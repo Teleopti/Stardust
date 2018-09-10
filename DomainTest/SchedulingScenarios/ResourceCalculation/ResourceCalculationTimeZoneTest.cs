@@ -20,8 +20,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		[Ignore("PBI75509 to be fixed")]
 		[TestCase("Arabian Standard Time", 15)] //+04:00
 		[TestCase("Iran Standard Time", 15)]    //+03:30
+		[TestCase("Newfoundland Standard Time", 15)]    //-03:30
 		[TestCase("Arabian Standard Time", 60)] //+04:00
 		[TestCase("Iran Standard Time", 60)]    //+03:30
+		[TestCase("Newfoundland Standard Time", 60)]    //-03:30
 		public void ShouldHandleSkillInHalfHourTimeZoneWithDifferentResolutions(string timeZoneId, int defaultResolution)
 		{
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);

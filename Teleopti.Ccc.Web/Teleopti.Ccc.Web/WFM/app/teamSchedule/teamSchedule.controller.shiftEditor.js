@@ -96,12 +96,19 @@
 			});
 
 			vm.timelineVm = ShiftEditorViewModelFactory.CreateTimeline(vm.date, vm.timezone, timeLineTimeRange);
+			vm.timelineVmWidth = getDiffMinutes(timeLineTimeRange.End, timeLineTimeRange.Start);
 
 			TimezoneListFactory.Create().then(function (timezoneList) {
 				vm.timezoneName = timezoneList.GetShortName(vm.timezone);
 			});
 
 			subscribeToScheduleChange();
+
+			$element[0].querySelector('.timeline').addEventListener('touchmove', function () {
+				var timelineViewportEl = $element[0].querySelector('.timeline').parentElement;
+				var shiftViewportEl = $element[0].querySelector('.shift').parentElement;
+				shiftViewportEl.scrollLeft = timelineViewportEl.scrollLeft;
+			});
 		};
 
 		vm.gotoDayView = function () {
@@ -113,9 +120,8 @@
 		};
 
 		vm.scroll = function (step) {
-			var viewportEl = $element[0].querySelector('.viewport');
-			viewportEl.scrollLeft += step;
-			displayScrollButton();
+			var timelineViewportEl = $element[0].querySelector('.timeline').parentElement;
+			scrollTo(timelineViewportEl.scrollLeft + step);
 		};
 
 		vm.isNotAllowedToChange = function (shiftLayer) {
@@ -214,6 +220,11 @@
 				|| !!shiftLayer.IsOvertime;
 		}
 
+		vm.isOnDesktop = function () {
+			var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+			return !(!!userAgent.match(/ipad|iphone|ipod/i) || !!userAgent.match(/android/i));
+		}
+
 		function bindResizeEvent(shiftLayer, shiftLayerEl) {
 			!vm.isNotResizable(shiftLayer) &&
 				!shiftLayer.interact &&
@@ -224,29 +235,33 @@
 							min: { width: 5 }
 						}
 					})
-					.pointerEvents({
-						allowFrom: '.selected'
+					.on('resizestart', function (event) {
+						if (vm.selectedShiftLayers.indexOf(shiftLayer) < 0) {
+							event.preventDefault();
+						}
 					})
 					.on('resizemove', function (event) {
 						var left = event.deltaRect.left;
 						var width = event.rect.width;
-
-						shiftLayer.isChangingStart = left != 0;
 
 						var mergedShiftLayer = vm.getMergedShiftLayer(shiftLayer);
 						var lastWidth = mergedShiftLayer.Width;
 						resizeLayer(shiftLayer, (mergedShiftLayer.TranslateX || 0) + left, width);
 						$scope.$apply();
 
+						shiftLayer.isChangingStart = left != 0;
 						scrollToProperPosition(shiftLayer, left, width, lastWidth);
+
 					})
 					.on('resizeend', function (event) {
 						var mergedShiftLayer = vm.getMergedShiftLayer(shiftLayer);
 						var translateX = round5(mergedShiftLayer.TranslateX);
 						var startMinutes = mergedShiftLayer.Left + translateX;
+						var startTime = timeLineTimeRange.Start.clone().add(startMinutes, 'minutes');
+
+						shiftLayer.isChangingStart = serviceDateFormatHelper.getDateTime(startTime) !== mergedShiftLayer.Start;
 
 						if (shiftLayer.isChangingStart) {
-							var startTime = timeLineTimeRange.Start.clone().add(startMinutes, 'minutes');
 							redrawLayers(shiftLayer, startTime, true);
 						} else {
 							var width = round5(mergedShiftLayer.Width);
@@ -258,10 +273,10 @@
 						$scope.$apply();
 
 						if (vm.selectedShiftLayers.length > 1) {
-							var bindingIndex = shiftLayer.isChangingStart ? 0 : vm.selectedShiftLayers.length - 1;
-							var bindingLayer = vm.selectedShiftLayers[bindingIndex];
-							var bindingLayerEl = $element[0].querySelectorAll('.shift-layer')[vm.scheduleVm.ShiftLayers.indexOf(bindingLayer)];
-							bindResizeEvent(bindingLayer, bindingLayerEl);
+							var shiftLayerEls = $element[0].querySelectorAll('.shift-layer')
+							vm.selectedShiftLayers.forEach(function (sl) {
+								bindResizeEvent(sl, shiftLayerEls[vm.scheduleVm.ShiftLayers.indexOf(sl)]);
+							});
 						}
 					});
 		}
@@ -271,7 +286,11 @@
 		}
 
 		function redrawLayers(selectedShiftLayer, dateTimeInTimezone, isChangingStart) {
-			var mergedSelectedShiftLayer = vm.getMergedShiftLayer(selectedShiftLayer);
+			var originalShiftLayers = vm.scheduleVm.ShiftLayers.slice(0);
+			var originalSelectedShiftLayer = originalShiftLayers[originalShiftLayers.indexOf(selectedShiftLayer)];
+			var selectedLayers = [originalSelectedShiftLayer];
+
+			var mergedSelectedShiftLayer = vm.getMergedShiftLayer(originalSelectedShiftLayer);
 			var dateTime = serviceDateFormatHelper.getDateTime(dateTimeInTimezone);
 
 			var timeField = isChangingStart ? 'Start' : 'End';
@@ -283,19 +302,19 @@
 
 			if (dateTime == mergedSelectedShiftLayer[timeField]) return;
 
-			var index = vm.scheduleVm.ShiftLayers.indexOf(selectedShiftLayer);
-			var lastLayerIndex = vm.scheduleVm.ShiftLayers.length - 1;
+			var index = originalShiftLayers.indexOf(originalSelectedShiftLayer);
+			var lastLayerIndex = originalShiftLayers.length - 1;
 			var endIndex = isChangingStart ? 0 : lastLayerIndex;
 
 			var step = isChangingStart ? -1 : 1;
 			var reverseStep = isChangingStart ? 1 : -1;
 
 			var isLayerShorten = moment.tz(mergedSelectedShiftLayer[timeField], vm.timezone)[coverCompletelyMethod](dateTimeInTimezone);
-			var layersCopy = vm.scheduleVm.ShiftLayers.slice(0);
+			var layersCopy = originalShiftLayers.slice(0);
 			var actualDateTime = dateTime;
 
-			var shiftStart = isChangingStart ? dateTime : vm.getMergedShiftLayer(vm.scheduleVm.ShiftLayers[0]).Start;
-			var shiftEnd = isChangingStart ? vm.getMergedShiftLayer(vm.scheduleVm.ShiftLayers[lastLayerIndex]).End : dateTime;
+			var shiftStart = isChangingStart ? dateTime : vm.getMergedShiftLayer(originalShiftLayers[0]).Start;
+			var shiftEnd = isChangingStart ? vm.getMergedShiftLayer(originalShiftLayers[lastLayerIndex]).End : dateTime;
 
 			if ((isChangingStart && serviceDateFormatHelper.getDateOnly(dateTime) !== vm.date)
 				|| (!isLayerShorten && isExceedMaxLength(shiftStart, shiftEnd))) {
@@ -303,11 +322,10 @@
 			}
 			else if (index !== endIndex) {
 				if (isLayerShorten) {
-					if (!fillWithLayer(index, mergedSelectedShiftLayer, dateTime, isChangingStart)) {
+					if (!fillWithLayer(originalShiftLayers, index, mergedSelectedShiftLayer, dateTime, isChangingStart)) {
 						actualDateTime = mergedSelectedShiftLayer[timeField];
 					}
 				} else {
-
 					var hasGonePassTopActivity = false;
 					var firstTimeGoPassTop = true;
 					var currentIndex = index + step;
@@ -317,8 +335,8 @@
 						currentIndex += step;
 
 						var orginalLayer = layersCopy[i];
-						var orginalIndex = vm.scheduleVm.ShiftLayers.indexOf(orginalLayer);
-						var layer = vm.scheduleVm.ShiftLayers[orginalIndex];
+						var orginalIndex = originalShiftLayers.indexOf(orginalLayer);
+						var layer = originalShiftLayers[orginalIndex];
 						var mergedLayer = vm.getMergedShiftLayer(layer);
 
 						if (moment.tz(mergedLayer[timeReverseField], vm.timezone)[coverMethod](dateTimeInTimezone))
@@ -339,23 +357,24 @@
 								var start = isChangingStart ? dateTime : newLayerTime;
 								var end = isChangingStart ? newLayerTime : dateTime;
 								var insertIndex = isChangingStart ? orginalIndex : orginalIndex + 1;
-								createLayer(selectedShiftLayer, start, end, insertIndex);
+								var newLayer = createLayer(originalShiftLayers, originalSelectedShiftLayer, start, end, insertIndex);
+								selectedLayers.push(newLayer);
 							}
 							continue;
 						}
 
 						if (hasGonePassTopActivity) {
-							var besideLayer = vm.scheduleVm.ShiftLayers[orginalIndex + reverseStep];
+							var besideLayer = originalShiftLayers[orginalIndex + reverseStep];
 							var mergedBesideLayer = !!besideLayer && vm.getMergedShiftLayer(besideLayer);
 							var needMerge = !!mergedBesideLayer && isSameType(mergedBesideLayer, mergedSelectedShiftLayer);
 							var layerActualTime = isCoveredCompletely && i !== endIndex ? mergedLayer[timeField] : dateTime;
 
 							if (needMerge) {
 								doUpdate(besideLayer, layerActualTime);
-								vm.selectedShiftLayers.push(besideLayer);
+								selectedLayers.push(besideLayer);
 							} else if (isSameTypeWithSelected && i === endIndex && isCoveredCompletely) {
 								doUpdate(layer, dateTime);
-								vm.selectedShiftLayers.push(layer);
+								selectedLayers.push(layer);
 								break;
 							} else if (!isSameTypeWithSelected) {
 								deleteIndex = isChangingStart ? orginalIndex : orginalIndex + 1;
@@ -363,9 +382,10 @@
 								var start = isChangingStart ? layerActualTime : newLayerTime;
 								var end = isChangingStart ? newLayerTime : layerActualTime;
 								var insertIndex = isChangingStart ? orginalIndex + 1 : orginalIndex;
-								createLayer(mergedSelectedShiftLayer, start, end, insertIndex);
+								var newLayer = createLayer(originalShiftLayers, mergedSelectedShiftLayer, start, end, insertIndex);
+								selectedLayers.push(newLayer);
 							} else if (isSameTypeWithSelected) {
-								vm.selectedShiftLayers.push(layer);
+								selectedLayers.push(layer);
 							}
 						}
 
@@ -373,7 +393,7 @@
 							if (!isSameTypeWithSelected
 								|| (isSameTypeWithSelected && i === endIndex)
 								|| (isSameTypeWithSelected && needMerge)) {
-								vm.scheduleVm.ShiftLayers.splice(deleteIndex, 1);
+								originalShiftLayers.splice(deleteIndex, 1);
 							}
 						} else if (!isSameTypeWithSelected) {
 							doUpdateSelf(layer, dateTime);
@@ -382,19 +402,20 @@
 					}
 
 					if (isChangingStart) {
-						vm.selectedShiftLayers.reverse();
+						selectedLayers.reverse();
 					}
 				}
 			}
 
-			doUpdate(selectedShiftLayer, actualDateTime);
+			doUpdate(originalSelectedShiftLayer, actualDateTime);
+			vm.selectedShiftLayers = selectedLayers;
+			vm.scheduleVm.ShiftLayers = originalShiftLayers;
 		}
 
-		function fillWithLayer(selectedIndex, selectedLayer, dateTime, isChangingStart) {
-
+		function fillWithLayer(shiftLayers, selectedIndex, selectedLayer, dateTime, isChangingStart) {
 			var step = isChangingStart ? -1 : 1;
-			var besideLayer = vm.scheduleVm.ShiftLayers[selectedIndex + step];
-			var secondLayer = vm.scheduleVm.ShiftLayers[selectedIndex + step * 2];
+			var besideLayer = shiftLayers[selectedIndex + step];
+			var secondLayer = shiftLayers[selectedIndex + step * 2];
 
 			var mergedBesideLayer = vm.getMergedShiftLayer(besideLayer);
 			var doUpdateBeside = isChangingStart ? updateEnd : updateStart;
@@ -404,7 +425,7 @@
 					var startTime = isChangingStart ? mergedBesideLayer.End : dateTime;
 					var endTime = isChangingStart ? dateTime : mergedBesideLayer.Start;
 					var insertIndex = isChangingStart ? selectedIndex : selectedIndex + 1;
-					createLayer(secondLayer, startTime, endTime, insertIndex);
+					createLayer(shiftLayers, secondLayer, startTime, endTime, insertIndex);
 					return true;
 				}
 			}
@@ -478,14 +499,15 @@
 				getDiffMinutes(layer.Current.End, layer.Current.Start));
 		}
 
-		function createLayer(layer, startTime, endTime, insertIndex) {
-			var newLayer = vm.scheduleVm.AddLayer(vm.getMergedShiftLayer(layer), startTime, endTime, insertIndex);
+		function createLayer(shiftLayers, layer, startTime, endTime, insertIndex) {
+			var newLayer = ShiftEditorViewModelFactory.CopyToNewLayer(vm.getMergedShiftLayer(layer), startTime, endTime);
 
 			resizeLayer(newLayer, 0, getDiffMinutes(newLayer.End, newLayer.Start));
 			newLayer.Left = getShiftLayerLeft(newLayer);
 			newLayer.IsNew = true;
 
-			vm.selectedShiftLayers.push(newLayer);
+			shiftLayers.splice(insertIndex, 0, newLayer);
+			return newLayer;
 		}
 
 		function round5(number) {
@@ -633,15 +655,15 @@
 		}
 
 		function initAndBindScrollEvent() {
-			var viewportEl = $element[0].querySelector('.viewport');
+			var timelineEl = $element[0].querySelector('.timeline');
 
 			if (!hasShift()) return;
 
 			initScrollState();
 			angular.element($window).bind('resize', initScrollState);
 
-			bindScrollMouseEvent(viewportEl.querySelector('.left-scroll'), -20);
-			bindScrollMouseEvent(viewportEl.querySelector('.right-scroll'), 20);
+			bindScrollMouseEvent(timelineEl.querySelector('.left-scroll'), -20);
+			bindScrollMouseEvent(timelineEl.querySelector('.right-scroll'), 20);
 		}
 
 		var scrollIntervalPromise = null;
@@ -680,17 +702,17 @@
 		}
 		function initScrollState() {
 			$timeout(function () {
-				var viewportEl = $element[0].querySelector('.viewport');
+				var shiftViewportEl = $element[0].querySelector('.shift').parentElement;
 				var shiftTimeRange = getShiftTimeRangeInMinutes();
 				var shiftLength = shiftTimeRange.End - shiftTimeRange.Start;
 
-				var scrollTo =
-					viewportEl.clientWidth <= shiftLength
+				var scrollLeft =
+					shiftViewportEl.clientWidth <= shiftLength
 						? shiftTimeRange.Start - 120
-						: shiftTimeRange.Start - (viewportEl.clientWidth - shiftLength) / 2;
-				if (scrollTo <= 0) scrollTo = 0;
-				viewportEl.scrollLeft = scrollTo;
-				displayScrollButton();
+						: shiftTimeRange.Start - (shiftViewportEl.clientWidth - shiftLength) / 2;
+				if (scrollLeft <= 0) scrollLeft = 0;
+
+				scrollTo(scrollLeft);
 			});
 		}
 
@@ -708,7 +730,7 @@
 		}
 
 		function scrollToProperPosition(shiftLayer, left, width, lastWidth) {
-			var viewportEl = $element[0].querySelector('.viewport');
+			var viewportEl = $element[0].querySelector('.shift').parentElement;
 			var mergedShiftLayer = vm.getMergedShiftLayer(shiftLayer);
 			var start = mergedShiftLayer.TranslateX + left + shiftLayer.Left;
 			var end = start + width;
@@ -722,13 +744,14 @@
 			if (shiftLayer.isChangingStart) {
 				if ((isExtending && viewportEl.scrollLeft > start)
 					|| (!isExtending && shiftTimeRange.End > viewingEnd)) {
-					vm.scroll(-changingWidth);
+					var step = isExtending ? changingWidth + 50 : changingWidth;
+					vm.scroll(-step);
 				}
 			} else {
 				if ((isExtending && end > viewingEnd)
 					|| (!isExtending && viewportEl.scrollLeft > shiftTimeRange.Start)) {
-					var scrollTo = isExtending ? changingWidth + 20 : changingWidth;
-					vm.scroll(scrollTo);
+					var step = isExtending ? changingWidth + 50 : changingWidth;
+					vm.scroll(step);
 				}
 			}
 		}
@@ -741,7 +764,7 @@
 		}
 
 		function displayScrollButton() {
-			var viewportEl = $element[0].querySelector('.viewport');
+			var viewportEl = $element[0].querySelector('.shift').parentElement;
 			vm.showScrollLeftButton = viewportEl.scrollLeft > 0;
 			vm.showScrollRightButton = viewportEl.scrollWidth > viewportEl.scrollLeft + viewportEl.clientWidth;
 		}
@@ -760,6 +783,14 @@
 				startTime = startTime.add(1, 'hours');
 			}
 			return hours * 60 + dateTimeMoment.diff(startTime, 'minutes');
+		}
+
+		function scrollTo(scrollLeft) {
+			var timelineViewportEl = $element[0].querySelector('.timeline').parentElement;
+			var shiftViewportEl = $element[0].querySelector('.shift').parentElement;
+			timelineViewportEl.scrollLeft = scrollLeft;
+			shiftViewportEl.scrollLeft = scrollLeft;
+			displayScrollButton();
 		}
 	}
 })();

@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	[RegisterEventHandlerInLifetimeScope]
+	[InstancePerLifetimeScope]
 	public class DayOffOptimizationEventHandler : IRunInSyncInFatClientProcess, IHandleEvent<DayOffOptimizationWasOrdered>
 	{
 		private readonly DeadLockRetrier _deadLockRetrier;

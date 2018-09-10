@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePushMessageRepository : IPushMessageRepository
 	{
-		private readonly FakeStorage storage;
+		private readonly IFakeStorage storage;
 
 		public FakePushMessageRepository()
 		{

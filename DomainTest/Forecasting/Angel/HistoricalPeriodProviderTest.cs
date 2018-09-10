@@ -57,37 +57,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		}
 
 		[Test]
-		public void ShouldGetMostRecentPeriodForIntradayTemplatePeriod()
-		{
-			var repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
-			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
-			var workload = new Workload(SkillFactory.CreateSkill("Phone"));
-			var dateOnlyPeriod = new DateOnlyPeriod(2014, 4, 5, 2014, 5, 5);
-			statisticRepository.Stub(x => x.QueueStatisticsUpUntilDate(workload.QueueSourceCollection)).Return(dateOnlyPeriod);
-			repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(statisticRepository);
-			var target = new HistoricalPeriodProvider(repositoryFactory);
-
-			var result = target.AvailableIntradayTemplatePeriod(workload);
-			result.Value.Should().Be.EqualTo(dateOnlyPeriod);
-		}
-
-		[Test]
-		public void ShouldGetMaximum3MonthsForIntradayTemplatePeriod()
-		{
-			var repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
-			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
-			var workload = new Workload(SkillFactory.CreateSkill("Phone"));
-			var dateOnlyPeriod = new DateOnlyPeriod(2005, 5, 5, 2014, 5, 5);
-			statisticRepository.Stub(x => x.QueueStatisticsUpUntilDate(workload.QueueSourceCollection)).Return(dateOnlyPeriod);
-			repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(statisticRepository);
-			var target = new HistoricalPeriodProvider(repositoryFactory);
-
-			var result = target.AvailableIntradayTemplatePeriod(workload);
-			result.Value.StartDate.Should().Be.EqualTo(new DateOnly(dateOnlyPeriod.EndDate.Date.AddMonths(-3).AddDays(1)));
-			result.Value.EndDate.Should().Be.EqualTo(dateOnlyPeriod.EndDate);
-		}
-
-		[Test]
 		public void ShouldGetMostRecentPeriodForIntradayTemplatePeriodByPeriod()
 		{
 			var dateOnlyPeriod = new DateOnlyPeriod(2014, 4, 5, 2014, 5, 5);

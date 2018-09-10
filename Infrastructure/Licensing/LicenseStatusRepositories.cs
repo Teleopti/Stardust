@@ -35,21 +35,19 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 
 		public int NumberOfActiveAgents()
 		{
-			int agents = 0;
 			var retryPolicy = Policy.Handle<TimeoutException>()
 				.Or<SqlException>(DetectTransientSqlException.IsTransient)
 				.OrInner<SqlException>(DetectTransientSqlException.IsTransient)
 				.WaitAndRetry(5, i => TimeSpan.FromMilliseconds(100));
-			retryPolicy.Execute(() => runNumberOfActiveAgents(out agents));
-			return agents;
+			return retryPolicy.Execute(runNumberOfActiveAgents);
 		}
 
-		private void runNumberOfActiveAgents(out int agents)
+		private int  runNumberOfActiveAgents()
 		{
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				var rep = _repositoryFactory.CreatePersonRepository(uow);
-				agents = rep.NumberOfActiveAgents();
+				return rep.NumberOfActiveAgents();
 			}
 		}
 

@@ -14,6 +14,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
+	[InstancePerLifetimeScope]
 	public class MultiAbsenceRequestsHandler : IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>, IRunOnStardust
 	{
 		private readonly IPersonRequestRepository _personRequestRepository;

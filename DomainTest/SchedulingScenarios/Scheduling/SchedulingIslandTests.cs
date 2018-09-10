@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -21,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public ReduceIslandsLimits ReduceIslandsLimits;
 		public FullScheduling Target;
 		public FakePersonRepository PersonRepository;
-		public FakeActivityRepository ActivityRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
@@ -30,54 +28,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public MergeIslandsSizeLimit MergeIslandsSizeLimit;
 
-
-		[Test]
-		[Ignore("Delete me - just a temp test for 74915")]
-		public void ForKittensToUseWhenLabbing()
-		{
-			MergeIslandsSizeLimit.TurnOff_UseOnlyFromTest();
-			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
-			var firstDay = new DateOnly(2015, 10, 12);
-			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
-			var activity = ActivityRepository.Has("_");
-			var rast = ActivityRepository.Has("_");
-			rast.RequiresSkill = false;
-			var lunch = ActivityRepository.Has();
-			lunch.InContractTime = false;
-			lunch.RequiresSkill = false;
-			var scenario = ScenarioRepository.Has("_");
-			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSetWithLoadsOfShifts = 
-				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(6, 0, 10, 0, 15), new TimePeriodWithSegment(15, 0, 19, 0, 15), shiftCategory));
-			ruleSetWithLoadsOfShifts.AddExtender(new ActivityRelativeStartExtender(lunch,
-				new TimePeriodWithSegment(1, 0, 1, 0, 15),
-				new TimePeriodWithSegment(3, 0, 5, 0, 15)));
-			ruleSetWithLoadsOfShifts.AddExtender(new ActivityRelativeStartExtender(rast,
-				new TimePeriodWithSegment(0, 15, 0, 30, 15),
-				new TimePeriodWithSegment(1, 0, 2, 0, 15)));
-			ruleSetWithLoadsOfShifts.AddExtender(new ActivityRelativeStartExtender(rast,
-				new TimePeriodWithSegment(0, 15, 0, 30, 15),
-				new TimePeriodWithSegment(6, 0, 7, 0, 15)));
-		
-			const int numberOfIslands = 50;
-			const int numberOfAgentsPerIsland = 1;
-			for (var i = 0; i < numberOfIslands; i++)
-			{
-				var skill = SkillRepository.Has("skill", activity);
-				SkillDayRepository.Has(skill.CreateSkillDayWithDemandOnInterval(scenario, period, 111).ToArray());
-				for (var j = 0; j < numberOfAgentsPerIsland; j++)
-				{
-					PersonRepository.Has(new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSetWithLoadsOfShifts, skill);	
-				}
-			}
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
-			
-			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
-			
-			Console.WriteLine("antal schemalagda shift: " + PersonAssignmentRepository.LoadAll().Count());
-		
-		}
-		
 		[Test]
 		public void ShouldNotUseSkillsThatWereRemovedDuringIslandCreation()
 		{
@@ -109,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(activityC);
 		}
 
-		public SchedulingIslandTests(SeperateWebRequest seperateWebRequest, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerXxl76496)
+		public SchedulingIslandTests(SeperateWebRequest seperateWebRequest, bool resourcePlannerXXL76496) : base(seperateWebRequest, resourcePlannerXXL76496)
 		{
 		}
 	}

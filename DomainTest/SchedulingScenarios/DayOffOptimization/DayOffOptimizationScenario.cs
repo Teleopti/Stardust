@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true)]
 	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false)]
 	[LoggedOnAppDomain]
+	[DontSendEventsAtPersist]
 	public abstract class DayOffOptimizationScenario : IIsolateSystem, IExtendSystem, IConfigureToggleManager, ITestInterceptor
 	{
 		private readonly SeperateWebRequest _seperateWebRequest;

@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeAgentDayScheduleTagRepository : IAgentDayScheduleTagRepository
 	{
-		private readonly FakeStorage _storage;
+		private readonly IFakeStorage _storage;
 
-		public FakeAgentDayScheduleTagRepository(FakeStorage storage)
+		public FakeAgentDayScheduleTagRepository(IFakeStorage storage)
 		{
 			_storage = storage;
 		}

@@ -17,9 +17,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterAssemblyTypes(typeof(IHandleCommand<>).Assembly)
-			       .Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IHandleCommand<>)) 
-				   && t.EnabledByToggle(_config))
-			       .As(t => t.GetInterfaces().Single(i => i.GetGenericTypeDefinition() == typeof (IHandleCommand<>)));
+				.Where(t =>
+					t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandleCommand<>)) &&
+					t.EnabledByToggle(_config.Toggle))
+				.As(t =>
+					t.GetInterfaces().Single(i => i.GetGenericTypeDefinition() == typeof(IHandleCommand<>))
+				);
 		}
 	}
 }

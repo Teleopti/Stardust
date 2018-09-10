@@ -10,7 +10,8 @@
 			},
 			CreateSchedule: function (date, timezone, schedule) {
 				return new ScheduleViewModel(date, timezone, schedule);
-			}
+			},
+			CopyToNewLayer: copyToNewLayer
 		};
 
 		function ScheduleViewModel(date, timezone, schedule) {
@@ -34,17 +35,12 @@
 			this.UnderlyingScheduleSummary = underlyingScheduleSummary;
 		}
 
-		ScheduleViewModel.prototype.AddLayer = function (layer, startTime, endTime, index) {
-			this.ShiftLayers = this.ShiftLayers || [];
-			var copyLayer = Object.assign({}, layer);
-			copyLayer.Start = startTime;
-			copyLayer.End = endTime;
-
-			var newLayer = new ShiftLayerViewModel(copyLayer, this.Date, this.Timezone, this.Timezone);
-
-			this.ShiftLayers.splice(index, 0, newLayer);
-
-			return newLayer;
+		function copyToNewLayer(layer, startTime, endTime) {
+			var copyLayer = angular.extend({}, layer, {
+				Start: startTime,
+				End: endTime
+			});
+			return new ShiftLayerViewModel(copyLayer, this.Date, this.Timezone, this.Timezone);
 		}
 
 		ScheduleViewModel.prototype.GetSummaryTimeSpan = function (info) {
