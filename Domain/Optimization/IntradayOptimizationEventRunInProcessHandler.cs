@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
+	[InstancePerLifetimeScope]
 	public class IntradayOptimizationEventRunInSyncInFatClientProcessHandler: IRunInSyncInFatClientProcess, IHandleEvent<IntradayOptimizationWasOrdered>
 	{
 		private readonly IntradayOptimizationExecutor _intradayOptimizationExecutor;

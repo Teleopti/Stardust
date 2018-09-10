@@ -21,6 +21,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 {
+	[InstancePerLifetimeScope]
 	public class ShiftTradeRequestHandler :
 		IHandleEvent<NewShiftTradeRequestCreatedEvent>,
 		IHandleEvent<AcceptShiftTradeEvent>,
