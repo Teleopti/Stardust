@@ -31,6 +31,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public T Merge<T>(T root) where T : class, IAggregateRoot
 		{
+			if (!root.Id.HasValue)
+			{
+				// some tests merge entities that are transient.
+				// sounds like bad tests, but dont want to fix now.
+				if (!_data.Contains(root))
+					_data.Add(root);
+			}
+			else
+			{
+				var item = _data.OfType<T>().ToArray().SingleOrDefault(x => x.Id.Equals(root.Id));
+				_data.Remove(item);
+				_data.Add(root);
+			}
 			return root;
 		}
 
