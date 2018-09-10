@@ -10,6 +10,11 @@
 	<meta name="theme-color" content="#0099FF" />
 	<link rel="manifest" href="manifest.webmanifest.json">
 	<script type="text/javascript" src="appInsights.js"></script>
+	<style>
+		[ng-cloak] {
+			 display: none;
+		}
+  </style>
 </head>
 
 <body ng-app="wfm" ng-show="isAuthenticated" ng-controller="MainController as main">
@@ -21,7 +26,7 @@
 				<label for="nav-left" ng-click="vm.mainMenuState = !vm.mainMenuState" class="pointer" id="main-menu-trigger">
 					<div tabindex=0 class="context-menu card-context even-icon">
 						<i class="mdi main-menu-trigger-icon text-white" ng-class="{'mdi-menu':!vm.mainMenuState, 'mdi-backburger':vm.mainMenuState}"></i>
-						<md-tooltip>
+						<md-tooltip ng-cloak>
 							{{'Navigate'|translate}}
 						</md-tooltip>
 					</div>
@@ -45,6 +50,7 @@
 	<link id="themeDependencies" rel="stylesheet" href="dist/dependencies.css">
 	<link id="themeStyleguide" rel="stylesheet" href="">
 	<link id="themeAnt" rel="stylesheet" href="">
+	<script type="text/javascript" src="theme-switcher.js"></script>
 	<ng2-bootstrap></ng2-bootstrap>
 	<!-- build:template
 	<% if (environment === 'dev') { %>
