@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeMeetingRepository : IMeetingRepository
 	{
-		private readonly FakeStorage _storage;
+		private readonly IFakeStorage _storage;
 
-		public FakeMeetingRepository(FakeStorage storage)
+		public FakeMeetingRepository(IFakeStorage storage)
 		{
 			_storage = storage;
 		}

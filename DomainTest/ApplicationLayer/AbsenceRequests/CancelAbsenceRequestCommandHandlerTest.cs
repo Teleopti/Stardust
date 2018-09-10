@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeGlobalSettingDataRepository GlobalSetting;
 		public MutableNow Now;
 		public FullPermission FullPermission;
-		public FakeStorage Storage;
+		public IFakeStorage Storage;
 
 		private IPerson person;
 		private IAbsence absence;

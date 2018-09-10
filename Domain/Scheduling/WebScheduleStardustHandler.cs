@@ -11,6 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
+	[InstancePerLifetimeScope]
 	public class WebScheduleStardustHandler : IHandleEvent<WebScheduleStardustEvent>, IRunOnStardust
 	{
 		private readonly FullScheduling _fullScheduling;

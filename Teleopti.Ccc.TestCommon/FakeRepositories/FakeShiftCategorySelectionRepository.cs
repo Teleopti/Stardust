@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeShiftCategorySelectionRepository : IRepository<IShiftCategorySelection>
 	{
-		private readonly FakeStorage _storage;
+		private readonly IFakeStorage _storage;
 
-		public FakeShiftCategorySelectionRepository(FakeStorage storage)
+		public FakeShiftCategorySelectionRepository(IFakeStorage storage)
 		{
 			_storage = storage;
 		}

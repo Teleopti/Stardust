@@ -181,9 +181,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 	}
 	public class FakePersonAssignmentRepositoryThrowsLockException : IPersonAssignmentRepository
 	{
-		private readonly FakeStorage _storage;
+		private readonly IFakeStorage _storage;
 
-		public FakePersonAssignmentRepositoryThrowsLockException(FakeStorage storage)
+		public FakePersonAssignmentRepositoryThrowsLockException(IFakeStorage storage)
 		{
 			_storage = storage;
 		}

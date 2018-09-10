@@ -314,6 +314,7 @@
     <Compile Include="SchedulingScenarios\Scheduling\ConcurrencyDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingAndDoTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCommandHandlerExternalStaffDesktopTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\SchedulingIslandDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\SyncInFatClientProcessEventPublisher_SimulateNoNewThreads.cs" />
     <Compile Include="SchedulingScenarios\IntraIntervalOptimization\IntraIntervalOptimizationScenarioTest.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeSchedulingScenario.cs" />

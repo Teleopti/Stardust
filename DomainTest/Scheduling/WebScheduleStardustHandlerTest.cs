@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			personAssignments.All(x => x.Source == ScheduleSource.WebScheduling).Should().Be.True();
 		}
 
-		public WebScheduleStardustHandlerTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerXxl76496)
+		public WebScheduleStardustHandlerTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXxl76496, bool resourcePlannerHalfHourSkillTimeZon75509) : base(seperateWebRequest, resourcePlannerXxl76496, resourcePlannerHalfHourSkillTimeZon75509)
 		{
 		}
 	}
