@@ -76,6 +76,106 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		}
 
 		[Test]
+		public void ShouldForecastByRemovingHighOutlier()
+		{
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
+			var friday = new DateOnly(2018, 05, 04);
+
+			SkillRepository.Add(skill);
+			ScenarioRepository.Has(scenario);
+			WorkloadRepository.Add(workload);
+
+			var statisticTasks = new List<IStatisticTask>();
+			var random = new Random();
+			for (var i = 1; i <= 30; i++)
+			{
+				statisticTasks.Add(new StatisticTask
+				{
+					Interval = friday.AddDays(-i).Date.AddHours(10),
+					StatOfferedTasks = 10,
+					StatAverageTaskTimeSeconds = random.Next(100, 200),
+					StatAverageAfterTaskTimeSeconds = random.Next(100, 200)
+				});
+			}
+
+			var lastFriday = statisticTasks.Single(x => new DateOnly(x.Interval.Date) == friday.AddDays(-7));
+			lastFriday.StatAverageTaskTimeSeconds = 5000;
+			lastFriday.StatAverageAfterTaskTimeSeconds = 5000;
+
+			StatisticRepository.Has(workload.QueueSourceCollection.First(), statisticTasks);
+
+			var forecastInput = new ForecastInput
+			{
+				ForecastStart = friday.Date,
+				ForecastEnd = friday.Date,
+				ScenarioId = scenario.Id.Value,
+				WorkloadId = workload.Id.Value
+			};
+			var result = (OkNegotiatedContentResult<ForecastModel>)Target.Forecast(forecastInput);
+			var forecastedTaskTime = result.Content.ForecastDays.Single().AverageTaskTime;
+			var forecastedAfterTaskTime = result.Content.ForecastDays.Single().AverageAfterTaskTime;
+
+			// Forecasted value is 997.252 when StatAverageTaskTimeSeconds,StatAverageAfterTaskTimeSeconds  in all historical data is 100 and outliers were not removed
+			forecastedTaskTime.Should().Be.GreaterThan(997);
+			forecastedAfterTaskTime.Should().Be.GreaterThan(997);
+			// Forecasted value is 1400 when StatAverageTaskTimeSeconds, StatAverageAfterTaskTimeSeconds in all historical data is 200 and outliers were not removed
+			forecastedTaskTime.Should().Be.LessThan(1400);
+			forecastedAfterTaskTime.Should().Be.LessThan(1400);
+		}
+
+		[Test]
+		public void ShouldForecastWithNoOutliers()
+		{
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
+			var friday = new DateOnly(2018, 05, 04);
+
+			SkillRepository.Add(skill);
+			ScenarioRepository.Has(scenario);
+			WorkloadRepository.Add(workload);
+
+			var statisticTasks = new List<IStatisticTask>();
+			var random = new Random();
+			for (var i = 1; i <= 30; i++)
+			{
+				statisticTasks.Add(new StatisticTask
+				{
+					Interval = friday.AddDays(-i).Date.AddHours(10),
+					StatOfferedTasks = 10,
+					StatAverageTaskTimeSeconds = random.Next(100, 200),
+					StatAverageAfterTaskTimeSeconds = random.Next(100, 200)
+				});
+			}
+
+			var lastFriday = statisticTasks.Single(x => new DateOnly(x.Interval.Date) == friday.AddDays(-7));
+			lastFriday.StatAverageTaskTimeSeconds = 260;
+			lastFriday.StatAverageAfterTaskTimeSeconds = 260;
+
+			StatisticRepository.Has(workload.QueueSourceCollection.First(), statisticTasks);
+
+			var forecastInput = new ForecastInput
+			{
+				ForecastStart = friday.Date,
+				ForecastEnd = friday.Date,
+				ScenarioId = scenario.Id.Value,
+				WorkloadId = workload.Id.Value
+			};
+			var result = (OkNegotiatedContentResult<ForecastModel>)Target.Forecast(forecastInput);
+			var forecastedTaskTime = result.Content.ForecastDays.Single().AverageTaskTime;
+			var forecastedAfterTaskTime = result.Content.ForecastDays.Single().AverageAfterTaskTime;
+
+			// Forecasted value is 129.298 when StatAverageTaskTimeSeconds in all historical data is 100 and outliers were not removed
+			forecastedTaskTime.Should().Be.GreaterThan(129);
+			forecastedAfterTaskTime.Should().Be.GreaterThan(129);
+			// Forecasted value is 210.98 when StatAverageTaskTimeSeconds in all historical data is 200 and outliers were not removed
+			forecastedTaskTime.Should().Be.LessThan(211);
+			forecastedAfterTaskTime.Should().Be.LessThan(211);
+		}
+
+		[Test]
 		public void ShouldForecastDaysWithDifferentAfterTaskTime()
 		{
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
