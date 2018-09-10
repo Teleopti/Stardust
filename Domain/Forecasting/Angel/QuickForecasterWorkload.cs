@@ -18,12 +18,12 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		private readonly IHistoricalData _historicalData;
 		private readonly IFutureData _futureData;
 		private readonly IForecastMethodProvider _forecastMethodProvider;
-		private readonly IOutlierRemover _outlierRemover;
+		private readonly OutlierRemover _outlierRemover;
 		private readonly ForecastDayModelMapper _forecastDayModelMapper;
 		private readonly IForecastDayOverrideRepository _forecastDayOverrideRepository;
 
 		public QuickForecasterWorkload(IHistoricalData historicalData, IFutureData futureData,
-			IForecastMethodProvider forecastMethodProvider, IOutlierRemover outlierRemover,
+			IForecastMethodProvider forecastMethodProvider, OutlierRemover outlierRemover,
 			ForecastDayModelMapper forecastDayModelMapper, IForecastDayOverrideRepository forecastDayOverrideRepository)
 		{
 			_historicalData = historicalData;
@@ -61,8 +61,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 					WarningMessage = Resources.NoQueueStatisticsAvailable
 				};
 			}
-			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethodForTasks, forecastMethodForTaskTime, forecastMethodForAfterTaskTime);
-			var forecastedTasks = forecastMethodForTasks.ForecastTasks(historicalDataNoOutliers, quickForecasterWorkloadParams.FuturePeriod);
+			_outlierRemover.RemoveOutliers(historicalData, forecastMethodForTasks, forecastMethodForTaskTime, forecastMethodForAfterTaskTime);
+			var forecastedTasks = forecastMethodForTasks.ForecastTasks(historicalData, quickForecasterWorkloadParams.FuturePeriod);
 			var forecastedTaskTime = forecastMethodForTaskTime.ForecastTaskTime(historicalData, quickForecasterWorkloadParams.FuturePeriod);
 			var forecastedAfterTaskTime = forecastMethodForAfterTaskTime.ForecastAfterTaskTime(historicalData, quickForecasterWorkloadParams.FuturePeriod);
 

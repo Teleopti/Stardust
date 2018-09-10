@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 {
 	public interface IForecastWorkloadEvaluator
 	{
-		WorkloadAccuracy Evaluate(IWorkload workload, IOutlierRemover outlierRemover, IForecastAccuracyCalculator forecastAccuracyCalculator);
+		WorkloadAccuracy Evaluate(IWorkload workload, OutlierRemover outlierRemover, IForecastAccuracyCalculator forecastAccuracyCalculator);
 	}
 }

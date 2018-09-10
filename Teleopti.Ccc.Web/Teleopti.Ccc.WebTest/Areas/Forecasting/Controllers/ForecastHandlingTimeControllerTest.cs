@@ -38,8 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
 			var workload = skill.WorkloadCollection.Single();
 			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
-			var openDay = new DateOnly(2018, 05, 04);
-			const int dayInAWeek = 7;
+			var date = new DateOnly(2018, 05, 04);
 
 			SkillRepository.Add(skill);
 			ScenarioRepository.Has(scenario);
@@ -49,14 +48,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			{
 				new StatisticTask
 				{
-					Interval = openDay.AddDays(-dayInAWeek+1).Date.AddHours(10),
+					Interval = date.AddDays(-6).Date.AddHours(10),
 					StatOfferedTasks = 10,
 					StatAverageTaskTimeSeconds = 100,
 					StatAverageAfterTaskTimeSeconds = 100,
 				},
 				new StatisticTask
 				{
-					Interval = openDay.AddDays(-dayInAWeek).Date.AddHours(10),
+					Interval = date.AddDays(-7).Date.AddHours(10),
 					StatOfferedTasks = 10,
 					StatAverageTaskTimeSeconds = 400,
 					StatAverageAfterTaskTimeSeconds = 400
@@ -65,8 +64,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			var forecastInput = new ForecastInput
 			{
-				ForecastStart = openDay.Date,
-				ForecastEnd = openDay.Date.AddDays(1),
+				ForecastStart = date.Date,
+				ForecastEnd = date.Date.AddDays(1),
 				ScenarioId = scenario.Id.Value,
 				WorkloadId = workload.Id.Value
 			};
@@ -87,7 +86,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
 			var workload = skill.WorkloadCollection.Single();
 			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
-			var friday = new DateOnly(2018, 05, 04);
+			var date = new DateOnly(2018, 05, 04);
 
 			SkillRepository.Add(skill);
 			ScenarioRepository.Has(scenario);
@@ -99,23 +98,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			{
 				statisticTasks.Add(new StatisticTask
 				{
-					Interval = friday.AddDays(-i).Date.AddHours(10),
+					Interval = date.AddDays(-i).Date.AddHours(10),
 					StatOfferedTasks = 10,
 					StatAverageTaskTimeSeconds = random.Next(100, 200),
 					StatAverageAfterTaskTimeSeconds = random.Next(100, 200)
 				});
 			}
 
-			var lastFriday = statisticTasks.Single(x => new DateOnly(x.Interval.Date) == friday.AddDays(-7));
-			lastFriday.StatAverageTaskTimeSeconds = 5000;
-			lastFriday.StatAverageAfterTaskTimeSeconds = 5000;
+			var outlierDay = statisticTasks.Single(x => new DateOnly(x.Interval.Date) == date.AddDays(-7));
+			outlierDay.StatAverageTaskTimeSeconds = 5000;
+			outlierDay.StatAverageAfterTaskTimeSeconds = 5000;
 
 			StatisticRepository.Has(workload.QueueSourceCollection.First(), statisticTasks);
 
 			var forecastInput = new ForecastInput
 			{
-				ForecastStart = friday.Date,
-				ForecastEnd = friday.Date,
+				ForecastStart = date.Date,
+				ForecastEnd = date.Date,
 				ScenarioId = scenario.Id.Value,
 				WorkloadId = workload.Id.Value
 			};
@@ -123,10 +122,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var forecastedTaskTime = result.Content.ForecastDays.Single().AverageTaskTime;
 			var forecastedAfterTaskTime = result.Content.ForecastDays.Single().AverageAfterTaskTime;
 
-			// Forecasted value is 997.252 when StatAverageTaskTimeSeconds,StatAverageAfterTaskTimeSeconds  in all historical data is 100 and outliers were not removed
+			// 997 is the forecasted value when statistics time is 100 for all days in history with no outliers removed
+			// 1400 is the forecasted value when statistics time is 200 for all days in history with no outliers removed
 			forecastedTaskTime.Should().Be.GreaterThan(997);
 			forecastedAfterTaskTime.Should().Be.GreaterThan(997);
-			// Forecasted value is 1400 when StatAverageTaskTimeSeconds, StatAverageAfterTaskTimeSeconds in all historical data is 200 and outliers were not removed
 			forecastedTaskTime.Should().Be.LessThan(1400);
 			forecastedAfterTaskTime.Should().Be.LessThan(1400);
 		}
@@ -137,7 +136,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
 			var workload = skill.WorkloadCollection.Single();
 			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
-			var friday = new DateOnly(2018, 05, 04);
+			var date = new DateOnly(2018, 05, 04);
 
 			SkillRepository.Add(skill);
 			ScenarioRepository.Has(scenario);
@@ -149,23 +148,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			{
 				statisticTasks.Add(new StatisticTask
 				{
-					Interval = friday.AddDays(-i).Date.AddHours(10),
+					Interval = date.AddDays(-i).Date.AddHours(10),
 					StatOfferedTasks = 10,
 					StatAverageTaskTimeSeconds = random.Next(100, 200),
 					StatAverageAfterTaskTimeSeconds = random.Next(100, 200)
 				});
 			}
 
-			var lastFriday = statisticTasks.Single(x => new DateOnly(x.Interval.Date) == friday.AddDays(-7));
-			lastFriday.StatAverageTaskTimeSeconds = 10;
-			lastFriday.StatAverageAfterTaskTimeSeconds = 10;
+			var outlierDay = statisticTasks.Single(x => new DateOnly(x.Interval.Date) == date.AddDays(-7));
+			outlierDay.StatAverageTaskTimeSeconds = 10;
+			outlierDay.StatAverageAfterTaskTimeSeconds = 10;
 
 			StatisticRepository.Has(workload.QueueSourceCollection.First(), statisticTasks);
 
 			var forecastInput = new ForecastInput
 			{
-				ForecastStart = friday.Date,
-				ForecastEnd = friday.Date,
+				ForecastStart = date.Date,
+				ForecastEnd = date.Date,
 				ScenarioId = scenario.Id.Value,
 				WorkloadId = workload.Id.Value
 			};
@@ -173,10 +172,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var forecastedTaskTime = result.Content.ForecastDays.Single().AverageTaskTime;
 			var forecastedAfterTaskTime = result.Content.ForecastDays.Single().AverageAfterTaskTime;
 
-			// Forecasted value is ~83 when StatAverageTaskTimeSeconds,StatAverageAfterTaskTimeSeconds  in all historical data is 100 and outliers were not removed
+			// 83 is the forecasted value when statistics time is 100 for all days in history with no outliers removed
+			// 166 is the forecasted value when statistics time is 200 for all days in history with no outliers removed
 			forecastedTaskTime.Should().Be.GreaterThan(83);
 			forecastedAfterTaskTime.Should().Be.GreaterThan(83);
-			// Forecasted value is ~166 when StatAverageTaskTimeSeconds, StatAverageAfterTaskTimeSeconds in all historical data is 200 and outliers were not removed
 			forecastedTaskTime.Should().Be.LessThan(166);
 			forecastedAfterTaskTime.Should().Be.LessThan(166);
 		}
@@ -187,7 +186,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
 			var workload = skill.WorkloadCollection.Single();
 			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
-			var friday = new DateOnly(2018, 05, 04);
+			var date = new DateOnly(2018, 05, 04);
 
 			SkillRepository.Add(skill);
 			ScenarioRepository.Has(scenario);
@@ -199,23 +198,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			{
 				statisticTasks.Add(new StatisticTask
 				{
-					Interval = friday.AddDays(-i).Date.AddHours(10),
+					Interval = date.AddDays(-i).Date.AddHours(10),
 					StatOfferedTasks = 10,
 					StatAverageTaskTimeSeconds = random.Next(100, 200),
 					StatAverageAfterTaskTimeSeconds = random.Next(100, 200)
 				});
 			}
 
-			var lastFriday = statisticTasks.Single(x => new DateOnly(x.Interval.Date) == friday.AddDays(-7));
-			lastFriday.StatAverageTaskTimeSeconds = 260;
-			lastFriday.StatAverageAfterTaskTimeSeconds = 260;
+			var outlierDay = statisticTasks.Single(x => new DateOnly(x.Interval.Date) == date.AddDays(-7));
+			outlierDay.StatAverageTaskTimeSeconds = 260;
+			outlierDay.StatAverageAfterTaskTimeSeconds = 260;
 
 			StatisticRepository.Has(workload.QueueSourceCollection.First(), statisticTasks);
 
 			var forecastInput = new ForecastInput
 			{
-				ForecastStart = friday.Date,
-				ForecastEnd = friday.Date,
+				ForecastStart = date.Date,
+				ForecastEnd = date.Date,
 				ScenarioId = scenario.Id.Value,
 				WorkloadId = workload.Id.Value
 			};
@@ -223,10 +222,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var forecastedTaskTime = result.Content.ForecastDays.Single().AverageTaskTime;
 			var forecastedAfterTaskTime = result.Content.ForecastDays.Single().AverageAfterTaskTime;
 
-			// Forecasted value is 129.298 when StatAverageTaskTimeSeconds in all historical data is 100 and outliers were not removed
+			// 129 is the forecasted value when statistics time is 100 for all days in history with no outliers removed
+			// 211 is the forecasted value when statistics time is 200 for all days in history with no outliers removed
 			forecastedTaskTime.Should().Be.GreaterThan(129);
 			forecastedAfterTaskTime.Should().Be.GreaterThan(129);
-			// Forecasted value is 210.98 when StatAverageTaskTimeSeconds in all historical data is 200 and outliers were not removed
 			forecastedTaskTime.Should().Be.LessThan(211);
 			forecastedAfterTaskTime.Should().Be.LessThan(211);
 		}

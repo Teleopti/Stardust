@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 			_historicalPeriodProvider = historicalPeriodProvider;
 		}
 
-		public WorkloadAccuracy Evaluate(IWorkload workload, IOutlierRemover outlierRemover,
+		public WorkloadAccuracy Evaluate(IWorkload workload, OutlierRemover outlierRemover,
 			IForecastAccuracyCalculator forecastAccuracyCalculator)
 		{
 			var result = new WorkloadAccuracy

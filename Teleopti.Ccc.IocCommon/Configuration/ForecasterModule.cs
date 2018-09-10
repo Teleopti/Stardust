@@ -30,8 +30,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.SingleInstance()
 				.As<IIntradayForecaster>();
 			builder.RegisterType<OutlierRemover>()
-				.SingleInstance()
-				.As<IOutlierRemover>();
+				.SingleInstance();
 			builder.RegisterType<ForecastWorkloadEvaluator>()
 				.SingleInstance()
 				.As<IForecastWorkloadEvaluator>();

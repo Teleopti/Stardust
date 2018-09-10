@@ -202,6 +202,7 @@
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\AccuracyModel.cs" />
     <Compile Include="Forecasting\Angel\Outlier\OutlierRemover.cs" />
+    <Compile Include="Forecasting\Angel\Outlier\QueueStatisticsPerType.cs" />
     <Compile Include="Forecasting\Angel\Trend\LinearRegressionTrendCalculator.cs" />
     <Compile Include="Forecasting\QueueStatisticsViewModelFactory.cs" />
     <Compile Include="Forecasting\IQueueStatisticsViewModelFactory.cs" />
@@ -2246,7 +2247,6 @@
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicBase.cs" />
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicWithTrend.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumesLongTermWithDayInMonth.cs" />
-    <Compile Include="Forecasting\Angel\Outlier\IOutlierRemover.cs" />
     <Compile Include="Forecasting\Angel\Trend\ILinearTrendCalculator.cs" />
     <Compile Include="Forecasting\Angel\Trend\LinearTrend.cs" />
     <Compile Include="Forecasting\Angel\ForecastingTargetMerger.cs" />
