@@ -78,7 +78,7 @@ Wfm_People_SetFallbackValuesForImporting_43289 = true
 Wfm_People_MoveImportJobToBackgroundService_43582 = true
 
 # Bockemon #
-Wfm_PeopleWeb_PrepareForRelease_74903 = RC
+Wfm_PeopleWeb_PrepareForRelease_74903 = true
 Wfm_Authentication_ChangePasswordMenu_76666 = RC
 
 # China, can any of these be removed? #
