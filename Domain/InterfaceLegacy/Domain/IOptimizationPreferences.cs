@@ -193,7 +193,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 		bool UseMinimumStaffing { get; set; }
 		bool UseMaximumStaffing { get; set; }
-		TimeSpan BreakPreferenceStartTimeByMax { get; set; }
 	}
 
     /// <summary>
