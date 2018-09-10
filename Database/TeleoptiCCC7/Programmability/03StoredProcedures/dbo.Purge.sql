@@ -255,6 +255,7 @@ begin
 	from SkillDay sd
 	where 1=1
 	and not exists (select 1 from SkillDayTemplate sdt where sdt.id = sd.TemplateId)
+	and not exists (select 1 from WorkloadDay wd where sd.id = wd.Parent)
 	and sd.SkillDayDate < @KeepUntil
 
 	select @RowCount = @@rowcount
