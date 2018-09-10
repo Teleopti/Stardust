@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeRtaMapRepository : IRtaMapRepository
 	{
-		private readonly FakeStorage _storage;
+		private readonly IFakeStorage _storage;
 
-		public FakeRtaMapRepository(FakeStorage storage)
+		public FakeRtaMapRepository(IFakeStorage storage)
 		{
 			_storage = storage;
 		}

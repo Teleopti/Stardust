@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	[TestFixture(SeperateWebRequest.SimulateFirstRequest, true)]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
+	[DontSendEventsAtPersist]
 	public abstract class SchedulingScenario : ITestInterceptor, IExtendSystem, IConfigureToggleManager
 	{
 		private readonly SeperateWebRequest _seperateWebRequest;

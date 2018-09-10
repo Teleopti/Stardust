@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeRtaRuleRepository : IRtaRuleRepository
 	{
-		private readonly FakeStorage _storage;
+		private readonly IFakeStorage _storage;
 
-		public FakeRtaRuleRepository(FakeStorage storage)
+		public FakeRtaRuleRepository(IFakeStorage storage)
 		{
 			_storage = storage;
 		}

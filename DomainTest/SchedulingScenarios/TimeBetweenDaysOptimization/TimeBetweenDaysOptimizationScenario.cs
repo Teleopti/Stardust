@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TimeBetweenDaysOptimizatio
 {
 	[TestFixture(true)]
 	[TestFixture(false)]
+	[DontSendEventsAtPersist]
 	public abstract class TimeBetweenDaysOptimizationScenario : IConfigureToggleManager
 	{
 		private readonly bool _resourcePlannerXxl76496;

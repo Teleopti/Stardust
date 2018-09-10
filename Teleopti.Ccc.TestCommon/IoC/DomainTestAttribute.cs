@@ -64,7 +64,14 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			extend.AddService<FakeDataSources>();
 			
 			extend.AddService<FakeDatabase>();
-			extend.AddService<FakeStorage>();
+			if (QueryAllAttributes<DontSendEventsAtPersistAttribute>().Any())
+			{
+				extend.AddService<FakeStorageSimple>();				
+			}
+			else
+			{
+				extend.AddService<FakeStorage>();
+			}
 			extend.AddService<FakeSchedulingSourceScope>();
 			extend.AddService<FakeRtaHistory>();
 		}
