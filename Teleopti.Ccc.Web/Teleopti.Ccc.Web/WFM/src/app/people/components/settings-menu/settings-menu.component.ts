@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { ChangePasswordComponent } from '../../../authentication/components/change-password/change-password.component';
-import { ThemeService } from '../../../core/services';
+import { ThemeService, TogglesService } from '../../../core/services';
 
 @Component({
 	selector: 'settings-menu',
@@ -12,10 +12,21 @@ export class SettingsMenuComponent implements OnInit {
 	lowLightFilter: boolean = false;
 	darkTheme: boolean = false;
 	visible: boolean;
+	changePasswordToggle: boolean = false;
+
 	@ViewChild('passwordModal')
 	passwordModal: ChangePasswordComponent;
 
-	constructor(private themeService: ThemeService, @Inject(DOCUMENT) private document: Document) {
+	constructor(
+		private themeService: ThemeService,
+		@Inject(DOCUMENT) private document: Document,
+		public toggleService: TogglesService
+	) {
+		this.toggleService.getToggles().subscribe({
+			next: toggles => {
+				this.changePasswordToggle = toggles.Wfm_Authentication_ChangePasswordMenu_76666;
+			}
+		});
 		this.themeService.getTheme().subscribe({
 			next: theme => {
 				this.lowLightFilter = theme.Overlay;
