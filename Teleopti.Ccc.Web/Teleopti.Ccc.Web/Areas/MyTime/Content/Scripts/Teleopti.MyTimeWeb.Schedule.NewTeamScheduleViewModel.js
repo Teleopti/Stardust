@@ -34,14 +34,18 @@
 	self.timeLines = ko.observableArray();
 	self.mySchedule = ko.observable();
 	self.teamSchedules = ko.observableArray();
+	self.allTeamSchedules = [];
 	self.agentNames = ko.observableArray();
+	self.allAgentNames = [];
+	self.lastAgentIndexInDom = 0;
 
 	self.filterChangedCallback = filterChangedCallback;
 	self.selectedDateSubscription = null;
 	self.selectedTeamSubscription = null;
-	self.currentPageNum = ko.observable(1);
-	self.totalPageNum = ko.observable(0);
-	self.totalAgentCount = ko.observable(0);
+	self.currentPageNum = 1;
+	self.totalPageNum = 0;
+	self.totalAgentCount = 0;
+	self.loadedAgentIndex = 0;
 	self.showOnlyDayOff = ko.observable(false);
 	self.isPanelVisible = ko.observable(false);
 	self.isScrollbarVisible = ko.observable(false);
@@ -69,23 +73,31 @@
 
 	self.paging = {
 		skip: 0,
-		take: 20
+		take: 50
 	};
 
 	self.today = function() {
+		if (moment().isSame(self.selectedDate(), 'day')) return;
+
 		self.paging.skip = 0;
 		self.filterChangedCallback(moment());
+		self.loadedAgentIndex = 0;
+		self.lastAgentIndexInDom = 0;
 		self.isLoadingMoreAgentSchedules = false;
 	};
 
 	self.previousDay = function() {
 		self.paging.skip = 0;
+		self.loadedAgentIndex = 0;
+		self.lastAgentIndexInDom = 0;
 		self.filterChangedCallback(moment(self.selectedDate()).add(-1, 'days'));
 		self.isLoadingMoreAgentSchedules = false;
 	};
 
 	self.nextDay = function() {
 		self.paging.skip = 0;
+		self.loadedAgentIndex = 0;
+		self.lastAgentIndexInDom = 0;
 		self.filterChangedCallback(moment(self.selectedDate()).add(1, 'days'));
 		self.isLoadingMoreAgentSchedules = false;
 	};
@@ -98,6 +110,8 @@
 			if (value) {
 				self.paging.skip = 0;
 			}
+			self.loadedAgentIndex = 0;
+			self.lastAgentIndexInDom = 0;
 			self.filterChangedCallback(self.selectedDate());
 		}
 	});
@@ -156,23 +170,10 @@
 				self.endTimeStart() != defaultFilterTime ||
 				self.endTimeEnd() != defaultFilterTime
 		);
+
+		self.loadedAgentIndex = 0;
+		self.lastAgentIndexInDom = 0;
 		self.filterChangedCallback(self.selectedDate());
-	};
-
-	self.goToPreviousPage = function() {
-		if (self.currentPageNum() == 1) return;
-
-		self.paging.skip -= self.paging.take;
-		if (self.paging.skip < 0) self.paging.skip = 0;
-
-		self.filterChangedCallback(self.selectedDate());
-	};
-
-	self.goToNextPage = function() {
-		if (self.paging.skip + self.paging.take < self.paging.take * self.totalPageNum()) {
-			self.paging.skip += self.paging.take;
-			self.filterChangedCallback(self.selectedDate());
-		}
 	};
 
 	self.readTeamsData = function(data) {
@@ -206,7 +207,6 @@
 	self.readScheduleData = function(data, date) {
 		disposeSelectedDateSubscription();
 
-		self.agentNames(buildAgentNames(data.AgentSchedules));
 		self.selectedDate(moment(date));
 		self.displayDate(moment(date).format(dateOnlyFormat));
 
@@ -215,13 +215,21 @@
 		self.scheduleContainerHeight(self.timeLines().length * PIXEL_OF_ONE_HOUR + timeLineOffset);
 
 		var timelineStart = data.TimeLine[0].Time;
-
 		self.mySchedule(createMySchedule(data.MySchedule, timelineStart));
-		self.teamSchedules(createTeamSchedules(data.AgentSchedules, timelineStart));
+
+		self.agentNames(buildAgentNames(data.AgentSchedules, self.loadedAgentIndex));
+		self.allAgentNames = buildAgentNames(data.AgentSchedules, self.loadedAgentIndex);
+
+		self.teamSchedules(createTeamSchedules(data.AgentSchedules, timelineStart, self.loadedAgentIndex));
+		self.allTeamSchedules = createTeamSchedules(data.AgentSchedules, timelineStart, self.loadedAgentIndex);
+
+		self.loadedAgentIndex = data.AgentSchedules.length - 1;
+		self.lastAgentIndexInDom = data.AgentSchedules.length - 1;
 
 		setSelectedDateSubscription();
-		setPaging(data.PageCount);
-		self.totalAgentCount(data.TotalAgentCount);
+
+		if (data.PageCount > 0) self.totalPageNum = data.PageCount;
+		self.totalAgentCount = data.TotalAgentCount;
 
 		self.hasFiltered(
 			self.hasTimeFiltered() ||
@@ -245,17 +253,23 @@
 
 		self.scheduleContainerHeight(self.timeLines().length * PIXEL_OF_ONE_HOUR + timeLineOffset);
 
-		var agentNames = buildAgentNames(data.AgentSchedules);
+		var agentNames = buildAgentNames(data.AgentSchedules, self.loadedAgentIndex + 1);
 		agentNames.forEach(function(a) {
-			self.agentNames.push(a);
+			self.allAgentNames.push(a);
 		});
 
-		var teamSchedule = createTeamSchedules(data.AgentSchedules, self.timeLines()[0].time);
+		var teamSchedule = createTeamSchedules(
+			data.AgentSchedules,
+			self.timeLines()[0].time,
+			self.loadedAgentIndex + 1
+		);
 		teamSchedule.forEach(function(agentSchedule) {
-			self.teamSchedules.push(agentSchedule);
+			self.allTeamSchedules.push(agentSchedule);
 		});
 
-		setPaging();
+		self.loadedAgentIndex += data.AgentSchedules.length;
+		self.lastAgentIndexInDom += data.AgentSchedules.length;
+
 		callback && callback();
 	};
 
@@ -278,14 +292,15 @@
 		return distinctRawTimeline;
 	}
 
-	function buildAgentNames(agentSchedulesData) {
+	function buildAgentNames(agentSchedulesData, agentIndex) {
 		var agentNames = [];
 		if (!agentSchedulesData || agentSchedulesData.length == 0) {
 			return agentNames;
 		}
 
-		agentSchedulesData.forEach(function(agentSchedule) {
+		agentSchedulesData.forEach(function(agentSchedule, i) {
 			agentNames.push({
+				index: i + agentIndex,
 				name: agentSchedule.Name,
 				shiftCategory: getShiftCategory(agentSchedule),
 				isDayOff: agentSchedule.IsDayOff
@@ -295,19 +310,13 @@
 		return agentNames;
 	}
 
-	function setPaging(pageCount) {
-		if (pageCount > 0) self.totalPageNum(pageCount);
-
-		self.currentPageNum(parseInt(self.paging.skip / self.paging.take) + 1);
-	}
-
 	function setSelectedDateSubscription() {
 		self.selectedDateSubscription = self.selectedDate.subscribe(function(value) {
 			self.displayDate(value.format(dateOnlyFormat));
-			if (self.filterChangedCallback) {
-				self.paging.skip = 0;
-				self.filterChangedCallback(moment(value));
-			}
+			self.paging.skip = 0;
+			self.loadedAgentIndex = 0;
+			self.lastAgentIndexInDom = 0;
+			self.filterChangedCallback && self.filterChangedCallback(moment(value));
 		});
 	}
 
@@ -324,6 +333,8 @@
 				self.selectedTeamIds.push(value);
 			}
 			if (self.isTeamsAndGroupsLoaded() && self.isDesktopEnabled) {
+				self.loadedAgentIndex = 0;
+				self.lastAgentIndexInDom = 0;
 				self.submitSearchForm();
 			}
 		});
@@ -378,14 +389,14 @@
 		};
 	}
 
-	function createTeamSchedules(agentSchedulesData, timelineStart) {
+	function createTeamSchedules(agentSchedulesData, timelineStart, agentIndex) {
 		var teamSchedules = [];
 
 		if (!agentSchedulesData || agentSchedulesData.length == 0) {
 			return teamSchedules;
 		}
 
-		agentSchedulesData.forEach(function(agentSchedule) {
+		agentSchedulesData.forEach(function(agentSchedule, i) {
 			var layers = [];
 			agentSchedule.Periods.forEach(function(layer, index, periods) {
 				var layerViewModel = new Teleopti.MyTimeWeb.Schedule.LayerViewModel(
@@ -403,6 +414,7 @@
 			});
 
 			teamSchedules.push({
+				index: i + agentIndex,
 				name: agentSchedule.Name,
 				layers: layers,
 				isDayOff: agentSchedule.IsDayOff,

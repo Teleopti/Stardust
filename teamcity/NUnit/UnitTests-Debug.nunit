@@ -2,6 +2,7 @@
 <Settings activeconfig="active" appbase="..\..\"/>
 	<Config name="active">
 		<assembly path=".\DomainTest\bin\Debug\Teleopti.Ccc.DomainTest.dll"/>
+		<assembly path=".\Teleopti.Wfm.Rta.Test\bin\Release\Teleopti.Wfm.Rta.Test.dll"/>
 		<assembly path=".\Teleopti.Ccc.Web\Teleopti.Ccc.WebTest\bin\Debug\Teleopti.Ccc.WebTest.dll"/>
 		<assembly path=".\Teleopti.Analytics\Teleopti.Analytics.Etl.CommonTest\bin\Debug\Teleopti.Analytics.Etl.CommonTest.dll"/>
 		<assembly path=".\Teleopti.Ccc.IocCommonTest\bin\Debug\Teleopti.Ccc.IocCommonTest.dll"/>

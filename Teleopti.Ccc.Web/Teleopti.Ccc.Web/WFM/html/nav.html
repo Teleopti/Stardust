@@ -87,13 +87,11 @@
 					</li>
 				</div>
 				<ng-container ng-controller="AuthenticationController as vm">
-					<li ng-if="vm.isToggleActive()">
-						<ng2-change-password></ng2-change-password>
-					</li>
+					<ng2-change-password ng-if="vm.isToggleActive()"></ng2-change-password>
 				</ng-container>
-				<a href="../Authentication/SignOut" style="width:100%; display: inline;">
+				<a href="../Authentication/SignOut " style="display: inline; ">
 					<li>
-						<i class="mdi mdi-logout"></i> {{'LogOut'|translate}}
+						<i class="mdi mdi-logout "></i> {{'LogOut'|translate}}
 					</li>
 				</a>
 			</ul>

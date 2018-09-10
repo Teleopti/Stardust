@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<SkillStaffingIntervalProvider>().For<SkillStaffingIntervalProvider>();
+			isolate.UseTestDouble<SkillStaffingIntervalProvider>().For<ISkillStaffingIntervalProvider>();
 		}
 
 

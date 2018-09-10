@@ -214,13 +214,13 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 	}
 
 	public class PrincipalAuthorization : IAuthorization
-    {
+	{
 		private readonly ICurrentTeleoptiPrincipal _teleoptiPrincipal;
 
 		public PrincipalAuthorization(ICurrentTeleoptiPrincipal teleoptiPrincipal)
-        {
-            _teleoptiPrincipal = teleoptiPrincipal;
-        }
+		{
+			_teleoptiPrincipal = teleoptiPrincipal;
+		}
 		
 		public static IAuthorization Current()
 		{
@@ -282,56 +282,56 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 
 
-    public class ModuleSpecification : Specification<IApplicationFunction>
-    {
-        public override bool IsSatisfiedBy(IApplicationFunction obj)
-        {
-            return obj?.Parent != null && obj.SortOrder.HasValue && obj.Level == 1;
-        }
-    }
+	public class ModuleSpecification : Specification<IApplicationFunction>
+	{
+		public override bool IsSatisfiedBy(IApplicationFunction obj)
+		{
+			return obj?.Parent != null && obj.SortOrder.HasValue && obj.Level == 1;
+		}
+	}
 
-    public class AllowedToSeeUsersNotInOrganizationSpecification : Specification<IEnumerable<ClaimSet>>
-    {
-        private readonly string _functionPath;
+	public class AllowedToSeeUsersNotInOrganizationSpecification : Specification<IEnumerable<ClaimSet>>
+	{
+		private readonly string _functionPath;
 
-        public AllowedToSeeUsersNotInOrganizationSpecification(string functionPath)
-        {
-            _functionPath = functionPath;
-        }
+		public AllowedToSeeUsersNotInOrganizationSpecification(string functionPath)
+		{
+			_functionPath = functionPath;
+		}
 
-	    public override bool IsSatisfiedBy(IEnumerable<ClaimSet> obj)
-	    {
-		    var principal = TeleoptiPrincipal.CurrentPrincipal;
-		    var identity = (ITeleoptiIdentity) principal.Identity;
+		public override bool IsSatisfiedBy(IEnumerable<ClaimSet> obj)
+		{
+			var principal = TeleoptiPrincipal.CurrentPrincipal;
+			var identity = (ITeleoptiIdentity) principal.Identity;
 
-		    var claimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/",
-			    _functionPath);
-		    var dataClaimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
-			    "/AvailableData");
+			var claimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/",
+				_functionPath);
+			var dataClaimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
+				"/AvailableData");
 
-		    foreach (var claimSet in obj)
-		    {
-			    if (claimSet.FindClaims(claimType, Rights.PossessProperty).Any())
-			    {
-				    var foundClaims = claimSet.FindClaims(dataClaimType, Rights.PossessProperty);
-				    foreach (var foundClaim in foundClaims)
-				    {
-					    var authorizeMyBusinessUnit = foundClaim.Resource as AuthorizeMyBusinessUnit;
-					    var authorizeEveryone = foundClaim.Resource as AuthorizeEveryone;
-					    var authorizeExternalAvailableData = foundClaim.Resource as AuthorizeExternalAvailableData;
+			foreach (var claimSet in obj)
+			{
+				if (claimSet.FindClaims(claimType, Rights.PossessProperty).Any())
+				{
+					var foundClaims = claimSet.FindClaims(dataClaimType, Rights.PossessProperty);
+					foreach (var foundClaim in foundClaims)
+					{
+						var authorizeMyBusinessUnit = foundClaim.Resource as AuthorizeMyBusinessUnit;
+						var authorizeEveryone = foundClaim.Resource as AuthorizeEveryone;
+						var authorizeExternalAvailableData = foundClaim.Resource as AuthorizeExternalAvailableData;
 
-					    if (authorizeEveryone != null || authorizeMyBusinessUnit != null)
-						    return true;
+						if (authorizeEveryone != null || authorizeMyBusinessUnit != null)
+							return true;
 
-					    if (authorizeExternalAvailableData != null)
-					    {
-						    if (authorizeExternalAvailableData.Check(principal.Organisation, DateOnly.Today, identity.BusinessUnit))
-							    return true;
-					    }
-				    }
-			    }
-		    }
-		    return false;
-	    }
-    }
+						if (authorizeExternalAvailableData != null)
+						{
+							if (authorizeExternalAvailableData.Check(principal.Organisation, DateOnly.Today, identity.BusinessUnit))
+								return true;
+						}
+					}
+				}
+			}
+			return false;
+		}
+	}
 }

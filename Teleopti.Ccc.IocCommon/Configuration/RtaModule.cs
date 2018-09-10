@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Tool;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 using Teleopti.Ccc.Infrastructure.Aop;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
@@ -63,6 +64,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AgentStateReadModelReader>().As<IAgentStateReadModelReader>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateReadModelQueryBuilderConfiguration>().SingleInstance();
 
+			builder.RegisterType<HistoricalOverviewReadModelPersister>()
+				.As<IHistoricalOverviewReadModelReader>()
+				.As<IHistoricalOverviewReadModelPersister>()
+				.SingleInstance().ApplyAspects();
+			
 			builder.RegisterType<KeyValueStorePersister>().As<IKeyValueStorePersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStatePersister>().As<IAgentStatePersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<MappingReadModelPersister>().As<IMappingReadModelPersister>().SingleInstance().ApplyAspects();
@@ -96,21 +102,24 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IRtaEventStoreTestReader>()
 				.SingleInstance();
 			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
-				builder.RegisterType<RtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance();
+				builder.RegisterType<RtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance().ApplyAspects();
 			else
-			{
 				builder.RegisterType<NoRtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance();
-			}
-			// register empty implementation please
+			builder.RegisterType<RtaEventStoreSynchronizerProcess>().SingleInstance().ApplyAspects();
 
-			if (_config.Toggle(Toggles.RTA_DurationOfHistoricalEvents_76470))
+			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
+				builder.RegisterType<AgentAdherenceDayLoaderHistoricalOverview>().As<IAgentAdherenceDayLoader>().SingleInstance();
+			else if (_config.Toggle(Toggles.RTA_DurationOfHistoricalEvents_76470))
 				builder.RegisterType<AgentAdherenceDayLoaderDurationOfEvents>().As<IAgentAdherenceDayLoader>().SingleInstance();
 			else if (_config.Toggle(Toggles.RTA_EasilySpotLateForWork_75668))
 				builder.RegisterType<AgentAdherenceDayLoaderLateForWork>().As<IAgentAdherenceDayLoader>().SingleInstance();
 			else
 				builder.RegisterType<AgentAdherenceDayLoaderFromEventStore>().As<IAgentAdherenceDayLoader>().SingleInstance();
 
-			builder.RegisterType<ScheduleLoader>().SingleInstance();
+			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
+				builder.RegisterType<ScheduleLoaderHistoricalOverview>().As<IScheduleLoader>().SingleInstance();
+			else if (_config.Toggle(Toggles.RTA_DurationOfHistoricalEvents_76470))
+				builder.RegisterType<ScheduleLoader>().As<IScheduleLoader>().SingleInstance();
 			builder.RegisterType<AdherencePercentageCalculator>().SingleInstance();
 
 			builder.RegisterType<ShiftEventPublisher>().SingleInstance();

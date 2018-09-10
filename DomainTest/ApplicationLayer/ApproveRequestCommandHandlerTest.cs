@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	[DomainTest]
 	class ApproveRequestCommandHandlerTest
 	{
-		private FakeCurrentScenario_DoNotUse _scenario;
+		private IScenario _scenario;
 		private FakePersonRequestRepository _personRequestRepository;
 		private FakePersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private FakeScheduleStorage_DoNotUse _fakeScheduleStorage;
@@ -40,7 +41,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[SetUp]
 		public void Setup()
 		{
-			_scenario = new FakeCurrentScenario_DoNotUse();
+			var scenarioRepository = new FakeScenarioRepository();
+			_scenario = scenarioRepository.Has("Default");
 			_personRequestRepository = new FakePersonRequestRepository();
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 
@@ -68,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				new PersonRequestAuthorizationCheckerForTest(),
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				_personRequestRepository, _requestApprovalServiceFactory,
-				_scenario, writeProtectedScheduleCommandValidator);
+				new DefaultScenarioFromRepository(scenarioRepository), writeProtectedScheduleCommandValidator);
 		}
 
 		[Test]
@@ -327,7 +329,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		private void addAssignment(IPerson person, DateTimePeriod absenceDateTimePeriod)
 		{
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
-				_scenario.Current(), absenceDateTimePeriod);
+				_scenario, absenceDateTimePeriod);
 			_fakeScheduleStorage.Add(assignment);
 		}
 	}

@@ -13,23 +13,25 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     	private readonly IRuleSetDeletedShiftCategoryChecker _rulesSetDeletedShiftCategoryChecker;
 	    private readonly IWorkShiftFromEditableShift _workShiftFromEditableShift;
 		private readonly ShiftProjectionCacheFetcher _shiftProjectionCacheFetcher;
-		private readonly IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
+		private readonly IShiftProjectionCacheFactory _shiftProjectionCacheFactory;
 
-	    public ShiftProjectionCacheManager(IRuleSetDeletedActivityChecker ruleSetDeletedActivityChecker, 
+		public ShiftProjectionCacheManager(IRuleSetDeletedActivityChecker ruleSetDeletedActivityChecker, 
 			IRuleSetDeletedShiftCategoryChecker rulesSetDeletedShiftCategoryChecker,
 			IWorkShiftFromEditableShift workShiftFromEditableShift,
-			ShiftProjectionCacheFetcher shiftProjectionCacheFetcher)
+			ShiftProjectionCacheFetcher shiftProjectionCacheFetcher,
+			IShiftProjectionCacheFactory shiftProjectionCacheFactory)
         {
             _ruleSetDeletedActivityChecker = ruleSetDeletedActivityChecker;
 			_rulesSetDeletedShiftCategoryChecker = rulesSetDeletedShiftCategoryChecker;
 	        _workShiftFromEditableShift = workShiftFromEditableShift;
 			_shiftProjectionCacheFetcher = shiftProjectionCacheFetcher;
+			_shiftProjectionCacheFactory = shiftProjectionCacheFactory;
 		}
 
 	    public ShiftProjectionCache ShiftProjectionCacheFromShift(IEditableShift shift, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
 	    {
 		    var workShift = _workShiftFromEditableShift.Convert(shift, dateOnlyAsDateTimePeriod.DateOnly,dateOnlyAsDateTimePeriod.TimeZone());
-		    return new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+		    return _shiftProjectionCacheFactory.Create(workShift, dateOnlyAsDateTimePeriod);
 	    }
 
 	    public IList<ShiftProjectionCache> ShiftProjectionCachesFromRuleSets(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, IEnumerable<IWorkShiftRuleSet> ruleSets, bool checkExcluded)

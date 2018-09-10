@@ -9,12 +9,7 @@
 						<i class="glyphicon glyphicon-chevron-left"></i>
 					</button>
 				</span>
-				<![if (!IE)|(gt IE 8)]>
 				<input type="text" class="col-lg-2 form-control add-shifttrade-datepicker text-center date-input-style" data-bind="datepicker: requestedDate, datepickerOptions: { format: DatePickerFormat(), startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
-				<![endif]>
-				<!--[if lte IE 8]>
-					<input type="text" class="col-lg-2 form-control add-shifttrade-datepicker" data-bind="value: requestedDate().format(DatePickerFormat())" readonly="readonly" />
-				<![endif]-->
 				<span class="input-group-btn">
 					<button class="btn" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
 						<i class="glyphicon glyphicon-calendar"></i>
@@ -225,7 +220,8 @@
 		</table>
 		<div class="pull-right" data-bind="visible: !isDetailVisible() && isPageVisible()">
 			<ul class="pagination pagination-sm">
-				<li><a data-bind="click: goToFirstPage,css:{'disabled':selectedPageIndex()===1,'hidden':selectablePages().length===0}"><i class="glyphicon glyphicon-fast-backward"></i></a></li>
+				<li><a data-bind="click: goToFirstPage,css:{'disabled':selectedPageIndex()===1,'hidden':selectablePages().length===0}"><i
+						 class="glyphicon glyphicon-fast-backward"></i></a></li>
 				<li>
 					<a data-bind="click: goPreviousPages, visible: isPreviousMore()">...</a>
 				</li>
@@ -238,7 +234,8 @@
 					<a data-bind="click: goNextPages, visible: isMore()">...</a>
 				</li>
 				<li>
-					<a data-bind="click: goToLastPage,css:{'disabled':pageCount()===selectedPageIndex(),'hidden':selectablePages().length===0}"><i class="glyphicon glyphicon-fast-forward"></i></a>
+					<a data-bind="click: goToLastPage,css:{'disabled':pageCount()===selectedPageIndex(),'hidden':selectablePages().length===0}"><i
+						 class="glyphicon glyphicon-fast-forward"></i></a>
 				</li>
 			</ul>
 		</div>
@@ -348,11 +345,13 @@
 	<div class="row add-shift-trade-detail-section">
 		<div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="well well-sm col-xs-12 col-md-6">
 			<div class="form-group">
-				<input id="Request-add-shift-trade-subject-input" class="form-control input-block-level" type="text" data-bind="value: subject" placeholder="@Resources.Subject" maxlength="80" />
+				<input id="Request-add-shift-trade-subject-input" class="form-control input-block-level" type="text" data-bind="value: subject"
+				 placeholder="@Resources.Subject" maxlength="80" />
 			</div>
 			<div class="form-group">
-				<textarea id="Request-add-shift-trade-message-input" class="form-control input-block-level" data-bind="value: message, valueUpdate: 'afterkeydown', event:{change : checkMessageLength}" rows="4" placeholder="@Resources.Message" />
-			</div>
+				<textarea id="Request-add-shift-trade-message-input" class="form-control input-block-level" data-bind="value: message, valueUpdate: 'afterkeydown', event:{change : checkMessageLength}"
+				 rows="4" placeholder="@Resources.Message" />
+				</div>
 			<div class="pull-right">
 				<button class="btn cancel-button" data-bind="click: cancelRequest">@Resources.Cancel</button>
 				<button class="btn btn-primary send-button" data-bind="enable: isSendEnabled, click: sendRequest">@Resources.Send</button>

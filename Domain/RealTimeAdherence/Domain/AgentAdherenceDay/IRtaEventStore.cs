@@ -13,9 +13,15 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 
 	public interface IRtaEventStoreReader
 	{
-		IEnumerable<IEvent> LoadAll();
 		IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period);
 		IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp);
+		LoadedEvents LoadFrom(int fromEventId);
+	}
+
+	public class LoadedEvents
+	{
+		public int MaxId { get; set; }
+		public IEnumerable<IEvent> Events { get; set; }
 	}
 
 	public interface IRtaEventStoreTestReader

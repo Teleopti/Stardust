@@ -19,6 +19,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			return bool.TryParse(value, out result) ? result : @default;
 		}
 
+		public static int Get(this IKeyValueStorePersister instance, string key, int @default)
+		{
+			var value = instance.Get(key);
+			if (string.IsNullOrEmpty(value))
+				return @default;
+			int result;
+			return int.TryParse(value, out result) ? result : @default;
+		}
+
 		public static void Update(this IKeyValueStorePersister instance, string key, CurrentScheduleReadModelVersion value)
 		{
 			instance.Update(key, value.ToString());

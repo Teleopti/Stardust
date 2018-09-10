@@ -26,20 +26,19 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 			DateTime endAtUtc);
 
 		IList<EslInterval> CalculateEstimatedServiceLevels(IEnumerable<ISkillDay> skillDays, DateTime startOfPeriodUtc, DateTime endOfPeriodUtc);
-		void CalculateForecastedAgentsForEmailSkills(IEnumerable<ISkillDay> skillDays, bool useShrinkage);
 	}
 
 	public class IntradayForecastingService : IIntradayForecastingService
 	{
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorService;
-		private readonly SkillStaffingIntervalProvider _skillStaffingIntervalProvider;
+		private readonly ISkillStaffingIntervalProvider _skillStaffingIntervalProvider;
 		private readonly IIntradayStaffingService _staffingService;
 
 		public IntradayForecastingService(
 			IIntervalLengthFetcher intervalLengthFetcher,
 			IStaffingCalculatorServiceFacade staffingCalculatorService,
-			SkillStaffingIntervalProvider skillStaffingIntervalProvider,
+			ISkillStaffingIntervalProvider skillStaffingIntervalProvider,
 			IIntradayStaffingService staffingService
 			)
 		{
@@ -111,66 +110,84 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 			if (!skillDays.Any())
 				return eslIntervals;
 
-			skillDays = skillDays.Where(x => !(x.Skill is IChildSkill) && x.Skill.Id.HasValue);
+			var skills = skillDays
+				.GroupBy(x => x.Skill)
+				.Select(x => x.Key)
+				.ToList();
 
-			var skills = skillDays.GroupBy(x => x.Skill).Select(x => x.Key).ToList();
+			var mainSkillDays = skillDays.Where(x => !(x.Skill is IChildSkill) && x.Skill.Id.HasValue);
 
-			var forcastedVolumes = this.GetForecastedCalls(skillDays, startOfPeriodUtc, endOfPeriodUtc);
-
-			var forecastedStaffing = this
-				.GetForecastedStaffing(skillDays, startOfPeriodUtc, endOfPeriodUtc, TimeSpan.FromMinutes(intervalLength), false)
-				.Where(x => x.StartTime >= startOfPeriodUtc && x.StartTime <= endOfPeriodUtc);
+			var forcastedVolumes = this.GetForecastedCalls(mainSkillDays, startOfPeriodUtc, endOfPeriodUtc);
+			var forecastedStaffing = this.GetForecastedStaffing(
+				mainSkillDays, 
+				startOfPeriodUtc, 
+				endOfPeriodUtc, 
+				TimeSpan.FromMinutes(intervalLength),
+				false);
 
 			if (!forcastedVolumes.Any() || !forecastedStaffing.Any())
 				return new List<EslInterval>();
 
-			var period = new DateTimePeriod(startOfPeriodUtc, endOfPeriodUtc);
 			var scheduledStaffing = _skillStaffingIntervalProvider
-				.StaffingForSkills(skills.Select(x => x.Id.Value).ToArray(), period, TimeSpan.FromMinutes(intervalLength), false);
-
-			var scheduledStaffingPerSkill = scheduledStaffing
-				.GroupBy(x => new { SkillId = x.Id, x.StartDateTime })
-				.Select(x => new
+				.StaffingForSkills(skills.Select(x => x.Id.Value).ToArray(), new DateTimePeriod(startOfPeriodUtc, endOfPeriodUtc), TimeSpan.FromMinutes(intervalLength), false)
+				.Select(x =>
 				{
-					x.Key.SkillId,
-					x.Key.StartDateTime,
-					StaffingLevel = x.Sum(y => y.StaffingLevel)
-				})
-				.OrderBy(o => o.StartDateTime);
+					IChildSkill skill = (IChildSkill) skills.FirstOrDefault(c => c.Id.Equals(x.Id) && c.IsChildSkill);
+					x.Id = (skill?.Id != null && skill is IChildSkill) ? skill.ParentSkill.Id.Value : x.Id;
+					return (x);
+				});
 
-			for (var iTime = startOfPeriodUtc; iTime < endOfPeriodUtc; iTime = iTime.AddMinutes(intervalLength))
+			var times = Enumerable
+				.Range(0, (int)Math.Ceiling((decimal)(endOfPeriodUtc - startOfPeriodUtc).TotalMinutes / intervalLength))
+				.Select(offset => startOfPeriodUtc.AddMinutes(offset * intervalLength));
+
+			foreach (var skill in skills.Where(x => !(x is IChildSkill) && x.Id.HasValue))
 			{
-				foreach (var skill in skills)
-				{
-					var forecastedVolume = forcastedVolumes.Where(x => x.StartTime == iTime && x.SkillId == skill.Id);
-					var one = skillDays
-						.Where(x => x.CurrentDate.Date == iTime.Date && x.Skill.Id == skill.Id);
-					var skillData = one.Select(x => x.SkillDataPeriodCollection
-							.FirstOrDefault(d => d.Period.StartDateTime <= iTime && d.Period.EndDateTime > iTime))
-						.FirstOrDefault();
-
-					if (forecastedVolume == null || skillData?.ServiceAgreement == null)
-						continue;
-
-					var esl = _staffingCalculatorService.ServiceLevelAchievedOcc(
-						scheduledStaffingPerSkill.Where(x => x.StartDateTime == iTime && x.SkillId == skill.Id)
-							.Sum(x => x.StaffingLevel),
-						skillData.ServiceAgreement.ServiceLevel.Seconds,
-						forecastedVolume.Sum(x => x.Calls),
-						forecastedVolume.Sum(x => x.AverageHandleTime),
-						TimeSpan.FromMinutes(intervalLength),
-						skillData.ServiceAgreement.ServiceLevel.Percent.Value,
-						forecastedStaffing.Where(x => x.StartTime == iTime && x.SkillId == skill.Id)
-							.Sum(x => x.Agents),
-						1,
-						skill.AbandonRate.Value);
-
-					eslIntervals.Add(new EslInterval
+				var skillDataPeriods = skillDays.Where(x => x.Skill.Id == skill.Id).SelectMany(x => x.SkillDataPeriodCollection).OrderBy(x => x.Period.StartDateTime);
+				var forecastedVolumesForThisSkill = forcastedVolumes.Where(f => f.SkillId == skill.Id);
+				var skillData = times
+					.Select(x =>
 					{
-						StartTime = iTime,
-						ForecastedCalls = forecastedVolume.Sum(x => x.Calls),
-						Esl = esl
+						var forecastedVolume = forecastedVolumesForThisSkill.Where(f => f.StartTime == x);
+						if (forecastedVolume == null || !forecastedVolume.Any())
+							return null;
+
+						var forecastedStaffingForThisSkill = forecastedStaffing.Where(f => f.SkillId == skill.Id);
+						var sla = skillDataPeriods.FirstOrDefault(s => s.Period.StartDateTime <= x)?.ServiceAgreement;
+						return new
+						{
+							SkillId = skill.Id,
+							StartTime = x,
+							SkillAbandonRate = skill.AbandonRate.Value,
+							SLA = sla,
+							ScheduledStaffingLevel = scheduledStaffing.Where(s => s.StartDateTime.Equals(x)).Sum(s => s.StaffingLevel),
+							ForecastedCalls = forecastedVolume.Sum(f => f.Calls),
+							ForecastedAverageHandleTime = forecastedVolume.Sum(f => f.AverageHandleTime),
+							ForecastedAgents = forecastedStaffingForThisSkill.Where(f => f.StartTime == x).Sum(f => f.Agents)
+						};
 					});
+				skillData = skillData.Where(x => x != null && x.SLA.HasValue);
+
+				if (skillData.Any())
+				{
+					var eslIntervalForSkill = skillData
+						.Select(x => new EslInterval
+						{
+							StartTime = x.StartTime,
+							ForecastedCalls = x.ForecastedCalls,
+							Esl = _staffingCalculatorService.ServiceLevelAchievedOcc(
+								x.ScheduledStaffingLevel,
+								x.SLA.Value.ServiceLevel.Seconds,
+								x.ForecastedCalls,
+								x.ForecastedAverageHandleTime,
+								TimeSpan.FromMinutes(intervalLength),
+								x.SLA.Value.ServiceLevel.Percent.Value,
+								x.ForecastedAgents,
+								1,
+								x.SkillAbandonRate)
+						});
+
+					eslIntervals.AddRange(eslIntervalForSkill);
 				}
 			}
 

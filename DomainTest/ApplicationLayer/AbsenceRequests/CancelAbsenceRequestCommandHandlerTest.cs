@@ -23,6 +23,7 @@ using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.DomainTest.Common;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -45,17 +46,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public ApprovalServiceForTest ApprovalService;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
-		public FakeScheduleStorage_DoNotUse ScheduleStorage;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public IScheduleStorage ScheduleStorage;
 		public FakePersonRepository PersonRepository;
-		public FakeCurrentScenario_DoNotUse CurrentScenario;
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeCommonAgentNameProvider CommonAgentNameProvider;
 		public FakeUserCulture UserCulture;
-		public FakeScheduleDifferenceSaver_DoNotUse ScheduleDifferenceSaver;
 		public FakeGlobalSettingDataRepository GlobalSetting;
 		public MutableNow Now;
 		public FullPermission FullPermission;
+		public FakeStorage Storage;
 
 		private IPerson person;
 		private IAbsence absence;
@@ -73,14 +74,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			isolate.UseTestDouble<PersonAbsenceCreator>().For<IPersonAbsenceCreator>();
 			isolate.UseTestDouble<PersonRequestAuthorizationCheckerConfigurable>().For<IPersonRequestCheckAuthorization>();
 			isolate.UseTestDouble<ApprovalServiceForTest>().For<IRequestApprovalService>();
-			isolate.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
 			isolate.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();
-			isolate.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			isolate.UseTestDouble<CancelAbsenceRequestCommandValidator>().For<ICancelAbsenceRequestCommandValidator>();
 			isolate.UseTestDouble<WriteProtectedScheduleCommandValidator>().For<IWriteProtectedScheduleCommandValidator>();
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			isolate.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
-			isolate.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
+			isolate.UseTestDouble<ScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
 			isolate.UseTestDouble<FakeEventHandler>().For<FakeEventHandler>();
 			var userCulture = new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture());
 			isolate.UseTestDouble(userCulture).For<IUserCulture>();
@@ -88,12 +87,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		private void commonSetup()
 		{
+			ScenarioRepository.Has("Default");
 			absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
 			person = PersonFactory.CreatePerson("Yngwie", "Malmsteen").WithId();
 			PersonRepository.Add(person);
 			UserCulture.IsSwedish();
-			ScheduleDifferenceSaver.SetScheduleStorage(ScheduleStorage);
-
+			
 			GlobalSetting.PersistSettingValue("FullDayAbsenceRequestStartTime", new TimeSpanSetting(new TimeSpan(0, 0, 0)));
 			GlobalSetting.PersistSettingValue("FullDayAbsenceRequestEndTime", new TimeSpanSetting(new TimeSpan(23, 59, 0)));
 		}
@@ -118,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var personRequest = basicCancelAbsenceRequest(cancelRequestCommand);
 
 			Assert.AreEqual(false, personRequest.IsCancelled);
-			Assert.AreEqual(1, ScheduleStorage.LoadAll().Count());
+			Assert.AreEqual(1, PersonAbsenceRepository.LoadAll().Count());
 			Assert.AreEqual(1, cancelRequestCommand.ErrorMessages.Count);
 		}
 
@@ -201,8 +200,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Assert.AreEqual(0, cancelRequestCommand.ErrorMessages.Count);
 
-			var schedules = ScheduleStorage.LoadAll();
-			schedules.Single().Period.Should().Be.EqualTo(new DateTimePeriod(2016, 03, 01, 08, 2016, 03, 01, 13));
+			var result = Storage.Commit();
+			var personAbsence = result.Where(r => r.Status == DomainUpdateType.Delete).Select(r => r.Root).OfType<IPersonAbsence>().Single();
+			personAbsence.Period.Should().Be.EqualTo(new DateTimePeriod(2016, 03, 01, 08, 2016, 03, 01, 13));
 		}
 
 
@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var personRequest = cancelAbsenceRequestWithMultipleAbsences(cancelRequestCommand);
 
 			Assert.IsTrue(personRequest.IsCancelled);
-			Assert.IsTrue(ScheduleStorage.LoadAll().IsEmpty());
+			Assert.IsTrue(PersonAbsenceRepository.LoadAll().IsEmpty());
 			Assert.IsTrue(cancelRequestCommand.ErrorMessages.IsEmpty());
 		}
 
@@ -274,7 +274,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			commonSetup();
 			var cancelRequestCommand = new CancelAbsenceRequestCommand();
 			basicCancelAbsenceRequest(cancelRequestCommand);
-			var personAbsence = PersonAbsenceRepository.LoadAll().First();
+			var result = Storage.Commit();
+			var personAbsence = result.Where(r => r.Status == DomainUpdateType.Delete).Select(r => r.Root).OfType<IPersonAbsence>().Single();
 
 			personAbsence.NotifyTransactionComplete(DomainUpdateType.Delete);
 			personAbsence.NotifyDelete();
@@ -348,9 +349,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var overnightShiftPeriod = new DateTimePeriod(2018, 04, 15, 17, 2018, 04, 16, 6);
 			createShiftsForPeriod(overnightShiftPeriod);
 
-			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, CurrentScenario.Current(),
+			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, ScenarioRepository.LoadDefaultScenario(),
 				new DateOnly(2018, 04, 16), new DayOffTemplate(new Description("dayoff template")));
-			ScheduleStorage.Add(dayOff);
+			PersonAssignmentRepository.Add(dayOff);
 
 			var absenceDateTimePeriod = new DateTimePeriod(2018, 04, 16, 05, 2018, 04, 16, 06);
 			var absenceRequest = createApprovedAbsenceRequest(timeInLieuabsence, absenceDateTimePeriod, person);
@@ -491,18 +492,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private void createPersonAbsence(IAbsence absence, DateTimePeriod dateTimePeriodOfAbsenceRequest, IPerson person)
 		{
 			var absenceLayer = new AbsenceLayer(absence, dateTimePeriodOfAbsenceRequest);
-			var personAbsence = new PersonAbsence(person, CurrentScenario.Current(), absenceLayer).WithId();
+			var personAbsence = new PersonAbsence(person, ScenarioRepository.LoadDefaultScenario(), absenceLayer).WithId();
 
 			PersonAbsenceRepository.Add(personAbsence);
-			ScheduleStorage.Add(personAbsence);
 		}
 
 		private void createShiftsForPeriod(DateTimePeriod period)
 		{
+			var defaultScenario = ScenarioRepository.LoadDefaultScenario();
 			foreach (var day in period.WholeDayCollection(TimeZoneInfo.Utc))
 			{
 				// need to have a shift otherwise personAccount day off will not be affected
-				ScheduleStorage.Add(createAssignment(person, day.StartDateTime, day.EndDateTime, CurrentScenario.Current()));
+				PersonAssignmentRepository.Add(createAssignment(person, day.StartDateTime, day.EndDateTime, defaultScenario));
 			}
 		}
 

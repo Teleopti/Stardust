@@ -7480,6 +7480,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Contract time violation..
+        /// </summary>
+        public static string ContractTimeViolation {
+            get {
+                return ResourceManager.GetString("ContractTimeViolation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Contract work rule validation.
         /// </summary>
         public static string ContractWorkRuleValidation {
@@ -9961,6 +9970,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string DetailView {
             get {
                 return ResourceManager.GetString("DetailView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deviation.
+        /// </summary>
+        public static string Deviation {
+            get {
+                return ResourceManager.GetString("Deviation", resourceCulture);
             }
         }
         
@@ -24336,7 +24354,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your password was changed.
+        ///   Looks up a localized string similar to Your password has been changed..
         /// </summary>
         public static string PasswordChangedSuccessfully {
             get {

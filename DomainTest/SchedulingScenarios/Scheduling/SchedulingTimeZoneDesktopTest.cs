@@ -87,9 +87,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		[Ignore("PBI75509 to be fixed")]
 		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509)]
 		public void ShouldHandleSkillInHalfHourTimeZoneWithDifferentResolutions(
-			[Values("Iran Standard Time", "GMT Standard Time")] string userAndAgentTimeZone,	//Iran +03:30
-			[Values("Iran Standard Time", "GMT Standard Time")] string skillTimeZone,           //Iran +03:30
+			[Values("Iran Standard Time", "Newfoundland Standard Time", "GMT Standard Time")] string userAndAgentTimeZone,		//Iran +03:30, Newfoundland -3:30
+			[Values("Iran Standard Time", "Newfoundland Standard Time", "GMT Standard Time")] string skillTimeZone,				//Iran +03:30, Newfoundland -3:30
 			[Values(5, 15, 60)] int defaultResolution)
 		{
 			TimeZoneGuard.SetTimeZone(TimeZoneInfo.FindSystemTimeZoneById(userAndAgentTimeZone));

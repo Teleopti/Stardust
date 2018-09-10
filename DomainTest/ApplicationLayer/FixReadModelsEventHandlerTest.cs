@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.TestCommon;
@@ -24,13 +23,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	{
 		public FakePersonRepository PersonRepository;
 		public FakePersonAssignmentWriteSideRepository PersonAssignmentRepo;
-		public FakeCurrentScenario_DoNotUse CurrentScenario;
+		public FakeScenarioRepository CurrentScenario;
 		public Domain.ApplicationLayer.ReadModelValidator.ReadModelValidator Target;
 		public IScheduleProjectionReadOnlyPersister Persister;
 		public IPersonScheduleDayReadModelFinder PersonScheduleDayReadModelFinder;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeScheduleDayReadModelRepository ScheduleDayReadModelRepository;
-		public FakeScheduleStorage_DoNotUse ScheduleStorage;
+		public IScheduleStorage ScheduleStorage;
 		public FixReadModelsEventHandler FixHandler;
 		public IReadModelValidationResultPersister ValidationResultPersister;
 		public FakePersonScheduleDayReadModelPersister PersonScheduleDayReadModelPersister;
@@ -45,8 +44,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			isolate.UseTestDouble<ReadModelFixer>().For<IReadModelFixer>();
 
 			isolate.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment,PersonAssignmentKey>>();
-			isolate.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
-			isolate.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			isolate.UseTestDouble<FakePersonScheduleDayReadModelFinder>().For<IPersonScheduleDayReadModelFinder>();
 			isolate.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
 			isolate.UseTestDouble<FakeScheduleDayReadModelRepository>().For<IScheduleDayReadModelRepository>();
@@ -58,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRemoveScheduleDayReadModelWhenNoPersonPeriodIsFound()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var site = SiteFactory.CreateSimpleSite("s");
 			site.WithId();
 			var team = TeamFactory.CreateTeamWithId("t");
@@ -69,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(2016,1,1,8,2016,1,1,17);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, dateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignment);
 
 			ScheduleDayReadModelRepository.SaveReadModel(new ScheduleDayReadModel
 			{
@@ -105,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRemovePersonScheduleDayReadModelWhenNoPersonPeriodIsFound()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var site = SiteFactory.CreateSimpleSite("s");
 			site.WithId();
 			var team = TeamFactory.CreateTeamWithId("t");
@@ -116,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(2016,1,1,8,2016,1,1,17);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, dateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignment);
 
 			ValidationResultPersister.SavePersonScheduleDay(new ReadModelValidationResult
 			{

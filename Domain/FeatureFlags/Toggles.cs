@@ -84,6 +84,7 @@
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,
 		ResourcePlanner_XXL_76496,
+		ResourcePlanner_HalfHourSkillTimeZone_75509,
 
 		Wfm_DisplayOnlineHelp_39402,
 

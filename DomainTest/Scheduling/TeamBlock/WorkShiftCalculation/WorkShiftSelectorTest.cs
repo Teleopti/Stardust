@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 	{
 		public IWorkShiftSelector Target;
 		public IGroupPersonSkillAggregator GroupPersonSkillAggregator;
-		public IPersonalShiftMeetingTimeChecker PersonalShiftMeetingTimeChecker;
 		public IGroupPersonBuilderWrapper GroupPersonBuilderWrapper;
 		public MatrixListFactory MatrixListFactory;
 		public IGroupPersonBuilderForOptimizationFactory GroupPersonBuilderForOptimizationFactory;
@@ -46,9 +45,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			var workShift1 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(8), TimeSpan.FromHours(9), skill.Activity);
 			var workShift2 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(9), TimeSpan.FromHours(10), skill.Activity); //should win
 			var workShift3 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(10), TimeSpan.FromHours(11), skill.Activity);
-			var cache1 = new ShiftProjectionCache(workShift1, PersonalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(date, TimeZoneGuard.Instance.TimeZone));
-			var cache2 = new ShiftProjectionCache(workShift2, PersonalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(date, TimeZoneGuard.Instance.TimeZone));
-			var cache3 = new ShiftProjectionCache(workShift3, PersonalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(date, TimeZoneGuard.Instance.TimeZone));
+			var cache1 = new ShiftProjectionCache(workShift1, new DateOnlyAsDateTimePeriod(date, TimeZoneGuard.Instance.TimeZone));
+			var cache2 = new ShiftProjectionCache(workShift2, new DateOnlyAsDateTimePeriod(date, TimeZoneGuard.Instance.TimeZone));
+			var cache3 = new ShiftProjectionCache(workShift3, new DateOnlyAsDateTimePeriod(date, TimeZoneGuard.Instance.TimeZone));
 			var caches = new List<ShiftProjectionCache> {cache1, cache2, cache3};
 			
 			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 				new List<ISkillDay> {skillDay}, teamBlockInfo, new SchedulingOptions(), TimeZoneGuard.Instance.TimeZone, true,
 				agent1);
 
-			result.WorkShiftStartTime.Hours.Should().Be.EqualTo(9);
+			result.WorkShiftStartTime().Hours.Should().Be.EqualTo(9);
 		}
 	}
 }

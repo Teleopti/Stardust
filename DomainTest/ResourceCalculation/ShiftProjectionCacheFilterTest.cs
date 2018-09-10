@@ -31,8 +31,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private MockRepository _mocks;
         private TimeZoneInfo _timeZoneInfo;
         private IScheduleRange _scheduleRange;
-        private IScheduleDictionary _scheduleDictionary;
-		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 	    private IPersonalShiftAndMeetingFilter _personalShiftAndMeetingFilter;
 		private INotOverWritableActivitiesShiftFilter _notOverWritableActivitiesShiftFilter;
 
@@ -52,8 +50,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	        _notOverWritableActivitiesShiftFilter = _mocks.StrictMock<INotOverWritableActivitiesShiftFilter>();
 			_target = new ShiftProjectionCacheFilter(_rules, _personalShiftAndMeetingFilter, _notOverWritableActivitiesShiftFilter);
             _scheduleRange = _mocks.StrictMock<IScheduleRange>();
-            _scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-        	_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
         }
 
         [Test]
@@ -175,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var casheList = new List<ShiftProjectionCache>();
             foreach (IWorkShift shift in listOfWorkShifts)
             {
-                var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker, dateOnlyAsPeriod);
+                var cache = new ShiftProjectionCache(shift, dateOnlyAsPeriod);
                 casheList.Add(cache);
             }
 
@@ -280,9 +276,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Playback())
 			{
 				var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 1, 1), _timeZoneInfo);
-				c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+				c1 = new ShiftProjectionCache(_workShift1, dateOnlyAsDateTimePeriod);
                 shifts.Add(c1);
-                c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+                c2 = new ShiftProjectionCache(_workShift2, dateOnlyAsDateTimePeriod);
                 shifts.Add(c2);
                 retShifts = _target.FilterOnRestrictionMinMaxWorkTime(shifts, _effectiveRestriction);
 
@@ -317,9 +313,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Playback())
             {
 				var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 1, 1), _timeZoneInfo);
-				c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+				c1 = new ShiftProjectionCache(_workShift1, dateOnlyAsDateTimePeriod);
                 shifts.Add(c1);
-                c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+                c2 = new ShiftProjectionCache(_workShift2, dateOnlyAsDateTimePeriod);
                 shifts.Add(c2);
                 retShifts = _target.FilterOnContractTime(minMaxcontractTime, shifts);
 
@@ -338,10 +334,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var workShift2 = _mocks.StrictMock<IWorkShift>();
             var workShift3 = _mocks.StrictMock<IWorkShift>();
 
-	        var personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
-	        var cache1 = new ShiftProjectionCache(workShift1,personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
-	        var cache2 = new ShiftProjectionCache(workShift2,personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
-	        var cache3 = new ShiftProjectionCache(workShift3,personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+	        var cache1 = new ShiftProjectionCache(workShift1, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+	        var cache2 = new ShiftProjectionCache(workShift2, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+	        var cache3 = new ShiftProjectionCache(workShift3, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
             
             IList<ShiftProjectionCache> caches = new List<ShiftProjectionCache> { cache1, cache2, cache3 };
             using (_mocks.Record())
@@ -373,10 +368,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var workShift2 = _mocks.StrictMock<IWorkShift>();
             var workShift3 = _mocks.StrictMock<IWorkShift>();
 
-	        var personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
-	        var cache1 = new ShiftProjectionCache(workShift1,personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
-	        var cache2 = new ShiftProjectionCache(workShift2,personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
-	        var cache3 = new ShiftProjectionCache(workShift3,personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+	        var cache1 = new ShiftProjectionCache(workShift1, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+	        var cache2 = new ShiftProjectionCache(workShift2, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+	        var cache3 = new ShiftProjectionCache(workShift3, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
 
             var caches = new List<ShiftProjectionCache> { cache1, cache2, cache3 };
             var categoriesNotAllowed = new List<IShiftCategory> { shiftCategory2, shiftCategory3 };
@@ -456,7 +450,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo);
 			foreach (IWorkShift shift in tmpList)
             {
-                var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+                var cache = new ShiftProjectionCache(shift, dateOnlyAsDateTimePeriod);
                 retList.Add(cache);
             }
             return retList;

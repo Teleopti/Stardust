@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			_schedulingOptions.TeamSameShiftCategory = false;
 			_schedulingOptions.BlockSameShiftCategory = false;
 			_workShift = new WorkShift(new ShiftCategory("Test"));
-			_shift = new ShiftProjectionCache(_workShift, new PersonalShiftMeetingTimeChecker(), new DateOnlyAsDateTimePeriod(_dateOnly,TimeZoneInfo.Utc));
+			_shift = new ShiftProjectionCache(_workShift, new DateOnlyAsDateTimePeriod(_dateOnly,TimeZoneInfo.Utc));
 		}
 
 

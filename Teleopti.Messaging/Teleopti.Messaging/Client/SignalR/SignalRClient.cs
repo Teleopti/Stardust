@@ -68,9 +68,7 @@ namespace Teleopti.Messaging.Client.SignalR
 		public void Call(string methodName, params object[] args)
 		{
 			_logger.Debug(methodName);
-			if (_stateAccessor == null)
-				return;
-			_stateAccessor.IfProxyConnected(p =>
+			_stateAccessor?.IfProxyConnected(p =>
 			{
 				var task = p.Invoke(methodName, args);
 
@@ -88,10 +86,7 @@ namespace Teleopti.Messaging.Client.SignalR
 			_afterConnectionCreated = afterConnectionCreated;
 		}
 
-		public bool IsAlive
-		{
-			get { return _connection != null && _connection.IsConnected(); }
-		}
+		public bool IsAlive => _connection?.IsConnected() ?? false;
 
 
 		public void Configure(string url)
@@ -103,8 +98,7 @@ namespace Teleopti.Messaging.Client.SignalR
 
 		public virtual void Dispose()
 		{
-			if (_connection == null) return;
-			_connection.Dispose();
+			_connection?.Dispose();
 			_connection = null;
 			_stateAccessor = null;
 		}

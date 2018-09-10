@@ -109,7 +109,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public List<Guid> FindPersonIdsInTeams(DateOnly date, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)
 		{
-			return _personList.Select(p => p.Id.GetValueOrDefault()).ToList();
+			var personList = _personList.Where(a =>
+				teamIds!=null && teamIds.Length > 0 && a.MyTeam(date)!=null? teamIds.ToList().Contains(a.MyTeam(date).Id.Value) : true);
+			return personList.Select(p => p.Id.GetValueOrDefault()).ToList();
 		}
 
 		public List<Guid> FindPersonIdsInTeamsBasedOnPersonPeriod(DateOnlyPeriod period, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 				return shiftList;
 
 			//ta reda på alla skiftlängder i _shiftList, som en lista
-			var contractTimes = shiftList.ToLookup(s => s.WorkShiftProjectionContractTime);
+			var contractTimes = shiftList.ToLookup(s => s.WorkShiftProjectionContractTime());
 			var resultingTimes = contractTimes.Select(x => x.Key).ToArray();
 			
 			//hämta önskad skiftlängd

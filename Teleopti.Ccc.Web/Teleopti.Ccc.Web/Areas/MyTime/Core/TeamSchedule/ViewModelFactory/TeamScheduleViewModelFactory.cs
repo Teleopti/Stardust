@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			var agentScheduleTupleList = constructAgentSchedulesWithoutReadModel(data);
 			var agentSchedules = agentScheduleTupleList.Item1;
 			var pageCount = agentScheduleTupleList.Item2;
-			var totalAgentCount = agentScheduleTupleList.Item3;
+			var agentCount = agentScheduleTupleList.Item3;
 
 			var schedulePeriodInUtc = getSchedulePeriod(agentSchedules.Concat(Enumerable.Repeat(myScheduleViewModel, 1)), data.ScheduleDate);
 
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 					.ToArray(),
 				TimeLine = timeLineHours,
 				PageCount = pageCount,
-				TotalAgentCount = totalAgentCount
+				TotalAgentCount = agentCount
 			};
 		}
 
@@ -92,18 +92,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 			var agentSchedules = new List<AgentInTeamScheduleViewModel>();
 			var pageCount = 1;
-			var totalAgentCount = people.Count;
+			var totalAgentCount = 0;
 			var canSeeUnpublishedSchedules =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 			if (people.Any())
 			{
-				pageCount = (int)Math.Ceiling((double)totalAgentCount / data.Paging.Take);
 				var scheduleDays = _scheduleProvider.GetScheduleForPersons(data.ScheduleDate, people).ToLookup(s => s.Person);
-
 				var personScheduleDays = people.Select(p => new Tuple<IPerson, IScheduleDay>(p, scheduleDays[p].FirstOrDefault())).ToArray();
 				personScheduleDays = filterSchedules(personScheduleDays, data).ToArray();
 
 				Array.Sort(personScheduleDays, new TeamScheduleComparer(canSeeUnpublishedSchedules, _permissionProvider, false) { ScheduleVisibleReason = ScheduleVisibleReasons.Any });
+
+				totalAgentCount = personScheduleDays.Length;
+				pageCount = (int)Math.Ceiling((double)totalAgentCount / data.Paging.Take);
 
 				var requestedScheduleDays = personScheduleDays.Skip(data.Paging.Skip).Take(data.Paging.Take);
 				foreach (var personScheduleDay in requestedScheduleDays)

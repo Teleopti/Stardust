@@ -137,17 +137,18 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return numberDays;
 		}
 
-		private static double calculateMinutes(IPersonRequest personRequest, IScheduleDay day, double numberMinutes)
+		private double calculateMinutes(IPersonRequest personRequest, IScheduleDay day, double numberMinutes)
 		{
 			var visualLayerCollection = day.ProjectionService().CreateProjection();
 			var visualLayerCollectionPeriod = visualLayerCollection.Period();
+			var isContractDayOff = _hasContractDayOffDefinition.IsDayOff(day);
 			if (day.IsScheduled() && visualLayerCollectionPeriod.HasValue)
 			{
 				var contractTime = day.ProjectionService().CreateProjection()
 					.FilterLayers(personRequest.Request.Period).ContractTime();
 				numberMinutes += contractTime.TotalMinutes;
 			}
-			else if (!day.HasDayOff() && !day.IsFullDayAbsence())
+			else if (!day.HasDayOff() && !day.IsFullDayAbsence() && !isContractDayOff)
 			{
 				var timeZone = personRequest.Person.PermissionInformation.DefaultTimeZone();
 				var requestedPeriod = personRequest.Request.Period;

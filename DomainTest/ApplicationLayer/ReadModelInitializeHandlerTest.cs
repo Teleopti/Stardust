@@ -23,22 +23,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		private IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 		private IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
 		private IPersonScheduleDayReadModelPersister _personScheduleDayReadModelRepository;
-		private ICurrentScenario _currentScenario;
+		private FakeScenarioRepository _currentScenario;
 		private LegacyFakeEventPublisher _eventPublisher;
 		private IDistributedLockAcquirer _distributedLockAquirer;
 
 		[SetUp]
 		public void Setup()
 		{
-			_personRepository = new FakePersonRepositoryLegacy2();
+			_personRepository = new FakePersonRepository(new FakeStorage());
 			_scheduleProjectionReadOnlyPersister = MockRepository.GenerateMock<IScheduleProjectionReadOnlyPersister>();
 			_scheduleDayReadModelRepository = MockRepository.GenerateMock<IScheduleDayReadModelRepository>();
 			_personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelPersister>();
-			_currentScenario = new FakeCurrentScenario_DoNotUse();
+			_currentScenario = new FakeScenarioRepository();
+			_currentScenario.Has("Default");
 			_eventPublisher = new LegacyFakeEventPublisher();
 			_distributedLockAquirer = new FakeDistributedLockAcquirer();
 
-			target = new ReadModelInitializeHandler(_personRepository, _scheduleProjectionReadOnlyPersister, _scheduleDayReadModelRepository, _personScheduleDayReadModelRepository, _currentScenario, _eventPublisher, _distributedLockAquirer);
+			target = new ReadModelInitializeHandler(_personRepository, _scheduleProjectionReadOnlyPersister,
+				_scheduleDayReadModelRepository, _personScheduleDayReadModelRepository,
+				new DefaultScenarioFromRepository(_currentScenario), _eventPublisher, _distributedLockAquirer);
 		}
 
 		[Test]

@@ -238,6 +238,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Develop.Batflow", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Intraday.TestCommon", "Teleopti.Ccc.Intraday.TestCommon\Teleopti.Ccc.Intraday.TestCommon.csproj", "{13E7CA1E-393B-4DD5-944E-90A19E736DFF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Wfm.Rta.Test", "Teleopti.Wfm.Rta.Test\Teleopti.Wfm.Rta.Test.csproj", "{906CD885-44E7-46B8-BECA-83FD20829532}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rta", "Rta", "{CACA68BF-D15D-41EF-8B42-ED99ED24F817}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -1360,6 +1364,22 @@ Global
 		{13E7CA1E-393B-4DD5-944E-90A19E736DFF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{13E7CA1E-393B-4DD5-944E-90A19E736DFF}.Release|x86.ActiveCfg = Release|Any CPU
 		{13E7CA1E-393B-4DD5-944E-90A19E736DFF}.Release|x86.Build.0 = Release|Any CPU
+		{906CD885-44E7-46B8-BECA-83FD20829532}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{906CD885-44E7-46B8-BECA-83FD20829532}.Debug|.NET.Build.0 = Debug|Any CPU
+		{906CD885-44E7-46B8-BECA-83FD20829532}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{906CD885-44E7-46B8-BECA-83FD20829532}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{906CD885-44E7-46B8-BECA-83FD20829532}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{906CD885-44E7-46B8-BECA-83FD20829532}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{906CD885-44E7-46B8-BECA-83FD20829532}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{906CD885-44E7-46B8-BECA-83FD20829532}.Debug|x86.Build.0 = Debug|Any CPU
+		{906CD885-44E7-46B8-BECA-83FD20829532}.Release|.NET.ActiveCfg = Release|Any CPU
+		{906CD885-44E7-46B8-BECA-83FD20829532}.Release|.NET.Build.0 = Release|Any CPU
+		{906CD885-44E7-46B8-BECA-83FD20829532}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{906CD885-44E7-46B8-BECA-83FD20829532}.Release|Any CPU.Build.0 = Release|Any CPU
+		{906CD885-44E7-46B8-BECA-83FD20829532}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{906CD885-44E7-46B8-BECA-83FD20829532}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{906CD885-44E7-46B8-BECA-83FD20829532}.Release|x86.ActiveCfg = Release|Any CPU
+		{906CD885-44E7-46B8-BECA-83FD20829532}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1406,6 +1426,7 @@ Global
 		{4A63DC5B-70BE-4F56-993D-B045C28ED438} = {5AC253DA-DE38-4EB4-8ECB-4E5E332D6011}
 		{5914E02A-AA82-43A0-B4B7-F563E5C9482B} = {FEFF4A24-4851-4A21-BF0F-68A36655E0E7}
 		{13E7CA1E-393B-4DD5-944E-90A19E736DFF} = {AA2B64E2-1EF7-4242-916F-815411F23E66}
+		{906CD885-44E7-46B8-BECA-83FD20829532} = {CACA68BF-D15D-41EF-8B42-ED99ED24F817}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {11E3E7A7-5B00-4514-9B17-892CE32AD321}

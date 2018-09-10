@@ -422,7 +422,7 @@
 		expect(viewModel.ShiftLayers[0].TimeSpan).toEqual('2018-03-25 01:00 - 2018-03-25 03:00');
 	});
 
-	it('should add shift layer', function () {
+	it('should copy shift layer to a new one', function () {
 		var schedule = {
 			PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
 			Name: 'Annika Andersson',
@@ -456,16 +456,17 @@
 		};
 
 		var viewModel = target.CreateSchedule('2018-08-30', 'Europe/Berlin', schedule);
-		viewModel.AddLayer(viewModel.ShiftLayers[0], '2018-08-30 09:00', '2018-08-30 10:00', 2);
 
-		expect(viewModel.ShiftLayers[2].ShiftLayerIds).toEqual(['61678e5a-ac3f-4daa-9577-a83800e49622']);
-		expect(viewModel.ShiftLayers[2].Color).toEqual('#ffffff');
-		expect(viewModel.ShiftLayers[2].Description).toEqual('Phone');
-		expect(viewModel.ShiftLayers[2].Start).toEqual('2018-08-30 09:00');
-		expect(viewModel.ShiftLayers[2].End).toEqual('2018-08-30 10:00');
-		expect(viewModel.ShiftLayers[2].IsOvertime).toEqual(true);
-		expect(viewModel.ShiftLayers[2].ActivityId).toEqual('0ffeb898-11bf-43fc-8104-9b5e015ab3c2');
-		expect(viewModel.ShiftLayers[2].TimeSpan).toEqual('2018-08-30 09:00 - 2018-08-30 10:00');
+		var shiftLayer = target.CopyToNewLayer(viewModel.ShiftLayers[0], '2018-08-30 09:00', '2018-08-30 10:00', 2);
+
+		expect(shiftLayer.ShiftLayerIds).toEqual(['61678e5a-ac3f-4daa-9577-a83800e49622']);
+		expect(shiftLayer.Color).toEqual('#ffffff');
+		expect(shiftLayer.Description).toEqual('Phone');
+		expect(shiftLayer.Start).toEqual('2018-08-30 09:00');
+		expect(shiftLayer.End).toEqual('2018-08-30 10:00');
+		expect(shiftLayer.IsOvertime).toEqual(true);
+		expect(shiftLayer.ActivityId).toEqual('0ffeb898-11bf-43fc-8104-9b5e015ab3c2');
+		expect(shiftLayer.TimeSpan).toEqual('2018-08-30 09:00 - 2018-08-30 10:00');
 	});
 
 	it('should create shift layers with correct time span for overnight shift', function () {

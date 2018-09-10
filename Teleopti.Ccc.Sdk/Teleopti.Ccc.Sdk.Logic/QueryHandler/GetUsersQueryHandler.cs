@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -15,12 +14,12 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
 	public class GetUsersQueryHandler : IHandleQuery<GetUsersQueryDto, ICollection<PersonDto>>
 	{
-		private readonly IAssembler<IPerson, PersonDto> _assembler;
+		private readonly PersonCredentialsAppender _assembler;
 		private readonly IPersonRepository _personRepository;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly ICurrentAuthorization _currentAuthorization;
 
-		public GetUsersQueryHandler(IAssembler<IPerson, PersonDto> assembler, IPersonRepository personRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ICurrentAuthorization currentAuthorization)
+		public GetUsersQueryHandler(PersonCredentialsAppender assembler, IPersonRepository personRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ICurrentAuthorization currentAuthorization)
 		{
 			_assembler = assembler;
 			_personRepository = personRepository;
@@ -38,10 +37,8 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			{
 				using (unitOfWork.LoadDeletedIfSpecified(query.LoadDeleted))
 				{
-					var memberList = new List<IPerson>();
-					var foundPersons = _personRepository.FindUsers(query.Date==null ? DateOnly.Today : query.Date.ToDateOnly());
-					memberList.AddRange(foundPersons);
-					return _assembler.DomainEntitiesToDtos(memberList).ToList();
+					var foundPersons = _personRepository.FindUsers(query.Date?.ToDateOnly() ?? DateOnly.Today);
+					return _assembler.Convert(foundPersons.ToArray()).ToList();
 				}
 			}
 		}
