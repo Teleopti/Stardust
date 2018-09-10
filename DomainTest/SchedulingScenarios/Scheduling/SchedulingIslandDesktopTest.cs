@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public MergeIslandsSizeLimit MergeIslandsSizeLimit;
 		
-		[Test]
+		[Test, Ignore("#76176")]
 		public void ShouldHandleDifferentOpenHoursWhenReducingSkills()
 		{
 			MergeIslandsSizeLimit.TurnOff_UseOnlyFromTest();
