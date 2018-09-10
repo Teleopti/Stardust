@@ -301,6 +301,10 @@
       <Project>{8d2565f2-7c44-45b7-96ad-2cd900e033a1}</Project>
       <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Wfm.Rta\Teleopti.Wfm.Rta.csproj">
+      <Project>{2dd2e616-8405-49df-a07d-546a8c160117}</Project>
+      <Name>Teleopti.Wfm.Rta</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -129,11 +129,15 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var cachedConfiguration = _nhibernateConfigurationCache.GetConfiguration(settings);
 			if (cachedConfiguration != null)
 				return cachedConfiguration;
-			var appCfg = new Configuration()
+
+			var configuration = new Configuration()
 				.SetProperties(settings);
-			setDefaultValuesOnApplicationConf(appCfg);
-			_nhibernateConfigurationCache.StoreConfiguration(settings, appCfg);
-			return appCfg;
+			
+			_dataSourceConfigurationSetter.AddDefaultSettingsTo(configuration, _toggles.IsEnabled(Toggles.Tech_Moving_ResilientConnectionLogic_76181));
+
+			_enversConfiguration.Configure(configuration);
+			_nhibernateConfigurationCache.StoreConfiguration(settings, configuration);
+			return configuration;
 		}
 
 		private Configuration createStatisticConfiguration(string connectionString, string tenant)
@@ -148,7 +152,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			// Maybe for David's bday?
 			// 2018-01-26
 			// Putting down a one beer bet that this will be here on 2020-01-01 // LevelUp
-			var statCfg = new Configuration()
+			var configuration = new Configuration()
 				.SetProperty(Environment.ConnectionString, connectionString)
 				.SetProperty(Environment.ConnectionProvider, "NHibernate.Connection.DriverConnectionProvider")
 				.SetProperty(Environment.ConnectionDriver,
@@ -159,14 +163,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				.SetProperty(Environment.SessionFactoryName, tenant + "_" + AnalyticsDataSourceName)
 				.SetProperty(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName);
 
-			_dataSourceConfigurationSetter.AddApplicationNameToConnectionString(statCfg);
-			return statCfg;
-		}
+			_dataSourceConfigurationSetter.AddApplicationNameToConnectionString(configuration);
 
-		private void setDefaultValuesOnApplicationConf(Configuration cfg)
-		{
-			_dataSourceConfigurationSetter.AddDefaultSettingsTo(cfg, _toggles.IsEnabled(Toggles.Tech_Moving_ResilientConnectionLogic_76181));
-			_enversConfiguration.Configure(cfg);
+			return configuration;
 		}
 	}
 }

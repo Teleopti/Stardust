@@ -828,6 +828,10 @@
       <Project>{96BAA3E0-A623-412E-BFE7-D3BE03A2288A}</Project>
       <Name>Teleopti.Support.Library</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Wfm.Rta\Teleopti.Wfm.Rta.csproj">
+      <Project>{2dd2e616-8405-49df-a07d-546a8c160117}</Project>
+      <Name>Teleopti.Wfm.Rta</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Teleopti.Ccc.TestCommon.dll.config">

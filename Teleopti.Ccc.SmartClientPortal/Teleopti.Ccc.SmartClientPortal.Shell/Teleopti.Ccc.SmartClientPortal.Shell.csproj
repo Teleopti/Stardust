@@ -5146,6 +5146,10 @@
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
       <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Wfm.Rta\Teleopti.Wfm.Rta.csproj">
+      <Project>{2dd2e616-8405-49df-a07d-546a8c160117}</Project>
+      <Name>Teleopti.Wfm.Rta</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Win\Teleopti.Ccc.Win.csproj">
       <Project>{26c57cbe-e75f-42c9-9747-8016aeb305f2}</Project>
       <Name>Teleopti.Ccc.Win</Name>
