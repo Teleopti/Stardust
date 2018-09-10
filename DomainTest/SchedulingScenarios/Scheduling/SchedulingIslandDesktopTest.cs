@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Not.Be.Empty();
 		}
 
-		public SchedulingIslandDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXXL76496) : base(seperateWebRequest, resourcePlannerXXL76496)
+		public SchedulingIslandDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXXL76496, bool resourcePlannerHalfHourSkillTimeZon75509) : base(seperateWebRequest, resourcePlannerXXL76496, resourcePlannerHalfHourSkillTimeZon75509)
 		{
 		}
 	}
