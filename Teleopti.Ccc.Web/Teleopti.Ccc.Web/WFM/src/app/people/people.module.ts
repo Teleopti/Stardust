@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { AuthenticationModule } from '../authentication/authentication.module';
 import { SharedModule } from '../shared/shared.module';
 import {
 	AppLogonPageComponent,
@@ -11,7 +10,6 @@ import {
 	TitleBarComponent,
 	WorkspaceComponent
 } from './components';
-import { SettingsMenuComponent } from './components/settings-menu';
 import { NavigationService, RolesService, SearchOverridesService, SearchService, WorkspaceService } from './services';
 
 @NgModule({
@@ -22,10 +20,9 @@ import { NavigationService, RolesService, SearchOverridesService, SearchService,
 		WorkspaceComponent,
 		TitleBarComponent,
 		AppLogonPageComponent,
-		IdentityLogonPageComponent,
-		SettingsMenuComponent
+		IdentityLogonPageComponent
 	],
-	imports: [SharedModule, TranslateModule.forChild(), AuthenticationModule],
+	imports: [SharedModule, TranslateModule.forChild()],
 	providers: [
 		WorkspaceService,
 		RolesService,
@@ -41,8 +38,7 @@ import { NavigationService, RolesService, SearchOverridesService, SearchService,
 		GrantPageComponent,
 		RevokePageComponent,
 		AppLogonPageComponent,
-		IdentityLogonPageComponent,
-		SettingsMenuComponent
+		IdentityLogonPageComponent
 	]
 })
 export class PeopleModule {

@@ -3,7 +3,6 @@ export * from './grant-page';
 export * from './identity-logon-page';
 export * from './revoke-page';
 export * from './search-page';
-export * from './settings-menu';
 export * from './shared';
 export * from './title-bar';
 export * from './workspace';

@@ -12,12 +12,12 @@ import {
 	IdentityLogonPageComponent,
 	RevokePageComponent,
 	SearchPageComponent,
-	SettingsMenuComponent,
 	TitleBarComponent
 } from './app/people/components';
 import { FeedbackMessageComponent } from './app/shared/components';
 import { environment } from './environments/environment';
 import { MainController } from './main.controller';
+import { SettingsMenuComponent } from './app/navigation/components';
 
 export interface IWfmRootScopeService extends IRootScopeService {
 	_: any;

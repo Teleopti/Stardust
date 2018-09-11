@@ -10,6 +10,7 @@ import { LanguageLoaderFactory, CustomTranslateParser, Zorroi18nService } from '
 import { PeopleModule } from './people/people.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { BootstrapComponent } from './bootstrap/bootstrap.component';
+import { NavigationModule } from './navigation/navigation.module';
 
 @NgModule({
 	declarations: [BootstrapComponent],
@@ -19,6 +20,7 @@ import { BootstrapComponent } from './bootstrap/bootstrap.component';
 		UpgradeModule,
 		PeopleModule,
 		AuthenticationModule,
+		NavigationModule,
 		ApiAccessModule,
 		HttpClientModule,
 		TranslateModule.forRoot({
