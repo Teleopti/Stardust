@@ -1,34 +1,44 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { ChangePasswordComponent } from '../../../authentication/components/change-password/change-password.component';
-import { ThemeService, TogglesService } from '../../../core/services';
+import { ThemeService, TogglesService, UserService } from '../../../core/services';
 
 @Component({
 	selector: 'settings-menu',
 	templateUrl: './settings-menu.component.html',
 	styleUrls: ['./settings-menu.component.scss']
 })
-export class SettingsMenuComponent implements OnInit {
+export class SettingsMenuComponent {
 	lowLightFilter: boolean = false;
 	darkTheme: boolean = false;
 	visible: boolean;
 	changePasswordToggle: boolean = false;
+	isTeleoptiApplicationLogon: boolean = false;
 
 	@ViewChild('passwordModal')
 	passwordModal: ChangePasswordComponent;
+	@Input('style')
+	style: { isFullyLoaded: boolean };
 
 	constructor(
 		private themeService: ThemeService,
 		@Inject(DOCUMENT) private document: Document,
-		public toggleService: TogglesService
+		public toggleService: TogglesService,
+		public userService: UserService
 	) {
 		this.toggleService.getToggles().subscribe({
 			next: toggles => {
 				this.changePasswordToggle = toggles.Wfm_Authentication_ChangePasswordMenu_76666;
 			}
 		});
+		this.userService.getPreferences().subscribe({
+			next: preferences => {
+				this.isTeleoptiApplicationLogon = preferences.IsTeleoptiApplicationLogon;
+			}
+		});
 		this.themeService.getTheme().subscribe({
 			next: theme => {
+				this.style.isFullyLoaded = true;
 				this.lowLightFilter = theme.Overlay;
 				this.darkTheme = theme.Name === 'dark';
 			}
@@ -36,7 +46,6 @@ export class SettingsMenuComponent implements OnInit {
 	}
 
 	toggleLightFilter(bool: boolean) {
-		console.log('toggle light filter');
 		this.themeService.saveThemePreference({
 			Name: this.darkTheme ? 'dark' : 'classic',
 			Overlay: bool
@@ -44,7 +53,6 @@ export class SettingsMenuComponent implements OnInit {
 	}
 
 	toggleDarkTheme(bool: boolean) {
-		console.log('toggle dark theme');
 		const themeStyle = bool ? 'dark' : 'classic';
 		this.themeService.saveThemePreference({
 			Name: themeStyle,
@@ -52,8 +60,6 @@ export class SettingsMenuComponent implements OnInit {
 		});
 		this.themeService.applyTheme(themeStyle);
 	}
-
-	ngOnInit() {}
 
 	hide() {
 		this.visible = false;
@@ -66,9 +72,5 @@ export class SettingsMenuComponent implements OnInit {
 
 	logOut() {
 		this.document.location.assign('../Authentication/SignOut');
-	}
-
-	toggleVisible(v) {
-		console.log('toggleVisible', v);
 	}
 }

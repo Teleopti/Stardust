@@ -11,13 +11,46 @@
 	<link rel="manifest" href="manifest.webmanifest.json">
 	<script type="text/javascript" src="appInsights.js"></script>
 	<style>
-		[ng-cloak] {
-			 display: none;
+		.loader {
+			width: 75px;
+			height: 75px;
+			margin: 5% auto 0;
+			border: 6px solid transparent;
+			border-top: 6px solid #09f;
+			animation-name: spin;
+			animation-duration: 1s;
+			animation-iteration-count: infinite;
+			border-radius: 50%;
+			transform: rotate(0);
+			overflow: hidden
 		}
-  </style>
+
+		@keyframes spin {
+			from {
+				transform: rotate(0)
+			}
+
+			to {
+				transform: rotate(360deg)
+			}
+		}
+
+		.backdrop {
+			position: fixed;
+			z-index: 999999;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			top: 0;
+			background: #fff
+		}
+	</style>
 </head>
 
-<body ng-app="wfm" ng-show="isAuthenticated" ng-controller="MainController as main">
+<body ng-app="wfm" ng-show="isAuthenticated" ng-cloak ng-controller="MainController as mainController">
+	<div class="backdrop" ng-if="!mainController.style.isFullyLoaded">
+		<div class="loader"></div>
+	</div>
 	<div id="nav" ng-include="'html/nav.html'" class="material-depth-1 navbar navbar-default navbar-static-top" role="navigation"></div>
 	<div class="layout-container">
 
@@ -50,7 +83,6 @@
 	<link id="themeDependencies" rel="stylesheet" href="dist/dependencies.css">
 	<link id="themeStyleguide" rel="stylesheet" href="">
 	<link id="themeAnt" rel="stylesheet" href="">
-	<script type="text/javascript" src="theme-switcher.js"></script>
 	<ng2-bootstrap></ng2-bootstrap>
 	<!-- build:template
 	<% if (environment === 'dev') { %>

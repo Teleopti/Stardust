@@ -1,16 +1,12 @@
-<nz-dropdown [nzTrigger]="'click'" [nzPlacement]="'bottomRight'" [nzClickHide]="false" [(nzVisible)]="visible"
-  (nzVisibleChange)="toggleVisible($event)">
+<nz-dropdown [nzTrigger]="'click'" [nzPlacement]="'bottomRight'" [nzClickHide]="false" [(nzVisible)]="visible">
   <div tabindex="0" class="context-menu card-context even-icon" nz-dropdown data-test-nav-item-settings>
     <i class="mdi mdi-account-settings-variant text-color-white"></i>
-    <!-- <md-tooltip>{{'UserSettings'|translate}}</md-tooltip> -->
   </div>
-  <!-- <a nz-dropdown>
-        Click me <i class="anticon anticon-down"></i>
-      </a> -->
   <ul nz-menu>
     <li nz-menu-item><label nz-checkbox [(ngModel)]="lowLightFilter" (ngModelChange)="toggleLightFilter($event)">{{'ToggleLowLightFilter'|translate}}</label></li>
     <li nz-menu-item><label nz-checkbox [(ngModel)]="darkTheme" (ngModelChange)="toggleDarkTheme($event)">{{'ToggleDarkTheme'|translate}}</label></li>
-    <li *ngIf="changePasswordToggle" nz-menu-item (click)="showChangePasswordDialog()"><i class="mdi mdi-key-variant"></i>
+    <li *ngIf="changePasswordToggle && isTeleoptiApplicationLogon" nz-menu-item (click)="showChangePasswordDialog()"><i
+        class="mdi mdi-key-variant"></i>
       {{'ChangeYourPassword'|translate}}</li>
     <li nz-menu-item (click)="logOut()"><i class="mdi mdi-logout"></i> {{'LogOut'|translate}}</li>
   </ul>

@@ -14,11 +14,6 @@ export class ThemeService {
 	private theme$ = new ReplaySubject<Theme>(1);
 
 	constructor(private http: HttpClient) {
-		const themeFromBrowser = (localStorage.getItem('theme') || 'classic') as ThemeType;
-		this.theme$.next({
-			Name: themeFromBrowser,
-			Overlay: false
-		});
 		this.http.get('../api/Theme').subscribe({
 			next: (theme: Theme) => {
 				this.theme$.next(theme);

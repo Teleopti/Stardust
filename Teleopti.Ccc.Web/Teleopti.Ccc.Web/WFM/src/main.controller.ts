@@ -7,4 +7,8 @@ type ThemeType = 'classic' | 'dark' | '';
 
 export function MainController($scope: IScope, $rootScope: IWfmRootScopeService, $q: IQService) {
 	var vm = this;
+
+	vm.style = {
+		isFullyLoaded: false
+	};
 }

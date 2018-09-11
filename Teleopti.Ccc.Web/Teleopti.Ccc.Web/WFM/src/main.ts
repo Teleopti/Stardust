@@ -86,14 +86,13 @@ const wfm = angular.module('wfm', [
 	'wfm.popup',
 	'wfm.gamification',
 	'wfm.btnGroup',
-	'wfm.ai',
-	'wfm.authentication'
+	'wfm.ai'
 ]);
 
 wfm.controller('MainController', MainController as IControllerConstructor);
 
-const downgradeHelper = (downgradeName: string, component, inputs?: string[]) => {
-	const downgradedComponent = downgradeComponent({ component, inputs: inputs }) as angular.IDirectiveFactory;
+const downgradeHelper = (downgradeName: string, component) => {
+	const downgradedComponent = downgradeComponent({ component }) as angular.IDirectiveFactory;
 	wfm.directive(downgradeName, downgradedComponent);
 };
 
@@ -107,7 +106,7 @@ downgradeHelper('ng2PeopleRevokePage', RevokePageComponent);
 downgradeHelper('ng2PeopleAppLogonPage', AppLogonPageComponent);
 downgradeHelper('ng2PeopleIdentityLogonPage', IdentityLogonPageComponent);
 downgradeHelper('ng2ChangePassword', ChangePasswordComponent);
-downgradeHelper('ng2FeedbackMessage', FeedbackMessageComponent, ['feedbackType', 'translationKey']);
+downgradeHelper('ng2FeedbackMessage', FeedbackMessageComponent);
 downgradeHelper('ng2Bootstrap', BootstrapComponent);
 downgradeHelper('ng2SettingsMenu', SettingsMenuComponent);
 
@@ -222,7 +221,7 @@ wfm.config([
 
 		$rootScope._ = (<any>window)._;
 
-		function initializeUserInfo() {			
+		function initializeUserInfo() {
 			return currentUserInfo.initContext().then(function(data) {
 				$rootScope.isAuthenticated = true;
 				return $translate.use(data.Language);
