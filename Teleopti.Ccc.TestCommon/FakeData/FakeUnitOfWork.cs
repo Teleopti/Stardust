@@ -72,12 +72,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			if (_publisher == null)
 				return Enumerable.Empty<IRootChangeInfo>();
 
-			var changes = (_storage as FakeStorage)?.Commit();
+			var changes = _storage.Commit();
 			if (changes.IsNullOrEmpty())
 				return Enumerable.Empty<IRootChangeInfo>();
-
-			//Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} OnAfterInvocation {changes.Count()}");
-			//changes.ForEach(x => Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} {x.Root.GetType()} {x.Status}"));
 
 			// required for rta tests, really, PA is missing events...
 			new ScheduleChangedEventPublisher(_publisher).AfterCompletion(changes);

@@ -1214,10 +1214,6 @@ teams-time-picker.ng-invalid-dst {
 }
 
 .shift-editor {
-	-webkit-user-select: none;
-	-moz-user-select: -moz-none;
-	-ms-user-select: none;
-	user-select: none;
 	position: relative;
 
 	.progress-linear-container {
@@ -1269,29 +1265,45 @@ teams-time-picker.ng-invalid-dst {
 	}
 
 	.shift-container {
+		height: 500px;
+		-webkit-user-select: none;
+		-moz-user-select: -moz-none;
+		-ms-user-select: none;
+		user-select: none;
 
 		.viewport-clip {
 			width: 100%;
 			max-width: 100%;
-			height: 500px;
 			white-space: nowrap;
 			overflow: hidden;
 
 			.viewport {
-				height: 530px;
 				overflow: auto;
 				transition: width 1s ease-in-out;
 
-				&.overflow {
+				&.viewport-timeline {
+					height: 40px;
+				}
+
+				&.no-scroll {
 					overflow: hidden;
 					touch-action: none;
 				}
 			}
 		}
 
+		.height-5em {
+			height: 5em;
+		}
+
+		.height-15em {
+			height: 15em;
+		}
+
 		.timeline {
 			width: 100%;
 			cursor: pointer;
+			height: 10em;
 
 			.scroll-toolbar {
 				display: none;
@@ -1354,18 +1366,18 @@ teams-time-picker.ng-invalid-dst {
 				.ticks {
 					.tick {
 						width: 1px;
-						height: 8px;
+						height: 16px;
 						display: inline-flex;
 						margin-right: 4px;
 						background-color: $gray100;
 					}
 
 					.tick.hour {
-						height: 15px;
+						height: 25px;
 					}
 
 					.tick.half-hour {
-						height: 12px;
+						height: 20px;
 					}
 				}
 			}
@@ -1375,6 +1387,7 @@ teams-time-picker.ng-invalid-dst {
 			width: 100%;
 			position: relative;
 			margin-top: 10px;
+			height: 20em;
 
 			&.has-selected .shift-layer:not(.selected) {
 				opacity: 0.4;
@@ -1383,10 +1396,11 @@ teams-time-picker.ng-invalid-dst {
 			.shift-layer {
 				position: absolute;
 				display: inline-block;
-				height: 25px;
+				height: 30px;
 				background-color: gainsboro;
 				z-index: 900;
 				cursor: pointer;
+
 
 				&:first-of-type {
 					border-radius: 4px 0 0 4px;
@@ -1441,6 +1455,34 @@ teams-time-picker.ng-invalid-dst {
 
 				&.float-top {
 					z-index: 999;
+				}
+			}
+
+			&.tablet {
+				.shift-layer {
+					height: 40px;
+
+					&.selected {
+						&::before, &::after {
+							content: " ";
+							position: absolute;
+							width: 2em;
+							height: 2em;
+							border-radius: 50% 1px 50% 50%;
+							background: $blue-500;
+							top: 115%;
+						}
+
+						&::before {
+							transform: translateX(-50%) rotate(0.88turn);
+							left: 0px;
+						}
+
+						&::after {
+							transform: translateX(50%) rotate(0.88turn);
+							right: 0px;
+						}
+					}
 				}
 			}
 		}

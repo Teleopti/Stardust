@@ -21,7 +21,7 @@
 		scrollBlockWidth = 0,
 		scrollContainerWidth = 0,
 		scrollRangeWidthInPixels = 0,
-		evenVisibleAgentsPagesNumberInDom = 10,
+		visibleAgentsPagesNumberInDom = 3,
 		visibleAgentsIndexRange = {
 			start: 0,
 			end: 0
@@ -135,31 +135,36 @@
 	}
 
 	function registerSwipeEventOnMobileAndiPad() {
-		if (!onMobile && !oniPad) return;
-
 		var container = $('.teammates-schedules-container');
+		var containerWidth = $('.teammates-schedules-container').width();
 		$('.new-teamschedule-table').swipe({
 			swipeLeft: function() {
 				var scrollLeft = container.scrollLeft();
 				var currentScrollPage = Math.ceil(scrollLeft / (vm.paging.take * agentScheduleColumnWidth));
 
 				var take = vm.paging.take;
-				var newStart = (currentScrollPage - evenVisibleAgentsPagesNumberInDom / 2) * take;
-				var newEnd = (currentScrollPage + evenVisibleAgentsPagesNumberInDom / 2) * take;
+				var newStart = (currentScrollPage - Math.floor(visibleAgentsPagesNumberInDom / 2)) * take;
+				var newEnd = (currentScrollPage + Math.floor(visibleAgentsPagesNumberInDom / 2)) * take;
 				if (newStart < 0) newStart = 0;
 
 				if (newEnd != visibleAgentsIndexRange.end) {
 					visibleAgentsIndexRange.start = newStart;
 					visibleAgentsIndexRange.end = newEnd;
+				}
 
-					if (vm.loadedAgentIndex + 1 < vm.totalAgentCount && newEnd > vm.loadedAgentIndex + 1) {
+				var reachedEndOfTheList =
+					(vm.lastAgentIndexInDom + 1) * agentScheduleColumnWidth - scrollLeft - containerWidth <
+					agentScheduleColumnWidth;
+
+				if (reachedEndOfTheList) {
+					if (vm.lastAgentIndexInDom == vm.loadedAgentIndex && vm.loadedAgentIndex + 1 < vm.totalAgentCount) {
 						if (vm.isLoadingMoreAgentSchedules) return;
 
 						vm.isLoadingMoreAgentSchedules = true;
 						loadMoreSchedules(
 							{
 								skip: vm.loadedAgentIndex + 1,
-								take: (evenVisibleAgentsPagesNumberInDom / 2) * take
+								take: take
 							},
 							function() {
 								vm.isLoadingMoreAgentSchedules = false;
@@ -168,6 +173,7 @@
 						);
 					} else {
 						setVisibleAgents(currentScrollPage, visibleAgentsIndexRange);
+						adjustScrollOnMobileAndiPad();
 					}
 				}
 			},
@@ -176,8 +182,8 @@
 				var currentScrollPage = Math.ceil(scrollLeft / (vm.paging.take * agentScheduleColumnWidth));
 
 				var take = vm.paging.take;
-				var newStart = (currentScrollPage - evenVisibleAgentsPagesNumberInDom / 2) * take;
-				var newEnd = (currentScrollPage + evenVisibleAgentsPagesNumberInDom / 2) * take;
+				var newStart = (currentScrollPage - visibleAgentsPagesNumberInDom / 2) * take;
+				var newEnd = (currentScrollPage + visibleAgentsPagesNumberInDom / 2) * take;
 				if (newStart < 0) newStart = 0;
 
 				if (newEnd != visibleAgentsIndexRange.end) {
@@ -270,11 +276,11 @@
 
 	function loadMoreSchedulesBasedOnScrollPositionAndUpdateCurrentPageNum(left, dragStopped, dragStopCallback) {
 		var currentScrollPage = Math.ceil(left / scrollIntervalsInPixelsRepresentingAPageOfAgents);
-		var pageDiff = currentScrollPage + 1 - vm.currentPageNum;
+		var pageDiff = currentScrollPage - vm.currentPageNum;
 
 		var take = vm.paging.take;
-		var newStart = (currentScrollPage - evenVisibleAgentsPagesNumberInDom / 2) * take;
-		var newEnd = (currentScrollPage + evenVisibleAgentsPagesNumberInDom / 2) * take;
+		var newStart = (currentScrollPage - visibleAgentsPagesNumberInDom) * take;
+		var newEnd = (currentScrollPage + visibleAgentsPagesNumberInDom) * take;
 		if (newStart < 0) newStart = 0;
 
 		if (newEnd != visibleAgentsIndexRange.end || dragStopped) {
@@ -285,8 +291,6 @@
 				setVisibleAgents(currentScrollPage, visibleAgentsIndexRange);
 			}
 			if (pageDiff > 0) {
-				if (pageDiff < evenVisibleAgentsPagesNumberInDom / 2) pageDiff = evenVisibleAgentsPagesNumberInDom / 2;
-
 				if (vm.loadedAgentIndex + 1 < vm.totalAgentCount && newEnd > vm.loadedAgentIndex) {
 					if (vm.isLoadingMoreAgentSchedules) return;
 					loadMoreSchedules(
@@ -550,6 +554,8 @@
 	function filterChangedCallback(momentDate) {
 		showLoadingGif();
 		vm.isAgentScheduleLoaded(false);
+		visibleAgentsIndexRange.start = 0;
+		visibleAgentsIndexRange.end = 0;
 
 		var dateStr =
 			(momentDate && momentDate.format('YYYY/MM/DD')) ||
@@ -630,7 +636,9 @@
 			completelyLoaded = completelyLoadedCallback;
 			registerUserInfoLoadedCallback(initialMomentDate);
 			setupFilterClickBindingFns();
-			registerSwipeEventOnMobileAndiPad();
+
+			if (onMobile || oniPad) registerSwipeEventOnMobileAndiPad();
+
 			registerScrollEvent();
 			readyForInteractionCallback();
 		},

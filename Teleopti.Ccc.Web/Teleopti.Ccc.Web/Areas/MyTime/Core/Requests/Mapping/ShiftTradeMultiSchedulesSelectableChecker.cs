@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 			var overTime = myScheduleDay?.PersonAssignment()?.OvertimeActivities();
 			if (hasNonMainActivity(overTime)) return true;
-			var personToOverTime = personToScheduleDay?.PersonAssignment().OvertimeActivities();
+			var personToOverTime = personToScheduleDay?.PersonAssignment()?.OvertimeActivities();
 			if (hasNonMainActivity(personToOverTime)) return true;
 
 			var myMeetings = myScheduleDay?.PersonMeetingCollection();

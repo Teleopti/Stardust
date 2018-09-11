@@ -153,8 +153,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public bool UseMinimumStaffing { get; set; }
 		public bool UseMaximumStaffing { get; set; }
 
-		public TimeSpan BreakPreferenceStartTimeByMax { get;set; }
-
 		public MaxSeatsFeatureOptions UserOptionMaxSeatsFeature { get; set; }
 		public bool UseAverageShiftLengths { get; set; }
 

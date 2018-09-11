@@ -30,12 +30,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
             _teamProvider = teamProvider;
         }
 
-        public Guid InitiatorId
-        {
-            get { return _messageBrokerInstance; }
-        }
+        public Guid InitiatorId => _messageBrokerInstance;
 
-        public void SaveChanges()
+		public void SaveChanges()
         {
             _unitOfWork.PersistAll(this);
         }

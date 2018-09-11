@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeWorkflowControlSetRepository : IWorkflowControlSetRepository
 	{
-		private readonly FakeStorage _storage;
+		private readonly IFakeStorage _storage;
 
-		public FakeWorkflowControlSetRepository(FakeStorage storage)
+		public FakeWorkflowControlSetRepository(IFakeStorage storage)
 		{
 			_storage = storage;
 		}

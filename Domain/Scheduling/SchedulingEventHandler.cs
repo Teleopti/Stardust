@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	[RegisterEventHandlerInLifetimeScope]
+	[InstancePerLifetimeScope]
 	public class SchedulingEventHandler : IRunInSyncInFatClientProcess, IHandleEvent<SchedulingWasOrdered>
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;

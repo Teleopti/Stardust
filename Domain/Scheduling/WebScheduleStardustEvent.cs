@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 	}
 
+	[InstancePerLifetimeScope]
 	public class WebScheduleStardustEvent : WebScheduleStardustBaseEvent
 	{
 	}

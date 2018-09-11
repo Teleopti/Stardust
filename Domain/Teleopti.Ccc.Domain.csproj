@@ -112,10 +112,10 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.237\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.238\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.237\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.238\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -261,21 +261,7 @@
     <Compile Include="MultiTenancy\PersonIdentityModel.cs" />
     <Compile Include="Optimization\TeamBlock\ForecastAndScheduleSumForDay.cs" />
     <Compile Include="Optimization\WasReallyBetterResult.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\IHistoricalOverviewReadModelPersister.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalOverviewViewModelBuilder.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayHistoricalOverview.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayLoaderDurationOfEvents.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayLoaderLateForWork.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayWithDurationOfEvents.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayWithLateForWork.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IScheduleLoader.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ScheduleLoaderHistoricalOverview.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Events\ISolidProof.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Events\PersonArrivedLateForWorkEvent.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Events\RtaEventStoreSynchronizer.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\DeadLockVictim.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\LateForWorkEventPublisher.cs" />
-    <Compile Include="RegisterEventHandlerInLifetimeScopeAttribute.cs" />
+    <Compile Include="InstancePerLifetimeScopeAttribute.cs" />
     <Compile Include="Repositories\IAllSkillForSkillGroupProvider.cs" />
     <Compile Include="Repositories\IForecastDayOverrideRepository.cs" />
     <Compile Include="Repositories\IExtensiveLogRepository.cs" />
@@ -527,136 +513,6 @@
     <Compile Include="Optimization\DayOffOptimizationWasOrdered.cs" />
     <Compile Include="Optimization\TeamBlock\BlockPreferencesMapper.cs" />
     <Compile Include="Optimization\TeamBlock\PreferenceLimits.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentStateReadModelMaintainer.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentStateReadModelUpdater.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\ControllableReadModelTransactionSyncronization.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\CurrentBelongsToDate.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\CurrentScheduleReadModelUpdater.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\ExternalLogonReadModelUpdater.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\RtaEventStoreMaintainer.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\IMappingReadModelPersister.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\IOrganizationReader.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\ITeamCardReader.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\MappingReadModelUpdater.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\OrganizationSiteModel.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\TeamCardModel.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\AgentStatesViewModelBuilder.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\AgentViewModel.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceDate.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModel.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\OrganizationViewModelBuilder.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\PhoneStateViewModelBuilder.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\RtaTracerViewModelBuilder.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\SiteCardViewModel.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\SiteCardViewModelBuilder.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\TeamCardViewModel.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AdherencePercentageCalculator.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDay.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayLoaderFromEventStore.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayWithEventStore.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\HistoricalChangeAdherence.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\HistoricalChangeModel.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IAgentAdherenceDay.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IAgentAdherenceDayLoader.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IRtaEventStore.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AdherencePeriod.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ScheduleLoader.cs" />
-    <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovedPeriod.cs" />
-    <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherence.cs" />
-    <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceCommand.cs" />
-    <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceCommandHandler.cs" />
-    <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\RemoveApprovedPeriod.cs" />
-    <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\RemoveApprovedPeriodCommand.cs" />
-    <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\RemoveApprovedPeriodCommandHandler.cs" />
-    <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\RemovedPeriod.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Configuration\ConfigurationValidationViewModel.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Configuration\ConfigurationValidator.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Configuration\DefaultStateGroupException.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Configuration\IRtaStateHolder.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Configuration\RtaMap.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Configuration\RtaRule.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Configuration\RtaState.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Configuration\RtaStateGroup.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Configuration\RtaStateHolder.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Events\ApprovedPeriodRemovedEvent.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Events\EventAdherence.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Events\IRtaStoredEvent.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Events\PeriodApprovedAsInAdherenceEvent.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Events\PersonInAdherenceEvent.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Events\PersonNeutralAdherenceEvent.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Events\PersonOutOfAdherenceEvent.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Events\PersonRuleChangedEvent.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Events\PersonStateChangedEvent.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Events\RtaMapChangedEvent.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Events\RtaRuleChangedEvent.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Events\RtaStateGroupChangedEvent.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\ActivityChangeChecker.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\ActivityEventPublisher.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\ActualAgentStateExtension.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\AdherenceEventPublisher.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\AdherenceInfo.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\AgentState.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\AgentStateMaintainer.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\AgentStateProcessor.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\AgentStateReadModel.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\BehaviorTestTenants.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\Context.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\ContextLoader.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\DataSourceMapper.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\EventCollector.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\ExternalLogonMapper.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\ExternalUserStateWebModel.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\IAgentStatePersister.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\IAgentStateReadModelLegacyReader.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\IAgentStateReadModelPersister.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\IAppliedAlarm.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\IContextLoader.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\IContextLoadingStrategy.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\ICurrentScheduleReadModelPersister.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\IDataSourceReader.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\IExternalLogonReader.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\IMappingReader.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\INotificationCreator.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\InputInfo.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\InvalidAuthenticationKeyException.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\InvalidSourceException.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\InvalidStateCodeException.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\InvalidUserCodeException.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\IRtaExceptionHandler.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\IScheduleReader.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\IStateQueueReader.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\IStateQueueWriter.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\LegacyAuthenticationKey.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\LegacyAuthenticationKeyException.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\Mapping.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\NoLoggedOutStateGroupsException.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\NotificationCreator.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\PerTenant.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\Rta.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\RuleEventPublisher.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\ScheduleCache.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\ScheduleChangeProcessor.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\ScheduledActivity.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\ScheduleInfo.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\ShiftEventPublisher.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\StateEventPublisher.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\StateInputModel.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\StateMapper.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\StateQueueTenants.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\StateRuleInfo.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\TenantLoader.cs" />
-    <Compile Include="RealTimeAdherence\Tool\IRtaToolViewModelBuilder.cs" />
-    <Compile Include="RealTimeAdherence\Tool\RtaToolViewModel.cs" />
-    <Compile Include="RealTimeAdherence\Tool\RtaToolViewModelBuilderFromAgentState.cs" />
-    <Compile Include="RealTimeAdherence\Tracer\IRtaTracer.cs" />
-    <Compile Include="RealTimeAdherence\Tracer\IRtaTracerConfigPersister.cs" />
-    <Compile Include="RealTimeAdherence\Tracer\IRtaTracerReader.cs" />
-    <Compile Include="RealTimeAdherence\Tracer\IRtaTracerWriter.cs" />
-    <Compile Include="RealTimeAdherence\Tracer\RtaTracer.cs" />
-    <Compile Include="RealTimeAdherence\Tracer\RtaTracerConfig.cs" />
-    <Compile Include="RealTimeAdherence\Tracer\RtaTracerLog.cs" />
-    <Compile Include="RealTimeAdherence\Tracer\SafeRtaTracer.cs" />
     <Compile Include="Reports\SimplestPersonInfo.cs" />
     <Compile Include="Repositories\IAnalyticsSiteRepository.cs" />
     <Compile Include="Repositories\IASMScheduleChangeTimeRepository.cs" />
@@ -699,6 +555,7 @@
     <Compile Include="Security\DataTokenManager.cs" />
     <Compile Include="Security\IDataTokenManager.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccOvertimeRequestsLicenseOption.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiWfmChatBotLicenseOption.cs" />
     <Compile Include="Security\SignedArgument.cs" />
     <Compile Include="SkillGroupManagement\ModifySkillGroup.cs" />
     <Compile Include="Intraday\To Staffing\ScheduledStaffingViewModel.cs" />
@@ -3699,12 +3556,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="RealTimeAdherence\Domain\Configuration\RtaMap.hbm.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RealTimeAdherence\Domain\Configuration\RtaRule.hbm.xml" />
-    <EmbeddedResource Include="RealTimeAdherence\Domain\Configuration\RtaState.hbm.xml" />
-    <EmbeddedResource Include="RealTimeAdherence\Domain\Configuration\RtaStateGroup.hbm.xml" />
     <EmbeddedResource Include="Scheduling\Assignment\PersonAssignment.hbm.xml" />
   </ItemGroup>
   <ItemGroup>

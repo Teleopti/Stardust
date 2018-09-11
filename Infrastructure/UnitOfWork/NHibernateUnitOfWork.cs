@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private void persistExceptionHandler(Exception ex)
 		{
-			_logger.Error("An error occurred when trying to save.", ex);
+			_logger.Error($"An error occurred when trying to save. Current stack: {Environment.StackTrace}", ex);
 			transactionRollback();
 			if (_session.IsOpen)
 				_session.Close();

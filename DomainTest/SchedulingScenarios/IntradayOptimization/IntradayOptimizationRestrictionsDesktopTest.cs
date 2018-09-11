@@ -122,7 +122,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var optimizationPreferences = new OptimizationPreferences
 			{
 				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true, UsePreferences = true, PreferencesValue = 1.0d },
-				Advanced = {BreakPreferenceStartTimeByMax = TimeSpan.FromMinutes(60) }
 			};
 
 			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, dateOnly.ToDateOnlyPeriod(), optimizationPreferences, null);
@@ -207,7 +206,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var optimizationPreferences = new OptimizationPreferences
 			{
 				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true, UsePreferences = true, PreferencesValue = 1d },
-				Advanced = {BreakPreferenceStartTimeByMax = TimeSpan.FromMinutes(60)}
 			};
 
 			Assert.DoesNotThrow(() =>

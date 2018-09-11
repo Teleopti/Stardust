@@ -5092,7 +5092,7 @@ Availability</value>
     <comment>Adherence</comment>
   </data>
   <data name="ReadyTimeAdherence" xml:space="preserve">
-    <value>Ready Time Adherence</value>
+    <value>Ready time adherence</value>
     <comment>Ready Time Adherence</comment>
   </data>
   <data name="InvalidAgentName" xml:space="preserve">
@@ -17723,5 +17723,9 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="ContractTimeViolation" xml:space="preserve">
     <value>Contract time violation.</value>
     <comment>Use in MyTime ShiftTradeRequest. Error message title when break contract tolerance.</comment>
+  </data>
+  <data name="ContractTimeViolationMessageInShiftTradeRequest" xml:space="preserve">
+    <value>The days currently selected to be included in the shift trade would result in too much or too little contract time.</value>
+    <comment>Contract time violation message in shift trade request.</comment>
   </data>
 </root>

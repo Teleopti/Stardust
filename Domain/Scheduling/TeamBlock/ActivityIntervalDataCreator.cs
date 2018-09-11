@@ -6,15 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-	public interface IActivityIntervalDataCreator
-	{
-		Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> CreateFor(IGroupPersonSkillAggregator groupPersonSkillAggregator, ITeamBlockInfo teamBlockInfo,
-		                                                                                           DateOnly day, 
-																																															 IEnumerable<ISkillDay> allSkillDays,
-																									bool forRoleModel);
-	}
-
-	public class ActivityIntervalDataCreator : IActivityIntervalDataCreator
+	public class ActivityIntervalDataCreator
 	{
 		private readonly CreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
 		private readonly IDayIntervalDataCalculator _dayIntervalDataCalculator;

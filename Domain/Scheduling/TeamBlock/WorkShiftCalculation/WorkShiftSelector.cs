@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 	{
 		private readonly WorkShiftValueCalculator _workShiftValueCalculator;
 
-		public WorkShiftSelectorDoNotCallMainShiftProjectionTooManyTimes(WorkShiftValueCalculator workShiftValueCalculator, IEqualWorkShiftValueDecider equalWorkShiftValueDecider, IActivityIntervalDataCreator activityIntervalDataCreator) : base(workShiftValueCalculator, equalWorkShiftValueDecider, activityIntervalDataCreator)
+		public WorkShiftSelectorDoNotCallMainShiftProjectionTooManyTimes(WorkShiftValueCalculator workShiftValueCalculator, IEqualWorkShiftValueDecider equalWorkShiftValueDecider, ActivityIntervalDataCreator activityIntervalDataCreator) : base(workShiftValueCalculator, equalWorkShiftValueDecider, activityIntervalDataCreator)
 		{
 			_workShiftValueCalculator = workShiftValueCalculator;
 		}
@@ -54,11 +54,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 	{
 		private readonly WorkShiftValueCalculator _workShiftValueCalculator;
 		private readonly IEqualWorkShiftValueDecider _equalWorkShiftValueDecider;
-		private readonly IActivityIntervalDataCreator _activityIntervalDataCreator;
+		private readonly ActivityIntervalDataCreator _activityIntervalDataCreator;
 
 		public WorkShiftSelector(WorkShiftValueCalculator workShiftValueCalculator,
 												IEqualWorkShiftValueDecider equalWorkShiftValueDecider,
-												IActivityIntervalDataCreator activityIntervalDataCreator)
+												ActivityIntervalDataCreator activityIntervalDataCreator)
 		{
 			_workShiftValueCalculator = workShiftValueCalculator;
 			_equalWorkShiftValueDecider = equalWorkShiftValueDecider;

@@ -2,8 +2,8 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd';
-import { UserService } from '../../../core/services';
-import { LogonInfoService } from '../../../shared/services';
+import { Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { PasswordService } from '../../services/password.service';
 
 export class MatchingPasswordValidation {
@@ -53,9 +53,7 @@ export class ChangePasswordComponent {
 		private fb: FormBuilder,
 		private ps: PasswordService,
 		private messageService: NzMessageService,
-		private translateService: TranslateService,
-		private logonInfoService: LogonInfoService,
-		private userService: UserService
+		private translateService: TranslateService
 	) {
 		this.changePasswordForm = this.fb.group(
 			{

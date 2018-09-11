@@ -1,95 +1,19 @@
-.shift-to-trade-row {
-	display: flex;
-	border-top: 0.8px solid #e3e3e3;
-	min-height: 80px;
+#Request-add-shift-trade {
+	padding: 0;
 }
-.shift-to-trade-row + .shift-to-trade-row {
-	margin-top: 1px;
-}
-.shift-detail {
-	overflow: visible;
-	flex: 4 4 40%;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	text-align: center;
-}
-.shift-detail-info {
-	flex: 1 0 auto;
-}
-.shift-date {
-	flex: 1 0 80px !important;
-	text-align: center;
-}
-.shift-date,
-.shift-selection {
-	flex: 1 1 10%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-.shift-selection input[type='checkbox'][disabled] {
-	cursor: default !important;
-	pointer-events: none;
-}
-.own-shift + .shift-to-trade {
-	margin-left: 1px;
-}
-.shift-visual-indication-wrapper {
-	box-sizing: border-box;
-	padding: 0 10%;
-	align-self: stretch;
-}
-.shift-visual-indication {
-	position: relative;
+.shift-trade-filter-container {
 	width: 100%;
-	height: 18px;
+	margin: 0;
 }
-.shift-visual-indication .tooltip-inner {
-	width: 140%;
-	width: -webkit-max-content;
-	width: -moz-max-content;
-}
-.shift-visual-indication-block {
-	position: absolute;
-	height: 18px;
-}
-.shift-visual-indication-block.dayoff {
-	width: 100%;
-}
-.not-scheduled {
-	min-height: 60px;
-	padding-top: 29px;
-}
-.shift-to-trade-row-disable {
-	color: #c9c4c4 !important;
-}
-.shift-to-trade-row-disable .shift-visual-indication-block {
-	opacity: 0.5;
-}
-.shift-to-trade-row-disable .text-indicator-mobile {
-	opacity: 0.5;
-}
-.shift-trade-error {
-	display: flex;
-	flex-direction: column;
-}
-.schedules-side-by-side {
-	flex: 1 1 70%;
-	overflow: hidden;
-	background-color: white;
-	border: 0.8px solid #e3e3e3;
-}
-.request-shift-trade-add-section {
-	background-color: #f8f8f8;
-	border: 1px solid rgb(216, 216, 216);
-	height: 100%;
-	padding: 10px;
+.shift-trade-schedule-container {
+	padding: 0 2px;
 }
 .shift-trade-add-schedule {
 	position: relative;
 	white-space: nowrap;
 }
+
+/*Old Shift Trade*/
 .shift-trade-my-schedule-row,
 .shift-trade-person-schedule-row {
 	height: 31px;
@@ -97,12 +21,6 @@
 }
 .shift-trade-person-schedule-row:nth-child(odd) {
 	background: #eee;
-}
-.shift-trade-selection-container {
-	width: 27px;
-	height: 27px;
-	text-align: center;
-	vertical-align: central;
 }
 @media (min-width: 993px) {
 	.shift-to-trade-row-disable .schedule-layer-text-container {
@@ -115,9 +33,6 @@
 		position: absolute;
 		/* Value for left should keep samve as width of .shift-trade-agent-name*/
 		left: 114px;
-	}
-	.shift-to-trade-row-disable .clear-desktop-color {
-		opacity: 0.5;
 	}
 	.shift-trade-agent-name {
 		overflow: hidden;
@@ -175,13 +90,6 @@
 .shift-trade-layer.edit.my {
 	top: 3px;
 }
-.shift-trade-schedule-loading {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
-}
 @media only screen and (min-width: 769px) {
 	.shift-trade-timeline {
 		height: 100%;
@@ -226,27 +134,6 @@
 	padding-left: 3px;
 	padding-right: 2px;
 }
-.shift-trade-add-datepicker {
-	position: absolute;
-	width: 100px;
-	text-align: center;
-	left: 30px;
-}
-.shift-trade-add-previous-date {
-	background-position: 0 -30px;
-	height: 20px;
-	width: 22px !important;
-	vertical-align: middle;
-	float: left;
-}
-.shift-trade-add-next-date {
-	background-position: right -90px;
-	margin: 0 -4px;
-	height: 20px;
-	width: 22px !important;
-	vertical-align: middle;
-	left: 102px;
-}
 .shift-trade-dayoff-name {
 	position: absolute;
 	left: 0;
@@ -264,8 +151,8 @@
 .add-shift-trade-detail-section textarea {
 	max-width: 100%;
 }
-.shift-trade-no-possible-trades {
-	margin-top: 10px;
+.shift-trade-contract-time {
+	font-size: 0.8em;
 }
 .shift-trade-contract-time {
 	width: 50px;
@@ -315,19 +202,6 @@
 	height: 30px;
 	/*hack to make LTR work - remove when were using "true" LTR in requests"". See bug 22898*/
 	padding-left: 0;
-}
-.shift-trade-contract {
-	clear: both;
-	font-size: 0.8em;
-}
-.shift-trade-request-74947 {
-	display: flex;
-	flex-direction: column;
-}
-.multiple-shift-trade-panel {
-	flex: 1 0 auto;
-	display: flex;
-	flex-direction: row;
 }
 .shift-trade-swap-detail-timeline-line {
 	height: 100%;
@@ -395,82 +269,334 @@
 	overflow: auto;
 	margin-top: 5px;
 }
+.request-add-shift-trade-subject-input,
+.request-add-shift-trade-message-input {
+	resize: none;
+	padding: 10px;
+	width: 100%;
+	box-shadow: none;
+	outline: none;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	color: #333333;
+}
+.request-add-shift-trade-message-input:focus {
+	border-color: #66afe9;
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+.shift-trade-no-possible-trades {
+	margin-top: 10px;
+}
 
-/*Shift Trade Cart*/
-.shift-cart-selection {
-	display: flex;
-	flex: 1 0 20px;
-	justify-content: center;
-	align-items: flex-end;
-}
-.shift-trade-cart {
-	flex: 1 1 30%;
-	padding: 0 5px;
-	background-color: white;
-}
-.shift-trade-list-panel {
-	position: relative;
-	height: 600px;
-	overflow: auto;
-}
+/*New multiple shift trade*/
 .shift-trade-request-container {
-	margin-bottom: 2px;
-	margin-top: 2px;
+	display: flex;
+	flex-direction: column;
+	background: white;
 }
-.shift-trade-cart-container {
+.multi-shift-trade-error-message {
+	height: 0;
+	transition: all 0.3s ease-in-out;
+	position: relative;
+}
+.multi-shift-trade-error-message-toggled {
+	box-shadow: 0 -1px 0px 1px rgb(255, 117, 24, 0.8);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	height: 30px;
+}
+.multi-shift-trade-error-message > div.cursorpointer {
+	height: 0;
+	overflow: hidden;
+}
+.multi-shift-trade-error-message > div.cursorpointer > * {
+	margin: 5px;
+}
+.multi-shift-trade-error-message-toggled > div.cursorpointer {
+	height: 100%;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	font-weight: bold;
+	background: rgb(255, 117, 24, 0.8);
+}
+.multi-shift-trade-error-detail {
+	padding: 5px;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	z-index: 1;
+	height: 0;
+	visibility: hidden;
+	background: white;
+	box-shadow: 0 2px 1px 0px rgb(255, 117, 24, 0.8);
+	transition: all 0.3s ease-in-out;
 	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+}
+.multi-shift-trade-error-detail-toggled {
+	height: 400px;
+	visibility: visible;
+}
+.multi-shift-trade-error-detail > div {
+	width: 100%;
+	max-width: 600px;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	padding: 5px 0;
+}
+.multi-shift-trade-error-detail > div:nth-child(3) {
+	border-top: 1px solid rgba(0, 0, 0, 0.1);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.multi-shift-trade-error-detail > div > p {
+	margin: 0;
+	display: inline-block;
+	text-align: center;
+	white-space: nowrap;
+}
+.multi-shift-trade-error-detail-name {
+	flex: 1 1 40%;
+}
+.multi-shift-trade-error-detail-time {
+	flex: 2 1 60%;
+}
+.multi-shift-trade-error-detail-time > span {
+	display: block;
+}
+.multi-shift-trade-error-detail-time > span > span {
+	width: 50%;
+	padding: 5px;
+	display: inline-block;
+	text-align: center;
+	white-space: normal;
+	border-left: 1px solid rgba(0, 0, 0, 0.1);
+}
+.multi-shift-trade-error-time {
+	font-size: 0.9em;
+}
+.multi-shift-trade-panel {
+	height: 600px;
+	flex: 1 0 auto;
+	display: flex;
+	flex-direction: row;
+}
+.multi-shift-trade-schedules-list {
+	flex: 1 1 70%;
+	overflow: hidden;
+	max-height: 100%;
+}
+.multi-shift-trade-schedules-list-header {
+	height: 25px;
+	display: flex;
+	font-weight: bold;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.multi-shift-trade-schedules-list-panel {
+	position: relative;
+	height: calc(100% - 25px);
+	overflow-x: hidden;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+}
+.multi-shift-trade-error-detail::-webkit-scrollbar,
+.multi-shift-trade-schedules-list-panel::-webkit-scrollbar,
+.multi-shift-trade-cart-container::-webkit-scrollbar {
+	width: 8px;
+}
+.multi-shift-trade-error-detail::-webkit-scrollbar-thumb,
+.multi-shift-trade-schedules-list-panel::-webkit-scrollbar-thumb,
+.multi-shift-trade-cart-container::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background: rgba(0, 0, 0, 0.3);
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+}
+.multi-shift-trade-row {
+	display: flex;
+	border-top: 0.8px solid #e3e3e3;
+	height: 100px;
+	min-height: 100px;
+	border-left: 2px solid #5acdf9;
+	margin: 0 0 1px 0;
+}
+.multi-shift-trade-row.multi-shift-trade-row-mobile {
+	height: 80px;
+	min-height: 80px;
+}
+.multi-shift-trade-row.multi-shift-trade-row-disabled {
+	border-left: 2px solid #ffa500;
+}
+.multi-shift-trade-row-disabled .multi-shift-trade-date-cell,
+.multi-shift-trade-row-mobile .multi-shift-trade-row-disabled .shift-detail-info {
+	opacity: 0.6;
+}
+.multi-shift-trade-row-disabled .multi-shift-trade-visual-layer {
+	opacity: 0.6;
+}
+.multi-shift-trade-row-disabled .tooltip * {
+	color: #fff;
+}
+.multi-shift-trade-date-cell,
+.multi-shift-trade-selection {
+	width: 80px;
+	padding: 3px;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex: 1 1 15%;
+}
+.multi-shift-trade-shift-detail {
+	flex: 2 2 40%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.multi-shift-trade-shift-detail > div {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 0 10px;
+	border-left: 1px solid rgba(0, 0, 0, 0.1);
+}
+.multi-shift-trade-row-mobile .multi-shift-trade-shift-detail > div {
+	padding: 0;
+}
+.multi-shift-trade-shift-detail.target-schedule-detail {
+	margin-left: 1px;
+}
+.multi-shift-trade-shift-detail.target-schedule-detail > div {
+	border: none;
+}
+.multi-shift-trade-row-text-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	padding: 0 5px;
+	flex: 1 1 70%;
+}
+.multi-shift-trade-row-text-container p {
+	padding: 0;
+	margin: 0;
+}
+.multi-shift-trade-schedule-container {
+	width: 100%;
+	padding: 0 5px;
+	flex: 1 1 30%;
+}
+.multi-shift-trade-layer-container {
+	position: relative;
+	width: 100%;
+	height: 18px;
+}
+.multi-shift-trade-layer-container .multi-shift-trade-visual-layer {
+	height: 100%;
+	position: absolute;
+	display: inline-block;
+}
+.multi-shift-trade-layer-container .multi-shift-trade-visual-layer:first-child {
+	border-top-left-radius: 3px;
+	border-bottom-left-radius: 3px;
+}
+.multi-shift-trade-layer-container .multi-shift-trade-visual-layer:last-child {
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+.multi-shift-trade-visual-layer.dayoff {
+	width: 100%;
+	border-radius: 3px;
+}
+.multi-shift-trade-row-mobile .multi-shift-trade-layer-container .shift-start-end-time {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.multi-shift-trade-row-mobile .multi-shift-trade-layer-container .spliter {
+	line-height: 2px;
+}
+.multi-shift-trade-row-disabled .multi-shift-trade-visual-layer {
+	opacity: 0.5;
+}
+.multi-shift-trade-row-disabled .text-indicator-mobile {
+	opacity: 0.5;
+}
+.multi-shift-trade-selection {
+	min-width: 30px;
+	flex: 1 1 5%;
+}
+.multi-shift-trade-selection input,
+.multi-shift-trade-selection .glyphicon-ban-circle,
+.multi-shift-trade-selection .shift-trade-select-checkbox-disabled label {
+	display: none;
+}
+.multi-shift-trade-selection label {
+	margin: 0;
+}
+.multi-shift-trade-selection input[type='checkbox'] + label::before {
+	content: '\a0';
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border-radius: 4px;
+	background-color: silver;
+	text-align: center;
+	vertical-align: middle;
+}
+.multi-shift-trade-selection input[type='checkbox']:checked + label::before {
+	content: '\2713';
+	background-color: rgb(98, 225, 98);
+	color: white;
+}
+.multi-shift-trade-selection .shift-trade-select-checkbox-disabled .glyphicon-ban-circle {
+	display: inline-block;
+	transform: scale(1.3);
+	color: silver;
+}
+.multi-shift-trade-cart {
+	flex: 1 1 30%;
+	background: white;
+	border-left: 1px solid rgba(0, 0, 0, 0.1);
+	padding: 5px;
+}
+.multi-shift-trade-cart-container {
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
 	height: 420px;
+	padding-bottom: 5px;
 }
-
-@media (max-width: 500px) {
-	.shift-start-end-time {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-
-	.spliter {
-		line-height: 2px;
-	}
-}
-
-.shift-trade-cart-wrapper {
+.multi-shift-trade-cart-wrapper {
 	display: flex;
 	flex-direction: column;
 	background-color: white;
 	height: 100%;
 }
-
-.shift-cart-row {
+.multi-shift-trade-cart-row {
 	height: 94px;
 	display: flex;
 	justify-content: center;
-	border-bottom: 0.8px solid #c0c0c0;
+	border-bottom: 1px solid #c0c0c0;
 }
-
-.shift-cart-row + .shift-cart-row {
-	margin-top: 3px;
-}
-
-.shift-cart-detail {
+.multi-shift-trade-cart-detail {
 	flex: 1 0 90%;
 	display: flex;
 	flex-direction: column;
+	align-items: stretch;
 }
-
-.shift-cart-date {
+.multi-shift-trade-cart-date {
 	display: flex;
 	flex: 1 0 20%;
 	justify-content: center;
 	height: 30px;
 }
-
-.shift-cart-detail-info {
+.multi-shift-trade-cart-detail-info {
 	flex: 1 0 80%;
 	display: flex;
 }
-
-.cart-schedule {
+.multi-shift-trade-cart-schedule {
 	flex: 1 0 50%;
 	display: flex;
 	flex-direction: column;
@@ -478,12 +604,22 @@
 	align-items: center;
 	padding-top: 4px;
 }
-
-.cart-schedule + .cart-schedule {
+.multi-shift-trade-cart-schedule + .multi-shift-trade-cart-schedule {
 	margin-left: 4px;
 }
-
-.cart-schedule-category {
+.multi-shift-trade-cart-schedule-category,
+.multi-shift-trade-cart-schedule-category.dayoff {
 	width: 80%;
 	text-align: center;
+	display: inline-block;
+}
+.multi-shift-trade-cart-selection {
+	display: flex;
+	min-width: 20px;
+	flex: 1 0 10%;
+	justify-content: center;
+	align-items: flex-end;
+}
+.multi-shift-trade-cart-selection .btn-remove i {
+	transform: scale(1.2);
 }

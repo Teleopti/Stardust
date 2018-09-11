@@ -180,6 +180,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PeopleAccess, "xxAccessManagement", DefinedRaptorApplicationFunctionForeignIds.PeopleAccess);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PeopleManageUsers, "xxPeopleManageUsers", DefinedRaptorApplicationFunctionForeignIds.PeopleManageUsers);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.Gamification, "xxGamification", DefinedRaptorApplicationFunctionForeignIds.Gamification);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ChatBot, "xxChatBot", DefinedRaptorApplicationFunctionForeignIds.ChatBot);
 
 			return result.ToArray();
 		}

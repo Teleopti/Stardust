@@ -375,10 +375,10 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.237\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.238\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.237\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.238\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
     <Reference Include="Validation">
       <HintPath>..\..\packages\Validation.2.0.2.13022\lib\portable-windows8+net40+sl5+windowsphone8\Validation.dll</HintPath>
@@ -495,6 +495,7 @@
     <Compile Include="Areas\MyTime\Models\Schedule\Common\OvertimeAvailabilityViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Schedule\Common\SpecialDateState.cs" />
     <Compile Include="Areas\MyTime\Models\Schedule\Common\DayViewModel.cs" />
+    <Compile Include="Areas\Rta\Controllers\RtaTestDataController.cs" />
     <Compile Include="Areas\Rta\Controllers\HistoricalOverviewController.cs" />
     <Compile Include="Core\Exceptions\CustomMessageException.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\SingleOwnedPerson.cs" />
@@ -2873,6 +2874,10 @@
     <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj">
       <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>
       <Name>Teleopti.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Wfm.Rta\Teleopti.Wfm.Rta.csproj">
+      <Project>{2dd2e616-8405-49df-a07d-546a8c160117}</Project>
+      <Name>Teleopti.Wfm.Rta</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

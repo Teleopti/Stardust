@@ -132,6 +132,9 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 				},{
 					DefinedLicenseOptionPaths.TeleoptiWfmOvertimeRequests,
 					licenseService.TeleoptiWFMOvertimeRequestsEnabled
+				},{
+					DefinedLicenseOptionPaths.TeleoptiWfmChatBot,
+					licenseService.TeleoptiWFMChatBotEnabled
 				}
 			};
 
