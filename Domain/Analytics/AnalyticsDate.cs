@@ -20,13 +20,13 @@ namespace Teleopti.Ccc.Domain.Analytics
 		{
 			DateDate = date.Date;
 			Year = date.Year;
-			YearMonth = int.Parse($"{date.Year}{date.Month.ToString("D2")}");
+			YearMonth = int.Parse($"{date.Year}{date.Month:D2}");
 			Month = date.Month;
 			MonthName = DateHelper.GetMonthName(date, culture);
 			MonthResourceKey = getMonthResourceKey(date.Month);
 			DayInMonth = date.Day;
 			WeekNumber = DateHelper.WeekNumber(date, culture);
-			WeekdayName = culture.DateTimeFormat.DayNames[(int) date.DayOfWeek];
+			WeekdayName = culture.DateTimeFormat.GetDayName(date.DayOfWeek);
 			WeekdayResourceKey = getWeekDayResourceKey(getDayOfWeek(date));
 			WeekdayNumber = getDayOfWeek(date);
 			YearWeek = getYearWeek(date, culture);
