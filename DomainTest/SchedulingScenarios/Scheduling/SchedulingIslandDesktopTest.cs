@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -25,15 +26,19 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public MergeIslandsSizeLimit MergeIslandsSizeLimit;
 		
-		[Test, Ignore("#76176")]
-		public void ShouldHandleDifferentOpenHoursWhenReducingSkills()
+		[TestCase(0, 12, 12, 24, true)]
+		[TestCase(8, 16, 8, 16, true)]
+		[TestCase(0, 12, 13, 24, false)]
+		[TestCase(0, 12, 0, 12, false)]
+		[Ignore("#76176")]
+		public void ShouldHandleDifferentOpenHoursWhenReducingSkills(int skill1Start, int skill1End, int skill2Start, int skill2End, bool canBeScheduled)
 		{
 			MergeIslandsSizeLimit.TurnOff_UseOnlyFromTest();
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 1);
 			var scenario = new Scenario();
 			var activity = new Activity{RequiresSkill = true}.WithId();
-			var skillA = new Skill().For(activity).IsOpenBetween(0,12).WithId();
-			var skillB = new Skill().For(activity).IsOpenBetween(12,24).WithId();
+			var skillA = new Skill().For(activity).IsOpenBetween(skill1Start, skill1End).WithId();
+			var skillB = new Skill().For(activity).IsOpenBetween(skill2Start, skill2End).WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
 			var date = new DateOnly(2015, 10, 12);
 			var agentToSchedule = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillA, skillB).WithSchedulePeriodOneDay(date);
@@ -47,8 +52,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			
 			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agentToSchedule}, date.ToDateOnlyPeriod());
 			
-			stateHolder.Schedules[agentToSchedule].ScheduledDay(date).PersonAssignment(true).ShiftLayers
-				.Should().Not.Be.Empty();
+			stateHolder.Schedules[agentToSchedule].ScheduledDay(date).PersonAssignment(true).ShiftLayers.Any()
+				.Should().Be.EqualTo(canBeScheduled);
 		}
 
 		public SchedulingIslandDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXXL76496, bool resourcePlannerHalfHourSkillTimeZon75509) : base(seperateWebRequest, resourcePlannerXXL76496, resourcePlannerHalfHourSkillTimeZon75509)
