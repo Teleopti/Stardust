@@ -234,6 +234,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	        public bool TeleoptiCccSmsLinkEnabled { get; private set; }
 	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
 			public bool TeleoptiWFMOvertimeRequestsEnabled { get; }
+			public bool TeleoptiWFMChatBotEnabled { get; }
 
 			public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
@@ -330,6 +331,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			  public bool TeleoptiCccSmsLinkEnabled { get; private set; }
 			  public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
 			  public bool TeleoptiWFMOvertimeRequestsEnabled { get; }
+			  public bool TeleoptiWFMChatBotEnabled { get; }
 			  public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 			  public int MaxSeats { get; private set; }
 			  public LicenseType LicenseType { get; private set; }
@@ -439,6 +441,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	        public bool TeleoptiCccSmsLinkEnabled { get; private set; }
 	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
 			public bool TeleoptiWFMOvertimeRequestsEnabled { get; }
+			public bool TeleoptiWFMChatBotEnabled { get; }
 
 			public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
@@ -508,6 +511,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             	TeleoptiCccSmsLinkEnabled = false;
 	            TeleoptiCccCalendarLinkEnabled = false;
 	            TeleoptiWFMVNextEnabled = false;
+				TeleoptiWFMChatBotEnabled = false;
 
                 TeleoptiCccFreemiumForecastsEnabled = false;
             }
@@ -564,6 +568,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	        public bool TeleoptiCccSmsLinkEnabled { get; private set; }
 	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
 			public bool TeleoptiWFMOvertimeRequestsEnabled { get; }
+			public bool TeleoptiWFMChatBotEnabled { get; }
 
 			public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 

@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 
 			hideRealTimeReports(functions);
 			if (!_toggleManager.IsEnabled(Toggles.WFM_Gamification_Permission_76546)) hideGamification(functions);
+			if (!_toggleManager.IsEnabled(Toggles.WFM_ChatBot_77547)) hideChatBot(functions);
 			
 			hideBpoExchangeIfNotLicensed(functions);
 			return functions;
@@ -36,34 +37,22 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			if (_toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_AuditTrail_44006))
 			{
 				var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailReport);
-				if (foundFunction != null)
-				{
-					foundFunction.SetHidden();
-				}
+				foundFunction?.SetHidden();
 			}
 			if (!_toggleManager.IsEnabled(Toggles.WFM_AuditTrail_44006))
 			{
 				var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailWebReport);
-				if (foundFunction != null)
-				{
-					foundFunction.SetHidden();
-				}
+				foundFunction?.SetHidden();
 			}
 			if (_toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560))
 			{
 				var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.ScheduledTimePerActivityReport);
-				if (foundFunction != null)
-				{
-					foundFunction.SetHidden();
-				}
+				foundFunction?.SetHidden();
 			}
 			if (_toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_Scheduled_Time_vs_Target_45559))
 			{
 				var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.ScheduleTimeVersusTargetTimeReport);
-				if (foundFunction != null)
-				{
-					foundFunction.SetHidden();
-				}
+				foundFunction?.SetHidden();
 			}
 			if (_toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_Scheduled_Time_vs_Target_45559)
 				&& _toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560)
@@ -72,10 +61,7 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 				foreach (var function in functions.Functions)
 				{
 					var onlineReportNode = function.ChildFunctions.FirstOrDefault(x => x.Function.LocalizedFunctionDescription == Resources.OnlineReports);
-					if (onlineReportNode != null)
-					{
-						onlineReportNode.SetHidden();
-					}
+					onlineReportNode?.SetHidden();
 				}
 			}
 		}
@@ -89,10 +75,7 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			if (!isLicenseAvailible)
 			{
 				var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.BpoExchange);
-				if (foundFunction != null)
-				{
-					foundFunction.SetHidden();
-				}
+				foundFunction?.SetHidden();
 			}
 
 		}
@@ -100,10 +83,13 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 		private void hideGamification(AllFunctions functions)
 		{
 			var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.Gamification);
-			if (foundFunction != null)
-			{
-				foundFunction.SetHidden();
-			}
+			foundFunction?.SetHidden();
+		}
+
+		private void hideChatBot(AllFunctions functions)
+		{
+			var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.ChatBot);
+			foundFunction?.SetHidden();
 		}
 	}
 }
