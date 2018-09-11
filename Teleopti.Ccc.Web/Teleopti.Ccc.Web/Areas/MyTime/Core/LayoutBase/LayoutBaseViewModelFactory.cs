@@ -3,6 +3,7 @@ using System.Globalization;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase;
 using Teleopti.Interfaces.Domain;
 
@@ -14,18 +15,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 		private readonly IDatePickerGlobalizationViewModelFactory _datePickerGlobalizationViewModelFactory;
 		private readonly INow _now;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly IPermissionProvider _permissionProvider;
 
 		public LayoutBaseViewModelFactory(ICultureSpecificViewModelFactory cultureSpecificViewModelFactory,
 		                                  IDatePickerGlobalizationViewModelFactory datePickerGlobalizationViewModelFactory,
-		                                  INow now, IUserTimeZone userTimeZone)
+		                                  INow now, IUserTimeZone userTimeZone, IPermissionProvider permissionProvider)
 		{
 			_cultureSpecificViewModelFactory = cultureSpecificViewModelFactory;
 			_datePickerGlobalizationViewModelFactory = datePickerGlobalizationViewModelFactory;
 			_now = now;
 			_userTimeZone = userTimeZone;
+			_permissionProvider = permissionProvider;
 		}
-
-		// TODO: JonasN, Texts
+		
 		public LayoutBaseViewModel CreateLayoutBaseViewModel(string title)
 		{
 			var cultureSpecificViewModel = _cultureSpecificViewModelFactory.CreateCutureSpecificViewModel();
@@ -33,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 				_datePickerGlobalizationViewModelFactory.CreateDatePickerGlobalizationViewModel();
 			DateTime? fixedDate = null;
 
-			if (_now is IMutateNow && (_now as IMutateNow).IsMutated())
+			if (_now is IMutateNow now && now.IsMutated())
 				fixedDate = _now.UtcDateTime();
 
 			var offset = _userTimeZone.TimeZone().BaseUtcOffset;
@@ -48,7 +50,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 				Footer = string.Empty,
 				Title = title,
 				FixedDate = fixedDate,
-				UserTimezoneOffsetMinute = (int) offset.TotalMinutes
+				UserTimezoneOffsetMinute = (int) offset.TotalMinutes,
+				GrantEnabled = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ChatBot)
 			};
 			
 			if (dayLightSavingAdjustment != null)
