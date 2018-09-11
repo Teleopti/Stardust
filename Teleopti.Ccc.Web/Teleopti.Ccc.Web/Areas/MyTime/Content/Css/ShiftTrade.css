@@ -297,9 +297,9 @@
 	height: 0;
 	transition: all 0.3s ease-in-out;
 	position: relative;
-	box-shadow: 0 -1px 0px 0px rgba(255, 165, 0, 0.6);
 }
 .multi-shift-trade-error-message-toggled {
+	box-shadow: 0 -1px 0px 1px rgb(255, 117, 24, 0.8);
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 	height: 30px;
 }
@@ -314,7 +314,7 @@
 	height: 100%;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 	font-weight: bold;
-	background: rgba(255, 165, 0, 0.6);
+	background: rgb(255, 117, 24, 0.8);
 }
 .multi-shift-trade-error-detail {
 	padding: 5px;
@@ -326,7 +326,7 @@
 	height: 0;
 	visibility: hidden;
 	background: white;
-	box-shadow: 0 2px 1px 0px rgba(255, 165, 0, 0.6);
+	box-shadow: 0 2px 1px 0px rgb(255, 117, 24, 0.8);
 	transition: all 0.3s ease-in-out;
 	overflow: auto;
 	-webkit-overflow-scrolling: touch;
