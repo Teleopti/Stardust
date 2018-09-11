@@ -118,9 +118,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			var currentDay = MaxDate().DateDate;
 			var culture = _analyticsConfigurationRepository.GetCulture();
 
+			var session = _currentAnalyticsUnitOfWork.Current().Session();
 			while ((currentDay += TimeSpan.FromDays(1)) <= toDate)
 			{
-				_currentAnalyticsUnitOfWork.Current().Session().Save(new AnalyticsDate(currentDay, culture));
+				session.Save(new AnalyticsDate(currentDay, culture));
 				shouldPublish = true;
 			}
 

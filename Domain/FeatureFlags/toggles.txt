@@ -158,6 +158,7 @@ MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947 = RC
 MyTimeWeb_ShiftTradeRequest_SetNotSelectableShifts_77052 = RC #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
 MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306 = RC #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
 MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408 = DEV #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
+MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409 = DEV #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
 WFM_Gamification_Permission_76546 = true
 
 # Tech #
