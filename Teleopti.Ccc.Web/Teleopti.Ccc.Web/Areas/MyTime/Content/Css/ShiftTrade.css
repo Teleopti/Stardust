@@ -12,13 +12,7 @@
 	position: relative;
 	white-space: nowrap;
 }
-.shift-trade-error {
-	display: flex;
-	flex-direction: column;
-	background: white;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-	padding: 5px;
-}
+
 /*Old Shift Trade*/
 .shift-trade-my-schedule-row,
 .shift-trade-person-schedule-row {
@@ -289,25 +283,105 @@
 	border-color: #66afe9;
 	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
-
-/*New multiple shift trade*/
 .shift-trade-no-possible-trades {
 	margin-top: 10px;
 }
+
+/*New multiple shift trade*/
 .shift-trade-request-container {
 	display: flex;
 	flex-direction: column;
+	background: white;
+}
+.multi-shift-trade-error-message {
+	height: 0;
+	transition: all 0.3s ease-in-out;
+	position: relative;
+	box-shadow: 0 -1px 0px 0px rgba(255, 165, 0, 0.6);
+}
+.multi-shift-trade-error-message-toggled {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	height: 30px;
+}
+.multi-shift-trade-error-message > div.cursorpointer {
+	height: 0;
+	overflow: hidden;
+}
+.multi-shift-trade-error-message > div.cursorpointer > * {
+	margin: 5px;
+}
+.multi-shift-trade-error-message-toggled > div.cursorpointer {
+	height: 100%;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	font-weight: bold;
+	background: rgba(255, 165, 0, 0.6);
+}
+.multi-shift-trade-error-detail {
+	padding: 5px;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	z-index: 1;
+	height: 0;
+	visibility: hidden;
+	background: white;
+	box-shadow: 0 2px 1px 0px rgba(255, 165, 0, 0.6);
+	transition: all 0.3s ease-in-out;
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+}
+.multi-shift-trade-error-detail-toggled {
+	height: 400px;
+	visibility: visible;
+}
+.multi-shift-trade-error-detail > div {
+	width: 100%;
+	max-width: 600px;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	padding: 5px 0;
+}
+.multi-shift-trade-error-detail > div:nth-child(3) {
+	border-top: 1px solid rgba(0, 0, 0, 0.1);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.multi-shift-trade-error-detail > div > p {
+	margin: 0;
+	display: inline-block;
+	text-align: center;
+	white-space: nowrap;
+}
+.multi-shift-trade-error-detail-name {
+	flex: 1 1 40%;
+}
+.multi-shift-trade-error-detail-time {
+	flex: 2 1 60%;
+}
+.multi-shift-trade-error-detail-time > span {
+	display: block;
+}
+.multi-shift-trade-error-detail-time > span > span {
+	width: 50%;
+	padding: 5px;
+	display: inline-block;
+	text-align: center;
+	white-space: normal;
+	border-left: 1px solid rgba(0, 0, 0, 0.1);
+}
+.multi-shift-trade-error-time {
+	font-size: 0.9em;
 }
 .multi-shift-trade-panel {
+	height: 600px;
 	flex: 1 0 auto;
 	display: flex;
 	flex-direction: row;
-	height: 600px;
 }
 .multi-shift-trade-schedules-list {
 	flex: 1 1 70%;
 	overflow: hidden;
-	background-color: white;
 	max-height: 100%;
 }
 .multi-shift-trade-schedules-list-header {
@@ -320,12 +394,15 @@
 	position: relative;
 	height: calc(100% - 25px);
 	overflow-x: hidden;
-	overflow-y: scroll;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
 }
+.multi-shift-trade-error-detail::-webkit-scrollbar,
 .multi-shift-trade-schedules-list-panel::-webkit-scrollbar,
 .multi-shift-trade-cart-container::-webkit-scrollbar {
 	width: 8px;
 }
+.multi-shift-trade-error-detail::-webkit-scrollbar-thumb,
 .multi-shift-trade-schedules-list-panel::-webkit-scrollbar-thumb,
 .multi-shift-trade-cart-container::-webkit-scrollbar-thumb {
 	border-radius: 10px;
@@ -487,6 +564,7 @@
 }
 .multi-shift-trade-cart-container {
 	overflow: auto;
+	-webkit-overflow-scrolling: touch;
 	height: 420px;
 	padding-bottom: 5px;
 }

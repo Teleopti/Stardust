@@ -242,23 +242,61 @@
 </div>
 
 <div class="shift-trade-request-container" data-bind="visible: isDetailVisible">
-	<div data-bind="visible: showToloranceMessage" class="shift-trade-error">
-		<div data-bind="click:toloranceMessageClicked" class="error-summary"><i class="glyphicon glyphicon-warning-sign"> </i>
-			<span>@Resources.ContractTimeViolation</span> </div>
-		<div data-bind="visible:showToloranceMessageDetail" class="error-detail">
-			<div>@Resources.Period @Resources.Deviation</div>
-			<div data-bind="visible: myToleranceMessages().length > 0">@Resources.MySchedule
-				<!--ko foreach: myToleranceMessages-->
-				<span class="error">[<span data-bind="text:$root.formatDate(periodStart)"></span> - <span data-bind="text:$root.formatDate(periodEnd)"></span>]<span
-					 data-bind="text:contractTimeGap"></span> </span>
-				<!--/ko-->
+	<div class="multi-shift-trade-error-message" data-bind="css:{'multi-shift-trade-error-message-toggled': showToloranceMessage()}">
+		<div class="cursorpointer" data-bind="click: toloranceMessageClicked">
+			<i class="glyphicon glyphicon-warning-sign"></i>
+			<span>@Resources.ContractTimeViolation</span>
+			<span class="pull-right">
+				<i class="glyphicon glyphicon-chevron-down" data-bind="visible: !showToloranceMessageDetail()"></i>
+				<i class="glyphicon glyphicon-chevron-up" data-bind="visible: showToloranceMessageDetail"></i>
+			</span>
+		</div>
+
+		<div class="multi-shift-trade-error-detail" data-bind="css:{'multi-shift-trade-error-detail-toggled': showToloranceMessageDetail}">
+			<p>@Resources.ContractTimeViolationMessageInShiftTradeRequest</p>
+			<div>
+				<p class="multi-shift-trade-error-detail-name">&nbsp;</p>
+				<p class="multi-shift-trade-error-detail-time">
+					<span>
+						<span>@Resources.Period</span>
+						<span>@Resources.Deviation</span>
+					</span>
+				</p>
+			</div>
+			<div data-bind="visible: myToleranceMessages().length > 0">
+				<p class="multi-shift-trade-error-detail-name">@Resources.MySchedule</p>
+				<p class="multi-shift-trade-error-detail-time">
+					<!--ko foreach: myToleranceMessages-->
+					<span>
+						<span class="multi-shift-trade-error-time">
+							[
+							<span data-bind="text: $root.formatDate(periodStart)">
+							</span>
+							-
+							<span data-bind="text: $root.formatDate(periodEnd)"></span>
+							]
+						</span>
+						<span data-bind="text: contractTimeGap"></span>
+					</span>
+					<!--/ko-->
+				</p>
 			</div>
 			<div data-bind="visible: targetToleranceMessages().length > 0">
-				<div data-bind="text:agentChoosed() ? agentChoosed().agentName : ''"></div>
-				<!--ko foreach: targetToleranceMessages-->
-				<span class="error">[<span data-bind="text:$root.formatDate(periodStart)"></span> - <span data-bind="text:$root.formatDate(periodEnd)"></span>]
-					<span data-bind="text:contractTimeGap"></span> </span>
-				<!--/ko-->
+				<p class="multi-shift-trade-error-detail-name" data-bind="text: agentChoosed() ? agentChoosed().agentName : ''"></p>
+				<p class="multi-shift-trade-error-detail-time">
+					<!--ko foreach: targetToleranceMessages-->
+					<span>
+						<span class="multi-shift-trade-error-time">
+							[
+							<span data-bind="text: $root.formatDate(periodStart)"></span>
+							-
+							<span data-bind="text: $root.formatDate(periodEnd)"></span>
+							]
+						</span>
+						<span data-bind="text: contractTimeGap"></span>
+					</span>
+					<!--/ko-->
+				</p>
 			</div>
 		</div>
 	</div>

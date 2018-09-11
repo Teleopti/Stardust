@@ -435,16 +435,6 @@ input.use-default-startTime {
 	margin: 5px 10px;
 }
 
-.error-detail {
-	display: flex;
-	flex-direction: column;
-}
-
-.error-summary {
-	cursor: pointer;
-	color: red;
-}
-
 .error-message-header {
 	display: flex;
 	font-weight: bold;
