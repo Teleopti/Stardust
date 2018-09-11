@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			personId = Guid.NewGuid();
 			dataSource = Guid.NewGuid().ToString();
 			tenantPassword = RandomName.Make();
-			target = new SessionSpecificData(buId, dataSource, personId, tenantPassword);
+			target = new SessionSpecificData(buId, dataSource, personId, tenantPassword, false);
 		}
 
 		[Test]

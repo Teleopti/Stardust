@@ -450,33 +450,14 @@ input.use-default-startTime {
 	font-weight: bold;
 }
 
-.side-by-side-header {
-	display: flex;
-	font-weight: bold;
-}
-
 .shift-to-trade-row-deskop {
 	height: 100px;
 	align-items: center;
 }
 
-.point-cursor {
-	cursor: pointer;
-}
-
-.schedule-layer-text-container {
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-}
-
 .dayoff-text {
 	line-height: 60px;
 	display: inline-block;
-}
-
-.clear-background-image {
-	background-image: none !important;
 }
 
 .btn-remove {
@@ -491,17 +472,6 @@ input.use-default-startTime {
 .cart-cancel-button {
 	background-color: buttonface;
 	border: 1px solid #cccccc;
-}
-
-.hiden-on-mobile {
-	width: 0px !important;
-	flex: none !important;
-}
-
-.hiden-cart-on-mobile {
-	width: 0px !important;
-	flex: none !important;
-	padding: 0 0 !important;
 }
 
 .not-visible {
@@ -543,8 +513,4 @@ input.use-default-startTime {
 .text-indicator-mobile {
 	width: 100%;
 	margin-bottom: 0px;
-}
-
-#Request-add-shift-trade {
-	padding: 2px !important;
 }

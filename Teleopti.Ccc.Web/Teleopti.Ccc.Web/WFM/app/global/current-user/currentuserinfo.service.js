@@ -16,12 +16,14 @@
 		var timeout;
 		var theme;
 		var firstDayOfWeek;
+		var isTeleoptiApplicationLogon;
 		this.SetCurrentUserInfo = SetCurrentUserInfo;
 		this.CurrentUserInfo = CurrentUserInfo;
 		this.getCurrentUserFromServer = getCurrentUserFromServer;
 		this.initContext = initContext;
 		this.isConnected = isConnected;
 		this.resetContext = resetContext;
+		this.isTeleoptiApplicationLogon = isTeleoptiApplicationLogon;
 
 		function SetCurrentUserInfo(data) {
 			userName = data.UserName;
@@ -31,6 +33,7 @@
 			dateFormatLocale = data.DateFormatLocale;
 			theme = data.Theme;
 			firstDayOfWeek = data.FirstDayOfWeek;
+			isTeleoptiApplicationLogon = data.IsTeleoptiApplicationLogon;
 		}
 
 		function CurrentUserInfo() {
@@ -41,7 +44,8 @@
 				Language: language,
 				DateFormatLocale: dateFormatLocale,
 				Theme: theme,
-				FirstDayOfWeek: firstDayOfWeek
+				FirstDayOfWeek: firstDayOfWeek,
+				IsTeleoptiApplicationLogon: isTeleoptiApplicationLogon
 			}
 		}
 

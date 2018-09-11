@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var httpcontext = new FakeHttpContext();
 
 			var sessionDataProvider = MockRepository.GenerateMock<ISessionSpecificWfmCookieProvider>();
-			sessionDataProvider.Expect(x => x.GrabFromCookie()).Return(new SessionSpecificData(Guid.NewGuid(), RandomName.Make(), personId, tenantPassword));
+			sessionDataProvider.Expect(x => x.GrabFromCookie()).Return(new SessionSpecificData(Guid.NewGuid(), RandomName.Make(), personId, tenantPassword, false));
 			var findPersonByCredentials = MockRepository.GenerateMock<IFindPersonInfoByCredentials>();
 			findPersonByCredentials.Expect(x => x.Find(personId, tenantPassword)).Return(expected);
 
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var httpcontext = new FakeHttpContext();
 
 			var sessionDataProvider = MockRepository.GenerateMock<ISessionSpecificWfmCookieProvider>();
-			sessionDataProvider.Expect(x => x.GrabFromCookie()).Return(new SessionSpecificData(Guid.NewGuid(), RandomName.Make(), Guid.NewGuid(), RandomName.Make()));
+			sessionDataProvider.Expect(x => x.GrabFromCookie()).Return(new SessionSpecificData(Guid.NewGuid(), RandomName.Make(), Guid.NewGuid(), RandomName.Make(), false));
 			var findPersonByCredentials = MockRepository.GenerateMock<IFindPersonInfoByCredentials>();
 			findPersonByCredentials.Expect(x => x.Find(personId, tenantPassword)).Return(null);
 

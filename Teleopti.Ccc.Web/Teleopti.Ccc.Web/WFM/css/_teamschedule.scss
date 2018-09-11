@@ -1401,9 +1401,6 @@ teams-time-picker.ng-invalid-dst {
 				z-index: 900;
 				cursor: pointer;
 
-				&.tablet {
-					height: 40px;
-				}
 
 				&:first-of-type {
 					border-radius: 4px 0 0 4px;
@@ -1454,35 +1451,38 @@ teams-time-picker.ng-invalid-dst {
 					&:not(.non-resizable) {
 						cursor: ew-resize;
 					}
-
-					&::before, &::after {
-						content: " ";
-						position: absolute;
-						width: 2em;
-						height: 2em;
-						border-radius: 50% 1px 50% 50%;
-						background: $blue-500;
-						top: 115%;
-					}
-
-					&:not(.tablet)::before, &:not(.tablet)::after {
-						width: 1.2em;
-						height: 1.2em;
-					}
-
-					&::before {
-						transform: translateX(-50%) rotate(0.88turn);
-						left: 0px;
-					}
-
-					&::after {
-						transform: translateX(50%) rotate(0.88turn);
-						right: 0px;
-					}
 				}
 
 				&.float-top {
 					z-index: 999;
+				}
+			}
+
+			&.tablet {
+				.shift-layer {
+					height: 40px;
+
+					&.selected {
+						&::before, &::after {
+							content: " ";
+							position: absolute;
+							width: 2em;
+							height: 2em;
+							border-radius: 50% 1px 50% 50%;
+							background: $blue-500;
+							top: 115%;
+						}
+
+						&::before {
+							transform: translateX(-50%) rotate(0.88turn);
+							left: 0px;
+						}
+
+						&::after {
+							transform: translateX(50%) rotate(0.88turn);
+							right: 0px;
+						}
+					}
 				}
 			}
 		}

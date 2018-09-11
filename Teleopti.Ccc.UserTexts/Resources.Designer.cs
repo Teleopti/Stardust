@@ -26880,7 +26880,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ready Time Adherence.
+        ///   Looks up a localized string similar to Ready time adherence.
         /// </summary>
         public static string ReadyTimeAdherence {
             get {
