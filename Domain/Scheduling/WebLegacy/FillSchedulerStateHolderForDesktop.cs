@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -10,11 +11,34 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
-	public class FillSchedulerStateHolderForDesktop : FillSchedulerStateHolder
+	[RemoveMeWithToggle("Merge with base class", Toggles.ResourcePlanner_ReducingSkillsDifferentOpeningHours_76176)]
+	public class FillSchedulerStateHolderForDesktop : FillSchedulerStateHolderForDesktopOLD
+	{
+		private readonly DesktopContext _desktopContext;
+		private readonly SkillsOnAgentsProvider _skillsOnAgentsProvider;
+
+		public FillSchedulerStateHolderForDesktop(DesktopContext desktopContext, PersonalSkillsProvider personalSkillsProvider, SkillsOnAgentsProvider skillsOnAgentsProvider) 
+			: base(desktopContext, personalSkillsProvider)
+		{
+			_desktopContext = desktopContext;
+			_skillsOnAgentsProvider = skillsOnAgentsProvider;
+		}
+		
+		protected override void AddSkillDaysForReducedSkills(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
+		{
+			var orgSkillDays = _desktopContext.CurrentContext().SchedulerStateHolderFrom.SchedulingResultState.SkillDays;
+			foreach (var reducedSkill in _skillsOnAgentsProvider.Execute(schedulerStateHolderTo.SchedulingResultState.LoadedAgents, period))
+			{
+				schedulerStateHolderTo.SchedulingResultState.SkillDays[reducedSkill] = orgSkillDays[reducedSkill];
+			}
+		}
+	}
+	
+	public class FillSchedulerStateHolderForDesktopOLD : FillSchedulerStateHolder
 	{
 		private readonly DesktopContext _desktopContext;
 
-		public FillSchedulerStateHolderForDesktop(DesktopContext desktopContext, PersonalSkillsProvider personalSkillsProvider) : base(personalSkillsProvider)
+		public FillSchedulerStateHolderForDesktopOLD(DesktopContext desktopContext, PersonalSkillsProvider personalSkillsProvider) : base(personalSkillsProvider)
 		{
 			_desktopContext = desktopContext;
 		}
@@ -38,6 +62,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			var stateHolderFrom = _desktopContext.CurrentContext().SchedulerStateHolderFrom;
 			schedulerStateHolderTo.SchedulingResultState.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>(stateHolderFrom.SchedulingResultState.SkillDays);
 			schedulerStateHolderTo.SchedulingResultState.AddSkills(skills.ToArray());
+		}
+
+		protected override void AddSkillDaysForReducedSkills(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
+		{
 		}
 
 		protected override void FillBpos(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<ISkill> skills, DateOnlyPeriod period)

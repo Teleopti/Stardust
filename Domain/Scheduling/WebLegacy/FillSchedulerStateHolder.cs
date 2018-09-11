@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -31,13 +32,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			FillSkillDays(schedulerStateHolderTo, schedulerStateHolderTo.RequestedScenario, skills, period);
 			FillBpos(schedulerStateHolderTo, skills, period);
 			removeUnwantedSkillsAndSkillDays(schedulerStateHolderTo, skills);
+			AddSkillDaysForReducedSkills(schedulerStateHolderTo, period);
 			FillSchedules(schedulerStateHolderTo, schedulerStateHolderTo.RequestedScenario, schedulerStateHolderTo.SchedulingResultState.LoadedAgents, period);
 			removeUnwantedScheduleRanges(schedulerStateHolderTo);
 			PostFill(schedulerStateHolderTo, period);
 			setLocks(schedulerStateHolderTo, lockInfoForStateHolder);
 			schedulerStateHolderTo.ResetFilteredPersons();
 		}
-
+		
 		private static void setLocks(ISchedulerStateHolder schedulerStateHolderTo, LockInfoForStateHolder lockInfoForStateHolder)
 		{
 			if (lockInfoForStateHolder == null)
@@ -124,6 +126,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected abstract void FillScenario(ISchedulerStateHolder schedulerStateHolderTo);
 		protected abstract void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, DateOnlyPeriod period);
 		protected abstract void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<ISkill> skills, DateOnlyPeriod period);
+		protected abstract void AddSkillDaysForReducedSkills(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period);
 		protected abstract void FillBpos(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<ISkill> skills, DateOnlyPeriod period);
 		protected abstract void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period);
 		protected abstract void PreFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period);
