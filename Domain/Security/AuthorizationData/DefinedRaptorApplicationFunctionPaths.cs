@@ -119,6 +119,7 @@
 		public const string AbsenceReport = "Raptor/MyTimeWeb/AbsenceReport";
 		public const string ViewStaffingInfo = "Raptor/MyTimeWeb/ViewStaffingInfo";
 		public const string ViewQRCodeForConfiguration = "Raptor/MyTimeWeb/ViewQRCodeForConfiguration";
+		public const string ChatBot = "Raptor/MyTimeWeb/ChatBot";
 
 		// Web
 		public const string MyTeamSchedules = "Raptor/Anywhere/Schedules";
