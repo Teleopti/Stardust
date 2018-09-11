@@ -1599,9 +1599,9 @@
       <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>
       <Name>Teleopti.Messaging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Wfm.Rta\Teleopti.Wfm.Rta.csproj">
+    <ProjectReference Include="..\..\Teleopti.Wfm.Adherence\Teleopti.Wfm.Adherence.csproj">
       <Project>{2dd2e616-8405-49df-a07d-546a8c160117}</Project>
-      <Name>Teleopti.Wfm.Rta</Name>
+      <Name>Teleopti.Wfm.Adherence</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.WebBehaviorTest.SpecFlowPlugin\Teleopti.Ccc.WebBehaviorTest.SpecFlowPlugin.csproj">
       <Project>{d164065c-2f33-431b-80a4-a4f59ce77486}</Project>
