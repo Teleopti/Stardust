@@ -162,3 +162,4 @@ WFM_Gamification_Permission_76546 = true
 
 # Tech #
 Tech_Moving_ResilientConnectionLogic_76181 = true
+WFM_ChatBot_77547 = DEV

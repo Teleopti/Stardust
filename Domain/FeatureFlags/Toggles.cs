@@ -136,6 +136,8 @@
 		WFM_Intraday_Redesign_77214,
 
 		Tech_Moving_ResilientConnectionLogic_76181,
+		WFM_ChatBot_77547,
+
 		Tenant_PurgeLogonAttempts_75782,
 		Tenant_PurgeNoneEmployeesData_76291,
 		Staffing_BPO_ClearStaffing_75498,
