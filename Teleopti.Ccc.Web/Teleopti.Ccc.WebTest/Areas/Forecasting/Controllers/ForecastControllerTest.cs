@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 					IsInModification = true
 				}
 			};
-			var forecastResult = new ForecastModel
+			var forecastResult = new ForecastViewModel
 			{
 				WorkloadId = skill.WorkloadCollection.Single().Id.Value,
 				ScenarioId = scenario.Id.Value,
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				}
 			});
 
-			var forecastResult = new ForecastModel
+			var forecastResult = new ForecastViewModel
 			{
 				WorkloadId = skill.WorkloadCollection.Single().Id.Value,
 				ScenarioId = scenario.Id.Value,
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldHandleEmptyForecastDaysOnSavingForecastResult()
 		{
-			var forecastResult = new ForecastModel
+			var forecastResult = new ForecastViewModel
 			{
 				WorkloadId = Guid.NewGuid(),
 				ScenarioId = Guid.NewGuid(),
@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				}
 			};
 
-			var forecastResult = new ForecastModel
+			var forecastResult = new ForecastViewModel
 			{
 				WorkloadId = skill.WorkloadCollection.Single().Id.Value,
 				ScenarioId = scenario.Id.Value,
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				}
 			};
 
-			var forecastResult = new ForecastModel
+			var forecastResult = new ForecastViewModel
 			{
 				WorkloadId = skill.WorkloadCollection.Single().Id.Value,
 				ScenarioId = scenario.Id.Value,
@@ -304,7 +304,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 					IsInModification = true
 				}
 			};
-			var forecastResult = new ForecastModel
+			var forecastResult = new ForecastViewModel
 			{
 				WorkloadId = skill.WorkloadCollection.Single().Id.Value,
 				ScenarioId = scenario.Id.Value,
@@ -356,7 +356,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 					IsInModification = true
 				}
 			};
-			var forecastResult = new ForecastModel
+			var forecastResult = new ForecastViewModel
 			{
 				WorkloadId = skill.WorkloadCollection.Single().Id.Value,
 				ScenarioId = scenario.Id.Value,
@@ -428,7 +428,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 					HasOverride = true
 				}
 			};
-			var forecastResult = new ForecastModel
+			var forecastResult = new ForecastViewModel
 			{
 				WorkloadId = skill.WorkloadCollection.Single().Id.Value,
 				ScenarioId = scenario.Id.Value,
@@ -488,7 +488,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 					HasOverride = true
 				}
 			};
-			var forecastResult = new ForecastModel
+			var forecastResult = new ForecastViewModel
 			{
 				WorkloadId = skill.WorkloadCollection.Single().Id.Value,
 				ScenarioId = scenario.Id.Value,
@@ -544,7 +544,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 					HasOverride = true
 				}
 			};
-			var forecastResult = new ForecastModel
+			var forecastResult = new ForecastViewModel
 			{
 				WorkloadId = skill.WorkloadCollection.Single().Id.Value,
 				ScenarioId = scenario.Id.Value,
@@ -603,7 +603,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 					HasOverride = false
 				}
 			};
-			var forecastResult = new ForecastModel
+			var forecastResult = new ForecastViewModel
 			{
 				WorkloadId = skill.WorkloadCollection.Single().Id.Value,
 				ScenarioId = scenario.Id.Value,
@@ -662,7 +662,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 					IsInModification = true
 				}
 			};
-			var forecastResult = new ForecastModel
+			var forecastResult = new ForecastViewModel
 			{
 				WorkloadId = skill.WorkloadCollection.Single().Id.Value,
 				ScenarioId = scenario.Id.Value,
@@ -867,9 +867,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 					StatOfferedTasks = 10
 				}
 			});
-			var result = (OkNegotiatedContentResult<ForecastModel>) Target.Forecast(forecastInput);
+			var result = (OkNegotiatedContentResult<ForecastViewModel>) Target.Forecast(forecastInput);
 
-			result.Should().Be.OfType<OkNegotiatedContentResult<ForecastModel>>();
+			result.Should().Be.OfType<OkNegotiatedContentResult<ForecastViewModel>>();
 			var forecastDays = result.Content.ForecastDays;
 			forecastDays.Count.Should().Be(2);
 			forecastDays.First().IsOpen.Should().Be.True();
@@ -912,7 +912,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 					StatOfferedTasks = 10
 				}
 			});
-			var result = (OkNegotiatedContentResult<ForecastModel>) Target.Forecast(forecastInput);
+			var result = (OkNegotiatedContentResult<ForecastViewModel>) Target.Forecast(forecastInput);
 			var forecastDay = result.Content.ForecastDays.Single();
 			forecastDay.HasOverride.Should().Be.False();
 			forecastDay.HasCampaign.Should().Be.True();
@@ -964,7 +964,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 					StatOfferedTasks = 10
 				}
 			});
-			var result = (OkNegotiatedContentResult<ForecastModel>) Target.Forecast(forecastInput);
+			var result = (OkNegotiatedContentResult<ForecastViewModel>) Target.Forecast(forecastInput);
 			var forecastDay = result.Content.ForecastDays.Single();
 			forecastDay.HasCampaign.Should().Be.False();
 			forecastDay.HasOverride.Should().Be.True();
@@ -1022,7 +1022,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 					StatOfferedTasks = 10
 				}
 			});
-			var result = (OkNegotiatedContentResult<ForecastModel>) Target.Forecast(forecastInput);
+			var result = (OkNegotiatedContentResult<ForecastViewModel>) Target.Forecast(forecastInput);
 			var forecastDay = result.Content.ForecastDays.Single();
 			forecastDay.HasCampaign.Should().Be.True();
 			forecastDay.HasOverride.Should().Be.True();
@@ -1294,7 +1294,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ScenarioId = scenario.Id.Value,
 				WorkloadId = workload.Id.Value
 			};
-			var result = (OkNegotiatedContentResult<ForecastModel>) Target.LoadForecast(forecastResultInput);
+			var result = (OkNegotiatedContentResult<ForecastViewModel>) Target.LoadForecast(forecastResultInput);
 			result.Content.WorkloadId.Should().Be.EqualTo(workload.Id.Value);
 			result.Content.ScenarioId.Should().Be.EqualTo(scenario.Id.Value);
 
@@ -1403,7 +1403,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ScenarioId = scenario.Id.Value,
 				WorkloadId = workload.Id.Value
 			};
-			var result = (OkNegotiatedContentResult<ForecastModel>) Target.LoadForecast(forecastResultInput);
+			var result = (OkNegotiatedContentResult<ForecastViewModel>) Target.LoadForecast(forecastResultInput);
 			result.Content.WorkloadId.Should().Be.EqualTo(workload.Id.Value);
 			result.Content.ScenarioId.Should().Be.EqualTo(scenario.Id.Value);
 
@@ -1470,7 +1470,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ScenarioId = scenario.Id.Value,
 				WorkloadId = workload.Id.Value
 			};
-			var result = (OkNegotiatedContentResult<ForecastModel>)Target.LoadForecast(forecastResultInput);
+			var result = (OkNegotiatedContentResult<ForecastViewModel>)Target.LoadForecast(forecastResultInput);
 			result.Content.WorkloadId.Should().Be.EqualTo(workload.Id.Value);
 			result.Content.ScenarioId.Should().Be.EqualTo(scenario.Id.Value);
 
@@ -1530,7 +1530,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ScenarioId = scenario.Id.Value,
 				WorkloadId = workload.Id.Value
 			};
-			var result = (OkNegotiatedContentResult<ForecastModel>)Target.LoadForecast(forecastResultInput);
+			var result = (OkNegotiatedContentResult<ForecastViewModel>)Target.LoadForecast(forecastResultInput);
 			result.Content.WorkloadId.Should().Be.EqualTo(workload.Id.Value);
 			result.Content.ScenarioId.Should().Be.EqualTo(scenario.Id.Value);
 

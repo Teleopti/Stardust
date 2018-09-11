@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 
 			using (var container = containerBuilder.Build())
 			{
-				container.Resolve<IQuickForecaster>()
+				container.Resolve<ForecastViewModelCreator>()
 					.Should().Not.Be.Null();
 			}
 		}

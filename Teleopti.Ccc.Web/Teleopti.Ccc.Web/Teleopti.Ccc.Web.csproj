@@ -396,7 +396,6 @@
     <Compile Include="Areas\Forecasting\Controllers\ForecastExportController.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastExportToExcel.cs" />
     <Compile Include="Areas\Forecasting\Models\ForecastResultInput.cs" />
-    <Compile Include="Areas\Forecasting\Models\ForecastResultViewModel.cs" />
     <Compile Include="Areas\Forecasting\Models\OverrideInput.cs" />
     <Compile Include="Areas\Gamification\Controller\GamificationCalculationController.cs" />
     <Compile Include="Areas\Gamification\Controller\GamificationController.cs" />

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		private readonly IWorkloadRepository _workloadRepository;
 		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
 		private readonly IHistoricalData _historicalData;
-		private readonly IOutlierRemover _outlierRemover;
+		private readonly OutlierRemover _outlierRemover;
 		private readonly IForecastMethodProvider _forecastMethodProvider;
 		private readonly IForecastWorkloadEvaluator _forecastWorkloadEvaluator;
 
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			IWorkloadRepository workloadRepository,
 			IHistoricalPeriodProvider historicalPeriodProvider,
 			IHistoricalData historicalData,
-			IOutlierRemover outlierRemover,
+			OutlierRemover outlierRemover,
 			IForecastMethodProvider forecastMethodProvider,
 			IForecastWorkloadEvaluator forecastWorkloadEvaluator)
 		{
@@ -77,10 +77,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethodForTasks,
 				forecastMethodForTaskTime, forecastMethodForAfterTaskTime);
-			foreach (var day in historicalDataNoOutliers.TaskOwnerDayCollection)
+			foreach (var day in historicalDataNoOutliers.Tasks)
 			{
-				statistics.Single(x => x.Date == day.CurrentDate).ValidatedTasks =
-					Math.Round(day.TotalStatisticCalculatedTasks, 1);
+				statistics.Single(x => x.Date == day.Key).ValidatedTasks =
+					Math.Round(day.Value, 1);
 			}
 
 			return statistics;

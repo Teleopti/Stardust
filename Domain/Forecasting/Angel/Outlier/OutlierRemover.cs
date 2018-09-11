@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Outlier
 
 			foreach (var day in seasonalVariationForTasks)
 			{
+				if(!historicalDictionary.ContainsKey(day.Key)) continue;
 				tasksOutlierModel.Add(new outlierModel
 					{
 						Date = day.Key,
@@ -37,6 +38,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Outlier
 
 			foreach (var day in seasonalVariationForTaskTime)
 			{
+				if (!historicalDictionary.ContainsKey(day.Key)) continue;
 				taskTimeOutlierModel.Add(new outlierModel
 					{
 						Date = day.Key,
@@ -47,6 +49,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Outlier
 
 			foreach (var day in seasonalVariationForAfterTaskTime)
 			{
+				if (!historicalDictionary.ContainsKey(day.Key)) continue;
 				afterTaskTimeOutlierModel.Add(new outlierModel
 					{
 						Date = day.Key,
@@ -61,29 +64,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Outlier
 				TaskTime = removeOutliers(taskTimeOutlierModel),
 				AfterTaskTime = removeOutliers(afterTaskTimeOutlierModel)
 			};
-
-			//foreach (var taskOwner in historicalData.TaskOwnerDayCollection)
-			//{
-			//	if (historicalDataForTasksWithoutOutliers.ContainsKey(taskOwner.CurrentDate))
-			//	{
-			//		((ValidatedVolumeDay) taskOwner).ValidatedTasks =
-			//			historicalDataForTasksWithoutOutliers[taskOwner.CurrentDate];
-			//	}
-
-			//	if (historicalDataForTaskTimeWithoutOutliers.ContainsKey(taskOwner.CurrentDate))
-			//	{
-			//		((ValidatedVolumeDay) taskOwner).ValidatedAverageTaskTime =
-			//			TimeSpan.FromSeconds(historicalDataForTaskTimeWithoutOutliers[taskOwner.CurrentDate]);
-			//	}
-
-			//	if (historicalDataForAfterTaskTimeWithoutOutliers.ContainsKey(taskOwner.CurrentDate))
-			//	{
-			//		((ValidatedVolumeDay) taskOwner).ValidatedAverageAfterTaskTime =
-			//			TimeSpan.FromSeconds(historicalDataForAfterTaskTimeWithoutOutliers[taskOwner.CurrentDate]);
-			//	}
-			//}
-
-			//return historicalData;
 		}
 
 		private Dictionary<DateOnly, double> removeOutliers(IReadOnlyCollection<outlierModel> valuesToRemoveOutlier)

@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			_forecastDayOverrideRepository = forecastDayOverrideRepository;
 		}
 
-		public ForecastModel Load(Guid workloadId, DateOnlyPeriod futurePeriod, IScenario scenario)
+		public ForecastViewModel Load(Guid workloadId, DateOnlyPeriod futurePeriod, IScenario scenario)
 		{
 			var workload = _workloadRepository.Get(workloadId);
 			var skillDays = _skillDayRepository.FindRange(futurePeriod, workload.Skill, scenario);
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				.OrderBy(x => x.CurrentDate);
 			var overrideDays = _forecastDayOverrideRepository.FindRange(futurePeriod, workload, scenario)
 				.ToDictionary(x => x.Date);
-			return new ForecastModel()
+			return new ForecastViewModel()
 			{
 				WorkloadId = workload.Id.Value,
 				ScenarioId = scenario.Id.Value,

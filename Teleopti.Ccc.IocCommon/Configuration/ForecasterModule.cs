@@ -34,12 +34,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ForecastWorkloadEvaluator>()
 				.SingleInstance()
 				.As<IForecastWorkloadEvaluator>();
-			builder.RegisterType<QuickForecasterWorkload>()
-				.SingleInstance()
-				.As<IQuickForecasterWorkload>();
-			builder.RegisterType<QuickForecaster>()
-				.SingleInstance()
-				.As<IQuickForecaster>();
+			builder.RegisterType<ForecasterWorkload>()
+				.SingleInstance();
+			builder.RegisterType<ForecastViewModelCreator>()
+				.SingleInstance();
 			builder.RegisterType<HistoricalData>()
 				.SingleInstance()
 				.As<IHistoricalData>();

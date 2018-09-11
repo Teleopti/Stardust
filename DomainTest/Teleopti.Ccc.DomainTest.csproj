@@ -787,10 +787,6 @@
     <Compile Include="Forecasting\Angel\HistoricalPeriodProviderTest.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumesFactory.cs" />
     <Compile Include="Forecasting\Angel\IntradayForecasterTest.cs" />
-    <Compile Include="Forecasting\Angel\Methods\ForecastMethodProviderTest.cs" />
-    <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicBaseFake.cs" />
-    <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicBaseTest.cs" />
-    <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicWithTrendTest.cs" />
     <Compile Include="Forecasting\Angel\ForecastingTargetMergerTest.cs" />
     <Compile Include="Forecasting\Angel\Historical\HistoricalDataTest.cs" />
     <Compile Include="Forecasting\Angel\MonthlyPatternIndexVolumesTest.cs" />
@@ -1695,7 +1691,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Forecasting\Angel\Outlier\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

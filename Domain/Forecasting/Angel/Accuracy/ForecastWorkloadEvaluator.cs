@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
@@ -57,18 +58,31 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 				var firstPeriodData = new TaskOwnerPeriod(DateOnly.MinValue,
 					firstPartHistoricalData.Select(taskOwner => cloneTaskOwner(workload, taskOwner)),
 					TaskOwnerPeriodType.Other);
-				var secondPeriodData = new TaskOwnerPeriod(DateOnly.MinValue,
-					secondPartHistoricalData.Select(taskOwner => cloneTaskOwner(workload, taskOwner)),
-					TaskOwnerPeriodType.Other);
-
+				
 				var firstPeriodDataNoOutliers = outlierRemover.RemoveOutliers(firstPeriodData, forecastMethod, forecastMethod, forecastMethod);
-				var forecastTasks = forecastMethod.ForecastTasks(firstPeriodDataNoOutliers, twoPeriods.Item2);
 
-				var forecastTaskTime = forecastMethod.ForecastTaskTime(firstPeriodDataNoOutliers, twoPeriods.Item2);
-				var forecastAfterTaskTime = forecastMethod.ForecastAfterTaskTime(firstPeriodDataNoOutliers, twoPeriods.Item2);
+				foreach (var taskOwner in firstPeriodData.TaskOwnerDayCollection)
+				{
+					if (firstPeriodDataNoOutliers.Tasks.ContainsKey(taskOwner.CurrentDate))
+						((ValidatedVolumeDay) taskOwner).ValidatedTasks =
+							firstPeriodDataNoOutliers.Tasks[taskOwner.CurrentDate];
+
+					if (firstPeriodDataNoOutliers.TaskTime.ContainsKey(taskOwner.CurrentDate))
+						((ValidatedVolumeDay) taskOwner).ValidatedAverageTaskTime =
+						TimeSpan.FromSeconds(firstPeriodDataNoOutliers.TaskTime[taskOwner.CurrentDate]);
+
+					if (firstPeriodDataNoOutliers.AfterTaskTime.ContainsKey(taskOwner.CurrentDate))
+						((ValidatedVolumeDay) taskOwner).ValidatedAverageAfterTaskTime =
+							TimeSpan.FromSeconds(firstPeriodDataNoOutliers.AfterTaskTime[taskOwner.CurrentDate]);
+				}
+
+
+				var forecastTasks = forecastMethod.ForecastTasks(firstPeriodData, twoPeriods.Item2);
+				var forecastTaskTime = forecastMethod.ForecastTaskTime(firstPeriodData, twoPeriods.Item2);
+				var forecastAfterTaskTime = forecastMethod.ForecastAfterTaskTime(firstPeriodData, twoPeriods.Item2);
 
 				var accuracyModel = forecastAccuracyCalculator.Accuracy(forecastTasks, forecastTaskTime, forecastAfterTaskTime,
-					secondPeriodData.TaskOwnerDayCollection);
+					secondPartHistoricalData);
 				methodsEvaluationResult.Add(new MethodAccuracy
 				{
 					NumberForTask = accuracyModel.TasksPercentageError,

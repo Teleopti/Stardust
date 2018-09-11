@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ScenarioId = scenario.Id.Value,
 				WorkloadId = workload.Id.Value
 			};
-			var result = (OkNegotiatedContentResult<ForecastModel>)Target.Forecast(forecastInput);
+			var result = (OkNegotiatedContentResult<ForecastViewModel>)Target.Forecast(forecastInput);
 			var taskTimeDay1 = result.Content.ForecastDays.First().TotalAverageTaskTime;
 			var taskTimeDay2 = result.Content.ForecastDays.Last().TotalAverageTaskTime;
 			var afterTaskTimeDay1 = result.Content.ForecastDays.First().TotalAverageAfterTaskTime;
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ScenarioId = scenario.Id.Value,
 				WorkloadId = workload.Id.Value
 			};
-			var result = (OkNegotiatedContentResult<ForecastModel>)Target.Forecast(forecastInput);
+			var result = (OkNegotiatedContentResult<ForecastViewModel>)Target.Forecast(forecastInput);
 			var forecastedTaskTime = result.Content.ForecastDays.Single().AverageTaskTime;
 			var forecastedAfterTaskTime = result.Content.ForecastDays.Single().AverageAfterTaskTime;
 
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ScenarioId = scenario.Id.Value,
 				WorkloadId = workload.Id.Value
 			};
-			var result = (OkNegotiatedContentResult<ForecastModel>)Target.Forecast(forecastInput);
+			var result = (OkNegotiatedContentResult<ForecastViewModel>)Target.Forecast(forecastInput);
 			var forecastedTaskTime = result.Content.ForecastDays.Single().AverageTaskTime;
 			var forecastedAfterTaskTime = result.Content.ForecastDays.Single().AverageAfterTaskTime;
 
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ScenarioId = scenario.Id.Value,
 				WorkloadId = workload.Id.Value
 			};
-			var result = (OkNegotiatedContentResult<ForecastModel>)Target.Forecast(forecastInput);
+			var result = (OkNegotiatedContentResult<ForecastViewModel>)Target.Forecast(forecastInput);
 			var forecastedTaskTime = result.Content.ForecastDays.Single().AverageTaskTime;
 			var forecastedAfterTaskTime = result.Content.ForecastDays.Single().AverageAfterTaskTime;
 

@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Models
 {
-	public class OverrideInput : ForecastModel
+	public class OverrideInput : ForecastViewModel
 	{
 		public DateOnly[] SelectedDays { get; set; }
 		public double? OverrideTasks { get; set; }

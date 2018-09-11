@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 		public AccuracyModel Accuracy(IDictionary<DateOnly, double> forecastedTasksForLastYear,
 			IDictionary<DateOnly, TimeSpan> forecastedTaskTimeForLastYear,
 			IDictionary<DateOnly, TimeSpan> forecastedAfterTaskTimeForLastYear,
-			ReadOnlyCollection<ITaskOwner> historicalDataForLastYear)
+			IList<ITaskOwner> historicalDataForLastYear)
 		{
 			var diffTasksSum = 0d;
 			var diffTaskTimeSum = 0d;

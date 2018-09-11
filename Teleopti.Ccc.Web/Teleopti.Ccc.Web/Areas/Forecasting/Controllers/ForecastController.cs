@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	{
 		private const double tolerance = 0.000001d;
 
-		private readonly IQuickForecaster _quickForecaster;
+		private readonly ForecastViewModelCreator _forecastViewModelCreator;
 		private readonly ISkillRepository _skillRepository;
 		private readonly ForecastProvider _forecastProvider;
 		private readonly IScenarioRepository _scenarioRepository;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IQueueStatisticsViewModelFactory _queueStatisticsViewModelFactory;
 
 		public ForecastController(
-			IQuickForecaster quickForecaster,
+			ForecastViewModelCreator quickForecaster,
 			ISkillRepository skillRepository,
 			ForecastProvider forecastProvider,
 			IScenarioRepository scenarioRepository,
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			IForecastDayOverrideRepository forecastDayOverrideRepository,
 			IQueueStatisticsViewModelFactory queueStatisticsViewModelFactory)
 		{
-			_quickForecaster = quickForecaster;
+			_forecastViewModelCreator = quickForecaster;
 			_skillRepository = skillRepository;
 			_forecastProvider = forecastProvider;
 			_scenarioRepository = scenarioRepository;
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					w => w.Id.HasValue && w.Id.Value == input.WorkloadId));
 
 			var workload = skill.WorkloadCollection.Single(w => w.Id.Value == input.WorkloadId);
-			var forecast = _quickForecaster.ForecastWorkload(workload, futurePeriod, scenario);
+			var forecast = _forecastViewModelCreator.ForecastWorkload(workload, futurePeriod, scenario);
 
 			return Ok(forecast);
 		}
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/ApplyForecast")]
-		public virtual IHttpActionResult ApplyForecast(ForecastModel forecastResult)
+		public virtual IHttpActionResult ApplyForecast(ForecastViewModel forecastResult)
 		{
 			if (!forecastResult.ForecastDays.Any())
 			{
