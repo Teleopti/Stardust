@@ -1,19 +1,18 @@
 import {
-	HTTP_INTERCEPTORS,
 	HttpEvent,
 	HttpHandler,
 	HttpInterceptor,
 	HttpRequest,
-	HttpResponse
+	HttpResponse,
+	HTTP_INTERCEPTORS
 } from '@angular/common/http';
 import { Injectable, Provider } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { PeopleSearchResult } from '..';
-import { Person, Role } from '../../types';
-import { ROLES } from './roles';
-import { PEOPLE } from './people';
 import { mergeMap } from 'rxjs/operators';
+import { PeopleSearchResult } from '..';
 import { LOGONS } from './logons';
+import { PEOPLE } from './people';
+import { ROLES } from './roles';
 
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {

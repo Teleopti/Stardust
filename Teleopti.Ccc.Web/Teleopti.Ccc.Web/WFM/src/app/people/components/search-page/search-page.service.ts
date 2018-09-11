@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { Person } from '../../../shared/types';
 import {
 	COLUMNS,
 	DIRECTION,
@@ -11,7 +12,6 @@ import {
 	SearchService,
 	WorkspaceService
 } from '../../services';
-import { Person } from '../../types';
 
 @Injectable()
 export class SearchPageService {

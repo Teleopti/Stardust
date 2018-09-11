@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Infrastructure.Aop;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterEventHandlers(_config.Toggle, typeof(IHandleEvent<>).Assembly);
+			builder.RegisterEventHandlers(_config.Toggle, typeof(IHandleEvent<>).Assembly, typeof(Rta).Assembly);
 
 			builder.RegisterType<ReadModelValidator>().As<IReadModelValidator>().SingleInstance();
 			builder.RegisterType<ReadModelFixer>().As<IReadModelFixer>().SingleInstance();

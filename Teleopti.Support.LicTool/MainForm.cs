@@ -125,6 +125,7 @@ namespace Teleopti.Support.LicTool
 			chkSeatPlanner.Checked = false;
 			chkOvertimeRequests.Checked = false;
 			chkBPOExchange.Checked = false;
+			chkChatBot.Checked = false;
 		}
 
 		private void EnterDemoSettings()
@@ -236,6 +237,7 @@ namespace Teleopti.Support.LicTool
 						if (options.Contains("OvertimeRequests")) chkOvertimeRequests.Checked = true;
 						if (options.Contains("SeatPlanner")) chkSeatPlanner.Checked = true;
 						if (options.Contains("BPOExchange")) chkBPOExchange.Checked = true;
+						if (options.Contains("ChatBot")) chkChatBot.Checked = true;
 						
 						//Freemium
 						if (options.Contains("Forecasts")) chkFreemium.Checked = true;
@@ -330,7 +332,9 @@ namespace Teleopti.Support.LicTool
 					elmOptions.AppendChild(xdoc.CreateElement("SeatPlanner")).AppendChild(xdoc.CreateTextNode("true"));
 				if (chkBPOExchange.Checked)
 					elmOptions.AppendChild(xdoc.CreateElement("BPOExchange")).AppendChild(xdoc.CreateTextNode("true"));
-				
+				if (chkChatBot.Checked)
+					elmOptions.AppendChild(xdoc.CreateElement("ChatBot")).AppendChild(xdoc.CreateTextNode("true"));
+
 				rootNode.AppendChild(elmOptions);
 			}
 			else

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Person } from '../types';
 import { BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Person } from '../../shared/types';
 
 export interface PeopleOverride {
 	people: Person[];

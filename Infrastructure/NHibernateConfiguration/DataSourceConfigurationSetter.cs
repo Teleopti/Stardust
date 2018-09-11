@@ -3,6 +3,7 @@ using NHibernate.Cfg;
 using NHibernate.Dialect;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling;
 using Environment = NHibernate.Cfg.Environment;
@@ -58,6 +59,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.DefaultSchema, "dbo");
 			nhConfiguration.AddAssembly(typeof(Person).Assembly);
+			nhConfiguration.AddAssembly(typeof(Rta).Assembly);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.SqlExceptionConverter,
 				typeof(SqlServerExceptionConverter).AssemblyQualifiedName);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.UseSecondLevelCache, "false");

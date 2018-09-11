@@ -1,5 +1,5 @@
-import { Person } from '../../types';
-import { agent, teamLeader, TeamLeader, Agent } from './roles';
+import { Person } from '../../../shared/types';
+import { agent, Agent, teamLeader, TeamLeader } from './roles';
 
 type Team1 = 'Team1';
 type Team2 = 'Team2';

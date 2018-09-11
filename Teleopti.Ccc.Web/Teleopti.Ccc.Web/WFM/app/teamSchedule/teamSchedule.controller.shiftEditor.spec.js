@@ -69,6 +69,7 @@
 			});
 		})
 	);
+
 	beforeEach(
 		inject(function (_$rootScope_, _$compile_, _$document_) {
 			$rootScope = _$rootScope_;
@@ -648,7 +649,6 @@
 
 		var scope = $rootScope.$new();
 		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-06-15', 'Europe/Berlin', scope);
-		scope.$apply();
 
 		var vm = panel.isolateScope().vm;
 
@@ -812,27 +812,14 @@
 			],
 			Timezone: { IanaId: 'Europe/Berlin' }
 		});
-
 		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-13', 'Europe/Berlin');
+
 		var vm = panel.isolateScope().vm;
 
 		var shiftLayer = panel[0].querySelector('.shift-layer');
 		shiftLayer.click();
 
-		var interact = vm.scheduleVm.ShiftLayers[0].interact;
-
-		interact.fire({
-			type: 'resizemove',
-			target: shiftLayer,
-			rect: {
-				width: 120
-			},
-			deltaRect: { left: -60 }
-		});
-		interact.fire({
-			type: 'resizeend',
-			target: shiftLayer
-		});
+		fireResize(vm, shiftLayer, 120, -60);
 
 		expect(vm.scheduleVm.ShiftLayers[0].Current.TimeSpan).toEqual('2018-08-13 07:00 - 2018-08-13 09:00');
 	});
@@ -865,20 +852,7 @@
 		var shiftLayer = panel[0].querySelector('.shift-layer');
 		shiftLayer.click();
 
-		var interact = vm.scheduleVm.ShiftLayers[0].interact;
-		interact.fire({
-			type: 'resizemove',
-			target: shiftLayer,
-			rect: {
-				width: 27
-			},
-			deltaRect: { left: 33 }
-		});
-
-		interact.fire({
-			type: 'resizeend',
-			target: shiftLayer
-		});
+		fireResize(vm, shiftLayer, 27, 33);
 
 		expect(vm.scheduleVm.ShiftLayers[0].Current.TimeSpan).toEqual('2018-08-16 08:35 - 2018-08-16 09:00');
 	});
@@ -911,20 +885,7 @@
 		var shiftLayer = panel[0].querySelector('.shift-layer');
 		shiftLayer.click();
 
-		var interact = vm.scheduleVm.ShiftLayers[0].interact;
-		interact.fire({
-			type: 'resizemove',
-			target: shiftLayer,
-			rect: {
-				width: 122.5
-			},
-			deltaRect: { left: 0 }
-		});
-
-		interact.fire({
-			type: 'resizeend',
-			target: shiftLayer
-		});
+		fireResize(vm, shiftLayer, 122.5, 0);
 
 		expect(vm.scheduleVm.ShiftLayers[0].Current.TimeSpan).toEqual('2018-08-13 08:00 - 2018-08-13 10:00');
 	});
@@ -957,21 +918,7 @@
 		var shiftLayer = panel[0].querySelector('.shift-layer');
 		shiftLayer.click();
 
-		var interact = vm.scheduleVm.ShiftLayers[0].interact;
-		interact.fire({
-			type: 'resizemove',
-			target: shiftLayer,
-			rect: {
-				width: 29
-			},
-			deltaRect: { left: 0 }
-		});
-
-		interact.fire({
-			type: 'resizeend',
-			target: shiftLayer
-		});
-
+		fireResize(vm, shiftLayer, 29, 0);
 		expect(vm.scheduleVm.ShiftLayers[0].Current.TimeSpan).toEqual('2018-08-13 08:00 - 2018-08-13 08:30');
 	});
 
@@ -1014,22 +961,7 @@
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		shiftLayer.click();
 
-		var interact = vm.scheduleVm.ShiftLayers[0].interact;
-		interact.fire({
-			type: 'resizemove',
-			target: shiftLayer,
-			rect: {
-				width: 90
-			},
-			deltaRect: { left: 0 }
-		});
-
-		interact.fire({
-			type: 'resizeend',
-			target: shiftLayer
-		});
-
-		scope.$apply();
+		fireResize(vm, shiftLayer, 90, 0);
 
 		shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		var nextShiftLayer = panel[0].querySelectorAll('.shift-layer')[1];
@@ -1080,21 +1012,7 @@
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[1];
 		shiftLayer.click();
 
-		var interact = vm.scheduleVm.ShiftLayers[1].interact;
-		interact.fire({
-			type: 'resizemove',
-			target: shiftLayer,
-			rect: {
-				width: 90
-			},
-			deltaRect: { left: -30 }
-		});
-
-		interact.fire({
-			type: 'resizeend',
-			target: shiftLayer
-		});
-		scope.$apply();
+		fireResize(vm, shiftLayer, 90, -30);
 
 		var previousShiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		shiftLayer = panel[0].querySelectorAll('.shift-layer')[1];
@@ -1145,21 +1063,7 @@
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		shiftLayer.click();
 
-		var interact = vm.scheduleVm.ShiftLayers[0].interact;
-		interact.fire({
-			type: 'resizemove',
-			target: shiftLayer,
-			rect: {
-				width: 30
-			},
-			deltaRect: { left: 0 }
-		});
-
-		interact.fire({
-			type: 'resizeend',
-			target: shiftLayer
-		});
-		scope.$apply();
+		fireResize(vm, shiftLayer, 30, 0);
 
 		var nextShiftLayer = panel[0].querySelectorAll('.shift-layer')[1];
 		shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
@@ -1210,21 +1114,7 @@
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		shiftLayer.click();
 
-		var interact = vm.scheduleVm.ShiftLayers[0].interact;
-		interact.fire({
-			type: 'resizemove',
-			target: shiftLayer,
-			rect: {
-				width: 90
-			},
-			deltaRect: { left: 0 }
-		});
-
-		interact.fire({
-			type: 'resizeend',
-			target: shiftLayer
-		});
-		scope.$apply();
+		fireResize(vm, shiftLayer, 90, 0);
 
 		shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		var nextShiftLayer = panel[0].querySelectorAll('.shift-layer')[1];
@@ -1275,60 +1165,19 @@
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[1];
 		shiftLayer.click();
 
-		var interact = vm.scheduleVm.ShiftLayers[1].interact;
-		interact.fire({
-			type: 'resizemove',
-			target: shiftLayer,
-			rect: {
-				width: 90
-			},
-			deltaRect: { left: -30 }
-		});
+		fireResize(vm, shiftLayer, 90, -30);
 
-		interact.fire({
-			type: 'resizeend',
-			target: shiftLayer
-		});
-		scope.$apply();
 		shiftLayer.click();
 
 		var previousShiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		previousShiftLayer.click();
 
-		var previousInteract = vm.scheduleVm.ShiftLayers[0].interact;
-		previousInteract.fire({
-			type: 'resizemove',
-			target: previousShiftLayer,
-			rect: {
-				width: 60
-			},
-			deltaRect: { left: -30 }
-		});
-
-		previousInteract.fire({
-			type: 'resizeend',
-			target: previousShiftLayer
-		});
-		scope.$apply();
+		fireResize(vm, previousShiftLayer, 60, -30);
 
 		previousShiftLayer.click();
 		previousShiftLayer.click();
 
-
-		previousInteract.fire({
-			type: 'resizemove',
-			target: previousShiftLayer,
-			rect: {
-				width: 120
-			},
-			deltaRect: { left: 0 }
-		});
-
-		previousInteract.fire({
-			type: 'resizeend',
-			target: previousShiftLayer
-		});
-		scope.$apply();
+		fireResize(vm, previousShiftLayer, 120, 0);
 
 		previousShiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		shiftLayer = panel[0].querySelectorAll('.shift-layer')[1];
@@ -1391,22 +1240,7 @@
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		shiftLayer.click();
 
-		var interact = vm.scheduleVm.ShiftLayers[0].interact;
-		interact.fire({
-			type: 'resizemove',
-			target: shiftLayer,
-			rect: {
-				width: 150
-			},
-			deltaRect: { left: 0 }
-		});
-
-		interact.fire({
-			type: 'resizeend',
-			target: shiftLayer
-		});
-
-		scope.$apply();
+		fireResize(vm, shiftLayer, 150, 0);
 
 		var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 		expect(shiftLayers.length).toEqual(2);
@@ -1463,22 +1297,7 @@
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[2];
 		shiftLayer.click();
 
-		var interact = vm.scheduleVm.ShiftLayers[2].interact;
-		interact.fire({
-			type: 'resizemove',
-			target: shiftLayer,
-			rect: {
-				width: 150
-			},
-			deltaRect: { left: -90 }
-		});
-
-		interact.fire({
-			type: 'resizeend',
-			target: shiftLayer
-		});
-
-		scope.$apply();
+		fireResize(vm, shiftLayer, 150, -90);
 
 		var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 		expect(shiftLayers.length).toEqual(2);
@@ -1530,22 +1349,7 @@
 		var salesLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		salesLayer.click();
 
-		var interact = vm.scheduleVm.ShiftLayers[0].interact;
-		interact.fire({
-			type: 'resizemove',
-			target: salesLayer,
-			rect: {
-				width: 180
-			},
-			deltaRect: { left: 0 }
-		});
-
-		interact.fire({
-			type: 'resizeend',
-			target: salesLayer
-		});
-
-		scope.$apply();
+		fireResize(vm, salesLayer, 180, 0);
 
 		var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 		expect(shiftLayers.length).toEqual(3);
@@ -1693,7 +1497,6 @@
 		var scope = $rootScope.$new();
 		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-09-05', 'Europe/Berlin', scope);
 		var vm = panel.isolateScope().vm;
-		scope.$apply();
 
 		var salesLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		salesLayer.click();
@@ -1813,22 +1616,7 @@
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		shiftLayer.click();
 
-		var interact = vm.scheduleVm.ShiftLayers[0].interact;
-		interact.fire({
-			type: 'resizemove',
-			target: shiftLayer,
-			rect: {
-				width: 60 * 37
-			},
-			deltaRect: { left: 0 }
-		});
-
-		interact.fire({
-			type: 'resizeend',
-			target: shiftLayer
-		});
-
-		scope.$apply();
+		fireResize(vm, shiftLayer, 60 * 37, 0);
 
 		var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 		expect(shiftLayers.length).toBe(2);
@@ -1882,22 +1670,7 @@
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		shiftLayer.click();
 
-		var interact = vm.scheduleVm.ShiftLayers[0].interact;
-		interact.fire({
-			type: 'resizemove',
-			target: shiftLayer,
-			rect: {
-				width: 60 * 36
-			},
-			deltaRect: { left: -60 * 35 }
-		});
-
-		interact.fire({
-			type: 'resizeend',
-			target: shiftLayer
-		});
-
-		scope.$apply();
+		fireResize(vm, shiftLayer, 60 * 36, -60 * 35);
 
 		var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 		expect(shiftLayers.length).toBe(2);
@@ -1952,22 +1725,7 @@
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		shiftLayer.click();
 
-		var interact = vm.scheduleVm.ShiftLayers[0].interact;
-		interact.fire({
-			type: 'resizemove',
-			target: shiftLayer,
-			rect: {
-				width: 60 * 9
-			},
-			deltaRect: { left: -60 * 8 }
-		});
-
-		interact.fire({
-			type: 'resizeend',
-			target: shiftLayer
-		});
-
-		scope.$apply();
+		fireResize(vm, shiftLayer, 60 * 9, -60 * 8);
 
 		var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 		expect(shiftLayers.length).toBe(2);
@@ -2015,7 +1773,8 @@
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		shiftLayer.click();
 
-		expect(!!vm.scheduleVm.ShiftLayers[0].interact).toBeFalsy();
+		shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
+		expect(shiftLayer.className.indexOf('non-resizable') >= 0).toBeTruthy();
 	})
 
 	it('can not resize meeting', function () {
@@ -2049,7 +1808,8 @@
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		shiftLayer.click();
 
-		expect(!!vm.scheduleVm.ShiftLayers[0].interact).toBeFalsy();
+		shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
+		expect(shiftLayer.className.indexOf('non-resizable') >= 0).toBeTruthy();
 	})
 
 	it('can not resize the intraday activity', function () {
@@ -2083,7 +1843,8 @@
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		shiftLayer.click();
 
-		expect(!!vm.scheduleVm.ShiftLayers[0].interact).toBeFalsy();
+		shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
+		expect(shiftLayer.className.indexOf('non-resizable') >= 0).toBeTruthy();
 	})
 
 	it('can not resize the overtime activity', function () {
@@ -2116,10 +1877,11 @@
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		shiftLayer.click();
 
-		expect(!!vm.scheduleVm.ShiftLayers[0].interact).toBeFalsy();
+		shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
+		expect(shiftLayer.className.indexOf('non-resizable') >= 0).toBeTruthy();
 	})
 
-	
+
 	describe('# keep the lunch/short break on the top when changing the selected activity start time#', function () {
 
 		it('should keep lunch activity when it covered completely', function () {
@@ -2165,29 +1927,13 @@
 				Timezone: { IanaId: 'Europe/Berlin' }
 			});
 
-			var scope = $rootScope.$new();
-			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-17', 'Europe/Berlin', scope);
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-17', 'Europe/Berlin');
 			var vm = panel.isolateScope().vm;
 
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[2];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[2].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 120
-				},
-				deltaRect: { left: -60 }
-			});
-
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
+			fireResize(vm, shiftLayer, 120, -60);
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(3);
@@ -2244,29 +1990,14 @@
 				Timezone: { IanaId: 'Europe/Berlin' }
 			});
 
-			var scope = $rootScope.$new();
-			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-17', 'Europe/Berlin', scope);
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-17', 'Europe/Berlin');
 			var vm = panel.isolateScope().vm;
 
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[2];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[2].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 120
-				},
-				deltaRect: { left: -90 }
-			});
 
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
+			fireResize(vm, shiftLayer, 120, -90);
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(3);
@@ -2345,29 +2076,13 @@
 				Timezone: { IanaId: 'Europe/Berlin' }
 			});
 
-			var scope = $rootScope.$new();
-			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-21', 'Europe/Berlin', scope);
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-21', 'Europe/Berlin');
 			var vm = panel.isolateScope().vm;
 
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[4];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[4].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 330
-				},
-				deltaRect: { left: -270 }
-			});
-
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
+			fireResize(vm, shiftLayer, 330, -270);
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(3);
@@ -2424,29 +2139,13 @@
 				Timezone: { IanaId: 'Europe/Berlin' }
 			});
 
-			var scope = $rootScope.$new();
-			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-21', 'Europe/Berlin', scope);
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-21', 'Europe/Berlin');
 			var vm = panel.isolateScope().vm;
 
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[2];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[2].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 210
-				},
-				deltaRect: { left: -150 }
-			});
-
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
+			fireResize(vm, shiftLayer, 210, -150);
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(3);
@@ -2494,29 +2193,13 @@
 				Timezone: { IanaId: 'Europe/Berlin' }
 			});
 
-			var scope = $rootScope.$new();
-			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-30', 'Europe/Berlin', scope);
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-30', 'Europe/Berlin');
 			var vm = panel.isolateScope().vm;
 
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[1];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[1].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 180
-				},
-				deltaRect: { left: -120 }
-			});
-
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
+			fireResize(vm, shiftLayer, 180, -120);
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(3);
@@ -2584,29 +2267,14 @@
 				Timezone: { IanaId: 'Europe/Berlin' }
 			});
 
-			var scope = $rootScope.$new();
-			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-21', 'Europe/Berlin', scope);
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-21', 'Europe/Berlin');
 			var vm = panel.isolateScope().vm;
 
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[3];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[3].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 240
-				},
-				deltaRect: { left: -180 }
-			});
+			fireResize(vm, shiftLayer, 240, -180);
 
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(3);
@@ -2675,29 +2343,13 @@
 				Timezone: { IanaId: 'Europe/Berlin' }
 			});
 
-			var scope = $rootScope.$new();
-			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-21', 'Europe/Berlin', scope);
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-21', 'Europe/Berlin');
 			var vm = panel.isolateScope().vm;
 
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[3];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[3].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 210
-				},
-				deltaRect: { left: -150 }
-			});
-
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
+			fireResize(vm, shiftLayer, 210, -150);
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(4);
@@ -2796,29 +2448,14 @@
 				Timezone: { IanaId: 'Europe/Berlin' }
 			});
 
-			var scope = $rootScope.$new();
-			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-21', 'Europe/Berlin', scope);
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-21', 'Europe/Berlin');
 			var vm = panel.isolateScope().vm;
 
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[6];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[6].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 270
-				},
-				deltaRect: { left: -240 }
-			});
+			fireResize(vm, shiftLayer, 270, -240);
 
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(6);
@@ -2880,29 +2517,13 @@
 				Timezone: { IanaId: 'Europe/Berlin' }
 			});
 
-			var scope = $rootScope.$new();
-			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-21', 'Europe/Berlin', scope);
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-21', 'Europe/Berlin');
 			var vm = panel.isolateScope().vm;
 
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[2];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[2].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 30
-				},
-				deltaRect: { left: 30 }
-			});
-
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
+			fireResize(vm, shiftLayer, 30, 30);
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(4);
@@ -2965,29 +2586,13 @@
 				Timezone: { IanaId: 'Europe/Berlin' }
 			});
 
-			var scope = $rootScope.$new();
-			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-21', 'Europe/Berlin', scope);
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-21', 'Europe/Berlin');
 			var vm = panel.isolateScope().vm;
 
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[2];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[2].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 30
-				},
-				deltaRect: { left: 30 }
-			});
-
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
+			fireResize(vm, shiftLayer, 30, 30);
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(3);
@@ -3068,29 +2673,13 @@
 				Timezone: { IanaId: 'Europe/Berlin' }
 			});
 
-			var scope = $rootScope.$new();
-			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-28', 'Europe/Berlin', scope);
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-28', 'Europe/Berlin');
 			var vm = panel.isolateScope().vm;
 
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[4];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[4].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 330
-				},
-				deltaRect: { left: -270 }
-			});
-
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
+			fireResize(vm, shiftLayer, 330, -270);
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(5);
@@ -3103,7 +2692,7 @@
 			expect(timespanEl.innerText.trim()).toBe('2018-08-28 04:30 - 2018-08-28 10:00');
 		});
 
-		it('should bind resize event after it split by lunch/short break', function () {
+		it('should be able to resize after it split by lunch/short break', function () {
 			fakeTeamSchedule.has({
 				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
 				Name: 'Annika Andersson',
@@ -3146,33 +2735,22 @@
 				Timezone: { IanaId: 'Europe/Berlin' }
 			});
 
-			var scope = $rootScope.$new();
-			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-28', 'Europe/Berlin', scope);
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-28', 'Europe/Berlin');
 			var vm = panel.isolateScope().vm;
 
-			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[2];
+			var shiftLayers = panel[0].querySelectorAll('.shift-layer')
+			var shiftLayer = shiftLayers[2];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[2].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 210
-				},
-				deltaRect: { left: -150 }
-			});
+			fireResize(vm, shiftLayer, 210, -150);
 
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
-
-			expect(!!vm.scheduleVm.ShiftLayers[0].interact).toBeTruthy();
-			expect(!!vm.scheduleVm.ShiftLayers[1].interact).toBeFalsy();
-			expect(!!vm.scheduleVm.ShiftLayers[2].interact).toBeTruthy();
+			shiftLayers = panel[0].querySelectorAll('.shift-layer');
+			expect(shiftLayers[0].className.indexOf('selected') >= 0).toBeTruthy();
+			expect(shiftLayers[0].className.indexOf('non-resizable') >= 0).toBeFalsy();
+			expect(shiftLayers[1].className.indexOf('selected') >= 0).toBeFalsy();
+			expect(shiftLayers[1].className.indexOf('non-resizable') >= 0).toBeTruthy();
+			expect(shiftLayers[2].className.indexOf('selected') >= 0).toBeTruthy();
+			expect(shiftLayers[2].className.indexOf('non-resizable') >= 0).toBeFalsy();
 		});
 
 		it('should keep activity info same with the selected activity when create a new activity', function () {
@@ -3218,29 +2796,13 @@
 				Timezone: { IanaId: 'Europe/Berlin' }
 			});
 
-			var scope = $rootScope.$new();
-			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-29', 'Europe/Berlin', scope);
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-29', 'Europe/Berlin');
 			var vm = panel.isolateScope().vm;
 
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[2];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[2].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 210
-				},
-				deltaRect: { left: -150 }
-			});
-
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
+			fireResize(vm, shiftLayer, 210, -150);
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(vm.scheduleVm.ShiftLayers[0].ShiftLayerIds[0]).toEqual('91678e5a-ac3f-4daa-9577-a83800e49622');
@@ -3309,28 +2871,13 @@
 				Timezone: { IanaId: 'Europe/Berlin' }
 			});
 
-			var scope = $rootScope.$new();
-			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-31', 'Europe/Berlin', scope);
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-31', 'Europe/Berlin');
 			var vm = panel.isolateScope().vm;
 
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[4];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[4].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 240
-				},
-				deltaRect: { left: -180 }
-			});
-
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-			scope.$apply();
+			fireResize(vm, shiftLayer, 240, -180);
 
 			var typeEls = panel[0].querySelectorAll('.activity-selector md-option');
 			typeEls[0].click();
@@ -3404,23 +2951,8 @@
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[0].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 30
-				},
-				deltaRect: { left: 0 }
-			});
 
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
-
+			fireResize(vm, shiftLayer, 30, 0);
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(4);
 
@@ -3490,22 +3022,7 @@
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[0].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 150
-				},
-				deltaRect: { left: 0 }
-			});
-
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
+			fireResize(vm, shiftLayer, 150, 0);
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(3);
@@ -3562,22 +3079,7 @@
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[0].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 180
-				},
-				deltaRect: { left: 0 }
-			});
-
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
+			fireResize(vm, shiftLayer, 180, 0);
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(3);
@@ -3642,22 +3144,7 @@
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[0].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 120
-				},
-				deltaRect: { left: 0 }
-			});
-
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
+			fireResize(vm, shiftLayer, 120, 0);
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(3);
@@ -3722,22 +3209,7 @@
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[0].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 180
-				},
-				deltaRect: { left: 0 }
-			});
-
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
+			fireResize(vm, shiftLayer, 180, 0);
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(3);
@@ -3813,22 +3285,7 @@
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[0].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 150
-				},
-				deltaRect: { left: 0 }
-			});
-
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
+			fireResize(vm, shiftLayer, 150, 0);
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(4);
@@ -3897,22 +3354,7 @@
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[0].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 210
-				},
-				deltaRect: { left: 0 }
-			});
-
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
+			fireResize(vm, shiftLayer, 210, 0);
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(3);
@@ -3998,22 +3440,7 @@
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[0].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 240
-				},
-				deltaRect: { left: 0 }
-			});
-
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
+			fireResize(vm, shiftLayer, 240, 0);
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(3);
@@ -4121,22 +3548,7 @@
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[0].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 270
-				},
-				deltaRect: { left: 0 }
-			});
-
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
+			fireResize(vm, shiftLayer, 270, 0);
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(6);
@@ -4230,22 +3642,7 @@
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[0].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 330
-				},
-				deltaRect: { left: 0 }
-			});
-
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
+			fireResize(vm, shiftLayer, 330, 0);
 
 			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 			expect(shiftLayers.length).toEqual(5);
@@ -4258,7 +3655,7 @@
 			expect(timespanEl.innerText.trim()).toBe('2018-08-28 05:00 - 2018-08-28 10:30');
 		});
 
-		it('should bind resize event after it split by lunch/short break', function () {
+		it('should be able to resize after it split by lunch/short break', function () {
 			fakeTeamSchedule.has({
 				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
 				Name: 'Annika Andersson',
@@ -4308,26 +3705,15 @@
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[0].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 210
-				},
-				deltaRect: { left: 0 }
-			});
+			fireResize(vm, shiftLayer, 210, 0);
 
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
-
-			expect(!!vm.scheduleVm.ShiftLayers[0].interact).toBeTruthy();
-			expect(!!vm.scheduleVm.ShiftLayers[1].interact).toBeFalsy();
-			expect(!!vm.scheduleVm.ShiftLayers[2].interact).toBeTruthy();
+			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
+			expect(shiftLayers[0].className.indexOf('selected') >= 0).toBeTruthy();
+			expect(shiftLayers[0].className.indexOf('non-resizable') >= 0).toBeFalsy();
+			expect(shiftLayers[1].className.indexOf('selected') >= 0).toBeFalsy();
+			expect(shiftLayers[1].className.indexOf('non-resizable') >= 0).toBeTruthy();
+			expect(shiftLayers[2].className.indexOf('selected') >= 0).toBeTruthy();
+			expect(shiftLayers[2].className.indexOf('non-resizable') >= 0).toBeFalsy();
 		});
 
 		it('should merge with the beside layers after changing its activity to the activity of the beside layers', function () {
@@ -4400,23 +3786,7 @@
 			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[0].interact;
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 240
-				},
-				deltaRect: { left: 0 }
-			});
-
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-
-			scope.$apply();
-
+			fireResize(vm, shiftLayer, 240, 0);
 
 			var typeEls = panel[0].querySelectorAll('.activity-selector md-option');
 			typeEls[0].click();
@@ -5370,21 +4740,7 @@
 			var shiftLayer = panel[0].querySelector('.shift-layer');
 			shiftLayer.click();
 
-			var interact = vm.scheduleVm.ShiftLayers[0].interact;
-
-			interact.fire({
-				type: 'resizemove',
-				target: shiftLayer,
-				rect: {
-					width: 120
-				},
-				deltaRect: { left: -60 }
-			});
-			interact.fire({
-				type: 'resizeend',
-				target: shiftLayer
-			});
-			scope.$apply();
+			fireResize(vm, shiftLayer, 120, -60);
 
 			var timespanEl = panel[0].querySelector('.timespan');
 			expect(timespanEl.innerText.trim()).toEqual('08/13/2018 7:00 AM - 08/13/2018 9:00 AM');
@@ -5407,6 +4763,7 @@
 		});
 	});
 
+	
 	function setUp(personId, date, timezone, scope) {
 		scope = $rootScope.$new();
 		scope.personId = personId;
@@ -5416,9 +4773,26 @@
 		var element = $compile('<shift-editor date="date" timezone="timezone" person-id="personId"></shift-editor>')(
 			scope
 		);
+
 		scope.$apply();
 
 		return element;
+	}
+
+	function fireResize(vm, el, width, translateX) {
+		vm.onResizeMove({
+			type: 'resizemove',
+			target: el,
+			rect: {
+				width: width
+			},
+			deltaRect: { left: translateX }
+		});
+
+		vm.onResizeEnd({
+			type: 'resizeend',
+			target: el
+		});
 	}
 
 	function FakeActivityService() {
@@ -5504,20 +4878,15 @@
 	}
 
 	function FakeTeamSchedule() {
-		var schedules = [];
+		var self = this;
+		self.schedules = [];
 		this.has = function (schedule) {
-			if (
-				!schedules.length ||
-				(schedules[0].PersonId == schedule.PersonId && schedules[0].Date == schedule.Date)
-			) {
-				schedules = [];
-				schedules.push(schedule);
-			}
+			self.schedules = [schedule];
 		};
 		this.getSchedules = function () {
 			return {
 				then: function (callback) {
-					callback({ Schedules: schedules });
+					callback({ Schedules: self.schedules });
 				}
 			};
 		};

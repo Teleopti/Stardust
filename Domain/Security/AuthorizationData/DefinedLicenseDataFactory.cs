@@ -87,6 +87,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 				new TeleoptiCccPilotCustomersReportsLicenseOption(),
 				new TeleoptiWfmBpoExchangeLicenseOption(),
 				new TeleoptiWfmOvertimeRequestsLicenseOption(),
+				new TeleoptiWfmChatBotLicenseOption(),
 				new AllLicenseOption()
 			};
 			

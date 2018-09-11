@@ -71,10 +71,11 @@
 	</div>
 	<div class="viewport-clip height-15em">
 		<div class="viewport  no-scroll">
-			<div class="shift"  ng-style="{'width':vm.timelineVmWidth+'px'}" ng-class="{'has-selected': !!vm.selectedShiftLayers.length}">
+			<div class="shift"
+				 ng-style="{'width':vm.timelineVmWidth+'px'}"
+				 ng-class="{'has-selected': !!vm.selectedShiftLayers.length,'tablet': !vm.isOnDesktop}">
 				<div class="shift-layer"
 					 ng-class="{
-					 'tablet': !vm.isOnDesktop(),
 					 'overtime': shiftLayer.IsOvertime,
 					 'overtime-light': vm.useLighterBorder(shiftLayer),
 					 'overtime-dark': !vm.useLighterBorder(shiftLayer),
@@ -85,6 +86,7 @@
 					 'disabled': vm.isNotAllowedToChange(shiftLayer),
 					 'non-resizable': vm.isNotResizable(shiftLayer),
 					 'float-top': vm.getMergedShiftLayer(shiftLayer).FloatOnTop}"
+					 ng-attr-index="{{vm.scheduleVm.ShiftLayers.indexOf(shiftLayer)}}"
 					 ng-style="{'width': vm.getMergedShiftLayer(shiftLayer).Width +'px',
 					 'background-color': vm.getMergedShiftLayer(shiftLayer).Color,
 					 'left': vm.getMergedShiftLayer(shiftLayer).Left + 'px',

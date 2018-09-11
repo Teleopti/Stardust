@@ -1,4 +1,4 @@
-import { Role } from '../../types';
+import { Role } from '../../../shared/types';
 
 export type Agent = { Id: 'id1'; Name: 'Agent' };
 export type TeamLeader = { Id: 'id2'; Name: 'TeamLeader' };

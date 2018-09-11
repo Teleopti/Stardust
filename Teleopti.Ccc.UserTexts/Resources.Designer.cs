@@ -7489,6 +7489,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The days currently selected to be included in the shift trade would result in too much or too little contract time..
+        /// </summary>
+        public static string ContractTimeViolationMessageInShiftTradeRequest {
+            get {
+                return ResourceManager.GetString("ContractTimeViolationMessageInShiftTradeRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Contract work rule validation.
         /// </summary>
         public static string ContractWorkRuleValidation {
@@ -26880,7 +26889,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ready Time Adherence.
+        ///   Looks up a localized string similar to Ready time adherence.
         /// </summary>
         public static string ReadyTimeAdherence {
             get {

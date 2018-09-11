@@ -52,17 +52,17 @@ namespace Teleopti.Ccc.DomainTest.Intraday.Domain
 				TimeZone = TimeZoneInfo.Utc
 
 			}.WithId();
-			this.CreateWorkload(parentSkill, new List<TimePeriod> {openHours}, false);
+			this.CreateWorkload(parentSkill, new List<TimePeriod> { openHours }, false);
 			var parentSkillDay = this.CreateSkillDay(parentSkill, scenario, date, openHours);
 			skillDays.Add(parentSkillDay);
 
 			var childSkill1 = new ChildSkill("Child1", "First child skill", Color.FromArgb(123), parentSkill).WithId();
-			this.CreateWorkload(childSkill1, new List<TimePeriod> {openHours}, false);
+			this.CreateWorkload(childSkill1, new List<TimePeriod> { openHours }, false);
 			var childSkillDay1 = this.CreateSkillDay(childSkill1, scenario, date, openHours);
 			skillDays.Add(childSkillDay1);
 
 			var childSkill2 = new ChildSkill("Child2", "second child skill", Color.FromArgb(123), parentSkill).WithId();
-			this.CreateWorkload(childSkill2, new List<TimePeriod> {openHours}, false);
+			this.CreateWorkload(childSkill2, new List<TimePeriod> { openHours }, false);
 			var childSkillDay2 = this.CreateSkillDay(childSkill2, scenario, date, openHours);
 			skillDays.Add(childSkillDay2);
 
@@ -159,15 +159,14 @@ namespace Teleopti.Ccc.DomainTest.Intraday.Domain
 						}
 					});
 
-			var target = new IntradayForecastingService(intervalFetcherMock, _staffingCalculatorService,
-				ssiProviderMock, issMock);
+			var target = new IntradayForecastingService(intervalFetcherMock, _staffingCalculatorService, ssiProviderMock, issMock);
 
 			var eslResults = target
 				.CalculateEstimatedServiceLevels(skillDays, startOfPeriodUtc, endOfPeriodUtc)
 				.Select(x => x.Esl)
 				.ToList();
 
-			var scheduledAgents = new List<double> {12, 8, 10, 15};			
+			var scheduledAgents = new List<double> { 12, 8, 10, 15 };
 			var taskPeriods = parentSkillDay.WorkloadDayCollection.First().TaskPeriodList;
 			var skillData = parentSkillDay.SkillDataPeriodCollection.First();
 
@@ -206,7 +205,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday.Domain
 					TimeZone = TimeZoneInfo.Utc
 				}.WithId();
 
-			this.CreateWorkload(skill, new List<TimePeriod> {openHours}, isClosedOnWeekends);
+			this.CreateWorkload(skill, new List<TimePeriod> { openHours }, isClosedOnWeekends);
 			return skill;
 		}
 
@@ -237,23 +236,41 @@ namespace Teleopti.Ccc.DomainTest.Intraday.Domain
 			return workload;
 		}
 
-		private ISkillDay CreateSkillDay(ISkill skill, IScenario scenario, DateOnly date, TimePeriod openHours,
-			bool giveDemand = true)
+		private ISkillDay CreateSkillDay(ISkill skill, IScenario scenario, DateOnly date, TimePeriod openHours)
 		{
-			var demand = 3;
-			if (!giveDemand)
-				demand = -1;
-
+			var serviceAgreement = ServiceAgreement.DefaultValues();
 			var random = new Random();
-			ISkillDay skillDay;
-			skillDay = skill
-				.CreateSkillDayWithDemandOnInterval(scenario, date, 3, new Tuple<TimePeriod, double>(openHours, demand))
-				.WithId();
+			int upperLimit = 10;
+			int lowerLimit = 3;
+
+			var intervals = Enumerable
+				.Range(0, (int)Math.Ceiling((decimal)(date.Date.AddDays(1) - date.Date).TotalMinutes / skill.DefaultResolution))
+				.Select(offset =>
+				{
+					var startTime = new DateTime(date.Date.AddMinutes(offset * skill.DefaultResolution).Ticks, DateTimeKind.Utc);
+					return new DateTimePeriod(startTime, startTime.AddMinutes(skill.DefaultResolution));
+				});
+
+			var opensAt = date.Date.Add(openHours.StartTime);
+			var closesAt = date.Date.Add(openHours.EndTime);
+			var skillData = intervals
+				.Select(x => new SkillDataPeriod(serviceAgreement, new SkillPersonData(), x)
+				{
+					ManualAgents = ((x.StartDateTime >= opensAt && x.EndDateTime <= closesAt) ? random.Next(lowerLimit, upperLimit) : 0)
+				});
+
+			var workloadDays = new List<IWorkloadDay>();
+			var workloadDay = new WorkloadDay();
+			var workload = skill.WorkloadCollection.First();
+			workloadDay.CreateFromTemplate(date, workload, (IWorkloadDayTemplate)workload.GetTemplate(TemplateTarget.Workload, date.DayOfWeek));
+			workloadDays.Add(workloadDay);
+			var skillDay = new SkillDay(date, skill, scenario, workloadDays, skillData).WithId();
+			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new List<ISkillDay> { skillDay }, date.ToDateOnlyPeriod());
 
 			var index = 0;
 			if (!(skill is IChildSkill))
 			{
-				var workloadDay = skillDay.WorkloadDayCollection.First();
+				//				var workloadDay = skillDay.WorkloadDayCollection.First();
 				workloadDay.Lock();
 				for (TimeSpan intervalStart = openHours.StartTime;
 					intervalStart < openHours.EndTime;

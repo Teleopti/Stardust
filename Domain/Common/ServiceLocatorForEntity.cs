@@ -1,7 +1,4 @@
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -32,7 +29,6 @@ namespace Teleopti.Ccc.Domain.Common
 	public static class ServiceLocatorForEntity
 	{
 		private static ICurrentBusinessUnit _currentBusinessUnit;
-		private static ProperAlarm _appliedAlarm;
 		private static IUpdatedBy _updatedBy;
 		private static ILoggedOnUserIsPerson _loggedOnUserIsPerson;
 		private static INow _now;
@@ -41,12 +37,6 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			get { return _currentBusinessUnit ?? Common.CurrentBusinessUnit.Make(); }
 			set { _currentBusinessUnit = value; }
-		}
-
-		public static ProperAlarm AppliedAlarm
-		{
-			get { return _appliedAlarm ?? new ProperAlarm(); }
-			set { _appliedAlarm = value; }
 		}
 
 		public static IUpdatedBy UpdatedBy

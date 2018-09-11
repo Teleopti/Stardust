@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
             get
             {
                 var owner = Parent as IBudgetGroup;
-                _orderIndex = owner == null ? -1 : ((IList<ICustomShrinkage>)owner.CustomShrinkages).IndexOf(this);
+                _orderIndex = ((IList<ICustomShrinkage>) owner?.CustomShrinkages)?.IndexOf(this) ?? -1;
                 return _orderIndex;
             }
             set
