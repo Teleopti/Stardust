@@ -85,6 +85,7 @@
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,
 		ResourcePlanner_XXL_76496,
 		ResourcePlanner_HalfHourSkillTimeZone_75509,
+		ResourcePlanner_ReducingSkillsDifferentOpeningHours_76176,
 
 		Wfm_DisplayOnlineHelp_39402,
 
