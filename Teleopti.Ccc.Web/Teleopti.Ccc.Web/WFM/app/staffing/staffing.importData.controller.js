@@ -314,10 +314,13 @@
 
 		function multiSkillExportIsEnabled() {
 			if (vm.selectedSkill != null) {
+				var start = moment.utc(vm.exportPeriod.startDate.toDateString());
+				var end = moment.utc(vm.exportPeriod.endDate.toDateString());
+				var 
 				var request = staffingService.postFileExport.get({
 					skillId: vm.selectedSkill.Id,
-					exportStartDateTime: vm.exportPeriod.startDate,
-					exportEndDateTime: vm.exportPeriod.endDate
+					exportStartDateTime: start,
+					exportEndDateTime: end
 				});
 				request.$promise.then(function(response) {
 					vm.ErrorMessage = response.ErrorMessage;
@@ -325,10 +328,12 @@
 					UtilService.saveToFs(response.Content, vm.selectedSkill.Name + '.csv', 'text/csv');
 				});
 			} else {
+				var start = moment.utc(vm.exportPeriod.startDate.toDateString());
+				var end = moment.utc(vm.exportPeriod.endDate.toDateString());
 				var request = staffingService.postFileExportForSkillArea.get({
 					skillAreaId: vm.selectedSkillArea.Id,
-					exportStartDateTime: vm.exportPeriod.startDate,
-					exportEndDateTime: vm.exportPeriod.endDate
+					exportStartDateTime: start,
+					exportEndDateTime: end
 				});
 				request.$promise.then(function (response) {
 					vm.ErrorMessage = response.ErrorMessage;
