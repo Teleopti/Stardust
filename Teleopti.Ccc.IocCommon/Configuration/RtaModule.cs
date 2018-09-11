@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Skill;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
@@ -162,6 +163,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RtaTracerSessionFactory>().SingleInstance();
 
 			builder.RegisterType<ConfigurationValidator>().SingleInstance();
+			
+			builder.RegisterType<TenantFromAuthenticationKey>().As<ITenantFinder>().SingleInstance();
+
 		}
 	}
 }
