@@ -27,9 +27,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected override void AddSkillDaysForReducedSkills(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
 		{
 			var orgSkillDays = _desktopContext.CurrentContext().SchedulerStateHolderFrom.SchedulingResultState.SkillDays;
-			foreach (var reducedSkill in _skillsOnAgentsProvider.Execute(schedulerStateHolderTo.SchedulingResultState.LoadedAgents, period))
+			var agentSkills = _skillsOnAgentsProvider.Execute(schedulerStateHolderTo.SchedulingResultState.LoadedAgents, period); //can be optimized to only selected agents
+			foreach (var reducedSkill in agentSkills.Except(schedulerStateHolderTo.SchedulingResultState.Skills))
 			{
-				schedulerStateHolderTo.SchedulingResultState.SkillDays[reducedSkill] = orgSkillDays[reducedSkill];
+				if (orgSkillDays.TryGetValue(reducedSkill, out var orgSkillDay))
+				{
+					schedulerStateHolderTo.SchedulingResultState.SkillDays[reducedSkill] = orgSkillDay;	
+				}
 			}
 		}
 	}
