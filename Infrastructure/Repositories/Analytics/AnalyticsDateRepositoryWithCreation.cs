@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			var oneDay = TimeSpan.FromDays(1);
 			while ((currentDay += oneDay) <= toDate)
 			{
-				session.Save(new AnalyticsDate(currentDay, culture));
+				_currentAnalyticsUnitOfWork.Current().Session().Save(new AnalyticsDate(currentDay, culture));
 				shouldPublish = true;
 			}
 

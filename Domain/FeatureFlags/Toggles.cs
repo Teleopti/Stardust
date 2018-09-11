@@ -131,7 +131,6 @@
 		MyTimeWeb_ShiftTradeRequest_SetNotSelectableShifts_77052,
 		MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306,
 		MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408,
-		MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409,
 
 		WFM_Intraday_Refactoring_74652,
 		WFM_Intraday_Redesign_77214,
