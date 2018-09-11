@@ -7,8 +7,8 @@
     <ProjectGuid>{906CD885-44E7-46B8-BECA-83FD20829532}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Teleopti.Wfm.Rta.Test</RootNamespace>
-    <AssemblyName>Teleopti.Wfm.Rta.Test</AssemblyName>
+    <RootNamespace>Teleopti.Wfm.Adherence.Test</RootNamespace>
+    <AssemblyName>Teleopti.Wfm.Adherence.Test</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -7,8 +7,8 @@
     <ProjectGuid>{2DD2E616-8405-49DF-A07D-546A8C160117}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Teleopti.Wfm.Rta</RootNamespace>
-    <AssemblyName>Teleopti.Wfm.Rta</AssemblyName>
+    <RootNamespace>Teleopti.Wfm.Adherence</RootNamespace>
+    <AssemblyName>Teleopti.Wfm.Adherence</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
