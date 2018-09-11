@@ -479,9 +479,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see a list for schedule for both me and '?(.*)'? start from date '(.*)'")]
 		public void ThenIShouldSeeAListForScheduleForBothMeAndOtherAgentStartFromDate(string personToName, string date)
 		{
-			Browser.Interactions.AssertExists(".shift-detail.own-shift", "My Schedule");
-			Browser.Interactions.AssertExists(".shift-detail.shift-to-trade", personToName);
-			Browser.Interactions.AssertExists(".shift-to-trade-row .shift-date", date);
+			Browser.Interactions.AssertExists(".multi-shift-trade-shift-detail.my-schedule-detail", "My Schedule");
+			Browser.Interactions.AssertExists(".multi-shift-trade-shift-detail.target-schedule-detail", personToName);
+			Browser.Interactions.AssertExists(".multi-shift-trade-row .multi-shift-trade-date-cell", date);
 		}
 
 	}

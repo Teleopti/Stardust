@@ -306,7 +306,7 @@
 		<div class="multi-shift-trade-schedules-list">
 			<div class="multi-shift-trade-schedules-list-header">
 				<div class="multi-shift-trade-date-cell"></div>
-				<div class="multi-shift-trade-shift-detail text-center">@Resources.MySchedule</div>
+				<div class="multi-shift-trade-shift-detail my-schedule-detail text-center">@Resources.MySchedule</div>
 				<div class="multi-shift-trade-shift-detail target-schedule-detail" data-bind="text:agentChoosed() ? agentChoosed().agentName : ''"></div>
 				<div class="multi-shift-trade-selection"></div>
 			</div>
@@ -317,7 +317,7 @@
 				<!--ko foreach: loadedSchedulePairs-->
 				<div class="multi-shift-trade-row" data-bind="attr: {id: 'shift-row-' + date.valueOf()}, css:{'multi-shift-trade-row-disabled':!isEnable, 'multi-shift-trade-row-mobile': $root.isMobile}">
 					<div class="multi-shift-trade-date-cell" data-bind="text:$root.formatDate(date)"></div>
-					<div class="multi-shift-trade-shift-detail">
+					<div class="multi-shift-trade-shift-detail my-schedule-detail">
 						<!--ko if: !mySchedule-->
 						<div class="multi-shift-trade-row-text-container">
 							<span>@Resources.NotScheduled </span>
