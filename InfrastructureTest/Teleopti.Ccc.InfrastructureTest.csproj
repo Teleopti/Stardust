@@ -438,6 +438,7 @@
     <Compile Include="Scheduling\ScheduleRangePersisterWithConflictSolve\ShouldSaveNoConflict.cs" />
     <Compile Include="Scheduling\ScheduleRangePersisterWithConflictSolve\ScheduleDictionaryPersisterWithConflictSolveBase.cs" />
     <Compile Include="Schema\ApplicationDatabaseClusteredIndexTest.cs" />
+    <Compile Include="Toggle\ApplicationFunctionsToggleFilterTest.cs" />
     <Compile Include="UnitOfWorkTestAttribute.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryHasCurrentUnitOfWorkTest.cs" />
     <Compile Include="UnitOfWork\AnalyticsUnitOfWorkTest.cs" />
