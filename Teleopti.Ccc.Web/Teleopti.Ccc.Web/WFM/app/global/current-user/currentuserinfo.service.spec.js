@@ -33,7 +33,6 @@
 
 		it('should get the current user from the server', function(done) {
 			inject(function(CurrentUserInfo) {
-				$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
 				$httpBackend
 					.expectGET('../api/Global/User/CurrentUser')
 					.respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
@@ -50,7 +49,6 @@
 
 		it('should return an error if the user is not logged on', function(done) {
 			inject(function(CurrentUserInfo) {
-				$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
 				$httpBackend.expectGET('../api/Global/User/CurrentUser').respond(401);
 
 				var request = CurrentUserInfo.getCurrentUserFromServer();
@@ -64,14 +62,13 @@
 		it('should init the user context with toggles', function(done) {
 			inject(function(CurrentUserInfo) {
 				$httpBackend
-					.expectGET('../ToggleHandler/AllToggles')
+					.whenGET('../ToggleHandler/AllToggles')
 					.respond(200, { WfmGlobalLayout_personalOptions_37114: true });
 				$httpBackend
 					.expectGET('../api/Global/User/CurrentUser')
 					.respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
 				$httpBackend.expectGET('../api/BusinessUnit').respond(200, ['mock']);
 				$httpBackend.expectGET('../api/Settings/SupportEmail').respond(200, '');
-				$httpBackend.expectGET('../api/Theme').respond(200, { Name: 'light' });
 
 				CurrentUserInfo.initContext().then(function() {
 					var result = CurrentUserInfo.isConnected();
@@ -85,14 +82,13 @@
 		it('should init the user context without theme toggle', function(done) {
 			inject(function(CurrentUserInfo) {
 				$httpBackend
-					.expectGET('../ToggleHandler/AllToggles')
+					.whenGET('../ToggleHandler/AllToggles')
 					.respond(200, { WfmGlobalLayout_personalOptions_37114: false });
 				$httpBackend
 					.expectGET('../api/Global/User/CurrentUser')
 					.respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
 				$httpBackend.expectGET('../api/BusinessUnit').respond(200, ['mock']);
 				$httpBackend.expectGET('../api/Settings/SupportEmail').respond(200, '');
-				$httpBackend.expectGET('../api/Theme').respond(200, '');
 
 				CurrentUserInfo.initContext().then(function() {
 					var result = CurrentUserInfo.isConnected();
