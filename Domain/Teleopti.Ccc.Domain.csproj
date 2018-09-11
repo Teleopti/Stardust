@@ -232,6 +232,7 @@
     <Compile Include="InterfaceLegacy\Domain\OvertimeRequestStaffingCheckMethod.cs" />
     <Compile Include="Intraday\ApplicationLayer\ViewModels\StaffingDataSeries.cs" />
     <Compile Include="Intraday\BacklogSkillTypesForecastCalculator.cs" />
+    <Compile Include="Intraday\Domain\IntradayForecastInterval.cs" />
     <Compile Include="Intraday\Extensions\IntradaySkillDayExtensions.cs" />
     <Compile Include="Intraday\Domain\IEmailBacklogProvider.cs" />
     <Compile Include="Intraday\IForecastedCallsProvider.cs" />
