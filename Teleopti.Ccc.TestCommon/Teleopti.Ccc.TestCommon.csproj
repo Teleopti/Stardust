@@ -446,7 +446,6 @@
     <Compile Include="FakeRepositories\Rta\FakeRtaMapRepository.cs" />
     <Compile Include="FakeRepositories\Tenant\FakeTenants.cs" />
     <Compile Include="FakeScheduleDifferenceSaver_DoNotUse.cs" />
-    <Compile Include="FakeScheduleRange.cs" />
     <Compile Include="FakeStardustSender.cs" />
     <Compile Include="FakeShiftTradeLightValidator.cs" />
     <Compile Include="FakeSignalR.cs" />
