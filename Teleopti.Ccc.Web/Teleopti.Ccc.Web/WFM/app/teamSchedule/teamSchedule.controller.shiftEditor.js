@@ -320,6 +320,7 @@
 			else if (index !== endIndex) {
 				if (isLayerShorten) {
 					if (!fillWithLayer(originalShiftLayers, index, mergedSelectedShiftLayer, dateTime, isChangingStart)) {
+
 						actualDateTime = mergedSelectedShiftLayer[timeField];
 					}
 				} else {
@@ -427,6 +428,8 @@
 					createLayer(shiftLayers, secondLayer, startTime, endTime, insertIndex);
 					return true;
 				}
+
+				if (!secondLayer && besideLayer.IsOvertime) return true;
 			}
 			else if (!isSameType(mergedBesideLayer, selectedLayer)) {
 				doUpdateBeside(besideLayer, dateTime);
