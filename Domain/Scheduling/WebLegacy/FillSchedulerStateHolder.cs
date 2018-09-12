@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -35,7 +34,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			AddSkillDaysForReducedSkills(schedulerStateHolderTo, period);
 			FillSchedules(schedulerStateHolderTo, schedulerStateHolderTo.RequestedScenario, schedulerStateHolderTo.SchedulingResultState.LoadedAgents, period);
 			removeUnwantedScheduleRanges(schedulerStateHolderTo);
-			PostFill(schedulerStateHolderTo, period);
 			setLocks(schedulerStateHolderTo, lockInfoForStateHolder);
 			schedulerStateHolderTo.ResetFilteredPersons();
 		}
@@ -130,6 +128,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected abstract void FillBpos(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<ISkill> skills, DateOnlyPeriod period);
 		protected abstract void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period);
 		protected abstract void PreFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period);
-		protected abstract void PostFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period);
 	}
 }

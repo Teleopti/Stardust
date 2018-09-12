@@ -105,10 +105,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		{
 			schedulerStateHolderTo.LoadCommonState(_currentUnitOfWork.Current(), _repositoryFactory);
 			_skillRepository.FindAllWithSkillDays(period); //perf hack to prevent working with skill proxies when doing calculation
-		}
-
-		protected override void PostFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
-		{
 			schedulerStateHolderTo.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, _userTimeZone.TimeZone());
 			schedulerStateHolderTo.SchedulingResultState.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
 		}
