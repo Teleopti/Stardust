@@ -21,6 +21,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		
 		public void Has(IPersonAssignment personAssignment)
 		{
+			if (!personAssignment.Id.HasValue)
+				personAssignment.WithId();
 			_storage.Add(personAssignment);
 		}
 

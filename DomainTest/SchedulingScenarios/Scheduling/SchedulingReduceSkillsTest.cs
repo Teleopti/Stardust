@@ -50,7 +50,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
 			var agentToSchedule = PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Day, 1), ruleSet, skill1, skill2);
 			PersonRepository.Has(skill1);
-			SkillDayRepository.Has(skill1.CreateSkillDayWithDemand(scenario, date, 100), skill2.CreateSkillDayWithDemand(scenario, date, 100));
+			SkillDayRepository.Has(
+				skill1.CreateSkillDayWithDemand(scenario, date, 100), 
+				skill2.CreateSkillDayWithDemand(scenario, date, 100)
+				);
 			PersonAssignmentRepository.Has(new PersonAssignment(agentToSchedule, scenario, date)); //just to make easier assert
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1, SchedulePeriodType.Day, null);
 			
