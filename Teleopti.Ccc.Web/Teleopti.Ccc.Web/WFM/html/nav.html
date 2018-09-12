@@ -1,3 +1,11 @@
+<style>
+	@media(max-width: 768px) {
+		.businessunit-list {
+			display: none;
+		}
+	}
+</style>
+
 <div class="con-row" style="margin-left: 40px;">
 	<a ng-controller="AppInsightsController as vm"></a>
 	<div class="con-flex inline-flex align-row-center" style="align-items: center!important;">
@@ -18,8 +26,8 @@
 					</div>
 				</div>
 
-				<div ng-controller="AreasController as vm" style="margin-top: 8px;" class="pointer">
-					<span ng-cloak ng-if="vm.detectMobile();" class="text-white">
+				<div style="margin-top: 8px;" class="pointer">
+					<span ng-cloak class="businessunit-list text-white">
 						{{businessunit.data.selectedBu.Name}}
 						<i class="mdi mdi-menu-down"></i>
 					</span>
