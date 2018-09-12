@@ -199,6 +199,7 @@
     <Compile Include="FakeData\FakeGamificationSettingRepository.cs" />
     <Compile Include="FakeData\FakeIntervalLengthFetcher.cs" />
     <Compile Include="FakeData\FakeLatestStatisticsIntervalIdLoader.cs" />
+    <Compile Include="FakeData\FakeLicensedFunctionProvider.cs" />
     <Compile Include="FakeData\FakeMessageBrokerUnitOfWorkScope.cs" />
     <Compile Include="FakeData\FakeNewBusinessRuleCollection.cs" />
     <Compile Include="FakeData\FakeNofiticationWebClient.cs" />
@@ -828,9 +829,9 @@
       <Project>{96BAA3E0-A623-412E-BFE7-D3BE03A2288A}</Project>
       <Name>Teleopti.Support.Library</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Wfm.Rta\Teleopti.Wfm.Rta.csproj">
+    <ProjectReference Include="..\Teleopti.Wfm.Adherence\Teleopti.Wfm.Adherence.csproj">
       <Project>{2dd2e616-8405-49df-a07d-546a8c160117}</Project>
-      <Name>Teleopti.Wfm.Rta</Name>
+      <Name>Teleopti.Wfm.Adherence</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

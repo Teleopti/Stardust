@@ -6,6 +6,7 @@ export interface UserPreferences {
 	readonly Id: string;
 	readonly UserName: string;
 	readonly Language: string;
+	readonly IsTeleoptiApplicationLogon: boolean;
 }
 
 @Injectable()

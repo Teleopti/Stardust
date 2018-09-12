@@ -516,10 +516,10 @@ div.new-teamschedule-no-result-indicator {
 	text-align: center;
 }
 .teamschedule-scroll-block-container {
-	width: calc(100% - 30px - 100px);
+	width: calc(100% - 30px - 110px);
 	height: 20px;
 	position: absolute;
-	left: calc(30px + 100px);
+	left: calc(30px + 110px);
 	bottom: 0;
 	border-radius: 9px;
 	overflow: visible;

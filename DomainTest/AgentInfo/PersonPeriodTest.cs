@@ -12,9 +12,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.AgentInfo
 {
-	/// <summary>
-	// Tests for PersonPeriod
-	/// </summary>
 	[TestFixture]
 	public class PersonPeriodTest
 	{

@@ -101,10 +101,6 @@ describe('planningGroupSettingOverviewController', function () {
         PlanGroupSettingService = _PlanGroupSettingService_;
         planningGroupService = _planningGroupService_;
 
-        $httpBackend.whenGET('../ToggleHandler/AllToggles').respond(function (method, url, data, headers) {
-            return [200, true];
-        });
-
         $httpBackend.whenPOST('../api/resourceplanner/plangroupsetting').respond(function (method, url, data, headers) {
             return [200, true];
         });
@@ -126,7 +122,6 @@ describe('planningGroupSettingOverviewController', function () {
             planningGroupInfo: planningGroupInfo,
             schedulingSettingInfo: schedulingSettingInfo
         });
-        $httpBackend.flush();
 
         expect(vm.schedulingSetting.length).toEqual(4);
     });

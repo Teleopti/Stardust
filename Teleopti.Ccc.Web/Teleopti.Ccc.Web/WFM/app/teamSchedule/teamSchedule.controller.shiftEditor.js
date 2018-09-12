@@ -98,11 +98,7 @@
 			subscribeToScheduleChange();
 
 
-			$element[0].querySelector('.timeline').addEventListener('touchmove', function () {
-				var timelineViewportEl = $element[0].querySelector('.timeline').parentElement;
-				var shiftViewportEl = $element[0].querySelector('.shift').parentElement;
-				shiftViewportEl.scrollLeft = timelineViewportEl.scrollLeft;
-			});
+
 
 			bindResizeLayerEvent();
 		};
@@ -209,8 +205,7 @@
 		}
 
 		vm.isNotResizable = function (shiftLayer) {
-			return vm.selectedShiftLayers.indexOf(shiftLayer) < 0
-				|| !!shiftLayer.IsPersonalActivity
+			return !!shiftLayer.IsPersonalActivity
 				|| !!shiftLayer.IsMeeting
 				|| !!shiftLayer.IsIntradayAbsence
 				|| !!shiftLayer.IsOvertime;
@@ -257,6 +252,10 @@
 			$scope.$apply();
 		}
 
+		function canNotFillWith(layer) {
+			return layer.FloatOnTop || vm.isNotResizable(layer);
+		}
+
 		function isOnDesktop() {
 			var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 			return !(!!userAgent.match(/ipad|iphone|ipod/i) || !!userAgent.match(/android/i));
@@ -265,7 +264,7 @@
 		function bindResizeLayerEvent() {
 			interact('.shift-layer')
 				.resizable({
-					allowFrom: '.selected',
+					allowFrom: '.selected:not(.non-resizable)',
 					edges: { left: true, right: true },
 					restrictSize: {
 						min: { width: 5 }
@@ -317,6 +316,7 @@
 			else if (index !== endIndex) {
 				if (isLayerShorten) {
 					if (!fillWithLayer(originalShiftLayers, index, mergedSelectedShiftLayer, dateTime, isChangingStart)) {
+
 						actualDateTime = mergedSelectedShiftLayer[timeField];
 					}
 				} else {
@@ -415,13 +415,17 @@
 			var doUpdateBeside = isChangingStart ? updateEnd : updateStart;
 
 			if (besideLayer.FloatOnTop) {
-				if (secondLayer && !isSameType(secondLayer, selectedLayer)) {
+				if (secondLayer
+					&& !isSameType(secondLayer, selectedLayer)
+					&& !canNotFillWith(secondLayer)) {
 					var startTime = isChangingStart ? mergedBesideLayer.End : dateTime;
 					var endTime = isChangingStart ? dateTime : mergedBesideLayer.Start;
 					var insertIndex = isChangingStart ? selectedIndex : selectedIndex + 1;
 					createLayer(shiftLayers, secondLayer, startTime, endTime, insertIndex);
 					return true;
 				}
+
+				if (!secondLayer && besideLayer.IsOvertime) return true;
 			}
 			else if (!isSameType(mergedBesideLayer, selectedLayer)) {
 				doUpdateBeside(besideLayer, dateTime);
@@ -658,8 +662,18 @@
 			initScrollState();
 			angular.element($window).bind('resize', initScrollState);
 
-			bindScrollMouseEvent(timelineEl.querySelector('.left-scroll'), -20);
-			bindScrollMouseEvent(timelineEl.querySelector('.right-scroll'), 20);
+			bindScrollEvent(timelineEl.querySelector('.left-scroll'), -20);
+			bindScrollEvent(timelineEl.querySelector('.right-scroll'), 20);
+
+			timelineEl.addEventListener('touchmove', function () {
+				var timelineViewportEl = $element[0].querySelector('.timeline').parentElement;
+				var shiftViewportEl = $element[0].querySelector('.shift').parentElement;
+				shiftViewportEl.scrollLeft = timelineViewportEl.scrollLeft;
+			});
+
+			timelineEl.addEventListener('keydown', function (e) {
+				e.preventDefault();
+			});
 		}
 
 		var scrollIntervalPromise = null;
@@ -670,32 +684,23 @@
 			}
 		}
 
-		function bindScrollMouseEvent(el, step) {
+		function bindScrollEvent(el, step, eventPrefix) {
 			el.addEventListener(
 				'mousedown',
-				function () {
+				function (e) {
 					cancelScrollIntervalPromise();
 					scrollIntervalPromise = $interval(function () {
-						vm.scroll(step);
+						vm.scroll(angular.isFunction(step) ? step(e) : step);
 					}, 150);
 				},
 				false
 			);
-			el.addEventListener(
-				'mouseup',
-				function () {
-					cancelScrollIntervalPromise();
-				},
-				false
-			);
-			el.addEventListener(
-				'mouseleave',
-				function () {
-					cancelScrollIntervalPromise();
-				},
-				false
-			);
+			el.addEventListener('mouseup', cancelScrollIntervalPromise, false);
+			el.addEventListener('mouseleave', cancelScrollIntervalPromise, false);
 		}
+
+
+
 		function initScrollState() {
 			$timeout(function () {
 				var shiftViewportEl = $element[0].querySelector('.shift').parentElement;

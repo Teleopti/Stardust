@@ -103,7 +103,7 @@ module.exports = function(grunt) {
 			'vendor/fabricjs/fabric.min.js',
 			'vendor/fabricjs/fabricjs_viewport.js',
 			'vendor/ng-image-input-with-preview/ng-image-input-with-preview.js',
-			'node_modules/d3/d3.min.js',
+			// 'node_modules/d3/d3.min.js',
 			'node_modules/c3/c3.min.js',
 			'node_modules/c3-angular/c3-angular.min.js',
 			'vendor/ui-bootstrap-custom-build/datepicker.directive.ext.js',
@@ -298,6 +298,16 @@ module.exports = function(grunt) {
 							src: ['*.ttf', '*.woff', '*.eot'],
 							dest: 'dist/fonts',
 							filter: 'isFile'
+						}
+					]
+				},
+				d3: {
+					files: [
+						{
+							expand: true,
+							cwd: 'vendor/d3',
+							src: 'd3.min.js',
+							dest: 'dist/resources/'
 						}
 					]
 				}

@@ -327,7 +327,7 @@
 	function setSelectedTeamSubscription() {
 		self.selectedTeamSubscription = self.selectedTeam.subscribe(function(value) {
 			if (value === '00000000-0000-0000-0000-000000000000') {
-				setAllTeams();
+				selectAllTeams();
 			} else {
 				self.selectedTeamIds = [];
 				self.selectedTeamIds.push(value);
@@ -340,10 +340,16 @@
 		});
 	}
 
-	function setAllTeams() {
-		self.selectedTeamIds = self.availableTeams()[1].children.map(function(c) {
-			return c.id;
-		});
+	function selectAllTeams() {
+		if (self.availableTeams()[1] && self.availableTeams()[1].children) {
+			self.selectedTeamIds = self.availableTeams()[1].children.map(function(a) {
+				return a.id;
+			});
+		} else {
+			self.availableTeams()[0].children.forEach(function(a, i) {
+				if (i > 0) self.selectedTeamIds.push(a.id);
+			});
+		}
 	}
 
 	function disposeSelectedTeamSubscription() {
@@ -410,6 +416,10 @@
 				);
 				layerViewModel.isLastLayer = index === periods.length - 1;
 
+				layerViewModel.showTitle = ko.computed(function() {
+					return layerViewModel.height() >= minPixelsToDisplayTitle;
+				});
+
 				layers.push(layerViewModel);
 			});
 
@@ -465,14 +475,22 @@
 		if (allTeam !== null) {
 			allTeam.id = '00000000-0000-0000-0000-000000000000';
 
-			if (teams.length > 1) {
+			if (teams.length > 0) {
 				if (teams[0] && teams[0].children != null) {
 					teams.unshift({ children: [allTeam], text: '' });
 				} else {
-					teams.unshift(allTeam);
+					teams = [
+						{
+							PageId: '',
+							children: teams,
+							text: ''
+						}
+					];
+					teams[0].children.unshift(allTeam);
 				}
 			}
 		}
+
 		self.availableTeams(teams);
 	}
 };
