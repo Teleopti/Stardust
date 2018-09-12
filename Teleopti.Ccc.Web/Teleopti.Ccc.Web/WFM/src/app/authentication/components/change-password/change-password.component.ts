@@ -67,8 +67,7 @@ export class ChangePasswordComponent {
 		);
 	}
 
-	showModal($event: Event) {
-		$event.preventDefault();
+	showModal() {
 		this.isVisible = true;
 	}
 

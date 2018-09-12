@@ -17,7 +17,6 @@ describe('permissionsFilter', function() {
 
 		fakeBackend.clear();
 		vm = $controller('PermissionsController');
-		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 	}));
 
 	afterEach(function() {

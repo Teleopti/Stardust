@@ -1,6 +1,5 @@
 import { Directive, NgModule, Pipe, PipeTransform, Injectable } from '@angular/core';
-import { inject } from '../../../node_modules/@angular/core/testing';
-import { TranslateService } from '../../../node_modules/@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import { Observable, of } from 'rxjs';
 
 @Directive({

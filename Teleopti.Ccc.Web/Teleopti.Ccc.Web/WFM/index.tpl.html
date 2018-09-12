@@ -55,31 +55,19 @@
 	        src="appInsights.js"></script>
 </head>
 
-<body ng-app="wfm"
-      ng-show="isAuthenticated"
-      ng-cloak
-      ng-controller="MainController as main">
-	<div class="backdrop"
-	     ng-if="!main.styleIsFullyLoaded">
+<body ng-app="wfm" ng-show="isAuthenticated" ng-cloak ng-controller="MainController as mainController">
+	<div class="backdrop" ng-if="!mainController.style.isFullyLoaded">
 		<div class="loader"></div>
 	</div>
-	<div id="nav"
-	     ng-include="'html/nav.html'"
-	     class="material-depth-1 navbar navbar-default navbar-static-top "
-	     role="navigation"></div>
+	<div id="nav" ng-include="'html/nav.html'" class="material-depth-1 navbar navbar-default navbar-static-top" role="navigation"></div>
 	<div class="layout-container">
-		<div class="main-menu"
-		     ng-controller="AreasController as vm">
+
+		<div class="main-menu" ng-controller="AreasController as vm">
 			<h2 class="main-menu-ctrls">
-				<label for="nav-left"
-				       ng-click="vm.mainMenuState = !vm.mainMenuState"
-				       class="pointer"
-				       id="main-menu-trigger">
-					<div tabindex=0
-					     class="context-menu card-context even-icon">
-						<i class="mdi main-menu-trigger-icon text-white"
-						   ng-class="{'mdi-menu':!vm.mainMenuState, 'mdi-backburger':vm.mainMenuState}"></i>
-						<md-tooltip>
+				<label for="nav-left" ng-click="vm.mainMenuState = !vm.mainMenuState" class="pointer" id="main-menu-trigger">
+					<div tabindex=0 class="context-menu card-context even-icon">
+						<i class="mdi main-menu-trigger-icon text-white" ng-class="{'mdi-menu':!vm.mainMenuState, 'mdi-backburger':vm.mainMenuState}"></i>
+						<md-tooltip ng-cloak>
 							{{'Navigate'|translate}}
 						</md-tooltip>
 					</div>
@@ -100,17 +88,11 @@
 			<wfm-notice notices="$parent.wfmNotices"></wfm-notice>
 		</div>
 	</div>
-	<script type="text/javascript"
-	        src="index_desktop_client_mods.js"></script>
-	<link id="themeDependencies"
-	      rel="stylesheet"
-	      href="dist/dependencies.css">
-	<link id="themeStyleguide"
-	      rel="stylesheet"
-	      href="">
-	<link id="themeAnt"
-	      rel="stylesheet"
-	      href="">
+	<script type="text/javascript" src="index_desktop_client_mods.js"></script>
+
+	<link id="themeDependencies" rel="stylesheet" href="dist/dependencies.css">
+	<link id="themeStyleguide" rel="stylesheet" href="">
+	<link id="themeAnt" rel="stylesheet" href="">
 	<ng2-bootstrap></ng2-bootstrap>
 	<!-- build:template
 	<% if (environment === 'dev') { %>
@@ -136,22 +118,14 @@
 	/build -->
 	<!--dummy links to disable IE default alt-key shortcuts-->
 	<div class="shortcut-trick-ie">
-		<a href="javascript:void(0);"
-		   accesskey="a"></a>
-		<a href="javascript:void(0);"
-		   accesskey="c"></a>
-		<a href="javascript:void(0);"
-		   accesskey="e"></a>
-		<a href="javascript:void(0);"
-		   accesskey="f"></a>
-		<a href="javascript:void(0);"
-		   accesskey="h"></a>
-		<a href="javascript:void(0);"
-		   accesskey="t"></a>
-		<a href="javascript:void(0);"
-		   accesskey="v"></a>
-		<a href="javascript:void(0);"
-		   accesskey="x"></a>
+		<a href="javascript:void(0);" accesskey="a"></a>
+		<a href="javascript:void(0);" accesskey="c"></a>
+		<a href="javascript:void(0);" accesskey="e"></a>
+		<a href="javascript:void(0);" accesskey="f"></a>
+		<a href="javascript:void(0);" accesskey="h"></a>
+		<a href="javascript:void(0);" accesskey="t"></a>
+		<a href="javascript:void(0);" accesskey="v"></a>
+		<a href="javascript:void(0);" accesskey="x"></a>
 	</div>
 </body>
 

@@ -49,7 +49,7 @@
 
 	</div>
 
-	<ng-container class="nav-tools inline-flex" ng-controller="ThemesPickerController as vm">
+	<ng-container class="nav-tools inline-flex">
 		<a href="https://www.teleopti.com/wfm/customer-feedback.aspx" target="_blank" rel="noopener">
 			<div tabindex=0 class="context-menu card-context even-icon feedback-wrap">
 				<svg class="feedback" viewBox="0 0 44 44">
@@ -71,41 +71,9 @@
 			</div>
 		</a>
 
-		<div tabindex="0" class="context-menu card-context even-icon" ng-click="showOptions = !showOptions" ng-class="{'nav-item-inactive':!showOptions, 'nav-item-active':showOptions}"
-		 data-test-nav-item-settings>
-			<i class="mdi mdi-account-settings-variant text-color-white" ng-class="{'mdi-account-outline':toggle}"></i>
+		<div>
+			<ng2-settings-menu [style]="mainController.style"></ng2-settings-menu>
 			<md-tooltip>{{'UserSettings'|translate}}</md-tooltip>
 		</div>
-		<wfm-popup show="showOptions">
-			<ul class="wfm-list">
-				<div ng-show="vm.personalizeToggle">
-					<li ng-click="vm.toggleOverlay()">
-						<a href="javascript:void(0);">
-							<i ng-if="vm.showOverlay" class="mdi mdi-checkbox-marked"></i>
-							<i ng-if="!vm.showOverlay" class="mdi mdi-checkbox-blank-outline"></i>
-							{{'ToggleLowLightFilter'|translate}}
-						</a>
-					</li>
-					<li ng-click="vm.toggleTheme()">
-						<a href="javascript:void(0);">
-							<i ng-if="vm.darkTheme" class="mdi mdi-checkbox-marked"></i>
-							<i ng-if="!vm.darkTheme" class="mdi mdi-checkbox-blank-outline"></i>
-							{{'ToggleDarkTheme'|translate}}
-						</a>
-					</li>
-				</div>
-				<ng-container ng-controller="AuthenticationController as vm">
-					<ng2-change-password ng-if="vm.isPasswordToggleActive() && vm.isTeleoptiApplicationLogonUser()"></ng2-change-password>
-				</ng-container>
-				<a href="../Authentication/SignOut" style="display: inline;">
-					<li>
-						<i class="mdi mdi-logout "></i> {{'LogOut'|translate}}
-					</li>
-				</a>
-			</ul>
-
-		</wfm-popup>
-		<span ng-show="vm.showOverlay" class="animate-show warm-overlay"></span>
-</div>
-
+	</ng-container>
 </div>

@@ -25,6 +25,7 @@
 			from {
 				transform: rotate(0)
 			}
+
 			to {
 				transform: rotate(360deg)
 			}
@@ -42,8 +43,8 @@
 	</style>
 </head>
 
-<body ng-show="isAuthenticated" ng-cloak ng-controller="MainController as main">
-	<div class="backdrop" ng-if="!main.styleIsFullyLoaded">
+<body ng-show="isAuthenticated" ng-controller="MainController as mainController">
+	<div class="backdrop" ng-if="!mainController.style.isFullyLoaded">
 		<div class="loader"></div>
 	</div>
 	<div class="layout-container">

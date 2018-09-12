@@ -6,8 +6,7 @@
     'angularMoment',
     'ngStorage',
     'wfm.i18n',
-    'wfm.businessunits',
-    'wfm.themes'
+    'wfm.businessunits'
     ]);
 
 })();

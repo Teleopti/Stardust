@@ -22,9 +22,6 @@ describe('<gamification-import>', function () {
 			$material = $injector.get('$material');
 			$document = $injector.get('$document');
 			$timeout = $injector.get('$timeout');
-			$httpBackend = $injector.get('$httpBackend');
-
-			$httpBackend.when('GET', '../ToggleHandler/AllToggles').respond('');
 		});
 	});
 
@@ -47,10 +44,6 @@ describe('<gamification-import>', function () {
 
 		$document.find('md-select-menu').remove();
 		$document.find('md-backdrop').remove();
-	});
-
-	afterEach(function () {
-		$httpBackend.flush();
 	});
 
 	it('should render', function () {

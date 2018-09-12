@@ -6,7 +6,7 @@ import { FeedbackMessageComponent } from '../../../shared/components/feedback-me
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { configureTestSuite } from '../../../../configure-test-suit';
 import { HttpClientModule } from '@angular/common/http';
-import { NoopAnimationsModule } from '../../../../../node_modules/@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('TitleBarComponent', () => {
 	let component: TitleBarComponent;

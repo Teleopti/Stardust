@@ -227,7 +227,6 @@
 				}
 			}
 			updateLabel();
-			console.log(vm.filteredOrgData);
 		}
 
 		function refreshData(keyword) {

@@ -5,12 +5,19 @@ import { IControllerConstructor, IRootScopeService } from 'angular';
 import { AddAppPageComponent, ApiAccessTitleBarComponent, ListPageComponent } from './app/api-access/components';
 import { AppModule } from './app/app.module';
 import { ChangePasswordComponent } from './app/authentication/components/change-password/change-password.component';
-import { AppLogonPageComponent, GrantPageComponent, IdentityLogonPageComponent, RevokePageComponent, SearchPageComponent, TitleBarComponent } from './app/people/components';
+import { BootstrapComponent } from './app/bootstrap/bootstrap.component';
+import {
+	AppLogonPageComponent,
+	GrantPageComponent,
+	IdentityLogonPageComponent,
+	RevokePageComponent,
+	SearchPageComponent,
+	TitleBarComponent
+} from './app/people/components';
 import { FeedbackMessageComponent } from './app/shared/components';
 import { environment } from './environments/environment';
 import { MainController } from './main.controller';
-import { BootstrapComponent } from './app/bootstrap/bootstrap.component';
-
+import { SettingsMenuComponent } from './app/navigation/components';
 
 export interface IWfmRootScopeService extends IRootScopeService {
 	_: any;
@@ -61,7 +68,6 @@ const wfm = angular.module('wfm', [
 	'wfm.teamSchedule',
 	'wfm.intraday',
 	'wfm.requests',
-	'wfm.themes',
 	'wfm.reports',
 	'wfm.signalR',
 	'wfm.culturalDatepicker',
@@ -80,14 +86,13 @@ const wfm = angular.module('wfm', [
 	'wfm.popup',
 	'wfm.gamification',
 	'wfm.btnGroup',
-	'wfm.ai',
-	'wfm.authentication'
+	'wfm.ai'
 ]);
 
 wfm.controller('MainController', MainController as IControllerConstructor);
 
-const downgradeHelper = (downgradeName: string, component, inputs?: string[]) => {
-	const downgradedComponent = downgradeComponent({ component, inputs: inputs }) as angular.IDirectiveFactory;
+const downgradeHelper = (downgradeName: string, component) => {
+	const downgradedComponent = downgradeComponent({ component }) as angular.IDirectiveFactory;
 	wfm.directive(downgradeName, downgradedComponent);
 };
 
@@ -101,8 +106,9 @@ downgradeHelper('ng2PeopleRevokePage', RevokePageComponent);
 downgradeHelper('ng2PeopleAppLogonPage', AppLogonPageComponent);
 downgradeHelper('ng2PeopleIdentityLogonPage', IdentityLogonPageComponent);
 downgradeHelper('ng2ChangePassword', ChangePasswordComponent);
-downgradeHelper('ng2FeedbackMessage', FeedbackMessageComponent, ['feedbackType', 'translationKey']);
+downgradeHelper('ng2FeedbackMessage', FeedbackMessageComponent);
 downgradeHelper('ng2Bootstrap', BootstrapComponent);
+downgradeHelper('ng2SettingsMenu', SettingsMenuComponent);
 
 wfm.config([
 	'$stateProvider',
