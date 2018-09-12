@@ -86,6 +86,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.AsSelf()
 				.SingleInstance();
 
+			builder.RegisterType<AddReducedSkillDaysToStateHolder>().SingleInstance();
 			builder.RegisterType<AddBpoResourcesToContext>().SingleInstance();
 			builder.RegisterType<SkillCombinationToBpoResourceMapper>().SingleInstance();
 			builder.RegisterType<ExternalStaffProvider>().SingleInstance();

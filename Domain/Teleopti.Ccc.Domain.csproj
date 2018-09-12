@@ -269,6 +269,7 @@
     <Compile Include="ResourceCalculation\ShiftProjectionCacheExtensions.cs" />
     <Compile Include="ResourceCalculation\ShiftProjectionCacheFactory.cs" />
     <Compile Include="ResourceCalculation\SkillsOnAgentsProvider.cs" />
+    <Compile Include="Scheduling\AddReducedSkillDaysToStateHolder.cs" />
     <Compile Include="Scheduling\WebClearScheduleStardustHandler.cs" />
     <Compile Include="Scheduling\IPredictShiftCategory.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModelLoader.cs" />

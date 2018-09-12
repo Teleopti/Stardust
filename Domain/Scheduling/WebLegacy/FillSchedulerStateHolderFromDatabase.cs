@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -25,6 +24,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly ExternalStaffProvider _externalStaffProvider;
+		private readonly SkillsOnAgentsProvider _skillsOnAgentsProvider;
+		private readonly AddReducedSkillDaysToStateHolder _addReducedSkillDaysToStateHolder;
 
 		public FillSchedulerStateHolderFromDatabase(PersonalSkillsProvider personalSkillsProvider,
 					IScenarioRepository scenarioRepository,
@@ -35,7 +36,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					ISkillRepository skillRepository,
 					ICurrentUnitOfWork currentUnitOfWork,
 					IUserTimeZone userTimeZone,
-					ExternalStaffProvider externalStaffProvider)
+					ExternalStaffProvider externalStaffProvider,
+					SkillsOnAgentsProvider skillsOnAgentsProvider,
+					AddReducedSkillDaysToStateHolder addReducedSkillDaysToStateHolder)
 			: base(personalSkillsProvider)
 		{
 			_scenarioRepository = scenarioRepository;
@@ -47,6 +50,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_currentUnitOfWork = currentUnitOfWork;
 			_userTimeZone = userTimeZone;
 			_externalStaffProvider = externalStaffProvider;
+			_skillsOnAgentsProvider = skillsOnAgentsProvider;
+			_addReducedSkillDaysToStateHolder = addReducedSkillDaysToStateHolder;
 		}
 
 		protected override void FillScenario(ISchedulerStateHolder schedulerStateHolderTo)
@@ -75,6 +80,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		protected override void AddSkillDaysForReducedSkills(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
 		{
+			var agentSkills = _skillsOnAgentsProvider.Execute(schedulerStateHolderTo.SchedulingResultState.LoadedAgents, period); //can be optimized to only selected agents
+			var reducedSkills = agentSkills.Except(schedulerStateHolderTo.SchedulingResultState.Skills);
+			var skillDaysContainingReducedSkills = _skillDayLoadHelper.LoadSchedulerSkillDays(period, reducedSkills, schedulerStateHolderTo.RequestedScenario);
+
+			_addReducedSkillDaysToStateHolder.Execute(schedulerStateHolderTo, period, reducedSkills, skillDaysContainingReducedSkills);
 		}
 
 		protected override void FillBpos(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<ISkill> skills, DateOnlyPeriod period)
@@ -95,10 +105,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		{
 			schedulerStateHolderTo.LoadCommonState(_currentUnitOfWork.Current(), _repositoryFactory);
 			_skillRepository.FindAllWithSkillDays(period); //perf hack to prevent working with skill proxies when doing calculation
-		}
-
-		protected override void PostFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
-		{
 			schedulerStateHolderTo.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, _userTimeZone.TimeZone());
 			schedulerStateHolderTo.SchedulingResultState.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
 		}

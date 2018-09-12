@@ -3,13 +3,19 @@
 
 <head lang="en">
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport"
+	      content="width=device-width, initial-scale=1">
 	<title>WFM</title>
-	<link rel="stylesheet" href="vendor/MaterialDesignIcons/css/materialdesignicons.min.css" media="none" onload="if(media!=='all')media='all'">
-	<link href="vendor/open-sans/font.css" rel="stylesheet">
-	<meta name="theme-color" content="#0099FF" />
-	<link rel="manifest" href="manifest.webmanifest.json">
-	<script type="text/javascript" src="appInsights.js"></script>
+	<link rel="stylesheet"
+	      href="vendor/MaterialDesignIcons/css/materialdesignicons.min.css"
+	      media="none"
+	      onload="if(media!=='all')media='all'">
+	<link href="vendor/open-sans/font.css"
+	      rel="stylesheet">
+	<meta name="theme-color"
+	      content="#0099FF" />
+	<link rel="manifest"
+	      href="manifest.webmanifest.json">
 	<style>
 		.loader {
 			width: 75px;
@@ -45,6 +51,8 @@
 			background: #fff
 		}
 	</style>
+	<script type="text/javascript"
+	        src="appInsights.js"></script>
 </head>
 
 <body ng-app="wfm" ng-show="isAuthenticated" ng-cloak ng-controller="MainController as mainController">
@@ -65,18 +73,20 @@
 					</div>
 				</label>
 			</h2>
-			<div ng-show="vm.mainMenuState" class="main-menu-slide main-menu-link-wrapper material-depth-1">
+			<div ng-show="vm.mainMenuState"
+			     class="main-menu-slide main-menu-link-wrapper material-depth-1">
 				<div ng-repeat="a in vm.areas">
-					<mainmenu data="a" open="vm.mainMenuState" ng-click="vm.toggleMobileMenu();"></mainmenu>
+					<mainmenu data="a"
+					          open="vm.mainMenuState"
+					          ng-click="vm.toggleMobileMenu();"></mainmenu>
 				</div>
 			</div>
 		</div>
-
-		<div id="materialcontainer" class="container content">
+		<div id="materialcontainer"
+		     class="container content">
 			<div ui-view></div>
 			<wfm-notice notices="$parent.wfmNotices"></wfm-notice>
 		</div>
-
 	</div>
 	<script type="text/javascript" src="index_desktop_client_mods.js"></script>
 
@@ -87,6 +97,7 @@
 	<!-- build:template
 	<% if (environment === 'dev') { %>
 	<script src="dist/resources/modules.js"></script>
+	<script src="dist/resources/d3.min.js"></script>
 	<script src="dist/templates.js"></script>
 	<script src="dist/main.js"></script>
 	<script src="dist/ng2/runtime.js"></script>
@@ -96,6 +107,7 @@
 	<script src="dist/ng2/main.js"></script>
 	<% } else { %>
 	<script src="dist/resources/modules.js"></script>
+	<script src="dist/resources/d3.min.js"></script>
 	<script src="dist/templates.js"></script>
 	<script src="dist/main.js"></script>
 	<script src="dist/ng2/runtime.js"></script>
@@ -104,7 +116,6 @@
 	<script src="dist/ng2/main.js"></script>
 	<% } %>
 	/build -->
-
 	<!--dummy links to disable IE default alt-key shortcuts-->
 	<div class="shortcut-trick-ie">
 		<a href="javascript:void(0);" accesskey="a"></a>

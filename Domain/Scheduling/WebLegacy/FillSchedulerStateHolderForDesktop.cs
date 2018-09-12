@@ -16,25 +16,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 	{
 		private readonly DesktopContext _desktopContext;
 		private readonly SkillsOnAgentsProvider _skillsOnAgentsProvider;
+		private readonly AddReducedSkillDaysToStateHolder _addReducedSkillDaysToStateHolder;
 
-		public FillSchedulerStateHolderForDesktop(DesktopContext desktopContext, PersonalSkillsProvider personalSkillsProvider, SkillsOnAgentsProvider skillsOnAgentsProvider) 
+		public FillSchedulerStateHolderForDesktop(DesktopContext desktopContext, PersonalSkillsProvider personalSkillsProvider, SkillsOnAgentsProvider skillsOnAgentsProvider, AddReducedSkillDaysToStateHolder addReducedSkillDaysToStateHolder) 
 			: base(desktopContext, personalSkillsProvider)
 		{
 			_desktopContext = desktopContext;
 			_skillsOnAgentsProvider = skillsOnAgentsProvider;
+			_addReducedSkillDaysToStateHolder = addReducedSkillDaysToStateHolder;
 		}
 		
 		protected override void AddSkillDaysForReducedSkills(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
 		{
-			var orgSkillDays = _desktopContext.CurrentContext().SchedulerStateHolderFrom.SchedulingResultState.SkillDays;
 			var agentSkills = _skillsOnAgentsProvider.Execute(schedulerStateHolderTo.SchedulingResultState.LoadedAgents, period); //can be optimized to only selected agents
-			foreach (var reducedSkill in agentSkills.Except(schedulerStateHolderTo.SchedulingResultState.Skills))
-			{
-				if (orgSkillDays.TryGetValue(reducedSkill, out var orgSkillDay))
-				{
-					schedulerStateHolderTo.SchedulingResultState.SkillDays[reducedSkill] = orgSkillDay;	
-				}
-			}
+			var reducedSkills = agentSkills.Except(schedulerStateHolderTo.SchedulingResultState.Skills);
+			var skillDaysContainingReducedSkills = _desktopContext.CurrentContext().SchedulerStateHolderFrom.SchedulingResultState.SkillDays;
+
+			_addReducedSkillDaysToStateHolder.Execute(schedulerStateHolderTo, period, reducedSkills, skillDaysContainingReducedSkills);
 		}
 	}
 	
@@ -92,14 +90,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		protected override void PreFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
 		{
+			var currContext = _desktopContext.CurrentContext();
 			schedulerStateHolderTo.SchedulingResultState.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
-			var dayOffTemplate = _desktopContext.CurrentContext().SchedulerStateHolderFrom.CommonStateHolder.ActiveDayOffs.First();
+			var dayOffTemplate = currContext.SchedulerStateHolderFrom.CommonStateHolder.ActiveDayOffs.First();
 			schedulerStateHolderTo.CommonStateHolder.SetDayOffTemplate(dayOffTemplate);
-		}
-
-		protected override void PostFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
-		{
-			schedulerStateHolderTo.RequestedPeriod = _desktopContext.CurrentContext().SchedulerStateHolderFrom.RequestedPeriod;
+			schedulerStateHolderTo.RequestedPeriod = currContext.SchedulerStateHolderFrom.RequestedPeriod;
 			schedulerStateHolderTo.ConsiderShortBreaks = false; //TODO check if this is the wanted behaviour in other cases than intraday optimization
 		}
 
