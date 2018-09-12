@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Islands;
@@ -42,14 +43,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var date = new DateOnly(2015, 10, 12);
 			var activity = ActivityRepository.Has();
-			var skill1 = new Skill().For(activity).IsOpenBetween(skill1Start, skill1End).WithId();
-			var skill2 = new Skill().For(activity).IsOpenBetween(skill2Start, skill2End).WithId();
+			var skill1 = new Skill("skill1").For(activity).IsOpenBetween(skill1Start, skill1End).WithId();
+			var skill2 = new Skill("skill2").For(activity).IsOpenBetween(skill2Start, skill2End).WithId();
 			SkillRepository.Has(skill1, skill2); 
 			var scenario = ScenarioRepository.Has();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
 			var agentToSchedule = PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Day, 1), ruleSet, skill1, skill2);
 			PersonRepository.Has(skill1);
 			SkillDayRepository.Has(skill1.CreateSkillDayWithDemand(scenario, date, 100), skill2.CreateSkillDayWithDemand(scenario, date, 100));
+			PersonAssignmentRepository.Has(new PersonAssignment(agentToSchedule, scenario, date)); //just to make easier assert
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1, SchedulePeriodType.Day, null);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
