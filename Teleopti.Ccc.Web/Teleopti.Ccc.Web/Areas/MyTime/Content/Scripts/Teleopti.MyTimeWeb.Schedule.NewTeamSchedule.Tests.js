@@ -101,6 +101,20 @@
 		equal(vm.loadedAgentIndex, 49);
 	});
 
+	test('should reset the filling block width after changing selected date', function() {
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		var today = moment();
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		vm.loadedAgentIndex = 100;
+
+		vm.selectedDate(today.add(9, 'days'));
+
+		equal($('.left-filling-block').width(), 0);
+	});
+
 	test('should render sites and teams on mobile', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
@@ -144,6 +158,30 @@
 			fakeDefaultTeamData.DefaultTeam
 		);
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
+	});
+
+	test('should handle sites and teams hierarchy when user has no group page permission', function() {
+		fakeAvailableTeamsData = {
+			teams: [{ id: '34590a63-6331-4921-bc9f-9b5e015ab495', text: 'London/Team Preferences' }],
+			allTeam: { id: 'allTeams', text: 'All Teams' }
+		};
+		fakeDefaultTeamData = {
+			DefaultTeam: fakeAvailableTeamsData.teams[0].id,
+			DefaultTeamName: fakeAvailableTeamsData.teams[0].text
+		};
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		var selector = '.new-teamschedule-filter-component select';
+		equal($(selector)[0].length, 1);
+		equal($($(selector)[0][0]).text(), 'London/Team Preferences');
+		vm.loadGroupAndTeams();
+
+		equal($(selector)[0].length, 2);
+		equal($($(selector)[0][0]).text(), 'All Teams');
+		equal($($(selector)[0][1]).text(), 'London/Team Preferences');
 	});
 
 	test('should not load sites and teams until user toggle the selection list on iPad', function() {
@@ -619,6 +657,44 @@
 			'Jon Kleinsmith1'
 		);
 		equal($('.new-teamschedule-view .teammates-schedules-column .new-teamschedule-layer').length, 50);
+		equal(
+			$('.new-teamschedule-view .teammates-schedules-column .new-teamschedule-layer strong:visible').length,
+			50
+		);
+	});
+
+	test('should not show title when the activity length is less than 30 minutes', function() {
+		fakeOriginalAgentSchedulesData.splice(1);
+		fakeOriginalAgentSchedulesData[0].Periods = [
+			{
+				Title: 'Email',
+				TimeSpan: '06:30 - 06:47',
+				StartTime: selectedDate + 'T06:30:00',
+				EndTime: selectedDate + 'T06:47:00',
+				Summary: '',
+				StyleClassName: '',
+				Meeting: '',
+				StartPositionPercentage: 0.0,
+				EndPositionPercentage: 0.05,
+				Color: '#80FF80',
+				IsOvertime: false,
+				IsAbsenceConfidential: false,
+				TitleTime: '06:30 - 06:47'
+			}
+		];
+
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		equal(
+			$($('.teammates-agent-name-row .new-teamschedule-agent-name')[0])
+				.find('.text-name')
+				.text(),
+			'Jon Kleinsmith1'
+		);
+		equal($('.new-teamschedule-view .teammates-schedules-column .new-teamschedule-layer').length, 1);
 		equal($('.new-teamschedule-view .teammates-schedules-column .new-teamschedule-layer strong:visible').length, 0);
 	});
 

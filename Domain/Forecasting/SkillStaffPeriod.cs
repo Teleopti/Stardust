@@ -273,13 +273,16 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		public IList<ISkillStaffPeriodView> Split(TimeSpan periodLength)
 		{
-			if (Period.ElapsedTime() < periodLength)
+			var skillResolution = Period.ElapsedTime();
+			if ( skillResolution < periodLength)
 				throw new ArgumentOutOfRangeException(nameof(periodLength), periodLength,
 					"You cannot split to a higher period length");
 
-			if (Period.ElapsedTime().TotalMinutes % periodLength.TotalMinutes > 0)
+			if (skillResolution.TotalMinutes % periodLength.TotalMinutes > 0)
 				throw new ArgumentOutOfRangeException(nameof(periodLength), periodLength,
 					"You cannot split if you get a remaining time");
+
+			var resolutionFactor = periodLength.TotalMinutes / skillResolution.TotalMinutes;
 
 			IList<ISkillStaffPeriodView> newViews = new List<ISkillStaffPeriodView>();
 			IList<DateTimePeriod> newPeriods = Period.Intervals(periodLength);
@@ -290,10 +293,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 					Period = newPeriod,
 					CalculatedResource = CalculatedResource,
 					ForecastedIncomingDemand = Payload.ForecastedIncomingDemand,
-					ForecastedTasks = Payload.TaskData.Tasks,
+					ForecastedTasks = Payload.TaskData.Tasks * resolutionFactor,
 					EstimatedServiceLevel = EstimatedServiceLevel,
 					EstimatedServiceLevelShrinkage = EstimatedServiceLevelShrinkage,
-					FStaff = FStaff
+					FStaff = FStaff,
+					AverageHandlingTaskTime = Payload.TaskData.AverageHandlingTaskTime
 				};
 				newViews.Add(newView);
 			}

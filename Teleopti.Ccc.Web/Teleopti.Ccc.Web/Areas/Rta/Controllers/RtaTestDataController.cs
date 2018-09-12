@@ -32,6 +32,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private readonly IRtaEventStore _events;
+		private readonly IRtaEventStoreSynchronizer _synchronizer;
+
 
 		public RtaTestDataController(
 			IPersonRepository persons,
@@ -40,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			IActivityRepository activities,
 			IDifferenceCollectionService<IPersistableScheduleData> differenceService,
 			IScheduleDifferenceSaver scheduleDifferenceSaver,
-			IRtaEventStore events)
+			IRtaEventStore events, IRtaEventStoreSynchronizer synchronizer)
 		{
 			_persons = persons;
 			_schedules = schedules;
@@ -49,6 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			_differenceService = differenceService;
 			_scheduleDifferenceSaver = scheduleDifferenceSaver;
 			_events = events;
+			_synchronizer = synchronizer;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/RtaTestData/MakeStuff")]
@@ -138,14 +141,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 						{
 							PersonId = p,
 							BelongsToDate = d,
-							Timestamp = d.Date.AddHours(8).AddSeconds(-5).Utc(),
+							Timestamp = d.Date.AddHours(8).Utc(),
 							StateName = "Logon",
 							StateGroupId = null,
 							ActivityName = null,
 							ActivityColor = null,
-							RuleName = "Out",
+							RuleName = "In",
 							RuleColor = Color.Red.ToArgb(),
-							Adherence = EventAdherence.Out
+							Adherence = EventAdherence.In
 						}
 					};
 				}),
@@ -239,12 +242,27 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 							_events.Add(x);
 						});
 				});
-			});
+			});		
 
 			return new HttpResponseMessage(HttpStatusCode.OK)
 			{
 				Content = new StringContent(log.ToString(), System.Text.Encoding.UTF8, "text/plain")
 			};
 		}
+
+
+		[HttpGet, Route("api/RtaTestData/SynchStuff")]
+		public virtual HttpResponseMessage SynchStuff()
+		{
+			_synchronizer.Synchronize();
+
+			return new HttpResponseMessage(HttpStatusCode.OK)
+			{
+				Content = new StringContent("Synchrooooooooooooooonized ", System.Text.Encoding.UTF8, "text/plain")
+			};			
+		}
+
+
+
 	}
 }

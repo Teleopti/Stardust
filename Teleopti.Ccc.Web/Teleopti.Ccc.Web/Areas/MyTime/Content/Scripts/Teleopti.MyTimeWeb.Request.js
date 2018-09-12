@@ -14,9 +14,8 @@ Teleopti.MyTimeWeb.Request = (function($) {
 	function RequestNavigationViewModel() {
 		var self = this;
 
-		self.showFabButton =
-			Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826') &&
-			Teleopti.MyTimeWeb.Common.IsHostAMobile();
+		self.showFabButton = (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826') && Teleopti.MyTimeWeb.Common.IsHostAMobile())
+						|| (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409') && Teleopti.MyTimeWeb.Common.IsHostAniPad());
 
 		self.hideFab = ko.observable(false);
 

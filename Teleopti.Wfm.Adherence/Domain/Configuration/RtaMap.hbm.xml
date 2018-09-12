@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
-                   assembly="Teleopti.Wfm.Rta"
+                   assembly="Teleopti.Wfm.Adherence"
                    namespace="Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration"
                    default-access="field.camelcase-underscore">
   

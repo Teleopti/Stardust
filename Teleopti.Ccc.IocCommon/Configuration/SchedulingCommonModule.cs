@@ -116,6 +116,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();
 			builder.RegisterType<CascadingPersonSkillProvider>().SingleInstance();
 			builder.RegisterType<PersonalSkillsProvider>().SingleInstance();
+			builder.RegisterType<PersonalSkills>().SingleInstance();
+			builder.RegisterType<SkillsOnAgentsProvider>().SingleInstance();
 			builder.RegisterType<DaysOffInPeriodValidatorForBlock>().As<IDaysOffInPeriodValidatorForBlock>().SingleInstance();
 			builder.RegisterType<SchedulerStateScheduleDayChangedCallback>().As<IScheduleDayChangeCallback>().InstancePerLifetimeScope();
 			builder.RegisterModule<IntraIntervalOptimizationServiceModule>();
@@ -423,10 +425,20 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.AsSelf()
 					.ApplyAspects()
 					.SingleInstance();
-				builder.RegisterType<FillSchedulerStateHolderForDesktop>()
-					.As<FillSchedulerStateHolder>()
-					.ApplyAspects()
-					.SingleInstance();
+				if (_configuration.Toggle(Toggles.ResourcePlanner_ReducingSkillsDifferentOpeningHours_76176))
+				{
+					builder.RegisterType<FillSchedulerStateHolderForDesktop>()
+						.As<FillSchedulerStateHolder>()
+						.ApplyAspects()
+						.SingleInstance();					
+				}
+				else
+				{
+					builder.RegisterType<FillSchedulerStateHolderForDesktopOLD>()
+						.As<FillSchedulerStateHolder>()
+						.ApplyAspects()
+						.SingleInstance();					
+				}
 				builder.RegisterType<DesktopContext>().SingleInstance();
 				builder.RegisterType<DesktopSchedulingContext>()
 					.As<ISchedulingOptionsProvider>()

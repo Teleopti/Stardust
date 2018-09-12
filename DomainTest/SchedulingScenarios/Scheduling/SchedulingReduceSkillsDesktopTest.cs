@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
 	[UseIocForFatClient]
-	public class SchedulingIslandDesktopTest : SchedulingScenario
+	public class SchedulingReduceSkillsDesktopTest : SchedulingScenario
 	{
 		public DesktopScheduling Target;
 		public ReduceIslandsLimits ReduceIslandsLimits;
@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[TestCase(8, 16, 8, 16, true)]
 		[TestCase(0, 12, 13, 24, false)]
 		[TestCase(0, 12, 0, 12, false)]
-		[Ignore("#76176")]
 		public void ShouldHandleDifferentOpenHoursWhenReducingSkills(int skill1Start, int skill1End, int skill2Start, int skill2End, bool canBeScheduled)
 		{
 			MergeIslandsSizeLimit.TurnOff_UseOnlyFromTest();
@@ -56,8 +55,38 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(canBeScheduled);
 		}
 
-		public SchedulingIslandDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXXL76496, bool resourcePlannerHalfHourSkillTimeZon75509) : base(seperateWebRequest, resourcePlannerXXL76496, resourcePlannerHalfHourSkillTimeZon75509)
+		[Test, Ignore("To be fixed")]
+		public void ShouldNotPlaceShiftOnReducedSkill()
 		{
+			MergeIslandsSizeLimit.TurnOff_UseOnlyFromTest();
+			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 1);
+			var scenario = new Scenario();
+			var activity = new Activity{RequiresSkill = true}.WithId();
+			var skillA = new Skill().For(activity).IsOpenBetween(11, 12).WithId();
+			var skillB = new Skill().For(activity).IsOpenBetween(12, 13).WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(11, 0, 12, 0, 60), new TimePeriodWithSegment(12, 0, 13, 0, 60), new ShiftCategory("_").WithId()));
+			ruleSet.AddLimiter(new ActivityTimeLimiter(activity, TimeSpan.FromHours(1), OperatorLimiter.Equals));
+			var date = new DateOnly(2015, 10, 12);
+			var agentToSchedule = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillA, skillB).WithSchedulePeriodOneDay(date);
+			var otherAgent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skillA);
+			var skillDays = new[]
+			{
+				skillA.CreateSkillDayWithDemand(scenario, date, 1000),
+				skillB.CreateSkillDayWithDemand(scenario, date, 0.01)
+			};
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, date, new[] { agentToSchedule, otherAgent }, skillDays);
+			
+			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agentToSchedule}, date.ToDateOnlyPeriod());
+			
+			stateHolder.Schedules[agentToSchedule].ScheduledDay(date).PersonAssignment(true).ShiftLayers.Single().Period.StartDateTime.TimeOfDay
+				.Should().Be.EqualTo(TimeSpan.FromHours(12));
+		}
+		
+
+		public SchedulingReduceSkillsDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXXL76496, bool resourcePlannerHalfHourSkillTimeZon75509, bool resourcePlannerReducingSkillsDifferentOpeningHours76176) : base(seperateWebRequest, resourcePlannerXXL76496, resourcePlannerHalfHourSkillTimeZon75509, resourcePlannerReducingSkillsDifferentOpeningHours76176)
+		{
+			if(!resourcePlannerReducingSkillsDifferentOpeningHours76176)
+				Assert.Ignore("not implemented");
 		}
 	}
 }
