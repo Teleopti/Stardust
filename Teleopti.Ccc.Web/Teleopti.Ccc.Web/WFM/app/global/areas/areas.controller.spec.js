@@ -1,26 +1,27 @@
 ﻿'use strict';
-describe('AreasController', function() {
-	var $httpBackend,
-		$controller,
-		$q;
+fdescribe('AreasController', function() {
+	var $httpBackend, $controller, $q, $scope;
 
 	beforeEach(function() {
 		module('wfm.areas');
 	});
 
-	beforeEach(inject(function(_$httpBackend_, _$controller_, _$q_) {
+	beforeEach(inject(function(_$httpBackend_, _$controller_, _$q_, _$rootScope_) {
 		$httpBackend = _$httpBackend_;
 		$controller = _$controller_;
 		$q = _$q_;
+		$scope = _$rootScope_.$new();
 	}));
 
 	it('should get an area', inject(function() {
-		var vm = $controller('AreasController');
-		var areas = [{
-			Name: 'Forecaster',
-			internalName: "Forecaster",
-			_links: []
-		}];
+		var vm = $controller('AreasController', { $scope });
+		var areas = [
+			{
+				Name: 'Forecaster',
+				internalName: 'Forecaster',
+				_links: []
+			}
+		];
 		$httpBackend.whenGET('../api/Global/Application/WfmAreasWithPermission').respond(function(method, url, data) {
 			return [200, areas, {}];
 		});
@@ -31,16 +32,19 @@ describe('AreasController', function() {
 	}));
 
 	it('contains correct area', inject(function() {
-		var vm = $controller('AreasController');
-		var areas = [{
-			Name: 'Forecaster',
-			internalName: "Forecaster",
-			_links: []
-		}, {
-			Name: "Schedules",
-			InternalName: "resourceplanner",
-			_links: []
-		}];
+		var vm = $controller('AreasController', { $scope });
+		var areas = [
+			{
+				Name: 'Forecaster',
+				internalName: 'Forecaster',
+				_links: []
+			},
+			{
+				Name: 'Schedules',
+				InternalName: 'resourceplanner',
+				_links: []
+			}
+		];
 		$httpBackend.whenGET('../api/Global/Application/WfmAreasWithPermission').respond(function(method, url, data) {
 			return [200, areas, {}];
 		});
