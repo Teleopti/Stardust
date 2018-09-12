@@ -7,7 +7,6 @@ module.exports = function(config) {
 	config.set({
 		files: [
 			{ pattern: 'dist/resources/modules.js', watched: false },
-			{ pattern: 'dist/resources/D3.js', watched: false },
 			{ pattern: '+(app|html)/**/*.html' },
 			{ pattern: 'node_modules/angular-material/angular-material-mocks.js', watched: false },
 			{ pattern: 'node_modules/angular-mocks/angular-mocks.js', watched: false },

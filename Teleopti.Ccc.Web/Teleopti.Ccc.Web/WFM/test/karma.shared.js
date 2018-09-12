@@ -4,7 +4,7 @@ function applyBaseConfig(config) {
 	config.set({
 		basePath: '../',
 		exclude: ['**/Gruntfile.js'],
-		frameworks: ['jasmine', '@angular-devkit/build-angular', 'requirejs'],
+		frameworks: ['jasmine', '@angular-devkit/build-angular'],
 		plugins: [
 			require('@angular-devkit/build-angular/plugins/karma'),
 			require('karma-teamcity-reporter'),
