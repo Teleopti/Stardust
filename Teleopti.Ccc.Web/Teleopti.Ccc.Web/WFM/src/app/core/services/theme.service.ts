@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface Theme {
 	readonly Name: 'classic' | 'dark';
@@ -14,12 +15,22 @@ export class ThemeService {
 	private theme$ = new ReplaySubject<Theme>(1);
 
 	constructor(private http: HttpClient) {
-		this.http.get('../api/Theme').subscribe({
-			next: (theme: Theme) => {
-				this.theme$.next(theme);
-				this.applyTheme(theme.Name);
-			}
-		});
+		this.http
+			.get('../api/Theme')
+			.pipe(map(this.ensureThemeNotNull.bind(this)))
+			.subscribe({
+				next: (theme: Theme) => {
+					this.theme$.next(theme);
+					this.applyTheme(theme.Name);
+				}
+			});
+	}
+
+	private ensureThemeNotNull(theme: Theme): Theme {
+		return {
+			Name: theme.Name || 'classic',
+			Overlay: theme.Overlay
+		};
 	}
 
 	getTheme(): Observable<Theme> {
