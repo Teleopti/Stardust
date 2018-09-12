@@ -119,6 +119,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersonalSkillsProvider>().SingleInstance();
 			builder.RegisterType<PersonalSkills>().SingleInstance();
 			builder.RegisterType<SkillsOnAgentsProvider>().SingleInstance();
+			builder.RegisterType<ReducedSkillsProvider>().SingleInstance();
 			builder.RegisterType<DaysOffInPeriodValidatorForBlock>().As<IDaysOffInPeriodValidatorForBlock>().SingleInstance();
 			builder.RegisterType<SchedulerStateScheduleDayChangedCallback>().As<IScheduleDayChangeCallback>().InstancePerLifetimeScope();
 			builder.RegisterModule<IntraIntervalOptimizationServiceModule>();

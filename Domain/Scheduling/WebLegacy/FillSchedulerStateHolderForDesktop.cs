@@ -15,22 +15,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 	public class FillSchedulerStateHolderForDesktop : FillSchedulerStateHolderForDesktopOLD
 	{
 		private readonly DesktopContext _desktopContext;
-		private readonly SkillsOnAgentsProvider _skillsOnAgentsProvider;
 		private readonly AddReducedSkillDaysToStateHolder _addReducedSkillDaysToStateHolder;
+		private readonly ReducedSkillsProvider _reducedSkillsProvider;
 
-		public FillSchedulerStateHolderForDesktop(DesktopContext desktopContext, PersonalSkillsProvider personalSkillsProvider, SkillsOnAgentsProvider skillsOnAgentsProvider, AddReducedSkillDaysToStateHolder addReducedSkillDaysToStateHolder) 
+		public FillSchedulerStateHolderForDesktop(DesktopContext desktopContext, PersonalSkillsProvider personalSkillsProvider, 
+			AddReducedSkillDaysToStateHolder addReducedSkillDaysToStateHolder, ReducedSkillsProvider reducedSkillsProvider) 
 			: base(desktopContext, personalSkillsProvider)
 		{
 			_desktopContext = desktopContext;
-			_skillsOnAgentsProvider = skillsOnAgentsProvider;
 			_addReducedSkillDaysToStateHolder = addReducedSkillDaysToStateHolder;
+			_reducedSkillsProvider = reducedSkillsProvider;
 		}
 		
 		protected override void AddSkillDaysForReducedSkills(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
 		{
-			var agentSkills = _skillsOnAgentsProvider.Execute(schedulerStateHolderTo.SchedulingResultState.LoadedAgents, period); //can be optimized to only selected agents
-			var reducedSkills = agentSkills.Except(schedulerStateHolderTo.SchedulingResultState.Skills);
 			var skillDaysContainingReducedSkills = _desktopContext.CurrentContext().SchedulerStateHolderFrom.SchedulingResultState.SkillDays;
+			var reducedSkills = _reducedSkillsProvider.Execute(schedulerStateHolderTo, period);
 
 			_addReducedSkillDaysToStateHolder.Execute(schedulerStateHolderTo, period, reducedSkills, skillDaysContainingReducedSkills);
 		}
