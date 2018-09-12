@@ -1457,32 +1457,38 @@ teams-time-picker.ng-invalid-dst {
 					z-index: 999;
 				}
 			}
+		}
 
-			&.tablet {
-				.shift-layer {
-					height: 40px;
+		&.tablet {
+			.shift-layer {
+				height: 40px;
 
-					&.selected:not(.non-resizable) {
-						&::before, &::after {
-							content: " ";
-							position: absolute;
-							width: 2em;
-							height: 2em;
-							border-radius: 50% 1px 50% 50%;
-							background: $blue-500;
-							top: 115%;
-						}
-
-						&::before {
-							transform: translateX(-50%) rotate(0.88turn);
-							left: 0px;
-						}
-
-						&::after {
-							transform: translateX(50%) rotate(0.88turn);
-							right: 0px;
-						}
+				&.selected:not(.non-resizable) {
+					&::before, &::after {
+						content: " ";
+						position: absolute;
+						width: 2em;
+						height: 2em;
+						border-radius: 50% 1px 50% 50%;
+						background: $blue-500;
+						top: 115%;
 					}
+
+					&::before {
+						transform: translateX(-50%) rotate(0.88turn);
+						left: 0px;
+					}
+
+					&::after {
+						transform: translateX(50%) rotate(0.88turn);
+						right: 0px;
+					}
+				}
+			}
+
+			.timeline {
+				.scroll-toolbar {
+					display: none;
 				}
 			}
 		}

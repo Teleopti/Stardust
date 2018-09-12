@@ -50,10 +50,10 @@
 	</div>
 </div>
 
-<div class="shift-container">
+<div class="shift-container"  ng-class="{'tablet': !vm.isOnDesktop}">
 	<div class="viewport-clip height-5em">
 		<div class="viewport">
-			<div class="timeline" ng-style="{'width':vm.timelineVmWidth+'px'}">
+			<div class="timeline" tabindex="0" ng-style="{'width':vm.timelineVmWidth+'px'}">
 				<div class="scroll-toolbar">
 					<span class="left-scroll" ng-show="vm.showScrollLeftButton" ng-click="vm.scroll(-60)"><i class="mdi mdi-chevron-left"></i></span>
 					<span class="right-scroll" ng-show="vm.showScrollRightButton" ng-click="vm.scroll(60)"><i class="mdi mdi-chevron-right"></i></span>
@@ -73,7 +73,7 @@
 		<div class="viewport  no-scroll">
 			<div class="shift"
 				 ng-style="{'width':vm.timelineVmWidth+'px'}"
-				 ng-class="{'has-selected': !!vm.selectedShiftLayers.length,'tablet': !vm.isOnDesktop}">
+				 ng-class="{'has-selected': !!vm.selectedShiftLayers.length}">
 				<div class="shift-layer"
 					 ng-class="{
 					 'overtime': shiftLayer.IsOvertime,

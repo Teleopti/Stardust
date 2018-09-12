@@ -98,11 +98,7 @@
 			subscribeToScheduleChange();
 
 
-			$element[0].querySelector('.timeline').addEventListener('touchmove', function () {
-				var timelineViewportEl = $element[0].querySelector('.timeline').parentElement;
-				var shiftViewportEl = $element[0].querySelector('.shift').parentElement;
-				shiftViewportEl.scrollLeft = timelineViewportEl.scrollLeft;
-			});
+
 
 			bindResizeLayerEvent();
 		};
@@ -666,8 +662,18 @@
 			initScrollState();
 			angular.element($window).bind('resize', initScrollState);
 
-			bindScrollMouseEvent(timelineEl.querySelector('.left-scroll'), -20);
-			bindScrollMouseEvent(timelineEl.querySelector('.right-scroll'), 20);
+			bindScrollEvent(timelineEl.querySelector('.left-scroll'), -20);
+			bindScrollEvent(timelineEl.querySelector('.right-scroll'), 20);
+
+			timelineEl.addEventListener('touchmove', function () {
+				var timelineViewportEl = $element[0].querySelector('.timeline').parentElement;
+				var shiftViewportEl = $element[0].querySelector('.shift').parentElement;
+				shiftViewportEl.scrollLeft = timelineViewportEl.scrollLeft;
+			});
+
+			timelineEl.addEventListener('keydown', function (e) {
+				e.preventDefault();
+			});
 		}
 
 		var scrollIntervalPromise = null;
@@ -678,32 +684,23 @@
 			}
 		}
 
-		function bindScrollMouseEvent(el, step) {
+		function bindScrollEvent(el, step, eventPrefix) {
 			el.addEventListener(
 				'mousedown',
-				function () {
+				function (e) {
 					cancelScrollIntervalPromise();
 					scrollIntervalPromise = $interval(function () {
-						vm.scroll(step);
+						vm.scroll(angular.isFunction(step) ? step(e) : step);
 					}, 150);
 				},
 				false
 			);
-			el.addEventListener(
-				'mouseup',
-				function () {
-					cancelScrollIntervalPromise();
-				},
-				false
-			);
-			el.addEventListener(
-				'mouseleave',
-				function () {
-					cancelScrollIntervalPromise();
-				},
-				false
-			);
+			el.addEventListener('mouseup', cancelScrollIntervalPromise, false);
+			el.addEventListener('mouseleave', cancelScrollIntervalPromise, false);
 		}
+
+
+
 		function initScrollState() {
 			$timeout(function () {
 				var shiftViewportEl = $element[0].querySelector('.shift').parentElement;
