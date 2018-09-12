@@ -1462,7 +1462,7 @@ teams-time-picker.ng-invalid-dst {
 				.shift-layer {
 					height: 40px;
 
-					&.selected {
+					&.selected:not(.non-resizable) {
 						&::before, &::after {
 							content: " ";
 							position: absolute;

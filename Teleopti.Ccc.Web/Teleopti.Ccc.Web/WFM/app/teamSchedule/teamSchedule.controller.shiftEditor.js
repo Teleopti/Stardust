@@ -209,8 +209,7 @@
 		}
 
 		vm.isNotResizable = function (shiftLayer) {
-			return vm.selectedShiftLayers.indexOf(shiftLayer) < 0
-				|| !!shiftLayer.IsPersonalActivity
+			return !!shiftLayer.IsPersonalActivity
 				|| !!shiftLayer.IsMeeting
 				|| !!shiftLayer.IsIntradayAbsence
 				|| !!shiftLayer.IsOvertime;
@@ -257,6 +256,10 @@
 			$scope.$apply();
 		}
 
+		function canNotFillWith(layer) {
+			return layer.FloatOnTop || vm.isNotResizable(layer);
+		}
+
 		function isOnDesktop() {
 			var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 			return !(!!userAgent.match(/ipad|iphone|ipod/i) || !!userAgent.match(/android/i));
@@ -265,7 +268,7 @@
 		function bindResizeLayerEvent() {
 			interact('.shift-layer')
 				.resizable({
-					allowFrom: '.selected',
+					allowFrom: '.selected:not(.non-resizable)',
 					edges: { left: true, right: true },
 					restrictSize: {
 						min: { width: 5 }
@@ -415,7 +418,9 @@
 			var doUpdateBeside = isChangingStart ? updateEnd : updateStart;
 
 			if (besideLayer.FloatOnTop) {
-				if (secondLayer && !isSameType(secondLayer, selectedLayer)) {
+				if (secondLayer
+					&& !isSameType(secondLayer, selectedLayer)
+					&& !canNotFillWith(secondLayer)) {
 					var startTime = isChangingStart ? mergedBesideLayer.End : dateTime;
 					var endTime = isChangingStart ? dateTime : mergedBesideLayer.Start;
 					var insertIndex = isChangingStart ? selectedIndex : selectedIndex + 1;
