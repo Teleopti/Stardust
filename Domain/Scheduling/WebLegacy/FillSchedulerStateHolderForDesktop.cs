@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -30,9 +31,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			var agentSkills = _skillsOnAgentsProvider.Execute(schedulerStateHolderTo.SchedulingResultState.LoadedAgents, period); //can be optimized to only selected agents
 			foreach (var reducedSkill in agentSkills.Except(schedulerStateHolderTo.SchedulingResultState.Skills))
 			{
-				if (orgSkillDays.TryGetValue(reducedSkill, out var orgSkillDay))
+				if (orgSkillDays.TryGetValue(reducedSkill, out var reducedSkillDays))
 				{
-					schedulerStateHolderTo.SchedulingResultState.SkillDays[reducedSkill] = orgSkillDay;	
+					var newSkillDays = new List<ISkillDay>();
+					foreach (var skillDay in reducedSkillDays)
+					{
+						var skillDataPeriod = new SkillDataPeriod(ServiceAgreement.DefaultValues(), new SkillPersonData(), skillDay.CurrentDate.ToDateTimePeriod(reducedSkill.TimeZone))
+							{ManualAgents = 0};
+						var newSkillDay = new SkillDay(skillDay.CurrentDate, reducedSkill, skillDay.Scenario, skillDay.WorkloadDayCollection, new List<ISkillDataPeriod> {skillDataPeriod});
+						newSkillDays.Add(newSkillDay);
+					}
+
+					var skillDayCalculator = new SkillDayCalculator(reducedSkill, newSkillDays, period);
+					foreach (var newSkillDay in newSkillDays)
+					{
+						newSkillDay.SkillDayCalculator = skillDayCalculator;
+					}
+					schedulerStateHolderTo.SchedulingResultState.SkillDays[reducedSkill] = newSkillDays;
 				}
 			}
 		}

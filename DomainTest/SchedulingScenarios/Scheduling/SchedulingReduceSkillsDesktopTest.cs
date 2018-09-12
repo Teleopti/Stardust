@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(canBeScheduled);
 		}
 
-		[Test, Ignore("To be fixed")]
+		[Test]
 		public void ShouldNotPlaceShiftOnReducedSkill()
 		{
 			MergeIslandsSizeLimit.TurnOff_UseOnlyFromTest();
