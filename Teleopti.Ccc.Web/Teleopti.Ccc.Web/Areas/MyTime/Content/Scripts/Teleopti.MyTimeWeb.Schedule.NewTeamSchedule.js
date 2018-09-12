@@ -556,6 +556,7 @@
 		vm.isAgentScheduleLoaded(false);
 		visibleAgentsIndexRange.start = 0;
 		visibleAgentsIndexRange.end = 0;
+		$('.left-filling-block').width(0);
 
 		var dateStr =
 			(momentDate && momentDate.format('YYYY/MM/DD')) ||
