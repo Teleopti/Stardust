@@ -17,39 +17,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 	{
 		private readonly DesktopContext _desktopContext;
 		private readonly SkillsOnAgentsProvider _skillsOnAgentsProvider;
+		private readonly AddReducedSkillDaysToStateHolder _addReducedSkillDaysToStateHolder;
 
-		public FillSchedulerStateHolderForDesktop(DesktopContext desktopContext, PersonalSkillsProvider personalSkillsProvider, SkillsOnAgentsProvider skillsOnAgentsProvider) 
+		public FillSchedulerStateHolderForDesktop(DesktopContext desktopContext, PersonalSkillsProvider personalSkillsProvider, SkillsOnAgentsProvider skillsOnAgentsProvider, AddReducedSkillDaysToStateHolder addReducedSkillDaysToStateHolder) 
 			: base(desktopContext, personalSkillsProvider)
 		{
 			_desktopContext = desktopContext;
 			_skillsOnAgentsProvider = skillsOnAgentsProvider;
+			_addReducedSkillDaysToStateHolder = addReducedSkillDaysToStateHolder;
 		}
 		
 		protected override void AddSkillDaysForReducedSkills(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
 		{
-			var orgSkillDays = _desktopContext.CurrentContext().SchedulerStateHolderFrom.SchedulingResultState.SkillDays;
 			var agentSkills = _skillsOnAgentsProvider.Execute(schedulerStateHolderTo.SchedulingResultState.LoadedAgents, period); //can be optimized to only selected agents
-			foreach (var reducedSkill in agentSkills.Except(schedulerStateHolderTo.SchedulingResultState.Skills))
-			{
-				if (orgSkillDays.TryGetValue(reducedSkill, out var reducedSkillDays))
-				{
-					var newSkillDays = new List<ISkillDay>();
-					foreach (var skillDay in reducedSkillDays)
-					{
-						var skillDataPeriod = new SkillDataPeriod(ServiceAgreement.DefaultValues(), new SkillPersonData(), skillDay.CurrentDate.ToDateTimePeriod(reducedSkill.TimeZone))
-							{ManualAgents = 0};
-						var newSkillDay = new SkillDay(skillDay.CurrentDate, reducedSkill, skillDay.Scenario, skillDay.WorkloadDayCollection, new List<ISkillDataPeriod> {skillDataPeriod});
-						newSkillDays.Add(newSkillDay);
-					}
+			var reducedSkills = agentSkills.Except(schedulerStateHolderTo.SchedulingResultState.Skills);
+			var skillDaysContainingReducedSkills = _desktopContext.CurrentContext().SchedulerStateHolderFrom.SchedulingResultState.SkillDays;
 
-					var skillDayCalculator = new SkillDayCalculator(reducedSkill, newSkillDays, period);
-					foreach (var newSkillDay in newSkillDays)
-					{
-						newSkillDay.SkillDayCalculator = skillDayCalculator;
-					}
-					schedulerStateHolderTo.SchedulingResultState.SkillDays[reducedSkill] = newSkillDays;
-				}
-			}
+			_addReducedSkillDaysToStateHolder.Execute(schedulerStateHolderTo, period, reducedSkills, skillDaysContainingReducedSkills);
 		}
 	}
 	

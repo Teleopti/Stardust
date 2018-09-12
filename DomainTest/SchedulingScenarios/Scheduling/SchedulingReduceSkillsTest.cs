@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[TestCase(8, 16, 8, 16, true)]
 		[TestCase(0, 12, 13, 24, false)]
 		[TestCase(0, 12, 0, 12, false)]
-		[Ignore("To be fixed #76176")]
 		public void ShouldHandleDifferentOpenHoursWhenReducingSkills(int skill1Start, int skill1End, int skill2Start, int skill2End, bool canBeScheduled)
 		{
 			MergeIslandsSizeLimit.TurnOff_UseOnlyFromTest();
