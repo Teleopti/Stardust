@@ -11,6 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
+	[InstancePerLifetimeScope]
 	public class WebIntradayOptimizationStardustHandler : IRunOnStardust, IHandleEvent<IntradayOptimizationOnStardustWasOrdered>
 	{
 		private readonly IJobResultRepository _jobResultRepository;

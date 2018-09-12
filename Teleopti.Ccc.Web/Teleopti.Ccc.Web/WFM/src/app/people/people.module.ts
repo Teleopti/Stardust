@@ -10,14 +10,7 @@ import {
 	TitleBarComponent,
 	WorkspaceComponent
 } from './components';
-import {
-	LogonInfoService,
-	NavigationService,
-	RolesService,
-	SearchOverridesService,
-	SearchService,
-	WorkspaceService
-} from './services';
+import { NavigationService, RolesService, SearchOverridesService, SearchService, WorkspaceService } from './services';
 
 @NgModule({
 	declarations: [
@@ -36,7 +29,6 @@ import {
 		SearchService,
 		SearchOverridesService,
 		NavigationService,
-		LogonInfoService,
 		TranslateModule
 	],
 	exports: [],

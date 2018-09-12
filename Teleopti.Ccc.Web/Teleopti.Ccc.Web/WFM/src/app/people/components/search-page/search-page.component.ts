@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
+import { Person, Role } from '../../../shared/types';
 import {
 	COLUMNS,
 	DIRECTION,
@@ -11,7 +12,6 @@ import {
 	SearchService,
 	WorkspaceService
 } from '../../services';
-import { Person, Role } from '../../types';
 import { SearchPageService } from './search-page.service';
 
 @Component({

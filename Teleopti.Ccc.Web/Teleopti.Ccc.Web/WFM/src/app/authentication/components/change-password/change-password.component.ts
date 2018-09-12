@@ -2,6 +2,8 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd';
+import { Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { PasswordService } from '../../services/password.service';
 
 export class MatchingPasswordValidation {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -10,11 +11,36 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
-	public class FillSchedulerStateHolderForDesktop : FillSchedulerStateHolder
+	[RemoveMeWithToggle("Merge with base class", Toggles.ResourcePlanner_ReducingSkillsDifferentOpeningHours_76176)]
+	public class FillSchedulerStateHolderForDesktop : FillSchedulerStateHolderForDesktopOLD
+	{
+		private readonly DesktopContext _desktopContext;
+		private readonly AddReducedSkillDaysToStateHolder _addReducedSkillDaysToStateHolder;
+		private readonly ReducedSkillsProvider _reducedSkillsProvider;
+
+		public FillSchedulerStateHolderForDesktop(DesktopContext desktopContext, PersonalSkillsProvider personalSkillsProvider, 
+			AddReducedSkillDaysToStateHolder addReducedSkillDaysToStateHolder, ReducedSkillsProvider reducedSkillsProvider) 
+			: base(desktopContext, personalSkillsProvider)
+		{
+			_desktopContext = desktopContext;
+			_addReducedSkillDaysToStateHolder = addReducedSkillDaysToStateHolder;
+			_reducedSkillsProvider = reducedSkillsProvider;
+		}
+		
+		protected override void AddSkillDaysForReducedSkills(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
+		{
+			var skillDaysContainingReducedSkills = _desktopContext.CurrentContext().SchedulerStateHolderFrom.SchedulingResultState.SkillDays;
+			var reducedSkills = _reducedSkillsProvider.Execute(schedulerStateHolderTo, period);
+
+			_addReducedSkillDaysToStateHolder.Execute(schedulerStateHolderTo, period, reducedSkills, skillDaysContainingReducedSkills);
+		}
+	}
+	
+	public class FillSchedulerStateHolderForDesktopOLD : FillSchedulerStateHolder
 	{
 		private readonly DesktopContext _desktopContext;
 
-		public FillSchedulerStateHolderForDesktop(DesktopContext desktopContext, PersonalSkillsProvider personalSkillsProvider) : base(personalSkillsProvider)
+		public FillSchedulerStateHolderForDesktopOLD(DesktopContext desktopContext, PersonalSkillsProvider personalSkillsProvider) : base(personalSkillsProvider)
 		{
 			_desktopContext = desktopContext;
 		}
@@ -40,6 +66,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			schedulerStateHolderTo.SchedulingResultState.AddSkills(skills.ToArray());
 		}
 
+		protected override void AddSkillDaysForReducedSkills(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
+		{
+		}
+
 		protected override void FillBpos(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<ISkill> skills, DateOnlyPeriod period)
 		{
 			var stateHolderFrom = _desktopContext.CurrentContext().SchedulerStateHolderFrom;
@@ -60,14 +90,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		protected override void PreFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
 		{
+			var currContext = _desktopContext.CurrentContext();
 			schedulerStateHolderTo.SchedulingResultState.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
-			var dayOffTemplate = _desktopContext.CurrentContext().SchedulerStateHolderFrom.CommonStateHolder.ActiveDayOffs.First();
+			var dayOffTemplate = currContext.SchedulerStateHolderFrom.CommonStateHolder.ActiveDayOffs.First();
 			schedulerStateHolderTo.CommonStateHolder.SetDayOffTemplate(dayOffTemplate);
-		}
-
-		protected override void PostFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
-		{
-			schedulerStateHolderTo.RequestedPeriod = _desktopContext.CurrentContext().SchedulerStateHolderFrom.RequestedPeriod;
+			schedulerStateHolderTo.RequestedPeriod = currContext.SchedulerStateHolderFrom.RequestedPeriod;
 			schedulerStateHolderTo.ConsiderShortBreaks = false; //TODO check if this is the wanted behaviour in other cases than intraday optimization
 		}
 

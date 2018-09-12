@@ -98,6 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public virtual JsonResult ChangePassword(ChangePasswordViewModel model)
 		{
 			var loggedOnUser = _loggedOnUser.CurrentUser();
+			
 			var ret = new ChangePasswordResultInfo();
 			try
 			{

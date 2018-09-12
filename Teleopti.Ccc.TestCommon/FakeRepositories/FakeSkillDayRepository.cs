@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -97,6 +98,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
+		[MethodImpl(MethodImplOptions.Synchronized)] //to prevent modifying same skilldays on multiple threads (real repo have different instances)
 		public virtual ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
 		{
 			if (JustGiveMeMySkillDays) return _skillDays;

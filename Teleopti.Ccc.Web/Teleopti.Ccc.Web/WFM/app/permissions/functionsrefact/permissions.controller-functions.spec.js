@@ -27,8 +27,6 @@ describe('component: permissionsTree', function () {
 		
 		vm = $controller('PermissionsController');
 
-		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
-
 		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Functions').respond(function (method, url, data, headers) {
 			response = angular.fromJson(data);
 			return 200;

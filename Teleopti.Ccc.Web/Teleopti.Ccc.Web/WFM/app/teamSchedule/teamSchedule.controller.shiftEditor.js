@@ -64,18 +64,12 @@
 		signalRSVC,
 		NoticeService
 	) {
-		var doNotToggleSelectionAfterResizeEnd;
+		var doNotToggleSelectionAfterResizeEnd = false;
 
 		var vm = this;
 		var timeLineTimeRange = {
-			Start: moment
-				.tz(vm.date, vm.timezone)
-				.add(-1, 'days')
-				.hours(0),
-			End: moment
-				.tz(vm.date, vm.timezone)
-				.add(3, 'days')
-				.hours(0)
+			Start: moment.tz(vm.date, vm.timezone).add(-1, 'days').hours(0),
+			End: moment.tz(vm.date, vm.timezone).add(3, 'days').hours(0)
 		};
 
 		vm.showScrollLeftButton = false;
@@ -86,7 +80,6 @@
 		vm.trackId = guidgenerator.newGuid();
 		vm.isSaving = false;
 		vm.selectedShiftLayers = [];
-		vm.isResizing = false;
 
 		vm.$onInit = function () {
 			getSchedule();
@@ -104,11 +97,10 @@
 
 			subscribeToScheduleChange();
 
-			$element[0].querySelector('.timeline').addEventListener('touchmove', function () {
-				var timelineViewportEl = $element[0].querySelector('.timeline').parentElement;
-				var shiftViewportEl = $element[0].querySelector('.shift').parentElement;
-				shiftViewportEl.scrollLeft = timelineViewportEl.scrollLeft;
-			});
+
+
+
+			bindResizeLayerEvent();
 		};
 
 		vm.gotoDayView = function () {
@@ -130,15 +122,14 @@
 
 		vm.toggleSelection = function (shiftLayer, $event) {
 			if (vm.isNotAllowedToChange(shiftLayer)) return;
-			if (doNotToggleSelectionAfterResizeEnd) {
+
+			if (vm.isOnDesktop && doNotToggleSelectionAfterResizeEnd) {
 				doNotToggleSelectionAfterResizeEnd = false;
+				$event.preventDefault();
 				return;
 			}
 			vm.selectedShiftLayers = vm.selectedShiftLayers.indexOf(shiftLayer) === -1 ? [shiftLayer] : [];
 			vm.selectedActivitiyId = vm.getMergedShiftLayer(shiftLayer).ActivityId;
-			vm.isResizing = !!vm.selectedShiftLayers.length ? true : false;
-
-			bindResizeEvent(shiftLayer, $event.target);
 		};
 
 		vm.useLighterBorder = function (shiftLayer) {
@@ -220,65 +211,67 @@
 				|| !!shiftLayer.IsOvertime;
 		}
 
-		vm.isOnDesktop = function () {
+		vm.isOnDesktop = isOnDesktop();
+
+		vm.onResizeMove = function (event) {
+			var left = event.deltaRect.left;
+			var width = event.rect.width;
+			var index = parseInt(event.target.attributes.index.value);
+
+			var curShiftLayer = vm.scheduleVm.ShiftLayers[index];
+
+			var mergedShiftLayer = vm.getMergedShiftLayer(curShiftLayer);
+			var lastWidth = mergedShiftLayer.Width;
+			var translateX = (mergedShiftLayer.TranslateX || 0) + left;
+			resizeLayer(curShiftLayer, translateX, width);
+
+			var isChangingStart = left != 0;
+			scrollToProperPosition(curShiftLayer, translateX, width, lastWidth, isChangingStart);
+
+			$scope.$apply();
+		};
+
+		vm.onResizeEnd = function (event) {
+			var curShiftLayer = vm.scheduleVm.ShiftLayers[parseInt(event.target.attributes.index.value)];
+			var mergedShiftLayer = vm.getMergedShiftLayer(curShiftLayer);
+			var translateX = round5(mergedShiftLayer.TranslateX);
+			var startMinutes = mergedShiftLayer.Left + translateX;
+			var startTime = timeLineTimeRange.Start.clone().add(startMinutes, 'minutes');
+
+			var isChangingStart = serviceDateFormatHelper.getDateTime(startTime) !== mergedShiftLayer.Start;
+
+			if (isChangingStart) {
+				redrawLayers(curShiftLayer, startTime, true);
+			} else {
+				var width = round5(mergedShiftLayer.Width);
+				var endTime = timeLineTimeRange.Start.clone().add(startMinutes + width, 'minutes');
+				redrawLayers(curShiftLayer, endTime, false);
+			}
+
+			doNotToggleSelectionAfterResizeEnd = true;
+			$scope.$apply();
+		}
+
+		function canNotFillWith(layer) {
+			return layer.FloatOnTop || vm.isNotResizable(layer);
+		}
+
+		function isOnDesktop() {
 			var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 			return !(!!userAgent.match(/ipad|iphone|ipod/i) || !!userAgent.match(/android/i));
 		}
 
-		function bindResizeEvent(shiftLayer, shiftLayerEl) {
-			!vm.isNotResizable(shiftLayer) &&
-				!shiftLayer.interact &&
-				(shiftLayer.interact = interact(shiftLayerEl))
-					.resizable({
-						edges: { left: true, right: true },
-						restrictSize: {
-							min: { width: 5 }
-						}
-					})
-					.on('resizestart', function (event) {
-						if (vm.selectedShiftLayers.indexOf(shiftLayer) < 0) {
-							event.preventDefault();
-						}
-					})
-					.on('resizemove', function (event) {
-						var left = event.deltaRect.left;
-						var width = event.rect.width;
-
-						var mergedShiftLayer = vm.getMergedShiftLayer(shiftLayer);
-						var lastWidth = mergedShiftLayer.Width;
-						resizeLayer(shiftLayer, (mergedShiftLayer.TranslateX || 0) + left, width);
-						$scope.$apply();
-
-						shiftLayer.isChangingStart = left != 0;
-						scrollToProperPosition(shiftLayer, left, width, lastWidth);
-
-					})
-					.on('resizeend', function (event) {
-						var mergedShiftLayer = vm.getMergedShiftLayer(shiftLayer);
-						var translateX = round5(mergedShiftLayer.TranslateX);
-						var startMinutes = mergedShiftLayer.Left + translateX;
-						var startTime = timeLineTimeRange.Start.clone().add(startMinutes, 'minutes');
-
-						shiftLayer.isChangingStart = serviceDateFormatHelper.getDateTime(startTime) !== mergedShiftLayer.Start;
-
-						if (shiftLayer.isChangingStart) {
-							redrawLayers(shiftLayer, startTime, true);
-						} else {
-							var width = round5(mergedShiftLayer.Width);
-							var endTime = timeLineTimeRange.Start.clone().add(startMinutes + width, 'minutes');
-							redrawLayers(shiftLayer, endTime, false);
-						}
-
-						doNotToggleSelectionAfterResizeEnd = true;
-						$scope.$apply();
-
-						if (vm.selectedShiftLayers.length > 1) {
-							var shiftLayerEls = $element[0].querySelectorAll('.shift-layer')
-							vm.selectedShiftLayers.forEach(function (sl) {
-								bindResizeEvent(sl, shiftLayerEls[vm.scheduleVm.ShiftLayers.indexOf(sl)]);
-							});
-						}
-					});
+		function bindResizeLayerEvent() {
+			interact('.shift-layer')
+				.resizable({
+					allowFrom: '.selected:not(.non-resizable)',
+					edges: { left: true, right: true },
+					restrictSize: {
+						min: { width: 5 }
+					}
+				})
+				.on('resizemove', vm.onResizeMove)
+				.on('resizeend', vm.onResizeEnd);
 		}
 
 		function isExceedMaxLength(startTime, endTime) {
@@ -323,6 +316,7 @@
 			else if (index !== endIndex) {
 				if (isLayerShorten) {
 					if (!fillWithLayer(originalShiftLayers, index, mergedSelectedShiftLayer, dateTime, isChangingStart)) {
+
 						actualDateTime = mergedSelectedShiftLayer[timeField];
 					}
 				} else {
@@ -421,13 +415,17 @@
 			var doUpdateBeside = isChangingStart ? updateEnd : updateStart;
 
 			if (besideLayer.FloatOnTop) {
-				if (secondLayer && !isSameType(secondLayer, selectedLayer)) {
+				if (secondLayer
+					&& !isSameType(secondLayer, selectedLayer)
+					&& !canNotFillWith(secondLayer)) {
 					var startTime = isChangingStart ? mergedBesideLayer.End : dateTime;
 					var endTime = isChangingStart ? dateTime : mergedBesideLayer.Start;
 					var insertIndex = isChangingStart ? selectedIndex : selectedIndex + 1;
 					createLayer(shiftLayers, secondLayer, startTime, endTime, insertIndex);
 					return true;
 				}
+
+				if (!secondLayer && besideLayer.IsOvertime) return true;
 			}
 			else if (!isSameType(mergedBesideLayer, selectedLayer)) {
 				doUpdateBeside(besideLayer, dateTime);
@@ -478,13 +476,10 @@
 				moment.tz(endTime, vm.timezone).format('L LT');
 		}
 
-		function resizeLayer(shiftLayer, x, width, afterResize) {
+		function resizeLayer(shiftLayer, x, width) {
 			shiftLayer.Current = shiftLayer.Current || {};
-
 			shiftLayer.Current.Width = width;
 			shiftLayer.Current.TranslateX = x || 0;
-
-			afterResize && afterResize(x, width, shiftLayer.Left);
 		}
 
 		function updateStart(layer, dateTime) {
@@ -545,16 +540,21 @@
 
 			vm.isLoading = true;
 			TeamSchedule.getSchedules(vm.date, [vm.personId]).then(function (data) {
+				vm.isLoading = false;
+
 				vm.scheduleVm = ShiftEditorViewModelFactory.CreateSchedule(vm.date, vm.timezone, data.Schedules[0]);
-				vm.scheduleVm.ShiftLayers &&
+				vm.isInDifferentTimezone = vm.scheduleVm.Timezone !== vm.timezone;
+
+				if (!!vm.scheduleVm.ShiftLayers) {
 					vm.scheduleVm.ShiftLayers.forEach(function (layer) {
 						layer.Width = getShiftLayerWidth(layer);
 						layer.Left = getShiftLayerLeft(layer);
 					});
-				vm.isInDifferentTimezone = vm.scheduleVm.Timezone !== vm.timezone;
-				initAndBindScrollEvent();
-				vm.isLoading = false;
+
+					initAndBindScrollEvent();
+				}
 			});
+
 		}
 
 		function getShiftLayerWidth(layer) {
@@ -662,8 +662,18 @@
 			initScrollState();
 			angular.element($window).bind('resize', initScrollState);
 
-			bindScrollMouseEvent(timelineEl.querySelector('.left-scroll'), -20);
-			bindScrollMouseEvent(timelineEl.querySelector('.right-scroll'), 20);
+			bindScrollEvent(timelineEl.querySelector('.left-scroll'), -20);
+			bindScrollEvent(timelineEl.querySelector('.right-scroll'), 20);
+
+			timelineEl.addEventListener('touchmove', function () {
+				var timelineViewportEl = $element[0].querySelector('.timeline').parentElement;
+				var shiftViewportEl = $element[0].querySelector('.shift').parentElement;
+				shiftViewportEl.scrollLeft = timelineViewportEl.scrollLeft;
+			});
+
+			timelineEl.addEventListener('keydown', function (e) {
+				e.preventDefault();
+			});
 		}
 
 		var scrollIntervalPromise = null;
@@ -674,32 +684,23 @@
 			}
 		}
 
-		function bindScrollMouseEvent(el, step) {
+		function bindScrollEvent(el, step, eventPrefix) {
 			el.addEventListener(
 				'mousedown',
-				function () {
+				function (e) {
 					cancelScrollIntervalPromise();
 					scrollIntervalPromise = $interval(function () {
-						vm.scroll(step);
+						vm.scroll(angular.isFunction(step) ? step(e) : step);
 					}, 150);
 				},
 				false
 			);
-			el.addEventListener(
-				'mouseup',
-				function () {
-					cancelScrollIntervalPromise();
-				},
-				false
-			);
-			el.addEventListener(
-				'mouseleave',
-				function () {
-					cancelScrollIntervalPromise();
-				},
-				false
-			);
+			el.addEventListener('mouseup', cancelScrollIntervalPromise, false);
+			el.addEventListener('mouseleave', cancelScrollIntervalPromise, false);
 		}
+
+
+
 		function initScrollState() {
 			$timeout(function () {
 				var shiftViewportEl = $element[0].querySelector('.shift').parentElement;
@@ -729,10 +730,10 @@
 			};
 		}
 
-		function scrollToProperPosition(shiftLayer, left, width, lastWidth) {
+		function scrollToProperPosition(shiftLayer, translateX, width, lastWidth, isChangingStart) {
 			var viewportEl = $element[0].querySelector('.shift').parentElement;
 			var mergedShiftLayer = vm.getMergedShiftLayer(shiftLayer);
-			var start = mergedShiftLayer.TranslateX + left + shiftLayer.Left;
+			var start = translateX + shiftLayer.Left;
 			var end = start + width;
 			var viewingEnd = viewportEl.scrollLeft + viewportEl.clientWidth;
 
@@ -741,7 +742,7 @@
 
 			var shiftTimeRange = getShiftTimeRangeInMinutes();
 
-			if (shiftLayer.isChangingStart) {
+			if (isChangingStart) {
 				if ((isExtending && viewportEl.scrollLeft > start)
 					|| (!isExtending && shiftTimeRange.End > viewingEnd)) {
 					var step = isExtending ? changingWidth + 50 : changingWidth;

@@ -3,12 +3,10 @@ using System.Web.Http.Results;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.SkillGroupManagement;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -31,7 +29,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 		public FakeActivityRepository ActivityRepository;
 		public FakeUserUiCulture UserUiCulture;
 		public FakeUserCulture UserCulture;
-		
+		private const string dateFormatter = "yyyy-MM-dd";
+
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeUserUiCulture>().For<IUserUiCulture>();
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 		public void ShouldHandleSkillNotFound()
 		{
 			ScenarioRepository.Has("Default");
-			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpo(Guid.NewGuid(), Now.UtcDateTime(), Now.UtcDateTime().AddDays(1));
+			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpo(Guid.NewGuid(), Now.UtcDateTime().ToString(dateFormatter), Now.UtcDateTime().AddDays(1).ToString(dateFormatter));
 
 			result.Content.ErrorMessage.Should().Contain("skill");
 		}
@@ -57,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 		public void ShouldHandleEndDateBeforeStartDate()
 		{
 			ScenarioRepository.Has("Default");
-			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpo(Guid.NewGuid(), Now.UtcDateTime(), Now.UtcDateTime().AddDays(-1));
+			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpo(Guid.NewGuid(), Now.UtcDateTime().ToString(dateFormatter), Now.UtcDateTime().AddDays(-1).ToString(dateFormatter));
 
 			result.Content.ErrorMessage.Should().Contain(Resources.BpoExportPeriodStartDateBeforeEndDate);
 		}
@@ -67,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 		public void ShouldHandlePeriodBeingOutside()
 		{
 			ScenarioRepository.Has("Default");
-			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpo(Guid.NewGuid(), Now.UtcDateTime(), Now.UtcDateTime().AddDays(365));
+			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpo(Guid.NewGuid(), Now.UtcDateTime().ToString(dateFormatter), Now.UtcDateTime().AddDays(365).ToString(dateFormatter));
 
 			result.Content.ErrorMessage.Should().Contain(Resources.BpoOnlyExportPeriodBetweenDates.Substring(0,20));
 		}
@@ -78,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 			ScenarioRepository.Has("Default");
 			var activity = ActivityRepository.Has("Activity");
 			var skill = SkillRepository.Has("Phone", activity);
-			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpo(skill.Id.GetValueOrDefault(), Now.UtcDateTime(), Now.UtcDateTime().AddDays(1));
+			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpo(skill.Id.GetValueOrDefault(), Now.UtcDateTime().ToString(dateFormatter), Now.UtcDateTime().AddDays(1).ToString(dateFormatter));
 
 			result.Content.ErrorMessage.Should().Be.Empty();
 			result.Content.Content.Should().Be.Empty();
@@ -92,7 +91,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 			ScenarioRepository.Has("Default");
 			var activity = ActivityRepository.Has("Activity");
 			var skill = SkillRepository.Has("Phone", activity);
-			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpo(skill.Id.GetValueOrDefault(), Now.UtcDateTime().AddDays(-1), Now.UtcDateTime().AddDays(1));
+			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpo(skill.Id.GetValueOrDefault(), Now.UtcDateTime().AddDays(-1).ToString(dateFormatter), Now.UtcDateTime().AddDays(1).ToString(dateFormatter));
 
 			result.Content.ErrorMessage.Should().Contain("2018-04-24");
 			result.Content.Content.Should().Be.NullOrEmpty();
@@ -102,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 		public void ShouldHandleSkillAreaNotFound()
 		{
 			ScenarioRepository.Has("Default");
-			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpoForSkillArea(Guid.NewGuid(), Now.UtcDateTime(), Now.UtcDateTime().AddDays(1));
+			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpoForSkillArea(Guid.NewGuid(), Now.UtcDateTime().ToString(dateFormatter), Now.UtcDateTime().AddDays(1).ToString(dateFormatter));
 
 			result.Content.ErrorMessage.Should().Contain("skill area");
 		}
@@ -112,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 		public void ShouldHandleEndDateBeforeStartDateForSkillArea()
 		{
 			ScenarioRepository.Has("Default");
-			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpoForSkillArea(Guid.NewGuid(), Now.UtcDateTime(), Now.UtcDateTime().AddDays(-1));
+			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpoForSkillArea(Guid.NewGuid(), Now.UtcDateTime().ToString(dateFormatter), Now.UtcDateTime().AddDays(-1).ToString(dateFormatter));
 
 			result.Content.ErrorMessage.Should().Contain(Resources.BpoExportPeriodStartDateBeforeEndDate);
 		}
@@ -122,7 +121,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 		public void ShouldHandlePeriodBeingOutsideForSkillArea()
 		{
 			ScenarioRepository.Has("Default");
-			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpoForSkillArea(Guid.NewGuid(), Now.UtcDateTime(), Now.UtcDateTime().AddDays(365));
+			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpoForSkillArea(Guid.NewGuid(), Now.UtcDateTime().ToString(dateFormatter), Now.UtcDateTime().AddDays(365).ToString(dateFormatter));
 
 			result.Content.ErrorMessage.Should().Contain(Resources.BpoOnlyExportPeriodBetweenDates.Substring(0, 20));
 		}
@@ -137,7 +136,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 			skillGroup.Skills = new[] { new SkillInIntraday() { Id = skill.Id.GetValueOrDefault() } };
 			skillGroup.SetId(Guid.NewGuid());
 			SkillGroupRepository.Add(skillGroup);
-			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpoForSkillArea(skillGroup.Id.GetValueOrDefault(), Now.UtcDateTime(), Now.UtcDateTime().AddDays(1));
+			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpoForSkillArea(skillGroup.Id.GetValueOrDefault(), Now.UtcDateTime().ToString(dateFormatter), Now.UtcDateTime().AddDays(1).ToString(dateFormatter));
 
 			result.Content.ErrorMessage.Should().Be.Empty();
 			result.Content.Content.Should().Be.Empty();
@@ -153,7 +152,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 			skillGroup.Skills = new[] {new SkillInIntraday(){Id = skill.Id.GetValueOrDefault()}};
 			skillGroup.SetId(Guid.NewGuid());
 			SkillGroupRepository.Add(skillGroup);
-			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpoForSkillArea(skillGroup.Id.GetValueOrDefault(), Now.UtcDateTime(), Now.UtcDateTime().AddDays(1));
+			
+			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpoForSkillArea(skillGroup.Id.GetValueOrDefault(), Now.UtcDateTime().ToString(dateFormatter), Now.UtcDateTime().AddDays(1).ToString(dateFormatter));
 
 			result.Content.ErrorMessage.Should().Be.Empty();
 			result.Content.Content.Should().Be.Empty();
@@ -167,9 +167,65 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 			ScenarioRepository.Has("Default");
 			var activity = ActivityRepository.Has("Activity");
 			var skill = SkillRepository.Has("Phone", activity);
-			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpoForSkillArea(skill.Id.GetValueOrDefault(), Now.UtcDateTime().AddDays(-1), Now.UtcDateTime().AddDays(1));
+			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpoForSkillArea(skill.Id.GetValueOrDefault(), Now.UtcDateTime().AddDays(-1).ToString(dateFormatter), Now.UtcDateTime().AddDays(1).ToString(dateFormatter));
 
 			result.Content.ErrorMessage.Should().Contain("2018-04-24");
+			result.Content.Content.Should().Be.NullOrEmpty();
+		}
+
+		[Test]
+		public void ShouldFailIfStartDateIsInvalidFormatForSkillArea()
+		{
+			UserCulture.IsSwedish();
+			Now.Is("2018-04-24 14:30");
+			ScenarioRepository.Has("Default");
+			var activity = ActivityRepository.Has("Activity");
+			var skill = SkillRepository.Has("Phone", activity);
+			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpoForSkillArea(skill.Id.GetValueOrDefault(),"2015-30-320", Now.UtcDateTime().AddDays(1).ToString(dateFormatter));
+
+			result.Content.ErrorMessage.Should().Contain("The date formart is invalid");
+			result.Content.Content.Should().Be.NullOrEmpty();
+		}
+
+		[Test]
+		public void ShouldFailIfEndDateIsInvalidFormatForSkillArea()
+		{
+			UserCulture.IsSwedish();
+			Now.Is("2018-04-24 14:30");
+			ScenarioRepository.Has("Default");
+			var activity = ActivityRepository.Has("Activity");
+			var skill = SkillRepository.Has("Phone", activity);
+			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpoForSkillArea(skill.Id.GetValueOrDefault(),  Now.UtcDateTime().AddDays(1).ToString(dateFormatter), "2019-30-320");
+
+			result.Content.ErrorMessage.Should().Contain("The date formart is invalid");
+			result.Content.Content.Should().Be.NullOrEmpty();
+		}
+
+		[Test]
+		public void ShouldFailIfStartDateIsInvalidFormatForSkill()
+		{
+			UserCulture.IsSwedish();
+			Now.Is("2018-04-24 14:30");
+			ScenarioRepository.Has("Default");
+			var activity = ActivityRepository.Has("Activity");
+			var skill = SkillRepository.Has("Phone", activity);
+			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpo(skill.Id.GetValueOrDefault(), "2015-30-320", Now.UtcDateTime().AddDays(1).ToString(dateFormatter));
+
+			result.Content.ErrorMessage.Should().Contain("The date formart is invalid");
+			result.Content.Content.Should().Be.NullOrEmpty();
+		}
+
+		[Test]
+		public void ShouldFailIfEndDateIsInvalidFormatForSkill()
+		{
+			UserCulture.IsSwedish();
+			Now.Is("2018-04-24 14:30");
+			ScenarioRepository.Has("Default");
+			var activity = ActivityRepository.Has("Activity");
+			var skill = SkillRepository.Has("Phone", activity);
+			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpo(skill.Id.GetValueOrDefault(), Now.UtcDateTime().AddDays(1).ToString(dateFormatter), "2019-30-320");
+
+			result.Content.ErrorMessage.Should().Contain("The date formart is invalid");
 			result.Content.Content.Should().Be.NullOrEmpty();
 		}
 	}

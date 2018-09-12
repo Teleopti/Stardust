@@ -255,6 +255,7 @@ begin
 	from SkillDay sd
 	where 1=1
 	and not exists (select 1 from SkillDayTemplate sdt where sdt.id = sd.TemplateId)
+	and not exists (select 1 from WorkloadDay wd where sd.id = wd.Parent)
 	and sd.SkillDayDate < @KeepUntil
 
 	select @RowCount = @@rowcount
@@ -541,7 +542,6 @@ begin
 end
 
 --Requests
---AF: Need to remove top (50000) as this caused corrupt data...
 select @KeepUntil = dateadd(month,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'MonthsToKeepRequests'),getdate())
 
 update ShiftTradeRequest
@@ -579,6 +579,11 @@ where r.EndDateTime < @KeepUntil
 delete TextRequest
 from TextRequest a
 inner join Request r on r.id = a.Request
+where r.EndDateTime < @KeepUntil
+
+delete OvertimeRequest
+from OvertimeRequest o
+inner join Request r on r.id = o.Request
 where r.EndDateTime < @KeepUntil
 
 delete Request

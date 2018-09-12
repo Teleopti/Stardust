@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Interfaces.Domain;
+using IFormatProvider = System.IFormatProvider;
 
 namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 {
@@ -53,14 +54,26 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		}
 
 		[UnitOfWork, HttpGet, Route("api/staffing/exportStaffingDemand")]
-		public virtual IHttpActionResult ExportBpo(Guid skillId, DateTime exportStartDateTime, DateTime exportEndDateTime)
+		public virtual IHttpActionResult ExportBpo(Guid skillId, string exportStartDateTime, string exportEndDateTime)
 		{
 			var returnVal = new ExportStaffingReturnObject();
+			
+			var validationObject = getDateOnly(exportStartDateTime, out var dateOnlyStartDate);
+			if (!validationObject.Result)
+			{
+				returnVal.ErrorMessage = validationObject.ErrorMessage;
+				return Ok(returnVal);
+			}
 
-			var dateOnlyStartDate = new DateOnly(exportStartDateTime);
-			var dateOnlyEndDate = new DateOnly(exportEndDateTime);
-			var validationObject = _periodValidationProvider.ValidateExportBpoPeriod(dateOnlyStartDate, dateOnlyEndDate);
+			validationObject = getDateOnly(exportEndDateTime, out var dateOnlyEndDate);
+			if (!validationObject.Result)
+			{
+				returnVal.ErrorMessage = validationObject.ErrorMessage;
+				return Ok(returnVal);
+			}
 
+			validationObject = _periodValidationProvider.ValidateExportBpoPeriod(dateOnlyStartDate, dateOnlyEndDate);
+			
 			if (validationObject.Result == false)
 			{
 				returnVal.ErrorMessage = validationObject.ErrorMessage;
@@ -82,13 +95,25 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		}
 
 		[UnitOfWork, HttpGet, Route("api/staffing/exportStaffingDemandskillArea")]
-		public virtual IHttpActionResult ExportBpoForSkillArea(Guid skillAreaId, DateTime exportStartDateTime, DateTime exportEndDateTime)
+		public virtual IHttpActionResult ExportBpoForSkillArea(Guid skillAreaId, string exportStartDateTime, string exportEndDateTime)
 		{
 			var returnVal = new ExportStaffingReturnObject();
 
-			var dateOnlyStartDate = new DateOnly(exportStartDateTime);
-			var dateOnlyEndDate = new DateOnly(exportEndDateTime);
-			var validationObject = _periodValidationProvider.ValidateExportBpoPeriod(dateOnlyStartDate, dateOnlyEndDate);
+			var validationObject = getDateOnly(exportStartDateTime, out var dateOnlyStartDate);
+			if (!validationObject.Result)
+			{
+				returnVal.ErrorMessage = validationObject.ErrorMessage;
+				return Ok(returnVal);
+			}
+
+			validationObject = getDateOnly(exportEndDateTime, out var dateOnlyEndDate);
+			if (!validationObject.Result)
+			{
+				returnVal.ErrorMessage = validationObject.ErrorMessage;
+				return Ok(returnVal);
+			}
+
+			validationObject = _periodValidationProvider.ValidateExportBpoPeriod(dateOnlyStartDate, dateOnlyEndDate);
 
 			if (validationObject.Result == false)
 			{
@@ -110,6 +135,22 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			return Ok(returnVal);
 		}
 
+
+		private ExportStaffingValidationObject getDateOnly(string dateTimeString, out DateOnly dateOnly)
+		{
+			var validationObject = new ExportStaffingValidationObject { Result = true };
+			var dateFormatter = "yyyy-MM-dd";
+			dateOnly = DateOnly.MinValue;
+			if (DateTime.TryParseExact(dateTimeString,dateFormatter, CultureInfo.InvariantCulture, DateTimeStyles.None,out var dateTime))
+			{
+				dateOnly = new DateOnly(dateTime);
+				return validationObject;
+			}
+			validationObject.ErrorMessage = $"The date formart is invalid {dateTimeString}";
+			validationObject.Result = false;
+			return validationObject;
+		}
+		
 		[UnitOfWork,HttpGet, Route("api/staffing/activebpos")]
 		public virtual IHttpActionResult LoadAllActiveBpos()
 		{

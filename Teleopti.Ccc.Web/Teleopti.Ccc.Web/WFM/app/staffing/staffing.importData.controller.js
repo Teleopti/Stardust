@@ -313,11 +313,13 @@
 		}
 
 		function multiSkillExportIsEnabled() {
+			var startDate = moment(vm.exportPeriod.startDate).format("YYYY-MM-DD");
+			var endDate = moment(vm.exportPeriod.endDate).format("YYYY-MM-DD");
 			if (vm.selectedSkill != null) {
 				var request = staffingService.postFileExport.get({
 					skillId: vm.selectedSkill.Id,
-					exportStartDateTime: vm.exportPeriod.startDate,
-					exportEndDateTime: vm.exportPeriod.endDate
+					exportStartDateTime: startDate,
+					exportEndDateTime: endDate
 				});
 				request.$promise.then(function(response) {
 					vm.ErrorMessage = response.ErrorMessage;
@@ -327,8 +329,8 @@
 			} else {
 				var request = staffingService.postFileExportForSkillArea.get({
 					skillAreaId: vm.selectedSkillArea.Id,
-					exportStartDateTime: vm.exportPeriod.startDate,
-					exportEndDateTime: vm.exportPeriod.endDate
+					exportStartDateTime: startDate,
+					exportEndDateTime: endDate
 				});
 				request.$promise.then(function (response) {
 					vm.ErrorMessage = response.ErrorMessage;
@@ -343,11 +345,13 @@
 				vm.ErrorMessage = $translate.instant('BpoExportYouMustSelectASkill');
 				return;
 			}
+			var startDate = moment(vm.exportPeriod.startDate).format("YYYY-MM-DD");
+			var endDate = moment(vm.exportPeriod.endDate).format("YYYY-MM-DD");
 
 			var request = staffingService.postFileExport.get({
 				skillId: vm.selectedSkill.Id,
-				exportStartDateTime: vm.exportPeriod.startDate,
-				exportEndDateTime: vm.exportPeriod.endDate
+				exportStartDateTime: startDate,
+				exportEndDateTime: endDate
 			});
 			request.$promise.then(function (response) {
 				vm.ErrorMessage = response.ErrorMessage;

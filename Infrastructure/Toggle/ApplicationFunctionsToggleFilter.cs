@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -11,13 +10,11 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 	{
 		private readonly IApplicationFunctionsProvider _applicationFunctionsProvider;
 		private readonly IToggleManager _toggleManager;
-		private ICurrentDataSource _currentDataSource;
 
-		public ApplicationFunctionsToggleFilter(IApplicationFunctionsProvider applicationFunctionsProvider, IToggleManager toggleManager, ICurrentDataSource currentDataSource)
+		public ApplicationFunctionsToggleFilter(IApplicationFunctionsProvider applicationFunctionsProvider, IToggleManager toggleManager)
 		{
 			_applicationFunctionsProvider = applicationFunctionsProvider;
 			_toggleManager = toggleManager;
-			_currentDataSource = currentDataSource;
 		}
 
 		public AllFunctions FilteredFunctions()
@@ -25,46 +22,25 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			var functions = _applicationFunctionsProvider.AllFunctions();
 
 			hideRealTimeReports(functions);
-			if (!_toggleManager.IsEnabled(Toggles.WFM_Gamification_Permission_76546)) hideGamification(functions);
+			hideAppFunctionWithToggleOff(functions, DefinedRaptorApplicationFunctionForeignIds.ChatBot, Toggles.WFM_ChatBot_77547);
+			hideAppFunctionWithToggleOff(functions, DefinedRaptorApplicationFunctionForeignIds.Gamification, Toggles.WFM_Gamification_Permission_76546);
 			
-			hideBpoExchangeIfNotLicensed(functions);
+			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.BpoExchange);
+			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.ChatBot);
 			return functions;
 		}
 
 		private void hideRealTimeReports(AllFunctions functions)
 		{
-			if (_toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_AuditTrail_44006))
-			{
-				var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailReport);
-				if (foundFunction != null)
-				{
-					foundFunction.SetHidden();
-				}
-			}
-			if (!_toggleManager.IsEnabled(Toggles.WFM_AuditTrail_44006))
-			{
-				var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailWebReport);
-				if (foundFunction != null)
-				{
-					foundFunction.SetHidden();
-				}
-			}
-			if (_toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560))
-			{
-				var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.ScheduledTimePerActivityReport);
-				if (foundFunction != null)
-				{
-					foundFunction.SetHidden();
-				}
-			}
-			if (_toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_Scheduled_Time_vs_Target_45559))
-			{
-				var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.ScheduleTimeVersusTargetTimeReport);
-				if (foundFunction != null)
-				{
-					foundFunction.SetHidden();
-				}
-			}
+			hideAppFunctionWithToggleOn(functions, DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailReport,
+				Toggles.Report_Remove_Realtime_AuditTrail_44006);
+			hideAppFunctionWithToggleOff(functions, DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailWebReport,
+				Toggles.WFM_AuditTrail_44006);
+			hideAppFunctionWithToggleOn(functions, DefinedRaptorApplicationFunctionForeignIds.ScheduledTimePerActivityReport,
+				Toggles.Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560);
+			hideAppFunctionWithToggleOn(functions, DefinedRaptorApplicationFunctionForeignIds.ScheduleTimeVersusTargetTimeReport,
+				Toggles.Report_Remove_Realtime_Scheduled_Time_vs_Target_45559);
+
 			if (_toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_Scheduled_Time_vs_Target_45559)
 				&& _toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560)
 				&& _toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_AuditTrail_44006))
@@ -72,38 +48,32 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 				foreach (var function in functions.Functions)
 				{
 					var onlineReportNode = function.ChildFunctions.FirstOrDefault(x => x.Function.LocalizedFunctionDescription == Resources.OnlineReports);
-					if (onlineReportNode != null)
-					{
-						onlineReportNode.SetHidden();
-					}
+					onlineReportNode?.SetHidden();
 				}
 			}
 		}
 
-		private void hideBpoExchangeIfNotLicensed(AllFunctions functions)
+		private void hideIfNotLicensed(AllFunctions functions, string applicationFunctionForeignId)
 		{
-			var currentName = _currentDataSource.CurrentName();
-			var isLicenseAvailible = DefinedLicenseDataFactory.HasLicense(currentName) &&
-									 DefinedLicenseDataFactory.GetLicenseActivator(currentName).EnabledLicenseOptionPaths.Contains(
-										 DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersBpoExchange);
-			if (!isLicenseAvailible)
-			{
-				var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.BpoExchange);
-				if (foundFunction != null)
-				{
-					foundFunction.SetHidden();
-				}
-			}
-
-		}
-
-		private void hideGamification(AllFunctions functions)
-		{
-			var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.Gamification);
-			if (foundFunction != null)
+			var foundFunction = functions.FindByForeignId(applicationFunctionForeignId);
+			if (foundFunction!=null && !foundFunction.IsLicensed)
 			{
 				foundFunction.SetHidden();
 			}
+		}
+		
+		private void hideAppFunctionWithToggleOff(AllFunctions functions, string appFunction, Toggles toggle)
+		{
+			if (_toggleManager.IsEnabled(toggle)) return;
+			var foundFunction = functions.FindByForeignId(appFunction);
+			foundFunction?.SetHidden();
+		}
+
+		private void hideAppFunctionWithToggleOn(AllFunctions functions, string appFunction, Toggles toggle)
+		{
+			if (!_toggleManager.IsEnabled(toggle)) return;
+			var foundFunction = functions.FindByForeignId(appFunction);
+			foundFunction?.SetHidden();
 		}
 	}
 }

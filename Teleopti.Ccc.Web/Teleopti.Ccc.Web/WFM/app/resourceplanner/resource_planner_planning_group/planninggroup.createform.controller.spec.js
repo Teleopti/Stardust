@@ -45,10 +45,6 @@ describe('planningGroupFormController', function () {
 			}], {}];
 		});
 
-		$httpBackend.whenGET('../ToggleHandler/AllToggles').respond(function (method, url, data, headers) {
-			return [200, true];
-		});
-
 		$httpBackend.whenDELETE('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e').respond(function (method, url, data, headers) {
 			return [200, true];
 		});
@@ -110,7 +106,6 @@ describe('planningGroupFormController', function () {
 	it('should not create planning group when submit data is invalid', function () {
 		var vm = $controller('planningGroupFormController', { editPlanningGroup: null });
 		vm.persist();
-		$httpBackend.flush();
 
 		expect($state.go).not.toHaveBeenCalledWith('resourceplanner.overview');
 	});
@@ -131,7 +126,6 @@ describe('planningGroupFormController', function () {
 
 	it('should load edit planning group', function () {
 		var vm = $controller('planningGroupFormController', { $stateParams: stateparams, editPlanningGroup: editPlanningGroup });
-		$httpBackend.flush();
 
 		expect(vm.editPlanningGroup.Id).toEqual('aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e');
 	});
@@ -139,8 +133,7 @@ describe('planningGroupFormController', function () {
 	it('should save new name for selected edit planning group', function () {
 		spyOn(planningGroupService, 'savePlanningGroup').and.callThrough();
 		var vm = $controller('planningGroupFormController', { $stateParams: stateparams, editPlanningGroup: editPlanningGroup });
-		$httpBackend.flush();
-
+		
 		var id = vm.editPlanningGroup.Id;
 		var filter = vm.editPlanningGroup.Filters;
 		vm.name = 'Plan Group 3';
@@ -154,7 +147,6 @@ describe('planningGroupFormController', function () {
 	it('should delete selected planning group', function () {
 		spyOn(planningGroupService, 'removePlanningGroup').and.callThrough();
 		var vm = $controller('planningGroupFormController', { $stateParams: stateparams, editPlanningGroup: editPlanningGroup });
-		$httpBackend.flush();
 
 		var id = vm.editPlanningGroup.Id;
 		var filter = vm.editPlanningGroup.Filters;

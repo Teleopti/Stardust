@@ -1401,9 +1401,6 @@ teams-time-picker.ng-invalid-dst {
 				z-index: 900;
 				cursor: pointer;
 
-				&.tablet {
-					height: 40px;
-				}
 
 				&:first-of-type {
 					border-radius: 4px 0 0 4px;
@@ -1454,7 +1451,19 @@ teams-time-picker.ng-invalid-dst {
 					&:not(.non-resizable) {
 						cursor: ew-resize;
 					}
+				}
 
+				&.float-top {
+					z-index: 999;
+				}
+			}
+		}
+
+		&.tablet {
+			.shift-layer {
+				height: 40px;
+
+				&.selected:not(.non-resizable) {
 					&::before, &::after {
 						content: " ";
 						position: absolute;
@@ -1463,11 +1472,6 @@ teams-time-picker.ng-invalid-dst {
 						border-radius: 50% 1px 50% 50%;
 						background: $blue-500;
 						top: 115%;
-					}
-
-					&:not(.tablet)::before, &:not(.tablet)::after {
-						width: 1.2em;
-						height: 1.2em;
 					}
 
 					&::before {
@@ -1480,9 +1484,11 @@ teams-time-picker.ng-invalid-dst {
 						right: 0px;
 					}
 				}
+			}
 
-				&.float-top {
-					z-index: 999;
+			.timeline {
+				.scroll-toolbar {
+					display: none;
 				}
 			}
 		}

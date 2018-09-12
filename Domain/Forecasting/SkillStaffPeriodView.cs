@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
@@ -12,5 +13,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	    public double ForecastedTasks { get; set; }
 	    public Percent EstimatedServiceLevel { get; set; }
 	    public Percent EstimatedServiceLevelShrinkage { get; set; }
-    }
+		public TimeSpan AverageHandlingTaskTime { get; set; }
+	}
 }

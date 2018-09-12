@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			schedulerStateHolder.Schedules[agent].ScheduledDay(date).IsScheduled().Should().Be.True();
 		}
 
-		public SchedulingTimeZoneDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerXxl76496)
+		public SchedulingTimeZoneDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXXL76496, bool resourcePlannerHalfHourSkillTimeZon75509, bool resourcePlannerReducingSkillsDifferentOpeningHours76176) : base(seperateWebRequest, resourcePlannerXXL76496, resourcePlannerHalfHourSkillTimeZon75509, resourcePlannerReducingSkillsDifferentOpeningHours76176)
 		{
 		}
 	}

@@ -169,10 +169,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.237\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.238\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.237\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.238\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -840,6 +840,10 @@
     <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj">
       <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>
       <Name>Teleopti.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Wfm.Adherence\Teleopti.Wfm.Adherence.csproj">
+      <Project>{2dd2e616-8405-49df-a07d-546a8c160117}</Project>
+      <Name>Teleopti.Wfm.Adherence</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

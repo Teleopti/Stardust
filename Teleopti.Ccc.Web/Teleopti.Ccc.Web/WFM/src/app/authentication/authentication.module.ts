@@ -9,7 +9,7 @@ import { PasswordService } from './services/password.service';
 @NgModule({
 	imports: [CommonModule, TranslateModule.forChild(), SharedModule, ReactiveFormsModule],
 	declarations: [ChangePasswordComponent],
-	entryComponents: [ChangePasswordComponent],
+	exports: [ChangePasswordComponent],
 	providers: [PasswordService]
 })
 export class AuthenticationModule {}

@@ -43,7 +43,7 @@ RTA_RestrictModifyAdherenceWithPermission_74898 = true
 RTA_EasilySpotLateForWork_75668 = true
 LevelUp_HangfireStatistics_76139_76373 = true
 RTA_DurationOfHistoricalEvents_76470 = true
-RTA_ReviewHistoricalAdherence_74770 = false
+RTA_ReviewHistoricalAdherence_74770 = RC
 
 # Dumplings, can any of these be removed? #
 WfmTeamSchedule_ShowStaffingInfo_45206 = true
@@ -78,7 +78,7 @@ Wfm_People_SetFallbackValuesForImporting_43289 = true
 Wfm_People_MoveImportJobToBackgroundService_43582 = true
 
 # Bockemon #
-Wfm_PeopleWeb_PrepareForRelease_74903 = RC
+Wfm_PeopleWeb_PrepareForRelease_74903 = true
 Wfm_Authentication_ChangePasswordMenu_76666 = RC
 
 # China, can any of these be removed? #
@@ -108,12 +108,14 @@ ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 ResourcePlanner_XXL_76496 = true
+ResourcePlanner_ReducingSkillsDifferentOpeningHours_76176 = RC
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
 WFM_Modify_Skill_Groups_43727 = true
 WFM_Remember_My_Selection_In_Intraday_47254 = true
 WFM_Intraday_Refactoring_74652 = true
+WFM_Intraday_Redesign_77214 = RC
 
 # Ziggy #
 WfmStaffing_AddOvertime_42524 = RC
@@ -145,7 +147,7 @@ WFM_Forecaster_Preview_74801 = RC
 ETL_Optimize_Memory_Usage_76761 = true
 WFM_Forecast_Show_History_Data_76432 = DEV
 ETL_Show_Web_Based_ETL_Tool_74837 = true
-ETL_Show_Tenant_Name_In_History_75767 = DEV
+ETL_Show_Tenant_Name_In_History_75767 = RC
 
 # Dragonfly #
 WFM_Gamification_Setting_With_External_Quality_Values_45003 = true
@@ -156,8 +158,10 @@ MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889 = true
 MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947 = RC
 MyTimeWeb_ShiftTradeRequest_SetNotSelectableShifts_77052 = RC #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
 MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306 = RC #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
-MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408 = DEV #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
+MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408 = RC #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
+MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409 = DEV #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
 WFM_Gamification_Permission_76546 = true
 
 # Tech #
 Tech_Moving_ResilientConnectionLogic_76181 = true
+WFM_ChatBot_77547 = DEV

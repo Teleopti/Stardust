@@ -152,10 +152,10 @@
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.237\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.238\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.237\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.238\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
     <Reference Include="WebDriver, Version=2.53.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Selenium.WebDriver.2.53.0\lib\net40\WebDriver.dll</HintPath>
@@ -199,6 +199,7 @@
     <Compile Include="FakeData\FakeGamificationSettingRepository.cs" />
     <Compile Include="FakeData\FakeIntervalLengthFetcher.cs" />
     <Compile Include="FakeData\FakeLatestStatisticsIntervalIdLoader.cs" />
+    <Compile Include="FakeData\FakeLicensedFunctionProvider.cs" />
     <Compile Include="FakeData\FakeMessageBrokerUnitOfWorkScope.cs" />
     <Compile Include="FakeData\FakeNewBusinessRuleCollection.cs" />
     <Compile Include="FakeData\FakeNofiticationWebClient.cs" />
@@ -300,10 +301,12 @@
     <Compile Include="FakeRepositories\FakeSkillCombinationResourceReader.cs" />
     <Compile Include="FakeRepositories\FakeSkillTypeRepository.cs" />
     <Compile Include="FakeRepositories\FakeStorage.cs" />
+    <Compile Include="FakeRepositories\FakeStorageSimple.cs" />
     <Compile Include="FakeRepositories\FakeTenantPersonLogonQuerier.cs" />
     <Compile Include="FakeRepositories\FakeUserDeviceRepository.cs" />
     <Compile Include="FakeRepositories\FakeWorkShiftRuleSetRepository.cs" />
     <Compile Include="FakeRepositories\FakeWriteSideRepository.cs" />
+    <Compile Include="FakeRepositories\IFakeStorage.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAgentStatePersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAllLicenseActivator.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAllLicenseActivatorProvider.cs" />
@@ -405,6 +408,7 @@
     <Compile Include="FakeRepositories\FakeLicenseRepository.cs" />
     <Compile Include="FakeRepositories\FakeStateQueue.cs" />
     <Compile Include="IoC\DefaultDataAttribute.cs" />
+    <Compile Include="IoC\DontSendEventsAtPersistAttribute.cs" />
     <Compile Include="IoC\FakePermissionsAttribute.cs" />
     <Compile Include="IoC\IIoCTestContext.cs" />
     <Compile Include="IoC\InfrastructureTestAttribute.cs" />
@@ -824,6 +828,10 @@
     <ProjectReference Include="..\Teleopti.Support.Library\Teleopti.Support.Library.csproj">
       <Project>{96BAA3E0-A623-412E-BFE7-D3BE03A2288A}</Project>
       <Name>Teleopti.Support.Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Wfm.Adherence\Teleopti.Wfm.Adherence.csproj">
+      <Project>{2dd2e616-8405-49df-a07d-546a8c160117}</Project>
+      <Name>Teleopti.Wfm.Adherence</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

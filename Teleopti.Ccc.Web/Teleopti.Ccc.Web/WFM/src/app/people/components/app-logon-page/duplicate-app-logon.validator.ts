@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
 import { Observable, of, timer } from 'rxjs';
 import { first, map, switchMap, take, tap } from 'rxjs/operators';
-import { LogonInfoService } from '../../services';
+import { LogonInfoService } from '../../../shared/services';
 import { FormControlWithInitial } from '../shared/forms';
 
 @Injectable()

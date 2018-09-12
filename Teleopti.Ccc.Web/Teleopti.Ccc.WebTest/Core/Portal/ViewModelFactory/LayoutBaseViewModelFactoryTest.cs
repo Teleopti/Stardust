@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase;
@@ -19,16 +20,19 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		private ICultureSpecificViewModelFactory _cultureSpecificViewModelFactory;
 		private IDatePickerGlobalizationViewModelFactory _datePickerGlobalizationViewModelFactory;
 		private IUserTimeZone _userTimeZone;
+		private IPermissionProvider _permissionProvider;
 
 		[SetUp]
 		public void Setup()
 		{
-
 			_mocks = new MockRepository();
 			_cultureSpecificViewModelFactory = _mocks.DynamicMock<ICultureSpecificViewModelFactory>();
 			_datePickerGlobalizationViewModelFactory = _mocks.DynamicMock<IDatePickerGlobalizationViewModelFactory>();
+			_permissionProvider = _mocks.DynamicMock<IPermissionProvider>();
+
 			_userTimeZone = new UtcTimeZone();
-			_target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, new Now(), _userTimeZone);
+			_target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory,
+				_datePickerGlobalizationViewModelFactory, new Now(), _userTimeZone, _permissionProvider);
 		}
 
 		[Test]
@@ -61,11 +65,9 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var now = new MutableNow();
 			now.Is(time);
 
-			var target = new LayoutBaseViewModelFactory(
-				_cultureSpecificViewModelFactory,
-				_datePickerGlobalizationViewModelFactory,
-				now,_userTimeZone);
-			
+			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory,
+				_datePickerGlobalizationViewModelFactory, now, _userTimeZone, _permissionProvider);
+
 			target.CreateLayoutBaseViewModel(string.Empty).FixedDate.Should().Be.EqualTo(time);
 		}
 
@@ -73,40 +75,41 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		public void ShouldSetTitle()
 		{
 			const string title = "the title..";
-			Assert.That(_target.CreateLayoutBaseViewModel(title).Title,Is.EqualTo(title));
+			Assert.That(_target.CreateLayoutBaseViewModel(title).Title, Is.EqualTo(title));
 		}
 
 		[Test]
 		public void ShouldReturnNullIfNotSet()
 		{
-			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, new Now(),_userTimeZone);
+			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory,
+				_datePickerGlobalizationViewModelFactory, new Now(), _userTimeZone, _permissionProvider);
 			target.CreateLayoutBaseViewModel(string.Empty).FixedDate.HasValue.Should().Be.False();
 		}
 
 		[Test]
-		public void ShoulGetCorrectUserTimezoneOffsetMinute()
+		public void ShouldGetCorrectUserTimezoneOffsetMinute()
 		{
 			var userTimezone = new FakeUserTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
-			var time = new DateTime(2001,1,1,1,12,0,0,DateTimeKind.Local);
+			var time = new DateTime(2001, 1, 1, 1, 12, 0, 0, DateTimeKind.Local);
 			var now = new MutableNow();
 			now.Is(time);
 
 			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory,
-				_datePickerGlobalizationViewModelFactory,now,userTimezone);
+				_datePickerGlobalizationViewModelFactory, now, userTimezone, _permissionProvider);
 
 			target.CreateLayoutBaseViewModel("title").UserTimezoneOffsetMinute.Should().Be.EqualTo(-300);
 		}
 
 		[Test]
-		public void ShouldCorrectDayLightSavingTimeUserTimezonOffsetMinute()
+		public void ShouldCorrectDayLightSavingTimeUserTimezoneOffsetMinute()
 		{
 			var userTimezone = new FakeUserTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			var time = new DateTime(2016,1,1,1,12,0,0,DateTimeKind.Local);
+			var time = new DateTime(2016, 1, 1, 1, 12, 0, 0, DateTimeKind.Local);
 			var now = new MutableNow();
 			now.Is(time);
 
 			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory,
-				_datePickerGlobalizationViewModelFactory,now,userTimezone);
+				_datePickerGlobalizationViewModelFactory, now, userTimezone, _permissionProvider);
 
 			var result = target.CreateLayoutBaseViewModel("title");
 
@@ -115,6 +118,21 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			result.DayLightSavingEnd.Should().Be("2016-10-29T23:59:59Z");
 			result.DayLightSavingAdjustmentInMinute.Should().Be(60);
 		}
-	}
 
+		[Test]
+		public void ShouldIndicateGrantChatBotEnabled()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ChatBot))
+					.Return(true);
+			}
+
+			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory,
+				_datePickerGlobalizationViewModelFactory, new Now(), new UtcTimeZone(), _permissionProvider);
+
+			var result = target.CreateLayoutBaseViewModel("title");
+			result.GrantEnabled.Should().Be.True();
+		}
+	}
 }

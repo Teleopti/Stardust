@@ -139,12 +139,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
         private void NotifyModificationOccured(IMeeting meeting, bool deleted)
         {
-        	var handler = ModificationOccured;
-            if (handler!=null)
-            {
-                handler.Invoke(this,new ModifyMeetingEventArgs(meeting,deleted));
-            }
-        }
+			ModificationOccured?.Invoke(this,new ModifyMeetingEventArgs(meeting,deleted));
+		}
 
 		/// <summary>
 		/// start meeting composer with supplied meeting, or null if new meeting should be created

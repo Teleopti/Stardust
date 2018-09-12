@@ -1,28 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using Autofac;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator;
-using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -45,88 +36,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterEventHandlers(_config.Toggle, typeof(IHandleEvent<>).Assembly, typeof(Rta).Assembly);
+
 			builder.RegisterType<ReadModelValidator>().As<IReadModelValidator>().SingleInstance();
 			builder.RegisterType<ReadModelFixer>().As<IReadModelFixer>().SingleInstance();
 			builder.RegisterType<ReadModelPersonScheduleDayValidator>().As<IReadModelPersonScheduleDayValidator>();
 			builder.RegisterType<ReadModelScheduleProjectionReadOnlyValidator>().As<IReadModelScheduleProjectionReadOnlyValidator>();
 			builder.RegisterType<ReadModelScheduleDayValidator>().As<IReadModelScheduleDayValidator>();
-
-			builder.RegisterAssemblyTypes(typeof(IHandleEvent<>).Assembly)
-				.Where(t =>
-					t.IsEventHandler() &&
-					t.EnabledByToggle(_config) && 
-					t.RegisterAsSingleton()
-				)
-				.As(t =>
-					t.HandleInterfaces()
-						.Where(x => x.Method?.EnabledByToggle(_config) ?? true)
-						.Select(x => x.Type)
-				)
-				.AsSelf()
-				.SingleInstance()
-				// use 	[RegisterEventHandlerInLifetimeScope] instead
-				.Except<IntradayOptimizationEventRunInSyncInFatClientProcessHandler>(ct =>
-				{
-					ct.As<IHandleEvent<IntradayOptimizationWasOrdered>>()
-						.AsSelf()
-						.InstancePerLifetimeScope()
-						.ApplyAspects();
-				})
-				.Except<WebIntradayOptimizationStardustHandler>(ct =>
-				{
-					ct.As<IHandleEvent<IntradayOptimizationOnStardustWasOrdered>>()
-						.AsSelf()
-						.InstancePerLifetimeScope()
-						.ApplyAspects();
-				})
-				.Except<WebScheduleStardustHandler>(ct =>
-				{
-					ct.As<IHandleEvent<WebScheduleStardustEvent>>()
-						.AsSelf()
-						.InstancePerLifetimeScope()
-						.ApplyAspects();
-				})
-				.Except<WebClearScheduleStardustHandler>(ct =>
-				{
-					ct.As<IHandleEvent<WebClearScheduleStardustEvent>>()
-						.AsSelf()
-						.InstancePerLifetimeScope()
-						.ApplyAspects();
-				})
-				.Except<ShiftTradeRequestHandler>(ct =>
-				{
-					ct.As(
-							typeof(IHandleEvent<NewShiftTradeRequestCreatedEvent>),
-							typeof(IHandleEvent<AcceptShiftTradeEvent>))
-						.AsSelf()
-						.InstancePerLifetimeScope()
-						.ApplyAspects();
-				})
-				.Except<MultiAbsenceRequestsHandler>(ct =>
-				{
-					ct.As(
-							typeof(IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>))
-						.AsSelf()
-						.InstancePerLifetimeScope()
-						.ApplyAspects();
-				})
-				.ApplyAspects();
-
-			builder.RegisterAssemblyTypes(typeof(IHandleEvent<>).Assembly)
-				.Where(t =>
-					t.IsEventHandler() &&
-					t.EnabledByToggle(_config) &&
-					t.RegisterAsLifetimeScope()
-				)
-				.As(t =>
-					t.HandleInterfaces()
-						.Where(x => x.Method?.EnabledByToggle(_config) ?? true)
-						.Select(x => x.Type)
-				)
-				.AsSelf()
-				.InstancePerLifetimeScope()
-				.ApplyAspects();
-			
 			builder.RegisterType<UnitOfWorkTransactionEventSyncronization>().As<IEventSyncronization>().SingleInstance();
 			builder.RegisterType<BusinessRulesForPersonalAccountUpdate>().As<IBusinessRulesForPersonalAccountUpdate>().InstancePerDependency();
 			builder.RegisterType<ProjectionChangedEventBuilder>().As<IProjectionChangedEventBuilder>().SingleInstance();
@@ -172,54 +88,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersonPeriodFilterForDateCreation>().As<IPersonPeriodFilter>().SingleInstance();
 			builder.CacheByInterfaceProxy<AnalyticsDateRepositoryWithCreation, IAnalyticsDateRepository>();
 			builder.RegisterType<AnalyticsTimeZoneRepositoryWithCreation>().As<IAnalyticsTimeZoneRepository>().SingleInstance();
-		}
-	}
-
-	public static class EventHandlerTypeExtensions
-	{
-		public static bool IsEventHandler(this Type t)
-		{
-			if (!t.HandleInterfaces().Any())
-				return false;
-
-			var runOnHangfire = typeof(IRunOnHangfire).IsAssignableFrom(t);
-			var runOnStardust = typeof(IRunOnStardust).IsAssignableFrom(t);
-			var runInSync = typeof(IRunInSync).IsAssignableFrom(t);
-			var runInSyncInFatClientProcess = typeof(IRunInSyncInFatClientProcess).IsAssignableFrom(t);
-			if (!(runOnHangfire ^ runOnStardust ^ runInSync ^ runInSyncInFatClientProcess))
-				throw new Exception($"All event handlers need to implement an IRunOn* interface. {t.Name} does not.");
-
-			return true;
-		}
-
-		public static IEnumerable<HandlerInfo> HandleInterfaces(this Type t)
-		{
-			foreach (var i in t.GetInterfaces())
-			{
-				if (i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandleEvent<>))
-				{
-					var eventType = i.GetMethods().Single().GetParameters().Single().ParameterType;
-					yield return new HandlerInfo
-					{
-						Type = i,
-						Method = t.GetMethod("Handle", new[] { eventType })
-					};
-				}
-				if (i == typeof(IHandleEvents))
-				{
-					yield return new HandlerInfo
-					{
-						Type = i,
-						Method = t.GetMethod("Handle")
-					};
-				}
-			}
-		}
-
-		public class HandlerInfo
-		{
-			public Type Type { get; set; }
-			public MethodInfo Method { get; set; }
 		}
 	}
 }

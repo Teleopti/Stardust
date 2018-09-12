@@ -1,9 +1,7 @@
-import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthenticatedInterceptor } from './interceptors';
-import { TogglesService, UserPreferences, UserService } from './services';
-import { LanguageLoaderFactory } from './translation';
+import { ThemeService, TogglesService, UserService } from './services';
 
 @NgModule({
 	imports: [HttpClientModule],
@@ -11,6 +9,7 @@ import { LanguageLoaderFactory } from './translation';
 	providers: [
 		TogglesService,
 		UserService,
+		ThemeService,
 		{
 			provide: HTTP_INTERCEPTORS,
 			useClass: AuthenticatedInterceptor,

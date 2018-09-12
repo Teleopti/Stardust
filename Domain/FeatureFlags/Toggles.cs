@@ -85,6 +85,7 @@
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,
 		ResourcePlanner_XXL_76496,
 		ResourcePlanner_HalfHourSkillTimeZone_75509,
+		ResourcePlanner_ReducingSkillsDifferentOpeningHours_76176,
 
 		Wfm_DisplayOnlineHelp_39402,
 
@@ -131,10 +132,14 @@
 		MyTimeWeb_ShiftTradeRequest_SetNotSelectableShifts_77052,
 		MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306,
 		MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408,
+		MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409,
 
 		WFM_Intraday_Refactoring_74652,
+		WFM_Intraday_Redesign_77214,
 
 		Tech_Moving_ResilientConnectionLogic_76181,
+		WFM_ChatBot_77547,
+
 		Tenant_PurgeLogonAttempts_75782,
 		Tenant_PurgeNoneEmployeesData_76291,
 		Staffing_BPO_ClearStaffing_75498,
