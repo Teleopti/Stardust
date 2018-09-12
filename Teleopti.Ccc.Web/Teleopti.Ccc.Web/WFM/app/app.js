@@ -1,5 +1,12 @@
 'use strict';
 
+// if (!d3) {
+// 	var d3;
+// 	require(['/TeleoptiWFM/Web/WFM/dist/resources/d3.js'], function(d3mod) {
+// 		d3 = d3mod;
+// 	});
+// }
+
 angular.module('externalModules', [
 	'ui.router',
 	'ui.bootstrap',
