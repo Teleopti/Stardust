@@ -17,7 +17,6 @@ export class ThemeService {
 		this.http.get('../api/Theme').subscribe({
 			next: (theme: Theme) => {
 				this.theme$.next(theme);
-				this.saveLocally(theme);
 				this.applyTheme(theme.Name);
 			}
 		});
@@ -27,12 +26,7 @@ export class ThemeService {
 		return this.theme$;
 	}
 
-	saveLocally(theme: Theme) {
-		localStorage.setItem('theme', theme.Name);
-	}
-
 	saveThemePreference(theme: Theme): void {
-		this.saveLocally(theme);
 		this.theme$.next(theme);
 		this.http.post('../api/Theme/Change', theme).subscribe();
 	}
