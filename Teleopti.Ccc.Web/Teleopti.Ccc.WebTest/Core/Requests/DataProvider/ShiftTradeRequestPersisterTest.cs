@@ -318,25 +318,4 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			isolate.UseTestDouble(dataSource).For<ICurrentDataSource>();
 		}
 	}
-
-	public class FakeLicensedFunctionProvider : ILicensedFunctionsProvider
-	{
-		public IEnumerable<IApplicationFunction> LicensedFunctions(string tenantName)
-		{
-			var functions = new DefinedRaptorApplicationFunctionFactory();
-			return new[]
-			{
-				ApplicationFunction.FindByPath(functions.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewSchedules),
-				ApplicationFunction.FindByPath(functions.ApplicationFunctions,
-					DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules),
-				ApplicationFunction.FindByPath(functions.ApplicationFunctions,
-					DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)
-			};
-		}
-
-		public void ClearLicensedFunctions(string tenantName)
-		{
-
-		}
-	}
 }
