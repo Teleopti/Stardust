@@ -108,7 +108,7 @@ ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 ResourcePlanner_XXL_76496 = true
-ResourcePlanner_ReducingSkillsDifferentOpeningHours_76176 = RC
+ResourcePlanner_ReducingSkillsDifferentOpeningHours_76176 = DEV
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
