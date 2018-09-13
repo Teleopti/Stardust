@@ -1027,7 +1027,7 @@
 
 		if (left < 0) {
 			var contractTimeGap = Teleopti.MyTimeWeb.Common.FormatTimeSpan(-left);
-			if (gap > 0) contractTimeGap = '-' + contractTimeGap;
+			contractTimeGap = (gap > 0 ? '-' : '+') + contractTimeGap;
 			if (isCheckSelf) {
 				self.myToleranceMessages.push({
 					periodStart: Teleopti.MyTimeWeb.Common.FormatDate(periodToloranceInfo.PeriodStart),
