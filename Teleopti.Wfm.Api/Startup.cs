@@ -3,6 +3,9 @@ using System.Configuration;
 using System.Web.Http;
 using System.Xml.Linq;
 using Autofac;
+using log4net;
+using log4net.Config;
+using log4net.Core;
 using NSwag.AspNet.Owin;
 using Owin;
 using Teleopti.Ccc.Domain.Common;
@@ -23,6 +26,7 @@ namespace Teleopti.Wfm.Api
 	public class Startup
 	{
 		private readonly ILifetimeScope _container;
+		private readonly ILog _logger = LogManager.GetLogger(typeof(Startup));
 
 		public Startup() : this(null)
 		{
@@ -35,6 +39,7 @@ namespace Teleopti.Wfm.Api
 
 		public void Configuration(IAppBuilder app)
 		{
+			XmlConfigurator.Configure();
 			var container = _container ?? configureContainer();
 			
 			if (!StateHolderReader.IsInitialized)

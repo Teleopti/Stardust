@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.Owin.Logging;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
@@ -7,6 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
+using log4net;
 
 namespace Teleopti.Wfm.Api.Command
 {
@@ -17,6 +19,7 @@ namespace Teleopti.Wfm.Api.Command
 		private readonly IActivityRepository _activityRepository;
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 		private readonly IShiftCategoryRepository _shiftCategoryRepository;
+		private static readonly ILog logger = LogManager.GetLogger(typeof(SetMainShiftHandler));
 
 		public SetMainShiftHandler(IScenarioRepository scenarioRepository, 
 			IPersonRepository personRepository, IActivityRepository activityRepository, 
@@ -33,22 +36,38 @@ namespace Teleopti.Wfm.Api.Command
 		[UnitOfWork]
 		public virtual ResultDto Handle(SetMainShiftDto command)
 		{
-			var scenario = command.ScenarioId == null ? _scenarioRepository.LoadDefaultScenario() : _scenarioRepository.Load(command.ScenarioId.GetValueOrDefault());
-			var person = _personRepository.Load(command.PersonId);
-			var dateOnly = command.Date.ToDateOnly();
-
-			var assignment = getPersonAssignment(person, dateOnly, scenario, command.ShiftCategory);
-			assignment.ClearMainActivities();
-
-			foreach (var layer in command.LayerCollection)
+			try
 			{
-				var activity = _activityRepository.Load(layer.ActivityId);
-				assignment.AddActivity(activity, new DateTimePeriod(layer.UtcStartDateTime.Utc(), layer.UtcEndDateTime.Utc()), true);
+				var scenario = command.ScenarioId == null
+					? _scenarioRepository.LoadDefaultScenario()
+					: _scenarioRepository.Load(command.ScenarioId.GetValueOrDefault());
+				var person = _personRepository.Load(command.PersonId);
+				var dateOnly = command.Date.ToDateOnly();
+
+				var assignment = getPersonAssignment(person, dateOnly, scenario, command.ShiftCategory);
+				assignment.ClearMainActivities();
+
+				foreach (var layer in command.LayerCollection)
+				{
+					var activity = _activityRepository.Load(layer.ActivityId);
+					assignment.AddActivity(activity, new DateTimePeriod(layer.UtcStartDateTime.Utc(), layer.UtcEndDateTime.Utc()),
+						true);
+				}
+
+				throw new Exception("this is a message");
+				return new ResultDto
+				{
+					Successful = true
+				};
 			}
-			return new ResultDto
+			catch (Exception e)
 			{
-				Successful = true
-			};
+				logger.Error(e.Message + e.StackTrace);
+				return new ResultDto
+				{
+					Successful = false
+				};
+			}
 		}
 
 		private IPersonAssignment getPersonAssignment(IPerson person, DateOnly dateOnly, IScenario scenario, Guid shiftCategoryId)
