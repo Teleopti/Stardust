@@ -20,13 +20,14 @@ namespace Teleopti.Wfm.Api.Test.Query
 		public void ShouldGetAllAbsences()
 		{
 			Client.Authorize();
-
-			AbsenceRepository.Add(AbsenceFactory.CreateAbsence("Absence").WithId());
+			var absence = AbsenceFactory.CreateAbsence("Absence").WithId();
+			AbsenceRepository.Add(absence);
 
 			var result = Client.PostAsync("/query/Absence/AllAbsences", new StringContent("{}"));
 			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result).ToObject<QueryResultDto<AbsenceDto>>();
 			resultDto.Successful.Should().Be.EqualTo(true);
 			resultDto.Result.Count().Should().Be.EqualTo(1);
+			resultDto.Result.FirstOrDefault().Id.Should().Be.EqualTo(absence.Id);
 		}
 	}
 }

@@ -22,6 +22,7 @@ namespace Teleopti.Wfm.Api.Query
 				Successful = true,
 				Result = absences.Select(x => new AbsenceDto
 				{
+					Id = x.Id.GetValueOrDefault(),
 					Name = x.Name,
 					Priority = x.Priority,
 					InPaidTime = x.InPaidTime,

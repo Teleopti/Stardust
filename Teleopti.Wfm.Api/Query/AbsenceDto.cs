@@ -1,7 +1,10 @@
-﻿namespace Teleopti.Wfm.Api.Query
+﻿using System;
+
+namespace Teleopti.Wfm.Api.Query
 {
 	public class AbsenceDto
 	{
+		public Guid Id;
 		public byte Priority;
 		public string Name;
 		public bool Requestable;
