@@ -70,7 +70,10 @@
     <Compile Include="QueryDtoProvider.cs" />
     <Compile Include="QueryHandlerProvider.cs" />
     <Compile Include="QueryResultDto.cs" />
+    <Compile Include="Query\AbsenceDto.cs" />
     <Compile Include="Query\ActivityDto.cs" />
+    <Compile Include="Query\AllAbsencesDto.cs" />
+    <Compile Include="Query\AllAbsencesHandler.cs" />
     <Compile Include="Query\AllActivitiesDto.cs" />
     <Compile Include="Query\AllActivitiesHandler.cs" />
     <Compile Include="Query\AllScheduleChangesListenerSubscriptionDto.cs" />
