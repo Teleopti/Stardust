@@ -10,7 +10,6 @@
 		vm.areas = [];
 
 		vm.$onInit = function() {
-			console.log('oninit');
 			const mq = window.matchMedia('(max-width: 768px)');
 			mq.addListener(function(mq) {
 				if (mq.matches) {
