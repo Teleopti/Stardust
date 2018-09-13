@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		{
 			_workShiftPeriodValueCalculator = MockRepository.GenerateMock<IWorkShiftPeriodValueCalculator>();
 			_workShiftLengthValueCalculator = MockRepository.GenerateMock<IWorkShiftLengthValueCalculator>();
-			_target = new WorkShiftValueCalculator(_workShiftPeriodValueCalculator, _workShiftLengthValueCalculator);
+			_target = new WorkShiftValueCalculator(_workShiftPeriodValueCalculator, _workShiftLengthValueCalculator, new ContainingSkillIntervalPeriodFinderOld());
 
 			_period1 = new DateTimePeriod(_start, _end);
 			_data = new SkillIntervalData(_period1, 5, -5, 0, null, null);

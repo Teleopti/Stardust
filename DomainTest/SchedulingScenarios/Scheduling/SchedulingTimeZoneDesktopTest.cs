@@ -3,12 +3,14 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
@@ -26,6 +28,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeTimeZoneGuard TimeZoneGuard; 
 		public FakeUserTimeZone UserTimeZone;
 		//
+		private bool _resourcePlannerHalfHourSkillTimeZon75509;
 
 		[Test]
 		public void ShouldBeAbleToScheduleNoMatterTimeZoneSettingsAlsoWhenRequiresSkillIsTrue(
@@ -85,14 +88,18 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 		}
 
-		[Ignore("PBI75509 to be fixed")]
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509)]
 		public void ShouldHandleSkillInHalfHourTimeZoneWithDifferentResolutions(
-			[Values("Iran Standard Time", "Newfoundland Standard Time", "GMT Standard Time")] string userAndAgentTimeZone,		//Iran +03:30, Newfoundland -3:30
-			[Values("Iran Standard Time", "Newfoundland Standard Time", "GMT Standard Time")] string skillTimeZone,				//Iran +03:30, Newfoundland -3:30
+			[Values("Iran Standard Time", "Newfoundland Standard Time", "GMT Standard Time", "Nepal Standard Time")] string userAndAgentTimeZone,       //Iran +03:30, Newfoundland -03:30, Nepal +05:45
+			[Values("Iran Standard Time", "Newfoundland Standard Time", "GMT Standard Time", "Nepal Standard Time")] string skillTimeZone,				//Iran +03:30, Newfoundland -03:30, Nepal +05:45
 			[Values(5, 15, 60)] int defaultResolution)
 		{
+			if (!_resourcePlannerHalfHourSkillTimeZon75509)
+			{
+				if ((!userAndAgentTimeZone.Equals("GMT Standard Time") || !skillTimeZone.Equals("GMT Standard Time")) && defaultResolution == 60)
+					Assert.Ignore();
+			}
+
 			TimeZoneGuard.SetTimeZone(TimeZoneInfo.FindSystemTimeZoneById(userAndAgentTimeZone));
 			var date = new DateOnly(2017, 9, 7);
 			var activity = new Activity { RequiresSkill = true }.WithId();
@@ -110,6 +117,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		public SchedulingTimeZoneDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXXL76496, bool resourcePlannerHalfHourSkillTimeZon75509, bool resourcePlannerReducingSkillsDifferentOpeningHours76176) : base(seperateWebRequest, resourcePlannerXXL76496, resourcePlannerHalfHourSkillTimeZon75509, resourcePlannerReducingSkillsDifferentOpeningHours76176)
 		{
+			_resourcePlannerHalfHourSkillTimeZon75509 = resourcePlannerHalfHourSkillTimeZon75509;
 		}
 	}
 }

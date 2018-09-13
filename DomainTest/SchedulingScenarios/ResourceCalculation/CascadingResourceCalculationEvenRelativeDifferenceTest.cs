@@ -191,5 +191,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			skillDayB3.SkillStaffPeriodCollection.First().CalculatedResource
 				.Should().Be.EqualTo(2); //all of "agent" shoveled here
 		}
+
+		public CascadingResourceCalculationEvenRelativeDifferenceTest(bool resourcePlannerHalfHourSkillTimeZon75509) : base(resourcePlannerHalfHourSkillTimeZon75509)
+		{
+		}
 	}
 }

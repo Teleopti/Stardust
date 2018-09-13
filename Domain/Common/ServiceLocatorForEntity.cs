@@ -1,4 +1,5 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -12,6 +13,7 @@ namespace Teleopti.Ccc.Domain.Common
 	{
 		private static ICurrentAuthorization _currentAuthorization;
 		private static ITimeZoneGuard _timeZoneGuard;
+		private static ScheduleResourcePeriodFetcher _scheduleResourcePeriodFetcher;
 
 		public static ICurrentAuthorization CurrentAuthorization
 		{
@@ -23,6 +25,13 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			get { return _timeZoneGuard ?? (_timeZoneGuard = new TimeZoneGuard()); }
 			set { _timeZoneGuard = value; }
+		}
+
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509)]
+		public static ScheduleResourcePeriodFetcher ScheduleResourcePeriodFetcher
+		{
+			get => _scheduleResourcePeriodFetcher ?? new ScheduleResourcePeriodFetcher();
+			set => _scheduleResourcePeriodFetcher = value;
 		}
 	}
 

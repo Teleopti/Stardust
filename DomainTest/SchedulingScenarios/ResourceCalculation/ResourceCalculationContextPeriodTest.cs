@@ -47,5 +47,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				partOfAssignmentInContext.Should().Be.EqualTo(expected);
 			}
 		}
+
+		public ResourceCalculationContextPeriodTest(bool resourcePlannerHalfHourSkillTimeZon75509) : base(resourcePlannerHalfHourSkillTimeZon75509)
+		{
+		}
 	}
 }

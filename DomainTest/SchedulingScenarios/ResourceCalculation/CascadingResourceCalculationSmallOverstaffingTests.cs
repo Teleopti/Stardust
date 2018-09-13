@@ -67,5 +67,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			subSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.GreaterThan(-1);
 		}
+
+		public CascadingResourceCalculationSmallOverstaffingTests(bool resourcePlannerHalfHourSkillTimeZon75509) : base(resourcePlannerHalfHourSkillTimeZon75509)
+		{
+		}
 	}
 }

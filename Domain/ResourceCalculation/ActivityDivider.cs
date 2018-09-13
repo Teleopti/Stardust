@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -24,7 +25,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     }
 
     public class ActivityDivider : IActivityDivider
-    {
+	{
+		private ScheduleResourcePeriodFetcher _scheduleResourcePeriodFetcher;
+
+		public ActivityDivider()
+		{
+			_scheduleResourcePeriodFetcher = ServiceLocatorForLegacy.ScheduleResourcePeriodFetcher;
+		}
+
         public IDividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
             IAffectedPersonSkillService affectedPersonSkillService,
             IActivity activity,
@@ -36,8 +44,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             IEnumerable<ISkill> skillsForActivity = skillsInActivity(affectedPersonSkillService,activity);
             foreach (ISkill skill in skillsForActivity)
-            {
-                double? targetDemandValue = skillDayDemand(skill,relevantSkillStaffPeriods,periodToCalculate);
+			{
+				var periodToCalculateAdjusted = _scheduleResourcePeriodFetcher.Fetch(periodToCalculate, skill);
+                double? targetDemandValue = skillDayDemand(skill,relevantSkillStaffPeriods, periodToCalculateAdjusted);
                 if (targetDemandValue.HasValue)
                     dividedActivity.TargetDemands.Add(skill, targetDemandValue.Value);
             }

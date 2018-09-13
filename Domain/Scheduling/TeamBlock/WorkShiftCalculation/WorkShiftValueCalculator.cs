@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
@@ -8,16 +9,48 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
+	public interface IContainingSkillIntervalPeriodFinder
+	{
+		DateTime? Find(IDictionary<DateTime, ISkillIntervalData> skillIntervals, DateTime periodKey, int resolution);
+	}
+
+	public class ContainingSkillIntervalPeriodFinder : IContainingSkillIntervalPeriodFinder
+	{
+		public DateTime? Find(IDictionary<DateTime, ISkillIntervalData> skillIntervals, DateTime periodKey, int resolution)
+		{
+			if (resolution < 60) return null;
+			foreach (var skillIntervalData in skillIntervals)
+			{
+				if (!skillIntervalData.Value.Period.Contains(periodKey)) continue;
+				return skillIntervalData.Key;
+			}
+
+			return null;
+		}
+	}
+
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509)]
+	public class ContainingSkillIntervalPeriodFinderOld : IContainingSkillIntervalPeriodFinder
+	{
+		public DateTime? Find(IDictionary<DateTime, ISkillIntervalData> skillIntervals, DateTime periodKey, int resolution)
+		{
+			return null;
+		}
+	}
+		
 	public class WorkShiftValueCalculator
 	{
 		private readonly IWorkShiftPeriodValueCalculator _workShiftPeriodValueCalculator;
 		private readonly IWorkShiftLengthValueCalculator _workShiftLengthValueCalculator;
+		private readonly IContainingSkillIntervalPeriodFinder _containingSkillIntervalPeriodFinder;
 
 		public WorkShiftValueCalculator(IWorkShiftPeriodValueCalculator workShiftPeriodValueCalculator,
-			IWorkShiftLengthValueCalculator workShiftLengthValueCalculator)
+			IWorkShiftLengthValueCalculator workShiftLengthValueCalculator,
+			IContainingSkillIntervalPeriodFinder containingSkillIntervalPeriodFinder)
 		{
 			_workShiftPeriodValueCalculator = workShiftPeriodValueCalculator;
 			_workShiftLengthValueCalculator = workShiftLengthValueCalculator;
+			_containingSkillIntervalPeriodFinder = containingSkillIntervalPeriodFinder;
 		}
 
 		public double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity,
@@ -53,10 +86,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				ISkillIntervalData currentStaffPeriod;
 				if (!skillIntervalDataDic.TryGetValue(currentSkillStaffPeriodKey, out currentStaffPeriod))
 				{
-					if (activity.RequiresSkill)
-						return null;
+					var containingPeriodKey = _containingSkillIntervalPeriodFinder.Find(skillIntervalDataDic, currentSkillStaffPeriodKey, resolution.Value);
+					if (containingPeriodKey.HasValue)
+					{
+						currentSkillStaffPeriodKey = containingPeriodKey.Value;
+						currentStaffPeriod = skillIntervalDataDic[containingPeriodKey.Value];
+					}
+					else
+					{
+						if (activity.RequiresSkill)
+							return null;
 
-					return 0;
+						return 0;
+					}	
 				}
 
 				var currentResourceInMinutes = 0;

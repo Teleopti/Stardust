@@ -16,29 +16,42 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	public class ResourceCalculationTimeZoneTest : ResourceCalculationScenario
 	{
 		public ResourceCalculateWithNewContext Target;
-		
-		[Ignore("PBI75509 to be fixed")]
-		[TestCase("Arabian Standard Time", 15)] //+04:00
-		[TestCase("Iran Standard Time", 15)]    //+03:30
-		[TestCase("Newfoundland Standard Time", 15)]    //-03:30
-		[TestCase("Arabian Standard Time", 60)] //+04:00
-		[TestCase("Iran Standard Time", 60)]    //+03:30
-		[TestCase("Newfoundland Standard Time", 60)]    //-03:30
+		private readonly bool _resourcePlannerHalfHourSkillTimeZon75509;
+
+		[TestCase("Arabian Standard Time", 15)]			//+04:00
+		[TestCase("Iran Standard Time", 15)]			//+03:30
+		[TestCase("Newfoundland Standard Time", 15)]	//-03:30
+		[TestCase("Nepal Standard Time", 15)]			//+05:45
+		[TestCase("Arabian Standard Time", 60)]			//+04:00
+		[TestCase("Iran Standard Time", 60)]			//+03:30
+		[TestCase("Newfoundland Standard Time", 60)]	//-03:30
+		[TestCase("Nepal Standard Time", 60)]			//+05:45
 		public void ShouldHandleSkillInHalfHourTimeZoneWithDifferentResolutions(string timeZoneId, int defaultResolution)
 		{
+			if (!_resourcePlannerHalfHourSkillTimeZon75509 && defaultResolution == 60 && timeZoneId != "Arabian Standard Time")
+				Assert.Ignore();
+			
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
 			var scenario = new Scenario();
 			var activity = new Activity();
 			var dateOnly = DateOnly.Today;
-			var skill = new Skill().For(activity).InTimeZone(timeZone).DefaultResolution(defaultResolution).WithId().IsOpenBetween(8, 9);
+			var skill = new Skill().For(activity).InTimeZone(timeZone).DefaultResolution(defaultResolution).WithId()
+				.IsOpenBetween(8, 9);
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, 2);
 			var agent = new Person().InTimeZone(timeZone).WithPersonPeriod(skill);
 			var assignment = new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
 
-			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { assignment }, new[] { skillDay }, false, false));
+			Target.ResourceCalculate(dateOnly,
+				ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] {assignment}, new[] {skillDay}, false,
+					false));
 
 			skillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(-1);
+		}
+
+		public ResourceCalculationTimeZoneTest(bool resourcePlannerHalfHourSkillTimeZon75509) : base(resourcePlannerHalfHourSkillTimeZon75509)
+		{
+			_resourcePlannerHalfHourSkillTimeZon75509 = resourcePlannerHalfHourSkillTimeZon75509;
 		}
 	}
 }

@@ -163,5 +163,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			skillDay2.SkillStaffPeriodCollection.First().CalculatedResource
 				.Should().Be.EqualTo(5); 
 		}
+
+		public ResourceCalculationWithExternalStaffTest(bool resourcePlannerHalfHourSkillTimeZon75509) : base(resourcePlannerHalfHourSkillTimeZon75509)
+		{
+		}
 	}
 }

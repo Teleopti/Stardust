@@ -195,5 +195,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Payload.CalculatedUsedSeats
 				.Should().Be.EqualTo(1);
 		}
+
+		public ResourceCalculationResultTest(bool resourcePlannerHalfHourSkillTimeZon75509) : base(resourcePlannerHalfHourSkillTimeZon75509)
+		{
+		}
 	}
 }

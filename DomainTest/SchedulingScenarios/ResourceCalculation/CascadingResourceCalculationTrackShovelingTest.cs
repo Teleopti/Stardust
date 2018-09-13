@@ -155,5 +155,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			trackShoveling.For(subskill).ResourcesBeforeShoveling
 				.Should().Be.EqualTo(0);
 		}
+
+		public CascadingResourceCalculationTrackShovelingTest(bool resourcePlannerHalfHourSkillTimeZon75509) : base(resourcePlannerHalfHourSkillTimeZon75509)
+		{
+		}
 	}
 }

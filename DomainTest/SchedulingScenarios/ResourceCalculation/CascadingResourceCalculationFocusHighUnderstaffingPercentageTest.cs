@@ -53,5 +53,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			b1AbsDiff.Should().Be.LessThan(19.3);
 			(b1AbsDiff + b2AbsDiff).Should().Be.IncludedIn(98.99, 99.01);
 		}
+
+		public CascadingResourceCalculationFocusHighUnderstaffingPercentageTest(bool resourcePlannerHalfHourSkillTimeZon75509) : base(resourcePlannerHalfHourSkillTimeZon75509)
+		{
+		}
 	}
 }
