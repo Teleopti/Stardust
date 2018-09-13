@@ -62,7 +62,9 @@
 	test('should navigate to corresponding date after tapping on a date cell', function() {
 		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
-		vm.weekViewModels()[0].dayViewModels()[0].navigateToDayView();
+		vm.weekViewModels()[0]
+			.dayViewModels()[0]
+			.navigateToDayView();
 
 		equal(hash, 'Schedule/MobileDay/2017/10/01');
 	});
@@ -75,13 +77,15 @@
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
 		var expectSelectedDate = moment(vm.selectedDate()).add('months', -1);
 
-		$('.mobile-month-view .pagebody').swipe('option').swipeRight();
+		$('.mobile-month-view .pagebody')
+			.swipe('option')
+			.swipeRight();
 
 		equal(vm.selectedDate().format('YYYY-MM-DD'), expectSelectedDate.format('YYYY-MM-DD'));
 		$('.mobile-month-view .pagebody').remove();
 	});
 
-	test('should navigate to next month when swiping left', function(){
+	test('should navigate to next month when swiping left', function() {
 		var html = '<div class="mobile-month-view"><div class="pagebody"></div></div>';
 		$('body').append(html);
 
@@ -89,13 +93,15 @@
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
 		var expectSelectedDate = moment(vm.selectedDate()).add('months', 1);
 
-		$('.mobile-month-view .pagebody').swipe('option').swipeLeft();
+		$('.mobile-month-view .pagebody')
+			.swipe('option')
+			.swipeLeft();
 
 		equal(vm.selectedDate().format('YYYY-MM-DD'), expectSelectedDate.format('YYYY-MM-DD'));
 		$('.mobile-month-view .pagebody').remove();
 	});
 
-	test('should reload data when schedules change within period', function(){
+	test('should reload data when schedules change within period', function() {
 		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
 		fetchMonthDataRequestCount = 0;
 		Teleopti.MyTimeWeb.Schedule.MobileMonth.ReloadScheduleListener({
@@ -106,7 +112,7 @@
 		equal(fetchMonthDataRequestCount, 1);
 	});
 
-	test('should not reload data when schedules change outside period', function(){
+	test('should not reload data when schedules change outside period', function() {
 		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
 		fetchMonthDataRequestCount = 0;
 		Teleopti.MyTimeWeb.Schedule.MobileMonth.ReloadScheduleListener({
@@ -117,22 +123,30 @@
 		equal(fetchMonthDataRequestCount, 0);
 	});
 
-	test('should reload data in viewing month', function(){
+	test('should reload data in viewing month', function() {
 		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
 		vm.selectedDate(moment('2017-10-12'));
 
 		fetchMonthDataRequestCount = 0;
-		fakeMonthData.ScheduleDays.forEach(function(d){
-			d.Date = moment(d.Date).add(1, 'month').format('YYYY-MM-DDTHH:mm');
-			d.FixedDate = moment(d.FixedDate).add(1, 'month').format('YYYY-MM-DD');
+		fakeMonthData.ScheduleDays.forEach(function(d) {
+			d.Date = moment(d.Date)
+				.add(1, 'month')
+				.format('YYYY-MM-DDTHH:mm');
+			d.FixedDate = moment(d.FixedDate)
+				.add(1, 'month')
+				.format('YYYY-MM-DD');
 		});
-		fakeMonthData.CurrentDate = moment(fakeMonthData.CurrentDate).add(1, 'month').format('YYYY-MM-DDTHH:mm');
-		fakeMonthData.FixedDate = moment(fakeMonthData.FixedDate).add(1, 'month').format('YYYY-MM-DDTHH:mm');
+		fakeMonthData.CurrentDate = moment(fakeMonthData.CurrentDate)
+			.add(1, 'month')
+			.format('YYYY-MM-DDTHH:mm');
+		fakeMonthData.FixedDate = moment(fakeMonthData.FixedDate)
+			.add(1, 'month')
+			.format('YYYY-MM-DDTHH:mm');
 
 		vm.nextMonth();
 
-		setTimeout(function(){
+		setTimeout(function() {
 			Teleopti.MyTimeWeb.Schedule.MobileMonth.ReloadScheduleListener({
 				StartDate: 'D2017-11-12T00:00:00',
 				EndDate: 'D2017-11-12T00:00:00'
@@ -143,7 +157,7 @@
 		equal(vm.selectedDate().format('YYYY-MM-DD'), '2017-11-12');
 	});
 
-	test("should show message icon when asmEnabled", function () {
+	test('should show message icon when asmEnabled', function() {
 		fakeMonthData.AsmEnabled = true;
 		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
@@ -181,156 +195,178 @@
 		Teleopti.MyTimeWeb.Portal.Init(getDefaultSetting(), getFakeWindow(), ajax);
 	}
 
-	function initAjax(){
+	function initAjax() {
 		fakeMonthData = {
-			'ScheduleDays': [{
-				'Date': '2017-10-01T00:00:00',
-				'FixedDate': '2017-10-01',
-				'Absences': [{
-					'Color': 'rgb(0, 0, 0)',
-					'IsFullDayAbsence': false,
-					'Name': 'Permitted',
-					'ShortName': 'PT'
-				}, {
-					'Color': 'rgb(20, 20, 100)',
-					'IsFullDayAbsence': false,
-					'Name': 'Illness',
-					'ShortName': 'IL'
-				}],
-				'IsDayOff': true,
-				'Shift': {
-					'Name': 'Late',
-					'ShortName': 'LA',
-					'Color': 'rgb(0, 0,0)',
-					'TimeSpan': '12:00 PM - 06:00 PM',
-					'WorkingHours': '0:00'
+			ScheduleDays: [
+				{
+					Date: '2017-10-01T00:00:00',
+					FixedDate: '2017-10-01',
+					Absences: [
+						{
+							Color: 'rgb(0, 0, 0)',
+							IsFullDayAbsence: false,
+							Name: 'Permitted',
+							ShortName: 'PT'
+						},
+						{
+							Color: 'rgb(20, 20, 100)',
+							IsFullDayAbsence: false,
+							Name: 'Illness',
+							ShortName: 'IL'
+						}
+					],
+					IsDayOff: true,
+					Shift: {
+						Name: 'Late',
+						ShortName: 'LA',
+						Color: 'rgb(0, 0,0)',
+						TimeSpan: '12:00 PM - 06:00 PM',
+						WorkingHours: '0:00'
+					},
+					SeatBookings: null
 				},
-				'SeatBookings': null
-			}, {
-				'Date': '2017-10-02T00:00:00',
-				'FixedDate': '2017-10-02',
-				'Absences': null,
-				'Overtimes': [{
-					'Name': 'Meeting',
-					'ShortName': '',
-					'Color': 'rgb(0,0,255)'
-				}, {
-					'Name': 'Phone',
-					'ShortName': '',
-					'Color': 'rgb(255,0,0)'
-				}],
-				'IsDayOff': false,
-				'Shift': {
-					'Name': 'Early',
-					'ShortName': 'AM',
-					'Color': 'rgb(0, 0,0)',
-					'TimeSpan': '8:30 AM - 5:30 PM',
-					'WorkingHours': '8:00'
+				{
+					Date: '2017-10-02T00:00:00',
+					FixedDate: '2017-10-02',
+					Absences: null,
+					Overtimes: [
+						{
+							Name: 'Meeting',
+							ShortName: '',
+							Color: 'rgb(0,0,255)'
+						},
+						{
+							Name: 'Phone',
+							ShortName: '',
+							Color: 'rgb(255,0,0)'
+						}
+					],
+					IsDayOff: false,
+					Shift: {
+						Name: 'Early',
+						ShortName: 'AM',
+						Color: 'rgb(0, 0,0)',
+						TimeSpan: '8:30 AM - 5:30 PM',
+						WorkingHours: '8:00'
+					},
+					SeatBookings: null
 				},
-				'SeatBookings': null
-			}, {
-				'Date': '2017-10-03T00:00:00',
-				'FixedDate': '2017-10-03',
-				'Absences': null,
-				'Overtimes': null,
-				'IsDayOff': false,
-				'Shift': {
-					'Name': 'Early',
-					'ShortName': 'AM',
-					'Color': 'rgb(128,255,128)',
-					'TimeSpan': '8:00 AM - 5:00 PM',
-					'WorkingHours': '8:00'
+				{
+					Date: '2017-10-03T00:00:00',
+					FixedDate: '2017-10-03',
+					Absences: null,
+					Overtimes: null,
+					IsDayOff: false,
+					Shift: {
+						Name: 'Early',
+						ShortName: 'AM',
+						Color: 'rgb(128,255,128)',
+						TimeSpan: '8:00 AM - 5:00 PM',
+						WorkingHours: '8:00'
+					},
+					SeatBookings: null
 				},
-				'SeatBookings': null
-			}, {
-				'Date': '2017-10-04T00:00:00',
-				'FixedDate': '2017-10-04',
-				'Absences': null,
-				'Overtimes': null,
-				'IsDayOff': false,
-				'Shift': {
-					'Name': 'Early',
-					'ShortName': 'AM',
-					'Color': 'rgb(128,255,128)',
-					'TimeSpan': '8:00 AM - 5:00 PM',
-					'WorkingHours': '8:00'
+				{
+					Date: '2017-10-04T00:00:00',
+					FixedDate: '2017-10-04',
+					Absences: null,
+					Overtimes: null,
+					IsDayOff: false,
+					Shift: {
+						Name: 'Early',
+						ShortName: 'AM',
+						Color: 'rgb(128,255,128)',
+						TimeSpan: '8:00 AM - 5:00 PM',
+						WorkingHours: '8:00'
+					},
+					SeatBookings: null
 				},
-				'SeatBookings': null
-			}, {
-				'Date': '2017-10-05T00:00:00',
-				'FixedDate': '2017-10-05',
-				'Absences': null,
-				'Overtimes': null,
-				'IsDayOff': false,
-				'Shift': {
-					'Name': 'Day',
-					'ShortName': 'DY',
-					'Color': 'rgb(255,192,128)',
-					'TimeSpan': '10:00 AM - 7:00 PM',
-					'WorkingHours': '8:00'
+				{
+					Date: '2017-10-05T00:00:00',
+					FixedDate: '2017-10-05',
+					Absences: null,
+					Overtimes: null,
+					IsDayOff: false,
+					Shift: {
+						Name: 'Day',
+						ShortName: 'DY',
+						Color: 'rgb(255,192,128)',
+						TimeSpan: '10:00 AM - 7:00 PM',
+						WorkingHours: '8:00'
+					},
+					SeatBookings: null
 				},
-				'SeatBookings': null
-			}, {
-				'Date': '2017-10-06T00:00:00',
-				'FixedDate': '2017-10-06',
-				'Absences': null,
-				'Overtimes': null,
-				'IsDayOff': false,
-				'Shift': {
-					'Name': 'Day',
-					'ShortName': 'DY',
-					'Color': 'rgb(255,192,128)',
-					'TimeSpan': '10:00 AM - 7:00 PM',
-					'WorkingHours': '8:00'
+				{
+					Date: '2017-10-06T00:00:00',
+					FixedDate: '2017-10-06',
+					Absences: null,
+					Overtimes: null,
+					IsDayOff: false,
+					Shift: {
+						Name: 'Day',
+						ShortName: 'DY',
+						Color: 'rgb(255,192,128)',
+						TimeSpan: '10:00 AM - 7:00 PM',
+						WorkingHours: '8:00'
+					},
+					SeatBookings: null
 				},
-				'SeatBookings': null
-			}, {
-				'Date': '2017-10-07T00:00:00',
-				'FixedDate': '2017-10-07',
-				'Absences': null,
-				'Overtimes': null,
-				'IsDayOff': true,
-				'Shift': {
-					'Name': null,
-					'ShortName': null,
-					'Color': null,
-					'TimeSpan': '12:00 PM - 12:00 PM',
-					'WorkingHours': '0:00'
+				{
+					Date: '2017-10-07T00:00:00',
+					FixedDate: '2017-10-07',
+					Absences: null,
+					Overtimes: null,
+					IsDayOff: true,
+					Shift: {
+						Name: null,
+						ShortName: null,
+						Color: null,
+						TimeSpan: '12:00 PM - 12:00 PM',
+						WorkingHours: '0:00'
+					},
+					SeatBookings: null
+				}
+			],
+			AsmEnabled: false,
+			CurrentDate: '2017-10-12T00:00:00',
+			FixedDate: '2017-10-12',
+			DayHeaders: [
+				{
+					Name: 'Sunday',
+					ShortName: 'Sun'
 				},
-				'SeatBookings': null
-			}],
-			'AsmEnabled':false,
-			'CurrentDate': '2017-10-12T00:00:00',
-			'FixedDate': '2017-10-12',
-			'DayHeaders': [{
-				'Name': 'Sunday',
-				'ShortName': 'Sun'
-			}, {
-				'Name': 'Monday',
-				'ShortName': 'Mon'
-			}, {
-				'Name': 'Tuesday',
-				'ShortName': 'Tue'
-			}, {
-				'Name': 'Wednesday',
-				'ShortName': 'Wed'
-			}, {
-				'Name': 'Thursday',
-				'ShortName': 'Thu'
-			}, {
-				'Name': 'Friday',
-				'ShortName': 'Fri'
-			}, {
-				'Name': 'Saturday',
-				'ShortName': 'Sat'
-			}]
+				{
+					Name: 'Monday',
+					ShortName: 'Mon'
+				},
+				{
+					Name: 'Tuesday',
+					ShortName: 'Tue'
+				},
+				{
+					Name: 'Wednesday',
+					ShortName: 'Wed'
+				},
+				{
+					Name: 'Thursday',
+					ShortName: 'Thu'
+				},
+				{
+					Name: 'Friday',
+					ShortName: 'Fri'
+				},
+				{
+					Name: 'Saturday',
+					ShortName: 'Sat'
+				}
+			]
 		};
 
 		fakeUserData = {
-			'BusinessUnitId': '928dd0bc-bf40-412e-b970-9b5e015aadea',
-			'DataSourceName': 'Teleopti WFM',
-			'Url': 'http://localhost:52858/TeleoptiWFM/Web/',
-			'AgentId': '11610fe4-0130-4568-97de-9b5e015b2564'
+			BusinessUnitId: '928dd0bc-bf40-412e-b970-9b5e015aadea',
+			DataSourceName: 'Teleopti WFM',
+			Url: 'http://localhost:52858/TeleoptiWFM/Web/',
+			AgentId: '11610fe4-0130-4568-97de-9b5e015b2564'
 		};
 
 		ajax = {

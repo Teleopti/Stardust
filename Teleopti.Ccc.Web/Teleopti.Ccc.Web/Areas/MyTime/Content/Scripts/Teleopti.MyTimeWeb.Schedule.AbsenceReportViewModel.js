@@ -1,7 +1,7 @@
 ﻿Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel = function(ajax, reloadSchedule) {
 	var self = this;
-	
-	this.Template = "add-absence-report-detail-template";
+
+	this.Template = 'add-absence-report-detail-template';
 	this.AbsenceId = ko.observable();
 	this.DateFrom = ko.observable(moment().startOf('day'));
 	this.DateTo = ko.observable(moment().startOf('day'));
@@ -9,40 +9,47 @@
 	this.EndTime = ko.observable('');
 	this.EndTimeNextDay = ko.observable(false);
 	this.DateFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
-		
-	this.DateToForDisplay = ko.computed(function () {
-		var date = self.EndTimeNextDay() ? self.DateFrom().clone().add('d', 1) : self.DateFrom().clone();
+
+	this.DateToForDisplay = ko.computed(function() {
+		var date = self.EndTimeNextDay()
+			? self
+					.DateFrom()
+					.clone()
+					.add('d', 1)
+			: self.DateFrom().clone();
 		return date.format(self.DateFormat());
 	});
 
-	this.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') === 'true');
+	this.ShowMeridian = $('div[data-culture-show-meridian]').attr('data-culture-show-meridian') === 'true';
 
 	this.ErrorMessage = ko.observable('');
-	
-	this.ShowError = ko.computed(function () {
+
+	this.ShowError = ko.computed(function() {
 		return self.ErrorMessage() !== undefined && self.ErrorMessage() !== '';
 	});
 
 	self.IsPostingData = ko.observable(false);
 
-	this.SaveAbsenceReport = function () {
-		if (self.IsPostingData()) { return; }
+	this.SaveAbsenceReport = function() {
+		if (self.IsPostingData()) {
+			return;
+		}
 
 		self.IsPostingData(true);
 
 		ajax.Ajax({
-			url: "Schedule/ReportAbsence",
-			dataType: "json",
+			url: 'Schedule/ReportAbsence',
+			dataType: 'json',
 			data: {
 				Date: Teleopti.MyTimeWeb.Common.FormatServiceDate(self.DateFrom()),
 				AbsenceId: self.AbsenceId()
 			},
 			type: 'POST',
-			success: function (data, textStatus, jqXHR) {
+			success: function(data, textStatus, jqXHR) {
 				reloadSchedule(data);
 				self.IsPostingData(false);
 			},
-			error: function (jqXHR, textStatus, errorThrown) {
+			error: function(jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status === 400) {
 					var data = $.parseJSON(jqXHR.responseText);
 					self.ErrorMessage(data.Errors.join('</br>'));
