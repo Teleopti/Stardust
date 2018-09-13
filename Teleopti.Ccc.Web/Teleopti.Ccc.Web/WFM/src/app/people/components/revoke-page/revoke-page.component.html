@@ -1,10 +1,8 @@
+<people-title-bar>{{'RevokeRoles' | translate}}</people-title-bar>
 <div class="con-row">
 	<div class="con-flex">
-		<div class="con-row">
-			<h2 class="con-flex">{{'RevokeRoles' | translate}}</h2>
-		</div>
 		<div class="role-content">
-			<h3>{{'CurrentRoles' | translate}}</h3>
+			<h3>{{'RevokableRoles' | translate}}</h3>
 			<div class="con-fluid-row" data-test-revoke-current>
 				<div class="con-fluid-flex" *ngFor="let role of revokePageService.rolesOfPeople$ | async">
 					<label nz-checkbox [ngModel]="role.selected" (ngModelChange)="toggleSelectedRole(role)" data-test-chip>
@@ -15,7 +13,7 @@
 			<nz-divider></nz-divider>
 			<aside class="action-buttons">
 				<button nz-button nzType="default" (click)="close()">{{'Cancel' | translate}}</button>
-				<button #saveBtn nz-button nzType="primary" (click)="save()" [disabled]="!isAnyRoleSelected()" data-test-save>{{'Save'
+				<button #saveBtn nz-button nzType="primary" (click)="save()" [disabled]="!isAnyRoleSelected()" data-test-save>{{'Revoke'
 					| translate}}</button>
 			</aside>
 		</div>

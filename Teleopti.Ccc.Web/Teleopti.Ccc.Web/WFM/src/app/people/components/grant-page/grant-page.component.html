@@ -1,19 +1,18 @@
+<people-title-bar>{{'GrantRoles' | translate}}</people-title-bar>
 <div class="con-row">
 	<div class="con-flex">
-		<div class="con-row">
-			<h2 class="con-flex" style="display:inline-block">{{'GrantRoles' | translate}}</h2>
-		</div>
 		<div class="role-content">
-			<h3>{{'CurrentRoles' | translate}}</h3>
+			<h2>{{'CurrentRoles' | translate}}</h2>
 			<div class="con-fluid-row" data-test-grant-current>
 				<div class="con-fluid-flex" *ngFor="let role of grantPageService.rolesOfPeople$ | async">
-					<label nz-checkbox [nzDisabled]="true" [ngModel]="isRoleOnAll(role.Id)" [nzIndeterminate]="!isRoleOnAll(role.Id)" data-test-chip>
+					<label nz-checkbox [nzDisabled]="true" [ngModel]="isRoleOnAll(role.Id)" [nzIndeterminate]="!isRoleOnAll(role.Id)"
+					 data-test-chip>
 						{{role.Name}}
 					</label>
 				</div>
 			</div>
 			<nz-divider></nz-divider>
-			<h3>{{'AvailableRoles' | translate}}</h3>
+			<h2>{{'AvailableRoles' | translate}}</h2>
 			<div class="con-fluid-row" data-test-grant-available>
 				<div class="con-fluid-flex" *ngFor="let role of getRolesNotOnAll()">
 					<label nz-checkbox [ngModel]="role.selected" (ngModelChange)="toggleSelectedRole(role)" data-test-chip>
@@ -24,7 +23,7 @@
 			<nz-divider></nz-divider>
 			<aside class="action-buttons">
 				<button nz-button nzType="default" (click)="close()">{{'Cancel' | translate}}</button>
-				<button #saveBtn nz-button nzType="primary" (click)="save()" [disabled]="!isAnyRoleSelected()" data-test-save>{{'Save'
+				<button #saveBtn nz-button nzType="primary" (click)="save()" [disabled]="!isAnyRoleSelected()" data-test-save>{{'Grant'
 					| translate}}</button>
 			</aside>
 		</div>

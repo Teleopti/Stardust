@@ -17728,4 +17728,20 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>The days currently selected to be included in the shift trade would result in too much or too little contract time.</value>
     <comment>Contract time violation message in shift trade request.</comment>
   </data>
+  <data name="Grant" xml:space="preserve">
+    <value>Grant</value>
+    <comment>Use in People when granting roles</comment>
+  </data>
+  <data name="RevokableRoles" xml:space="preserve">
+    <value>Revokable roles</value>
+    <comment>Header for section with roles to revoke</comment>
+  </data>
+  <data name="ManageApplicationLogon" xml:space="preserve">
+    <value>Manage application logons</value>
+    <comment>Header for managing application logons</comment>
+  </data>
+  <data name="ManageIdentityLogon" xml:space="preserve">
+    <value>Manage identity logons</value>
+    <comment>Header for managing identity logons</comment>
+  </data>
 </root>

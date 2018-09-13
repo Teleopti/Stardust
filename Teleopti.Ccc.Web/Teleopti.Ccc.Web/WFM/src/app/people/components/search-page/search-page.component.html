@@ -1,23 +1,30 @@
+<people-title-bar><i class="mdi mdi-account-group"></i> {{'People' | translate}}</people-title-bar>
+<h2>{{'AccessManagement' | translate}}</h2>
 <div class="con-row">
   <div class="con-flex">
     <div class="sub-header">
       <div class="con-row">
         <div class="con-flex">
           <nz-input-group [nzSuffix]="suffixTemplate" nzPrefixIcon="anticon anticon-search">
-            <input nz-input [placeholder]="'Search' | translate" [formControl]="searchControl" (keyup.enter)="onSearch()" autofocus data-test-searchinput>
+            <input nz-input [placeholder]="'Search' | translate" [formControl]="searchControl" (keyup.enter)="onSearch()"
+              autofocus data-test-searchinput>
           </nz-input-group>
           <ng-template #suffixTemplate>
             <i class="anticon anticon-close-circle" (click)="searchControl.setValue('')" *ngIf="searchControl.value.length"></i>
           </ng-template>
         </div>
         <div class="con-flex x3">
-          <button nz-button nzType="default" data-test-grant-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToGrant()">
+          <button nz-button nzType="default" data-test-grant-button [disabled]="!workspaceService.isAnySelected()"
+            (click)="nav.navToGrant()">
             {{'GrantRole' | translate}}</button>
-          <button nz-button nzType="default" data-test-revoke-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToRevoke()">
+          <button nz-button nzType="default" data-test-revoke-button [disabled]="!workspaceService.isAnySelected()"
+            (click)="nav.navToRevoke()">
             {{'RevokeRole' | translate}}</button>
-          <button nz-button nzType="default" data-test-applicationlogon-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToApplicationLogon()">
+          <button nz-button nzType="default" data-test-applicationlogon-button [disabled]="!workspaceService.isAnySelected()"
+            (click)="nav.navToApplicationLogon()">
             {{'ApplicationLogon' | translate}}</button>
-          <button nz-button nzType="default" data-test-identitylogon-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToIdentityLogon()">
+          <button nz-button nzType="default" data-test-identitylogon-button [disabled]="!workspaceService.isAnySelected()"
+            (click)="nav.navToIdentityLogon()">
             {{'IdentityLogon' | translate}}</button>
         </div>
       </div>
@@ -25,12 +32,13 @@
     <div class="con-row">
       <div class="con-flex table-container" data-test-search>
         <nz-table #basicTable (nzCurrentPageDataChange)="nzOnCurrentPageDataChange($event)" (nzPageSizeChange)="nzOnPageSizeChange($event)"
-          (nzPageIndexChange)="nzOnPageIndexChange($event)" [nzData]="peopleDataSet" [nzFrontPagination]="false" nzShowPagination
-          [nzPageSizeOptions]="[20, 50, 100, 500]" [nzSize]="'small'" nzShowSizeChanger [nzPageIndex]="searchService.pageIndex + 1"
+          (nzPageIndexChange)="nzOnPageIndexChange($event)" [nzData]="peopleDataSet" [nzFrontPagination]="false"
+          nzShowPagination [nzPageSizeOptions]="[20, 50, 100, 500]" [nzSize]="'small'" nzShowSizeChanger [nzPageIndex]="searchService.pageIndex + 1"
           [nzPageSize]="searchService.pageSize" [nzTotal]="searchService.lastQuerySize" [nzNoResult]="'noSearchResults' | translate">
           <thead>
             <tr>
-              <th nzWidth="62px" nzShowCheckbox [nzChecked]="isAllSelected()" [nzIndeterminate]="isAnySelected() && !isAllSelected()" (nzCheckedChange)="selectAllOnPage()"></th>
+              <th nzWidth="62px" nzShowCheckbox [nzChecked]="isAllSelected()" [nzIndeterminate]="isAnySelected() && !isAllSelected()"
+                (nzCheckedChange)="selectAllOnPage()"></th>
               <th (click)="sort('FirstName')" class="first-name" data-test-sort-fn>{{'FirstName' | translate}}
                 <ng-container *ngIf="isSortingBy('FirstName')">
                   <i *ngIf="isSortingAsc()" class="anticon anticon-arrow-up"></i>

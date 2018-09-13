@@ -3,7 +3,14 @@ import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { NzButtonModule, NzCheckboxModule, NzDividerModule, NzFormModule, NzTableModule, NzToolTipModule } from 'ng-zorro-antd';
+import {
+	NzButtonModule,
+	NzCheckboxModule,
+	NzDividerModule,
+	NzFormModule,
+	NzTableModule,
+	NzToolTipModule
+} from 'ng-zorro-antd';
 import { WorkspaceComponent } from '..';
 import { configureTestSuite } from '../../../../configure-test-suit';
 import { MockTranslationModule } from '../../../../mocks/translation';
@@ -16,6 +23,7 @@ import {
 } from '../../services';
 import { adina, eva, fakeBackendProvider, myles } from '../../services/fake-backend';
 import { countUniqueRolesFromPeople } from '../../utils';
+import { MockTitleBarComponent } from '../title-bar';
 import { GrantPageComponent } from './grant-page.component';
 import { GrantPageService } from './grant-page.service';
 
@@ -29,7 +37,7 @@ describe('GrantPageComponent', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [GrantPageComponent, WorkspaceComponent],
+			declarations: [GrantPageComponent, WorkspaceComponent, MockTitleBarComponent],
 			imports: [
 				MockTranslationModule,
 				HttpClientModule,

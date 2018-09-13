@@ -1,9 +1,7 @@
+<people-title-bar>{{'ManageIdentityLogon' | translate}}</people-title-bar>
 <div class="con-row" data-test-identity-logon>
   <div class="con-flex">
     <div class="con-row">
-      <div class="con-flex">
-        <h2>{{'IdentityLogon' | translate}}</h2>
-      </div>
     </div>
     <form [formGroup]="form">
       <form formArrayName="people">
@@ -30,7 +28,8 @@
       <div nz-col [nzSpan]="14">
         <aside class="action-buttons">
           <button nz-button nzType="default" (click)="nav.navToSearch()">{{'Cancel' | translate}}</button>
-          <button nz-button nzType="primary" [disabled]="!isValid()" (click)="save()" data-test-save>{{'Save' | translate}}</button>
+          <button nz-button nzType="primary" [disabled]="!isValid()" (click)="save()" data-test-save>{{'Save' |
+            translate}}</button>
         </aside>
       </div>
     </div>

@@ -1,9 +1,7 @@
+<people-title-bar>{{'ManageApplicationLogon' | translate}}</people-title-bar>
 <div class="con-row" data-test-application-logon>
   <div class="con-flex">
     <div class="con-row">
-      <div class="con-flex">
-        <h2>{{'ApplicationLogon' | translate}}</h2>
-      </div>
     </div>
     <form [formGroup]="form">
       <form formArrayName="people">
@@ -11,7 +9,8 @@
           <nz-form-item data-test-person>
             <nz-form-label [nzSpan]="7" data-test-person-name>{{ personGroup.get('FullName').value }}</nz-form-label>
             <nz-form-control [nzSpan]="7" nzHasFeedback>
-              <input nz-input formControlName="Logon" [placeholder]="'ApplicationLogon' | translate" data-test-person-logon>
+              <input nz-input formControlName="Logon" [placeholder]="'ApplicationLogon' | translate"
+                data-test-person-logon>
               <nz-form-explain *ngIf="personGroup.get('Logon').dirty && personGroup.get('Logon').errors">
                 <ng-container *ngIf="personGroup.get('Logon').hasError('duplicateNameValidator')">
                   {{'PeopleUsernameIsAlreadyInUse' | translate}}
@@ -30,7 +29,8 @@
       <div nz-col [nzSpan]="14">
         <aside class="action-buttons">
           <button nz-button nzType="default" (click)="nav.navToSearch()">{{'Cancel' | translate}}</button>
-          <button nz-button nzType="primary" [disabled]="!isValid()" (click)="save()" data-test-save>{{'Save' | translate}}</button>
+          <button nz-button nzType="primary" [disabled]="!isValid()" (click)="save()" data-test-save>{{'Save' |
+            translate}}</button>
         </aside>
       </div>
     </div>
