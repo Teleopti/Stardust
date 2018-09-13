@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 				Assert.DoesNotThrow(() => { Synchronizer.Synchronize(); });
 		}
 		
-		
 		[Test]
 		public void ShouldSynchronizeAdherence()
 		{			
@@ -79,6 +78,6 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 			var data = UnitOfWork.Get(() => Target.Build(null, new[] {teamId}).First());
 			
 			data.Agents.Single().Days.Last().Adherence.Should().Be(100);
-		}
+		}		
 	}
 }
