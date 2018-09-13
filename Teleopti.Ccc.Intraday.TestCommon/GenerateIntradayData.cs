@@ -46,6 +46,8 @@ namespace Teleopti.Ccc.Intraday.TestCommon
 
 			foreach (var period in input.TimePeriods)
 			{
+
+
 				var fromDateUtc = period.From;
 				var toDateUtc = period.To;
 				var deleteToDateUtc = period.From.AddDays(1);
@@ -57,18 +59,23 @@ namespace Teleopti.Ccc.Intraday.TestCommon
 					toDateUtc = TimeZoneInfo.FindSystemTimeZoneById(input.UserTimeZoneInfo.TimeZoneId)
 						.SafeConvertTimeToUtc(DateTime.SpecifyKind(period.To, DateTimeKind.Unspecified));
 					deleteToDateUtc = TimeZoneInfo.FindSystemTimeZoneById(input.UserTimeZoneInfo.TimeZoneId)
-						.SafeConvertTimeToUtc(DateTime.SpecifyKind(period.From.AddDays(1), DateTimeKind.Unspecified));
+						.SafeConvertTimeToUtc(
+							DateTime.SpecifyKind(period.From.AddDays(1), DateTimeKind.Unspecified));
 				}
 
-				var fromIntervalIdUtc = IntervalHelper.GetIntervalId(input.TimeZoneInterval.IntervalLength, fromDateUtc);
-				var toIntervalIdUtc = IntervalHelper.GetIntervalId(input.TimeZoneInterval.IntervalLength, toDateUtc);
-				var deleteToIntervalIdUtc = IntervalHelper.GetIntervalId(input.TimeZoneInterval.IntervalLength, deleteToDateUtc);
+				var fromIntervalIdUtc =
+					IntervalHelper.GetIntervalId(input.TimeZoneInterval.IntervalLength, fromDateUtc);
+				var toIntervalIdUtc =
+					IntervalHelper.GetIntervalId(input.TimeZoneInterval.IntervalLength, toDateUtc);
+				var deleteToIntervalIdUtc =
+					IntervalHelper.GetIntervalId(input.TimeZoneInterval.IntervalLength, deleteToDateUtc);
 
 				var workloads = _workloadQueuesProvider.Provide();
 
 				foreach (var workloadInfo in workloads)
 				{
-					var forecastIntervals = _forecastProvider.Provide(workloadInfo.WorkloadId, fromDateUtc.Date, fromIntervalIdUtc, toDateUtc.Date, toIntervalIdUtc);
+					var forecastIntervals = _forecastProvider.Provide(workloadInfo.WorkloadId, fromDateUtc.Date,
+						fromIntervalIdUtc, toDateUtc.Date, toIntervalIdUtc);
 
 					if (forecastIntervals.Count == 0 || Math.Abs(forecastIntervals.Sum(x => x.Calls)) < 0.001)
 						continue;
@@ -76,15 +83,18 @@ namespace Teleopti.Ccc.Intraday.TestCommon
 					var targetQueue = _uniqueQueueProvider.Get(workloadInfo);
 					if (!_queueDataDictionary.ContainsKey(targetQueue.QueueId))
 					{
-						_queueDataDictionary.Add(targetQueue.QueueId, generateQueueDataIntervals(forecastIntervals, targetQueue));
+						_queueDataDictionary.Add(targetQueue.QueueId,
+							generateQueueDataIntervals(forecastIntervals, targetQueue));
 					}
 					else if (consoleApplication)
 					{
-						Console.WriteLine($"Found duplicate for QueueId: ${targetQueue.QueueId}, QueueName: ${targetQueue.QueueName}, DatasourceId: ${targetQueue.DatasourceId}");
+						Console.WriteLine(
+							$"Found duplicate for QueueId: ${targetQueue.QueueId}, QueueName: ${targetQueue.QueueName}, DatasourceId: ${targetQueue.DatasourceId}");
 					}
 				}
 
-				_queueDataPersister.Persist(_queueDataDictionary, fromDateUtc.Date, fromIntervalIdUtc, deleteToDateUtc.Date, deleteToIntervalIdUtc);
+				_queueDataPersister.Persist(_queueDataDictionary, fromDateUtc.Date, fromIntervalIdUtc,
+					deleteToDateUtc.Date, deleteToIntervalIdUtc);
 
 				var skillsContainingQueue = new List<string>();
 
@@ -115,7 +125,8 @@ namespace Teleopti.Ccc.Intraday.TestCommon
 
 					if (skillsAffectedText.Length > 0)
 					{
-						Console.WriteLine($"Queue stats were generated {period.From:yyyy-MM-dd} for the following skills:");
+						Console.WriteLine(
+							$"Queue stats were generated {period.From:yyyy-MM-dd} for the following skills:");
 						Console.WriteLine(skillsAffectedText);
 					}
 					else
@@ -144,6 +155,7 @@ namespace Teleopti.Ccc.Intraday.TestCommon
 				input.Date = DateTime.Today;
 				input.UserTimeZoneInfo = userTimeZoneInfo ?? _userTimeZoneProvider.GetTimeZoneForCurrentUser();
 				input.TimeZoneInterval = _timeZoneprovider.Provide(input.UserTimeZoneInfo.TimeZoneId);
+				new UserTimeZoneInfo(input.UserTimeZoneInfo.Username, input.UserTimeZoneInfo.TimeZoneId);
 				input.TimePeriods = new List<IntradayTestDateTimePeriod>()
 				{
 					new IntradayTestDateTimePeriod(DateTime.Today, DateTime.Now),
@@ -157,8 +169,9 @@ namespace Teleopti.Ccc.Intraday.TestCommon
 				};
 				return input;
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
+				Console.WriteLine(e);
 				Console.WriteLine("Cant autogenerate input.");
 				Console.WriteLine("");
 				return null;

@@ -1,3 +1,4 @@
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Intraday.TestCommon.Infrastructure;
@@ -19,10 +20,14 @@ namespace Teleopti.Ccc.Intraday.TestCommon
 			var dbCommand = new DatabaseCommand(CommandType.Text,
 				$"select * from Person p inner join Tenant.PersonInfo pi on pi.Id = p.Id where pi.[Identity] = '{currentUser}'", _connectionString);
 			var result = dbCommand.ExecuteDataSet(new SqlParameter[0]);
-			if (result.Tables[0].Rows.Count == 0)
+
+			if (result == null || result.Tables[0].Rows.Count == 0)
 			{
-				return null;
+				dbCommand = new DatabaseCommand(CommandType.Text,
+					"select top 1 * from Person p inner join Tenant.PersonInfo pi on pi.Id = p.Id", _connectionString);
+				result = dbCommand.ExecuteDataSet(new SqlParameter[0]);
 			}
+
 			var username = result.Tables[0].Rows[0]["ApplicationLogonName"].ToString();
 			var timezone = result.Tables[0].Rows[0]["DefaultTimeZone"].ToString();
 			return new UserTimeZoneInfo(username, timezone);
