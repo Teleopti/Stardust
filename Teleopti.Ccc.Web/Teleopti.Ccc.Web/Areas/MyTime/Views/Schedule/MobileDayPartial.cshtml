@@ -1,6 +1,6 @@
-﻿@using Teleopti.Ccc.UserTexts 
+﻿@using Teleopti.Ccc.UserTexts
 @{
-	Layout = null;
+Layout = null;
 }
 <style>
 	html, body, section#page, article#body, #body-inner, .mobile-start-day {
@@ -25,9 +25,9 @@
 </script>
 @if (Model.RequestLicense.IsOvertimeAvailabilityEnabled)
 {
-	<script type="text/html" id="add-overtime-availability-template">
-		@Html.Partial("AddOvertimeAvailabilityPartial")
-	</script>
+<script type="text/html" id="add-overtime-availability-template">
+	@Html.Partial("AddOvertimeAvailabilityPartial")
+</script>
 }
 <script type="text/html" id="probability-options-template">
 	@Html.Partial("ProbabilityOptionsPartial")
@@ -37,9 +37,9 @@
 </script>
 @if (Model.RequestLicense.IsOvertimeRequestEnabled)
 {
-	<script type="text/html" id="add-overtime-request-template">
-		@Html.Partial("~/Areas/MyTime/Views/Requests/AddNewOvertimeRequestView.cshtml")
-	</script>
+<script type="text/html" id="add-overtime-request-template">
+	@Html.Partial("~/Areas/MyTime/Views/Requests/AddNewOvertimeRequestView.cshtml")
+</script>
 }
 <div class="mobile-start-day">
 	<div class="navbar navbar-teleopti subnavbar">
@@ -53,7 +53,7 @@
 								<i class="glyphicon glyphicon-chevron-left"></i>
 							</button>
 						</span>
-						<input class="form-control text-center date-input-style" data-bind="value: displayDate" type="text" readonly="readonly"/>
+						<input class="form-control text-center date-input-style" data-bind="value: displayDate" type="text" readonly="readonly" />
 						<span class="input-group-btn">
 							<span class="btn btn-default moment-datepicker" type="button">
 								<i class="glyphicon glyphicon-calendar"></i>
@@ -91,7 +91,7 @@
 					<a class="mobile-month-calendar-icon" data-bind="attr: { href: mobileMonthUrl}">
 						<i class="glyphicon glyphicon-calendar"></i>
 					</a>
- 				</li>
+				</li>
 				<li class="mobile-today" data-bind="click: today">
 					<a>
 						<i class="glyphicon glyphicon-home"></i>
@@ -129,7 +129,9 @@
 			<span class="probability-toggle-container">
 				<a class="btn btn-default" data-bind="style: {color: textColor}, click: toggleProbabilityOptionsPanel">
 					<!-- ko if: loadingProbabilityData -->
-					<span><img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..."></span>
+					<span>
+						<img class="probability-loading-gif" src='@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader.gif")' alt="..." />
+					</span>
 					<!-- /ko -->
 					<!-- ko ifnot: showingAbsenceProbability() || showingOvertimeProbability() || loadingProbabilityData() -->
 					<span><i class="glyphicon glyphicon-eye-close"></i></span>
@@ -144,44 +146,45 @@
 			</span>
 			<!-- /ko -->
 		</div>
-		
+
 		<div class="mobile-timeline floatleft" data-bind="style: {height: scheduleHeight}">
 			<!-- ko foreach: timeLines -->
 			<div class="mobile-timeline-label absolute" data-bind="style: {top: topPosition}, text: timeText, visible: isHour">
 			</div>
 			<!-- /ko -->
 		</div>
-		
+
 		<div class="mobile-schedule-container relative" data-bind="style: {height: scheduleHeight}">
 			<!-- ko if: isLoading -->
-			<img class="data-loading-gif" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="...">
+			<img class="data-loading-gif probability-loading-gif" src='@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader.gif")'
+			 alt="..." />
 			<!-- /ko -->
 			<!-- ko if: !isLoading() -->
-				<!-- ko foreach: layers-->
-				<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-availability-bar': isOvertimeAvailability, 'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true">
-					<div data-bind="visible: showTitle() && !isOvertimeAvailability()">
-						<strong data-bind="text: title()"></strong>
-						<!-- ko if: hasMeeting -->
-						<div class="meeting floatright">
-							<i class="meeting-icon mr10">
-								<i class="glyphicon glyphicon-user ml10"></i>
-							</i>
-						</div>
-						<!-- /ko -->
-						<span class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
+			<!-- ko foreach: layers-->
+			<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-availability-bar': isOvertimeAvailability, 'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true">
+				<div data-bind="visible: showTitle() && !isOvertimeAvailability()">
+					<strong data-bind="text: title()"></strong>
+					<!-- ko if: hasMeeting -->
+					<div class="meeting floatright">
+						<i class="meeting-icon mr10">
+							<i class="glyphicon glyphicon-user ml10"></i>
+						</i>
 					</div>
-					<div data-bind="visible: showTitle() && isOvertimeAvailability()">
-						<i class="glyphicon glyphicon-time"></i>
-					</div>
-				</div>
-				<!-- /ko -->
-				<!-- ko if: showProbabilityOptionsToggleIcon || probabilities().length > 0 -->
-				<div class="probability-vertical-bar">
-					<!--ko foreach: probabilities-->
-					<div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true, placement: 'left', trigger: 'click'}, style: styleJson, hideTooltipAfterMouseLeave: true"></div>
 					<!-- /ko -->
+					<span class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
 				</div>
+				<div data-bind="visible: showTitle() && isOvertimeAvailability()">
+					<i class="glyphicon glyphicon-time"></i>
+				</div>
+			</div>
+			<!-- /ko -->
+			<!-- ko if: showProbabilityOptionsToggleIcon || probabilities().length > 0 -->
+			<div class="probability-vertical-bar">
+				<!--ko foreach: probabilities-->
+				<div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true, placement: 'left', trigger: 'click'}, style: styleJson, hideTooltipAfterMouseLeave: true"></div>
 				<!-- /ko -->
+			</div>
+			<!-- /ko -->
 			<!-- /ko -->
 		</div>
 	</div>

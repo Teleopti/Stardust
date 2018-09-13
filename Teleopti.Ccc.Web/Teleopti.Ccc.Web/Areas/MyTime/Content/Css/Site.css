@@ -1736,3 +1736,9 @@ button.btn.absence-report-cancel {
 	background-color: beige !important;
 	background-image: url(../Images/stripe.png) !important;
 }
+
+.probability-loading-gif {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+}
