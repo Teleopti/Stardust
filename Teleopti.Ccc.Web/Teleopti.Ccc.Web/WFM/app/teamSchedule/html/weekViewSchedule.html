@@ -26,7 +26,7 @@
 			</div>
 
 			<span class="datepicker-container" ng-click="$event.stopPropagation()">
-				<team-schedule-datepicker selected-date="vm.startOfWeek" status="vm.showDatePicker" on-date-change="vm.onStartOfWeekChanged()" step="7"></team-schedule-datepicker>
+				<team-schedule-datepicker selected-date="vm.scheduleDate" status="vm.showDatePicker" on-date-change="vm.onScheduleDateChanged()" step="7"></team-schedule-datepicker>
 			</span>
 
 			<view-changer selected-date="vm.scheduleDate"

@@ -3,15 +3,42 @@
 
 	angular.module('wfm.teamSchedule').controller('TeamScheduleWeeklyController', TeamScheduleWeeklyController);
 
-	TeamScheduleWeeklyController.$inject = ['$window', '$q', '$translate',
-		'$filter', 'PersonScheduleWeekViewCreator', 'UtilityService', 'weekViewScheduleSvc',
-		'TeamSchedule', 'signalRSVC', '$scope', 'Toggle', 'bootstrapCommon', 'groupPageService',
-		'serviceDateFormatHelper', 'ViewStateKeeper', 'CurrentUserInfo'];
+	TeamScheduleWeeklyController.$inject =
+		[
+			'$window',
+			'$q',
+			'$translate',
+			'$filter',
+			'PersonScheduleWeekViewCreator',
+			'UtilityService',
+			'weekViewScheduleSvc',
+			'TeamSchedule',
+			'signalRSVC',
+			'$scope',
+			'Toggle',
+			'bootstrapCommon',
+			'groupPageService',
+			'serviceDateFormatHelper',
+			'ViewStateKeeper',
+			'CurrentUserInfo'];
 
-	function TeamScheduleWeeklyController($window, $q, $translate, $filter, WeekViewCreator, Util,
-		weekViewScheduleSvc, teamScheduleSvc, signalR,
-		$scope, toggles, bootstrapCommon, groupPageService,
-		serviceDateFormatHelper, ViewStateKeeper, CurrentUserInfo) {
+	function TeamScheduleWeeklyController(
+		$window,
+		$q,
+		$translate,
+		$filter,
+		WeekViewCreator,
+		Util,
+		weekViewScheduleSvc,
+		teamScheduleSvc,
+		signalR,
+		$scope,
+		toggles,
+		bootstrapCommon,
+		groupPageService,
+		serviceDateFormatHelper,
+		ViewStateKeeper,
+		CurrentUserInfo) {
 		var vm = this;
 		var stateParams = ViewStateKeeper.get();
 		vm.searchOptions = {
@@ -23,13 +50,16 @@
 				'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
 			]
 		};
-		
+
 		vm.toggles = toggles;
 		vm.boostrap = bootstrapCommon.ready();
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
+
+		vm.startOfWeek = stateParams.selectedDate || new Date();
 		vm.scheduleDate = stateParams.selectedDate || new Date();
+
 		vm.teamNameMap = stateParams.teamNameMap || {};
 		vm.enableClickableCell = true;
 		vm.onCellClick = openSelectedAgentDayInNewWindow;
@@ -41,7 +71,7 @@
 			groupIds: [],
 			groupPageId: ''
 		};
-		vm.startOfWeek = stateParams.selectedDate || new Date();
+
 
 		if (angular.isArray(stateParams.selectedTeamIds) && stateParams.selectedTeamIds.length > 0) {
 			replaceArrayValues(stateParams.selectedTeamIds, vm.selectedGroups.groupIds);
@@ -53,7 +83,6 @@
 		}
 
 		vm.selectedFavorite = stateParams.do ? stateParams.selectedFavorite : null;
-		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 
 		vm.onKeyWordInSearchInputChanged = function () {
 			vm.selectedFavorite = false;
@@ -73,17 +102,9 @@
 			resetFocus();
 		};
 
-		function resetFocus() {
-			$scope.$broadcast("resetFocus", "organizationPicker");
-		};
-
-		vm.onStartOfWeekChanged = function () {
-			vm.scheduleDate = angular.copy(vm.startOfWeek);
-			
+		vm.onScheduleDateChanged = function () {
+			loadGroupings();
 			vm.loadSchedules();
-			if (toggles.Wfm_HideUnusedTeamsAndSites_42690) {
-				loadGroupings();
-			}
 		};
 
 		vm.paginationOptions = {
@@ -155,6 +176,7 @@
 				SearchTerm: vm.searchOptions.keyword
 			};
 		};
+
 		vm.paginationOptions.totalPages = 1;
 
 		vm.orgPickerSelectedText = function () {
@@ -182,27 +204,21 @@
 		};
 
 		vm.getGroupPagesAsync = function () {
-			var startDateStr = serviceDateFormatHelper.getDateOnly(vm.startOfWeek);
-			var endDateStr = serviceDateFormatHelper.getDateOnly(moment(vm.startOfWeek).add(6, 'days'));
-			groupPageService.fetchAvailableGroupPages(startDateStr, endDateStr).then(function (data) {
+			var date = serviceDateFormatHelper.getDateOnly(moment(vm.scheduleDate));
+			groupPageService.fetchAvailableGroupPagesForDate(date).then(function (data) {
 				vm.availableGroups = data;
 				loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
 			});
 		};
-		if (vm.toggles.Wfm_GroupPages_45057)
-			vm.getGroupPagesAsync();
 
 		vm.getSitesAndTeamsAsync = function () {
 			return $q(function (resolve, reject) {
 				var startDate = serviceDateFormatHelper.getDateOnly(moment(vm.startOfWeek));
 				var endDate = serviceDateFormatHelper.getDateOnly(moment(vm.startOfWeek).add(6, 'days'));
 
-				var promise;
-				if (toggles.Wfm_HideUnusedTeamsAndSites_42690) {
-					promise = teamScheduleSvc.hierarchyOverPeriod(startDate, endDate);
-				} else {
-					promise = teamScheduleSvc.hierarchy(startDate);
-				}
+				var promise = toggles.Wfm_HideUnusedTeamsAndSites_42690 ?
+					teamScheduleSvc.hierarchyOverPeriod(startDate, endDate)
+					: teamScheduleSvc.hierarchy(startDate);
 
 				promise.then(function (data) {
 					resolve(data);
@@ -213,29 +229,16 @@
 				});
 			});
 		};
-		if (!vm.toggles.Wfm_GroupPages_45057)
-			vm.getSitesAndTeamsAsync();
 
-		$q.all(asyncData).then(function (data) {
-			if (data.pageSetting.Agents > 0) {
-				vm.paginationOptions.pageSize = data.pageSetting.Agents;
-			}
+		vm.searchPlaceholder = $translate.instant('Search');
 
-			var defaultFavoriteSearch = data.defaultFavoriteSearch;
-			var loggedonUsersTeamId = data.loggedonUsersTeamId;
+		function getFormatDate(date) {
+			return serviceDateFormatHelper.getDateOnly(moment(date));
+		}
 
-			if (!stateParams.do) {
-				if (defaultFavoriteSearch) {
-					replaceArrayValues(defaultFavoriteSearch.TeamIds, vm.selectedGroups.groupIds);
-					vm.searchOptions.keyword = defaultFavoriteSearch.SearchTerm;
-					vm.selectedFavorite = defaultFavoriteSearch;
-				} else if (loggedonUsersTeamId && vm.selectedGroups.groupIds.length === 0) {
-					replaceArrayValues([loggedonUsersTeamId], vm.selectedGroups.groupIds);
-				}
-			}
-			vm.resetSchedulePage();
-			monitorScheduleChanged();
-		});
+		function resetFocus() {
+			$scope.$broadcast("resetFocus", "organizationPicker");
+		};
 
 		function openSelectedAgentDayInNewWindow(personId, scheduleDate) {
 			if (!vm.enableClickableCell) return;
@@ -275,14 +278,40 @@
 			return teamNameMap;
 		}
 
-		vm.searchPlaceholder = $translate.instant('Search');
-
 		function loadGroupings() {
 			if (toggles.Wfm_GroupPages_45057)
 				vm.getGroupPagesAsync();
 			else
 				vm.getSitesAndTeamsAsync();
 		}
+
+		function init() {
+			loadGroupings();
+			vm.loadSchedules();
+
+			$q.all(asyncData).then(function (data) {
+				if (data.pageSetting.Agents > 0) {
+					vm.paginationOptions.pageSize = data.pageSetting.Agents;
+				}
+
+				var defaultFavoriteSearch = data.defaultFavoriteSearch;
+				var loggedonUsersTeamId = data.loggedonUsersTeamId;
+
+				if (!stateParams.do) {
+					if (defaultFavoriteSearch) {
+						replaceArrayValues(defaultFavoriteSearch.TeamIds, vm.selectedGroups.groupIds);
+						vm.searchOptions.keyword = defaultFavoriteSearch.SearchTerm;
+						vm.selectedFavorite = defaultFavoriteSearch;
+					} else if (loggedonUsersTeamId && vm.selectedGroups.groupIds.length === 0) {
+						replaceArrayValues([loggedonUsersTeamId], vm.selectedGroups.groupIds);
+					}
+				}
+				vm.resetSchedulePage();
+				monitorScheduleChanged();
+			});
+		}
+
+		init();
 	}
 
 	function replaceArrayValues(from, to) {

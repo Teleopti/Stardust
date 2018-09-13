@@ -6,21 +6,28 @@
 		weekViewCreator,
 		viewStateKeeper,
 		serviceDateFormatHelper,
-		fakeWeekViewScheduleService;
+		weekViewScheduleService,
+		groupPageService,
+		toggle;
+
 	describe("teamschedule week controller tests", function () {
 		beforeEach(function () {
 			module("wfm.teamSchedule");
 			module(function ($provide) {
-				$provide.service('weekViewScheduleSvc', function () {
-					fakeWeekViewScheduleService = new FakeWeekViewScheduleService();
-					return fakeWeekViewScheduleService;
-				});
+				initProvideService($provide);
 				$provide.service('CurrentUserInfo', fakeCurrentUserInfo);
 			});
 		});
+
 		beforeEach(function () { moment.locale('sv'); });
 		afterEach(function () { moment.locale('en'); });
-		beforeEach(inject(function (_$q_, _$rootScope_, _$controller_, _PersonScheduleWeekViewCreator_, _ViewStateKeeper_, _serviceDateFormatHelper_) {
+
+		beforeEach(inject(function (_$q_,
+			_$rootScope_,
+			_$controller_,
+			_PersonScheduleWeekViewCreator_,
+			_ViewStateKeeper_,
+			_serviceDateFormatHelper_) {
 			$q = _$q_;
 			rootScope = _$rootScope_.$new();
 			weekViewCreator = _PersonScheduleWeekViewCreator_;
@@ -57,23 +64,23 @@
 		});
 
 		it("should clear group weeks and set person count when selected person larger than 500", function () {
-			var scheduleData = {
+			weekViewScheduleService.has({
 				"PersonWeekSchedules": [], "Total": 800, "Keyword": ""
-			};
+			});
 			var controller = setUpController();
-			fakeWeekViewScheduleService.has(scheduleData);
 
 			controller.scheduleDate = new Date("2015-10-26");
 			controller.searchOptions = {
 				focusingSearch: false
 			}
-			controller.loadSchedules();
+			controller.onScheduleDateChanged();
+
 			expect(controller.groupWeeks.length).toEqual(0);
 			expect(controller.total).toEqual(800);
 		});
 
-		it('should get correct startOfWeek and week days when start of week is changed', function () {
-			var scheduleData = {
+		it('should get correct first day of week and week days when start of week is changed', function () {
+			weekViewScheduleService.has({
 				"PersonWeekSchedules": [{
 					"PersonId": "b0e35119-4661-4a1b-8772-9b5e015b2564",
 					"Name": "Pierre Baldi",
@@ -101,18 +108,26 @@
 								"Date": { "Date": "2018-07-01T00:00:00" }
 							}], "ContractTimeMinutes": 2400.0
 				}], "Total": 1, "Keyword": ""
-			};
-			
+			});
+
 			var controller = setUpController();
-
-			fakeWeekViewScheduleService.has(scheduleData);
-
-			controller.startOfWeek = '2018-07-01';
-			controller.onStartOfWeekChanged();
+			controller.scheduleDate = '2018-07-01';
+			controller.onScheduleDateChanged();
 
 			expect(controller.startOfWeek).toEqual('2018-06-25');
 			expect(serviceDateFormatHelper.getDateOnly(controller.weekDays[0].date)).toEqual('2018-06-25');
 			expect(serviceDateFormatHelper.getDateOnly(controller.weekDays[6].date)).toEqual('2018-07-01');
+		});
+
+		it('should send get group page command with correct data', function () {
+			var state = {
+				selectedDate: '2018-08-30'
+			};
+			viewStateKeeper.save(state);
+
+			setUpController();
+
+			expect(groupPageService.period.date).toEqual('2018-08-30');
 		});
 
 		function fakeCurrentUserInfo() {
@@ -132,16 +147,20 @@
 		beforeEach(function () {
 			module("wfm.teamSchedule");
 			module(function ($provide) {
-				$provide.service('weekViewScheduleSvc', function () {
-					fakeWeekViewScheduleService = new FakeWeekViewScheduleService();
-					return fakeWeekViewScheduleService;
-				});
+				initProvideService($provide);
 				$provide.service('CurrentUserInfo', fakeCurrentUserInfo);
 			});
 		});
+
 		beforeEach(function () { moment.locale('ar-OM'); });
 		afterEach(function () { moment.locale('en'); });
-		beforeEach(inject(function (_$q_, _$rootScope_, _$controller_, _PersonScheduleWeekViewCreator_, _ViewStateKeeper_, _serviceDateFormatHelper_) {
+
+		beforeEach(inject(function (_$q_,
+			_$rootScope_,
+			_$controller_,
+			_PersonScheduleWeekViewCreator_,
+			_ViewStateKeeper_,
+			_serviceDateFormatHelper_) {
 			$q = _$q_;
 			rootScope = _$rootScope_.$new();
 			weekViewCreator = _PersonScheduleWeekViewCreator_;
@@ -150,8 +169,8 @@
 			$controller = _$controller_;
 		}));
 
-		it('should get correct startOfWeek and week days when start of week is changed', function () {
-			var scheduleData = {
+		it('should get correct start of week and week days when start of week is changed', function () {
+			weekViewScheduleService.has({
 				"PersonWeekSchedules": [{
 					"PersonId": "b0e35119-4661-4a1b-8772-9b5e015b2564",
 					"Name": "Pierre Baldi",
@@ -177,15 +196,18 @@
 							},
 							{
 								"Date": { "Date": "2018-07-07T00:00:00" }
-							}], "ContractTimeMinutes": 2400.0
-				}], "Total": 1, "Keyword": ""
-			};
+							}],
+					"ContractTimeMinutes": 2400.0
+				}],
+				"Total": 1,
+				"Keyword": ""
+			});
+
 			var controller = setUpController();
 
-			fakeWeekViewScheduleService.has(scheduleData);
+			controller.scheduleDate = "2018-07-01";
+			controller.onScheduleDateChanged();
 
-			controller.startOfWeek = "2018-07-01";
-			controller.onStartOfWeekChanged();
 			expect(controller.startOfWeek).toEqual("2018-07-01");
 			expect(serviceDateFormatHelper.getDateOnly(controller.weekDays[0].date)).toEqual('2018-07-01');
 			expect(serviceDateFormatHelper.getDateOnly(controller.weekDays[6].date)).toEqual('2018-07-07');
@@ -203,6 +225,21 @@
 			};
 		}
 	});
+	function initProvideService($provide) {
+		weekViewScheduleService = new WeekViewScheduleService();
+		groupPageService = new GroupPageService();
+		toggle = new ToggleService();
+
+		$provide.service('weekViewScheduleSvc', function () {
+			return weekViewScheduleService;
+		});
+		$provide.service('groupPageService', function () {
+			return groupPageService;
+		});
+		$provide.service('Toggle', function () {
+			return toggle;
+		});
+	}
 
 	function setUpController() {
 		return $controller("TeamScheduleWeeklyController", {
@@ -211,7 +248,7 @@
 		});
 	};
 
-	function FakeWeekViewScheduleService() {
+	function WeekViewScheduleService() {
 		var scheduleData = {
 			"PersonWeekSchedules": [], "Total": 0, "Keyword": ""
 		};
@@ -226,5 +263,27 @@
 				}
 			}
 		}
+	}
+
+	function GroupPageService() {
+		this.period = {};
+		this.fetchAvailableGroupPagesForDate = function (scheduleDate) {
+			this.period = { date: scheduleDate };
+			return {
+				then: function (cb) {
+				}
+			}
+		}
+	}
+
+	function ToggleService() {
+		return {
+			Wfm_GroupPages_45057: true
+		};
+	}
+
+	function SignalRSVCService() {
+		this.subscribeBatchMessage = function (options, messageHandler, timeout) {
+		};
 	}
 })();

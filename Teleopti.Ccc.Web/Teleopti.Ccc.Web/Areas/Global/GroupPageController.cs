@@ -3,6 +3,7 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Global.Core;
+using Teleopti.Ccc.Web.Core.Extensions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Global
@@ -20,6 +21,13 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		public virtual IHttpActionResult AvailableStructuredGroupPages(DateTime startDate, DateTime endDate)
 		{
 			return Ok(_groupPageViewModelFactory.CreateViewModel(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules));
+		}
+
+		[UnitOfWork, HttpGet, Route("api/GroupPage/AvailableStructuredGroupPagesForDate")]
+		public virtual IHttpActionResult AvailableStructuredGroupPagesForDate(DateTime date)
+		{
+			var period = DateHelper.GetWeekPeriod(new DateOnly(date), DateTimeFormatExtensions.FirstDayOfWeek);
+			return Ok(_groupPageViewModelFactory.CreateViewModel(period, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/GroupPage/AvailableGroupPages")]
