@@ -26,6 +26,14 @@ namespace Teleopti.Ccc.TestCommon
 			assignment.AddOvertimeActivity(activity, periodAsDateTimePeriod, new MultiplicatorDefinitionSet("_", MultiplicatorType.Overtime));
 			return assignment;
 		}
+		
+		public static IPersonAssignment WithPersonalLayer(this IPersonAssignment assignment, IActivity activity, TimePeriod period)
+		{
+			var assDate = assignment.Date.Date;
+			var periodAsDateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(assDate.Add(period.StartTime), assDate.Add(period.EndTime), assignment.Person.PermissionInformation.DefaultTimeZone());
+			assignment.AddPersonalActivity(activity, periodAsDateTimePeriod);
+			return assignment;
+		}
 
 		public static IPersonAssignment ShiftCategory(this IPersonAssignment assignment, IShiftCategory shiftCategory)
 		{

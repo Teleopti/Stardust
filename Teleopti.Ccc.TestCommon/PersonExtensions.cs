@@ -109,6 +109,13 @@ namespace Teleopti.Ccc.TestCommon
 			newAgent.Period(DateOnly.MinValue).PersonContract.ContractSchedule = contractSchedule;
 			return newAgent;
 		}
+		
+		public static Person WithPersonPeriod(this Person agent, IContractSchedule contractSchedule, params ISkill[] skills)
+		{
+			var newAgent = agent.WithPersonPeriod(null, new Team(), skills);
+			newAgent.Period(DateOnly.MinValue).PersonContract.ContractSchedule = contractSchedule;
+			return newAgent;
+		}
 
 		public static Person WithPersonPeriod(this Person agent, IRuleSetBag ruleSetBag, IContract contract, ITeam team, params ISkill[] skills)
 		{

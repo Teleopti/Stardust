@@ -31,6 +31,31 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public Func<IGridlockManager> LockManager;
 		public FakeGroupPageRepository GroupPageRepository;
 
+		[Test, Ignore("bug #77550")]
+		public void ShouldPutDayOffOnDayWithPersonalActivityAfterMidnight()
+		{
+			var date = new DateOnly(2018, 9, 10);
+			var activity = new Activity().WithId();
+			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var scenario = new Scenario();
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(new ContractScheduleWorkingMondayToFriday(), skill).WithSchedulePeriodOneWeek(date);
+			var skillDays = skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1);
+			var dayToSchedule = date.AddDays(5);
+			var asses = new List<IPersonAssignment>();
+			for (var i = 0; i < 7; i++)
+			{
+				asses.Add(new PersonAssignment(agent, scenario, date.AddDays(i)).WithId());
+			}
+			asses.Single(x => x.Date == dayToSchedule)
+				.WithPersonalLayer(activity, new TimePeriod(30, 31));
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), agent, asses, skillDays);
+			
+			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[]{agent}, dayToSchedule.ToDateOnlyPeriod());
+
+			schedulerStateHolder.Schedules[agent].ScheduledDay(dayToSchedule).PersonAssignment(true).DayOff()
+				.Should().Not.Be.Null();
+		}
+		
 		[Test]
 		public void ShouldNotScheduleHourlyEmployeesWhenSchedulingFixedStaff()
 		{
