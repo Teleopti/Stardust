@@ -1632,4 +1632,22 @@
 		equal(result, '(PT)');
 	});
 
+	test("should show trade chosen view from cart panel", function() {
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel({});
+		viewModel.showCartPanel(true);
+
+		viewModel.previousPage();
+		equal(viewModel.showCartPanel(), false);
+	});
+
+	test("should show shift trade list view from trade chosen view", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel({});
+		viewModel.showCartPanel(false);
+		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(null, null, null, "Ashley", "id", false);
+		viewModel.agentChoosed(agent);
+
+		viewModel.previousPage();
+		equal(viewModel.showCartPanel(), false);
+		equal(viewModel.agentChoosed(), null);
+	});
 });

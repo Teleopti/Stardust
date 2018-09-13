@@ -113,6 +113,10 @@
 		return Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306');
 	};
 
+	self.showToolbar = function() {
+		return Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409');
+	};
+
 	self.showCartToggle = function() {
 		return self.isMobile && self.showCart();
 	};
@@ -155,6 +159,11 @@
 
 	self.cartMenuClick = function() {
 		self.showCartPanel(!self.showCartPanel());
+	};
+
+	self.previousPage = function() {
+		if (self.showCartPanel()) return self.showCartPanel(!self.showCartPanel());
+		return self.cancelRequest();
 	};
 
 	self.removeSelect = function(data) {
@@ -424,6 +433,7 @@
 		self.resetStatus();
 		self.chooseAgent(null);
 		self.selectedInternal(false);
+		self.showCartPanel(false);
 		if (self.subject() !== undefined) {
 			self.subject('');
 		}
