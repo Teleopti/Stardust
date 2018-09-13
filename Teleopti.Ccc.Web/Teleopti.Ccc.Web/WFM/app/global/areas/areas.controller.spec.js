@@ -1,5 +1,5 @@
 ﻿'use strict';
-fdescribe('AreasController', function() {
+describe('AreasController', function() {
 	var $httpBackend, $controller, $q, $scope;
 
 	beforeEach(function() {
