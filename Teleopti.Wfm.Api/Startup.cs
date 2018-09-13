@@ -26,7 +26,6 @@ namespace Teleopti.Wfm.Api
 	public class Startup
 	{
 		private readonly ILifetimeScope _container;
-		private readonly ILog _logger = LogManager.GetLogger(typeof(Startup));
 
 		public Startup() : this(null)
 		{
