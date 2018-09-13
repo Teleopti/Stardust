@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -22,17 +24,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                                                            IActivity activity,
 			IResourceCalculationDataContainer filteredProjections,
                                                            DateTimePeriod periodToCalculate);
-    }
+
+		DateTimePeriod FetchPeriodForSkill(DateTimePeriod period, ISkill skill);
+	}
 
     public class ActivityDivider : IActivityDivider
 	{
-		private ScheduleResourcePeriodFetcher _scheduleResourcePeriodFetcher;
-
-		public ActivityDivider()
-		{
-			_scheduleResourcePeriodFetcher = ServiceLocatorForLegacy.ScheduleResourcePeriodFetcher;
-		}
-
         public IDividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
             IAffectedPersonSkillService affectedPersonSkillService,
             IActivity activity,
@@ -45,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             IEnumerable<ISkill> skillsForActivity = skillsInActivity(affectedPersonSkillService,activity);
             foreach (ISkill skill in skillsForActivity)
 			{
-				var periodToCalculateAdjusted = _scheduleResourcePeriodFetcher.Fetch(periodToCalculate, skill);
+				var periodToCalculateAdjusted = FetchPeriodForSkill(periodToCalculate, skill);
                 double? targetDemandValue = skillDayDemand(skill,relevantSkillStaffPeriods, periodToCalculateAdjusted);
                 if (targetDemandValue.HasValue)
                     dividedActivity.TargetDemands.Add(skill, targetDemandValue.Value);
@@ -111,7 +108,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return dividedActivity;
         }
 
-	    private static double? skillDayDemand(ISkill skill, ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods, DateTimePeriod periodToCalculate)
+		public DateTimePeriod FetchPeriodForSkill(DateTimePeriod period, ISkill skill)
+		{
+			return ServiceLocatorForLegacy.ScheduleResourcePeriodFetcher.Fetch(period, skill);
+		}
+
+		private static double? skillDayDemand(ISkill skill, ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods, DateTimePeriod periodToCalculate)
         {
 			IResourceCalculationPeriodDictionary skillStaffPeriods;
             bool anythingOpen = false;
@@ -153,4 +155,30 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return new HashSet<ISkill>(affectedPersonSkillService.AffectedSkills.Where(s => s.Activity.Id == activity.Id));
         }
     }
+	
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509)]
+	public class ScheduleResourcePeriodFetcher
+	{
+		public virtual DateTimePeriod Fetch(DateTimePeriod period, ISkill skill)
+		{
+			return period;
+		}
+	}
+
+	[RemoveMeWithToggle("put this on ActivityDivider.FetchPeriodForSkill instead", Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509)]
+	public class ScheduleResourcePeriodFetcherAdjustForTimeZone : ScheduleResourcePeriodFetcher
+	{
+		public override DateTimePeriod Fetch(DateTimePeriod period, ISkill skill)
+		{
+			var minutesOffset = skill.TimeZone.BaseUtcOffset.Minutes;
+			if (minutesOffset == 0)
+				return period;
+
+			minutesOffset = 60 - minutesOffset;
+			if (minutesOffset > 60)
+				minutesOffset = minutesOffset % 60 * -1;
+			
+			return period.MovePeriod(TimeSpan.FromMinutes(minutesOffset));
+		}
+	}
 }

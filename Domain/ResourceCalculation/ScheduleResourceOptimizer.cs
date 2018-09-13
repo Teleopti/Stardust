@@ -10,32 +10,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509)]
-	public class ScheduleResourcePeriodFetcher
-	{
-		public virtual DateTimePeriod Fetch(DateTimePeriod period, ISkill skill)
-		{
-			return period;
-		}
-	}
-
-	[RemoveMeWithToggle("use as function instead", Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509)]
-	public class ScheduleResourcePeriodFetcherAdjustForTimeZone : ScheduleResourcePeriodFetcher
-	{
-		public override DateTimePeriod Fetch(DateTimePeriod period, ISkill skill)
-		{
-			var minutesOffset = skill.TimeZone.BaseUtcOffset.Minutes;
-			if (minutesOffset == 0)
-				return period;
-
-			minutesOffset = 60 - minutesOffset;
-			if (minutesOffset > 60)
-				minutesOffset = minutesOffset % 60 * -1;
-			
-			return period.MovePeriod(TimeSpan.FromMinutes(minutesOffset));
-		}
-	}
-
 	/// <summary>
 	/// Takes the input domain classes, runs the resource optimalization and writes back the result
 	/// data to the domain.
@@ -50,7 +24,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private const double _quotient = 1d; // the outer quotient: default = 1
 		private const int _maximumIteration = 100; // the maximum number of iterations
-		private ScheduleResourcePeriodFetcher _scheduleResourcePeriodFetcher;
 
 		public ScheduleResourceOptimizer(IResourceCalculationDataContainer relevantProjections,
 										 ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
@@ -64,7 +37,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_distinctActivities = getDistinctActivities();
 			if (clearSkillStaffPeriods)
 				this.clearSkillStaffPeriods();
-			_scheduleResourcePeriodFetcher = ServiceLocatorForLegacy.ScheduleResourcePeriodFetcher;
 		}
 
 		public void Optimize(DateTimePeriod datePeriodToRecalculate, ResourceCalculationData resourceCalculationData = null)
@@ -108,7 +80,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				if (_skillStaffPeriods.TryGetValue(skill, out skillStaffPeriodDic))
 				{
 					IResourceCalculationPeriod skillStaffPeriod;
-					var completeIntervalPeriodAdjusted = _scheduleResourcePeriodFetcher.Fetch(completeIntervalPeriod, skill);
+					var completeIntervalPeriodAdjusted = _activityDivider.FetchPeriodForSkill(completeIntervalPeriod, skill);
 					if (skillStaffPeriodDic.TryGetValue(completeIntervalPeriodAdjusted, out skillStaffPeriod))
 					{
 						skillStaffPeriod.SetCalculatedResource65(0);
@@ -197,7 +169,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				IResourceCalculationPeriodDictionary skillStaffPeriodDictionary;
 				if (!_skillStaffPeriods.TryGetValue(skill, out skillStaffPeriodDictionary)) continue;
 				IResourceCalculationPeriod staffPeriod;
-				var intervalPeriodAdjusted = _scheduleResourcePeriodFetcher.Fetch(intervalPeriod, skill);
+				var intervalPeriodAdjusted = _activityDivider.FetchPeriodForSkill(intervalPeriod, skill);
 				if (skillStaffPeriodDictionary.TryGetResolutionAdjustedValue(skill, intervalPeriodAdjusted, out staffPeriod))
 				{
 					staffPeriod.ResetMultiskillMinOccupancy();
