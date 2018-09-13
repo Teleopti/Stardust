@@ -24,7 +24,7 @@ import {
 	SearchService,
 	WorkspaceService
 } from '../../services';
-import { MockTitleBarComponent } from '../title-bar';
+import { MockTitleBarModule } from '../title-bar';
 import { SearchPageComponent } from './search-page.component';
 
 describe('SearchPageComponent', () => {
@@ -36,8 +36,9 @@ describe('SearchPageComponent', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [SearchPageComponent, WorkspaceComponent, MockTitleBarComponent],
+			declarations: [SearchPageComponent, WorkspaceComponent],
 			imports: [
+				MockTitleBarModule,
 				MockTranslationModule,
 				HttpClientModule,
 				ReactiveFormsModule,

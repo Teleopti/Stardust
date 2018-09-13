@@ -23,7 +23,7 @@ import {
 } from '../../services';
 import { adina, eva, fakeBackendProvider, myles } from '../../services/fake-backend';
 import { countUniqueRolesFromPeople } from '../../utils';
-import { MockTitleBarComponent } from '../title-bar';
+import { MockTitleBarModule } from '../title-bar';
 import { GrantPageComponent } from './grant-page.component';
 import { GrantPageService } from './grant-page.service';
 
@@ -37,8 +37,9 @@ describe('GrantPageComponent', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [GrantPageComponent, WorkspaceComponent, MockTitleBarComponent],
+			declarations: [GrantPageComponent, WorkspaceComponent],
 			imports: [
+				MockTitleBarModule,
 				MockTranslationModule,
 				HttpClientModule,
 				NzCheckboxModule,

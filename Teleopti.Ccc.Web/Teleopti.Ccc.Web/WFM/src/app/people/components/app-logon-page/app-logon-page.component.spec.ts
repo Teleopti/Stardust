@@ -11,7 +11,7 @@ import { MockTranslationModule } from '../../../../mocks/translation';
 import { LogonInfoService } from '../../../shared/services';
 import { adina, fakeBackendProvider, NavigationService, SearchService, WorkspaceService } from '../../services';
 import { adinaLogon } from '../../services/fake-backend/logons';
-import { MockTitleBarComponent } from '../title-bar';
+import { MockTitleBarModule } from '../title-bar';
 import { AppLogonPageComponent } from './app-logon-page.component';
 
 describe('AppLogonPageComponent', () => {
@@ -24,8 +24,9 @@ describe('AppLogonPageComponent', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [AppLogonPageComponent, WorkspaceComponent, MockTitleBarComponent],
+			declarations: [AppLogonPageComponent, WorkspaceComponent],
 			imports: [
+				MockTitleBarModule,
 				MockTranslationModule,
 				ReactiveFormsModule,
 				HttpClientModule,

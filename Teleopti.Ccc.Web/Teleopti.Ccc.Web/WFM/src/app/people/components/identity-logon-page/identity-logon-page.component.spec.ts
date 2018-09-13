@@ -8,7 +8,7 @@ import { configureTestSuite } from '../../../../configure-test-suit';
 import { MockTranslationModule } from '../../../../mocks/translation';
 import { LogonInfoService } from '../../../shared/services';
 import { fakeBackendProvider, NavigationService, SearchService, WorkspaceService } from '../../services';
-import { MockTitleBarComponent } from '../title-bar';
+import { MockTitleBarModule } from '../title-bar';
 import { IdentityLogonPageComponent } from './identity-logon-page.component';
 
 describe('IdentityLogonPageComponent', () => {
@@ -19,8 +19,9 @@ describe('IdentityLogonPageComponent', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [IdentityLogonPageComponent, WorkspaceComponent, MockTitleBarComponent],
+			declarations: [IdentityLogonPageComponent, WorkspaceComponent],
 			imports: [
+				MockTitleBarModule,
 				MockTranslationModule,
 				ReactiveFormsModule,
 				HttpClientModule,
