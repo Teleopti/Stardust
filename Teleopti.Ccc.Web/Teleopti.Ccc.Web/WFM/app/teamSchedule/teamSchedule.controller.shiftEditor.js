@@ -97,9 +97,6 @@
 
 			subscribeToScheduleChange();
 
-
-
-
 			bindResizeLayerEvent();
 		};
 
@@ -316,7 +313,6 @@
 			else if (index !== endIndex) {
 				if (isLayerShorten) {
 					if (!fillWithLayer(originalShiftLayers, index, mergedSelectedShiftLayer, dateTime, isChangingStart)) {
-
 						actualDateTime = mergedSelectedShiftLayer[timeField];
 					}
 				} else {
@@ -359,9 +355,10 @@
 
 						if (hasGonePassTopActivity) {
 							var besideLayer = originalShiftLayers[orginalIndex + reverseStep];
+							var nextLayer = originalShiftLayers[orginalIndex + step];
 							var mergedBesideLayer = !!besideLayer && vm.getMergedShiftLayer(besideLayer);
 							var needMerge = !!mergedBesideLayer && isSameType(mergedBesideLayer, mergedSelectedShiftLayer);
-							var layerActualTime = isCoveredCompletely && i !== endIndex ? mergedLayer[timeField] : dateTime;
+							var layerActualTime = isCoveredCompletely && i !== endIndex ? (nextLayer.IsOvertime ? dateTime : mergedLayer[timeField]) : dateTime;
 
 							if (needMerge) {
 								doUpdate(besideLayer, layerActualTime);
@@ -554,7 +551,6 @@
 					initAndBindScrollEvent();
 				}
 			});
-
 		}
 
 		function getShiftLayerWidth(layer) {
@@ -698,8 +694,6 @@
 			el.addEventListener('mouseup', cancelScrollIntervalPromise, false);
 			el.addEventListener('mouseleave', cancelScrollIntervalPromise, false);
 		}
-
-
 
 		function initScrollState() {
 			$timeout(function () {

@@ -1886,7 +1886,7 @@
 			WorkTimeMinutes: 60,
 			ContractTimeMinutes: 60,
 			Projection: [
-				
+
 				{
 					ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
 					Color: '#ffffff',
@@ -2887,6 +2887,85 @@
 			var timespanEl = panel[0].querySelector('.timespan');
 			expect(timespanEl.innerText.trim()).toBe('2018-08-31 05:00 - 2018-08-31 10:00');
 		});
+
+		it('can extend an activity if the last activity is an overtime activity and have a gap between it', function () {
+			fakeTeamSchedule.has({
+				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
+				Name: 'Annika Andersson',
+				Date: '2018-09-12',
+				WorkTimeMinutes: 60,
+				ContractTimeMinutes: 60,
+				Projection: [
+					{
+						ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#ffffff',
+						Description: 'Phone',
+						Start: '2018-09-12 06:00',
+						End: '2018-09-12 07:00',
+						Minutes: 60,
+						IsOvertime: true,
+						FloatOnTop: true,
+						ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+					},
+					{
+						ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#FFCCA2',
+						Description: 'Sales',
+						Start: '2018-09-12 09:00',
+						End: '2018-09-12 10:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '84db44f4-22a8-44c7-b376-a0a200da613e'
+					},
+					{
+						ShiftLayerIds: ['81678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#ffff00',
+						Description: 'Lunch',
+						Start: '2018-09-12 10:00',
+						End: '2018-09-12 11:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '1ffeb898-11bf-43fc-8104-9b5e015ab3c2',
+						FloatOnTop: true
+					},
+					{
+						ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#000000',
+						Description: 'Email',
+						Start: '2018-09-12 11:00',
+						End: '2018-09-12 11:30',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
+					}
+				],
+				Timezone: { IanaId: 'Europe/Berlin' }
+			});
+
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-09-12', 'Europe/Berlin');
+			var vm = panel.isolateScope().vm;
+
+			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[3];
+			shiftLayer.click();
+
+			fireResize(vm, shiftLayer, 180, -150);
+
+			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
+			expect(shiftLayers.length).toEqual(4);
+
+			expect(shiftLayers[0].style.width).toEqual('60px');
+			expect(shiftLayers[0].style.backgroundColor).toEqual('rgb(255, 255, 255)');
+			expect(shiftLayers[0].style.transform).toEqual('translate(0px, 0px)');
+
+			expect(shiftLayers[1].style.width).toEqual('90px');
+			expect(shiftLayers[1].style.backgroundColor).toEqual('rgb(0, 0, 0)');
+
+			expect(shiftLayers[2].style.width).toEqual('60px');
+			expect(shiftLayers[2].style.backgroundColor).toEqual('rgb(255, 255, 0)');
+
+			expect(shiftLayers[3].style.width).toEqual('30px');
+			expect(shiftLayers[3].style.backgroundColor).toEqual('rgb(0, 0, 0)');
+		});
 	});
 
 	describe('# keep the lunch/short break on the top when changing the selected activity end time#', function () {
@@ -3069,7 +3148,7 @@
 						ActivityId: '1ffeb898-11bf-43fc-8104-9b5e015ab3c2',
 						FloatOnTop: true
 					},
-					
+
 				],
 				Timezone: { IanaId: 'Europe/Berlin' }
 			});
@@ -3804,7 +3883,86 @@
 			expect(timespanEl.innerText.trim()).toBe('2018-08-31 05:00 - 2018-08-31 10:00');
 		});
 
-		
+		it('can extend an activity if the last activity is an overtime activity and have a gap between it', function () {
+			fakeTeamSchedule.has({
+				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
+				Name: 'Annika Andersson',
+				Date: '2018-09-12',
+				WorkTimeMinutes: 60,
+				ContractTimeMinutes: 60,
+				Projection: [
+					{
+						ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#000000',
+						Description: 'Email',
+						Start: '2018-09-12 06:00',
+						End: '2018-09-12 07:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
+					},
+					{
+						ShiftLayerIds: ['81678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#ffff00',
+						Description: 'Lunch',
+						Start: '2018-09-12 07:00',
+						End: '2018-09-12 08:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '1ffeb898-11bf-43fc-8104-9b5e015ab3c2',
+						FloatOnTop: true
+					},
+					{
+						ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#FFCCA2',
+						Description: 'Sales',
+						Start: '2018-09-12 08:00',
+						End: '2018-09-12 09:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '84db44f4-22a8-44c7-b376-a0a200da613e'
+					},
+					{
+						ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#ffffff',
+						Description: 'Phone',
+						Start: '2018-09-12 11:00',
+						End: '2018-09-12 11:30',
+						Minutes: 60,
+						IsOvertime: true,
+						FloatOnTop: true,
+						ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+					},
+
+
+				],
+				Timezone: { IanaId: 'Europe/Berlin' }
+			});
+
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-09-12', 'Europe/Berlin');
+			var vm = panel.isolateScope().vm;
+
+			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
+			shiftLayer.click();
+
+			fireResize(vm, shiftLayer, 210, 0);
+
+			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
+			expect(shiftLayers.length).toEqual(4);
+
+			expect(shiftLayers[0].style.width).toEqual('60px');
+			expect(shiftLayers[0].style.backgroundColor).toEqual('rgb(0, 0, 0)');
+			expect(shiftLayers[0].style.transform).toEqual('translate(0px, 0px)');
+
+			expect(shiftLayers[1].style.width).toEqual('60px');
+			expect(shiftLayers[1].style.backgroundColor).toEqual('rgb(255, 255, 0)');
+
+			expect(shiftLayers[2].style.width).toEqual('90px');
+			expect(shiftLayers[2].style.backgroundColor).toEqual('rgb(0, 0, 0)');
+
+			expect(shiftLayers[3].style.width).toEqual('30px');
+			expect(shiftLayers[3].style.backgroundColor).toEqual('rgb(255, 255, 255)');
+		});
 	});
 
 	it('should save changes with correct data', function () {
@@ -4762,7 +4920,7 @@
 		});
 	});
 
-	
+
 	function setUp(personId, date, timezone, scope) {
 		scope = $rootScope.$new();
 		scope.personId = personId;
