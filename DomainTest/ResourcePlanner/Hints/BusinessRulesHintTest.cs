@@ -300,6 +300,27 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			result.Should().Be.Empty();
 		}
 
+		[Test]
+		public void ShouldNotReturnDaysOffNotFulfilledWhenFirstSchedulePeriodStartsEarlierThanPlanningPeriod()
+		{
+			var startDate = new DateOnly(2017, 01, 23);
+			var schedulePeriodStartDate = startDate.AddDays(-7);
+			var endDate = new DateOnly(2017, 01, 29);
+			var scenario = new Scenario();
+			var activity = ActivityRepository.Has("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
+			var agent = PersonRepository.Has(new Contract("_"), new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(schedulePeriodStartDate, SchedulePeriodType.Week, 1), ruleSet, SkillRepository.Has("skill", activity)).WithId(Guid.NewGuid());
+			
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateOnlyPeriod(schedulePeriodStartDate, endDate).ToDateTimePeriod(TimeZoneInfo.Utc));
+
+			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate).WithDayOff());
+			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate.AddDays(-1)).WithDayOff());
+
+			var result = Target.Execute(new HintInput(scheduleDictionary, new[] { agent }, new DateOnlyPeriod(startDate, endDate), null, false)).InvalidResources;
+			
+			result.First().ValidationErrors.Count(x =>x.ErrorResource.Equals("TargetDayOffNotFulfilledMessage")).Should().Be.EqualTo(0);
+		}
+
 
 		public void Isolate(IIsolate isolate)
 		{
