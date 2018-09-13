@@ -9857,7 +9857,7 @@ Jakso: {3}</value>
     <value>Käytettävyyden toteutuminen</value>
   </data>
   <data name="Anywhere" xml:space="preserve">
-    <value>Anywhere</value>
+    <value>Web</value>
   </data>
   <data name="ActualAfterCallWorkTime" xml:space="preserve">
     <value>Todellinen ACW aika</value>
@@ -14608,7 +14608,7 @@ Applikaatio sulkeutuu. </value>
     <value>Käyttäjäasetukset</value>
   </data>
   <data name="ShiftStartsDayBeforeOrAfter" xml:space="preserve">
-    <value>{0d}: Työvuoro alkaa edellisenä päivänä tai seuraavana päivänä, tämä ei ole sallittua. Tämä voi johtua agentin aikavyöhykkeen vaihosta Henkilöt moduulissa. Poista päivä tai muokkaa aikavyöhykettä. </value>
+    <value>{0:d}: Työvuoro alkaa edellisenä päivänä tai seuraavana päivänä, tämä ei ole sallittua. Tämä voi johtua agentin aikavyöhykkeen vaihosta Henkilöt moduulissa. Poista päivä tai muokkaa aikavyöhykettä. </value>
   </data>
   <data name="MaximumAgentToExport" xml:space="preserve">
     <value>Voit enintään viedä 1000 agenttia kerralla, yrität viedä {0} agenttia. </value>
@@ -14632,7 +14632,7 @@ Applikaatio sulkeutuu. </value>
     <value>Hyäksytty aikaväli on {0} - {1}</value>
   </data>
   <data name="OvertimeRequestRollingPeriodError" xml:space="preserve">
-    <value>Hyäksytty aikaväli on {0} - {1}</value>
+    <value>Hyäksytty aikaväli on 0 - {0}</value>
   </data>
   <data name="OvertimeRequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>Ylityöpyyntöä ei voida hyväksyä, koska tietyt päivät ei ole avoinna pyynnöille tällä hetkellä. </value>
@@ -14668,7 +14668,7 @@ Applikaatio sulkeutuu. </value>
     <value>Vähimmäismäärä lepoaikaa: </value>
   </data>
   <data name="ExistingShiftNotMatchShift" xml:space="preserve">
-    <value>Työvuoro päivämäärälle {0} ei vastaa työvuoroa päivämäärälle [1}. </value>
+    <value>Työvuoro päivämäärälle {0:d} ei vastaa työvuoroa päivämäärälle [1:d}. </value>
   </data>
   <data name="ExistingShiftNotMatchShiftCategory" xml:space="preserve">
     <value>Vuoroluokka {0} päivämäärälle {1} ei vastaa vuoroluokkaa {2} päivämäärälle {3}. </value>

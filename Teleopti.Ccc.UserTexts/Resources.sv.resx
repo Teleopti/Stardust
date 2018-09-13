@@ -15787,4 +15787,13 @@ Applikationen kommer nu att stängas. </value>
   <data name="PasswordChangedSuccessfully" xml:space="preserve">
     <value>Ditt lösenord har ändrats</value>
   </data>
+  <data name="BeforeRunningAForecastYouNeedToCreateASkillDot" xml:space="preserve">
+    <value>Innan du kan skapa en prognos måste du skapa en kompetens. </value>
+  </data>
+  <data name="Deviation" xml:space="preserve">
+    <value>Avvikelse</value>
+  </data>
+  <data name="ContractTimeViolationMessageInShiftTradeRequest" xml:space="preserve">
+    <value>De dagar som valts för att ingå i skiftbytet skulle ge för mycket eller för lite kontraktstid. </value>
+  </data>
 </root>
