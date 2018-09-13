@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public Func<IGridlockManager> LockManager;
 		public FakeGroupPageRepository GroupPageRepository;
 
-		[Test, Ignore("bug #77550")]
+		[Test]
 		public void ShouldPutDayOffOnDayWithPersonalActivityAfterMidnight()
 		{
 			var date = new DateOnly(2018, 9, 10);
