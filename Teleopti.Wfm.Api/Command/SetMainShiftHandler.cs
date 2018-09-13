@@ -53,8 +53,6 @@ namespace Teleopti.Wfm.Api.Command
 					assignment.AddActivity(activity, new DateTimePeriod(layer.UtcStartDateTime.Utc(), layer.UtcEndDateTime.Utc()),
 						true);
 				}
-
-				throw new Exception("this is a message");
 				return new ResultDto
 				{
 					Successful = true
