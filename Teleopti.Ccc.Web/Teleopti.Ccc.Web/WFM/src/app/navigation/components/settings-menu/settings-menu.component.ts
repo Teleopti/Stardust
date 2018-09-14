@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, OnInit, ViewChild, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, Inject, ViewChild } from '@angular/core';
 import { ChangePasswordComponent } from '../../../authentication/components/change-password/change-password.component';
 import { ThemeService, TogglesService, UserService } from '../../../core/services';
 
@@ -17,8 +17,6 @@ export class SettingsMenuComponent {
 
 	@ViewChild('passwordModal')
 	passwordModal: ChangePasswordComponent;
-	@Input('style')
-	style: { isFullyLoaded: boolean };
 
 	constructor(
 		private themeService: ThemeService,
@@ -38,7 +36,6 @@ export class SettingsMenuComponent {
 		});
 		this.themeService.getTheme().subscribe({
 			next: theme => {
-				this.style.isFullyLoaded = true;
 				this.lowLightFilter = theme.Overlay;
 				this.darkTheme = theme.Name === 'dark';
 			}
