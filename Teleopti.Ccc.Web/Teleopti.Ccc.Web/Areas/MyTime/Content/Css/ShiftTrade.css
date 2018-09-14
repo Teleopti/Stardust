@@ -293,6 +293,36 @@
 	flex-direction: column;
 	background: white;
 }
+.shift-trade-request-container > .subnavbar {
+	min-height: 40px;
+	height: 40px;
+}
+.multi-shift-trade-toolbar-icon {
+	height: 100%;
+	position: relative;
+	margin: 0;
+	padding: 0 5px;
+}
+.multi-shift-trade-toolbar-icon > a {
+	width: 40px;
+	height: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	color: white;
+	text-decoration: none;
+}
+.multi-shift-trade-toolbar-icon i {
+	transform: scale(1.5);
+}
+.multi-shift-trade-toolbar-icon .badge {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	font-size: 12px;
+	padding: 3px 5px;
+}
 .multi-shift-trade-error-message {
 	height: 0;
 	transition: all 0.3s ease-in-out;

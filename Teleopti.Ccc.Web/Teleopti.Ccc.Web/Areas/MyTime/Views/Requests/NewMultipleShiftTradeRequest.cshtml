@@ -118,18 +118,6 @@
 	</div>
 </div>
 
-<div class="navbar navbar-teleopti subnavbar" data-bind="visible: isMobile && showToolbar() && isReadyLoaded() && isDetailVisible()">
-	<div class="container toolbar-icon-mobile">
-		<button class="btn btn-default" data-bind="click: previousPage">
-			<i class="glyphicon glyphicon-chevron-left"></i>
-		</button>
-		<button class="btn btn-default pull-right" data-bind="visible: !showCartPanel(), click: cartMenuClick">
-			<i class="glyphicon glyphicon-shopping-cart"></i>
-			<span class="badge" data-bind="text: selectedCount"></span>
-		</button>
-	</div>
-</div>
-
 <div class="shift-trade-schedule-container" data-bind="visible: isReadyLoaded() && !isDetailVisible(), fadeInIf: !IsLoading() , fadeInDuration: 150, fadeOutDuration: 50">
 	<div class="shift-trade-missing-team-message alert alert-warning" data-bind="visible: noAnyTeamToShow">
 		@Resources.YouDoNotHaveAccessToAnyTeams
@@ -254,6 +242,18 @@
 </div>
 
 <div class="shift-trade-request-container" data-bind="visible: isDetailVisible">
+	<div class="navbar navbar-teleopti subnavbar" data-bind="visible: isMobile && showToolbar() && isReadyLoaded() && isDetailVisible()">
+		<div class="container multi-shift-trade-toolbar-icon">
+			<a class="pull-left" data-bind="click: previousPage">
+				<i class="glyphicon glyphicon-chevron-left"></i>
+			</a>
+			<a class="pull-right multi-shift-trade-selected-schedules-icon" data-bind="visible: !showCartPanel(), click: cartMenuClick">
+				<i class="glyphicon glyphicon-shopping-cart"></i>
+				<span class="badge" data-bind="text: selectedCount"></span>
+			</a>
+		</div>
+	</div>
+
 	<div class="multi-shift-trade-error-message" data-bind="css:{'multi-shift-trade-error-message-toggled': showToloranceMessage()}">
 		<div class="alert-warning cursorpointer" data-bind="click: toloranceMessageClicked">
 			<i class="glyphicon glyphicon-warning-sign"></i>
