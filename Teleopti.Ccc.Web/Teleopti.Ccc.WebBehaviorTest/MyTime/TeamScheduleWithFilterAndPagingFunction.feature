@@ -187,6 +187,7 @@ Scenario: Navigate to the previous day
 Scenario: Show team-picker with multiple teams
 	Given I am an agent in a team with access to the whole site
 	And the site has another team
+	And I have a colleague in another team
 	And I am viewing team schedule
 	When I open the team-picker
 	Then I should see the team-picker with both teams
