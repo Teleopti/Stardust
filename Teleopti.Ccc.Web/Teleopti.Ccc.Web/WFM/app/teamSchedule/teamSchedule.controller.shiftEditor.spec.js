@@ -1998,7 +1998,7 @@
 		expect(shiftLayers[1].style.transform).toEqual('translate(30px, 0px)');
 	});
 
-	it('should not do nothing if changing the activity from the start time and the step less than 5 mins',
+	it('should do nothing if changing the activity from the start time and the step less than 5 mins',
 		function() {
 			fakeTeamSchedule.has({
 				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
@@ -2061,7 +2061,7 @@
 			expect(shiftLayers[2].style.transform).toEqual('translate(0px, 0px)');
 		});
 
-	it('should not do nothing if changing the activity from the end time and the step less than 5 mins',
+	it('should do nothing if changing the activity from the end time and the step less than 5 mins',
 		function () {
 			fakeTeamSchedule.has({
 				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
@@ -2123,7 +2123,6 @@
 			expect(shiftLayers[2].style.backgroundColor).toEqual('rgb(255, 162, 162)');
 			expect(shiftLayers[2].style.transform).toEqual('translate(0px, 0px)');
 		});
-
 
 	describe('# keep the lunch/short break on the top when changing the selected activity start time#', function () {
 
