@@ -289,15 +289,14 @@
 			var coverMethod = isChangingStart ? 'isSameOrBefore' : 'isSameOrAfter';
 			var doUpdate = isChangingStart ? updateStart : updateEnd;
 			var doUpdateSelf = isChangingStart ? updateEnd : updateStart;
+			var step = isChangingStart ? -1 : 1;
+			var reverseStep = isChangingStart ? 1 : -1;
 
 			if (dateTime == mergedSelectedShiftLayer[timeField]) return;
 
 			var index = originalShiftLayers.indexOf(originalSelectedShiftLayer);
 			var lastLayerIndex = originalShiftLayers.length - 1;
 			var endIndex = isChangingStart ? 0 : lastLayerIndex;
-
-			var step = isChangingStart ? -1 : 1;
-			var reverseStep = isChangingStart ? 1 : -1;
 
 			var isLayerShorten = moment.tz(mergedSelectedShiftLayer[timeField], vm.timezone)[coverCompletelyMethod](dateTimeInTimezone);
 			var layersCopy = originalShiftLayers.slice(0);
@@ -336,7 +335,7 @@
 						var isCoveredCompletely = dateTimeInTimezone[coverMethod](layerTimeInTimezone);
 						var isSameTypeWithSelected = isSameType(mergedLayer, mergedSelectedShiftLayer);
 						var deleteIndex = orginalIndex;
-						if (layer.FloatOnTop) {
+						if (layer.FloatOnTop && !isSameTypeWithSelected) {
 							hasGonePassTopActivity = dateTimeInTimezone[coverCompletelyMethod](layerTimeInTimezone);
 							if (firstTimeGoPassTop) {
 								firstTimeGoPassTop = false;
@@ -354,15 +353,15 @@
 						}
 
 						if (hasGonePassTopActivity) {
-							var besideLayer = originalShiftLayers[orginalIndex + reverseStep];
+							var previousLayer = originalShiftLayers[orginalIndex + reverseStep];
 							var nextLayer = originalShiftLayers[orginalIndex + step];
-							var mergedBesideLayer = !!besideLayer && vm.getMergedShiftLayer(besideLayer);
+							var mergedBesideLayer = !!previousLayer && vm.getMergedShiftLayer(previousLayer);
 							var needMerge = !!mergedBesideLayer && isSameType(mergedBesideLayer, mergedSelectedShiftLayer);
 							var layerActualTime = isCoveredCompletely && i !== endIndex ? (nextLayer.IsOvertime ? dateTime : mergedLayer[timeField]) : dateTime;
 
 							if (needMerge) {
-								doUpdate(besideLayer, layerActualTime);
-								selectedLayers.push(besideLayer);
+								doUpdate(previousLayer, layerActualTime);
+								selectedLayers.push(previousLayer);
 							} else if (isSameTypeWithSelected && i === endIndex && isCoveredCompletely) {
 								doUpdate(layer, dateTime);
 								selectedLayers.push(layer);
@@ -386,8 +385,13 @@
 								|| (isSameTypeWithSelected && needMerge)) {
 								originalShiftLayers.splice(deleteIndex, 1);
 							}
-						} else if (!isSameTypeWithSelected) {
-							doUpdateSelf(layer, dateTime);
+						} else {
+							if (!isSameTypeWithSelected) {
+								doUpdateSelf(layer, dateTime);
+							} else if (isSameTypeWithSelected && !hasGonePassTopActivity) {
+								actualDateTime = mergedLayer.End;
+								originalShiftLayers.splice(deleteIndex, 1);
+							}
 							break;
 						}
 					}

@@ -1878,6 +1878,68 @@
 		expect(shiftLayer.className.indexOf('non-resizable') >= 0).toBeTruthy();
 	})
 
+	it('should merge with the same type activities even the new period did not cover it completely', function () {
+		fakeTeamSchedule.has({
+			PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
+			Name: 'Annika Andersson',
+			Date: '2018-09-12',
+			WorkTimeMinutes: 60,
+			ContractTimeMinutes: 60,
+			Projection: [
+				{
+					ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+					Color: '#ffffff',
+					Description: 'Phone',
+					Start: '2018-09-12 09:00',
+					End: '2018-09-12 10:00',
+					Minutes: 60,
+					IsOvertime: true,
+					FloatOnTop: true,
+					ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+				},
+				{
+					ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+					Color: '#000000',
+					Description: 'Email',
+					Start: '2018-09-12 10:00',
+					End: '2018-09-12 11:00',
+					Minutes: 60,
+					IsOvertime: false,
+					ActivityId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
+				},
+				{
+					ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+					Color: '#ffffff',
+					Description: 'Phone',
+					Start: '2018-09-12 11:00',
+					End: '2018-09-12 12:00',
+					Minutes: 60,
+					IsOvertime: true,
+					FloatOnTop: true,
+					ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+				}
+			],
+			Timezone: { IanaId: 'Europe/Berlin' }
+		});
+
+		var scope = $rootScope.$new();
+		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-09-12', 'Europe/Berlin', scope);
+		var vm = panel.isolateScope().vm;
+
+		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
+		shiftLayer.click();
+
+		fireResize(vm, shiftLayer, 150, 0);
+
+		var shiftLayers = panel[0].querySelectorAll('.shift-layer');
+		expect(shiftLayers.length).toEqual(1);
+
+		expect(shiftLayers[0].style.width).toEqual('180px');
+		expect(shiftLayers[0].style.backgroundColor).toEqual('rgb(255, 255, 255)');
+		expect(shiftLayers[0].style.transform).toEqual('translate(0px, 0px)');
+	});
+
+
 	it('can shorten an activity from the end time if the next activity is an overtime activity and have a gap between it', function () {
 		fakeTeamSchedule.has({
 			PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
@@ -3792,7 +3854,7 @@
 			expect(timespanEl.innerText.trim()).toBe('2018-08-28 05:00 - 2018-08-28 10:30');
 		});
 
-		it('should merge with the beside layers after changing its activity to the activity of the beside layers', function () {
+		it('should merge with the previous layers after changing its activity to the activity of the beside layers', function () {
 			fakeTeamSchedule.has({
 				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
 				Name: 'Annika Andersson',
