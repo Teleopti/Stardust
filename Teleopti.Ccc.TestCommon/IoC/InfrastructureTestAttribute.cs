@@ -84,7 +84,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// Tenant stuff
 			isolate.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
-			//system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 
 			// Hangfire bus maybe? ;)
 			if (QueryAllAttributes<RealHangfireAttribute>().IsEmpty())

@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
 using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -84,7 +83,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			isolate.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
 			isolate.UseTestDouble<PersonRequestAuthorizationCheckerForTest>().For<IPersonRequestCheckAuthorization>();
 			isolate.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
-			//isolate.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
 
 			// Tenant (and datasource) stuff
 			var tenants = new FakeTenants();
@@ -94,7 +92,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			isolate.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
 			isolate.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
 			isolate.UseTestDouble<FakeDataSourcesFactory>().For<IDataSourcesFactory>();
-			//system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 			//
 
 			// Event stuff

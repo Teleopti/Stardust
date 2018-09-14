@@ -10,6 +10,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			EventPublisher = eventPublisher;
 		}
 
-		public Type EventPublisher { get; private set; }
+		public Type EventPublisher { get; }
 	}
 }
