@@ -2,7 +2,12 @@
 	height: 100%;
 	overflow-x: hidden;
 	max-height: calc(100vh - 50px - 5px);
+	-webkit-transform: translate3d(0, 0, 0);
 }
+.new-teamschedule-view .relative {
+	-webkit-transform: translate3d(0, 0, 0);
+}
+
 .new-teamschedule-view-nav {
 	padding: 0;
 }
@@ -72,7 +77,6 @@
 	background: grey;
 	display: block;
 	border-radius: 100px;
-	position: relative;
 	display: inline-block;
 	margin: 0;
 }
@@ -237,7 +241,6 @@
 	min-width: 30px;
 	background: white;
 	border-right: 1px solid #dfdfdf;
-	position: relative;
 	z-index: 10;
 	text-align: right;
 }
@@ -251,7 +254,6 @@
 	padding-right: 1px;
 }
 .new-teamschedule-view .timeline-margin-block {
-	position: relative;
 	z-index: 10;
 	width: 30px;
 	min-width: 30px;
@@ -311,7 +313,6 @@
 	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 	border-left: 1px solid rgba(0, 0, 0, 0.1);
 	border-right: 1px solid rgba(0, 0, 0, 0.1);
-	position: relative;
 	overflow: visible;
 	cursor: pointer;
 }

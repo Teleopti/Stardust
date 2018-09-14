@@ -84,7 +84,7 @@
 				</li>
 				<li class="new-teamschedule-day-off-toggle" data-bind="tooltip: { title: '@Resources.ShowOnlyDayOff', html: true, trigger: 'hover', placement: 'bottom'}">
 					<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />
-					<label for="show-only-day-off-switch">Day off switch</label>
+					<label class="relative" for="show-only-day-off-switch">Day off switch</label>
 				</li>
 				<li class="new-teamschedule-filter-component relative">
 					<div data-bind="click: openTeamSelectorPanel"></div>
@@ -110,7 +110,7 @@
 	<div class="container relative">
 		<div class="agent-name-row container relative">
 			<!-- ko if: mySchedule -->
-			<div class="timeline-margin-block"></div>
+			<div class="timeline-margin-block relative"></div>
 			<div class="new-teamschedule-agent-name my-name relative">
 				<span class="text-name">@Resources.MySchedule</span>
 				<span class="shift-category-cell" data-bind="text: mySchedule().shiftCategory.name, style: {background: mySchedule().shiftCategory.bgColor, color: mySchedule().shiftCategory.color}, css: {'dayoff': mySchedule().isDayOff}">
@@ -121,7 +121,7 @@
 			<div class="teammates-agent-name-row relative">
 				<div class="left-filling-block"></div>
 				<!-- ko foreach: agentNames -->
-				<span class="new-teamschedule-agent-name" data-bind="tooltip: { title: $data.name, trigger: 'click', placement: 'bottom'}, attr: {'index': index}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">
+				<span class="new-teamschedule-agent-name relative" data-bind="tooltip: { title: $data.name, trigger: 'click', placement: 'bottom'}, attr: {'index': index}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">
 					<span class="text-name" data-bind="text: $data.name"></span>
 					<span class="shift-category-cell" data-bind="text: $data.shiftCategory.name, style: {background: $data.shiftCategory.bgColor, color: $data.shiftCategory.color}, css: {'dayoff': $data.isDayOff}"></span>
 				</span>
@@ -133,7 +133,7 @@
 		</div>
 
 		<div class="new-teamschedule-table relative container">
-			<div class="mobile-timeline" data-bind="style: {height: scheduleContainerHeight() + 'px'}">
+			<div class="mobile-timeline relative" data-bind="style: {height: scheduleContainerHeight() + 'px'}">
 				<!-- ko foreach: timeLines -->
 				<div class="mobile-timeline-label absolute" data-bind="style: {top: topPosition}, text: timeText, visible: isHour">
 				</div>
@@ -285,7 +285,7 @@
 			<!-- ko if: isHostAMobile-->
 			<div class="new-teamschedule-day-off-toggle">
 				<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />
-				<label for="show-only-day-off-switch">Day off switch</label>
+				<label class="relative" for="show-only-day-off-switch">Day off switch</label>
 				<span>@Resources.ShowOnlyDayOff</span>
 			</div>
 			<div class="empty-search-result">
