@@ -539,6 +539,37 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			return stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff();//saturday
 		}
 
+		[Test, Ignore("Story #76348")]
+		public void DaysOffBackToLegalStateShouldNotMoveDayOffFromClosedDays()
+		{
+			var firstDay = new DateOnly(2015, 10, 12); //mon
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var activity = new Activity("_");
+			var timePeriod = new TimePeriod(8, 16);
+			var skill = new Skill().WithId().For(activity).IsOpen(timePeriod, timePeriod, timePeriod, timePeriod, timePeriod, timePeriod); //closed on sundays
+			var scenario = new Scenario("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var team = new Team { Site = new Site("_") };
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team, skill).WithSchedulePeriodOneWeek(firstDay);
+			agent.SchedulePeriod(firstDay).SetDaysOff(2);
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 5, 1, 5, 5, 5, 25);
+			var asses = Enumerable.Range(0, 7).Select(i => new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16))).ToArray();
+			var doTemplate = new DayOffTemplate();
+			asses[5].SetDayOff(doTemplate); //saturday
+			asses[6].SetDayOff(doTemplate); //sunday
+			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, asses, skillDays);
+			var optPrefs = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() }};
+
+			//locking saturday so sunday is the only day to remowe to comly with DO rules
+			LockManager().AddLock(agent, firstDay.AddDays(5), LockType.Normal);
+
+			var doPrefs = new DaysOffPreferences() {UseWeekEndDaysOff = true, WeekEndDaysOffValue = new MinMax<int>(1, 1)};
+			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(doPrefs), new NoOptimizationCallback());
+
+			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff().Should().Be.True();//closed sunday
+		}
+
 		public DayOffOptimizationDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerXxl76496)
 		{
 		}
