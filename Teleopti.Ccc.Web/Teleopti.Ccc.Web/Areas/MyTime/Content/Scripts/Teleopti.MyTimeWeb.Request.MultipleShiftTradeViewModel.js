@@ -1023,27 +1023,43 @@
 		var gap = 0;
 		schedulesInPeriod.forEach(function(p) {
 			if (isCheckSelf) {
-				if (p.mySchedule == null && p.targetSchedule == null) gap += 0;
 				if (p.mySchedule != null && p.targetSchedule == null) gap += p.mySchedule.contractMinutes;
 				if (p.mySchedule == null && p.targetSchedule != null) gap -= p.targetSchedule.contractMinutes;
-				if (p.mySchedule != null && p.targetSchedule != null)
-					gap += p.mySchedule.contractMinutes - p.targetSchedule.contractMinutes;
+				if (p.mySchedule != null && p.targetSchedule != null) gap += p.mySchedule.contractMinutes - p.targetSchedule.contractMinutes;
 			} else {
-				if (p.mySchedule == null && p.targetSchedule == null) gap += 0;
 				if (p.mySchedule == null && p.targetSchedule != null) gap += p.targetSchedule.contractMinutes;
 				if (p.mySchedule != null && p.targetSchedule == null) gap -= p.mySchedule.contractMinutes;
-				if (p.mySchedule != null && p.targetSchedule != null)
-					gap += p.targetSchedule.contractMinutes - p.mySchedule.contractMinutes;
+				if (p.mySchedule != null && p.targetSchedule != null) gap += p.targetSchedule.contractMinutes - p.mySchedule.contractMinutes;
 			}
 		});
 
 		var left = 0;
-		if (gap > 0) left = periodToloranceInfo.NegativeToleranceMinutes - gap;
-		if (gap < 0) left = periodToloranceInfo.PositiveToleranceMinutes + gap;
+		var isNegative = true;
+		if (periodToloranceInfo.NegativeToleranceMinutes < 0) {
+			left = periodToloranceInfo.NegativeToleranceMinutes - gap;
+			if (left > 0) {
+				left = periodToloranceInfo.PositiveToleranceMinutes - left;
+				isNegative = false;
+			}
+		}
+		else if (periodToloranceInfo.PositiveToleranceMinutes < 0) {
+			isNegative = false;
+			left = periodToloranceInfo.PositiveToleranceMinutes + gap;
+			if (left > 0) {
+				left = periodToloranceInfo.NegativeToleranceMinutes - left;
+				isNegative = true;
+			}
+		} else {
+			if (gap > 0) left = periodToloranceInfo.NegativeToleranceMinutes - gap;
+			if (gap < 0) {
+				left = periodToloranceInfo.PositiveToleranceMinutes + gap;
+				isNegative = false;
+			}
+		}
 
 		if (left < 0) {
 			var contractTimeGap = Teleopti.MyTimeWeb.Common.FormatTimeSpan(-left);
-			contractTimeGap = (gap > 0 ? '-' : '+') + contractTimeGap;
+			contractTimeGap = (isNegative ? '-' : '+') + contractTimeGap;
 			if (isCheckSelf) {
 				self.myToleranceMessages.push({
 					periodStart: Teleopti.MyTimeWeb.Common.FormatDate(periodToloranceInfo.PeriodStart),
