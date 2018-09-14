@@ -1821,4 +1821,26 @@
 			}]
 		};
 	}
+
+	test("should hide previous contract time violation warning message panel when cancel and choose another agent", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel({});
+		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(null, null, null, "Ashley", null, false);
+		viewModel.chooseAgent(agent);
+		viewModel.showToloranceMessageDetail(true);
+		viewModel.cancelRequest();
+		var anotherAgent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(null, null, null, "Jon", null, false);
+		viewModel.chooseAgent(anotherAgent);
+		equal(viewModel.showToloranceMessageDetail(), false);
+	});
+
+	test("should show cart panl when cancel and choose another agent", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
+		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(null, null, null, "Ashley", null, false);
+		viewModel.chooseAgent(agent);
+		viewModel.cancelRequest();
+		var anotherAgent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(null, null, null, "Jon", null, false);
+		viewModel.chooseAgent(anotherAgent);
+		equal(viewModel.showCartPanel(),true);
+	});
+
 });

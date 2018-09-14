@@ -320,6 +320,12 @@
 	};
 
 	self.chooseAgent = function(agent) {
+
+		self.showToloranceMessageDetail(false);
+
+		if (!Teleopti.MyTimeWeb.Common.IsHostAMobile()) 
+			self.showCartPanel(true);
+
 		self.selectedSchedulePairs([]);
 
 		//hide or show all agents
