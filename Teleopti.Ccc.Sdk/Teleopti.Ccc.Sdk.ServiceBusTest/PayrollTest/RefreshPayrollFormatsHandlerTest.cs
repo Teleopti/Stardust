@@ -29,8 +29,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			dataSourceForTenant.Has(ds);
 
 			var payrollFormatRepositoryFactory = new FakePayrollFormatRepositoryFactory();
-
-			var searchPath = new SearchPath();
+		
+			var searchPath = new FakeSearchPath();
 			var tenantDestinationPath = Path.Combine(searchPath.Path, tenantName);
 			if(Directory.Exists(tenantDestinationPath))
 			{

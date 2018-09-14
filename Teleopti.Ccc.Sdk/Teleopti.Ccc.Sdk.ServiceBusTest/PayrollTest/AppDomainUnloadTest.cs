@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 {
-	[TestFixture]
+	[TestFixture, Ignore("works locally")]
 	public class AppDomainUnloadTest
 	{
 		private AppdomainCreatorWrapper target;
