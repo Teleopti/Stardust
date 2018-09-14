@@ -389,6 +389,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			timestamp.Should().Not.Be.EqualTo(new DateTime());
 		}
 
+		[Test]
+		public void ShouldCheckIfNoAgentsScheduled()
+		{
+			_rep.IsThereScheduledAgents().Should().Be.False();
+		}
+		
+		[Test]
+		public void ShouldCheckIfAnyAgentsScheduled()
+		{
+			var ass = CreateAggregateWithCorrectBusinessUnit();
+			new PersonAssignmentRepository(UnitOfWork).Add(ass);
+			Session.Flush();
+
+			_rep.IsThereScheduledAgents().Should().Be.True();
+		}
+
 		protected override Repository<IPersonAssignment> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			return new PersonAssignmentRepository(currentUnitOfWork);

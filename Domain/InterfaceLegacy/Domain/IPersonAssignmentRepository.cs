@@ -44,6 +44,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 			DateOnlyPeriod period,
 			IScenario scenario,
 			string source);
+
+		bool IsThereScheduledAgents();
 	}
 
 	public class PersonAssignmentKey

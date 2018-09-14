@@ -18,5 +18,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	
 		ICollection<IPersonAbsence> FindExact(IPerson person, DateTimePeriod period, IAbsence absence,
 			IScenario scenario);
+
+		bool IsThereScheduledAgents();
 	}
 }

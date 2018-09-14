@@ -93,5 +93,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				.Where(personAbsence => personAbsence.Person == person && personAbsence.Period == period && personAbsence.Layer.Payload == absence && personAbsence.Scenario == scenario
 			).ToList();
 		}
+
+		public bool IsThereScheduledAgents()
+		{
+			return _storage.LoadAll<IPersonAbsence>().Any();
+		}
 	}
 }

@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		private readonly IPersonScheduleDayReadModelPersister _personScheduleDayReadModelRepository;
 		private readonly ICurrentScenario _scenarioRepository;
 		private readonly IDistributedLockAcquirer _distributedLockAcquirer;
+		private readonly IPersonAssignmentRepository _personAssignmentRepository;
+		private readonly IPersonAbsenceRepository _personAbsenceRepository;
 		private readonly IEventPublisher _eventPublisher;
 
 		private IEnumerable<IPerson> _people;
@@ -33,7 +35,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		private DateOnlyPeriod _period;
 		private DateTimePeriod _utcPeriod;
 
-		public ReadModelInitializeHandler(IPersonRepository personRepository, IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, IScheduleDayReadModelRepository scheduleDayReadModelRepository, IPersonScheduleDayReadModelPersister personScheduleDayReadModelRepository, ICurrentScenario scenarioRepository, IEventPublisher eventPublisher, IDistributedLockAcquirer distributedLockAcquirer)
+		public ReadModelInitializeHandler(IPersonRepository personRepository,
+			IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister,
+			IScheduleDayReadModelRepository scheduleDayReadModelRepository,
+			IPersonScheduleDayReadModelPersister personScheduleDayReadModelRepository,
+			ICurrentScenario scenarioRepository, IEventPublisher eventPublisher,
+			IDistributedLockAcquirer distributedLockAcquirer,
+			IPersonAssignmentRepository personAssignmentRepository,
+			IPersonAbsenceRepository personAbsenceRepository)
 		{
 			_personRepository = personRepository;
 			_scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
@@ -42,6 +51,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_scenarioRepository = scenarioRepository;
 			_eventPublisher = eventPublisher;
 			_distributedLockAcquirer = distributedLockAcquirer;
+			_personAssignmentRepository = personAssignmentRepository;
+			_personAbsenceRepository = personAbsenceRepository;
 		}
 
 		[ImpersonateSystem]
@@ -51,15 +62,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_distributedLockAcquirer.TryLockForTypeOfAnd(this, @event.LogOnBusinessUnitId.ToString(), () =>
 			// Use a lock for each business unit to only run this once for each BU
 			{
-				var messages = new List<ScheduleChangedEventBase>();
+				if (!areAnyAgentsScheduled())
+				{
+					return;
+				}
+				
 				var projectionModelInitialized = _scheduleProjectionReadOnlyPersister.IsInitialized();
 				var scheduleDayModelInitialized = _scheduleDayReadModelRepository.IsInitialized();
 				var personScheduleDayModelInitialized = _personScheduleDayReadModelRepository.IsInitialized();
-
-				if (projectionModelInitialized && scheduleDayModelInitialized && personScheduleDayModelInitialized) return;
+				if (projectionModelInitialized && scheduleDayModelInitialized && personScheduleDayModelInitialized)
+				{
+					return;
+				}
 
 				loadPeopleAndScenario(@event.StartDays, @event.EndDays);
 
+				var messages = new List<ScheduleChangedEventBase>();
 				if (!projectionModelInitialized && !scheduleDayModelInitialized && !personScheduleDayModelInitialized)
 				{
 					messages.AddRange(initialLoad<ScheduleChangedEvent>(@event));
@@ -68,28 +86,39 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					scheduleDayModelInitialized = true;
 					personScheduleDayModelInitialized = true;
 				}
+
 				if (!projectionModelInitialized)
 				{
 					messages.AddRange(initialLoad<ScheduleInitializeTriggeredEventForScheduleProjection>(@event));
 				}
+
 				if (!scheduleDayModelInitialized)
 				{
 					messages.AddRange(initialLoad<ScheduleInitializeTriggeredEventForScheduleDay>(@event));
 				}
+
 				if (!personScheduleDayModelInitialized)
 				{
 					messages.AddRange(initialLoad<ScheduleInitializeTriggeredEventForPersonScheduleDay>(@event));
 				}
+
 				messages.ForEach(m => _eventPublisher.Publish(m));
 			});
 		}
 
 		private void loadPeopleAndScenario(int startDays, int endDays)
 		{
-			_people = _personRepository.LoadAll();
+			_people = _personRepository.LoadAll().Where(p=>p.PersonPeriodCollection.Any());
 			_defaultScenario = _scenarioRepository.Current();
 			_period = new DateOnlyPeriod(DateOnly.Today.AddDays(startDays), DateOnly.Today.AddDays(endDays));
 			_utcPeriod = _period.ToDateTimePeriod(TimeZoneInfo.Utc);
+		}
+
+		private bool areAnyAgentsScheduled()
+		{
+			var existsAnyPersonAssignment = _personAssignmentRepository.IsThereScheduledAgents();
+			var existsAnyPersonAbsence = _personAbsenceRepository.IsThereScheduledAgents();
+			return existsAnyPersonAssignment || existsAnyPersonAbsence;
 		}
 
 		private IEnumerable<T> initialLoad<T>(InitialLoadScheduleProjectionEvent message) where T : ScheduleChangedEventBase, new()

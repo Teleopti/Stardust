@@ -144,5 +144,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return retList;
 		}
+
+		public bool IsThereScheduledAgents()
+		{
+			const string sql = "IF EXISTS (SELECT TOP 1 Id FROM PersonAssignment) SELECT 1 ELSE SELECT 0";
+			var result = Session.CreateSQLQuery(sql).UniqueResult<int>();
+			return result > 0;
+		}
 	}
 }

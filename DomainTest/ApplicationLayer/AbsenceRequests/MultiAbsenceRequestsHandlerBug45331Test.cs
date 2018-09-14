@@ -90,7 +90,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest.Pending();
 			PersonRequestRepository.Add(personRequest);
 
-
 			addToQueue(personRequest, RequestValidatorsFlag.None);
 
 			QueuedAbsenceRequestRepository.Add(
@@ -105,7 +104,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var requestList = new List<Guid> { personRequest.Id.GetValueOrDefault() };
 			Target.Handle(new NewMultiAbsenceRequestsCreatedEvent { PersonRequestIds = requestList, Sent = Now.UtcDateTime() });
 			Assert.IsTrue(personRequest.IsPending);
-
 		}
 
 		[Test]
@@ -177,7 +175,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Sent = Now.UtcDateTime()
 			});
 		}
-		
 	}
 	public class FakePersonAssignmentRepositoryThrowsLockException : IPersonAssignmentRepository
 	{
@@ -216,8 +213,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			ass.SetDayOff(dayOffTemplate);
 			Add(ass);
 		}
-
-
 
 		public void Add(IPersonAssignment entity)
 		{
@@ -272,6 +267,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, string source)
 		{
 			return Find(persons, period, scenario).Where(s => s.Source == source).ToList();
+		}
+
+		public bool IsThereScheduledAgents()
+		{
+			return _storage.LoadAll<IPersonAssignment>().Any();
 		}
 
 		public IPersonAssignment GetSingle(DateOnly dateOnly)

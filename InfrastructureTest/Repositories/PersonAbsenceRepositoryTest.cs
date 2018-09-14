@@ -316,11 +316,34 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var scenarioWrongBu = new Scenario("wrong");
 			scenarioWrongBu.SetBusinessUnit(bu);
 			PersistAndRemoveFromUnitOfWork(scenarioWrongBu);
-			var ass = new PersonAbsence(agent, scenarioWrongBu,
-																	new AbsenceLayer(absenceSick, new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
+			var ass = new PersonAbsence(agent, scenarioWrongBu, new AbsenceLayer(absenceSick, new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
 			PersistAndRemoveFromUnitOfWork(ass);
 
 			new PersonAbsenceRepository(CurrUnitOfWork).Find(new DateTimePeriod(1900, 1, 1, 2100, 1, 1), scenarioWrongBu).Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldCheckIfNoAgentsScheduled()
+		{
+			new PersonAbsenceRepository(CurrUnitOfWork).IsThereScheduledAgents().Should().Be.False();
+		}
+		
+		[Test]
+		public void ShouldCheckIfAnyAgentsScheduled()
+		{
+			var bu = new BusinessUnit("bu");
+			PersistAndRemoveFromUnitOfWork(bu);
+
+			var scenario = new Scenario("scenario");
+			scenario.SetBusinessUnit(bu);
+			PersistAndRemoveFromUnitOfWork(scenario);
+
+			var ass = new PersonAbsence(agent, scenario, new AbsenceLayer(absenceSick, new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
+			PersistAndRemoveFromUnitOfWork(ass);
+
+			Session.Flush();
+
+			new PersonAbsenceRepository(CurrUnitOfWork).IsThereScheduledAgents().Should().Be.True();
 		}
 
         private static void verifyRelatedObjectsAreEagerlyLoaded(IEnumerable<IPersonAbsence> personAbsenceCollection)
