@@ -360,27 +360,31 @@
 		}
 		var agentId = agent.personId;
 		clearSchedulePairs();
+		
+	    loadPeriodSchedule(startDate, endDate, agentId, false, function () {
+				var element = document.querySelector('.shift-trade-list-panel');
+				if (element) {
+					element.scrollTop = 10;
+				}
 
-		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408')) {
-			loadToleranceInfo(agentId);
-		}
+				// select the date when choose an agent
+				var item = self.loadedSchedulePairs().filter(function (pair) {
+					return pair.date.isSame(self.requestedDateInternal(), 'day');
+				})[0];
 
-		loadPeriodSchedule(startDate, endDate, agentId, false, function() {
-			var element = document.querySelector('.shift-trade-list-panel');
-			if (element) {
-				element.scrollTop = 10;
-			}
-
-			// select the date when choose an agent
-			var item = self.loadedSchedulePairs().filter(function(pair) {
-				return pair.date.isSame(self.requestedDateInternal(), 'day');
-			})[0];
-
-			if (item && item.isEnable) {
-				item.isSelected(true);
-				self.select(item);
-			}
-		});
+				if (item && item.isEnable) {
+					item.isSelected(true);
+					if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408')) {
+						loadToleranceInfo(agentId, function () {
+							self.select(item);
+						});
+					}
+					else {
+						self.select(item);
+					}	
+				}
+			});
+	
 		self.isLoadingSchedulesOnBottom(true);
 	};
 
@@ -947,7 +951,7 @@
 			});
 	}
 
-	function loadToleranceInfo(agentId) {
+	function loadToleranceInfo(agentId,callback) {
 		if (!agentId) return;
 
 		ajax.Ajax({
@@ -960,6 +964,8 @@
 					myTolorance: data.MyInfos,
 					targetTolorance: data.PersonToInfos
 				};
+				if (callback)
+					callback();
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status === 400) {

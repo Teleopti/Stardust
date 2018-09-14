@@ -1374,7 +1374,7 @@
 		viewModel.redrawLayers = function () { };
 
 		viewModel.chooseAgent(agent);
-		equal(viewModel.myToleranceMessages()[0].contractTimeGap, "0:10");
+		equal(viewModel.myToleranceMessages()[0].contractTimeGap, "+0:10");
 		equal(viewModel.targetToleranceMessages()[0].contractTimeGap, "-0:11");
 	});
 
