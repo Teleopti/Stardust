@@ -31,14 +31,18 @@
 				$interval.cancel(refreshPromise);
 			});
 
-		$http.get("./AllTenants", tokenHeaderService.getHeaders())
-			.success(function (data) {
-				vm.Tenants = data;
+		$http.get("./Toggle/IsEnabled",
+				{
+					params: { toggle: "Wfm_Payroll_SupportMultiDllPayrolls_75959" }
+				},
+				tokenHeaderService.getHeaders())
+			.then(function(data) {
+				vm.showRefreshPayrollFormats = data.data;
 			});
 
-		$http.get("./Stardust/ShowRefreshPayrollFormats", tokenHeaderService.getHeaders())
+	$http.get("./AllTenants", tokenHeaderService.getHeaders())
 			.success(function (data) {
-				vm.showRefreshPayrollFormats = data;
+				vm.Tenants = data;
 			});
 
 		$http.get("./Stardust/ShowIntradayTool", tokenHeaderService.getHeaders())

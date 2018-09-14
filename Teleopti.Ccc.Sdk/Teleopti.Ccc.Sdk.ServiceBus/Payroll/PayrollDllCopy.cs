@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -37,11 +38,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			}
 		}
 
-		public void CopyPayrollDllFromAzureStorage(string tenantName)
+		public List<string> CopyPayrollDllFromAzureStorage(string tenantName)
 		{
 			try
 			{
-				CopyFilsesFromAzureStorage(tenantName, _configReader.ConnectionString("AzureStorage"),
+				return CopyFilsesFromAzureStorage(tenantName, _configReader.ConnectionString("AzureStorage"),
 					_configReader.AppConfig("AzureStorageContainer"), _configReader.AppConfig("AzureStoragePayrollPath"),
 					_searchPath.Path);
 			}
@@ -52,8 +53,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			}
 		}
 
-		public static void CopyFilsesFromAzureStorage(string tenantName, string connectionString, string containerName, string payrollPath, string destination)
+		public static List<string> CopyFilsesFromAzureStorage(string tenantName, string connectionString, string containerName, string payrollPath, string destination)
 		{
+			var addedFiles = new List<string>();
 			var account = CloudStorageAccount.Parse(connectionString);
 
 			//Get storage account reference
@@ -67,9 +69,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 
 			var listOfUrisToDownload = container.ListBlobs($"{payrollPath}/{tenantName}/", true).Select(x => x.Uri).ToList();
 
+			//Ensure path exist and add tenantName to path.
+			destination += $"{tenantName}/";
+			Directory.CreateDirectory(destination);
+
+
 			foreach (var uri in listOfUrisToDownload)
 			{
-				var fileNameAndDestination = $"{destination}{uri.Segments[uri.Segments.Length - 1]}";
+				var fileName = uri.Segments[uri.Segments.Length - 1];
+				addedFiles.Add(fileName);
+
+				var fileNameAndDestination = $"{destination}{fileName}";
 				if(File.Exists(fileNameAndDestination))
 				{
 					File.Delete(fileNameAndDestination);
@@ -77,6 +87,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 
 				container.GetBlockBlobReference(uri.LocalPath.Replace($"/{containerName}/", "")).DownloadToFile($"{fileNameAndDestination}", FileMode.CreateNew);
 			}
+
+			return addedFiles;
 		}
 
 		private static void copyFiles(string source, string destination)

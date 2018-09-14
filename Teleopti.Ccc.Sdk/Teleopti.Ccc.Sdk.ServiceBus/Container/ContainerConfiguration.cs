@@ -37,18 +37,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			const string configKey = "FCM";
 			const string configValue = "key=AAAANvMkWNA:APA91bG1pR8ZVsp-S98uWsFUE5lnQiC8UnsQL3DgN6Vyw5HyaKuqVt86kdeurfLfQkWt_7kZTgXcTuAaxvcVUkjtE8jFo72loTy6UYrLrVbYnqCXVI4mWCYhvLQnU3Sv0sIfW1k-eZCu";
 			var build = new ContainerBuilder();
-
-			build.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigOverrider(new ConfigReader(),
+			var configuration = new IocConfiguration(new IocArgs(new ConfigOverrider(new ConfigReader(),
 				new Dictionary<string, string> {{configKey, configValue}}))
 			{
 				SharedContainer = sharedContainer,
 				DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForServiceBus(),
 				OptimizeScheduleChangedEvents_DontUseFromWeb = true
-			}, _toggleManager)));
+			}, _toggleManager);
+			build.RegisterModule(new CommonModule(configuration));
 			
 			build.RegisterModule<AuthorizationModule>();
 			build.RegisterModule<ServiceBusCommonModule>();
-			build.RegisterModule<PayrollContainerInstaller>();
+			build.RegisterModule(new PayrollContainerInstaller(configuration));
 			build.RegisterModule<SchedulingModule>();
 			build.Register(c => StatisticRepositoryFactory.Create()).As<IStatisticRepository>();
 			build.RegisterModule(new NotificationModule(_toggleManager));

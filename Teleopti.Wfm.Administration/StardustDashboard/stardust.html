@@ -23,9 +23,10 @@
 					</div>
 				</div>
 			</div>
-
+			
 			<div ng-show="vm.showRefreshPayrollFormats" class="panel panel-default ">
-				<div class="panel-heading">Trigger payroll dll reload</div>
+				<div class="panel-heading">Trigger payroll format load</div>
+				<p>Copies the Payroll dlls from the source. Either the default path Payroll.DeployNew\[TENANTNAME] or the path configured on the startpage of the Aministration site. Use the 'PayrollSourcePath' Key to define a shared directory with one directory for each tenant (\\SERVER\Dlls\[TENANTNAME]) where all Service Buses can fetch the dlls from.</p>
 				<div class="panel-body">
 					<div class="dropdown" style="padding-bottom: 10px">
 						<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -39,7 +40,7 @@
 					</div>
 					<div class="row" style="padding: 10px">
 						<button class="btn btn-primary" ng-disabled="!vm.selectedTenantName" ng-click="vm.refreshPayrollFormats()">
-							<span class="text-white">Trigger payroll dll load &raquo;</span>
+							<span class="text-white">Trigger payroll format load &raquo;</span>
 						</button>
 					</div>
 				</div>

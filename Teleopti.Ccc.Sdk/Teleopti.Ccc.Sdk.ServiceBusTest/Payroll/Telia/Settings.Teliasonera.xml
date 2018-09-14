@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<config xmlns="urn:settings">
+  <!-- Config for Teliasonera -->
+  <!-- 2011-10-05 -->
+<conccc value="Data Source=.;User Id=notused;Password=notuserd;initial Catalog=notused" />
+
+
+	<params>
+		<param key="excludeAgentsWithEmploymentNumberPrefix" value="xx" />
+		
+		<!--Decides how many days we shall take snapshot for when running format TeliasoneraSAPSnapShotChangesFormat
+			This setting will also affect for what days we are taking changes. 
+			Example if value 1. and executing this 2013-01-10 This will mean that we take snapshot for 2013-01-09 and changes between 2013-01-01 and 2013-01-08 that was changed during 2013-01-09 (previos day)
+			Example if value 2. and executing this 2013-01-10 This will mean that we take snapshot for 2013-01-09 and 2013-01-08 and changes between 2013-01-01 and 2013-01-07 that was changed during 2013-01-09 (previos day)
+			-->
+		<param key="numberOfDaysInSnaphot" value="1" />
+
+		<!--This setting will decide how many day in the next month that we shall continue to export changes for the previos month
+			The first every month we always export changes and snapshot as for setting "numberOfDaysInSnaphot" but from the 2nd we can continue to export changes that was made to the previous month
+			Example: 4; This will say that we shall export changes for the previos month until the 4th of the following month 
+			This is offcourse tied togehter with the number of days that the automatic schedule is executed
+			-->
+		<param key="daysExtraToExportChanges" value="4" />
+
+		<!--Setting that decides when format and format is allowed to be executed
+			This is to minimize the risk that anyone by mistake runs the formats that is only meant for auto export
+			Theese formats updates history tables and shall not be executed manually
+			Observer that the format must be hh:mm:ss-->		
+		<param key="AutomaticExecutionWindowStartTime" value="00:01:00" />
+		<param key="AutomaticExecutionWindowEndTime" value="07:00:00" />
+		
+		
+		
+  </params>
+
+  
+  
+</config>

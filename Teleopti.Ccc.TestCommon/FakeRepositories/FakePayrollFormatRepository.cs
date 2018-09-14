@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Remove(IPayrollFormat root)
 		{
-			throw new NotImplementedException();
+			internalStore.Remove(root);
 		}
 
 		public IPayrollFormat Get(Guid id)

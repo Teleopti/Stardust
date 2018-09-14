@@ -44,9 +44,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			public string ConnectionString { get; }
 			
 	        public IUnitOfWork CreateAndOpenUnitOfWork()
-	        {
-		        throw new NotImplementedException();
-	        }
+			{
+				return new FakeUnitOfWork(new FakeStorage());
+			}
 
 	        public IUnitOfWork CreateAndOpenUnitOfWork(IQueryFilter businessUnitFilter)
 	        {

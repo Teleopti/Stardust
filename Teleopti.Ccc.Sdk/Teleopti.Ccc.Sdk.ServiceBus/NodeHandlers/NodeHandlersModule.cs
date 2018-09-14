@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Runtime.InteropServices;
+using Autofac;
 using Stardust.Node.Interfaces;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
@@ -16,11 +17,19 @@ using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
+using Teleopti.Ccc.IocCommon;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
 	public class NodeHandlersModule : Module
 	{
+		private readonly IocConfiguration _configuration;
+
+		public NodeHandlersModule(IocConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<StardustHealthCheckHandler>().As<IHandle<StardustHealthCheckEvent>>().SingleInstance();
@@ -32,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<SchedulingProgress>().As<ISchedulingProgress>().SingleInstance();
 			builder.RegisterType<DataSourceScope>().As<IDataSourceScope>();
 			builder.RegisterType<ExportPayrollHandler>().As<IHandle<RunPayrollExportEvent>>().SingleInstance().ApplyAspects();
-			builder.RegisterModule<PayrollContainerInstaller>();
+			builder.RegisterModule(new PayrollContainerInstaller(_configuration));
 			builder.RegisterType<StardustJobFeedback>().As<IStardustJobFeedback>().SingleInstance();
 			builder.RegisterType<UpdateStaffingLevelReadModelHandler>().As<IHandle<UpdateStaffingLevelReadModelEvent>>().SingleInstance();
 			builder.RegisterType<ValidateReadModelsHandler>().As<IHandle<ValidateReadModelsEvent>>().SingleInstance().ApplyAspects();
@@ -52,6 +61,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<IntradayToolHandler>().As<IHandle<IntradayToolEvent>>().SingleInstance();
 			builder.RegisterType<ImportScheduleNodeHandler>().As<IHandle<ImportScheduleEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ArchiveScheduleNodeHandler>().As<IHandle<ArchiveScheduleEvent>>().SingleInstance().ApplyAspects();
+			builder.RegisterType<PayrollFormatRepositoryFactory>().As<IPayrollFormatRepositoryFactory>().SingleInstance();
 		}
 	}
 }

@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 
-namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
+namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 {
 	[TestFixture]
 	public class PlugInLoaderTest
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 
 			var domainAssemblyResolver = new DomainAssemblyResolver(new AssemblyFileLoader(searchPath));
 
-			target = new PlugInLoader(domainAssemblyResolver, searchPath, null);
+			target = new PlugInLoader(domainAssemblyResolver, searchPath);
 		}
 
 		[Test]

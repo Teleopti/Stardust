@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
-using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
@@ -10,6 +8,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
+using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 		{
 			try
 			{
-				using (var uow=_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
 					_stardustJobFeedback.SendProgress($@"Consuming message for Payroll Export with Id = {@event.PayrollExportId}. (Message timestamp = {@event.Timestamp})");
 
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			}
 			catch (Exception exception)
 			{
-				using (var uow=_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
 					//a very unusual way of reporting error but we need that to make the UI more responsive
 					var payrollResult = _payrollResultRepository.Get(@event.PayrollResultId);
@@ -110,5 +110,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 				AppDomain.CurrentDomain.AssemblyResolve -= _domainAssemblyResolver.Resolve;
 			}
 		}
+		
 	}
 }

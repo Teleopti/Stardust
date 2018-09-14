@@ -84,6 +84,7 @@
       <HintPath>..\..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -118,10 +119,15 @@
     <Compile Include="BudgetGroupAllowanceSpecificationTest.cs" />
     <Compile Include="BudgetGroupHeadCountSpecificationTest.cs" />
     <Compile Include="Container\ContainerConfigurationTest.cs" />
+    <Compile Include="FakeServerConfigurationRepository.cs" />
     <Compile Include="PayrollDllCopyTest.cs" />
-    <Compile Include="Payroll\PayrollExportConsumerTest.cs" />
-    <Compile Include="Payroll\PayrollPeopleLoaderTest.cs" />
-    <Compile Include="Payroll\PlugInLoaderTest.cs" />
+    <Compile Include="PayrollTest\FakeTeleoptiSchedulingService.cs" />
+    <Compile Include="PayrollTest\PayrollExportConsumerTest.cs" />
+    <Compile Include="PayrollTest\PayrollPeopleLoaderTest.cs" />
+    <Compile Include="PayrollTest\AppDomainUnloadTest.cs" />
+    <Compile Include="PayrollTest\PlugInLoaderTest.cs" />
+    <Compile Include="PayrollTest\RefreshPayrollFormatsHandlerTest.cs" />
+    <Compile Include="PayrollTest\SdkFakeServiceFactory.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -197,6 +203,56 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Payroll.DeployNew\TestTenant\Teleopti.Ccc.Payroll.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Payroll\Telia\Config.RelesayTeliaSonera.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Payroll\Telia\Facet.Combinatorics.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Payroll\Telia\FluentNHibernate.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Payroll\Telia\ReadMe.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Payroll\Telia\Settings.Teliasonera.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Payroll\Telia\Teleopti.Ccc.Payroll.Base.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Payroll\Telia\Teleopti.Ccc.Payroll.Core.Configuration.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Payroll\Telia\Teleopti.Ccc.Payroll.Core.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Payroll\Telia\Teleopti.Ccc.Payroll.Core.Interfaces.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Payroll\Telia\Teleopti.Ccc.Payroll.Core.Templates.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Payroll\Telia\Teleopti.Ccc.Payroll.Customers.ReleasyTeliaSonera.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Payroll\Teleopti.Ccc.Payroll.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Payroll\Telia\Teleopti.Ccc.Payroll.Systems.Hogia.RelesayTeliaSonera.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Payroll\Telia\Teleopti.Ccc.Payroll.Systems.SAP.Teliasonera.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Payroll\Telia\Teleopti.Ccc.Payroll.Teliasonera.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

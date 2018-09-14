@@ -9,8 +9,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {
-    public class PayrollExportFeedback : IServiceBusPayrollExportFeedback
-    {
+	public class PayrollExportFeedback : IServiceBusPayrollExportFeedback
+	{
 	    private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 	    private IMessageBrokerComposite _messageBroker;
         private IPayrollResult _payrollResult;
@@ -61,7 +61,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
             _payrollResult.AddDetail(new PayrollResultDetail(detailLevel, message, DateTime.UtcNow, exception));
         }
 
-        public void Error(string message, Exception exception)
+		public void AddPayrollResultDetail(IPayrollResultDetail payrollResultDetail)
+		{
+			_payrollResult.AddDetail(payrollResultDetail);
+		}
+
+		public void Error(string message, Exception exception)
         {
             Logger.Error(message,exception);
             AddPayrollResultDetail(DetailLevel.Error,message,exception);

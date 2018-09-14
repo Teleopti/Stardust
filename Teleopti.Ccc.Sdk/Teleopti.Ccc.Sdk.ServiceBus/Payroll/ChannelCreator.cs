@@ -1,8 +1,10 @@
-﻿using System.ServiceModel;
+﻿using System;
+using System.ServiceModel;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {
-    public class ChannelCreator : IChannelCreator
+	[Serializable]
+	public class ChannelCreator : IChannelCreator
     {
         public T CreateChannel<T>()
         {

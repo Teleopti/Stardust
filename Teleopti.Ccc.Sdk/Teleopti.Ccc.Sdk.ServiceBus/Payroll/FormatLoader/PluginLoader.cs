@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
@@ -14,14 +13,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
     {
         private readonly IDomainAssemblyResolver _domainAssemblyResolver;
         private readonly ISearchPath _searchPath;
-		private readonly IDataSourceForTenant _dataSourceForTenant;
-        private List<IPayrollExportProcessor> _availablePayrollExportProcessors;
+		private List<IPayrollExportProcessor> _availablePayrollExportProcessors;
 
-        public PlugInLoader(IDomainAssemblyResolver domainAssemblyResolver, ISearchPath searchPath, IDataSourceForTenant dataSourceForTenant)
+        public PlugInLoader(IDomainAssemblyResolver domainAssemblyResolver, ISearchPath searchPath)
         {
             _domainAssemblyResolver = domainAssemblyResolver;
             _searchPath = searchPath;
-			_dataSourceForTenant = dataSourceForTenant;
 		}
 
         public IList<IPayrollExportProcessor> Load()

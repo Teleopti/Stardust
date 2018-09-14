@@ -16,11 +16,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
         {
             var currentAssemblies = AppDomain.CurrentDomain.GetAssemblies();
             
+			//var argsShortAssemblyName = new AssemblyName(args.Name);
             foreach (var t in currentAssemblies)
             {
-                if (t.FullName == args.Name)
-                {
-                    return t;
+				//var tShortName = new AssemblyName(t.FullName);
+
+				//if (t.GetName().Name == args.RequestingAssembly.GetName().Name)
+				//if(tShortName.Name == argsShortAssemblyName.Name)
+				if (t.FullName == args.Name)
+				{
+					return t;
                 }
             }
             return _assemblyFileLoader.Find(args.Name);

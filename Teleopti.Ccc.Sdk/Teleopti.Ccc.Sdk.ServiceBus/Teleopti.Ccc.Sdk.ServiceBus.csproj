@@ -107,6 +107,9 @@
     <Reference Include="policy.2.3.FSharp.Core">
       <HintPath>..\..\packages\FSharp.Core.3.0.0.2\lib\net40\policy.2.3.FSharp.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Polly, Version=5.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Polly.5.9.0\lib\net45\Polly.dll</HintPath>
+    </Reference>
     <Reference Include="Stardust.Node, Version=1.0.0.830, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Stardust.Node.1.0.0.830\lib\net451\Stardust.Node.dll</HintPath>
     </Reference>
@@ -185,15 +188,28 @@
     <Compile Include="NodeHandlers\ValidateReadModelsHandler.cs" />
     <Compile Include="NodeHandlers\WebIntradayOptimizationHandler.cs" />
     <Compile Include="NodeHandlers\WebScheduleHandler.cs" />
+    <Compile Include="Payroll\FormatLoader\AppdomainCreatorWrapper.cs" />
+    <Compile Include="Payroll\FormatLoader\AssemblyFileLoader.cs" />
+    <Compile Include="Payroll\FormatLoader\FakeServiceBusPayrollExportFeedback.cs" />
+    <Compile Include="Payroll\FormatLoader\InterAppDomainArguments.cs" />
+    <Compile Include="Payroll\FormatLoader\ISdkServiceFactory.cs" />
     <Compile Include="Payroll\InitializePayrollFormatsToDb.cs" />
     <Compile Include="NotificationModule.cs" />
+    <Compile Include="Payroll\InitializePayrollFormatsUsingAppDomain.cs" />
+    <Compile Include="Payroll\JobResultProgressLight.cs" />
     <Compile Include="Payroll\PayrollContainerInstaller.cs" />
     <Compile Include="Payroll\PayrollDllCopy.cs" />
+    <Compile Include="Payroll\PayrollExportFeedbackEx.cs" />
+    <Compile Include="Payroll\PayrollExportHandlerNew.cs" />
+    <Compile Include="Payroll\PayrollExportHandler.cs" />
+    <Compile Include="Payroll\PayrollFormatRepositoryFactory.cs" />
+    <Compile Include="Payroll\PayrollResultDetailData.cs" />
+    <Compile Include="Payroll\SdkServiceFactory.cs" />
     <Compile Include="ServiceBusCommonModule.cs" />
     <Compile Include="AuthorizationModule.cs" />
     <Compile Include="Container\ContainerConfiguration.cs" />
     <Compile Include="Payroll\ChannelCreator.cs" />
-    <Compile Include="Payroll\FormatLoader\AssemblyFileLoader.cs" />
+    <Compile Include="Payroll\FormatLoader\AssemblyFileLoaderTenant.cs" />
     <Compile Include="Payroll\FormatLoader\DomainAssemblyResolver.cs" />
     <Compile Include="Payroll\FormatLoader\IAssemblyFileLoader.cs" />
     <Compile Include="Payroll\FormatLoader\IDomainAssemblyResolver.cs" />
@@ -207,7 +223,6 @@
     <Compile Include="Payroll\IPersonBusAssembler.cs" />
     <Compile Include="Payroll\IServiceBusPayrollExportFeedback.cs" />
     <Compile Include="Payroll\PayrollDataExtractor.cs" />
-    <Compile Include="Payroll\PayrollExportHandler.cs" />
     <Compile Include="Payroll\FormatLoader\PluginLoader.cs" />
     <Compile Include="Payroll\PayrollExportFeedback.cs" />
     <Compile Include="Payroll\PayrollPeopleLoader.cs" />
@@ -240,6 +255,10 @@
     <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
+      <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>
+      <Name>Teleopti.Ccc.TestCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
       <Project>{98105BFE-6C3B-4C57-9141-6BD065C7E966}</Project>

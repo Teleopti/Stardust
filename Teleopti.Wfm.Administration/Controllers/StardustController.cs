@@ -205,24 +205,18 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public virtual IHttpActionResult RefreshPayrollFormats([FromBody] LogOnModel logOnModel)
 		{
 			if (logOnModel == null) return BadRequest("logOnModel is null!");
-			if (string.IsNullOrEmpty(_configReader.AppConfig("IsContainer"))) return BadRequest("");
-
-			var tenant = _loadAllTenants.Tenants().Single(x => x.Name.Equals(logOnModel.Tenant));
+			//if (string.IsNullOrEmpty(_configReader.AppConfig("IsContainer"))) return BadRequest("");
+			//var tenant = _loadAllTenants.Tenants().Single(x => x.Name.Equals(logOnModel.Tenant));
 
 			_stardustSender.Send(
 					new RefreshPayrollFormatsEvent
 					{
 						LogOnBusinessUnitId = Guid.NewGuid(),
-						TenantName = tenant.Name
+						TenantName = logOnModel.Tenant,
+						LogOnDatasource = logOnModel.Tenant
 					});
 
 			return Ok("");
-		}
-
-		[HttpGet, Route("Stardust/ShowRefreshPayrollFormats")]
-		public IHttpActionResult ShowRefreshPayrollFormats()
-		{
-			return Ok(!string.IsNullOrEmpty(_configReader.AppConfig("IsContainer")));
 		}
 
 		[HttpGet, Route("Stardust/IntradayToolGoWithTheFlow")]

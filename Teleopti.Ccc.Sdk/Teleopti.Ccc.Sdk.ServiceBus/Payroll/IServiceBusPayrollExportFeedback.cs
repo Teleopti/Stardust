@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
     public interface IServiceBusPayrollExportFeedback : IPayrollExportFeedback, IDisposable
     {
         void SetPayrollResult(IPayrollResult payrollResult);
-    }
+		void AddPayrollResultDetail(IPayrollResultDetail payrollResultDetail);
+	}
 }

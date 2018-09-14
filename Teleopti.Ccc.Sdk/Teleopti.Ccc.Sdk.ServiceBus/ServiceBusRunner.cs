@@ -15,6 +15,7 @@ using Stardust.Node;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -84,14 +85,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			}
 			else
 			{
-				new PayrollDllCopy(new SearchPath()).CopyPayrollDll();
+				if (!toggleManager.IsEnabled(Toggles.Wfm_Payroll_SupportMultiDllPayrolls_75959))
+					new PayrollDllCopy(new SearchPath()).CopyPayrollDll();
 
 				Task.Run(() =>
 				{
 					var container = makeContainer(toggleManager, _sharedContainer);
-					var initializePayrollFormats = new InitializePayrollFormatsToDb(container.Resolve<IPlugInLoader>(),
-						container.Resolve<DataSourceForTenantWrapper>().DataSource()());
-					initializePayrollFormats.Initialize();
+					if (!toggleManager.IsEnabled(Toggles.Wfm_Payroll_SupportMultiDllPayrolls_75959))
+					{
+						var initializePayrollFormats = new InitializePayrollFormatsToDb(container.Resolve<IPlugInLoader>(),
+							container.Resolve<DataSourceForTenantWrapper>().DataSource()());
+						initializePayrollFormats.Initialize();
+					}
+					
 				}).ContinueWith(t =>
 					{
 						nodeStarter();
@@ -189,7 +195,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var configuration = new IocConfiguration(iocArgs, toggleManager);
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new CommonModule(configuration));
-			builder.RegisterModule<NodeHandlersModule>();
+			builder.RegisterModule(new NodeHandlersModule(configuration));
 
 			builder.RegisterType<BadgeCalculationRepository>().As<IBadgeCalculationRepository>();
 

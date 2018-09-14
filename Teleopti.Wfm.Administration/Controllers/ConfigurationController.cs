@@ -45,6 +45,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			const string asDatabase = "AS_DATABASE";
 			const string asServerName = "AS_SERVER_NAME";
 			const string pmInstall = "PM_INSTALL";
+			const string payrollSourcePath = "PayrollSourcePath";
 			
 
 			return serverConfigurations.Select(serverConfiguration =>
@@ -77,6 +78,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 				if (configurationModel.Key == logonAttempsDays)
 				{
 					configurationModel.Description = "How many days the logon attempts are saved.";
+				}
+				if (configurationModel.Key == payrollSourcePath)
+				{
+					configurationModel.Description = @"OBS! This is not used in an Azure installation. The path to where the payroll files are placed. Leave blank if you want to use the the default path Payroll.DeployNew\[TENANTNAME] under the Service Bus.";
 				}
 				return configurationModel;
 			});

@@ -71,10 +71,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			}
 		}
 
-		public void InitializeOneTenant(IList<PayrollFormatDto> tenantPayrollFormats, string tenantName)
+		public void RefreshOneTenant(string tenantName)
 		{
-			if (tenantPayrollFormats == null)
-				tenantPayrollFormats = _plugInLoader.LoadDtos();
+			var tenantPayrollFormats = _plugInLoader.LoadDtos();
 
 			var tenant = _dataSourceForTenant.Tenant(tenantName);
 			var unitOfWork = (tenant.Application.HasCurrentUnitOfWork()
