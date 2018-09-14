@@ -90,8 +90,6 @@
 		self.paging.skip = 0;
 		self.loadedAgentIndex = 0;
 		self.lastAgentIndexInDom = 0;
-		self.mySchedule({});
-		self.teamSchedules.removeAll();
 		self.filterChangedCallback(moment(self.selectedDate()).add(-1, 'days'));
 		self.isLoadingMoreAgentSchedules = false;
 	};
@@ -100,8 +98,6 @@
 		self.paging.skip = 0;
 		self.loadedAgentIndex = 0;
 		self.lastAgentIndexInDom = 0;
-		self.mySchedule({});
-		self.teamSchedules.removeAll();
 		self.filterChangedCallback(moment(self.selectedDate()).add(1, 'days'));
 		self.isLoadingMoreAgentSchedules = false;
 	};
