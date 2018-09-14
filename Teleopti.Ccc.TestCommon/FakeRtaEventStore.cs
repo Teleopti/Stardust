@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.TestCommon
 			public int Id;
 		}
 
-		private int _id = 0;
+		private int _id;
 
 		public FakeRtaEventStore(Lazy<IRtaEventStoreSynchronizer> synchronizer)
 		{

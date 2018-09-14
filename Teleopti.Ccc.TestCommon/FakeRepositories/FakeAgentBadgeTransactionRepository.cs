@@ -10,8 +10,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeAgentBadgeTransactionRepository :IAgentBadgeTransactionRepository
 	{
-		private IList<IAgentBadgeTransaction> _agentBadgeTransactions = new List<IAgentBadgeTransaction>();
-		private int _findByPersonListWasCalledTimes = 0;
+		private readonly IList<IAgentBadgeTransaction> _agentBadgeTransactions = new List<IAgentBadgeTransaction>();
+		private int _findByPersonListWasCalledTimes;
 
 		public void Add(IAgentBadgeTransaction root)
 		{

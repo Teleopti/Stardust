@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return RequestRepository;
 		}
 		
-		private IEnumerable<IPersonRequest> findAllRequests(RequestFilter filter, out int count, bool ignoreCount = false)
+		private IEnumerable<IPersonRequest> findAllRequests(RequestFilter filter, out int count)
 		{
 			IEnumerable<IPersonRequest> requests;
 
@@ -141,17 +141,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<IPersonRequest> FindAbsenceAndTextRequests(RequestFilter filter, out int count, bool ignoreCount = false)
 		{
-			return findAllRequests(filter, out count, ignoreCount);
+			return findAllRequests(filter, out count);
 		}
 
 		public IEnumerable<IPersonRequest> FindShiftTradeRequests(RequestFilter filter, out int count, bool ignoreCount = false)
 		{
-			return findAllRequests(filter, out count, ignoreCount);
+			return findAllRequests(filter, out count);
 		}
 
 		public IEnumerable<IPersonRequest> FindOvertimeRequests(RequestFilter filter, out int count, bool ignoreCount = false)
 		{
-			return findAllRequests(filter, out count, ignoreCount);
+			return findAllRequests(filter, out count);
 		}
 
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging,

@@ -29,8 +29,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             ITeam team = new Team();
             IPersonPeriod personPeriod = new PersonPeriod(startDate, personContract, team);
 
-            IActivity activity = new Activity("dummy activity");
-
             foreach (Skill skill in skills)
             {
                 Percent percent = new Percent(1);
@@ -50,8 +48,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			ITeam team = new Team();
 			team.Site = new Site("Site1");
 			IPersonPeriod personPeriod = new PersonPeriod(startDate, personContract, team);
-
-			IActivity activity = new Activity("dummy activity");
 
 			foreach (Skill skill in skills)
 			{
@@ -101,9 +97,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
         public static IPersonPeriod CreatePersonPeriod(DateOnly startDate, IPersonContract personContract, ITeam team)
         {
-            IPersonPeriod personPeriod = new PersonPeriod(startDate, personContract, team);
-            IActivity activity = new Activity("dummy activity");
-            return personPeriod;
+            return new PersonPeriod(startDate, personContract, team);
         }
     }
 }

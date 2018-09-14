@@ -19,15 +19,10 @@ namespace Teleopti.Ccc.TestCommon.Web
 		private HttpResponseBase _response;
 		private HttpRequestBase _request;
 		private readonly Dictionary<object, object> _items;
-		private NameValueCollection _headers;
+		private readonly NameValueCollection _headers;
 
 		public FakeHttpContext()
-			: this("~/", null, null, null, null, null, null)
-		{
-		}
-
-		public FakeHttpContext(string relativeUrl, string method)
-			: this(relativeUrl, method, null, null, null, null, null)
+			: this("~/", null, null, null, null, null, null, null)
 		{
 		}
 
@@ -39,13 +34,6 @@ namespace Teleopti.Ccc.TestCommon.Web
 		public FakeHttpContext(string relativeUrl, IPrincipal principal, NameValueCollection formParams,
 							   NameValueCollection queryStringParams, HttpCookieCollection cookies,
 							   SessionStateItemCollection sessionItems) 
-			: this(relativeUrl, null, principal, formParams, queryStringParams, cookies, sessionItems)
-		{
-		}
-
-		public FakeHttpContext(string relativeUrl, string method, IPrincipal principal, NameValueCollection formParams,
-							   NameValueCollection queryStringParams, HttpCookieCollection cookies,
-							   SessionStateItemCollection sessionItems)
 			: this(relativeUrl, null, principal, formParams, queryStringParams, cookies, sessionItems, null)
 		{
 		}

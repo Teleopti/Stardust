@@ -48,8 +48,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
         public static BusinessUnit CreateBusinessUnitWithSitesAndTeams()
         {
-            IList<ITeam> teams;
-            return CreateBusinessUnitWithSitesAndTeams(out teams);
+			return CreateBusinessUnitWithSitesAndTeams(out _);
         }
 
         public static BusinessUnit CreateBusinessUnitWithSitesAndTeams(out IList<ITeam> teams)
