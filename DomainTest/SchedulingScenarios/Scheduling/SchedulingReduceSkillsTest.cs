@@ -61,7 +61,33 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(canBeScheduled);
 		}
 
-		
+		[Test]
+		[Ignore("To be fixed for #76176")]
+		public void ShouldNotCauseThreadingIssues()
+		{
+			const int numberOfReducedSkillsAndIslands = 50; 
+			MergeIslandsSizeLimit.TurnOff_UseOnlyFromTest();
+			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 1);
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			var date = new DateOnly(2015, 10, 12);
+			var activity = ActivityRepository.Has();
+			var scenario = ScenarioRepository.Has();
+			var superSkillThatEveryOneKnows = new Skill("super skill").For(activity).IsOpen().WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory().WithId()));
+			SkillDayRepository.Has(superSkillThatEveryOneKnows.CreateSkillDayWithDemand(scenario, date, 1000));
+			for (var i = 0; i < numberOfReducedSkillsAndIslands; i++)
+			{
+				var extraSkill = new Skill("extra skill" + i).For(activity).IsOpen().WithId();
+				SkillDayRepository.Has(extraSkill.CreateSkillDayWithDemand(scenario, date, 1000));
+				PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Day, 1), ruleSet, superSkillThatEveryOneKnows, extraSkill);
+			}
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1, SchedulePeriodType.Day, null);
+			
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
+			
+			PersonAssignmentRepository.LoadAll().Where(x => x.Date == date).All(ass => ass.ShiftLayers.Any())
+				.Should().Be.True();
+		}
 		
 		public SchedulingReduceSkillsTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXXL76496, bool resourcePlannerHalfHourSkillTimeZon75509, bool resourcePlannerReducingSkillsDifferentOpeningHours76176) : base(seperateWebRequest, resourcePlannerXXL76496, resourcePlannerHalfHourSkillTimeZon75509, resourcePlannerReducingSkillsDifferentOpeningHours76176)
 		{
