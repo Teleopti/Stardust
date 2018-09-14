@@ -231,11 +231,14 @@
 		vm.onResizeEnd = function (event) {
 			var curShiftLayer = vm.scheduleVm.ShiftLayers[parseInt(event.target.attributes.index.value)];
 			var mergedShiftLayer = vm.getMergedShiftLayer(curShiftLayer);
-			var translateX = round5(mergedShiftLayer.TranslateX);
-			var startMinutes = mergedShiftLayer.Left + translateX;
+
+			var originStartMinutes = mergedShiftLayer.Left + mergedShiftLayer.TranslateX;
+			var originStartTime = timeLineTimeRange.Start.clone().add(originStartMinutes, 'minutes');
+
+			var startMinutes = mergedShiftLayer.Left + round5(mergedShiftLayer.TranslateX);
 			var startTime = timeLineTimeRange.Start.clone().add(startMinutes, 'minutes');
 
-			var isChangingStart = serviceDateFormatHelper.getDateTime(startTime) !== mergedShiftLayer.Start;
+			var isChangingStart = serviceDateFormatHelper.getDateTime(originStartTime) !== mergedShiftLayer.Start;
 
 			if (isChangingStart) {
 				redrawLayers(curShiftLayer, startTime, true);
@@ -292,116 +295,119 @@
 			var step = isChangingStart ? -1 : 1;
 			var reverseStep = isChangingStart ? 1 : -1;
 
-			if (dateTime == mergedSelectedShiftLayer[timeField]) return;
-
-			var index = originalShiftLayers.indexOf(originalSelectedShiftLayer);
-			var lastLayerIndex = originalShiftLayers.length - 1;
-			var endIndex = isChangingStart ? 0 : lastLayerIndex;
-
-			var isLayerShorten = moment.tz(mergedSelectedShiftLayer[timeField], vm.timezone)[coverCompletelyMethod](dateTimeInTimezone);
-			var layersCopy = originalShiftLayers.slice(0);
-			var actualDateTime = dateTime;
-
-			var shiftStart = isChangingStart ? dateTime : vm.getMergedShiftLayer(originalShiftLayers[0]).Start;
-			var shiftEnd = isChangingStart ? vm.getMergedShiftLayer(originalShiftLayers[lastLayerIndex]).End : dateTime;
-
-			if ((isChangingStart && serviceDateFormatHelper.getDateOnly(dateTime) !== vm.date)
-				|| (!isLayerShorten && isExceedMaxLength(shiftStart, shiftEnd))) {
+			if (dateTime == mergedSelectedShiftLayer[timeField]) {
 				actualDateTime = mergedSelectedShiftLayer[timeField];
-			}
-			else if (index !== endIndex) {
-				if (isLayerShorten) {
-					if (!fillWithLayer(originalShiftLayers, index, mergedSelectedShiftLayer, dateTime, isChangingStart)) {
-						actualDateTime = mergedSelectedShiftLayer[timeField];
-					}
-				} else {
-					var hasGonePassTopActivity = false;
-					var firstTimeGoPassTop = true;
-					var currentIndex = index + step;
-					var newLayerTime = "";
-					while (currentIndex !== endIndex + step) {
-						var i = currentIndex;
-						currentIndex += step;
+			} else {
 
-						var orginalLayer = layersCopy[i];
-						var orginalIndex = originalShiftLayers.indexOf(orginalLayer);
-						var layer = originalShiftLayers[orginalIndex];
-						var mergedLayer = vm.getMergedShiftLayer(layer);
 
-						if (moment.tz(mergedLayer[timeReverseField], vm.timezone)[coverMethod](dateTimeInTimezone))
-							break;
+				var index = originalShiftLayers.indexOf(originalSelectedShiftLayer);
+				var lastLayerIndex = originalShiftLayers.length - 1;
+				var endIndex = isChangingStart ? 0 : lastLayerIndex;
 
-						var layerTimeInTimezone = moment.tz(mergedLayer[timeField], vm.timezone);
-						var isCoveredCompletely = dateTimeInTimezone[coverMethod](layerTimeInTimezone);
-						var isSameTypeWithSelected = isSameType(mergedLayer, mergedSelectedShiftLayer);
-						var deleteIndex = orginalIndex;
-						if (layer.FloatOnTop && !isSameTypeWithSelected) {
-							hasGonePassTopActivity = dateTimeInTimezone[coverCompletelyMethod](layerTimeInTimezone);
-							if (firstTimeGoPassTop) {
-								firstTimeGoPassTop = false;
-								actualDateTime = mergedLayer[timeReverseField];
-							}
-							newLayerTime = mergedLayer[timeField];
-							if (hasGonePassTopActivity && i == endIndex) {
-								var start = isChangingStart ? dateTime : newLayerTime;
-								var end = isChangingStart ? newLayerTime : dateTime;
-								var insertIndex = isChangingStart ? orginalIndex : orginalIndex + 1;
-								var newLayer = createLayer(originalShiftLayers, originalSelectedShiftLayer, start, end, insertIndex);
-								selectedLayers.push(newLayer);
-							}
-							continue;
+				var isLayerShorten = moment.tz(mergedSelectedShiftLayer[timeField], vm.timezone)[coverCompletelyMethod](dateTimeInTimezone);
+				var layersCopy = originalShiftLayers.slice(0);
+				var actualDateTime = dateTime;
+
+				var shiftStart = isChangingStart ? dateTime : vm.getMergedShiftLayer(originalShiftLayers[0]).Start;
+				var shiftEnd = isChangingStart ? vm.getMergedShiftLayer(originalShiftLayers[lastLayerIndex]).End : dateTime;
+
+				if ((isChangingStart && serviceDateFormatHelper.getDateOnly(dateTime) !== vm.date)
+					|| (!isLayerShorten && isExceedMaxLength(shiftStart, shiftEnd))) {
+					actualDateTime = mergedSelectedShiftLayer[timeField];
+				}
+				else if (index !== endIndex) {
+					if (isLayerShorten) {
+						if (!fillWithLayer(originalShiftLayers, index, mergedSelectedShiftLayer, dateTime, isChangingStart)) {
+							actualDateTime = mergedSelectedShiftLayer[timeField];
 						}
+					} else {
+						var hasGonePassTopActivity = false;
+						var firstTimeGoPassTop = true;
+						var currentIndex = index + step;
+						var newLayerTime = "";
+						while (currentIndex !== endIndex + step) {
+							var i = currentIndex;
+							currentIndex += step;
 
-						if (hasGonePassTopActivity) {
-							var previousLayer = originalShiftLayers[orginalIndex + reverseStep];
-							var nextLayer = originalShiftLayers[orginalIndex + step];
-							var mergedBesideLayer = !!previousLayer && vm.getMergedShiftLayer(previousLayer);
-							var needMerge = !!mergedBesideLayer && isSameType(mergedBesideLayer, mergedSelectedShiftLayer);
-							var layerActualTime = isCoveredCompletely && i !== endIndex ? (nextLayer.IsOvertime ? dateTime : mergedLayer[timeField]) : dateTime;
+							var orginalLayer = layersCopy[i];
+							var orginalIndex = originalShiftLayers.indexOf(orginalLayer);
+							var layer = originalShiftLayers[orginalIndex];
+							var mergedLayer = vm.getMergedShiftLayer(layer);
 
-							if (needMerge) {
-								doUpdate(previousLayer, layerActualTime);
-								selectedLayers.push(previousLayer);
-							} else if (isSameTypeWithSelected && i === endIndex && isCoveredCompletely) {
-								doUpdate(layer, dateTime);
-								selectedLayers.push(layer);
+							if (moment.tz(mergedLayer[timeReverseField], vm.timezone)[coverMethod](dateTimeInTimezone))
 								break;
-							} else if (!isSameTypeWithSelected) {
-								deleteIndex = isChangingStart ? orginalIndex : orginalIndex + 1;
 
-								var start = isChangingStart ? layerActualTime : newLayerTime;
-								var end = isChangingStart ? newLayerTime : layerActualTime;
-								var insertIndex = isChangingStart ? orginalIndex + 1 : orginalIndex;
-								var newLayer = createLayer(originalShiftLayers, mergedSelectedShiftLayer, start, end, insertIndex);
-								selectedLayers.push(newLayer);
-							} else if (isSameTypeWithSelected) {
-								selectedLayers.push(layer);
+							var layerTimeInTimezone = moment.tz(mergedLayer[timeField], vm.timezone);
+							var isCoveredCompletely = dateTimeInTimezone[coverMethod](layerTimeInTimezone);
+							var isSameTypeWithSelected = isSameType(mergedLayer, mergedSelectedShiftLayer);
+							var deleteIndex = orginalIndex;
+							if (layer.FloatOnTop && !isSameTypeWithSelected) {
+								hasGonePassTopActivity = dateTimeInTimezone[coverCompletelyMethod](layerTimeInTimezone);
+								if (firstTimeGoPassTop) {
+									firstTimeGoPassTop = false;
+									actualDateTime = mergedLayer[timeReverseField];
+								}
+								newLayerTime = mergedLayer[timeField];
+								if (hasGonePassTopActivity && i == endIndex) {
+									var start = isChangingStart ? dateTime : newLayerTime;
+									var end = isChangingStart ? newLayerTime : dateTime;
+									var insertIndex = isChangingStart ? orginalIndex : orginalIndex + 1;
+									var newLayer = createLayer(originalShiftLayers, originalSelectedShiftLayer, start, end, insertIndex);
+									selectedLayers.push(newLayer);
+								}
+								continue;
+							}
+
+							if (hasGonePassTopActivity) {
+								var previousLayer = originalShiftLayers[orginalIndex + reverseStep];
+								var nextLayer = originalShiftLayers[orginalIndex + step];
+								var mergedBesideLayer = !!previousLayer && vm.getMergedShiftLayer(previousLayer);
+								var needMerge = !!mergedBesideLayer && isSameType(mergedBesideLayer, mergedSelectedShiftLayer);
+								var layerActualTime = isCoveredCompletely && i !== endIndex ? (nextLayer.IsOvertime ? dateTime : mergedLayer[timeField]) : dateTime;
+
+								if (needMerge) {
+									doUpdate(previousLayer, layerActualTime);
+									selectedLayers.push(previousLayer);
+								} else if (isSameTypeWithSelected && i === endIndex && isCoveredCompletely) {
+									doUpdate(layer, dateTime);
+									selectedLayers.push(layer);
+									break;
+								} else if (!isSameTypeWithSelected) {
+									deleteIndex = isChangingStart ? orginalIndex : orginalIndex + 1;
+
+									var start = isChangingStart ? layerActualTime : newLayerTime;
+									var end = isChangingStart ? newLayerTime : layerActualTime;
+									var insertIndex = isChangingStart ? orginalIndex + 1 : orginalIndex;
+									var newLayer = createLayer(originalShiftLayers, mergedSelectedShiftLayer, start, end, insertIndex);
+									selectedLayers.push(newLayer);
+								} else if (isSameTypeWithSelected) {
+									selectedLayers.push(layer);
+								}
+							}
+
+							if (isCoveredCompletely) {
+								if (!isSameTypeWithSelected
+									|| (isSameTypeWithSelected && i === endIndex)
+									|| (isSameTypeWithSelected && needMerge)) {
+									originalShiftLayers.splice(deleteIndex, 1);
+								}
+							} else {
+								if (!isSameTypeWithSelected) {
+									doUpdateSelf(layer, dateTime);
+								} else if (isSameTypeWithSelected && !hasGonePassTopActivity) {
+									actualDateTime = mergedLayer.End;
+									originalShiftLayers.splice(deleteIndex, 1);
+								}
+								break;
 							}
 						}
 
-						if (isCoveredCompletely) {
-							if (!isSameTypeWithSelected
-								|| (isSameTypeWithSelected && i === endIndex)
-								|| (isSameTypeWithSelected && needMerge)) {
-								originalShiftLayers.splice(deleteIndex, 1);
-							}
-						} else {
-							if (!isSameTypeWithSelected) {
-								doUpdateSelf(layer, dateTime);
-							} else if (isSameTypeWithSelected && !hasGonePassTopActivity) {
-								actualDateTime = mergedLayer.End;
-								originalShiftLayers.splice(deleteIndex, 1);
-							}
-							break;
+						if (isChangingStart) {
+							selectedLayers.reverse();
 						}
-					}
-
-					if (isChangingStart) {
-						selectedLayers.reverse();
 					}
 				}
 			}
-
 			doUpdate(originalSelectedShiftLayer, actualDateTime);
 			vm.selectedShiftLayers = selectedLayers;
 			vm.scheduleVm.ShiftLayers = originalShiftLayers;
