@@ -100,9 +100,9 @@ module.exports = function(grunt) {
 			'node_modules/hammerjs/hammer.min.js',
 			'node_modules/angular-material/angular-material.min.js',
 			'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
+			'node_modules/ng-image-input-with-preview/dist/ng-image-input-with-preview.js',
 			'vendor/fabricjs/fabric.min.js',
 			'vendor/fabricjs/fabricjs_viewport.js',
-			'vendor/ng-image-input-with-preview/ng-image-input-with-preview.js',
 
 			//To get around the problem of getting a d3 global variable this minified js file was made using
 			//rollup and uglify "nom i -g rollup uglify".
