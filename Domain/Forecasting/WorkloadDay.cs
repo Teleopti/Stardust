@@ -523,5 +523,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
             NoneEntityCloneTaskPeriodList(newWorkloadDay);
             return newWorkloadDay;
         }
+
+		public virtual IWorkloadDay MakeCopyAndNewParentList()
+		{
+			var ret = (WorkloadDay)EntityClone();
+			ret.Parents = new List<ITaskOwner>();
+			return ret;
+		}
     }
 }

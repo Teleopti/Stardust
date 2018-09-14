@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 														period.Contains(skillDayInDb.CurrentDate) && skills.Contains(skillDayInDb.Skill))
 				.Select(skillDay =>
 					{
-						var ret = new SkillDay(skillDay.CurrentDate, skillDay.Skill, skillDay.Scenario, skillDay.WorkloadDayCollection,
+						var ret = new SkillDay(skillDay.CurrentDate, skillDay.Skill, skillDay.Scenario, skillDay.WorkloadDayCollection.Select(x => x.MakeCopyAndNewParentList()),
 							skillDay.SkillDataPeriodCollection);
 						ret.SetId(skillDay.Id);
 						ret.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = skillDay.SkillDataPeriodCollection.First().Shrinkage);

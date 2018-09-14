@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 								skillDay.CurrentDate.ToDateTimePeriod(reducedSkill.TimeZone))
 							{ManualAgents = 0};
 						var newSkillDay = new SkillDay(skillDay.CurrentDate, reducedSkill, skillDay.Scenario,
-							skillDay.WorkloadDayCollection, new List<ISkillDataPeriod> {skillDataPeriod});
+							skillDay.WorkloadDayCollection.Select(x => x.MakeCopyAndNewParentList()), new List<ISkillDataPeriod> {skillDataPeriod});
 						newSkillDays.Add(newSkillDay);
 					}
 

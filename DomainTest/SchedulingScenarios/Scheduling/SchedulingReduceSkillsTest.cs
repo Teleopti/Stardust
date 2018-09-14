@@ -62,7 +62,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("To be fixed for #76176")]
 		public void ShouldNotCauseThreadingIssues()
 		{
 			const int numberOfReducedSkillsAndIslands = 50; 

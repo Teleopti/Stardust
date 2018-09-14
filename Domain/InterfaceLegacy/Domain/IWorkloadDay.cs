@@ -32,5 +32,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     	/// Created date: 2008-03-03
     	/// </remarks>
     	void ApplyTemplate(IWorkloadDayTemplate workloadDayTemplate, Action<IWorkloadDayBase> lockAction, Action<IWorkloadDayBase> releaseAction);
-    }
+
+		IWorkloadDay MakeCopyAndNewParentList();
+	}
 }

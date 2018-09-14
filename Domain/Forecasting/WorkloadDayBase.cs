@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private bool _turnOffInternalRecalc;
         private bool _initialized;
         private bool _isDirty;
-        private readonly IList<ITaskOwner> _parents = new List<ITaskOwner>();
+        private IList<ITaskOwner> _parents = new List<ITaskOwner>();
         private DateOnly _currentDate;
         private IQueueStatisticsProvider _queueStatisticsProvider;
 	    private bool _useSkewedDistribution;
@@ -1542,7 +1542,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: zoet
         /// Created date: 2008-10-13
         /// </remarks>
-        public virtual IList<ITaskOwner> Parents => _parents;
+		public virtual IList<ITaskOwner> Parents
+		{
+			get => _parents;
+			protected set => _parents = value;
+		}
 
 		public virtual ReadOnlyCollection<ITemplateTaskPeriodView> TemplateTaskPeriodViewCollection(TimeSpan periodLength)
         {
