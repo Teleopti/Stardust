@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { interval } from 'rxjs';
-import { filter, first, switchMap, tap } from 'rxjs/operators';
+import { filter, first, switchMap } from 'rxjs/operators';
 import { MainControllerStyle } from '../../main.controller';
 import { ThemeService } from '../core/services';
 
@@ -18,9 +18,6 @@ export class BootstrapComponent {
 			.pipe(
 				switchMap(() => {
 					return interval(50).pipe(
-						tap(() => {
-							console.log('interval tick', this.style);
-						}),
 						filter(() => typeof this.style !== 'undefined'),
 						first()
 					);
