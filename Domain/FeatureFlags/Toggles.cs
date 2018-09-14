@@ -86,6 +86,7 @@
 		ResourcePlanner_XXL_76496,
 		ResourcePlanner_HalfHourSkillTimeZone_75509,
 		ResourcePlanner_ReducingSkillsDifferentOpeningHours_76176,
+		ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348,
 
 		Wfm_DisplayOnlineHelp_39402,
 
