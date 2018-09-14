@@ -1440,6 +1440,10 @@ teams-time-picker.ng-invalid-dst {
 					border: 1px dashed;
 					z-index: 990;
 
+					&.float-top {
+						z-index: 990;
+					}
+
 					&.border-light {
 						border-color: #00ffff;
 					}
