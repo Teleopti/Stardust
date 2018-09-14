@@ -143,11 +143,18 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 
 			return eslIntervals
 				.GroupBy(g => g.StartTime)
-				.Select(s => new EslInterval
+				.Select(s =>
 				{
-					StartTime = s.Key,
-					ForecastedCalls = s.Sum(x => x.ForecastedCalls),
-					Esl = Math.Abs(s.Sum(x => x.ForecastedCalls)) < 0.01 ? null : s.Sum(x => x.AnsweredCallsWithinServiceLevel) / s.Sum(x => x.ForecastedCalls)
+					var esls = s.Where(x => x.Esl.HasValue);
+					var eslSum = esls.Any() ? (double ?) esls.Sum(x => x.Esl.Value) : null;
+					var esl = (eslSum.HasValue && eslSum > 0.01) ? eslSum / esls.Count() : eslSum;
+
+					return new EslInterval
+					{
+						StartTime = s.Key,
+						ForecastedCalls = s.Sum(x => x.ForecastedCalls),
+						Esl = esl
+					};
 				})
 				.OrderBy(t => t.StartTime)
 				.ToList();

@@ -537,7 +537,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday.ApplicationLayer
 			var result = Target.GeneratePerformanceViewModel(new Guid[] { skill.Id.Value });
 
 			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(1);
-			result.DataSeries.EstimatedServiceLevels.First().Should().Be.EqualTo(null);
+			result.DataSeries.EstimatedServiceLevels.First().Value.Should().Be.EqualTo(0);
 			result.Summary.EstimatedServiceLevel.Should().Be.EqualTo(0);
 		}
 
