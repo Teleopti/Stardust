@@ -45,6 +45,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		{
 			if(_resourcePlannerXxl76496)
 				toggleManager.Enable(Toggles.ResourcePlanner_XXL_76496);
+
+			toggleManager.Enable(Toggles.ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348);
 		}
 
 		public void OnBefore()

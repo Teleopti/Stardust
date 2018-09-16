@@ -110,7 +110,7 @@ ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 ResourcePlanner_XXL_76496 = true
 ResourcePlanner_ReducingSkillsDifferentOpeningHours_76176 = RC
 ResourcePlanner_HalfHourSkillTimeZone_75509 = RC
-ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348 = DEV
+ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348 = RC
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true

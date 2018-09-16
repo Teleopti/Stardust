@@ -539,7 +539,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			return stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff();//saturday
 		}
 
-		[Test, Ignore("Story #76348")]
+		[Test] // Ignore("#76348"), 
 		public void DaysOffBackToLegalStateShouldNotMoveDayOffFromClosedDays()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
@@ -565,6 +565,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			LockManager().AddLock(agent, firstDay.AddDays(5), LockType.Normal);
 
 			var doPrefs = new DaysOffPreferences() {UseWeekEndDaysOff = true, WeekEndDaysOffValue = new MinMax<int>(1, 1)};
+			
 			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(doPrefs), new NoOptimizationCallback());
 
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff().Should().Be.True();//closed sunday

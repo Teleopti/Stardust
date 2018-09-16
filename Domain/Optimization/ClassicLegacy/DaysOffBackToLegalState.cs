@@ -34,9 +34,14 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			IOptimizationPreferences optimizationPreferences)
 		{
+			var stateHolder = _schedulerStateHolder();
+			
+
 			var solverContainers =
 				_optimizerHelper.CreateSmartDayOffSolverContainers(matrixOriginalStateContainers,
 					_scheduleMatrixLockableBitArrayConverterEx, dayOffOptimizationPreferenceProvider);
+
+			
 
 			using (PerformanceOutput.ForOperation("SmartSolver for " + solverContainers.Count + " containers"))
 			{

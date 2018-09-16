@@ -61,6 +61,7 @@ using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
 using IWorkShiftCalculator = Teleopti.Ccc.Domain.Scheduling.IWorkShiftCalculator;
 
@@ -291,6 +292,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RuleSetBagsOfGroupOfPeopleCanHaveShortBreak>().SingleInstance();
 			builder.RegisterType<GridlockManager>().As<IGridlockManager>().InstancePerLifetimeScope();
 			builder.RegisterType<MatrixUserLockLocker>().InstancePerLifetimeScope();
+			if(_configuration.Toggle(Toggles.ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348))
+				builder.RegisterType<MatrixClosedDayLocker>().As<IMatrixClosedDayLocker>().InstancePerLifetimeScope();
+			else
+				builder.RegisterType<MatrixClosedDaysLockerDoNothing>().As<IMatrixClosedDayLocker>().InstancePerLifetimeScope();
+
 			builder.RegisterType<MatrixNotPermittedLocker>().SingleInstance();
 			builder.RegisterType<ScheduleMatrixValueCalculatorProFactory>().As<IScheduleMatrixValueCalculatorProFactory>().SingleInstance();
 			builder.RegisterType<WorkShiftLegalStateDayIndexCalculator>().SingleInstance();
