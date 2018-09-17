@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			var scheduleDayAfter2 = schedules[personWeek.Week.EndDate.AddDays(2)].ScheduleDay;
             result = _dayOffMaxFlexCalculator.MaxFlex(scheduleDayAfter1, scheduleDayAfter2);
             if (result != null)
-                endOfPeriodAfter = result.Value.StartDateTime;
+                endOfPeriodAfter = result.Value.EndDateTime;
 
             if ((endOfPeriodAfter - endOfPeriodBefore) >= weeklyRest)
                 return true;

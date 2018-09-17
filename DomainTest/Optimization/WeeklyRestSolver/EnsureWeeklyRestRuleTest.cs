@@ -97,5 +97,27 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 					scenario)[_person], TimeSpan.FromHours(40));
 			Assert.IsTrue(result);
 		}
-    }
+
+		[Test]
+		public void ShouldNotWarnForWeeklyRestWhenSundayAndMondayAreDaysOff()
+		{
+			var week = new DateOnlyPeriod(2018, 06, 11, 2018, 06, 17);
+			var personWeek = new PersonWeek(_person, week);
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			var activity = ActivityFactory.CreateActivity("Phone");
+			activity.InWorkTime = true;
+
+			for (int i = 0; i < 6; i++)
+			{
+				_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, scenario, activity,new DateTimePeriod(2018, 06, 11 + i, 10, 2018, 06, 11 + i, 18), ShiftCategoryFactory.CreateShiftCategory()));
+
+			}
+			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, scenario,new DateOnly(2018, 06, 17), new TimeSpan(24, 00, 00), new TimeSpan(4, 0, 0), new TimeSpan(12, 0, 0)));
+			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, scenario,new DateOnly(2018, 06, 18), new TimeSpan(24, 00, 00), new TimeSpan(4, 0, 0), new TimeSpan(12, 0, 0)));
+			_scheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, scenario, activity,new DateTimePeriod(2018, 06, 19, 10, 2018, 06, 19, 18), ShiftCategoryFactory.CreateShiftCategory()));
+
+			var result = _target.HasMinWeeklyRest(personWeek, _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person, new ScheduleDictionaryLoadOptions(false, false), personWeek.Week.Inflate(2), scenario)[_person], TimeSpan.FromHours(36));
+			Assert.IsTrue(result);
+		}
+	}
 }
