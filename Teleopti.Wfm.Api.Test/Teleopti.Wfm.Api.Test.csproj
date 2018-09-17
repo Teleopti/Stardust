@@ -101,6 +101,7 @@
     <Compile Include="ApiTestAttribute.cs" />
     <Compile Include="AuthorizationTest.cs" />
     <Compile Include="CommandListingTest.cs" />
+    <Compile Include="Command\AddAbsenceTest.cs" />
     <Compile Include="Command\AddScheduleChangesListenerTest.cs" />
     <Compile Include="Command\SetMainShiftTest.cs" />
     <Compile Include="FakeTokenVerifier.cs" />

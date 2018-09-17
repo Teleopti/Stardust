@@ -55,6 +55,8 @@
     <Compile Include="ApiModule.cs" />
     <Compile Include="CommandDtoProvider.cs" />
     <Compile Include="Command\ActivityLayerDto.cs" />
+    <Compile Include="Command\AddAbsenceDto.cs" />
+    <Compile Include="Command\AddAbsenceHandler.cs" />
     <Compile Include="Command\ScheduleChangesListenerDto.cs" />
     <Compile Include="Command\AddScheduleChangesListenerHandler.cs" />
     <Compile Include="Command\SetMainShiftDto.cs" />
