@@ -108,7 +108,26 @@
 </div>
 @if (ViewBag.LayoutBase.GrantEnabled)
 {
-	<span>Chat here!</span>
+	<script type="text/javascript">
+		(function () {
+			var width = document.documentElement.clientWidth < 450 ? document.documentElement.clientWidth : 400;
+
+			var div = document.createElement("div");
+			document.getElementsByTagName('body')[0].appendChild(div);
+			var availableClientHeight = (document.documentElement.clientHeight - 100);
+			var expectedHeight = (availableClientHeight > 500 ? 400 : availableClientHeight) + 'px';
+
+			div.outerHTML = "<div id='botDiv' style='height: 38px; position: fixed; bottom: 0; z-index: 1000; background-color: #fff'><div id='botTitleBar' style='height: 38px; width: " + width + "px; position:fixed; cursor: pointer;'></div><iframe width='" + width + "px' height='" + expectedHeight +"' src='https://webchat.botframework.com/embed/teleoptibottest?s=HRxFFD8wPZc.cwA.AUY.RYXZMV9clbUcFqVoyL4BzxJFqREHRcy0SI_22B7AfFc'></iframe></div>"; 
+
+			document.querySelector('body').addEventListener('click', function (e) {
+				e.target.matches = e.target.matches || e.target.msMatchesSelector;
+				if (e.target.matches('#botTitleBar')) { 
+					var botDiv = document.querySelector('#botDiv');
+					botDiv.style.height = botDiv.style.height == expectedHeight ? '38px' : expectedHeight;
+				};
+			});
+		}());
+	</script>
 }
 	<div id="dialog">
 	</div>
