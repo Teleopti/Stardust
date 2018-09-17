@@ -11,10 +11,36 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 {
-	[TestFixture, Ignore("WIP, trying to fix diff between build servers and local test run")]
+	[TestFixture]
 	public class AppDomainUnloadTest
 	{
 		private readonly SearchPath _searchPath = new SearchPath();
+
+		[OneTimeSetUp]
+		public void SetupFixture()
+		{
+			copyFiles(Path.Combine(TestContext.CurrentContext.TestDirectory, "Payroll"),
+				Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Payroll"), "Telia");
+		}
+
+		private static void copyFiles(string sourcePath, string destinationPath,
+			string subdirectoryPath)
+		{
+			var fullSourcePath = Path.Combine(sourcePath, subdirectoryPath);
+			var fullDestinationPath = Path.Combine(destinationPath, subdirectoryPath);
+
+			if (Path.GetFullPath(fullSourcePath) == Path.GetFullPath(fullDestinationPath))
+				return;
+
+			if (!Directory.Exists(fullDestinationPath))
+				Directory.CreateDirectory(fullDestinationPath);
+
+			foreach (var sourceFile in Directory.GetFiles(fullSourcePath))
+			{
+				var fullDestinationFilename = Path.Combine(fullDestinationPath, Path.GetFileName(sourceFile));
+				File.Copy(sourceFile, fullDestinationFilename, true);
+			}
+		}
 
 		[Test]
 		public void VerifyPayrollDtosCanBeLoaded()

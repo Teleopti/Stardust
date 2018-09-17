@@ -20,7 +20,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 	[TestFixture]
 	public class RefreshPayrollFormatsHandlerTest
 	{
-		[Test, Ignore("did not help, nya tag på måndag")]
+		[OneTimeSetUp]
+		public void SetupFixture()
+		{
+			copyFiles(Path.Combine(TestContext.CurrentContext.TestDirectory, "Payroll.DeployNew"),
+				Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Payroll.DeployNew"), "TestTenant");
+		}
+		[Test]
 		public void CopyPayrollFilesFromSourceToDestination()
 		{
 			var tenantName = "TestTenant";
@@ -59,7 +65,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			Directory.GetFiles(tenantDestinationPath).Should().Not.Be.Empty();
 		}
 
-		[Test, Ignore("For Ziggy to investigate")]
+
+		[Test]
 		public void CopyPayrollFilesFromSourceToDestinationShouldUseDefaultPathIfNotDefined()
 		{
 			var tenantName = "TestTenant";
@@ -98,5 +105,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			Directory.GetFiles(tenantDestinationPath).Should().Not.Be.Empty();
 		}
 
+		private static void copyFiles(string sourcePath, string destinationPath,
+			string subdirectoryPath)
+		{
+			var fullSourcePath = Path.Combine(sourcePath, subdirectoryPath);
+			var fullDestinationPath = Path.Combine(destinationPath, subdirectoryPath);
+
+			if (Path.GetFullPath(fullSourcePath) == Path.GetFullPath(fullDestinationPath))
+				return;
+
+			if (!Directory.Exists(fullDestinationPath))
+				Directory.CreateDirectory(fullDestinationPath);
+
+			foreach (var sourceFile in Directory.GetFiles(fullSourcePath))
+			{
+				var fullDestinationFilename = Path.Combine(fullDestinationPath, Path.GetFileName(sourceFile));
+				File.Copy(sourceFile, fullDestinationFilename, true);
+			}
+		}
 	}
 }
