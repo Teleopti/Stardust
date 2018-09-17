@@ -15796,4 +15796,19 @@ Applikationen kommer nu att stängas. </value>
   <data name="ContractTimeViolationMessageInShiftTradeRequest" xml:space="preserve">
     <value>De dagar som valts för att ingå i skiftbytet skulle ge för mycket eller för lite kontraktstid. </value>
   </data>
+  <data name="Grant" xml:space="preserve">
+    <value>Bevilja</value>
+  </data>
+  <data name="RevokableRoles" xml:space="preserve">
+    <value>Roller som kan upphävas</value>
+  </data>
+  <data name="ContractTimeViolation" xml:space="preserve">
+    <value>Bytet bryter mot kontraktstidsreglerna.</value>
+  </data>
+  <data name="ManageApplicationLogon" xml:space="preserve">
+    <value>Hantera applikationsinloggningar</value>
+  </data>
+  <data name="ManageIdentityLogon" xml:space="preserve">
+    <value>Hantera tredjepartsinloggningar</value>
+  </data>
 </root>
