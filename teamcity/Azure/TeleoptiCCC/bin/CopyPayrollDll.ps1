@@ -234,6 +234,7 @@ Try
 
 	## FileWatch destination directory
 	$FILEWATCH = $directory + "\..\Services\ServiceBus\Payroll.DeployNew"
+	$FILEWATCHNEWDIR = $directory + "\..\Services\ServiceBus\Payroll"
 
 	## Options to be added to AzCopy
 	$OPTIONS = @("/S","/XO","/Y","/sourceKey:$AccountKey")
@@ -260,8 +261,9 @@ Try
     }
 
     $newFiles = Sync-NewFilesOnly $DESTINATION $FILEWATCH
+	$newFiles1 = Sync-NewFilesOnly $DESTINATION $FILEWATCHNEWDIR
 	##one or more files are new, log info to Eventlog and restart serviceBus
-	If ($newFiles -ge 1) {
+	If ($newFiles -ge "1" -or $newFiles1 -ge "1" ) {
 		log-info "Stopping service bus..."
         StopWindowsService -ServiceName $TeleoptiServiceBus
     	write-host "-------------" -ForegroundColor blue
@@ -269,6 +271,7 @@ Try
         StartWindowsService -ServiceName $TeleoptiServiceBus
 	}
 	Write-EventLog -LogName Application -Source $JOB -EventID 0 -EntryType Information -Message "$newFiles files synced from: $BlobSource to: $FILEWATCH"
+	Write-EventLog -LogName Application -Source $JOB -EventID 0 -EntryType Information -Message "$newFiles files synced from: $BlobSource to: $FILEWATCHNEWDIR"
 }
 Catch [Exception]
 {
