@@ -321,6 +321,9 @@
 
 	self.chooseAgent = function(agent) {
 
+		self.myToleranceMessages([]);
+		self.targetToleranceMessages([]);
+
 		self.showToloranceMessageDetail(false);
 
 		if (!Teleopti.MyTimeWeb.Common.IsHostAMobile()) 
