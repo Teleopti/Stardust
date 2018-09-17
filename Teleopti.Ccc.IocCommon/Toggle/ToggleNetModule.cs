@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 		protected override void Load(ContainerBuilder builder)
 		{
 			var pathToToggle = _iocArgs.FeatureToggle;
-			if (bool.TryParse(_iocArgs.ConfigReader.AppConfig("PBI77584"), out _))
+
+			if (bool.TryParse(_iocArgs.ConfigReader.AppConfig("PBI77584"), out var pbi77584) && pbi77584)
 			{
 				builder.Register(c => new FetchToggleOverride(_iocArgs.ConfigReader)).As<IFetchToggleOverride>();
 			}

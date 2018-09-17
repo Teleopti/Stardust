@@ -88,5 +88,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 				File.Delete(tempFile);
 			}
 		}
+		
+		//REMOVE ME WHEN FEATURE IS ENABLED! Only to verify old behavior
+		[TestCase(true, true)]
+		[TestCase(true, false)]
+		[TestCase(false, true)]
+		[TestCase(false, false)]
+		public void ShouldNotUseOverridenValueIfWebConfigValueIsFalse(bool fileValue, bool dbValue)
+		{
+			SetupFixtureForAssembly.RestoreCcc7Database();
+			var tempFile = Path.GetTempFileName();
+			try
+			{
+				File.WriteAllLines(tempFile, new[] { $"TestToggle={fileValue.ToString()}" });
+				var configReader = new FakeConfigReader("PBI77584", "false");
+				configReader.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
+				var iocArgs = new IocArgs(configReader) { FeatureToggle = tempFile };
+				new SaveToggleOverride(configReader).Save(Toggles.TestToggle, dbValue);
+				
+				var toggleManager = CommonModule.ToggleManagerForIoc(iocArgs);
+				
+				toggleManager.IsEnabled(Toggles.TestToggle)
+					.Should().Be.EqualTo(fileValue);
+			}
+			finally
+			{
+				File.Delete(tempFile);
+			}
+		}
 	}
 }
