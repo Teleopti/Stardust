@@ -5,7 +5,7 @@
                    default-access="field.camelcase-underscore">
 
 	<class name="RtaState">
-		<id name="Id" type="guid" access="nosetter.camelcase-underscore" unsaved-value="null">
+		<id name="Id" access="nosetter.camelcase-underscore" unsaved-value="null">
 			<generator class="guid.comb" />
 		</id>
 		<many-to-one name="BusinessUnit" class="Teleopti.Ccc.Domain.Common.BusinessUnit" access="readonly" />
