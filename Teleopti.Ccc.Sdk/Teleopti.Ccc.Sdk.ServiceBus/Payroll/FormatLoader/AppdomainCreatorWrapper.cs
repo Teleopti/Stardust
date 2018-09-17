@@ -7,7 +7,6 @@ using System.Security;
 using System.Security.Permissions;
 using System.Xml;
 using System.Xml.XPath;
-using log4net;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
 using Teleopti.Ccc.Domain.Payroll;
@@ -19,11 +18,17 @@ using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 {
 	[Serializable]
+	public static class Helper
+	{
+		public static void AppDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs unhandledExceptionEventArgs)
+		{
+			throw (Exception)(unhandledExceptionEventArgs.ExceptionObject);
+		}
+	}
+
 	public class AppdomainCreatorWrapper
 	{
-		private string _tenantName;
-		private string _payrollBasePath;
-		private static readonly ILog logger = LogManager.GetLogger(typeof(AppdomainCreatorWrapper));
+		//private static readonly ILog logger = LogManager.GetLogger(typeof(AppdomainCreatorWrapper));
 
 		public XmlDocument RunPayroll(ISdkServiceFactory sdkServiceFactory, PayrollExportDto payrollExportDto,
 			RunPayrollExportEvent @event, Guid payrollResultId,
@@ -37,10 +42,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 				DataSource = @event.LogOnDatasource,
 				UserName = SystemUser.Id.ToString(),
 				SdkServiceFactory = sdkServiceFactory,
-				PayrollResultId = payrollResultId
+				PayrollResultId = payrollResultId,
+				PayrollBasePath = payrollBasePath,
+				TenantName = tenantName
 			};
-
-			_payrollBasePath = payrollBasePath;
 
 			var appDomain = createAppdomain(tenantName);
 			appDomain.SetData(InterAppDomainParameters.AppDomainArgumentsParameter, appDomainArguements);
@@ -68,7 +73,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 
 		private AppDomain createAppdomain(string appdomainName)
 		{
-			_tenantName = appdomainName;
 			var appdomainSetup =
 				new AppDomainSetup
 				{
@@ -79,18 +83,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 
 			var trustedLoadFromRemoteSourceGrantSet = new PermissionSet(PermissionState.Unrestricted);//this is the fix
 			var appDomain = AppDomain.CreateDomain(appdomainName, null, appdomainSetup, trustedLoadFromRemoteSourceGrantSet);
-			appDomain.UnhandledException += AppDomainOnUnhandledException;
+			appDomain.UnhandledException += Helper.AppDomainOnUnhandledException;
 
 			return appDomain;
 		}
 
-		private void AppDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs unhandledExceptionEventArgs)
+		private static void runPayroll()
 		{
-			throw (Exception)(unhandledExceptionEventArgs.ExceptionObject);
-		}
-
-		private void runPayroll()
-		{
+			//ILog logger = LogManager.GetLogger(typeof(AppdomainCreatorWrapper));
+			//logger.Error("This is a test!!!!");
 			var appDomainArguments = AppDomain.CurrentDomain.GetData(InterAppDomainParameters.AppDomainArgumentsParameter) as InterAppDomainArguments;
 			fixAuthenticationMessageHeader(appDomainArguments);
 			var payrollExportDto = JsonConvert.DeserializeObject<PayrollExportDto>(appDomainArguments.PayrollExportDto);
@@ -100,12 +101,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 
 			var feedback = sdkServiceFactory.CreatePayrollExportFeedback(appDomainArguments);
 			
-			processors = load(_payrollBasePath, feedback as PayrollExportFeedbackEx);
+			processors = load(appDomainArguments.PayrollBasePath, feedback as PayrollExportFeedbackEx, appDomainArguments.TenantName);
 			
 			if (!processors.Any())
 			{
 				var message = "Unable to run payroll. No payroll export processor found.";
-				logger.Error(message);
+				//logger.Error(message);
 				feedback.Error(message);
 				SetFeedbackData(feedback);
 				return;
@@ -114,16 +115,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 			var processorForCurrentPayroll = processors.FirstOrDefault(p => p.PayrollFormat.FormatId == payrollExportDto.PayrollFormat.FormatId);
 			if (processorForCurrentPayroll is IPayrollExportProcessorWithFeedback payrollExportProcessorWithFeedback)
 			{
-				logger.Debug("The selected payroll export processor can report progress and other feedback.");
+				//logger.Debug("The selected payroll export processor can report progress and other feedback.");
 				payrollExportProcessorWithFeedback.PayrollExportFeedback = feedback;
 			}
 
 			if (processorForCurrentPayroll == null)
 			{
-				var tenantSpecificPath = Path.Combine(_payrollBasePath, _tenantName);
+				var tenantSpecificPath = Path.Combine(appDomainArguments.PayrollBasePath, appDomainArguments.TenantName);
 				var message = $"Payroll export processor for format id: {payrollExportDto.PayrollFormat.FormatId} not found. " +
-					$"Please make sure that all payroll files are located for tenant {_tenantName} is located in: {tenantSpecificPath}.";
-				logger.Error(message);
+					$"Please make sure that all payroll files are located for tenant {appDomainArguments.TenantName} is located in: {tenantSpecificPath}.";
+				//logger.Error(message);
 				feedback.Error(message);
 				SetFeedbackData(feedback);
 				return;
@@ -131,8 +132,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 		
 			// Changing the Base directory of the Appdomain to find non-assembly files used from Payroll processors
 			var payrollPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Payroll");
-			if (Directory.Exists(Path.Combine(payrollPath, _tenantName)))
-				payrollPath = Path.Combine(payrollPath, _tenantName);
+			if (Directory.Exists(Path.Combine(payrollPath, appDomainArguments.TenantName)))
+				payrollPath = Path.Combine(payrollPath, appDomainArguments.TenantName);
 
 			AppDomain.CurrentDomain.SetData("APPBASE", payrollPath);
 
@@ -146,7 +147,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex);
+				//logger.Error(ex);
 				feedback.Error("An error occurred while running the payroll export.", ex);
 				SetFeedbackData(feedback);
 				return;
@@ -166,7 +167,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 
 		}
 
-		private void SetFeedbackData(IPayrollExportFeedback feedback)
+		private static void SetFeedbackData(IPayrollExportFeedback feedback)
 		{
 			if (feedback is PayrollExportFeedbackEx ex)
 				AppDomain.CurrentDomain.SetData(InterAppDomainParameters.PayrollResultDetailsParameter, ex.PayrollResultDetails);
@@ -181,13 +182,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 			AuthenticationMessageHeader.UseWindowsIdentity = false;
 		}
 
-		private IList<IPayrollExportProcessor> load(string path, PayrollExportFeedbackEx feedback)
+		private static IList<IPayrollExportProcessor> load(string path, PayrollExportFeedbackEx feedback, string tenantName)
 		{
+			//ILog logger = LogManager.GetLogger(typeof(AppdomainCreatorWrapper));
 			var availablePayrollExportProcessors = new List<IPayrollExportProcessor>();
 			var domainAssemblyResolver = new DomainAssemblyResolver(new AssemblyFileLoaderTenant());
 			{
 				AppDomain.CurrentDomain.AssemblyResolve += domainAssemblyResolver.Resolve;
-				var tenantSpecificPath = Path.Combine(path, _tenantName);
+				var tenantSpecificPath = Path.Combine(path, tenantName);
 				try
 				{
 					var	files = Directory.GetFiles(
@@ -213,15 +215,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 				}
 				catch (DirectoryNotFoundException ex)
 				{
-					var message = $"No payroll is configured for {_tenantName}. Directory not found: {tenantSpecificPath}";
-					logger.Error(message);
+					var message = $"No payroll is configured for {tenantName}. Directory not found: {tenantSpecificPath}";
+					//logger.Error(message);
 					feedback?.Error(message, ex);
 					return new List<IPayrollExportProcessor>();
 				}
 				catch (Exception ex)
 				{
 					var message = $"Problems when loading Payroll files from path: {tenantSpecificPath}  {ex.Message}";
-					logger.Error(message);
+					//logger.Error(message);
 					feedback?.Error(message, ex);
 					return new List<IPayrollExportProcessor>();
 				}
@@ -234,20 +236,29 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 		}
 
 		
-		public IList<PayrollFormatDto> FindPayrollFormatsForTenant(string tenantName, string tenantPath)
+		public IList<PayrollFormatDto> FindPayrollFormatsForTenant(string tenantName, string payrollBasePath)
 		{
-			_payrollBasePath = tenantPath;
 			var appDomain = createAppdomain(tenantName);
+				var interAppDomainArguments = new InterAppDomainArguments()
+				{
+					TenantName = tenantName,
+					PayrollBasePath = payrollBasePath
+				};
+				appDomain.SetData(InterAppDomainParameters.AppDomainArgumentsParameter, interAppDomainArguments);
 				appDomain.DoCallBack(loadAssemblyInternal);
 				var payrollFormatDtos = appDomain.GetData(InterAppDomainParameters.PayrollFormatDtosParameter) as IList<PayrollFormatDto>;
 			AppDomain.Unload(appDomain);
 			return payrollFormatDtos;
 		}
 
-		private void loadAssemblyInternal()
+		private static void loadAssemblyInternal()
 		{
 			var payrollFormatDtos = new List<PayrollFormatDto>();
-			var processors = load(_payrollBasePath, null);
+
+			if(!(AppDomain.CurrentDomain.GetData(InterAppDomainParameters.AppDomainArgumentsParameter) is InterAppDomainArguments interAppParameters))
+				throw new ArgumentNullException(nameof(interAppParameters));
+
+			var processors = load(interAppParameters.PayrollBasePath, null, interAppParameters.TenantName);
 
 			foreach (var processor in processors)
 			{

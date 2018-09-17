@@ -11,10 +11,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 {
-	[TestFixture, Ignore("works locally")]
+	[TestFixture]
 	public class AppDomainUnloadTest
 	{
-		private AppdomainCreatorWrapper target;
 		private readonly SearchPath _searchPath = new SearchPath();
 
 		[Test]
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 		{
 			runWithExceptionHandling(() =>
 			{
-				target = new AppdomainCreatorWrapper();
+				var target = new AppdomainCreatorWrapper();
 				var payrollDtos = target.FindPayrollFormatsForTenant("Telia", _searchPath.Path);
 				payrollDtos.Count.Should().Be(6);
 			});
@@ -48,8 +47,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 				for (var i = 0; i < 51; i++)
 					payrollExportDto.PersonCollection.Add(new PersonDto());
 
-				target = new AppdomainCreatorWrapper();
-				var document = target.RunPayroll(new SdkFakeServiceFactory(), payrollExportDto,new RunPayrollExportEvent(),Guid.NewGuid(), new FakeServiceBusPayrollExportFeedback(), _searchPath.Path);
+				var target = new AppdomainCreatorWrapper();
+				var document = target.RunPayroll(
+					new SdkFakeServiceFactory(), payrollExportDto, new RunPayrollExportEvent(),
+					Guid.NewGuid(), new FakeServiceBusPayrollExportFeedback(), 
+					_searchPath.Path);
 				document.DocumentElement.ChildNodes.Count.Should().Be(5);
 			});
 		}
@@ -74,7 +76,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 				for (var i = 0; i < 51; i++)
 					payrollExportDto.PersonCollection.Add(new PersonDto());
 
-				target = new AppdomainCreatorWrapper();
+				var target = new AppdomainCreatorWrapper();
 				var document = target.RunPayroll(new SdkFakeServiceFactory(), payrollExportDto, new RunPayrollExportEvent(), Guid.NewGuid(), new FakeServiceBusPayrollExportFeedback(), _searchPath.Path);
 				document.DocumentElement.ChildNodes.Count.Should().Be(5);
 			});
@@ -97,7 +99,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			for (var i = 0; i < 51; i++)
 				payrollExportDto.PersonCollection.Add(new PersonDto());
 
-			target = new AppdomainCreatorWrapper();
+			var target = new AppdomainCreatorWrapper();
 			var factory = new SdkFakeServiceFactory();
 			var feedback = new FakeServiceBusPayrollExportFeedback();
 			Assert.DoesNotThrow(() => target.RunPayroll(factory, payrollExportDto, new RunPayrollExportEvent(), Guid.NewGuid(), feedback, _searchPath.Path));
@@ -125,7 +127,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			var fullPayrollPath = Path.Combine(_searchPath.Path, @"Telia\Teleopti.Ccc.Payroll.Customers.ReleasyTeliaSonera.dll");
 			var file = File.Open(fullPayrollPath, FileMode.Open);
 
-			target = new AppdomainCreatorWrapper();
+			var target = new AppdomainCreatorWrapper();
 			var factory = new SdkFakeServiceFactory();
 			var feedback = new FakeServiceBusPayrollExportFeedback();
 			var result = target.RunPayroll(factory, payrollExportDto, new RunPayrollExportEvent(), Guid.NewGuid(),
@@ -152,10 +154,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			for (var i = 0; i < 51; i++)
 				payrollExportDto.PersonCollection.Add(new PersonDto());
 
-			target = new AppdomainCreatorWrapper();
+			var target = new AppdomainCreatorWrapper();
 			var factory = new SdkFakeServiceFactory();
 			var feedback = new FakeServiceBusPayrollExportFeedback();
-			Assert.DoesNotThrow(() => 
+			Assert.DoesNotThrow(() =>
 				target.RunPayroll(factory, payrollExportDto, new RunPayrollExportEvent(), Guid.NewGuid(),
 					feedback, _searchPath.Path));
 
@@ -181,7 +183,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 				for (var i = 0; i < 51; i++)
 					payrollExportDto.PersonCollection.Add(new PersonDto());
 
-				target = new AppdomainCreatorWrapper();
+				var target = new AppdomainCreatorWrapper();
 				var feedback = new FakeServiceBusPayrollExportFeedback();
 				var factory = new SdkFakeServiceFactory();
 				feedback.ProgressList.Count.Should().Be.EqualTo(0);
