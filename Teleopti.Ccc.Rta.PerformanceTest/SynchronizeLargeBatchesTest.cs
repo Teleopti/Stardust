@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Rta.PerformanceTest.Code;
+using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 
 
 namespace Teleopti.Ccc.Rta.PerformanceTest
