@@ -4,11 +4,11 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Infrastructure.Toggle
 {
-	public class FetchToggleOverrideFromDb: IFetchToggleOverride
+	public class FetchToggleOverride: IFetchToggleOverride
 	{
 		private readonly IConfigReader _configReader;
 
-		public FetchToggleOverrideFromDb(IConfigReader configReader)
+		public FetchToggleOverride(IConfigReader configReader)
 		{
 			_configReader = configReader;
 		}
@@ -25,4 +25,21 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			}
 		}
 	}
+	
+	//REMOVE THESE WHEN FEATURE IS DONE 
+	public interface IFetchToggleOverride
+	{
+		bool? OverridenValue(Toggles toggle);
+	}
+
+	public class NoFetchingOfOverridenToggles : IFetchToggleOverride
+	{
+		public bool? OverridenValue(Toggles toggle)
+		{
+			return null;
+		}
+	}
+		
+		
+	//
 }
