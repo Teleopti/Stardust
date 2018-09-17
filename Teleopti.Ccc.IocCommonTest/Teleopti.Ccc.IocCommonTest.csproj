@@ -118,9 +118,7 @@
     <Compile Include="Toggle\CustomerTest.cs" />
     <Compile Include="Toggle\DeveloperTest.cs" />
     <Compile Include="Toggle\EnabledOrDisabledByToggleEventPackageHandlerTest.cs" />
-    <Compile Include="Toggle\FakeFetchToggleOverride.cs" />
     <Compile Include="Toggle\GeneralTest.cs" />
-    <Compile Include="Toggle\OverrideToggleTest.cs" />
     <Compile Include="Toggle\UseNotOnToggleTest.cs" />
     <Compile Include="Toggle\UseOnAndNotOnToggleTest.cs" />
     <Compile Include="Toggle\EnabledOrDisabledByToggleEventHandlerTest.cs" />

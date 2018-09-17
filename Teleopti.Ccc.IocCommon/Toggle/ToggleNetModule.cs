@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 			}
 			else
 			{
-				builder.Register<IToggleManager>(c =>
+				builder.Register(c =>
 				{
 					const string developerMode = "ALL";
 					const string rcMode = "RC";
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 						});
 					toggleConfiguration.SetDefaultSpecification(defaultSpecification);
 					return bool.TryParse(_iocArgs.ConfigReader.AppConfig("PBI77584"), out _)
-						? (IToggleManager) new toggleCheckerWrapperFeature584(toggleConfiguration.Create(), _iocArgs.FetchToggleOverride)
+						? (IToggleManager) new toggleCheckerWrapperFeature584(toggleConfiguration.Create(), new FetchToggleOverrideFromDb(_iocArgs.ConfigReader))
 						: new toggleCheckerWrapper(toggleConfiguration.Create());
 				})
 				.SingleInstance()
