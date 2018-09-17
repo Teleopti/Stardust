@@ -12,7 +12,7 @@ namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ViewModels.HistoricalOverviewVi
 	[DomainTest]
 	[DefaultData]
 	[TestFixture]
-	public class BuildAdherenceTest
+	public class AdherenceTest
 	{
 		public Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels.HistoricalOverviewViewModelBuilder Target;
 		public FakeDatabase Database;
