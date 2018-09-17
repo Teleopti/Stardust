@@ -27,6 +27,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 	public interface IRtaEventStoreTestReader
 	{
 		IEnumerable<IEvent> LoadAllForTest();
+		int LoadLastIdForTest();
 		IEnumerable<string>	LoadAllEventTypes();
 	}
 }

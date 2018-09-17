@@ -74,6 +74,7 @@
     <Compile Include="Code\StatesSender.cs" />
     <Compile Include="Code\StateChange.cs" />
     <Compile Include="Service References\TeleoptiRtaService\Reference.cs" />
+    <Compile Include="SynchronizeLargeBatchesTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

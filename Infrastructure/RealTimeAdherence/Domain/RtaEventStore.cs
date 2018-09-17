@@ -166,6 +166,9 @@ ORDER BY [Id]
 
 		public IEnumerable<IEvent> LoadAllForTest() =>
 			loadEvents(_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT [Type], [Event] FROM [rta].[Events]"));
+		
+		public int LoadLastIdForTest() =>
+			_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT MAX([Id]) FROM [rta].[Events] WITH (NOLOCK)").UniqueResult<int>();
 
 		public IEnumerable<string> LoadAllEventTypes() => _unitOfWork.Current().Session()
 			.CreateSQLQuery(@"SELECT [Type] FROM [rta].[Events]")
