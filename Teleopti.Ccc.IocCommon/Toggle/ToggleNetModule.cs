@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 
 			public bool IsEnabled(Toggles toggle)
 			{
-				var toggleValue = _fetchToggleOverride.ToggleValue(toggle);
+				var toggleValue = _fetchToggleOverride.OverridenValue(toggle);
 				return toggleValue ?? _toggleChecker.IsEnabled(toggle.ToString());
 			}
 		}

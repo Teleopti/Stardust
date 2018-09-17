@@ -593,10 +593,12 @@
     <Compile Include="ServiceLocatorForEntity.cs" />
     <Compile Include="SystemCheck\CheckMessageBrokerMailBox.cs" />
     <Compile Include="Toggle\ApplicationFunctionsToggleFilter.cs" />
+    <Compile Include="Toggle\FetchToggleOverrideFromDb.cs" />
     <Compile Include="Toggle\IApplicationFunctionsToggleFilter.cs" />
     <Compile Include="Toggle\IFetchToggleOverride.cs" />
     <Compile Include="Toggle\IToggleFiller.cs" />
     <Compile Include="Toggle\IToggleManager.cs" />
+    <Compile Include="Toggle\SaveToggleOverride.cs" />
     <Compile Include="Toggle\ToggleEnabledResult.cs" />
     <Compile Include="Toggle\ToggleQuerier.cs" />
     <Compile Include="Toggle\TogglesActive.cs" />

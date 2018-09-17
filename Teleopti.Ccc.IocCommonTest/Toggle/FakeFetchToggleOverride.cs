@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 	{
 		private readonly IDictionary<Toggles, bool> _overridenToggles = new Dictionary<Toggles, bool>();
 		
-		public bool? ToggleValue(Toggles toggle)
+		public bool? OverridenValue(Toggles toggle)
 		{
 			if (_overridenToggles.TryGetValue(toggle, out var ret))
 				return ret;
