@@ -144,8 +144,9 @@
 				layer.Current.Color = selectActivity.Color;
 				layer.Current.Description = selectActivity.Name;
 				layer.Current.ActivityId = selectActivity.Id;
-				layer.FloatOnTop = selectActivity.FloatOnTop;
-
+				if (!isNotRegularActivity(layer)) {
+					layer.FloatOnTop = selectActivity.FloatOnTop;
+				}
 				mergeBesideLayer(layer);
 			});
 		};
@@ -201,12 +202,7 @@
 			return angular.extend({}, layer, layer.Current);
 		}
 
-		vm.isNotResizable = function (shiftLayer) {
-			return !!shiftLayer.IsPersonalActivity
-				|| !!shiftLayer.IsMeeting
-				|| !!shiftLayer.IsIntradayAbsence
-				|| !!shiftLayer.IsOvertime;
-		}
+		vm.isNotResizable = isNotRegularActivity;
 
 		vm.isOnDesktop = isOnDesktop();
 
@@ -250,6 +246,13 @@
 
 			doNotToggleSelectionAfterResizeEnd = true;
 			$scope.$apply();
+		}
+
+		function isNotRegularActivity(shiftLayer) {
+			return !!shiftLayer.IsPersonalActivity
+				|| !!shiftLayer.IsMeeting
+				|| !!shiftLayer.IsIntradayAbsence
+				|| !!shiftLayer.IsOvertime;
 		}
 
 		function canNotFillWith(layer) {

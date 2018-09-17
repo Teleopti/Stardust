@@ -1739,8 +1739,7 @@
 		expect(timespanEl.innerText.trim()).toBe('2018-08-31 07:00 - 2018-08-31 08:00');
 	});
 
-	it('can not resize the personal activity',
-		function () {
+	it('can not resize the personal activity', function () {
 			fakeTeamSchedule.has({
 				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
 				Name: 'Annika Andersson',
@@ -1773,9 +1772,9 @@
 
 			shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 			expect(shiftLayer.className.indexOf('non-resizable') >= 0).toBeTruthy();
-		});
-	it('can not resize meeting',
-		function () {
+	});
+
+	it('can not resize meeting', function () {
 			fakeTeamSchedule.has({
 				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
 				Name: 'Annika Andersson',
@@ -1810,8 +1809,7 @@
 			expect(shiftLayer.className.indexOf('non-resizable') >= 0).toBeTruthy();
 		});
 
-	it('can not resize the intraday activity',
-		function () {
+	it('can not resize the intraday activity', function () {
 			fakeTeamSchedule.has({
 				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
 				Name: 'Annika Andersson',
@@ -1846,8 +1844,7 @@
 			expect(shiftLayer.className.indexOf('non-resizable') >= 0).toBeTruthy();
 		});
 
-	it('can not resize the overtime activity',
-		function () {
+	it('can not resize the overtime activity', function () {
 			fakeTeamSchedule.has({
 				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
 				Name: 'Annika Andersson',
@@ -1942,7 +1939,6 @@
 		expect(shiftLayers[0].style.transform).toEqual('translate(0px, 0px)');
 	});
 
-
 	it('can shorten an activity from the end time if the next activity is an overtime activity and have a gap between it', function () {
 		fakeTeamSchedule.has({
 			PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
@@ -1998,8 +1994,84 @@
 		expect(shiftLayers[1].style.transform).toEqual('translate(30px, 0px)');
 	});
 
-	it('should do nothing if changing the activity from the start time and the step less than 5 mins',
-		function() {
+	it('should not merge if the beside activity is a personal activity', function () {
+		fakeTeamSchedule.has({
+			PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
+			Name: 'Annika Andersson',
+			Date: '2018-09-17',
+			WorkTimeMinutes: 60,
+			ContractTimeMinutes: 60,
+			Projection: [
+				{
+					ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+					Color: '#ffffff',
+					Description: 'Phone',
+					Start: '2018-09-17 09:00',
+					End: '2018-09-17 10:00',
+					Minutes: 60,
+					IsOvertime: false,
+					FloatOnTop: false,
+					ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+				},
+				{
+					ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+					Color: '#000000',
+					Description: 'Email',
+					Start: '2018-09-17 10:00',
+					End: '2018-09-17 11:00',
+					Minutes: 60,
+					IsOvertime: false,
+					IsPersonalActivity: true,
+					FloatOnTop: true,
+					ActivityId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
+				},
+				{
+					ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+					Color: '#ffffff',
+					Description: 'Phone',
+					Start: '2018-09-17 11:00',
+					End: '2018-09-17 12:00',
+					Minutes: 60,
+					IsOvertime: false,
+					FloatOnTop: false,
+					ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+				}
+			],
+			Timezone: { IanaId: 'Europe/Berlin' }
+		});
+
+		var scope = $rootScope.$new();
+		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-09-17', 'Europe/Berlin', scope);
+		var vm = panel.isolateScope().vm;
+
+		var emailLayer = panel[0].querySelectorAll('.shift-layer')[1];
+		emailLayer.click();
+
+		var typeEls = panel[0].querySelectorAll('.activity-selector md-option');
+		typeEls[2].click();
+
+		emailLayer.click();
+
+		var phoneLayer = panel[0].querySelectorAll('.shift-layer')[0];
+		phoneLayer.click();
+
+		fireResize(vm, phoneLayer, 210, 0);
+
+		var shiftLayers = panel[0].querySelectorAll('.shift-layer');
+		expect(shiftLayers.length).toEqual(3);
+
+		expect(shiftLayers[0].style.width).toEqual('60px');
+		expect(shiftLayers[0].style.backgroundColor).toEqual('rgb(255, 255, 255)');
+		expect(shiftLayers[0].style.transform).toEqual('translate(0px, 0px)');
+
+		expect(shiftLayers[1].style.width).toEqual('60px');
+		expect(shiftLayers[1].style.backgroundColor).toEqual('rgb(255, 255, 255)');
+
+		expect(shiftLayers[2].style.width).toEqual('90px');
+		expect(shiftLayers[2].style.backgroundColor).toEqual('rgb(255, 255, 255)');
+	});
+
+	it('should do nothing if changing the activity from the start time and the step less than 5 mins', function() {
 			fakeTeamSchedule.has({
 				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
 				Name: 'Annika Andersson',
@@ -2061,8 +2133,7 @@
 			expect(shiftLayers[2].style.transform).toEqual('translate(0px, 0px)');
 		});
 
-	it('should do nothing if changing the activity from the end time and the step less than 5 mins',
-		function () {
+	it('should do nothing if changing the activity from the end time and the step less than 5 mins', function () {
 			fakeTeamSchedule.has({
 				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
 				Name: 'Annika Andersson',
@@ -5147,27 +5218,32 @@
 			{
 				Id: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6',
 				Name: 'E-mail',
-				Color: '#FFa2a2'
+				Color: '#FFa2a2',
+				FloatOnTop: false
 			},
 			{
 				Id: '5c1409de-a0f1-4cd4-b383-9b5e015ab3c6',
 				Name: 'Invoice',
-				Color: '#FF0000'
+				Color: '#FF0000',
+				FloatOnTop: false
 			},
 			{
 				Id: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2',
 				Name: 'Phone',
-				Color: '#ffffff'
+				Color: '#ffffff',
+				FloatOnTop: false
 			},
 			{
 				Id: '84db44f4-22a8-44c7-b376-a0a200da613e',
 				Name: 'Sales',
-				Color: '#FFCCA2'
+				Color: '#FFCCA2',
+				FloatOnTop: false
 			},
 			{
 				Id: '35e33821-862f-461c-92db-9f0800a8d095',
 				Name: 'Social Media',
-				Color: '#FFA2CC'
+				Color: '#FFA2CC',
+				FloatOnTop: false
 			},
 			{
 				Id: '12e33821-862f-461c-92db-9f0800a8d056',
