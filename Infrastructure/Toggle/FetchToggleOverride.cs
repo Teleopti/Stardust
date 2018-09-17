@@ -39,7 +39,5 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			return null;
 		}
 	}
-		
-		
 	//
 }

@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		[TestCase(true, false)]
 		[TestCase(false, true)]
 		[TestCase(false, false)]
-		public void ShouldNotUseOverridenValue(bool fileValue, bool dbValue)
+		public void ShouldNotUseOverridenValueIfWebConfigValueMissing(bool fileValue, bool dbValue)
 		{
 			SetupFixtureForAssembly.RestoreCcc7Database();
 			var tempFile = Path.GetTempFileName();

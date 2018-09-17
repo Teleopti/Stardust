@@ -26,6 +26,14 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 		protected override void Load(ContainerBuilder builder)
 		{
 			var pathToToggle = _iocArgs.FeatureToggle;
+			if (bool.TryParse(_iocArgs.ConfigReader.AppConfig("PBI77584"), out _))
+			{
+				builder.Register(c => new FetchToggleOverride(_iocArgs.ConfigReader)).As<IFetchToggleOverride>();
+			}
+			else
+			{
+				builder.RegisterType<NoFetchingOfOverridenToggles>().As<IFetchToggleOverride>();				
+			}
 
 			if (string.IsNullOrEmpty(pathToToggle))
 			{
@@ -68,9 +76,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 							AllowedFeatures = Enum.GetNames(typeof(Toggles))
 						});
 					toggleConfiguration.SetDefaultSpecification(defaultSpecification);
-					return bool.TryParse(_iocArgs.ConfigReader.AppConfig("PBI77584"), out _)
-						? (IToggleManager) new toggleCheckerWrapper(toggleConfiguration.Create(), new FetchToggleOverride(_iocArgs.ConfigReader))
-						: new toggleCheckerWrapper(toggleConfiguration.Create(), new NoFetchingOfOverridenToggles());
+					return new toggleCheckerWrapper(toggleConfiguration.Create(), c.Resolve<IFetchToggleOverride>());
 				})
 				.SingleInstance()
 				.As<IToggleManager>();
