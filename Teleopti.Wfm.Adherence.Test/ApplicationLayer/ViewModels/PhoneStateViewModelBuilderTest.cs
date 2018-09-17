@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ViewModels
+namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels
 {
 	[TestFixture]
 	[DomainTest]

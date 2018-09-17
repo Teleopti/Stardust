@@ -3,11 +3,10 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ViewModels.HistoricalAdherenceViewModelBuilder
+namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalAdherenceViewModelBuilder
 {
 	[DomainTest]
 	[DefaultData]
@@ -24,8 +23,8 @@ namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ViewModels.HistoricalAdherenceV
 			Now.Is("2018-01-10 15:00");
 			var person = Guid.NewGuid();
 			Database
-				.WithHistoricalStateChange(person, "2018-01-10 08:05", Adherence.Out)
-				.WithHistoricalStateChange(person, "2018-01-10 08:15", Adherence.In);
+				.WithHistoricalStateChange(person, "2018-01-10 08:05", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange(person, "2018-01-10 08:15", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
 
 			var data = Target.Build(person);
 
@@ -39,8 +38,8 @@ namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ViewModels.HistoricalAdherenceV
 			Now.Is("2018-02-13 15:00");
 			var person = Guid.NewGuid();
 			Database
-				.WithHistoricalStateChange(person, "2018-02-13 08:05", Adherence.Out)
-				.WithHistoricalStateChange(person, "2018-02-13 08:15", Adherence.In)
+				.WithHistoricalStateChange(person, "2018-02-13 08:05", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange(person, "2018-02-13 08:15", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				.WithApprovedPeriod(person, "2018-02-13 08:05", "2018-02-13 08:15");
 
 			var data = Target.Build(person);

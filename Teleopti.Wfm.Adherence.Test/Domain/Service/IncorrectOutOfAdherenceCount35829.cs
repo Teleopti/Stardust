@@ -4,13 +4,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
-namespace Teleopti.Wfm.Rta.Test.Domain.Service
+namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 {
 	[TestFixture]
 	[RtaTest]
@@ -38,10 +37,10 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 				.WithSchedule(person, inbound, "2015-11-25 17:45:00", "2015-11-25 20:20:00")
 				.WithSchedule(person, breaks, "2015-11-25 20:20:00", "2015-11-25 20:30:00")
 				.WithSchedule(person, inbound, "2015-11-25 20:30:00", "2015-11-25 23:00:00")
-				.WithMappedRule("1", inbound, -1, Adherence.Out)
-				.WithMappedRule("1", breaks, 0, Adherence.In)
-				.WithMappedRule("1", lunch, 0, Adherence.In)
-				.WithMappedRule("1", null, 0, Adherence.In)
+				.WithMappedRule("1", inbound, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithMappedRule("1", breaks, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithMappedRule("1", lunch, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithMappedRule("1", null, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				;
 
 			Now.Is("2015-11-25 13:55");

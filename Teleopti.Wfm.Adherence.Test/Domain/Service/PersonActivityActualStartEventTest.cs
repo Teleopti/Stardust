@@ -5,12 +5,11 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
-namespace Teleopti.Wfm.Rta.Test.Domain.Service
+namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 {
 	[TestFixture]
 	[RtaTest]
@@ -30,7 +29,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-08-19 08:00", "2015-08-19 09:00")
-				.WithMappedRule("phone", phone, 0, Adherence.In);
+				.WithMappedRule("phone", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
 			Now.Is("2015-08-19 08:00");
 			
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
@@ -52,7 +51,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-08-19 08:00", "2015-08-19 09:00")
-				.WithMappedRule("phone", phone, 0, Adherence.In);
+				.WithMappedRule("phone", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
 			Now.Is("2015-08-19 08:00");
 
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
@@ -71,7 +70,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-08-19 08:00", "2015-08-19 09:00")
 				.WithSchedule(personId, lunch, "2015-08-19 09:00", "2015-08-19 10:00")
-				.WithMappedRule("phone", phone, 0, Adherence.In);
+				.WithMappedRule("phone", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
 
 			Now.Is("2015-08-19 08:00");
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
@@ -90,7 +89,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-08-19 08:00", "2015-08-19 09:00")
-				.WithMappedRule("phone", phone, 0, Adherence.In);
+				.WithMappedRule("phone", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
 			Now.Is("2015-08-19 08:00");
 
 			Target.ProcessState(new StateForTest
@@ -112,7 +111,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-08-19 08:00", "2015-08-19 09:00")
-				.WithMappedRule("phone", phone, 0, Adherence.In);
+				.WithMappedRule("phone", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
 
 			Now.Is("2015-08-19 07:55");
 			Target.ProcessState(new StateForTest
@@ -135,9 +134,9 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-08-19 08:00", "2015-08-19 09:00")
-				.WithMappedRule("loggedout", phone, -1, Adherence.Out)
-				.WithMappedRule("phone", phone, 0, Adherence.In)
-				.WithMappedRule("ready", phone, 0, Adherence.In);
+				.WithMappedRule("loggedout", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithMappedRule("phone", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithMappedRule("ready", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
 
 			Now.Is("2015-08-19 07:45");
 			Target.ProcessState(new StateForTest
@@ -172,7 +171,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-08-19 08:00", "2015-08-19 09:00")
-				.WithMappedRule("phone", phone, 0, Adherence.In);
+				.WithMappedRule("phone", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
 
 			Now.Is("2015-08-19 08:00");
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
@@ -197,8 +196,8 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone1, "2015-08-19 08:00", "2015-08-19 09:00")
 				.WithSchedule(personId, phone2, "2015-08-19 09:00", "2015-08-19 10:00")
-				.WithMappedRule("phone", phone1, 0, Adherence.In)
-				.WithMappedRule("phone", phone2, 0, Adherence.In);
+				.WithMappedRule("phone", phone1, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithMappedRule("phone", phone2, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
 			Now.Is("2015-08-19 08:00");
 			Target.ProcessState(new StateForTest
 			{

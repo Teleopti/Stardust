@@ -5,13 +5,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
-namespace Teleopti.Wfm.Rta.Test.Domain.Service
+namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 {
 	[TestFixture]
 	[RtaTest]
@@ -138,7 +137,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, admin, "2015-03-13 08:00", "2015-03-13 09:00")
-				.WithMappedRule("admin", admin, 0, Adherence.Neutral);
+				.WithMappedRule("admin", admin, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral);
 			Now.Is("2015-03-13 08:00");
 
 			Target.ProcessState(new StateForTest
@@ -221,7 +220,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2017-03-06 10:00", "2017-03-06 11:00")
-				.WithMappedRule(Guid.NewGuid(), "break", phone, 0, "out", Adherence.Out, Color.DarkGoldenrod)
+				.WithMappedRule(Guid.NewGuid(), "break", phone, 0, "out", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out, Color.DarkGoldenrod)
 				;
 			Now.Is("2017-03-06 10:00");
 
@@ -243,7 +242,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2017-03-06 10:00", "2017-03-06 11:00")
-				.WithMappedRule(Guid.NewGuid(), "break", phone, 0, "out", Adherence.Out, Color.Chocolate)
+				.WithMappedRule(Guid.NewGuid(), "break", phone, 0, "out", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out, Color.Chocolate)
 				;
 			Now.Is("2017-03-06 10:00");
 
@@ -267,7 +266,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 				.WithSchedule(personId, phone, "2017-03-06 10:00", "2017-03-06 11:00")
 				.WithStateGroup(null, "out")
 				.WithStateCode("break")
-				.WithMappedRule(Guid.NewGuid(), "break", phone, 0, "out", Adherence.Out)
+				.WithMappedRule(Guid.NewGuid(), "break", phone, 0, "out", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
 				;
 			Now.Is("2017-03-06 10:00");
 
@@ -292,7 +291,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 				.WithSchedule(personId, phone, "2017-03-06 10:00", "2017-03-06 11:00")
 				.WithStateGroup(stateGroup, "out")
 				.WithStateCode("break")
-				.WithMappedRule(Guid.NewGuid(), "break", phone, 0, "out", Adherence.Out)
+				.WithMappedRule(Guid.NewGuid(), "break", phone, 0, "out", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
 				;
 			Now.Is("2017-03-06 10:00");
 

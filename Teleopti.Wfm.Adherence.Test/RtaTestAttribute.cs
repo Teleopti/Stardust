@@ -6,7 +6,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Wfm.Rta.Test
+namespace Teleopti.Wfm.Adherence.Test
 {
 	[LoggedOff]
 	public class RtaTestAttribute : RtaTestLoggedOnAttribute

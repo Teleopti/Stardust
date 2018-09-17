@@ -4,13 +4,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
-namespace Teleopti.Wfm.Rta.Test.Domain.Service
+namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 {
 	
 	[TestFixture]
@@ -252,8 +251,8 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 			Database
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2016-05-30 09:00", "2016-05-30 10:00")
-				.WithMappedRule("state1", phone, -1, Adherence.Out)
-				.WithMappedRule("state2", phone, -1, Adherence.Out)
+				.WithMappedRule("state1", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithMappedRule("state2", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
 				;
 
 			Now.Is("2016-05-30 09:00");
@@ -263,8 +262,8 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 				StateCode = "state1"
 			});
 			Database.ClearRuleMap()
-				.WithMappedRule("state1", phone, 0, Adherence.In)
-				.WithMappedRule("state2", phone, -1, Adherence.Out)
+				.WithMappedRule("state1", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithMappedRule("state2", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
 				;
 			Now.Is("2016-05-30 09:01");
 			Target.ProcessState(new StateForTest

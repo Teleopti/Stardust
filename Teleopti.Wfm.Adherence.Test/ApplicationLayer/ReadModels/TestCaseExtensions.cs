@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ReadModels
+namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ReadModels
 {
 	public class TestCase
 	{

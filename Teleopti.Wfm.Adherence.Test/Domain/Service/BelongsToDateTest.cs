@@ -4,13 +4,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
-namespace Teleopti.Wfm.Rta.Test.Domain.Service
+namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 {
 	[TestFixture]
 	[RtaTest]
@@ -170,7 +169,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, admin, null, "2015-02-19", "2015-02-20 1:00", "2015-02-20 7:00")
-				.WithMappedRule("admin", admin, 0, Adherence.Neutral)
+				.WithMappedRule("admin", admin, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral)
 				;
 			Now.Is("2015-02-20 2:00");
 
@@ -247,7 +246,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, admin, null, "2015-02-19", "2015-02-20 1:00", "2015-02-20 7:00")
-				.WithMappedRule("admin", admin, 0, Adherence.In)
+				.WithMappedRule("admin", admin, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				;
 
 			Now.Is("2015-02-20 2:00");
@@ -293,7 +292,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, null, "2015-02-19", "2015-02-20 1:00", "2015-02-20 7:00")
-				.WithMappedRule(Guid.NewGuid(), "break", phone, 0, "out", Adherence.Out);
+				.WithMappedRule(Guid.NewGuid(), "break", phone, 0, "out", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out);
 			Now.Is("2015-02-20 2:00");
 
 			Target.ProcessState(new StateForTest

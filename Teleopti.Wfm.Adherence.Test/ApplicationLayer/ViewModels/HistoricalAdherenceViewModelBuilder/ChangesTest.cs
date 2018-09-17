@@ -11,7 +11,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 
-namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ViewModels.HistoricalAdherenceViewModelBuilder
+namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalAdherenceViewModelBuilder
 {
 	[DomainTest]
 	[DefaultData]
@@ -38,7 +38,7 @@ namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ViewModels.HistoricalAdherenceV
 				.WithStateGroup(null, "InCall")
 				.WithStateCode("InCall")
 				.WithActivity(null, "phone", Color.Crimson)
-				.WithRule(null, "in", 0, Adherence.In, Color.DarkKhaki)
+				.WithRule(null, "in", 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In, Color.DarkKhaki)
 				.WithHistoricalStateChange("2017-03-07 14:00")
 				;
 			
@@ -138,7 +138,7 @@ namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ViewModels.HistoricalAdherenceV
 				.WithStateGroup(state, "InCall")
 				.WithStateCode("InCall")
 				.WithActivity(null, "phone", Color.Crimson)
-				.WithRule(null, "in", 0, Adherence.In, Color.DarkKhaki)
+				.WithRule(null, "in", 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In, Color.DarkKhaki)
 				.WithHistoricalStateChange("2017-03-07 14:00")
 				.WithHistoricalStateChange("2017-03-07 14:00")
 				.WithHistoricalStateChange("2017-03-07 14:00")

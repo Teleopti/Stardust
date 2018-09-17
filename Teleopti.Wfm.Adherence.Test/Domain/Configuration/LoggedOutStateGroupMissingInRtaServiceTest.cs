@@ -4,7 +4,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 
-namespace Teleopti.Wfm.Rta.Test.Domain.Configuration
+namespace Teleopti.Wfm.Adherence.Test.Domain.Configuration
 {
 	[RtaTest]
 	public class LoggedOutStateGroupMissingInRtaServiceTest

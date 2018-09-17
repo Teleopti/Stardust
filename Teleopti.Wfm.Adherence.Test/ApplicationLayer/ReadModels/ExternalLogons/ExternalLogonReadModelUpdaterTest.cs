@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ReadModels.ExternalLogons
+namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ReadModels.ExternalLogons
 {
 	[TestFixture]
 	[DomainTest]

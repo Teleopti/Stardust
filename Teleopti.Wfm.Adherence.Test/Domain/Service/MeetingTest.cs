@@ -4,13 +4,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
-namespace Teleopti.Wfm.Rta.Test.Domain.Service
+namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 {
 	[TestFixture]
 	[RtaTest]
@@ -29,15 +28,15 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 			var training = Guid.NewGuid();
 			Now.Is("2016-12-15 14:00");
 			Database
-				.WithMappedRule("training", training, 0, Adherence.In)
-				.WithMappedRule("training", phone, -1, Adherence.Out)
-				.WithMappedRule("training", null, -1, Adherence.Out)
-				.WithMappedRule("phone", phone, 0, Adherence.In)
-				.WithMappedRule("phone", training, -1, Adherence.Out)
-				.WithMappedRule("phone", null, -1, Adherence.Out)
-				.WithMappedRule(null, phone, -1, Adherence.Out)
-				.WithMappedRule(null, training, -1, Adherence.Out)
-				.WithMappedRule(null, null, 0, Adherence.In)
+				.WithMappedRule("training", training, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithMappedRule("training", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithMappedRule("training", null, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithMappedRule("phone", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithMappedRule("phone", training, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithMappedRule("phone", null, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithMappedRule(null, phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithMappedRule(null, training, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithMappedRule(null, null, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "phone", "2016-12-15 09:00", "2016-12-15 17:00")
 				.WithActivity(training, "training")

@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Wfm.Rta.Test.Domain.ApprovePeriodAsInAdherence
+namespace Teleopti.Wfm.Adherence.Test.Domain.ApprovePeriodAsInAdherence
 {
 	[DomainTest]
 	[TestFixture]

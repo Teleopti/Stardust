@@ -5,13 +5,12 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
-namespace Teleopti.Wfm.Rta.Test.Domain.Service
+namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 {
 	[TestFixture]
 	[RtaTest]
@@ -94,10 +93,10 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 17:00")
-				.WithMappedRule("phone", phone, 0, Adherence.In)
-				.WithMappedRule("phone", null, 1, Adherence.Out)
-				.WithMappedRule("loggedout", null, 0, Adherence.In)
-				.WithMappedRule("loggedout", phone, -1, Adherence.Out)
+				.WithMappedRule("phone", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithMappedRule("phone", null, 1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithMappedRule("loggedout", null, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithMappedRule("loggedout", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
 				;
 			Now.Is("2014-10-20 7:55");
 			Target.ProcessState(new StateForTest
@@ -133,10 +132,10 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 17:00")
-				.WithMappedRule("phone", phone, 0, Adherence.In)
-				.WithMappedRule("phone", null, 1, Adherence.Neutral)
-				.WithMappedRule("loggedout", null, 0, Adherence.In)
-				.WithMappedRule("loggedout", phone, -1, Adherence.Out)
+				.WithMappedRule("phone", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithMappedRule("phone", null, 1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral)
+				.WithMappedRule("loggedout", null, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithMappedRule("loggedout", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
 				;
 			Now.Is("2014-10-20 16:55");
 			Target.ProcessState(new StateForTest
