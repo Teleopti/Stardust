@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Interfaces.Domain;
@@ -40,6 +41,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
 			_keyValueStore = keyValueStore;
 		}
 
+		[FullPermissions]
 		[AllBusinessUnitsUnitOfWork, ReadModelUnitOfWork]
 		public virtual void Synchronize()
 		{

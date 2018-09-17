@@ -183,6 +183,7 @@
     <Compile Include="ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\TimelineTest.cs" />
     <Compile Include="ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\UserTimeZoneTest.cs" />
     <Compile Include="ApplicationLayer\ViewModels\HistoricalOverviewViewModelBuilder\AdherenceTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalOverviewViewModelBuilder\PermissionTest.cs" />
     <Compile Include="ApplicationLayer\ViewModels\HistoricalOverviewViewModelBuilder\AgentDaysTest.cs" />
     <Compile Include="ApplicationLayer\ViewModels\HistoricalOverviewViewModelBuilder\AgentTest.cs" />
     <Compile Include="ApplicationLayer\ViewModels\HistoricalOverviewViewModelBuilder\IntervalAdherenceTest.cs" />

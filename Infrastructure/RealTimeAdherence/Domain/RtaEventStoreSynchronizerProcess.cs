@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain
 		}
 
 		[TenantScope]
-		[FullPermissions]
 		protected virtual void Synchronize(string tenant)
 		{
 			_distributedLock.TryLockForTypeOf(this, () =>
