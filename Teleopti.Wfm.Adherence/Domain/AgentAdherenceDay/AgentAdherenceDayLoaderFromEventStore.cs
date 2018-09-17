@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
+namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 {
 	public class AgentAdherenceDayLoaderFromEventStore : IAgentAdherenceDayLoader
 	{

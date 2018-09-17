@@ -13,7 +13,7 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 	[TestFixture]
 	public class BuildIntervalAdherenceTest
 	{
-		public Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels.HistoricalOverviewViewModelBuilder Target;
+		public Adherence.ApplicationLayer.ViewModels.HistoricalOverviewViewModelBuilder Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
 

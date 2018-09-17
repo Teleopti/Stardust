@@ -1,7 +1,7 @@
 using System;
 using Teleopti.Ccc.Domain.MessageBroker;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Domain.Service
 {
 	public interface INotificationCreator
 	{

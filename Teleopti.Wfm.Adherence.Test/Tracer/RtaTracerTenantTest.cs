@@ -2,11 +2,11 @@ using System;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.Tracer;
 
 namespace Teleopti.Wfm.Adherence.Test.Tracer
 {

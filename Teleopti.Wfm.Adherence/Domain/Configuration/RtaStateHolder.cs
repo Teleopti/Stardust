@@ -5,11 +5,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration
+namespace Teleopti.Wfm.Adherence.Domain.Configuration
 {
     public class RtaStateHolder : IRtaStateHolder
     {

@@ -2,11 +2,11 @@ using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Tool;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
+using Teleopti.Wfm.Adherence.Tool;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {

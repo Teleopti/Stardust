@@ -1,8 +1,7 @@
 using System;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Domain.Events;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Domain.Service
 {
 	public class AdherenceInfo
 	{
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 			return adherenceFor(rule?.Adherence, rule?.StaffingEffect);
 		}
 
-		private static EventAdherence adherenceFor(Adherence? adherence, double? staffingEffect)
+		private static EventAdherence adherenceFor(Ccc.Domain.InterfaceLegacy.Domain.Adherence? adherence, double? staffingEffect)
 		{
 			if (!adherence.HasValue)
 			{
@@ -40,11 +39,11 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 				return EventAdherence.Out;
 			}
 
-			if (adherence == InterfaceLegacy.Domain.Adherence.In)
+			if (adherence == Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				return EventAdherence.In;
-			if (adherence == InterfaceLegacy.Domain.Adherence.Out)
+			if (adherence == Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
 				return EventAdherence.Out;
-			if (adherence == InterfaceLegacy.Domain.Adherence.Neutral)
+			if (adherence == Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral)
 				return EventAdherence.Neutral;
 
 			return EventAdherence.Neutral;

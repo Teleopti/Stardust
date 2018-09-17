@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
+namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
 {
 	public interface ITeamCardReader
 	{

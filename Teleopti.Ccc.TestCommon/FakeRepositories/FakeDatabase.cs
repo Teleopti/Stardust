@@ -10,9 +10,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -30,6 +27,9 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
+using Teleopti.Wfm.Adherence.Domain.Configuration;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {

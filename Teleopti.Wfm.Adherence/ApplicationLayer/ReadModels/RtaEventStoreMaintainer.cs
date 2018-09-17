@@ -3,12 +3,10 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
+using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
+namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
 {
 	public class RtaEventStoreMaintainer :
 		IHandleEvent<TenantDayTickEvent>,

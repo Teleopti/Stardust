@@ -1,6 +1,6 @@
 using Teleopti.Ccc.Domain.MultiTenancy;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Domain.Service
 {
 	public class TenantLoader
 	{

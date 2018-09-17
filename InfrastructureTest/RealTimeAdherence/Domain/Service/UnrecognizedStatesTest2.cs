@@ -3,13 +3,13 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 {
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 	public class UnrecognizedStatesTest2
 	{
 		public IPrincipalAndStateContext Context;
-		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
+		public Rta Target;
 		public Database Database;
 		public AnalyticsDatabase Analytics;
 		public WithUnitOfWork UnitOfWork;
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 			Context.Login();
 			var actual = UnitOfWork.Get(() => StateGroupRepository.LoadAllCompleteGraph());
 			actual.SelectMany(g => g.StateCollection.Select(s => s.StateCode))
-				.Where(x => x == Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot)
+				.Where(x => x == Rta.LogOutBySnapshot)
 				.Should().Have.Count.EqualTo(1);
 		}
 	}

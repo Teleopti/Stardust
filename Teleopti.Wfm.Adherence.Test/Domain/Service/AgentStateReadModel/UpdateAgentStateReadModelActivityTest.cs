@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Wfm.Adherence.Test.Domain.Service.AgentStateReadModel
 {
@@ -14,7 +15,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service.AgentStateReadModel
 	{
 		public FakeDatabase Database;
 		public MutableNow Now;
-		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
+		public Rta Target;
 		public FakeAgentStateReadModelPersister ReadModels;
 
 		[Test]

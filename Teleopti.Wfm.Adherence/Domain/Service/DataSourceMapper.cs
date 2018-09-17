@@ -2,9 +2,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
+using Teleopti.Wfm.Adherence.Tracer;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Domain.Service
 {
 	public class DataSourceMapper
 	{

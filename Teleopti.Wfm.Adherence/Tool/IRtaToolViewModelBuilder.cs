@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Tool
+namespace Teleopti.Wfm.Adherence.Tool
 {
 	public class RtaToolAgentStateFilter
 	{

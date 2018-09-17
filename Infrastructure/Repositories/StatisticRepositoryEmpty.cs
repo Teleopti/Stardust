@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Data;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.LogObject;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {

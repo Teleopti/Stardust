@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Domain.Service
 {
 	public class ScheduleCache
 	{

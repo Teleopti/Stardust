@@ -1,7 +1,8 @@
 using System;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer
+namespace Teleopti.Wfm.Adherence
 {
 	public static class KeyValueStorePersisterExtensions
 	{

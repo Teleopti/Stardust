@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
+namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
 {
 	public class CurrentBelongsToDate 
 	{

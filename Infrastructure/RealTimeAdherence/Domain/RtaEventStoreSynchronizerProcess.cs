@@ -4,8 +4,8 @@ using Hangfire.Server;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Logon.Aspects;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain
 {

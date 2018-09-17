@@ -3,12 +3,12 @@ using System.Drawing;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Repositories;
+using Teleopti.Wfm.Adherence.Domain.Configuration;
 
 namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Repositories
 {

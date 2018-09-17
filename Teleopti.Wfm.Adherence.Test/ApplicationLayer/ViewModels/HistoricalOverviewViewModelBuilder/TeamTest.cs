@@ -4,9 +4,9 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
 
 namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOverviewViewModelBuilder
 {
@@ -15,7 +15,7 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 	[TestFixture]
 	public class BuildTeamTest
 	{
-		public Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels.HistoricalOverviewViewModelBuilder Target;
+		public Adherence.ApplicationLayer.ViewModels.HistoricalOverviewViewModelBuilder Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
 

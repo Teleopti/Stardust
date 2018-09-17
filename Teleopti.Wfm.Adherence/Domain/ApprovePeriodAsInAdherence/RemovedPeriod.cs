@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence
+namespace Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence
 {
 	public class RemovedPeriod
 	{

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Tracer;
+using Teleopti.Wfm.Adherence.Tracer;
 
 namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 {

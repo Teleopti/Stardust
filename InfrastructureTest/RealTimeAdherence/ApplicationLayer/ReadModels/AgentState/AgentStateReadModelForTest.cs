@@ -1,7 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.ReadModels.AgentState
 {

@@ -3,11 +3,11 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 
 namespace Teleopti.Wfm.Adherence.Test.Domain.AgentAdherenceDay
 {
@@ -338,7 +338,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.AgentAdherenceDay
 
 	public static class AgentAdherenceDayLoaderEx
 	{
-		public static Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay.IAgentAdherenceDay Load(this IAgentAdherenceDayLoader loader, Guid personId)
+		public static IAgentAdherenceDay Load(this IAgentAdherenceDayLoader loader, Guid personId)
 		{
 			return loader.LoadUntilNow(personId, new DateOnly(ServiceLocatorForEntity.Now.UtcDateTime().Date));
 		}

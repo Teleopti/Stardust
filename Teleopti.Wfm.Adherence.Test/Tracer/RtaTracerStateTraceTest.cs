@@ -5,10 +5,10 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Tracer;
 
 namespace Teleopti.Wfm.Adherence.Test.Tracer
 {

@@ -14,7 +14,7 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalAdhe
 	[TestFixture]
 	public class DateTest
 	{
-		public Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels.HistoricalAdherenceViewModelBuilder Target;
+		public Adherence.ApplicationLayer.ViewModels.HistoricalAdherenceViewModelBuilder Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
 

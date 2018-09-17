@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Tracer
+namespace Teleopti.Wfm.Adherence.Tracer
 {
 	public class SafeRtaTracer : IRtaTracer
 	{

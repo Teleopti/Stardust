@@ -3,10 +3,11 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 {
@@ -15,7 +16,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 	public class RuleMappingTest
 	{
 		public FakeDatabase Database;
-		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
+		public Rta Target;
 		public MutableNow Now;
 		public FakeEventPublisher EventPublisher;
 		

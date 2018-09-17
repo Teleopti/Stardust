@@ -14,7 +14,7 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 	[RealPermissions]
 	public class PermissionTest
 	{
-		public Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels.HistoricalOverviewViewModelBuilder Target;
+		public Adherence.ApplicationLayer.ViewModels.HistoricalOverviewViewModelBuilder Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
 

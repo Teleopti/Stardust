@@ -3,13 +3,13 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
+using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Tracer;
 
 namespace Teleopti.Wfm.Adherence.Test.Tracer
 {

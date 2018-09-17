@@ -3,9 +3,9 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 {
@@ -16,7 +16,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 		public FakeAgentStatePersister Persister;
 		public FakeDatabase Database;
 		public MutableNow Now;
-		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
+		public Rta Target;
 
 		[Test]
 		public void ShouldLogOutPersonsNotInSnapshot()
@@ -27,7 +27,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithAgent("usercode2", personId)
 				.WithStateGroup(loggedout, "loggedout", false, true)
-				.WithStateCode(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot)
+				.WithStateCode(Rta.LogOutBySnapshot)
 				.WithStateGroup(null, "state")
 				.WithStateCode("statecode")
 				;
@@ -87,7 +87,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 				.WithDataSource("source2")
 				.WithAgent("usercode2", user2)
 				.WithStateGroup(Guid.NewGuid(), "loggedout", false, true)
-				.WithStateCode(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot)
+				.WithStateCode(Rta.LogOutBySnapshot)
 				.WithStateGroup(state, "state")
 				.WithStateCode("statecode")
 				;
@@ -162,7 +162,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithAgent("usercode2", personId)
 				.WithStateGroup(loggedout, "loggedout", false, true)
-				.WithStateCode(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot)
+				.WithStateCode(Rta.LogOutBySnapshot)
 				.WithStateGroup(null, "state1")
 				.WithStateCode("statecode1")
 				.WithStateGroup(null, "state2")
@@ -218,7 +218,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 				.WithDataSource("source2")
 				.WithAgent("usercode2", personId)
 				.WithStateGroup(Guid.NewGuid(), "loggedout", false, true)
-				.WithStateCode(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot)
+				.WithStateCode(Rta.LogOutBySnapshot)
 				.WithStateGroup(state1, "state1")
 				.WithStateCode("statecode1")
 				.WithStateGroup(null, "state2")
@@ -272,7 +272,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithAgent("usercode2", user2)
 				.WithStateGroup(loggedout, "loggedout", false, true)
-				.WithStateCode(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot)
+				.WithStateCode(Rta.LogOutBySnapshot)
 				.WithStateGroup(null, "state")
 				.WithStateCode("statecode")
 				;
@@ -290,7 +290,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 					new BatchStateForTest
 					{
 						UserCode = "usercode2",
-						StateCode = Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot
+						StateCode = Rta.LogOutBySnapshot
 					}
 				}
 			});

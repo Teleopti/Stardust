@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.PerformanceMeasurement
 {
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Perfo
 	public class MeasureActivityCheckerTest
 	{
 		public Database Database;
-		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Rta;
+		public Rta Rta;
 		public FakeConfigReader Config;
 		public FakeEventPublisher Publisher;
 		public AnalyticsDatabase Analytics;
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Perfo
 			Database
 				.WithDefaultScenario("default")
 				.WithStateGroup("default", true)
-				.WithStateCode(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot)
+				.WithStateCode(Rta.LogOutBySnapshot)
 				.WithStateGroup("phone")
 				.WithStateCode("phone");
 			stateCodes.ForEach(x => Database.WithStateGroup($"code{x}").WithStateCode($"code{x}"));

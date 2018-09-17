@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
+namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
 {
 	public interface IHistoricalOverviewReadModelPersister
 	{

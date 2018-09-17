@@ -1,8 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.Tracer;
 
 namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Tracer
 {

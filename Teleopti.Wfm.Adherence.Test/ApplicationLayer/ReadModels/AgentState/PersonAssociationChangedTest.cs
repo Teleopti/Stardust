@@ -4,10 +4,10 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
+using Teleopti.Wfm.Adherence.Domain.Service;
 using ExternalLogon = Teleopti.Ccc.Domain.ApplicationLayer.Events.ExternalLogon;
 
 namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ReadModels.AgentState

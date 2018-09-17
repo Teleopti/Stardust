@@ -4,13 +4,13 @@ using System.Web.Http;
 using Microsoft.AspNet.SignalR.Messaging;
 using NPOI.SS.Formula.Udf;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
+using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {

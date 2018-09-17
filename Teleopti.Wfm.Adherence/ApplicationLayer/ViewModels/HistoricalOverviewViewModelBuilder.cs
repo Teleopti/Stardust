@@ -6,13 +6,13 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
+using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
+namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 {
 	public class HistoricalOverviewViewModelBuilder
 	{

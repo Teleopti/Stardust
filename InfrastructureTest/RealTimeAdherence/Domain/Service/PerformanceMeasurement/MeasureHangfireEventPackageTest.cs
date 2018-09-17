@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.PerformanceMeasurement
 {
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Perfo
 	public class MeasureHangfireEventPackageTest
 	{
 		public Database Database;
-		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Rta;
+		public Rta Rta;
 		public FakeConfigReader Config;
 		public AnalyticsDatabase Analytics;
 		public PerformanceMeasurementTestAttribute Context;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Perfo
 				Database
 					.WithDefaultScenario("default")
 					.WithStateGroup("default", true)
-					.WithStateCode(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot);
+					.WithStateCode(Rta.LogOutBySnapshot);
 				stateCodes.ForEach(x => Database.WithStateGroup(x).WithStateCode(x));
 				Enumerable.Range(0, 10).ForEach(x => Database.WithActivity($"activity{x}"));
 

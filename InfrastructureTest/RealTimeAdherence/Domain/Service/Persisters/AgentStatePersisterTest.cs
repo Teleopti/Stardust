@@ -4,8 +4,8 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persisters
 {

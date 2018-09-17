@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
+namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 {
 	public enum HistoricalChangeAdherence
 	{

@@ -9,12 +9,12 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Wfm.Adherence.Domain.Configuration;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 {

@@ -19,10 +19,6 @@ using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -47,6 +43,10 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.Services;
+using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
+using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
+using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Tracer;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {

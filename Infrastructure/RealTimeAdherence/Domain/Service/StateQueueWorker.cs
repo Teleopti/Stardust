@@ -3,18 +3,18 @@ using System.Threading.Tasks;
 using Hangfire.Server;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Logon.Aspects;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service
 {
 	public class StateQueueWorker : IBackgroundProcess
 	{
-		private readonly Ccc.Domain.RealTimeAdherence.Domain.Service.Rta _rta;
+		private readonly Rta _rta;
 		private readonly StateQueueTenants _tenants;
 		private readonly IDistributedLockAcquirer _distributedLock;
 
 		public StateQueueWorker(
-			Ccc.Domain.RealTimeAdherence.Domain.Service.Rta rta,
+			Rta rta,
 			StateQueueTenants tenants,
 			IDistributedLockAcquirer distributedLock)
 		{

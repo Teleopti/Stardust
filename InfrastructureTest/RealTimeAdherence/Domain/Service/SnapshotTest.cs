@@ -4,14 +4,14 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 {
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
 		public WithUnitOfWork WithUnitOfWork;
 		public IPersonRepository Persons;
-		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Rta;
+		public Rta Rta;
 		public IAgentStateReadModelReader ReadModels;
 		public FakeEventPublisher Publisher;
 
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 			Publisher.AddHandler(typeof(ExternalLogonReadModelUpdater));
 			Publisher.AddHandler(typeof(AgentStateReadModelMaintainer));
 			Publisher.AddHandler(typeof(AgentStateReadModelUpdater));
-			var logOutBySnapshot = Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot;
+			var logOutBySnapshot = Rta.LogOutBySnapshot;
 			Analytics.WithDataSource(9, "sourceId");
 			Database
 				.WithAgent("user1")

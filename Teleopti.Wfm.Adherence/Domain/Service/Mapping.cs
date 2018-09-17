@@ -1,7 +1,6 @@
 using System;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Domain.Service
 {
 	public class Mapping
 	{
@@ -16,7 +15,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 
 		public Guid? RuleId { get; set; }
 		public string RuleName { get; set; }
-		public Adherence? Adherence { get; set; }
+		public Ccc.Domain.InterfaceLegacy.Domain.Adherence? Adherence { get; set; }
 		public double? StaffingEffect { get; set; }
 		public int DisplayColor { get; set; }
 

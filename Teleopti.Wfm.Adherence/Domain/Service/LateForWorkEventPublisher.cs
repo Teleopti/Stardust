@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Domain.Events;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Domain.Service
 {
 	public interface ILateForWorkEventPublisher
 	{

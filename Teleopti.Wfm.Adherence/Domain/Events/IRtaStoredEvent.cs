@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
+namespace Teleopti.Wfm.Adherence.Domain.Events
 {
 	public interface IRtaStoredEvent
 	{

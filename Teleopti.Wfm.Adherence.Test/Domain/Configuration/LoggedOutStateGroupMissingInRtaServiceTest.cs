@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Wfm.Adherence.Domain.Configuration;
 
 namespace Teleopti.Wfm.Adherence.Test.Domain.Configuration
 {

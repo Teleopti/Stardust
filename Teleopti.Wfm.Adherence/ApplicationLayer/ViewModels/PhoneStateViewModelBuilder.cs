@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
+namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 {
 	public class PhoneStateViewModel
 	{

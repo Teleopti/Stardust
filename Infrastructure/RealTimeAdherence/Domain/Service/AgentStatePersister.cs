@@ -5,9 +5,9 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service
 {

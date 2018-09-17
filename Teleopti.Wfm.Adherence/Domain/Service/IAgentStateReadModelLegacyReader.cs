@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels;
+using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Domain.Service
 {
 	public interface IAgentStateReadModelReader
 	{

@@ -4,9 +4,9 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
+using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 {

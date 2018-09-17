@@ -1,9 +1,9 @@
 using System;
 using Microsoft.CSharp.RuntimeBinder;
 using Teleopti.Ccc.Domain.Logon.Aspects;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer
+namespace Teleopti.Wfm.Adherence
 {
 	public class TenantFromAuthenticationKey : ITenantFinder
 	{

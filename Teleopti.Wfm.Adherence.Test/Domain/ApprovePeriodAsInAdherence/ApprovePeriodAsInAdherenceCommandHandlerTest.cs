@@ -3,10 +3,10 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
+using Teleopti.Wfm.Adherence.Domain.Events;
 
 namespace Teleopti.Wfm.Adherence.Test.Domain.ApprovePeriodAsInAdherence
 {

@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 {

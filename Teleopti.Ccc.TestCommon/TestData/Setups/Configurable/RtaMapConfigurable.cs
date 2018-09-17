@@ -4,10 +4,10 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Wfm.Adherence.Domain.Configuration;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {

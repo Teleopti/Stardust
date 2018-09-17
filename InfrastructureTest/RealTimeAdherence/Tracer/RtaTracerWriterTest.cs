@@ -5,8 +5,8 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.Tracer;
 
 namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Tracer
 {

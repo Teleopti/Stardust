@@ -7,10 +7,10 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon.Aspects;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Tracer
+namespace Teleopti.Wfm.Adherence.Tracer
 {
 	public class RtaTracer : IRtaTracer
 	{

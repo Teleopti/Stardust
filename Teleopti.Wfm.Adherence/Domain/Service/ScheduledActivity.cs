@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Domain.Service
 {
 	public class ScheduledActivity
     {

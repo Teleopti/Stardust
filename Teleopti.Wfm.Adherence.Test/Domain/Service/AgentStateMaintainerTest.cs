@@ -3,9 +3,9 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Wfm.Adherence.Domain.Service;
 using ExternalLogon = Teleopti.Ccc.Domain.ApplicationLayer.Events.ExternalLogon;
 
 namespace Teleopti.Wfm.Adherence.Test.Domain.Service

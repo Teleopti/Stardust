@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
+using Teleopti.Wfm.Adherence.Tracer;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
+namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 {
 	public class RtaTracerViewModelBuilder
 	{

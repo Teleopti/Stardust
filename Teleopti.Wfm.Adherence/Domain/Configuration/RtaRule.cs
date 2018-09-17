@@ -2,13 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Wfm.Adherence.Domain.Events;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration
+namespace Teleopti.Wfm.Adherence.Domain.Configuration
 {
 	public class RtaRule : VersionedAggregateRootWithBusinessUnit, IRtaRule
 	{
@@ -17,7 +16,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration
 		private Color _alarmColor;
 		private int _thresholdTime;
 		private double _staffingEffect;
-		private Adherence? _adherence;
+		private Ccc.Domain.InterfaceLegacy.Domain.Adherence? _adherence;
 		private bool _isAlarm = false;
 
 		public RtaRule(Description description, Color color, int thresholdTime, double staffingEffect)
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration
 			set{ _staffingEffect = value;}
 		}
 
-		public virtual Adherence? Adherence
+		public virtual Ccc.Domain.InterfaceLegacy.Domain.Adherence? Adherence
 		{
 			get { return _adherence; }
 			set { _adherence = value; }
@@ -55,31 +54,31 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration
 		{
 			new adherenceWithText
 			{
-				Adherence = InterfaceLegacy.Domain.Adherence.In,
+				Adherence = Ccc.Domain.InterfaceLegacy.Domain.Adherence.In,
 				Text = Resources.InAdherence
 			},
 			new adherenceWithText
 			{
-				Adherence = InterfaceLegacy.Domain.Adherence.Out,
+				Adherence = Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out,
 				Text = Resources.OutOfAdherence
 			},
 			new adherenceWithText
 			{
-				Adherence = InterfaceLegacy.Domain.Adherence.Neutral,
+				Adherence = Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral,
 				Text = Resources.NeutralAdherence
 			}
 		};
 
 		private class adherenceWithText
 		{
-			public Adherence Adherence { get; set; }
+			public Ccc.Domain.InterfaceLegacy.Domain.Adherence Adherence { get; set; }
 			public string Text { get; set; }
 		}
 
 		public virtual void SetAdherenceByText(string text)
 		{
 			var adherenceWithText = _adherences.SingleOrDefault(x => x.Text == text);
-			Adherence = adherenceWithText == null ? (Adherence?) null : adherenceWithText.Adherence;
+			Adherence = adherenceWithText == null ? (Ccc.Domain.InterfaceLegacy.Domain.Adherence?) null : adherenceWithText.Adherence;
 		}
 
 		public virtual string AdherenceText

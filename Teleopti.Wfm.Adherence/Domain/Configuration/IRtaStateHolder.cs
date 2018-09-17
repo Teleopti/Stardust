@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration
+namespace Teleopti.Wfm.Adherence.Domain.Configuration
 {
     public interface IRtaStateHolder
     {

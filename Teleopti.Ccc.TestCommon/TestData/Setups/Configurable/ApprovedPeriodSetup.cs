@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {

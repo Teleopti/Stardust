@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Tracer
+namespace Teleopti.Wfm.Adherence.Tracer
 {
 	public interface IRtaTracer
 	{

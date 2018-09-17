@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration
+namespace Teleopti.Wfm.Adherence.Domain.Configuration
 {
 	public class ConfigurationValidationViewModel
 	{

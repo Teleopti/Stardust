@@ -1,7 +1,7 @@
 using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
+namespace Teleopti.Wfm.Adherence.Domain.Events
 {
 	public class PersonArrivedLateForWorkEvent : IRtaStoredEvent, IEvent, ISolidProof
 	{

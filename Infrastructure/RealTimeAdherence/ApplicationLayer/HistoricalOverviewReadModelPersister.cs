@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 
 namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 {
