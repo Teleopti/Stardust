@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return retList;
 		}
 
-		public bool IsThereScheduledAgents()
+		public bool IsThereScheduledAgents(Guid businessUnitId)
 		{
 			const string sql = "IF EXISTS (SELECT TOP 1 Id FROM PersonAbsence) SELECT 1 ELSE SELECT 0";
 			var result = Session.CreateSQLQuery(sql).UniqueResult<int>();

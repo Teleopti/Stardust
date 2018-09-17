@@ -59,10 +59,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		[UnitOfWork]
 		public virtual void Handle(InitialLoadScheduleProjectionEvent @event)
 		{
-			_distributedLockAcquirer.TryLockForTypeOfAnd(this, @event.LogOnBusinessUnitId.ToString(), () =>
+			var businessUnitId = @event.LogOnBusinessUnitId;
+			_distributedLockAcquirer.TryLockForTypeOfAnd(this, businessUnitId.ToString(), () =>
 			// Use a lock for each business unit to only run this once for each BU
 			{
-				if (!areAnyAgentsScheduled())
+				if (!areAnyAgentsScheduled(businessUnitId))
 				{
 					return;
 				}
@@ -114,10 +115,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_utcPeriod = _period.ToDateTimePeriod(TimeZoneInfo.Utc);
 		}
 
-		private bool areAnyAgentsScheduled()
+		private bool areAnyAgentsScheduled(Guid businessUnitId)
 		{
-			var existsAnyPersonAssignment = _personAssignmentRepository.IsThereScheduledAgents();
-			var existsAnyPersonAbsence = _personAbsenceRepository.IsThereScheduledAgents();
+			var existsAnyPersonAssignment = _personAssignmentRepository.IsThereScheduledAgents(businessUnitId);
+			var existsAnyPersonAbsence = _personAbsenceRepository.IsThereScheduledAgents(businessUnitId);
 			return existsAnyPersonAssignment || existsAnyPersonAbsence;
 		}
 

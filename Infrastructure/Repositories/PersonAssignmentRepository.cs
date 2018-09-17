@@ -14,7 +14,8 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class PersonAssignmentRepository : Repository<IPersonAssignment>, IPersonAssignmentRepository, IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>
+	public class PersonAssignmentRepository : Repository<IPersonAssignment>, IPersonAssignmentRepository,
+		IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>
 	{
 		public PersonAssignmentRepository(IUnitOfWork unitOfWork)
 #pragma warning disable 618
@@ -145,10 +146,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return retList;
 		}
 
-		public bool IsThereScheduledAgents()
+		public bool IsThereScheduledAgents(Guid businessUnitId)
 		{
-			const string sql = "IF EXISTS (SELECT TOP 1 Id FROM PersonAssignment) SELECT 1 ELSE SELECT 0";
-			var result = Session.CreateSQLQuery(sql).UniqueResult<int>();
+			var sql = $@"IF EXISTS (SELECT TOP 1 pa.Id
+  FROM PersonAssignment pa
+ INNER JOIN Person p ON pa.Person = p.Id
+ INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
+ INNER JOIN Team t ON pp.Team = t.Id
+ INNER JOIN [Site] s ON t.[Site] = s.Id
+ INNER JOIN BusinessUnit bu ON s.BusinessUnit = bu.Id
+ WHERE bu.Id = :{nameof(businessUnitId)})
+SELECT 1 ELSE SELECT 0";
+			var result = Session.CreateSQLQuery(sql)
+				.SetParameter(nameof(businessUnitId), businessUnitId)
+				.UniqueResult<int>();
 			return result > 0;
 		}
 	}

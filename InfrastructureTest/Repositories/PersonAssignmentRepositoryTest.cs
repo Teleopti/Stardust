@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private IShiftCategory _dummyCat;
 		private IShiftCategory _dummyCategory;
 		private IMultiplicatorDefinitionSet _definitionSet;
+		private ISite site;
 
 		protected override void ConcreteSetup()
 		{
@@ -51,8 +52,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(_definitionSet);
 
 			PersonFactory.AddDefinitionSetToPerson(_dummyAgent, _definitionSet);
-			IPersonPeriod per = _dummyAgent.Period(new DateOnly(2000, 1, 1));
-			ISite site = SiteFactory.CreateSimpleSite("df");
+			var per = _dummyAgent.Period(new DateOnly(2000, 1, 1));
+			site = SiteFactory.CreateSimpleSite("df");
 			PersistAndRemoveFromUnitOfWork(site);
 			per.Team.Site = site;
 			PersistAndRemoveFromUnitOfWork(per.PersonContract.PartTimePercentage);
@@ -392,7 +393,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldCheckIfNoAgentsScheduled()
 		{
-			_rep.IsThereScheduledAgents().Should().Be.False();
+			_rep.IsThereScheduledAgents(site.BusinessUnit.Id.Value).Should().Be.False();
 		}
 		
 		[Test]
@@ -402,7 +403,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			new PersonAssignmentRepository(UnitOfWork).Add(ass);
 			Session.Flush();
 
-			_rep.IsThereScheduledAgents().Should().Be.True();
+			_rep.IsThereScheduledAgents(site.BusinessUnit.Id.Value).Should().Be.True();
 		}
 
 		protected override Repository<IPersonAssignment> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
