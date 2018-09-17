@@ -68,7 +68,9 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 							AllowedFeatures = Enum.GetNames(typeof(Toggles))
 						});
 					toggleConfiguration.SetDefaultSpecification(defaultSpecification);
-					return new toggleCheckerWrapper(toggleConfiguration.Create());
+					return bool.TryParse(_iocArgs.ConfigReader.AppConfig("PBI77584"), out _)
+						? (IToggleManager) new toggleCheckerWrapperFeature584(toggleConfiguration.Create(), _iocArgs.FetchToggleOverride)
+						: new toggleCheckerWrapper(toggleConfiguration.Create());
 				})
 				.SingleInstance()
 				.As<IToggleManager>();
@@ -92,6 +94,25 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 			public bool IsEnabled(Toggles toggle)
 			{
 				return _toggleChecker.IsEnabled(toggle.ToString());
+			}
+		}
+		
+		//when "toggle" is removed, replace togglecheckerwrapper with this one
+		private class toggleCheckerWrapperFeature584 : IToggleManager
+		{
+			private readonly IToggleChecker _toggleChecker;
+			private readonly IFetchToggleOverride _fetchToggleOverride;
+
+			public toggleCheckerWrapperFeature584(IToggleChecker toggleChecker, IFetchToggleOverride fetchToggleOverride)
+			{
+				_toggleChecker = toggleChecker;
+				_fetchToggleOverride = fetchToggleOverride;
+			}
+
+			public bool IsEnabled(Toggles toggle)
+			{
+				var toggleValue = _fetchToggleOverride.ToggleValue(toggle);
+				return toggleValue ?? _toggleChecker.IsEnabled(toggle.ToString());
 			}
 		}
 	}

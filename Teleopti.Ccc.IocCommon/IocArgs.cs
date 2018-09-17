@@ -2,6 +2,7 @@ using System;
 using Autofac;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.IocCommon
@@ -28,6 +29,8 @@ namespace Teleopti.Ccc.IocCommon
 		public bool WebByPassDefaultPermissionCheck_37984 { get; set; }
 		public IConfigReader ConfigReader { get; }
 		public bool IsFatClient { get; set; }
+		
+		public IFetchToggleOverride FetchToggleOverride { get; set; }
 
 		public IocArgs(IConfigReader configReader)
 		{

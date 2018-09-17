@@ -594,6 +594,7 @@
     <Compile Include="SystemCheck\CheckMessageBrokerMailBox.cs" />
     <Compile Include="Toggle\ApplicationFunctionsToggleFilter.cs" />
     <Compile Include="Toggle\IApplicationFunctionsToggleFilter.cs" />
+    <Compile Include="Toggle\IFetchToggleOverride.cs" />
     <Compile Include="Toggle\IToggleFiller.cs" />
     <Compile Include="Toggle\IToggleManager.cs" />
     <Compile Include="Toggle\ToggleEnabledResult.cs" />
