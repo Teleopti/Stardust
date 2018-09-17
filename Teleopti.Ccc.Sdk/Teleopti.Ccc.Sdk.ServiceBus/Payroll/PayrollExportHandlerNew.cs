@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
@@ -18,6 +19,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {
 	public class PayrollExportHandlerNew : IHandleEvent<RunPayrollExportEvent>, IRunOnStardust
 	{
+		private readonly ILog logger = LogManager.GetLogger(typeof(PayrollExportHandlerNew));
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly IPayrollExportRepository _payrollExportRepository;
 		private readonly IPayrollResultRepository _payrollResultRepository;
@@ -103,6 +105,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 						_serviceBusPayrollExportFeedback.SetPayrollResult(payrollResult);
 						_stardustJobFeedback.SendProgress("An error occurred while running the payroll export. " + exception.StackTrace);
 						_serviceBusPayrollExportFeedback.Error(@"An error occurred while running the payroll export.", exception);
+						logger.Error("An error occurred while running the payroll export. ", exception);
 					}
 					finally
 					{

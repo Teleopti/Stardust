@@ -28,8 +28,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 
 	public class AppdomainCreatorWrapper
 	{
-		//private static readonly ILog logger = LogManager.GetLogger(typeof(AppdomainCreatorWrapper));
-
 		public XmlDocument RunPayroll(ISdkServiceFactory sdkServiceFactory, PayrollExportDto payrollExportDto,
 			RunPayrollExportEvent @event, Guid payrollResultId,
 			IServiceBusPayrollExportFeedback serviceBusPayrollExportFeedback, string payrollBasePath)
@@ -90,23 +88,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 
 		private static void runPayroll()
 		{
-			//ILog logger = LogManager.GetLogger(typeof(AppdomainCreatorWrapper));
-			//logger.Error("This is a test!!!!");
 			var appDomainArguments = AppDomain.CurrentDomain.GetData(InterAppDomainParameters.AppDomainArgumentsParameter) as InterAppDomainArguments;
 			fixAuthenticationMessageHeader(appDomainArguments);
 			var payrollExportDto = JsonConvert.DeserializeObject<PayrollExportDto>(appDomainArguments.PayrollExportDto);
 			var sdkServiceFactory = appDomainArguments.SdkServiceFactory;
 
-			IList<IPayrollExportProcessor> processors = new List<IPayrollExportProcessor>();
-
 			var feedback = sdkServiceFactory.CreatePayrollExportFeedback(appDomainArguments);
 			
-			processors = load(appDomainArguments.PayrollBasePath, feedback as PayrollExportFeedbackEx, appDomainArguments.TenantName);
+			var processors = load(appDomainArguments.PayrollBasePath, feedback as PayrollExportFeedbackEx, appDomainArguments.TenantName);
 			
 			if (!processors.Any())
 			{
 				var message = "Unable to run payroll. No payroll export processor found.";
-				//logger.Error(message);
 				feedback.Error(message);
 				SetFeedbackData(feedback);
 				return;
@@ -115,7 +108,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 			var processorForCurrentPayroll = processors.FirstOrDefault(p => p.PayrollFormat.FormatId == payrollExportDto.PayrollFormat.FormatId);
 			if (processorForCurrentPayroll is IPayrollExportProcessorWithFeedback payrollExportProcessorWithFeedback)
 			{
-				//logger.Debug("The selected payroll export processor can report progress and other feedback.");
 				payrollExportProcessorWithFeedback.PayrollExportFeedback = feedback;
 			}
 
@@ -124,7 +116,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 				var tenantSpecificPath = Path.Combine(appDomainArguments.PayrollBasePath, appDomainArguments.TenantName);
 				var message = $"Payroll export processor for format id: {payrollExportDto.PayrollFormat.FormatId} not found. " +
 					$"Please make sure that all payroll files are located for tenant {appDomainArguments.TenantName} is located in: {tenantSpecificPath}.";
-				//logger.Error(message);
 				feedback.Error(message);
 				SetFeedbackData(feedback);
 				return;
@@ -147,7 +138,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 			}
 			catch (Exception ex)
 			{
-				//logger.Error(ex);
 				feedback.Error("An error occurred while running the payroll export.", ex);
 				SetFeedbackData(feedback);
 				return;
@@ -184,7 +174,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 
 		private static IList<IPayrollExportProcessor> load(string path, PayrollExportFeedbackEx feedback, string tenantName)
 		{
-			//ILog logger = LogManager.GetLogger(typeof(AppdomainCreatorWrapper));
 			var availablePayrollExportProcessors = new List<IPayrollExportProcessor>();
 			var domainAssemblyResolver = new DomainAssemblyResolver(new AssemblyFileLoaderTenant());
 			{
@@ -216,14 +205,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 				catch (DirectoryNotFoundException ex)
 				{
 					var message = $"No payroll is configured for {tenantName}. Directory not found: {tenantSpecificPath}";
-					//logger.Error(message);
 					feedback?.Error(message, ex);
 					return new List<IPayrollExportProcessor>();
 				}
 				catch (Exception ex)
 				{
 					var message = $"Problems when loading Payroll files from path: {tenantSpecificPath}  {ex.Message}";
-					//logger.Error(message);
 					feedback?.Error(message, ex);
 					return new List<IPayrollExportProcessor>();
 				}
