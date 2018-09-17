@@ -6,8 +6,9 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Wfm.Rta.Test.Domain.Service.AgentStateReadModel
+namespace Teleopti.Wfm.Adherence.Test.Domain.Service.AgentStateReadModel
 {
 	[RtaTest]
 	[TestFixture]
@@ -16,7 +17,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service.AgentStateReadModel
 		public FakeAgentStateReadModelPersister Persister;
 		public FakeDatabase Database;
 		public MutableNow Now;
-		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
+		public Rta Target;
 
 		[Test]
 		public void ShouldLogOutPersonsNotInSnapshot()
@@ -27,8 +28,8 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service.AgentStateReadModel
 				.WithAgent("usercode2", personId)
 				.WithMappedRule("statecode", Guid.Empty, null, "A State")
 				.WithStateGroup(null, "Logged Out", false, true)
-				.WithStateCode(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot)
-				.WithMappedRule(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
+				.WithStateCode(Rta.LogOutBySnapshot)
+				.WithMappedRule(Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 
 			Now.Is("2014-10-20 10:00");
@@ -89,8 +90,8 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service.AgentStateReadModel
 				.WithStateCode("statecode")
 				.WithMappedRule("statecode", Guid.Empty)
 				.WithStateGroup(null, "Logged Out", false, true)
-				.WithStateCode(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot)
-				.WithMappedRule(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
+				.WithStateCode(Rta.LogOutBySnapshot)
+				.WithMappedRule(Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 			Now.Is("2014-10-20 10:00");
 			Target.Process(new BatchForTest
@@ -165,8 +166,8 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service.AgentStateReadModel
 				.WithAgent("usercode2", personId)
 				.WithMappedRule("statecode1", Guid.Empty, null, "A State")
 				.WithStateGroup(null, "Logged Out", false, true)
-				.WithStateCode(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot)
-				.WithMappedRule(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
+				.WithStateCode(Rta.LogOutBySnapshot)
+				.WithMappedRule(Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -221,8 +222,8 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service.AgentStateReadModel
 				.WithStateCode("statecode1")
 				.WithMappedRule("statecode1", Guid.Empty)
 				.WithStateGroup(null, "Logged Out", false, true)
-				.WithStateCode(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot)
-				.WithMappedRule(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
+				.WithStateCode(Rta.LogOutBySnapshot)
+				.WithMappedRule(Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -274,7 +275,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service.AgentStateReadModel
 				.WithStateGroup(null, "state", true, false)
 				.WithStateCode("statecode")
 				.WithStateGroup(null, "loggedout", false, true)
-				.WithStateCode(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot)
+				.WithStateCode(Rta.LogOutBySnapshot)
 				;
 			Now.Is("2014-10-20 10:00");
 			Target.Process(new BatchForTest
@@ -290,7 +291,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service.AgentStateReadModel
 					new BatchStateForTest
 					{
 						UserCode = "usercode2",
-						StateCode = Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot
+						StateCode = Rta.LogOutBySnapshot
 					}
 				}
 			});

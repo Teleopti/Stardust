@@ -5,8 +5,8 @@ using Newtonsoft.Json;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 {

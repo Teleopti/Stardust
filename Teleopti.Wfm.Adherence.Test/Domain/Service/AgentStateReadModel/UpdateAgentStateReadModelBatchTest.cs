@@ -4,11 +4,11 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Wfm.Rta.Test.Domain.Service.AgentStateReadModel
+namespace Teleopti.Wfm.Adherence.Test.Domain.Service.AgentStateReadModel
 {
 	[RtaTest]
 	[TestFixture]
@@ -17,7 +17,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service.AgentStateReadModel
 		public FakeDatabase Database;
 		public FakeAgentStateReadModelPersister ReadModels;
 		public MutableNow Now;
-		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
+		public Rta Target;
 
 		[Test]
 		public void ShouldUpdateState()

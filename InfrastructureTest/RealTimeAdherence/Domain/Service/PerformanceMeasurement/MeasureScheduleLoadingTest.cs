@@ -15,6 +15,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.PerformanceMeasurement
 {
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Perfo
 	public class MeasureScheduleLoadingTest
 	{
 		public Database Database;
-		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Rta;
+		public Rta Rta;
 		public FakeConfigReader Config;
 		public FakeEventPublisher Publisher;
 		public AnalyticsDatabase Analytics;
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Perfo
 			Database
 				.WithDefaultScenario("default")
 				.WithStateGroup("default", true)
-				.WithStateCode(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot)
+				.WithStateCode(Rta.LogOutBySnapshot)
 				.WithActivity("phone")
 				.WithActivity("break")
 				.WithActivity("lunch");

@@ -4,14 +4,13 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
+using Teleopti.Wfm.Adherence.Domain.Events;
 
-namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ReadModels.Mappings
+namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ReadModels.Mappings
 {
 	[TestFixture]
 	[DomainTest]
@@ -112,7 +111,7 @@ namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ReadModels.Mappings
 		{
 			var rule = Guid.NewGuid();
 			var phone = Guid.NewGuid();
-			Database.WithMappedRule(rule, "off", phone, 1, "Out", Adherence.Out, Color.Red);
+			Database.WithMappedRule(rule, "off", phone, 1, "Out", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out, Color.Red);
 
 			Target.Handle(new TenantMinuteTickEvent());
 
@@ -120,7 +119,7 @@ namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ReadModels.Mappings
 			mapping.RuleId.Should().Be(rule);
 			mapping.RuleName.Should().Be("Out");
 			mapping.StaffingEffect.Should().Be(1);
-			mapping.Adherence.Should().Be(Adherence.Out);
+			mapping.Adherence.Should().Be(Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out);
 			mapping.DisplayColor.Should().Be(Color.Red.ToArgb());
 		}
 
@@ -139,7 +138,7 @@ namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ReadModels.Mappings
 		{
 			var rule = Guid.NewGuid();
 			var phone = Guid.NewGuid();
-			Database.WithMappedRule(rule, "phone", phone, 0, "In", Adherence.In, Color.Green);
+			Database.WithMappedRule(rule, "phone", phone, 0, "In", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In, Color.Green);
 			Database.WithAlarm(TimeSpan.FromMinutes(2), Color.Red);
 
 			Target.Handle(new TenantMinuteTickEvent());

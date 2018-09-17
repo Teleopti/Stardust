@@ -6,12 +6,12 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.SystemCheck;
 using Teleopti.Ccc.Infrastructure.SystemCheck;
 using Teleopti.Messaging.Client.Composite;
 using Teleopti.Messaging.Client.Http;
 using Teleopti.Messaging.Client.SignalR;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {

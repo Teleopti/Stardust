@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Infrastructure.Aop;
@@ -21,6 +20,7 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Wfm.Adherence.Domain.Service;
 using Module = Autofac.Module;
 
 namespace Teleopti.Ccc.IocCommon.Configuration

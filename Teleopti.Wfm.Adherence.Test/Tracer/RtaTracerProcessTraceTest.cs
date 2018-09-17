@@ -4,12 +4,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Tracer;
 
-namespace Teleopti.Wfm.Rta.Test.Tracer
+namespace Teleopti.Wfm.Adherence.Test.Tracer
 {
 	[DomainTest]
 	[Setting("UseSafeRtaTracer", false)]

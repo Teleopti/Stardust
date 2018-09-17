@@ -2,8 +2,8 @@ using System;
 using System.Drawing;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
+using Teleopti.Wfm.Adherence.Domain.Events;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {

@@ -3,9 +3,9 @@ using NHibernate.Cfg;
 using NHibernate.Dialect;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling;
+using Teleopti.Wfm.Adherence.Domain.Service;
 using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration

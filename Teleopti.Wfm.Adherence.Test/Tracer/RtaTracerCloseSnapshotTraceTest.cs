@@ -3,13 +3,14 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Tracer;
 
-namespace Teleopti.Wfm.Rta.Test.Tracer
+namespace Teleopti.Wfm.Adherence.Test.Tracer
 {
 	[RtaTest]
 	[Setting("UseSafeRtaTracer", false)]
@@ -32,7 +33,7 @@ namespace Teleopti.Wfm.Rta.Test.Tracer
 				Target.Trace(userCode);
 
 			using (DataSource.OnThisThreadUse(Database.TenantName()))
-				Target.SnapshotLogout(person, Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot);
+				Target.SnapshotLogout(person, Rta.LogOutBySnapshot);
 
 			using (DataSource.OnThisThreadUse(Database.TenantName()))
 				Logs.ReadOfType<StateTraceLog>().Single().Log.User.Should().Contain(userCode);
@@ -48,10 +49,10 @@ namespace Teleopti.Wfm.Rta.Test.Tracer
 				Target.Trace("usercode");
 
 			using (DataSource.OnThisThreadUse(Database.TenantName()))
-				Target.SnapshotLogout(person, Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot);
+				Target.SnapshotLogout(person, Rta.LogOutBySnapshot);
 
 			using (DataSource.OnThisThreadUse(Database.TenantName()))
-				Logs.ReadOfType<StateTraceLog>().Single().Log.StateCode.Should().Be(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot);
+				Logs.ReadOfType<StateTraceLog>().Single().Log.StateCode.Should().Be(Rta.LogOutBySnapshot);
 		}
 
 		[Test]
@@ -64,7 +65,7 @@ namespace Teleopti.Wfm.Rta.Test.Tracer
 				Target.Trace("usercode");
 
 			using (DataSource.OnThisThreadUse(Database.TenantName()))
-				Target.SnapshotLogout(person, Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot);
+				Target.SnapshotLogout(person, Rta.LogOutBySnapshot);
 
 			using (DataSource.OnThisThreadUse(Database.TenantName()))
 				Logs.ReadOfType<StateTraceLog>().Single().Message.Should().Be("Snapshot logout");

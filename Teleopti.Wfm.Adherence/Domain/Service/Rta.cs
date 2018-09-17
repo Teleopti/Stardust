@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Logon.Aspects;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Wfm.Adherence.Tracer;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Domain.Service
 {
 	public class Rta
 	{

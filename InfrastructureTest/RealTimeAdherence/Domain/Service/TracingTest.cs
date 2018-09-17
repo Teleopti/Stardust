@@ -2,13 +2,13 @@
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
+using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Tracer;
 
 namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 {
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 	{
 		public Database Database;
 		public AnalyticsDatabase Analytics;
-		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Rta;
+		public Rta Rta;
 		public IRtaTracer Tracer;
 		public FakeEventPublisher Publisher;
 		public IRtaTracerReader Reader;

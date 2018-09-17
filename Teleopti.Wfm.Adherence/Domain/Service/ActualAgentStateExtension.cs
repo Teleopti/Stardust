@@ -3,7 +3,7 @@ using System.Text;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.MessageBroker;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Domain.Service
 {
 	public static class ActualAgentStateExtension
 	{

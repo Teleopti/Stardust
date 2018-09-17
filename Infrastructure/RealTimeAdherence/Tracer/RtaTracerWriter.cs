@@ -11,7 +11,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
+using Teleopti.Wfm.Adherence.Tracer;
 
 namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Tracer
 {

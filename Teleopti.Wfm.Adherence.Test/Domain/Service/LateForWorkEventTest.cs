@@ -5,13 +5,13 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Wfm.Rta.Test.Domain.Service
+namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 {
 	[TestFixture]
 	[RtaTest]
@@ -20,7 +20,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 		public FakeDatabase Database;
 		public FakeEventPublisher Publisher;
 		public MutableNow Now;
-		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
+		public Rta Target;
 
 		[Test]
 		public void ShouldPublish()
@@ -89,7 +89,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, "Phone", phone, Color.Aqua, "2018-05-30 8:00", "2018-05-30 17:00")
 				.WithStateGroup("Phone").WithStateCode("phone")
-				.WithMappedRule("phone", phone, 0, "InAdherence", Adherence.In, Color.BlueViolet)
+				.WithMappedRule("phone", phone, 0, "InAdherence", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In, Color.BlueViolet)
 				.WithLoggedOutStateGroup("Logged Out").WithStateCode("loggedOut");
 			Now.Is("2018-05-29 17:00");
 			Target.ProcessState(new StateForTest

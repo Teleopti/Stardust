@@ -2,14 +2,14 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Tracer;
 
-namespace Teleopti.Wfm.Rta.Test.Domain.Service
+namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 {
 	[TestFixture]
 	[RtaTest]
@@ -17,7 +17,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 	public class TraceTest
 	{
 		public FakeDatabase Database;
-		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
+		public Rta Target;
 		public FakeRtaTracerPersister Logs;
 		public IRtaTracer Tracer;
 		public IDataSourceScope DataSource;

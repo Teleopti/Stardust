@@ -4,14 +4,14 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Wfm.Adherence.Domain.Configuration;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Wfm.Rta.Test
+namespace Teleopti.Wfm.Adherence.Test
 {
     [TestFixture]
     public class RtaStateHolderTest

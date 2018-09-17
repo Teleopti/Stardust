@@ -18,8 +18,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -29,6 +27,8 @@ using Teleopti.Ccc.Infrastructure.Persisters.Account;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence.Domain.Configuration;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 {

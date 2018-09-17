@@ -2,7 +2,7 @@
 using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence
+namespace Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence
 {
 	public class RemoveApprovedPeriodCommandHandler
 	{

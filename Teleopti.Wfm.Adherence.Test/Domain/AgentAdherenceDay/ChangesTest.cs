@@ -4,13 +4,12 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 
-namespace Teleopti.Wfm.Rta.Test.Domain.AgentAdherenceDay
+namespace Teleopti.Wfm.Adherence.Test.Domain.AgentAdherenceDay
 {
 	[DomainTest]
 	[DefaultData]
@@ -41,7 +40,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.AgentAdherenceDay
 			Now.Is("2017-03-14 18:00");
 			var personId = Guid.NewGuid();
 			History
-				.RuleChanged(personId, "2017-03-14 18:00", "InCall", "phone", Color.Crimson, null, Color.DarkKhaki, Adherence.In)
+				.RuleChanged(personId, "2017-03-14 18:00", "InCall", "phone", Color.Crimson, null, Color.DarkKhaki, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				;
 
 			var data = Target.LoadUntilNow(personId, "2017-03-14".Date());

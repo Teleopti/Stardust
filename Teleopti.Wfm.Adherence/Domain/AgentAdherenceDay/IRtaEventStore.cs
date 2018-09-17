@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
+namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 {
 	public interface IRtaEventStore
 	{

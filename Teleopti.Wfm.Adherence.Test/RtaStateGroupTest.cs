@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
+using Teleopti.Wfm.Adherence.Domain.Configuration;
 
-namespace Teleopti.Wfm.Rta.Test
+namespace Teleopti.Wfm.Adherence.Test
 {
     [TestFixture]
     public class RtaStateGroupTest

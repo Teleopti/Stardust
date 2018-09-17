@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.UnitOfWork;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
+namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
 {
 	public class ControllableReadModelTransactionSyncronization : IReadModelTransactionSyncronization
 	{

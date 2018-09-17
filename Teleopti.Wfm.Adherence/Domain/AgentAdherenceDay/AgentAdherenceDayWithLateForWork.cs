@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
+using Teleopti.Wfm.Adherence.Domain.Events;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
+namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 {
 	public class AgentAdherenceDayWithLateForWork : IAgentAdherenceDay
 	{
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 		{
 			var model = applySolidProof(@event);
 			if (model != null)
-				model.LateForWork = string.Format(UserTexts.Resources.LateXMinutes, Math.Round(new DateTimePeriod(@event.ShiftStart, @event.Timestamp).ElapsedTime().TotalMinutes));
+				model.LateForWork = string.Format(Ccc.UserTexts.Resources.LateXMinutes, Math.Round(new DateTimePeriod(@event.ShiftStart, @event.Timestamp).ElapsedTime().TotalMinutes));
 		}
 
 		public void Apply(PeriodApprovedAsInAdherenceEvent @event) =>

@@ -4,20 +4,20 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Wfm.Rta.Test.Domain.Service
+namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 {
 	[TestFixture]
 	[RtaTest]
 	public class ExternalLogonPersonMappingTest
 	{
 		public FakeDatabase Database;
-		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
+		public Rta Target;
 		public FakeEventPublisher Publisher;
 		public MutableNow Now;
 
@@ -48,8 +48,8 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 			Database
 				.WithAgent("usercode1", person)
 				.WithAgent("usercode2", person)
-				.WithMappedRule("phone", phone, 0, Adherence.In)
-				.WithMappedRule("loggedOut", phone, -1, Adherence.Out)
+				.WithMappedRule("phone", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithMappedRule("loggedOut", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
 				.WithSchedule(person, phone, "2016-08-29 10:00", "2016-08-29 11:00")
 				;
 
@@ -91,8 +91,8 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 				.WithAgent("usercode2", person1)
 				.WithAgent("usercode2", person2)
 				.WithAgent("usercode3", person2)
-				.WithMappedRule("phone", phone, 0, Adherence.In)
-				.WithMappedRule("loggedOut", phone, -1, Adherence.Out)
+				.WithMappedRule("phone", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithMappedRule("loggedOut", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
 				.WithSchedule(person1, phone, "2016-08-29 10:00", "2016-08-29 11:00")
 				.WithSchedule(person2, phone, "2016-08-29 10:00", "2016-08-29 11:00")
 				;

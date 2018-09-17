@@ -11,12 +11,12 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Wfm.Adherence.Domain.Configuration;
 
 namespace Teleopti.Ccc.WinCodeTest.Configuration
 {

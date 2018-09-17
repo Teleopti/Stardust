@@ -1,6 +1,6 @@
-using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
+using Teleopti.Wfm.Adherence.Tracer;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Domain.Service
 {
 	public interface IActivityChangeCheckerFromScheduleChangeProcessor
 	{

@@ -7,14 +7,14 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ViewModels.HistoricalAdherenceDate
+namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalAdherenceDate
 {
 	[DomainTest]
 	[DefaultData]
 	[TestFixture]
 	public class DateTest
 	{
-		public Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels.HistoricalAdherenceDate Target;
+		public Adherence.ApplicationLayer.ViewModels.HistoricalAdherenceDate Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
 

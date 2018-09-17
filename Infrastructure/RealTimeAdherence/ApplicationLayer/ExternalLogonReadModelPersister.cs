@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Domain.Service
 {
 	public class InvalidUserCodeException : Exception
 	{

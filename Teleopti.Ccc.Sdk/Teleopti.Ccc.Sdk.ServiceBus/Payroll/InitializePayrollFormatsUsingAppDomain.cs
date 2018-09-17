@@ -52,10 +52,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 				}
 
 				logger.InfoFormat(CultureInfo.CurrentCulture, "Saving formats for " + tenant.DataSourceName);
-				var appDomainWrapper = new AppdomainCreatorWrapper();
+				var wrapper = new AppdomainCreatorWrapper();
 				//change this with the shared path
 				var searchPath = new SearchPath();
-				var payrollFormatsDtos = appDomainWrapper.FindPayrollFormatsForTenant(tenant.DataSourceName, searchPath.Path);
+				var payrollFormatsDtos = wrapper.FindPayrollFormatsForTenant(tenant.DataSourceName, searchPath.Path);
 				foreach (var payrollFormatDto in payrollFormatsDtos)
 				{
 					var format = new PayrollFormat { Name = payrollFormatDto.Name, FormatId = payrollFormatDto.FormatId };

@@ -6,14 +6,14 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.Domain.Service;
 using FakeDatabase = Teleopti.Ccc.TestCommon.FakeRepositories.FakeDatabase;
 
-namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ReadModels.Schedules
+namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ReadModels.Schedules
 {
 	[TestFixture]
 	[DomainTest]

@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
+namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 {
 	public class HistoricalAdherenceDate
 	{

@@ -2,10 +2,10 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration
+namespace Teleopti.Wfm.Adherence.Domain.Configuration
 {
 	public class ConfigurationValidator
 	{
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration
 				where !valid
 				select new ConfigurationValidationViewModel
 				{
-					Resource = nameof(UserTexts.Resources.DefaultStateGroupMissingInConfiguration),
+					Resource = nameof(Ccc.UserTexts.Resources.DefaultStateGroupMissingInConfiguration),
 					Data = new[] {businessUnit.Name}
 				};
 		}
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration
 				where !valid
 				select new ConfigurationValidationViewModel
 				{
-					Resource = nameof(UserTexts.Resources.LoggedOutStateGroupMissingInConfiguration),
+					Resource = nameof(Ccc.UserTexts.Resources.LoggedOutStateGroupMissingInConfiguration),
 					Data = new[] {businessUnit.Name}
 				};
 		}
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration
 				{
 					new ConfigurationValidationViewModel
 					{
-						Resource = nameof(UserTexts.Resources.LoggedOutStateGroupMissingInRtaService)
+						Resource = nameof(Ccc.UserTexts.Resources.LoggedOutStateGroupMissingInRtaService)
 					}
 				};
 			return Enumerable.Empty<ConfigurationValidationViewModel>();

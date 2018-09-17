@@ -9,14 +9,14 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ViewModels.HistoricalAdherenceViewModelBuilder
+namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalAdherenceViewModelBuilder
 {
 	[DomainTest]
 	[TestFixture]
 	[DefaultData]
 	public class UserTimeZoneTest : IIsolateSystem
 	{
-		public Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels.HistoricalAdherenceViewModelBuilder Target;
+		public Adherence.ApplicationLayer.ViewModels.HistoricalAdherenceViewModelBuilder Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
@@ -48,8 +48,8 @@ namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ViewModels.HistoricalAdherenceV
 			Now.Is("2016-10-10 15:00");
 			var person = Guid.NewGuid();
 			Database
-				.WithHistoricalStateChange(person, "2016-10-10 06:05", Adherence.Out)
-				.WithHistoricalStateChange(person, "2016-10-10 06:15", Adherence.In);
+				.WithHistoricalStateChange(person, "2016-10-10 06:05", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange(person, "2016-10-10 06:15", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
 
 			var data = Target.Build(person);
 
@@ -84,8 +84,8 @@ namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ViewModels.HistoricalAdherenceV
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent(person, "nicklas")
-				.WithHistoricalStateChange(person, "2016-10-12 14:00", Adherence.Out)
-				.WithHistoricalStateChange(person, "2016-10-12 15:00", Adherence.In);
+				.WithHistoricalStateChange(person, "2016-10-12 14:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange(person, "2016-10-12 15:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
 
 			var data = Target.Build(person);
 

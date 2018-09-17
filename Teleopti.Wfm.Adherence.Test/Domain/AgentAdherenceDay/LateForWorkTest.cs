@@ -6,13 +6,12 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 
-namespace Teleopti.Wfm.Rta.Test.Domain.AgentAdherenceDay
+namespace Teleopti.Wfm.Adherence.Test.Domain.AgentAdherenceDay
 {
 	[DomainTest]
 	[DefaultData]
@@ -75,7 +74,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.AgentAdherenceDay
 			Now.Is("2018-05-28 17:00");
 			var personId = Guid.NewGuid();
 			History
-				.ArrivedLateForWork(personId, "2018-05-28 09:00", "2018-05-28 10:00", "InCall", "Phone", Color.Crimson, "InAdherence", Color.DarkKhaki, Adherence.In)
+				.ArrivedLateForWork(personId, "2018-05-28 09:00", "2018-05-28 10:00", "InCall", "Phone", Color.Crimson, "InAdherence", Color.DarkKhaki, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				;
 
 			var data = Target.LoadUntilNow(personId, "2018-05-28".Date());

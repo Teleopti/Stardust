@@ -6,14 +6,14 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ViewModels.HistoricalOverviewViewModelBuilder
+namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOverviewViewModelBuilder
 {
 	[DomainTest]
 	[DefaultData]
 	[TestFixture]
 	public class BuildLateForWorkTest
 	{
-		public Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels.HistoricalOverviewViewModelBuilder Target;
+		public Adherence.ApplicationLayer.ViewModels.HistoricalOverviewViewModelBuilder Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
 		

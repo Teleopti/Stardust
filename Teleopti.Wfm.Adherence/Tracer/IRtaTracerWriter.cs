@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Tracer
+namespace Teleopti.Wfm.Adherence.Tracer
 {
 	public interface IRtaTracerWriter
 	{

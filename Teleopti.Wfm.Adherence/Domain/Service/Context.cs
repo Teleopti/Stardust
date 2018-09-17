@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Domain.Service
 {
 	public class Context
 	{

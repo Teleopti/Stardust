@@ -2,14 +2,14 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ViewModels
+namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels
 {
 	[DomainTest]
 	[TestFixture]

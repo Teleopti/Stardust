@@ -12,7 +12,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Module = Autofac.Module;
 
-namespace Teleopti.Wfm.Rta.Test
+namespace Teleopti.Wfm.Adherence.Test
 {
 	[DomainTest]
 	[TestFixture]

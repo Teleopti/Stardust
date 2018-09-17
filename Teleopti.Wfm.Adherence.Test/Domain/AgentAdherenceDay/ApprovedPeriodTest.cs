@@ -6,13 +6,12 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 
-namespace Teleopti.Wfm.Rta.Test.Domain.AgentAdherenceDay
+namespace Teleopti.Wfm.Adherence.Test.Domain.AgentAdherenceDay
 {
 	[DomainTest]
 	[DefaultData]
@@ -30,8 +29,8 @@ namespace Teleopti.Wfm.Rta.Test.Domain.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent(person)
-				.WithHistoricalStateChange("2018-02-08 08:00", Adherence.Out)
-				.WithHistoricalStateChange("2018-02-08 09:00", Adherence.In)
+				.WithHistoricalStateChange("2018-02-08 08:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-08 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				.WithApprovedPeriod("2018-02-08 08:00", "2018-02-08 09:00")
 				;
 
@@ -47,8 +46,8 @@ namespace Teleopti.Wfm.Rta.Test.Domain.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent(person)
-				.WithHistoricalStateChange("2018-02-08 08:00", Adherence.Out)
-				.WithHistoricalStateChange("2018-02-08 09:00", Adherence.In)
+				.WithHistoricalStateChange("2018-02-08 08:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-08 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				.WithApprovedPeriod("2018-02-08 08:00", "2018-02-08 09:00")
 				;
 
@@ -66,10 +65,10 @@ namespace Teleopti.Wfm.Rta.Test.Domain.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent(person)
-				.WithHistoricalStateChange("2018-02-08 08:00", Adherence.Out)
-				.WithHistoricalStateChange("2018-02-08 09:00", Adherence.In)
-				.WithHistoricalStateChange("2018-02-08 10:00", Adherence.Out)
-				.WithHistoricalStateChange("2018-02-08 11:00", Adherence.In)
+				.WithHistoricalStateChange("2018-02-08 08:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-08 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithHistoricalStateChange("2018-02-08 10:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-08 11:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				.WithApprovedPeriod("2018-02-08 10:00", "2018-02-08 11:00")
 				;
 
@@ -88,8 +87,8 @@ namespace Teleopti.Wfm.Rta.Test.Domain.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent(person)
-				.WithHistoricalStateChange("2018-02-08 08:00", Adherence.Out)
-				.WithHistoricalStateChange("2018-02-08 09:00", Adherence.In)
+				.WithHistoricalStateChange("2018-02-08 08:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-08 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				.WithApprovedPeriod("2018-02-08 08:00", "2018-02-08 08:30")
 				;
 
@@ -106,8 +105,8 @@ namespace Teleopti.Wfm.Rta.Test.Domain.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent(person)
-				.WithHistoricalStateChange("2018-02-08 08:00", Adherence.Out)
-				.WithHistoricalStateChange("2018-02-08 09:00", Adherence.In)
+				.WithHistoricalStateChange("2018-02-08 08:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-08 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				.WithApprovedPeriod("2018-02-08 08:30", "2018-02-08 09:00")
 				;
 
@@ -124,8 +123,8 @@ namespace Teleopti.Wfm.Rta.Test.Domain.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent(person)
-				.WithHistoricalStateChange("2018-02-08 08:00", Adherence.Out)
-				.WithHistoricalStateChange("2018-02-08 09:00", Adherence.In)
+				.WithHistoricalStateChange("2018-02-08 08:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-08 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				.WithApprovedPeriod("2018-02-08 07:00", "2018-02-08 08:15")
 				.WithApprovedPeriod("2018-02-08 08:45", "2018-02-08 10:00")
 				;
@@ -145,8 +144,8 @@ namespace Teleopti.Wfm.Rta.Test.Domain.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent(person)
-				.WithHistoricalStateChange("2018-02-08 08:00", Adherence.Out)
-				.WithHistoricalStateChange("2018-02-08 09:00", Adherence.In)
+				.WithHistoricalStateChange("2018-02-08 08:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-08 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				.WithApprovedPeriod("2018-02-08 08:15", "2018-02-08 08:45")
 				;
 
@@ -165,8 +164,8 @@ namespace Teleopti.Wfm.Rta.Test.Domain.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent(person)
-				.WithHistoricalStateChange("2018-02-08 08:00", Adherence.Out)
-				.WithHistoricalStateChange("2018-02-08 09:00", Adherence.In)
+				.WithHistoricalStateChange("2018-02-08 08:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-08 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				.WithApprovedPeriod("2018-02-08 08:10", "2018-02-08 08:20")
 				.WithApprovedPeriod("2018-02-08 08:30", "2018-02-08 08:40")
 				;
@@ -188,8 +187,8 @@ namespace Teleopti.Wfm.Rta.Test.Domain.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent(person)
-				.WithHistoricalStateChange("2018-02-08 08:00", Adherence.Out)
-				.WithHistoricalStateChange("2018-02-08 09:00", Adherence.In)
+				.WithHistoricalStateChange("2018-02-08 08:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-08 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				.WithApprovedPeriod("2018-02-08 07:00", "2018-02-08 10:00")
 				;
 
@@ -206,8 +205,8 @@ namespace Teleopti.Wfm.Rta.Test.Domain.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent(person)
-				.WithHistoricalStateChange("2018-02-08 08:00", Adherence.Out)
-				.WithHistoricalStateChange("2018-02-08 09:00", Adherence.In)
+				.WithHistoricalStateChange("2018-02-08 08:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-08 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				.WithApprovedPeriod("2018-02-08 07:50", "2018-02-08 08:10")
 				.WithApprovedPeriod("2018-02-08 08:20", "2018-02-08 08:30")
 				.WithApprovedPeriod("2018-02-08 08:50", "2018-02-08 09:10")

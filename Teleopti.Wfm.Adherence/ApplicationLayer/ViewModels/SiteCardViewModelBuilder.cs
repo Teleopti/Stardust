@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
+namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 {
 	public class SiteCardViewModelBuilder
 	{

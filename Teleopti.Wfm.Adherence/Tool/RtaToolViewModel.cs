@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Tool
+namespace Teleopti.Wfm.Adherence.Tool
 {
 	public class RtaToolViewModel
 	{

@@ -3,11 +3,11 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Wfm.Rta.Test.Domain.Service.AgentStateReadModel.StartTime
+namespace Teleopti.Wfm.Adherence.Test.Domain.Service.AgentStateReadModel.StartTime
 {
 	[RtaTest]
 	[TestFixture]
@@ -15,7 +15,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service.AgentStateReadModel.StartTime
 	{
 		public FakeDatabase Database;
 		public MutableNow Now;
-		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
+		public Rta Target;
 		public FakeAgentStateReadModelPersister ReadModels;
 
 		[Test]
@@ -26,7 +26,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service.AgentStateReadModel.StartTime
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-12-15 8:00", "2015-12-15 9:00")
-				.WithMappedRule("phone", phone, 0, Adherence.In)
+				.WithMappedRule("phone", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				.WithAlarm(TimeSpan.FromMinutes(5));
 			Now.Is("2015-12-15 8:00");
 
@@ -48,7 +48,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service.AgentStateReadModel.StartTime
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-12-15 8:00", "2015-12-15 9:00")
-				.WithMappedRule("phone", phone, 0, Adherence.In);
+				.WithMappedRule("phone", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
 			Now.Is("2015-12-15 8:00");
 
 			Target.ProcessState(new StateForTest

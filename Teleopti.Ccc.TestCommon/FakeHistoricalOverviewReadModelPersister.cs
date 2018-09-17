@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
+using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 
 namespace Teleopti.Ccc.TestCommon
 {

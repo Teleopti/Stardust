@@ -4,21 +4,21 @@ using System.Drawing;
 using System.Linq;
 using NHibernate.Util;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public static class RtaExtensions
 	{
-		public static void CheckForActivityChanges(this Domain.RealTimeAdherence.Domain.Service.Rta rta, string tenant, Guid personId)
+		public static void CheckForActivityChanges(this Wfm.Adherence.Domain.Service.Rta rta, string tenant, Guid personId)
 		{
 			rta.CheckForActivityChanges(tenant);
 		}
 
-		public static void ProcessState(this Domain.RealTimeAdherence.Domain.Service.Rta rta, StateForTest input)
+		public static void ProcessState(this Wfm.Adherence.Domain.Service.Rta rta, StateForTest input)
 		{
 			rta.Process(new BatchInputModel
 			{
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			});
 		}
 
-		public static void CloseSnapshot(this Domain.RealTimeAdherence.Domain.Service.Rta rta, CloseSnapshotForTest input)
+		public static void CloseSnapshot(this Wfm.Adherence.Domain.Service.Rta rta, CloseSnapshotForTest input)
 		{
 			rta.Process(new BatchInputModel
 			{

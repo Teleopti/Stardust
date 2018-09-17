@@ -11,6 +11,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 		public string  UserName { get; set; }
 		public ISdkServiceFactory SdkServiceFactory { get; set; }
 		public Guid PayrollResultId { get; set; }
+		public string TenantName { get; set; }
+		public string PayrollBasePath { get; set; }
 	}
 
 	public class InterAppDomainParameters

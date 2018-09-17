@@ -4,12 +4,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Wfm.Rta.Test.Domain.Service
+namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 {
 	[RtaTest]
 	[TestFixture]
@@ -17,7 +17,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 	{
 		public FakeDatabase Database;
 		public MutableNow Now;
-		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
+		public Rta Target;
 		public FakeAgentStateReadModelPersister Persister;
 		
 		[Test]
@@ -61,9 +61,9 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 			Database
 				.WithAgent("user1", personId1)
 				.WithAgent("user2", personId2)
-				.WithStateGroup(null, Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot, false, true)
-				.WithStateCode(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot)
-				.WithMappedRule(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot)
+				.WithStateGroup(null, Rta.LogOutBySnapshot, false, true)
+				.WithStateCode(Rta.LogOutBySnapshot)
+				.WithMappedRule(Rta.LogOutBySnapshot)
 				.WithMappedRule("ready")
 				.WithMappedRule("phone")
 				;
@@ -102,7 +102,7 @@ namespace Teleopti.Wfm.Rta.Test.Domain.Service
 				SnapshotId = "2016-07-11 08:10".Utc()
 			});
 
-			Persister.Load(personId1).StateName.Should().Be(Ccc.Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot);
+			Persister.Load(personId1).StateName.Should().Be(Rta.LogOutBySnapshot);
 			Persister.Load(personId2).StateName.Should().Be("phone");
 		}
 

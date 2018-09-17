@@ -2,9 +2,9 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
+using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Domain.Service
 {
 	public class ScheduleChangeProcessor :
 		IRunOnHangfire,

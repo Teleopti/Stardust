@@ -4,13 +4,13 @@ using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
+using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
+using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
+namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 {
 	public class HistoricalAdherenceViewModelBuilder
 	{
@@ -144,11 +144,11 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 			switch (adherence.Value)
 			{
 				case HistoricalChangeAdherence.In:
-					return UserTexts.Resources.InAdherence;
+					return Ccc.UserTexts.Resources.InAdherence;
 				case HistoricalChangeAdherence.Neutral:
-					return UserTexts.Resources.NeutralAdherence;
+					return Ccc.UserTexts.Resources.NeutralAdherence;
 				case HistoricalChangeAdherence.Out:
-					return UserTexts.Resources.OutOfAdherence;
+					return Ccc.UserTexts.Resources.OutOfAdherence;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(adherence), adherence, null);
 			}

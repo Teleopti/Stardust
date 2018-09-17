@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
+namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 {
 	public interface IAgentAdherenceDay
 	{

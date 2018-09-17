@@ -4,11 +4,12 @@ using System.Text.RegularExpressions;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
+using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
+namespace Teleopti.Wfm.Adherence.Domain.Events
 {
 	public interface IRtaEventStoreSynchronizer
 	{
@@ -40,6 +41,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
 			_keyValueStore = keyValueStore;
 		}
 
+		[FullPermissions]
 		[AllBusinessUnitsUnitOfWork, ReadModelUnitOfWork]
 		public virtual void Synchronize()
 		{
