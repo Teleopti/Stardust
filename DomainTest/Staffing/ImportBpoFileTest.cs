@@ -61,8 +61,8 @@ TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 			var fileContents = @"SourcE,skilLcombination,staRtdatetime,enDdatEtime,AgeNts
 TPBRZIL,ChannelSales|DirectSales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 
-			SkillRepository.Has("ChannelSales", new Activity());
-			SkillRepository.Has("DirectSales", new Activity());
+			SkillRepository.Has("ChannelSales", new Activity()).DefaultResolution(15);
+			SkillRepository.Has("DirectSales", new Activity()).DefaultResolution(15);
 
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
 			result.Success.Should().Be.True();
@@ -99,8 +99,8 @@ TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 
 TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 
-			SkillRepository.Has("Channel Sales", new Activity());
-			SkillRepository.Has("Direct Sales", new Activity());
+			SkillRepository.Has("Channel Sales", new Activity()).DefaultResolution(15);
+			SkillRepository.Has("Direct Sales", new Activity()).DefaultResolution(15);
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
 			result.Success.Should().Be.True();
 			SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo().Count.Should().Be.EqualTo(1);
@@ -236,8 +236,8 @@ TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 10:15,8.75";
 			var fileContents = @"source, skillcombination , startdatetime , enddatetime , agents 
 								TPBRZIL, Directsales | Channel  , 2017-07-24 10:15 , 2017-07-24 10:30, 6.0";
 
-			SkillRepository.Has("Directsales", new Activity());
-			SkillRepository.Has("Channel", new Activity());
+			SkillRepository.Has("Directsales", new Activity()).DefaultResolution(15);
+			SkillRepository.Has("Channel", new Activity()).DefaultResolution(15);
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
 			result.Success.Should().Be.True();
 		}
@@ -248,8 +248,8 @@ TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 10:15,8.75";
 			var fileContents = @"source, skillcombination , startdatetime , enddatetime , agents 
 								TPBRZIL, Direct sales | Channel sales  , 2017-07-24 10:15 , 2017-07-24 10:30, 6.0";
 
-			SkillRepository.Has("Direct sales", new Activity());
-			SkillRepository.Has("Channel sales", new Activity());
+			SkillRepository.Has("Direct sales", new Activity()).DefaultResolution(15);
+			SkillRepository.Has("Channel sales", new Activity()).DefaultResolution(15);
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
 			result.Success.Should().Be.True();
 		}
@@ -273,7 +273,7 @@ TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 10:15,8.75";
 			var fileContents = @"source, skillcombination, startdatetime, enddatetime, agents
 								TPBRZIL, Directsales, 2017-07-24 10:15, 2017-07-24 10:30, 6.0";
 
-			SkillRepository.Has("Directsales", new Activity());
+			SkillRepository.Has("Directsales", new Activity()).DefaultResolution(15);
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
 			result.Success.Should().Be.True();
 
@@ -287,8 +287,8 @@ TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 10:15,8.75";
 								TPBRZIL, Directsales, 2017-07-24 10:15, 2017-07-24 10:30, 6.0
 								TPPARIS, Channel, 2017-07-24 10:15, 2017-07-24 10:30, 10.0";
 
-			SkillRepository.Has("Directsales", new Activity());
-			SkillRepository.Has("Channel", new Activity());
+			SkillRepository.Has("Directsales", new Activity()).DefaultResolution(15);
+			SkillRepository.Has("Channel", new Activity()).DefaultResolution(15);
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
 			result.Success.Should().Be.True();
 
@@ -304,7 +304,7 @@ TPBRZIL, KLINGON, 2017-07-24 10:15, 2017-07-24 10:30, 6.0
 TPBRZIL, KLINGON, 2017-07-24 10:30, 2017-07-24 10:45, 6.0
 TPBRZIL, Directsales|KLINGON, 2017-07-24 10:30, 2017-07-24 10:45, 6.0";
 
-			SkillRepository.Has("Directsales", new Activity());
+			SkillRepository.Has("Directsales", new Activity()).DefaultResolution(15);
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
 
 			result.Success.Should().Be.False();
@@ -331,7 +331,7 @@ TPBRZIL,ChannelSales,2017-07-24 1000,2017-07-24 10:15,10.5";
 			var fileContents = @"source,skillcombination,startdatetime,enddatetime,agents
 TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 
-			SkillRepository.Has("ChannelSales", new Activity());
+			SkillRepository.Has("ChannelSales", new Activity()).DefaultResolution(15);
 
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
 			result.Success.Should().Be.True();
@@ -367,8 +367,8 @@ TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 10:15,10.5€";
 		[Test]
 		public void ShouldReturnFalseIfDuplicateRecordsAreFoundInTheFile()
 		{
-			SkillRepository.Has("Channel Sales", new Activity());
-			SkillRepository.Has("Direct Sales", new Activity());
+			SkillRepository.Has("Channel Sales", new Activity()).DefaultResolution(15);
+			SkillRepository.Has("Direct Sales", new Activity()).DefaultResolution(15);
 			var fileContents = @"source,skillcombination,startdatetime,enddatetime,agents
 TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5
 TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
@@ -382,8 +382,8 @@ TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 		[Test]
 		public void ShouldReturnFalseIfDuplicateRecordsButDifferentCaseInSourceAreFoundInTheFile()
 		{
-			SkillRepository.Has("Channel Sales", new Activity());
-			SkillRepository.Has("Direct Sales", new Activity());
+			SkillRepository.Has("Channel Sales", new Activity()).DefaultResolution(15);
+			SkillRepository.Has("Direct Sales", new Activity()).DefaultResolution(15);
 			var fileContents = @"source,skillcombination,startdatetime,enddatetime,agents
 TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5
 TPBrZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
@@ -479,8 +479,8 @@ TPBrZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 			var fileContents = @"source, skillcombination, startdatetime, enddatetime, agents
 								TPBRZIL, Directsales, 2017-07-24 10:15, 2017-07-24 10:30, 6.0";
 
-			SkillRepository.Has("Directsales", new Activity());
-			SkillRepository.Has("Channel", new Activity());
+			SkillRepository.Has("Directsales", new Activity()).DefaultResolution(15);
+			SkillRepository.Has("Channel", new Activity()).DefaultResolution(15);
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
 			result.Success.Should().Be.True();
 
@@ -534,7 +534,7 @@ TPBRZIL, Directsales|Channelsales, 2017-07-24 10:45, 2017-07-24 11:00, 6.0
 TPBRZIL, Directsales|Channelsales, 2017-07-24 11:00, 2017-07-24 11:15, 6.0";
 
 			var channelSales = SkillFactory.CreateSkillWithId("Channelsales", 16);
-			SkillRepository.Has("Directsales", new Activity());
+			SkillRepository.Has("Directsales", new Activity()).DefaultResolution(15);
 			SkillRepository.Has(channelSales);
 
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
@@ -605,7 +605,7 @@ TPBRZIL, Directsales|Channelsales, 2017-07-24 11:00, 2017-07-24 11:15, 6.0";
 			var fileContents = @"source, skillcombination, startdatetime, enddatetime, agents
 								TPBRZIL, Directsales, 20170724 10:30, 20170724 10:45, 6.0";
 
-			SkillRepository.Has("Directsales", new Activity());
+			SkillRepository.Has("Directsales", new Activity()).DefaultResolution(15);
 
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
 			result.Success.Should().Be.True();
@@ -623,7 +623,7 @@ TPBRZIL, Directsales|Channelsales, 2017-07-24 11:00, 2017-07-24 11:15, 6.0";
 			var fileContents = @"source, skillcombination, startdatetime, enddatetime, agents
 								TPBRZIL, Directsales, 07/24/2017 10:30 AM, 07/24/2017 10:45 AM, 6.0";
 
-			SkillRepository.Has("Directsales", new Activity());
+			SkillRepository.Has("Directsales", new Activity()).DefaultResolution(15);
 
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
 			result.Success.Should().Be.True();
@@ -639,7 +639,7 @@ TPBRZIL, Directsales|Channelsales, 2017-07-24 11:00, 2017-07-24 11:15, 6.0";
 			var fileContents = @"source, skillcombination, startdatetime, enddatetime, agents
 								TPBRZIL, Directsales, 2017-07-24 10:30, 2017-07-24 10:45, 6.0";
 
-			SkillRepository.Has("Directsales", new Activity());
+			SkillRepository.Has("Directsales", new Activity()).DefaultResolution(15);
 
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
 			result.Success.Should().Be.True();
@@ -655,7 +655,7 @@ TPBRZIL, Directsales|Channelsales, 2017-07-24 11:00, 2017-07-24 11:15, 6.0";
 			var fileContents = @"source, skillcombination, startdatetime, enddatetime, agents
 								TPBRZIL, DIRECTSALES, 2017-07-24 10:30, 2017-07-24 10:45, 6.0";
 
-			SkillRepository.Has("Directsales", new Activity());
+			SkillRepository.Has("Directsales", new Activity()).DefaultResolution(15);
 
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
 			result.Success.Should().Be.True();
@@ -671,7 +671,7 @@ TPBRZIL, Directsales|Channelsales, 2017-07-24 11:00, 2017-07-24 11:15, 6.0";
 			var fileContents = @"source; skillcombination; startdatetime; enddatetime; agents
 								TPBRZIL; DIRECTSALES; 2017-07-24 10:30; 2017-07-24 10:45; 6.0";
 
-			SkillRepository.Has("Directsales", new Activity());
+			SkillRepository.Has("Directsales", new Activity()).DefaultResolution(15);
 
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
 			result.Success.Should().Be.True();
@@ -687,7 +687,7 @@ TPBRZIL, Directsales|Channelsales, 2017-07-24 11:00, 2017-07-24 11:15, 6.0";
 			var fileContents = @"source; skillcombination; startdatetime; enddatetime; agents
 								TPBRZIL; DIRECTSALES; 2017-07-24 10:30; 2017-07-24 10:45; 6,25";
 
-			SkillRepository.Has("Directsales", new Activity());
+			SkillRepository.Has("Directsales", new Activity()).DefaultResolution(15);
 
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
 			result.Success.Should().Be.True();
@@ -704,7 +704,7 @@ TPBRZIL, Directsales|Channelsales, 2017-07-24 11:00, 2017-07-24 11:15, 6.0";
 			var fileContents = @"source; skillcombination; startdatetime; enddatetime; agents
 								TPBRZIL; DIRECTSALES; 2017-07-24 10:30; 2017-07-24 10:45; 6.25";
 
-			SkillRepository.Has("Directsales", new Activity());
+			SkillRepository.Has("Directsales", new Activity()).DefaultResolution(15);
 
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
 			result.Success.Should().Be.True();
@@ -803,7 +803,7 @@ Generic,Email,2/9/2018 11:00,2/9/2018  18:15:00 PM,500";
 ""TPBRZIL, Directsales, 2017 - 07 - 24 10:15, 2017 - 07 - 24 10:30, 6.0""";
 
 
-			SkillRepository.Has("Directsales", new Activity());
+			SkillRepository.Has("Directsales", new Activity()).DefaultResolution(15);
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
 			result.Success.Should().Be.True();
 
@@ -817,7 +817,7 @@ Generic,Email,2/9/2018 11:00,2/9/2018  18:15:00 PM,500";
 			var fileContents = @"source; skillcombination; startdatetime; enddatetime; agents
 TPBRZIL; DIRECTSALES; 2017-07-24 10:30; 2017-07-24 10:45; 6.25";
 
-			SkillRepository.Has("Directsales", new Activity());
+			SkillRepository.Has("Directsales", new Activity()).DefaultResolution(15);
 
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
 
@@ -839,7 +839,7 @@ TPBRZIL; DIRECTSALES; 2017-07-24 10:30; 2017-07-24 10:45; 6.25";
 			var fileContents = @"source; skillcombination; startdatetime; enddatetime; agents
 TPBRZIL; DIRECTSALES; 2017-07-24 0:0; 2017-07-24 0:15; 6.25";
 
-			SkillRepository.Has("Directsales", new Activity());
+			SkillRepository.Has("Directsales", new Activity()).DefaultResolution(15);
 
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
 

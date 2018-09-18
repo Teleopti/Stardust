@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			var scenario = ScenarioRepository.Has("default");
 
-			var saleSkill = SkillRepository.Has("sales", activity);
+			var saleSkill = SkillRepository.Has("sales", activity).DefaultResolution(15);
 			var supportSkill = SkillRepository.Has("support", activity);
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 12, 19), new[] { saleSkill, supportSkill }).WithId();
 			var person2 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 12, 19), new[] { saleSkill, supportSkill }).WithId();
