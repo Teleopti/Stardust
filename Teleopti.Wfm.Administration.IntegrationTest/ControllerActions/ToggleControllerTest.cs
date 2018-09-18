@@ -17,7 +17,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		{
 			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			
-			Target.SaveOverride(Toggles.TestToggle, true);
+			Target.SaveOverride(new SaveOverrideInput{Toggle = Toggles.TestToggle, Value = true});
 			var allOverrides = Target.GetAllOverrides().Content;
 			var overrideModel = allOverrides.Single();
 			overrideModel.Toggle.Should().Be.EqualTo(Toggles.TestToggle.ToString());
@@ -28,7 +28,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		public void ShouldDeleteOverride()
 		{
 			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
-			Target.SaveOverride(Toggles.TestToggle, true);
+			Target.SaveOverride(new SaveOverrideInput{Toggle = Toggles.TestToggle, Value = true});
 			
 			Target.DeleteOverride(Toggles.TestToggle);
 			
