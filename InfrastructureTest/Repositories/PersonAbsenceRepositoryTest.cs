@@ -332,7 +332,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldCheckIfAnyAgentsScheduled()
 		{
-			var bu = new BusinessUnit("bu").WithId();
+			var bu = new BusinessUnit("bu");
 			PersistAndRemoveFromUnitOfWork(bu);
 
 			var scenario = new Scenario("scenario");
@@ -341,8 +341,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var ass = new PersonAbsence(agent, scenario, new AbsenceLayer(absenceSick, new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
 			PersistAndRemoveFromUnitOfWork(ass);
-
-			Session.Flush();
 
 			new PersonAbsenceRepository(CurrUnitOfWork).IsThereScheduledAgents(bu.Id.Value).Should().Be.True();
 		}

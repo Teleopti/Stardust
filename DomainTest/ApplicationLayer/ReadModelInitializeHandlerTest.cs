@@ -17,6 +17,8 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Ccc.TestCommon.TestData.Analytics.Tables;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
@@ -34,10 +36,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		private IDistributedLockAcquirer _distributedLockAcquirer;
 		private FakePersonAssignmentRepository _personAssignmentRepository;
 		private FakePersonAbsenceRepository _personAbsenceRepository;
+		private IBusinessUnit _businessUnit;
+		private ITeam _team;
 
 		[SetUp]
 		public void Setup()
 		{
+			BusinessUnitFactory.CreateNewBusinessUnitUsedInTest();
+			_businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
+			_team = TeamFactory.CreateTeam("teamName", "siteName");
+			_team.Site.SetBusinessUnit(_businessUnit);
 			_personRepository = new FakePersonRepository(new FakeStorage());
 			_scheduleProjectionReadOnlyPersister = MockRepository.GenerateMock<IScheduleProjectionReadOnlyPersister>();
 			_scheduleDayReadModelRepository = MockRepository.GenerateMock<IScheduleDayReadModelRepository>();
@@ -64,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			target.Handle(new InitialLoadScheduleProjectionEvent
 			{
-				LogOnBusinessUnitId = Guid.NewGuid(),
+				LogOnBusinessUnitId = _businessUnit.Id.Value,
 				EndDays = 10,
 				StartDays = 1
 			});
@@ -83,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			target.Handle(new InitialLoadScheduleProjectionEvent
 			{
-				LogOnBusinessUnitId = Guid.NewGuid(),
+				LogOnBusinessUnitId = _businessUnit.Id.Value,
 				EndDays = 10,
 				StartDays = 1
 			});
@@ -103,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			target.Handle(new InitialLoadScheduleProjectionEvent
 			{
-				LogOnBusinessUnitId = Guid.NewGuid(),
+				LogOnBusinessUnitId = _businessUnit.Id.Value,
 				EndDays = 10,
 				StartDays = 1
 			});
@@ -123,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			target.Handle(new InitialLoadScheduleProjectionEvent
 			{
-				LogOnBusinessUnitId = Guid.NewGuid(),
+				LogOnBusinessUnitId = _businessUnit.Id.Value,
 				EndDays = 10,
 				StartDays = 1
 			});
@@ -143,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			target.Handle(new InitialLoadScheduleProjectionEvent
 			{
-				LogOnBusinessUnitId = Guid.NewGuid(),
+				LogOnBusinessUnitId = _businessUnit.Id.Value,
 				EndDays = 10,
 				StartDays = 1
 			});
@@ -165,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			target.Handle(new InitialLoadScheduleProjectionEvent
 			{
-				LogOnBusinessUnitId = Guid.NewGuid(),
+				LogOnBusinessUnitId = _businessUnit.Id.Value,
 				EndDays = 10,
 				StartDays = 1
 			});
@@ -185,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			target.Handle(new InitialLoadScheduleProjectionEvent
 			{
-				LogOnBusinessUnitId = Guid.NewGuid(),
+				LogOnBusinessUnitId = _businessUnit.Id.Value,
 				EndDays = 10,
 				StartDays = 1
 			});
@@ -206,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			target.Handle(new InitialLoadScheduleProjectionEvent
 			{
-				LogOnBusinessUnitId = Guid.NewGuid(),
+				LogOnBusinessUnitId = _businessUnit.Id.Value,
 				EndDays = 10,
 				StartDays = 1
 			});
@@ -216,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
-		public void ShouldPublishScheduleInitializeTriggeredEventForPersonScheduleDayForEachPersonWhenPersonScheduleDayNotInitialized()
+		public void ShouldPublishEventForEachPersonWhenPersonScheduleDayNotInitialized()
 		{
 			_scheduleProjectionReadOnlyPersister.Stub(x => x.IsInitialized()).Return(true);
 			_scheduleDayReadModelRepository.Stub(x => x.IsInitialized()).Return(true);
@@ -227,7 +235,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			target.Handle(new InitialLoadScheduleProjectionEvent
 			{
-				LogOnBusinessUnitId = Guid.NewGuid(),
+				LogOnBusinessUnitId = _businessUnit.Id.Value,
 				EndDays = 10,
 				StartDays = 1
 			});
@@ -241,12 +249,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var number = new Random(DateTime.UtcNow.Millisecond).Next(5, 10);
 			for (var i = 0; i < number; i++)
 			{
-				var person = new Person();
+				IPerson person = new Person();
 				if (withPersonPeriod)
 				{
 					addPersonPeriod(person);
 				}
-
 				_personRepository.Add(person);
 			}
 			return number;
@@ -267,7 +274,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		private void addPersonPeriod(IPerson person)
 		{
-			var personPeriod = new PersonPeriod(DateOnly.Today, PersonContractFactory.CreatePersonContract(), TeamFactory.CreateSimpleTeam());
+			var personPeriod = new PersonPeriod(DateOnly.Today, PersonContractFactory.CreatePersonContract(), _team);
 			person.AddPersonPeriod(personPeriod);
 		}
 	}

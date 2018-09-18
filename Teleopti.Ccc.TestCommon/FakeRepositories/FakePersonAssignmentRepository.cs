@@ -120,7 +120,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public bool IsThereScheduledAgents(Guid businessUnitId)
 		{
-			return _storage.LoadAll<IPersonAssignment>().Any();
+
+			return _storage.LoadAll<IPersonAssignment>().Any(pa => pa.Person.PersonPeriodCollection.First().Team.Site.BusinessUnit.Id == businessUnitId);
 		}
 
 		public IPersonAssignment GetSingle(DateOnly dateOnly)
