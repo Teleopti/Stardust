@@ -314,7 +314,7 @@
 				var shiftStart = isChangingStart ? dateTime : vm.getMergedShiftLayer(originalShiftLayers[0]).Start;
 				var shiftEnd = isChangingStart ? vm.getMergedShiftLayer(originalShiftLayers[lastLayerIndex]).End : dateTime;
 
-				if ((isChangingStart && serviceDateFormatHelper.getDateOnly(dateTime) !== vm.date)
+				if (isChangingStart && !isSameDate(dateTime)
 					|| (!isLayerShorten && isExceedMaxLength(shiftStart, shiftEnd))) {
 					actualDateTime = mergedSelectedShiftLayer[timeField];
 				}
@@ -414,6 +414,9 @@
 			doUpdate(originalSelectedShiftLayer, actualDateTime);
 			vm.selectedShiftLayers = selectedLayers;
 			vm.scheduleVm.ShiftLayers = originalShiftLayers;
+		}
+		function isSameDate(dateTime) {
+			return serviceDateFormatHelper.getDateOnly(moment.tz(dateTime, vm.timezone).tz(vm.scheduleVm.Timezone)) === vm.date;
 		}
 
 		function fillWithLayer(shiftLayers, selectedIndex, selectedLayer, dateTime, isChangingStart) {
