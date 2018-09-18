@@ -28,18 +28,25 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			return Json(_toggleManager.IsEnabled(enumToggle));
 		}
+		
+		[HttpGet, Route("Toggle/AllToggleNames")]
+		public JsonResult<IEnumerable<string>> AllToggleNamesWithoutOverrides()
+		{
+			var toggles = new HashSet<string>(Enum.GetValues(typeof(Toggles)).Cast<Toggles>().Select(x=>x.ToString()));
+			var overrides = new HashSet<string>(_fetchToggleOverride.OverridenValues().Select(x => x.Key));
+			return Json(toggles.Except(overrides));
+		}
 
 		[HttpGet, Route("Toggle/AllOverrides")]
 		public JsonResult<IEnumerable<OverrideModel>> GetAllOverrides()
 		{
-			return Json(_fetchToggleOverride.OverridenValues()
-				.Select(x => new OverrideModel {Toggle = x.Key, Enabled = x.Value}));
+			return Json(_fetchToggleOverride.OverridenValues().Select(x => new OverrideModel {Toggle = x.Key, Enabled = x.Value}));
 		}
 
 		[HttpPost, Route("Toggle/SaveOverride")]
-		public void SaveOverride(Toggles toggle, bool value)
+		public void SaveOverride(SaveOverrideInput input)
 		{
-			_saveToggleOverride.Save(toggle, value);
+			_saveToggleOverride.Save(input.Toggle, input.Value);
 		}
 
 		[HttpDelete, Route("Toggle/DeleteOverride/{toggle}")]
@@ -47,6 +54,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			_saveToggleOverride.Delete(toggle);
 		}
+	}
+
+	public class SaveOverrideInput
+	{
+		public Toggles Toggle { get; set; }
+		public bool Value { get; set; }
 	}
 
 	public class OverrideModel

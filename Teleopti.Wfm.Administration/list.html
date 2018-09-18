@@ -130,7 +130,9 @@
 		</div>
 		<div class="col-md-12">
 			<div class="panel panel-default">
-				<div class="panel-heading"><strong>Manage Overridden Toggles</strong>	</div>
+				<div class="panel-heading"><strong>Manage Overridden Toggles</strong>
+					
+				</div>
 				<div class="panel-body text-container">
 					<table>
 						<thead>
@@ -138,6 +140,7 @@
 							<th>Toggle</th>
 							<th>Enabled</th>
 							<th>Delete</th>
+							<th></th>
 						</tr>
 						</thead>
 						<tbody>
@@ -150,8 +153,30 @@
 								</button>
 							</td>
 						</tr>
+						<tr ng-show="vm.ShowAdd">
+							<td>
+								<select class="form-control" ng-options="name as name for name in ToggleNames" ng-model="vm.ToggleNameToSave">
+								</select>
+							</td>
+							<td>
+								<select class="form-control" ng-model="vm.ToggleValueToSave">
+									<option value="true">true</option>
+									<option value="false">false</option>
+								</select>
+							</td>
+							<td>
+							</td>
+							<td>
+								<button class="btn btn-primary btn-xs" ng-click="vm.SaveOverride()">
+									<span class="text-white">Save</span>
+								</button>
+							</td>
+						</tr>
 						</tbody>
 					</table>
+					<button class="btn btn-primary btn-xs" ng-click="vm.ToggleAdd()">
+						<span class="text-white">Add</span>
+					</button>
 				</div>
 			</div>
 		</div>
