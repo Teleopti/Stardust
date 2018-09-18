@@ -30,8 +30,8 @@
 							inData.averageSpeedOfAnswerObj.series,
 							inData.abandonedRateObj.series,
 							inData.serviceLevelObj.series,
-							inData.estimatedServiceLevelObj.series,
-							inData.currentInterval
+							inData.estimatedServiceLevelObj.series
+							// inData.currentInterval
 						],
 						hide: hiddenArray,
 						type: 'line',

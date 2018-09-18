@@ -19,9 +19,11 @@
 				angular.isDefined(inData.forecastedCallsObj) &&
 				angular.isDefined(inData.actualCallsObj) &&
 				angular.isDefined(inData.forecastedAverageHandleTimeObj) &&
-				angular.isDefined(inData.actualAverageHandleTimeObj)
+				angular.isDefined(inData.actualAverageHandleTimeObj) &&
+				angular.isDefined(inData.timeSeries) &&
+				inData.timeSeries.length > 0
 			) {
-				ctrl.trafficChart = c3.generate({
+				var config = {
 					bindto: '#trafficChart',
 					data: {
 						x: 'x',
@@ -30,8 +32,8 @@
 							inData.forecastedCallsObj.series,
 							inData.actualCallsObj.series,
 							inData.forecastedAverageHandleTimeObj.series,
-							inData.actualAverageHandleTimeObj.series,
-							inData.currentInterval
+							inData.actualAverageHandleTimeObj.series
+							// inData.currentInterval
 						],
 						hide: hiddenArray,
 						types: {
@@ -51,7 +53,9 @@
 						},
 						axes: {
 							Forecasted_AHT: 'y2',
-							AHT: 'y2'
+							AHT: 'y2',
+							Calls: 'y',
+							Forecasted_calls: 'y'
 						}
 					},
 					axis: {
@@ -105,7 +109,8 @@
 					transition: {
 						duration: 500
 					}
-				});
+				};
+				ctrl.trafficChart = c3.generate(config);
 			}
 		};
 
