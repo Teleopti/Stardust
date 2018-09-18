@@ -249,7 +249,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeAnalyticsTimeZoneRepository>().For<IAnalyticsTimeZoneRepository>();
 				isolate.UseTestDouble<FakeAnalyticsWorkloadRepository>().For<IAnalyticsWorkloadRepository>();
 				isolate.UseTestDouble<FakeUserDeviceRepository>().For<IUserDeviceRepository>();
-				isolate.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
 				isolate.UseTestDouble<FakeScheduleAuditTrailReport>().For<IScheduleAuditTrailReport>();
 				isolate.UseTestDouble<FakeBudgetGroupRepository>().For<IBudgetGroupRepository>();
 				isolate.UseTestDouble<FakeBudgetDayRepository>().For<IBudgetDayRepository>();

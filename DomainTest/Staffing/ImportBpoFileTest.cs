@@ -5,8 +5,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.TestCommon;
@@ -16,20 +14,13 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Staffing
 {
 	[DomainTest]
-	public class ImportBpoFileTest : IIsolateSystem
+	public class ImportBpoFileTest
 	{
 		public ImportBpoFile Target;
 		public FakeSkillRepository SkillRepository;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeUserTimeZone UserTimeZone;
 		public MutableNow Now;
-
-		public void Isolate(IIsolate isolate)
-		{
-			isolate.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
-			isolate.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
-			isolate.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
-		}
 
 		[Test]
 		public void ShouldReturnInformationOnInvalidFieldName()
