@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingQuality
 		public IScheduleResultDataExtractorProvider ScheduleResultDataExtractorProvider;
 		public IUserTimeZone UserTimeZone;
 
-		[Test]
+		[Test, Ignore("To see if this speeds up testruns")]
 		public void ShouldProduceGoodStandardDevBetweenDaysWhenUsingSingleAgentSingleDayAndNoDoSettings()
 		{
 			var targetStandardDeviation = 0.032;
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingQuality
 			targetAchieved.Should().Be.True();
 		}
 
-		[Test]
+		[Test, Ignore("To see if this speeds up testruns")]
 		public void ShouldProduceGoodStandardDevBetweenDaysWhenUsingSingleAgentSingleDayAndFreeWeekEndSettings()
 		{
 			var targetStandardDeviation = 0.032;

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingQuality
 		public IScheduleResultDataExtractorProvider ScheduleResultDataExtractorProvider;
 		public ResourceCalculateWithNewContext ResourceCalculation;
 
-		[Test]
+		[Test, Ignore("To see if this speeds up testruns")]
 		public void ShouldProduceGoodResultWithNoLimitations()
 		{
 			var date = new DateOnly(2017, 09, 04); //mon
