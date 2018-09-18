@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 {
-	[TestFixture]
+	[TestFixture, Ignore("")]
 	public class AppDomainUnloadTest
 	{
 		private readonly SearchPath _searchPath = new SearchPath();
