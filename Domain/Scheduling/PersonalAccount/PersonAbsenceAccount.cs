@@ -27,13 +27,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 		{
 		}
 
-        public virtual IEnumerable<IAccount> AccountCollection()
-        {
-            var ret = new List<IAccount>(accountCollection);
-            ret.Sort(new AccountDateDescendingComparer());
+		public virtual IEnumerable<IAccount> AccountCollection()
+		{
+			var ret = new List<IAccount>(accountCollection);
+			ret.Sort(new AccountDateDescendingComparer());
 
-            return new ReadOnlyCollection<IAccount>(ret);
-        }
+			return new ReadOnlyCollection<IAccount>(ret);
+		}
 
 		public virtual IPerson Person => _person;
 
@@ -69,15 +69,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 
 		public virtual void Restore(IPersonAbsenceAccount previousState)
 		{
-			//behövs inte person & absence här?
 			accountCollection.Clear();
 			previousState.AccountCollection().ForEach(accountCollection.Add);
 		}
 
 		public virtual IMemento CreateMemento()
 		{
-			return new Memento<IPersonAbsenceAccount>(this,
-												EntityClone());
+			return new Memento<IPersonAbsenceAccount>(this, EntityClone());
 		}
 
 		public virtual object Clone()

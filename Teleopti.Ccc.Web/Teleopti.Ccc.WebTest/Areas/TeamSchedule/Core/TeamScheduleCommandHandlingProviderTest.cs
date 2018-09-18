@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			isolate.UseTestDouble<FakeDayOffTemplateRepository>().For<IDayOffTemplateRepository>();
 		}
 
-
 		[Test]
 		public void ShouldNotFixOverwriteLayerWithoutPermission()
 		{

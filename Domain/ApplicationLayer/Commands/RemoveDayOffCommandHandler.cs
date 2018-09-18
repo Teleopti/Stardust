@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -13,14 +14,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	{
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IScheduleStorage _scheduleStorage;
+		private readonly IPersonAccountUpdater _personAccountUpdater;
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 
 		public RemoveDayOffCommandHandler(ICurrentScenario currentScenario,
 			IScheduleStorage scheduleStorage,
-			IScheduleDifferenceSaver scheduleDifferenceSaver)
+			IScheduleDifferenceSaver scheduleDifferenceSaver, IPersonAccountUpdater personAccountUpdater)
 		{
 			_currentScenario = currentScenario;
 			_scheduleDifferenceSaver = scheduleDifferenceSaver;
+			_personAccountUpdater = personAccountUpdater;
 			_scheduleStorage = scheduleStorage;
 		}
 
@@ -41,6 +44,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			scheduleDay.DeleteDayOff(command.TrackedCommandInfo);
 			scheduleDic.Modify(scheduleDay, NewBusinessRuleCollection.Minimum());
 			_scheduleDifferenceSaver.SaveChanges(scheduleRange.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()), (ScheduleRange)scheduleRange);
+
+			var absenceCollection = scheduleDay.PersonAbsenceCollection();
+			if (!absenceCollection.Any()) return;
+			foreach (var absence in absenceCollection)
+			{
+				_personAccountUpdater.UpdateForAbsence(command.Person, absence.Layer.Payload, command.Date);
+			}
 		}
 	}
 }

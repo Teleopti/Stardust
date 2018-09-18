@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain

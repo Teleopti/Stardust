@@ -2,12 +2,12 @@
 
 namespace Teleopti.Ccc.Domain.Tracking
 {
-    public interface ITraceableRefreshService
-    {
-        bool NeedsRefresh(ITraceable traceable);
+	public interface ITraceableRefreshService
+	{
+		bool NeedsRefresh(ITraceable traceable);
 
-        void Refresh(IAccount account);
+		void Refresh(IAccount account);
 
-        void RefreshIfNeeded(IAccount account);
-    }
+		void RefreshIfNeeded(IAccount account);
+	}
 }
