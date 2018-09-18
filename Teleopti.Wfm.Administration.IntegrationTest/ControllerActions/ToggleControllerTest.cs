@@ -7,7 +7,7 @@ using Teleopti.Wfm.Administration.Controllers;
 
 namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 {
-	[WfmAdminToggleTest]
+	[WfmAdminTestAttribute]
 	public class ToggleControllerTest
 	{
 		public ToggleController Target;
@@ -33,17 +33,6 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			Target.DeleteOverride(Toggles.TestToggle);
 			
 			Target.GetAllOverrides().Content.Should().Be.Empty();
-		}
-	}
-	
-	public class WfmAdminToggleTestAttribute : WfmAdminTestAttribute
-	{ 
-		protected override FakeConfigReader Config()
-		{
-			var config = base.Config();
-			config.FakeSetting("PBI77584", "true");
-			config.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
-			return config;
 		}
 	}
 }
