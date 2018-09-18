@@ -1742,3 +1742,22 @@ button.btn.absence-report-cancel {
 	width: 20px;
 	height: 20px;
 }
+
+/* Styles for chatbot */
+.chatbox {
+	position: fixed;
+	left: 0;
+	margin: 10px;
+	bottom: 0;
+	background-color: #f6f6f6;
+	opacity: 1.0;
+}
+
+.chatbox>#botIndicator{
+	background-color: #0078d7;
+	color: #ffffff; 
+	font-family: 'Segoe UI', sans-serif;
+	font-size: 15px;
+	font-weight: 500;
+	padding: 8px 8px 0 8px;
+}

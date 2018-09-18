@@ -19,28 +19,32 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<link href="@Url.Content("~/favicon.ico")?v=2" rel="shortcut icon" type="image/x-icon" />
 
+	<script src="https://cdn.botframework.com/botframework-webchat/latest/botchat.js"></script>
+	<link href="https://cdn.botframework.com/botframework-webchat/latest/botchat.css" rel="stylesheet" />
+
 	@Styles.Render(BundleScripts.BootstrapCss)
 	@Styles.Render(BundleScripts.Select2Css)
 	@Styles.Render(BundleScripts.MyTimeCss)
 	@Scripts.Render(BundleScripts.MyTimeJs)
 
 	<script src="@Url.Content("~/Content/jquery-plugin/jquery.placeholder.js")"></script>
+
 	<!--[if lt IE 9]>
 		<script src="@Url.Content("~/Content/respondjs/respond.min.js")"></script>
 	<![endif]-->
-	@if (ViewBag.LayoutBase.FixedDate != null)
-	{
-		DateTime date = ViewBag.LayoutBase.FixedDate;
-		<script type="text/javascript">
+@if (ViewBag.LayoutBase.FixedDate != null)
+{
+	DateTime date = ViewBag.LayoutBase.FixedDate;
+	<script type="text/javascript">
 		$(function () {
 			Date.prototype.getTeleoptiTime = function () { return new Date(@(date.Year), @(date.Month -1), @(date.Day), @(date.Hour), @(date.Minute), @(date.Second)).getTime(); };
-			Date.prototype.getTeleoptiTimeInUserTimezone = Date.prototype.getTeleoptiTime;  // We don't touch scenario tests
+			Date.prototype.getTeleoptiTimeInUserTimezone = Date.prototype.getTeleoptiTime; // We don't touch scenario tests
 		});
-		</script>
-	}
-	else
-	{
-		<script type="text/javascript">
+	</script>
+}
+else
+{
+	<script type="text/javascript">
 		$(function () {
 			Date.prototype.getTeleoptiTime = function () { return new Date().getTime(); };
 			Date.prototype.getTeleoptiTimeInUserTimezone = Teleopti.MyTimeWeb.Common.SetupTeleoptiTime(
@@ -53,13 +57,13 @@
 				}
 			);
 		});
-		</script>
-	}
+	</script>
+}
 
-	<script>
-	    $(function() {
-	        Teleopti.MyTimeWeb.Common.SetUserTexts(
-	        {
+<script>
+	$(function() {
+		Teleopti.MyTimeWeb.Common.SetUserTexts(
+		{
 				XRequests: '@Resources.XRequests',
 				SubjectColon: '@Resources.SubjectColon',
 				LocationColon: '@Resources.LocationColon',
@@ -81,56 +85,82 @@
 				NoDateIsSelected: '@Resources.NoDateIsSelected'
 			});
 		})
-	</script>
+</script>
 
-	@RenderSection("head", required: false)
+@RenderSection("head", required: false)
 </head>
 <body ontouchstart="" @Html.LayoutBase().FullDirClass() @Html.LayoutBase().FullDirAttribute()>
 	@RenderSection("header", required: false)
 	@RenderBody()
 	<footer class="col-1">
-
 		<p>@ViewBag.LayoutBase.Footer</p>
-
 	</footer>
-<div id="dialog-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">×</button>
-				<h3 id="dialog-modal-header"></h3>
-			</div>
-			<div id="dialog-modal-body" class="modal-body">
-
+	<div id="dialog-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">×</button>
+					<h3 id="dialog-modal-header"></h3>
+				</div>
+				<div id="dialog-modal-body" class="modal-body">
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 @if (ViewBag.LayoutBase.GrantEnabled)
 {
 	<script type="text/javascript">
 		(function () {
-			var width = document.documentElement.clientWidth < 450 ? document.documentElement.clientWidth : 400;
+			const headerHeight = '38px';
+			const indicatorWidth = '120px';
+			const availableClientWidth = document.documentElement.clientWidth;
+			const availableClientHeight = (document.documentElement.clientHeight - 100);
+			const chatbotwidth = (availableClientWidth > 450 ? 430 : availableClientWidth - 20) + 'px';
+			const expectedHeight = (availableClientHeight > 500 ? 400 : availableClientHeight) + 'px';
 
 			var div = document.createElement("div");
 			document.getElementsByTagName('body')[0].appendChild(div);
-			var availableClientHeight = (document.documentElement.clientHeight - 100);
-			var expectedHeight = (availableClientHeight > 500 ? 400 : availableClientHeight) + 'px';
+			div.outerHTML = "<div id='botDiv' class='chatbox' style='width: " + indicatorWidth + "; height: " + headerHeight + "; z-index: 10000;'>"
+				+ "<div id='botIndicator' style='height: " + headerHeight + "; width: " + indicatorWidth + ";'>Grant bot &gt;&gt;</div>"
+				+ "<div id='grantBot' style='width: 100%; display: none;'>"
+				+ "</div>";
 
-			div.outerHTML = "<div id='botDiv' style='height: 38px; position: fixed; bottom: 0; z-index: 1000; background-color: #fff'><div id='botTitleBar' style='height: 38px; width: " + width + "px; position:fixed; cursor: pointer;'></div><iframe width='" + width + "px' height='" + expectedHeight +"' src='https://webchat.botframework.com/embed/teleoptibottest?s=HRxFFD8wPZc.cwA.AUY.RYXZMV9clbUcFqVoyL4BzxJFqREHRcy0SI_22B7AfFc'></iframe></div>"; 
+			BotChat.App({
+				directLine: { secret: '4iLsDqwxH7w.cwA.GSo.KqnAG1hrW3hA4QIE7rCt4cFl3qnXN0lBybxUMh7MSTw' },
+				user: { id: 'userid' },
+				bot: { id: 'botid' },
+				resize: 'detect',
+				chatTitle: 'Grant bot',
+				showUploadButton: false
+			}, document.getElementById("grantBot"));
 
-			document.querySelector('body').addEventListener('click', function (e) {
-				e.target.matches = e.target.matches || e.target.msMatchesSelector;
-				if (e.target.matches('#botTitleBar')) { 
-					var botDiv = document.querySelector('#botDiv');
-					botDiv.style.height = botDiv.style.height == expectedHeight ? '38px' : expectedHeight;
-				};
-			});
+			document.querySelector("#grantBot .wc-header").setAttribute("id", "chatbotHeader");
+
+			document.getElementById("chatbotHeader").addEventListener("click",
+				function(e) {
+					var botDiv = document.getElementById("botDiv");
+					botDiv.style.height = headerHeight;
+					botDiv.style.width = indicatorWidth;
+
+					document.getElementById("grantBot").style.display = "none";
+					document.getElementById("botIndicator").style.display = "block";
+				}
+			);
+
+			document.getElementById("botIndicator").addEventListener("click",
+				function(e) {
+					var botDiv = document.getElementById("botDiv");
+					botDiv.style.height = expectedHeight;
+					botDiv.style.width = chatbotwidth;
+
+					document.getElementById("grantBot").style.display = 'block';
+					document.getElementById("botIndicator").style.display = "none";
+				}
+			);
 		}());
 	</script>
 }
-	<div id="dialog">
-	</div>
+	<div id="dialog"></div>
 	<div id="modal-disable"></div>
 	<span id="notifyLogger" style="display: none"></span>
 </body>
