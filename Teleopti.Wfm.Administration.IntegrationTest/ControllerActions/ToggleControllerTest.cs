@@ -23,10 +23,21 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			overrideModel.Toggle.Should().Be.EqualTo(Toggles.TestToggle.ToString());
 			overrideModel.Enabled.Should().Be.True();
 		}
+
+		[Test]
+		public void ShouldDeleteOverride()
+		{
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			Target.SaveOverride(Toggles.TestToggle, true);
+			
+			Target.DeleteOverride(Toggles.TestToggle);
+			
+			Target.GetAllOverrides().Content.Should().Be.Empty();
+		}
 	}
 	
 	public class WfmAdminToggleTestAttribute : WfmAdminTestAttribute
-	{
+	{ 
 		protected override FakeConfigReader Config()
 		{
 			var config = base.Config();

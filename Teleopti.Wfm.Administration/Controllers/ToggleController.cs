@@ -41,6 +41,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			_saveToggleOverride.Save(toggle, value);
 		}
+
+		[HttpDelete, Route("Toggle/DeleteOverride/{toggle}")]
+		public void DeleteOverride(Toggles toggle)
+		{
+			_saveToggleOverride.Delete(toggle);
+		}
 	}
 
 	public class OverrideModel
