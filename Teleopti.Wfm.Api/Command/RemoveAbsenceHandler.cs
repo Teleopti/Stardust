@@ -7,6 +7,11 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
+/* DO NOT USE! 
+It only contains vary simple logic. 
+Used for staffhub integration only until further notice */
+
+//TODO personal account
 namespace Teleopti.Wfm.Api.Command
 {
 	public class RemoveAbsenceHandler : ICommandHandler<RemoveAbsenceDto>

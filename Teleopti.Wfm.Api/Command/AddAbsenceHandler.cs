@@ -7,6 +7,12 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
+
+/* DO NOT USE! 
+It only contains vary simple logic. 
+Used for staffhub integration only until further notice */
+
+//TODO personal account 
 namespace Teleopti.Wfm.Api.Command
 {
 	public class AddAbsenceHandler : ICommandHandler<AddAbsenceDto>
@@ -26,7 +32,7 @@ namespace Teleopti.Wfm.Api.Command
 			_personAbsenceRepository = personAbsenceRepository;
 		}
 
-		[UnitOfWork]
+		[UnitOfWork] 
 		public virtual ResultDto Handle(AddAbsenceDto command)
 		{
 			try
@@ -61,8 +67,6 @@ namespace Teleopti.Wfm.Api.Command
 					Successful = false
 				};
 			}
-
-
 		}
 	}
 }

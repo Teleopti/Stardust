@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.Owin.Logging;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
@@ -9,6 +8,10 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 using log4net;
+
+/* DO NOT USE! 
+It only contains vary simple logic. 
+Used for staffhub integration only until further notice */
 
 namespace Teleopti.Wfm.Api.Command
 {
