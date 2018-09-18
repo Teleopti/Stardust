@@ -482,7 +482,7 @@
 			</div>
 		</div>
 		<!-- /ko -->
-
+	
 		<!-- ko if: showCartPanel -->
 		<div class="multi-shift-trade-cart">
 			<div class="multi-shift-trade-cart-wrapper" data-bind="visible:$root.showCart()">
@@ -547,8 +547,8 @@
 			</div>
 		</div>
 		<!-- /ko -->
-
-		<!--ko if: isMobile-->
+	
+		<!--ko if: isMobile && !showToolbar()-->
 		<button data-bind="click: cartMenuClick" class="cart-menu">
 			<span data-bind="text:selectedCount, visible: !showCartPanel()"></span>
 			<i data-bind="visible: showCartPanel" class="glyphicon glyphicon-arrow-left"></i>
