@@ -19,7 +19,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 {
-	[TestFixture, Ignore("")]
+	[TestFixture]
 	public class RefreshPayrollFormatsHandlerTest
 	{
 
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 		public void SetupFixture()
 		{
 			copyFiles(Path.Combine(TestContext.CurrentContext.TestDirectory, "Payroll.DeployNew"),
-				Path.Combine(TestContext.CurrentContext.TestDirectory, "Payroll.DeployNew"), "TestTenant");
+				Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Payroll.DeployNew"), "TestTenant");
 		}
 		
 		[Test,Ignore("")]
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 		}
 
 
-		[Test]
+		[Test,Ignore("")]
 		public void CopyPayrollFilesFromSourceToDestinationShouldUseDefaultPathIfNotDefined()
 		{
 			var tenantName = "TestTenant";
@@ -107,6 +107,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			payrollFormatRepositoryFactory.CurrentPayrollFormatRepository.LoadAll().Should().Not.Be.Empty();
 			Directory.Exists(tenantDestinationPath).Should().Be.True();
 			Directory.GetFiles(tenantDestinationPath).Should().Not.Be.Empty();
+		}
+
+		[Test]
+		public void TestToShowLogs()
+		{
+			TestContext.WriteLine($"Payroll Test Logs, Test directory path {TestContext.CurrentContext.TestDirectory}");
+			TestContext.WriteLine($"Payroll Test Logs, Work directory path {TestContext.CurrentContext.WorkDirectory}");
+			TestContext.WriteLine($"Payroll Test Logs, app domain base directory {AppDomain.CurrentDomain.BaseDirectory}");
 		}
 
 		private static void copyFiles(string sourcePath, string destinationPath,
