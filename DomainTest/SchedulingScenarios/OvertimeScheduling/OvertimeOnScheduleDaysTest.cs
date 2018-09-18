@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
 				SkillActivity = activity
 			};
-
 			LockManager.AddLock(agent, dateOnly,LockType.Normal);
 
 			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
@@ -103,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			TimeZoneGuard.SetTimeZone(TimeZoneInfo.FindSystemTimeZoneById(viewersTimeZone));
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			var activity = new Activity("_");
-			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")).WithId().IsOpen();
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")).WithId().IsOpen().DefaultResolution(15);
 			var dateOnly = new DateOnly(2015, 10, 12);
 			var scenario = new Scenario("_");
 			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
@@ -247,7 +246,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		{
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			var activity = new Activity("_") {InWorkTime = true};
-			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen().DefaultResolution(15);
 			var dateOnly = new DateOnly(2015, 10, 12);
 			var scenario = new Scenario("_");
 			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));

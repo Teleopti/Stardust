@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -18,9 +19,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public ISkill Has(string skillName, IActivity activity, int? cascadingIndex)
 		{
-			var skill = SkillFactory.CreateSkill(skillName).WithId();
+			var skill = new Skill(skillName).For(activity).WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
-			skill.Activity = activity;
 			_skills.Add(skill);
 
 			if (cascadingIndex.HasValue)
@@ -32,9 +32,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public ISkill Has(string skillName, IActivity activity, TimePeriod openHours)
 		{
-			var skill = SkillFactory.CreateSkill(skillName).WithId();
+			var skill = new Skill(skillName).For(activity).WithId();
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours);
-			skill.Activity = activity;
 			_skills.Add(skill);
 			return skill;
 		}
