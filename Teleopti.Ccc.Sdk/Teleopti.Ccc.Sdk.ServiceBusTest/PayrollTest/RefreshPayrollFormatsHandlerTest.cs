@@ -17,7 +17,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 {
-	[TestFixture, Ignore("Test fails on build server")]
+	[TestFixture]
 	public class RefreshPayrollFormatsHandlerTest
 	{
 		[OneTimeSetUp]

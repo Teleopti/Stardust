@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 {
-	[TestFixture, Ignore("Test fails on build server")]
+	[TestFixture]
 	public class AppDomainUnloadTest
 	{
 		private readonly SearchPath _searchPath = new SearchPath();
