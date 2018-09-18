@@ -128,5 +128,32 @@
 				</div>
 			</div>
 		</div>
+		<div class="col-md-12">
+			<div class="panel panel-default">
+				<div class="panel-heading"><strong>Manage Overridden Toggles</strong>	</div>
+				<div class="panel-body text-container">
+					<table>
+						<thead>
+						<tr>
+							<th>Toggle</th>
+							<th>Enabled</th>
+							<th>Delete</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="override in Overrides">
+							<td><a>{{override.Toggle}}</a></td>
+							<td><a>{{override.Enabled}}</a></td>
+							<td>
+								<button class="btn btn-primary btn-xs">
+									<span class="text-white">Delete</span>
+								</button>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>

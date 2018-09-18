@@ -33,9 +33,10 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 			}
 			else
 			{
-				builder.RegisterType<NoFetchingOfOverridenToggles>().As<IFetchToggleOverride>();				
+				builder.RegisterType<NoFetchingOfOverridenToggles>().As<IFetchToggleOverride>();
 			}
-
+			builder.RegisterType<SaveToggleOverride>().SingleInstance();
+			
 			if (string.IsNullOrEmpty(pathToToggle))
 			{
 				logger.Warn(missingPathToToggle);

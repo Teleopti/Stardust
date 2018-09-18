@@ -19,6 +19,12 @@
 		}).error(function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 		});
+
+		$http.get("./Toggle/AllOverrides", tokenHeaderService.getHeaders()).success(function (data) {
+			$scope.Overrides = data;
+		}).error(function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+		});
 	}
 
 })();
