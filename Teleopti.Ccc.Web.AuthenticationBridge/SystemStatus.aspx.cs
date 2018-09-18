@@ -50,7 +50,9 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge
 			var result = new Dictionary<string, bool>();
 			foreach (var provider in providers)
 			{
-				var baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
+				var uriLoadBalancer = Request.UrlConsideringLoadBalancerHeaders();
+
+				var baseUrl = uriLoadBalancer.Scheme + "://" + uriLoadBalancer.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
 				var authenticateUrl = baseUrl + "authenticate?whr=" + provider.Identifier;
 
 				sbTriedVisitByIdentityUrls.Append($"{authenticateUrl};");
