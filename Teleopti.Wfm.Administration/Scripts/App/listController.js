@@ -33,7 +33,7 @@
 		vm.DeleteOverride = function(override){
 			$http.delete('./Toggle/DeleteOverride/'+override.Toggle, tokenHeaderService.getHeaders())
 				.success(function(data) {
-					getAllOverrides();
+					getAllOverrides(); 
 					getAllToggleNamesWithoutOverride();
 				}).error(function(xhr, ajaxOptions, thrownError) {
 				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
