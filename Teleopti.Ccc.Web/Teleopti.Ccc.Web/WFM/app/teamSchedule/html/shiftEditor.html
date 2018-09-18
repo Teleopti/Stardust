@@ -5,7 +5,13 @@
 	<div class="con-flex">
 		<span>
 			<span class="name">{{vm.scheduleVm.Name}}</span>
-			<i ng-if="vm.isInDifferentTimezone" class="mdi mdi-earth"></i>
+			<span ng-if="vm.isInDifferentTimezone">
+				<i  class="mdi mdi-earth"></i>
+				<md-tooltip md-direction="right">
+					{{::vm.scheduleVm.TimezoneName}}
+				</md-tooltip>
+			</span>
+			
 		</span>
 		<span class="date">
 			<i class="mdi mdi-calendar"></i>

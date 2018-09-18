@@ -302,7 +302,10 @@
 				}
 				
 			],
-			Timezone: { IanaId: 'Asia/Hong_Kong' },
+			Timezone: {
+				IanaId: 'Asia/Hong_Kong',
+				DisplayName: '(UTC+08:00) China Time'
+			},
 			UnderlyingScheduleSummary: underlyingScheduleSummary
 		};
 
@@ -311,6 +314,7 @@
 		expect(schedule.Date).toEqual('2018-05-28');
 		expect(schedule.Name).toEqual('Annika Andersson');
 		expect(schedule.Timezone).toEqual('Asia/Hong_Kong');
+		expect(schedule.TimezoneName).toEqual('(UTC+08:00) China Time');
 		expect(schedule.HasUnderlyingSchedules).toBe(true);
 		expect(schedule.ProjectionTimeRange.Start).toBe('2018-05-28 08:00');
 		expect(schedule.ProjectionTimeRange.End).toBe('2018-05-28 16:00');
@@ -373,7 +377,9 @@
 					IsOvertime: false
 				}
 			],
-			Timezone: { IanaId: 'Europe/Berlin' },
+			Timezone: {
+				IanaId: 'Europe/Berlin'
+			},
 			UnderlyingScheduleSummary: underlyingScheduleSummary
 		};
 
