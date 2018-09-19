@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakePersonRepository PersonRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakeScenarioRepository ScenarioRepository;
+		public IScheduleDayProvider ScheduleDayProvider;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public MutableNow Now;
@@ -49,14 +51,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRaiseRemoveActivityEvent()
 		{
+			var date = new DateOnly(2013, 11, 14);
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 			var activity = ActivityFactory.CreateActivity("Phone").WithId();
 			ActivityRepository.Add(activity);
 			ActivityRepository.Add(_mainActivity);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,_mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, _mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
 			personAssignment.SetId(Guid.NewGuid());
-			
+
 			personAssignment.AddActivity(activity, new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14, 14));
 			personAssignment.ShiftLayers.ForEach(sl => sl.WithId());
 			var shiftLayer = personAssignment.ShiftLayers.First(sl => sl.Payload == activity);
@@ -64,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				PersonId = person.Id.GetValueOrDefault(),
 				ShiftLayerId = shiftLayer.Id.GetValueOrDefault(),
-				Date = new DateOnly(2013, 11, 14),
+				Date = date,
 				TrackedCommandInfo = new TrackedCommandInfo
 				{
 					OperatedPersonId = Guid.NewGuid(),
@@ -77,12 +80,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			personAssignment.PopAllEvents();
 			Target.Handle(command);
 
-			var dic = ScheduleStorage.FindSchedulesForPersons(personAssignment.Scenario, new[] { person }, new ScheduleDictionaryLoadOptions(false, false), new DateTimePeriod(command.Date.Date.Utc(), command.Date.Date.Utc()), new[] { person }, false);
-			var scheduleRange = dic[person];
+			var scheduleDic = ScheduleDayProvider.GetScheduleDictionary(date, person);
+			var scheduleRange = scheduleDic[person];
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
 			personAssignment = scheduleDay.PersonAssignment();
 
-		var @event = personAssignment.PopAllEvents().OfType<PersonAssignmentLayerRemovedEvent>().Single();
+			var @event = personAssignment.PopAllEvents().OfType<PersonAssignmentLayerRemovedEvent>().Single();
 			@event.PersonId.Should().Be(person.Id.GetValueOrDefault());
 			@event.Date.Should().Be(new DateTime(2013, 11, 14));
 			@event.StartDateTime.Should().Be(shiftLayer.Period.StartDateTime);
@@ -92,6 +95,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldReportErrorWhenRemoveBaseShiftLayerAndShiftHasOneLayer()
 		{
+			var date = new DateOnly(2013, 11, 14);
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 			ActivityRepository.Add(_mainActivity);
@@ -103,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				PersonId = person.Id.GetValueOrDefault(),
 				ShiftLayerId = shiftLayer.Id.GetValueOrDefault(),
-				Date = new DateOnly(2013, 11, 14),
+				Date = date,
 				TrackedCommandInfo = new TrackedCommandInfo
 				{
 					OperatedPersonId = Guid.NewGuid(),
@@ -116,8 +120,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Target.Handle(command);
 
-			var dic = ScheduleStorage.FindSchedulesForPersons(personAssignment.Scenario, new[] { person }, new ScheduleDictionaryLoadOptions(false, false), new DateTimePeriod(command.Date.Date.Utc(), command.Date.Date.Utc()), new[] { person }, false);
-			var scheduleRange = dic[person];
+			var scheduleDic = ScheduleDayProvider.GetScheduleDictionary(date, person);
+			var scheduleRange = scheduleDic[person];
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
 			personAssignment = scheduleDay.PersonAssignment();
 
@@ -127,6 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldReportErrorWhenRemoveBaseShiftLayerAndShiftHasMultipleLayers()
 		{
+			var date = new DateOnly(2013, 11, 14);
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 			ActivityRepository.Add(_mainActivity);
@@ -139,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				PersonId = person.Id.GetValueOrDefault(),
 				ShiftLayerId = shiftLayer.Id.GetValueOrDefault(),
-				Date = new DateOnly(2013, 11, 14),
+				Date = date,
 				TrackedCommandInfo = new TrackedCommandInfo
 				{
 					OperatedPersonId = Guid.NewGuid(),
@@ -152,8 +157,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Target.Handle(command);
 
-			var dic = ScheduleStorage.FindSchedulesForPersons(personAssignment.Scenario, new[] { person }, new ScheduleDictionaryLoadOptions(false, false), new DateTimePeriod(command.Date.Date.Utc(), command.Date.Date.Utc()), new[] { person }, false);
-			var scheduleRange = dic[person];
+			var scheduleDic = ScheduleDayProvider.GetScheduleDictionary(date, person);
+			var scheduleRange = scheduleDic[person];
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
 			personAssignment = scheduleDay.PersonAssignment();
 
@@ -164,6 +169,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldReportErrorWhenShiftLayerNotFound()
 		{
+			var date = new DateOnly(2013, 11, 14);
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 			ActivityRepository.Add(_mainActivity);
@@ -175,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				PersonId = person.Id.GetValueOrDefault(),
 				ShiftLayerId = invalidLayerId,
-				Date = new DateOnly(2013, 11, 14),
+				Date = date,
 				TrackedCommandInfo = new TrackedCommandInfo
 				{
 					OperatedPersonId = Guid.NewGuid(),
@@ -188,8 +194,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Target.Handle(command);
 
-			var dic = ScheduleStorage.FindSchedulesForPersons(personAssignment.Scenario, new[] { person }, new ScheduleDictionaryLoadOptions(false, false), new DateTimePeriod(command.Date.Date.Utc(), command.Date.Date.Utc()), new[] { person }, false);
-			var scheduleRange = dic[person];
+			var scheduleDic = ScheduleDayProvider.GetScheduleDictionary(date, person);
+			var scheduleRange = scheduleDic[person];
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
 			personAssignment = scheduleDay.PersonAssignment();
 
@@ -210,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var skill = SkillFactory.CreateSkillWithId("skill", 15);
 			skill.Activity = activity;
-			
+
 			SkillRepository.Add(skill);
 			var person = PersonRepository.Has(skill);
 
@@ -233,7 +239,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			ScenarioRepository.Has(personAssignment.Scenario);
 			ScheduleStorage.Add(personAssignment);
-			
+
 			Target.Handle(command);
 
 			var combs = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14, 14), false).ToList();
@@ -290,6 +296,48 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			combs.Count(x => x.Resource == -1).Should().Be.EqualTo(8);
 			combs.Count(x => x.Resource == 1).Should().Be.EqualTo(8);
 
+		}
+
+		[Test]
+		public void ShouldRemoveActivityInTimezone()
+		{
+			var date = new DateOnly(2018, 9, 17);
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Add(person);
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
+
+			var phoneActivity = ActivityFactory.CreateActivity("phone", Color.Beige);
+			ActivityRepository.Add(_mainActivity);
+			ActivityRepository.Add(phoneActivity);
+
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, _mainActivity, new DateTimePeriod(2018, 9, 17, 8, 2018, 9, 17, 18));
+			personAssignment.AddActivity(phoneActivity, new DateTimePeriod(2018, 9, 17, 10, 2018, 9, 17, 11));
+			personAssignment.ShiftLayers.ForEach(sl => sl.WithId());
+
+			var shiftLayer = personAssignment.ShiftLayers.ElementAt(1);
+			var command = new RemoveActivityCommand
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				ShiftLayerId = shiftLayer.Id.GetValueOrDefault(),
+				Date = date,
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = Guid.NewGuid(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+
+			ScenarioRepository.Has(personAssignment.Scenario);
+			ScheduleStorage.Add(personAssignment);
+
+			Target.Handle(command);
+
+			var scheduleDic = ScheduleDayProvider.GetScheduleDictionary(date, person);
+			var scheduleRange = scheduleDic[person];
+			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
+			personAssignment = scheduleDay.PersonAssignment();
+
+			personAssignment.ShiftLayers.Count().Should().Be.EqualTo(1);
 		}
 	}
 }

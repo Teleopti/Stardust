@@ -14,27 +14,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class RemoveActivityCommandHandler : IHandleCommand<RemoveActivityCommand>
 	{
-		private readonly ICurrentScenario _currentScenario;
 		private readonly IProxyForId<IPerson> _personForId;
-		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
+		private readonly IScheduleDayProvider _scheduleDayProvider;
 
-		public RemoveActivityCommandHandler( ICurrentScenario currentScenario, IProxyForId<IPerson> personForId, IScheduleStorage scheduleStorage, IScheduleDifferenceSaver scheduleDifferenceSaver)
+		public RemoveActivityCommandHandler(
+			IProxyForId<IPerson> personForId, 
+			IScheduleDifferenceSaver scheduleDifferenceSaver,
+			IScheduleDayProvider scheduleDayProvider)
 		{
-			_currentScenario = currentScenario;
 			_personForId = personForId;
-			_scheduleStorage = scheduleStorage;
 			_scheduleDifferenceSaver = scheduleDifferenceSaver;
+			_scheduleDayProvider = scheduleDayProvider;
 		}
 
 		public void Handle(RemoveActivityCommand command)
 		{
-
 			var person = _personForId.Load(command.PersonId);
-			var scenario = _currentScenario.Current();
 			var period = new DateTimePeriod(command.Date.Date.Utc(), command.Date.Date.Utc());
-			var dic = _scheduleStorage.FindSchedulesForPersons(scenario, new[] { person }, new ScheduleDictionaryLoadOptions(false, false), period, new[] { person }, false);
-			var scheduleRange = dic[person];
+			var scheduleDic = _scheduleDayProvider.GetScheduleDictionary(command.Date, person);
+
+			var scheduleRange = scheduleDic[person];
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
 			var personAssignment = scheduleDay.PersonAssignment();
 			
@@ -55,8 +55,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			var mainShiftLayer = shiftLayer as MainShiftLayer;
-
-
 			if (mainShiftLayer != null && mainShiftLayer.OrderIndex == 0)
 			{
 				command.ErrorMessages.Add(Resources.CannotDeleteBaseActivity);
@@ -64,7 +62,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 			
 			personAssignment.RemoveActivity(shiftLayer, false, command.TrackedCommandInfo);
-			dic.Modify(scheduleDay, NewBusinessRuleCollection.Minimum());
+			((ReadOnlyScheduleDictionary)scheduleDic).MakeEditable();
+			scheduleDic.Modify(scheduleDay, NewBusinessRuleCollection.Minimum());
 			_scheduleDifferenceSaver.SaveChanges(scheduleRange.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()), (ScheduleRange)scheduleRange);
 		}
 	}
