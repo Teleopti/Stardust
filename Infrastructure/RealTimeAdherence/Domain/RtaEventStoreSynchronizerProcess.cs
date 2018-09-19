@@ -14,8 +14,10 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain
 		private readonly StateQueueTenants _tenants;
 		private readonly IDistributedLockAcquirer _distributedLock;
 
-		public RtaEventStoreSynchronizerProcess(IRtaEventStoreSynchronizer synchronizer,
-			StateQueueTenants tenants, IDistributedLockAcquirer distributedLock)
+		public RtaEventStoreSynchronizerProcess(
+			IRtaEventStoreSynchronizer synchronizer,
+			StateQueueTenants tenants, 
+			IDistributedLockAcquirer distributedLock)
 		{
 			_synchronizer = synchronizer;
 			_tenants = tenants;
