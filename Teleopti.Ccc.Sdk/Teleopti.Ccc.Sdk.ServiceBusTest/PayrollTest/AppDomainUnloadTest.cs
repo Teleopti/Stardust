@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 		public void VerifyPayrollDtosCanBeLoaded()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
-			AppDomain.CurrentDomain.SetData("APPBASE", @"C:\Git\TeleoptiWFM\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\bin\Debug");
+			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
 			runWithExceptionHandling(() =>
 			{
 				var target = new AppdomainCreatorWrapper();
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 		public void ExecutePayroll()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
-			AppDomain.CurrentDomain.SetData("APPBASE", @"C:\Git\TeleoptiWFM\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\bin\Debug");
+			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
 			runWithExceptionHandling(() =>
 			{
 				var payrollExportDto = new PayrollExportDto
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 		public void ShouldFindPayrollFilesOnPayrollRootDirIfMissingInTenantSpecificDir()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
-			AppDomain.CurrentDomain.SetData("APPBASE", @"C:\Git\TeleoptiWFM\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\bin\Debug");
+			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
 			runWithExceptionHandling(() =>
 			{
 				var payrollExportDto = new PayrollExportDto
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 		public void ShouldNotCrashIfTenantNotFound()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
-			AppDomain.CurrentDomain.SetData("APPBASE", @"C:\Git\TeleoptiWFM\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\bin\Debug");
+			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
 			var payrollExportDto = new PayrollExportDto
 			{
 				TimeZoneId = "Utc",
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 		public void ShouldNotReturnValuesWhenFileIsLocked()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
-			AppDomain.CurrentDomain.SetData("APPBASE", @"C:\Git\TeleoptiWFM\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\bin\Debug");
+			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
 			var payrollExportDto = new PayrollExportDto
 			{
 				TimeZoneId = "Utc",
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 		public void ShouldHandlePayrollFormatIdNotFound()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
-			AppDomain.CurrentDomain.SetData("APPBASE", @"C:\Git\TeleoptiWFM\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\bin\Debug");
+			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
 			var payrollExportDto = new PayrollExportDto
 			{
 				TimeZoneId = "Utc",
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 		public void ExecutePayrollAndGetUpdatedFeedback()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
-			AppDomain.CurrentDomain.SetData("APPBASE", @"C:\Git\TeleoptiWFM\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\bin\Debug");
+			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
 			runWithExceptionHandling(() =>
 			{
 				var payrollExportDto = new PayrollExportDto
