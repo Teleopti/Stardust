@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				new ForecastDayModel
 				{
 					Date = forecastedDay,
-					Tasks = 200,
+					Tasks = 1500,
 					AverageTaskTime = 60,
 					AverageAfterTaskTime = 60,
 					IsInModification = true
@@ -144,18 +144,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				new StatisticTask
 				{
 					Interval = templateDay.AddHours(10).AddMinutes(15),
-					StatOfferedTasks = 25
+					StatOfferedTasks = 250
 				},
 				new StatisticTask
 				{
 					Interval = templateDay.AddHours(10).AddMinutes(30),
-					StatOfferedTasks = 55
+					StatOfferedTasks = 1000
 				},
 				new StatisticTask
 				{
 					Interval = templateDay.AddHours(10).AddMinutes(45),
-					StatOfferedTasks = 5
-				}
+					StatOfferedTasks = 100
+				},
 			});
 
 			var forecastResult = new ForecastViewModel
@@ -173,7 +173,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var taskPeriods = savedWorkloadDay.TaskPeriodList;
 			taskPeriods.Count.Should().Be(4);
 			taskPeriods.All(x => x.Tasks > 0).Should().Be.True();
-			Assert.That(taskPeriods.Sum(x => x.Tasks), Is.EqualTo(200).Within(tolerance));
+			Math.Round(taskPeriods[1].Tasks, 4).Should().Be.GreaterThan(Math.Round(taskPeriods[0].Tasks, 4));
+			Math.Round(taskPeriods[2].Tasks, 4).Should().Be.EqualTo(Math.Round(taskPeriods[1].Tasks, 4));
+			Math.Round(taskPeriods[3].Tasks, 4).Should().Be.LessThan(Math.Round(taskPeriods[2].Tasks, 4));
 		}
 
 		[Test]
