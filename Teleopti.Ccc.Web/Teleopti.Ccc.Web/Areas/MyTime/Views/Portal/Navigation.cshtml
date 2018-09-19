@@ -25,15 +25,15 @@
 		};
 
 		Teleopti.MyTimeWeb.Common.SetupCalendar(
-		{
-			UseJalaaliCalendar: @Model.UseJalaaliCalendar.ToString().ToLowerInvariant(),
-			DateFormat: "@Html.Raw(@Model.DateFormat)",
-			TimeFormat: "@Model.TimeFormat",
-			AMDesignator: "@Model.AMDesignator",
-			PMDesignator: "@Model.PMDesignator",
-			DateTimeDefaultValues: dateTimeDefaultValues,
-			DateFormatLocale: "@Model.DateFormatLocale"
-		});
+			{
+				UseJalaaliCalendar: @Model.UseJalaaliCalendar.ToString().ToLowerInvariant(),
+				DateFormat: "@Html.Raw(@Model.DateFormat)",
+				TimeFormat: "@Model.TimeFormat",
+				AMDesignator: "@Model.AMDesignator",
+				PMDesignator: "@Model.PMDesignator",
+				DateTimeDefaultValues: dateTimeDefaultValues,
+				DateFormatLocale: "@Model.DateFormatLocale"
+			});
 	});
 
 	var requestsMessagesUserTexts = {
@@ -55,10 +55,12 @@
 {
 	<script type="text/javascript">
 		$(document).ready(function () {
+// ReSharper disable Es6Feature
 			const availableClientWidth = document.documentElement.clientWidth;
 			const availableClientHeight = (document.documentElement.clientHeight - 100);
 			const chatbotwidth = (availableClientWidth > 450 ? 430 : availableClientWidth - 20) + 'px';
 			const expectedHeight = (availableClientHeight > 500 ? 400 : availableClientHeight) + 'px';
+// ReSharper restore Es6Feature
 
 			var div = document.createElement("div");
 			document.getElementsByTagName('body')[0].appendChild(div);
@@ -85,7 +87,9 @@
 
 			document.getElementById("botIndicator").addEventListener("click",
 				function (e) {
+// ReSharper disable Es6Feature
 					const style = document.getElementById("botDiv").style;
+// ReSharper restore Es6Feature
 					if (style.display === 'block') {
 						style.display = 'none';
 					} else {
