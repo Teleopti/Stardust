@@ -212,6 +212,7 @@
     <Compile Include="ApplicationLayer\StardustSender.cs" />
     <Compile Include="ApplicationLayer\SyncAllEventPublisher.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcher.cs" />
+    <Compile Include="ApplicationLayer\RecurringEventPublishingUpdater.cs" />
     <Compile Include="ApplicationLayer\UnitOfWorkTransactionEventSyncronization.cs" />
     <Compile Include="Authentication\CryptoKeyInfo.cs" />
     <Compile Include="Authentication\CryptoKeyInfoRepository.cs" />
@@ -264,6 +265,7 @@
     <Compile Include="MachineLearning\ShiftCategoryExampleForTraining.cs" />
     <Compile Include="MachineLearning\ShiftCategoryPredictionModelLoader.cs" />
     <Compile Include="MultiTenancy\Admin\CheckTenantUserExists.cs" />
+    <Compile Include="MultiTenancy\AllTenantNames.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAspect.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAttribute.cs" />
     <Compile Include="MultiTenancy\Server\Queries\TenantAuditPersisterFake.cs" />

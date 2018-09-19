@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Args().BehaviorTestServer)
 				builder.RegisterType<BehaviorTestTenants>().As<IAllTenantNames>().SingleInstance();
 			else
-				builder.RegisterType<CannotIterateAllTenants>().As<IAllTenantNames>().SingleInstance();
+				builder.RegisterType<AllTenantNames>().As<IAllTenantNames>().SingleInstance();
 
 			fromServerModule(builder);
 

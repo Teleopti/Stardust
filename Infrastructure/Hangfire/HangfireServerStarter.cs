@@ -1,11 +1,10 @@
+using System.Collections.Generic;
 using System.Linq;
 using Hangfire;
+using Hangfire.Server;
 using Owin;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Tracer;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
@@ -13,22 +12,16 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 	{
 		private readonly HangfireStarter _starter;
 		private readonly IConfigReader _config;
-		private readonly StateQueueWorker _stateQueueWorker;
-		private readonly RtaTracerRefresher _rtaTracerRefresher;
-		private readonly RtaEventStoreSynchronizerProcess _eventStoreSynchronizerProcess;
+		private readonly IEnumerable<IBackgroundProcess> _backgroundProcesses;
 
 		public HangfireServerStarter(
 			HangfireStarter starter,
 			IConfigReader config,
-			StateQueueWorker stateQueueWorker,
-			RtaTracerRefresher rtaTracerRefresher,
-			RtaEventStoreSynchronizerProcess eventStoreSynchronizerProcess)
+			IEnumerable<IBackgroundProcess> backgroundProcesses)
 		{
 			_starter = starter;
 			_config = config;
-			_stateQueueWorker = stateQueueWorker;
-			_rtaTracerRefresher = rtaTracerRefresher;
-			_eventStoreSynchronizerProcess = eventStoreSynchronizerProcess;
+			_backgroundProcesses = backgroundProcesses;
 		}
 
 		public void Start(IAppBuilder app)
@@ -50,9 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 			app.UseHangfireServer(
 				options,
-				_stateQueueWorker,
-				_rtaTracerRefresher,
-				_eventStoreSynchronizerProcess
+				_backgroundProcesses.ToArray()
 			);
 		}
 	}

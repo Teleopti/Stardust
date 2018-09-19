@@ -19,12 +19,12 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Analytics.Etl.CommonTest.Service
 {
 	[DomainTest]
-	public class EtlServiceHangfireEventPublisherTest : IIsolateSystem, IExtendSystem
+	public class NotReallyEtlServiceHangfireEventPublisherTest : IIsolateSystem, IExtendSystem
 	{
 		public FakeRecurringEventPublisher Publisher;
 		public FakeTenants FakeTenants;
 		public MutableNow Now;
-		public TenantTickEventPublisher TenantTickEventPublisher;
+		public RecurringEventPublishings RecurringEventPublishings;
 
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
@@ -47,12 +47,13 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 			Now.Is("2016-03-21 13:00");
 			hasTenant("t");
 
-			var target = new EtlService(null, TenantTickEventPublisher, null, Now);
-			target.EnsureTenantRecurringJobs();
-
+			RecurringEventPublishings.RemovePublishingsOfRemovedTenants();
+			RecurringEventPublishings.PublishRecurringJobs();
+			
 			Now.Is("2016-03-21 13:10");
 			Publisher.Clear();
-			target.EnsureTenantRecurringJobs();
+			RecurringEventPublishings.RemovePublishingsOfRemovedTenants();
+			RecurringEventPublishings.PublishRecurringJobs();
 
 			Publisher.HasPublishing.Should().Be.True();
 			Publisher.Publishings.Count(x => x.Tenant == "t").Should().Be.EqualTo(3);
@@ -64,11 +65,12 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 			Now.Is("2016-03-21 13:00");
 			hasTenant("t");
 
-			var target = new EtlService(null, TenantTickEventPublisher, null, Now);
-			target.EnsureTenantRecurringJobs();
+			RecurringEventPublishings.RemovePublishingsOfRemovedTenants();
+			RecurringEventPublishings.PublishRecurringJobs();
 
 			Now.Is("2016-03-21 13:09");
-			target.EnsureTenantRecurringJobs();
+			RecurringEventPublishings.RemovePublishingsOfRemovedTenants();
+			RecurringEventPublishings.PublishRecurringJobs();
 
 			Publisher.Publishings.Select(x => x.CreatedAt).Should().Have.SameValuesAs("2016-03-21 13:00".Utc());
 		}
@@ -77,8 +79,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		public void ShouldPublishCleanFailedQueue()
 		{
 			hasTenant("t");
-			var target = new EtlService(null, TenantTickEventPublisher, null, Now);
-			target.EnsureTenantRecurringJobs();
+			RecurringEventPublishings.RemovePublishingsOfRemovedTenants();
+			RecurringEventPublishings.PublishRecurringJobs();
 
 			Publisher.Publishings.First().Event.GetType().Should().Be.EqualTo<CleanFailedQueue>();
 		}
@@ -87,8 +89,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		public void ShouldPublishTenentRecurringEvent()
 		{
 			hasTenant("t");
-			var target = new EtlService(null, TenantTickEventPublisher, null, Now);
-			target.EnsureTenantRecurringJobs();
+			RecurringEventPublishings.RemovePublishingsOfRemovedTenants();
+			RecurringEventPublishings.PublishRecurringJobs();
 
 			Publisher.Publishings.Select(x => x.Event.GetType()).Should().Contain(typeof(TenantHourTickEvent));
 			Publisher.Publishings.Select(x => x.Event.GetType()).Should().Contain(typeof(TenantMinuteTickEvent));
@@ -99,13 +101,14 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		{
 			Now.Is("2016-03-21 13:00");
 			hasTenant("t");
-			var target = new EtlService(null, TenantTickEventPublisher, null, Now);
-			target.EnsureTenantRecurringJobs();
+			RecurringEventPublishings.RemovePublishingsOfRemovedTenants();
+			RecurringEventPublishings.PublishRecurringJobs();
 			Publisher.Publishings.Should().Not.Be.Empty();
 
 			Now.Is("2016-03-21 13:10");
 			FakeTenants.WasRemoved("t");
-			target.EnsureTenantRecurringJobs();
+			RecurringEventPublishings.RemovePublishingsOfRemovedTenants();
+			RecurringEventPublishings.PublishRecurringJobs();
 
 			Publisher.Publishings.Select(x => x.Tenant).Should().Not.Contain("t");
 		}
@@ -114,14 +117,14 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		public void ShouldRepublishAtStartup()
 		{
 			hasTenant("t");
-			var target = new EtlService(null, TenantTickEventPublisher, null, Now);
-			target.EnsureTenantRecurringJobs();
+			RecurringEventPublishings.RemovePublishingsOfRemovedTenants();
+			RecurringEventPublishings.PublishRecurringJobs();
 
 			Publisher.Publishings.Should().Not.Be.Empty();
 			Publisher.Clear();
 
-			target = new EtlService(null, TenantTickEventPublisher, null, Now);
-			target.EnsureTenantRecurringJobs();
+			RecurringEventPublishings.RemovePublishingsOfRemovedTenants();
+			RecurringEventPublishings.PublishRecurringJobs();
 			Publisher.Publishings.Should().Not.Be.Empty();
 		}
 	}

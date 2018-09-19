@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autofac;
+using Hangfire.Server;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Skill;
 using Teleopti.Ccc.Domain.Config;
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateQueue>().As<IStateQueueReader>().As<IStateQueueWriter>().SingleInstance().ApplyAspects();
-			builder.RegisterType<StateQueueWorker>().SingleInstance().ApplyAspects();
+			builder.RegisterType<StateQueueWorker>().AsSelf().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateQueueTenants>().SingleInstance();
 			builder.RegisterType<StateQueueUtilities>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateProcessor>().SingleInstance().ApplyAspects();
@@ -107,7 +108,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<RtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance().ApplyAspects();
 			else
 				builder.RegisterType<NoRtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance();
-			builder.RegisterType<RtaEventStoreSynchronizerProcess>().SingleInstance().ApplyAspects();
+			builder.RegisterType<RtaEventStoreSynchronizerProcess>().AsSelf().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 
 			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
 				builder.RegisterType<AgentAdherenceDayLoaderHistoricalOverview>().As<IAgentAdherenceDayLoader>().SingleInstance();
@@ -157,7 +158,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<RtaTracer>().As<IRtaTracer>().SingleInstance().ApplyAspects();
 			}
 
-			builder.RegisterType<RtaTracerRefresher>().SingleInstance().ApplyAspects();
+			builder.RegisterType<RtaTracerRefresher>().AsSelf().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 			builder.RegisterType<RtaTracerReader>().As<IRtaTracerReader>().SingleInstance();
 			builder.RegisterType<RtaTracerWriter>().As<IRtaTracerWriter>().SingleInstance();
 			builder.RegisterType<RtaTracerConfigPersister>().As<IRtaTracerConfigPersister>().SingleInstance();

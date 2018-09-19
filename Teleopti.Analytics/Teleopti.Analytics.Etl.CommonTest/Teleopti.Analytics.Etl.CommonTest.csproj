@@ -92,7 +92,7 @@
     <Compile Include="RunControllerTest.cs" />
     <Compile Include="Service\EtlJobScheduleCollectionForTest.cs" />
     <Compile Include="Service\EtlJobScheduleForTest.cs" />
-    <Compile Include="Service\EtlServiceHangfireEventPublisherTest.cs" />
+    <Compile Include="Service\NotReallyEtlServiceHangfireEventPublisherTest.cs" />
     <Compile Include="Service\ResolveTest.cs" />
     <Compile Include="Service\SchedulePriorityTest.cs" />
     <Compile Include="Transformer\AbsenceTransformerTest.cs" />

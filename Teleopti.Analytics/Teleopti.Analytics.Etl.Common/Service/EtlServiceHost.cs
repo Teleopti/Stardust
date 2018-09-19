@@ -14,7 +14,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 		private IContainer _container;
 
-		public void SimplyEnsureRecurringJobs()
+		public void SimplyTriggerRecurringJobs()
 		{
 			XmlConfigurator.Configure();
 			_retryPolicy = new RetryPolicy<retryingOnAllStrategy>(14, TimeSpan.FromSeconds(4));
@@ -22,7 +22,6 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			_retryPolicy.ExecuteAction(() =>
 			{
 				var service = buildEtlService();
-				service.EnsureTenantRecurringJobs();
 				service.TriggerRecurringJobs();
 			});
 		}

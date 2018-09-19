@@ -1,6 +1,6 @@
 using Autofac;
+using Hangfire.Server;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence;
@@ -43,7 +43,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.SingleInstance();
 
 			builder.Register(c => c.Resolve<HangfireEventPublisher>()).As<IRecurringEventPublisher>().SingleInstance();
-			builder.RegisterType<TenantTickEventPublisher>().SingleInstance();
+			if (!_configuration.Args().BehaviorTestServer)
+				builder.RegisterType<RecurringEventPublishingUpdater>().AsSelf().As<IBackgroundProcess>().SingleInstance();
+			builder.RegisterType<RecurringEventPublishings>().SingleInstance();
 			builder.RegisterType<AllTenantRecurringEventPublisher>().SingleInstance();
 
 			builder.RegisterType<CannotPublishToHangfire>().As<IHangfireEventClient>().SingleInstance();
