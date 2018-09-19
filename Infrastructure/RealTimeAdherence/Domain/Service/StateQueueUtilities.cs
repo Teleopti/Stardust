@@ -23,14 +23,17 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service
 			var attempts = (int) (timeout.TotalMilliseconds / interval.TotalMilliseconds);
 			var batchCount = Policy.HandleResult<int>(t => t > 0)
 				.WaitAndRetry(attempts, attempt => interval)
-				.Execute(() => _unitOfWork.Current()
-					.Session()
-					.CreateSQLQuery(@"SELECT COUNT(1) FROM Rta.StateQueue")
-					.UniqueResult<int>()
-				);
+				.Execute(BatchesInStateQueue);
 			if (batchCount > 0)
 				throw new WaitForDequeueException($"{batchCount} batches still in state queue after waiting {timeout.TotalSeconds} seconds");
 		}
+
+		[TestLog]
+		protected virtual int BatchesInStateQueue() => 
+			_unitOfWork.Current()
+				.Session()
+				.CreateSQLQuery(@"SELECT COUNT(1) FROM Rta.StateQueue")
+				.UniqueResult<int>();
 
 		public class WaitForDequeueException : Exception
 		{
