@@ -27,8 +27,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.SingleInstance()
 				.As<ILinearTrendCalculator>();
 			builder.RegisterType<IntradayForecaster>()
-				.SingleInstance()
-				.As<IIntradayForecaster>();
+				.SingleInstance();
 			builder.RegisterType<OutlierRemover>()
 				.SingleInstance();
 			builder.RegisterType<ForecastWorkloadEvaluator>()

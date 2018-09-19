@@ -19,17 +19,222 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 {
 	[DomainTest]
-	public class ForecastHandlingTimeControllerTest : IExtendSystem
+	public class ForecastCreateControllerTest : IExtendSystem
 	{
 		public ForecastController Target;
 		public FakeSkillRepository SkillRepository;
+		public FakeSkillDayRepository SkillDayRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeStatisticRepository StatisticRepository;
 		public FakeWorkloadRepository WorkloadRepository;
+		public FakeForecastDayOverrideRepository ForecastDayOverrideRepository;
+
+		private const double tolerance = 0.000001d;
 
 		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
 			extend.AddService<ForecastController>();
+		}
+
+		[Test]
+		public void ShouldHaveClosedAndOpenDayWhenForecasting()
+		{
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
+			var openDay = new DateOnly(2018, 05, 04);
+			var closedDay = new DateOnly(2018, 05, 05);
+			var workloadDayTemplate = new WorkloadDayTemplate();
+			workloadDayTemplate.Create(openDay.Date.DayOfWeek.ToString(), DateTime.UtcNow, workload,
+				new List<TimePeriod> { new TimePeriod(10, 12) });
+			workload.SetTemplate(openDay.Date.DayOfWeek, workloadDayTemplate);
+
+			SkillRepository.Add(skill);
+			WorkloadRepository.Add(workload);
+			ScenarioRepository.Has(scenario);
+			var forecastInput = new ForecastInput
+			{
+				ForecastStart = openDay.Date,
+				ForecastEnd = closedDay.Date,
+				ScenarioId = scenario.Id.Value,
+				WorkloadId = workload.Id.Value
+			};
+			StatisticRepository.Has(workload.QueueSourceCollection.First(), new List<IStatisticTask>
+			{
+				new StatisticTask
+				{
+					Interval = openDay.AddDays(-10).Date.AddHours(10),
+					StatOfferedTasks = 10
+				}
+			});
+			var result = (OkNegotiatedContentResult<ForecastViewModel>)Target.Forecast(forecastInput);
+
+			result.Should().Be.OfType<OkNegotiatedContentResult<ForecastViewModel>>();
+			var forecastDays = result.Content.ForecastDays;
+			forecastDays.Count.Should().Be(2);
+			forecastDays.First().IsOpen.Should().Be.True();
+			forecastDays.First().IsInModification.Should().Be.True();
+			forecastDays.Last().IsOpen.Should().Be.False();
+			forecastDays.Last().IsInModification.Should().Be.False();
+		}
+
+
+		[Test]
+		public void ShouldForecastUsingExistingCampaign()
+		{
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
+			var openDay = new DateOnly(2018, 05, 04);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, workload, openDay, scenario);
+			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new[] { skillDay }, new DateOnlyPeriod());
+			var workloadDay = skillDay.WorkloadDayCollection.Single();
+			workloadDay.CampaignTasks = new Percent(0.5);
+			workloadDay.CampaignTaskTime = new Percent(0.6);
+			workloadDay.CampaignAfterTaskTime = new Percent(0.7);
+
+			SkillRepository.Add(skill);
+			WorkloadRepository.Add(workload);
+			ScenarioRepository.Has(scenario);
+			SkillDayRepository.Add(skillDay);
+
+			var forecastInput = new ForecastInput
+			{
+				ForecastStart = openDay.Date,
+				ForecastEnd = openDay.Date,
+				ScenarioId = scenario.Id.Value,
+				WorkloadId = workload.Id.Value
+			};
+			StatisticRepository.Has(workload.QueueSourceCollection.First(), new List<IStatisticTask>
+			{
+				new StatisticTask
+				{
+					Interval = openDay.AddDays(-10).Date.AddHours(10),
+					StatOfferedTasks = 10
+				}
+			});
+			var result = (OkNegotiatedContentResult<ForecastViewModel>)Target.Forecast(forecastInput);
+			var forecastDay = result.Content.ForecastDays.Single();
+			forecastDay.HasOverride.Should().Be.False();
+			forecastDay.HasCampaign.Should().Be.True();
+			forecastDay.CampaignTasksPercentage.Should().Be(new Percent(0.5).Value);
+			forecastDay.TotalTasks.Should().Be(forecastDay.Tasks * 1.5);
+			forecastDay.TotalAverageTaskTime.Should().Be(forecastDay.AverageTaskTime * 1.6);
+			forecastDay.TotalAverageAfterTaskTime.Should().Be(forecastDay.AverageAfterTaskTime * 1.7);
+			forecastDay.IsInModification.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldForecastUsingExistingOverride()
+		{
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
+			var openDay = new DateOnly(2018, 05, 04);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, workload, openDay, scenario);
+			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new[] { skillDay }, new DateOnlyPeriod());
+
+			var workloadDay = skillDay.WorkloadDayCollection.Single();
+			ForecastDayOverrideRepository.Add(new ForecastDayOverride(openDay, workload, scenario)
+			{
+				OriginalTasks = workloadDay.Tasks,
+				OriginalAverageTaskTime = workloadDay.AverageTaskTime,
+				OriginalAverageAfterTaskTime = workloadDay.AverageAfterTaskTime,
+				OverriddenTasks = 100,
+				OverriddenAverageTaskTime = TimeSpan.FromSeconds(150),
+				OverriddenAverageAfterTaskTime = TimeSpan.FromSeconds(200)
+			});
+
+			SkillRepository.Add(skill);
+			WorkloadRepository.Add(workload);
+			ScenarioRepository.Has(scenario);
+			SkillDayRepository.Add(skillDay);
+
+			var forecastInput = new ForecastInput
+			{
+				ForecastStart = openDay.Date,
+				ForecastEnd = openDay.Date,
+				ScenarioId = scenario.Id.Value,
+				WorkloadId = workload.Id.Value
+			};
+			StatisticRepository.Has(workload.QueueSourceCollection.First(), new List<IStatisticTask>
+			{
+				new StatisticTask
+				{
+					Interval = openDay.AddDays(-10).Date.AddHours(10),
+					StatOfferedTasks = 10
+				}
+			});
+			var result = (OkNegotiatedContentResult<ForecastViewModel>)Target.Forecast(forecastInput);
+			var forecastDay = result.Content.ForecastDays.Single();
+			forecastDay.HasCampaign.Should().Be.False();
+			forecastDay.HasOverride.Should().Be.True();
+			forecastDay.IsInModification.Should().Be.True();
+			Assert.That(forecastDay.TotalTasks, Is.EqualTo(100d).Within(tolerance));
+			Assert.That(forecastDay.TotalAverageTaskTime, Is.EqualTo(150d).Within(tolerance));
+			Assert.That(forecastDay.TotalAverageAfterTaskTime, Is.EqualTo(200d).Within(tolerance));
+			Assert.That(forecastDay.OverrideTasks, Is.EqualTo(100d).Within(tolerance));
+			Assert.That(forecastDay.OverrideAverageTaskTime, Is.EqualTo(150d).Within(tolerance));
+			Assert.That(forecastDay.OverrideAverageAfterTaskTime, Is.EqualTo(200d).Within(tolerance));
+		}
+
+		[Test]
+		public void ShouldForecastUsingExistingCampaignAndOverride()
+		{
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
+			var openDay = new DateOnly(2018, 05, 04);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, workload, openDay, scenario);
+			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new[] { skillDay }, new DateOnlyPeriod());
+
+			var workloadDay = skillDay.WorkloadDayCollection.Single();
+			workloadDay.CampaignTasks = new Percent(0.5);
+			workloadDay.CampaignTaskTime = new Percent(0.6);
+			workloadDay.CampaignAfterTaskTime = new Percent(0.7);
+
+			ForecastDayOverrideRepository.Add(new ForecastDayOverride(openDay, workload, scenario)
+			{
+				OriginalTasks = workloadDay.Tasks,
+				OriginalAverageTaskTime = workloadDay.AverageTaskTime,
+				OriginalAverageAfterTaskTime = workloadDay.AverageAfterTaskTime,
+				OverriddenTasks = 100,
+				OverriddenAverageTaskTime = TimeSpan.FromSeconds(150),
+				OverriddenAverageAfterTaskTime = TimeSpan.FromSeconds(200)
+			});
+
+			SkillRepository.Add(skill);
+			WorkloadRepository.Add(workload);
+			ScenarioRepository.Has(scenario);
+			SkillDayRepository.Add(skillDay);
+
+			var forecastInput = new ForecastInput
+			{
+				ForecastStart = openDay.Date,
+				ForecastEnd = openDay.Date,
+				ScenarioId = scenario.Id.Value,
+				WorkloadId = workload.Id.Value
+			};
+			StatisticRepository.Has(workload.QueueSourceCollection.First(), new List<IStatisticTask>
+			{
+				new StatisticTask
+				{
+					Interval = openDay.AddDays(-10).Date.AddHours(10),
+					StatOfferedTasks = 10
+				}
+			});
+			var result = (OkNegotiatedContentResult<ForecastViewModel>)Target.Forecast(forecastInput);
+			var forecastDay = result.Content.ForecastDays.Single();
+			forecastDay.HasCampaign.Should().Be.True();
+			forecastDay.HasOverride.Should().Be.True();
+			forecastDay.CampaignTasksPercentage.Should().Be(new Percent(0.5).Value);
+			forecastDay.IsInModification.Should().Be(true);
+			Assert.That(forecastDay.TotalTasks, Is.EqualTo(100d).Within(tolerance));
+			Assert.That(forecastDay.TotalAverageTaskTime, Is.EqualTo(150d).Within(tolerance));
+			Assert.That(forecastDay.TotalAverageAfterTaskTime, Is.EqualTo(200d).Within(tolerance));
+			Assert.That(forecastDay.OverrideTasks, Is.EqualTo(100d).Within(tolerance));
+			Assert.That(forecastDay.OverrideAverageTaskTime, Is.EqualTo(150d).Within(tolerance));
+			Assert.That(forecastDay.OverrideAverageAfterTaskTime, Is.EqualTo(200d).Within(tolerance));
 		}
 
 		[Test]

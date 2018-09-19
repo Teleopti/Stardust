@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IAuthorization _authorization;
 		private readonly IFetchAndFillSkillDays _fetchAndFillSkillDays;
 		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
-		private readonly IIntradayForecaster _intradayForecaster;
+		private readonly IntradayForecaster _intradayForecaster;
 		private readonly IForecastDayOverrideRepository _forecastDayOverrideRepository;
 		private readonly IQueueStatisticsViewModelFactory _queueStatisticsViewModelFactory;
 
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			IAuthorization authorization,
 			IFetchAndFillSkillDays fetchAndFillSkillDays,
 			IHistoricalPeriodProvider historicalPeriodProvider,
-			IIntradayForecaster intradayForecaster,
+			IntradayForecaster intradayForecaster,
 			IForecastDayOverrideRepository forecastDayOverrideRepository,
 			IQueueStatisticsViewModelFactory queueStatisticsViewModelFactory)
 		{

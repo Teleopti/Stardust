@@ -216,7 +216,10 @@
     </Compile>
     <Compile Include="Areas\Anywhere\BusinessUnitControllerTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastControllerTest.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\ForecastHandlingTimeControllerTest.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\ForecastLoadControllerTest.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\ForecastModifyControllerTest.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\ForecastSaveControllerTest.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\ForecastCreateControllerTest.cs" />
     <Compile Include="Areas\Gamification\GamificationCalculationControllerTest.cs" />
     <Compile Include="Areas\Gamification\GamificationControllerPersistTest.cs" />
     <Compile Include="Areas\Gamification\GamificationControllerReadTest.cs" />

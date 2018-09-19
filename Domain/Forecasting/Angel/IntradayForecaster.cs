@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.Forecasting.Angel.LegacyWrappers;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -8,10 +10,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
-	public class IntradayForecaster : IIntradayForecaster
+	public class IntradayForecaster 
 	{
 		private const int smoothing = 5;
 		private readonly ILoadStatistics _loadStatistics;
+		public ILog Logger = LogManager.GetLogger(typeof(IntradayForecaster));
+		private readonly Stopwatch _stopwatch = new Stopwatch();
 
 		public IntradayForecaster(ILoadStatistics loadStatistics)
 		{
@@ -20,7 +24,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 		public void Apply(IWorkload workload, DateOnlyPeriod templatePeriod, IEnumerable<IWorkloadDayBase> futureWorkloadDays)
 		{
-			var sortedTemplateTaskPeriodsDic = CalculatePattern(workload, templatePeriod);
+			_stopwatch.Start();
+			var sortedTemplateTaskPeriodsDic = calculatePattern(workload, templatePeriod);
 
 			foreach (var futureWorkloadDay in futureWorkloadDays)
 			{
@@ -29,11 +34,14 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 				if(!(futureWorkloadDay is WorkloadDay workloadDay)) continue;
 				workloadDay.TemplateReference.TemplateName = TemplateReference.WebTemplateKey;
 			}
+			_stopwatch.Stop();
 		}
 
-		public IDictionary<DayOfWeek, IEnumerable<ITemplateTaskPeriod>> CalculatePattern(IWorkload workload, DateOnlyPeriod templatePeriod)
+		private IDictionary<DayOfWeek, IEnumerable<ITemplateTaskPeriod>> calculatePattern(IWorkload workload, DateOnlyPeriod templatePeriod)
 		{
+			Logger.Debug($"Before _loadStatistics.LoadWorkloadDay: {_stopwatch.ElapsedMilliseconds} ms");
 			var workloadDays = _loadStatistics.LoadWorkloadDay(workload, templatePeriod).ToLookup(k => k.CurrentDate.DayOfWeek);
+			Logger.Debug($"After _loadStatistics.LoadWorkloadDay: {_stopwatch.ElapsedMilliseconds} ms");
 
 			var sortedTemplateTaskPeriodsDic = new Dictionary<DayOfWeek, IEnumerable<ITemplateTaskPeriod>>();
 			foreach (DayOfWeek day in Enum.GetValues(typeof (DayOfWeek)))
@@ -45,6 +53,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 		private IEnumerable<ITemplateTaskPeriod> createExtendedTaskPeriodList(IEnumerable<IWorkloadDayBase> workloadDays, DateTime startTimeTemplate)
 		{
+			Logger.Debug($"Before createExtendedTaskPeriodList: {_stopwatch.ElapsedMilliseconds} ms");
 			var taskPeriods = new List<ITemplateTaskPeriod>();
 			foreach (var workloadDay in workloadDays)
 			{
@@ -68,6 +77,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 					taskPeriods.Add(templateTaskPeriod);
 				}
 			}
+			Logger.Debug($"After createExtendedTaskPeriodList: {_stopwatch.ElapsedMilliseconds} ms");
 			return taskPeriods;
 		}
 
@@ -84,6 +94,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 		private IEnumerable<ITemplateTaskPeriod> calculateTemplateTaskPeriods(IEnumerable<IWorkloadDayBase> workloadDaysToCalculateTemplate, IWorkload workload)
 		{
+			Logger.Debug($"Before calculateTemplateTaskPeriods: {_stopwatch.ElapsedMilliseconds} ms");
 			var raptorTimeZoneInfo = workload.Skill.TimeZone;
 			var startDateTime = raptorTimeZoneInfo.SafeConvertTimeToUtc(SkillDayTemplate.BaseDate.Date);
 
@@ -117,6 +128,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 			var list = templateTaskPeriods.OrderBy(tp => tp.Period.StartDateTime).ToList();
 			Smoothing(list);
+
+			Logger.Debug($"After calculateTemplateTaskPeriods: {_stopwatch.ElapsedMilliseconds} ms");
 			return list;
 		}
 	}

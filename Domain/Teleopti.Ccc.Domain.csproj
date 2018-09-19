@@ -2092,7 +2092,6 @@
     <Compile Include="DummyDataSource.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\MethodAccuracy.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\WorkloadAccuracy.cs" />
-    <Compile Include="Forecasting\Angel\IIntradayForecaster.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumesMediumTermWithDayInMonth.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumesShortTerm.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumesMediumTerm.cs" />
