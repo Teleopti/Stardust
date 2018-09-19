@@ -1,6 +1,7 @@
 using Autofac;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.Toggle;
 
 namespace Teleopti.Ccc.IocCommon
 {
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.IocCommon
 		{
 			builder.RegisterInstance(_iocArgs.ConfigReader).As<IConfigReader>().SingleInstance();
 			builder.RegisterModule(new MbCacheModule(_iocArgs));
+			builder.RegisterModule(new ToggleNetModule(_iocArgs));
 		}
 	}
 }
