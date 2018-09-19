@@ -22,15 +22,15 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service
 			{
 				var interval = TimeSpan.FromMilliseconds(100);
 				var attempts = (int) (timeout.TotalMilliseconds / interval.TotalMilliseconds);
-				var queueIsEmpty = Policy.HandleResult(false)
+				var batchCount = Policy.HandleResult<int>(t => t > 0)
 					.WaitAndRetry(attempts, attempt => interval)
 					.Execute(() => uow.Current()
 									   .Session()
 									   .CreateSQLQuery(@"SELECT COUNT(1) FROM Rta.StateQueue")
-									   .UniqueResult<int>() == 0
+									   .UniqueResult<int>()
 					);
-				if (!queueIsEmpty)
-					throw new WaitForDequeueException($"Batches still in state queue after waiting {timeout.TotalSeconds} seconds");
+				if (batchCount > 0)
+					throw new WaitForDequeueException($"{batchCount} batches still in state queue after waiting {timeout.TotalSeconds} seconds");
 			});
 		}
 

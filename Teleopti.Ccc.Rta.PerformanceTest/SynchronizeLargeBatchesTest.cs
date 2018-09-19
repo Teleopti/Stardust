@@ -1,12 +1,8 @@
-﻿using System.Threading;
+﻿using System;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.Infrastructure.Hangfire;
+using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Rta.PerformanceTest.Code;
-using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 
 
 namespace Teleopti.Ccc.Rta.PerformanceTest
@@ -16,6 +12,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 	public class SynchronizeLargeBatchesTest
 	{
 		public StatesSender States;
+		public HangfireUtilities Hangfire;
+		public StateQueueUtilities StateQueue;
 		public TestCommon.PerformanceTest.PerformanceTest PerformanceTest;
 		public SynchronzieWaiter Waiter;
 
@@ -27,6 +25,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 				States.SendAllAsLargeBatches();
 				Waiter.WaitForSyncronize();
 			});
+			StateQueue.WaitForDequeue(TimeSpan.FromMinutes(15));
+			Hangfire.WaitForQueue();
 		}
 	}
 }
