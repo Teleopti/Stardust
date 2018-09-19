@@ -1,4 +1,3 @@
-using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 
@@ -15,13 +14,18 @@ namespace Teleopti.Ccc.IocCommon
 			_toggleManager = toggleManager;
 		}
 
+		protected IocConfiguration()
+		{
+			//just to support some old mock tests...
+		}
+
 		public void FillToggles()
 		{
 			var toggleQuerier = _toggleManager as ToggleQuerier;
 			toggleQuerier?.FillAllToggles();
 		}
 
-		public bool Toggle(Toggles toggle)
+		public virtual bool Toggle(Toggles toggle)
 		{
 			return _toggleManager != null && _toggleManager.IsEnabled(toggle);
 		}
