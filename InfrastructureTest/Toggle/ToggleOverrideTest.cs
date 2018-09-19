@@ -63,7 +63,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		}
 
 		[Test]
-		[Ignore("To be fixed for #77584")]
 		public void ShouldCacheResultWhenCreatingContainer()
 		{
 			SetupFixtureForAssembly.RestoreCcc7Database();
@@ -92,7 +91,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		}
 		
 		[Test]
-		[Ignore("To be fixed for #77584")]
 		public void ShouldCacheResultWhenUsingContainerInRuntime()
 		{
 			SetupFixtureForAssembly.RestoreCcc7Database();

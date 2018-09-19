@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<ServiceLocatorModule>();
 			builder.RegisterModule<LogModule>();
 			builder.RegisterModule<JsonSerializationModule>();
-			builder.RegisterModule(new ToggleNetModule(_configuration.Args()));
+			builder.RegisterModule(ToggleNetModule.CreateForRuntimeContainer(_configuration));
 			builder.RegisterModule(new MessageBrokerModule(_configuration));
 			if (_configuration.Args().WebByPassDefaultPermissionCheck_37984)
 			{
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.IocCommon
 		public static IToggleManager ToggleManagerForIoc(IocArgs iocArgs)
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new ToggleNetModule(iocArgs));
+			builder.RegisterModule(ToggleNetModule.CreateForContainerUsedInSetup(iocArgs));
 			using (var container = builder.Build())
 				return container.Resolve<IToggleManager>();
 		}
