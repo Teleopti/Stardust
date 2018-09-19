@@ -32,7 +32,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpGet, Route("Toggle/AllToggleNames")]
 		public JsonResult<IEnumerable<string>> AllToggleNamesWithoutOverrides()
 		{
-			var toggles = new HashSet<string>(Enum.GetValues(typeof(Toggles)).Cast<Toggles>().Select(x=>x.ToString()));
+			var toggles = new HashSet<string>(Enum.GetValues(typeof(Toggles)).Cast<Toggles>().Select(x=>x.ToString())).OrderBy(x=>x);
 			var overrides = new HashSet<string>(_fetchToggleOverride.OverridenValues().Select(x => x.Key));
 			return Json(toggles.Except(overrides));
 		}
