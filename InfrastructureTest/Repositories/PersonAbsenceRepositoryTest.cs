@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
@@ -332,17 +332,36 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldCheckIfAnyAgentsScheduled()
 		{
-			var bu = new BusinessUnit("bu");
-			PersistAndRemoveFromUnitOfWork(bu);
+			var team = TeamFactory.CreateTeam("team", "site");
+			var contract = new Contract("contract");
+			var partTimePercentage = new PartTimePercentage("partTimePercentage");
+			var contractSchedule = ContractScheduleFactory.CreateContractSchedule("contractSchedule");
+
+			PersistAndRemoveFromUnitOfWork(team.Site);
+			PersistAndRemoveFromUnitOfWork(team);
+			PersistAndRemoveFromUnitOfWork(contract);
+			PersistAndRemoveFromUnitOfWork(partTimePercentage);
+			PersistAndRemoveFromUnitOfWork(contractSchedule);
+
+			var personPeriod = new PersonPeriod(DateOnly.Today.AddDays(-1), new PersonContract(contract, partTimePercentage, contractSchedule), team);
+			agent.AddPersonPeriod(personPeriod);
+			PersistAndRemoveFromUnitOfWork(personPeriod);
+			PersistAndRemoveFromUnitOfWork(agent);
+
+			var buWithAgentScheduled = team.Site.BusinessUnit;
 
 			var scenario = new Scenario("scenario");
-			scenario.SetBusinessUnit(bu);
+			scenario.SetBusinessUnit(buWithAgentScheduled);
 			PersistAndRemoveFromUnitOfWork(scenario);
 
 			var ass = new PersonAbsence(agent, scenario, new AbsenceLayer(absenceSick, new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
 			PersistAndRemoveFromUnitOfWork(ass);
 
-			new PersonAbsenceRepository(CurrUnitOfWork).IsThereScheduledAgents(bu.Id.Value).Should().Be.True();
+			var buWithoutAgentScheduled = new BusinessUnit("businessUnit");
+			PersistAndRemoveFromUnitOfWork(buWithoutAgentScheduled);
+
+			new PersonAbsenceRepository(CurrUnitOfWork).IsThereScheduledAgents(buWithoutAgentScheduled.Id.Value).Should().Be.False();
+			new PersonAbsenceRepository(CurrUnitOfWork).IsThereScheduledAgents(buWithAgentScheduled.Id.Value).Should().Be.True();
 		}
 
 		private static void verifyRelatedObjectsAreEagerlyLoaded(IEnumerable<IPersonAbsence> personAbsenceCollection)

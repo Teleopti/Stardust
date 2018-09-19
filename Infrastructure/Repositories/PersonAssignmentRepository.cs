@@ -156,11 +156,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
  INNER JOIN [Site] s ON t.[Site] = s.Id
  INNER JOIN BusinessUnit bu ON s.BusinessUnit = bu.Id
  WHERE bu.Id = :{nameof(businessUnitId)})
-SELECT 1 ELSE SELECT 0";
+SELECT CAST(1 AS BIT) ELSE SELECT CAST(0 AS BIT)";
 			var result = Session.CreateSQLQuery(sql)
 				.SetParameter(nameof(businessUnitId), businessUnitId)
-				.UniqueResult<int>();
-			return result > 0;
+				.UniqueResult<bool>();
+			return result;
 		}
 	}
 }

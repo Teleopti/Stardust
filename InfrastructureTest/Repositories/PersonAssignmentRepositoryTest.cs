@@ -401,9 +401,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var ass = CreateAggregateWithCorrectBusinessUnit();
 			new PersonAssignmentRepository(UnitOfWork).Add(ass);
+
+			var buWithoutAgentScheduled = new BusinessUnit("businessUnit");
+			PersistAndRemoveFromUnitOfWork(buWithoutAgentScheduled);
+
 			Session.Flush();
 
 			_rep.IsThereScheduledAgents(site.BusinessUnit.Id.Value).Should().Be.True();
+			_rep.IsThereScheduledAgents(buWithoutAgentScheduled.Id.Value).Should().Be.False();
 		}
 
 		protected override Repository<IPersonAssignment> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
