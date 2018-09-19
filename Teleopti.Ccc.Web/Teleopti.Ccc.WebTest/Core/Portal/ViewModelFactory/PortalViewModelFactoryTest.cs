@@ -285,6 +285,16 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			result.FirstOrDefault(r => r.Title == Resources.TeamSchedule)?.Action.Should().Be("NewIndex");
 		}
 
+		public void ShouldIndicateGrantChatBotEnabled()
+		{
+			setupLoggedOnUser();
+			setLicense("default");
+			PermissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ChatBot);
+
+			var result = Target.CreatePortalViewModel();
+			result.GrantEnabled.Should().Be.True();
+		}
+
 		private void setLicense(string name)
 		{
 			CurrentDataSource.FakeName(name);

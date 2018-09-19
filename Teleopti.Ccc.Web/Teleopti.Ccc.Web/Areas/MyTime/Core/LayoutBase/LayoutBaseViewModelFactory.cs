@@ -50,8 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 				Footer = string.Empty,
 				Title = title,
 				FixedDate = fixedDate,
-				UserTimezoneOffsetMinute = (int) offset.TotalMinutes,
-				GrantEnabled = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ChatBot)
+				UserTimezoneOffsetMinute = (int) offset.TotalMinutes
 			};
 			
 			if (dayLightSavingAdjustment != null)

@@ -107,59 +107,6 @@ else
 			</div>
 		</div>
 	</div>
-@if (ViewBag.LayoutBase.GrantEnabled)
-{
-	<script type="text/javascript">
-		(function () {
-			const headerHeight = '38px';
-			const indicatorWidth = '120px';
-			const availableClientWidth = document.documentElement.clientWidth;
-			const availableClientHeight = (document.documentElement.clientHeight - 100);
-			const chatbotwidth = (availableClientWidth > 450 ? 430 : availableClientWidth - 20) + 'px';
-			const expectedHeight = (availableClientHeight > 500 ? 400 : availableClientHeight) + 'px';
-
-			var div = document.createElement("div");
-			document.getElementsByTagName('body')[0].appendChild(div);
-			div.outerHTML = "<div id='botDiv' class='chatbox' style='width: " + indicatorWidth + "; height: " + headerHeight + "; z-index: 10000;'>"
-				+ "<div id='botIndicator' style='height: " + headerHeight + "; width: " + indicatorWidth + ";'>Grant bot &gt;&gt;</div>"
-				+ "<div id='grantBot' style='width: 100%; display: none;'></div>"
-				+ "</div>";
-
-			BotChat.App({
-				directLine: { secret: '4iLsDqwxH7w.cwA.GSo.KqnAG1hrW3hA4QIE7rCt4cFl3qnXN0lBybxUMh7MSTw' },
-				user: { id: 'userid' },
-				bot: { id: 'botid' },
-				resize: 'detect',
-				chatTitle: 'Grant bot',
-				showUploadButton: false
-			}, document.getElementById("grantBot"));
-
-			document.querySelector("#grantBot .wc-header").setAttribute("id", "chatbotHeader");
-
-			document.getElementById("chatbotHeader").addEventListener("click",
-				function(e) {
-					var botDiv = document.getElementById("botDiv");
-					botDiv.style.height = headerHeight;
-					botDiv.style.width = indicatorWidth;
-
-					document.getElementById("grantBot").style.display = "none";
-					document.getElementById("botIndicator").style.display = "block";
-				}
-			);
-
-			document.getElementById("botIndicator").addEventListener("click",
-				function(e) {
-					var botDiv = document.getElementById("botDiv");
-					botDiv.style.height = expectedHeight;
-					botDiv.style.width = chatbotwidth;
-
-					document.getElementById("grantBot").style.display = 'block';
-					document.getElementById("botIndicator").style.display = "none";
-				}
-			);
-		}());
-	</script>
-}
 	<div id="dialog"></div>
 	<div id="modal-disable"></div>
 	<span id="notifyLogger" style="display: none"></span>
