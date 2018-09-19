@@ -27,7 +27,7 @@ namespace Teleopti.Wfm.Api.Test
 {
 	public class ApiTestAttribute : DomainTestAttribute
 	{
-		protected override void Extend(IExtend extend, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			base.Extend(extend, configuration);
 

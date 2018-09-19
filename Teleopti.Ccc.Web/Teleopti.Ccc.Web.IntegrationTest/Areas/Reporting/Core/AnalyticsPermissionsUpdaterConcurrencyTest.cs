@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Reporting.Core
 		public IPersonRepository PersonRepository;
 		public IAnalyticsPermissionsUpdater Target;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<PermissionsConverter>();
 			extend.AddService<AnalyticsPermissionsUpdater>();

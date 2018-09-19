@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class AnalyticsUnitOfWorkModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public AnalyticsUnitOfWorkModule(IIocConfiguration configuration)
+		public AnalyticsUnitOfWorkModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

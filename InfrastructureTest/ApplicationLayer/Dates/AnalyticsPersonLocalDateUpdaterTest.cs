@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Dates
 		public AnalyticsDatabase AnalyticsDatabase;
 		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<AnalyticsPersonLocalDateUpdater>();
 		}

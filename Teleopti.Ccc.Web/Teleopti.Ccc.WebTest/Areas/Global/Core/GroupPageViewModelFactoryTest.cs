@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 		public FakePersonRepository PersonRepository;
 		public ITeamRepository TeamRepository;
 
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<GroupPageViewModelFactory>();
 		}

@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class EventHandlersModule : Module
 	{
-		private readonly IIocConfiguration _config;
+		private readonly IocConfiguration _config;
 
-		public EventHandlersModule(IIocConfiguration config)
+		public EventHandlersModule(IocConfiguration config)
 		{
 			_config = config;
 		}

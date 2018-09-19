@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 {
 	public class UpdateScheduleModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public UpdateScheduleModule(IIocConfiguration configuration)
+		public UpdateScheduleModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

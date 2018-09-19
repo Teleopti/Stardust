@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public BackoutScheduleChangeCommandHandler Target;
 		public FakeEventPublisher EventPublisher;
 
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<BackoutScheduleChangeCommandHandler>();
 		}

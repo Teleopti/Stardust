@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 	[Ignore("Sometimes out of memory")]
 	public class ScheduleProjectionReadOnlyPersisterConcurrencyTest : IExtendSystem
 	{		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<TheService>();
 		}

@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core.IoC
 {
 	public class MartAreaModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public MartAreaModule(IIocConfiguration configuration)
+		public MartAreaModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

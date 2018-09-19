@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public IJsonDeserializer Deserializer;
 		public FakeHandler Handler;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<FakeHandler>();
 		}

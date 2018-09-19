@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class WebModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public WebModule(IIocConfiguration configuration)
+		public WebModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

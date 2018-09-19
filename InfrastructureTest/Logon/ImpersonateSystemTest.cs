@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Logon
 		public WithUnitOfWork UnitOfWork;
 		public FakeMessageSender Messages;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<Service>();
 		}

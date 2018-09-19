@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Logon
 		public IUserTimeZone TimeZone;
 		public IUserCulture Culture;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<Service>();
 		}

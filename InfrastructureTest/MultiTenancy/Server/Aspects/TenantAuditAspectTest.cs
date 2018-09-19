@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Aspects
 		public ICurrentHttpContext CurrentHttpContext;
 
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<TestAuditService>();
 		}

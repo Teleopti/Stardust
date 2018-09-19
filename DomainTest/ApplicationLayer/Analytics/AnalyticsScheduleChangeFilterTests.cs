@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Analytics
 		private Scenario notReportableScenario;
 		private Scenario defaultScenario;
 
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<AnalyticsScheduleChangeForAllReportableScenariosFilter>();
 		}

@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
     public class EncryptionModule : Module
     {
-	    private readonly IIocConfiguration _configuration;
+	    private readonly IocConfiguration _configuration;
 
-	    public EncryptionModule(IIocConfiguration configuration)
+	    public EncryptionModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

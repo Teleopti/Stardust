@@ -4,7 +4,7 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Ccc.IocCommon
 {
-	public class IocConfiguration : IIocConfiguration
+	public class IocConfiguration
 	{
 		private readonly IocArgs _args;
 		private readonly IToggleManager _toggleManager;

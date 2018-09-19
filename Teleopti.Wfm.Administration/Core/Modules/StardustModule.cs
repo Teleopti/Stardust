@@ -7,9 +7,9 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 {
 	public class StardustModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public StardustModule(IIocConfiguration configuration)
+		public StardustModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

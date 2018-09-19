@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		public GamificationController Target;
 		
 				
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddModule(new WebModule(configuration, null));
 		}

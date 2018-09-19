@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			// You can argue that intervalB should be higher than 0.75 as agent1 could spend almost all his time on A. In this case we have lost 0.25 resources in total
 		}
 
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<ResourceCalculateWithNewContext>();
 		}

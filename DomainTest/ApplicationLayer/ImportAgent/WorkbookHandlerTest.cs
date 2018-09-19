@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public FakeTenants FindTenantByName;
 		private AgentFileTemplate _agentFileTemplate;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<FakeDatabase>();
 			extend.AddService<FakeStorage>();

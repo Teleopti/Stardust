@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 	[InfrastructureTest]
 	public class AspectsTest : IExtendSystem
 	{		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<AspectedService>();
 			extend.AddService<Aspect1Attribute.Aspect1>();

@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		public IEventPublisher EventPublisher;
 		public ICurrentBusinessUnit CurrentBusinessUnit;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<WithUnitOfWorkWithRecurringEvents>();
 			extend.AddService<SyncAllEventPublisher>();

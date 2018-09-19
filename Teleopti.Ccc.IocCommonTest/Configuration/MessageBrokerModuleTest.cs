@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			return builder.Build();
 		}
 
-		private IContainer BuildContainer(IIocConfiguration configuration)
+		private IContainer BuildContainer(IocConfiguration configuration)
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new CommonModule(configuration));

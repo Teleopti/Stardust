@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				.Be.EqualTo(scheduleTag);
 		}	
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<ClearMainShiftCommandHandler>();
 			extend.AddModule(new AssemblerModule());

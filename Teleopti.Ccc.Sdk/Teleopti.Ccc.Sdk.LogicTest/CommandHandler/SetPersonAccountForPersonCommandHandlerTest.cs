@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			    Assert.Throws<FaultException>(() => Target.Handle(setPersonAccountForPersonCommandDto));
 		    }
 	    }		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<SetPersonAccountForPersonCommandHandler>();
 			extend.AddModule(new AssemblerModule());
@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				.EqualTo(TimeSpan.FromHours(9));
 		}
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<SetPersonAccountForPersonCommandHandler>();
 			extend.AddModule(new AssemblerModule());

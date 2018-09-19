@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 {
 	public class StartupModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public StartupModule(IIocConfiguration configuration)
+		public StartupModule(IocConfiguration configuration)
 		{
 			ProfileOptimization.SetProfileRoot(Application.UserAppDataPath);
 			ProfileOptimization.StartProfile("StartupModule.Profile");

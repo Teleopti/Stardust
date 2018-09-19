@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 {
 	public class TeamScheduleTestAttribute : IoCTestAttribute
 	{
-		protected override void Extend(IExtend extend, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddModule(new WebModule(configuration, null));
 			extend.AddModule(new TeamScheduleAreaModule());

@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		private AgentFileTemplate _agentFileTemplate;
 		private IIsolate _isolate;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<FakeDatabase>();
 			extend.AddService<FakeStorage>();

@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class StaffingModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public StaffingModule(IIocConfiguration configuration)
+		public StaffingModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

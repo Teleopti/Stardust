@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 {
 	public class BudgetModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public BudgetModule(IIocConfiguration configuration)
+		public BudgetModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

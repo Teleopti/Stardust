@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class RuleSetModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public RuleSetModule(IIocConfiguration configuration)
+		public RuleSetModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

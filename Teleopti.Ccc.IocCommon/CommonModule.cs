@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.IocCommon
 	
 	public class CommonModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
 		public static CommonModule ForTest()
 		{
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.IocCommon
 			return new CommonModule(new IocConfiguration(iocArgs, toggleManager));
 		}
 
-		public CommonModule(IIocConfiguration configuration)
+		public CommonModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 			_configuration.FillToggles();

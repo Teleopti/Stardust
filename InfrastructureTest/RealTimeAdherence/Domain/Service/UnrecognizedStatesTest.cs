@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 		public AnalyticsDatabase Analytics;
 		public FakeEventPublisher Publisher;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<TheServiceImpl>();
 			extend.AddService<PersonCreator>();

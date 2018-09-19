@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class ReportModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public ReportModule(IIocConfiguration configuration)
+		public ReportModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

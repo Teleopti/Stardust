@@ -23,9 +23,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class AuthenticationModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public AuthenticationModule(IIocConfiguration configuration)
+		public AuthenticationModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

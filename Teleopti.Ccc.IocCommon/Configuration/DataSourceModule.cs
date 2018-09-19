@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class DataSourceModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public DataSourceModule(IIocConfiguration configuration)
+		public DataSourceModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

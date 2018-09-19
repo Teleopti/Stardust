@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 {
 	public class AnywhereAreaModule : Module
 	{
-		private readonly IIocConfiguration _config;
+		private readonly IocConfiguration _config;
 
-		public AnywhereAreaModule(IIocConfiguration config)
+		public AnywhereAreaModule(IocConfiguration config)
 		{
 			_config = config;
 		}

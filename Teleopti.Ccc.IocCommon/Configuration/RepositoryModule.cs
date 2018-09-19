@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class RepositoryModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 		private readonly Type repositoryConstructorType = typeof (ICurrentUnitOfWork);
 
-		public RepositoryModule(IIocConfiguration configuration)
+		public RepositoryModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

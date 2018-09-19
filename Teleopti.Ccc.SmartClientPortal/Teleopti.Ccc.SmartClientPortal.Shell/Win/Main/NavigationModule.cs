@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 {
     public class NavigationModule : Module
     {
-	    private readonly IIocConfiguration _config;
+	    private readonly IocConfiguration _config;
 
-	    public NavigationModule(IIocConfiguration config)
+	    public NavigationModule(IocConfiguration config)
 	    {
 		    _config = config;
 	    }

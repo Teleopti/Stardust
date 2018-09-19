@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting
 {
     public class ForecasterModule : Module
     {
-		private static IIocConfiguration _configuration;
+		private static IocConfiguration _configuration;
 
-		public ForecasterModule(IIocConfiguration configuration)
+		public ForecasterModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		private readonly DateTime startDate = new DateTime(2017, 03, 07, 8, 0, 0, DateTimeKind.Utc);
 		private readonly DateTime endDate = new DateTime(2017, 03, 07, 17, 0, 0, DateTimeKind.Utc);
 
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<AnalyticsScheduleChangeUpdater>();
 		}

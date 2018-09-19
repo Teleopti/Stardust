@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class UnitOfWorkModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public UnitOfWorkModule(IIocConfiguration configuration)
+		public UnitOfWorkModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

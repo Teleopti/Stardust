@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 {
 	public class MyTimeWebRequestsShiftTradeViewModelFactoryTestAttribute : MyTimeWebTestAttribute
 	{
-		protected override void Extend(IExtend extend, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			base.Extend(extend, configuration);
 			extend.AddService<FakeStorage>();
