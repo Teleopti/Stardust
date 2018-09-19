@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using Hangfire.Server;
 using Teleopti.Ccc.Domain.DistributedLock;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
@@ -24,9 +23,9 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain
 		}
 
 		public void Execute(BackgroundProcessContext context)
-		{	
-			Parallel.ForEach(_tenants.ActiveTenants(), Synchronize);			
-			context.CancellationToken.WaitHandle.WaitOne(TimeSpan.FromMinutes(1));
+		{
+			Parallel.ForEach(_tenants.ActiveTenants(), Synchronize);
+			context.CancellationToken.WaitHandle.WaitOne(TimeSpan.FromSeconds(1));
 		}
 
 		[TenantScope]
@@ -36,6 +35,6 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain
 			{
 				_synchronizer.Synchronize();
 			});
-		}		
+		}
 	}
 }
