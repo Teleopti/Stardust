@@ -79,7 +79,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 					ApplicationBase = AppDomain.CurrentDomain.BaseDirectory
 				};
 
-			var trustedLoadFromRemoteSourceGrantSet = new PermissionSet(PermissionState.Unrestricted);//this is the fix
+			// PermissionSet used to be able to use files that originate from Domain/Internet  (Not Local computer)
+			var trustedLoadFromRemoteSourceGrantSet = new PermissionSet(PermissionState.Unrestricted);
 			var appDomain = AppDomain.CreateDomain(appdomainName, null, appdomainSetup, trustedLoadFromRemoteSourceGrantSet);
 			appDomain.UnhandledException += Helper.AppDomainOnUnhandledException;
 
@@ -210,7 +211,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 				}
 				catch (Exception ex)
 				{
-					var message = $"Problems when loading Payroll files from path: {tenantSpecificPath}  {ex.Message}";
+					var message = $"Problems when loading Payroll files from path: {tenantSpecificPath}  {ex.Message} AppBase:{AppDomain.CurrentDomain.BaseDirectory}";
 					feedback?.Error(message, ex);
 					return new List<IPayrollExportProcessor>();
 				}
