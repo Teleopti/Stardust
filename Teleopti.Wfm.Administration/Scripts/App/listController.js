@@ -21,7 +21,7 @@
 		};
 		
 		var getAllToggleNamesWithoutOverride = function(){
-			$http.get("./Toggle/AllToggleNames", tokenHeaderService.getHeaders()).success(function (data) {
+			$http.get("./Toggle/AllToggleNamesWithoutOverrides", tokenHeaderService.getHeaders()).success(function (data) {
 				$scope.ToggleNames = data;
 				if(data.length>0)
 					vm.ToggleNameToSave = data[0];
