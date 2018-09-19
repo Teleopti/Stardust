@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IPhysicalApplicationPath _physicalApplicationPath;
 		private readonly IFindPersonInfo _findPersonInfo;
 		private readonly HangfireUtilities _hangfire;
-		private readonly RecurringEventPublishings _recurringEventPublishings;
+		private readonly TenantTickEventPublisher _tenantTickEventPublisher;
 		private readonly SystemVersion _version;
 
 		public TestController(
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			IPhysicalApplicationPath physicalApplicationPath,
 			IFindPersonInfo findPersonInfo,
 			HangfireUtilities hangfire,
-			RecurringEventPublishings recurringEventPublishings,
+			TenantTickEventPublisher tenantTickEventPublisher,
 			SystemVersion version)
 		{
 			_mutateNow = mutateNow;
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_physicalApplicationPath = physicalApplicationPath;
 			_findPersonInfo = findPersonInfo;
 			_hangfire = hangfire;
-			_recurringEventPublishings = recurringEventPublishings;
+			_tenantTickEventPublisher = tenantTickEventPublisher;
 			_version = version;
 		}
 
@@ -258,7 +258,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				_mutateNow.Is(time.Utc());
 			var newNow = _now.UtcDateTime();
 
-			_recurringEventPublishings.WithPublishingsForTest(() =>
+			_tenantTickEventPublisher.WithPublishingsForTest(() =>
 			{
 				var timePassed = new TimePassingSimulator(oldNow, newNow);
 				timePassed.IfDayPassed(_hangfire.TriggerDailyRecurringJobs);

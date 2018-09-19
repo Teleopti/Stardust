@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.TickEvent
 	[DomainTest]
 	public class TenantDayTickEventTest
 	{
-		public RecurringEventPublishings Target;
+		public TenantTickEventPublisher Target;
 		public FakeRecurringEventPublisher Publisher;
 		public FakeTenants Tenants;
 

@@ -15,18 +15,23 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 		private Timer _timer;
 		private readonly EtlJobStarter _etlJobStarter;
+		private readonly TenantTickEventPublisher _tenantTickEventPublisher;
 		private readonly HangfireUtilities _hangfire;
 		private DateTime? lastTenantRecurringJobPublishing;
+		private INow _now;
 		private int tickTries;
 
 		public EtlService(
 			EtlJobStarter etlJobStarter,
-			HangfireUtilities hangfire
-			)
+			TenantTickEventPublisher tenantTickEventPublisher,
+			HangfireUtilities hangfire,
+			INow now)
 		{
 			tickTries = 0;
 			_etlJobStarter = etlJobStarter;
+			_tenantTickEventPublisher = tenantTickEventPublisher;
 			_hangfire = hangfire;
+			_now = now;
 			_timer = new Timer(tick, null, TimeSpan.FromMilliseconds(-1), TimeSpan.FromMilliseconds(-1));
 		}
 
@@ -41,6 +46,8 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			var stop = false;
 
 			log.Debug("Tick");
+
+			EnsureTenantRecurringJobs();
 
 			try
 			{
@@ -71,11 +78,26 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			}
 		}
 
-		public void TriggerRecurringJobs()
+		public void EnsureTenantRecurringJobs()
 		{
-			Thread.Sleep(2000);
-			_hangfire.TriggerReccuringJobs();
+			try
+			{
+				if (lastTenantRecurringJobPublishing == null ||
+					_now.UtcDateTime().Subtract(lastTenantRecurringJobPublishing.GetValueOrDefault()).TotalMinutes >= 10)
+				{
+					_tenantTickEventPublisher.RemovePublishingsOfRemovedTenants();
+					_tenantTickEventPublisher.PublishRecurringJobs();
+					lastTenantRecurringJobPublishing = _now.UtcDateTime();
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex);
+				log.Error($"Exception occurred invoking {nameof(TenantTickEventPublisher)}", ex);
+			}
 		}
+
+		public void TriggerRecurringJobs() => _hangfire.TriggerReccuringJobs();
 
 		public void Dispose()
 		{
