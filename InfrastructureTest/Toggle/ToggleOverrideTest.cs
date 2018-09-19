@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -54,6 +55,68 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 				
 				toggleManager.IsEnabled(Toggles.TestToggle)
 					.Should().Be.EqualTo(dbValue);
+			}
+			finally
+			{
+				File.Delete(tempFile);
+			}
+		}
+
+		[Test]
+		[Ignore("To be fixed for #77584")]
+		public void ShouldCacheResultWhenCreatingContainer()
+		{
+			SetupFixtureForAssembly.RestoreCcc7Database();
+			var tempFile = Path.GetTempFileName();
+			try
+			{
+				File.WriteAllLines(tempFile, new[] { $"TestToggle={false}" });
+				var configReader = new FakeConfigReader("PBI77584", "true");
+				configReader.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
+				var iocArgs = new IocArgs(configReader) { FeatureToggle = tempFile };
+				new SaveToggleOverride(configReader).Save(Toggles.TestToggle, true);
+				var toggleManager = CommonModule.ToggleManagerForIoc(iocArgs);
+				
+				toggleManager.IsEnabled(Toggles.TestToggle)
+					.Should().Be.True();
+				new SaveToggleOverride(configReader).Delete(Toggles.TestToggle);
+				
+				
+				toggleManager.IsEnabled(Toggles.TestToggle)
+					.Should().Be.True();
+			}
+			finally
+			{
+				File.Delete(tempFile);
+			}
+		}
+		
+		[Test]
+		[Ignore("To be fixed for #77584")]
+		public void ShouldCacheResultWhenUsingContainerInRuntime()
+		{
+			SetupFixtureForAssembly.RestoreCcc7Database();
+			var tempFile = Path.GetTempFileName();
+			try
+			{
+				File.WriteAllLines(tempFile, new[] { $"TestToggle={false}" });
+				var configReader = new FakeConfigReader("PBI77584", "true");
+				configReader.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
+				var iocArgs = new IocArgs(configReader) { FeatureToggle = tempFile };
+				new SaveToggleOverride(configReader).Save(Toggles.TestToggle, true);
+				var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
+				var builder = new ContainerBuilder();
+				builder.RegisterModule(new CommonModule(configuration));
+				var runtimeContainer = builder.Build();
+
+				var toggleManager = runtimeContainer.Resolve<IToggleManager>();
+				toggleManager.IsEnabled(Toggles.TestToggle)
+					.Should().Be.True();
+				new SaveToggleOverride(configReader).Delete(Toggles.TestToggle);
+				
+				
+				toggleManager.IsEnabled(Toggles.TestToggle)
+					.Should().Be.True();
 			}
 			finally
 			{
