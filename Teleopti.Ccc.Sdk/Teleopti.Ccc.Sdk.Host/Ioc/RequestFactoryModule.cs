@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Ioc
 {
 	public class RequestFactoryModule : Module
 	{
-		private IIocConfiguration _configuration;
+		private IocConfiguration _configuration;
 
-		public RequestFactoryModule(IIocConfiguration configuration)
+		public RequestFactoryModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

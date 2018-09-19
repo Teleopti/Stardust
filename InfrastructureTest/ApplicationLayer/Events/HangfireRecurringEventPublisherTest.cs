@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public FakeDataSourceForTenant DataSources;
 		public IDataSourceScope DataSource;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<TestHandler>();
 			extend.AddService<TestMultiHandler1>();

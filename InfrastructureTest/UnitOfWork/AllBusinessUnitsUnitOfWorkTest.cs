@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	[PrincipalAndStateTest]
 	public class AllBusinessUnitsUnitOfWorkTest : IExtendSystem
 	{		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<TheServiceImpl>();
 		}

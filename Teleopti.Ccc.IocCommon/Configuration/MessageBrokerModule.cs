@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class MessageBrokerModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public MessageBrokerModule(IIocConfiguration configuration)
+		public MessageBrokerModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

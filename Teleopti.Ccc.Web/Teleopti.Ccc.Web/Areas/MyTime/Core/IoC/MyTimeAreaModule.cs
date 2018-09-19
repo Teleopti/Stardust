@@ -59,9 +59,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 {
 	public class MyTimeAreaModule : Module
 	{
-		private readonly IIocConfiguration _config;
+		private readonly IocConfiguration _config;
 
-		public MyTimeAreaModule(IIocConfiguration config)
+		public MyTimeAreaModule(IocConfiguration config)
 		{
 			_config = config;
 		}

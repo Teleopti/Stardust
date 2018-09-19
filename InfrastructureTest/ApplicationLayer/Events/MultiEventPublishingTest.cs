@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public FakeStardustSender Stardust;
 		public IEventPublisher Target;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<HangfireEventHandler>();
 			extend.AddService<StardustEventHandler>();

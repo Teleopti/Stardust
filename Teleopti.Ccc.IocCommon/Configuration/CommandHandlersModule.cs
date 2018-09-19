@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class CommandHandlersModule : Module
 	{
-		private readonly IIocConfiguration _config;
+		private readonly IocConfiguration _config;
 
-		public CommandHandlersModule(IIocConfiguration config)
+		public CommandHandlersModule(IocConfiguration config)
 		{
 			_config = config;
 		}

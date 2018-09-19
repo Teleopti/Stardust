@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.EndDateTime.Should().Be(personAssignmentPeriod.EndDateTime);
 		}
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<FakeWriteSideRepository<IPerson>>();
 			extend.AddService<FakeWriteSideRepository<IAbsence>>();

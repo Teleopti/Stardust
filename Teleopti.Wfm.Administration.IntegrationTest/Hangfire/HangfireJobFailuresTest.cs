@@ -21,7 +21,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Hangfire
 		public IEventPublisher Publisher;
 		public HangfireStatisticsViewModelBuilder Target;
 
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<TestHandler>();
 		}

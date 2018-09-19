@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	
 	public interface IExtendSystem
 	{
-		void Extend(IExtend extend, IIocConfiguration configuration);
+		void Extend(IExtend extend, IocConfiguration configuration);
 	}
 
 }

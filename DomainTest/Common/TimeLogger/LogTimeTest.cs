@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Common.TimeLogger
 		public LogTimeTester LogTimeTester;
 		public LogSpy LogSpy;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<LogTimeTester>();
 		}

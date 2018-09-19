@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class AuthenticationCachedModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public AuthenticationCachedModule(IIocConfiguration configuration)
+		public AuthenticationCachedModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

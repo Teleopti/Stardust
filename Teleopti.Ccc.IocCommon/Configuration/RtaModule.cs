@@ -29,9 +29,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class RtaModule : Module
 	{
-		private readonly IIocConfiguration _config;
+		private readonly IocConfiguration _config;
 
-		public RtaModule(IIocConfiguration config)
+		public RtaModule(IocConfiguration config)
 		{
 			_config = config;
 		}

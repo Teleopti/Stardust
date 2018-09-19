@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public HangfireClientStarter Starter;
 		public FailingHandlerImpl FailingHandler;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<FailingHandlerImpl>();
 			extend.AddService<FailingHandlerImpl2>();

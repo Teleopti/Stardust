@@ -43,9 +43,9 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 
 	public class WfmAdminModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public WfmAdminModule(IIocConfiguration configuration)
+		public WfmAdminModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.LogOnBusinessUnitId.Should().Be(scenario.BusinessUnit.Id.GetValueOrDefault());
 		}
 
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<SaveSchedulePartService>();
 			extend.AddService<MyTeamRemovePersonAbsenceCommandHandler>();

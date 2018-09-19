@@ -11,7 +11,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 	[DomainTest]
 	public class ResolveTest : IIsolateSystem, IExtendSystem
 	{		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddModule(new EtlModule(configuration));
 		}

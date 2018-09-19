@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public TheService TheService;
 		public ICurrentAnalyticsUnitOfWork UnitOfWork;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<TheService>();
 		}

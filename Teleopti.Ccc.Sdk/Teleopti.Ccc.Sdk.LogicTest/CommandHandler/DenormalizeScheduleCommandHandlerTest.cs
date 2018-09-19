@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		public FakePersonRepository PersonRepository;
 		public FakeScenarioRepository ScenarioRepository;
 
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<DenormalizeScheduleCommandHandler>();
 		}

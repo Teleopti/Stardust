@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 			}
 		}
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<AspectedType>();
 			extend.AddService<Aspect1>();

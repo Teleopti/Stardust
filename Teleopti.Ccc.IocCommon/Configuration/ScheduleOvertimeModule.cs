@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class ScheduleOvertimeModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public ScheduleOvertimeModule(IIocConfiguration configuration)
+		public ScheduleOvertimeModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

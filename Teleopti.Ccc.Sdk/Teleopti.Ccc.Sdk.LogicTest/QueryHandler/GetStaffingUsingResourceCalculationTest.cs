@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			}));
 		}
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<GetStaffingUsingResourceCalculation>();
 			extend.AddModule(new AssemblerModule());

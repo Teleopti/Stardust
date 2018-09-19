@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			error.ErrorMessages[0].Should().Not.Be.Empty();
 		}
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<SwapMainShiftForTwoPersonsCommandHandler>();
 		}

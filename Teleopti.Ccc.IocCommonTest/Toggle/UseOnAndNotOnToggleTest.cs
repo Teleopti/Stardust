@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		[Test]
 		public void ShouldBeEnabledIfUseOnToggleIsTrueAndUseNotOnToggleIsFalse()
 		{
-			var iocConfig = MockRepository.GenerateMock<IIocConfiguration>();
+			var iocConfig = MockRepository.GenerateMock<IocConfiguration>();
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(true);
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle2)).Return(false);
 
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		[Test]
 		public void ShouldNotBeEnabledIfUseOnToggleIsFalseAndUseNotOnToggleIsFalse()
 		{
-			var iocConfig = MockRepository.GenerateMock<IIocConfiguration>();
+			var iocConfig = MockRepository.GenerateMock<IocConfiguration>();
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(false);
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle2)).Return(false);
 
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		[Test]
 		public void ShouldNotBeEnabledIfUseOnToggleIsTrueAndUseNotOnToggleIsTrue()
 		{
-			var iocConfig = MockRepository.GenerateMock<IIocConfiguration>();
+			var iocConfig = MockRepository.GenerateMock<IocConfiguration>();
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(true);
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle2)).Return(true);
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		[Test]
 		public void ShouldNotBeEnabledIfUseOnToggleIsFalseAndUseNotOnToggleIsTrue()
 		{
-			var iocConfig = MockRepository.GenerateMock<IIocConfiguration>();
+			var iocConfig = MockRepository.GenerateMock<IocConfiguration>();
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(false);
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle2)).Return(true);
 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		[Test]
 		public void ShouldNotBeEnabledIfUseOnToggleIsTrueAndUseNotOnToggleIsFalseAndTrue()
 		{
-			var iocConfig = MockRepository.GenerateMock<IIocConfiguration>();
+			var iocConfig = MockRepository.GenerateMock<IocConfiguration>();
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(true);
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle2)).Return(false);
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle3)).Return(true);

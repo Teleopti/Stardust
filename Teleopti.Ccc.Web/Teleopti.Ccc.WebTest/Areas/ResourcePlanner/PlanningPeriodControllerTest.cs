@@ -406,7 +406,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			};
 		}
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			//shouldn't be here
 			//instead move logic to domain and don't fake other stuff than "out of process calls" (=repos and similar)

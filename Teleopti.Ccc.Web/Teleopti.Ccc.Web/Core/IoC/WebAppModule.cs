@@ -8,15 +8,15 @@ namespace Teleopti.Ccc.Web.Core.IoC
 {
 	public class WebAppModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 		private readonly HttpConfiguration _httpConfiguration;
 
-		public WebAppModule(IIocConfiguration configuration)
+		public WebAppModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}
 
-		public WebAppModule(IIocConfiguration configuration, HttpConfiguration httpConfiguration)
+		public WebAppModule(IocConfiguration configuration, HttpConfiguration httpConfiguration)
 		{
 			_configuration = configuration;
 			_httpConfiguration = httpConfiguration;

@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 			isolate.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
 		}
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<BpoController>();
 		}

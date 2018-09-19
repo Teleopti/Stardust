@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class InitializeModule : Module
 	{
-		private readonly IIocConfiguration _iocConfiguration;
+		private readonly IocConfiguration _iocConfiguration;
 
-		public InitializeModule(IIocConfiguration iocConfiguration)
+		public InitializeModule(IocConfiguration iocConfiguration)
 		{
 			_iocConfiguration = iocConfiguration;
 		}

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		public FakeJobResultRepository JobResultRepository;
 		public FakePurgeSettingRepository PurgeSettingRepository;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddModule(new WebModule(configuration, null));
 		}

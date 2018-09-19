@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class EventPublisherModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public EventPublisherModule(IIocConfiguration configuration)
+		public EventPublisherModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

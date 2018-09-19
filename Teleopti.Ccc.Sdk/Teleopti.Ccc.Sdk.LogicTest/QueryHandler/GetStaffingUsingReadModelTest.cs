@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			skillCombinationResourceRepository.AddSkillCombinationResource(DateTime.UtcNow, skillCombinationResources);
 		}
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<GetStaffingUsingReadModel>();
 			extend.AddModule(new AssemblerModule());

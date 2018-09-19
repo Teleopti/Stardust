@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Logon
 		public ICurrentAuthorization PrincipalAuthorization;
 		public IDefinedRaptorApplicationFunctionFactory ApplicationFunctions;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<Service>();
 		}

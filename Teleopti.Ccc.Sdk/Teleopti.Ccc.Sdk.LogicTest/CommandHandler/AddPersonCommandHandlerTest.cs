@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			Assert.Throws<ArgumentException>(() => Target.Handle(addPersonCommandDto));
 		}
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<AddPersonCommandHandler>();
 			extend.AddModule(new AssemblerModule());

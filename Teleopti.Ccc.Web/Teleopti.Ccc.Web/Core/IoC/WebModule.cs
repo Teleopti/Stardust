@@ -57,10 +57,10 @@ namespace Teleopti.Ccc.Web.Core.IoC
 {
 	public class WebModule : Module
 	{
-		private static IIocConfiguration _configuration;
+		private static IocConfiguration _configuration;
 		private readonly HttpConfiguration _httpConfiguration;
 
-		public WebModule(IIocConfiguration configuration, HttpConfiguration httpConfiguration)
+		public WebModule(IocConfiguration configuration, HttpConfiguration httpConfiguration)
 		{
 			_configuration = configuration;
 			_httpConfiguration = httpConfiguration;

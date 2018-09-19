@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class PersonAccountModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public PersonAccountModule(IIocConfiguration configuration)
+		public PersonAccountModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

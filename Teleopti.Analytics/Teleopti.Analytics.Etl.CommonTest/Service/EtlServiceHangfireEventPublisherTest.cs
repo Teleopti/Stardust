@@ -26,7 +26,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		public MutableNow Now;
 		public TenantTickEventPublisher TenantTickEventPublisher;
 
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddModule(new EtlModule(configuration));
 		}

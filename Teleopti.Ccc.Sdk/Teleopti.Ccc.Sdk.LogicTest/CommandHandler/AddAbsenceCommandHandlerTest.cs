@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				.Be.EqualTo(1);
 		}
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<AddAbsenceCommandHandler>();
 			extend.AddModule(new AssemblerModule());

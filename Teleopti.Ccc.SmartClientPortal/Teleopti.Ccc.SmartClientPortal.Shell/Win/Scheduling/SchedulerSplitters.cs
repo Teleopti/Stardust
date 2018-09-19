@@ -161,13 +161,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             //fix to solve right to left cultures not showing panel on start
             lessIntellegentSplitContainerAdvMainContainer.Panel2Collapsed = !value;
             lessIntellegentSplitContainerAdvMainContainer.Panel2Collapsed = value;
-	        if (!value)
+			var defaultDistance = lessIntellegentSplitContainerAdvMainContainer.Width - 350;
+
+			if (!value)
 	        {
 		        if (lessIntellegentSplitContainerAdvMainContainer.SplitterDistance >
-		            lessIntellegentSplitContainerAdvMainContainer.Width - 300)
+					defaultDistance)
 			        lessIntellegentSplitContainerAdvMainContainer.SplitterDistance =
-				        lessIntellegentSplitContainerAdvMainContainer.Width - 300;
-	        }
+						defaultDistance;
+
+				if (lessIntellegentSplitContainerAdvMainContainer.SplitterDistance <
+					lessIntellegentSplitContainerAdvMainContainer.Width - 700)
+					lessIntellegentSplitContainerAdvMainContainer.SplitterDistance =
+						defaultDistance;
+			}
         }
 
 	    public void InsertAgentInfoControl(AgentInfoControl agentInfoControl)

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public FakePlanningGroupRepository PlanningGroupRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<PlanningGroupController>();
 		}

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Aop
 	[DomainTest]
 	public class LogInfoAspectTest : IIsolateSystem, IExtendSystem
 	{
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<Service>();
 		}

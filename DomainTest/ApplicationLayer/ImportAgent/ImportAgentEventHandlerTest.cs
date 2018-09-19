@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public FakeTenants FindTenantByName;
 		public PersistPersonInfoFake PersonInfoPersister;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<FakeDatabase>();
 			extend.AddService<FakeStorage>();

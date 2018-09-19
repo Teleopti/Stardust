@@ -15,9 +15,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class IntradayWebModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public IntradayWebModule(IIocConfiguration configuration)
+		public IntradayWebModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

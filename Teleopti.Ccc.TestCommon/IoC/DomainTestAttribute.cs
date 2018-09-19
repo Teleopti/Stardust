@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public static string DefaultTenantName = "default";
 		public static Guid DefaultBusinessUnitId = Guid.NewGuid();
 
-		protected override void Extend(IExtend extend, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			base.Extend(extend, configuration);
 			extend.AddService<FakeDataSources>();

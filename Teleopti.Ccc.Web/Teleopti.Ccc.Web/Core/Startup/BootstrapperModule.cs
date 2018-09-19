@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.Web.Core.Startup
 {
 	public class BootstrapperModule : Module
 	{
-		private readonly IIocConfiguration _config;
+		private readonly IocConfiguration _config;
 
-		public BootstrapperModule(IIocConfiguration config)
+		public BootstrapperModule(IocConfiguration config)
 		{
 			_config = config;
 		}

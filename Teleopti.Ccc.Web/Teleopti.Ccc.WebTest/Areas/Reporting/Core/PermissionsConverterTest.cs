@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 		private readonly Guid teamId = Guid.NewGuid();
 		private const int analyticsBusinessUnitId = 1;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<PermissionsConverter>();
 		}

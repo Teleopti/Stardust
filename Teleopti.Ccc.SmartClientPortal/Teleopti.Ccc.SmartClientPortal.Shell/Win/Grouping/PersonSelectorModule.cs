@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 {
 	public class PersonSelectorModule : Module
 	{
-		private readonly IIocConfiguration _config;
+		private readonly IocConfiguration _config;
 
-		public PersonSelectorModule(IIocConfiguration config)
+		public PersonSelectorModule(IocConfiguration config)
 		{
 			_config = config;
 		}
