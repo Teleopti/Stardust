@@ -31,9 +31,13 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 		private readonly IAgentAdherenceDayLoader _adherenceDayLoader;
 		private readonly IKeyValueStorePersister _keyValueStore;
 
-		public RtaEventStoreSynchronizer(IRtaEventStoreReader events,
+		public const string SynchronizedEventKey = "HistoricalOverviewReadModelSynchronizedEvent";
+		
+		public RtaEventStoreSynchronizer(
+			IRtaEventStoreReader events,
 			IHistoricalOverviewReadModelPersister readModels,
-			IAgentAdherenceDayLoader adherenceDayLoader, IKeyValueStorePersister keyValueStore)
+			IAgentAdherenceDayLoader adherenceDayLoader,
+			IKeyValueStorePersister keyValueStore)
 		{
 			_events = events;
 			_readModels = readModels;
@@ -42,12 +46,13 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 		}
 
 		[FullPermissions]
-		[AllBusinessUnitsUnitOfWork, ReadModelUnitOfWork]
+		[AllBusinessUnitsUnitOfWork]
+		[ReadModelUnitOfWork]
 		public virtual void Synchronize()
 		{
-			var events = _events.LoadFrom(_keyValueStore.Get("LatestSynchronizedRTAEvent", 0));
+			var events = _events.LoadFrom(_keyValueStore.Get(SynchronizedEventKey, 0));
 
-			_keyValueStore.Update("LatestSynchronizedRTAEvent", events.MaxId.ToString());
+			_keyValueStore.Update(SynchronizedEventKey, events.MaxId.ToString());
 
 			events.Events
 				.Cast<IRtaStoredEvent>()
