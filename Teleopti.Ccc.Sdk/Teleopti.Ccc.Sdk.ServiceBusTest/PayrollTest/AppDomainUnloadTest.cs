@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
-		[Test, Ignore("")]
+		[Test]
 		public void ExecutePayroll()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
-		[Test, Ignore("")]
+		[Test]
 		public void ShouldFindPayrollFilesOnPayrollRootDirIfMissingInTenantSpecificDir()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
