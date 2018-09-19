@@ -20,61 +20,13 @@ h1, h2, h3, h4, h5, body, button, input {
 html {
 	background: #66C2FF!important;
 }
+
+.panel {
+	padding: 20px;
+}
+
 .login-form {
 	max-width: 100%!important;	
-}
-
-.animate-material {
-	-webkit-animation-name: material;
-	animation-name: material;
-	-webkit-animation-duration: 0.5s;
-	animation-duration: 0.5s;
-	-webkit-animation-delay: 0.5s;
-	animation-delay: 0.5s;
-	-webkit-animation-iteration-count: 1;
-	animation-iteration-count: 1;
-	-webkit-animation-fill-mode: forwards;
-	animation-fill-mode: forwards;
-  max-height: 54px;
-}
-
-@keyframes material {
-	from {
-		opacity: 0;
-		max-height: 54px;
-	}
-	to {
-		opacity: 1;
-		max-height: 100%;
-	}
-}
-
-.animate-content {
-  margin: 0 20px;
-}
-
-.animate-content, .wfm-checkbox-toggle::after, .animate-content input[type=text] {
-	-webkit-animation-name: content;
-	animation-name: content;
-	-webkit-animation-duration: 0.5s;
-	animation-duration: 0.5s;
-	-webkit-animation-delay: 0.7s;
-	animation-delay: 0.7s;
-	-webkit-animation-iteration-count: 1;
-	animation-iteration-count: 1;
-	-webkit-animation-fill-mode: forwards;
-	animation-fill-mode: forwards;
-  opacity: 0;
-  background: white;
-}
-
-@keyframes content {
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
 }
 
 .formError {
@@ -179,13 +131,5 @@ html {
   }
 	body {
 		background: #66C2FF!important;
-	}
-}
-
-@media all and (-ms-high-contrast: none),
-(-ms-high-contrast: active) {
-	.animate-material {
-		max-height: 100%!important;
-		animation: none;
 	}
 }

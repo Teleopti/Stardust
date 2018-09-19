@@ -9,12 +9,12 @@
 	<div class="con-row" style="margin-top: 2%;">
 		<div class="con-flex"></div>
 		<div class="con-flex split-1-2">
-			<div class="panel material-depth-1 line-center animate-material">
+			<div class="panel material-depth-1 line-center">
 				<div class="sub-header">
 					<h1>TELEOPTI WFM</h1>
 				</div>
 				<div id="spinnerwrapper"></div>
-				<div class="con-row animate-content">
+				<div class="con-row">
 					<div class="con-flex">
 						<div id="selector">
 							<form action="" method="get">
