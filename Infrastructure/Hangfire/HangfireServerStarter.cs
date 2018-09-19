@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			HangfireStarter starter,
 			IConfigReader config,
 			StateQueueWorker stateQueueWorker,
-			RtaTracerRefresher rtaTracerRefresher, 
+			RtaTracerRefresher rtaTracerRefresher,
 			RtaEventStoreSynchronizerProcess eventStoreSynchronizerProcess)
 		{
 			_starter = starter;
@@ -34,11 +34,22 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		public void Start(IAppBuilder app)
 		{
 			_starter.Start(_config.ConnectionString("Hangfire"));
-			app.UseHangfireServer(new BackgroundJobServerOptions
+
+			var workerCount = _config.ReadValue("HangFireWorkerCount", 8);
+			var options = workerCount > 0
+				? new BackgroundJobServerOptions
 				{
-					WorkerCount = _config.ReadValue("HangFireWorkerCount", 8),
+					WorkerCount = workerCount,
 					Queues = Queues.OrderOfPriority().ToArray()
-				},
+				}
+				: new BackgroundJobServerOptions
+				{
+					WorkerCount = 1,
+					Queues = new[] {"idle_worker_queue"}
+				};
+
+			app.UseHangfireServer(
+				options,
 				_stateQueueWorker,
 				_rtaTracerRefresher,
 				_eventStoreSynchronizerProcess
