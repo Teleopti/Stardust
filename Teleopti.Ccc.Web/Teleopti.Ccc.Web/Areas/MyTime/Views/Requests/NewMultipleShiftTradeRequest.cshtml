@@ -344,7 +344,7 @@
 									<span data-bind="text:mySchedule.categoryName"></span>
 									<span data-bind="text:$root.getOvertimeAndIntradayAbsenceText(mySchedule, '@Resources.OvertimeShortName')"></span>
 								</p>
-								<div class="shift-start-end-time">
+								<div class="multi-shift-trade-start-end-time">
 									<span data-bind="text:mySchedule.scheduleStart + $root.getOvernightFlag(mySchedule.scheduleStartTime(), date)"></span>
 									<span class="spliter">-</span>
 									<span data-bind="text:mySchedule.scheduleEnd + $root.getOvernightFlag(mySchedule.scheduleEndTime(), date)"></span>
@@ -401,7 +401,9 @@
 					<div class="multi-shift-trade-shift-detail target-schedule-detail">
 						<!--ko if: !targetSchedule-->
 						<div class="multi-shift-trade-row-text-container">
-							<span>@Resources.NotScheduled </span>
+							<p>
+								<span>@Resources.NotScheduled </span>
+							</p>
 						</div>
 						<!--/ko-->
 
@@ -413,7 +415,7 @@
 									<span data-bind="text:targetSchedule.categoryName"></span>
 									<span data-bind="text:$root.getOvertimeAndIntradayAbsenceText(targetSchedule, '@Resources.OvertimeShortName')"></span>
 								</p>
-								<div class="shift-start-end-time">
+								<div class="multi-shift-trade-start-end-time">
 									<span data-bind="text:targetSchedule.scheduleStart + $root.getOvernightFlag(targetSchedule.scheduleStartTime(), date)"></span>
 									<span class="spliter">-</span>
 									<span data-bind="text:targetSchedule.scheduleEnd + $root.getOvernightFlag(targetSchedule.scheduleEndTime(), date)"></span>
@@ -453,7 +455,9 @@
 
 							<!--ko if: targetSchedule.isFullDayAbsence && !targetSchedule.isDayOff-->
 							<div class="multi-shift-trade-row-text-container">
-								<span data-bind="text: targetSchedule.categoryName"></span>
+								<p>
+									<span data-bind="text: targetSchedule.categoryName"></span>
+								</p>
 							</div>
 							<div data-bind="visible: !$root.isMobile" class="multi-shift-trade-schedule-container">
 								<div class="multi-shift-trade-layer-container">
@@ -482,7 +486,7 @@
 			</div>
 		</div>
 		<!-- /ko -->
-	
+
 		<!-- ko if: showCartPanel -->
 		<div class="multi-shift-trade-cart">
 			<div class="multi-shift-trade-cart-wrapper" data-bind="visible:$root.showCart()">
