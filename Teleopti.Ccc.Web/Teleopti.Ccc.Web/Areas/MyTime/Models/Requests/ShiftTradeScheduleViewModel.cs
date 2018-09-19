@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 
 	public class ShiftTradeMultiScheduleViewModel
 	{
-		public DateTime Date { get; set; }
+		public string Date { get; set; }
 		public ShiftTradeAddPersonScheduleViewModel MySchedule { get; set; }
 		public ShiftTradeAddPersonScheduleViewModel PersonToSchedule { get; set; }
 		public bool IsSelectable { get; set; }

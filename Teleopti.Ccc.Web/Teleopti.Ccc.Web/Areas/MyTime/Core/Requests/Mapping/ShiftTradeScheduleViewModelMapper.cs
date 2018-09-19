@@ -276,7 +276,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					myScheduleRange?.ScheduledDay(dateOnly), personToScheduleRange?.ScheduledDay(dateOnly), dateOnly, personTo, out var reason);
 				multiSchedules.Add(new ShiftTradeMultiScheduleViewModel
 				{
-					Date = dateOnly.Date, MySchedule = mySchedule, PersonToSchedule = personToSchedule,
+					Date = dateOnly.Date.ToString("yyyy-MM-dd"), MySchedule = mySchedule, PersonToSchedule = personToSchedule,
 					IsSelectable = isSelectable, UnselectableReason = reason
 				});
 			}
