@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36)),
 				PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9)
 			};
-			var skillA = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpen(new TimePeriod(8, 0, 8, 15));
+			var skillA = new Skill().For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpen(new TimePeriod(8, 0, 8, 15)).DefaultResolution(15);
 			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, contract, skillA).WithSchedulePeriodOneWeek(dateOnly);
 			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(phoneActivity, new TimePeriod(8, 0, 8, 5)).ShiftCategory(new ShiftCategory("_").WithId());
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36)),
 				PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9)
 			};
-			var skillA = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpen(new TimePeriod(8, 0, 8, 15));
+			var skillA = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpen(new TimePeriod(8, 0, 8, 15)).DefaultResolution(15);
 			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, contract, skillA).WithSchedulePeriodOneWeek(dateOnly);
 			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(phoneActivity, new TimePeriod(8, 0, 8, 5)).ShiftCategory(new ShiftCategory("_").WithId());

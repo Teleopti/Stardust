@@ -209,7 +209,7 @@
 
 		return '';
 	};
-
+	
 	self.scrolled = function(data, event) {
 		var element = event.target;
 		var wholeHeight = element.scrollHeight;

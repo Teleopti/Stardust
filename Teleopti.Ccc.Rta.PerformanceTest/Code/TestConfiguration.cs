@@ -10,9 +10,12 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			numberOfMappings ^ 
 			345452; // change this whenever anything created by DataCreator changes
 
-		private const int numberOfAgentsInSystem = 10000;
-		private const int numberOfAgentsWorking = 2000;
-		private const int numberOfMappings = 10000;
+		private const int numberOfAgentsInSystem = 100;
+		private const int numberOfAgentsWorking = 20;
+		private const int numberOfMappings = 10;
+//		private const int numberOfAgentsInSystem = 10000;
+//		private const int numberOfAgentsWorking = 2000;
+//		private const int numberOfMappings = 10000;
 		private const string sourceId = "8";
 		private const int dataSourceId = 9;
 

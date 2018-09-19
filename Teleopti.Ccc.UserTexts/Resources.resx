@@ -17744,4 +17744,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Manage identity logons</value>
     <comment>Header for managing identity logons</comment>
   </data>
+  <data name="ChatBot" xml:space="preserve">
+    <value>Chat bot</value>
+    <comment>Name for chatbot</comment>
+  </data>
 </root>

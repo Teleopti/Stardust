@@ -16,6 +16,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase
 		public string DayLightSavingStart { get; set; }
 		public string DayLightSavingEnd { get; set; }
 		public int DayLightSavingAdjustmentInMinute { get; set; }
-		public bool GrantEnabled { get; set; }
 	}
 }

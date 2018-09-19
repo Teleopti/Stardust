@@ -65,7 +65,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
             foreach (var keyValuePair in workloadDayTemplate.SortedTaskPeriodList)
             {
                 var localTemplatePeriod = keyValuePair.Period.TimePeriod(timeZone);
-	            var taskPeriods = TaskPeriodList.Select(t => new {t, localTime = t.Period.TimePeriod(timeZone) }).Where(t => localTemplatePeriod.Contains(t.localTime)).ToArray();
+				var taskPeriodAndLocalTime = TaskPeriodList.Select(t => new {t, localTime = t.Period.TimePeriod(timeZone)}).ToArray();
+	            var taskPeriods = taskPeriodAndLocalTime.Where(t => localTemplatePeriod.Contains(t.localTime)).ToArray();
                 int taskPeriodCount = taskPeriods.Length;
                 if (taskPeriodCount == 2 &&
                     taskPeriods[0].localTime == taskPeriods[1].localTime)
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 {
                     innerMergeTemplateTaskPeriods(taskPeriods.Select(t => t.t).ToArray(), lockAction, releaseAction);
                     taskPeriods =
-                        TaskPeriodList.Select(t => new { t, localTime = t.Period.TimePeriod(timeZone) }).Where(t => localTemplatePeriod.StartTime == t.localTime.StartTime)
+						taskPeriodAndLocalTime.Where(t => localTemplatePeriod.StartTime == t.localTime.StartTime)
                             .ToArray();
                     taskPeriodCount = taskPeriods.Length;
                 }

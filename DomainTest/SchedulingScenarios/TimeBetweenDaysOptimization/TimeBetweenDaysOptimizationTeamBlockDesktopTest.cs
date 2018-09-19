@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TimeBetweenDaysOptimizatio
 		public FakeRuleSetBagRepository RuleSetBagRepository;
 
 		[Test]
-		public void ShouldworkWhenOverStaffed()
+		public void ShouldWorkWhenOverStaffed()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
@@ -59,7 +59,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TimeBetweenDaysOptimizatio
 				2,
 				1,
 				1);
-
 			var asses1 = Enumerable.Range(0, 7).Select(i =>
 				new PersonAssignment(agent1, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory)
 					.WithLayer(activity, new TimePeriod(7, 15))).ToList();
@@ -101,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TimeBetweenDaysOptimizatio
 		}
 
 		[Test]
-		public void ShouldworkWhenUnderStaffed()
+		public void ShouldWorkWhenUnderStaffed()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
@@ -128,7 +127,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TimeBetweenDaysOptimizatio
 				20,
 				10,
 				10);
-
 			var asses1 = Enumerable.Range(0, 7).Select(i =>
 				new PersonAssignment(agent1, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory)
 					.WithLayer(activity, new TimePeriod(7, 15))).ToList();
@@ -176,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TimeBetweenDaysOptimizatio
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_");
 			var tp = new TimePeriod(7, 17);
-			var skill = new Skill().WithId().For(activity).IsOpen(tp, tp, tp, tp, tp, tp, tp);
+			var skill = new Skill().WithId().For(activity).IsOpen(tp, tp, tp, tp, tp, tp, tp).DefaultResolution(15);
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(7, 0, 9, 0, 60), new TimePeriodWithSegment(15, 0, 17, 0, 60), shiftCategory));

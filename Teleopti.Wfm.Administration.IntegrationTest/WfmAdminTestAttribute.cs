@@ -28,6 +28,8 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
 			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
 			config.FakeConnectionString("RtaTracer", InfraTestConfigReader.AnalyticsConnectionString);
+			config.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
+			config.FakeSetting("PBI77584", "true"); //remove me with toggle
 			return config;
 		}
 

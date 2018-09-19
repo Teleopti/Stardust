@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var lateInterval = new TimePeriod(15, 45, 16, 0);
 			var date = DateOnly.Today;
 			var activity = ActivityRepository.Has("_");
-			var skillA = SkillRepository.Has("A", activity, 1);
-			var skillB = SkillRepository.Has("B", activity, 2);
+			var skillA = SkillRepository.Has("A", activity, 1).DefaultResolution(15);
+			var skillB = SkillRepository.Has("B", activity, 2).DefaultResolution(15);
 			var scenario = ScenarioRepository.Has("default");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet =

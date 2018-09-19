@@ -363,6 +363,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldGetDateAsString()
+		{
+			_now.Is(DateOnly.Today.Date);
+			var startDate = DateOnly.Today.AddDays(2);
+			var endDate = startDate;
+			var form = createDataWithAbsence(startDate, endDate, endDate.AddDays(10).Date, 2);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MultiSchedulesForShiftTrade.First().Date.Should().Be.EqualTo(startDate.Date.ToString("yyyy-MM-dd"));
+		}
+
+		[Test]
 		public void ShouldNotSelectableWhenPersonToHasAbsence()
 		{
 			_now.Is(DateOnly.Today.Date);

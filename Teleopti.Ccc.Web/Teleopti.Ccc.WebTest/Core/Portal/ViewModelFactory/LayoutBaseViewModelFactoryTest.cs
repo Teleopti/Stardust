@@ -5,7 +5,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase;
@@ -117,22 +116,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			result.DayLightSavingStart.Should().Be("2016-03-27T00:00:00Z");
 			result.DayLightSavingEnd.Should().Be("2016-10-29T23:59:59Z");
 			result.DayLightSavingAdjustmentInMinute.Should().Be(60);
-		}
-
-		[Test]
-		public void ShouldIndicateGrantChatBotEnabled()
-		{
-			using (_mocks.Record())
-			{
-				Expect.Call(_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ChatBot))
-					.Return(true);
-			}
-
-			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory,
-				_datePickerGlobalizationViewModelFactory, new Now(), new UtcTimeZone(), _permissionProvider);
-
-			var result = target.CreateLayoutBaseViewModel("title");
-			result.GrantEnabled.Should().Be.True();
 		}
 	}
 }
