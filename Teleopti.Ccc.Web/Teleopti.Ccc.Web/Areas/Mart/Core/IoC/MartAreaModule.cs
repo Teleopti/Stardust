@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core.IoC
 			builder.RegisterType<QueueStatRepository>().As<IQueueStatRepository>().SingleInstance();
 			builder.RegisterType<DatabaseConnectionHandler>().As<IDatabaseConnectionHandler>().SingleInstance();
 
-			_configuration.Cache().This<IQueueStatRepository>(b => b
+			_configuration.Args().Cache.This<IQueueStatRepository>(b => b
 				.CacheMethod(x => x.GetLogObject(1, ""))
 				.CacheMethod(x => x.GetQueueId("", "", 0, ""))
 				.CacheMethod(x => x.GetDateId(new DateTime(), ""))

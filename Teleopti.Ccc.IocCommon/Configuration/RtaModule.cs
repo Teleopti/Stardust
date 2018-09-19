@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DataSourceReader>().As<IDataSourceReader>().SingleInstance();
 			builder.RegisterType<MappingReadModelReader>().As<IMappingReader>().SingleInstance();
 
-			_config.Cache().This<TenantLoader>(b => b
+			_config.Args().Cache.This<TenantLoader>(b => b
 				.CacheMethod(x => x.TenantNameByKey(null))
 				.CacheMethod(x => x.Authenticate(null))
 			);

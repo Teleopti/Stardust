@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 			try
 			{
 				File.WriteAllLines(tempFile, new[] { $"TestToggle={fileValue.ToString()}" });
-				var configReader = new FakeConfigReader("PBI77584", "true");
+				var configReader = createConfigReader();
 				configReader.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
 				var iocArgs = new IocArgs(configReader) { FeatureToggle = tempFile };
 				
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 			try
 			{
 				File.WriteAllLines(tempFile, new[] { $"TestToggle={fileValue.ToString()}" });
-				var configReader = new FakeConfigReader("PBI77584", "true");
+				var configReader = createConfigReader();
 				configReader.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
 				var iocArgs = new IocArgs(configReader) { FeatureToggle = tempFile };
 				new SaveToggleOverride(configReader).Save(Toggles.TestToggle, dbValue);
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 			try
 			{
 				File.WriteAllLines(tempFile, new[] { $"TestToggle={false}" });
-				var configReader = new FakeConfigReader("PBI77584", "true");
+				var configReader = createConfigReader();
 				configReader.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
 				var iocArgs = new IocArgs(configReader) { FeatureToggle = tempFile };
 				new SaveToggleOverride(configReader).Save(Toggles.TestToggle, true);
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 			try
 			{
 				File.WriteAllLines(tempFile, new[] { $"TestToggle={false}" });
-				var configReader = new FakeConfigReader("PBI77584", "true");
+				var configReader = createConfigReader();
 				configReader.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
 				var iocArgs = new IocArgs(configReader) { FeatureToggle = tempFile };
 				new SaveToggleOverride(configReader).Save(Toggles.TestToggle, true);
@@ -122,7 +122,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 			}
 		}
 		
-		//REMOVE ME WHEN FEATURE IS ENABLED! Only to verify old behavior
+		#region Remove me when feature is released
+		
+		//simply use default ctor in tests instead
+		private FakeConfigReader createConfigReader()
+		{
+			return new FakeConfigReader("PBI77584", "true");
+		}
+		
 		[TestCase(true, true)]
 		[TestCase(true, false)]
 		[TestCase(false, true)]
@@ -150,7 +157,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 			}
 		}
 		
-		//REMOVE ME WHEN FEATURE IS ENABLED! Only to verify old behavior
 		[TestCase(true, true)]
 		[TestCase(true, false)]
 		[TestCase(false, true)]
@@ -177,5 +183,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 				File.Delete(tempFile);
 			}
 		}
+		
+		#endregion
 	}
 }

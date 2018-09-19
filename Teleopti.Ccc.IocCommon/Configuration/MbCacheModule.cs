@@ -7,11 +7,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class	MbCacheModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocArgs _iocArgs;
 
-		public MbCacheModule(IIocConfiguration configuration)
+		public MbCacheModule(IocArgs iocArgs)
 		{
-			_configuration = configuration;
+			_iocArgs = iocArgs;
 		}
 		
 		protected override void Load(ContainerBuilder builder)
@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				var cacheBuilder = new CacheBuilder(c.Resolve<LinFuProxyFactory>())
 					.SetCacheKey(c.Resolve<TeleoptiCacheKey>())
 					.AddEventListener(new MbCacheLog4NetListener());
-				IComponentContext threadSpecificContext = c.Resolve<IComponentContext>();
-				_configuration.Cache().Build(threadSpecificContext, cacheBuilder);
+				var threadSpecificContext = c.Resolve<IComponentContext>();
+				_iocArgs.Cache.Build(threadSpecificContext, cacheBuilder);
 				return cacheBuilder;
 			}).SingleInstance();
 
