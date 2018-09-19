@@ -1,0 +1,23 @@
+using System;
+using Hangfire.Server;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+
+namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
+{
+	public class RecurringEventPublishingUpdater : IBackgroundProcess
+	{
+		private readonly RecurringEventPublishings _publishings;
+
+		public RecurringEventPublishingUpdater(RecurringEventPublishings publishings)
+		{
+			_publishings = publishings;
+		}
+		
+		public void Execute(BackgroundProcessContext context)
+		{
+			_publishings.RemovePublishingsOfRemovedTenants();
+			_publishings.PublishRecurringJobs();
+			context.CancellationToken.WaitHandle.WaitOne(TimeSpan.FromMinutes(3));
+		}
+	}
+}

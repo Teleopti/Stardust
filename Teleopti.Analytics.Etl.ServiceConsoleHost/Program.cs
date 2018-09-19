@@ -11,8 +11,8 @@ namespace Teleopti.Analytics.Etl.ServiceConsoleHost
 			if (args.FirstOrDefault() == "/EnsureRecurringJobs")
 				using (var host = new EtlServiceHost())
 				{
-					Console.WriteLine("ETL Service is simply ensuring recurring jobs and then closing...");					
-					host.SimplyEnsureRecurringJobs();
+					Console.WriteLine("ETL Service is simply triggering recurring jobs and then closing...");					
+					host.SimplyTriggerRecurringJobs();
 				}
 			else
 			{
