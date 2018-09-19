@@ -5,6 +5,7 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.Toggle.Admin;
 
 namespace Teleopti.Wfm.Administration.Controllers
 {
@@ -12,35 +13,36 @@ namespace Teleopti.Wfm.Administration.Controllers
 	{
 		private readonly IToggleManager _toggleManager;
 		private readonly SaveToggleOverride _saveToggleOverride;
-		private readonly IFetchToggleOverride _fetchToggleOverride;
+		private readonly FetchAllToggleOverrides _fetchAllToggleOverrides;
+		private readonly IAllToggles _allToggles;
 
-		public ToggleController(IToggleManager toggleManager, SaveToggleOverride saveToggleOverride, IFetchToggleOverride fetchToggleOverride)
+		public ToggleController(IToggleManager toggleManager, SaveToggleOverride saveToggleOverride, FetchAllToggleOverrides fetchAllToggleOverrides, IAllToggles allToggles)
 		{
 			_toggleManager = toggleManager;
 			_saveToggleOverride = saveToggleOverride;
-			_fetchToggleOverride = fetchToggleOverride;
+			_allToggles = allToggles;
+			_fetchAllToggleOverrides = fetchAllToggleOverrides;
 		}
 
 		[HttpGet, Route("Toggle/IsEnabled")]
 		public IHttpActionResult IsEnabled(string toggle)
 		{
 			Toggles enumToggle = (Toggles)Enum.Parse(typeof(Toggles), toggle, true);
-
 			return Json(_toggleManager.IsEnabled(enumToggle));
 		}
 		
-		[HttpGet, Route("Toggle/AllToggleNames")]
+		[HttpGet, Route("Toggle/AllToggleNamesWithoutOverrides")]
 		public JsonResult<IEnumerable<string>> AllToggleNamesWithoutOverrides()
 		{
-			var toggles = new HashSet<string>(Enum.GetValues(typeof(Toggles)).Cast<Toggles>().Select(x=>x.ToString())).OrderBy(x=>x);
-			var overrides = new HashSet<string>(_fetchToggleOverride.OverridenValues().Select(x => x.Key));
+			var toggles = _allToggles.Toggles().Select(x=>x.ToString()).OrderBy(x=>x);
+			var overrides = new HashSet<string>(_fetchAllToggleOverrides.OverridenValues().Select(x => x.Key));
 			return Json(toggles.Except(overrides));
 		}
 
 		[HttpGet, Route("Toggle/AllOverrides")]
 		public JsonResult<IEnumerable<OverrideModel>> GetAllOverrides()
 		{
-			return Json(_fetchToggleOverride.OverridenValues().Select(x => new OverrideModel {Toggle = x.Key, Enabled = x.Value}));
+			return Json(_fetchAllToggleOverrides.OverridenValues().Select(x => new OverrideModel {Toggle = x.Key, Enabled = x.Value}));
 		}
 
 		[HttpPost, Route("Toggle/SaveOverride")]

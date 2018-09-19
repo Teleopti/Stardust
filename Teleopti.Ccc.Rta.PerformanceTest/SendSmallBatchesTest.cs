@@ -1,7 +1,4 @@
-using System;
 using NUnit.Framework;
-using Teleopti.Ccc.Infrastructure.Hangfire;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Rta.PerformanceTest.Code;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest
@@ -11,8 +8,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 	public class SendSmallBatchesTest
 	{
 		public StatesSender States;
-		public HangfireUtilities Hangfire;
-		public StateQueueUtilities StateQueue;
 		public TestCommon.PerformanceTest.PerformanceTest PerformanceTest;
 
 		[Test]
@@ -22,8 +17,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			{
 				States.SendAllAsSmallBatches();
 			});
-			StateQueue.WaitForDequeue(TimeSpan.FromMinutes(15));
-			Hangfire.WaitForQueue();
 		}
 	}
 }

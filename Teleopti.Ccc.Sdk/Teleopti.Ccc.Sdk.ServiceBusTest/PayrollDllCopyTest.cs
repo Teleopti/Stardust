@@ -12,13 +12,14 @@ using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest
 {
+	[TestFixture,Ignore("")]
 	public class PayrollDllCopyTest
 	{
 		private string _source;
 		private string _destination;
 		private IList<string> _createdTestFiles;
 		private IList<string> _createdFolders;
-			
+
 		[SetUp]
 		public void Setup()
 		{

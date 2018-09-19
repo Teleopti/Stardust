@@ -231,20 +231,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 					TenantName = tenantName,
 					PayrollBasePath = payrollBasePath
 				};
-				appDomain.SetData(InterAppDomainParameters.AppDomainArgumentsParameter, interAppDomainArguments);
-				appDomain.DoCallBack(loadAssemblyInternal);
-				var payrollFormatDtos = appDomain.GetData(InterAppDomainParameters.PayrollFormatDtosParameter) as IList<PayrollFormatDto>;
+			appDomain.SetData(InterAppDomainParameters.AppDomainArgumentsParameter, interAppDomainArguments);
+			appDomain.DoCallBack(loadAssemblyInternal);
+			var payrollFormatDtos = appDomain.GetData(InterAppDomainParameters.PayrollFormatDtosParameter) as IList<PayrollFormatDto>;
 			AppDomain.Unload(appDomain);
+			
 			return payrollFormatDtos;
 		}
 
 		private static void loadAssemblyInternal()
 		{
 			var payrollFormatDtos = new List<PayrollFormatDto>();
-
-			if(!(AppDomain.CurrentDomain.GetData(InterAppDomainParameters.AppDomainArgumentsParameter) is InterAppDomainArguments interAppParameters))
+			if (!(AppDomain.CurrentDomain.GetData(InterAppDomainParameters.AppDomainArgumentsParameter) is InterAppDomainArguments interAppParameters))
 				throw new ArgumentNullException(nameof(interAppParameters));
-
 			var processors = load(interAppParameters.PayrollBasePath, null, interAppParameters.TenantName);
 
 			foreach (var processor in processors)

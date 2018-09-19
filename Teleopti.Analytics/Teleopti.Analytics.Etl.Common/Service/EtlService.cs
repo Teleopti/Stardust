@@ -17,7 +17,6 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private readonly EtlJobStarter _etlJobStarter;
 		private readonly TenantTickEventPublisher _tenantTickEventPublisher;
 		private readonly HangfireUtilities _hangfire;
-		private readonly IRecurringEventPublisher _recurringEventPublisher;
 		private DateTime? lastTenantRecurringJobPublishing;
 		private INow _now;
 		private int tickTries;
@@ -26,21 +25,18 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			EtlJobStarter etlJobStarter,
 			TenantTickEventPublisher tenantTickEventPublisher,
 			HangfireUtilities hangfire,
-			IRecurringEventPublisher recurringEventPublisher,
 			INow now)
 		{
 			tickTries = 0;
 			_etlJobStarter = etlJobStarter;
 			_tenantTickEventPublisher = tenantTickEventPublisher;
 			_hangfire = hangfire;
-			_recurringEventPublisher = recurringEventPublisher;
 			_now = now;
 			_timer = new Timer(tick, null, TimeSpan.FromMilliseconds(-1), TimeSpan.FromMilliseconds(-1));
 		}
 
 		public void Start(DateTime serviceStartTime, Action stopService)
 		{
-			EnsureSystemWideRecurringJobs();
 			_etlJobStarter.Initialize(serviceStartTime, stopService);
 			_timer.Change(TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(-1));
 		}
@@ -80,12 +76,6 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				_timer?.Change(TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(-1));
 				log.Debug("Timer started");
 			}
-		}
-
-		public void EnsureSystemWideRecurringJobs()
-		{
-			_recurringEventPublisher.StopPublishingAll();
-			_recurringEventPublisher.PublishHourly(new CleanFailedQueue());
 		}
 
 		public void EnsureTenantRecurringJobs()

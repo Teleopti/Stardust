@@ -4,7 +4,6 @@ using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Rta.PerformanceTest.Code;
 
-
 namespace Teleopti.Ccc.Rta.PerformanceTest
 {
 	[TestFixture]
@@ -23,10 +22,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			PerformanceTest.Measure("1mKUHvBlk5wIk0LDZESO2prWvRuimhpjiWaSvoKk2gsE", "SynchronizeLargeBatchesTest", () =>
 			{
 				States.SendAllAsLargeBatches();
-				Waiter.WaitForSyncronize();
+				Waiter.WaitForSyncronize(TimeSpan.FromMinutes(15));
 			});
-			StateQueue.WaitForDequeue(TimeSpan.FromMinutes(15));
-			Hangfire.WaitForQueue();
 		}
 	}
 }

@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 {
-	[TestFixture, Ignore("")]
+	[TestFixture]
 	public class AppDomainUnloadTest
 	{
 		private readonly SearchPath _searchPath = new SearchPath();
@@ -19,43 +19,49 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 		[OneTimeSetUp]
 		public void SetupFixture()
 		{
-			copyFiles(Path.Combine(TestContext.CurrentContext.TestDirectory, "Payroll"),
-				Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Payroll"), "Telia");
+			//copyFiles(Path.Combine(TestContext.CurrentContext.TestDirectory, "Payroll"),
+			//	Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Payroll"), "Telia");
+			//AppDomain.CurrentDomain.SetData("APPBASE", @"C:\Git\TeleoptiWFM\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\bin\Debug");
 		}
 
-		private static void copyFiles(string sourcePath, string destinationPath,
-			string subdirectoryPath)
-		{
-			var fullSourcePath = Path.Combine(sourcePath, subdirectoryPath);
-			var fullDestinationPath = Path.Combine(destinationPath, subdirectoryPath);
+		//private static void copyFiles(string sourcePath, string destinationPath,
+		//	string subdirectoryPath)
+		//{
+		//	var fullSourcePath = Path.Combine(sourcePath, subdirectoryPath);
+		//	var fullDestinationPath = Path.Combine(destinationPath, subdirectoryPath);
 
-			if (Path.GetFullPath(fullSourcePath) == Path.GetFullPath(fullDestinationPath))
-				return;
+		//	if (Path.GetFullPath(fullSourcePath) == Path.GetFullPath(fullDestinationPath))
+		//		return;
 
-			if (!Directory.Exists(fullDestinationPath))
-				Directory.CreateDirectory(fullDestinationPath);
+		//	if (!Directory.Exists(fullDestinationPath))
+		//		Directory.CreateDirectory(fullDestinationPath);
 
-			foreach (var sourceFile in Directory.GetFiles(fullSourcePath))
-			{
-				var fullDestinationFilename = Path.Combine(fullDestinationPath, Path.GetFileName(sourceFile));
-				File.Copy(sourceFile, fullDestinationFilename, true);
-			}
-		}
+		//	foreach (var sourceFile in Directory.GetFiles(fullSourcePath))
+		//	{
+		//		var fullDestinationFilename = Path.Combine(fullDestinationPath, Path.GetFileName(sourceFile));
+		//		File.Copy(sourceFile, fullDestinationFilename, true);
+		//	}
+		//}
 
 		[Test]
 		public void VerifyPayrollDtosCanBeLoaded()
 		{
+			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
+			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
 			runWithExceptionHandling(() =>
 			{
 				var target = new AppdomainCreatorWrapper();
 				var payrollDtos = target.FindPayrollFormatsForTenant("Telia", _searchPath.Path);
 				payrollDtos.Count.Should().Be(6);
 			});
+			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
-		[Test]
+		[Test, Ignore("")]
 		public void ExecutePayroll()
 		{
+			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
+			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
 			runWithExceptionHandling(() =>
 			{
 				var payrollExportDto = new PayrollExportDto
@@ -80,11 +86,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 					_searchPath.Path);
 				document.DocumentElement.ChildNodes.Count.Should().Be(5);
 			});
+			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
-		[Test]
+		[Test, Ignore("")]
 		public void ShouldFindPayrollFilesOnPayrollRootDirIfMissingInTenantSpecificDir()
 		{
+			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
+			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
 			runWithExceptionHandling(() =>
 			{
 				var payrollExportDto = new PayrollExportDto
@@ -106,11 +115,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 				var document = target.RunPayroll(new SdkFakeServiceFactory(), payrollExportDto, new RunPayrollExportEvent(), Guid.NewGuid(), new FakeServiceBusPayrollExportFeedback(), _searchPath.Path);
 				document.DocumentElement.ChildNodes.Count.Should().Be(5);
 			});
+			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
 		[Test]
 		public void ShouldNotCrashIfTenantNotFound()
 		{
+			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
+			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
 			var payrollExportDto = new PayrollExportDto
 			{
 				TimeZoneId = "Utc",
@@ -130,11 +142,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			var feedback = new FakeServiceBusPayrollExportFeedback();
 			Assert.DoesNotThrow(() => target.RunPayroll(factory, payrollExportDto, new RunPayrollExportEvent(), Guid.NewGuid(), feedback, _searchPath.Path));
 			feedback.ProgressList.Where(i => i.DetailLevel == DetailLevel.Error).Should().Not.Be.Empty();
+			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
 		[Test]
 		public void ShouldNotReturnValuesWhenFileIsLocked()
 		{
+			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
+			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
 			var payrollExportDto = new PayrollExportDto
 			{
 				TimeZoneId = "Utc",
@@ -161,11 +176,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			feedback.ProgressList.Where(i => i.DetailLevel == DetailLevel.Error).Should().Not.Be.Empty();
 			result.InnerXml.Should().Be.Empty();
 			file.Close();
+			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
 		[Test]
 		public void ShouldHandlePayrollFormatIdNotFound()
 		{
+			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
+			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
 			var payrollExportDto = new PayrollExportDto
 			{
 				TimeZoneId = "Utc",
@@ -187,12 +205,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 				target.RunPayroll(factory, payrollExportDto, new RunPayrollExportEvent(), Guid.NewGuid(),
 					feedback, _searchPath.Path));
 
-			feedback.ProgressList.Where(i => i.DetailLevel == DetailLevel.Error).Should().Not.Be.Empty();	
+			feedback.ProgressList.Where(i => i.DetailLevel == DetailLevel.Error).Should().Not.Be.Empty();
+			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
 		[Test]
 		public void ExecutePayrollAndGetUpdatedFeedback()
 		{
+			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
+			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
 			runWithExceptionHandling(() =>
 			{
 				var payrollExportDto = new PayrollExportDto
@@ -216,6 +237,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 				target.RunPayroll(factory, payrollExportDto, new RunPayrollExportEvent(), Guid.NewGuid(), feedback, _searchPath.Path);
 				feedback.ProgressList.Count.Should().Not.Be.EqualTo(0);
 			});
+			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
 		private static void runWithExceptionHandling(Action action)

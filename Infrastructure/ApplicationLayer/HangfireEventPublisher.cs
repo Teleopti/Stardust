@@ -25,45 +25,30 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_dataSource = dataSource;
 		}
 
-		public void Publish(params IEvent[] events)
-		{
+		public void Publish(params IEvent[] events) =>
 			jobsFor(events).ForEach(j => _client.Enqueue(j));
-		}
 
-		public void PublishDaily(IEvent @event)
-		{
-			jobsFor(@event).ForEach(x => _client.AddOrUpdateDaily(x));
-		}
+		public void PublishDaily(IEvent @event) =>
+			jobsFor(new[] {@event}).ForEach(x => _client.AddOrUpdateDaily(x));
 
-		public void PublishHourly(IEvent @event)
-		{
-			jobsFor(@event).ForEach(x => _client.AddOrUpdateHourly(x));
-		}
+		public void PublishHourly(IEvent @event) =>
+			jobsFor(new[] {@event}).ForEach(x => _client.AddOrUpdateHourly(x));
 
-		public void PublishMinutely(IEvent @event)
-		{
-			var jobs = _resolver.RecurringJobsFor<IRunOnHangfire>(@event);
-			jobsFor(jobs).ForEach(x => _client.AddOrUpdateMinutely(x));
-		}
+		public void PublishMinutely(IEvent @event) =>
+			jobsFor(_resolver.MinutelyRecurringJobsFor<IRunOnHangfire>(@event))
+				.ForEach(x => _client.AddOrUpdateMinutely(x));
 
-		private IEnumerable<HangfireEventJob> jobsFor(IEvent @event)
-		{
-			return jobsFor(new[] {@event});
-		}
-
-		private IEnumerable<HangfireEventJob> jobsFor(IEnumerable<IEvent> events)
-		{
-			return jobsFor(_resolver.JobsFor<IRunOnHangfire>(events));
-		}
+		private IEnumerable<HangfireEventJob> jobsFor(IEnumerable<IEvent> events) =>
+			jobsFor(_resolver.JobsFor<IRunOnHangfire>(events));
 
 		private IEnumerable<HangfireEventJob> jobsFor(IEnumerable<IJobInfo> jobInfos)
 		{
 			var tenant = _dataSource.CurrentName();
+			var tenantDisplayName = (string.IsNullOrWhiteSpace(tenant) ? "ALL" : tenant);
 			return jobInfos
 				.Select(x =>
 					{
 						var eventDisplayName = x.Event?.GetType().Name ?? "a package";
-						var tenantDisplayName = (string.IsNullOrWhiteSpace(tenant) ? "ALL" : tenant);
 						return new HangfireEventJob
 						{
 							DisplayName = $"{x.HandlerType.Name} got {eventDisplayName} on {tenantDisplayName}",
@@ -101,12 +86,5 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_client.GetRecurringJobIds()
 				.ForEach(x => _client.RemoveIfExists(x));
 		}
-	}
-
-	public class JobInfo
-	{
-		public HangfireEventJob Job;
-		public AttemptsAttribute AttemptsAttribute;
-		public AllowFailuresAttribute AllowFailuresAttribute;
 	}
 }

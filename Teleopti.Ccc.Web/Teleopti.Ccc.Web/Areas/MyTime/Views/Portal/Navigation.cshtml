@@ -25,15 +25,15 @@
 		};
 
 		Teleopti.MyTimeWeb.Common.SetupCalendar(
-		{
-			UseJalaaliCalendar: @Model.UseJalaaliCalendar.ToString().ToLowerInvariant(),
-			DateFormat: "@Html.Raw(@Model.DateFormat)",
-			TimeFormat: "@Model.TimeFormat",
-			AMDesignator: "@Model.AMDesignator",
-			PMDesignator: "@Model.PMDesignator",
-			DateTimeDefaultValues: dateTimeDefaultValues,
-			DateFormatLocale: "@Model.DateFormatLocale"
-		});
+			{
+				UseJalaaliCalendar: @Model.UseJalaaliCalendar.ToString().ToLowerInvariant(),
+				DateFormat: "@Html.Raw(@Model.DateFormat)",
+				TimeFormat: "@Model.TimeFormat",
+				AMDesignator: "@Model.AMDesignator",
+				PMDesignator: "@Model.PMDesignator",
+				DateTimeDefaultValues: dateTimeDefaultValues,
+				DateFormatLocale: "@Model.DateFormatLocale"
+			});
 	});
 
 	var requestsMessagesUserTexts = {
@@ -50,6 +50,56 @@
 	};
 
 </script>
+
+@if (Model.GrantEnabled)
+{
+	<script type="text/javascript">
+		$(document).ready(function () {
+// ReSharper disable Es6Feature
+			const availableClientWidth = document.documentElement.clientWidth;
+			const availableClientHeight = (document.documentElement.clientHeight - 100);
+			const chatbotwidth = (availableClientWidth > 450 ? 430 : availableClientWidth - 20) + 'px';
+			const expectedHeight = (availableClientHeight > 500 ? 400 : availableClientHeight) + 'px';
+// ReSharper restore Es6Feature
+
+			var div = document.createElement("div");
+			document.getElementsByTagName('body')[0].appendChild(div);
+			div.outerHTML = "<div id='botDiv' class='chatbox' style='width: " + chatbotwidth + "; height: " + expectedHeight + "; z-index: 10000; display: none;'>"
+				+ "<div id='grantBot' style='width: 100%;'></div>"
+				+ "</div>";
+
+			BotChat.App({
+				directLine: { secret: '4iLsDqwxH7w.cwA.GSo.KqnAG1hrW3hA4QIE7rCt4cFl3qnXN0lBybxUMh7MSTw' },
+				user: { id: 'userid' },
+				bot: { id: 'botid' },
+				resize: 'detect',
+				chatTitle: 'Grant bot',
+				showUploadButton: false
+			}, document.getElementById("grantBot"));
+
+			document.querySelector("#grantBot .wc-header").setAttribute("id", "chatbotHeader");
+
+			document.getElementById("chatbotHeader").addEventListener("click",
+				function (e) {
+					document.getElementById("botDiv").style.display = "none";
+				}
+			);
+
+			document.getElementById("botIndicator").addEventListener("click",
+				function (e) {
+// ReSharper disable Es6Feature
+					const style = document.getElementById("botDiv").style;
+// ReSharper restore Es6Feature
+					if (style.display === 'block') {
+						style.display = 'none';
+					} else {
+						style.display = 'block';
+					}
+				}
+			);
+		});
+	</script>
+}
 
 <div id="autocollapse" class="navbar navbar-default navbar-inverse bdd-mytime-top-menu">
 	<div id="innerNavBar" class="container">
@@ -68,6 +118,14 @@
 		<!-- Non Collapsing Right Menu-->
 		<div class="navbar-header pull-right navbar-right">
 			<ul class="nav navbar-nav pull-left navbar-user-setting">
+				@if (Model.GrantEnabled)
+				{
+					<li id="botIndicator" class="dropdown pull-left">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<i class="glyphicon glyphicon-headphones"></i>
+						</a>
+					</li>
+				}
 				@if (Model.ShowBadge)
 				{
 					<li id="BadgePanel" class="dropdown pull-left">
@@ -186,8 +244,8 @@
 							<a href="@string.Format("#{0}Tab", navSection.Controller)"
 							   onclick="hideNavMenu();"
 							   data-mytime-action="@Html.Portal().GetAction(navSection)" @(navSection.PayAttention ? @Html.Raw("class=\"asm-new-message-indicator \"") : @Html.Raw(""))>
-							   @navSection.Title
-							   <span class="badge badge-important">@navSection.UnreadMessageCount</span>
+								@navSection.Title
+								<span class="badge badge-important">@navSection.UnreadMessageCount</span>
 							</a>
 						}
 						else
@@ -195,8 +253,8 @@
 							<a href="@string.Format("#{0}Tab", navSection.Controller)"
 							   onclick="hideNavMenu();"
 							   data-mytime-action="@Html.Portal().GetAction(navSection)">
-							   @navSection.Title
-							   <span class="badge hide no-unread-msg"></span>
+								@navSection.Title
+								<span class="badge hide no-unread-msg"></span>
 							</a>
 						}
 					</li>
@@ -219,22 +277,22 @@
 										<a href="@string.Format("#{0}Tab", reportNavSection.Controller)"
 										   onclick="hideNavMenu();"
 										   data-mytime-action="@Html.Portal().GetAction(reportNavSection)">
-										   @reportNavSection.Title
-										   <span class="badge hide"></span>
+											@reportNavSection.Title
+											<span class="badge hide"></span>
 										</a>
 									}
-									
+
 									@if (!reportNavSection.IsWebReport && !Request.UserAgent.Contains("app/android") && !Request.UserAgent.Contains("app/ios"))
 									{
 										<a href="@reportNavSection.Url"
-											onclick="hideNavMenu();"
-											target="_blank">@reportNavSection.Title</a>
+										   onclick="hideNavMenu();"
+										   target="_blank">@reportNavSection.Title</a>
 									}
 								</li>
 							}
 						</ul>
 					</li>
-					}
+				}
 			</ul>
 		</div>
 	</div>

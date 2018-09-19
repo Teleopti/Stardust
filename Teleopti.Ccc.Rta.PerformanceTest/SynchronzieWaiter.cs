@@ -1,47 +1,48 @@
-﻿using System.Threading;
+﻿using System;
+using Polly;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
+using Teleopti.Wfm.Adherence.Domain.Events;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest
 {
 	public class SynchronzieWaiter
 	{
-		private readonly WithUnitOfWork _unitOfWork;
-		private readonly WithReadModelUnitOfWork _readModelUnitOfWork;
 		private readonly IKeyValueStorePersister _keyValueStore;
 		private readonly IRtaEventStoreTestReader _events;
 
-		public SynchronzieWaiter(WithUnitOfWork unitOfWork, WithReadModelUnitOfWork readModelUnitOfWork, IKeyValueStorePersister keyValueStore, IRtaEventStoreTestReader events)
+		public SynchronzieWaiter(IKeyValueStorePersister keyValueStore, IRtaEventStoreTestReader events)
 		{
-			_unitOfWork = unitOfWork;
-			_readModelUnitOfWork = readModelUnitOfWork;
 			_keyValueStore = keyValueStore;
 			_events = events;
 		}
 
 		[TestLog]
-		public virtual void WaitForSyncronize()
+		[UnitOfWork]
+		[ReadModelUnitOfWork]
+		public virtual void WaitForSyncronize(TimeSpan timeout)
 		{
-			while (true)
+			var interval = TimeSpan.FromMilliseconds(100);
+			var attempts = (int) (timeout.TotalMilliseconds / interval.TotalMilliseconds);
+			var synchronized = Policy.HandleResult(false)
+				.WaitAndRetry(attempts, attempt => interval)
+				.Execute(() => SynchronizedEventId() >= LatestEventId());
+			if (!synchronized)
+				throw new WaitForSyncronizeException($"Events still not syncronized after waiting {timeout.TotalSeconds} seconds");
+		}
+
+		[TestLog]
+		protected virtual int SynchronizedEventId() => _keyValueStore.Get(RtaEventStoreSynchronizer.SynchronizedEventKey, 0);
+
+		[TestLog]
+		protected virtual int LatestEventId() => _events.LoadLastIdForTest();
+
+		public class WaitForSyncronizeException : Exception
+		{
+			public WaitForSyncronizeException(string message) : base(message)
 			{
-				if (GetLatestStoredRtaEventId() == GetLatestSynchronizedRtaEventId())
-					break;
-				Thread.Sleep(100);
 			}
-		}
-
-		[TestLog]
-		protected virtual int GetLatestSynchronizedRtaEventId()
-		{
-			return _readModelUnitOfWork.Get(() => _keyValueStore.Get("LatestSynchronizedRTAEvent", 0));
-		}
-
-		[TestLog]
-		protected virtual int GetLatestStoredRtaEventId()
-		{
-			return _unitOfWork.Get(() => _events.LoadLastIdForTest());
 		}
 	}
 }

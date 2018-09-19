@@ -592,9 +592,11 @@
     <Compile Include="RealTimeAdherence\SqlDataReaderExtensions.cs" />
     <Compile Include="ServiceLocatorForEntity.cs" />
     <Compile Include="SystemCheck\CheckMessageBrokerMailBox.cs" />
+    <Compile Include="Toggle\Admin\FetchAllToggleOverrides.cs" />
     <Compile Include="Toggle\ApplicationFunctionsToggleFilter.cs" />
-    <Compile Include="Toggle\FetchToggleOverride.cs" />
+    <Compile Include="Toggle\FetchToggleOverrideKeepOverridenValueResult.cs" />
     <Compile Include="Toggle\IApplicationFunctionsToggleFilter.cs" />
+    <Compile Include="Toggle\InApp\FetchToggleOverride.cs" />
     <Compile Include="Toggle\IToggleFiller.cs" />
     <Compile Include="Toggle\IToggleManager.cs" />
     <Compile Include="Toggle\SaveToggleOverride.cs" />

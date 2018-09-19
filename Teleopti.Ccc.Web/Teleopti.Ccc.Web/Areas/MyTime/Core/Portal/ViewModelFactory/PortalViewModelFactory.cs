@@ -132,7 +132,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				DateTimeDefaultValues = getDateTimeDefaultValues(culture),
 				ShowBadge = showBadge,
 				ShowBadgePeriodNavigator = showBadgePeriodNavigator,
-				DateFormatLocale = getLocale()
+				DateFormatLocale = getLocale(),
+				GrantEnabled = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ChatBot)
 			};
 		}
 

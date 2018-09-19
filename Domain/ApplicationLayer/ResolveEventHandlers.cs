@@ -28,24 +28,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				.Where(x => x.GetInterfaces().Contains(typeof(T)));
 		}
 
-		public IEnumerable<IJobInfo> ResolveAllJobs(IEnumerable<IEvent> events)
-		{
-			return 
-				jobsFor<IRunOnHangfire>(events)
+		public IEnumerable<IJobInfo> ResolveAllJobs(IEnumerable<IEvent> events) =>
+			jobsFor<IRunOnHangfire>(events)
 				.Concat(jobsFor<IRunOnStardust>(events))
 				.Concat(jobsFor<IRunInSync>(events))
 				.Concat(jobsFor<IRunInSyncInFatClientProcess>(events))
 				.ToArray();
-		}
 
-		public IEnumerable<IJobInfo> JobsFor<T>(IEnumerable<IEvent> events)
-		{
-			return jobsFor<T>(events);
-		}
+		public IEnumerable<IJobInfo> JobsFor<T>(IEnumerable<IEvent> events) =>
+			jobsFor<T>(events);
 
-		public IEnumerable<IJobInfo> RecurringJobsFor<T>(IEvent @event)
+		public IEnumerable<IJobInfo> MinutelyRecurringJobsFor<T>(IEvent @event)
 		{
-			var jobs = jobsFor<T>(new[] { @event });
+			var jobs = jobsFor<T>(new[] {@event});
 
 			if (jobs.Any(x => x.AttemptsAttribute != null))
 				throw new Exception("Retrying minutely recurring job is a bad idea");
@@ -138,12 +133,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			return handler
 				.GetMethods()
 				.FirstOrDefault(m =>
-						m.Name == "QueueTo" &&
-						m.GetParameters().Single().ParameterType == @event.GetType()
+					m.Name == "QueueTo" &&
+					m.GetParameters().Single().ParameterType == @event.GetType()
 				)
-				?.Invoke(_resolve.Resolve(handler), new[] { @event }) as string;
+				?.Invoke(_resolve.Resolve(handler), new[] {@event}) as string;
 		}
-		
+
 		private AttemptsAttribute getAttemptsAttribute(MethodInfo handlerMethod)
 		{
 			return handlerMethod?
@@ -159,7 +154,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				.Cast<AllowFailuresAttribute>()
 				.SingleOrDefault();
 		}
-		
+
 		private class jobInfo : IJobInfo
 		{
 			public Type HandlerType { get; set; }
@@ -175,7 +170,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			public AttemptsAttribute AttemptsAttribute { get; set; }
 			public AllowFailuresAttribute AllowFailuresAttribute { get; set; }
 		}
-
 	}
 
 	public interface IJobInfo
@@ -190,5 +184,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		int AllowFailures { get; }
 		int RunInterval { get; }
 	}
-
 }

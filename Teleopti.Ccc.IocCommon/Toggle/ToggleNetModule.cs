@@ -5,6 +5,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.Toggle.Admin;
+using Teleopti.Ccc.Infrastructure.Toggle.InApp;
 using Toggle.Net;
 using Toggle.Net.Configuration;
 using Toggle.Net.Providers.TextFile;
@@ -15,12 +17,24 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 	internal class ToggleNetModule : Module
 	{
 		private readonly IocArgs _iocArgs;
+		private readonly IIocConfiguration _iocConfiguration;
 		private const string missingPathToToggle = "Path to toggle file is missing. Please use a valid path (or use a http address to point to the toggle.net service)!";
 		private static readonly ILog logger = LogManager.GetLogger(typeof(ToggleNetModule));
 
-		public ToggleNetModule(IocArgs iocArgs)
+		public static Module CreateForRuntimeContainer(IIocConfiguration configuration)
+		{
+			return new ToggleNetModule(configuration.Args(), configuration);
+		}
+
+		public static Module CreateForContainerUsedInSetup(IocArgs iocArgs)
+		{
+			return new ToggleNetModule(iocArgs, null);
+		}
+		
+		private ToggleNetModule(IocArgs iocArgs, IIocConfiguration iocConfiguration)
 		{
 			_iocArgs = iocArgs;
+			_iocConfiguration = iocConfiguration;
 		}
 
 		protected override void Load(ContainerBuilder builder)
@@ -29,13 +43,23 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 
 			if (bool.TryParse(_iocArgs.ConfigReader.AppConfig("PBI77584"), out var pbi77584) && pbi77584)
 			{
-				builder.Register(c => new FetchToggleOverride(_iocArgs.ConfigReader)).As<IFetchToggleOverride>();
+				if (isRuntimeContainer())
+				{	
+					builder.CacheByInterfaceProxy<FetchToggleOverride, IFetchToggleOverride>();
+					_iocConfiguration.Cache().This<IFetchToggleOverride>(b => b
+							.CacheMethod(m => m.OverridenValue(Toggles.TestToggle)));
+				}
+				else
+				{
+					builder.Register(c => new FetchToggleOverrideKeepOverridenValueResult(_iocArgs.ConfigReader)).As<IFetchToggleOverride>();					
+				}
 			}
 			else
 			{
 				builder.RegisterType<NoFetchingOfOverridenToggles>().As<IFetchToggleOverride>();
 			}
 			builder.RegisterType<SaveToggleOverride>().SingleInstance();
+			builder.RegisterType<FetchAllToggleOverrides>().SingleInstance();
 			
 			if (string.IsNullOrEmpty(pathToToggle))
 			{
@@ -88,6 +112,11 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 				.SingleInstance().As<ITogglesActive>();
 			builder.RegisterType<AllToggles>()
 				.SingleInstance().As<IAllToggles>();
+		}
+
+		private bool isRuntimeContainer()
+		{
+			return _iocConfiguration != null;
 		}
 
 		private class toggleCheckerWrapper : IToggleManager
