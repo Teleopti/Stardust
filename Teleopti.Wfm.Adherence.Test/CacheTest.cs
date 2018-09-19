@@ -48,7 +48,7 @@ namespace Teleopti.Wfm.Adherence.Test
 				builder.RegisterType<OuterService>().SingleInstance();
 
 				builder.CacheByClassProxy<CachedServiceImpl>().SingleInstance();
-				_configuration.Cache().This<CachedServiceImpl>(
+				_configuration.Args().Cache.This<CachedServiceImpl>(
 					(c, b) => b
 						.CacheMethod(x => x.GetDataSourceName())
 						.CacheKey(c.Resolve<CachePerDataSource>())

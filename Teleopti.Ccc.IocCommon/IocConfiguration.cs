@@ -1,3 +1,4 @@
+using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 
@@ -6,7 +7,6 @@ namespace Teleopti.Ccc.IocCommon
 	public class IocConfiguration : IIocConfiguration
 	{
 		private readonly IocArgs _args;
-		private readonly IocCache _cache = new IocCache();
 		private readonly IToggleManager _toggleManager;
 
 		public IocConfiguration(IocArgs args, IToggleManager toggleManager)
@@ -31,9 +31,9 @@ namespace Teleopti.Ccc.IocCommon
 			return _args;
 		}
 
-		public IocCache Cache()
+		public void AddToggleManagerToBuilder(ContainerBuilder builder)
 		{
-			return _cache;
+			builder.Register(x => _toggleManager).As<IToggleManager>().SingleInstance();
 		}
 	}
 }

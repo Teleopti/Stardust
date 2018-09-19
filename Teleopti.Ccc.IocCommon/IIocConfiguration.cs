@@ -1,3 +1,4 @@
+using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.IocCommon
@@ -7,6 +8,6 @@ namespace Teleopti.Ccc.IocCommon
 		void FillToggles();
 		bool Toggle(Toggles toggle);
 		IocArgs Args();
-		IocCache Cache();
+		void AddToggleManagerToBuilder(ContainerBuilder builder);
 	}
 }

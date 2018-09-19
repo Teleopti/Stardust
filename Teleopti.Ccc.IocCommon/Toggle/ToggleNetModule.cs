@@ -17,24 +17,12 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 	internal class ToggleNetModule : Module
 	{
 		private readonly IocArgs _iocArgs;
-		private readonly IIocConfiguration _iocConfiguration;
 		private const string missingPathToToggle = "Path to toggle file is missing. Please use a valid path (or use a http address to point to the toggle.net service)!";
 		private static readonly ILog logger = LogManager.GetLogger(typeof(ToggleNetModule));
 
-		public static Module CreateForRuntimeContainer(IIocConfiguration configuration)
-		{
-			return new ToggleNetModule(configuration.Args(), configuration);
-		}
-
-		public static Module CreateForContainerUsedInSetup(IocArgs iocArgs)
-		{
-			return new ToggleNetModule(iocArgs, null);
-		}
-		
-		private ToggleNetModule(IocArgs iocArgs, IIocConfiguration iocConfiguration)
+		public ToggleNetModule(IocArgs iocArgs)
 		{
 			_iocArgs = iocArgs;
-			_iocConfiguration = iocConfiguration;
 		}
 
 		protected override void Load(ContainerBuilder builder)
@@ -43,16 +31,8 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 
 			if (bool.TryParse(_iocArgs.ConfigReader.AppConfig("PBI77584"), out var pbi77584) && pbi77584)
 			{
-				if (isRuntimeContainer())
-				{	
-					builder.CacheByInterfaceProxy<FetchToggleOverride, IFetchToggleOverride>();
-					_iocConfiguration.Cache().This<IFetchToggleOverride>(b => b
-							.CacheMethod(m => m.OverridenValue(Toggles.TestToggle)));
-				}
-				else
-				{
-					builder.Register(c => new FetchToggleOverrideKeepOverridenValueResult(_iocArgs.ConfigReader)).As<IFetchToggleOverride>();					
-				}
+				builder.CacheByInterfaceProxy<FetchToggleOverride, IFetchToggleOverride>();
+				_iocArgs.Cache.This<IFetchToggleOverride>(x => x.CacheMethod(m => m.OverridenValue(Toggles.TestToggle)));
 			}
 			else
 			{
@@ -113,12 +93,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 			builder.RegisterType<AllToggles>()
 				.SingleInstance().As<IAllToggles>();
 		}
-
-		private bool isRuntimeContainer()
-		{
-			return _iocConfiguration != null;
-		}
-
+		
 		private class toggleCheckerWrapper : IToggleManager
 		{
 			private readonly IToggleChecker _toggleChecker;

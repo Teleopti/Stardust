@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.Toggle.InApp
 			_configReader = configReader;
 		}
 
-		public virtual bool? OverridenValue(Toggles toggle)
+		public bool? OverridenValue(Toggles toggle)
 		{
 			using (var connection = new SqlConnection(_configReader.ConnectionString("Toggle")))
 			{

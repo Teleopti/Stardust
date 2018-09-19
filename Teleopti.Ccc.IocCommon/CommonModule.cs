@@ -8,6 +8,22 @@ using Teleopti.Ccc.IocCommon.Toggle;
 
 namespace Teleopti.Ccc.IocCommon
 {
+	public class SharedModuleUsedInBothRuntimeContainerAndToggleManagerModule : Module
+	{
+		private readonly IocArgs _iocArgs;
+
+		public SharedModuleUsedInBothRuntimeContainerAndToggleManagerModule(IocArgs iocArgs)
+		{
+			_iocArgs = iocArgs;
+		}
+		
+		protected override void Load(ContainerBuilder builder)
+		{
+			builder.RegisterInstance(_iocArgs.ConfigReader).As<IConfigReader>().SingleInstance();
+			builder.RegisterModule(new MbCacheModule(_iocArgs));
+		}
+	}
+	
 	public class CommonModule : Module
 	{
 		private readonly IIocConfiguration _configuration;
@@ -34,13 +50,13 @@ namespace Teleopti.Ccc.IocCommon
 
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterModule(new SharedModuleUsedInBothRuntimeContainerAndToggleManagerModule(_configuration.Args()));
 			builder.RegisterModule(new RuleSetModule(_configuration));
-			builder.RegisterModule(new MbCacheModule(_configuration));
 			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterModule<ServiceLocatorModule>();
 			builder.RegisterModule<LogModule>();
 			builder.RegisterModule<JsonSerializationModule>();
-			builder.RegisterModule(ToggleNetModule.CreateForRuntimeContainer(_configuration));
+			_configuration.AddToggleManagerToBuilder(builder);
 			builder.RegisterModule(new MessageBrokerModule(_configuration));
 			if (_configuration.Args().WebByPassDefaultPermissionCheck_37984)
 			{
@@ -93,7 +109,8 @@ namespace Teleopti.Ccc.IocCommon
 		public static IToggleManager ToggleManagerForIoc(IocArgs iocArgs)
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(ToggleNetModule.CreateForContainerUsedInSetup(iocArgs));
+			builder.RegisterModule(new ToggleNetModule(iocArgs));
+			builder.RegisterModule(new SharedModuleUsedInBothRuntimeContainerAndToggleManagerModule(iocArgs));
 			using (var container = builder.Build())
 				return container.Resolve<IToggleManager>();
 		}

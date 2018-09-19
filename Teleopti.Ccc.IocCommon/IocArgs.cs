@@ -33,6 +33,8 @@ namespace Teleopti.Ccc.IocCommon
 		
 		public IFetchToggleOverride FetchToggleOverride { get; set; }
 
+		public IocCache Cache { get; } = new IocCache();
+
 		public IocArgs(IConfigReader configReader)
 		{
 			FeatureToggle = configReader.AppConfig("FeatureToggle");
