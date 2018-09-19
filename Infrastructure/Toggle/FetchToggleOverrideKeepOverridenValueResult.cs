@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Toggle.InApp;
 
 namespace Teleopti.Ccc.Infrastructure.Toggle
 {

@@ -5,6 +5,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.Toggle.Admin;
+using Teleopti.Ccc.Infrastructure.Toggle.InApp;
 using Toggle.Net;
 using Toggle.Net.Configuration;
 using Toggle.Net.Providers.TextFile;
@@ -57,6 +59,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 				builder.RegisterType<NoFetchingOfOverridenToggles>().As<IFetchToggleOverride>();
 			}
 			builder.RegisterType<SaveToggleOverride>().SingleInstance();
+			builder.RegisterType<FetchAllToggleOverrides>().SingleInstance();
 			
 			if (string.IsNullOrEmpty(pathToToggle))
 			{

@@ -1,9 +1,8 @@
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 
-namespace Teleopti.Ccc.Infrastructure.Toggle
+namespace Teleopti.Ccc.Infrastructure.Toggle.InApp
 {
 	public class FetchToggleOverride: IFetchToggleOverride
 	{
@@ -25,35 +24,12 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 				return (bool?) result;
 			}
 		}
-		
-		public Dictionary<string, bool> OverridenValues()
-		{
-			using (var connection = new SqlConnection(_configReader.ConnectionString("Toggle")))
-			{
-				connection.Open();
-				using (var sqlCommand = new SqlCommand("select Toggle, Enabled from Toggle.Override", connection))
-				{
-					var result = new Dictionary<string, bool>();
-					using (var reader = sqlCommand.ExecuteReader())
-					{
-						while (reader.Read())
-						{
-							var toggleName = reader.GetString(0);
-							var toggleValue = reader.GetBoolean(1);
-							result.Add(toggleName, toggleValue);
-						}
-					}
-					return result;
-				}
-			}
-		}
 	}
 	
 	//REMOVE THESE WHEN FEATURE IS DONE 
 	public interface IFetchToggleOverride
 	{
 		bool? OverridenValue(Toggles toggle);
-		Dictionary<string, bool> OverridenValues();
 	}
 
 	public class NoFetchingOfOverridenToggles : IFetchToggleOverride
@@ -61,11 +37,6 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 		public bool? OverridenValue(Toggles toggle)
 		{
 			return null;
-		}
-
-		public Dictionary<string, bool> OverridenValues()
-		{
-			return new Dictionary<string, bool>();
 		}
 	}
 	//
