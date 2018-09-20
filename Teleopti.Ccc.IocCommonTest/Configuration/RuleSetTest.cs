@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
@@ -18,8 +19,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void VerifyProjectionServiceIsCached()
 		{
 			var containerBuilder = new ContainerBuilder();
-			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
-			containerBuilder.RegisterModule(new CommonModule(configuration));
+			var configuration = CommonModule.ForTest();
+			containerBuilder.RegisterModule(configuration);
 			var callback = new WorkShiftAddStopperCallback();
 			using (var container = containerBuilder.Build())
 			{
@@ -36,8 +37,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ShouldCacheWorkShiftWorkTime()
 		{
 			var containerBuilder = new ContainerBuilder();
-			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
-			containerBuilder.RegisterModule(new CommonModule(configuration));
+			var configuration = CommonModule.ForTest();
+			containerBuilder.RegisterModule(configuration);
 
 			using (var container = containerBuilder.Build())
 			{
@@ -50,8 +51,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ShouldCacheWithDifferentCallbacks()
 		{
 			var containerBuilder = new ContainerBuilder();
-			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
-			containerBuilder.RegisterModule(new CommonModule(configuration));
+			var configuration = CommonModule.ForTest();
+			containerBuilder.RegisterModule(configuration);
 			using (var container = containerBuilder.Build())
 			{
 				var wsRs = createRuleset(true);
@@ -67,8 +68,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ShouldNotCacheRuleSetWithNoId()
 		{
 			var containerBuilder = new ContainerBuilder();
-			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
-			containerBuilder.RegisterModule(new CommonModule(configuration));
+			var configuration = CommonModule.ForTest();
+			containerBuilder.RegisterModule(configuration);
 			var wsRs = createRuleset(false);
 			var callback = new WorkShiftAddStopperCallback();
 			using (var container = containerBuilder.Build())

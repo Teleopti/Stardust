@@ -18,14 +18,10 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			try
 			{
 				File.WriteAllLines(tempFile, new[] { "TestToggle=false" });
-				var containerBuilder = new ContainerBuilder();
-				containerBuilder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = tempFile, ToggleMode = ToggleMode }, null)));
-				using (var container = containerBuilder.Build())
-				{
-					var toggleChecker = container.Resolve<IToggleManager>();
-					toggleChecker.IsEnabled(Toggles.TestToggle)
-						.Should().Be.EqualTo(DisabledFeatureShouldBe);
-				}
+				var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()){FeatureToggle = tempFile, ToggleMode = ToggleMode});
+				
+				toggleManager.IsEnabled(Toggles.TestToggle)
+					.Should().Be.EqualTo(DisabledFeatureShouldBe);
 			}
 			finally
 			{
@@ -40,14 +36,10 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			try
 			{
 				File.WriteAllLines(tempFile, new[] { "TestToggle=true" });
-				var containerBuilder = new ContainerBuilder();
-				containerBuilder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = tempFile, ToggleMode = ToggleMode }, null)));
-				using (var container = containerBuilder.Build())
-				{
-					var toggleChecker = container.Resolve<IToggleManager>();
-					toggleChecker.IsEnabled(Toggles.TestToggle)
-						.Should().Be.EqualTo(EnabledFeatureShouldBe);
-				}
+				var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()){FeatureToggle = tempFile, ToggleMode = ToggleMode});
+				
+				toggleManager.IsEnabled(Toggles.TestToggle)
+					.Should().Be.EqualTo(EnabledFeatureShouldBe);
 			}
 			finally
 			{
@@ -62,14 +54,10 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			try
 			{
 				File.WriteAllLines(tempFile, new string[0]);
-				var containerBuilder = new ContainerBuilder();
-				containerBuilder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = tempFile, ToggleMode = ToggleMode }, null)));
-				using (var container = containerBuilder.Build())
-				{
-					var toggleChecker = container.Resolve<IToggleManager>();
-					toggleChecker.IsEnabled(Toggles.TestToggle)
-						.Should().Be.EqualTo(UndefinedFeatureShouldBe);
-				}
+				var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()){FeatureToggle = tempFile, ToggleMode = ToggleMode});
+
+				toggleManager.IsEnabled(Toggles.TestToggle)
+					.Should().Be.EqualTo(UndefinedFeatureShouldBe);
 			}
 			finally
 			{
@@ -84,14 +72,10 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			try
 			{
 				File.WriteAllLines(tempFile, new[] {"TestToggle=rc"});
-				var containerBuilder = new ContainerBuilder();
-				containerBuilder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = tempFile, ToggleMode = ToggleMode }, null)));
-				using (var container = containerBuilder.Build())
-				{
-					var toggleChecker = container.Resolve<IToggleManager>();
-					toggleChecker.IsEnabled(Toggles.TestToggle)
-						.Should().Be.EqualTo(RcFeatureShouldBe);
-				}
+				var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()){FeatureToggle = tempFile, ToggleMode = ToggleMode});
+				
+				toggleManager.IsEnabled(Toggles.TestToggle)
+					.Should().Be.EqualTo(RcFeatureShouldBe);
 			}
 			finally
 			{
@@ -106,14 +90,10 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			try
 			{
 				File.WriteAllLines(tempFile, new[] { "TestToggle= Rc	 " });
-				var containerBuilder = new ContainerBuilder();
-				containerBuilder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = tempFile, ToggleMode = ToggleMode }, null)));
-				using (var container = containerBuilder.Build())
-				{
-					var toggleChecker = container.Resolve<IToggleManager>();
-					toggleChecker.IsEnabled(Toggles.TestToggle)
+				var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()){FeatureToggle = tempFile, ToggleMode = ToggleMode});
+
+				toggleManager.IsEnabled(Toggles.TestToggle)
 						.Should().Be.EqualTo(RcFeatureShouldBe);
-				}
 			}
 			finally
 			{
@@ -128,14 +108,10 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			try
 			{
 				File.WriteAllLines(tempFile, new[] { "TestToggle= Dev " });
-				var containerBuilder = new ContainerBuilder();
-				containerBuilder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = tempFile, ToggleMode = ToggleMode }, null)));
-				using (var container = containerBuilder.Build())
-				{
-					var toggleChecker = container.Resolve<IToggleManager>();
-					toggleChecker.IsEnabled(Toggles.TestToggle)
-						.Should().Be.EqualTo(devFeatureShouldBe);
-				}
+				var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()){FeatureToggle = tempFile, ToggleMode = ToggleMode});
+				
+				toggleManager.IsEnabled(Toggles.TestToggle)
+					.Should().Be.EqualTo(devFeatureShouldBe);
 			}
 			finally
 			{

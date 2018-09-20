@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Messaging.Client.Http;
 using Teleopti.Messaging.Client.SignalR;
 
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldResolveKeepAliveStrategies()
 		{
-			var config = new IocConfiguration(new IocArgs(new ConfigReader()) { MessageBrokerListeningEnabled = true }, null);
+			var config = new IocConfiguration(new IocArgs(new ConfigReader()) { MessageBrokerListeningEnabled = true }, new FalseToggleManager());
 			using (var container = BuildContainer(config))
 			{
 				container.Resolve<IEnumerable<IConnectionKeepAliveStrategy>>()
@@ -61,8 +62,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ShouldNotUseSignalRIfListeningDisabled()
 		{
 			var config = new IocConfiguration(
-				new IocArgs(new ConfigReader()) { MessageBrokerListeningEnabled = false }, null
-				);
+				new IocArgs(new ConfigReader()) { MessageBrokerListeningEnabled = false }, new FalseToggleManager());
 			using (var container = BuildContainer(config))
 			{
 				container.Resolve<ISignalRClient>().Should().Be.OfType<DisabledSignalRClient>();
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(signalRClient).As<ISignalRClient>();
 			var sharedContainer = builder.Build();
-			using (var container = BuildContainer(new IocConfiguration(new IocArgs(new ConfigReader()){SharedContainer = sharedContainer}, null)))
+			using (var container = BuildContainer(new IocConfiguration(new IocArgs(new ConfigReader()){SharedContainer = sharedContainer}, new FalseToggleManager())))
 			{
 				container.Resolve<ISignalRClient>().Should().Be.SameInstanceAs(signalRClient);
 			}
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		private IContainer BuildContainer()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()), null)));
+			builder.RegisterModule(CommonModule.ForTest());
 			return builder.Build();
 		}
 

@@ -16,9 +16,9 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[SetUp]
 		public void Setup()
 		{
-			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
 			_containerBuilder = new ContainerBuilder();
-			_containerBuilder.RegisterModule(new CommonModule(configuration));
+			var configuration = CommonModule.ForTest();
+			_containerBuilder.RegisterModule(configuration);
 			_containerBuilder.RegisterModule(new OutboundScheduledResourcesProviderModule());
 		}
 
