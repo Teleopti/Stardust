@@ -4,7 +4,6 @@ using Autofac;
 using log4net;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.Toggle.Admin;
 using Teleopti.Ccc.Infrastructure.Toggle.InApp;
@@ -89,11 +88,6 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 				.SingleInstance()
 				.As<IToggleManager>();
 			}
-
-			builder.RegisterType<TogglesActive>()
-				.SingleInstance().As<ITogglesActive>();
-			builder.RegisterType<AllToggles>()
-				.SingleInstance().As<IAllToggles>();
 		}
 		
 		private class toggleCheckerWrapper : IToggleManager
