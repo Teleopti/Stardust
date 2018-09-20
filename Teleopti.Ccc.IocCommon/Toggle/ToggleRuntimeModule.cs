@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.ToggleAdmin;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.Toggle.Admin;
 
 namespace Teleopti.Ccc.IocCommon.Toggle
 {
@@ -16,6 +17,9 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 				.SingleInstance().As<IAllToggles>();
 
 			builder.RegisterType<AllToggleNamesWithoutOverrides>().SingleInstance();
+			
+			builder.RegisterType<SaveToggleOverride>().SingleInstance();
+			builder.RegisterType<FetchAllToggleOverrides>().SingleInstance().As<IFetchAllToggleOverrides>();
 		}
 	}
 }

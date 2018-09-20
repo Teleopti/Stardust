@@ -39,8 +39,6 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 				builder.RegisterType<NoFetchingOfOverridenToggles>().As<IFetchToggleOverride>();
 			}
 			
-			builder.RegisterType<SaveToggleOverride>().SingleInstance();
-			builder.RegisterType<FetchAllToggleOverrides>().SingleInstance();
 			
 			if (string.IsNullOrEmpty(pathToToggle))
 			{

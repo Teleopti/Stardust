@@ -439,6 +439,7 @@
     <Compile Include="Scheduling\ScheduleRangePersisterWithConflictSolve\ShouldSaveNoConflict.cs" />
     <Compile Include="Scheduling\ScheduleRangePersisterWithConflictSolve\ScheduleDictionaryPersisterWithConflictSolveBase.cs" />
     <Compile Include="Schema\ApplicationDatabaseClusteredIndexTest.cs" />
+    <Compile Include="Toggle\Admin\FetchAllToggleOverridesTest.cs" />
     <Compile Include="Toggle\ApplicationFunctionsToggleFilterTest.cs" />
     <Compile Include="Toggle\ToggleOverrideTest.cs" />
     <Compile Include="UnitOfWorkTestAttribute.cs" />
