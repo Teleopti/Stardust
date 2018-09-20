@@ -13,7 +13,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
 	{
 		IEnumerable<HistoricalOverviewReadModel> Read(IEnumerable<Guid> personIds);
 	}
-
+	
 	public class HistoricalOverviewReadModel
 	{
 		public DateOnly Date;
@@ -21,7 +21,6 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
 		public int? Adherence { get; set; }
 		public bool WasLateForWork { get; set; }
 		public int MinutesLateForWork { get; set; }
-		public int InAdherenceMinutes { get; set; }
-		public int OutOfAdherenceMinutes { get; set; }
+		public int? ShiftLength { get; set; }
 	}
 }

@@ -50,7 +50,8 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				Date = date,
 				Adherence = 90,
 				WasLateForWork = true,
-				MinutesLateForWork = 5
+				MinutesLateForWork = 5,
+				ShiftLength = 480
 			});
 
 			var result = Reader.Read(new[] {personId});
@@ -59,6 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			result.Single().Adherence.Should().Be(90);
 			result.Single().WasLateForWork.Should().Be(true);
 			result.Single().MinutesLateForWork.Should().Be(5);
+			result.Single().ShiftLength.Should().Be(480);
 		}
 
 		[Test]
@@ -74,6 +76,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				Adherence = 90,
 				WasLateForWork = false,
 				MinutesLateForWork = 0,
+				ShiftLength = 0
 			});
 			Persister.Upsert(new HistoricalOverviewReadModel
 			{
@@ -81,13 +84,15 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				Date = date,
 				Adherence = 98,
 				WasLateForWork = true,
-				MinutesLateForWork = 5
+				MinutesLateForWork = 5,
+				ShiftLength = 480
 			});
 
 			var result = Reader.Read(new[] {personId});
 			result.Single().Adherence.Should().Be(98);
 			result.Single().WasLateForWork.Should().Be(true);
 			result.Single().MinutesLateForWork.Should().Be(5);
+			result.Single().ShiftLength.Should().Be(480);
 		}
 
 		[Test]

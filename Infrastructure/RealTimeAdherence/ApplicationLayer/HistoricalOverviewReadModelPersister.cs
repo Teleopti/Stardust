@@ -27,7 +27,8 @@ UPDATE [ReadModel].[HistoricalOverview]
 	SET 
 		Adherence = :Adherence, 
 		WasLateForWork = :WasLateForWork, 
-		MinutesLateForWork = :MinutesLateForWork 
+		MinutesLateForWork = :MinutesLateForWork, 
+		ShiftLength = :ShiftLength
 	WHERE 
 		PersonId = :PersonId AND 
 		[Date] = :Date 
@@ -36,6 +37,7 @@ UPDATE [ReadModel].[HistoricalOverview]
 				.SetParameter("Adherence", model.Adherence)
 				.SetParameter("WasLateForWork", model.WasLateForWork)
 				.SetParameter("MinutesLateForWork", model.MinutesLateForWork)
+				.SetParameter("ShiftLength", model.ShiftLength)
 				.SetParameter("Date", date)
 				.ExecuteUpdate();
 			if (updated == 0)
@@ -48,7 +50,8 @@ INSERT INTO [ReadModel].[HistoricalOverview]
 		[Date], 
 		[Adherence], 
 		[WasLateForWork], 
-		[MinutesLateForWork]
+		[MinutesLateForWork], 
+		[ShiftLength]  
 	) 
 VALUES 
 	(
@@ -56,13 +59,15 @@ VALUES
 		:Date, 
 		:Adherence, 
 		:WasLateForWork, 
-		:MinutesLateForWork
+		:MinutesLateForWork, 
+		:ShiftLength
 	)
 ")
 				.SetParameter("PersonId", model.PersonId)
 				.SetParameter("Adherence", model.Adherence)
 				.SetParameter("WasLateForWork", model.WasLateForWork)
 				.SetParameter("MinutesLateForWork", model.MinutesLateForWork)
+				.SetParameter("ShiftLength", model.ShiftLength)
 				.SetParameter("Date", date)
 				.ExecuteUpdate();
 			}
@@ -77,7 +82,8 @@ SELECT
 	[Date], 
 	[Adherence], 
 	[WasLateForWork], 
-	[MinutesLateForWork]
+	[MinutesLateForWork], 
+	[ShiftLength]
 FROM [ReadModel].[HistoricalOverview]
 WHERE PersonId IN (:PersonId)
 ")

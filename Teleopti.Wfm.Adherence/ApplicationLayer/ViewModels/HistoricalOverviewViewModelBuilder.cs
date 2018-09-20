@@ -146,16 +146,26 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 
 		private static int? calculateIntervalAdherence(IEnumerable<DateTime> days, IEnumerable<HistoricalOverviewReadModel> readModels, Guid personId)
 		{
-			var models = days.Select(d => getReadModel(readModels, personId, d))
-				.Where(x => x != null).ToList();
+			var models = days.Select(d => getReadModel(readModels, personId, d));
+			if (models.All(x => x?.Adherence == null))
+				return null;
 
-			var allIns = models.Sum(model => model.InAdherenceMinutes);
-			var allOuts = models.Sum(model => model.OutOfAdherenceMinutes);
-			var totalWorkTime = allIns + allOuts;
+			var sumAdherences = models.Sum(model =>
+			{
+				if (model?.ShiftLength == null || model.Adherence == null)
+					return 0;
+				return model.Adherence * model.ShiftLength;
+			});
 
-			return totalWorkTime == 0
-				? null
-				: (int?) Math.Floor(((double) allIns / totalWorkTime) * 100);
+			var sumPeriods = models.Sum(model =>
+			{
+				if (model == null || model.ShiftLength == null)
+					return 0;
+
+				return model.ShiftLength;
+			});
+
+			return sumAdherences / sumPeriods;
 		}
 
 		private static HistoricalOverviewReadModel getReadModel(IEnumerable<HistoricalOverviewReadModel> models, Guid agentId, DateTime day)
@@ -230,6 +240,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 			public DateTime Day { get; set; }
 		}
 	}
+
 
 	public class HistoricalOverviewTeamViewModel
 	{

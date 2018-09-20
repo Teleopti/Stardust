@@ -12,7 +12,5 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 		IEnumerable<ApprovedPeriod> ApprovedPeriods();
 		IEnumerable<AdherencePeriod> OutOfAdherences();
 		int? Percentage();
-		int InAdherence();
-		int OutAdherence();
 	}
 }
