@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Policy;
 using Autofac;
 using log4net;
 using Teleopti.Ccc.Domain.Common;
@@ -38,6 +39,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 			{
 				builder.RegisterType<NoFetchingOfOverridenToggles>().As<IFetchToggleOverride>();
 			}
+			
 			builder.RegisterType<SaveToggleOverride>().SingleInstance();
 			builder.RegisterType<FetchAllToggleOverrides>().SingleInstance();
 			

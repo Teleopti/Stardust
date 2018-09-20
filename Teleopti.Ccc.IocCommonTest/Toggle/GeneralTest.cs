@@ -15,78 +15,45 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		[Test]
 		public void ShouldUseToggleQuerierIfStartsWithHttp()
 		{
-			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = "http://tralala" }, null)));
-			using (var container = containerBuilder.Build())
-			{
-				var toggleChecker = container.Resolve<IToggleManager>();
-				toggleChecker.Should().Be.OfType<ToggleQuerier>();
-			}
+			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()){FeatureToggle = "http://tralala"});
+			
+			toggleManager.Should().Be.OfType<ToggleQuerier>();
 		}
 
 		[Test]
 		public void ShouldUseToggleQuerierIfStartsWithHttps()
 		{
-			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = "https://hejsan" }, null)));
-			using (var container = containerBuilder.Build())
-			{
-				var toggleChecker = container.Resolve<IToggleManager>();
-				toggleChecker.Should().Be.OfType<ToggleQuerier>();
-			}
+			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()){FeatureToggle = "https://hejsan"});
+
+			toggleManager.Should().Be.OfType<ToggleQuerier>();
 		}
 
 		[Test]
 		public void ShouldRegisterToggleFillerIfToggleQuerierIsUsed()
 		{
-			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = "https://hejsan" }, null)));
-			using (var container = containerBuilder.Build())
-			{
-				var toggleChecker = container.Resolve<IToggleManager>();
-				var toggleFiller = container.Resolve<IToggleFiller>();
-				toggleChecker.Should().Be.SameInstanceAs(toggleFiller);
-			}
-		}
+			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()){FeatureToggle = "https://hejsan"});
 
-		[Test]
-		public void ShouldResolveTogglesActive()
-		{
-			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = "http://something" }, null)));
-			using (var container = containerBuilder.Build())
-			{
-				container.Resolve<ITogglesActive>()
-					.Should().Not.Be.Null();
-			}
+			(toggleManager is IToggleFiller).Should().Be.True();
 		}
 
 		[Test]
 		public void ShouldSetAllTogglesToFalseIfPathIsEmpty()
 		{
-			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = "" }, null)));
-			using (var container = containerBuilder.Build())
-			{
-				var toggleManager = container.Resolve<IToggleManager>();
-				toggleManager.IsEnabled(Toggles.TestToggle)
-					.Should().Be.False();
-				toggleManager.Should().Be.OfType<FalseToggleManager>();
-			}
+			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()){FeatureToggle = ""});
+			
+			toggleManager.IsEnabled(Toggles.TestToggle)
+				.Should().Be.False();
+			toggleManager.Should().Be.OfType<FalseToggleManager>();
 		}
 
 		[Test]
 		public void ShouldSetAllTogglesToFalseIfPathIsNull()
 		{
-			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = null }, null)));
-			using (var container = containerBuilder.Build())
-			{
-				var toggleManager = container.Resolve<IToggleManager>();
-				toggleManager.IsEnabled(Toggles.TestToggle)
-					.Should().Be.False();
-				toggleManager.Should().Be.OfType<FalseToggleManager>();
-			}
+			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()){FeatureToggle = null});
+			
+			toggleManager.IsEnabled(Toggles.TestToggle)
+				.Should().Be.False();
+			toggleManager.Should().Be.OfType<FalseToggleManager>();
 		}
 	}
 }

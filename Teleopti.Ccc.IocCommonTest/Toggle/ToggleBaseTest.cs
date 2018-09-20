@@ -148,10 +148,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		protected abstract bool DisabledFeatureShouldBe { get; }
 		protected abstract bool RcFeatureShouldBe { get; }
 
-		private bool devFeatureShouldBe
-		{
-			get { return UndefinedFeatureShouldBe; }
-		}
+		private bool devFeatureShouldBe => UndefinedFeatureShouldBe;
 
 		protected abstract string ToggleMode { get; }
 	}

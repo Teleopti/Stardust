@@ -2,9 +2,6 @@
 {
 	public class UndefinedTest : CustomerTest
 	{
-		protected override string ToggleMode
-		{
-			get { return null; }
-		}
+		protected override string ToggleMode => null;
 	}
 }
