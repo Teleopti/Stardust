@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			SkillRepository.Has(skill);
 
 			var target = new ForecastController(null, SkillRepository, null, null, null, FullPermission,
-				null, null, null, null, null);
+				null, null, null, null, null, null);
 
 			dynamic data = target.Skills();
 			var result = data.Content;
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		public void ShouldHavePermissionForModifySkill()
 		{
 			var target = new ForecastController(null, SkillRepository, null, null, null, FullPermission,
-				null, null, null, null, null);
+				null, null, null, null, null, null);
 
 			dynamic data = target.Skills();
 			var result = data.Content;

@@ -1,12 +1,15 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
+using Teleopti.Ccc.Domain.Forecasting.Angel.LegacyWrappers;
 using Teleopti.Ccc.Domain.Forecasting.Models;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -33,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IntradayForecaster _intradayForecaster;
 		private readonly IForecastDayOverrideRepository _forecastDayOverrideRepository;
 		private readonly IQueueStatisticsViewModelFactory _queueStatisticsViewModelFactory;
+		private readonly ILoadStatistics _loadStatistics;
 
 		public ForecastController(
 			ForecastViewModelCreator quickForecaster,
@@ -45,7 +49,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			IHistoricalPeriodProvider historicalPeriodProvider,
 			IntradayForecaster intradayForecaster,
 			IForecastDayOverrideRepository forecastDayOverrideRepository,
-			IQueueStatisticsViewModelFactory queueStatisticsViewModelFactory)
+			IQueueStatisticsViewModelFactory queueStatisticsViewModelFactory,
+			ILoadStatistics loadStatistics)
 		{
 			_forecastViewModelCreator = quickForecaster;
 			_skillRepository = skillRepository;
@@ -58,6 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_intradayForecaster = intradayForecaster;
 			_forecastDayOverrideRepository = forecastDayOverrideRepository;
 			_queueStatisticsViewModelFactory = queueStatisticsViewModelFactory;
+			_loadStatistics = loadStatistics;
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
@@ -209,6 +215,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		[UnitOfWork, HttpPost, Route("api/Forecasting/ApplyForecast")]
 		public virtual IHttpActionResult ApplyForecast(ForecastViewModel forecastResult)
 		{
+			Stopwatch stopwatch = new Stopwatch();
+			stopwatch.Start();
+
 			if (!forecastResult.ForecastDays.Any())
 			{
 				return Ok();
@@ -223,6 +232,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			var forecastPeriod = new DateOnlyPeriod(periodStart, periodEnd);
 			var skillDays = _fetchAndFillSkillDays.FindRange(forecastPeriod, workload.Skill, scenario).ToDictionary(x => x.CurrentDate);
 			var overrideDays = _forecastDayOverrideRepository.FindRange(forecastPeriod, workload, scenario).ToDictionary(k => k.Date);
+
+			IEnumerable<IWorkloadDayBase> queueStatistics = new List<IWorkloadDayBase>();
+			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
+			if (availablePeriod.HasValue)
+			{
+				var periodForTemplate = _historicalPeriodProvider.AvailableIntradayTemplatePeriod(availablePeriod.Value);
+				queueStatistics = _loadStatistics.LoadWorkloadDay(workload, periodForTemplate);
+			}
 
 			foreach (var forecastDay in forecastResult.ForecastDays)
 			{
@@ -277,11 +294,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					}
 				}
 
-				var period = _historicalPeriodProvider.AvailablePeriod(workload);
-				if (period.HasValue)
+				if (queueStatistics.Any())
 				{
-					var periodForTemplate = _historicalPeriodProvider.AvailableIntradayTemplatePeriod(period.Value);
-					_intradayForecaster.Apply(workload, periodForTemplate, skillDay.WorkloadDayCollection);
+					_intradayForecaster.Apply(workload, queueStatistics, skillDay.WorkloadDayCollection);
 				}
 			}
 
