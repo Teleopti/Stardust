@@ -55,31 +55,28 @@
 {
 	<script type="text/javascript">
 		$(document).ready(function () {
-// ReSharper disable Es6Feature
-			const availableClientWidth = document.documentElement.clientWidth;
-			const availableClientHeight = (document.documentElement.clientHeight - 100);
-			const chatbotwidth = (availableClientWidth > 450 ? 430 : availableClientWidth - 20) + 'px';
-			const expectedHeight = (availableClientHeight > 500 ? 400 : availableClientHeight) + 'px';
-// ReSharper restore Es6Feature
-
 			var div = document.createElement("div");
 			document.getElementsByTagName('body')[0].appendChild(div);
-			div.outerHTML = "<div id='botDiv' class='chatbox' style='width: " + chatbotwidth + "; height: " + expectedHeight + "; z-index: 10000; display: none;'>"
+			div.outerHTML = "<div id='botDiv' class='chatbot' style='width: 430px; height: 400px; z-index: 10000; display: none;'>"
+				+ "<div class='wc-header'>"
+				+ "<span>Grant bot</span>"
+				+ "<span id='closeChatbot' class='pull-right dropdown-toggle'>"
+				+ "<i class='glyphicon glyphicon-remove' style='color: white'></i>"
+				+ "</span>"
+				+ "</div>"
 				+ "<div id='grantBot' style='width: 100%;'></div>"
 				+ "</div>";
 
 			BotChat.App({
-				directLine: { secret: '4iLsDqwxH7w.cwA.GSo.KqnAG1hrW3hA4QIE7rCt4cFl3qnXN0lBybxUMh7MSTw' },
-				user: { id: 'userid' },
-				bot: { id: 'botid' },
-				resize: 'detect',
-				chatTitle: 'Grant bot',
+				directLine: { secret: "4iLsDqwxH7w.cwA.GSo.KqnAG1hrW3hA4QIE7rCt4cFl3qnXN0lBybxUMh7MSTw" },
+				user: { id: "userid" },
+				bot: { id: "botid" },
+				resize: "detect",
+				chatTitle: false,
 				showUploadButton: false
 			}, document.getElementById("grantBot"));
 
-			document.querySelector("#grantBot .wc-header").setAttribute("id", "chatbotHeader");
-
-			document.getElementById("chatbotHeader").addEventListener("click",
+			document.getElementById("closeChatbot").addEventListener("click",
 				function (e) {
 					document.getElementById("botDiv").style.display = "none";
 				}
@@ -87,13 +84,15 @@
 
 			document.getElementById("botIndicator").addEventListener("click",
 				function (e) {
-// ReSharper disable Es6Feature
-					const style = document.getElementById("botDiv").style;
-// ReSharper restore Es6Feature
-					if (style.display === 'block') {
-						style.display = 'none';
+					var style = document.getElementById("botDiv").style;
+					if (style.display === "block") {
+						style.display = "none";
 					} else {
-						style.display = 'block';
+						var availableClientWidth = document.documentElement.clientWidth;
+						var availableClientHeight = document.documentElement.clientHeight - 100;
+						style.width = (availableClientWidth > 450 ? 430 : availableClientWidth - 20) + 'px';
+						style.height = (availableClientHeight > 500 ? 400 : availableClientHeight) + 'px';
+						style.display = "block";
 					}
 				}
 			);
@@ -121,7 +120,7 @@
 				@if (Model.GrantEnabled)
 				{
 					<li id="botIndicator" class="dropdown pull-left">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Grant bot">
 							<i class="glyphicon glyphicon-headphones"></i>
 						</a>
 					</li>
