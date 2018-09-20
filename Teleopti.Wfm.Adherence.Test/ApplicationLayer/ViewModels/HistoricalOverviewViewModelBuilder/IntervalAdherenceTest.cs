@@ -50,7 +50,7 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 		}
 
 		[Test]
-		public void ShouldDisplayCalculatedIntervalAdherence()
+		public void ShouldDisplayIntervalAdherenceBasedOnTwoDays()
 		{
 			Now.Is("2018-08-31 08:00");
 			var teamId = Guid.NewGuid();
@@ -72,7 +72,7 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 		}
 
 		[Test]
-		public void ShouldDisplayFiftyPercentCalculatedIntervalAdherence()
+		public void ShouldDisplayFiftyPercentIntervalAdherence()
 		{
 			Now.Is("2018-08-31 08:00");
 			var teamId = Guid.NewGuid();
@@ -92,6 +92,49 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 			var data = Target.Build(null, new[] {teamId}).First();
 
 			data.Agents.Single().IntervalAdherence.Should().Be(50);
+		}
+		
+		[Test]
+		public void ShouldDisplayFiftyPercentIntervalAdherenceWithNeutral()
+		{
+			Now.Is("2018-08-31 08:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent()
+				.WithAssignment("2018-08-31")
+				.WithAssignedActivity("2018-08-31 10:00", "2018-08-31 14:00")
+				.WithHistoricalStateChange("2018-08-31 10:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithHistoricalStateChange("2018-08-31 11:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange("2018-08-31 12:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral);
+			Now.Is("2018-09-02 08:00");
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().IntervalAdherence.Should().Be(50);
+		}
+		
+		[Test]
+		public void ShouldDisplayHundredPercentIntervalAdherenceWithNeutral()
+		{
+			Now.Is("2018-08-31 08:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent()
+				.WithAssignment("2018-08-31")
+				.WithAssignedActivity("2018-08-31 10:00", "2018-08-31 16:00")
+				.WithHistoricalStateChange("2018-08-31 10:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithHistoricalStateChange("2018-08-31 11:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange("2018-08-31 14:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral)
+				.WithAssignment("2018-09-01")
+				.WithAssignedActivity("2018-09-01 10:00", "2018-09-01 16:00")
+				.WithHistoricalStateChange("2018-09-01 10:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
+			Now.Is("2018-09-02 08:00");
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().IntervalAdherence.Should().Be(70);
 		}
 
 		[Test]

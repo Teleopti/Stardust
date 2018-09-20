@@ -158,6 +158,31 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			return new AdherencePercentageCalculator().Calculate(_shift, neutralAdherencesWithinShift, outOfAhderencesWithinShift, _now);
 		}
 
+		public int InAdherence()
+		{		
+			var neutralAdherences = subtractPeriods(_recordedNeutralAdherences.Select(x => new DateTimePeriod(x.StartTime, x.EndTime.Value)), _approvedPeriods);
+			var timeNeutral = time(withinShift(_shift, neutralAdherences));
+
+			var calculateUntil = new[] {_now, _shift.Value.EndDateTime}.Min();
+			var shiftTime = calculateUntil - _shift.Value.StartDateTime;
+			
+			
+			var timeOut = time(withinShift(_shift, OutOfAdherences().Select(x => new DateTimePeriod(x.StartTime, x.EndTime.Value))));
+			var timeIn = shiftTime - timeOut - timeNeutral;
+
+			return (int) timeIn.TotalMinutes;
+		}
+
+		public int OutAdherence()
+		{
+			var timeOut = time(withinShift(_shift, OutOfAdherences().Select(x => new DateTimePeriod(x.StartTime, x.EndTime.Value))));
+
+			return (int) timeOut.TotalMinutes;
+		}
+		
+		private static TimeSpan time(IEnumerable<DateTimePeriod> periods) =>
+			TimeSpan.FromSeconds(periods.Sum(x => (x.EndDateTime - x.StartDateTime).TotalSeconds));
+
 		//difficult to grasp the linq
 		private static IEnumerable<DateTimePeriod> subtractPeriods(IEnumerable<DateTimePeriod> periods, IEnumerable<DateTimePeriod> toSubtract) =>
 			toSubtract
