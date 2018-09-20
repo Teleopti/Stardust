@@ -539,7 +539,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			return stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff();//saturday
 		}
 
-		[Test] // Ignore("#76348"), 
+		[Test]
 		public void DaysOffBackToLegalStateShouldNotMoveDayOffFromClosedDays()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon

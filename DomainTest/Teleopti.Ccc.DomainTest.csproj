@@ -314,6 +314,7 @@
     <Compile Include="SchedulingScenarios\Islands\IslandModelCompleteTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationTimeZoneTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\ConcurrencyDesktopTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\DaysOffSchedulingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingAndDoTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCommandHandlerExternalStaffDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingReduceSkillsDesktopTest.cs" />
