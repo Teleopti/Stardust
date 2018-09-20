@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
-		[Test, Ignore("some more is needed")]
+		[Test]
 		public void ExecutePayroll()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
@@ -80,10 +80,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 					payrollExportDto.PersonCollection.Add(new PersonDto());
 
 				var target = new AppdomainCreatorWrapper();
+				var feedback = new FakeServiceBusPayrollExportFeedback();
 				var document = target.RunPayroll(
 					new SdkFakeServiceFactory(), payrollExportDto, new RunPayrollExportEvent(),
-					Guid.NewGuid(), new FakeServiceBusPayrollExportFeedback(), 
+					Guid.NewGuid(), feedback, 
 					_searchPath.Path);
+				feedback.ProgressList.ForEach(i => Console.WriteLine(i.Message));
+				feedback.ProgressList.Where(i => i.Message == "Unable to run payroll.No payroll export processor found.").Should()
+					.Be.Empty();
 				document.DocumentElement.ChildNodes.Count.Should().Be(5);
 			});
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
