@@ -14,10 +14,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 	{
 		private readonly IToggleManager _toggleManager;
 		private readonly SaveToggleOverride _saveToggleOverride;
-		private readonly FetchAllToggleOverrides _fetchAllToggleOverrides;
+		private readonly IFetchAllToggleOverrides _fetchAllToggleOverrides;
 		private readonly AllToggleNamesWithoutOverrides _allToggleNamesWithoutOverrides;
 
-		public ToggleController(IToggleManager toggleManager, SaveToggleOverride saveToggleOverride, FetchAllToggleOverrides fetchAllToggleOverrides,
+		public ToggleController(IToggleManager toggleManager, SaveToggleOverride saveToggleOverride, IFetchAllToggleOverrides fetchAllToggleOverrides,
 			AllToggleNamesWithoutOverrides allToggleNamesWithoutOverrides)
 		{
 			_toggleManager = toggleManager;
