@@ -1,8 +1,10 @@
 ﻿using System;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Rta.PerformanceTest.Code;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest
 {
@@ -17,6 +19,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		public SynchronzieWaiter Waiter;
 
 		[Test]
+		[OnlyRunIfEnabled(Toggles.RTA_ReviewHistoricalAdherence_74770)]
 		public void MeasurePerformance()
 		{
 			PerformanceTest.Measure("1mKUHvBlk5wIk0LDZESO2prWvRuimhpjiWaSvoKk2gsE", "SynchronizeLargeBatchesTest", () =>
