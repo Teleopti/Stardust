@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
-		[Test, Ignore("WIP")]
+		[Test]
 		public void ExecutePayroll()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
@@ -53,13 +53,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 					payrollExportDto.PersonCollection.Add(new PersonDto());
 
 				var target = new AppdomainCreatorWrapper();
-				var feedback = new FakeServiceBusPayrollExportFeedback();
+				var feedback = new FakeServiceBusPayrollExportFeedback(new InterAppDomainArguments());
 				var document = target.RunPayroll(
 					new SdkFakeServiceFactory(), payrollExportDto, new RunPayrollExportEvent(),
 					Guid.NewGuid(), feedback, 
 					_searchPath.Path);
-				feedback.ProgressList.ForEach(i => Console.WriteLine($"Message: {i.Message}\r\nExceptionMessage: {i.ExceptionMessage}\r\nException.Stacktrace: {i.ExceptionStackTrace}\r\n" ));
-				feedback.ProgressList.Where(i => i.Message == "Unable to run payroll.No payroll export processor found.").Should()
+				feedback.PayrollResultDetails.ForEach(i => Console.WriteLine($"Message: {i.Message}\r\nExceptionMessage: {i.Exception.Message}\r\nException.Stacktrace: {i.Exception.StackTrace}\r\n" ));
+				feedback.PayrollResultDetails.Where(i => i.Message == "Unable to run payroll.No payroll export processor found.").Should()
 					.Be.Empty();
 				document.DocumentElement.ChildNodes.Count.Should().Be(5);
 			});
@@ -89,13 +89,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 					payrollExportDto.PersonCollection.Add(new PersonDto());
 
 				var target = new AppdomainCreatorWrapper();
-				var feedback = new FakeServiceBusPayrollExportFeedback();
+				var feedback = new FakeServiceBusPayrollExportFeedback(new InterAppDomainArguments());
 				var document = target.RunPayroll(
 					new SdkFakeServiceFactory(), payrollExportDto, new RunPayrollExportEvent(),
 					Guid.NewGuid(), feedback,
 					_searchPath.Path);
-				feedback.ProgressList.ForEach(i => Console.WriteLine($"Message: {i.Message}\r\nExceptionMessage: {i.ExceptionMessage}\r\nException.Stacktrace: {i.ExceptionStackTrace}"));
-				feedback.ProgressList.Where(i => i.Message == "Unable to run payroll.No payroll export processor found.").Should()
+				feedback.PayrollResultDetails.ForEach(i => 
+					Console.WriteLine($"Message: {i.Message}\r\nExceptionMessage: {i.Exception.Message}\r\nException.Stacktrace: {i.Exception.StackTrace}"));
+				feedback.PayrollResultDetails.Where(i => i.Message == "Unable to run payroll.No payroll export processor found.").Should()
 					.Be.Empty();
 				document.DocumentElement.ChildNodes.Count.Should().Be(5);
 			});
@@ -125,7 +126,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 					payrollExportDto.PersonCollection.Add(new PersonDto());
 
 				var target = new AppdomainCreatorWrapper();
-				var document = target.RunPayroll(new SdkFakeServiceFactory(), payrollExportDto, new RunPayrollExportEvent(), Guid.NewGuid(), new FakeServiceBusPayrollExportFeedback(), _searchPath.Path);
+				var document = target.RunPayroll(new SdkFakeServiceFactory(), payrollExportDto, 
+					new RunPayrollExportEvent(), Guid.NewGuid(), new FakeServiceBusPayrollExportFeedback(new InterAppDomainArguments()), _searchPath.Path);
 				document.DocumentElement.ChildNodes.Count.Should().Be(5);
 			});
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
@@ -152,9 +154,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 
 			var target = new AppdomainCreatorWrapper();
 			var factory = new SdkFakeServiceFactory();
-			var feedback = new FakeServiceBusPayrollExportFeedback();
+			var feedback = new FakeServiceBusPayrollExportFeedback(new InterAppDomainArguments());
 			Assert.DoesNotThrow(() => target.RunPayroll(factory, payrollExportDto, new RunPayrollExportEvent(), Guid.NewGuid(), feedback, _searchPath.Path));
-			feedback.ProgressList.Where(i => i.DetailLevel == DetailLevel.Error).Should().Not.Be.Empty();
+			feedback.PayrollResultDetails.Where(i => i.DetailLevel == DetailLevel.Error).Should().Not.Be.Empty();
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
@@ -184,10 +186,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 
 			var target = new AppdomainCreatorWrapper();
 			var factory = new SdkFakeServiceFactory();
-			var feedback = new FakeServiceBusPayrollExportFeedback();
+			var feedback = new FakeServiceBusPayrollExportFeedback(new InterAppDomainArguments());
+			//factory.CreatePayrollExportFeedback(new InterAppDomainArguments());
 			var result = target.RunPayroll(factory, payrollExportDto, new RunPayrollExportEvent(), Guid.NewGuid(),
 				feedback, _searchPath.Path);
-			feedback.ProgressList.Where(i => i.DetailLevel == DetailLevel.Error).Should().Not.Be.Empty();
+			feedback.PayrollResultDetails.Where(i => i.DetailLevel == DetailLevel.Error).Should().Not.Be.Empty();
 			result.InnerXml.Should().Be.Empty();
 			file.Close();
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
@@ -214,12 +217,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 
 			var target = new AppdomainCreatorWrapper();
 			var factory = new SdkFakeServiceFactory();
-			var feedback = new FakeServiceBusPayrollExportFeedback();
+			var feedback = new FakeServiceBusPayrollExportFeedback(new InterAppDomainArguments());
 			Assert.DoesNotThrow(() =>
 				target.RunPayroll(factory, payrollExportDto, new RunPayrollExportEvent(), Guid.NewGuid(),
 					feedback, _searchPath.Path));
 
-			feedback.ProgressList.Where(i => i.DetailLevel == DetailLevel.Error).Should().Not.Be.Empty();
+			feedback.PayrollResultDetails.Where(i => i.DetailLevel == DetailLevel.Error).Should().Not.Be.Empty();
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
@@ -245,11 +248,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 					payrollExportDto.PersonCollection.Add(new PersonDto());
 
 				var target = new AppdomainCreatorWrapper();
-				var feedback = new FakeServiceBusPayrollExportFeedback();
+				var feedback = new FakeServiceBusPayrollExportFeedback(new InterAppDomainArguments());
 				var factory = new SdkFakeServiceFactory();
-				feedback.ProgressList.Count.Should().Be.EqualTo(0);
+				feedback.PayrollResultDetails.Count.Should().Be.EqualTo(0);
 				target.RunPayroll(factory, payrollExportDto, new RunPayrollExportEvent(), Guid.NewGuid(), feedback, _searchPath.Path);
-				feedback.ProgressList.Count.Should().Not.Be.EqualTo(0);
+				feedback.PayrollResultDetails.Count.Should().Not.Be.EqualTo(0);
 			});
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}

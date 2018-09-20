@@ -24,9 +24,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 
 		public IPayrollExportFeedback CreatePayrollExportFeedback(InterAppDomainArguments intrAppDomainArguments)
 		{
-			return new PayrollExportFeedbackEx(intrAppDomainArguments);
+			return new FakeServiceBusPayrollExportFeedback(intrAppDomainArguments);
 		}
-		
 	}
 
 	public class FakeTeleoptiOrganizationService : ITeleoptiOrganizationService

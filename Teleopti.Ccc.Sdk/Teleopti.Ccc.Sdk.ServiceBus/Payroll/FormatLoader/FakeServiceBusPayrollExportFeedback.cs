@@ -1,64 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Payroll;
-using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 {
-	public class FakeServiceBusPayrollExportFeedback : IServiceBusPayrollExportFeedback
+	public class FakeServiceBusPayrollExportFeedback : PayrollExportFeedbackEx
 	{
-		public List<IPayrollResultDetail> ProgressList = new List<IPayrollResultDetail>();
-
-		public void ReportProgress(int percentage, string information)
+		private void internalAddPayrollDetail(DetailLevel detailLevel, string message, Exception exception = null)
 		{
-			ProgressList.Add(new PayrollResultDetail(DetailLevel.Info, information, DateTime.UtcNow, null));
+			PayrollResultDetails.Add(new PayrollResultDetailData(detailLevel, message, exception, DateTime.UtcNow));
+		}
+		public new void ReportProgress(int percentage, string information)
+		{
+			internalAddPayrollDetail(DetailLevel.Info, $"{information} + {percentage}%");
 		}
 
-		public void Error(string message)
+		public FakeServiceBusPayrollExportFeedback(InterAppDomainArguments interAppDomainArguments) : base(interAppDomainArguments)
 		{
-			//throw new NotImplementedException();
-		}
-
-		public void Error(string message, Exception exception)
-		{
-			ProgressList.Add(new PayrollResultDetail(DetailLevel.Error, message, DateTime.UtcNow, exception));
-		}
-
-		public void Warning(string message)
-		{
-			//throw new NotImplementedException();
-		}
-
-		public void Warning(string message, Exception exception)
-		{
-			//throw new NotImplementedException();
-		}
-
-		public void Info(string message)
-		{
-			//throw new NotImplementedException();
-		}
-
-		public void Info(string message, Exception exception)
-		{
-			//throw new NotImplementedException();
-		}
-
-		public void Dispose()
-		{
-			//throw new NotImplementedException();
-		}
-
-		public void SetPayrollResult(IPayrollResult payrollResult)
-		{
-			//throw new NotImplementedException();
-		}
-
-		public void AddPayrollResultDetail(IPayrollResultDetail payrollResultDetail)
-		{
-			ProgressList.Add(payrollResultDetail);
 		}
 	}
 }

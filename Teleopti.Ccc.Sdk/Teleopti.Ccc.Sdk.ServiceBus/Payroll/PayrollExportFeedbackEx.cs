@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Net;
 using System.Net.Http;
-using System.Security.Policy;
 using Teleopti.Ccc.Domain.Coders;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;
@@ -48,7 +47,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			JobResultProgressEncoder payrollResultProgressEncoder = new JobResultProgressEncoder();
 			var binaryData =
 				payrollResultProgressEncoder.Encode(payrollExportProgress);
-			//AppDomain.CurrentDomain.SetData("payrollExportProgress", payrollExportProgress);
 
 			var message = createNotifications(
 				_interAppDomainArguments.DataSource,
@@ -62,7 +60,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 				DomainUpdateType.NotApplicable,
 				binaryData,
 				Guid.Empty);
-			//_messageSender.SendMultiple(notificationList);
 
 			_httpClientM.Post("MessageBroker/NotifyClients", message);
 		}
@@ -144,6 +141,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 
 		public void AddPayrollResultDetail(IPayrollResultDetail payrollResultDetail)
 		{
+			PayrollResultDetails.Add(new PayrollResultDetailData(payrollResultDetail.DetailLevel, payrollResultDetail.Message, new Exception(payrollResultDetail.ExceptionMessage),DateTime.UtcNow));
 		}
 
 		private void addPayrollResultDetailToList(DetailLevel detailLevel, string message, Exception exception)
