@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
-		[Test, Ignore("WIP")]
+		[Test]
 		public void ExecuteTeleoptiPayroll()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
