@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		}
 
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<ModifyPersonAbsenceCommandHandler>();
 			extend.AddService<SaveSchedulePartService>();

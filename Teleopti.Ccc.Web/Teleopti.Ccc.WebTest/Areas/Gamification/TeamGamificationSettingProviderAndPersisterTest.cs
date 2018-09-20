@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		public ITeamGamificationSettingProviderAndPersister Target;
 		public FakeTeamRepository teamRepository;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddModule(new WebModule(configuration, null));
 		}

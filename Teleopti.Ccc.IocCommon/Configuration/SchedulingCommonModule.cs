@@ -69,9 +69,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class SchedulingCommonModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public SchedulingCommonModule(IIocConfiguration configuration)
+		public SchedulingCommonModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

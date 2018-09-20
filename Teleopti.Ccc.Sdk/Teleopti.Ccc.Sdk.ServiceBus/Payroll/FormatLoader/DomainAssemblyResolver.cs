@@ -15,20 +15,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
         public Assembly Resolve(object sender, ResolveEventArgs args)
         {
             var currentAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-            
 			//var argsShortAssemblyName = new AssemblyName(args.Name);
-            foreach (var t in currentAssemblies)
+			foreach (var t in currentAssemblies)
             {
 				//var tShortName = new AssemblyName(t.FullName);
 
 				//if (t.GetName().Name == args.RequestingAssembly.GetName().Name)
 				//if(tShortName.Name == argsShortAssemblyName.Name)
-				if (t.FullName == args.Name)
+				
+				if (new AssemblyName(t.FullName).Name == new AssemblyName(args.Name).Name)
 				{
 					return t;
                 }
             }
-            return _assemblyFileLoader.Find(args.Name);
+			
+			return _assemblyFileLoader.Find(args.Name);
         }
     }
 }

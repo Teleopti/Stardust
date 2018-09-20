@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 		public IAnalyticsAbsenceRepository AnalyticsAbsenceRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<AnalyticsRequestUpdater>();
 		}

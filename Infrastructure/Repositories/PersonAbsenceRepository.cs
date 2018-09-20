@@ -79,11 +79,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return retList;
 		}
 
-		public bool IsThereScheduledAgents()
+		public bool IsThereScheduledAgents(Guid businessUnitId)
 		{
-			const string sql = "IF EXISTS (SELECT TOP 1 Id FROM PersonAbsence) SELECT 1 ELSE SELECT 0";
-			var result = Session.CreateSQLQuery(sql).UniqueResult<int>();
-			return result > 0;
+			var sql = $@"IF EXISTS (SELECT TOP 1 pa.Id
+  FROM PersonAbsence pa
+ INNER JOIN Person p ON pa.Person = p.Id
+ INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
+ INNER JOIN Team t ON pp.Team = t.Id
+ INNER JOIN [Site] s ON t.[Site] = s.Id
+ INNER JOIN BusinessUnit bu ON s.BusinessUnit = bu.Id
+ WHERE bu.Id = :{nameof(businessUnitId)})
+SELECT CAST(1 AS BIT) ELSE SELECT CAST(0 AS BIT)";
+			var result = Session.CreateSQLQuery(sql)
+				.SetParameter(nameof(businessUnitId), businessUnitId)
+				.UniqueResult<bool>();
+			return result;
 		}
 
 		public ICollection<IPersonAbsence> Find(IEnumerable<Guid> personAbsenceIds, IScenario scenario)

@@ -105,7 +105,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			periodToLoad = SkillDayCalculator.GetPeriodToLoad(period);
 	        foreach (var skill in skillsToLoad)
 	        {
-	            var skillDays = testSkillDays[skill].OrderBy(s => s.CurrentDate).ToArray();
+				skill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
+				var skillDays = testSkillDays[skill].OrderBy(s => s.CurrentDate).ToArray();
 
 				if (skill is IMultisiteSkill multisiteSkill)
 	            {
@@ -127,11 +128,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	                calculators.Add(multisiteCalculator);
 	            }
 	            else
-	            {
-	                calculators.Add(new SkillDayCalculator(skill, skillDays, period));
+				{
+					calculators.Add(new SkillDayCalculator(skill, skillDays, period));
 					foreach (ISkillDay skillDay in skillDays)
 					{
-						skillDay.Skill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
 						skillDay.RecalculateDailyTasks();
 					}
 				}

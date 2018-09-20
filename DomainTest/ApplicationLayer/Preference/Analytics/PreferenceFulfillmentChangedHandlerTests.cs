@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		public FakeEventPublisher EventPublisher;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<PreferenceFulfillmentChangedHandler>();
 		}

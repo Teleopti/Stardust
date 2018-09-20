@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class RequestModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public RequestModule(IIocConfiguration configuration)
+		public RequestModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

@@ -2,7 +2,7 @@ using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 
-namespace Teleopti.Ccc.Infrastructure.Toggle
+namespace Teleopti.Ccc.Infrastructure.Toggle.InApp
 {
 	public class FetchToggleOverride: IFetchToggleOverride
 	{

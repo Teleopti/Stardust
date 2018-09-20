@@ -270,9 +270,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			_events.Remove(DateTime.Now.AddYears(1), int.MaxValue);
 			
 			var events = new List<IEvent>();
-			
-//			log.AppendLine($"Reset LatestSynchronizedRTAEvent to 0");
-//			_keyValueStore.Update("LatestSynchronizedRTAEvent", "0");
 
 			dates.ForEach(d =>
 			{

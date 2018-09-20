@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public QueueDefaultHandler QueueDefaultHandlerImpl;
 		public QueueCriticalScheduleChangesTodayHandler QueueCriticalScheduleChangesTodayHandlerImpl;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<QueueScheduleChangesTodayHandler>();
 			extend.AddService<QueueCriticalScheduleChangesTodayHandler>();

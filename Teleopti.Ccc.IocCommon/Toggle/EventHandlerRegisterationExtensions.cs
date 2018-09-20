@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 				.Any();
 		}
 
-		public static bool EnabledByToggle(this Type type, IIocConfiguration config) => type.EnabledByToggle(config.Toggle);
+		public static bool EnabledByToggle(this Type type, IocConfiguration config) => type.EnabledByToggle(config.Toggle);
 
 		public static bool EnabledByToggle(this Type type, Func<Toggles, bool> toggles)
 		{

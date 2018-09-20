@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		private IDisposable _tenantScope;
 		private Person _loggedOnPerson;
 
-		protected override void Extend(IExtend extend, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddModule(new WebModule(configuration, null));
 

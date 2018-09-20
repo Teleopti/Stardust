@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			).ToList();
 		}
 
-		public bool IsThereScheduledAgents()
+		public bool IsThereScheduledAgents(Guid businessUnitId)
 		{
 			return _storage.LoadAll<IPersonAbsence>().Any();
 		}

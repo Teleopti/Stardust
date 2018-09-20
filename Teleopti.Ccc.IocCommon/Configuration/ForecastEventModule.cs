@@ -12,12 +12,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class ForecastEventModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
 		[ThreadStatic]
 		private static IJobResultFeedback jobResultFeedback;
 
-		public ForecastEventModule(IIocConfiguration configuration)
+		public ForecastEventModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

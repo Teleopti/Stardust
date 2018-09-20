@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public AcdLoginPersonTransformer Target;
 		public FakeAnalyticsPersonPeriodRepository AnalyticsPersonPeriodRepository;
 
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<AcdLoginPersonTransformer>();
 		}

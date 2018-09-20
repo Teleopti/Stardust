@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 					scenario)[person].ScheduledDay(new DateOnly(_startDate).AddDays(3)).PersonAbsenceCollection(true).Length.Should().Be.EqualTo(1);
 		}
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<CancelAbsenceCommandHandler>();
 			extend.AddModule(new AssemblerModule());

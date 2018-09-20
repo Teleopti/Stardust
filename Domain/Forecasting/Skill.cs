@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
         }
 
-		public Skill(string name) : this(name, "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
+		public Skill(string name) : this(name, "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
 		{
 		}
 

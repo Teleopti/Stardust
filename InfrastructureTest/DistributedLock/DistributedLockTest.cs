@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 		public FakeConfigReader ConfigReader;
 		public Lock1 Lock1Proxy;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<Lock1>();
 		}

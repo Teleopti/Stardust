@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class BadgeCalculationModule : Module
 	{
-		private readonly IIocConfiguration _config;
+		private readonly IocConfiguration _config;
 
-		public BadgeCalculationModule(IIocConfiguration config)
+		public BadgeCalculationModule(IocConfiguration config)
 		{
 			_config = config;
 		}

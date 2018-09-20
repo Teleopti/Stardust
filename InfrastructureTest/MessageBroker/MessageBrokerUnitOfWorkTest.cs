@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		public CurrentHttpContext HttpContext;
 		public ICurrentMessageBrokerUnitOfWork UnitOfWork;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<TheService>();
 			extend.AddService<NestedService1>();

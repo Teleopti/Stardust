@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public static string DefaultTenantName = "default";
 		public static Guid DefaultBusinessUnitId = Guid.NewGuid();
 
-		protected override void Extend(IExtend extend, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			base.Extend(extend, configuration);
 			extend.AddService<FakeDataSources>();
@@ -249,7 +249,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeAnalyticsTimeZoneRepository>().For<IAnalyticsTimeZoneRepository>();
 				isolate.UseTestDouble<FakeAnalyticsWorkloadRepository>().For<IAnalyticsWorkloadRepository>();
 				isolate.UseTestDouble<FakeUserDeviceRepository>().For<IUserDeviceRepository>();
-				isolate.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
 				isolate.UseTestDouble<FakeScheduleAuditTrailReport>().For<IScheduleAuditTrailReport>();
 				isolate.UseTestDouble<FakeBudgetGroupRepository>().For<IBudgetGroupRepository>();
 				isolate.UseTestDouble<FakeBudgetDayRepository>().For<IBudgetDayRepository>();

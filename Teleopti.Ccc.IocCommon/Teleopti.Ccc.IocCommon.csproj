@@ -176,7 +176,6 @@
     <Compile Include="Configuration\TenantModule.cs" />
     <Compile Include="Configuration\DistributedLockModule.cs" />
     <Compile Include="Configuration\WeeklyRestSolverModule.cs" />
-    <Compile Include="IIocConfiguration.cs" />
     <Compile Include="IocCache.cs" />
     <Compile Include="IocConfiguration.cs" />
     <Compile Include="IocArgs.cs" />
@@ -201,6 +200,7 @@
     <Compile Include="CommonModule.cs" />
     <Compile Include="Configuration\JsonSerializationModule.cs" />
     <Compile Include="Configuration\ServiceBusModule.cs" />
+    <Compile Include="SharedModuleUsedInBothRuntimeContainerAndToggleManagerModule.cs" />
     <Compile Include="Toggle\FakeToggleManager.cs" />
     <Compile Include="Toggle\FalseToggleManager.cs" />
     <Compile Include="Toggle\ToggleNetModule.cs" />

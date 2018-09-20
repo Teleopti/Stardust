@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[DontSendEventsAtPersist]
 	public abstract class IntradayOptimizationScenarioTest : IExtendSystem, IIsolateSystem
 	{		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<ResourceCalculateWithNewContext>();
 		}

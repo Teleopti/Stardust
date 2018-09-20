@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			_resourcePlannerXxl76496 = resourcePlannerXXL76496;
 		}
 				
-		public virtual void Extend(IExtend extend, IIocConfiguration configuration)
+		public virtual void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<ResourceCalculateWithNewContext>();
 		}

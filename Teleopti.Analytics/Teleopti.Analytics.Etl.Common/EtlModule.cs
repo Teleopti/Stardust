@@ -24,9 +24,9 @@ namespace Teleopti.Analytics.Etl.Common
 {
 	public class EtlModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public EtlModule(IIocConfiguration configuration)
+		public EtlModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

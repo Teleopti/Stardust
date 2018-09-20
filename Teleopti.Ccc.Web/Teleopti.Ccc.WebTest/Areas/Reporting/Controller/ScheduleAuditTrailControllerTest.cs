@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Controller
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 		public Global.FakePermissionProvider PermissionProvider;
 	
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<ScheduleAuditTrailController>();
 		}

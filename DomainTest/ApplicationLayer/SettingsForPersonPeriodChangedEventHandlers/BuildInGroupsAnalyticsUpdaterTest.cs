@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		private readonly Guid _businessUnitId = Guid.NewGuid();
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<BuildInGroupsAnalyticsUpdater>();
 		}

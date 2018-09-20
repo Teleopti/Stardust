@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public INow Now;
 		public ScheduleChangedEventDetector ScheduleChangedEventDetector;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<SwapAndModifyServiceNew>();
 		}

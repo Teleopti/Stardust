@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class RuleSetModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public RuleSetModule(IIocConfiguration configuration)
+		public RuleSetModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}
@@ -22,15 +22,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.CacheByInterfaceProxy<RuleSetProjectionEntityService, IRuleSetProjectionEntityService>().SingleInstance();
 			builder.CacheByInterfaceProxy<WorkShiftWorkTime, IWorkShiftWorkTime>().SingleInstance();
 
-			_configuration.Cache().This<IRuleSetProjectionService>(b => b
+			_configuration.Args().Cache.This<IRuleSetProjectionService>(b => b
 					.CacheMethod(m => m.ProjectionCollection(null, null))
 				, "RSPS");
 
-			_configuration.Cache().This<IRuleSetProjectionEntityService>(b => b
+			_configuration.Args().Cache.This<IRuleSetProjectionEntityService>(b => b
 					.CacheMethod(m => m.ProjectionCollection(null, null))
 				, "RSPES");
 
-			_configuration.Cache().This<IWorkShiftWorkTime>(b => b
+			_configuration.Args().Cache.This<IWorkShiftWorkTime>(b => b
 					.CacheMethod(m => m.CalculateMinMax(null, null))
 				, "WSWT");
 		}

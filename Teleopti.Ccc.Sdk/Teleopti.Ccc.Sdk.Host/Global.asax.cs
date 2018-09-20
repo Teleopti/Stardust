@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			builder.RegisterType<SetNoLicenseActivator>().As<ISetLicenseActivator>().SingleInstance();
 		}
 
-		private static void registerSdkFactories(ContainerBuilder builder, IIocConfiguration configuration)
+		private static void registerSdkFactories(ContainerBuilder builder, IocConfiguration configuration)
 		{
 			builder.RegisterType<TeleoptiCccSdkService>();
 			builder.RegisterType<GetPayrollResultById.MultiTenancyPayrollLogon>().As<GetPayrollResultById.IPayrollLogon>().InstancePerLifetimeScope();

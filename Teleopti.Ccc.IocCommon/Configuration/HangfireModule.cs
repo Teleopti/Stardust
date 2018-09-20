@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class HangfireModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public HangfireModule(IIocConfiguration configuration)
+		public HangfireModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

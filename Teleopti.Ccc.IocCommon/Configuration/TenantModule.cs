@@ -23,9 +23,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class TenantModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocConfiguration _configuration;
 
-		public TenantModule(IIocConfiguration configuration) 
+		public TenantModule(IocConfiguration configuration) 
 		{
 			_configuration = configuration;
 		}

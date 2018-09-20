@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Workload
 		private readonly Guid workloadId = Guid.NewGuid();
 		private readonly Guid businessUnitId = Guid.NewGuid();
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<AnalyticsWorkloadUpdater>();
 		}

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 {
 	public class ReadModelUnitOfWorkTestAttribute : InfrastructureTestAttribute
 	{
-		protected override void Extend(IExtend extend, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			base.Extend(extend, configuration);
 			

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		public FakeGamificationSettingRepository GamificationSettingRepository;
 		public FakeExternalPerformanceRepository ExternalPerformanceRepository;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddModule(new WebModule(configuration, null));
 		}

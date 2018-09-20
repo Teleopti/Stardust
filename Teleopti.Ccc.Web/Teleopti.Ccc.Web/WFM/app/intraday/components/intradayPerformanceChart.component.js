@@ -7,9 +7,9 @@
 		}
 	});
 
-	theComponent.$inject = ['$translate', '$log'];
+	theComponent.$inject = ['$translate'];
 
-	function theComponent($translate, $log) {
+	function theComponent($translate) {
 		var ctrl = this;
 		var hiddenArray = [];
 
@@ -19,20 +19,29 @@
 				angular.isDefined(inData.averageSpeedOfAnswerObj) &&
 				angular.isDefined(inData.abandonedRateObj) &&
 				angular.isDefined(inData.serviceLevelObj) &&
-				angular.isDefined(inData.estimatedServiceLevelObj)
+				angular.isDefined(inData.estimatedServiceLevelObj) &&
+				angular.isDefined(inData.timeSeries) &&
+				inData.timeSeries.length > 0
 			) {
-				ctrl.performanceChart = c3.generate({
+				var columns = [
+					inData.timeSeries,
+					inData.averageSpeedOfAnswerObj.series,
+					inData.serviceLevelObj.series,
+					inData.estimatedServiceLevelObj.series
+				];
+
+				if (inData.abandonedRateObj.series.length > 0) {
+					columns.push(inData.abandonedRateObj.series);
+				}
+				if (inData.currentInterval.length > 0) {
+					columns.push(inData.currentInterval);
+				}
+
+				var config = {
 					bindto: '#performanceChart',
 					data: {
 						x: 'x',
-						columns: [
-							inData.timeSeries,
-							inData.averageSpeedOfAnswerObj.series,
-							inData.abandonedRateObj.series,
-							inData.serviceLevelObj.series,
-							inData.estimatedServiceLevelObj.series
-							// inData.currentInterval
-						],
+						columns: columns,
 						hide: hiddenArray,
 						type: 'line',
 						types: {
@@ -107,7 +116,8 @@
 					transition: {
 						duration: 500
 					}
-				});
+				};
+				ctrl.performanceChart = c3.generate(config);
 			}
 		};
 

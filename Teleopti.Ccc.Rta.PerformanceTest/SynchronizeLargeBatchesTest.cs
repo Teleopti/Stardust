@@ -1,10 +1,8 @@
-﻿using System.Threading;
+﻿using System;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Hangfire;
+using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Rta.PerformanceTest.Code;
-using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
-
 
 namespace Teleopti.Ccc.Rta.PerformanceTest
 {
@@ -13,33 +11,19 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 	public class SynchronizeLargeBatchesTest
 	{
 		public StatesSender States;
+		public HangfireUtilities Hangfire;
+		public StateQueueUtilities StateQueue;
 		public TestCommon.PerformanceTest.PerformanceTest PerformanceTest;
-		public WithUnitOfWork WithUnitOfWork;
-		public WithReadModelUnitOfWork WithReadModelUnitOfWork;
-		public IKeyValueStorePersister KeyValueStore;
-		public IRtaEventStoreTestReader Events;
+		public SynchronzieWaiter Waiter;
 
 		[Test]
 		public void MeasurePerformance()
 		{
 			PerformanceTest.Measure("1mKUHvBlk5wIk0LDZESO2prWvRuimhpjiWaSvoKk2gsE", "SynchronizeLargeBatchesTest", () =>
 			{
-			    States.SendAllAsSmallBatches();				
-				waitForSyncronize();			
+				States.SendAllAsLargeBatches();
+				Waiter.WaitForSyncronize(TimeSpan.FromMinutes(15));
 			});
-		}
-
-		private void waitForSyncronize()
-		{
-			while (true)
-			{
-				
-				var latestStoredRtaEventId = WithUnitOfWork.Get(() => Events.LoadLastIdForTest());
-				var latestSynchronizedRtaEvent = WithReadModelUnitOfWork.Get(() => KeyValueStore.Get("LatestSynchronizedRTAEvent", 0));
-				if (latestStoredRtaEventId == latestSynchronizedRtaEvent)
-					break;
-				Thread.Sleep(20);					
-			}
 		}
 	}
 }

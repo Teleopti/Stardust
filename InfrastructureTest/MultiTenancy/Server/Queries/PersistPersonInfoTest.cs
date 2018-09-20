@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 
 		public IPersistPersonInfo target;
 
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<PersistPersonInfo>(true);
 			extend.AddService<TenantAuditAttribute>();

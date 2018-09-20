@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			return _service.Config();
 		}
 
-		protected virtual void Extend(IExtend extend, IIocConfiguration configuration)
+		protected virtual void Extend(IExtend extend, IocConfiguration configuration)
 		{
 		}
 

@@ -2,98 +2,63 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting
 {
-    /// <summary>
-    /// Tests for the SkillDayLoadHelper class
-    /// </summary>
-    /// <remarks>
-    /// Created by: robink
-    /// Created date: 2008-05-08
-    /// </remarks>
-    [TestFixture]
+    [DomainTest]
     public class SkillDayLoadHelperTest
     {
-        private DateOnlyPeriod _dtp;
-        private IList<ISkill> _skills;
-        private IScenario _scenario;
-        private IMultisiteDayRepository _multisiteDayRep;
-        private ISkillDayRepository _skillDayRep;
-        private MockRepository _mocks;
-    	private ISkillDayLoadHelper _target;
-
-    	/// <summary>
-        /// Setups this instance.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-05-08
-        /// </remarks>
-        [SetUp]
-        public void Setup()
-        {
-            _mocks = new MockRepository();
-            _multisiteDayRep = _mocks.StrictMock<IMultisiteDayRepository>();
-            _skillDayRep = _mocks.StrictMock<ISkillDayRepository>();
-            _scenario = ScenarioFactory.CreateScenarioAggregate();
-            _dtp = new DateOnlyPeriod(new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 19));
-            _skills = new List<ISkill>
-                          {
-                              SkillFactory.CreateSkill("skill2")
-                          };
-        	_target = new SkillDayLoadHelper(_skillDayRep,_multisiteDayRep, new StaffingCalculatorServiceFacade());
-        }
-
-        /// <summary>
-        /// Verifies the load with multisite days.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-05-08
-        /// </remarks>
+        public FakeMultisiteDayRepository MultisiteDayRep;
+        public FakeSkillDayRepository SkillDayRep;
+		public IStaffingCalculatorServiceFacade StaffingCalculatorServiceFacade;
+		public ISkillDayLoadHelper Target;
+		
         [Test]
         public void VerifyLoadWithMultisiteDays()
-        {
-            IMultisiteSkill multisiteSkill = SkillFactory.CreateMultisiteSkill("skill1");
-            _skills.Add(multisiteSkill);
+		{
+			var scenario = ScenarioFactory.CreateScenarioAggregate().WithId();
+			var dtp = new DateOnlyPeriod(new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 19));
+			var skills = new List<ISkill>
+			{
+				SkillFactory.CreateSkill("skill2").WithId()
+			};
+
+			IMultisiteSkill multisiteSkill = SkillFactory.CreateMultisiteSkill("skill1");
+            skills.Add(multisiteSkill);
                 
             IList<ISkillDay> skillDays1 = new List<ISkillDay>
                                               { 
-                                                                 SkillDayFactory.CreateSkillDay(multisiteSkill, _dtp.StartDate),
-                                                                 SkillDayFactory.CreateSkillDay(multisiteSkill, _dtp.StartDate.AddDays(1)),
-                                                                 SkillDayFactory.CreateSkillDay(multisiteSkill, _dtp.StartDate.AddDays(2))
+                                                                 SkillDayFactory.CreateSkillDay(multisiteSkill, dtp.StartDate, scenario),
+                                                                 SkillDayFactory.CreateSkillDay(multisiteSkill, dtp.StartDate.AddDays(1), scenario),
+                                                                 SkillDayFactory.CreateSkillDay(multisiteSkill, dtp.StartDate.AddDays(2), scenario)
                                                              };
 
             IList<ISkillDay> skillDays2 = new List<ISkillDay>
                                               { 
-                                                                 SkillDayFactory.CreateSkillDay(_skills[0], _dtp.StartDate),
-                                                                 SkillDayFactory.CreateSkillDay(_skills[0], _dtp.StartDate.AddDays(1)),
-                                                                 SkillDayFactory.CreateSkillDay(_skills[0], _dtp.StartDate.AddDays(2))
+                                                                 SkillDayFactory.CreateSkillDay(skills[0], dtp.StartDate, scenario),
+                                                                 SkillDayFactory.CreateSkillDay(skills[0], dtp.StartDate.AddDays(1), scenario),
+                                                                 SkillDayFactory.CreateSkillDay(skills[0], dtp.StartDate.AddDays(2), scenario)
                                                              };
 
-            var allSkillDays = new List<ISkillDay>(skillDays1);
-            allSkillDays.AddRange(skillDays2);
-            IList<IMultisiteDay> multisiteDays = new List<IMultisiteDay>
-                                                    {
-                                                                             new MultisiteDay(_dtp.StartDate,multisiteSkill,_scenario),
-                                                                             new MultisiteDay(_dtp.StartDate.AddDays(1),multisiteSkill,_scenario),
-                                                                             new MultisiteDay(_dtp.StartDate.AddDays(2),multisiteSkill,_scenario)
-                                                                         };
-
-            Expect.Call(_skillDayRep.FindReadOnlyRange(new DateOnlyPeriod(_dtp.StartDate.AddDays(-8), _dtp.EndDate.AddDays(2)), _skills, _scenario)).Return(allSkillDays).Repeat.Once();
-            Expect.Call(_skillDayRep.FindReadOnlyRange(new DateOnlyPeriod(_dtp.StartDate.AddDays(-7), _dtp.EndDate.AddDays(1)), multisiteSkill.ChildSkills, _scenario)).Return(new ISkillDay[]{}).Repeat.Once();
-            
-            Expect.Call(_multisiteDayRep.FindRange(SkillDayCalculator.GetPeriodToLoad(_dtp),multisiteSkill, _scenario)).Return(multisiteDays).Repeat.Once();
-
-            _mocks.ReplayAll();
-            var result = _target.LoadSchedulerSkillDays(_dtp, _skills, _scenario);
+            SkillDayRep.AddRange(skillDays1);
+			SkillDayRep.AddRange(skillDays2);
+			var multisiteDays = new[]
+			{
+				new MultisiteDay(dtp.StartDate, multisiteSkill, scenario),
+				new MultisiteDay(dtp.StartDate.AddDays(1), multisiteSkill, scenario),
+				new MultisiteDay(dtp.StartDate.AddDays(2), multisiteSkill, scenario)
+			};
+			MultisiteDayRep.Has(multisiteDays);
+				
+            var result = Target.LoadSchedulerSkillDays(dtp, skills, scenario);
             var resultSkillDays = result[multisiteSkill];
 
             Assert.AreEqual(3, resultSkillDays.Count());
@@ -102,100 +67,120 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(multisiteDays[2].MultisiteSkillDay, resultSkillDays.ElementAt(2));
             Assert.IsNotNull(resultSkillDays.ElementAt(0).SkillDayCalculator);
             Assert.IsNotNull(resultSkillDays.ElementAt(2).SkillDayCalculator);
-            _mocks.VerifyAll();
         }
 
-        /// <summary>
-        /// Verifies the load without multisite days.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-05-08
-        /// </remarks>
-        [Test]
+		[Test]
+		public void ShouldSetStaffingCalculatorServiceOnMultisiteSkill()
+		{
+			var scenario = ScenarioFactory.CreateScenarioAggregate().WithId();
+			var dtp = new DateOnlyPeriod(new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 19));
+			
+			IMultisiteSkill multisiteSkill = SkillFactory.CreateMultisiteSkill("skill1");
+			
+			IList<ISkillDay> skillDays1 = new List<ISkillDay>
+											  {
+																 SkillDayFactory.CreateSkillDay(multisiteSkill, dtp.StartDate, scenario)
+															 };
+			
+			SkillDayRep.AddRange(skillDays1);
+			var multisiteDays = new[]
+			{
+				new MultisiteDay(dtp.StartDate, multisiteSkill, scenario)
+			};
+			MultisiteDayRep.Has(multisiteDays);
+
+			var result = Target.LoadSchedulerSkillDays(dtp, new []{multisiteSkill}, scenario);
+			var resultSkillDays = result[multisiteSkill];
+
+			Assert.AreEqual(1, resultSkillDays.Count());
+			Assert.AreEqual(resultSkillDays.ElementAt(0).Skill.SkillType.StaffingCalculatorService, StaffingCalculatorServiceFacade);
+		}
+
+		[Test]
         public void VerifyLoadWithoutMultisiteDays()
-        {
-            IList<ISkillDay> skillDays = new List<ISkillDay>
+		{
+			var scenario = ScenarioFactory.CreateScenarioAggregate().WithId();
+			var dtp = new DateOnlyPeriod(new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 19));
+			var skills = new List<ISkill>
+			{
+				SkillFactory.CreateSkill("skill2").WithId()
+			};
+			IList<ISkillDay> skillDays = new List<ISkillDay>
                                              { 
-                                                                 SkillDayFactory.CreateSkillDay(_skills[0], _dtp.StartDate),
-                                                                 SkillDayFactory.CreateSkillDay(_skills[0], _dtp.StartDate.AddDays(1)),
-                                                                 SkillDayFactory.CreateSkillDay(_skills[0], _dtp.StartDate.AddDays(2))
+                                                                 SkillDayFactory.CreateSkillDay(skills[0], dtp.StartDate, scenario).WithId(),
+                                                                 SkillDayFactory.CreateSkillDay(skills[0], dtp.StartDate.AddDays(1), scenario).WithId(),
+                                                                 SkillDayFactory.CreateSkillDay(skills[0], dtp.StartDate.AddDays(2), scenario).WithId()
                                                              };
+			SkillDayRep.AddRange(skillDays);
 
-            Expect.Call(_skillDayRep.FindReadOnlyRange(new DateOnlyPeriod(_dtp.StartDate.AddDays(-8), _dtp.EndDate.AddDays(2)), _skills, _scenario)).Return(skillDays).Repeat.Once();
-            
-            _mocks.ReplayAll();
-            var result = _target.LoadSchedulerSkillDays(_dtp, _skills, _scenario);
+            var result = Target.LoadSchedulerSkillDays(dtp, skills, scenario);
 
-            var resultSkillDays = result[_skills[0]];
+            var resultSkillDays = result[skills[0]];
             Assert.AreEqual(3, resultSkillDays.Count());
             Assert.AreEqual(skillDays[0], resultSkillDays.ElementAt(0));
             Assert.AreEqual(skillDays[1], resultSkillDays.ElementAt(1));
             Assert.AreEqual(skillDays[2], resultSkillDays.ElementAt(2));
             Assert.IsNotNull(resultSkillDays.ElementAt(0).SkillDayCalculator);
             Assert.IsNotNull(resultSkillDays.ElementAt(2).SkillDayCalculator);
-            _mocks.VerifyAll();
         }
 
         [Test]
         public void VerifyLoadBudgetSkillDaysWithMultisiteSkill()
         {
-            var multisiteSkill = SkillFactory.CreateMultisiteSkill("skill1");
-            _skills.Add(multisiteSkill);
-            _mocks.ReplayAll();
+			var scenario = ScenarioFactory.CreateScenarioAggregate().WithId();
+			var dtp = new DateOnlyPeriod(new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 19));
+			var skills = new List<ISkill>
+			{
+				SkillFactory.CreateSkill("skill2").WithId()
+			};
 
-			Assert.Throws<ArgumentException>(() => _target.LoadBudgetSkillDays(_dtp, _skills, _scenario));
-
-            _mocks.VerifyAll();
+			var multisiteSkill = SkillFactory.CreateMultisiteSkill("skill1");
+            skills.Add(multisiteSkill);
+            
+			Assert.Throws<ArgumentException>(() => Target.LoadBudgetSkillDays(dtp, skills, scenario));
         }
 
         [Test]
         public void VerifyLoadBudgetSkillDays()
-        {
-            var multisiteSkill = SkillFactory.CreateMultisiteSkill("multisite skill");
+		{
+			var scenario = ScenarioFactory.CreateScenarioAggregate().WithId();
+			var dtp = new DateOnlyPeriod(new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 19));
+			var skills = new List<ISkill>
+			{
+				SkillFactory.CreateSkill("skill2").WithId()
+			};
+			var multisiteSkill = SkillFactory.CreateMultisiteSkill("multisite skill");
             var childSkill = SkillFactory.CreateChildSkill("Sub 1", multisiteSkill);
             multisiteSkill.AddChildSkill(childSkill);
-            _skills.Add(childSkill);
-            var skillToBeLoad = new List<ISkill> {_skills[0], multisiteSkill};
+            skills.Add(childSkill);
+
             IList<ISkillDay> skillDays = new List<ISkillDay>
                                              {
-                                                 SkillDayFactory.CreateSkillDay(_skills[0], _dtp.StartDate.AddDays(1)),
-                                                 SkillDayFactory.CreateSkillDay(multisiteSkill, _dtp.StartDate),
-                                                 SkillDayFactory.CreateSkillDay(childSkill,_dtp.StartDate)
+                                                 SkillDayFactory.CreateSkillDay(skills[0], dtp.StartDate.AddDays(1), scenario),
+                                                 SkillDayFactory.CreateSkillDay(multisiteSkill, dtp.StartDate, scenario),
+                                                 SkillDayFactory.CreateSkillDay(childSkill,dtp.StartDate, scenario)
                                              };
-            IList<IMultisiteDay> multisiteDays = new List<IMultisiteDay>
-                                             {
-                                                 new MultisiteDay(_dtp.StartDate, multisiteSkill, _scenario)
-                                             };
-            Expect.Call(_skillDayRep.FindReadOnlyRange(new DateOnlyPeriod(_dtp.StartDate.AddDays(-8), _dtp.EndDate.AddDays(2)),
-                                               skillToBeLoad, _scenario)).Return(skillDays).Repeat.Any();
-            Expect.Call(_multisiteDayRep.FindRange(SkillDayCalculator.GetPeriodToLoad(_dtp), multisiteSkill, _scenario)).Return(multisiteDays).Repeat.Once();
+			MultisiteDayRep.Has(new MultisiteDay(dtp.StartDate, multisiteSkill, scenario));
+			SkillDayRep.AddRange(skillDays);
 
-            Expect.Call(_skillDayRep.FindReadOnlyRange(SkillDayCalculator.GetPeriodToLoad(_dtp),
-                                               multisiteSkill.ChildSkills, _scenario)).Return(new List<ISkillDay> { skillDays[2] }).Repeat.Once();
-            _mocks.ReplayAll();
-
-            var result = _target.LoadBudgetSkillDays(_dtp, _skills, _scenario);
+            var result = Target.LoadBudgetSkillDays(dtp, skills, scenario);
             var resultSkillDays = result[childSkill];
             
             Assert.AreEqual(1, resultSkillDays.Count());
-            _mocks.VerifyAll();
         }
-
-        /// <summary>
-        /// Verifies the null values give empty results.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-05-08
-        /// </remarks>
+		
         [Test]
         public void VerifyNullValuesGiveEmptyResults()
-        {
-            IDictionary<ISkill, IEnumerable<ISkillDay>> result;
-            result = _target.LoadSchedulerSkillDays(_dtp, null, _scenario);
+		{
+			var scenario = ScenarioFactory.CreateScenarioAggregate().WithId();
+			var dtp = new DateOnlyPeriod(new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 19));
+			var skills = new List<ISkill>
+			{
+				SkillFactory.CreateSkill("skill2").WithId()
+			};
+			var result = Target.LoadSchedulerSkillDays(dtp, null, scenario);
             Assert.AreEqual(0, result.Count);
-            result = _target.LoadSchedulerSkillDays(_dtp, _skills, null);
+            result = Target.LoadSchedulerSkillDays(dtp, skills, null);
             Assert.AreEqual(0, result.Count);
         }
     }

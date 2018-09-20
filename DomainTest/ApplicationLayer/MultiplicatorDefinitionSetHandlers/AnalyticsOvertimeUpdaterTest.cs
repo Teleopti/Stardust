@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.MultiplicatorDefinitionSetHan
 		public IAnalyticsOvertimeRepository AnalyticsOvertimeRepository;
 		public IMultiplicatorDefinitionSetRepository MultiplicatorDefinitionSetRepository;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<AnalyticsOvertimeUpdater>();
 		}

@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 				.Should().Be.Empty();
 		}
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<TestEventHandler>(true);
 			extend.AddService<TestEventHandler2>(true);

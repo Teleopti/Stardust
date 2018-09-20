@@ -3,6 +3,7 @@ using Autofac;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.Toggle.InApp;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.IocCommon
@@ -31,6 +32,8 @@ namespace Teleopti.Ccc.IocCommon
 		public bool IsFatClient { get; set; }
 		
 		public IFetchToggleOverride FetchToggleOverride { get; set; }
+
+		public IocCache Cache { get; } = new IocCache();
 
 		public IocArgs(IConfigReader configReader)
 		{

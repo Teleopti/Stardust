@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				toggleManager.Enable(Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509);
 		}
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<ResourceCalculateWithNewContext>();
 		}

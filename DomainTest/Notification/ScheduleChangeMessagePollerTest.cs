@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		public FakeLoggedOnUser LoggedOnUser;
 		public MutableNow Now;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<ScheduleChangeMessagePoller>();
 		}

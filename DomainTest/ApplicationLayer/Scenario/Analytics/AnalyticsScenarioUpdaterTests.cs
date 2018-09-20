@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<AnalyticsScenarioUpdater>();
 		}

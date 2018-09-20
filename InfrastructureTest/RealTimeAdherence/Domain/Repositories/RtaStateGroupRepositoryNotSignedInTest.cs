@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Repositories
 		public IPrincipalAndStateContext Context;
 		public TheServiceImpl TheService;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<TheServiceImpl>();
 		}

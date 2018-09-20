@@ -28,6 +28,8 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
 			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
 			config.FakeConnectionString("RtaTracer", InfraTestConfigReader.AnalyticsConnectionString);
+			config.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
+			config.FakeSetting("PBI77584", "true"); //remove me with toggle
 			return config;
 		}
 
@@ -37,7 +39,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 			HangfireClientStarter.Start();
 		}
 
-		protected override void Extend(IExtend extend, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			base.Extend(extend, configuration);
 			extend.AddModule(new WfmAdminModule(configuration));

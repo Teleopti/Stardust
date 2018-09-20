@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		[Test]
 		public void ShouldBeEnabledIfMultipleToggleIsEnabledByAttribute()
 		{
-			var iocConfig = MockRepository.GenerateMock<IIocConfiguration>();
+			var iocConfig = MockRepository.GenerateMock<IocConfiguration>();
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(true);
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle2)).Return(true);
 
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		[Test]
 		public void ShouldBeEnabledIfToggleIsEnabledByAttribute()
 		{
-			var iocConfig = MockRepository.GenerateMock<IIocConfiguration>();
+			var iocConfig = MockRepository.GenerateMock<IocConfiguration>();
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(true);
 
 			Assert.That(typeof(targetWithAttrib).EnabledByToggle(iocConfig), Is.True);
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		[Test]
 		public void ShouldBeEnabledIfNoAttribute()
 		{
-			var iocConfig = MockRepository.GenerateMock<IIocConfiguration>();
+			var iocConfig = MockRepository.GenerateMock<IocConfiguration>();
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(false).Repeat.Any();
 
 			Assert.That(typeof(targetWithoutAttrib).EnabledByToggle(iocConfig), Is.True);
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		[Test]
 		public void ShouldBeNotEnabledIfMultipleTogglesAreBothEnabledAndDisabledByAttribute()
 		{
-			var iocConfig = MockRepository.GenerateMock<IIocConfiguration>();
+			var iocConfig = MockRepository.GenerateMock<IocConfiguration>();
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(true);
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle2)).Return(false);
 
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		[Test]
 		public void ShouldNotBeEnabledIfToggleIsFalseByAttribute()
 		{
-			var iocConfig = MockRepository.GenerateMock<IIocConfiguration>();
+			var iocConfig = MockRepository.GenerateMock<IocConfiguration>();
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(false);
 
 			Assert.That(typeof(targetWithAttrib).EnabledByToggle(iocConfig), Is.False);

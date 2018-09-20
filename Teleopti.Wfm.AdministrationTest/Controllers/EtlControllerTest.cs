@@ -62,7 +62,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		public FakeAnalyticsTimeZoneRepository TimeZoneRepository;
 		public FakeJobHistoryRepository JobHistoryRepository;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<EtlController>();
 			extend.AddModule(new EtlToolModule());

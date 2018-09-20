@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 					_period, _scenario)[_person].ScheduledDay(_startDate).ScheduleTag().Should().Be.EqualTo(_scheduleTag);
 		}
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<AddPersonalActivityCommandHandler>();
 			extend.AddService<ScheduleSaveHandler>();

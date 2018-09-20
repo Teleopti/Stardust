@@ -560,7 +560,7 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationRestrictionsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationScenarioTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationStandardDeviationTest.cs" />
-    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTeamBlockForSingleAgentTeamAndSingleDayTest.cs" />
+    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTeamBlockForSingleAgentTeamAndSingleDayDesktopTest.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulePlanningPeriodCommandHandlerTest.cs" />
     <Compile Include="SchedulingScenarios\IntraIntervalOptimization\IntraIntervalOptimizationDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandExtendedModelTest.cs" />

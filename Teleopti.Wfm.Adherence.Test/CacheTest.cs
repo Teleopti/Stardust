@@ -24,7 +24,7 @@ namespace Teleopti.Wfm.Adherence.Test
 		public IDataSourceScope DataSource;
 		public IMbCacheFactory Cache;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddModule(new TestModule(configuration));
 		}
@@ -36,9 +36,9 @@ namespace Teleopti.Wfm.Adherence.Test
 
 		public class TestModule : Module
 		{
-			private readonly IIocConfiguration _configuration;
+			private readonly IocConfiguration _configuration;
 
-			public TestModule(IIocConfiguration configuration)
+			public TestModule(IocConfiguration configuration)
 			{
 				_configuration = configuration;
 			}
@@ -48,7 +48,7 @@ namespace Teleopti.Wfm.Adherence.Test
 				builder.RegisterType<OuterService>().SingleInstance();
 
 				builder.CacheByClassProxy<CachedServiceImpl>().SingleInstance();
-				_configuration.Cache().This<CachedServiceImpl>(
+				_configuration.Args().Cache.This<CachedServiceImpl>(
 					(c, b) => b
 						.CacheMethod(x => x.GetDataSourceName())
 						.CacheKey(c.Resolve<CachePerDataSource>())

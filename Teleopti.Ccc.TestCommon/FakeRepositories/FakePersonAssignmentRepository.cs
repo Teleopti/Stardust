@@ -118,9 +118,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Find(persons, period, scenario).Where(s => s.Source == source).ToList();
 		}
 
-		public bool IsThereScheduledAgents()
+		public bool IsThereScheduledAgents(Guid businessUnitId)
 		{
-			return _storage.LoadAll<IPersonAssignment>().Any();
+
+			return _storage.LoadAll<IPersonAssignment>().Any(pa => pa.Person.PersonPeriodCollection.First().Team.Site.BusinessUnit.Id == businessUnitId);
 		}
 
 		public IPersonAssignment GetSingle(DateOnly dateOnly)

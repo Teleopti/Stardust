@@ -7,9 +7,9 @@
 		}
 	});
 
-	theComponent.$inject = ['$translate', '$log'];
+	theComponent.$inject = ['$translate'];
 
-	function theComponent($translate, $log) {
+	function theComponent($translate) {
 		var ctrl = this;
 		var hiddenArray = [];
 
@@ -23,18 +23,23 @@
 				angular.isDefined(inData.timeSeries) &&
 				inData.timeSeries.length > 0
 			) {
+				var columns = [
+					inData.timeSeries,
+					inData.forecastedCallsObj.series,
+					inData.actualCallsObj.series,
+					inData.forecastedAverageHandleTimeObj.series,
+					inData.actualAverageHandleTimeObj.series
+				];
+
+				if (inData.currentInterval.length > 0) {
+					columns.push(inData.currentInterval);
+				}
+
 				var config = {
 					bindto: '#trafficChart',
 					data: {
 						x: 'x',
-						columns: [
-							inData.timeSeries,
-							inData.forecastedCallsObj.series,
-							inData.actualCallsObj.series,
-							inData.forecastedAverageHandleTimeObj.series,
-							inData.actualAverageHandleTimeObj.series
-							// inData.currentInterval
-						],
+						columns: columns,
 						hide: hiddenArray,
 						types: {
 							Current: 'bar'

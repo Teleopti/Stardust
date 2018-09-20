@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 				.ForEach(account => account.LatestCalculatedBalance.Should().Be.EqualTo(TimeSpan.FromDays(1)));
 		}
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<PersonAccountConflictResolver>();
 		}

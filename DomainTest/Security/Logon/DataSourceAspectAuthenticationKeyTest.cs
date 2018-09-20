@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Logon
 		public ICurrentDataSource DataSource;
 		public FakeDatabase Database;
 		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<Service>();
 		}

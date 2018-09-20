@@ -3,10 +3,9 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Ccc.IocCommon
 {
-	public class IocConfiguration : IIocConfiguration
+	public class IocConfiguration
 	{
 		private readonly IocArgs _args;
-		private readonly IocCache _cache = new IocCache();
 		private readonly IToggleManager _toggleManager;
 
 		public IocConfiguration(IocArgs args, IToggleManager toggleManager)
@@ -15,13 +14,18 @@ namespace Teleopti.Ccc.IocCommon
 			_toggleManager = toggleManager;
 		}
 
+		protected IocConfiguration()
+		{
+			//just to support some old mock tests...
+		}
+
 		public void FillToggles()
 		{
 			var toggleQuerier = _toggleManager as ToggleQuerier;
 			toggleQuerier?.FillAllToggles();
 		}
 
-		public bool Toggle(Toggles toggle)
+		public virtual bool Toggle(Toggles toggle)
 		{
 			return _toggleManager != null && _toggleManager.IsEnabled(toggle);
 		}
@@ -29,11 +33,6 @@ namespace Teleopti.Ccc.IocCommon
 		public IocArgs Args()
 		{
 			return _args;
-		}
-
-		public IocCache Cache()
-		{
-			return _cache;
 		}
 	}
 }

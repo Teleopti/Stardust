@@ -5,6 +5,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.Toggle.Admin;
+using Teleopti.Ccc.Infrastructure.Toggle.InApp;
 using Toggle.Net;
 using Toggle.Net.Configuration;
 using Toggle.Net.Providers.TextFile;
@@ -29,13 +31,16 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 
 			if (bool.TryParse(_iocArgs.ConfigReader.AppConfig("PBI77584"), out var pbi77584) && pbi77584)
 			{
-				builder.Register(c => new FetchToggleOverride(_iocArgs.ConfigReader)).As<IFetchToggleOverride>();
+				builder.CacheByInterfaceProxy<FetchToggleOverride, IFetchToggleOverride>();
+				_iocArgs.Cache.This<IFetchToggleOverride>(x => x.CacheMethod(m => m.OverridenValue(Toggles.TestToggle)));
 			}
 			else
 			{
-				builder.RegisterType<NoFetchingOfOverridenToggles>().As<IFetchToggleOverride>();				
+				builder.RegisterType<NoFetchingOfOverridenToggles>().As<IFetchToggleOverride>();
 			}
-
+			builder.RegisterType<SaveToggleOverride>().SingleInstance();
+			builder.RegisterType<FetchAllToggleOverrides>().SingleInstance();
+			
 			if (string.IsNullOrEmpty(pathToToggle))
 			{
 				logger.Warn(missingPathToToggle);
@@ -88,7 +93,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 			builder.RegisterType<AllToggles>()
 				.SingleInstance().As<IAllToggles>();
 		}
-
+		
 		private class toggleCheckerWrapper : IToggleManager
 		{
 			private readonly IToggleChecker _toggleChecker;

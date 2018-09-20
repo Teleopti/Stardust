@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			PerformanceTest.Measure("1mKUHvBlk5wIk0LDZESO2prWvRuimhpjiWaSvoKk2gsE", "QueueWorkLargeBatchesTest", () =>
 			{
 				States.SendAllAsLargeBatches();
-				StateQueue.WaitForDequeue(TimeSpan.FromMinutes(60));
+				StateQueue.WaitForDequeue(TimeSpan.FromMinutes(15));
 				Hangfire.WaitForQueue();
 			});
 		}
