@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		public FakeForecastDayOverrideRepository ForecastDayOverrideRepository;
 		private const double tolerance = 0.000001d;
 
-		public void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<ForecastController>();
 		}
