@@ -203,7 +203,7 @@
     <Compile Include="SharedModuleUsedInBothRuntimeContainerAndToggleManagerModule.cs" />
     <Compile Include="Toggle\FakeToggleManager.cs" />
     <Compile Include="Toggle\FalseToggleManager.cs" />
-    <Compile Include="Toggle\ToggleNetModule.cs" />
+    <Compile Include="Toggle\ToggleManagerModule.cs" />
     <Compile Include="Configuration\UnitOfWorkModule.cs" />
     <Compile Include="Configuration\MbCacheModule.cs" />
     <Compile Include="Configuration\WebModule.cs" />

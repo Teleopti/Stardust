@@ -1,3 +1,4 @@
+using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 
@@ -33,6 +34,11 @@ namespace Teleopti.Ccc.IocCommon
 		public IocArgs Args()
 		{
 			return _args;
+		}
+
+		public void AddToggleManagerToBuilder(ContainerBuilder builder)
+		{
+			builder.RegisterInstance(_toggleManager).As<IToggleManager>().SingleInstance();
 		}
 	}
 }

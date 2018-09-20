@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.IocCommon
 		{
 			builder.RegisterInstance(_iocArgs.ConfigReader).As<IConfigReader>().SingleInstance();
 			builder.RegisterModule(new MbCacheModule(_iocArgs));
-			builder.RegisterModule(new ToggleNetModule(_iocArgs));
 		}
 	}
 }

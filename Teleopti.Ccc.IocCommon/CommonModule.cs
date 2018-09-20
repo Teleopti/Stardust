@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.IocCommon
 
 		protected override void Load(ContainerBuilder builder)
 		{
+			_configuration.AddToggleManagerToBuilder(builder);
 			builder.RegisterModule(new SharedModuleUsedInBothRuntimeContainerAndToggleManagerModule(_configuration.Args()));
 			builder.RegisterModule(new RuleSetModule(_configuration));
 			builder.RegisterModule<DateAndTimeModule>();
@@ -92,6 +93,7 @@ namespace Teleopti.Ccc.IocCommon
 		public static IToggleManager ToggleManagerForIoc(IocArgs iocArgs)
 		{
 			var builder = new ContainerBuilder();
+			builder.RegisterModule(new ToggleManagerModule(iocArgs));
 			builder.RegisterModule(new SharedModuleUsedInBothRuntimeContainerAndToggleManagerModule(iocArgs));
 			using (var container = builder.Build())
 				return container.Resolve<IToggleManager>();
