@@ -37,12 +37,17 @@ namespace Teleopti.Wfm.Administration.Core
 			var conflicts = _getImportUsers.GetConflictionUsers(connStringApp, newTenant.Name);
 			saveToDb(conflicts.NotConflicting, newTenant);
 			saveToDb(conflicts.ConflictingUserModels, newTenant);
-			
+
+			var returnConflictsMessage = (conflicts.NumberOfConflicting > 0 ? "New conflicting users: " + string.Join(",", conflicts.ConflictingUserModels.Select(x => x.AppLogon).ToList()) : "");
+
+
 			return new ImportTenantResultModel
 			{
 				Success = true,
 				TenantId = newTenant.Id,
-				Message = string.Format("Succesfully imported a new Tenant with {0} user.", conflicts.NumberOfConflicting + conflicts.NumberOfNotConflicting)
+				Message = string.Format("Succesfully imported a new Tenant with {0} user. {1}", 
+					conflicts.NumberOfConflicting + conflicts.NumberOfNotConflicting, 
+					returnConflictsMessage)
 			};
 		}
 
