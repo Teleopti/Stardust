@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.IoC;
 using Teleopti.Ccc.Web.Areas.Outbound.Controllers;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.IoC
 		[SetUp]
 		public void SetUp()
 		{
-			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
+			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), new FakeToggleManager());
 			_containerBuilder = new ContainerBuilder();
 			_containerBuilder.RegisterModule(new WebAppModule(configuration));
 			_containerBuilder.RegisterModule(new OutboundAreaModule(true));

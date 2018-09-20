@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.Toggle;
 
 namespace Teleopti.Ccc.WinCodeTest.Autofac
 {
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.Autofac
 		[SetUp]
 		public void Setup()
 		{
-			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
+			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), new FakeToggleManager());
 			_containerBuilder = new ContainerBuilder();
 			_containerBuilder.RegisterModule(new CommonModule(configuration));
 		}

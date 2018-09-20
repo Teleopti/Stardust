@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Web.Areas.Requests.Controller;
 using Teleopti.Ccc.Web.Areas.Requests.Core.IOC;
 using Teleopti.Ccc.Web.Core.IoC;
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 		[SetUp]
 		public void SetUp()
 		{
-			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
+			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), new FakeToggleManager());
 			_containerBuilder = new ContainerBuilder();
 			_containerBuilder.RegisterModule(new WebAppModule(configuration));
 			_containerBuilder.RegisterModule(new RequestsAreaModule());

@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Web.Areas.Reports.Controllers;
 using Teleopti.Ccc.Web.Areas.Reports.Core;
 using Teleopti.Ccc.Web.Areas.Reports.IoC;
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reports.IoC
 		[SetUp]
 		public void SetUp()
 		{
-			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
+			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), new FakeToggleManager());
 			_containerBuilder = new ContainerBuilder();
 			_containerBuilder.RegisterModule(new WebAppModule(configuration));
 			_containerBuilder.RegisterModule(new ReportsAreaModule());
