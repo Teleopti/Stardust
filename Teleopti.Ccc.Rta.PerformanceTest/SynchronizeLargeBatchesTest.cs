@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			PerformanceTest.Measure("1mKUHvBlk5wIk0LDZESO2prWvRuimhpjiWaSvoKk2gsE", "SynchronizeLargeBatchesTest", () =>
 			{
 				States.SendAllAsLargeBatches();
+				StateQueue.WaitForDequeue(TimeSpan.FromMinutes(15));
 				Waiter.WaitForSyncronize(TimeSpan.FromMinutes(15));
 			});
 		}
