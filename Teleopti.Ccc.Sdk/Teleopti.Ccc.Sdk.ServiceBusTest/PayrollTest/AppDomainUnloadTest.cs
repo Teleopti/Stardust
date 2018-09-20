@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
-		[Test]
+		[Test, Ignore("still using httpsender?")]
 		public void ExecutePayroll()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
-		[Test]
+		[Test, Ignore("still using httpsender?")]
 		public void ExecuteTeleoptiPayroll()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
