@@ -209,7 +209,7 @@
 
 		return '';
 	};
-	
+
 	self.scrolled = function(data, event) {
 		var element = event.target;
 		var wholeHeight = element.scrollHeight;
@@ -320,14 +320,12 @@
 	};
 
 	self.chooseAgent = function(agent) {
-
 		self.myToleranceMessages([]);
 		self.targetToleranceMessages([]);
 
 		self.showToloranceMessageDetail(false);
 
-		if (!Teleopti.MyTimeWeb.Common.IsHostAMobile()) 
-			self.showCartPanel(true);
+		if (!Teleopti.MyTimeWeb.Common.IsHostAMobile()) self.showCartPanel(true);
 
 		self.selectedSchedulePairs([]);
 
@@ -369,31 +367,32 @@
 		}
 		var agentId = agent.personId;
 		clearSchedulePairs();
-		
-	    loadPeriodSchedule(startDate, endDate, agentId, false, function () {
-				var element = document.querySelector('.shift-trade-list-panel');
-				if (element) {
-					element.scrollTop = 10;
-				}
 
-				// select the date when choose an agent
-				var item = self.loadedSchedulePairs().filter(function (pair) {
-					return pair.date.isSame(self.requestedDateInternal(), 'day');
-				})[0];
+		loadPeriodSchedule(startDate, endDate, agentId, false, function() {
+			var element = document.querySelector('.shift-trade-list-panel');
+			if (element) {
+				element.scrollTop = 10;
+			}
 
-				if (item && item.isEnable) {
-					item.isSelected(true);
-					if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408')) {
-						loadToleranceInfo(agentId, function () {
-							self.select(item);
-						});
-					}
-					else {
+			// select the date when choose an agent
+			var item = self.loadedSchedulePairs().filter(function(pair) {
+				return pair.date.isSame(self.requestedDateInternal(), 'day');
+			})[0];
+
+			if (item && item.isEnable) {
+				item.isSelected(true);
+				if (
+					Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408')
+				) {
+					loadToleranceInfo(agentId, function() {
 						self.select(item);
-					}	
+					});
+				} else {
+					self.select(item);
 				}
-			});
-	
+			}
+		});
+
 		self.isLoadingSchedulesOnBottom(true);
 	};
 
@@ -960,7 +959,7 @@
 			});
 	}
 
-	function loadToleranceInfo(agentId,callback) {
+	function loadToleranceInfo(agentId, callback) {
 		if (!agentId) return;
 
 		ajax.Ajax({
@@ -973,8 +972,7 @@
 					myTolorance: data.MyInfos,
 					targetTolorance: data.PersonToInfos
 				};
-				if (callback)
-					callback();
+				if (callback) callback();
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status === 400) {
@@ -1034,11 +1032,13 @@
 			if (isCheckSelf) {
 				if (p.mySchedule != null && p.targetSchedule == null) gap += p.mySchedule.contractMinutes;
 				if (p.mySchedule == null && p.targetSchedule != null) gap -= p.targetSchedule.contractMinutes;
-				if (p.mySchedule != null && p.targetSchedule != null) gap += p.mySchedule.contractMinutes - p.targetSchedule.contractMinutes;
+				if (p.mySchedule != null && p.targetSchedule != null)
+					gap += p.mySchedule.contractMinutes - p.targetSchedule.contractMinutes;
 			} else {
 				if (p.mySchedule == null && p.targetSchedule != null) gap += p.targetSchedule.contractMinutes;
 				if (p.mySchedule != null && p.targetSchedule == null) gap -= p.mySchedule.contractMinutes;
-				if (p.mySchedule != null && p.targetSchedule != null) gap += p.targetSchedule.contractMinutes - p.mySchedule.contractMinutes;
+				if (p.mySchedule != null && p.targetSchedule != null)
+					gap += p.targetSchedule.contractMinutes - p.mySchedule.contractMinutes;
 			}
 		});
 
@@ -1050,8 +1050,7 @@
 				left = periodToloranceInfo.PositiveToleranceMinutes - left;
 				isNegative = false;
 			}
-		}
-		else if (periodToloranceInfo.PositiveToleranceMinutes < 0) {
+		} else if (periodToloranceInfo.PositiveToleranceMinutes < 0) {
 			isNegative = false;
 			left = periodToloranceInfo.PositiveToleranceMinutes + gap;
 			if (left > 0) {
@@ -1107,11 +1106,7 @@
 				PersonToId: agentId
 			}),
 			success: function(data) {
-				var mySchedules = [],
-					targetSchedules = [],
-					schedulePairs = [],
-					dateInRange = endDate.clone(),
-					previousFirstRowId;
+				var previousFirstRowId;
 
 				if (data.MultiSchedulesForShiftTrade && data.MultiSchedulesForShiftTrade.length > 0) {
 					var loadedData = [];

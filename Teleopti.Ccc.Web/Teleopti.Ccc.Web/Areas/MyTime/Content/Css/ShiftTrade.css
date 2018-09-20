@@ -415,14 +415,17 @@
 	max-height: 100%;
 }
 .multi-shift-trade-schedules-list-header {
-	height: 25px;
+	position: absolute;
+	width: 100%;
+	height: 50px;
 	display: flex;
 	font-weight: bold;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	background: white;
 }
 .multi-shift-trade-schedules-list-panel {
-	position: relative;
-	height: calc(100% - 25px);
+	margin-top: 50px;
+	height: calc(100% - 50px);
 	overflow-x: hidden;
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
@@ -481,9 +484,10 @@
 }
 .multi-shift-trade-shift-detail {
 	height: 100%;
-	width: calc((100% - 80px - 30px - 2*3px - 2*3px) / 2);
+	width: calc((100% - 80px - 30px - 2 * 3px - 2 * 3px) / 2);
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
 	align-items: center;
 }
 .multi-shift-trade-shift-detail > div {
@@ -503,6 +507,7 @@
 }
 .multi-shift-trade-shift-detail.target-schedule-detail > div {
 	border: none;
+	border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
 .multi-shift-trade-row-text-container {
 	display: flex;
@@ -513,9 +518,19 @@
 	padding: 0 5px;
 	flex: 1 1 70%;
 }
-.multi-shift-trade-row-text-container p {
+.multi-shift-trade-row-text-container > p {
 	padding: 0;
 	margin: 0;
+	max-width: 100%;
+	display: inline-block;
+}
+.multi-shift-trade-row-text-container > p > span {
+	max-width: 100%;
+	display: inline-block;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	cursor: pointer;
 }
 .multi-shift-trade-schedule-container {
 	width: 100%;
@@ -553,7 +568,7 @@
 	flex-direction: column;
 	align-items: center;
 }
-.multi-shift-trade-start-end-time span.spliter{
+.multi-shift-trade-start-end-time span.spliter {
 	display: inline-block;
 	height: 2px;
 	line-height: 2px;
@@ -606,7 +621,8 @@
 	padding: 5px;
 }
 .multi-shift-trade-cart-container {
-	overflow: auto;
+	overflow-x: hidden;
+	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
 	height: 420px;
 	padding-bottom: 5px;
@@ -652,9 +668,17 @@
 }
 .multi-shift-trade-cart-schedule-category,
 .multi-shift-trade-cart-schedule-category.dayoff {
-	width: 80%;
+	width: 120px;
 	text-align: center;
 	display: inline-block;
+	padding: 0 5px;
+}
+.multi-shift-trade-cart-schedule-category span {
+	display: inline-block;
+	max-width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 .multi-shift-trade-cart-text {
 	text-align: center;

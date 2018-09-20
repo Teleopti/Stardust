@@ -315,11 +315,13 @@
 
 	<div class="multi-shift-trade-panel">
 		<!-- ko if: isiPad || isDesktop || (isMobile && !showCartPanel()) -->
-		<div class="multi-shift-trade-schedules-list">
+		<div class="multi-shift-trade-schedules-list relative">
 			<div class="multi-shift-trade-schedules-list-header">
 				<div class="multi-shift-trade-date-cell"></div>
-				<div class="multi-shift-trade-shift-detail my-schedule-detail text-center">@Resources.MySchedule</div>
-				<div class="multi-shift-trade-shift-detail target-schedule-detail" data-bind="text:agentChoosed() ? agentChoosed().agentName : ''"></div>
+				<div class="multi-shift-trade-shift-detail my-schedule-detail text-center"><span>@Resources.MySchedule</span></div>
+				<div class="multi-shift-trade-shift-detail target-schedule-detail text-center">
+					<span data-bind="text:agentChoosed() ? agentChoosed().agentName : ''"></span>
+				</div>
 				<div class="multi-shift-trade-selection"></div>
 			</div>
 			<div class="multi-shift-trade-schedules-list-panel" data-bind="event:{scroll: scrolled},css:{'cursorpointer': isMobile || isiPad}">
@@ -332,7 +334,9 @@
 					<div class="multi-shift-trade-shift-detail my-schedule-detail">
 						<!--ko if: !mySchedule-->
 						<div class="multi-shift-trade-row-text-container">
-							<span>@Resources.NotScheduled </span>
+							<p>
+								<span>@Resources.NotScheduled</span>
+							</p>
 						</div>
 						<!--/ko-->
 
@@ -341,8 +345,7 @@
 							<!--ko if: !mySchedule.isDayOff && !mySchedule.isFullDayAbsence-->
 							<div class="multi-shift-trade-row-text-container">
 								<p>
-									<span data-bind="text:mySchedule.categoryName"></span>
-									<span data-bind="text:$root.getOvertimeAndIntradayAbsenceText(mySchedule, '@Resources.OvertimeShortName')"></span>
+									<span data-bind="text:mySchedule.categoryName + $root.getOvertimeAndIntradayAbsenceText(mySchedule, '@Resources.OvertimeShortName'),tooltip: {title: mySchedule.categoryName + $root.getOvertimeAndIntradayAbsenceText(mySchedule, '@Resources.OvertimeShortName')}"></span>
 								</p>
 								<div class="multi-shift-trade-start-end-time">
 									<span data-bind="text:mySchedule.scheduleStart + $root.getOvernightFlag(mySchedule.scheduleStartTime(), date)"></span>
@@ -365,11 +368,10 @@
 							<!--/ko-->
 							<!--/ko-->
 
-							<!--ko if: mySchedule.isDayOff-->
+							<!--ko if: mySchedule.isDayOff && !mySchedule.isFullDayAbsence-->
 							<div class="multi-shift-trade-row-text-container" data-bind="css: {'dayoff': $root.isMobile}">
 								<p>
-									<span data-bind="text: mySchedule.dayOffName"></span>
-									<span data-bind="text: $root.getOvertimeAndIntradayAbsenceText(mySchedule, '@Resources.OvertimeShortName')"></span>
+									<span data-bind="text: mySchedule.dayOffName + $root.getOvertimeAndIntradayAbsenceText(mySchedule, '@Resources.OvertimeShortName'), tooltip: {title: mySchedule.dayOffName + $root.getOvertimeAndIntradayAbsenceText(mySchedule, '@Resources.OvertimeShortName')}"></span>
 								</p>
 							</div>
 
@@ -382,9 +384,11 @@
 							<!--/ko-->
 							<!--/ko-->
 
-							<!--ko if: mySchedule.isFullDayAbsence && !mySchedule.isDayOff-->
+							<!--ko if: mySchedule.isFullDayAbsence-->
 							<div class="multi-shift-trade-row-text-container">
-								<span data-bind="text: mySchedule.categoryName"></span>
+								<p>
+									<span data-bind="text: mySchedule.categoryName, tooltip: {title: mySchedule.categoryName}"></span>
+								</p>
 							</div>
 							<div data-bind="visible: !$root.isMobile" class="multi-shift-trade-schedule-container">
 								<div class="multi-shift-trade-layer-container">
@@ -402,7 +406,7 @@
 						<!--ko if: !targetSchedule-->
 						<div class="multi-shift-trade-row-text-container">
 							<p>
-								<span>@Resources.NotScheduled </span>
+								<span>@Resources.NotScheduled</span>
 							</p>
 						</div>
 						<!--/ko-->
@@ -412,8 +416,7 @@
 							<!--ko if: !targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence-->
 							<div class="multi-shift-trade-row-text-container">
 								<p>
-									<span data-bind="text:targetSchedule.categoryName"></span>
-									<span data-bind="text:$root.getOvertimeAndIntradayAbsenceText(targetSchedule, '@Resources.OvertimeShortName')"></span>
+									<span data-bind="text:targetSchedule.categoryName + $root.getOvertimeAndIntradayAbsenceText(targetSchedule, '@Resources.OvertimeShortName'), tooltip: {title : targetSchedule.categoryName + $root.getOvertimeAndIntradayAbsenceText(targetSchedule, '@Resources.OvertimeShortName')}"></span>
 								</p>
 								<div class="multi-shift-trade-start-end-time">
 									<span data-bind="text:targetSchedule.scheduleStart + $root.getOvernightFlag(targetSchedule.scheduleStartTime(), date)"></span>
@@ -436,11 +439,10 @@
 							<!--/ko-->
 							<!--/ko-->
 
-							<!--ko if: targetSchedule.isDayOff-->
+							<!--ko if: targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence-->
 							<div class="multi-shift-trade-row-text-container" data-bind="css: {'dayoff': $root.isMobile}">
 								<p>
-									<span data-bind="text: targetSchedule.dayOffName"></span>
-									<span data-bind="text: $root.getOvertimeAndIntradayAbsenceText(targetSchedule, '@Resources.OvertimeShortName')"></span>
+									<span data-bind="text: targetSchedule.dayOffName + $root.getOvertimeAndIntradayAbsenceText(targetSchedule, '@Resources.OvertimeShortName'), tooltip: {title: targetSchedule.dayOffName + $root.getOvertimeAndIntradayAbsenceText(targetSchedule, '@Resources.OvertimeShortName')}"></span>
 								</p>
 							</div>
 
@@ -453,10 +455,10 @@
 							<!--/ko-->
 							<!--/ko-->
 
-							<!--ko if: targetSchedule.isFullDayAbsence && !targetSchedule.isDayOff-->
+							<!--ko if: targetSchedule.isFullDayAbsence-->
 							<div class="multi-shift-trade-row-text-container">
 								<p>
-									<span data-bind="text: targetSchedule.categoryName"></span>
+									<span data-bind="text: targetSchedule.categoryName, tooltip: {title: targetSchedule.categoryName}"></span>
 								</p>
 							</div>
 							<div data-bind="visible: !$root.isMobile" class="multi-shift-trade-schedule-container">
@@ -488,7 +490,7 @@
 		<!-- /ko -->
 
 		<!-- ko if: showCartPanel -->
-		<div class="multi-shift-trade-cart">
+		<div class="multi-shift-trade-cart" data-bind="css: {'multi-shift-trade-cart-mobile': isMobile}">
 			<div class="multi-shift-trade-cart-wrapper" data-bind="visible:$root.showCart()">
 				<div class="multi-shift-trade-cart-container">
 					<!--ko foreach: selectedSchedulePairs-->
@@ -501,10 +503,14 @@
 									<span class="multi-shift-trade-cart-text">@Resources.NotScheduled</span>
 									<!--/ko-->
 									<!--ko if:mySchedule && mySchedule.isDayOff-->
-									<span class="multi-shift-trade-cart-schedule-category dayoff" data-bind="text:mySchedule.dayOffName"></span>
+									<div class="multi-shift-trade-cart-schedule-category dayoff" data-bind="tooltip: { title: mySchedule.dayOffName}">
+										<span data-bind="text:mySchedule.dayOffName"></span>
+									</div>
 									<!--/ko-->
 									<!--ko if:mySchedule && !mySchedule.isDayOff-->
-									<span class="multi-shift-trade-cart-schedule-category" data-bind="text:mySchedule.categoryName,style:{'background-color': mySchedule.categoryColor ? mySchedule.categoryColor: 'none', 'color': mySchedule.categoryColor ? $root.getTextColor(mySchedule.categoryColor) : 'none'}"></span>
+									<div class="multi-shift-trade-cart-schedule-category" data-bind="style:{'background-color': mySchedule.categoryColor ? mySchedule.categoryColor: 'none', 'color': mySchedule.categoryColor ? $root.getTextColor(mySchedule.categoryColor) : 'none'}, tooltip: { title: mySchedule.categoryName}">
+										<span data-bind="text:mySchedule.categoryName"></span>
+									</div>
 									<span class="multi-shift-trade-cart-text cart-text-time" data-bind="text:mySchedule.scheduleStart + $root.getOvernightFlag(mySchedule.scheduleStartTime(), date) + '-' + mySchedule.scheduleEnd + $root.getOvernightFlag(mySchedule.scheduleEndTime(), date)"></span>
 									<span data-bind="text:mySchedule.contractTime"></span>
 									<!--/ko-->
@@ -515,10 +521,14 @@
 									<span class="multi-shift-trade-cart-text">@Resources.NotScheduled</span>
 									<!--/ko-->
 									<!--ko if:targetSchedule && targetSchedule.isDayOff-->
-									<span class="multi-shift-trade-cart-schedule-category dayoff" data-bind="text:targetSchedule.dayOffName"></span>
+									<div class="multi-shift-trade-cart-schedule-category dayoff" data-bind="tooltip: { title: targetSchedule.dayOffName}">
+										<span data-bind="text:targetSchedule.dayOffName"></span>
+									</div>
 									<!--/ko-->
 									<!--ko if:targetSchedule && !targetSchedule.isDayOff-->
-									<span class="multi-shift-trade-cart-schedule-category" data-bind="text:targetSchedule.categoryName,style:{'background-color': targetSchedule.categoryColor ? targetSchedule.categoryColor: 'none', 'color': targetSchedule.categoryColor ? $root.getTextColor(targetSchedule.categoryColor) : 'none'}"></span>
+									<div class="multi-shift-trade-cart-schedule-category" data-bind="style:{'background-color': targetSchedule.categoryColor ? targetSchedule.categoryColor: 'none', 'color': targetSchedule.categoryColor ? $root.getTextColor(targetSchedule.categoryColor) : 'none'}, tooltip: { title: targetSchedule.categoryName}">
+										<span data-bind="text:targetSchedule.categoryName"></span>
+									</div>
 									<span class="multi-shift-trade-cart-text cart-text-time" data-bind="text:targetSchedule.scheduleStart + $root.getOvernightFlag(targetSchedule.scheduleStartTime(), date) + '-' + targetSchedule.scheduleEnd + $root.getOvernightFlag(targetSchedule.scheduleEndTime(), date)"></span>
 									<span data-bind="text:targetSchedule.contractTime"></span>
 									<!--/ko-->
@@ -551,7 +561,7 @@
 			</div>
 		</div>
 		<!-- /ko -->
-	
+
 		<!--ko if: isMobile && !showToolbar()-->
 		<button data-bind="click: cartMenuClick" class="cart-menu">
 			<span data-bind="text:selectedCount, visible: !showCartPanel()"></span>
