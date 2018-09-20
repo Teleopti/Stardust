@@ -96,6 +96,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 				{
 					Date = target.Key,
 					Tasks = target.Value,
+					TotalTasks = target.Value,
 					AverageTaskTime = forecastedTaskTime[target.Key].TotalSeconds,
 					TotalAverageTaskTime = forecastedTaskTime[target.Key].TotalSeconds,
 					AverageAfterTaskTime = forecastedAfterTaskTime[target.Key].TotalSeconds,
