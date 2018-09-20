@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.Events;
-using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -33,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				RuleName = rule,
 				RuleColor = ruleColor?.ToArgb(),
 				Adherence = adherence == null ? null : (EventAdherence?) Enum.Parse(typeof(EventAdherence), adherence.ToString()),
-			}, DeadLockVictim.No);
+			});
 			return this;
 		}
 
@@ -53,7 +52,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				RuleName = rule,
 				RuleColor = ruleColor?.ToArgb(),
 				Adherence = adherence == null ? null : (EventAdherence?) Enum.Parse(typeof(EventAdherence), adherence.ToString()),
-			}, DeadLockVictim.No);
+			});
 			return this;
 		}
 
@@ -73,7 +72,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				RuleName = rule,
 				RuleColor = ruleColor?.ToArgb(),
 				Adherence = adherence == null ? null : (EventAdherence?) Enum.Parse(typeof(EventAdherence), adherence.ToString())
-			}, DeadLockVictim.No);
+			});
 			return this;
 		}
 	}

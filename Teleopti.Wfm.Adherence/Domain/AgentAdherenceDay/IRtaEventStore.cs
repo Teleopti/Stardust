@@ -2,20 +2,19 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 {
 	public interface IRtaEventStore
 	{
-		void Add(IEvent @event, DeadLockVictim deadLockVictim);
+		void Add(IEvent @event);
 		int Remove(DateTime removeUntil, int maxEventsToRemove);
 	}
 
 	public interface IRtaEventStoreReader
 	{
 		IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period);
-		IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp, DeadLockVictim deadLockVictim);
+		IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp);
 		LoadedEvents LoadFrom(int fromEventId);
 	}
 

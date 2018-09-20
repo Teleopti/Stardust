@@ -7,38 +7,31 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.Events;
-using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain
 {
 	public class RtaEventStore : IRtaEventStore, IRtaEventStoreReader, IRtaEventStoreTestReader
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
-		private readonly DeadLockVictimPriority _deadLockVictimPriority;
 		private readonly IJsonEventSerializer _serializer;
 		private readonly IJsonEventDeserializer _deserializer;
 
 		public RtaEventStore(
 			ICurrentUnitOfWork unitOfWork,
-			DeadLockVictimPriority deadLockVictimPriority,
 			IJsonEventSerializer serializer,
 			IJsonEventDeserializer deserializer)
 		{
 			_unitOfWork = unitOfWork;
-			_deadLockVictimPriority = deadLockVictimPriority;
 			_serializer = serializer;
 			_deserializer = deserializer;
 		}
 
-		public void Add(IEvent @event, DeadLockVictim deadLockVictim)
+		public void Add(IEvent @event)
 		{
-			_deadLockVictimPriority.Specify(deadLockVictim);
-			
 			var queryData = (@event as IRtaStoredEvent).QueryData();
 			var eventType = $"{@event.GetType().FullName}, {@event.GetType().Assembly.GetName().Name}";
 
@@ -100,10 +93,8 @@ ORDER BY [Id] ASC
 					.SetParameter("EndTime", period.EndDateTime)
 			);
 
-		public IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp, DeadLockVictim deadLockVictim)
+		public IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp)
 		{
-			_deadLockVictimPriority.Specify(deadLockVictim);
-			
 			return loadEvents(_unitOfWork.Current().Session()
 					.CreateSQLQuery(@"
 SELECT TOP 1 
