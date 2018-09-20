@@ -35,14 +35,12 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly ISkillRepository _skillRepository;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
-		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly IIntradayStatisticsService _intradayStatisticsService;
 
 		public IntradayStaffingService(
 			ICurrentScenario currentScenario,
-			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade,	
 			IResourceCalculation resourceCalculation,
 			IIntradayStatisticsService intradayStatisticsService,
 			ISkillCombinationResourceRepository skillCombinationResourceRepository, 
@@ -53,7 +51,6 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 			_skillCombinationResourceRepository = skillCombinationResourceRepository ?? throw new ArgumentNullException(nameof(skillCombinationResourceRepository));
 			_skillRepository = skillRepository ?? throw new ArgumentNullException(nameof(skillRepository));
 			_skillDayLoadHelper = skillDayLoadHelper;
-			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade ?? throw new ArgumentNullException(nameof(staffingCalculatorServiceFacade));
 			_currentScenario = currentScenario ?? throw new ArgumentNullException(nameof(currentScenario));
 			_resourceCalculation = resourceCalculation ?? throw new ArgumentNullException(nameof(resourceCalculation));
 			_intradayStatisticsService = intradayStatisticsService ?? throw new ArgumentNullException(nameof(intradayStatisticsService));
@@ -75,7 +72,6 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 			var returnList = new HashSet<SkillStaffingInterval>();
 			foreach (var skillDay in skillDays)
 			{
-				skillDay.Skill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
 				skillDay.RecalculateDailyTasks();
 
 				if (useShrinkage)

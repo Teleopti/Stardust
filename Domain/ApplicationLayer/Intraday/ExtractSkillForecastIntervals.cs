@@ -15,14 +15,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 	{
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly ICurrentScenario _currentScenario;
-		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 
-		public ExtractSkillForecastIntervals(ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade, ISkillDayLoadHelper skillDayLoadHelper)
+		public ExtractSkillForecastIntervals(ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario, ISkillDayLoadHelper skillDayLoadHelper)
 		{
 			_skillDayRepository = skillDayRepository;
 			_currentScenario = currentScenario;
-			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
 			_skillDayLoadHelper = skillDayLoadHelper;
 		}
 
@@ -33,7 +31,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 			
 			foreach (var skillDay in skillDays)
 			{
-				skillDay.Skill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
 				skillDay.RecalculateDailyTasks();
 				
 				if (useShrinkage)
