@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 
 		public void Error(string message, Exception exception)
 		{
-			//throw new NotImplementedException();
+			ProgressList.Add(new PayrollResultDetail(DetailLevel.Error, message, DateTime.UtcNow, exception));
 		}
 
 		public void Warning(string message)

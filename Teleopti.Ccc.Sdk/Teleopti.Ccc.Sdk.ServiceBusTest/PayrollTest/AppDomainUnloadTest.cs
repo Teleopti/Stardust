@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
-		[Test, Ignore("WIP")]
+		[Test]
 		public void ExecutePayroll()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
@@ -85,7 +85,43 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 					new SdkFakeServiceFactory(), payrollExportDto, new RunPayrollExportEvent(),
 					Guid.NewGuid(), feedback, 
 					_searchPath.Path);
-				feedback.ProgressList.ForEach(i => Console.WriteLine(i.Message));
+				feedback.ProgressList.ForEach(i => Console.WriteLine($"Message: {i.Message}\r\nExceptionMessage: {i.ExceptionMessage}\r\nException.Stacktrace: {i.ExceptionStackTrace}\r\n" ));
+				feedback.ProgressList.Where(i => i.Message == "Unable to run payroll.No payroll export processor found.").Should()
+					.Be.Empty();
+				document.DocumentElement.ChildNodes.Count.Should().Be(5);
+			});
+			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
+		}
+
+		[Test]
+		public void ExecuteTeleoptiPayroll()
+		{
+			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
+			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
+			runWithExceptionHandling(() =>
+			{
+				var payrollExportDto = new PayrollExportDto
+				{
+					TimeZoneId = "Utc",
+					DatePeriod = new DateOnlyPeriodDto
+					{
+						StartDate = new DateOnlyDto(2009, 2, 1),
+						EndDate = new DateOnlyDto(2009, 2, 1)
+
+					},
+					Name = "TestTenant",
+					PayrollFormat = new PayrollFormatDto(new Guid("{0e531434-a463-4ab6-8bf1-4696ddc9b296}"), "Name", "TestTenant")
+				};
+				for (var i = 0; i < 51; i++)
+					payrollExportDto.PersonCollection.Add(new PersonDto());
+
+				var target = new AppdomainCreatorWrapper();
+				var feedback = new FakeServiceBusPayrollExportFeedback();
+				var document = target.RunPayroll(
+					new SdkFakeServiceFactory(), payrollExportDto, new RunPayrollExportEvent(),
+					Guid.NewGuid(), feedback,
+					_searchPath.Path);
+				feedback.ProgressList.ForEach(i => Console.WriteLine($"Message: {i.Message}\r\nExceptionMessage: {i.ExceptionMessage}\r\nException.Stacktrace: {i.ExceptionStackTrace}"));
 				feedback.ProgressList.Where(i => i.Message == "Unable to run payroll.No payroll export processor found.").Should()
 					.Be.Empty();
 				document.DocumentElement.ChildNodes.Count.Should().Be(5);
