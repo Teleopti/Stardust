@@ -26,6 +26,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.ToggleAdmin;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
@@ -283,7 +284,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			isolate.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();
 			isolate.UseTestDouble<ReplaceLayerInSchedule>().For<IReplaceLayerInSchedule>();
 
-			
+			isolate.UseTestDouble<FakeFetchAllToggleOverrides>().For<IFetchAllToggleOverrides>();
 
 			if (QueryAllAttributes<LoggedOnAppDomainAttribute>().Any())
 				isolate.UseTestDouble<FakeAppDomainPrincipalContext>().For<IThreadPrincipalContext>();

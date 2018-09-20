@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.ToggleAdmin;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.Toggle.Admin;
 
@@ -14,13 +15,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly IToggleManager _toggleManager;
 		private readonly SaveToggleOverride _saveToggleOverride;
 		private readonly FetchAllToggleOverrides _fetchAllToggleOverrides;
-		private readonly IAllToggles _allToggles;
+		private readonly AllToggleNamesWithoutOverrides _allToggleNamesWithoutOverrides;
 
-		public ToggleController(IToggleManager toggleManager, SaveToggleOverride saveToggleOverride, FetchAllToggleOverrides fetchAllToggleOverrides, IAllToggles allToggles)
+		public ToggleController(IToggleManager toggleManager, SaveToggleOverride saveToggleOverride, FetchAllToggleOverrides fetchAllToggleOverrides,
+			AllToggleNamesWithoutOverrides allToggleNamesWithoutOverrides)
 		{
 			_toggleManager = toggleManager;
 			_saveToggleOverride = saveToggleOverride;
-			_allToggles = allToggles;
+			_allToggleNamesWithoutOverrides = allToggleNamesWithoutOverrides;
 			_fetchAllToggleOverrides = fetchAllToggleOverrides;
 		}
 
@@ -34,9 +36,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpGet, Route("Toggle/AllToggleNamesWithoutOverrides")]
 		public JsonResult<IEnumerable<string>> AllToggleNamesWithoutOverrides()
 		{
-			var toggles = _allToggles.Toggles().Select(x=>x.ToString()).OrderBy(x=>x);
-			var overrides = new HashSet<string>(_fetchAllToggleOverrides.OverridenValues().Select(x => x.Key));
-			return Json(toggles.Except(overrides));
+			return Json(_allToggleNamesWithoutOverrides.Execute());
 		}
 
 		[HttpGet, Route("Toggle/AllOverrides")]

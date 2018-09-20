@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.ToggleAdmin;
 
 namespace Teleopti.Ccc.Infrastructure.Toggle.Admin
 {
-	public class FetchAllToggleOverrides
+	public class FetchAllToggleOverrides : IFetchAllToggleOverrides
 	{
 		private readonly IConfigReader _configReader;
 
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.Toggle.Admin
 			_configReader = configReader;
 		}
 
-		public Dictionary<string, bool> OverridenValues()
+		public IDictionary<string, bool> OverridenValues()
 		{
 			using (var connection = new SqlConnection(_configReader.ConnectionString("Toggle")))
 			{

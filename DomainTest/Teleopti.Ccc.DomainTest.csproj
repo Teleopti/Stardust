@@ -1573,6 +1573,7 @@
     <Compile Include="Time\TimePeriodTest.cs" />
     <Compile Include="Collection\FixedCapacityStackTest.cs" />
     <Compile Include="Forecasting\VolumeYearTest.cs" />
+    <Compile Include="ToggleAdmin\AllToggleNamesWithoutOverridesTest.cs" />
     <Compile Include="Tracking\TraceableRefreshServiceTest.cs" />
     <Compile Include="UndoRedo\MementoTest.cs">
       <SubType>Code</SubType>
