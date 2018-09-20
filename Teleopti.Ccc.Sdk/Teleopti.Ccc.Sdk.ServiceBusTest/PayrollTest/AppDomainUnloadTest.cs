@@ -149,7 +149,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 		public void ShouldNotReturnValuesWhenFileIsLocked()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
-			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
+			var binDir = Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", "");
+			AppDomain.CurrentDomain.SetData("APPBASE", binDir);
 			var payrollExportDto = new PayrollExportDto
 			{
 				TimeZoneId = "Utc",
@@ -165,7 +166,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 				payrollExportDto.PersonCollection.Add(new PersonDto());
 
 			// lock specific payroll file
-			var fullPayrollPath = Path.Combine(_searchPath.Path, @"Telia\Teleopti.Ccc.Payroll.Customers.ReleasyTeliaSonera.dll");
+			var fullPayrollPath = Path.Combine(binDir,"Payroll", @"Telia\Teleopti.Ccc.Payroll.Customers.ReleasyTeliaSonera.dll");
 			var file = File.Open(fullPayrollPath, FileMode.Open);
 
 			var target = new AppdomainCreatorWrapper();

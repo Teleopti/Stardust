@@ -12,7 +12,7 @@ using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest
 {
-	[TestFixture,Ignore("")]
+	[TestFixture, Ignore("Must be reworked with custom Appdomains/AppBase")]
 	public class PayrollDllCopyTest
 	{
 		private string _source;
