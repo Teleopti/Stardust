@@ -1,13 +1,7 @@
-﻿using System.Configuration;
-using System.IO;
-using NUnit.Framework;
-using Teleopti.Ccc.DBManager.Library;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -29,7 +23,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
 			config.FakeConnectionString("RtaTracer", InfraTestConfigReader.AnalyticsConnectionString);
 			config.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
-			config.FakeSetting("PBI77584", "true"); //remove me with toggle
+			config.FakeSetting("PBI77584", "true"); //remove me when releasing feature
 			return config;
 		}
 
