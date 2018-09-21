@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_requestApprovalService.Stub(x => x.Approve(null)).IgnoreArguments()
 				.Return(new List<IBusinessRuleResponse>());
 
-			//_factory.Stub(x => x.GetRequestApprovalService(null, _scenario, _schedulingResultStateHolder)).IgnoreArguments().Return(_requestApprovalService);
+			//_factory.Stub(x => x.GetRequestApprovalService(null, ScenarioRepository, _schedulingResultStateHolder)).IgnoreArguments().Return(_requestApprovalService);
 
 			_target.Handle(_message);
 
