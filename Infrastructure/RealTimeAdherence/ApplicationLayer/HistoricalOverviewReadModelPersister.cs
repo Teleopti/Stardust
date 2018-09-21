@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 				.CreateSQLQuery(@"
 UPDATE [ReadModel].[HistoricalOverview] 
 	SET 
-		Adherence = :Adherence, 
 		WasLateForWork = :WasLateForWork, 
 		MinutesLateForWork = :MinutesLateForWork,
 		SecondsInAdherence = :SecondsInAdherence,
@@ -35,7 +34,6 @@ UPDATE [ReadModel].[HistoricalOverview]
 		[Date] = :Date 
 ")
 				.SetParameter("PersonId", model.PersonId)
-				.SetParameter("Adherence", model.Adherence)
 				.SetParameter("WasLateForWork", model.WasLateForWork)
 				.SetParameter("MinutesLateForWork", model.MinutesLateForWork)
 				.SetParameter("SecondsInAdherence", model.SecondsInAdherence)
@@ -50,7 +48,6 @@ INSERT INTO [ReadModel].[HistoricalOverview]
 	(
 		[PersonId], 
 		[Date], 
-		[Adherence], 
 		[WasLateForWork], 
 		[MinutesLateForWork],
 		[SecondsInAdherence],
@@ -60,7 +57,6 @@ VALUES
 	(
 		:PersonId, 
 		:Date, 
-		:Adherence, 
 		:WasLateForWork, 
 		:MinutesLateForWork,
 		:SecondsInAdherence,
@@ -68,7 +64,6 @@ VALUES
 	)
 ")
 				.SetParameter("PersonId", model.PersonId)
-				.SetParameter("Adherence", model.Adherence)
 				.SetParameter("WasLateForWork", model.WasLateForWork)
 				.SetParameter("MinutesLateForWork", model.MinutesLateForWork)
 				.SetParameter("SecondsInAdherence", model.SecondsInAdherence)
@@ -85,7 +80,6 @@ VALUES
 SELECT 
 	[PersonId], 
 	[Date], 
-	[Adherence], 
 	[WasLateForWork], 
 	[MinutesLateForWork],
 	[SecondsInAdherence],

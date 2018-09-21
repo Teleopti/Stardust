@@ -71,7 +71,6 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 			{
 				PersonId = personId,
 				Date = day,
-				Adherence = adherenceDay.Percentage(),
 				WasLateForWork = lateForWork != null,
 				MinutesLateForWork = minutesLateForWork,
 				SecondsInAdherence = adherenceDay.SecondsInAherence(),

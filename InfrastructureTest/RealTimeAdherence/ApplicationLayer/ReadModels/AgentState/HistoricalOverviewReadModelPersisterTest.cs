@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			{
 				PersonId = personId,
 				Date = date,
-				Adherence = 90,
 				WasLateForWork = true,
 				MinutesLateForWork = 5,
 				SecondsInAdherence = 1,
@@ -58,7 +57,6 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var result = Reader.Read(new[] {personId});
 			result.Single().PersonId.Should().Be(personId);
 			result.Single().Date.Should().Be(date);
-			result.Single().Adherence.Should().Be(90);
 			result.Single().WasLateForWork.Should().Be(true);
 			result.Single().MinutesLateForWork.Should().Be(5);
 			result.Single().SecondsInAdherence.Should().Be(1);
@@ -75,23 +73,26 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			{
 				PersonId = personId,
 				Date = date,
-				Adherence = 90,
 				WasLateForWork = false,
 				MinutesLateForWork = 0,
+				SecondsInAdherence = 1,
+				SecondsOutOfAdherence = 2
 			});
 			Persister.Upsert(new HistoricalOverviewReadModel
 			{
 				PersonId = personId,
 				Date = date,
-				Adherence = 98,
 				WasLateForWork = true,
 				MinutesLateForWork = 5,
+				SecondsInAdherence = 3,
+				SecondsOutOfAdherence = 4
 			});
 
 			var result = Reader.Read(new[] {personId});
-			result.Single().Adherence.Should().Be(98);
 			result.Single().WasLateForWork.Should().Be(true);
 			result.Single().MinutesLateForWork.Should().Be(5);
+			result.Single().SecondsInAdherence.Should().Be(3);
+			result.Single().SecondsOutOfAdherence.Should().Be(4);
 		}
 
 		[Test]
@@ -103,22 +104,27 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			Persister.Upsert(new HistoricalOverviewReadModel
 			{
 				PersonId = personId1,
-				Adherence = 1
+				SecondsInAdherence = 1,
+				SecondsOutOfAdherence = 2
 			});
 			Persister.Upsert(new HistoricalOverviewReadModel
 			{
 				PersonId = personId2,
-				Adherence = 2
+				SecondsInAdherence = 3,
+				SecondsOutOfAdherence = 4
 			});
 			Persister.Upsert(new HistoricalOverviewReadModel
 			{
 				PersonId = personId1,
-				Adherence = 3
+				SecondsInAdherence = 5,
+				SecondsOutOfAdherence = 6
 			});
 
 			var result = Reader.Read(new[] {personId1, personId2});
-			result.Single(x => x.PersonId == personId2).Adherence.Should().Be(2);
-			result.Single(x => x.PersonId == personId1).Adherence.Should().Be(3);
+			result.Single(x => x.PersonId == personId2).SecondsInAdherence.Should().Be(3);
+			result.Single(x => x.PersonId == personId2).SecondsOutOfAdherence.Should().Be(4);
+			result.Single(x => x.PersonId == personId1).SecondsInAdherence.Should().Be(5);
+			result.Single(x => x.PersonId == personId1).SecondsOutOfAdherence.Should().Be(6);
 		}
 
 		[Test]
@@ -132,24 +138,29 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			{
 				PersonId = personId,
 				Date = date1,
-				Adherence = 1
+				SecondsInAdherence = 1,
+				SecondsOutOfAdherence = 2
 			});
 			Persister.Upsert(new HistoricalOverviewReadModel
 			{
 				PersonId = personId,
 				Date = date2,
-				Adherence = 2
+				SecondsInAdherence = 3,
+				SecondsOutOfAdherence = 4
 			});
 			Persister.Upsert(new HistoricalOverviewReadModel
 			{
 				PersonId = personId,
 				Date = date1,
-				Adherence = 3
+				SecondsInAdherence = 5,
+				SecondsOutOfAdherence = 6
 			});
 
 			var result = Reader.Read(new[] {personId});
-			result.Single(x => x.Date == date2).Adherence.Should().Be(2);
-			result.Single(x => x.Date == date1).Adherence.Should().Be(3);
+			result.Single(x => x.Date == date2).SecondsInAdherence.Should().Be(3);
+			result.Single(x => x.Date == date2).SecondsOutOfAdherence.Should().Be(4);
+			result.Single(x => x.Date == date1).SecondsInAdherence.Should().Be(5);
+			result.Single(x => x.Date == date1).SecondsOutOfAdherence.Should().Be(6);
 		}
 		
 		[Test]
