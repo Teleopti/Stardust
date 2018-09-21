@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 		public FakePreferenceDayRepository PreferenceDayRepository;
 
-		[Test, Ignore("#77830 to be fixed")]
+		[Test]
 		public void ShouldConsiderPreferences()
 		{
 			var date = new DateOnly(2015, 10, 12); //mon;
