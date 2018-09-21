@@ -778,10 +778,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var data = (result as JsonResult)?.Data as ShiftTradeToleranceInfoViewModel;
 
 			data.IsNeedToCheck.Should().Be.True();
-			data.MyInfos.First().PeriodStart.Should().Be.EqualTo(startDate.Date);
-			data.MyInfos.First().PeriodEnd.Should().Be.EqualTo(startDate.Date.AddMonths(1).AddDays(-1));
-			data.PersonToInfos.First().PeriodStart.Should().Be.EqualTo(startDate.Date);
-			data.PersonToInfos.First().PeriodEnd.Should().Be.EqualTo(startDate.Date.AddMonths(1).AddDays(-1));
+			data.MyInfos.First().PeriodStart.Should().Be.EqualTo(startDate.Date.ToString("yyyy-MM-dd"));
+			data.MyInfos.First().PeriodEnd.Should().Be.EqualTo(startDate.Date.AddMonths(1).AddDays(-1).ToString("yyyy-MM-dd"));
+			data.PersonToInfos.First().PeriodStart.Should().Be.EqualTo(startDate.Date.ToString("yyyy-MM-dd"));
+			data.PersonToInfos.First().PeriodEnd.Should().Be.EqualTo(startDate.Date.AddMonths(1).AddDays(-1).ToString("yyyy-MM-dd"));
 		}
 
 		private ShiftTradeMultiSchedulesForm prepareData(DateOnly startDate, DateOnly endDate, DateTime publishedDate, TimeZoneInfo timeZone = null)
