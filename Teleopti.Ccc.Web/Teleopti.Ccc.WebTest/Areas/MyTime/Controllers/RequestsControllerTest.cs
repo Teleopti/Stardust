@@ -1555,6 +1555,31 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			shiftTradeScheduleViewModel.MySchedule.Should().Not.Be.Null();
 		}
 
+		[Test]
+		public void ShouldNotThrowExceptionWhenPersonPeriodOrSchedulePeriodIsNull()
+		{
+			var personFromId = Guid.NewGuid();
+			var scenarioId = Guid.NewGuid();
+			var personToId = Guid.NewGuid();
+			var skill = new Skill("must");
+			Database.WithMultiSchedulesForShiftTradeWorkflow(DateTime.Today.AddDays(10), skill)
+				.WithPerson(personFromId, "logOn", TimeZoneInfo.Utc)
+				.WithScenario(scenarioId)
+				.WithPerson(personToId);
+			setPrincipal(personFromId, scenarioId);
+			bool hasException = false;
+			try
+			{
+				Target.GetWFCTolerance(personToId);
+			}
+			catch (ArgumentOutOfRangeException ex)
+			{
+				hasException = true;
+			}
+			hasException.Should().Be.False();
+		}
+
+
 		private void setPermissions(params string[] functionPaths)
 		{
 			var teleoptiPrincipal = ThreadPrincipalContext.Current();

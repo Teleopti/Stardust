@@ -241,7 +241,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			starts.AddRange(personToVirtualSchedulePeriods.Select(x=>x.DateOnlyPeriod.StartDate));
 			var end = myVirtualSchedulePeriods.Select(x => x.DateOnlyPeriod.EndDate).ToList();
 			end.AddRange(personToVirtualSchedulePeriods.Select(x=>x.DateOnlyPeriod.EndDate));
-			var period = new DateOnlyPeriod(starts.Min(), end.Max());
+			var minStart = starts.Min().Date == DateTime.MinValue ? starts.Min().AddWeeks(52) : starts.Min();
+			var maxEnd = end.Max().Date == DateTime.MinValue ? new DateOnly(DateTime.MaxValue.AddYears(-1)) : end.Max();
+			var period = new DateOnlyPeriod(minStart, maxEnd);
 			var allSchedules = _shiftTradeRequestProvider.RetrieveTradeMultiSchedules(period, new List<IPerson> { _loggedOnUser.CurrentUser(), personTo });
 
 			return new ShiftTradeToleranceInfoViewModel
