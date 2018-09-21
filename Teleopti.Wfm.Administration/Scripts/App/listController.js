@@ -31,6 +31,7 @@
 				.success(function(data) {
 					getAllOverrides(); 
 					getAllToggleNamesWithoutOverride();
+					alert("Toggles changes made here may take some time before being active in system!");
 				});	
 		};
 		
@@ -46,6 +47,7 @@
 					getAllToggleNamesWithoutOverride();
 					vm.ShowAdd = false;
 					vm.ToggleValueToSave="false";
+					alert("Toggles changes made here may take some time before being active in system!");
 				});
 		};
 
