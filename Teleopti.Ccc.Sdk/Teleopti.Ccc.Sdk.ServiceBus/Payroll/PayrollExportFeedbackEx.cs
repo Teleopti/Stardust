@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Net;
 using System.Net.Http;
 using Teleopti.Ccc.Domain.Coders;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			_httpClientM = new HttpClientM(new HttpServer(httpClient,new NewtonsoftJsonSerializer()),messageBrokerUrl );
 		}
 
-		public void ReportProgress(int percentage, string information)
+		public virtual void ReportProgress(int percentage, string information)
 		{
 			var payrollExportProgress = new JobResultProgressLight
 			{
@@ -141,7 +142,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 
 		public void AddPayrollResultDetail(IPayrollResultDetail payrollResultDetail)
 		{
-			PayrollResultDetails.Add(new PayrollResultDetailData(payrollResultDetail.DetailLevel, payrollResultDetail.Message, new Exception(payrollResultDetail.ExceptionMessage),DateTime.UtcNow));
+			Exception exception = null;
+			if (!payrollResultDetail.ExceptionMessage.IsNullOrEmpty())
+				exception = new Exception(payrollResultDetail.ExceptionMessage);
+
+			PayrollResultDetails.Add(new PayrollResultDetailData(payrollResultDetail.DetailLevel, payrollResultDetail.Message, exception, DateTime.UtcNow));
 		}
 
 		private void addPayrollResultDetailToList(DetailLevel detailLevel, string message, Exception exception)

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
-		[Test, Ignore("still using httpsender?")]
+		[Test]
 		public void ExecutePayroll()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
@@ -58,7 +58,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 					new SdkFakeServiceFactory(), payrollExportDto, new RunPayrollExportEvent(),
 					Guid.NewGuid(), feedback, 
 					_searchPath.Path);
-				feedback.PayrollResultDetails.ForEach(i => Console.WriteLine($"Message: {i.Message}\r\nExceptionMessage: {i.Exception.Message}\r\nException.Stacktrace: {i.Exception.StackTrace}\r\n" ));
+				feedback.PayrollResultDetails.ForEach(i => 
+					Console.WriteLine($"Message: {i.Message}\r\nExceptionMessage: {i.Exception?.Message}\r\nException.Stacktrace: {i.Exception?.StackTrace}\r\n" ));
 				feedback.PayrollResultDetails.Where(i => i.Message == "Unable to run payroll.No payroll export processor found.").Should()
 					.Be.Empty();
 				document.DocumentElement.ChildNodes.Count.Should().Be(5);
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
-		[Test, Ignore("still using httpsender?")]
+		[Test]
 		public void ExecuteTeleoptiPayroll()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
@@ -95,7 +96,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 					Guid.NewGuid(), feedback,
 					_searchPath.Path);
 				feedback.PayrollResultDetails.ForEach(i => 
-					Console.WriteLine($"Message: {i.Message}\r\nExceptionMessage: {i.Exception.Message}\r\nException.Stacktrace: {i.Exception.StackTrace}"));
+					Console.WriteLine($"Message: {i.Message}\r\nExceptionMessage: {i.Exception?.Message}\r\nException.Stacktrace: {i.Exception?.StackTrace}"));
 				feedback.PayrollResultDetails.Where(i => i.Message == "Unable to run payroll.No payroll export processor found.").Should()
 					.Be.Empty();
 				document.DocumentElement.ChildNodes.Count.Should().Be(5);
@@ -103,7 +104,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
-		[Test, Ignore("some more is needed")]
+		[Test]
 		public void ShouldFindPayrollFilesOnPayrollRootDirIfMissingInTenantSpecificDir()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
