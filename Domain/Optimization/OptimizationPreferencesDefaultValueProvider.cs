@@ -11,13 +11,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			return _setFromTests ?? new OptimizationPreferences
 			{
-				General = new GeneralPreferences
-				{
-					ScheduleTag = NullScheduleTag.Instance, 
-					OptimizationStepDaysOff = true, 
-					UsePreferences = true
-				},
-				Advanced = new AdvancedPreferences {UseMinimumStaffing = true}
+				General = new GeneralPreferences {ScheduleTag = NullScheduleTag.Instance, OptimizationStepDaysOff = true},
+				Advanced = new AdvancedPreferences{UseMinimumStaffing = true}
 			};
 		}
 

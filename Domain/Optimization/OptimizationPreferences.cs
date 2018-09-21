@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public bool UseStudentAvailabilities { get; set; }
 		public bool UseShiftCategoryLimitations { get; set; }
 
-		public double PreferencesValue { get; set; } = 1;
+		public double PreferencesValue { get; set; }
 		public double MustHavesValue { get; set; }
 		public double RotationsValue { get; set; }
 		public double AvailabilitiesValue { get; set; }

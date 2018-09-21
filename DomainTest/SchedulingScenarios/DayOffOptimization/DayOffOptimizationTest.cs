@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
@@ -12,7 +11,6 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.TestCommon;
@@ -39,43 +37,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
-		public FakePreferenceDayRepository PreferenceDayRepository;
 
-		[Test]
-		public void ShouldConsiderPreferences()
-		{
-			var date = new DateOnly(2015, 10, 12); //mon;
-			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
-			var activity = ActivityRepository.Has();
-			var skill = SkillRepository.Has("skill", activity);
-			var scenario = ScenarioRepository.Has("some name");
-			var shiftCategory = new ShiftCategory().WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			var agentToSchedule = PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Week, 1), ruleSet, skill);
-			var alreadyScheduledAgent = PersonRepository.Has(skill);
-			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date,
-				2,
-				2,
-				2,
-				2,
-				0.5, //wants to move here
-				1, //...but cannot, so should end up here 
-				2));
-			foreach (var day in DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1).DayCollection())
-			{
-				PersonAssignmentRepository.Has(new PersonAssignment(alreadyScheduledAgent, scenario, day).WithLayer(activity, new TimePeriod(8, 16)));
-				PersonAssignmentRepository.Has(new PersonAssignment(agentToSchedule, scenario, day).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory));
-			}
-			PersonAssignmentRepository.LoadAll().Single(x => x.Date == date.AddDays(6) && x.Person.Equals(agentToSchedule)).WithDayOff();
-			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = shiftCategory};
-			PreferenceDayRepository.Has(new PreferenceDay(agentToSchedule, date.AddDays(4), preferenceRestriction));
-
-			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
-
-			PersonAssignmentRepository.GetSingle(date.AddDays(5), agentToSchedule).DayOff()
-				.Should().Not.Be.Null();
-		}
-		
 		[Test]
 		public void ShouldMoveDayOffToDayWithLessDemand()
 		{
