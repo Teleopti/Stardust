@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
@@ -124,7 +123,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 				{
 					Date = day.Date.ToString("yyyyMMdd"),
 					DisplayDate = day.Date.ToString("MM") + "/" + day.Date.ToString("dd"),
-					Adherence = readModelForPersonAndDay?.Adherence,
+					Adherence = calculateAdherence(readModelForPersonAndDay?.SecondsInAdherence, readModelForPersonAndDay?.SecondsOutOfAdherence),
 					WasLateForWork = readModelForPersonAndDay != null && readModelForPersonAndDay.WasLateForWork
 				};
 		}
@@ -150,16 +149,14 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 		private int? calculateIntervalAdherence(Guid personId)
 		{
 			var modelForPersonEachDay = _sevenDays.Select(d => getReadModelForPersonAndDay(personId, d)).Where(rm => rm != null).ToList();
-			//if (modelForPersonEachDay.All(x => x.Adherence == null))
-			//	return null;
+			
 			if (modelForPersonEachDay.All(x => x.SecondsInAdherence == null))
 				return null;
 
-			var inAdherenceSum = Convert.ToDouble(modelForPersonEachDay.Where(model => model.SecondsInAdherence != null).Sum(model => model.SecondsInAdherence));
-			var outOfAdherenceSum = Convert.ToDouble(modelForPersonEachDay.Where(model => model.SecondsOutOfAdherence != null).Sum(model => model.SecondsOutOfAdherence));
+			var inAdherenceSum = modelForPersonEachDay.Where(model => model.SecondsInAdherence != null).Sum(model => model.SecondsInAdherence);
+			var outOfAdherenceSum = modelForPersonEachDay.Where(model => model.SecondsOutOfAdherence != null).Sum(model => model.SecondsOutOfAdherence);
 
-			var percent = (inAdherenceSum / (inAdherenceSum + outOfAdherenceSum)) * 100;
-			return Convert.ToInt32(percent);
+			return calculateAdherence(inAdherenceSum, outOfAdherenceSum);
 		}
 
 		private HistoricalOverviewReadModel getReadModelForPersonAndDay(Guid agentId, DateTime day)
@@ -168,6 +165,19 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 				? null
 				: _readModel.SingleOrDefault(m => m.PersonId == agentId && m.Date == day.Date.ToDateOnly());
 		}
+		
+		private static int? calculateAdherence(int? secondsInAdherence, int? secondsOutOfAdherence)
+		{
+			if (secondsInAdherence == null)
+				return null;
+			
+			var inAdherence = Convert.ToDouble(secondsInAdherence);
+			var outAdherence = Convert.ToDouble(secondsOutOfAdherence);
+			
+			var percent = (inAdherence / (inAdherence + outAdherence)) * 100;
+			return Convert.ToInt32(percent);
+		}
+		
 
 		private IEnumerable<HistoricalOverviewTeamViewModel> buildViewModelQuickAndDirty(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds)
 		{

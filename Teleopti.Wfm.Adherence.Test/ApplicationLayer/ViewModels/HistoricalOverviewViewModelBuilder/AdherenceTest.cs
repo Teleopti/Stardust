@@ -85,6 +85,62 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 			var data = Target.Build(null, new[] {teamId}).First();
 
 			data.Agents.Single().Days.First().Adherence.Should().Be("50");
+		}		
+		
+		[Test]
+		public void ShouldDisplayAdherenceIfOutAllDay()
+		{
+			Now.Is("2018-08-17 08:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent()
+				.WithAssignment("2018-08-17")
+				.WithAssignedActivity("2018-08-17 10:00", "2018-08-17 20:00")
+				.WithHistoricalStateChange("2018-08-17 10:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out);
+			Now.Is("2018-08-24 08:00");
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().Days.First().Adherence.Should().Be("0");
+		}		
+		
+		[Test]
+		public void ShouldDisplayEmptyAdherenceIfNeutralAllDay()
+		{
+			Now.Is("2018-08-17 08:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent()
+				.WithAssignment("2018-08-17")
+				.WithAssignedActivity("2018-08-17 10:00", "2018-08-17 20:00")
+				.WithHistoricalStateChange("2018-08-17 10:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral);
+			Now.Is("2018-08-24 08:00");
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().Days.First().Adherence.Should().Be(null);
+		}
+		
+		[Test]
+		public void ShouldDisplayWithNeutralAdherence()
+		{
+			Now.Is("2018-09-20 08:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent()
+				.WithAssignment("2018-09-20")
+				.WithAssignedActivity("2018-09-20 10:00", "2018-09-20 18:00")
+				.WithHistoricalStateChange("2018-09-20 10:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral)
+				.WithHistoricalStateChange("2018-09-20 16:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange("2018-09-20 17:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
+			Now.Is("2018-09-27 08:00");
+		
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().Days.First().Adherence.Should().Be("50");
 		}
 	}
 }
