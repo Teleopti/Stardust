@@ -331,9 +331,6 @@
 
 		//hide or show all agents
 		var showAllAgent = agent === null;
-		//$.each(self.possibleTradeSchedules(), function (index, value) {
-		//	value.isVisible(showAllAgent);
-		//});
 		if (!showAllAgent) {
 			agent.isVisible(true);
 			redrawLayers();
@@ -347,8 +344,6 @@
 
 		if (showAllAgent) {
 			self.selectedInternal(false);
-		} else {
-			//self.add();
 		}
 
 		if (agent == null) {
@@ -1211,7 +1206,6 @@
 				createMySchedule(data.MySchedule);
 				setPossibleTradeSchedulesRaw(date, data);
 				createPossibleTradeSchedules(self.possibleTradeSchedulesRaw);
-				//self.keepSelectedAgentVisible();
 				scheduleReloaded = true;
 			},
 			complete: function() {
@@ -1225,7 +1219,6 @@
 					self.suppressChangeInSearchBox = false;
 				}
 				if (scheduleReloaded) {
-					// Redraw layers after data loaded
 					redrawLayers();
 				}
 			}
