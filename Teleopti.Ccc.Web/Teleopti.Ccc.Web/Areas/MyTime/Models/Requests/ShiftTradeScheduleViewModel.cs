@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 
 	public class ContractTimeInfoViewModel
 	{
-		public DateTime PeriodStart { get; set; }
-		public DateTime PeriodEnd { get; set; }
+		public string PeriodStart { get; set; }
+		public string PeriodEnd { get; set; }
 		public double ContractTimeMinutes { get; set; }
 		public double NegativeToleranceMinutes { get; set; }
 		public double PositiveToleranceMinutes { get; set; }

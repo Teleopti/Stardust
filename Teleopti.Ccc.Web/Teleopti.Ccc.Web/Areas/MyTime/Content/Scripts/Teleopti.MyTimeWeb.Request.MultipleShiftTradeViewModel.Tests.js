@@ -1290,7 +1290,7 @@
 			}]
 		}
 
-		var schedules = createMultiSchedulesForShiftTrade();
+		var schedules = createMultiSchedulesForShiftTrade(480, 580);
 
 		var ajax = {
 			Ajax: function (options) {
@@ -1346,7 +1346,7 @@
 			}]
 		}
 
-		var schedules = createMultiSchedulesForShiftTrade();
+		var schedules = createMultiSchedulesForShiftTrade(480, 580);
 
 		var ajax = {
 			Ajax: function (options) {
@@ -1402,7 +1402,7 @@
 			}]
 		}
 
-		var schedules = createMultiSchedulesForShiftTrade();
+		var schedules = createMultiSchedulesForShiftTrade(480, 580);
 
 		var ajax = {
 			Ajax: function (options) {
@@ -1423,6 +1423,61 @@
 		viewModel.chooseAgent(agent);
 		equal(viewModel.myToleranceMessages()[0].contractTimeGap, "+0:10");
 		equal(viewModel.targetToleranceMessages()[0].contractTimeGap, "-0:20");
+	});
+
+	test("should not calculate tolerance when there is not diff between two agent' contract time", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) {
+			if (toggleName === "MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408") return true;
+			return false;
+		}
+		Teleopti.MyTimeWeb.Common.SetupCalendar({
+			UseJalaaliCalendar: false,
+			DateFormat: 'YYYY-MM-DD',
+			TimeFormat: 'HH:mm tt',
+			AMDesignator: 'AM',
+			PMDesignator: 'PM'
+		});
+
+		var agentId = "123";
+		var toleranceInfo = {
+			IsNeedToCheck: true,
+			MyInfos: [{
+				PeriodStart: moment('2018-06-30'),
+				PeriodEnd: moment('2018-07-29'),
+				ContractTimeMinutes: 1000,
+				NegativeToleranceMinutes: -80,
+				PositiveToleranceMinutes: 10
+			}],
+
+			PersonToInfos: [{
+				PeriodStart: moment('2018-06-30'),
+				PeriodEnd: moment('2018-07-29'),
+				ContractTimeMinutes: 1000,
+				NegativeToleranceMinutes: 10,
+				PositiveToleranceMinutes: -70
+			}]
+		}
+
+		var schedules = createMultiSchedulesForShiftTrade(480, 480);
+
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url === 'Requests/GetWFCTolerance?personToId=' + agentId) {
+					options.success(toleranceInfo);
+				}
+				if (options.url === "Requests/ShiftTradeMultiDaysSchedule") {
+					options.success(schedules);
+				}
+			}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
+		viewModel.requestedDateInternal(moment("2018-07-18"));
+		viewModel.openPeriodEndDate(moment("2018-07-19"));
+		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(null, null, null, "Ashley", agentId, false);
+		viewModel.redrawLayers = function () { };
+
+		viewModel.chooseAgent(agent);
+		equal(viewModel.showToloranceMessage(), false);
 	});
 
 	test("should calculate tolerance for both side at one time and balance without error", function () {
@@ -1458,7 +1513,7 @@
 			}]
 		}
 
-		var schedules = createMultiSchedulesForShiftTrade();
+		var schedules = createMultiSchedulesForShiftTrade(480, 580);
 
 		var ajax = {
 			Ajax: function (options) {
@@ -1753,7 +1808,7 @@
 		equal(viewModel.agentChoosed(), null);
 	});
 
-	function createMultiSchedulesForShiftTrade() {
+	function createMultiSchedulesForShiftTrade(myContractTime, personToContractTime) {
 		return {
 			MultiSchedulesForShiftTrade: [{
 				Date: "\/Date(1531916600000)\/",
@@ -1775,7 +1830,7 @@
 					"IsFullDayAbsence": false,
 					"Total": 0,
 					"DayOffName": null,
-					"ContractTimeInMinute": 480,
+					"ContractTimeInMinute": myContractTime,
 					"IsNotScheduled": false,
 					"ShiftCategory": {
 						"Id": null,
@@ -1805,7 +1860,7 @@
 					"IsFullDayAbsence": false,
 					"Total": 0,
 					"DayOffName": null,
-					"ContractTimeInMinute": 580,
+					"ContractTimeInMinute": personToContractTime,
 					"IsNotScheduled": false,
 					"ShiftCategory": {
 						"Id": null,

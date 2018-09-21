@@ -1038,24 +1038,26 @@
 
 		var left = 0;
 		var isNegative = true;
-		if (periodToloranceInfo.NegativeToleranceMinutes < 0) {
-			left = periodToloranceInfo.NegativeToleranceMinutes - gap;
-			if (left > 0) {
-				left = periodToloranceInfo.PositiveToleranceMinutes - left;
+		if (gap !== 0) {
+			if (periodToloranceInfo.NegativeToleranceMinutes < 0) {
+				left = periodToloranceInfo.NegativeToleranceMinutes - gap;
+				if (left > 0) {
+					left = periodToloranceInfo.PositiveToleranceMinutes - left;
+					isNegative = false;
+				}
+			} else if (periodToloranceInfo.PositiveToleranceMinutes < 0) {
 				isNegative = false;
-			}
-		} else if (periodToloranceInfo.PositiveToleranceMinutes < 0) {
-			isNegative = false;
-			left = periodToloranceInfo.PositiveToleranceMinutes + gap;
-			if (left > 0) {
-				left = periodToloranceInfo.NegativeToleranceMinutes - left;
-				isNegative = true;
-			}
-		} else {
-			if (gap > 0) left = periodToloranceInfo.NegativeToleranceMinutes - gap;
-			if (gap < 0) {
 				left = periodToloranceInfo.PositiveToleranceMinutes + gap;
-				isNegative = false;
+				if (left > 0) {
+					left = periodToloranceInfo.NegativeToleranceMinutes - left;
+					isNegative = true;
+				}
+			} else {
+				if (gap > 0) left = periodToloranceInfo.NegativeToleranceMinutes - gap;
+				if (gap < 0) {
+					left = periodToloranceInfo.PositiveToleranceMinutes + gap;
+					isNegative = false;
+				}
 			}
 		}
 
