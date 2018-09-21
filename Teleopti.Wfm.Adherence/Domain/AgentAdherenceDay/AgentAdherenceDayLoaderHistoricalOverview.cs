@@ -55,7 +55,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 					.Where(x => x != null)
 					.ToArray();
 
-			var obj = new AgentAdherenceDayWithDurationOfEvents(personId, period, shift, until);
+			var obj = new AgentAdherenceDayWithHistoricalOverview(personId, period, shift, until);
 			events.ForEach(x => obj.Apply((dynamic) x));
 			obj.ApplyDone();
 

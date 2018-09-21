@@ -123,5 +123,15 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 				.ToArray();
 
 		public int? Percentage() => _percentage;
+		
+		public int? SecondsInAherence()
+		{
+			throw new NotImplementedException();
+		}
+
+		public int? SecondsOutOfAdherence()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

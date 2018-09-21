@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
@@ -115,7 +116,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 				}).ToArray();
 		}
 
-		private  IEnumerable<HistoricalOverviewDayViewModel> buildDays(Guid agentId)
+		private IEnumerable<HistoricalOverviewDayViewModel> buildDays(Guid agentId)
 		{
 			return from day in _sevenDays
 				let readModelForPersonAndDay = getReadModelForPersonAndDay(agentId, day)
@@ -138,7 +139,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 			};
 		}
 
-		private  IEnumerable<int> calculateLateMinutesForDay(Guid agentId)
+		private IEnumerable<int> calculateLateMinutesForDay(Guid agentId)
 		{
 			return from day in _sevenDays
 				let lateMinutesForDay = getReadModelForPersonAndDay(agentId, day)?.MinutesLateForWork ?? 0
@@ -148,29 +149,20 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 
 		private int? calculateIntervalAdherence(Guid personId)
 		{
-			var modelForPersonEachDay = _sevenDays.Select(d => getReadModelForPersonAndDay(personId, d));
-			if (modelForPersonEachDay.All(x => x?.Adherence == null))
+			var modelForPersonEachDay = _sevenDays.Select(d => getReadModelForPersonAndDay(personId, d)).Where(rm => rm != null).ToList();
+			//if (modelForPersonEachDay.All(x => x.Adherence == null))
+			//	return null;
+			if (modelForPersonEachDay.All(x => x.SecondsInAdherence == null))
 				return null;
 
-			var sumAdherences = modelForPersonEachDay.Sum(model =>
-			{
-				if (model?.ShiftLength == null || model.Adherence == null)
-					return 0;
-				return model.Adherence * model.ShiftLength;
-			});
+			var inAdherenceSum = Convert.ToDouble(modelForPersonEachDay.Where(model => model.SecondsInAdherence != null).Sum(model => model.SecondsInAdherence));
+			var outOfAdherenceSum = Convert.ToDouble(modelForPersonEachDay.Where(model => model.SecondsOutOfAdherence != null).Sum(model => model.SecondsOutOfAdherence));
 
-			var sumPeriods = modelForPersonEachDay.Sum(model =>
-			{
-				if (model == null || model.ShiftLength == null)
-					return 0;
-
-				return model.ShiftLength;
-			});
-
-			return sumAdherences / sumPeriods;
+			var percent = (inAdherenceSum / (inAdherenceSum + outOfAdherenceSum)) * 100;
+			return Convert.ToInt32(percent);
 		}
 
-		private HistoricalOverviewReadModel getReadModelForPersonAndDay( Guid agentId, DateTime day)
+		private HistoricalOverviewReadModel getReadModelForPersonAndDay(Guid agentId, DateTime day)
 		{
 			return _readModel.IsNullOrEmpty()
 				? null

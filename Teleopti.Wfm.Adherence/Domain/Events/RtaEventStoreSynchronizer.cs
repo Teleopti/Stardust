@@ -66,9 +66,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 			var lateForWork = adherenceDay.Changes().FirstOrDefault(c => c.LateForWork != null);
 			var lateForWorkText = lateForWork != null ? lateForWork.LateForWork : "0";
 			var minutesLateForWork = int.Parse(Regex.Replace(lateForWorkText, "[^0-9.]", ""));
-			var shift = new DateTimePeriod(adherenceDay.Period().StartDateTime.AddHours(1), adherenceDay.Period().EndDateTime.AddHours(-1));
-			var shiftLength = (int) shift.ElapsedTime().TotalMinutes;
-
+			
 			_readModels.Upsert(new HistoricalOverviewReadModel
 			{
 				PersonId = personId,
@@ -76,7 +74,8 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 				Adherence = adherenceDay.Percentage(),
 				WasLateForWork = lateForWork != null,
 				MinutesLateForWork = minutesLateForWork,
-				ShiftLength = shiftLength
+				SecondsInAdherence = adherenceDay.SecondsInAherence(),
+				SecondsOutOfAdherence = adherenceDay.SecondsOutOfAdherence(),
 			});
 		}
 	}
