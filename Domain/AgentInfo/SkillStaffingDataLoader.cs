@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer.DTOs;
 using Teleopti.Ccc.Domain.Intraday.Domain;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Interfaces.Domain;
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private readonly IScheduledStaffingProvider _scheduledStaffingProvider;
 		private readonly IForecastedStaffingProvider _forecastedStaffingProvider;
 		private readonly ICurrentScenario _scenarioRepository;
-		private readonly ISkillDayRepository _skillDayRepository;
+		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly BacklogSkillTypesForecastCalculator _backlogSkillTypesForecastCalculator;
 		private readonly IUserTimeZone _userTimeZone;
 
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			IScheduledStaffingProvider scheduledStaffingProvider,
 			IForecastedStaffingProvider forecastedStaffingProvider,
 			ICurrentScenario scenarioRepository, 
-			ISkillDayRepository skillDayRepository, 
+			ISkillDayLoadHelper skillDayLoadHelper, 
 			BacklogSkillTypesForecastCalculator backlogSkillTypesForecastCalculator, 
 			IUserTimeZone userTimeZone,
 			IIntradayStaffingApplicationService intradayStaffingApplicationService
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_scheduledStaffingProvider = scheduledStaffingProvider;
 			_forecastedStaffingProvider = forecastedStaffingProvider;
 			_scenarioRepository = scenarioRepository;
-			_skillDayRepository = skillDayRepository;
+			_skillDayLoadHelper = skillDayLoadHelper;
 			_backlogSkillTypesForecastCalculator = backlogSkillTypesForecastCalculator;
 			_userTimeZone = userTimeZone;
 
@@ -52,8 +52,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			if (!skills.Any()) return skillStaffingList;
 
 			var resolution = skills.Min(s => s.DefaultResolution);
-			var skillDays = _skillDayRepository
-				.FindReadOnlyRange(period.Inflate(1), skills, _scenarioRepository.Current())
+			var skillDays = _skillDayLoadHelper
+				.LoadSchedulerSkillDaysFlat(period.Inflate(1), skills, _scenarioRepository.Current())
 				.ToList();
 
 			foreach (var dateOnly in period.DayCollection())

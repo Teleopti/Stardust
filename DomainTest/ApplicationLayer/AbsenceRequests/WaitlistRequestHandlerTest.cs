@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -17,7 +16,6 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -149,14 +147,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			});
 			wfcs.AbsenceRequestWaitlistEnabled = true;
-			//agent.WorkflowControlSet = wfcs;
 			waitListedAgent.WorkflowControlSet = wfcs;
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 
-			//var personAbsence = new PersonAbsence(agent, scenario, new AbsenceLayer(absence, period));
-			//PersonAbsenceRepository.Add(personAbsence);
-
-			//PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(waitListedAgent, scenario, activity, period, new ShiftCategory("category")));
 
 			IPersonRequest waitListedRequest = new PersonRequest(waitListedAgent, new AbsenceRequest(absence, period)).WithId();
@@ -170,13 +163,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
 
-			//var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
-			//personRequest.Deny("Denied!", new PersonRequestAuthorizationCheckerForTest());
-			//PersonRequestRepository.Add(personRequest);
 			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
 
 			waitListedRequest.IsDenied.Should().Be.True();
-			//personRequest.IsDenied.Should().Be.True();
 		}
 
 		[Test]
@@ -754,7 +743,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				createSkillCombinationResource(period2, new[] {skill.Id.GetValueOrDefault()}, 6)
 			});
 
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period1.StartDateTime), 5));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period1.StartDateTime), 5).WithId());
 
 			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period2)).WithId();
 			personRequest.Deny("Denied!", new PersonRequestAuthorizationCheckerForTest());

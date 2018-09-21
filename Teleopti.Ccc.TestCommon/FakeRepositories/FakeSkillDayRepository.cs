@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 		protected readonly List<ISkillDay> _skillDays = new List<ISkillDay>();
 		public bool HasSkillDays;
-		public bool JustGiveMeMySkillDays;
 
 		public void Add(ISkillDay root)
 		{
@@ -101,8 +100,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		[MethodImpl(MethodImplOptions.Synchronized)] //to prevent modifying same skilldays on multiple threads (real repo have different instances)
 		public virtual ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
 		{
-			if (JustGiveMeMySkillDays) return _skillDays;
-
 			var days = _skillDays.Where(skillDayInDb => skillDayInDb.Scenario.Equals(scenario) &&
 														period.Contains(skillDayInDb.CurrentDate) && skills.Contains(skillDayInDb.Skill))
 				.Select(skillDay =>
