@@ -1574,6 +1574,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			}
 			catch (ArgumentOutOfRangeException ex)
 			{
+				ex.Should().Not.Be.Null();
 				hasException = true;
 			}
 			hasException.Should().Be.False();
