@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -19,7 +17,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 {
-	[TestFixture, Ignore("")]
+	[TestFixture]
 	public class RefreshPayrollFormatsHandlerTest
 	{
 
@@ -30,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 				Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Payroll.DeployNew"), "TestTenant");
 		}
 
-		[Test, Ignore("")]
+		[Test]
 		public void CopyPayrollFilesFromSourceToDestination()
 		{
 			var tenantName = "TestTenant";
@@ -70,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 		}
 
 
-		[Test, Ignore("")]
+		[Test]
 		public void CopyPayrollFilesFromSourceToDestinationShouldUseDefaultPathIfNotDefined()
 		{
 			var tenantName = "TestTenant";
@@ -93,8 +91,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			}
 
 			var serverConfigurationRepository = new FakeServerConfigurationRepository();
-			//serverConfigurationRepository.Configuration.Add("PayrollSourcePath",
-			//	Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Payroll.DeployNew"));
 			var initializePayrollFormatsUsingAppDomain =
 				new InitializePayrollFormatsUsingAppDomain(dataSourceForTenant, payrollFormatRepositoryFactory);
 			var refreshPayrollFormatsHandler =
