@@ -134,6 +134,7 @@
 		MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306,
 		MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408,
 		MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409,
+		MyTimeWeb_Request_CleanUpRequestHisotry_77776,
 
 		WFM_Intraday_Refactoring_74652,
 		WFM_Intraday_Redesign_77214,
