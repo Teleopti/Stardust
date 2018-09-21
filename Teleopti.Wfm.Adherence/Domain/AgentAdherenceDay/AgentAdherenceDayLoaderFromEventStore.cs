@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 {
@@ -46,7 +47,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			}
 
 			var events =
-				_eventStore.LoadLastAdherenceEventBefore(personId, period.StartDateTime)
+				_eventStore.LoadLastAdherenceEventBefore(personId, period.StartDateTime, DeadLockVictim.Yes)
 					.AsArray()
 					.Concat(_eventStore.Load(personId, period))
 					.Where(x => x != null)

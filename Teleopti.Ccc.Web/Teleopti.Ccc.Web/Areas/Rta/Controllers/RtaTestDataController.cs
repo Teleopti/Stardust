@@ -23,6 +23,7 @@ using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
@@ -294,7 +295,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			{
 				var q = (e as IRtaStoredEvent)?.QueryData();
 				log.AppendLine($"Adding event {q.PersonId} {q.StartTime} {e.GetType().Name}");			
-				_events.Add(e);
+				_events.Add(e, DeadLockVictim.No);
 			});
 			
 			
