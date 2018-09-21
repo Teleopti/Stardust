@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.Intraday.Domain;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests;
@@ -28,13 +27,13 @@ namespace Teleopti.Ccc.DomainTest.Intraday.ApplicationLayer
 	[DomainTest]
 	[TestFixture(true)]
 	[TestFixture(false)]
-	
 	public class IntradayStaffingApplicationServiceTest : IIsolateSystem, IConfigureToggleManager
 	{
 		private readonly bool _useErlangA;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillRepository SkillRepository;
-		public FakeSkillDayRepository_DoNotUse SkillDayRepository;
+		public FakeMultisiteDayRepository MultisiteDayRepository;
+		public FakeSkillDayRepository SkillDayRepository;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakeIntradayQueueStatisticsLoader IntradayQueueStatisticsLoader;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
@@ -53,21 +52,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday.ApplicationLayer
 			_useErlangA = useErlangA;
 		}
 
-		public IntradayStaffingApplicationServiceTestHelper ViewModelCreatorTestHelper
-		{
-			get
-			{
-				if(_staffingViewModelCreatorTestHelper == null)
-					_staffingViewModelCreatorTestHelper = new IntradayStaffingApplicationServiceTestHelper(StaffingCalculatorServiceFacade);
-
-				return _staffingViewModelCreatorTestHelper;
-			}
-		}
+		public IntradayStaffingApplicationServiceTestHelper ViewModelCreatorTestHelper => _staffingViewModelCreatorTestHelper ?? (_staffingViewModelCreatorTestHelper =
+																							  new IntradayStaffingApplicationServiceTestHelper(StaffingCalculatorServiceFacade));
 
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
-			isolate.UseTestDouble<FakeSkillDayRepository_DoNotUse>().For<ISkillDayRepository>();
 		}
 
 		[Test]
@@ -99,8 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday.ApplicationLayer
 		public void ShouldUseSpecifiecDateTimePeriod()
 		{
 			TimeZone.IsSweden();
-
-
+			
 			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 			var scheduledStartTime = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
@@ -153,8 +142,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday.ApplicationLayer
 			vm.Second().DataSeries.ScheduledStaffing.Last().Should().Be.EqualTo(3);
 			vm.Second().StaffingHasData.Should().Be.EqualTo(true);
 		}
-
-
+		
 		[Test]
 		public void ShouldUseSpecifiecDateTime()
 		{
@@ -1311,6 +1299,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday.ApplicationLayer
 			var skillDayChild1 = ViewModelCreatorTestHelper.CreateSkillDay(skillChild1, scenario, userNow, new TimePeriod(8, 00, 8, 15), false, ServiceAgreement.DefaultValues());
 			var skillDayChild2 = ViewModelCreatorTestHelper.CreateSkillDay(skillChild2, scenario, userNow, new TimePeriod(8, 00, 8, 15), false, ServiceAgreement.DefaultValues());
 
+			MultisiteDayRepository.Has(multiSkill.CreateMultisiteDays(scenario, new DateOnly(userNow), 1));
+
 			//Set CalculatedStaffCollection
 			ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
 				new DateTimePeriod(userNow, userNow.AddMinutes(minutesPerInterval)),
@@ -1350,8 +1340,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday.ApplicationLayer
 			});
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(userNow, skillCombinationResources);
-
-
+			
 			var vm = Target.GenerateStaffingViewModel(new[] { multiSkill.Id.GetValueOrDefault() });
 
 			vm.DataSeries.Time.Length.Should().Be.EqualTo(4);

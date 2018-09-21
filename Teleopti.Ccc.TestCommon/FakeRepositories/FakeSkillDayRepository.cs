@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -10,21 +9,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-
-	public class FakeSkillDayRepository_DoNotUse : FakeSkillDayRepository
-	{
-		public override ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IEnumerable<ISkill> skills,
-			IScenario scenario)
-		{
-			return _skillDays
-				.Where(skillDayInDb =>
-					skillDayInDb.Scenario.Equals(scenario) &&
-					period.Contains(skillDayInDb.CurrentDate) &&
-					skills.Contains(skillDayInDb.Skill))
-				.ToList();
-		}
-	}
-
 	public class FakeSkillDayRepository : ISkillDayRepository
 	{
 		protected readonly List<ISkillDay> _skillDays = new List<ISkillDay>();
@@ -105,9 +89,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				.Select(skillDay =>
 					{
 						var ret = new SkillDay(skillDay.CurrentDate, skillDay.Skill, skillDay.Scenario, skillDay.WorkloadDayCollection.Select(x => x.MakeCopyAndNewParentList()),
-							skillDay.SkillDataPeriodCollection);
+							skillDay.SkillDataPeriodCollection.Select(s => s.EntityClone()).ToList());
 						ret.SetId(skillDay.Id);
-						ret.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = skillDay.SkillDataPeriodCollection.First().Shrinkage);
 						return ret;
 					}
 				).Cast<ISkillDay>().ToList();
