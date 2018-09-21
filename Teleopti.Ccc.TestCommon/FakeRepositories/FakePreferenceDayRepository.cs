@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
@@ -74,6 +75,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IPreferenceDay Find(Guid preferenceId)
 		{
 			return _preferensDays.Single(a => a.Id == preferenceId);
+		}
+
+		public void Has(PreferenceDay preferenceDay)
+		{
+			Add(preferenceDay.WithId());
 		}
 	}
 }
