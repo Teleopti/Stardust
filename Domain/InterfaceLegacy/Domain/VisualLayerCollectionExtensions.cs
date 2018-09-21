@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -11,20 +12,22 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	/// </summary>
 	public static class VisualLayerCollectionExtensions
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="resourceLayerCollection"></param>
-		/// <param name="minutesSplit"></param>
-		/// <returns></returns>
-		public static IEnumerable<ResourceLayer> ToResourceLayers(this IVisualLayerCollection resourceLayerCollection, int minutesSplit)
+		public static IEnumerable<ResourceLayer> ToResourceLayers(this IVisualLayerCollection resourceLayerCollection, int minutesSplit, TimeZoneInfo timeZoneInfo)
 		{
 			if (!resourceLayerCollection.Any()) yield break;
 
 			DateTime startTime = resourceLayerCollection.First().Period.StartDateTime;
-			var rest = startTime.Minute % minutesSplit;
+
+			var minutesOffset = ServiceLocatorForLegacy.ScheduleResourcePeriodFetcher.FetchTimeZoneOffset(timeZoneInfo);
+
+			var adjustedStartTime = startTime.AddMinutes(minutesOffset);
+			var rest = adjustedStartTime.Minute % minutesSplit;
 			if (rest != 0)
 				startTime = startTime.AddMinutes(-rest);
+
+			//var rest = startTime.Minute % minutesSplit;
+			//if (rest != 0)
+			//	startTime = startTime.AddMinutes(-rest);
 			foreach (var layer in resourceLayerCollection)
 			{
 				while (startTime < layer.Period.EndDateTime)
@@ -74,7 +77,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 			if (!scheduleDay.HasProjection()) return;
 
 			var projection = scheduleDay.ProjectionService().CreateProjection();
-			var resourceLayers = projection.ToResourceLayers(resources.MinSkillResolution);
+			var resourceLayers = projection.ToResourceLayers(resources.MinSkillResolution, scheduleDay.TimeZone);
 			foreach (var resourceLayer in resourceLayers)
 			{
 				resources.AddResources(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, resourceLayer);
@@ -86,7 +89,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
             if (!scheduleDay.HasProjection()) return;
 
 			var projection = scheduleDay.ProjectionService().CreateProjection();
-			var resourceLayers = projection.ToResourceLayers(resources.MinSkillResolution);
+			var resourceLayers = projection.ToResourceLayers(resources.MinSkillResolution, scheduleDay.TimeZone);
 			foreach (var resourceLayer in resourceLayers)
 			{
 				resources.RemoveResources(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, resourceLayer);

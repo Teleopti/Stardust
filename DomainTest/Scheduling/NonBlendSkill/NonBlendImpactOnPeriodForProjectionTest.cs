@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 			_resources = new ResourceCalculationDataContainer(Enumerable.Empty<ExternalStaff>(), _personSkillProvider, 60, false);
 			foreach (var layer in new []{_layerCollection1,_layerCollection2})
 			{
-				foreach (var resourceLayer in layer.ToResourceLayers(15))
+				foreach (var resourceLayer in layer.ToResourceLayers(15, TimeZoneInfo.Utc))
 				{
 					_resources.AddResources(_person1, new DateOnly(2008, 1, 1), resourceLayer);
 				}

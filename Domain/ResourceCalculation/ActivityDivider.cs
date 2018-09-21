@@ -163,9 +163,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			return period;
 		}
+
+		public virtual int FetchTimeZoneOffset(TimeZoneInfo timeZone)
+		{
+			return 0;
+		}
 	}
 
-	[RemoveMeWithToggle("put this on ActivityDivider.FetchPeriodForSkill instead", Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509)]
+	[RemoveMeWithToggle("put this where used instead", Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509)]
 	public class ScheduleResourcePeriodFetcherAdjustForTimeZone : ScheduleResourcePeriodFetcher
 	{
 		public override DateTimePeriod Fetch(DateTimePeriod period, ISkill skill)
@@ -179,6 +184,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				minutesOffset = minutesOffset % 60 * -1;
 			
 			return period.MovePeriod(TimeSpan.FromMinutes(minutesOffset));
+		}
+
+		public override int FetchTimeZoneOffset(TimeZoneInfo timeZone)
+		{
+			return timeZone.BaseUtcOffset.Minutes;
 		}
 	}
 }
