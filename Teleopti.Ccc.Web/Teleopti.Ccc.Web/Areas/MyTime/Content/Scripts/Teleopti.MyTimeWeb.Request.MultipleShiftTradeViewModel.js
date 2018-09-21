@@ -369,7 +369,7 @@
 		clearSchedulePairs();
 
 		loadPeriodSchedule(startDate, endDate, agentId, false, function() {
-			var element = document.querySelector('.shift-trade-list-panel');
+			var element = document.querySelector('.multi-shift-trade-schedules-list-panel');
 			if (element) {
 				element.scrollTop = 10;
 			}
@@ -379,17 +379,16 @@
 				return pair.date.isSame(self.requestedDateInternal(), 'day');
 			})[0];
 
-			if (item && item.isEnable) {
-				item.isSelected(true);
-				if (
-					Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408')
-				) {
-					loadToleranceInfo(agentId, function() {
+			if ( Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408')) {
+				loadToleranceInfo(agentId, function () {
+					if (item && item.isEnable) {
+						item.isSelected(true);
 						self.select(item);
-					});
-				} else {
-					self.select(item);
-				}
+					}
+				});
+			} else if (item && item.isEnable) {
+				item.isSelected(true);
+				self.select(item);
 			}
 		});
 
