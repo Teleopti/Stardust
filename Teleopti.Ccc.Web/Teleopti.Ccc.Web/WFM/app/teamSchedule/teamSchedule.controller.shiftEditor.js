@@ -677,7 +677,7 @@
 			bindScrollEvent(timelineEl.querySelector('.left-scroll'), -20);
 			bindScrollEvent(timelineEl.querySelector('.right-scroll'), 20);
 
-			timelineEl.addEventListener('touchmove', function () {
+			timelineEl.parentElement.addEventListener('scroll', function () {
 				var timelineViewportEl = $element[0].querySelector('.timeline').parentElement;
 				var shiftViewportEl = $element[0].querySelector('.shift').parentElement;
 				shiftViewportEl.scrollLeft = timelineViewportEl.scrollLeft;
