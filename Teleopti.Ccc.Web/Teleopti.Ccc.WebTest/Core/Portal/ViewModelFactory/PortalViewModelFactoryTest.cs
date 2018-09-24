@@ -48,7 +48,10 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		{
 			isolate.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
 			isolate.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
-			isolate.UseTestDouble(new FakeCurrentUnitOfWorkFactory(null).WithCurrent(new FakeUnitOfWorkFactory(null, null, null) { Name = MyTimeWebTestAttribute.DefaultTenantName })).For<ICurrentUnitOfWorkFactory>();
+			isolate.UseTestDouble(new FakeCurrentUnitOfWorkFactory(null).WithCurrent(new FakeUnitOfWorkFactory(null, null, null)
+			{
+				Name = MyTimeWebTestAttribute.DefaultTenantName
+			})).For<ICurrentUnitOfWorkFactory>();
 			isolate.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
 			isolate.UseTestDouble<FakeCurrentTeleoptiPrincipal>().For<ICurrentTeleoptiPrincipal>();
 			isolate.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
@@ -295,14 +298,28 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			result.FirstOrDefault(r => r.Title == Resources.TeamSchedule)?.Action.Should().Be("NewIndex");
 		}
 
-		public void ShouldIndicateGrantChatBotEnabled()
+		[TestCase(true, true, true, true)]
+		[TestCase(false, true, true, false)]
+		[TestCase(true, false, true, false)]
+		[TestCase(true, true, false, false)]
+		public void ShouldIndicateIfGrantChatBotEnabled(bool licensed, bool hasPermission, bool toggleEnabled,
+			bool expectedGrantBotEnabled)
 		{
 			setupLoggedOnUser();
-			setLicense("default");
-			PermissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ChatBot);
+			setLicense(licensed ? "default" : "");
+			PermissionProvider.SetApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ChatBot,
+				hasPermission);
+			if (toggleEnabled)
+			{
+				ToggleManager.Enable(Toggles.WFM_ChatBot_77547);
+			}
+			else
+			{
+				ToggleManager.Disable(Toggles.WFM_ChatBot_77547);
+			}
 
 			var result = Target.CreatePortalViewModel();
-			result.GrantEnabled.Should().Be.True();
+			result.GrantEnabled.Should().Be.EqualTo(expectedGrantBotEnabled);
 		}
 
 		private void setLicense(string name)
