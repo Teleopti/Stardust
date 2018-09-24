@@ -21,6 +21,9 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 		private readonly IList<DateTimePeriod> _approvedPeriods = new List<DateTimePeriod>();
 		private IEnumerable<DateTimePeriod> _outOfAhderencesWithinShift;
 		private IEnumerable<DateTimePeriod> _neutralAdherencesWithinShift;
+		private int? _adherencePercentage;
+		private int? _secondsInAdherence;
+		private int? _secondsOutOfAdherence;
 
 		public AgentAdherenceDayWithHistoricalOverview(Guid personId, DateTimePeriod period, DateTimePeriod? shift, DateTime now)
 		{
@@ -60,6 +63,8 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			
 			_outOfAhderencesWithinShift = withinShift(_shift, OutOfAdherences().Select(x => new DateTimePeriod(x.StartTime, x.EndTime.Value)));
 			_neutralAdherencesWithinShift = withinShift(_shift, neutralAdherencePeriods());
+			
+			calculateAdherence(_shift, _neutralAdherencesWithinShift, _outOfAhderencesWithinShift, _now);
 		}
 
 		private HistoricalChangeModel applySolidProof(ISolidProof @event)
@@ -164,41 +169,38 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 				.Select(x => new AdherencePeriod(x.StartDateTime, x.EndDateTime))
 				.ToArray();
 
-		public int? Percentage() => 
-			new AdherencePercentageCalculator().Calculate(_shift, _neutralAdherencesWithinShift, _outOfAhderencesWithinShift, _now);
+		public int? Percentage() => _adherencePercentage;
 
-		public int? SecondsInAherence()
-		{
-			if (!_shift.HasValue)
-				return null;
-			
-			var timeNeutral = time(_neutralAdherencesWithinShift);
-			var calculateUntil = new[] {_now, _shift.Value.EndDateTime}.Min();
-			var shiftTime = calculateUntil - _shift.Value.StartDateTime;
-			var allDayNeutral = timeNeutral == shiftTime;
+		public int? SecondsInAherence() => _secondsInAdherence;
 
-			if (allDayNeutral)
-				return null;
-            
-			var timeOut = time(_outOfAhderencesWithinShift);
-			var timeIn = shiftTime - timeOut - timeNeutral;
-						
-			return  Convert.ToInt32(timeIn.TotalSeconds);
-		}
-
-		public int? SecondsOutOfAdherence()
-		{
-			if (!_shift.HasValue)
-				return null;
-			
-			var timeOut = time(_outOfAhderencesWithinShift);
-			return Convert.ToInt32(timeOut.TotalSeconds);
-		}
+		public int? SecondsOutOfAdherence() => _secondsOutOfAdherence;
 		
 		private IEnumerable<DateTimePeriod> neutralAdherencePeriods()
 		{
 			return subtractPeriods(_recordedNeutralAdherences.Select(x => new DateTimePeriod(x.StartTime, x.EndTime.Value)), _approvedPeriods).ToArray();
 		}
+		
+		private void calculateAdherence(DateTimePeriod? shift, IEnumerable<DateTimePeriod> neutralPeriods, IEnumerable<DateTimePeriod> outPeriods, DateTime now)
+		{
+			if (!shift.HasValue)
+				return;
+
+			var calculateUntil = new[] {now, shift.Value.EndDateTime}.Min();
+
+			var shiftTime = calculateUntil - shift.Value.StartDateTime;
+
+			var timeNeutral = time(neutralPeriods);
+			var timeToAdhere = shiftTime - timeNeutral;
+			if (timeToAdhere == TimeSpan.Zero)
+				return;
+			
+			var timeOut = time(outPeriods);
+			var timeIn = shiftTime - timeOut - timeNeutral;
+
+			_secondsInAdherence = Convert.ToInt32(timeIn.TotalSeconds);
+			_secondsOutOfAdherence = Convert.ToInt32(timeOut.TotalSeconds);
+			_adherencePercentage = Convert.ToInt32((timeIn.TotalSeconds / timeToAdhere.TotalSeconds) * 100);
+		}		
 				
 		private static TimeSpan time(IEnumerable<DateTimePeriod> periods) =>
 			TimeSpan.FromSeconds(periods.Sum(x => (x.EndDateTime - x.StartDateTime).TotalSeconds));		
