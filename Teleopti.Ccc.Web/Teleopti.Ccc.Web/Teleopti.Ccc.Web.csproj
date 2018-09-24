@@ -466,6 +466,7 @@
     <Compile Include="Areas\MultiTenancy\Model\PersonInfoGenericModel.cs" />
     <Compile Include="Areas\MultiTenancy\NewExternalApplicationModel.cs" />
     <Compile Include="Areas\MultiTenancy\NewExternalApplicationResponseModel.cs" />
+    <Compile Include="Areas\MyTime\Controllers\GrantBotApiController.cs" />
     <Compile Include="Areas\MyTime\Controllers\OvertimeRequestsController.cs" />
     <Compile Include="Areas\MyTime\Controllers\TeamScheduleController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AgentBadgeWithinPeriodProvider.cs" />
@@ -478,6 +479,7 @@
     <Compile Include="Areas\MyTime\Core\IWeekScheduleDomainDataProvider.cs" />
     <Compile Include="Areas\MyTime\Core\DaySchedule\Mapping\DayScheduleDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeMultiSchedulesSelectableChecker.cs" />
+    <Compile Include="Areas\MyTime\Models\Portal\ChatbotConfig.cs" />
     <Compile Include="Areas\MyTime\Models\Schedule\Common\BaseScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Schedule\DaySchedule\DayScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Schedule\Common\RequestPermission.cs" />

@@ -758,6 +758,7 @@
     <Compile Include="TestData\Setups\Specific\UtcTimeZone.cs" />
     <Compile Include="Web\FakeHttpContext.cs" />
     <Compile Include="Web\FakeHttpRequest.cs" />
+    <Compile Include="Web\FakeHttpRequestHandler.cs" />
     <Compile Include="Web\FakeHttpResponse.cs" />
     <Compile Include="Web\FakeHttpSessionState.cs" />
     <Compile Include="Web\MutableFakeCurrentHttpContext.cs" />
