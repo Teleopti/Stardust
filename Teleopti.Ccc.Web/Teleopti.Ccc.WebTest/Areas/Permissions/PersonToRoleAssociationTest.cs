@@ -30,19 +30,4 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			person1.PermissionInformation.ApplicationRoleCollection.Should().Be.Empty();
 		}
 	}
-
-	public class FakePersonInRoleQuerier : IPersonInRoleQuerier
-	{
-		private List<Guid> _personIdList = new List<Guid>();
-
-		public void AddFakeData(List<Guid> personIdList)
-		{
-			_personIdList = personIdList;
-		}
-		
-		public IEnumerable<Guid> GetPersonInRole(Guid roleId)
-		{
-			return _personIdList;
-		}
-	}
 }
