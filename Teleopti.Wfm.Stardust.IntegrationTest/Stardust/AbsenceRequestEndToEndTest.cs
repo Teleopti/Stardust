@@ -23,7 +23,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
-	[StardustTest, Ignore("Should only be enabled if we make sure that these are not flaky")]
+	[StardustTest]
 	public class AbsenceRequestEndToEndTest
 	{
 		public WithUnitOfWork WithUnitOfWork;

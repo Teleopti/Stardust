@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
-	[StardustTest, Ignore("Should only be enabled if we make sure that these are not flaky")]
+	[StardustTest]
 	public class PayrollEndToEndTest
 	{
 		public IStardustSender StardustSender;
@@ -35,11 +35,10 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public IPayrollResultRepository PayrollResultRepository;
 		public TestLog TestLog;
 
-
 		private AssertRetryStrategy _assertRetryStrategy;
 
 		[Test]
-		public void ShouldPublishAndProcessPayrollJob()
+		public void ShouldPublishAndProcessPayrollJob([Range(1, 20, 1)] int x)
 		{
 			_assertRetryStrategy = new AssertRetryStrategy(100);
 

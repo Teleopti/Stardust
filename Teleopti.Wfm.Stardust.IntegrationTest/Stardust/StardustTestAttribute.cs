@@ -52,8 +52,10 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
 				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
 			if (!haveDatabases)
+			{
+				TestLog.Debug("DataSourceHelper.CreateDatabases");
 				DataSourceHelper.CreateDatabases();
-
+			}
 			//DO NOT remove this as you will get optimistic lock on two diff tests
 			if (!haveDatabases)
 			{
@@ -85,21 +87,28 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 				}
 				
 			}
+			else
+			{
+				TestLog.Debug("haveDatabases = true");
+			}
 			
 			HangfireClientStarter.Start();
-
+			TestLog.Debug("HangfireClientStarter.Start");
 			Guid businessUnitId;
 			using (DataSource.OnThisThreadUse(DataSourceHelper.TestTenantName))
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
+			TestLog.Debug("AsSystem.Logon(DataSourceHelper.TestTenantName, businessUnitId)");
 			AsSystem.Logon(DataSourceHelper.TestTenantName, businessUnitId);
-			Thread.Sleep(30000);
+			//Thread.Sleep(30000);
+			TestLog.Debug("TestSiteConfigurationSetup.TearDown()..");
 			TestSiteConfigurationSetup.TearDown();
 
-			Thread.Sleep(60000);
-
+			//Thread.Sleep(60000);
+			TestLog.Debug("TestSiteConfigurationSetup.Setup()..");
 			TestSiteConfigurationSetup.Setup();
-			Thread.Sleep(30000);
+			//Thread.Sleep(30000);
 
+			TestLog.Debug("Setting up ConfigValues..");
 			((TestConfigReader) ConfigReader).ConfigValues.Remove("ManagerLocation");
 			((TestConfigReader) ConfigReader).ConfigValues.Remove("MessageBroker");
 			((TestConfigReader) ConfigReader).ConfigValues.Remove("NumberOfNodes");
@@ -111,16 +120,15 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		}
 
 		
-
 		public override void AfterTest(ITest testDetails)
 		{
 			base.AfterTest(testDetails);
 			try
 			{
-				TestLog.Debug("In teardown stopping all services");
-				Hangfire.WaitForQueue();
+				//TestLog.Debug("Hangfire.WaitForQueue() in progress..");
+				//Hangfire.WaitForQueue();
 
-
+				TestLog.Debug("TestSiteConfigurationSetup.TearDown()");
 				TestSiteConfigurationSetup.TearDown();
 			}
 			catch (Exception e)
