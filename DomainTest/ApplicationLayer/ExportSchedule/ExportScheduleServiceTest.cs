@@ -25,14 +25,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 	public class ExportScheduleServiceTest : IIsolateSystem, IExtendSystem
 	{
 		public ExportScheduleService Target;
-		public FakeScheduleStorage_DoNotUse ScheduleStorage;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonRepository PersonRepository;
 		public FakePersonFinderReadOnlyRepository PersonFinder;
 		public FakeTeamRepository TeamRepository;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 		public FakeOptionalColumnRepository OptionalColumnRepository;
-		
 		
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
@@ -43,13 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 		{
 			isolate.UseTestDouble<PeopleSearchProvider>().For<IPeopleSearchProvider>();
 			isolate.UseTestDouble<UserTextTranslator>().For<IUserTextTranslator>();
-			isolate.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
-			isolate.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();
-			isolate.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
-			isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 			isolate.UseTestDouble<PermissionProvider>().For<IPermissionProvider>();
-			isolate.UseTestDouble<FakeGroupingReadOnlyRepository>().For<IGroupingReadOnlyRepository>();
-			isolate.UseTestDouble<FakeOptionalColumnRepository>().For<IOptionalColumnRepository>();
 		}
 
 		[Test]
@@ -75,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9));
 			pa.AddActivity(ActivityFactory.CreateActivity("activity2", new Color()),
 				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 11));
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var input = new ExportScheduleForm
 			{
@@ -320,7 +313,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9));
 			pa.AddActivity(ActivityFactory.CreateActivity("activity2", new Color()),
 				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 11));
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 			
 			var input = new ExportScheduleForm
 			{
@@ -401,7 +394,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9));
 			pa.AddActivity(ActivityFactory.CreateActivity("activity2", new Color()),
 				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 11));
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var input = new ExportScheduleForm
 			{
