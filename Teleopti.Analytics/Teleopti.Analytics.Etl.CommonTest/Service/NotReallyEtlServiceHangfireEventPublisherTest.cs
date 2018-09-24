@@ -3,10 +3,8 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
-using Teleopti.Analytics.Etl.Common.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Infrastructure.Events;
@@ -47,13 +45,11 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 			Now.Is("2016-03-21 13:00");
 			hasTenant("t");
 
-			RecurringEventPublishings.RemovePublishingsOfRemovedTenants();
-			RecurringEventPublishings.PublishRecurringJobs();
+			RecurringEventPublishings.UpdatePublishings();
 			
 			Now.Is("2016-03-21 13:10");
 			Publisher.Clear();
-			RecurringEventPublishings.RemovePublishingsOfRemovedTenants();
-			RecurringEventPublishings.PublishRecurringJobs();
+			RecurringEventPublishings.UpdatePublishings();
 
 			Publisher.HasPublishing.Should().Be.True();
 			Publisher.Publishings.Count(x => x.Tenant == "t").Should().Be.EqualTo(3);
@@ -65,12 +61,10 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 			Now.Is("2016-03-21 13:00");
 			hasTenant("t");
 
-			RecurringEventPublishings.RemovePublishingsOfRemovedTenants();
-			RecurringEventPublishings.PublishRecurringJobs();
+			RecurringEventPublishings.UpdatePublishings();
 
 			Now.Is("2016-03-21 13:09");
-			RecurringEventPublishings.RemovePublishingsOfRemovedTenants();
-			RecurringEventPublishings.PublishRecurringJobs();
+			RecurringEventPublishings.UpdatePublishings();
 
 			Publisher.Publishings.Select(x => x.CreatedAt).Should().Have.SameValuesAs("2016-03-21 13:00".Utc());
 		}
@@ -79,8 +73,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		public void ShouldPublishCleanFailedQueue()
 		{
 			hasTenant("t");
-			RecurringEventPublishings.RemovePublishingsOfRemovedTenants();
-			RecurringEventPublishings.PublishRecurringJobs();
+			RecurringEventPublishings.UpdatePublishings();
 
 			Publisher.Publishings.First().Event.GetType().Should().Be.EqualTo<CleanFailedQueue>();
 		}
@@ -89,8 +82,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		public void ShouldPublishTenentRecurringEvent()
 		{
 			hasTenant("t");
-			RecurringEventPublishings.RemovePublishingsOfRemovedTenants();
-			RecurringEventPublishings.PublishRecurringJobs();
+			RecurringEventPublishings.UpdatePublishings();
 
 			Publisher.Publishings.Select(x => x.Event.GetType()).Should().Contain(typeof(TenantHourTickEvent));
 			Publisher.Publishings.Select(x => x.Event.GetType()).Should().Contain(typeof(TenantMinuteTickEvent));
@@ -101,14 +93,12 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		{
 			Now.Is("2016-03-21 13:00");
 			hasTenant("t");
-			RecurringEventPublishings.RemovePublishingsOfRemovedTenants();
-			RecurringEventPublishings.PublishRecurringJobs();
+			RecurringEventPublishings.UpdatePublishings();
 			Publisher.Publishings.Should().Not.Be.Empty();
 
 			Now.Is("2016-03-21 13:10");
 			FakeTenants.WasRemoved("t");
-			RecurringEventPublishings.RemovePublishingsOfRemovedTenants();
-			RecurringEventPublishings.PublishRecurringJobs();
+			RecurringEventPublishings.UpdatePublishings();
 
 			Publisher.Publishings.Select(x => x.Tenant).Should().Not.Contain("t");
 		}
@@ -117,14 +107,12 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		public void ShouldRepublishAtStartup()
 		{
 			hasTenant("t");
-			RecurringEventPublishings.RemovePublishingsOfRemovedTenants();
-			RecurringEventPublishings.PublishRecurringJobs();
+			RecurringEventPublishings.UpdatePublishings();
 
 			Publisher.Publishings.Should().Not.Be.Empty();
 			Publisher.Clear();
 
-			RecurringEventPublishings.RemovePublishingsOfRemovedTenants();
-			RecurringEventPublishings.PublishRecurringJobs();
+			RecurringEventPublishings.UpdatePublishings();
 			Publisher.Publishings.Should().Not.Be.Empty();
 		}
 	}

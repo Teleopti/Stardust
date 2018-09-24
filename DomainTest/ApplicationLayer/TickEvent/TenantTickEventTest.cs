@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.TickEvent
 		{
 			Tenants.Has(new Tenant("tenant"));
 
-			Target.PublishRecurringJobs();
+			Target.UpdatePublishings();
 
 			Publisher.Publishings.Select(x => x.Tenant).Should().Contain("tenant");
 		}
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.TickEvent
 			Tenants.Has(new Tenant(tenant1));
 			Tenants.Has(new Tenant(tenant2));
 
-			Target.PublishRecurringJobs();
+			Target.UpdatePublishings();
 
 			Publisher.Tenants.Should().Contain(tenant1);
 			Publisher.Tenants.Should().Contain(tenant2);
@@ -47,10 +47,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.TickEvent
 		public void ShouldStartPublishingForAddedTenants()
 		{
 			Tenants.Has("tenant1");
-			Target.PublishRecurringJobs();
+			Target.UpdatePublishings();
 
 			Tenants.Has("tenant2");
-			Target.PublishRecurringJobs();
+			Target.UpdatePublishings();
 
 			Publisher.Tenants.Should().Contain("tenant2");
 		}

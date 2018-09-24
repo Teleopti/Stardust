@@ -17,8 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			try
 			{
-				_publishings.RemovePublishingsOfRemovedTenants();
-				_publishings.PublishRecurringJobs();
+				_publishings.UpdatePublishings();
 				context.CancellationToken.WaitHandle.WaitOne(TimeSpan.FromMinutes(10));
 			}
 			finally
