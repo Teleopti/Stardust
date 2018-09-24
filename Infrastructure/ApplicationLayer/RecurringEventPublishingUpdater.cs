@@ -15,9 +15,16 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		
 		public void Execute(BackgroundProcessContext context)
 		{
-			_publishings.RemovePublishingsOfRemovedTenants();
-			_publishings.PublishRecurringJobs();
-			context.CancellationToken.WaitHandle.WaitOne(TimeSpan.FromMinutes(10));
+			try
+			{
+				_publishings.RemovePublishingsOfRemovedTenants();
+				_publishings.PublishRecurringJobs();
+				context.CancellationToken.WaitHandle.WaitOne(TimeSpan.FromMinutes(10));
+			}
+			finally
+			{
+				context.CancellationToken.WaitHandle.WaitOne(TimeSpan.FromMinutes(1));
+			}
 		}
 	}
 }
