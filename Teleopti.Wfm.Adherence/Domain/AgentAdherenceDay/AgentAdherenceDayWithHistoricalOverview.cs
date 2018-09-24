@@ -58,9 +58,8 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			_recordedNeutralAdherences = removeTinyPeriods(_recordedNeutralAdherences);
 			_recordedNeutralAdherences = mergePeriods(_recordedNeutralAdherences);
 			
-			var neutralAdherences = subtractPeriods(_recordedNeutralAdherences.Select(x => new DateTimePeriod(x.StartTime, x.EndTime.Value)), _approvedPeriods);
 			_outOfAhderencesWithinShift = withinShift(_shift, OutOfAdherences().Select(x => new DateTimePeriod(x.StartTime, x.EndTime.Value)));
-			_neutralAdherencesWithinShift = withinShift(_shift, neutralAdherences);
+			_neutralAdherencesWithinShift = withinShift(_shift, neutralAdherencePeriods());
 		}
 
 		private HistoricalChangeModel applySolidProof(ISolidProof @event)
@@ -68,29 +67,38 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			applyAdherencePeriod(_recordedOutOfAdherences, @event.Timestamp, @event.Adherence, EventAdherence.Out);
 			applyAdherencePeriod(_recordedNeutralAdherences, @event.Timestamp, @event.Adherence, EventAdherence.Neutral);
 
-			var isInitialAdherenceEvent = @event.Timestamp < _period.StartDateTime;
-			if (isInitialAdherenceEvent)
+			var isEventBeforePeriod = @event.Timestamp < _period.StartDateTime;
+			if (isEventBeforePeriod)
 				return null;
 
-			var model = _changes.LastOrDefault();
-			if (model != null && !isSameProof(model, @event))
-				model.Duration = floorToSeconds(@event.Timestamp).Subtract(floorToSeconds(model.Timestamp)).ToString();
-
-			if (model == null || !isSameProof(model, @event))
+			var lastProof = _changes.LastOrDefault();
+			if (lastProof != null && !isSameProof(lastProof, @event))
+				lastProof.Duration = floorToSeconds(@event.Timestamp).Subtract(floorToSeconds(lastProof.Timestamp)).ToString();	
+			
+			var needNewProof = (lastProof == null || !isSameProof(lastProof, @event));
+			if (needNewProof)
 			{
-				model = new HistoricalChangeModel();
-				_changes.Add(model);
-			}
+				var proof = createProof(@event);
+				_changes.Add(proof);
+				return proof;
+			}	
 
-			model.Timestamp = @event.Timestamp;
-			model.StateName = @event.StateName;
-			model.ActivityName = @event.ActivityName;
-			model.ActivityColor = @event.ActivityColor;
-			model.RuleName = @event.RuleName;
-			model.RuleColor = @event.RuleColor;
-			model.Adherence = convertAdherence(@event.Adherence);
+			lastProof.Timestamp = @event.Timestamp;
+			return lastProof;
+		}
 
-			return model;
+		private static HistoricalChangeModel createProof(ISolidProof @event)
+		{
+			return new HistoricalChangeModel
+			{
+				StateName = @event.StateName,
+				ActivityName = @event.ActivityName,
+				ActivityColor = @event.ActivityColor,
+				RuleName = @event.RuleName,
+				RuleColor = @event.RuleColor,
+				Adherence = convertAdherence(@event.Adherence),
+				Timestamp = @event.Timestamp
+			};
 		}
 
 		private static bool isSameProof(HistoricalChangeModel model, ISolidProof @event) =>
@@ -102,10 +110,10 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			model.RuleName == @event.RuleName &&
 			model.Adherence == convertAdherence(@event.Adherence);
 
-		private void applyAdherencePeriod(ICollection<AdherencePeriod> periods, DateTime time, EventAdherence? adherence, EventAdherence adherencePeriod)
+		private void applyAdherencePeriod(ICollection<AdherencePeriod> periods, DateTime time, EventAdherence? adherence, EventAdherence adherenceType)
 		{
 			var period = periods.LastOrDefault();
-			if (adherence == adherencePeriod)
+			if (adherence == adherenceType)
 			{
 				if (period == null || period.EndTime != null)
 					periods.Add(new AdherencePeriod {StartTime = time});
@@ -165,15 +173,16 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 				return null;
 			
 			var timeNeutral = time(_neutralAdherencesWithinShift);
-
 			var calculateUntil = new[] {_now, _shift.Value.EndDateTime}.Min();
 			var shiftTime = calculateUntil - _shift.Value.StartDateTime;
-            
-			var timeOut = time(withinShift(_shift, OutOfAdherences().Select(x => new DateTimePeriod(x.StartTime, x.EndTime.Value))));
-			var timeIn = shiftTime - timeOut - timeNeutral;
-			var allDayNeutral = Convert.ToInt32(timeOut.TotalSeconds) == 0 && Convert.ToInt32(timeIn.TotalSeconds) == 0;
+			var allDayNeutral = timeNeutral == shiftTime;
+
 			if (allDayNeutral)
 				return null;
+            
+			var timeOut = time(_outOfAhderencesWithinShift);
+			var timeIn = shiftTime - timeOut - timeNeutral;
+						
 			return  Convert.ToInt32(timeIn.TotalSeconds);
 		}
 
@@ -182,10 +191,15 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			if (!_shift.HasValue)
 				return null;
 			
-			var timeOut = time(withinShift(_shift, OutOfAdherences().Select(x => new DateTimePeriod(x.StartTime, x.EndTime.Value))));
+			var timeOut = time(_outOfAhderencesWithinShift);
 			return Convert.ToInt32(timeOut.TotalSeconds);
 		}
 		
+		private IEnumerable<DateTimePeriod> neutralAdherencePeriods()
+		{
+			return subtractPeriods(_recordedNeutralAdherences.Select(x => new DateTimePeriod(x.StartTime, x.EndTime.Value)), _approvedPeriods).ToArray();
+		}
+				
 		private static TimeSpan time(IEnumerable<DateTimePeriod> periods) =>
 			TimeSpan.FromSeconds(periods.Sum(x => (x.EndDateTime - x.StartDateTime).TotalSeconds));		
 
