@@ -22,6 +22,8 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 		public bool TryInitialize(IDataSource dataSource)
 		{
 			//don't really know what this does - extracted from web startup
+			if (dataSource.Application == null)
+				return false;
 			var licenseVerifier = _licenseVerifierFactory.Create(this, dataSource.Application);
 			using (dataSource.Application.CreateAndOpenUnitOfWork())
 			{
