@@ -67,15 +67,6 @@
 				+ "<div id='grantBot' style='width: 100%;'></div>"
 				+ "</div>";
 
-			BotChat.App({
-				directLine: { secret: "4iLsDqwxH7w.cwA.GSo.KqnAG1hrW3hA4QIE7rCt4cFl3qnXN0lBybxUMh7MSTw" },
-				user: { id: "userid" },
-				bot: { id: "botid" },
-				resize: "detect",
-				chatTitle: false,
-				showUploadButton: false
-			}, document.getElementById("grantBot"));
-
 			document.getElementById("closeChatbot").addEventListener("click",
 				function (e) {
 					document.getElementById("botDiv").style.display = "none";
@@ -87,13 +78,37 @@
 					var style = document.getElementById("botDiv").style;
 					if (style.display === "block") {
 						style.display = "none";
-					} else {
-						var availableClientWidth = document.documentElement.clientWidth;
-						var availableClientHeight = document.documentElement.clientHeight - 100;
-						style.width = (availableClientWidth > 450 ? 430 : availableClientWidth - 20) + 'px';
-						style.height = (availableClientHeight > 500 ? 400 : availableClientHeight) + 'px';
-						style.display = "block";
+						return;
 					}
+
+					if (document.querySelector("#grantBot>.wc-app") === null) {
+						var ajax = new Teleopti.MyTimeWeb.Ajax();
+						ajax.Ajax({
+							url: "../api/GrantBot/Config",
+							dataType: "json",
+							type: 'GET',
+							contentType: 'application/json; charset=utf-8',
+							success: function (grantBotConfig) {
+								BotChat.App({
+									directLine: { secret: grantBotConfig.Token },
+									user: { id: grantBotConfig.UserId },
+									bot: { id: "botid" },
+									resize: "detect",
+									chatTitle: false,
+									showUploadButton: false
+								}, document.getElementById("grantBot"));
+							},
+							error: function (e) {
+								console.error("Failed to load GrantBot config.", e);
+							}
+						});
+					}
+
+					var availableClientWidth = document.documentElement.clientWidth;
+					var availableClientHeight = document.documentElement.clientHeight - 100;
+					style.width = (availableClientWidth > 450 ? 430 : availableClientWidth - 20) + 'px';
+					style.height = (availableClientHeight > 500 ? 400 : availableClientHeight) + 'px';
+					style.display = "block";
 				}
 			);
 		});
