@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service
 
 		public void Execute(BackgroundProcessContext context)
 		{
-			Parallel.ForEach(_tenants.ActiveTenants(), QueueIteration);
+			Parallel.ForEach(_tenants.Tenants(), QueueIteration);
 			context.CancellationToken.WaitHandle.WaitOne(TimeSpan.FromMilliseconds(100));
 		}
 

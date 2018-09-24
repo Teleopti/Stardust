@@ -51,6 +51,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ActiveTenants.cs" />
     <Compile Include="ApplicationLayer\ReadModels\AgentStateReadModelMaintainer.cs" />
     <Compile Include="ApplicationLayer\ReadModels\AgentStateReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\ReadModels\ControllableReadModelTransactionSyncronization.cs" />

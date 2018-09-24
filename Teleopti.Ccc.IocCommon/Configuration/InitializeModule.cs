@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MemoryNHibernateConfigurationCache>().SingleInstance();
 			builder.RegisterType<UnitOfWorkFactoryFactory>().SingleInstance();				
 			builder.RegisterType<DataSourcesFactory>().As<IDataSourcesFactory>().SingleInstance();
-			builder.RegisterType<SetLicenseActivator>().As<ISetLicenseActivator>().SingleInstance();
+			builder.RegisterType<InitializeLicenseServiceForTenant>().As<IInitializeLicenseServiceForTenant>().SingleInstance();
 			builder.RegisterType<LicenseVerifierFactory>().As<ILicenseVerifierFactory>().SingleInstance();
 			builder.RegisterType<LicenseRepositoryForLicenseVerifier>().As<ILicenseRepositoryForLicenseVerifier>().SingleInstance();
 			builder.RegisterType<EnversConfiguration>().As<IEnversConfiguration>().SingleInstance();
