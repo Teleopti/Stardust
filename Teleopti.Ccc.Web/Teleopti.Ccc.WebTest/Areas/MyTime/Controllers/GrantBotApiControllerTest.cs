@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 					"application/json")
 			});
 
-			var target = new GrantBotApiController(configReader, httpRequestHandler);
+			var target = new GrantBotApiController(configReader, httpRequestHandler, new FakeCurrentHttpContext());
 
 			var result = await target.GetGrantBotConfig();
 			result.Token.Should().Be(expectedToken.token);

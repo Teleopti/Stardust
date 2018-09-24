@@ -90,7 +90,7 @@
 							contentType: 'application/json; charset=utf-8',
 							success: function (grantBotConfig) {
 								BotChat.App({
-									directLine: { secret: grantBotConfig.Token },
+									directLine: { token: grantBotConfig.Token },
 									user: { id: "@Model.CurrentLogonAgentId", name: "@Model.CurrentLogonAgentName"},
 									bot: { id: "botid" },
 									resize: "detect",
