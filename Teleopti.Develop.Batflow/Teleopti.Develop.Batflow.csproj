@@ -47,12 +47,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Linq" />
     <Reference Include="System.Xml" />
-    <Reference Include="Teleopti.Ccc.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Bin\Teleopti.Ccc.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="Teleopti.Ccc.TestCommon, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Teleopti.Ccc.Web\Teleopti.Ccc.WebTest\bin\Debug\Teleopti.Ccc.TestCommon.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GlobalAssemblyInfo.cs">
@@ -75,6 +69,10 @@
       <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
+      <Project>{aa4a5374-77af-44f0-85c1-6cabc6701352}</Project>
+      <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\ReportTexts\Teleopti.Analytics.ReportTexts.csproj">
       <Project>{7c7067a8-c9ff-462e-8469-78e886c2e002}</Project>
       <Name>Teleopti.Analytics.ReportTexts</Name>
@@ -86,6 +84,10 @@
     <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{db42d973-9889-4d51-9fc5-be66aa7f117c}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
+      <Project>{68a028b6-864c-4969-8830-9c3c6bd56a98}</Project>
+      <Name>Teleopti.Ccc.TestCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Support.Library\Teleopti.Support.Library.csproj">
       <Project>{96BAA3E0-A623-412E-BFE7-D3BE03A2288A}</Project>
