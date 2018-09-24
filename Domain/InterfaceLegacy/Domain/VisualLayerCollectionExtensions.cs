@@ -25,9 +25,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 			if (rest != 0)
 				startTime = startTime.AddMinutes(-rest);
 
-			//var rest = startTime.Minute % minutesSplit;
-			//if (rest != 0)
-			//	startTime = startTime.AddMinutes(-rest);
 			foreach (var layer in resourceLayerCollection)
 			{
 				while (startTime < layer.Period.EndDateTime)

@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _activityDivider = new ActivityDivider();
 			_personSkillProvider = new PersonSkillProvider();
 
-			_resources = new ResourceCalculationDataContainer(Enumerable.Empty<ExternalStaff>(), _personSkillProvider, 15, false);
+			_resources = new ResourceCalculationDataContainer(Enumerable.Empty<ExternalStaff>(), _personSkillProvider, 15, false, new ActivityDivider());
 			var layers = _personAssignmentListContainer.TestVisualLayerCollection();
 			foreach (var layer in layers)
 			{

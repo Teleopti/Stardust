@@ -56,9 +56,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		{
 			if (!_resourcePlannerHalfHourSkillTimeZon75509 && defaultResolution == 60 &&
 				timeZoneId != "Arabian Standard Time")
-				//Assert.Ignore();
-				return;
-
+					Assert.Ignore();
+				
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
 			var scenario = new Scenario();
 			var activity = new Activity();

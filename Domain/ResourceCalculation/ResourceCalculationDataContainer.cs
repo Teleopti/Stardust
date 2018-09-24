@@ -11,15 +11,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class ResourceCalculationDataContainer : IResourceCalculationDataContainerWithSingleOperation
 	{
 		private readonly IPersonSkillProvider _personSkillProvider;
+		private readonly IActivityDivider _activityDivider;
 		private readonly ConcurrentDictionary<DateTimePeriod, PeriodResource> _dictionary = new ConcurrentDictionary<DateTimePeriod, PeriodResource>();
 		private readonly ConcurrentDictionary<DoubleGuidCombinationKey, IEnumerable<ISkill>> _skills = new ConcurrentDictionary<DoubleGuidCombinationKey, IEnumerable<ISkill>>();
 		private readonly ConcurrentDictionary<Guid, bool> _activityRequiresSeat = new ConcurrentDictionary<Guid,bool>();
 		private readonly ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>> _personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
 		private const double heads = 1d;
 
-		public ResourceCalculationDataContainer(IEnumerable<ExternalStaff> bpoResources, IPersonSkillProvider personSkillProvider, int minSkillResolution, bool primarySkillMode)
+		public ResourceCalculationDataContainer(IEnumerable<ExternalStaff> bpoResources, IPersonSkillProvider personSkillProvider, int minSkillResolution, bool primarySkillMode, IActivityDivider activityDivider)
 		{
 			_personSkillProvider = personSkillProvider;
+			_activityDivider = activityDivider;
 			BpoResources = bpoResources;
 			MinSkillResolution = minSkillResolution;
 			PrimarySkillMode = primarySkillMode;
@@ -139,14 +141,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var divider = periodToCalculate.ElapsedTime().TotalMinutes/MinSkillResolution;
 			var periodSplit = periodToCalculate.Intervals(TimeSpan.FromMinutes(MinSkillResolution));
 
-			var skillsOffset = new Dictionary<int, ISkill>();
+			var skillsOffset = new Dictionary<int, TimeZoneInfo>();
 			foreach (var skillKey in _skills)
 			{
 				foreach (var skill in skillKey.Value)
 				{
 					var minutesOffset = ServiceLocatorForLegacy.ScheduleResourcePeriodFetcher.FetchTimeZoneOffset(skill.TimeZone);
 					if(!skillsOffset.ContainsKey(minutesOffset))
-						skillsOffset.Add(minutesOffset, skill);
+						skillsOffset.Add(minutesOffset, skill.TimeZone);
 				}
 			}
 
@@ -154,7 +156,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				foreach (var dateTimePeriod in periodSplit)
 				{
-					var adjustedPeriod = ServiceLocatorForLegacy.ScheduleResourcePeriodFetcher.Fetch(dateTimePeriod, skillOffset.Value);
+					var adjustedPeriod = _activityDivider.FetchPeriodForSkill(dateTimePeriod, skillOffset.Value);
 					PeriodResource interval;
 					if (_dictionary.TryGetValue(adjustedPeriod, out interval))
 					{
