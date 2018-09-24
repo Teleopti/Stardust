@@ -60,6 +60,15 @@ namespace Teleopti.Develop.Batflow
 					AggDatabase = command.AggDatabase(),
 					UseIntegratedSecurity = true
 				});
+
+				new HangfireRecurringJobTrigger().Trigger(
+					new HangfireRecurringJobTriggerCommand
+					{
+						Server = command.Server(),
+						ApplicationDatabase = command.ApplicationDatabase(),
+						AnalyticsDatabase = command.AnalyticsDatabase()
+					}
+				);
 			}
 
 			command.ConsoleEnd();

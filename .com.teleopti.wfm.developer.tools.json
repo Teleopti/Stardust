@@ -7,8 +7,7 @@
 		{Id: "NpmStart", Icon: "CommandLine.png", Text: "npm start", Directory: "Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\WFM", Run: ["Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\.node\\npm", "start"]},
 		{Id: "NpmTest", Icon: "CommandLine.png", Text: "npm test", Directory: "Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\WFM", Run: ["Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\.node\\npm", "test"]},
 		{Id: "NpmTestRta", Icon: "CommandLine.png", Text: "npm run test:rta", Directory: "Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\WFM", Run: ["Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\.node\\npm", "run", "test:rta"]},
-		{Id: "Etl", Text: "Etl", Directory: "Teleopti.Analytics.Etl.ServiceConsoleHost\\bin\\Debug\\", Run: ["Teleopti.Analytics.Etl.ServiceConsoleHost\\bin\\Debug\\Teleopti.Analytics.Etl.ServiceConsoleHost.exe"]},
-		{Id: "EnsureRecurringJobs", Text: "EnsureRecurringJobs", Directory: "Teleopti.Analytics.Etl.ServiceConsoleHost\\bin\\Debug\\", Run: ["Teleopti.Analytics.Etl.ServiceConsoleHost\\bin\\Debug\\Teleopti.Analytics.Etl.ServiceConsoleHost.exe", "/EnsureRecurringJobs"]}
+		{Id: "Etl", Text: "Etl", Directory: "Teleopti.Analytics.Etl.ServiceConsoleHost\\bin\\Debug\\", Run: ["Teleopti.Analytics.Etl.ServiceConsoleHost\\bin\\Debug\\Teleopti.Analytics.Etl.ServiceConsoleHost.exe"]}
 	],
 	NavigationToolBar: [
 		{Id: "SuperFlow", Icon: "SuperFlow.png", Sound: "SuperFlow.wav", Text: "Super Flow", Description: "Stuff and cats!", 
@@ -23,8 +22,6 @@
 				"CD \"Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\WFM\"",
 				"START ..\\.node\\npm start",
 				"START ..\\.node\\npm run test:rta",
-				"CD ..\\..\\..",
-				"START \"\" \"Teleopti.Analytics.Etl.ServiceConsoleHost\\bin\\Debug\\Teleopti.Analytics.Etl.ServiceConsoleHost.exe\" /EnsureRecurringJobs",
 				"EXIT"
 			]
 		},
