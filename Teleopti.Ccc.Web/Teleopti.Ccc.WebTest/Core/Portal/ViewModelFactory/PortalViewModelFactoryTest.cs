@@ -114,6 +114,16 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		}
 
 		[Test]
+		public void ShouldHaveLogonAgentId()
+		{
+			setupLoggedOnUser();
+
+			var result = Target.CreatePortalViewModel();
+
+			result.CurrentLogonAgentId.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id);
+		}
+
+		[Test]
 		public void ShouldHideChangePasswordIfNoApplicationLogonExists()
 		{
 			setupLoggedOnUser();
