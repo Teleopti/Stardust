@@ -20,7 +20,7 @@ namespace Teleopti.Runtime.Environment
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-			Engine.CleanUpCacheFolders(CacheFolderCleanUpPolicy.AllVersions);
+			//Engine.CleanUpCacheFolders(CacheFolderCleanUpPolicy.AllVersions);
 
 			var client = new WebClient();
 	        client.Credentials = CredentialCache.DefaultNetworkCredentials;

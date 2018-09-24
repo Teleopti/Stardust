@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				"tKbC4q1pmaTA6YxDl6Sxy7to2PD9GvZ3hI6xy59Zs/MDD+SrwPL3Gp+d2Pj2" +
 				"6KFvprfA3a9qq6axHvSbvPwBFPE=");
 
-			Engine.CleanUpCacheFolders(CacheFolderCleanUpPolicy.AllVersions);
+			//Engine.CleanUpCacheFolders(CacheFolderCleanUpPolicy.AllVersions);
 
 			var enableLargeAddressSpaceSetting = ConfigurationManager.AppSettings["EOEnableLargeAddressSpace"];
 			if (bool.TryParse(enableLargeAddressSpaceSetting, out var enableLargeAddressSpace) && enableLargeAddressSpace)
