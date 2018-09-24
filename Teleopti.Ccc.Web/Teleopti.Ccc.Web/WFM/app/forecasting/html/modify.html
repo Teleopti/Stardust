@@ -1,17 +1,15 @@
 <section>
 	<div ng-if="!vm.noWorkloadFound">
-		<div class="view-header with-desc">
-			<div class="view-title">
-				<h1>
-					<i ng-class="vm.getSkillIcon(vm.selectedWorkload.SkillType)">
-						<md-tooltip>
-							<span ng-if="vm.selectedWorkload.SkillType.DoDisplayData">{{vm.selectedWorkload.SkillType.SkillType | translate}}</span>
-							<span ng-if="!vm.selectedWorkload.SkillType.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
-						</md-tooltip>
-					</i>
-					<span>{{vm.selectedWorkload.Workload.Name}}</span>
-				</h1>
-			</div>
+		<div class="view-header">
+			<h1>
+				<i ng-class="vm.getSkillIcon(vm.selectedWorkload.SkillType)">
+					<md-tooltip>
+						<span ng-if="vm.selectedWorkload.SkillType.DoDisplayData">{{vm.selectedWorkload.SkillType.SkillType | translate}}</span>
+						<span ng-if="!vm.selectedWorkload.SkillType.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
+					</md-tooltip>
+				</i>
+				<span>{{vm.selectedWorkload.Workload.Name}}</span>
+			</h1>
 		</div>
 
 		<div class="con-row">
@@ -19,8 +17,8 @@
 				<div class="panel material-depth-1">
 					<div class="con-row">
 						<div class="con-flex">
-							<div style="display: flex; align-items: center; justify-content:space-between;">
-								<label class="inline-flex" style="align-items: center;">
+							<div class="center">
+								<label class="inline-flex center">
 									{{'ScenarioColon'|translate}} &nbsp;
 									<md-select ng-model="vm.selectedScenario" ng-change="vm.changeScenario(vm.selectedScenario)" placeholder="{{'Scenario' | translate}}" ng-disabled="vm.changesMade || vm.savingToScenario || vm.isForecastRunning">
 										<md-option ng-repeat="scenario in vm.scenarios" ng-value="scenario">{{scenario.Name}}</md-option>
@@ -29,20 +27,20 @@
 								</label>
 
 								<div>
-									<button tabindex=0 class="context-menu card-context" ng-click="vm.periodModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning || vm.changesMade">
+									<button tabindex="0" class="context-menu card-context" ng-click="vm.periodModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning || vm.changesMade">
 										<i class="mdi mdi-calendar"></i>
 										<md-tooltip>{{'SelectForecastPeriodIntro'|translate}}</md-tooltip>
 									</button>
 									<md-tooltip ng-if="vm.changesMade">{{'PleaseSaveOrDiscardChangesBeforeChangingPeriod' | translate}}</md-tooltip>
-									{{'FromDate' | translate}}: {{vm.forecastPeriod.startDate | date: 'shortDate'}} {{'DateTo' | translate}}: {{vm.forecastPeriod.endDate  | date: 'shortDate'}}
+									{{'FromDate' | translate}}: {{vm.forecastPeriod.startDate | date: 'shortDate'}} {{'DateTo' | translate}}: {{vm.forecastPeriod.endDate | date: 'shortDate'}}
 								</div>
 
 								<div>
-									<button ng-if="vm.selectedWorkload.SkillType.DoDisplayData" tabindex=0 class="context-menu card-context" ng-click="vm.scenarioExportModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
+									<button ng-if="vm.selectedWorkload.SkillType.DoDisplayData" tabindex="0" class="context-menu card-context" ng-click="vm.scenarioExportModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
 										<i class="mdi mdi-share"></i>
 										<md-tooltip>{{'SaveToOtherScenario' | translate}}</md-tooltip>
 									</button>
-									<button tabindex=0 class="context-menu card-context" ng-click="vm.exportModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
+									<button tabindex="0" class="context-menu card-context" ng-click="vm.exportModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
 										<i class="mdi mdi-file-excel"></i>
 										<md-tooltip>{{'ExportToFile'|translate}}</md-tooltip>
 									</button>
@@ -182,10 +180,10 @@
 					<h2 ng-if="vm.selectedWorkload.SkillType.DoDisplayData">{{'SelectToModify'|translate}}</h2>
 					<h2 ng-if="!vm.selectedWorkload.SkillType.DoDisplayData">{{'SkillNotSupported'|translate}}</h2>
 					<div class="head-actions panel-menu">
-						<div tabindex=0 ng-show="vm.selectedDayCount.length > 0" class="grow-out context-menu card-context">
+						<div tabindex="0" ng-show="vm.selectedDayCount.length > 0" class="grow-out context-menu card-context">
 							<i class="mdi mdi-dots-vertical"></i>
 							<wfm-badge badge-model="vm.selectedDayCount.length" pulse="true" status="'notice-success'"> </wfm-badge>
-							<span class="context-menu-left">
+							<div class="context-menu-left">
 								<ul class="wfm-list">
 									<li ng-if="vm.selectedWorkload.SkillType.DoDisplayData" ng-click="vm.modifyPanelHelper(true)">{{'CreateOverride'|translate}}</li>
 									<li ng-if="vm.selectedWorkload.SkillType.DoDisplayData" ng-click="vm.modifyPanelHelper(false)">{{'CreateCampaign'|translate}}</li>
@@ -193,7 +191,7 @@
 									<li ng-if="vm.selectedWorkload.SkillType.DoDisplayData" ng-click="vm.clearCampaign()">{{'ClearCampaign'|translate}}</li>
 									<li ng-click="vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days)">{{'ClearForecastChart'|translate}}</li>
 								</ul>
-							</span>
+							</div>
 							<md-tooltip>{{ 'Modify' | translate }}</md-tooltip>
 						</div>
 					</div>
@@ -220,7 +218,7 @@
 </section>
 
 <section>
-	<modal-dialog show='vm.forecastModal' ng-cloak>
+	<modal-dialog show="vm.forecastModal" ng-cloak>
 		<div>
 			<div class="con-row">
 				<div class="con-flex">
@@ -229,7 +227,7 @@
 				</div>
 			</div>
 
-			<div class="modal-inner-content" style="text-align:center;">
+			<div class="modal-inner-content">
 				<wfm-calendar-picker ng-model="vm.forecastPeriod"></wfm-calendar-picker>
 			</div>
 
@@ -245,7 +243,7 @@
 		</div>
 	</modal-dialog>
 
-	<modal-dialog show='vm.periodModal' ng-cloak>
+	<modal-dialog show="vm.periodModal" ng-cloak>
 		<div>
 			<div class="con-row">
 				<div class="con-flex">
@@ -254,7 +252,7 @@
 				</div>
 			</div>
 
-			<div class="modal-inner-content" style="text-align:center;">
+			<div class="modal-inner-content">
 				<wfm-calendar-picker ng-model="vm.forecastPeriod"></wfm-calendar-picker>
 			</div>
 
@@ -269,7 +267,7 @@
 		</div>
 	</modal-dialog>
 
-	<modal-dialog show='vm.exportModal' ng-cloak>
+	<modal-dialog show="vm.exportModal" ng-cloak>
 		<div>
 			<div class="con-row">
 				<div class="con-flex">
@@ -277,7 +275,7 @@
 				</div>
 			</div>
 
-			<div class="modal-inner-content" style="text-align:center;">
+			<div class="modal-inner-content">
 				<wfm-calendar-picker ng-model="vm.forecastPeriod"></wfm-calendar-picker>
 			</div>
 
@@ -293,7 +291,7 @@
 		</div>
 	</modal-dialog>
 
-	<modal-dialog show='vm.scenarioExportModal' ng-cloak>
+	<modal-dialog show="vm.scenarioExportModal" ng-cloak>
 		<div>
 			<div class="con-row">
 				<div class="con-flex">
@@ -301,7 +299,7 @@
 				</div>
 			</div>
 
-			<form class="modal-inner-content">
+			<form class="form-radio">
 				<md-radio-group ng-model="vm.targetScenario" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
 					<md-radio-button ng-repeat="scenario in vm.scenarios" ng-value="scenario" aria-label="radio">{{scenario.Name}}</md-radio-button>
 				</md-radio-group>

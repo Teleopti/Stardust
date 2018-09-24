@@ -151,3 +151,17 @@ forecast-result-chart >.c3 > svg{
 	margin-left: -2*$full-padding;
 	background-color: transparent!important;
 }
+
+// New css for the data time picker to be centered
+.center {
+	display: flex;
+	align-items: center;
+	justify-content: space-between
+}
+.modal-box .modal-inner-content {
+	text-align: center;
+}
+.form-radio {
+	padding-left: 1%;
+	padding-top:1%;
+}
