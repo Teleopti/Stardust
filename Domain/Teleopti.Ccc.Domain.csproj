@@ -209,6 +209,8 @@
     <Compile Include="Forecasting\Models\QueueStatisticsModel.cs" />
     <Compile Include="Forecasting\Models\WorkloadQueueStatisticsViewModel.cs" />
     <Compile Include="Infrastructure\DeadLockRetrier.cs" />
+    <Compile Include="Infrastructure\HttpRequestHandler.cs" />
+    <Compile Include="Infrastructure\IHttpRequestHandler.cs" />
     <Compile Include="InterfaceLegacy\Domain\PersonInfoForShiftTradeFilter.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayForcastedStaffingIntervalDTO.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayScheduleStaffingIntervalDTO.cs" />
