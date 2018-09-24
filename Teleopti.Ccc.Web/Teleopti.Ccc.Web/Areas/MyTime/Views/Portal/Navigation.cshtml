@@ -91,7 +91,7 @@
 							success: function (grantBotConfig) {
 								BotChat.App({
 									directLine: { secret: grantBotConfig.Token },
-									user: { id: @Model.CurrentLogonAgentId, name: @Model.CurrentLogonAgentName },
+									user: { id: "@Model.CurrentLogonAgentId", name: "@Model.CurrentLogonAgentName"},
 									bot: { id: "botid" },
 									resize: "detect",
 									chatTitle: false,
