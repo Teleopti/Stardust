@@ -93,7 +93,7 @@
 								BotChat.App({
 									botConnection: Object.assign({}, dl, {
 										postActivity: activity => {
-											var newActivity = Object.assign({}, activity, { channelData: { "personId": "@Model.CurrentLogonAgentId" } });
+											var newActivity = Object.assign({}, activity, { channelData: { "personId": "@Model.CurrentLogonAgentId", "environment": window.location.hostname } });
 											return dl.postActivity(newActivity);
 										}
 									}),
