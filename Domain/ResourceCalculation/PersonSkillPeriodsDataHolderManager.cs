@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class PersonSkillDayCreator : IPersonSkillDayCreator
+	public class PersonSkillDayCreator
 	{
 		private readonly PersonalSkillsProvider _personalSkillsProvider;
 

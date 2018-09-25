@@ -1030,16 +1030,13 @@
     <Compile Include="InterfaceLegacy\Domain\IPersonRotation.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonScheduleDayReadModel.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonSkill.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IPersonSkillDayCreator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonSkillPeriodsDataHolderManager.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonWriteProtectionInfo.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPerstistableScheduleData.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IPopulationStatisticsData.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPossibleMinMaxWorkShiftLengthExtractor.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPreferenceDay.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPreferenceRestriction.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPreferenceRestrictionTemplate.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IPreSchedulingStatusChecker.cs" />
     <Compile Include="InterfaceLegacy\Domain\IProcessAbsenceRequest.cs" />
     <Compile Include="InterfaceLegacy\Domain\IProjectionMerger.cs" />
     <Compile Include="InterfaceLegacy\Domain\IProjectionProvider.cs" />
@@ -2963,7 +2960,6 @@
     <Compile Include="ResourceCalculation\DeviationStatisticsCalculator.cs" />
     <Compile Include="ResourceCalculation\DeviationStatisticsData.cs" />
     <Compile Include="ResourceCalculation\PersonSkillPeriodsDataHolderManager.cs" />
-    <Compile Include="ResourceCalculation\PopulationStatisticsData.cs" />
     <Compile Include="ResourceCalculation\PreSchedulingStatusChecker.cs" />
     <Compile Include="Optimization\ScheduleMatrixPro.cs" />
     <Compile Include="ResourceCalculation\ShiftProjectionCacheManager.cs" />

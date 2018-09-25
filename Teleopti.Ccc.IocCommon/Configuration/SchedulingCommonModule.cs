@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SchedulingResultStateHolderProvider>().As<ISchedulingResultStateHolderProvider>().SingleInstance();
 			builder.RegisterType<ScheduleDayForPerson>().As<IScheduleDayForPerson>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleRangeForPerson>().As<IScheduleRangeForPerson>().InstancePerLifetimeScope();
-			builder.RegisterType<PreSchedulingStatusChecker>().As<IPreSchedulingStatusChecker>().InstancePerLifetimeScope();
+			builder.RegisterType<PreSchedulingStatusChecker>().InstancePerLifetimeScope();
 			builder.RegisterType<NightRestWhiteSpotSolverServiceFactory>().As<INightRestWhiteSpotSolverServiceFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<NumberOfAgentsKnowingSkill>().SingleInstance();
 			builder.RegisterType<ReduceSkillSets>().SingleInstance();
@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<GroupPagePerDateHolder>().As<IGroupPagePerDateHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<DesiredShiftLengthCalculator>().As<IDesiredShiftLengthCalculator>().SingleInstance();
 			builder.RegisterType<ShiftLengthDecider>().As<IShiftLengthDecider>().SingleInstance();
-			builder.RegisterType<PersonSkillDayCreator>().As<IPersonSkillDayCreator>().SingleInstance();
+			builder.RegisterType<PersonSkillDayCreator>().SingleInstance();
 
 			builder.RegisterType<ShiftProjectionCacheManager>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamScheduling>().SingleInstance();

@@ -21,7 +21,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
-	[StardustTest] //Explicit("not running now")
+	[StardustTest, Ignore("Still Flaky")]
 	public class PayrollEndToEndTest
 	{
 		public IStardustSender StardustSender;

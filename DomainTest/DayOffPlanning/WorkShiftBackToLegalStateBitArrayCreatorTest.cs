@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             }
             using (_mocks.Playback())
             {
-                ILockableBitArray lockableBitArray = _target.CreatePeriodBitArray(true, _matrix);
+                ILockableBitArray lockableBitArray = _target.CreatePeriodBitArray(_matrix);
 
                 Assert.IsTrue(lockableBitArray.IsLocked(0, true));
                 Assert.IsTrue(lockableBitArray.IsLocked(1, true));

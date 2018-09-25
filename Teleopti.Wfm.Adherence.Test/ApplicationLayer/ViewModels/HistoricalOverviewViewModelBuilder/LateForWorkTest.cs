@@ -24,7 +24,9 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 			var teamId = Guid.NewGuid();
 			Database
 				.WithTeam(teamId)
-				.WithAgent();
+				.WithAgent()
+				.WithHistoricalStateChange("2018-08-24 08:00");
+			Now.Is("2018-08-25 08:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
 
@@ -70,7 +72,9 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 			var teamId = Guid.NewGuid();
 			Database
 				.WithTeam(teamId)
-				.WithAgent();
+				.WithAgent()
+				.WithHistoricalStateChange("2018-08-24 08:00");
+			Now.Is("2018-08-25 08:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
 
@@ -100,7 +104,9 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 			var teamId = Guid.NewGuid();
 			Database
 				.WithTeam(teamId)
-				.WithAgent();
+				.WithAgent()
+				.WithHistoricalStateChange("2018-08-24 08:00");
+			Now.Is("2018-08-25 08:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
 
