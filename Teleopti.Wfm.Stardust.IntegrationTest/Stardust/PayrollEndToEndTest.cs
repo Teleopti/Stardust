@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
-using log4net;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -38,13 +37,14 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		private AssertRetryStrategy _assertRetryStrategy;
 
 		[Test]
-		public void ShouldPublishAndProcessPayrollJob([Range(1, 20, 1)] int x)
+		public void ShouldPublishAndProcessPayrollJob([Range(1, 50, 1)] int rangeCount)
 		{
 			_assertRetryStrategy = new AssertRetryStrategy(100);
 
 			TestLog.Debug("Starting the test for payroll");
 			var period = new DateOnlyPeriod(2016, 02, 20, 2016, 02, 28);
 
+			StardustManagerPingHelper.WaitForStarDustManagerToStart(TestLog);
 			StardustSender.Send(dataSetup(period));
 			TestLog.Debug("Sent job to star dust");
 

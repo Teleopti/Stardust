@@ -41,8 +41,9 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 
 		[Test]
-		public void ShouldRunEndToEndAbsenceRequest()
+		public void ShouldRunEndToEndAbsenceRequest([Range(1, 50, 1)] int rangeCount)
 		{
+			StardustManagerPingHelper.WaitForStarDustManagerToStart(TestLog);
 			TestLog.Debug("Setting up test data");
 			_assertRetryStrategy = new AssertRetryStrategy(100);
 			Now.Is("2016-02-25 08:00".Utc());
