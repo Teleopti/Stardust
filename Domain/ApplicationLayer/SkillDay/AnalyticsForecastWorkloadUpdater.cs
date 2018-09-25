@@ -28,9 +28,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 		private readonly IAnalyticsIntervalRepository _analyticsIntervalRepository;
 		private readonly AnalyticsDateMapper _analyticsDateMapper;
 
-		private int intervalsPerDay;
-		private int minutesPerInterval;
-
 		public AnalyticsForecastWorkloadUpdater(ISkillDayRepository skillDayRepository,
 			IAnalyticsWorkloadRepository analyticsWorkloadRepository,
 			IAnalyticsDateRepository analyticsDateRepository,
@@ -64,19 +61,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 				logger.Debug($"Aborting because {typeof(ISkillDay)} {@event.SkillDayId} is not for a reportable scenario.");
 				return;
 			}
-			
-			var analyticsDateIds = mapDates(skillDay);
-			handleForecasts(skillDay, analyticsDateIds);
+
+			var intervalsPerDay = analyticsIntervalsPerDay();
+			var minutesPerInterval = minutesPerDay / intervalsPerDay;
+			var analyticsDateIds = mapDates(skillDay, minutesPerInterval);
+			handleForecasts(skillDay, analyticsDateIds, intervalsPerDay, minutesPerInterval);
 		}
-
+		
 		[AnalyticsUnitOfWork]
-		protected virtual void handleForecasts(ISkillDay skillDay, IDictionary<DateOnly, int> analyticsDateIds)
+		protected virtual void handleForecasts(ISkillDay skillDay, IDictionary<DateOnly, int> analyticsDateIds, int intervalsPerDay, int minutesPerInterval)
 		{
-			intervalsPerDay = _analyticsIntervalRepository.IntervalsPerDay();
-			minutesPerInterval = minutesPerDay / intervalsPerDay;
-
-			var newForecastWorkloads = createForecastWorkloads(skillDay, analyticsDateIds).ToList();
-			var currentForecastWorkloads = getCurrentForecastWorkloads(skillDay, analyticsDateIds).ToList();
+			var newForecastWorkloads = createForecastWorkloads(skillDay, analyticsDateIds, intervalsPerDay, minutesPerInterval).ToList();
+			var currentForecastWorkloads = getCurrentForecastWorkloads(skillDay, analyticsDateIds, intervalsPerDay, minutesPerInterval).ToList();
 			var workloadsToRemove = currentForecastWorkloads.Where(x => !newForecastWorkloads.Contains(x)).ToList();
 
 			addOrUpdateWorkloads(newForecastWorkloads);
@@ -100,7 +96,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 		}
 
 		private IEnumerable<AnalyticsForcastWorkload> getCurrentForecastWorkloads(ISkillDay skillDay,
-			IDictionary<DateOnly, int> analyticsDateIds)
+			IDictionary<DateOnly, 
+			int> analyticsDateIds,
+			int intervalsPerDay,
+			int minutesPerInterval)
 		{
 			var currentDate = skillDay.CurrentDate.Date;
 			var timezone = skillDay.Skill.TimeZone;
@@ -129,7 +128,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 		}
 
 		private IEnumerable<AnalyticsForcastWorkload> createForecastWorkloads(ISkillDay skillDay,
-			IDictionary<DateOnly, int> analyticsDateIds)
+			IDictionary<DateOnly, int> analyticsDateIds,
+			int intervalsPerDay,
+			int minutesPerInterval)
 		{
 			var analyticsScenario = getAnalyticsScenario(skillDay);
 
@@ -195,7 +196,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 		}
 
 		[AnalyticsUnitOfWork]
-		protected virtual IDictionary<DateOnly, int> mapDates(ISkillDay skillDay)
+		protected virtual IDictionary<DateOnly, int> mapDates(ISkillDay skillDay, int minutesPerInterval)
 		{
 			var currentDate = skillDay.CurrentDate.Date;
 			var timezone = skillDay.Skill.TimeZone;
@@ -212,6 +213,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 			}
 
 			return analyticsDates;
+		}
+
+		[AnalyticsUnitOfWork]
+		protected virtual int analyticsIntervalsPerDay()
+		{
+			return _analyticsIntervalRepository.IntervalsPerDay();
 		}
 	}
 }
