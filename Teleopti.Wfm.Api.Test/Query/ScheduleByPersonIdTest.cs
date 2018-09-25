@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -40,7 +41,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 					PersonId = person.Id.GetValueOrDefault(),
 					StartDate = new DateTime(2001, 1, 1),
 					EndDate = new DateTime(2001, 1, 1)
-				})));
+				}), Encoding.UTF8, "application/json"));
 			var obj = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Result"][0];
 
 			obj["PersonId"].Value<string>().Should().Be.EqualTo(person.Id.Value.ToString());

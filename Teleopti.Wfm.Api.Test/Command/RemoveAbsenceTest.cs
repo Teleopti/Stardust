@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -9,7 +10,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Wfm.Api.Command;
 
 namespace Teleopti.Wfm.Api.Test.Command
 {
@@ -37,8 +37,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 				PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2018, 1, 1, 2018, 1, 2));
 			PersonAbsenceRepository.Add(personAbsence);
 
-			var removeAbsenceDto = new RemoveAbsenceDto
-			{
+			var removeAbsenceDto = new {
 				PersonId = person.Id.GetValueOrDefault(),
 				PeriodStartUtc = new DateTime(2018, 1, 2),
 				PeriodEndUtc = new DateTime(2018, 1, 1),
@@ -46,10 +45,9 @@ namespace Teleopti.Wfm.Api.Test.Command
 			};
 
 			var result = Client.PostAsync("/command/RemoveAbsence",
-				new StringContent(JsonConvert.SerializeObject(removeAbsenceDto)));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)
-				.ToObject<ResultDto>();
-			resultDto.Successful.Should().Be.EqualTo(false);
+				new StringContent(JsonConvert.SerializeObject(removeAbsenceDto), Encoding.UTF8, "application/json"));
+			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(false);
 		}
 
 		[Test]
@@ -66,8 +64,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 				PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2018, 1, 1, 2018, 1, 2));
 			PersonAbsenceRepository.Add(personAbsence);
 
-			var removeAbsenceDto = new RemoveAbsenceDto
-			{
+			var removeAbsenceDto = new {
 				PersonId = person.Id.GetValueOrDefault(),
 				PeriodStartUtc = new DateTime(2018,1,1),
 				PeriodEndUtc = new DateTime(2018,1,2),
@@ -75,10 +72,9 @@ namespace Teleopti.Wfm.Api.Test.Command
 			};
 
 			var result = Client.PostAsync("/command/RemoveAbsence",
-				new StringContent(JsonConvert.SerializeObject(removeAbsenceDto)));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)
-				.ToObject<ResultDto>();
-			resultDto.Successful.Should().Be.EqualTo(true);
+				new StringContent(JsonConvert.SerializeObject(removeAbsenceDto), Encoding.UTF8, "application/json"));
+			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
 			PersonAbsenceRepository.LoadAll().Count().Should().Be.EqualTo(0);
 		}
 
@@ -96,8 +92,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 				PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2018, 1, 1, 2018, 1, 10));
 			PersonAbsenceRepository.Add(personAbsence);
 
-			var removeAbsenceDto = new RemoveAbsenceDto
-			{
+			var removeAbsenceDto = new {
 				PersonId = person.Id.GetValueOrDefault(),
 				PeriodStartUtc = new DateTime(2018, 1, 3),
 				PeriodEndUtc = new DateTime(2018, 1, 4),
@@ -105,10 +100,9 @@ namespace Teleopti.Wfm.Api.Test.Command
 			};
 
 			var result = Client.PostAsync("/command/RemoveAbsence",
-				new StringContent(JsonConvert.SerializeObject(removeAbsenceDto)));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)
-				.ToObject<ResultDto>();
-			resultDto.Successful.Should().Be.EqualTo(true);
+				new StringContent(JsonConvert.SerializeObject(removeAbsenceDto), Encoding.UTF8, "application/json"));
+			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
 			PersonAbsenceRepository.LoadAll().Count().Should().Be.EqualTo(2);
 			PersonAbsenceRepository.LoadAll().Any(x => x.Period == new DateTimePeriod(2018,1,1,2018,1,3)).Should().Be.True();
 			PersonAbsenceRepository.LoadAll().Any(x => x.Period == new DateTimePeriod(2018,1,4,2018,1,10)).Should().Be.True();
