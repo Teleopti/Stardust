@@ -498,7 +498,6 @@
     <Compile Include="Areas\Rta\Controllers\RtaTestDataController.cs" />
     <Compile Include="Areas\Rta\Controllers\HistoricalOverviewController.cs" />
     <Compile Include="Core\Exceptions\CustomMessageException.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\SingleOwnedPerson.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\AgentScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\IAgentScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\ILayerViewModelMapper.cs" />

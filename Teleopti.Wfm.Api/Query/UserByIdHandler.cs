@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.Aop;
+﻿using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Wfm.Api.Query

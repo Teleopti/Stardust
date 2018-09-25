@@ -265,6 +265,7 @@
     <Compile Include="Infrastructure\Events\IntradayToolEvent.cs" />
     <Compile Include="Forecasting\WorkloadNameBuilder.cs" />
     <Compile Include="Intraday\To Staffing\StaffingIntervalModel.cs" />
+    <Compile Include="Logon\SingleOwnedPerson.cs" />
     <Compile Include="Optimization\IntradayOptimizationOnStardust.cs" />
     <Compile Include="Optimization\MatrixLockers\MatrixClosedDayLocker.cs" />
     <Compile Include="Optimization\PredictorResult.cs" />
