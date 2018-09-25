@@ -43,6 +43,11 @@ namespace Stardust.Manager.Helpers
 			return CreateUri(NodeRouteConstants.Job);
 		}
 
+		public Uri GetPingTemplateUri()
+		{
+			return CreateUri(NodeRouteConstants.IsAlive);
+		}
+
 		public Uri GetUpdateJobUri(Guid jobId)
 		{
 			var path = NodeRouteConstants.UpdateJobByJobId.Replace(NodeRouteConstants.JobIdOptionalParameter,

@@ -113,6 +113,11 @@ namespace ManagerTest.Fakes
 			throw new NotImplementedException();
 		}
 
+		public bool PingWorkerNode(Uri workerNodeUri)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void AssignDesignatedNode(Guid id, string url)
 		{
 			var job = _jobs.FirstOrDefault(x => x.JobId == id);

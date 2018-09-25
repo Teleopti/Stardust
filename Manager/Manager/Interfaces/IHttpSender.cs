@@ -13,5 +13,6 @@ namespace Stardust.Manager.Interfaces
 											object data);
 
 		Task<HttpResponseMessage> DeleteAsync(Uri url);
+		Task<HttpResponseMessage> GetAsync(Uri url);
 	}
 }

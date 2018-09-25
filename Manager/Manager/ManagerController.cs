@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Stardust.Manager.Constants;
 using Stardust.Manager.Extensions;
+using Stardust.Manager.Helpers;
 using Stardust.Manager.Models;
 using Stardust.Manager.Validations;
 
@@ -96,13 +99,18 @@ namespace Stardust.Manager
 		{
 			var isValidRequest = _validator.ValidateUri(workerNodeUri);
 			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
-			
+
 			Task.Factory.StartNew(() =>
 			{
-				this.Log().InfoWithLineNumber(WhoAmI(Request) + 
-					": Received heartbeat from Node. Node Uri : ( " + workerNodeUri + " )");
+				var pingresult = _jobManager.PingWorkerNode(workerNodeUri);
+				if (pingresult)
+				{
+					this.Log().InfoWithLineNumber(WhoAmI(Request) +
+					                              ": Received heartbeat from Node. Node Uri : ( " + workerNodeUri + " )");
 
-				_nodeManager.WorkerNodeRegisterHeartbeat(workerNodeUri.ToString());
+					_nodeManager.WorkerNodeRegisterHeartbeat(workerNodeUri.ToString());
+				}
+				
 			});
 
 			return Ok();

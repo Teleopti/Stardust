@@ -60,6 +60,24 @@ namespace Stardust.Manager
 			}
 		}
 
+		public async Task<HttpResponseMessage> GetAsync(Uri url)
+		{
+			var retries = RetryCount;
+			while (true)
+			{
+				try
+				{
+					return await Client.GetAsync(url,HttpCompletionOption.ResponseContentRead)
+						.ConfigureAwait(false);
+				}
+				catch
+				{
+					if (--retries == 0) throw;
+					Thread.Sleep(RetryDelayMilliseconds);
+				}
+			}
+		}
+
 
 		public async Task<HttpResponseMessage> DeleteAsync(Uri url)
 		{

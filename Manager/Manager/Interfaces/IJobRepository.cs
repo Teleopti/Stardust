@@ -31,5 +31,6 @@ namespace Stardust.Manager.Interfaces
 		IList<Job> GetAllExecutingJobs();
 
 		IList<JobDetail> GetJobDetailsByJobId(Guid jobId);
+		bool PingWorkerNode(Uri workerNodeUri);
 	}
 }

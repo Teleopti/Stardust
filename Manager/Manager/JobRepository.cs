@@ -299,6 +299,22 @@ namespace Stardust.Manager
 			}
 		}
 
+		public bool PingWorkerNode(Uri workerNodeUri)
+		{
+			var builderHelper = new NodeUriBuilderHelper(workerNodeUri);
+			var urijob = builderHelper.GetPingTemplateUri();
+			HttpResponseMessage response;
+			try
+			{
+				response = _httpSender.GetAsync(urijob).Result;
+			}
+			catch (AggregateException)
+			{
+				return false;
+			}
+
+			return response != null && response.IsSuccessStatusCode ;
+		}
 
 
 		public void RequeueJobThatDidNotEndByWorkerNodeUri(string workerNodeUri)
