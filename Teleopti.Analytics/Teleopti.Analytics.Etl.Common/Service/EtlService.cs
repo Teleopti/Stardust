@@ -15,17 +15,12 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 		private Timer _timer;
 		private readonly EtlJobStarter _etlJobStarter;
-		private readonly HangfireUtilities _hangfire;
 		private int tickTries;
 
-		public EtlService(
-			EtlJobStarter etlJobStarter,
-			HangfireUtilities hangfire
-			)
+		public EtlService(EtlJobStarter etlJobStarter)
 		{
 			tickTries = 0;
 			_etlJobStarter = etlJobStarter;
-			_hangfire = hangfire;
 			_timer = new Timer(tick, null, TimeSpan.FromMilliseconds(-1), TimeSpan.FromMilliseconds(-1));
 		}
 
@@ -68,12 +63,6 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				_timer?.Change(TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(-1));
 				log.Debug("Timer started");
 			}
-		}
-
-		public void TriggerRecurringJobs()
-		{
-			Thread.Sleep(2000);
-			_hangfire.TriggerReccuringJobs();
 		}
 
 		public void Dispose()

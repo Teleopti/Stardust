@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Net.Http;
+using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -31,7 +32,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 					Url = url,
 					DaysStartFromCurrentDate = daysStartFromCurrentDate,
 					DaysEndFromCurrentDate = daysEndFromCurrentDate
-				}))).Result.EnsureSuccessStatusCode();
+				}), Encoding.UTF8, "application/json")).Result.EnsureSuccessStatusCode();
 
 			var result =
 				Client.PostAsync("/query/ScheduleChangesListenerSubscription/AllScheduleChangesListenerSubscription",
@@ -53,7 +54,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 			Client.Authorize();
 			var result =
 				Client.PostAsync("/query/ScheduleChangesListenerSubscription/AllScheduleChangesListenerSubscription",
-					new StringContent("{}"));
+					new StringContent("{}", Encoding.UTF8, "application/json"));
 
 			var obj =
 				JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Result"][0];
@@ -70,7 +71,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 
 			var result =
 				Client.PostAsync("/query/ScheduleChangesListenerSubscription/AllScheduleChangesListenerSubscription",
-					new StringContent("{}"));
+					new StringContent("{}", Encoding.UTF8, "application/json"));
 
 			var obj = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
 

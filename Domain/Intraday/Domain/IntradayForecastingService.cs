@@ -61,15 +61,11 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 
 		public IList<EslInterval> CalculateEstimatedServiceLevels(IEnumerable<ISkillDay> skillDays, DateTime startOfPeriodUtc, DateTime endOfPeriodUtc)
 		{
-			var useShrinkage = false;
 			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
 			var eslIntervals = new List<EslInterval>();
 
 			if (!skillDays.Any())
 				return eslIntervals;
-
-
-			this.CalculateForecastedAgentsForEmailSkills(skillDays, useShrinkage);
 
 			var mainSkillDays = skillDays.Where(x => !(x.Skill is IChildSkill) && x.Skill.Id.HasValue);
 			
@@ -104,15 +100,16 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 							return null;
 
 						var sla = skillDataPeriods.FirstOrDefault(s => s.Period.StartDateTime <= x)?.ServiceAgreement;
+						var forcastedCalls = forecastForInterval.Sum(f => f.Calls);
 						return new
 						{
 							SkillId = skill.Id,
 							StartTime = x,
 							SkillAbandonRate = skill.AbandonRate.Value,
 							SLA = sla,
-							ScheduledStaffingLevel = scheduledStaffing.Where(s => s.StartDateTime.Equals(x)).Sum(s => s.StaffingLevel),
-							ForecastedCalls = forecastForInterval.Sum(f => f.Calls),
-							ForecastedAverageHandleTime = forecastForInterval.Sum(f => f.AverageHandleTime),
+							ScheduledStaffingLevel = scheduledStaffing.Where(s => s.Id.Equals(skill.Id) && s.StartDateTime.Equals(x)).Sum(s => s.StaffingLevel),
+							ForecastedCalls = forcastedCalls,
+							ForecastedAverageHandleTime = (forcastedCalls > 0) ? (forecastForInterval.Sum(f => f.AverageHandleTime * f.Calls) / forcastedCalls) : 0.0,
 							ForecastedAgents = forecastForInterval.Sum(f => f.Agents)
 						};
 					});

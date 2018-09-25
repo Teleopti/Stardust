@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Licensing;
@@ -16,21 +16,21 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 	public class ApplicationFunctionsController : ApiController
 	{
 		private readonly IApplicationFunctionsToggleFilter _applicationFunctionsToggleFilter;
-		private readonly ISetLicenseActivator _setLicenseActivator;
-		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private readonly IInitializeLicenseServiceForTenant _initializeLicenseServiceForTenant;
+		private readonly ICurrentDataSource _dataSource;
 
-		public ApplicationFunctionsController(IApplicationFunctionsToggleFilter applicationFunctionsToggleFilter, ISetLicenseActivator setLicenseActivator, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+		public ApplicationFunctionsController(IApplicationFunctionsToggleFilter applicationFunctionsToggleFilter, IInitializeLicenseServiceForTenant initializeLicenseServiceForTenant, ICurrentDataSource dataSource)
 		{
 			_applicationFunctionsToggleFilter = applicationFunctionsToggleFilter;
-			_setLicenseActivator = setLicenseActivator;
-			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_initializeLicenseServiceForTenant = initializeLicenseServiceForTenant;
+			_dataSource = dataSource;
 		}
 
 		[HttpGet, Route("api/Permissions/ApplicationFunctions")]
 		public virtual ICollection<ApplicationFunctionViewModel> GetAllFunctions()
 		{
-			_setLicenseActivator.Execute(_currentUnitOfWorkFactory.Current());
-			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			_initializeLicenseServiceForTenant.TryInitialize(_dataSource.Current());
+			using (_dataSource.Current().Application.CreateAndOpenUnitOfWork())
 			{
 				var functions = _applicationFunctionsToggleFilter.FilteredFunctions();
 				return createAllFunctionsHierarchy(functions.Functions);

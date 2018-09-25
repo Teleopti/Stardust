@@ -8,7 +8,7 @@ using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 {
-	[TestFixture, Ignore("")]
+	[TestFixture]
 	public class PlugInLoaderTest
 	{
 		private PlugInLoader target;

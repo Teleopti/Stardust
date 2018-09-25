@@ -18,9 +18,9 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
 	{
 		public DateOnly Date;
 		public Guid PersonId;
-		public int? Adherence { get; set; }
 		public bool WasLateForWork { get; set; }
 		public int MinutesLateForWork { get; set; }
-		public int? ShiftLength { get; set; }
+		public int? SecondsInAdherence { get; set; }
+		public int? SecondsOutOfAdherence { get; set; }
 	}
 }

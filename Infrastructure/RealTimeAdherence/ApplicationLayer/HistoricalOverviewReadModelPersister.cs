@@ -25,19 +25,19 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 				.CreateSQLQuery(@"
 UPDATE [ReadModel].[HistoricalOverview] 
 	SET 
-		Adherence = :Adherence, 
 		WasLateForWork = :WasLateForWork, 
-		MinutesLateForWork = :MinutesLateForWork, 
-		ShiftLength = :ShiftLength
+		MinutesLateForWork = :MinutesLateForWork,
+		SecondsInAdherence = :SecondsInAdherence,
+		SecondsOutOfAdherence = :SecondsOutOfAdherence
 	WHERE 
 		PersonId = :PersonId AND 
 		[Date] = :Date 
 ")
 				.SetParameter("PersonId", model.PersonId)
-				.SetParameter("Adherence", model.Adherence)
 				.SetParameter("WasLateForWork", model.WasLateForWork)
 				.SetParameter("MinutesLateForWork", model.MinutesLateForWork)
-				.SetParameter("ShiftLength", model.ShiftLength)
+				.SetParameter("SecondsInAdherence", model.SecondsInAdherence)
+				.SetParameter("SecondsOutOfAdherence", model.SecondsOutOfAdherence)
 				.SetParameter("Date", date)
 				.ExecuteUpdate();
 			if (updated == 0)
@@ -48,26 +48,26 @@ INSERT INTO [ReadModel].[HistoricalOverview]
 	(
 		[PersonId], 
 		[Date], 
-		[Adherence], 
 		[WasLateForWork], 
-		[MinutesLateForWork], 
-		[ShiftLength]  
+		[MinutesLateForWork],
+		[SecondsInAdherence],
+		[SecondsOutOfAdherence]  
 	) 
 VALUES 
 	(
 		:PersonId, 
 		:Date, 
-		:Adherence, 
 		:WasLateForWork, 
-		:MinutesLateForWork, 
-		:ShiftLength
+		:MinutesLateForWork,
+		:SecondsInAdherence,
+		:SecondsOutOfAdherence
 	)
 ")
 				.SetParameter("PersonId", model.PersonId)
-				.SetParameter("Adherence", model.Adherence)
 				.SetParameter("WasLateForWork", model.WasLateForWork)
 				.SetParameter("MinutesLateForWork", model.MinutesLateForWork)
-				.SetParameter("ShiftLength", model.ShiftLength)
+				.SetParameter("SecondsInAdherence", model.SecondsInAdherence)
+				.SetParameter("SecondsOutOfAdherence", model.SecondsOutOfAdherence)
 				.SetParameter("Date", date)
 				.ExecuteUpdate();
 			}
@@ -80,10 +80,10 @@ VALUES
 SELECT 
 	[PersonId], 
 	[Date], 
-	[Adherence], 
 	[WasLateForWork], 
-	[MinutesLateForWork], 
-	[ShiftLength]
+	[MinutesLateForWork],
+	[SecondsInAdherence],
+	[SecondsOutOfAdherence]
 FROM [ReadModel].[HistoricalOverview]
 WHERE PersonId IN (:PersonId)
 ")

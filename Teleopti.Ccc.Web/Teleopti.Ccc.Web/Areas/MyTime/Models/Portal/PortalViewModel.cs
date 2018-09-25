@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public string DateFormatLocale { get; set; }
 
 		public bool GrantEnabled { get; set; }
+		public Guid? CurrentLogonAgentId { get; set; }
 	}
 
 	public class NavigationItem

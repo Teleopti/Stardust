@@ -4,11 +4,10 @@ using MbCache.Core;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 using Module = Autofac.Module;
 
@@ -20,10 +19,10 @@ namespace Teleopti.Wfm.Adherence.Test
 	{
 		public OuterService Service;
 		public CachedServiceImpl CachedService;
-		public FakeDataSourceForTenant DataSources;
 		public IDataSourceScope DataSource;
 		public IMbCacheFactory Cache;
-		
+		public FakeTenants Tenants;
+
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddModule(new TestModule(configuration));
@@ -52,9 +51,8 @@ namespace Teleopti.Wfm.Adherence.Test
 					(c, b) => b
 						.CacheMethod(x => x.GetDataSourceName())
 						.CacheKey(c.Resolve<CachePerDataSource>())
-					);
+				);
 			}
-
 		}
 
 		public class OuterService
@@ -70,7 +68,6 @@ namespace Teleopti.Wfm.Adherence.Test
 			{
 				return _cached.GetDataSourceName();
 			}
-
 		}
 
 		public class CachedServiceImpl
@@ -106,10 +103,9 @@ namespace Teleopti.Wfm.Adherence.Test
 		[Test]
 		public void ShouldCache()
 		{
-			var datasource1 = new FakeDataSource("1");
-			DataSources.Has(datasource1);
+			Tenants.Has("1");
 
-			using (DataSource.OnThisThreadUse(datasource1))
+			using (DataSource.OnThisThreadUse("1"))
 			{
 				Service.GetDataSourceName();
 				Service.GetDataSourceName();
@@ -121,17 +117,14 @@ namespace Teleopti.Wfm.Adherence.Test
 		[Test]
 		public void ShouldCachePerDataSource()
 		{
-			IDataSource datasource1 = new FakeDataSource("1");
-			IDataSource datasource2 = new FakeDataSource("2");
-			DataSources.Has(datasource1);
-			DataSources.Has(datasource2);
+			Tenants.Has("1");
+			Tenants.Has("2");
 
-			using (DataSource.OnThisThreadUse(datasource1))
+			using (DataSource.OnThisThreadUse("1"))
 				Service.GetDataSourceName().Should().Be("1");
 
-			using (DataSource.OnThisThreadUse(datasource2))
+			using (DataSource.OnThisThreadUse("2"))
 				Service.GetDataSourceName().Should().Be("2");
-
 		}
 
 		[Test]
@@ -143,13 +136,12 @@ namespace Teleopti.Wfm.Adherence.Test
 		[Test]
 		public void ShouldInvalidateForAllDataSources()
 		{
-			IDataSource datasource1 = new FakeDataSource("1");
-			DataSources.Has(datasource1);
+			Tenants.Has("1");
 
-			using (DataSource.OnThisThreadUse(datasource1))
+			using (DataSource.OnThisThreadUse("1"))
 				Service.GetDataSourceName().Should().Be("1");
 			Cache.Invalidate<CachedServiceImpl>();
-			using (DataSource.OnThisThreadUse(datasource1))
+			using (DataSource.OnThisThreadUse("1"))
 				Service.GetDataSourceName().Should().Be("1");
 
 			CachedService.CalledCount.Should().Be(2);

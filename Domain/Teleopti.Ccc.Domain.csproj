@@ -210,6 +210,8 @@
     <Compile Include="Forecasting\Models\QueueStatisticsModel.cs" />
     <Compile Include="Forecasting\Models\WorkloadQueueStatisticsViewModel.cs" />
     <Compile Include="Infrastructure\DeadLockRetrier.cs" />
+    <Compile Include="Infrastructure\HttpRequestHandler.cs" />
+    <Compile Include="Infrastructure\IHttpRequestHandler.cs" />
     <Compile Include="InterfaceLegacy\Domain\PersonInfoForShiftTradeFilter.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayForcastedStaffingIntervalDTO.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayScheduleStaffingIntervalDTO.cs" />
@@ -264,6 +266,7 @@
     <Compile Include="Infrastructure\Events\IntradayToolEvent.cs" />
     <Compile Include="Forecasting\WorkloadNameBuilder.cs" />
     <Compile Include="Intraday\To Staffing\StaffingIntervalModel.cs" />
+    <Compile Include="Logon\SingleOwnedPerson.cs" />
     <Compile Include="Optimization\IntradayOptimizationOnStardust.cs" />
     <Compile Include="Optimization\MatrixLockers\MatrixClosedDayLocker.cs" />
     <Compile Include="Optimization\PredictorResult.cs" />

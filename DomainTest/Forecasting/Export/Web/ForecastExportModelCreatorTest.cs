@@ -21,7 +21,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 {
 	[DomainTest]
-	public class ForecastExportModelCreatorTest : IIsolateSystem
+	public class ForecastExportModelCreatorTest
 	{
 		public ForecastExportModelCreator Target;
 		public FakeScenarioRepository ScenarioRepository;
@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 
 			var model = Target.Load(scenario.Id.Value, workloadTwo.Id.Value, period);
 
-			model.DailyModelForecast.Count().Should().Be.EqualTo(1);
+			model.DailyModelForecast.Count.Should().Be.EqualTo(1);
 			var dailyModel = model.DailyModelForecast.First();
 
 			dailyModel.ForecastDate.Should().Be.EqualTo(skillDay.CurrentDate.Date);
@@ -292,6 +292,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			ITemplateTaskPeriod taskPeriod, 
 			double shrinkage)
 		{
+			staffingInterval.Payload.UseShrinkage = true;
 			var agentsNoShrinkage = staffingInterval.FStaff * (1 - shrinkage);
 			intervalModel.IntervalStart.Should().Be.EqualTo(intervalStart);
 			intervalModel.Calls.Should().Be.EqualTo(taskPeriod.TotalTasks);
@@ -321,11 +322,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			workload.SetId(Guid.NewGuid());
 
 			return skill;
-		}
-
-		public void Isolate(IIsolate isolate)
-		{
-			isolate.UseTestDouble<FakeSkillDayRepository_DoNotUse>().For<ISkillDayRepository>();
 		}
 	}
 }

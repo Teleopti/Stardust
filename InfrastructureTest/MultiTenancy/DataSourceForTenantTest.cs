@@ -23,9 +23,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			var appNhibConf = new Dictionary<string, string>();
 			var statisticConnString = RandomName.Make();
 			var applicationConnectionString = RandomName.Make();
-			var dataSource = new FakeDataSource();
+			var dataSource = new FakeDataSource {DataSourceName = dataSourceName};
 			dataSourcesFactory.Expect(x => x.Create(dataSourceName, applicationConnectionString, statisticConnString, appNhibConf)).Return(dataSource);
-			var target = new DataSourceForTenant(dataSourcesFactory, new SetNoLicenseActivator(), new FindTenantByNameWithEnsuredTransactionFake());
+			var target = new DataSourceForTenant(dataSourcesFactory, new NoLicenseServiceInitialization(), new FindTenantByNameWithEnsuredTransactionFake());
 			target.Tenant(dataSourceName).Should().Be.EqualTo(null);
 			target.MakeSureDataSourceCreated(dataSourceName, applicationConnectionString, statisticConnString, appNhibConf);
 			target.Tenant(dataSourceName).Should().Be.SameInstanceAs(dataSource);
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			var dataSourceName = RandomName.Make();
 			var appNhibConf = new Dictionary<string, string>();
 			var statisticConnString = RandomName.Make();
-			var dataSource = new FakeDataSource { DataSourceName = dataSourceName };
+			var dataSource = new FakeDataSource {DataSourceName = dataSourceName};
 			var target = new FakeDataSourceForTenant(dataSourcesFactory, null, null);
 			target.Has(dataSource);
 
@@ -88,10 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		public void RemovingNonExistingTenantShouldNotThrow()
 		{
 			var target = new DataSourceForTenant(null, null, null);
-			Assert.DoesNotThrow(() =>
-			{
-				target.RemoveDataSource(RandomName.Make());
-			});
+			Assert.DoesNotThrow(() => { target.RemoveDataSource(RandomName.Make()); });
 		}
 
 		[Test]
@@ -112,24 +109,11 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		}
 
 		[Test]
-		public void ShouldCallSetLicenseActivatorWhenNewTenantIsAdded()
-		{
-			var dataSourcesFactory = MockRepository.GenerateMock<IDataSourcesFactory>();
-			var dataSource = new FakeDataSource();
-			dataSourcesFactory.Expect(x => x.Create(null, null, null,null)).IgnoreArguments().Return(dataSource);
-			var setLicenseActivator = MockRepository.GenerateMock<ISetLicenseActivator>();
-
-			var target = new DataSourceForTenant(dataSourcesFactory, setLicenseActivator, null);
-			target.MakeSureDataSourceCreated(RandomName.Make(), null, null, new Dictionary<string, string>());
-
-			setLicenseActivator.AssertWasCalled(x => x.Execute(dataSource.Application));
-		}
-
-		[Test]
 		public void ShouldFetchTenantFromDataSourceIfNotExists()
 		{
-			var existingTenant = new Tenant(RandomName.Make());
-			var createdDataSource = new FakeDataSource();
+			var tenantName = RandomName.Make();
+			var existingTenant = new Tenant(tenantName);
+			var createdDataSource = new FakeDataSource {DataSourceName = tenantName};
 
 			var findTenantByName = new FindTenantByNameWithEnsuredTransactionFake();
 			findTenantByName.Has(existingTenant);
@@ -140,10 +124,10 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 						existingTenant.DataSourceConfiguration.AnalyticsConnectionString,
 						existingTenant.ApplicationConfig)).Return(createdDataSource);
 
-			var target = new DataSourceForTenant(dataSourcesFactory, new SetNoLicenseActivator(), findTenantByName);
+			var target = new DataSourceForTenant(dataSourcesFactory, new NoLicenseServiceInitialization(), findTenantByName);
 
 			target.Tenant(existingTenant.Name)
 				.Should().Be.SameInstanceAs(createdDataSource);
 		}
-}
+	}
 }

@@ -4,7 +4,6 @@ using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
-using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest

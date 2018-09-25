@@ -3,7 +3,6 @@ using System.Globalization;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase;
 using Teleopti.Interfaces.Domain;
 
@@ -15,17 +14,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 		private readonly IDatePickerGlobalizationViewModelFactory _datePickerGlobalizationViewModelFactory;
 		private readonly INow _now;
 		private readonly IUserTimeZone _userTimeZone;
-		private readonly IPermissionProvider _permissionProvider;
 
 		public LayoutBaseViewModelFactory(ICultureSpecificViewModelFactory cultureSpecificViewModelFactory,
 		                                  IDatePickerGlobalizationViewModelFactory datePickerGlobalizationViewModelFactory,
-		                                  INow now, IUserTimeZone userTimeZone, IPermissionProvider permissionProvider)
+		                                  INow now, IUserTimeZone userTimeZone)
 		{
 			_cultureSpecificViewModelFactory = cultureSpecificViewModelFactory;
 			_datePickerGlobalizationViewModelFactory = datePickerGlobalizationViewModelFactory;
 			_now = now;
 			_userTimeZone = userTimeZone;
-			_permissionProvider = permissionProvider;
 		}
 		
 		public LayoutBaseViewModel CreateLayoutBaseViewModel(string title)

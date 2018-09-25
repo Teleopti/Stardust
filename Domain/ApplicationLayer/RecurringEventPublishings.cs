@@ -17,17 +17,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_recurringEventPublisher = recurringEventPublisher;
 		}
 
-		public void PublishRecurringJobs()
+		public void UpdatePublishings()
 		{
+			_allTenantRecurringEventPublisher.RemovePublishingsOfRemovedTenants();
 			_recurringEventPublisher.PublishHourly(new CleanFailedQueue());
 			_allTenantRecurringEventPublisher.PublishMinutely(new TenantMinuteTickEvent());
 			_allTenantRecurringEventPublisher.PublishHourly(new TenantHourTickEvent());
 			_allTenantRecurringEventPublisher.PublishDaily(new TenantDayTickEvent());
-		}
-
-		public void RemovePublishingsOfRemovedTenants()
-		{
-			_allTenantRecurringEventPublisher.RemovePublishingsOfRemovedTenants();
 		}
 
 		public void WithPublishingsForTest(Action action)
@@ -40,8 +36,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			action.Invoke();
 
 			_allTenantRecurringEventPublisher.RemoveAllPublishings();
-
 		}
 	}
-
 }

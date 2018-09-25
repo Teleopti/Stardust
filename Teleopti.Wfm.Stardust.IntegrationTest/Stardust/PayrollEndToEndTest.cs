@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
-using log4net;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -22,7 +21,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
-	[StardustTest, Ignore("Should only be enabled if we make sure that these are not flaky")]
+	[StardustTest] //Explicit("not running now")
 	public class PayrollEndToEndTest
 	{
 		public IStardustSender StardustSender;
@@ -35,17 +34,17 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public IPayrollResultRepository PayrollResultRepository;
 		public TestLog TestLog;
 
-
 		private AssertRetryStrategy _assertRetryStrategy;
 
 		[Test]
-		public void ShouldPublishAndProcessPayrollJob()
+		public void ShouldPublishAndProcessPayrollJob([Range(1, 50, 1)] int rangeCount)
 		{
 			_assertRetryStrategy = new AssertRetryStrategy(100);
 
 			TestLog.Debug("Starting the test for payroll");
 			var period = new DateOnlyPeriod(2016, 02, 20, 2016, 02, 28);
 
+			StardustManagerPingHelper.WaitForStarDustManagerToStart(TestLog);
 			StardustSender.Send(dataSetup(period));
 			TestLog.Debug("Sent job to star dust");
 

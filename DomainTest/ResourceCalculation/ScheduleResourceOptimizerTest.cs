@@ -37,11 +37,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _activityDivider = new ActivityDivider();
 			_personSkillProvider = new PersonSkillProvider();
 
-			_resources = new ResourceCalculationDataContainer(Enumerable.Empty<ExternalStaff>(), _personSkillProvider, 15, false);
+			_resources = new ResourceCalculationDataContainer(Enumerable.Empty<ExternalStaff>(), _personSkillProvider, 15, false, new ActivityDivider());
 			var layers = _personAssignmentListContainer.TestVisualLayerCollection();
 			foreach (var layer in layers)
 			{
-				foreach (var resourceLayer in layer.Item1.ToResourceLayers(15))
+				foreach (var resourceLayer in layer.Item1.ToResourceLayers(15, TimeZoneInfo.Utc))
 				{
 					_resources.AddResources(layer.Item2, new DateOnly(2008, 1, 1), resourceLayer);
 				}

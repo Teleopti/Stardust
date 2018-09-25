@@ -8,11 +8,8 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -29,7 +26,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public MoveShiftLayerCommandHandler Target;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
-		public FakeScheduleDifferenceSaver_DoNotUse ScheduleDifferenceSaver;
 		public FakePersonRepository PersonRepository;
 		public MutableNow Now;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
@@ -39,7 +35,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
 			isolate.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 			isolate.UseTestDouble<MoveShiftLayerCommandHandler>().For<IHandleCommand<MoveShiftLayerCommand>>();
 		}

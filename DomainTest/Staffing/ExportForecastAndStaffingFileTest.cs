@@ -561,7 +561,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			
 			SkillRepository.Add(skill);
 			SkillDayRepository.Add(skillDay);
-			SkillDayRepository.JustGiveMeMySkillDays = true;
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{

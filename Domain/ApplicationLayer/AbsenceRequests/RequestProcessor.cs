@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				{
 					var projection = day.ProjectionService().CreateProjection().FilterLayers(personRequest.Request.Period);
 
-					var layers = projection.ToResourceLayers(skillInterval).ToList();
+					var layers = projection.ToResourceLayers(skillInterval, day.TimeZone).ToList();
 					if (!layers.Any())
 					{
 						continue;

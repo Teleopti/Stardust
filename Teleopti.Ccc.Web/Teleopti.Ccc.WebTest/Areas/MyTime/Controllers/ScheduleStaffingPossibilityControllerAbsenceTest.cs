@@ -427,6 +427,31 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Assert.AreEqual(1, possibilities.ElementAt(0).Possibility);
 			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
 		}
+
+		[Test]
+		public void ShouldGetFairPossibilitiesForAbsenceWhenUnderstaffingIsZeroAndForcastedAndScheduledAreEqual()
+		{
+			var person = User.CurrentUser();
+			var activity1 = createActivity();
+			var skill1 = createSkill("skill1");
+			skill1.StaffingThresholds = createStaffingThresholds(0, 0, 0.1);
+
+			var personSkill1 = createPersonSkill(activity1, skill1);
+			setupIntradayStaffingForSkill(skill1, new double?[] { 10d, 10d }, new double?[] { 10d, 10d });
+
+			addPersonSkillsToPersonPeriod(personSkill1);
+
+			createAssignment(person, activity1);
+			setupWorkFlowControlSet();
+
+			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Absence)
+				.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat()).ToList();
+
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
 		private void setupWorkFlowControlSet()
 		{
 			var absenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
@@ -517,6 +542,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		private static StaffingThresholds createStaffingThresholds()
 		{
 			return new StaffingThresholds(new Percent(-0.3), new Percent(-0.1), new Percent(0.1));
+		}
+
+		private static StaffingThresholds createStaffingThresholds(double seriousUnderstaffing, double understaffing, double overstaffing)
+		{
+			return new StaffingThresholds(new Percent(seriousUnderstaffing), new Percent(understaffing), new Percent(overstaffing));
 		}
 
 		private static IActivity createActivity()

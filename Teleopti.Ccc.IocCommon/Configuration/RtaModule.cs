@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Infrastructure.Aop;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain;
@@ -43,6 +44,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StateQueue>().As<IStateQueueReader>().As<IStateQueueWriter>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateQueueWorker>().AsSelf().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateQueueTenants>().SingleInstance();
+			builder.RegisterType<ActiveTenantsUpdater>().As<IBackgroundProcess>().SingleInstance();
+			builder.RegisterType<ActiveTenants>().SingleInstance();
 			builder.RegisterType<StateQueueUtilities>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateProcessor>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateMapper>().SingleInstance().ApplyAspects();
@@ -71,7 +74,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IHistoricalOverviewReadModelReader>()
 				.As<IHistoricalOverviewReadModelPersister>()
 				.SingleInstance().ApplyAspects();
-			
+
 			builder.RegisterType<KeyValueStorePersister>().As<IKeyValueStorePersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStatePersister>().As<IAgentStatePersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<MappingReadModelPersister>().As<IMappingReadModelPersister>().SingleInstance().ApplyAspects();
@@ -165,9 +168,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RtaTracerSessionFactory>().SingleInstance();
 
 			builder.RegisterType<ConfigurationValidator>().SingleInstance();
-			
-			builder.RegisterType<TenantFromAuthenticationKey>().As<ITenantFinder>().SingleInstance();
 
+			builder.RegisterType<TenantFromAuthenticationKey>().As<ITenantFinder>().SingleInstance();
 		}
 	}
 }

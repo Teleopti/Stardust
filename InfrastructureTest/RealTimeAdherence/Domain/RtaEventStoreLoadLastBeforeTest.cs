@@ -11,6 +11,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 {
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 					Timestamp = "2018-03-07 08:00".Utc()
 				});
 
-			var actual = WithUnitOfWork.Get(() => Events.LoadLastAdherenceEventBefore(personId, "2018-03-07 08:00".Utc())) as PersonStateChangedEvent;
+			var actual = WithUnitOfWork.Get(() => Events.LoadLastAdherenceEventBefore(personId, "2018-03-07 08:00".Utc(), DeadLockVictim.No)) as PersonStateChangedEvent;
 
 			actual.Timestamp.Should().Be("2018-03-06 08:00".Utc());
 		}
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 					Timestamp = "2018-03-06 08:00".Utc()
 				});
 
-			var actual = WithUnitOfWork.Get(() => Events.LoadLastAdherenceEventBefore(personId, "2018-03-07 08:00".Utc())) as PersonStateChangedEvent;
+			var actual = WithUnitOfWork.Get(() => Events.LoadLastAdherenceEventBefore(personId, "2018-03-07 08:00".Utc(), DeadLockVictim.No)) as PersonStateChangedEvent;
 
 			actual.Timestamp.Should().Be("2018-03-06 08:00".Utc());	
 		}
@@ -80,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 					Timestamp = "2018-03-06 08:00".Utc()
 				});
 
-			var actual = WithUnitOfWork.Get(() => Events.LoadLastAdherenceEventBefore(personId, "2018-03-07 08:00".Utc()) as PersonRuleChangedEvent);
+			var actual = WithUnitOfWork.Get(() => Events.LoadLastAdherenceEventBefore(personId, "2018-03-07 08:00".Utc(), DeadLockVictim.No) as PersonRuleChangedEvent);
 
 			actual.Timestamp.Should().Be("2018-03-06 08:00".Utc());
 		}
@@ -88,7 +89,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 		[Test]
 		public void ShouldReturnNullIfNoEarlierEvent()
 		{
-			WithUnitOfWork.Get(() => Events.LoadLastAdherenceEventBefore(Guid.NewGuid(), DateTime.MinValue))
+			WithUnitOfWork.Get(() => Events.LoadLastAdherenceEventBefore(Guid.NewGuid(), DateTime.MinValue, DeadLockVictim.No))
 				.Should().Be.Null();
 		}
 	}

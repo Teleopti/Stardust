@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		{
 			var projection = scheduleDay.ProjectionService().CreateProjection();
 
-			return projection.ToResourceLayers(resolution).Select(layer => new ActivityResourceInterval
+			return projection.ToResourceLayers(resolution, scheduleDay.TimeZone).Select(layer => new ActivityResourceInterval
 			{
 				Activity = layer.PayloadId,
 				Interval = layer.Period,

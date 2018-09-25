@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 {
@@ -48,13 +49,13 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			}
 
 			var events =
-				_eventStore.LoadLastAdherenceEventBefore(personId, period.StartDateTime)
+				_eventStore.LoadLastAdherenceEventBefore(personId, period.StartDateTime, DeadLockVictim.Yes)
 					.AsArray()
 					.Concat(_eventStore.Load(personId, period))
 					.Where(x => x != null)
 					.ToArray();
 
-			var obj = new AgentAdherenceDayWithDurationOfEvents(personId, period, shift, until);
+			var obj = new AgentAdherenceDayWithHistoricalOverview(personId, period, shift, until);
 			events.ForEach(x => obj.Apply((dynamic) x));
 			obj.ApplyDone();
 

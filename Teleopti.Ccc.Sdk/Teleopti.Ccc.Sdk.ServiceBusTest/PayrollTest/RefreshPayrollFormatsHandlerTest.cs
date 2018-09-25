@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -19,20 +18,22 @@ using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 {
-	[TestFixture, Ignore("")]
+	[TestFixture]
 	public class RefreshPayrollFormatsHandlerTest
 	{
 
-		[OneTimeSetUp]
-		public void SetupFixture()
-		{
-			copyFiles(Path.Combine(TestContext.CurrentContext.TestDirectory, "Payroll.DeployNew"),
-				Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Payroll.DeployNew"), "TestTenant");
-		}
+		//[OneTimeSetUp]
+		//public void SetupFixture()
+		//{
+		//	copyFiles(Path.Combine(TestContext.CurrentContext.TestDirectory, "Payroll.DeployNew"),
+		//		Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Payroll.DeployNew"), "TestTenant");
+		//}
 
-		[Test, Ignore("")]
+		[Test]
 		public void CopyPayrollFilesFromSourceToDestination()
 		{
+			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
+			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
 			var tenantName = "TestTenant";
 			var ds = new DataSource(UnitOfWorkFactoryFactoryForTest.CreateUnitOfWorkFactory(tenantName), null, null);
 			var dataSourceForTenant = new FakeDataSourceForTenant(null, null, new FindTenantByNameWithEnsuredTransactionFake());
@@ -67,12 +68,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			payrollFormatRepositoryFactory.CurrentPayrollFormatRepository.LoadAll().Should().Not.Be.Empty();
 			Directory.Exists(tenantDestinationPath).Should().Be.True();
 			Directory.GetFiles(tenantDestinationPath).Should().Not.Be.Empty();
+			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
 
-		[Test, Ignore("")]
+		[Test]
 		public void CopyPayrollFilesFromSourceToDestinationShouldUseDefaultPathIfNotDefined()
 		{
+			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
+			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
 			var tenantName = "TestTenant";
 			var ds = new DataSource(UnitOfWorkFactoryFactoryForTest.CreateUnitOfWorkFactory(tenantName), null, null);
 			var dataSourceForTenant = new FakeDataSourceForTenant(null, null, new FindTenantByNameWithEnsuredTransactionFake());
@@ -93,8 +97,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			}
 
 			var serverConfigurationRepository = new FakeServerConfigurationRepository();
-			//serverConfigurationRepository.Configuration.Add("PayrollSourcePath",
-			//	Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Payroll.DeployNew"));
 			var initializePayrollFormatsUsingAppDomain =
 				new InitializePayrollFormatsUsingAppDomain(dataSourceForTenant, payrollFormatRepositoryFactory);
 			var refreshPayrollFormatsHandler =
@@ -107,27 +109,28 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			payrollFormatRepositoryFactory.CurrentPayrollFormatRepository.LoadAll().Should().Not.Be.Empty();
 			Directory.Exists(tenantDestinationPath).Should().Be.True();
 			Directory.GetFiles(tenantDestinationPath).Should().Not.Be.Empty();
+			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
 
 
-		private static void copyFiles(string sourcePath, string destinationPath,
-			string subdirectoryPath)
-		{
-			var fullSourcePath = Path.Combine(sourcePath, subdirectoryPath);
-			var fullDestinationPath = Path.Combine(destinationPath, subdirectoryPath);
+		//private static void copyFiles(string sourcePath, string destinationPath,
+		//	string subdirectoryPath)
+		//{
+		//	var fullSourcePath = Path.Combine(sourcePath, subdirectoryPath);
+		//	var fullDestinationPath = Path.Combine(destinationPath, subdirectoryPath);
 
-			if (Path.GetFullPath(fullSourcePath) == Path.GetFullPath(fullDestinationPath))
-				return;
+		//	if (Path.GetFullPath(fullSourcePath) == Path.GetFullPath(fullDestinationPath))
+		//		return;
 
-			if (!Directory.Exists(fullDestinationPath))
-				Directory.CreateDirectory(fullDestinationPath);
+		//	if (!Directory.Exists(fullDestinationPath))
+		//		Directory.CreateDirectory(fullDestinationPath);
 
-			foreach (var sourceFile in Directory.GetFiles(fullSourcePath))
-			{
-				var fullDestinationFilename = Path.Combine(fullDestinationPath, Path.GetFileName(sourceFile));
-				File.Copy(sourceFile, fullDestinationFilename, true);
-			}
-		}
+		//	foreach (var sourceFile in Directory.GetFiles(fullSourcePath))
+		//	{
+		//		var fullDestinationFilename = Path.Combine(fullDestinationPath, Path.GetFileName(sourceFile));
+		//		File.Copy(sourceFile, fullDestinationFilename, true);
+		//	}
+		//}
 	}
 }

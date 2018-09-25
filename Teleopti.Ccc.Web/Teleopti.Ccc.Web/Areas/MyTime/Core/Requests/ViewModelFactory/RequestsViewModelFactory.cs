@@ -261,6 +261,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 				OvertimeRequestPermission =
 					_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OvertimeRequestWeb)
 			};
+			permission.RequestListPermission = permission.TextRequestPermission || permission.AbsenceReportPermission || permission.ShiftTradeRequestPermission
+											   || permission.ShiftTradeBulletinBoardPermission || permission.OvertimeAvailabilityPermission;
 			return permission;
 		}
 

@@ -23,7 +23,7 @@
 			data: {
 				date: date,
 				staffingPossiblityType: staffingPossiblityType,
-				returnOneWeekData: false
+				returnOneWeekData: true
 			},
 			success: function(data) {
 				successCallback && successCallback(data);

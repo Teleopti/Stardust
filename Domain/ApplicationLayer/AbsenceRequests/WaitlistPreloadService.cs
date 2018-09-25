@@ -175,7 +175,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			dataHolder.ResCalcData = new ResourceCalculationData(dataHolder.Skills, new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods));
 			
 			var persons = waitlistedRequests.Select(wr => wr.Person).Distinct().ToArray();
-			ExtractSkillForecastIntervals.GetLongestPeriod(dataHolder.Skills, inflatedPeriod);
 			dataHolder.PersonsSchedules =
 				_scheduleStorage.FindSchedulesForPersons(_currentScenario.Current(),
 					persons, new ScheduleDictionaryLoadOptions(false, false), dataHolder.LoadSchedulesPeriodToCoverForMidnightShifts, persons, true);

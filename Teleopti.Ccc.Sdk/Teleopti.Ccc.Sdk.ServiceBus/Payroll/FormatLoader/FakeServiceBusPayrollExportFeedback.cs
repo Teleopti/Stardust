@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 		{
 			PayrollResultDetails.Add(new PayrollResultDetailData(detailLevel, message, exception, DateTime.UtcNow));
 		}
-		public new void ReportProgress(int percentage, string information)
+		public override void ReportProgress(int percentage, string information)
 		{
 			internalAddPayrollDetail(DetailLevel.Info, $"{information} + {percentage}%");
 		}

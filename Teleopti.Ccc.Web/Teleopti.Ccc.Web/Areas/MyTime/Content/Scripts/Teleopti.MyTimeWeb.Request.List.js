@@ -501,7 +501,7 @@
 			_unbind();
 		},
 		HideRequests: function (show) {
-			if (pageViewModel != null)
+			if (pageViewModel != null && Teleopti.MyTimeWeb.Common.IsHostAMobile())
 				pageViewModel.hideRequestsOnPhone(show);
 		}
 

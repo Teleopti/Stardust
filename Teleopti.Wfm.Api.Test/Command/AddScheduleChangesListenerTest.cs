@@ -1,12 +1,11 @@
 ﻿using System.Linq;
 using System.Net.Http;
+using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -30,7 +29,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 					Url = "http://endpoint/",
 					DaysStartFromCurrentDate = -1,
 					DaysEndFromCurrentDate = 1
-				})));
+				}), Encoding.UTF8, "application/json"));
 			result.Result.EnsureSuccessStatusCode();
 
 			var persistedListener = GlobalSettingDataRepository
@@ -55,7 +54,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 					Url = "InvalidUrl",
 					DaysStartFromCurrentDate = -1,
 					DaysEndFromCurrentDate = 1
-				})));
+				}), Encoding.UTF8, "application/json"));
 			JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Successful"]
 				.Value<bool>().Should().Be.False();
 
@@ -77,7 +76,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 					Url = "http://endpoint/",
 					DaysStartFromCurrentDate = 1,
 					DaysEndFromCurrentDate = -1
-				})));
+				}), Encoding.UTF8, "application/json"));
 			JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Successful"]
 				.Value<bool>().Should().Be.False();
 
@@ -98,7 +97,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 					Url = "http://endpoint/",
 					DaysStartFromCurrentDate = -1,
 					DaysEndFromCurrentDate = 1
-				})));
+				}), Encoding.UTF8, "application/json"));
 			JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Successful"]
 				.Value<bool>().Should().Be.False();
 
@@ -119,7 +118,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 					Url = "http://endpoint/",
 					DaysStartFromCurrentDate = -1,
 					DaysEndFromCurrentDate = 1
-				})));
+				}), Encoding.UTF8, "application/json"));
 			JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Successful"]
 				.Value<bool>().Should().Be.False();
 

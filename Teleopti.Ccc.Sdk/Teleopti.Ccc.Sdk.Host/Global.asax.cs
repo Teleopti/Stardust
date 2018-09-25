@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 		private static void registerDataSourcesFactory(ContainerBuilder builder)
 		{
-			builder.RegisterType<SetNoLicenseActivator>().As<ISetLicenseActivator>().SingleInstance();
+			builder.RegisterType<NoLicenseServiceInitialization>().As<IInitializeLicenseServiceForTenant>().SingleInstance();
 		}
 
 		private static void registerSdkFactories(ContainerBuilder builder, IocConfiguration configuration)

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Net.Http;
+using System.Text;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -22,7 +23,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 			ActivityRepository.Add(new Activity("Activity1"));
 			ActivityRepository.Add(new Activity("Activity2"));
 
-			var result = Client.PostAsync("/query/Activity/AllActivities", new StringContent("{}"));
+			var result = Client.PostAsync("/query/Activity/AllActivities", new StringContent("{}", Encoding.UTF8, "application/json"));
 			var activitesObj = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Result"];
 			activitesObj.Count().Should().Be.EqualTo(2);
 		}
