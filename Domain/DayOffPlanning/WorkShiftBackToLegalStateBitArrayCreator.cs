@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
     public interface IWorkShiftBackToLegalStateBitArrayCreator
     {
         ILockableBitArray CreateWeeklyBitArray(int weekIndex, IScheduleMatrixPro scheduleMatrix);
-        ILockableBitArray CreatePeriodBitArray(bool raise, IScheduleMatrixPro scheduleMatrix);
+        ILockableBitArray CreatePeriodBitArray(IScheduleMatrixPro scheduleMatrix);
     }
 
     public class WorkShiftBackToLegalStateBitArrayCreator : IWorkShiftBackToLegalStateBitArrayCreator
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             return ret;
         }
 
-        public ILockableBitArray CreatePeriodBitArray(bool raise, IScheduleMatrixPro scheduleMatrix)
+        public ILockableBitArray CreatePeriodBitArray(IScheduleMatrixPro scheduleMatrix)
         {
             IList<IScheduleDayPro> daysList = scheduleMatrix.FullWeeksPeriodDays;
             ILockableBitArray ret = new LockableBitArray(daysList.Count, false, false, null);
