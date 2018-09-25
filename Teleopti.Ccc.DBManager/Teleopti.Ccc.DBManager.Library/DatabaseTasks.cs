@@ -29,9 +29,10 @@ namespace Teleopti.Ccc.DBManager.Library
 				
 				DECLARE @kill varchar(8000) = '';
 				SELECT @kill = @kill + 'kill ' + CONVERT(varchar(5), spid) + ';'
-				FROM master..sysprocesses 
+				FROM master..sysprocesses  p 
+				INNER JOIN master.sys.dm_exec_sessions s ON s.session_id = p.spid
 				WHERE dbid = db_id('{databaseName}')
-				AND spid >= 50
+				AND s.is_user_process = 1
 				EXEC(@kill);
 				GO
 				
