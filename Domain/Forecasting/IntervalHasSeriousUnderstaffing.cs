@@ -19,11 +19,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			var seriousUnderstaffing = _skill.StaffingThresholds.SeriousUnderstaffing.Value;
 			if (seriousUnderstaffing.Equals(0))
 			{
-				isSatisfied = obj.RelativeDifference <= _skill.StaffingThresholds.SeriousUnderstaffing.Value;
+				isSatisfied = obj.RelativeDifference <= seriousUnderstaffing;
 			}
 			else
 			{
-				isSatisfied = obj.RelativeDifference < _skill.StaffingThresholds.SeriousUnderstaffing.Value;
+				isSatisfied = obj.RelativeDifference < seriousUnderstaffing;
 			}
 			return isSatisfied;
 		}
