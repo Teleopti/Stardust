@@ -26,6 +26,7 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 				.WithTeam(teamId)
 				.WithAgent()
 				.WithHistoricalStateChange("2018-08-24 14:00");
+			Now.Is("2018-08-25 14:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
 

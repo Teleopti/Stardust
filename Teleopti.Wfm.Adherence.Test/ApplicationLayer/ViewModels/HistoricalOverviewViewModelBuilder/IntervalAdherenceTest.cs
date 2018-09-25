@@ -24,7 +24,9 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 			var teamId = Guid.NewGuid();
 			Database
 				.WithTeam(teamId)
-				.WithAgent();
+				.WithAgent()
+				.WithHistoricalStateChange("2018-08-31 08:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral);
+			Now.Is("2018-09-01 14:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
 

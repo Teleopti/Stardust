@@ -27,6 +27,7 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 				.WithTeam(teamId)
 				.WithAgent(agentId)
 				.WithHistoricalStateChange("2018-08-23 14:00");
+			Now.Is("2018-08-24 14:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
 
@@ -43,6 +44,7 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 				.WithAgentNameDisplayedAs("{LastName} {FirstName}")
 				.WithAgent("Bob Anderson")
 				.WithHistoricalStateChange("2018-08-23 14:00");
+			Now.Is("2018-08-24 14:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
 
@@ -59,6 +61,25 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 				.WithAgentNameDisplayedAs("{LastName} {FirstName}")
 				.WithAgent("Lucy Stone")
 				.WithHistoricalStateChange("2018-08-23 14:00");
+			Now.Is("2018-08-24 14:00");
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().Name.Should().Be("Stone Lucy");
+		}
+		
+		[Test]
+		public void ShouldOnlyDisplayAgentsWithData()
+		{
+			Now.Is("2018-08-23 14:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgentNameDisplayedAs("{LastName} {FirstName}")
+				.WithAgent("Lucy Stone")
+				.WithHistoricalStateChange("2018-08-23 14:00")
+				.WithAgent("Bob Anderson");
+			Now.Is("2018-08-24 14:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
 

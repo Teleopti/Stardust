@@ -52,8 +52,8 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 			_sevenDays = _now.UtcDateTime().Date.AddDays(-7).DateRange(7).ToArray();
 			var period = new DateOnlyPeriod(new DateOnly(_sevenDays.First()), new DateOnly(_sevenDays.Last()));
 			var persons = teams.SelectMany(t => _persons.FindPeopleBelongTeam(t, period)).ToArray();
-			_readModel = _reader.Read(persons.Select(p => p.Id.Value).ToArray());
-			var agentsOnTeamForAllDays = groupAgentsOnTeamForAllDays(_sevenDays, persons);
+			_readModel = _reader.Read(persons.Select(p => p.Id.Value).ToArray()).Where(x => x.Date != _now.UtcDateTime().ToDateOnly());
+			var agentsOnTeamForAllDays = groupAgentsOnTeamForAllDays(_sevenDays, persons.Where(p => _readModel.Any(r => r.PersonId == p.Id.Value)).ToArray());
 
 			return (from agentsOnTeam in agentsOnTeamForAllDays
 				select new HistoricalOverviewTeamViewModel
