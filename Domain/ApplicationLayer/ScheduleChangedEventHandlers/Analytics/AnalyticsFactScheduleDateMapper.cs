@@ -1,15 +1,11 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
 	public interface IAnalyticsFactScheduleDateMapper
 	{
-		bool MapDateId(DateOnly date, out int dateId);
-
 		IAnalyticsFactScheduleDate Map(
 			DateTime shiftStartDateUtc,
 			DateTime shiftEndDateUtc,
@@ -21,25 +17,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 	public class AnalyticsFactScheduleDateMapper : IAnalyticsFactScheduleDateMapper
 	{
-		private readonly IAnalyticsDateRepository _analyticsDateRepository;
+		private readonly AnalyticsDateMapper _analyticsDateMapper;
 
-		public AnalyticsFactScheduleDateMapper(IAnalyticsDateRepository analyticsDateRepository)
+		public AnalyticsFactScheduleDateMapper(AnalyticsDateMapper analyticsDateMapper)
 		{
-			_analyticsDateRepository = analyticsDateRepository;
-		}
-
-		public bool MapDateId(DateOnly date, out int dateId)
-		{
-			var noDateIdFound = new AnalyticsDate();
-			var datePair = _analyticsDateRepository.Date(date.Date) ?? noDateIdFound;
-			if (datePair.DateDate == noDateIdFound.DateDate)
-			{
-				dateId = -1;
-				return false;
-			}
-
-			dateId = datePair.DateId;
-			return true;
+			_analyticsDateMapper = analyticsDateMapper;
 		}
 
 		public IAnalyticsFactScheduleDate Map(
@@ -57,11 +39,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			int shiftStartDateId;
 			int shiftEndDateId;
 
-			if (!MapDateId(shiftStartDateLocal, out scheduleStartDateLocalId)) return null;
-			if (!MapDateId(new DateOnly(layer.StartDateTime), out activityStartDateId)) return null;
-			if (!MapDateId(new DateOnly(layer.EndDateTime), out activityEndDateId)) return null;
-			if (!MapDateId(new DateOnly(shiftStartDateUtc), out shiftStartDateId)) return null;
-			if (!MapDateId(new DateOnly(shiftEndDateUtc), out shiftEndDateId)) return null;
+			if (!_analyticsDateMapper.MapDateId(shiftStartDateLocal, out scheduleStartDateLocalId)) return null;
+			if (!_analyticsDateMapper.MapDateId(new DateOnly(layer.StartDateTime), out activityStartDateId)) return null;
+			if (!_analyticsDateMapper.MapDateId(new DateOnly(layer.EndDateTime), out activityEndDateId)) return null;
+			if (!_analyticsDateMapper.MapDateId(new DateOnly(shiftStartDateUtc), out shiftStartDateId)) return null;
+			if (!_analyticsDateMapper.MapDateId(new DateOnly(shiftEndDateUtc), out shiftEndDateId)) return null;
 
 			return new AnalyticsFactScheduleDate
 			{

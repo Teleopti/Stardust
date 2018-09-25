@@ -72,44 +72,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.List<IAnalyticsDate>();
 		}
 
-		private IList<IAnalyticsDate> getRangeInDb(DateTime fromDate, DateTime toDate)
-		{
-			if (fromDate > toDate)
-			{
-				return new List<IAnalyticsDate>();
-			}
-
-			AnalyticsDatePartial analyticsDatePartial = null;
-			return _currentAnalyticsUnitOfWork.Current().Session().QueryOver<AnalyticsDate>()
-				.Where(ad => ad.DateId >= 0 && fromDate <= ad.DateDate && ad.DateDate <= toDate)
-				.SelectList(list => list
-					.Select(d => d.DateId).WithAlias(() => analyticsDatePartial.DateId)
-					.Select(d => d.DateDate).WithAlias(() => analyticsDatePartial.DateDate)
-				)
-				.OrderBy(ad => ad.DateId)
-				.Asc
-				.TransformUsing(Transformers.AliasToBean<AnalyticsDatePartial>())
-				.List<IAnalyticsDate>();
-		}
-
 		public IAnalyticsDate Date(DateTime dateDate)
 		{
 			return dateInDb(dateDate) ?? createDatesTo(dateDate.Date);
-		}
-
-		public IList<IAnalyticsDate> GetRange(DateTime fromDate, DateTime toDate)
-		{
-			if (fromDate > toDate)
-			{
-				return new List<IAnalyticsDate>();
-			}
-
-			if (dateInDb(toDate) == null)
-			{
-				createDatesTo(toDate);
-			}
-
-			return getRangeInDb(fromDate, toDate);
 		}
 
 		private IAnalyticsDate createDatesTo(DateTime dateDate)

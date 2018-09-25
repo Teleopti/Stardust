@@ -12,16 +12,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 	public class AnalyticsFactScheduleDayCountMapper : IAnalyticsFactScheduleDayCountMapper
 	{
-		private readonly IAnalyticsFactScheduleDateMapper _dateMapper;
+		private readonly IAnalyticsFactScheduleDateMapper _factScheduleDateMapper;
 		private readonly IAnalyticsFactScheduleTimeMapper _timeMapper;
+		private readonly AnalyticsDateMapper _analyticsDateMapper;
 
 		public AnalyticsFactScheduleDayCountMapper(
-			IAnalyticsFactScheduleDateMapper dateMapper,
-			IAnalyticsFactScheduleTimeMapper timeMapper)
+			IAnalyticsFactScheduleDateMapper factScheduleDateMapper,
+			IAnalyticsFactScheduleTimeMapper timeMapper,
+			AnalyticsDateMapper analyticsDateMapper)
 
 		{
-			_dateMapper = dateMapper;
+			_factScheduleDateMapper = factScheduleDateMapper;
 			_timeMapper = timeMapper;
+			_analyticsDateMapper = analyticsDateMapper;
 		}
 
 		public IAnalyticsFactScheduleDayCount Map(
@@ -32,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 		{
 			int dateId;
-			if (!_dateMapper.MapDateId(new DateOnly(scheduleDay.Date), out dateId)) return null;
+			if (!_analyticsDateMapper.MapDateId(new DateOnly(scheduleDay.Date), out dateId)) return null;
 
 			DateTime starTime;
 			var absenceId = -1;

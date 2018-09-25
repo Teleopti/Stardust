@@ -193,6 +193,7 @@
     <Compile Include="ApplicationLayer\Events\RefreshPayrollFormatsEvent.cs" />
     <Compile Include="ApplicationLayer\Intraday\ISkillStaffingIntervalProvider.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedule.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsDateMapper.cs" />
     <Compile Include="Budgeting\BudgetGroupAllowanceCalculatorExtended.cs" />
     <Compile Include="Budgeting\BudgetGroupAllowanceCalculatorLimited.cs" />
     <Compile Include="Budgeting\BudgetGroupHeadCountSpecificationExtended.cs" />

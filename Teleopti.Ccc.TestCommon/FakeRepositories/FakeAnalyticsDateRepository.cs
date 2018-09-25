@@ -64,12 +64,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _fakeDates.FirstOrDefault(a => new DateOnly(a.DateDate) == new DateOnly(dateDate)) ?? createDates(dateDate);
 		}
 
-		public IList<IAnalyticsDate> GetRange(DateTime fromDate, DateTime toDate)
-		{
-			return _fakeDates.Where(ad => ad.DateId >= 0 && fromDate <= ad.DateDate && ad.DateDate <= toDate)
-				.ToList();
-		}
-
 		private IAnalyticsDate createDates(DateTime dateDate)
 		{
 			initDates(MaxDate().DateDate.AddDays(1), dateDate, MaxDate().DateId + 1);
