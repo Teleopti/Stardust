@@ -21,13 +21,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly Func<IWorkShiftMinMaxCalculator> _workShiftMinMaxCalculator;
         private readonly FairnessAndMaxSeatCalculatorsManager28317 _fairnessAndMaxSeatCalculatorsManager;
     	private readonly IShiftLengthDecider _shiftLengthDecider;
-	    private readonly IPersonSkillDayCreator _personSkillDayCreator;
+	    private readonly PersonSkillDayCreator _personSkillDayCreator;
 
 	    public WorkShiftFinderService(Func<ISchedulingResultStateHolder> resultStateHolder, Func<IPreSchedulingStatusChecker> preSchedulingStatusChecker
             ,ShiftProjectionCacheFilter shiftProjectionCacheFilter, Func<IPersonSkillPeriodsDataHolderManager> personSkillPeriodsDataHolderManager,  
 			ShiftProjectionCacheManager shiftProjectionCacheManager ,  WorkShiftCalculatorsManager workShiftCalculatorsManager,  
             Func<IWorkShiftMinMaxCalculator> workShiftMinMaxCalculator, FairnessAndMaxSeatCalculatorsManager28317 fairnessAndMaxSeatCalculatorsManager,
-			IShiftLengthDecider shiftLengthDecider, IPersonSkillDayCreator personSkillDayCreator)
+			IShiftLengthDecider shiftLengthDecider, PersonSkillDayCreator personSkillDayCreator)
         {
             _resultStateHolder = resultStateHolder;
             _preSchedulingStatusChecker = preSchedulingStatusChecker;
@@ -240,13 +240,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly Func<IWorkShiftMinMaxCalculator> _workShiftMinMaxCalculator;
         private readonly FairnessAndMaxSeatCalculatorsManager28317 _fairnessAndMaxSeatCalculatorsManager;
     	private readonly IShiftLengthDecider _shiftLengthDecider;
-	    private readonly IPersonSkillDayCreator _personSkillDayCreator;
+	    private readonly PersonSkillDayCreator _personSkillDayCreator;
 
 	    public WorkShiftFinderServiceOLD(Func<ISchedulingResultStateHolder> resultStateHolder, Func<IPreSchedulingStatusChecker> preSchedulingStatusChecker
             ,ShiftProjectionCacheFilter shiftProjectionCacheFilter, Func<IPersonSkillPeriodsDataHolderManager> personSkillPeriodsDataHolderManager,  
 			ShiftProjectionCacheManager shiftProjectionCacheManager ,  WorkShiftCalculatorsManager workShiftCalculatorsManager,  
             Func<IWorkShiftMinMaxCalculator> workShiftMinMaxCalculator, FairnessAndMaxSeatCalculatorsManager28317 fairnessAndMaxSeatCalculatorsManager,
-			IShiftLengthDecider shiftLengthDecider, IPersonSkillDayCreator personSkillDayCreator)
+			IShiftLengthDecider shiftLengthDecider, PersonSkillDayCreator personSkillDayCreator)
         {
             _resultStateHolder = resultStateHolder;
             _preSchedulingStatusChecker = preSchedulingStatusChecker;

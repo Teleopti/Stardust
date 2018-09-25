@@ -1029,7 +1029,6 @@
     <Compile Include="InterfaceLegacy\Domain\IPersonRotation.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonScheduleDayReadModel.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonSkill.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IPersonSkillDayCreator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonSkillPeriodsDataHolderManager.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonWriteProtectionInfo.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPerstistableScheduleData.cs" />
