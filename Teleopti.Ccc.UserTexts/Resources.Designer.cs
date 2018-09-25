@@ -28107,6 +28107,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Request List.
+        /// </summary>
+        public static string RequestList {
+            get {
+                return ResourceManager.GetString("RequestList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Response Action.
         /// </summary>
         public static string RequestResponseAction {

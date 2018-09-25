@@ -17748,4 +17748,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Chat bot</value>
     <comment>Name for chatbot</comment>
   </data>
+  <data name="RequestList" xml:space="preserve">
+    <value>Request List</value>
+    <comment>Use in MyTime Request Model, a sub button name for show all requests history.</comment>
+  </data>
 </root>
