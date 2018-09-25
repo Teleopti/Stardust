@@ -53,17 +53,14 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AuthBridge, Version=1.0.4.129, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\AuthBridge.1.0.4.129\lib\net461\AuthBridge.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="AuthBridge, Version=1.0.4.131, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AuthBridge.1.0.4.131\lib\net461\AuthBridge.dll</HintPath>
     </Reference>
-    <Reference Include="AuthBridge.Web, Version=1.0.4.129, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\AuthBridge.Web.1.0.4.129\lib\net461\AuthBridge.Web.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="AuthBridge.Web, Version=1.0.4.131, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AuthBridge.Web.1.0.4.131\lib\net461\AuthBridge.Web.dll</HintPath>
     </Reference>
-    <Reference Include="ClaimsPolicyEngine, Version=1.0.4.129, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\ClaimsPolicyEngine.1.0.4.129\lib\net461\ClaimsPolicyEngine.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="ClaimsPolicyEngine, Version=1.0.4.131, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClaimsPolicyEngine.1.0.4.131\lib\net461\ClaimsPolicyEngine.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.AspNet, Version=4.1.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
