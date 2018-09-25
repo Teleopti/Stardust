@@ -25,11 +25,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			var understaffingValue = _skill.StaffingThresholds.Understaffing.Value;
 			if (understaffingValue.Equals(0))
 			{
-				isSatified = validatePeriod.RelativeDifference <= _skill.StaffingThresholds.Understaffing.Value;
+				isSatified = validatePeriod.RelativeDifference <= understaffingValue;
 			}
 			else
 			{
-				isSatified = validatePeriod.RelativeDifference < _skill.StaffingThresholds.Understaffing.Value;
+				isSatified = validatePeriod.RelativeDifference < understaffingValue;
 			}
 
 			return isSatified;
