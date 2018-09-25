@@ -64,11 +64,11 @@ namespace DotNetOpenAuth.OpenId {
 		/// <param name="realmUrl">The realm URL to use in the new instance.</param>
 		[SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "Not all realms are valid URLs (because of wildcards).")]
 		public Realm(string realmUrl) {
-			Requires.NotNull(realmUrl, "realmUrl"); // not non-zero check so we throw UriFormatException later
+			Requires.NotNull(realmUrl, nameof(realmUrl)); // not non-zero check so we throw UriFormatException later
 			this.DomainWildcard = Regex.IsMatch(realmUrl, WildcardDetectionPattern);
 			this.uri = new Uri(Regex.Replace(realmUrl, WildcardDetectionPattern, m => m.Groups[1].Value));
-			if (!this.uri.Scheme.Equals("http", StringComparison.OrdinalIgnoreCase) &&
-				!this.uri.Scheme.Equals("https", StringComparison.OrdinalIgnoreCase)) {
+			if (!this.uri.Scheme.Equals(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) &&
+				!this.uri.Scheme.Equals(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)) {
 				throw new UriFormatException(
 					string.Format(CultureInfo.CurrentCulture, OpenIdStrings.InvalidScheme, this.uri.Scheme));
 			}
@@ -79,10 +79,10 @@ namespace DotNetOpenAuth.OpenId {
 		/// </summary>
 		/// <param name="realmUrl">The realm URL of the Relying Party.</param>
 		public Realm(Uri realmUrl) {
-			Requires.NotNull(realmUrl, "realmUrl");
+			Requires.NotNull(realmUrl, nameof(realmUrl));
 			this.uri = realmUrl;
-			if (!this.uri.Scheme.Equals("http", StringComparison.OrdinalIgnoreCase) &&
-				!this.uri.Scheme.Equals("https", StringComparison.OrdinalIgnoreCase)) {
+			if (!this.uri.Scheme.Equals(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) &&
+				!this.uri.Scheme.Equals(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)) {
 				throw new UriFormatException(
 					string.Format(CultureInfo.CurrentCulture, OpenIdStrings.InvalidScheme, this.uri.Scheme));
 			}

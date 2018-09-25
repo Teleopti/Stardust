@@ -50,7 +50,7 @@ namespace DotNetOpenAuth {
 		/// </returns>
 		internal static bool IsTransportSecure(this Uri uri) {
 			Requires.NotNull(uri, "uri");
-			return string.Equals(uri.Scheme, "https", StringComparison.OrdinalIgnoreCase);
+			return string.Equals(uri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase);
 		}
 
 		/// <summary>
@@ -65,8 +65,8 @@ namespace DotNetOpenAuth {
 
 			// We only check for implied ports on HTTP and HTTPS schemes since those
 			// are the only ones supported by OpenID anyway.
-			if ((builder.Port == 80 && string.Equals(builder.Scheme, "http", StringComparison.OrdinalIgnoreCase)) ||
-				(builder.Port == 443 && string.Equals(builder.Scheme, "https", StringComparison.OrdinalIgnoreCase))) {
+			if ((builder.Port == 80 && string.Equals(builder.Scheme, Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase)) ||
+				(builder.Port == 443 && string.Equals(builder.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase))) {
 				// An implied port may be removed.
 				string url = builder.ToString();
 
