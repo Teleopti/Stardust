@@ -1,3 +1,4 @@
+using System;
 using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -6,26 +7,38 @@ using Teleopti.Ccc.Domain.Specification;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
-    public class IntervalHasUnderstaffing : Specification<IValidatePeriod>
-    {
-        private readonly ISkill _skill;
+	public class IntervalHasUnderstaffing : Specification<IValidatePeriod>
+	{
+		private readonly ISkill _skill;
 		private static readonly ILog requestLogger = LogManager.GetLogger("Teleopti.Requests");
 
 		public IntervalHasUnderstaffing(ISkill skill)
-        {
-            _skill = skill;
-        }
-
-        public override bool IsSatisfiedBy(IValidatePeriod validatePeriod)
 		{
+			_skill = skill;
+		}
+
+		public override bool IsSatisfiedBy(IValidatePeriod validatePeriod)
+		{
+			bool isSatified;
 			logIfDebugIsEnabled(validatePeriod);
-			return validatePeriod.RelativeDifference < _skill.StaffingThresholds.Understaffing.Value;
-        }
+
+			var understaffingValue = _skill.StaffingThresholds.Understaffing.Value;
+			if (understaffingValue.Equals(0))
+			{
+				isSatified = validatePeriod.RelativeDifference <= _skill.StaffingThresholds.Understaffing.Value;
+			}
+			else
+			{
+				isSatified = validatePeriod.RelativeDifference < _skill.StaffingThresholds.Understaffing.Value;
+			}
+
+			return isSatified;
+		}
 
 		private void logIfDebugIsEnabled(IValidatePeriod validatePeriod)
 		{
 			if(validatePeriod.DateTimePeriod.StartDateTime == validatePeriod.DateTimePeriod.EndDateTime)
-				requestLogger.Debug(System.Environment.StackTrace);
+				requestLogger.Debug(Environment.StackTrace);
 			
 			switch (validatePeriod)
 			{
@@ -42,5 +55,5 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 		}
 
-    }
+	}
 }
