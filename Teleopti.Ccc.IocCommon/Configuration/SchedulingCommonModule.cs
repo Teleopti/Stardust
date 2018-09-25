@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SchedulingResultStateHolderProvider>().As<ISchedulingResultStateHolderProvider>().SingleInstance();
 			builder.RegisterType<ScheduleDayForPerson>().As<IScheduleDayForPerson>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleRangeForPerson>().As<IScheduleRangeForPerson>().InstancePerLifetimeScope();
-			builder.RegisterType<PreSchedulingStatusChecker>().As<IPreSchedulingStatusChecker>().InstancePerLifetimeScope();
+			builder.RegisterType<PreSchedulingStatusChecker>().InstancePerLifetimeScope();
 			builder.RegisterType<NightRestWhiteSpotSolverServiceFactory>().As<INightRestWhiteSpotSolverServiceFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<NumberOfAgentsKnowingSkill>().SingleInstance();
 			builder.RegisterType<ReduceSkillSets>().SingleInstance();

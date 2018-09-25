@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public class PreSchedulingStatusChecker : IPreSchedulingStatusChecker
+    public class PreSchedulingStatusChecker
     {
         private DateTime _scheduleDayUtc;
         private DateOnly _scheduleDateOnly;
