@@ -98,9 +98,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			var ret = _target.CheckStatus(_part, _schedulingOptions);
             Assert.IsFalse(ret);
-            Assert.AreEqual(_person, _target.Person);
-            Assert.AreEqual(_scheduleDateOnly, _target.ScheduleDateOnly);
-            Assert.AreEqual(new DateTime(2009, 02,02, 04, 00, 00, 00, DateTimeKind.Utc), _target.ScheduleDayUtc);
         }
 
         [Test]
