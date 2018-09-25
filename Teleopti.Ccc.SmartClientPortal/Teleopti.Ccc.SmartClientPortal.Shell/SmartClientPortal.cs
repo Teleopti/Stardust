@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			logInfo(" Bu loaded for data protection EO:URL= " + webViewDataProtection.Url);
 			webViewDataProtection.LoadCompleted -= dataProtectionWebViewOnLoadCompletedSetBusinessUnit;
-			webViewDataProtection.LoadUrl($"{webServer}WFM/index_desktop_client.html#/fdpa?timestamp={DateTime.Now}");
+			webViewDataProtection.LoadUrl($"{webServer}WFM/index_desktop_client.html#/fdpa");
 		}
 
 
