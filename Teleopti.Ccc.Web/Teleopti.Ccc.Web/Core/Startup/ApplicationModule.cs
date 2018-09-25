@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			yield return "/css/";
 			yield return "/html/";
 			yield return "/vendor/";
+			yield return "/rta/state/";
 		}
 
 		private static IEnumerable<string> ignoreStartupErrors()
