@@ -1,14 +1,14 @@
-angular.module('wfm.forecasting').component('forecastHistoryChart', {
+angular.module("wfm.forecasting").component("forecastHistoryChart", {
 	template: '<div id="{{$ctrl.chartId}}" class="wfm-chart forecast-history-chart" ng-click=""></div>',
 	controller: ForecastHistoryChartController,
 	bindings: {
-		chartId: '=',
-		selectable: '=',
-		days: '='
+		chartId: "=",
+		selectable: "=",
+		days: "="
 	}
 });
 
-function ForecastHistoryChartController($translate, $filter, $timeout, SkillTypeService) {
+function ForecastHistoryChartController($translate, $timeout, SkillTypeService) {
 	var ctrl = this;
 	var chart;
 	ctrl.refresh = drawForecastHistoryChart;
@@ -27,14 +27,10 @@ function ForecastHistoryChartController($translate, $filter, $timeout, SkillType
 		}
 
 		var preparedData = {
-			dateSeries: ['Date'],
-			originalSeries: ['OriginalTasks'],
-			validatedSeries: ['ValidatedTasks']
+			dateSeries: ["Date"],
+			originalSeries: ["OriginalTasks"],
+			validatedSeries: ["ValidatedTasks"]
 		};
-
-
-		var selectItems = [];
-		//ctrl.onClick(ctrl.selectedDays);
 		var selectedWorkload;
 		if (sessionStorage.currentForecastWorkload) {
 			selectedWorkload = angular.fromJson(sessionStorage.currentForecastWorkload);
@@ -46,51 +42,47 @@ function ForecastHistoryChartController($translate, $filter, $timeout, SkillType
 
 		for (var i = 0; i < days.length; i++) {
 			var date = moment(days[i].Date);
-			preparedData.dateSeries.push(date.format('L'));
+			preparedData.dateSeries.push(date.format("L"));
 			preparedData.originalSeries.push(days[i].OriginalTasks);
 			preparedData.validatedSeries.push(days[i].ValidatedTasks);
 		}
 
 		chart = c3.generate({
-			bindto: '#' + chartId,
+			bindto: "#" + chartId,
 			data: {
-				x: 'Date',
+				x: "Date",
 				columns: [preparedData.dateSeries, preparedData.originalSeries, preparedData.validatedSeries],
-
+				colors: {
+					OriginalTasks: "#EE8F7D",
+					ValidatedTasks: "#0099FF"
+				},
 				names: {
-					Date: $translate.instant('Date'),
+					Date: $translate.instant("Date"),
 					OriginalTasks: dataName.OriginalTasks,
 					ValidatedTasks: dataName.ValidatedTasks
 					
-				},
-				colors: {
-					OriginalTasks: '#EE8F7D',
-					ValidatedTasks: '#0099FF'
 				}
 			},
 			subchart: {
 				show: true
 			},
-			tooltip: {
-				format: {
-					value: d3.format('.1f')
-				}
-			},
 			axis: {
 				x: {
-					type: 'category',
+					type: "category",
 					tick: {
 						culling: {
-							max: 10
+							max: 10,
+							format: "%Y-%m-%d"
 						},
 						multiline: false
 					}
 				},
 				y: {
 					label: {
-						text: $translate.instant('Count'),
-						position: 'outer-middle'
-					}
+						text: $translate.instant("Count"),
+						position: "outer-middle"
+					},
+					padding: { top: 10, bottom: 10 }
 				}
 			}
 		});
