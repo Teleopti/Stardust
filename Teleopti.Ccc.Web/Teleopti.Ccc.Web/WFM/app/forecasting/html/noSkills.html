@@ -2,7 +2,7 @@
 	<div class="view-header with-fab with-desc">
 		<div class="view-title">
 			<h1><i class="mdi mdi-chart-line"></i> {{'Forecasts' | translate}}</h1>
-			<p translate>Skills</p>
+			<p>{{'Skills' | translate}}</p>
 		</div>
 	</div>
 	<div class="con-row">
@@ -12,11 +12,11 @@
 				<h2 class="line-center">
 					{{'BeforeRunningAForecastYouNeedToCreateASkillDot' | translate }}
 				</h2>
-				<a ui-sref="forecast-create-skill" ng-cloak>
+				<form ui-sref="forecast-create-skill" ng-cloak>
 					<button class="wfm-btn wfm-btn-primary line-center">
 						{{'NewSkill' | translate}}
 						</button>
-				</a>
+				</form>
 			</div>
 		</div>
 	</div>
