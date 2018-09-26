@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using Autofac;
 using EO.Base;
 using EO.WebBrowser;
+using EO.WebEngine;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.SmartClientPortal.Shell.Controls;
@@ -95,6 +96,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			KeyPreview = true;
 			KeyDown += formKeyDown;
 			KeyPress += Form_KeyPress;
+			WebView.ShowDebugUI();
 
 			webViewDataProtection.RegisterJSExtensionFunction("yesResponseCallback", yesResponse);
 			webViewDataProtection.RegisterJSExtensionFunction("noOrNotNowResponseCallback", noResponse);
@@ -139,9 +141,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			logInfo(" Bu loaded for data protection EO:URL= " + webViewDataProtection.Url);
 			webViewDataProtection.LoadCompleted -= dataProtectionWebViewOnLoadCompletedSetBusinessUnit;
-			webViewDataProtection.LoadUrl($"{webServer}WFM/index_desktop_client.html#/fdpa");
+			webViewDataProtection.LoadUrl($"{webServer}WFM/index_desktop_client.html?r={DateTime.UtcNow.Ticks.ToString()}#/fdpa");
 		}
-
 
 		void formKeyDown(object sender, KeyEventArgs e)
 		{
