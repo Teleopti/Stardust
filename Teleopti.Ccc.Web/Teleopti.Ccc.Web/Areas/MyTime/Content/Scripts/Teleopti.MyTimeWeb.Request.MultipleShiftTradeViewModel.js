@@ -432,6 +432,7 @@
 	self.sendRequest = function() {
 		self.saveNewShiftTrade();
 		self.chooseAgent(null);
+		Teleopti.MyTimeWeb.Request.List.HideRequests(false);
 		self.goToFirstPage();
 	};
 
