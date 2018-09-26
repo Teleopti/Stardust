@@ -32,8 +32,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public virtual JsonResult<IEnumerable<ConfigurationModel>> GetAllConfigurations()
 		{
 			var serverConfigurations = _serverConfigurationRepository.AllConfigurations().ToArray();
-			if (!_toggleManager.IsEnabled(Toggles.Tenant_PurgeLogonAttempts_75782))
-				serverConfigurations = serverConfigurations.Where(sc => sc.Key != logonAttempsDays).ToArray();
 
 			return Json(map(serverConfigurations));
 		}
