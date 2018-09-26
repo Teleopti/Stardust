@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	{
 		private readonly AllTenantRecurringEventPublisher _allTenantRecurringEventPublisher;
 		private readonly IRecurringEventPublisher _recurringEventPublisher;
+		private bool _initialized;
 
 		public RecurringEventPublishings(
 			AllTenantRecurringEventPublisher allTenantRecurringEventPublisher,
@@ -19,8 +20,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public void UpdatePublishings()
 		{
-			_allTenantRecurringEventPublisher.RemovePublishingsOfRemovedTenants();
-			_recurringEventPublisher.PublishHourly(new CleanFailedQueue());
+			if (!_initialized)
+			{
+				_allTenantRecurringEventPublisher.RemoveAllPublishings();
+				_recurringEventPublisher.PublishHourly(new CleanFailedQueue());
+				_initialized = true;
+			}
+			else
+			{
+				_allTenantRecurringEventPublisher.RemovePublishingsOfRemovedTenants();
+			}
+
 			_allTenantRecurringEventPublisher.PublishMinutely(new TenantMinuteTickEvent());
 			_allTenantRecurringEventPublisher.PublishHourly(new TenantHourTickEvent());
 			_allTenantRecurringEventPublisher.PublishDaily(new TenantDayTickEvent());
