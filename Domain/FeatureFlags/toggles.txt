@@ -120,7 +120,6 @@ WFM_Intraday_Redesign_77214 = RC
 
 # Ziggy #
 WfmStaffing_AddOvertime_42524 = RC
-People_ImprovePersonAccountAccuracy_74914 = true
 Staffing_BPO_Visualization_74958 = true
 Tenant_PurgeLogonAttempts_75782 = true
 Tenant_PurgeNoneEmployeesData_76291 = true
