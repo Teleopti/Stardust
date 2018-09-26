@@ -32,8 +32,7 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 			var teamId = Guid.NewGuid();
 			Database
 				.WithSite("Barcelona")
-				.WithTeam(teamId, "Blue")
-				.WithHistoricalStateChange("2018-08-23 14:00");
+				.WithTeam(teamId, "Blue");
 
 			Target.Build(null, new[] {teamId})
 				.Should().Have.SameValuesAs(Enumerable.Empty<HistoricalOverviewTeamViewModel>());
@@ -78,7 +77,6 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 		{
 			Now.Is("2018-08-23 14:00");
 			var siteId = Guid.NewGuid();
-
 			Database
 				.WithSite(siteId, "Barcelona")
 				.WithTeam("Blue")
@@ -120,7 +118,6 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 		{
 			Now.Is("2018-08-23 14:00");
 			var siteId = Guid.NewGuid();
-
 			Database
 				.WithSite(siteId)
 				.WithTeam("Blue")
@@ -136,7 +133,6 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 		{
 			Now.Is("2018-08-23 14:00");
 			var teamId = Guid.NewGuid();
-
 			Database
 				.WithTeam(teamId)
 				.WithAgent()
@@ -144,7 +140,21 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 
 			Target.Build(null, new[] {teamId})
 				.Should().Have.SameValuesAs(Enumerable.Empty<HistoricalOverviewTeamViewModel>());
-		}		
+		}	
 		
+		[Test]
+		public void ShouldGetEmptyModelIfNoValidAgent()
+		{
+			Now.Is("2018-08-23 14:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithSite("Barcelona")
+				.WithTeam(teamId, "Blue")
+				.WithHistoricalStateChange("2018-08-23 14:00");
+			Now.Is("2018-08-24 14:00");
+            
+			Target.Build(null, new[] {teamId})
+				.Should().Have.SameValuesAs(Enumerable.Empty<HistoricalOverviewTeamViewModel>());
+		}	
 	}
 }
