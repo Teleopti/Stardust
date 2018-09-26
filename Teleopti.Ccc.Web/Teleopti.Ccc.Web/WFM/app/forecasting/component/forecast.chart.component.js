@@ -149,6 +149,14 @@ function ForecastChartCtrl($translate, $timeout, SkillTypeService) {
 			subchart: {
 				show: true
 			},
+			tooltip: {
+				format: {
+					value: d3.format(".1f")
+				},
+				order: function (t1, t2) {
+					return t1.id < t2.id;
+				}
+			},
 			axis: {
 				x: {
 					type: "category",
