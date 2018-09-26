@@ -59,7 +59,6 @@
 		Wfm_Requests_Approve_Based_On_Intraday_39868,
 		Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274,
 		Wfm_Requests_NightShift_BudgetDay_Allowance_76599,
-		AddOrRemoveTenantsWithoutRestart_43635,
 		Wfm_Requests_NightShift_BudgetDay_HeadCount_77146,
 
 		Wfm_People_ImportAndCreateAgentFromFile_42528,
