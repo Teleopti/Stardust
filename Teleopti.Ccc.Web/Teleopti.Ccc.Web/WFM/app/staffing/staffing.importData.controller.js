@@ -55,7 +55,6 @@
 		vm.ClearErrorMessage = '';
 		vm.ExportPeriodMessage = 'DefaultHejsan';
 		vm.ExportBpoPeriodMessage = 'DefaultHejsan';
-		vm.isBpoVisualizeEnabled = isBpoVisualizeEnabled;
 		vm.isClearBpoEnabled = isClearBpoEnabled;
 		vm.isMultiSkillExportEnabled = isMultiSkillExportEnabled;
 		vm.GetRangeMessage = getRangeMessage;
@@ -236,10 +235,6 @@
 				vm.selectedSkillArea = null;
 				selectedAreaChange(angular.fromJson($window.sessionStorage.staffingSelectedArea));
 			}
-		}
-
-		function isBpoVisualizeEnabled() {
-			return toggleService.Staffing_BPO_Visualization_74958;
 		}
 
 		function isClearBpoEnabled() {
