@@ -141,7 +141,9 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Tracer
 		{
 			var serialized = loggingEvent.RenderedMessage;
 			var obj = _deserializer.DeserializeObject<dynamic>(serialized);
-			((IDbDataParameter) command.Parameters[ParameterName]).Value = ValueReader.Invoke(obj);
+			var value = ValueReader.Invoke(obj);
+			var parameter = (IDbDataParameter) command.Parameters[ParameterName];
+			parameter.Value = value == null ? DBNull.Value : ValueReader.Invoke(obj);
 		}
 	}
 }

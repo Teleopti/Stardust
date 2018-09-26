@@ -86,16 +86,17 @@ namespace Teleopti.Wfm.Adherence.Tracer
 		public void Stop() => _config.DeleteForTenant();
 		public void Clear() => _writer.Clear();
 
-		public void ProcessReceived(string method, int? count) => writeForCurrentOrConfigured(new ProcessReceivedLog
+		public void ProcessReceived(string method, int? count) => writeProcessTrace(new ProcessReceivedLog
 		{
-			ReceivedAt = _now.UtcDateTime(),
-			ReceivedBy = method,
-			ReceivedCount = count ?? 0
+			At = _now.UtcDateTime(),
+			By = method,
+			Count = count ?? 0
 		}, "Data received at");
 
-		public void ProcessProcessing() => writeForCurrentOrConfigured(new ProcessProcessingLog {ProcessingAt = _now.UtcDateTime()}, "Processing");
-		public void ProcessActivityCheck() => writeForCurrentOrConfigured(new ActivityCheckLog {ActivityCheckAt = _now.UtcDateTime()}, "Activity check at");
-		public void ProcessException(Exception exception) => writeForCurrentOrConfigured(new ProcessExceptionLog {Type = exception.GetType().Name, Info = exception.ToString()}, exception.Message);
+		public void ProcessEnqueuing(int? count) => writeProcessTrace(new ProcessEnqueuingLog {At = _now.UtcDateTime(), Count = count ?? 0}, "Enqueuing");
+		public void ProcessProcessing(int? count) => writeProcessTrace(new ProcessProcessingLog {At = _now.UtcDateTime(), Count = count ?? 0}, "Processing");
+		public void ProcessActivityCheck() => writeProcessTrace(new ProcessActivityCheckLog {At = _now.UtcDateTime()}, "Activity check at");
+		public void ProcessException(Exception exception) => writeProcessTrace(new ProcessExceptionLog {Type = exception.GetType().Name, Info = exception.ToString()}, exception.Message);
 
 		public void For(IEnumerable<StateTraceLog> traces, Action<StateTraceLog> trace)
 		{
@@ -154,17 +155,15 @@ namespace Teleopti.Wfm.Adherence.Tracer
 			return _tracers;
 		}
 
-		private void writeForCurrentOrConfigured<T>(T log, string message)
+		private void writeProcessTrace<T>(T log, string message)
 		{
 			if (!enabled())
 				return;
-			var allTracers = tracers();
-			var hasCurrentTenant = _dataSource.CurrentName() != null;
-			var currentTenantTracer = allTracers.Where(x => x.Tenant == _dataSource.CurrentName());
-			var tracersToWrite = hasCurrentTenant ? currentTenantTracer : allTracers;
-			tracersToWrite.ForEach(t =>
-				justWrite(log, message, t.Tenant)
-			);
+			var tenant = _dataSource.CurrentName();
+			var noTenant = tenant == null;
+			var currentTenantEnabled = tracers().Any(x => x.Tenant == tenant);
+			if (noTenant || currentTenantEnabled)
+				justWrite(log, message, tenant);
 		}
 
 		private StateTraceLog startStateTrace(tracer tracer, string stateCode, string message)

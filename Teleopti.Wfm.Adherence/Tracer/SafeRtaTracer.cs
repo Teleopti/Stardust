@@ -24,10 +24,13 @@ namespace Teleopti.Wfm.Adherence.Tracer
 		public void Clear() => _unsafe.Clear();
 
 		public void ProcessReceived(string method, int? count) => safely(() => _unsafe.ProcessReceived(method, count));
-		public void ProcessProcessing() => safely(() => _unsafe.ProcessProcessing());
+		public void ProcessEnqueuing(int? count) => safely(() => _unsafe.ProcessEnqueuing(count));
+		public void ProcessProcessing(int? count) => safely(() => _unsafe.ProcessProcessing(count));
 		public void ProcessActivityCheck() => safely(() => _unsafe.ProcessActivityCheck());
 		public void ProcessException(Exception exception) => safely(() => _unsafe.ProcessException(exception));
+
 		public void For(IEnumerable<StateTraceLog> traces, Action<StateTraceLog> trace) => safely(() => _unsafe.For(traces, trace));
+
 		public StateTraceLog StateReceived(string userCode, string stateCode) => safely(() => _unsafe.StateReceived(userCode, stateCode));
 		public StateTraceLog ActivityCheck(Guid personId) => safely(() => _unsafe.ActivityCheck(personId));
 		public StateTraceLog SnapshotLogout(Guid personId, string stateCode) => safely(() => _unsafe.SnapshotLogout(personId, stateCode));

@@ -11,15 +11,23 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 	{
 		private readonly ICurrentDataSource _dataSource;
 		private readonly List<object> _data = new List<object>();
+		private string _tenant;
 
 		public FakeRtaTracerPersister(ICurrentDataSource dataSource)
 		{
 			_dataSource = dataSource;
 		}
 
+		public FakeRtaTracerPersister WithCurrentTenant()
+		{
+			_tenant = _dataSource.CurrentName();
+			return this;
+		}
+		
 		public FakeRtaTracerPersister Has<T>(params RtaTracerLog<T>[] datas)
 		{
-			datas.ForEach(x => x.Tenant = _dataSource.CurrentName());
+			if (_tenant != null)
+				datas.ForEach(x => x.Tenant = _tenant);
 			_data.AddRange(datas);
 			return this;
 		}
@@ -27,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public IEnumerable<RtaTracerLog<T>> ReadOfType<T>()
 		{
 			return _data.OfType<RtaTracerLog<T>>()
-				.Where(x => x.Tenant == _dataSource.CurrentName())
+				.Where(x => x.Tenant == _dataSource.CurrentName() || x.Tenant == null)
 				.ToArray();
 		}
 
@@ -48,5 +56,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public void Purge()
 		{
 		}
+
 	}
 }

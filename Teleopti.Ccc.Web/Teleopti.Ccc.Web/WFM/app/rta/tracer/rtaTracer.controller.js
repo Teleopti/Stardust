@@ -41,15 +41,36 @@
 								return {
 									at: d.At,
 									by: d.By,
-									count: d.Count
+									count: d.Count,
+									tenant: d.Tenant
 								}
 							}),
-							activityCheckAt: tracer.ActivityCheckAt,
+							dataEnqueuing: (tracer.DataEnqueuing || []).map(function (d) {
+								return {
+									at: d.At,
+									count: d.Count,
+									tenant: d.Tenant
+								}
+							}),
+							dataProcessing: (tracer.DataProcessing || []).map(function (d) {
+								return {
+									at: d.At,
+									count: d.Count,
+									tenant: d.Tenant
+								}
+							}),
+							activityCheck: (tracer.ActivityCheck || []).map(function (d) {
+								return {
+									at: d.At,
+									tenant: d.Tenant
+								}
+							}),
 							tracing: tracer.Tracing,
 							exceptions: (tracer.Exceptions || []).map(function (e) {
 								return {
 									exception: e.Exception,
 									at: e.At,
+									tenant: e.Tenant,
 									toggleDisplay: function () {
 										if (vm.exception === e.Info)
 											vm.exception = undefined;

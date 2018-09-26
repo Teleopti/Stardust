@@ -271,6 +271,7 @@
     <Compile Include="Tracer\RtaTracerProcessTraceTest.cs" />
     <Compile Include="Tracer\RtaTracerStateTraceTest.cs" />
     <Compile Include="Tracer\RtaTracerTenantTest.cs" />
+    <Compile Include="Tracer\RtaTracerViewModelBuilderTenantTest.cs" />
     <Compile Include="Tracer\RtaTracerViewModelBuilderTest.cs" />
   </ItemGroup>
   <ItemGroup>

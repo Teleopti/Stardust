@@ -17,7 +17,8 @@ namespace Teleopti.Wfm.Adherence.Tracer
 
 
 		void ProcessReceived(string method, int? count);
-		void ProcessProcessing();
+		void ProcessEnqueuing(int? count);
+		void ProcessProcessing(int? count);
 		void ProcessActivityCheck();
 		void ProcessException(Exception exception);
 
