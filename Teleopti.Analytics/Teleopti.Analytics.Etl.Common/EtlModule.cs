@@ -39,10 +39,7 @@ namespace Teleopti.Analytics.Etl.Common
 			builder.RegisterType<JobExtractor>().SingleInstance();
 			builder.RegisterType<JobHelper>().SingleInstance();
 			
-			if(_configuration.Toggle(Toggles.AddOrRemoveTenantsWithoutRestart_43635))
-				builder.RegisterType<Tenants>().As<ITenants>().SingleInstance();
-			else
-				builder.RegisterType<TenantsOld>().As<ITenants>().SingleInstance();
+			builder.RegisterType<Tenants>().As<ITenants>().SingleInstance();
 			
 			builder.RegisterType<TenantsLoadedInEtl>().As<IAllTenantNames>().SingleInstance();
 			builder.RegisterType<BaseConfigurationRepository>().As<IBaseConfigurationRepository>().SingleInstance();

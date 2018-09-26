@@ -15,14 +15,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		IValidatedRequest Validate(IAbsenceRequest absenceRequest, IEnumerable<IPersonSkill> personSkills, IScheduleRange scheduleRange);
 	}
 
-	public class AnyPersonSkillOpenTrueValidator : IAnyPersonSkillsOpenValidator
-	{
-		public IValidatedRequest Validate(IAbsenceRequest absenceRequest, IEnumerable<IPersonSkill> personSkills, IScheduleRange scheduleRange)
-		{
-			return new ValidatedRequest() { IsValid = true };
-		}
-	}
-
 	public class AnyPersonSkillsOpenValidator : IAnyPersonSkillsOpenValidator
 	{
 		private readonly ISkillRepository _skillRepository;

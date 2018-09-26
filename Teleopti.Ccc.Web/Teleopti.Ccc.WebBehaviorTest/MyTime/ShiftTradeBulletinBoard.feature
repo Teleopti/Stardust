@@ -517,3 +517,10 @@ Scenario: Should show my shift and other shifts filtered by site open hours in b
 	| Start time	| 08:00 |
 	| End time		| 17:00 |
 	And I should see a possible schedule trade with 'OtherAgent'
+
+@OnlyRunIfEnabled('MyTimeWeb_Request_CleanUpRequestHisotry_77776')
+Scenario: Should not see request list in bulletin board view
+	Given I am an agent
+	And I have an existing text request
+	When I view Bulletin Board
+	Then I should not see any request in current view

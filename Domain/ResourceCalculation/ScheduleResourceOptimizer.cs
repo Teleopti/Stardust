@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				if (_skillStaffPeriods.TryGetValue(skill, out skillStaffPeriodDic))
 				{
 					IResourceCalculationPeriod skillStaffPeriod;
-					var completeIntervalPeriodAdjusted = _activityDivider.FetchPeriodForSkill(completeIntervalPeriod, skill);
+					var completeIntervalPeriodAdjusted = _activityDivider.FetchPeriodForSkill(completeIntervalPeriod, skill.TimeZone);
 					if (skillStaffPeriodDic.TryGetValue(completeIntervalPeriodAdjusted, out skillStaffPeriod))
 					{
 						skillStaffPeriod.SetCalculatedResource65(0);
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				IResourceCalculationPeriodDictionary skillStaffPeriodDictionary;
 				if (!_skillStaffPeriods.TryGetValue(skill, out skillStaffPeriodDictionary)) continue;
 				IResourceCalculationPeriod staffPeriod;
-				var intervalPeriodAdjusted = _activityDivider.FetchPeriodForSkill(intervalPeriod, skill);
+				var intervalPeriodAdjusted = _activityDivider.FetchPeriodForSkill(intervalPeriod, skill.TimeZone);
 				if (skillStaffPeriodDictionary.TryGetResolutionAdjustedValue(skill, intervalPeriodAdjusted, out staffPeriod))
 				{
 					staffPeriod.ResetMultiskillMinOccupancy();

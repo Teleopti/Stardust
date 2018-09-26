@@ -1,23 +1,19 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
-using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
-using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.Tracking;
-using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -28,50 +24,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture]
 	[DomainTest]
-	class ApproveRequestCommandHandlerTest
+	public class ApproveRequestCommandHandlerTest : IIsolateSystem
 	{
-		private IScenario _scenario;
-		private FakePersonRequestRepository _personRequestRepository;
-		private FakePersonAbsenceAccountRepository _personAbsenceAccountRepository;
-		private FakeScheduleStorage_DoNotUse _fakeScheduleStorage;
-		private FakeScheduleDifferenceSaver_DoNotUse _scheduleDifferenceSaver;
-		private RequestApprovalServiceFactory _requestApprovalServiceFactory;
-		private ApproveRequestCommandHandler _approveRequestCommandHandler;
-
-		[SetUp]
-		public void Setup()
-		{
-			var scenarioRepository = new FakeScenarioRepository();
-			_scenario = scenarioRepository.Has("Default");
-			_personRequestRepository = new FakePersonRequestRepository();
-			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
-
-			_fakeScheduleStorage = new FakeScheduleStorage_DoNotUse();
-			_scheduleDifferenceSaver = new FakeScheduleDifferenceSaver_DoNotUse(_fakeScheduleStorage, new EmptyScheduleDayDifferenceSaver());
-
-			var businessRules = new BusinessRulesForPersonalAccountUpdate(_personAbsenceAccountRepository, new SchedulingResultStateHolder());
-
-			var overtimeRequestSkillProvider = MockRepository.GenerateMock<IOvertimeRequestSkillProvider>();
-			overtimeRequestSkillProvider.Stub(s => s.GetAvailableSkillsBySkillType(null, new DateTimePeriod()))
-				.IgnoreArguments()
-				.Return(new ISkill[] {});
-			_requestApprovalServiceFactory = new RequestApprovalServiceFactory(
-				new SwapAndModifyService(null, null),
-				new FakeGlobalSettingDataRepository(),
-				businessRules, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), new DoNothingScheduleDayChangeCallBack()
-				, null, null, overtimeRequestSkillProvider, null, new FakePersonRequestRepository(),null, null
-			);
-
-			var writeProtectedScheduleCommandValidator = new WriteProtectedScheduleCommandValidator(
-				new FakePermissions(), new FakeCommonAgentNameProvider(), new FakeLoggedOnUser(), new SwedishCulture());
-
-			_approveRequestCommandHandler = new ApproveRequestCommandHandler(
-				_fakeScheduleStorage, _scheduleDifferenceSaver,
-				new PersonRequestAuthorizationCheckerForTest(),
-				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
-				_personRequestRepository, _requestApprovalServiceFactory,
-				new DefaultScenarioFromRepository(scenarioRepository), writeProtectedScheduleCommandValidator);
-		}
+		public FakeScenarioRepository ScenarioRepository;
+		public FakePersonRequestRepository PersonRequestRepository;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
+		public ApproveRequestCommandHandler Target;
 
 		[Test]
 		public void ShouldUpdatePersonalAccountWhenRequestIsGranted()
@@ -83,10 +42,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var accountDay = createAccountDay(person, absence, new DateOnly(2015, 12, 1));
 
-			addAssignment(person, absenceDateTimePeriod);
+			addAssignment(person, ScenarioRepository.Has("Default"), absenceDateTimePeriod);
 			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
 
-			_approveRequestCommandHandler.Handle(new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value });
+			Target.Handle(new ApproveRequestCommand {PersonRequestId = personRequest.Id.Value});
 
 			Assert.IsTrue(personRequest.IsApproved);
 			Assert.AreEqual(24, accountDay.Remaining.TotalDays);
@@ -100,14 +59,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var person = PersonFactory.CreatePersonWithId();
 			var absence = new Absence();
 
-			var accountDay = createAccountDay(person, absence, new DateOnly(2015, 12, 1));
+			createAccountDay(person, absence, new DateOnly(2015, 12, 1));
 
-			addAssignment(person, absenceDateTimePeriod);
+			addAssignment(person, ScenarioRepository.Has("Default"), absenceDateTimePeriod);
 			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
 
-			_approveRequestCommandHandler.Handle(new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value });
+			Target.Handle(new ApproveRequestCommand
+				{PersonRequestId = personRequest.Id.Value});
 
-			var personAbsence = ((IAbsenceApprovalService)_approveRequestCommandHandler.GetRequestApprovalService()).GetApprovedPersonAbsence();
+			var personAbsence = ((IAbsenceApprovalService) Target.GetRequestApprovalService())
+				.GetApprovedPersonAbsence();
 
 			var @events = personAbsence.PopAllEvents();
 			@events.Single().Should().Be.OfType<PersonAbsenceAddedEvent>();
@@ -121,6 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var person = PersonFactory.CreatePersonWithId();
 			var absence = new Absence();
+			ScenarioRepository.Has("Default");
 
 			createAccountDay(person, absence, new DateOnly(2015, 12, 1));
 
@@ -133,9 +95,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 					messagePropertyChanged = true;
 				}
 			};
-			var command = new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value, ReplyMessage = "test" };
+			var command = new ApproveRequestCommand {PersonRequestId = personRequest.Id.Value, ReplyMessage = "test"};
 
-			_approveRequestCommandHandler.Handle(command);
+			Target.Handle(command);
 
 			Assert.IsTrue(personRequest.IsApproved);
 			Assert.IsTrue(personRequest.GetMessage(new NoFormatting()).Contains("test"));
@@ -153,13 +115,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var accountDay = createAccountDay(person, absence, new DateOnly(2015, 12, 1), balance);
 
 			var absenceDateTimePeriod = new DateTimePeriod(2016, 01, 01, 00, 2016, 01, 01, 23);
-			addAssignment(person, absenceDateTimePeriod);
+			addAssignment(person, ScenarioRepository.Has("Default"), absenceDateTimePeriod);
 
 			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
 			personRequest.Deny("test", new PersonRequestAuthorizationCheckerConfigurable());
 
-			var command = new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value };
-			_approveRequestCommandHandler.Handle(command);
+			var command = new ApproveRequestCommand {PersonRequestId = personRequest.Id.Value};
+			Target.Handle(command);
 
 			Assert.IsTrue(command.ErrorMessages.Contains("A request that is Denied cannot be Approved."));
 			Assert.IsTrue(personRequest.IsDenied);
@@ -176,15 +138,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var accountDay = createAccountDay(person, absence, new DateOnly(2015, 12, 1), balance);
 
 			var absenceDateTimePeriod = new DateTimePeriod(2016, 01, 01, 00, 2016, 01, 01, 23);
-			addAssignment(person, absenceDateTimePeriod);
+			addAssignment(person, ScenarioRepository.Has("Default"), absenceDateTimePeriod);
 
 			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
 			var personRequestCheckAuthorization = new PersonRequestAuthorizationCheckerConfigurable();
 			personRequest.Approve(new ApprovalServiceForTest(), personRequestCheckAuthorization);
 			personRequest.Cancel(personRequestCheckAuthorization);
 
-			var command = new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value };
-			_approveRequestCommandHandler.Handle(command);
+			var command = new ApproveRequestCommand {PersonRequestId = personRequest.Id.Value};
+			Target.Handle(command);
 
 			Assert.IsTrue(command.ErrorMessages.Contains("A request that is Cancelled cannot be Approved."));
 			Assert.IsTrue(personRequest.IsCancelled);
@@ -198,14 +160,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var absence = AbsenceFactory.CreateAbsenceWithId();
 
 			var absenceDateTimePeriod = new DateTimePeriod(2016, 01, 01, 00, 2016, 01, 01, 23);
-			addAssignment(person, absenceDateTimePeriod);
+			addAssignment(person, ScenarioRepository.Has("Default"), absenceDateTimePeriod);
 
 			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
 
 			personRequest.SetDeleted();
 
-			var command = new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value };
-			_approveRequestCommandHandler.Handle(command);
+			var command = new ApproveRequestCommand {PersonRequestId = personRequest.Id.Value};
+			Target.Handle(command);
 			command.ErrorMessages.Single().Should().Be.EqualTo(UserTexts.Resources.RequestHasBeenDeleted);
 		}
 
@@ -219,14 +181,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var accountDay = createAccountDay(person, absence, new DateOnly(2015, 12, 1), balance);
 
 			var absenceDateTimePeriod = new DateTimePeriod(2016, 01, 01, 00, 2016, 01, 01, 23);
-			addAssignment(person, absenceDateTimePeriod);
+			addAssignment(person, ScenarioRepository.Has("Default"), absenceDateTimePeriod);
 
 			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
 			var personRequestCheckAuthorization = new PersonRequestAuthorizationCheckerConfigurable();
 			personRequest.Approve(new ApprovalServiceForTest(), personRequestCheckAuthorization);
 
-			var command = new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value };
-			_approveRequestCommandHandler.Handle(command);
+			var command = new ApproveRequestCommand {PersonRequestId = personRequest.Id.Value};
+			Target.Handle(command);
 
 			Assert.IsTrue(personRequest.IsApproved);
 			Assert.IsTrue(accountDay.LatestCalculatedBalance.Equals(balance));
@@ -235,19 +197,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldApproveTextRequest()
 		{
-			var personRequestFactory = new PersonRequestFactory { Person = PersonFactory.CreatePerson() };
+			ScenarioRepository.Has("Default");
+			var personRequestFactory = new PersonRequestFactory {Person = PersonFactory.CreatePerson()};
 			var personRequest = personRequestFactory.CreatePersonRequest();
 			var textRequest = new TextRequest(DateOnly.Today.ToDateTimePeriod(TimeZoneInfo.Utc));
 			personRequest.Request = textRequest;
 			personRequest.SetId(Guid.NewGuid());
-			_personRequestRepository.Add(personRequest);
+			PersonRequestRepository.Add(personRequest);
 
-			var command = new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value };
-			_approveRequestCommandHandler.Handle(command);
+			var command = new ApproveRequestCommand {PersonRequestId = personRequest.Id.Value};
+			Target.Handle(command);
 
 			Assert.IsTrue(personRequest.IsApproved);
 		}
-		
+
 		[Test]
 		public void ShouldSkipAlreadyApprovedRequest()
 		{
@@ -258,14 +221,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var accountDay = createAccountDay(person, absence, new DateOnly(2015, 12, 1), balance);
 
 			var absenceDateTimePeriod = new DateTimePeriod(2016, 01, 01, 00, 2016, 01, 01, 23);
-			addAssignment(person, absenceDateTimePeriod);
+			addAssignment(person, ScenarioRepository.Has("Default"), absenceDateTimePeriod);
 
 			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
 			var personRequestCheckAuthorization = new PersonRequestAuthorizationCheckerConfigurable();
 			personRequest.Approve(new ApprovalServiceForTest(), personRequestCheckAuthorization);
 
-			var command = new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value };
-			_approveRequestCommandHandler.Handle(command);
+			var command = new ApproveRequestCommand {PersonRequestId = personRequest.Id.Value};
+			Target.Handle(command);
 
 			Assert.IsTrue(command.ErrorMessages.IsEmpty());
 			Assert.IsTrue(personRequest.IsApproved);
@@ -277,38 +240,41 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var skill1 = new Domain.Forecasting.Skill("skill1");
 			var baseDate = new DateOnly(2016, 12, 1);
-			var person = PersonFactory.CreatePersonWithPersonPeriod(baseDate, new[] { skill1 });
+			var person = PersonFactory.CreatePersonWithPersonPeriod(baseDate, new[] {skill1});
+			person.WorkflowControlSet = new WorkflowControlSet();
 
-			var personRequestFactory = new PersonRequestFactory { Person = person };
+			var personRequestFactory = new PersonRequestFactory {Person = person};
 			var personRequest = personRequestFactory.CreatePersonRequest();
 			var overtimePeriod = DateOnly.Today.ToDateTimePeriod(TimeZoneInfo.Utc);
-			var overtimeRequest = new OvertimeRequest(new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime), overtimePeriod);
+			var overtimeRequest =
+				new OvertimeRequest(new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime), overtimePeriod);
 			personRequest.Request = overtimeRequest;
 			personRequest.SetId(Guid.NewGuid());
-			_personRequestRepository.Add(personRequest);
+			PersonRequestRepository.Add(personRequest);
 
-			addAssignment(person, overtimePeriod);
+			addAssignment(person, ScenarioRepository.Has("Default"), overtimePeriod);
 
-			var command = new ApproveRequestCommand { PersonRequestId = personRequest.Id.Value };
-			_approveRequestCommandHandler.Handle(command);
+			var command = new ApproveRequestCommand {PersonRequestId = personRequest.Id.Value};
+			Target.Handle(command);
 
-			var schedules =_fakeScheduleStorage.LoadAll();
+			var schedules = PersonAssignmentRepository.LoadAll();
 			Assert.IsTrue(schedules.Count() == 1);
 		}
 
 		private PersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod dateTimePeriod)
 		{
-			var personRequestFactory = new PersonRequestFactory() { Person = person };
+			var personRequestFactory = new PersonRequestFactory() {Person = person};
 			var absenceRequest = personRequestFactory.CreateAbsenceRequest(absence, dateTimePeriod);
 			var personRequest = absenceRequest.Parent as PersonRequest;
 			personRequest.SetId(Guid.NewGuid());
 
-			_personRequestRepository.Add(personRequest);
+			PersonRequestRepository.Add(personRequest);
 
 			return personRequest;
 		}
 
-		private AccountDay createAccountDay(IPerson person, IAbsence absence, DateOnly startDate, TimeSpan? balance = null)
+		private AccountDay createAccountDay(IPerson person, IAbsence absence, DateOnly startDate,
+			TimeSpan? balance = null)
 		{
 			var accountDay = new AccountDay(startDate)
 			{
@@ -322,15 +288,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			personAbsenceAccount.Absence.Tracker = Tracker.CreateDayTracker();
 			personAbsenceAccount.Add(accountDay);
 
-			_personAbsenceAccountRepository.Add(personAbsenceAccount);
+			PersonAbsenceAccountRepository.Add(personAbsenceAccount);
 			return accountDay;
 		}
 
-		private void addAssignment(IPerson person, DateTimePeriod absenceDateTimePeriod)
+		private void addAssignment(IPerson person, IScenario scenario, DateTimePeriod absenceDateTimePeriod)
 		{
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
-				_scenario, absenceDateTimePeriod);
-			_fakeScheduleStorage.Add(assignment);
+				scenario, absenceDateTimePeriod);
+			PersonAssignmentRepository.Add(assignment);
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<ApproveRequestCommandHandler>().For<IHandleCommand<ApproveRequestCommand>>();
 		}
 	}
 }

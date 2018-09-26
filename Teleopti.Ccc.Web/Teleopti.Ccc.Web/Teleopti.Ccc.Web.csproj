@@ -283,8 +283,8 @@
     <Reference Include="StackExchange.Redis.StrongName, Version=1.1.608.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
       <HintPath>..\..\packages\StackExchange.Redis.StrongName.1.1.608\lib\net46\StackExchange.Redis.StrongName.dll</HintPath>
     </Reference>
-    <Reference Include="Stardust.Manager, Version=1.0.0.830, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Stardust.Manager.1.0.0.830\lib\net451\Stardust.Manager.dll</HintPath>
+    <Reference Include="Stardust.Manager, Version=1.0.0.831, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Stardust.Manager.1.0.0.831\lib\net451\Stardust.Manager.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -466,6 +466,7 @@
     <Compile Include="Areas\MultiTenancy\Model\PersonInfoGenericModel.cs" />
     <Compile Include="Areas\MultiTenancy\NewExternalApplicationModel.cs" />
     <Compile Include="Areas\MultiTenancy\NewExternalApplicationResponseModel.cs" />
+    <Compile Include="Areas\MyTime\Controllers\GrantBotApiController.cs" />
     <Compile Include="Areas\MyTime\Controllers\OvertimeRequestsController.cs" />
     <Compile Include="Areas\MyTime\Controllers\TeamScheduleController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AgentBadgeWithinPeriodProvider.cs" />
@@ -478,6 +479,7 @@
     <Compile Include="Areas\MyTime\Core\IWeekScheduleDomainDataProvider.cs" />
     <Compile Include="Areas\MyTime\Core\DaySchedule\Mapping\DayScheduleDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeMultiSchedulesSelectableChecker.cs" />
+    <Compile Include="Areas\MyTime\Models\Portal\ChatbotConfig.cs" />
     <Compile Include="Areas\MyTime\Models\Schedule\Common\BaseScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Schedule\DaySchedule\DayScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Schedule\Common\RequestPermission.cs" />
@@ -496,7 +498,6 @@
     <Compile Include="Areas\Rta\Controllers\RtaTestDataController.cs" />
     <Compile Include="Areas\Rta\Controllers\HistoricalOverviewController.cs" />
     <Compile Include="Core\Exceptions\CustomMessageException.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\SingleOwnedPerson.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\AgentScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\IAgentScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\ILayerViewModelMapper.cs" />
@@ -1495,6 +1496,8 @@
     <Content Include="Areas\Start\Content\Css\main.min.css" />
     <Content Include="Areas\Start\Content\Images\bg.png" />
     <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker-ext.js" />
+    <Content Include="Content\botchat\botchat.css" />
+    <Content Include="Content\botchat\botchat.js" />
     <Content Include="Content\jquery-plugin\jquery.touchSwipe.min.js" />
     <Content Include="Content\jqueryui\jquery.ui.dialog.js" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui.css" />
@@ -1605,10 +1608,10 @@
     <Content Include="WFM\app\forecasting\html\modify.html" />
     <Content Include="WFM\app\forecasting\service\forecast.backend.fake.js" />
     <Content Include="WFM\app\forecasting\controller\controller.js" />
-    <Content Include="WFM\app\forecasting\controller\controller.spec.js" />
+    <Content Include="WFM\app\forecasting\spec\controller.spec.js" />
     <Content Include="WFM\app\forecasting\html\forecast.html" />
     <Content Include="WFM\app\forecasting\controller\modify.controller.js" />
-    <Content Include="WFM\app\forecasting\controller\modify.controller.spec.js" />
+    <Content Include="WFM\app\forecasting\spec\modify.controller.spec.js" />
     <Content Include="WFM\app\global\areas\menu-component.html" />
     <Content Include="WFM\app\global\areas\menu.component.js" />
     <Content Include="WFM\app\global\businessunits\businessunits.controller.spec.js" />
@@ -1973,7 +1976,7 @@
     <Content Include="WFM\app\app_desktop_client.js" />
     <Content Include="WFM\app\forecasting\routes.js" />
     <Content Include="WFM\app\forecasting\html\skillCreate.html" />
-    <Content Include="WFM\app\forecasting\controller\skill.create.controller.spec.js" />
+    <Content Include="WFM\app\forecasting\spec\skill.create.controller.spec.js" />
     <Content Include="WFM\app\global\areas\areas.controller.spec.js" />
     <Content Include="WFM\app\global\businessunits\businessunits.service.js" />
     <Content Include="WFM\app\global\businessunits\_modules.js" />

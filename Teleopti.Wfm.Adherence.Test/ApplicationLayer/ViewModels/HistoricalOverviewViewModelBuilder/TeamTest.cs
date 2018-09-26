@@ -32,8 +32,7 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 			var teamId = Guid.NewGuid();
 			Database
 				.WithSite("Barcelona")
-				.WithTeam(teamId, "Blue")
-				.WithHistoricalStateChange("2018-08-23 14:00");
+				.WithTeam(teamId, "Blue");
 
 			Target.Build(null, new[] {teamId})
 				.Should().Have.SameValuesAs(Enumerable.Empty<HistoricalOverviewTeamViewModel>());
@@ -49,6 +48,7 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 				.WithTeam(teamId, "Blue")
 				.WithAgent()
 				.WithHistoricalStateChange("2018-08-23 14:00");
+			Now.Is("2018-08-24 14:00");
 
 			var data = Target.Build(null, new[] {teamId});
 
@@ -65,7 +65,8 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 				.WithTeam(teamId, "Red")
 				.WithAgent()
 				.WithHistoricalStateChange("2018-08-23 14:00");
-
+			Now.Is("2018-08-24 14:00");
+			
 			var data = Target.Build(null, new[] {teamId});
 
 			data.Single().Name.Should().Be("Denver/Red");
@@ -76,11 +77,12 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 		{
 			Now.Is("2018-08-23 14:00");
 			var siteId = Guid.NewGuid();
-
 			Database
 				.WithSite(siteId, "Barcelona")
 				.WithTeam("Blue")
-				.WithAgent();
+				.WithAgent()
+				.WithHistoricalStateChange("2018-08-23 14:00");
+			Now.Is("2018-08-24 14:00");
 
 			var data = Target.Build(new[] {siteId}, null);
 
@@ -98,14 +100,61 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 				.WithSite("Denver")
 				.WithTeam(teamId, "Red")
 				.WithAgent()
+				.WithHistoricalStateChange("2018-08-23 14:00")
 				.WithSite(siteId, "Barcelona")
 				.WithTeam("Blue")
-				.WithAgent();
-
+				.WithAgent()
+				.WithHistoricalStateChange("2018-08-23 14:00");
+			Now.Is("2018-08-24 14:00");
+			
 			var data = Target.Build(new[] {siteId}, new[] {teamId});
 
 			data.First().Name.Should().Be("Barcelona/Blue");
 			data.Second().Name.Should().Be("Denver/Red");
 		}
+		
+		[Test]
+		public void ShouldNotDisplayTeamWithNoAgentData()
+		{
+			Now.Is("2018-08-23 14:00");
+			var siteId = Guid.NewGuid();
+			Database
+				.WithSite(siteId)
+				.WithTeam("Blue")
+				.WithAgent();
+			Now.Is("2018-08-24 14:00");			
+			
+			Target.Build(new[] {siteId}, null)
+				.Should().Have.SameValuesAs(Enumerable.Empty<HistoricalOverviewTeamViewModel>());
+		}
+		
+		[Test]
+		public void ShouldNotBuildForToday()
+		{
+			Now.Is("2018-08-23 14:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent()
+				.WithHistoricalStateChange("2018-08-23 14:00");
+
+			Target.Build(null, new[] {teamId})
+				.Should().Have.SameValuesAs(Enumerable.Empty<HistoricalOverviewTeamViewModel>());
+		}	
+		
+		[Test]
+		public void ShouldGetEmptyModelIfNoValidAgent()
+		{
+			Now.Is("2018-08-23 14:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithSite("Barcelona")
+				.WithTeam(teamId, "Blue")
+				.WithHistoricalStateChange("2018-08-23 14:00");
+			Now.Is("2018-08-24 14:00");
+            
+			Target.Build(null, new[] {teamId})
+				.Should().Have.SameValuesAs(Enumerable.Empty<HistoricalOverviewTeamViewModel>());
+		}	
 	}
 }

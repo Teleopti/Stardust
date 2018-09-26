@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -23,7 +24,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 			var person = PersonFactory.CreatePerson().WithId();
 			PersonRepository.Add(person);
 
-			var result = Client.PostAsync("/query/User/UserById", new StringContent(JsonConvert.SerializeObject(new { PersonId = person.Id})));
+			var result = Client.PostAsync("/query/User/UserById", new StringContent(JsonConvert.SerializeObject(new { PersonId = person.Id}), Encoding.UTF8, "application/json"));
 			var obj = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Result"][0];
 
 			obj["Id"].Value<string>().Should().Be.EqualTo(person.Id.Value.ToString());

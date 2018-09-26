@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			isolate.UseTestDouble<AddActivityCommandHandler>().For<IHandleCommand<AddActivityCommand>>();
 			isolate.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
-			isolate.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
 		}
 
 		[Test]

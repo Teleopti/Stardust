@@ -100,8 +100,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		private static int calculatePossibility(SkillStaffingData skillStaffingData)
 		{
-			var isSatisfied = !new IntervalHasSeriousUnderstaffing(skillStaffingData.Skill).IsSatisfiedBy(skillStaffingData.SkillStaffingInterval);
-			return isSatisfied ? ScheduleStaffingPossibilityConsts.FairPossibility : ScheduleStaffingPossibilityConsts.GoodPossibility;
+			var isSatisfied = new IntervalHasSeriousUnderstaffing(skillStaffingData.Skill).IsSatisfiedBy(skillStaffingData.SkillStaffingInterval);
+			return isSatisfied ? ScheduleStaffingPossibilityConsts.GoodPossibility : ScheduleStaffingPossibilityConsts.FairPossibility;
 		}
 
 		private static bool hasFairPossibilityInThisInterval(Dictionary<DateTime, int> intervalPossibilities, DateTime time)

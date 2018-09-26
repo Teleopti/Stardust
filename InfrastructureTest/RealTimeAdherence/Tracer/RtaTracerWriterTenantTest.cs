@@ -59,5 +59,15 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Tracer
 			using (DataSource.OnThisThreadUse("another tenant"))
 				Reader.ReadOfType<ProcessReceivedLog>().Should().Not.Be.Empty();
 		}
+
+		[Test]
+		public void ShouldReadWithoutTenantToo()
+		{
+			Target.Write(new RtaTracerLog<ProcessReceivedLog> {Tenant = null});
+			Target.Write(new RtaTracerLog<ProcessReceivedLog> {Tenant = Tenant.CurrentName()});
+
+			Reader.ReadOfType<ProcessReceivedLog>()
+				.Select(x => x.Tenant).Should().Have.SameValuesAs(null, Tenant.CurrentName());
+		}
 	}
 }

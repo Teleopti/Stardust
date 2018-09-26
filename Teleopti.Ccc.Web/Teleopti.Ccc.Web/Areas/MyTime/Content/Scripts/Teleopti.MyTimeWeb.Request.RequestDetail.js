@@ -296,6 +296,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		},
 		AddOvertimeRequest: function() {
 			_addOvertimeRequest();
+		},
+		CancelAddingNewRequest: function() {
+			parentViewModel.CancelAddingNewRequest();
 		}
 	};
 })(jQuery);

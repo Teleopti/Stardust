@@ -63,6 +63,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			
 			if(_resourcePlannerReducingSkillsDifferentOpeningHours76176)
 				toggleManager.Enable(Toggles.ResourcePlanner_ReducingSkillsDifferentOpeningHours_76176);
+
+			//toggleManager.Enable(Toggles.ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348);
 		}
 	}
 }

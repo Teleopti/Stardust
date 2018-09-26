@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public IScheduleDay ExecutePeriodStep(bool raise, IScheduleMatrixPro scheduleMatrix, ISchedulePartModifyAndRollbackService rollbackService)
         {
-            ILockableBitArray periodBitArray = _bitArrayCreator.CreatePeriodBitArray(raise, scheduleMatrix);
+            ILockableBitArray periodBitArray = _bitArrayCreator.CreatePeriodBitArray(scheduleMatrix);
 	        var scheduleMatrixFullWeeksPeriodDays = scheduleMatrix.FullWeeksPeriodDays;
 	        int? indexToRemove = _decisionMaker.Execute(periodBitArray, raise, new DateOnlyPeriod(scheduleMatrixFullWeeksPeriodDays[0].Day, scheduleMatrixFullWeeksPeriodDays[scheduleMatrixFullWeeksPeriodDays.Length - 1].Day));
             if (!indexToRemove.HasValue)

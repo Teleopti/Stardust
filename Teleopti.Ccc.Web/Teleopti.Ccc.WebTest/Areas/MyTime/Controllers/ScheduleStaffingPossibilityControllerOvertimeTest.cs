@@ -44,8 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public SkillIntradayStaffingFactory SkillIntradayStaffingFactory;
 
 		private readonly TimeSpan[] intervals = { TimeSpan.FromMinutes(495), TimeSpan.FromMinutes(510) };
-		readonly ISkillType phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
-			.WithId();
+		readonly ISkillType phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -239,7 +238,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			createAssignment(person, activity1);
 
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] {phoneSkillType})
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13)))
@@ -575,7 +574,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				AutoGrantType = OvertimeRequestAutoGrantType.No
 			});
 			person.WorkflowControlSet = workFlowControlSet;
-			
+
 			var activity1 = createActivity();
 			var channelSupportSkill = createSkill("channelSupportCriticalUnderStaffedSkill");
 			channelSupportSkill.SkillType = phoneSkillType;
@@ -586,7 +585,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var webChatSkill = createSkill("webChatSkill not cricical understaffed at first");
 			webChatSkill.SkillType = chatSkillType;
 			var personSkill2 = createPersonSkill(activity2, webChatSkill);
-			setupIntradayStaffingForSkill(webChatSkill, new double?[] { 10d, 10d }, new double?[] { 15d, 5d});
+			setupIntradayStaffingForSkill(webChatSkill, new double?[] { 10d, 10d }, new double?[] { 15d, 5d });
 
 			addPersonSkillsToPersonPeriod(personSkill1, personSkill2);
 
@@ -598,7 +597,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
 			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
 		}
-		
+
 		[Test]
 		public void ShouldGetPossibilitiesForOvertimeWithDayOff()
 		{
@@ -714,7 +713,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			setupWorkFlowControlSet();
 
 			User.CurrentUser().WorkflowControlSet.OvertimeRequestUsePrimarySkill = true;
-			
+
 			var primarySkill1 = createSkill("primarySkill");
 			primarySkill1.SetCascadingIndex(1);
 			setupIntradayStaffingForSkill(primarySkill1, new double?[] { 5, 5 }, new double?[] { 10, 10 });
@@ -888,7 +887,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			TimeZone.Is(TimeZoneInfoFactory.CentralStandardTime());
 			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
-			
+
 			Now.Is("2018-03-11 6:00");
 
 			var personPeriod = getOrAddPersonPeriod();
@@ -910,7 +909,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var date = new DateOnly(2018, 3, 11);
 			var staffingPeriodData = new List<StaffingPeriodData>();
-			staffingPeriodData.Add(new StaffingPeriodData(){Period = date.ToDateTimePeriod(timePeriod, TimeZone.TimeZone()),ForecastedStaffing = 1,ScheduledStaffing = 2});
+			staffingPeriodData.Add(new StaffingPeriodData() { Period = date.ToDateTimePeriod(timePeriod, TimeZone.TimeZone()), ForecastedStaffing = 1, ScheduledStaffing = 2 });
 			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill, date, staffingPeriodData, TimeZone.TimeZone());
 
 			var workFlowControlSet = new WorkflowControlSet();
@@ -923,6 +922,41 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.GetPossibilityViewModels(date, StaffingPossiblityType.Overtime, false).ToList();
 			result.Count.Should().Be.EqualTo(8);
 			result[3].EndTime.TimeOfDay.TotalMinutes.Should().Be.EqualTo(180);
+		}
+
+		[Ignore("temp for codemonkeys")]
+		[Test]
+		public void ShouldGetGoodPossibilitiesForOvertimeWhenSeriousUnderstaffingIsZeroAndForcastedAndScheduledAreEqual()
+		{
+			TimeZone.Is(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
+
+			Now.Is("2018-09-19 6:00");
+			var today = Now.ServerDate_DontUse();
+
+			setupWorkFlowControlSet();
+			User.CurrentUser().WorkflowControlSet.OvertimeRequestStaffingCheckMethod = OvertimeRequestStaffingCheckMethod.Intraday;
+
+			setupSiteOpenHour();
+
+			var person = User.CurrentUser();
+			var activity1 = createActivity();
+			var skill1 = createSkill("skill1");
+			skill1.StaffingThresholds = createStaffingThresholds(0, 0, 0.1);
+			var personSkill1 = createPersonSkill(activity1, skill1);
+
+			setUpIntradayStaffing(today, skill1, new double?[] { 6d, 6d }, new double?[] { 6d, 6d });
+
+			addPersonSkillsToPersonPeriod(personSkill1);
+
+			createAssignment(person, activity1);
+
+			var possibilitiesWeek = getPossibilityViewModels(today, StaffingPossiblityType.Overtime)
+				.Where(d => d.Date == today.ToFixedClientDateOnlyFormat()).ToList();
+
+			Assert.AreEqual(2, possibilitiesWeek.Count);
+			Assert.AreEqual(1, possibilitiesWeek.ElementAt(0).Possibility);
+			Assert.AreEqual(1, possibilitiesWeek.ElementAt(1).Possibility);
 		}
 
 		private void setupWorkFlowControlSet()
@@ -1012,6 +1046,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			return new StaffingThresholds(new Percent(-0.3), new Percent(-0.1), new Percent(0.1));
 		}
 
+		private static StaffingThresholds createStaffingThresholds(double seriousUnderstaffing, double understaffing, double overstaffing)
+		{
+			return new StaffingThresholds(new Percent(seriousUnderstaffing), new Percent(understaffing), new Percent(overstaffing));
+		}
+
 		private static IActivity createActivity()
 		{
 			var activity = ActivityFactory.CreateActivity("activity1");
@@ -1050,22 +1089,27 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var period = getAvailablePeriod();
 			period.DayCollection().ToList().ForEach(day =>
 			{
-				var utcDate = TimeZoneHelper.ConvertToUtc(day.Date, User.CurrentUser().PermissionInformation.DefaultTimeZone());
-				var staffingPeriodData1 = new StaffingPeriodData
-				{
-					ForecastedStaffing = forecastedStaffings[0].Value,
-					ScheduledStaffing = scheduledStaffings[0].Value,
-					Period = new DateTimePeriod(utcDate.Date.Add(intervals[0]), utcDate.Date.Add(intervals[0]).AddMinutes(15))
-				};
-				var staffingPeriodData2 = new StaffingPeriodData
-				{
-					ForecastedStaffing = forecastedStaffings[1].Value,
-					ScheduledStaffing = scheduledStaffings[1].Value,
-					Period = new DateTimePeriod(utcDate.Date.Add(intervals[1]), utcDate.Date.Add(intervals[1]).AddMinutes(15))
-				};
-				SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill, new DateOnly(utcDate),
-					new[] {staffingPeriodData1, staffingPeriodData2}, User.CurrentUser().PermissionInformation.DefaultTimeZone());
+				setUpIntradayStaffing(day, skill, forecastedStaffings, scheduledStaffings);
 			});
+		}
+
+		private void setUpIntradayStaffing(DateOnly day, ISkill skill, double?[] forecastedStaffings, double?[] scheduledStaffings)
+		{
+			var utcDate = TimeZoneHelper.ConvertToUtc(day.Date, User.CurrentUser().PermissionInformation.DefaultTimeZone());
+			var staffingPeriodData1 = new StaffingPeriodData
+			{
+				ForecastedStaffing = forecastedStaffings[0].Value,
+				ScheduledStaffing = scheduledStaffings[0].Value,
+				Period = new DateTimePeriod(utcDate.Date.Add(intervals[0]), utcDate.Date.Add(intervals[0]).AddMinutes(15))
+			};
+			var staffingPeriodData2 = new StaffingPeriodData
+			{
+				ForecastedStaffing = forecastedStaffings[1].Value,
+				ScheduledStaffing = scheduledStaffings[1].Value,
+				Period = new DateTimePeriod(utcDate.Date.Add(intervals[1]), utcDate.Date.Add(intervals[1]).AddMinutes(15))
+			};
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill, new DateOnly(utcDate),
+				new[] { staffingPeriodData1, staffingPeriodData2 }, User.CurrentUser().PermissionInformation.DefaultTimeZone());
 		}
 	}
 }

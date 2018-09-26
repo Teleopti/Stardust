@@ -1575,6 +1575,66 @@
 		expect(timespanEl.innerText.trim()).toBe('2018-08-31 06:00 - 2018-08-31 09:00');
 	});
 
+	it('should merge to one layer and make the length of merged layer correctly', function () {
+		fakeTeamSchedule.has({
+			PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
+			Name: 'Annika Andersson',
+			Date: '2018-09-25',
+			WorkTimeMinutes: 60,
+			ContractTimeMinutes: 60,
+			Projection: [
+				{
+					ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+					Color: '#FFCCA2',
+					Description: 'Sales',
+					Start: '2018-09-25 06:00',
+					End: '2018-09-25 07:00',
+					Minutes: 60,
+					IsOvertime: false,
+					ActivityId: '84db44f4-22a8-44c7-b376-a0a200da613e'
+				},
+				{
+					ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+					Color: '#ffffff',
+					Description: 'Phone',
+					Start: '2018-09-25 07:00',
+					End: '2018-09-25 08:00',
+					Minutes: 60,
+					IsOvertime: false,
+					ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+				}
+			],
+			Timezone: { IanaId: 'Europe/Berlin' }
+		});
+
+		var scope = $rootScope.$new();
+		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-09-25', 'Europe/Berlin', scope);
+		var vm = panel.isolateScope().vm;
+
+		var shiftLayers = panel[0].querySelectorAll('.shift-layer');
+
+		shiftLayers[0].click();
+
+		fireResize(vm, shiftLayers[0], 30, 30);
+
+		shiftLayers[0].click();
+
+		shiftLayers[1].click();
+
+		var typeEls = panel[0].querySelectorAll('.activity-selector md-option');
+		typeEls[3].click();
+
+		shiftLayers = panel[0].querySelectorAll('.shift-layer');
+
+		expect(shiftLayers.length).toBe(1);
+		expect(shiftLayers[0].style.width).toEqual("90px");
+		expect(shiftLayers[0].style.backgroundColor).toEqual("rgb(255, 204, 162)");
+
+		var timespanEl = panel[0].querySelector('.timespan');
+		expect(timespanEl.innerText.trim()).toBe('2018-09-25 06:30 - 2018-09-25 08:00');
+	
+	});
+
 	it('should reject if extending an activity from the end time exceed 36 hours', function () {
 		fakeTeamSchedule.has({
 			PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',

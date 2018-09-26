@@ -100,6 +100,10 @@
 			bindResizeLayerEvent();
 		};
 
+		vm.$onDestroy = function () {
+			interact('.shift-layer').unset();
+		};
+
 		vm.gotoDayView = function () {
 			$state.go('teams.dayView');
 		};
@@ -455,13 +459,13 @@
 			var deleteIndex = index + 1;
 
 			if (previousLayer && isSameType(mergedLayer, previousLayer)) {
-				updateStart(layer, previousLayer.Start);
+				updateStart(layer, vm.getMergedShiftLayer(previousLayer).Start);
 				vm.scheduleVm.ShiftLayers.splice(index - 1, 1);
 				deleteIndex = index;
 			}
 
 			if (nextLayer && isSameType(mergedLayer, nextLayer)) {
-				updateEnd(layer, nextLayer.End);
+				updateEnd(layer, vm.getMergedShiftLayer(nextLayer).End);
 				vm.scheduleVm.ShiftLayers.splice(deleteIndex, 1);
 			}
 		}

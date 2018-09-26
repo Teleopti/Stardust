@@ -18,10 +18,14 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 		{
 			var tracingLogs = _reader.ReadOfType<TracingLog>().ToLookup(x => x.Process);
 			var dataReceivedLogs = _reader.ReadOfType<ProcessReceivedLog>().ToLookup(x => x.Process);
-			var activityCheckLogs = _reader.ReadOfType<ActivityCheckLog>().ToLookup(x => x.Process);
+			var dataEnqueuingLogs = _reader.ReadOfType<ProcessEnqueuingLog>().ToLookup(x => x.Process);
+			var dataProcessingLogs = _reader.ReadOfType<ProcessProcessingLog>().ToLookup(x => x.Process);
+			var activityCheckLogs = _reader.ReadOfType<ProcessActivityCheckLog>().ToLookup(x => x.Process);
 			var exceptionLogs = _reader.ReadOfType<ProcessExceptionLog>().ToLookup(x => x.Process);
 			var processLogs = tracingLogs.Select(x => x.Key).Concat(
 					dataReceivedLogs.Select(x => x.Key)).Concat(
+					dataEnqueuingLogs.Select(x => x.Key)).Concat(
+					dataProcessingLogs.Select(x => x.Key)).Concat(
 					activityCheckLogs.Select(x => x.Key)).Concat(
 					exceptionLogs.Select(x => x.Key))
 				.Distinct();
@@ -29,31 +33,63 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 			var tracers = from process in processLogs
 				let tracing = tracingLogs[process].OrderBy(x => x.Time).LastOrDefault()?.Log?.Tracing
 				let dataReceived = dataReceivedLogs[process]
-					.OrderByDescending(r => r.Log?.ReceivedAt)
+					.OrderByDescending(r => r.Log?.At)
 					.Take(5)
 					.Select(x =>
 						new DataReceived
 						{
-							At = x.Log?.ReceivedAt?.ToString("HH:mm:ss"),
-							By = x.Log?.ReceivedBy,
-							Count = x.Log?.ReceivedCount ?? 0,
+							At = x.Log?.At?.ToString("HH:mm:ss"),
+							By = x.Log?.By,
+							Count = x.Log?.Count ?? 0,
+							Tenant = x.Tenant
 						})
-				let activityCheckAt = activityCheckLogs[process].Max(r => r.Log?.ActivityCheckAt?.ToString("HH:mm:ss"))
+				let dataEnqueuings = dataEnqueuingLogs[process]
+					.OrderByDescending(r => r.Log?.At)
+					.Take(5)
+					.Select(x =>
+						new DataEnqueuing
+						{
+							At = x.Log?.At?.ToString("HH:mm:ss"),
+							Count = x.Log?.Count ?? 0,
+							Tenant = x.Tenant
+						})
+				let dataProcessings = dataProcessingLogs[process]
+					.OrderByDescending(r => r.Log?.At)
+					.Take(5)
+					.Select(x =>
+						new DataProcessing
+						{
+							At = x.Log?.At?.ToString("HH:mm:ss"),
+							Count = x.Log?.Count ?? 0,
+							Tenant = x.Tenant
+						})
+				let activityChecks = activityCheckLogs[process]
+					.OrderByDescending(r => r.Log?.At)
+					.Take(5)
+					.Select(x =>
+						new ActivityCheck
+						{
+							At = x.Log?.At?.ToString("HH:mm:ss"),
+							Tenant = x.Tenant
+						})
 				let exceptions = exceptionLogs[process]
 					.OrderByDescending(x => x.Time)
 					.Take(5)
 					.Select(x => new TracedException
 					{
-						Exception = x.Log.Type,
+						Exception = x.Log?.Type,
 						At = x.Time.ToString("yyyy-MM-dd HH:mm:ss"),
-						Info = x.Log.Info
+						Info = x.Log?.Info,
+						Tenant = x.Tenant
 					})
 				select new Tracer
 				{
 					Process = process,
 					Tracing = tracing,
 					DataReceived = dataReceived.ToArray(),
-					ActivityCheckAt = activityCheckAt,
+					DataEnqueuing = dataEnqueuings.ToArray(),
+					DataProcessing = dataProcessings.ToArray(),
+					ActivityCheck = activityChecks.ToArray(),
 					Exceptions = exceptions
 				};
 
@@ -99,7 +135,9 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 	{
 		public string Process;
 		public IEnumerable<DataReceived> DataReceived;
-		public string ActivityCheckAt;
+		public IEnumerable<DataEnqueuing> DataEnqueuing;
+		public IEnumerable<DataProcessing> DataProcessing;
+		public IEnumerable<ActivityCheck> ActivityCheck;
 		public string Tracing;
 		public IEnumerable<TracedException> Exceptions;
 	}
@@ -109,6 +147,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 		public string Exception;
 		public string At;
 		public string Info;
+		public string Tenant;
 	}
 
 	public class DataReceived
@@ -116,6 +155,27 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 		public string At;
 		public string By;
 		public int Count;
+		public string Tenant;
+	}
+
+	public class DataEnqueuing
+	{
+		public string At;
+		public int Count;
+		public string Tenant;
+	}
+
+	public class DataProcessing
+	{
+		public string At;
+		public int Count;
+		public string Tenant;
+	}
+
+	public class ActivityCheck
+	{
+		public string At;
+		public string Tenant;
 	}
 
 	public class TracedUser

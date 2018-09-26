@@ -18,13 +18,15 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 		public MutableNow Now;
 
 		[Test]
-		public void ShouldDisplayEmptyIntervalAdherence()
+		public void ShouldDisplayEmpty()
 		{
 			Now.Is("2018-08-31 08:00");
 			var teamId = Guid.NewGuid();
 			Database
 				.WithTeam(teamId)
-				.WithAgent();
+				.WithAgent()
+				.WithHistoricalStateChange("2018-08-31 08:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral);
+			Now.Is("2018-09-01 14:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
 
@@ -32,7 +34,7 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 		}
 
 		[Test]
-		public void ShouldDisplayIntervalAdherence()
+		public void ShouldDisplayOneHundredPercent()
 		{
 			Now.Is("2018-08-31 08:00");
 			var teamId = Guid.NewGuid();
@@ -47,10 +49,11 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 			var data = Target.Build(null, new[] {teamId}).First();
 
 			data.Agents.Single().IntervalAdherence.Should().Be(100);
-		}
+		}		
+		
 
 		[Test]
-		public void ShouldDisplayCalculatedIntervalAdherence()
+		public void ShouldDisplaySeventyFivePercent()
 		{
 			Now.Is("2018-08-31 08:00");
 			var teamId = Guid.NewGuid();
@@ -72,7 +75,7 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 		}
 
 		[Test]
-		public void ShouldDisplayFiftyPercentCalculatedIntervalAdherence()
+		public void ShouldDisplayFiftyPercent()
 		{
 			Now.Is("2018-08-31 08:00");
 			var teamId = Guid.NewGuid();
@@ -95,7 +98,7 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 		}
 
 		[Test]
-		public void ShouldDisplayCalculatedIntervalAdherenceForShortShift()
+		public void ShouldDisplayForShortShift()
 		{
 			Now.Is("2018-08-31 08:00");
 			var teamId = Guid.NewGuid();
@@ -110,6 +113,65 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 			var data = Target.Build(null, new[] {teamId}).First();
 
 			data.Agents.Single().IntervalAdherence.Should().Be(100);
+		}		
+	
+		[Test]
+		public void ShouldDisplayWithNeutralAdherence()
+		{
+			Now.Is("2018-09-20 08:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent()
+				.WithAssignment("2018-09-20")
+				.WithAssignedActivity("2018-09-20 10:00", "2018-09-20 18:00")
+				.WithHistoricalStateChange("2018-09-20 10:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithAssignment("2018-09-21")
+				.WithAssignedActivity("2018-09-21 10:00", "2018-09-21 18:00")
+				.WithHistoricalStateChange("2018-09-21 10:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral)
+				.WithHistoricalStateChange("2018-09-21 16:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange("2018-09-21 17:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
+			Now.Is("2018-09-22 08:00");
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().IntervalAdherence.Should().Be(90);
 		}
+		
+		[Test]
+		public void ShouldDisplayWithAllDayNeutralAdherence()
+		{
+			Now.Is("2018-09-20 08:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent()
+				.WithAssignment("2018-09-20")
+				.WithAssignedActivity("2018-09-20 10:00", "2018-09-20 18:00")
+				.WithHistoricalStateChange("2018-09-20 10:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral);
+			Now.Is("2018-09-21 08:00");
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().IntervalAdherence.Should().Be(null);
+		}
+		
+		[Test]
+		public void ShouldDisplayWithAllDayOutAdherence()
+		{
+			Now.Is("2018-09-20 08:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent()
+				.WithAssignment("2018-09-20")
+				.WithAssignedActivity("2018-09-20 10:00", "2018-09-20 18:00")
+				.WithHistoricalStateChange("2018-09-20 10:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out);
+			Now.Is("2018-09-21 08:00");
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().IntervalAdherence.Should().Be(0);
+		}		
 	}
 }

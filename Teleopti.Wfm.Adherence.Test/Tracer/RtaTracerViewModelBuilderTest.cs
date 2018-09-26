@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
@@ -19,6 +20,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 	{
 		public RtaTracerViewModelBuilder Target;
 		public FakeRtaTracerPersister RtaTracers;
+		public ICurrentDataSource DataSource;
 
 		[Test]
 		public void ShouldBuildSomething()
@@ -29,7 +31,9 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		[Test]
 		public void ShouldContainTracer()
 		{
-			RtaTracers.Has(new RtaTracerLog<ProcessReceivedLog> {Process = "process"});
+			RtaTracers
+				.WithCurrentTenant()
+				.Has(new RtaTracerLog<ProcessReceivedLog> {Process = "process"});
 
 			Target.Build().Tracers.Single().Process.Should().Be("process");
 		}
@@ -38,6 +42,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldContainTracers()
 		{
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(new RtaTracerLog<ProcessReceivedLog> {Process = "process1"})
 				.Has(new RtaTracerLog<ProcessReceivedLog> {Process = "process2"});
 
@@ -50,7 +55,9 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldMapTracersSyncronously()
 		{
 			var process = new RtaTracerLog<ProcessReceivedLog> {Process = "process"};
-			RtaTracers.Has(process);
+			RtaTracers
+				.WithCurrentTenant()
+				.Has(process);
 
 			var result = Target.Build();
 			process.Process = "mutated";
@@ -62,6 +69,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldContainTracing()
 		{
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(new RtaTracerLog<TracingLog>
 				{
 					Log = new TracingLog
@@ -77,6 +85,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldOnlyContainLatestTracing()
 		{
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(new RtaTracerLog<TracingLog>
 				{
 					Process = "process",
@@ -103,6 +112,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldContainTracingForTheProcess()
 		{
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(new RtaTracerLog<TracingLog>
 				{
 					Process = "process1",
@@ -128,9 +138,10 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldContainDataReceivedAt()
 		{
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(new RtaTracerLog<ProcessReceivedLog>
 				{
-					Log = new ProcessReceivedLog {ReceivedAt = "2017-10-04 08:00:01.123".Utc()}
+					Log = new ProcessReceivedLog {At = "2017-10-04 08:00:01.123".Utc()}
 				});
 
 			Target.Build().Tracers.Single().DataReceived.Single().At.Should().Be("08:00:01");
@@ -141,9 +152,10 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldContainDataReceivedAtInUSA()
 		{
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(new RtaTracerLog<ProcessReceivedLog>
 				{
-					Log = new ProcessReceivedLog {ReceivedAt = "2017-10-04 13:00:01".Utc()}
+					Log = new ProcessReceivedLog {At = "2017-10-04 13:00:01".Utc()}
 				});
 
 			Target.Build().Tracers.Single().DataReceived.Single().At.Should().Be("13:00:01");
@@ -153,12 +165,13 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldContainLatestDataReceivedFirst()
 		{
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(new RtaTracerLog<ProcessReceivedLog>
 				{
 					Process = "process",
 					Log = new ProcessReceivedLog
 					{
-						ReceivedAt = "2017-10-04 08:00:01".Utc()
+						At = "2017-10-04 08:00:01".Utc()
 					}
 				})
 				.Has(new RtaTracerLog<ProcessReceivedLog>
@@ -166,7 +179,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 					Process = "process",
 					Log = new ProcessReceivedLog
 					{
-						ReceivedAt = "2017-10-04 08:00:11".Utc()
+						At = "2017-10-04 08:00:11".Utc()
 					}
 				});
 
@@ -179,9 +192,11 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 			var times = "2017-12-19 12:00".Utc().TimeRange("2017-12-19 13:00".Utc(), TimeSpan.FromMinutes(1));
 			var logs = times.Select(x => new RtaTracerLog<ProcessReceivedLog>
 			{
-				Log = new ProcessReceivedLog {ReceivedAt = x}
+				Log = new ProcessReceivedLog {At = x}
 			});
-			RtaTracers.Has(logs.ToArray());
+			RtaTracers
+				.WithCurrentTenant()
+				.Has(logs.ToArray());
 
 			Target.Build().Tracers.Single().DataReceived.Should().Have.Count.EqualTo(5);
 			Target.Build().Tracers.Single().DataReceived.ElementAt(0).At.Should().Be("13:00:00");
@@ -195,12 +210,13 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldContainDataReceivedAtForTheProcess()
 		{
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(new RtaTracerLog<ProcessReceivedLog>
 				{
 					Process = "p1",
 					Log = new ProcessReceivedLog
 					{
-						ReceivedAt = "2017-10-05 08:00:00".Utc()
+						At = "2017-10-05 08:00:00".Utc()
 					}
 				})
 				.Has(new RtaTracerLog<ProcessReceivedLog>
@@ -208,7 +224,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 					Process = "p2",
 					Log = new ProcessReceivedLog
 					{
-						ReceivedAt = "2017-10-05 08:00:10".Utc()
+						At = "2017-10-05 08:00:10".Utc()
 					}
 				});
 
@@ -220,12 +236,13 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldContainDataReceivedByAndCount()
 		{
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(new RtaTracerLog<ProcessReceivedLog>
 				{
 					Log = new ProcessReceivedLog
 					{
-						ReceivedBy = "method",
-						ReceivedCount = 123
+						By = "method",
+						Count = 123
 					}
 				});
 
@@ -238,15 +255,16 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldContainActivtyCheckAt()
 		{
 			RtaTracers
-				.Has(new RtaTracerLog<ActivityCheckLog>
+				.WithCurrentTenant()
+				.Has(new RtaTracerLog<ProcessActivityCheckLog>
 				{
-					Log = new ActivityCheckLog
+					Log = new ProcessActivityCheckLog
 					{
-						ActivityCheckAt = "2017-10-04 08:00:01.123".Utc()
+						At = "2017-10-04 08:00:01.123".Utc()
 					}
 				});
 
-			Target.Build().Tracers.Single().ActivityCheckAt.Should().Be("08:00:01");
+			Target.Build().Tracers.Single().ActivityCheck.Single().At.Should().Be("08:00:01");
 		}
 
 		[Test]
@@ -254,15 +272,16 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldContainActivtyCheckAtInUSA()
 		{
 			RtaTracers
-				.Has(new RtaTracerLog<ActivityCheckLog>
+				.WithCurrentTenant()
+				.Has(new RtaTracerLog<ProcessActivityCheckLog>
 				{
-					Log = new ActivityCheckLog
+					Log = new ProcessActivityCheckLog
 					{
-						ActivityCheckAt = "2017-10-04 08:00:01".Utc()
+						At = "2017-10-04 08:00:01".Utc()
 					}
 				});
 
-			Target.Build().Tracers.Single().ActivityCheckAt.Should().Be("08:00:01");
+			Target.Build().Tracers.Single().ActivityCheck.Single().At.Should().Be("08:00:01");
 		}
 
 		[Test]
@@ -270,51 +289,47 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldContainActivityCheckAtForTheProcess()
 		{
 			RtaTracers
-				.Has(new RtaTracerLog<ActivityCheckLog>
+				.WithCurrentTenant()
+				.Has(new RtaTracerLog<ProcessActivityCheckLog>
 				{
 					Process = "p1",
-					Log = new ActivityCheckLog
+					Log = new ProcessActivityCheckLog
 					{
-						ActivityCheckAt = "2017-10-05 08:00:00".Utc()
+						At = "2017-10-05 08:00:00".Utc()
 					}
 				})
-				.Has(new RtaTracerLog<ActivityCheckLog>
+				.Has(new RtaTracerLog<ProcessActivityCheckLog>
 				{
 					Process = "p2",
-					Log = new ActivityCheckLog
+					Log = new ProcessActivityCheckLog
 					{
-						ActivityCheckAt = "2017-10-05 08:00:10".Utc()
+						At = "2017-10-05 08:00:10".Utc()
 					}
 				});
 
-			Target.Build().Tracers.Single(x => x.Process == "p1").ActivityCheckAt
+			Target.Build().Tracers.Single(x => x.Process == "p1").ActivityCheck.Single().At
 				.Should().Be("08:00:00");
 		}
 
-		[Test]
-		[SetCulture("sv-SE")]
-		public void ShouldContainLatestActivityCheckedAt()
-		{
-			RtaTracers
-				.Has(new RtaTracerLog<ActivityCheckLog>
-				{
-					Process = "process",
-					Log = new ActivityCheckLog
-					{
-						ActivityCheckAt = "2017-10-05 08:00:00".Utc()
-					}
-				})
-				.Has(new RtaTracerLog<ActivityCheckLog>
-				{
-					Process = "process",
-					Log = new ActivityCheckLog
-					{
-						ActivityCheckAt = "2017-10-05 08:00:10".Utc()
-					}
-				});
 
-			Target.Build().Tracers.Single().ActivityCheckAt
-				.Should().Be("08:00:10");
+		[Test]
+		public void ShouldContain5LatestActivityChecks()
+		{
+			var times = "2017-12-19 12:00".Utc().TimeRange("2017-12-19 13:00".Utc(), TimeSpan.FromMinutes(1));
+			var logs = times.Select(x => new RtaTracerLog<ProcessActivityCheckLog>
+			{
+				Log = new ProcessActivityCheckLog {At = x}
+			});
+			RtaTracers
+				.WithCurrentTenant()
+				.Has(logs.ToArray());
+
+			Target.Build().Tracers.Single().ActivityCheck.Should().Have.Count.EqualTo(5);
+			Target.Build().Tracers.Single().ActivityCheck.ElementAt(0).At.Should().Be("13:00:00");
+			Target.Build().Tracers.Single().ActivityCheck.ElementAt(1).At.Should().Be("12:59:00");
+			Target.Build().Tracers.Single().ActivityCheck.ElementAt(2).At.Should().Be("12:58:00");
+			Target.Build().Tracers.Single().ActivityCheck.ElementAt(3).At.Should().Be("12:57:00");
+			Target.Build().Tracers.Single().ActivityCheck.ElementAt(4).At.Should().Be("12:56:00");
 		}
 
 		[Test]
@@ -322,6 +337,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		{
 			var exceptionType = RandomName.Make(nameof(InvalidAuthenticationKeyException));
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(new RtaTracerLog<ProcessExceptionLog>
 				{
 					Time = "2018-01-09 12:00".Utc(),
@@ -346,7 +362,9 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 				Time = x,
 				Log = new ProcessExceptionLog()
 			});
-			RtaTracers.Has(logs.ToArray());
+			RtaTracers
+				.WithCurrentTenant()
+				.Has(logs.ToArray());
 
 			Target.Build().Tracers.Single().Exceptions.Should().Have.Count.EqualTo(5);
 			Target.Build().Tracers.Single().Exceptions.ElementAt(0).At.Should().Be("2017-12-19 13:00:00");
@@ -360,6 +378,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldHaveTracedUser()
 		{
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(new RtaTracerLog<StateTraceLog>
 				{
 					Log = new StateTraceLog
@@ -377,6 +396,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldHave2TracedUsers()
 		{
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(new RtaTracerLog<StateTraceLog>
 				{
 					Log = new StateTraceLog
@@ -400,6 +420,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldHave2TracedUsersOrderedByLatestFirst()
 		{
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(new RtaTracerLog<StateTraceLog>
 				{
 					Time = "2017-10-18 10:00".Utc(),
@@ -426,6 +447,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldHaveStateCode()
 		{
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(new RtaTracerLog<StateTraceLog>
 				{
 					Log = new StateTraceLog
@@ -443,6 +465,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldHave2StateCodes()
 		{
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(new RtaTracerLog<StateTraceLog>
 					{
 						Log = new StateTraceLog
@@ -469,6 +492,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldHave2StateCodesOrderedByLatestFirst()
 		{
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(new RtaTracerLog<StateTraceLog>
 				{
 					Time = "2017-10-18 10:00".Utc(),
@@ -500,6 +524,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		{
 			var traceId = Guid.NewGuid();
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(new RtaTracerLog<StateTraceLog>
 				{
 					Log = new StateTraceLog
@@ -527,6 +552,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldHaveMessageToo()
 		{
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(
 					new RtaTracerLog<StateTraceLog>
 					{
@@ -546,6 +572,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		public void ShouldHaveMessageWithProcess()
 		{
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(
 					new RtaTracerLog<StateTraceLog>
 					{
@@ -567,6 +594,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		{
 			var traceId = Guid.NewGuid();
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(new RtaTracerLog<StateTraceLog>
 				{
 					Log = new StateTraceLog
@@ -602,6 +630,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 		{
 			var traceId = Guid.NewGuid();
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(new RtaTracerLog<StateTraceLog>
 					{
 						Time = "2017-10-18 10:00".Utc(),
@@ -632,6 +661,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 			var trace1 = Guid.NewGuid();
 			var trace2 = Guid.NewGuid();
 			RtaTracers
+				.WithCurrentTenant()
 				.Has(new RtaTracerLog<StateTraceLog>
 				{
 					Log = new StateTraceLog
@@ -672,7 +702,9 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 				Log = new StateTraceLog {User = "usercode", StateCode = "statecode"},
 				Message = "message"
 			};
-			RtaTracers.Has(recevied);
+			RtaTracers
+				.WithCurrentTenant()
+				.Has(recevied);
 
 			var result = Target.Build();
 			recevied.Log.User = "mutated";
@@ -685,6 +717,75 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 				.Should().Be("statecode");
 			result.TracedUsers.Single().States.Single().Traces.Single()
 				.Should().Be("message");
+		}
+
+		[Test]
+		[SetCulture("sv-SE")]
+		public void ShouldContainDataEnqueuing()
+		{
+			RtaTracers
+				.WithCurrentTenant()
+				.Has(new RtaTracerLog<ProcessEnqueuingLog>
+				{
+					Log = new ProcessEnqueuingLog {At = "2017-10-04 08:00:01.123".Utc(), Count = 3}
+				});
+
+			Target.Build().Tracers.Single().DataEnqueuing.Single().At.Should().Be("08:00:01");
+			Target.Build().Tracers.Single().DataEnqueuing.Single().Count.Should().Be(3);
+		}
+
+		[Test]
+		public void ShouldContain5LatestDataEnqueuings()
+		{
+			var times = "2017-12-19 12:00".Utc().TimeRange("2017-12-19 13:00".Utc(), TimeSpan.FromMinutes(1));
+			var logs = times.Select(x => new RtaTracerLog<ProcessEnqueuingLog>
+			{
+				Log = new ProcessEnqueuingLog {At = x}
+			});
+			RtaTracers
+				.WithCurrentTenant()
+				.Has(logs.ToArray());
+
+			Target.Build().Tracers.Single().DataEnqueuing.Should().Have.Count.EqualTo(5);
+			Target.Build().Tracers.Single().DataEnqueuing.ElementAt(0).At.Should().Be("13:00:00");
+			Target.Build().Tracers.Single().DataEnqueuing.ElementAt(1).At.Should().Be("12:59:00");
+			Target.Build().Tracers.Single().DataEnqueuing.ElementAt(2).At.Should().Be("12:58:00");
+			Target.Build().Tracers.Single().DataEnqueuing.ElementAt(3).At.Should().Be("12:57:00");
+			Target.Build().Tracers.Single().DataEnqueuing.ElementAt(4).At.Should().Be("12:56:00");
+		}
+
+		[Test]
+		[SetCulture("sv-SE")]
+		public void ShouldContainDataProcessing()
+		{
+			RtaTracers
+				.Has(new RtaTracerLog<ProcessProcessingLog>
+				{
+					Log = new ProcessProcessingLog {At = "2017-10-04 08:00:01.123".Utc(), Count = 3}
+				});
+
+			Target.Build().Tracers.Single().DataProcessing.Single().At.Should().Be("08:00:01");
+			Target.Build().Tracers.Single().DataProcessing.Single().Count.Should().Be(3);
+		}
+
+		[Test]
+		public void ShouldContain5LatestDataProcessings()
+		{
+			var times = "2017-12-19 12:00".Utc().TimeRange("2017-12-19 13:00".Utc(), TimeSpan.FromMinutes(1));
+			var logs = times.Select(x => new RtaTracerLog<ProcessProcessingLog>
+			{
+				Log = new ProcessProcessingLog {At = x}
+			});
+			RtaTracers
+				.WithCurrentTenant()
+				.Has(logs.ToArray());
+
+			Target.Build().Tracers.Single().DataProcessing.Should().Have.Count.EqualTo(5);
+			Target.Build().Tracers.Single().DataProcessing.ElementAt(0).At.Should().Be("13:00:00");
+			Target.Build().Tracers.Single().DataProcessing.ElementAt(1).At.Should().Be("12:59:00");
+			Target.Build().Tracers.Single().DataProcessing.ElementAt(2).At.Should().Be("12:58:00");
+			Target.Build().Tracers.Single().DataProcessing.ElementAt(3).At.Should().Be("12:57:00");
+			Target.Build().Tracers.Single().DataProcessing.ElementAt(4).At.Should().Be("12:56:00");
 		}
 	}
 }

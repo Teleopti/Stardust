@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			IResourceCalculationDataContainer filteredProjections,
                                                            DateTimePeriod periodToCalculate);
 
-		DateTimePeriod FetchPeriodForSkill(DateTimePeriod period, ISkill skill);
+		DateTimePeriod FetchPeriodForSkill(DateTimePeriod period, TimeZoneInfo timeZone);
 	}
 
     public class ActivityDivider : IActivityDivider
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             IEnumerable<ISkill> skillsForActivity = skillsInActivity(affectedPersonSkillService,activity);
             foreach (ISkill skill in skillsForActivity)
 			{
-				var periodToCalculateAdjusted = FetchPeriodForSkill(periodToCalculate, skill);
+				var periodToCalculateAdjusted = FetchPeriodForSkill(periodToCalculate, skill.TimeZone);
                 double? targetDemandValue = skillDayDemand(skill,relevantSkillStaffPeriods, periodToCalculateAdjusted);
                 if (targetDemandValue.HasValue)
                     dividedActivity.TargetDemands.Add(skill, targetDemandValue.Value);
@@ -108,9 +108,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return dividedActivity;
         }
 
-		public DateTimePeriod FetchPeriodForSkill(DateTimePeriod period, ISkill skill)
+		public DateTimePeriod FetchPeriodForSkill(DateTimePeriod period, TimeZoneInfo timeZone)
 		{
-			return ServiceLocatorForLegacy.ScheduleResourcePeriodFetcher.Fetch(period, skill);
+			return ServiceLocatorForLegacy.ScheduleResourcePeriodFetcher.Fetch(period, timeZone);
 		}
 
 		private static double? skillDayDemand(ISkill skill, ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods, DateTimePeriod periodToCalculate)
@@ -159,18 +159,23 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509)]
 	public class ScheduleResourcePeriodFetcher
 	{
-		public virtual DateTimePeriod Fetch(DateTimePeriod period, ISkill skill)
+		public virtual DateTimePeriod Fetch(DateTimePeriod period, TimeZoneInfo timeZone)
 		{
 			return period;
 		}
+
+		public virtual int FetchTimeZoneOffset(TimeZoneInfo timeZone)
+		{
+			return 0;
+		}
 	}
 
-	[RemoveMeWithToggle("put this on ActivityDivider.FetchPeriodForSkill instead", Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509)]
+	[RemoveMeWithToggle("put Fetch in ActivityDivider.FetchPeriodForSkill & FetchTimeZoneOffset where used instead", Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509)]
 	public class ScheduleResourcePeriodFetcherAdjustForTimeZone : ScheduleResourcePeriodFetcher
 	{
-		public override DateTimePeriod Fetch(DateTimePeriod period, ISkill skill)
+		public override DateTimePeriod Fetch(DateTimePeriod period, TimeZoneInfo timeZone)
 		{
-			var minutesOffset = skill.TimeZone.BaseUtcOffset.Minutes;
+			var minutesOffset = timeZone.BaseUtcOffset.Minutes;
 			if (minutesOffset == 0)
 				return period;
 
@@ -179,6 +184,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				minutesOffset = minutesOffset % 60 * -1;
 			
 			return period.MovePeriod(TimeSpan.FromMinutes(minutesOffset));
+		}
+
+		public override int FetchTimeZoneOffset(TimeZoneInfo timeZone)
+		{
+			return timeZone.BaseUtcOffset.Minutes;
 		}
 	}
 }

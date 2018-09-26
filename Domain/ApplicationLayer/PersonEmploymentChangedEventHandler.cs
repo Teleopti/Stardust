@@ -6,16 +6,6 @@ using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
-	[DisabledBy(Toggles.People_ImprovePersonAccountAccuracy_74914)]
-	public class PersonEmploymentChangedEventEmptyHandler  : IHandleEvent<PersonEmploymentChangedEvent>, IRunOnHangfire
-	{
-		public virtual void Handle(PersonEmploymentChangedEvent @event)
-		{
-			
-		}
-	}
-
-	[EnabledBy(Toggles.People_ImprovePersonAccountAccuracy_74914)]
 	public class PersonEmploymentChangedEventHandler  : IHandleEvent<PersonEmploymentChangedEvent>, IRunOnHangfire
 	{
 		private readonly CalculatePersonAccount _calculatePersonAccount;

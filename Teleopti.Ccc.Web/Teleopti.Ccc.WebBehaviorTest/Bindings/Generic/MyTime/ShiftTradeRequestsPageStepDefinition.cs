@@ -23,6 +23,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			gotoAddRequestToday();
 		}
 
+		[When(@"I view Bulletin Board")]
+		public void WhenIViewBulletinBoard()
+		{
+			gotoShiftTradeBulletinBoardToday();
+		}
+
 		[Given(@"I view Add Shift Trade Request for date '(.*)'")]
 		[When(@"I view Add Shift Trade Request for date '(.*)'")]
 		public void WhenIViewAddShiftTradeRequestForDate(DateTime date)

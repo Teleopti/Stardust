@@ -94,19 +94,33 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Tracer
 		public void Clear()
 		{
 			using (var session = _sessionFactory.OpenSession())
-				session
-					.CreateSQLQuery($@"DELETE RtaTracer.Logs WHERE Tenant = :Tenant")
-					.SetParameter("Tenant", _dataSource.CurrentName())
-					.ExecuteUpdate();
+			{
+				while (true)
+				{
+					var rowsAffected = session
+						.CreateSQLQuery($@"DELETE TOP (1000) RtaTracer.Logs WHERE Tenant = :Tenant")
+						.SetParameter("Tenant", _dataSource.CurrentName())
+						.ExecuteUpdate();
+					if (rowsAffected == 0)
+						break;
+				}
+			}
 		}
 
 		public void Purge()
 		{
 			using (var session = _sessionFactory.OpenSession())
-				session
-					.CreateSQLQuery($@"DELETE RtaTracer.Logs WHERE Time <= :Time")
-					.SetParameter("Time", _now.UtcDateTime().Add(_keepLogs.Negate()))
-					.ExecuteUpdate();
+			{
+				while (true)
+				{
+					var rowsAffected = session
+						.CreateSQLQuery($@"DELETE TOP (1000) RtaTracer.Logs WHERE Time <= :Time")
+						.SetParameter("Time", _now.UtcDateTime().Add(_keepLogs.Negate()))
+						.ExecuteUpdate();
+					if (rowsAffected == 0)
+						break;
+				}
+			}
 		}
 	}
 
@@ -127,7 +141,9 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Tracer
 		{
 			var serialized = loggingEvent.RenderedMessage;
 			var obj = _deserializer.DeserializeObject<dynamic>(serialized);
-			((IDbDataParameter) command.Parameters[ParameterName]).Value = ValueReader.Invoke(obj);
+			var value = ValueReader.Invoke(obj);
+			var parameter = (IDbDataParameter) command.Parameters[ParameterName];
+			parameter.Value = value == null ? DBNull.Value : ValueReader.Invoke(obj);
 		}
 	}
 }

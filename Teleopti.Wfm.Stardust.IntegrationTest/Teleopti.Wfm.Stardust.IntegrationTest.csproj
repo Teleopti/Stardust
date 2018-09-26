@@ -124,6 +124,7 @@
     <Compile Include="Stardust\DataCreator.cs" />
     <Compile Include="Stardust\NUnitSetup.cs" />
     <Compile Include="Stardust\PayrollEndToEndTest.cs" />
+    <Compile Include="Stardust\StardustManagerPingHelper.cs" />
     <Compile Include="Stardust\StardustTestAttribute.cs" />
     <Compile Include="Stardust\TestConfigReader.cs" />
   </ItemGroup>

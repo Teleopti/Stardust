@@ -6,6 +6,7 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		private readonly IList<storedEvent> _events = new List<storedEvent>();
 
-		public void Add(IEvent @event)
+		public void Add(IEvent @event, DeadLockVictim deadLockVictim)
 		{
 			var rtaStoredEvent = (@event as IRtaStoredEvent).QueryData();
 			if (rtaStoredEvent == null)
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.TestCommon
 				.Select(e => e.Event);
 		}
 
-		public IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp)
+		public IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp, DeadLockVictim deadLockVictim)
 		{
 			return _events
 				.Where(e => e.PersonId == personId &&

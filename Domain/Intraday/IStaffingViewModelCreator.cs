@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer.ViewModels;
 using Teleopti.Interfaces.Domain;
 

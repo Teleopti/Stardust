@@ -2,7 +2,6 @@
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
-
 	/// <summary>
 	/// Responsible to update all the person absence accounts
 	/// </summary>
@@ -11,7 +10,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <summary>
 		/// Updates the person absence accounts on activation / on termination
 		/// </summary>
-        void Update(IPerson person);
+		void Update(IPerson person);
 
 		bool UpdateForAbsence (IPerson person, IAbsence absence, DateOnly personAbsenceStartDate);
 

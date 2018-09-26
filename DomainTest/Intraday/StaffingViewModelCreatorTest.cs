@@ -12,11 +12,9 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Intraday.Domain;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -29,14 +27,14 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 	[DomainTest]
 	[TestFixture(true)]
 	[TestFixture(false)]
-
 	public class StaffingViewModelCreatorTest : IIsolateSystem, IConfigureToggleManager
 	{
 		private readonly bool _useErlangA;
 		public IStaffingViewModelCreator Target;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillRepository SkillRepository;
-		public FakeSkillDayRepository_DoNotUse SkillDayRepository;
+		public FakeSkillDayRepository SkillDayRepository;
+		public FakeMultisiteDayRepository MultisiteDayRepository;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakeIntradayQueueStatisticsLoader IntradayQueueStatisticsLoader;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
@@ -65,7 +63,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
-			isolate.UseTestDouble<FakeSkillDayRepository_DoNotUse>().For<ISkillDayRepository>();
 		}
 
 		[Test]
@@ -1358,6 +1355,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			//Add to SkillDayRepository
 			SkillDayRepository.Has(skillDay, skillDayChild1, skillDayChild2);
+			MultisiteDayRepository.Has(multiSkill.CreateMultisiteDays(scenario,new DateOnly(userNow), 1));
 
 			//Create SkillResources 
 			var skillCombinationResources = new List<SkillCombinationResource>();
@@ -1385,8 +1383,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			});
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(userNow, skillCombinationResources);
-
-
+			
 			var vm = Target.Load_old(new[] { multiSkill.Id.GetValueOrDefault() });
 
 			vm.DataSeries.Time.Length.Should().Be.EqualTo(4);

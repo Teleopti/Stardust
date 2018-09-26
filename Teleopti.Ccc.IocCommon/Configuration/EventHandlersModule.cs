@@ -64,6 +64,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			_config.Args().Cache.This<FetchAnalyticsScenarios>(b => b.CacheMethod(m => m.Execute()));
 			builder.RegisterType<AnalyticsFactScheduleTimeMapper>().As<IAnalyticsFactScheduleTimeMapper>().SingleInstance();				
 			builder.RegisterType<AnalyticsFactScheduleDateMapper>().As<IAnalyticsFactScheduleDateMapper>().SingleInstance();
+			builder.RegisterType<AnalyticsDateMapper>().SingleInstance();
 			builder.RegisterType<AnalyticsFactSchedulePersonMapper>().As<IAnalyticsFactSchedulePersonMapper>().SingleInstance();
 			builder.RegisterType<AnalyticsFactScheduleMapper>().As<IAnalyticsFactScheduleMapper>().SingleInstance();
 			builder.RegisterType<AnalyticsFactScheduleDayCountMapper>().As<IAnalyticsFactScheduleDayCountMapper>().SingleInstance();

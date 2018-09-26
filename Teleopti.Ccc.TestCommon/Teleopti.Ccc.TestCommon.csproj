@@ -446,7 +446,6 @@
     <Compile Include="FakeRepositories\Rta\FakeRtaStateGroupRepository.cs" />
     <Compile Include="FakeRepositories\Rta\FakeRtaMapRepository.cs" />
     <Compile Include="FakeRepositories\Tenant\FakeTenants.cs" />
-    <Compile Include="FakeScheduleDifferenceSaver_DoNotUse.cs" />
     <Compile Include="FakeStardustSender.cs" />
     <Compile Include="FakeShiftTradeLightValidator.cs" />
     <Compile Include="FakeSignalR.cs" />
@@ -759,6 +758,7 @@
     <Compile Include="TestData\Setups\Specific\UtcTimeZone.cs" />
     <Compile Include="Web\FakeHttpContext.cs" />
     <Compile Include="Web\FakeHttpRequest.cs" />
+    <Compile Include="Web\FakeHttpRequestHandler.cs" />
     <Compile Include="Web\FakeHttpResponse.cs" />
     <Compile Include="Web\FakeHttpSessionState.cs" />
     <Compile Include="Web\MutableFakeCurrentHttpContext.cs" />

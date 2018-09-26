@@ -51,6 +51,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ActiveTenants.cs" />
     <Compile Include="ApplicationLayer\ReadModels\AgentStateReadModelMaintainer.cs" />
     <Compile Include="ApplicationLayer\ReadModels\AgentStateReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\ReadModels\ControllableReadModelTransactionSyncronization.cs" />
@@ -80,12 +81,13 @@
     <Compile Include="Domain\AgentAdherenceDay\AdherencePercentageCalculator.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AdherencePeriod.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDay.cs" />
-    <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayHistoricalOverview.cs" />
+    <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayLoaderHistoricalOverview.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayLoaderDurationOfEvents.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayLoaderFromEventStore.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayLoaderLateForWork.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayWithDurationOfEvents.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayWithEventStore.cs" />
+    <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayWithHistoricalOverview.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayWithLateForWork.cs" />
     <Compile Include="Domain\AgentAdherenceDay\HistoricalChangeAdherence.cs" />
     <Compile Include="Domain\AgentAdherenceDay\HistoricalChangeModel.cs" />

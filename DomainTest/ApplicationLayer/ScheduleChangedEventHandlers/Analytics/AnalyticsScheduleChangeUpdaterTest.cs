@@ -60,8 +60,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
-
 			var fetcher = new FakeIntervalLengthFetcher();
 			fetcher.Has(15);
 			isolate.UseTestDouble(fetcher).For<IIntervalLengthFetcher>();

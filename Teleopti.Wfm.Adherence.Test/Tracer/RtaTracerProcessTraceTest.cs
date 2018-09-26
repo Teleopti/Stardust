@@ -30,7 +30,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 			var log = Logs.ReadOfType<ProcessReceivedLog>().Single();
 			log.Message.Should().Be("Data received at");
 			log.Process.Should().Be(RtaTracer.ProcessName());
-			log.Log.ReceivedAt.Should().Be("2017-10-09 13:00".Utc());
+			log.Log.At.Should().Be("2017-10-09 13:00".Utc());
 		}
 
 		[Test]
@@ -42,8 +42,8 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 			Target.ProcessReceived("method", 123);
 
 			var log = Logs.ReadOfType<ProcessReceivedLog>().Single();
-			log.Log.ReceivedBy.Should().Be("method");
-			log.Log.ReceivedCount.Should().Be(123);
+			log.Log.By.Should().Be("method");
+			log.Log.Count.Should().Be(123);
 		}
 
 		[Test]
@@ -52,14 +52,30 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 			Now.Is("2017-10-09 13:00");
 			Target.Trace("usercode");
 
-			Target.ProcessProcessing();
+			Target.ProcessProcessing(3);
 
 			var log = Logs.ReadOfType<ProcessProcessingLog>().Single();
 			log.Message.Should().Be("Processing");
 			log.Process.Should().Be(RtaTracer.ProcessName());
-			log.Log.ProcessingAt.Should().Be("2017-10-09 13:00".Utc());
+			log.Log.Count.Should().Be(3);
+			log.Log.At.Should().Be("2017-10-09 13:00".Utc());
 		}
 
+		[Test]
+		public void ShouldLogProcessEnqueuing()
+		{
+			Now.Is("2017-10-09 13:00");
+			Target.Trace("usercode");
+
+			Target.ProcessEnqueuing(4);
+
+			var log = Logs.ReadOfType<ProcessEnqueuingLog>().Single();
+			log.Message.Should().Be("Enqueuing");
+			log.Process.Should().Be(RtaTracer.ProcessName());
+			log.Log.Count.Should().Be(4);
+			log.Log.At.Should().Be("2017-10-09 13:00".Utc());
+		}
+		
 		[Test]
 		public void ShouldLogActivityCheck()
 		{
@@ -68,10 +84,10 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 
 			Target.ProcessActivityCheck();
 
-			var log = Logs.ReadOfType<ActivityCheckLog>().Single();
+			var log = Logs.ReadOfType<ProcessActivityCheckLog>().Single();
 			log.Message.Should().Be("Activity check at");
 			log.Process.Should().Be(RtaTracer.ProcessName());
-			log.Log.ActivityCheckAt.Should().Be("2017-10-09 13:00".Utc());
+			log.Log.At.Should().Be("2017-10-09 13:00".Utc());
 		}
 
 		[Test]
@@ -126,7 +142,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 			Target.Trace("usercode");
 			Target.Stop();
 
-			Target.ProcessProcessing();
+			Target.ProcessProcessing(null);
 
 			Logs.ReadOfType<ProcessProcessingLog>().Should().Be.Empty();
 		}
@@ -139,7 +155,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 
 			Target.ProcessActivityCheck();
 
-			Logs.ReadOfType<ActivityCheckLog>().Should().Be.Empty();
+			Logs.ReadOfType<ProcessActivityCheckLog>().Should().Be.Empty();
 		}
 
 		[Test]

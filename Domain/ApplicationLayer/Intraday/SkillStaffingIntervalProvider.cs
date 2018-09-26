@@ -13,20 +13,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 	{
 		private readonly SplitSkillStaffInterval _splitSkillStaffInterval;
 		private readonly ISkillRepository _skillRepository;
-		private readonly IActivityRepository _activityRepository;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly ExtractSkillForecastIntervals _extractSkillForecastIntervals;
 
 		public SkillStaffingIntervalProvider(SplitSkillStaffInterval splitSkillStaffInterval,
-											 ISkillCombinationResourceRepository skillCombinationResourceRepository, ISkillRepository skillRepository, IResourceCalculation resourceCalculation, ExtractSkillForecastIntervals extractSkillForecastIntervals, IActivityRepository activityRepository)
+											 ISkillCombinationResourceRepository skillCombinationResourceRepository, ISkillRepository skillRepository, IResourceCalculation resourceCalculation, ExtractSkillForecastIntervals extractSkillForecastIntervals)
 		{
 			_splitSkillStaffInterval = splitSkillStaffInterval;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 			_skillRepository = skillRepository;
 			_resourceCalculation = resourceCalculation;
 			_extractSkillForecastIntervals = extractSkillForecastIntervals;
-			_activityRepository = activityRepository;
 		}
 
 
@@ -70,7 +68,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 
             using (getContext(combinationResources, skills, false))
 			{
-				//var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfo.Utc);
 				var dateOnlyPeriod = ExtractSkillForecastIntervals.GetLongestPeriod(skills, periodUtc);
 				_resourceCalculation.ResourceCalculate(dateOnlyPeriod, resCalcData, () => getContext(combinationResources, skills, true));
 			}

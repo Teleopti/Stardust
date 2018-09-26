@@ -154,6 +154,16 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			return new AdherencePercentageCalculator().Calculate(_shift, neutralAdherencesWithinShift, outOfAhderencesWithinShift, _now);
 		}
 
+		public int? SecondsInAherence()
+		{
+			throw new NotImplementedException();
+		}
+
+		public int? SecondsOutOfAdherence()
+		{
+			throw new NotImplementedException();
+		}
+
 		//difficult to grasp the linq
 		private static IEnumerable<DateTimePeriod> subtractPeriods(IEnumerable<DateTimePeriod> periods, IEnumerable<DateTimePeriod> toSubtract) =>
 			toSubtract

@@ -11,5 +11,6 @@
 		public bool ShiftTradeBulletinBoardPermission { get; set; }
 		public bool PersonAccountPermission { get; set; }
 		public bool OvertimeRequestPermission { get; set; }
+		public bool RequestListPermission { get; set; }
 	}
 }

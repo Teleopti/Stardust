@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             const bool raise = true;
             using (_mockRepository.Record())
             {
-                Expect.Call(_bitArrayCreator.CreatePeriodBitArray(raise, _scheduleMatrix)).Return(_lockableBitArray);
+                Expect.Call(_bitArrayCreator.CreatePeriodBitArray(_scheduleMatrix)).Return(_lockableBitArray);
 				Expect.Call(_decisionMaker.Execute(_lockableBitArray, raise, _period)).Return(0);
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDays).Return(
                     new [] { _day1 }).Repeat.AtLeastOnce();
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             const bool raise = false;
             using (_mockRepository.Record())
             {
-                Expect.Call(_bitArrayCreator.CreatePeriodBitArray(raise, _scheduleMatrix)).Return(_lockableBitArray);
+                Expect.Call(_bitArrayCreator.CreatePeriodBitArray(_scheduleMatrix)).Return(_lockableBitArray);
 				Expect.Call(_decisionMaker.Execute(_lockableBitArray, raise, _period)).Return(0);
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDays).Return(
                     new [] { _day1 }).Repeat.AtLeastOnce();

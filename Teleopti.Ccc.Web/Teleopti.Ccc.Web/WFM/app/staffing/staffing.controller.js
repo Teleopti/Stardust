@@ -44,7 +44,6 @@
 		vm.dynamicIcon = dynamicIcon;
 		vm.toggleOverstaffSettings = toggleOverstaffSettings;
 		vm.isOvertimeSuggestionEnabled = isOvertimeSuggestionEnabled;
-		vm.showBpoImportInfo = showBpoImportInfo;
 		vm.validSettings = validSettings;
 		vm.isRunning = isRunning;
 		vm.isNoSuggestion = isNoSuggestion;
@@ -113,10 +112,6 @@
 
 		function isOvertimeSuggestionEnabled() {
 			return toggleService.WfmStaffing_AddOvertime_42524;
-		}
-
-		function showBpoImportInfo() {
-			return toggleService.Staffing_BPO_Visualization_74958;
 		}
 
 		function toggleOverstaffSettings() {

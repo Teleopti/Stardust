@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		private static readonly ILog logger = LogManager.GetLogger(typeof(UpdateFactSchedules));
 
 		private readonly IAnalyticsFactScheduleMapper _factScheduleMapper;
-		private readonly IAnalyticsFactScheduleDateMapper _factScheduleDateMapper;
 		private readonly IAnalyticsFactSchedulePersonMapper _factSchedulePersonMapper;
 		private readonly IAnalyticsFactScheduleDayCountMapper _factScheduleDayCountMapper;
 		private readonly IAnalyticsScheduleRepository _analyticsScheduleRepository;
@@ -31,9 +30,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IProjectionChangedEventBuilder _projectionChangedEventBuilder;
 		private readonly IAnalyticsDayOffRepository _analyticsDayOffRepository;
+		private readonly AnalyticsDateMapper _analyticsDateMapper;
 
 		public UpdateFactSchedules(IAnalyticsFactScheduleMapper factScheduleMapper,
-			IAnalyticsFactScheduleDateMapper factScheduleDateMapper,
 			IAnalyticsFactSchedulePersonMapper factSchedulePersonMapper,
 			IAnalyticsFactScheduleDayCountMapper factScheduleDayCountMapper,
 			IAnalyticsScheduleRepository analyticsScheduleRepository,
@@ -44,10 +43,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			IPersonRepository personRepository,
 			IScenarioRepository scenarioRepository,
 			IProjectionChangedEventBuilder projectionChangedEventBuilder,
-			IAnalyticsDayOffRepository analyticsDayOffRepository)
+			IAnalyticsDayOffRepository analyticsDayOffRepository,
+			AnalyticsDateMapper analyticsDateMapper)
 		{
 			_factScheduleMapper = factScheduleMapper;
-			_factScheduleDateMapper = factScheduleDateMapper;
 			_factSchedulePersonMapper = factSchedulePersonMapper;
 			_factScheduleDayCountMapper = factScheduleDayCountMapper;
 			_analyticsScheduleRepository = analyticsScheduleRepository;
@@ -59,6 +58,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			_scenarioRepository = scenarioRepository;
 			_projectionChangedEventBuilder = projectionChangedEventBuilder;
 			_analyticsDayOffRepository = analyticsDayOffRepository;
+			_analyticsDateMapper = analyticsDateMapper;
 		}
 
 		public void Execute(Guid personId, Guid scenarioId, Guid businessUnitId, Func<IPerson, IEnumerable<DateTime>> dates, DateTime timestamp)
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		[AnalyticsUnitOfWork]
 		protected virtual void MapDate(DateOnly date, List<int> dateIds)
 		{
-			if (_factScheduleDateMapper.MapDateId(date, out var dateId))
+			if (_analyticsDateMapper.MapDateId(date, out var dateId))
 			{
 				dateIds.Add(dateId);
 			}

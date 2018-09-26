@@ -8,8 +8,6 @@ namespace Teleopti.Ccc.Web.Auth
 {
 	public static class UriExtension
 	{
-		private const string SecureScheme = "https";
-
 		public static Uri UrlConsideringLoadBalancerHeaders(this HttpRequestBase request)
 		{
 			var uri = request?.Url;
@@ -34,12 +32,12 @@ namespace Teleopti.Ccc.Web.Auth
 			if (headers == null) return uri;
 			var forwardedProto = headers["X-Forwarded-Proto"];
 			var frontEndHttps = headers["Front-End-Https"];
-			if (SecureScheme.Equals(forwardedProto, StringComparison.OrdinalIgnoreCase) ||
+			if (Uri.UriSchemeHttps.Equals(forwardedProto, StringComparison.OrdinalIgnoreCase) ||
 				"on".Equals(frontEndHttps, StringComparison.OrdinalIgnoreCase))
 			{
 				var builder = new UriBuilder(uri)
 				{
-					Scheme = SecureScheme,
+					Scheme = Uri.UriSchemeHttps,
 					Port = 443
 				};
 				return builder.Uri;

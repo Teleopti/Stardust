@@ -110,6 +110,8 @@
     <Compile Include="QueryListingTest.cs" />
     <Compile Include="Query\AllAbsencesTest.cs" />
     <Compile Include="Query\GetAllActivitiesTest.cs" />
+    <Compile Include="Query\PermittedFunctionsByPersonTest.cs" />
+    <Compile Include="Query\PersonalAccountBalanceTest.cs" />
     <Compile Include="Query\ScheduleByPersonIdTest.cs" />
     <Compile Include="Query\ScheduleChangesListenersTest.cs" />
     <Compile Include="Query\UserByEmailTest.cs" />

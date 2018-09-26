@@ -117,10 +117,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OvertimeRequestAvailability>().As<IOvertimeRequestAvailability>();
 			builder.RegisterType<LicenseAvailability>().As<ILicenseAvailability>();
 
-			registerType
-				<IAnyPersonSkillsOpenValidator, AnyPersonSkillsOpenValidator, AnyPersonSkillOpenTrueValidator>(builder,
-					Toggles.Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384
-				);
+			builder.RegisterType<AnyPersonSkillsOpenValidator>().As<IAnyPersonSkillsOpenValidator>();
 			builder.RegisterType<ShiftEndTimeProvider>().As<IShiftEndTimeProvider>().SingleInstance();
 			builder.RegisterType<ShiftStartTimeProvider>().As<IShiftStartTimeProvider>().SingleInstance();
 			builder.RegisterType<OvertimeRequestDefaultStartTimeProvider>().As<IOvertimeRequestDefaultStartTimeProvider>().SingleInstance();

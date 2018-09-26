@@ -6,9 +6,9 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -23,33 +23,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsForecastWorkloadUpdater));
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly IAnalyticsWorkloadRepository _analyticsWorkloadRepository;
-		private readonly IAnalyticsDateRepository _analyticsDateRepository;
 		private readonly IAnalyticsScenarioRepository _analyticsScenarioRepository;
 		private readonly IAnalyticsForecastWorkloadRepository _analyticsForecastWorkloadRepository;
 		private readonly IAnalyticsIntervalRepository _analyticsIntervalRepository;
-
-		private int intervalsPerDay;
-		private int minutesPerInterval;
-		private Dictionary<DateTime, IAnalyticsDate> analyticsDates;
+		private readonly AnalyticsDateMapper _analyticsDateMapper;
 
 		public AnalyticsForecastWorkloadUpdater(ISkillDayRepository skillDayRepository,
 			IAnalyticsWorkloadRepository analyticsWorkloadRepository,
 			IAnalyticsDateRepository analyticsDateRepository,
 			IAnalyticsScenarioRepository analyticsScenarioRepository,
 			IAnalyticsForecastWorkloadRepository analyticsForecastWorkloadRepository,
-			IAnalyticsIntervalRepository analyticsIntervalRepository)
+			IAnalyticsIntervalRepository analyticsIntervalRepository,
+			AnalyticsDateMapper analyticsDateMapper)
 		{
 			_skillDayRepository = skillDayRepository;
 			_analyticsWorkloadRepository = analyticsWorkloadRepository;
-			_analyticsDateRepository = analyticsDateRepository;
 			_analyticsScenarioRepository = analyticsScenarioRepository;
 			_analyticsForecastWorkloadRepository = analyticsForecastWorkloadRepository;
 			_analyticsIntervalRepository = analyticsIntervalRepository;
+			_analyticsDateMapper = analyticsDateMapper;
 		}
 
 		[ImpersonateSystem]
 		[UnitOfWork]
-		[AnalyticsUnitOfWork]
 		[Attempts(10)]
 		public virtual void Handle(SkillDayChangedEvent @event)
 		{
@@ -66,12 +62,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 				return;
 			}
 
-			intervalsPerDay = _analyticsIntervalRepository.IntervalsPerDay();
-			minutesPerInterval = minutesPerDay / intervalsPerDay;
-			analyticsDates = getAnalyticsDatesForSkillDay(skillDay);
-
-			var newForecastWorkloads = createForecastWorkloads(skillDay).ToList();
-			var currentForecastWorkloads = getCurrentForecastWorkloads(skillDay).ToList();
+			var intervalsPerDay = analyticsIntervalsPerDay();
+			var minutesPerInterval = minutesPerDay / intervalsPerDay;
+			var analyticsDateIds = mapDates(skillDay, minutesPerInterval);
+			handleForecasts(skillDay, analyticsDateIds, intervalsPerDay, minutesPerInterval);
+		}
+		
+		[AnalyticsUnitOfWork]
+		protected virtual void handleForecasts(ISkillDay skillDay, IDictionary<DateOnly, int> analyticsDateIds, int intervalsPerDay, int minutesPerInterval)
+		{
+			var newForecastWorkloads = createForecastWorkloads(skillDay, analyticsDateIds, intervalsPerDay, minutesPerInterval).ToList();
+			var currentForecastWorkloads = getCurrentForecastWorkloads(skillDay, analyticsDateIds, intervalsPerDay, minutesPerInterval).ToList();
 			var workloadsToRemove = currentForecastWorkloads.Where(x => !newForecastWorkloads.Contains(x)).ToList();
 
 			addOrUpdateWorkloads(newForecastWorkloads);
@@ -94,7 +95,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 			}
 		}
 
-		private IEnumerable<AnalyticsForcastWorkload> getCurrentForecastWorkloads(ISkillDay skillDay)
+		private IEnumerable<AnalyticsForcastWorkload> getCurrentForecastWorkloads(ISkillDay skillDay,
+			IDictionary<DateOnly, 
+			int> analyticsDateIds,
+			int intervalsPerDay,
+			int minutesPerInterval)
 		{
 			var currentDate = skillDay.CurrentDate.Date;
 			var timezone = skillDay.Skill.TimeZone;
@@ -105,8 +110,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 			var startIntervalId = new IntervalBase(startDateUtc, intervalsPerDay).Id;
 			var endIntervalId = new IntervalBase(endDateUtc, intervalsPerDay).Id;
 
-			var startDateId = getAnalyticsDate(startDateUtc.Date).DateId;
-			var endDateId = getAnalyticsDate(endDateUtc.Date).DateId;
+			var startDateId = analyticsDateIds[new DateOnly(startDateUtc.Date)];
+			var endDateId = analyticsDateIds[new DateOnly(endDateUtc.Date)];
 
 			var analyticsScenario = getAnalyticsScenario(skillDay);
 			var currentForecastWorkloads = new List<AnalyticsForcastWorkload>();
@@ -122,7 +127,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 			return currentForecastWorkloads;
 		}
 
-		private IEnumerable<AnalyticsForcastWorkload> createForecastWorkloads(ISkillDay skillDay)
+		private IEnumerable<AnalyticsForcastWorkload> createForecastWorkloads(ISkillDay skillDay,
+			IDictionary<DateOnly, int> analyticsDateIds,
+			int intervalsPerDay,
+			int minutesPerInterval)
 		{
 			var analyticsScenario = getAnalyticsScenario(skillDay);
 
@@ -133,7 +141,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 				
 				foreach (var taskPeriod in templateTaskPeriodList)
 				{
-					var analyticsDate = getAnalyticsDate(taskPeriod.Period.StartDateTime.Date);
+					var dateId = analyticsDateIds[new DateOnly(taskPeriod.Period.StartDateTime)];
 					var forecastedTalkTimeSeconds = taskPeriod.TotalAverageTaskTime.TotalSeconds * taskPeriod.TotalTasks;
 					var forecastedAfterCallWorkSeconds = taskPeriod.TotalAverageAfterTaskTime.TotalSeconds * taskPeriod.TotalTasks;
 					var forecastedCampaignTalkTimeSeconds = taskPeriod.CampaignTaskTime.Value * forecastedTalkTimeSeconds;
@@ -145,7 +153,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 						BusinessUnitId = analyticsWorkload.BusinessUnitId,
 						WorkloadId = analyticsWorkload.WorkloadId,
 						SkillId = analyticsWorkload.SkillId,
-						DateId = analyticsDate.DateId,
+						DateId = dateId,
 						ScenarioId = analyticsScenario.ScenarioId,
 						IntervalId = new IntervalBase(taskPeriod.Period.StartDateTime, intervalsPerDay).Id,
 						StartTime = taskPeriod.Period.StartDateTime,
@@ -179,14 +187,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 			return analyticsScenario;
 		}
 
-		private IAnalyticsDate getAnalyticsDate(DateTime date)
-		{
-			analyticsDates.TryGetValue(date, out var analyticsDate);
-			if (analyticsDate == null)
-				throw new DateMissingInAnalyticsException(date);
-			return analyticsDate;
-		}
-
 		private AnalyticsWorkload getAnalyticsWorkload(IWorkloadDayBase workloadDay)
 		{
 			var analyticsWorkload = _analyticsWorkloadRepository.GetWorkload(workloadDay.Workload.Id.GetValueOrDefault());
@@ -195,14 +195,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 			return analyticsWorkload;
 		}
 
-		private Dictionary<DateTime, IAnalyticsDate> getAnalyticsDatesForSkillDay(ISkillDay skillDay)
+		[AnalyticsUnitOfWork]
+		protected virtual IDictionary<DateOnly, int> mapDates(ISkillDay skillDay, int minutesPerInterval)
 		{
 			var currentDate = skillDay.CurrentDate.Date;
 			var timezone = skillDay.Skill.TimeZone;
 			var fromDate = TimeZoneHelper.ConvertToUtc(currentDate, timezone).Date;
 			var toDate = TimeZoneHelper.ConvertToUtc(currentDate.AddDays(1).AddMinutes(-minutesPerInterval), timezone).Date;
 
-			return _analyticsDateRepository.GetRange(fromDate, toDate).ToDictionary(x => x.DateDate, x => x);
+			var analyticsDates = new Dictionary<DateOnly, int>();
+			_analyticsDateMapper.MapDateId(new DateOnly(fromDate), out var dateId);
+			analyticsDates.Add(new DateOnly(fromDate), dateId);
+			_analyticsDateMapper.MapDateId(new DateOnly(toDate), out dateId);
+			if (!analyticsDates.ContainsKey(new DateOnly(toDate)))
+			{
+				analyticsDates.Add(new DateOnly(toDate), dateId);
+			}
+
+			return analyticsDates;
+		}
+
+		[AnalyticsUnitOfWork]
+		protected virtual int analyticsIntervalsPerDay()
+		{
+			return _analyticsIntervalRepository.IntervalsPerDay();
 		}
 	}
 }

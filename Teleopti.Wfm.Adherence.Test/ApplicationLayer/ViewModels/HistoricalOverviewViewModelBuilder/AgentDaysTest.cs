@@ -20,12 +20,13 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 		[Test]
 		public void ShouldDisplaySevenDays()
 		{
-			Now.Is("2018-08-23 14:00");
+			Now.Is("2018-08-22 14:00");
 			var teamId = Guid.NewGuid();
 			Database
 				.WithTeam(teamId)
 				.WithAgent()
-				.WithHistoricalStateChange("2018-08-23 14:00");
+				.WithHistoricalStateChange("2018-08-22 14:00");
+			Now.Is("2018-08-23 14:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
 
@@ -41,6 +42,7 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 				.WithTeam(teamId)
 				.WithAgent()
 				.WithHistoricalStateChange("2018-08-23 14:00");
+			Now.Is("2018-08-24 14:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
 
@@ -50,12 +52,13 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 		[Test]
 		public void ShouldGetCorrectDateForFirstDay()
 		{
-			Now.Is("2018-08-23 14:00");
+			Now.Is("2018-08-22 14:00");
 			var teamId = Guid.NewGuid();
 			Database
 				.WithTeam(teamId)
 				.WithAgent()
-				.WithHistoricalStateChange("2018-08-23 14:00");
+				.WithHistoricalStateChange("2018-08-22 14:00");
+			Now.Is("2018-08-23 14:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
 
@@ -65,12 +68,13 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 		[Test]
 		public void ShouldGetSevenDaysSequentially()
 		{
-			Now.Is("2018-08-24 14:00");
+			Now.Is("2018-08-23 14:00");
 			var teamId = Guid.NewGuid();
 			Database
 				.WithTeam(teamId)
 				.WithAgent()
-				.WithHistoricalStateChange("2018-08-24 14:00");
+				.WithHistoricalStateChange("2018-08-23 14:00");
+			Now.Is("2018-08-24 14:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
 
@@ -80,12 +84,13 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 		[Test]
 		public void ShouldDisplayDateForSevenDaysSequentially()
 		{
-			Now.Is("2018-08-24 14:00");
+			Now.Is("2018-08-23 14:00");
 			var teamId = Guid.NewGuid();
 			Database
 				.WithTeam(teamId)
 				.WithAgent()
-				.WithHistoricalStateChange("2018-08-24 14:00");
+				.WithHistoricalStateChange("2018-08-23 14:00");
+			Now.Is("2018-08-24 14:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
 

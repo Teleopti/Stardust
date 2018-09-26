@@ -40,7 +40,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			}
 		}
 
-		public IEnumerable<string> ActiveTenants()
+		public IEnumerable<string> Tenants()
 		{
 			lock (_lock)
 			{

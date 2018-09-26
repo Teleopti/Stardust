@@ -136,7 +136,6 @@
     <Compile Include="Configuration\StartupConfigurationModel.cs" />
     <Compile Include="TenantInfo.cs" />
     <Compile Include="Tenants.cs" />
-    <Compile Include="TenantsOld.cs" />
     <Compile Include="Service\EtlJobStarter.cs" />
     <Compile Include="Service\EtlService.cs" />
     <Compile Include="Infrastructure\CubeRepository.cs" />

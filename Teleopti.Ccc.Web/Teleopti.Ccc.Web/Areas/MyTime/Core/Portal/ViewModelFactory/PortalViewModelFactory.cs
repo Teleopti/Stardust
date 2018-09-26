@@ -46,7 +46,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			ITeamGamificationSettingRepository teamGamificationSettingReop,
 			ICurrentTenantUser currentTenantUser,
 			IUserCulture userCulture,
-			ICurrentTeleoptiPrincipal currentIdentity, IToggleManager toggleManager, ILicenseAvailability licenseAvailability,
+			ICurrentTeleoptiPrincipal currentIdentity, IToggleManager toggleManager,
+			ILicenseAvailability licenseAvailability,
 			IAgentBadgeWithinPeriodProvider agentBadgeWithinPeriodProvider, INow now)
 		{
 			_permissionProvider = permissionProvider;
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 
 		public PortalViewModel CreatePortalViewModel()
 		{
-			var navigationItems = new List<NavigationItem> { createWeekScheduleNavigationItem() };
+			var navigationItems = new List<NavigationItem> {createWeekScheduleNavigationItem()};
 
 			var culture = _userCulture == null ? CultureInfo.InvariantCulture : _userCulture.GetCulture();
 			var useJalaaliCalendar = culture.IetfLanguageTag == "fa-IR";
@@ -108,7 +109,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				rollingPeriodSet = teamSetting.GamificationSetting.RollingPeriodSet;
 			}
 
-			var showBadgePeriodNavigator = _toggleManager.IsEnabled(Toggles.WFM_Gamification_Create_Rolling_Periods_74866);
+			var showBadgePeriodNavigator =
+				_toggleManager.IsEnabled(Toggles.WFM_Gamification_Create_Rolling_Periods_74866);
 
 			return new PortalViewModel
 			{
@@ -116,11 +118,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				NavigationItems = navigationItems,
 				CustomerName = customerName,
 				CurrentLogonAgentName = _personNameProvider.BuildNameFromSetting(person.Name),
+				CurrentLogonAgentId = person.Id,
 				ShowChangePassword = showChangePassword(),
 				ShowWFMAppGuide = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewQRCodeForConfiguration),
-				AsmEnabled =
-					_permissionProvider.HasApplicationFunctionPermission(
-						DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger) && isAsmLicenseAvailable(),
+				AsmEnabled =  isAsmAvailable(),
 				ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
 				UseJalaaliCalendar = useJalaaliCalendar,
 				DateFormat = culture.DateTimeFormat.ShortDatePattern.ToUpper(),
@@ -133,7 +134,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				ShowBadge = showBadge,
 				ShowBadgePeriodNavigator = showBadgePeriodNavigator,
 				DateFormatLocale = getLocale(),
-				GrantEnabled = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ChatBot)
+				GrantEnabled = isGrantBotAvailable()
+					
 			};
 		}
 
@@ -154,7 +156,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			if (!_toggleManager.IsEnabled(Toggles.WFM_Gamification_Create_Rolling_Periods_74866)) return onGoingPeriod;
 
 			var firstDayOfWeek = person.FirstDayOfWeek;
-			
+
 			switch (gamificationSetting.RollingPeriodSet)
 			{
 				case GamificationRollingPeriodSet.Weekly:
@@ -176,21 +178,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			var reportsItems = _reportsNavigationProvider.GetNavigationItems();
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule))
 			{
-				if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_NewTeamScheduleView_75989))
-				{
-					navigationItems.Add(createNewTeamScheduleNavigationItem());
-				}
-				else
-				{
-					navigationItems.Add(createTeamScheduleNavigationItem());
-				}
+				navigationItems.Add(_toggleManager.IsEnabled(Toggles.MyTimeWeb_NewTeamScheduleView_75989)
+					? createNewTeamScheduleNavigationItem()
+					: createTeamScheduleNavigationItem());
 			}
-			if (
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StudentAvailability) &&
+
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StudentAvailability) &&
 				!useJalaaliCalendar)
 			{
 				navigationItems.Add(createStudentAvailabilityNavigationItem());
 			}
+
 			if (
 				(!useJalaaliCalendar || _toggleManager.IsEnabled(Toggles.MyTimeWeb_PreferenceForJalaliCalendar_42965)) &&
 				(_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences) ||
@@ -198,6 +196,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			{
 				navigationItems.Add(createPreferenceNavigationItem());
 			}
+
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests) ||
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb) ||
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb) ||
@@ -205,16 +204,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			{
 				navigationItems.Add(createRequestsNavigationItem());
 			}
-			if (isAsmLicenseAvailable() && _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger))
+
+			if (isAsmAvailable())
 			{
 				navigationItems.Add(createMessageNavigationItem(_pushMessageProvider.UnreadMessageCount));
 			}
+
 			var reportsList = new List<ReportNavigationItem>();
 			if (reportsItems != null && (reportsItems.Count.Equals(1) && reportsItems.First().IsWebReport))
 			{
 				navigationItems.Add(reportsItems.First());
 			}
 			else if (reportsItems != null) reportsList.AddRange(reportsItems);
+
 			return reportsList;
 		}
 
@@ -312,9 +314,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			};
 		}
 
-		private bool isAsmLicenseAvailable()
+		private bool isAsmAvailable()
 		{
-			return _licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger);
+			return _licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger) &&
+				   _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths
+					   .AgentScheduleMessenger);
+		}
+
+		private bool isGrantBotAvailable()
+		{
+			return _licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiWfmChatBot) &&
+				   _toggleManager.IsEnabled(Toggles.WFM_ChatBot_77547) &&
+				   _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ChatBot);
 		}
 	}
 }

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			var layers = new List<IVisualLayer> { visualLayer1, visualLayer2, visualLayer3 };
 			var visualLayers = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
-			var result = visualLayers.ToResourceLayers(15).ToArray();
+			var result = visualLayers.ToResourceLayers(15, TimeZoneInfo.Utc).ToArray();
 
 			result.First(r => r.Period.StartDateTime == new DateTime(2001, 1, 1, 10, 0, 0, DateTimeKind.Utc)).Resource.Should().Be.EqualTo(0.8);
 			result.Last(r => r.Period.StartDateTime == new DateTime(2001, 1, 1, 10, 0, 0, DateTimeKind.Utc)).Resource.Should().Be.EqualTo(0.2);
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			var layers = new List<IVisualLayer> { visualLayer };
 			var visualLayers = new VisualLayerCollection(layers,new ProjectionPayloadMerger());
 
-			var result = visualLayers.ToResourceLayers(15).ToArray();
+			var result = visualLayers.ToResourceLayers(15, TimeZoneInfo.Utc).ToArray();
 
 			var resultLayer = result.Single();
 			resultLayer.Resource.Should().Be.EqualTo(0.2);
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			var layers = new List<IVisualLayer> { visualLayer };
 			var visualLayers = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
-			var result = visualLayers.ToResourceLayers(15).ToArray();
+			var result = visualLayers.ToResourceLayers(15, TimeZoneInfo.Utc).ToArray();
 
 			var resultLayer = result.Single();
 			resultLayer.Resource.Should().Be.EqualTo(0.2);
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			var layers = new List<IVisualLayer> { visualLayer };
 			var visualLayers = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
-			var result = visualLayers.ToResourceLayers(15).ToArray();
+			var result = visualLayers.ToResourceLayers(15, TimeZoneInfo.Utc).ToArray();
 
 			var resultLayer = result.Single();
 			resultLayer.Resource.Should().Be.EqualTo(0.2);
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			var layers = new List<IVisualLayer> { visualLayer };
 			var visualLayers = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
-			var result = visualLayers.ToResourceLayers(15).ToArray();
+			var result = visualLayers.ToResourceLayers(15, TimeZoneInfo.Utc).ToArray();
 
 			result.Single().Resource.Should().Be.EqualTo(1.0);
 		}
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			var layers = new List<IVisualLayer> { visualLayer };
 			var visualLayers = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
-			var result = visualLayers.ToResourceLayers(15).ToArray();
+			var result = visualLayers.ToResourceLayers(15, TimeZoneInfo.Utc).ToArray();
 
 			result.Single().FractionPeriod.HasValue.Should().Be.False();
 		}
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			var layers = new List<IVisualLayer> {visualLayer1, visualLayer2};
 			var visualLayers = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
-			var result = visualLayers.ToResourceLayers(15).ToArray();
+			var result = visualLayers.ToResourceLayers(15, TimeZoneInfo.Utc).ToArray();
 			Assert.AreEqual(2, result.Count());
 			Assert.IsTrue(result[0].Period.Equals(dateTimePeriod1));
 			Assert.IsTrue(result[1].Period.Equals(dateTimePeriod2));

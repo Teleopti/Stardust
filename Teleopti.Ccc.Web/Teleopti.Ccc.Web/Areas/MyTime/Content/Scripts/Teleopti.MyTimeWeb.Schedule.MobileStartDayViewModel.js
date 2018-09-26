@@ -1,7 +1,8 @@
 ﻿Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function(weekStart, parent, dataService) {
 	var self = this;
 
-	var constants = Teleopti.MyTimeWeb.Common.Constants;
+	var constants = Teleopti.MyTimeWeb.Common.Constants,
+		oneWeekRawProbabilities = [];
 
 	self.displayDate = ko.observable();
 	self.selectedDate = ko.observable(moment().startOf('day'));
@@ -351,28 +352,49 @@
 
 	self.reloadProbabilityData = function() {
 		self.loadingProbabilityData(true);
-		dataService.fetchProbabilityData(
-			self.selectedDate().format('YYYY-MM-DD'),
-			self.selectedProbabilityOptionValue(),
-			self.updateProbabilityData
-		);
+
+		var isWithinLoadedProbabilityPeriod =
+			oneWeekRawProbabilities.length > 0 &&
+			moment(oneWeekRawProbabilities[0].Date) <= self.selectedDate() &&
+			self.selectedDate() <= moment(oneWeekRawProbabilities[oneWeekRawProbabilities.length - 1].Date);
+
+		if (isWithinLoadedProbabilityPeriod) {
+			var probabilities = oneWeekRawProbabilities.filter(function(r) {
+				return r.Date === self.selectedDate().format('YYYY-MM-DD');
+			});
+
+			self.probabilities(
+				Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(
+					probabilities,
+					self,
+					buildProbabilityOptions()
+				)
+			);
+			self.loadingProbabilityData(false);
+		} else {
+			self.probabilities([]);
+			dataService.fetchProbabilityData(
+				self.selectedDate().format('YYYY-MM-DD'),
+				self.selectedProbabilityOptionValue(),
+				self.updateProbabilityData
+			);
+		}
 	};
 
 	self.updateProbabilityData = function(rawProbabilities) {
 		if (!self.staffingProbabilityOnMobileEnabled()) return;
-		var options = {
-			probabilityType: self.selectedProbabilityOptionValue(),
-			layoutDirection: constants.layoutDirection.vertical,
-			timelines: self.timeLines(),
-			mergeSameIntervals: self.mergeIdenticalProbabilityIntervals,
-			hideProbabilityEarlierThanNow: self.hideProbabilityEarlierThanNow,
-			userTexts: self.userTexts,
-			daylightSavingTimeAdjustment: self.daylightSavingTimeAdjustment
-		};
+		oneWeekRawProbabilities = rawProbabilities;
+
 		self.fixedDate = self.selectedDate;
 
 		self.probabilities(
-			Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(rawProbabilities, self, options)
+			Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(
+				oneWeekRawProbabilities.filter(function(r) {
+					return r.Date === self.selectedDate().format('YYYY-MM-DD');
+				}),
+				self,
+				buildProbabilityOptions()
+			)
 		);
 
 		self.loadingProbabilityData(false);
@@ -389,6 +411,18 @@
 		self.menuIconIsVisible(true);
 		resetRequestViewModel();
 	};
+
+	function buildProbabilityOptions() {
+		return {
+			probabilityType: self.selectedProbabilityOptionValue(),
+			layoutDirection: constants.layoutDirection.vertical,
+			timelines: self.timeLines(),
+			mergeSameIntervals: self.mergeIdenticalProbabilityIntervals,
+			hideProbabilityEarlierThanNow: self.hideProbabilityEarlierThanNow,
+			userTexts: self.userTexts,
+			daylightSavingTimeAdjustment: self.daylightSavingTimeAdjustment
+		};
+	}
 
 	function resetRequestViewModel() {
 		self.requestViewModel(undefined);

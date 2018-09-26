@@ -54,7 +54,10 @@ rtaTester.describe('RtaTracerController', function (it, fit, xit) {
 		t.backend.withTracer({
 			Process: 'box1:hej',
 			DataReceived: [{At: '2017-10-02 07:00:' + random}],
-			ActivityCheckAt: '2017-10-02 09:21:' + random,
+			DataEnqueuing: [{At: '2017-10-02 07:01:' + random}],
+			DataProcessing: [{At: '2017-10-02 07:02:' + random}],
+			ActivityCheck: [{At: '2017-10-02 09:21:' + random}],
+			Exceptions: [{At: '2017-10-02 09:22:' + random}],
 			Tracing: 'usercode34, Ashley Andeen' + random
 		});
 
@@ -62,7 +65,10 @@ rtaTester.describe('RtaTracerController', function (it, fit, xit) {
 
 		expect(vm.tracers[0].process).toBe('box1:hej');
 		expect(vm.tracers[0].dataReceived[0].at).toBe('2017-10-02 07:00:' + random);
-		expect(vm.tracers[0].activityCheckAt).toBe('2017-10-02 09:21:' + random);
+		expect(vm.tracers[0].dataEnqueuing[0].at).toBe('2017-10-02 07:01:' + random);
+		expect(vm.tracers[0].dataProcessing[0].at).toBe('2017-10-02 07:02:' + random);
+		expect(vm.tracers[0].activityCheck[0].at).toBe('2017-10-02 09:21:' + random);
+		expect(vm.tracers[0].exceptions[0].at).toBe('2017-10-02 09:22:' + random);
 		expect(vm.tracers[0].tracing).toBe('usercode34, Ashley Andeen' + random);
 	});
 
@@ -140,6 +146,64 @@ rtaTester.describe('RtaTracerController', function (it, fit, xit) {
 		var vm = t.createController();
 
 		expect(vm.tracers[0].dataReceived.length).toBe(0);
+	});
+
+	it('should display tracer enqueuing count', function (t) {
+		t.backend.withTracer({
+			DataEnqueuing: [{
+				Count: 3
+			}]
+		});
+
+		var vm = t.createController();
+
+		expect(vm.tracers[0].dataEnqueuing[0].count).toBe(3);
+	});
+
+	it('should display tracer processing count', function (t) {
+		t.backend.withTracer({
+			DataProcessing: [{
+				Count: 4
+			}]
+		});
+
+		var vm = t.createController();
+
+		expect(vm.tracers[0].dataProcessing[0].count).toBe(4);
+	});
+
+	it('should return tracer tenant', function (t) {
+		t.backend.withTracer({
+			DataReceived: [{Tenant: 'tenant'}],
+			DataEnqueuing: [{Tenant: 'tenant'}],
+			DataProcessing: [{Tenant: 'tenant'}],
+			ActivityCheck: [{Tenant: 'tenant'}],
+			Exceptions: [{Tenant: 'tenant'}]
+		});
+		
+		var vm = t.createController();
+
+		expect(vm.tracers[0].dataReceived[0].tenant).toBe('tenant');
+		expect(vm.tracers[0].dataEnqueuing[0].tenant).toBe('tenant');
+		expect(vm.tracers[0].dataProcessing[0].tenant).toBe('tenant');
+		expect(vm.tracers[0].activityCheck[0].tenant).toBe('tenant');
+		expect(vm.tracers[0].exceptions[0].tenant).toBe('tenant');
+	});
+
+	it('should not return tracer tenant if tenant is unknown', function (t) {
+		t.backend.withTracer({
+			DataReceived: [{}],
+			DataEnqueuing: [{}],
+			DataProcessing: [{}],
+			ActivityCheck: [{}],
+		});
+
+		var vm = t.createController();
+
+		expect(vm.tracers[0].dataReceived[0].tenant).toBeFalsy();
+		expect(vm.tracers[0].dataEnqueuing[0].tenant).toBeFalsy();
+		expect(vm.tracers[0].dataProcessing[0].tenant).toBeFalsy();
+		expect(vm.tracers[0].activityCheck[0].tenant).toBeFalsy();
 	});
 
 	it('should display user codes', function (t) {

@@ -16,9 +16,11 @@ Teleopti.MyTimeWeb.Request = (function($) {
 
 		self.showFabButton = (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826') && Teleopti.MyTimeWeb.Common.IsHostAMobile())
 						|| (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409') && Teleopti.MyTimeWeb.Common.IsHostAniPad());
+		self.showRequestListButton = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_Request_CleanUpRequestHisotry_77776');
 
 		self.hideFab = ko.observable(false);
 
+		self.requestListActive = ko.observable(true);
 		self.addTextRequestActive = ko.observable(false);
 		self.addAbsenceRequestActive = ko.observable(false);
 		self.addShiftTradeRequestActive = ko.observable(false);
@@ -33,6 +35,15 @@ Teleopti.MyTimeWeb.Request = (function($) {
 
 		self.disableMenu = function() {
 			self.menuIsVisible(false);
+		};
+
+		self.clickRequestList = function() {
+			self.resetToolbarActiveButtons();
+			self.requestListActive(true);
+			self.disableMenu();
+			Teleopti.MyTimeWeb.Request.RequestDetail.CancelAddingNewRequest();
+			$('#Request-add-shift-trade').hide();
+			$('#Request-shift-trade-bulletin-board').hide();
 		};
 
 		self.addTextRequest = function() {
@@ -93,7 +104,8 @@ Teleopti.MyTimeWeb.Request = (function($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
 		};
 
-		self.resetToolbarActiveButtons = function() {
+		self.resetToolbarActiveButtons = function () {
+			self.requestListActive(false);
 			self.addTextRequestActive(false);
 			self.addAbsenceRequestActive(false);
 			self.addShiftTradeRequestActive(false);
