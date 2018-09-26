@@ -73,6 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeActivityRepository ActivityRepository;
 		public MutableNow _now;
 		public FakeGlobalSettingDataRepository GlobalSettingDataRepository;
+		public FakeSkillRepository SkillRepository;
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -1076,10 +1077,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			PersonRequestRepository.Find(Guid.Parse(data.Id)).Should().Not.Be.Null();
 		}
 
-		[Ignore("uses old validator")]
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnErrorFromAbsenceRequestFormWhenPersistError()
 		{
+			BusinessUnitRepository.Add(new BusinessUnit("BU"));
 			var person = PersonFactory.CreatePersonWithId(Guid.NewGuid());
 
 			Now.Is(TimeZoneHelper.ConvertToUtc(DateOnly.Today.Date, person.PermissionInformation.DefaultTimeZone()));
@@ -1099,6 +1100,19 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			person.WorkflowControlSet = workflowControlSet;
 			PersonRepository.Add(person);
 			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+
+			var date = DateOnly.Today;
+			
+			var personSkill = PersonSkillFactory.CreatePersonSkill("skill", 1);
+			SkillRepository.Add(personSkill.Skill);
+			//var currentUser = ThreadPrincipalContext.Current().GetPerson(PersonRepository);
+			setPrincipal(person.Id.GetValueOrDefault(), Guid.NewGuid());
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date));
+			person.AddSkill(personSkill, person.PersonPeriodCollection.FirstOrDefault());
+			PersonAssignmentRepository.Has(person, CurrentScenario.Current(), new Activity(), new ShiftCategory("test"),
+				date, new TimePeriod(8, 10));
+
 
 
 			var form = new AbsenceRequestForm
@@ -1474,15 +1488,26 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			data.AnonymousTrading.Should().Be.True();
 		}
 
-		[Test, Ignore("uses old validator")]
+		[Test]
 		public void ShouldAllowCancelAbsenceRequest()
-		{	
-			Now.Is(new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc));
+		{
+			BusinessUnitRepository.Add(new BusinessUnit("BU"));
 
+			var date = new DateOnly(2016, 03, 02);
+			Now.Is(new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc));
+			//var skill = SkillFactory.CreateSkill("skill", SkillTypeFactory.CreateSkillType(), 15);
+			var personSkill = PersonSkillFactory.CreatePersonSkill("skill",1);
+			SkillRepository.Add(personSkill.Skill);
 			var currentUser = ThreadPrincipalContext.Current().GetPerson(PersonRepository);
-			currentUser.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 01, 01)));
+			setPrincipal(currentUser.Id.GetValueOrDefault(), Guid.NewGuid());
+			currentUser.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date));
+			currentUser.AddSkill(personSkill, currentUser.PersonPeriodCollection.FirstOrDefault());
+			PersonAssignmentRepository.Has(currentUser, CurrentScenario.Current(), new Activity(), new ShiftCategory("test"),
+				date, new TimePeriod(8, 10));
+
 			var data = doCancelAbsenceRequestMyTimeSpecificValidation(currentUser,
 				new DateTimePeriod(2016, 03, 02, 2016, 03, 03));
+			
 			data.ErrorMessages.Should().Be.Empty();
 		}
 
