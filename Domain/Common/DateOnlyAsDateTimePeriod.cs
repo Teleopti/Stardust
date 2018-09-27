@@ -34,8 +34,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 	    public bool Equals(IDateOnlyAsDateTimePeriod other)
 	    {
-		    var otherCasted = other as DateOnlyAsDateTimePeriod;
-		    return otherCasted != null && otherCasted._dateOnly == _dateOnly &&
+			return other is DateOnlyAsDateTimePeriod otherCasted && otherCasted._dateOnly == _dateOnly &&
 				   otherCasted._sourceTimeZone.Id == _sourceTimeZone.Id;
 	    }
     }

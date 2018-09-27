@@ -65,8 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		private void sendTrackingMessage(IEvent @event)
 		{
-			var commandIdentifier = @event as ICommandIdentifier;
-			if (commandIdentifier != null && commandIdentifier.CommandId != Guid.Empty)
+			if (@event is ICommandIdentifier commandIdentifier && commandIdentifier.CommandId != Guid.Empty)
 			{
 				_trackingMessageSender.SendTrackingMessage(
 					@event,

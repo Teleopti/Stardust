@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 					// to all business units like super roles.
 
 					var identity = Thread.CurrentPrincipal.Identity as ITeleoptiIdentity;
-                    var businessUnit = identity != null ? identity.BusinessUnit : null;
+                    var businessUnit = identity?.BusinessUnit;
                     if (!StateHolderReader.IsInitialized
                         && businessUnit != null
                         && (applicationRole.BusinessUnit != null && !applicationRole.BusinessUnit.Equals(businessUnit)))

@@ -46,10 +46,9 @@ namespace Teleopti.Ccc.Domain.Common
 
 			foreach (var shiftLayer in shiftLayersList)
 			{
-				var isPersonalLayer = shiftLayer is PersonalShiftLayer;
-				if (layer.Payload.Id.GetValueOrDefault() == shiftLayer.Payload.Id.GetValueOrDefault() && (layer.Period.Intersect(shiftLayer.Period)) && isPersonalLayer)
+				if (shiftLayer is PersonalShiftLayer personalShiftLayer && layer.Payload.Equals(shiftLayer.Payload) && layer.Period.Intersect(shiftLayer.Period))
 				{
-					matchedLayers.Add(shiftLayer as PersonalShiftLayer);
+					matchedLayers.Add(personalShiftLayer);
 				}
 			}
 			return matchedLayers;

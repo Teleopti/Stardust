@@ -165,9 +165,9 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHand
 
 					if (resultType == typeof(XmlReader))
 					{
-						if (!(command is SqlCommand))
+						if (!(command is SqlCommand sqlCommand))
 							throw new NotSupportedException();
-						var innerReader = (command as SqlCommand).ExecuteXmlReader();
+						var innerReader = sqlCommand.ExecuteXmlReader();
 						closeOpenedConnectionOnSuccess = false;
 						return (T) ((behavior & CommandBehavior.CloseConnection) != CommandBehavior.CloseConnection
 							? (object) innerReader

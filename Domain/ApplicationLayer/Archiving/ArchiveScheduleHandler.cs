@@ -75,8 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 				{
 					if (!(scheduleData is IExportToAnotherScenario)) continue;
 					var entity = _scheduleStorage.Get(scheduleData.GetType(), scheduleData.Id.GetValueOrDefault());
-					var absence = entity as PersonAbsence;
-					if (absence != null)
+					if (entity is PersonAbsence absence)
 					{
 						if (absence.Period.StartDateTime > archivePeriod.EndDateTime || absence.Period.EndDateTime < archivePeriod.StartDateTime)
 							continue;
@@ -118,8 +117,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 					var exportableType = scheduleData as IExportToAnotherScenario;
 					var changedScheduleData = exportableType?.CloneAndChangeParameters(new ScheduleParameters(toScenario, person,
 							archivePeriod));
-					var absence = changedScheduleData as PersonAbsence;
-					if (absence != null)
+					if (changedScheduleData is PersonAbsence absence)
 					{
 						if (HandleAbsenceSplits(archivePeriod, absence)) continue;
 					}

@@ -442,12 +442,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 		public override bool Equals(object obj)
 		{
-			var restriction = obj as EffectiveRestriction;
-			if (restriction == null)
-			{
-				return false;
-			}
-			return Equals(restriction);
+			return obj is EffectiveRestriction restriction && Equals(restriction);
 		}
 
 		public bool Equals(EffectiveRestriction restriction)

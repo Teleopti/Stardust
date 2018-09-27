@@ -29,9 +29,7 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 
 		public int GetPositionInWaitlist(IAbsenceRequest absenceRequest)
 		{
-			var personRequest = absenceRequest.Parent as PersonRequest;
-
-			if (personRequest == null || !personRequest.IsWaitlisted) return 0;
+			if (!(absenceRequest.Parent is PersonRequest personRequest) || !personRequest.IsWaitlisted) return 0;
 
 			var requestsInWaitlist = getRequestsInWaitlist(absenceRequest).ToList();
 			var index = requestsInWaitlist.FindIndex(perRequest => perRequest.Id == personRequest.Id);

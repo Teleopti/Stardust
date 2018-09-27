@@ -28,11 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization.Filters
 
 		public override bool Equals(IEntity other)
 		{
-			var otherTeamFilter = other as TeamFilter;
-			if (otherTeamFilter == null)
-				return false;
-
-			return Team.Equals(otherTeamFilter.Team);
+			return other is TeamFilter otherTeamFilter && Team.Equals(otherTeamFilter.Team);
 		}
 
 		public override int GetHashCode()

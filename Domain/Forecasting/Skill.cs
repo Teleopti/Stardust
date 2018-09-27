@@ -590,8 +590,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual int AddTemplate(IForecastDayTemplate dayTemplate)
         {
-            ISkillDayTemplate newTemplate = dayTemplate as ISkillDayTemplate;
-            if (newTemplate != null)
+			if (dayTemplate is ISkillDayTemplate newTemplate)
                 return AddTemplate(newTemplate);
 
             return -1;

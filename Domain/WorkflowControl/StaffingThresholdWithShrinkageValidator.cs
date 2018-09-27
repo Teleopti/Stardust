@@ -45,15 +45,11 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return new StaffingThresholdWithShrinkageValidator();
 		}
 
-		public override string DisplayText
-		{
-			get { return Resources.IntradayWithShrinkage; }
-		}
+		public override string DisplayText => Resources.IntradayWithShrinkage;
 
 		public override bool Equals(object obj)
 		{
-			var validator = obj as StaffingThresholdWithShrinkageValidator;
-			return validator != null;
+			return obj is StaffingThresholdWithShrinkageValidator;
 		}
 
 		public override int GetHashCode()
@@ -61,7 +57,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			unchecked
 			{
 				int result = (GetType().GetHashCode());
-				result = (result*397) ^ (BudgetGroupHeadCountSpecification != null ? BudgetGroupHeadCountSpecification.GetHashCode() : 0);
+				result = (result*397) ^ (BudgetGroupHeadCountSpecification?.GetHashCode() ?? 0);
 				return result;
 			}
 		}

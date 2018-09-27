@@ -64,10 +64,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				return new ValidatedRequest{IsValid = false};
 
 			var validatedRequest = ValidatedRequest.Valid;
-
+			var waitlistingIsEnabled = person.WorkflowControlSet.WaitlistingIsEnabled(absenceRequest);
 			foreach (var affectedAccount in affectedAccounts)
 			{
-				var waitlistingIsEnabled = person.WorkflowControlSet.WaitlistingIsEnabled(personRequest.Request as IAbsenceRequest);
 				if (affectedAccount.IsExceeded)
 				{
 					

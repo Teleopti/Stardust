@@ -224,8 +224,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		{
 			setUpdatedProperties(root, propertyNames, currentState);
 
-			var deleteInfo = root as IDeleteTag;
-			if (deleteInfo != null && deleteInfo.IsDeleted)
+			if (root is IDeleteTag deleteInfo && deleteInfo.IsDeleted)
 				modifiedRoots.Add(new RootChangeInfo(root, DomainUpdateType.Delete));
 			else
 				modifiedRoots.Add(new RootChangeInfo(root, DomainUpdateType.Update));

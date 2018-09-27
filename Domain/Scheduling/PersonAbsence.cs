@@ -102,17 +102,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			var @events = PopAllEvents().ToList();
 
-			if (!@events.Any(e =>
-			{
-				var _e = e as PersonAbsenceAddedEvent;
-				if (_e == null) return false;
-				return _e.AbsenceId == personAbsenceAddedEvent.AbsenceId
-					   && _e.PersonId == personAbsenceAddedEvent.PersonId
-					   && _e.StartDateTime == personAbsenceAddedEvent.StartDateTime
-					   && _e.EndDateTime == personAbsenceAddedEvent.EndDateTime
-					   && _e.ScenarioId == personAbsenceAddedEvent.ScenarioId
-					   && _e.LogOnBusinessUnitId == personAbsenceAddedEvent.LogOnBusinessUnitId;
-			}))
+			if (!@events.Any(e => e is PersonAbsenceAddedEvent addedEvent && (addedEvent.AbsenceId == personAbsenceAddedEvent.AbsenceId
+																			  && addedEvent.PersonId == personAbsenceAddedEvent.PersonId
+																			  && addedEvent.StartDateTime == personAbsenceAddedEvent.StartDateTime
+																			  && addedEvent.EndDateTime == personAbsenceAddedEvent.EndDateTime
+																			  && addedEvent.ScenarioId == personAbsenceAddedEvent.ScenarioId
+																			  && addedEvent.LogOnBusinessUnitId ==
+																			  personAbsenceAddedEvent.LogOnBusinessUnitId)))
 			{
 				@events.Add(personAbsenceAddedEvent);				
 			}

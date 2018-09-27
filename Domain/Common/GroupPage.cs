@@ -117,10 +117,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public override bool Equals(object obj)
 		{
-			var ent = obj as IGroupPage;
-			if (ent == null)
-				return false;
-			return Equals(ent);
+			return obj is IGroupPage ent && Equals(ent);
 		}
 
 		public virtual bool Equals(IGroupPage other)

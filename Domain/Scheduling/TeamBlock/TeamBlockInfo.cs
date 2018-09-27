@@ -58,8 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
         public override bool Equals(object obj)
         {
-            var ent = obj as ITeamBlockInfo;
-            return ent != null && Equals(ent);
+			return obj is ITeamBlockInfo ent && Equals(ent);
         }
 
         public virtual bool Equals(ITeamBlockInfo other)

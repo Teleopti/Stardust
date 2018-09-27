@@ -24,9 +24,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 			var currentUser = _loggedOnUser.Current();
 			if (currentUser == null) return null;
 
-			var principalCacheable = currentUser as TeleoptiPrincipalCacheable;
-
-			var timezone = (principalCacheable != null) && (!principalCacheable.Person.PermissionInformation.DefaultTimeZoneString().IsNullOrEmpty())
+			var timezone = (currentUser is TeleoptiPrincipalCacheable principalCacheable) && (!principalCacheable.Person.PermissionInformation.DefaultTimeZoneString().IsNullOrEmpty())
 				? principalCacheable.Person.PermissionInformation.DefaultTimeZone()
 				: currentUser.Regional.TimeZone;
 

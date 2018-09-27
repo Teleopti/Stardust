@@ -53,15 +53,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	    public string FriendlyName { get; }
 
 	    public override bool Equals(object obj)
-        {
-            var casted = obj as BusinessRuleResponse;
-            if (obj == null || casted == null)
-            {
-                return false;
-            }
-
-            return (casted._person.Equals(_person) && _typeOfRule == casted._typeOfRule && casted._period.Equals(_period) && casted._dateOnlyPeriod.Equals(_dateOnlyPeriod));
-        }
+		{
+			return obj != null && obj is BusinessRuleResponse casted &&
+				   (casted._person.Equals(_person) && _typeOfRule == casted._typeOfRule &&
+					casted._period.Equals(_period) && casted._dateOnlyPeriod.Equals(_dateOnlyPeriod));
+		}
 
         public override int GetHashCode()
         {

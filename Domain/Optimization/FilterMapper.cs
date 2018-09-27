@@ -26,8 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public FilterModel ToModel(IFilter filter)
 		{
-			var contractFilter = filter as ContractFilter;
-			if (contractFilter != null)
+			if (filter is ContractFilter contractFilter)
 			{
 				return new FilterModel
 				{
@@ -37,8 +36,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				};
 			}
 
-			var teamFilter = filter as TeamFilter;
-			if (teamFilter != null)
+			if (filter is TeamFilter teamFilter)
 			{
 				return new FilterModel
 				{
@@ -48,8 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				};
 			}
 
-			var siteFilter = filter as SiteFilter;
-			if (siteFilter != null)
+			if (filter is SiteFilter siteFilter)
 			{
 				return new FilterModel
 				{

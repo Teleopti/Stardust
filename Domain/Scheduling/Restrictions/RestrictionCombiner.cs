@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				preferenceRestrictions = from r in preferenceRestrictions where r.MustHave select r;
 
 			var asEffectiveRestrictions = from r in preferenceRestrictions
-			                              select new EffectiveRestriction(
+			                              select (IEffectiveRestriction)new EffectiveRestriction(
 			                                     	r.StartTimeLimitation,
 			                                     	r.EndTimeLimitation,
 			                                     	r.WorkTimeLimitation,
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			                                     	)
 			                                     	{
 			                                     		IsPreferenceDay = true
-			                                     	} as IEffectiveRestriction;
+			                                     	};
 
 			return CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);
 		}
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			                                      select r;
 
 			var asEffectiveRestrictions = from r in studentAvailabilityRestrictions
-			                              select new EffectiveRestriction(
+			                              select (IEffectiveRestriction)new EffectiveRestriction(
 			                                     	r.StartTimeLimitation,
 			                                     	r.EndTimeLimitation,
 			                                     	r.WorkTimeLimitation,
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			                                     	)
 			                                     	{
 			                                     		IsStudentAvailabilityDay = true
-			                                     	} as IEffectiveRestriction;
+			                                     	};
 
 			return CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);
 		}
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			rotationRestrictions = from r in rotationRestrictions where r.IsRestriction() select r;
 
 			var asEffectiveRestrictions = from r in rotationRestrictions
-			                              select new EffectiveRestriction(
+			                              select (IEffectiveRestriction)new EffectiveRestriction(
 			                                     	r.StartTimeLimitation,
 			                                     	r.EndTimeLimitation,
 			                                     	r.WorkTimeLimitation,
@@ -118,7 +118,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			                                     	{
 			                                     		IsRotationDay = true
 			                                     	}
-			                                     as IEffectiveRestriction
 				;
 
 			return CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);

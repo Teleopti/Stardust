@@ -381,20 +381,14 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
         /// </returns>
         public override bool Equals(object obj)
-        {
-            IApplicationFunction ent = obj as IApplicationFunction;
-            if (ent == null)
-                return false;
-            return Equals(ent);
-        }
+		{
+			return obj is IApplicationFunction ent && Equals(ent);
+		}
 
         public override bool Equals(IEntity other)
-        {
-            IApplicationFunction ent = other as IApplicationFunction;
-            if (ent == null)
-                return false;
-            return Equals(ent);
-        }
+		{
+			return other is IApplicationFunction ent && Equals(ent);
+		}
 
         ///<summary>
         ///Indicates whether the current object is equal to another object of the same type.

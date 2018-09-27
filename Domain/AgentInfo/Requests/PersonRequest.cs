@@ -217,8 +217,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			}
 
 			var request = getRequest();
-			var absenceRequest = request as AbsenceRequest;
-			if (absenceRequest == null)
+			if (!(request is AbsenceRequest absenceRequest))
 			{
 				return;
 			}
@@ -428,8 +427,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			if (IsWaitlisted && !_changed) return null;
 
 			string message = Request.TextForNotification;
-			var shiftTradeRequest = Request as IShiftTradeRequest;
-			if (shiftTradeRequest != null && shiftTradeRequest.Offer != null)
+			if (Request is IShiftTradeRequest shiftTradeRequest && shiftTradeRequest.Offer != null)
 			{
 				type = MessageType.ShiftTradeFromOffer;
 			}
@@ -502,9 +500,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		private bool waitlistingIsEnabled()
 		{
-			var absenceRequest = getRequest() as IAbsenceRequest;
-
-			if (absenceRequest != null)
+			if (getRequest() is IAbsenceRequest absenceRequest)
 			{
 				var workflowControlSet = Person.WorkflowControlSet;
 				if (workflowControlSet != null && workflowControlSet.WaitlistingIsEnabled(absenceRequest))
@@ -921,8 +917,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		{
 			if (_persistedState == null)
 				return false;
-			var shiftTradeRequest = Request as ShiftTradeRequest;
-			if (shiftTradeRequest != null)
+			if (Request is ShiftTradeRequest shiftTradeRequest)
 			{
 				var shiftTradeStatus = shiftTradeRequest.GetShiftTradeStatus(new EmptyShiftTradeRequestChecker());
 				if (_persistedState.IsNew && _requestState.IsNew)

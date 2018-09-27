@@ -86,11 +86,8 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		public void NullSafeSet(DbCommand cmd, object value, int index, ISessionImplementor session)
 		{
 			object date = value;
-			if (date != null)
-			{
-				if (date is DateOnly)
-					date = ((DateOnly)value).Date;
-			}
+			if (date is DateOnly dateValue)
+				date = dateValue.Date;
 			NHibernateUtil.DateTime.NullSafeSet(cmd, date, index, session);
 		}
 

@@ -31,8 +31,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public override bool Equals(object obj)
 		{
-			var validator = obj as BudgetGroupAllowanceValidator;
-			return validator != null;
+			return obj is BudgetGroupAllowanceValidator;
 		}
 
 		public override int GetHashCode()

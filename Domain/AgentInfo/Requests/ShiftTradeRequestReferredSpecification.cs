@@ -17,8 +17,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var isRefered = false;
 			if (obj != null)
 			{
-				var shiftTradeRequest = obj.Request as IShiftTradeRequest;
-				if (shiftTradeRequest != null)
+				if (obj.Request is IShiftTradeRequest shiftTradeRequest)
 					isRefered = shiftTradeRequest.GetShiftTradeStatus(_shiftTradeRequestStatusChecker) == ShiftTradeStatus.Referred;
 			}
 			return isRefered;

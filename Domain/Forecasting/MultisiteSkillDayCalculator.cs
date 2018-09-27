@@ -78,8 +78,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public override IEnumerable<ISkillStaffPeriod> GetSkillStaffPeriodsForDayCalculation(ISkillDay skillDay)
         {
             var result = base.GetSkillStaffPeriodsForDayCalculation(skillDay).ToList();
-            var childSkill = skillDay.Skill as IChildSkill;
-            if (childSkill != null)
+			if (skillDay.Skill is IChildSkill childSkill)
             {
                 if (_multisiteSkill.ChildSkills.Contains(childSkill))
                 {

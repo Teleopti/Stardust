@@ -35,8 +35,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public IEnumerable<IBusinessRuleResponse> Approve(IRequest request)
 		{
-			var overtimeRequest = request as IOvertimeRequest;
-			if (overtimeRequest == null)
+			if (!(request is IOvertimeRequest overtimeRequest))
 			{
 				throw new InvalidCastException("Request type should be OvertimeRequest!");
 			}

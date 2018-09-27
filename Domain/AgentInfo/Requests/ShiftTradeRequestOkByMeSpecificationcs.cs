@@ -17,8 +17,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var isOkByMe = false;
 			if (obj != null)
 			{
-				var shiftTradeRequest = obj.Request as IShiftTradeRequest;
-				if (shiftTradeRequest != null)
+				if (obj.Request is IShiftTradeRequest shiftTradeRequest)
 					isOkByMe = shiftTradeRequest.GetShiftTradeStatus(_shiftTradeRequestStatusChecker) == ShiftTradeStatus.OkByMe;
 			}
 			return isOkByMe;

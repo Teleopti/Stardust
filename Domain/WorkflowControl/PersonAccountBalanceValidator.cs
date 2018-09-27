@@ -46,17 +46,16 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public override bool Equals(object obj)
 		{
-			var validator = obj as PersonAccountBalanceValidator;
-			return validator != null;
+			return obj is PersonAccountBalanceValidator;
 		}
 
 		public override int GetHashCode()
 		{
 			unchecked
 			{
-				int result = (GetType().GetHashCode());
+				int result = GetType().GetHashCode();
 				result = (result*397) ^
-						 (BudgetGroupHeadCountSpecification != null ? BudgetGroupHeadCountSpecification.GetHashCode() : 0);
+						 (BudgetGroupHeadCountSpecification?.GetHashCode() ?? 0);
 				return result;
 			}
 		}

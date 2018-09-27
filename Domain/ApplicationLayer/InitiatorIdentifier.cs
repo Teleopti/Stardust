@@ -7,8 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	{
 		public static IInitiatorIdentifier FromMessage(object message)
 		{
-			var initiatorInfo = message as IInitiatorContext;
-			return initiatorInfo != null
+			return message is IInitiatorContext initiatorInfo
 				? new InitiatorIdentifier {InitiatorId = initiatorInfo.InitiatorId}
 				: null;
 		}

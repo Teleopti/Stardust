@@ -43,10 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization.Filters
 
 		public override bool Equals(object obj)
 		{
-			var filter = obj as FindFilterResult;
-			if (filter == null)
-				return false;
-			return filter.Id == Id && filter.FilterType == FilterType;
+			return obj is FindFilterResult filter && (filter.Id == Id && filter.FilterType == FilterType);
 		}
 
 		public override int GetHashCode()

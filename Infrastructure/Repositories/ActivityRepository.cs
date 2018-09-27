@@ -31,8 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             var lst = base.LoadAll();
             foreach (var activity in lst)
             {
-                var thisActivity = activity as IMasterActivity;
-                if (thisActivity != null)
+				if (activity is IMasterActivity thisActivity)
                 {
                     LazyLoadingManager.Initialize(thisActivity.ActivityCollection);
                 }

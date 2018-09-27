@@ -62,9 +62,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private bool cancelRequest(IPersonRequest personRequest, CancelAbsenceRequestCommand command)
 		{
-			var absenceRequest = personRequest.Request as IAbsenceRequest;
-
-			if (absenceRequest == null)
+			if (!(personRequest.Request is IAbsenceRequest absenceRequest))
 			{
 				command.ErrorMessages.Add(Resources.OnlyAbsenceRequestCanBeCancelled);
 				return false;

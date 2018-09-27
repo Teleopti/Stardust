@@ -14,8 +14,8 @@ namespace Teleopti.Ccc.Domain
 			var inners = new Exception[] { };
 			if (source.InnerException != null)
 				inners = inners.Concat(new[] {source.InnerException}).ToArray();
-			if (source is AggregateException)
-				inners = inners.Concat((source as AggregateException).InnerExceptions).ToArray();
+			if (source is AggregateException exception)
+				inners = inners.Concat(exception.InnerExceptions).ToArray();
 
 			foreach (var inner in inners)
 			{

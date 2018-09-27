@@ -27,11 +27,11 @@ namespace Teleopti.Ccc.Domain.Logon.Aspects
 			if (argument is IEnumerable && !(argument is string))
 				argument = (argument as IEnumerable).Cast<dynamic>().First();
 
-			if (argument is string)
-				return argument as string;
+			if (argument is string s)
+				return s;
 
-			if (argument is ILogOnContext)
-				return (argument as ILogOnContext).LogOnDatasource;
+			if (argument is ILogOnContext context)
+				return context.LogOnDatasource;
 
 			// make all above n below ITenantFinder implementations?
 			var tenant = _finders

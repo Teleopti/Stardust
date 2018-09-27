@@ -41,14 +41,14 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             foreach (IWorkShiftExtender workShiftExtender in workShiftExtenders)
             {
-                if (workShiftExtender is IAutoPositionedActivityExtender)
+                if (workShiftExtender is IAutoPositionedActivityExtender extender)
                 {
-                    if (CheckActivityExtender((IAutoPositionedActivityExtender)workShiftExtender))
+                    if (CheckActivityExtender(extender))
                         return true;
                 }
-                else if(workShiftExtender is IActivityNormalExtender)
+                else if(workShiftExtender is IActivityNormalExtender normalExtender)
                 {
-                    if (CheckActivityExtender((IActivityNormalExtender)workShiftExtender))
+                    if (CheckActivityExtender(normalExtender))
                         return true;
                 }
                 else

@@ -32,8 +32,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public override bool Equals(object obj)
 		{
-			PendingAbsenceRequest process = obj as PendingAbsenceRequest;
-			return process != null;
+			return obj is PendingAbsenceRequest;
 		}
 
 		public override int GetHashCode()

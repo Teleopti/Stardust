@@ -170,8 +170,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             get
             {
-                ISkill skill = Parent as ISkill;
-                if (skill != null)
+				if (Parent is ISkill skill)
                     return skill.DefaultResolution;
                 return 15;
             }

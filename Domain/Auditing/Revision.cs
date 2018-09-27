@@ -26,8 +26,7 @@ namespace Teleopti.Ccc.Domain.Auditing
 
 		public override bool Equals(object obj)
 		{
-			var rev = obj as IRevision;
-			return rev != null && Equals(rev);
+			return obj is IRevision rev && Equals(rev);
 		}
 
 

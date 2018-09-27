@@ -72,8 +72,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 				logger.Warn("Request missing from Application database, aborting.");
 				return;
 			}
-			var deleteTag = personRequest as IDeleteTag;
-			if (deleteTag != null && deleteTag.IsDeleted)
+
+			if (personRequest is IDeleteTag deleteTag && deleteTag.IsDeleted)
 			{
 				// Request has been deleted, remove from analytics
 				_analyticsRequestRepository.Delete(@event.PersonRequestId);
@@ -104,8 +104,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 
 			var dayCollection = numOfDays.DayCollection();
 
-			var shiftTradeRequest = personRequest.Request as IShiftTradeRequest;
-			if (shiftTradeRequest != null)
+			if (personRequest.Request is IShiftTradeRequest shiftTradeRequest)
 				dayCollection = shiftTradeRequest.ShiftTradeSwapDetails.Select(x => x.DateFrom).ToList();
 
 			var dayIdCollection = dayCollection.Select(x =>
@@ -166,9 +165,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 		}
 
 		private int getAbsence(IPersonRequest personRequest)
-		{ 
-			var absenceRequest = personRequest.Request as IAbsenceRequest;
-			if (absenceRequest == null) return -1;
+		{
+			if (!(personRequest.Request is IAbsenceRequest absenceRequest)) return -1;
 
 			var analyticsAbsence = _analyticsAbsenceRepository.Absence(absenceRequest.Absence.Id.GetValueOrDefault());
 			if (analyticsAbsence != null)

@@ -66,9 +66,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 			Func<IVisualLayer, bool> stickyLayerPredicate = layer =>
 			{
-				var activityLayer = layer.Payload as IActivity;
-
-				return activityLayer != null &&
+				return layer.Payload is IActivity activityLayer &&
 					   !(activityLayer.Id == targetLayer.Payload.Id && targetLayer.Period.Contains(layer.Period))
 					   && !activityLayer.AllowOverwrite;
 			};
@@ -88,8 +86,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 			Func<IVisualLayer, bool> predictFunc = layer =>
 			{
-				var activityLayer = layer.Payload as IActivity;
-				return activityLayer != null && !activityLayer.AllowOverwrite;
+				return layer.Payload is IActivity activityLayer && !activityLayer.AllowOverwrite;
 			};
 
 			overlappedLayers.AddRange(getOverlappedLayersInProjection(scheduleDay, assForChecking, predictFunc));
