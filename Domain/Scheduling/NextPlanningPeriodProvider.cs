@@ -34,29 +34,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return result;
 		}
 
-		public IPlanningPeriod Next(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation, IPlanningGroup planningGroup)
-		{
-			var foundPlanningPeriods = _planningPeriodRepository.LoadAll();
-			var current =
-				foundPlanningPeriods.Where(x => x.Range.StartDate > _now.ServerDate_DontUse())
-					.OrderBy(y => y.Range.StartDate)
-					.FirstOrDefault();
-			var next = foundPlanningPeriods.Where(x => x.Range.StartDate >= current.Range.EndDate.AddDays(1))
-					.OrderBy(y => y.Range.StartDate)
-					.FirstOrDefault();
-			
-			if (planningPeriodNotFound(next))
-			{
-				//refactor
-				var planningPeriodSuggestion = _planningPeriodRepository.Suggestions(_now);
-				var planningPeriod = new PlanningPeriod(planningPeriodSuggestion, planningGroup);
-				planningPeriod.ChangeRange(schedulePeriodForRangeCalculation);
-				_planningPeriodRepository.Add(planningPeriod);
-				return planningPeriod;
-			}
-			return next;
-		}
-
 		private static bool planningPeriodNotFound(IPlanningPeriod result)
 		{
 			return result == null;
