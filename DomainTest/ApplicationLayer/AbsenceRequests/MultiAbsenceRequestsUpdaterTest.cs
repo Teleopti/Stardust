@@ -192,7 +192,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest.DenyReason.Should().Be.EqualTo(string.Format(Resources.RequestDenyReasonRequestExpired, personRequest.Request.Period.StartDateTime, 15));
 		}
 
-		[Ignore("temp for codemonkeys")]
 		[Test]
 		public void ShouldOnlyApprove50RequestsSoNotUnderstaffed()
 		{
@@ -256,7 +255,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			reqs.Count(x => x.IsDenied).Should().Be.EqualTo(150);
 		}
 
-		[Ignore("temp for codemonkeys")]
 		[Test]
 		public void ShouldHandleDifferentSkillSetups()
 		{
@@ -332,7 +330,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			reqs.Count(x => x.IsDenied).Should().Be.EqualTo(300);
 		}
 
-		[Ignore("temp for codemonkeys")]
 		[Test]
 		public void ShouldHandleMidnightShifts()
 		{
@@ -393,7 +390,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			reqs.Count(x => x.IsDenied).Should().Be.EqualTo(170);
 		}
 
-		[Ignore("temp for codemonkeys")]
 		[Test]
 		public void ShouldHandleMidnightShiftsWhenAbsenceIsOnSecondDay()
 		{
@@ -454,7 +450,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			reqs.Count(x => x.IsDenied).Should().Be.EqualTo(170);
 		}
 
-		[Ignore("temp for codemonkeys")]
 		[Test]
 		public void ShouldHandleMidnightShiftsOnOtherAgents()
 		{
@@ -524,7 +519,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			reqs.Count(x => x.IsDenied).Should().Be.EqualTo(2);
 		}
 
-		[Ignore("temp for codemonkeys")]
 		[Test]
 		public void ShouldNotApproveAllRequestsIfRequestsStartsAfterEndOfShiftAndEndsTheNextDay()
 		{
@@ -588,7 +582,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			reqs.Count(x => x.IsDenied).Should().Be.EqualTo(150);
 		}
 
-		[Ignore("temp for codemonkeys")]
 		[Test] //debug friendly, assert the same as above
 		public void ShouldNotApproveAllRequestsIfRequestsStartsAfterEndOfShiftAndEndsTheNextDayDebugFriendly()
 		{
@@ -650,7 +643,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			reqs.Count(x => x.IsDenied).Should().Be.EqualTo(1);
 		}
 
-		[Ignore("temp for codemonkeys")]
 		[Test]
 		public void ShouldOnlyValidateWhenAgentHasAnActivity()
 		{
@@ -713,7 +705,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			reqs.Count(x => x.IsApproved).Should().Be.EqualTo(1); //with 0% threshold
 			reqs.Count(x => x.IsDenied).Should().Be.EqualTo(1);
 		}
-
 
 		[Test]
 		public void ShouldNotDenyIfAgentHasNoShift()

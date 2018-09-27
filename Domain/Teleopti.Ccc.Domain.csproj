@@ -205,10 +205,12 @@
     <Compile Include="Forecasting\Angel\Outlier\OutlierRemover.cs" />
     <Compile Include="Forecasting\Angel\Outlier\QueueStatisticsPerType.cs" />
     <Compile Include="Forecasting\Angel\Trend\LinearRegressionTrendCalculator.cs" />
+    <Compile Include="Forecasting\ISkillStaffingIntervalUnderstaffing.cs" />
     <Compile Include="Forecasting\QueueStatisticsViewModelFactory.cs" />
     <Compile Include="Forecasting\IQueueStatisticsViewModelFactory.cs" />
     <Compile Include="Forecasting\Models\QueueStatisticsModel.cs" />
     <Compile Include="Forecasting\Models\WorkloadQueueStatisticsViewModel.cs" />
+    <Compile Include="Forecasting\SkillStaffingIntervalUnderstaffing.cs" />
     <Compile Include="Infrastructure\DeadLockRetrier.cs" />
     <Compile Include="Infrastructure\HttpRequestHandler.cs" />
     <Compile Include="Infrastructure\IHttpRequestHandler.cs" />

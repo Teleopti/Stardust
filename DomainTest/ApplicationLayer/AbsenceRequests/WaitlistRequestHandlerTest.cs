@@ -276,7 +276,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest.IsApproved.Should().Be.False();
 		}
 
-		[Ignore("temp for codemonkeys")]
 		[Test]
 		public void ShouldApproveRequestBasedOnSeniority()
 		{
@@ -334,7 +333,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			waitListedRequest.IsApproved.Should().Be.False();
 		}
 
-		[Ignore("temp for codemonkeys")]
 		[Test]
 		public void ShouldApproveManyWaitlistedRequests()
 		{
@@ -699,7 +697,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest.IsApproved.Should().Be.True();
 		}
 
-		[Ignore("temp for codemonkeys")]
 		[Test]
 		public void ShouldRollbackIfNotApproved()
 		{
