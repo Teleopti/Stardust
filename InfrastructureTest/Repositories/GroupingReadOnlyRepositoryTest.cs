@@ -704,7 +704,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldReturnAvailableGroups()
 		{
-
 			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
 			var team = TeamFactory.CreateTeam("Dummy Team 1", "Dummy Site");
 			var activity = new Activity("dummy activity");
@@ -752,6 +751,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				teamGroup.SiteId.Should().Be.EqualTo(team.Site.Id);
 				teamGroup.GroupName.Should().Be.EqualTo("Dummy Site/Dummy Team 1");
 				teamGroup.PageId.Should().Be.EqualTo(Group.PageMainId);
+				teamGroup.PersonId.Should().Be.EqualTo(personToTest.Id);
 
 				var skillGroup = result.Single(s => s.GroupId == skill.Id);
 				skillGroup.GroupName.Should().Be.EqualTo("dummy skill");

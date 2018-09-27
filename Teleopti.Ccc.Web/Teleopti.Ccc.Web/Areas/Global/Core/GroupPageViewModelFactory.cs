@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 
 		public GroupPagesViewModel CreateViewModel(DateOnlyPeriod period, string functionPath)
 		{
-			var authourization = PrincipalAuthorization.Current();
 			var stringComparer = StringComparer.Create(_uiCulture.GetUiCulture(), false);
 			var allDynamicOptionalColumns = _optionalColumnRepository.GetOptionalColumns<Person>().Where(o => o.AvailableAsGroupPage).ToList();
 		
@@ -57,13 +56,11 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 			foreach (var siteLookUp in orgsLookup)
 			{
 				var permittedTeamGroups = siteLookUp
-					.GroupBy(slu => slu.TeamId)
-					.Select(slu => slu.First())
-					.Where(team => authourization.IsPermitted(functionPath, period.StartDate, team));
+					.Where(teamWithPerson => _permissionProvider.HasOrganisationDetailPermission(functionPath, period.StartDate, teamWithPerson));
 
 				if (!permittedTeamGroups.Any())
 					continue;
-				var permittedTeams = _teamRepository.FindTeams(permittedTeamGroups.Select(x => x.TeamId));
+				var permittedTeams = _teamRepository.FindTeams(permittedTeamGroups.Select(x => x.TeamId.Value));
 				if (!permittedTeams.Any())
 					continue;
 				var children = permittedTeams.Select(t => new TeamViewModel
@@ -74,9 +71,8 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 
 				actualOrgs.Add(new SiteViewModelWithTeams
 				{
-
 					Name = permittedTeams.First().Site.Description.Name,
-					Id = siteLookUp.Key,
+					Id = siteLookUp.Key.GetValueOrDefault(),
 					Children = children.ToList()
 				});
 			}
