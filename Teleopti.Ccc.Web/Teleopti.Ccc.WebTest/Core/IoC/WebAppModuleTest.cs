@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Web;
-using System.Web.Http;
 using System.Web.Mvc;
 using Autofac;
 using MbCache.Core;
@@ -28,7 +26,6 @@ using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.TestCommon.Web;
-using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
@@ -553,21 +550,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			var result = requestContainer.Resolve<IExtendedPreferencePredicate>();
 			result.Should().Not.Be.Null();
 		}
-
-		[Test]
-		public void ShouldResolveAnywhereTeamScheduleHub()
-		{
-			requestContainer.Resolve<GroupScheduleController>()
-				.Should().Not.Be.Null();
-		}
-
-		[Test]
-		public void ShouldResolveAnywherePersonScheduleHub()
-		{
-			requestContainer.Resolve<PersonScheduleController>()
-				.Should().Not.Be.Null();
-		}
-
+		
 		[Test]
 		public void ShouldNotRegisterUnitOfWorkFactory()
 		{
