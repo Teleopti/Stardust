@@ -429,16 +429,17 @@ Try
 	CopyFileToBlobStorage -sourceFolder "$SupportToolFolder" -pattern "*.key"
     
     #more - show content of ETL + Service bus config
-    $AzureConfigFiles = $SupportToolFolder + "\ConfigFiles\AzureConfigFiles.txt"
-    get-content $AzureConfigFiles | ForEach-Object {
-        $temp = ([string] $SupportToolFolder + "\" + $_).split(",")
-        if (!$temp[0].EndsWith(".txt")) {
-            write-host "--------------------"
-            write-host $temp[0]
-            write-host "--------------------"
-            get-content $temp[0]
-            }
-     }
+	# Should be safe to remove this part - Doing nothing we need //Jimmy
+    #$AzureConfigFiles = $SupportToolFolder + "\ConfigFiles\AzureConfigFiles.txt"
+    #get-content $AzureConfigFiles | ForEach-Object {
+    #    $temp = ([string] $SupportToolFolder + "\" + $_).split(",")
+    #    if (!$temp[0].EndsWith(".txt")) {
+    #        write-host "--------------------"
+     #       write-host $temp[0]
+     #       write-host "--------------------"
+     #       get-content $temp[0]
+     #       }
+     #}
     
     #Sign ClickOnce, create bat files for later execution in Scheduled task
     $ClickOnceSignPath="$directory\..\Tools\ClickOnceSign"
