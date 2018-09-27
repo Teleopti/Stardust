@@ -28,15 +28,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         // We have to filter so we don't get the masterActivities here but at the same time activate masterActivity.Activitycollection
         public override IEnumerable<IActivity> LoadAll()
         {
-            var lst = base.LoadAll();
-            foreach (var activity in lst)
-            {
-				if (activity is IMasterActivity thisActivity)
-                {
-                    LazyLoadingManager.Initialize(thisActivity.ActivityCollection);
-                }
-            }
-            return lst.Where(activity => !(activity is IMasterActivity)).ToList();
+            var lst = base.LoadAll().ToArray();
+			var masterActivities = lst.OfType<IMasterActivity>().ToArray();
+			foreach (var activity in masterActivities)
+			{
+				LazyLoadingManager.Initialize(activity.ActivityCollection);
+			}
+            return lst.Except(masterActivities).ToList();
         }
 
         public IList<IActivity> LoadAllSortByName()

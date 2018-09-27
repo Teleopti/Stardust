@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 				var activities = Activities.LoadAll().OrderBy(x => x.Description.Name).ToArray();
 				var inWorkTimeActivities = activities.Where(x => x.InWorkTime).ToArray();
 				var notInWorkTimeActivity = activities.First(x => !x.InWorkTime);
-				var dayoffTempate = DayOffTemplateRepository.FindActivedDayOffsSortByDescription().First();
+				var dayoffTempate = DayOffTemplateRepository.FindAllDayOffsSortByDescription().First();
 				var absence = AbsenceRepository.LoadAllSortByName().First();
 
 				TestLog.Debug($"Creating data for {persons.Length} people for {periodPlanningPeriod.DayCount()} dates.");

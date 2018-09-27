@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	public interface IDayOffTemplateRepository : IRepository<IDayOffTemplate>
 	{
 		IList<IDayOffTemplate> FindAllDayOffsSortByDescription();
-		IList<IDayOffTemplate> FindActivedDayOffsSortByDescription();
 
 	}
 }
