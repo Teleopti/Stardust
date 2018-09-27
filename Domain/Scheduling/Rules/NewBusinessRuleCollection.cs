@@ -301,7 +301,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return ret;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static INewBusinessRuleCollection AllForScheduling(ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			var ret = schedulingResultStateHolder.UseValidation
@@ -329,15 +328,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var ret = new NewBusinessRuleCollection
 			{
 				new NewPersonAccountRule(scheduleDictionary, personAccounts)
-			};
-			return ret;
-		}
-
-		public static INewBusinessRuleCollection NightlyRestRule()
-		{
-			var ret = new NewBusinessRuleCollection
-			{
-				new NewNightlyRestRule(new WorkTimeStartEndExtractor())
 			};
 			return ret;
 		}
