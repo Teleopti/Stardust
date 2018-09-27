@@ -7,15 +7,13 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.IoC;
+using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
@@ -75,7 +73,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			isolate.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 			isolate.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			extend.AddService<Database>();
-			extend.AddModule(new AnywhereAreaModule(configuration));
+			extend.AddModule(new LegacyRegistrationsFromAnywhere(configuration));
 			extend.AddModule(new TeamScheduleAreaModule());
 		}
 	}

@@ -393,15 +393,14 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Areas\Anywhere\Core\GroupScheduleDayOffViewModel.cs" />
-    <Compile Include="Areas\Anywhere\Core\GroupScheduleProjectionViewModel.cs" />
-    <Compile Include="Areas\Anywhere\Core\GroupScheduleShiftViewModel.cs" />
-    <Compile Include="Areas\Anywhere\Core\IoC\AnywhereAreaModule.cs" />
-    <Compile Include="Areas\Anywhere\Core\IPersonScheduleViewModelFactory.cs" />
-    <Compile Include="Areas\Anywhere\Core\PersonScheduleData.cs" />
-    <Compile Include="Areas\Anywhere\Core\PersonScheduleViewModel.cs" />
-    <Compile Include="Areas\Anywhere\Core\PersonScheduleViewModelFactory.cs" />
-    <Compile Include="Areas\Anywhere\Core\PersonScheduleViewModelMapper.cs" />
+    <Compile Include="Areas\TeamSchedule\Models\GroupScheduleDayOffViewModel.cs" />
+    <Compile Include="Areas\TeamSchedule\Models\GroupScheduleProjectionViewModel.cs" />
+    <Compile Include="Areas\TeamSchedule\Models\GroupScheduleShiftViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\IPersonScheduleViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\PersonScheduleData.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\PersonScheduleViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\PersonScheduleViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\PersonScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Forecasting\Models\CampaignInput.cs" />
     <Compile Include="Areas\Forecasting\Models\ExportForecastInput.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastExportController.cs" />
@@ -808,6 +807,7 @@
     <Compile Include="Core\Data\MultiplicatorDefinitionSetProvider.cs" />
     <Compile Include="Core\Data\ShiftCategoryProvider.cs" />
     <Compile Include="Core\Extensions\DateTimeFormatExtensions.cs" />
+    <Compile Include="Core\IoC\LegacyRegistrationsFromAnywhere.cs" />
     <Compile Include="Core\RequestContext\Cookie\SessionSpecificCookieSettingsProvider.cs" />
     <Compile Include="Core\Startup\CsrfFilter.cs" />
     <Compile Include="Core\Startup\InitializeApplication\PublishStartupJobsTask.cs" />
@@ -1487,7 +1487,8 @@
     <Content Include="Content\botchat\botchat.css" />
     <Content Include="Content\botchat\botchat.js" />
     <Content Include="Content\jquery-plugin\jquery.touchSwipe.min.js" />
-    <Content Include="Content\jqueryui\jquery.ui.dialog.js" />
+    <Content Include="Content\jqueryui\jquery-ui-1.10.2.dialog.js" />
+    <Content Include="Content\jqueryui\jquery-ui-1.10.2.slider.js" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui.css" />
     <Content Include="Content\jqueryui\smoothness\jquery.ui.dialog.css" />
     <Content Include="Content\jquery\jquery-1.12.4.js" />
@@ -2528,7 +2529,6 @@
     <Content Include="Content\jasny-bootstrap\js\jasny-bootstrap.min.js" />
     <Content Include="Content\jquery-plugin\jquery.placeholder.js" />
     <Content Include="Content\jquery-plugin\jquery.placeholder.min.js" />
-    <Content Include="Content\jquery-plugin\jquery.swipeListener.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.10.2.custom.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.10.2.custom.min.js" />
     <Content Include="Content\jqueryui\smoothness\images\animated-overlay.gif" />
@@ -2715,8 +2715,6 @@
     <Content Include="Areas\Reporting\Views\web.config" />
     <Content Include="Areas\Reporting\Views\Report\Index.cshtml" />
     <Content Include="Areas\MyTime\Views\TeamSchedule\TeamSchedulePartial.cshtml" />
-    <Content Include="Content\lazy\lazy.js" />
-    <Content Include="Content\lazy\lazy.min.js" />
     <Content Include="Areas\Rta\TeleoptiRtaService.svc" />
     <Content Include="web.config">
       <SubType>Designer</SubType>

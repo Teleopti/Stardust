@@ -4,8 +4,8 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.Web.Core.Extensions;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
