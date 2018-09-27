@@ -1764,6 +1764,7 @@
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.schedule.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.configurationValidation.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.nositesmessage.spec.js" />
+    <Content Include="WFM\app\rta\rta\overview\controller.restrictHistoricalOverviewWithPermission.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.ReviewHistoricalAdherence_74770.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.RTA_ConfigurationValidationNotification_46933.js" />
     <Content Include="WFM\app\rta\rta\overview\view.ReviewHistoricalAdherence_74770.html" />

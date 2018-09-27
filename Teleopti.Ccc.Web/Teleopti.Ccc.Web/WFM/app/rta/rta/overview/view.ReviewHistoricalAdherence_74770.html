@@ -21,7 +21,7 @@
 				<md-tooltip md-direction="bottom"
 							ng-if="!vm.highlightAgentsButton()">{{'ViewAgents'|translate}}</md-tooltip>
 			</button>
-			<button class="wfm-btn wfm-btn-default wfm-badge-wrapper" ng-click="vm.goToHistorical()">{{'HistoricalAdherence'|translate}}
+			<button class="wfm-btn wfm-btn-default wfm-badge-wrapper" ng-click="vm.goToHistorical()" ng-if="vm.hasHistoricalOverviewPermission">{{'HistoricalAdherence'|translate}}
 			</button>
 			</span>
 			</span>
