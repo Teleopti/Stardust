@@ -11,6 +11,8 @@
 		vm.userCode = $stateParams.userCode || '';
 		vm.tracers = [];
 
+		vm.unknownTenantMessage = 'Tenant is known for some log entries. These will not be cleared manually, but purged later automatically.';
+		
 		vm.trace = function () {
 			$http.get('../api/RtaTracer/Trace', {params: {userCode: vm.userCode}});
 		};
@@ -26,9 +28,28 @@
 			$http.get('../api/RtaTracer/Clear');
 			vm.exception = undefined;
 		};
-		
+
 		vm.displaySlapInTheFace = function () {
-			return vm.tracers.length > 0;
+			return vm.tracers.some(function (t) {
+				if (t.tenant != null)
+					return true;
+				var dataReceived = t.dataReceived.some(function (t) {
+					return t.tenant != null
+				});
+				var dataEnqueuing = t.dataEnqueuing.some(function (t) {
+					return t.tenant != null
+				});
+				var dataProcessing = t.dataProcessing.some(function (t) {
+					return t.tenant != null
+				});
+				var activityCheck = t.activityCheck.some(function (t) {
+					return t.tenant != null
+				});
+				var exceptions = t.exceptions.some(function (t) {
+					return t.tenant != null
+				});
+				return dataReceived || dataEnqueuing || dataProcessing || activityCheck || exceptions;
+			});
 		};
 
 		var poller = rtaPollingService.create(function () {
@@ -37,6 +58,8 @@
 					.map(function (tracer) {
 						return {
 							process: tracer.Process,
+							tracing: tracer.Tracing,
+							tenant: tracer.Tenant,
 							dataReceived: (tracer.DataReceived || []).map(function (d) {
 								return {
 									at: d.At,
@@ -65,7 +88,6 @@
 									tenant: d.Tenant
 								}
 							}),
-							tracing: tracer.Tracing,
 							exceptions: (tracer.Exceptions || []).map(function (e) {
 								return {
 									exception: e.Exception,

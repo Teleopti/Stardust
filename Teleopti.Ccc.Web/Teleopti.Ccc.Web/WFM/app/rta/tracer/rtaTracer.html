@@ -29,6 +29,7 @@
 								ng-click="vm.stop()">Stop
 						</button>
 						<button class="wfm-btn"
+								title="{{vm.unknownTenantMessage}}"
 								ng-class="!vm.displaySlapInTheFace() ? 'wfm-btn-invis-default' : 'wfm-btn-invis-primary'"
 								ng-click="vm.clear()">Clear
 						</button>
@@ -50,35 +51,35 @@
 						</td>
 						<td width="350px" style="vertical-align: top">
 							<span ng-repeat="x in tracer.dataReceived">
-								<span ng-if="!x.tenant"><a title="Tenant is unknown for this log entry"><b>?</b></a></span>
+								<span ng-if="!x.tenant"><a title="{{vm.unknownTenantMessage}}"><b>?</b></a></span>
 								Received ({{x.count}}) {{x.by}} {{x.at}}
 								<br/>
 							</span>
 						</td>
 						<td width="200px" style="vertical-align: top">
 							<span ng-repeat="x in tracer.dataEnqueuing">
-								<span ng-if="!x.tenant"><a title="Tenant is unknown for this log entry"><b>?</b></a></span>
+								<span ng-if="!x.tenant"><a title="{{vm.unknownTenantMessage}}"><b>?</b></a></span>
 								Enqueuing ({{x.count}}) {{x.at}}
 								<br/>
 							</span>
 						</td>
 						<td width="200px" style="vertical-align: top">
 							<span ng-repeat="x in tracer.dataProcessing">
-								<span ng-if="!x.tenant"><a title="Tenant is unknown for this log entry"><b>?</b></a></span>
+								<span ng-if="!x.tenant"><a title="{{vm.unknownTenantMessage}}"><b>?</b></a></span>
 								Processing ({{x.count}}) {{x.at}}
 								<br/>
 							</span>
 						</td>
 						<td width="200px" style="vertical-align: top">
 							<span ng-repeat="x in tracer.activityCheck">
-								<span ng-if="!x.tenant"><a title="Tenant is unknown for this log entry"><b>?</b></a></span>
+								<span ng-if="!x.tenant"><a title="{{vm.unknownTenantMessage}}"><b>?</b></a></span>
 								Checked {{x.at}}
 								<br/>
 							</span>
 						</td>
 						<td style="vertical-align: top">
 							<span ng-repeat="x in tracer.exceptions">
-								<span ng-if="!x.tenant"><a title="Tenant is unknown for this log entry"><b>?</b></a></span>
+								<span ng-if="!x.tenant"><a title="{{vm.unknownTenantMessage}}"><b>?</b></a></span>
 								<a href="" ng-click="x.toggleDisplay()">
 									{{x.exception}}
 								</a>

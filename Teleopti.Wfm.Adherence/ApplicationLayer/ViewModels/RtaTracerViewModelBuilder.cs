@@ -31,7 +31,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 				.Distinct();
 
 			var tracers = from process in processLogs
-				let tracing = tracingLogs[process].OrderBy(x => x.Time).LastOrDefault()?.Log?.Tracing
+				let tracing = tracingLogs[process].OrderBy(x => x.Time).LastOrDefault()
 				let dataReceived = dataReceivedLogs[process]
 					.OrderByDescending(r => r.Log?.At)
 					.Take(5)
@@ -85,12 +85,13 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 				select new Tracer
 				{
 					Process = process,
-					Tracing = tracing,
+					Tracing = tracing?.Log?.Tracing,
 					DataReceived = dataReceived.ToArray(),
 					DataEnqueuing = dataEnqueuings.ToArray(),
 					DataProcessing = dataProcessings.ToArray(),
 					ActivityCheck = activityChecks.ToArray(),
-					Exceptions = exceptions
+					Exceptions = exceptions,
+					Tenant = tracing?.Tenant
 				};
 
 			var logs = _reader.ReadOfType<StateTraceLog>().OrderByDescending(x => x.Time);
@@ -140,6 +141,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 		public IEnumerable<ActivityCheck> ActivityCheck;
 		public string Tracing;
 		public IEnumerable<TracedException> Exceptions;
+		public string Tenant;
 	}
 
 	public class TracedException

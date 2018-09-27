@@ -31,6 +31,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 			using (Tenant.OnThisThreadUse("tenant"))
 			{
 				RtaTracers
+					.Has(new RtaTracerLog<TracingLog> {Tenant = "tenant"})
 					.Has(new RtaTracerLog<ProcessReceivedLog> {Tenant = "tenant"})
 					.Has(new RtaTracerLog<ProcessEnqueuingLog> {Tenant = "tenant"})
 					.Has(new RtaTracerLog<ProcessProcessingLog> {Tenant = "tenant"})
@@ -38,6 +39,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 					.Has(new RtaTracerLog<ProcessExceptionLog> {Tenant = "tenant"})
 					;
 
+				Target.Build().Tracers.Single().Tenant.Should().Be("tenant");
 				Target.Build().Tracers.Single().DataReceived.Single().Tenant.Should().Be("tenant");
 				Target.Build().Tracers.Single().DataEnqueuing.Single().Tenant.Should().Be("tenant");
 				Target.Build().Tracers.Single().DataProcessing.Single().Tenant.Should().Be("tenant");
@@ -59,6 +61,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 					.Has(new RtaTracerLog<ProcessExceptionLog> {Tenant = null})
 					;
 
+				Target.Build().Tracers.Single().Tenant.Should().Be.Null();
 				Target.Build().Tracers.Single().DataReceived.Single().Tenant.Should().Be(null);
 				Target.Build().Tracers.Single().DataEnqueuing.Single().Tenant.Should().Be(null);
 				Target.Build().Tracers.Single().DataProcessing.Single().Tenant.Should().Be(null);
