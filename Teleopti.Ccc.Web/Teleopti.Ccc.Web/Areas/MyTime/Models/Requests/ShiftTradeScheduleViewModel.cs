@@ -28,6 +28,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public double ContractTimeMinutes { get; set; }
 		public double NegativeToleranceMinutes { get; set; }
 		public double PositiveToleranceMinutes { get; set; }
+		public double RealScheduleNegativeGap { get; set; }
+		public double RealSchedulePositiveGap { get; set; }
 	}
 
 	public class ShiftTradeToleranceInfoViewModel

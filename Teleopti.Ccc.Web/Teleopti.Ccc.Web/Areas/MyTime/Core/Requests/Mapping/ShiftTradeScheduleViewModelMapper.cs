@@ -186,15 +186,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				let contracePositiveWorkTimeTolerance = schedulePeriod.Contract?.PositivePeriodWorkTimeTolerance.TotalMinutes ?? 0
 				let actualContractTime = getCurrentWorkingContractTime(schedulePeriod.DateOnlyPeriod, person, allSchedules)
 				let contractDiff = actualContractTime - getTotalContractTime(schedulePeriod)
-				let negative = contractDiff < 0 ? contractDiff : 0
+				let negative = contractDiff < 0 ? -contractDiff : 0
 				let positive = contractDiff > 0 ? contractDiff : 0
 				select new ContractTimeInfoViewModel
 				{
 					PeriodStart = schedulePeriod.DateOnlyPeriod.StartDate.Date.ToString("yyyy-MM-dd"),
 					PeriodEnd = schedulePeriod.DateOnlyPeriod.EndDate.Date.ToString("yyyy-MM-dd"),
 					ContractTimeMinutes = actualContractTime,
-					NegativeToleranceMinutes = contractNegativeWorkTimeTolerance + shiftTradeTargetTimeFlexibility + negative,
-					PositiveToleranceMinutes = contracePositiveWorkTimeTolerance + shiftTradeTargetTimeFlexibility - positive
+					NegativeToleranceMinutes = contractNegativeWorkTimeTolerance + shiftTradeTargetTimeFlexibility,
+					PositiveToleranceMinutes = contracePositiveWorkTimeTolerance + shiftTradeTargetTimeFlexibility,
+					RealScheduleNegativeGap = negative,
+					RealSchedulePositiveGap = positive
 				}).ToList();
 		}
 

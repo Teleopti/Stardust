@@ -1038,33 +1038,12 @@
 		});
 
 		var left = 0;
-		var isNegative = true;
-		if (gap !== 0) {
-			if (periodToloranceInfo.NegativeToleranceMinutes < 0) {
-				left = periodToloranceInfo.NegativeToleranceMinutes - gap;
-				if (left > 0) {
-					left = periodToloranceInfo.PositiveToleranceMinutes - left;
-					isNegative = false;
-				}
-			} else if (periodToloranceInfo.PositiveToleranceMinutes < 0) {
-				isNegative = false;
-				left = periodToloranceInfo.PositiveToleranceMinutes + gap;
-				if (left > 0) {
-					left = periodToloranceInfo.NegativeToleranceMinutes - left;
-					isNegative = true;
-				}
-			} else {
-				if (gap > 0) left = periodToloranceInfo.NegativeToleranceMinutes - gap;
-				if (gap < 0) {
-					left = periodToloranceInfo.PositiveToleranceMinutes + gap;
-					isNegative = false;
-				}
-			}
-		}
+		if (gap > 0) left = periodToloranceInfo.NegativeToleranceMinutes + periodToloranceInfo.RealSchedulePositiveGap - gap;
+		if (gap < 0) left = periodToloranceInfo.PositiveToleranceMinutes + periodToloranceInfo.RealScheduleNegativeGap + gap;
 
 		if (left < 0) {
 			var contractTimeGap = Teleopti.MyTimeWeb.Common.FormatTimeSpan(-left);
-			contractTimeGap = (isNegative ? '-' : '+') + contractTimeGap;
+			contractTimeGap = (gap > 0 ? '-' : '+') + contractTimeGap;
 			if (isCheckSelf) {
 				self.myToleranceMessages.push({
 					periodStart: Teleopti.MyTimeWeb.Common.FormatDate(periodToloranceInfo.PeriodStart),
