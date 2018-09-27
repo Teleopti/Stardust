@@ -408,7 +408,6 @@
     <Compile Include="LiteUnitOfWork\MessageBrokerUnitOfWork\IMessageBrokerUnitOfWorkScope.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWork\ICurrentReadModelUnitOfWork.cs" />
     <Compile Include="LiteUnitOfWork\ILiteUnitOfWork.cs" />
-    <Compile Include="LiteUnitOfWork\ReadModelTransactionSyncronization.cs" />
     <Compile Include="LiteUnitOfWork\LiteUnitOfWork.cs" />
     <Compile Include="LiteUnitOfWork\MessageBrokerUnitOfWork\MessageBrokerUnitOfWorkAspect.cs" />
     <Compile Include="LiteUnitOfWork\MessageBrokerUnitOfWork\MessageBrokerUnitOfWorkState.cs" />
