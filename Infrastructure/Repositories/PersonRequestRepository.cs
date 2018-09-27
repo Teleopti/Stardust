@@ -829,6 +829,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			foreach (var item in persons.Batch(2000))
 			{
 				retList.AddRange(Session.CreateCriteria(typeof(PersonRequest))
+					.CreateAlias("requests","req")
+					.Add(Restrictions.Not(Restrictions.Eq("req.class",typeof(ShiftTradeRequest))))
 					.SetFetchMode("requests", FetchMode.Join)
 					.SetFetchMode("requests.ShiftTradeSwapDetails", FetchMode.Join)
 					.Add(Restrictions.InG("Person", item.ToArray()))
@@ -836,10 +838,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						Restrictions.Eq("requestStatus", 0)))
 					.List<IPersonRequest>());
 			}
-
-			//sjukt korkat - men finns inget lämpligt att filtrera p?i frågan ovan (varför en lista av requests!?)
-			retList = retList.Where(pr => !(pr.Request is IShiftTradeRequest)).ToList();
-
+			
 			foreach (var personRequest in retList)
 			{
 				LazyLoadingManager.Initialize(personRequest.Person);
