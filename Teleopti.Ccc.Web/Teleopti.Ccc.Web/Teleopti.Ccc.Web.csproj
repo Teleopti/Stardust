@@ -497,6 +497,7 @@
     <Compile Include="Areas\MyTime\Models\Schedule\Common\OvertimeAvailabilityViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Schedule\Common\SpecialDateState.cs" />
     <Compile Include="Areas\MyTime\Models\Schedule\Common\DayViewModel.cs" />
+    <Compile Include="Areas\Rta\Controllers\RtaPermissionsController.cs" />
     <Compile Include="Areas\Rta\Controllers\RtaTestDataController.cs" />
     <Compile Include="Areas\Rta\Controllers\HistoricalOverviewController.cs" />
     <Compile Include="Core\Exceptions\CustomMessageException.cs" />
@@ -1726,6 +1727,7 @@
     <Content Include="WFM\app\rta\rta\agents\rta.agents.configurationValidation.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.filter.sort.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.noagentsmessage.spec.js" />
+    <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.restrictHistoricalOverviewWithPermission.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.ReviewHistoricalAdherence_74770.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.RTA_ImprovedStateGroupFilter_48724.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.organization.selection.spec.js" />

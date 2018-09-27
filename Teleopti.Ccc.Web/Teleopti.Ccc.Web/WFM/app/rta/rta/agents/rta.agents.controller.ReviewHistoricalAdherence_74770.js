@@ -42,7 +42,6 @@
 		var vm = this;
 
 		rtaConfigurationValidator.validate();
-		
 		vm.showInAlarm = !$stateParams.showAllAgents;
 
 		var lastUpdate;
@@ -66,6 +65,7 @@
 			buildSkillGroups(data.skillAreas);
 			buildSites(data.organization);
 			buildPhoneStates(data.states);
+			vm.hasHistoricalOverviewPermission = data.rtaPermissions.HasHistoricalOverviewPermission;
 		});
 
 		var defaultSorting = function () {
@@ -374,6 +374,6 @@
 
 		vm.goToHistorical = function () {
 			$state.go('rta-historical-overview', {});
-		}
+		};
 	}
 })();
