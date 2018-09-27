@@ -44,33 +44,6 @@ namespace Teleopti.Ccc.DomainTest.Time
                 var expect = new DateTimePeriod(expectedStartTime, expectedEndTime);
                 Assert.AreEqual(expect, _target.Period);
             }
-
-        }
-
-        [Test]
-        public void VerifyDefaultPeriodWithKnownShiftEndTime()
-        {
-            var startTime = new DateTime(2010, 01, 01, 0, 0, 0, DateTimeKind.Utc);
-            var endTime = new DateTime(2010, 01, 01, 23, 59, 59, DateTimeKind.Utc);
-
-            var expectedStartTime = new DateTime(2010, 01, 01, 14, 30, 0, DateTimeKind.Utc);
-            var expectedEndTime = new DateTime(2010, 01, 01, 15, 45, 0, DateTimeKind.Utc);
-
-            var period = new DateTimePeriod(2010, 1, 1, 2010, 1, 2);
-	        var startDateTimeLocal = period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
-	        var dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTimeLocal.Add(new TimeSpan(14, 30, 0)), startDateTimeLocal.Add(new TimeSpan(15, 45, 0)), TimeZoneHelper.CurrentSessionTimeZone);
-
-            using (_mockRepository.Record())
-            {
-                Expect.Call(_scheduleDay.Period).Return(new DateTimePeriod(startTime, endTime)).Repeat.Twice();
-                Expect.Call(_scheduleDay.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
-            }
-            using (_mockRepository.Playback())
-            {
-                _target = new SetupDateTimePeriodDefaultLocalHoursForActivities(_scheduleDay, new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()), dateTimePeriod);
-                var expect = new DateTimePeriod(expectedStartTime, expectedEndTime);
-                Assert.AreEqual(expect, _target.Period);
-            }
         }
     }
  }
