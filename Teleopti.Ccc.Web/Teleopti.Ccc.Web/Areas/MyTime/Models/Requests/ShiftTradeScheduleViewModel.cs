@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Interfaces.Domain;
+﻿using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 {
