@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Domain.Time
             var setupDateTimePeriodToDefaultLocalHours =
                 new SetupDateTimePeriodToDefaultLocalHours(
                     defaultPeriod,
-                    null,
                     scheduleDay.TimeZone);
 
             return setupDateTimePeriodToDefaultLocalHours.Period;
