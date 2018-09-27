@@ -42,33 +42,40 @@ namespace Teleopti.Wfm.Adherence.Tracer
 
 		public static string ProcessName()
 		{
-			var boxName = Environment.GetEnvironmentVariable("COMPUTERNAME")
-						  ?? Environment.GetEnvironmentVariable("HOSTNAME");
+			var boxName = Environment.GetEnvironmentVariable("COMPUTERNAME") ??
+						  Environment.GetEnvironmentVariable("HOSTNAME");
 			var processId = Process.GetCurrentProcess().Id.ToString();
 			return $"{boxName}:{processId}";
 		}
 
 		public void RefreshTracers() =>
 			_tracers = _config.ReadAll()
-				.Where(x => x.UserCode != null)
-				.Select(tracer =>
+				.Select(config =>
 				{
-					var config = makeTracerFromConfig(tracer);
-					justWrite(new TracingLog {Tracing = config.User}, "Tracing", config.Tenant);
-					return config;
+					var tracer = makeTracerFromConfig(config);
+					justWrite(new TracingLog {Tracing = tracer.User}, "Tracing", tracer.Tenant);
+					return tracer;
 				})
 				.ToArray();
 
 		[TenantScope, UnitOfWork]
-		protected virtual tracer makeTracerFromConfig(RtaTracerConfig tracer)
+		protected virtual tracer makeTracerFromConfig(RtaTracerConfig config)
 		{
 			_mapper.Refresh();
-			var personIdsForUserCode = _mapper.PersonIdsFor(tracer.UserCode);
+			string user = null;
+			var personIdsForUserCode = Enumerable.Empty<Guid>();
+
+			if (config.UserCode != null)
+			{
+				personIdsForUserCode = _mapper.PersonIdsFor(config.UserCode);
+				user = $"{config.UserCode}: {string.Join(", ", personIdsForUserCode.Select(x => _persons.Get(x).Name))}";
+			}
+
 			return new tracer
 			{
-				Tenant = tracer.Tenant,
-				UserCode = tracer.UserCode,
-				User = $"{tracer.UserCode}: {string.Join(", ", personIdsForUserCode.Select(x => _persons.Get(x).Name))}",
+				Tenant = config.Tenant,
+				UserCode = config.UserCode,
+				User = user,
 				Persons = personIdsForUserCode
 			};
 		}
@@ -133,8 +140,13 @@ namespace Teleopti.Wfm.Adherence.Tracer
 			if (!enabled())
 				return null;
 
-			var tenantName = _dataSource.CurrentName();
-			return tracers().FirstOrDefault(t => t.Tenant == tenantName && t.UserCode.Equals(userCode, StringComparison.InvariantCultureIgnoreCase));
+			var tenant = _dataSource.CurrentName();
+			return tracers()
+				.Where(x => x.UserCode != null)
+				.FirstOrDefault(t =>
+					t.Tenant == tenant &&
+					t.UserCode.Equals(userCode, StringComparison.InvariantCultureIgnoreCase)
+				);
 		}
 
 		private tracer tracerFor(Guid personId)
@@ -142,8 +154,10 @@ namespace Teleopti.Wfm.Adherence.Tracer
 			if (!enabled())
 				return null;
 
-			var tenantName = _dataSource.CurrentName();
-			return tracers().FirstOrDefault(t => t.Tenant == tenantName && t.Persons.Any(p => p == personId));
+			var tenant = _dataSource.CurrentName();
+			return tracers().FirstOrDefault(t =>
+				t.Tenant == tenant && t.Persons.Any(p => p == personId)
+			);
 		}
 
 		private bool enabled() => tracers().Any();
@@ -190,6 +204,7 @@ namespace Teleopti.Wfm.Adherence.Tracer
 		private void justWrite<T>(T log, string message, string tenant) =>
 			_writer.Write(new RtaTracerLog<T>
 			{
+				Time = _now.UtcDateTime(),
 				Log = log,
 				Message = message,
 				Process = _process,

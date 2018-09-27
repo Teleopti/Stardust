@@ -167,6 +167,7 @@ namespace Teleopti.Wfm.Adherence.Test.Tracer
 			Target.ProcessReceived(null, null);
 
 			var log = Logs.ReadOfType<TracingLog>().Single();
+			log.Time.Should().Be("2017-10-12 13:00".Utc());
 			log.Message.Should().Be("Tracing");
 			log.Process.Should().Be(RtaTracer.ProcessName());
 			log.Log.Tracing.Should().Contain("usercode");
