@@ -1174,7 +1174,6 @@
     <Compile Include="WinCode\Scheduling\SkillResult\SkillMonthGridControlPresenter.cs" />
     <Compile Include="WinCode\Scheduling\SkillResult\SkillWeekGridControlPresenter.cs" />
     <Compile Include="WinCode\Scheduling\SplitLongDayAbsences.cs" />
-    <Compile Include="WinCode\Scheduling\TeleoptiProgressChangeMessage.cs" />
     <Compile Include="WinCode\Scheduling\ValidationAlertsModel.cs" />
     <Compile Include="WinCode\Scheduling\ViewBaseHelper.cs" />
     <Compile Include="WinCode\Scheduling\WeekPresenter.cs" />
