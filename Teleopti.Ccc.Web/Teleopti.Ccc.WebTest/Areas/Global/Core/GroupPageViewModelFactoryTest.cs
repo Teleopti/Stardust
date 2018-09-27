@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -27,11 +25,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 		public GroupPageViewModelFactory Target;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 		public FakeUserUiCulture UserCulture;
-		public FakePermissions Permissions;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeOptionalColumnRepository OptionalColumnRepository;
 		public FakePersonRepository PersonRepository;
 		public ITeamRepository TeamRepository;
+		public FakePermissionProvider PermissionProvider;
 
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
@@ -130,8 +128,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 		[Test]
 		public void ShouldReturnAvailableGroupPagesBasedOnPeriod()
 		{
-			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
-
 			var mainPage = new ReadOnlyGroupPage()
 			{
 				PageName = "Main",
@@ -184,8 +180,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 		[Test]
 		public void ShouldReturnSortedGroupPages()
 		{
-			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
-
 			var mainPage = new ReadOnlyGroupPage()
 			{
 				PageName = "Main",
@@ -331,8 +325,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 		[Test]
 		public void ShouldOrderGroupPagesByUserCulture()
 		{
-			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
-
 			UserCulture.IsSwedish();
 			var mainPage = new ReadOnlyGroupPage
 			{
@@ -503,12 +495,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 					BusinessUnitId = businessUnitId
 				}
 			};
+
 			TeamRepository.Add(team1Site1);
 			TeamRepository.Add(team1Site2);
 
 			GroupingReadOnlyRepository.Has(groupDetails);
 
-			Permissions.HasPermissionToTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, team1InSite1Id);
+			PermissionProvider.Enable();
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, DateOnly.Today, new PersonAuthorization
+			{
+				SiteId = site1Id,
+				TeamId = team1InSite1Id,
+				BusinessUnitId = businessUnitId
+			});
 
 			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
@@ -536,7 +535,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			team1Site1.Site.WithId(site1Id);
 			team1Site1.SetDeleted();
 
-
 			var groups = new []
 			{
 				new ReadOnlyGroup
@@ -553,7 +551,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 
 			GroupingReadOnlyRepository.Has(groups);
 
-			Permissions.HasPermissionToTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, team1Site1.Id.Value);
+			PermissionProvider.Enable();
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, DateOnly.Today, new PersonAuthorization
+			{
+				SiteId = site1Id,
+				TeamId = team1Site1.Id.Value,
+				BusinessUnitId = businessUnitId
+			});
 
 			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 			result.BusinessHierarchy.Length.Should().Be.EqualTo(0);
@@ -648,7 +652,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 
 			LoggedOnUser.SetFakeLoggedOnUser(me);
 
-			Permissions.HasPermissionToTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, team.Id.Value);
+			PermissionProvider.Enable();
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, DateOnly.Today, new PersonAuthorization
+			{
+				SiteId = site.Id.Value,
+				TeamId = team.Id.Value,
+				BusinessUnitId = businessUnitId
+			});
 
 			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
@@ -658,8 +668,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 		[Test]
 		public void ShouldReturnAvailableGroupPagesWithCorrectPageName()
 		{
-			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
-
 			var mainPage = new ReadOnlyGroupPage()
 			{
 				PageName = "Main",

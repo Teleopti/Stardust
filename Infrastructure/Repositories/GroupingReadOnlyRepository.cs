@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<ReadOnlyGroup> AllAvailableGroups(DateOnlyPeriod period)
 		{
-			string sql = @"SELECT DISTINCT PageId, PageName, GroupId, GroupName, TeamId, SiteId FROM ReadModel.GroupingReadOnly WITH(nolock)
+			string sql = @"SELECT DISTINCT PageId, PageName, GroupId, GroupName, TeamId, SiteId, PersonId FROM ReadModel.GroupingReadOnly WITH(nolock)
 							WHERE BusinessUnitId = :businessUnitId 
 							AND StartDate <= :endDate
 							AND EndDate >= :startDate

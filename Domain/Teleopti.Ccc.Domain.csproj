@@ -115,11 +115,13 @@
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.238\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.252\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.238\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.252\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -205,10 +207,12 @@
     <Compile Include="Forecasting\Angel\Outlier\OutlierRemover.cs" />
     <Compile Include="Forecasting\Angel\Outlier\QueueStatisticsPerType.cs" />
     <Compile Include="Forecasting\Angel\Trend\LinearRegressionTrendCalculator.cs" />
+    <Compile Include="Forecasting\ISkillStaffingIntervalUnderstaffing.cs" />
     <Compile Include="Forecasting\QueueStatisticsViewModelFactory.cs" />
     <Compile Include="Forecasting\IQueueStatisticsViewModelFactory.cs" />
     <Compile Include="Forecasting\Models\QueueStatisticsModel.cs" />
     <Compile Include="Forecasting\Models\WorkloadQueueStatisticsViewModel.cs" />
+    <Compile Include="Forecasting\SkillStaffingIntervalUnderstaffing.cs" />
     <Compile Include="Infrastructure\DeadLockRetrier.cs" />
     <Compile Include="Infrastructure\HttpRequestHandler.cs" />
     <Compile Include="Infrastructure\IHttpRequestHandler.cs" />

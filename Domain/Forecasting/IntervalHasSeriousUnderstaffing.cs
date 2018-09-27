@@ -15,16 +15,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		public override bool IsSatisfiedBy(IValidatePeriod obj)
 		{
-			bool isSatisfied;
 			var seriousUnderstaffing = _skill.StaffingThresholds.SeriousUnderstaffing.Value;
-			if (seriousUnderstaffing.Equals(0))
-			{
-				isSatisfied = obj.RelativeDifference <= seriousUnderstaffing;
-			}
-			else
-			{
-				isSatisfied = obj.RelativeDifference < seriousUnderstaffing;
-			}
+			var isSatisfied = obj.RelativeDifference < seriousUnderstaffing;
 			return isSatisfied;
 		}
 	}

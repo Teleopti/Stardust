@@ -924,9 +924,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result[3].EndTime.TimeOfDay.TotalMinutes.Should().Be.EqualTo(180);
 		}
 
-		[Ignore("temp for codemonkeys")]
 		[Test]
-		public void ShouldGetGoodPossibilitiesForOvertimeWhenSeriousUnderstaffingIsZeroAndForcastedAndScheduledAreEqual()
+		public void ShouldGetFairPossibilitiesForOvertimeWhenSeriousUnderstaffingIsZeroAndForcastedAndScheduledAreEqual()
 		{
 			TimeZone.Is(TimeZoneInfoFactory.UtcTimeZoneInfo());
 			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
@@ -955,8 +954,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				.Where(d => d.Date == today.ToFixedClientDateOnlyFormat()).ToList();
 
 			Assert.AreEqual(2, possibilitiesWeek.Count);
-			Assert.AreEqual(1, possibilitiesWeek.ElementAt(0).Possibility);
-			Assert.AreEqual(1, possibilitiesWeek.ElementAt(1).Possibility);
+			Assert.AreEqual(0, possibilitiesWeek.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilitiesWeek.ElementAt(1).Possibility);
 		}
 
 		private void setupWorkFlowControlSet()

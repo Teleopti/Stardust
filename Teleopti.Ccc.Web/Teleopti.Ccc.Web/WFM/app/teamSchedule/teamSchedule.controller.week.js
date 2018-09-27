@@ -51,6 +51,10 @@
 			]
 		};
 
+		var mode = {
+			BusinessHierarchy: 'BusinessHierarchy',
+			GroupPages: 'GroupPages'
+		}
 		vm.toggles = toggles;
 		vm.boostrap = bootstrapCommon.ready();
 		vm.isLoading = false;
@@ -66,20 +70,13 @@
 		vm.sortOption = stateParams.selectedSortOption;
 		vm.staffingEnabled = stateParams.staffingEnabled;
 		vm.timezone = stateParams.timezone;
-		vm.selectedGroups = {
-			mode: 'BusinessHierarchy',
-			groupIds: [],
-			groupPageId: ''
-		};
-
+		initSelectedGroups(mode.BusinessHierarchy, [], '');
 
 		if (angular.isArray(stateParams.selectedTeamIds) && stateParams.selectedTeamIds.length > 0) {
-			replaceArrayValues(stateParams.selectedTeamIds, vm.selectedGroups.groupIds);
+			vm.selectedGroups.groupIds = stateParams.selectedTeamIds.slice(0);
 		}
 		else if (stateParams.selectedGroupPage && stateParams.selectedGroupPage.groupIds.length > 0) {
-			replaceArrayValues(stateParams.selectedGroupPage.groupIds, vm.selectedGroups.groupIds);
-			vm.selectedGroups.mode = 'GroupPages';
-			vm.selectedGroups.groupPageId = stateParams.selectedGroupPage.pageId;
+			initSelectedGroups(mode.GroupPages, stateParams.selectedGroupPage.groupIds.slice(0), stateParams.selectedGroupPage.pageId);
 		}
 
 		vm.selectedFavorite = stateParams.do ? stateParams.selectedFavorite : null;
@@ -157,8 +154,7 @@
 
 		vm.applyFavorite = function (currentFavorite) {
 			vm.selectedFavorite = currentFavorite;
-			vm.selectedGroups = { mode: 'BusinessHierarchy', groupIds: [], groupPageId: '' };
-			replaceArrayValues(currentFavorite.TeamIds, vm.selectedGroups.groupIds);
+			initSelectedGroups(mode.BusinessHierarchy, currentFavorite.TeamIds.slice(0), '');
 			vm.searchOptions.keyword = currentFavorite.SearchTerm;
 			vm.resetSchedulePage();
 		};
@@ -285,6 +281,14 @@
 				vm.getSitesAndTeamsAsync();
 		}
 
+		function initSelectedGroups(mode, groupIds, groupPageId) {
+			vm.selectedGroups = {
+				mode: mode,
+				groupIds: groupIds,
+				groupPageId: groupPageId
+			};
+		}
+
 		function init() {
 			loadGroupings();
 			vm.loadSchedules();
@@ -297,14 +301,12 @@
 				var defaultFavoriteSearch = data.defaultFavoriteSearch;
 				var loggedonUsersTeamId = data.loggedonUsersTeamId;
 
-				if (!stateParams.do) {
-					if (defaultFavoriteSearch) {
-						replaceArrayValues(defaultFavoriteSearch.TeamIds, vm.selectedGroups.groupIds);
-						vm.searchOptions.keyword = defaultFavoriteSearch.SearchTerm;
-						vm.selectedFavorite = defaultFavoriteSearch;
-					} else if (loggedonUsersTeamId && vm.selectedGroups.groupIds.length === 0) {
-						replaceArrayValues([loggedonUsersTeamId], vm.selectedGroups.groupIds);
-					}
+				if (defaultFavoriteSearch) {
+					vm.selectedGroups.groupIds = defaultFavoriteSearch.TeamIds.slice(0);
+					vm.searchOptions.keyword = defaultFavoriteSearch.SearchTerm;
+					vm.selectedFavorite = defaultFavoriteSearch;
+				} else if (loggedonUsersTeamId && vm.selectedGroups.groupIds.length === 0) {
+					vm.selectedGroups.groupIds = [loggedonUsersTeamId].slice(0);
 				}
 				vm.resetSchedulePage();
 				monitorScheduleChanged();
@@ -312,10 +314,5 @@
 		}
 
 		init();
-	}
-
-	function replaceArrayValues(from, to) {
-		to.splice(0);
-		from.forEach(function (x) { to.push(x); });
 	}
 })();

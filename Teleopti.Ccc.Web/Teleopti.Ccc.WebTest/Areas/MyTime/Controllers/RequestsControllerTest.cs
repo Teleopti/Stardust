@@ -693,16 +693,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			PersonRepository.Get(form.PersonToId).WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(1, 30, 0);
 			var schedulePeriod = new DateOnlyPeriod(startDate, new DateOnly(startDate.Date.AddMonths(1).AddDays(-1)));
 			var totalSettingContract = 480 * schedulePeriod.DayCount();
-			var expactedMyTolerance = 80 + 540 - totalSettingContract;
-			var expactedPersonToTolerance = 90 + 540 - totalSettingContract;
+			var expactedRealGap = totalSettingContract - 540;
 
 			var result = Target.GetWFCTolerance(form.PersonToId);
 			var data = (result as JsonResult)?.Data as ShiftTradeToleranceInfoViewModel;
 
 			data.IsNeedToCheck.Should().Be.True();
-			data.MyInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(expactedMyTolerance);
+			data.MyInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(80);
 			data.MyInfos.First().PositiveToleranceMinutes.Should().Be.EqualTo(80);
-			data.PersonToInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(expactedPersonToTolerance);
+			data.MyInfos.First().RealSchedulePositiveGap.Should().Be.EqualTo(0);
+			data.MyInfos.First().RealScheduleNegativeGap.Should().Be.EqualTo(expactedRealGap);
+			data.PersonToInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(90);
 			data.PersonToInfos.First().PositiveToleranceMinutes.Should().Be.EqualTo(90);
 		}
 
@@ -724,27 +725,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldGetToleranceTimeBaseOnContractSetting()
-		{
-			setGlobaleSetting(typeof(ShiftTradeTargetTimeSpecification).FullName, true, RequestHandleOption.AutoDeny);
-			_now.Is(DateOnly.Today.Date);
-			var startDate = DateOnly.Today.AddDays(1);
-			var form = createShiftWithDifferentWFC(startDate);
-			var virtualSchedulePeriod = LoggedOnUser.CurrentUser().VirtualSchedulePeriod(startDate);
-			virtualSchedulePeriod.Contract.NegativePeriodWorkTimeTolerance = new TimeSpan(9, 0, 0);
-			virtualSchedulePeriod.Contract.PositivePeriodWorkTimeTolerance = new TimeSpan(10, 0, 0);
-			var expactedNegativeToleranceMinutes = -13320;
-			var expactedPosigiveToleranceMinutes = 600;
-
-			var result = Target.GetWFCTolerance(form.PersonToId);
-			var data = (result as JsonResult)?.Data as ShiftTradeToleranceInfoViewModel;
-
-			data.IsNeedToCheck.Should().Be.True();
-			data.MyInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(expactedNegativeToleranceMinutes);
-			data.MyInfos.First().PositiveToleranceMinutes.Should().Be.EqualTo(expactedPosigiveToleranceMinutes);
-		}
-
-		[Test]
 		public void ShouldGetToleranceTimeBaseOnAllFacts()
 		{
 			setGlobaleSetting(typeof(ShiftTradeTargetTimeSpecification).FullName, true, RequestHandleOption.AutoDeny);
@@ -756,15 +736,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			virtualSchedulePeriod.Contract.NegativePeriodWorkTimeTolerance = new TimeSpan(9, 0, 0);
 			virtualSchedulePeriod.Contract.PositivePeriodWorkTimeTolerance = new TimeSpan(10, 0, 0);
 			personTo.WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(0, 20, 0);
-			var expactedNegativeToleranceMinutes = -13300;
-			var expactedPosigiveToleranceMinutes = 620;
 
 			var result = Target.GetWFCTolerance(form.PersonToId);
 			var data = (result as JsonResult)?.Data as ShiftTradeToleranceInfoViewModel;
 
 			data.IsNeedToCheck.Should().Be.True();
-			data.PersonToInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(expactedNegativeToleranceMinutes);
-			data.PersonToInfos.First().PositiveToleranceMinutes.Should().Be.EqualTo(expactedPosigiveToleranceMinutes);
+			data.PersonToInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(560);
+			data.PersonToInfos.First().PositiveToleranceMinutes.Should().Be.EqualTo(620);
+			data.PersonToInfos.First().RealScheduleNegativeGap.Should().Be.EqualTo(13860);
+			data.PersonToInfos.First().RealSchedulePositiveGap.Should().Be.EqualTo(0);
 		}
 
 		[Test]
