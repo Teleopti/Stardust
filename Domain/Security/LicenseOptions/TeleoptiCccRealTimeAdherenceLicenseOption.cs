@@ -22,7 +22,9 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				ApplicationFunction.FindByPath(allApplicationFunctions,
 					DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview),
 				ApplicationFunction.FindByPath(allApplicationFunctions,
-					DefinedRaptorApplicationFunctionPaths.ModifyAdherence)
+					DefinedRaptorApplicationFunctionPaths.ModifyAdherence),
+				ApplicationFunction.FindByPath(allApplicationFunctions,
+					DefinedRaptorApplicationFunctionPaths.HistoricalOverview)
 			);
 		}
 	}

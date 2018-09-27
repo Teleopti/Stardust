@@ -47,5 +47,14 @@ namespace Teleopti.Ccc.DomainTest.Security.License
 			actual.FindByFunctionPath(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)
 				.IsLicensed.Should().Be.True();
 		}
+		
+		[Test]
+		public void ShouldEnableHistoricalOverview()
+		{
+			var actual = ApplicationFunctions.AllFunctions();
+
+			actual.FindByFunctionPath(DefinedRaptorApplicationFunctionPaths.HistoricalOverview)
+				.IsLicensed.Should().Be.True();
+		}
 	}
 }
