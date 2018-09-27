@@ -726,7 +726,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ResourceCalculationPrerequisitesLoader>().As<IResourceCalculationPrerequisitesLoader>();
 			builder.RegisterType<LoadSchedulingStateHolderForResourceCalculation>().As<ILoadSchedulingStateHolderForResourceCalculation>().SingleInstance();
 			builder.RegisterType<LoadSchedulesForRequestWithoutResourceCalculation>().As<ILoadSchedulesForRequestWithoutResourceCalculation>().SingleInstance();
-			builder.RegisterType<ScheduleIsInvalidSpecification>().As<IScheduleIsInvalidSpecification>();
 			builder.RegisterType<BudgetGroupHeadCountSpecification>().As<IBudgetGroupHeadCountSpecification>();
 			builder.RegisterType<SwapAndModifyService>().As<ISwapAndModifyService>();
 			builder.RegisterType<SwapService>().As<ISwapService>();

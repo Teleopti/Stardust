@@ -1112,7 +1112,6 @@
     <Compile Include="InterfaceLegacy\Domain\IScheduleDictionary.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleExtractor.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleHistoryRepository.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IScheduleIsInvalidSpecification.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleMatrixOriginalStateContainer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleMatrixPro.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleMatrixValueCalculatorPro.cs" />
@@ -1794,7 +1793,6 @@
     <Compile Include="Scheduling\ISchedulingOptionsProvider.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleOvertimeOnNonScheduleDays.cs" />
     <Compile Include="Scheduling\Restrictions\SchedulePreferenceTransformerHelper.cs" />
-    <Compile Include="Scheduling\ScheduleIsInvalidSpecification.cs" />
     <Compile Include="Scheduling\SchedulingOptionsProvider.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\FixedRuleSetBagExtractor.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetBagExtractorProvider.cs" />
