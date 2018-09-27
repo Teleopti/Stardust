@@ -102,14 +102,12 @@ namespace Stardust.Manager
 
 			Task.Factory.StartNew(() =>
 			{
-				//var pingresult = _jobManager.PingWorkerNode(workerNodeUri);
-				//if (pingresult)
-				//{
-					this.Log().InfoWithLineNumber(WhoAmI(Request) +
+				_jobManager.PingWorkerNode(workerNodeUri);
+				
+				this.Log().InfoWithLineNumber(WhoAmI(Request) +
 					                              ": Received heartbeat from Node. Node Uri : ( " + workerNodeUri + " )");
 
-					_nodeManager.WorkerNodeRegisterHeartbeat(workerNodeUri.ToString());
-				//}
+				_nodeManager.WorkerNodeRegisterHeartbeat(workerNodeUri.ToString());
 				
 			});
 

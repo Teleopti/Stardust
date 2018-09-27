@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Handlers;
 using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using Stardust.Manager.Interfaces;
@@ -18,11 +19,14 @@ namespace ManagerTest.Fakes
 			FailPostAsync = false;
 			BusyNodesUrl = new List<string>();
 			CallToWorkerNodes = new List<string>();
+			NodeURLAndResult = new Dictionary<Uri, bool>();
 		}
 
 		public List<string> BusyNodesUrl { get; set; }
 
 		public List<string> CallToWorkerNodes { get; set; }
+
+		public Dictionary<Uri, bool> NodeURLAndResult { get; set; }
 
 		public Task<HttpResponseMessage> PostAsync(Uri url,
 		                                           object data)
@@ -48,7 +52,17 @@ namespace ManagerTest.Fakes
 
 		public Task<HttpResponseMessage> GetAsync(Uri url)
 		{
-			throw new NotImplementedException();
+			var result = NodeURLAndResult.FirstOrDefault(x => url.ToString().Contains(x.Key.ToString())).Value;
+			var statusCode = HttpStatusCode.OK;
+			if (!result)
+			{
+				statusCode = HttpStatusCode.NotFound;
+			}
+			var task = new Task<HttpResponseMessage>(() => new HttpResponseMessage(statusCode));
+			task.Start();
+			task.Wait();
+
+			return task;
 		}
 
 		private Task<HttpResponseMessage> ReturnOkOrConflict(Uri url, bool canReturnConflict)

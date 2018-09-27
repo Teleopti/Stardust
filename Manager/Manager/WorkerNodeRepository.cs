@@ -146,7 +146,33 @@ namespace Stardust.Manager
 			return deadNodes;
 		}
 
-	public void RegisterHeartbeat(string nodeUri, bool updateStatus)
+		public void UpdatePing(string nodeUrl, bool pingResult)
+		{
+			try
+			{
+				using (var connection = new SqlConnection(_connectionString))
+				{
+					connection.OpenWithRetry(_retryPolicy);
+
+					var updateCommandText = @"UPDATE [Stardust].[WorkerNode] SET Pingresult = @pingResult WHERE Url = @Url";
+
+					using (var command = new SqlCommand(updateCommandText, connection))
+					{
+						command.Parameters.Add("@Url", SqlDbType.NVarChar).Value = nodeUrl;
+						command.Parameters.Add("@pingResult", SqlDbType.Bit).Value = pingResult;
+						command.ExecuteNonQueryWithRetry(_retryPolicy);
+					}
+				}
+			}
+
+			catch (Exception exp)
+			{
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
+				throw;
+			}
+		}
+
+		public void RegisterHeartbeat(string nodeUri, bool updateStatus)
 		{
 			try
 			{

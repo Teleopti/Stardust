@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
 using System.Web.Http;
@@ -24,6 +27,7 @@ namespace ManagerTest
 		public FakeHttpSender HttpSender;
 		public ManagerConfiguration ManagerConfiguration;
 		public TestHelper TestHelper;
+		public JobManager JobManager;
 
 		private WorkerNode _workerNode;
 
@@ -241,6 +245,75 @@ namespace ManagerTest
 		{
 			HttpSender.BusyNodesUrl.Add(url.ToString());
 		}
+
+		[Test]
+		public void ShouldAddTrueOnASuccessfullPingToNode()
+		{
+			var nodeUri = new Uri("https://teleopti.visualstudio.com");
+			NodeRepository.AddWorkerNode(new WorkerNode() { Url = nodeUri });
+
+			var allNodes = getAllWorkerNodes();
+			allNodes.First().PingResult.Should().Be.False();
+
+			(HttpSender).NodeURLAndResult.Add(nodeUri, true);
+			
+			JobManager.PingWorkerNode(nodeUri);
+
+			allNodes = getAllWorkerNodes();
+			allNodes.First().PingResult.Should().Be.True();
+		}
+
 		
+
+		[Test]
+		public void ShouldAddFalseOnAFailedPingToNode()
+		{
+			var nodeUri = new Uri("https://teleopti.visualstudio.com");
+			NodeRepository.AddWorkerNode(new WorkerNode() { Url = nodeUri });
+
+			(HttpSender).NodeURLAndResult.Add(nodeUri, false);
+
+			
+			var allNodes = getAllWorkerNodes();
+			allNodes.First().PingResult.Should().Be.False();
+
+			JobManager.PingWorkerNode(nodeUri);
+
+			allNodes = getAllWorkerNodes();
+			allNodes.First().PingResult.Should().Be.False();
+		}
+
+		private List<WorkerNode> getAllWorkerNodes()
+		{
+			var result = new List<WorkerNode>();
+			var connectionString = ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				using (var command = new SqlCommand(@"select Id,Url,Heartbeat,Alive,PingResult from Stardust.WorkerNode", connection))
+				{
+					using (SqlDataReader reader = command.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							result.Add(new WorkerNode()
+							{
+								Id = reader.GetGuid(0),
+								Url = new Uri(reader.GetString(1)),
+								Heartbeat = reader.GetDateTime(2),
+								Alive = reader.GetBoolean(3),
+								PingResult = reader.GetBoolean(4)
+							});
+							
+						}
+					}
+					
+				}
+				connection.Close();
+			}
+
+			return result;
+		}
+
 	}
 }
