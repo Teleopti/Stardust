@@ -44,7 +44,6 @@ Scenario: Show export gap card in bpo exchange
 	Given I am viewing BPO exhange page
 	Then I should see the bpo export card
 
-@OnlyRunIfEnabled('Staffing_BPO_ClearStaffing_75498')
 Scenario: Show clear staffing card in bpo exchange
 	Given I am viewing BPO exhange page
 	Then I should see the bpo remove card
