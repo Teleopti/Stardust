@@ -88,7 +88,6 @@
 
 		Wfm_DisplayOnlineHelp_39402,
 
-		ETL_UseBpoResources_75855,
 
 		Wfm_SkillPriorityRoutingGUI_39885,
 		ETL_Optimize_Memory_Usage_76761,
