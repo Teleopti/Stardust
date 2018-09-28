@@ -24,12 +24,13 @@
 		'TeamsStaffingConfigurationStorageService',
 		'serviceDateFormatHelper',
 		'ViewStateKeeper',
+		'teamsPermissions',
 		TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $timeout, $translate, $state, $mdSidenav, $stateParams, $mdComponentRegistry, $document,
 		teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService,
 		CommandCheckService, ScheduleNoteManagementService, teamsToggles, toggleSvc, bootstrapCommon, groupPageService,
-		StaffingConfigStorageService, serviceDateFormatHelper, ViewStateKeeper) {
+		StaffingConfigStorageService, serviceDateFormatHelper, ViewStateKeeper, teamsPermissions) {
 		var mode = {
 			BusinessHierarchy: 'BusinessHierarchy',
 			GroupPages: 'GroupPages'
@@ -49,6 +50,7 @@
 		vm.avaliableTimezones = [];
 		vm.sitesAndTeams = undefined;
 		vm.staffingEnabled = viewState.staffingEnabled;
+		vm.permissions = {};
 
 		initSelectedGroups(mode.BusinessHierarchy, [], '');
 		if (angular.isArray(viewState.selectedTeamIds) && viewState.selectedTeamIds.length > 0) {
@@ -266,6 +268,10 @@
 			closeAllCommandSidenav();
 			$mdSidenav(settingsContainerId).toggle();
 		};
+
+		vm.isExportScheduleEnabled = function() {
+			return vm.toggles.WfmTeamSchedule_ExportSchedulesToExcel_45795 && vm.permissions.HasExportSchedulePermission;
+		}
 
 		vm.openExportPanel = function () {
 			$state.go('teams.exportSchedule');
@@ -585,7 +591,8 @@
 		var asyncData = {
 			pageSetting: teamScheduleSvc.PromiseForGetAgentsPerPageSetting(),
 			loggedonUsersTeamId: loggedonUsersTeamId.promise,
-			defaultFavoriteSearch: vm.onFavoriteSearchInitDefer.promise
+			defaultFavoriteSearch: vm.onFavoriteSearchInitDefer.promise,
+			bootstrapReady:bootstrapCommon.ready()
 		};
 
 		if (!vm.searchEnabled) {
@@ -673,6 +680,7 @@
 				}
 
 				vm.resetSchedulePage();
+				vm.permissions = teamsPermissions.all();
 			});
 
 			personSelectionSvc.clearPersonInfo();
