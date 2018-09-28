@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_desktopContext = desktopContext;
 		}
 
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		public void Synchronize(IScheduleDictionary modifiedScheduleDictionary, DateOnlyPeriod period)
 		{
 			var schedulerScheduleDictionary = _desktopContext.CurrentContext().SchedulerStateHolderFrom.Schedules;
