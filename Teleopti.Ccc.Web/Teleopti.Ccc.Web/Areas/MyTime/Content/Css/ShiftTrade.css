@@ -277,6 +277,7 @@
 	box-shadow: none;
 	outline: none;
 	border: 1px solid rgba(0, 0, 0, 0.2);
+	border-radius: 0;
 	color: #333333;
 }
 .request-add-shift-trade-message-input:focus {
@@ -653,7 +654,6 @@
 	flex: 1 1 30%;
 	background: white;
 	border-left: 1px solid rgba(0, 0, 0, 0.1);
-	padding: 5px;
 }
 .multi-shift-trade-cart-container {
 	overflow-x: hidden;
@@ -662,6 +662,9 @@
 	height: 420px;
 	padding-bottom: 5px;
 }
+.multi-shift-trade-cart-mobile .multi-shift-trade-cart-container {
+	height: 360px;
+}
 .multi-shift-trade-cart-wrapper {
 	display: flex;
 	flex-direction: column;
@@ -669,6 +672,7 @@
 	height: 100%;
 }
 .multi-shift-trade-cart-row {
+	height: 94px;
 	min-height: 94px;
 	display: flex;
 	justify-content: center;
@@ -676,18 +680,15 @@
 }
 .multi-shift-trade-cart-detail {
 	flex: 1 0 90%;
-	display: flex;
-	flex-direction: column;
-	align-items: stretch;
 }
 .multi-shift-trade-cart-date {
 	display: flex;
-	flex: 1 0 20%;
 	justify-content: center;
-	height: 30px;
+	align-items: center;
+	height: 24px;
 }
 .multi-shift-trade-cart-detail-info {
-	flex: 1 0 80%;
+	height: calc(100% - 24px);
 	display: flex;
 	justify-content: space-between;
 }
@@ -698,6 +699,7 @@
 	justify-content: flex-start;
 	align-items: center;
 	padding-top: 4px;
+	height: 100%;
 }
 .multi-shift-trade-cart-schedule + .multi-shift-trade-cart-schedule {
 	margin-left: 8px;
@@ -727,5 +729,8 @@
 	align-items: flex-end;
 }
 .multi-shift-trade-cart-selection .btn-remove i {
-	transform: scale(1.2);
+	transform: scale(1.3);
+}
+.add-shift-trade-request-block {
+	padding: 5px;
 }
