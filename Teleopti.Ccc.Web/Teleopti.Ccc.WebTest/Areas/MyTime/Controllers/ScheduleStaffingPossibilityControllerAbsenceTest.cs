@@ -411,7 +411,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
 		}
 
-		[Ignore("temp for codemonkeys")]
 		[Test]
 		public void ShouldGetAllGoodPossibilitiesWhenUnderStaffingThresholdsIsMinusOne()
 		{

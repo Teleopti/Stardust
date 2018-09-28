@@ -924,11 +924,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result[3].EndTime.TimeOfDay.TotalMinutes.Should().Be.EqualTo(180);
 		}
 
-		[Ignore("temp for codemonkeys")]
 		[Test]
 		public void ShouldGetFairPossibilitiesForOvertimeWhenSeriousUnderstaffingIsZeroAndForcastedAndScheduledAreEqual()
 		{
-			TimeZone.Is(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			TimeZone.Is(TimeZoneInfoFactory.DenverTimeZoneInfo());
 			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
 
 			Now.Is("2018-09-19 6:00");
@@ -942,6 +941,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var person = User.CurrentUser();
 			var activity1 = createActivity();
 			var skill1 = createSkill("skill1");
+			skill1.TimeZone = TimeZone.TimeZone();
 			skill1.StaffingThresholds = createStaffingThresholds(0, 0, 0.1);
 			var personSkill1 = createPersonSkill(activity1, skill1);
 

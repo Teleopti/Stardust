@@ -159,16 +159,19 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		private void substractUsersSchedule(SkillStaffingData skillStaffingData, IPersonAssignment personAssignment)
 		{
+			var skill = skillStaffingData.Skill;
 			var timezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var startTime = TimeZoneHelper.ConvertToUtc(skillStaffingData.Time, timezone);
 			var skillScheduled = isSkillScheduled(personAssignment,
 				new DateTimePeriod(startTime, startTime.AddMinutes(skillStaffingData.Resolution)),
-				skillStaffingData.Skill);
+				skill);
 			if (!skillScheduled) return;
 			// we can't calculate current user's schedule for a skill in a specific period
 			// so we just substract 1 which means user's schedule is removed(#44607)
-			if (skillStaffingData.ScheduledStaffing <= 1)
+			if (skillStaffingData.ScheduledStaffing <= 1 && !skill.StaffingThresholds.Understaffing.Value.Equals(-1))
+			{
 				skillStaffingData.ScheduledStaffing = 0;
+			}
 		}
 
 		private static bool hasFairPossibilityInThisInterval(Dictionary<DateTime, int> intervalPossibilities, DateTime time)
