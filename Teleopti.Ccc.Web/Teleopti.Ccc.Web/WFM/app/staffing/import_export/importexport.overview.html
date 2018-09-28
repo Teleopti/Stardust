@@ -99,29 +99,8 @@
 		</card-header>
 		<card-body class="panel">
 			<div class="con-row ">
-				<div class="con-flex" ng-show ="!vm.isMultiSkillExportEnabled()">
-					<md-autocomplete id="skill-id" class="autocomplete-skill" md-selected-item="vm.selectedSkill" md-search-text="searchSkillText"
-										  md-selected-item-change="vm.selectedSkillChange(vm.selectedSkill)" md-items="skill in vm.querySearchSkills(searchSkillText)"
-										  md-item-text="skill.Name" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
-						<md-item-template>
-							<i ng-class="vm.dynamicIcon(skill)"></i>
-							<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
-							<md-tooltip>
-								<span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType | translate}} - {{'MultisiteSkill' | translate}}</span>
-								<span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType | translate}}</span>
-								<span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
-							</md-tooltip>
-						</md-item-template>
-						<md-not-found>
-							{{'RepViewerNoMoreMatches'|translate}}
-						</md-not-found>
-					</md-autocomplete>
-					<i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill" ng-click="vm.selectedSkill=null">
-						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
-					</i>
-				</div>
 				
-				<div class="con-flex" ng-show ="vm.isMultiSkillExportEnabled()">
+				<div class="con-flex">
 					<the-skill-picker skills="vm.skills"
 									  skill-groups="vm.allSkillAreas"
 									  on-skill-selected="vm.selectedSkillChange(skill)"
