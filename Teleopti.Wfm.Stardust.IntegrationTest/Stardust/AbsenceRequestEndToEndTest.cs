@@ -23,7 +23,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
-	[StardustTest, Ignore("Still Flaky")]
+	[StardustTest, Ignore("Flaky")]
 	public class AbsenceRequestEndToEndTest
 	{
 		public WithUnitOfWork WithUnitOfWork;
@@ -41,7 +41,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 
 		[Test]
-		public void ShouldRunEndToEndAbsenceRequest([Range(1, 50, 1)] int rangeCount)
+		public void ShouldRunEndToEndAbsenceRequest()//[Range(1, 50, 1)] int rangeCount
 		{
 			StardustManagerPingHelper.WaitForStarDustManagerToStart(TestLog);
 			TestLog.Debug("Setting up test data");
@@ -76,7 +76,6 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			Thread.Sleep(2000);
 			EventPublisher.Publish(new TenantMinuteTickEvent());
 
-
 			TestLog.Debug("Performing Tier1 assertion");
 			_assertRetryStrategy.Reset();
 			performLevel1Assert(personRequest);
@@ -95,7 +94,6 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 			host.Stop();
 			TestLog.Debug("Service bus stopped");
-
 		}
 
 		private void performLevel1Assert(IPersonRequest personRequest)

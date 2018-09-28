@@ -23,15 +23,16 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		public static string UrlWindowsIdentityProvider;
 		private static readonly ILog _logger = LogManager.GetLogger(typeof(TestSiteConfigurationSetup));
 
-		private static IISExpress _server;
+		private static IisExpressRunner _server;
 		private static Process _stardustProcess;
 		private static IDisposable _portsConfiguration;
 
 		private static readonly SettingsFileManager settingsFile = new SettingsFileManager();
 
-		public static void Setup(bool runStardust = false)
+		public static void Setup(bool runStardust = false, TestLog testlog = null)
 		{
-			_portsConfiguration = RandomPortsAndUrls();
+			_portsConfiguration = RandomPortsAndUrls(testlog);
+			
 			writeWebConfigs();
 			killProcess("killAllIISExpress", "iisexpress");
 			StartIISExpress();
@@ -58,16 +59,20 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			});
 		}
 
-		private static IDisposable RandomPortsAndUrls()
+		private static int customPortLastUsed = 57000;
+
+		private static IDisposable RandomPortsAndUrls(TestLog testlog = null)
 		{
 			var originalPort = Port;
 			var originalAuthenticationBridgePort = PortAuthenticationBridge;
 			var originalWindowsIdentityProviderPort = PortWindowsIdentityProvider;
 
-			Port = new Random().Next(57000, 57999);
-			PortAuthenticationBridge = Port - new Random().Next(1, 100);
-			PortWindowsIdentityProvider = Port + new Random().Next(1, 100);
+			Port = customPortLastUsed++; //new Random().Next(57000, 57999);
+			PortAuthenticationBridge = customPortLastUsed++; //Port - new Random().Next(1, 100);
+			PortWindowsIdentityProvider = customPortLastUsed++; // Port + new Random().Next(1, 100);
 
+			testlog?.Debug($"Port={Port} ; PortAuthenticationBridge={PortAuthenticationBridge} ; PortWindowsIdentityProvider={PortWindowsIdentityProvider}");
+			
 			URL = new Uri($"http://localhost:{Port}/");
 			UrlAuthenticationBridge = new Uri($"http://localhost:{PortAuthenticationBridge}/");
 			WindowsClaimProvider =
@@ -105,12 +110,16 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 				searchReplaces()
 			);
 
+			//Process.Start()
+
 			var parameters = new Parameters
 			{
 				Systray = false,
 				Config = string.Concat(runningConfig, " /apppool:\"Clr4IntegratedAppPool\"")
 			};
-			_server = new IISExpress(parameters, "c:\\program files\\IIS Express\\iisexpress.exe");
+			//_server = new IISExpress(parameters, "c:\\program files\\IIS Express\\iisexpress.exe");
+			_server = new IisExpressRunner();
+			_server.Execute(parameters, "c:\\program files\\IIS Express\\iisexpress.exe");
 		}
 
 		private static void cleanOldLogs()

@@ -13,30 +13,26 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			testlog.Debug("waitForStarDustManagerToStart");
 			var managerBaseUrl = TestSiteConfigurationSetup.URL.AbsoluteUri + @"StardustDashboard/";
 
-			for (var i = 0; i < 5; i++)
+			var result = tryPingManager(managerBaseUrl);
+			if (!result)
 			{
-				var result = tryPingManager(managerBaseUrl);
-				if (result == true)
-				{
-					testlog.Debug("StarDustManager ping OK!");
-					return;
-				}
-
 				testlog.Debug("Failed to ping Stardust Manager. Try pinging again..");
+				throw new TimeoutException("Failed to ping Stardust Manager. Aborting test");
 			}
-			throw new TimeoutException("Failed to ping Stardust Manager. Aborting test");
+			testlog.Debug("StarDustManager ping OK!");
 		}
 
 		private static bool tryPingManager(string managerBaseUrl)
 		{
-			var ping = new GetHttpRequest();
 			try
 			{
+				var ping = new GetHttpRequest();
 				ping.Get<string>(managerBaseUrl + "ping", new NameValueCollection());
 				return true;
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
+				TestLog.Static.Debug(ex.Message);
 				return false;
 			}
 		}
