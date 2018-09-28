@@ -1,0 +1,10 @@
+<NUnitProject>
+<Settings activeconfig="active" appbase="..\..\"/>
+	<Config name="active">
+		<assembly path=".\Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\bin\Release\Teleopti.Analytics.Etl.IntegrationTest.dll"/>
+		<assembly path=".\Teleopti.Ccc.Web\Teleopti.Ccc.Web.IntegrationTest\bin\Release\Teleopti.Ccc.Web.IntegrationTest.dll"/>
+		<assembly path=".\Teleopti.Wfm.Administration.IntegrationTest\bin\Release\Teleopti.Wfm.Administration.IntegrationTest.dll"/>
+		<assembly path=".\Teleopti.Wfm.Api.Test\bin\Release\Teleopti.Wfm.Api.Test.dll"/>
+		<assembly path=".\Teleopti.Wfm.Stardust.IntegrationTest\bin\Release\Teleopti.Wfm.Stardust.IntegrationTest.dll"/>
+	</Config>
+</NUnitProject>		
