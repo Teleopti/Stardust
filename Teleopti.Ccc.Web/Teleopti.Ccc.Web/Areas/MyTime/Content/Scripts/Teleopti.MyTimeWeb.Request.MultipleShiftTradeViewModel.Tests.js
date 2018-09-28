@@ -1255,7 +1255,7 @@
 		equal(viewModel.targetToleranceMessages()[0].contractTimeGap, "-0:11");
 	});
 
-	test("should calculate tolerance when tolerance value is negative", function() {
+	test("should calculate tolerance when real gap have exceed tolerance", function() {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) {
 			if (toggleName === "MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408") return true;
 			return false;
@@ -1275,9 +1275,9 @@
 				PeriodStart: moment('2018-06-30'),
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
-				NegativeToleranceMinutes: 80,
-				PositiveToleranceMinutes: -90,
-				RealSchedulePositiveGap: 0,
+				NegativeToleranceMinutes: 0,
+				PositiveToleranceMinutes: 0,
+				RealSchedulePositiveGap: 90,
 				RealScheduleNegativeGap: 0
 			}],
 
@@ -1285,10 +1285,10 @@
 				PeriodStart: moment('2018-06-30'),
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
-				NegativeToleranceMinutes: -89,
-				PositiveToleranceMinutes: 1189,
+				NegativeToleranceMinutes: 0,
+				PositiveToleranceMinutes: 0,
 				RealSchedulePositiveGap: 0,
-				RealScheduleNegativeGap: 0
+				RealScheduleNegativeGap: 89
 			}]
 		}
 
@@ -1395,7 +1395,7 @@
 				PeriodStart: moment('2018-06-30'),
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
-				NegativeToleranceMinutes: -80,
+				NegativeToleranceMinutes: 80,
 				PositiveToleranceMinutes: 10,
 				RealSchedulePositiveGap: 0,
 				RealScheduleNegativeGap: 0
@@ -1406,7 +1406,7 @@
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
 				NegativeToleranceMinutes: 10,
-				PositiveToleranceMinutes: -70,
+				PositiveToleranceMinutes: 70,
 				RealSchedulePositiveGap: 0,
 				RealScheduleNegativeGap: 0
 			}]
@@ -1434,7 +1434,7 @@
 		equal(viewModel.showToloranceMessage(), false);
 	});
 
-	test("should calculate tolerance for both side at one time and balance without error", function () {
+	test("should not show tolerance error when there is no gap between schedules", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) {
 			if (toggleName === "MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408") return true;
 			return false;
@@ -1493,7 +1493,7 @@
 		equal(viewModel.showToloranceMessage(), false);
 	});
 
-	test("should not show error message when not break tolerance", function () {
+	test("should not show error message when there is no schedules", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) {
 			if (toggleName === "MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408") return true;
 			return false;

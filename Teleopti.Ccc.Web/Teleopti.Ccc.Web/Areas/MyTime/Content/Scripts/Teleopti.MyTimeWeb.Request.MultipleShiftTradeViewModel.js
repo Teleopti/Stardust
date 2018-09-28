@@ -1038,8 +1038,8 @@
 		});
 
 		var left = 0;
-		if (gap > 0) left = periodToloranceInfo.NegativeToleranceMinutes + periodToloranceInfo.RealSchedulePositiveGap - gap;
-		if (gap < 0) left = periodToloranceInfo.PositiveToleranceMinutes + periodToloranceInfo.RealScheduleNegativeGap + gap;
+		if (gap > 0) left = periodToloranceInfo.NegativeToleranceMinutes - periodToloranceInfo.RealScheduleNegativeGap + periodToloranceInfo.RealSchedulePositiveGap - gap;
+		if (gap < 0) left = periodToloranceInfo.PositiveToleranceMinutes - periodToloranceInfo.RealSchedulePositiveGap + periodToloranceInfo.RealScheduleNegativeGap + gap;
 
 		if (left < 0) {
 			var contractTimeGap = Teleopti.MyTimeWeb.Common.FormatTimeSpan(-left);
