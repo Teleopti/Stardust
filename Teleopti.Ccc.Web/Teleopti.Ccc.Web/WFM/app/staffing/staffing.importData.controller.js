@@ -55,7 +55,6 @@
 		vm.ClearErrorMessage = '';
 		vm.ExportPeriodMessage = 'DefaultHejsan';
 		vm.ExportBpoPeriodMessage = 'DefaultHejsan';
-		vm.isMultiSkillExportEnabled = isMultiSkillExportEnabled;
 		vm.GetRangeMessage = getRangeMessage;
 		vm.clearBpoPeriod = clearBpoPeriod;
 		vm.setSelectedBpo = setSelectedBpo;
@@ -121,13 +120,9 @@
 		//}
 
 		function disableNewSkillSelectorWithToggle() {
-			if (isMultiSkillExportEnabled())
-				return (vm.selectedSkill === null && vm.selectedSkillArea === null) ||
-					vm.exportPeriod.startDate === null ||
-					vm.exportPeriod.endDate === null;
-			else
-				return vm.selectedSkill === null || vm.exportPeriod.startDate === null ||
-					vm.exportPeriod.endDate === null;
+			return (vm.selectedSkill === null && vm.selectedSkillArea === null) ||
+				vm.exportPeriod.startDate === null ||
+				vm.exportPeriod.endDate === null;
 		}
 
 		function resetFileLists() {
@@ -236,10 +231,6 @@
 			}
 		}
 
-		function isMultiSkillExportEnabled() {
-			return toggleService.Staffing_BPO_ExportMultipleSkills_74968;
-		}
-
 		function getMessage() {
 			var query = staffingService.getExportStaffingPeriodMessage.get();
 			query.$promise.then(function(response) {
@@ -295,15 +286,6 @@
 		}
 
 		function exportFile() {
-			if (!isMultiSkillExportEnabled()) {
-				multiSkillExportIsDisabled();
-			}
-			else {
-				multiSkillExportIsEnabled();
-			}
-		}
-
-		function multiSkillExportIsEnabled() {
 			var startDate = moment(vm.exportPeriod.startDate).format("YYYY-MM-DD");
 			var endDate = moment(vm.exportPeriod.endDate).format("YYYY-MM-DD");
 			if (vm.selectedSkill != null) {
@@ -330,27 +312,6 @@
 				});
 			}
 		}
-
-		function multiSkillExportIsDisabled() {
-			if (vm.selectedSkill === null) {
-				vm.ErrorMessage = $translate.instant('BpoExportYouMustSelectASkill');
-				return;
-			}
-			var startDate = moment(vm.exportPeriod.startDate).format("YYYY-MM-DD");
-			var endDate = moment(vm.exportPeriod.endDate).format("YYYY-MM-DD");
-
-			var request = staffingService.postFileExport.get({
-				skillId: vm.selectedSkill.Id,
-				exportStartDateTime: startDate,
-				exportEndDateTime: endDate
-			});
-			request.$promise.then(function (response) {
-				vm.ErrorMessage = response.ErrorMessage;
-				if (vm.ErrorMessage !== '') return;
-				UtilService.saveToFs(response.Content, vm.selectedSkill.Name + '.csv', 'text/csv');
-			});
-		}
-		
 		
 		function getActiveBpos() {
 			var query = staffingService.getActiveBpos.query();
