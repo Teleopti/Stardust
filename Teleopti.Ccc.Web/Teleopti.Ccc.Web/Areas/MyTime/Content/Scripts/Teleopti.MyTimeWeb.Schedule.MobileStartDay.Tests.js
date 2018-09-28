@@ -896,11 +896,78 @@
 		equal(ajaxOption.data.returnOneWeekData, true);
 		equal(probabilityAjaxCallCount, 1);
 
-		console.log(vm.selectedDate().format());
 		vm.reloadProbabilityData();
 
 		equal(probabilityAjaxCallCount, 1);
 		equal(vm.probabilities().length, 1);
+	});
+
+	test('should reload one week probability data when probability option is changed', function() {
+		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
+		startDayData.CheckStaffingByIntraday = true;
+		startDayData.Date = moment()
+			.zone(-startDayData.BaseUtcOffsetInMinutes)
+			.format(constants.serviceDateTimeFormat.dateOnly);
+		startDayData.Schedule.OpenHourPeriod = { EndTime: '13:00:00', StartTime: '08:00:00' };
+		propabilities = createPropabilities(['12:00:00', '12:15:00'], startDayData.Date);
+		propabilities = propabilities.concat(
+			createPropabilities(
+				['12:00:00', '12:15:00'],
+				moment(startDayData.Date)
+					.add(1, 'day')
+					.format(constants.serviceDateTimeFormat.dateOnly)
+			)
+		);
+		propabilities = propabilities.concat(
+			createPropabilities(
+				['12:00:00', '12:15:00'],
+				moment(startDayData.Date)
+					.add(2, 'day')
+					.format(constants.serviceDateTimeFormat.dateOnly)
+			)
+		);
+		propabilities = propabilities.concat(
+			createPropabilities(
+				['12:00:00', '12:15:00'],
+				moment(startDayData.Date)
+					.add(3, 'day')
+					.format(constants.serviceDateTimeFormat.dateOnly)
+			)
+		);
+		propabilities = propabilities.concat(
+			createPropabilities(
+				['12:00:00', '12:15:00'],
+				moment(startDayData.Date)
+					.add(4, 'day')
+					.format(constants.serviceDateTimeFormat.dateOnly)
+			)
+		);
+		propabilities = propabilities.concat(
+			createPropabilities(
+				['12:00:00', '12:15:00'],
+				moment(startDayData.Date)
+					.add(5, 'day')
+					.format(constants.serviceDateTimeFormat.dateOnly)
+			)
+		);
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
+			fakeReadyForInteractionCallback,
+			fakeCompletelyLoadedCallback,
+			ajax
+		);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		vm.onProbabilityOptionSelectCallback(constants.probabilityType.overtime);
+
+		equal(ajaxOption.data.returnOneWeekData, true);
+		equal(probabilityAjaxCallCount, 1);
+
+		propabilities = [];
+
+		vm.onProbabilityOptionSelectCallback(constants.probabilityType.absence);
+
+		equal(probabilityAjaxCallCount, 2);
+		equal(vm.probabilities().length, 0);
 	});
 
 	test('should clear probabilities when probability option is none', function() {

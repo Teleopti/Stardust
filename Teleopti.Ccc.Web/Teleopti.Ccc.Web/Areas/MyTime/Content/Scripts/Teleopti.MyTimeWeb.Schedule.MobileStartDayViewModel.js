@@ -82,7 +82,7 @@
 		Teleopti.MyTimeWeb.Portal.NavigateTo('Requests/Index');
 	};
 
-	self.readData = function(data) {
+	self.readData = function(data, forceReloadProbabilityData) {
 		self.requestDay = moment(data.Date);
 
 		disposeSelectedDateSubscription();
@@ -189,7 +189,7 @@
 			(self.selectedProbabilityOptionValue() === constants.probabilityType.absence ||
 				self.selectedProbabilityOptionValue() === constants.probabilityType.overtime)
 		)
-			self.reloadProbabilityData();
+			self.reloadProbabilityData(forceReloadProbabilityData);
 
 		setPostShiftTradeMenuVisibility(data);
 		self.currentUserDate(getCurrentUserDate());
@@ -347,10 +347,10 @@
 			self.probabilities([]);
 		}
 
-		parent.ReloadSchedule();
+		parent.ReloadSchedule(null, true);
 	};
 
-	self.reloadProbabilityData = function() {
+	self.reloadProbabilityData = function(forceReloadProbabilityData) {
 		self.loadingProbabilityData(true);
 
 		var isWithinLoadedProbabilityPeriod =
@@ -358,7 +358,14 @@
 			moment(oneWeekRawProbabilities[0].Date) <= self.selectedDate() &&
 			self.selectedDate() <= moment(oneWeekRawProbabilities[oneWeekRawProbabilities.length - 1].Date);
 
-		if (isWithinLoadedProbabilityPeriod) {
+		if (!isWithinLoadedProbabilityPeriod || forceReloadProbabilityData) {
+			self.probabilities([]);
+			dataService.fetchProbabilityData(
+				self.selectedDate().format('YYYY-MM-DD'),
+				self.selectedProbabilityOptionValue(),
+				self.updateProbabilityData
+			);
+		} else {
 			var probabilities = oneWeekRawProbabilities.filter(function(r) {
 				return r.Date === self.selectedDate().format('YYYY-MM-DD');
 			});
@@ -371,13 +378,6 @@
 				)
 			);
 			self.loadingProbabilityData(false);
-		} else {
-			self.probabilities([]);
-			dataService.fetchProbabilityData(
-				self.selectedDate().format('YYYY-MM-DD'),
-				self.selectedProbabilityOptionValue(),
-				self.updateProbabilityData
-			);
 		}
 	};
 
