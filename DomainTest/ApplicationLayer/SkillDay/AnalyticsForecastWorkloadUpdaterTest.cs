@@ -37,6 +37,50 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SkillDay
 		}
 
 		[Test]
+		public void ShouldUpdateAnalyticsWithMultipleForecastedDaysInSameEvent()
+		{
+			AnalyticsDateRepository.Clear();
+			AnalyticsDateRepository.HasDatesBetween(new DateTime(2018, 9, 27), new DateTime(2018, 9, 30));
+			var businessUnitId = Guid.NewGuid();
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitId));
+			var forecastedDay1 = new DateOnly(2018, 9, 28);
+			var forecastedDay2 = new DateOnly(2018, 9, 29);
+			var skill = SkillFactory.CreateSkill("TestSkill");
+			var scenario = ScenarioFactory.CreateScenario("TestScenario", true, true);
+			var skillDay1 = SkillDayFactory.CreateSkillDay(skill, forecastedDay1, scenario).WithId();
+			var skillDay2 = SkillDayFactory.CreateSkillDay(skill, forecastedDay2, scenario).WithId();
+
+			foreach (var workloadDay in skillDay1.WorkloadDayCollection)
+			{
+				workloadDay.Workload.SetId(Guid.NewGuid());
+				AnalyticsWorkloadRepository.AddOrUpdate(AnalyticsWorkloadFactory.CreateAnalyticsWorkload(workloadDay.Workload, 1, 1));
+			}
+
+			foreach (var workloadDay in skillDay2.WorkloadDayCollection)
+			{
+				workloadDay.Workload.SetId(Guid.NewGuid());
+				AnalyticsWorkloadRepository.AddOrUpdate(AnalyticsWorkloadFactory.CreateAnalyticsWorkload(workloadDay.Workload, 1, 1));
+			}
+
+			SkillDayRepository.Add(skillDay1);
+			SkillDayRepository.Add(skillDay2);
+			AnalyticsScenarioRepository.AddScenario(AnalyticsScenarioFactory.CreateAnalyticsScenario(scenario));
+
+			Target.Handle(new ForecastChangedEvent()
+			{
+				SkillDayIds = new []{ skillDay1.Id.Value, skillDay2.Id.Value },
+				LogOnBusinessUnitId = businessUnitId
+			});
+
+			var analyticsforecastedDay1 = AnalyticsDateRepository.Date(forecastedDay1.Date);
+			var analyticsforecastedDay2 = AnalyticsDateRepository.Date(forecastedDay2.Date);
+			AnalyticsForecastWorkloadRepository.AnalyticsForcastWorkloads.Any(x => x.DateId == analyticsforecastedDay1.DateId)
+				.Should().Be.True();
+			AnalyticsForecastWorkloadRepository.AnalyticsForcastWorkloads.Any(x => x.DateId == analyticsforecastedDay2.DateId)
+				.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldDoNothingWhenSkillDayMissing()
 		{
 			var businessUnitId = Guid.NewGuid();
@@ -423,72 +467,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SkillDay
 				.Count(x => x.WorkloadId == 2 && x.DateId == dateIdYesterday)
 				.Should()
 				.Be.EqualTo(AnalyticsIntervalRepository.IntervalsPerDay());
-		}
-
-		[Test]
-		public void ShouldCreateDatesWhenForecastingStockholmTimeZone()
-		{
-			AnalyticsDateRepository.Clear();
-			AnalyticsDateRepository.HasDatesBetween(new DateTime(2018, 09, 29), new DateTime(2018, 09, 29));
-			var businessUnitId = Guid.NewGuid();
-			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitId));
-			var forecastedDay = new DateOnly(2018, 10, 1);
-			var skill = SkillFactory.CreateSkill("TestSkill", TimeZoneInfoFactory.StockholmTimeZoneInfo());
-			var scenario = ScenarioFactory.CreateScenario("TestScenario", true, true);
-			var skillDay = SkillDayFactory.CreateSkillDay(skill, forecastedDay, scenario).WithId();
-
-			foreach (var workloadDay in skillDay.WorkloadDayCollection)
-			{
-				workloadDay.Workload.SetId(Guid.NewGuid());
-				AnalyticsWorkloadRepository.AddOrUpdate(AnalyticsWorkloadFactory.CreateAnalyticsWorkload(workloadDay.Workload, 1, 1));
-			}
-
-			SkillDayRepository.Add(skillDay);
-			AnalyticsScenarioRepository.AddScenario(AnalyticsScenarioFactory.CreateAnalyticsScenario(scenario));
-
-			AnalyticsDateRepository.MinDate().DateDate.Should().Be(new DateTime(2018, 9, 29));
-			AnalyticsDateRepository.MaxDate().DateDate.Should().Be(new DateTime(2018, 9, 29));
-
-			Target.Handle(new SkillDayChangedEvent
-			{
-				SkillDayId = skillDay.Id.GetValueOrDefault(),
-				LogOnBusinessUnitId = businessUnitId
-			});
-			
-			AnalyticsDateRepository.MaxDate().DateDate.Should().Be(new DateTime(2018, 10, 1));
-		}
-
-		[Test]
-		public void ShouldCreateDatesWhenForecastingUtcTimeZone()
-		{
-			AnalyticsDateRepository.Clear();
-			AnalyticsDateRepository.HasDatesBetween(new DateTime(2018, 09, 29), new DateTime(2018, 09, 29));
-			var businessUnitId = Guid.NewGuid();
-			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitId));
-			var forecastedDay = new DateOnly(2018, 10, 1);
-			var skill = SkillFactory.CreateSkill("TestSkill", TimeZoneInfoFactory.UtcTimeZoneInfo());
-			var scenario = ScenarioFactory.CreateScenario("TestScenario", true, true);
-			var skillDay = SkillDayFactory.CreateSkillDay(skill, forecastedDay, scenario).WithId();
-
-			foreach (var workloadDay in skillDay.WorkloadDayCollection)
-			{
-				workloadDay.Workload.SetId(Guid.NewGuid());
-				AnalyticsWorkloadRepository.AddOrUpdate(AnalyticsWorkloadFactory.CreateAnalyticsWorkload(workloadDay.Workload, 1, 1));
-			}
-
-			SkillDayRepository.Add(skillDay);
-			AnalyticsScenarioRepository.AddScenario(AnalyticsScenarioFactory.CreateAnalyticsScenario(scenario));
-
-			AnalyticsDateRepository.MinDate().DateDate.Should().Be(new DateTime(2018, 9, 29));
-			AnalyticsDateRepository.MaxDate().DateDate.Should().Be(new DateTime(2018, 9, 29));
-
-			Target.Handle(new SkillDayChangedEvent
-			{
-				SkillDayId = skillDay.Id.GetValueOrDefault(),
-				LogOnBusinessUnitId = businessUnitId
-			});
-
-			AnalyticsDateRepository.MaxDate().DateDate.Should().Be(new DateTime(2018, 10, 1));
 		}
 
 		private void createAnalyticsWorkload(ISkillDay skillday)

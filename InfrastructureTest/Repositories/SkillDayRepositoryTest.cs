@@ -505,6 +505,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			skillDayRepository.HasSkillDaysWithinPeriod(DateOnly.MinValue, DateOnly.MaxValue, bu, _scenario).Should().Be.True();
 		}
 
+		[Test]
+		public void ShouldLoadSkillDaysByGivenIds()
+		{
+			ISkillDay skillDay1 = CreateAggregateWithCorrectBusinessUnit();
+			ISkillDay skillDay2 = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(skillDay1);
+			PersistAndRemoveFromUnitOfWork(skillDay2);
+
+			SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+			ICollection<ISkillDay> skillDays =
+				skillDayRepository.LoadSkillDays(new List<Guid> { skillDay1.Id.Value, skillDay2.Id.Value });
+
+			Assert.AreEqual(2, skillDays.Count);
+			skillDays.Any(s => s.CurrentDate == skillDay1.CurrentDate);
+			skillDays.Any(s => s.CurrentDate == skillDay2.CurrentDate);
+		}
+
 		protected override Repository<ISkillDay> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			return new SkillDayRepository(currentUnitOfWork);

@@ -186,6 +186,7 @@
     <Compile Include="ApplicationLayer\Commands\IScheduleCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\IShiftCategorySelector.cs" />
     <Compile Include="ApplicationLayer\Commands\ChangeActivityTypeCommand.cs" />
+    <Compile Include="ApplicationLayer\Events\ForecastChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonEmployementChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Commands\ShiftCategorySelector.cs" />
     <Compile Include="ApplicationLayer\Commands\ShiftCategorySelectorWithPrediction.cs" />

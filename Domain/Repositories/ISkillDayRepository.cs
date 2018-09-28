@@ -22,5 +22,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
 
 		bool HasSkillDaysWithinPeriod(DateOnly startDate, DateOnly endDate, IBusinessUnit businessUnit, IScenario scenario);
+
+		ICollection<ISkillDay> LoadSkillDays(IEnumerable<Guid> skillDaysIdList);
 	}
 }

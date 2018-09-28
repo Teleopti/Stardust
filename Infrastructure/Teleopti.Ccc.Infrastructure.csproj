@@ -713,6 +713,7 @@
     <Compile Include="UnitOfWork\NestedUnitOfWorkException.cs" />
     <Compile Include="UnitOfWork\NoPreCommitHooks.cs" />
     <Compile Include="UnitOfWork\OptionalColumnCollectionChangedEventPublisher.cs" />
+    <Compile Include="UnitOfWork\ForecastChangedEventPublisher.cs" />
     <Compile Include="UnitOfWork\ScheduleChangedMessageSender.cs" />
     <Compile Include="UnitOfWork\ClearScheduleEvents.cs" />
     <Compile Include="UnitOfWork\CurrentTransactionHooks.cs" />
