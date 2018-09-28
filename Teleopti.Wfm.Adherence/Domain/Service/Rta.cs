@@ -52,11 +52,12 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		{
 			handleExceptions(exceptionHandler, () =>
 			{
-				batch.States.EmptyIfNull()
-					.ForEach(x => { x.TraceLog = _tracer.StateReceived(x.UserCode, x.StateCode); });
 				validateAuthenticationKey(batch);
 				validateStateCodes(batch);
 				_tenants.Poke();
+				batch.States.EmptyIfNull()
+					.ForEach(x => { x.TraceLog = _tracer.StateReceived(x.UserCode, x.StateCode); });
+				_tracer.ProcessEnqueuing(batch?.States?.Count());
 				_analytics.Do(() => _queueWriter.Enqueue(batch));
 			});
 		}
@@ -72,7 +73,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 				iterated = input != null;
 				if (iterated)
 				{
-					_tracer.ProcessProcessing();
+					_tracer.ProcessProcessing(input?.States?.Count());
 					process(input);
 				}
 			});

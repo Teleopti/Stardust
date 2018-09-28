@@ -248,9 +248,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 		private bool isLunchOrShortBreakActivity(IVisualLayer visualLayer)
 		{
-			if (visualLayer.Payload is IActivity)
+			if (visualLayer.Payload is IActivity activity)
 			{
-				var activity = (IActivity) visualLayer.Payload;
 				return activity.ReportLevelDetail == ReportLevelDetail.Lunch ||
 					   activity.ReportLevelDetail == ReportLevelDetail.ShortBreak;
 			}

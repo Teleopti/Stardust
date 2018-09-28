@@ -31,7 +31,16 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Tracer
 		{
 			using (var session = _sessionFactory.OpenSession())
 				return session
-					.CreateSQLQuery($@"SELECT Time, Message FROM RtaTracer.Logs WHERE MessageType = :MessageType AND Tenant = :Tenant")
+					.CreateSQLQuery($@"
+SELECT 
+	Time, 
+	Message 
+FROM 
+	RtaTracer.Logs 
+WHERE 
+	MessageType = :MessageType AND 
+	(Tenant = :Tenant OR Tenant IS NULL)
+")
 					.SetParameter("Tenant", _dataSource.CurrentName())
 					.SetParameter("MessageType", typeof(T).Name)
 					.SetResultTransformer(Transformers.AliasToBean<internalModel>())

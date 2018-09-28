@@ -283,8 +283,8 @@
     <Reference Include="StackExchange.Redis.StrongName, Version=1.1.608.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
       <HintPath>..\..\packages\StackExchange.Redis.StrongName.1.1.608\lib\net46\StackExchange.Redis.StrongName.dll</HintPath>
     </Reference>
-    <Reference Include="Stardust.Manager, Version=1.0.0.830, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Stardust.Manager.1.0.0.830\lib\net451\Stardust.Manager.dll</HintPath>
+    <Reference Include="Stardust.Manager, Version=1.0.0.832, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Stardust.Manager.1.0.0.832\lib\net451\Stardust.Manager.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -374,11 +374,13 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.238\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.253\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.238\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.253\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Validation">
       <HintPath>..\..\packages\Validation.2.0.2.13022\lib\portable-windows8+net40+sl5+windowsphone8\Validation.dll</HintPath>
@@ -391,6 +393,14 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Areas\TeamSchedule\Models\GroupScheduleDayOffViewModel.cs" />
+    <Compile Include="Areas\TeamSchedule\Models\GroupScheduleProjectionViewModel.cs" />
+    <Compile Include="Areas\TeamSchedule\Models\GroupScheduleShiftViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\IPersonScheduleViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\PersonScheduleData.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\PersonScheduleViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\PersonScheduleViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\PersonScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Forecasting\Models\CampaignInput.cs" />
     <Compile Include="Areas\Forecasting\Models\ExportForecastInput.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastExportController.cs" />
@@ -416,9 +426,6 @@
     <Compile Include="Areas\Global\Models\GroupPagesViewModel.cs" />
     <Compile Include="Areas\Global\FavoriteSearchController.cs" />
     <Compile Include="Areas\Global\FavoriteSearchFormData.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\GroupScheduleController.cs" />
-    <Compile Include="Areas\Anywhere\Core\GroupScheduleProjectionViewModel.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\AnywhereReportsController.cs" />
     <Compile Include="Areas\Global\DataProtectionController.cs" />
     <Compile Include="Areas\Global\Core\GroupPageViewModelFactory.cs" />
     <Compile Include="Areas\Global\DataTokenController.cs" />
@@ -427,19 +434,6 @@
     <Compile Include="Areas\Global\ThemeController.cs" />
     <Compile Include="Areas\Global\BusinessUnitController.cs" />
     <Compile Include="Areas\Global\GroupPageController.cs" />
-    <Compile Include="Areas\Anywhere\Core\IPersonScheduleDayViewModelFactory.cs" />
-    <Compile Include="Areas\Anywhere\Core\PersonScheduleDayViewModel.cs" />
-    <Compile Include="Areas\Anywhere\Core\PersonScheduleDayViewModelFactory.cs" />
-    <Compile Include="Areas\Anywhere\Core\ReportItemsProvider.cs" />
-    <Compile Include="Areas\Anywhere\Core\IReportItemsProvider.cs" />
-    <Compile Include="Areas\Anywhere\Core\IGroupScheduleViewModelFactory.cs" />
-    <Compile Include="Areas\Anywhere\Core\IGroupScheduleViewModelMapper.cs" />
-    <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecification.cs" />
-    <Compile Include="Areas\Anywhere\Core\GroupScheduleData.cs" />
-    <Compile Include="Areas\Anywhere\Core\GroupScheduleDayOffViewModel.cs" />
-    <Compile Include="Areas\Anywhere\Core\GroupScheduleShiftViewModel.cs" />
-    <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelFactory.cs" />
-    <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillController.cs" />
     <Compile Include="Areas\Global\ApplicationController.cs" />
     <Compile Include="Areas\Global\AreaWithPermissionPath.cs" />
@@ -495,6 +489,7 @@
     <Compile Include="Areas\MyTime\Models\Schedule\Common\OvertimeAvailabilityViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Schedule\Common\SpecialDateState.cs" />
     <Compile Include="Areas\MyTime\Models\Schedule\Common\DayViewModel.cs" />
+    <Compile Include="Areas\Rta\Controllers\RtaPermissionsController.cs" />
     <Compile Include="Areas\Rta\Controllers\RtaTestDataController.cs" />
     <Compile Include="Areas\Rta\Controllers\HistoricalOverviewController.cs" />
     <Compile Include="Core\Exceptions\CustomMessageException.cs" />
@@ -812,6 +807,7 @@
     <Compile Include="Core\Data\MultiplicatorDefinitionSetProvider.cs" />
     <Compile Include="Core\Data\ShiftCategoryProvider.cs" />
     <Compile Include="Core\Extensions\DateTimeFormatExtensions.cs" />
+    <Compile Include="Core\IoC\LegacyRegistrationsFromAnywhere.cs" />
     <Compile Include="Core\RequestContext\Cookie\SessionSpecificCookieSettingsProvider.cs" />
     <Compile Include="Core\Startup\CsrfFilter.cs" />
     <Compile Include="Core\Startup\InitializeApplication\PublishStartupJobsTask.cs" />
@@ -1097,13 +1093,6 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceTemplateProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplatePersister.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplateProvider.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\PersonScheduleCommandController.cs" />
-    <Compile Include="Areas\Anywhere\Core\IPersonScheduleViewModelFactory.cs" />
-    <Compile Include="Areas\Anywhere\Core\PersonScheduleData.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\PersonScheduleController.cs" />
-    <Compile Include="Areas\Anywhere\Core\PersonScheduleViewModel.cs" />
-    <Compile Include="Areas\Anywhere\Core\PersonScheduleViewModelFactory.cs" />
-    <Compile Include="Areas\Anywhere\Core\PersonScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IPossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeRequestPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\WebPersonRequestCheckAuthorization.cs" />
@@ -1129,7 +1118,6 @@
     <Compile Include="Areas\SSO\Core\OpenIdProviderWapper.cs" />
     <Compile Include="Areas\SSO\Core\IoC\SSOAreaModule.cs" />
     <Compile Include="Areas\SSO\SSOAreaRegistration.cs" />
-    <Compile Include="Areas\Anywhere\Core\IoC\AnywhereAreaModule.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ChangePasswordInput.cs" />
     <Compile Include="Areas\Start\Models\Authentication\IIpAddressResolver.cs" />
     <Compile Include="Areas\Start\Models\Authentication\IpAddressResolver.cs" />
@@ -1499,7 +1487,8 @@
     <Content Include="Content\botchat\botchat.css" />
     <Content Include="Content\botchat\botchat.js" />
     <Content Include="Content\jquery-plugin\jquery.touchSwipe.min.js" />
-    <Content Include="Content\jqueryui\jquery.ui.dialog.js" />
+    <Content Include="Content\jqueryui\jquery-ui-1.10.2.dialog.js" />
+    <Content Include="Content\jqueryui\jquery-ui-1.10.2.slider.js" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui.css" />
     <Content Include="Content\jqueryui\smoothness\jquery.ui.dialog.css" />
     <Content Include="Content\jquery\jquery-1.12.4.js" />
@@ -1608,10 +1597,10 @@
     <Content Include="WFM\app\forecasting\html\modify.html" />
     <Content Include="WFM\app\forecasting\service\forecast.backend.fake.js" />
     <Content Include="WFM\app\forecasting\controller\controller.js" />
-    <Content Include="WFM\app\forecasting\controller\controller.spec.js" />
+    <Content Include="WFM\app\forecasting\spec\controller.spec.js" />
     <Content Include="WFM\app\forecasting\html\forecast.html" />
     <Content Include="WFM\app\forecasting\controller\modify.controller.js" />
-    <Content Include="WFM\app\forecasting\controller\modify.controller.spec.js" />
+    <Content Include="WFM\app\forecasting\spec\modify.controller.spec.js" />
     <Content Include="WFM\app\global\areas\menu-component.html" />
     <Content Include="WFM\app\global\areas\menu.component.js" />
     <Content Include="WFM\app\global\businessunits\businessunits.controller.spec.js" />
@@ -1724,6 +1713,7 @@
     <Content Include="WFM\app\rta\rta\agents\rta.agents.configurationValidation.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.filter.sort.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.noagentsmessage.spec.js" />
+    <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.restrictHistoricalOverviewWithPermission.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.ReviewHistoricalAdherence_74770.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.RTA_ImprovedStateGroupFilter_48724.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.organization.selection.spec.js" />
@@ -1760,6 +1750,7 @@
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.schedule.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.configurationValidation.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.nositesmessage.spec.js" />
+    <Content Include="WFM\app\rta\rta\overview\controller.restrictHistoricalOverviewWithPermission.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.ReviewHistoricalAdherence_74770.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.RTA_ConfigurationValidationNotification_46933.js" />
     <Content Include="WFM\app\rta\rta\overview\view.ReviewHistoricalAdherence_74770.html" />
@@ -1976,7 +1967,7 @@
     <Content Include="WFM\app\app_desktop_client.js" />
     <Content Include="WFM\app\forecasting\routes.js" />
     <Content Include="WFM\app\forecasting\html\skillCreate.html" />
-    <Content Include="WFM\app\forecasting\controller\skill.create.controller.spec.js" />
+    <Content Include="WFM\app\forecasting\spec\skill.create.controller.spec.js" />
     <Content Include="WFM\app\global\areas\areas.controller.spec.js" />
     <Content Include="WFM\app\global\businessunits\businessunits.service.js" />
     <Content Include="WFM\app\global\businessunits\_modules.js" />
@@ -2176,26 +2167,6 @@
     <Content Include="WFM\vendor\angular-bootstrap-persian-datepicker-master\persian-datepicker-tpls.js" />
     <Content Include="WFM\vendor\angular-bootstrap-persian-datepicker-master\persiandate.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\timepicker.directive.ext.js" />
-    <Content Include="Areas\Anywhere\Content\feature.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\fulldayabsencetimesetting.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\guidgenerator.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\navigation_test.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\knockout-3.2.0.debug.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\knockout-3.2.0.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\notifications.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\helpers_test.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\signalrhubs.started.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\shared\timezone-current.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\shared\timezone-display.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.trackingmessages.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.personschedule.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.groupschedule.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\resources.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\permissions.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\absencelistitem_test.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\moveactivityform.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm_test.js" />
     <Content Include="Areas\MyTime\Content\Scripts\moment.timepicker.ext.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Common.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.Tests.js" />
@@ -2329,44 +2300,6 @@
     <Content Include="Areas\Reporting\images\right_all_light.gif" />
     <Content Include="Areas\Reporting\images\right_light.gif" />
     <Content Include="Content\Site.css" />
-    <Content Include="Areas\Anywhere\Content\Scripts\business_unit.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\vm_test.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\window.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\tests.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\tests.main.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\knockout.bindings.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\pagelog.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\errorview.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\require\configuration.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\shared\current-state.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline-unit.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\signalrhubs.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\resizeevent.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\messagebroker.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\menu.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\Tests.html" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addfulldayabsenceform.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\absencelistitem.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addactivityform.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addintradayabsenceform.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline-time.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\person.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\shift.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\view.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\shared\group-page-group.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\person-menu.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\shift-menu.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\shared\group-page.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\shared\dayoff.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\person.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\shift.js" />
-    <Content Include="Areas\Anywhere\Content\Styles\person-schedule.css" />
-    <Content Include="Areas\Anywhere\Content\Templates\notification.html" />
-    <Content Include="Areas\Anywhere\Content\Templates\error.html" />
-    <Content Include="Areas\Anywhere\Content\Templates\personschedule\view.html" />
-    <Content Include="Areas\Anywhere\Views\Application\index.aspx" />
     <Content Include="Areas\MultiTenancy\these_files_will_probably_be_moved.txt" />
     <Content Include="Areas\MessageBrokerTool\Content\Scripts\main.js" />
     <Content Include="Areas\MessageBrokerTool\Content\Scripts\require\configuration.js" />
@@ -2473,16 +2406,6 @@
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.SignInView.js" />
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.SignInViewModel.js" />
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Common.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\helpers.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\layout.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\main.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\navigation.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\shared\layer.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\view.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\vm.js" />
-    <Content Include="Areas\Anywhere\Content\Styles\helpers.css" />
-    <Content Include="Areas\Anywhere\Content\Styles\main.css" />
-    <Content Include="Areas\Anywhere\Content\Styles\team-schedule.css" />
     <Content Include="Areas\MyTime\Content\Css\Asm.css" />
     <Content Include="Areas\MyTime\Content\Css\CalendarView.css" />
     <Content Include="Areas\MyTime\Content\Css\AsmMessage.css" />
@@ -2565,10 +2488,6 @@
     <Content Include="Areas\MyTime\Views\Requests\NewShiftTradeRequest.cshtml" />
     <Content Include="Areas\Start\Views\Authentication\SignIn.cshtml" />
     <Content Include="Areas\Start\Content\Css\login.css" />
-    <Content Include="Areas\Anywhere\Content\Templates\layout.html" />
-    <Content Include="Areas\Anywhere\Content\Templates\menu.html" />
-    <Content Include="Areas\Anywhere\Content\Templates\teamschedule\view.html" />
-    <Content Include="Areas\Anywhere\Content\Translation\TranslationTemplate.txt" />
     <Content Include="Areas\Reporting\Views\Report\Adherence.cshtml" />
     <Content Include="Areas\Reporting\Views\Report\Empty.cshtml" />
     <Content Include=".node\flatten-packages.cmd" />
@@ -2610,7 +2529,6 @@
     <Content Include="Content\jasny-bootstrap\js\jasny-bootstrap.min.js" />
     <Content Include="Content\jquery-plugin\jquery.placeholder.js" />
     <Content Include="Content\jquery-plugin\jquery.placeholder.min.js" />
-    <Content Include="Content\jquery-plugin\jquery.swipeListener.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.10.2.custom.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.10.2.custom.min.js" />
     <Content Include="Content\jqueryui\smoothness\images\animated-overlay.gif" />
@@ -2699,8 +2617,6 @@
     <Content Include="Content\modernizr\modernizr-2.6.2.js" />
     <Content Include="Content\modernizr\modernizr-2.6.2.min.js" />
     <Content Include="Content\moment-datepicker\datepicker.css" />
-    <Content Include="Areas\Anywhere\Content\Scripts\require\resourcesr.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\require\signalrrr.js" />
     <Content Include="Content\require\noext.js" />
     <Content Include="Content\require\require.js" />
     <Content Include="Content\require\text.js" />
@@ -2799,8 +2715,6 @@
     <Content Include="Areas\Reporting\Views\web.config" />
     <Content Include="Areas\Reporting\Views\Report\Index.cshtml" />
     <Content Include="Areas\MyTime\Views\TeamSchedule\TeamSchedulePartial.cshtml" />
-    <Content Include="Content\lazy\lazy.js" />
-    <Content Include="Content\lazy\lazy.min.js" />
     <Content Include="Areas\Rta\TeleoptiRtaService.svc" />
     <Content Include="web.config">
       <SubType>Designer</SubType>

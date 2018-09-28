@@ -259,32 +259,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		}
 
 		[Test]
-		public void ShouldExecuteCodeAfterSuccessfulCommit()
-		{
-			string result = null;
-			NestedService1.ActionWSync = (uow, sync) => sync.OnSuccessfulTransaction(() => result = "success");
-
-			TheService.CallNestedServices();
-
-			result.Should().Be("success");
-		}
-
-		[Test]
-		public void ShouldNotExecuteCodeAfterFailedCommit()
-		{
-			var result = "failed";
-			NestedService1.ActionWSync = (uow, sync) =>
-			{
-				sync.OnSuccessfulTransaction(() => result = "success");
-				throw new TestException();
-			};
-
-			Assert.Throws<TestException>(TheService.CallNestedServices);
-
-			result.Should().Be("failed");
-		}
-
-		[Test]
 		public void ShouldNotAllowNestedUnitOfWork()
 		{
 			var wasHere = false;
@@ -380,16 +354,16 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 
 	public class NestedService1 : NestedBase
 	{
-		public NestedService1(ICurrentReadModelUnitOfWork uow, IReadModelTransactionSyncronization syncronization)
-			: base(uow, syncronization)
+		public NestedService1(ICurrentReadModelUnitOfWork uow)
+			: base(uow)
 		{
 		}
 	}
 
 	public class NestedService2 : NestedBase
 	{
-		public NestedService2(ICurrentReadModelUnitOfWork uow, IReadModelTransactionSyncronization syncronization)
-			: base(uow, syncronization)
+		public NestedService2(ICurrentReadModelUnitOfWork uow)
+			: base(uow)
 		{
 		}
 	}
@@ -397,21 +371,17 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 	public class NestedBase
 	{
 		private readonly ICurrentReadModelUnitOfWork _uow;
-		private readonly IReadModelTransactionSyncronization _syncronization;
 
-		public NestedBase(ICurrentReadModelUnitOfWork uow, IReadModelTransactionSyncronization syncronization)
+		public NestedBase(ICurrentReadModelUnitOfWork uow)
 		{
 			_uow = uow;
-			_syncronization = syncronization;
 		}
 
 		public Action<ILiteUnitOfWork> Action = u => { };
-		public Action<ILiteUnitOfWork, IReadModelTransactionSyncronization> ActionWSync = (u, s) => { };
 
 		public void ExecuteAction()
 		{
 			Action.Invoke(_uow.Current());
-			ActionWSync.Invoke(_uow.Current(), _syncronization);
 		}
 	}
 

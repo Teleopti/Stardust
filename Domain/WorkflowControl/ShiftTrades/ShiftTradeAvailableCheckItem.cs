@@ -18,13 +18,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 		public override bool Equals(object obj)
 		{
-			var other = obj as ShiftTradeAvailableCheckItem;
-			if (other == null)
-				return false;
-
-			return PersonFrom.Equals(other.PersonFrom) &&
-				PersonTo.Equals(other.PersonTo) &&
-				DateOnly.Equals(other.DateOnly);
+			return obj is ShiftTradeAvailableCheckItem other && (PersonFrom.Equals(other.PersonFrom) &&
+																 PersonTo.Equals(other.PersonTo) &&
+																 DateOnly.Equals(other.DateOnly));
 		}
 
 		public override int GetHashCode()

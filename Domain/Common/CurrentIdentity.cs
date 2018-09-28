@@ -19,9 +19,7 @@ namespace Teleopti.Ccc.Domain.Common
 		public ITeleoptiIdentity Current()
 		{
 			var principal = _principal.Current();
-			if (principal == null)
-				return null;
-			return principal.Identity as ITeleoptiIdentity;
+			return principal?.Identity as ITeleoptiIdentity;
 		}
 	}
 }

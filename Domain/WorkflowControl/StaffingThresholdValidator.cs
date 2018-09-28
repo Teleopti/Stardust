@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using log4net;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
@@ -281,8 +280,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public override bool Equals(object obj)
 		{
-			var validator = obj as StaffingThresholdValidator;
-			return validator != null;
+			return obj is StaffingThresholdValidator;
 		}
 
 		public override int GetHashCode()

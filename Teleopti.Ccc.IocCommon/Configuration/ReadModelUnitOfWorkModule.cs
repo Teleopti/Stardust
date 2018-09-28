@@ -11,9 +11,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<ReadModelTransactionSyncronization>()
-				.As<IReadModelTransactionSyncronization>()
-				.SingleInstance();
 			builder.RegisterType<ReadModelUnitOfWorkState>()
 				.As<ICurrentReadModelUnitOfWork>()
 				.SingleInstance();

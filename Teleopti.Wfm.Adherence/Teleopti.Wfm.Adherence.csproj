@@ -54,7 +54,6 @@
     <Compile Include="ActiveTenants.cs" />
     <Compile Include="ApplicationLayer\ReadModels\AgentStateReadModelMaintainer.cs" />
     <Compile Include="ApplicationLayer\ReadModels\AgentStateReadModelUpdater.cs" />
-    <Compile Include="ApplicationLayer\ReadModels\ControllableReadModelTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\ReadModels\CurrentBelongsToDate.cs" />
     <Compile Include="ApplicationLayer\ReadModels\CurrentScheduleReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\ReadModels\ExternalLogonReadModelUpdater.cs" />

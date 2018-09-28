@@ -55,9 +55,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 		public override bool Equals(object obj)
 		{
-			if (obj is OpenForWork)
+			if (obj is OpenForWork work)
 			{
-				return Equals((OpenForWork) obj);
+				return Equals(work);
 			}
 			return false;
 		}

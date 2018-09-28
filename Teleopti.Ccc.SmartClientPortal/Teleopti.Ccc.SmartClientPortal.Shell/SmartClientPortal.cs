@@ -1,3 +1,8 @@
+using Autofac;
+using EO.Base;
+using EO.WebBrowser;
+using log4net;
+using Syncfusion.Windows.Forms.Tools;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -10,14 +15,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Autofac;
-using EO.Base;
-using EO.WebBrowser;
-using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.Infrastructure.Util;
-using Teleopti.Ccc.SmartClientPortal.Shell.Controls;
-using log4net;
-using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -33,7 +30,10 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Util;
+using Teleopti.Ccc.SmartClientPortal.Shell.Controls;
 using Teleopti.Ccc.SmartClientPortal.Shell.Properties;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
@@ -139,9 +139,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			logInfo(" Bu loaded for data protection EO:URL= " + webViewDataProtection.Url);
 			webViewDataProtection.LoadCompleted -= dataProtectionWebViewOnLoadCompletedSetBusinessUnit;
-			webViewDataProtection.LoadUrl($"{webServer}WFM/index_desktop_client.html#/fdpa");
+			webViewDataProtection.LoadUrl($"{webServer}WFM/index_desktop_client.html?r={DateTime.UtcNow.Ticks.ToString()}#/fdpa");
 		}
-
 
 		void formKeyDown(object sender, KeyEventArgs e)
 		{

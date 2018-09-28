@@ -95,8 +95,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 					var exportableType = scheduleData as IExportToAnotherScenario;
 					var changedScheduleData = exportableType?.CloneAndChangeParameters(new ScheduleParameters(toScenario, person,
 							importPeriod));
-					var absence = changedScheduleData as PersonAbsence;
-					if (absence != null)
+					if (changedScheduleData is PersonAbsence absence)
 					{
 						if (HandleAbsenceSplits(importPeriod, absence)) continue;
 

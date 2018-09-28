@@ -817,7 +817,6 @@
 		equal(methodCalled, true);
 	});
 
-	//New test
 	test("should load multiple days schedules after choose a agent", function () {
 		var schedules = {
 			MultiSchedulesForShiftTrade: [{
@@ -1157,7 +1156,9 @@
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
 				NegativeToleranceMinutes: 800,
-				PositiveToleranceMinutes: 90
+				PositiveToleranceMinutes: 90,
+				RealSchedulePositiveGap: 0,
+				RealScheduleNegativeGap: 0
 			}],
 
 			PersonToInfos: [{
@@ -1165,76 +1166,13 @@
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
 				NegativeToleranceMinutes: 89,
-				PositiveToleranceMinutes: 1189
+				PositiveToleranceMinutes: 1189,
+				RealSchedulePositiveGap: 0,
+				RealScheduleNegativeGap: 0
 			}]
 		}
 
-		var schedules = {
-			MultiSchedulesForShiftTrade: [{
-				Date: "\/Date(1531916600000)\/",
-				IsSelectable: true,
-				MySchedule: {
-					"ScheduleLayers": [{
-						"Start": "\/Date(1531956600000)\/",
-						"End": "\/Date(1531964700000)\/",
-						"LengthInMinutes": 135,
-						"Color": "#80FF80",
-						"TitleHeader": "Phone",
-						"IsAbsenceConfidential": false,
-						"IsOvertime": false,
-						"TitleTime": "07:30 - 09:45",
-						"Meeting": null
-					}],
-					"StartTimeUtc": "\/Date(1531978200000)\/",
-					"IsDayOff": false,
-					"IsFullDayAbsence": false,
-					"Total": 0,
-					"DayOffName": null,
-					"ContractTimeInMinute": 480,
-					"IsNotScheduled": false,
-					"ShiftCategory": {
-						"Id": null,
-						"ShortName": "AM",
-						"Name": "Early",
-						"DisplayColor": "#80FF80"
-					},
-					"IntradayAbsenceCategory": {
-						"ShortName": null,
-						"Color": null
-					}
-				},
-				PersonToSchedule: {
-					"ScheduleLayers": [{
-						"Start": "\/Date(1531956600000)\/",
-						"End": "\/Date(1531964700000)\/",
-						"LengthInMinutes": 135,
-						"Color": "#80FF80",
-						"TitleHeader": "Phone",
-						"IsAbsenceConfidential": false,
-						"IsOvertime": false,
-						"TitleTime": "07:30 - 09:45",
-						"Meeting": null
-					}],
-					"StartTimeUtc": "\/Date(1531978200000)\/",
-					"IsDayOff": false,
-					"IsFullDayAbsence": false,
-					"Total": 0,
-					"DayOffName": null,
-					"ContractTimeInMinute": 580,
-					"IsNotScheduled": false,
-					"ShiftCategory": {
-						"Id": null,
-						"ShortName": "AM",
-						"Name": "Early",
-						"DisplayColor": "#80FF80"
-					},
-					"IntradayAbsenceCategory": {
-						"ShortName": null,
-						"Color": null
-					}
-				}
-			}]
-		};
+		var schedules  = createMultiSchedulesForShiftTrade(480, 580);
 		
 		var ajax = {
 			Ajax: function (options) {
@@ -1278,7 +1216,9 @@
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
 				NegativeToleranceMinutes: 800,
-				PositiveToleranceMinutes: 90
+				PositiveToleranceMinutes: 90,
+				RealSchedulePositiveGap: 0,
+				RealScheduleNegativeGap:0
 			}],
 
 			PersonToInfos: [{
@@ -1286,7 +1226,9 @@
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
 				NegativeToleranceMinutes: 89,
-				PositiveToleranceMinutes: 1189
+				PositiveToleranceMinutes: 1189,
+				RealSchedulePositiveGap: 0,
+				RealScheduleNegativeGap: 0
 			}]
 		}
 
@@ -1313,7 +1255,7 @@
 		equal(viewModel.targetToleranceMessages()[0].contractTimeGap, "-0:11");
 	});
 
-	test("should calculate tolerance when tolerance value is negative", function() {
+	test("should calculate tolerance when real gap have exceed tolerance", function() {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) {
 			if (toggleName === "MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408") return true;
 			return false;
@@ -1333,16 +1275,20 @@
 				PeriodStart: moment('2018-06-30'),
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
-				NegativeToleranceMinutes: 80,
-				PositiveToleranceMinutes: -90
+				NegativeToleranceMinutes: 0,
+				PositiveToleranceMinutes: 0,
+				RealSchedulePositiveGap: 90,
+				RealScheduleNegativeGap: 0
 			}],
 
 			PersonToInfos: [{
 				PeriodStart: moment('2018-06-30'),
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
-				NegativeToleranceMinutes: -89,
-				PositiveToleranceMinutes: 1189
+				NegativeToleranceMinutes: 0,
+				PositiveToleranceMinutes: 0,
+				RealSchedulePositiveGap: 0,
+				RealScheduleNegativeGap: 89
 			}]
 		}
 
@@ -1389,8 +1335,10 @@
 				PeriodStart: moment('2018-06-30'),
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
-				NegativeToleranceMinutes: -80,
-				PositiveToleranceMinutes: 10
+				NegativeToleranceMinutes: 10,
+				PositiveToleranceMinutes: 10,
+				RealSchedulePositiveGap: 0,
+				RealScheduleNegativeGap: 80
 			}],
 
 			PersonToInfos: [{
@@ -1398,7 +1346,9 @@
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
 				NegativeToleranceMinutes: 10,
-				PositiveToleranceMinutes: -70
+				PositiveToleranceMinutes: 10,
+				RealSchedulePositiveGap: 70,
+				RealScheduleNegativeGap: 0
 			}]
 		}
 
@@ -1445,8 +1395,10 @@
 				PeriodStart: moment('2018-06-30'),
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
-				NegativeToleranceMinutes: -80,
-				PositiveToleranceMinutes: 10
+				NegativeToleranceMinutes: 80,
+				PositiveToleranceMinutes: 10,
+				RealSchedulePositiveGap: 0,
+				RealScheduleNegativeGap: 0
 			}],
 
 			PersonToInfos: [{
@@ -1454,7 +1406,9 @@
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
 				NegativeToleranceMinutes: 10,
-				PositiveToleranceMinutes: -70
+				PositiveToleranceMinutes: 70,
+				RealSchedulePositiveGap: 0,
+				RealScheduleNegativeGap: 0
 			}]
 		}
 
@@ -1480,7 +1434,7 @@
 		equal(viewModel.showToloranceMessage(), false);
 	});
 
-	test("should calculate tolerance for both side at one time and balance without error", function () {
+	test("should not show tolerance error when there is no gap between schedules", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) {
 			if (toggleName === "MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408") return true;
 			return false;
@@ -1500,8 +1454,10 @@
 				PeriodStart: moment('2018-06-30'),
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
-				NegativeToleranceMinutes: -80,
-				PositiveToleranceMinutes: 30
+				NegativeToleranceMinutes: 30,
+				PositiveToleranceMinutes: 30,
+				RealSchedulePositiveGap: 0,
+				RealScheduleNegativeGap: 70
 			}],
 
 			PersonToInfos: [{
@@ -1509,7 +1465,9 @@
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
 				NegativeToleranceMinutes: 40,
-				PositiveToleranceMinutes: -70
+				PositiveToleranceMinutes: 40,
+				RealSchedulePositiveGap: 60,
+				RealScheduleNegativeGap: 0
 			}]
 		}
 
@@ -1535,7 +1493,7 @@
 		equal(viewModel.showToloranceMessage(), false);
 	});
 
-	test("should not show error message when not break tolerance", function () {
+	test("should not show error message when there is no schedules", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) {
 			if (toggleName === "MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408") return true;
 			return false;
@@ -1549,7 +1507,9 @@
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
 				NegativeToleranceMinutes: 800,
-				PositiveToleranceMinutes: 90
+				PositiveToleranceMinutes: 90,
+				RealSchedulePositiveGap: 0,
+				RealScheduleNegativeGap: 0
 			}],
 
 			PersonToInfos: [{
@@ -1557,7 +1517,9 @@
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
 				NegativeToleranceMinutes: 89,
-				PositiveToleranceMinutes: 1189
+				PositiveToleranceMinutes: 1189,
+				RealSchedulePositiveGap: 0,
+				RealScheduleNegativeGap: 0
 			}]
 		}
 
@@ -1604,7 +1566,9 @@
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
 				NegativeToleranceMinutes: 800,
-				PositiveToleranceMinutes: 90
+				PositiveToleranceMinutes: 90,
+				RealSchedulePositiveGap: 0,
+				RealScheduleNegativeGap: 0
 			}],
 
 			PersonToInfos: [{
@@ -1612,7 +1576,9 @@
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
 				NegativeToleranceMinutes: 89,
-				PositiveToleranceMinutes: 1189
+				PositiveToleranceMinutes: 1189,
+				RealSchedulePositiveGap: 0,
+				RealScheduleNegativeGap: 0
 			}]
 		}
 
@@ -1666,7 +1632,9 @@
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
 				NegativeToleranceMinutes: 800,
-				PositiveToleranceMinutes: 90
+				PositiveToleranceMinutes: 90,
+				RealSchedulePositiveGap: 0,
+				RealScheduleNegativeGap: 0
 			}],
 
 			PersonToInfos: [{
@@ -1674,76 +1642,13 @@
 				PeriodEnd: moment('2018-07-29'),
 				ContractTimeMinutes: 1000,
 				NegativeToleranceMinutes: 89,
-				PositiveToleranceMinutes: 1189
+				PositiveToleranceMinutes: 1189,
+				RealSchedulePositiveGap: 0,
+				RealScheduleNegativeGap: 0
 			}]
 		}
 
-		var schedules = {
-			MultiSchedulesForShiftTrade: [{
-				Date: "\/Date(1531916600000)\/",
-				IsSelectable: true,
-				MySchedule: {
-					"ScheduleLayers": [{
-						"Start": "\/Date(1531956600000)\/",
-						"End": "\/Date(1531964700000)\/",
-						"LengthInMinutes": 135,
-						"Color": "#80FF80",
-						"TitleHeader": "Phone",
-						"IsAbsenceConfidential": false,
-						"IsOvertime": false,
-						"TitleTime": "07:30 - 09:45",
-						"Meeting": null
-					}],
-					"StartTimeUtc": "\/Date(1531978200000)\/",
-					"IsDayOff": false,
-					"IsFullDayAbsence": false,
-					"Total": 0,
-					"DayOffName": null,
-					"ContractTimeInMinute": 480,
-					"IsNotScheduled": false,
-					"ShiftCategory": {
-						"Id": null,
-						"ShortName": "AM",
-						"Name": "Early",
-						"DisplayColor": "#80FF80"
-					},
-					"IntradayAbsenceCategory": {
-						"ShortName": null,
-						"Color": null
-					}
-				},
-				PersonToSchedule: {
-					"ScheduleLayers": [{
-						"Start": "\/Date(1531956600000)\/",
-						"End": "\/Date(1531964700000)\/",
-						"LengthInMinutes": 135,
-						"Color": "#80FF80",
-						"TitleHeader": "Phone",
-						"IsAbsenceConfidential": false,
-						"IsOvertime": false,
-						"TitleTime": "07:30 - 09:45",
-						"Meeting": null
-					}],
-					"StartTimeUtc": "\/Date(1531978200000)\/",
-					"IsDayOff": false,
-					"IsFullDayAbsence": false,
-					"Total": 0,
-					"DayOffName": null,
-					"ContractTimeInMinute": 580,
-					"IsNotScheduled": false,
-					"ShiftCategory": {
-						"Id": null,
-						"ShortName": "AM",
-						"Name": "Early",
-						"DisplayColor": "#80FF80"
-					},
-					"IntradayAbsenceCategory": {
-						"ShortName": null,
-						"Color": null
-					}
-				}
-			}]
-		};
+		var schedules = createMultiSchedulesForShiftTrade(480, 580);
 
 		var ajax = {
 			Ajax: function (options) {

@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -43,15 +41,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					   .AddOrder(Order.Asc("Description"))
 					   .List<IDayOffTemplate>();
 			return retList;
-		}
-
-		public IList<IDayOffTemplate> FindActivedDayOffsSortByDescription()
-		{
-			var templates = LoadAll()
-				.Where(t => !((IDeleteTag)t).IsDeleted)
-				.ToList();
-			templates.Sort(new DayOffTemplateSorter());
-			return templates;
 		}
 	}
 }

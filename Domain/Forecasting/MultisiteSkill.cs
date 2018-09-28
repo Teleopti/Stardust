@@ -71,8 +71,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public override void SetTemplateAt(int templateIndex, IForecastDayTemplate dayTemplate)
         {
             base.SetTemplateAt(templateIndex,dayTemplate);
-            IMultisiteDayTemplate newTemplate = dayTemplate as IMultisiteDayTemplate;
-            if (newTemplate != null)
+			if (dayTemplate is IMultisiteDayTemplate newTemplate)
             {
                 newTemplate.SetParent(this);
                 _templateMultisiteWeekCollection.Remove(templateIndex);

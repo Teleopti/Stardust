@@ -11,6 +11,7 @@
 		var skills = [];
 		var skillAreas = [];
 		var states = [];
+		var rtaPermissions = {};
 
 		var loaded = null;
 
@@ -35,13 +36,18 @@
 					.then(function (response) {
 						states = response.data;
 						states.push({Id: null, Name: $translate.instant('NoState')});
+					}),
+				$http.get('../api/RtaPermissions/Load')
+					.then(function(response){
+						rtaPermissions = response.data;
 					})
 			]).then(function () {
 				return {
 					organization: organization,
 					skills: skills,
 					skillAreas: skillAreas,
-					states: states
+					states: states,
+					rtaPermissions: rtaPermissions
 				}
 			})
 		}

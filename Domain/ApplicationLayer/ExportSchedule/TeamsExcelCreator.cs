@@ -209,13 +209,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 				{
 					newCell.SetCellValue(cellData.CellValue.ToString());
 				}
-				else if (cellData.CellValue is double)
+				else if (cellData.CellValue is double d)
 				{
-					newCell.SetCellValue((double)cellData.CellValue);
+					newCell.SetCellValue(d);
 				}
-				else if (cellData.CellValue is DateTime)
+				else if (cellData.CellValue is DateTime time)
 				{
-					newCell.SetCellValue((DateTime)cellData.CellValue);
+					newCell.SetCellValue(time);
 				}
 
 				if (cellData.SetCellStyle)

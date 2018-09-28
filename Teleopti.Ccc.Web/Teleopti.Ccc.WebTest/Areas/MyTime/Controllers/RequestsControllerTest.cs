@@ -73,6 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeActivityRepository ActivityRepository;
 		public MutableNow _now;
 		public FakeGlobalSettingDataRepository GlobalSettingDataRepository;
+		public FakeSkillRepository SkillRepository;
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -692,16 +693,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			PersonRepository.Get(form.PersonToId).WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(1, 30, 0);
 			var schedulePeriod = new DateOnlyPeriod(startDate, new DateOnly(startDate.Date.AddMonths(1).AddDays(-1)));
 			var totalSettingContract = 480 * schedulePeriod.DayCount();
-			var expactedMyTolerance = 80 + 540 - totalSettingContract;
-			var expactedPersonToTolerance = 90 + 540 - totalSettingContract;
+			var expactedRealGap = totalSettingContract - 540;
 
 			var result = Target.GetWFCTolerance(form.PersonToId);
 			var data = (result as JsonResult)?.Data as ShiftTradeToleranceInfoViewModel;
 
 			data.IsNeedToCheck.Should().Be.True();
-			data.MyInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(expactedMyTolerance);
+			data.MyInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(80);
 			data.MyInfos.First().PositiveToleranceMinutes.Should().Be.EqualTo(80);
-			data.PersonToInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(expactedPersonToTolerance);
+			data.MyInfos.First().RealSchedulePositiveGap.Should().Be.EqualTo(0);
+			data.MyInfos.First().RealScheduleNegativeGap.Should().Be.EqualTo(expactedRealGap);
+			data.PersonToInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(90);
 			data.PersonToInfos.First().PositiveToleranceMinutes.Should().Be.EqualTo(90);
 		}
 
@@ -723,27 +725,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldGetToleranceTimeBaseOnContractSetting()
-		{
-			setGlobaleSetting(typeof(ShiftTradeTargetTimeSpecification).FullName, true, RequestHandleOption.AutoDeny);
-			_now.Is(DateOnly.Today.Date);
-			var startDate = DateOnly.Today.AddDays(1);
-			var form = createShiftWithDifferentWFC(startDate);
-			var virtualSchedulePeriod = LoggedOnUser.CurrentUser().VirtualSchedulePeriod(startDate);
-			virtualSchedulePeriod.Contract.NegativePeriodWorkTimeTolerance = new TimeSpan(9, 0, 0);
-			virtualSchedulePeriod.Contract.PositivePeriodWorkTimeTolerance = new TimeSpan(10, 0, 0);
-			var expactedNegativeToleranceMinutes = -13320;
-			var expactedPosigiveToleranceMinutes = 600;
-
-			var result = Target.GetWFCTolerance(form.PersonToId);
-			var data = (result as JsonResult)?.Data as ShiftTradeToleranceInfoViewModel;
-
-			data.IsNeedToCheck.Should().Be.True();
-			data.MyInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(expactedNegativeToleranceMinutes);
-			data.MyInfos.First().PositiveToleranceMinutes.Should().Be.EqualTo(expactedPosigiveToleranceMinutes);
-		}
-
-		[Test]
 		public void ShouldGetToleranceTimeBaseOnAllFacts()
 		{
 			setGlobaleSetting(typeof(ShiftTradeTargetTimeSpecification).FullName, true, RequestHandleOption.AutoDeny);
@@ -755,15 +736,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			virtualSchedulePeriod.Contract.NegativePeriodWorkTimeTolerance = new TimeSpan(9, 0, 0);
 			virtualSchedulePeriod.Contract.PositivePeriodWorkTimeTolerance = new TimeSpan(10, 0, 0);
 			personTo.WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(0, 20, 0);
-			var expactedNegativeToleranceMinutes = -13300;
-			var expactedPosigiveToleranceMinutes = 620;
 
 			var result = Target.GetWFCTolerance(form.PersonToId);
 			var data = (result as JsonResult)?.Data as ShiftTradeToleranceInfoViewModel;
 
 			data.IsNeedToCheck.Should().Be.True();
-			data.PersonToInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(expactedNegativeToleranceMinutes);
-			data.PersonToInfos.First().PositiveToleranceMinutes.Should().Be.EqualTo(expactedPosigiveToleranceMinutes);
+			data.PersonToInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(560);
+			data.PersonToInfos.First().PositiveToleranceMinutes.Should().Be.EqualTo(620);
+			data.PersonToInfos.First().RealScheduleNegativeGap.Should().Be.EqualTo(13860);
+			data.PersonToInfos.First().RealSchedulePositiveGap.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -1079,6 +1060,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnErrorFromAbsenceRequestFormWhenPersistError()
 		{
+			BusinessUnitRepository.Add(new BusinessUnit("BU"));
 			var person = PersonFactory.CreatePersonWithId(Guid.NewGuid());
 
 			Now.Is(TimeZoneHelper.ConvertToUtc(DateOnly.Today.Date, person.PermissionInformation.DefaultTimeZone()));
@@ -1098,6 +1080,19 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			person.WorkflowControlSet = workflowControlSet;
 			PersonRepository.Add(person);
 			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+
+			var date = DateOnly.Today;
+			
+			var personSkill = PersonSkillFactory.CreatePersonSkill("skill", 1);
+			SkillRepository.Add(personSkill.Skill);
+			//var currentUser = ThreadPrincipalContext.Current().GetPerson(PersonRepository);
+			setPrincipal(person.Id.GetValueOrDefault(), Guid.NewGuid());
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date));
+			person.AddSkill(personSkill, person.PersonPeriodCollection.FirstOrDefault());
+			PersonAssignmentRepository.Has(person, CurrentScenario.Current(), new Activity(), new ShiftCategory("test"),
+				date, new TimePeriod(8, 10));
+
 
 
 			var form = new AbsenceRequestForm
@@ -1475,13 +1470,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		[Test]
 		public void ShouldAllowCancelAbsenceRequest()
-		{	
-			Now.Is(new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc));
+		{
+			BusinessUnitRepository.Add(new BusinessUnit("BU"));
 
+			var date = new DateOnly(2016, 03, 02);
+			Now.Is(new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc));
+			//var skill = SkillFactory.CreateSkill("skill", SkillTypeFactory.CreateSkillType(), 15);
+			var personSkill = PersonSkillFactory.CreatePersonSkill("skill",1);
+			SkillRepository.Add(personSkill.Skill);
 			var currentUser = ThreadPrincipalContext.Current().GetPerson(PersonRepository);
-			currentUser.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 01, 01)));
+			setPrincipal(currentUser.Id.GetValueOrDefault(), Guid.NewGuid());
+			currentUser.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date));
+			currentUser.AddSkill(personSkill, currentUser.PersonPeriodCollection.FirstOrDefault());
+			PersonAssignmentRepository.Has(currentUser, CurrentScenario.Current(), new Activity(), new ShiftCategory("test"),
+				date, new TimePeriod(8, 10));
+
 			var data = doCancelAbsenceRequestMyTimeSpecificValidation(currentUser,
 				new DateTimePeriod(2016, 03, 02, 2016, 03, 03));
+			
 			data.ErrorMessages.Should().Be.Empty();
 		}
 

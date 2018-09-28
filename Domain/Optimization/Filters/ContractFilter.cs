@@ -28,11 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization.Filters
 
 		public override bool Equals(IEntity other)
 		{
-			var otherContractFilter = other as ContractFilter;
-			if (otherContractFilter == null)
-				return false;
-
-			return Contract.Equals(otherContractFilter.Contract);
+			return other is ContractFilter otherContractFilter && Contract.Equals(otherContractFilter.Contract);
 		}
 
 		public override int GetHashCode()

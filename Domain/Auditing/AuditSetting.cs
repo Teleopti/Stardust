@@ -28,8 +28,7 @@ namespace Teleopti.Ccc.Domain.Auditing
 				return false;
 
 			var root = aggregateRootFromEntity(entity);
-			var schedData = root as IPersistableScheduleData;
-			if (schedData!=null)
+			if (root is IPersistableScheduleData schedData)
 			{
 				var scenario = schedData.Scenario;
 				if (scenario != null && scenario.DefaultScenario)
@@ -44,8 +43,7 @@ namespace Teleopti.Ccc.Domain.Auditing
 			var aggRoot = entity as IAggregateRoot;
 			if (aggRoot == null)
 			{
-				var aggEntity = entity as IAggregateEntity;
-				if (aggEntity != null)
+				if (entity is IAggregateEntity aggEntity)
 				{
 					aggRoot = aggEntity.Root();
 				}

@@ -18,7 +18,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Gamification.core.IoC;
 using Teleopti.Ccc.Web.Areas.Global;
@@ -89,7 +88,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule(new MyTimeAreaModule(_configuration));
 			builder.RegisterModule<SSOAreaModule>();
 			builder.RegisterModule<StartAreaModule>();
-			builder.RegisterModule(new AnywhereAreaModule(_configuration));
+			builder.RegisterModule(new LegacyRegistrationsFromAnywhere(_configuration));
 
 			builder.RegisterModule<ForecastingAreaModule>();
 			builder.RegisterType<BasicActionThrottler>().As<IActionThrottler>().SingleInstance();

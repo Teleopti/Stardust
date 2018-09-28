@@ -30,9 +30,8 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				return;
 			}
 
-			if (context.CandidateState is FailedState)
+			if (context.CandidateState is FailedState failedState)
 			{
-				var failedState = context.CandidateState as FailedState;
 				var failures = getHashValue<int>(context, key, "Failures");
 				failures = failures + 1;
 				if (failures <= allowFailures)

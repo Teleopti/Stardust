@@ -140,17 +140,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 
 			foreach (var layer in projection)
 			{
-				var isPayloadAbsence = (layer.Payload is IAbsence);
-				var description = isPayloadAbsence
-					? (layer.Payload as IAbsence).Description
-					: layer.Payload.ConfidentialDescription(person);
+				IAbsence absence = null;
+				if (layer.Payload is IAbsence absencePayload)
+				{
+					absence = absencePayload;
+				}
+
+				var description = absence?.Description ?? layer.Payload.ConfidentialDescription(person);
 				var contractTime = projection.ContractTime(layer.Period);
 				var overTime = projection.Overtime(layer.Period);
 				var paidTime = projection.PaidTime(layer.Period);
 				var workTime = projection.WorkTime(layer.Period);
 				var requiresSeat = false;
-				var activity = layer.Payload.UnderlyingPayload as IActivity;
-				if (activity != null)
+				if (layer.Payload.UnderlyingPayload is IActivity activity)
 				{
 					requiresSeat = activity.RequiresSeat;
 				}
@@ -161,17 +163,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					ShortName = description.ShortName,
 					ContractTime = contractTime,
 					Overtime = overTime,
-					MultiplicatorDefinitionSetId = layer.DefinitionSet != null ? layer.DefinitionSet.Id.GetValueOrDefault() : Guid.Empty,
+					MultiplicatorDefinitionSetId = layer.DefinitionSet?.Id ?? Guid.Empty,
 					PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
 					IsAbsence = layer.Payload.UnderlyingPayload is IAbsence,
-					DisplayColor =
-						isPayloadAbsence ? (layer.Payload as IAbsence).DisplayColor.ToArgb() : layer.Payload.ConfidentialDisplayColor(person).ToArgb(),
+					DisplayColor = absence?.DisplayColor.ToArgb() ?? layer.Payload.ConfidentialDisplayColor(person).ToArgb(),
 					RequiresSeat = requiresSeat,
 					WorkTime = workTime,
 					PaidTime = paidTime,
 					StartDateTime = layer.Period.StartDateTime,
 					EndDateTime = layer.Period.EndDateTime,
-					IsAbsenceConfidential = isPayloadAbsence && (layer.Payload as IAbsence).Confidential
+					IsAbsenceConfidential = absence?.Confidential ?? false
 				});
 			}
 			return layers;

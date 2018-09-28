@@ -29,6 +29,7 @@
 								ng-click="vm.stop()">Stop
 						</button>
 						<button class="wfm-btn"
+								title="{{vm.unknownTenantMessage}}"
 								ng-class="!vm.displaySlapInTheFace() ? 'wfm-btn-invis-default' : 'wfm-btn-invis-primary'"
 								ng-click="vm.clear()">Clear
 						</button>
@@ -44,28 +45,54 @@
 			<div class="panel material-depth-1">
 				<table class="wfm-table">
 					<tr ng-repeat="tracer in vm.tracers" class="process">
-						<td width="200px" style="vertical-align: top">{{tracer.process}}</td>
-						<td width="400px" style="vertical-align: top" ng-if="tracer.dataReceived.length > 0">
-							<span ng-repeat="recevied in tracer.dataReceived">
-								Received {{recevied.count}} states by {{recevied.by}} at {{recevied.at}}<br/>
+						<td width="200px" style="vertical-align: top">
+							{{tracer.process}}<br/>
+							{{tracer.tracing}}
+						</td>
+						<td width="350px" style="vertical-align: top">
+							<span ng-repeat="x in tracer.dataReceived">
+								<span ng-if="!x.tenant"><a title="{{vm.unknownTenantMessage}}"><b>?</b></a></span>
+								Received ({{x.count}}) {{x.by}} {{x.at}}
+								<br/>
 							</span>
 						</td>
-						<td width="400px" style="vertical-align: top" ng-if="tracer.dataReceived.length === 0">Received
-							nothing yet
+						<td width="200px" style="vertical-align: top">
+							<span ng-repeat="x in tracer.dataEnqueuing">
+								<span ng-if="!x.tenant"><a title="{{vm.unknownTenantMessage}}"><b>?</b></a></span>
+								Enqueuing ({{x.count}}) {{x.at}}
+								<br/>
+							</span>
 						</td>
-						<td width="200px" style="vertical-align: top">Checked at {{tracer.activityCheckAt}}</td>
-						<td style="vertical-align: top">Tracing {{tracer.tracing}}</td>
-						<td width="400px" style="vertical-align: top">
-							<a href="" ng-repeat="exception in tracer.exceptions" ng-click="exception.toggleDisplay()">
-								{{exception.exception}} at {{exception.at}}<br/>
-							</a>
+						<td width="200px" style="vertical-align: top">
+							<span ng-repeat="x in tracer.dataProcessing">
+								<span ng-if="!x.tenant"><a title="{{vm.unknownTenantMessage}}"><b>?</b></a></span>
+								Processing ({{x.count}}) {{x.at}}
+								<br/>
+							</span>
+						</td>
+						<td width="200px" style="vertical-align: top">
+							<span ng-repeat="x in tracer.activityCheck">
+								<span ng-if="!x.tenant"><a title="{{vm.unknownTenantMessage}}"><b>?</b></a></span>
+								Checked {{x.at}}
+								<br/>
+							</span>
+						</td>
+						<td style="vertical-align: top">
+							<span ng-repeat="x in tracer.exceptions">
+								<span ng-if="!x.tenant"><a title="{{vm.unknownTenantMessage}}"><b>?</b></a></span>
+								<a href="" ng-click="x.toggleDisplay()">
+									{{x.exception}}
+								</a>
+								{{x.at}}
+								<br/>
+							</span>
 						</td>
 					</tr>
 				</table>
 			</div>
 		</div>
 	</div>
-
+	
 	<h1 ng-if="vm.exception">Exception</h1>
 	<div ng-if="vm.exception" class="con-row">
 		<div class="con-flex">

@@ -20,9 +20,7 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
         {
             foreach (var rootChangedInfo in changedRoots)
             {
-                IPushMessageWhenRootAltered pushMessageWhenRootAltered =
-                    rootChangedInfo.Root as IPushMessageWhenRootAltered;
-                if(pushMessageWhenRootAltered!=null)
+				if(rootChangedInfo.Root is IPushMessageWhenRootAltered pushMessageWhenRootAltered)
                 {
                     if (Logger.IsDebugEnabled)
                     {

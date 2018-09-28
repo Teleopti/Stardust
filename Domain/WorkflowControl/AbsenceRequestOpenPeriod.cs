@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			get
 			{
 				var owner = Parent as IWorkflowControlSet;
-				_orderIndex = owner == null ? -1 : owner.AbsenceRequestOpenPeriods.IndexOf(this);
+				_orderIndex = owner?.AbsenceRequestOpenPeriods.IndexOf(this) ?? -1;
 				return _orderIndex;
 			}
 			set

@@ -45,15 +45,15 @@ namespace Teleopti.Ccc.Domain.Repositories
 		public Guid PageId { get; set; }
 	}
 
-	public class ReadOnlyGroup: ITeamAuthorization
+	public class ReadOnlyGroup: IPersonAuthorization
 	{
 		public Guid PageId { get; set; }
 		public string PageName { get; set; }
 		public string GroupName { get; set; }
 		public Guid GroupId { get; set; }
-		public Guid TeamId { get; set; }
-		public Guid SiteId { get; set; }
+		public Guid? TeamId { get; set; }
+		public Guid? SiteId { get; set; }
 		public Guid BusinessUnitId { get; set; }
-		
+		public Guid PersonId { get; set; }
 	}
 }

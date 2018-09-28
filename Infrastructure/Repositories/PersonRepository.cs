@@ -698,21 +698,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				var groupings = Restrictions.Disjunction();
 				foreach (var filter in group)
 				{
-					if (filter is TeamFilter)
+					if (filter is TeamFilter teamFilter)
 					{
-						groupings.Add(Subqueries.Exists(findActivePeriod(((TeamFilter) filter).Team, period)));
+						groupings.Add(Subqueries.Exists(findActivePeriod(teamFilter.Team, period)));
 					}
-					else if (filter is SiteFilter)
+					else if (filter is SiteFilter siteFilter)
 					{
-						groupings.Add(Subqueries.Exists(findActivePeriod(((SiteFilter) filter).Site.TeamCollection.ToArray(), period)));
+						groupings.Add(Subqueries.Exists(findActivePeriod(siteFilter.Site.TeamCollection.ToArray(), period)));
 					}
-					else if (filter is ContractFilter)
+					else if (filter is ContractFilter contractFilter)
 					{
-						groupings.Add(Subqueries.Exists(findActivePeriod(((ContractFilter) filter).Contract, period)));
+						groupings.Add(Subqueries.Exists(findActivePeriod(contractFilter.Contract, period)));
 					}
-					else if (filter is SkillFilter)
+					else if (filter is SkillFilter skillFilter)
 					{
-						groupings.Add(Subqueries.Exists(findBySkill(((SkillFilter) filter).Skill, period)));
+						groupings.Add(Subqueries.Exists(findBySkill(skillFilter.Skill, period)));
 					}
 				}
 

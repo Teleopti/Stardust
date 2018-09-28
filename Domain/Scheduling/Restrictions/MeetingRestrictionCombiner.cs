@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			var asEffectiveRestrictions = from m in meetings
 			                              let meetingPeriod = m.Period
 			                              let period = meetingPeriod.TimePeriod(timeZoneInfo)
-			                              select new EffectiveRestriction(
+			                              select (IEffectiveRestriction)new EffectiveRestriction(
 				                                     new StartTimeLimitation(null, period.StartTime),
 				                                     new EndTimeLimitation(period.EndTime, null),
 				                                     new WorkTimeLimitation(period.SpanningTime(), null),
@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				                                     null,
 				                                     null,
 				                                     new List<IActivityRestriction>())
-			                                     as IEffectiveRestriction
 				;
 
 			return _combiner.CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);

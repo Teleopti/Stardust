@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/AllDayOffTemplates")]
 		public virtual IHttpActionResult GetAllDayOffTemplates()
 		{
-			return Ok(_dayOffTemplateRepository.FindActivedDayOffsSortByDescription()
+			return Ok(_dayOffTemplateRepository.FindAllDayOffsSortByDescription()
 				.Select(t => new { t.Id, t.Description.Name }));
 		}
 	}

@@ -114,8 +114,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					{
 						if (personSkill.Active)
 						{
-							var childSkill = personSkill.Skill as IChildSkill;
-							if (childSkill != null && !agentSkills.Any(x => x.Id == childSkill.ParentSkill.Id))
+							if (personSkill.Skill is IChildSkill childSkill && !agentSkills.Any(x => x.Equals(childSkill.ParentSkill)))
 							{
 								agentSkills.Add(childSkill.ParentSkill);
 							}

@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			skill.SetCascadingIndex(1);
 			var skill2 = SkillRepository.Has("skillB", activity).WithId();
 			skill2.SetCascadingIndex(2);
-			var threshold = new StaffingThresholds(new Percent(-2), new Percent(-1), new Percent(0));
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
 			skill.StaffingThresholds = skill2.StaffingThresholds = threshold;
 			skill.DefaultResolution = skill2.DefaultResolution = 60;
 			var agent = PersonRepository.Has(skill, skill2);
@@ -430,7 +430,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var lunch = ActivityRepository.Has("lunch");
 			lunch.RequiresSkill = false;
 			var skill = SkillRepository.Has("skillA", activity).WithId();
-			var threshold = new StaffingThresholds(new Percent(-2), new Percent(-1), new Percent(0));
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
 			skill.StaffingThresholds = threshold;
 			skill.DefaultResolution = 60;
 			var agent = PersonRepository.Has(skill);
@@ -663,7 +663,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skill2 = SkillRepository.Has("skillB", activity).WithId();
 			skill1.SetCascadingIndex(1);
 			skill2.SetCascadingIndex(2);
-			var threshold = new StaffingThresholds(new Percent(-0.01), new Percent(-0.001), new Percent(0));
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
 			skill1.StaffingThresholds = skill2.StaffingThresholds = threshold;
 			skill1.DefaultResolution = skill2.DefaultResolution = 60;
 
@@ -703,7 +703,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skill2 = SkillRepository.Has("skillB", activity).WithId();
 			skill1.SetCascadingIndex(1);
 			skill2.SetCascadingIndex(2);
-			var threshold = new StaffingThresholds(new Percent(-0.01), new Percent(-0.001), new Percent(0));
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
 			skill1.StaffingThresholds = skill2.StaffingThresholds = threshold;
 			skill1.DefaultResolution = skill2.DefaultResolution = 60;
 
@@ -764,7 +764,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skill3 = SkillRepository.Has("skill", activity).WithId();
 			skill1.SetCascadingIndex(1);
 			skill2.SetCascadingIndex(2);
-			var threshold = new StaffingThresholds(new Percent(-0.01), new Percent(-0.001), new Percent(0));
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
 			skill1.StaffingThresholds = skill2.StaffingThresholds = skill3.StaffingThresholds = threshold;
 			skill1.DefaultResolution = skill2.DefaultResolution = skill3.DefaultResolution = 60;
 
@@ -822,7 +822,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var activity = ActivityRepository.Has("activity");
 			var skill1 = SkillRepository.Has("skillA", activity).WithId();
 			var skill2 = SkillRepository.Has("skillB", activity).WithId();
-			var threshold = new StaffingThresholds(new Percent(-0.01), new Percent(-0.001), new Percent(0));
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
 			skill1.StaffingThresholds = skill2.StaffingThresholds = threshold;
 			skill1.DefaultResolution = skill2.DefaultResolution = 60;
 
@@ -879,7 +879,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var activity = ActivityRepository.Has("activity");
 			var skill1 = SkillRepository.Has("skillA", activity).WithId();
 			var skill2 = SkillRepository.Has("skillB", activity).WithId();
-			var threshold = new StaffingThresholds(new Percent(-0.01), new Percent(-0.001), new Percent(0));
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
 			skill1.StaffingThresholds = skill2.StaffingThresholds = threshold;
 			skill1.DefaultResolution = skill2.DefaultResolution = 60;
 
@@ -940,7 +940,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skill3 = SkillRepository.Has("skillUnsorted", activity).WithId();
 			skill1.SetCascadingIndex(1);
 			skill2.SetCascadingIndex(2);
-			var threshold = new StaffingThresholds(new Percent(-2), new Percent(-1), new Percent(0));
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
 			skill1.StaffingThresholds = skill2.StaffingThresholds = skill3.StaffingThresholds = threshold;
 			skill1.DefaultResolution = skill2.DefaultResolution = skill3.DefaultResolution = 60;
 
@@ -969,7 +969,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
 		}
-
 
 		[Test, SetCulture("en-US")]
 		public void DenyIfReadModelDataIsTooOld()
@@ -1111,7 +1110,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
 		}
-
 
 		[Test]
 		public void ShouldApproveRequestIfPersonSkillsOnMinResolution()

@@ -223,6 +223,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertNotExists("#Requests-body-inner", ".request");
 		}
 
+		[Then(@"I should not see any request in current view")]
+		public void ThenIShouldNotSeeAnyRequestInCurrentView()
+		{
+			Browser.Interactions.AssertNotVisibleUsingJQuery("#Requests-data-binding-area");
+		}
+
+
 		[Then(@"I should see that the existing request is processing")]
 		public void ThenIShouldSeeThatTheExistingRequestIsProcessing()
 		{

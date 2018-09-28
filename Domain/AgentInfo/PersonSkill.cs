@@ -67,8 +67,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public override bool Equals(IEntity other)
 		{
-			var otherPersonSkill = other as IPersonSkill;
-			if (otherPersonSkill == null)
+			if (!(other is IPersonSkill otherPersonSkill))
 				return false;
 
 			return _skill.Equals(otherPersonSkill.Skill);

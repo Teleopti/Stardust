@@ -170,12 +170,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				new NewDayOffRule(new WorkTimeStartEndExtractor()),
 				new NewPersonAccountRule(schedulingResultStateHolder.Schedules, schedulingResultStateHolder.AllPersonAccounts),
 				new NotOverwriteLayerRule()
-
-				//This one takes to long time tu run first time when caches are empty, so put on hold for now
-				//new NewLegalStateRule(
-				//    new ScheduleMatrixListCreator(schedulingResultStateHolder),
-				//    schedulingResultStateHolder.Schedules,
-				//    new WorkShiftMinMaxLengthCalculatorFactory())
 			};
 
 			if (schedulingResultStateHolder.UseMaximumWorkday) ret.Add(new MaximumWorkdayRule());
@@ -301,7 +295,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return ret;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static INewBusinessRuleCollection AllForScheduling(ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			var ret = schedulingResultStateHolder.UseValidation
@@ -329,15 +322,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var ret = new NewBusinessRuleCollection
 			{
 				new NewPersonAccountRule(scheduleDictionary, personAccounts)
-			};
-			return ret;
-		}
-
-		public static INewBusinessRuleCollection NightlyRestRule()
-		{
-			var ret = new NewBusinessRuleCollection
-			{
-				new NewNightlyRestRule(new WorkTimeStartEndExtractor())
 			};
 			return ret;
 		}

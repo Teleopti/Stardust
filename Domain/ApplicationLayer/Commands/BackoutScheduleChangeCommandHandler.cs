@@ -52,9 +52,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var periods = new List<DateOnlyPeriod> {new DateOnlyPeriod(date, date)};
 			
 			foreach(var data in scheduleData)
-			{				
-				var personAbsence = data as IPersonAbsence;
-				if (personAbsence != null)
+			{
+				if (data is IPersonAbsence personAbsence)
 				{
 					periods.Add( personAbsence.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()));					
 				}
@@ -102,11 +101,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			foreach(var data in scheduleData)
 			{
-				var personAssignment = data as IPersonAssignment;
-				var personAbsence = data as IPersonAbsence;
-
-				if(personAssignment != null) personAssignments.Add(personAssignment);
-				if(personAbsence != null) personAbsences.Add(personAbsence);
+				if (data is IPersonAssignment personAssignment) personAssignments.Add(personAssignment);
+				if (data is IPersonAbsence personAbsence) personAbsences.Add(personAbsence);
 			}
 
 			if(!personAssignments.IsEmpty())

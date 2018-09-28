@@ -55,8 +55,6 @@
 		vm.ClearErrorMessage = '';
 		vm.ExportPeriodMessage = 'DefaultHejsan';
 		vm.ExportBpoPeriodMessage = 'DefaultHejsan';
-		vm.isBpoVisualizeEnabled = isBpoVisualizeEnabled;
-		vm.isClearBpoEnabled = isClearBpoEnabled;
 		vm.isMultiSkillExportEnabled = isMultiSkillExportEnabled;
 		vm.GetRangeMessage = getRangeMessage;
 		vm.clearBpoPeriod = clearBpoPeriod;
@@ -238,13 +236,6 @@
 			}
 		}
 
-		function isBpoVisualizeEnabled() {
-			return toggleService.Staffing_BPO_Visualization_74958;
-		}
-
-		function isClearBpoEnabled() {
-			return toggleService.Staffing_BPO_ClearStaffing_75498;
-		}
 		function isMultiSkillExportEnabled() {
 			return toggleService.Staffing_BPO_ExportMultipleSkills_74968;
 		}
@@ -362,8 +353,6 @@
 		
 		
 		function getActiveBpos() {
-			if (vm.isClearBpoEnabled() === false)
-				return;
 			var query = staffingService.getActiveBpos.query();
 
 			query.$promise.then(function(activeBpos) {

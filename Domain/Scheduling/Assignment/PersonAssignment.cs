@@ -576,9 +576,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var index = shiftLayers.IndexOf(shiftLayer);
 				RemoveActivity(shiftLayer);
 
-				var overtimeLayer = shiftLayer as OvertimeShiftLayer;
-
-				if (overtimeLayer != null)
+				if (shiftLayer is OvertimeShiftLayer overtimeLayer)
 				{
 					InsertOvertimeLayer(overtimeLayer.Payload, newPeriod, index, overtimeLayer.DefinitionSet);
 				}
@@ -628,10 +626,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				InsertPersonalLayer(shiftLayer.Payload, newLayerPeriod, originalOrderIndex);
 			}
-			else if (shiftLayer is OvertimeShiftLayer)
+			else if (shiftLayer is OvertimeShiftLayer overtimeLayer)
 			{
-				var overtimeLayer = (OvertimeShiftLayer) shiftLayer;
-				InsertOvertimeLayer(shiftLayer.Payload, newLayerPeriod, originalOrderIndex,  overtimeLayer.DefinitionSet);
+				InsertOvertimeLayer(overtimeLayer.Payload, newLayerPeriod, originalOrderIndex,  overtimeLayer.DefinitionSet);
 			}
 
 			var affectedPeriod = shiftLayer.Period.MaximumPeriod(newLayerPeriod);

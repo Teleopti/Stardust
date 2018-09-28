@@ -29,11 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization.Filters
 
 		public override bool Equals(IEntity other)
 		{
-			var otherSkillFilter = other as SkillFilter;
-			if (otherSkillFilter == null)
-				return false;
-
-			return Skill.Equals(otherSkillFilter.Skill);
+			return other is SkillFilter otherSkillFilter && Skill.Equals(otherSkillFilter.Skill);
 		}
 
 		public override int GetHashCode()

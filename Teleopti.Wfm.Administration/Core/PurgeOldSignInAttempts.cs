@@ -52,13 +52,6 @@ namespace Teleopti.Wfm.Administration.Core
 
 	}
 
-	public class PurgeOldSignInAttemptsEmpty : IPurgeOldSignInAttempts
-	{
-		public virtual void Purge()
-		{
-
-		}
-	}
 
 	public interface IPurgeOldSignInAttempts
 	{

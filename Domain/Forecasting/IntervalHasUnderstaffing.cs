@@ -19,18 +19,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		public override bool IsSatisfiedBy(IValidatePeriod validatePeriod)
 		{
-			bool isSatified;
 			logIfDebugIsEnabled(validatePeriod);
 
 			var understaffingValue = _skill.StaffingThresholds.Understaffing.Value;
-			if (understaffingValue.Equals(0))
-			{
-				isSatified = validatePeriod.RelativeDifference <= understaffingValue;
-			}
-			else
-			{
-				isSatified = validatePeriod.RelativeDifference < understaffingValue;
-			}
+			
+			var isSatified = validatePeriod.RelativeDifference < understaffingValue;
 
 			return isSatified;
 		}

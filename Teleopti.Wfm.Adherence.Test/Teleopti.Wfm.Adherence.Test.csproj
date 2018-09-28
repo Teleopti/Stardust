@@ -267,10 +267,11 @@
     <Compile Include="RtaTestAttribute.cs" />
     <Compile Include="Tracer\RtaTracerActivityCheckTraceTest.cs" />
     <Compile Include="Tracer\RtaTracerCloseSnapshotTraceTest.cs" />
-    <Compile Include="Tracer\RtaTracerNullTest.cs" />
+    <Compile Include="Tracer\RtaTracerNoUserCodeTest.cs" />
     <Compile Include="Tracer\RtaTracerProcessTraceTest.cs" />
     <Compile Include="Tracer\RtaTracerStateTraceTest.cs" />
     <Compile Include="Tracer\RtaTracerTenantTest.cs" />
+    <Compile Include="Tracer\RtaTracerViewModelBuilderTenantTest.cs" />
     <Compile Include="Tracer\RtaTracerViewModelBuilderTest.cs" />
   </ItemGroup>
   <ItemGroup>

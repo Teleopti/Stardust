@@ -29,12 +29,11 @@ namespace Teleopti.Ccc.Domain.Analytics
 
 		public override bool Equals(object obj)
 		{
-			var analyticsPermission = obj as AnalyticsBridgeTimeZone;
-			if (analyticsPermission == null)
-				return false;
-			return DateId == analyticsPermission.DateId
-				   && IntervalId == analyticsPermission.IntervalId
-				   && TimeZoneId == analyticsPermission.TimeZoneId;
+			return obj is AnalyticsBridgeTimeZone analyticsPermission && (DateId == analyticsPermission.DateId
+																		  && IntervalId ==
+																		  analyticsPermission.IntervalId
+																		  && TimeZoneId ==
+																		  analyticsPermission.TimeZoneId);
 		}
 		public override int GetHashCode()
 		{

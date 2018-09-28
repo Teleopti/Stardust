@@ -200,11 +200,13 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml" />
-    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.238\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.253\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.238\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.253\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="WebGrease">
       <HintPath>..\..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -228,13 +230,7 @@
     <Compile Include="Areas\Gamification\TeamGamificationSettingProviderAndPersisterTest.cs" />
     <Compile Include="Areas\Global\Core\GroupPageViewModelFactoryTest.cs" />
     <Compile Include="Areas\Global\GroupPageControllerTest.cs" />
-    <Compile Include="Areas\Anywhere\ReportsControllerTest.cs" />
-    <Compile Include="Areas\Anywhere\PublishedScheduleSpecificationTest.cs" />
-    <Compile Include="Areas\Anywhere\PersonScheduleDayViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\FakeClientBuilder.cs" />
-    <Compile Include="Areas\Anywhere\ReportItemsProviderTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Areas\Anywhere\Rta\ThemeSettingProviderTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\WorkloadNameBuilderTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillControllerTest.cs" />
@@ -461,8 +457,6 @@
     <Compile Include="Core\Requests\Mapping\ShiftTradeTimeLineHoursViewModelMapperTest.cs" />
     <Compile Include="Core\IoC\MyTimeWebTestAttribute.cs" />
     <Compile Include="FakeSchedulePersonProvider.cs" />
-    <Compile Include="Areas\Anywhere\GroupScheduleViewModelFactoryTest.cs" />
-    <Compile Include="Areas\Anywhere\GroupScheduleViewModelMapperTest.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\OvertimeAvailabilityPersisterTest.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkGeneratorTest.cs" />
@@ -474,7 +468,6 @@
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityViewModelMappingTest.cs" />
     <Compile Include="Areas\MyTime\Models\WeekSchedule\OvertimeAvailabilityInputTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProviderTest.cs" />
-    <Compile Include="Areas\Anywhere\PersonScheduleCommandControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplatePersisterTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplateProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateInputMappingTest.cs" />
@@ -489,7 +482,6 @@
     <Compile Include="Areas\SSO\Contollers\ApplicationAuthenticationApiControllerTest.cs" />
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\BusinessUnitsViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\AnywhereAreaRegistrationTest.cs" />
-    <Compile Include="Areas\Anywhere\ApplicationControllerTest.cs" />
     <Compile Include="Areas\SSO\SSOAreaRegistrationTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\AsmControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\MessageControllerTest.cs" />

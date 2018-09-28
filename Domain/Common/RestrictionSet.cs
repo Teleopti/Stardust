@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.Domain.Common
         /// </remarks>
         public void CheckEntity(object entityToCheck)
         {
-            if (entityToCheck is T)
-                CheckEntity((T) entityToCheck);
+            if (entityToCheck is T e)
+                CheckEntity(e);
         }
 
         /// <summary>

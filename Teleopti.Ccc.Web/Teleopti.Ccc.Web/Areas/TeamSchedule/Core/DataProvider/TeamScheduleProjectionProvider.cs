@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Core;
@@ -16,6 +15,7 @@ using Teleopti.Ccc.Web.Core.Extensions;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 {
@@ -51,8 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				Date = date.Date.ToGregorianDateTimeString().Remove(10),
 				Projection = new List<GroupScheduleProjectionViewModel>(),
 				MultiplicatorDefinitionSetIds =
-				(personPeriod != null && personPeriod.PersonContract != null &&
-				 personPeriod.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Count > 0)
+				(personPeriod?.PersonContract?.Contract.MultiplicatorDefinitionSetCollection.Count > 0)
 					? personPeriod.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Select(s => s.Id.GetValueOrDefault())
 						.ToList()
 					: null,
@@ -176,14 +175,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			};
 			var personAssignment = scheduleDay.PersonAssignment();
 
-			var overtimeActivities = personAssignment != null
-				? personAssignment.OvertimeActivities().ToArray()
-				: null;
+			var overtimeActivities = personAssignment?.OvertimeActivities().ToArray();
 
 			var significantPart = scheduleDay.SignificantPart();
 			if (significantPart == SchedulePartView.DayOff || significantPart == SchedulePartView.ContractDayOff)
 			{
-				var dayOff = personAssignment != null ? personAssignment.DayOff() : null;
+				var dayOff = personAssignment?.DayOff();
 				var dayOffStart = scheduleDay.DateOnlyAsPeriod.Period().StartDateTime;
 				var dayOffEnd = scheduleDay.DateOnlyAsPeriod.Period().EndDateTime;
 
@@ -442,7 +439,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			foreach (var projection in projections)
 			{
 				if (projection.TopShiftLayerId.HasValue
-					&& projections.Where(p => !p.ShiftLayerIds.IsNullOrEmpty() && p.ShiftLayerIds.Contains(projection.TopShiftLayerId.Value)).Count() > 1)
+					&& projections.Count(p => !p.ShiftLayerIds.IsNullOrEmpty() && p.ShiftLayerIds.Contains(projection.TopShiftLayerId.Value)) > 1)
 				{
 					projection.TopShiftLayerId = null;
 				}

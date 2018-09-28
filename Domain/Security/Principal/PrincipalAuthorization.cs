@@ -126,13 +126,11 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 					var availableData = claimSet.FindClaims(dataClaimType, Rights.PossessProperty);
 					foreach (var claim in availableData)
 					{
-						var authorizeAvailableData = claim.Resource as IAuthorizeAvailableData;
-						if (authorizeAvailableData == null) continue;
-
-						if (availableDataCheck(authorizeAvailableData))
-						{
-							return true;
-						}
+						if (claim.Resource is IAuthorizeAvailableData authorizeAvailableData)
+							if (availableDataCheck(authorizeAvailableData))
+							{
+								return true;
+							}
 					}
 				}
 			}
@@ -198,10 +196,8 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			{
 				foreach (var claim in claimSet)
 				{
-					var applicationFunction = claim.Resource as IApplicationFunction;
-					if (applicationFunction == null)
-						continue;
-					grantedFunctions.Add(applicationFunction);
+					if (claim.Resource is IApplicationFunction applicationFunction)
+						grantedFunctions.Add(applicationFunction);
 				}
 			}
 			return grantedFunctions;

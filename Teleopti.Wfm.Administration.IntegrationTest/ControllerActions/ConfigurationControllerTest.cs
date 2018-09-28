@@ -1,11 +1,9 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Models;
 
@@ -43,7 +41,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			value.Should().Be.EqualTo("");
 		}
 
-		[Test, Toggle(Toggles.Tenant_PurgeLogonAttempts_75782)]
+		[Test]
 		public void ShouldGetLogonAttemptsDays()
 		{
 			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
@@ -51,14 +49,6 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			var value = configurationModels.SingleOrDefault(x => x.Key == "PreserveLogonAttemptsDays");
 			value.Should().Not.Be.Null();
 			value.Value.Should().Be.EqualTo("30");
-		}
-
-		[Test]
-		public void ShouldNotGetLogonAttemptsDaysWithoutToggleOn()
-		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
-			var configurationModels = Target.GetAllConfigurations().Content;
-			configurationModels.SingleOrDefault(x => x.Key == "PreserveLogonAttemptsDays").Should().Be.Null();
 		}
 
 		[Test]

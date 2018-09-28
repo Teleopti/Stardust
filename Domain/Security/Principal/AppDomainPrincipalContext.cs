@@ -19,8 +19,11 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public void SetCurrentPrincipal(ITeleoptiPrincipal principal)
 		{
-			var currentPrincipal = _currentTeleoptiPrincipal.Current() as TeleoptiPrincipal;
-			if (currentPrincipal == null)
+			if (_currentTeleoptiPrincipal.Current() is TeleoptiPrincipal currentPrincipal)
+			{
+				currentPrincipal.ChangePrincipal((TeleoptiPrincipal) principal);
+			}
+			else
 			{
 				try
 				{
@@ -30,11 +33,8 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 				{
 					//This seems to happen some times when we already have set the default principal, but not for this thread apparently.
 				}
+
 				_threadPrincipalContext.SetCurrentPrincipal(principal);
-			}
-			else
-			{
-				currentPrincipal.ChangePrincipal((TeleoptiPrincipal)principal);
 			}
 		}
 	}

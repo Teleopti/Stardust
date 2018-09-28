@@ -60,9 +60,9 @@ namespace Teleopti.Ccc.Domain.Util
 			/// <param name="obj">The object to substitute. </param><param name="targetType">The <see cref="T:System.Type"/> that the substituted object should be assigned to.</param>
 			public object GetObjectToSerialize(object obj, Type targetType)
 			{
-				if (obj is DateOnly)
+				if (obj is DateOnly only)
 				{
-					return ((DateOnly) obj).Date.ToString(clientFixedDateOnlyPattern);
+					return only.Date.ToString(clientFixedDateOnlyPattern);
 				}
 				return obj;
 			}

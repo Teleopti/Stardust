@@ -22,13 +22,15 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private readonly INow _now;
 		private readonly PersonalSkills _personalSkills = new PersonalSkills();
 		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
+		private readonly ISkillStaffingIntervalUnderstaffing _skillStaffingIntervalUnderstaffing;
 
 		public AbsenceStaffingPossibilityCalculator(ILoggedOnUser loggedOnUser,
 			IScheduleStorage scheduleStorage,
 			ICurrentScenario scenarioRepository,
 			ISkillStaffingDataLoader skillStaffingDataLoader,
 			INow now,
-			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider)
+			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider,
+			ISkillStaffingIntervalUnderstaffing skillStaffingIntervalUnderstaffing)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scheduleStorage = scheduleStorage;
@@ -36,6 +38,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_skillStaffingDataLoader = skillStaffingDataLoader;
 			_now = now;
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
+			_skillStaffingIntervalUnderstaffing = skillStaffingIntervalUnderstaffing;
 		}
 
 		public IList<CalculatedPossibilityModel> CalculateIntradayIntervalPossibilities(DateOnlyPeriod period)
@@ -118,9 +121,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return intervalPossibilities;
 		}
 
-		private static int calculatePossibility(SkillStaffingData skillStaffingData)
+		private int calculatePossibility(SkillStaffingData skillStaffingData)
 		{
-			var isSatisfied = new IntervalHasUnderstaffing(skillStaffingData.Skill).IsSatisfiedBy(skillStaffingData.SkillStaffingInterval);
+			var isSatisfied = _skillStaffingIntervalUnderstaffing.IsSatisfiedBy(skillStaffingData.Skill, skillStaffingData.SkillStaffingInterval);
 			return isSatisfied ? ScheduleStaffingPossibilityConsts.FairPossibility : ScheduleStaffingPossibilityConsts.GoodPossibility;
 		}
 
@@ -156,16 +159,19 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		private void substractUsersSchedule(SkillStaffingData skillStaffingData, IPersonAssignment personAssignment)
 		{
+			var skill = skillStaffingData.Skill;
 			var timezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var startTime = TimeZoneHelper.ConvertToUtc(skillStaffingData.Time, timezone);
 			var skillScheduled = isSkillScheduled(personAssignment,
 				new DateTimePeriod(startTime, startTime.AddMinutes(skillStaffingData.Resolution)),
-				skillStaffingData.Skill);
+				skill);
 			if (!skillScheduled) return;
 			// we can't calculate current user's schedule for a skill in a specific period
 			// so we just substract 1 which means user's schedule is removed(#44607)
-			if (skillStaffingData.ScheduledStaffing <= 1)
+			if (skillStaffingData.ScheduledStaffing <= 1 && !skill.StaffingThresholds.Understaffing.Value.Equals(-1))
+			{
 				skillStaffingData.ScheduledStaffing = 0;
+			}
 		}
 
 		private static bool hasFairPossibilityInThisInterval(Dictionary<DateTime, int> intervalPossibilities, DateTime time)

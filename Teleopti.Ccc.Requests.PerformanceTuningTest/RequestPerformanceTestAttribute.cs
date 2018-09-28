@@ -6,14 +6,12 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Hangfire;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.IoC;
+using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
@@ -32,7 +30,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		{
 			base.Extend(extend, configuration);
 			extend.AddService<Database>();
-			extend.AddModule(new AnywhereAreaModule(configuration));
+			extend.AddModule(new LegacyRegistrationsFromAnywhere(configuration));
 			extend.AddModule(new TeamScheduleAreaModule());
 		}
 

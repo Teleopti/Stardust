@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				.Where(x => x.Scenario != null)
 				.Select(x =>
 				{
-					if (x is IAggregateRootWithEvents)
-						(x as IAggregateRootWithEvents).PopAllEvents();
+					if (x is IAggregateRootWithEvents events)
+						events.PopAllEvents();
 					return x;
 				})
 				.ToArray();

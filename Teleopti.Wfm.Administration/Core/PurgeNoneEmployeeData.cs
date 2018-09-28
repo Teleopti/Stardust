@@ -82,12 +82,4 @@ namespace Teleopti.Wfm.Administration.Core
 	{
 		void Purge();
 	}
-
-	public class PurgeNoneEmployeeDataEmpty : IPurgeNoneEmployeeData
-	{
-		public void Purge()
-		{
-			
-		}
-	}
 }

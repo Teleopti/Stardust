@@ -42,5 +42,17 @@ namespace Teleopti.Ccc.DomainTest.Security.LicenseOptions
 			enabledFunctions.Should().Contain(ApplicationFunction.FindByPath(applicationFunctions,
 				DefinedRaptorApplicationFunctionPaths.ModifyAdherence));
 		}
+		
+		[Test]
+		public void VerifyHistoricalOverviewEnabled()
+		{
+			IList<IApplicationFunction> applicationFunctions = new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions;
+		
+			_target.EnableApplicationFunctions(applicationFunctions);
+			
+			IList<IApplicationFunction> enabledFunctions = _target.EnabledApplicationFunctions;
+			enabledFunctions.Should().Contain(ApplicationFunction.FindByPath(applicationFunctions,
+				DefinedRaptorApplicationFunctionPaths.HistoricalOverview));
+		}
     }
 }

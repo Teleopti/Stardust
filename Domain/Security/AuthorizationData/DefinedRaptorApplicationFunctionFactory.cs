@@ -160,6 +160,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity, "xxMoveInvalidOverlappedActivity", DefinedRaptorApplicationFunctionForeignIds.MoveInvalidOverlappedActivity);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "xxRealTimeAdherenceOverview", DefinedRaptorApplicationFunctionForeignIds.RealTimeAdherenceOverview);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ModifyAdherence, "xxModifyAdherence", DefinedRaptorApplicationFunctionForeignIds.ModifyAdherence);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.HistoricalOverview, "xxHistoricalOverview", DefinedRaptorApplicationFunctionForeignIds.HistoricalOverview);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebForecasts, "xxForecasts", DefinedRaptorApplicationFunctionForeignIds.WebForecasts);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebPermissions, "xxPermissions", DefinedRaptorApplicationFunctionForeignIds.WebPermissions);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebPlans, "xxPlans", DefinedRaptorApplicationFunctionForeignIds.WebPlans);
@@ -181,6 +182,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PeopleManageUsers, "xxPeopleManageUsers", DefinedRaptorApplicationFunctionForeignIds.PeopleManageUsers);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.Gamification, "xxGamification", DefinedRaptorApplicationFunctionForeignIds.Gamification);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ChatBot, "xxChatBot", DefinedRaptorApplicationFunctionForeignIds.ChatBot);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ExportSchedule, "xxExportSchedule", DefinedRaptorApplicationFunctionForeignIds.ExportSchedule);
 
 			return result.ToArray();
 		}

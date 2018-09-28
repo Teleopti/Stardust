@@ -9,8 +9,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 	{
 		public static void AttachExistingSeatBookingsToSeats(ISeatMapLocation rootSeatMapLocation, IList<ISeatBooking> existingSeatBookings)
 		{
-			var rootLocation = rootSeatMapLocation as SeatMapLocation;
-			if (rootLocation != null)
+			if (rootSeatMapLocation is SeatMapLocation rootLocation)
 			{
 				AttachExistingSeatBookingsToSeats(rootSeatMapLocation.Seats, existingSeatBookings);
 				rootLocation 

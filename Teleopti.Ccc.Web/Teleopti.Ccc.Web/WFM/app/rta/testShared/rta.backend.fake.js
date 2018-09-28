@@ -108,6 +108,22 @@
 			}
 		});
 
+		service.fake({
+			name: 'rtaPermissions',
+			url: /\.\.\/api\/RtaPermissions\/Load(.*)/,
+			clear: function () {
+				return {
+					HasHistoricalOverviewPermission: true
+				};
+			},
+			add: function (data, item) {
+				for(var key in item) {
+					data[key] = item[key];
+				}
+				return data;
+			}
+		});
+
 		service.fake(/\.\.\/api\/AgentStates\/Poll/,
 			function (params) {
 				service.lastAgentStatesRequestParams = params;

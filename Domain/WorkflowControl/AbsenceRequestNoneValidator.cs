@@ -28,8 +28,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public override bool Equals(object obj)
 		{
-			var validator = obj as AbsenceRequestNoneValidator;
-			return validator != null;
+			return obj is AbsenceRequestNoneValidator;
 		}
 
 		public override int GetHashCode()

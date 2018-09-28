@@ -58,9 +58,7 @@
 		Wfm_Requests_Approve_Based_On_Budget_Allotment_39626,
 		Wfm_Requests_Approve_Based_On_Intraday_39868,
 		Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274,
-		Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384,
 		Wfm_Requests_NightShift_BudgetDay_Allowance_76599,
-		AddOrRemoveTenantsWithoutRestart_43635,
 		Wfm_Requests_NightShift_BudgetDay_HeadCount_77146,
 
 		Wfm_People_ImportAndCreateAgentFromFile_42528,
@@ -90,7 +88,6 @@
 
 		Wfm_DisplayOnlineHelp_39402,
 
-		ETL_UseBpoResources_75855,
 
 		Wfm_SkillPriorityRoutingGUI_39885,
 		ETL_Optimize_Memory_Usage_76761,
@@ -109,7 +106,6 @@
 		WFM_Export_Forecast_44716,
 		WFM_Forecaster_Preview_74801,
 		WFM_Forecast_Show_History_Data_76432,
-		Staffing_BPO_Visualization_74958,
 		WFM_TrainingPlanner_44780,
 		Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560,
 		Report_Remove_Realtime_Scheduled_Time_vs_Target_45559,
@@ -126,8 +122,7 @@
 		ETL_Show_Web_Based_ETL_Tool_74837,
 		WFM_Remember_My_Selection_In_Intraday_47254,
 		WFM_Clear_Data_After_Leaving_Date_47768,
-
-		People_ImprovePersonAccountAccuracy_74914,
+		
 		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889,
 		MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947,
 		MyTimeWeb_ShiftTradeRequest_SetNotSelectableShifts_77052,
@@ -142,9 +137,6 @@
 		Tech_Moving_ResilientConnectionLogic_76181,
 		WFM_ChatBot_77547,
 
-		Tenant_PurgeLogonAttempts_75782,
-		Tenant_PurgeNoneEmployeesData_76291,
-		Staffing_BPO_ClearStaffing_75498,
 		Staffing_BPO_ExportMultipleSkills_74968,
 		Wfm_Staffing_RemoveDeletedHeadsFromReadmodel_77049,
 		Wfm_Payroll_SupportMultiDllPayrolls_75959

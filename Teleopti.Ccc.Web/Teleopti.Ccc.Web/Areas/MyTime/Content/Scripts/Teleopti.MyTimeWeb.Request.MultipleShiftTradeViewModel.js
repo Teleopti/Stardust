@@ -366,7 +366,7 @@
 		loadPeriodSchedule(startDate, endDate, agentId, false, function() {
 			var element = document.querySelector('.multi-shift-trade-schedules-list-panel');
 			if (element) {
-				element.scrollTop = 10;
+				element.scrollTop = 2;
 			}
 
 			// select the date when choose an agent
@@ -374,8 +374,8 @@
 				return pair.date.isSame(self.requestedDateInternal(), 'day');
 			})[0];
 
-			if ( Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408')) {
-				loadToleranceInfo(agentId, function () {
+			if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408')) {
+				loadToleranceInfo(agentId, function() {
 					if (item && item.isEnable) {
 						item.isSelected(true);
 						self.select(item);
@@ -432,6 +432,7 @@
 	self.sendRequest = function() {
 		self.saveNewShiftTrade();
 		self.chooseAgent(null);
+		Teleopti.MyTimeWeb.Request.List.HideRequests(false);
 		self.goToFirstPage();
 	};
 
@@ -1037,33 +1038,22 @@
 		});
 
 		var left = 0;
-		var isNegative = true;
-		if (gap !== 0) {
-			if (periodToloranceInfo.NegativeToleranceMinutes < 0) {
-				left = periodToloranceInfo.NegativeToleranceMinutes - gap;
-				if (left > 0) {
-					left = periodToloranceInfo.PositiveToleranceMinutes - left;
-					isNegative = false;
-				}
-			} else if (periodToloranceInfo.PositiveToleranceMinutes < 0) {
-				isNegative = false;
-				left = periodToloranceInfo.PositiveToleranceMinutes + gap;
-				if (left > 0) {
-					left = periodToloranceInfo.NegativeToleranceMinutes - left;
-					isNegative = true;
-				}
-			} else {
-				if (gap > 0) left = periodToloranceInfo.NegativeToleranceMinutes - gap;
-				if (gap < 0) {
-					left = periodToloranceInfo.PositiveToleranceMinutes + gap;
-					isNegative = false;
-				}
-			}
-		}
+		if (gap > 0)
+			left =
+				periodToloranceInfo.NegativeToleranceMinutes -
+				periodToloranceInfo.RealScheduleNegativeGap +
+				periodToloranceInfo.RealSchedulePositiveGap -
+				gap;
+		if (gap < 0)
+			left =
+				periodToloranceInfo.PositiveToleranceMinutes -
+				periodToloranceInfo.RealSchedulePositiveGap +
+				periodToloranceInfo.RealScheduleNegativeGap +
+				gap;
 
 		if (left < 0) {
 			var contractTimeGap = Teleopti.MyTimeWeb.Common.FormatTimeSpan(-left);
-			contractTimeGap = (isNegative ? '-' : '+') + contractTimeGap;
+			contractTimeGap = (gap > 0 ? '-' : '+') + contractTimeGap;
 			if (isCheckSelf) {
 				self.myToleranceMessages.push({
 					periodStart: Teleopti.MyTimeWeb.Common.FormatDate(periodToloranceInfo.PeriodStart),

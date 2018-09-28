@@ -15,14 +15,12 @@ namespace Teleopti.Ccc.Domain.Analytics
 
 		public override bool Equals(object obj)
 		{
-			var analyticsPermission = obj as AnalyticsPermission;
-			if (analyticsPermission == null)
-				return false;
-			return PersonCode == analyticsPermission.PersonCode
-				   && TeamId == analyticsPermission.TeamId
-				   && MyOwn == analyticsPermission.MyOwn
-				   && BusinessUnitId == analyticsPermission.BusinessUnitId
-				   && ReportId == analyticsPermission.ReportId;
+			return obj is AnalyticsPermission analyticsPermission && (PersonCode == analyticsPermission.PersonCode
+																	  && TeamId == analyticsPermission.TeamId
+																	  && MyOwn == analyticsPermission.MyOwn
+																	  && BusinessUnitId ==
+																	  analyticsPermission.BusinessUnitId
+																	  && ReportId == analyticsPermission.ReportId);
 		}
 		public override int GetHashCode()
 		{

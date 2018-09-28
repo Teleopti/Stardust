@@ -57,14 +57,9 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
         }
 
         public override bool Equals(object obj)
-        {
-            var casted = obj as MatrixPermissionHolder;
-            if (obj == null || casted == null)
-            {
-                return false;
-            }
-            return (casted.GetHashCode() == this.GetHashCode());
-        }
+		{
+			return obj != null && obj is MatrixPermissionHolder casted && casted.GetHashCode() == this.GetHashCode();
+		}
 
     }
 }

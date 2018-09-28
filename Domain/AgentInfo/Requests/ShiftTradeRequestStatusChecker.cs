@@ -58,20 +58,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			foreach (IPersonRequest personRequest in personRequests)
 			{
 				if (!personRequest.IsPending) continue;
-				IShiftTradeRequest shiftTradeRequest = personRequest.Request as IShiftTradeRequest;
-				if (shiftTradeRequest == null) continue;
+				if (!(personRequest.Request is IShiftTradeRequest shiftTradeRequest)) continue;
 
 				shiftTradeRequestPersonExtractor.ExtractPersons(shiftTradeRequest);
 				shiftTradeRequests.Add(shiftTradeRequest);
 
-				if (_period.HasValue)
-				{
-					_period = _period.Value.MaximumPeriod(personRequest.Request.Period);
-				}
-				else
-				{
-					_period = personRequest.Request.Period;
-				}
+				_period = _period?.MaximumPeriod(personRequest.Request.Period) ?? personRequest.Request.Period;
 			}
 			_persons = shiftTradeRequestPersonExtractor.Persons;
 			return shiftTradeRequests;

@@ -35,8 +35,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public IEnumerable<IBusinessRuleResponse> Approve(IRequest request)
 		{
-			var shiftTradeRequest = request as IShiftTradeRequest;
-			if (shiftTradeRequest == null)
+			if (!(request is IShiftTradeRequest shiftTradeRequest))
 			{
 				throw new InvalidCastException("Request type should be ShiftTradeRequest!");
 			}

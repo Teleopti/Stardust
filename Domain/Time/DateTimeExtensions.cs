@@ -5,11 +5,6 @@ namespace Teleopti.Ccc.Domain.Time
 {
     public static class DateTimeExtensions
     {
-        public static DateTime ToInterval(this DateTime dateTime, int resolutionInMinutes)
-        {
-            return dateTime.ToInterval(resolutionInMinutes, IntervalRounding.Nearest);
-        }
-
         public static DateTime ToInterval(this DateTime dateTime,TimeSpan interval)
         {
             return dateTime.ToInterval((int) interval.TotalMinutes, IntervalRounding.Nearest);

@@ -56,8 +56,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public IEnumerable<IBusinessRuleResponse> Approve(IRequest request)
 		{
-			var absenceRequest = request as IAbsenceRequest;
-			if (absenceRequest == null)
+			if (!(request is IAbsenceRequest absenceRequest))
 			{
 				throw new InvalidCastException("Request type should be AbsenceRequest!");
 			}

@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToPreferences { get; set; }
 		public bool AccessToRealTimeAdherenceOverview { get; set; }
 		public bool AccessToModifyAdherence { get; set; }
+		public bool AccessToHistoricalOverview { get; set; }
 		public bool AccessToTeamSchedule { get; set; }
 		public bool AccessToViewAllGroupPages { get; set; }
 		public bool AccessToMatrixReports { get; set; }
@@ -116,6 +117,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToPreferences = true;
 			AccessToRealTimeAdherenceOverview = true;
 			AccessToModifyAdherence = true;
+			AccessToHistoricalOverview = true;
 			AccessToSeatPlanner = false;
 			AccessToTeamSchedule = true;
 			AccessToMatrixReports = true;
@@ -249,7 +251,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview);
 			if (!AccessToModifyAdherence)
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ModifyAdherence);
-
+			if (!AccessToHistoricalOverview)
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.HistoricalOverview);
+			
 			if (!AccessToResourcePlanner)
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebPlans);
 			if (!AccessToPeople)

@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.Search.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
@@ -75,7 +74,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				HasRemoveShiftPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveShift),
 				HasAddDayOffPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddDayOff),
 				HasRemoveDayOffPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveDayOff),
-				HasModifyWriteProtectedSchedulePermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)
+				HasModifyWriteProtectedSchedulePermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule),
+				HasExportSchedulePermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ExportSchedule)
 			};
 
 			return Json(permissions);

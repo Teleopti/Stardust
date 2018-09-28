@@ -678,8 +678,7 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			get
 			{
-				var workflowControlSet = _workflowControlSet as IDeleteTag;
-				if (workflowControlSet != null && workflowControlSet.IsDeleted)
+				if (_workflowControlSet is IDeleteTag workflowControlSet && workflowControlSet.IsDeleted)
 					return null;
 				return _workflowControlSet;
 			}

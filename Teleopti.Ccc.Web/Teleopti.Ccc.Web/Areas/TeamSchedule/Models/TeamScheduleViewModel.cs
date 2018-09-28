@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
@@ -27,6 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 
 		public bool HasRemoveDayOffPermission { get; set; }
 		public bool HasModifyWriteProtectedSchedulePermission { get; set; }
+		public bool HasExportSchedulePermission { get; set; }
 	}
 
 	public class PagingGroupScheduleShiftViewModel

@@ -137,6 +137,7 @@
 		public const string MoveInvalidOverlappedActivity = "0111";
 		public const string RealTimeAdherenceOverview = "0092";
 		public const string ModifyAdherence = "0153";
+		public const string HistoricalOverview = "0162";
 		public const string WebForecasts = "0121";
 		public const string WebPermissions = "0122";
 		public const string WebPlans = "0123";
@@ -154,6 +155,7 @@
 		public const string RemoveShift = "0150";
 		public const string AddDayOff = "0151";
 		public const string RemoveDayOff = "0152";
+		public const string ExportSchedule = "0156";
 
 		//Seat Planner
 		public const string SeatPlanner = "0107";

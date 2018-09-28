@@ -20,9 +20,8 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				var localizedArguments = new List<Object>();
 				foreach (var argument in argumentsArray)
 				{
-					if (argument is DateTime)
+					if (argument is DateTime dateTimeArgument)
 					{
-						var dateTimeArgument = (DateTime)argument;
 						try
 						{
 							localizedArguments.Add(TimeZoneHelper.ConvertFromUtc(dateTimeArgument, TimeZoneHelper.CurrentSessionTimeZone));

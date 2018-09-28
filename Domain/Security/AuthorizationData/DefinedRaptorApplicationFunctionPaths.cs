@@ -135,6 +135,7 @@
 		public const string SwapShifts = "Raptor/Anywhere/Schedules/SwapShifts";
 		public const string RealTimeAdherenceOverview = "Raptor/Anywhere/RealTimeAdherenceOverview";
 		public const string ModifyAdherence = "Raptor/Anywhere/RealTimeAdherenceOverview/ModifyAdherence";
+		public const string HistoricalOverview = "Raptor/Anywhere/RealTimeAdherenceOverview/HistoricalOverview";
 		public const string EditShiftCategory = "Raptor/Anywhere/Schedules/EditShiftCategory";
 		public const string MoveInvalidOverlappedActivity = "Raptor/Anywhere/Schedules/MoveInvalidOverlappedActivity";
 		public const string RemoveOvertime = "Raptor/Anywhere/Schedules/RemoveOvertime";
@@ -143,6 +144,7 @@
 		public const string AddDayOff = "Raptor/Anywhere/Schedules/AddDayOff";
 		public const string RemoveDayOff = "Raptor/Anywhere/Schedules/RemoveDayOff";
 		public const string Gamification = "Raptor/Anywhere/Gamification";
+		public const string ExportSchedule = "Raptor/Anywhere/Schedules/ExportSchedule";
 
 		// Angel
 		public const string WebForecasts = "Raptor/Anywhere/WebForecasts";

@@ -2,13 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
-using Teleopti.Ccc.TestCommon.IoC;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.TestCommon;
@@ -16,7 +14,6 @@ using Teleopti.Ccc.TestCommon;
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 {
 	[TestFixture]
-	[Toggle(Toggles.People_ImprovePersonAccountAccuracy_74914)]
 	public class ImprovePersonAccountAccuracyTest
 	{
 

@@ -96,8 +96,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
         /// </remarks>
         protected virtual void OnChangeMultisitePeriodData()
         {
-            IMultisiteDayTemplate multisiteDayTemplate = Parent as IMultisiteDayTemplate;
-            if (multisiteDayTemplate != null)
+			if (Parent is IMultisiteDayTemplate multisiteDayTemplate)
             {
                 multisiteDayTemplate.IncreaseVersionNumber();
             }

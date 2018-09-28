@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			((IDeleteTag)_dayOff).SetDeleted();
 			PersistAndRemoveFromUnitOfWork(_dayOff);
 
-			var dayOffList = new DayOffTemplateRepository(UnitOfWork).FindActivedDayOffsSortByDescription();
+			var dayOffList = new DayOffTemplateRepository(UnitOfWork).FindAllDayOffsSortByDescription();
 			dayOffList.Count.Should().Be.EqualTo(2);
 			dayOffList[0].Description.Name.Should().Be.EqualTo("AAA");
 			dayOffList[1].Description.Name.Should().Be.EqualTo("CCC");

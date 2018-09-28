@@ -115,11 +115,13 @@
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.238\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.253\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.238\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.253\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -206,10 +208,12 @@
     <Compile Include="Forecasting\Angel\Outlier\OutlierRemover.cs" />
     <Compile Include="Forecasting\Angel\Outlier\QueueStatisticsPerType.cs" />
     <Compile Include="Forecasting\Angel\Trend\LinearRegressionTrendCalculator.cs" />
+    <Compile Include="Forecasting\ISkillStaffingIntervalUnderstaffing.cs" />
     <Compile Include="Forecasting\QueueStatisticsViewModelFactory.cs" />
     <Compile Include="Forecasting\IQueueStatisticsViewModelFactory.cs" />
     <Compile Include="Forecasting\Models\QueueStatisticsModel.cs" />
     <Compile Include="Forecasting\Models\WorkloadQueueStatisticsViewModel.cs" />
+    <Compile Include="Forecasting\SkillStaffingIntervalUnderstaffing.cs" />
     <Compile Include="Infrastructure\DeadLockRetrier.cs" />
     <Compile Include="Infrastructure\HttpRequestHandler.cs" />
     <Compile Include="Infrastructure\IHttpRequestHandler.cs" />
@@ -1109,7 +1113,6 @@
     <Compile Include="InterfaceLegacy\Domain\IScheduleDictionary.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleExtractor.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleHistoryRepository.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IScheduleIsInvalidSpecification.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleMatrixOriginalStateContainer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleMatrixPro.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleMatrixValueCalculatorPro.cs" />
@@ -1791,7 +1794,6 @@
     <Compile Include="Scheduling\ISchedulingOptionsProvider.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleOvertimeOnNonScheduleDays.cs" />
     <Compile Include="Scheduling\Restrictions\SchedulePreferenceTransformerHelper.cs" />
-    <Compile Include="Scheduling\ScheduleIsInvalidSpecification.cs" />
     <Compile Include="Scheduling\SchedulingOptionsProvider.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\FixedRuleSetBagExtractor.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetBagExtractorProvider.cs" />
@@ -1915,7 +1917,6 @@
     <Compile Include="Logon\Aspects\TenantScopeAspect.cs" />
     <Compile Include="Logon\Aspects\TenantScopeAttribute.cs" />
     <Compile Include="ApplicationLayer\TestHandlers.cs" />
-    <Compile Include="UnitOfWork\IReadModelTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventShiftExtension.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDate.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDayCount.cs" />

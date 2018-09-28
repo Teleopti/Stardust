@@ -19,8 +19,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         public void SetChecksum(IRequest request)
         {
             var defaultScenario = _scenarioRepository.Current();
-            var shiftTradeRequest = request as IShiftTradeRequest;
-            if (shiftTradeRequest == null) 
+			if (!(request is IShiftTradeRequest shiftTradeRequest)) 
                 return;
 
             var shiftTradeRequestPersonExtractor = new ShiftTradeRequestPersonExtractor();

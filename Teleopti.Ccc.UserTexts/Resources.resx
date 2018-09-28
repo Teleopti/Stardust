@@ -17752,4 +17752,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Request List</value>
     <comment>Use in MyTime Request Model, a sub button name for show all requests history.</comment>
   </data>
+	  <data name="HistoricalOverview" xml:space="preserve">
+    <value>Historical Overview</value>
+    <comment>Historical overview</comment>
+  </data>
 </root>

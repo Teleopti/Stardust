@@ -1,25 +1,23 @@
-WFM Web
-================
-Overview of project files.
+# WFM Web
 
-* app - angularjs code incl. routes
-* css - styles for angularjs
-* e2e - end-to-end tests with protractor
-* src - Angular code
-* .browserlistrc - tells tools like autoprefixer, babel etc. about which browsers to support
+## Overview of project files
 
+| Folder/file | Contains                                |
+| ----------- | --------------------------------------- |
+| app         | angularjs code incl. routes             |
+| css         | styles for angularjs                    |
+| src         | Angular code                            |
+| vendor      | certain vendor dependencies             |
+| test        | test configs for different environments |
 
-# Protractor (e2e/)
-1. Upgrade chromedrivers
-    * `npx webdriver-manager update`
-2. Start selenium server
-    * `npx webdriver-manager start`
-3. Start IIS
-    * `npm run iis`
-4. Run protractor tests
-    * Run all tests
-        - `npx protractor e2e/protractor.conf.js`
-    * Run module tests
-        - `npx protractor e2e/people/protractor.conf.js`
-    * Run single spec
-        - `npx protractor e2e/protractor.conf.js --specs e2e/people/search.e2e-spec.ts`
+## Scripts
+
+| Script                    | What                                  |
+| ------------------------- | ------------------------------------- |
+| `..\.node\UseNodeEnv.ps1` | Use build server Node.js env          |
+| `npm run test`            | run all angular tests                 |
+| `npm run iis:web`         | start the iis for web project         |
+| `npm run iis:admin`       | start the iis for admin portal        |
+| `npm run dev:watch`       | Watch and build the entire frontend   |
+| `npm run dev:build`       | Build the entire frontend in dev env  |
+| `npm run prod:build`      | Build the entire frontend in prod env |

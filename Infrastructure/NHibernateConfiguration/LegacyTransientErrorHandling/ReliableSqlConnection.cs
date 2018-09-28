@@ -170,9 +170,9 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErr
 					}
 					if (resultType == typeof(XmlReader))
 					{
-						if (!(command is SqlCommand))
+						if (!(command is SqlCommand sqlCommand))
 							throw new NotSupportedException();
-						XmlReader innerReader = (command as SqlCommand).ExecuteXmlReader();
+						XmlReader innerReader = sqlCommand.ExecuteXmlReader();
 						closeOpenedConnectionOnSuccess = false;
 						return (T)((behavior & CommandBehavior.CloseConnection) != CommandBehavior.CloseConnection ? (object)innerReader : (object)new SqlXmlReader(command.Connection, innerReader));
 					}

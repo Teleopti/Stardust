@@ -34,8 +34,7 @@ namespace Teleopti.Ccc.Domain.Analytics
 
 		public override bool Equals(object obj)
 		{
-			var workload = obj as AnalyticsForcastWorkload;
-			return workload != null &&
+			return obj is AnalyticsForcastWorkload workload &&
 				   DateId == workload.DateId &&
 				   IntervalId == workload.IntervalId &&
 				   StartTime == workload.StartTime &&

@@ -125,11 +125,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 		{
 			var personAssignment = scheduleDay.PersonAssignment();
 			var projection = personAssignment?.ProjectionService().CreateProjection();
-			var activitiesRequiringSeat = projection?.Where(layer =>
-			{
-				var activityLayer = layer.Payload as IActivity;
-				return activityLayer != null && activityLayer.RequiresSeat;
-			});
+			var activitiesRequiringSeat = projection?.Where(layer => layer.Payload is IActivity activityLayer && activityLayer.RequiresSeat);
 			return activitiesRequiringSeat;
 		}
 	}

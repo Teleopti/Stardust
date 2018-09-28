@@ -66,12 +66,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		{
 			var log = CreateStuff();
 
-			var timer = new Stopwatch();
-			timer.Start();
-			_synchronizer.Synchronize();
-			timer.Stop();
-			log.AppendLine($"Elapsed time: {timer.Elapsed}");
-
 			return new HttpResponseMessage(HttpStatusCode.OK)
 			{
 				Content = new StringContent(log.ToString(), System.Text.Encoding.UTF8, "text/plain")
@@ -83,34 +77,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		{
 			var log = new StringBuilder();
 			var date = DateOnly.Today.AddDays(-1);
-			var period = new DateOnlyPeriod(date.AddDays(-5), date);
+			var period = new DateOnlyPeriod(date.AddDays(-6), date);
 			var dates = period.DayCollection();
 			var allPersons = _persons.LoadAll();
-
-//			var team =
-//			(
-//				from p in allPersons
-//				let pp = p.Period(date)
-//				where pp != null
-//				let t = pp.Team
-//				where t != null
-//				let externalLogon = pp.ExternalLogOnCollection.FirstOrDefault()
-//				where externalLogon != null
-//				select t
-//			).First();
-
-//			var threePersonsInTeam =
-//			(
-//				from p in allPersons
-//				let pp = p.Period(date)
-//				where pp != null
-//				let t = pp.Team
-//				where t == team
-//				let externalLogon = pp.ExternalLogOnCollection.FirstOrDefault()
-//				where externalLogon != null
-//				select p
-//			).Take(3).ToArray();
-//			threePersonsInTeam.ForEach(p => log.AppendLine($"Found {p.Name}"));
 
 			var persons =
 			(
@@ -122,13 +91,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 				select p
 			).ToArray();
 			persons.ForEach(p => log.AppendLine($"Found {p.Name}"));
-
-//			var schedules = _schedules.FindSchedulesForPersonsOnlyInGivenPeriod(
-//				threePersonsInTeam,
-//				new ScheduleDictionaryLoadOptions(false, false),
-//				period,
-//				_scenario.Current()
-//			);
 
 			var schedules = _schedules.FindSchedulesForPersonsOnlyInGivenPeriod(
 				persons,
@@ -176,29 +138,47 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			var moments = new[]
 			{
 				new Func<DateOnly, Guid, IEnumerable<IEvent>>((d, p) =>
+                   				{
+                   					return new IEvent[]
+                   					{
+                   						new PersonStateChangedEvent
+                   						{
+                   							PersonId = p,
+                   							BelongsToDate = d,
+                   							Timestamp = d.Date.AddHours(8).Utc(),
+                   							StateName = "Logon",
+                   							StateGroupId = null,
+                   							ActivityName = "Phone",
+                   							ActivityColor = Color.Green.ToArgb(),
+                   							RuleName = "Out",
+                   							RuleColor = Color.Red.ToArgb(),
+                   							Adherence = EventAdherence.Out
+                   						},
+                   						new PersonRuleChangedEvent
+                   						{
+                   							PersonId = p,
+                   							BelongsToDate = d,
+                   							Timestamp = d.Date.AddHours(8).Utc(),
+                   							StateName = "Logon",
+                   							StateGroupId = null,
+                   							ActivityName = "Phone",
+                   							ActivityColor = Color.Green.ToArgb(),
+                   							RuleName = "Out",
+                   							RuleColor = Color.Red.ToArgb(),
+                   							Adherence = EventAdherence.Out
+                   						}
+                   					};
+                   				}),
+				new Func<DateOnly, Guid, IEnumerable<IEvent>>((d, p) =>
 				{
 					return new IEvent[]
 					{
-						new PersonStateChangedEvent
+						new PersonArrivedLateForWorkEvent
 						{
 							PersonId = p,
-							BelongsToDate = d,
-							Timestamp = d.Date.AddHours(8).Utc(),
+							Timestamp = d.Date.AddHours(8).AddMinutes(15).Utc(),
+							ShiftStart = d.Date.AddHours(8).Utc(),
 							StateName = "Logon",
-							StateGroupId = null,
-							ActivityName = null,
-							ActivityColor = null,
-							RuleName = "In",
-							RuleColor = Color.Red.ToArgb(),
-							Adherence = EventAdherence.In
-						},
-						new PersonRuleChangedEvent
-						{
-							PersonId = p,
-							BelongsToDate = d,
-							Timestamp = d.Date.AddHours(8).Utc(),
-							StateName = "Logon",
-							StateGroupId = null,
 							ActivityName = "Phone",
 							ActivityColor = Color.Green.ToArgb(),
 							RuleName = "In",
@@ -211,15 +191,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 				{
 					var listOfEvents = new List<IEvent>();
 					
-					for (int i = 1; i < 80; i ++)
-					{
 						listOfEvents.AddRange(new IEvent[]
 						{
 							new PersonStateChangedEvent
 							{
 								PersonId = p,
 								BelongsToDate = d,
-								Timestamp = d.Date.AddHours(8).AddMinutes(i).Utc(),
+								Timestamp = d.Date.AddHours(8).AddHours(6).Utc(),
 								StateName = "Logoff",
 								StateGroupId = null,
 								ActivityName = "Phone",
@@ -232,7 +210,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 							{
 								PersonId = p,
 								BelongsToDate = d,
-								Timestamp = d.Date.AddHours(8).AddMinutes(i).Utc(),
+								Timestamp = d.Date.AddHours(8).AddHours(6).Utc(),
 								StateName = "Logoff",
 								StateGroupId = null,
 								ActivityName = "Phone",
@@ -242,7 +220,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 								Adherence = EventAdherence.Out
 							}
 						});
-					}
 					return listOfEvents.ToArray();
 				}),
 				new Func<DateOnly, Guid, IEnumerable<IEvent>>((d, p) =>
@@ -306,11 +283,17 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		[HttpGet, Route("api/RtaTestData/SynchStuff")]
 		public virtual HttpResponseMessage SynchStuff()
 		{
+			var log = new StringBuilder();
+			var timer = new Stopwatch();
+			log.AppendLine("Starting Synch");
+			timer.Start();
 			_synchronizer.Synchronize();
+			timer.Stop();
+			log.AppendLine($"Elapsed time: {timer.Elapsed}");
 
 			return new HttpResponseMessage(HttpStatusCode.OK)
 			{
-				Content = new StringContent("Synchrooooooooooooooonized ", System.Text.Encoding.UTF8, "text/plain")
+				Content = new StringContent(log.ToString(), System.Text.Encoding.UTF8, "text/plain")
 			};
 		}
 	}

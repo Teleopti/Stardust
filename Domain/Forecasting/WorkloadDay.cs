@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				{
 					innerMergeTemplateTaskPeriods(taskPeriods, day => day.Lock(), day => { });
 					taskPeriods =
-						TaskPeriodList.Where(t => localTemplatePeriod.StartTime == t.Period.TimePeriod(timeZone).StartTime)
+						TaskPeriodList.Where(t => localTemplatePeriod.StartTime == t.Period.StartDateTimeLocal(timeZone).TimeOfDay)
 							.ToList();
 					taskPeriodCount = taskPeriods.Count;
 				}
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 {
                     innerMergeTemplateTaskPeriods(taskPeriods, lockAction, releaseAction);
                     taskPeriods =
-                        TaskPeriodList.Where(t => localTemplatePeriod.StartTime == t.Period.TimePeriod(timeZone).StartTime)
+                        TaskPeriodList.Where(t => localTemplatePeriod.StartTime == t.Period.StartDateTimeLocal(timeZone).TimeOfDay)
                             .ToList();
                     taskPeriodCount = taskPeriods.Count;
                 }

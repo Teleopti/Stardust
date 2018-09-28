@@ -174,11 +174,13 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.238\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.253\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.238\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.253\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -406,7 +408,6 @@
     <Compile Include="LiteUnitOfWork\MessageBrokerUnitOfWork\IMessageBrokerUnitOfWorkScope.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWork\ICurrentReadModelUnitOfWork.cs" />
     <Compile Include="LiteUnitOfWork\ILiteUnitOfWork.cs" />
-    <Compile Include="LiteUnitOfWork\ReadModelTransactionSyncronization.cs" />
     <Compile Include="LiteUnitOfWork\LiteUnitOfWork.cs" />
     <Compile Include="LiteUnitOfWork\MessageBrokerUnitOfWork\MessageBrokerUnitOfWorkAspect.cs" />
     <Compile Include="LiteUnitOfWork\MessageBrokerUnitOfWork\MessageBrokerUnitOfWorkState.cs" />

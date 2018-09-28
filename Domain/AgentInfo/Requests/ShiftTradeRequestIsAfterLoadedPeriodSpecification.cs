@@ -20,8 +20,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		{
 			if (obj == null) return false;
 
-			var shiftTrade = obj.Request as IShiftTradeRequest;
-			if (shiftTrade == null) return false;
+			if (!(obj.Request is IShiftTradeRequest shiftTrade)) return false;
 			if (areAllDetailsOutsidePeriod(shiftTrade)) return false;
 
 			var shiftTradeStatus = shiftTrade.GetShiftTradeStatus(_emptyShiftTradeRequestChecker);

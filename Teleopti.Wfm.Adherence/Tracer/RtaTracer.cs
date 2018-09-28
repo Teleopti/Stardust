@@ -42,33 +42,40 @@ namespace Teleopti.Wfm.Adherence.Tracer
 
 		public static string ProcessName()
 		{
-			var boxName = Environment.GetEnvironmentVariable("COMPUTERNAME")
-						  ?? Environment.GetEnvironmentVariable("HOSTNAME");
+			var boxName = Environment.GetEnvironmentVariable("COMPUTERNAME") ??
+						  Environment.GetEnvironmentVariable("HOSTNAME");
 			var processId = Process.GetCurrentProcess().Id.ToString();
 			return $"{boxName}:{processId}";
 		}
 
 		public void RefreshTracers() =>
 			_tracers = _config.ReadAll()
-				.Where(x => x.UserCode != null)
-				.Select(tracer =>
+				.Select(config =>
 				{
-					var config = makeTracerFromConfig(tracer);
-					justWrite(new TracingLog {Tracing = config.User}, "Tracing", config.Tenant);
-					return config;
+					var tracer = makeTracerFromConfig(config);
+					justWrite(new TracingLog {Tracing = tracer.User}, "Tracing", tracer.Tenant);
+					return tracer;
 				})
 				.ToArray();
 
 		[TenantScope, UnitOfWork]
-		protected virtual tracer makeTracerFromConfig(RtaTracerConfig tracer)
+		protected virtual tracer makeTracerFromConfig(RtaTracerConfig config)
 		{
 			_mapper.Refresh();
-			var personIdsForUserCode = _mapper.PersonIdsFor(tracer.UserCode);
+			string user = null;
+			var personIdsForUserCode = Enumerable.Empty<Guid>();
+
+			if (config.UserCode != null)
+			{
+				personIdsForUserCode = _mapper.PersonIdsFor(config.UserCode);
+				user = $"{config.UserCode}: {string.Join(", ", personIdsForUserCode.Select(x => _persons.Get(x).Name))}";
+			}
+
 			return new tracer
 			{
-				Tenant = tracer.Tenant,
-				UserCode = tracer.UserCode,
-				User = $"{tracer.UserCode}: {string.Join(", ", personIdsForUserCode.Select(x => _persons.Get(x).Name))}",
+				Tenant = config.Tenant,
+				UserCode = config.UserCode,
+				User = user,
 				Persons = personIdsForUserCode
 			};
 		}
@@ -86,16 +93,17 @@ namespace Teleopti.Wfm.Adherence.Tracer
 		public void Stop() => _config.DeleteForTenant();
 		public void Clear() => _writer.Clear();
 
-		public void ProcessReceived(string method, int? count) => writeForCurrentOrConfigured(new ProcessReceivedLog
+		public void ProcessReceived(string method, int? count) => writeProcessTrace(new ProcessReceivedLog
 		{
-			ReceivedAt = _now.UtcDateTime(),
-			ReceivedBy = method,
-			ReceivedCount = count ?? 0
+			At = _now.UtcDateTime(),
+			By = method,
+			Count = count ?? 0
 		}, "Data received at");
 
-		public void ProcessProcessing() => writeForCurrentOrConfigured(new ProcessProcessingLog {ProcessingAt = _now.UtcDateTime()}, "Processing");
-		public void ProcessActivityCheck() => writeForCurrentOrConfigured(new ActivityCheckLog {ActivityCheckAt = _now.UtcDateTime()}, "Activity check at");
-		public void ProcessException(Exception exception) => writeForCurrentOrConfigured(new ProcessExceptionLog {Type = exception.GetType().Name, Info = exception.ToString()}, exception.Message);
+		public void ProcessEnqueuing(int? count) => writeProcessTrace(new ProcessEnqueuingLog {At = _now.UtcDateTime(), Count = count ?? 0}, "Enqueuing");
+		public void ProcessProcessing(int? count) => writeProcessTrace(new ProcessProcessingLog {At = _now.UtcDateTime(), Count = count ?? 0}, "Processing");
+		public void ProcessActivityCheck() => writeProcessTrace(new ProcessActivityCheckLog {At = _now.UtcDateTime()}, "Activity check at");
+		public void ProcessException(Exception exception) => writeProcessTrace(new ProcessExceptionLog {Type = exception.GetType().Name, Info = exception.ToString()}, exception.Message);
 
 		public void For(IEnumerable<StateTraceLog> traces, Action<StateTraceLog> trace)
 		{
@@ -132,8 +140,13 @@ namespace Teleopti.Wfm.Adherence.Tracer
 			if (!enabled())
 				return null;
 
-			var tenantName = _dataSource.CurrentName();
-			return tracers().FirstOrDefault(t => t.Tenant == tenantName && t.UserCode.Equals(userCode, StringComparison.InvariantCultureIgnoreCase));
+			var tenant = _dataSource.CurrentName();
+			return tracers()
+				.Where(x => x.UserCode != null)
+				.FirstOrDefault(t =>
+					t.Tenant == tenant &&
+					t.UserCode.Equals(userCode, StringComparison.InvariantCultureIgnoreCase)
+				);
 		}
 
 		private tracer tracerFor(Guid personId)
@@ -141,8 +154,10 @@ namespace Teleopti.Wfm.Adherence.Tracer
 			if (!enabled())
 				return null;
 
-			var tenantName = _dataSource.CurrentName();
-			return tracers().FirstOrDefault(t => t.Tenant == tenantName && t.Persons.Any(p => p == personId));
+			var tenant = _dataSource.CurrentName();
+			return tracers().FirstOrDefault(t =>
+				t.Tenant == tenant && t.Persons.Any(p => p == personId)
+			);
 		}
 
 		private bool enabled() => tracers().Any();
@@ -154,17 +169,15 @@ namespace Teleopti.Wfm.Adherence.Tracer
 			return _tracers;
 		}
 
-		private void writeForCurrentOrConfigured<T>(T log, string message)
+		private void writeProcessTrace<T>(T log, string message)
 		{
 			if (!enabled())
 				return;
-			var allTracers = tracers();
-			var hasCurrentTenant = _dataSource.CurrentName() != null;
-			var currentTenantTracer = allTracers.Where(x => x.Tenant == _dataSource.CurrentName());
-			var tracersToWrite = hasCurrentTenant ? currentTenantTracer : allTracers;
-			tracersToWrite.ForEach(t =>
-				justWrite(log, message, t.Tenant)
-			);
+			var tenant = _dataSource.CurrentName();
+			var noTenant = tenant == null;
+			var currentTenantEnabled = tracers().Any(x => x.Tenant == tenant);
+			if (noTenant || currentTenantEnabled)
+				justWrite(log, message, tenant);
 		}
 
 		private StateTraceLog startStateTrace(tracer tracer, string stateCode, string message)
@@ -191,6 +204,7 @@ namespace Teleopti.Wfm.Adherence.Tracer
 		private void justWrite<T>(T log, string message, string tenant) =>
 			_writer.Write(new RtaTracerLog<T>
 			{
+				Time = _now.UtcDateTime(),
 				Log = log,
 				Message = message,
 				Process = _process,

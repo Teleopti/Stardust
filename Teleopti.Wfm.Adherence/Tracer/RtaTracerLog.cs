@@ -13,25 +13,32 @@ namespace Teleopti.Wfm.Adherence.Tracer
 
 	public class ProcessReceivedLog
 	{
-		public DateTime? ReceivedAt;
-		public string ReceivedBy;
-		public int ReceivedCount;
+		public DateTime? At;
+		public string By;
+		public int Count;
+	}
+
+	public class ProcessEnqueuingLog
+	{
+		public DateTime? At;
+		public int Count;
 	}
 
 	public class ProcessProcessingLog
 	{
-		public DateTime? ProcessingAt;
+		public DateTime? At;
+		public int Count;
+	}
+
+	public class ProcessActivityCheckLog
+	{
+		public DateTime? At;
 	}
 
 	public class ProcessExceptionLog
 	{
 		public string Type;
 		public string Info;
-	}
-
-	public class ActivityCheckLog
-	{
-		public DateTime? ActivityCheckAt;
 	}
 
 	public class TracingLog

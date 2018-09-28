@@ -100,6 +100,10 @@
 			bindResizeLayerEvent();
 		};
 
+		vm.$onDestroy = function () {
+			interact('.shift-layer').unset();
+		};
+
 		vm.gotoDayView = function () {
 			$state.go('teams.dayView');
 		};
