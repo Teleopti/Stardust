@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			: base(currentUnitOfWork)
 		{
 		}
-		
+
 		/// <summary>
 		/// Finds the specified persons.
 		/// </summary>
@@ -34,15 +34,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// Created date: 2008-03-06
 		/// </remarks>
 		public ICollection<IPersonAbsence> Find(IEnumerable<IPerson> persons,
-						     DateTimePeriod period,
-						     IScenario scenario)
+			DateTimePeriod period,
+			IScenario scenario)
 		{
 			InParameter.NotNull(nameof(persons), persons);
 			InParameter.NotNull(nameof(period), period);
 			InParameter.NotNull(nameof(scenario), scenario);
 			var retList = new List<IPersonAbsence>();
 
-			var restrictions = Restrictions.Conjunction().Add(Restrictions.Gt("Layer.Period.period.Maximum", period.StartDateTime))
+			var restrictions = Restrictions.Conjunction()
+				.Add(Restrictions.Gt("Layer.Period.period.Maximum", period.StartDateTime))
 				.Add(Restrictions.Lt("Layer.Period.period.Minimum", period.EndDateTime));
 
 			if (scenario != null)
@@ -51,12 +52,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			foreach (var personList in persons.Batch(400))
 			{
 				var people = personList.ToArray();
-				
+
 				retList.AddRange(Session.CreateCriteria(typeof(PersonAbsence), "abs")
-				    .Add(restrictions)
+					.Add(restrictions)
 					.Add(Restrictions.InG("Person", people))
-				    .SetResultTransformer(Transformers.DistinctRootEntity)
-				    .List<IPersonAbsence>());		
+					.SetResultTransformer(Transformers.DistinctRootEntity)
+					.List<IPersonAbsence>());
 			}
 
 			initializeAbsences(retList);
@@ -67,20 +68,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public ICollection<IPersonAbsence> FindExact(IPerson person, DateTimePeriod period, IAbsence absence,
 			IScenario scenario)
 		{
-			var retList = Session.CreateCriteria(typeof(PersonAbsence))				
-				.Add(Restrictions.Eq("Layer.Period.period.Minimum",period.StartDateTime))
-				.Add(Restrictions.Eq("Layer.Period.period.Maximum",period.EndDateTime))
-				.Add(Restrictions.Eq("Scenario",scenario))
+			var retList = Session.CreateCriteria(typeof(PersonAbsence))
+				.Add(Restrictions.Eq("Layer.Period.period.Minimum", period.StartDateTime))
+				.Add(Restrictions.Eq("Layer.Period.period.Maximum", period.EndDateTime))
+				.Add(Restrictions.Eq("Scenario", scenario))
 				.Add(Restrictions.Eq("Layer.Payload", absence))
-				.Add(Restrictions.Eq("Person",person))
+				.Add(Restrictions.Eq("Person", person))
 				.List<IPersonAbsence>();
 
 			initializeAbsences(retList);
 			return retList;
 		}
 
-		public bool IsThereScheduledAgents(Guid businessUnitId)
+		public bool IsThereScheduledAgents(Guid businessUnitId, DateOnlyPeriod period)
 		{
+			var startDate = period.StartDate.Date;
+			var endDate = period.EndDate.Date;
+
 			var sql = $@"IF EXISTS (SELECT TOP 1 pa.Id
   FROM PersonAbsence pa
  INNER JOIN Person p ON pa.Person = p.Id
@@ -88,10 +92,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
  INNER JOIN Team t ON pp.Team = t.Id
  INNER JOIN [Site] s ON t.[Site] = s.Id
  INNER JOIN BusinessUnit bu ON s.BusinessUnit = bu.Id
- WHERE bu.Id = :{nameof(businessUnitId)})
+ WHERE bu.Id = :{nameof(businessUnitId)}
+   AND ((pa.Minimum >= :{nameof(startDate)} AND pa.Minimum <= :{nameof(endDate)})
+    OR (pa.Maximum >= :{nameof(startDate)} AND pa.Maximum <= :{nameof(endDate)})
+    OR (pa.Minimum <= :{nameof(startDate)} AND pa.Maximum >= :{nameof(endDate)})))
 SELECT CAST(1 AS BIT) ELSE SELECT CAST(0 AS BIT)";
 			var result = Session.CreateSQLQuery(sql)
 				.SetParameter(nameof(businessUnitId), businessUnitId)
+				.SetDateTime(nameof(startDate), startDate)
+				.SetDateTime(nameof(endDate), endDate)
 				.UniqueResult<bool>();
 			return result;
 		}
@@ -109,17 +118,17 @@ SELECT CAST(1 AS BIT) ELSE SELECT CAST(0 AS BIT)";
 					.Add(Restrictions.InG("Id", absenceIdList))
 					.Add(Restrictions.Eq("Scenario", scenario))
 					.SetResultTransformer(Transformers.DistinctRootEntity)
-					.List<IPersonAbsence>());				
+					.List<IPersonAbsence>());
 			}
 
 			initializeAbsences(retList);
 			return retList;
 		}
-		
 
-		public ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence = null)
+		public ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period,
+			IAbsence absence = null)
 		{
-			var criteria = Session.CreateCriteria(typeof (PersonAbsence))
+			var criteria = Session.CreateCriteria(typeof(PersonAbsence))
 				.SetProjection(Projections.Property("Layer.Period"))
 				.Add(Restrictions.Gt("Layer.Period.period.Maximum", period.StartDateTime))
 				.Add(Restrictions.Lt("Layer.Period.period.Minimum", period.EndDateTime))
@@ -129,6 +138,7 @@ SELECT CAST(1 AS BIT) ELSE SELECT CAST(0 AS BIT)";
 			{
 				criteria.Add(Restrictions.Eq("Layer.Payload", absence));
 			}
+
 			return criteria.List<DateTimePeriod>();
 		}
 
@@ -145,16 +155,17 @@ SELECT CAST(1 AS BIT) ELSE SELECT CAST(0 AS BIT)";
 		/// </remarks>
 		public ICollection<IPersonAbsence> Find(DateTimePeriod period, IScenario scenario)
 		{
-			var restrictions = Restrictions.Conjunction().Add(Restrictions.Gt("Layer.Period.period.Maximum", period.StartDateTime))
-			    .Add(Restrictions.Lt("Layer.Period.period.Minimum", period.EndDateTime));
+			var restrictions = Restrictions.Conjunction()
+				.Add(Restrictions.Gt("Layer.Period.period.Maximum", period.StartDateTime))
+				.Add(Restrictions.Lt("Layer.Period.period.Minimum", period.EndDateTime));
 
 			if (scenario != null)
 				restrictions.Add(Restrictions.Eq("Scenario", scenario));
 
 			var retList = Session.CreateCriteria(typeof(PersonAbsence), "abs")
-						.Add(restrictions)
-						.SetResultTransformer(Transformers.DistinctRootEntity)
-						.List<IPersonAbsence>();			
+				.Add(restrictions)
+				.SetResultTransformer(Transformers.DistinctRootEntity)
+				.List<IPersonAbsence>();
 
 			initializeAbsences(retList);
 			return retList;
@@ -162,7 +173,7 @@ SELECT CAST(1 AS BIT) ELSE SELECT CAST(0 AS BIT)";
 
 		private static void initializeAbsences(IEnumerable<IPersonAbsence> personAbsences)
 		{
-			foreach (IPersonAbsence personAbsence in personAbsences)
+			foreach (var personAbsence in personAbsences)
 			{
 				if (!LazyLoadingManager.IsInitialized(personAbsence.Layer.Payload))
 					LazyLoadingManager.Initialize(personAbsence.Layer.Payload);
@@ -171,14 +182,16 @@ SELECT CAST(1 AS BIT) ELSE SELECT CAST(0 AS BIT)";
 
 		public IPersonAbsence LoadAggregate(Guid id)
 		{
-			PersonAbsence retObj = Session.CreateCriteria(typeof(PersonAbsence))
-				    .Add(Restrictions.IdEq(id))
-				    .UniqueResult<PersonAbsence>();
+			var retObj = Session.CreateCriteria(typeof(PersonAbsence))
+				.Add(Restrictions.IdEq(id))
+				.UniqueResult<PersonAbsence>();
+
 			if (retObj != null)
 			{
-				var initializer = new InitializeRootsPersonAbsence(new List<IPersonAbsence> { retObj });
+				var initializer = new InitializeRootsPersonAbsence(new List<IPersonAbsence> {retObj});
 				initializer.Initialize();
 			}
+
 			return retObj;
 		}
 

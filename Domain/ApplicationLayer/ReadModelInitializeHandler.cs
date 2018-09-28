@@ -63,7 +63,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_distributedLockAcquirer.TryLockForTypeOfAnd(this, businessUnitId.ToString(), () =>
 			// Use a lock for each business unit to only run this once for each BU
 			{
-				if (!areAnyAgentsScheduled(businessUnitId))
+				var startDate = DateTime.Today.Date.AddDays(@event.StartDays);
+				var endDate = DateTime.Today.Date.AddDays(@event.EndDays);
+				var period = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
+				if (!anyAgentScheduled(businessUnitId, period))
 				{
 					return;
 				}
@@ -115,10 +118,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_utcPeriod = _period.ToDateTimePeriod(TimeZoneInfo.Utc);
 		}
 
-		private bool areAnyAgentsScheduled(Guid businessUnitId)
+		private bool anyAgentScheduled(Guid businessUnitId, DateOnlyPeriod period)
 		{
-			var existsAnyPersonAssignment = _personAssignmentRepository.IsThereScheduledAgents(businessUnitId);
-			var existsAnyPersonAbsence = _personAbsenceRepository.IsThereScheduledAgents(businessUnitId);
+			var existsAnyPersonAssignment = _personAssignmentRepository.IsThereScheduledAgents(businessUnitId, period);
+			var existsAnyPersonAbsence = _personAbsenceRepository.IsThereScheduledAgents(businessUnitId, period);
 			return existsAnyPersonAssignment || existsAnyPersonAbsence;
 		}
 

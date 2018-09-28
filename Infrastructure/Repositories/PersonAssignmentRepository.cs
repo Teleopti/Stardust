@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return retList;
 		}
 
-		public bool IsThereScheduledAgents(Guid businessUnitId)
+		public bool IsThereScheduledAgents(Guid businessUnitId, DateOnlyPeriod period)
 		{
 			var sql = $@"IF EXISTS (SELECT TOP 1 pa.Id
   FROM PersonAssignment pa
@@ -155,10 +155,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
  INNER JOIN Team t ON pp.Team = t.Id
  INNER JOIN [Site] s ON t.[Site] = s.Id
  INNER JOIN BusinessUnit bu ON s.BusinessUnit = bu.Id
- WHERE bu.Id = :{nameof(businessUnitId)})
+ WHERE bu.Id = :{nameof(businessUnitId)}
+   AND pa.Date >= :startDate
+   AND pa.Date <= :endDate)
 SELECT CAST(1 AS BIT) ELSE SELECT CAST(0 AS BIT)";
 			var result = Session.CreateSQLQuery(sql)
 				.SetParameter(nameof(businessUnitId), businessUnitId)
+				.SetDateTime("startDate", period.StartDate.Date)
+				.SetDateTime("endDate", period.EndDate.Date)
 				.UniqueResult<bool>();
 			return result;
 		}

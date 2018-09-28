@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_storage.Add(personAssignment);
 		}
 
-		public void Has(IPerson agent, IScenario scenario, IActivity activity, IShiftCategory shiftCategory, DateOnlyPeriod period, TimePeriod timePeriod, string source=null)
+		public void Has(IPerson agent, IScenario scenario, IActivity activity, IShiftCategory shiftCategory,
+			DateOnlyPeriod period, TimePeriod timePeriod, string source=null)
 		{
 			foreach (var date in period.DayCollection())
 			{
@@ -38,12 +39,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			}
 		}
 
-		public void Has(IPerson agent, IScenario scenario, IActivity activity, DateOnlyPeriod period, TimePeriod timePeriod, string source = null)
+		public void Has(IPerson agent, IScenario scenario, IActivity activity, DateOnlyPeriod period,
+			TimePeriod timePeriod, string source = null)
 		{
 			Has(agent, scenario, activity, new ShiftCategory().WithId(), period, timePeriod, source);
 		}
 
-		public void Has(IPerson agent, IScenario scenario, IActivity activity, IShiftCategory shiftCategory, DateOnly date, TimePeriod timePeriod, string source = null)
+		public void Has(IPerson agent, IScenario scenario, IActivity activity, IShiftCategory shiftCategory,
+			DateOnly date, TimePeriod timePeriod, string source = null)
 		{
 			Has(agent, scenario, activity, shiftCategory, date.ToDateOnlyPeriod(), timePeriod, source);
 		}
@@ -95,7 +98,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
 		{
-			return _storage.LoadAll<IPersonAssignment>().Where(ass => persons.Any(x => ass.Person.Equals(x)) && ass.BelongsToPeriod(period) && ass.Scenario.Equals(scenario)).ToList();
+			return _storage.LoadAll<IPersonAssignment>()
+				.Where(ass => persons.Any(x => ass.Person.Equals(x)) && ass.BelongsToPeriod(period) && ass.Scenario.Equals(scenario))
+				.ToList();
 		}
 
 		public ICollection<IPersonAssignment> Find(DateOnlyPeriod period, IScenario scenario)
@@ -118,10 +123,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Find(persons, period, scenario).Where(s => s.Source == source).ToList();
 		}
 
-		public bool IsThereScheduledAgents(Guid businessUnitId)
+		public bool IsThereScheduledAgents(Guid businessUnitId, DateOnlyPeriod period)
 		{
 
-			return _storage.LoadAll<IPersonAssignment>().Any(pa => pa.Person.PersonPeriodCollection.First().Team.Site.BusinessUnit.Id == businessUnitId);
+			return _storage.LoadAll<IPersonAssignment>()
+				.Any(pa => pa.Person.PersonPeriodCollection.First().Team.Site.BusinessUnit.Id == businessUnitId && period.Contains(pa.Date));
 		}
 
 		public IPersonAssignment GetSingle(DateOnly dateOnly)
