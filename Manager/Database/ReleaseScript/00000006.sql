@@ -2,6 +2,6 @@ USE [$(DBNAME)]
 GO
 
 ALTER TABLE stardust.WorkerNode
-ADD PingResult Bit NULL DEFAULT(0);
+ADD PingResult Bit not null DEFAULT 0
 
 GO
