@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Autofac;
 using NUnit.Framework.Interfaces;
@@ -38,7 +39,6 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			TestSiteConfigurationSetup.Setup();
 
 			var dataHash = DefaultDataCreator.HashValue;
-			
 			var path = "";
 #if DEBUG
 			path = "./";
