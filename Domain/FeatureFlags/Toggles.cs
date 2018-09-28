@@ -137,8 +137,6 @@
 		Tech_Moving_ResilientConnectionLogic_76181,
 		WFM_ChatBot_77547,
 
-		Staffing_BPO_ClearStaffing_75498,
-		Staffing_BPO_ExportMultipleSkills_74968,
 		Wfm_Staffing_RemoveDeletedHeadsFromReadmodel_77049,
 		Wfm_Payroll_SupportMultiDllPayrolls_75959
 		// ReSharper restore InconsistentNaming

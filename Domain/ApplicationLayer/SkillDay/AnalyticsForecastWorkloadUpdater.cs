@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 {
 	public class AnalyticsForecastWorkloadUpdater :
 		IHandleEvent<SkillDayChangedEvent>,
+		IHandleEvent<ForecastChangedEvent>,
 		IRunOnHangfire
 	{
 		private static readonly int minutesPerDay = (int)TimeSpan.FromDays(1).TotalMinutes;
@@ -47,6 +48,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 		[ImpersonateSystem]
 		[UnitOfWork]
 		[Attempts(10)]
+		public void Handle(ForecastChangedEvent @event)
+		{
+			var skillDays = _skillDayRepository.LoadSkillDays(@event.SkillDayIds)
+				.Where(s => s.Scenario.EnableReporting)
+				.ToList();
+
+			var intervalsPerDay = analyticsIntervalsPerDay();
+			var minutesPerInterval = minutesPerDay / intervalsPerDay;
+			var analyticsDateIds = mapDates(skillDays, minutesPerInterval);
+
+			var skillDaysByScenario = skillDays.ToLookup(l => l.Scenario);
+
+			foreach (var days in skillDaysByScenario)
+			{
+				foreach (var skillDay in days)
+				{
+					handleForecasts(skillDay, analyticsDateIds, intervalsPerDay, minutesPerInterval);
+				}
+			}
+		}
+
+		[ImpersonateSystem]
+		[UnitOfWork]
+		[Attempts(10)]
 		public virtual void Handle(SkillDayChangedEvent @event)
 		{
 			var skillDay = _skillDayRepository.Get(@event.SkillDayId);
@@ -55,16 +80,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 				logger.Warn($"Aborting because {typeof(ISkillDay)} {@event.SkillDayId} was not found in Application database.");
 				return;
 			}
-
 			if (!skillDay.Scenario.EnableReporting)
 			{
 				logger.Debug($"Aborting because {typeof(ISkillDay)} {@event.SkillDayId} is not for a reportable scenario.");
 				return;
 			}
-
 			var intervalsPerDay = analyticsIntervalsPerDay();
 			var minutesPerInterval = minutesPerDay / intervalsPerDay;
-			var analyticsDateIds = mapDates(skillDay, minutesPerInterval);
+			var analyticsDateIds = mapDates(new List<ISkillDay>{ skillDay }, minutesPerInterval);
 			handleForecasts(skillDay, analyticsDateIds, intervalsPerDay, minutesPerInterval);
 		}
 		
@@ -196,20 +219,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 		}
 
 		[AnalyticsUnitOfWork]
-		protected virtual IDictionary<DateOnly, int> mapDates(ISkillDay skillDay, int minutesPerInterval)
+		protected virtual IDictionary<DateOnly, int> mapDates(IEnumerable<ISkillDay> skillDays, int minutesPerInterval)
 		{
-			var currentDate = skillDay.CurrentDate.Date;
-			var timezone = skillDay.Skill.TimeZone;
-			var fromDate = TimeZoneHelper.ConvertToUtc(currentDate, timezone).Date;
-			var toDate = TimeZoneHelper.ConvertToUtc(currentDate.AddDays(1).AddMinutes(-minutesPerInterval), timezone).Date;
-
+			var fromDate = skillDays.Min(s => s.CurrentDate).AddDays(-1);
+			var toDate = skillDays.Min(s => s.CurrentDate).AddDays(1);
 			var analyticsDates = new Dictionary<DateOnly, int>();
-			_analyticsDateMapper.MapDateId(new DateOnly(fromDate), out var dateId);
-			analyticsDates.Add(new DateOnly(fromDate), dateId);
-			_analyticsDateMapper.MapDateId(new DateOnly(toDate), out dateId);
-			if (!analyticsDates.ContainsKey(new DateOnly(toDate)))
+
+			for (DateOnly theDate = fromDate; theDate <= toDate; theDate = theDate.AddDays(1))
 			{
-				analyticsDates.Add(new DateOnly(toDate), dateId);
+				_analyticsDateMapper.MapDateId(theDate, out var dateId);
+				if (!analyticsDates.ContainsKey(theDate))
+				{
+					analyticsDates.Add(theDate, dateId);
+				}
 			}
 
 			return analyticsDates;

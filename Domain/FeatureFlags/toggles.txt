@@ -120,8 +120,6 @@ WFM_Intraday_Redesign_77214 = RC
 
 # Ziggy #
 WfmStaffing_AddOvertime_42524 = RC
-Staffing_BPO_ClearStaffing_75498 = true
-Staffing_BPO_ExportMultipleSkills_74968 = true
 Wfm_Requests_NightShift_BudgetDay_Allowance_76599 = true
 Wfm_Staffing_RemoveDeletedHeadsFromReadmodel_77049 = true
 Wfm_Requests_NightShift_BudgetDay_HeadCount_77146 = true

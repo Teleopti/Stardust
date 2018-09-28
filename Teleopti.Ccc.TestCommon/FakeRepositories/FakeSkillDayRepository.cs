@@ -112,5 +112,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return HasSkillDays;
 		}
+
+		public ICollection<ISkillDay> LoadSkillDays(IEnumerable<Guid> skillDaysIdList)
+		{
+			return _skillDays
+				.Where(s => skillDaysIdList.Contains(s.Id.Value))
+				.ToList();
+		}
 	}
 }

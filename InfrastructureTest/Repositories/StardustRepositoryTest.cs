@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
 using Newtonsoft.Json;
@@ -312,6 +315,46 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var jobs = Target.GetJobs(new JobFilterModel {From = 1, To = 10, Type = "IndexMaintenanceEvent"});
 			jobs.Count.Should().Be.EqualTo(1);
 			jobs.Single().JobId.Should().Be.EqualTo(job1.JobId);
+		}
+
+		[Test]
+		public void ShouldGetPingRelatedInformationForNode()
+		{
+			var nodeUri = new Uri("https://teleopti.visualstudio.com");
+			setupWorkerNode(nodeUri.ToString(), false);
+			var allWorkernodes = Target.GetAllWorkerNodes();
+			allWorkernodes.FirstOrDefault().PingResult.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldGetUpdatedValueOfThePing()
+		{
+			var nodeUri = new Uri("https://teleopti.visualstudio.com");
+			setupWorkerNode(nodeUri.ToString(), true);
+			var allWorkernodes = Target.GetAllWorkerNodes();
+			allWorkernodes.FirstOrDefault().PingResult.Should().Be.True();
+		}
+
+		private void setupWorkerNode(string url, bool pingResult)
+		{
+			var connectionString = ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString;
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+
+				var updateCommandText = @"INSERT INTO [Stardust].[WorkerNode] (Id, Url, Heartbeat, Alive,PingResult) 
+											VALUES(NEWID(), @Url, GETUTCDATE(), 1, @pingResult)";
+
+				using (var command = new SqlCommand(updateCommandText, connection))
+				{
+					command.Parameters.Add("@Url", SqlDbType.NVarChar).Value = url;
+					command.Parameters.Add("@pingResult", SqlDbType.Bit).Value = pingResult;
+					command.ExecuteNonQuery();
+				}
+				connection.Close();
+			}
+
+
 		}
 	}
 }

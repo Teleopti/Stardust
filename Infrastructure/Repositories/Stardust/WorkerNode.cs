@@ -20,5 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 		public DateTime Heartbeat { get; set; }
 
 		public bool Running { get; set; }
+
+		public bool PingResult { get; set; }
 	}
 }

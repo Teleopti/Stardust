@@ -110,7 +110,14 @@ SELECT 0
 			return result > 0;
 		}
 
-        public ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
+		public ICollection<ISkillDay> LoadSkillDays(IEnumerable<Guid> skillDaysIdList)
+		{
+			return Session.CreateCriteria<SkillDay>("sd")
+				.Add(Restrictions.InG("Id", skillDaysIdList))
+				.List<ISkillDay>();
+		}
+
+		public ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
         {
             InParameter.NotNull(nameof(period), period);
             InParameter.NotNull(nameof(skills), skills);
