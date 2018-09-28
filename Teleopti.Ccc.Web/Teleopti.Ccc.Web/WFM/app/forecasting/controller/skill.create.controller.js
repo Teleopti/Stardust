@@ -29,7 +29,7 @@
 			var activities = $filter("orderBy")(result, "Name");
 			vm.activities = activities;
 			if (vm.activities[0])
-				vm.model.selectedActivity = vm.activities[4];
+				vm.model.selectedActivity = vm.activities[0];
 		});
 		vm.timezones = [];
 		skillService.timezones.get().$promise.then(function(result) {

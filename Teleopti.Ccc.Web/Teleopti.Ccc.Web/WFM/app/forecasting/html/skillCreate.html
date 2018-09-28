@@ -21,11 +21,22 @@
 											</div>
 										</div>
 									</section>
+
+									<section>
+										<div class="form-input-wrap">
+											<lable>{{ 'SkillType' | translate}}:</lable>
+											<select>
+												<option class="md-text">{{ 'Phone' | translate}}</option>
+												<option disabled="">{{ 'Chat' | translate}}</option>
+											</select>
+										</div>
+									</section>
+
 									<section>
 										<div class="form-input-wrap">
 											<label>{{ 'SkillActivity' | translate}}:</label>
 											<md-select id="activityId" aria-label="Activity" ng-model="vm.model.selectedActivity" required="">
-												<md-option ng-repeat="activity in vm.activities" ng-disabled="'Sales'" ng-value="activity">{{ activity.Name }}</md-option>
+												<md-option ng-repeat="activity in vm.activities" ng-value="activity">{{ activity.Name }}</md-option>
 											</md-select>
 											<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Activity.$touched">
 												<div class="form-input-message" ng-class="{ formInvalidInput:form.Activity.$error.required }">{{ 'Required' | translate }}</div>
