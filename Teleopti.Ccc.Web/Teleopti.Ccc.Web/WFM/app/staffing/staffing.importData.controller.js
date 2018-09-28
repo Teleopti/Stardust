@@ -294,7 +294,7 @@
 					exportStartDateTime: startDate,
 					exportEndDateTime: endDate
 				});
-				request.$promise.then(function (response) {
+				request.$promise.then(function(response) {
 					vm.ErrorMessage = response.ErrorMessage;
 					if (vm.ErrorMessage !== '') return;
 					UtilService.saveToFs(response.Content, vm.selectedSkill.Name + '.csv', 'text/csv');
