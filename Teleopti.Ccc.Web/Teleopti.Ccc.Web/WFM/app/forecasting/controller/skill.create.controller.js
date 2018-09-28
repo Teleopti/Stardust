@@ -1,9 +1,9 @@
 ﻿(function() {
-	'use strict';
-	angular.module('wfm.forecasting')
-		.controller('ForecastingSkillCreateController',
+	"use strict";
+	angular.module("wfm.forecasting")
+		.controller("ForecastingSkillCreateController",
 			[
-				'$scope', '$filter', '$state', '$translate', 'NoticeService', 'SkillService', 'workingHoursService', forecastingSkillCreateController
+				"$scope", "$filter", "$state", "$translate", "NoticeService", "SkillService", "workingHoursService", forecastingSkillCreateController
 			]);
 
 	function forecastingSkillCreateController($scope, $filter, $state, $translate, noticeService, skillService, workingHoursService) {
@@ -26,16 +26,16 @@
 
 		vm.activities = [];
 		skillService.activities.get().$promise.then(function(result) {
-			var activities = $filter('orderBy')(result, 'Name');
+			var activities = $filter("orderBy")(result, "Name");
 			vm.activities = activities;
 			if (vm.activities[0])
-				vm.model.selectedActivity = vm.activities[0];
+				vm.model.selectedActivity = vm.activities[4];
 		});
 		vm.timezones = [];
 		skillService.timezones.get().$promise.then(function(result) {
 			vm.timezones = result.Timezones;
 			vm.model.selectedTimezone =
-				$filter('filter')(result.Timezones, function(x) { return x.Id === result.DefaultTimezone; })[0];
+				$filter("filter")(result.Timezones, function(x) { return x.Id === result.DefaultTimezone; })[0];
 		});
 
 		vm.queueSelected = true;
@@ -45,18 +45,18 @@
 			enableSelectAll: true,
 			enableFullRowSelection: true,
 			columnDefs: [
-				{ displayName: 'Name', field: 'Name', enableColumnMenu: false, headerCellFilter: 'translate' },
+				{ displayName: "Name", field: "Name", enableColumnMenu: false, headerCellFilter: "translate" },
 				{
-					displayName: 'LogObject',
-					field: 'LogObjectName',
+					displayName: "LogObject",
+					field: "LogObjectName",
 					enableColumnMenu: false,
-					headerCellFilter: 'translate'
+					headerCellFilter: "translate"
 				},
 				{
-					displayName: 'Description',
-					field: 'Description',
+					displayName: "Description",
+					field: "Description",
 					enableColumnMenu: false,
-					headerCellFilter: 'translate'
+					headerCellFilter: "translate"
 				}
 			],
 			onRegisterApi: function(gridApi) {
@@ -81,15 +81,15 @@
 			var startTimeMoment = moment(timespan.StartTime),
 				endTimeMoment = moment(timespan.EndTime);
 
-			if (startTimeMoment.isSame(endTimeMoment, 'day')) {
+			if (startTimeMoment.isSame(endTimeMoment, "day")) {
 				return {
-					StartTime: startTimeMoment.format('HH:mm'),
-					EndTime: endTimeMoment.format('HH:mm')
+					StartTime: startTimeMoment.format("HH:mm"),
+					EndTime: endTimeMoment.format("HH:mm")
 				};
 			} else {
 				return {
-					StartTime: startTimeMoment.format('HH:mm'),
-					EndTime: '1.' + endTimeMoment.format('HH:mm')
+					StartTime: startTimeMoment.format("HH:mm"),
+					EndTime: "1." + endTimeMoment.format("HH:mm")
 				};
 			}
 		}
@@ -98,7 +98,7 @@
 			if (!isFormValid || !vm.queueSelected || vm.hideQueueInvalidMessage) {
 				if (vm.hideQueueInvalidMessage)
 					vm.queueSelected = false;
-				noticeService.warning($translate.instant('CouldNotApply'), 5000, true);
+				noticeService.warning($translate.instant("CouldNotApply"), 5000, true);
 				return;
 			}
 			var selectedRows = vm.gridApi.selection.getSelectedRows();
@@ -129,7 +129,7 @@
 					OpenHours: workingHours
 				}).$promise.then(
 				function(result) {
-					$state.go('forecast', { workloadId: result.WorkloadId });
+					$state.go("forecast", { workloadId: result.WorkloadId });
 				}
 			);
 		};
@@ -137,7 +137,7 @@
 		vm.noOpenHoursWarning = function() {
 			for (var i = 0, len = vm.model.workingHours.length; i < len; i++) {
 				var workingHour = vm.model.workingHours[i];
-				if ($filter('filter')(workingHour.WeekDaySelections, function(x) { return x.Checked; }).length !== 0)
+				if ($filter("filter")(workingHour.WeekDaySelections, function(x) { return x.Checked; }).length !== 0)
 					return false;
 			}
 			return true;
