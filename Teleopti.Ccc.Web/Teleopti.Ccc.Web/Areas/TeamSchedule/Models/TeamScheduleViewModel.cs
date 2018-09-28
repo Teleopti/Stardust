@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 
 		public bool HasRemoveDayOffPermission { get; set; }
 		public bool HasModifyWriteProtectedSchedulePermission { get; set; }
-		public bool HasExportSchedulePermission { get; set; }
 	}
 
 	public class PagingGroupScheduleShiftViewModel

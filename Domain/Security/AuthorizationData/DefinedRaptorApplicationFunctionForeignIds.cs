@@ -155,7 +155,6 @@
 		public const string RemoveShift = "0150";
 		public const string AddDayOff = "0151";
 		public const string RemoveDayOff = "0152";
-		public const string ExportSchedule = "0156";
 
 		//Seat Planner
 		public const string SeatPlanner = "0107";

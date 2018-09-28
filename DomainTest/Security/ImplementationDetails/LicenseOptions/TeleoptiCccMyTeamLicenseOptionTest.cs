@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.LicenseOptions
 
 			target.EnableApplicationFunctions(inputList);
 			IList<IApplicationFunction> resultList = target.EnabledApplicationFunctions;
-			Assert.AreEqual(18, resultList.Count);
+			Assert.AreEqual(17, resultList.Count);
 		}
 	}
 }

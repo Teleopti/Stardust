@@ -9,7 +9,7 @@ using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 {
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.ExportSchedule)]
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules)]
 	public class ExportScheduleController : ApiController
 	{
 		private readonly ExportScheduleService _exportScheduleService;

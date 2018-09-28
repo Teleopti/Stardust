@@ -144,7 +144,6 @@
 		public const string AddDayOff = "Raptor/Anywhere/Schedules/AddDayOff";
 		public const string RemoveDayOff = "Raptor/Anywhere/Schedules/RemoveDayOff";
 		public const string Gamification = "Raptor/Anywhere/Gamification";
-		public const string ExportSchedule = "Raptor/Anywhere/Schedules/ExportSchedule";
 
 		// Angel
 		public const string WebForecasts = "Raptor/Anywhere/WebForecasts";

@@ -136,14 +136,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		}
 
 		[Test]
-		public void ShouldGetHasExportSchedulePermission()
-		{
-			principalAuthorization.HasPermission(DefinedRaptorApplicationFunctionPaths.ExportSchedule);
-			var result = target.GetPermissions();
-			result.Content.HasExportSchedulePermission.Should().Be.True();
-		}
-
-		[Test]
 		public void ShouldAssignOperatePersonForAddFullDayAbsence()
 		{
 			var expectedPerson = new Person();
