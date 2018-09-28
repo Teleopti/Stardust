@@ -14,26 +14,20 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 {
 	public class HistoricalOverviewViewModelBuilder
 	{
-		private readonly IAgentStateReadModelReader _agentStateReader;
 		private readonly ICommonAgentNameProvider _nameDisplaySetting;
 		private readonly INow _now;
-		private readonly IAgentAdherenceDayLoader _agentAdherenceDayLoader;
 		private readonly IHistoricalOverviewReadModelReader _reader;
 		private readonly IPersonRepository _persons;
 		private readonly ITeamRepository _teams;
 
 		public HistoricalOverviewViewModelBuilder(
-			IAgentStateReadModelReader agentStateReader,
 			ICommonAgentNameProvider nameDisplaySetting,
 			INow now,
-			IAgentAdherenceDayLoader agentAdherenceDayLoader,
 			IHistoricalOverviewReadModelReader reader,
 			IPersonRepository persons, ITeamRepository teams)
 		{
-			_agentStateReader = agentStateReader;
 			_nameDisplaySetting = nameDisplaySetting;
 			_now = now;
-			_agentAdherenceDayLoader = agentAdherenceDayLoader;
 			_reader = reader;
 			_persons = persons;
 			_teams = teams;
