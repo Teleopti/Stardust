@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			string comment = null;
 			if (workloads.Count > 1)
 			{
-				comment = "This includes hours from:" + splitter + string.Join(splitter, workloads);
+				comment = "This includes agents from:" + splitter + string.Join(splitter, workloads);
 			}
 
 			addRow(sheet, new[]
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				new CellData("Average ACW (s)", _cellStyleTitle),
 				new CellData("AHT (s)", _cellStyleTitle),
 				new CellData("Agents", _cellStyleTitle, comment),
-				new CellData("Agents with shrinkage", _cellStyleTitle, comment),
+				new CellData("Agents with shrinkage", _cellStyleTitle, comment)
 			});
 		}
 
