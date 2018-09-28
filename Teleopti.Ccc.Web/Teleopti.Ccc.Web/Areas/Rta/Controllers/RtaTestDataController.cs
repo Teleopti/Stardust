@@ -145,27 +145,27 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
                    						{
                    							PersonId = p,
                    							BelongsToDate = d,
-                   							Timestamp = d.Date.AddHours(8).AddMinutes(15).Utc(),
+                   							Timestamp = d.Date.AddHours(8).Utc(),
                    							StateName = "Logon",
                    							StateGroupId = null,
-                   							ActivityName = null,
-                   							ActivityColor = null,
-                   							RuleName = "In",
+                   							ActivityName = "Phone",
+                   							ActivityColor = Color.Green.ToArgb(),
+                   							RuleName = "Out",
                    							RuleColor = Color.Red.ToArgb(),
-                   							Adherence = EventAdherence.In
+                   							Adherence = EventAdherence.Out
                    						},
                    						new PersonRuleChangedEvent
                    						{
                    							PersonId = p,
                    							BelongsToDate = d,
-                   							Timestamp = d.Date.AddHours(8).AddMinutes(15).Utc(),
+                   							Timestamp = d.Date.AddHours(8).Utc(),
                    							StateName = "Logon",
                    							StateGroupId = null,
                    							ActivityName = "Phone",
                    							ActivityColor = Color.Green.ToArgb(),
-                   							RuleName = "In",
-                   							RuleColor = Color.Green.ToArgb(),
-                   							Adherence = EventAdherence.In
+                   							RuleName = "Out",
+                   							RuleColor = Color.Red.ToArgb(),
+                   							Adherence = EventAdherence.Out
                    						}
                    					};
                    				}),
@@ -179,10 +179,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 							Timestamp = d.Date.AddHours(8).AddMinutes(15).Utc(),
 							ShiftStart = d.Date.AddHours(8).Utc(),
 							StateName = "Logon",
-							ActivityName = null,
-							ActivityColor = null,
+							ActivityName = "Phone",
+							ActivityColor = Color.Green.ToArgb(),
 							RuleName = "In",
-							RuleColor = Color.Red.ToArgb(),
+							RuleColor = Color.Green.ToArgb(),
 							Adherence = EventAdherence.In
 						}
 					};
