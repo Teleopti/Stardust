@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_eventPublisher.PublishedEvents.Should().Be.Empty();
 		}
 
-		[Test]
+		[Test,Ignore("see bug #77971")]
 		public void ShouldNotPublishAnyEventsIfNoAgentScheduledInPeriod()
 		{
 			addPeople();
