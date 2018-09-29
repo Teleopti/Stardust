@@ -71,6 +71,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			self.requestViewModel(null);
 			overtimeRequestDetailViewModel = null;
 			Teleopti.MyTimeWeb.Request.ResetToolbarActiveButtons();
+			Teleopti.MyTimeWeb.Request.ActiveRequestList();
 		};
 	};
 

@@ -1,4 +1,4 @@
-﻿@MyTimeAbsence
+﻿	@MyTimeAbsence
 Feature: Absence request from requests
 	In order to make requests to my superior
 	As an agent
@@ -27,6 +27,21 @@ When I click to add a new absence request
 And I input absence request values with 'Vacation' for date '2014-10-03'
 Then I should see the remaining days is '22 Days'
 And I should see the used days is '3 Days'
+
+@OnlyRunIfEnabled('MyTimeWeb_Request_CleanUpRequestHisotry_77776')
+@suppressHangfireQueue
+Scenario: Should show request list when cancel add absence request
+	Given I am an agent
+	And I have a requestable absence called Vacation
+	And I am viewing requests
+	When I click to add a new absence request
+	And I input absence request values with Vacation
+	And I click the send button
+	Then I should see the request of type 'Vacation' in the list
+	When I click to add a new absence request
+	And I should not see any request in current view
+	And I cancel to add absence request
+	Then I should see the request of type 'Vacation' in the list
 
 @NotKeyExample
 Scenario: When requesting absence tracked by hours view remaining and used time
