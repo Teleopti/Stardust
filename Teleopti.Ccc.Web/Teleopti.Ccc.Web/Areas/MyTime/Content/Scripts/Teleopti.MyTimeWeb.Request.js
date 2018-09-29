@@ -165,7 +165,7 @@ Teleopti.MyTimeWeb.Request = (function($) {
 			requestNavigationViewModel.resetToolbarActiveButtons();
 		},
 		ActiveRequestList: function() {
-			requestNavigationViewModel.requestListActive(true);;
+			requestNavigationViewModel.requestListActive(true);
 		},
 		ShiftTradeRequest: function(date) {
 			requestNavigationViewModel.addShiftTradeRequest(date);
