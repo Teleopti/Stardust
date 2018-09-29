@@ -286,7 +286,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			personAbsence.SetId(Guid.NewGuid());
 
 			var meeting = new Meeting(person1, new[] { new MeetingPerson(person1, false) }, "subj", "loc",
-				"desc", meetingActivity, scenario);
+				"desc", meetingActivity,scenario);
 			meeting.StartDate = meeting.EndDate = new DateOnly(date);
 			meeting.StartTime = TimeSpan.FromHours(16);
 			meeting.EndTime = TimeSpan.FromHours(17);
@@ -341,48 +341,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			vm.ContractTimeMinutes.Should().Be(420);
 			vm.WorkTimeMinutes.Should().Be(345);
-		}
-		[Test]
-		public void ShouldGetProjectionWithStartInUTC() {
-			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
-
-			SetupProjectionProvider();
-			var date = new DateTime(2018, 10, 27, 0, 0, 0, DateTimeKind.Utc);
-			var person1 = PersonFactory.CreatePersonWithGuid("agent", "1");
-
-			var assignment1Person1 = PersonAssignmentFactory.CreatePersonAssignment(person1, scenario, new DateOnly(date));
-			var scheduleDayOnePerson1 = ScheduleDayFactory.Create(new DateOnly(date), person1, scenario);
-			var phoneActivityPeriod = new DateTimePeriod(date.AddHours(10), date.AddHours(11));
-
-			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
-			assignment1Person1.AddActivity(phoneActivity, phoneActivityPeriod);
-
-			scheduleDayOnePerson1.Add(assignment1Person1);
-
-			var vm = Target.Projection(scheduleDayOnePerson1, true, CommonAgentNameProvider.CommonAgentNameSettings);
-			vm.Projection.ElementAt(0).StartInUtc.Should().Be.EqualTo("2018-10-27 10:00");
-			vm.Projection.ElementAt(0).Start.Should().Be.EqualTo("2018-10-27 18:00");
-		}
-
-		[Test]
-		public void ShouldGetProjectionWithEndInDST() {
-			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.GmtTimeZoneInfo());
-
-			SetupProjectionProvider();
-			var date = new DateTime(2018, 10, 28, 0, 0, 0, DateTimeKind.Utc);
-			var person1 = PersonFactory.CreatePersonWithGuid("agent", "1");
-
-			var assignment1Person1 = PersonAssignmentFactory.CreatePersonAssignment(person1, scenario, new DateOnly(date));
-			var scheduleDayOnePerson1 = ScheduleDayFactory.Create(new DateOnly(date), person1, scenario);
-			var phoneActivityPeriod = new DateTimePeriod(date.AddMinutes(35), date.AddHours(1));
-
-			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
-			assignment1Person1.AddActivity(phoneActivity, phoneActivityPeriod);
-
-			scheduleDayOnePerson1.Add(assignment1Person1);
-
-			var vm = Target.Projection(scheduleDayOnePerson1, true, CommonAgentNameProvider.CommonAgentNameSettings);
-			vm.Projection.ElementAt(0).End.Should().Be.EqualTo("2018-10-28 01:00");
 		}
 
 		[Test]
