@@ -154,7 +154,7 @@ MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306 = RC #Depending on MyTime
 MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408 = RC #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
 MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409 = RC #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
 WFM_Gamification_Permission_76546 = true
-MyTimeWeb_Request_CleanUpRequestHisotry_77776 = DEV
+MyTimeWeb_Request_CleanUpRequestHisotry_77776 = RC
 
 # Tech #
 Tech_Moving_ResilientConnectionLogic_76181 = true
