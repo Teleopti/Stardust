@@ -1,9 +1,10 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.teamSchedule').factory('TeamScheduleTimeLineFactory', ['ShiftHelper', TeamScheduleTimeLineFactory]);
+	angular.module('wfm.teamSchedule').factory('TeamScheduleTimeLineFactory', ['ShiftHelper', 'currentTimezone',
+		TeamScheduleTimeLineFactory]);
 
-	function TeamScheduleTimeLineFactory(shiftHelper) {
+	function TeamScheduleTimeLineFactory(shiftHelper, currentTimezone) {
 
 		var timeLineFactory = {
 			Create: create
@@ -149,10 +150,8 @@
 		};
 
 		function hourPointViewModel(baseDate, minutes, start, percentPerMinute, isLabelHidden) {
-			var time = ((angular.isUndefined(baseDate))
-				? moment()
-				: moment(baseDate)).startOf('day').add(minutes, 'minutes');
-
+			var timezone = currentTimezone.get();
+			var time = moment.tz(baseDate, 'etc/UTC').add(minutes, 'minutes').tz(timezone);
 			var isCurrentDay = minutes >=0 && minutes < 1440; 
 			var isNextDay = minutes >= 1440; 
 

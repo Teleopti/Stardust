@@ -1,8 +1,18 @@
 ﻿(function () {
 	'use strict';
-	angular.module('wfm.teamSchedule').factory('PersonSchedule', ['$filter', 'Toggle', 'teamsPermissions', 'serviceDateFormatHelper', personScheduleFactory]);
+	angular.module('wfm.teamSchedule').factory('PersonSchedule', [
+		'$filter',
+		'Toggle',
+		'teamsPermissions',
+		'serviceDateFormatHelper',
+		'currentTimezone',
+		personScheduleFactory]);
 
-	function personScheduleFactory($filter, toggleSvc, permissions, serviceDateFormatHelper) {
+	function personScheduleFactory($filter,
+		toggleSvc,
+		permissions,
+		serviceDateFormatHelper,
+		currentTimezone) {
 
 		var personScheduleFactory = {
 			Create: create
@@ -38,7 +48,6 @@
 		};
 
 		function getProjectionTimeRange(schedule) {
-
 			if (!schedule.Projection || schedule.Projection.length == 0) {
 				return null;
 			}
@@ -138,13 +147,18 @@
 			return (yiq >= 128) ? 'black' : 'white';
 		}
 
+		function getOffsetMinutesFromTimeLineBase(startTimeInUtc, timeLineBase) {
+			var currectTimezone = currentTimezone.get();
+			var time = moment.tz(startTimeInUtc, 'etc/UTC').tz(currectTimezone);
+			return time.diff(timeLineBase, 'minutes');
+		}
+
 		function createShiftProjectionViewModel(projection, timeLine, shiftVm) {
 			if (!projection) projection = {};
 
-			var startTime = moment(projection.Start);
-			var endTime = moment(projection.End);
-			var startTimeMinutes = startTime.diff(timeLine.Offset, 'minutes');
-			var endTimeMinutes = endTime.diff(timeLine.Offset, 'minutes');
+			var endTimeInUtcStr = moment.tz(projection.StartInUtc, 'etc/UTC').add(projection.Minutes, 'minutes').format('YYYY-MM-DD HH:mm');
+			var startTimeMinutes = getOffsetMinutesFromTimeLineBase(projection.StartInUtc, timeLine.Offset);
+			var endTimeMinutes = getOffsetMinutesFromTimeLineBase(endTimeInUtcStr, timeLine.Offset);
 
 			var timelineStartMinute = timeLine.StartMinute;
 			var timelineEndMinute = timeLine.EndMinute;
@@ -264,7 +278,7 @@
 		PersonSchedule.prototype.HasUnderlyingSchedules = function () {
 			return toggleSvc.WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 && !!this.UnderlyingScheduleSummary;
 		}
-		
+
 
 		PersonSchedule.prototype.AbsenceCount = function () {
 			var shiftsOnCurrentDate = this.Shifts.filter(function (shift) {
@@ -339,6 +353,7 @@
 			this.ParentPersonAbsences = projection.ParentPersonAbsences;
 			this.ShiftLayerIds = projection.ShiftLayerIds;
 			this.Start = projection.Start;
+			this.End = projection.End;
 			this.StartPosition = startPosition;
 			this.UseLighterBorder = useLightColor(projection.Color);
 		}
@@ -349,7 +364,7 @@
 
 		ProjectionViewModel.prototype.TimeSpan = function () {
 			var start = moment(this.Start);
-			var end = moment(this.Start).add(this.Minutes, 'minute');
+			var end = moment(this.End);
 			if (!start.isSame(end, 'day')) {
 				return $filter('date')(start.toDate(), 'short') + ' - ' + $filter('date')(end.toDate(), 'short');
 			}
@@ -390,4 +405,4 @@
 
 		return personScheduleFactory;
 	}
-}) ();
+})();
