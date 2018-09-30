@@ -91,7 +91,10 @@
 				"Color": "#80FF80",
 				"Description": "Email",
 				"Start": scheduleDate + " 11:00",
-				"Minutes": 480
+				"StartInUtc": scheduleDate + " 03:00",
+				"Minutes": 480,
+				"End": scheduleDate + " 19:00",
+
 			}
 		],
 		"IsFullDayAbsence": false,
@@ -123,6 +126,8 @@
 				"Color": "#80FF80",
 				"Description": "Email",
 				"Start": scheduleDate + " 12:00:00",
+				"End": scheduleDate + " 20:00:00",
+				"StartInUtc": scheduleDate + " 04:00:00",
 				"Minutes": 480
 			}
 		],
@@ -139,6 +144,8 @@
 				"Color": "#80FF80",
 				"Description": "Email",
 				"Start": yesterday + " 21:00",
+				"End": scheduleDate + " 05:00",
+				"StartInUtc": yesterday + " 21:00",
 				"Minutes": 480
 			}
 

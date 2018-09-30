@@ -2,10 +2,23 @@ describe('teamschedule ScheduleHelper Service tests', function () {
 	'use strict';
 
     var target;
-    var scheduleManagementSvc;
+	var scheduleManagementSvc;
+	var mockCurrentUserInfo = {
+		CurrentUserInfo: function () {
+			return { DefaultTimeZone: "etc/UTC" };
+		}
+	};
 
     beforeEach(function() {
 		module('wfm.teamSchedule');
+	});
+
+	beforeEach(function () {
+		module(function ($provide) {
+			$provide.service('CurrentUserInfo', function () {
+				return mockCurrentUserInfo;
+			});
+		});
 	});
 
     beforeEach(inject(function (ScheduleHelper, ScheduleManagement) {
@@ -26,6 +39,8 @@ describe('teamschedule ScheduleHelper Service tests', function () {
 				Color: '#80FF80',
 				Description: 'Email',
 				Start: scheduleDate + ' 11:00',
+				StartInUtc: scheduleDate + ' 11:00',
+				End: scheduleDate + ' 19:00',
 				Minutes: 480
 			}
 		],
@@ -42,6 +57,8 @@ describe('teamschedule ScheduleHelper Service tests', function () {
 				Color: '#80FF80',
 				Description: 'Email',
 				Start: scheduleDate + ' 12:00:00',
+				End: scheduleDate + ' 20:00:00',
+				StartInUtc: scheduleDate + ' 12:00:00',
 				Minutes: 480
 			}
 		],
@@ -58,6 +75,8 @@ describe('teamschedule ScheduleHelper Service tests', function () {
 				Color: '#80FF80',
 				Description: 'Email',
 				Start: yesterday + ' 21:00',
+				End: scheduleDate + ' 05:00',
+				StartInUtc: yesterday + ' 21:00',
 				Minutes: 480
 			}
 

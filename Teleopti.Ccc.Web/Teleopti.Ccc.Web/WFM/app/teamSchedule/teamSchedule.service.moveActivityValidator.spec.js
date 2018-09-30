@@ -20,6 +20,7 @@
 					"Color": "#80FF80",
 					"Description": "Email",
 					"Start": scheduleDate + " 07:00",
+					"StartInUtc": scheduleDate + " 07:00",
 					"Minutes": 480,
 					"End": scheduleDate + " 15:00",
 				}
@@ -234,7 +235,9 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": scheduleDate + " 01:00",
-							"Minutes": 480
+							"StartInUtc": scheduleDate + " 01:00",
+							"Minutes": 480,
+							"End": scheduleDate + " 10:00"
 						},
 						{
 							"ShiftLayerIds": ["layer2"],
@@ -242,6 +245,8 @@
 							"Color": "#80FF80",
 							"Description": "Phone",
 							"Start": scheduleDate + " 10:00",
+							"End": scheduleDate + " 18:00",
+							"StartInUtc": scheduleDate + " 10:00",
 							"Minutes": 480
 						}
 					],
@@ -276,13 +281,17 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": previousDay + " 22:00",
-							"Minutes": 180
+							"StartInUtc": previousDay + " 14:00",
+							"Minutes": 180,
+							"End": scheduleDate + " 01:00"
 						}, {
 							"ShiftLayerIds": ["layer2"],
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Short Break",
 							"Start": scheduleDate + " 01:00",
+							"End": scheduleDate + " 02:00",
+							"StartInUtc": previousDay + " 17:00",
 							"Minutes": 60
 						}, {
 							"ShiftLayerIds": ["layer3"],
@@ -290,6 +299,8 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": scheduleDate + " 02:00",
+							"End": scheduleDate + " 04:00",
+							"StartInUtc": scheduleDate + " 18:00",
 							"Minutes": 120
 						}
 					],
@@ -297,7 +308,7 @@
 					"DayOff": null
 				};
 
-				scheduleMgmt.resetSchedules([localSchedule], moment(scheduleDate));
+				scheduleMgmt.resetSchedules([localSchedule], moment(previousDay));
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.Shifts[0].Projections[1].Selected = true;
 				personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[1], personSchedule);
@@ -324,6 +335,8 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": previousDay + " 22:00",
+							"End": scheduleDate + " 01:00",
+							"StartInUtc": previousDay + " 14:00",
 							"Minutes": 180
 						}
 					],
@@ -358,6 +371,8 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": nextDay + " 01:00",
+							"End": nextDay + " 04:00",
+							"StartInUtc": scheduleDate + " 17:00",
 							"Minutes": 180
 						}
 					],
@@ -392,6 +407,8 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": nextDay + " 01:00",
+							"End": nextDay + " 04:00",
+							"StartInUtc": scheduleDate + " 17:00",
 							"Minutes": 180
 						}
 					],
@@ -425,6 +442,8 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": scheduleDate + " 06:00",
+							"End": scheduleDate + " 08:00",
+							"StartInUtc": "2016-05-11 22:00",
 							"Minutes": 120,
 							"IsOvertime": true
 						},
@@ -434,6 +453,8 @@
 							"Color": "#80FF80",
 							"Description": "Phone",
 							"Start": scheduleDate + " 10:00",
+							"End": scheduleDate + " 18:00",
+							"StartInUtc": scheduleDate + " 02:00",
 							"Minutes": 480
 						}
 					],
@@ -466,6 +487,8 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": scheduleDate + " 08:00",
+							"End": scheduleDate + " 16:00",
+							"StartInUtc": scheduleDate + " 00:00",
 							"Minutes": 480
 						}
 					],
@@ -500,6 +523,7 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": scheduleDate + " 08:00",
+							"StartInUtc": scheduleDate + " 00:00",
 							"End": scheduleDate + " 17:00",
 							"Minutes": 540
 						}
@@ -522,6 +546,7 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": nextDay + " 08:00",
+							"StartInUtc": nextDay + " 00:00",
 							"End": nextDay + " 17:00",
 							"Minutes": 540
 						}
@@ -557,6 +582,8 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": scheduleDate + " 08:00",
+							"End": scheduleDate + " 16:00",
+							"StartInUtc": scheduleDate + " 00:00",
 							"Minutes": 480
 						}
 					],
@@ -591,6 +618,8 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": scheduleDate + " 08:00",
+							"End": scheduleDate + " 18:00",
+							"StartInUtc": scheduleDate + " 00:00",
 							"Minutes": 600
 						}
 					],
@@ -612,6 +641,8 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": nextDay + " 05:00",
+							"End": nextDay + " 13:00",
+							"StartInUtc": scheduleDate + " 21:00",
 							"Minutes": 480
 						}
 					],
@@ -646,6 +677,8 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": scheduleDate + " 08:00",
+							"End": scheduleDate + " 18:00",
+							"StartInUtc": scheduleDate + " 00:00",
 							"Minutes": 600
 						}
 					],
@@ -667,6 +700,8 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": nextDay + " 08:00",
+							"End": nextDay + " 16:00",
+							"StartInUtc": nextDay + " 00:00",
 							"Minutes": 480
 						}
 					],
@@ -690,7 +725,7 @@
 				var scheduleToday = {
 					"PersonId": "221B-Baker-SomeoneElse",
 					"Name": "SomeoneElse",
-					"Date": scheduleDate,
+					"Date": prevDay,
 					"Timezone": {
 						IanaId: "Asia/Hong_Kong"
 					},
@@ -701,6 +736,8 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": scheduleDate + " 13:00",
+							"End": scheduleDate + " 21:00",
+							"StartInUtc": scheduleDate + " 05:00",
 							"Minutes": 480
 						}
 					],
@@ -722,6 +759,8 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": prevDay + " 23:00",
+							"End": scheduleDate + " 07:00",
+							"StartInUtc": prevDay + " 15:00",
 							"Minutes": 480
 						}
 					],
@@ -755,6 +794,8 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": scheduleDate + " 08:00",
+							"End": scheduleDate + " 16:00",
+							"StartInUtc": scheduleDate + " 00:00",
 							"Minutes": 480
 						}
 					],
@@ -813,6 +854,7 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": scheduleDate + " 11:00",
+							"StartInUtc": scheduleDate + " 03:00",
 							"End": scheduleDate + " 19:00",
 							"Minutes": 480
 						}
@@ -850,6 +892,7 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": scheduleDate + " 23:00",
+							"StartInUtc": scheduleDate + " 15:00",
 							"End": "2016-05-13 23:00",
 							"Minutes": 1440
 						}
@@ -887,6 +930,7 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": scheduleDate + " 23:00",
+							"StartInUtc": scheduleDate + " 15:00",
 							"End": "2016-05-13 23:00",
 							"Minutes": 1440
 						}

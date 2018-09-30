@@ -3,20 +3,10 @@
 describe("teamschedule timeLine tests", function () {
 
 	var dateTimeFormat = "YYYY-MM-DD HH:mm:ss";
-	var mockCurrentUserInfo = {
-		DefaultTimeZone: "Etc/UTC",
-		DateFormatLocale: "en-GB"
-	};
 
 	beforeEach(function() {
-		module("wfm.teamSchedule");
-		module(function ($provide) {
-			$provide.service('CurrentUserInfo', function () {
-				return mockCurrentUserInfo;
-			});
-		});
-
-		moment.locale(mockCurrentUserInfo.DateFormatLocale);
+        module("wfm.teamSchedule");
+		moment.locale('en-GB');
 	});
 	
 

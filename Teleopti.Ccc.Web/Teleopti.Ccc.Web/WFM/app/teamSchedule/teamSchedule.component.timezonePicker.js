@@ -15,9 +15,9 @@
 			}
 		});
 
-	timezonePickerCtrl.$inject = ['$timeout', 'CurrentUserInfo', 'TimezoneListFactory'];
+	timezonePickerCtrl.$inject = ['$timeout', 'CurrentUserInfo', 'TimezoneListFactory', 'currentTimezone'];
 
-	function timezonePickerCtrl($timeout, currentUserInfo, TimezoneListFactory) {
+	function timezonePickerCtrl($timeout, currentUserInfo, TimezoneListFactory, currentTimezone) {
 		var ctrl = this;
 		var defaultTimezone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
 
@@ -34,6 +34,7 @@
 					ctrl.onSelectionChanged();
 				});
 			}
+
 			ctrl.avaliableTimezones.push(defaultTimezone);
 			TimezoneListFactory.Create(ctrl.avaliableTimezones).then(function (timezoneList) {
 				ctrl.timezoneList = timezoneList;
@@ -46,8 +47,10 @@
 		}
 
 		ctrl.onSelectionChanged = function () {
+			currentTimezone.set(ctrl.selectedTimezone);
 			ctrl.ngModel = ctrl.selectedTimezone;
 			ctrl.ngModelCtrl.$setViewValue(ctrl.ngModel);
+			
 		}
 	}
 
