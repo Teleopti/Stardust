@@ -700,6 +700,7 @@
 	align-items: center;
 	padding-top: 4px;
 	height: 100%;
+	position: relative;
 }
 .multi-shift-trade-cart-schedule + .multi-shift-trade-cart-schedule {
 	margin-left: 8px;
