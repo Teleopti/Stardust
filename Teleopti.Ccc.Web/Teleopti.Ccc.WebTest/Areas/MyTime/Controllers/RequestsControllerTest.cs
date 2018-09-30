@@ -691,7 +691,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var form = createShiftWithDifferentWFC(startDate);
 			LoggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(1, 20, 0);
 			PersonRepository.Get(form.PersonToId).WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(1, 30, 0);
-			var schedulePeriod = new DateOnlyPeriod(startDate, new DateOnly(startDate.Date.AddMonths(1).AddDays(-1)));
+			var schedulePeriod = new DateOnlyPeriod(startDate, new DateOnly(startDate.Date.AddDays(7-1)));
 			var totalSettingContract = 480 * schedulePeriod.DayCount();
 			var expactedRealGap = totalSettingContract - 540;
 
@@ -743,7 +743,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			data.IsNeedToCheck.Should().Be.True();
 			data.PersonToInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(560);
 			data.PersonToInfos.First().PositiveToleranceMinutes.Should().Be.EqualTo(620);
-			data.PersonToInfos.First().RealScheduleNegativeGap.Should().Be.EqualTo(13860);
+			data.PersonToInfos.First().RealScheduleNegativeGap.Should().Be.EqualTo(2820);
 			data.PersonToInfos.First().RealSchedulePositiveGap.Should().Be.EqualTo(0);
 		}
 
@@ -760,9 +760,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			data.IsNeedToCheck.Should().Be.True();
 			data.MyInfos.First().PeriodStart.Should().Be.EqualTo(startDate.Date.ToString("yyyy-MM-dd"));
-			data.MyInfos.First().PeriodEnd.Should().Be.EqualTo(startDate.Date.AddMonths(1).AddDays(-1).ToString("yyyy-MM-dd"));
+			data.MyInfos.First().PeriodEnd.Should().Be.EqualTo(startDate.Date.AddDays(7-1).ToString("yyyy-MM-dd"));
 			data.PersonToInfos.First().PeriodStart.Should().Be.EqualTo(startDate.Date.ToString("yyyy-MM-dd"));
-			data.PersonToInfos.First().PeriodEnd.Should().Be.EqualTo(startDate.Date.AddMonths(1).AddDays(-1).ToString("yyyy-MM-dd"));
+			data.PersonToInfos.First().PeriodEnd.Should().Be.EqualTo(startDate.Date.AddDays(7-1).ToString("yyyy-MM-dd"));
 		}
 
 		private ShiftTradeMultiSchedulesForm prepareData(DateOnly startDate, DateOnly endDate, DateTime publishedDate, TimeZoneInfo timeZone = null)
@@ -892,13 +892,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Database.WithMultiSchedulesForShiftTradeWorkflow(DateTime.Today.AddDays(10), skill)
 				.WithPerson(personFromId, "logOn", TimeZoneInfo.Utc)
 				.WithPeriod(DateOnly.MinValue.ToString(), siteOpenHour)
-				.WithSchedulePeriod(date.Date.ToString())
+				.WithSchedulePeriod(date.Date.ToString(), SchedulePeriodType.Week, 1)
 				.WithTerminalDate(DateOnly.MaxValue.ToString())
 				.WithScenario(scenarioId)
 				.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString())
 				.WithPerson(personToId)
 				.WithPeriod(DateOnly.MinValue.ToString(), siteOpenHour)
-				.WithSchedulePeriod(date.Date.ToString())
+				.WithSchedulePeriod(date.Date.ToString(), SchedulePeriodType.Week, 1)
 				.WithTerminalDate(DateOnly.MaxValue.ToString())
 				.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString());
 
