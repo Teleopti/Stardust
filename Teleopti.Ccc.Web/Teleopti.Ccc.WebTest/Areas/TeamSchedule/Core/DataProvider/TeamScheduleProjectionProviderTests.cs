@@ -772,6 +772,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 		[Test]
 		public void ShouldSplitMergedPersonalActivityInProjectionWithSinglePersonalLayer()
 		{
+			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			SetupProjectionProvider();
+
 			var date = new DateTime(2015, 01, 01, 0, 0, 0, DateTimeKind.Utc);
 			var person1 = PersonFactory.CreatePersonWithGuid("agent", "1");
 			var assignment1Person1 = PersonAssignmentFactory.CreatePersonAssignment(person1, scenario, new DateOnly(date));
@@ -802,6 +805,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			visualLayers[0].ActivityId.Should().Be(meetingActivity.Id);
 			visualLayers[0].ShiftLayerIds.Single().Should().Be(assignment1Person1.ShiftLayers.Single(l => l is MainShiftLayer && l.Payload.Description.Name == "Meeting").Id);
 			visualLayers[0].Start.Should().Be("2015-01-01 08:00");
+			visualLayers[0].StartInUtc.Should().Be("2015-01-01 08:00");
 			visualLayers[0].End.Should().Be("2015-01-01 08:30");
 			visualLayers[0].Minutes.Should().Be(30);
 
@@ -811,10 +815,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			visualLayers[1].Start.Should().Be("2015-01-01 08:30");
 			visualLayers[1].End.Should().Be("2015-01-01 10:00");
 			visualLayers[1].Minutes.Should().Be(90);
+			visualLayers[1].StartInUtc.Should().Be("2015-01-01 08:30");
 
 			visualLayers[2].Description.Should().Be("Phone");
 			visualLayers[2].ActivityId.Should().Be(phoneActivity.Id);
 			visualLayers[2].Start.Should().Be("2015-01-01 10:00");
+			visualLayers[2].StartInUtc.Should().Be("2015-01-01 10:00");
 			visualLayers[2].End.Should().Be("2015-01-01 15:00");
 			visualLayers[2].Minutes.Should().Be(300);
 		}
@@ -922,7 +928,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			visualLayers[3].Minutes.Should().Be(270);
 			visualLayers[3].ShiftLayerIds.First().Should().Be(shiftLayers[0].Id);
 		}
-
 
 		[Test]
 		public void ShouldMakeAgentInTeamScheduleViewModel()

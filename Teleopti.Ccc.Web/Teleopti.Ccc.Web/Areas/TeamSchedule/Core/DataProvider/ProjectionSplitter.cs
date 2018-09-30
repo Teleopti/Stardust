@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					Description = layer.Payload.ConfidentialDescription(scheduleDay.Person).Name,
 					Color = layer.Payload.ConfidentialDisplayColor(scheduleDay.Person).ToHtml(),
 					Start = TimeZoneInfo.ConvertTimeFromUtc(l.Period.StartDateTime, userTimeZone).ToFixedDateTimeFormat(),
+					StartInUtc = l.Period.StartDateTime.ToFixedDateTimeFormat(),
 					End = TimeZoneInfo.ConvertTimeFromUtc(l.Period.EndDateTime, userTimeZone).ToFixedDateTimeFormat(),
 					Minutes = (int)l.Period.ElapsedTime().TotalMinutes,
 					ActivityId = layer.Payload.Id.GetValueOrDefault(),
