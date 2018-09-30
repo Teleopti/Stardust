@@ -10,10 +10,11 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
-	[Ignore("temp ignore to get rid of red build")]
+	[DomainTest]
 	public class RequestExpirationValidatorTest
 	{
 		private FakeGlobalSettingDataRepository _globalSettingDataRepository;

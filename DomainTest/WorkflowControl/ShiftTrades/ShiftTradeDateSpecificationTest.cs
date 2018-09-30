@@ -7,11 +7,12 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 {
-	[Ignore("temp ignore to get rid of red build")]
+	[DomainTest]
 	public class ShiftTradeDateSpecificationTest
 	{
 		private ShiftTradeDateSpecification _target;
