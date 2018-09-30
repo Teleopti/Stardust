@@ -691,7 +691,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var form = createShiftWithDifferentWFC(startDate);
 			LoggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(1, 20, 0);
 			PersonRepository.Get(form.PersonToId).WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(1, 30, 0);
-			var schedulePeriod = new DateOnlyPeriod(startDate, new DateOnly(startDate.Date.AddDays(7-1)));
+			var schedulePeriod = new DateOnlyPeriod(startDate, new DateOnly(startDate.Date.AddDays(6)));
 			var totalSettingContract = 480 * schedulePeriod.DayCount();
 			var expactedRealGap = totalSettingContract - 540;
 
@@ -760,9 +760,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			data.IsNeedToCheck.Should().Be.True();
 			data.MyInfos.First().PeriodStart.Should().Be.EqualTo(startDate.Date.ToString("yyyy-MM-dd"));
-			data.MyInfos.First().PeriodEnd.Should().Be.EqualTo(startDate.Date.AddDays(7-1).ToString("yyyy-MM-dd"));
+			data.MyInfos.First().PeriodEnd.Should().Be.EqualTo(startDate.Date.AddDays(6).ToString("yyyy-MM-dd"));
 			data.PersonToInfos.First().PeriodStart.Should().Be.EqualTo(startDate.Date.ToString("yyyy-MM-dd"));
-			data.PersonToInfos.First().PeriodEnd.Should().Be.EqualTo(startDate.Date.AddDays(7-1).ToString("yyyy-MM-dd"));
+			data.PersonToInfos.First().PeriodEnd.Should().Be.EqualTo(startDate.Date.AddDays(6).ToString("yyyy-MM-dd"));
 		}
 
 		private ShiftTradeMultiSchedulesForm prepareData(DateOnly startDate, DateOnly endDate, DateTime publishedDate, TimeZoneInfo timeZone = null)
