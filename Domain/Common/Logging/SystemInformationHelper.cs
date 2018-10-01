@@ -18,14 +18,5 @@ namespace Teleopti.Ccc.Domain.Common.Logging
             }
             return localIP;
         }
-
-        public static string GetCurrentUserName()
-        {
-            var windowsIdentity = System.Security.Principal.WindowsIdentity.GetCurrent();
-            if (windowsIdentity != null)
-                return windowsIdentity.Name;
-            return "";
-        }
     }
-    
 }
