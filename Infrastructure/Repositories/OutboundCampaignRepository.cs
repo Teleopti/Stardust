@@ -9,13 +9,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class OutboundCampaignRepository : Repository<IOutboundCampaign>, IOutboundCampaignRepository
 	{
-		public OutboundCampaignRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-			: base(unitOfWork)
-#pragma warning restore 618
-		{
-		}
-
 		public OutboundCampaignRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{
