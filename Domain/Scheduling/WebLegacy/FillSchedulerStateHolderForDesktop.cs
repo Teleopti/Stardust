@@ -98,20 +98,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			schedulerStateHolderTo.ConsiderShortBreaks = false; //TODO check if this is the wanted behaviour in other cases than intraday optimization
 		}
 
-		private readonly object moveSchedulesLock = new object();
-		private void moveSchedules(ISchedulerStateHolder schedulerStateHolderFrom,
+		private static void moveSchedules(ISchedulerStateHolder schedulerStateHolderFrom,
 			IScheduleDictionary toDic,
 			IEnumerable<IPerson> agents)
 		{
-			DateOnlyPeriod period;
-			lock (moveSchedulesLock)
-			{
-				period = schedulerStateHolderFrom.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(schedulerStateHolderFrom.TimeZoneInfo);
-			}
-			
 			foreach (var fromScheduleRange in agents.Select(agent => schedulerStateHolderFrom.Schedules[agent]))
 			{
-				fromScheduleRange.CopyTo(toDic[fromScheduleRange.Person], period);
+				//can probably optimize and not copy all schedules here (using choosing Period instead)
+				fromScheduleRange.CopyTo(toDic[fromScheduleRange.Person]);
 			}
 		}
 	}

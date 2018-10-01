@@ -203,11 +203,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return _currentScheduleSummary;
 		}
 
-		public void CopyTo(IScheduleRange scheduleRangeToModify, DateOnlyPeriod period)
+		public void CopyTo(IScheduleRange scheduleRangeToModify)
 		{
 			var rangeToModify = (ScheduleRange) scheduleRangeToModify;
 			rangeToModify.AddRange(ScheduleDataInternalCollection()
-				.Where(x => x.BelongsToPeriod(period))
 				.Select(x => (IScheduleData) x.Clone()));
 			rangeToModify._scheduleObjectsWithNoPermissions = _scheduleObjectsWithNoPermissions.ToArray();
 		}
