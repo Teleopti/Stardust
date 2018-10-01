@@ -125,6 +125,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AbsenceStaffingPossibilityCalculator>().As<IAbsenceStaffingPossibilityCalculator>().SingleInstance();
 			builder.RegisterType<OvertimeStaffingPossibilityCalculator>().As<IOvertimeStaffingPossibilityCalculator>().SingleInstance();
 			builder.RegisterType<SkillStaffingIntervalUnderstaffing>().As<ISkillStaffingIntervalUnderstaffing>().SingleInstance();
+			builder.RegisterType<BudgetGroupAllowanceCalculatorExtended>().As<IBudgetGroupAllowanceCalculator>()
+				.SingleInstance();
 
 			registerType<IOvertimeRequestCriticalUnderStaffedSpecification,
 				OvertimeRequestCriticalUnderStaffedSpecificationToggle74944On, OvertimeRequestCriticalUnderStaffedSpecification>(
@@ -133,10 +135,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			registerType<IPrimaryPersonSkillFilter,
 				PrimaryPersonSkillFilter, PrimaryPersonSkillFilterToggle75573Off>(
 				builder, Toggles.OvertimeRequestUsePrimarySkillOption_75573);
-
-			registerType<IBudgetGroupAllowanceCalculator,
-				BudgetGroupAllowanceCalculatorExtended, BudgetGroupAllowanceCalculatorLimited>(
-				builder, Toggles.Wfm_Requests_NightShift_BudgetDay_Allowance_76599);
 
 			registerType<IBudgetGroupHeadCountCalculator,
 				BudgetGroupHeadCountSpecificationExtended, BudgetGroupHeadCountSpecificationLimited>(

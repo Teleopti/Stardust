@@ -120,7 +120,6 @@ WFM_Intraday_Redesign_77214 = RC
 
 # Ziggy #
 WfmStaffing_AddOvertime_42524 = RC
-Wfm_Requests_NightShift_BudgetDay_Allowance_76599 = true
 Wfm_Staffing_RemoveDeletedHeadsFromReadmodel_77049 = true
 Wfm_Requests_NightShift_BudgetDay_HeadCount_77146 = true
 Wfm_Payroll_SupportMultiDllPayrolls_75959 = RC
