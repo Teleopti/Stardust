@@ -31,42 +31,6 @@ namespace Teleopti.Ccc.Domain.Collection
         {
         }
 
-        /// <summary>
-        /// Periods this instance.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-12-10
-        /// </remarks>
-        public DateTimePeriod? Period()
-        {
-            DateTime? minTime = null, maxTime = null;
-
-            foreach (var periodCollection in Values)
-            {
-                if (periodCollection.Any())
-                {
-                    var currentMinTime = periodCollection.Min(p => p.Value.Period.StartDateTime);
-                    var currentMaxTime = periodCollection.Max(p => p.Value.Period.EndDateTime);
-                    if (!maxTime.HasValue || currentMaxTime>maxTime.Value)
-                    {
-                        maxTime = currentMaxTime;
-                    }
-
-                    if (!minTime.HasValue || currentMinTime < minTime.Value)
-                    {
-                        minTime = currentMinTime;
-                    }
-                }
-            }
-
-            DateTimePeriod? returnValue = (!minTime.HasValue || !maxTime.HasValue)
-                                              ? (DateTimePeriod?)null
-                                              : new DateTimePeriod(minTime.Value, maxTime.Value);
-            return returnValue;
-        }
-
 		public bool GuessResourceCalculationHasBeenMade()
 		{
 			return Values.SelectMany(skillStaffPeriodDic => skillStaffPeriodDic.Values)
