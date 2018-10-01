@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_desktopContext = desktopContext;
 		}
 
-		[MethodImpl(MethodImplOptions.Synchronized)]
 		public void Synchronize(IScheduleDictionary modifiedScheduleDictionary, DateOnlyPeriod period)
 		{
 			var schedulerScheduleDictionary = _desktopContext.CurrentContext().SchedulerStateHolderFrom.Schedules;
