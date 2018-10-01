@@ -63,8 +63,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_distributedLockAcquirer.TryLockForTypeOfAnd(this, businessUnitId.ToString(), () =>
 			// Use a lock for each business unit to only run this once for each BU
 			{
-				var startDate = DateTime.Today.Date.AddDays(@event.StartDays);
-				var endDate = DateTime.Today.Date.AddDays(@event.EndDays);
+				var utcNow = DateTime.UtcNow;
+				var startDate = utcNow.Date.AddDays(@event.StartDays);
+				var endDate = utcNow.Date.AddDays(@event.EndDays);
 				var period = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 				if (!anyAgentScheduled(businessUnitId, period))
 				{

@@ -79,12 +79,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_eventPublisher.PublishedEvents.Should().Be.Empty();
 		}
 
-		[Test,Ignore("see bug #77971")]
+		[Test]
 		public void ShouldNotPublishAnyEventsIfNoAgentScheduledInPeriod()
 		{
+			var now = DateTime.UtcNow;
+
 			addPeople();
-			addAbsence();
-			addAssignment();
+			addAbsence(now);
+			addAssignment(new DateOnly(now));
 			
 			_scheduleProjectionReadOnlyPersister.Stub(x => x.IsInitialized()).Return(false);
 			_scheduleDayReadModelRepository.Stub(x => x.IsInitialized()).Return(false);
@@ -103,8 +105,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldPublishEventsWhenAnyScheduledAssignment()
 		{
+			var now = DateTime.UtcNow;
 			var count = addPeople();
-			addAssignment();
+			addAssignment(new DateOnly(now));
 			
 			_scheduleProjectionReadOnlyPersister.Stub(x => x.IsInitialized()).Return(false);
 			_scheduleDayReadModelRepository.Stub(x => x.IsInitialized()).Return(false);
@@ -124,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldPublishEventsWhenAnyScheduledAbsence()
 		{
 			var count = addPeople();
-			addAbsence();
+			addAbsence(DateTime.UtcNow);
 			
 			_scheduleProjectionReadOnlyPersister.Stub(x => x.IsInitialized()).Return(false);
 			_scheduleDayReadModelRepository.Stub(x => x.IsInitialized()).Return(false);
@@ -148,7 +151,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_personScheduleDayReadModelRepository.Stub(x => x.IsInitialized()).Return(false);
 
 			var count = addPeople();
-			addAssignment();
+
+			var now = DateTime.UtcNow;
+			addAssignment(new DateOnly(now));
 
 			target.Handle(new InitialLoadScheduleProjectionEvent
 			{
@@ -169,7 +174,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_personScheduleDayReadModelRepository.Stub(x => x.IsInitialized()).Return(false);
 
 			addPeople(false);
-			addAssignment();
+
+			var now = DateTime.UtcNow;
+			addAssignment(new DateOnly(now));
 			addPersonPeriod(_personRepository.FindAllSortByName().First());
 
 			target.Handle(new InitialLoadScheduleProjectionEvent
@@ -190,7 +197,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_personScheduleDayReadModelRepository.Stub(x => x.IsInitialized()).Return(true);
 
 			var count = addPeople();
-			addAssignment();
+
+			var now = DateTime.UtcNow;
+			addAssignment(new DateOnly(now));
 
 			target.Handle(new InitialLoadScheduleProjectionEvent
 			{
@@ -211,7 +220,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_personScheduleDayReadModelRepository.Stub(x => x.IsInitialized()).Return(true);
 
 			var count = addPeople();
-			addAssignment();
+
+			var now = DateTime.UtcNow;
+			addAssignment(new DateOnly(now));
 
 			target.Handle(new InitialLoadScheduleProjectionEvent
 			{
@@ -232,7 +243,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_personScheduleDayReadModelRepository.Stub(x => x.IsInitialized()).Return(false);
 
 			var count = addPeople();
-			addAssignment();
+
+			var now = DateTime.UtcNow;
+			addAssignment(new DateOnly(now));
 
 			target.Handle(new InitialLoadScheduleProjectionEvent
 			{
@@ -260,18 +273,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			return number;
 		}
 
-		private void addAssignment(int relativeDays = 0)
+		private void addAssignment(DateOnly todayUtc)
 		{
 			_personAssignmentRepository.Has(new PersonAssignment(_personRepository.FindAllSortByName().First(),
-				_currentScenario.LoadDefaultScenario(), DateOnly.Today.AddDays(relativeDays)));
+				_currentScenario.LoadDefaultScenario(), todayUtc));
 		}
 
-		private void addAbsence(int relativeDays = 0)
+		private void addAbsence(DateTime todayUtc)
 		{
-			var now = DateTime.UtcNow;
-			var nowWithoutSeconds = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Second, 0, DateTimeKind.Utc);
-			var period = new DateTimePeriod(nowWithoutSeconds.AddDays(relativeDays),
-				nowWithoutSeconds.AddDays(1).AddDays(relativeDays));
+			var nowWithoutSeconds = new DateTime(todayUtc.Year, todayUtc.Month, todayUtc.Day, todayUtc.Hour, todayUtc.Minute, 0, DateTimeKind.Utc);
+			var period = new DateTimePeriod(nowWithoutSeconds,
+				nowWithoutSeconds.AddDays(1));
 
 			var absence = AbsenceFactory.CreateAbsence("absence");
 
