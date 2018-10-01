@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public Task<HttpResponseMessage> Post(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
 		{
-			var headers = customHeadersFunc != null ? customHeadersFunc(thing.ToString()) : null;
+			var headers = customHeadersFunc?.Invoke(thing.ToString());
 			Requests.Add(new RequestInfo { Uri = uri, Thing = thing, Headers = headers });
 			_postRespTask = Task.FromResult(_responseMessage ?? new HttpResponseMessage(HttpStatusCode.OK));
 			return _postRespTask;
@@ -25,13 +25,13 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void PostOrThrow(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
 		{
-			var headers = customHeadersFunc != null ? customHeadersFunc(thing.ToString()) : null;
+			var headers = customHeadersFunc?.Invoke(thing.ToString());
 			Requests.Add(new RequestInfo { Uri = uri, Thing = thing, Headers = headers });
 		}
 
 		public Task PostOrThrowAsync(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
 		{
-			var headers = customHeadersFunc != null ? customHeadersFunc(thing.ToString()) : null;
+			var headers = customHeadersFunc?.Invoke(thing.ToString());
 			Requests.Add(new RequestInfo { Uri = uri, Thing = thing, Headers = headers });
 			return Task.FromResult(false);
 		}

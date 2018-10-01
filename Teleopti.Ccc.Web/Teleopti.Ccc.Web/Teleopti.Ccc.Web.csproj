@@ -393,6 +393,8 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Areas\Global\ChatConfigurationController.cs" />
+    <Compile Include="Areas\Global\TenantCredential.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleDayOffViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleShiftViewModel.cs" />
