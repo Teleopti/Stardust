@@ -25,7 +25,7 @@ namespace Stardust.Manager
 
 		public void AddWorkerNode(WorkerNode workerNode)
 		{
-			const string selectWorkerNodeCommand = "INSERT INTO [Stardust].[WorkerNode] (Id, Url, Heartbeat, Alive) VALUES(@Id, @Url, @Heartbeat, @Alive)";
+			const string selectWorkerNodeCommand = "INSERT INTO [Stardust].[WorkerNode] (Id, Url, Heartbeat, Alive, PingResult) VALUES(@Id, @Url, @Heartbeat, @Alive, @PingResult)";
 			try
 			{
 				using (var connection = new SqlConnection(_connectionString))
@@ -38,6 +38,7 @@ namespace Stardust.Manager
 						workerNodeCommand.Parameters.AddWithValue("@Url", workerNode.Url.ToString());
 						workerNodeCommand.Parameters.AddWithValue("@Heartbeat", workerNode.Heartbeat);
 						workerNodeCommand.Parameters.AddWithValue("@Alive", workerNode.Alive);
+						workerNodeCommand.Parameters.AddWithValue("@PingResult", workerNode.PingResult);
 
 						workerNodeCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 					}
