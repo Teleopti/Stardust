@@ -94,7 +94,7 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 
 			var data = Target.Build(null, new[] {teamId}).First();
 
-			data.Agents.Single().Days.Select(x => x.DisplayDate).Should().Have.SameValuesAs(new[] {"08/17", "08/18", "08/19", "08/20", "08/21", "08/22", "08/23"});
+			data.DisplayDays.Should().Have.SameValuesAs(new[] {"08/17", "08/18", "08/19", "08/20", "08/21", "08/22", "08/23"});
 		}
 
 	}

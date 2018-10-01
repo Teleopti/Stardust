@@ -91,6 +91,7 @@
 			vm.cards = data.map(function (card) {
 				return {
 					Name: card.Name,
+					DisplayDays: card.DisplayDays,
 					toggle: function () {
 						this.isOpen = !this.isOpen;
 					},
@@ -116,7 +117,7 @@
 		function buildDays(days, personId) {
 			return days.map(function (day) {
 				return {
-					DisplayDate: day.DisplayDate,
+					//DisplayDate: day.DisplayDate,
 					Adherence: day.Adherence,
 					Color: colorAdherence(day.Adherence),
 					HistoricalAdherenceUrl: $state.href('rta-historical', {personId: personId, date: day.Date}),
