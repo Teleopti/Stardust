@@ -124,6 +124,7 @@
     <Compile Include="FakeServerConfigurationRepository.cs" />
     <Compile Include="PayrollDllCopyTest.cs" />
     <Compile Include="PayrollTest\FakeTeleoptiSchedulingService.cs" />
+    <Compile Include="PayrollTest\PayrollDataExtractorTest.cs" />
     <Compile Include="PayrollTest\PayrollExportConsumerTest.cs" />
     <Compile Include="PayrollTest\PayrollPeopleLoaderTest.cs" />
     <Compile Include="PayrollTest\AppDomainUnloadTest.cs" />
