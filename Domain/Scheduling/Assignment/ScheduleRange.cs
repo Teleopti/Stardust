@@ -5,7 +5,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security;
@@ -45,11 +44,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public bool CanSeeUnpublishedSchedules { get; set; } = false;
 
-		public IEnumerable<DateOnlyPeriod> AvailablePeriods()
-		{
-			return _availablePeriods.Value;
-		}
-
 		public bool Contains(IScheduleData scheduleData, bool includeNonPermitted)
 		{
 			if (!includeNonPermitted)
@@ -79,13 +73,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public IScheduleDay ScheduledDay(DateOnly day, bool includeUnpublished)
 		{
 			var dayAndPeriod = new DateOnlyAsDateTimePeriod(day, Person.PermissionInformation.DefaultTimeZone());
-			return ScheduleDay(dayAndPeriod, includeUnpublished, AvailablePeriods());
+			return ScheduleDay(dayAndPeriod, includeUnpublished, _availablePeriods.Value);
 		}
 
 		public IScheduleDay ScheduledDay(DateOnly day)
 		{
 			var dayAndPeriod = new DateOnlyAsDateTimePeriod(day, Person.PermissionInformation.DefaultTimeZone());
-			return ScheduleDay(dayAndPeriod, PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules), AvailablePeriods());
+			return ScheduleDay(dayAndPeriod, PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules), _availablePeriods.Value);
 		}
 
 		public void ValidateBusinessRules(INewBusinessRuleCollection newBusinessRuleCollection)
@@ -106,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		protected override bool CheckPermission(IScheduleData persistableScheduleData)
 		{
 			var hasPermission = false;
-			foreach (var availablePeriod in AvailablePeriods())
+			foreach (var availablePeriod in _availablePeriods.Value)
 			{
 				if (persistableScheduleData.BelongsToPeriod(availablePeriod))
 				{
@@ -120,7 +114,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				if (Owner.PermissionsEnabled)
 				{
 					var availablePeriodsInfo =
-						string.Join(",", AvailablePeriods().Select(p => p.ToShortDateString(CultureInfo.CurrentCulture)));
+						string.Join(",", _availablePeriods.Value.Select(p => p.ToShortDateString(CultureInfo.CurrentCulture)));
 					throw new PermissionException("Cannot add " + persistableScheduleData +
 												  " to the collection.PersistableData period:" + persistableScheduleData.Period + " AvailablePeriods are" +
 												  availablePeriodsInfo + " Person timezone:" +
@@ -408,7 +402,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private IEnumerable<IScheduleDay> getScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod, bool canSeeUnpublished)
 		{
 			var timeZone = Person.PermissionInformation.DefaultTimeZone();
-			var availablePeriods = AvailablePeriods();
+			var availablePeriods = _availablePeriods.Value;
 
 			return dateOnlyPeriod.DayCollection().Select(date => new DateOnlyAsDateTimePeriod(date, timeZone))
 				.Select(dayAndPeriod => ScheduleDay(dayAndPeriod, canSeeUnpublished, availablePeriods)).ToArray();
