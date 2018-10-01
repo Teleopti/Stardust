@@ -53,11 +53,6 @@ namespace Teleopti.Ccc.Domain.Collection
 			_mergedCollection = new Lazy<IEnumerable<IVisualLayer>>(() => merger.MergedCollection(UnMergedCollection).ToList());
 		}
 
-		public IEnumerable<IVisualLayer> MergedCollection()
-		{
-			return _mergedCollection.Value;
-		} 
-
 		public static IVisualLayerCollection CreateEmptyProjection(IPerson assignedPerson)
 		{
 			return new VisualLayerCollection(Enumerable.Empty<IVisualLayer>(), new NoProjectionMerger());
@@ -74,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Collection
 			}
 		}
 
-		internal IVisualLayer[] UnMergedCollection { get; private set; }
+		internal IVisualLayer[] UnMergedCollection { get; }
 
 
 		public bool IsSatisfiedBy(ISpecification<IVisualLayerCollection> specification)
@@ -211,30 +206,30 @@ namespace Teleopti.Ccc.Domain.Collection
 		{
 			IVisualLayerFactory visualLayerFactory = new VisualLayerFactory();
 			IList<IVisualLayer> retColl = new List<IVisualLayer>();
-			int collCount = UnMergedCollection.Length;
+			var collCount = UnMergedCollection.Length;
 			if (collCount > 0)
 			{
-				DateTime endDateTimeSearch = periodToSearch.EndDateTime;
-				DateTime startDateTimeSearch = periodToSearch.StartDateTime;
-				IFilterOnPeriodOptimizer opt = PeriodOptimizer;
+				var endDateTimeSearch = periodToSearch.EndDateTime;
+				var startDateTimeSearch = periodToSearch.StartDateTime;
+				var opt = PeriodOptimizer;
 
-				int foundIndex = collCount - 1; //if no hits
-				int startIndex = 0;
+				var foundIndex = collCount - 1; //if no hits
+				var startIndex = 0;
 				if (collCount > 1)
 					startIndex = opt.FindStartIndex(UnMergedCollection, startDateTimeSearch);
 
-				for (int index = startIndex; index < collCount; index++)
+				for (var index = startIndex; index < collCount; index++)
 				{
-					IVisualLayer layer = UnMergedCollection[index];
-					DateTimePeriod layerPeriod = layer.Period;
-					DateTime layerPeriodStartDateTime = layerPeriod.StartDateTime;
+					var layer = UnMergedCollection[index];
+					var layerPeriod = layer.Period;
+					var layerPeriodStartDateTime = layerPeriod.StartDateTime;
 
 					if (endDateTimeSearch <= layerPeriodStartDateTime)
 					{
 						foundIndex = index == 0 ? 0 : index - 1;
 						break;
 					}
-					DateTimePeriod? intersectionPeriod = layerPeriod.Intersection(periodToSearch);
+					var intersectionPeriod = layerPeriod.Intersection(periodToSearch);
 					if (intersectionPeriod.HasValue)
 					{
 						var newLayer = visualLayerFactory.CreateResultLayer(layer.Payload, layer, intersectionPeriod.Value);
@@ -249,12 +244,12 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		public int Count()
 		{
-			return MergedCollection().Count();
+			return _mergedCollection.Value.Count();
 		}
 
 		public IEnumerator GetEnumerator()
 		{
-			return MergedCollection().GetEnumerator();
+			return _mergedCollection.Value.GetEnumerator();
 		}
 
 		public DateTimePeriod? Period()
@@ -275,17 +270,16 @@ namespace Teleopti.Ccc.Domain.Collection
 					var endDateTime = UnMergedCollection[UnMergedCollection.Length - 1].Period.EndDateTime;
 					if (endDateTime < startDateTime)
 					{
-						throw new ArgumentOutOfRangeException(string.Format("The start datetime cannot be greater than the layer end datetime. ({0} - {1})", startDateTime, endDateTime));
+						throw new ArgumentOutOfRangeException($"The start datetime cannot be greater than the layer end datetime. ({startDateTime} - {endDateTime})");
 					}
 					return
-						new DateTimePeriod(startDateTime,
-										   endDateTime);
+						new DateTimePeriod(startDateTime, endDateTime);
 			}
 		}
 
 		IEnumerator<IVisualLayer> IEnumerable<IVisualLayer>.GetEnumerator()
 		{
-			return MergedCollection().GetEnumerator();
+			return _mergedCollection.Value.GetEnumerator();
 		}
 
 		private struct LayerCollectionNumbers
@@ -298,10 +292,10 @@ namespace Teleopti.Ccc.Domain.Collection
 				OverTime = overTime;
 			}
 
-			public TimeSpan WorkTime { get; private set; }
-			public TimeSpan ContractTime { get; private set; }
-			public TimeSpan OverTime { get; private set; }
-			public TimeSpan PaidTime { get; private set; }
+			public TimeSpan WorkTime { get; }
+			public TimeSpan ContractTime { get; }
+			public TimeSpan OverTime { get; }
+			public TimeSpan PaidTime { get; }
 		}
 	}
 
@@ -315,6 +309,6 @@ namespace Teleopti.Ccc.Domain.Collection
 			}
 		}
 
-		public DateTimePeriod? OriginalProjectionPeriod { get; private set; }
+		public DateTimePeriod? OriginalProjectionPeriod { get; }
 	}
 }
