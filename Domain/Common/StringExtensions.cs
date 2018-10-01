@@ -17,16 +17,10 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			return new[] { g };
 		}
-		
-		public static IEnumerable<T> AsIEnumerable<T>(this T g)
-		{
-			yield return g;
-		}
 	}
 	
 	public static class GuidExtension
 	{
-		
 		public static Guid?[] AsNullableArray(this Guid g)
 		{
 			return new Guid?[] { g };
