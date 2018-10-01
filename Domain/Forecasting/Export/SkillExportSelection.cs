@@ -15,7 +15,5 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
         public IEnumerable<MultisiteSkillForExport> MultisiteSkillsForExport => _multisiteSkillForExports;
 
 	    public DateOnlyPeriod Period { get; set; }
-
-        public int Incremental { get; set; }
     }
 }
