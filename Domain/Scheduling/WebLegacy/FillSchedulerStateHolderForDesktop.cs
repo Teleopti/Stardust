@@ -104,14 +104,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			IEnumerable<IPerson> agents)
 		{
 			DateOnlyPeriod period;
-			var fromScheduleRanges = new List<IScheduleRange>();
 			lock (moveSchedulesLock)
 			{
 				period = schedulerStateHolderFrom.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(schedulerStateHolderFrom.TimeZoneInfo);
-				fromScheduleRanges.AddRange(agents.Select(agent => schedulerStateHolderFrom.Schedules[agent]));
 			}
-
-			foreach (var fromScheduleRange in fromScheduleRanges)
+			
+			foreach (var fromScheduleRange in agents.Select(agent => schedulerStateHolderFrom.Schedules[agent]))
 			{
 				fromScheduleRange.CopyTo(toDic[fromScheduleRange.Person], period);
 			}
