@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Islands
 
 		private static void moveSkillSetForOneIslandToCorrectIsland(ICollection<SkillSet> allSkillSets, IEnumerable<ICollection<SkillSet>> islands, ICollection<SkillSet> island, ISet<ICollection<SkillSet>> touchedIslands)
 		{
-			foreach (var SkillSet in island.ToArray())
+			foreach (var skillSet in island.ToArray())
 			{
 				var allOtherIslands = islands.Except(new[] { island });
 				foreach (var otherIsland in allOtherIslands)
@@ -28,20 +28,20 @@ namespace Teleopti.Ccc.Domain.Islands
 						if (touchedIslands.Contains(island))
 							return;
 
-						if (otherSkillSet.HasAnySkillSameAs(SkillSet))
+						if (otherSkillSet.HasAnySkillSameAs(skillSet))
 						{
-							if (SkillSet.HasSameSkillsAs(otherSkillSet))
+							if (skillSet.HasSameSkillsAs(otherSkillSet))
 							{
-								otherSkillSet.AddAgentsFrom(SkillSet);
-								allSkillSets.Remove(SkillSet);
+								otherSkillSet.AddAgentsFrom(skillSet);
+								allSkillSets.Remove(skillSet);
 							}
 							else
 							{
-								otherIsland.Add(SkillSet);
+								otherIsland.Add(skillSet);
 							}
 							touchedIslands.Add(island);
 							touchedIslands.Add(otherIsland);
-							island.Remove(SkillSet);
+							island.Remove(skillSet);
 						}
 					}
 				}
