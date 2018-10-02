@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Infrastructure.Toggle.InApp
 {
-	public class FetchToggleOverride
+	public class FetchToggleOverride : IFetchToggleOverride
 	{
 		private readonly IConfigReader _configReader;
 
@@ -15,10 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.Toggle.InApp
 
 		public virtual bool? OverridenValue(Toggles toggle)
 		{
-			var connString = _configReader.ConnectionString("Toggle");
-			if (connString == null)
-				return null;
-			using (var connection = new SqlConnection(connString))
+			using (var connection = new SqlConnection(_configReader.ConnectionString("Toggle")))
 			{
 				connection.Open();
 				var sqlCommand = new SqlCommand("select enabled from Toggle.Override where Toggle = @name", connection);
