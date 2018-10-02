@@ -3,14 +3,12 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
@@ -28,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeTimeZoneGuard TimeZoneGuard; 
 		public FakeUserTimeZone UserTimeZone;
 		//
-		private bool _resourcePlannerHalfHourSkillTimeZon75509;
+		private readonly bool _resourcePlannerHalfHourSkillTimeZon75509;
 
 		[Test]
 		public void ShouldBeAbleToScheduleNoMatterTimeZoneSettingsAlsoWhenRequiresSkillIsTrue(
