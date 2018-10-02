@@ -13,4 +13,4 @@ namespace Teleopti.Wfm.Api.Query
 		public string PayrollCode;
 		public bool Confidential;
 	}
-}
+} 
