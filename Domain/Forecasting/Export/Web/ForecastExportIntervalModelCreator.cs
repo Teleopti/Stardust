@@ -40,7 +40,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 				}
 			}
 
-			return intervalModels;
+			return intervalModels
+				.OrderBy(i => i.IntervalStart)
+				.ToList();
 		}
 	}
 }

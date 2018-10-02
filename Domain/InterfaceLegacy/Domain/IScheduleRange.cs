@@ -159,6 +159,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	    bool IsEmpty();
 	    TargetScheduleSummary CalculatedTargetTimeSummary(DateOnlyPeriod periodToCheck);
 	    CurrentScheduleSummary CalculatedCurrentScheduleSummary(DateOnlyPeriod periodToCheck);
-		void CopyTo(IScheduleRange scheduleRangeToModify, DateOnlyPeriod period);
+		void CopyTo(IScheduleRange scheduleRangeToModify);
 	}
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using NHibernate;
-using NHibernate.Transaction;
 
 namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 {

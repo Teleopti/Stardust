@@ -93,7 +93,7 @@
 								BotChat.App({
 									botConnection: Object.assign({}, dl, {
 										postActivity: activity => {
-											var newActivity = Object.assign({}, activity, { channelData: { "personId": "@Model.CurrentLogonAgentId", "environment": window.location.hostname } });
+											var newActivity = Object.assign({}, activity, { channelData: { "personId": "@Model.CurrentLogonAgentId", "environment": window.location.host } });
 											return dl.postActivity(newActivity);
 										}
 									}),
@@ -108,6 +108,33 @@
 								console.error("Failed to load GrantBot config.", e);
 							}
 						});
+
+						ajax.Ajax({
+							url: "../api/ChatConfiguration/exists",
+							dataType: "json",
+							type: 'POST',
+							data: JSON.stringify({ host: window.location.host, tenant: '@Model.CurrentLogonAgentId' }),
+							contentType: 'application/json; charset=utf-8',
+							success: function(grantBotConfig) {
+								if (!grantBotConfig) {
+									ajax.Ajax({
+										url: "../api/token",
+										dataType: "json",
+										type: 'POST',
+										data: JSON.stringify({ name: 'GrantBot' }),
+										contentType: 'application/json; charset=utf-8',
+										success: function(token) {
+												ajax.Ajax({
+													url: "../api/ChatConfiguration",
+													dataType: "json",
+													type: 'POST',
+													data: JSON.stringify({ host: window.location.host, tenant: '@Model.CurrentLogonAgentId', apiKey: token.Token }),
+													contentType: 'application/json; charset=utf-8',
+													success: function() {
+													}});
+										}});
+								}
+							}});
 					}
 
 					var availableClientWidth = document.documentElement.clientWidth;

@@ -127,17 +127,5 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 			return newAverageTaskTimeTicks;
 		}
-
-    }
-
-    /// <summary>
-    /// Determines which field to work with when distributing task times
-    /// </summary>
-    public enum TaskFieldToDistribute
-    {
-        AverageTaskTime,
-        AverageAfterTaskTime,
-		OverrideAverageTaskTime,
-		OverrideAverageAfterTaskTime
     }
 }

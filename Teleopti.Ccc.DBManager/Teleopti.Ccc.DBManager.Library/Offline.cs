@@ -1,5 +1,6 @@
 using System;
 using System.Data.SqlClient;
+using Teleopti.Ccc.Domain;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
