@@ -445,19 +445,6 @@ BEGIN
 			Raiserror ('@from_date_id_utc or @from_interval_id_utc values inside [mart].[etl_fact_schedule_deviation_load] contained null values. Transaction should be aborted by ADO.NET!',16,1) WITH NOWAIT
 		END
 
-		declare @max_deviation_table_date_id int, @max_deviation_table_interval int
-
-		select @max_deviation_table_date_id = max([date_id])
-		from [mart].[fact_schedule_deviation] 
-		where business_unit_id = @business_unit_id 
-			and is_logged_in = 1
-
-		select @max_deviation_table_interval = max([interval_id]) 
-		from [mart].[fact_schedule_deviation] 
-		where business_unit_id = @business_unit_id 
-			and date_id = @max_deviation_table_date_id
-			and is_logged_in = 1
-
 		select
 			@now_date_id_utc	= date_id,
 			@now_date_date_utc	= CONVERT(DATE,@now_utc)
@@ -475,6 +462,21 @@ BEGIN
 			@now_interval_id_utc IS NULL
 			)
 		Raiserror ('@now_date_id_utc or @now_interval_id_utc values inside [mart].[etl_fact_schedule_deviation_load] contained null values. Transaction should be aborted by ADO.NET!',16,1) WITH NOWAIT
+
+		declare @max_deviation_table_date_id int, @max_deviation_table_interval int
+
+		select @max_deviation_table_date_id = max([date_id])
+        from [mart].[fact_schedule_deviation] 
+        where shift_startdate_local_id > @now_date_id_utc-10 --Keep data volumes down and speed up this query by using the clustered key better. 10 days back should work.
+        and business_unit_id = @business_unit_id
+        and is_logged_in = 1
+
+        select @max_deviation_table_interval = max([interval_id]) 
+        from [mart].[fact_schedule_deviation] 
+        where shift_startdate_local_id >= @max_deviation_table_date_id-1 --Keep data volumes down and speed up this query by using the clustered key better. 1 day back should cover all timezones.
+        and date_id = @max_deviation_table_date_id
+        and business_unit_id = @business_unit_id
+        and is_logged_in = 1
 
 		--Make sure 10 intervals before last log date goes back at least as far as data in schedule deviation table for current/previous day
 		if @max_deviation_table_date_id >= @now_date_id_utc-1
