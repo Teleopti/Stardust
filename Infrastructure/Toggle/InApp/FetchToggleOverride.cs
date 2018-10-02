@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Infrastructure.Toggle.InApp
 {
-	public class FetchToggleOverride: IFetchToggleOverride
+	public class FetchToggleOverride
 	{
 		private readonly IConfigReader _configReader;
 
@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.Toggle.InApp
 			_configReader = configReader;
 		}
 
-		public bool? OverridenValue(Toggles toggle)
+		public virtual bool? OverridenValue(Toggles toggle)
 		{
 			using (var connection = new SqlConnection(_configReader.ConnectionString("Toggle")))
 			{
@@ -25,19 +25,4 @@ namespace Teleopti.Ccc.Infrastructure.Toggle.InApp
 			}
 		}
 	}
-	
-	//REMOVE THESE WHEN FEATURE IS DONE 
-	public interface IFetchToggleOverride
-	{
-		bool? OverridenValue(Toggles toggle);
-	}
-
-	public class NoFetchingOfOverridenToggles : IFetchToggleOverride
-	{
-		public bool? OverridenValue(Toggles toggle)
-		{
-			return null;
-		}
-	}
-	//
 }

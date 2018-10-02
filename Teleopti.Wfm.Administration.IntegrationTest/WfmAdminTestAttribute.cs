@@ -23,7 +23,6 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
 			config.FakeConnectionString("RtaTracer", InfraTestConfigReader.AnalyticsConnectionString);
 			config.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
-			config.FakeSetting("PBI77584", "true"); //remove me when releasing feature
 			return config;
 		}
 

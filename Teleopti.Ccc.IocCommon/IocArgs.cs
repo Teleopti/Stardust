@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.IocCommon
 		public IConfigReader ConfigReader { get; }
 		public bool IsFatClient { get; set; }
 		
-		public IFetchToggleOverride FetchToggleOverride { get; set; }
+		public FetchToggleOverride FetchToggleOverride { get; set; }
 
 		public IocCache Cache { get; } = new IocCache();
 

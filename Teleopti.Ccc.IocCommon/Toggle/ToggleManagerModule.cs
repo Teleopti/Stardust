@@ -28,17 +28,8 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 		protected override void Load(ContainerBuilder builder)
 		{
 			var pathToToggle = _iocArgs.FeatureToggle;
-
-			if (bool.TryParse(_iocArgs.ConfigReader.AppConfig("PBI77584"), out var pbi77584) && pbi77584)
-			{
-				builder.CacheByInterfaceProxy<FetchToggleOverride, IFetchToggleOverride>();
-				_iocArgs.Cache.This<IFetchToggleOverride>(x => x.CacheMethod(m => m.OverridenValue(Toggles.TestToggle)));
-			}
-			else
-			{
-				builder.RegisterType<NoFetchingOfOverridenToggles>().As<IFetchToggleOverride>();
-			}
-			
+			builder.CacheByClassProxy<FetchToggleOverride>();
+			_iocArgs.Cache.This<FetchToggleOverride>(x => x.CacheMethod(m => m.OverridenValue(Toggles.TestToggle)));
 			
 			if (string.IsNullOrEmpty(pathToToggle))
 			{
@@ -81,7 +72,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 							AllowedFeatures = Enum.GetNames(typeof(Toggles))
 						});
 					toggleConfiguration.SetDefaultSpecification(defaultSpecification);
-					return new toggleCheckerWrapper(toggleConfiguration.Create(), c.Resolve<IFetchToggleOverride>());
+					return new toggleCheckerWrapper(toggleConfiguration.Create(), c.Resolve<FetchToggleOverride>());
 				})
 				.SingleInstance()
 				.As<IToggleManager>();
@@ -91,9 +82,9 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 		private class toggleCheckerWrapper : IToggleManager
 		{
 			private readonly IToggleChecker _toggleChecker;
-			private readonly IFetchToggleOverride _fetchToggleOverride;
+			private readonly FetchToggleOverride _fetchToggleOverride;
 
-			public toggleCheckerWrapper(IToggleChecker toggleChecker, IFetchToggleOverride fetchToggleOverride)
+			public toggleCheckerWrapper(IToggleChecker toggleChecker, FetchToggleOverride fetchToggleOverride)
 			{
 				_toggleChecker = toggleChecker;
 				_fetchToggleOverride = fetchToggleOverride;
