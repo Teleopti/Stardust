@@ -30,9 +30,6 @@ namespace Teleopti.Ccc.IocCommon
 		public bool WebByPassDefaultPermissionCheck_37984 { get; set; }
 		public IConfigReader ConfigReader { get; }
 		public bool IsFatClient { get; set; }
-		
-		public FetchToggleOverride FetchToggleOverride { get; set; }
-
 		public IocCache Cache { get; } = new IocCache();
 
 		public IocArgs(IConfigReader configReader)
