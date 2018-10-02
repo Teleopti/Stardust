@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			result.BusinessRulesValidationResults.Should().Be.Empty();
 		}
 
-		public FullSchedulingResultTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerHalfHourSkillTimeZon75509, bool resourcePlannerReducingSkillsDifferentOpeningHours76176) : base(seperateWebRequest, resourcePlannerHalfHourSkillTimeZon75509, resourcePlannerReducingSkillsDifferentOpeningHours76176)
+		public FullSchedulingResultTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerHalfHourSkillTimeZon75509) : base(seperateWebRequest, resourcePlannerHalfHourSkillTimeZon75509)
 		{
 		}
 	}

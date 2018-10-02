@@ -7,14 +7,10 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false, false)]
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false, true)]
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true, false)]
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true, true)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, false, false)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, false, true)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, true, false)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, true, true)]
+	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false)]
+	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequest, false)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequest, true)]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
 	[DontSendEventsAtPersist]
@@ -22,14 +18,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	{
 		private readonly SeperateWebRequest _seperateWebRequest;
 		private readonly bool _resourcePlannerHalfHourSkillTimeZon75509;
-		private readonly bool _resourcePlannerReducingSkillsDifferentOpeningHours76176;
 		public IIoCTestContext IoCTestContext;
 
-		protected SchedulingScenario(SeperateWebRequest seperateWebRequest, bool resourcePlannerHalfHourSkillTimeZon75509, bool resourcePlannerReducingSkillsDifferentOpeningHours76176)
+		protected SchedulingScenario(SeperateWebRequest seperateWebRequest, bool resourcePlannerHalfHourSkillTimeZon75509)
 		{
 			_seperateWebRequest = seperateWebRequest;
 			_resourcePlannerHalfHourSkillTimeZon75509 = resourcePlannerHalfHourSkillTimeZon75509;
-			_resourcePlannerReducingSkillsDifferentOpeningHours76176 = resourcePlannerReducingSkillsDifferentOpeningHours76176;
 		}
 
 		public virtual void OnBefore()
@@ -47,9 +41,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		{
 			if(_resourcePlannerHalfHourSkillTimeZon75509)
 				toggleManager.Enable(Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509);
-			
-			if(_resourcePlannerReducingSkillsDifferentOpeningHours76176)
-				toggleManager.Enable(Toggles.ResourcePlanner_ReducingSkillsDifferentOpeningHours_76176);
 		}
 	}
 }
