@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle.Admin
 	[DatabaseTestAttribute]
 	public class FetchAllToggleOverridesTest
 	{
-		public PersistToggleOverride PersistToggleOverride;
+		public IPersistToggleOverride PersistToggleOverride;
 		public IFetchAllToggleOverrides Target;
 
 		[TestCase(true)]

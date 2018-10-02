@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ToggleAdmin
 		}
 		public void Execute(string toggle)
 		{
-			_persistToggleOverride.Delete((Toggles)Enum.Parse(typeof(Toggles),toggle));
+			_persistToggleOverride.Delete(toggle);
 		}
 	}
 }

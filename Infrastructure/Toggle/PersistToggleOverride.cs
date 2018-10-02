@@ -26,14 +26,14 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			}
 		}
 
-		public void Delete(Toggles toggle)
+		public void Delete(string toggle)
 		{
 			using (var connection = new SqlConnection(_configReader.ConnectionString("Toggle")))
 			{
 				connection.Open();
 				using (var sqlCommand = new SqlCommand("delete from Toggle.Override where Toggle = @name", connection))
 				{
-					sqlCommand.Parameters.AddWithValue("@name", toggle.ToString());
+					sqlCommand.Parameters.AddWithValue("@name", toggle);
 					sqlCommand.ExecuteNonQuery();
 				}
 			}

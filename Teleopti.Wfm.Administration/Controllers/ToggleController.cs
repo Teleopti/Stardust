@@ -13,12 +13,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 	public class ToggleController : ApiController
 	{
 		private readonly IToggleManager _toggleManager;
-		private readonly PersistToggleOverride _persistToggleOverride;
+		private readonly IPersistToggleOverride _persistToggleOverride;
 		private readonly IFetchAllToggleOverrides _fetchAllToggleOverrides;
 		private readonly AllToggleNamesWithoutOverrides _allToggleNamesWithoutOverrides;
 		private readonly DeleteToggleOverride _deleteToggleOverride;
 
-		public ToggleController(IToggleManager toggleManager, PersistToggleOverride persistToggleOverride, IFetchAllToggleOverrides fetchAllToggleOverrides,
+		public ToggleController(IToggleManager toggleManager, IPersistToggleOverride persistToggleOverride, IFetchAllToggleOverrides fetchAllToggleOverrides,
 			AllToggleNamesWithoutOverrides allToggleNamesWithoutOverrides, DeleteToggleOverride deleteToggleOverride)
 		{
 			_toggleManager = toggleManager;

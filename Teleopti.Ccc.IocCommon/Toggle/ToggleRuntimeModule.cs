@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 
 			builder.RegisterType<AllToggleNamesWithoutOverrides>().SingleInstance();
 			
-			builder.RegisterType<PersistToggleOverride>().SingleInstance();
+			builder.RegisterType<PersistToggleOverride>().As<IPersistToggleOverride>().SingleInstance();
 			builder.RegisterType<DeleteToggleOverride>().SingleInstance();
 			builder.RegisterType<FetchAllToggleOverrides>().SingleInstance().As<IFetchAllToggleOverrides>();
 		}

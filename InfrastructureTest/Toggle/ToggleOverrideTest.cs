@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 				
 				toggleManager.IsEnabled(Toggles.TestToggle)
 					.Should().Be.True();
-				new PersistToggleOverride(configReader).Delete(Toggles.TestToggle);
+				new PersistToggleOverride(configReader).Delete(Toggles.TestToggle.ToString());
 				
 				
 				toggleManager.IsEnabled(Toggles.TestToggle)
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 				var toggleManager = runtimeContainer.Resolve<IToggleManager>();
 				toggleManager.IsEnabled(Toggles.TestToggle)
 					.Should().Be.True();
-				new PersistToggleOverride(configReader).Delete(Toggles.TestToggle);
+				new PersistToggleOverride(configReader).Delete(Toggles.TestToggle.ToString());
 				
 				
 				toggleManager.IsEnabled(Toggles.TestToggle)
