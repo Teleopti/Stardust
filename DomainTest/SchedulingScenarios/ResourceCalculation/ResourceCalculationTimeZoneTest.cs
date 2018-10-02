@@ -50,8 +50,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(-1);
 		}
 
-		[TestCase("Iran Standard Time", 60)]            //+03:30
 		[TestCase("Arabian Standard Time", 60)]         //+04:00
+		[TestCase("Iran Standard Time", 60)]            //+03:30
+		[TestCase("Newfoundland Standard Time", 60)]    //-03:30
+		[TestCase("Nepal Standard Time", 60)]           //+05:45
 		public void ShouldPlaceFullResourceOnInterval(string timeZoneId, int defaultResolution)
 		{
 			if (!_resourcePlannerHalfHourSkillTimeZon75509 && defaultResolution == 60 &&
@@ -72,8 +74,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			skillDay.SkillStaffPeriodCollection.First().CalculatedResource.Should().Be.EqualTo(1);
 		}
 
-		[TestCase("Iran Standard Time", 60)]            //+03:30
 		[TestCase("Arabian Standard Time", 60)]         //+04:00
+		[TestCase("Iran Standard Time", 60)]            //+03:30
+		[TestCase("Newfoundland Standard Time", 60)]    //-03:30
+		[TestCase("Nepal Standard Time", 60)]           //+05:45
 		public void ShouldSplitResourceOnIntervals(string timeZoneId, int defaultResolution)
 		{
 			if (!_resourcePlannerHalfHourSkillTimeZon75509 && defaultResolution == 60 && timeZoneId != "Arabian Standard Time")
