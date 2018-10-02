@@ -57,7 +57,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public IActivity CommonActivity { get; set; }
         public bool TeamSameActivity { get; set; }
 		public bool UseAverageShiftLengths { get; set; }
-		public TimeSpan BreakPreferenceStartTimeByMax { get;set; }
 	      
         public BlockFinderType BlockFinderTypeForAdvanceScheduling
         {
