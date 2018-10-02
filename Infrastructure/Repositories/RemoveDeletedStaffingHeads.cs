@@ -3,13 +3,6 @@ using Teleopti.Ccc.Domain.Staffing;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class RemoveDeletedStaffingHeadsToggleOff : IRemoveDeletedStaffingHeads
-	{
-		public DateTime GetStartDate(DateTime dateTime)
-		{
-			return dateTime;
-		}
-	}
 
 	public class RemoveDeletedStaffingHeads : IRemoveDeletedStaffingHeads
 	{

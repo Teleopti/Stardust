@@ -118,8 +118,6 @@
     <Compile Include="ContainerTest.cs" />
     <Compile Include="AgentBadge\AgentBadgeWithRankCalculatorTest.cs" />
     <Compile Include="AgentBadge\AgentBadgeCalculatorTest.cs" />
-    <Compile Include="BudgetGroupAllowanceSpecificationTest.cs" />
-    <Compile Include="BudgetGroupHeadCountSpecificationTest.cs" />
     <Compile Include="Container\ContainerConfigurationTest.cs" />
     <Compile Include="FakeServerConfigurationRepository.cs" />
     <Compile Include="PayrollDllCopyTest.cs" />
