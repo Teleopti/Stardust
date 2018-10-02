@@ -264,9 +264,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TimeBetweenDaysOptimizatio
 				Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent1, agent2 }, period, optPreferences, null);
 			});
 		}
-
-		public TimeBetweenDaysOptimizationTeamBlockDesktopTest(bool resourcePlannerXXL76496) : base(resourcePlannerXXL76496)
-		{
-		}
 	}
 }

@@ -226,18 +226,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<ShiftProjectionCacheManager>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamScheduling>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_XXL_76496))
-			{
-				builder.RegisterType<WorkShiftFinderService>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
-				builder.RegisterType<WorkShiftSelectorDoNotCallMainShiftProjectionTooManyTimes>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();
-				builder.RegisterType<ShiftProjectionCacheFactory>().As<IShiftProjectionCacheFactory>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<WorkShiftFinderServiceOLD>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
-				builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();
-				builder.RegisterType<ShiftProjectionCacheFactoryOld>().As<IShiftProjectionCacheFactory>().SingleInstance();
-			}
+			builder.RegisterType<WorkShiftFinderService>().InstancePerLifetimeScope();
+			builder.RegisterType<ShiftProjectionCacheFactory>().SingleInstance();
+			builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509))
 			{
 				builder.RegisterType<ScheduleResourcePeriodFetcherAdjustForTimeZone>().As<ScheduleResourcePeriodFetcher>().SingleInstance();

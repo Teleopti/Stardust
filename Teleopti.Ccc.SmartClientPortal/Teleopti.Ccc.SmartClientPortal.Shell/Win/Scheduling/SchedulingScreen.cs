@@ -1233,7 +1233,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				var bestShiftChooser = _container.Resolve<BestShiftChooser>();
 				var schedulingOptions = new SchedulingOptions { UseRotations = false };
-				var finderService = _container.Resolve<IWorkShiftFinderService>();
+				var finderService = _container.Resolve<WorkShiftFinderService>();
 				// This is not working now I presume (SelectedSchedules is probably not correct)
 				foreach (IScheduleDay schedulePart in _scheduleView.SelectedSchedules())
 				{

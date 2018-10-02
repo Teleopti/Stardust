@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				.DayOff().Should().Be.Null();
 		}
 
-		public DayOffOptimizationLockDaysTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerXxl76496)
+		public DayOffOptimizationLockDaysTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
 		{
 		}
 	}

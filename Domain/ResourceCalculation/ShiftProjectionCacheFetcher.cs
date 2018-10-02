@@ -8,11 +8,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		private readonly IShiftFromMasterActivityService _shiftFromMasterActivityService;
 		private readonly IRuleSetProjectionEntityService _ruleSetProjectionEntityService;
-		private readonly IShiftProjectionCacheFactory _shiftProjectionCacheFactory;
+		private readonly ShiftProjectionCacheFactory _shiftProjectionCacheFactory;
 
 		public ShiftProjectionCacheFetcher(IShiftFromMasterActivityService shiftFromMasterActivityService,
 			IRuleSetProjectionEntityService ruleSetProjectionEntityService,
-			IShiftProjectionCacheFactory shiftProjectionCacheFactory)
+			ShiftProjectionCacheFactory shiftProjectionCacheFactory)
 		{
 			_shiftFromMasterActivityService = shiftFromMasterActivityService;
 			_ruleSetProjectionEntityService = ruleSetProjectionEntityService;

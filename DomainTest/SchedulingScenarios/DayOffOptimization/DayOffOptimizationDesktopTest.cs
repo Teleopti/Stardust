@@ -571,7 +571,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff().Should().Be.True();//closed sunday
 		}
 
-		public DayOffOptimizationDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerXxl76496)
+		public DayOffOptimizationDesktopTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
 		{
 		}
 	}

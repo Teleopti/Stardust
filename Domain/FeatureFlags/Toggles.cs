@@ -79,7 +79,6 @@
 		ResourcePlanner_PrepareToRemoveExportSchedule_46576,
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,
-		ResourcePlanner_XXL_76496,
 		ResourcePlanner_HalfHourSkillTimeZone_75509,
 		ResourcePlanner_ReducingSkillsDifferentOpeningHours_76176,
 		ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348,

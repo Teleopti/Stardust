@@ -16,15 +16,14 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.InfrastructureTest.Hangfire
 {
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_XXL_76496)]
 	public class HangfireRetryEnqueuingTest : IIsolateSystem
 	{
 		public HangfireEventPublisher Target;
 		public backgroundJobClientThatThrows BackgroundJobClient;
 
-		[TestCase(HangfireEventClientWithRetry.NumberOfRetries, ExpectedResult = true)]
-		[TestCase(HangfireEventClientWithRetry.NumberOfRetries + 1, ExpectedResult = false)]
-		[TestCase(HangfireEventClientWithRetry.NumberOfRetries -1, ExpectedResult = true)]
+		[TestCase(HangfireEventClient.NumberOfRetries, ExpectedResult = true)]
+		[TestCase(HangfireEventClient.NumberOfRetries + 1, ExpectedResult = false)]
+		[TestCase(HangfireEventClient.NumberOfRetries -1, ExpectedResult = true)]
 		public bool ShouldRetryWhenBackgroundJobClientExceptionTest(int numberOfTimesHangfireThrows)
 		{
 			BackgroundJobClient.NumberOfTimesToThrow = numberOfTimesHangfireThrows;

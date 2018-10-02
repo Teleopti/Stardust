@@ -6,35 +6,39 @@ using Hangfire;
 using Hangfire.Common;
 using Hangfire.Storage;
 using log4net;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
-	[RemoveMeWithToggle("Merge with base class", Toggles.ResourcePlanner_XXL_76496)]
-	public class HangfireEventClientWithRetry : HangfireEventClient
+	public class HangfireEventClient : IHangfireEventClient
 	{
+		private readonly Lazy<IBackgroundJobClient> _jobClient;
+		private readonly Lazy<RecurringJobManager> _recurringJob;
+		private readonly Lazy<JobStorage> _storage;
 		private readonly ILog _log;
 		public const int NumberOfRetries = 3;
 		private const string warningRetryMessage = "Failed to enqueue hangfire job. Retrying! {0} attempt left";
-		
-		public HangfireEventClientWithRetry(Lazy<IBackgroundJobClient> jobClient, 
-				Lazy<RecurringJobManager> recurringJob, 
-				Lazy<JobStorage> storage,
-				ILog log) 
-			: base(jobClient, recurringJob, storage)
+
+		public HangfireEventClient(
+			Lazy<IBackgroundJobClient> jobClient,
+			Lazy<RecurringJobManager> recurringJob,
+			Lazy<JobStorage> storage,
+			ILog log)
 		{
+			_jobClient = jobClient;
+			_recurringJob = recurringJob;
+			_storage = storage;
 			_log = log;
 		}
-
-		public override void Enqueue(HangfireEventJob job)
+		
+		public void Enqueue(HangfireEventJob job)
 		{
 			var left = NumberOfRetries;
 			while (true)
 			{
 				try
 				{
-					base.Enqueue(job);
+					_jobClient.Value.Enqueue<HangfireEventServer>(x => x.Process(job.DisplayName, job));
 					break;
 				}
 				catch (BackgroundJobClientException)
@@ -44,28 +48,6 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 						throw;
 				}
 			}
-		}
-	}
-	
-	public class HangfireEventClient : IHangfireEventClient
-	{
-		private readonly Lazy<IBackgroundJobClient> _jobClient;
-		private readonly Lazy<RecurringJobManager> _recurringJob;
-		private readonly Lazy<JobStorage> _storage;
-
-		public HangfireEventClient(
-			Lazy<IBackgroundJobClient> jobClient,
-			Lazy<RecurringJobManager> recurringJob,
-			Lazy<JobStorage> storage)
-		{
-			_jobClient = jobClient;
-			_recurringJob = recurringJob;
-			_storage = storage;
-		}
-		
-		public virtual void Enqueue(HangfireEventJob job)
-		{
-			_jobClient.Value.Enqueue<HangfireEventServer>(x => x.Process(job.DisplayName, job));
 		}
 
 		public void AddOrUpdateHourly(HangfireEventJob job)
