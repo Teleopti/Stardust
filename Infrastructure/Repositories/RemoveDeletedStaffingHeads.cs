@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public DateTime GetStartDate(DateTime dateTime)
 		{
 			return _updateStaffingLevelReadModelStartDate.StartDateTime;
+
 		}
 	}
 
