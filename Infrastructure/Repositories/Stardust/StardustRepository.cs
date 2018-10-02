@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 		{
 			var listToReturn = new List<WorkerNode>();
 
-			const string commandText = @"SELECT DISTINCT Id, Url, Heartbeat, Alive,PingResult,Running FROM (SELECT Id, Url, Heartbeat, Alive,PingResult, CASE WHEN Url IN 
+			const string commandText = @"SELECT DISTINCT Id, Url, Heartbeat, Alive,Running FROM (SELECT Id, Url, Heartbeat, Alive, CASE WHEN Url IN 
 								(SELECT SentToWorkerNodeUri FROM Stardust.Job WITH(NOLOCK) WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running 
 									FROM [Stardust].WorkerNode WITH(NOLOCK)) w";
 			using (var connection = new SqlConnection(_connectionString))
@@ -325,7 +325,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 						var ordinalPositionForUrlField = reader.GetOrdinal("Url");
 						var ordinalPositionForAliveField = reader.GetOrdinal("Alive");
 						var ordinalPositionForRunningField = reader.GetOrdinal("Running");
-						var ordinalPositionForPingResultField = reader.GetOrdinal("PingResult");
 						var ordinalPositionForHeartbeatField = reader.GetOrdinal("Heartbeat");
 						
 
@@ -337,8 +336,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 								Url = new Uri((string)reader.GetValue(ordinalPositionForUrlField)),
 								Alive = (bool)reader.GetValue(ordinalPositionForAliveField),
 								Heartbeat = (DateTime)reader.GetValue(ordinalPositionForHeartbeatField),
-								Running = (bool)reader.GetValue(ordinalPositionForRunningField),
-								PingResult = (bool)reader.GetValue(ordinalPositionForPingResultField),
+								Running = (bool)reader.GetValue(ordinalPositionForRunningField)
 							};
 							listToReturn.Add(workerNode);
 						}
