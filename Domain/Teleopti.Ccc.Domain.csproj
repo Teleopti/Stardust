@@ -1300,7 +1300,6 @@
     <Compile Include="InterfaceLegacy\Domain\ScheduleVisibleReasons.cs" />
     <Compile Include="InterfaceLegacy\Domain\SchedulingServiceBaseEventArgs.cs" />
     <Compile Include="InterfaceLegacy\Domain\SchedulingServiceSuccessfulEventArgs.cs" />
-    <Compile Include="InterfaceLegacy\Domain\SendNotificationException.cs" />
     <Compile Include="InterfaceLegacy\Domain\ServiceAgreement.cs" />
     <Compile Include="InterfaceLegacy\Domain\ServiceLevel.cs" />
     <Compile Include="InterfaceLegacy\Domain\SettingsExtensions.cs" />
