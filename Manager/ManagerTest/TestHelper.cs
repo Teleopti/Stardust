@@ -50,8 +50,7 @@ namespace ManagerTest
 								Url = new Uri(sqlDataReader.GetString(sqlDataReader.GetOrdinal("Url"))),
 								Id = sqlDataReader.GetGuid(sqlDataReader.GetOrdinal("Id")),
 								Heartbeat = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("Heartbeat")),
-								Alive = sqlDataReader.GetBoolean(sqlDataReader.GetOrdinal("Alive")),
-								PingResult = sqlDataReader.GetBoolean(sqlDataReader.GetOrdinal("PingResult"))
+								Alive = sqlDataReader.GetBoolean(sqlDataReader.GetOrdinal("Alive"))
 							};
 							nodes.Add(node);
 						}

@@ -9,7 +9,6 @@ namespace Stardust.Manager.Models
 			Id = Guid.NewGuid();
 			Heartbeat = DateTime.UtcNow;
 			Alive = true;
-			PingResult = false;
 		}
 
 		public Uri Url { get; set; }
@@ -19,6 +18,5 @@ namespace Stardust.Manager.Models
 		public bool Alive { get; set; }
 
 		public DateTime Heartbeat { get; set; }
-		public bool PingResult { get; set; }
 	}
 }

@@ -11,6 +11,5 @@ namespace Stardust.Manager.Interfaces
 		void RegisterHeartbeat(string nodeUri, bool updateStatus);
 
 		List<string> CheckNodesAreAlive(TimeSpan timeSpan);
-		void UpdatePing(string nodeUrl, bool pingResult);
 	}
 }

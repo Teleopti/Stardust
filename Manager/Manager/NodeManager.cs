@@ -35,10 +35,5 @@ namespace Stardust.Manager
 		{
 			_jobRepository.RequeueJobThatDidNotEndByWorkerNodeUri(workerNodeUri);
 		}
-
-		public void UpdatePing(string nodeUrl, bool pingResult)
-		{
-			_nodeRepository.UpdatePing(nodeUrl, pingResult);
-		}
 	}
 }

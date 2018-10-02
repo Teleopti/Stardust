@@ -139,12 +139,5 @@ namespace Stardust.Manager
 		{
 			return _jobRepository.GetJobDetailsByJobId(jobId);
 		}
-
-		public void PingWorkerNode(Uri workerNodeUri)
-		{
-			var result =  _jobRepository.PingWorkerNode(workerNodeUri);
-			_nodeManager.UpdatePing(workerNodeUri.ToString(), result);
-			
-		}
 	}
 }

@@ -38,10 +38,5 @@ namespace ManagerTest.Fakes
 		{
 			throw new NotImplementedException();
 		}
-
-		public void UpdatePing(string nodeUrl, bool pingResult)
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

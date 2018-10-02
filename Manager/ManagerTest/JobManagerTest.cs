@@ -427,34 +427,5 @@ namespace ManagerTest
 			JobRepository.GetAllJobs().Count.Should().Be(1);
 		}
 
-
-		[Test]
-		public void ShouldAddPingResultWhileAddingThePingResult()
-		{
-			var nodeUri = new Uri("https://teleopti.visualstudio.com");
-			WorkerNodeRepository.AddWorkerNode(new WorkerNode() { Url = nodeUri, PingResult = true});
-
-			TestHelper.GetAllNodes().FirstOrDefault().PingResult.Should().Be.True();
-		}
-
-		[Test]
-		public void ShouldAddDefaultPingResultWhileAddingThePingResult()
-		{
-			var nodeUri = new Uri("https://teleopti.visualstudio.com");
-			WorkerNodeRepository.AddWorkerNode(new WorkerNode() { Url = nodeUri});
-
-			TestHelper.GetAllNodes().FirstOrDefault().PingResult.Should().Be.False();
-		}
-
-		[Test]
-		public void ShouldUpdatePingResult()
-		{
-			var nodeUri = new Uri("https://teleopti.visualstudio.com");
-			WorkerNodeRepository.AddWorkerNode(new WorkerNode() { Url = nodeUri });
-
-			WorkerNodeRepository.UpdatePing(nodeUri.ToString(),true);
-
-			TestHelper.GetAllNodes().FirstOrDefault().PingResult.Should().Be.True();
-		}
 	}
 }

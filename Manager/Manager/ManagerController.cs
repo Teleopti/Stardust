@@ -102,8 +102,6 @@ namespace Stardust.Manager
 
 			Task.Factory.StartNew(() =>
 			{
-				_jobManager.PingWorkerNode(workerNodeUri);
-				
 				this.Log().InfoWithLineNumber(WhoAmI(Request) +
 					                              ": Received heartbeat from Node. Node Uri : ( " + workerNodeUri + " )");
 

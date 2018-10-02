@@ -25,7 +25,7 @@ namespace Stardust.Manager
 
 		public void AddWorkerNode(WorkerNode workerNode)
 		{
-			const string selectWorkerNodeCommand = "INSERT INTO [Stardust].[WorkerNode] (Id, Url, Heartbeat, Alive, PingResult) VALUES(@Id, @Url, @Heartbeat, @Alive, @PingResult)";
+			const string selectWorkerNodeCommand = "INSERT INTO [Stardust].[WorkerNode] (Id, Url, Heartbeat, Alive) VALUES(@Id, @Url, @Heartbeat, @Alive)";
 			try
 			{
 				using (var connection = new SqlConnection(_connectionString))
@@ -38,7 +38,6 @@ namespace Stardust.Manager
 						workerNodeCommand.Parameters.AddWithValue("@Url", workerNode.Url.ToString());
 						workerNodeCommand.Parameters.AddWithValue("@Heartbeat", workerNode.Heartbeat);
 						workerNodeCommand.Parameters.AddWithValue("@Alive", workerNode.Alive);
-						workerNodeCommand.Parameters.AddWithValue("@PingResult", workerNode.PingResult);
 
 						workerNodeCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 					}
@@ -145,32 +144,6 @@ namespace Stardust.Manager
 			}
 
 			return deadNodes;
-		}
-
-		public void UpdatePing(string nodeUrl, bool pingResult)
-		{
-			try
-			{
-				using (var connection = new SqlConnection(_connectionString))
-				{
-					connection.OpenWithRetry(_retryPolicy);
-
-					var updateCommandText = @"UPDATE [Stardust].[WorkerNode] SET Pingresult = @pingResult WHERE Url = @Url";
-
-					using (var command = new SqlCommand(updateCommandText, connection))
-					{
-						command.Parameters.Add("@Url", SqlDbType.NVarChar).Value = nodeUrl;
-						command.Parameters.Add("@pingResult", SqlDbType.Bit).Value = pingResult;
-						command.ExecuteNonQueryWithRetry(_retryPolicy);
-					}
-				}
-			}
-
-			catch (Exception exp)
-			{
-				this.Log().ErrorWithLineNumber(exp.Message, exp);
-				throw;
-			}
 		}
 
 		public void RegisterHeartbeat(string nodeUri, bool updateStatus)
