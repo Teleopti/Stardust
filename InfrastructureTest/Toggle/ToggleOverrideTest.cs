@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 				var configReader = new FakeConfigReader();
 				configReader.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
 				var iocArgs = new IocArgs(configReader) { FeatureToggle = tempFile };
-				new SaveToggleOverride(configReader).Save(Toggles.TestToggle, dbValue);
+				new PersistToggleOverride(configReader).Save(Toggles.TestToggle, dbValue);
 				
 				var toggleManager = CommonModule.ToggleManagerForIoc(iocArgs);
 				
@@ -73,12 +73,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 				var configReader = new FakeConfigReader();
 				configReader.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
 				var iocArgs = new IocArgs(configReader) { FeatureToggle = tempFile };
-				new SaveToggleOverride(configReader).Save(Toggles.TestToggle, true);
+				new PersistToggleOverride(configReader).Save(Toggles.TestToggle, true);
 				var toggleManager = CommonModule.ToggleManagerForIoc(iocArgs);
 				
 				toggleManager.IsEnabled(Toggles.TestToggle)
 					.Should().Be.True();
-				new SaveToggleOverride(configReader).Delete(Toggles.TestToggle);
+				new PersistToggleOverride(configReader).Delete(Toggles.TestToggle);
 				
 				
 				toggleManager.IsEnabled(Toggles.TestToggle)
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 				var configReader = new FakeConfigReader();
 				configReader.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
 				var iocArgs = new IocArgs(configReader) { FeatureToggle = tempFile };
-				new SaveToggleOverride(configReader).Save(Toggles.TestToggle, true);
+				new PersistToggleOverride(configReader).Save(Toggles.TestToggle, true);
 				var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
 				var builder = new ContainerBuilder();
 				builder.RegisterModule(new CommonModule(configuration));
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 				var toggleManager = runtimeContainer.Resolve<IToggleManager>();
 				toggleManager.IsEnabled(Toggles.TestToggle)
 					.Should().Be.True();
-				new SaveToggleOverride(configReader).Delete(Toggles.TestToggle);
+				new PersistToggleOverride(configReader).Delete(Toggles.TestToggle);
 				
 				
 				toggleManager.IsEnabled(Toggles.TestToggle)

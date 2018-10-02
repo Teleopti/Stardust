@@ -1813,7 +1813,9 @@
     <Compile Include="SystemSetting\GlobalSetting\DataProtectionResponse.cs" />
     <Compile Include="SystemSetting\GlobalSetting\NotificationDurationTime.cs" />
     <Compile Include="ToggleAdmin\AllToggleNamesWithoutOverrides.cs" />
+    <Compile Include="ToggleAdmin\DeleteToggleOverride.cs" />
     <Compile Include="ToggleAdmin\IFetchAllToggleOverrides.cs" />
+    <Compile Include="ToggleAdmin\IPersistToggleOverride.cs" />
     <Compile Include="UndoRedo\UndoRedoState.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSystemSettings.cs" />
     <Compile Include="UndoRedo\UndoRedoWithScheduleCallbackContainer.cs" />

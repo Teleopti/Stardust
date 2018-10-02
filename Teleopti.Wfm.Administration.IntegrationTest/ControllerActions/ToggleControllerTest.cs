@@ -30,7 +30,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			Target.SaveOverride(new SaveOverrideInput{Toggle = Toggles.TestToggle, Value = true});
 			
-			Target.DeleteOverride(Toggles.TestToggle);
+			Target.DeleteOverride(Toggles.TestToggle.ToString());
 			
 			Target.GetAllOverrides().Content.Should().Be.Empty();
 		}

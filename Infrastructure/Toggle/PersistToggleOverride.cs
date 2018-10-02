@@ -1,14 +1,15 @@
 using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.ToggleAdmin;
 
 namespace Teleopti.Ccc.Infrastructure.Toggle
 {
-	public class SaveToggleOverride
+	public class PersistToggleOverride : IPersistToggleOverride
 	{
 		private readonly IConfigReader _configReader;
 
-		public SaveToggleOverride(IConfigReader configReader)
+		public PersistToggleOverride(IConfigReader configReader)
 		{
 			_configReader = configReader;
 		}

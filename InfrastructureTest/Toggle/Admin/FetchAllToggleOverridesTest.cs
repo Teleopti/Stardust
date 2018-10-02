@@ -10,14 +10,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle.Admin
 	[DatabaseTestAttribute]
 	public class FetchAllToggleOverridesTest
 	{
-		public SaveToggleOverride SaveToggleOverride;
+		public PersistToggleOverride PersistToggleOverride;
 		public IFetchAllToggleOverrides Target;
 
 		[TestCase(true)]
 		[TestCase(false)]
 		public void ShouldReadSavedToggleOverride(bool value)
 		{
-			SaveToggleOverride.Save(Toggles.TestToggle, value);
+			PersistToggleOverride.Save(Toggles.TestToggle, value);
 			
 			var overriden = Target.OverridenValues().Single();
 			
