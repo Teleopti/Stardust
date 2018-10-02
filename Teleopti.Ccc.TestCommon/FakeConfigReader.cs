@@ -43,4 +43,13 @@ namespace Teleopti.Ccc.TestCommon
 			return _connectionStrings.ContainsKey(name) ? _connectionStrings[name] : null;
 		}
 	}
+	
+	public static class FakeConfigReaderExtensions
+	{
+		public static FakeConfigReader AddConnectionString(this FakeConfigReader configReader, string name, string connectionString)
+		{
+			configReader.FakeConnectionString("Toggle", null);
+			return configReader;
+		}				
+	}
 }

@@ -15,7 +15,10 @@ namespace Teleopti.Ccc.Infrastructure.Toggle.InApp
 
 		public virtual bool? OverridenValue(Toggles toggle)
 		{
-			using (var connection = new SqlConnection(_configReader.ConnectionString("Toggle")))
+			var connString = _configReader.ConnectionString("Toggle");
+			if (connString == null)
+				return null;
+			using (var connection = new SqlConnection(connString))
 			{
 				connection.Open();
 				var sqlCommand = new SqlCommand("select enabled from Toggle.Override where Toggle = @name", connection);
