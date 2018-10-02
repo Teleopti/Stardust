@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest;
 using Teleopti.Interfaces.Domain;
@@ -28,7 +29,8 @@ namespace Teleopti.Wfm.Test
 		public IPersonRepository PersonRepository;
 		public IAbsenceRequestProcessor AbsenceRequestProcessor;
 		public IPersonRequestRepository PersonRequestRepository;
-		
+		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
+
 		[SetUp]
 		public void Setup()
 		{
@@ -39,6 +41,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldApproveAbsenceIfAppliedBeforeShiftStarts()
 		{
 			var now = new DateTime(2017, 04, 06, 0, 0, 0, DateTimeKind.Utc);
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var hourNow = now.Date.AddHours(now.Hour);
@@ -62,6 +65,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldApproveAbsenceIfAppliedAfterShiftEnds()
 		{
 			var now = new DateTime(2017, 04, 06, 0, 0, 0, DateTimeKind.Utc);
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var hourNow = now.Date.AddHours(now.Hour);
@@ -85,6 +89,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldApproveAbsenceIfAppliedBetweenShifts()
 		{
 			var now = new DateTime(2017, 04, 06, 0, 0, 0, DateTimeKind.Utc);
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var requestStart = new DateTime(2017, 04, 06, 6, 0, 0, DateTimeKind.Utc);
@@ -107,6 +112,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldDenyAbsenceIfAppliedBeforeShiftAndEndsWitinShiftIsUnderstaffed()
 		{
 			var now = new DateTime(2017, 04, 06, 0, 0, 0, DateTimeKind.Utc);
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var hourNow = now.Date.AddHours(now.Hour);
@@ -132,6 +138,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldApproveAbsenceIfAppliedBeforeShiftAndEndsWitinShiftIsNotUnderstaffed()
 		{
 			var now = new DateTime(2017, 04, 06, 0, 0, 0, DateTimeKind.Utc);
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var hourNow = now.Date.AddHours(now.Hour);
@@ -155,6 +162,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldApproveIfAppliedWithinShiftAndEndsAfterShiftIfOverstaffed()
 		{
 			var now = new DateTime(2017, 04, 06, 0, 0, 0, DateTimeKind.Utc);
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var hourNow = now.Date.AddHours(now.Hour);
@@ -179,6 +187,7 @@ namespace Teleopti.Wfm.Test
 		{
 			//shift 13 to 15
 			var now = new DateTime(2017, 04, 06, 0, 0, 0, DateTimeKind.Utc);
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var hourNow = now.Date.AddHours(now.Hour);
@@ -203,6 +212,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldApproveIfRequestSpawnsOverTwoShifts()
 		{
 			var now = new DateTime(2017, 04, 06, 13, 0, 0, DateTimeKind.Utc);
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var requestStart = now.AddHours(1);
@@ -225,6 +235,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldApproveIfRequestSpawnsOverMidnightShiftsWhenOverstaffed()
 		{
 			var now = new DateTime(2017, 04, 06, 9, 0, 0, DateTimeKind.Utc);
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var requestStart = now.AddHours(1);
@@ -247,6 +258,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldApproveIfRequestSpawnsOverMidnightShiftsWhenUnderstaffed()
 		{
 			var now = new DateTime(2017, 04, 06, 9, 0, 0, DateTimeKind.Utc);
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var requestStart = now.AddHours(1);

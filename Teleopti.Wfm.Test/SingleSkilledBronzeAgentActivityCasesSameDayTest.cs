@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest;
 using Teleopti.Interfaces.Domain;
@@ -27,6 +28,7 @@ namespace Teleopti.Wfm.Test
 		public IPersonRepository PersonRepository;
 		public IAbsenceRequestProcessor AbsenceRequestProcessor;
 		public IPersonRequestRepository PersonRequestRepository;
+		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 
 
 		[SetUp]
@@ -41,6 +43,7 @@ namespace Teleopti.Wfm.Test
 		{
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var hourNow = now.Date.AddHours(now.Hour);
 			var requestStart = hourNow.AddHours(2);
@@ -65,6 +68,7 @@ namespace Teleopti.Wfm.Test
 		{
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var hourNow = now.Date.AddHours(now.Hour);
 			var requestStart = hourNow.AddHours(3);
@@ -88,6 +92,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeDeniedIfUnderstaffedDuringAdministration()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var hourNow = now.Date.AddHours(now.Hour);
@@ -112,6 +117,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeDeniedIfUnderstaffedDuringShortAdministration()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var hourNow = now.Date.AddHours(now.Hour);
@@ -136,6 +142,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeDeniedIfUnderstaffedWithNoSkillActivityAtTheStartOfRequest()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var hourNow = now.Date.AddHours(now.Hour);
@@ -160,6 +167,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeDeniedIfUnderstaffedWithNoSkillActivityAtTheEndOfRequest()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var hourNow = now.Date.AddHours(now.Hour);
@@ -185,6 +193,7 @@ namespace Teleopti.Wfm.Test
 		{
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var hourNow = now.Date.AddHours(now.Hour);
 			var requestStart = hourNow.AddHours(3);
@@ -209,6 +218,7 @@ namespace Teleopti.Wfm.Test
 		{
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var hourNow = now.Date.AddHours(now.Hour);
 			var requestStart = hourNow.AddHours(1);
@@ -233,6 +243,7 @@ namespace Teleopti.Wfm.Test
 		{
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var requestStart = now.AddHours(2);
 			SetUpRelevantStuffWithCascading();
@@ -256,6 +267,7 @@ namespace Teleopti.Wfm.Test
 		{
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var requestStart = now.AddHours(3);
 			SetUpRelevantStuffWithCascading();

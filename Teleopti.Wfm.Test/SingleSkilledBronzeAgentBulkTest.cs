@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest;
 using Teleopti.Ccc.UserTexts;
@@ -33,6 +34,7 @@ namespace Teleopti.Wfm.Test
 		public IPersonRepository PersonRepository;
 		public IHandleEvent<NewMultiAbsenceRequestsCreatedEvent> UpdateRequestHandler;
 		public IPersonRequestRepository PersonRequestRepository;
+		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 
 
 		[SetUp]
@@ -46,6 +48,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeApprovedIfOverstaffedSingleInterval()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			IPersonRequest personRequest;
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -84,6 +87,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeApprovedIfOverstaffedMultipleIntervals()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			IPersonRequest personRequest;
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -121,6 +125,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeDeniedIfUnderstaffedSingleInterval()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			IPersonRequest personRequest;
 			IPerson person;
@@ -160,6 +165,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeDeniedIfUnderstaffedMultipleIntervals()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			IPersonRequest personRequest;
 			IPerson person;
@@ -199,6 +205,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeDeniedIfUnderstaffedOnFirstHourAndOverstaffedOnSecond()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			IPersonRequest personRequest;
 			IPerson person;
@@ -238,6 +245,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeApprovedIfNoShiftInRequestPeriodAndOverStaffed()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			IPersonRequest personRequest;
 			var requestStart = now.AddHours(2);
@@ -276,6 +284,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeApprovedIfNoShiftInRequestPeriodAndUnderstaffed()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			IPersonRequest personRequest;
 			var requestStart = now.AddHours(2);
@@ -314,6 +323,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeApprovedWhenActivityIsNotConnectedToPersonSkillAndOverStaffed()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			IPersonRequest personRequest;
 			var requestStart = now.AddHours(2);
@@ -353,6 +363,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeApprovedWhenActivityIsNotConnectedToPersonSkillAndUnderStaffed()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			IPersonRequest personRequest;
 			IPerson person;
@@ -393,6 +404,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeApprovedIfOverstaffedAndActivityIsOvertime()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			IPersonRequest personRequest;
 			var requestStart = now.AddHours(2);
@@ -434,6 +446,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeDeniedIfUnderstaffedAndActivityIsOvertime()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			IPersonRequest personRequest;
 			var requestStart = now.AddHours(2);
