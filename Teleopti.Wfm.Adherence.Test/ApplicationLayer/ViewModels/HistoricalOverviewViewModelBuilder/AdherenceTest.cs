@@ -143,5 +143,26 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 
 			data.Agents.Single().Days.First().Adherence.Should().Be("50");
 		}
+		
+		[Test]
+		public void ShouldBuildAdherenceWhenOvernightShift()
+		{
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)	
+				.WithAgent()
+				.WithAssignment("2018-10-01")
+				.WithActivity(null, "phone")
+				.WithAssignedActivity("2018-10-01 22:00", "2018-10-02 02:00")
+				.WithHistoricalStateChange("2018-10-01 22:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange("2018-10-02 01:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
+			Now.Is("2018-10-03 22:00");
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().Days.Single(d => d.Date == "20181001").Adherence.Should().Be(25);
+			data.Agents.Single().Days.Single(d => d.Date == "20181002").Adherence.Should().Be(null);
+		}				
+		
 	}
 }

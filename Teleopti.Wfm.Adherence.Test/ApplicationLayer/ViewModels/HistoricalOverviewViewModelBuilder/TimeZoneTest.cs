@@ -44,7 +44,7 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 		}
 		
 		[Test]
-		public void ShouldGetAgentDaysSequentiallyInUserTimezone()
+		public void ShouldGetAgentDaysInUserTimezone()
 		{
 			Now.Is("2018-09-30 14:00");
 			var teamId = Guid.NewGuid();
@@ -58,30 +58,6 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 			var data = Target.Build(null, new[] {teamId}).First();
 
 			data.Agents.Single().Days.Select(x => x.Date).Should().Have.SameValuesAs(new[] {"20180924", "20180925", "20180926", "20180927", "20180928", "20180929", "20180930"});
-		}
-		
-//		[Test]
-//		public void ShouldBuildAdherencePercentage2()
-//		{
-//			var teamId = Guid.NewGuid();
-//			Database
-//				.WithTeam(teamId)	
-//				.WithAgent()
-//				.WithAssignment("2018-10-01")
-//				.WithActivity(null, "phone")
-//				.WithAssignedActivity("2018-10-01 22:00", "2018-10-02 02:00")
-//				.WithHistoricalStateChange("2018-10-01 22:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
-//				.WithHistoricalStateChange("2018-10-02 01:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
-//				;
-//			
-//			Now.Is("2018-10-03 22:00");
-//
-//			var data = Target.Build(null, new[] {teamId}).First();
-//
-//			data.Agents.Single().Days.Single(d => d.Date == "20181001").Adherence.Should().Be(75);
-//			data.Agents.Single().Days.Single(d => d.Date == "20181002").Adherence.Should().Be(null);
-//		}		
-				
-		
+		}		
 	}
 }

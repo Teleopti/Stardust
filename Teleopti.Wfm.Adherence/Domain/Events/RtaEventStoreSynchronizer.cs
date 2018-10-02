@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -69,8 +70,9 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 
 		[AllBusinessUnitsUnitOfWork]
 		[FullPermissions]
-		protected virtual void Synchronize(IEnumerable<IEvent> events) =>
-			events
+		protected virtual void Synchronize(IEnumerable<IEvent> events)
+		{
+			var toBeSynched = events
 				.Cast<IRtaStoredEvent>()
 				.Select(e =>
 				{
@@ -82,24 +84,38 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 					};
 				})
 				.Distinct()
-				.ForEach(key => { synchronizeAdherenceDay(key.PersonId, key.Day); });
+				.ToArray();
 
+			toBeSynched.ForEach(x =>
+			{
+				var shouldSynchPreviousDay = toBeSynched
+							.FirstOrDefault(
+								y => y.PersonId == x.PersonId &&
+									 y.Day == x.Day.AddDays(-1)) == null;
+
+				if (shouldSynchPreviousDay)
+					synchronizeAdherenceDay(x.PersonId, x.Day.AddDays(-1));
+				synchronizeAdherenceDay(x.PersonId, x.Day);
+			});
+		}
+		
 		private void synchronizeAdherenceDay(Guid personId, DateOnly day)
 		{
 			var adherenceDay = _adherenceDayLoader.Load(personId, day);
 			var lateForWork = adherenceDay.Changes().FirstOrDefault(c => c.LateForWork != null);
 			var lateForWorkText = lateForWork != null ? lateForWork.LateForWork : "0";
 			var minutesLateForWork = int.Parse(Regex.Replace(lateForWorkText, "[^0-9.]", ""));
-
-			_readModels.Upsert(new HistoricalOverviewReadModel
-			{
-				PersonId = personId,
-				Date = day,
-				WasLateForWork = lateForWork != null,
-				MinutesLateForWork = minutesLateForWork,
-				SecondsInAdherence = adherenceDay.SecondsInAherence(),
-				SecondsOutOfAdherence = adherenceDay.SecondsOutOfAdherence(),
-			});
+			
+			if (adherenceDay.Changes().Any())
+				_readModels.Upsert(new HistoricalOverviewReadModel
+				{
+					PersonId = personId,
+					Date = day,
+					WasLateForWork = lateForWork != null,
+					MinutesLateForWork = minutesLateForWork,
+					SecondsInAdherence = adherenceDay.SecondsInAherence(),
+					SecondsOutOfAdherence = adherenceDay.SecondsOutOfAdherence(),
+				});
 		}
 	}
 }
