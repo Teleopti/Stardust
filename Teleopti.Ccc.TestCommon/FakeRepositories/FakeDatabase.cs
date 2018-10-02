@@ -786,6 +786,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
+		public FakeDatabase WithSchedulePeriod(string startDate, SchedulePeriodType type, int circle)
+		{
+			startDate = startDate ?? "2000-01-01";
+			_person.AddSchedulePeriod(new SchedulePeriod(startDate.Date(), type, circle));
+			return this;
+		}
+
 
 		[UnitOfWork]
 		public virtual FakeDatabase WithExternalLogon(string name)

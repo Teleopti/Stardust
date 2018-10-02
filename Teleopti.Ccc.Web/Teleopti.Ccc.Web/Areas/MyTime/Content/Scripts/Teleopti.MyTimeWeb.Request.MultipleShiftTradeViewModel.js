@@ -434,6 +434,8 @@
 		self.chooseAgent(null);
 		Teleopti.MyTimeWeb.Request.List.HideRequests(false);
 		self.goToFirstPage();
+		Teleopti.MyTimeWeb.Request.ResetToolbarActiveButtons();
+		Teleopti.MyTimeWeb.Request.ActiveRequestList();
 	};
 
 	self.cancelRequest = function() {

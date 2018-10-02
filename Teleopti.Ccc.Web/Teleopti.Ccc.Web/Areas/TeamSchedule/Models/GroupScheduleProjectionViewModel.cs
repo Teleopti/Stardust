@@ -20,5 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public bool FloatOnTop { get; set; }
 		public bool IsPersonalActivity { get; set; }
 		public bool IsMeeting { get; set; }
+
+		public string StartInUtc { get; set; }
 	}
 }

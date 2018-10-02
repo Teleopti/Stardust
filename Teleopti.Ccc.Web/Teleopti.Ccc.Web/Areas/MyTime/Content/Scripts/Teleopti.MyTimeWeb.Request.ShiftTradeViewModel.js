@@ -356,6 +356,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		self.chooseAgent(null);
 		self.chooseHistorys.removeAll();
 		self.goToFirstPage();
+		Teleopti.MyTimeWeb.Request.ResetToolbarActiveButtons();
+		Teleopti.MyTimeWeb.Request.ActiveRequestList();
 	};
 
 	self.cancelRequest = function() {

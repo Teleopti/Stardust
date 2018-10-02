@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -14,49 +16,46 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 {
 	public class HistoricalOverviewViewModelBuilder
 	{
-		private readonly IAgentStateReadModelReader _agentStateReader;
 		private readonly ICommonAgentNameProvider _nameDisplaySetting;
 		private readonly INow _now;
-		private readonly IAgentAdherenceDayLoader _agentAdherenceDayLoader;
 		private readonly IHistoricalOverviewReadModelReader _reader;
 		private readonly IPersonRepository _persons;
 		private readonly ITeamRepository _teams;
 
 		public HistoricalOverviewViewModelBuilder(
-			IAgentStateReadModelReader agentStateReader,
 			ICommonAgentNameProvider nameDisplaySetting,
 			INow now,
-			IAgentAdherenceDayLoader agentAdherenceDayLoader,
 			IHistoricalOverviewReadModelReader reader,
 			IPersonRepository persons, ITeamRepository teams)
 		{
-			_agentStateReader = agentStateReader;
 			_nameDisplaySetting = nameDisplaySetting;
 			_now = now;
-			_agentAdherenceDayLoader = agentAdherenceDayLoader;
 			_reader = reader;
 			_persons = persons;
 			_teams = teams;
 		}
-	
-		public IEnumerable<HistoricalOverviewTeamViewModel> Build(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds) 
+
+		public IEnumerable<HistoricalOverviewTeamViewModel> Build(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds)
 		{
 			var teams = getTeams(siteIds, teamIds);
 			var sevenDays = _now.UtcDateTime().Date.AddDays(-7).DateRange(7).ToArray();
+			var displayDays = from day in sevenDays
+				let displayDay = day.ToString("MM") + "/" + day.ToString("dd")
+				select displayDay;
 			var period = new DateOnlyPeriod(new DateOnly(sevenDays.First()), new DateOnly(sevenDays.Last()));
 			var persons = teams.SelectMany(t => _persons.FindPeopleBelongTeam(t, period)).ToArray();
 			var firstDay = sevenDays.First().ToDateOnly();
-			var lastDay = sevenDays.Last().ToDateOnly();			
+			var lastDay = sevenDays.Last().ToDateOnly();
 			var readModel = _reader.Read(persons.Select(p => p.Id.Value))
-										.Where(x => x.Date >= firstDay && 
-													x.Date <= lastDay)
-										.ToArray();
+				.Where(x => x.Date >= firstDay &&
+							x.Date <= lastDay)
+				.ToArray();
 
 			var agentsPerDayGroupedOnTeam = (from agentDay in readModel
 				let person = persons.FirstOrDefault(p => p.Id == agentDay.PersonId)
 				let pp = person?.Period(agentDay.Date)
 				where pp != null
-				select new 
+				select new
 				{
 					TeamId = pp.Team.Id,
 					SiteTeamName = pp.Team.SiteAndTeam,
@@ -67,14 +66,15 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 					agentDay.WasLateForWork,
 					agentDay.MinutesLateForWork,
 					agentDay.SecondsInAdherence,
-					agentDay.SecondsOutOfAdherence
+					agentDay.SecondsOutOfAdherence,
+					SevenDaysForAgent = sevenDays
 				}).OrderBy(ai => ai.SiteTeamName).ThenBy(ai => ai.Name).ToLookup(ai => ai.TeamId);
 
-			
 			return (from agentsOnTeam in agentsPerDayGroupedOnTeam
 					select new HistoricalOverviewTeamViewModel
 					{
 						Name = agentsOnTeam.First().SiteTeamName,
+						DisplayDays = displayDays,
 						Agents = (from agent in agentsOnTeam
 							group agent by agent.PersonId
 							into groupedAgent
@@ -82,12 +82,11 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 							{
 								Id = groupedAgent.First().PersonId,
 								Name = groupedAgent.First().Name,
-								Days = (from day in sevenDays
+								Days = (from day in groupedAgent.First().SevenDaysForAgent
 									let agentDay = groupedAgent.FirstOrDefault(a => a.Day == day.ToDateOnly())
 									select new HistoricalOverviewDayViewModel
 									{
 										Date = day.ToString("yyyyMMdd"),
-										DisplayDate = day.ToString("MM") + "/" + day.ToString("dd"),
 										Adherence = agentDay?.Adherence,
 										WasLateForWork = agentDay?.WasLateForWork ?? false
 									}).ToArray(),
@@ -130,9 +129,9 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 
 			if (expectedWorkTime.Equals(0.0))
 				return null;
-			
+
 			//Financial Rounding
-			return  Convert.ToInt32((inAdherence / expectedWorkTime) * 100);		
+			return Convert.ToInt32((inAdherence / expectedWorkTime) * 100);
 		}
 	}
 
@@ -140,6 +139,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 	{
 		public string Name { get; set; }
 		public IEnumerable<HistoricalOverviewAgentViewModel> Agents { get; set; }
+		public IEnumerable<string> DisplayDays { get; set; }
 	}
 
 	public class HistoricalOverviewAgentViewModel

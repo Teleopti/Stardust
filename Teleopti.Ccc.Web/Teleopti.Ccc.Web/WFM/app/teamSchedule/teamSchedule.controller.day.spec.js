@@ -409,6 +409,7 @@
 									"Color": "#80FF80",
 									"Description": "Email",
 									"Start": today + " 07:00",
+									"StartInUtc": today + " 07:00",
 									"Minutes": 480
 								},
 								{
@@ -416,6 +417,7 @@
 									"Color": "#80FF80",
 									"Description": "Email",
 									"Start": today + " 15:00",
+									"StartInUtc": today + " 15:00",
 									"Minutes": 120
 								}
 							],
@@ -437,6 +439,7 @@
 									"Color": "#80FF80",
 									"Description": "Email",
 									"Start": today + " 08:00",
+									"StartInUtc": today + " 08:00",
 									"Minutes": 480
 								}
 							],

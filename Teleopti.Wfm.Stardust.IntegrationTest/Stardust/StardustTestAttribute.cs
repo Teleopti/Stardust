@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using Autofac;
 using NUnit.Framework.Interfaces;
 using Teleopti.Ccc.Domain.Aop;
@@ -12,7 +11,6 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Hangfire;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
@@ -20,7 +18,7 @@ using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
-	public class StardustTestAttribute : IntegrationTestAttribute
+	public class StardustTestAttribute : IntegrationTestAttribute 
 	{
 		public IComponentContext Container;
 		public DefaultDataCreator DefaultDataCreator;
@@ -38,9 +36,9 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public override void BeforeTest(ITest testDetails)
 		{
 			base.BeforeTest(testDetails);
+			TestSiteConfigurationSetup.Setup();
 
 			var dataHash = DefaultDataCreator.HashValue;
-			
 			var path = "";
 #if DEBUG
 			path = "./";
@@ -99,14 +97,6 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
 			TestLog.Debug("AsSystem.Logon(DataSourceHelper.TestTenantName, businessUnitId)");
 			AsSystem.Logon(DataSourceHelper.TestTenantName, businessUnitId);
-			//Thread.Sleep(30000);
-			TestLog.Debug("TestSiteConfigurationSetup.TearDown()..");
-			TestSiteConfigurationSetup.TearDown();
-
-			//Thread.Sleep(60000);
-			TestLog.Debug("TestSiteConfigurationSetup.Setup()..");
-			TestSiteConfigurationSetup.Setup();
-			//Thread.Sleep(30000);
 
 			TestLog.Debug("Setting up ConfigValues..");
 			((TestConfigReader) ConfigReader).ConfigValues.Remove("ManagerLocation");

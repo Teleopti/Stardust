@@ -393,7 +393,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldCheckIfNoAgentsScheduled()
 		{
-			_rep.IsThereScheduledAgents(site.BusinessUnit.Id.Value).Should().Be.False();
+			_rep.IsThereScheduledAgents(site.BusinessUnit.Id.Value, new DateOnlyPeriod()).Should().Be.False();
 		}
 		
 		[Test]
@@ -407,8 +407,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			Session.Flush();
 
-			_rep.IsThereScheduledAgents(site.BusinessUnit.Id.Value).Should().Be.True();
-			_rep.IsThereScheduledAgents(buWithoutAgentScheduled.Id.Value).Should().Be.False();
+			var period1 = new DateOnlyPeriod(new DateOnly(2000, 1, 1), new DateOnly(2000, 1, 3));
+			_rep.IsThereScheduledAgents(site.BusinessUnit.Id.Value, period1).Should().Be.True();
+			_rep.IsThereScheduledAgents(buWithoutAgentScheduled.Id.Value, period1).Should().Be.False();
+
+			var period2 = new DateOnlyPeriod(new DateOnly(2000, 1, 3), new DateOnly(2000, 1, 5));
+			_rep.IsThereScheduledAgents(site.BusinessUnit.Id.Value, period2).Should().Be.False();
+			_rep.IsThereScheduledAgents(buWithoutAgentScheduled.Id.Value, period2).Should().Be.False();
 		}
 
 		protected override Repository<IPersonAssignment> TestRepository(ICurrentUnitOfWork currentUnitOfWork)

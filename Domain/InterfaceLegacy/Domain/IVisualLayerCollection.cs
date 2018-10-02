@@ -109,16 +109,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		int Count();
 
 		/// <summary>
-		/// Gets or sets the period optimizer.
-		/// </summary>
-		/// <value>The period optimizer.</value>
-		/// <remarks>
-		/// Created by: rogerkr
-		/// Created date: 2009-02-02
-		/// </remarks>
-		IFilterOnPeriodOptimizer PeriodOptimizer { get; set; }
-
-		/// <summary>
 		/// Determines whether [is satisfied by] [the specified specification].
 		/// </summary>
 		/// <param name="specification">The specification.</param>

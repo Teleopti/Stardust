@@ -1,4 +1,4 @@
-﻿Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
+﻿Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function (ajax) {
 	var self = this;
 	self.maxShiftsPerPage = 20;
 	self.layerCanvasPixelWidth = ko.observable();
@@ -235,6 +235,8 @@
 		self.chooseAgent(null);
 		Teleopti.MyTimeWeb.Request.List.HideRequests(false);
 		self.goToFirstPage();
+		Teleopti.MyTimeWeb.Request.ResetToolbarActiveButtons();
+		Teleopti.MyTimeWeb.Request.ActiveRequestList();
 	};
 
 	self.cancelRequest = function() {

@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			PersistAndRemoveFromUnitOfWork(seatPlan);
 
-			var seatPlanRepo = new SeatPlanRepository (UnitOfWork);
+			var seatPlanRepo = new SeatPlanRepository (CurrUnitOfWork);
 			var existingSeatPlan = seatPlanRepo.GetSeatPlanForDate (seatPlan.Date);
 			existingSeatPlan.Status = SeatPlanStatus.Ok;
 

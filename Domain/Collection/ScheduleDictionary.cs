@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using NPOI.OpenXmlFormats.Dml;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -546,23 +548,22 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		public IScheduleRange this[IPerson key]
 		{
-			get
-			{
-				IScheduleRange scheduleRange;
-				if (!_dictionary.TryGetValue(key, out scheduleRange))
-				{
-					scheduleRange = new ScheduleRange(this,
-														new ScheduleParameters(Scenario, key, Period.RangeToLoadCalculator.SchedulerRangeToLoad(key)), _dataPermissionChecker);
-					_dictionary.Add(key, scheduleRange);
-				}
-				return scheduleRange;
-			}
-			set
-			{
-				throw new NotSupportedException(NotSupportedOperation);
-			}
+			get => getOrCreateScheduleRange(key);
+			set => throw new NotSupportedException(NotSupportedOperation);
 		}
 
+		[MethodImpl(MethodImplOptions.Synchronized)]
+		private IScheduleRange getOrCreateScheduleRange(IPerson agent)
+		{
+			if (_dictionary.TryGetValue(agent, out var scheduleRange)) 
+				return scheduleRange;
+			
+			var newScheduleRange = new ScheduleRange(this, 
+				new ScheduleParameters(Scenario, agent, Period.RangeToLoadCalculator.SchedulerRangeToLoad(agent)), _dataPermissionChecker);
+			_dictionary.Add(agent, newScheduleRange);
+			return newScheduleRange;
+		}
+		
 		public bool Remove(IPerson key)
 		{
 			return _dictionary.Remove(key);

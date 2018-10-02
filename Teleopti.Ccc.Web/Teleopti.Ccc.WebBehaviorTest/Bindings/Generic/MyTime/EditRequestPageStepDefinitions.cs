@@ -41,6 +41,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExists("#Request-add-section");
 		}
 
+		[When(@"I cancel to add absence request")]
+		public void WhenICancelToAddAbsenceRequest()
+		{
+			Browser.Interactions.Click(".request-new-cancel");
+		}
+
 		[When(@"I click to shift trade bulletin board")]
 		public void WhenIClickToShiftTradeBulletinBoard()
 		{

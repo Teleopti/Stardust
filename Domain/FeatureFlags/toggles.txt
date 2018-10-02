@@ -107,8 +107,8 @@ ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 ResourcePlanner_XXL_76496 = true
-ResourcePlanner_ReducingSkillsDifferentOpeningHours_76176 = RC
-ResourcePlanner_HalfHourSkillTimeZone_75509 = RC
+ResourcePlanner_ReducingSkillsDifferentOpeningHours_76176 = true
+ResourcePlanner_HalfHourSkillTimeZone_75509 = true
 ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348 = DEV
 
 # DeBockers #
@@ -154,7 +154,8 @@ MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306 = RC #Depending on MyTime
 MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408 = RC #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
 MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409 = RC #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
 WFM_Gamification_Permission_76546 = true
-MyTimeWeb_Request_CleanUpRequestHisotry_77776 = DEV
+MyTimeWeb_Request_CleanUpRequestHisotry_77776 = RC
+MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446 = DEV
 
 # Tech #
 Tech_Moving_ResilientConnectionLogic_76181 = true

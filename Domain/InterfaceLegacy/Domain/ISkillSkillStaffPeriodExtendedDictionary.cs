@@ -26,16 +26,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     public interface ISkillSkillStaffPeriodExtendedDictionary
     {
         /// <summary>
-        /// Periods this instance.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-12-10
-        /// </remarks>
-        DateTimePeriod? Period();
-
-        /// <summary>
         /// Adds the specified key.
         /// </summary>
         /// <param name="key">The key.</param>

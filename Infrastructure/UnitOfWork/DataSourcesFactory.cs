@@ -142,21 +142,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private Configuration createStatisticConfiguration(string connectionString, string tenant)
 		{
-			// 2013-10-03
-			//REMOVE ME LATER!!!!!!!!!!!!!!!!/((
-			Log4NetConfiguration.SetConnectionString(connectionString);
-			////////////////////////////////////
-			// 2014-10-24
-			// ^^ how much later are we talking?
-			// 2016-03-07
-			// Maybe for David's bday?
-			// 2018-01-26
-			// Putting down a one beer bet that this will be here on 2020-01-01 // LevelUp
 			var configuration = new Configuration()
 				.SetProperty(Environment.ConnectionString, connectionString)
 				.SetProperty(Environment.ConnectionProvider, "NHibernate.Connection.DriverConnectionProvider")
 				.SetProperty(Environment.ConnectionDriver,
-					_toggles.IsEnabled(Domain.FeatureFlags.Toggles.Tech_Moving_ResilientConnectionLogic_76181)
+					_toggles.IsEnabled(Toggles.Tech_Moving_ResilientConnectionLogic_76181)
 						? typeof(ResilientSql2008ClientDriver).AssemblyQualifiedName
 						: typeof(SqlAzureClientDriverWithLogRetries).AssemblyQualifiedName)
 				.SetProperty(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName)

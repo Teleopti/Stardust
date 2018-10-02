@@ -106,7 +106,6 @@
     <Compile Include="DatabaseVersionInformation.cs" />
     <Compile Include="ExecuteSql.cs" />
     <Compile Include="FileLogger.cs" />
-    <Compile Include="GenericDisposable.cs" />
     <Compile Include="HangfireSchemaCreator.cs" />
     <Compile Include="IniFile.cs" />
     <Compile Include="LoginHelper.cs" />

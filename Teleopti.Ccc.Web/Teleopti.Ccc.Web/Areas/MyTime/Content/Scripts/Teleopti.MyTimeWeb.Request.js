@@ -37,6 +37,11 @@ Teleopti.MyTimeWeb.Request = (function($) {
 			self.menuIsVisible(false);
 		};
 
+		self.cancelOrSendCallback = function () {
+			self.resetToolbarActiveButtons();
+			self.requestListActive(true);
+		}
+
 		self.clickRequestList = function() {
 			self.resetToolbarActiveButtons();
 			self.requestListActive(true);
@@ -158,6 +163,9 @@ Teleopti.MyTimeWeb.Request = (function($) {
 		},
 		ResetToolbarActiveButtons: function() {
 			requestNavigationViewModel.resetToolbarActiveButtons();
+		},
+		ActiveRequestList: function() {
+			requestNavigationViewModel.requestListActive(true);
 		},
 		ShiftTradeRequest: function(date) {
 			requestNavigationViewModel.addShiftTradeRequest(date);

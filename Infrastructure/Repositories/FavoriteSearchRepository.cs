@@ -9,12 +9,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class FavoriteSearchRepository : Repository<IFavoriteSearch>, IFavoriteSearchRepository
 	{
-#pragma warning disable CS0618 // Type or member is obsolete
-		public FavoriteSearchRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
-#pragma warning restore CS0618 // Type or member is obsolete
-		{
-		}
-
 		public FavoriteSearchRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
 		}

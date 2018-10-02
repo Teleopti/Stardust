@@ -18,7 +18,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.TestData;
-using Teleopti.Ccc.TestCommon.TestData.Analytics.Tables;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
@@ -80,10 +79,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_eventPublisher.PublishedEvents.Should().Be.Empty();
 		}
 
-		[Test]
-		public void ShouldNotPublishAnyEventsIfNoAgentScheduled()
+		[Test,Ignore("see bug #77971")]
+		public void ShouldNotPublishAnyEventsIfNoAgentScheduledInPeriod()
 		{
 			addPeople();
+			addAbsence();
+			addAssignment();
 			
 			_scheduleProjectionReadOnlyPersister.Stub(x => x.IsInitialized()).Return(false);
 			_scheduleDayReadModelRepository.Stub(x => x.IsInitialized()).Return(false);
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				LogOnBusinessUnitId = _businessUnit.Id.Value,
 				EndDays = 10,
-				StartDays = 1
+				StartDays = 2
 			});
 
 			_eventPublisher.PublishedEvents.Should().Be.Empty();
@@ -113,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				LogOnBusinessUnitId = _businessUnit.Id.Value,
 				EndDays = 10,
-				StartDays = 1
+				StartDays = 0
 			});
 
 			_eventPublisher.PublishedEvents.Count().Should().Be(count);
@@ -133,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				LogOnBusinessUnitId = _businessUnit.Id.Value,
 				EndDays = 10,
-				StartDays = 1
+				StartDays = 0
 			});
 
 			_eventPublisher.PublishedEvents.Count().Should().Be(count);
@@ -153,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				LogOnBusinessUnitId = _businessUnit.Id.Value,
 				EndDays = 10,
-				StartDays = 1
+				StartDays = 0
 			});
 
 			_eventPublisher.PublishedEvents.Count().Should().Be.EqualTo(count);
@@ -175,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				LogOnBusinessUnitId = _businessUnit.Id.Value,
 				EndDays = 10,
-				StartDays = 1
+				StartDays = 0
 			});
 
 			_eventPublisher.PublishedEvents.Count().Should().Be.EqualTo(1);
@@ -195,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				LogOnBusinessUnitId = _businessUnit.Id.Value,
 				EndDays = 10,
-				StartDays = 1
+				StartDays = 0
 			});
 
 			_eventPublisher.PublishedEvents.Count().Should().Be.EqualTo(count);
@@ -216,7 +217,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				LogOnBusinessUnitId = _businessUnit.Id.Value,
 				EndDays = 10,
-				StartDays = 1
+				StartDays = 0
 			});
 
 			_eventPublisher.PublishedEvents.Count().Should().Be.EqualTo(count);
@@ -237,7 +238,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				LogOnBusinessUnitId = _businessUnit.Id.Value,
 				EndDays = 10,
-				StartDays = 1
+				StartDays = 0
 			});
 
 			_eventPublisher.PublishedEvents.Count().Should().Be.EqualTo(count);
@@ -259,17 +260,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			return number;
 		}
 
-		private void addAssignment()
+		private void addAssignment(int relativeDays = 0)
 		{
 			_personAssignmentRepository.Has(new PersonAssignment(_personRepository.FindAllSortByName().First(),
-				_currentScenario.LoadDefaultScenario(), DateOnly.Today));
+				_currentScenario.LoadDefaultScenario(), DateOnly.Today.AddDays(relativeDays)));
 		}
 
-		private void addAbsence()
+		private void addAbsence(int relativeDays = 0)
 		{
+			var now = DateTime.UtcNow;
+			var nowWithoutSeconds = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Second, 0, DateTimeKind.Utc);
+			var period = new DateTimePeriod(nowWithoutSeconds.AddDays(relativeDays),
+				nowWithoutSeconds.AddDays(1).AddDays(relativeDays));
+
 			var absence = AbsenceFactory.CreateAbsence("absence");
+
 			_personAbsenceRepository.Has(new PersonAbsence(_personRepository.FindAllSortByName().First(),
-				_currentScenario.LoadDefaultScenario(), new AbsenceLayer(absence, new DateTimePeriod())));
+				_currentScenario.LoadDefaultScenario(), new AbsenceLayer(absence, period)));
 		}
 
 		private void addPersonPeriod(IPerson person)

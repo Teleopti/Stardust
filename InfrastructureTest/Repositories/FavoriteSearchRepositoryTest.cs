@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(person);
 			PersistAndRemoveFromUnitOfWork(fav);
 
-			var loadedAll = new FavoriteSearchRepository(UnitOfWork).LoadAll();
+			var loadedAll = new FavoriteSearchRepository(CurrUnitOfWork).LoadAll();
 
 			Assert.AreEqual(1, loadedAll.Count());
 			Assert.AreEqual("myFav", loadedAll.First().Name);
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			PersistAndRemoveFromUnitOfWork(fav);
 
-			var allByPerson = new FavoriteSearchRepository(UnitOfWork).FindAllForPerson(person.Id.Value, WfmArea.Teams);
+			var allByPerson = new FavoriteSearchRepository(CurrUnitOfWork).FindAllForPerson(person.Id.Value, WfmArea.Teams);
 
 			Assert.AreEqual(1, allByPerson.Count());
 		}
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			duplicate.WfmArea = WfmArea.Teams;
 			PersistAndRemoveFromUnitOfWork(fav1);
 
-			var target = new FavoriteSearchRepository(UnitOfWork);
+			var target = new FavoriteSearchRepository(CurrUnitOfWork);
 			Assert.Throws<Infrastructure.Foundation.ConstraintViolationException>(() =>
 			{				
 				target.Add(duplicate);

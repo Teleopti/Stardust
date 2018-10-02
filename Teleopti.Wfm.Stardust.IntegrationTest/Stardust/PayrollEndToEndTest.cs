@@ -21,7 +21,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
-	[StardustTest, Ignore("Still Flaky")]
+	[StardustTest]
 	public class PayrollEndToEndTest
 	{
 		public IStardustSender StardustSender;
@@ -37,7 +37,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		private AssertRetryStrategy _assertRetryStrategy;
 
 		[Test]
-		public void ShouldPublishAndProcessPayrollJob([Range(1, 50, 1)] int rangeCount)
+		public void ShouldPublishAndProcessPayrollJob()
 		{
 			_assertRetryStrategy = new AssertRetryStrategy(100);
 

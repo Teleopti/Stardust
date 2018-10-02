@@ -13,14 +13,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function($) {
 	var vmBulletin;
 
 	function _init() {
-		// Teleopti.MyTimeWeb.Request.List.HideRequests(true);	
-
 		var elementToBind = $('#Request-add-shift-trade')[0];
 		if (elementToBind !== undefined) {
 			if ((vm || '') == '') {
 				var toggleOn = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947");
 				var ajax = new Teleopti.MyTimeWeb.Ajax();
-				vm = toggleOn ? new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax):  new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+				vm = toggleOn ? new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax) : new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
 				ko.cleanNode(elementToBind);
 				ko.applyBindings(vm, elementToBind);
 			}
@@ -146,7 +144,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function($) {
 		    vm.loadPeriod(date);
 		    _openAddShiftTradeWindow();
 		},
-		OpenAddShiftTradeBulletinWindow: function(date) {
+		OpenAddShiftTradeBulletinWindow: function (date) {
 			_initBulletinBoard();
 			vmBulletin.loadPeriod();
 			_openShiftTradeBulletinWindow();

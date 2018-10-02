@@ -6,6 +6,7 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		t.backend.with.historicalOverview(
 				{
 					Name: 'Denver/Avalanche',
+					DisplayDays: ['20/8', '21/8', '22/8', '23/8', '24/8', '25/8', '26/8'],
 					Agents: [{
 						Id: '625295cf-9b4c-4915-ba66-9b5e015b257c',
 						Name: 'Andeen Ashley',
@@ -13,7 +14,6 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 						Days: [
 							{
 								Date: '20180820',
-								DisplayDate: '20/8',
 								Adherence: 50,
 								WasLateForWork: true
 							}
@@ -33,9 +33,10 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		});
 		
 		expect(vm.cards[0].Name).toBe('Denver/Avalanche');
+		expect(vm.cards[0].DisplayDays.length).toBe(7);
+		expect(vm.cards[0].DisplayDays[0]).toBe('20/8');
 		expect(vm.cards[0].Agents[0].Name).toBe('Andeen Ashley');
 		expect(vm.cards[0].Agents[0].IntervalAdherence).toBe(73);
-		expect(vm.cards[0].Agents[0].Days[0].DisplayDate).toBe('20/8');
 		expect(vm.cards[0].Agents[0].Days[0].Adherence).toBe(50);
 		expect(vm.cards[0].Agents[0].Days[0].WasLateForWork).toBe(true);
 		expect(vm.cards[0].Agents[0].Days[0].Color).toBe('hsl(0,0%,70%)');

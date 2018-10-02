@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			personAbsence.LastChange = date;
 			PersistAndRemoveFromUnitOfWork(personAbsence);
 
-			IPersonAbsence loaded = new PersonAbsenceRepository(CurrUnitOfWork).LoadAggregate(personAbsence.Id.Value);
+			var loaded = new PersonAbsenceRepository(CurrUnitOfWork).LoadAggregate(personAbsence.Id.Value);
 			Assert.AreEqual(date.Value, loaded.LastChange.Value);
 		}
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyUpdatedByAndUpdatedOnIsChangedWhenObjectIsUpdated()
 		{
-			IPersonAbsence personAbsence = CreateAggregateWithCorrectBusinessUnit();
+			var personAbsence = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(personAbsence);
 			
 			Assert.IsTrue(personAbsence.UpdatedOn.HasValue);
@@ -103,18 +103,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldIgnoreOtherAbsencesWhenLoadingPeriodsForAbsence()
 		{
-			IAbsence notSelectedAbsence = AbsenceFactory.CreateAbsence("Not Selected");
+			var notSelectedAbsence = AbsenceFactory.CreateAbsence("Not Selected");
 			PersistAndRemoveFromUnitOfWork(notSelectedAbsence);
 
 			var period1 = new DateTimePeriod(new DateTime(2007, 1, 1, 10, 15, 0, DateTimeKind.Utc),
 								   new DateTime(2007, 1, 1, 17, 15, 0, DateTimeKind.Utc));
 			var period2 = period1.MovePeriod(TimeSpan.FromHours(1));
 			
-			AbsenceLayer layer1 = new AbsenceLayer(absenceSick, period1);
-			AbsenceLayer layer2 = new AbsenceLayer(notSelectedAbsence, period2);
+			var layer1 = new AbsenceLayer(absenceSick, period1);
+			var layer2 = new AbsenceLayer(notSelectedAbsence, period2);
 
-			PersonAbsence agAbsValid1 = new PersonAbsence(agent, defaultScenario, layer1);
-			PersonAbsence agAbsInValid2 = new PersonAbsence(agent, defaultScenario, layer2);
+			var agAbsValid1 = new PersonAbsence(agent, defaultScenario, layer1);
+			var agAbsInValid2 = new PersonAbsence(agent, defaultScenario, layer2);
 			
 			PersistAndRemoveFromUnitOfWork(agAbsValid1);
 			PersistAndRemoveFromUnitOfWork(agAbsInValid2);
@@ -165,11 +165,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 								   new DateTime(2007, 1, 1, 17, 15, 0, DateTimeKind.Utc));
 			var period2 = period1.MovePeriod(TimeSpan.FromHours(1));
 
-			AbsenceLayer layer1 = new AbsenceLayer(absenceSick, period1);
-			AbsenceLayer layer2 = new AbsenceLayer(absenceSick, period2);
+			var layer1 = new AbsenceLayer(absenceSick, period1);
+			var layer2 = new AbsenceLayer(absenceSick, period2);
 
-			PersonAbsence agAbsValid1 = new PersonAbsence(agent, defaultScenario, layer1);
-			PersonAbsence agAbsInValid2 = new PersonAbsence(agent, noScenario, layer2);
+			var agAbsValid1 = new PersonAbsence(agent, defaultScenario, layer1);
+			var agAbsInValid2 = new PersonAbsence(agent, noScenario, layer2);
 
 			PersistAndRemoveFromUnitOfWork(agAbsValid1);
 			PersistAndRemoveFromUnitOfWork(agAbsInValid2);
@@ -192,11 +192,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 								   new DateTime(2007, 1, 1, 17, 15, 0, DateTimeKind.Utc));
 			var period2 = period1.MovePeriod(TimeSpan.FromHours(1));
 
-			AbsenceLayer layer1 = new AbsenceLayer(absenceSick, period1);
-			AbsenceLayer layer2 = new AbsenceLayer(absenceSick, period2);
+			var layer1 = new AbsenceLayer(absenceSick, period1);
+			var layer2 = new AbsenceLayer(absenceSick, period2);
 
-			PersonAbsence agAbsValid1 = new PersonAbsence(agent, defaultScenario, layer1);
-			PersonAbsence agAbsInValid2 = new PersonAbsence(dummyAgent2, defaultScenario, layer2);
+			var agAbsValid1 = new PersonAbsence(agent, defaultScenario, layer1);
+			var agAbsInValid2 = new PersonAbsence(dummyAgent2, defaultScenario, layer2);
 
 			PersistAndRemoveFromUnitOfWork(agAbsValid1);
 			PersistAndRemoveFromUnitOfWork(agAbsInValid2);
@@ -219,11 +219,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 								   new DateTime(2007, 1, 1, 17, 15, 0, DateTimeKind.Utc));
 			var period2 = period1.MovePeriod(TimeSpan.FromHours(7));
 
-			AbsenceLayer layer1 = new AbsenceLayer(absenceSick, period1);
-			AbsenceLayer layer2 = new AbsenceLayer(absenceSick, period2);
+			var layer1 = new AbsenceLayer(absenceSick, period1);
+			var layer2 = new AbsenceLayer(absenceSick, period2);
 
-			PersonAbsence agAbsValid1 = new PersonAbsence(agent, defaultScenario, layer1);
-			PersonAbsence agAbsInValid2 = new PersonAbsence(dummyAgent2, defaultScenario, layer2);
+			var agAbsValid1 = new PersonAbsence(agent, defaultScenario, layer1);
+			var agAbsInValid2 = new PersonAbsence(dummyAgent2, defaultScenario, layer2);
 
 			PersistAndRemoveFromUnitOfWork(agAbsValid1);
 			PersistAndRemoveFromUnitOfWork(agAbsInValid2);
@@ -238,18 +238,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void CanFindAgentAbsencesWithCorrectScenario()
 		{
-			Scenario noScenario = new Scenario("High");
+			var noScenario = new Scenario("High");
 			PersistAndRemoveFromUnitOfWork(noScenario);
 			
-			DateTimePeriod period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
-			AbsenceLayer layer1 = new AbsenceLayer(absenceSick, period);
-			AbsenceLayer layer2 = new AbsenceLayer(absenceSick, period);
-			PersonAbsence personAbsence1 = new PersonAbsence(agent, noScenario, layer1);
-			PersonAbsence personAbsence2 = new PersonAbsence(agent, defaultScenario, layer2);
+			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+			var layer1 = new AbsenceLayer(absenceSick, period);
+			var layer2 = new AbsenceLayer(absenceSick, period);
+			var personAbsence1 = new PersonAbsence(agent, noScenario, layer1);
+			var personAbsence2 = new PersonAbsence(agent, defaultScenario, layer2);
 			PersistAndRemoveFromUnitOfWork(personAbsence1);
 			PersistAndRemoveFromUnitOfWork(personAbsence2);
 
-			ICollection<IPersonAbsence> retList = new PersonAbsenceRepository(CurrUnitOfWork).Find(new DateTimePeriod(2000, 1, 1, 2007, 1, 3), defaultScenario);
+			var retList = new PersonAbsenceRepository(CurrUnitOfWork).Find(new DateTimePeriod(2000, 1, 1, 2007, 1, 3), defaultScenario);
 			verifyRelatedObjectsAreEagerlyLoaded(retList);
 			Assert.AreEqual(1, retList.Count);
 		}
@@ -262,12 +262,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var period2 = new DateTimePeriod(2000,1,1,9,2000,1,1,14);
 			var layer1 = new AbsenceLayer(absenceSick,period1);
 			var layer2 = new AbsenceLayer(absenceSick,period2);
-			PersonAbsence personAbsence1 = new PersonAbsence(agent,defaultScenario,layer1);
-			PersonAbsence personAbsence2 = new PersonAbsence(agent,defaultScenario,layer2);
+			var personAbsence1 = new PersonAbsence(agent,defaultScenario,layer1);
+			var personAbsence2 = new PersonAbsence(agent,defaultScenario,layer2);
 			PersistAndRemoveFromUnitOfWork(personAbsence1);
 			PersistAndRemoveFromUnitOfWork(personAbsence2);
 
-			ICollection<IPersonAbsence> retList = new PersonAbsenceRepository(CurrUnitOfWork).FindExact(agent, period1, absenceSick, defaultScenario);
+			var retList = new PersonAbsenceRepository(CurrUnitOfWork).FindExact(agent, period1, absenceSick, defaultScenario);
 			verifyRelatedObjectsAreEagerlyLoaded(retList);
 			retList.Single().Period.Should().Be.EqualTo(period1);
 		}
@@ -283,27 +283,27 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void CanFindAgentAbsencesWithCorrectScenarioAndPeriod()
 		{
-			Scenario noScenario = new Scenario("High");
-			var agent = PersonFactory.CreatePerson("k");
+			var noScenario = new Scenario("High");
+			var dummyAgent1 = PersonFactory.CreatePerson("k");
 			var dummyAgent2 = PersonFactory.CreatePerson("l");
-			DateTimePeriod period = new DateTimePeriod(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+			var period = new DateTimePeriod(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc),
 								   new DateTime(2000, 1, 2, 0, 0, 0, DateTimeKind.Utc));
 			
-			PersistAndRemoveFromUnitOfWork(agent);
+			PersistAndRemoveFromUnitOfWork(dummyAgent1);
 			PersistAndRemoveFromUnitOfWork(dummyAgent2);
 			PersistAndRemoveFromUnitOfWork(noScenario);
 
-			AbsenceLayer layer1 = new AbsenceLayer(absenceSick, period);
-			AbsenceLayer layer2 = new AbsenceLayer(absenceSick, period);
-			PersonAbsence personAbsence1 = new PersonAbsence(agent, noScenario, layer1);
-			PersonAbsence personAbsence2 = new PersonAbsence(dummyAgent2, defaultScenario, layer2);
+			var layer1 = new AbsenceLayer(absenceSick, period);
+			var layer2 = new AbsenceLayer(absenceSick, period);
+			var personAbsence1 = new PersonAbsence(dummyAgent1, noScenario, layer1);
+			var personAbsence2 = new PersonAbsence(dummyAgent2, defaultScenario, layer2);
 			
 			PersistAndRemoveFromUnitOfWork(personAbsence1);
 			PersistAndRemoveFromUnitOfWork(personAbsence2);
 
 			IList<IPerson> persons = new List<IPerson>();
 			persons.Add(dummyAgent2);
-			ICollection<IPersonAbsence> retList = new PersonAbsenceRepository(CurrUnitOfWork).Find(persons, new DateTimePeriod(2000, 1, 1, 2007, 1, 3), defaultScenario);
+			var retList = new PersonAbsenceRepository(CurrUnitOfWork).Find(persons, new DateTimePeriod(2000, 1, 1, 2007, 1, 3), defaultScenario);
 			verifyRelatedObjectsAreEagerlyLoaded(retList);
 			Assert.AreEqual(1, retList.Count);
 		}
@@ -326,11 +326,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldCheckIfNoAgentsScheduled()
 		{
-			new PersonAbsenceRepository(CurrUnitOfWork).IsThereScheduledAgents(Guid.NewGuid()).Should().Be.False();
+			new PersonAbsenceRepository(CurrUnitOfWork).IsThereScheduledAgents(Guid.NewGuid(), new DateOnlyPeriod()).Should().Be.False();
 		}
-		
-		[Test]
-		public void ShouldCheckIfAnyAgentsScheduled()
+
+		[TestCase(1, 1, true)] // Absence started in query period, ended in query period
+		[TestCase(-1, 4, true)] // Absence started before query period, ended after query period
+		[TestCase(-1, 2, true)] // Absence started before query period, ended in query period
+		[TestCase(1, 4, true)] // Absence started in query period, ended after query period
+		[TestCase(-3, -2, false)] // Absence started before query period, ended before query period
+		[TestCase(4, 8, false)] // Absence started after query period, ended after query period
+		public void ShouldCheckIfAnyAgentsScheduled(int relativeStartDate, int relativeEndDate, bool expectedResult)
 		{
 			var team = TeamFactory.CreateTeam("team", "site");
 			var contract = new Contract("contract");
@@ -354,19 +359,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			scenario.SetBusinessUnit(buWithAgentScheduled);
 			PersistAndRemoveFromUnitOfWork(scenario);
 
-			var ass = new PersonAbsence(agent, scenario, new AbsenceLayer(absenceSick, new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
+			var baseDate = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+			var absencePeriod = new DateTimePeriod(baseDate.AddDays(relativeStartDate),
+				baseDate.AddDays(relativeEndDate));
+			var ass = new PersonAbsence(agent, scenario, new AbsenceLayer(absenceSick, absencePeriod));
 			PersistAndRemoveFromUnitOfWork(ass);
 
 			var buWithoutAgentScheduled = new BusinessUnit("businessUnit");
 			PersistAndRemoveFromUnitOfWork(buWithoutAgentScheduled);
 
-			new PersonAbsenceRepository(CurrUnitOfWork).IsThereScheduledAgents(buWithoutAgentScheduled.Id.Value).Should().Be.False();
-			new PersonAbsenceRepository(CurrUnitOfWork).IsThereScheduledAgents(buWithAgentScheduled.Id.Value).Should().Be.True();
+			var period = new DateOnlyPeriod(new DateOnly(baseDate), new DateOnly(baseDate.AddDays(3)));
+			new PersonAbsenceRepository(CurrUnitOfWork).IsThereScheduledAgents(buWithAgentScheduled.Id.Value, period)
+				.Should().Be.EqualTo(expectedResult);
+			new PersonAbsenceRepository(CurrUnitOfWork).IsThereScheduledAgents(buWithoutAgentScheduled.Id.Value, period)
+				.Should().Be.False();
 		}
 
 		private static void verifyRelatedObjectsAreEagerlyLoaded(IEnumerable<IPersonAbsence> personAbsenceCollection)
 		{
-			foreach (PersonAbsence personAbsence in personAbsenceCollection)
+			foreach (var personAbsence in personAbsenceCollection)
 			{
 				Assert.IsTrue(LazyLoadingManager.IsInitialized(personAbsence.Layer.Payload));
 			}

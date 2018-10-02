@@ -98,8 +98,10 @@
 						validationResult.messages.push($translate.instant('PickAtleastOneTeamDot'));
 					if (moment(period.endDate).diff(period.startDate, 'days') > 65)
 						validationResult.messages.push($translate.instant('PickASmallerDatePeriodDot'));
-					if (moment(period.startDate).diff(moment(), 'days') < 1)
-						validationResult.messages.push($translate.instant('YouNeedToSelectADateInTheFutureDot'));
+					if(vm.isImportSchedule){
+						if (moment(period.startDate).diff(moment(), 'days') < 1)
+							validationResult.messages.push($translate.instant('YouNeedToSelectADateInTheFutureDot'));
+					}
 					validationResult.successful = validationResult.messages.length === 0;
 					return validationResult;
 				}

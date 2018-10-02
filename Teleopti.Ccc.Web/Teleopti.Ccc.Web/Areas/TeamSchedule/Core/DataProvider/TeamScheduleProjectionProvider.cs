@@ -207,6 +207,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					var isMeeting = layer.Payload is MeetingPayload;
 					var isAbsenceConfidential = isPayloadAbsence && (layer.Payload as IAbsence).Confidential;
 					var startDateTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, userTimeZone);
+					var endDateTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, userTimeZone);
 					var description = isPayloadAbsence
 						? (isAbsenceConfidential && !canViewConfidential
 							? ConfidentialPayloadValues.Description
@@ -243,7 +244,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 														: ((IAbsence)layer.Payload).DisplayColor.ToHtml())
 													: layer.Payload.ConfidentialDisplayColor(scheduleDay.Person).ToHtml(),
 							Start = startDateTimeInUserTimeZone.ToGregorianDateTimeString().Replace("T", " ").Remove(16),
-							End = startDateTimeInUserTimeZone.Add(layer.Period.ElapsedTime()).ToGregorianDateTimeString().Replace("T", " ").Remove(16),
+							StartInUtc = layer.Period.StartDateTime.ToGregorianDateTimeString().Replace("T", " ").Remove(16),
+							End = endDateTimeInUserTimeZone.ToGregorianDateTimeString().Replace("T", " ").Remove(16),
 							Minutes = (int)layer.Period.ElapsedTime().TotalMinutes,
 							IsOvertime = isOvertime,
 							FloatOnTop = reportLevelDetail == ReportLevelDetail.Lunch
