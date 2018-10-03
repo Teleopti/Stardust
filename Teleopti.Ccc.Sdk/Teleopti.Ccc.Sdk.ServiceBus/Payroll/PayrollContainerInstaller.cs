@@ -27,18 +27,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			builder.RegisterType<PlugInLoader>().As<IPlugInLoader>().SingleInstance();
 			builder.RegisterType<DataSourceForTenantWrapper>().SingleInstance();
 			builder.RegisterType<SearchPath>().As<ISearchPath>().SingleInstance();
-			builder.RegisterType<DomainAssemblyResolver>().As<IDomainAssemblyResolver>().SingleInstance();
-			builder.RegisterType<AssemblyFileLoaderTenant>().As<IAssemblyFileLoader>().SingleInstance();
+			
 			//Need to check if that is going to work for the container or not.
 			if (_configuration.Toggle(Toggles.Wfm_Payroll_SupportMultiDllPayrolls_75959))
 			{
 				builder.RegisterType<PayrollExportHandlerNew>().As<IHandleEvent<RunPayrollExportEvent>>().ApplyAspects();
 				builder.RegisterType<InitializePayrollFormatsUsingAppDomain>().As<IInitializePayrollFormats>().SingleInstance();
+				builder.RegisterType<DomainAssemblyResolverNew>().As<IDomainAssemblyResolver>().SingleInstance();
+				builder.RegisterType<AssemblyFileLoaderTenant>().As<IAssemblyFileLoader>().SingleInstance();
 			}
 			else
 			{
 				builder.RegisterType<PayrollExportHandler>().As<IHandleEvent<RunPayrollExportEvent>>().ApplyAspects();
 				builder.RegisterType<InitializePayrollFormatsToDb>().As<IInitializePayrollFormats>().SingleInstance();
+				builder.RegisterType<DomainAssemblyResolverOld>().As<IDomainAssemblyResolver>().SingleInstance();
+				builder.RegisterType<AssemblyFileLoader>().As<IAssemblyFileLoader>().SingleInstance();
 			}
 
 			builder.RegisterType<ChannelCreator>().As<IChannelCreator>();
