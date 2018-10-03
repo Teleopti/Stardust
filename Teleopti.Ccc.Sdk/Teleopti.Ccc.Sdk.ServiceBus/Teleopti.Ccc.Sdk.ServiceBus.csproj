@@ -167,6 +167,7 @@
     <Compile Include="..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Areas\Rta\ITeleoptiRtaService.cs">
       <Link>Rta\ITeleoptiRtaService.cs</Link>
     </Compile>
+    <Compile Include="FetchNodeConfiguration.cs" />
     <Compile Include="NodeHandlers\ApproveRequestsWithValidatorsEventStardustHandler.cs" />
     <Compile Include="NodeHandlers\ArchiveScheduleNodeHandler.cs" />
     <Compile Include="NodeHandlers\WebClearScheduleHandler.cs" />

@@ -160,38 +160,25 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			var fixedNodeIp = _configReader.ReadValue("FixedNodeIp", "");
 
-			NodeConfiguration nodeConfig;
-
-			if (string.IsNullOrEmpty(fixedNodeIp))
-			{
-				nodeConfig = new NodeConfiguration(
-					managerLocation,
-					handlerAssembly,
-					port,
-					nodeName,
-					pingToManagerSeconds,
-					sendDetailsToManagerMilliSeconds, enableGC
-				);
-			}
-			else
-			{
-				nodeConfig = new NodeConfiguration(
-					managerLocation,
-					handlerAssembly,
-					port,
-					nodeName,
-					pingToManagerSeconds,
-					sendDetailsToManagerMilliSeconds,
-					IPAddress.Parse(fixedNodeIp), enableGC
-				);
-			}
-
 			var iocArgs = new IocArgs(new ConfigReader())
 			{
 				OptimizeScheduleChangedEvents_DontUseFromWeb = true
 			};
 
 			var toggleManager = CommonModule.ToggleManagerForIoc(iocArgs);
+			NodeConfiguration nodeConfig;
+			if (toggleManager.IsEnabled(Toggles.Wfm_Stardust_EnableScaleout_77366))
+			{
+				var fetchNodeConfiguration = new FetchNodeConfigurationToggleOn();
+				nodeConfig = fetchNodeConfiguration.GetNodeConfiguration(port, nodeName, fixedNodeIp, managerLocation, handlerAssembly, pingToManagerSeconds, sendDetailsToManagerMilliSeconds, enableGC);
+			}
+			else
+			{
+				var fetchNodeConfiguration = new FetchNodeConfigurationToggleOff();
+				nodeConfig = fetchNodeConfiguration.GetNodeConfiguration(port, nodeName, fixedNodeIp, managerLocation, handlerAssembly, pingToManagerSeconds, sendDetailsToManagerMilliSeconds, enableGC);
+			}
+			
+
 			var configuration = new IocConfiguration(iocArgs, toggleManager);
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new CommonModule(configuration));
