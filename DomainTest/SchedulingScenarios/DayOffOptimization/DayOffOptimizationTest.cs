@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var agent = PersonRepository.Has(new Contract("dont allow breaking number of DO"), schedulePeriod, ruleSet, skill);
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1));
-			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(date, date.AddDays(7)), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 			for (var i = 4; i < 7; i++)
 			{
 				PersonAssignmentRepository.GetSingle(date.AddDays(i)).SetDayOff(new DayOffTemplate());
