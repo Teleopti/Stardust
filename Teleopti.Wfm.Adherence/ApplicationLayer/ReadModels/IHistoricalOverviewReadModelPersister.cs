@@ -7,6 +7,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
 	public interface IHistoricalOverviewReadModelPersister
 	{
 		void Upsert(HistoricalOverviewReadModel model);
+		void Remove(DateTime removeUntil);
 	}
 
 	public interface IHistoricalOverviewReadModelReader

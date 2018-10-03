@@ -73,6 +73,19 @@ VALUES
 			}
 		}
 
+		public void Remove(DateTime removeUntil) =>
+			_unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
+DELETE 
+FROM 
+	[ReadModel].[HistoricalOverview] 
+WHERE 
+	[Date] < :ts
+")
+				.SetParameter("ts", removeUntil)
+				.ExecuteUpdate();
+		
+		
 		public IEnumerable<HistoricalOverviewReadModel> Read(IEnumerable<Guid> personIds)
 		{
 			return _unitOfWork.Current().Session()
