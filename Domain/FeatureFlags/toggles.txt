@@ -107,6 +107,7 @@ ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348 = DEV
+ResourcePlanner_NoWhiteSpotWhenTargetDayoffIsBroken_77941 = RC
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
