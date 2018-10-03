@@ -1,6 +1,8 @@
-<header>
-	<h1><i class="mdi mdi-chart-line"></i>{{ 'CreateSkill' | translate }}</h1>
-</header>
+<section>
+	<header>
+		<h1><i class="mdi mdi-chart-line"></i>{{ 'CreateSkill' | translate }}</h1>
+	</header>
+</section>
 
 <section>
 	<div class="con-row">
@@ -21,17 +23,15 @@
 											</div>
 										</div>
 									</section>
-
 									<section>
 										<div class="form-input-wrap">
 											<lable>{{ 'SkillType' | translate}}:</lable>
-											<select>
+											<select required="">
 												<option class="md-text">{{ 'Phone' | translate}}</option>
 												<option disabled="">{{ 'Chat' | translate}}</option>
 											</select>
 										</div>
 									</section>
-
 									<section>
 										<div class="form-input-wrap">
 											<label>{{ 'SkillActivity' | translate}}:</label>
@@ -97,8 +97,8 @@
 							</div>
 							<div class="form-input-wrap">
 								<label>{{'Queues'|translate}}:</label>
-								<div class="big-table-wrapper material-depth-1">
-									<div ui-grid="vm.gridOptions" ui-grid-auto-resize ui-grid-resize-columns ui-grid-selection></div>
+								<div ui-i18n="gridLang" class="big-table-wrapper material-depth-1">
+ 									<div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-selection ui-grid-disable-animation></div>
 								</div>
 								<div ng-cloak class="animate-input-message" ng-show="!vm.queueSelected">
 									<div class="form-input-message formInvalidInput">{{ 'Required' | translate }}</div>
