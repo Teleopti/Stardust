@@ -203,4 +203,15 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		expect(vm.cards[0].Agents[0].AdherenceBarWidth).toBe(0);
 	});
 
+	it('should display loading until data is returned on page load', function (t) {
+		var vm = t.createController({flush: false});
+
+		expect(vm.loading).toEqual(true);
+	});
+
+	it('should not display loading after data is returned', function (t) {
+		var vm = t.createController();
+
+		expect(vm.loading).toEqual(false);
+	});
 });
