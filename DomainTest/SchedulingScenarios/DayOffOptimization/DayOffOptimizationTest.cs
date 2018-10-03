@@ -38,9 +38,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 
-		[Test, Ignore("#77941 to be fixed")]
+		[Test]
 		public void ShouldNotRemoveAllShiftsWhenExistingDayOffsAreMoreThanTarget()
 		{
+			if(!_resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941)
+				Assert.Ignore("only valid with toggle true");
 			var date = new DateOnly(2015, 10, 12); //mon
 			var activity = ActivityRepository.Has();
 			var skill = SkillRepository.Has("skill", activity);
@@ -507,7 +509,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 		}
 
-		public DayOffOptimizationTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
+		public DayOffOptimizationTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941) : base(seperateWebRequest, resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941)
 		{
 		}
 	}

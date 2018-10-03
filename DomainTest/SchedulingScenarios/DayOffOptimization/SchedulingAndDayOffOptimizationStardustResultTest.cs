@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			endUserDate.RelativeDifference.Should().Be(0);
 		}
 		
-		public SchedulingAndDayOffOptimizationStardustResultTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
+		public SchedulingAndDayOffOptimizationStardustResultTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941) : base(seperateWebRequest, resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941)
 		{
 		}
 	}
