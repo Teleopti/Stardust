@@ -104,7 +104,7 @@
 					<td style="max-width:200px; overflow: hidden; text-overflow: ellipsis">{{agent.Name}}</td>
 					<td ng-repeat="day in agent.Days" class="cell">
 						<div ng-class="day.WasLateForWork ? 'late-for-work-flag': ''"></div>
-						<div ng-if="day.DisplayAdherence" class="square" style="background-color: {{day.Color}}">
+						<div class="square" style="background-color: {{day.Color}};" >
 							<a ng-href="{{day.HistoricalAdherenceUrl}}" target="_blank">
 								{{day.Adherence}}
 							</a>

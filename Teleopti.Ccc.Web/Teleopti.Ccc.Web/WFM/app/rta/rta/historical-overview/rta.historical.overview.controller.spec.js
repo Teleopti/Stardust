@@ -140,7 +140,7 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		expect(t.backend.lastParams.historicalOverview().siteIds).toContain('LondonId');
 	});
 
-	it('should display adherence if 0', function (t) {
+	it('should display -- when adherence is empty', function (t) {
 		t.stateParams.teamIds = ['teamAvalancheId'];
 		t.backend.with.historicalOverview(
 			{
@@ -148,10 +148,11 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 				DisplayDays: ['2/10', '3/10', '4/10', '5/10', '6/10', '7/10', '8/10'],
 				Agents: [{
 					Name: 'Andeen Ashley',
+					IntervalAdherence: null,
 					Days: [
 						{
 							Date: '20180820',
-							Adherence: 0,
+							Adherence: null,
 							WasLateForWork: false
 						}
 					],
@@ -167,11 +168,43 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		t.apply(function () {
 			vm.closeOrganizationPicker();
 		});
-		
-		expect(vm.cards[0].Agents[0].Days[0].DisplayAdherence).toBe(true);
+
+		expect(vm.cards[0].Agents[0].Days[0].Adherence).toBe('--');
 	});
 	
-	it('should display 0 width bar if interval adherence is empty', function (t) {
+	it('should display white background when adherence is empty', function (t) {
+		t.stateParams.teamIds = ['teamAvalancheId'];
+		t.backend.with.historicalOverview(
+			{
+				Name: 'Denver/Avalanche',
+				DisplayDays: ['2/10', '3/10', '4/10', '5/10', '6/10', '7/10', '8/10'],
+				Agents: [{
+					Name: 'Andeen Ashley',
+					IntervalAdherence: null,
+					Days: [
+						{
+							Date: '20180820',
+							Adherence: null,
+							WasLateForWork: false
+						}
+					],
+					LateForWork:
+						{
+							Count: 0,
+							TotalMinutes: 0
+						}
+				}]
+			});
+
+		var vm = t.createController();
+		t.apply(function () {
+			vm.closeOrganizationPicker();
+		});
+
+		expect(vm.cards[0].Agents[0].Days[0].Color).toBe('hsl(0,0%,100%)');
+	});
+
+	it('should display white when adherence is empty', function (t) {
 		t.stateParams.teamIds = ['teamAvalancheId'];
 		t.backend.with.historicalOverview(
 			{
@@ -199,7 +232,7 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		t.apply(function () {
 			vm.closeOrganizationPicker();
 		});
-		
+
 		expect(vm.cards[0].Agents[0].AdherenceBarWidth).toBe(0);
 	});
 
