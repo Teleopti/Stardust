@@ -38,6 +38,38 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 
+		[Test, Ignore("#77941 to be fixed")]
+		public void ShouldNotRemoveAllShiftsWhenExistingDayOffsAreMoreThanTarget()
+		{
+			var date = new DateOnly(2015, 10, 12); //mon
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			var scenario = ScenarioRepository.Has("some name");
+			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1);
+			schedulePeriod.SetDaysOff(2);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team {Site = new Site("site")}, schedulePeriod, ruleSet, skill);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnlyPeriod(date, date.AddDays(6)), 1));
+
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory,
+				new DateOnlyPeriod(date, date.AddDays(7)), new TimePeriod(8, 0, 16, 0));
+			
+			for (int i = 4; i < 7; i++)
+			{
+				PersonAssignmentRepository.GetSingle(date.AddDays(i)).SetDayOff(new DayOffTemplate());
+			}
+
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
+
+			for (int i = 0; i < 7; i++)
+			{
+				var personAssignment = PersonAssignmentRepository.GetSingle(date.AddDays(i));
+				(!personAssignment.ShiftLayers.IsEmpty() || personAssignment.DayOffTemplate != null).Should().Be.True();
+			}
+		}
+		
 		[Test]
 		public void ShouldMoveDayOffToDayWithLessDemand()
 		{
