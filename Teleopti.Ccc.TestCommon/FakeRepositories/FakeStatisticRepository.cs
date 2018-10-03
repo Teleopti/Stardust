@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.LogObject;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
@@ -87,24 +86,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IList LoadAgentQueueStat(DateTime startDate, DateTime endDate, string timeZoneId, Guid personCode)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold,
-			Guid businessUnitId, int? timeoutInSecond)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
-			string timezoneCode, DateTime date, Percent adherenceThreshold, Guid businessUnitId, int? timeoutInSecond)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan ahtThreshold,
-			Guid businessUnitId, int? timeoutInSecond)
 		{
 			throw new NotImplementedException();
 		}

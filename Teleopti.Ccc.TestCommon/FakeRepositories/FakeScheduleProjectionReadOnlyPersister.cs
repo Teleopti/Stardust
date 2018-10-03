@@ -39,11 +39,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _numberOfHeadCounts;
 		}
 
-		public void SetNumberOfAbsencesPerDayAndBudgetGroup(int numberOfHeadCounts)
-		{
-			_numberOfHeadCounts = numberOfHeadCounts;
-		}
-
 		public IEnumerable<ScheduleProjectionReadOnlyModel> ForPerson(DateOnly date, Guid personId, Guid scenarioId)
 		{
 			return _data.Where(x => x.PersonId == personId).ToArray();

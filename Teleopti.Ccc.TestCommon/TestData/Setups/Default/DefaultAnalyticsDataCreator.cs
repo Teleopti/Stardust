@@ -49,18 +49,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 		};
 		private static readonly IList<IAnalyticsDataSetup> setups = generateSetups();
 
-		private int? _hashValue;
-
-		public int HashValue
-		{
-			get
-			{
-				if (!_hashValue.HasValue)
-					_hashValue = setups.Aggregate(37, (current, setup) => current ^ setup.GetHashCode());
-				return _hashValue.Value;
-			}
-		}
-
 		public void OneTimeSetup()
 		{
 			var analyticsDataFactory = new AnalyticsDataFactory();

@@ -15,10 +15,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			fakeAbsences = new List<AnalyticsAbsence>();
 		}
 
-		public FakeAnalyticsAbsenceRepository(List<AnalyticsAbsence> absences)
-		{
-			fakeAbsences = absences;
-		}
 		public IList<AnalyticsAbsence> Absences()
 		{
 			return fakeAbsences;
