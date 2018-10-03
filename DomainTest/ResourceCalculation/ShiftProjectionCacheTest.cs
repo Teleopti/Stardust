@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	[TestFixture]
 	public class ShiftProjectionCacheTest
 	{
-		private MockRepository _mocks;
 		private ShiftProjectionCache target;
 		private IWorkShift workShift;
 		private DateOnly schedulingDate;
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
 			schedulingDate = new DateOnly(2009, 2, 2);
 			category = new ShiftCategory("öfdöf");
 			workShift = new WorkShift(category);

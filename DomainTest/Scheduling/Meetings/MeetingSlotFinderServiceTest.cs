@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
         private IPerson _person2;
         private IList<DateOnly> _dates;
         private IList<IPerson> _persons;
-        readonly IList<TimeSpan> _times = new List<TimeSpan>();
         private MockRepository _mocks;
         private IScheduleDictionary _dictionary;
         private IScenario _scenario;
@@ -234,9 +233,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             _dates.Add(new DateOnly(2009, 02, 03));
             _persons.Add(_person1);
             _persons.Add(_person2);
-            _times.Add(new TimeSpan(8, 0, 0));
-            _times.Add(new TimeSpan(8, 30, 0));
-            _times.Add(new TimeSpan(9, 0, 0));
             using (_mocks.Record())
             {
                 Expect.Call(_dictionary[_persons[0]]).Return(_range1).Repeat.Times(1);

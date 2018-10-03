@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 	public class EarliestEndTimeLimitationShiftFilterTest
 	{
 		private IEarliestEndTimeLimitationShiftFilter _target;
-		private MockRepository _mocks;
 		private DateOnly _dateOnly;
 		private TimeZoneInfo _timeZoneInfo;
 		private IActivity _activity;
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
 			_dateOnly = new DateOnly(2013, 3, 1);
 			_activity = ActivityFactory.CreateActivity("sd");
 			_activity.SetId(Guid.NewGuid());
