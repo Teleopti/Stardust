@@ -140,4 +140,35 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		expect(t.backend.lastParams.historicalOverview().siteIds).toContain('LondonId');
 	});
 
+	it('should display adherence if 0', function (t) {
+		t.stateParams.teamIds = ['teamAvalancheId'];
+		t.backend.with.historicalOverview(
+			{
+				Name: 'Denver/Avalanche',
+				DisplayDays: ['20/8', '21/8', '22/8', '23/8', '24/8', '25/8', '26/8'],
+				Agents: [{
+					Name: 'Andeen Ashley',
+					Days: [
+						{
+							Date: '20180820',
+							Adherence: 0,
+							WasLateForWork: false
+						}
+					],
+					LateForWork:
+						{
+							Count: 0,
+							TotalMinutes: 0
+						}
+				}]
+			});
+
+		var vm = t.createController();
+		t.apply(function () {
+			vm.closeOrganizationPicker();
+		});
+		
+		expect(vm.cards[0].Agents[0].Days[0].DisplayAdherence).toBe(true);
+	});
+
 });
