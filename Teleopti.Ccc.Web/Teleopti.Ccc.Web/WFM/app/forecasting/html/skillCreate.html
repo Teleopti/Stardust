@@ -25,11 +25,11 @@
 									</section>
 									<section>
 										<div class="form-input-wrap">
-											<lable>{{ 'SkillType' | translate}}:</lable>
-											<select required="">
-												<option class="md-text">{{ 'Phone' | translate}}</option>
-												<option disabled="">{{ 'Chat' | translate}}</option>
-											</select>
+											<label>{{ 'SkillType' | translate}}:</label>
+											<md-select id="type" aria-label="Type: Phone" ng-model="vm.model.selectedActivity">
+												<md-option ng-value="Phone">{{ 'Phone' | translate}}</md-option>
+												<md-option ng-disabled="true">{{ 'Chat' | translate}}</md-option>
+											</md-select>
 										</div>
 									</section>
 									<section>
