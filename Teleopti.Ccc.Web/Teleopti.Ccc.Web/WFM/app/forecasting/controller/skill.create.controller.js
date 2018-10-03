@@ -55,6 +55,7 @@
 			enableGridMenu: false,
 			enableSelectAll: true,
 			enableFullRowSelection: true,
+			enableSorting: true,
 			columnDefs: [
 				{
 					displayName: "Name",
@@ -71,14 +72,19 @@
 					displayName: "LogObject",
 					field: "LogObjectName",
 					enableColumnMenu: false,
-					headerCellFilter: "translate"
+					headerCellFilter: "translate",
+					sort: {
+						direction: uiGridConstants.ASC,
+						priority: 1,
+					}
 				},
 
 				{
 					displayName: "Description",
 					field: "Description",
 					enableColumnMenu: false,
-					headerCellFilter: "translate"
+					headerCellFilter: "translate",
+					enableSorting: false
 				}
 
 			],
