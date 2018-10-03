@@ -105,6 +105,7 @@
 				return {
 					Name: agent.Name,
 					IntervalAdherence: agent.IntervalAdherence,
+					AdherenceBarWidth: agent.IntervalAdherence === null ? 0 :  agent.IntervalAdherence,
 					Days: buildDays(agent.Days, agent.Id),
 					LateForWork: {
 						Count: agent.LateForWork.Count,

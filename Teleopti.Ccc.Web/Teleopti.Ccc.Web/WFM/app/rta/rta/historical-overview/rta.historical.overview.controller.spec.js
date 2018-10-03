@@ -145,7 +145,7 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		t.backend.with.historicalOverview(
 			{
 				Name: 'Denver/Avalanche',
-				DisplayDays: ['20/8', '21/8', '22/8', '23/8', '24/8', '25/8', '26/8'],
+				DisplayDays: ['2/10', '3/10', '4/10', '5/10', '6/10', '7/10', '8/10'],
 				Agents: [{
 					Name: 'Andeen Ashley',
 					Days: [
@@ -169,6 +169,38 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		});
 		
 		expect(vm.cards[0].Agents[0].Days[0].DisplayAdherence).toBe(true);
+	});
+	
+	it('should display 0 width bar if interval adherence is empty', function (t) {
+		t.stateParams.teamIds = ['teamAvalancheId'];
+		t.backend.with.historicalOverview(
+			{
+				Name: 'Denver/Avalanche',
+				DisplayDays: ['2/10', '3/10', '4/10', '5/10', '6/10', '7/10', '8/10'],
+				Agents: [{
+					Name: 'Andeen Ashley',
+					IntervalAdherence: null,
+					Days: [
+						{
+							Date: '20180820',
+							Adherence: 0,
+							WasLateForWork: false
+						}
+					],
+					LateForWork:
+						{
+							Count: 0,
+							TotalMinutes: 0
+						}
+				}]
+			});
+
+		var vm = t.createController();
+		t.apply(function () {
+			vm.closeOrganizationPicker();
+		});
+		
+		expect(vm.cards[0].Agents[0].AdherenceBarWidth).toBe(0);
 	});
 
 });
