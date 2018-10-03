@@ -108,6 +108,7 @@ ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don'
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348 = DEV
 ResourcePlanner_NoWhiteSpotWhenTargetDayoffIsBroken_77941 = RC
+Wfm_ArchiveScheduleForPast_77958 = RC
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
