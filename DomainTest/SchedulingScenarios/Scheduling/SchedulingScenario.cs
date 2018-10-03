@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
@@ -7,23 +6,19 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false)]
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, false)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, true)]
+	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequest)]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
 	[DontSendEventsAtPersist]
 	public abstract class SchedulingScenario : ITestInterceptor, IExtendSystem, IConfigureToggleManager
 	{
 		private readonly SeperateWebRequest _seperateWebRequest;
-		private readonly bool _resourcePlannerHalfHourSkillTimeZon75509;
 		public IIoCTestContext IoCTestContext;
 
-		protected SchedulingScenario(SeperateWebRequest seperateWebRequest, bool resourcePlannerHalfHourSkillTimeZon75509)
+		protected SchedulingScenario(SeperateWebRequest seperateWebRequest)
 		{
 			_seperateWebRequest = seperateWebRequest;
-			_resourcePlannerHalfHourSkillTimeZon75509 = resourcePlannerHalfHourSkillTimeZon75509;
 		}
 
 		public virtual void OnBefore()
@@ -39,8 +34,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		public void Configure(FakeToggleManager toggleManager)
 		{
-			if(_resourcePlannerHalfHourSkillTimeZon75509)
-				toggleManager.Enable(Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509);
 		}
 	}
 }

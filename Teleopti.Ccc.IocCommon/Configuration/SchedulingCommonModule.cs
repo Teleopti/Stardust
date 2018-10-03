@@ -228,17 +228,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamScheduling>().SingleInstance();
 			builder.RegisterType<WorkShiftFinderService>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftProjectionCacheFactory>().SingleInstance();
-			builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509))
-			{
-				builder.RegisterType<ScheduleResourcePeriodFetcherAdjustForTimeZone>().As<ScheduleResourcePeriodFetcher>().SingleInstance();
-				builder.RegisterType<ContainingSkillIntervalPeriodFinder>().As<IContainingSkillIntervalPeriodFinder>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<ScheduleResourcePeriodFetcher>().SingleInstance();
-				builder.RegisterType<ContainingSkillIntervalPeriodFinderOld>().As<IContainingSkillIntervalPeriodFinder>().SingleInstance();
-			}
+			builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();	
+			builder.RegisterType<ContainingSkillIntervalPeriodFinder>().As<IContainingSkillIntervalPeriodFinder>().SingleInstance();
 			builder.RegisterType<TeamBlockRoleModelSelector>().InstancePerLifetimeScope();			
 			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>().SingleInstance();
 			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().SingleInstance();

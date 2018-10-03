@@ -28,15 +28,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			return null;
 		}
 	}
-
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509)]
-	public class ContainingSkillIntervalPeriodFinderOld : IContainingSkillIntervalPeriodFinder
-	{
-		public DateTime? Find(IDictionary<DateTime, ISkillIntervalData> skillIntervals, DateTime periodKey, int resolution)
-		{
-			return null;
-		}
-	}
 		
 	public class WorkShiftValueCalculator
 	{

@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				foreach (var skill in skillKey.Value)
 				{
-					var minutesOffset = ServiceLocatorForLegacy.ScheduleResourcePeriodFetcher.FetchTimeZoneOffset(skill.TimeZone);
+					var minutesOffset = skill.TimeZone.BaseUtcOffset.Minutes;
 					if(!skillsOffset.ContainsKey(minutesOffset))
 						skillsOffset.Add(minutesOffset, skill.TimeZone);
 				}

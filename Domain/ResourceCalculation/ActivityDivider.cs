@@ -110,7 +110,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public DateTimePeriod FetchPeriodForSkill(DateTimePeriod period, TimeZoneInfo timeZone)
 		{
-			return ServiceLocatorForLegacy.ScheduleResourcePeriodFetcher.Fetch(period, timeZone);
+			var minutesOffset = timeZone.BaseUtcOffset.Minutes;
+			if (minutesOffset == 0)
+				return period;
+
+			minutesOffset = 60 - minutesOffset;
+			if (minutesOffset > 60)
+				minutesOffset = minutesOffset % 60 * -1;
+
+			return period.MovePeriod(TimeSpan.FromMinutes(minutesOffset));
 		}
 
 		private static double? skillDayDemand(ISkill skill, ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods, DateTimePeriod periodToCalculate)
@@ -155,40 +163,4 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return new HashSet<ISkill>(affectedPersonSkillService.AffectedSkills.Where(s => s.Activity.Id == activity.Id));
         }
     }
-	
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509)]
-	public class ScheduleResourcePeriodFetcher
-	{
-		public virtual DateTimePeriod Fetch(DateTimePeriod period, TimeZoneInfo timeZone)
-		{
-			return period;
-		}
-
-		public virtual int FetchTimeZoneOffset(TimeZoneInfo timeZone)
-		{
-			return 0;
-		}
-	}
-
-	[RemoveMeWithToggle("put Fetch in ActivityDivider.FetchPeriodForSkill & FetchTimeZoneOffset where used instead", Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509)]
-	public class ScheduleResourcePeriodFetcherAdjustForTimeZone : ScheduleResourcePeriodFetcher
-	{
-		public override DateTimePeriod Fetch(DateTimePeriod period, TimeZoneInfo timeZone)
-		{
-			var minutesOffset = timeZone.BaseUtcOffset.Minutes;
-			if (minutesOffset == 0)
-				return period;
-
-			minutesOffset = 60 - minutesOffset;
-			if (minutesOffset > 60)
-				minutesOffset = minutesOffset % 60 * -1;
-			
-			return period.MovePeriod(TimeSpan.FromMinutes(minutesOffset));
-		}
-
-		public override int FetchTimeZoneOffset(TimeZoneInfo timeZone)
-		{
-			return timeZone.BaseUtcOffset.Minutes;
-		}
-	}
 }
