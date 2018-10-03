@@ -1007,7 +1007,6 @@
     <Compile Include="Optimization\MainShiftOptimizeActivitiesSpecificationTest.cs" />
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByPersonalSkillsExtractorTest.cs" />
     <Compile Include="Optimization\TimePeriodCanHaveShortBreakTest.cs" />
-    <Compile Include="Optimization\WorkShiftBackToLegalStateServiceProTest.cs" />
     <Compile Include="Optimization\WorkShiftBackToLegalStateStepTest.cs" />
     <Compile Include="Optimization\WorkShiftRuleSetHasShortBreakTest.cs" />
     <Compile Include="Outbound\CampaignTest.cs" />
