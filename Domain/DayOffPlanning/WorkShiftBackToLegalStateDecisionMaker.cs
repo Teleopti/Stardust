@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             _dayIndexCalculator = dayIndexCalculator;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[RemoveMeWithToggle("remove raise param, always false", Toggles.ResourcePlanner_NoWhiteSpotWhenTargetDayoffIsBroken_77941)]
 		public int? Execute(ILockableBitArray lockableBitArray,  bool raise, DateOnlyPeriod period)
         {
             IList<double?> values = _dataExtractor.Values(period);

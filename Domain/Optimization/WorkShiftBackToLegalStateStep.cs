@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
@@ -41,6 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return scheduleDay;
         }
 
+		[RemoveMeWithToggle("remove raise param, always false", Toggles.ResourcePlanner_NoWhiteSpotWhenTargetDayoffIsBroken_77941)]
 		public IScheduleDay ExecutePeriodStep(bool raise, IScheduleMatrixPro scheduleMatrix, ISchedulePartModifyAndRollbackService rollbackService)
         {
             ILockableBitArray periodBitArray = _bitArrayCreator.CreatePeriodBitArray(scheduleMatrix);
