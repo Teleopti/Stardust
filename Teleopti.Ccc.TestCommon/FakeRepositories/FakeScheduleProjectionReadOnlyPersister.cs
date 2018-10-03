@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakeScheduleProjectionReadOnlyPersister : IScheduleProjectionReadOnlyPersister
 	{
 		private readonly IList<ScheduleProjectionReadOnlyModel> _data = new List<ScheduleProjectionReadOnlyModel>();
-		private int _numberOfHeadCounts;
 
 		public IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup,
 			IScenario scenario)
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate)
 		{
-			return _numberOfHeadCounts;
+			return 0;
 		}
 
 		public IEnumerable<ScheduleProjectionReadOnlyModel> ForPerson(DateOnly date, Guid personId, Guid scenarioId)
