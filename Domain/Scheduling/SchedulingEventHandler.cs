@@ -4,8 +4,10 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
-using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourcePlanner;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
@@ -14,6 +16,34 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.Scheduling
 {
 	[InstancePerLifetimeScope]
+	[EnabledBy(Toggles.ResourcePlanner_BetterFitPreferences_76289)]
+	[RemoveMeWithToggle("merge with base class", Toggles.ResourcePlanner_BetterFitPreferences_76289)]
+	public class SchedulingEventHandlerNew : SchedulingEventHandler
+	{
+		private readonly ScheduleExecutor _scheduleExecutor;
+		private readonly FailedScheduledAgents _failedScheduledAgents;
+
+		public SchedulingEventHandlerNew(Func<ISchedulerStateHolder> schedulerStateHolder, FillSchedulerStateHolder fillSchedulerStateHolder, ScheduleExecutor scheduleExecutor, ISchedulingOptionsProvider schedulingOptionsProvider, ICurrentSchedulingCallback currentSchedulingCallback, ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland, IGridlockManager gridlockManager, ISchedulingSourceScope schedulingSourceScope, ExtendSelectedPeriodForMonthlyScheduling extendSelectedPeriodForMonthlyScheduling, IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod, DayOffOptimization dayOffOptimization, FailedScheduledAgents failedScheduledAgents) : base(schedulerStateHolder, fillSchedulerStateHolder, scheduleExecutor, schedulingOptionsProvider, currentSchedulingCallback, synchronizeSchedulesAfterIsland, gridlockManager, schedulingSourceScope, extendSelectedPeriodForMonthlyScheduling, blockPreferenceProviderForPlanningPeriod, dayOffOptimization, failedScheduledAgents)
+		{
+			_scheduleExecutor = scheduleExecutor;
+			_failedScheduledAgents = failedScheduledAgents;
+		}
+
+		protected override void RunSchedulingWithoutPreferences(SchedulingWasOrdered @event, ISchedulerStateHolder schedulerStateHolder,
+			DateOnlyPeriod selectedPeriod, SchedulingOptions schedulingOptions, ISchedulingCallback schedulingCallback,
+			ISchedulingProgress schedulingProgress, IBlockPreferenceProvider blockPreferenceProvider)
+		{
+			var failedScheduleAgents = _failedScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod).Where(x => @event.Agents.Contains(x.Id.Value));
+			// below needs to be handled differently if/when DO should use pref (this line affects that as well)
+			schedulingOptions.UsePreferences = false;
+			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, failedScheduleAgents,
+				selectedPeriod, blockPreferenceProvider);		
+		}
+	}
+	
+	
+	[InstancePerLifetimeScope]
+	[DisabledBy(Toggles.ResourcePlanner_BetterFitPreferences_76289)]
 	public class SchedulingEventHandler : IRunInSyncInFatClientProcess, IHandleEvent<SchedulingWasOrdered>
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
@@ -100,15 +130,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var agents = schedulerStateHolder.SchedulingResultState.LoadedAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray();
 			
 			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, agents, selectedPeriod, blockPreferenceProvider);
-
-			if (@event.ScheduleWithoutPreferencesForFailedAgents) //add test for this one
-			{
-				var failedScheduleAgents = _failedScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod).Where(x => @event.Agents.Contains(x.Id.Value));
-				// below needs to be handled differently if/when DO should use pref (this line affects that as well)
-				schedulingOptions.UsePreferences = false;
-				_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, failedScheduleAgents, selectedPeriod, blockPreferenceProvider);
-			}
 			
+			RunSchedulingWithoutPreferences(@event, schedulerStateHolder, selectedPeriod, schedulingOptions, schedulingCallback, schedulingProgress, blockPreferenceProvider);
+
 			if(@event.RunDayOffOptimization)
 			{
 				_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate),
@@ -116,6 +140,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					true,
 					@event.PlanningPeriodId);
 			}
+		}
+
+		protected virtual void RunSchedulingWithoutPreferences(SchedulingWasOrdered @event,
+			ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod, SchedulingOptions schedulingOptions,
+			ISchedulingCallback schedulingCallback, ISchedulingProgress schedulingProgress,
+			IBlockPreferenceProvider blockPreferenceProvider)
+		{
 		}
 	}
 }

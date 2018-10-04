@@ -81,6 +81,8 @@
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,
 		ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348,
 		ResourcePlanner_NoWhiteSpotWhenTargetDayoffIsBroken_77941,
+		ResourcePlanner_BetterFitPreferences_76289,
+		
 		Wfm_ArchiveScheduleForPast_77958,
 
 		Wfm_DisplayOnlineHelp_39402,

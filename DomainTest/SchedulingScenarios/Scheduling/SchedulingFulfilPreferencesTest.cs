@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -78,6 +79,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		
 		public SchedulingFulfilPreferencesTest(PlanTestParameters planTestParameters) : base(planTestParameters)
 		{
+			if (!_planTestParameters.IsEnabled(Toggles.ResourcePlanner_BetterFitPreferences_76289))
+			{
+				Assert.Ignore("only works with toggle on");
+			}
 		}
 	}
 }
