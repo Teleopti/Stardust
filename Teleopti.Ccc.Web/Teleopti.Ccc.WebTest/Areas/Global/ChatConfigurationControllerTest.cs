@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		}
 
 		[Test]
-		public async void ShouldConfigureBot()
+		public async Task ShouldConfigureBot()
 		{
 			var tenantCredential = new TenantCredential {Host = "localhost:52858", Tenant = "Teleopti WFM", ApiKey = "topsecretkeygoeshere"};
 			await Target.Configure(tenantCredential);
