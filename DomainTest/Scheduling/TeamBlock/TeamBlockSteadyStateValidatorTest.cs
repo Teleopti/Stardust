@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -17,8 +16,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private ITeamBlockSteadyStateValidator _target;
         private ITeamInfo _teamInfo;
         private IBlockInfo _blockInfo;
-        private IList<IScheduleMatrixPro> _matrixList;
-        private IScheduleMatrixPro _scheduleMatrixPro;
         private DateOnly _today;
         private ITeamBlockInfo _teamBlockInfo;
         private ISameStartTimeBlockSpecification _sameStartTimeBlockSpecification;
@@ -51,11 +48,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		                                                _sameShiftCategoryTeamSpecification, _sameShiftBlockSpecification, 
 														_teamBlockOpenHoursValidator,
 														() => _schedulingResultStateHolder);
-			_scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
 		    _schedulingOptions = new SchedulingOptions();
 			_today = new DateOnly();
-			_matrixList = new List<IScheduleMatrixPro>();
-			_matrixList.Add(_scheduleMatrixPro);
 			_teamInfo = _mock.StrictMock<ITeamInfo>();
 			_blockInfo = new BlockInfo(new DateOnlyPeriod(_today, _today.AddDays(2)));
 			_teamBlockInfo = new TeamBlockInfo(_teamInfo, _blockInfo);

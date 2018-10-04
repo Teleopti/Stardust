@@ -16600,6 +16600,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Late for work.
+        /// </summary>
+        public static string LateForWork {
+            get {
+                return ResourceManager.GetString("LateForWork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Latest acquired time.
         /// </summary>
         public static string LatestAcquiredTime {
@@ -19324,6 +19333,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Monday {
             get {
                 return ResourceManager.GetString("Monday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monitor agents.
+        /// </summary>
+        public static string MonitorAgents {
+            get {
+                return ResourceManager.GetString("MonitorAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monitor organization.
+        /// </summary>
+        public static string MonitorOrganization {
+            get {
+                return ResourceManager.GetString("MonitorOrganization", resourceCulture);
             }
         }
         

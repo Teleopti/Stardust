@@ -17756,4 +17756,16 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Historical Overview</value>
     <comment>Historical overview</comment>
   </data>
+	<data name="MonitorOrganization" xml:space="preserve">
+    <value>Monitor organization</value>
+    <comment>Navigation button name in RTA</comment>
+  </data>
+	<data name="MonitorAgents" xml:space="preserve">
+    <value>Monitor agents</value>
+    <comment>Navigation button name in RTA</comment>
+  </data>
+	<data name="LateForWork" xml:space="preserve">
+    <value>Late for work</value>
+    <comment>Table column header in RTA historical overview</comment>
+  </data>
 </root>

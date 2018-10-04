@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 	public class BpoProviderTest : IIsolateSystem
 	{
 		public MutableNow Now;
-		public FakeStaffingSettingsReader StaffingSettingsReader;
 		public BpoProvider Target;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeUserTimeZone UserTimeZone;

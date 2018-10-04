@@ -29,11 +29,6 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		{
 		}
 
-		protected void AddEvent(Func<IEvent> @event)
-		{
-			_events.AddEvent(@event);
-		}
-
 		protected void AddEvent(IEvent @event)
 		{
 			_events.AddEvent(@event);
@@ -109,8 +104,6 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 	{
 		private IPerson _updatedBy;
 		private DateTime? _updatedOn;
-		private static readonly LocalizedUpdateInfo _localizedUpdateInfo = new LocalizedUpdateInfo();
-
 		private Events _events = new Events();
 
 		public virtual void NotifyCommandId(Guid commandId)

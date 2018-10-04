@@ -224,13 +224,5 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 			return workloadDays;
 		}
-
-		public static IWorkloadDay CreateWorkloadDayFromWorkloadTemplate(IWorkload workload, DateOnly date)
-		{
-			IWorkloadDay futureWorkloadDay = new WorkloadDay();
-			var template = (IWorkloadDayTemplate)workload.GetTemplate(TemplateTarget.Workload, date.DayOfWeek);
-			futureWorkloadDay.CreateFromTemplate(date, workload, template);
-			return futureWorkloadDay;
-		}
 	}
 }

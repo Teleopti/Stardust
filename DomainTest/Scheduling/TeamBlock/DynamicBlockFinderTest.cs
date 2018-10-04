@@ -16,31 +16,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private IScheduleMatrixPro _matrixPro;
 	    private ITeamInfo _teamInfo;
 	    private DateOnly _date;
-	    private IVirtualSchedulePeriod _schedulePeriod;
-	    private IScheduleMatrixPro _matrixPro2;
         private IPerson _person;
         private IScheduleRange _range;
         private IScheduleDay _scheduleDay;
 	    private IScheduleDayPro _scheduleDayPro;
-
 
 	    [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
             _matrixPro = _mock.StrictMock<IScheduleMatrixPro>();
-			_matrixPro2 = _mock.StrictMock<IScheduleMatrixPro>();
 	        _teamInfo = _mock.StrictMock<ITeamInfo>();
 			_target = new DynamicBlockFinder();
 			_date = new DateOnly(2013, 02, 22);
-		    _schedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
             _range = _mock.StrictMock<IScheduleRange>();
             _person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
             _scheduleDay = _mock.StrictMock<IScheduleDay>();
 		    _scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
         }
-
-      
 
 		[Test]
 		public void ShouldReturnSameDateAsAskedForIfBlockFinderTypeIsSingleDay()

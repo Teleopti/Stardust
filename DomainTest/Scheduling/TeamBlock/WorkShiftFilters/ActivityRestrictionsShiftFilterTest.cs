@@ -18,14 +18,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 	public class ActivityRestrictionsShiftFilterTest
 	{
 		private ActivityRestrictionsShiftFilter _target;
-		private MockRepository _mocks;
 		private IPerson _person;
 		private DateOnly _dateOnly;
 
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
 			_dateOnly = new DateOnly(2009, 2, 2);
 			_person = PersonFactory.CreatePerson("bill");
 			_target = new ActivityRestrictionsShiftFilter();

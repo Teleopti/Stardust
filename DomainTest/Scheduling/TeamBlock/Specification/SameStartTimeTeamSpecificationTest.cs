@@ -15,14 +15,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
         private IEditableShift _editableShift;
         private IScheduleMatrixPro _matrix1;
         private IScheduleMatrixPro _matrix2;
-        private IList<IScheduleMatrixPro> _matrixList;
         private MockRepository _mock;
         private IProjectionService _projectionService;
         private IScheduleDay _scheduleDay1;
         private IScheduleDay _scheduleDay2;
         private IScheduleDay _scheduleDay3;
         private IScheduleDay _scheduleDay4;
-        private IScheduleMatrixPro _scheduleMatrixPro;
         private IScheduleRange _scheduleRange1;
         private IScheduleRange _scheduleRange2;
         private ISameStartTimeTeamSpecification _target;
@@ -35,10 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
         public void Setup()
         {
             _mock = new MockRepository();
-            _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
             _today = new DateOnly();
-            _matrixList = new List<IScheduleMatrixPro>();
-            _matrixList.Add(_scheduleMatrixPro);
             _teamInfo = _mock.StrictMock<ITeamInfo>();
             _blockInfo = _mock.StrictMock<IBlockInfo>();
             _teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();

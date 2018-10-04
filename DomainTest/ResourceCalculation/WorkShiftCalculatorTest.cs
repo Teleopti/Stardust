@@ -422,10 +422,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             dataHolders.Add(period3.StartDateTime, dataHolder3);
             dataHolders.Add(period4.StartDateTime, dataHolder4);
 
-            var dataHolders2 = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
-            dataHolders2.Add(period3.StartDateTime, dataHolder3);
-            dataHolders2.Add(period4.StartDateTime, dataHolder4);
-
             var skillStaffPeriods = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
             skillStaffPeriods.Add(activity1, dataHolders);
 

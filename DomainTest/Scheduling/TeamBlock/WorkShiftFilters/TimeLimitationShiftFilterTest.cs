@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 	[TestWithStaticDependenciesDONOTUSE]
 	public class TimeLimitationShiftFilterTest
 	{
-		private MockRepository _mocks;
 		private DateOnly _dateOnly;
 		private IActivity _activity;
 		private ShiftCategory _category;
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
 			_dateOnly = new DateOnly(2013, 3, 1);
 			_activity = ActivityFactory.CreateActivity("sd");
 			_activity.SetId(Guid.NewGuid());

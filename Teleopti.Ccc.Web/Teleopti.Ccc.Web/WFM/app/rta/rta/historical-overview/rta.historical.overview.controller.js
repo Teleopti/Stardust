@@ -121,9 +121,8 @@
 		function buildDays(days, personId) {
 			return days.map(function (day) {
 				return {
-					Adherence: day.Adherence,
-					DisplayAdherence: day.Adherence !== null,
-					Color: colorAdherence(day.Adherence),
+					Adherence: day.Adherence === null ? '--' : day.Adherence,
+					Color: colorAdherence(day.Adherence === null ? 100 : day.Adherence),
 					HistoricalAdherenceUrl: $state.href('rta-historical', {personId: personId, date: day.Date}),
 					WasLateForWork: day.WasLateForWork
 				};

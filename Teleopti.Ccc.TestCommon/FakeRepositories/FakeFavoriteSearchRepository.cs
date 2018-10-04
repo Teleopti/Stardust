@@ -16,11 +16,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return storage.Where(f => f.Creator.Id == personId && f.WfmArea == area);
 		}
 
-		public IEnumerable<IFavoriteSearch> FindByPersonAndName(Guid personId, string name, WfmArea area)
-		{
-			return storage.Where(f => f.Creator.Id == personId && f.Name == name && f.WfmArea == area);
-		}
-
 		public IEnumerator<IFavoriteSearch> GetEnumerator()
 		{
 			throw new NotImplementedException();
