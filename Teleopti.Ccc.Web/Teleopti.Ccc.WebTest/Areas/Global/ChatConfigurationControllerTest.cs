@@ -25,10 +25,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		}
 
 		[Test]
-		public void ShouldConfigureBot()
+		public async void ShouldConfigureBot()
 		{
 			var tenantCredential = new TenantCredential {Host = "localhost:52858", Tenant = "Teleopti WFM", ApiKey = "topsecretkeygoeshere"};
-			Target.Configure(tenantCredential);
+			await Target.Configure(tenantCredential);
 
 			HttpServer.Requests[0].Thing.Should().Be.SameInstanceAs(tenantCredential);
 		}
