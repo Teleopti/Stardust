@@ -124,9 +124,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 			stateHolder.DaysToRecalculate.Should().Have.SameValuesAs(date);
 		}
-
-		public ResourceCalculateCorrectDaysTest(bool resourcePlannerHalfHourSkillTimeZon75509) : base(resourcePlannerHalfHourSkillTimeZon75509)
-		{
-		}
 	}
 }

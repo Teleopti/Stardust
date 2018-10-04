@@ -6,9 +6,9 @@
 	{
 		//Don't remove these - used in tests
 		TestToggle,
-
 		TestToggle2,
 		TestToggle3,
+		TestToggle4,
 
 		//////
 		// ReSharper disable InconsistentNaming
@@ -58,8 +58,6 @@
 		Wfm_Requests_Approve_Based_On_Budget_Allotment_39626,
 		Wfm_Requests_Approve_Based_On_Intraday_39868,
 		Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274,
-		Wfm_Requests_NightShift_BudgetDay_Allowance_76599,
-		Wfm_Requests_NightShift_BudgetDay_HeadCount_77146,
 
 		Wfm_People_ImportAndCreateAgentFromFile_42528,
 		Wfm_People_SetFallbackValuesForImporting_43289,
@@ -81,10 +79,9 @@
 		ResourcePlanner_PrepareToRemoveExportSchedule_46576,
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,
-		ResourcePlanner_XXL_76496,
-		ResourcePlanner_HalfHourSkillTimeZone_75509,
-		ResourcePlanner_ReducingSkillsDifferentOpeningHours_76176,
 		ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348,
+		ResourcePlanner_NoWhiteSpotWhenTargetDayoffIsBroken_77941,
+		Wfm_ArchiveScheduleForPast_77958,
 
 		Wfm_DisplayOnlineHelp_39402,
 
@@ -138,8 +135,8 @@
 		Tech_Moving_ResilientConnectionLogic_76181,
 		WFM_ChatBot_77547,
 
-		Wfm_Staffing_RemoveDeletedHeadsFromReadmodel_77049,
-		Wfm_Payroll_SupportMultiDllPayrolls_75959
+		Wfm_Payroll_SupportMultiDllPayrolls_75959,
+		Wfm_Stardust_EnableScaleout_77366
 		// ReSharper restore InconsistentNaming
 	}
 }

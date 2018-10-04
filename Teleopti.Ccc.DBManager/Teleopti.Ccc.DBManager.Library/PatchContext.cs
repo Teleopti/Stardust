@@ -33,7 +33,11 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public ExecuteSql MasterExecuteSql() => _masterExecuteSql ?? (_masterExecuteSql = new ExecuteSql(() => connectAndOpen(connectionStringToMaster()), _log));
 		public ExecuteSql ExecuteSql() => _executeSql ?? (_executeSql = new ExecuteSql(() => connectAndOpen(connectionString()), _log));
-		public SqlVersion SqlVersion() => _sqlVersion ?? (_sqlVersion = new ServerVersionHelper(MasterExecuteSql()).Version());
+		public SqlVersion SqlVersion() => _sqlVersion ?? (_sqlVersion = new ServerVersionHelper(_command.CreateDatabase ||
+																								_command.RecreateDatabaseIfNotExistsOrNewer ||
+																								!string.IsNullOrEmpty(_command.RestoreBackup) ||
+																								!string.IsNullOrEmpty(_command.RestoreBackupIfNotExistsOrNewer) ? MasterExecuteSql() : ExecuteSql()).Version());
+
 		public DatabaseFolder DatabaseFolder() => _databaseFolder ?? (_databaseFolder = new DatabaseFolder(new DbManagerFolder(_command.DbManagerFolderPath)));
 		public DatabaseVersionInformation DatabaseVersionInformation() => _databaseVersionInformation ?? (_databaseVersionInformation = new DatabaseVersionInformation(DatabaseFolder(), ExecuteSql()));
 		public SchemaVersionInformation SchemaVersionInformation() => _schemaVersionInformation ?? (_schemaVersionInformation = new SchemaVersionInformation(DatabaseFolder()));

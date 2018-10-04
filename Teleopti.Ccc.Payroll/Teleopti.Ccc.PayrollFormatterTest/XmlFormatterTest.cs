@@ -26,14 +26,15 @@ namespace Teleopti.Ccc.PayrollFormatterTest
         public void VerifyThroughputResult()
         {
             XmlDocument document = new XmlDocument();
-            document.Load(Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicXmlExport.xml"));
+			var testFilesDir = Path.Combine(TestContext.CurrentContext.TestDirectory, "TestFiles");
+			document.Load(Path.Combine(testFilesDir, "BasicXmlExport.xml"));
 
             DocumentFormat format = DocumentFormat.LoadFromXml(document);
             Stream stream = target.Format(document, format);
             StreamReader streamReader = new StreamReader(stream, format.Encoding);
             string content = streamReader.ReadToEnd();
 
-            Assert.AreEqual(File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicXmlExport.xml")),content);
+            Assert.AreEqual(File.ReadAllText(Path.Combine(testFilesDir, "BasicXmlExport.xml")),content);
             Assert.AreEqual("xml", target.FileSuffix);
         }
     }

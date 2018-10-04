@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 			DateTime startTime = resourceLayerCollection.First().Period.StartDateTime;
 
-			var minutesOffset = ServiceLocatorForLegacy.ScheduleResourcePeriodFetcher.FetchTimeZoneOffset(timeZoneInfo);
+			var minutesOffset = timeZoneInfo.BaseUtcOffset.Minutes;
 
 			var adjustedStartTime = startTime.AddMinutes(minutesOffset);
 			var rest = adjustedStartTime.Minute % minutesSplit;

@@ -175,11 +175,11 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.255\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.256\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.255\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.256\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -600,9 +600,11 @@
     <Compile Include="Toggle\ApplicationFunctionsToggleFilter.cs" />
     <Compile Include="Toggle\IApplicationFunctionsToggleFilter.cs" />
     <Compile Include="Toggle\InApp\FetchToggleOverride.cs" />
+    <Compile Include="Toggle\InApp\IFetchToggleOverride.cs" />
+    <Compile Include="Toggle\InApp\NoFetchingOfToggleOverride.cs" />
     <Compile Include="Toggle\IToggleFiller.cs" />
     <Compile Include="Toggle\IToggleManager.cs" />
-    <Compile Include="Toggle\SaveToggleOverride.cs" />
+    <Compile Include="Toggle\PersistToggleOverride.cs" />
     <Compile Include="Toggle\ToggleEnabledResult.cs" />
     <Compile Include="Toggle\ToggleQuerier.cs" />
     <Compile Include="Toggle\TogglesActive.cs" />

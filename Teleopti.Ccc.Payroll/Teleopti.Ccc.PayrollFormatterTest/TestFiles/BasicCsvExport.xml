@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DocumentElement>
+  <Format xmlns="urn:payroll-format-1.0">
+    <Document DocumentElement="DocumentElement" Separator="," Type="Csv" Line-separator="&#10;">
+      <Header Enabled="true" Element="MyHeader" />
+      <Footer Enabled="true" Element="MyFooter" />
+      <Items Element="PayrollExport">
+        <Item Element="Person" Type="xs:string" Quote="true" />
+        <Item Element="Date" Type="xs:date" Format="yyyyMMdd" />
+        <Item Element="Hours" Type="xs:time" Format="hhmm" />
+        <Item Element="Amount" Type="xs:double" Format="0.0" />
+        <Item Element="PartTime" Type="xs:decimal" Format="P1" />
+      </Items>
+    </Document>
+  </Format>
+  <MyHeader>==================Header</MyHeader>
+  <MyFooter>==================Footer</MyFooter>
+  <PayrollExport>
+    <Person>123</Person>
+    <Date>2009-02-02T00:00:00+01:00</Date>
+    <Hours>PT4H</Hours>
+    <Amount>3.5</Amount>
+  </PayrollExport>
+  <PayrollExport>
+    <Person>123</Person>
+    <Date>2009-02-03T00:00:00+01:00</Date>
+    <Hours>PT4H</Hours>
+    <Amount>3.6</Amount>
+  </PayrollExport>
+  <PayrollExport>
+    <Person>125</Person>
+    <Date>2009-02-05T00:00:00+01:00</Date>
+    <Hours>PT4H</Hours>
+    <Amount>3.7</Amount>
+  </PayrollExport>
+  <PayrollExport>
+    <Person>125</Person>
+    <Date>2009-02-06T00:00:00+01:00</Date>
+    <Hours>PT4H</Hours>
+    <PartTime>0.825</PartTime>
+  </PayrollExport>
+  <PayrollExport>
+    <Person />
+    <Date>2009-02-07T00:00:00+01:00</Date>
+    <Hours>PT165H</Hours>
+  </PayrollExport>
+</DocumentElement>

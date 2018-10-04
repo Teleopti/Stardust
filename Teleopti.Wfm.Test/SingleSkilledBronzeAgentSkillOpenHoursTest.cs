@@ -9,8 +9,10 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Test
@@ -27,7 +29,9 @@ namespace Teleopti.Wfm.Test
 		public IPersonRepository PersonRepository;
 		public IAbsenceRequestProcessor AbsenceRequestProcessor;
 		public IPersonRequestRepository PersonRequestRepository;
-		
+		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
+
+
 		[SetUp]
 		public void Setup()
 		{
@@ -38,6 +42,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldApproveIfActivityOutsideOfSkillOpenHours()
 		{
 			var now = new DateTime(2017, 04, 06, 0, 0, 0, DateTimeKind.Utc);
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var hourNow = now.Date.AddHours(now.Hour);
@@ -60,7 +65,9 @@ namespace Teleopti.Wfm.Test
 		[Test]
 		public void ShouldApproveIfActivityStartsBeforeSkillIsOpen()
 		{
+			
 			var now = new DateTime(2017, 04, 06, 0, 0, 0, DateTimeKind.Utc);
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var hourNow = now.Date.AddHours(now.Hour);
@@ -84,6 +91,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldDenyIfActivityStartsBeforeSkillIsOpenAndUnderstaffed()
 		{
 			var now = new DateTime(2017, 04, 06, 0, 0, 0, DateTimeKind.Utc);
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var hourNow = now.Date.AddHours(now.Hour);
@@ -108,6 +116,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldApproveIfActivityContinuesAfterSkillIsClosed()
 		{
 			var now = new DateTime(2017, 04, 06, 0, 0, 0, DateTimeKind.Utc);
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var hourNow = now.Date.AddHours(now.Hour);
@@ -131,6 +140,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldDenyIfActivityContinuesAfterSkillIsClosed()
 		{
 			var now = new DateTime(2017, 04, 06, 0, 0, 0, DateTimeKind.Utc);
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var hourNow = now.Date.AddHours(now.Hour);
@@ -155,6 +165,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldApproveIfOverstaffedOnAnOpenSkill()
 		{
 			var now = new DateTime(2017, 04, 06, 0, 0, 0, DateTimeKind.Utc);
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var hourNow = now.Date.AddHours(now.Hour);
@@ -173,6 +184,8 @@ namespace Teleopti.Wfm.Test
 			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
 			req.IsApproved.Should().Be.True();
 		}
+
+		
 	}
 
 }

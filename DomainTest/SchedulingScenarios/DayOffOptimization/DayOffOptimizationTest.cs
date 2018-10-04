@@ -39,6 +39,37 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 
 		[Test]
+		public void ShouldNotRemoveAllShiftsWhenExistingDayOffsAreMoreThanTarget()
+		{
+			if(!_resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941)
+				Assert.Ignore("only valid with toggle true");
+			var date = new DateOnly(2015, 10, 12); //mon
+			var activity = ActivityRepository.Has();
+			var skill = SkillRepository.Has("skill", activity);
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			var scenario = ScenarioRepository.Has();
+			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1);
+			schedulePeriod.SetDaysOff(2);
+			var shiftCategory = new ShiftCategory().WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var agent = PersonRepository.Has(new Contract("dont allow breaking number of DO"), schedulePeriod, ruleSet, skill);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1));
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
+			for (var i = 4; i < 7; i++)
+			{
+				PersonAssignmentRepository.GetSingle(date.AddDays(i)).SetDayOff(new DayOffTemplate());
+			}
+
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
+
+			for (var i = 0; i < 7; i++)
+			{
+				var personAssignment = PersonAssignmentRepository.GetSingle(date.AddDays(i));
+				(!personAssignment.ShiftLayers.IsEmpty() || personAssignment.DayOffTemplate != null).Should().Be.True();
+			}
+		}
+		
+		[Test]
 		public void ShouldMoveDayOffToDayWithLessDemand()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
@@ -478,7 +509,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 		}
 
-		public DayOffOptimizationTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerXxl76496)
+		public DayOffOptimizationTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941) : base(seperateWebRequest, resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941)
 		{
 		}
 	}

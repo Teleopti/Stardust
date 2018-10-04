@@ -36,6 +36,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.IocCommon;
@@ -285,6 +286,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			isolate.UseTestDouble<ReplaceLayerInSchedule>().For<IReplaceLayerInSchedule>();
 
 			isolate.UseTestDouble<FakeFetchAllToggleOverrides>().For<IFetchAllToggleOverrides>();
+			isolate.UseTestDouble<FakePersistToggleOverride>().For<IPersistToggleOverride>();
 
 			if (QueryAllAttributes<LoggedOnAppDomainAttribute>().Any())
 				isolate.UseTestDouble<FakeAppDomainPrincipalContext>().For<IThreadPrincipalContext>();

@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest;
 using Teleopti.Interfaces.Domain;
@@ -32,6 +33,7 @@ namespace Teleopti.Wfm.Test
 		public IPersonRepository PersonRepository;
 		public IHandleEvent<NewMultiAbsenceRequestsCreatedEvent> UpdateRequestHandler;
 		public IPersonRequestRepository PersonRequestRepository;
+		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 
 
 		[SetUp]
@@ -45,6 +47,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeDeniedIfUnderstaffedDuringLunch()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var requestStart = now.AddHours(2);
 			IPersonRequest personRequest;
@@ -85,6 +88,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeDeniedIfUnderstaffedDuringLunchShortRequest()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var requestStart = now.AddHours(3);
 			IPersonRequest personRequest;
@@ -125,6 +129,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeDeniedIfUnderstaffedDuringLunchAndLunchInBeginningOfRequest()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var requestStart = now.AddHours(3);
 			IPersonRequest personRequest;
@@ -165,6 +170,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeDeniedIfUnderstaffedDuringLunchAndLunchInEndOfRequest()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var requestStart = now.AddHours(1);
 			IPersonRequest personRequest;
@@ -205,6 +211,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeDeniedIfUnderstaffedDuringMeeting()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var requestStart = now.AddHours(2);
 			IPersonRequest personRequest;
@@ -245,6 +252,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldBeDeniedIfUnderstaffedDuringMeetingShortRequest()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var requestStart = now.AddHours(3);
 			IPersonRequest personRequest;

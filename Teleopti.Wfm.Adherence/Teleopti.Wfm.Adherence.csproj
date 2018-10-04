@@ -57,6 +57,7 @@
     <Compile Include="ApplicationLayer\ReadModels\CurrentBelongsToDate.cs" />
     <Compile Include="ApplicationLayer\ReadModels\CurrentScheduleReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\ReadModels\ExternalLogonReadModelUpdater.cs" />
+    <Compile Include="ApplicationLayer\ReadModels\HistoricalOverviewReadModelMaintainer.cs" />
     <Compile Include="ApplicationLayer\ReadModels\IHistoricalOverviewReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\ReadModels\IMappingReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\ReadModels\IOrganizationReader.cs" />

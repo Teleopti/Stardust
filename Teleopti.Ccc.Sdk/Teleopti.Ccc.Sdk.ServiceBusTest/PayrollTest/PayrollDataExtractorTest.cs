@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			
 			var searchPath = new FakeSearchPath();
 			var target = new PayrollDataExtractor(
-				new PlugInLoader(new DomainAssemblyResolver(new AssemblyFileLoader(searchPath)), searchPath),new ChannelCreator() );
+				new PlugInLoader(new DomainAssemblyResolverOld(new AssemblyFileLoader(searchPath)), searchPath),new ChannelCreator() );
 			var feedback = new FakeServiceBusPayrollExportFeedback(new InterAppDomainArguments());
 
 			var proc = new PayrollExport {PayrollFormatId = new Guid("{dbbe8c77-a7c2-4675-89f6-2e5bfc34470c}")};
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 		{
 			var searchPath = new FakeSearchPath();
 			var target = new PayrollDataExtractor(
-				new PlugInLoader(new DomainAssemblyResolver(new AssemblyFileLoader(searchPath)), searchPath), new ChannelCreator());
+				new PlugInLoader(new DomainAssemblyResolverOld(new AssemblyFileLoader(searchPath)), searchPath), new ChannelCreator());
 			var feedback = new FakeServiceBusPayrollExportFeedback(new InterAppDomainArguments());
 
 			var proc = new PayrollExport { PayrollFormatId = new Guid("{0E531434-A463-4AB6-8BF1-4696DDC9B296}") };

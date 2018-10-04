@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ExtendSelectedPeriodForMonthlyScheduling _extendSelectedPeriodForMonthlyScheduling;
 		private readonly IBlockPreferenceProviderForPlanningPeriod _blockPreferenceProviderForPlanningPeriod;
 		private readonly DayOffOptimization _dayOffOptimization;
+		private readonly FailedScheduledAgents _failedScheduledAgents;
 
 		public SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder,
 						FillSchedulerStateHolder fillSchedulerStateHolder,
@@ -37,7 +38,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						ISchedulingSourceScope schedulingSourceScope,
 						ExtendSelectedPeriodForMonthlyScheduling extendSelectedPeriodForMonthlyScheduling,
 						IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod,
-						DayOffOptimization dayOffOptimization)
+						DayOffOptimization dayOffOptimization, 
+						FailedScheduledAgents failedScheduledAgents)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -50,6 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_extendSelectedPeriodForMonthlyScheduling = extendSelectedPeriodForMonthlyScheduling;
 			_blockPreferenceProviderForPlanningPeriod = blockPreferenceProviderForPlanningPeriod;
 			_dayOffOptimization = dayOffOptimization;
+			_failedScheduledAgents = failedScheduledAgents;
 		}
 
 		[TestLog]
@@ -94,10 +97,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				new FixedBlockPreferenceProvider(schedulingOptions);
 			selectedPeriod = _extendSelectedPeriodForMonthlyScheduling.Execute(@event, schedulerStateHolder, selectedPeriod);
 			var agents = schedulerStateHolder.SchedulingResultState.LoadedAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray();
+			
+			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, agents, selectedPeriod, blockPreferenceProvider);
 
-			_scheduleExecutor.Execute(schedulingCallback,
-				schedulingOptions, schedulingProgress, agents,
-				selectedPeriod, blockPreferenceProvider);
+			if (@event.FromWeb)
+			{
+				var failedScheduleAgents = _failedScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod);
+				schedulingOptions.UsePreferences = false;
+				_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, failedScheduleAgents, selectedPeriod, blockPreferenceProvider);
+			}
+			
 			if(@event.RunDayOffOptimization)
 			{
 				_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate),

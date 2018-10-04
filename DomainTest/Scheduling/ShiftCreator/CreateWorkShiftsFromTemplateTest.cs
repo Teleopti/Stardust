@@ -106,10 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         public void VerifySimpleLimiterEnd()
         {
             IWorkShiftLimiter limiter = mocks.StrictMock<IWorkShiftLimiter>();
-            IList<IWorkShift> retValue = new List<IWorkShift>();
-            IWorkShift retShift = mocks.StrictMock<IWorkShift>();
             IVisualLayerCollection projTemplate = new VisualLayerCollection(new List<IVisualLayer>(), new ProjectionPayloadMerger());
-            retValue.Add(retShift);
             limiters.Add(limiter);
 
             using (mocks.Record())

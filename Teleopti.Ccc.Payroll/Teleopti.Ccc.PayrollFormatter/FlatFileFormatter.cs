@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml.XPath;
 
@@ -36,8 +37,8 @@ namespace Teleopti.Ccc.PayrollFormatter
                 foreach (var item in documentFormat.Items)
                 {
                     var itemNode = itemElements.Current.SelectSingleNode("./" + item.Element);
-                    if (documentFormat.DocumentFormatType == DocumentFormatType.Csv && rowBuilder.Length > 0)
-                        rowBuilder.Append(documentFormat.ItemSeparator);
+					if (documentFormat.DocumentFormatType == DocumentFormatType.Csv && !documentFormat.Items.First().Equals(item))
+							rowBuilder.Append(documentFormat.ItemSeparator);
 
                     var formattedNodeValue = FormatNodeValue(item, itemNode == null ? string.Empty : itemNode.Value);
                     rowBuilder.Append(formattedNodeValue);

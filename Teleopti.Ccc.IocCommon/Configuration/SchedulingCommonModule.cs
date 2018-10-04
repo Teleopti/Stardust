@@ -226,28 +226,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<ShiftProjectionCacheManager>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamScheduling>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_XXL_76496))
-			{
-				builder.RegisterType<WorkShiftFinderService>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
-				builder.RegisterType<WorkShiftSelectorDoNotCallMainShiftProjectionTooManyTimes>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();
-				builder.RegisterType<ShiftProjectionCacheFactory>().As<IShiftProjectionCacheFactory>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<WorkShiftFinderServiceOLD>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
-				builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();
-				builder.RegisterType<ShiftProjectionCacheFactoryOld>().As<IShiftProjectionCacheFactory>().SingleInstance();
-			}
-			if (_configuration.Toggle(Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509))
-			{
-				builder.RegisterType<ScheduleResourcePeriodFetcherAdjustForTimeZone>().As<ScheduleResourcePeriodFetcher>().SingleInstance();
-				builder.RegisterType<ContainingSkillIntervalPeriodFinder>().As<IContainingSkillIntervalPeriodFinder>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<ScheduleResourcePeriodFetcher>().SingleInstance();
-				builder.RegisterType<ContainingSkillIntervalPeriodFinderOld>().As<IContainingSkillIntervalPeriodFinder>().SingleInstance();
-			}
+			builder.RegisterType<WorkShiftFinderService>().InstancePerLifetimeScope();
+			builder.RegisterType<ShiftProjectionCacheFactory>().SingleInstance();
+			builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();	
+			builder.RegisterType<ContainingSkillIntervalPeriodFinder>().As<IContainingSkillIntervalPeriodFinder>().SingleInstance();
 			builder.RegisterType<TeamBlockRoleModelSelector>().InstancePerLifetimeScope();			
 			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>().SingleInstance();
 			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().SingleInstance();
@@ -397,10 +379,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DayOffOptimizationDesktop>().InstancePerLifetimeScope(); 
 
 			builder.RegisterType<OptimizerHelperHelper>().SingleInstance();
-			builder.RegisterType<WorkShiftBackToLegalStateServiceProFactory>().InstancePerLifetimeScope();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_NoWhiteSpotWhenTargetDayoffIsBroken_77941))
+			{
+				builder.RegisterType<WorkShiftBackToLegalStateServiceProFactoryNew>().As<WorkShiftBackToLegalStateServiceProFactory>().InstancePerLifetimeScope();
+			}
+			else
+			{
+				builder.RegisterType<WorkShiftBackToLegalStateServiceProFactory>().InstancePerLifetimeScope();
+			}
 			builder.RegisterType<ScheduleBlankSpots>().InstancePerLifetimeScope();
 			builder.RegisterType<DaysOffBackToLegalState>().InstancePerLifetimeScope();
 			builder.RegisterType<SuccessfulScheduledAgents>().SingleInstance();
+			builder.RegisterType<FailedScheduledAgents>().SingleInstance();
 			builder.RegisterType<SchedulingInformationProvider>().SingleInstance().ApplyAspects();
 			builder.RegisterType<IntradayOptimization>().InstancePerLifetimeScope();
 			builder.RegisterType<FullSchedulingResult>().InstancePerLifetimeScope().ApplyAspects();
@@ -441,20 +431,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.AsSelf()
 					.ApplyAspects()
 					.SingleInstance();
-				if (_configuration.Toggle(Toggles.ResourcePlanner_ReducingSkillsDifferentOpeningHours_76176))
-				{
-					builder.RegisterType<FillSchedulerStateHolderForDesktop>()
-						.As<FillSchedulerStateHolder>()
-						.ApplyAspects()
-						.SingleInstance();					
-				}
-				else
-				{
-					builder.RegisterType<FillSchedulerStateHolderForDesktopOLD>()
-						.As<FillSchedulerStateHolder>()
-						.ApplyAspects()
-						.SingleInstance();					
-				}
+				builder.RegisterType<FillSchedulerStateHolderForDesktop>()
+					.As<FillSchedulerStateHolder>()
+					.ApplyAspects()
+					.SingleInstance();					
+
 				builder.RegisterType<DesktopContext>().SingleInstance();
 				builder.RegisterType<DesktopSchedulingContext>()
 					.As<ISchedulingOptionsProvider>()

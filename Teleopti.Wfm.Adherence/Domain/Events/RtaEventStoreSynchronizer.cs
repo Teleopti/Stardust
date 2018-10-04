@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -7,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
@@ -32,6 +34,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 		private readonly IHistoricalOverviewReadModelPersister _readModels;
 		private readonly IAgentAdherenceDayLoader _adherenceDayLoader;
 		private readonly IKeyValueStorePersister _keyValueStore;
+		private readonly IPersonRepository _persons;
 
 		public const string SynchronizedEventKey = "HistoricalOverviewReadModelSynchronizedEvent";
 
@@ -39,12 +42,13 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 			IRtaEventStoreReader events,
 			IHistoricalOverviewReadModelPersister readModels,
 			IAgentAdherenceDayLoader adherenceDayLoader,
-			IKeyValueStorePersister keyValueStore)
+			IKeyValueStorePersister keyValueStore, IPersonRepository persons)
 		{
 			_events = events;
 			_readModels = readModels;
 			_adherenceDayLoader = adherenceDayLoader;
 			_keyValueStore = keyValueStore;
+			_persons = persons;
 		}
 
 		public void Synchronize()
@@ -69,8 +73,9 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 
 		[AllBusinessUnitsUnitOfWork]
 		[FullPermissions]
-		protected virtual void Synchronize(IEnumerable<IEvent> events) =>
-			events
+		protected virtual void Synchronize(IEnumerable<IEvent> events)
+		{
+			var toBeSynched = events
 				.Cast<IRtaStoredEvent>()
 				.Select(e =>
 				{
@@ -82,24 +87,52 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 					};
 				})
 				.Distinct()
-				.ForEach(key => { synchronizeAdherenceDay(key.PersonId, key.Day); });
+				.ToArray();
 
-		private void synchronizeAdherenceDay(Guid personId, DateOnly day)
+			var personsTimeZones =  _persons.FindPeople(toBeSynched.Select(x => x.PersonId).Distinct()).Select(p => new
+			{
+				p.Id,
+				TimeZone = p.PermissionInformation.DefaultTimeZone()
+			}).ToArray();
+						
+			toBeSynched.ForEach(x =>
+			{
+				var personTimeZone = personsTimeZones.FirstOrDefault(p => p.Id == x.PersonId)?.TimeZone ?? TimeZoneInfo.Utc;
+				var shouldSynchPreviousDay = toBeSynched
+							.FirstOrDefault(
+								y => y.PersonId == x.PersonId &&
+									 y.Day == x.Day.AddDays(-1)) == null;
+
+				if (shouldSynchPreviousDay)
+					synchronizeAdherenceDay(x.PersonId, x.Day.AddDays(-1), personTimeZone);
+				synchronizeAdherenceDay(x.PersonId, x.Day, personTimeZone);
+			});
+		}
+		
+		private void synchronizeAdherenceDay(Guid personId, DateOnly day, TimeZoneInfo timeZone)
 		{
 			var adherenceDay = _adherenceDayLoader.Load(personId, day);
-			var lateForWork = adherenceDay.Changes().FirstOrDefault(c => c.LateForWork != null);
-			var lateForWorkText = lateForWork != null ? lateForWork.LateForWork : "0";
-			var minutesLateForWork = int.Parse(Regex.Replace(lateForWorkText, "[^0-9.]", ""));
 
-			_readModels.Upsert(new HistoricalOverviewReadModel
-			{
-				PersonId = personId,
-				Date = day,
-				WasLateForWork = lateForWork != null,
-				MinutesLateForWork = minutesLateForWork,
-				SecondsInAdherence = adherenceDay.SecondsInAherence(),
-				SecondsOutOfAdherence = adherenceDay.SecondsOutOfAdherence(),
-			});
+			if (adherenceDay.Changes().Any())
+			{				
+				var lateForWork = adherenceDay.Changes().FirstOrDefault(c => c.LateForWork != null);
+				var lateForWorkText = lateForWork != null ? lateForWork.LateForWork : "0";
+				var minutesLateForWork = int.Parse(Regex.Replace(lateForWorkText, "[^0-9.]", ""));
+				var shiftStartTime = adherenceDay.Period().StartDateTime.AddHours(1);
+				
+				var dayInAgentTimeZone = TimeZoneInfo.ConvertTimeFromUtc(shiftStartTime, timeZone).ToDateOnly();
+				
+				_readModels.Upsert(new HistoricalOverviewReadModel
+				{
+					PersonId = personId,
+					Date = dayInAgentTimeZone,
+					WasLateForWork = lateForWork != null,
+					MinutesLateForWork = minutesLateForWork,
+					SecondsInAdherence = adherenceDay.SecondsInAherence(),
+					SecondsOutOfAdherence = adherenceDay.SecondsOutOfAdherence(),
+				});
+			}
+
 		}
 	}
 }

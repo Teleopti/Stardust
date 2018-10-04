@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			searchPath = MockRepository.GenerateMock<ISearchPath>();
 			searchPath.Stub(x => x.Path).Return(pathToDlls);
 
-			var domainAssemblyResolver = new DomainAssemblyResolver(new AssemblyFileLoader(searchPath));
+			var domainAssemblyResolver = new DomainAssemblyResolverOld(new AssemblyFileLoader(searchPath));
 
 			target = new PlugInLoader(domainAssemblyResolver, searchPath);
 		}

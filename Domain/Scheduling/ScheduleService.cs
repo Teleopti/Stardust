@@ -11,17 +11,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
     public class ScheduleService : IScheduleService
     {
 	    private readonly Func<ISchedulerStateHolder> _stateHolder;
-	    private readonly IWorkShiftFinderService _finderService;
+	    private readonly WorkShiftFinderService _finderService;
 		private readonly MatrixListFactory _scheduleMatrixListCreator;
         private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 
         public ScheduleService(
 					Func<ISchedulerStateHolder> stateHolder,
-			IWorkShiftFinderService finderService,
+					WorkShiftFinderService finderService,
 					MatrixListFactory scheduleMatrixListCreator,
-            IShiftCategoryLimitationChecker shiftCategoryLimitationChecker, 
-            IEffectiveRestrictionCreator effectiveRestrictionCreator)
+					IShiftCategoryLimitationChecker shiftCategoryLimitationChecker, 
+					IEffectiveRestrictionCreator effectiveRestrictionCreator)
         {
 	        _stateHolder = stateHolder;
 	        _finderService = finderService;

@@ -138,8 +138,9 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 				.WithAgent()
 				.WithHistoricalStateChange("2018-08-23 14:00");
 
-			Target.Build(null, new[] {teamId})
-				.Should().Have.SameValuesAs(Enumerable.Empty<HistoricalOverviewTeamViewModel>());
+			var data = Target.Build(null, new[] {teamId});
+			
+			data.Should().Have.SameValuesAs(Enumerable.Empty<HistoricalOverviewTeamViewModel>());
 		}	
 		
 		[Test]

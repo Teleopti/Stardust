@@ -1,0 +1,54 @@
+﻿<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel"
+xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+xmlns:html="http://www.w3.org/TR/REC-html40">
+<Worksheet ss:Name="DocumentElement">
+<Table x:FullColumns="1" x:FullRows="1">
+<Row>
+<Cell><Data ss:Type="String">Person</Data></Cell>
+<Cell><Data ss:Type="String">Date</Data></Cell>
+<Cell><Data ss:Type="String">Hours</Data></Cell>
+<Cell><Data ss:Type="String">Amount</Data></Cell>
+<Cell><Data ss:Type="String">PartTime</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="String">"123"</Data></Cell>
+<Cell><Data ss:Type="String">20090202</Data></Cell>
+<Cell><Data ss:Type="String">400</Data></Cell>
+<Cell><Data ss:Type="String">3.5</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="String">"123"</Data></Cell>
+<Cell><Data ss:Type="String">20090203</Data></Cell>
+<Cell><Data ss:Type="String">400</Data></Cell>
+<Cell><Data ss:Type="String">3.6</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="String">"125"</Data></Cell>
+<Cell><Data ss:Type="String">20090205</Data></Cell>
+<Cell><Data ss:Type="String">400</Data></Cell>
+<Cell><Data ss:Type="String">3.7</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="String">"125"</Data></Cell>
+<Cell><Data ss:Type="String">20090206</Data></Cell>
+<Cell><Data ss:Type="String">400</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">82.5 %</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="String">""</Data></Cell>
+<Cell><Data ss:Type="String">20090207</Data></Cell>
+<Cell><Data ss:Type="String">16500</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+</Row>
+
+</Table>
+</Worksheet></Workbook>

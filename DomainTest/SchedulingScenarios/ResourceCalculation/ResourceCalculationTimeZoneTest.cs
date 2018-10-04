@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	public class ResourceCalculationTimeZoneTest : ResourceCalculationScenario
 	{
 		public ResourceCalculateWithNewContext Target;
-		private readonly bool _resourcePlannerHalfHourSkillTimeZon75509;
 
 		[TestCase("Arabian Standard Time", 15)]			//+04:00
 		[TestCase("Iran Standard Time", 15)]			//+03:30
@@ -29,9 +28,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		[TestCase("Nepal Standard Time", 60)]			//+05:45
 		public void ShouldHandleSkillInHalfHourTimeZoneWithDifferentResolutions(string timeZoneId, int defaultResolution)
 		{
-			if (!_resourcePlannerHalfHourSkillTimeZon75509 && defaultResolution == 60 && timeZoneId != "Arabian Standard Time")
-				Assert.Ignore();
-			
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
 			var scenario = new Scenario();
 			var activity = new Activity();
@@ -55,11 +51,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		[TestCase("Newfoundland Standard Time", 60)]    //-03:30
 		[TestCase("Nepal Standard Time", 60)]           //+05:45
 		public void ShouldPlaceFullResourceOnInterval(string timeZoneId, int defaultResolution)
-		{
-			if (!_resourcePlannerHalfHourSkillTimeZon75509 && defaultResolution == 60 &&
-				timeZoneId != "Arabian Standard Time")
-					Assert.Ignore();
-				
+		{	
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
 			var scenario = new Scenario();
 			var activity = new Activity();
@@ -80,9 +72,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		[TestCase("Nepal Standard Time", 60)]           //+05:45
 		public void ShouldSplitResourceOnIntervals(string timeZoneId, int defaultResolution)
 		{
-			if (!_resourcePlannerHalfHourSkillTimeZon75509 && defaultResolution == 60 && timeZoneId != "Arabian Standard Time")
-				Assert.Ignore();
-
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
 			var scenario = new Scenario();
 			var activity = new Activity();
@@ -96,11 +85,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 			skillDay.SkillStaffPeriodCollection.First().CalculatedResource.Should().Be.EqualTo(0.5);
 			skillDay.SkillStaffPeriodCollection.Second().CalculatedResource.Should().Be.EqualTo(0.5);
-		}
-
-		public ResourceCalculationTimeZoneTest(bool resourcePlannerHalfHourSkillTimeZon75509) : base(resourcePlannerHalfHourSkillTimeZon75509)
-		{
-			_resourcePlannerHalfHourSkillTimeZon75509 = resourcePlannerHalfHourSkillTimeZon75509;
 		}
 	}
 }

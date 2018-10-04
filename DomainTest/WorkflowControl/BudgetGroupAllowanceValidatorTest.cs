@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
 	[TestFixture]
 	[DomainTest]
-	[Toggle(Domain.FeatureFlags.Toggles.Wfm_Requests_NightShift_BudgetDay_Allowance_76599)]
 	public class BudgetGroupAllowanceValidatorTest :  IIsolateSystem
 	{
 

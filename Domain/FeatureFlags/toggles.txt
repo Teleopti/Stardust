@@ -106,10 +106,9 @@ ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = true
 ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
-ResourcePlanner_XXL_76496 = true
-ResourcePlanner_ReducingSkillsDifferentOpeningHours_76176 = true
-ResourcePlanner_HalfHourSkillTimeZone_75509 = true
 ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348 = DEV
+ResourcePlanner_NoWhiteSpotWhenTargetDayoffIsBroken_77941 = RC
+Wfm_ArchiveScheduleForPast_77958 = RC
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
@@ -120,10 +119,8 @@ WFM_Intraday_Redesign_77214 = RC
 
 # Ziggy #
 WfmStaffing_AddOvertime_42524 = RC
-Wfm_Requests_NightShift_BudgetDay_Allowance_76599 = true
-Wfm_Staffing_RemoveDeletedHeadsFromReadmodel_77049 = true
-Wfm_Requests_NightShift_BudgetDay_HeadCount_77146 = true
 Wfm_Payroll_SupportMultiDllPayrolls_75959 = RC
+Wfm_Stardust_EnableScaleout_77366 = RC
 
 # Squids #
 WFM_Forecaster_Refact_44480 = true

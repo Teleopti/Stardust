@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 	[TestFixture]
 	public class MainShiftOptimizeActivitiesSpecificationShiftFilterTest
 	{
-		private MockRepository _mocks;
 		private MainShiftOptimizeActivitiesSpecificationShiftFilter _target;
 		private TimeZoneInfo _timeZoneInfo;
 		private ShiftCategory _category;
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
 			_dateOnly = new DateOnly(2013, 3, 1);
 			_activity = ActivityFactory.CreateActivity("sd");
 			_activity.SetId(Guid.NewGuid());

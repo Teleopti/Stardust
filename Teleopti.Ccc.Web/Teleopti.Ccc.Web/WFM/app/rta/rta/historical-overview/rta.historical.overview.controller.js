@@ -10,14 +10,15 @@
 	function RtaHistoricalOverviewController($filter, $stateParams, $state, $http, $translate, rtaStateService, rtaDataService) {
 
 		var vm = this;
-
+		vm.loading = true;
+		
 		rtaStateService.setCurrentState($stateParams);
 
 		rtaDataService.load().then(function (data) {
 			buildSites(data.organization);
 			loadCards();
 		});
-
+		
 		function buildSites(organization) {
 			vm.sites = organization.map(function (site) {
 				var siteModel = {
@@ -72,11 +73,12 @@
 		};
 
 		function loadCards() {
-
+			vm.loading = true;
 			var params = rtaStateService.historicalOverviewParams();
 			var noParams = !(params.siteIds.length || params.teamIds.length);
 			if (noParams) {
 				vm.cards = [];
+				vm.loading = false;
 				return;
 			}
 			
@@ -84,6 +86,7 @@
 				params: params
 			}).then(function (response) {
 				buildCards(response.data);
+				vm.loading = false;
 			});
 		}
 
@@ -105,6 +108,7 @@
 				return {
 					Name: agent.Name,
 					IntervalAdherence: agent.IntervalAdherence,
+					AdherenceBarWidth: agent.IntervalAdherence === null ? 0 :  agent.IntervalAdherence,
 					Days: buildDays(agent.Days, agent.Id),
 					LateForWork: {
 						Count: agent.LateForWork.Count,
@@ -117,9 +121,8 @@
 		function buildDays(days, personId) {
 			return days.map(function (day) {
 				return {
-					//DisplayDate: day.DisplayDate,
-					Adherence: day.Adherence,
-					Color: colorAdherence(day.Adherence),
+					Adherence: day.Adherence === null ? '--' : day.Adherence,
+					Color: colorAdherence(day.Adherence === null ? 100 : day.Adherence),
 					HistoricalAdherenceUrl: $state.href('rta-historical', {personId: personId, date: day.Date}),
 					WasLateForWork: day.WasLateForWork
 				};

@@ -31,15 +31,21 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			
 			var currentBu = new FakeCurrentBusinessUnit();
 			currentBu.FakeBusinessUnit(BusinessUnitFactory.CreateWithId(theSkill.BusinessUnit.Id.GetValueOrDefault()));
-
-			var skillCombinationReadModel = new SkillCombinationResourceRepository(new MutableNow(_theDate.Date.AddHours(7)), currentUnitOfWork, currentBu, new FakeStardustJobFeedback(), new RemoveDeletedStaffingHeadsToggleOff());
-			skillCombinationReadModel.PersistSkillCombinationResource(_theDate.Date.AddHours(7), new List<SkillCombinationResource> {new SkillCombinationResource
-																	  {
-																		 StartDateTime = _theDate.Date.AddHours(8),
-																		 EndDateTime = _theDate.Date.AddHours(8).AddMinutes(15),
-																		 Resource = 4,
-																		 SkillCombination = new []{theSkill.Id.GetValueOrDefault()}
-																	  } });
+			var skillComboList = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = _theDate.Date.AddHours(8),
+					EndDateTime = _theDate.Date.AddHours(8).AddMinutes(15),
+					Resource = 4,
+					SkillCombination = new[] {theSkill.Id.GetValueOrDefault()}
+				}
+			};
+			var updateStaffingDateSetting = new UpdateStaffingLevelReadModelStartDate();
+			updateStaffingDateSetting.RememberStartDateTime(skillComboList.Min(x=>x.StartDateTime));
+			var removeDeletedStaffingHeads = new RemoveDeletedStaffingHeads(updateStaffingDateSetting);
+			var skillCombinationReadModel = new SkillCombinationResourceRepository(new MutableNow(_theDate.Date.AddHours(7)), currentUnitOfWork, currentBu, new FakeStardustJobFeedback(), removeDeletedStaffingHeads);
+			skillCombinationReadModel.PersistSkillCombinationResource(_theDate.Date.AddHours(7),skillComboList);
 			
 		}
 	}

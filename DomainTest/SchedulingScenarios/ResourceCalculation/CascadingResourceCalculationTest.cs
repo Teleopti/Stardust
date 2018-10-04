@@ -278,9 +278,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			prioritizedSkillDay2.SkillStaffPeriodCollection.First().CalculatedResource.Should().Be.EqualTo(1);
 			prioritizedSkillDay3.SkillStaffPeriodCollection.First().CalculatedResource.Should().Be.EqualTo(0);
 		}
-
-		public CascadingResourceCalculationTest(bool resourcePlannerHalfHourSkillTimeZon75509) : base(resourcePlannerHalfHourSkillTimeZon75509)
-		{
-		}
 	}
 }

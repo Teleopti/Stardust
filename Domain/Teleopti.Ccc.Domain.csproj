@@ -116,11 +116,11 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.255\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.256\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.255\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.256\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -198,9 +198,7 @@
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedule.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsDateMapper.cs" />
     <Compile Include="Budgeting\BudgetGroupAllowanceCalculatorExtended.cs" />
-    <Compile Include="Budgeting\BudgetGroupAllowanceCalculatorLimited.cs" />
     <Compile Include="Budgeting\BudgetGroupHeadCountSpecificationExtended.cs" />
-    <Compile Include="Budgeting\BudgetGroupHeadCountSpecificationLimited.cs" />
     <Compile Include="Common\DefaultSchedulePeriodProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\MultipleChangeScheduleCommandHandler.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />
@@ -1302,7 +1300,6 @@
     <Compile Include="InterfaceLegacy\Domain\ScheduleVisibleReasons.cs" />
     <Compile Include="InterfaceLegacy\Domain\SchedulingServiceBaseEventArgs.cs" />
     <Compile Include="InterfaceLegacy\Domain\SchedulingServiceSuccessfulEventArgs.cs" />
-    <Compile Include="InterfaceLegacy\Domain\SendNotificationException.cs" />
     <Compile Include="InterfaceLegacy\Domain\ServiceAgreement.cs" />
     <Compile Include="InterfaceLegacy\Domain\ServiceLevel.cs" />
     <Compile Include="InterfaceLegacy\Domain\SettingsExtensions.cs" />
@@ -1813,7 +1810,9 @@
     <Compile Include="SystemSetting\GlobalSetting\DataProtectionResponse.cs" />
     <Compile Include="SystemSetting\GlobalSetting\NotificationDurationTime.cs" />
     <Compile Include="ToggleAdmin\AllToggleNamesWithoutOverrides.cs" />
+    <Compile Include="ToggleAdmin\DeleteToggleOverride.cs" />
     <Compile Include="ToggleAdmin\IFetchAllToggleOverrides.cs" />
+    <Compile Include="ToggleAdmin\IPersistToggleOverride.cs" />
     <Compile Include="UndoRedo\UndoRedoState.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSystemSettings.cs" />
     <Compile Include="UndoRedo\UndoRedoWithScheduleCallbackContainer.cs" />

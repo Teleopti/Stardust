@@ -83,10 +83,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 		
 
-		public SchedulingReduceSkillsDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXXL76496, bool resourcePlannerHalfHourSkillTimeZon75509, bool resourcePlannerReducingSkillsDifferentOpeningHours76176) : base(seperateWebRequest, resourcePlannerXXL76496, resourcePlannerHalfHourSkillTimeZon75509, resourcePlannerReducingSkillsDifferentOpeningHours76176)
+		public SchedulingReduceSkillsDesktopTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
 		{
-			if(!resourcePlannerReducingSkillsDifferentOpeningHours76176)
-				Assert.Ignore("not implemented");
 		}
 	}
 }

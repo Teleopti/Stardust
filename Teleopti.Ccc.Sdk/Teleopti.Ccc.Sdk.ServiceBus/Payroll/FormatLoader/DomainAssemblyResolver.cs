@@ -3,11 +3,11 @@ using System.Reflection;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 {
-    public class DomainAssemblyResolver : IDomainAssemblyResolver
+    public class DomainAssemblyResolverNew : IDomainAssemblyResolver
     {
         private readonly IAssemblyFileLoader _assemblyFileLoader;
 
-        public DomainAssemblyResolver(IAssemblyFileLoader assemblyFileLoader)
+        public DomainAssemblyResolverNew(IAssemblyFileLoader assemblyFileLoader)
         {
             _assemblyFileLoader = assemblyFileLoader;
         }
@@ -32,4 +32,28 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 			return _assemblyFileLoader.Find(args.Name);
         }
     }
+
+	public class DomainAssemblyResolverOld : IDomainAssemblyResolver
+	{
+		private readonly IAssemblyFileLoader _assemblyFileLoader;
+
+		public DomainAssemblyResolverOld(IAssemblyFileLoader assemblyFileLoader)
+		{
+			_assemblyFileLoader = assemblyFileLoader;
+		}
+
+		public Assembly Resolve(object sender, ResolveEventArgs args)
+		{
+			var currentAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+			foreach (var t in currentAssemblies)
+			{
+				if (t.FullName == args.Name)
+				{
+					return t;
+				}
+			}
+
+			return _assemblyFileLoader.Find(args.Name);
+		}
+	}
 }

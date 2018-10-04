@@ -36,10 +36,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ExportStaffingPeriodValidationProvider>().As<ExportStaffingPeriodValidationProvider>().SingleInstance();
 
 			builder.RegisterType<UpdateStaffingLevelReadModelStartDate>().SingleInstance();
-			if (_configuration.Toggle(Toggles.Wfm_Staffing_RemoveDeletedHeadsFromReadmodel_77049))
-				builder.RegisterType<RemoveDeletedStaffingHeads>().As<IRemoveDeletedStaffingHeads>().SingleInstance();
-			else
-				builder.RegisterType<RemoveDeletedStaffingHeadsToggleOff>().As<IRemoveDeletedStaffingHeads>().SingleInstance();
+			builder.RegisterType<RemoveDeletedStaffingHeads>().As<IRemoveDeletedStaffingHeads>().SingleInstance();
 
 			
 		}

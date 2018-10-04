@@ -159,7 +159,6 @@
 				</div>
 			</div>
 			<div class="panel panel-default ">
-				<!--<div class="panel-heading">Nodes   <label for="enabledBox">Show accessable nodes:</label>  <input id="enabledBox" type="checkbox" name="" ng-model="vm.pingedNodes" ng-checked ="true"> </div>-->
 				<div class="panel-heading">Nodes </div>
 				<div class="panel-body">
 					<table ng-show="vm.anyNodes">
@@ -169,16 +168,14 @@
 							<th>Latest Heartbeat (UTC)</th>
 							<th>Working</th>
 							<th>Alive</th>
-							<th>PingResult</th>
 						</tr>
 						</thead>
 						<tbody>
-						<tr ng-class="{'greenNode': node.Alive === true, 'redNode': node.Alive === false}" ng-show="node.PingResult" ng-repeat="node in vm.WorkerNodes">
+						<tr ng-class="{'greenNode': node.Alive === true, 'redNode': node.Alive === false}" ng-repeat="node in vm.WorkerNodes">
 							<td><a href="#StardustDashboard/nodes/{{node.Id}}">{{node.Url}}</a></td>
 							<td>{{node.Heartbeat | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 							<td>{{node.Running}}</td>
 							<td ng-class="node.Alive === true ? 'green' : 'red'">{{node.Alive}}</td>
-							<td>{{node.PingResult}}</td>
 						</tr>
 						</tbody>
 					</table>

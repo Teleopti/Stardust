@@ -1,14 +1,15 @@
 using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.ToggleAdmin;
 
 namespace Teleopti.Ccc.Infrastructure.Toggle
 {
-	public class SaveToggleOverride
+	public class PersistToggleOverride : IPersistToggleOverride
 	{
 		private readonly IConfigReader _configReader;
 
-		public SaveToggleOverride(IConfigReader configReader)
+		public PersistToggleOverride(IConfigReader configReader)
 		{
 			_configReader = configReader;
 		}
@@ -25,14 +26,14 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			}
 		}
 
-		public void Delete(Toggles toggle)
+		public void Delete(string toggle)
 		{
 			using (var connection = new SqlConnection(_configReader.ConnectionString("Toggle")))
 			{
 				connection.Open();
 				using (var sqlCommand = new SqlCommand("delete from Toggle.Override where Toggle = @name", connection))
 				{
-					sqlCommand.Parameters.AddWithValue("@name", toggle.ToString());
+					sqlCommand.Parameters.AddWithValue("@name", toggle);
 					sqlCommand.ExecuteNonQuery();
 				}
 			}

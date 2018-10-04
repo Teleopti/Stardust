@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 			AppDomain.CurrentDomain.SetData("APPBASE", payrollPath);
 
 			IXPathNavigable result;
-			var domainAssemblyResolver = new DomainAssemblyResolver(new AssemblyFileLoaderTenant());
+			var domainAssemblyResolver = new DomainAssemblyResolverNew(new AssemblyFileLoaderTenant());
 			AppDomain.CurrentDomain.AssemblyResolve += domainAssemblyResolver.Resolve;
 			try
 			{
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 		private static IList<IPayrollExportProcessor> load(string path, PayrollExportFeedbackEx feedback, string tenantName)
 		{
 			var availablePayrollExportProcessors = new List<IPayrollExportProcessor>();
-			var domainAssemblyResolver = new DomainAssemblyResolver(new AssemblyFileLoaderTenant());
+			var domainAssemblyResolver = new DomainAssemblyResolverNew(new AssemblyFileLoaderTenant());
 			{
 				AppDomain.CurrentDomain.AssemblyResolve += domainAssemblyResolver.Resolve;
 				var tenantSpecificPath = Path.Combine(path, tenantName);

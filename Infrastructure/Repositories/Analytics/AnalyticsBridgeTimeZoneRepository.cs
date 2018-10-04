@@ -51,14 +51,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				dt.Columns.Add("insert_date", typeof(DateTime));
 				dt.Columns.Add("update_date", typeof(DateTime));
 				
-				foreach (var skill in toBeAdded)
+				foreach (var bridgeDate in toBeAdded)
 				{
 					var row = dt.NewRow();
-					row["date_id"] = skill.DateId;
-					row["interval_id"] = skill.IntervalId;
-					row["time_zone_id"] = skill.TimeZoneId;
-					row["local_date_id"] = skill.LocalDateId;
-					row["local_interval_id"] = skill.LocalIntervalId;
+					row["date_id"] = bridgeDate.DateId;
+					row["interval_id"] = bridgeDate.IntervalId;
+					row["time_zone_id"] = bridgeDate.TimeZoneId;
+					row["local_date_id"] = bridgeDate.LocalDateId;
+					row["local_interval_id"] = bridgeDate.LocalIntervalId;
 					row["datasource_id"] = 1;
 					row["insert_date"] = DateTime.UtcNow;
 					row["update_date"] = DateTime.UtcNow;

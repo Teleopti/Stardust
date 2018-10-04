@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Analytics;
@@ -8,6 +10,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
@@ -83,14 +86,65 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			var currentDay = MaxDate().DateDate;
 			var culture = _analyticsConfigurationRepository.GetCulture();
 
-			var session = _currentAnalyticsUnitOfWork.Current().Session();
-			var oneDay = TimeSpan.FromDays(1);
-			while ((currentDay += oneDay) <= toDate)
+			using (var session = _currentAnalyticsUnitOfWork.Current().Session().SessionFactory.OpenStatelessSession())
+			using (var transaction = session.Connection.BeginTransaction())
 			{
-				session.Save(new AnalyticsDate(currentDay, culture));
-				shouldPublish = true;
-			}
+				var dt = new DataTable();
+				dt.Columns.Add("date_id", typeof(int));
+				dt.Columns.Add("date_date", typeof(DateTime));
+				dt.Columns.Add("year", typeof(int));
+				dt.Columns.Add("year_month", typeof(int));
+				dt.Columns.Add("month", typeof(int));
+				dt.Columns.Add("month_name", typeof(string));
+				dt.Columns.Add("month_resource_key", typeof(string));
+				dt.Columns.Add("day_in_month", typeof(int));
+				dt.Columns.Add("weekday_number", typeof(int));
+				dt.Columns.Add("weekday_name", typeof(string));
+				dt.Columns.Add("weekday_resource_key", typeof(string));
+				dt.Columns.Add("week_number", typeof(int));
+				dt.Columns.Add("year_week", typeof(string));
+				dt.Columns.Add("quarter", typeof(string));
+				dt.Columns.Add("insert_date", typeof(DateTime));
 
+
+				var oneDay = TimeSpan.FromDays(1);
+				while ((currentDay += oneDay) <= toDate)
+				{
+					var day = new AnalyticsDate(currentDay, culture);
+					var row = dt.NewRow();
+					row["day_in_month"] = day.DayInMonth;
+					row["date_date"] = day.DateDate;
+					row["year"] = day.Year;
+					row["year_month"] = day.YearMonth;
+					row["year_week"] = day.YearWeek;
+					row["month"] = day.Month;
+					row["month_name"] = day.MonthName;
+					row["month_resource_key"] = day.MonthResourceKey;
+					row["week_number"] = day.WeekNumber;
+					row["weekday_name"] = day.WeekdayName;
+					row["weekday_number"] = day.WeekdayNumber;
+					row["weekday_resource_key"] = day.WeekdayResourceKey;
+					row["quarter"] = day.Quarter;
+					row["insert_date"] = day.InsertDate;
+					dt.Rows.Add(row);
+
+					shouldPublish = true;
+				}
+
+				if (shouldPublish)
+				{
+					using (var sqlBulkCopy = new SqlBulkCopy(session.Connection.Unwrap(), SqlBulkCopyOptions.Default,
+						(SqlTransaction) transaction))
+					{
+						sqlBulkCopy.DestinationTableName = "[mart].[dim_date]";
+						sqlBulkCopy.BulkCopyTimeout = 300;
+						sqlBulkCopy.WriteToServer(dt);
+					}
+
+					transaction.Commit();
+				}
+			}
+			
 			_currentAnalyticsUnitOfWork.Current().AfterSuccessfulTx(() =>
 			{
 				if (!shouldPublish) return;

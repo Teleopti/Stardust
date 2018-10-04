@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Infrastructure.Toggle.InApp
 {
-	public class FetchToggleOverride
+	public class FetchToggleOverride : IFetchToggleOverride
 	{
 		private readonly IConfigReader _configReader;
 

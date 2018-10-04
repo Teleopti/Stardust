@@ -53,9 +53,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			stateHolder.SchedulingResultState.GuessResourceCalculationHasBeenMade()
 				.Should().Be.True();
 		}
-
-		public GuessResourceCalculationHasBeenMadeTest(bool resourcePlannerHalfHourSkillTimeZon75509) : base(resourcePlannerHalfHourSkillTimeZon75509)
-		{
-		}
 	}
 }

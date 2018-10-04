@@ -24,9 +24,6 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Matrix
         private MockRepository _mocks;
         private IRepositoryFactory _repositoryFactory;
         private IUnitOfWork _unitOfWork;
-        private IAvailableData _adminAvailableData;
-        private IAvailableData _agentAvailableData;
-        private IAvailableData _siteAvailableData;
         private IList<IAvailableData> _availableDataList;
         private IApplicationRole _adminRole;
         private IApplicationRole _agentRole;
@@ -42,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Matrix
             
             _applicationRoles = ApplicationRoleFactory.CreateShippedRoles(out _adminRole, out _agentRole, out _unitRole, out _siteRole, out _teamRole);
 
-            _availableDataList = CreateAvailableDatas(out _adminAvailableData, out _agentAvailableData, out _siteAvailableData);
+            _availableDataList = CreateAvailableDatas();
 
             var idOne = "09DB7510-ED3C-49CE-B49C-D43D94EC7263";
             var idTwo = "1C2BDC8C-BFED-4BB3-AD13-6614488310BE";
@@ -301,12 +298,12 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Matrix
         /// <param name="siteAvailableData">The site available data.</param>
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        private IList<IAvailableData> CreateAvailableDatas(out IAvailableData adminAvailableData, out IAvailableData agentAvailableData, out IAvailableData siteAvailableData)
+        private IList<IAvailableData> CreateAvailableDatas()
         {
             // create three available data objects and add them to a list
-            adminAvailableData = new AvailableData();
-            agentAvailableData = new AvailableData();
-            siteAvailableData = new AvailableData();
+            var adminAvailableData = new AvailableData();
+            var agentAvailableData = new AvailableData();
+            var siteAvailableData = new AvailableData();
             IList<IAvailableData> availableDatas = new List<IAvailableData>();
             availableDatas.Add(adminAvailableData);
             availableDatas.Add(agentAvailableData);

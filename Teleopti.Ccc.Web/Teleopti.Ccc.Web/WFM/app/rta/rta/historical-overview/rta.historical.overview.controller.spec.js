@@ -140,4 +140,111 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		expect(t.backend.lastParams.historicalOverview().siteIds).toContain('LondonId');
 	});
 
+	it('should display -- when adherence is empty', function (t) {
+		t.stateParams.teamIds = ['teamAvalancheId'];
+		t.backend.with.historicalOverview(
+			{
+				Name: 'Denver/Avalanche',
+				DisplayDays: ['2/10', '3/10', '4/10', '5/10', '6/10', '7/10', '8/10'],
+				Agents: [{
+					Name: 'Andeen Ashley',
+					IntervalAdherence: null,
+					Days: [
+						{
+							Date: '20180820',
+							Adherence: null,
+							WasLateForWork: false
+						}
+					],
+					LateForWork:
+						{
+							Count: 0,
+							TotalMinutes: 0
+						}
+				}]
+			});
+
+		var vm = t.createController();
+		t.apply(function () {
+			vm.closeOrganizationPicker();
+		});
+
+		expect(vm.cards[0].Agents[0].Days[0].Adherence).toBe('--');
+	});
+	
+	it('should display white background when adherence is empty', function (t) {
+		t.stateParams.teamIds = ['teamAvalancheId'];
+		t.backend.with.historicalOverview(
+			{
+				Name: 'Denver/Avalanche',
+				DisplayDays: ['2/10', '3/10', '4/10', '5/10', '6/10', '7/10', '8/10'],
+				Agents: [{
+					Name: 'Andeen Ashley',
+					IntervalAdherence: null,
+					Days: [
+						{
+							Date: '20180820',
+							Adherence: null,
+							WasLateForWork: false
+						}
+					],
+					LateForWork:
+						{
+							Count: 0,
+							TotalMinutes: 0
+						}
+				}]
+			});
+
+		var vm = t.createController();
+		t.apply(function () {
+			vm.closeOrganizationPicker();
+		});
+
+		expect(vm.cards[0].Agents[0].Days[0].Color).toBe('hsl(0,0%,100%)');
+	});
+
+	it('should display white when adherence is empty', function (t) {
+		t.stateParams.teamIds = ['teamAvalancheId'];
+		t.backend.with.historicalOverview(
+			{
+				Name: 'Denver/Avalanche',
+				DisplayDays: ['2/10', '3/10', '4/10', '5/10', '6/10', '7/10', '8/10'],
+				Agents: [{
+					Name: 'Andeen Ashley',
+					IntervalAdherence: null,
+					Days: [
+						{
+							Date: '20180820',
+							Adherence: 0,
+							WasLateForWork: false
+						}
+					],
+					LateForWork:
+						{
+							Count: 0,
+							TotalMinutes: 0
+						}
+				}]
+			});
+
+		var vm = t.createController();
+		t.apply(function () {
+			vm.closeOrganizationPicker();
+		});
+
+		expect(vm.cards[0].Agents[0].AdherenceBarWidth).toBe(0);
+	});
+
+	it('should display loading until data is returned on page load', function (t) {
+		var vm = t.createController({flush: false});
+
+		expect(vm.loading).toEqual(true);
+	});
+
+	it('should not display loading after data is returned', function (t) {
+		var vm = t.createController();
+
+		expect(vm.loading).toEqual(false);
+	});
 });

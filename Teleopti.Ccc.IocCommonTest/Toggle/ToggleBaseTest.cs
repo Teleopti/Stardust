@@ -1,11 +1,9 @@
 ﻿using System.IO;
-using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.IocCommonTest.Toggle
 {
@@ -18,7 +16,8 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			try
 			{
 				File.WriteAllLines(tempFile, new[] { "TestToggle=false" });
-				var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()){FeatureToggle = tempFile, ToggleMode = ToggleMode});
+				var configReader = new FakeConfigReader().AddConnectionString("Toggle", null);
+				var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(configReader){FeatureToggle = tempFile, ToggleMode = ToggleMode});
 				
 				toggleManager.IsEnabled(Toggles.TestToggle)
 					.Should().Be.EqualTo(DisabledFeatureShouldBe);
@@ -36,7 +35,8 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			try
 			{
 				File.WriteAllLines(tempFile, new[] { "TestToggle=true" });
-				var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()){FeatureToggle = tempFile, ToggleMode = ToggleMode});
+				var configReader = new FakeConfigReader().AddConnectionString("Toggle", null);
+				var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(configReader){FeatureToggle = tempFile, ToggleMode = ToggleMode});
 				
 				toggleManager.IsEnabled(Toggles.TestToggle)
 					.Should().Be.EqualTo(EnabledFeatureShouldBe);
@@ -54,7 +54,8 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			try
 			{
 				File.WriteAllLines(tempFile, new string[0]);
-				var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()){FeatureToggle = tempFile, ToggleMode = ToggleMode});
+				var configReader = new FakeConfigReader().AddConnectionString("Toggle", null);
+				var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(configReader){FeatureToggle = tempFile, ToggleMode = ToggleMode});
 
 				toggleManager.IsEnabled(Toggles.TestToggle)
 					.Should().Be.EqualTo(UndefinedFeatureShouldBe);
@@ -72,7 +73,8 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			try
 			{
 				File.WriteAllLines(tempFile, new[] {"TestToggle=rc"});
-				var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()){FeatureToggle = tempFile, ToggleMode = ToggleMode});
+				var configReader = new FakeConfigReader().AddConnectionString("Toggle", null);
+				var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(configReader){FeatureToggle = tempFile, ToggleMode = ToggleMode});
 				
 				toggleManager.IsEnabled(Toggles.TestToggle)
 					.Should().Be.EqualTo(RcFeatureShouldBe);
@@ -90,7 +92,8 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			try
 			{
 				File.WriteAllLines(tempFile, new[] { "TestToggle= Rc	 " });
-				var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()){FeatureToggle = tempFile, ToggleMode = ToggleMode});
+				var configReader = new FakeConfigReader().AddConnectionString("Toggle", null);
+				var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(configReader){FeatureToggle = tempFile, ToggleMode = ToggleMode});
 
 				toggleManager.IsEnabled(Toggles.TestToggle)
 						.Should().Be.EqualTo(RcFeatureShouldBe);
@@ -108,7 +111,8 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			try
 			{
 				File.WriteAllLines(tempFile, new[] { "TestToggle= Dev " });
-				var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()){FeatureToggle = tempFile, ToggleMode = ToggleMode});
+				var configReader = new FakeConfigReader().AddConnectionString("Toggle", null);
+				var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(configReader){FeatureToggle = tempFile, ToggleMode = ToggleMode});
 				
 				toggleManager.IsEnabled(Toggles.TestToggle)
 					.Should().Be.EqualTo(devFeatureShouldBe);

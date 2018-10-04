@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DocumentElement>
+<Format xmlns="urn:payroll-format-1.0">
+  <Document DocumentElement="DocumentElement" Separator="," Type="Csv">
+    <Items Element="PayrollExport">
+			<Item Element="Person" Type="string" />
+			<Item Element="FirstName" Type="string" />
+			<Item Element="LastName" Type="string" />
+			<Item Element="BusinessUnitName" Type="string" />
+			<Item Element="SiteName" Type="string" />
+			<Item Element="TeamName" Type="string" />
+			<Item Element="ContractName" Type="string" />
+			<Item Element="PartTimePercentageName" Type="string" />
+			<Item Element="PartTimePercentageNumber" Type="decimal" />
+			<Item Element="Date" Type="date" Format="yyyy-MM-dd" />
+			<Item Element="StartDate" Type="fullTime" Format="yyyy-MM-dd HH:mm"/>
+			<Item Element="EndDate" Type="fullTime" Format="yyyy-MM-dd HH:mm"/>
+			<Item Element="ShiftCategoryName" Type="string" />
+			<Item Element="ContractTime" Type="time" Format="hh:mm" />
+			<Item Element="WorkTime" Type="time" Format="hh:mm" />
+			<Item Element="PaidTime" Type="time" Format="hh:mm" />
+			<Item Element="AbsencePayrollCode" Type="string" />
+			<Item Element="DayOffPayrollCode" Type="string" />
+    </Items>
+  </Document>
+</Format>
+<PayrollExport>
+	<Person>123</Person>
+	<FirstName>FirstName</FirstName>
+	<LastName>LastName</LastName>
+	<BusinessUnitName>BusinessUnitName</BusinessUnitName>
+	<SiteName>SiteName</SiteName>
+	<TeamName>TeamName</TeamName>
+	<ContractName>ContractName</ContractName>
+	<PartTimePercentageName>PartTimePercentageName</PartTimePercentageName>
+	<PartTimePercentageNumber>75</PartTimePercentageNumber>
+	<Date>2009-02-02</Date>
+	<StartDate>2009-02-02T00:00:00+01:00</StartDate>
+	<EndDate>2009-02-02T00:00:00+01:00</EndDate>
+	<ShiftCategoryName>ShiftCategoryName</ShiftCategoryName>
+	<ContractTime>PT8H</ContractTime>
+	<WorkTime>PT8H</WorkTime>
+	<PaidTime>PT8H</PaidTime>
+	<AbsencePayrollCode>123</AbsencePayrollCode>
+	<DayOffPayrollCode>123</DayOffPayrollCode>
+</PayrollExport>
+	<PayrollExport>
+		<Person></Person>
+		<FirstName>FirstName</FirstName>
+		<LastName>LastName</LastName>
+		<BusinessUnitName>BusinessUnitName</BusinessUnitName>
+		<SiteName>SiteName</SiteName>
+		<TeamName>TeamName</TeamName>
+		<ContractName>ContractName</ContractName>
+		<PartTimePercentageName>PartTimePercentageName</PartTimePercentageName>
+		<PartTimePercentageNumber>75</PartTimePercentageNumber>
+		<Date>2009-02-02</Date>
+		<StartDate>2009-02-02T00:00:00+01:00</StartDate>
+		<EndDate>2009-02-02T00:00:00+01:00</EndDate>
+		<ShiftCategoryName>ShiftCategoryName</ShiftCategoryName>
+		<ContractTime>PT8H</ContractTime>
+		<WorkTime>PT8H</WorkTime>
+		<PaidTime>PT8H</PaidTime>
+		<AbsencePayrollCode>123</AbsencePayrollCode>
+		<DayOffPayrollCode>123</DayOffPayrollCode>
+	</PayrollExport>
+</DocumentElement>

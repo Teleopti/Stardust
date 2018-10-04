@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest;
 using Teleopti.Interfaces.Domain;
@@ -27,6 +28,7 @@ namespace Teleopti.Wfm.Test
 		public IPersonRepository PersonRepository;
 		public IAbsenceRequestProcessor AbsenceRequestProcessor;
 		public IPersonRequestRepository PersonRequestRepository;
+		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 
 
 		[SetUp]
@@ -39,6 +41,7 @@ namespace Teleopti.Wfm.Test
 		public void ShouldApproveIfAbsenceAppliedOnOvertime()
 		{
 			var now = new DateTime(2017, 04, 06, 0, 0, 0, DateTimeKind.Utc);
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
 			Now.Is(now);
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			var hourNow = now.Date.AddHours(now.Hour);

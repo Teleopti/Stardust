@@ -139,11 +139,11 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.255\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.256\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.255\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.256\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -331,6 +331,10 @@
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopBlockTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopPermissionTest.cs" />
     <Compile Include="SchedulingScenarios\SeperateWebRequest.cs" />
+    <Compile Include="SchedulingScenarios\TestLogic\PlanFixtureSource.cs" />
+    <Compile Include="SchedulingScenarios\TestLogic\PlanFixtureSourceTest.cs" />
+    <Compile Include="SchedulingScenarios\TestLogic\PlanTestParameters.cs" />
+    <Compile Include="SchedulingScenarios\TestLogic\PlanTestParameterTest.cs" />
     <Compile Include="SchedulingScenarios\TimeBetweenDaysOptimization\TimeBetweenDaysOptimizationScenario.cs" />
     <Compile Include="Scheduling\AdvancedAgentsFilterTest.cs" />
     <Compile Include="Scheduling\Assignment\ReplaceActivityServiceTest.cs" />
@@ -1007,7 +1011,6 @@
     <Compile Include="Optimization\MainShiftOptimizeActivitiesSpecificationTest.cs" />
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByPersonalSkillsExtractorTest.cs" />
     <Compile Include="Optimization\TimePeriodCanHaveShortBreakTest.cs" />
-    <Compile Include="Optimization\WorkShiftBackToLegalStateServiceProTest.cs" />
     <Compile Include="Optimization\WorkShiftBackToLegalStateStepTest.cs" />
     <Compile Include="Optimization\WorkShiftRuleSetHasShortBreakTest.cs" />
     <Compile Include="Outbound\CampaignTest.cs" />
@@ -1577,6 +1580,7 @@
     <Compile Include="Collection\FixedCapacityStackTest.cs" />
     <Compile Include="Forecasting\VolumeYearTest.cs" />
     <Compile Include="ToggleAdmin\AllToggleNamesWithoutOverridesTest.cs" />
+    <Compile Include="ToggleAdmin\DeleteToggleOverrideTest.cs" />
     <Compile Include="Tracking\TraceableRefreshServiceTest.cs" />
     <Compile Include="UndoRedo\MementoTest.cs">
       <SubType>Code</SubType>

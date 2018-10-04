@@ -16,6 +16,8 @@ namespace Teleopti.Ccc.TestCommon
 			_data = _data.Except(existing).Append(model).ToArray();
 		}
 
+		public void Remove(DateTime removeUntil) => throw new NotImplementedException();
+
 		public IEnumerable<HistoricalOverviewReadModel> Read(IEnumerable<Guid> personIds)
 		{
 			return personIds.IsNullOrEmpty() ? _data : _data.Where(d => personIds.Contains(d.PersonId));

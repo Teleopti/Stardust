@@ -18,6 +18,7 @@ describe('ResourceplannerManageScheduleCtrl', function () {
 		$controller = _$controller_;
 		$httpBackend = _$httpBackend_;
 		manageScheduleSrvc = setUpManageScheduleServ();
+		$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
 	}));
 
 
