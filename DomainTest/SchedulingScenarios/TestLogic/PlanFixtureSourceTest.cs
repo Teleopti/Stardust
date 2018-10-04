@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TestLogic
 {
-	[Ignore("to be fixed")]
 	public class PlanFixtureSourceTest
 	{
 		[Test]
@@ -59,6 +58,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TestLogic
 		{
 			var target = new PlanFixtureSourceForTest(new[]{Toggles.TestToggle, Toggles.TestToggle2}, false);
 
+			var res = target.ToList();
+			
 			target.Should().Have.SameValuesAs(
 				new PlanTestParameters(Enumerable.Empty<Toggles>(), null),
 				new PlanTestParameters(new[] {Toggles.TestToggle}, null),
@@ -88,16 +89,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TestLogic
 		public void ThreeToggles()
 		{
 			var target = new PlanFixtureSourceForTest(new[]{Toggles.TestToggle, Toggles.TestToggle2, Toggles.TestToggle3}, false);
-
+			
 			target.Should().Have.SameValuesAs(
 				new PlanTestParameters(Enumerable.Empty<Toggles>(), null),
 				new PlanTestParameters(new[] {Toggles.TestToggle}, null),
-				new PlanTestParameters(new[] {Toggles.TestToggle2}, null),
-				new PlanTestParameters(new[] {Toggles.TestToggle3}, null),
 				new PlanTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2}, null),
 				new PlanTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle3}, null),
+				new PlanTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2, Toggles.TestToggle3}, null),
+				new PlanTestParameters(new[] {Toggles.TestToggle2}, null),
 				new PlanTestParameters(new[] {Toggles.TestToggle2, Toggles.TestToggle3}, null),
-				new PlanTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2, Toggles.TestToggle3}, null)
+				new PlanTestParameters(new[] {Toggles.TestToggle3}, null)
 			);
 		}
 		
