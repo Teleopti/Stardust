@@ -6,6 +6,7 @@ using System.Text;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.IocCommon.Toggle;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TestLogic
 {
@@ -92,6 +93,17 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TestLogic
 		public bool IsEnabled(Toggles testToggle)
 		{
 			return _parameters.Contains(testToggle);
+		}
+
+		public void EnableToggles(FakeToggleManager toggleManager)
+		{
+			foreach (var parameter in _parameters)
+			{
+				if (parameter is Toggles toggle)
+				{
+					toggleManager.Enable(toggle);
+				}
+			}
 		}
 	}
 }
