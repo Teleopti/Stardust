@@ -6,9 +6,9 @@
 	{
 		//Don't remove these - used in tests
 		TestToggle,
-
 		TestToggle2,
 		TestToggle3,
+		TestToggle4,
 
 		//////
 		// ReSharper disable InconsistentNaming
