@@ -100,12 +100,12 @@
 				</tr>
 				</thead>
 				<tbody>
-				<tr ng-repeat="agent in card.Agents" style="background-color: transparent">
+				<tr ng-repeat="agent in card.Agents" style="background-color: transparent" class="agent-adherence-period" data-agent="{{agent.Name}}">
 					<td style="max-width:200px; overflow: hidden; text-overflow: ellipsis">{{agent.Name}}</td>
 					<td ng-repeat="day in agent.Days" class="cell">
 						<div ng-class="day.WasLateForWork ? 'late-for-work-flag': ''"></div>
 						<div class="square" style="background-color: {{day.Color}};" >
-							<a ng-href="{{day.HistoricalAdherenceUrl}}" target="_blank">
+							<a ng-href="{{day.HistoricalAdherenceUrl}}" target="_blank" class="daily-adherence-percent" data-day="{{card.DisplayDays[$index]}}">
 								{{day.Adherence}}
 							</a>
 						</div>
@@ -119,7 +119,7 @@
 					<td>
 						<div ng-if="agent.LateForWork.Count > 0">
 							<span class="label late-for-work">{{agent.LateForWork.Count}}</span>
-							<span>{{agent.LateForWork.TotalMinutes}}&nbsp;{{'Minutes'|translate}}</span>
+							<span class="minutes-late-for-work">{{agent.LateForWork.TotalMinutes}}&nbsp;{{'Minutes'|translate}}</span>
 						</div>
 					</td>
 				</tr>
