@@ -1,17 +1,25 @@
-(function() {
-	'use strict';
+(function () {
+	"use strict";
 
-	angular.module('wfm.forecasting').controller('r2ForecastRefactController', r2ForecastCtrl);
+	angular
+		.module("wfm.forecasting")
+		.controller("r2ForecastRefactController", r2ForecastCtrl);
 
 	r2ForecastCtrl.$inject = [
-		'ForecastingService',
-		'$state',
-		'$translate',
-		'skillIconService',
-		'Toggle'
+		"ForecastingService",
+		"$state",
+		"$translate",
+		"skillIconService",
+		"Toggle"
 	];
 
-	function r2ForecastCtrl(forecastingService, $state, $translate, skillIconService, toggleSvc) {
+	function r2ForecastCtrl(
+		forecastingService,
+		$state,
+		$translate,
+		skillIconService,
+		toggleSvc
+	) {
 		var vm = this;
 
 		vm.skills = [];
@@ -27,9 +35,9 @@
 
 		function getAllSkills() {
 			vm.skills = [];
-			forecastingService.skills.query().$promise.then(function(result) {
-				result.Skills.forEach(function(skill) {
-					skill.Workloads.forEach(function(workload) {
+			forecastingService.skills.query().$promise.then(function (result) {
+				result.Skills.forEach(function (skill) {
+					skill.Workloads.forEach(function (workload) {
 						var skillModel = {
 							Workload: workload,
 							SkillId: skill.Id,
@@ -37,7 +45,7 @@
 								DoDisplayData: isSkillTypeSupported(skill.SkillType),
 								SkillType: skill.SkillType
 							},
-							ChartId: 'chart' + workload.Id
+							ChartId: "chart" + workload.Id
 						};
 						vm.skills.push(skillModel);
 
@@ -47,23 +55,23 @@
 					});
 				});
 				if (vm.skills.length < 1) {
-					$state.go('forecast-no-skills');
+					$state.go("forecast-no-skills");
 				}
 			});
 		}
 
 		function isSkillTypeSupported(skillType) {
-			return skillType === 'SkillTypeInboundTelephony';
+			return skillType === "SkillTypeInboundTelephony";
 		}
 
 		function goToModify(skill) {
 			sessionStorage.currentForecastWorkload = angular.toJson(skill);
-			$state.go('forecast-modify', { workloadId: skill.Workload.Id });
+			$state.go("forecast-modify", { workloadId: skill.Workload.Id });
 		}
 
 		function goToHistory(skill) {
 			sessionStorage.currentForecastWorkload = angular.toJson(skill);
-			$state.go('forecast-history', { workloadId: skill.Workload.Id });
+			$state.go("forecast-history", { workloadId: skill.Workload.Id });
 		}
 
 		init();

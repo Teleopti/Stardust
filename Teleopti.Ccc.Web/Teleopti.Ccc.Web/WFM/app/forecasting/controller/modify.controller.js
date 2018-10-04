@@ -1,11 +1,29 @@
-(function() {
-	'use strict';
+(function () {
+	"use strict";
 
-	angular.module('wfm.forecasting').controller('ForecastModifyController', forecastModifyController);
+	angular
+		.module("wfm.forecasting")
+		.controller("ForecastModifyController", forecastModifyController);
 
-	forecastModifyController.$inject = ['ForecastingService', 'NoticeService', '$translate', '$state', '$scope', 'skillIconService', 'SkillTypeService'];
+	forecastModifyController.$inject = [
+		"ForecastingService",
+		"NoticeService",
+		"$translate",
+		"$state",
+		"$scope",
+		"skillIconService",
+		"SkillTypeService"
+	];
 
-	function forecastModifyController(forecastingService, noticeSvc, $translate, $state, $scope, skillIconService, skillTypeService) {
+	function forecastModifyController(
+		forecastingService,
+		noticeSvc,
+		$translate,
+		$state,
+		$scope,
+		skillIconService,
+		skillTypeService
+	) {
 		var vm = this;
 
 		vm.loadChart = loadChart;
@@ -18,13 +36,13 @@
 		vm.targetScenario = null;
 		vm.forecastPeriod = {
 			startDate: moment()
-			.utc()
-			.add(1, 'days')
-			.toDate(),
+				.utc()
+				.add(1, "days")
+				.toDate(),
 			endDate: moment()
-			.utc()
-			.add(6, 'months')
-			.toDate()
+				.utc()
+				.add(6, "months")
+				.toDate()
 		};
 		vm.savingToScenario = false;
 		vm.getSkillIcon = skillIconService.get;
@@ -55,7 +73,9 @@
 				return;
 			}
 
-			vm.dataName = skillTypeService.getSkillLabels(vm.selectedWorkload.SkillType); 
+			vm.dataName = skillTypeService.getSkillLabels(
+				vm.selectedWorkload.SkillType
+			);
 			getScenarios();
 		})();
 
@@ -90,7 +110,10 @@
 		}
 
 		function updateCampaignPreview() {
-			vm.sumOfCallsForSelectedDays = (vm.selectedDayCount[0].value * (vm.campaignPercentage + 100) / 100).toFixed(1);
+			vm.sumOfCallsForSelectedDays = (
+				(vm.selectedDayCount[0].value * (vm.campaignPercentage + 100)) /
+				100
+			).toFixed(1);
 		}
 
 		function applyCampaign() {
@@ -104,23 +127,27 @@
 					ScenarioId: vm.selectedScenario.Id,
 					CampaignTasksPercent: vm.campaignPercentage / 100
 				}),
-				function(data, status, headers, config) {
+				function (data, status, headers, config) {
 					vm.selectedWorkload.Days = data.ForecastDays;
 					vm.modifyMessage = data.WarningMessage;
 					vm.changesMade = true;
 					vm.isForecastRunning = false;
 				},
-				function(data, status, headers, config) {
+				function (data, status, headers, config) {
 					vm.selectedWorkload.Days = data.ForecastDays;
 					vm.modifyMessage = data.WarningMessage;
 					vm.changesMade = true;
 					vm.isForecastRunning = false;
 				},
-				function() {
+				function () {
 					if (vm.modifyMessage) {
 						noticeSvc.warning(vm.modifyMessage, 15000, true);
 					} else {
-						noticeSvc.success($translate.instant('AppliedACampaign'), 15000, true);
+						noticeSvc.success(
+							$translate.instant("AppliedACampaign"),
+							15000,
+							true
+						);
 					}
 					modifyPanelHelper();
 					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
@@ -145,26 +172,32 @@
 					OverrideAverageAfterTaskTime: form.overrideAfterCallWorkValue,
 					ShouldOverrideTasks: checkData(form.overrideTasksValue),
 					ShouldOverrideAverageTaskTime: checkData(form.overrideTalkTimeValue),
-					ShouldOverrideAverageAfterTaskTime: checkData(form.overrideAfterCallWorkValue),
+					ShouldOverrideAverageAfterTaskTime: checkData(
+						form.overrideAfterCallWorkValue
+					),
 					ForecastDays: vm.selectedWorkload.Days
 				}),
-				function(data, status, headers, config) {
+				function (data, status, headers, config) {
 					vm.selectedWorkload.Days = data.ForecastDays;
 					vm.modifyMessage = data.WarningMessage;
 					vm.changesMade = true;
 					vm.isForecastRunning = false;
 				},
-				function(data, status, headers, config) {
+				function (data, status, headers, config) {
 					vm.selectedWorkload.Days = data.ForecastDays;
 					vm.modifyMessage = data.WarningMessage;
 					vm.changesMade = true;
 					vm.isForecastRunning = false;
 				},
-				function() {
+				function () {
 					if (vm.modifyMessage) {
 						noticeSvc.warning(vm.modifyMessage, 15000, true);
 					} else {
-						noticeSvc.success($translate.instant('AppliedAOverride'), 15000, true);
+						noticeSvc.success(
+							$translate.instant("AppliedAOverride"),
+							15000,
+							true
+						);
 					}
 
 					modifyPanelHelper();
@@ -185,20 +218,20 @@
 					ShouldOverrideAverageTaskTime: true,
 					ShouldOverrideAverageAfterTaskTime: true
 				}),
-				function(data, status, headers, config) {
+				function (data, status, headers, config) {
 					vm.selectedWorkload.Days = data.ForecastDays;
 					vm.modifyMessage = data.WarningMessage;
 					vm.isForecastRunning = false;
 					vm.changesMade = true;
 				},
-				function(data, status, headers, config) {
+				function (data, status, headers, config) {
 					vm.selectedWorkload.Days = data.ForecastDays;
 					vm.modifyMessage = data.WarningMessage;
 					vm.isForecastRunning = false;
 					vm.changesMade = true;
 				},
-				function() {
-					noticeSvc.success($translate.instant('ClearOverride'), 15000, true);
+				function () {
+					noticeSvc.success($translate.instant("ClearOverride"), 15000, true);
 
 					modifyPanelHelper();
 					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
@@ -217,7 +250,9 @@
 		function manageLocalStorage() {
 			vm.noWorkloadFound = null;
 			if (sessionStorage.currentForecastWorkload) {
-				vm.selectedWorkload = angular.fromJson(sessionStorage.currentForecastWorkload);
+				vm.selectedWorkload = angular.fromJson(
+					sessionStorage.currentForecastWorkload
+				);
 			} else {
 				vm.noWorkloadFound = true;
 			}
@@ -225,8 +260,8 @@
 
 		function getScenarios() {
 			vm.scenarios = [];
-			forecastingService.scenarios.query().$promise.then(function(result) {
-				result.forEach(function(s) {
+			forecastingService.scenarios.query().$promise.then(function (result) {
+				result.forEach(function (s) {
 					vm.scenarios.push(s);
 				});
 				changeScenario(vm.scenarios[0]);
@@ -254,13 +289,13 @@
 
 			forecastingService.result(
 				wl,
-				function(data, status, headers, config) {
+				function (data, status, headers, config) {
 					vm.selectedWorkload.Days = data.ForecastDays;
 					vm.isForecastRunning = false;
 					vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
 					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
 				},
-				function(data, status, headers, config) {
+				function (data, status, headers, config) {
 					vm.selectedWorkload.Days = data.ForecastDays;
 					vm.isForecastRunning = false;
 					vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
@@ -271,7 +306,7 @@
 		function forecastWorkload() {
 			vm.forecastModal = false;
 			vm.isForecastRunning = true;
-			
+
 			forecastingService.forecast(
 				{
 					ForecastStart: moment(vm.forecastPeriod.startDate).format(),
@@ -316,13 +351,19 @@
 					ScenarioId: vm.selectedScenario.Id,
 					ForecastDays: tempForecastDays
 				}),
-				function(data, status, headers, config) {
+				function (data, status, headers, config) {
 					vm.savingToScenario = false;
 					vm.changesMade = false;
 					getWorkloadForecastData();
-					noticeSvc.success($translate.instant('SuccessfullyUpdatedPeopleCountColon') + ' ' + vm.selectedScenario.Name, 15000, true);
+					noticeSvc.success(
+						$translate.instant("SuccessfullyUpdatedPeopleCountColon") +
+						" " +
+						vm.selectedScenario.Name,
+						15000,
+						true
+					);
 				},
-				function(data, status, headers, config) {
+				function (data, status, headers, config) {
 					vm.savingToScenario = false;
 					vm.changesMade = false;
 					getWorkloadForecastData();
@@ -340,12 +381,18 @@
 					ScenarioId: vm.targetScenario.Id,
 					ForecastDays: tempForecastDays
 				}),
-				function(data, status, headers, config) {
+				function (data, status, headers, config) {
 					vm.savingToScenario = false;
-					noticeSvc.success($translate.instant('SuccessfullyUpdatedPeopleCountColon') + ' ' + vm.targetScenario.Name, 15000, true);
+					noticeSvc.success(
+						$translate.instant("SuccessfullyUpdatedPeopleCountColon") +
+						" " +
+						vm.targetScenario.Name,
+						15000,
+						true
+					);
 					vm.targetScenario = null;
 				},
-				function(data, status, headers, config) {
+				function (data, status, headers, config) {
 					vm.savingToScenario = false;
 				}
 			);
@@ -362,19 +409,19 @@
 					SkillId: vm.selectedWorkload.SkillId,
 					WorkloadId: vm.selectedWorkload.Workload.Id
 				},
-				function(data, status, headers, config) {
+				function (data, status, headers, config) {
 					var blob = new Blob([data], {
-						type: headers['content-type']
+						type: headers["content-type"]
 					});
 					var fileName =
-					moment(vm.forecastPeriod.startDate).format('YYYY-MM-DD') +
-					' - ' +
-					moment(vm.forecastPeriod.endDate).format('YYYY-MM-DD') +
-					'.xlsx';
+						moment(vm.forecastPeriod.startDate).format("YYYY-MM-DD") +
+						" - " +
+						moment(vm.forecastPeriod.endDate).format("YYYY-MM-DD") +
+						".xlsx";
 					saveAs(blob, fileName);
 					vm.isForecastRunning = false;
 				},
-				function(data, status, headers, config) {
+				function (data, status, headers, config) {
 					vm.isForecastRunning = false;
 				}
 			);
@@ -388,7 +435,7 @@
 			}
 		};
 
-		$scope.$on('$stateChangeStart', function (event, next, current) {
+		$scope.$on("$stateChangeStart", function (event, next, current) {
 			if (vm.changesMade) {
 				event.preventDefault();
 				vm.stateName = next.name;
