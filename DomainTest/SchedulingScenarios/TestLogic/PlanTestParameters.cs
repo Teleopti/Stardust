@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TestLogic
 			_parameters = parameters;
 		}
 
+		
 		public override string ToString()
 		{
 			var seperateWebRequestOutput = new StringBuilder();
@@ -78,6 +80,18 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TestLogic
 		public override int GetHashCode()
 		{
 			return _parameters.Count();
+		}
+
+		public bool SimulateSecondRequest()
+		{
+			return _parameters.Any(x =>
+				x is SeperateWebRequest seperateWebRequest &&
+				seperateWebRequest == SeperateWebRequest.SimulateSecondRequestOrScheduler);
+		}
+
+		public bool IsEnabled(Toggles testToggle)
+		{
+			return _parameters.Contains(testToggle);
 		}
 	}
 }
