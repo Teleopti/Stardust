@@ -5,12 +5,12 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 {
-	public abstract class PlanFixtureSource : IEnumerable<PlanTestParameters>
+	public abstract class ResourcePlannerFixtureSource : IEnumerable<ResourcePlannerTestParameters>
 	{
 		protected abstract IEnumerable<Toggles> ToggleFlags { get; }
 		protected abstract bool AlsoSimulateSecondRequest { get; }
 		
-		public IEnumerator<PlanTestParameters> GetEnumerator()
+		public IEnumerator<ResourcePlannerTestParameters> GetEnumerator()
 		{
 			var toggleCombos = new HashSet<IEnumerable<Toggles>> {Enumerable.Empty<Toggles>()};
 			foreach (var toggleOuter in ToggleFlags)
@@ -22,12 +22,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			{
 				if (AlsoSimulateSecondRequest)
 				{
-					yield return new PlanTestParameters(toggleCombo, SeperateWebRequest.SimulateFirstRequest);
-					yield return new PlanTestParameters(toggleCombo, SeperateWebRequest.SimulateSecondRequestOrScheduler);
+					yield return new ResourcePlannerTestParameters(toggleCombo, SeperateWebRequest.SimulateFirstRequest);
+					yield return new ResourcePlannerTestParameters(toggleCombo, SeperateWebRequest.SimulateSecondRequestOrScheduler);
 				}
 				else
 				{
-					yield return new PlanTestParameters(toggleCombo, null);					
+					yield return new ResourcePlannerTestParameters(toggleCombo, null);					
 				}
 			}
 		}

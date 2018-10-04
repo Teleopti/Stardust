@@ -6,7 +6,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 {
-	public class PlanTestParameterTest
+	public class ResourcePlannerTestParameterTest
 	{
 		[TestCase(SeperateWebRequest.SimulateSecondRequestOrScheduler, ExpectedResult = true)]
 		[TestCase(SeperateWebRequest.SimulateFirstRequest, ExpectedResult = false)]
@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 		public bool ShouldSimulateSecondRequest(SeperateWebRequest? seperateWebRequest)
 		{
 			var iocTestContext = new FakeIoCTestContext();
-			var target = new PlanTestParameters(new []{Toggles.TestToggle}, seperateWebRequest);
+			var target = new ResourcePlannerTestParameters(new []{Toggles.TestToggle}, seperateWebRequest);
 
 			target.SimulateNewRequest(iocTestContext);
 
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 		{
 			var activeToggles = new[] {Toggles.TestToggle, Toggles.TestToggle3};
 			var toggleManager = new FakeToggleManager();
-			var target = new PlanTestParameters(activeToggles, null);
+			var target = new ResourcePlannerTestParameters(activeToggles, null);
 
 			target.EnableToggles(toggleManager);
 			
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 		[TestCase(Toggles.TestToggle2, Toggles.TestToggle3, ExpectedResult = false)]
 		public bool ShouldCheckIfToggleIsEnabled(params Toggles[] toggles)
 		{
-			var target = new PlanTestParameters(toggles, null);
+			var target = new ResourcePlannerTestParameters(toggles, null);
 
 			return target.IsEnabled(Toggles.TestToggle);
 		}

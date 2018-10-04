@@ -15,12 +15,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[TestFixtureSource(typeof(dayOffFixtureSource))]
 	public abstract class DayOffOptimizationScenario : IIsolateSystem, IExtendSystem, ITestInterceptor, IConfigureToggleManager
 	{
-		protected readonly PlanTestParameters _planTestParameters;
+		protected readonly ResourcePlannerTestParameters ResourcePlannerTestParameters;
 		public IIoCTestContext IoCTestContext;
 
-		protected DayOffOptimizationScenario(PlanTestParameters planTestParameters)
+		protected DayOffOptimizationScenario(ResourcePlannerTestParameters resourcePlannerTestParameters)
 		{
-			_planTestParameters = planTestParameters;
+			ResourcePlannerTestParameters = resourcePlannerTestParameters;
 		}
 				
 		public virtual void Extend(IExtend extend, IocConfiguration configuration)
@@ -37,15 +37,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 		public void OnBefore()
 		{
-			_planTestParameters.SimulateNewRequest(IoCTestContext);
+			ResourcePlannerTestParameters.SimulateNewRequest(IoCTestContext);
 		}
 
 		public void Configure(FakeToggleManager toggleManager)
 		{
-			_planTestParameters.EnableToggles(toggleManager);
+			ResourcePlannerTestParameters.EnableToggles(toggleManager);
 		}
 
-		private class dayOffFixtureSource : PlanFixtureSource
+		private class dayOffFixtureSource : ResourcePlannerFixtureSource
 		{
 			protected override IEnumerable<Toggles> ToggleFlags { get; } = new[]
 			{

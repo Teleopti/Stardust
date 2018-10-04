@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			MergeIslandsSizeLimit.TurnOff_UseOnlyFromTest();
 		}
 
-		public ConcurrencyDesktopTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public ConcurrencyDesktopTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

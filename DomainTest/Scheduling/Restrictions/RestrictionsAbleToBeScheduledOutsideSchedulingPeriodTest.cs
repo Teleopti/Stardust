@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			return period;
 		}
 
-		public RestrictionsAbleToBeScheduledOutsideSchedulingPeriodTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public RestrictionsAbleToBeScheduledOutsideSchedulingPeriodTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.False();
 		}
 
-		public SchedulingFulfilPrefernceDesktopTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public SchedulingFulfilPrefernceDesktopTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

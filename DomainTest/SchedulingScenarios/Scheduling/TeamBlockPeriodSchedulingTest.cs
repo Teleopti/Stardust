@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 		}
 
-		public TeamBlockPeriodSchedulingTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public TeamBlockPeriodSchedulingTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

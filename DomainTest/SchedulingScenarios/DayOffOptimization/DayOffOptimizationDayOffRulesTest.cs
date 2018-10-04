@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate, agentWithExplicitFilter).DayOff().Should().Not.Be.Null();
 		}
 
-		public DayOffOptimizationDayOffRulesTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public DayOffOptimizationDayOffRulesTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

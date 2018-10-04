@@ -15,12 +15,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	[DontSendEventsAtPersist]
 	public abstract class SchedulingScenario : ITestInterceptor, IExtendSystem, IConfigureToggleManager
 	{
-		protected readonly PlanTestParameters _planTestParameters;
+		protected readonly ResourcePlannerTestParameters ResourcePlannerTestParameters;
 		public IIoCTestContext IoCTestContext;
 
-		protected SchedulingScenario(PlanTestParameters planTestParameters)
+		protected SchedulingScenario(ResourcePlannerTestParameters resourcePlannerTestParameters)
 		{
-			_planTestParameters = planTestParameters;
+			ResourcePlannerTestParameters = resourcePlannerTestParameters;
 		}
 
 		public virtual void Extend(IExtend extend, IocConfiguration configuration)
@@ -30,15 +30,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		
 		public virtual void OnBefore()
 		{
-			_planTestParameters.SimulateNewRequest(IoCTestContext);
+			ResourcePlannerTestParameters.SimulateNewRequest(IoCTestContext);
 		}
 
 		public void Configure(FakeToggleManager toggleManager)
 		{
-			_planTestParameters.EnableToggles(toggleManager);
+			ResourcePlannerTestParameters.EnableToggles(toggleManager);
 		}
 		
-		private class schedulingFixtureSource : PlanFixtureSource
+		private class schedulingFixtureSource : ResourcePlannerFixtureSource
 		{
 			protected override IEnumerable<Toggles> ToggleFlags { get; } = new[]{Toggles.ResourcePlanner_BetterFitPreferences_76289};
 			protected override bool AlsoSimulateSecondRequest { get; } = true;

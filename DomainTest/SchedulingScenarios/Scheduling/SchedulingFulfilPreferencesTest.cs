@@ -77,9 +77,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		
-		public SchedulingFulfilPreferencesTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public SchedulingFulfilPreferencesTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
-			if (!_planTestParameters.IsEnabled(Toggles.ResourcePlanner_BetterFitPreferences_76289))
+			if (!ResourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_BetterFitPreferences_76289))
 			{
 				Assert.Ignore("only works with toggle on");
 			}

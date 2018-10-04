@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(30);
 		}
 
-		public SchedulingPersistTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public SchedulingPersistTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

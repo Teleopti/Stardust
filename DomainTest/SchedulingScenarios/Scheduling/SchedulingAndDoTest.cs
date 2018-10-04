@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		}
 
-		public SchedulingAndDayOffTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public SchedulingAndDayOffTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

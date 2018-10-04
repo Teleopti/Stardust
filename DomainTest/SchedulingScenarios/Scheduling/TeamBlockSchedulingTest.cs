@@ -998,7 +998,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			assignments.Count.Should().Be.EqualTo(6);
 		}
 
-		public TeamBlockSchedulingTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public TeamBlockSchedulingTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

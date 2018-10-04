@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		[Test]
 		public void ShouldNotRemoveAllShiftsWhenExistingDayOffsAreMoreThanTarget()
 		{
-			if(!_planTestParameters.IsEnabled(Toggles.ResourcePlanner_NoWhiteSpotWhenTargetDayoffIsBroken_77941))
+			if(!ResourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_NoWhiteSpotWhenTargetDayoffIsBroken_77941))
 				Assert.Ignore("only valid with toggle true");
 			var date = new DateOnly(2015, 10, 12); //mon
 			var activity = ActivityRepository.Has();
@@ -510,7 +510,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 		}
 
-		public DayOffOptimizationTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public DayOffOptimizationTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingQuality
 			return standardDeviation;
 		}
 
-		public DayOffOptimizationDesktopQualityTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public DayOffOptimizationDesktopQualityTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

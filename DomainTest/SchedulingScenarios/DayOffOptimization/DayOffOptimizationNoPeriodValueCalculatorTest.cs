@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			base.Isolate(isolate);
 		}
 
-		public DayOffOptimizationNoPeriodValueCalculatorTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public DayOffOptimizationNoPeriodValueCalculatorTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

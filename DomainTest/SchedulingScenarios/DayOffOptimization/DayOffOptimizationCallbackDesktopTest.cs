@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				.Should().Be.EqualTo(1);
 		}
 
-		public DayOffOptimizationCallbackDesktopTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public DayOffOptimizationCallbackDesktopTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

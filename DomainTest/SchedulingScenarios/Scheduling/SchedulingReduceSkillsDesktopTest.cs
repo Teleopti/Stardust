@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 		
 
-		public SchedulingReduceSkillsDesktopTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public SchedulingReduceSkillsDesktopTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

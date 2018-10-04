@@ -505,7 +505,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				.And.Not.Be.EqualTo(date.AddDays(6));
 		}
 		
-		public DayOffOptimizationMinimumAgentsTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public DayOffOptimizationMinimumAgentsTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

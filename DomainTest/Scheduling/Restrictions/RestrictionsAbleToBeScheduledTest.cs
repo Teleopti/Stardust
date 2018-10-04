@@ -432,7 +432,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			return period;
 		}
 
-		public RestrictionsAbleToBeScheduledTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public RestrictionsAbleToBeScheduledTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

@@ -10,11 +10,11 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 {
-	public class PlanTestParameters : IEnumerable<object>, IEquatable<PlanTestParameters>
+	public class ResourcePlannerTestParameters : IEnumerable<object>, IEquatable<ResourcePlannerTestParameters>
 	{
 		private readonly IEnumerable<object> _parameters;
 
-		public PlanTestParameters(IEnumerable<Toggles> toggles, SeperateWebRequest? seperateWebRequest)
+		public ResourcePlannerTestParameters(IEnumerable<Toggles> toggles, SeperateWebRequest? seperateWebRequest)
 		{
 			var parameters = new List<object>();
 			if(seperateWebRequest.HasValue)
@@ -68,14 +68,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			return GetEnumerator();
 		}
 
-		public bool Equals(PlanTestParameters other)
+		public bool Equals(ResourcePlannerTestParameters other)
 		{
 			return _parameters.All(other._parameters.Contains);
 		}
 
 		public override bool Equals(object obj)
 		{
-			return Equals((PlanTestParameters) obj);
+			return Equals((ResourcePlannerTestParameters) obj);
 		}
 
 		public override int GetHashCode()

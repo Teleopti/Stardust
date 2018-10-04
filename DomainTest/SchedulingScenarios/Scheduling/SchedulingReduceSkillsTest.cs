@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.True();
 		}
 		
-		public SchedulingReduceSkillsTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public SchedulingReduceSkillsTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

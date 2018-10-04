@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			}
 		}
 
-		public PerformanceTestHackTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public PerformanceTestHackTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

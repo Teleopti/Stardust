@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			callbackTracker.NumberOfScheduleAttempts.Should().Be.LessThanOrEqualTo(1);
 		}
 
-		public SchedulingCallbackTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public SchedulingCallbackTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

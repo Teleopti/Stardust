@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			endUserDate.RelativeDifference.Should().Be(0);
 		}
 		
-		public SchedulingAndDayOffOptimizationStardustResultTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public SchedulingAndDayOffOptimizationStardustResultTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			result.SkillResultList.First().SkillName.Should().Be.EqualTo("active skill");
 		}
 
-		public DayOffOptimizationResultTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public DayOffOptimizationResultTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

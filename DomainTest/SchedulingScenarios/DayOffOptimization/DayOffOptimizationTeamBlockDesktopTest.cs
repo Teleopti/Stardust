@@ -288,7 +288,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			}
 		}
 
-		public DayOffOptimizationTeamBlockDesktopTest(PlanTestParameters planTestParameters) : base(planTestParameters)
+		public DayOffOptimizationTeamBlockDesktopTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}
