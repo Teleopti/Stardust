@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourcePlanner;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -103,8 +104,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (@event.FromWeb)
 			{
 				var failedScheduleAgents = _failedScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod);
-				schedulingOptions.UsePreferences = false;
-				_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, failedScheduleAgents, selectedPeriod, blockPreferenceProvider);
+				failedScheduleAgents = failedScheduleAgents.Where(x => @event.Agents.Contains(x.Id.Value));
+				if (!failedScheduleAgents.IsEmpty())
+				{
+					schedulingOptions.UsePreferences = false;
+					_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, failedScheduleAgents, selectedPeriod, blockPreferenceProvider);
+				}
 			}
 			
 			if(@event.RunDayOffOptimization)
