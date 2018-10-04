@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeStudentAvailabilityDayRepository StudentAvailabilityDayRepository;
 		public FakeSkillCombinationResourceReader SkillCombinationResourceReader;
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
+		public FakePreferenceDayRepository PreferenceDayRepository;
 		
 		[Test]
 		public void ShouldNotCreateTags()
@@ -313,6 +314,53 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			return AssignmentRepository.GetSingle(date, agentToSchedule).Period.StartDateTime.Hour;
 		}
+		
+		
+		[Test, Ignore("#76288 to be fixed")]
+        public void ShouldScheduleWithoutPreferencesIfPreferencesCannotBeFulfilled()
+        {
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+            var date = new DateOnly(2015, 10, 12); //mon;
+            var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+            var activity = ActivityRepository.Has();
+            var skill = SkillRepository.Has("_", activity);
+            var scenario = ScenarioRepository.Has("_");
+            var shiftCategory = new ShiftCategory().WithId();
+            var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+            var agentToSchedule = PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Week, 1), ruleSet, skill);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnlyPeriod(date, date.AddDays(6)), 1)); 
+	        var preferenceRestriction = new PreferenceRestriction {ShiftCategory = new ShiftCategory()};
+	        PreferenceDayRepository.Add(new PreferenceDay(agentToSchedule, date, preferenceRestriction));
+
+            Target.DoSchedulingAndDO(planningPeriod.Id.Value);
+
+			AssignmentRepository.LoadAll().Count().Should().Be.EqualTo(7);
+        }
+		
+		[Test, Ignore("#76288 to be fixed")]
+		public void ShouldScheduleWithoutPreferencesIfSomePreferencesCannotBeFulfilled()
+		{
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			var date = new DateOnly(2015, 10, 12); //mon;
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			var activity = ActivityRepository.Has();
+			var skill = SkillRepository.Has("_", activity);
+			var scenario = ScenarioRepository.Has("_");
+			var shiftCategory10H = new ShiftCategory().WithId();
+			var shiftCategory8H = new ShiftCategory().WithId();
+			var ruleSet8H = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory8H));
+			var ruleSet10H = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), shiftCategory10H));
+			var shiftBag = new RuleSetBag(ruleSet8H, ruleSet10H);
+			var agentToSchedule = PersonRepository.Has(new Contract("_"),new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"),new Team(), new SchedulePeriod(date, SchedulePeriodType.Week, 1), shiftBag, skill);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnlyPeriod(date, date.AddDays(6)), 1)); 
+			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = shiftCategory10H};
+			PreferenceDayRepository.Add(new PreferenceDay(agentToSchedule, date, preferenceRestriction));
+
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
+
+			AssignmentRepository.LoadAll().Count().Should().Be.EqualTo(7);
+		}
+
 
 		public FullSchedulingTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
 		{
