@@ -206,12 +206,6 @@ WHERE stage.stg_person.person_code    = tmp.person_code
 AND   stage.stg_person.valid_to_date  > @maxdate
 --</Todo>
 
------------------------
--- reset to-be-deleted flag for all person periods
------------------------
-UPDATE mart.dim_person
-SET to_be_deleted=0
-WHERE business_unit_code = @current_business_unit_code
 
 -----------------------
 -- delete persons
@@ -227,6 +221,7 @@ ON p.person_period_code = s.person_period_code
 WHERE p.person_id <> -1  --Not the Default person
 	AND s.person_period_code IS NULL
 	AND p.business_unit_code = @current_business_unit_code
+	AND p.insert_date >= s.insert_date
 
 -------------------------
 -- update changes on person
@@ -296,6 +291,7 @@ ON
 	s.valid_to_date_local = validToLocalDate.date_date
 WHERE
 	s.person_period_code        = mart.dim_person.person_period_code
+	AND s.update_date > mart.dim_person.update_date
 
 -- Update period start date only
 UPDATE mart.dim_person
@@ -317,6 +313,7 @@ ON
 	s.valid_from_date_local = validFromLocalDate.date_date
 WHERE
 	s.person_period_code        = mart.dim_person.person_period_code
+	AND s.update_date > mart.dim_person.update_date
 
 -------------------------
 -- Insert new persons
