@@ -1,5 +1,6 @@
 ﻿@WFM
 @OnlyRunIfEnabled('Wfm_WebPlan_Pilot_46815')
+@RunningStardust
 Feature: Planning Period
 	As a resource planner
 	I want to work on planning periods
@@ -51,7 +52,6 @@ Scenario: Creating next planning period should generate a period with the same t
 	And I click create next planning period
 	Then I should see a planning period between '2016-07-01' and '2016-07-31'
 
-@RunningStardust 
 Scenario: Schedule a planning period
 	Given there is a dayoff named 'Day Off'
 	And there is a scenario
@@ -113,8 +113,7 @@ Scenario: Schedule a planning period
 	And I open planning period
 	And I click schedule
 	Then Planning period should have been scheduled
-
-@RunningStardust
+  
   Scenario: Intraday optimization a planning period
 	Given there is a dayoff named 'Day Off'
 	And there is a scenario

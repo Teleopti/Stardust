@@ -10,14 +10,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
     [Binding]
     public class ManageScheduleStepDefinition
     {
-		[BeforeScenario("RunningStardust")]
-		public void BeforePasswordPolicyScenario()
+		[BeforeFeature("RunningStardust")]
+		public static void BeforePasswordPolicyScenario()
 		{
 			TestSiteConfigurationSetup.StartStardust();
 		}
 
-		[AfterScenario("RunningStardust")]
-		public void AfterPasswordPolicyScenario()
+		[AfterFeature("RunningStardust")]
+		public static void AfterPasswordPolicyScenario()
 		{
 			TestSiteConfigurationSetup.KillStardust();
 		}

@@ -1,10 +1,11 @@
 ﻿@WFM
+@RunningStardust
 Feature: ManageSchedule
 	As a resource planner
 	I want to be able to archive schedules from default scenario to another scenario
 	I want to be able to import schedules from another scenario to default scenario
 
-@RunningStardust
+
 Scenario: Run archiving for one agent
 	Given there is a scenario
 	| Field          | Value        |
@@ -26,8 +27,8 @@ Scenario: Run archiving for one agent
 	And I run archiving
 	And I confirm to run archiving
 	Then I should get a success message
+  
 
-	@RunningStardust
 Scenario: Run archiving from non-default scenario
 	Given there is a scenario
 	| Field          | Value        |
