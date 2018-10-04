@@ -579,7 +579,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			};
 		}
 
-		public SchedulingShiftCategoryLimitationDesktopTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
+		public SchedulingShiftCategoryLimitationDesktopTest(PlanTestParameters planTestParameters) : base(planTestParameters)
 		{
 		}
 	}

@@ -362,7 +362,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 
-		public FullSchedulingTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
+		public FullSchedulingTest(PlanTestParameters planTestParameters) : base(planTestParameters)
 		{
 		}
 	}

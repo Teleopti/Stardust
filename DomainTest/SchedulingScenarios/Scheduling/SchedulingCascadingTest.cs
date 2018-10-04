@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(numberOfAgents/2);
 		}
 
-		public SchedulingCascadingTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
+		public SchedulingCascadingTest(PlanTestParameters planTestParameters) : base(planTestParameters)
 		{
 		}
 	}

@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			schedulerStateHolder.Schedules[agents[4]].ScheduledDay(date).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategory1);
 		}
 
-		public MinMaxStaffingDesktopTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
+		public MinMaxStaffingDesktopTest(PlanTestParameters planTestParameters) : base(planTestParameters)
 		{
 		}
 	}

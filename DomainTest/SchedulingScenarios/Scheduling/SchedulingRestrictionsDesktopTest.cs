@@ -269,7 +269,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 		}
 
-		public SchedulingRestrictionsDesktopTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
+		public SchedulingRestrictionsDesktopTest(PlanTestParameters planTestParameters) : base(planTestParameters)
 		{
 		}
 	}

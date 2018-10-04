@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			personAssignments.All(x => x.Source == ScheduleSource.WebScheduling).Should().Be.True();
 		}
 
-		public WebScheduleStardustHandlerTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
+		public WebScheduleStardustHandlerTest(PlanTestParameters planTestParameters) : base(planTestParameters)
 		{
 		}
 	}

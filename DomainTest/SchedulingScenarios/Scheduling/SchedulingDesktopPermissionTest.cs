@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		
 		
 
-		public SchedulingDesktopPermissionTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
+		public SchedulingDesktopPermissionTest(PlanTestParameters planTestParameters) : base(planTestParameters)
 		{
 		}
 	}

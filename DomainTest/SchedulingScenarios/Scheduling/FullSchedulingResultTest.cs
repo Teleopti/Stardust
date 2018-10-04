@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			result.BusinessRulesValidationResults.Should().Be.Empty();
 		}
 
-		public FullSchedulingResultTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
+		public FullSchedulingResultTest(PlanTestParameters planTestParameters) : base(planTestParameters)
 		{
 		}
 	}
