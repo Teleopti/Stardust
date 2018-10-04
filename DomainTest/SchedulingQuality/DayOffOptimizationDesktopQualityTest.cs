@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingQuality
 			return standardDeviation;
 		}
 
-		public DayOffOptimizationDesktopQualityTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941) : base(seperateWebRequest, resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941)
+		public DayOffOptimizationDesktopQualityTest(PlanTestParameters planTestParameters) : base(planTestParameters)
 		{
 		}
 	}

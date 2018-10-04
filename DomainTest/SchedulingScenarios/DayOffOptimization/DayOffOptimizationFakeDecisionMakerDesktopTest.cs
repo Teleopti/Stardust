@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			}
 		}
 
-		public DayOffOptimizationFakeDecisionMakerDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941) : base(seperateWebRequest, resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941)
+		public DayOffOptimizationFakeDecisionMakerDesktopTest(PlanTestParameters planTestParameters) : base(planTestParameters)
 		{
 		}
 	}

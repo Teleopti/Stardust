@@ -314,6 +314,10 @@
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\ResourcePlannerCommandHandlerTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\SUT.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelCompleteTest.cs" />
+    <Compile Include="SchedulingScenarios\PlanFixtureSource.cs" />
+    <Compile Include="SchedulingScenarios\PlanFixtureSourceTest.cs" />
+    <Compile Include="SchedulingScenarios\PlanTestParameters.cs" />
+    <Compile Include="SchedulingScenarios\PlanTestParameterTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationTimeZoneTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\ConcurrencyDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\DaysOffSchedulingDesktopTest.cs" />
@@ -331,10 +335,6 @@
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopBlockTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopPermissionTest.cs" />
     <Compile Include="SchedulingScenarios\SeperateWebRequest.cs" />
-    <Compile Include="SchedulingScenarios\TestLogic\PlanFixtureSource.cs" />
-    <Compile Include="SchedulingScenarios\TestLogic\PlanFixtureSourceTest.cs" />
-    <Compile Include="SchedulingScenarios\TestLogic\PlanTestParameters.cs" />
-    <Compile Include="SchedulingScenarios\TestLogic\PlanTestParameterTest.cs" />
     <Compile Include="SchedulingScenarios\TimeBetweenDaysOptimization\TimeBetweenDaysOptimizationScenario.cs" />
     <Compile Include="Scheduling\AdvancedAgentsFilterTest.cs" />
     <Compile Include="Scheduling\Assignment\ReplaceActivityServiceTest.cs" />

@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				.Should().Be.EqualTo(agentShouldHaveDayOff);
 		}
 
-		public DayOffOptimizationRestrictionDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941) : base(seperateWebRequest, resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941)
+		public DayOffOptimizationRestrictionDesktopTest(PlanTestParameters planTestParameters) : base(planTestParameters)
 		{
 		}
 	}

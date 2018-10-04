@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			dayCount[6].RelativeDifference.Should().Be.EqualTo(-0.96);
 		}
 
-		public SchedulePlanningPeriodCommandHandlerHeatMapTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941) : base(seperateWebRequest, resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941)
+		public SchedulePlanningPeriodCommandHandlerHeatMapTest(PlanTestParameters planTestParameters) : base(planTestParameters)
 		{
 		}
 	}

@@ -4,7 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TestLogic
+namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 {
 	public class PlanFixtureSourceTest
 	{

@@ -3,13 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TestLogic
+namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 {
 	public class PlanTestParameters : IEnumerable<object>, IEquatable<PlanTestParameters>
 	{
@@ -102,6 +101,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TestLogic
 					toggleManager.Enable(toggle);
 				}
 			}
+		}
+		
+		public bool IsEnabled(Toggles toggle)
+		{
+			return _parameters.Contains(toggle);
 		}
 	}
 }

@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TestLogic
+namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 {
 	public class PlanTestParameterTest
 	{
@@ -33,6 +33,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TestLogic
 			toggleManager.IsEnabled(Toggles.TestToggle).Should().Be.True();
 			toggleManager.IsEnabled(Toggles.TestToggle2).Should().Be.False();
 			toggleManager.IsEnabled(Toggles.TestToggle3).Should().Be.True();
+		}
+		
+		[TestCase(ExpectedResult = false)]
+		[TestCase(Toggles.TestToggle, ExpectedResult = true)]
+		[TestCase(Toggles.TestToggle2, Toggles.TestToggle3, ExpectedResult = false)]
+		public bool ShouldCheckIfToggleIsEnabled(params Toggles[] toggles)
+		{
+			var target = new PlanTestParameters(toggles, null);
+
+			return target.IsEnabled(Toggles.TestToggle);
 		}
 
 		private class FakeIoCTestContext : IIoCTestContext

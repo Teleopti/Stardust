@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			base.Isolate(isolate);
 		}
 
-		public DayOffOptimizationNoPeriodValueCalculatorTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941) : base(seperateWebRequest, resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941)
+		public DayOffOptimizationNoPeriodValueCalculatorTest(PlanTestParameters planTestParameters) : base(planTestParameters)
 		{
 		}
 	}

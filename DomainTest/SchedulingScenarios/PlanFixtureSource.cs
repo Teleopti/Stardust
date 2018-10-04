@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TestLogic
+namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 {
 	public abstract class PlanFixtureSource : IEnumerable<PlanTestParameters>
 	{

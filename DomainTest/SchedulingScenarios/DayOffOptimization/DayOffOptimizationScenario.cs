@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.IocCommon;
@@ -9,23 +10,17 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, false)]
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, true)]
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true)]
 	[LoggedOnAppDomain]
 	[DontSendEventsAtPersist]
+	[TestFixtureSource(typeof(dayOffFixtureSource))]
 	public abstract class DayOffOptimizationScenario : IIsolateSystem, IExtendSystem, ITestInterceptor, IConfigureToggleManager
 	{
-		private readonly SeperateWebRequest _seperateWebRequest;
-		protected readonly bool _resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941;
-
+		protected readonly PlanTestParameters _planTestParameters;
 		public IIoCTestContext IoCTestContext;
 
-		protected DayOffOptimizationScenario(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941)
+		protected DayOffOptimizationScenario(PlanTestParameters planTestParameters)
 		{
-			_seperateWebRequest = seperateWebRequest;
-			_resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941 = resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941;
+			_planTestParameters = planTestParameters;
 		}
 				
 		public virtual void Extend(IExtend extend, IocConfiguration configuration)
@@ -42,14 +37,22 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 		public void OnBefore()
 		{
-			if (_seperateWebRequest == SeperateWebRequest.SimulateSecondRequestOrScheduler)
-				IoCTestContext.SimulateNewRequest();
+			_planTestParameters.SimulateNewRequest(IoCTestContext);
 		}
 
 		public void Configure(FakeToggleManager toggleManager)
 		{
-			if(_resourcePlannerNoWhiteSpotWhenTargetDayoffIsBroken77941)
-				toggleManager.Enable(Toggles.ResourcePlanner_NoWhiteSpotWhenTargetDayoffIsBroken_77941);
+			_planTestParameters.EnableToggles(toggleManager);
+		}
+
+		private class dayOffFixtureSource : PlanFixtureSource
+		{
+			protected override IEnumerable<Toggles> ToggleFlags { get; } = new[]
+			{
+				//All combinations of these toggles will be run
+				Toggles.ResourcePlanner_NoWhiteSpotWhenTargetDayoffIsBroken_77941
+			};
+			protected override bool AlsoSimulateSecondRequest { get; } = true;
 		}
 	}
 }
