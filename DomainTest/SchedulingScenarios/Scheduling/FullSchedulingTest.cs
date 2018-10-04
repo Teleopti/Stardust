@@ -316,7 +316,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 		
 		
-		[Test, Ignore("#76288 to be fixed")]
+		[Test]
         public void ShouldScheduleWithoutPreferencesIfPreferencesCannotBeFulfilled()
         {
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
@@ -337,7 +337,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.LoadAll().Count().Should().Be.EqualTo(7);
         }
 		
-		[Test, Ignore("#76288 to be fixed")]
+		[Test]
 		public void ShouldScheduleWithoutPreferencesIfSomePreferencesCannotBeFulfilled()
 		{
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
