@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.PayrollFormatterTest
             StreamReader streamReader = new StreamReader(stream, format.Encoding);
             string content = streamReader.ReadToEnd();
 
-            Assert.AreEqual(File.ReadAllText(Path.Combine(testFilesDir, "BasicXmlExport.xml")),content);
+            Assert.AreEqual(File.ReadAllText(Path.Combine(testFilesDir, "BasicXmlExport.xml")).Replace("\r", ""), content.Replace("\r",""));
             Assert.AreEqual("xml", target.FileSuffix);
         }
     }

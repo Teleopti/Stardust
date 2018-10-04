@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <DocumentElement>
 <Format xmlns="urn:payroll-format-1.0">
-  <Document DocumentElement="DocumentElement" Separator="," Type="Csv">
+  <Document DocumentElement="DocumentElement" Separator="," Type="Csv" Line-separator="&#10;">
     <Items Element="PayrollExport">
 			<Item Element="Person" Type="string" />
 			<Item Element="FirstName" Type="string" />

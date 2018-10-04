@@ -51,9 +51,8 @@ namespace Teleopti.Ccc.PayrollFormatterTest
 
 			var streamReader = new StreamReader(result, format.Encoding);
 			var content = streamReader.ReadToEnd();
-			var fileContent = File.ReadAllText(Path.Combine(testFilesDir, "TeleoptiTimeExportFormat.txt"));
 
-			Assert.AreEqual(fileContent, content);
+			Assert.AreEqual(content, "123,FirstName,LastName,BusinessUnitName,SiteName,TeamName,ContractName,PartTimePercentageName,75,2009-02-02,2009-02-02 00:00,2009-02-02 00:00,ShiftCategoryName,8:00,8:00,8:00,123,123\n,FirstName,LastName,BusinessUnitName,SiteName,TeamName,ContractName,PartTimePercentageName,75,2009-02-02,2009-02-02 00:00,2009-02-02 00:00,ShiftCategoryName,8:00,8:00,8:00,123,123\n");
 			Assert.AreEqual("txt", target.FileSuffix);
 		}
 	}
