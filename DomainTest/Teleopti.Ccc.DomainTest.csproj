@@ -323,6 +323,7 @@
     <Compile Include="SchedulingScenarios\Scheduling\DaysOffSchedulingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingAndDoTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCommandHandlerExternalStaffDesktopTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\SchedulingFulfilPreferencesTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingReduceSkillsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingReduceSkillsTest.cs" />
     <Compile Include="SchedulingScenarios\SyncInFatClientProcessEventPublisher_SimulateNoNewThreads.cs" />
