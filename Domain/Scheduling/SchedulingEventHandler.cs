@@ -103,13 +103,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			if (@event.FromWeb)
 			{
-				var failedScheduleAgents = _failedScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod);
-				failedScheduleAgents = failedScheduleAgents.Where(x => @event.Agents.Contains(x.Id.Value));
-				if (!failedScheduleAgents.IsEmpty())
-				{
-					schedulingOptions.UsePreferences = false;
-					_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, failedScheduleAgents, selectedPeriod, blockPreferenceProvider);
-				}
+				var failedScheduleAgents = _failedScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod).Where(x => @event.Agents.Contains(x.Id.Value));
+				schedulingOptions.UsePreferences = false;
+				_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, failedScheduleAgents, selectedPeriod, blockPreferenceProvider);
 			}
 			
 			if(@event.RunDayOffOptimization)
