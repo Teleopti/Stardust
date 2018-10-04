@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.PayrollFormatterTest
         [Test]
         public void VerifyLoadFromXmlWithCsv()
         {
-            document.Load(Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicCsvExport.xml"));
+            document.Load(Path.Combine(TestContext.CurrentContext.TestDirectory,"TestFiles", "BasicCsvExport.xml"));
             DocumentFormat format = DocumentFormat.LoadFromXml(document);
 
             Assert.AreEqual(DocumentFormatType.Csv, format.DocumentFormatType);
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.PayrollFormatterTest
         [Test]
         public void VerifyLoadFromXmlWithXml()
         {
-            document.Load(Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicXmlExport.xml"));
+            document.Load(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestFiles", "BasicXmlExport.xml"));
             DocumentFormat format = DocumentFormat.LoadFromXml(document);
 
             Assert.AreEqual(DocumentFormatType.Xml, format.DocumentFormatType);
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.PayrollFormatterTest
         [Test]
         public void VerifyLoadFromXmlWithFixedWidth()
         {
-            document.Load(Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicFixedWidthExport.xml"));
+            document.Load(Path.Combine(TestContext.CurrentContext.TestDirectory, "TestFiles", "BasicFixedWidthExport.xml"));
             DocumentFormat format = DocumentFormat.LoadFromXml(document);
 
             Assert.AreEqual(DocumentFormatType.FixedWidth, format.DocumentFormatType);

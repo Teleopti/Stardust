@@ -19,9 +19,11 @@ namespace Teleopti.Ccc.PayrollFormatterTest
 
         [Test]
         public void VerifyBasicCsvExport()
-        {
-            var document = new XmlDocument();
-            document.Load(Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicCsvExport.xml"));
+		{
+			var testFilesDir = Path.Combine(TestContext.CurrentContext.TestDirectory, "TestFiles");
+
+			var document = new XmlDocument();
+            document.Load(Path.Combine(testFilesDir, "BasicCsvExport.xml"));
 
             var format = DocumentFormat.LoadFromXml(document);
             var result = target.Format(document, format);
@@ -29,10 +31,30 @@ namespace Teleopti.Ccc.PayrollFormatterTest
 
             var streamReader = new StreamReader(result, format.Encoding);
             var content = streamReader.ReadToEnd();
-	        var fileContent = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicCsvExportResult.txt")).Replace("\r", "");
+	        var fileContent = File.ReadAllText(Path.Combine(testFilesDir, "BasicCsvExportResult.txt")).Replace("\r", "");
 
             Assert.AreEqual(fileContent,content);
             Assert.AreEqual("txt",target.FileSuffix);
         }
-    }
+
+		[Test]
+		public void CsvExportShouldAddInitalCommaWhenEmptyEmployeeNumber()
+		{
+			var testFilesDir = Path.Combine(TestContext.CurrentContext.TestDirectory, "TestFiles");
+
+			var document = new XmlDocument();
+			document.Load(Path.Combine(testFilesDir, "TeleoptiTimeExportFormat.xml"));
+
+			var format = DocumentFormat.LoadFromXml(document);
+			var result = target.Format(document, format);
+			result.Position = 0;
+
+			var streamReader = new StreamReader(result, format.Encoding);
+			var content = streamReader.ReadToEnd();
+			var fileContent = File.ReadAllText(Path.Combine(testFilesDir, "TeleoptiTimeExportFormat.txt"));
+
+			Assert.AreEqual(fileContent, content);
+			Assert.AreEqual("txt", target.FileSuffix);
+		}
+	}
 }
