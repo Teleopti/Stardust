@@ -1,18 +1,27 @@
-(function() {
-	'use strict';
+(function () {
+	"use strict";
 
-	angular.module('wfm.forecasting').controller('ForecastHistoryController', forecastHistoryController);
+	angular
+		.module("wfm.forecasting")
+		.controller("ForecastHistoryController", forecastHistoryController);
 
 	forecastHistoryController.$inject = [
-		'$translate',
-		'$state',
-		'$scope',
-		'ForecastingService',
-		'NoticeService',
-		'skillIconService'
+		"$translate",
+		"$state",
+		"$scope",
+		"ForecastingService",
+		"NoticeService",
+		"skillIconService"
 	];
 
-	function forecastHistoryController($translate, $state, $scope, forecastingService, noticeSvc, skillIconService) {
+	function forecastHistoryController(
+		$translate,
+		$state,
+		$scope,
+		forecastingService,
+		noticeSvc,
+		skillIconService
+	) {
 		var vm = this;
 
 		vm.getSkillIcon = skillIconService.get;
@@ -26,14 +35,14 @@
 			vm.isLoadingHistoryData = true;
 			forecastingService.history(
 				angular.toJson(vm.selectedWorkload.Workload.Id),
-				function(data, status, headers, config) {
+				function (data, status, headers, config) {
 					vm.historyData = data.QueueStatisticsDays;
 					vm.hasHistoryData = vm.historyData.length > 0;
 				},
-				function(data, status, headers, config) {
+				function (data, status, headers, config) {
 					// TODO: Show error message on failed
 				},
-				function() {
+				function () {
 					vm.isLoadingHistoryData = false;
 				}
 			);
@@ -42,7 +51,9 @@
 		function loadWorkload() {
 			vm.workloadFound = true;
 			if (sessionStorage.currentForecastWorkload) {
-				vm.selectedWorkload = angular.fromJson(sessionStorage.currentForecastWorkload);
+				vm.selectedWorkload = angular.fromJson(
+					sessionStorage.currentForecastWorkload
+				);
 			} else {
 				vm.workloadFound = false;
 			}
