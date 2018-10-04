@@ -423,6 +423,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 				CommandId = commandId,
 				AgentsToSchedule = _personList.ToArray(),
 				FromWeb = false,
+				ScheduleWithoutPreferencesForFailedAgents = false,
 				Period = _date.ToDateOnlyPeriod(),
 				RunDayOffOptimization = false
 			};

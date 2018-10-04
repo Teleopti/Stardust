@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 					CommandId = command.CommandId,
 					UserLocks = userLocks,
 					FromWeb= command.FromWeb,
+					ScheduleWithoutPreferencesForFailedAgents= command.ScheduleWithoutPreferencesForFailedAgents,
 					PlanningPeriodId = command.PlanningPeriodId,
 					Skills = agentsAndSkills.Skills,
 					RunDayOffOptimization = command.RunDayOffOptimization
@@ -81,6 +82,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 							UserLocks = userLocks,
 							Skills = island.SkillIds(),
 							FromWeb = command.FromWeb,
+							ScheduleWithoutPreferencesForFailedAgents = command.ScheduleWithoutPreferencesForFailedAgents,
 							PlanningPeriodId = command.PlanningPeriodId,
 							RunDayOffOptimization = command.RunDayOffOptimization
 						};

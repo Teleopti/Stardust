@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			
 			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, agents, selectedPeriod, blockPreferenceProvider);
 
-			if (@event.FromWeb) //add test for this one
+			if (@event.ScheduleWithoutPreferencesForFailedAgents) //add test for this one
 			{
 				var failedScheduleAgents = _failedScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod).Where(x => @event.Agents.Contains(x.Id.Value));
 				// below needs to be handled differently if/when DO should use pref (this line affects that as well)

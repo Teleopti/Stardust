@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			{
 				Period = schedulingInformation.Period,
 				FromWeb = true,
+				ScheduleWithoutPreferencesForFailedAgents = true,
 				AgentsToSchedule = agents,
 				PlanningPeriodId = planningPeriodId,
 				RunDayOffOptimization = runDayOffOptimization
