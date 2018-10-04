@@ -90,11 +90,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TestLogic
 				seperateWebRequest == SeperateWebRequest.SimulateSecondRequestOrScheduler);
 		}
 
-		public bool IsEnabled(Toggles testToggle)
-		{
-			return _parameters.Contains(testToggle);
-		}
-
 		public void EnableToggles(FakeToggleManager toggleManager)
 		{
 			foreach (var parameter in _parameters)
