@@ -2,6 +2,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TestLogic
 {
@@ -12,9 +13,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TestLogic
 		[TestCase(null, ExpectedResult = false)]
 		public bool ShouldSimulateSecondRequest(SeperateWebRequest? seperateWebRequest)
 		{
+			var iocTestContext = new FakeIoCTestContext();
 			var target = new PlanTestParameters(new []{Toggles.TestToggle}, seperateWebRequest);
 
-			return target.SimulateSecondRequest();
+			target.SimulateNewRequest(iocTestContext);
+
+			return iocTestContext.SimulateNewRequestWasCalled;
 		}
 
 		[Test]
@@ -29,6 +33,23 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TestLogic
 			toggleManager.IsEnabled(Toggles.TestToggle).Should().Be.True();
 			toggleManager.IsEnabled(Toggles.TestToggle2).Should().Be.False();
 			toggleManager.IsEnabled(Toggles.TestToggle3).Should().Be.True();
+		}
+
+		private class FakeIoCTestContext : IIoCTestContext
+		{
+			public void SimulateShutdown()
+			{
+				throw new System.NotImplementedException();
+			}
+			public void SimulateRestart()
+			{
+				throw new System.NotImplementedException();
+			}
+			public bool SimulateNewRequestWasCalled { get; private set; }
+			public void SimulateNewRequest()
+			{
+				SimulateNewRequestWasCalled = true;
+			}
 		}
 	}
 }

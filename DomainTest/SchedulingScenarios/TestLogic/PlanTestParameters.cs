@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TestLogic
 {
@@ -83,11 +84,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TestLogic
 			return _parameters.Count();
 		}
 
-		public bool SimulateSecondRequest()
+		public void SimulateNewRequest(IIoCTestContext iocTestContext)
 		{
-			return _parameters.Any(x =>
-				x is SeperateWebRequest seperateWebRequest &&
-				seperateWebRequest == SeperateWebRequest.SimulateSecondRequestOrScheduler);
+			if (_parameters.Any(x => x is SeperateWebRequest seperateWebRequest &&
+				seperateWebRequest == SeperateWebRequest.SimulateSecondRequestOrScheduler))
+			{
+				iocTestContext.SimulateNewRequest();
+			}
 		}
 
 		public void EnableToggles(FakeToggleManager toggleManager)
