@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
-	public class OvertimeRequestPeriodProjection : IOvertimeRequestPeriodProjection
+	public class OvertimeRequestPeriodProjection
 	{
 		private readonly IList<OvertimeRequestSkillTypeFlatOpenPeriod> _overtimeRequestOpenPeriodList;
 		private readonly CultureInfo _dateCulture;
