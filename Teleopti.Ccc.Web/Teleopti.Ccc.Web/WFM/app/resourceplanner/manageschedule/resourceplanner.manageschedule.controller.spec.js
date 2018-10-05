@@ -53,6 +53,53 @@ describe('ResourceplannerManageScheduleCtrl', function () {
 		expect(controller.showProgress).toEqual(false);
 
 	});
+	
+	function setupHappyPath(){
+		var fromScenario = {
+			DefaultScenario: false,
+			Id: "1",
+			Name: "Default"
+		};
+		var toScenario = {
+			DefaultScenario: true,
+			Id: "2",
+			Name: "Low"
+		};
+
+		var period = {
+			startDate: moment().add(1,'days'),
+			endDate: moment().add(8,'days')
+		};
+		var teamSelection = ["e5f968d7-6f6d-407c-81d5-9b5e015ab495"];
+
+		return {fromScenario: fromScenario, toScenario: toScenario, period: period, teamSelection:teamSelection };
+	}
+
+	it('should show confirm', function () {
+		controller = setUpController($controller);
+
+		var input = setupHappyPath();
+
+		controller.isImportSchedule = true;
+		controller.validateAndShowModal(input.fromScenario, input.toScenario, input.period, input.teamSelection);
+		$scope.$digest();
+		
+		expect(controller.showConfirmModal).toEqual(true);
+
+	});
+
+	it('should not show confirm when date is today', function () {
+		controller = setUpController($controller);
+
+		var input = setupHappyPath();
+		input.period.startDate = moment();
+
+		controller.isImportSchedule = true;
+		controller.validateAndShowModal(input.fromScenario, input.toScenario, input.period, input.teamSelection);
+		$scope.$digest();
+
+		expect(controller.showConfirmModal).toEqual(false);
+	});
 
 
 	function setUpController($controller) {
