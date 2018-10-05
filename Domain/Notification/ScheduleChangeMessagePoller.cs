@@ -41,10 +41,4 @@ namespace Teleopti.Ccc.Domain.Notification
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
 	}
-
-	public class ScheduleUpdatedPeriod
-	{
-		public string StartDate { get; set; }
-		public string EndDate { get; set; }
-	}
 }
