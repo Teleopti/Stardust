@@ -138,8 +138,12 @@ SELECT
 	[Event] 
 FROM 
 	[rta].[Events]
+WHERE
+	[Id] > :FromEventId
 ORDER BY [Id]
-"));
+")
+				.SetParameter("FromEventId", fromEventId)
+				);
 			return new LoadedEvents
 			{
 				MaxId = events.IsNullOrEmpty() ? 0 : events.Last().Id,
