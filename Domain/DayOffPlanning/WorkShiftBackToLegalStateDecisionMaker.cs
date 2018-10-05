@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             _dayIndexCalculator = dayIndexCalculator;
         }
 
-		[RemoveMeWithToggle("remove raise param, always false", Toggles.ResourcePlanner_NoWhiteSpotWhenTargetDayoffIsBroken_77941)]
 		public int? Execute(ILockableBitArray lockableBitArray,  bool raise, DateOnlyPeriod period)
         {
             IList<double?> values = _dataExtractor.Values(period);

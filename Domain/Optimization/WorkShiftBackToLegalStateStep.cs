@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return scheduleDay;
         }
 
-		[RemoveMeWithToggle("remove raise param, always false", Toggles.ResourcePlanner_NoWhiteSpotWhenTargetDayoffIsBroken_77941)]
 		public IScheduleDay ExecutePeriodStep(bool raise, IScheduleMatrixPro scheduleMatrix, ISchedulePartModifyAndRollbackService rollbackService)
         {
             ILockableBitArray periodBitArray = _bitArrayCreator.CreatePeriodBitArray(scheduleMatrix);
