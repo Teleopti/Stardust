@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 			bool dontTrackChangesForPersonAssignment = false);
 		
 
-		IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence = null);
+		IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence);
 
 		IPersistableScheduleData LoadScheduleDataAggregate(Type scheduleDataType, Guid id);
 	}

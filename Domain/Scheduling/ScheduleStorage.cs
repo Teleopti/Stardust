@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return _scheduleStorageRepositoryWrapper.Get(concreteType, id);
 		}
 
-		//todo: Fixa lazy-problem utanför! inte ladda andra rötter här inne!
 		public IPersistableScheduleData LoadScheduleDataAggregate(Type scheduleDataType, Guid id)
 		{
 			return _scheduleStorageRepositoryWrapper.LoadScheduleDataAggregate(scheduleDataType, id);
@@ -180,7 +179,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			}
 		}
 
-		public IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence = null)
+		public IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence)
 		{
 			IList<IPerson> people = new List<IPerson> { person };
 			var uow = _currentUnitOfWork.Current();
@@ -286,7 +285,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ScheduleDictionary")]
 		private static void removeSchedulesOfPersonsNotInOrganization(IScheduleDictionary scheduleDictionary, IEnumerable<IPerson> personsInOrganization)
 		{
 			foreach (var person in personsInOrganization)

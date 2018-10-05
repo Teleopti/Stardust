@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			throw new NotImplementedException();
 		}
 
-		public IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence = null)
+		public IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence)
 		{
 			ThePeriodThatWasUsedForFindingSchedules = period;
 
