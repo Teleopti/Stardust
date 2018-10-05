@@ -29,16 +29,4 @@ namespace Teleopti.Ccc.Domain.Notification
 			return _now.UtcDateTime() - time.TimeStamp <= interval;
 		}
 	}
-
-	public class PollerInputPeriod
-	{
-		public PollerInputPeriod() { }
-		public PollerInputPeriod(DateTime startDateTime, DateTime endDateTime)
-		{
-			StartDateTime = startDateTime;
-			EndDateTime = endDateTime;
-		}
-		public DateTime StartDateTime { get; set; }
-		public DateTime EndDateTime { get; set; }
-	}
 }
