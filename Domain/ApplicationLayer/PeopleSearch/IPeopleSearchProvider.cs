@@ -13,8 +13,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 		
 		IEnumerable<IPerson> SearchPermittedPeople(PersonFinderSearchCriteria searchCriteria, DateOnly dateInUserTimeZone,
 			string function);
-		
-		IEnumerable<IPerson> SearchPermittedPeopleWithAbsence(IEnumerable<IPerson> permittedPeople, DateOnly dateInUserTimeZone);
 
 		PersonFinderSearchCriteria CreatePersonFinderSearchCriteria(IDictionary<PersonFinderField, string> criteriaDictionary,
 			int pageSize, int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns);
@@ -26,7 +24,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 			string function);
 
 		void PopulateSearchCriteriaResult(PersonFinderSearchCriteria search);
-		void PopulateSearchCriteriaResult(PersonFinderSearchCriteria search, Guid[] teamIds);
 
 		List<Guid> FindPersonIds(DateOnly date, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria);
 

@@ -15,28 +15,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 		private readonly IPersonRepository _personRepository;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IOptionalColumnRepository _optionalColumnRepository;
-		private readonly IPersonAbsenceRepository _personAbsenceRepository;
-		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ICurrentBusinessUnit _businessUnitProvider;
-		private readonly ICurrentScenario _currentScenario;
 
 		public PeopleSearchProvider(
 			IPersonFinderReadOnlyRepository searchRepository,
 			IPersonRepository personRepository,
 			IPermissionProvider permissionProvider,
-			IOptionalColumnRepository optionalColumnRepository, IPersonAbsenceRepository personAbsenceRepository,
-			ILoggedOnUser loggedOnUser,
-			ICurrentBusinessUnit businessUnitProvider,
-			ICurrentScenario currentScenario)
+			IOptionalColumnRepository optionalColumnRepository,
+			ICurrentBusinessUnit businessUnitProvider)
 		{
 			_searchRepository = searchRepository;
 			_personRepository = personRepository;
 			_permissionProvider = permissionProvider;
 			_optionalColumnRepository = optionalColumnRepository;
-			_personAbsenceRepository = personAbsenceRepository;
-			_loggedOnUser = loggedOnUser;
 			_businessUnitProvider = businessUnitProvider;
-			_currentScenario = currentScenario;
 		}
 
 		public PeopleSummaryModel SearchPermittedPeopleSummary(IDictionary<PersonFinderField, string> criteriaDictionary,
@@ -77,16 +69,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 		{
 			var personIdList = getPermittedPersonIdList(searchCriteria, dateInUserTimeZone, function);
 			return _personRepository.FindPeople(personIdList).ToList();
-		}
-
-		public IEnumerable<IPerson> SearchPermittedPeopleWithAbsence(IEnumerable<IPerson> permittedPeople,
-			DateOnly dateInUserTimeZone)
-		{
-			var dateTimePeriod = dateInUserTimeZone.ToDateTimePeriod(_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).ChangeEndTime(TimeSpan.FromSeconds(-1));
-			var personAbsences =
-				_personAbsenceRepository.Find(permittedPeople, dateTimePeriod, _currentScenario.Current()).ToList();
-
-			return personAbsences.Select(personAbsence => personAbsence.Person).ToList();
 		}
 
 		private IEnumerable<Guid> getPermittedPersonIdList(PersonFinderSearchCriteria searchCriteria, DateOnly currentDate,
@@ -136,11 +118,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 		public void PopulateSearchCriteriaResult(PersonFinderSearchCriteria search)
 		{
 			_searchRepository.Find(search);
-		}
-
-		public void PopulateSearchCriteriaResult(PersonFinderSearchCriteria search, Guid[] teamIds)
-		{
-			_searchRepository.FindInTeams(search, teamIds);
 		}
 
 		private IEnumerable<Guid> getPermittedPersonIdList(IDictionary<PersonFinderField, string> criteriaDictionary,
