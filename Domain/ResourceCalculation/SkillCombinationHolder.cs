@@ -11,11 +11,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_skillCombinationResources.Add(skillCombinationResource);
 		}
 
-		public void StartRecodingValuesWithShrinkage()
-		{
-			_skillCombinationResources = new List<SkillCombinationResource>();
-		}
-
 		public IEnumerable<SkillCombinationResource> SkillCombinationResources => _skillCombinationResources;
 	}
 }
