@@ -1,18 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Intraday;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 
 namespace Teleopti.Ccc.Domain.Staffing
 {
-	public class OverTimeStaffingSuggestionModel
-	{
-		public IList<SkillStaffingInterval> SkillStaffingIntervals { get; set; }
-		public IList<OverTimeModel> OverTimeModels { get; set; }
-	}
-
-
 	public class OverTimeSuggestionResultModel
 	{
 		public StaffingDataSeries DataSeries { get; set; }
