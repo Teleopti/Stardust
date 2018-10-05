@@ -18,7 +18,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			TestControllerMethods.Logon();
 			var teamId = idForTeam(name);
 			Navigation.GoToHistoricalOverview(teamId);
-			Browser.Interactions.AssertExists(".card-panel-header-wrapper");
+			var selector = ".card-panel-header-wrapper";
+
+			var cardFound = $@"
+var element = document.querySelector(""{selector}"");
+return 'OK';
+";			
+			Browser.Interactions.AssertJavascriptResultContains(cardFound, "OK");			
 			Browser.Interactions.Click(".card-panel-header-wrapper");
 		}
 
