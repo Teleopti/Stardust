@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		
 		private class schedulingFixtureSource : ResourcePlannerFixtureSource
 		{
-			protected override IEnumerable<Toggles> ToggleFlags { get; } = new[]{Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288};
+			protected override IEnumerable<Toggles> ToggleFlags { get; } = new[]{Toggles.ResourcePlanner_BetterFitPreferences_76289};
 			protected override bool AlsoSimulateSecondRequest { get; } = true;
 		}
 	}
