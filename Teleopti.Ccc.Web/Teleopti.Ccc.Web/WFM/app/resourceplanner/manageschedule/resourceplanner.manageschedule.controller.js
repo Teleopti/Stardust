@@ -101,7 +101,7 @@
 					if (moment(period.endDate).diff(period.startDate, 'days') > 65)
 						validationResult.messages.push($translate.instant('PickASmallerDatePeriodDot'));
 					if (!toggleSvc.Wfm_ArchiveScheduleForPast_77958 || vm.isImportSchedule) {
-						if (moment(period.startDate).diff(moment(), 'days') < 1)
+						if (moment(period.startDate).diff(moment().startOf('day'), 'days') < 1)
 							validationResult.messages.push($translate.instant('YouNeedToSelectADateInTheFutureDot'));
 					}
 
