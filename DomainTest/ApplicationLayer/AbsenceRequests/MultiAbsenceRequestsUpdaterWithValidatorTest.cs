@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.DomainTest.ResourceCalculation;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -46,6 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeSchedulingResultStateHolder_DoNotUse>().For<ISchedulingResultStateHolder>();
 			isolate.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 		}
 
