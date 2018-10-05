@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -75,11 +76,36 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			AssignmentRepository.LoadAll().Count().Should().Be.EqualTo(7);
 		}
+		
+		[TestCase(true, ExpectedResult = true)]
+		[TestCase(false, ExpectedResult = false)]
+		[Ignore("to be fixed")]
+		public bool ShouldGiveHintForAgentsScheduledWithoutPreference(bool blockedByPreference)
+		{
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			var date = new DateOnly(2015, 10, 12); //mon;
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			var activity = ActivityRepository.Has();
+			var skill = SkillRepository.Has("_", activity);
+			var scenario = ScenarioRepository.Has("_");
+			var shiftCategoryInRuleSet = new ShiftCategory().WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategoryInRuleSet));
+			var agentToSchedule = PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Week, 1), ruleSet, skill);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1));
+			var shiftCategoryInPref = blockedByPreference ? new ShiftCategory() : shiftCategoryInRuleSet;
+			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = shiftCategoryInPref};
+			PreferenceDayRepository.Add(new PreferenceDay(agentToSchedule, date, preferenceRestriction));
+
+			var scheduleResult = Target.DoSchedulingAndDO(planningPeriod.Id.Value, false);
+
+			return scheduleResult.BusinessRulesValidationResults.SelectMany(x => x.ValidationErrors)
+				.Select(x => x.ResourceType).Contains(ValidationResourceType.Preferences);
+		}
 
 		
 		public SchedulingFulfilPreferencesTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
-			if (!ResourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_BetterFitPreferences_76289))
+			if (!ResourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288))
 			{
 				Assert.Ignore("only works with toggle on");
 			}
