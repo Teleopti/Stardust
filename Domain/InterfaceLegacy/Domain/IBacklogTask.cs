@@ -17,9 +17,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		double TotalWorkItems { get; }
 		TimeSpan TotalWorkTime { get; }
 		TimeSpan AverageWorkTimePerItem { get; }
-		void SetIncomingOverflowedWork(double workItems);
 		TimeSpan GetTimeOnDate(DateOnly date);
-		TimeSpan GetPlannedTimeOnDate(DateOnly date);
 		TimeSpan GetRealPlannedTimeOnDate(DateOnly date);
 		void SetRealPlannedTimeOnDate(DateOnly date, TimeSpan time);
 		TimeSpan GetScheduledTimeOnDate(DateOnly date);
