@@ -328,32 +328,5 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 			events.Cast<PersonStateChangedEvent>().Single().PersonId.Should().Be(personId);			
 		}
 		
-		[Test]
-		public void ShouldLoadFromEvent()
-		{
-			Publisher.Publish(new PersonStateChangedEvent
-			{
-				PersonId = Guid.NewGuid(),
-				Timestamp = "2018-03-06 08:00".Utc()
-			});			
-			Publisher.Publish(new PersonStateChangedEvent
-			{
-				PersonId = Guid.NewGuid(),
-				Timestamp = "2018-03-06 08:00".Utc()
-			});
-			var events = WithUnitOfWork.Get(() => Events.LoadFrom(0));
-			var maxId = events.MaxId;
-			Publisher.Publish(new PersonStateChangedEvent
-			{
-				PersonId = Guid.NewGuid(),
-				Timestamp = "2018-03-06 09:00".Utc()
-			});
-			
-			var latestEvents = WithUnitOfWork.Get(() => Events.LoadFrom(maxId));
-			
-			latestEvents.MaxId.Should().Be.GreaterThan(maxId);
-			latestEvents.Events.Count().Should().Be(1);			
-		}		
-		
 	}
 }

@@ -5,7 +5,6 @@ $parameters.Add("DataSource", "Teleopti WFM")
 $parameters.Add("UseWindowsIdentity", "false")
 $parameters.Add("ResultGuid", "DAC14836-EA85-4E03-B4A3-A6F900DF7C6B")
 
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 $webClient = new-object System.Net.WebClient
 $webClient.Headers.Add("user-agent", "PowerShell Script")
 
