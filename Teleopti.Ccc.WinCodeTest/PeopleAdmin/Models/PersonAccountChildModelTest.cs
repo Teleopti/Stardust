@@ -322,4 +322,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             }
         }
     }
+
+
+	//Don't fake IScheduleStorage - use the real one instead
 }

@@ -45,7 +45,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<FakeSchedulingResultStateHolder_DoNotUse>().For<ISchedulingResultStateHolder>();
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			isolate.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 		}

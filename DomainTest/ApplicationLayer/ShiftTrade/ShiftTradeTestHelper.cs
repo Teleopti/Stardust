@@ -21,13 +21,12 @@ using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 {
-	internal class ShiftTradeTestHelper
+	public class ShiftTradeTestHelper
 	{
 		private ShiftTradeRequestHandler _target;
 		private readonly IPersonRequestRepository _personRequestRepository;
@@ -36,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private readonly FakeRequestFactory _requestFactory;
 		private IShiftTradeValidator _validator;
 		private readonly IPersonRepository _personRepository;
+		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IBusinessRuleProvider _businessRuleProvider;
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
@@ -45,41 +45,38 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private readonly IShiftTradeMaxSeatValidator _shiftTradeMaxSeatReadModelValidator;
 		private IShiftTradeMaxSeatValidator _activeShiftTradeMaxSeatValidator;
 
-		public ShiftTradeTestHelper(ISchedulingResultStateHolder schedulingResultStateHolder, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IBusinessRuleProvider businessRuleProvider, ICurrentScenario currentScenario, IScheduleProjectionReadOnlyActivityProvider scheduleProjectionReadOnlyActivityProvider)
+		public ShiftTradeTestHelper(ISchedulingResultStateHolder schedulingResultStateHolder, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IPersonAssignmentRepository personAssignmentRepository, IGlobalSettingDataRepository globalSettingDataRepository, IPersonRequestRepository personRequestRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IBusinessRuleProvider businessRuleProvider, ICurrentScenario currentScenario, IScheduleProjectionReadOnlyActivityProvider scheduleProjectionReadOnlyActivityProvider)
 		{
-			_personRequestRepository = new FakePersonRequestRepository();
 			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_personRequestRepository = personRequestRepository;
 			_requestFactory = new FakeRequestFactory();
 			_requestFactory.SetPersonRequestRepository(_personRequestRepository);
 
 			_scheduleStorage = scheduleStorage;
 			_personRepository = personRepository;
+			_personAssignmentRepository = personAssignmentRepository;
 			_businessRuleProvider = businessRuleProvider;
 			_currentScenario = currentScenario;
 
 			_scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage, CurrentUnitOfWork.Make(), new EmptyScheduleDayDifferenceSaver());
 			_shiftTradePendingReasonsService = new ShiftTradePendingReasonsService();
 
-			_globalSettingDataRepository = new FakeGlobalSettingDataRepository();
-			_globalSettingDataRepository.PersistSettingValue(ShiftTradeSettings.SettingsKey, new ShiftTradeSettings()
+			_globalSettingDataRepository = globalSettingDataRepository;
+			_globalSettingDataRepository.PersistSettingValue(ShiftTradeSettings.SettingsKey, new ShiftTradeSettings
 			{
 				MaxSeatsValidationEnabled = true,
-				MaxSeatsValidationSegmentLength = 15
+				MaxSeatsValidationSegmentLength = 15,
+				BusinessRuleConfigs = new ShiftTradeBusinessRuleConfig[] { }
 			});
 
 			_shiftTradeMaxSeatReadModelValidator = new ShiftTradeMaxSeatReadModelValidator(scheduleProjectionReadOnlyActivityProvider, _currentScenario);
 
-			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
-			globalSettingDataRepository.PersistSettingValue(ShiftTradeSettings.SettingsKey, new ShiftTradeSettings
-			{
-				BusinessRuleConfigs = new ShiftTradeBusinessRuleConfig[] { }
-			});
-
+			
 			var specificationChecker = new SpecificationCheckerWithConfig(GetDefaultShiftTradeSpecifications(), globalSettingDataRepository);
 
 			_validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), specificationChecker);
 			_loadSchedulingDataForRequestWithoutResourceCalculation =
-				new LoadSchedulesForRequestWithoutResourceCalculation(new FakePersonAbsenceAccountRepository(), _scheduleStorage);
+				new LoadSchedulesForRequestWithoutResourceCalculation(personAbsenceAccountRepository, _scheduleStorage);
 		}
 
 		internal void UseSpecificationCheckerWithConfig(IEnumerable<IShiftTradeSpecification> shiftTradeSpecifications,
@@ -119,18 +116,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 		private void setValidator(IShiftTradeMaxSeatValidator shiftTradeMaxSeatValidator)
 		{
-			var shiftTradeSpecifications = new List<IShiftTradeSpecification>
-			{
-				new ValidatorSpecificationForTest (true, "_openShiftTradePeriodSpecification"),
-				new ShiftTradeMaxSeatsSpecification (_globalSettingDataRepository, shiftTradeMaxSeatValidator)
-			};
-			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
-			globalSettingDataRepository.PersistSettingValue(ShiftTradeSettings.SettingsKey, new ShiftTradeSettings
-			{
-				BusinessRuleConfigs = new ShiftTradeBusinessRuleConfig[] { }
-			});
-
-			var specificationChecker = new SpecificationCheckerWithConfig(GetDefaultShiftTradeSpecifications(), globalSettingDataRepository);
+			var specificationChecker =
+				new SpecificationCheckerWithConfig(GetDefaultShiftTradeSpecifications(), _globalSettingDataRepository);
 
 			_validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), specificationChecker);
 			_activeShiftTradeMaxSeatValidator = shiftTradeMaxSeatValidator;
@@ -158,9 +145,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			var businessRuleProvider = new BusinessRuleProvider();
 			var scheduleDictionary =
-				_scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(allPeople, null,
+				_scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(allPeople, new ScheduleDictionaryLoadOptions(false,false), 
 					new DateOnlyPeriod(new DateOnly(scheduleDate), new DateOnly(scheduleDate.AddDays(7))), _currentScenario.Current());
-
+			((ReadOnlyScheduleDictionary)scheduleDictionary).MakeEditable();
 			SetScheduleDictionary(scheduleDictionary);
 
 			HandleRequest(@event, businessRuleProvider);
@@ -212,7 +199,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		internal void SetScheduleDictionary(IScheduleDictionary scheduleDictionary)
 		{
 			_requestFactory.SetScheduleDictionary(scheduleDictionary);
-			
 		}
 
 		internal void HandleRequest(AcceptShiftTradeEvent acceptShiftTradeEvent, IBusinessRuleProvider businessRuleProvider = null)
@@ -262,7 +248,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var personAssignment = activity != null ?
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, dateTimePeriod, new ShiftCategory("AM")).WithId() :
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, dateTimePeriod).WithId();
-			_scheduleStorage.Add(personAssignment);
+			_personAssignmentRepository.Add(personAssignment);
 			return personAssignment;
 		}
 
@@ -270,7 +256,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		{
 			var startDate = new DateOnly(2016, 1, 1);
 			var team = person.MyTeam(startDate);
-			var siteOpenHour = new SiteOpenHour()
+			var siteOpenHour = new SiteOpenHour
 			{
 				IsClosed = true,
 				Parent = team.Site,

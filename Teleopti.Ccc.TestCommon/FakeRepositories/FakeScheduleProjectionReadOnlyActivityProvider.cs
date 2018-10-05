@@ -8,8 +8,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeScheduleProjectionReadOnlyActivityProvider : IScheduleProjectionReadOnlyActivityProvider
 	{
-		private List<ISiteActivity> _siteActivities = new List<ISiteActivity>();
-
+		private readonly List<ISiteActivity> _siteActivities = new List<ISiteActivity>();
+		
 		public void AddSiteActivity (ISiteActivity siteActivity)
 		{
 			_siteActivities.Add (siteActivity);

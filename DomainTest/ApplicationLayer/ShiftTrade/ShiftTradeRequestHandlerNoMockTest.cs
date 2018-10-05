@@ -1,58 +1,43 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Claims;
 using System.Linq;
-using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 {
-	[TestWithStaticDependenciesDONOTUSE]
-	public class ShiftTradeRequestHandlerNoMockTest
+	[DomainTest]
+	public class ShiftTradeRequestHandlerNoMockTest : IIsolateSystem
 	{
-		private FakeScenarioRepository _currentScenario;
-		private ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private IPersonRepository _personRepository;
-		private IScheduleStorage _scheduleStorage;
-		private IBusinessRuleProvider _businessRuleProvider;
-		private INewBusinessRuleCollection _businessRuleCollection;
-		private ShiftTradeTestHelper _shiftTradeTestHelper;
-
-		[SetUp]
-		public void Setup()
-		{
-			_currentScenario = new FakeScenarioRepository();
-			_currentScenario.Has("Default");
-
-			_schedulingResultStateHolder = new SchedulingResultStateHolder();
-			_personRepository = new FakePersonRepository(new FakeStorage());
-			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
-			_businessRuleProvider = new FakeBusinessRuleProvider();
-			_businessRuleCollection = new FakeNewBusinessRuleCollection();
-			_shiftTradeTestHelper = new ShiftTradeTestHelper(_schedulingResultStateHolder, _scheduleStorage, _personRepository,
-				_businessRuleProvider, new DefaultScenarioFromRepository(_currentScenario), new FakeScheduleProjectionReadOnlyActivityProvider());
-		}
-
+		public FakeScenarioRepository _currentScenario;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakePersonAbsenceRepository PersonAbsenceRepository;
+		public ISchedulingResultStateHolder _schedulingResultStateHolder;
+		public IPersonRepository _personRepository;
+		public IScheduleStorage _scheduleStorage;
+		public IBusinessRuleProvider _businessRuleProvider;
+		public ShiftTradeTestHelper _shiftTradeTestHelper;
+		
 		[Test]
 		public void ShouldTradeShiftsOnAutoApproval()
 		{
+			_currentScenario.Has("Default");
+			
 			var workflowControlSet = ShiftTradeTestHelper.CreateWorkFlowControlSet(true);
 			var result = doBasicShiftTrade(workflowControlSet);
 
@@ -64,6 +49,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldSetMinWeeklyWorkTimeBrokenRuleWhenUseMinWeekWorkTimeIsOn()
 		{
+			_currentScenario.Has("Default");
+
 			var businessRuleProvider = new BusinessRuleProvider();
 			var personRequest = doShiftTradeWithBrokenRules(businessRuleProvider);
 			Assert.IsTrue(personRequest.BrokenBusinessRules.Value.HasFlag(BusinessRuleFlags.MinWeekWorkTimeRule));
@@ -72,6 +59,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldSetSiteOpenHoursBrokenRule()
 		{
+			_currentScenario.Has("Default");
+			
 			var businessRuleProvider = new BusinessRuleProvider();
 			var personRequest = doShiftTradeWithBrokenRules(businessRuleProvider);
 			Assert.IsTrue(personRequest.BrokenBusinessRules.Value.HasFlag(BusinessRuleFlags.SiteOpenHoursRule));
@@ -80,6 +69,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldReturnDenyReasonForTheFirstDeniableBrokenRule()
 		{
+			_currentScenario.Has("Default");
+			
 			var businessRuleProvider = getConfigurableBusinessRuleProvider(
 				new ShiftTradeBusinessRuleConfig
 				{
@@ -103,6 +94,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldDenyWhenDeniableRuleIsBroken()
 		{
+			_currentScenario.Has("Default");
+			
 			var businessRuleProvider = getConfigurableBusinessRuleProvider(
 				new ShiftTradeBusinessRuleConfig
 				{
@@ -118,6 +111,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldNotValidateDisabledRule()
 		{
+			_currentScenario.Has("Default");
+
 			var businessRuleProvider = getConfigurableBusinessRuleProvider(
 				new ShiftTradeBusinessRuleConfig
 				{
@@ -139,6 +134,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldNotDenyWithAutoGrantOff()
 		{
+			_currentScenario.Has("Default");
 			var businessRuleProvider = getConfigurableBusinessRuleProvider(
 				new ShiftTradeBusinessRuleConfig
 				{
@@ -155,6 +151,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldDenyOtherShiftTradeRequestsWhenShiftExchangeOfferIsCompleted()
 		{
+			_currentScenario.Has("Default");
 			var shiftDate = new DateOnly(2007, 1, 1);
 			var agent1 = PersonFactory.CreatePersonWithId();
 			_personRepository.AddRange(new[]
@@ -192,6 +189,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldNotDenyOtherShiftTradeRequestsWhenShiftExchangeOfferIsCompletedWithAutoGrantOff()
 		{
+			_currentScenario.Has("Default");
 			var shiftDate = new DateOnly(2007, 1, 1);
 			var agent1 = PersonFactory.CreatePersonWithId();
 			_personRepository.AddRange(new[]
@@ -226,6 +224,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldNotDenyOtherShiftTradeRequestsWhenShiftTradeRequestIsInvalid()
 		{
+			_currentScenario.Has("Default");
 			var shiftDate = new DateOnly(2007, 1, 1);
 			var agent1 = PersonFactory.CreatePersonWithId();
 			_personRepository.AddRange(new[]
@@ -260,6 +259,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldNotDenyOtherShiftTradeRequestsWhenShiftTradeRequestIsDenied()
 		{
+			_currentScenario.Has("Default");
 			var shiftDate = new DateOnly(2007, 1, 1);
 			var agent1 = PersonFactory.CreatePersonWithId();
 			_personRepository.AddRange(new[]
@@ -295,10 +295,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldApprovePendingRequestAfterNightlyRuleIsSatisfied()
 		{
+			_currentScenario.Has("Default");
 			var workflowControlSet = ShiftTradeTestHelper.CreateWorkFlowControlSet(true);
-
-			setPermissions();
-
+			
 			var personTo = PersonFactory.CreatePerson("To").WithId();
 			var personFrom = PersonFactory.CreatePerson("With").WithId();
 			_personRepository.Add(personTo);
@@ -322,7 +321,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_shiftTradeTestHelper.AddPersonAssignment(personFrom, dateTimePeriod, activityPersonFrom);
 
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] {personTo, personFrom},
-				null, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), _currentScenario.LoadDefaultScenario());
+				new ScheduleDictionaryLoadOptions(false,false), new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), _currentScenario.LoadDefaultScenario());
+			((ReadOnlyScheduleDictionary)scheduleDictionary).MakeEditable();
 
 			personTo.WorkflowControlSet = workflowControlSet;
 			personFrom.WorkflowControlSet = workflowControlSet;
@@ -357,8 +357,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldNotRemoveCrossNightAbsenceWhenShifTradeTargetPersonHasFulldayAbsence()
 		{
-			setPermissions();
-
+			_currentScenario.Has("Default");
+			
 			var personFrom = PersonFactory.CreatePerson("From").WithId();
 			var personTo = PersonFactory.CreatePerson("To").WithId();
 
@@ -384,23 +384,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var scenario = _currentScenario.LoadDefaultScenario();
 			var assPersonFrom = PersonAssignmentFactory
 				.CreateAssignmentWithMainShift(personFrom, scenario, new Activity("Shift_PersonFrom"), todayOvernightPeriod, new ShiftCategory("LT")).WithId();
-			_scheduleStorage.Add(assPersonFrom);
+			PersonAssignmentRepository.Add(assPersonFrom);
 
 			var yesterdayOvernightPeriod = new DateTimePeriod(new DateTime(2018, 07, 18, 21, 0, 0, DateTimeKind.Utc), new DateTime(2018, 07, 19, 6, 0, 0, DateTimeKind.Utc));
 			var ass2PersonFrom = PersonAssignmentFactory
 				.CreateAssignmentWithMainShift(personFrom, scenario, new Activity("Shift_PersonFrom_Yesterday"), yesterdayOvernightPeriod, new ShiftCategory("LT")).WithId();
-			_scheduleStorage.Add(ass2PersonFrom);
+			PersonAssignmentRepository.Add(ass2PersonFrom);
 
 			var fullDayAbsence = PersonAbsenceFactory.CreatePersonAbsence(personFrom, scenario,
 				yesterdayOvernightPeriod, AbsenceFactory.CreateAbsence("fromPersonFullDayAbsence")).WithId();
-			_scheduleStorage.Add(fullDayAbsence);
+			PersonAbsenceRepository.Add(fullDayAbsence);
 
 			var assPersonTo = PersonAssignmentFactory.CreateAssignmentWithDayOff(personTo, scenario, new DateOnly(2018, 07, 19),
 				new DayOffTemplate(new Description("DayOff_PersonTo")));
-			_scheduleStorage.Add(assPersonTo);
+			PersonAssignmentRepository.Add(assPersonTo);
 
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom },
-				null, new DateOnlyPeriod(new DateOnly(2018, 07, 18), new DateOnly(2018, 07, 20)), scenario);
+				new ScheduleDictionaryLoadOptions(false,false), new DateOnlyPeriod(new DateOnly(2018, 07, 18), new DateOnly(2018, 07, 20)), scenario);
+			((ReadOnlyScheduleDictionary)scheduleDictionary).MakeEditable();
 
 			var shiftTradeRequest = _shiftTradeTestHelper.PrepareAndGetPersonRequest(personFrom, personTo, new DateOnly(2018, 07, 19));
 			shiftTradeRequest.ForcePending();
@@ -426,8 +427,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldNotRemoveCrossNightAbsenceWhenShifTradeTargetPersonHasFulldayAbsenceInNewYorkTimeZone()
 		{
-			setPermissions();
-
+			_currentScenario.Has("Default");
+			
 			var personFrom = PersonFactory.CreatePerson("From").WithId();
 			var personTo = PersonFactory.CreatePerson("To").WithId();
 
@@ -454,23 +455,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var scenario = _currentScenario.LoadDefaultScenario();
 			var assPersonFrom = PersonAssignmentFactory
 				.CreateAssignmentWithMainShift(personFrom, scenario, new Activity("Shift_PersonFrom"), todayOvernightPeriod, new ShiftCategory("LT")).WithId();
-			_scheduleStorage.Add(assPersonFrom);
+			PersonAssignmentRepository.Add(assPersonFrom);
 
 			var yesterdayOvernightPeriod = new DateTimePeriod(new DateTime(2018, 07, 19, 1, 0, 0, DateTimeKind.Utc), new DateTime(2018, 07, 19, 10, 0, 0, DateTimeKind.Utc));
 			var ass2PersonFrom = PersonAssignmentFactory
 				.CreateAssignmentWithMainShift(personFrom, scenario, new Activity("Shift_PersonFrom_Yesterday"), yesterdayOvernightPeriod, new ShiftCategory("LT")).WithId();
-			_scheduleStorage.Add(ass2PersonFrom);
+			PersonAssignmentRepository.Add(ass2PersonFrom);
 
 			var fullDayAbsence = PersonAbsenceFactory.CreatePersonAbsence(personFrom, scenario,
 				yesterdayOvernightPeriod, AbsenceFactory.CreateAbsence("fromPersonFullDayAbsence")).WithId();
-			_scheduleStorage.Add(fullDayAbsence);
+			PersonAbsenceRepository.Add(fullDayAbsence);
 
 			var assPersonTo = PersonAssignmentFactory.CreateAssignmentWithDayOff(personTo, scenario, new DateOnly(2018, 07, 19),
 				new DayOffTemplate(new Description("DayOff_PersonTo")));
-			_scheduleStorage.Add(assPersonTo);
+			PersonAssignmentRepository.Add(assPersonTo);
 
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom },
-				null, new DateOnlyPeriod(new DateOnly(2018, 07, 18), new DateOnly(2018, 07, 20)), scenario);
+				new ScheduleDictionaryLoadOptions(false,false), new DateOnlyPeriod(new DateOnly(2018, 07, 18), new DateOnly(2018, 07, 20)), scenario);
+			((ReadOnlyScheduleDictionary)scheduleDictionary).MakeEditable();
 
 			var shiftTradeRequest = _shiftTradeTestHelper.PrepareAndGetPersonRequest(personFrom, personTo, new DateOnly(2018, 07, 19));
 			shiftTradeRequest.ForcePending();
@@ -516,8 +518,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 		private basicShiftTradeTestResult doBasicShiftTrade(IWorkflowControlSet workflowControlSet, bool addBrokenBusinessRules = false, IShiftExchangeOffer offer = null)
 		{
-			setPermissions();
-
 			var personTo = PersonFactory.CreatePerson("To").WithId();
 			var personFrom = PersonFactory.CreatePerson("With").WithId();
 
@@ -529,8 +529,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_shiftTradeTestHelper.AddPersonAssignment(personTo, dateTimePeriod, activityPersonTo);
 			_shiftTradeTestHelper.AddPersonAssignment(personFrom, dateTimePeriod, activityPersonFrom);
 
-			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, null, DateOnly.Today.ToDateOnlyPeriod(), _currentScenario.LoadDefaultScenario());
-
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, new ScheduleDictionaryLoadOptions(false,false), DateOnly.Today.ToDateOnlyPeriod(), _currentScenario.LoadDefaultScenario());
+			((ReadOnlyScheduleDictionary)scheduleDictionary).MakeEditable();
 			personTo.WorkflowControlSet = workflowControlSet;
 			personFrom.WorkflowControlSet = workflowControlSet;
 
@@ -565,36 +565,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				PersonRequest = personRequest
 			};
 		}
-
-		private static void setPermissions()
-		{
-			var principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
-			var claims = new List<Claim>
-			{
-				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
-						, "/", DefinedRaptorApplicationFunctionPaths.ViewSchedules)
-					, new AuthorizeEveryone(), Rights.PossessProperty),
-				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
-						, "/", DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence)
-					, new AuthorizeEveryone(), Rights.PossessProperty),
-				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
-						, "/", DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)
-					, new AuthorizeEveryone(), Rights.PossessProperty),
-				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
-						, "/", DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment)
-					, new AuthorizeEveryone(), Rights.PossessProperty),
-				new Claim(
-					string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
-						"/AvailableData"), new AuthorizeEveryone(), Rights.PossessProperty)
-			};
-			principal.AddClaimSet(new DefaultClaimSet(ClaimSet.System, claims));
-		}
-
+		
 		private IPersonRequest doShiftTradeWithBrokenRules(IBusinessRuleProvider businessRuleProvider, bool autoGrantShiftTrade = true, 
 			IShiftExchangeOffer offer = null, bool useMaximumWorkday = false)
 		{
-			setPermissions();
-
 			var scheduleDate = new DateTime(2016, 7, 25);
 			var scheduleDateOnly = new DateOnly(scheduleDate);
 
@@ -626,8 +600,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			@event.UseMaximumWorkday = useMaximumWorkday;
 			_schedulingResultStateHolder.UseMaximumWorkday = useMaximumWorkday;
 
-			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, null,
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, new ScheduleDictionaryLoadOptions(false,false), 
 				new DateOnlyPeriod(new DateOnly(scheduleDate), new DateOnly(scheduleDate.AddDays(7))), _currentScenario.LoadDefaultScenario());
+			((ReadOnlyScheduleDictionary)scheduleDictionary).MakeEditable();
 			_shiftTradeTestHelper.SetScheduleDictionary(scheduleDictionary);
 
 			_shiftTradeTestHelper.HandleRequest(@event, businessRuleProvider);
@@ -636,8 +611,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 		private void prepareBusinessRuleProvider(params IBusinessRuleResponse[] ruleResponses)
 		{
-			((FakeNewBusinessRuleCollection)_businessRuleCollection).SetRuleResponse(ruleResponses);
-			((FakeBusinessRuleProvider)_businessRuleProvider).SetBusinessRules(_businessRuleCollection);
+			var businessRuleCollection = new FakeNewBusinessRuleCollection();
+			businessRuleCollection.SetRuleResponse(ruleResponses);
+			((FakeBusinessRuleProvider)_businessRuleProvider).SetBusinessRules(businessRuleCollection);
 		}
 
 		private IPerson createPerson(bool autoGrantShiftTrade = true)
@@ -667,6 +643,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			public IPersonRequest PersonRequest { get; set; }
 			public IActivity ActivityTo { get; set; }
 			public IActivity ActivityFrom { get; set; }
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<ShiftTradeTestHelper>().For<ShiftTradeTestHelper>();
+			isolate.UseTestDouble<FakeBusinessRuleProvider>().For<IBusinessRuleProvider>();
+			isolate.UseTestDouble<FakeScheduleProjectionReadOnlyActivityProvider>()
+				.For<IScheduleProjectionReadOnlyActivityProvider>();
 		}
 	}
 }

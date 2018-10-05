@@ -16,14 +16,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Aspects
 		{
 			foreach (var arg in invocation.Arguments)
 			{
-				if (arg is GrantRolesInputModel)
+				if (arg is GrantRolesInputModel model)
 				{
-					auditHelper.AuditCall(PersonAuditActionType.GrantRole, arg as GrantRolesInputModel);
+					auditHelper.AuditCall(PersonAuditActionType.GrantRole, model);
 
 				}
-				else if (arg is RevokeRolesInputModel)
+				else if (arg is RevokeRolesInputModel inputModel)
 				{
-					auditHelper.AuditCall(PersonAuditActionType.RevokeRole, arg as RevokeRolesInputModel);
+					auditHelper.AuditCall(PersonAuditActionType.RevokeRole, inputModel);
 				}
 			}
 		}

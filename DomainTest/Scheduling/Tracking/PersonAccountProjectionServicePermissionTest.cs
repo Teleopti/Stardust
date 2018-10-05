@@ -22,6 +22,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 	{
 		public FakeDatabase Database;
 		public FakePersonRepository PersonRepository;
+		public FakePersonAbsenceRepository PersonAbsenceRepository;
+		public IScheduleStorage ScheduleStorage;
 		public ILogOnOff LogOnOff;
 
 		[TestCase(true, ExpectedResult = true)]
@@ -50,10 +52,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 			var personAbsenceAccount = new PersonAbsenceAccount(user, absence);
 			var account = new AccountDay(date);
 			personAbsenceAccount.Add(account);
-			var storage = new FakeScheduleStorage_DoNotUse();
-			storage.Add(new PersonAbsence(user, scenario, new AbsenceLayer(absence, date.ToDateTimePeriod(user.PermissionInformation.DefaultTimeZone()))));
+			PersonAbsenceRepository.Add(new PersonAbsence(user, scenario, new AbsenceLayer(absence, date.ToDateTimePeriod(user.PermissionInformation.DefaultTimeZone()))));
 			var target = new PersonAccountProjectionService(account);
-			var days = target.CreateProjection(storage, scenario);
+			var days = target.CreateProjection(ScheduleStorage, scenario);
 
 			return days.First().PersonAbsenceCollection().Length.Equals(1);
 		}

@@ -391,7 +391,6 @@
     <Compile Include="FakeRepositories\FakePreferenceDayRepository.cs" />
     <Compile Include="FakeRepositories\FakePublicNoteRepository.cs" />
     <Compile Include="FakeRepositories\FakeRepositoryFactory.cs" />
-    <Compile Include="FakeRepositories\FakeScheduleStorage_DoNotUse.cs" />
     <Compile Include="FakeRepositories\FakeScheduleProjectionReadOnlyPersister.cs" />
     <Compile Include="FakeRepositories\FakeScheduleTagRepository.cs" />
     <Compile Include="FakeRepositories\FakeSeatBookingRepository.cs" />

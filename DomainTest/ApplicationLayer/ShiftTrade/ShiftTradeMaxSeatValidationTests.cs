@@ -4,8 +4,8 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon;
@@ -17,51 +17,29 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 {
 	[DomainTest]
-	[TestWithStaticDependenciesDONOTUSE]
-	public class ShiftTradeMaxSeatValidationTests
+	public class ShiftTradeMaxSeatValidationTests : IIsolateSystem
 	{
-		private ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private IPersonRepository _personRepository;
-		private IScheduleStorage _scheduleStorage;
-
-		private IActivity _requiresSeatActivity;
-		private IActivity _doesNotRequireSeatActivity;
-		private ShiftTradeTestHelper _shiftTradeTestHelper;
-		private FakeScheduleProjectionReadOnlyActivityProvider _scheduleProjectionReadOnlyActivityProvider;
-		private ICurrentScenario _currentScenario;
+		public IPersonRepository PersonRepository;
+		public ShiftTradeTestHelper ShiftTradeTestHelper;
+		public FakeScheduleProjectionReadOnlyActivityProvider ScheduleProjectionReadOnlyActivityProvider;
+		public FakeScenarioRepository ScenarioRepository;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
 
 		protected virtual bool UseReadModel()
 		{
 			return false;
 		}
-
-		[SetUp]
-		public void Setup()
-		{
-			_schedulingResultStateHolder = new SchedulingResultStateHolder();
-			_personRepository = new FakePersonRepository(new FakeStorage());
-			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
-
-			_requiresSeatActivity = ActivityFactory.CreateActivity("Shift_RequiresSeat");
-			_requiresSeatActivity.RequiresSeat = true;
-
-			_doesNotRequireSeatActivity = ActivityFactory.CreateActivity("Shift_DoesNotRequireSeat");
-			_doesNotRequireSeatActivity.RequiresSeat = false;
-
-			_scheduleProjectionReadOnlyActivityProvider = new FakeScheduleProjectionReadOnlyActivityProvider();
-
-			var scenarioRepository = new FakeScenarioRepository();
-			scenarioRepository.Has("Default");
-			_currentScenario = new DefaultScenarioFromRepository(scenarioRepository);
-			_shiftTradeTestHelper = new ShiftTradeTestHelper(_schedulingResultStateHolder, _scheduleStorage, _personRepository, new FakeBusinessRuleProvider(), _currentScenario, _scheduleProjectionReadOnlyActivityProvider);
-
-			_shiftTradeTestHelper.UseMaxSeatReadModelValidator();
-		}
-
+		
 		[Test]
 		public void ShouldDenyWhenMaxSeatsWillBeExceeded()
 		{
-			var personRequest = doBasicMaxSeatsValidationTest();
+			var requiresSeatActivity = ActivityFactory.CreateActivity("Shift_RequiresSeat").WithId();
+			requiresSeatActivity.RequiresSeat = true;
+			
+			ScenarioRepository.Has("Default");
+
+			ShiftTradeTestHelper.UseMaxSeatReadModelValidator();
+			var personRequest = doBasicMaxSeatsValidationTest(requiresSeatActivity );
 
 			Assert.IsTrue(personRequest.IsDenied);
 		}
@@ -69,13 +47,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldNotDenyWhenSystemConfigurationExcludesMaxSeatValidation()
 		{
-			_shiftTradeTestHelper.OverrideShiftTradeGlobalSettings(new ShiftTradeSettings()
+			var requiresSeatActivity = ActivityFactory.CreateActivity("Shift_RequiresSeat").WithId();
+			requiresSeatActivity.RequiresSeat = true;
+			
+			ScenarioRepository.Has("Default");
+
+			ShiftTradeTestHelper.UseMaxSeatReadModelValidator();
+			ShiftTradeTestHelper.OverrideShiftTradeGlobalSettings(new ShiftTradeSettings()
 			{
 				MaxSeatsValidationEnabled = false,
 				MaxSeatsValidationSegmentLength = 15
 			});
 
-			var personRequest = doBasicMaxSeatsValidationTest();
+			var personRequest = doBasicMaxSeatsValidationTest(requiresSeatActivity);
 
 			Assert.IsFalse(personRequest.IsDenied);
 		}
@@ -83,6 +67,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldValidateMaxSeatsAccordingToInterval()
 		{
+			var requiresSeatActivity = ActivityFactory.CreateActivity("Shift_RequiresSeat");
+			requiresSeatActivity.RequiresSeat = true;
+			
+			ScenarioRepository.Has("Default");
+
+			ShiftTradeTestHelper.UseMaxSeatReadModelValidator();
 			var scheduleDate = new DateTime(2016, 7, 25, 0, 0, 0, DateTimeKind.Utc);
 			var scheduleDateOnly = new DateOnly(scheduleDate);
 
@@ -97,25 +87,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var peopleInSiteOne = new[]
 			{
 				personTo,
-				_shiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly))
+				ShiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly))
 			};
 
-			addPersonAssignment(peopleInSiteOne[1], morningShiftTimePeriod, _requiresSeatActivity);
-			addPersonAssignment(personTo, afternoonShiftTimePeriodSite1, _requiresSeatActivity);
+			addPersonAssignment(peopleInSiteOne[1], morningShiftTimePeriod, requiresSeatActivity);
+			addPersonAssignment(personTo, afternoonShiftTimePeriodSite1, requiresSeatActivity);
 
 			var personFrom = createPersonWithSiteMaxSeats(1);
-			addPersonAssignment(personFrom, afternoonShiftTimePeriodSite2, _requiresSeatActivity);
+			addPersonAssignment(personFrom, afternoonShiftTimePeriodSite2, requiresSeatActivity);
 
-			var personRequest15MinuteInterval = _shiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly,
+			var personRequest15MinuteInterval = ShiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly,
 				new[] { personTo, peopleInSiteOne[1], personFrom }, scheduleDate);
 
-			_shiftTradeTestHelper.OverrideShiftTradeGlobalSettings(new ShiftTradeSettings()
+			ShiftTradeTestHelper.OverrideShiftTradeGlobalSettings(new ShiftTradeSettings
 			{
 				MaxSeatsValidationEnabled = true,
 				MaxSeatsValidationSegmentLength = 30
 			});
 
-			var personRequest30MinuteInterval = _shiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly,
+			var personRequest30MinuteInterval = ShiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly,
 				new[] { personTo, peopleInSiteOne[1], personFrom }, scheduleDate);
 
 			Assert.IsTrue(personRequest15MinuteInterval.IsApproved);
@@ -125,6 +115,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldDenyWhenMaxSeatsWillBeExceededFromOvernightShift()
 		{
+			var requiresSeatActivity = ActivityFactory.CreateActivity("Shift_RequiresSeat");
+			requiresSeatActivity.RequiresSeat = true;
+			
+			ScenarioRepository.Has("Default");
+
+			ShiftTradeTestHelper.UseMaxSeatReadModelValidator();
 			var scheduleDate = new DateTime(2016, 7, 25, 0, 0, 0, DateTimeKind.Utc);
 			var dayBeforeScheduleDate = scheduleDate.AddDays(-1);
 
@@ -138,16 +134,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var peopleInSiteOne = new[]
 			{
 				personTo,
-				_shiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly))
+				ShiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly))
 			};
 
-			addPersonAssignment(peopleInSiteOne[1], overnightShiftTimePeriod, _requiresSeatActivity);
-			addPersonAssignment(personTo, afternoonShiftTimePeriod, _requiresSeatActivity);
+			addPersonAssignment(peopleInSiteOne[1], overnightShiftTimePeriod, requiresSeatActivity);
+			addPersonAssignment(personTo, afternoonShiftTimePeriod, requiresSeatActivity);
 
 			var personFrom = createPersonWithSiteMaxSeats(1);
-			addPersonAssignment(personFrom, morningShiftTimePeriod, _requiresSeatActivity);
+			addPersonAssignment(personFrom, morningShiftTimePeriod, requiresSeatActivity);
 
-			var personRequest = _shiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly, new[] { personTo, peopleInSiteOne[1], personFrom }, scheduleDate);
+			var personRequest = ShiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly, new[] { personTo, peopleInSiteOne[1], personFrom }, scheduleDate);
 
 			Assert.IsTrue(personRequest.IsDenied);
 		}
@@ -155,6 +151,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldDenyWhenMaxSeatsWillBeExceededWhenAgentsAreInDifferentTimezones()
 		{
+			var requiresSeatActivity = ActivityFactory.CreateActivity("Shift_RequiresSeat");
+			requiresSeatActivity.RequiresSeat = true;
+			
+			ScenarioRepository.Has("Default");
+
+			ShiftTradeTestHelper.UseMaxSeatReadModelValidator();
 			var chinaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("China Standard Time");
 			var newZealandTimeZone = TimeZoneInfo.FindSystemTimeZoneById("New Zealand Standard Time"); //26/7
 
@@ -170,18 +172,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var peopleInSiteOne = new[]
 			{
 				personTo,
-				_shiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly))
+				ShiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly))
 			};
 
-			addPersonAssignment(peopleInSiteOne[1], earlyShift, _requiresSeatActivity);
-			addPersonAssignment(personTo, lateShift, _requiresSeatActivity);
+			addPersonAssignment(peopleInSiteOne[1], earlyShift, requiresSeatActivity);
+			addPersonAssignment(personTo, lateShift, requiresSeatActivity);
 
 			var personFrom = createPersonWithSiteMaxSeats(1);
 			personFrom.PermissionInformation.SetDefaultTimeZone(chinaTimeZone);
 
-			addPersonAssignment(personFrom, earlyShift, _requiresSeatActivity);
+			addPersonAssignment(personFrom, earlyShift, requiresSeatActivity);
 
-			var personRequest = _shiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly, new[] { personTo, peopleInSiteOne[1], personFrom }, scheduleDate);
+			var personRequest = ShiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly, new[] { personTo, peopleInSiteOne[1], personFrom }, scheduleDate);
 
 			Assert.IsTrue(personRequest.IsDenied);
 		}
@@ -189,6 +191,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldIgnoreRequestThatWillBeTradedAndApproveAsMaxSeatsIsOk()
 		{
+			var requiresSeatActivity = ActivityFactory.CreateActivity("Shift_RequiresSeat");
+			requiresSeatActivity.RequiresSeat = true;
+			
+			ScenarioRepository.Has("Default");
+
+			ShiftTradeTestHelper.UseMaxSeatReadModelValidator();
 			var scheduleDate = new DateTime(2016, 7, 25, 0, 0, 0, DateTimeKind.Utc);
 			var scheduleDateOnly = new DateOnly(scheduleDate);
 			var morningShiftTimePeriod = new DateTimePeriod(scheduleDate.AddHours(7), scheduleDate.AddHours(12));
@@ -199,18 +207,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var peopleInSiteOne = new[]
 			{
 				personTo,
-				_shiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly)),
-				_shiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly))
+				ShiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly)),
+				ShiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly))
 			};
 
-			addPersonAssignment(peopleInSiteOne[1], morningShiftTimePeriod, _requiresSeatActivity);
-			addPersonAssignment(peopleInSiteOne[2], morningShiftTimePeriod, _requiresSeatActivity);
-			addPersonAssignment(personTo, morningShiftTimePeriod, _requiresSeatActivity);
+			addPersonAssignment(peopleInSiteOne[1], morningShiftTimePeriod, requiresSeatActivity);
+			addPersonAssignment(peopleInSiteOne[2], morningShiftTimePeriod, requiresSeatActivity);
+			addPersonAssignment(personTo, morningShiftTimePeriod, requiresSeatActivity);
 
 			var personFrom = createPersonWithSiteMaxSeats(1);
-			addPersonAssignment(personFrom, morningShiftTimePeriod, _requiresSeatActivity);
+			addPersonAssignment(personFrom, morningShiftTimePeriod, requiresSeatActivity);
 
-			var personRequest = _shiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly, new[] { personTo, peopleInSiteOne[1], peopleInSiteOne[2], personFrom }, scheduleDate);
+			var personRequest = ShiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly, new[] { personTo, peopleInSiteOne[1], peopleInSiteOne[2], personFrom }, scheduleDate);
 
 			Assert.IsTrue(personRequest.IsApproved);
 		}
@@ -218,6 +226,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldAcceptWhenAnAssignmentDoesNotRequireSeats()
 		{
+			var requiresSeatActivity = ActivityFactory.CreateActivity("Shift_RequiresSeat");
+			requiresSeatActivity.RequiresSeat = true;
+
+			var doesNotRequireSeatActivity = ActivityFactory.CreateActivity("Shift_DoesNotRequireSeat");
+			doesNotRequireSeatActivity.RequiresSeat = false;
+
+			ScenarioRepository.Has("Default");
+
+			ShiftTradeTestHelper.UseMaxSeatReadModelValidator();
 			var scheduleDate = new DateTime(2016, 7, 25, 0, 0, 0, DateTimeKind.Utc);
 			var scheduleDateOnly = new DateOnly(scheduleDate);
 
@@ -227,18 +244,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var peopleInSiteOne = new[]
 			{
 				personTo,
-				_shiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly)),
-				_shiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly))
+				ShiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly)),
+				ShiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly))
 			};
 
-			addPersonAssignment(peopleInSiteOne[1], morningShiftTimePeriod, _doesNotRequireSeatActivity);
-			addPersonAssignment(peopleInSiteOne[2], morningShiftTimePeriod, _requiresSeatActivity);
-			addPersonAssignment(personTo, morningShiftTimePeriod, _requiresSeatActivity);
+			addPersonAssignment(peopleInSiteOne[1], morningShiftTimePeriod, doesNotRequireSeatActivity);
+			addPersonAssignment(peopleInSiteOne[2], morningShiftTimePeriod, requiresSeatActivity);
+			addPersonAssignment(personTo, morningShiftTimePeriod, requiresSeatActivity);
 
 			var personFrom = createPersonWithSiteMaxSeats(1);
-			addPersonAssignment(personFrom, morningShiftTimePeriod, _requiresSeatActivity);
+			addPersonAssignment(personFrom, morningShiftTimePeriod, requiresSeatActivity);
 
-			var personRequest = _shiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly, new[] { personTo, peopleInSiteOne[1], peopleInSiteOne[2], personFrom }, scheduleDate);
+			var personRequest = ShiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly, new[] { personTo, peopleInSiteOne[1], peopleInSiteOne[2], personFrom }, scheduleDate);
 
 			Assert.IsTrue(personRequest.IsApproved);
 		}
@@ -246,6 +263,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldAcceptWhenActivitiesInsidePeriodDoNotRequireSeats()
 		{
+			var requiresSeatActivity = ActivityFactory.CreateActivity("Shift_RequiresSeat");
+			requiresSeatActivity.RequiresSeat = true;
+
+			var doesNotRequireSeatActivity = ActivityFactory.CreateActivity("Shift_DoesNotRequireSeat");
+			doesNotRequireSeatActivity.RequiresSeat = false;
+
+			ScenarioRepository.Has("Default");
+
+			ShiftTradeTestHelper.UseMaxSeatReadModelValidator();
 			var scheduleDate = new DateTime(2016, 7, 25, 0, 0, 0, DateTimeKind.Utc);
 			var scheduleDateOnly = new DateOnly(scheduleDate);
 
@@ -255,33 +281,33 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var peopleInSiteOne = new[]
 			{
 				personTo,
-				_shiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly))
+				ShiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly))
 			};
 
 			var startTime = morningShiftTimePeriod.StartDateTime;
 
-			addPersonAssignmentWithMultipleActivities(peopleInSiteOne[1], morningShiftTimePeriod, new List<ActivityAndDateTime>()
+			addPersonAssignmentWithMultipleActivities(peopleInSiteOne[1], morningShiftTimePeriod, new List<ActivityAndDateTime>
 			{
-				createActivity (true, startTime, startTime.AddHours (1)),
-				createActivity (false, startTime.AddHours (1), startTime.AddHours (2)),
-				createActivity (true, startTime.AddHours (2), startTime.AddHours (3)),
-				createActivity (false, startTime.AddHours (3), startTime.AddHours (4)),
-				createActivity (true, startTime.AddHours (4), startTime.AddHours (5))
+				createActivity (true, startTime, startTime.AddHours (1), requiresSeatActivity, doesNotRequireSeatActivity),
+				createActivity (false, startTime.AddHours (1), startTime.AddHours (2), requiresSeatActivity, doesNotRequireSeatActivity),
+				createActivity (true, startTime.AddHours (2), startTime.AddHours (3), requiresSeatActivity, doesNotRequireSeatActivity),
+				createActivity (false, startTime.AddHours (3), startTime.AddHours (4), requiresSeatActivity, doesNotRequireSeatActivity),
+				createActivity (true, startTime.AddHours (4), startTime.AddHours (5), requiresSeatActivity, doesNotRequireSeatActivity)
 			});
 
-			addPersonAssignment(personTo, morningShiftTimePeriod, _requiresSeatActivity);
+			addPersonAssignment(personTo, morningShiftTimePeriod, requiresSeatActivity);
 
 			var personFrom = createPersonWithSiteMaxSeats(1);
-			addPersonAssignmentWithMultipleActivities(personFrom, morningShiftTimePeriod, new List<ActivityAndDateTime>()
+			addPersonAssignmentWithMultipleActivities(personFrom, morningShiftTimePeriod, new List<ActivityAndDateTime>
 			{
-				createActivity (false, startTime, startTime.AddHours (1)),
-				createActivity (true, startTime.AddHours (1), startTime.AddHours (2)),
-				createActivity (false, startTime.AddHours (2), startTime.AddHours (3)),
-				createActivity (true, startTime.AddHours (3), startTime.AddHours (4)),
-				createActivity (false, startTime.AddHours (4), startTime.AddHours (5))
+				createActivity (false, startTime, startTime.AddHours (1), requiresSeatActivity, doesNotRequireSeatActivity),
+				createActivity (true, startTime.AddHours (1), startTime.AddHours (2), requiresSeatActivity, doesNotRequireSeatActivity),
+				createActivity (false, startTime.AddHours (2), startTime.AddHours (3), requiresSeatActivity, doesNotRequireSeatActivity),
+				createActivity (true, startTime.AddHours (3), startTime.AddHours (4), requiresSeatActivity, doesNotRequireSeatActivity),
+				createActivity (false, startTime.AddHours (4), startTime.AddHours (5), requiresSeatActivity, doesNotRequireSeatActivity)
 			});
 
-			var personRequest = _shiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly, new[] { personTo, peopleInSiteOne[1], personFrom }, scheduleDate);
+			var personRequest = ShiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly, new[] { personTo, peopleInSiteOne[1], personFrom }, scheduleDate);
 
 			Assert.IsTrue(personRequest.IsApproved);
 		}
@@ -289,6 +315,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldDenyWhenOneActivityInsidePeriodOverlapsViolatingMaxSeats()
 		{
+			var requiresSeatActivity = ActivityFactory.CreateActivity("Shift_RequiresSeat");
+			requiresSeatActivity.RequiresSeat = true;
+
+			var doesNotRequireSeatActivity = ActivityFactory.CreateActivity("Shift_DoesNotRequireSeat");
+			doesNotRequireSeatActivity.RequiresSeat = false;
+
+			ScenarioRepository.Has("Default");
+
+			ShiftTradeTestHelper.UseMaxSeatReadModelValidator();
 			var scheduleDate = new DateTime(2016, 7, 25, 0, 0, 0, DateTimeKind.Utc);
 			var scheduleDateOnly = new DateOnly(scheduleDate);
 
@@ -298,33 +333,33 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var peopleInSiteOne = new[]
 			{
 				personTo,
-				_shiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly))
+				ShiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly))
 			};
 
 			var startTime = morningShiftTimePeriod.StartDateTime;
 
-			addPersonAssignmentWithMultipleActivities(peopleInSiteOne[1], morningShiftTimePeriod, new List<ActivityAndDateTime>()
+			addPersonAssignmentWithMultipleActivities(peopleInSiteOne[1], morningShiftTimePeriod, new List<ActivityAndDateTime>
 			{
-				createActivity (false,startTime.AddHours(3), startTime.AddHours (4)),
-				createActivity (true,startTime.AddHours(4), startTime.AddHours (5))
+				createActivity (false,startTime.AddHours(3), startTime.AddHours (4), requiresSeatActivity, doesNotRequireSeatActivity),
+				createActivity (true,startTime.AddHours(4), startTime.AddHours (5), requiresSeatActivity, doesNotRequireSeatActivity)
 			});
 
-			addPersonAssignment(personTo, morningShiftTimePeriod, _requiresSeatActivity);
+			addPersonAssignment(personTo, morningShiftTimePeriod, requiresSeatActivity);
 
 			var personFrom = createPersonWithSiteMaxSeats(1);
-			addPersonAssignmentWithMultipleActivities(personFrom, morningShiftTimePeriod, new List<ActivityAndDateTime>()
+			addPersonAssignmentWithMultipleActivities(personFrom, morningShiftTimePeriod, new List<ActivityAndDateTime>
 			{
 				//this activity should conflict with the activity above that begins at 4
-				createActivity (true,startTime.AddHours(3), startTime.AddHours (4).AddMinutes (1)),
-				createActivity (false,startTime.AddHours(4).AddMinutes (1), startTime.AddHours (5))
+				createActivity (true,startTime.AddHours(3), startTime.AddHours (4).AddMinutes (1), requiresSeatActivity, doesNotRequireSeatActivity),
+				createActivity (false,startTime.AddHours(4).AddMinutes (1), startTime.AddHours (5), requiresSeatActivity, doesNotRequireSeatActivity)
 			});
 
-			var personRequest = _shiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly, new[] { personTo, peopleInSiteOne[1], personFrom }, scheduleDate);
+			var personRequest = ShiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly, new[] { personTo, peopleInSiteOne[1], personFrom }, scheduleDate);
 
 			Assert.IsTrue(personRequest.IsDenied);
 		}
 
-		private IPersonRequest doBasicMaxSeatsValidationTest()
+		private IPersonRequest doBasicMaxSeatsValidationTest(IActivity requiresSeatActivity)
 		{
 			var scheduleDate = new DateTime(2016, 7, 25, 0, 0, 0, DateTimeKind.Utc);
 			var scheduleDateOnly = new DateOnly(scheduleDate);
@@ -336,16 +371,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var peopleInSiteOne = new[]
 			{
 				personTo,
-				_shiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly))
+				ShiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly))
 			};
 
-			addPersonAssignment(peopleInSiteOne[1], morningShiftTimePeriod, _requiresSeatActivity);
-			addPersonAssignment(personTo, afternoonShiftTimePeriod, _requiresSeatActivity);
+			addPersonAssignment(peopleInSiteOne[1], morningShiftTimePeriod, requiresSeatActivity);
+			addPersonAssignment(personTo, afternoonShiftTimePeriod, requiresSeatActivity);
 
 			var personFrom = createPersonWithSiteMaxSeats(1);
-			addPersonAssignment(personFrom, morningShiftTimePeriod, _requiresSeatActivity);
+			addPersonAssignment(personFrom, morningShiftTimePeriod, requiresSeatActivity);
 
-			var personRequest = _shiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly,
+			var personRequest = ShiftTradeTestHelper.PrepareAndExecuteRequest(personTo, personFrom, scheduleDateOnly,
 				new[] { personTo, peopleInSiteOne[1], personFrom }, scheduleDate);
 			return personRequest;
 		}
@@ -354,8 +389,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		{
 			var dateOnly = new DateOnly(dateTimePeriod.StartDateTime);
 
-			var personAssignment = _shiftTradeTestHelper.AddPersonAssignment(person, dateTimePeriod, activity);
-			_scheduleProjectionReadOnlyActivityProvider.AddSiteActivity(new SiteActivity
+			var personAssignment = ShiftTradeTestHelper.AddPersonAssignment(person, dateTimePeriod, activity);
+			ScheduleProjectionReadOnlyActivityProvider.AddSiteActivity(new SiteActivity
 			{
 				PersonId = person.Id.GetValueOrDefault(),
 				ActivityId = personAssignment.ShiftLayers.First().Id.GetValueOrDefault(),
@@ -369,12 +404,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private void addPersonAssignmentWithMultipleActivities(IPerson person, DateTimePeriod dateTimePeriod, IList<ActivityAndDateTime> activityDefinitions)
 		{
 			var dateOnly = new DateOnly(dateTimePeriod.StartDateTime);
-			var scenario = _currentScenario.Current();
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, dateOnly).WithId();
 			foreach (var activityDefinition in activityDefinitions)
 			{
 				personAssignment.AddActivity(activityDefinition.Activity, activityDefinition.Period);
-				_scheduleProjectionReadOnlyActivityProvider.AddSiteActivity(new SiteActivity
+				ScheduleProjectionReadOnlyActivityProvider.AddSiteActivity(new SiteActivity
 				{
 					PersonId = person.Id.GetValueOrDefault(),
 					ActivityId = activityDefinition.Activity.Id.Value,
@@ -385,7 +420,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				});
 			}
 
-			_scheduleStorage.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignment);
 		}
 
 		private IPerson createPersonWithSiteMaxSeats(int maxSeats)
@@ -400,18 +435,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDate, team);
 			((Person)person).InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			person.WorkflowControlSet = workControlSet;
-			_personRepository.Add(person);
+			PersonRepository.Add(person);
 
 			return person;
 		}
 
-		private ActivityAndDateTime createActivity(bool requiresSeat, DateTime startDateTime, DateTime endDateTime)
+		private ActivityAndDateTime createActivity(bool requiresSeat, DateTime startDateTime, DateTime endDateTime, IActivity requiresSeatActivity, IActivity doesNotRequireSeatActivity)
 		{
 			return new ActivityAndDateTime
 			{
-				Activity = requiresSeat ? _requiresSeatActivity : _doesNotRequireSeatActivity,
+				Activity = requiresSeat ? requiresSeatActivity : doesNotRequireSeatActivity,
 				Period = new DateTimePeriod(startDateTime, endDateTime)
 			};
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<ShiftTradeTestHelper>().For<ShiftTradeTestHelper>();
+			isolate.UseTestDouble<FakeBusinessRuleProvider>().For<IBusinessRuleProvider>();
+
+			var activityProvider = new FakeScheduleProjectionReadOnlyActivityProvider();
+			isolate.UseTestDouble(activityProvider).For<IScheduleProjectionReadOnlyActivityProvider>();
 		}
 	}
 

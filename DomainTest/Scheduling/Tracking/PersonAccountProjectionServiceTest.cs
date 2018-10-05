@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Tracking;
@@ -11,7 +12,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 {
     [DomainTest]
     public class PersonAccountProjectionServiceTest
-    {
+	{
+		public FakePersonAbsenceRepository PersonAbsenceRepository;
+		public IScheduleStorage ScheduleStorage;
+
 	    [Test]
 	    public void VerifyNumberOfDays()
 	    {
@@ -25,13 +29,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 		    personAbsenceAccount.Add(secondAccount);
 			
 		    var scenario = ScenarioFactory.CreateScenarioAggregate();
-		    var storage = new FakeScheduleStorage_DoNotUse();
-		    storage.Add(new PersonAbsence(person, scenario,
+		    PersonAbsenceRepository.Add(new PersonAbsence(person, scenario,
 			    new AbsenceLayer(absence,
 				    firstAccount.StartDate.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()))));
 
 		    var target = new PersonAccountProjectionService(firstAccount);
-		    var days = target.CreateProjection(storage, scenario);
+		    var days = target.CreateProjection(ScheduleStorage, scenario);
 
 		    //Verify correct number of days is returned
 		    Assert.AreEqual(1, days.Count);
