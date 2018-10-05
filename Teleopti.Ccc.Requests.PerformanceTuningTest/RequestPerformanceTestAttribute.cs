@@ -10,6 +10,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.Web.Areas.Requests.Core.IOC;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.IoC;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Messaging.Client;
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			base.Extend(extend, configuration);
 			extend.AddService<Database>();
 			extend.AddModule(new LegacyRegistrationsFromAnywhere(configuration));
+			extend.AddModule(new RequestsAreaModule());
 			extend.AddModule(new TeamScheduleAreaModule());
 		}
 
