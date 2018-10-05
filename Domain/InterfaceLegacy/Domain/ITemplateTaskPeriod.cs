@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// Created by: peterwe
     /// Created date: 2007-11-13
     /// </remarks>
-    public interface ITemplateTaskPeriod : IAggregateEntity, ITaskOwner, ITaskSource, IPeriodized, ICloneableEntity<ITemplateTaskPeriod>
+    public interface ITemplateTaskPeriod : IAggregateEntity, ITaskOwner, IPeriodized, ICloneableEntity<ITemplateTaskPeriod>
     {
         /// <summary>
         /// Gets or sets the task.

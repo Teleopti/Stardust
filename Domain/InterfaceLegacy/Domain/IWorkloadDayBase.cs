@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// Created by: robink
     /// Created date: 2008-09-17
     /// </remarks>
-    public interface IWorkloadDayBase : ITaskOwner, ITaskSource, IAggregateEntity
+    public interface IWorkloadDayBase : ITaskOwner, IAggregateEntity
     {
         /// <summary>
         /// Creates the specified workload day
