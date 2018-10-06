@@ -378,7 +378,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<DayOffOptimizationDesktop>().InstancePerLifetimeScope(); 
 
-			builder.RegisterType<OptimizerHelperHelper>().SingleInstance();
 			builder.RegisterType<WorkShiftBackToLegalStateServiceProFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleBlankSpots>().InstancePerLifetimeScope();
 			builder.RegisterType<DaysOffBackToLegalState>().InstancePerLifetimeScope();

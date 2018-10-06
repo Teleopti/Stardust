@@ -1681,7 +1681,6 @@
     <Compile Include="Scheduling\SeatLimitation\MaxSeatOptimization.cs" />
     <Compile Include="Optimization\ClassicLegacy\DaysOffBackToLegalState.cs" />
     <Compile Include="Optimization\AffectedDates.cs" />
-    <Compile Include="Optimization\OptimizerHelperHelper.cs" />
     <Compile Include="Optimization\ScheduleChangesAffectedDates.cs" />
     <Compile Include="Optimization\ClassicLegacy\ScheduleBlankSpots.cs" />
     <Compile Include="Optimization\SmartDayOffBackToLegalStateSolverContainer.cs" />
