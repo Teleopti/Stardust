@@ -11,5 +11,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 		public double AverageHandleTime { get; set; }
 		public double Agents { get; set; }
 		public double AgentsShrinkage { get; set; }
+		public DateTime IntervalStartUtc { get; set; }
 	}
 }
