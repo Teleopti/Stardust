@@ -1,5 +1,4 @@
-﻿using NUnit.Framework;
-using Teleopti.Ccc.IocCommon;
+﻿using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.IoC;
 
