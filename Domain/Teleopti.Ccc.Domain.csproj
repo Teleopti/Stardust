@@ -285,6 +285,7 @@
     <Compile Include="ResourceCalculation\ShiftProjectionCacheExtensions.cs" />
     <Compile Include="ResourceCalculation\ShiftProjectionCacheFactory.cs" />
     <Compile Include="ResourceCalculation\SkillsOnAgentsProvider.cs" />
+    <Compile Include="ResourcePlanner\Hints\PreferenceHint.cs" />
     <Compile Include="Scheduling\AddReducedSkillDaysToStateHolder.cs" />
     <Compile Include="Scheduling\ReducedSkillsProvider.cs" />
     <Compile Include="Scheduling\WebClearScheduleStardustHandler.cs" />
@@ -867,7 +868,6 @@
     <Compile Include="InterfaceLegacy\Domain\IChildPersonGroup.cs" />
     <Compile Include="InterfaceLegacy\Domain\IChildSkill.cs" />
     <Compile Include="InterfaceLegacy\Domain\ICloneableEntity.cs" />
-    <Compile Include="InterfaceLegacy\Domain\ICommandLineArgument.cs" />
     <Compile Include="InterfaceLegacy\Domain\ICommonActivity.cs" />
     <Compile Include="InterfaceLegacy\Domain\ICommonNameDescriptionSetting.cs" />
     <Compile Include="InterfaceLegacy\Domain\IContract.cs" />
@@ -1208,7 +1208,6 @@
     <Compile Include="InterfaceLegacy\Domain\ISystemCheck.cs" />
     <Compile Include="InterfaceLegacy\Domain\ITask.cs" />
     <Compile Include="InterfaceLegacy\Domain\ITaskOwner.cs" />
-    <Compile Include="InterfaceLegacy\Domain\ITaskSource.cs" />
     <Compile Include="InterfaceLegacy\Domain\ITaskTimeDistributionService.cs" />
     <Compile Include="InterfaceLegacy\Domain\ITeam.cs" />
     <Compile Include="InterfaceLegacy\Domain\ITeamGamificationSetting.cs" />
@@ -1683,7 +1682,6 @@
     <Compile Include="Scheduling\SeatLimitation\MaxSeatOptimization.cs" />
     <Compile Include="Optimization\ClassicLegacy\DaysOffBackToLegalState.cs" />
     <Compile Include="Optimization\AffectedDates.cs" />
-    <Compile Include="Optimization\OptimizerHelperHelper.cs" />
     <Compile Include="Optimization\ScheduleChangesAffectedDates.cs" />
     <Compile Include="Optimization\ClassicLegacy\ScheduleBlankSpots.cs" />
     <Compile Include="Optimization\SmartDayOffBackToLegalStateSolverContainer.cs" />

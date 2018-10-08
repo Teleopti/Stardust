@@ -16,8 +16,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.Scheduling
 {
 	[InstancePerLifetimeScope]
-	[EnabledBy(Toggles.ResourcePlanner_BetterFitPreferences_76289)]
-	[RemoveMeWithToggle("merge with base class", Toggles.ResourcePlanner_BetterFitPreferences_76289)]
+	[EnabledBy(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288)]
+	[RemoveMeWithToggle("merge with base class", Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288)]
 	public class SchedulingEventHandlerNew : SchedulingEventHandler
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	
 	
 	[InstancePerLifetimeScope]
-	[DisabledBy(Toggles.ResourcePlanner_BetterFitPreferences_76289)]
+	[DisabledBy(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288)]
 	public class SchedulingEventHandler : IRunInSyncInFatClientProcess, IHandleEvent<SchedulingWasOrdered>
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;

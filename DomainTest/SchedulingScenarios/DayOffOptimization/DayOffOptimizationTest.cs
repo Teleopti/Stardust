@@ -6,7 +6,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -39,36 +38,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 
-		[Test]
-		public void ShouldNotRemoveAllShiftsWhenExistingDayOffsAreMoreThanTarget()
-		{
-			if(!ResourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_NoWhiteSpotWhenTargetDayoffIsBroken_77941))
-				Assert.Ignore("only valid with toggle true");
-			var date = new DateOnly(2015, 10, 12); //mon
-			var activity = ActivityRepository.Has();
-			var skill = SkillRepository.Has("skill", activity);
-			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
-			var scenario = ScenarioRepository.Has();
-			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1);
-			schedulePeriod.SetDaysOff(2);
-			var shiftCategory = new ShiftCategory().WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			var agent = PersonRepository.Has(new Contract("dont allow breaking number of DO"), schedulePeriod, ruleSet, skill);
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1));
-			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
-			for (var i = 4; i < 7; i++)
-			{
-				PersonAssignmentRepository.GetSingle(date.AddDays(i)).SetDayOff(new DayOffTemplate());
-			}
-
-			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
-
-			for (var i = 0; i < 7; i++)
-			{
-				var personAssignment = PersonAssignmentRepository.GetSingle(date.AddDays(i));
-				(!personAssignment.ShiftLayers.IsEmpty() || personAssignment.DayOffTemplate != null).Should().Be.True();
-			}
-		}
 		
 		[Test]
 		public void ShouldMoveDayOffToDayWithLessDemand()

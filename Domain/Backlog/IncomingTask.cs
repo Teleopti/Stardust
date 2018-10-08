@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Backlog
 		private IDictionary<DateOnly, TimeSpan> _orgScheduledTime = new Dictionary<DateOnly, TimeSpan>();
 		private IDictionary<DateOnly, bool> _manualPlannedTime = new Dictionary<DateOnly, bool>();
 		private IDictionary<DateOnly, TimeSpan> _actualBacklog = new Dictionary<DateOnly, TimeSpan>();
-		private double _incomingOverflowedWork;
 
 
 		public IncomingTask(DateOnlyPeriod spanningPeriod, int totalWorkItems, TimeSpan averageWorkTimePerItem,
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Backlog
 
 		public double TotalWorkItems
 		{
-			get { return _totalWorkItems + _incomingOverflowedWork; }
+			get { return _totalWorkItems; }
 		}
 
 		public TimeSpan TotalWorkTime
@@ -53,22 +52,9 @@ namespace Teleopti.Ccc.Domain.Backlog
 			get { return _averageWorkTimePerItem; }
 		}
 
-		public void SetIncomingOverflowedWork(double workItems)
-		{
-			_incomingOverflowedWork = workItems;
-		}
-
 		public TimeSpan GetTimeOnDate(DateOnly date)
 		{
 			return _taskDays[date].Time;
-		}
-
-		public TimeSpan GetPlannedTimeOnDate(DateOnly date)
-		{
-			if (PlannedTimeTypeOnDate(date) != PlannedTimeTypeEnum.Scheduled)
-				return GetTimeOnDate(date).Subtract(GetOverstaffTimeOnDate(date));
-
-			return TimeSpan.Zero;
 		}
 
 		public TimeSpan GetRealPlannedTimeOnDate(DateOnly date)

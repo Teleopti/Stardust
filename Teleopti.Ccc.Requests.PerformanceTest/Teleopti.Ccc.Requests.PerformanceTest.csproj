@@ -60,6 +60,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ShiftTradeRequestPerformanceTestAttribute.cs" />
     <Compile Include="ShiftTradeRequestsTest.cs" />
   </ItemGroup>
   <ItemGroup>

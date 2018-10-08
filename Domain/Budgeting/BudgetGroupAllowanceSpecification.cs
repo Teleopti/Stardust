@@ -15,11 +15,6 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			_budgetGroupAllowanceCalculator = budgetGroupAllowanceCalculator;
 		}
 
-		protected static bool IsSkillOpenForDateOnly(DateOnly date, IEnumerable<ISkill> skills)
-		{
-			return skills.Any(s => s.WorkloadCollection.Any(w => w.TemplateWeekCollection.Any(t => t.Key == (int)date.DayOfWeek && t.Value.OpenForWork.IsOpen)));
-		}
-
 		public override IValidatedRequest IsSatisfied(IAbsenceRequestAndSchedules absenceRequestAndSchedules)
 		{
 			return _budgetGroupAllowanceCalculator.IsSatisfied(absenceRequestAndSchedules);

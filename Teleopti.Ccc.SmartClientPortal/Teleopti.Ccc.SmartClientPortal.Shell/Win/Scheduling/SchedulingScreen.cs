@@ -3527,7 +3527,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void loadAndOptimizeData(DoWorkEventArgs e)
 		{
 			_container.Resolve<IMbCacheFactory>().Invalidate();
-			var optimizerHelper = new OptimizerHelperHelper();
 			IList<LoaderMethod> methods = new List<LoaderMethod>();
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -3567,8 +3566,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				if (!_teamLeaderMode)
 				{
 					var options = new SchedulingOptions();
-					optimizerHelper.SetConsiderShortBreaks(SchedulerState.SchedulingResultState.LoadedAgents,
-						SchedulerState.RequestedPeriod.DateOnlyPeriod, options, _container.Resolve<RuleSetBagsOfGroupOfPeopleCanHaveShortBreak>());
+					options.ConsiderShortBreaks = _container.Resolve<RuleSetBagsOfGroupOfPeopleCanHaveShortBreak>()
+						.CanHaveShortBreak(SchedulerState.SchedulingResultState.LoadedAgents,
+							SchedulerState.RequestedPeriod.DateOnlyPeriod);
 					SchedulerState.ConsiderShortBreaks = options.ConsiderShortBreaks;
 				}
 				else

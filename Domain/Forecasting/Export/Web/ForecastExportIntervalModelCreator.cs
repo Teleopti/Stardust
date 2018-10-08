@@ -21,11 +21,13 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 				{
 					intervalModels.Add(new ForecastExportIntervalModel
 					{
+						IntervalStartUtc = taskPeriod.Period.StartDateTime,
 						IntervalStart = TimeZoneHelper.ConvertFromUtc(taskPeriod.Period.StartDateTime, skillTimeZone),
 						Calls = taskPeriod.TotalTasks,
 						AverageTalkTime = taskPeriod.TotalAverageTaskTime.TotalSeconds,
 						AverageAfterCallWork = taskPeriod.TotalAverageAfterTaskTime.TotalSeconds,
-						AverageHandleTime = taskPeriod.TotalAverageTaskTime.TotalSeconds + taskPeriod.TotalAverageAfterTaskTime.TotalSeconds,});
+						AverageHandleTime = taskPeriod.TotalAverageTaskTime.TotalSeconds + taskPeriod.TotalAverageAfterTaskTime.TotalSeconds
+					});
 				}
 
 				foreach (var staffPeriod in skillDay.SkillStaffPeriodCollection)
@@ -41,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 			}
 
 			return intervalModels
-				.OrderBy(i => i.IntervalStart)
+				.OrderBy(i => i.IntervalStartUtc)
 				.ToList();
 		}
 	}

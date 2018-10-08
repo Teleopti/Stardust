@@ -22,10 +22,5 @@ namespace Teleopti.Ccc.Domain.Common.Time
 		{
 			return _utcTheTime;
 		}
-
-		public bool IsExplicitlySet()
-		{
-			return true;
-		}
 	}
 }

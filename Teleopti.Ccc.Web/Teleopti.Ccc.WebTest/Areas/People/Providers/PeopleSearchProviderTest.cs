@@ -25,10 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 		private PeopleSearchProvider target;
 		private IOptionalColumnRepository optionalColumnRepository;
 		private IPermissionProvider permissionProvider;
-		private FakePersonAbsenceRepository personAbsenceRepository;
-		private ILoggedOnUser loggedOnUser;
 		private FakeCurrentBusinessUnit currentBusinessUnit;
-		private ICurrentScenario currentScenario;
 
 		[SetUp]
 		public void Setup()
@@ -36,19 +33,13 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			searchRepository = MockRepository.GenerateMock<IPersonFinderReadOnlyRepository>();
 			personRepository = new FakePersonRepositoryLegacy();
 			optionalColumnRepository = MockRepository.GenerateMock<IOptionalColumnRepository>();
-			personAbsenceRepository = new FakePersonAbsenceRepository(null);
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			loggedOnUser = new FakeLoggedOnUser();
 			var scenarioRepository = new FakeScenarioRepository();
 			scenarioRepository.Has("Default");
-			currentScenario = new DefaultScenarioFromRepository(scenarioRepository);
-
 			currentBusinessUnit = new FakeCurrentBusinessUnit();
-
 			currentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("bu"));
-
 			target = new PeopleSearchProvider(searchRepository, personRepository,
-				new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository, loggedOnUser, currentBusinessUnit, currentScenario);
+				new FakePermissionProvider(), optionalColumnRepository, currentBusinessUnit);
 		}
 
 		[Test]
@@ -149,7 +140,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 		{
 			personRepository = new FakePersonRepositoryLegacy();
 			target = new PeopleSearchProvider(searchRepository, personRepository,
-				new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository, loggedOnUser, currentBusinessUnit, currentScenario);
+				new FakePermissionProvider(), optionalColumnRepository, currentBusinessUnit);
 
 			var searchCriteria = new Dictionary<PersonFinderField, string>
 			{

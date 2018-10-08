@@ -211,7 +211,38 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 				0
 			);
 		}
-		
+
+		[Test]
+		public void ShouldReturnIntervalModelInCorrectOrderDuringDaylightSavingTime()
+		{
+			var theDate = new DateOnly(2018, 10, 28);
+			var openHour = new TimePeriod(1, 45, 3, 15);
+			var skill = createSkill(minutesPerInterval, "skill", openHour, false, 0);
+			skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			var workload = skill.WorkloadCollection.First();
+			var period = new DateOnlyPeriod(theDate, theDate);
+			var scenario = IntradayStaffingApplicationServiceTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
+			var skillDay = SkillSetupHelper.CreateSkillDay(skill, scenario, theDate.Date, openHour, false);
+
+			SkillRepository.Has(skill);
+			WorkloadRepository.Add(workload);
+			SkillDayRepository.Add(skillDay);
+
+			var model = Target.Load(scenario.Id.Value, workload.Id.Value, period);
+
+			model.IntervalModelForecast.Count.Should().Be.EqualTo(10);
+			model.IntervalModelForecast.First().IntervalStart.Should().Be(new DateTime(2018, 10, 28, 1, 45, 0));
+			model.IntervalModelForecast[1].IntervalStart.Should().Be(new DateTime(2018, 10, 28, 2, 0, 0));
+			model.IntervalModelForecast[2].IntervalStart.Should().Be(new DateTime(2018, 10, 28, 2, 15, 0));
+			model.IntervalModelForecast[3].IntervalStart.Should().Be(new DateTime(2018, 10, 28, 2, 30, 0));
+			model.IntervalModelForecast[4].IntervalStart.Should().Be(new DateTime(2018, 10, 28, 2, 45, 0));
+			model.IntervalModelForecast[5].IntervalStart.Should().Be(new DateTime(2018, 10, 28, 2, 0, 0));
+			model.IntervalModelForecast[6].IntervalStart.Should().Be(new DateTime(2018, 10, 28, 2, 15, 0));
+			model.IntervalModelForecast[7].IntervalStart.Should().Be(new DateTime(2018, 10, 28, 2, 30, 0));
+			model.IntervalModelForecast[8].IntervalStart.Should().Be(new DateTime(2018, 10, 28, 2, 45, 0));
+			model.IntervalModelForecast[9].IntervalStart.Should().Be(new DateTime(2018, 10, 28, 3, 0, 0));
+		}
+
 		[Test]
 		public void ShouldOnlyExportForGivenPeriod()
 		{

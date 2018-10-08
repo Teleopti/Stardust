@@ -104,10 +104,9 @@ ResourcePlanner_HideSkillPrioSliders_41312 = RC #Skill priorities, aka Cascading
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = true
 ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = true
 ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
-ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
+ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production. Don't modify this line!
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348 = DEV
-ResourcePlanner_NoWhiteSpotWhenTargetDayoffIsBroken_77941 = RC
 Wfm_ArchiveScheduleForPast_77958 = RC
 
 # DeBockers #

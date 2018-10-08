@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
@@ -47,11 +48,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 		private class dayOffFixtureSource : ResourcePlannerFixtureSource
 		{
-			protected override IEnumerable<Toggles> ToggleFlags { get; } = new[]
-			{
-				//All combinations of these toggles will be run
-				Toggles.ResourcePlanner_NoWhiteSpotWhenTargetDayoffIsBroken_77941
-			};
+			protected override IEnumerable<Toggles> ToggleFlags { get; } = Enumerable.Empty<Toggles>();
 			protected override bool AlsoSimulateSecondRequest { get; } = true;
 		}
 	}

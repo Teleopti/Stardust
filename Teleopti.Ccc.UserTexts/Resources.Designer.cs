@@ -2024,6 +2024,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Agent was scheduled without preferences.
+        /// </summary>
+        public static string AgentScheduledWithoutPreferences {
+            get {
+                return ResourceManager.GetString("AgentScheduledWithoutPreferences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Teleopti WFM Agent Schedule Messenger.
         /// </summary>
         public static string AgentScheduleMessenger {

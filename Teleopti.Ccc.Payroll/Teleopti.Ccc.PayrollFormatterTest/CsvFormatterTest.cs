@@ -6,20 +6,13 @@ using Teleopti.Ccc.PayrollFormatter;
 
 namespace Teleopti.Ccc.PayrollFormatterTest
 {
-    [TestFixture, Parallelizable, Ignore("Wrong in some timezones")]
+    [TestFixture, Parallelizable]
     public class CsvFormatterTest
     {
-        private FlatFileFormatter target;
-
-        [SetUp]
-        public void Setup()
-        {
-            target = new FlatFileFormatter(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-        }
-
         [Test]
         public void VerifyBasicCsvExport()
 		{
+			var target = new FlatFileFormatter(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			var testFilesDir = Path.Combine(TestContext.CurrentContext.TestDirectory, "TestFiles");
 
 			var document = new XmlDocument();
@@ -38,8 +31,10 @@ namespace Teleopti.Ccc.PayrollFormatterTest
         }
 
 		[Test]
-		public void CsvExportShouldAddInitalCommaWhenEmptyEmployeeNumber()
+		public void CsvExportShouldAddInitalCommaWhenEmptyEmployeeNumberInEuropianTimezone()
 		{
+			var target = new FlatFileFormatter(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+
 			var testFilesDir = Path.Combine(TestContext.CurrentContext.TestDirectory, "TestFiles");
 
 			var document = new XmlDocument();
@@ -52,7 +47,7 @@ namespace Teleopti.Ccc.PayrollFormatterTest
 			var streamReader = new StreamReader(result, format.Encoding);
 			var content = streamReader.ReadToEnd();
 
-			Assert.AreEqual(content, "123,FirstName,LastName,BusinessUnitName,SiteName,TeamName,ContractName,PartTimePercentageName,75,2009-02-02,2009-02-02 00:00,2009-02-02 00:00,ShiftCategoryName,8:00,8:00,8:00,123,123\n,FirstName,LastName,BusinessUnitName,SiteName,TeamName,ContractName,PartTimePercentageName,75,2009-02-02,2009-02-02 00:00,2009-02-02 00:00,ShiftCategoryName,8:00,8:00,8:00,123,123\n");
+			Assert.AreEqual(content, "123,FirstName,LastName,BusinessUnitName,SiteName,TeamName,ContractName,PartTimePercentageName,75,,,,ShiftCategoryName,8:00,8:00,8:00,123,123\n,FirstName,LastName,BusinessUnitName,SiteName,TeamName,ContractName,PartTimePercentageName,75,,,,ShiftCategoryName,8:00,8:00,8:00,123,123\n");
 			Assert.AreEqual("txt", target.FileSuffix);
 		}
 	}

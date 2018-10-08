@@ -59,12 +59,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 				: _permittedPeople;
 		}
 
-		public IEnumerable<IPerson> SearchPermittedPeopleWithAbsence(IEnumerable<IPerson> permittedPeople,
-			DateOnly dateInUserTimeZone)
-		{
-			throw new NotImplementedException();
-		}
-
 		public PersonFinderSearchCriteria CreatePersonFinderSearchCriteria(
 			IDictionary<PersonFinderField, string> criteriaDictionary, int pageSize,
 			int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns)
@@ -101,28 +95,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 				people = _permittedPeople.ToList();
 			}
 
-			search.TotalRows = people.Count;
-			int row = 0;
-			people.ForEach(p =>
-			{
-				search.SetRow(row, toPersonFinderDisplayRow(p, date, row + 1));
-				row++;
-			});
-		}
-
-		public void PopulateSearchCriteriaResult(PersonFinderSearchCriteria search, Guid[] teamIds)
-		{
-			var people = new List<IPerson>();
-			var date = search.BelongsToDate;
-			if (_enableDateFilter)
-			{
-				people = !_permittedPeopleByDate.ContainsKey(date) ? new List<IPerson>() : _permittedPeopleByDate[date].ToList();
-			}
-			else
-			{
-				people = _permittedPeople.ToList();
-			}
-			people = people.Where(p => p.PersonPeriodCollection.Any(pp => teamIds.ToList().Contains(pp.Team.Id.Value))).ToList();
 			search.TotalRows = people.Count;
 			int row = 0;
 			people.ForEach(p =>

@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 				using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 				{
 					var personRepository = _repositoryFactory.CreatePersonRepository(uow);
-					var person = personRepository.Load(sessionData.PersonId);
+					var person = personRepository.Get(sessionData.PersonId);
 
 					var businessUnitRepository = _repositoryFactory.CreateBusinessUnitRepository(uow);
 					var businessUnit = businessUnitRepository.Get(sessionData.BusinessUnitId);

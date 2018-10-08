@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 		private readonly IEmailBacklogProvider _emailBacklogProvider;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
-		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly ISkillTypeInfoProvider _skillTypeInfoProvider;
 
 		public StaffingViewModelCreator(
@@ -49,7 +48,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider,
 			IEmailBacklogProvider emailBacklogProvider,
 			ISkillDayLoadHelper skillDayLoadHelper,
-			ISkillDayRepository skillDayRepository,
 			ISkillTypeInfoProvider skillTypeInfoProvider
 			)
 		{
@@ -68,7 +66,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 			_emailBacklogProvider = emailBacklogProvider;
 			_skillDayLoadHelper = skillDayLoadHelper;
-			_skillDayRepository = skillDayRepository;
 			_skillTypeInfoProvider = skillTypeInfoProvider;
 		}
 
@@ -177,12 +174,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				}
 			}
 		}
-
-		public IEnumerable<IntradayStaffingViewModel> Load_old(Guid[] skillIdList, DateOnlyPeriod dateOnlyPeriod, bool useShrinkage = false)
-		{
-			return dateOnlyPeriod.DayCollection().Select(day => Load_old(skillIdList, day, useShrinkage)).ToList();
-		}
-
+		
 		private static DateTime? getLastestStatsTime(IList<SkillIntervalStatistics> actualCallsPerSkillInterval)
 		{
 			return actualCallsPerSkillInterval.Any() ? (DateTime?)actualCallsPerSkillInterval.Max(d => d.StartTime) : null;

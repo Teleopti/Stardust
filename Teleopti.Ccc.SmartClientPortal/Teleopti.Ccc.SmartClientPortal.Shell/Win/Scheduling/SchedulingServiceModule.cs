@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 	    {
 			builder.RegisterType<VirtualSkillHelper>().As<IVirtualSkillHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<BestShiftChooser>().InstancePerLifetimeScope();
-			builder.RegisterType<OptimizerHelperHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<CurrentTeleoptiPrincipal>().As<ICurrentTeleoptiPrincipal>().SingleInstance();
 		}
 	}

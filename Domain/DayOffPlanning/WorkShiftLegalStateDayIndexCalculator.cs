@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
     public class WorkShiftLegalStateDayIndexCalculator
     {
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_NoWhiteSpotWhenTargetDayoffIsBroken_77941)]
 		public double?[] CalculateIndexForRaising(IEnumerable<double?> relativeDeficits)
 		{
 			var max = relativeDeficits.Any() ? relativeDeficits.Max(d => d ?? 0d) : 0d;

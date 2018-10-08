@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			TestControllerMethods.Logon();
 			var teamId = idForTeam(name);
-			Navigation.GoToHistoricalOverview(teamId);
+			Navigation.GoToHistoricalOverview(teamId);		
 			Browser.Interactions.Click(".card-panel-header-wrapper");
 		}
 
