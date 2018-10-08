@@ -35,8 +35,8 @@
 	<PartTimePercentageName>PartTimePercentageName</PartTimePercentageName>
 	<PartTimePercentageNumber>75</PartTimePercentageNumber>
 	<Date>2009-02-02</Date>
-	<StartDate>2009-02-02T00:00:00+01:00</StartDate>
-	<EndDate>2009-02-02T00:00:00+01:00</EndDate>
+	<StartDate>2009-02-02T00:00:00</StartDate>
+	<EndDate>2009-02-02T00:00:00</EndDate>
 	<ShiftCategoryName>ShiftCategoryName</ShiftCategoryName>
 	<ContractTime>PT8H</ContractTime>
 	<WorkTime>PT8H</WorkTime>
@@ -55,8 +55,8 @@
 		<PartTimePercentageName>PartTimePercentageName</PartTimePercentageName>
 		<PartTimePercentageNumber>75</PartTimePercentageNumber>
 		<Date>2009-02-02</Date>
-		<StartDate>2009-02-02T00:00:00+01:00</StartDate>
-		<EndDate>2009-02-02T00:00:00+01:00</EndDate>
+		<StartDate>2009-02-02T00:00:00</StartDate>
+		<EndDate>2009-02-02T00:00:00</EndDate>
 		<ShiftCategoryName>ShiftCategoryName</ShiftCategoryName>
 		<ContractTime>PT8H</ContractTime>
 		<WorkTime>PT8H</WorkTime>
