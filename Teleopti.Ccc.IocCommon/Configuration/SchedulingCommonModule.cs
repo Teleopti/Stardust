@@ -482,6 +482,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<NextPlanningPeriodProvider>().SingleInstance().As<INextPlanningPeriodProvider>();
 			builder.RegisterType<CheckScheduleHints>().SingleInstance();
+			builder.RegisterType<GetValidations>().SingleInstance();
 			builder.RegisterType<BusinessRulesHint>().As<IScheduleHint>().SingleInstance();
 			if (!_configuration.Args().IsFatClient)
 			{

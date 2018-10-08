@@ -17,10 +17,11 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			_matrixListFactory = matrixListFactory;
 		}
 
-
-
 		public void FillResult(HintResult hintResult, HintInput input)
 		{
+			if (input.Schedules == null)
+				return;
+			
 			var matrixes = _matrixListFactory.CreateMatrixListForSelection(input.Schedules, input.People, input.Period);
 
 			foreach (var matrix in matrixes)
