@@ -79,7 +79,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		
 		[TestCase(true, ExpectedResult = true)]
 		[TestCase(false, ExpectedResult = false)]
-		[Ignore("to be fixed")]
 		public bool ShouldGiveHintForAgentsScheduledWithoutPreference(bool blockedByPreference)
 		{
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
@@ -87,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
 			var activity = ActivityRepository.Has();
 			var skill = SkillRepository.Has("_", activity);
-			var scenario = ScenarioRepository.Has("_");
+			var scenario = ScenarioRepository.Has();
 			var shiftCategoryInRuleSet = new ShiftCategory().WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategoryInRuleSet));
 			var agentToSchedule = PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Week, 1), ruleSet, skill);
