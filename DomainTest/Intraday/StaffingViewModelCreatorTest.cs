@@ -91,66 +91,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		public void ShouldUseSpecifiecDateTimePeriod()
-		{
-			TimeZone.IsSweden();
-
-
-			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
-			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
-			var scheduledStartTime = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
-
-			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
-			var act = ActivityRepository.Has("act");
-			var skill = SkillSetupHelper.CreateSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false, act);
-			SkillRepository.Has(skill);
-
-			var skillDayToday = SkillSetupHelper.CreateSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false);
-			var skillDayTomorrow = SkillSetupHelper.CreateSkillDay(skill, scenario, Now.UtcDateTime().AddDays(1), new TimePeriod(8, 0, 8, 30), false);
-			SkillDayRepository.Has(skillDayToday, skillDayTomorrow);
-
-			var userToday = TimeZoneHelper.ConvertFromUtc(Now.UtcDateTime(), TimeZone.TimeZone());
-			var userTomorrow = TimeZoneHelper.ConvertFromUtc(Now.UtcDateTime().AddDays(1), TimeZone.TimeZone());
-			var userDateTimePeriod = new DateOnlyPeriod(new DateOnly(userToday), new DateOnly(userTomorrow));
-
-			SkillSetupHelper.PopulateStaffingReadModels(skill, scheduledStartTime, scheduledStartTime.AddMinutes(minutesPerInterval), 15, SkillCombinationResourceRepository);
-			SkillSetupHelper.PopulateStaffingReadModels(skill, scheduledStartTime.AddMinutes(minutesPerInterval), scheduledStartTime.AddMinutes(minutesPerInterval * 2), 10, SkillCombinationResourceRepository);
-
-			SkillSetupHelper.PopulateStaffingReadModels(skill, scheduledStartTime.AddDays(1), scheduledStartTime.AddDays(1).AddMinutes(minutesPerInterval), 7, SkillCombinationResourceRepository);
-			SkillSetupHelper.PopulateStaffingReadModels(skill, scheduledStartTime.AddDays(1).AddMinutes(minutesPerInterval), scheduledStartTime.AddDays(1).AddMinutes(minutesPerInterval * 2), 3, SkillCombinationResourceRepository);
-
-			var vm = Target.Load_old(new[] { skill.Id.GetValueOrDefault() }, userDateTimePeriod).ToList();
-
-			var staffingIntervalsToday = skillDayToday.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(minutesPerInterval));
-			var staffingIntervalsTomorrow = skillDayTomorrow.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(minutesPerInterval));
-
-			vm.Count.Should().Be.EqualTo(2);
-
-			vm.First().DataSeries.Time.Length.Should().Be.EqualTo(2);
-			vm.First().DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(staffingIntervalsToday.First().Period.StartDateTime, TimeZone.TimeZone()));
-			vm.First().DataSeries.Time.Last().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(staffingIntervalsToday.Last().Period.StartDateTime, TimeZone.TimeZone()));
-			vm.First().DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(2);
-			vm.First().DataSeries.ForecastedStaffing.First().Should().Be.GreaterThan(0d);
-			vm.First().DataSeries.ForecastedStaffing.Last().Should().Be.GreaterThan(0d);
-			vm.First().DataSeries.ScheduledStaffing.Length.Should().Be.EqualTo(2);
-			vm.First().DataSeries.ScheduledStaffing.First().Should().Be.EqualTo(15);
-			vm.First().DataSeries.ScheduledStaffing.Last().Should().Be.EqualTo(10);
-			vm.First().StaffingHasData.Should().Be.EqualTo(true);
-
-			vm.Second().DataSeries.Time.Length.Should().Be.EqualTo(2);
-			vm.Second().DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(staffingIntervalsTomorrow.First().Period.StartDateTime, TimeZone.TimeZone()));
-			vm.Second().DataSeries.Time.Last().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(staffingIntervalsTomorrow.Last().Period.StartDateTime, TimeZone.TimeZone()));
-			vm.Second().DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(2);
-			vm.Second().DataSeries.ForecastedStaffing.First().Should().Be.GreaterThan(0d);
-			vm.Second().DataSeries.ForecastedStaffing.Last().Should().Be.GreaterThan(0d);
-			vm.Second().DataSeries.ScheduledStaffing.Length.Should().Be.EqualTo(2);
-			vm.Second().DataSeries.ScheduledStaffing.First().Should().Be.EqualTo(7);
-			vm.Second().DataSeries.ScheduledStaffing.Last().Should().Be.EqualTo(3);
-			vm.Second().StaffingHasData.Should().Be.EqualTo(true);
-		}
-
-
-		[Test]
 		public void ShouldUseSpecifiecDateTime()
 		{
 			TimeZone.IsSweden();

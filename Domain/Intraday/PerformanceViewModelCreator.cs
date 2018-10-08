@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer.ViewModels;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -22,8 +20,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 		private readonly EstimatedServiceLevelProvider _estimatedServiceLevelProvider;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
-		private readonly ISkillDayRepository _skillDayRepository;
-		private readonly ISkillTypeInfoProvider _skillTypeInfoProvider;
 
 		public PerformanceViewModelCreator(INow now,
 			IUserTimeZone timeZone,
@@ -32,9 +28,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			IncomingTrafficViewModelCreator incomingTrafficViewModelCreator,
 			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider,
 			EstimatedServiceLevelProvider estimatedServiceLevelProvider,
-			ISkillDayLoadHelper skillDayLoadHelper,
-			ISkillDayRepository skillDayRepository, 
-			ISkillTypeInfoProvider skillTypeInfoProvider)
+			ISkillDayLoadHelper skillDayLoadHelper)
 		{
 			_now = now;
 			_timeZone = timeZone;
@@ -44,8 +38,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 			_estimatedServiceLevelProvider = estimatedServiceLevelProvider;
 			_skillDayLoadHelper = skillDayLoadHelper;
-			_skillDayRepository = skillDayRepository;
-			_skillTypeInfoProvider = skillTypeInfoProvider;
 		}
 
 

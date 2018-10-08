@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			foreach (var skill in skillDays.Keys)
 			{
-				var mergedTaskPeriodList = new List<ITemplateTaskPeriod>();
+				var mergedTaskPeriodList = new List<ISkillStaffPeriodView>();
 				var skillDaysForSkill = skillDays[skill].ToList();
 				if (!skillDaysForSkill.Any())
 					continue;
@@ -53,15 +53,19 @@ namespace Teleopti.Ccc.Domain.Intraday
 			};
 		}
 
-		private List<SkillIntervalStatistics> getForecastedCalls(IEnumerable<ITemplateTaskPeriod> mergedTaskPeriodList, ISkill skill)
+		private List<SkillIntervalStatistics> getForecastedCalls(IEnumerable<ISkillStaffPeriodView> mergedTaskPeriodList, ISkill skill)
 		{
+			var timeZone = _timeZone.TimeZone();
 			var mergedTaskPeriodPerSkill = mergedTaskPeriodList
-				.Select(x => new SkillIntervalStatistics
+				.Select(x =>
 				{
-					SkillId = skill.Id.Value,
-					StartTime = TimeZoneHelper.ConvertFromUtc(x.Period.StartDateTime, _timeZone.TimeZone()),
-					Calls = x.TotalTasks,
-					AverageHandleTime = x.AverageTaskTime.TotalSeconds + x.AverageAfterTaskTime.TotalSeconds
+					return new SkillIntervalStatistics
+					{
+						SkillId = skill.Id.Value,
+						StartTime = TimeZoneHelper.ConvertFromUtc(x.Period.StartDateTime, timeZone),
+						Calls = x.ForecastedTasks,
+						AverageHandleTime = x.AverageHandlingTaskTime.TotalSeconds
+					};
 				})
 				.ToList();
 
@@ -80,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return forecastedCalls;
 		}
 
-		private static SkillDayStatsRange getSkillStatsRange(IEnumerable<ITemplateTaskPeriod> templateTaskPeriods,
+		private static SkillDayStatsRange getSkillStatsRange(IEnumerable<ISkillStaffPeriodView> templateTaskPeriods,
 			ISkill skill,
 			ISkillDay skillDay)
 		{
