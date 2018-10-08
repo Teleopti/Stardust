@@ -17768,4 +17768,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Late for work</value>
     <comment>Table column header in RTA historical overview</comment>
   </data>
+	<data name="AgentScheduledWithoutPreferences" xml:space="preserve">
+    <value>Agent was scheduled without preferences</value>
+    <comment>Table column header in RTA historical overview</comment>
+  </data>
 </root>

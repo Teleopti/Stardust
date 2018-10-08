@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
@@ -15,7 +16,9 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			_restrictionOverLimitDecider = restrictionOverLimitDecider;
 			_matrixListFactory = matrixListFactory;
 		}
-		
+
+
+
 		public void FillResult(HintResult hintResult, HintInput input)
 		{
 			var matrixes = _matrixListFactory.CreateMatrixListForSelection(input.Schedules, input.People, input.Period);
@@ -24,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			{
 				if (_restrictionOverLimitDecider.PreferencesOverLimit(new Percent(1), matrix).BrokenDays.Any())
 				{
-					hintResult.Add(new PersonHintError(), null, ValidationResourceType.Preferences);					
+					hintResult.Add(new PersonHintError(matrix.Person){ErrorResource = nameof(Resources.AgentScheduledWithoutPreferences)}, null, ValidationResourceType.Preferences);					
 				}
 			}
 		}
