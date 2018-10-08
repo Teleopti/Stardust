@@ -48,7 +48,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 		private class dayOffFixtureSource : ResourcePlannerFixtureSource
 		{
-			protected override IEnumerable<Toggles> ToggleFlags { get; } = Enumerable.Empty<Toggles>();
+			protected override IEnumerable<Toggles> ToggleFlags { get; } = new[]
+				{Toggles.ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348};
 			protected override bool AlsoSimulateSecondRequest { get; } = true;
 		}
 	}

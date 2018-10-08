@@ -14,17 +14,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly MatrixNotPermittedLocker _matrixNotPermittedLocker;
 		private readonly IPersonListExtractorFromScheduleParts _personExtractor;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
-		private readonly IMatrixClosedDayLocker _matrixClosedDayLocker;
 
 		public MatrixListFactory(MatrixUserLockLocker matrixUserLockLocker,
 			MatrixNotPermittedLocker matrixNotPermittedLocker, IPersonListExtractorFromScheduleParts personExtractor,
-			PeriodExtractorFromScheduleParts periodExtractor, IMatrixClosedDayLocker matrixClosedDayLocker)
+			PeriodExtractorFromScheduleParts periodExtractor)
 		{
 			_matrixUserLockLocker = matrixUserLockLocker;
 			_matrixNotPermittedLocker = matrixNotPermittedLocker;
 			_personExtractor = personExtractor;
 			_periodExtractor = periodExtractor;
-			_matrixClosedDayLocker = matrixClosedDayLocker;
 		}
 
 		public IEnumerable<IScheduleMatrixPro> CreateMatrixListAllForLoadedPeriod(IScheduleDictionary schedules, IEnumerable<IPerson> personsInOrganization, DateOnlyPeriod selectedPeriod)
@@ -47,7 +45,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var matrixes = createMatrixes(schedules, selectedPersons, selectedPeriod.Value);
 			_matrixUserLockLocker.Execute(matrixes, selectedPeriod.Value);
 			_matrixNotPermittedLocker.Execute(matrixes);
-			_matrixClosedDayLocker.Execute(matrixes);
 			return matrixes;
 		}
 
@@ -56,7 +53,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var matrixes = createMatrixes(schedules, selectedAgents, selectedPeriod);
 			_matrixUserLockLocker.Execute(matrixes, selectedPeriod);
 			_matrixNotPermittedLocker.Execute(matrixes);
-			_matrixClosedDayLocker.Execute(matrixes);
 			return matrixes;
 		}
 

@@ -275,8 +275,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<GridlockManager>().As<IGridlockManager>().InstancePerLifetimeScope();
 			builder.RegisterType<MatrixUserLockLocker>().InstancePerLifetimeScope();
 
-			builder.RegisterType<MatrixClosedDaysLockerDoNothing>().As<IMatrixClosedDayLocker>().InstancePerLifetimeScope();
-
+			if (_configuration.Toggle(Toggles.ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348))
+			{
+				builder.RegisterType<MatrixClosedDayLocker>().As<IMatrixClosedDayLocker>().InstancePerLifetimeScope();
+			}
+			else
+			{
+				builder.RegisterType<MatrixClosedDaysLockerDoNothing>().As<IMatrixClosedDayLocker>().InstancePerLifetimeScope();
+			}
+			
 			builder.RegisterType<MatrixNotPermittedLocker>().SingleInstance();
 			builder.RegisterType<ScheduleMatrixValueCalculatorProFactory>().As<IScheduleMatrixValueCalculatorProFactory>().SingleInstance();
 			builder.RegisterType<WorkShiftLegalStateDayIndexCalculator>().SingleInstance();

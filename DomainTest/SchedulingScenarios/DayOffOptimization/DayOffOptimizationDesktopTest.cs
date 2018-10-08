@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	public class DayOffOptimizationDesktopTest : DayOffOptimizationScenario
 	{
+		private readonly ResourcePlannerTestParameters _resourcePlannerTestParameters;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public DayOffOptimizationDesktop Target;
 		public Func<IGridlockManager> LockManager;
@@ -539,7 +541,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			return stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff();//saturday
 		}
 
-		[Test, Ignore("until #76348 is done")]
+		[Test]
 		public void DaysOffBackToLegalStateShouldNotMoveDayOffFromClosedDays()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
@@ -561,18 +563,26 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, asses, skillDays);
 			var optPrefs = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() }};
 
-			//locking saturday so sunday is the only day to remowe to comly with DO rules
+			//locking saturday so sunday is the only day to remove to comply with DO rules
 			LockManager().AddLock(agent, firstDay.AddDays(5), LockType.Normal);
 
 			var doPrefs = new DaysOffPreferences() {UseWeekEndDaysOff = true, WeekEndDaysOffValue = new MinMax<int>(1, 1)};
 			
 			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(doPrefs), new NoOptimizationCallback());
 
-			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff().Should().Be.True();//closed sunday
+			if(_resourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348))
+			{
+				stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff().Should().Be.True();//closed sunday should not move
+			}
+			else
+			{
+				stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff().Should().Be.False();//old behavior
+			}
 		}
 
 		public DayOffOptimizationDesktopTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
+			_resourcePlannerTestParameters = resourcePlannerTestParameters;
 		}
 	}
 }
