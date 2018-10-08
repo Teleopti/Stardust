@@ -1,6 +1,5 @@
 using System;
 using System.Drawing;
-using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
