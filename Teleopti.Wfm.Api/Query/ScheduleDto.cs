@@ -7,6 +7,6 @@ namespace Teleopti.Wfm.Api.Query
 		public Guid PersonId { get; set; }
 		public DateTime Date { get; set; }
 		public ShiftLayerDto[] Shift { get; set; }
-		public string TimezoneId { get; set; }
+		public string TimeZoneId { get; set; }
 	}
 }
