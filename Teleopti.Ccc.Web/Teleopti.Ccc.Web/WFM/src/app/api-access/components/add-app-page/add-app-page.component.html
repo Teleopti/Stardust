@@ -1,37 +1,40 @@
-<api-access-page-container data-test-application-logon>
-	<div class="con-row">
-		<div class="blue-box con-flex">
-			<h2>Add a new api app</h2>
-		</div>
+<h1><i class="mdi mdi-account-multiple"></i> API access</h1>
+<h2>Add a new api app</h2>
+<div nz-row>
+	<div nz-col>
+
+
 	</div>
-	<form [formGroup]="form">
-		<div class="con-row" data-test-person>
-			<div class="con-flex">
-				<mat-form-field class="full-width">
-					<input matInput formControlName="appFormControl" [readonly]="hasToken()" required placeholder="App Name" data-test-person-name>
-				</mat-form-field>
-			</div>
-		</div>
-		<div class="con-row" *ngIf="hasToken()">
-			<div class="con-flex">
-				<p>Copy the token below. Please note that the token can only be displayed this time.</p>
-				<mat-form-field class="full-width">
-					<input matInput formControlName="tokenControl" readonly>
-				</mat-form-field>
-			</div>
-		</div>
-	</form>
-	<div class="con-row">
-		<div class="con-flex" *ngIf="!hasToken()">
-			<aside class="action-buttons">
-				<button mat-button (click)="nav.navToList()">Cancel</button>
-				<button mat-button color="primary" [disabled]="!appFormControl.valid" (click)="save()" data-test-save>Save</button>
-			</aside>
-		</div>
-		<div class="con-flex" *ngIf="hasToken()">
-			<aside class="action-buttons">
-				<button mat-button color="primary" (click)="nav.navToList()">OK</button>
-			</aside>
-		</div>
-	</div>
-</api-access-page-container>
+</div>
+
+<form nz-form [nzLayout]="vertical" [formGroup]="form">
+
+	<nz-form-item>
+		<nz-form-label nzRequired nzFor="appFormControl">App name</nz-form-label>
+		<nz-form-control>
+			<input nz-input formControlName="appFormControl" [readonly]="hasToken()" placeholder="App name" required>
+		</nz-form-control>
+	</nz-form-item>
+
+	<nz-form-item>
+		<nz-form-control>
+			<button nz-button nzType="primary" [disabled]="hasToken()" (click)="save()">
+				Add App
+			</button>
+		</nz-form-control>
+	</nz-form-item>
+
+	<nz-form-item *ngIf="hasToken()">
+		<nz-form-control>
+			<p>Copy the token below. Please note that the token can only be displayed this time.</p>
+			<input nz-input formControlName="token" readonly>
+		</nz-form-control>
+	</nz-form-item>
+
+	<nz-form-item>
+		<nz-form-control>
+			<button nz-button color="primary" (click)="nav.navToList()">Go back</button>
+		</nz-form-control>
+	</nz-form-item>
+
+</form>
