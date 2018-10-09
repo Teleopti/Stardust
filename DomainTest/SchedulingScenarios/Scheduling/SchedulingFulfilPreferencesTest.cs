@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Select(x => x.ResourceType).Contains(ValidationResourceType.Preferences);
 		}
 		
-		[Test, Ignore("#76288")]
+		[Test]
 		public void ShouldDeleteBeforeRescheduleWhenPreferencesCantBeFulfilled()
 		{
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
@@ -132,6 +132,31 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			AssignmentRepository.LoadAll().Count().Should().Be.EqualTo(7);
 		}
+		
+		[Test]
+		public void ShouldNotDeleteAlreadyExistingScheduleWhenPreferencesCantBeFulfilled()
+		{
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			var date = new DateOnly(2015, 10, 12); //mon;
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			var activity = ActivityRepository.Has();
+			var skill = SkillRepository.Has("_", activity);
+			var scenario = ScenarioRepository.Has("_");
+			var shiftCategory = new ShiftCategory().WithId();
+			var ruleSet8H = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var shiftBag = new RuleSetBag(ruleSet8H);
+			var agentToSchedule = PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Week, 1), shiftBag, skill);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnlyPeriod(date, date.AddDays(6)), 1)); 
+			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = new ShiftCategory().WithId()};
+			PreferenceDayRepository.Add(new PreferenceDay(agentToSchedule, date, preferenceRestriction));
+			AssignmentRepository.Has(agentToSchedule, scenario, activity, new ShiftCategory(), date.AddDays(1), new TimePeriod(10, 18));
+			
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
+
+			AssignmentRepository.GetSingle(date.AddDays(1), agentToSchedule).Period.StartDateTime.Hour
+				.Should().Be.EqualTo(10);
+		}
+
 
 		
 		public SchedulingFulfilPreferencesTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
