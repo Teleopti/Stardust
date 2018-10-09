@@ -20,7 +20,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
-	public class SchedulingFulfilPreferencesTest : SchedulingScenario
+	public class SchedulingFulfillPreferencesTest : SchedulingScenario
 	{
 		public FullScheduling Target;
 		public FakePersonRepository PersonRepository;
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 
 		
-		public SchedulingFulfilPreferencesTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
+		public SchedulingFulfillPreferencesTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 			if (!ResourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288))
 			{
