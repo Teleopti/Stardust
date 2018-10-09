@@ -501,7 +501,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			moveLayer(currentIndex, indexToInsert);
 		}
 
-		public bool HasDayOffOrMainShiftLayer()
+		public virtual bool HasDayOffOrMainShiftLayer()
 		{
 			return DayOffTemplate != null || MainActivities().Any();
 		}
