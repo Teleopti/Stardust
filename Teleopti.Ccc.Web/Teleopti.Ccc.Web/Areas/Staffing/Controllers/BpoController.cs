@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Interfaces.Domain;
-using IFormatProvider = System.IFormatProvider;
+
 
 namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 {
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/staffing/importBpo")]
-		public virtual IHttpActionResult ImportBpo([FromBody]importObj fileContents)
+		public virtual IHttpActionResult ImportBpo([FromBody]ImportBpoActionObj fileContents)
 		{
 			var result = _bpoFile.ImportFile(fileContents.FileContent, CultureInfo.InvariantCulture, fileContents.FileName);
 			return Ok(result);
@@ -169,11 +169,21 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			return Ok(_bpoProvider.GetRangeMessage(bpoGuid));
 		}
 
-		public class importObj
-		{
-			public string FileContent { get; set; }
-			public string FileName { get; set; }
-		}
+		
 	}
 
+	public class ImportBpoActionObj
+	{
+		public string FileContent { get; set; }
+		public string FileName { get; set; }
+	}
+
+	
+
+	public class ClearBpoActionObj
+	{
+		public Guid BpoGuid { get; set; }
+		public DateTime StartDate { get; set; }
+		public DateTime EndDate { get; set; }
+	}
 }
