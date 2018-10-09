@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 	{
 		BlockScheduling,
 		Basic,
-		Skill
+		Skill,
+		Preferences
 	}
 }

@@ -1,6 +1,4 @@
-﻿using Teleopti.Ccc.Secrets.WorkShiftCalculator;
-
-namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
+﻿namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
 	public class PeriodValueCalculationParameters
 	{

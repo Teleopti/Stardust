@@ -69,8 +69,8 @@ function wfmrestoretolocal {
     Set-Location ($WFMRepoPath + "\.debug-Setup")
     $env:IFFLOW = "y"
     & '.\Restore to Local.bat'
-    # TODO: Fix clear variable
-    Clear-Variable $env:IFFLOW
+    $env:IFFLOW = ""
+    [Console]::ResetColor()
 }
 function fcheck { # search for fdescribe and fit
     $Matches = Get-ChildItem -Recurse -Filter *.spec.ts $WFMRepoWebPath |

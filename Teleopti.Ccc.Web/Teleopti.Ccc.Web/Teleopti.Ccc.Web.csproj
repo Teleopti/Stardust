@@ -2208,6 +2208,7 @@
     <Content Include="WFM\app\seatManagement\html\seatmapoccupancylist.html" />
     <Content Include="WFM\app\seatManagement\html\seatplanreport.html" />
     <Content Include="WFM\app\seatManagement\html\teampicker.html" />
+    <Content Include="WFM\app\seatManagement\seatmapoccupancydetail.controller.js" />
     <Content Include="WFM\app\seatManagement\seatmapoccupancydetail.directive.js" />
     <Content Include="WFM\app\seatManagement\locationpicker.directive.js" />
     <Content Include="WFM\app\seatManagement\seatplanreport.controller.js" />

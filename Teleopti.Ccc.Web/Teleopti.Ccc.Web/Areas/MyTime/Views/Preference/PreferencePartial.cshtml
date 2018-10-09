@@ -138,7 +138,7 @@
 					@Html.Raw(string.Format(Resources.YourPreferencesCanResultXToYHours, "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>", "<span data-bind='text: PossibleResultContractTimeUpper' class='feedback-detail'>-</span>"))
 					<!-- /ko -->
 					<!-- ko if: PreferenceTimeIsOutOfRange -->
-					<span class="glyphicon glyphicon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange" />
+					<span class="glyphicon glyphicon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange"></span>
 					<!-- /ko -->
 				</div>
 				<div>
@@ -150,7 +150,7 @@
 					<!-- /ko -->
 					@Html.Raw(string.Format(Resources.YourPreferencesCanResultXDaysOff, "<span data-bind='text: PossibleResultDaysOff' class='feedback-detail'>-</span>"))
 					<!-- ko if: PreferenceDaysOffIsOutOfRange-->
-					<span class="glyphicon glyphicon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange" />
+					<span class="glyphicon glyphicon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange"></span>
 					<!-- /ko -->
 				</div>
 				<div data-bind="foreach:PossibleNightRestViolations()">
@@ -196,7 +196,7 @@
 				<li style="max-width: 55px;">&nbsp;</li>
 				@foreach (WeekDayHeader weekDayName in Model.WeekDayHeaders)
 				{
-					<li class="header-week-day" data-date="@weekDayName.Date.Date.ToString("yyyy-MM-dd")"></li>
+					<li class="header-week-day" data-date='@weekDayName.Date.Date.ToString("yyyy-MM-dd")'></li>
 				}
 			</ul>
 
@@ -213,11 +213,11 @@
 						<div class="day-content">
 							<!-- ko if: IsWeeklyWorkTimeVisible -->
 							<div class="min-hours-per-week" data-bind="css: {'weekly-work-time-alert-editable': IsMinHoursBroken() && IsEditable(), 'weekly-work-time-alert-noneditable': IsMinHoursBroken() && !IsEditable()}">
-								<span>></span>
+								<span>&gt;</span>
 								<span data-bind="text:PossibleResultWeeklyContractTimeLower"></span>
 							</div>
 							<div class="max-hours-per-week" data-bind="css: {'weekly-work-time-alert-editable': IsMaxHoursBroken() && IsEditable(), 'weekly-work-time-alert-noneditable': IsMaxHoursBroken() && !IsEditable()}">
-								<span><</span>
+								<span>&lt;</span>
 								<span data-bind="text:PossibleResultWeeklyContractTimeUpper"></span>
 							</div>
 							<!-- /ko -->
@@ -227,14 +227,14 @@
 					@foreach (DayViewModel day in week.Days)
 					{
 						var date = Html.Schedule().FormatDate(day.Date);
-						<li class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-mytime-date="@date" data-period-start-date="@Model.Weeks.First().Days.First().Date.Date.ToString("yyyy-MM-dd")"  data-mytime-editable="@day.Editable" data-bind="css: StyleClassName, css: { editable: Editable, 'non-editable': !Editable(), feedback: Feedback }">
+						<li class='relative @(day.InPeriod ? "inperiod" : "non-editable")' data-mytime-date="@date" data-period-start-date='@Model.Weeks.First().Days.First().Date.Date.ToString("yyyy-MM-dd")'  data-mytime-editable="@day.Editable" data-bind="css: StyleClassName, css: { editable: Editable, 'non-editable': !Editable(), feedback: Feedback }">
 							<div class="relative">
 								<div class="day-header">
 									<span class="day-header-left badge day-header-text floatleft" data-bind="text: MonthString"></span>
 									<span class="floatright day-header-right badge day-header-text" data-bind="text: DayString"></span>
 								</div>
 								<div class="day-content">
-									<figure class="cover-me" data-bind="visible: IsLoading()"><img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." /></figure>
+									<figure class="cover-me" data-bind="visible: IsLoading()"><img src='@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")' alt="..." /></figure>
 									<div class="hide-at-start" data-bind="css:{'show-after-loaded': !IsLoading()}">
 										<!-- ko if: HasAjaxError -->
 										<div class="error" data-bind="text: AjaxError"></div>

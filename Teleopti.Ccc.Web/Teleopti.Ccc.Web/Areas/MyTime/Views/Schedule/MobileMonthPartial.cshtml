@@ -3,10 +3,16 @@
 Layout = null;
 }
 <style>
-	html, body, section#page, article#body,#body-inner, .mobile-month-view {
+	html,
+	body,
+	section#page,
+	article#body,
+	#body-inner,
+	.mobile-month-view {
 		height: 100%;
 		cursor: pointer;
 	}
+
 	.pagebody {
 		padding: 0 5px;
 		height: calc(100% - 50px);
@@ -14,9 +20,11 @@ Layout = null;
 		margin: 0;
 		-webkit-overflow-scrolling: touch;
 	}
+
 	.tooltip {
 		margin: 0;
 	}
+
 	.datepicker.dropdown-menu {
 		position: fixed;
 		z-index: 199;
@@ -31,7 +39,7 @@ Layout = null;
 					<a class="mobile-month-calendar-icon" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1, calendarPlacement: 'center' }">
 						<i class="glyphicon glyphicon-calendar"></i>
 					</a>
- 				</li> 
+				</li>
 				<li>
 					<a href="#Schedule/MobileDay">
 						<i class="glyphicon glyphicon-home"></i>
@@ -54,9 +62,9 @@ Layout = null;
 
 	<div class="container pagebody">
 		<!-- ko if: isLoading -->
-		<img class="data-loading-gif" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="...">
+		<img class="data-loading-gif" src='@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")' alt="...">
 		<!-- /ko -->
-		
+
 		<!-- ko if: !isLoading() -->
 		<div class="mobile-month-row-fluid mobile-month-row-head clearfix" data-bind="foreach: weekDayNames">
 			<div class="mobile-month-cell mobile-month-weekday-header weekday-shortname" data-bind="text: ShortName"></div>

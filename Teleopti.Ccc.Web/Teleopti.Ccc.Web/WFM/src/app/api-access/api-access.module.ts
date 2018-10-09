@@ -1,73 +1,16 @@
 import { NgModule } from '@angular/core';
-import {
-	MatButtonModule,
-	MatCheckboxModule,
-	MatDatepickerModule,
-	MatDialogModule,
-	MatDividerModule,
-	MatGridListModule,
-	MatInputModule,
-	MatListModule,
-	MatNativeDateModule,
-	MatPaginatorModule,
-	MatProgressSpinnerModule,
-	MatSortModule,
-	MatTableModule,
-	MatTooltipModule,
-	MatMenuModule
-} from '@angular/material';
 import { SharedModule } from '../shared/shared.module';
-import {
-	ChipAddComponent,
-	ChipComponent,
-	ChipRemoveComponent,
-	ApiAccessTitleBarComponent,
-	ListPageComponent,
-	AddAppPageComponent,
-	PageContainerComponent
-} from './components';
-import {
-	ExternalApplicationService,
-	NavigationService
-} from './services';
+import { AddAppPageComponent, ListPageComponent } from './components';
+import { ExternalApplicationService, NavigationService } from './services';
 
 @NgModule({
-	declarations: [
-		ChipComponent,
-		ChipAddComponent,
-		ChipRemoveComponent,
-		ApiAccessTitleBarComponent,
-		AddAppPageComponent,
-		ListPageComponent,
-		PageContainerComponent
-	],
+	declarations: [AddAppPageComponent, ListPageComponent],
 	imports: [
-		SharedModule,
-		MatCheckboxModule,
-		MatDialogModule,
-		MatPaginatorModule,
-		MatButtonModule,
-		MatDividerModule,
-		MatTableModule,
-		MatSortModule,
-		MatProgressSpinnerModule,
-		MatInputModule,
-		MatListModule,
-		MatGridListModule,
-		MatDatepickerModule,
-		MatNativeDateModule,
-		MatTooltipModule,
-		MatMenuModule
+		SharedModule
 	],
-	providers: [
-		ExternalApplicationService
-	],
+	providers: [ExternalApplicationService, NavigationService],
 	exports: [],
-	entryComponents: [
-		ApiAccessTitleBarComponent,
-		AddAppPageComponent,
-		ListPageComponent
-	]
+	entryComponents: [AddAppPageComponent, ListPageComponent]
 })
 export class ApiAccessModule {
 	ngDoBootstrap() {}

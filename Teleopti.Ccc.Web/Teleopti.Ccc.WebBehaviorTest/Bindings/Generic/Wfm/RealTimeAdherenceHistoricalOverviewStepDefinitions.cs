@@ -18,14 +18,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			TestControllerMethods.Logon();
 			var teamId = idForTeam(name);
 			Navigation.GoToHistoricalOverview(teamId);
-			var selector = ".card-panel-header-wrapper";
 
-			var cardFound = $@"
+			var selector = ".card-panel-header-wrapper";
+			var findCardPanel = $@"
 var element = document.querySelector(""{selector}"");
 return 'OK';
-";			
-			Browser.Interactions.AssertJavascriptResultContains(cardFound, "OK");			
-			Browser.Interactions.Click(".card-panel-header-wrapper");
+";
+			Browser.Interactions.AssertJavascriptResultContains(findCardPanel, "OK");
+			Browser.Interactions.Click(selector);
 		}
 
 		[Then(@"I should see '(.*)' having adherence percent of '(.*)' on '(.*)'")]

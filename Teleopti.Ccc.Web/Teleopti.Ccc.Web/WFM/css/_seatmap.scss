@@ -3,41 +3,24 @@
 .seatmap-container {
 	position: absolute;
 	top: 39px;
-	left: 0;
-	right: 0;
 	bottom: 10px;
+	width: calc(100% - 20px);
 	overflow: hidden;
-	width: 100%;
 }
 .seatmap-container.seatplan {
 	margin: 0;
+	width: calc(100% - 20px);
 }
 .seatmap {
 	height: 100%;
 	padding: 0;
 	overflow: hidden;
 	background: $white;
-
-	.wfm-block {
-		margin: 0;
-		padding: 0;
-		position: relative;
-		top: 41px;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		box-shadow: none;
-		-webkit-box-shadow: none;
-	}
-	.wfm-block-edit-mode {
-		top: 10px;
-		bottom: 0;
-	}
+	display: flex;
+	flex-direction: column;
 }
 .seatmap-view-header {
 	height: 41px;
-	position: absolute;
-	top: 0;
 	width: 100%;
 	z-index: 2;
 	border-bottom: 1px solid #e1e2e3;
@@ -47,6 +30,7 @@
 		margin: 0px;
 		border-radius: 0px;
 		text-transform: none;
+		line-height: 1;
 	}
 	.return-button:hover {
 		background: #0099ff !important;
@@ -60,16 +44,24 @@
 		transition-duration: 0s;
 	}
 	.button-active {
-		background: #0099FF !important;
+		background: #0099ff !important;
 		color: $white !important;
 	}
 	.seatmap-view-datepicker {
-		.wfm-datepicker {
-			background: $white;
-			position: absolute;
-			left: 38px;
-			top: 42px;
-			z-index: 2;
+		height: 100%;
+
+		& > div.date-picker {
+			position: relative;
+			& > div.wfm-datepicker {
+				background: $white;
+				position: absolute;
+				top: 40px;
+				left: 38px;
+				padding: 0;
+				min-width: 283px;
+				min-height: 230px;
+				z-index: 2;
+			}
 		}
 	}
 	.turn-off-datepicker {
@@ -94,7 +86,7 @@
 	z-index: 1;
 
 	.location-breadcrumb-clickable {
-		color: #09F;
+		color: #09f;
 		cursor: pointer;
 	}
 	div {
@@ -109,8 +101,9 @@
 		font-size: 95%;
 		float: left;
 	}
-	.breadcrumb-inverse a, .breadcrumb-inverse > .active {
-		color: #09F !important;
+	.breadcrumb-inverse a,
+	.breadcrumb-inverse > .active {
+		color: #09f !important;
 		padding: 0px;
 		margin-left: 5px;
 	}
@@ -131,7 +124,7 @@ seatmap-editor {
 .top-adjust {
 	top: 23px;
 }
-@media(min-width:1475px) {
+@media (min-width: 1475px) {
 	.top-adjust {
 		top: -20px;
 	}
@@ -147,7 +140,7 @@ seatmap-editor {
 		span {
 			left: 0;
 			margin: 2px 0 0 0;
-			box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .26);
+			box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
 		}
 		ul li {
 			white-space: nowrap;
@@ -156,7 +149,7 @@ seatmap-editor {
 			box-shadow: none;
 			float: right;
 		}
-		ul li i{
+		ul li i {
 			color: inherit;
 		}
 	}
@@ -247,6 +240,27 @@ seatmap-editor {
 	margin-left: -32px;
 	margin-top: -62px;
 }
+.seatmap-canvas {
+	position: relative;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+
+	&.booking-view {
+	}
+
+	.wfm-block {
+		flex-grow: 1;
+		margin: 0;
+		padding: 0;
+		position: relative;
+		box-shadow: none;
+		-webkit-box-shadow: none;
+	}
+	.wfm-block.wfm-block-edit-mode {
+	}
+}
 .wfm-block-edit-mode {
 	md-content.layout-padding {
 		position: absolute;
@@ -277,12 +291,8 @@ seatmap-editor {
 		margin-left: 10px;
 	}
 }
-.seatmap-canvas {
-	position: relative;
-	height: 100%;
-}
 .seatmap-canvas .resizable {
-	min-width: 450px;
+	min-width: 380px;
 }
 .seat-property-message {
 	position: absolute;
@@ -301,30 +311,18 @@ seatmap-editor {
 	min-width: 310px;
 }
 seatmap-occupancy-detail {
-	top: 0;
-	bottom: 0;
-	position: absolute;
-	right: 0;
-	left: 0;
-
 	.add-booking-detail {
-		top: 50px;
-		bottom: 0;
-		position: absolute !important;
-		width: 100%;
-
 		.date-range-picker-wrapper {
 			width: 250px;
 			height: 30px;
 		}
-		.input-prepend input[type=text] {
+		.input-prepend input[type='text'] {
 			width: 90% !important;
 		}
 	}
 }
-.seatbooking-operations-add, .seatbooking-operations-cancel {
-	position: absolute;
-	top: 0;
+.seatbooking-operations-add,
+.seatbooking-operations-cancel {
 	padding: 2px 0;
 	height: 40px;
 	width: 100%;
@@ -341,20 +339,12 @@ seatmap-occupancy-detail {
 	}
 }
 people-selection-list {
-	top: 40px;
-	bottom: 0;
-	position: absolute;
-	right: 0;
-	left: 0;
 	overflow: hidden;
 }
 people-selection-list > div.view-header {
 	display: none;
 }
 people-selection-list > .panel {
-	bottom: 80px;
-	position: absolute;
-	top: 0px;
 	width: 100%;
 	padding-left: 10px;
 	box-shadow: none;
@@ -434,6 +424,8 @@ people-selection-list > .panel {
 }
 .seatmap-bottom-bar {
 	height: 48px;
+	position: absolute;
+	bottom: 0;
 
 	md-slider {
 		width: 200px;
