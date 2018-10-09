@@ -90,5 +90,37 @@ namespace Teleopti.Wfm.Api.Test.Query
 			obj["Shift"][0]["EndTime"].Value<DateTime>().Should().Be.EqualTo(new DateTime(2001, 1, 1, 17, 0, 0));
 			obj["Shift"][0]["IsAbsence"].Value<bool>().Should().Be.True();
 		}
+		
+		[Test]
+		public void ShouldGetAgentTimezoneInformation()
+		{
+			const string timezoneId = "Mountain Standard Time";
+
+			Client.Authorize();
+
+			var timezone = TimeZoneInfo.FindSystemTimeZoneById(timezoneId);
+			var person = PersonFactory.CreatePerson().WithId();
+			person.PermissionInformation.SetDefaultTimeZone(timezone);
+			PersonRepository.Add(person);
+
+			var scenario = ScenarioRepository.Has("Default");
+			var activity = ActivityRepository.Has("Phone").WithId();
+			var personAssignment = new PersonAssignment(person,scenario,new DateOnly(2001,1,1)).WithId();
+			personAssignment.AddActivity(activity,new TimePeriod(8,17));
+			PersonAssignmentRepository.Add(personAssignment);
+
+			var result = Client.PostAsync("/query/Schedule/ScheduleByPersonId",
+				new StringContent(JsonConvert.SerializeObject(new
+				{
+					PersonId = person.Id.GetValueOrDefault(),
+					StartDate = new DateTime(2001, 1, 1),
+					EndDate = new DateTime(2001, 1, 1)
+				}), Encoding.UTF8, "application/json"));
+			var obj = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Result"][0];
+
+			obj["PersonId"].Value<string>().Should().Be.EqualTo(person.Id.Value.ToString());
+			obj["Date"].Value<DateTime>().Should().Be.EqualTo(new DateTime(2001,1,1));
+			obj["TimezoneId"].Value<string>().Should().Be.EqualTo(timezoneId);
+		}
 	}
 }

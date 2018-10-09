@@ -42,7 +42,8 @@ namespace Teleopti.Wfm.Api.Query
 						PayloadId = l.Payload.Id.GetValueOrDefault(),
 						IsAbsence = l.Payload is IAbsence
 					}).ToArray(),
-					PersonId = person.Id.GetValueOrDefault()
+					PersonId = person.Id.GetValueOrDefault(),
+					TimezoneId = person.PermissionInformation.DefaultTimeZone().Id
 				}).ToArray()
 			};
 		}
