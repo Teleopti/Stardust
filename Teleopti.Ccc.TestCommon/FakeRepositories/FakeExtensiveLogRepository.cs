@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Staffing;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -22,4 +24,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 		
 	}
+	public class FakeStaffingAuditRepository : IStaffingAuditRepository
+	{
+		public List<StaffingAudit> StaffingAuditList = new List<StaffingAudit>();
+		public void Persist(StaffingAudit staffingAudit)
+		{
+			StaffingAuditList.Add(staffingAudit);
+		}
+	}
+
+	
+
+	
 }

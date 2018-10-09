@@ -21,6 +21,7 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Gamification.core.IoC;
 using Teleopti.Ccc.Web.Areas.Global;
+using Teleopti.Ccc.Web.Areas.Global.Aspect;
 using Teleopti.Ccc.Web.Areas.Global.Core;
 using Teleopti.Ccc.Web.Areas.Mart.Core.IoC;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;

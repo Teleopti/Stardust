@@ -629,6 +629,7 @@
     <Compile Include="Staffing\IExportBpoFile.cs" />
     <Compile Include="Staffing\ImportBpoFile.cs" />
     <Compile Include="Staffing\ISkillCombinationBpoTimeLineReader.cs" />
+    <Compile Include="Staffing\IStaffingAuditRepository.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
     <Compile Include="ResourcePlanner\Hints\IScheduleHint.cs" />
     <Compile Include="Scheduling\Overtime\IOvertimeSkillPeriodData.cs" />
