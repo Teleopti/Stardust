@@ -16,7 +16,6 @@ properties {
 	#$Medium = "Standard_D1_v2"
 	#$Large = "Standard_D4_v3"
 	
-	
 	#Size on Azure cloud VM size
 	$Medium = "Standard_A2_v2"
 	$Large = "Standard_D2_v3"
