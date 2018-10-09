@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var result = Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, firstDay.ToDateOnlyPeriod(), scenario);
-			assignments.Count.Should().Be.EqualTo(0);
+			assignments.Count(x => x.ShiftLayers.Any()).Should().Be.EqualTo(0);
 
 			result.ScheduledAgentsCount.Should().Be.EqualTo(0);
 		}
