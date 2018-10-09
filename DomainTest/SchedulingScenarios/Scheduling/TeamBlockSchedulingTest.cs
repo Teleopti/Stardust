@@ -984,7 +984,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
-			assignments.Count.Should().Be.EqualTo(6);
+			assignments.Count(x => x.MainActivities().Any() || x.AssignedWithDayOff(dayOffTemplate)).Should().Be.EqualTo(6);
 		}
 
 		[Test]
@@ -1000,7 +1000,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
 			agent.Period(firstDay).RuleSetBag = new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
 				new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId())));
-
 			foreach (var dayTemplate in skill.WorkloadCollection.First().TemplateWeekCollection.Values)
 			{
 				if (dayTemplate.DayOfWeek == DayOfWeek.Monday || dayTemplate.DayOfWeek == DayOfWeek.Sunday || dayTemplate.DayOfWeek == DayOfWeek.Saturday)
@@ -1008,7 +1007,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 					dayTemplate.Close();
 				}
 			}
-
 			PersonAbsenceRepository.Has(new PersonAbsence(agent, scenario, new AbsenceLayer(new Absence { InContractTime = true },
 					firstDay.ToDateTimePeriod(new TimePeriod(8, 16), TimeZoneInfo.Utc))));
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 0, 1, 1, 1, 1, 0, 0));
@@ -1029,7 +1027,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
-			assignments.Count.Should().Be.EqualTo(6);
+			assignments.Count(x => x.MainActivities().Any() || x.AssignedWithDayOff(dayOffTemplate)).Should().Be.EqualTo(6);
 		}
 
 		public TeamBlockSchedulingTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
