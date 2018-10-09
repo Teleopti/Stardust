@@ -3,7 +3,7 @@
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability
 @model StudentAvailabilityViewModel
 @{
-	Layout = null;
+Layout = null;
 }
 
 <div class="navbar navbar-teleopti subnavbar">
@@ -16,7 +16,8 @@
 							<i class="glyphicon glyphicon-chevron-left"></i>
 						</button>
 					</span>
-					<input class="form-control text-center date-input-style" style="font-size: 13px;" data-bind="value: displayDate" type="text" readonly="readonly" />
+					<input class="form-control text-center date-input-style" style="font-size: 13px;" data-bind="value: displayDate"
+					 type="text" readonly="readonly" />
 					<span class="input-group-btn">
 						<button class="btn btn-default moment-datepicker" type="button">
 							<i class="glyphicon glyphicon-calendar"></i>
@@ -45,30 +46,32 @@
 	<div id="Student-availability-edit-form" data-bind="visible: AddAvailabilityFormVisible,css:{'phone-form-availability': IsHostAMobile}">
 		<div class="availability-add-container well well-sm clearfix form-student-availability">
 			<div class="posting-mask" data-bind="visible: IsPostingData()">
-				<img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader.gif")" alt="Applying..." />
+				<img src='@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader.gif")' alt="Applying..." />
 			</div>
 			@Html.Partial("AddStudentAvailabilityPartial")
 		</div>
 		<div class="phone-background"></div>
 	</div>
-	<div id="StudentAvailability-period" class="m-b-10" data-bind="css:{'phone-warning-indicator': IsHostAMobile}" data-mytime-studentavailabilityperiod="@Model.StudentAvailabilityPeriod">
-		<div class="warning-indicator" data-bind="click: toggleWarningDetail"><span data-bind="css: StudentAvailabilityFeedbackClass,text:WarningCount" class="warning-count">!</span></div>
+	<div id="StudentAvailability-period" class="m-b-10" data-bind="css:{'phone-warning-indicator': IsHostAMobile}"
+	 data-mytime-studentavailabilityperiod="@Model.StudentAvailabilityPeriod">
+		<div class="warning-indicator" data-bind="click: toggleWarningDetail"><span data-bind="css: StudentAvailabilityFeedbackClass,text:WarningCount"
+			 class="warning-count">!</span></div>
 		<div data-bind="css:{warningDetail:shouldShowWarningDetail()}">
 			<div class="alert alert-student-availability" data-bind="css : StudentAvailabilityFeedbackClass()">
 				@if (Model.StudentAvailabilityPeriod == null)
 				{
-					@String.Format("{0} : {1}", Resources.StudentAvailabilityPeriod, Resources.MissingWorkflowControlSet)
+				@String.Format("{0} : {1}", Resources.StudentAvailabilityPeriod, Resources.MissingWorkflowControlSet)
 				}
 				else
 				{
-					@Html.Raw(string.Format(Resources.YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot,
-						"<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>",
-						"<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>",
-						"<span data-bind='text: PossibleResultContractTimeUpper' class='feedback-detail'>-</span>"))
-					@Html.Raw("</br>")
+				@Html.Raw(string.Format(Resources.YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot,
+				"<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>",
+				"<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>",
+				"<span data-bind='text: PossibleResultContractTimeUpper' class='feedback-detail'>-</span>"))
+				@Html.Raw("</br>")
 
-					@String.Format("{0} : {1} | ", Resources.StudentAvailabilityPeriod, Model.StudentAvailabilityPeriod.Period)
-					@String.Format("{0} : {1}", Resources.IsOpen, Model.StudentAvailabilityPeriod.OpenPeriod)
+				@String.Format("{0} : {1} | ", Resources.StudentAvailabilityPeriod, Model.StudentAvailabilityPeriod.Period)
+				@String.Format("{0} : {1}", Resources.IsOpen, Model.StudentAvailabilityPeriod.OpenPeriod)
 				}
 			</div>
 		</div>
@@ -76,71 +79,72 @@
 	<div class="student-availability-body-container">
 		<div id="StudentAvailability-body" class="clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
 			<style>
-				@foreach (var style in Model.Styles)
-				{
+				@foreach (var style in Model.Styles) {
 					@String.Format(".calendarview-week li.{0} div.day-content{{border-left-color: #{1}; border-right-color: #{1};}}\n", style.Name, style.ColorHex)
 				}
-				</style>
+			</style>
 			<div id="StudentAvailability-body-inner" class="well clearfix pd0 body-inner">
 				<ul class="weekdays">
 					@foreach (var weekDayName in Model.WeekDayHeaders)
 					{
-						<li>@weekDayName.Title</li>
+					<li>@weekDayName.Title</li>
 					}
 				</ul>
 				@foreach (var week in Model.Weeks)
 				{
-					<ul class="calendarview-week" onselectstart="return false;">
-						<li style="height: 0">
-							<div>
+				<ul class="calendarview-week" onselectstart="return false;">
+					<li style="height: 0">
+						<div>
 
+						</div>
+					</li>
+					@foreach (var day in week.Days)
+					{
+					<li data-mytime-editable="@day.Editable" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" class='relative @(day.InPeriod ? "inperiod" : "non-editable")'
+					 data-bind="css: { editable: Editable, 'non-editable': !Editable() }">
+						<div>
+							<div class="day-header">
+								<span class="floatleft badge day-header-left day-header-text">@day.Header.DayDescription</span><span class="floatright badge day-header-right day-header-text">@day.Header.DayNumber</span>
 							</div>
-						</li>
-						@foreach (var day in week.Days)
-						{
-							<li data-mytime-editable="@day.Editable" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-bind="css: { editable: Editable, 'non-editable': !Editable() }">
-								<div>
-									<div class="day-header">
-										<span class="floatleft badge day-header-left day-header-text">@day.Header.DayDescription</span><span class="floatright badge day-header-right day-header-text">@day.Header.DayNumber</span>
-									</div>
-									<div class="day-content">
-										<img class="loading-small-gray-blue" data-bind="visible: IsLoading" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..."/>
-										<!-- ko if: AjaxError().length > 0 -->
-										<h2 class="error" data-bind="text: AjaxError"></h2>
-										<!-- /ko -->
-										<div class="fullwidth day-content-text" data-bind="visible: HasAvailability(), text: AvailableTimeSpan"></div>
+							<div class="day-content">
+								<img class="loading-small-gray-blue" data-bind="visible: IsLoading" src='@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")'
+								 alt="..." />
+								<!-- ko if: AjaxError().length > 0 -->
+								<h2 class="error" data-bind="text: AjaxError"></h2>
+								<!-- /ko -->
+								<div class="fullwidth day-content-text" data-bind="visible: HasAvailability(), text: AvailableTimeSpan"></div>
 
-										<!-- ko if: !HasAvailability() && EditableIsInOpenPeriod -->
-										<div class="fullwidth day-content-text" style="padding-top: 15px">
-											<i class="glyphicon glyphicon-plus canAddAvailibility"></i>
-										</div>
-										<!-- /ko -->
-										<!-- ko if: HasAvailability() -->
-										<!-- ko if: HasFeedbackError() -->
-										<div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
-										<!-- /ko -->
-										<!-- ko if: !HasFeedbackError() -->
-										<div>
-											<div class="possible-start-times time-limitation clearleftfloat">
-												<span class="glyphicon glyphicon-step-backward"></span>
-												<span data-bind="text: PossibleStartTimes"></span>
-											</div>
-											<div class="possible-end-times time-limitation clearleftfloat">
-												<span class="glyphicon glyphicon-step-forward"></span>
-												<span data-bind="text: PossibleEndTimes"></span>
-											</div>
-											<div class="possible-contract-times time-limitation clearleftfloat">
-												<span class="glyphicon glyphicon-resize-horizontal"></span>
-												<span data-bind="text: PossibleContractTimes"></span>
-											</div>
-										</div>
-										<!-- /ko -->
-										<!-- /ko -->
+								<!-- ko if: !HasAvailability() && EditableIsInOpenPeriod -->
+								<div class="fullwidth day-content-text" style="padding-top: 15px">
+									<i class="glyphicon glyphicon-plus canAddAvailibility"></i>
+								</div>
+								<!-- /ko -->
+								<!-- ko if: HasAvailability() -->
+								<!-- ko if: HasFeedbackError() -->
+								<div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
+								<!-- /ko -->
+								<!-- ko if: !HasFeedbackError() -->
+								<div>
+									<div class="possible-start-times time-limitation clearleftfloat">
+										<span class="glyphicon glyphicon-step-backward"></span>
+										<span data-bind="text: PossibleStartTimes"></span>
+									</div>
+									<div class="possible-end-times time-limitation clearleftfloat">
+										<span class="glyphicon glyphicon-step-forward"></span>
+										<span data-bind="text: PossibleEndTimes"></span>
+									</div>
+									<div class="possible-contract-times time-limitation clearleftfloat">
+										<span class="glyphicon glyphicon-resize-horizontal"></span>
+										<span data-bind="text: PossibleContractTimes"></span>
 									</div>
 								</div>
-							</li>
-						}
-					</ul>
+								<!-- /ko -->
+								<!-- /ko -->
+							</div>
+						</div>
+					</li>
+					}
+				</ul>
 				}
 			</div>
 		</div>

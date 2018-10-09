@@ -1,6 +1,6 @@
 ﻿@using Teleopti.Ccc.UserTexts
 @{
-	Layout = null;
+Layout = null;
 }
 
 <div class="BadgeLeaderBoardReport">
@@ -21,7 +21,8 @@
 						<input type="hidden" class="format-field" value="@ViewBag.DatePickerFormat">
 						<input type="hidden" class="rolling-type-field" value="@ViewBag.GamificationRollingPeriodSet">
 						<span class="input-group-btn">
-							<button id="period-navigator-previous" class="btn btn-default" data-bind="click: previous, disable: isLoading" type="button">
+							<button id="period-navigator-previous" class="btn btn-default" data-bind="click: previous, disable: isLoading"
+							 type="button">
 								<i class="glyphicon glyphicon-chevron-left"></i>
 							</button>
 						</span>
@@ -58,16 +59,16 @@
 				<tr class="agent-badge">
 					<td data-bind="text:rank" class="agent-rank"></td>
 					<td data-bind="text:name" class="agent-name"></td>
-					<td id ="gold-badge-num" class="agent-badge-num" data-bind="text: gold"></td>
-					<td id ="silver-badge-num" class="agent-badge-num" data-bind="text: silver"></td>
-					<td id ="bronze-badge-num" class="agent-badge-num" data-bind="text: bronze"></td>
+					<td id="gold-badge-num" class="agent-badge-num" data-bind="text: gold"></td>
+					<td id="silver-badge-num" class="agent-badge-num" data-bind="text: silver"></td>
+					<td id="bronze-badge-num" class="agent-badge-num" data-bind="text: bronze"></td>
 				</tr>
 				<!-- /ko -->
 			</tbody>
 		</table>
 	</div>
 	<div class="container" data-bind="visible: isLoading">
-		<img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." />
+		<img src='@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")' alt="..." />
 		@Resources.LoadingThreeDots
 	</div>
 </div>

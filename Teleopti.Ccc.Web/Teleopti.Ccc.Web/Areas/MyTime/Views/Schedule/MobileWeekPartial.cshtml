@@ -1,6 +1,6 @@
 ﻿@using Teleopti.Ccc.UserTexts
 @{
-	Layout = null;
+Layout = null;
 }
 
 <script type="text/html" id="add-absence-report-detail-template">
@@ -27,21 +27,22 @@
 								<i class="glyphicon glyphicon-chevron-left"></i>
 							</button>
 						</span>
-						<input class="form-control text-center date-input-style" style="width: 100%; font-size: 13px" data-bind="value: displayDate" type="text" readonly="readonly" />
+						<input class="form-control text-center date-input-style" style="width: 100%; font-size: 13px" data-bind="value: displayDate"
+						 type="text" readonly="readonly" />
 						<span class="input-group-btn">
 							<button class="btn btn-default" data-bind="click: nextWeek, css: 'done'" type="button">
 								<i class="glyphicon glyphicon-chevron-right"></i>
 							</button>
 						</span>
 					</div>
-					
+
 				</li>
 			</ul>
 			<!-- ko if: showProbabilityOptionsToggleIcon-->
 			<span class="probability-toggle-container">
 				<a class="btn btn-default" data-bind="click: toggleProbabilityOptionsPanel">
 					<!-- ko if: loadingProbabilityData() -->
-					<span><img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..."></span>
+					<span><img src='@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")' alt="..."></span>
 					<!-- /ko -->
 					<!-- ko ifnot: showingAbsenceProbability() || showingOvertimeProbability() || loadingProbabilityData() -->
 					<span><i class="glyphicon glyphicon-eye-close"></i></span>
