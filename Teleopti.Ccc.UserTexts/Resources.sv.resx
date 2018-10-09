@@ -15811,4 +15811,25 @@ Applikationen kommer nu att stängas. </value>
   <data name="ManageIdentityLogon" xml:space="preserve">
     <value>Hantera tredjepartsinloggningar</value>
   </data>
+  <data name="ChatBot" xml:space="preserve">
+    <value>Chatbot</value>
+  </data>
+  <data name="RequestList" xml:space="preserve">
+    <value>Förfrågningslista</value>
+  </data>
+  <data name="HistoricalOverview" xml:space="preserve">
+    <value>Historisk översikt</value>
+  </data>
+  <data name="MonitorOrganization" xml:space="preserve">
+    <value>Bevaka organisation</value>
+  </data>
+  <data name="MonitorAgents" xml:space="preserve">
+    <value>Bevaka agenter</value>
+  </data>
+  <data name="LateForWork" xml:space="preserve">
+    <value>Sen till jobbet</value>
+  </data>
+  <data name="AgentScheduledWithoutPreferences" xml:space="preserve">
+    <value>Agenten schemalades utan önskemål</value>
+  </data>
 </root>
