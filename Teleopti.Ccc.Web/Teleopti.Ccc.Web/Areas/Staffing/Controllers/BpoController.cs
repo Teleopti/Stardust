@@ -17,13 +17,15 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		private readonly ISkillGroupRepository _skillGroupRepository;
 		private readonly ExportStaffingPeriodValidationProvider _periodValidationProvider;
 		private readonly BpoProvider _bpoProvider;
+		private readonly IAuditableBpoOperations _auditableBpoOperations;
 
-		public BpoController(ImportBpoFile bpoFile, BpoProvider bpoProvider, IExportBpoFile exportBpoFile, ExportStaffingPeriodValidationProvider periodValidationProvider, ISkillRepository skillRepository, ISkillGroupRepository skillGroupRepository)
+		public BpoController(ImportBpoFile bpoFile, BpoProvider bpoProvider, IExportBpoFile exportBpoFile, ExportStaffingPeriodValidationProvider periodValidationProvider, ISkillRepository skillRepository, ISkillGroupRepository skillGroupRepository, IAuditableBpoOperations auditableBpoOperations)
 		{
 			_bpoFile = bpoFile;
 			_exportBpoFile = exportBpoFile;
 			_skillRepository = skillRepository;
 			_skillGroupRepository = skillGroupRepository;
+			_auditableBpoOperations = auditableBpoOperations;
 			_periodValidationProvider = periodValidationProvider;
 			_bpoProvider = bpoProvider;
 		}
@@ -49,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		[UnitOfWork, HttpPost, Route("api/staffing/importBpo")]
 		public virtual IHttpActionResult ImportBpo([FromBody]ImportBpoActionObj fileContents)
 		{
-			var result = _bpoFile.ImportFile(fileContents.FileContent, CultureInfo.InvariantCulture, fileContents.FileName);
+			var result = _auditableBpoOperations.ImportBpo(fileContents);
 			return Ok(result);
 		}
 
@@ -160,7 +162,8 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		[UnitOfWork, HttpGet, Route("api/staffing/clearbpoperiod")]
 		public virtual IHttpActionResult ClearBpoForPeriod(Guid bpoGuid, DateTime startDate, DateTime endDate)
 		{
-			return Ok(_bpoProvider.ClearBpoResources(bpoGuid, startDate, endDate.AddDays(1).AddMinutes(-1)));
+			return Ok(_auditableBpoOperations.ClearBpoForPeriod(new ClearBpoActionObj()
+				{BpoGuid = bpoGuid, EndDate = endDate, StartDate = startDate}));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/staffing/getrangemessage")]

@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Linq;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Web.Areas.People.Core.Aspects;
 
-namespace Teleopti.Ccc.Web.Areas.People.Core.Aspects
+namespace Teleopti.Ccc.Web.Areas.Global
 {
 	public class AuditTrailAspect : IAspect
 	{
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Aspects
 		{
 			//using (var resolve = _resolve.NewScope())
 			//{
-				var handlerType = typeof(IHandleContext<>).MakeGenericType(invocation.Arguments[0].GetType());
+				var handlerType = typeof(IHandleContextAction<>).MakeGenericType(invocation.Arguments[0].GetType());
 				var handler = _resolve.Resolve(handlerType);
 				var method = handler.GetType().GetMethod("Handle", new[] { invocation.Arguments[0].GetType() });
 				method.Invoke(handler, new[] { invocation.Arguments[0] });

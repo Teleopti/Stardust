@@ -1,12 +1,13 @@
-﻿using Teleopti.Ccc.Web.Areas.People.Models;
+﻿using Teleopti.Ccc.Web.Areas.Global;
+using Teleopti.Ccc.Web.Areas.People.Models;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core.Aspects
 {
-	public class PersonAccessAuditContext : IHandleContext<GrantRolesInputModel>, IHandleContext<RevokeRolesInputModel>
+	public class PersonAccessAuditContextAction : IHandleContextAction<GrantRolesInputModel>, IHandleContextAction<RevokeRolesInputModel>
 	{
 		private readonly IAuditHelper auditHelper;
 
-		public PersonAccessAuditContext(IAuditHelper auditHelper)
+		public PersonAccessAuditContextAction(IAuditHelper auditHelper)
 		{
 			this.auditHelper = auditHelper;
 		}
