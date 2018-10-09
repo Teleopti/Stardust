@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -6,9 +7,11 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourcePlanner;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
@@ -23,12 +26,26 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly ScheduleExecutor _scheduleExecutor;
 		private readonly FailedScheduledAgents _failedScheduledAgents;
+		private readonly IDeleteSchedulePartService _deleteService;
+		private readonly ISchedulePartModifyAndRollbackService _rollbackService;
 
-		public SchedulingEventHandlerNew(Func<ISchedulerStateHolder> schedulerStateHolder, FillSchedulerStateHolder fillSchedulerStateHolder, ScheduleExecutor scheduleExecutor, ISchedulingOptionsProvider schedulingOptionsProvider, ICurrentSchedulingCallback currentSchedulingCallback, ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland, IGridlockManager gridlockManager, ISchedulingSourceScope schedulingSourceScope, ExtendSelectedPeriodForMonthlyScheduling extendSelectedPeriodForMonthlyScheduling, IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod, DayOffOptimization dayOffOptimization, FailedScheduledAgents failedScheduledAgents) : base(schedulerStateHolder, fillSchedulerStateHolder, scheduleExecutor, schedulingOptionsProvider, currentSchedulingCallback, synchronizeSchedulesAfterIsland, gridlockManager, schedulingSourceScope, extendSelectedPeriodForMonthlyScheduling, blockPreferenceProviderForPlanningPeriod, dayOffOptimization)
+		public SchedulingEventHandlerNew(Func<ISchedulerStateHolder> schedulerStateHolder,
+			FillSchedulerStateHolder fillSchedulerStateHolder, ScheduleExecutor scheduleExecutor, 
+			ISchedulingOptionsProvider schedulingOptionsProvider, ICurrentSchedulingCallback currentSchedulingCallback, 
+			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland, IGridlockManager gridlockManager, 
+			ISchedulingSourceScope schedulingSourceScope, ExtendSelectedPeriodForMonthlyScheduling extendSelectedPeriodForMonthlyScheduling, 
+			IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod, DayOffOptimization dayOffOptimization,
+			FailedScheduledAgents failedScheduledAgents, IDeleteSchedulePartService deleteService, 
+			ISchedulePartModifyAndRollbackService rollbackService) 
+			: base(schedulerStateHolder, fillSchedulerStateHolder, scheduleExecutor, schedulingOptionsProvider,
+				currentSchedulingCallback, synchronizeSchedulesAfterIsland, gridlockManager, schedulingSourceScope, 
+				extendSelectedPeriodForMonthlyScheduling, blockPreferenceProviderForPlanningPeriod, dayOffOptimization)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_scheduleExecutor = scheduleExecutor;
 			_failedScheduledAgents = failedScheduledAgents;
+			_deleteService = deleteService;
+			_rollbackService = rollbackService;
 		}
 
 		protected override void RunSchedulingWithoutPreferences(SchedulingWasOrdered @event,
@@ -37,9 +54,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			if (!@event.ScheduleWithoutPreferencesForFailedAgents) 
 				return;
-			
-			var failedScheduleAgents = _failedScheduledAgents.Execute(_schedulerStateHolder().Schedules, selectedPeriod).Where(x => @event.Agents.Contains(x.Id.Value));
+
+			var scheduleDictionary = _schedulerStateHolder().Schedules;
+			var failedScheduleAgents = _failedScheduledAgents.Execute(scheduleDictionary, selectedPeriod).Where(x => @event.Agents.Contains(x.Id.Value));
 			// below needs to be handled differently if/when DO should use pref (this line affects that as well)
+
+			_deleteService.Delete(scheduleDictionary.SchedulesForPeriod(selectedPeriod, failedScheduleAgents.ToArray()), new DeleteOption(){MainShift = true, DayOff = true}, _rollbackService, new NoSchedulingProgress());
+			
 			schedulingOptions.UsePreferences = false;
 			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, failedScheduleAgents,
 				selectedPeriod, blockPreferenceProvider);
