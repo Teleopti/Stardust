@@ -84,6 +84,7 @@
     <Compile Include="Query\ApplicationFunctionDto.cs" />
     <Compile Include="Query\PermissionByPersonDto.cs" />
     <Compile Include="Query\PermissionByPersonHandler.cs" />
+    <Compile Include="Query\ScheduleByPersonIdHandler.cs" />
     <Compile Include="Query\UserByIdDto.cs" />
     <Compile Include="Query\ScheduleChangesListenerDto.cs" />
     <Compile Include="Query\ScheduleByPersonIdDto.cs" />

@@ -8,5 +8,6 @@ namespace Teleopti.Wfm.Api.Query
 		public string Name { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
+		public bool IsAbsence { get; set; }
 	}
 }
