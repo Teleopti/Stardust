@@ -509,7 +509,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<BlockSchedulingPreferenceHint>().As<IScheduleHint>().SingleInstance();
 			if(_configuration.Toggle(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288))
 			{
+				builder.RegisterType<AlreadyScheduledAgents>().As<IAlreadyScheduledAgents>().SingleInstance();
 				builder.RegisterType<PreferenceHint>().As<IScheduleHint>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<AlreadyScheduledAgentsNullObject>().As<IAlreadyScheduledAgents>().SingleInstance();
 			}
 		}
 
