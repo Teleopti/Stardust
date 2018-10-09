@@ -1,11 +1,10 @@
 ﻿using System;
-using Teleopti.Ccc.Web.Areas.Global;
-using Teleopti.Ccc.Web.Areas.People.Core.Aspects;
+using Teleopti.Ccc.Web.Areas.Global.Aspect;
 using Teleopti.Ccc.Web.Areas.Staffing.Controllers;
 
 namespace Teleopti.Ccc.Web.Areas.Staffing
 {
-	public class StaffingAuditContextAction : IHandleContextAction<ClearBpoActionObj>, IHandleContextAction<ImportBpoActionObj>
+	public class StaffingAuditContext : IHandleContextAction<ClearBpoActionObj>, IHandleContextAction<ImportBpoActionObj>
 	{
 		public void Handle(ClearBpoActionObj command)
 		{

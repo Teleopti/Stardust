@@ -395,12 +395,12 @@
     </Compile>
     <Compile Include="Areas\Global\ChatConfigurationController.cs" />
     <Compile Include="Areas\Global\TenantCredential.cs" />
-    <Compile Include="Areas\Global\AuditTrailAspect.cs" />
-    <Compile Include="Areas\Global\IHandleContextAction.cs" />
-    <Compile Include="Areas\People\Core\Aspects\PersonAccessAuditContextAction.cs" />
+    <Compile Include="Areas\Global\Aspect\AuditTrailAspect.cs" />
+    <Compile Include="Areas\Global\Aspect\IHandleContextAction.cs" />
+    <Compile Include="Areas\People\Core\Aspects\PersonAccessAuditContext.cs" />
     <Compile Include="Areas\Staffing\AuditableBpoOperations.cs" />
-    <Compile Include="Areas\Staffing\StaffingAuditContextAction.cs" />
-    <Compile Include="Areas\Global\AuditTrailContextHandlersModule.cs" />
+    <Compile Include="Areas\Staffing\StaffingAuditContext.cs" />
+    <Compile Include="Areas\Global\Aspect\AuditTrailContextHandlersModule.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleDayOffViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleShiftViewModel.cs" />

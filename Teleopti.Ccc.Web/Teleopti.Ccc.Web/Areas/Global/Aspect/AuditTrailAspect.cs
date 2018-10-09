@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Web.Areas.People.Core.Aspects;
+using Teleopti.Ccc.Web.Areas.Global.Aspect;
 
 namespace Teleopti.Ccc.Web.Areas.Global
 {

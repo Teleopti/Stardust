@@ -1,5 +1,5 @@
 ﻿
-namespace Teleopti.Ccc.Web.Areas.Global
+namespace Teleopti.Ccc.Web.Areas.Global.Aspect
 {
 	public interface IHandleContextAction<TContext>
 	{
