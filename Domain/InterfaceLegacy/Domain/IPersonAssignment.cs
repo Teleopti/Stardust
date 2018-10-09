@@ -86,5 +86,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		void SetActivitiesAndShiftCategoryFromWithOffset(IPersonAssignment sourceAssignment, TimeSpan periodOffset);
 		void MoveLayerDown(ShiftLayer shiftLayer);
 		void MoveLayerUp(ShiftLayer shiftLayer);
+		bool HasDayOffOrMainShiftLayer();
 	}
 }

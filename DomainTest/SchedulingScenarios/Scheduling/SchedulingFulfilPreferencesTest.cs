@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
-			AssignmentRepository.LoadAll().Count().Should().Be.EqualTo(7);
+			AssignmentRepository.LoadAll().Count(x => x.HasDayOffOrMainShiftLayer()).Should().Be.EqualTo(7);
 		}
 		
 		[Test]
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
-			AssignmentRepository.LoadAll().Count().Should().Be.EqualTo(7);
+			AssignmentRepository.LoadAll().Count(x => x.HasDayOffOrMainShiftLayer()).Should().Be.EqualTo(7);
 		}
 		
 		[TestCase(true, ExpectedResult = true)]
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
-			AssignmentRepository.LoadAll().Count().Should().Be.EqualTo(7);
+			AssignmentRepository.LoadAll().Count(x => x.HasDayOffOrMainShiftLayer()).Should().Be.EqualTo(7);
 		}
 		
 		[Test]
@@ -157,6 +157,36 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(10);
 		}
 
+		[Test]
+		public void ShouldNotDeletePersonalActivityWhenPreferencesCantBeFulfilled()
+		{
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			var date = new DateOnly(2015, 10, 12); //mon;
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			var activity = ActivityRepository.Has();
+			var skill = SkillRepository.Has("_", activity);
+			var scenario = ScenarioRepository.Has("_");
+			var shiftCategory = new ShiftCategory().WithId();
+			var ruleSet8H = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var ruleSet10H = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), shiftCategory));
+			var shiftBag = new RuleSetBag(ruleSet8H, ruleSet10H);
+			var contract = new Contract("_")
+			{
+				NegativeDayOffTolerance = 0,
+				PositiveDayOffTolerance = 0,
+				NegativePeriodWorkTimeTolerance = new TimeSpan(0, 0, 0),
+				PositivePeriodWorkTimeTolerance = new TimeSpan(0, 0, 0)
+			};
+			var agentToSchedule = PersonRepository.Has(contract,new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"),new Team(), new SchedulePeriod(date, SchedulePeriodType.Week, 1), shiftBag, skill);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnlyPeriod(date, date.AddDays(6)), 1)); 
+			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = new ShiftCategory().WithId()};
+			PreferenceDayRepository.Add(new PreferenceDay(agentToSchedule, date, preferenceRestriction));
+			AssignmentRepository.Has(new PersonAssignment(agentToSchedule, scenario, date.AddDays(1)).WithPersonalLayer(activity,new TimePeriod(10, 11)));
+
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
+
+			AssignmentRepository.LoadAll().Count(x => x.HasDayOffOrMainShiftLayer()).Should().Be.EqualTo(7);
+		}
 
 		
 		public SchedulingFulfilPreferencesTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)

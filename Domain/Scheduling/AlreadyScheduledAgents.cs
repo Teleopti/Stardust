@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			
 			foreach (var scheduleDay in schedules.SchedulesForPeriod(period, agents.ToArray()))
 			{
-				if (scheduleDay.PersonAssignment(true).ShiftLayers.Any() || scheduleDay.HasDayOff())
+				if (scheduleDay.PersonAssignment(true).MainActivities().Any() || scheduleDay.HasDayOff())
 				{
 					if (!ret.TryGetValue(scheduleDay.Person, out var agentDates))
 					{
