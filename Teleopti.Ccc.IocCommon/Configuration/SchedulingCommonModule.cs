@@ -510,6 +510,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if(_configuration.Toggle(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288))
 			{
 				builder.RegisterType<AlreadyScheduledAgents>().As<IAlreadyScheduledAgents>().SingleInstance();
+				builder.RegisterType<AgentsWithWhiteSpots>().SingleInstance();
 				builder.RegisterType<PreferenceHint>().As<IScheduleHint>().SingleInstance();
 			}
 			else
