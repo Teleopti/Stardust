@@ -11,7 +11,8 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 		private readonly IApplicationFunctionsProvider _applicationFunctionsProvider;
 		private readonly IToggleManager _toggleManager;
 
-		public ApplicationFunctionsToggleFilter(IApplicationFunctionsProvider applicationFunctionsProvider, IToggleManager toggleManager)
+		public ApplicationFunctionsToggleFilter(IApplicationFunctionsProvider applicationFunctionsProvider,
+			IToggleManager toggleManager)
 		{
 			_applicationFunctionsProvider = applicationFunctionsProvider;
 			_toggleManager = toggleManager;
@@ -22,27 +23,42 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			var functions = _applicationFunctionsProvider.AllFunctions();
 
 			hideRealTimeReports(functions);
-			hideAppFunctionWithToggleOff(functions, DefinedRaptorApplicationFunctionForeignIds.ChatBot, Toggles.WFM_ChatBot_77547);
-			hideAppFunctionWithToggleOff(functions, DefinedRaptorApplicationFunctionForeignIds.Gamification, Toggles.WFM_Gamification_Permission_76546);
-			
+			hideAppFunctionWithToggleOff(functions, Toggles.WFM_ChatBot_77547,
+				DefinedRaptorApplicationFunctionForeignIds.ChatBot);
+			hideAppFunctionWithToggleOff(functions, Toggles.WFM_Gamification_Permission_76546,
+				DefinedRaptorApplicationFunctionForeignIds.Gamification);
+
 			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.BpoExchange);
 			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.ChatBot);
-			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.PmNextGen);
-			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.PmNextGenViewReport);
-			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.PmNextGenEditReport);
+
+			hidePmNextGen(functions);
+
 			return functions;
+		}
+
+		private void hidePmNextGen(AllFunctions functions)
+		{
+			hideIfNotLicensed(functions,
+				DefinedRaptorApplicationFunctionForeignIds.PmNextGen,
+				DefinedRaptorApplicationFunctionForeignIds.PmNextGenViewReport,
+				DefinedRaptorApplicationFunctionForeignIds.PmNextGenEditReport);
+
+			hideAppFunctionWithToggleOff(functions, Toggles.Wfm_PmNextGen_78059,
+				DefinedRaptorApplicationFunctionForeignIds.PmNextGen,
+				DefinedRaptorApplicationFunctionForeignIds.PmNextGenViewReport,
+				DefinedRaptorApplicationFunctionForeignIds.PmNextGenEditReport);
 		}
 
 		private void hideRealTimeReports(AllFunctions functions)
 		{
-			hideAppFunctionWithToggleOn(functions, DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailReport,
-				Toggles.Report_Remove_Realtime_AuditTrail_44006);
-			hideAppFunctionWithToggleOff(functions, DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailWebReport,
-				Toggles.WFM_AuditTrail_44006);
-			hideAppFunctionWithToggleOn(functions, DefinedRaptorApplicationFunctionForeignIds.ScheduledTimePerActivityReport,
-				Toggles.Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560);
-			hideAppFunctionWithToggleOn(functions, DefinedRaptorApplicationFunctionForeignIds.ScheduleTimeVersusTargetTimeReport,
-				Toggles.Report_Remove_Realtime_Scheduled_Time_vs_Target_45559);
+			hideAppFunctionWithToggleOn(functions, Toggles.Report_Remove_Realtime_AuditTrail_44006,
+				DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailReport);
+			hideAppFunctionWithToggleOff(functions, Toggles.WFM_AuditTrail_44006,
+				DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailWebReport);
+			hideAppFunctionWithToggleOn(functions, Toggles.Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560,
+				DefinedRaptorApplicationFunctionForeignIds.ScheduledTimePerActivityReport);
+			hideAppFunctionWithToggleOn(functions, Toggles.Report_Remove_Realtime_Scheduled_Time_vs_Target_45559,
+				DefinedRaptorApplicationFunctionForeignIds.ScheduleTimeVersusTargetTimeReport);
 
 			if (_toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_Scheduled_Time_vs_Target_45559)
 				&& _toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560)
@@ -50,33 +66,45 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			{
 				foreach (var function in functions.Functions)
 				{
-					var onlineReportNode = function.ChildFunctions.FirstOrDefault(x => x.Function.LocalizedFunctionDescription == Resources.OnlineReports);
+					var onlineReportNode = function.ChildFunctions.FirstOrDefault(x =>
+						x.Function.LocalizedFunctionDescription == Resources.OnlineReports);
 					onlineReportNode?.SetHidden();
 				}
 			}
 		}
 
-		private void hideIfNotLicensed(AllFunctions functions, string applicationFunctionForeignId)
+		private void hideIfNotLicensed(AllFunctions functions, params string[] applicationFunctionForeignIds)
 		{
-			var foundFunction = functions.FindByForeignId(applicationFunctionForeignId);
-			if (foundFunction!=null && !foundFunction.IsLicensed)
+			foreach (var foreignId in applicationFunctionForeignIds)
 			{
-				foundFunction.SetHidden();
+				var foundFunction = functions.FindByForeignId(foreignId);
+				if (foundFunction != null && !foundFunction.IsLicensed)
+				{
+					foundFunction.SetHidden();
+				}
 			}
 		}
-		
-		private void hideAppFunctionWithToggleOff(AllFunctions functions, string appFunction, Toggles toggle)
+
+		private void hideAppFunctionWithToggleOff(AllFunctions functions, Toggles toggle, params string[] appFunctions)
 		{
 			if (_toggleManager.IsEnabled(toggle)) return;
-			var foundFunction = functions.FindByForeignId(appFunction);
-			foundFunction?.SetHidden();
+
+			foreach (var appFunction in appFunctions)
+			{
+				var foundFunction = functions.FindByForeignId(appFunction);
+				foundFunction?.SetHidden();
+			}
 		}
 
-		private void hideAppFunctionWithToggleOn(AllFunctions functions, string appFunction, Toggles toggle)
+		private void hideAppFunctionWithToggleOn(AllFunctions functions, Toggles toggle, params string[] appFunctions)
 		{
 			if (!_toggleManager.IsEnabled(toggle)) return;
-			var foundFunction = functions.FindByForeignId(appFunction);
-			foundFunction?.SetHidden();
+
+			foreach (var appFunction in appFunctions)
+			{
+				var foundFunction = functions.FindByForeignId(appFunction);
+				foundFunction?.SetHidden();
+			}
 		}
 	}
 }
