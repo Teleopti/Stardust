@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Repositories;
@@ -19,7 +18,6 @@ using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -925,7 +923,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
-		public void ShouldCheckPersonalAccountCorrectlyWhenApprovingCrossDayAbsence()
+		public void ShouldCheckPersonalAccountCorrectlyWhenApprovingCrossDayAbsenceWithDayoff()
 		{
 			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
 				, CurrentScenario.Current(),
@@ -964,6 +962,120 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldCheckPersonalAccountCorrectlyWhenApprovingCrossDayAbsence()
+		{
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
+				, CurrentScenario.Current(),
+				_today.ToDateTimePeriod(
+					new TimePeriod(TimeSpan.FromHours(16), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(1))),
+					UserTimeZone.TimeZone())));
+			
+			_absence = createAbsence();
+			_absence.Tracker = Tracker.CreateTimeTracker();
+
+			var accountTime = new AccountTime(_today)
+			{
+				Accrued = TimeSpan.FromHours(2)
+			};
+			createPersonAbsenceAccount(_person, _absence, accountTime);
+
+			setWorkflowControlSet(usePersonAccountValidator: true);
+
+			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
+			var skill = SkillFactory.CreateSkill("Phone");
+			skill.MidnightBreakOffset = TimeSpan.FromHours(1);
+			setupPersonSkills(skill, skillOpenPeriod);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today.AddDays(1),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(23)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
+			});
+
+			Persister.Persist(form);
+
+			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
+			request.IsDenied.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldCheckPersonalAccountCorrectlyWhenApprovingCrossDayAbsenceWithEmptyDay()
+		{
+			_absence = createAbsence();
+			_absence.Tracker = Tracker.CreateTimeTracker();
+
+			var accountTime = new AccountTime(_today)
+			{
+				Accrued = TimeSpan.FromHours(2)
+			};
+			createPersonAbsenceAccount(_person, _absence, accountTime);
+
+			setWorkflowControlSet(usePersonAccountValidator: true);
+
+			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
+			var skill = SkillFactory.CreateSkill("Phone");
+			skill.MidnightBreakOffset = TimeSpan.FromHours(1);
+			setupPersonSkills(skill, skillOpenPeriod);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today.AddDays(1),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(23)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
+			});
+
+			Persister.Persist(form);
+
+			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
+			request.IsDenied.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldCheckPersonalAccountCorrectlyWhenApprovingCrossDayAbsenceWithEmptyDayInStockholmTimeZone()
+		{
+			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateEmptyAssignment(_person, CurrentScenario.Current(),
+				_today.AddDays(1).ToDateTimePeriod(timeZone)));
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateEmptyAssignment(_person, CurrentScenario.Current(),
+				_today.AddDays(2).ToDateTimePeriod(timeZone)));
+
+			_person.PermissionInformation.SetDefaultTimeZone(timeZone);
+			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
+			var skill = SkillFactory.CreateSkill("Phone");
+			skill.MidnightBreakOffset = TimeSpan.FromHours(1);
+			setupPersonSkills(skill, skillOpenPeriod);
+
+			_absence = createAbsence("Time Off In Lieu");
+			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: true);
+
+			var accountTime = new AccountTime(_today.AddDays(-1))
+			{
+				BalanceIn = TimeSpan.FromMinutes(0),
+				Accrued = TimeSpan.FromMinutes(480),
+				Extra = TimeSpan.FromMinutes(0),
+				LatestCalculatedBalance = TimeSpan.Zero
+			};
+			createPersonAbsenceAccount(_person, _absence, accountTime);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today.AddDays(1),
+				EndDate = _today.AddDays(2),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(20)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(4))
+			});
+			setupPersonSkills();
+
+			var personRequest = Persister.Persist(form);
+			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+
+			request.IsDenied.Should().Be(false);
 		}
 
 		[Test]
