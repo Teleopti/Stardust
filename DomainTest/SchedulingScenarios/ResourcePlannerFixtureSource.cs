@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			foreach (var toggleCombo in sortedToggleCombos)
 			{
 				sortedTestParameters.Add(AlsoSimulateSecondRequest ? 
-					new ResourcePlannerTestParameters(toggleCombo, SeperateWebRequest.SimulateFirstRequest) : 
+					new ResourcePlannerTestParameters(toggleCombo, SeparateWebRequest.SimulateFirstRequest) : 
 					new ResourcePlannerTestParameters(toggleCombo, null));
 			}
 
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			{
 				foreach (var toggleCombo in sortedToggleCombos)
 				{
-					sortedTestParameters.Add(new ResourcePlannerTestParameters(toggleCombo, SeperateWebRequest.SimulateSecondRequestOrScheduler));	
+					sortedTestParameters.Add(new ResourcePlannerTestParameters(toggleCombo, SeparateWebRequest.SimulateSecondRequestOrScheduler));	
 				}
 			}
 			
