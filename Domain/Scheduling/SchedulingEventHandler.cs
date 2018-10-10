@@ -52,9 +52,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						continue;
 						
 					var scheduleDay = range.ScheduledDay(date);
-					//this is not correct
 					scheduleDay.PersonAssignment(true).ClearMainActivities();
-					scheduleDay.PersonAssignment(true).SetDayOff(null,true);
+					scheduleDay.PersonAssignment().SetDayOff(null);
 
 					//Correct, res calc numbers?!?!?
 					schedules.Modify(scheduleDay, new DoNothingScheduleDayChangeCallBack());
