@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			{
 				parameters.Add(seperateWebRequest);
 			}
-			toggles.ForEach(x => parameters.Add(x));
+			toggles.OrderBy(x => x.ToString()).ForEach(x => parameters.Add(x));
 			_parameters = parameters;
 		}
 
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 
 		public bool Equals(ResourcePlannerTestParameters other)
 		{
-			return _parameters.All(other._parameters.Contains);
+			return _parameters.SequenceEqual(other._parameters);
 		}
 
 		public override bool Equals(object obj)

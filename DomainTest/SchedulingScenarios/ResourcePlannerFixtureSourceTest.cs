@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 		}
 		
 		[Test, Ignore("To be fixed")]
-		public void ThreeToggles_WithExtraRequest_AlsoCheckOrder()
+		public void ThreeToggles_WithExtraRequest_CheckOrder_UpDown()
 		{
 			var target = new resourcePlannerFixtureSourceForTest(new[]{Toggles.TestToggle3, Toggles.TestToggle, Toggles.TestToggle2}, true);
 
@@ -175,6 +175,23 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle3}, SeperateWebRequest.SimulateSecondRequestOrScheduler),
 				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2, Toggles.TestToggle3}, SeperateWebRequest.SimulateSecondRequestOrScheduler),
 				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2, Toggles.TestToggle3}, SeperateWebRequest.SimulateSecondRequestOrScheduler)
+			);
+		}
+		
+		[Test]
+		public void ThreeToggles_CheckOrder_LeftRight()
+		{
+			var target = new resourcePlannerFixtureSourceForTest(new[]{Toggles.TestToggle3, Toggles.TestToggle, Toggles.TestToggle2}, false);
+			
+			target.Should().Have.SameValuesAs(
+				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), null),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle}, null),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2}, null),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle3}, null),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2, Toggles.TestToggle3}, null),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2}, null),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2, Toggles.TestToggle3}, null),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle3}, null)
 			);
 		}
 		
