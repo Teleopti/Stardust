@@ -27,31 +27,34 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly ScheduleExecutor _scheduleExecutor;
 		
-		public SchedulingEventHandlerNew(AgentsWithPreferences agentsWithPreferences, AgentsWithWhiteSpots agentsWithWhiteSpots, Func<ISchedulerStateHolder> schedulerStateHolder, FillSchedulerStateHolder fillSchedulerStateHolder, ScheduleExecutor scheduleExecutor, ISchedulingOptionsProvider schedulingOptionsProvider, ICurrentSchedulingCallback currentSchedulingCallback, ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland, IGridlockManager gridlockManager, ISchedulingSourceScope schedulingSourceScope, ExtendSelectedPeriodForMonthlyScheduling extendSelectedPeriodForMonthlyScheduling, IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod, DayOffOptimization dayOffOptimization, IAlreadyScheduledAgents alreadyScheduledAgents) : base(schedulerStateHolder, fillSchedulerStateHolder, scheduleExecutor, schedulingOptionsProvider, currentSchedulingCallback, synchronizeSchedulesAfterIsland, gridlockManager, schedulingSourceScope, extendSelectedPeriodForMonthlyScheduling, blockPreferenceProviderForPlanningPeriod, dayOffOptimization, alreadyScheduledAgents)
+		
+		public SchedulingEventHandlerNew(AgentsWithPreferences agentsWithPreferences, AgentsWithWhiteSpots agentsWithWhiteSpots, Func<ISchedulerStateHolder> schedulerStateHolder, FillSchedulerStateHolder fillSchedulerStateHolder, ScheduleExecutor scheduleExecutor, ISchedulingOptionsProvider schedulingOptionsProvider, ICurrentSchedulingCallback currentSchedulingCallback, ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland, IGridlockManager gridlockManager, ISchedulingSourceScope schedulingSourceScope, ExtendSelectedPeriodForMonthlyScheduling extendSelectedPeriodForMonthlyScheduling, IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod, DayOffOptimization dayOffOptimization, IAlreadyScheduledAgents alreadyScheduledAgents, IAgentsNotPossibleToScheduleWithPreferences agentsNotPossibleToScheduleDueToPreferences) : base(schedulerStateHolder, fillSchedulerStateHolder, scheduleExecutor, schedulingOptionsProvider, currentSchedulingCallback, synchronizeSchedulesAfterIsland, gridlockManager, schedulingSourceScope, extendSelectedPeriodForMonthlyScheduling, blockPreferenceProviderForPlanningPeriod, dayOffOptimization, alreadyScheduledAgents, agentsNotPossibleToScheduleDueToPreferences)
 		{
 			_agentsWithPreferences = agentsWithPreferences;
 			_agentsWithWhiteSpots = agentsWithWhiteSpots;
 			_schedulerStateHolder = schedulerStateHolder;
 			_scheduleExecutor = scheduleExecutor;
 		}
-
+		
 		protected override void RunSchedulingWithoutPreferences(
-			IDictionary<IPerson, IEnumerable<DateOnly>> alreadyScheduledAgents, SchedulingWasOrdered @event, IEnumerable<IPerson> agents,
+			IDictionary<IPerson, IEnumerable<DateOnly>> scheduledDays, SchedulingWasOrdered @event,
 			DateOnlyPeriod selectedPeriod, SchedulingOptions schedulingOptions, ISchedulingCallback schedulingCallback,
-			ISchedulingProgress schedulingProgress, IBlockPreferenceProvider blockPreferenceProvider)
+			ISchedulingProgress schedulingProgress, IBlockPreferenceProvider blockPreferenceProvider,
+			IEnumerable<IPerson> alreadyTriedScheduledAgents,
+			IEnumerable<IPerson> agentsNotPossibleToScheduleWithPreferences)
 		{
 			if (!@event.ScheduleWithoutPreferencesForFailedAgents) 
 				return;
 			var schedules = _schedulerStateHolder().Schedules;
-			var agentsWithPreferences = _agentsWithPreferences.Execute(schedules, agents, selectedPeriod);
-			var agentsWithWhiteSpotsAndPreferences = _agentsWithWhiteSpots.Execute(schedules, agentsWithPreferences, selectedPeriod);
+			var alreadyTriedScheduledAgentsWithWhiteSpotsAndPreferences = 
+				_agentsWithWhiteSpots.Execute(schedules, _agentsWithPreferences.Execute(schedules, alreadyTriedScheduledAgents, selectedPeriod), selectedPeriod).ToList();
 			
-			foreach (var agent in agentsWithWhiteSpotsAndPreferences)
+			foreach (var agent in alreadyTriedScheduledAgentsWithWhiteSpotsAndPreferences)
 			{
 				var range = schedules[agent];
 				foreach (var date in selectedPeriod.DayCollection())
 				{
-					if(alreadyScheduledAgents.TryGetValue(agent, out var alreadyScheduleDates) && alreadyScheduleDates.Contains(date))
+					if(scheduledDays.TryGetValue(agent, out var alreadyScheduleDates) && alreadyScheduleDates.Contains(date))
 						continue;
 						
 					var scheduleDay = range.ScheduledDay(date);
@@ -62,10 +65,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					schedules.Modify(scheduleDay, new DoNothingScheduleDayChangeCallBack());
 				}
 			}
+
+			var agentsToReschedule =
+				alreadyTriedScheduledAgentsWithWhiteSpotsAndPreferences.Union(
+					agentsNotPossibleToScheduleWithPreferences);
+
 			schedulingOptions.UsePreferences = false;
-			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, agentsWithWhiteSpotsAndPreferences,
+			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, agentsToReschedule,
 				selectedPeriod, blockPreferenceProvider);
 		}
+
 	}
 	
 	
@@ -85,6 +94,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IBlockPreferenceProviderForPlanningPeriod _blockPreferenceProviderForPlanningPeriod;
 		private readonly DayOffOptimization _dayOffOptimization;
 		private readonly IAlreadyScheduledAgents _alreadyScheduledAgents;
+		private readonly IAgentsNotPossibleToScheduleWithPreferences _agentsNotPossibleToScheduleDueToPreferences;
 
 		public SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder,
 						FillSchedulerStateHolder fillSchedulerStateHolder,
@@ -97,7 +107,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						ExtendSelectedPeriodForMonthlyScheduling extendSelectedPeriodForMonthlyScheduling,
 						IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod,
 						DayOffOptimization dayOffOptimization,
-						IAlreadyScheduledAgents alreadyScheduledAgents)
+						IAlreadyScheduledAgents alreadyScheduledAgents,
+			IAgentsNotPossibleToScheduleWithPreferences agentsNotPossibleToScheduleDueToPreferences)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -111,6 +122,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_blockPreferenceProviderForPlanningPeriod = blockPreferenceProviderForPlanningPeriod;
 			_dayOffOptimization = dayOffOptimization;
 			_alreadyScheduledAgents = alreadyScheduledAgents;
+			_agentsNotPossibleToScheduleDueToPreferences = agentsNotPossibleToScheduleDueToPreferences;
 		}
 
 		[TestLog]
@@ -154,29 +166,37 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				_blockPreferenceProviderForPlanningPeriod.Fetch(@event.PlanningPeriodId) : 
 				new FixedBlockPreferenceProvider(schedulingOptions);
 			selectedPeriod = _extendSelectedPeriodForMonthlyScheduling.Execute(@event, schedulerStateHolder, selectedPeriod);
-			var agents = schedulerStateHolder.SchedulingResultState.LoadedAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray();
+			var agentsToSchedule = schedulerStateHolder.SchedulingResultState.LoadedAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray();
+			
+			var agentsNotPossibleToScheduleDueToPreferences = _agentsNotPossibleToScheduleDueToPreferences.Execute(selectedPeriod, agentsToSchedule);
 
-			var alreadyScheduledAgents = _alreadyScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod, agents);
+			var agentsThatMightBePossibleToScheduleWithPreferences = agentsToSchedule.Where(agent => !agentsNotPossibleToScheduleDueToPreferences.Contains(agent)).ToList();
+
+			var daysScheduledAtStart = _alreadyScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod, agentsThatMightBePossibleToScheduleWithPreferences);
 			
-			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, agents, selectedPeriod, blockPreferenceProvider);
+			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, agentsThatMightBePossibleToScheduleWithPreferences, selectedPeriod, blockPreferenceProvider);
 			
-			RunSchedulingWithoutPreferences(alreadyScheduledAgents, @event, agents, selectedPeriod, schedulingOptions, schedulingCallback, schedulingProgress, blockPreferenceProvider);
+			RunSchedulingWithoutPreferences(daysScheduledAtStart, @event, selectedPeriod, schedulingOptions, schedulingCallback, schedulingProgress, blockPreferenceProvider,
+			agentsThatMightBePossibleToScheduleWithPreferences, agentsNotPossibleToScheduleDueToPreferences);
 
 			if(@event.RunDayOffOptimization)
 			{
 				_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate),
-					agents,
+					agentsToSchedule,
 					true,
 					@event.PlanningPeriodId);
 			}
 		}
 
 		protected virtual void RunSchedulingWithoutPreferences(
-			IDictionary<IPerson, IEnumerable<DateOnly>> alreadyScheduledAgents, SchedulingWasOrdered @event,IEnumerable<IPerson> agents,
+			IDictionary<IPerson, IEnumerable<DateOnly>> scheduledDays, SchedulingWasOrdered @event,
 			DateOnlyPeriod selectedPeriod, SchedulingOptions schedulingOptions,
 			ISchedulingCallback schedulingCallback, ISchedulingProgress schedulingProgress,
-			IBlockPreferenceProvider blockPreferenceProvider)
+			IBlockPreferenceProvider blockPreferenceProvider,
+			IEnumerable<IPerson> thatMightBePossibleToScheduleWithPreferences,
+			IEnumerable<IPerson> agentsNotPossibleToScheduleWithPreferences)
 		{
 		}
 	}
+
 }

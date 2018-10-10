@@ -510,6 +510,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if(_configuration.Toggle(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288))
 			{
 				builder.RegisterType<AlreadyScheduledAgents>().As<IAlreadyScheduledAgents>().SingleInstance();
+				builder.RegisterType<AgentsNotPossibleToScheduleWithPreferences>().As<IAgentsNotPossibleToScheduleWithPreferences>().InstancePerLifetimeScope();
 				builder.RegisterType<AgentsWithWhiteSpots>().SingleInstance();
 				builder.RegisterType<AgentsWithPreferences>().SingleInstance();
 				if (!_configuration.Args().IsFatClient)
@@ -520,6 +521,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			else
 			{
 				builder.RegisterType<AlreadyScheduledAgentsNullObject>().As<IAlreadyScheduledAgents>().SingleInstance();
+				builder.RegisterType<AgentsNotPossibleToScheduleWithPreferencesNullObject>().As<IAgentsNotPossibleToScheduleWithPreferences>().InstancePerLifetimeScope();
+
 			}
 		}
 
