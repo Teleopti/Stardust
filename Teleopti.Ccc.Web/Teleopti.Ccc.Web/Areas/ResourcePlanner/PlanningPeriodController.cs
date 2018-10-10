@@ -53,11 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			if (lastJobResult != null && lastJobResult.FinishedOk)
 			{
 				var fullSchedulingResultModel = JsonConvert.DeserializeObject<FullSchedulingResultModel>(lastJobResult.Details.Last().Message);
-
-				foreach (var schedulingHintError in fullSchedulingResultModel.BusinessRulesValidationResults)
-				{
-					HintsHelper.BuildErrorMessages(schedulingHintError.ValidationErrors);
-				}
+				fullSchedulingResultModel.BusinessRulesValidationResults = HintsHelper.BuildBusinessRulesValidationResults(fullSchedulingResultModel.BusinessRulesValidationResults);
 				return Ok(new
 				{
 					PlanningPeriod = new

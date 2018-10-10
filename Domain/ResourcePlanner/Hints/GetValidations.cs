@@ -27,11 +27,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			var people = _planningGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.PlanningGroup).AllPeople.ToList();
 			var validationResult = _basicCheckScheduleHints.Execute(
 				new HintInput(null, people, planningPeriod.Range, _blockPreferenceProviderUsingFiltersFactory.Create(planningPeriod.PlanningGroup), true));
-			foreach (var res in validationResult.InvalidResources)
-			{
-				HintsHelper.BuildErrorMessages(res.ValidationErrors);
-			}
-
+			validationResult.InvalidResources = HintsHelper.BuildBusinessRulesValidationResults(validationResult.InvalidResources);
 			return validationResult;
 		}
 	}
