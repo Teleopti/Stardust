@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 		
 		public IEnumerator<ResourcePlannerTestParameters> GetEnumerator()
 		{
-			var toggleCombos = new HashSet<IEnumerable<Toggles>> {Enumerable.Empty<Toggles>()};
+			var toggleCombos = new HashSet<IEnumerable<Toggles>>(new togglesComparer()) {Enumerable.Empty<Toggles>()};
 			foreach (var toggleOuter in ToggleFlags)
 			{
 				innerEnumerator(toggleOuter, toggleCombos);
@@ -47,6 +47,19 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
+		}
+		
+		private class togglesComparer : IEqualityComparer<IEnumerable<Toggles>>
+		{
+			public bool Equals(IEnumerable<Toggles> x, IEnumerable<Toggles> y)
+			{
+				return x.All(y.Contains);
+			}
+
+			public int GetHashCode(IEnumerable<Toggles> obj)
+			{
+				return obj.Count();
+			}
 		}
 	}
 }

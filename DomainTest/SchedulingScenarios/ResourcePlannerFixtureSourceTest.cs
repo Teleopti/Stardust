@@ -124,6 +124,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2, Toggles.TestToggle3}, SeperateWebRequest.SimulateSecondRequestOrScheduler)
 			);
 		}
+		
+		[Test]
+		public void ThreeToggle_WithExtraRequest_VerifyCount()
+		{
+			var target = new resourcePlannerFixtureSourceForTest(new[]{Toggles.TestToggle, Toggles.TestToggle2, Toggles.TestToggle3}, true);
+
+			target.Count().Should().Be.EqualTo(16);
+		}
 
 		[Test]
 		public void FourToggles()
