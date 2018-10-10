@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 		
 		[Test]
-		public void ShouldRemoveDaysOff()
+		public void ShouldRemoveDaysOffAndManageToRescheduleAllDays()
 		{
 			var dayOffTemplate = DayOffFactory.CreateDayOff();
 			DayOffTemplateRepository.Has(dayOffTemplate);
