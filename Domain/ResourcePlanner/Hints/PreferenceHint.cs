@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			{
 				if (_restrictionOverLimitDecider.PreferencesOverLimit(new Percent(1), matrix).BrokenDays.Any())
 				{
-					hintResult.Add(new PersonHintError(matrix.Person){ErrorResource = nameof(Resources.AgentScheduledWithoutPreferences)}, null, ValidationResourceType.Preferences);					
+					hintResult.Add(new PersonHintError(matrix.Person){ErrorResource = nameof(Resources.AgentScheduledWithoutPreferences)}, GetType(),ValidationResourceType.Preferences);					
 				}
 			}
 		}

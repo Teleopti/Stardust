@@ -511,7 +511,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<AlreadyScheduledAgents>().As<IAlreadyScheduledAgents>().SingleInstance();
 				builder.RegisterType<AgentsWithWhiteSpots>().SingleInstance();
-				builder.RegisterType<PreferenceHint>().As<IScheduleHint>().SingleInstance();
+				if (!_configuration.Args().IsFatClient)
+				{
+					builder.RegisterType<PreferenceHint>().As<IScheduleHint>().SingleInstance();
+				}
 			}
 			else
 			{
