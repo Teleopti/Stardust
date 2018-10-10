@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Auditing;
-using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
@@ -23,6 +21,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeStaffingAuditRepository StaffingAuditRepository;
 		public MutableNow Now;
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+		}
+		
 
 		[Test]
 		public void ShouldPersistUserInfoOnClearStaffingAction()
@@ -46,28 +50,53 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 		}
 
 		[Test]
-		public void ShouldPersisAllFieldsOnClearStaffingAction()
+		public void ShouldPersistAllFieldsOnClearStaffingAction()
 		{
 			IPerson person = PersonFactory.CreatePersonWithGuid("Ashley", "Aaron");
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			_target = new StaffingAuditContext(StaffingAuditRepository, LoggedOnUser, Now);
 			Now.Is(new DateTime(2018,10,09,10,10,10));
-			_target.Handle(new ClearBpoActionObj() { BpoGuid = Guid.NewGuid(), EndDate = DateTime.Today, StartDate = DateTime.Today.AddDays(-1) });
+			var clearBpoAction = new ClearBpoActionObj()
+			{
+				BpoGuid = Guid.NewGuid(),
+				EndDate = DateTime.Today,
+				StartDate = DateTime.Today.AddDays(-1)
+			};
 
-			StaffingAuditRepository.StaffingAuditList.First().ActionResult.Should().Be.EqualTo("Success");
-			StaffingAuditRepository.StaffingAuditList.First().Data.Should().Be.EqualTo(null);
-			StaffingAuditRepository.StaffingAuditList.First().Correlation.Should().Be.EqualTo(null);
-			StaffingAuditRepository.StaffingAuditList.First().TimeStamp.Should().Be.EqualTo(new DateTime(2018, 10, 09, 10, 10, 10));
+			_target.Handle(clearBpoAction);
+
+			var staffingAuditLog = StaffingAuditRepository.StaffingAuditList.First();
+			staffingAuditLog.ActionResult.Should().Be.EqualTo("Success");
+			staffingAuditLog.Data.Should().Be.EqualTo(JsonConvert.SerializeObject(clearBpoAction));
+			staffingAuditLog.Correlation.Should().Not.Be.Null();
+			staffingAuditLog.TimeStamp.Should().Be.EqualTo(new DateTime(2018, 10, 09, 10, 10, 10));
 		}
 
 
-		public void Isolate(IIsolate isolate)
+		[Test]
+		public void ShouldPersistAllFieldsOnBpoImportAction()
 		{
-			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			IPerson person = PersonFactory.CreatePersonWithGuid("Ashley", "Aaron");
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			_target = new StaffingAuditContext(StaffingAuditRepository, LoggedOnUser, Now);
+			Now.Is(new DateTime(2018, 10, 09, 10, 10, 20));
+			var importBpoAction = new ImportBpoActionObj()
+			{
+				FileContent = "I am content",
+				FileName = "Import_File_For_Telia.txt"
+			};
+
+			_target.Handle(importBpoAction);
+
+			var staffingAuditLog = StaffingAuditRepository.StaffingAuditList.First();
+			staffingAuditLog.ActionPerformedBy.Id.GetValueOrDefault().Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id.GetValueOrDefault());
+			staffingAuditLog.Action.Should().Be.EqualTo("ImportBpo");
+			staffingAuditLog.ActionResult.Should().Be.EqualTo("Success");
+			staffingAuditLog.Data.Should().Be.EqualTo(importBpoAction.FileName);
+			staffingAuditLog.Correlation.Should().Not.Be.Null();
+			staffingAuditLog.TimeStamp.Should().Be.EqualTo(new DateTime(2018, 10, 09, 10, 10, 20));
 		}
+		
 	}
-
-
-
 	
 }

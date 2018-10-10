@@ -397,6 +397,7 @@
     <Compile Include="Areas\Global\TenantCredential.cs" />
     <Compile Include="Areas\Global\Aspect\AuditTrailAspect.cs" />
     <Compile Include="Areas\Global\Aspect\IHandleContextAction.cs" />
+    <Compile Include="Areas\Global\Aspect\AuditTrailAttribute.cs" />
     <Compile Include="Areas\People\Core\Aspects\PersonAccessAuditContext.cs" />
     <Compile Include="Areas\Staffing\AuditableBpoOperations.cs" />
     <Compile Include="Areas\Staffing\StaffingAuditContext.cs" />

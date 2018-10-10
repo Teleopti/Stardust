@@ -1,9 +1,8 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Web.Areas.Global.Aspect;
 
-namespace Teleopti.Ccc.Web.Areas.Global
+namespace Teleopti.Ccc.Web.Areas.Global.Aspect
 {
 	public class AuditTrailAspect : IAspect
 	{
@@ -16,13 +15,13 @@ namespace Teleopti.Ccc.Web.Areas.Global
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
+			//We can also introduce the correlatoin id here as well and pass in in the argument list but that means to chagne the IHandleContextAction Contract
 			//using (var resolve = _resolve.NewScope())
-			//{
-				var handlerType = typeof(IHandleContextAction<>).MakeGenericType(invocation.Arguments[0].GetType());
-				var handler = _resolve.Resolve(handlerType);
-				var method = handler.GetType().GetMethod("Handle", new[] { invocation.Arguments[0].GetType() });
-				method.Invoke(handler, new[] { invocation.Arguments[0] });
-			//}
+			var handlerType = typeof(IHandleContextAction<>).MakeGenericType(invocation.Arguments[0].GetType());
+			var handler = _resolve.Resolve(handlerType);
+			var method = handler.GetType().GetMethod("Handle", new[] {invocation.Arguments[0].GetType()});
+			method.Invoke(handler, new[] {invocation.Arguments[0]});
+
 		}
 
 		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)

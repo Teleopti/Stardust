@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.Web.Areas.People.Core.Aspects;
+using Teleopti.Ccc.Web.Areas.Global.Aspect;
 using Teleopti.Ccc.Web.Areas.Staffing.Controllers;
 
 namespace Teleopti.Ccc.Web.Areas.Staffing

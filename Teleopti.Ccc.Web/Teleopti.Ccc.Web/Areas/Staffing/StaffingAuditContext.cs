@@ -1,4 +1,6 @@
 ﻿using System;
+using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Web.Areas.Global.Aspect;
@@ -10,22 +12,28 @@ namespace Teleopti.Ccc.Web.Areas.Staffing
 	{
 		private readonly IStaffingAuditRepository _staffingAuditRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly INow _now;
 
-		public StaffingAuditContext(IStaffingAuditRepository staffingAuditRepository, ILoggedOnUser loggedOnUser)
+
+		public StaffingAuditContext(IStaffingAuditRepository staffingAuditRepository, ILoggedOnUser loggedOnUser,INow now)
 		{
 			_staffingAuditRepository = staffingAuditRepository;
 			_loggedOnUser = loggedOnUser;
+			_now = now;
 		}
 
 		public void Handle(ClearBpoActionObj clearBpoAction)
 		{
-			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), null, "ClearBpoStaffing", "", "", null);
+			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), null, "ClearBpoStaffing", "Success", JsonConvert.SerializeObject(clearBpoAction));
+			staffingAudit.TimeStamp = _now.UtcDateTime();
 			_staffingAuditRepository.Persist(staffingAudit);
 		}
 
-		public void Handle(ImportBpoActionObj command)
+		public void Handle(ImportBpoActionObj importBpoAction)
 		{
-			throw new NotImplementedException();
+			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), null, "ImportBpo", "Success", importBpoAction.FileName);
+			staffingAudit.TimeStamp = _now.UtcDateTime();
+			_staffingAuditRepository.Persist(staffingAudit);
 		}
 	}
 

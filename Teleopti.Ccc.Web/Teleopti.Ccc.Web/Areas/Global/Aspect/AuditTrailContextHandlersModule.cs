@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.Web.Areas.People.Controllers;
 using Teleopti.Ccc.Web.Areas.Staffing;
 
 namespace Teleopti.Ccc.Web.Areas.Global.Aspect

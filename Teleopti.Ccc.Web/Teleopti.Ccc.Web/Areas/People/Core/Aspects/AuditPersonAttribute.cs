@@ -10,20 +10,4 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Aspects
 		{
 		}
 	}
-
-	public class AuditTrailAttribute : AspectAttribute
-	{
-		//version1
-		//public AuditTrailAttribute(Type type) : base(typeof(AuditTrailAspect))
-		//{
-		//	AuditContextType = type;
-		//}
-
-		//public Type AuditContextType { get; }
-
-		public AuditTrailAttribute() : base(typeof(AuditTrailAspect))
-		{
-		}
-
-	}
 }

@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			Action = action;
 			ActionResult = actionResult;
 			Data = actionData;
+			//should we have that or not?
 			Correlation = correlation ?? Guid.NewGuid();
 			TimeStamp = DateTime.UtcNow;
 		}
