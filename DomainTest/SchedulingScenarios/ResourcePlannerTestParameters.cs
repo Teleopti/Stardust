@@ -14,12 +14,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 	{
 		private readonly IEnumerable<object> _parameters;
 
-		public ResourcePlannerTestParameters(IEnumerable<Toggles> toggles, SeperateWebRequest? seperateWebRequest)
+		public ResourcePlannerTestParameters(IEnumerable<Toggles> toggles, SeparateWebRequest? separateWebRequest)
 		{
 			var parameters = new List<object>();
-			if(seperateWebRequest.HasValue)
+			if(separateWebRequest.HasValue)
 			{
-				parameters.Add(seperateWebRequest);
+				parameters.Add(separateWebRequest);
 			}
 			toggles.OrderBy(x => x.ToString()).ForEach(x => parameters.Add(x));
 			_parameters = parameters;
@@ -34,9 +34,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			{
 				foreach (var parameter in _parameters)
 				{
-					if (parameter is SeperateWebRequest seperateWebRequest)
+					if (parameter is SeparateWebRequest separateWebRequest)
 					{
-						seperateWebRequestOutput.Append(seperateWebRequest);
+						seperateWebRequestOutput.Append(separateWebRequest);
 					}
 					else
 					{
@@ -85,8 +85,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 
 		public void SimulateNewRequest(IIoCTestContext iocTestContext)
 		{
-			if (_parameters.Any(x => x is SeperateWebRequest seperateWebRequest &&
-				seperateWebRequest == SeperateWebRequest.SimulateSecondRequestOrScheduler))
+			if (_parameters.Any(x => x is SeparateWebRequest separateWebRequest &&
+				separateWebRequest == SeparateWebRequest.SimulateSecondRequestOrScheduler))
 			{
 				iocTestContext.SimulateNewRequest();
 			}

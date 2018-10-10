@@ -8,13 +8,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 {
 	public class ResourcePlannerTestParameterTest
 	{
-		[TestCase(SeperateWebRequest.SimulateSecondRequestOrScheduler, ExpectedResult = true)]
-		[TestCase(SeperateWebRequest.SimulateFirstRequest, ExpectedResult = false)]
+		[TestCase(SeparateWebRequest.SimulateSecondRequestOrScheduler, ExpectedResult = true)]
+		[TestCase(SeparateWebRequest.SimulateFirstRequest, ExpectedResult = false)]
 		[TestCase(null, ExpectedResult = false)]
-		public bool ShouldSimulateSecondRequest(SeperateWebRequest? seperateWebRequest)
+		public bool ShouldSimulateSecondRequest(SeparateWebRequest? separateWebRequest)
 		{
 			var iocTestContext = new FakeIoCTestContext();
-			var target = new ResourcePlannerTestParameters(new []{Toggles.TestToggle}, seperateWebRequest);
+			var target = new ResourcePlannerTestParameters(new []{Toggles.TestToggle}, separateWebRequest);
 
 			target.SimulateNewRequest(iocTestContext);
 

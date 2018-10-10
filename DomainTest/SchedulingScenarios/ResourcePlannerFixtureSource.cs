@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			{
 				if (AlsoSimulateSecondRequest)
 				{
-					yield return new ResourcePlannerTestParameters(toggleCombo, SeperateWebRequest.SimulateFirstRequest);
-					yield return new ResourcePlannerTestParameters(toggleCombo, SeperateWebRequest.SimulateSecondRequestOrScheduler);
+					yield return new ResourcePlannerTestParameters(toggleCombo, SeparateWebRequest.SimulateFirstRequest);
+					yield return new ResourcePlannerTestParameters(toggleCombo, SeparateWebRequest.SimulateSecondRequestOrScheduler);
 				}
 				else
 				{
