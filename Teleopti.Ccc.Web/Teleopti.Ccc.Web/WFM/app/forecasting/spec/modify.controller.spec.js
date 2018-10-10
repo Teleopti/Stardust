@@ -1,5 +1,5 @@
 describe("ForecastModifyController", function () {
-	var vm, $controller, $httpBackend, fakeBackend, skill, scenario, scenario2;
+	var vm, $controller, $httpBackend, fakeBackend, skill, scenario, scenario2, forecastDays;
 
 	sessionStorage.currentForecastWorkload = angular.toJson({
 		ChartId: "123",
@@ -57,28 +57,6 @@ describe("ForecastModifyController", function () {
 				Name: "High",
 				DefaultScenario: false
 			};
-
-			$httpBackend
-				.whenPOST("../api/Forecasting/LoadForecast")
-				.respond(function (method, url, data, headers) {
-					return [
-						201,
-						{
-							ForecastDays: [
-								{
-									Date: "2018-04-25T00:00:00",
-									AverageAfterTaskTime: 4.7,
-									Tasks: 1135.2999999999997,
-									TotalAverageAfterTaskTime: 4.7,
-									TotalTasks: 1135.2999999999997,
-									AverageTaskTime: 158.10038509999998,
-									TotalAverageTaskTime: 158.10038509999998
-								}
-							],
-							WorkloadId: "123"
-						}
-					];
-				});
 		});
 	});
 
@@ -99,23 +77,44 @@ describe("ForecastModifyController", function () {
 		expect(vm.selectedScenario.Id).toEqual(scenario.Id);
 	}));
 
-	it("should default forecasting period to next 6 month", inject(function () {
-		var today = moment()
+	it("should default forecasting period to next 6 months", inject(function ($controller) {
+		var tomorrow = moment()
 			.utc()
-			.add(1, "days")
-			.format("MMM Do YY");
+			.add(1, "days");
+		forecastDays = [
+			{
+				Date: tomorrow,
+				AverageAfterTaskTime: 4.7,
+				Tasks: 1135.2999999999997,
+				TotalAverageAfterTaskTime: 4.7,
+				TotalTasks: 1135.2999999999997,
+				AverageTaskTime: 158.10038509999998,
+				TotalAverageTaskTime: 158.10038509999998
+			},
+			{
+				Date: tomorrow.add(6, "months"),
+				AverageAfterTaskTime: 4.7,
+				Tasks: 1135.2999999999997,
+				TotalAverageAfterTaskTime: 4.7,
+				TotalTasks: 1135.2999999999997,
+				AverageTaskTime: 158.10038509999998,
+				TotalAverageTaskTime: 158.10038509999998
+			}
+		];
+		fakeBackend.withSkill(skill);
+		fakeBackend.withForecastStatus(true);
+		fakeBackend.withScenario(scenario);
+		fakeBackend.withForecastData(forecastDays);
+		$httpBackend.flush();
+
 		var testStartDate = moment(vm.forecastPeriod.startDate)
 			.utc()
 			.format("MMM Do YY");
 		var testEndDate = moment(vm.forecastPeriod.endDate)
 			.utc()
 			.format("MMM Do YY");
-		expect(testStartDate).toEqual(today);
-		expect(testEndDate).toEqual(
-			moment()
-				.utc()
-				.add(6, "months")
-				.format("MMM Do YY")
+		expect(testStartDate).toEqual(tomorrow.format("MMM Do YY"));
+		expect(testEndDate).toEqual(moment().utc().add(1, "days").add(6, "months").format("MMM Do YY")
 		);
 	}));
 

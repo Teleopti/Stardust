@@ -291,6 +291,11 @@
 				wl,
 				function (data, status, headers, config) {
 					vm.selectedWorkload.Days = data.ForecastDays;
+					vm.forecastPeriod = {
+						startDate: moment(data.ForecastDays[0].Date).utc().toDate(),
+						endDate: moment(data.ForecastDays[vm.selectedWorkload.Days.length - 1].Date).utc().toDate()
+					};
+					//vm.forecastPeriod.endDate = data.ForecastDays[vm.selectedWorkload.Days.length - 1].Date;
 					vm.isForecastRunning = false;
 					vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
 					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
