@@ -161,10 +161,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			);
 		}
 		
-		[Test]
-		public void ThreeToggles_WithExtraRequest_CheckOrder_UpDown()
+		[TestCase(Toggles.TestToggle, Toggles.TestToggle2, Toggles.TestToggle3)]
+		[TestCase(Toggles.TestToggle3, Toggles.TestToggle2, Toggles.TestToggle)]
+		[TestCase(Toggles.TestToggle2, Toggles.TestToggle, Toggles.TestToggle3)]
+		public void ThreeToggles_WithExtraRequest_CheckOrder_UpDown(Toggles toggle1, Toggles toggle2, Toggles toggle3)
 		{
-			var target = new resourcePlannerFixtureSourceForTest(new[]{Toggles.TestToggle3, Toggles.TestToggle, Toggles.TestToggle2}, true);
+			var target = new resourcePlannerFixtureSourceForTest(new[]{toggle1, toggle2, toggle3}, true);
 
 			target.Should().Have.SameSequenceAs(
 				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), SeparateWebRequest.SimulateFirstRequest),
