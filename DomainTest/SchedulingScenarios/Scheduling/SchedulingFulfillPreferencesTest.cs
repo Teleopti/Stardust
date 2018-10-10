@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var ruleSet8H = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory8H));
 			var ruleSet10H = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), shiftCategory10H));
 			var shiftBag = new RuleSetBag(ruleSet8H, ruleSet10H);
-			var agentToSchedule = PersonRepository.Has(new Contract("_"),new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"),new Team(), new SchedulePeriod(date, SchedulePeriodType.Week, 1), shiftBag, skill);
+			var agentToSchedule = PersonRepository.Has(new Contract("_"),new ContractScheduleWorkingMondayToFriday(), new SchedulePeriod(date, SchedulePeriodType.Week, 1), shiftBag, skill);
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnlyPeriod(date, date.AddDays(6)), 1)); 
 			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = shiftCategory10H};
 			PreferenceDayRepository.Add(new PreferenceDay(agentToSchedule, date, preferenceRestriction));
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				PositivePeriodWorkTimeTolerance = new TimeSpan(0, 0, 0)
 			};
 
-			var agentToSchedule = PersonRepository.Has(contract,new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"),new Team(), new SchedulePeriod(date, SchedulePeriodType.Week, 1), shiftBag, skill);
+			var agentToSchedule = PersonRepository.Has(contract,new ContractScheduleWorkingMondayToFriday(), new SchedulePeriod(date, SchedulePeriodType.Week, 1), shiftBag, skill);
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnlyPeriod(date, date.AddDays(6)), 1)); 
 			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = new ShiftCategory().WithId()};
 			PreferenceDayRepository.Add(new PreferenceDay(agentToSchedule, date, preferenceRestriction));
@@ -156,8 +156,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var scenario = ScenarioRepository.Has("_");
 			var shiftCategory = new ShiftCategory().WithId();
 			var ruleSet8H = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			var shiftBag = new RuleSetBag(ruleSet8H);
-			var agentToSchedule = PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Week, 1), shiftBag, skill);
+			var agentToSchedule = PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Week, 1), ruleSet8H, skill);
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnlyPeriod(date, date.AddDays(6)), 1)); 
 			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = new ShiftCategory().WithId()};
 			PreferenceDayRepository.Add(new PreferenceDay(agentToSchedule, date, preferenceRestriction));
@@ -193,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				NegativePeriodWorkTimeTolerance = new TimeSpan(0, 0, 0),
 				PositivePeriodWorkTimeTolerance = new TimeSpan(0, 0, 0)
 			};
-			var agentToSchedule = PersonRepository.Has(contract,new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"),new Team(), new SchedulePeriod(date, SchedulePeriodType.Week, 1), shiftBag, skill);
+			var agentToSchedule = PersonRepository.Has(contract,new ContractScheduleWorkingMondayToFriday(), new SchedulePeriod(date, SchedulePeriodType.Week, 1), shiftBag, skill);
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnlyPeriod(date, date.AddDays(6)), 1)); 
 			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = new ShiftCategory().WithId()};
 			PreferenceDayRepository.Add(new PreferenceDay(agentToSchedule, date, preferenceRestriction));
@@ -224,7 +223,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				NegativePeriodWorkTimeTolerance = new TimeSpan(0, 0, 0),
 				PositivePeriodWorkTimeTolerance = new TimeSpan(0, 0, 0)
 			};
-			var agentToSchedule = PersonRepository.Has(contract,new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"),new Team(), new SchedulePeriod(date, SchedulePeriodType.Week, 1), shiftBag, skill);
+			var agentToSchedule = PersonRepository.Has(contract,new ContractScheduleWorkingMondayToFriday(), new SchedulePeriod(date, SchedulePeriodType.Week, 1), shiftBag, skill);
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnlyPeriod(date, date.AddDays(6)), 1)); 
 			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = new ShiftCategory().WithId()};
 			PreferenceDayRepository.Add(new PreferenceDay(agentToSchedule, date, preferenceRestriction));
@@ -250,7 +249,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var scenario = ScenarioRepository.Has("_");
 			var shiftCategory = new ShiftCategory().WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			var shiftBag = new RuleSetBag(ruleSet);
 			var contract = new Contract("_")
 			{
 				NegativeDayOffTolerance = 0,
@@ -258,7 +256,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				NegativePeriodWorkTimeTolerance = new TimeSpan(0, 0, 0),
 				PositivePeriodWorkTimeTolerance = new TimeSpan(0, 0, 0)
 			};
-			var agentToSchedule = PersonRepository.Has(contract,new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"),new Team(), new SchedulePeriod(date, SchedulePeriodType.Week, 1), shiftBag, skill);
+			var agentToSchedule = PersonRepository.Has(contract,new ContractScheduleWorkingMondayToFriday(), new SchedulePeriod(date, SchedulePeriodType.Week, 1), ruleSet, skill);
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnlyPeriod(date, date.AddDays(6)), 1)); 
 			var preferenceRestriction = new PreferenceRestriction {DayOffTemplate = dayOffTemplate};
 			for (int i = 0; i < 3; i++)
