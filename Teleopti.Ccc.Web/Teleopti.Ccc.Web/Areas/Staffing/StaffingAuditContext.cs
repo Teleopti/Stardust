@@ -24,16 +24,16 @@ namespace Teleopti.Ccc.Web.Areas.Staffing
 
 		public void Handle(ClearBpoActionObj clearBpoAction)
 		{
-			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), null, "ClearBpoStaffing", "Success", JsonConvert.SerializeObject(clearBpoAction));
+			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(),  "ClearBpoStaffing", "Success", JsonConvert.SerializeObject(clearBpoAction));
 			staffingAudit.TimeStamp = _now.UtcDateTime();
-			_staffingAuditRepository.Persist(staffingAudit);
+			_staffingAuditRepository.Add(staffingAudit);
 		}
 
 		public void Handle(ImportBpoActionObj importBpoAction)
 		{
-			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), null, "ImportBpo", "Success", importBpoAction.FileName);
+			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), "ImportBpo", "Success", importBpoAction.FileName);
 			staffingAudit.TimeStamp = _now.UtcDateTime();
-			_staffingAuditRepository.Persist(staffingAudit);
+			_staffingAuditRepository.Add(staffingAudit);
 		}
 	}
 

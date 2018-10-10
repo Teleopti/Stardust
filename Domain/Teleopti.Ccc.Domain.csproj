@@ -630,6 +630,7 @@
     <Compile Include="Staffing\ImportBpoFile.cs" />
     <Compile Include="Staffing\ISkillCombinationBpoTimeLineReader.cs" />
     <Compile Include="Staffing\IStaffingAuditRepository.cs" />
+    <Compile Include="Staffing\StaffingAudit.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
     <Compile Include="ResourcePlanner\Hints\IScheduleHint.cs" />
     <Compile Include="Scheduling\Overtime\IOvertimeSkillPeriodData.cs" />
@@ -4018,6 +4019,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Staffing\StaffingAudit.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WorkflowControl\OvertimeRequestOpenPeriodSkillType.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
