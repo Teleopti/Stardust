@@ -27,6 +27,9 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			
 			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.BpoExchange);
 			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.ChatBot);
+			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.PmNextGen);
+			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.PmNextGenViewReport);
+			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.PmNextGenEditReport);
 			return functions;
 		}
 

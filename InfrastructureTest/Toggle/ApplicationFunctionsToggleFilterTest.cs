@@ -102,10 +102,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		[Test]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.BpoExchange)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.ChatBot)]
+		[TestCase(DefinedRaptorApplicationFunctionPaths.PmNextGen)]
+		[TestCase(DefinedRaptorApplicationFunctionPaths.PmNextGenViewReport)]
+		[TestCase(DefinedRaptorApplicationFunctionPaths.PmNextGenEditReport)]
 		public void ShouldHideApplicationFunctionWithoutLicenseOption(string applicationFunctionPath)
 		{
 			var toggleManager = new TrueToggleManager();
-
 			var factory = new DefinedRaptorApplicationFunctionFactory();
 			var dataSource = new FakeCurrentDatasource("TestDataSource");
 			var functionsProvider = new FakeLicensedFunctionProvider();
