@@ -18,18 +18,25 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 				innerEnumerator(toggleOuter, toggleCombos);
 			}
 
-			foreach (var toggleCombo in toggleCombos)
+			var sortedTestParameters = new List<ResourcePlannerTestParameters>();
+			var sortedToggleCombos = toggleCombos.OrderBy(x => x.Count()).ThenBy(x => x.FirstOrDefault().ToString()).ToList();
+
+			foreach (var toggleCombo in sortedToggleCombos)
 			{
-				if (AlsoSimulateSecondRequest)
+				sortedTestParameters.Add(AlsoSimulateSecondRequest ? 
+					new ResourcePlannerTestParameters(toggleCombo, SeperateWebRequest.SimulateFirstRequest) : 
+					new ResourcePlannerTestParameters(toggleCombo, null));
+			}
+
+			if (AlsoSimulateSecondRequest)
+			{
+				foreach (var toggleCombo in sortedToggleCombos)
 				{
-					yield return new ResourcePlannerTestParameters(toggleCombo, SeparateWebRequest.SimulateFirstRequest);
-					yield return new ResourcePlannerTestParameters(toggleCombo, SeparateWebRequest.SimulateSecondRequestOrScheduler);
-				}
-				else
-				{
-					yield return new ResourcePlannerTestParameters(toggleCombo, null);					
+					sortedTestParameters.Add(new ResourcePlannerTestParameters(toggleCombo, SeperateWebRequest.SimulateSecondRequestOrScheduler));	
 				}
 			}
+			
+			return sortedTestParameters.GetEnumerator();
 		}
 
 		private void innerEnumerator(Toggles mainToggle, ISet<IEnumerable<Toggles>> toggleCombos, int startPos = 0)

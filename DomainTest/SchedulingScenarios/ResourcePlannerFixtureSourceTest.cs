@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			);
 		}
 		
-		[Test, Ignore("To be fixed")]
+		[Test]
 		public void ThreeToggles_WithExtraRequest_CheckOrder_UpDown()
 		{
 			var target = new resourcePlannerFixtureSourceForTest(new[]{Toggles.TestToggle3, Toggles.TestToggle, Toggles.TestToggle2}, true);
