@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Domain
 				browserInteractions.AssertExistsUsingJQuery(".heatmap:visible");
 				
 				TestLog.Static.Debug(
-					$"Scheduled agents/total number of agents in planning group: {browserInteractions.GetText(".scheduled-agents")}");
+					$"Agents with schedules/total number of agents in planning group: {browserInteractions.GetText(".scheduled-agents")}");
 			}
 		}
 	}
