@@ -119,12 +119,12 @@ WFM_Intraday_Redesign_77214 = RC
 # Ziggy #
 WfmStaffing_AddOvertime_42524 = RC
 Wfm_Payroll_SupportMultiDllPayrolls_75959 = RC
-Wfm_Stardust_EnableScaleout_77366 = RC
+Wfm_Stardust_EnableScaleout_77366 = true
 
 # Squids #
 WFM_Forecaster_Refact_44480 = true
 WFM_Export_Forecast_44716 = true
-WFM_TrainingPlanner_44780 = RC #So that large customers can use TP for up to 7 weeks from readmodels. Hard to set to true for everyone as they may book trinings further out...
+WFM_TrainingPlanner_44780 = RC #So that large customers can use TP for up to 7 weeks from readmodels. Hard to set to true for everyone as they may book trainings further out...
 Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560 = true
 Report_Remove_Realtime_Scheduled_Time_vs_Target_45559 = true
 Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640 = true
