@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
@@ -14,24 +15,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			if (!layerActivity.RequiresSkill)
 				return true;
 			var layerStartDate = layer.Period.ToDateOnlyPeriod(agentTimeZoneInfo).StartDate;
-			foreach (var skillDay in skillDays)
+			foreach (var skillDay in skillDaysForDate(skillDays, layerActivity, layerStartDate))
 			{
-				if (!(skillDay.Skill is MaxSeatSkill) &&
-					skillDay.Skill.Activity.Equals(layerActivity) &&
-					skillDay.CurrentDate.Equals(layerStartDate))
+				var skillTimeZone = skillDay.Skill.TimeZone;
+				var skillDayOpenHours = skillDay.OpenHours().ToList();
+				var layerTimePeriod = layer.Period.TimePeriod(skillTimeZone);
+				if (skillDayOpenHours.Any(timePeriod => timePeriod.Contains(layerTimePeriod)))
 				{
+					return true;
+				}
 
-					var skillTimeZone = skillDay.Skill.TimeZone;
-					var skillDayOpenHours = skillDay.OpenHours().ToList();
-					var layerTimePeriod = layer.Period.TimePeriod(skillTimeZone);
-					if (skillDayOpenHours.Any(timePeriod => timePeriod.Contains(layerTimePeriod)))
-					{
-						return true;
-					}
-
-					if (layerTimePeriod.EndTime.Days <= 0) continue;
-					var nextSkillDay = skillDays.FirstOrDefault(x => !(x.Skill is MaxSeatSkill) && x.CurrentDate.Equals(layerStartDate.AddDays(1)) && x.Skill.Activity.Equals(layerActivity));
-					if (nextSkillDay == null) continue;
+				if (layerTimePeriod.EndTime.Days <= 0) continue;
+				foreach (var nextSkillDay in skillDaysForDate(skillDays, layerActivity, layerStartDate.AddDays(1)))
+				{
 					foreach (var openHoursPeriod in skillDayOpenHours)
 					{
 						if (openHoursPeriod.EndTime.Days <= 0 || openHoursPeriod.StartTime > layerTimePeriod.StartTime) continue;
@@ -43,9 +39,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 						}
 					}
 				}
-
 			}
 			return false;
+		}
+
+		private static IEnumerable<ISkillDay> skillDaysForDate(IEnumerable<ISkillDay> skillDays, IActivity activity, DateOnly date)
+		{
+			return skillDays.Where(skillDay => !(skillDay.Skill is MaxSeatSkill) &&
+											   skillDay.Skill.Activity.Equals(activity) &&
+											   skillDay.CurrentDate.Equals(date));
 		}
 	}
 }
