@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.Domain.Aop
 		{
 			if (argument == null)
 				return "null";
-			if (argument is ICollection collection)
-				return "Count = " + collection.Count;
+			if (argument is IEnumerable collection)
+				return "Count = " + collection.Cast<object>().Count();
 			return argument;
 		}
 	}
