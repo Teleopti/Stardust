@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class FullSchedulingResult
 	{
 		private readonly CheckScheduleHints _checkScheduleHints;
-		private readonly SuccessfulScheduledAgents _successfulScheduledAgents;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IFindSchedulesForPersons _findSchedulesForPersons;
 		private readonly IUserTimeZone _userTimeZone;
@@ -28,20 +27,23 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
+		private readonly AgentsWithWhiteSpots _agentsWithWhiteSpots;
+
 		public FullSchedulingResult(Func<ISchedulerStateHolder> schedulerStateHolder, IFindSchedulesForPersons findSchedulesForPersons, 
 			IUserTimeZone userTimeZone, ICurrentScenario currentScenario,  
-			CheckScheduleHints checkScheduleHints, SuccessfulScheduledAgents successfulScheduledAgents, 
+			CheckScheduleHints checkScheduleHints, 
 			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory, 
 			ICurrentUnitOfWork currentUnitOfWork, IResourceCalculation resourceCalculation, 
-			CascadingResourceCalculationContextFactory resourceCalculationContextFactory, FillSchedulerStateHolder fillSchedulerStateHolder)
+			CascadingResourceCalculationContextFactory resourceCalculationContextFactory, FillSchedulerStateHolder fillSchedulerStateHolder,
+			AgentsWithWhiteSpots agentsWithWhiteSpots)
 		{
 			_checkScheduleHints = checkScheduleHints;
-			_successfulScheduledAgents = successfulScheduledAgents;
 			_blockPreferenceProviderUsingFiltersFactory = blockPreferenceProviderUsingFiltersFactory;
 			_currentUnitOfWork = currentUnitOfWork;
 			_resourceCalculation = resourceCalculation;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
+			_agentsWithWhiteSpots = agentsWithWhiteSpots;
 			_schedulerStateHolder = schedulerStateHolder;
 			_findSchedulesForPersons = findSchedulesForPersons;
 			_userTimeZone = userTimeZone;
@@ -50,11 +52,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		[TestLog]
 		[UnitOfWork]
-		public virtual FullSchedulingResultModel Create(DateOnlyPeriod period, IEnumerable<IPerson> fixedStaffPeople, IPlanningGroup planningGroup, bool usePreferences)
+		public virtual FullSchedulingResultModel Create(DateOnlyPeriod period, IEnumerable<IPerson> selectedAgents, IPlanningGroup planningGroup, bool usePreferences)
 		{
 			//TODO: investigate, hackelihack
-			_currentUnitOfWork.Current().Reassociate(fixedStaffPeople);
-			var planningGroupSkills = fixedStaffPeople.SelectMany(person => person.PersonPeriods(period)).SelectMany(p => p.PersonSkillCollection.Select(s => s.Skill)).Distinct().ToArray();
+			_currentUnitOfWork.Current().Reassociate(selectedAgents);
+			var planningGroupSkills = selectedAgents.SelectMany(person => person.PersonPeriods(period)).SelectMany(p => p.PersonSkillCollection.Select(s => s.Skill)).Distinct().ToArray();
 			_currentUnitOfWork.Current().Reassociate(planningGroupSkills);
 			//
 
@@ -67,12 +69,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 					new ResourceCalculationData(resultStateHolder, false, false));
 			}
 			var allSkillsForAgentGroup = getAllSkillsForPlanningGroup(planningGroupSkills, resultStateHolder);
-			var scheduleOfSelectedPeople = _findSchedulesForPersons.FindSchedulesForPersons(_currentScenario.Current(), fixedStaffPeople, 
-				new ScheduleDictionaryLoadOptions(usePreferences, false, usePreferences), period.ToDateTimePeriod(_userTimeZone.TimeZone()), fixedStaffPeople, true);
-			var validationResults = _checkScheduleHints.Execute(new HintInput(scheduleOfSelectedPeople, fixedStaffPeople, period, _blockPreferenceProviderUsingFiltersFactory.Create(planningGroup), usePreferences)).InvalidResources;
+			var scheduleOfSelectedPeople = _findSchedulesForPersons.FindSchedulesForPersons(_currentScenario.Current(), selectedAgents, 
+				new ScheduleDictionaryLoadOptions(usePreferences, false, usePreferences), period.ToDateTimePeriod(_userTimeZone.TimeZone()), selectedAgents, true);
+			var validationResults = _checkScheduleHints.Execute(new HintInput(scheduleOfSelectedPeople, selectedAgents, period, _blockPreferenceProviderUsingFiltersFactory.Create(planningGroup), usePreferences)).InvalidResources;
+			var nonScheduledAgents = _agentsWithWhiteSpots.Execute(scheduleOfSelectedPeople, selectedAgents, period);
 			var result = new FullSchedulingResultModel
 			{
-				ScheduledAgentsCount = _successfulScheduledAgents.Execute(scheduleOfSelectedPeople, period),
+				ScheduledAgentsCount = selectedAgents.Count() - nonScheduledAgents.Count(),
 				BusinessRulesValidationResults = validationResults
 			};
 			if (resultStateHolder.SkillDays != null)
