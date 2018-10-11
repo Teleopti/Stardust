@@ -68,16 +68,32 @@ describe("ForecastModifyController", function () {
 	});
 
 	it("should get workload with days", inject(function ($controller) {
+		var tomorrow = moment()
+			.utc()
+			.add(1, "days");
+		forecastDays = [
+			{
+				Date: tomorrow,
+				AverageAfterTaskTime: 4.7,
+				Tasks: 1135.2999999999997,
+				TotalAverageAfterTaskTime: 4.7,
+				TotalTasks: 1135.2999999999997,
+				AverageTaskTime: 158.10038509999998,
+				TotalAverageTaskTime: 158.10038509999998
+			}
+		];
 		fakeBackend.withSkill(skill);
 		fakeBackend.withForecastStatus(true);
 		fakeBackend.withScenario(scenario);
+		fakeBackend.withForecastData(forecastDays);
 		$httpBackend.flush();
+
 		expect(vm.isForecastRunning).toEqual(false);
 		expect(vm.selectedWorkload.Days.length).toEqual(1);
 		expect(vm.selectedScenario.Id).toEqual(scenario.Id);
 	}));
 
-	it("should default forecasting period to next 6 months", inject(function ($controller) {
+	it("should set forecasting period to min and max of forecasted days", inject(function ($controller) {
 		var tomorrow = moment()
 			.utc()
 			.add(1, "days");
@@ -92,7 +108,7 @@ describe("ForecastModifyController", function () {
 				TotalAverageTaskTime: 158.10038509999998
 			},
 			{
-				Date: tomorrow.add(6, "months"),
+				Date: tomorrow.add(1, "days"),
 				AverageAfterTaskTime: 4.7,
 				Tasks: 1135.2999999999997,
 				TotalAverageAfterTaskTime: 4.7,
@@ -113,8 +129,39 @@ describe("ForecastModifyController", function () {
 		var testEndDate = moment(vm.forecastPeriod.endDate)
 			.utc()
 			.format("MMM Do YY");
-		expect(testStartDate).toEqual(tomorrow.format("MMM Do YY"));
-		expect(testEndDate).toEqual(moment().utc().add(1, "days").add(6, "months").format("MMM Do YY")
+		expect(testStartDate).toEqual(tomorrow
+			.format("MMM Do YY"));
+		expect(testEndDate).toEqual(moment()
+			.utc()
+			.add(2, "days")
+			.format("MMM Do YY")
+		);
+	}));
+	
+	it("should set forecasting period to next 6 months when no forecast", inject(function ($controller) {
+		var tomorrow = moment()
+			.utc()
+			.add(1, "days");
+		forecastDays = [];
+		fakeBackend.withSkill(skill);
+		fakeBackend.withForecastStatus(true);
+		fakeBackend.withScenario(scenario);
+		fakeBackend.withForecastData(forecastDays);
+		$httpBackend.flush();
+
+		var testStartDate = moment(vm.forecastPeriod.startDate)
+			.utc()
+			.format("MMM Do YY");
+		var testEndDate = moment(vm.forecastPeriod.endDate)
+			.utc()
+			.format("MMM Do YY");
+		expect(testStartDate).toEqual(
+			tomorrow
+			.format("MMM Do YY"));
+		expect(testEndDate).toEqual(moment()
+			.utc()
+			.add(6, "months")
+			.format("MMM Do YY")
 		);
 	}));
 
