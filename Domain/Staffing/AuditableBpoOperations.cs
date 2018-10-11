@@ -1,9 +1,10 @@
-﻿using System.Globalization;
-using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.Web.Areas.Global.Aspect;
-using Teleopti.Ccc.Web.Areas.Staffing.Controllers;
+﻿using System;
+using System.Globalization;
+using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
+using Teleopti.Ccc.Domain.Exceptions;
 
-namespace Teleopti.Ccc.Web.Areas.Staffing
+namespace Teleopti.Ccc.Domain.Staffing
 {
 	public interface IAuditableBpoOperations
 	{
@@ -25,14 +26,20 @@ namespace Teleopti.Ccc.Web.Areas.Staffing
 		[AuditTrail]
 		public virtual ClearBpoReturnObject ClearBpoForPeriod(ClearBpoActionObj clearBpoActionObj)
 		{
-			return _bpoProvider.ClearBpoResources(clearBpoActionObj.BpoGuid, clearBpoActionObj.StartDate, clearBpoActionObj.EndDate.AddDays(1).AddMinutes(-1));
+			var result = _bpoProvider.ClearBpoResources(clearBpoActionObj.BpoGuid, clearBpoActionObj.StartDate, clearBpoActionObj.EndDate.AddDays(1).AddMinutes(-1));
+			if (String.IsNullOrEmpty(result.ErrorMessage))
+				return result;
+			throw new BusinessRuleBrokenException() { ReturnObject = result };
+
 		}
 
 		[AuditTrail]
 		public virtual ImportBpoFileResult ImportBpo(ImportBpoActionObj fileContents)
 		{
 			var result = _bpoFile.ImportFile(fileContents.FileContent, CultureInfo.InvariantCulture, fileContents.FileName);
-			return result;
+			if (result.Success)
+				return result;
+			throw new BusinessRuleBrokenException(){ReturnObject = result};
 		}
 	}
 	

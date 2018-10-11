@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
@@ -23,43 +14,35 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 	[TestFixture]
 	[InfrastructureTest]
 	public class StaffingAuditRepositoryTest 
-		//: IIsolateSystem
 	{
-		//public SendUpdateStaffingReadModelHandler Target;
-		//public IEventPublisherScope Publisher;
-		//public IBusinessUnitRepository BusinessUnitRepository;
-		//public IScenarioRepository ScenarioRepository;
-		//public WithUnitOfWork WithUnitOfWork;
-		//public IBusinessUnitScope BusinessUnitScope;
-		//public FakeSkillDayRepository FakeSkillDayRepository;
-		//public LegacyFakeEventPublisher FakeEventPublisher;
+		public IStaffingAuditRepository Target;
+		public WithUnitOfWork WithUnitOfWork;
+		public IPersonRepository PersonRepository;
+		
+		[Test]
+		public void ShouldBeAbleToSaveAuditData()
+		{
 
-		//public void Isolate(IIsolate isolate)
-		//{
-		//	isolate.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();
-		//	isolate.UseTestDouble<LegacyFakeEventPublisher>().For<IEventPublisher>();
-		//}
+			StaffingAudit staffingAudit = null;
+			var person = PersonFactory.CreatePerson(new Name("ash", "and"));
+			var datetime = new DateTime(2018,10,11,10,10,10,DateTimeKind.Utc);
+			WithUnitOfWork.Do(() =>
+			{
+				PersonRepository.Add(person);
+				staffingAudit = new StaffingAudit(person, "ClearBpoStaffing","This is the data");
+				staffingAudit.TimeStamp = datetime;
+				Target.Add(staffingAudit);
+			});
 
-		//[Test]
-		//public void ShouldSendUpdateJob()
-		//{
-		//	FakeSkillDayRepository.HasSkillDays = true;
-		//	WithUnitOfWork.Do(() =>
-		//	{
-		//		var bu = BusinessUnitFactory.CreateSimpleBusinessUnit("bu");
-		//		BusinessUnitRepository.Add(bu);
-		//		using (BusinessUnitScope.OnThisThreadUse(bu))
-		//		{
-		//			var scenario = ScenarioFactory.CreateScenario("Default scenario", true, false);
-		//			ScenarioRepository.Add(scenario);
-		//		}
-
-		//	});
-
-		//	Target.Handle(new TenantMinuteTickEvent());
-
-		//	FakeEventPublisher.PublishedEvents.OfType<UpdateStaffingLevelReadModelEvent>().SingleOrDefault().Should().Not.Be
-		//		.Null();
-		//}
+			WithUnitOfWork.Do(() =>
+			{
+				var loadedStaffingAudit =  Target.LoadAll().First();
+				loadedStaffingAudit.Action.Should().Be.EqualTo(staffingAudit.Action);
+				loadedStaffingAudit.ActionPerformedBy.Id.GetValueOrDefault().Should().Be.EqualTo(person.Id.GetValueOrDefault());
+				loadedStaffingAudit.TimeStamp.Should().Be.EqualTo(staffingAudit.TimeStamp);
+				loadedStaffingAudit.Id.HasValue.Should().Be.True();
+			});
+		}
+		
 	}
 }

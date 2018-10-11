@@ -1,12 +1,10 @@
 ﻿using System;
 using Newtonsoft.Json;
-using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.Web.Areas.Global.Aspect;
-using Teleopti.Ccc.Web.Areas.Staffing.Controllers;
 
-namespace Teleopti.Ccc.Web.Areas.Staffing
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 {
 	public class StaffingAuditContext : IHandleContextAction<ClearBpoActionObj>, IHandleContextAction<ImportBpoActionObj>
 	{
@@ -24,18 +22,33 @@ namespace Teleopti.Ccc.Web.Areas.Staffing
 
 		public void Handle(ClearBpoActionObj clearBpoAction)
 		{
-			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(),  "ClearBpoStaffing", "Success", JsonConvert.SerializeObject(clearBpoAction));
+			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(),  "ClearBpoStaffing", JsonConvert.SerializeObject(clearBpoAction));
 			staffingAudit.TimeStamp = _now.UtcDateTime();
 			_staffingAuditRepository.Add(staffingAudit);
 		}
 
 		public void Handle(ImportBpoActionObj importBpoAction)
 		{
-			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), "ImportBpo", "Success", importBpoAction.FileName);
+			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), "ImportBpo",  importBpoAction.FileName);
 			staffingAudit.TimeStamp = _now.UtcDateTime();
 			_staffingAuditRepository.Add(staffingAudit);
 		}
 	}
 
-	
+
+	public class ImportBpoActionObj
+	{
+		public string FileContent { get; set; }
+		public string FileName { get; set; }
+	}
+
+
+
+	public class ClearBpoActionObj
+	{
+		public Guid BpoGuid { get; set; }
+		public DateTime StartDate { get; set; }
+		public DateTime EndDate { get; set; }
+	}
+
 }

@@ -147,6 +147,7 @@
     </Compile>
     <Compile Include="Configuration\AnalyticsUnitOfWorkModule.cs" />
     <Compile Include="Configuration\AspectsModule.cs" />
+    <Compile Include="Configuration\AuditTrailContextHandlersModule.cs" />
     <Compile Include="Configuration\BackToLegalShiftModule.cs" />
     <Compile Include="Configuration\BadgeCalculationModule.cs" />
     <Compile Include="Configuration\DataSourceModule.cs" />

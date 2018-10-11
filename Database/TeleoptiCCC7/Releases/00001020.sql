@@ -1,12 +1,9 @@
-
 CREATE TABLE [Auditing].[StaffingAudit](
 	[Id] [uniqueidentifier] NOT NULL,
 	[TimeStamp] [datetime] NOT NULL,
 	[ActionPerformedBy] [uniqueidentifier] NOT NULL,
 	[Action] [nvarchar](255) NOT NULL,
-	[ActionResult] [nvarchar](128) NOT NULL,
 	[Data] [nvarchar](max) NOT NULL,
-	[Correlation] [uniqueidentifier] NOT NULL,
  CONSTRAINT [PK_StaffingAudit] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

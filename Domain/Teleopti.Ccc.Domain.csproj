@@ -175,8 +175,13 @@
     <Compile Include="AgentInfo\SkillStaffingDataLoader.cs" />
     <Compile Include="AgentInfo\SkillStaffingDataSkillTypeFilter.cs" />
     <Compile Include="Analytics\AnalyticsSite.cs" />
+    <Compile Include="Aop\AuditTrailAspect.cs" />
+    <Compile Include="Aop\AuditTrailAttribute.cs" />
+    <Compile Include="Aop\IHandleContextAction.cs" />
     <Compile Include="Aop\IUnitOfWorkNoCommitAspect.cs" />
     <Compile Include="Aop\ReadonlyUnitOfWorkAttribute.cs" />
+    <Compile Include="ApplicationLayer\Audit\PersonAccessAuditContext.cs" />
+    <Compile Include="ApplicationLayer\Audit\StaffingAuditContext.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\FilterOutRequestsHandledByReadmodel.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistPreloadService.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistProcessPublisher.cs" />
@@ -202,6 +207,7 @@
     <Compile Include="Common\DefaultSchedulePeriodProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\MultipleChangeScheduleCommandHandler.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />
+    <Compile Include="Exceptions\BusinessRuleBrokenException.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\AccuracyModel.cs" />
     <Compile Include="Forecasting\Angel\Outlier\OutlierRemover.cs" />
     <Compile Include="Forecasting\Angel\Outlier\QueueStatisticsPerType.cs" />
@@ -620,6 +626,7 @@
     <Compile Include="Scheduling\WebLegacy\MoveSchedulesToOriginalStateHolderAfterIsland.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiWfmBpoExchangeLicenseOption.cs" />
     <Compile Include="SkillGroupManagement\ModifySkillGroupInput.cs" />
+    <Compile Include="Staffing\AuditableBpoOperations.cs" />
     <Compile Include="Staffing\BpoProvider.cs" />
     <Compile Include="Staffing\ClearBpoReturnObject.cs" />
     <Compile Include="Staffing\ExportStaffingPeriodValidationProvider.cs" />

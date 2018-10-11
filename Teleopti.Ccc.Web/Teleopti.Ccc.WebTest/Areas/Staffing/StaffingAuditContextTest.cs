@@ -3,6 +3,8 @@ using System.Linq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
@@ -66,9 +68,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 			_target.Handle(clearBpoAction);
 
 			var staffingAuditLog = StaffingAuditRepository.StaffingAuditList.First();
-			staffingAuditLog.ActionResult.Should().Be.EqualTo("Success");
 			staffingAuditLog.Data.Should().Be.EqualTo(JsonConvert.SerializeObject(clearBpoAction));
-			staffingAuditLog.Correlation.Should().Not.Be.Null();
 			staffingAuditLog.TimeStamp.Should().Be.EqualTo(new DateTime(2018, 10, 09, 10, 10, 10));
 		}
 
@@ -91,9 +91,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 			var staffingAuditLog = StaffingAuditRepository.StaffingAuditList.First();
 			staffingAuditLog.ActionPerformedBy.Id.GetValueOrDefault().Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id.GetValueOrDefault());
 			staffingAuditLog.Action.Should().Be.EqualTo("ImportBpo");
-			staffingAuditLog.ActionResult.Should().Be.EqualTo("Success");
 			staffingAuditLog.Data.Should().Be.EqualTo(importBpoAction.FileName);
-			staffingAuditLog.Correlation.Should().Not.Be.Null();
 			staffingAuditLog.TimeStamp.Should().Be.EqualTo(new DateTime(2018, 10, 09, 10, 10, 20));
 		}
 		

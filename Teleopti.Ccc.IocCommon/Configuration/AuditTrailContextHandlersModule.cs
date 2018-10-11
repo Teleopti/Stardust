@@ -1,12 +1,9 @@
 ﻿using System.Linq;
 using Autofac;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Aop.Core;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Infrastructure.Aop;
-using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.Web.Areas.Staffing;
 
-namespace Teleopti.Ccc.Web.Areas.Global.Aspect
+namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class AuditTrailContextHandlersModule : Module
 	{
@@ -30,11 +27,11 @@ namespace Teleopti.Ccc.Web.Areas.Global.Aspect
 				);
 
 
-			//may be we should move it to domain or its own module or a global module
-			if (_config.Toggle(Toggles.Wfm_AuditTrail_StaffingAuditTrail_78125))
-				builder.RegisterType<AuditableBpoOperationsToggleOn>().As<IAuditableBpoOperations>().SingleInstance().ApplyAspects();
-			else
-				builder.RegisterType<AuditableBpoOperationsToggleOff>().As<IAuditableBpoOperations>().SingleInstance();
+			////may be we should move it to domain or its own module or a global module
+			//if (_config.Toggle(Toggles.Wfm_AuditTrail_StaffingAuditTrail_78125))
+			//	builder.RegisterType<AuditableBpoOperationsToggleOn>().As<IAuditableBpoOperations>().SingleInstance().ApplyAspects();
+			//else
+			//	builder.RegisterType<AuditableBpoOperationsToggleOff>().As<IAuditableBpoOperations>().SingleInstance();
 
 		}
 	}
