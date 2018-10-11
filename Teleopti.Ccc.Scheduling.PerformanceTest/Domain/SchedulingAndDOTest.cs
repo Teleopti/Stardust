@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl;
@@ -46,6 +47,9 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Domain
 				//not redirected to logon page
 				browserInteractions.AssertNotExists("body", "#Login-container");
 				browserInteractions.AssertExistsUsingJQuery(".heatmap:visible");
+				
+				TestLog.Static.Debug(
+					$"Scheduled agents/total number of agents in planning group: {browserInteractions.GetText(".scheduled-agents")}");
 			}
 		}
 	}
