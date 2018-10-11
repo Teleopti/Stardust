@@ -75,6 +75,53 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Count(personAssignment => personAssignment.MainActivities().Any()).Should().Be.EqualTo(5);
 		}
 
+		[Test]
+		[Ignore("#78085 to be fixed")]
+		public void ShouldHandleTeamUsingShiftOverMidnightMultipleSkills()
+		{
+			var firstDay = new DateOnly(2015, 10, 12);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var activity = ActivityRepository.Has();
+			var skill1 = SkillRepository.Has("A", activity);
+			var skill2 = SkillRepository.Has("B", activity);
+
+			foreach (var dayTemplate in skill1.WorkloadCollection.First().TemplateWeekCollection.Values)
+			{
+				dayTemplate.ChangeOpenHours(new[] { new TimePeriod(8, 24) });	
+			}
+
+			//foreach (var dayTemplate in skill2.WorkloadCollection.First().TemplateWeekCollection.Values)
+			//{
+			//	dayTemplate.ChangeOpenHours(new[] { new TimePeriod(0, 8) });
+			//}
+
+			var scenario = ScenarioRepository.Has();
+			var team = new Team().WithId();
+			var dayOffTemplate = new DayOffTemplate(new Description()).WithId();
+			dayOffTemplate.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(8));
+			dayOffTemplate.Anchor = TimeSpan.FromHours(12);
+			DayOffTemplateRepository.Add(dayOffTemplate);
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value));
+			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
+			var shiftCategory = new ShiftCategory().WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(19, 0, 19, 0, 15), new TimePeriodWithSegment(27, 0, 27, 0, 15), shiftCategory));
+			var agent = PersonRepository.Has(new ContractWithMaximumTolerance(), contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill1, skill2);
+			SkillDayRepository.Has(skill1.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
+			SkillDayRepository.Has(skill2.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			{
+				DayOffTemplate = dayOffTemplate,
+				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
+				UseTeam = true,
+				TeamSameShiftCategory = true
+			});
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
+
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
+
+			AssignmentRepository.Find(new[] { agent }, period, scenario).Count(personAssignment => personAssignment.MainActivities().Any()).Should().Be.EqualTo(5);
+		}
+
 		[TestCase(true)]
 		[TestCase(false)]
 		public void ShouldHandleMixOfTeamAndBlockAndNotClearToMuch_BetweenDayOffs(bool reversedAgentOrder)
