@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 
 		[Test]
-		[Ignore("#78085 to be fixed")]
 		public void ShouldHandleTeamUsingShiftOverMidnight()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
