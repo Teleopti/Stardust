@@ -81,12 +81,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var firstDay = new DateOnly(2015, 10, 12);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = ActivityRepository.Has();
-			var skill1 = SkillRepository.Has("A", activity);
+			var skill1 = SkillRepository.Has("A", activity, new TimePeriod(8, 24));
 			var skill2 = SkillRepository.Has("B", activity);
-			foreach (var dayTemplate in skill1.WorkloadCollection.First().TemplateWeekCollection.Values)
-			{
-				dayTemplate.ChangeOpenHours(new[] { new TimePeriod(8, 24) });	
-			}
 			var scenario = ScenarioRepository.Has();
 			var team = new Team().WithId();
 			var dayOffTemplate = new DayOffTemplate(new Description()).WithId();
