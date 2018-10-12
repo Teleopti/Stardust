@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			WithUnitOfWork.Do(() =>
 			{
 				PersonRepository.Add(person);
-				staffingAudit = new StaffingAudit(person, "ClearBpoStaffing","This is the data");
+				staffingAudit = new StaffingAudit(person, "ClearBpoStaffing","This is the data", "BPO");
 				staffingAudit.TimeStamp = datetime;
 				Target.Add(staffingAudit);
 			});
@@ -43,6 +43,28 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				loadedStaffingAudit.Id.HasValue.Should().Be.True();
 			});
 		}
-		
+
+		[Test]
+		public void ShouldBeAbleToSaveContext()
+		{
+
+			StaffingAudit staffingAudit = null;
+			var person = PersonFactory.CreatePerson(new Name("ash", "and"));
+			var datetime = new DateTime(2018, 10, 11, 10, 10, 10, DateTimeKind.Utc);
+			WithUnitOfWork.Do(() =>
+			{
+				PersonRepository.Add(person);
+				staffingAudit = new StaffingAudit(person, "ClearBpoStaffing", "This is the data", "BPO");
+				staffingAudit.TimeStamp = datetime;
+				Target.Add(staffingAudit);
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				var loadedStaffingAudit = Target.LoadAll().First();
+				loadedStaffingAudit.Context.Should().Be.EqualTo("BPO");
+			});
+		}
+
 	}
 }

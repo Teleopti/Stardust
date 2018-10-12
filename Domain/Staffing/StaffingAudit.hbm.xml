@@ -29,12 +29,19 @@
 				not-null="true"
 				length="8001"
 				type="string" />
+	
+	  <property name="Context"
+				access="property"
+				not-null="true"
+				length="255"
+				type="string" />
 	  
     <many-to-one name="ActionPerformedBy"
       class="Teleopti.Ccc.Domain.Common.Person"
 		access="property"
         not-null="true"
        foreign-key="FK__PER_SA_ActionPerformedBy_Person_Id"/>
+
 	 
   </class>
 </hibernate-mapping>

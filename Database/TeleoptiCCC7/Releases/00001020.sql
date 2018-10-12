@@ -4,6 +4,7 @@ CREATE TABLE [Auditing].[StaffingAudit](
 	[ActionPerformedBy] [uniqueidentifier] NOT NULL,
 	[Action] [nvarchar](255) NOT NULL,
 	[Data] [nvarchar](max) NOT NULL,
+	[Context] [nvarchar](255) NOT NULL,
  CONSTRAINT [PK_StaffingAudit] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -11,11 +12,11 @@ CREATE TABLE [Auditing].[StaffingAudit](
 ) ON [PRIMARY] 
 GO
 
-ALTER TABLE [Auditing].[PersonAccess]  WITH CHECK ADD  CONSTRAINT [FK__PER_SA_ActionPerformedBy_Person_Id] FOREIGN KEY([ActionPerformedBy])
+ALTER TABLE [Auditing].[StaffingAudit]  WITH CHECK ADD  CONSTRAINT [FK__PER_SA_ActionPerformedBy_Person_Id] FOREIGN KEY([ActionPerformedBy])
 REFERENCES [dbo].[Person] ([Id])
 GO
 
-ALTER TABLE [Auditing].[PersonAccess] CHECK CONSTRAINT [FK__PER_SA_ActionPerformedBy_Person_Id]
+ALTER TABLE [Auditing].[StaffingAudit] CHECK CONSTRAINT [FK__PER_SA_ActionPerformedBy_Person_Id]
 GO
 
 

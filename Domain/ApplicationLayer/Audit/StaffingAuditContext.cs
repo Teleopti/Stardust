@@ -22,14 +22,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 
 		public void Handle(ClearBpoActionObj clearBpoAction)
 		{
-			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(),  "ClearBpoStaffing", JsonConvert.SerializeObject(clearBpoAction));
+			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(),  "ClearBpoStaffing", JsonConvert.SerializeObject(clearBpoAction), "BPO");
 			staffingAudit.TimeStamp = _now.UtcDateTime();
 			_staffingAuditRepository.Add(staffingAudit);
 		}
 
 		public void Handle(ImportBpoActionObj importBpoAction)
 		{
-			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), "ImportBpo",  importBpoAction.FileName);
+			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), "ImportBpo",  importBpoAction.FileName, "BPO");
 			staffingAudit.TimeStamp = _now.UtcDateTime();
 			_staffingAuditRepository.Add(staffingAudit);
 		}
