@@ -606,7 +606,6 @@
     <Compile Include="Areas\Options\SiteOpenHourController.cs" />
     <Compile Include="Areas\Reports\Controllers\ScheduleAuditTrailController.cs" />
     <Compile Include="Areas\Requests\Controller\SiteWithOpenHourController.cs" />
-    <Compile Include="Areas\People\Controllers\ApplySmartPropertyModel.cs" />
     <Compile Include="Areas\People\Controllers\ImportAgentController.cs" />
     <Compile Include="Areas\Global\Core\IMultipartHttpContentExtractor.cs" />
     <Compile Include="Areas\People\Core\IoC\PeopleAreaModule.cs" />
