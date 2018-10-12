@@ -1,7 +1,6 @@
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling
 {

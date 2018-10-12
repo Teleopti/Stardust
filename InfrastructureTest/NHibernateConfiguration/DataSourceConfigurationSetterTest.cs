@@ -3,12 +3,9 @@ using NHibernate.Dialect;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 {
@@ -16,12 +13,11 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 	public class DataSourceConfigurationSetterTest
 	{
 		[Test]
-		[Toggle(Toggles.Tech_Moving_ResilientConnectionLogic_76181)]
 		public void ShouldHaveStaticDefaultValuesWithResilientDriverSet()
 		{
 			var cfg = new Configuration();
 			var target = new dataSourceConfigurationSetterForTest(null, new ConfigReader());
-			target.AddDefaultSettingsTo(cfg, true);
+			target.AddDefaultSettingsTo(cfg);
 
 			cfg.GetProperty(Environment.Dialect).Should().Be.EqualTo(typeof(MsSql2008Dialect).AssemblyQualifiedName);
 			cfg.GetProperty(Environment.DefaultSchema).Should().Be.EqualTo("dbo");
@@ -32,25 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 				.Should()
 				.Be.EqualTo(typeof(ResilientAdoNetTransactionFactory).AssemblyQualifiedName);
 		}
-
-		[Test]
-		[ToggleOff(Toggles.Tech_Moving_ResilientConnectionLogic_76181)]
-		public void ShouldHaveStaticDefaultValuesSet()
-		{
-			var cfg = new Configuration();
-			var target = new dataSourceConfigurationSetterForTest(null, new ConfigReader());
-			target.AddDefaultSettingsTo(cfg, false);
-
-			cfg.GetProperty(Environment.Dialect).Should().Be.EqualTo(typeof(MsSql2008Dialect).AssemblyQualifiedName);
-			cfg.GetProperty(Environment.DefaultSchema).Should().Be.EqualTo("dbo");
-			cfg.GetProperty(Environment.SessionFactoryName).Should().Be.EqualTo("[not set]");
-			cfg.GetProperty(Environment.SqlExceptionConverter).Should().Be.EqualTo(typeof(SqlServerExceptionConverter).AssemblyQualifiedName);
-			cfg.GetProperty(Environment.ConnectionDriver).Should().Be.EqualTo(typeof(SqlAzureClientDriverWithLogRetries).AssemblyQualifiedName);
-			cfg.GetProperty(Environment.TransactionStrategy)
-				.Should()
-				.Be.EqualTo(typeof (ReliableAdoNetTransactionFactory).AssemblyQualifiedName);
-		}
-
+		
 		[Test]
 		public void ShouldSetApplicationNameOnConnectionString()
 		{
@@ -58,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			cfg.SetProperty(Environment.ConnectionString,
 			                "Data Source=teleopti730;Initial Catalog=PBI17774_Demoreg_TeleoptiCCC7;user id=sa;password=cadadi");
 			var target = new dataSourceConfigurationSetterForTest("application name", new ConfigReader());
-			target.AddDefaultSettingsTo(cfg, true);
+			target.AddDefaultSettingsTo(cfg);
 			cfg.GetProperty(Environment.ConnectionString).Should().Contain(@"Application Name=""application name""");
 		}
 
@@ -69,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			cfg.SetProperty(Environment.ConnectionString,
 								 "Data Source=teleopti730;Initial Catalog=PBI17774_Demoreg_TeleoptiCCC7;user id=sa;password=cadadi;Application Name=Teleopti.CCC.Client");
 			var target = new dataSourceConfigurationSetterForTest("application name", new ConfigReader());
-			target.AddDefaultSettingsTo(cfg, true);
+			target.AddDefaultSettingsTo(cfg);
 			cfg.GetProperty(Environment.ConnectionString).Should().Contain("Application Name=Teleopti.CCC.Client");
 		}
 
@@ -78,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		{
 			var cfg = new Configuration();
 			var target = new dataSourceConfigurationSetterForTest(null, new ConfigReader());
-			target.AddDefaultSettingsTo(cfg, true);
+			target.AddDefaultSettingsTo(cfg);
 
 			cfg.GetProperty(Environment.UseSecondLevelCache).Should().Be.EqualTo("false");
 		}
@@ -92,7 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 
 			var target = new dataSourceConfigurationSetterForTest(null, configReader);
 
-			target.AddDefaultSettingsTo(cfg, true);
+			target.AddDefaultSettingsTo(cfg);
 			cfg.GetProperty(Environment.ConnectionDriver).Should().Be.EqualTo(typeof(TeleoptiLatencySqlDriver).AssemblyQualifiedName);
 		}
 
@@ -101,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		{
 			var cfg = new Configuration();
 			var target = new dataSourceConfigurationSetterForTest(null, new ConfigReader());
-			target.AddDefaultSettingsTo(cfg, true);
+			target.AddDefaultSettingsTo(cfg);
 
 			cfg.GetProperty(Environment.TransactionStrategy).Should().Not.Contain("Distributed");
 		}
@@ -129,7 +107,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			}
 			cfg.SetProperty(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName);
 			var target = new dataSourceConfigurationSetterForTest(null, new ConfigReader());
-			target.AddDefaultSettingsTo(cfg, true);
+			target.AddDefaultSettingsTo(cfg);
 			foreach (var key in keys)
 			{
 				cfg.Properties[key].Should().Be.EqualTo(cfgValue);
@@ -143,7 +121,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			var cfg = new Configuration();
 			cfg.SetProperty(Environment.Dialect, dialect);
 			var target = new dataSourceConfigurationSetterForTest(null, new ConfigReader());
-			target.AddDefaultSettingsTo(cfg, true);
+			target.AddDefaultSettingsTo(cfg);
 			cfg.GetProperty(Environment.Dialect).Should().Be.EqualTo(dialect);
 		}
 

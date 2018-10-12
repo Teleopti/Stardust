@@ -5,7 +5,7 @@ using NHibernate.Dialect;
 using NHibernate.Impl;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 {
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 					db.ConnectionString = connectionString;
 					db.Dialect<MsSql2008Dialect>();
 					db.ExceptionConverter<TenantNhibernateExceptionConverter>();
-					db.Driver<SqlAzureClientDriverWithLogRetries>();
+					db.Driver<ResilientSql2008ClientDriver>();
 				});
 			//TODO: tenant - if/when tenant stuff is it's own service, we don't have to pick these one-by-one but take all assembly instead.
 			cfg.AddResources(new[]
