@@ -1,4 +1,4 @@
-import { Person } from '../../../shared/types';
+import { Person } from '../../shared/types';
 import { agent, Agent, teamLeader, TeamLeader } from './roles';
 
 type Team1 = 'Team1';

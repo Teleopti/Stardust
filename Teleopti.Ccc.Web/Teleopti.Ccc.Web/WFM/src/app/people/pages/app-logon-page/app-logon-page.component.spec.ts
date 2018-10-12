@@ -9,8 +9,8 @@ import { configureTestSuite } from '../../../../configure-test-suit';
 import { MockTranslationModule } from '../../../../mocks/translation';
 import { LogonInfoService } from '../../../shared/services';
 import { MockTitleBarModule, WorkspaceComponent } from '../../components';
-import { adinaLogon } from '../../services/fake-backend/logons';
-import { adina, fakeBackendProvider, NavigationService, SearchService, WorkspaceService } from '../../shared';
+import { adina, adinaLogon, fakeBackendProvider } from '../../mocks';
+import { NavigationService, SearchService, WorkspaceService } from '../../shared';
 import { AppLogonPageComponent } from './app-logon-page.component';
 
 describe('AppLogonPageComponent', () => {

@@ -7,7 +7,8 @@ import { configureTestSuite } from '../../../../configure-test-suit';
 import { MockTranslationModule } from '../../../../mocks/translation';
 import { LogonInfoService } from '../../../shared/services';
 import { MockTitleBarModule, WorkspaceComponent } from '../../components';
-import { fakeBackendProvider, NavigationService, SearchService, WorkspaceService } from '../../shared';
+import { fakeBackendProvider } from '../../mocks';
+import { NavigationService, SearchService, WorkspaceService } from '../../shared';
 import { IdentityLogonPageComponent } from './identity-logon-page.component';
 
 describe('IdentityLogonPageComponent', () => {

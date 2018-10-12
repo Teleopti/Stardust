@@ -8,14 +8,11 @@ import { NzButtonModule, NzFormModule, NzInputModule, NzTableModule, NzToolTipMo
 import { of } from 'rxjs';
 import { configureTestSuite } from '../../../../configure-test-suit';
 import { MockTranslationModule } from '../../../../mocks/translation';
-import { WorkspaceComponent } from '../../components';
+import { MockTitleBarModule, WorkspaceComponent } from '../../components';
+import { adina, eva, fakeBackendProvider, myles } from '../../mocks';
 import {
-	adina,
 	COLUMNS,
 	DIRECTION,
-	eva,
-	fakeBackendProvider,
-	myles,
 	NavigationService,
 	PeopleSearchQuery,
 	PeopleSearchResult,
@@ -24,7 +21,6 @@ import {
 	SearchService,
 	WorkspaceService
 } from '../../shared';
-import { MockTitleBarModule } from '../title-bar';
 import { SearchPageComponent } from './search-page.component';
 
 describe('SearchPageComponent', () => {

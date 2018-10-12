@@ -1,4 +1,4 @@
-import { Adina, adina, eva, myles } from './people';
+import { adina, eva, myles } from './people';
 
 export type AdinaLogon = {
 	PersonId: typeof adina.Id;

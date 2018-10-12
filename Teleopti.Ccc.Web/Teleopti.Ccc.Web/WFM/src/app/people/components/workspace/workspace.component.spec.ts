@@ -5,7 +5,8 @@ import { By } from '@angular/platform-browser';
 import { NzButtonModule, NzTableModule, NzToolTipModule } from 'ng-zorro-antd';
 import { configureTestSuite } from '../../../../configure-test-suit';
 import { MockTranslationModule } from '../../../../mocks/translation';
-import { adina, eva, fakeBackendProvider, myles, SearchService, WorkspaceService } from '../../shared';
+import { adina, eva, fakeBackendProvider, myles } from '../../mocks';
+import { SearchService, WorkspaceService } from '../../shared';
 import { WorkspaceComponent } from './workspace.component';
 
 describe('WorkspaceComponent', () => {

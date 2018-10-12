@@ -9,7 +9,7 @@ import {
 import { Injectable, Provider } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-import { PeopleSearchResult } from '..';
+import { PeopleSearchResult } from '../shared';
 import { LOGONS } from './logons';
 import { PEOPLE } from './people';
 import { ROLES } from './roles';

@@ -14,7 +14,7 @@ import {
 import { configureTestSuite } from '../../../../configure-test-suit';
 import { MockTranslationModule } from '../../../../mocks/translation';
 import { MockTitleBarModule, WorkspaceComponent } from '../../components';
-import { adina, eva, fakeBackendProvider, myles } from '../../services/fake-backend';
+import { adina, eva, fakeBackendProvider, myles } from '../../mocks';
 import { NavigationService, RolesService, SearchOverridesService, SearchService, WorkspaceService } from '../../shared';
 import { countUniqueRolesFromPeople } from '../../utils';
 import { GrantPageComponent } from './grant-page.component';
