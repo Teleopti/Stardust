@@ -95,6 +95,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 				var model = new ForecastDayModel
 				{
 					Date = target.Key,
+					IsForecasted = true,
 					Tasks = target.Value,
 					TotalTasks = target.Value,
 					AverageTaskTime = forecastedTaskTime[target.Key].TotalSeconds,

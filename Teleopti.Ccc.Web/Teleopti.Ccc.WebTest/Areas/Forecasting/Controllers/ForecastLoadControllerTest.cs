@@ -287,7 +287,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		}
 		
 		[Test]
-		public void ShouldFillGapsInForecastPeriod()
+		public void ShouldFillGapsInsideForecastPeriod()
 		{
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
 			var workload = skill.WorkloadCollection.Single();
@@ -304,8 +304,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			var forecastResultInput = new ForecastResultInput
 			{
-				ForecastStart = firstDay.Date,
-				ForecastEnd = firstDay.AddDays(2).Date,
+				ForecastStart = firstDay.AddDays(-2).Date,
+				ForecastEnd = firstDay.AddDays(4).Date,
 				ScenarioId = scenario.Id.Value,
 				WorkloadId = workload.Id.Value
 			};

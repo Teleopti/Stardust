@@ -51,12 +51,22 @@ function ForecastChartCtrl($translate, $timeout, SkillTypeService) {
 
 		for (var i = 0; i < days.length; i++) {
 			preparedData.dateSeries.push(moment(days[i].Date).format("L"));
-			preparedData.averageAfterTaskTimeSeries.push(days[i].AverageAfterTaskTime);
-			preparedData.tasksSeries.push(days[i].Tasks);
-			preparedData.totalAverageAfterTaskTimeSeries.push(days[i].TotalAverageAfterTaskTime);
-			preparedData.totalTasksSeries.push(days[i].TotalTasks);
-			preparedData.averageTaskTimeSeries.push(days[i].AverageTaskTime);
-			preparedData.totalAverageTaskTimeSeries.push(days[i].TotalAverageTaskTime);
+			if (days[i].IsForecasted) {
+				preparedData.averageAfterTaskTimeSeries.push(days[i].AverageAfterTaskTime);
+				preparedData.tasksSeries.push(days[i].Tasks);
+				preparedData.totalAverageAfterTaskTimeSeries.push(days[i].TotalAverageAfterTaskTime);
+				preparedData.totalTasksSeries.push(days[i].TotalTasks);
+				preparedData.averageTaskTimeSeries.push(days[i].AverageTaskTime);
+				preparedData.totalAverageTaskTimeSeries.push(days[i].TotalAverageTaskTime);
+			}
+			else {
+				preparedData.averageAfterTaskTimeSeries.push(null);
+				preparedData.tasksSeries.push(null);
+				preparedData.totalAverageAfterTaskTimeSeries.push(null);
+				preparedData.totalTasksSeries.push(null);
+				preparedData.averageTaskTimeSeries.push(null);
+				preparedData.totalAverageTaskTimeSeries.push(null);
+			}
 
 			if (days[i].HasCampaign) {
 				preparedData.campaignSeries.push(1);

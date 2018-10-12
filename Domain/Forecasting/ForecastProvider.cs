@@ -49,11 +49,20 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		}
 
 		private IList<ForecastDayModel> createModelDays(IList<IWorkloadDayBase> workloadDays,
-			Dictionary<DateOnly, IForecastDayOverride> overrideDays, DateOnlyPeriod futurePeriod)
+			Dictionary<DateOnly, IForecastDayOverride> overrideDays, 
+			DateOnlyPeriod futurePeriod)
 		{
 			var days = new List<ForecastDayModel>();
 
-			for (var date = futurePeriod.StartDate; date <= futurePeriod.EndDate; date = date.AddDays(1))
+			if (!workloadDays.Any())
+			{
+				return days;
+			}
+
+			var forecastedStartDay = workloadDays.Min(x => x.CurrentDate);
+			var forecastedEndDay = workloadDays.Max(x => x.CurrentDate);
+
+			for (var date = forecastedStartDay; date <= forecastedEndDay; date = date.AddDays(1))
 			{
 				var workloadDay = workloadDays.SingleOrDefault(x => x.CurrentDate == date);
 				ForecastDayModel dayModel;
