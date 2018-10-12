@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var skillDaysBySkills = _skillDayLoadHelper.LoadSchedulerSkillDays(new DateOnlyPeriod(userDateOnly, userDateOnly.AddDays(1)), skills, scenario);
 
-			calculateForecastedAgentsForEmailSkills(useShrinkage, skillDaysBySkills);
+			calculateForecastedAgentsForEmailSkills(useShrinkage, skillDaysBySkills, timeZone);
 
 			var forecastedStaffingModel = _forecastedStaffingProvider.StaffingPerSkill(skillDaysBySkills, minutesPerInterval, dateOnly, useShrinkage);
 
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			};
 		}
 
-		private void calculateForecastedAgentsForEmailSkills(bool useShrinkage, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)
+		private void calculateForecastedAgentsForEmailSkills(bool useShrinkage, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, TimeZoneInfo timeZone)
 		{
 			var scheduledStaffingPerSkill = new List<SkillStaffingIntervalLightModel>();
 			var skillGroupsByResuolution = skillDays.Keys
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 						scheduledStaffingPerSkill.AddRange(_scheduledStaffingProvider.StaffingPerSkill(emailSkillsForOneResoultion, group.Key, skillDayDate, useShrinkage));
 						foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 						{
-							var intervalStart = skillStaffPeriod.Period.StartDateTime;
+							var intervalStart = skillStaffPeriod.Period.StartDateTimeLocal(timeZone);
 							var scheduledStaff =
 								scheduledStaffingPerSkill.FirstOrDefault(
 									x => x.Id == skill.Id.Value && x.StartDateTime == intervalStart);
