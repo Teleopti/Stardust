@@ -55,7 +55,6 @@
 		vm.getWorkloadForecastData = getWorkloadForecastData;
 		vm.changeScenario = changeScenario;
 		vm.forecastWorkload = forecastWorkload;
-		vm.loadChart = loadChart;
 		vm.applyWipToScenario = applyWipToScenario;
 		vm.exportToFile = exportToFile;
 		vm.exportToScenario = exportToScenario;

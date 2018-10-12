@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		{
 			extend.AddService<ForecastController>();
 		}
-
+		
 		[Test]
 		public void ShouldLoadForecast()
 		{
@@ -284,6 +284,45 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			Assert.That(forecastDay.OverrideTasks, Is.EqualTo(100d).Within(tolerance));
 			Assert.That(forecastDay.OverrideAverageTaskTime, Is.EqualTo(150d).Within(tolerance));
 			Assert.That(forecastDay.OverrideAverageAfterTaskTime, Is.EqualTo(200d).Within(tolerance));
+		}
+		
+		[Test]
+		public void ShouldFillGapsInForecastPeriod()
+		{
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
+			var firstDay = new DateOnly(2018, 05, 04);
+			var skillDay1 = SkillDayFactory.CreateSkillDay(skill, workload, firstDay, scenario);
+			var skillDay2 = SkillDayFactory.CreateSkillDay(skill, workload, firstDay.AddDays(2), scenario);
+
+			SkillRepository.Add(skill);
+			WorkloadRepository.Add(workload);
+			ScenarioRepository.Has(scenario);
+			SkillDayRepository.Add(skillDay1);
+			SkillDayRepository.Add(skillDay2);
+
+			var forecastResultInput = new ForecastResultInput
+			{
+				ForecastStart = firstDay.Date,
+				ForecastEnd = firstDay.AddDays(2).Date,
+				ScenarioId = scenario.Id.Value,
+				WorkloadId = workload.Id.Value
+			};
+
+			var result = (OkNegotiatedContentResult<ForecastViewModel>)Target.LoadForecast(forecastResultInput);
+			result.Content.WorkloadId.Should().Be.EqualTo(workload.Id.Value);
+			result.Content.ScenarioId.Should().Be.EqualTo(scenario.Id.Value);
+
+			result.Content.ForecastDays.Count.Should().Be(3);
+
+			result.Content.ForecastDays[0].Date.Should().Be(new DateOnly(2018, 05, 04));
+			result.Content.ForecastDays[1].Date.Should().Be(new DateOnly(2018, 05, 05));
+			result.Content.ForecastDays[2].Date.Should().Be(new DateOnly(2018, 05, 06));
+
+			result.Content.ForecastDays[0].IsForecasted.Should().Be(true);
+			result.Content.ForecastDays[1].IsForecasted.Should().Be(false);
+			result.Content.ForecastDays[2].IsForecasted.Should().Be(true);
 		}
 	}
 }

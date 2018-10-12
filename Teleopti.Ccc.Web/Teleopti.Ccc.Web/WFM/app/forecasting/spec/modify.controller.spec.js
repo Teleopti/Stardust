@@ -1,4 +1,4 @@
-describe("ForecastModifyController", function () {
+fdescribe("ForecastModifyController", function () {
 	var vm, $controller, $httpBackend, fakeBackend, skill, scenario, scenario2, forecastDays;
 
 	sessionStorage.currentForecastWorkload = angular.toJson({
@@ -108,7 +108,7 @@ describe("ForecastModifyController", function () {
 				TotalAverageTaskTime: 158.10038509999998
 			},
 			{
-				Date: tomorrow.add(1, "days"),
+				Date: tomorrow.add(2, "days"),
 				AverageAfterTaskTime: 4.7,
 				Tasks: 1135.2999999999997,
 				TotalAverageAfterTaskTime: 4.7,
@@ -133,7 +133,7 @@ describe("ForecastModifyController", function () {
 			.format("MMM Do YY"));
 		expect(testEndDate).toEqual(moment()
 			.utc()
-			.add(2, "days")
+			.add(3, "days")
 			.format("MMM Do YY")
 		);
 	}));
