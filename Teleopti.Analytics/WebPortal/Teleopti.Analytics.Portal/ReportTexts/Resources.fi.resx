@@ -475,7 +475,7 @@
     <comment>Ready Time</comment>
   </data>
   <data name="ResAdherenceCalculationColon" xml:space="preserve">
-    <value>Työvuorolistan noudattamisen laskenta:</value>
+    <value>Noudattamisen laskenta:</value>
     <comment>Adherence Calculation:</comment>
   </data>
   <data name="ResOfferedCallsPerAgent" xml:space="preserve">
@@ -519,7 +519,7 @@
     <comment>Previous</comment>
   </data>
   <data name="ResAdherencePerIntervalPercent" xml:space="preserve">
-    <value>Työvuorolistan noudattaminen / Intervalli (%)</value>
+    <value>Noudattaminen / Intervalli (%)</value>
     <comment>Adherence / Interval (%)</comment>
   </data>
   <data name="ResDeviationPerIntervalMinute" xml:space="preserve">
@@ -1306,5 +1306,41 @@
   </data>
   <data name="ResIncludeDetails" xml:space="preserve">
     <value>Sisällä yksityskohtaiset tiedot: </value>
+  </data>
+  <data name="ResReadyTimeAdherencePercent" xml:space="preserve">
+    <value>Valmiusajan seuranta (%)</value>
+  </data>
+  <data name="ResReadyTimeAdherenceCalculationColon" xml:space="preserve">
+    <value>Työvuorolistan noudattamisen laskenta:</value>
+  </data>
+  <data name="ResReadyTimeAdherencePerIntervalPercent" xml:space="preserve">
+    <value>Valmiusajan seuranta / Intervalli (%)</value>
+  </data>
+  <data name="ResPlannedOvertimeH" xml:space="preserve">
+    <value>Suunniteltu ylityö (tt:mm)</value>
+  </data>
+  <data name="ResRequestTypeOvertime" xml:space="preserve">
+    <value>Ylityö</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerAgent" xml:space="preserve">
+    <value>Valmiusajan seuranta per agentti</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerDay" xml:space="preserve">
+    <value>Valmiusajan seuranta per päivä</value>
+  </data>
+  <data name="ResRequestStatusCancelled" xml:space="preserve">
+    <value>Peruttu</value>
+  </data>
+  <data name="ResRequestStatusWaitlisted" xml:space="preserve">
+    <value>Odotuslistalla</value>
+  </data>
+  <data name="MultipleActivitiesOrAbsences" xml:space="preserve">
+    <value>Useampi aktiviteetti/poissaolo</value>
+  </data>
+  <data name="ResESLInclShrinkagePercent" xml:space="preserve">
+    <value>ESL sis. suunnittelemattomat poissaolot (%)</value>
+  </data>
+  <data name="ResESLPercent" xml:space="preserve">
+    <value>ESL (%)</value>
   </data>
 </root>
