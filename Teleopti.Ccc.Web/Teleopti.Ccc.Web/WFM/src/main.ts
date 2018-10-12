@@ -12,9 +12,8 @@ import {
 	GrantPageComponent,
 	IdentityLogonPageComponent,
 	RevokePageComponent,
-	SearchPageComponent,
-	TitleBarComponent
-} from './app/people/components';
+	SearchPageComponent
+} from './app/people/pages';
 import { WorkspaceComponent } from './app/pm/components';
 import { FeedbackMessageComponent } from './app/shared/components';
 import { environment } from './environments/environment';
@@ -100,7 +99,6 @@ const downgradeHelper = (downgradeName: string, component) => {
 
 downgradeHelper('ng2ApiAccessListPage', ListPageComponent);
 downgradeHelper('ng2ApiAccessAddAppPage', AddAppPageComponent);
-downgradeHelper('ng2PeopleTitleBar', TitleBarComponent);
 downgradeHelper('ng2PeopleSearchPage', SearchPageComponent);
 downgradeHelper('ng2PeopleGrantPage', GrantPageComponent);
 downgradeHelper('ng2PeopleRevokePage', RevokePageComponent);

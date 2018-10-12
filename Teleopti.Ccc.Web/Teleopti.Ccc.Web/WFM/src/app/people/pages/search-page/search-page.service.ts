@@ -11,7 +11,7 @@ import {
 	SearchOverridesService,
 	SearchService,
 	WorkspaceService
-} from '../../services';
+} from '../../shared';
 
 @Injectable()
 export class SearchPageService {

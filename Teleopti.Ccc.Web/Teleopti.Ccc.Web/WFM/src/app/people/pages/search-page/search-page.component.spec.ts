@@ -6,9 +6,9 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NzButtonModule, NzFormModule, NzInputModule, NzTableModule, NzToolTipModule } from 'ng-zorro-antd';
 import { of } from 'rxjs';
-import { WorkspaceComponent } from '..';
 import { configureTestSuite } from '../../../../configure-test-suit';
 import { MockTranslationModule } from '../../../../mocks/translation';
+import { WorkspaceComponent } from '../../components';
 import {
 	adina,
 	COLUMNS,
@@ -23,7 +23,7 @@ import {
 	SearchOverridesService,
 	SearchService,
 	WorkspaceService
-} from '../../services';
+} from '../../shared';
 import { MockTitleBarModule } from '../title-bar';
 import { SearchPageComponent } from './search-page.component';
 

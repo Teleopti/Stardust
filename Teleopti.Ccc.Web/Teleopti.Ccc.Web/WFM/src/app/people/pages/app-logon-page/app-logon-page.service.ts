@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { flatMap, map } from 'rxjs/operators';
 import { LogonInfoService } from '../../../shared/services';
-import { WorkspaceService } from '../../services';
+import { WorkspaceService } from '../../shared';
 
 interface PersonWithName {
 	Id: string;

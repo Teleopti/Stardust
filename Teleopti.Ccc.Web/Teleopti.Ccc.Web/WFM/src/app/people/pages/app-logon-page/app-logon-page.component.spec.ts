@@ -5,13 +5,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NzButtonModule, NzFormModule, NzGridModule, NzTableModule, NzToolTipModule } from 'ng-zorro-antd';
-import { WorkspaceComponent } from '..';
 import { configureTestSuite } from '../../../../configure-test-suit';
 import { MockTranslationModule } from '../../../../mocks/translation';
 import { LogonInfoService } from '../../../shared/services';
-import { adina, fakeBackendProvider, NavigationService, SearchService, WorkspaceService } from '../../services';
+import { MockTitleBarModule, WorkspaceComponent } from '../../components';
 import { adinaLogon } from '../../services/fake-backend/logons';
-import { MockTitleBarModule } from '../title-bar';
+import { adina, fakeBackendProvider, NavigationService, SearchService, WorkspaceService } from '../../shared';
 import { AppLogonPageComponent } from './app-logon-page.component';
 
 describe('AppLogonPageComponent', () => {

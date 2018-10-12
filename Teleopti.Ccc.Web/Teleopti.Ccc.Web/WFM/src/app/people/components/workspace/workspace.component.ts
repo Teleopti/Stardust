@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { WorkspaceService } from '../../services';
+import { WorkspaceService } from '../../shared';
 
 @Component({
 	selector: 'people-workspace',

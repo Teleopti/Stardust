@@ -11,7 +11,7 @@ import {
 	RolesService,
 	SearchService,
 	WorkspaceService
-} from '../../services';
+} from '../../shared';
 import { SearchPageService } from './search-page.service';
 
 @Component({

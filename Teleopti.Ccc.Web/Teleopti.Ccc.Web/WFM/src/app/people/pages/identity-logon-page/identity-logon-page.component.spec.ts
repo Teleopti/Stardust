@@ -3,12 +3,11 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NzButtonModule, NzFormModule, NzGridModule, NzTableModule, NzToolTipModule } from 'ng-zorro-antd';
-import { WorkspaceComponent } from '..';
 import { configureTestSuite } from '../../../../configure-test-suit';
 import { MockTranslationModule } from '../../../../mocks/translation';
 import { LogonInfoService } from '../../../shared/services';
-import { fakeBackendProvider, NavigationService, SearchService, WorkspaceService } from '../../services';
-import { MockTitleBarModule } from '../title-bar';
+import { MockTitleBarModule, WorkspaceComponent } from '../../components';
+import { fakeBackendProvider, NavigationService, SearchService, WorkspaceService } from '../../shared';
 import { IdentityLogonPageComponent } from './identity-logon-page.component';
 
 describe('IdentityLogonPageComponent', () => {

@@ -11,19 +11,12 @@ import {
 	NzTableModule,
 	NzToolTipModule
 } from 'ng-zorro-antd';
-import { WorkspaceComponent } from '..';
 import { configureTestSuite } from '../../../../configure-test-suit';
 import { MockTranslationModule } from '../../../../mocks/translation';
-import {
-	NavigationService,
-	RolesService,
-	SearchOverridesService,
-	SearchService,
-	WorkspaceService
-} from '../../services';
+import { MockTitleBarModule, WorkspaceComponent } from '../../components';
 import { adina, eva, fakeBackendProvider, myles } from '../../services/fake-backend';
+import { NavigationService, RolesService, SearchOverridesService, SearchService, WorkspaceService } from '../../shared';
 import { countUniqueRolesFromPeople } from '../../utils';
-import { MockTitleBarModule } from '../title-bar';
 import { GrantPageComponent } from './grant-page.component';
 import { GrantPageService } from './grant-page.service';
 

@@ -3,22 +3,21 @@ import { FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, Valid
 import { AbstractControl } from '@angular/forms/src/model';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { NavigationService } from '../../services';
-import { FormControlWithInitial } from '../shared';
-import { DuplicateIdentityLogonValidator } from './duplicate-identity-logon.validator';
-import { IdentityLogonPageService, PeopleWithLogon, PersonWithLogon } from './identity-logon-page.service';
+import { FormControlWithInitial, NavigationService } from '../../shared';
+import { AppLogonPageService, PeopleWithLogon, PersonWithLogon } from './app-logon-page.service';
+import { DuplicateAppLogonValidator } from './duplicate-app-logon.validator';
 
 class DuplicateFormNameValidator {
-	private identityLogonPageComponent: IdentityLogonPageComponent;
+	private appLogonPageComponent: AppLogonPageComponent;
 
-	constructor(identityLogonPageComponent: IdentityLogonPageComponent) {
-		this.identityLogonPageComponent = identityLogonPageComponent;
+	constructor(appLogonPageComponent: AppLogonPageComponent) {
+		this.appLogonPageComponent = appLogonPageComponent;
 	}
 
 	validate = (control: FormControlWithInitial): ValidationErrors => {
 		const filterByExists = (logon: string) => logon && logon.length > 0;
-		const filterBySameLogon = logon => logon.toLowerCase() === (control.value as string).toLowerCase();
-		const countSameLogon = this.identityLogonPageComponent.logons
+		const filterBySameLogon = (logon: string) => logon.toLowerCase() === (control.value as string).toLowerCase();
+		const countSameLogon = this.appLogonPageComponent.logons
 			.map(control => control.value)
 			.filter(filterByExists)
 			.filter(filterBySameLogon).length;
@@ -28,17 +27,17 @@ class DuplicateFormNameValidator {
 }
 
 @Component({
-	selector: 'people-identity-logon-page',
-	templateUrl: './identity-logon-page.component.html',
-	styleUrls: ['./identity-logon-page.component.scss'],
-	providers: [IdentityLogonPageService, DuplicateIdentityLogonValidator]
+	selector: 'people-app-logon-page',
+	templateUrl: './app-logon-page.component.html',
+	styleUrls: ['./app-logon-page.component.scss'],
+	providers: [AppLogonPageService, DuplicateAppLogonValidator]
 })
-export class IdentityLogonPageComponent implements OnDestroy, OnInit {
+export class AppLogonPageComponent implements OnDestroy, OnInit {
 	constructor(
 		public nav: NavigationService,
 		private formBuilder: FormBuilder,
-		private identityLogonPageService: IdentityLogonPageService,
-		private duplicateNameValidator: DuplicateIdentityLogonValidator
+		private appLogonPageService: AppLogonPageService,
+		private duplicateNameValidator: DuplicateAppLogonValidator
 	) {}
 
 	private componentDestroyed: Subject<any> = new Subject();
@@ -48,7 +47,7 @@ export class IdentityLogonPageComponent implements OnDestroy, OnInit {
 	});
 
 	ngOnInit() {
-		this.identityLogonPageService.people$.pipe(takeUntil(this.componentDestroyed)).subscribe({
+		this.appLogonPageService.people$.pipe(takeUntil(this.componentDestroyed)).subscribe({
 			next: (people: PeopleWithLogon) => {
 				if (people.length === 0) return this.nav.navToSearch();
 				this.buildForm(people);
@@ -109,7 +108,7 @@ export class IdentityLogonPageComponent implements OnDestroy, OnInit {
 
 	save(): void {
 		const people = this.people.getRawValue();
-		this.identityLogonPageService.save(people).subscribe({
+		this.appLogonPageService.save(people).subscribe({
 			next: () => {
 				this.nav.navToSearch();
 			},

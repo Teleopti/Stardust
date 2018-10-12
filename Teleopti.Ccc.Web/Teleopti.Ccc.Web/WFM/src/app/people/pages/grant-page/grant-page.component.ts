@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Person, Role } from '../../../shared/types';
-import { NavigationService, WorkspaceService } from '../../services';
+import { NavigationService, WorkspaceService } from '../../shared';
 import { GrantPageService } from './grant-page.service';
 
 interface SelectableRole extends Role {
