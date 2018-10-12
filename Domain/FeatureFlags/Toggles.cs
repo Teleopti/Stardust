@@ -80,7 +80,7 @@
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,
 		ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348,
-		ResourcePlanner_BetterFitPreferences_76289,
+		ResourcePlanner_SeamlessPlanningForPreferences_76288,
 		
 		Wfm_ArchiveScheduleForPast_77958,
 
@@ -99,7 +99,6 @@
 		OvertimeRequestStaffingCheckMethod_74949,
 		OvertimeRequestChangeBelongsToDateForOverNightShift_74984,
 		OvertimeRequestUsePrimarySkillOption_75573,
-		MyTimeWeb_MobileResponsive_43826,
 		WFM_Forecaster_Refact_44480,
 		WFM_Export_Forecast_44716,
 		WFM_Forecaster_Preview_74801,
@@ -135,6 +134,7 @@
 
 		Tech_Moving_ResilientConnectionLogic_76181,
 		WFM_ChatBot_77547,
+		Wfm_PmNextGen_78059,
 
 		Wfm_Payroll_SupportMultiDllPayrolls_75959,
 		Wfm_Stardust_EnableScaleout_77366,

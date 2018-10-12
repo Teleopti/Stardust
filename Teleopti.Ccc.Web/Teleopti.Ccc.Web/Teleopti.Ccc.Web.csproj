@@ -375,11 +375,11 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.256\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.257\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.256\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.257\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Validation">
@@ -2208,6 +2208,7 @@
     <Content Include="WFM\app\seatManagement\html\seatmapoccupancylist.html" />
     <Content Include="WFM\app\seatManagement\html\seatplanreport.html" />
     <Content Include="WFM\app\seatManagement\html\teampicker.html" />
+    <Content Include="WFM\app\seatManagement\seatmapoccupancydetail.controller.js" />
     <Content Include="WFM\app\seatManagement\seatmapoccupancydetail.directive.js" />
     <Content Include="WFM\app\seatManagement\locationpicker.directive.js" />
     <Content Include="WFM\app\seatManagement\seatplanreport.controller.js" />

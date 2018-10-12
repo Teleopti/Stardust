@@ -78,66 +78,80 @@ BEGIN
 	--default row
 	EXEC [mart].[etl_dim_acd_login_load_identity_on]
 
-	--------------
-	-- update changes
-	--------------
-	--prepare
-	SELECT @sqlstring = 'UPDATE mart.dim_acd_login
-	SET acd_login_name = ltrim(rtrim(agg.agent_name)),
-		update_date = getdate()
-	FROM'
-	+ CASE @internal
-		WHEN 0 THEN '	mart.v_agent_info agg'
-		WHEN 1 THEN '	dbo.agent_info agg'
-		ELSE NULL --Fail fast
-	  END
-	+ ' 
-	INNER JOIN mart.sys_datasource sys
-	ON
-		agg.log_object_id = sys.log_object_id	AND
-		sys.datasource_id = ' + CAST(@datasource_id as nvarchar(10)) + '
-	WHERE 
-	agg.agent_id	= mart.dim_acd_login.acd_login_agg_id AND
-	ltrim(rtrim(agg.orig_agent_id))	= mart.dim_acd_login.acd_login_original_id collate database_default AND
-	sys.datasource_id =  mart.dim_acd_login.datasource_id AND
-	acd_login_name <> ltrim(rtrim(agg.agent_name)) collate database_default'
-			
-	--Exec
-	EXEC sp_executesql @sqlstring
-	
-	--update logins that doesnt exist anymore in agg
-	--prepare
-	set @inactive = ' (inactive)'
-	SELECT @sqlstring = '
-	UPDATE mart.dim_acd_login 
-	SET is_active=0
-	,acd_login_name = acd_login_name + '''+ @inactive +
-	'''
-	FROM mart.dim_acd_login d
-	INNER JOIN 
-		mart.sys_datasource sys
-		ON
-		d.datasource_id=sys.datasource_id
-		AND d.datasource_id=' + CAST(@datasource_id as nvarchar(10)) + '
-	WHERE NOT EXISTS(
-		SELECT  agg.agent_id
+
+	BEGIN TRY
+
+		BEGIN TRANSACTION
+		--------------
+		-- update changes
+		--------------
+		--prepare
+		SELECT @sqlstring = 'UPDATE mart.dim_acd_login
+		SET acd_login_name = ltrim(rtrim(agg.agent_name)),
+			update_date = getdate()
 		FROM'
-	+ CASE @internal
-		WHEN 0 THEN '	mart.v_agent_info agg'
-		WHEN 1 THEN '	dbo.agent_info agg'
-		ELSE NULL --Fail fast
-	  END
-	+ ' 
-		WHERE acd_login_agg_id = agg.agent_id
-		AND agg.log_object_id = sys.log_object_id
-		AND agg.Agent_name = d.acd_login_name collate database_default
-		)
-		AND d.acd_login_id>=0
-		AND d.is_active = 1'
+		+ CASE @internal
+			WHEN 0 THEN '	mart.v_agent_info agg'
+			WHEN 1 THEN '	dbo.agent_info agg'
+			ELSE NULL --Fail fast
+			END
+		+ ' 
+		INNER JOIN mart.sys_datasource sys
+		ON
+			agg.log_object_id = sys.log_object_id	AND
+			sys.datasource_id = ' + CAST(@datasource_id as nvarchar(10)) + '
+		WHERE 
+		agg.agent_id	= mart.dim_acd_login.acd_login_agg_id AND
+		ltrim(rtrim(agg.orig_agent_id))	= mart.dim_acd_login.acd_login_original_id collate database_default AND
+		sys.datasource_id =  mart.dim_acd_login.datasource_id AND
+		acd_login_name <> ltrim(rtrim(agg.agent_name)) collate database_default'
 
-	--Exec
-	EXEC sp_executesql @sqlstring
+		--Exec
+		EXEC sp_executesql @sqlstring
+	
+		--update logins that doesnt exist anymore in agg
+		--prepare
+		set @inactive = ' (inactive)'
+		SELECT @sqlstring = '
+		UPDATE mart.dim_acd_login 
+		SET is_active=0
+		,acd_login_name = acd_login_name + '''+ @inactive +
+		'''
+		FROM mart.dim_acd_login d
+		INNER JOIN 
+			mart.sys_datasource sys
+			ON
+			d.datasource_id=sys.datasource_id
+			AND d.datasource_id=' + CAST(@datasource_id as nvarchar(10)) + '
+		WHERE NOT EXISTS(
+			SELECT  agg.agent_id
+			FROM'
+		+ CASE @internal
+			WHEN 0 THEN '	mart.v_agent_info agg'
+			WHEN 1 THEN '	dbo.agent_info agg'
+			ELSE NULL --Fail fast
+			END
+		+ ' 
+			WHERE acd_login_agg_id = agg.agent_id
+			AND agg.log_object_id = sys.log_object_id
+			AND agg.Agent_name = d.acd_login_name collate database_default
+			)
+			AND d.acd_login_id>=0
+			AND d.is_active = 1'
 
+		--Exec
+		EXEC sp_executesql @sqlstring
+
+		--If we got this far; commit
+		COMMIT TRAN -- Transaction Success!
+	END TRY
+
+	BEGIN CATCH
+		DECLARE @ErrorMsg nvarchar(4000)
+		SELECT @ErrorMsg  = ERROR_MESSAGE()
+		RAISERROR (@ErrorMsg,16,1)
+		ROLLBACK TRANSACTION
+	END CATCH
 
 	-------------
 	-- Insert new

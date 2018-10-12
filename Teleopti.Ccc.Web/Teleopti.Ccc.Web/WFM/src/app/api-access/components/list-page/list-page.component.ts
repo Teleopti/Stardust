@@ -1,31 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource, PageEvent } from '@angular/material';
-import { SelectionModel } from '@angular/cdk/collections';
-
-import {
-	ExternalApplicationService,
-	NavigationService
-} from '../../services';
+import { NavigationService } from '../../services';
 import { ExternalApplication } from '../../types';
 import { ListPageService } from './list-page.service';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+
+interface ExternalApplicationItem extends ExternalApplication {
+	checked: boolean;
+}
 
 @Component({
 	selector: 'api-access-list-page',
 	templateUrl: './list-page.component.html',
 	styleUrls: ['./list-page.component.scss'],
-	providers: [ListPageService, NavigationService]
+	providers: [ListPageService]
 })
 export class ListPageComponent implements OnInit {
-	constructor(
-		public listPageService: ListPageService,
-		public nav: NavigationService
-	) {}
+	constructor(public listPageService: ListPageService, public nav: NavigationService) {}
 
-	displayedColumns = ['select', 'Id', 'Name'];
-	dataSource = new MatTableDataSource<ExternalApplication>([]);
-	selection = new SelectionModel<ExternalApplication>(true, []);
-	
+	data: ExternalApplicationItem[] = [];
+	allChecked = false;
+	indeterminate = false;
+
 	ngOnInit() {
 		this.reloadList();
 	}
@@ -33,29 +27,42 @@ export class ListPageComponent implements OnInit {
 	reloadList() {
 		this.listPageService.listExternalApplications().subscribe({
 			next: (apps: ExternalApplication[]) => {
-				this.dataSource.data = apps;
+				this.data = apps.map(item => {
+					return {
+						...item,
+						checked: false
+					};
+				});
 			}
 		});
 	}
 
-	/** Whether the number of selected elements matches the total number of rows. */
-	isAllSelected() {
-		const numSelected = this.selection.selected.length;
-		const numRows = this.dataSource.data.length;
-		return numSelected === numRows;
+	refreshStatus(): void {
+		const allChecked = this.data.every(value => value.checked === true);
+		const allUnChecked = this.data.every(value => !value.checked);
+		this.allChecked = allChecked;
+		this.indeterminate = !allChecked && !allUnChecked;
 	}
 
-	/** Selects all rows if they are not all selected; otherwise clear selection. */
-	masterToggle() {
-		this.isAllSelected() ?
-			this.selection.clear() :
-			this.dataSource.data.forEach(row => this.selection.select(row));
+	checkAll(value: boolean): void {
+		this.data.forEach(data => {
+			data.checked = value;
+		});
+		this.refreshStatus();
+	}
+
+	getCheckedItems(): ExternalApplicationItem[] {
+		return this.data.filter(item => item.checked);
 	}
 
 	revokeSelected() {
-		let items = this.selection.selected.slice();
+		let items = this.getCheckedItems();
 		items.forEach(app => {
-			this.listPageService.revokeApiAccess(app.Id).subscribe({ next: _ => { this.reloadList(); } });
+			this.listPageService.revokeApiAccess(app.Id).subscribe({
+				next: _ => {
+					this.reloadList();
+				}
+			});
 		});
 	}
 }

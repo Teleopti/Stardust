@@ -26,23 +26,20 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly IPlanningGroupStaffLoader _planningGroupStaffLoader;
 		private readonly INow _now;
-		private readonly CheckScheduleHints _basicCheckScheduleHints;
 		private readonly IPlanningGroupRepository _planningGroupRepository;
-		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
+		private readonly GetValidations _getValidatons;
 
 
 		public PlanningPeriodController(INextPlanningPeriodProvider nextPlanningPeriodProvider,
 			IPlanningPeriodRepository planningPeriodRepository, IPlanningGroupStaffLoader planningGroupStaffLoader, INow now,
-			CheckScheduleHints basicCheckScheduleHints, IPlanningGroupRepository planningGroupRepository, 
-			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory)
+			IPlanningGroupRepository planningGroupRepository, GetValidations getValidatons)
 		{
 			_nextPlanningPeriodProvider = nextPlanningPeriodProvider;
 			_planningPeriodRepository = planningPeriodRepository;
 			_planningGroupStaffLoader = planningGroupStaffLoader;
 			_now = now;
-			_basicCheckScheduleHints = basicCheckScheduleHints;
 			_planningGroupRepository = planningGroupRepository;
-			_blockPreferenceProviderUsingFiltersFactory = blockPreferenceProviderUsingFiltersFactory;
+			_getValidatons = getValidatons;
 		}
 
 		[HttpGet, UnitOfWork, Route("api/resourceplanner/planningperiod/{planningPeriodId}/result")]
@@ -56,11 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			if (lastJobResult != null && lastJobResult.FinishedOk)
 			{
 				var fullSchedulingResultModel = JsonConvert.DeserializeObject<FullSchedulingResultModel>(lastJobResult.Details.Last().Message);
-
-				foreach (var schedulingHintError in fullSchedulingResultModel.BusinessRulesValidationResults)
-				{
-					HintsHelper.BuildErrorMessages(schedulingHintError.ValidationErrors);
-				}
+				fullSchedulingResultModel.BusinessRulesValidationResults = HintsHelper.BuildBusinessRulesValidationResults(fullSchedulingResultModel.BusinessRulesValidationResults);
 				return Ok(new
 				{
 					PlanningPeriod = new
@@ -205,16 +198,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{planningPeriodId}/validation")] 
 		public virtual IHttpActionResult GetValidation(Guid planningPeriodId)
 		{
-			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
-			var validationResult = new HintResult();
-			var people = _planningGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.PlanningGroup).AllPeople.ToList();
-			validationResult = _basicCheckScheduleHints.Execute(
-				new HintInput(null, people, planningPeriod.Range, _blockPreferenceProviderUsingFiltersFactory.Create(planningPeriod.PlanningGroup), true));
-			foreach (var res in validationResult.InvalidResources)
-			{
-				HintsHelper.BuildErrorMessages(res.ValidationErrors);
-			}
-			return Ok(validationResult);
+			return Ok(_getValidatons.Execute(planningPeriodId));
 		}
 
 		[UnitOfWork, HttpPut, Route("api/resourceplanner/planningperiod/{planningPeriodId}")]

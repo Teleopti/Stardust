@@ -361,10 +361,8 @@ input[type='search']::-ms-clear {
 }
 
 /*Mobile tweaks*/
-@media only screen and (max-width: 768px) {
-	.hide-fab-on-phone {
-		display: none !important;
-	}
+.hide-fab-on-phone {
+	display: none !important;
 }
 
 .overtime-add-body .row label {

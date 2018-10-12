@@ -1,5 +1,4 @@
 using System;
-using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {

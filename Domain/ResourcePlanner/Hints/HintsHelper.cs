@@ -48,8 +48,27 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 		{
 			foreach (var validationError in validationErrors)
 			{
-				validationError.ErrorMessageLocalized = HintsHelper.BuildErrorMessage(validationError);
+				validationError.ErrorMessageLocalized = BuildErrorMessage(validationError);
 			}
 		}
+
+		public static ICollection<SchedulingHintError> BuildBusinessRulesValidationResults(IEnumerable<SchedulingHintError> businessRulesValidationResults)
+		{
+			foreach (var schedulingHintError in businessRulesValidationResults)
+			{
+				BuildErrorMessages(schedulingHintError.ValidationErrors);
+			}
+
+			var groups = businessRulesValidationResults.GroupBy(x =>
+				x.ValidationErrors.First().ResourceType);
+
+			var schedulingHintErrors = new List<SchedulingHintError>(); 
+			foreach (var group in groups)
+			{
+				schedulingHintErrors.AddRange(group.OrderBy(x => x.ResourceName));
+			}
+			return schedulingHintErrors;
+		}
+
 	}
 }

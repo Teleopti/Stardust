@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using NUnit.Framework;
+using Rhino.Mocks.Constraints;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.IocCommon;
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Aop
 		}
 
 		[Test]
-		public void ShouldLogCountOfIEnumerableArgument()
+		public void ShouldLogCountOfArrayArgument()
 		{
 			Service.DoesSomethingWithIEnumerable(new []{new object(), "thing", new object() });
 
@@ -93,10 +94,18 @@ namespace Teleopti.Ccc.DomainTest.Aop
 		}
 		
 		[Test]
-		public void ShouldLogCountOfIEnumerableIntArgument()
+		public void ShouldLogCountOfArrayOfIntArgument()
 		{
 			Service.DoesSomethingWithIEnumerable(new[] {1,1,1});
 
+			Logger.InfoMessage.Should().Contain("Count = 3");
+		}
+
+		[Test]
+		public void ShouldLogCountOfIEnumerable()
+		{
+			Service.DoesSomethingWithIEnumerable(new[] {1,1,1}.Select(x => x));
+			
 			Logger.InfoMessage.Should().Contain("Count = 3");
 		}
 

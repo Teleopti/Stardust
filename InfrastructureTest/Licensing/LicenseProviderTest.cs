@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -179,6 +179,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	            TeleoptiWFMShiftTraderEnabled = true;
 	            TeleoptiWFMVacationPlannerEnabled = true;
 				TeleoptiWFMVNextEnabled = true;
+				TeleoptiWFMPMNextGenEnabled = true;
             }
 
             #region Implementation of IDisposable
@@ -235,6 +236,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
 			public bool TeleoptiWFMOvertimeRequestsEnabled { get; }
 			public bool TeleoptiWFMChatBotEnabled { get; }
+			public bool TeleoptiWFMPMNextGenEnabled { get; }
 
 			public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
@@ -332,6 +334,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			  public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
 			  public bool TeleoptiWFMOvertimeRequestsEnabled { get; }
 			  public bool TeleoptiWFMChatBotEnabled { get; }
+			  public bool TeleoptiWFMPMNextGenEnabled { get; }
 			  public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 			  public int MaxSeats { get; private set; }
 			  public LicenseType LicenseType { get; private set; }
@@ -442,6 +445,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
 			public bool TeleoptiWFMOvertimeRequestsEnabled { get; }
 			public bool TeleoptiWFMChatBotEnabled { get; }
+			public bool TeleoptiWFMPMNextGenEnabled { get; }
 
 			public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
@@ -512,6 +516,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	            TeleoptiCccCalendarLinkEnabled = false;
 	            TeleoptiWFMVNextEnabled = false;
 				TeleoptiWFMChatBotEnabled = false;
+				TeleoptiWFMPMNextGenEnabled = false;
 
                 TeleoptiCccFreemiumForecastsEnabled = false;
             }
@@ -569,6 +574,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
 			public bool TeleoptiWFMOvertimeRequestsEnabled { get; }
 			public bool TeleoptiWFMChatBotEnabled { get; }
+			public bool TeleoptiWFMPMNextGenEnabled { get; }
 
 			public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 

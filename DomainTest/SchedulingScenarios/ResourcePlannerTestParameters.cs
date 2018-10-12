@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NPOI.SS.Formula.Functions;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.IocCommon.Toggle;
@@ -10,18 +11,18 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 {
-	public class ResourcePlannerTestParameters : IEnumerable<object>, IEquatable<ResourcePlannerTestParameters>
+	public class ResourcePlannerTestParameters : IEnumerable<object>, IEquatable<ResourcePlannerTestParameters>, IComparable<ResourcePlannerTestParameters>
 	{
 		private readonly IEnumerable<object> _parameters;
 
-		public ResourcePlannerTestParameters(IEnumerable<Toggles> toggles, SeperateWebRequest? seperateWebRequest)
+		public ResourcePlannerTestParameters(IEnumerable<Toggles> toggles, SeparateWebRequest? separateWebRequest)
 		{
 			var parameters = new List<object>();
-			if(seperateWebRequest.HasValue)
+			if(separateWebRequest.HasValue)
 			{
-				parameters.Add(seperateWebRequest);
+				parameters.Add(separateWebRequest);
 			}
-			toggles.ForEach(x => parameters.Add(x));
+			toggles.OrderBy(x => x.ToString()).ForEach(x => parameters.Add(x));
 			_parameters = parameters;
 		}
 
@@ -34,9 +35,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			{
 				foreach (var parameter in _parameters)
 				{
-					if (parameter is SeperateWebRequest seperateWebRequest)
+					if (parameter is SeparateWebRequest separateWebRequest)
 					{
-						seperateWebRequestOutput.Append(seperateWebRequest);
+						seperateWebRequestOutput.Append(separateWebRequest);
 					}
 					else
 					{
@@ -70,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 
 		public bool Equals(ResourcePlannerTestParameters other)
 		{
-			return _parameters.All(other._parameters.Contains);
+			return _parameters.SequenceEqual(other._parameters);
 		}
 
 		public override bool Equals(object obj)
@@ -85,8 +86,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 
 		public void SimulateNewRequest(IIoCTestContext iocTestContext)
 		{
-			if (_parameters.Any(x => x is SeperateWebRequest seperateWebRequest &&
-				seperateWebRequest == SeperateWebRequest.SimulateSecondRequestOrScheduler))
+			if (_parameters.Any(x => x is SeparateWebRequest separateWebRequest &&
+				separateWebRequest == SeparateWebRequest.SimulateSecondRequestOrScheduler))
 			{
 				iocTestContext.SimulateNewRequest();
 			}
@@ -106,6 +107,37 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 		public bool IsEnabled(Toggles toggle)
 		{
 			return _parameters.Contains(toggle);
+		}
+
+		public int CompareTo(ResourcePlannerTestParameters other)
+		{
+			var thisSeparateWebRequest = (SeparateWebRequest?)_parameters.SingleOrDefault(x => x is SeparateWebRequest);
+			var otherSeparateWebRequest = (SeparateWebRequest?)other._parameters.SingleOrDefault(x => x is SeparateWebRequest);
+			
+			if (thisSeparateWebRequest == otherSeparateWebRequest)
+			{
+				var thisCount = this.Count();
+				var otherCount = other.Count();
+				if (thisCount == otherCount)
+				{
+					var thisToggles = _parameters.OfType<Toggles>().OrderBy(x => x.ToString()).ToArray();
+					var otherToggles = other._parameters.OfType<Toggles>().OrderBy(x => x.ToString()).ToArray();
+
+					for (var i = 0; i < thisCount; i++)
+					{
+						var compareToggle = thisToggles[i].CompareTo(otherToggles[i]);
+						if (compareToggle != 0)
+						{
+							return compareToggle;
+						}
+					}
+					return 0;
+				}
+
+				return thisCount.CompareTo(otherCount);
+			}
+
+			return otherSeparateWebRequest.Value.CompareTo(thisSeparateWebRequest.Value);
 		}
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -10,13 +9,13 @@ namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348)]
 	public interface IMatrixClosedDayLocker
 	{
-		void Execute(IEnumerable<IScheduleMatrixPro> matrixList);
+		void Execute(ILockableBitArray bitArray, IVirtualSchedulePeriod schedulePeriod);
 	}
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348)]
 	public class MatrixClosedDaysLockerDoNothing : IMatrixClosedDayLocker
 	{
-		public void Execute(IEnumerable<IScheduleMatrixPro> matrixList)
+		public void Execute(ILockableBitArray bitArray, IVirtualSchedulePeriod schedulePeriod)
 		{}
 	}
 
@@ -29,26 +28,26 @@ namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 			_schedulerStateHolder = schedulerStateHolder;
 		}
 
-		public void Execute(IEnumerable<IScheduleMatrixPro> matrixList)
+		public void Execute(ILockableBitArray bitArray, IVirtualSchedulePeriod schedulePeriod)
 		{
 			var stateHolder = _schedulerStateHolder();
-			foreach (var matrix in matrixList)
+
+			var personPeriod = schedulePeriod.Person.Period(schedulePeriod.DateOnlyPeriod.StartDate);
+			var personSkills = personPeriod.PersonSkillCollection.Where(ps => ps.Active);
+			var skills = personSkills.Select(personSkill => personSkill.Skill).ToList();
+
+			var dayIndex = bitArray.PeriodArea.Minimum;
+			foreach (var dateOnly in schedulePeriod.DateOnlyPeriod.DayCollection())
 			{
-				var personPeriod = matrix.Person.Period(matrix.SchedulePeriod.DateOnlyPeriod.StartDate);
-				var personSkills = personPeriod.PersonSkillCollection.Where(ps => ps.Active);
-				var skills = personSkills.Select(personSkill => personSkill.Skill).ToList();
+				var skillDays = stateHolder.SchedulingResultState.SkillDaysOnDateOnly(new[] {dateOnly});
+				var isOpen = skillDays.Any(skillDay => skillDay.OpenForWork.IsOpen && skills.Contains(skillDay.Skill));
 
-				foreach (var dateOnly in matrix.SchedulePeriod.DateOnlyPeriod.DayCollection())
+				if (!isOpen)
 				{
-					var skillDays = stateHolder.SchedulingResultState.SkillDaysOnDateOnly(new[] { dateOnly });
-					var isOpen = skillDays.Any(skillDay => skillDay.OpenForWork.IsOpen && skills.Contains(skillDay.Skill));
-
-					if (!isOpen)
-					{
-						matrix.LockDay(dateOnly);
-					}
+					bitArray.Lock(dayIndex, true);
 				}
 
+				dayIndex++;
 			}
 		}
 	}

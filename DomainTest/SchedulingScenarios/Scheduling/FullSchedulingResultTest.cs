@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePersonAssignmentRepository AssignmentRepository;
 		public FakePreferenceDayRepository PreferenceDayRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
+		public FakePersonAbsenceRepository PersonAbsenceRepository;
 
 		[Test]
 		public void ShouldShowAgentWithoutSchedulePeriodAsNotScheduled()
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var result = Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, firstDay.ToDateOnlyPeriod(), scenario);
-			assignments.Count.Should().Be.EqualTo(0);
+			assignments.Count(x => x.ShiftLayers.Any()).Should().Be.EqualTo(0);
 
 			result.ScheduledAgentsCount.Should().Be.EqualTo(0);
 		}
@@ -214,6 +215,22 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			result.ScheduledAgentsCount.Should().Be.EqualTo(1);
 			result.BusinessRulesValidationResults.Should().Be.Empty();
+		}
+
+		[TestCase(0, ExpectedResult = 1)]
+		[TestCase(6, ExpectedResult = 0)]
+		public int ShouldCountDayWithAbsenceOnTopOfContractScheduleAsScheduled(int absencePosition)
+		{
+			var monday = new DateOnly(2018, 10, 8);
+			var planningPeriod = PlanningPeriodRepository.Has(monday, monday, SchedulePeriodType.Day, 1);
+			var scenario = ScenarioRepository.Has();
+			var agent = PersonRepository.Has(new ContractScheduleWorkingMondayToFriday(), new SchedulePeriod(monday, SchedulePeriodType.Day, 1));
+			var personAbsence = new PersonAbsence(agent, scenario, new AbsenceLayer(new Absence(), monday.AddDays(absencePosition).ToDateOnlyPeriod().ToDateTimePeriod(agent.PermissionInformation.DefaultTimeZone())));
+			PersonAbsenceRepository.Has(personAbsence);
+	
+			var result = Target.DoSchedulingAndDO(planningPeriod.Id.Value);
+
+			return result.ScheduledAgentsCount;
 		}
 
 		public FullSchedulingResultTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)

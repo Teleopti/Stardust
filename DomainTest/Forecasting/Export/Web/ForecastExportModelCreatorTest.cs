@@ -242,6 +242,35 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			model.IntervalModelForecast[8].IntervalStart.Should().Be(new DateTime(2018, 10, 28, 2, 45, 0));
 			model.IntervalModelForecast[9].IntervalStart.Should().Be(new DateTime(2018, 10, 28, 3, 0, 0));
 		}
+		
+		[Test]
+		public void ShouldReturnIntervalModelWithCorrectAgentValuesDuringDaylightSavingTime()
+		{
+			var theDate = new DateOnly(2018, 10, 28);
+			var openHour = new TimePeriod(1, 45, 3, 15);
+			var skill = createSkill(minutesPerInterval, "skill", openHour, false, 0);
+			skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			var workload = skill.WorkloadCollection.First();
+			var period = new DateOnlyPeriod(theDate, theDate);
+			var scenario = IntradayStaffingApplicationServiceTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
+			var skillDay = SkillSetupHelper.CreateSkillDay(skill, scenario, theDate.Date, openHour, false);
+
+			SkillRepository.Has(skill);
+			WorkloadRepository.Add(workload);
+			SkillDayRepository.Add(skillDay);
+
+			var model = Target.Load(scenario.Id.Value, workload.Id.Value, period);
+
+			model.IntervalModelForecast[5].Agents.Should().Be.GreaterThan(0);
+			model.IntervalModelForecast[6].Agents.Should().Be.GreaterThan(0);
+			model.IntervalModelForecast[7].Agents.Should().Be.GreaterThan(0);
+			model.IntervalModelForecast[8].Agents.Should().Be.GreaterThan(0);
+			
+			model.IntervalModelForecast[5].AgentsShrinkage.Should().Be.GreaterThan(0);
+			model.IntervalModelForecast[6].AgentsShrinkage.Should().Be.GreaterThan(0);
+			model.IntervalModelForecast[7].AgentsShrinkage.Should().Be.GreaterThan(0);
+			model.IntervalModelForecast[8].AgentsShrinkage.Should().Be.GreaterThan(0);
+		}
 
 		[Test]
 		public void ShouldOnlyExportForGivenPeriod()

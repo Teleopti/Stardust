@@ -1,22 +1,74 @@
-CREATE TABLE [Auditing].[StaffingAudit](
-	[Id] [uniqueidentifier] NOT NULL,
-	[TimeStamp] [datetime] NOT NULL,
-	[ActionPerformedBy] [uniqueidentifier] NOT NULL,
-	[Action] [nvarchar](255) NOT NULL,
-	[Data] [nvarchar](max) NOT NULL,
-	[Context] [nvarchar](255) NOT NULL,
- CONSTRAINT [PK_StaffingAudit] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)
-) ON [PRIMARY] 
+----------------
+--Name: PM Next Generation
+--Date: 2018-10-04
+--Desc: Add new application function "PM Next Generation"
+----------------
+SET NOCOUNT ON
+
+--declarations
+DECLARE @SuperUserId as uniqueidentifier
+DECLARE @FunctionId as uniqueidentifier
+DECLARE @ParentFunctionId as uniqueidentifier
+DECLARE @ForeignId as varchar(255)
+DECLARE @ParentForeignId as varchar(255)
+DECLARE @FunctionCode as varchar(255)
+DECLARE @FunctionDescription as varchar(255)
+DECLARE @ParentId as uniqueidentifier
+
+--insert to super user if not exist
+SELECT	@SuperUserId = '3f0886ab-7b25-4e95-856a-0d726edc2a67'
+
+-- check for the existence of super user role
+IF (NOT EXISTS (SELECT id FROM [dbo].[Person] WHERE Id = @SuperUserId))
+INSERT [dbo].[Person](
+       [Id], [Version], [UpdatedBy], [UpdatedOn], [Email], [Note], [EmploymentNumber]
+     , [TerminalDate], [FirstName], [LastName], [DefaultTimeZone], [Culture], [UiCulture]
+	 , [IsDeleted], [WriteProtectionUpdatedOn], [PersonWriteProtectedDate], [WriteProtectionUpdatedBy]
+	 , [WorkflowControlSet], [FirstDayOfWeek])
+VALUES (@SuperUserId, 1, @SuperUserId, getdate(), '', '', '', NULL
+     , '_Super User', '_Super User', 'UTC', NULL, NULL, 0, NULL, NULL, NULL, NULL, 1)
+
+--get parent level
+SELECT @ParentForeignId = '0001'	--Parent Foreign id that is hardcoded
+SELECT @ParentId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ParentForeignId + '%')
+
+--insert/modify application function
+SELECT @ForeignId = '0163' --Foreign id of the function > hardcoded
+SELECT @FunctionCode = 'PmNextGen' --Name of the function > hardcoded
+SELECT @FunctionDescription = 'xxPmNextGen' --Description of the function > hardcoded
+SELECT @ParentId = @ParentId
+
+IF (NOT EXISTS (SELECT Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')))
+INSERT [dbo].[ApplicationFunction]([Id], [Version], [UpdatedBy], [UpdatedOn], [Parent], [FunctionCode], [FunctionDescription], [ForeignId], [ForeignSource], [IsDeleted])
+VALUES (newid(), 1, @SuperUserId, getdate(), @ParentId, @FunctionCode, @FunctionDescription, @ForeignId, 'Raptor', 0)
+SELECT @FunctionId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
+UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentId WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
+
+SELECT @ParentForeignId = '0163'	--Parent Foreign id that is hardcoded
+SELECT @ParentId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ParentForeignId + '%')
+
+--insert/modify "sub" application function
+SELECT @ForeignId = '0164'
+SELECT @FunctionCode = 'PmNextGenViewReport'
+SELECT @FunctionDescription = 'xxPmNextGenViewReport'
+SELECT @ParentId = @ParentId
+
+IF (NOT EXISTS (SELECT Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')))
+INSERT [dbo].[ApplicationFunction]([Id], [Version], [UpdatedBy], [UpdatedOn], [Parent], [FunctionCode], [FunctionDescription], [ForeignId], [ForeignSource], [IsDeleted])
+VALUES (newid(), 1, @SuperUserId, getdate(), @ParentId, @FunctionCode, @FunctionDescription, @ForeignId, 'Raptor', 0)
+SELECT @FunctionId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
+UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentId WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
+
+SELECT @ForeignId = '0165'
+SELECT @FunctionCode = 'PmNextGenEditReport'
+SELECT @FunctionDescription = 'xxPmNextGenEditReport'
+SELECT @ParentId = @ParentId
+
+IF (NOT EXISTS (SELECT Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')))
+INSERT [dbo].[ApplicationFunction]([Id], [Version], [UpdatedBy], [UpdatedOn], [Parent], [FunctionCode], [FunctionDescription], [ForeignId], [ForeignSource], [IsDeleted])
+VALUES (newid(), 1, @SuperUserId, getdate(), @ParentId, @FunctionCode, @FunctionDescription, @ForeignId, 'Raptor', 0)
+SELECT @FunctionId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
+UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentId WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
+
+SET NOCOUNT OFF
 GO
-
-ALTER TABLE [Auditing].[StaffingAudit]  WITH CHECK ADD  CONSTRAINT [FK__PER_SA_ActionPerformedBy_Person_Id] FOREIGN KEY([ActionPerformedBy])
-REFERENCES [dbo].[Person] ([Id])
-GO
-
-ALTER TABLE [Auditing].[StaffingAudit] CHECK CONSTRAINT [FK__PER_SA_ActionPerformedBy_Person_Id]
-GO
-
-

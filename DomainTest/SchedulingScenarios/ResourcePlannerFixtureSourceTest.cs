@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			var target = new resourcePlannerFixtureSourceForTest(Enumerable.Empty<Toggles>(), true);
 			
 			target.Should().Have.SameValuesAs(
-				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), SeperateWebRequest.SimulateFirstRequest),
-				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), SeperateWebRequest.SimulateSecondRequestOrScheduler)
+				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), SeparateWebRequest.SimulateSecondRequestOrScheduler)
 			);
 		}
 		
@@ -46,10 +46,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			var target = new resourcePlannerFixtureSourceForTest(new[]{Toggles.TestToggle}, true);
 
 			target.Should().Have.SameValuesAs(
-				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), SeperateWebRequest.SimulateFirstRequest),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle}, SeperateWebRequest.SimulateFirstRequest),
-				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), SeperateWebRequest.SimulateSecondRequestOrScheduler),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle}, SeperateWebRequest.SimulateSecondRequestOrScheduler)
+				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle}, SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), SeparateWebRequest.SimulateSecondRequestOrScheduler),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle}, SeparateWebRequest.SimulateSecondRequestOrScheduler)
 			);
 		}
 
@@ -72,14 +72,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			var target = new resourcePlannerFixtureSourceForTest(new[]{Toggles.TestToggle, Toggles.TestToggle2}, true);
 
 			target.Should().Have.SameValuesAs(
-				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), SeperateWebRequest.SimulateFirstRequest),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle}, SeperateWebRequest.SimulateFirstRequest),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2}, SeperateWebRequest.SimulateFirstRequest),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2}, SeperateWebRequest.SimulateFirstRequest),
-				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), SeperateWebRequest.SimulateSecondRequestOrScheduler),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle}, SeperateWebRequest.SimulateSecondRequestOrScheduler),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2}, SeperateWebRequest.SimulateSecondRequestOrScheduler),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2}, SeperateWebRequest.SimulateSecondRequestOrScheduler)
+				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle}, SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2}, SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2}, SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), SeparateWebRequest.SimulateSecondRequestOrScheduler),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle}, SeparateWebRequest.SimulateSecondRequestOrScheduler),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2}, SeparateWebRequest.SimulateSecondRequestOrScheduler),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2}, SeparateWebRequest.SimulateSecondRequestOrScheduler)
 			);
 		}
 		
@@ -106,23 +106,31 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			var target = new resourcePlannerFixtureSourceForTest(new[]{Toggles.TestToggle, Toggles.TestToggle2, Toggles.TestToggle3}, true);
 
 			target.Should().Have.SameValuesAs(
-				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), SeperateWebRequest.SimulateFirstRequest),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle}, SeperateWebRequest.SimulateFirstRequest),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2}, SeperateWebRequest.SimulateFirstRequest),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle3}, SeperateWebRequest.SimulateFirstRequest),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2}, SeperateWebRequest.SimulateFirstRequest),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle3}, SeperateWebRequest.SimulateFirstRequest),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2, Toggles.TestToggle3}, SeperateWebRequest.SimulateFirstRequest),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2, Toggles.TestToggle3}, SeperateWebRequest.SimulateFirstRequest),
-				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), SeperateWebRequest.SimulateSecondRequestOrScheduler),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle}, SeperateWebRequest.SimulateSecondRequestOrScheduler),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2}, SeperateWebRequest.SimulateSecondRequestOrScheduler),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle3}, SeperateWebRequest.SimulateSecondRequestOrScheduler),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2}, SeperateWebRequest.SimulateSecondRequestOrScheduler),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle3}, SeperateWebRequest.SimulateSecondRequestOrScheduler),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2, Toggles.TestToggle3}, SeperateWebRequest.SimulateSecondRequestOrScheduler),
-				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2, Toggles.TestToggle3}, SeperateWebRequest.SimulateSecondRequestOrScheduler)
+				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle}, SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2}, SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle3}, SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2}, SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle3}, SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2, Toggles.TestToggle3}, SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2, Toggles.TestToggle3}, SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), SeparateWebRequest.SimulateSecondRequestOrScheduler),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle}, SeparateWebRequest.SimulateSecondRequestOrScheduler),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2}, SeparateWebRequest.SimulateSecondRequestOrScheduler),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle3}, SeparateWebRequest.SimulateSecondRequestOrScheduler),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2}, SeparateWebRequest.SimulateSecondRequestOrScheduler),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle3}, SeparateWebRequest.SimulateSecondRequestOrScheduler),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2, Toggles.TestToggle3}, SeparateWebRequest.SimulateSecondRequestOrScheduler),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2, Toggles.TestToggle3}, SeparateWebRequest.SimulateSecondRequestOrScheduler)
 			);
+		}
+		
+		[Test]
+		public void ThreeToggle_WithExtraRequest_VerifyCount()
+		{
+			var target = new resourcePlannerFixtureSourceForTest(new[]{Toggles.TestToggle, Toggles.TestToggle2, Toggles.TestToggle3}, true);
+
+			target.Count().Should().Be.EqualTo(16);
 		}
 
 		[Test]
@@ -150,6 +158,50 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle3, Toggles.TestToggle4}, null),
 
 				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle4}, null)
+			);
+		}
+		
+		[TestCase(Toggles.TestToggle, Toggles.TestToggle2, Toggles.TestToggle3)]
+		[TestCase(Toggles.TestToggle3, Toggles.TestToggle2, Toggles.TestToggle)]
+		[TestCase(Toggles.TestToggle2, Toggles.TestToggle, Toggles.TestToggle3)]
+		public void ThreeToggles_WithExtraRequest_CheckOrder_UpDown(Toggles toggle1, Toggles toggle2, Toggles toggle3)
+		{
+			var target = new resourcePlannerFixtureSourceForTest(new[]{toggle1, toggle2, toggle3}, true);
+
+			target.Should().Have.SameSequenceAs(
+				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle}, SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2}, SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle3}, SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2}, SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle3}, SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2, Toggles.TestToggle3}, SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2, Toggles.TestToggle3}, SeparateWebRequest.SimulateFirstRequest),
+				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), SeparateWebRequest.SimulateSecondRequestOrScheduler),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle}, SeparateWebRequest.SimulateSecondRequestOrScheduler),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2}, SeparateWebRequest.SimulateSecondRequestOrScheduler),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle3}, SeparateWebRequest.SimulateSecondRequestOrScheduler),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2}, SeparateWebRequest.SimulateSecondRequestOrScheduler),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle3}, SeparateWebRequest.SimulateSecondRequestOrScheduler),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2, Toggles.TestToggle3}, SeparateWebRequest.SimulateSecondRequestOrScheduler),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2, Toggles.TestToggle3}, SeparateWebRequest.SimulateSecondRequestOrScheduler)
+			);
+		}
+		
+		[Test]
+		public void ThreeToggles_CheckOrder_LeftRight()
+		{
+			var target = new resourcePlannerFixtureSourceForTest(new[]{Toggles.TestToggle3, Toggles.TestToggle, Toggles.TestToggle2}, false);
+			
+			target.Should().Have.SameValuesAs(
+				new ResourcePlannerTestParameters(Enumerable.Empty<Toggles>(), null),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle}, null),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2}, null),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle3}, null),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle, Toggles.TestToggle2, Toggles.TestToggle3}, null),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2}, null),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle2, Toggles.TestToggle3}, null),
+				new ResourcePlannerTestParameters(new[] {Toggles.TestToggle3}, null)
 			);
 		}
 		

@@ -13273,11 +13273,11 @@ Reduce the complexity to use these shifts.</value>
     <comment>use in wfm web outbound, campaign list view</comment>
   </data>
   <data name="ConnectAHT" xml:space="preserve">
-    <value>Connect AHT(s)</value>
+    <value>Connect AHT (s)</value>
     <comment>use in wfm web outbound, campaign edit view property of a campaign. Average handling time</comment>
   </data>
   <data name="ConnectRate" xml:space="preserve">
-    <value>Connect Rate(%)</value>
+    <value>Connect Rate (%)</value>
     <comment>use in wfm web outbound, campaign edit view property of a campaign</comment>
   </data>
   <data name="DeleteCampaign" xml:space="preserve">
@@ -13293,15 +13293,15 @@ Reduce the complexity to use these shifts.</value>
     <comment>use in wfm web outbound, campaign list view</comment>
   </data>
   <data name="RPCAHT" xml:space="preserve">
-    <value>RPC AHT(s)</value>
+    <value>RPC AHT (s)</value>
     <comment>use in wfm web outbound, campaign edit view property of a campaign. Right Party Connection Average Handing Time</comment>
   </data>
   <data name="RPCR" xml:space="preserve">
-    <value>RPCR(%)</value>
+    <value>RPCR (%)</value>
     <comment>use in wfm web outbound, campaign edit view property of a campaign. Right Party Connect Rate</comment>
   </data>
   <data name="TargetRate" xml:space="preserve">
-    <value>Target Rate(%)</value>
+    <value>Target Rate (%)</value>
     <comment>use in wfm web outbound, campaign edit view property of a campaign</comment>
   </data>
   <data name="UnproductiveTime" xml:space="preserve">
@@ -17752,20 +17752,36 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Request List</value>
     <comment>Use in MyTime Request Model, a sub button name for show all requests history.</comment>
   </data>
-	  <data name="HistoricalOverview" xml:space="preserve">
+  <data name="HistoricalOverview" xml:space="preserve">
     <value>Historical Overview</value>
     <comment>Historical overview</comment>
   </data>
-	<data name="MonitorOrganization" xml:space="preserve">
+  <data name="MonitorOrganization" xml:space="preserve">
     <value>Monitor organization</value>
     <comment>Navigation button name in RTA</comment>
   </data>
-	<data name="MonitorAgents" xml:space="preserve">
+  <data name="MonitorAgents" xml:space="preserve">
     <value>Monitor agents</value>
     <comment>Navigation button name in RTA</comment>
   </data>
-	<data name="LateForWork" xml:space="preserve">
+  <data name="LateForWork" xml:space="preserve">
     <value>Late for work</value>
     <comment>Table column header in RTA historical overview</comment>
+  </data>
+  <data name="AgentScheduledWithoutPreferences" xml:space="preserve">
+    <value>Agent was scheduled without preferences</value>
+    <comment>Table column header in RTA historical overview</comment>
+  </data>
+  <data name="PmNextGen" xml:space="preserve">
+    <value>PM Next Generation</value>
+    <comment>Label for permission item</comment>
+  </data>
+  <data name="PmNextGenViewReport" xml:space="preserve">
+    <value>View report</value>
+    <comment>Label for permission item</comment>
+  </data>
+  <data name="PmNextGenEditReport" xml:space="preserve">
+    <value>Edit report</value>
+    <comment>Label for permission item</comment>
   </data>
 </root>

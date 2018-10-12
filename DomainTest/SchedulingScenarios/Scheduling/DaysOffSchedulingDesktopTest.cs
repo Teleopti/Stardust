@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
-		[Test, Ignore("until #76348 is solved")]
+		[Test]
 		public void DaysOffFromContractScheduleShouldBePossibleToPlaceOnClosedDays()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon

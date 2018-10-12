@@ -26,8 +26,10 @@
                 return;
             vm.valLoading = true;
             planningPeriodServiceNew.getValidation({ id: $stateParams.ppId }).$promise.then(function (data) {
+
                 vm.valData.preValidation = data.InvalidResources;
-                vm.valData.preValidation.sort(localeLanguageSortingService.localeSort('+ResourceName'));
+				
+                // vm.valData.preValidation.sort(localeLanguageSortingService.localeSort('+ResourceName'));
                 vm.valLoading = false;
                 vm.valNumber();
             });

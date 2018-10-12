@@ -12,24 +12,27 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 		
 		public IEnumerator<ResourcePlannerTestParameters> GetEnumerator()
 		{
-			var toggleCombos = new HashSet<IEnumerable<Toggles>> {Enumerable.Empty<Toggles>()};
+			var toggleCombos = new HashSet<IEnumerable<Toggles>>(new togglesComparer()) {Enumerable.Empty<Toggles>()};
 			foreach (var toggleOuter in ToggleFlags)
 			{
 				innerEnumerator(toggleOuter, toggleCombos);
 			}
 
+			var testParameters = new List<ResourcePlannerTestParameters>();
 			foreach (var toggleCombo in toggleCombos)
 			{
 				if (AlsoSimulateSecondRequest)
 				{
-					yield return new ResourcePlannerTestParameters(toggleCombo, SeperateWebRequest.SimulateFirstRequest);
-					yield return new ResourcePlannerTestParameters(toggleCombo, SeperateWebRequest.SimulateSecondRequestOrScheduler);
+					testParameters.Add(new ResourcePlannerTestParameters(toggleCombo, SeparateWebRequest.SimulateFirstRequest));
+					testParameters.Add(new ResourcePlannerTestParameters(toggleCombo, SeparateWebRequest.SimulateSecondRequestOrScheduler));
 				}
 				else
 				{
-					yield return new ResourcePlannerTestParameters(toggleCombo, null);					
+					testParameters.Add(new ResourcePlannerTestParameters(toggleCombo, null));
 				}
 			}
+			testParameters.Sort();
+			return testParameters.GetEnumerator();
 		}
 
 		private void innerEnumerator(Toggles mainToggle, ISet<IEnumerable<Toggles>> toggleCombos, int startPos = 0)
@@ -47,6 +50,19 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
+		}
+		
+		private class togglesComparer : IEqualityComparer<IEnumerable<Toggles>>
+		{
+			public bool Equals(IEnumerable<Toggles> x, IEnumerable<Toggles> y)
+			{
+				return x.All(y.Contains);
+			}
+
+			public int GetHashCode(IEnumerable<Toggles> obj)
+			{
+				return obj.Count();
+			}
 		}
 	}
 }

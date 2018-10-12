@@ -14,9 +14,14 @@ Teleopti.MyTimeWeb.Request = (function($) {
 	function RequestNavigationViewModel() {
 		var self = this;
 
-		self.showFabButton = (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826') && Teleopti.MyTimeWeb.Common.IsHostAMobile())
-						|| (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409') && Teleopti.MyTimeWeb.Common.IsHostAniPad());
-		self.showRequestListButton = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_Request_CleanUpRequestHisotry_77776');
+		self.showFabButton =
+			Teleopti.MyTimeWeb.Common.IsHostAMobile() ||
+			(Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409') &&
+				Teleopti.MyTimeWeb.Common.IsHostAMobile());
+
+		self.showRequestListButton = Teleopti.MyTimeWeb.Common.IsToggleEnabled(
+			'MyTimeWeb_Request_CleanUpRequestHisotry_77776'
+		);
 
 		self.hideFab = ko.observable(false);
 
@@ -37,10 +42,10 @@ Teleopti.MyTimeWeb.Request = (function($) {
 			self.menuIsVisible(false);
 		};
 
-		self.cancelOrSendCallback = function () {
+		self.cancelOrSendCallback = function() {
 			self.resetToolbarActiveButtons();
 			self.requestListActive(true);
-		}
+		};
 
 		self.clickRequestList = function() {
 			self.resetToolbarActiveButtons();
@@ -71,8 +76,6 @@ Teleopti.MyTimeWeb.Request = (function($) {
 			if (e) {
 				e.stopPropagation();
 			}
-
-			self.hideFab(true);
 			self.closeDatePickers();
 			self.resetToolbarActiveButtons();
 			self.addShiftTradeRequestActive(true);
@@ -109,7 +112,7 @@ Teleopti.MyTimeWeb.Request = (function($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
 		};
 
-		self.resetToolbarActiveButtons = function () {
+		self.resetToolbarActiveButtons = function() {
 			self.requestListActive(false);
 			self.addTextRequestActive(false);
 			self.addAbsenceRequestActive(false);

@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 
 				foreach (var staffPeriod in skillDay.SkillStaffPeriodCollection)
 				{
-					var intervalModel = intervalModels.FirstOrDefault(i => i.IntervalStart == TimeZoneHelper.ConvertFromUtc(staffPeriod.Period.StartDateTime, skillTimeZone));
+					var intervalModel = intervalModels.FirstOrDefault(i => i.IntervalStartUtc == staffPeriod.Period.StartDateTime);
 					if (intervalModel == null)
 						continue;
 

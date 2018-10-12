@@ -1,13 +1,12 @@
 ﻿.seatplan {
-	width: 100%;
 	margin-bottom: 20px;
 	background: $white;
 }
 
-#seatmap-toolbar{
-    .context-menu{
-        z-index:45;
-    }
+#seatmap-toolbar {
+	.context-menu {
+		z-index: 45;
+	}
 }
 
 .calendar-progress {
@@ -21,19 +20,22 @@
 .planning-day-detail {
 	height: 235px;
 	padding-left: 15px;
-    padding-top:5px;
-}
+	padding-top: 5px;
 
-.planning-day-detail .wfm-btn-invis-primary {
-	position: absolute;
-	right: 10px;
-	bottom: 10px;
+	.wfm-btn-invis-primary {
+		position: absolute;
+		right: 10px;
+		bottom: 10px;
+	}
+	.wfm-chip-wrap {
+		line-height: 2;
+	}
 }
 
 .planning-period-button-bar {
 	float: right;
 	padding: 0 10px;
-    min-height: 50px;
+	min-height: 50px;
 }
 
 .planning-period-progress-bar {
@@ -45,37 +47,8 @@
 	max-width: 320px;
 }
 
-
-/*.seatplan-manual-planning-calendar {
-	height: 100%;
-	margin-top: 10px;
-	padding: 5px;
-
-
-    .dropdown-menu {
-                text-align: left !important;
-    }
-
-    .line-center{
-            text-align: left !important;
-
-    }
-
-    .wfm-datepicker-wrap {
-
-        box-shadow: none !important;
-
-
-
-        .sub-header{
-            text-align: center;
-        }
-    }
-
-}*/
-
-.seatplan-planning-periods{
-    padding-top:10px;
+.seatplan-planning-periods {
+	padding-top: 10px;
 }
 
 .seatplan-paging-container {
@@ -106,7 +79,11 @@
 		height: auto;
 	}
 
-	.layout-container, .navbar, .shortcut-trick-ie, wfm-notice, md-tooltip {
+	.layout-container,
+	.navbar,
+	.shortcut-trick-ie,
+	wfm-notice,
+	md-tooltip {
 		display: none !important;
 	}
 }
@@ -138,7 +115,8 @@
 	height: 100px;
 }
 
-.seatplan-report-content .tr-break, .seatplan-report-content .tr-show {
+.seatplan-report-content .tr-break,
+.seatplan-report-content .tr-show {
 	height: 40px;
 	vertical-align: bottom;
 	border-bottom: 1px #e1e2e3 solid;
@@ -167,7 +145,8 @@
 	background: #f1f2f3;
 }
 
-.seatplan-report-content table th, .seatplan-report-content .seatPlanReportContent table td {
+.seatplan-report-content table th,
+.seatplan-report-content .seatPlanReportContent table td {
 	text-align: left;
 	word-break: break-word;
 }
@@ -180,7 +159,8 @@
 	width: 10%;
 }
 
-.seatplan-report-content table tr .td-team, .seatplan-report-content table tr .td-agent {
+.seatplan-report-content table tr .td-team,
+.seatplan-report-content table tr .td-agent {
 	width: 20%;
 }
 
@@ -223,12 +203,11 @@
 }
 
 .seatplan-report-filter .alert-error {
+	position: relative;
+	width: 100%;
 
-    position: relative;
-    width: 100%;
-
-    margin-left: auto;
-    margin-right: auto;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .seatplan-report-filter .report-filter-panel {
@@ -302,7 +281,7 @@
 }
 
 /*work around for IE issues with date range picker*/
-@media screen and (min-width:0\0) {
+@media screen and (min-width: 0\0) {
 	.seatplan-report-filter .date-range-end-date {
 		margin-left: 280px;
 	}

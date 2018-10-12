@@ -275,8 +275,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<GridlockManager>().As<IGridlockManager>().InstancePerLifetimeScope();
 			builder.RegisterType<MatrixUserLockLocker>().InstancePerLifetimeScope();
 
-			builder.RegisterType<MatrixClosedDaysLockerDoNothing>().As<IMatrixClosedDayLocker>().InstancePerLifetimeScope();
-
+			if (_configuration.Toggle(Toggles.ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348))
+			{
+				builder.RegisterType<MatrixClosedDayLocker>().As<IMatrixClosedDayLocker>().InstancePerLifetimeScope();
+			}
+			else
+			{
+				builder.RegisterType<MatrixClosedDaysLockerDoNothing>().As<IMatrixClosedDayLocker>().InstancePerLifetimeScope();
+			}
+			
 			builder.RegisterType<MatrixNotPermittedLocker>().SingleInstance();
 			builder.RegisterType<ScheduleMatrixValueCalculatorProFactory>().As<IScheduleMatrixValueCalculatorProFactory>().SingleInstance();
 			builder.RegisterType<WorkShiftLegalStateDayIndexCalculator>().SingleInstance();
@@ -381,8 +388,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftBackToLegalStateServiceProFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleBlankSpots>().InstancePerLifetimeScope();
 			builder.RegisterType<DaysOffBackToLegalState>().InstancePerLifetimeScope();
-			builder.RegisterType<SuccessfulScheduledAgents>().SingleInstance();
-			builder.RegisterType<FailedScheduledAgents>().SingleInstance();
 			builder.RegisterType<SchedulingInformationProvider>().SingleInstance().ApplyAspects();
 			builder.RegisterType<IntradayOptimization>().InstancePerLifetimeScope();
 			builder.RegisterType<FullSchedulingResult>().InstancePerLifetimeScope().ApplyAspects();
@@ -482,6 +487,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<NextPlanningPeriodProvider>().SingleInstance().As<INextPlanningPeriodProvider>();
 			builder.RegisterType<CheckScheduleHints>().SingleInstance();
+			builder.RegisterType<GetValidations>().SingleInstance();
 			builder.RegisterType<BusinessRulesHint>().As<IScheduleHint>().SingleInstance();
 			if (!_configuration.Args().IsFatClient)
 			{
@@ -500,8 +506,20 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<BlockSchedulingPreviousShiftNotMatchingEachOtherHint>().As<IScheduleHint>().SingleInstance();
 			builder.RegisterType<BlockSchedulingExistingShiftNotMatchingEachOtherHint>().As<IScheduleHint>().SingleInstance();
 			builder.RegisterType<BlockSchedulingPreferenceHint>().As<IScheduleHint>().SingleInstance();
-			
-
+			builder.RegisterType<AgentsWithWhiteSpots>().SingleInstance();
+			if(_configuration.Toggle(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288))
+			{
+				builder.RegisterType<AlreadyScheduledAgents>().As<IAlreadyScheduledAgents>().SingleInstance();
+				builder.RegisterType<AgentsWithPreferences>().SingleInstance();
+				if (!_configuration.Args().IsFatClient)
+				{
+					builder.RegisterType<PreferenceHint>().As<IScheduleHint>().SingleInstance();
+				}
+			}
+			else
+			{
+				builder.RegisterType<AlreadyScheduledAgentsNullObject>().As<IAlreadyScheduledAgents>().SingleInstance();
+			}
 		}
 
 		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)

@@ -1,18 +1,19 @@
 ﻿@using Teleopti.Ccc.UserTexts
 @{
-	Layout = null;
+Layout = null;
 }
 
 <div class="overtime-add-container clearfix">
 	<div class="overtime-add-body relative">
 		<div class="posting-mask" data-bind="visible: IsPostingData() || IsLoading()">
-			<img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader.gif")" alt="Saving..." />
+			<img src='@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader.gif")' alt="Saving..." />
 		</div>
 		<div class="form-group">
-			<input type="text" class="request-new-subject form-control" placeholder="@Resources.Subject" data-bind="value: Subject, enable: IsEditable" maxlength="80"/>
+			<input type="text" class="request-new-subject form-control" placeholder="@Resources.Subject" data-bind="value: Subject, enable: IsEditable"
+			 maxlength="80" />
 		</div>
 		<div class="form-group">
-			<textarea class="request-new-message form-control" placeholder="@Resources.Message" data-bind="value: Message, valueUpdate: 'afterkeydown', event:{change:checkMessageLength}, enable: IsEditable" />
+			<textarea class="request-new-message form-control" placeholder="@Resources.Message" data-bind="value: Message, valueUpdate: 'afterkeydown', event:{change:checkMessageLength}, enable: IsEditable"></textarea>
 		</div>
 
 		<div class="row form-group">
@@ -23,17 +24,17 @@
 				<select class="input-sm form-control" data-bind="value: MultiplicatorDefinitionSetId, enable: IsEditable">
 					@foreach (var overtimeType in Model.OvertimeTypes)
 					{
-						<option value="@Html.AttributeEncode(overtimeType.Id)">@overtimeType.Name</option>
+					<option value="@Html.AttributeEncode(overtimeType.Id)">@overtimeType.Name</option>
 					}
 				</select>
 			</div>
 		</div>
-		
+
 		@if (Model.OvertimeTypes.Count == 0)
 		{
-			<div class="alert alert-warning">
-				@Resources.NoOvertimeType
-			</div>
+		<div class="alert alert-warning">
+			@Resources.NoOvertimeType
+		</div>
 		}
 
 		<div class="row form-group">
@@ -49,7 +50,8 @@
 					@Resources.Date
 				</label>
 				<span class="input-group">
-					<input class="input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart, startDate: PeriodStartDate(), endDate: PeriodEndDate() }, enable: IsEditable() && !IsMobile" type="text" />
+					<input class="input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart, startDate: PeriodStartDate(), endDate: PeriodEndDate() }, enable: IsEditable() && !IsMobile"
+					 type="text" />
 					<span class="input-group-btn">
 						<button class="btn btn-sm" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart,startDate: PeriodStartDate(), endDate: PeriodEndDate() }, click: CloseDropdownTimeList, enable: IsEditable">
 							<i class="glyphicon glyphicon-calendar"></i>
@@ -78,7 +80,8 @@
 					@Resources.Duration
 				</label>
 				<div class="input-group">
-					<input type="text" class="input-sm form-control" data-bind="value: RequestDuration, event:{change:validateDuration}, enable: IsEditable, scrollIntoViewWhenClick:'#Request-add-section'" maxlength="5">
+					<input type="text" class="input-sm form-control" data-bind="value: RequestDuration, event:{change:validateDuration}, enable: IsEditable, scrollIntoViewWhenClick:'#Request-add-section'"
+					 maxlength="5">
 					<span class="input-group-addon input-group-btn" data-bind="css: {'open': IsTimeListOpened}, outsideClickCallback: CloseDropdownTimeList">
 						<ul role="menu" class="dropdown-menu" data-bind="visbile: IsTimeListOpened">
 							<!-- ko foreach: TimeList-->
@@ -101,7 +104,7 @@
 		<button class="request-new-cancel btn" data-bind="click: CancelAddRequest, visible: ShowCancelButton">@Resources.Cancel</button>
 		@if (Model.OvertimeTypes.Count > 0)
 		{
-			<button class="request-new-send btn btn-primary" data-bind="click: AddRequest, visible: IsEditable, disable: IsLoading() || IsPostingData()">@Resources.Save</button>
+		<button class="request-new-send btn btn-primary" data-bind="click: AddRequest, visible: IsEditable, disable: IsLoading() || IsPostingData()">@Resources.Save</button>
 		}
 	</div>
 </div>

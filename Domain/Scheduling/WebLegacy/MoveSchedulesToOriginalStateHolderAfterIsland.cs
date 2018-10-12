@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;

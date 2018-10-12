@@ -16,7 +16,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionReadOnly
@@ -43,7 +42,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 		public ISkillTypeRepository SkillTypeRepository;
 		public IWorkloadRepository WorkloadRepository;
 		public IPersonRequestRepository PersonRequestRepository;
-		public IScenarioRepository ScenarioRepository;
 		public IBudgetGroupRepository BudgetGroupRepository;
 
 		[Test]
@@ -105,16 +103,59 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 		[Test]
 		public void
 			ShouldGetNumberOfAbsencesPerDayAndBudgetGroupBasedOnCustomShrinkage()
-		
+
 		{
 			var date = new DateOnly(2018, 3, 15);
+			var absences = createTwoDifferentAbsences();
+			var holidayAbsence = getHolidayAbsence(absences);
+			var budgetGroup = createBudgetGroupWithHolidayAbsenceAsCustomShinkage(holidayAbsence);
+			var agents = createAgents(date, budgetGroup);
 
-			var scenario = new Scenario("_") {DefaultScenario = true};
-			var activity = new Activity("_");
+			createTwoHolidayAndOneIllnessAbsenceRequests(date, agents, absences);
+			createScheduleProjectionReadOnlyModels(date, agents, absences);
+
+			Assert.AreEqual(2, AbsenceRepository.LoadAll().Count());
+			Assert.AreEqual(10, PersonRepository.LoadAll().Count());
+			Assert.AreEqual(2, Persister.GetNumberOfAbsencesPerDayAndBudgetGroup(budgetGroup.Id.Value, date));
+		}
+
+		private List<IAbsence> createTwoDifferentAbsences()
+		{
 			var holidayAbsence = new Absence {Description = new Description("Holiday"), Requestable = true};
 			var illnessAbsence = new Absence {Description = new Description("Illness"), Requestable = true};
-			var absences = new List<Absence> {holidayAbsence, illnessAbsence};
-			var team = new Team {Site = new Site("_")};
+			var absences = new List<IAbsence> {holidayAbsence, illnessAbsence};
+			AbsenceRepository.AddRange(absences);
+			UnitOfWork.Current().PersistAll();
+
+			return absences;
+		}
+
+		private IAbsence getHolidayAbsence(List<IAbsence> absences)
+		{
+			return absences.Single(x => x.Description.Name == "Holiday");
+		}
+
+		private IAbsence getIllnessAbsence(List<IAbsence> absences)
+		{
+			return absences.Single(x => x.Description.Name == "Illness");
+		}
+
+		private IBudgetGroup createBudgetGroupWithHolidayAbsenceAsCustomShinkage(IAbsence holidayAbsence)
+		{
+			var customShrinkage = new CustomShrinkage("_");
+			customShrinkage.AddAbsence(holidayAbsence);
+			var budgetGroup = new BudgetGroup { Name = "_", TimeZone = TimeZoneInfo.Utc };
+			budgetGroup.AddCustomShrinkage(customShrinkage);
+			BudgetGroupRepository.Add(budgetGroup);
+			UnitOfWork.Current().PersistAll();
+
+			return budgetGroup;
+		}
+
+		private List<IPerson> createAgents(DateOnly date, IBudgetGroup budgetGroup)
+		{
+			var activity = new Activity("_");
+			var team = new Team { Site = new Site("_") };
 			team.SetDescription(new Description("_"));
 
 			var partTimePercentage = new PartTimePercentage("_");
@@ -131,16 +172,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 			{
 				Description = new Description("_")
 			};
-			var ruleSetBag = new RuleSetBag(ruleSet) {Description = new Description("_")};
+			var ruleSetBag = new RuleSetBag(ruleSet) { Description = new Description("_") };
 
 			var agents = new List<IPerson>();
-			var requests = new List<IPersonRequest>();
-
-			var customShrinkage = new CustomShrinkage("_");
-			customShrinkage.AddAbsence(holidayAbsence);
-			var budgetGroup = new BudgetGroup { Name = "_", TimeZone = TimeZoneInfo.Utc };
-			budgetGroup.AddCustomShrinkage(customShrinkage);
-			
 			for (var i = 0; i < 10; i++)
 			{
 				var agent = new Person()
@@ -155,20 +189,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 				agents.Add(agent);
 			}
 
-			var personRequest = new PersonRequest(agents[0],
-				new AbsenceRequest(holidayAbsence, new DateTimePeriod(2018, 03, 15, 10, 2018, 03, 15, 11)));
-			requests.Add(personRequest);
-
-			personRequest = new PersonRequest(agents[1],
-				new AbsenceRequest(illnessAbsence, date.ToDateTimePeriod(TimeZoneInfo.Utc)));
-			requests.Add(personRequest);
-
-			personRequest = new PersonRequest(agents[2],
-				new AbsenceRequest(holidayAbsence, date.ToDateTimePeriod(TimeZoneInfo.Utc)));
-			requests.Add(personRequest);
-
-			AbsenceRepository.AddRange(absences);
-			ScenarioRepository.Add(scenario);
 			SiteRepository.Add(team.Site);
 			TeamRepository.Add(team);
 			PartTimePercentageRepository.Add(partTimePercentage);
@@ -182,44 +202,69 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 			WorkShiftRuleSetRepository.Add(ruleSetBag.RuleSetCollection.Single());
 			RuleSetBagRepository.Add(ruleSetBag);
 			PersonRepository.AddRange(agents);
-			PersonRequestRepository.AddRange(requests);
-			BudgetGroupRepository.Add(budgetGroup);
+
 			UnitOfWork.Current().PersistAll();
+
+			return agents;
+		}
+
+		private void createTwoHolidayAndOneIllnessAbsenceRequests(DateOnly date, List<IPerson> agents,  List<IAbsence> absences)
+		{
+			var holidayAbsence = getHolidayAbsence(absences);
+			var illnessAbsence = getIllnessAbsence(absences);
+
+			var requests = new List<IPersonRequest>();
+			var shortAbsencePeriod = date.ToDateTimePeriod(new TimePeriod(10, 11), TimeZoneInfo.Utc);
+			var personRequest = new PersonRequest(agents[0],
+				new AbsenceRequest(holidayAbsence, shortAbsencePeriod));
+			requests.Add(personRequest);
+
+			personRequest = new PersonRequest(agents[1],
+				new AbsenceRequest(illnessAbsence, date.ToDateTimePeriod(TimeZoneInfo.Utc)));
+			requests.Add(personRequest);
+
+			personRequest = new PersonRequest(agents[2],
+				new AbsenceRequest(holidayAbsence, date.ToDateTimePeriod(TimeZoneInfo.Utc)));
+			requests.Add(personRequest);
+			PersonRequestRepository.AddRange(requests);
+			UnitOfWork.Current().PersistAll();
+		}
+
+		private void createScheduleProjectionReadOnlyModels(DateOnly date, List<IPerson> agents, List<IAbsence> absences)
+		{
+			var holidayAbsence = getHolidayAbsence(absences);
+			var illnessAbsence = getIllnessAbsence(absences);
 
 			Persister.AddActivity(
 				new ScheduleProjectionReadOnlyModel
 				{
 					BelongsToDate = date,
-					ScenarioId = scenario.Id.Value,
 					PersonId = agents[0].Id.Value,
 					StartDateTime = DateTime.Now,
 					EndDateTime = DateTime.Now,
 					PayloadId = holidayAbsence.Id.Value
 				});
+
 			Persister.AddActivity(
 				new ScheduleProjectionReadOnlyModel
 				{
 					BelongsToDate = date,
-					ScenarioId = scenario.Id.Value,
 					PersonId = agents[1].Id.Value,
 					StartDateTime = DateTime.Now,
 					EndDateTime = DateTime.Now,
 					PayloadId = illnessAbsence.Id.Value
 				});
+
 			Persister.AddActivity(
 				new ScheduleProjectionReadOnlyModel
 				{
 					BelongsToDate = date,
-					ScenarioId = scenario.Id.Value,
 					PersonId = agents[2].Id.Value,
 					StartDateTime = DateTime.Now,
 					EndDateTime = DateTime.Now,
 					PayloadId = holidayAbsence.Id.Value
 				});
-
-			Assert.AreEqual(2, AbsenceRepository.LoadAll().Count());
-			Assert.AreEqual(10, PersonRepository.LoadAll().Count());
-			Assert.AreEqual(2, Persister.GetNumberOfAbsencesPerDayAndBudgetGroup(budgetGroup.Id.Value, date));
 		}
+
 	}
 }

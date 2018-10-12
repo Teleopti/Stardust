@@ -2,10 +2,11 @@ import { enableProdMode, StaticProvider } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { downgradeComponent, downgradeModule } from '@angular/upgrade/static';
 import { IControllerConstructor, IRootScopeService } from 'angular';
-import { AddAppPageComponent, ApiAccessTitleBarComponent, ListPageComponent } from './app/api-access/components';
+import { AddAppPageComponent, ListPageComponent } from './app/api-access/components';
 import { AppModule } from './app/app.module';
 import { ChangePasswordComponent } from './app/authentication/components/change-password/change-password.component';
 import { BootstrapComponent } from './app/bootstrap/bootstrap.component';
+import { SettingsMenuComponent } from './app/navigation/components';
 import {
 	AppLogonPageComponent,
 	GrantPageComponent,
@@ -17,7 +18,6 @@ import {
 import { FeedbackMessageComponent } from './app/shared/components';
 import { environment } from './environments/environment';
 import { MainController } from './main.controller';
-import { SettingsMenuComponent } from './app/navigation/components';
 
 export interface IWfmRootScopeService extends IRootScopeService {
 	_: any;
@@ -96,7 +96,6 @@ const downgradeHelper = (downgradeName: string, component) => {
 	wfm.directive(downgradeName, downgradedComponent);
 };
 
-downgradeHelper('ng2ApiAccessTitleBar', ApiAccessTitleBarComponent);
 downgradeHelper('ng2ApiAccessListPage', ListPageComponent);
 downgradeHelper('ng2ApiAccessAddAppPage', AddAppPageComponent);
 downgradeHelper('ng2PeopleTitleBar', TitleBarComponent);

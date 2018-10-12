@@ -70,6 +70,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return agent;
 		}
 
+		public Person Has(IContract contract, IContractSchedule contractSchedule,
+				ISchedulePeriod schedulePeriod, IRuleSetBag ruleSetBag, params ISkill[] skills)
+		{
+			return Has(contract, contractSchedule, new PartTimePercentage("_"), new Team(), schedulePeriod, ruleSetBag, skills);
+		}
+		
+		public Person Has(IContract contract, IContractSchedule contractSchedule,
+			ISchedulePeriod schedulePeriod, IWorkShiftRuleSet ruleSet, params ISkill[] skills)
+		{
+			return Has(contract, contractSchedule, schedulePeriod, new RuleSetBag(ruleSet), skills);
+		}
+
 		public Person Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage,
 			ITeam team, ISchedulePeriod schedulePeriod, IWorkShiftRuleSet ruleSet, params ISkill[] skills)
 		{
@@ -85,6 +97,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public Person Has(IContract contract, ISchedulePeriod schedulePeriod, params ISkill[] skills)
 		{
 			return Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team {Site = new Site("_")},
+				schedulePeriod, skills);
+		}
+		
+		public Person Has(IContractSchedule contractSchedule, ISchedulePeriod schedulePeriod, params ISkill[] skills)
+		{
+			return Has(new Contract("_"), contractSchedule, new PartTimePercentage("_"), new Team {Site = new Site("_")},
 				schedulePeriod, skills);
 		}
 

@@ -2,11 +2,11 @@
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 @model RequestsViewModel
 @{
-	Layout = null;
+Layout = null;
 }
 
 <script>
-	$(function() {
+	$(function () {
 		Teleopti.MyTimeWeb.Request.RequestDetail.PrepareForViewModel(Teleopti.MyTimeWeb.Common.DateTimeDefaultValues);
 	});
 </script>
@@ -45,56 +45,59 @@
 
 <input id="Request-detail-datepicker-format" type="hidden" value="@Model.DatePickerFormat" />
 <div class="navbar-container">
-	<button class="close-fab-overlay" data-bind="visible: menuIsVisible,css: { 'hide-fab-on-phone': hideFab}, click: disableMenu"></button>
-	<div class="with-fab" data-bind="if: showFabButton, css: { 'hide-fab-on-phone': hideFab}">
+	<button class="close-fab-overlay" data-bind="visible: menuIsVisible, css:{'hide-fab-on-phone': hideFab}, click: disableMenu"></button>
+	<div class="with-fab" data-bind="if: showFabButton, css:{'hide-fab-on-phone': hideFab}">
 		<button class="fab" data-bind="click: enableMenu" tabindex="0"></button>
 		<div class="navbar navbar-teleopti subnavbar" data-bind="css: {'menu-focusing': menuIsVisible}, visible: menuIsVisible">
 			<ul class="nav navbar-nav navbar-teleopti row submenu">
 				<!-- ko if: showRequestListButton-->
 				@if (Model.RequestPermission.RequestListPermission)
 				{
-					<li data-bind="css: { active: requestListActive }" class="col-xs-12 col-sm-4">
-						<a id="requestList" href="#" class="request-list" data-bind="click: clickRequestList">@Resources.RequestList</a>
-					</li>
+				<li data-bind="css: { active: requestListActive }" class="col-xs-12 col-sm-4">
+					<a id="requestList" href="#" class="request-list" data-bind="click: clickRequestList"><i class="glyphicon glyphicon-th-list"></i>&nbsp;@Resources.RequestList</a>
+				</li>
 				}
 				<!-- /ko -->
 				@if (Model.RequestPermission.TextRequestPermission)
 				{
-					<li data-bind="css: { active: addTextRequestActive }" class="col-xs-12 col-sm-4">
-						<a id="addTextRequest" href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
-					</li>
+				<li data-bind="css: { active: addTextRequestActive }" class="col-xs-12 col-sm-4">
+					<a id="addTextRequest" href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
+				</li>
 				}
 				@if (Model.RequestPermission.AbsenceRequestPermission)
 				{
-					<li data-bind="css: { active: addAbsenceRequestActive }" class="col-xs-12 col-sm-4">
-						<a id="addAbsenceRequest" href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
-					</li>
+				<li data-bind="css: { active: addAbsenceRequestActive }" class="col-xs-12 col-sm-4">
+					<a id="addAbsenceRequest" href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+				</li>
 				}
 				@if (Model.RequestPermission.ShiftTradeRequestPermission)
 				{
-					<li data-bind="css: { active: addShiftTradeRequestActive }" class="col-xs-12 col-sm-4">
-						<a id="addShiftTradeRequest" href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
-					</li>
+				<li data-bind="css: { active: addShiftTradeRequestActive }" class="col-xs-12 col-sm-4">
+					<a id="addShiftTradeRequest" href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i
+						 class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+				</li>
 				}
 
 				@if (Model.RequestPermission.ShiftTradeBulletinBoardPermission)
 				{
-					<li data-bind="css: { active: addShiftTradeBulletinBoardActive }" class="col-xs-12 col-sm-4">
-						<a id="addShiftTradeRequestFromBulletinBoard" href="#" class="shifttradebulletinboard-request-add" data-bind="click: addShiftTradeBulletinBoardRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
-					</li>
+				<li data-bind="css: { active: addShiftTradeBulletinBoardActive }" class="col-xs-12 col-sm-4">
+					<a id="addShiftTradeRequestFromBulletinBoard" href="#" class="shifttradebulletinboard-request-add" data-bind="click: addShiftTradeBulletinBoardRequest"><i
+						 class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
+				</li>
 
-					<li data-bind="css: { active: addPostShiftForTradeActive }" class="col-xs-12 col-sm-4">
-						<a id="addPostShiftForTrade" href=" #" class="postshiftfortrade-request-add" data-bind="click: addPostShiftForTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
-					</li>
+				<li data-bind="css: { active: addPostShiftForTradeActive }" class="col-xs-12 col-sm-4">
+					<a id="addPostShiftForTrade" href=" #" class="postshiftfortrade-request-add" data-bind="click: addPostShiftForTradeRequest"><i
+						 class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
+				</li>
 				}
 
 				@if (Model.RequestPermission.OvertimeRequestPermission && Model.RequestLicense.IsOvertimeRequestEnabled)
 				{
-					<li class="col-xs-12 col-sm-4" data-bind="css: {active: addOvertimeRequestActive }">
-						<a id="addOvertimeRequest" href="#" class="" data-bind="click: addOvertimeRequest">
-							<i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeRequest
-						</a>
-					</li>
+				<li class="col-xs-12 col-sm-4" data-bind="css: {active: addOvertimeRequestActive }">
+					<a id="addOvertimeRequest" href="#" class="" data-bind="click: addOvertimeRequest">
+						<i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeRequest
+					</a>
+				</li>
 				}
 			</ul>
 		</div>
@@ -102,52 +105,55 @@
 	<div class="no-fab" data-bind="ifnot: showFabButton, click: closeDatePickers">
 		<div class="navbar navbar-teleopti subnavbar" tabindex="0">
 			<div class="container">
-				<ul class="nav navbar-nav navbar-teleopti row submenu" >
+				<ul class="nav navbar-nav navbar-teleopti row submenu">
 					<!-- ko if: showRequestListButton-->
 					@if (Model.RequestPermission.RequestListPermission)
 					{
-						<li data-bind="css: { active: requestListActive }" class="col-xs-12 col-sm-4">
-							<a id="requestList" href="#" class="request-list" data-bind="click: clickRequestList">@Resources.RequestList</a>
-						</li>
+					<li data-bind="css: { active: requestListActive }" class="col-xs-12 col-sm-4">
+						<a id="requestList" href="#" class="request-list" data-bind="click: clickRequestList"><i class="glyphicon glyphicon-th-list"></i>&nbsp;@Resources.RequestList</a>
+					</li>
 					}
 					<!-- /ko -->
 					@if (Model.RequestPermission.TextRequestPermission)
 					{
-						<li data-bind="css: { active: addTextRequestActive }" class="col-xs-12 col-sm-4">
-							<a id="addTextRequest" href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
-						</li>
+					<li data-bind="css: { active: addTextRequestActive }" class="col-xs-12 col-sm-4">
+						<a id="addTextRequest" href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
+					</li>
 					}
 					@if (Model.RequestPermission.AbsenceRequestPermission)
 					{
-						<li data-bind="css: { active: addAbsenceRequestActive }" class="col-xs-12 col-sm-4">
-							<a id="addAbsenceRequest" href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
-						</li>
+					<li data-bind="css: { active: addAbsenceRequestActive }" class="col-xs-12 col-sm-4">
+						<a id="addAbsenceRequest" href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+					</li>
 					}
 					@if (Model.RequestPermission.ShiftTradeRequestPermission)
 					{
-						<li data-bind="css: { active: addShiftTradeRequestActive }" class="col-xs-12 col-sm-4">
-							<a id="addShiftTradeRequest" href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
-						</li>
+					<li data-bind="css: { active: addShiftTradeRequestActive }" class="col-xs-12 col-sm-4">
+						<a id="addShiftTradeRequest" href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i
+							 class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+					</li>
 					}
 
 					@if (Model.RequestPermission.ShiftTradeBulletinBoardPermission)
 					{
-						<li data-bind="css: { active: addShiftTradeBulletinBoardActive }" class="col-xs-12 col-sm-4">
-							<a id="addShiftTradeRequestFromBulletinBoard" href=" #" class="shifttradebulletinboard-request-add" data-bind="click: addShiftTradeBulletinBoardRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
-						</li>
+					<li data-bind="css: { active: addShiftTradeBulletinBoardActive }" class="col-xs-12 col-sm-4">
+						<a id="addShiftTradeRequestFromBulletinBoard" href=" #" class="shifttradebulletinboard-request-add" data-bind="click: addShiftTradeBulletinBoardRequest"><i
+							 class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
+					</li>
 
-						<li data-bind="css: { active: addPostShiftForTradeActive }" class="col-xs-12 col-sm-4">
-							<a id="addPostShiftForTrade" href=" #" class="postshiftfortrade-request-add" data-bind="click: addPostShiftForTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
-						</li>
+					<li data-bind="css: { active: addPostShiftForTradeActive }" class="col-xs-12 col-sm-4">
+						<a id="addPostShiftForTrade" href=" #" class="postshiftfortrade-request-add" data-bind="click: addPostShiftForTradeRequest"><i
+							 class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
+					</li>
 					}
-					
+
 					@if (Model.RequestPermission.OvertimeRequestPermission && Model.RequestLicense.IsOvertimeRequestEnabled)
 					{
-						<li class="col-xs-12 col-sm-4" data-bind="css: {active: addOvertimeRequestActive }">
-							<a id="addOvertimeRequest" href="#" class="" data-bind="click: addOvertimeRequest">
-								<i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeRequest
-							</a>
-						</li>
+					<li class="col-xs-12 col-sm-4" data-bind="css: {active: addOvertimeRequestActive }">
+						<a id="addOvertimeRequest" href="#" class="" data-bind="click: addOvertimeRequest">
+							<i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeRequest
+						</a>
+					</li>
 					}
 				</ul>
 			</div>
@@ -174,42 +180,22 @@
 			<div class="row">
 				<div id="request-filter-row" class="row filter-row">
 					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-3">
-						<div class="old-filter" data-bind="ifnot: newFilterToggle">
-							<div class="btn-group request-list-filter col-lg-3 col-md-4 col-sm-6" data-bind="if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_SortRequestList_40711'),
-							if: !Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826'), visible: !isLoadingRequests()">
-								<label class="btn btn-primary">
-									<input type="radio" name="hideOldRequest" data-bind="checked: hideOldRequests" value="false"/> @Resources.AllRequests
-								</label>
-								<label class="btn btn-primary">
-									<input type="radio" name="hideOldRequest" data-bind="checked: hideOldRequests" value="true"/> @Resources.CurrentRequests
-								</label>
-							</div>
-						</div>
-						<div class="new-filter" data-bind="if: newFilterToggle">
+						<div class="new-filter">
 							<div class="form-group" data-bind="visible: !isLoadingRequests()">
-								<select class="form-control" data-bind="if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826'), options: filters, optionsText: 'name',
-									optionsValue: 'show', value: hideOldRequests" id="sel1">
+								<select class="form-control" data-bind="options: filters, optionsText: 'name',
+									optionsValue: 'show', value: hideOldRequests"
+								 id="sel1">
 								</select>
 							</div>
 						</div>
 					</div>
-					<span data-bind="ifnot: newFilterToggle"></span>
+
 					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-3">
-						<div class="old-filter" data-bind="ifnot: newFilterToggle">
-							<div class="btn-group request-list-filter col-lg-3 col-md-4 col-sm-6" data-bind="visible: !isLoadingRequests()">
-								<label class="btn btn-primary">
-									<input type="radio" name="IsSortByUpdateDate" data-bind="checked: IsSortByUpdateDate" value="false" /> @Resources.SortByStartDate
-								</label>
-								<label class="btn btn-primary">
-									<input type="radio" name="IsSortByUpdateDate" data-bind="checked: IsSortByUpdateDate" value="true" /> @Resources.SortByUpdateDate
-								</label>
-							</div>
-						</div>
 						<div class="form-group">
-							<div class="new-filter" data-bind="if: newFilterToggle">
-								<select class="form-control" data-bind="if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826'),
-								visible: !isLoadingRequests(), options: sorters, optionsText: 'name',
-									optionsValue: 'show', value: IsSortByUpdateDate"id="sel2">
+							<div class="new-filter">
+								<select class="form-control" data-bind="visible: !isLoadingRequests(), options: sorters, optionsText: 'name',
+									optionsValue: 'show', value: IsSortByUpdateDate"
+								 id="sel2">
 								</select>
 							</div>
 						</div>
@@ -217,7 +203,8 @@
 				</div>
 			</div>
 
-			<div class="alert alert-info" data-bind="visible: Requests().length == 0 && !isLoadingRequests(), hideWhenFadedOut: true" id="Requests-no-requests-found">
+			<div class="alert alert-info" data-bind="visible: Requests().length == 0 && !isLoadingRequests(), hideWhenFadedOut: true"
+			 id="Requests-no-requests-found">
 				@Resources.NoRequestsFound
 			</div>
 
@@ -231,10 +218,12 @@
 						<div class="well well-small">
 							<div class="request-body" data-bind="click: ShowDetails" style="cursor: pointer">
 								<div data-bind="if: CanDelete">
-									<button class="request-delete close" data-bind="click: $root.SwitchDeleteConfirmationVisibility, clickBubble: false, disable: IsDeletePending()" title="@Resources.Delete">&times;</button>
+									<button class="request-delete close" data-bind="click: $root.SwitchDeleteConfirmationVisibility, clickBubble: false, disable: IsDeletePending()"
+									 title="@Resources.Delete">&times;</button>
 								</div>
 								<div data-bind="if: CanCancel">
-									<button class="request-cancel close" data-bind="click: $root.SwitchCancelConfirmationVisibility, clickBubble: false, disable: IsCancelPending()" title="@Resources.Cancel">&times;</button>
+									<button class="request-cancel close" data-bind="click: $root.SwitchCancelConfirmationVisibility, clickBubble: false, disable: IsCancelPending()"
+									 title="@Resources.Cancel">&times;</button>
 								</div>
 								<div class="request-subject">
 									<h5 class="request-data-subject" data-bind="text: Subject"></h5>
@@ -257,18 +246,17 @@
 								</div>
 
 								<div class="alert alert-danger" role="alert" data-bind="visible: ErrorMessage()!=null">
-
 									<span data-bind="text: ErrorMessage()"></span>
 									<span class="pull-right">
 										<a href="#" class="alert-link" data-bind="click: $root.SwitchErrorMessageVisibility, clickBubble: false">@Resources.Dismiss</a>
 									</span>
 								</div>
 
-
 								<div class="request-details">
 									<div>
 										<span class="request-caption">@Resources.Type: </span><span data-bind="text: Type" class="request-data-type"></span>
-										<span class="request-caption">@Resources.Status: </span><span class="request-caption" data-bind="visible: isProcessing"> (@Resources.ProcessingDotDotDot) </span>
+										<span class="request-caption">@Resources.Status: </span><span class="request-caption" data-bind="visible: isProcessing">
+											(@Resources.ProcessingDotDotDot) </span>
 										<span class="label request-label" data-bind="text: Status(), css: StatusClass"></span>
 									</div>
 									<span class="request-caption">@Resources.Date: </span><span class="request-data-date" data-bind="text: Dates"></span>

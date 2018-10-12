@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
 	[UseIocForFatClient]
-	public class SchedulingFulfilPrefernceDesktopTest : SchedulingScenario
+	public class SchedulingFulfillPreferenceDesktopTest : SchedulingScenario
 	{
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.False();
 		}
 
-		public SchedulingFulfilPrefernceDesktopTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
+		public SchedulingFulfillPreferenceDesktopTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
 	}

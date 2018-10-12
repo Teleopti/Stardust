@@ -87,6 +87,11 @@
 		public const string CreatePerformanceManagerReport = "Raptor/PerformanceManager/CreatePerformanceManagerReport";
 		public const string ViewPerformanceManagerReport = "Raptor/PerformanceManager/ViewPerformanceManagerReport";
 
+		// PM Next Gen
+		public const string PmNextGen = "Raptor/PmNextGen";
+		public const string PmNextGenEditReport = PmNextGen + "/EditReport";
+		public const string PmNextGenViewReport = PmNextGen + "/ViewReport";
+
 		// Online Reports
 		public const string ScheduledTimePerActivityReport = "Raptor/OnlineReports/ScheduledTimePerActivityReport";
 		public const string ScheduleAuditTrailReport = "Raptor/OnlineReports/ScheduleAuditTrailReport";

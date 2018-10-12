@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -2020,6 +2020,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AgentsAnalyzed {
             get {
                 return ResourceManager.GetString("AgentsAnalyzed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Agent was scheduled without preferences.
+        /// </summary>
+        public static string AgentScheduledWithoutPreferences {
+            get {
+                return ResourceManager.GetString("AgentScheduledWithoutPreferences", resourceCulture);
             }
         }
         
@@ -7236,7 +7245,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Connect AHT(s).
+        ///   Looks up a localized string similar to Connect AHT (s).
         /// </summary>
         public static string ConnectAHT {
             get {
@@ -7273,7 +7282,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Connect Rate(%).
+        ///   Looks up a localized string similar to Connect Rate (%).
         /// </summary>
         public static string ConnectRate {
             get {
@@ -26040,6 +26049,33 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PM Next Generation.
+        /// </summary>
+        public static string PmNextGen {
+            get {
+                return ResourceManager.GetString("PmNextGen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit report.
+        /// </summary>
+        public static string PmNextGenEditReport {
+            get {
+                return ResourceManager.GetString("PmNextGenEditReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View report.
+        /// </summary>
+        public static string PmNextGenViewReport {
+            get {
+                return ResourceManager.GetString("PmNextGenViewReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Points per shift category.
         /// </summary>
         public static string PointsPerShiftCategory {
@@ -29385,7 +29421,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to RPC AHT(s).
+        ///   Looks up a localized string similar to RPC AHT (s).
         /// </summary>
         public static string RPCAHT {
             get {
@@ -29394,7 +29430,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to RPCR(%).
+        ///   Looks up a localized string similar to RPCR (%).
         /// </summary>
         public static string RPCR {
             get {
@@ -35372,7 +35408,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Target Rate(%).
+        ///   Looks up a localized string similar to Target Rate (%).
         /// </summary>
         public static string TargetRate {
             get {
