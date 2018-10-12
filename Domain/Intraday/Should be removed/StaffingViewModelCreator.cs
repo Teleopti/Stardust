@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var skillDaysBySkills = _skillDayLoadHelper.LoadSchedulerSkillDays(new DateOnlyPeriod(userDateOnly, userDateOnly.AddDays(1)), skills, scenario);
 
-			calculateForecastedAgentsForEmailSkills(useShrinkage, skillDaysBySkills, timeZone);
+			calculateForecastedAgentsForEmailSkills(useShrinkage, skillDaysBySkills);
 
 			var forecastedStaffingModel = _forecastedStaffingProvider.StaffingPerSkill(skillDaysBySkills, minutesPerInterval, dateOnly, useShrinkage);
 
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			);
 
 
-			var dataSeries = new  Teleopti.Ccc.Domain.Intraday.ApplicationLayer.ViewModels.StaffingDataSeries
+			var dataSeries = new  ApplicationLayer.ViewModels.StaffingDataSeries
 			{
 				Date = userDateOnly,
 				Time = timeSeries,
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			};
 		}
 
-		private void calculateForecastedAgentsForEmailSkills(bool useShrinkage, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, TimeZoneInfo timeZone)
+		private void calculateForecastedAgentsForEmailSkills(bool useShrinkage, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)
 		{
 			var scheduledStaffingPerSkill = new List<SkillStaffingIntervalLightModel>();
 			var skillGroupsByResuolution = skillDays.Keys
@@ -158,14 +158,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 					var skillDaysEmail = skillDays[skill];
 					foreach (var skillDay in skillDaysEmail)
 					{
-						var skillDayDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(skillDay.CurrentDate.Date, timeZone));
+						var skillDayDate = skillDay.CurrentDate;
 						scheduledStaffingPerSkill.AddRange(_scheduledStaffingProvider.StaffingPerSkill(emailSkillsForOneResoultion, group.Key, skillDayDate, useShrinkage));
 						foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 						{
-							var intervalStartLocal = TimeZoneHelper.ConvertFromUtc(skillStaffPeriod.Period.StartDateTime, _timeZone.TimeZone());
+							var intervalStart = skillStaffPeriod.Period.StartDateTime;
 							var scheduledStaff =
 								scheduledStaffingPerSkill.FirstOrDefault(
-									x => x.Id == skill.Id.Value && x.StartDateTime == intervalStartLocal);
+									x => x.Id == skill.Id.Value && x.StartDateTime == intervalStart);
 							skillStaffPeriod.SetCalculatedResource65(0);
 							if (scheduledStaff.StaffingLevel > 0)
 								skillStaffPeriod.SetCalculatedResource65(scheduledStaff.StaffingLevel);

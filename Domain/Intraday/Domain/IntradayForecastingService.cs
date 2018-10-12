@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 		public IList<IntradayForecastInterval> GenerateForecast(IEnumerable<ISkillDay> skillDays, DateTime startTimeUtc, DateTime endTimeUtc, TimeSpan resolution, bool useShrinkage)
 		{
 			skillDays = skillDays.Where(x => !(x.Skill is ChildSkill));
-			this.CalculateForecastedAgentsForEmailSkills(skillDays, useShrinkage);
+			this.CalculateForecastedAgentsForEmailSkills(skillDays, startTimeUtc, endTimeUtc, useShrinkage);
 			var periods = skillDays
 				.SelectMany(x => x.SkillStaffPeriodViewCollection(resolution, useShrinkage).Select(i => new {SkillDay = x, StaffPeriod = i}));
 
@@ -158,40 +158,33 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 		}
 	
 		
-		public void CalculateForecastedAgentsForEmailSkills(IEnumerable<ISkillDay> skillDays, bool useShrinkage)
+		public void CalculateForecastedAgentsForEmailSkills(IEnumerable<ISkillDay> skillDays, DateTime startDateUtc, DateTime endDateUtc, bool useShrinkage)
 		{
-			var skills = skillDays.Select(x => x.Skill).Distinct();
-
-			var scheduledStaffingPerSkill = new List<SkillStaffingIntervalLightModel>();
-
-			var skillGroupsByResuolution = skills
+			var skillDaysBySkill = skillDays.ToLookup(x => x.Skill);
+			var skillGroupsByResuolution = skillDaysBySkill.Select(s => s.Key)
 				.Where(SkillTypesWithBacklog.IsBacklogSkillType)
 				.GroupBy(x => x.DefaultResolution);
 
 			foreach (var group in skillGroupsByResuolution)
 			{
 				var emailSkillsForOneResoultion = group.ToList();
-
+				var scheduledStaffingPerSkill = _staffingService
+					.GetScheduledStaffing(
+						emailSkillsForOneResoultion.Where(x => x.Id.HasValue).Select(x => x.Id.Value).ToArray(),
+						startDateUtc.AddDays(-1),
+						endDateUtc.AddDays(1),
+						TimeSpan.FromMinutes(group.Key),
+						useShrinkage).ToLookup(s => s.Id);
 				foreach (var skill in emailSkillsForOneResoultion)
 				{
-					var skillDaysEmail = skillDays.Where(x => x.Skill.Equals(skill));
+					var skillDaysEmail = skillDaysBySkill[skill];
 					foreach (var skillDay in skillDaysEmail)
 					{
-						var skillDayStartUtc = DateTime.SpecifyKind(skillDay.CurrentDate.Date, DateTimeKind.Utc);
-						scheduledStaffingPerSkill.AddRange(_staffingService
-							.GetScheduledStaffing(
-								emailSkillsForOneResoultion.Where(x => x.Id.HasValue).Select(x => x.Id.Value).ToArray(), 
-								skillDayStartUtc,
-								skillDayStartUtc.AddDays(1), 
-								TimeSpan.FromMinutes(group.Key), 
-								useShrinkage));
-
 						foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 						{
-							var intervalStartLocal = skillStaffPeriod.Period.StartDateTime;
+							var intervalStart = skillStaffPeriod.Period.StartDateTime;
 							var scheduledStaff =
-								scheduledStaffingPerSkill.FirstOrDefault(
-									x => x.Id == skill.Id.Value && x.StartDateTime == intervalStartLocal);
+								scheduledStaffingPerSkill[skill.Id.Value].FirstOrDefault(x => x.StartDateTime == intervalStart);
 							skillStaffPeriod.SetCalculatedResource65(0);
 							if (scheduledStaff.StaffingLevel > 0)
 								skillStaffPeriod.SetCalculatedResource65(scheduledStaff.StaffingLevel);
