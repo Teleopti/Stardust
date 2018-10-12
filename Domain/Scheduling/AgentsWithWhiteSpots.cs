@@ -12,12 +12,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var ret = new HashSet<IPerson>();
 			foreach (var schedule in schedules.SchedulesForPeriod(period, agents.ToArray()))
 			{
-				if (!schedule.HasDayOff() && !schedule.PersonAssignment(true).ShiftLayers.Any())
+				if(ret.Contains(schedule.Person))
+					continue;
+				if (!schedule.HasDayOff() && !schedule.ProjectionService().CreateProjection().HasLayers)
 				{
 					ret.Add(schedule.Person);
 				}
 			}
-
 			return ret;
 		}
 	}
