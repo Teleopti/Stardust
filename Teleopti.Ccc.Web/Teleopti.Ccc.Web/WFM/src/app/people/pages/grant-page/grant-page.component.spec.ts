@@ -3,6 +3,7 @@ import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { MockTranslationModule } from '@wfm/mocks/translation';
 import {
 	NzButtonModule,
 	NzCheckboxModule,
@@ -12,7 +13,6 @@ import {
 	NzToolTipModule
 } from 'ng-zorro-antd';
 import { configureTestSuite } from '../../../../configure-test-suit';
-import { MockTranslationModule } from '../../../../mocks/translation';
 import { MockTitleBarModule, WorkspaceComponent } from '../../components';
 import { adina, eva, fakeBackendProvider, myles } from '../../mocks';
 import { NavigationService, RolesService, SearchOverridesService, SearchService, WorkspaceService } from '../../shared';
