@@ -70,7 +70,7 @@
 		vm.hideQueueInvalidMessage = true;
 
 		vm.gridOptions = {
-			enableGridMenu: false,
+			//enableGridMenu: true,
 			enableSelectAll: true,
 			enableFullRowSelection: true,
 			enableSorting: true,
@@ -78,7 +78,7 @@
 				{
 					displayName: "Name",
 					field: "Name",
-					enableColumnMenu: true,
+					enableColumnMenu: false,
 					headerCellFilter: "translate",
 					sort: {
 						direction: uiGridConstants.ASC,
@@ -88,7 +88,7 @@
 				{
 					displayName: "LogObject",
 					field: "LogObjectName",
-					enableColumnMenu: true,
+					enableColumnMenu: false,
 					headerCellFilter: "translate",
 					sort: {
 						direction: uiGridConstants.ASC,
@@ -98,7 +98,7 @@
 				{
 					displayName: "Description",
 					field: "Description",
-					enableColumnMenu: true,
+					enableColumnMenu: false,
 					headerCellFilter: "translate",
 					sort: {
 						direction: uiGridConstants.ASC,
