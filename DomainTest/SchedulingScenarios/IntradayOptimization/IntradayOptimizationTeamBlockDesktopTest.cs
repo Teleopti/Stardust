@@ -500,7 +500,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		}
 
 		[Test]
-		[Ignore("#78170 to be fixed")]
 		public void ShouldHandleAgentStartingInTheMiddleOfTheSchedulePeriod()
 		{
 			var date = new DateOnly(2017, 9, 25);
