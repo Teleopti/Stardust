@@ -263,16 +263,16 @@
 				result.forEach(function (s) {
 					vm.scenarios.push(s);
 				});
-				changeScenario(vm.scenarios[0]);
+				changeScenario(vm.scenarios[0], false);
 			});
 		}
 
-		function changeScenario(scenario) {
+		function changeScenario(scenario, keepSelectedPeriod) {
 			vm.selectedScenario = scenario;
-			getWorkloadForecastData();
+			getWorkloadForecastData(keepSelectedPeriod);
 		}
 
-		function getWorkloadForecastData() {
+		function getWorkloadForecastData(keepSelectedPeriod) {
 			vm.periodModal = false;
 
 			vm.selectedWorkload.Days = [];
@@ -290,7 +290,7 @@
 				wl,
 				function (data, status, headers, config) {
 					vm.selectedWorkload.Days = data.ForecastDays;
-					if (vm.selectedWorkload.Days.length > 0) {
+					if (!keepSelectedPeriod && vm.selectedWorkload.Days.length > 0) {
 						vm.forecastPeriod = {
 							startDate: moment(data.ForecastDays[0].Date).utc().toDate(),
 							endDate: moment(data.ForecastDays[vm.selectedWorkload.Days.length - 1].Date).utc().toDate()
@@ -359,7 +359,7 @@
 				function (data, status, headers, config) {
 					vm.savingToScenario = false;
 					vm.changesMade = false;
-					getWorkloadForecastData();
+					getWorkloadForecastData(true);
 					noticeSvc.success(
 						$translate.instant("SuccessfullyUpdatedPeopleCountColon") +
 						" " +
@@ -371,7 +371,7 @@
 				function (data, status, headers, config) {
 					vm.savingToScenario = false;
 					vm.changesMade = false;
-					getWorkloadForecastData();
+					getWorkloadForecastData(true);
 				}
 			);
 		}

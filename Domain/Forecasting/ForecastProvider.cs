@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			_forecastDayOverrideRepository = forecastDayOverrideRepository;
 		}
 
-		public ForecastViewModel Load(Guid workloadId, DateOnlyPeriod futurePeriod, IScenario scenario)
+		public ForecastViewModel Load(Guid workloadId, DateOnlyPeriod futurePeriod, IScenario scenario, bool hasUserSelectedPeriod)
 		{
 			var workload = _workloadRepository.Get(workloadId);
 			var skillDays = _skillDayRepository.FindRange(futurePeriod, workload.Skill, scenario);
@@ -44,13 +44,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			{
 				WorkloadId = workload.Id.Value,
 				ScenarioId = scenario.Id.Value,
-				ForecastDays = createModelDays(futureWorkloadDays, overrideDays, futurePeriod)
+				ForecastDays = createModelDays(futureWorkloadDays, overrideDays, futurePeriod, hasUserSelectedPeriod)
 			};
 		}
 
 		private IList<ForecastDayModel> createModelDays(IList<IWorkloadDayBase> workloadDays,
 			Dictionary<DateOnly, IForecastDayOverride> overrideDays, 
-			DateOnlyPeriod futurePeriod)
+			DateOnlyPeriod futurePeriod,
+			bool hasUserSelectedPeriod)
 		{
 			var days = new List<ForecastDayModel>();
 
@@ -59,10 +60,20 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				return days;
 			}
 
-			var forecastedStartDay = workloadDays.Min(x => x.CurrentDate);
-			var forecastedEndDay = workloadDays.Max(x => x.CurrentDate);
+			DateOnly dayModelStart;
+			DateOnly dayModelEnd;
+			if (hasUserSelectedPeriod)
+			{
+				dayModelStart = futurePeriod.StartDate;
+				dayModelEnd = futurePeriod.EndDate;
+			}
+			else
+			{
+				dayModelStart = workloadDays.Min(x => x.CurrentDate);
+				dayModelEnd = workloadDays.Max(x => x.CurrentDate);
+			}
 
-			for (var date = forecastedStartDay; date <= forecastedEndDay; date = date.AddDays(1))
+			for (var date = dayModelStart; date <= dayModelEnd; date = date.AddDays(1))
 			{
 				var workloadDay = workloadDays.SingleOrDefault(x => x.CurrentDate == date);
 				ForecastDayModel dayModel;

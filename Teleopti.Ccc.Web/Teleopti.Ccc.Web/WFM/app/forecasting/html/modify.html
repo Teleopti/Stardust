@@ -20,7 +20,7 @@
 							<div class="center">
 								<label class="inline-flex center">
 									{{'ScenarioColon'|translate}} &nbsp;
-									<md-select ng-model="vm.selectedScenario" ng-change="vm.changeScenario(vm.selectedScenario)" placeholder="{{'Scenario' | translate}}" ng-disabled="vm.changesMade || vm.savingToScenario || vm.isForecastRunning">
+									<md-select ng-model="vm.selectedScenario" ng-change="vm.changeScenario(vm.selectedScenario, true)" placeholder="{{'Scenario' | translate}}" ng-disabled="vm.changesMade || vm.savingToScenario || vm.isForecastRunning">
 										<md-option ng-repeat="scenario in vm.scenarios" ng-value="scenario">{{scenario.Name}}</md-option>
 									</md-select>
 									<md-tooltip ng-if="vm.changesMade">{{'PleaseSaveOrDiscardChangesBeforeChangingScenario' | translate}}</md-tooltip>

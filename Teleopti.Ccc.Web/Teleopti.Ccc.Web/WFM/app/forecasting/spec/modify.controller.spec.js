@@ -175,7 +175,7 @@ fdescribe("ForecastModifyController", function () {
 	}));
 
 	it("should be able to forecast clean scenario", inject(function () {
-		vm.changeScenario(scenario2);
+		vm.changeScenario(scenario2, true);
 
 		expect(vm.selectedWorkload.Days.length).toEqual(0);
 		expect(vm.selectedScenario.Id).toEqual(scenario2.Id);

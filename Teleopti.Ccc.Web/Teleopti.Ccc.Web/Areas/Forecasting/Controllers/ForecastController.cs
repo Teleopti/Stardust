@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		{
 			var period = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
 			var scenario = _scenarioRepository.Get(input.ScenarioId);
-			return Ok(_forecastProvider.Load(input.WorkloadId, period, scenario));
+			return Ok(_forecastProvider.Load(input.WorkloadId, period, scenario, input.HasUserSelectedPeriod));
 		}
 
 		[HttpPost, Route("api/Forecasting/Forecast"), ReadonlyUnitOfWork]
