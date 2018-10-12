@@ -113,22 +113,6 @@ describe('SearchPageComponent', () => {
 		});
 	}));
 
-	//TODO: Activate again when Story 75440 is in the pipe
-	xit('should be able to select all people on all pages', async(() => {
-		component.searchPeople();
-
-		fixture.whenStable().then(() => {
-			expect(page.resultRows.length).toBeGreaterThan(0);
-			page.actionMenu.nativeElement.click();
-			page.selectAllOnAllPagesButton.nativeElement.click();
-			component.workspaceService.getSelectedPeople().subscribe({
-				next: people => {
-					expect(people.length).toEqual(3);
-				}
-			});
-		});
-	}));
-
 	it('should be able to sort on first name', async(() => {
 		const searchResultStubBefore: PeopleSearchResult = {
 			People: [eva, adina, myles],
@@ -173,16 +157,8 @@ class Page {
 		return this.queryAll('[data-test-search] [data-test-person] [data-test-person-firstname]');
 	}
 
-	get actionMenu() {
-		return this.queryAll('[data-test-action-menu]')[0];
-	}
-
 	get selectAllCheckbox() {
 		return this.queryAll('[data-test-search] [data-test-selectall-toggle] input')[0];
-	}
-
-	get selectAllOnAllPagesButton() {
-		return this.queryAll('[data-test-selectallonallpages-button]')[0];
 	}
 
 	get sortOnFirstName() {

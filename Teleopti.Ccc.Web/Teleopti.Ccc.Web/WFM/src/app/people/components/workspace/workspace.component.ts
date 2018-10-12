@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { WorkspaceService } from '../../shared';
 
 @Component({
@@ -6,8 +6,6 @@ import { WorkspaceService } from '../../shared';
 	templateUrl: './workspace.component.html',
 	styleUrls: ['./workspace.component.scss']
 })
-export class WorkspaceComponent implements OnInit {
+export class WorkspaceComponent {
 	constructor(public workspaceService: WorkspaceService) {}
-
-	ngOnInit() {}
 }
