@@ -1594,6 +1594,10 @@
     <Content Include="WFM\app\people\people.start.controller.js" />
     <Content Include="WFM\app\people\_modules.js" />
     <Content Include="WFM\app\permissions\functionsrefact\permissions.function.component.js" />
+    <Content Include="WFM\app\pm\pm.default.controller.js" />
+    <Content Include="WFM\app\pm\pm.routes.js" />
+    <Content Include="WFM\app\pm\pm.start.controller.js" />
+    <Content Include="WFM\app\pm\_modules.js" />
     <Content Include="WFM\app\reports\audit.controller.spec.js" />
     <Content Include="WFM\app\forecasting\component\forecast.chart.component.js" />
     <Content Include="WFM\app\forecasting\html\modify.html" />

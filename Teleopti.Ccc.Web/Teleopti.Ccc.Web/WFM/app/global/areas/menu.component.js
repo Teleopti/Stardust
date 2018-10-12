@@ -70,6 +70,10 @@ function MenuController($state) {
 		{
 			i: 'mdi mdi-trophy',
 			name: 'gamification'
+		},
+		{
+			i: 'mdi mdi-elevation-rise',
+			name: 'pm'
 		}
 	];
 	function setMenuItem() {

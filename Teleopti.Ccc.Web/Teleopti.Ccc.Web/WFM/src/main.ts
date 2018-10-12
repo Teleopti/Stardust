@@ -15,6 +15,7 @@ import {
 	SearchPageComponent,
 	TitleBarComponent
 } from './app/people/components';
+import { WorkspaceComponent } from './app/pm/components';
 import { FeedbackMessageComponent } from './app/shared/components';
 import { environment } from './environments/environment';
 import { MainController } from './main.controller';
@@ -47,6 +48,7 @@ const wfm = angular.module('wfm', [
 	'wfm.apiaccess',
 	'wfm.peopleold',
 	'wfm.people',
+	'wfm.pm',
 	'wfm.outbound',
 	'wfm.forecasting',
 	'wfm.resourceplanner',
@@ -108,6 +110,7 @@ downgradeHelper('ng2ChangePassword', ChangePasswordComponent);
 downgradeHelper('ng2FeedbackMessage', FeedbackMessageComponent);
 downgradeHelper('ng2Bootstrap', BootstrapComponent);
 downgradeHelper('ng2SettingsMenu', SettingsMenuComponent);
+downgradeHelper('ng2PmWorkspacePage', WorkspaceComponent);
 
 wfm.config([
 	'$stateProvider',
