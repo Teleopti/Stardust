@@ -313,7 +313,7 @@ seatmap-editor {
 seatmap-occupancy-detail {
 	.add-booking-detail {
 		.date-range-picker-wrapper {
-			width: 250px;
+			max-width: 100%;
 			height: 30px;
 		}
 		.input-prepend input[type='text'] {
