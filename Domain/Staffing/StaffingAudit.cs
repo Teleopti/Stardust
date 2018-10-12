@@ -11,14 +11,14 @@ namespace Teleopti.Ccc.Domain.Staffing
 		{
 		}
 
-		public StaffingAudit(IPerson actionBy, string action, string actionData, string context)
+		public StaffingAudit(IPerson actionBy, string action, string actionData, string area)
 			: this()
 		{
 			ActionPerformedBy = actionBy;
 			Action = action;
 			Data = actionData;
 			TimeStamp = DateTime.UtcNow;
-			Context = context;
+			Area = area;
 		}
 
 		public virtual DateTime TimeStamp { get; set; }
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		//public IPerson ActionPerformedOn { get; set; }
 		public virtual string Action { get; set; }
 		public virtual string Data { get; set; }
-		public virtual string Context { get; set; }
+		public virtual string Area { get; set; }
 	}
 
 	public interface IStaffingAudit : IAggregateRoot
@@ -37,6 +37,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 		IPerson ActionPerformedBy { get; set; }
 		string Action { get; set; }
 		string Data { get; set; }
-		string Context { get; set; }
+		string Area { get; set; }
 	}
 }

@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			WithUnitOfWork.Do(() =>
 			{
 				var loadedStaffingAudit = Target.LoadAll().First();
-				loadedStaffingAudit.Context.Should().Be.EqualTo("BPO");
+				loadedStaffingAudit.Area.Should().Be.EqualTo("BPO");
 			});
 		}
 

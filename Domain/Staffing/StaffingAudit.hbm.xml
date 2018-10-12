@@ -30,7 +30,7 @@
 				length="8001"
 				type="string" />
 	
-	  <property name="Context"
+	  <property name="Area"
 				access="property"
 				not-null="true"
 				length="255"
