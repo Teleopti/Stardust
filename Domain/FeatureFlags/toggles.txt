@@ -119,6 +119,7 @@ WFM_Intraday_Redesign_77214 = RC
 WfmStaffing_AddOvertime_42524 = RC
 Wfm_Payroll_SupportMultiDllPayrolls_75959 = RC
 Wfm_Stardust_EnableScaleout_77366 = true
+Wfm_AuditTrail_StaffingAuditTrail_78125=RC
 
 # Squids #
 WFM_Forecaster_Refact_44480 = true
