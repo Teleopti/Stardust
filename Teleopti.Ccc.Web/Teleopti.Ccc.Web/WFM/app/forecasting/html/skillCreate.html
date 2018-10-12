@@ -65,7 +65,7 @@
 									<section>
 										<div class="form-input-wrap">
 											<label>{{ 'ServiceLevelSeconds'|translate }}:</label>
-											<input type="number" ng-model="vm.model.serviceLevelSeconds" name="skillServiceLevelSeconds" id="skillServiceLevelSecondsId" max="86400" min="1" required="" />
+											<input type="number" ng-model="vm.model.serviceLevelSeconds" name="skillServiceLevelSeconds" id="skillServiceLevelSecondsId" max="5000" min="1" required="" />
 											<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.skillServiceLevelSeconds.$touched">
 												<div class="form-input-message" ng-class="{ formInvalidInput:form.skillServiceLevelSeconds.$error.required }">{{ 'Required' | translate }}</div>
 												<div class="form-input-message" ng-class="{ formInvalidInput:form.skillServiceLevelSeconds.$error.min || form.skillServiceLevelSeconds.$error.max }">{{ 'SecondsSpan' | translate }}</div>
