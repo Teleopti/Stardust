@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -19,17 +17,17 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 		private readonly IScheduleMatrixLockableBitArrayConverterEx _scheduleMatrixLockableBitArrayConverterEx;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-		private readonly IMatrixClosedDayLocker _matrixClosedDayLocker;
+		private readonly ISmartDayOffBackToLegalStateService _smartDayOffBackToLegalStateService;
 
 		public DaysOffBackToLegalState(IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx,
 																	Func<ISchedulerStateHolder> schedulerStateHolder,
 																	IScheduleDayChangeCallback scheduleDayChangeCallback,
-																	IMatrixClosedDayLocker matrixClosedDayLocker)
+																	ISmartDayOffBackToLegalStateService smartDayOffBackToLegalStateService)
 		{
 			_scheduleMatrixLockableBitArrayConverterEx = scheduleMatrixLockableBitArrayConverterEx;
 			_schedulerStateHolder = schedulerStateHolder;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
-			_matrixClosedDayLocker = matrixClosedDayLocker;
+			_smartDayOffBackToLegalStateService = smartDayOffBackToLegalStateService;
 		}
 
 		public void Execute(IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
@@ -165,13 +163,8 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 				ILockableBitArray bitArray = scheduleMatrixLockableBitArrayConverterEx.Convert(
 					matrixOriginalStateContainer.ScheduleMatrix, dayOffOptimizationPreference.ConsiderWeekBefore,
 					dayOffOptimizationPreference.ConsiderWeekAfter);
-				var clonedArray = (ILockableBitArray)bitArray.Clone();
-				_matrixClosedDayLocker.Execute(clonedArray, matrix.SchedulePeriod);
-				IDayOffDecisionMaker cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker =
-					new CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(new OfficialWeekendDays(), new TrueFalseRandomizer());
-				ISmartDayOffBackToLegalStateService solverService = new SmartDayOffBackToLegalStateService(cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker);
 				ISmartDayOffBackToLegalStateSolverContainer solverContainer =
-					new SmartDayOffBackToLegalStateSolverContainer(matrixOriginalStateContainer, clonedArray, solverService);
+					new SmartDayOffBackToLegalStateSolverContainer(matrixOriginalStateContainer, bitArray, _smartDayOffBackToLegalStateService, _schedulerStateHolder().SchedulingResultState);
 				solverContainers.Add(solverContainer);
 			}
 
