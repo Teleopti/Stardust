@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var result = Target.Create(period, new[] { agent1 }, new NoSchedulingProgress());
 
 			result.Count().Should().Be.EqualTo(1);
-			result.First().Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.NoIssue);
+			result.First().Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.NoRestrictions);
 		}
 
 		[Test]

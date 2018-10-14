@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
 		[Test]
-		[Ignore("until 78216 is fixed")]
+		//[Ignore("until 78216 is fixed")]
 		public void ShouldAddMissingDaysOffAndReportTrueIfNoRestrictions()
 		{
 			var period = createStandardSetup(out var scenario, out var agent, out var skillDays);
@@ -389,7 +389,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new IScheduleData[] { ass1, ass2 }, skillDays);
 
 			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
-			result.Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.NoIssue);
+			result.Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.NoRestrictions);
 
 		}
 
