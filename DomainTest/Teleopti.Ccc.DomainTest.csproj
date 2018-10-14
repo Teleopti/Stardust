@@ -787,7 +787,6 @@
     <Compile Include="DayOffPlanning\Scheduling\WorkShiftMinMaxCalculatorSkipWeekCheckTest.cs" />
     <Compile Include="DayOffPlanning\Scheduling\WorkShiftMinMaxLengthCalculatorTest.cs" />
     <Compile Include="DayOffPlanning\Scheduling\WorkShiftWeekMinMaxCalculatorTest.cs" />
-    <Compile Include="DayOffPlanning\SmartDayOffBackToLegalStateServiceTest.cs" />
     <Compile Include="DayOffPlanning\TeDataDayOffDecisionMakerTest.cs" />
     <Compile Include="DayOffPlanning\TuiCaseSolverTest.cs" />
     <Compile Include="DayOffPlanning\WeeklyDayOffValidatorTest.cs" />

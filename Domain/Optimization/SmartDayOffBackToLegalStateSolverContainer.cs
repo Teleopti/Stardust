@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public void Execute(IDaysOffPreferences daysOffPreferences)
         {
-            _result = _dayOffBackToLegalStateService.Execute(_dayOffBackToLegalStateService.BuildSolverList(_schedulingResultStateHolder,  MatrixOriginalStateContainer.ScheduleMatrix.SchedulePeriod, BitArray, daysOffPreferences, 20), 20);
+            _result = _dayOffBackToLegalStateService.Execute(_schedulingResultStateHolder,  MatrixOriginalStateContainer.ScheduleMatrix.SchedulePeriod, BitArray, daysOffPreferences);
         }
     }
 }
