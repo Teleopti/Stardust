@@ -21,9 +21,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			var virtualSchedulePeriods = new HashSet<IVirtualSchedulePeriod>();
 			foreach (var person in persons)
 			{
-				foreach (var dateOnly in selectedPeriod.DayCollection())
+				var firstDate = selectedPeriod.StartDate;
+				while (firstDate < selectedPeriod.EndDate)
 				{
-					virtualSchedulePeriods.Add(person.VirtualSchedulePeriod(dateOnly));
+					var schedulePeriod = person.VirtualSchedulePeriod(firstDate);
+					virtualSchedulePeriods.Add(schedulePeriod);
+					firstDate = schedulePeriod.DateOnlyPeriod.EndDate.AddDays(1);
 				}
 			}
 
@@ -60,6 +63,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 	//	UserTexts.Resources.RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken
 	//	UserTexts.Resources.RestrictionNotAbleToBeScheduledReasonConflictingRestrictions
 	//	UserTexts.Resources.RestrictionNotAbleToBeScheduledReasonNoIssue
+	//	UserTexts.Resources.RestrictionNotAbleToBeScheduledReasonNoRestrictions
 	public enum RestrictionNotAbleToBeScheduledReason
 	{
 		TooManyDaysOff,
@@ -67,6 +71,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		TooLittleWorkTimeInPeriod,
 		NightlyRestMightBeBroken,
 		ConflictingRestrictions,
-		NoIssue
+		NoIssue,
+		NoRestrictions
 	}
 }
