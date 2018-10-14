@@ -25,6 +25,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				while (firstDate < selectedPeriod.EndDate)
 				{
 					var schedulePeriod = person.VirtualSchedulePeriod(firstDate);
+					if (!schedulePeriod.IsValid)
+					{
+						firstDate = firstDate.AddDays(1);
+						continue;
+					}
+
 					virtualSchedulePeriods.Add(schedulePeriod);
 					firstDate = schedulePeriod.DateOnlyPeriod.EndDate.AddDays(1);
 				}
