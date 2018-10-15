@@ -44,4 +44,11 @@
 
 	 
   </class>
+<query name="StaffingAuditOnCriteria">
+	<![CDATA[
+Select s from StaffingAudit s
+			where s.TimeStamp between :StartDate and :EndDate and :PersonId = s.ActionPerformedBy
+
+]]>
+</query>
 </hibernate-mapping>

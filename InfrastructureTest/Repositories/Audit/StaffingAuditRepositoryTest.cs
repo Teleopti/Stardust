@@ -2,10 +2,12 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -63,6 +65,59 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				var loadedStaffingAudit = Target.LoadAll().First();
 				loadedStaffingAudit.Area.Should().Be.EqualTo("BPO");
+			});
+		}
+
+		[Test]
+		public void ShouldReturnStaffingAuditForTheGivenPeriod()
+		{
+
+			StaffingAudit staffingAudit = null;
+			var person = PersonFactory.CreatePerson(new Name("ash", "and"));
+			WithUnitOfWork.Do(() =>
+			{
+				PersonRepository.Add(person);
+				var staffingAudit1 = new StaffingAudit(person, StaffingAuditActionConstants.ImportBPO, "", "BPO") { TimeStamp = new DateTime(2018, 10, 01, 08, 08, 08, DateTimeKind.Utc) };
+				var staffingAudit2 = new StaffingAudit(person, StaffingAuditActionConstants.ImportBPO, "", "BPO") { TimeStamp = new DateTime(2018, 10, 02, 08, 08, 08, DateTimeKind.Utc) };
+				var staffingAudit3 = new StaffingAudit(person, StaffingAuditActionConstants.ImportBPO, "", "BPO") { TimeStamp = new DateTime(2018, 10, 03, 08, 08, 08, DateTimeKind.Utc) };
+				Target.Add(staffingAudit1);
+				Target.Add(staffingAudit2);
+				Target.Add(staffingAudit3);
+
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				var loadedStaffingAudit =
+					Target.LoadAudits(person, new DateTime(2018, 10, 01), new DateTime(2018, 10, 02));
+				loadedStaffingAudit.Count().Should().Be.EqualTo(2);
+			});
+		}
+
+		[Test]
+		public void ShouldReturnStaffingAuditForTheGivenPerson()
+		{
+			StaffingAudit staffingAudit = null;
+			var person1 = PersonFactory.CreatePerson(new Name("ash", "and"));
+			var person2 = PersonFactory.CreatePerson(new Name("ashley", "and"));
+			WithUnitOfWork.Do(() =>
+			{
+				PersonRepository.Add(person1);
+				PersonRepository.Add(person2);
+				var staffingAudit1 = new StaffingAudit(person1, StaffingAuditActionConstants.ImportBPO, "", "BPO") { TimeStamp = new DateTime(2018, 10, 01, 08, 08, 08, DateTimeKind.Utc) };
+				var staffingAudit2 = new StaffingAudit(person2, StaffingAuditActionConstants.ImportBPO, "", "BPO") { TimeStamp = new DateTime(2018, 10, 02, 08, 08, 08, DateTimeKind.Utc) };
+				Target.Add(staffingAudit1);
+				Target.Add(staffingAudit2);
+
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				var loadedStaffingAudit =
+					Target.LoadAudits(person1, new DateTime(2018, 10, 01), new DateTime(2018, 10, 02));
+				loadedStaffingAudit.Count().Should().Be.EqualTo(1);
+
+				loadedStaffingAudit.First().ActionPerformedBy.Should().Be.EqualTo(person1);
 			});
 		}
 

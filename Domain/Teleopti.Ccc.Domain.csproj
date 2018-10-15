@@ -643,6 +643,7 @@
     <Compile Include="Staffing\ISkillCombinationBpoTimeLineReader.cs" />
     <Compile Include="Staffing\IStaffingAuditRepository.cs" />
     <Compile Include="Staffing\StaffingAudit.cs" />
+    <Compile Include="Staffing\StaffingContextAuditService.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
     <Compile Include="ResourcePlanner\Hints\IScheduleHint.cs" />
     <Compile Include="Scheduling\Overtime\IOvertimeSkillPeriodData.cs" />

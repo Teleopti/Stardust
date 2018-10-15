@@ -1553,6 +1553,7 @@
     <Compile Include="Staffing\ImportBpoFileTest.cs" />
     <Compile Include="Staffing\RequiredStaffingProviderTest.cs" />
     <Compile Include="Staffing\ScheduledSTaffingVIewModelCreatorTest.cs" />
+    <Compile Include="Staffing\StaffingContextAuditServiceTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSettingsTest.cs" />
     <Compile Include="TestWithStaticDependenciesDONOTUSEAttribute.cs" />
     <Compile Include="SiteOpenHours\SiteOpenHoursPersisterTest.cs" />

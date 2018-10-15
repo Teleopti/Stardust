@@ -40,7 +40,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RemoveDeletedStaffingHeads>().As<IRemoveDeletedStaffingHeads>().SingleInstance();
 
 			if (_configuration.Toggle(Toggles.Wfm_AuditTrail_StaffingAuditTrail_78125))
-				builder.RegisterType<AuditableBpoOperationsToggleOn>().As<IAuditableBpoOperations>().SingleInstance().ApplyAspects();
+			{
+				builder.RegisterType<AuditableBpoOperationsToggleOn>().As<IAuditableBpoOperations>().SingleInstance()
+					.ApplyAspects();
+				builder.RegisterType<StaffingContextAuditService>().SingleInstance();
+			}
+
 			else
 				builder.RegisterType<AuditableBpoOperationsToggleOff>().As<IAuditableBpoOperations>().SingleInstance();
 
