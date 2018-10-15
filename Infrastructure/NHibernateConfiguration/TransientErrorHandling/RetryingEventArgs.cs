@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling
+namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling
 {
 	public class RetryingEventArgs : EventArgs
 	{

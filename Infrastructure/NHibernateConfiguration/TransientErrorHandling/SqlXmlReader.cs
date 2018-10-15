@@ -1,9 +1,8 @@
 using System;
 using System.Data;
 using System.Xml;
-using Teleopti.Ccc.Domain.FeatureFlags;
 
-namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling
+namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling
 {
 	internal class SqlXmlReader : XmlReader
 	{
@@ -20,109 +19,31 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErr
 			this.innerReader = innerReader;
 		}
 
-		public override int AttributeCount
-		{
-			get
-			{
-				return this.innerReader.AttributeCount;
-			}
-		}
+		public override int AttributeCount => this.innerReader.AttributeCount;
 
-		public override string BaseURI
-		{
-			get
-			{
-				return this.innerReader.BaseURI;
-			}
-		}
+		public override string BaseURI => innerReader.BaseURI;
 
-		public override int Depth
-		{
-			get
-			{
-				return this.innerReader.Depth;
-			}
-		}
+		public override int Depth => this.innerReader.Depth;
 
-		public override bool EOF
-		{
-			get
-			{
-				return this.innerReader.EOF;
-			}
-		}
+		public override bool EOF => this.innerReader.EOF;
 
-		public override bool HasValue
-		{
-			get
-			{
-				return this.innerReader.HasValue;
-			}
-		}
+		public override bool HasValue => this.innerReader.HasValue;
 
-		public override bool IsEmptyElement
-		{
-			get
-			{
-				return this.innerReader.IsEmptyElement;
-			}
-		}
+		public override bool IsEmptyElement => this.innerReader.IsEmptyElement;
 
-		public override string LocalName
-		{
-			get
-			{
-				return this.innerReader.LocalName;
-			}
-		}
+		public override string LocalName => this.innerReader.LocalName;
 
-		public override XmlNameTable NameTable
-		{
-			get
-			{
-				return this.innerReader.NameTable;
-			}
-		}
+		public override XmlNameTable NameTable => this.innerReader.NameTable;
 
-		public override string NamespaceURI
-		{
-			get
-			{
-				return this.innerReader.NamespaceURI;
-			}
-		}
+		public override string NamespaceURI => this.innerReader.NamespaceURI;
 
-		public override XmlNodeType NodeType
-		{
-			get
-			{
-				return this.innerReader.NodeType;
-			}
-		}
+		public override XmlNodeType NodeType => this.innerReader.NodeType;
 
-		public override string Prefix
-		{
-			get
-			{
-				return this.innerReader.Prefix;
-			}
-		}
+		public override string Prefix => this.innerReader.Prefix;
 
-		public override ReadState ReadState
-		{
-			get
-			{
-				return this.innerReader.ReadState;
-			}
-		}
+		public override ReadState ReadState => this.innerReader.ReadState;
 
-		public override string Value
-		{
-			get
-			{
-				return this.innerReader.Value;
-			}
-		}
+		public override string Value => this.innerReader.Value;
 
 		public override string GetAttribute(string name)
 		{
@@ -141,11 +62,8 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErr
 
 		public override void Close()
 		{
-			if (this.innerReader != null)
-				this.innerReader.Close();
-			if (this.connection == null)
-				return;
-			this.connection.Close();
+			innerReader?.Close();
+			connection?.Close();
 		}
 
 		public override string LookupNamespace(string prefix)

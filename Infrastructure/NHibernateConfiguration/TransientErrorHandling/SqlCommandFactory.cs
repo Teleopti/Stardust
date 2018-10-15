@@ -2,7 +2,7 @@ using System;
 using System.Data;
 using System.Globalization;
 
-namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling
+namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling
 {
 	public static class SqlCommandFactory
 	{

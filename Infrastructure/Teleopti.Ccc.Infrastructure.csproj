@@ -282,9 +282,9 @@
     <Compile Include="MultiTenancy\Server\Queries\TenantAuditPersister.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersonInfoPersister.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersonInfoPersisterFake.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\RetryingEventArgs.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\SqlCommandFactory.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\SqlXmlReader.cs" />
+    <Compile Include="NHibernateConfiguration\TransientErrorHandling\RetryingEventArgs.cs" />
+    <Compile Include="NHibernateConfiguration\TransientErrorHandling\SqlCommandFactory.cs" />
+    <Compile Include="NHibernateConfiguration\TransientErrorHandling\SqlXmlReader.cs" />
     <Compile Include="NHibernateConfiguration\TransientErrorHandling\DbConnectionExtensions.cs" />
     <Compile Include="NHibernateConfiguration\TransientErrorHandling\DetectTransientSqlException.cs" />
     <Compile Include="NHibernateConfiguration\TransientErrorHandling\ResilientAdoNetTransactionFactory.cs" />
