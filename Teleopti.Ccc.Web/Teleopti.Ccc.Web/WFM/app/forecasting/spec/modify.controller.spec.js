@@ -1,4 +1,4 @@
-fdescribe("ForecastModifyController", function () {
+describe("ForecastModifyController", function () {
 	var vm, $controller, $httpBackend, fakeBackend, skill, scenario, scenario2, forecastDays;
 
 	sessionStorage.currentForecastWorkload = angular.toJson({
@@ -163,6 +163,44 @@ fdescribe("ForecastModifyController", function () {
 			.add(6, "months")
 			.format("MMM Do YY")
 		);
+	}));
+
+	it("should keep user selected forecasting period", inject(function ($controller) {
+		var tomorrow = moment()
+			.utc()
+			.add(1, "days");
+		forecastDays = [
+			{
+				Date: tomorrow,
+				AverageAfterTaskTime: 4.7,
+				Tasks: 1135.2999999999997,
+				TotalAverageAfterTaskTime: 4.7,
+				TotalTasks: 1135.2999999999997,
+				AverageTaskTime: 158.10038509999998,
+				TotalAverageTaskTime: 158.10038509999998
+			}
+		];
+		fakeBackend.withSkill(skill);
+		fakeBackend.withForecastStatus(true);
+		fakeBackend.withScenario(scenario);
+		fakeBackend.withForecastData(forecastDays);
+		$httpBackend.flush();
+
+		vm.forecastPeriod = {
+			startDate: new Date(2018, 10, 1),
+			endDate: new Date(2018, 10, 7)
+		};
+
+		var startDateBeforeLoadingForecast = vm.forecastPeriod.startDate;
+		var endDateBeforeLoadingForecast = vm.forecastPeriod.endDate;
+
+		vm.getWorkloadForecastData(true);
+		$httpBackend.flush();
+
+		expect(startDateBeforeLoadingForecast)
+			.toEqual(vm.forecastPeriod.startDate);
+		expect(endDateBeforeLoadingForecast)
+			.toEqual(vm.forecastPeriod.endDate);
 	}));
 
 	it("should get correct data for export", inject(function () {

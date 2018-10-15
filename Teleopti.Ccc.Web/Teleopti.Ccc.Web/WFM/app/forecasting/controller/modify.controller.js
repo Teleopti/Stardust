@@ -283,7 +283,8 @@
 				ForecastStart: moment(vm.forecastPeriod.startDate).format(),
 				ForecastEnd: moment(vm.forecastPeriod.endDate).format(),
 				WorkloadId: vm.selectedWorkload.Workload.Id,
-				ScenarioId: vm.selectedScenario.Id
+				ScenarioId: vm.selectedScenario.Id,
+				HasUserSelectedPeriod: keepSelectedPeriod
 			};
 
 			forecastingService.result(

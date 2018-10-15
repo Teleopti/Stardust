@@ -258,7 +258,7 @@
 
 			<div class="modal-actions">
 				<aside>
-					<button class="wfm-btn wfm-btn-invis-primary" ng-disabled="!vm.forecastPeriod.startDate || !vm.forecastPeriod.endDate" ng-click="vm.getWorkloadForecastData()">{{'Apply'|translate}}</button>
+					<button class="wfm-btn wfm-btn-invis-primary" ng-disabled="!vm.forecastPeriod.startDate || !vm.forecastPeriod.endDate" ng-click="vm.getWorkloadForecastData(true)">{{'Apply'|translate}}</button>
 				</aside>
 			</div>
 			<div ng-if="vm.isForecastRunning">
@@ -330,7 +330,7 @@
 
 					<div class="modal-actions">
 						<aside>
-							<button type="button" focus-me="vm.closeConfirmation" id="confirmDiscardButton" ng-click="vm.changesMade=false; vm.confirmDiscardDialog = false; vm.getWorkloadForecastData();
+							<button type="button" focus-me="vm.closeConfirmation" id="confirmDiscardButton" ng-click="vm.changesMade=false; vm.confirmDiscardDialog = false; vm.getWorkloadForecastData(true);
 									$event.stopPropagation();" class="wfm-btn wfm-btn-invis-default">
 								{{'Yes'|translate}}
 							</button>
