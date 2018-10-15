@@ -6,27 +6,18 @@
 			<i class="mdi mdi-reply"></i>
 		</button>
 
-		<span ng-click="vm.isDatePickerOpened = false" class="turn-off-datepicker"></span>
 		<div class="seatmap-view-datepicker">
-			<button class="wfm-btn wfm-btn-invis-primary pull-left" ng-class="{'button-active':vm.isDatePickerOpened}" ng-click="vm.isDatePickerOpened = !vm.isDatePickerOpened">
-				<i class="mdi mdi-calendar"></i>
-				{{vm.getDisplaySelectedDate()}}
-			</button>
-			<div class="date-picker">
-				<div uib-datepicker  ng-if="vm.isDatePickerOpened" ng-model="vm.selectedDate"
-							class="wfm-datepicker material-depth-1" ng-change="vm.onChangeOfDate()">
-				</div>
-			</div>
+			<wfm-date-picker ng-model="vm.selectedDate" show-week="true" popup-mode="true" on-date-change="vm.onChangeOfDate(vm.selectedDate)"></wfm-date-picker>
 		</div>
 	</div>
 
-	<div class="seatmap-canvas" ng-click="vm.isDatePickerOpened = false" ng-class="{'booking-view':vm.showOccupancy}">
+	<div class="seatmap-canvas" ng-class="{'booking-view':vm.showOccupancy}">
 
 		<seatmap-editor ng-if="vm.showEditor"></seatmap-editor>
 
 		<div class="wfm-block panel" ng-class="{'wfm-block-edit-mode':(vm.showEditor)} ">
 
-			<div class="location-breadcrumb" ng-click="vm.isDatePickerOpened = false">
+			<div class="location-breadcrumb">
 				<span ng-if="!vm.isLoading" class="breadcrumb-inverse" ng-repeat="breadcrumb in vm.breadcrumbs">
 					<span ng-class="{'location-breadcrumb-clickable': !$last}"
 						  ng-click="vm.handleBreadcrumbClick(breadcrumb.Id)">{{breadcrumb.Name}}</span>

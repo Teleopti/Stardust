@@ -54,14 +54,15 @@
 		}
 	}
 	.gantt-datepicker {
-		position: absolute;
-		top: 5rem;
+		padding: 5px;
 		z-index: 1000;
-	}
-	.gantt-datepicker-container {
-		.wfm-datepicker-wrap {
-			min-height: auto;
-			padding: 5px;
+		position: relative;
+		input {
+			min-width: 100px;
+		}
+		div[uib-datepicker] {
+			position: absolute;
+			top: 5rem;
 		}
 	}
 	.date-navigation-button {
@@ -244,9 +245,6 @@
 	}
 	.c3-tooltip-container {
 		max-width: 170px;
-	}
-	.wfm-datepicker .btn-info.active {
-		background-color: $blue-100 !important;
 	}
 	.campaign-warning-icon {
 		margin-top: 7px;

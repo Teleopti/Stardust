@@ -47,7 +47,6 @@
 		vm.isUsingRequestSubmitterTimeZone = false;
 		vm.Wfm_GroupPages_45057 = toggleService.Wfm_GroupPages_45057;
 		vm.overtimeRequestsLicenseAvailable = false;
-		vm.isShowingDatePicker = false;
 		vm.teamNameMap = {};
 
 		vm.selectedGroups = {
@@ -138,11 +137,6 @@
 			$timeout(function() {
 				$state.go('requests.overtime', { getParams: getParams });
 			}, loadRequetsDelay);
-		};
-
-		vm.toggleDatePicker = function(event) {
-			event && event.stopPropagation();
-			vm.isShowingDatePicker = !vm.isShowingDatePicker;
 		};
 
 		vm.dateRangeCustomValidators = function() {

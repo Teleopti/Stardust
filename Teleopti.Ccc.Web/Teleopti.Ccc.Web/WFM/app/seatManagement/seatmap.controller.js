@@ -75,10 +75,6 @@
 			canvasUtils.loadSeatMap(null, vm.selectedDate, canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
-		vm.getDisplaySelectedDate = function () {
-			return moment(vm.selectedDate).format('L');
-		};
-
 		vm.getCanvas = function () {
 			return canvas;
 		};
@@ -132,25 +128,19 @@
 			canvasUtils.loadSeatMap(id, vm.selectedDate, canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
-		vm.refreshSeatMap = function () {
+		vm.refreshSeatMap = function (date) {
 			vm.isLoading = true;
-			canvasUtils.loadSeatMap(vm.seatMapId, vm.selectedDate, canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
+			canvasUtils.loadSeatMap(vm.seatMapId, date, canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 			resize();
 		};
 
-		vm.onChangeOfDate = function () {
-			vm.refreshSeatMap();
-			vm.isDatePickerOpened = false;
+		vm.onChangeOfDate = function (date) {
+			vm.refreshSeatMap(moment(date).format('YYYY-MM-DD'));
 		};
 
 		vm.updateSeatNumber = function(seat, newNumber) {
 			canvasUtils.updateSeatNumber(canvas, seat, newNumber, vm.seats);
 		}
-
-		function onSaveSuccess() {
-			NoticeService.success('Seat map saved successfully.', 5000, false);
-			vm.refreshSeatMap();
-		};
 
 		function resize() {
 			canvasUtils.resize(canvas);

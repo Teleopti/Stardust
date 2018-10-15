@@ -1,16 +1,15 @@
 import { NgModule } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from '../shared/shared.module';
+import { TitleBarComponent, WorkspaceComponent } from './components';
 import {
 	AppLogonPageComponent,
 	GrantPageComponent,
 	IdentityLogonPageComponent,
 	RevokePageComponent,
-	SearchPageComponent,
-	TitleBarComponent,
-	WorkspaceComponent
-} from './components';
-import { NavigationService, RolesService, SearchOverridesService, SearchService, WorkspaceService } from './services';
+	SearchPageComponent
+} from './pages';
+import { NavigationService, RolesService, SearchOverridesService, SearchService, WorkspaceService } from './shared';
 
 @NgModule({
 	declarations: [
@@ -33,7 +32,6 @@ import { NavigationService, RolesService, SearchOverridesService, SearchService,
 	],
 	exports: [],
 	entryComponents: [
-		TitleBarComponent,
 		SearchPageComponent,
 		GrantPageComponent,
 		RevokePageComponent,

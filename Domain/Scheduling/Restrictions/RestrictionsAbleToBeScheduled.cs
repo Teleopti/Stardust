@@ -56,6 +56,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			if (!matrixList.Any())
 				return null;
 
+			var restrictionFound = false;
+			foreach (var dateOnly in selectedPeriod.DayCollection())
+			{
+				var scheduleDay = _schedulerStateHolder().Schedules[schedulePeriod.Person].ScheduledDay(dateOnly);
+				if (scheduleDay.RestrictionCollection().Any())
+					restrictionFound = true;
+			}
+
+			if (!restrictionFound)
+			{
+				return new RestrictionsNotAbleToBeScheduledResult
+				{
+					Agent = schedulePeriod.Person,
+					Reason = RestrictionNotAbleToBeScheduledReason.NoRestrictions,
+					Period = selectedPeriod,
+					Matrix = matrixList.First()
+				};
+			}
 			var schedulePartModifyAndRollbackServiceForContractDaysOff =
 				new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState, new DoNothingScheduleDayChangeCallBack(),
 					new ScheduleTagSetter(new NullScheduleTag()));

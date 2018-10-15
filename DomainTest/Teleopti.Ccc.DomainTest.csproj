@@ -139,11 +139,11 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.257\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.258\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.257\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.258\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -787,7 +787,6 @@
     <Compile Include="DayOffPlanning\Scheduling\WorkShiftMinMaxCalculatorSkipWeekCheckTest.cs" />
     <Compile Include="DayOffPlanning\Scheduling\WorkShiftMinMaxLengthCalculatorTest.cs" />
     <Compile Include="DayOffPlanning\Scheduling\WorkShiftWeekMinMaxCalculatorTest.cs" />
-    <Compile Include="DayOffPlanning\SmartDayOffBackToLegalStateServiceTest.cs" />
     <Compile Include="DayOffPlanning\TeDataDayOffDecisionMakerTest.cs" />
     <Compile Include="DayOffPlanning\TuiCaseSolverTest.cs" />
     <Compile Include="DayOffPlanning\WeeklyDayOffValidatorTest.cs" />

@@ -19,17 +19,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class SchedulerStateHolder : ISchedulerStateHolder, IClearReferredShiftTradeRequests
 	{
-		private readonly ISchedulingResultStateHolder _schedulingResultState;
-		private readonly IList<IPerson> _allPermittedPersons;
 		private readonly ICollection<DateOnly> _daysToResourceCalculate = new HashSet<DateOnly>();
-		private IScenario _requestedScenario;
-		private readonly IList<IPersonRequest> _workingPersonRequests = new List<IPersonRequest>();
 		private ShiftTradeRequestStatusCheckerWithSchedule _shiftTradeRequestStatusChecker;
-		private CommonNameDescriptionSetting _commonNameDescription = new CommonNameDescriptionSetting();
-		private CommonNameDescriptionSettingScheduleExport _commonNameDescriptionScheduleExport = new CommonNameDescriptionSettingScheduleExport();
 		private DefaultSegment _defaultSegment = new DefaultSegment();
-		private ICommonStateHolder _commonStateHolder;
-        private IDictionary<Guid, IPerson> _filteredAgents;
 		private Lazy<IDictionary<Guid, IPerson>> _combinedFilteredAgents;
 		private IDictionary<Guid, IPerson> _filteredPersonsOvertimeAvailability;
 		private IDictionary<Guid, IPerson> _filteredPersonsHourlyAvailability;
@@ -39,46 +31,46 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public SchedulerStateHolder(IScenario loadScenario, IDateOnlyPeriodAsDateTimePeriod loadPeriod, IEnumerable<IPerson> allPermittedPersons, IDisableDeletedFilter disableDeleteFilter, ISchedulingResultStateHolder schedulingResultStateHolder, ITimeZoneGuard timeZoneGuard)
 		{
 			TimeZoneInfo = timeZoneGuard.CurrentTimeZone();
-			_requestedScenario = loadScenario;
-			_commonStateHolder = new CommonStateHolder(disableDeleteFilter);
+			RequestedScenario = loadScenario;
+			CommonStateHolder = new CommonStateHolder(disableDeleteFilter);
 			RequestedPeriod = loadPeriod;
-			_schedulingResultState = schedulingResultStateHolder;
-			_allPermittedPersons = new List<IPerson>(allPermittedPersons);
+			SchedulingResultState = schedulingResultStateHolder;
+			ChoosenAgents = new List<IPerson>(allPermittedPersons);
 			ResetFilteredPersons();
 			ResetFilteredPersonsOvertimeAvailability();
 		}
 
 		public SchedulerStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder, ICommonStateHolder commonStateHolder, ITimeZoneGuard timeZoneGuard)
 		{
-			_schedulingResultState = schedulingResultStateHolder;
+			SchedulingResultState = schedulingResultStateHolder;
 			TimeZoneInfo = timeZoneGuard.CurrentTimeZone();
-			_commonStateHolder = commonStateHolder;
-			_allPermittedPersons = new List<IPerson>();
+			CommonStateHolder = commonStateHolder;
+			ChoosenAgents = new List<IPerson>();
 			ResetFilteredPersonsOvertimeAvailability();
 		}
 
 		public void SetRequestedScenario(IScenario scenario)
 		{
-			_requestedScenario = scenario;
+			RequestedScenario = scenario;
 		}
 
-		public IList<IPerson> ChoosenAgents => _allPermittedPersons;
+		public IList<IPerson> ChoosenAgents { get; }
 
 		public bool ConsiderShortBreaks { get; set; } = true;
 
-		public ISchedulingResultStateHolder SchedulingResultState => _schedulingResultState;
+		public ISchedulingResultStateHolder SchedulingResultState { get; }
 
 		public TimeZoneInfo TimeZoneInfo { get; set; }
 
-		public IList<IPersonRequest> PersonRequests => _workingPersonRequests;
-		
+		public IList<IPersonRequest> PersonRequests { get; } = new List<IPersonRequest>();
+
 		public IDictionary<Guid, IPerson> FilteredCombinedAgentsDictionary => _combinedFilteredAgents.Value;
-		
-		public IDictionary<Guid, IPerson> FilteredAgentsDictionary => _filteredAgents;
+
+		public IDictionary<Guid, IPerson> FilteredAgentsDictionary { get; private set; }
 
 		private IDictionary<Guid, IPerson> combinedFilters()
 		{
-			var filter = _filteredAgents;
+			var filter = FilteredAgentsDictionary;
 
 			if (!_filterOnOvertimeAvailability && !_filterOnHourlyAvailability) return filter;
 
@@ -93,16 +85,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public IScheduleDictionary Schedules => SchedulingResultState.Schedules;
 
-		public ICommonStateHolder CommonStateHolder => _commonStateHolder;
+		public ICommonStateHolder CommonStateHolder { get; }
 
-		/// <summary>
-		/// Gets the days to recalculate.
-		/// </summary>
-		/// <value>The days to recalculate.</value>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 2008-05-04
-		/// </remarks>
 		public IEnumerable<DateOnly> DaysToRecalculate
 		{
 			get
@@ -114,15 +98,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public IDateOnlyPeriodAsDateTimePeriod RequestedPeriod { get; set; }
 
 
-		public IScenario RequestedScenario => _requestedScenario;
+		public IScenario RequestedScenario { get; private set; }
 
-		/// <summary>
-		/// Clears the days to recalculate.
-		/// </summary>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 2008-05-04
-		/// </remarks>
 		public void ClearDaysToRecalculate()
 		{
 			_daysToResourceCalculate.Clear();
@@ -149,8 +126,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		
 		public void LoadSettings(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory)
 		{
-			_commonNameDescription = repositoryFactory.CreateGlobalSettingDataRepository(unitOfWork).FindValueByKey(CommonNameDescriptionSetting.Key, new CommonNameDescriptionSetting());
-			_commonNameDescriptionScheduleExport = repositoryFactory.CreateGlobalSettingDataRepository(unitOfWork).FindValueByKey(CommonNameDescriptionSettingScheduleExport.Key, new CommonNameDescriptionSettingScheduleExport());
+			CommonNameDescription = repositoryFactory.CreateGlobalSettingDataRepository(unitOfWork).FindValueByKey(CommonNameDescriptionSetting.Key, new CommonNameDescriptionSetting());
+			CommonNameDescriptionScheduleExport = repositoryFactory.CreateGlobalSettingDataRepository(unitOfWork).FindValueByKey(CommonNameDescriptionSettingScheduleExport.Key, new CommonNameDescriptionSettingScheduleExport());
 			_defaultSegment = repositoryFactory.CreateGlobalSettingDataRepository(unitOfWork).FindValueByKey("DefaultSegment", new DefaultSegment());
 		}
 
@@ -171,13 +148,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var okByMeSpecification = new ShiftTradeRequestOkByMeSpecification(_shiftTradeRequestStatusChecker);
 			var notOvertimeRequestSpecification = new NotOvertimeRequestSpecification();
 			var afterLoadedPeriodSpecification = new ShiftTradeRequestIsAfterLoadedPeriodSpecification(SchedulingResultState.Schedules.Period.VisiblePeriod);
-			_workingPersonRequests.Clear();
+			PersonRequests.Clear();
 
 			var period = new DateTimePeriod(DateTime.UtcNow.Date.AddDays(-numberOfDaysToShowNonPendingRequests), DateTime.SpecifyKind(DateTime.MaxValue.Date, DateTimeKind.Utc));
 
 			IList<IPersonRequest> personRequests = new List<IPersonRequest>();
 
-			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler) && _requestedScenario.DefaultScenario)
+			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler) && RequestedScenario.DefaultScenario)
 				if (personRequestRepository != null)
 					personRequests = personRequestRepository.FindAllRequestModifiedWithinPeriodOrPending(ChoosenAgents, period);
 			
@@ -190,50 +167,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			foreach (var personRequest in requests)
 			{
 				personRequest.Changed = false;
-				_workingPersonRequests.Add(personRequest);
+				PersonRequests.Add(personRequest);
 			}
 		}
-
-		/// <summary>
-		/// Return common agent name description
-		/// </summary>
-		/// <param name="person"></param>
-		/// <returns></returns>
+		
 		public string CommonAgentName(IPerson person)
 		{
-			return _commonNameDescription.BuildFor(person);
+			return CommonNameDescription.BuildFor(person);
 		}
-
-		/// <summary>
-		/// Return common agent name description for schedule export
-		/// </summary>
-		/// <param name="person"></param>
-		/// <returns></returns>
+		
 		public string CommonAgentNameScheduleExport(IPerson person)
 		{
-			return _commonNameDescriptionScheduleExport.BuildFor(person);
+			return CommonNameDescriptionScheduleExport.BuildFor(person);
 		}
 
-		/// <summary>
-		/// Marks the date to be recalculated.
-		/// </summary>
-		/// <param name="dateToRecalculate">The date.</param>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 2008-05-04
-		/// </remarks>
 		public void MarkDateToBeRecalculated(DateOnly dateToRecalculate)
 		{
 			_daysToResourceCalculate.Add(dateToRecalculate);
 		}
 
-        public void ResetFilteredPersons()
-        {
-	        var allPermittedPersonIds = ChoosenAgents.Select(x => x.Id.GetValueOrDefault()).ToArray();
-	        _filteredAgents =
-		        SchedulingResultState.LoadedAgents.Where(p => Array.IndexOf(allPermittedPersonIds, p.Id.Value) >= 0)
-			        .OrderBy(CommonAgentName)
-			        .ToDictionary(p => p.Id.Value);
+		public void ResetFilteredPersons()
+		{
+			var allPermittedPersonIds = ChoosenAgents.Select(x => x.Id.GetValueOrDefault()).ToArray();
+			FilteredAgentsDictionary =
+				SchedulingResultState.LoadedAgents.Where(p => Array.IndexOf(allPermittedPersonIds, p.Id.Value) >= 0)
+					.OrderBy(CommonAgentName)
+					.ToDictionary(p => p.Id.Value);
 			_combinedFilteredAgents = new Lazy<IDictionary<Guid, IPerson>>(combinedFilters);
 		}
 
@@ -253,7 +212,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public void FilterPersons(IList<IPerson> selectedPersons)
 		{
-			_filteredAgents = selectedPersons.OrderBy(CommonAgentName).ToDictionary(p => p.Id.Value);
+			FilteredAgentsDictionary = selectedPersons.OrderBy(CommonAgentName).ToDictionary(p => p.Id.Value);
 			_combinedFilteredAgents = new Lazy<IDictionary<Guid, IPerson>>(combinedFilters);
 		}
 
@@ -281,7 +240,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					selectedPersons.Add(person.Id.Value, person);
 				}
 			}
-			_filteredAgents = selectedPersons.Values.OrderBy(CommonAgentName).ToDictionary(p => p.Id.Value);
+			FilteredAgentsDictionary = selectedPersons.Values.OrderBy(CommonAgentName).ToDictionary(p => p.Id.Value);
 			_combinedFilteredAgents = new Lazy<IDictionary<Guid, IPerson>>(combinedFilters);
 		}
 
@@ -290,9 +249,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IPersonRequest updatedRequest = null;
 			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))
 				updatedRequest = personRequestRepository.Find(personRequestId);
-
+			
 			if (updatedRequest != null)
 			{
+				var notOvertimeRequestSpecification = new NotOvertimeRequestSpecification();
+				if (!notOvertimeRequestSpecification.IsSatisfiedBy(updatedRequest))
+				{
+					return null;
+				}
+
 				if (!SchedulingResultState.LoadedAgents.Contains(updatedRequest.Person)) //Do not try to update persons that are not loaded in scheduler
 					return null;
 
@@ -300,16 +265,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				var shiftTradeRequestReferredSpecification = new ShiftTradeRequestReferredSpecification(_shiftTradeRequestStatusChecker);
 				var shiftTradeRequestOkByMeSpecification = new ShiftTradeRequestOkByMeSpecification(_shiftTradeRequestStatusChecker);
-				var shiftTradeRequestAfterLoadedPeriodSpecification =
-					new ShiftTradeRequestIsAfterLoadedPeriodSpecification(Schedules.Period.VisiblePeriod);
-
+				var shiftTradeRequestAfterLoadedPeriodSpecification = new ShiftTradeRequestIsAfterLoadedPeriodSpecification(Schedules.Period.VisiblePeriod);
 
 				if (shiftTradeRequestAfterLoadedPeriodSpecification.IsSatisfiedBy(updatedRequest) ||
-				    (!shiftTradeRequestOkByMeSpecification.IsSatisfiedBy(updatedRequest) &&
-				    !shiftTradeRequestReferredSpecification.IsSatisfiedBy(updatedRequest))) 
+				!shiftTradeRequestOkByMeSpecification.IsSatisfiedBy(updatedRequest) &&
+				!shiftTradeRequestReferredSpecification.IsSatisfiedBy(updatedRequest)) 
 				{
 					updatedRequest.Changed = false;
-					_workingPersonRequests.Add(updatedRequest);
+					PersonRequests.Add(updatedRequest);
 				}
 			}
 
@@ -352,10 +315,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public IPersonRequest RequestDeleteFromBroker(Guid personRequestId)
 		{
 			IPersonRequest currentRequest =
-				_workingPersonRequests.FirstOrDefault(r => r.Id.GetValueOrDefault(Guid.Empty) == personRequestId);
+				PersonRequests.FirstOrDefault(r => r.Id.GetValueOrDefault(Guid.Empty) == personRequestId);
 			if (currentRequest != null)
 			{
-				_workingPersonRequests.Remove(currentRequest);
+				PersonRequests.Remove(currentRequest);
 			}
 
 			return currentRequest;
@@ -363,15 +326,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public IUndoRedoContainer UndoRedoContainer { get; set; }
 
-		public CommonNameDescriptionSetting CommonNameDescription => _commonNameDescription;
+		public CommonNameDescriptionSetting CommonNameDescription { get; private set; } = new CommonNameDescriptionSetting();
 
-		public CommonNameDescriptionSettingScheduleExport CommonNameDescriptionScheduleExport => _commonNameDescriptionScheduleExport;
+		public CommonNameDescriptionSettingScheduleExport CommonNameDescriptionScheduleExport { get; private set; } = new CommonNameDescriptionSettingScheduleExport();
 
 		public int DefaultSegmentLength => _defaultSegment.SegmentLength;
 
 		public bool AgentFilter()
 		{
-			return _filteredAgents.Count != _allPermittedPersons.Count;
+			return FilteredAgentsDictionary.Count != ChoosenAgents.Count;
 		}
 	}
 }

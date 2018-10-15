@@ -4,7 +4,6 @@ using System.Data.SqlClient;
 using NHibernate.AdoNet;
 using NHibernate.Driver;
 using Polly;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling
 {

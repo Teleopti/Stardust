@@ -12,9 +12,8 @@ import {
 	GrantPageComponent,
 	IdentityLogonPageComponent,
 	RevokePageComponent,
-	SearchPageComponent,
-	TitleBarComponent
-} from './app/people/components';
+	SearchPageComponent
+} from './app/people/pages';
 import { WorkspaceComponent } from './app/pm/components';
 import { FeedbackMessageComponent } from './app/shared/components';
 import { environment } from './environments/environment';
@@ -72,7 +71,8 @@ const wfm = angular.module('wfm', [
 	'wfm.requests',
 	'wfm.reports',
 	'wfm.signalR',
-	'wfm.culturalDatepicker',
+	'wfm.datePicker',
+	'wfm.dateRangePicker',
 	'wfm.utilities',
 	'wfm.staffing',
 	'wfm.dataProtection',
@@ -84,7 +84,6 @@ const wfm = angular.module('wfm', [
 	'wfm.treePicker',
 	'wfm.card-panel',
 	'wfm.skillGroup',
-	'wfm.calendarPicker',
 	'wfm.popup',
 	'wfm.gamification',
 	'wfm.btnGroup',
@@ -100,7 +99,6 @@ const downgradeHelper = (downgradeName: string, component) => {
 
 downgradeHelper('ng2ApiAccessListPage', ListPageComponent);
 downgradeHelper('ng2ApiAccessAddAppPage', AddAppPageComponent);
-downgradeHelper('ng2PeopleTitleBar', TitleBarComponent);
 downgradeHelper('ng2PeopleSearchPage', SearchPageComponent);
 downgradeHelper('ng2PeopleGrantPage', GrantPageComponent);
 downgradeHelper('ng2PeopleRevokePage', RevokePageComponent);

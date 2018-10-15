@@ -159,8 +159,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			var result = Target.Create(period, new[] { agent1 }, new NoSchedulingProgress());
 
-			result.Count().Should().Be.EqualTo(2);
-			result.First().Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.NoIssue);
+			result.Count().Should().Be.EqualTo(1);
+			result.First().Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.NoRestrictions);
 		}
 
 		[Test]
@@ -192,8 +192,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			var result = Target.Create(period, new[] { agent1 }, new NoSchedulingProgress());
 
-			result.Count().Should().Be.EqualTo(2);
-			result.First().Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.NoIssue);
+			result.Count().Should().Be.EqualTo(1);
+			result.First().Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod);
 		}
 
 		[Test]
@@ -229,12 +229,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			var result = Target.Create(period, new[] { agent1 }, new NoSchedulingProgress()).ToList();
 
-			result.Count().Should().Be.EqualTo(3);
-			result[0].Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.NoIssue);
+			result.Count.Should().Be.EqualTo(2);
+			result[0].Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod);
+			result[0].Period.Should().Be.EqualTo(new DateOnlyPeriod(new DateOnly(2018, 4, 9), new DateOnly(2018, 4, 9).AddDays(6)));
 			result[1].Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod);
-			result[1].Period.Should().Be.EqualTo(new DateOnlyPeriod(new DateOnly(2018, 4, 9), new DateOnly(2018, 4, 9).AddDays(6)));
-			result[2].Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod);
-			result[2].Period.Should().Be.EqualTo(new DateOnlyPeriod(new DateOnly(2018, 4, 23), new DateOnly(2018, 4, 23).AddDays(6)));
+			result[1].Period.Should().Be.EqualTo(new DateOnlyPeriod(new DateOnly(2018, 4, 23), new DateOnly(2018, 4, 23).AddDays(6)));
 		}
 
 		public RestrictionNotAbleToBeScheduledReportTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)

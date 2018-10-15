@@ -308,7 +308,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, contract, skill).WithSchedulePeriodOneWeek(firstDay);
-			agent.SchedulePeriod(firstDay).SetDaysOff(1);
+			agent.SchedulePeriod(firstDay).SetDaysOff(2);
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 5, 5, 1, 1, 5, 5, 5);	
 			var persistableScheduleData = new List<IPersistableScheduleData>();
 			for (var i = 0; i < 7; i++)
@@ -541,7 +541,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			return stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff();//saturday
 		}
 
-		[Test, Ignore("works when running alone but not when running all tests in this class")]
+		[Test]
 		public void DaysOffBackToLegalStateShouldNotMoveDayOffFromClosedDays()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon

@@ -15838,4 +15838,8 @@ Applikationen kommer nu att stängas. </value>
   <data name="PmNextGenEditReport" xml:space="preserve">
     <value>Ändra rapport</value>
   </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonNoRestrictions" xml:space="preserve">
+    <value>Inga restriktioner inom perioden</value>
+    <comment>No restrictions in period</comment>
+  </data>
 </root>

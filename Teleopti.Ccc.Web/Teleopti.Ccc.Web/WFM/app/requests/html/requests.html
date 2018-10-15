@@ -13,8 +13,8 @@
 					<favorite-search apply-favorite="vm.applyFavorite(currentFavorite)" get-search="vm.getSearch()" current-favorite="vm.selectedFavorite"
 					 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
 
-					<group-page-picker ng-if="vm.Wfm_GroupPages_45057" group-pages="vm.availableGroups" on-close="vm.changeSelectedTeams()" class="group-picker-container inline-block"
-					 selected-groups="vm.selectedGroups"></group-page-picker>
+					<group-page-picker ng-if="vm.Wfm_GroupPages_45057" group-pages="vm.availableGroups" on-close="vm.changeSelectedTeams()"
+					 class="group-picker-container inline-block" selected-groups="vm.selectedGroups"></group-page-picker>
 
 					<organization-picker ng-if="!vm.Wfm_GroupPages_45057" sites-and-teams="vm.sitesAndTeams" on-open="vm.agentSearchOptions.focusingSearch = false"
 					 on-close="vm.changeSelectedTeams()" selected-team-ids="vm.selectedGroups.groupIds" selected-text="vm.orgPickerSelectedText()"
@@ -26,15 +26,8 @@
 					</div>
 
 					<div class="request-date-range-picker relative unselectable">
-						<div class="cursor-pointer" ng-click="vm.toggleDatePicker($event)">
-							<span><i class="mdi mdi-calendar-range"></i></span>
-							<span>{{'From'| translate}}: {{vm.period.startDate | amDateFormat:"L"}}</span>
-							<span>{{'To'|translate}}: {{vm.period.endDate | amDateFormat:"L"}}</span>
-						</div>
-						<wfm-popup show="vm.isShowingDatePicker" class="absolute">
-							<wfm-calendar-picker ng-if="vm.isShowingDatePicker" ng-model="vm.period" show-week="true" custom-validate="vm.dateRangeCustomValidators()">
-							</wfm-calendar-picker>
-						</wfm-popup>
+						<wfm-date-range-picker ng-model="vm.period" show-week="true" custom-validate="vm.dateRangeCustomValidators(vm.period)"
+						 popup-mode="true"></wfm-date-range-picker>
 					</div>
 
 					<div class="filter-switch inline-block">
@@ -46,9 +39,11 @@
 				</div>
 
 				<div class="right-part">
-					<requests-commands-pane before-command="vm.onBeforeCommand()" is-shift-trade-view-active="vm.isShiftTradeViewActive()" after-command-success="vm.onCommandSuccess(commandType, changedRequestsCount, requestsCount, waitlistPeriod)"
-					 on-error-messages="vm.onErrorMessages(errorMessages)" after-command-error="vm.onCommandError(error)" commands-disabled="vm.disableInteraction"
-					 on-process-waitlist-finished="vm.onProcessWaitlistFinished(message)" on-approve-based-on-business-rules-finished="vm.onApproveBasedOnBusinessRulesFinished(message)"></requests-commands-pane>
+					<requests-commands-pane before-command="vm.onBeforeCommand()" is-shift-trade-view-active="vm.isShiftTradeViewActive()"
+					 after-command-success="vm.onCommandSuccess(commandType, changedRequestsCount, requestsCount, waitlistPeriod)"
+					 on-error-messages="vm.onErrorMessages(errorMessages)" after-command-error="vm.onCommandError(error)"
+					 commands-disabled="vm.disableInteraction" on-process-waitlist-finished="vm.onProcessWaitlistFinished(message)"
+					 on-approve-based-on-business-rules-finished="vm.onApproveBasedOnBusinessRulesFinished(message)"></requests-commands-pane>
 				</div>
 			</div>
 
@@ -70,8 +65,8 @@
 				</div>
 			</div>
 
-			<requests-footer ng-if="vm.isFooterInited" paging="vm.paging" page-size-options="vm.pageSizeOptions" is-shift-trade-view-active="vm.isShiftTradeViewActive()"
-			 is-using-request-submitter-time-zone="vm.isUsingRequestSubmitterTimeZone"></requests-footer>
+			<requests-footer ng-if="vm.isFooterInited" paging="vm.paging" page-size-options="vm.pageSizeOptions"
+			 is-shift-trade-view-active="vm.isShiftTradeViewActive()" is-using-request-submitter-time-zone="vm.isUsingRequestSubmitterTimeZone"></requests-footer>
 		</div>
 	</div>
 </div>

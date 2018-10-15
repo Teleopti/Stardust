@@ -1,5 +1,23 @@
-﻿"use strict";
-(function () {
+﻿'use strict';
+(function() {
+	angular
+		.module('wfm.requests')
+		.directive('requestsBudgetAllowance', function() {
+			return {
+				restrict: 'E',
+				controller: 'requestsBudgetAllowanceController',
+				controllerAs: 'vm',
+				bindToController: true,
+				templateUrl: 'app/requests/html/requests-budget-allowance.tpl.html'
+			};
+		})
+		.controller('requestsBudgetAllowanceController', [
+			'$translate',
+			'$filter',
+			'requestsDataService',
+			requestsBudgetAllowanceController
+		]);
+
 	function requestsBudgetAllowanceController($translate, $filter, requestsDataSvc) {
 		var vm = this;
 		vm.isLoading = false;
@@ -8,33 +26,34 @@
 		vm.linkedAbsences = [];
 		vm.selectedDate = new Date();
 		vm.previousSelectedDate = vm.selectedDate;
-		vm.selectedBudgetGroupId = "";
+		vm.selectedBudgetGroupId = '';
 
-		vm.formatAbsenceName = function (absence) {
+		vm.formatAbsenceName = function(absence) {
 			var template = $translate.instant('UsedBy');
-			return template.replace("{0}", absence);
-		}
+			return template.replace('{0}', absence);
+		};
 
-		vm.getStyle = function (allowance) {
-			if (moment(vm.selectedDate).isSame(allowance.date, "day")) return "current-date";
-			return allowance.isWeekend ? "weekend" : "";
-		}
+		vm.getStyle = function(allowance) {
+			if (moment(vm.selectedDate).isSame(allowance.date, 'day')) return 'current-date';
+			return allowance.isWeekend ? 'weekend' : '';
+		};
 
-		vm.selectedDateChanged = function () {
-			if (moment(vm.previousSelectedDate).isSame(moment(vm.selectedDate), "week")) {
-				vm.previousSelectedDate = vm.selectedDate;
+		vm.selectedDateChanged = function(date) {
+			if (moment(vm.previousSelectedDate).isSame(moment(vm.selectedDate), 'week')) {
+				vm.previousSelectedDate = date;
 				return;
 			}
 
-			vm.previousSelectedDate = vm.selectedDate;
+			vm.previousSelectedDate = date;
 			vm.loadBudgetAllowance();
-		}
+		};
 
-		vm.loadBudgetAllowance = function () {
+		vm.loadBudgetAllowance = function() {
 			if (vm.budgetGroups.length === 0) return;
 
-			requestsDataSvc.getBudgetAllowancePromise(moment(vm.selectedDate).format("YYYY-MM-DD"), vm.selectedBudgetGroupId)
-				.then(function (response) {
+			requestsDataSvc
+				.getBudgetAllowancePromise(moment(vm.selectedDate).format('YYYY-MM-DD'), vm.selectedBudgetGroupId)
+				.then(function(response) {
 					vm.linkedAbsences = [];
 					vm.budgetAllowanceList = [];
 					if (response.data.length === 0) return;
@@ -48,14 +67,32 @@
 
 					vm.isLoading = false;
 				});
-		}
+		};
+
+		vm.init = function() {
+			vm.isLoading = true;
+			requestsDataSvc.getBudgetGroupsPromise().then(function(response) {
+				if (response.data.length > 0) {
+					vm.budgetGroups = response.data;
+					vm.selectedBudgetGroupId = vm.budgetGroups[0].Id;
+					vm.loadBudgetAllowance();
+				} else {
+					vm.budgetGroups = [];
+					vm.isLoading = false;
+				}
+			});
+		};
+
+		vm.init();
 
 		function parseLinkedAbsences(allowance) {
 			// Get absences linked to this budget group
 			for (var absenceAllowance in allowance.UsedAbsencesDictionary) {
-				if (absenceAllowance.indexOf("$") !== 0 
-					&& allowance.UsedAbsencesDictionary.hasOwnProperty(absenceAllowance) 
-					&& angular.isNumber(allowance.UsedAbsencesDictionary[absenceAllowance])) {
+				if (
+					absenceAllowance.indexOf('$') !== 0 &&
+					allowance.UsedAbsencesDictionary.hasOwnProperty(absenceAllowance) &&
+					angular.isNumber(allowance.UsedAbsencesDictionary[absenceAllowance])
+				) {
 					vm.linkedAbsences.push(absenceAllowance);
 				}
 			}
@@ -63,15 +100,15 @@
 
 		function createAllowance(allowance) {
 			var fractionSize = 2;
-			var numberFilter = $filter("number");
+			var numberFilter = $filter('number');
 
 			var relativeDifference;
 			if (allowance.RelativeDifference == null) {
-				relativeDifference = "-";
-			} else if (allowance.RelativeDifference === "Infinity") {
-				relativeDifference = "∞";
+				relativeDifference = '-';
+			} else if (allowance.RelativeDifference === 'Infinity') {
+				relativeDifference = '∞';
 			} else {
-				relativeDifference = numberFilter(allowance.RelativeDifference * 100, fractionSize) + "%";
+				relativeDifference = numberFilter(allowance.RelativeDifference * 100, fractionSize) + '%';
 			}
 
 			var allowanceModel = {
@@ -92,35 +129,5 @@
 
 			return allowanceModel;
 		}
-
-		function initialize() {
-			vm.isLoading = true;
-			requestsDataSvc.getBudgetGroupsPromise().then(function (response) {
-				if (response.data.length > 0) {
-					vm.budgetGroups = response.data;
-					vm.selectedBudgetGroupId = vm.budgetGroups[0].Id;
-					vm.loadBudgetAllowance();
-				} else {
-					vm.budgetGroups = [];
-					vm.isLoading = false;
-				}
-			});
-		}
-
-		initialize();
 	}
-
-	var requestsBudgetAllowanceDirective = function () {
-		return {
-			restrict: "E",
-			controller: "requestsBudgetAllowanceController",
-			controllerAs: "vm",
-			bindToController: true,
-			templateUrl: "app/requests/html/requests-budget-allowance.tpl.html"
-		};
-	};
-
-	angular.module("wfm.requests")
-		.controller("requestsBudgetAllowanceController", ["$translate", "$filter", "requestsDataService", requestsBudgetAllowanceController])
-		.directive("requestsBudgetAllowance", requestsBudgetAllowanceDirective);
 })();
