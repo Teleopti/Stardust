@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			);
 
 
-			var dataSeries = new  Teleopti.Ccc.Domain.Intraday.ApplicationLayer.ViewModels.StaffingDataSeries
+			var dataSeries = new  ApplicationLayer.ViewModels.StaffingDataSeries
 			{
 				Date = userDateOnly,
 				Time = timeSeries,
@@ -158,14 +158,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 					var skillDaysEmail = skillDays[skill];
 					foreach (var skillDay in skillDaysEmail)
 					{
-						var skillDayDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(skillDay.CurrentDate.Date, timeZone));
+						var skillDayDate = skillDay.CurrentDate;
 						scheduledStaffingPerSkill.AddRange(_scheduledStaffingProvider.StaffingPerSkill(emailSkillsForOneResoultion, group.Key, skillDayDate, useShrinkage));
 						foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 						{
-							var intervalStartLocal = TimeZoneHelper.ConvertFromUtc(skillStaffPeriod.Period.StartDateTime, _timeZone.TimeZone());
+							var intervalStart = skillStaffPeriod.Period.StartDateTimeLocal(timeZone);
 							var scheduledStaff =
 								scheduledStaffingPerSkill.FirstOrDefault(
-									x => x.Id == skill.Id.Value && x.StartDateTime == intervalStartLocal);
+									x => x.Id == skill.Id.Value && x.StartDateTime == intervalStart);
 							skillStaffPeriod.SetCalculatedResource65(0);
 							if (scheduledStaff.StaffingLevel > 0)
 								skillStaffPeriod.SetCalculatedResource65(scheduledStaff.StaffingLevel);

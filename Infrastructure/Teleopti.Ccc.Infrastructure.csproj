@@ -175,11 +175,11 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.256\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.258\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.256\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.258\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -282,42 +282,9 @@
     <Compile Include="MultiTenancy\Server\Queries\TenantAuditPersister.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersonInfoPersister.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersonInfoPersisterFake.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\AsyncExecution.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\DefaultReliableSql2008ClientDriver.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ExponentialBackoff.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\FixedInterval.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\Incremental.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ITransientErrorDetectionStrategy.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ReliableAdoNetTransactionFactory.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ReliableAdoTransaction.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ReliableSql2008ClientDriver.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ReliableSqlClientBatchingBatcher.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ReliableSqlClientBatchingBatcherFactory.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ReliableSqlCommand.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ReliableSqlConnection.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ReliableSqlDbConnection.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\RetryingEventArgs.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\RetryLimitExceededException.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\RetryManager.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\RetryManagerSqlExtensions.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\RetryPolicy.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\RetryStrategy.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ShouldRetry.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\SqlAzureClientDriverWithLogRetries.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\SqlAzureTransientErrorDetectionStrategy.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\SqlAzureTransientErrorDetectionStrategyWithTimeouts.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\SqlCommandFactory.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\SqlDatabaseTransientErrorDetectionStrategy.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\SqlTransientErrorDetectionStrategyWithTimeouts.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\SqlXmlReader.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ThrottledResourceType.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ThrottlingCondition.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ThrottlingMode.cs" />
-    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ThrottlingType.cs" />
+    <Compile Include="NHibernateConfiguration\TransientErrorHandling\RetryingEventArgs.cs" />
+    <Compile Include="NHibernateConfiguration\TransientErrorHandling\SqlCommandFactory.cs" />
+    <Compile Include="NHibernateConfiguration\TransientErrorHandling\SqlXmlReader.cs" />
     <Compile Include="NHibernateConfiguration\TransientErrorHandling\DbConnectionExtensions.cs" />
     <Compile Include="NHibernateConfiguration\TransientErrorHandling\DetectTransientSqlException.cs" />
     <Compile Include="NHibernateConfiguration\TransientErrorHandling\ResilientAdoNetTransactionFactory.cs" />
@@ -737,6 +704,7 @@
     <Compile Include="UnitOfWork\UnitOfWorkFactoryFactory.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkNoCommitAspect.cs" />
     <Compile Include="Util\ApplicationInsightsFilterOutSignalR.cs" />
+    <Compile Include="Util\ApplicationInsightsFilterSSO.cs" />
     <Compile Include="Util\ApplicationInsigths.cs" />
     <Compile Include="Util\AppVersionTelemetryInitializer.cs" />
     <Compile Include="Util\CloudSafeSqlExecute.cs" />

@@ -498,5 +498,37 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 					.Should().Be.EqualTo(new DateTimePeriod(dateTime1.AddHours(10), dateTime1.AddHours(18)));
 			}
 		}
+
+		[Test]
+		public void ShouldHandleAgentStartingInTheMiddleOfTheSchedulePeriod()
+		{
+			var date = new DateOnly(2017, 9, 25);
+			var activity = new Activity();
+			var skill = new Skill().WithId().For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
+			var scenario = new Scenario().WithId();
+			var shiftCategory = new ShiftCategory().WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(10, 0, 10, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), shiftCategory));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(date.AddDays(2), new RuleSetBag(ruleSet), new ContractWithMaximumTolerance(), skill).WithSchedulePeriodOneWeek(date);
+			var skillDays = new List<ISkillDay>();
+			var asses = new List<IPersonAssignment>();
+			for (var i = 0; i < 7; i++)
+			{
+				skillDays.Add(skill.CreateSkillDayWithDemandPerHour(scenario, date.AddDays(i), TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(180))));
+				asses.Add(new PersonAssignment(agent, scenario, date.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 0, 16, 0)).WithId());
+			}
+			var optimizationPreferences = new OptimizationPreferences
+			{
+				General = new GeneralPreferences { ScheduleTag = NullScheduleTag.Instance, OptimizationStepShiftsWithinDay = true },
+				Extra = new ExtraPreferences { UseTeamBlockOption = true, UseBlockSameShiftCategory = true, BlockTypeValue = BlockFinderType.BetweenDayOff }
+			};
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), agent, asses, skillDays);
+
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), optimizationPreferences, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+
+			for (var i = 2; i < 7; i++)
+			{
+				stateHolder.Schedules[agent].ScheduledDay(date.AddDays(i)).PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(10);
+			}
+		}
 	}
 }

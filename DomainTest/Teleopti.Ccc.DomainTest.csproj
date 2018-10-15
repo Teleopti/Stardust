@@ -139,11 +139,11 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.256\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.258\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.256\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.258\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -295,6 +295,7 @@
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingPreferenceHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingPreviousShiftNotMatchingEachOtherHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\GetValidationsTest.cs" />
+    <Compile Include="ResourcePlanner\Hints\PreferenceHintDesktopTest.cs" />
     <Compile Include="ResourcePlanner\Hints\PreferenceHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\ScheduleStartOnWrongDateHintTest.cs" />
     <Compile Include="SchedulingQuality\DayOffOptimizationDesktopQualityTest.cs" />
@@ -325,8 +326,8 @@
     <Compile Include="SchedulingScenarios\Scheduling\DaysOffSchedulingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingAndDoTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCommandHandlerExternalStaffDesktopTest.cs" />
-    <Compile Include="SchedulingScenarios\Scheduling\SchedulingFulfilPreferencesTest.cs" />
-    <Compile Include="SchedulingScenarios\Scheduling\SchedulingFulfilPrefernceDesktopTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\SchedulingFulfillPreferencesTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\SchedulingFulfillPreferenceDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingReduceSkillsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingReduceSkillsTest.cs" />
     <Compile Include="SchedulingScenarios\SyncInFatClientProcessEventPublisher_SimulateNoNewThreads.cs" />
@@ -338,7 +339,7 @@
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationWithNoContextTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopBlockTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopPermissionTest.cs" />
-    <Compile Include="SchedulingScenarios\SeperateWebRequest.cs" />
+    <Compile Include="SchedulingScenarios\SeparateWebRequest.cs" />
     <Compile Include="SchedulingScenarios\TimeBetweenDaysOptimization\TimeBetweenDaysOptimizationScenario.cs" />
     <Compile Include="Scheduling\AdvancedAgentsFilterTest.cs" />
     <Compile Include="Scheduling\Assignment\ReplaceActivityServiceTest.cs" />
@@ -397,6 +398,7 @@
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiCccVacationPlannerLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmChatBotLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmOutboundLicenseOptionTest.cs" />
+    <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmPmNextGenLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmSeatPlannerLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmVNextPilotLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseTest.cs" />
@@ -785,7 +787,6 @@
     <Compile Include="DayOffPlanning\Scheduling\WorkShiftMinMaxCalculatorSkipWeekCheckTest.cs" />
     <Compile Include="DayOffPlanning\Scheduling\WorkShiftMinMaxLengthCalculatorTest.cs" />
     <Compile Include="DayOffPlanning\Scheduling\WorkShiftWeekMinMaxCalculatorTest.cs" />
-    <Compile Include="DayOffPlanning\SmartDayOffBackToLegalStateServiceTest.cs" />
     <Compile Include="DayOffPlanning\TeDataDayOffDecisionMakerTest.cs" />
     <Compile Include="DayOffPlanning\TuiCaseSolverTest.cs" />
     <Compile Include="DayOffPlanning\WeeklyDayOffValidatorTest.cs" />
@@ -799,7 +800,6 @@
     <Compile Include="Forecasting\Angel\DayWeekIndexVolumesTest.cs" />
     <Compile Include="Forecasting\Angel\DayWeekMonthIndexVolumesTest.cs" />
     <Compile Include="Forecasting\Angel\HistoricalPeriodProviderTest.cs" />
-    <Compile Include="Forecasting\Angel\IndexVolumesFactory.cs" />
     <Compile Include="Forecasting\Angel\ForecastingTargetMergerTest.cs" />
     <Compile Include="Forecasting\Angel\Historical\HistoricalDataTest.cs" />
     <Compile Include="Forecasting\Angel\MonthlyPatternIndexVolumesTest.cs" />

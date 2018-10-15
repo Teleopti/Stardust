@@ -22,7 +22,6 @@
 		vm.showPeopleSelection = false;
 		vm.hasOpenedPersonSelectionPanel = false;
 		vm.previousSelectedSeatIds = [];
-		vm.dateRangeTemplateType = 'popup';
 
 		vm.asignAgentsToSeats = function() {
 			seatPlanService.seatPlan
@@ -37,6 +36,7 @@
 					onSeatPlanCompleted(seatPlanResultMessage);
 				});
 		};
+
 		vm.getDisplayTime = function(booking) {
 			return utils.getSeatBookingTimeDisplay(booking);
 		};

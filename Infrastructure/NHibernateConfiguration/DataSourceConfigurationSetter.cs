@@ -3,7 +3,6 @@ using NHibernate.Cfg;
 using NHibernate.Dialect;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Environment = NHibernate.Cfg.Environment;
@@ -54,7 +53,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		public string ApplicationName { get; }
 		private bool UseLatency { get; }
 
-		public void AddDefaultSettingsTo(Configuration nhConfiguration, bool pollyResilientEnabled)
+		public void AddDefaultSettingsTo(Configuration nhConfiguration)
 		{
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.DefaultSchema, "dbo");
@@ -66,11 +65,8 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.ConnectionDriver,
 				UseLatency
 					? typeof(TeleoptiLatencySqlDriver).AssemblyQualifiedName
-					: pollyResilientEnabled
-						? typeof(ResilientSql2008ClientDriver).AssemblyQualifiedName
-						: typeof(SqlAzureClientDriverWithLogRetries).AssemblyQualifiedName);
-			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.TransactionStrategy,
-				pollyResilientEnabled ? typeof(ResilientAdoNetTransactionFactory).AssemblyQualifiedName : typeof(ReliableAdoNetTransactionFactory).AssemblyQualifiedName);
+					: typeof(ResilientSql2008ClientDriver).AssemblyQualifiedName);
+			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.TransactionStrategy, typeof(ResilientAdoNetTransactionFactory).AssemblyQualifiedName);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.SessionFactoryName, NoDataSourceName);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.OrderUpdates, "true");
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.OrderInserts, "true");

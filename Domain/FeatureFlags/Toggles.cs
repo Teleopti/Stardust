@@ -99,7 +99,6 @@
 		OvertimeRequestStaffingCheckMethod_74949,
 		OvertimeRequestChangeBelongsToDateForOverNightShift_74984,
 		OvertimeRequestUsePrimarySkillOption_75573,
-		MyTimeWeb_MobileResponsive_43826,
 		WFM_Forecaster_Refact_44480,
 		WFM_Export_Forecast_44716,
 		WFM_Forecaster_Preview_74801,
@@ -132,9 +131,9 @@
 
 		WFM_Intraday_Refactoring_74652,
 		WFM_Intraday_Redesign_77214,
-
-		Tech_Moving_ResilientConnectionLogic_76181,
+		
 		WFM_ChatBot_77547,
+		Wfm_PmNextGen_78059,
 
 		Wfm_Payroll_SupportMultiDllPayrolls_75959,
 		Wfm_Stardust_EnableScaleout_77366

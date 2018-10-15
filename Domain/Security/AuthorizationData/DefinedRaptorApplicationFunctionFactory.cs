@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -183,6 +183,11 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.Gamification, "xxGamification", DefinedRaptorApplicationFunctionForeignIds.Gamification);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ChatBot, "xxChatBot", DefinedRaptorApplicationFunctionForeignIds.ChatBot);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ExportSchedule, "xxExportSchedule", DefinedRaptorApplicationFunctionForeignIds.ExportSchedule);
+
+			// PM Next Gen
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PmNextGen, "xxPmNextGen", DefinedRaptorApplicationFunctionForeignIds.PmNextGen);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PmNextGenEditReport, "xxPmNextGenEditReport", DefinedRaptorApplicationFunctionForeignIds.PmNextGenEditReport);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PmNextGenViewReport, "xxPmNextGenViewReport", DefinedRaptorApplicationFunctionForeignIds.PmNextGenViewReport);
 
 			return result.ToArray();
 		}

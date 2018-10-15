@@ -4,10 +4,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MockTranslationModule } from '@wfm/mocks/translation';
 import { NzButtonModule, NzFormModule, NzInputModule, NzMessageModule, NzModalModule } from 'ng-zorro-antd';
 import { of } from 'rxjs';
 import { configureTestSuite } from '../../../../configure-test-suit';
-import { MockTranslationModule } from '../../../../mocks/translation';
 import { PasswordService } from '../../services/password.service';
 import { ChangePasswordComponent } from './change-password.component';
 

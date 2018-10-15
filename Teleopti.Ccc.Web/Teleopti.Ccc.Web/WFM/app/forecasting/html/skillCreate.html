@@ -26,7 +26,7 @@
 										<div class="form-input-wrap select-skilltype">
 											<lable class="lable-skilltype">{{ 'SkillType' | translate}}:</lable>
 											<select class="select-text">
-												<option class="option-text">{{ 'Phone' | translate}}</option>
+												<option class="option-text">{{ 'Inbound Telephony' | translate}}</option>
 											</select>
 										</div>
 									</section>
@@ -55,7 +55,7 @@
 									<section>
 										<div class="form-input-wrap">
 											<label>{{'ServiceLevelParenthesisPercentSign'|translate}}:</label>
-											<input type="number" ng-model="vm.model.serviceLevelPercent" name="skillServiceLevelPercent" id="serviceLevelPercentId" ng-maxlength="100" ng-minlength="1" required="" />
+											<input type="number" ng-model="vm.model.serviceLevelPercent" name="skillServiceLevelPercent" id="serviceLevelPercentId" max="100" min="1" required="" />
 											<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.skillServiceLevelPercent.$touched">
 												<div class="form-input-message" ng-class="{ formInvalidInput:form.skillServiceLevelPercent.$error.required }">{{ 'Required' | translate }}</div>
 												<div class="form-input-message" ng-class="{ formInvalidInput:form.skillServiceLevelPercent.$error.min || form.skillServiceLevelPercent.$error.max}">{{ 'PercentageError'|translate }}</div>
@@ -65,7 +65,7 @@
 									<section>
 										<div class="form-input-wrap">
 											<label>{{ 'ServiceLevelSeconds'|translate }}:</label>
-											<input type="number" ng-model="vm.model.serviceLevelSeconds" name="skillServiceLevelSeconds" id="skillServiceLevelSecondsId" ng-maxlength="86400" ng-minlength="1" required="" />
+											<input type="number" ng-model="vm.model.serviceLevelSeconds" name="skillServiceLevelSeconds" id="skillServiceLevelSecondsId" max="5000" min="1" required="" />
 											<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.skillServiceLevelSeconds.$touched">
 												<div class="form-input-message" ng-class="{ formInvalidInput:form.skillServiceLevelSeconds.$error.required }">{{ 'Required' | translate }}</div>
 												<div class="form-input-message" ng-class="{ formInvalidInput:form.skillServiceLevelSeconds.$error.min || form.skillServiceLevelSeconds.$error.max }">{{ 'SecondsSpan' | translate }}</div>
@@ -75,7 +75,7 @@
 									<section>
 										<div class="form-input-wrap">
 											<label>{{'ShrinkageParenthesisPercentSign'|translate}}:</label>
-											<input type="number" ng-model="vm.model.shrinkage" name="shrinkage" id="vm.shrinkageId" ng-maxlength="99" ng-minlength="0" required="">
+											<input type="number" ng-model="vm.model.shrinkage" name="shrinkage" id="vm.shrinkageId" max="99" min="0" required="">
 											<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.shrinkage.$touched">
 												<div class="form-input-message" ng-class="{ formInvalidInput:form.shrinkage.$error.required }">{{ 'Required' | translate }}</div>
 												<div class="form-input-message" ng-class="{ formInvalidInput:form.shrinkage.$error.min || form.shrinkage.$error.max }">{{ 'ShrinkageSpan' | translate }}</div>
@@ -95,11 +95,13 @@
 							</div>
 							<div class="form-input-wrap">
 								<label>{{'Queues'|translate}}:</label>
-								<div ui-i18n="gridLang" class="big-table-wrapper material-depth-1">
- 									<div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-selection ui-grid-disable-animation class="myGrid"></div>
+								<div class="skill-queues">
+								<div class="big-table-wrapper material-depth-1 queue-list">
+ 									<div ui-i18n="en" ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-resize-colums ui-grid-selection ui-grid-disable-animation class="myGrid"></div>
 								</div>
-								<div ng-cloak class="animate-input-message" ng-show="!vm.queueSelected">
-									<div class="form-input-message formInvalidInput">{{ 'Required' | translate }}</div>
+									<div ng-cloak class="animate-input-message" ng-show="!vm.queueSelected">
+										<div class="form-input-message formInvalidInput">{{ 'Required' | translate }}</div>
+									</div>
 								</div>
 							</div>
 						</div>

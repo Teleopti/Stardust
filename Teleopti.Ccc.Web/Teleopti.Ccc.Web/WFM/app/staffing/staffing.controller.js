@@ -176,27 +176,37 @@
 			if (skill) {
 				vm.isSearchRequested = true;
 				clearSuggestions();
-				vm.chartQuery = getSkillStaffingByDate(skill.Id, vm.selectedDate, vm.useShrinkage);
+				vm.chartQuery = getSkillStaffingByDate(
+					skill.Id,
+					moment(vm.selectedDate).format('YYYY-MM-DD'),
+					vm.useShrinkage
+				);
 			} else if (area) {
 				vm.isSearchRequested = true;
 				clearSuggestions();
-				vm.chartQuery = getSkillAreaStaffingByDate(area.Id, vm.selectedDate, vm.useShrinkage);
+				vm.chartQuery = getSkillAreaStaffingByDate(
+					area.Id,
+					moment(vm.selectedDate).format('YYYY-MM-DD'),
+					vm.useShrinkage
+				);
 			}
 			if (vm.chartQuery) {
-				vm.chartQuery.$promise.then(function(result) {
-					if (staffingPrecheck(result.DataSeries)) {
-						timeSerie = result.DataSeries.Time;
-						staffingData = utilService.prepareStaffingData(result);
-						generateChartForView(staffingData);
-						vm.importedBboInfos = result.ImportBpoInfoList;
-					} else {
-						vm.staffingDataAvailable = false;
-					}
-					//just in case
-					vm.isSearchRequested = false;
-				}).finally(function () {
-					vm.isSearchRequested = false;
-				});
+				vm.chartQuery.$promise
+					.then(function(result) {
+						if (staffingPrecheck(result.DataSeries)) {
+							timeSerie = result.DataSeries.Time;
+							staffingData = utilService.prepareStaffingData(result);
+							generateChartForView(staffingData);
+							vm.importedBboInfos = result.ImportBpoInfoList;
+						} else {
+							vm.staffingDataAvailable = false;
+						}
+						//just in case
+						vm.isSearchRequested = false;
+					})
+					.finally(function() {
+						vm.isSearchRequested = false;
+					});
 			}
 		}
 
@@ -223,8 +233,8 @@
 			};
 		}
 
-		function navigateToNewDay() {
-			$window.sessionStorage.staffingSelectedDate = vm.selectedDate;
+		function navigateToNewDay(date) {
+			$window.sessionStorage.staffingSelectedDate = moment(date).format('YYYY-MM-DD');
 			if (vm.hasSuggestionData) {
 				if (confirm($translate.instant('DiscardSuggestionData'))) {
 					clearSuggestions();
@@ -484,8 +494,7 @@
 			}
 		}
 
-		function initializeShrinkageCheckBoxFromSession()
-		{
+		function initializeShrinkageCheckBoxFromSession() {
 			if ($window.sessionStorage.staffingUseShrinkage) {
 				vm.useShrinkage = angular.fromJson($window.sessionStorage.staffingUseShrinkage);
 			}

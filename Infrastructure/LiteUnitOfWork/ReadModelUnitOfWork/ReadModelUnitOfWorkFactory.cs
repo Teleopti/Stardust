@@ -3,8 +3,7 @@ using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling;
 using Teleopti.Ccc.Infrastructure.Web;
 
 namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork
 			configuration.SetProperty(NHibernate.Cfg.Environment.ConnectionString, _connectionString);
 			configuration.SetProperty(NHibernate.Cfg.Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName);
 			configuration.SetProperty(NHibernate.Cfg.Environment.ConnectionDriver,
-				typeof(SqlAzureClientDriverWithLogRetries).AssemblyQualifiedName);
+				typeof(ResilientSql2008ClientDriver).AssemblyQualifiedName);
 			_sessionFactory = configuration.BuildSessionFactory();
 		}
 

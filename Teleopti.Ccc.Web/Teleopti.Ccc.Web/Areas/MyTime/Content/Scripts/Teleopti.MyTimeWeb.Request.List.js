@@ -1,4 +1,4 @@
-﻿Teleopti.MyTimeWeb.Request.List = (function ($) {
+﻿Teleopti.MyTimeWeb.Request.List = (function($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var pageViewModel;
 
@@ -36,8 +36,8 @@
 		self.DetailItem = undefined;
 		self.parent = requestPageViewModel;
 
-		self.Type = ko.computed(function () {
-			var payload = (self.RequestPayload() !== '') ? ', ' + self.RequestPayload() : '';
+		self.Type = ko.computed(function() {
+			var payload = self.RequestPayload() !== '' ? ', ' + self.RequestPayload() : '';
 			return self.RequestType() + payload;
 		});
 
@@ -45,11 +45,11 @@
 		self.isCreatedByUser = ko.observable(false);
 
 		self.IsFullDay = ko.observable();
-		self.IsShiftTradeRequest = function () {
-			return (self.RequestTypeEnum() === 2);
+		self.IsShiftTradeRequest = function() {
+			return self.RequestTypeEnum() === 2;
 		};
 
-		self.GetDateDisplay = function () {
+		self.GetDateDisplay = function() {
 			if (!(self.StartDateTime() && self.EndDateTime())) {
 				return null;
 			}
@@ -62,11 +62,11 @@
 			return Teleopti.MyTimeWeb.Common.FormatDatePeriod(self.StartDateTime(), self.EndDateTime(), showTimes);
 		};
 
-		self.Dates = ko.computed(function () {
+		self.Dates = ko.computed(function() {
 			return self.GetDateDisplay();
 		});
 
-		self.ShowDetails = function () {
+		self.ShowDetails = function() {
 			if (self.IsSelected()) {
 				self.IsSelected(false);
 				return;
@@ -75,16 +75,19 @@
 			if (self.DetailItem === undefined) {
 				ajax.Ajax({
 					url: self.Link(),
-					dataType: "json",
+					dataType: 'json',
 					type: 'GET',
-					beforeSend: function () {
+					beforeSend: function() {
 						self.IsLoading(true);
 					},
-					complete: function () {
+					complete: function() {
 						self.IsLoading(false);
 					},
-					success: function (data) {
-						self.DetailItem = Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, self.successUpdatingRequest);
+					success: function(data) {
+						self.DetailItem = Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(
+							data,
+							self.successUpdatingRequest
+						);
 						self.IsSelected(true);
 					}
 				});
@@ -93,32 +96,32 @@
 			}
 		};
 
-		self.successUpdatingRequest = function (data) {
+		self.successUpdatingRequest = function(data) {
 			self.IsSelected(false);
 			self.DetailItem = undefined;
 			self.parent.AddRequest(data, false);
 		};
 
-		self.ToggleMouseOver = function () {
+		self.ToggleMouseOver = function() {
 			self.IsMouseOver(!self.IsMouseOver());
 		};
 
-		self.isValid = function () {
-			return (!(self.isReferred() && !self.isCreatedByUser()));
+		self.isValid = function() {
+			return !(self.isReferred() && !self.isCreatedByUser());
 		};
 	}
 
 	function RequestPageViewModel(readyForInteraction, completelyLoaded) {
 		var self = this;
-		
+
 		self.Ready = readyForInteraction;
 		self.Completed = completelyLoaded;
-		self.IsUpdate = ko.computed(function () {
+		self.IsUpdate = ko.computed(function() {
 			return false;
 		});
 
-		self.Template = ko.computed(function () {
-			return "request-detail-not-set";
+		self.Template = ko.computed(function() {
+			return 'request-detail-not-set';
 		});
 
 		self.Requests = ko.observableArray();
@@ -128,17 +131,16 @@
 		self.isLoadingRequests = ko.observable(true);
 		self.hideRequestsOnPhone = ko.observable(false);
 		self.filters = [
-			{ name: requestsMessagesUserTexts.CURRENT_REQUESTS, show: "true" },
-			{ name: requestsMessagesUserTexts.ALL_REQUESTS, show: "false" }
+			{ name: requestsMessagesUserTexts.CURRENT_REQUESTS, show: 'true' },
+			{ name: requestsMessagesUserTexts.ALL_REQUESTS, show: 'false' }
 		];
 		self.sorters = [
-			{ name: requestsMessagesUserTexts.BY_STARTDATE, show: "false" },
-			{ name: requestsMessagesUserTexts.BY_UPDATEDATE, show: "true" }
+			{ name: requestsMessagesUserTexts.BY_STARTDATE, show: 'false' },
+			{ name: requestsMessagesUserTexts.BY_UPDATEDATE, show: 'true' }
 		];
-		self.newFilterToggle = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826');
-		self.ShowRequests = function (data) {
-			ko.utils.arrayForEach(data, function (item) {
-				ko.utils.arrayForEach(self.Requests(), function (request) {
+		self.ShowRequests = function(data) {
+			ko.utils.arrayForEach(data, function(item) {
+				ko.utils.arrayForEach(self.Requests(), function(request) {
 					if (item !== undefined && request.Id() === item.Id) {
 						var index = data.indexOf(item);
 						if (index !== -1) {
@@ -148,20 +150,20 @@
 				});
 			});
 
-			ko.utils.arrayForEach(data, function (item) {
+			ko.utils.arrayForEach(data, function(item) {
 				var vm = new RequestItemViewModel(self);
 				vm.Initialize(item, false);
 				self.Requests.push(vm);
 			});
 		};
 
-		self.ColumnRequests = ko.computed(function () {
-			var list = ko.utils.arrayFilter(self.Requests(), function (request) {
+		self.ColumnRequests = ko.computed(function() {
+			var list = ko.utils.arrayFilter(self.Requests(), function(request) {
 				return request.isValid();
 			});
 			var result = [];
 			var index = 0;
-			ko.utils.arrayForEach(list, function (i) {
+			ko.utils.arrayForEach(list, function(i) {
 				if (index % 2 === 0) {
 					result.push({ Items: [i] });
 				} else {
@@ -172,25 +174,29 @@
 			return result;
 		});
 
-		ko.eventAggregator.subscribe(function (cancelRequestMessage) {
-			ko.utils.arrayFirst(self.Requests(), function (r) {
-				if (r.Id() === cancelRequestMessage.id) {
-					self.Delete(r);
-				}
-			});
-		}, null, 'cancel_request');
+		ko.eventAggregator.subscribe(
+			function(cancelRequestMessage) {
+				ko.utils.arrayFirst(self.Requests(), function(r) {
+					if (r.Id() === cancelRequestMessage.id) {
+						self.Delete(r);
+					}
+				});
+			},
+			null,
+			'cancel_request'
+		);
 
-		self.clearAllPromptsFromOtherRequestItemViewModels = function (requestItemViewModel) {
-			ko.utils.arrayForEach(self.Requests(), function (request) {
+		self.clearAllPromptsFromOtherRequestItemViewModels = function(requestItemViewModel) {
+			ko.utils.arrayForEach(self.Requests(), function(request) {
 				if (request !== requestItemViewModel) {
 					request.IsCancelPending(false);
 					request.IsDeletePending(false);
 					request.ErrorMessage(null);
 				}
 			});
-		}
+		};
 
-		self.SwitchDeleteConfirmationVisibility = function (requestItemViewModel) {
+		self.SwitchDeleteConfirmationVisibility = function(requestItemViewModel) {
 			requestItemViewModel.IsDeletePending(!requestItemViewModel.IsDeletePending());
 			requestItemViewModel.IsCancelPending(false);
 			requestItemViewModel.ErrorMessage(null);
@@ -198,7 +204,7 @@
 			self.clearAllPromptsFromOtherRequestItemViewModels(requestItemViewModel);
 		};
 
-		self.SwitchCancelConfirmationVisibility = function (requestItemViewModel) {
+		self.SwitchCancelConfirmationVisibility = function(requestItemViewModel) {
 			requestItemViewModel.IsCancelPending(!requestItemViewModel.IsCancelPending());
 			requestItemViewModel.IsDeletePending(false);
 			requestItemViewModel.ErrorMessage(null);
@@ -206,7 +212,7 @@
 			self.clearAllPromptsFromOtherRequestItemViewModels(requestItemViewModel);
 		};
 
-		self.SwitchErrorMessageVisibility = function (requestItemViewModel) {
+		self.SwitchErrorMessageVisibility = function(requestItemViewModel) {
 			requestItemViewModel.ErrorMessage(null);
 			requestItemViewModel.IsCancelPending(false);
 			requestItemViewModel.IsDeletePending(false);
@@ -214,35 +220,35 @@
 			self.clearAllPromptsFromOtherRequestItemViewModels(requestItemViewModel);
 		};
 
-		self.Delete = function (requestItemViewModel) {
+		self.Delete = function(requestItemViewModel) {
 			var url = requestItemViewModel.Link();
 
 			ajax.Ajax({
 				url: url,
-				dataType: "json",
+				dataType: 'json',
 				contentType: 'application/json; charset=utf-8',
-				type: "DELETE",
-				success: function () {
+				type: 'DELETE',
+				success: function() {
 					self.Requests.remove(requestItemViewModel);
 				},
-				error: function (jqXHR, textStatus) {
+				error: function(jqXHR, textStatus) {
 					Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
 				}
 			});
-		}
+		};
 
-		self.Cancel = function (requestItemViewModel) {
+		self.Cancel = function(requestItemViewModel) {
 			var selectedViewModel = requestItemViewModel;
 			var requestId = requestItemViewModel.Id();
 			if (!requestId) return;
 
 			ajax.Ajax({
-				url: "Requests/CancelRequest",
-				dataType: "json",
+				url: 'Requests/CancelRequest',
+				dataType: 'json',
 				contentType: 'application/json; charset=utf-8',
-				type: "PUT",
+				type: 'PUT',
 				data: JSON.stringify({ id: requestId }),
-				success: function (result) {
+				success: function(result) {
 					if (result.Success) {
 						self.Requests.remove(requestItemViewModel);
 						selectedViewModel.Initialize(result.RequestViewModel);
@@ -254,21 +260,20 @@
 					}
 					requestItemViewModel.IsCancelPending(false);
 				},
-				error: function (jqXHR, textStatus) {
+				error: function(jqXHR, textStatus) {
 					Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
 				}
 			});
-		}
+		};
 
-		self.AddRequest = function (request, isProcessing) {
-			var selectedViewModel = ko.utils.arrayFirst(self.Requests(), function (item) {
+		self.AddRequest = function(request, isProcessing) {
+			var selectedViewModel = ko.utils.arrayFirst(self.Requests(), function(item) {
 				return item.Id() === request.Id;
 			});
 
 			if (selectedViewModel) {
 				self.Requests.remove(selectedViewModel);
-			}
-			else {
+			} else {
 				selectedViewModel = new RequestItemViewModel(self);
 				selectedViewModel.Initialize(request);
 			}
@@ -276,13 +281,12 @@
 			if (isProcessing) {
 				selectedViewModel.Initialize(request, false);
 				self.Requests.unshift(selectedViewModel);
-			}
-			else {
+			} else {
 				ajax.Ajax({
 					url: selectedViewModel.Link(),
-					dataType: "json",
+					dataType: 'json',
 					type: 'GET',
-					success: function (data) {
+					success: function(data) {
 						selectedViewModel.Initialize(data, isProcessing);
 						self.Requests.unshift(selectedViewModel);
 					}
@@ -290,15 +294,15 @@
 			}
 		};
 
-		self.hideOldRequests = ko.observable("true");
-		self.hideOldRequests.subscribe(function () {
+		self.hideOldRequests = ko.observable('true');
+		self.hideOldRequests.subscribe(function() {
 			self.Requests([]);
 			self.pages = 0;
 			self.LoadPage();
 		});
 
-		self.IsSortByUpdateDate = ko.observable("true");
-		self.IsSortByUpdateDate.subscribe(function () {
+		self.IsSortByUpdateDate = ko.observable('true');
+		self.IsSortByUpdateDate.subscribe(function() {
 			self.Requests([]);
 			self.pages = 0;
 			self.LoadPage();
@@ -309,12 +313,12 @@
 			self.MoreToLoad(false);
 			self.LoadPage();
 		};
-		self.LoadPage = function () {
+		self.LoadPage = function() {
 			var skip = self.pages * 20;
 			var take = 20;
 			ajax.Ajax({
-				url: "Requests/Requests",
-				dataType: "json",
+				url: 'Requests/Requests',
+				dataType: 'json',
 				type: 'GET',
 				data: {
 					Take: take,
@@ -322,17 +326,17 @@
 					HideOldRequest: self.hideOldRequests(),
 					IsSortByUpdateDate: self.IsSortByUpdateDate()
 				},
-				beforeSend: function () {
+				beforeSend: function() {
 					self.isLoadingRequests(true);
 				},
-				success: function (data) {
+				success: function(data) {
 					self.MoreToLoad(data.length === take);
 					self.ShowRequests(data);
 					if (data.length !== 0) {
 						self.pages++;
 					}
 				},
-				complete: function () {
+				complete: function() {
 					if (self.Ready) {
 						self.Ready();
 						self.Ready = null;
@@ -350,24 +354,22 @@
 		self.CanCancel = ko.observable(true);
 	}
 
-	_classFromStatus = function (data) {
-		if (data.IsApproved)
-			return 'label-success';
-		if (data.IsDenied)
-			return 'label-danger';
+	_classFromStatus = function(data) {
+		if (data.IsApproved) return 'label-success';
+		if (data.IsDenied) return 'label-danger';
 
 		return 'label-warning';
 	};
 
-	_setAgentName = function (message, name) {
+	_setAgentName = function(message, name) {
 		// replace agent name (as a work-around is inside [] so they can be found inside the message SLOB)
 		var placeholderReg = /^\[(.?|.+?)\]/gi;
 		return message.replace(placeholderReg, '[' + name + ']');
 	};
 
-	_splitChunk = function (textSegs) {
+	_splitChunk = function(textSegs) {
 		var splitedTextSegs = [];
-		$.each(textSegs, function (index, line) {
+		$.each(textSegs, function(index, line) {
 			var len = 60;
 			var curr = len;
 			var prev = 0;
@@ -384,30 +386,30 @@
 		});
 
 		return splitedTextSegs;
-	}
+	};
 
 	ko.utils.extend(RequestItemViewModel.prototype, {
-		Initialize: function (data, isProcessing) {
+		Initialize: function(data, isProcessing) {
 			if (data == undefined) return;
 			if (data.Text !== null) {
-				var textSegs = data.Text.split("\n");
+				var textSegs = data.Text.split('\n');
 			}
-			var textNoBr = "";
+			var textNoBr = '';
 			var messageInList = [];
 
 			var splitedTextSegs = _splitChunk(textSegs);
 
 			//remove line breaks for summary display...
-			$.each(textSegs, function (index, text) {
+			$.each(textSegs, function(index, text) {
 				if (text !== undefined && text !== '') {
 					var updatedText = text;
 					if (index === 0) {
-						if (data.From !== "") updatedText = _setAgentName(text, data.From);
+						if (data.From !== '') updatedText = _setAgentName(text, data.From);
 					} else {
-						if (data.To !== "") updatedText = _setAgentName(text, data.To);
+						if (data.To !== '') updatedText = _setAgentName(text, data.To);
 					}
-					textNoBr = textNoBr + updatedText + " ";
-					messageInList.push(updatedText + "\n");
+					textNoBr = textNoBr + updatedText + ' ';
+					messageInList.push(updatedText + '\n');
 				}
 			});
 
@@ -427,14 +429,14 @@
 
 			self.TextSegments(messageInList);
 			self.ListText(textNoBr.length > 50 ? textNoBr.substring(0, 50) + '...' : textNoBr);
-			self.DenyReason(data.DenyReason === undefined ? '' : data.DenyReason.replace(/\n/g, "<br/>"));
+			self.DenyReason(data.DenyReason === undefined ? '' : data.DenyReason.replace(/\n/g, '<br/>'));
 			self.Link(data.Link.href);
 			self.Id(data.Id);
 			self.StatusClass(_classFromStatus(data));
 			self.RequestPayload(data.Payload);
-			self.CanDelete(data.Link.Methods.indexOf("DELETE") !== -1);
-			self.IsEditable(data.Link.Methods.indexOf("PUT") !== -1);
-			self.CanCancel(data.Link.Methods.indexOf("CANCEL") !== -1);
+			self.CanDelete(data.Link.Methods.indexOf('DELETE') !== -1);
+			self.IsEditable(data.Link.Methods.indexOf('PUT') !== -1);
+			self.CanCancel(data.Link.Methods.indexOf('CANCEL') !== -1);
 			self.isCreatedByUser(data.IsCreatedByUser);
 			self.isReferred(data.IsReferred);
 			self.IsSelected(false);
@@ -458,9 +460,9 @@
 		var jqWindow = $(window);
 		var jqDocument = $(window.document);
 		if (_isAtBottom(jqDocument, jqWindow)) {
-			$(window).off("scroll");
+			$(window).off('scroll');
 			pageViewModel.LoadPage();
-			setTimeout(function () {
+			setTimeout(function() {
 				$(window).scroll(_loadAPageIfRequired);
 			}, 100);
 		}
@@ -484,30 +486,28 @@
 	}
 
 	return {
-		Init: function (readyForInteractionCallback, completelyLoadedCallback) {
+		Init: function(readyForInteractionCallback, completelyLoadedCallback) {
 			pageViewModel = new RequestPageViewModel(readyForInteractionCallback, completelyLoadedCallback);
 
 			_initScrollPaging();
 			var element = $('#Requests-data-binding-area')[0];
 			if (element) ko.applyBindings(pageViewModel, element);
 		},
-		AddItemAtTop: function (request, isProcessing) {
+		AddItemAtTop: function(request, isProcessing) {
 			pageViewModel.AddRequest(request, isProcessing);
 		},
-		GetRequestItemViewModel: function () {
+		GetRequestItemViewModel: function() {
 			return new RequestItemViewModel(null);
 		},
-		Dispose: function () {
+		Dispose: function() {
 			_unbind();
 		},
-		HideRequests: function (show) {
+		HideRequests: function(show) {
 			if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_Request_CleanUpRequestHisotry_77776')) {
 				if (pageViewModel != null) pageViewModel.hideRequestsOnPhone(show);
-			}
-			else if (pageViewModel != null && Teleopti.MyTimeWeb.Common.IsHostAMobile()){
-				 pageViewModel.hideRequestsOnPhone(show);
+			} else if (pageViewModel != null && Teleopti.MyTimeWeb.Common.IsHostAMobile()) {
+				pageViewModel.hideRequestsOnPhone(show);
 			}
 		}
-
 	};
 })(jQuery);

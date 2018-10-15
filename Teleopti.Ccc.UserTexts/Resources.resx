@@ -17772,4 +17772,20 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Agent was scheduled without preferences</value>
     <comment>Table column header in RTA historical overview</comment>
   </data>
+  <data name="PmNextGen" xml:space="preserve">
+    <value>PM Next Generation</value>
+    <comment>Label for permission item</comment>
+  </data>
+  <data name="PmNextGenViewReport" xml:space="preserve">
+    <value>View report</value>
+    <comment>Label for permission item</comment>
+  </data>
+  <data name="PmNextGenEditReport" xml:space="preserve">
+    <value>Edit report</value>
+    <comment>Label for permission item</comment>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonNoRestrictions" xml:space="preserve">
+    <value>No restrictions in period</value>
+    <comment>No restrictions in period</comment>
+  </data>
 </root>

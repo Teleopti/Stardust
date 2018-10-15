@@ -92,7 +92,6 @@ MyTimeWeb_NewTeamScheduleViewDesktop_76313 = RC
 MyTimeWeb_PollToCheckScheduleChanges_46595 = true
 
 # China, can any of these be removed? #
-MyTimeWeb_MobileResponsive_43826 = true
 Staffing_Info_Configuration_44687 = true
 
 
@@ -119,12 +118,12 @@ WFM_Intraday_Redesign_77214 = RC
 # Ziggy #
 WfmStaffing_AddOvertime_42524 = RC
 Wfm_Payroll_SupportMultiDllPayrolls_75959 = RC
-Wfm_Stardust_EnableScaleout_77366 = RC
+Wfm_Stardust_EnableScaleout_77366 = true
 
 # Squids #
 WFM_Forecaster_Refact_44480 = true
 WFM_Export_Forecast_44716 = true
-WFM_TrainingPlanner_44780 = RC #So that large customers can use TP for up to 7 weeks from readmodels. Hard to set to true for everyone as they may book trinings further out...
+WFM_TrainingPlanner_44780 = RC #So that large customers can use TP for up to 7 weeks from readmodels. Hard to set to true for everyone as they may book trainings further out...
 Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560 = true
 Report_Remove_Realtime_Scheduled_Time_vs_Target_45559 = true
 Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640 = true
@@ -154,5 +153,5 @@ MyTimeWeb_Request_CleanUpRequestHisotry_77776 = RC
 MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446 = DEV
 
 # Tech #
-Tech_Moving_ResilientConnectionLogic_76181 = true
 WFM_ChatBot_77547 = DEV
+Wfm_PmNextGen_78059 = DEV
