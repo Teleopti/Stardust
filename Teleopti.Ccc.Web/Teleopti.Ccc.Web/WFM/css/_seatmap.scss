@@ -257,7 +257,7 @@ seatmap-editor {
 	}
 }
 .seatmap-canvas .resizable {
-	min-width: 380px;
+	min-width: 500px;
 }
 .seat-property-message {
 	position: absolute;
@@ -277,10 +277,7 @@ seatmap-editor {
 }
 seatmap-occupancy-detail {
 	.add-booking-detail {
-		.date-range-picker-wrapper {
-			max-width: 100%;
-			height: 30px;
-		}
+		border-top: 1px solid $gray012;
 		.input-prepend input[type='text'] {
 			width: 90% !important;
 		}
@@ -288,20 +285,9 @@ seatmap-occupancy-detail {
 }
 .seatbooking-operations-add,
 .seatbooking-operations-cancel {
-	padding: 2px 0;
 	height: 40px;
 	width: 100%;
-	border-bottom: 1px solid #e1e2e3;
-
-	.wfm-btn {
-		height: 100%;
-		padding: 5px 10px;
-		margin: 0 5px;
-		background: $white;
-	}
-	.wfm-btn:hover {
-		background: #f1f2f3;
-	}
+	margin-bottom: 5px;
 }
 people-selection-list {
 	overflow: hidden;
@@ -354,16 +340,8 @@ people-selection-list > .panel {
 	}
 }
 .seatmap-occupancy-detail {
-	height: 100%;
-
 	.seat-booking-list {
 		overflow: auto;
-		position: absolute;
-		top: 40px;
-		right: 0;
-		left: 0;
-		bottom: 0;
-
 		.wfm-list {
 			overflow-y: auto;
 			max-height: none;
