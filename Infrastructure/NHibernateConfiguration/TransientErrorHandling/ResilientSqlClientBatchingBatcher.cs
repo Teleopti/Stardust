@@ -7,7 +7,6 @@ using NHibernate;
 using NHibernate.AdoNet;
 using NHibernate.AdoNet.Util;
 using NHibernate.Exceptions;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling
 {

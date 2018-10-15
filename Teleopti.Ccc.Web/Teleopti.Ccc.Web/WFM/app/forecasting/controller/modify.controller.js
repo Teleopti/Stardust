@@ -55,7 +55,6 @@
 		vm.getWorkloadForecastData = getWorkloadForecastData;
 		vm.changeScenario = changeScenario;
 		vm.forecastWorkload = forecastWorkload;
-		vm.loadChart = loadChart;
 		vm.applyWipToScenario = applyWipToScenario;
 		vm.exportToFile = exportToFile;
 		vm.exportToScenario = exportToScenario;
@@ -264,16 +263,16 @@
 				result.forEach(function (s) {
 					vm.scenarios.push(s);
 				});
-				changeScenario(vm.scenarios[0]);
+				changeScenario(vm.scenarios[0], false);
 			});
 		}
 
-		function changeScenario(scenario) {
+		function changeScenario(scenario, keepSelectedPeriod) {
 			vm.selectedScenario = scenario;
-			getWorkloadForecastData();
+			getWorkloadForecastData(keepSelectedPeriod);
 		}
 
-		function getWorkloadForecastData() {
+		function getWorkloadForecastData(keepSelectedPeriod) {
 			vm.periodModal = false;
 
 			vm.selectedWorkload.Days = [];
@@ -284,13 +283,20 @@
 				ForecastStart: moment(vm.forecastPeriod.startDate).format(),
 				ForecastEnd: moment(vm.forecastPeriod.endDate).format(),
 				WorkloadId: vm.selectedWorkload.Workload.Id,
-				ScenarioId: vm.selectedScenario.Id
+				ScenarioId: vm.selectedScenario.Id,
+				HasUserSelectedPeriod: keepSelectedPeriod
 			};
 
 			forecastingService.result(
 				wl,
 				function (data, status, headers, config) {
 					vm.selectedWorkload.Days = data.ForecastDays;
+					if (!keepSelectedPeriod && vm.selectedWorkload.Days.length > 0) {
+						vm.forecastPeriod = {
+							startDate: moment(data.ForecastDays[0].Date).utc().toDate(),
+							endDate: moment(data.ForecastDays[vm.selectedWorkload.Days.length - 1].Date).utc().toDate()
+						};
+					}
 					vm.isForecastRunning = false;
 					vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
 					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
@@ -354,7 +360,7 @@
 				function (data, status, headers, config) {
 					vm.savingToScenario = false;
 					vm.changesMade = false;
-					getWorkloadForecastData();
+					getWorkloadForecastData(true);
 					noticeSvc.success(
 						$translate.instant("SuccessfullyUpdatedPeopleCountColon") +
 						" " +
@@ -366,7 +372,7 @@
 				function (data, status, headers, config) {
 					vm.savingToScenario = false;
 					vm.changesMade = false;
-					getWorkloadForecastData();
+					getWorkloadForecastData(true);
 				}
 			);
 		}

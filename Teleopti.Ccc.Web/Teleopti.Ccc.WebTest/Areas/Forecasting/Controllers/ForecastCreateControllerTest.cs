@@ -74,8 +74,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			forecastDays.Count.Should().Be(2);
 			forecastDays.First().IsOpen.Should().Be.True();
 			forecastDays.First().IsInModification.Should().Be.True();
+			forecastDays.First().IsForecasted.Should().Be.True();
 			forecastDays.Last().IsOpen.Should().Be.False();
 			forecastDays.Last().IsInModification.Should().Be.False();
+			forecastDays.Last().IsForecasted.Should().Be.True();
 		}
 
 

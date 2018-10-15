@@ -131,8 +131,7 @@
 
 		WFM_Intraday_Refactoring_74652,
 		WFM_Intraday_Redesign_77214,
-
-		Tech_Moving_ResilientConnectionLogic_76181,
+		
 		WFM_ChatBot_77547,
 		Wfm_PmNextGen_78059,
 

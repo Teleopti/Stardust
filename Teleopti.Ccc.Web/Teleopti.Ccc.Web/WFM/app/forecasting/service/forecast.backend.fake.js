@@ -8,6 +8,7 @@
 		var skills = {};
 		var forecastStatus = {};
 		var scenarios = [];
+		var forecastData = {};
 
 		var paramsOf = function (url) {
 			var result = {};
@@ -35,6 +36,13 @@
 				});
 		};
 
+		var fakePost = function(url, response) {
+			$httpBackend.whenPOST(url)
+				.respond(function(method, url, data, headers, params) {
+					return response(JSON.parse(data), params, method, url, headers);
+				});
+		};
+
 		fakeGet('../api/Forecasting/Skills',
 			function () {
 				return [200, skills];
@@ -49,6 +57,17 @@
 			function () {
 				return [200, scenarios];
 			});
+
+		fakePost('../api/Forecasting/LoadForecast',
+			function() {
+				return [201, forecastData];
+			});
+
+		this.withForecastData = function (forecastDays) {
+			forecastData.WorkloadId = "123";
+			forecastData.ForecastDays = forecastDays;
+			return this;
+		}
 
 		this.withSkill = function (skill) {
 			skills = skill;
@@ -69,6 +88,7 @@
 			skills = {};
 			forecastStatus = {};
 			scenarios = [];
+			forecastData = {};
 		};
 	}
 })();

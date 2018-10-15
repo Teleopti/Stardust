@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -19,17 +20,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			DateOnlyPeriod rangePeriod = rangeForPerson.Period.ToDateOnlyPeriod( TimeZoneGuard.Instance.CurrentTimeZone());
 			var schedulePeriod = scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod;
-
-	        var terminalDate = person.TerminalDate;
-			var startDate = traverse(rangeForPerson, rangePeriod, providedDateOnly, -1, schedulePeriod, terminalDate);
-			var endDate = traverse(rangeForPerson, rangePeriod, providedDateOnly, 1, schedulePeriod, terminalDate);
+			var personStartDate = DateOnly.MaxValue;
+			foreach (var personPeriod in person.PersonPeriodCollection)
+			{
+				personStartDate = personPeriod.StartDate < personStartDate ? personPeriod.StartDate : personStartDate;
+			}
+			var terminalDate = person.TerminalDate;
+			var startDate = traverse(rangeForPerson, rangePeriod, providedDateOnly, -1, schedulePeriod, terminalDate, personStartDate);
+			var endDate = traverse(rangeForPerson, rangePeriod, providedDateOnly, 1, schedulePeriod, terminalDate, personStartDate);
 	        if (endDate < startDate) return null;
 
 	        return new DateOnlyPeriod(startDate, endDate);
         }
 
 		private static DateOnly traverse(IScheduleRange rangeForPerson, DateOnlyPeriod rangePeriod, DateOnly providedDateOnly,
-								  int stepDays, DateOnlyPeriod currentSchedulePeriod, DateOnly? terminalDate)
+								  int stepDays, DateOnlyPeriod currentSchedulePeriod, DateOnly? terminalDate, DateOnly personStartDate)
 		{
 			var edgeDate = providedDateOnly;
 			currentSchedulePeriod = new DateOnlyPeriod(currentSchedulePeriod.StartDate.AddDays(-10),
@@ -37,6 +42,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			
 			while (rangePeriod.Contains(edgeDate) && currentSchedulePeriod.Contains(edgeDate))
 			{
+				if (edgeDate < personStartDate)
+					return personStartDate;
 				if (terminalDate != null && edgeDate > terminalDate)
 					return  terminalDate.Value;
 

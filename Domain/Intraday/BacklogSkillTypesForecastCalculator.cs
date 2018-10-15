@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 					{
 						foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 						{
-							var intervalStartLocal = TimeZoneHelper.ConvertFromUtc(skillStaffPeriod.Period.StartDateTime, timezone);
+							var intervalStartLocal = skillStaffPeriod.Period.StartDateTimeLocal(timezone);
 							var scheduledStaff =
 								scheduledStaffingPerSkill.FirstOrDefault(
 									x => x.Id == skill.Id.Value && x.StartDateTime == intervalStartLocal);

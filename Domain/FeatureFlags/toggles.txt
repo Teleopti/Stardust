@@ -154,6 +154,5 @@ MyTimeWeb_Request_CleanUpRequestHisotry_77776 = RC
 MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446 = DEV
 
 # Tech #
-Tech_Moving_ResilientConnectionLogic_76181 = true
 WFM_ChatBot_77547 = DEV
 Wfm_PmNextGen_78059 = DEV

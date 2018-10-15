@@ -12,6 +12,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { BootstrapComponent } from './bootstrap/bootstrap.component';
 import { NavigationModule } from './navigation/navigation.module';
 import { ReportModule } from './reports/reports.module';
+import { PmModule } from './pm/pm.module';
 
 @NgModule({
 	declarations: [BootstrapComponent],
@@ -24,6 +25,7 @@ import { ReportModule } from './reports/reports.module';
 		NavigationModule,
 		ApiAccessModule,
 		HttpClientModule,
+		PmModule,
 		TranslateModule.forRoot({
 			loader: {
 				provide: TranslateLoader,

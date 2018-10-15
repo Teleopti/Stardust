@@ -72,6 +72,9 @@ function wfmrestoretolocal {
     $env:IFFLOW = ""
     [Console]::ResetColor()
 }
+function wfmiisweb {
+    c:"\program files\iis express\iisexpress.exe" /config:$WFMRepoPath/.vs/config/applicationhost.config /site:Teleopti.Ccc.Web-Site
+}
 function fcheck { # search for fdescribe and fit
     $Matches = Get-ChildItem -Recurse -Filter *.spec.ts $WFMRepoWebPath |
     Select-String -Pattern "fdescribe\(|fit\(" -List

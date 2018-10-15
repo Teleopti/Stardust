@@ -31,43 +31,78 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			_forecastDayOverrideRepository = forecastDayOverrideRepository;
 		}
 
-		public ForecastViewModel Load(Guid workloadId, DateOnlyPeriod futurePeriod, IScenario scenario)
+		public ForecastViewModel Load(Guid workloadId, DateOnlyPeriod futurePeriod, IScenario scenario, bool hasUserSelectedPeriod)
 		{
 			var workload = _workloadRepository.Get(workloadId);
 			var skillDays = _skillDayRepository.FindRange(futurePeriod, workload.Skill, scenario);
 			var futureWorkloadDays = _futureData.Fetch(workload, skillDays, futurePeriod)
-				.OrderBy(x => x.CurrentDate);
+				.OrderBy(x => x.CurrentDate)
+				.ToList();
 			var overrideDays = _forecastDayOverrideRepository.FindRange(futurePeriod, workload, scenario)
 				.ToDictionary(x => x.Date);
 			return new ForecastViewModel()
 			{
 				WorkloadId = workload.Id.Value,
 				ScenarioId = scenario.Id.Value,
-				ForecastDays = createModelDays(futureWorkloadDays, overrideDays)
+				ForecastDays = createModelDays(futureWorkloadDays, overrideDays, futurePeriod, hasUserSelectedPeriod)
 			};
 		}
 
-		private IList<ForecastDayModel> createModelDays(IEnumerable<IWorkloadDayBase> workloadDays,
-			Dictionary<DateOnly, IForecastDayOverride> overrideDays)
+		private IList<ForecastDayModel> createModelDays(IList<IWorkloadDayBase> workloadDays,
+			Dictionary<DateOnly, IForecastDayOverride> overrideDays, 
+			DateOnlyPeriod futurePeriod,
+			bool hasUserSelectedPeriod)
 		{
 			var days = new List<ForecastDayModel>();
-			foreach (var workloadDay in workloadDays)
+
+			if (!workloadDays.Any())
 			{
-				overrideDays.TryGetValue(workloadDay.CurrentDate, out var overrideDay);
-				var dayModel = new ForecastDayModel
+				return days;
+			}
+
+			DateOnly dayModelStart;
+			DateOnly dayModelEnd;
+			if (hasUserSelectedPeriod)
+			{
+				dayModelStart = futurePeriod.StartDate;
+				dayModelEnd = futurePeriod.EndDate;
+			}
+			else
+			{
+				dayModelStart = workloadDays.Min(x => x.CurrentDate);
+				dayModelEnd = workloadDays.Max(x => x.CurrentDate);
+			}
+
+			for (var date = dayModelStart; date <= dayModelEnd; date = date.AddDays(1))
+			{
+				var workloadDay = workloadDays.SingleOrDefault(x => x.CurrentDate == date);
+				ForecastDayModel dayModel;
+				if (workloadDay == null)
 				{
-					Date = workloadDay.CurrentDate,
-					Tasks = overrideDay?.OriginalTasks ?? workloadDay.Tasks,
-					TotalTasks = workloadDay.TotalTasks,
-					AverageTaskTime = overrideDay?.OriginalAverageTaskTime.TotalSeconds ?? workloadDay.AverageTaskTime.TotalSeconds,
-					TotalAverageTaskTime = workloadDay.TotalAverageTaskTime.TotalSeconds,
-					AverageAfterTaskTime = overrideDay?.OriginalAverageAfterTaskTime.TotalSeconds ?? workloadDay.AverageAfterTaskTime.TotalSeconds,
-					TotalAverageAfterTaskTime = workloadDay.TotalAverageAfterTaskTime.TotalSeconds,
-					IsOpen = workloadDay.OpenForWork.IsOpen
-				};
+					dayModel= new ForecastDayModel()
+					{
+						Date = date,
+						IsForecasted = false
+					};
+				}
+				else
+				{
+					overrideDays.TryGetValue(workloadDay.CurrentDate, out var overrideDay);
+					dayModel = new ForecastDayModel
+					{
+						Date = workloadDay.CurrentDate,
+						Tasks = overrideDay?.OriginalTasks ?? workloadDay.Tasks,
+						TotalTasks = workloadDay.TotalTasks,
+						AverageTaskTime = overrideDay?.OriginalAverageTaskTime.TotalSeconds ?? workloadDay.AverageTaskTime.TotalSeconds,
+						TotalAverageTaskTime = workloadDay.TotalAverageTaskTime.TotalSeconds,
+						AverageAfterTaskTime = overrideDay?.OriginalAverageAfterTaskTime.TotalSeconds ?? workloadDay.AverageAfterTaskTime.TotalSeconds,
+						TotalAverageAfterTaskTime = workloadDay.TotalAverageAfterTaskTime.TotalSeconds,
+						IsOpen = workloadDay.OpenForWork.IsOpen,
+						IsForecasted = true
+					};
 
-				_forecastDayModelMapper.SetCampaignAndOverride(workloadDay, dayModel, overrideDay);
-
+					_forecastDayModelMapper.SetCampaignAndOverride(workloadDay, dayModel, overrideDay);
+				}
 				days.Add(dayModel);
 			}
 

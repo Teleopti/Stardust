@@ -1,4 +1,6 @@
-﻿@RTA
+﻿@ignore
+@RTA
+
 Feature: Rta tool
 	In order to manually verify the rta works
 	As a tester

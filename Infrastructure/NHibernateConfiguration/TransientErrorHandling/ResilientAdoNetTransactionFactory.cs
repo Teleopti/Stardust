@@ -2,7 +2,6 @@ using NHibernate;
 using NHibernate.Engine;
 using NHibernate.Engine.Transaction;
 using NHibernate.Transaction;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling
 {

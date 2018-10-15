@@ -29079,6 +29079,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No restrictions in period.
+        /// </summary>
+        public static string RestrictionNotAbleToBeScheduledReasonNoRestrictions {
+            get {
+                return ResourceManager.GetString("RestrictionNotAbleToBeScheduledReasonNoRestrictions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The period results in too little work time.
         /// </summary>
         public static string RestrictionNotAbleToBeScheduledReasonTooLittleWorkTimeInPeriod {

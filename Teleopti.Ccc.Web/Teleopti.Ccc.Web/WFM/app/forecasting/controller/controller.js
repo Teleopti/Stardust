@@ -44,7 +44,7 @@
     vm.goStatistics = goStatistics;
 
 
-    function init() {
+	  function init() {
       resetForecastPeriod();
       vm.isForecastRunning();
       vm.getSkills();

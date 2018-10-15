@@ -2,10 +2,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { MockTranslationModule } from '@wfm/mocks/translation';
 import { NzButtonModule, NzTableModule, NzToolTipModule } from 'ng-zorro-antd';
 import { configureTestSuite } from '../../../../configure-test-suit';
-import { MockTranslationModule } from '../../../../mocks/translation';
-import { adina, eva, fakeBackendProvider, myles, SearchService, WorkspaceService } from '../../services';
+import { adina, eva, fakeBackendProvider, myles } from '../../mocks';
+import { SearchService, WorkspaceService } from '../../shared';
 import { WorkspaceComponent } from './workspace.component';
 
 describe('WorkspaceComponent', () => {

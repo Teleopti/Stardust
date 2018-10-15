@@ -1,6 +1,5 @@
 using System.Data.Common;
 using System.Data.SqlClient;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling
 {
@@ -8,10 +7,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHand
 	{
 		public static SqlConnection Unwrap(this DbConnection conn)
 		{
-			if (conn is ReliableSqlDbConnection dbConnection)
-			{
-				return dbConnection.ReliableConnection.Current;
-			}
 			if (conn is ResilientSqlDbConnection connection)
 			{
 				return connection.ReliableConnection.Current;

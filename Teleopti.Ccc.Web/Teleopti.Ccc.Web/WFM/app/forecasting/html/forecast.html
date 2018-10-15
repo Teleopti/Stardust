@@ -113,7 +113,7 @@
 
 		<div class="modal-inner-content" style="text-align:center;">
 			<label>{{'ForecastPeriod' | translate}}: </label><br />
-			<wfm-calendar-picker ng-model="vm.forecastPeriod"></wfm-calendar-picker>
+			<wfm-date-range-picker ng-model="vm.forecastPeriod"></wfm-date-range-picker>
 			<div class="text-warning animate-show" ng-cloak ng-show="vm.disableMoreThanOneYear()">
 				<i class='mdi mdi-alert'></i>
 				{{ 'ForecastPeriodLength' | translate }}.
@@ -136,7 +136,7 @@
 			</div>
 		</div>
 		<div class="modal-inner-content" style="text-align:center;">
-			<wfm-calendar-picker ng-model="vm.forecastPeriod"></wfm-calendar-picker>
+			<wfm-date-range-picker ng-model="vm.forecastPeriod"></wfm-date-range-picker>
 		</div>
 		<div class="modal-actions">
 			<aside>

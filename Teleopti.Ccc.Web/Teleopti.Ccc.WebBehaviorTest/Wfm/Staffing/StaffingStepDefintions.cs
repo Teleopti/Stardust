@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
@@ -121,18 +122,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Staffing
 
 			Browser.Interactions.ClickVisibleOnly("the-skill-picker .con-flex:nth-child(2n) div.wfm-form input");
 			Browser.Interactions.ClickContaining("the-skill-picker .con-flex:nth-child(2n) div.wfm-form .wfm-dropdown-panel li", group);
-
 		}
 
 		[When(@"I change staffing date to '(.*)'")]
 		public void WhenIChangeStaffingDateTo(string date)
 		{
-			Browser.Interactions.FillWith(
-				"#teamschedule-datepicker-input",
-				date
-			);
+			Browser.Interactions.SetScopeValues(".staffing-toolbar", new Dictionary<string, string>
+			{
+				{"vm.selectedDate" , $"new Date('{date}')"}
+			});
 			Thread.Sleep(600);
-			Browser.Interactions.PressEnter("#teamschedule-datepicker-input");
 		}
 
 		[When(@"I press the create skill button")]

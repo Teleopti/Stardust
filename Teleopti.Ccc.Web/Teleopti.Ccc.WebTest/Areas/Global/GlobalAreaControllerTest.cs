@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			var target = new GlobalAreaController(areaPathProvider);
 
 			var result = target.GetApplicationAreas();
-			result.Count().Should().Be(5);
+			result.Count().Should().Be(6);
 		}
 
 		[Test]
