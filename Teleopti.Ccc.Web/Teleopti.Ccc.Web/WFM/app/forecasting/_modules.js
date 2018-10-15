@@ -6,7 +6,7 @@
 			'ngResource',
 			'toggleService',
 			'ui.router',
-			'wfm.daterangepicker',
+			'wfm.oldDateRangePicker',
 			'wfm.workingHoursPicker',
 			'pascalprecht.translate',
 			'wfm.modal',

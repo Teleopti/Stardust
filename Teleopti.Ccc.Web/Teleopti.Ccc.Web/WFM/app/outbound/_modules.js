@@ -10,7 +10,7 @@
 		'pascalprecht.translate',
 		'angularMoment',
 		'wfm.cardList',
-		'wfm.daterangepicker',
+		'wfm.oldDateRangePicker',
 		'wfm.workingHoursPicker',
 		'toggleService',
 		'gantt',
