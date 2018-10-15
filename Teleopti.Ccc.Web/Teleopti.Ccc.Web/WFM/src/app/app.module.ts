@@ -11,6 +11,7 @@ import { PeopleModule } from './people/people.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { BootstrapComponent } from './bootstrap/bootstrap.component';
 import { NavigationModule } from './navigation/navigation.module';
+import { ReportModule } from './reports/reports.module';
 
 @NgModule({
 	declarations: [BootstrapComponent],
@@ -30,7 +31,8 @@ import { NavigationModule } from './navigation/navigation.module';
 				deps: [HttpClient]
 			},
 			parser: { provide: TranslateParser, useClass: CustomTranslateParser }
-		})
+		}),
+		ReportModule
 	],
 	entryComponents: [BootstrapComponent],
 	providers: [Zorroi18nService]
