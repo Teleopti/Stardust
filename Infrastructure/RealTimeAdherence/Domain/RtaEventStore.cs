@@ -88,7 +88,7 @@ SELECT
 	[Type],
 	[Event] 
 FROM 
-	[rta].[Events] 
+	[rta].[Events] WITH (NOLOCK) 
 WHERE 
 	PersonId = :PersonId AND 
 	StartTime <= :EndTime AND 
@@ -110,7 +110,7 @@ SELECT TOP 1
 	[Type],
 	[Event] 
 FROM 
-	[rta].[Events] 
+	[rta].[Events] WITH (NOLOCK)
 WHERE 
 	[Type] IN (:Types) AND
 	PersonId = :PersonId AND 
