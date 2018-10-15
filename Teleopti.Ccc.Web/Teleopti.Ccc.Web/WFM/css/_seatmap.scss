@@ -25,19 +25,8 @@
 	z-index: 2;
 	border-bottom: 1px solid #e1e2e3;
 
-	.wfm-btn {
-		height: 100%;
-		margin: 0px;
-		border-radius: 0px;
-		text-transform: none;
-		line-height: 1;
-	}
 	.return-button:hover {
 		background: #0099ff !important;
-		color: $white !important;
-	}
-	.wfm-btn-invis-primary:hover {
-		background: #0099ff;
 		color: $white !important;
 	}
 	.wfm-fab {
@@ -49,30 +38,6 @@
 	}
 	.seatmap-view-datepicker {
 		height: 100%;
-
-		& > div.date-picker {
-			position: relative;
-			& > div.wfm-datepicker {
-				background: $white;
-				position: absolute;
-				top: 40px;
-				left: 38px;
-				padding: 0;
-				min-width: 283px;
-				min-height: 230px;
-				z-index: 2;
-			}
-		}
-	}
-	.turn-off-datepicker {
-		width: 100%;
-		height: 40px;
-		z-index: -1;
-		position: absolute;
-		display: inline-block;
-		left: 0;
-		top: 0;
-		background: transparent;
 	}
 }
 .location-breadcrumb {

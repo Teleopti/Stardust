@@ -132,18 +132,8 @@ wfm-multiple-search-input {
 
 			.request-date-range-picker {
 				padding: 8px 10px;
-				& > .cursor-pointer {
-					display: flex;
-					align-items: center;
-					& > span {
-						display: inline-block;
-						margin: 0 5px;
-					}
-				}
-				& > .absolute {
-					top: 3em;
-					z-index: 10;
-				}
+				position: relative;
+				z-index: 10;
 			}
 		}
 
@@ -503,11 +493,6 @@ wfm-multiple-search-input {
 
 			& > span {
 				display: inline-block;
-			}
-
-			.teamschedule-datepicker > button {
-				margin-left: 0;
-				margin-right: 0;
 			}
 		}
 

@@ -15,20 +15,7 @@
 						<wfm-multiple-search-input search-options="vm.searchOptions" search-title="'Search'" search-callback="vm.onKeyWordInSearchInputChanged"></wfm-multiple-search-input>
 					</div>
 					<div>
-						<div class="inline-flex baseline pointer" ng-click="toggleRange =!toggleRange">
-							<div tabindex=0 class="context-menu card-context">
-								<i class="mdi mdi-calendar"></i>
-							</div>
-							<div ng-if="vm.selectedPeriod.startDate">{{'From'| translate}}: {{vm.selectedPeriod.startDate | amDateFormat:"L"}}</div>
-							&nbsp;
-							&nbsp;
-							&nbsp;
-							<div ng-if="vm.selectedPeriod.endDate">{{'To'|translate}}: {{vm.selectedPeriod.endDate | amDateFormat:"L"}}</div>
-							<div ng-if="!vm.selectedPeriod.endDate && !vm.selectedPeriod.startDate" class="text-warning"> No selected date</div>
-						</div>
-						<wfm-popup show="toggleRange" class="datepicker-popup">
-							<wfm-calendar-picker ng-model="vm.selectedPeriod" ng-change="vm.afterSelectedDateChange()" ng-if="toggleRange" ng-change="vm.getOrgData()"></wfm-calendar-picker>
-						</wfm-popup>
+						<wfm-date-range-picker ng-model="vm.selectedPeriod" ng-change="vm.afterSelectedDateChange()" ng-change="vm.getOrgData()" popup-mode="true"></wfm-date-range-picker>
 					</div>
 				</div>
 				<div class="con-row">

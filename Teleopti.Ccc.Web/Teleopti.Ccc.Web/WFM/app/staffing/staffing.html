@@ -70,7 +70,7 @@
             </div>
             <div class="modal-inner-content"
                  style="text-align:center;">
-                <wfm-calendar-picker ng-model="vm.exportStaffingDataDate"></wfm-calendar-picker>
+                <wfm-date-range-picker ng-model="vm.exportStaffingDataDate"></wfm-date-range-picker>
                 <div ng-if="!vm.exporting && vm.ErrorMessage"
                      class="text-danger">
                     {{vm.ErrorMessage}}
