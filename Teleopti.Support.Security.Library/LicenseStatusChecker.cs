@@ -35,8 +35,8 @@ namespace Teleopti.Support.Security.Library
 		        {
 			        StatusOk = true,
 			        NumberOfActiveAgents = 1,
-			        CheckDate = DateTime.Today.Date,
-			        LastValidDate = DateTime.Today.Date.AddDays(1),
+			        CheckDate = DateTime.Today,
+			        LastValidDate = DateTime.Today.AddDays(1),
 			        DaysLeft = 30
 		        };
 

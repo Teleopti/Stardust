@@ -1,23 +1,18 @@
 import { enableProdMode, StaticProvider } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { downgradeComponent, downgradeModule } from '@angular/upgrade/static';
+import { downgradeComponent as ngDowngradeComponent, downgradeModule } from '@angular/upgrade/static';
 import { IControllerConstructor, IRootScopeService } from 'angular';
-import { AddAppPageComponent, ListPageComponent } from './app/api-access/components';
+import { apiAccessComponents } from './app/api-access/api-access.module';
 import { AppModule } from './app/app.module';
-import { ChangePasswordComponent } from './app/authentication/components/change-password/change-password.component';
+import { authenticationComponents } from './app/authentication/authentication.module';
 import { BootstrapComponent } from './app/bootstrap/bootstrap.component';
-import { SettingsMenuComponent } from './app/navigation/components';
-import {
-	AppLogonPageComponent,
-	GrantPageComponent,
-	IdentityLogonPageComponent,
-	RevokePageComponent,
-	SearchPageComponent
-} from './app/people/pages';
+import { navigationComponents } from './app/navigation/navigation.module';
+import { peopleComponents } from './app/people/people.module';
 import { WorkspaceComponent } from './app/pm/components';
-import { FeedbackMessageComponent } from './app/shared/components';
+import { sharedComponents } from './app/shared/shared.module';
 import { environment } from './environments/environment';
 import { MainController } from './main.controller';
+import { DowngradeableComponent } from './types';
 
 export interface IWfmRootScopeService extends IRootScopeService {
 	_: any;
@@ -92,23 +87,29 @@ const wfm = angular.module('wfm', [
 
 wfm.controller('MainController', MainController as IControllerConstructor);
 
-const downgradeHelper = (downgradeName: string, component) => {
-	const downgradedComponent = downgradeComponent({ component }) as angular.IDirectiveFactory;
-	wfm.directive(downgradeName, downgradedComponent);
+const downgradeHelper = (downgradableComponents: DowngradeableComponent[] | DowngradeableComponent) => {
+	if (Array.isArray(downgradableComponents)) {
+		downgradableComponents.forEach(downgradeHelper);
+	} else {
+		const { ng1Name, ng2Component } = downgradableComponents;
+		const downgradedComponent = ngDowngradeComponent({ component: ng2Component }) as angular.IDirectiveFactory;
+		wfm.directive(ng1Name, downgradedComponent);
+	}
 };
 
-downgradeHelper('ng2ApiAccessListPage', ListPageComponent);
-downgradeHelper('ng2ApiAccessAddAppPage', AddAppPageComponent);
-downgradeHelper('ng2PeopleSearchPage', SearchPageComponent);
-downgradeHelper('ng2PeopleGrantPage', GrantPageComponent);
-downgradeHelper('ng2PeopleRevokePage', RevokePageComponent);
-downgradeHelper('ng2PeopleAppLogonPage', AppLogonPageComponent);
-downgradeHelper('ng2PeopleIdentityLogonPage', IdentityLogonPageComponent);
-downgradeHelper('ng2ChangePassword', ChangePasswordComponent);
-downgradeHelper('ng2FeedbackMessage', FeedbackMessageComponent);
-downgradeHelper('ng2Bootstrap', BootstrapComponent);
-downgradeHelper('ng2SettingsMenu', SettingsMenuComponent);
-downgradeHelper('ng2PmWorkspacePage', WorkspaceComponent);
+// Use this to downgrade module components
+downgradeHelper(peopleComponents);
+downgradeHelper(sharedComponents);
+downgradeHelper(navigationComponents);
+downgradeHelper(authenticationComponents);
+downgradeHelper(apiAccessComponents);
+
+// Use this to downgrade components
+// that has no containing module
+downgradeHelper([
+	{ ng1Name: 'ng2Bootstrap', ng2Component: BootstrapComponent },
+	{ ng1Name: 'ng2PmWorkspacePage', ng2Component: WorkspaceComponent }
+]);
 
 wfm.config([
 	'$stateProvider',

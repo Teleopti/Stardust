@@ -301,6 +301,16 @@ describe('StaffingController', function() {
 		expect($window.sessionStorage.staffingSelectedDate).toBe('Tue Jan 30 2018 14:56:27 GMT+0100 (Central Europe Standard Time)');
 	});
 
+	it('should not save invalid date to session storage ', function() {
+		var vm = $controller('StaffingController', {
+			$scope: scope
+		});
+
+		vm.selectedDate = moment('2018-01-01');
+
+		expect(vm.getDisplayDate()).toBe(moment('2018-01-01').format('YYYY-MM-DD'));
+	});
+
 	it('should be able to export staffing data', function() {
 		var skill = { DoDisplayData: true, IsMultisiteSkill: false, SkillType: 'SkillTypeChat', Id: '123' };
 
