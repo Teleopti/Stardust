@@ -3,10 +3,8 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
-using WorkShiftLengthHintOption = Teleopti.Ccc.Domain.Scheduling.WorkShiftLengthHintOption;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
