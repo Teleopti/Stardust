@@ -7498,7 +7498,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contract time violation..
+        ///   Looks up a localized string similar to This shift trade would change the working hours too much..
         /// </summary>
         public static string ContractTimeViolation {
             get {
@@ -7507,7 +7507,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The days currently selected to be included in the shift trade would result in too much or too little contract time..
+        ///   Looks up a localized string similar to The days currently selected to be included in the shift trade would result in too much or too little contract time. Add or remove days to balance the working hours..
         /// </summary>
         public static string ContractTimeViolationMessageInShiftTradeRequest {
             get {

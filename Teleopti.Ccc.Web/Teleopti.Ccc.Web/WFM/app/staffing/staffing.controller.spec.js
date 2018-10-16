@@ -16,7 +16,7 @@ describe('StaffingController', function() {
 			"Id":"9019d62f-0086-44b1-a977-9bb900b8c361",
 			"Name":"Overtime time"
 		}
-	]
+	];
 
 	var mockedImportData ={
 		"DataSeries": {
@@ -39,7 +39,7 @@ describe('StaffingController', function() {
 			}
 		],
 		"StaffingHasData": true
-	}
+	};
 
 	beforeEach(
 		inject(function(_$q_, _$rootScope_, _$httpBackend_, _$controller_, _UtilService_, _$window_) {
@@ -185,7 +185,7 @@ describe('StaffingController', function() {
 
 		spyOn(vm, 'generateChart').and.callThrough();
 		vm.selectedSkill = skill;
-		vm.navigateToNewDay();
+		vm.navigateToNewDay(vm.selectedDate);
 
 		expect(vm.showOverstaffSettings).toBe(false);
 		expect(vm.generateChart).toHaveBeenCalled();
@@ -288,6 +288,17 @@ describe('StaffingController', function() {
 		vm.testSessionStorage(4);
 
 		expect(vm.selectedDate).not.toBe(undefined);
+	});
+
+	it('should not save invalid date to session storage ', function() {
+		var vm = $controller('StaffingController', {
+			$scope: scope
+		});
+
+		$window.sessionStorage.staffingSelectedDate = 'Tue Jan 30 2018 14:56:27 GMT+0100 (Central Europe Standard Time)';
+		vm.navigateToNewDay(undefined);
+
+		expect($window.sessionStorage.staffingSelectedDate).toBe('Tue Jan 30 2018 14:56:27 GMT+0100 (Central Europe Standard Time)');
 	});
 
 	it('should be able to export staffing data', function() {

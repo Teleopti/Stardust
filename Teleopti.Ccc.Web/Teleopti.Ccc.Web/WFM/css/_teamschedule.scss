@@ -163,8 +163,7 @@
 		height: 48px;
 
 		input[type='text'] {
-			width: 22px;
-			padding-bottom: 2px;
+			width: 40px;
 			text-align: center;
 		}
 
@@ -500,7 +499,7 @@ team-schedule-datepicker {
 	> span {
 		#teamschedule-datepicker-input {
 			text-align: center;
-			width: 90px;
+			width: 100px;
 
 			&.ng-invalid {
 				border-bottom-color: $orange-600;

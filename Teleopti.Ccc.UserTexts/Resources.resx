@@ -17721,11 +17721,11 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>use in MyTime ShiftTradeRequest the error message colume title when agent break contract tolerance</comment>
   </data>
   <data name="ContractTimeViolation" xml:space="preserve">
-    <value>Contract time violation.</value>
+    <value>This shift trade would change the working hours too much.</value>
     <comment>Use in MyTime ShiftTradeRequest. Error message title when break contract tolerance.</comment>
   </data>
   <data name="ContractTimeViolationMessageInShiftTradeRequest" xml:space="preserve">
-    <value>The days currently selected to be included in the shift trade would result in too much or too little contract time.</value>
+    <value>The days currently selected to be included in the shift trade would result in too much or too little contract time. Add or remove days to balance the working hours.</value>
     <comment>Contract time violation message in shift trade request.</comment>
   </data>
   <data name="Grant" xml:space="preserve">

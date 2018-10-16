@@ -234,6 +234,8 @@
 		}
 
 		function navigateToNewDay(date) {
+			if(!date) return;
+
 			$window.sessionStorage.staffingSelectedDate = moment(date).format('YYYY-MM-DD');
 			if (vm.hasSuggestionData) {
 				if (confirm($translate.instant('DiscardSuggestionData'))) {
@@ -503,7 +505,7 @@
 		function manageDateSessionStorage() {
 			if ($window.sessionStorage.staffingSelectedDate) {
 				vm.selectedDate = new Date($window.sessionStorage.staffingSelectedDate);
-				vm.navigateToNewDay();
+				vm.navigateToNewDay(vm.selectedDate);
 			}
 		}
 

@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void WhenIClickFor(string state)
 		{
 			Browser.Interactions.AssertExists(".for-test-agent");
-			Browser.Interactions.ClickContaining(".sendbatch", state.ToUpper());
+			Browser.Interactions.ClickContaining(".sendbatch", state);
 			Browser.Interactions.AssertExists(".notice-info", "Done!");
 		}
 	}
