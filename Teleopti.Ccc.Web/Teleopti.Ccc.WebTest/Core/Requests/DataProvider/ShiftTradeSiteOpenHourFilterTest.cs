@@ -392,7 +392,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldReturnScheduleViewWithDayOff()
 		{
-			var today = DateTime.Today.Date;
+			var today = DateTime.Today;
 			var dayOfWeek = today.DayOfWeek;
 			var personFrom = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>
 			{
