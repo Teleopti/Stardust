@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			}
 			_parent.OnRestrictionsNotAbleToBeScheduledProgress(new ProgressChangedEventArgs(100, ""));
 
-			var result = _result.Where(x => x.Reason != RestrictionNotAbleToBeScheduledReason.NoIssue);
+			var result = _result.Where(x => x.Reason != RestrictionNotAbleToBeScheduledReason.NoIssue && x.Reason != RestrictionNotAbleToBeScheduledReason.NoRestrictions);
 			if (!result.Any())
 			{
 				toolStripLabelManySelected.Text = Resources.NoAgentsWithIssuesFound;
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			listViewResult.SuspendLayout();
 			listViewResult.Items.Clear();
 
-			foreach (var restrictionsAbleToBeScheduledResult in _result.Where(x => x.Reason != RestrictionNotAbleToBeScheduledReason.NoIssue))
+			foreach (var restrictionsAbleToBeScheduledResult in _result.Where(x => x.Reason != RestrictionNotAbleToBeScheduledReason.NoIssue && x.Reason != RestrictionNotAbleToBeScheduledReason.NoRestrictions))
 			{
 				var item = new ListViewItem(restrictionsAbleToBeScheduledResult.Agent.Name.ToString())
 				{
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 
 			if (showAll)
 			{
-				var result = _result.Where(x => x.Reason == RestrictionNotAbleToBeScheduledReason.NoIssue).Take(50).ToList();
+				var result = _result.Where(x => x.Reason == RestrictionNotAbleToBeScheduledReason.NoIssue || x.Reason == RestrictionNotAbleToBeScheduledReason.NoRestrictions).Take(50).ToList();
 				for (int i = 0; i < Math.Min(result.Count, 50); i++)
 				{
 					var item = new ListViewItem(result[i].Agent.Name.ToString())
