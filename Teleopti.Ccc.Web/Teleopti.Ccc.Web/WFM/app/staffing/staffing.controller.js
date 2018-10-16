@@ -50,6 +50,7 @@
 		vm.goToImportExports = goToImportView;
 		vm.testSessionStorage = testSessionStorage;
 		vm.exportStaffingData = exportStaffingData;
+		vm.getDisplayDate = getDisplayDate;
 
 		vm.showOverstaffSettings = false;
 		vm.openImportData = false;
@@ -473,6 +474,10 @@
 					utilService.saveToFs(response.Content, vm.selectedSkill.Name + '.csv', 'text/csv');
 				}
 			});
+		}
+
+		function getDisplayDate() {
+			return moment(vm.selectedDate).format('YYYY-MM-DD');
 		}
 
 		function manageAreaSessionStorage() {
