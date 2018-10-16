@@ -254,7 +254,7 @@
 					cellTooltip: true,
 					filterHeaderTemplate:
 						'<div class="ui-grid-filter-container" ng-repeat="colFilter in col.filters" > <input ng-enter="enter()" ' +
-						'type="text" class="ui-grid-filter-input ui-grid-filter-input-{{$index}}" ng-model="grid.appScope.subjectFilter" ' +
+						'type="text" ng-model="grid.appScope.subjectFilter" ' +
 						'ng-model-options="{ debounce: 500 }" ng-change="grid.appScope.subjectFilterChanged()" ' +
 						'ng-attr-placeholder="{{colFilter.placeholder || \'\'}}" aria-label="{{colFilter.ariaLabel || aria.defaultFilterLabel}}" /></div>'
 				},
@@ -274,8 +274,8 @@
 						placeholder: $translate.instant('FilterThreeDots')
 					},
 					filterHeaderTemplate:
-						'<div class="ui-grid-filter-container" ng-repeat="colFilter in col.filters" > <input ng-enter="enter()" ' +
-						'type="text" class="ui-grid-filter-input ui-grid-filter-input-{{$index}}" ng-model="grid.appScope.messageFilter" n' +
+						'<div class="ui-grid-filter-container" ng-repeat="colFilter in col.filters"> <input ng-enter="enter()" ' +
+						'type="text" ng-model="grid.appScope.messageFilter" n' +
 						'g-model-options="{ debounce: 500 }" ng-change="grid.appScope.messageFilterChanged()" ' +
 						'ng-attr-placeholder="{{colFilter.placeholder || \'\'}}" aria-label="{{colFilter.ariaLabel || aria.defaultFilterLabel}}" /></div>'
 				},
@@ -303,12 +303,14 @@
 					enablePinning: false,
 					minWidth: 100,
 					filterHeaderTemplate:
-						'<md-select ng-model-options="{trackBy: \'$value.Id\'}" ng-repeat="colFilter in col.filters" md-on-close="grid.appScope.statusFilterClose()"' +
+						'<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\">' +
+						'<md-select ng-model-options="{trackBy: \'$value.Id\'}" md-on-close="grid.appScope.statusFilterClose()"' +
 						'multiple ng-model="grid.appScope.selectedRequestStatuses" placeholder="{{\'FilterColon\' | translate}} {{\'Status\' | translate}}" aria-label="{{\'Status\' | translate}}">' +
 						'<md-option ng-repeat="item in grid.appScope.allRequestStatuses" ng-value="item">' +
 						'<span>{{item.Name | translate}}</span>' +
 						'</md-option>' +
-						'</md-select>'
+						'</md-select>' +'
+						</div>'
 				},
 				{
 					displayName: 'CreatedOn',

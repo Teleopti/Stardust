@@ -199,13 +199,15 @@ wfm-multiple-search-input {
 		max-height: 35px;
 		max-width: 100%;
 		overflow: hidden;
+		font-weight: normal;
 
 		.ui-grid-filter-container {
-			padding: 5px;
+			padding: 0 5px;
 		}
 
-		md-select {
-			padding: 0 5px;
+		input, md-select-value {
+			height: 28px;
+			min-height: 28px;
 		}
 
 		md-select-value span {
@@ -218,14 +220,8 @@ wfm-multiple-search-input {
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
-		padding: 5px 0;
-		height: 30px;
-		margin-top: -10px;
 	}
 
-	input.ui-grid-filter-input {
-		text-overflow: ellipsis;
-	}
 	/* Fix angular material issue where tabs are not displayed correctly on occasion
         https://github.com/angular/material/issues/9660
         https://github.com/angular/material/issues/9644 seem to be related.
@@ -329,10 +325,10 @@ wfm-multiple-search-input {
 	}
 
 	.ui-grid-menu-button {
-		top: 0px;
-		right: 0px;
+		top: 0;
+		right: 0;
 		width: 20px;
-		margin: 5px;
+		margin: 0;
 	}
 
 	.shift-trade-view {
@@ -517,7 +513,7 @@ wfm-multiple-search-input {
 
 	.clear-all-filters {
 		position: absolute;
-		top: 30px;
-		left: 0.8rem;
+		top: 32px;
+		left: 9px;
 	}
 }
