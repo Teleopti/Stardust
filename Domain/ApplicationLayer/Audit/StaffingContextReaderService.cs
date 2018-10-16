@@ -2,21 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Staffing
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 {
-	public class StaffingContextAuditService
+	public class StaffingContextReaderService
 	{
-		private IStaffingAuditRepository _staffingAuditRepository;
-		private ISkillCombinationResourceRepository _skillCombinationResourceRepository;
-		private IUserCulture _userCulture;
+		private readonly IStaffingAuditRepository _staffingAuditRepository;
+		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
+		private readonly IUserCulture _userCulture;
 
-		public StaffingContextAuditService(IStaffingAuditRepository staffingAuditRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository, IUserCulture userCulture)
+		public StaffingContextReaderService(IStaffingAuditRepository staffingAuditRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository, IUserCulture userCulture)
 		{
 			_staffingAuditRepository = staffingAuditRepository;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;

@@ -3,15 +3,11 @@ using System.Linq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -22,10 +18,10 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 	[TestFixture]
 	[DomainTest]
 	[AllTogglesOn]
-	public class StaffingContextAuditServiceTest : IIsolateSystem
+	public class StaffingContextReaderServiceTest : IIsolateSystem
 	{
 		public IStaffingAuditRepository StaffingAuditRepository;
-		public StaffingContextAuditService Target;
+		public StaffingContextReaderService Target;
 		public ISkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeUserCulture UserCulture;
@@ -44,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		}
 
 		[Test]
-		public void ShouldReturnStaffingAuditOnClearBPOAction()
+		public void ShouldReturnStaffingAuditOnClearBpoAction()
 		{
 			UserCulture.IsSwedish();
 
@@ -72,33 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			Target.LoadAll().FirstOrDefault().Data.Should().Be.EqualTo(expectedResult);
 		}
 
-		//[Test]
-		//public void ShouldReturnStaffingAuditForTheGivenPeriod()
-		//{
-
-		//	var person = PersonFactory.CreatePersonWithId();
-		//	var staffingAudit1 = new StaffingAudit(person, StaffingAuditActionConstants.ImportBPO, "", "BPO"){TimeStamp = new DateTime(2018, 10, 01, 08, 08, 08) };
-		//	var staffingAudit2 = new StaffingAudit(person, StaffingAuditActionConstants.ImportBPO, "", "BPO"){TimeStamp = new DateTime(2018, 10, 02, 08, 08, 08) };
-		//	var staffingAudit3 = new StaffingAudit(person, StaffingAuditActionConstants.ImportBPO, "", "BPO"){TimeStamp = new DateTime(2018, 10, 03, 08, 08, 08) };
-		//	StaffingAuditRepository.Add(staffingAudit1);
-		//	StaffingAuditRepository.Add(staffingAudit2);
-		//	StaffingAuditRepository.Add(staffingAudit3);
-		//	Target.LoadAuditsForPeriod(new DateTime(2018, 10, 01), new DateTime(2018, 10, 02)).Count().Should().Be
-		//		.EqualTo(2);
-		//}
-
-		[Test]
-		public void ShouldReturnStaffingAuditForTheGivenPerson()
-		{
-			var person1 = PersonFactory.CreatePersonWithId();
-			var person2 = PersonFactory.CreatePersonWithId();
-			//var personRelevant = PersonFactory.CreatePersonWithId();
-			//var personIrellevant = PersonFactory.CreatePersonWithId();
-			//var expectedResult = "File name: abc.txt";
-			//StaffingAuditRepository.Add(new StaffingAudit(PersonFactory.CreatePersonWithId(), StaffingAuditActionConstants.ImportBPO, "abc.txt", "BPO"));
-			//Target.LoadAll().FirstOrDefault().Data.Should().Be.EqualTo(expectedResult);
-		}
-
+		
 		[Test]
 		public void ShouldReturnStaffingAuditForTheGivenParameters()
 		{
@@ -112,7 +82,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			list.FirstOrDefault().Action.Should().Be.EqualTo(StaffingAuditActionConstants.ImportBPO);
 			list.FirstOrDefault().ActionPerformedBy.Should().Be.EqualTo(person);
 			list.FirstOrDefault().Context.Should().Be.EqualTo("Staffing");
-			
 		}
 	}
 }

@@ -180,6 +180,7 @@
     <Compile Include="Aop\IHandleContextAction.cs" />
     <Compile Include="Aop\IUnitOfWorkNoCommitAspect.cs" />
     <Compile Include="Aop\ReadonlyUnitOfWorkAttribute.cs" />
+    <Compile Include="ApplicationLayer\Audit\AuditAggregatorService.cs" />
     <Compile Include="ApplicationLayer\Audit\PersonAccessAuditContext.cs" />
     <Compile Include="ApplicationLayer\Audit\StaffingAuditContext.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\FilterOutRequestsHandledByReadmodel.cs" />
@@ -643,7 +644,7 @@
     <Compile Include="Staffing\ISkillCombinationBpoTimeLineReader.cs" />
     <Compile Include="Staffing\IStaffingAuditRepository.cs" />
     <Compile Include="Staffing\StaffingAudit.cs" />
-    <Compile Include="Staffing\StaffingContextAuditService.cs" />
+    <Compile Include="ApplicationLayer\Audit\StaffingContextReaderService.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
     <Compile Include="ResourcePlanner\Hints\IScheduleHint.cs" />
     <Compile Include="Scheduling\Overtime\IOvertimeSkillPeriodData.cs" />

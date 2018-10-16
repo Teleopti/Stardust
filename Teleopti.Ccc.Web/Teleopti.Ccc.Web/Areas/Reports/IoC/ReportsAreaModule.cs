@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Web.Areas.Reports.Core;
@@ -12,7 +13,6 @@ namespace Teleopti.Ccc.Web.Areas.Reports.IoC
 		{
 			builder.RegisterType<ReportNavigationProvider>().As<IReportNavigationProvider>().SingleInstance();
 			builder.RegisterType<AgentBadgeProvider>().As<IAgentBadgeProvider>().SingleInstance();
-			builder.RegisterType<AuditService>().As<IAuditService>().SingleInstance();
 		}
 	}
 }

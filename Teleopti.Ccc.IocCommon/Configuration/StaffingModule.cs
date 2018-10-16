@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<AuditableBpoOperationsToggleOn>().As<IAuditableBpoOperations>().SingleInstance()
 					.ApplyAspects();
-				builder.RegisterType<StaffingContextAuditService>().SingleInstance();
+				builder.RegisterType<StaffingContextReaderService>().SingleInstance();
 			}
 
 			else

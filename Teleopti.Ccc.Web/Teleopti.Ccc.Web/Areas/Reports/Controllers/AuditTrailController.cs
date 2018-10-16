@@ -14,17 +14,17 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 {
 	public class AuditTrailController : ApiController
 	{
-		private readonly AuditService _auditService;
+		private readonly AuditAggregatorService _auditAggregatorService;
 
-		public AuditTrailController(AuditService staffingAuditRepository)
+		public AuditTrailController(AuditAggregatorService staffingAuditAggregatorRepository)
 		{
-			_auditService = staffingAuditRepository;
+			_auditAggregatorService = staffingAuditAggregatorRepository;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Reports/getallstaffingaudit")]
 		public virtual IHttpActionResult GetAllStaffingAudit()
 		{
-			return Ok(_auditService.LoadAll());
+			return Ok(_auditAggregatorService.LoadAll());
 		}
 
 	}
