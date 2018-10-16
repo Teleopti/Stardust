@@ -113,7 +113,11 @@
 										from: user,
 										name: 'startConversation',
 										type: 'event',
-										value: ''
+										value: '',
+										channelData: {
+											"personId": "@Model.CurrentLogonAgentId",
+											"environment": window.location.host
+										}
 									})
 									.subscribe(function (id) {
 										if (console) console.log('"trigger requestWelcomeDialog" sent');
