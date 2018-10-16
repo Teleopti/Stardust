@@ -1,30 +1,23 @@
 ﻿using System;
-using System.Globalization;
 using System.Web.Http;
-using NPOI.SS.Formula.Functions;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
-using Teleopti.Ccc.Domain.Exceptions;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Interfaces.Domain;
 
-
-namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
+namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 {
 	public class AuditTrailController : ApiController
 	{
 		private readonly AuditAggregatorService _auditAggregatorService;
 
-		public AuditTrailController(AuditAggregatorService staffingAuditAggregatorRepository)
+		public AuditTrailController(AuditAggregatorService auditAggregatorService)
 		{
-			_auditAggregatorService = staffingAuditAggregatorRepository;
+			_auditAggregatorService = auditAggregatorService;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Reports/getallstaffingaudit")]
-		public virtual IHttpActionResult GetAllStaffingAudit()
+		public virtual IHttpActionResult GetAllStaffingAudit(Guid personId, DateTime startDate, DateTime endDate)
 		{
-			return Ok(_auditAggregatorService.LoadAll());
+			return Ok(_auditAggregatorService.Load(personId,startDate,endDate));
 		}
 
 	}
