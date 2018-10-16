@@ -704,7 +704,6 @@
     <Compile Include="UnitOfWork\UnitOfWorkFactoryFactory.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkNoCommitAspect.cs" />
     <Compile Include="Util\ApplicationInsightsFilterOutSignalR.cs" />
-    <Compile Include="Util\ApplicationInsightsFilterSSO.cs" />
     <Compile Include="Util\ApplicationInsigths.cs" />
     <Compile Include="Util\AppVersionTelemetryInitializer.cs" />
     <Compile Include="Util\CloudSafeSqlExecute.cs" />
