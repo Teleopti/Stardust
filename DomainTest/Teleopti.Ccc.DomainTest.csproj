@@ -1337,7 +1337,6 @@
     <Compile Include="Scheduling\ScheduleTagging\ScheduleTagTest.cs" />
     <Compile Include="Scheduling\SeatLimitations\MaxSeatSitesExtractorTest.cs" />
     <Compile Include="Scheduling\SeatLimitations\OccupiedSeatCalculatorTest.cs" />
-    <Compile Include="Scheduling\SeatLimitations\SeatLimitationWorkShiftCalculatorTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\PersonMeetingByDateSorterTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionEntityServiceTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionServiceTest.cs" />
