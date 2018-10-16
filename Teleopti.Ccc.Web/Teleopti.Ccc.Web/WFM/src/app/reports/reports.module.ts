@@ -5,7 +5,7 @@ import { ScheduleAuditTrail, GeneralAuditTrail } from './components';
 import { AuditTrailService } from './services';
 
 @NgModule({
-	declarations: [ScheduleAuditTrail],
+	declarations: [ScheduleAuditTrail, GeneralAuditTrail],
 	imports: [SharedModule, TranslateModule.forChild()],
 	providers: [TranslateModule, AuditTrailService],
 	exports: [],
