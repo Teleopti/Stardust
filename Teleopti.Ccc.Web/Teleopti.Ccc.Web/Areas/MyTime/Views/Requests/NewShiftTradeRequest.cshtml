@@ -1,6 +1,6 @@
 ﻿@using Teleopti.Ccc.UserTexts
 
-<div class="row" data-bind="if: !missingWorkflowControlSet() && isReadyLoaded()">
+<div class="row shift-trade-filter-container" data-bind="if: !missingWorkflowControlSet() && isReadyLoaded()">
 	<div class="col-sm-6 col-md-6 col-lg-3">
 		<div>
 			<div class="input-group schedule-filter-component">
@@ -115,7 +115,7 @@
 		</div>
 	</div>
 </div>
-<div data-bind="visible: isReadyLoaded(), fadeInIf: !IsLoading() , fadeInDuration: 150, fadeOutDuration: 50">
+<div class="shift-trade-schedule-container" data-bind="visible: isReadyLoaded(), fadeInIf: !IsLoading() , fadeInDuration: 150, fadeOutDuration: 50">
 	<div class="shift-trade-missing-team-message alert alert-warning" data-bind="visible: noAnyTeamToShow">
 		@Resources.YouDoNotHaveAccessToAnyTeams
 	</div>
@@ -341,7 +341,6 @@
 		</table>
 	</div>
 	<!-- /ko -->
-
 	<div class="row add-shift-trade-detail-section">
 		<div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="well well-sm col-xs-12 col-md-6">
 			<div class="form-group">
@@ -359,7 +358,8 @@
 			<div class="error" data-bind="html: errorMessage"></div>
 		</div>
 	</div>
-	<div class="shift-trade-no-possible-trades alert alert-info" data-bind="visible: noPossibleShiftTrades()">
-		@Resources.NoAgentsAvailableForShiftTrade
-	</div>
+</div>
+
+<div class="shift-trade-no-possible-trades alert alert-info" data-bind="visible: noPossibleShiftTrades()">
+	@Resources.NoAgentsAvailableForShiftTrade
 </div>
