@@ -16,7 +16,7 @@
 	  <Setting name="TeleoptiSetting.VmSize" value="Standard_A2_v2" />
     </ConfigurationSettings>
     <Certificates>
-	  <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="B4801CD7F6B859F960941D0D2B9133755BACEC03" thumbprintAlgorithm="sha1" />
+	  <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="570BFA116439CAB373E61D53053F13D96FB4EC11" thumbprintAlgorithm="sha1" />
 	  <Certificate name="fakedress.teleopticloud.com" thumbprint="570BFA116439CAB373E61D53053F13D96FB4EC11" thumbprintAlgorithm="sha1"/>
     </Certificates>
   </Role>
