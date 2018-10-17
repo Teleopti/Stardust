@@ -53,6 +53,8 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 		{
 			hideAppFunctionWithToggleOn(functions, Toggles.Report_Remove_Realtime_AuditTrail_44006,
 				DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailReport);
+			hideAppFunctionWithToggleOff(functions, Toggles.Wfm_AuditTrail_StaffingAuditTrail_78125,
+				DefinedRaptorApplicationFunctionForeignIds.GeneralAuditTrailWebReport);
 			hideAppFunctionWithToggleOff(functions, Toggles.WFM_AuditTrail_44006,
 				DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailWebReport);
 			hideAppFunctionWithToggleOn(functions, Toggles.Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560,
