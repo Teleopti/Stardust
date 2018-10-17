@@ -89,15 +89,14 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 				.Distinct()
 				.ToArray();
 
-			var personsTimeZones =  _persons.FindPeople(toBeSynched.Select(x => x.PersonId).Distinct()).Select(p => new
-			{
-				p.Id,
-				TimeZone = p.PermissionInformation.DefaultTimeZone()
-			}).ToArray();
+			var personsTimeZones = _persons.FindPeople(toBeSynched.Select(x => x.PersonId).Distinct())
+				.ToDictionary(k => k.Id.GetValueOrDefault(), v => v.PermissionInformation.DefaultTimeZone());
 						
 			toBeSynched.ForEach(x =>
 			{
-				var personTimeZone = personsTimeZones.FirstOrDefault(p => p.Id == x.PersonId)?.TimeZone ?? TimeZoneInfo.Utc;
+				if (!personsTimeZones.TryGetValue(x.PersonId, out var personTimeZone))
+					personTimeZone = TimeZoneInfo.Utc;
+				
 				var shouldSynchPreviousDay = toBeSynched
 							.FirstOrDefault(
 								y => y.PersonId == x.PersonId &&
