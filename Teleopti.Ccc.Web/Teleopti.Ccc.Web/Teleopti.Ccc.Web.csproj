@@ -1572,9 +1572,6 @@
     <Content Include="WFM\app\global\utilities\serviceDateFormatHelper.service.js" />
     <Content Include="WFM\app\global\utilities\skill.type.service.js" />
     <Content Include="WFM\app\global\utilities\skillIcon.service.js" />
-    <Content Include="WFM\app\global\work-hour-picker\work-hour-picker.component.js" />
-    <Content Include="WFM\app\global\work-hour-picker\work-hour-picker.component.spec.js" />
-    <Content Include="WFM\app\global\work-hour-picker\work-hour-picker.tpl.html" />
     <Content Include="WFM\app\intraday\components\intradayPerformanceChart.component.js" />
     <Content Include="WFM\app\intraday\components\intradayPerformanceChart.html" />
     <Content Include="WFM\app\intraday\components\intradayStaffingChart.component.js" />
