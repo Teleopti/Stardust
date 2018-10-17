@@ -309,8 +309,8 @@
 						'<md-option ng-repeat="item in grid.appScope.allRequestStatuses" ng-value="item">' +
 						'<span>{{item.Name | translate}}</span>' +
 						'</md-option>' +
-						'</md-select>' +'
-						</div>'
+						'</md-select>' +
+						'</div>'
 				},
 				{
 					displayName: 'CreatedOn',
