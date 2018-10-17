@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 			var skillDay = _skillDayRepository.Get(@event.SkillDayId);
 			if (skillDay == null)
 			{
-				logger.Warn($"Aborting because {typeof(ISkillDay)} {@event.SkillDayId} was not found in Application database.");
+				logger.Debug($"Aborting because {typeof(ISkillDay)} {@event.SkillDayId} was not found in Application database.");
 				return;
 			}
 			if (!skillDay.Scenario.EnableReporting)
