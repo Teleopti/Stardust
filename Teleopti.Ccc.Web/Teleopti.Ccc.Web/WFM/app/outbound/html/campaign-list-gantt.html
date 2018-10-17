@@ -20,18 +20,18 @@
 			<div class="con-row" style="align-items: normal;">
 				<div class="con-flex">
 					<div class="gantt-datepicker inline-flex" style="align-items:baseline" ng-init="showDatePicker=false">
-						<button class="wfm-btn wfm-btn-invis-primary date-navigation-button" ng-click="viewOneMonthBefore()">
+						<button class="wfm-btn wfm-btn-sm wfm-btn-invis-primary" ng-click="viewOneMonthBefore()">
 							<i class="mdi mdi-chevron-double-left"></i>
 						</button>
-						<div class="animate-show" ng-show="showDatePicker">
-							<div uib-datepicker ng-model="settings.periodStart" class="wfm-datepicker" datepicker-options="monthpickerOptions" ng-change="showDatePicker=false"></div>
-						</div>
-						<input class="pointer text-center" type="text" ng-click="showDatePicker=!showDatePicker" value="{{settings.periodStart | monthview }}" readonly />
 						<div tabindex=0 class="context-menu card-context" ng-click="showDatePicker=!showDatePicker">
 							<i class="mdi mdi-calendar pointer"></i>
 							<md-tooltip>{{"Month"|translate}}</md-tooltip>
 						</div>
-						<button class="wfm-btn wfm-btn-invis-primary date-navigation-button" ng-click="viewOneMonthAfter()">
+						<div class="animate-show absolute" ng-show="showDatePicker">
+							<div uib-datepicker ng-model="settings.periodStart" class="wfm-datepicker" datepicker-options="monthpickerOptions" ng-change="showDatePicker=false"></div>
+						</div>
+						<input class="pointer text-center" type="text" ng-click="showDatePicker=!showDatePicker" value="{{settings.periodStart | monthview }}" readonly />
+						<button class="wfm-btn wfm-btn-sm wfm-btn-invis-primary" ng-click="viewOneMonthAfter()">
 							<i class="mdi mdi-chevron-double-right"></i>
 						</button>
 					</div>
