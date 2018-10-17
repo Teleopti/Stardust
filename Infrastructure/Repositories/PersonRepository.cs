@@ -443,6 +443,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				foreach (IPersonPeriod personPeriod in person.PersonPeriodCollection)
 				{
+					if (personPeriod.BudgetGroup != null && !LazyLoadingManager.IsInitialized(personPeriod.BudgetGroup.Name))
+						LazyLoadingManager.Initialize(personPeriod.BudgetGroup.Name);
+
 					foreach (var pSkill in personPeriod.PersonSkillCollection)
 					{
 						if (pSkill.Skill.SkillType.Description.Name == "xyyyxxxyyyyx")

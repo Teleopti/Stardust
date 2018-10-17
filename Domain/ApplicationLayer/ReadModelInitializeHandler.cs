@@ -29,12 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 		private readonly IPersonAbsenceRepository _personAbsenceRepository;
 		private readonly IEventPublisher _eventPublisher;
-
-		private IEnumerable<IPerson> _people;
-		private IScenario _defaultScenario;
-		private DateOnlyPeriod _period;
-		private DateTimePeriod _utcPeriod;
-
+		
 		public ReadModelInitializeHandler(IPersonRepository personRepository,
 			IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister,
 			IScheduleDayReadModelRepository scheduleDayReadModelRepository,
@@ -67,6 +62,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				var startDate = utcNow.Date.AddDays(@event.StartDays);
 				var endDate = utcNow.Date.AddDays(@event.EndDays);
 				var period = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
+				var utcPeriod = period.ToDateTimePeriod(TimeZoneInfo.Utc);
 				if (!anyAgentScheduled(businessUnitId, period))
 				{
 					return;
@@ -80,12 +76,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					return;
 				}
 
-				loadPeopleAndScenario(@event.StartDays, @event.EndDays);
+				var people = _personRepository.LoadAll()
+					.Where(p => p.PersonPeriodCollection.Any())
+					.ToList();
+				var defaultScenario = _scenarioRepository.Current();
 
 				var messages = new List<ScheduleChangedEventBase>();
 				if (!projectionModelInitialized && !scheduleDayModelInitialized && !personScheduleDayModelInitialized)
 				{
-					messages.AddRange(initialLoad<ScheduleChangedEvent>(@event));
+					messages.AddRange(initialLoad<ScheduleChangedEvent>(@event, people, defaultScenario, utcPeriod));
 
 					projectionModelInitialized = true;
 					scheduleDayModelInitialized = true;
@@ -94,29 +93,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 				if (!projectionModelInitialized)
 				{
-					messages.AddRange(initialLoad<ScheduleInitializeTriggeredEventForScheduleProjection>(@event));
+					messages.AddRange(initialLoad<ScheduleInitializeTriggeredEventForScheduleProjection>(@event, people, defaultScenario, utcPeriod));
 				}
 
 				if (!scheduleDayModelInitialized)
 				{
-					messages.AddRange(initialLoad<ScheduleInitializeTriggeredEventForScheduleDay>(@event));
+					messages.AddRange(initialLoad<ScheduleInitializeTriggeredEventForScheduleDay>(@event, people, defaultScenario, utcPeriod));
 				}
 
 				if (!personScheduleDayModelInitialized)
 				{
-					messages.AddRange(initialLoad<ScheduleInitializeTriggeredEventForPersonScheduleDay>(@event));
+					messages.AddRange(initialLoad<ScheduleInitializeTriggeredEventForPersonScheduleDay>(@event, people, defaultScenario, utcPeriod));
 				}
 
 				messages.ForEach(m => _eventPublisher.Publish(m));
 			});
-		}
-
-		private void loadPeopleAndScenario(int startDays, int endDays)
-		{
-			_people = _personRepository.LoadAll().Where(p=>p.PersonPeriodCollection.Any());
-			_defaultScenario = _scenarioRepository.Current();
-			_period = new DateOnlyPeriod(DateOnly.Today.AddDays(startDays), DateOnly.Today.AddDays(endDays));
-			_utcPeriod = _period.ToDateTimePeriod(TimeZoneInfo.Utc);
 		}
 
 		private bool anyAgentScheduled(Guid businessUnitId, DateOnlyPeriod period)
@@ -126,19 +117,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			return existsAnyPersonAssignment || existsAnyPersonAbsence;
 		}
 
-		private IEnumerable<T> initialLoad<T>(InitialLoadScheduleProjectionEvent message) where T : ScheduleChangedEventBase, new()
+		private IEnumerable<T> initialLoad<T>(InitialLoadScheduleProjectionEvent message, IEnumerable<IPerson> people,
+			IScenario defaultScenario, DateTimePeriod utcPeriod) where T : ScheduleChangedEventBase, new()
 		{
-			return _people.Select(
+			return people.Select(
 				p =>
 				new T
 				{
 					LogOnBusinessUnitId = message.LogOnBusinessUnitId,
 					LogOnDatasource = message.LogOnDatasource,
 					PersonId = p.Id.GetValueOrDefault(),
-					ScenarioId = _defaultScenario.Id.GetValueOrDefault(),
+					ScenarioId = defaultScenario.Id.GetValueOrDefault(),
 					Timestamp = DateTime.UtcNow,
-					StartDateTime = _utcPeriod.StartDateTime,
-					EndDateTime = _utcPeriod.EndDateTime,
+					StartDateTime = utcPeriod.StartDateTime,
+					EndDateTime = utcPeriod.EndDateTime,
 					SkipDelete = true
 				}).ToArray();
 		}

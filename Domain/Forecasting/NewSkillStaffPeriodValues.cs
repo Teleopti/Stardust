@@ -21,29 +21,23 @@ namespace Teleopti.Ccc.Domain.Forecasting
             _runWhenBatchCompleted = calculateChildSkillDay;
         }
 
-        public void BatchCompleted()
-        {
-            if (_runWhenBatchCompleted!=null)
-            {
-                _runWhenBatchCompleted.DynamicInvoke(this);
-                _runWhenBatchCompleted = null;
-            }
-        }
+		public void BatchCompleted()
+		{
+			_runWhenBatchCompleted?.DynamicInvoke(this);
+			_runWhenBatchCompleted = null;
+		}
 
-        public void SetValues(IEnumerable<ISkillStaffPeriod> skillStaffPeriods)
+		public void SetValues(IEnumerable<ISkillStaffPeriod> skillStaffPeriods)
         {
             skillStaffPeriods.ForEach(s =>
                                           {
                                               s.Reset();
                                               s.IsAvailable = false;
                                           });
+			var skillStaffPeriodForStartDateTime = skillStaffPeriods.ToDictionary(s => s.Period.StartDateTime);
             foreach (ISkillStaffPeriod skillStaffPeriod in _updatedSkillStaffPeriods)
             {
-                DateTime startDateTime = skillStaffPeriod.Period.StartDateTime;
-                var currentPeriod =
-                    skillStaffPeriods.FirstOrDefault(
-                        s => s.Period.StartDateTime == startDateTime);
-                if (currentPeriod == null) continue;
+                if (!skillStaffPeriodForStartDateTime.TryGetValue(skillStaffPeriod.Period.StartDateTime, out var currentPeriod)) continue;
 
                 currentPeriod.Payload.TaskData = skillStaffPeriod.Payload.TaskData;
                 currentPeriod.Payload.ServiceAgreementData = skillStaffPeriod.Payload.ServiceAgreementData;

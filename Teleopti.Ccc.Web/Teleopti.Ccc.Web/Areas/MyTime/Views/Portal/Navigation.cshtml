@@ -14,6 +14,9 @@
 	}
 
 	$(function() {
+
+		$("a[href='#RequestsTab']").click(function () { $("#requestList").click();});
+
 		var dateTimeDefaultValues = {
 			defaultStartTime: "@Model.DateTimeDefaultValues.StartTime",
 			defaultEndTime: "@Model.DateTimeDefaultValues.EndTime",
@@ -90,6 +93,8 @@
 							contentType: 'application/json; charset=utf-8',
 							success: function (grantBotConfig) {
 								var dl = new BotChat.DirectLine({ token: grantBotConfig.Token });
+								var user = { id: "@Model.CurrentLogonAgentId", name: "@Model.CurrentLogonAgentName" };
+
 								BotChat.App({
 									botConnection: Object.assign({}, dl, {
 										postActivity: activity => {
@@ -97,15 +102,29 @@
 											return dl.postActivity(newActivity);
 										}
 									}),
-									user: { id: "@Model.CurrentLogonAgentId", name: "@Model.CurrentLogonAgentName"},
+									user: user,
 									bot: { id: "botid" },
 									resize: "detect",
 									chatTitle: false,
 									showUploadButton: false
 								}, document.getElementById("grantBot"));
+
+								dl.postActivity({
+										from: user,
+										name: 'startConversation',
+										type: 'event',
+										value: '',
+										channelData: {
+											"personId": "@Model.CurrentLogonAgentId",
+											"environment": window.location.host
+										}
+									})
+									.subscribe(function (id) {
+										if (console) console.log('"trigger requestWelcomeDialog" sent');
+									});
 							},
 							error: function (e) {
-								console.error("Failed to load GrantBot config.", e);
+								if (console) console.error("Failed to load GrantBot config.", e);
 							}
 						});
 

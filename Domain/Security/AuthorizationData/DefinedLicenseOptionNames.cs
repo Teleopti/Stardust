@@ -25,10 +25,6 @@
         /// Constant string for Freemium base option name
         /// </summary>
         public const string TeleoptiCccFreemiumBase = "Teleopti WFM Freemium Base";
-        /// <summary>
-        /// Constant string for EarlyBird base option name
-        /// </summary>
-        public const string TeleoptiCccPilotCustomersBase = "Teleopti WFM Pilot Customers Base";
 
 		public const string TeleoptiWfmVNextPilot = "Teleopti WFM VNext Pilot";
 

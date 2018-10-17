@@ -623,6 +623,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 				name = personPeriod.RuleSetBag.Description.Name;
 
 			createAndAddItem(listViewPersonPeriod, Resources.RuleSetBag, name, 2);
+
+			name = string.Empty;
+			if (personPeriod.BudgetGroup != null && !((IDeleteTag)personPeriod.BudgetGroup).IsDeleted)
+				name = personPeriod.BudgetGroup.Name;
+
+			createAndAddItem(listViewPersonPeriod, Resources.BudgetGroup, name, 2);
+
 			listViewPersonPeriod.Columns[0].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
 			listViewPersonPeriod.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
 		}

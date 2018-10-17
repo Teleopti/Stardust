@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             Expect.Call(_licenseStatusReps.LicenseStatus).Return(_licenseStatus);
             Expect.Call(_licenseStatusReps.XmlLicenseService(500)).Return(_licenseService);
 
-            Expect.Call(_licenseStatus.CheckDate = DateTime.Today.Date);
+            Expect.Call(_licenseStatus.CheckDate = DateTime.Today);
             Expect.Call(_licenseStatus.LastValidDate = DateTime.Today.AddDays(1));
             Expect.Call(_licenseStatus.StatusOk = true);
             Expect.Call(_licenseStatus.NumberOfActiveAgents = 500);
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 
             Expect.Call(_licenseStatus.StatusOk).Return(false).Repeat.Times(2);
             Expect.Call(_licenseStatus.NumberOfActiveAgents = 500);
-            Expect.Call(_licenseStatus.CheckDate = DateTime.Today.Date);
+            Expect.Call(_licenseStatus.CheckDate = DateTime.Today);
             Expect.Call(_licenseStatus.LastValidDate).Return(DateTime.Today.AddDays(6).Date);
             Expect.Call(_licenseStatus.DaysLeft = 6);
             Expect.Call(_licenseStatus.GetNewStatusDocument()).Return(new XmlDocument());

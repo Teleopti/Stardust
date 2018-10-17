@@ -67,8 +67,6 @@
 		Wfm_PeopleWeb_PrepareForRelease_74903,
 		Wfm_Authentication_ChangePasswordMenu_76666,
 
-		People_SpeedUpOpening_76365,
-
 		WfmGlobalLayout_personalOptions_37114,
 
 		WFM_Gamification_Permission_76546,

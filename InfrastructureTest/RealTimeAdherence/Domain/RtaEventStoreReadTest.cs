@@ -353,6 +353,22 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 			
 			latestEvents.MaxId.Should().Be.GreaterThan(maxId);
 			latestEvents.Events.Count().Should().Be(1);			
+		}			
+		
+		[Test]
+		public void ShouldSetToPreviousMaxIfNoNewEvents()
+		{
+			Publisher.Publish(new PersonStateChangedEvent
+			{
+				PersonId = Guid.NewGuid(),
+				Timestamp = "2018-10-17 08:00".Utc()
+			});						
+			var events = WithUnitOfWork.Get(() => Events.LoadFrom(0));
+			var previousMaxId = events.MaxId;
+			
+			var latestEvents = WithUnitOfWork.Get(() => Events.LoadFrom(previousMaxId));
+		
+			latestEvents.MaxId.Should().Be(previousMaxId);
 		}		
 		
 	}

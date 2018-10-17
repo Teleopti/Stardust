@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     {
         private readonly DateTime _date = new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc);
         private IVisualLayerFactory _layerFactory;
-        private IWorkShiftCalculator _target;
+        private NonSecretWorkShiftCalculatorClassic _target;
 
     	[SetUp]
         public void Setup()

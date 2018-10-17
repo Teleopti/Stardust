@@ -12,17 +12,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 	public class AnalyticsFactScheduleDayCountMapper : IAnalyticsFactScheduleDayCountMapper
 	{
-		private readonly IAnalyticsFactScheduleDateMapper _factScheduleDateMapper;
 		private readonly IAnalyticsFactScheduleTimeMapper _timeMapper;
 		private readonly AnalyticsDateMapper _analyticsDateMapper;
 
 		public AnalyticsFactScheduleDayCountMapper(
-			IAnalyticsFactScheduleDateMapper factScheduleDateMapper,
 			IAnalyticsFactScheduleTimeMapper timeMapper,
 			AnalyticsDateMapper analyticsDateMapper)
 
 		{
-			_factScheduleDateMapper = factScheduleDateMapper;
 			_timeMapper = timeMapper;
 			_analyticsDateMapper = analyticsDateMapper;
 		}

@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Interfaces.Domain;
@@ -137,18 +136,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			Assert.IsTrue(_licenseService.TeleoptiCccPerformanceManagerEnabled);
 			Assert.IsTrue(_licenseService.TeleoptiCccPayrollIntegrationEnabled);
 			Assert.IsTrue(_licenseService.TeleoptiCccMyTimeWebEnabled);
-
-			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersBaseEnabled);
-			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersForecastsEnabled);
-			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersShiftsEnabled);
-			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersPeopleEnabled);
-			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersAgentPortalEnabled);
-			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersOptionsEnabled);
-			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersSchedulerEnabled);
-			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersIntradayEnabled);
-			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersPermissionsEnabled);
-			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersReportsEnabled);
-
+			
 			Assert.IsFalse(_licenseService.TeleoptiCccFreemiumForecastsEnabled);
 		}
 
@@ -186,18 +174,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			Assert.IsFalse(_licenseService.TeleoptiCccPerformanceManagerEnabled);
 			Assert.IsFalse(_licenseService.TeleoptiCccPayrollIntegrationEnabled);
 			Assert.IsFalse(_licenseService.TeleoptiCccMyTimeWebEnabled);
-
-			Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersBaseEnabled);
-			Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersForecastsEnabled);
-			Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersShiftsEnabled);
-			Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersPeopleEnabled);
-			Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersAgentPortalEnabled);
-			Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersOptionsEnabled);
-			Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersSchedulerEnabled);
-			Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersIntradayEnabled);
-			Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersPermissionsEnabled);
-			Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersReportsEnabled);
-
+			
 			Assert.IsFalse(_licenseService.TeleoptiCccFreemiumForecastsEnabled);
 		}
 
@@ -235,17 +212,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			Assert.IsFalse(_licenseService.TeleoptiCccPerformanceManagerEnabled);
 			Assert.IsFalse(_licenseService.TeleoptiCccPayrollIntegrationEnabled);
 			Assert.IsFalse(_licenseService.TeleoptiCccMyTimeWebEnabled);
-
-			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersBaseEnabled);
-			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersForecastsEnabled);
-			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersShiftsEnabled);
-			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersPeopleEnabled);
-			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersAgentPortalEnabled);
-			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersOptionsEnabled);
-			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersSchedulerEnabled);
-			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersIntradayEnabled);
-			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersPermissionsEnabled);
-			Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersReportsEnabled);
 
 			Assert.IsTrue(_licenseService.TeleoptiCccFreemiumForecastsEnabled);
 		}

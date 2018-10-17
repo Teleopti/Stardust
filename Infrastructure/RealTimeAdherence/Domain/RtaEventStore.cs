@@ -146,7 +146,7 @@ ORDER BY [Id]
 				);
 			return new LoadedEvents
 			{
-				MaxId = events.IsNullOrEmpty() ? 0 : events.Last().Id,
+				MaxId = events.IsNullOrEmpty() ? fromEventId : events.Last().Id,
 				Events = events.Select(e => e.DeserializedEvent).ToArray()
 			};
 		}

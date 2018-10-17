@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
                 var licenseService = _licenseStatusRepositories.XmlLicenseService(numberOfActiveAgents);
 
                 //Ok
-                status.CheckDate = DateTime.Today.Date;
+                status.CheckDate = DateTime.Today;
                 status.LastValidDate = DateTime.Today.AddDays(1).Date;
                 status.StatusOk = true;
                 status.AlmostTooMany = licenseService.IsThisAlmostTooManyActiveAgents(numberOfActiveAgents);
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
                     //Ok before  but not now
                     if (status.StatusOk)
                     {
-                        status.CheckDate = DateTime.Today.Date;
+                        status.CheckDate = DateTime.Today;
                         status.LastValidDate = DateTime.Today.AddDays(15).Date;
                         status.DaysLeft = 15;
                         status.StatusOk = false;
@@ -65,8 +65,8 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
                     if (!status.StatusOk)
                     {
                         status.NumberOfActiveAgents = numberOfActiveAgents;
-                        status.CheckDate = DateTime.Today.Date;
-                        status.DaysLeft = (int)Math.Round((status.LastValidDate.Date - DateTime.Today.Date).TotalDays);
+                        status.CheckDate = DateTime.Today;
+                        status.DaysLeft = (int)Math.Round((status.LastValidDate.Date - DateTime.Today).TotalDays);
                         _licenseStatusRepositories.SaveLicenseStatus(status.GetNewStatusDocument().OuterXml);
                         return 1;
                     }

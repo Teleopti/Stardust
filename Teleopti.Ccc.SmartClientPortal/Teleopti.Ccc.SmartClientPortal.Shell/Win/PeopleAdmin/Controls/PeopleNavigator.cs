@@ -6,7 +6,6 @@ using Autofac;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -19,7 +18,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
@@ -149,41 +147,45 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 			_applicationInsights.TrackEvent("Opened agents in People Module.");
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability",
+			"CA2000:Dispose objects before losing scope")]
 		private void openPeople(IEnumerable<Guid> selectedGuids)
 		{
 			if (selectedGuids == null || selectedGuids.IsEmpty()) return;
 			var saviour = _container.Resolve<ITenantDataManager>();
 			_gracefulDataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() =>
-																													{
-																														IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork();
+			{
+				IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork();
 
-																														var foundPeople = _personRepository.FindPeople(selectedGuids).ToList();
-																														var accounts = new PersonAbsenceAccountRepository(uow).FindByUsers(foundPeople);
-																														var logonData = _tenantDataManager.GetLogonInfoModelsForGuids(selectedGuids);
-																														var repositoryFactory = new RepositoryFactory();
-																														var currentUnitOfWork = new ThisUnitOfWork(uow);
-																														ITraceableRefreshService service = new TraceableRefreshService(_currentScenario, new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork)));
+				var foundPeople = _personRepository.FindPeople(selectedGuids).ToList();
+				var accounts = new PersonAbsenceAccountRepository(uow).FindByUsers(foundPeople);
+				var logonData = _tenantDataManager.GetLogonInfoModelsForGuids(selectedGuids);
+				var repositoryFactory = new RepositoryFactory();
+				var currentUnitOfWork = new ThisUnitOfWork(uow);
+				ITraceableRefreshService service = new TraceableRefreshService(_currentScenario,
+					new ScheduleStorage(currentUnitOfWork, repositoryFactory,
+						new PersistableScheduleDataPermissionChecker(),
+						new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork)));
 
-																														var filteredPeopleHolder = new FilteredPeopleHolder(service, accounts, saviour, _personRepository)
-																														{
-																															SelectedDate = _selectorPresenter.SelectedDate,
-																															GetUnitOfWork = uow
-																														};
+				var filteredPeopleHolder = new FilteredPeopleHolder(service, accounts, saviour, _personRepository)
+				{
+					SelectedDate = _selectorPresenter.SelectedDate,
+					GetUnitOfWork = uow
+				};
 
-																														var state = new WorksheetStateHolder(_container.Resolve<IToggleManager>().IsEnabled(Toggles.People_SpeedUpOpening_76365));
+				var state = new WorksheetStateHolder();
 
-																														loadPeopleGeneralViewAndInitialReferences(state, uow);
+				loadPeopleGeneralViewAndInitialReferences(state, uow);
 
-																														filteredPeopleHolder.LoadIt();
+				filteredPeopleHolder.LoadIt();
 
-																														filteredPeopleHolder.SetRotationCollection(state.AllRotations);
-																														filteredPeopleHolder.SetAvailabilityCollection(state.AllAvailabilities);
+				filteredPeopleHolder.SetRotationCollection(state.AllRotations);
+				filteredPeopleHolder.SetAvailabilityCollection(state.AllAvailabilities);
 
-																														filteredPeopleHolder.ReassociateSelectedPeopleWithNewUowOpenPeople(foundPeople, logonData);
+				filteredPeopleHolder.ReassociateSelectedPeopleWithNewUowOpenPeople(foundPeople, logonData);
 
-																														openPeopleAdmin(state, filteredPeopleHolder, _mainWindow);
-																													});
+				openPeopleAdmin(state, filteredPeopleHolder, _mainWindow);
+			});
 		}
 
 		void onAddNewPeople(object sender, EventArgs e)
@@ -245,7 +247,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 				var repositoryFactory = new RepositoryFactory();
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
 				ITraceableRefreshService cacheServiceForPersonAccounts = new TraceableRefreshService(_currentScenario, new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork)));
-				var state = new WorksheetStateHolder(_container.Resolve<IToggleManager>().IsEnabled(Toggles.People_SpeedUpOpening_76365));
+				var state = new WorksheetStateHolder();
 				var saviour = _container.Resolve<ITenantDataManager>();
 				var filteredPeopleHolder = new FilteredPeopleHolder(cacheServiceForPersonAccounts, accounts, saviour, _personRepository)
 				{
@@ -367,13 +369,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 
 				using (var findForm = new PersonFinderView(_selectorPresenter.SelectedDate))
 				{
-					findForm.DoubleClickSelectedPeople += FindFormDoubleClickSelectedPeople;
+					findForm.DoubleClickSelectedPeople += findFormDoubleClickSelectedPeople;
 					findForm.ShowDialog(this);
 					if (findForm.DialogResult == DialogResult.OK)
 					{
 						selectedGuids = findForm.SelectedPersonGuids;
 					}
-					findForm.DoubleClickSelectedPeople -= FindFormDoubleClickSelectedPeople;
+					findForm.DoubleClickSelectedPeople -= findFormDoubleClickSelectedPeople;
 				}
 				openPeople(selectedGuids);
 
@@ -381,7 +383,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 			Cursor.Current = Cursors.Default;
 		}
 
-		private void FindFormDoubleClickSelectedPeople(object sender, EventArgs e)
+		private void findFormDoubleClickSelectedPeople(object sender, EventArgs e)
 		{
 			var form = sender as PersonFinderView;
 			if (form == null) return;

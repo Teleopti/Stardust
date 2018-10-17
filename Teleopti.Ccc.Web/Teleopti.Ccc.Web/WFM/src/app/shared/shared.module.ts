@@ -3,6 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DowngradeableComponent } from '@wfm/types';
 import { en_US, NgZorroAntdModule, NZ_I18N } from 'ng-zorro-antd';
 import { FeedbackMessageComponent } from './components';
 import { LogonInfoService } from './services';
@@ -30,3 +31,7 @@ import { LogonInfoService } from './services';
 	declarations: [FeedbackMessageComponent]
 })
 export class SharedModule {}
+
+export const sharedComponents: DowngradeableComponent[] = [
+	{ ng1Name: 'ng2FeedbackMessage', ng2Component: FeedbackMessageComponent }
+];

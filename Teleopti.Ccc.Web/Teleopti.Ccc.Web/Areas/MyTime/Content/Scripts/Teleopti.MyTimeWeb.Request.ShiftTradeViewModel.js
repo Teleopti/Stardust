@@ -1,5 +1,10 @@
 Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	var self = this;
+
+	self.isMobile = Teleopti.MyTimeWeb.Common.IsHostAMobile();
+	self.isiPad = Teleopti.MyTimeWeb.Common.IsHostAniPad();
+	self.isDesktop = !self.isMobile && !self.isiPad;
+
 	self.layerCanvasPixelWidth = ko.observable();
 	self.weekStart = ko.observable(1);
 	self.openPeriodStartDate = ko.observable(

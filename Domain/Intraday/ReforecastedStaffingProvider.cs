@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.Staffing;
@@ -36,40 +37,37 @@ namespace Teleopti.Ccc.Domain.Intraday
 			if (latestStatsTime > usersNow) // This case only for dev, test and demo
 				usersNow = latestStatsTime.Value.AddMinutes(minutesPerInterval);
 
-			var reforecastedStaffingPerSkill = new List<StaffingInterval>();
-
-			foreach (var skillId in forecastedCallsPerSkillDictionary.Keys)
+			var staffingBySkill = forecastedStaffingList.ToLookup(f => f.SkillId);
+			var reforecastedStaffingPerSkill = forecastedCallsPerSkillDictionary.Keys.SelectMany(skillId =>
 			{
-				var averageDeviation = calculateMovingAverage(actualCallsPerSkillList, forecastedCallsPerSkillDictionary, skillId);
+				var averageDeviation =
+					calculateMovingAverage(actualCallsPerSkillList, forecastedCallsPerSkillDictionary, skillId);
 
-				var reforecastedStaffing = forecastedStaffingList
-					.Where(x => x.SkillId == skillId && x.StartTime >= usersNow)
+				return staffingBySkill[skillId]
+					.Where(x => x.StartTime >= usersNow)
 					.Select(t => new StaffingInterval
 					{
 						SkillId = skillId,
-						Agents = t.Agents*averageDeviation,
+						Agents = t.Agents * averageDeviation,
 						StartTime = t.StartTime
 					})
 					.OrderBy(y => y.StartTime)
 					.ToList();
-
-				reforecastedStaffingPerSkill.AddRange(reforecastedStaffing);
-			}
+			});
 
 			return !reforecastedStaffingPerSkill.Any() 
 				? new double?[] {} 
 				: getDataSeries(minutesPerInterval, timeSeries, reforecastedStaffingPerSkill);
 		}
 
-		private static double?[] getDataSeries(int minutesPerInterval, DateTime[] timeSeries, List<StaffingInterval> reforecastedStaffingPerSkill)
+		private static double?[] getDataSeries(int minutesPerInterval, DateTime[] timeSeries, IEnumerable<StaffingInterval> reforecastedStaffingPerSkill)
 		{
 			var returnValue = reforecastedStaffingPerSkill
 				.OrderBy(g => g.StartTime)
 				.GroupBy(h => h.StartTime)
 				.Select(s => (double?) s.Sum(a => a.Agents))
 				.ToList();
-
-
+			
 			var timeSeriesStart = timeSeries.Min();
 			var reforecastStart = reforecastedStaffingPerSkill
 				.Min(m => m.StartTime);
@@ -97,7 +95,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			Dictionary<Guid, List<SkillIntervalStatistics>> forecastedCallsPerSkillDictionary, 
 			Guid skillId)
 		{
-			List<SkillIntervalStatistics> actualStats = actualCallsPerSkillList.Where(x => x.SkillId == skillId).ToList();
+			var actualStats = actualCallsPerSkillList.Where(x => x.SkillId == skillId).ToLookup(k => k.StartTime);
 			List<double> listDeviationFactorPerInterval = new List<double>();
 			double averageDeviation = 1;
 			var alpha = 0.2d;
@@ -107,8 +105,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			foreach (var forecastedIntervalCalls in forecastedCallsPerSkillDictionary[skillId])
 			{
-				var actualIntervalCalls = actualStats.Where(x => x.StartTime == forecastedIntervalCalls.StartTime);
-				if (actualIntervalCalls == null)
+				var actualIntervalCalls = actualStats[forecastedIntervalCalls.StartTime];
+				if (actualIntervalCalls.IsEmpty())
 					continue;
 				if (Math.Abs(forecastedIntervalCalls.Calls) < 0.1)
 					continue;

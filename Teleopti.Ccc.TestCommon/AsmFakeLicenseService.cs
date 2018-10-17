@@ -10,17 +10,7 @@ namespace Teleopti.Ccc.TestCommon
 			ExpirationDate = DateTime.MaxValue;
 			ExpirationGracePeriod = TimeSpan.FromDays(10);
 			MaxActiveAgentsGrace = 1000;
-
-			TeleoptiCccPilotCustomersBaseEnabled = false;
-			TeleoptiCccPilotCustomersForecastsEnabled = false;
-			TeleoptiCccPilotCustomersShiftsEnabled = false;
-			TeleoptiCccPilotCustomersPeopleEnabled = false;
-			TeleoptiCccPilotCustomersAgentPortalEnabled = false;
-			TeleoptiCccPilotCustomersOptionsEnabled = false;
-			TeleoptiCccPilotCustomersSchedulerEnabled = false;
-			TeleoptiCccPilotCustomersIntradayEnabled = false;
-			TeleoptiCccPilotCustomersPermissionsEnabled = false;
-			TeleoptiCccPilotCustomersReportsEnabled = false;
+			
 			TeleoptiCccBaseEnabled = true;
 			TeleoptiCccDeveloperEnabled = true;
 			TeleoptiCccAgentSelfServiceEnabled = true;
@@ -67,16 +57,6 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			throw new NotImplementedException();
 		}
-		public bool TeleoptiCccPilotCustomersBaseEnabled { get; }
-		public bool TeleoptiCccPilotCustomersForecastsEnabled { get; }
-		public bool TeleoptiCccPilotCustomersShiftsEnabled { get; }
-		public bool TeleoptiCccPilotCustomersPeopleEnabled { get; }
-		public bool TeleoptiCccPilotCustomersAgentPortalEnabled { get; }
-		public bool TeleoptiCccPilotCustomersOptionsEnabled { get; }
-		public bool TeleoptiCccPilotCustomersSchedulerEnabled { get; }
-		public bool TeleoptiCccPilotCustomersIntradayEnabled { get; }
-		public bool TeleoptiCccPilotCustomersPermissionsEnabled { get; }
-		public bool TeleoptiCccPilotCustomersReportsEnabled { get; }
 		public bool TeleoptiCccBaseEnabled { get; }
 		public bool TeleoptiCccDeveloperEnabled { get; }
 		public bool TeleoptiCccAgentSelfServiceEnabled { get; }
