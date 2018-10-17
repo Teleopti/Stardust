@@ -18,12 +18,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakePersonRepository : IPersonRepository, IEnumerable<IPerson>, IWriteSideRepository<IPerson>, IProxyForId<IPerson>, IPersonLoadAllWithAssociation
 	{
 		private readonly IFakeStorage _storage;
-		private readonly IDictionary<Guid, string> _appLogonNames;
 
 		public FakePersonRepository(IFakeStorage storage)
 		{
 			_storage = storage ?? new FakeStorageSimple();
-			_appLogonNames = new Dictionary<Guid, string>();
 		}
 
 		public void Has(IPerson person)
@@ -37,15 +35,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			{
 				Has(person);
 			}
-		}
-
-		/// <summary>
-		/// Add a person with application logon name
-		/// </summary>
-		public void Has(IPerson person, string appLogonName)
-		{
-			_storage.Add(person);
-			_appLogonNames.Add(person.Id.Value, appLogonName);
 		}
 
 		public Person Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage,
