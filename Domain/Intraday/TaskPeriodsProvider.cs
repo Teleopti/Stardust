@@ -19,34 +19,13 @@ namespace Teleopti.Ccc.Domain.Intraday
 		
 		public IEnumerable<ISkillStaffPeriodView> Load(ISkillDay skillDay,
 			int minutesPerInterval,
-			DateTime? latestStatisticsTime)
-		{
-			var timeZone = _timeZone.TimeZone();
-			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone);
-			var usersNowStartOfDayUtc = TimeZoneHelper.ConvertToUtc(usersNow.Date, timeZone);
-			var latestStatisticsTimeUtc = getLatestStatisticsTimeUtc(latestStatisticsTime);
-			
-			if (!latestStatisticsTimeUtc.HasValue)
-				return Enumerable.Empty<ISkillStaffPeriodView>();
-			
-			if (minutesPerInterval > skillDay.Skill.DefaultResolution)
-				return Enumerable.Empty<ISkillStaffPeriodView>();
-
-			return skillDay.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(minutesPerInterval)).Where(t =>
-				t.Period.StartDateTime >= usersNowStartOfDayUtc &&
-				t.Period.EndDateTime <= latestStatisticsTimeUtc.Value.AddMinutes(minutesPerInterval)
-			);
-		}
-
-		public IEnumerable<ISkillStaffPeriodView> Load(ISkillDay skillDay,
-			int minutesPerInterval,
 			DateTime? latestStatisticsTime,
-			DateTime? nullableCurrentDateTime)
+			DateTime? nullableCurrentDateTime = null)
 		{
-			if (nullableCurrentDateTime == null) return Load(skillDay, minutesPerInterval, latestStatisticsTime);
-
 			var userTimeZone = _timeZone.TimeZone();
-			var usersNow = TimeZoneHelper.ConvertFromUtc(DateTime.SpecifyKind(nullableCurrentDateTime.Value,DateTimeKind.Utc), userTimeZone);
+			var usersNow = TimeZoneHelper.ConvertFromUtc(
+				DateTime.SpecifyKind(nullableCurrentDateTime ?? _now.UtcDateTime(), DateTimeKind.Utc),
+				userTimeZone);
 			var usersNowStartOfDayUtc = TimeZoneHelper.ConvertToUtc(usersNow.Date, userTimeZone);
 			var latestStatisticsTimeUtc = getLatestStatisticsTimeUtc(latestStatisticsTime);
 			

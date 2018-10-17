@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 					intervalModels.Add(new ForecastExportIntervalModel
 					{
 						IntervalStartUtc = taskPeriod.Period.StartDateTime,
-						IntervalStart = TimeZoneHelper.ConvertFromUtc(taskPeriod.Period.StartDateTime, skillTimeZone),
+						IntervalStart = taskPeriod.Period.StartDateTimeLocal(skillTimeZone),
 						Calls = taskPeriod.TotalTasks,
 						AverageTalkTime = taskPeriod.TotalAverageTaskTime.TotalSeconds,
 						AverageAfterCallWork = taskPeriod.TotalAverageAfterTaskTime.TotalSeconds,

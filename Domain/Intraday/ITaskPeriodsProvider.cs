@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 {
 	public interface ITaskPeriodsProvider
 	{
-		IEnumerable<ISkillStaffPeriodView> Load(ISkillDay skillDay, int minutesPerInterval, DateTime? latestStatisticsTime);
 		IEnumerable<ISkillStaffPeriodView> Load(ISkillDay skillDay, int minutesPerInterval, DateTime? latestStatisticsTime, DateTime? nullableCurrentDateTime);
 	}
 }

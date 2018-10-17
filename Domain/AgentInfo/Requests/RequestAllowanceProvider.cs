@@ -99,10 +99,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var dayCollection = period.DayCollection();
 			var allBudgetDaysForPeriod = new List<IBudgetDay>(dayCollection.Count);
 
+			var existingBudgetDaysForDay = existingBudgetDays.ToDictionary(d => d.Day);
 			foreach (var date in dayCollection)
 			{
-				var budgetDay = existingBudgetDays.FirstOrDefault(d => d.Day == date);
-				if (budgetDay == null)
+				if (!existingBudgetDaysForDay.TryGetValue(date, out var budgetDay))
 				{
 					budgetDay = new BudgetDay(selectedBudgetGroup, _scenarioRepository.Current(), date);
 					initiateBudgetDayWithDefaultValue(budgetDay);

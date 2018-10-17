@@ -134,6 +134,21 @@
 		);
 	}
 
+	function setupTeamScheduleColumnClickBinding() {
+		setTimeout(function() {
+			$('.teammates-schedules-column').each(function(index, ele) {
+				ele.addEventListener(
+					'click',
+					function() {
+						$('.teammates-schedules-column').css({ 'z-index': '0' });
+						$(ele).css({ 'z-index': '1' });
+					},
+					true
+				);
+			});
+		}, 0);
+	}
+
 	function registerSwipeEventOnMobileAndiPad() {
 		var container = $('.teammates-schedules-container');
 		var containerWidth = $('.teammates-schedules-container').width();
@@ -591,6 +606,7 @@
 	function fetchDataSuccessCallback() {
 		hideLoadingGif();
 		completelyLoaded();
+		setupTeamScheduleColumnClickBinding();
 		if (!subscribed) subscribeForChanges();
 	}
 

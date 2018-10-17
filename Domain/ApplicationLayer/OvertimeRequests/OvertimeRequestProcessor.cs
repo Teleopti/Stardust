@@ -193,8 +193,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 		private ISkillType getDefaultSkillType()
 		{
-			ISkillType phoneSkillType;
-			phoneSkillType = _skillTypeRepository.LoadAll()
+			var phoneSkillType = _skillTypeRepository.LoadAll()
 				.FirstOrDefault(s => s.Description.Name.Equals(SkillTypeIdentifier.Phone));
 			return phoneSkillType;
 		}
