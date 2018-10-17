@@ -118,7 +118,7 @@ WFM_Intraday_Redesign_77214 = RC
 # Ziggy #
 WfmStaffing_AddOvertime_42524 = RC
 Wfm_Payroll_SupportMultiDllPayrolls_75959 = RC
-Wfm_Stardust_EnableScaleout_77366 = false
+Wfm_Stardust_EnableScaleout_77366 = true
 
 # Squids #
 WFM_Forecaster_Refact_44480 = true
