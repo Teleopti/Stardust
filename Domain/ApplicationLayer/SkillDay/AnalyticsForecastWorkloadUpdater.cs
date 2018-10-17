@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 
 		public AnalyticsForecastWorkloadUpdater(ISkillDayRepository skillDayRepository,
 			IAnalyticsWorkloadRepository analyticsWorkloadRepository,
-			IAnalyticsDateRepository analyticsDateRepository,
 			IAnalyticsScenarioRepository analyticsScenarioRepository,
 			IAnalyticsForecastWorkloadRepository analyticsForecastWorkloadRepository,
 			IAnalyticsIntervalRepository analyticsIntervalRepository,
