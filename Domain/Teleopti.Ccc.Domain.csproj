@@ -2101,7 +2101,6 @@
     <Compile Include="Forecasting\Angel\HistoricalPeriodProvider.cs" />
     <Compile Include="Forecasting\Angel\IHistoricalPeriodProvider.cs" />
     <Compile Include="Forecasting\Angel\IntradayForecaster.cs" />
-    <Compile Include="Forecasting\Angel\Methods\AhtAndAcw.cs" />
     <Compile Include="Forecasting\Angel\Methods\DateAndTask.cs" />
     <Compile Include="Forecasting\Angel\Methods\ForecastMethodProvider.cs" />
     <Compile Include="Forecasting\Angel\Methods\ForecastMethodType.cs" />
