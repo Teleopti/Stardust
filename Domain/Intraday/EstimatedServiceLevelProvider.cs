@@ -15,35 +15,24 @@ namespace Teleopti.Ccc.Domain.Intraday
 {
 	public class EstimatedServiceLevelProvider
 	{
-		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly IScheduledStaffingProvider _scheduledStaffingProvider;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorService;
-		private readonly ISkillStaffingIntervalProvider _skillStaffingIntervalProvider;
-
 		private readonly IForecastedCallsProvider _forecastedCallsProvider;
 		private readonly IForecastedStaffingProvider _forecastedStaffingProvider;
-		private readonly IIntradayForecastingService _forecastingService;
 
 		public EstimatedServiceLevelProvider(
-			IIntervalLengthFetcher intervalLengthFetcher,
 			IScheduledStaffingProvider scheduledStaffingProvider,
 			IUserTimeZone timeZone,
 			IStaffingCalculatorServiceFacade staffingCalculatorService,
-			ISkillStaffingIntervalProvider skillStaffingIntervalProvider,
 			IForecastedCallsProvider forecastedCallsProvider,
-			IForecastedStaffingProvider forecastedStaffingProvider,
-			IIntradayForecastingService forecastingService)
+			IForecastedStaffingProvider forecastedStaffingProvider)
 		{
 			_scheduledStaffingProvider = scheduledStaffingProvider;
 			_timeZone = timeZone;
 			_staffingCalculatorService = staffingCalculatorService;
-			_intervalLengthFetcher = intervalLengthFetcher;
-			_skillStaffingIntervalProvider = skillStaffingIntervalProvider;
 			_forecastedCallsProvider = forecastedCallsProvider;
 			_forecastedStaffingProvider = forecastedStaffingProvider;
-
-			this._forecastingService = forecastingService ?? throw new ArgumentNullException(nameof(forecastingService));
 		}
 
 		public double EslSummary(IList<EslInterval> eslIntervals)
