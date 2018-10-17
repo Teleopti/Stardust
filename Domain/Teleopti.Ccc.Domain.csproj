@@ -142,7 +142,6 @@
     <Compile Include="AgentInfo\OvertimeRequestUnderStaffingSkillProviderToggle74944On.cs" />
     <Compile Include="AgentInfo\OvertimeStaffingPossibilityCalculator.cs" />
     <Compile Include="AgentInfo\PersonExternalLogonInfo.cs" />
-    <Compile Include="AgentInfo\PersonIdentityInfo.cs" />
     <Compile Include="AgentInfo\PlanningGroupStaffLoader.cs" />
     <Compile Include="AgentInfo\CalculatedPossibilityModel.cs" />
     <Compile Include="AgentInfo\EnumerablePersonExtensions.cs" />
@@ -2101,7 +2100,6 @@
     <Compile Include="Forecasting\Angel\HistoricalPeriodProvider.cs" />
     <Compile Include="Forecasting\Angel\IHistoricalPeriodProvider.cs" />
     <Compile Include="Forecasting\Angel\IntradayForecaster.cs" />
-    <Compile Include="Forecasting\Angel\Methods\AhtAndAcw.cs" />
     <Compile Include="Forecasting\Angel\Methods\DateAndTask.cs" />
     <Compile Include="Forecasting\Angel\Methods\ForecastMethodProvider.cs" />
     <Compile Include="Forecasting\Angel\Methods\ForecastMethodType.cs" />

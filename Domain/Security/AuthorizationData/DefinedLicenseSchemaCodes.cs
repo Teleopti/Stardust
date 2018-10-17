@@ -13,9 +13,5 @@
         /// Constant string for Forecaster/Freemium schema
         /// </summary>
         public const string TeleoptiWFMForecastsSchema = "TeleoptiWFMForecasts";
-        /// <summary>
-        /// Constant string for Early bird schema
-        /// </summary>
-        public const string TeleoptiWFMPilotCustomersSchema = "TeleoptiWFMPilotCustomers";
     }
 }
