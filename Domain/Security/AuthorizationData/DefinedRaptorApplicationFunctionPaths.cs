@@ -95,11 +95,11 @@
 		// Online Reports
 		public const string ScheduledTimePerActivityReport = "Raptor/OnlineReports/ScheduledTimePerActivityReport";
 		public const string ScheduleAuditTrailReport = "Raptor/OnlineReports/ScheduleAuditTrailReport";
-		public const string GeneralAuditTrailWebReport = "Raptor/OnlineReports/GeneralAuditTrailWebReport";
 		public const string ScheduleTimeVersusTargetTimeReport = "Raptor/OnlineReports/ScheduleTimeVersusTargetTimeReport";
 
 		// Reports
 		public const string ViewBadgeLeaderboardUnderReports = "Raptor/Reports/ViewBadgeLeaderboard";
+		public const string GeneralAuditTrailWebReport = "Raptor/Reports/GeneralAuditTrailWebReport";
 
 		// Agent Portal Web
 		public const string StudentAvailability = "Raptor/MyTimeWeb/StudentAvailability";

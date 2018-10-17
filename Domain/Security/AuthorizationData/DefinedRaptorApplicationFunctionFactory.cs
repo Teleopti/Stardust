@@ -113,12 +113,12 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			// Online Reports
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport, "xxScheduledTimePerActivityReport", DefinedRaptorApplicationFunctionForeignIds.ScheduledTimePerActivityReport);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport, "xxScheduleAuditTrailReport", DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailReport);
-			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.GeneralAuditTrailWebReport, "xxGeneralAuditTrailWebReport", DefinedRaptorApplicationFunctionForeignIds.GeneralAuditTrailWebReport);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport, "xxScheduledTimeVsTarget", DefinedRaptorApplicationFunctionForeignIds.ScheduleTimeVersusTargetTimeReport);
 
 			// Reports
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports, "xxBadgeLeaderBoardReport", DefinedRaptorApplicationFunctionForeignIds.ViewBadgeLeaderboardUnderReports);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailWebReport, "xxScheduleAuditTrailReport", DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailWebReport);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.GeneralAuditTrailWebReport, "xxGeneralAuditTrailWebReport", DefinedRaptorApplicationFunctionForeignIds.GeneralAuditTrailWebReport);
 
 			// Agent Portal Web
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.MyTimeWeb, "xxMyTimeWeb", DefinedRaptorApplicationFunctionForeignIds.MyTimeWeb);
