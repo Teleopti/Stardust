@@ -17,7 +17,6 @@
 		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
 
 		RTA_KillFattyIntradayUntilItDies_74939, //remove april 2019
-		LevelUp_HangfireStatistics_76139_76373,
 		RTA_DurationOfHistoricalEvents_76470,
 		RTA_ReviewHistoricalAdherence_74770,
 

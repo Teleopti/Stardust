@@ -39,7 +39,6 @@ WebByPassDefaultPermissionCheck_37984 = true
 
 # LevelUp #
 RTA_KillFattyIntradayUntilItDies_74939 = true
-LevelUp_HangfireStatistics_76139_76373 = true
 RTA_DurationOfHistoricalEvents_76470 = true
 RTA_ReviewHistoricalAdherence_74770 = RC
 
