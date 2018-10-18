@@ -258,7 +258,6 @@
     <Content Include="Etl\schedule.html" />
     <Content Include="Etl\scheduleModal.html" />
     <Content Include="HangfireMonitoring_LevelUp_HangfireStatistics_76139_76373.html" />
-    <Content Include="HangfireMonitoring.html" />
     <Content Include="login.html" />
     <Content Include="menuitem.html" />
     <Content Include="Content\angular-material.min.css" />
@@ -316,7 +315,6 @@
     </Content>
     <None Include="packages.config" />
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />
-    <Content Include="Scripts\Hangfire\hangfireMonitoringController.js" />
     <Content Include="Scripts\Hangfire\hangfireMonitoringController_LevelUp_HangfireStatistics_76139_76373.js" />
     <Content Include="Scripts\jquery-3.1.0.js" />
     <Content Include="Scripts\jquery-3.1.0.min.js" />

@@ -1,6 +1,4 @@
 ﻿@RTA
-@OnlyRunIfEnabled('RTA_EasilySpotLateForWork_75668')
-
 Feature: Easily spot late for work
   In order to spot late for work
   As a real-time analyst

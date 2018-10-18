@@ -3,7 +3,7 @@
 
 	angular
 		.module('adminApp')
-		.controller('loginController', loginController, ['$scope', '$http', '$window', '$cookies','$rootScope'])
+		.controller('loginController', loginController, ['$scope', '$http', '$window', '$cookies', '$rootScope'])
 		.directive('menuItem', function () {
 			return {
 				scope: {
@@ -30,77 +30,56 @@
 			};
 		});
 
-    function loginController($scope, $http, $cookies, $rootScope, tokenHeaderService) {
+	function loginController($scope, $http, $cookies, $rootScope, tokenHeaderService) {
 		var firstUser = false;
-	    var vm = this;
+		var vm = this;
 		//checked if has cookie
 		var cookie = $cookies.getObject('WfmAdminAuth');
 		var token = cookie ? cookie.tokenKey : null;
-		var LevelUp_HangfireStatistics_76139_76373 = false;
 
-	    vm.user = cookie ? cookie.user : null;
+		vm.user = cookie ? cookie.user : null;
 		vm.shouldShowEtl = false;
 		vm.loginPassword = "";
 		vm.Message = '';
 		vm.ErrorMessage = '';
-		
+
 		vm.Id = cookie ? cookie.id : null;
 
-		$http.get("./Toggle/IsEnabled",
-				{
-					params: { toggle: "LevelUp_HangfireStatistics_76139_76373" }
-				}, 
-				tokenHeaderService.getHeaders())
-			.then(function(data) {
-				LevelUp_HangfireStatistics_76139_76373 = data.data;
+		$http.get("./Etl/ShouldEtlToolBeVisible", tokenHeaderService.getHeaders())
+			.success(function (data) {
+				vm.shouldShowEtl = data;
 
 				$scope.menuItems.push(
 					{
-						text: "Hangfire Monitoring",
-						link: "#/HangfireMonitoring",
-						toggle: !LevelUp_HangfireStatistics_76139_76373
+						text: "ETL",
+						link: "#/ETL",
+						toggle: vm.shouldShowEtl
 					}
 				);
-
-				$scope.menuItems.push(
-					{
-						text: "Hangfire Statistics",
-						link: "#/HangfireStatistics",
-						toggle: LevelUp_HangfireStatistics_76139_76373
-					}
-				);
-			}).then(function() {
-				$http.get("./Etl/ShouldEtlToolBeVisible", tokenHeaderService.getHeaders())
-					.success(function (data) {
-						vm.shouldShowEtl = data;
-
-						$scope.menuItems.push(
-							{
-								text: "ETL",
-								link: "#/ETL",
-								toggle: vm.shouldShowEtl
-							}
-						);
-					});
 			});
 
-	    $scope.state = {
-		    selected: 1
-	    };
-	    $scope.menuItems = [{
-			    text: "Tenant administration",
-			    link: "#/",
-			    toggle: true
-		    }, {
-			    text: "Stardust Dashboard",
-			    link: "#/StardustDashboard",
-			    toggle: true
-		    }, {
-			    text: "Hangfire Dashboard",
-			    link: "#/HangfireDashboard",
-			    toggle: true
-		    }
-	    ];
+		$scope.state = {
+			selected: 1
+		};
+		$scope.menuItems = [
+			{
+				text: "Tenant administration",
+				link: "#/",
+				toggle: true
+			}, {
+				text: "Stardust Dashboard",
+				link: "#/StardustDashboard",
+				toggle: true
+			}, {
+				text: "Hangfire Dashboard",
+				link: "#/HangfireDashboard",
+				toggle: true
+			}, {
+				text: "Hangfire Statistics",
+				link: "#/HangfireStatistics",
+				toggle: true
+			}
+		];
 
 		$scope.message = "något som jag vill visa";
 
@@ -126,7 +105,7 @@
 
 		function showError(jqXHR) {
 			vm.ErrorMessage = jqXHR.Message + ': ' + jqXHR.ExceptionMessage;
-        }
+		}
 
 		function createCookies(data) {
 			vm.user = data.UserName;
@@ -134,18 +113,18 @@
 			vm.Message = 'Successful log in...';
 			// Cache the username token in session storage.
 			vm.UserName = data.UserName;
-			
+
 			//lets do authentication in cookie
 			var today = new Date();
 			var expireDate = new Date(today.getTime() + 30 * 60000);
-			$cookies.putObject('WfmAdminAuth', { 'tokenKey': data.AccessToken, 'user': data.UserName , 'id': data.Id }, { 'expires': expireDate });
+			$cookies.putObject('WfmAdminAuth', {'tokenKey': data.AccessToken, 'user': data.UserName, 'id': data.Id}, {'expires': expireDate});
 		}
 
 		updateCookies();
 
 		function updateCookies() {
 			//catch route chnaged : console.log("location changing to:" + next);
-			$rootScope.$on("$locationChangeStart", function(event, next, current) {
+			$rootScope.$on("$locationChangeStart", function (event, next, current) {
 				//check cookies
 				var checkedCookie = $cookies.getObject('WfmAdminAuth');
 				if (!checkedCookie) {
@@ -155,7 +134,7 @@
 					var info = $cookies.getObject('WfmAdminAuth');
 					var today = new Date();
 					var newExpireDate = new Date(today.getTime() + 30 * 60000);
-					$cookies.putObject('WfmAdminAuth', info, { 'expires': newExpireDate });
+					$cookies.putObject('WfmAdminAuth', info, {'expires': newExpireDate});
 				}
 			});
 		}

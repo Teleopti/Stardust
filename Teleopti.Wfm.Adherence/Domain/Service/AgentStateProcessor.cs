@@ -65,7 +65,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		private readonly AdherenceEventPublisher _adherenceEventPublisher;
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly ICurrentEventPublisher _currentEventPublisher;
-		private readonly ILateForWorkEventPublisher _lateForWorkEventPublisher;
+		private readonly LateForWorkEventPublisher _lateForWorkEventPublisher;
 		private readonly IRtaTracer _tracer;
 
 		public AgentStateProcessor(
@@ -76,7 +76,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			AdherenceEventPublisher adherenceEventPublisher,
 			IEventPublisherScope eventPublisherScope,
 			ICurrentEventPublisher currentEventPublisher,
-			ILateForWorkEventPublisher lateForWorkEventPublisher,
+			LateForWorkEventPublisher lateForWorkEventPublisher,
 			IRtaTracer tracer
 		)
 		{
