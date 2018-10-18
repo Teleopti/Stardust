@@ -46,5 +46,32 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			schedulingHintError.ValidationErrors.Single(x => x.ResourceType == ValidationResourceType.Preferences).ErrorResource
 				.Should().Be.EqualTo(nameof(Resources.AgentScheduledWithoutPreferences));
 		}
+		
+		[Test]
+		public void ShouldNotRepeatTheSameHintWhenTwoSchedulePeriodsAreUsed()
+		{
+			var period = new DateOnlyPeriod(2000,1,1,2000,1,2);
+			var agent = new Person().WithSchedulePeriodOneDay(period.StartDate).WithPersonPeriod()
+				.WithName(new Name(Guid.NewGuid().ToString(), Guid.NewGuid().ToString())).WithId();
+			var scenario = ScenarioRepository.Has();
+			var currentSchedule = new ScheduleDictionaryForTest(scenario, period.ToDateTimePeriod(TimeZoneInfo.Utc));
+			currentSchedule.AddScheduleData(agent, new PreferenceDay(agent, period.StartDate, new PreferenceRestriction
+			{
+				ShiftCategory = new ShiftCategory()
+			}),new PreferenceDay(agent, period.EndDate, new PreferenceRestriction
+			{
+				ShiftCategory = new ShiftCategory()
+			}));
+			currentSchedule.AddPersonAssignment(new PersonAssignment(agent, scenario, period.StartDate)
+				.ShiftCategory(new ShiftCategory()).WithLayer(new Activity(), new TimePeriod(1, 2)));
+			currentSchedule.AddPersonAssignment(new PersonAssignment(agent, scenario, period.EndDate)
+				.ShiftCategory(new ShiftCategory()).WithLayer(new Activity(), new TimePeriod(1, 2)));
+
+			var schedulingHintError = Target.Execute(new HintInput(currentSchedule, new[] { agent }, period, null, false))
+				.InvalidResources.Single();
+			schedulingHintError.ResourceName.Should().Be.EqualTo(agent.Name.ToString());
+			schedulingHintError.ValidationErrors.Single(x => x.ResourceType == ValidationResourceType.Preferences).ErrorResource
+				.Should().Be.EqualTo(nameof(Resources.AgentScheduledWithoutPreferences));
+		}
 	}
 }
