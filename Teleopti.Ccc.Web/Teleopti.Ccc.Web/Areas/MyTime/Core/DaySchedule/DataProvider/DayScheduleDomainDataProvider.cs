@@ -205,8 +205,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.DataProvider
 				}
 
 				var margin = TimeSpan.FromMinutes(ScheduleConsts.TimelineMarginInMinute);
-
-				return new TimePeriod(startTimeSpan.Subtract(margin), endTimeSpan.Add(margin));
+				return startTimeSpan == TimeSpan.Zero ? new TimePeriod(startTimeSpan, endTimeSpan.Add(margin)) : new TimePeriod(startTimeSpan.Subtract(margin), endTimeSpan.Add(margin));
 			}
 
 			return new TimePeriod(TimeSpan.Zero, TimeSpan.Zero);

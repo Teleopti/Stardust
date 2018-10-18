@@ -367,13 +367,12 @@ namespace Teleopti.Ccc.WebTest.Core
 			var result = Target.GetDaySchedule(date);
 
 			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(0);
-			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(-15);
+			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(0);
 
 			result.MinMaxTime.EndTime.Days.Should().Be.EqualTo(0);
 			result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(4);
 			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(15);
 		}
-
 
 		[Test]
 		public void
