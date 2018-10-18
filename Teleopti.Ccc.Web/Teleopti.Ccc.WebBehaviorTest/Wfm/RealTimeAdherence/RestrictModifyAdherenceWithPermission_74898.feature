@@ -1,6 +1,4 @@
 ﻿@RTA
-@OnlyRunIfEnabled('RTA_RestrictModifyAdherenceWithPermission_74898')
-
 Feature: Restrict modify adherence with permission
   As a Manager I need to define who is permitted to approve, and remove approval,
   so that all team leads can approve for their team members, but not for any others
