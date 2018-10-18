@@ -80,7 +80,7 @@
 		ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348,
 		ResourcePlanner_SeamlessPlanningForPreferences_76288,
 		
-		Wfm_ArchiveScheduleForPast_77958,
+		Wfm_CopyScheduleForPast_77958,
 
 		Wfm_DisplayOnlineHelp_39402,
 

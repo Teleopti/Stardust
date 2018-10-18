@@ -168,11 +168,11 @@
     <Compile Include="Aop\ValidationTest.cs" />
     <Compile Include="ApplicationLayer\AnalyticsPersonPeriodUpdaterIntegrationTests.cs" />
     <Compile Include="ApplicationLayer\AnalyticsScheduleMatchingPersonTest.cs" />
-    <Compile Include="ApplicationLayer\Archiving\ArchiveScheduleHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\Archiving\ImportScheduleHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\Archiving\MoveTestCase.cs" />
-    <Compile Include="ApplicationLayer\Archiving\ScheduleManagementTestBase.cs" />
-    <Compile Include="ApplicationLayer\Archiving\SourceAbsenceSplitTestCase.cs" />
+    <Compile Include="ApplicationLayer\ManageSchedule\CopyScheduleHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ManageSchedule\ImportScheduleHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ManageSchedule\MoveTestCase.cs" />
+    <Compile Include="ApplicationLayer\ManageSchedule\ScheduleManagementTestBase.cs" />
+    <Compile Include="ApplicationLayer\ManageSchedule\SourceAbsenceSplitTestCase.cs" />
     <Compile Include="ApplicationLayer\Concurrency\AnalyticsAvailabilityUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Concurrency\AnalyticsScheduleChangeUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Dates\AnalyticsPersonLocalDateUpdaterTest.cs" />

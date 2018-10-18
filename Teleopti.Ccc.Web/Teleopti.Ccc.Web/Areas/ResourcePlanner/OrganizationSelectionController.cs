@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 		private bool permissionFor(ITeam team)
 		{
-			return _permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.ArchiveSchedule, DateOnly.Today,
+			return _permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.CopySchedule, DateOnly.Today,
 				team);
 		}
 	}

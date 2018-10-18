@@ -20,7 +20,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.ArchiveSchedule, DefinedRaptorApplicationFunctionPaths.ImportSchedule)]
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.CopySchedule, DefinedRaptorApplicationFunctionPaths.ImportSchedule)]
 	public class ManageScheduleController : ApiController
 	{
 		private readonly IPersonRepository _personRepository;
@@ -48,10 +48,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return ManageSchedules(model, JobCategory.ImportSchedule, model.CreateImportEvent<ImportScheduleEvent>, DefinedRaptorApplicationFunctionPaths.ImportSchedule);
 		}
 
-		[Route("api/ResourcePlanner/Archiving/Run"), HttpPost, UnitOfWork]
-		public virtual IHttpActionResult RunArchiving([FromBody] ManageSchedulesModel model)
+		[Route("api/ResourcePlanner/Copying/Run"), HttpPost, UnitOfWork]
+		public virtual IHttpActionResult RunCopying([FromBody] ManageSchedulesModel model)
 		{
-			return ManageSchedules(model, JobCategory.ArchiveSchedule, model.CreateImportEvent<ArchiveScheduleEvent>, DefinedRaptorApplicationFunctionPaths.ArchiveSchedule);
+			return ManageSchedules(model, JobCategory.CopySchedule, model.CreateImportEvent<CopyScheduleEvent>, DefinedRaptorApplicationFunctionPaths.CopySchedule);
 		}
 
 		public IHttpActionResult ManageSchedules(ManageSchedulesModel model, string jobCategory, Func<IEnumerable<IPerson>, ManageScheduleBaseEvent> eventCreator, string requiredPermission)

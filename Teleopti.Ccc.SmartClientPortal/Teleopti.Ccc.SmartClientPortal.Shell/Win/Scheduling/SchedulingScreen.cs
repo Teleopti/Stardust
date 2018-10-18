@@ -1019,7 +1019,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripMenuItemPublish.Visible = publishScedule;
 
 			backStageButtonManiMenuImport.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ImportSchedule);
-			backStageButtonMainMenuArchive.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ArchiveSchedule);
+			backStageButtonMainMenuCopy.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.CopySchedule);
 
 			setPermissionOnControls();
 			schedulerSplitters1.MultipleHostControl3.GotFocus += multipleHostControl3OnGotFocus;
@@ -4685,7 +4685,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 
 			backStageButtonManiMenuImport.Visible = _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576);
-			backStageButtonMainMenuArchive.Visible = _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576);
+			backStageButtonMainMenuCopy.Visible = _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576);
 
 			foreach (var scenario in scenarios)
 			{
@@ -5342,7 +5342,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			backStageButtonOptions.Click -= toolStripButtonOptionsClick;
 			backStageButtonSystemExit.Click -= toolStripButtonSystemExitClick;
 			backStageButtonManiMenuImport.Click -= backStageButtonManiMenuImportClick;
-			backStageButtonMainMenuArchive.Click -= backStageButtonMainMenuArchiveClick;
+			backStageButtonMainMenuCopy.Click -= backStageButtonMainMenuCopyClick;
 			backStage1.VisibleChanged -= backStage1VisibleChanged;
 
 			if (flowLayoutExportToScenario != null && flowLayoutExportToScenario.ContainerControl != null)
@@ -6996,9 +6996,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			openResourcePlannerInWfm("importschedule");
 		}
 
-		private void backStageButtonMainMenuArchiveClick(object sender, EventArgs e)
+		private void backStageButtonMainMenuCopyClick(object sender, EventArgs e)
 		{
-			openResourcePlannerInWfm("archiveschedule");
+			openResourcePlannerInWfm("copyschedule");
 		}
 
 		private void openResourcePlannerInWfm(string what)

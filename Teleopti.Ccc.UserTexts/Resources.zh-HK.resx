@@ -12996,7 +12996,7 @@ Teleopti R&amp;D</value>
   <data name="TheAbsenceCanNotBeAddedTo" xml:space="preserve">
     <value>該缺勤無法被添加到</value>
   </data>
-  <data name="ArchivingConfirmationWithParameters" xml:space="preserve">
+  <data name="CopyingConfirmationWithParameters" xml:space="preserve">
     <value>您將要覆蓋選定的小組在情景'{0}'中所有已存在的班表，在週期{1} - {2}。</value>
   </data>
   <data name="PickASmallerDatePeriodDot" xml:space="preserve">

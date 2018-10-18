@@ -47,7 +47,7 @@
 			this.toolStripButtonShowMeetings = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButtonImportSchedule = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonArchiveSchedule = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButtonCopySchedule = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButtonOrganizeCascadingSkills = new System.Windows.Forms.ToolStripButton();
 			this.toolStripRefresh = new System.Windows.Forms.ToolStripButton();
@@ -110,7 +110,7 @@
             this.toolStripButtonShowMeetings,
             this.toolStripSeparator3,
             this.toolStripButtonImportSchedule,
-            this.toolStripButtonArchiveSchedule,
+            this.toolStripButtonCopySchedule,
             this.toolStripSeparator1,
             this.toolStripButtonOrganizeCascadingSkills,
             this.toolStripRefresh});
@@ -259,15 +259,15 @@
 			// 
 			// toolStripButtonArchiveSchedule
 			// 
-			this.toolStripButtonArchiveSchedule.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.ccc_Skill_Backoffice_16x16;
-			this.toolStripButtonArchiveSchedule.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripButtonArchiveSchedule.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonArchiveSchedule.Name = "toolStripButtonArchiveSchedule";
-			this.toolStripButtonArchiveSchedule.Padding = new System.Windows.Forms.Padding(4);
-			this.toolStripButtonArchiveSchedule.Size = new System.Drawing.Size(142, 29);
-			this.toolStripButtonArchiveSchedule.Text = "xxArchiveSchedule";
-			this.toolStripButtonArchiveSchedule.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripButtonArchiveSchedule.Click += new System.EventHandler(this.toolStripButtonArchiveScheduleClick);
+			this.toolStripButtonCopySchedule.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.ccc_Skill_Backoffice_16x16;
+			this.toolStripButtonCopySchedule.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripButtonCopySchedule.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonCopySchedule.Name = "toolStripButtonCopySchedule";
+			this.toolStripButtonCopySchedule.Padding = new System.Windows.Forms.Padding(4);
+			this.toolStripButtonCopySchedule.Size = new System.Drawing.Size(142, 29);
+			this.toolStripButtonCopySchedule.Text = "xxCopySchedule";
+			this.toolStripButtonCopySchedule.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripButtonCopySchedule.Click += new System.EventHandler(this.toolStripButtonCopyScheduleClick);
 			// 
 			// toolStripSeparator1
 			// 
@@ -341,7 +341,7 @@
         protected System.Windows.Forms.ToolStripButton tsRenameGroupPage;
         protected System.Windows.Forms.ToolStripButton tsDeleteGroupPage;
 		private System.Windows.Forms.ToolStripButton toolStripButtonOrganizeCascadingSkills;
-		private System.Windows.Forms.ToolStripButton toolStripButtonArchiveSchedule;
+		private System.Windows.Forms.ToolStripButton toolStripButtonCopySchedule;
 		private System.Windows.Forms.ToolStripButton toolStripButtonImportSchedule;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 	}

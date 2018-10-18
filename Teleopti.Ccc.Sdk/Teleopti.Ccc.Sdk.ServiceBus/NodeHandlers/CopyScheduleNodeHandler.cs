@@ -10,13 +10,13 @@ using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
-	public class ArchiveScheduleNodeHandler : IHandle<ArchiveScheduleEvent>
+	public class CopyScheduleNodeHandler : IHandle<CopyScheduleEvent>
 	{
 		private readonly IDataSourceScope _dataSourceScope;
 		private readonly IStardustJobFeedback _stardustJobFeedback;
-		private readonly IHandleEvent<ArchiveScheduleEvent> _realEventHandler;
+		private readonly IHandleEvent<CopyScheduleEvent> _realEventHandler;
 
-		public ArchiveScheduleNodeHandler(IDataSourceScope dataSourceScope, IStardustJobFeedback stardustJobFeedback, IHandleEvent<ArchiveScheduleEvent> realEventHandler)
+		public CopyScheduleNodeHandler(IDataSourceScope dataSourceScope, IStardustJobFeedback stardustJobFeedback, IHandleEvent<CopyScheduleEvent> realEventHandler)
 		{
 			_dataSourceScope = dataSourceScope;
 			_stardustJobFeedback = stardustJobFeedback;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 		}
 
 		[AsSystem]
-		public void Handle(ArchiveScheduleEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress,
+		public void Handle(CopyScheduleEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress,
 			ref IEnumerable<object> returnObjects)
 		{
 			_stardustJobFeedback.SendProgress = sendProgress;

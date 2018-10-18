@@ -15218,7 +15218,7 @@ These options are activated:
   <data name="ArchiveScheduleDescription" xml:space="preserve">
     <value>Archive schedule from default scenario to another scenario, overwriting any previous schedule in the target scenario for the given period.</value>
   </data>
-  <data name="ArchivingConfirmationWithParameters" xml:space="preserve">
+  <data name="CopyingConfirmationWithParameters" xml:space="preserve">
     <value>You are about to overwrite all existing schedule for scenario '{0}' for the period {1} - {2} and the selected teams.</value>
   </data>
   <data name="AreYouSure" xml:space="preserve">
@@ -15226,6 +15226,9 @@ These options are activated:
   </data>
   <data name="DoneArchivingForXPeopleDot" xml:space="preserve">
     <value>Done archiving for {0} people.</value>
+  </data>
+  <data name="DoneCopyingForXPeopleDot" xml:space="preserve">
+    <value>Done copying for {0} people.</value>
   </data>
   <data name="FromScenarioColon" xml:space="preserve">
     <value>From scenario:</value>
@@ -15256,6 +15259,12 @@ These options are activated:
   </data>
   <data name="YouNeedToPickAScenarioToArchiveToDot" xml:space="preserve">
     <value>You need to pick a scenario to archive to.</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToCopyFromDot" xml:space="preserve">
+    <value>You need to pick a scenario to copy from.</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToCopyToDot" xml:space="preserve">
+    <value>You need to pick a scenario to copy to.</value>
   </data>
   <data name="YourSelectionResultedInZeroPeopleDot" xml:space="preserve">
     <value>Your selection resulted in 0 people.</value>
@@ -17787,5 +17796,12 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="RestrictionNotAbleToBeScheduledReasonNoRestrictions" xml:space="preserve">
     <value>No restrictions in period</value>
     <comment>No restrictions in period</comment>
+  </data>
+  <data name="CopySchedule" xml:space="preserve">
+    <value>Copy schedule</value>
+    <comment>Copy schedule</comment>
+  </data>
+  <data name="CopyScheduleDescription" xml:space="preserve">
+    <value>Copy schedule from any scenario to any non-default scenario, overwriting any previous schedule in the target scenario for the given period.</value>
   </data>
 </root>

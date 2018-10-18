@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.backStage1 = new Syncfusion.Windows.Forms.BackStage();
 			this.backStageButtonMainMenuSave = new Syncfusion.Windows.Forms.BackStageButton();
 			this.backStageButtonManiMenuImport = new Syncfusion.Windows.Forms.BackStageButton();
-			this.backStageButtonMainMenuArchive = new Syncfusion.Windows.Forms.BackStageButton();
+			this.backStageButtonMainMenuCopy = new Syncfusion.Windows.Forms.BackStageButton();
 			this.backStageTabExportTo = new Syncfusion.Windows.Forms.BackStageTab();
 			this.backStageButtonMainMenuHelp = new Syncfusion.Windows.Forms.BackStageButton();
 			this.backStageButtonMainMenuClose = new Syncfusion.Windows.Forms.BackStageButton();
@@ -1445,7 +1445,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.backStage1.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.backStage1.Controls.Add(this.backStageButtonMainMenuSave);
 			this.backStage1.Controls.Add(this.backStageButtonManiMenuImport);
-			this.backStage1.Controls.Add(this.backStageButtonMainMenuArchive);
+			this.backStage1.Controls.Add(this.backStageButtonMainMenuCopy);
 			this.backStage1.Controls.Add(this.backStageTabExportTo);
 			this.backStage1.Controls.Add(this.backStageButtonMainMenuHelp);
 			this.backStage1.Controls.Add(this.backStageButtonMainMenuClose);
@@ -1488,16 +1488,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			// 
 			// backStageButtonMainMenuArchive
 			// 
-			this.backStageButtonMainMenuArchive.Accelerator = "";
-			this.backStageButtonMainMenuArchive.BackColor = System.Drawing.Color.Transparent;
-			this.backStageButtonMainMenuArchive.BeforeTouchSize = new System.Drawing.Size(75, 23);
-			this.backStageButtonMainMenuArchive.IsBackStageButton = false;
-			this.backStageButtonMainMenuArchive.Location = new System.Drawing.Point(0, 92);
-			this.backStageButtonMainMenuArchive.Name = "backStageButtonMainMenuArchive";
-			this.backStageButtonMainMenuArchive.Size = new System.Drawing.Size(110, 25);
-			this.backStageButtonMainMenuArchive.TabIndex = 5;
-			this.backStageButtonMainMenuArchive.Text = "xxArchiveSchedule";
-			this.backStageButtonMainMenuArchive.Click += new System.EventHandler(this.backStageButtonMainMenuArchiveClick);
+			this.backStageButtonMainMenuCopy.Accelerator = "";
+			this.backStageButtonMainMenuCopy.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButtonMainMenuCopy.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButtonMainMenuCopy.IsBackStageButton = false;
+			this.backStageButtonMainMenuCopy.Location = new System.Drawing.Point(0, 92);
+			this.backStageButtonMainMenuCopy.Name = "backStageButtonMainMenuCopy";
+			this.backStageButtonMainMenuCopy.Size = new System.Drawing.Size(110, 25);
+			this.backStageButtonMainMenuCopy.TabIndex = 5;
+			this.backStageButtonMainMenuCopy.Text = "xxCopySchedule";
+			this.backStageButtonMainMenuCopy.Click += new System.EventHandler(this.backStageButtonMainMenuCopyClick);
 			// 
 			// backStageTabExportTo
 			// 
@@ -3809,7 +3809,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private ToolStripMenuItem agentSkillAnalyzerToolStripMenuItem;
 		private ToolStripSplitButton toolStripSplitButtonTimeZone;
 		private Syncfusion.Windows.Forms.BackStageButton backStageButtonManiMenuImport;
-		private Syncfusion.Windows.Forms.BackStageButton backStageButtonMainMenuArchive;
+		private Syncfusion.Windows.Forms.BackStageButton backStageButtonMainMenuCopy;
 		private ToolStripMenuItem replaceActivityToolStripMenuItem;
 	}
 }

@@ -11142,7 +11142,7 @@ Teleopti R&amp;D</value>
   <data name="ArchiveScheduleDescription" xml:space="preserve">
     <value>آرشیو زمانبندی را از سناریو پیش فرض به سناریو دیگر، تمامی زمانبدیهای قبلی در سناریو مقصد را در بازه مربوطه بازنویسی میکند</value>
   </data>
-  <data name="ArchivingConfirmationWithParameters" xml:space="preserve">
+  <data name="CopyingConfirmationWithParameters" xml:space="preserve">
     <value>شما دارید تمامی زمانبندیهای موجود برای سناریو {0}  در بازه {1} تا {2} برای پاسخگوهای انتخاب شده را بانویسی میکنید</value>
   </data>
   <data name="LoadingRequestsTreeDots" xml:space="preserve">
