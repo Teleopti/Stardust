@@ -19,15 +19,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    {
 		    
 	    }
-
-        public IList<INote> Find(DateTimePeriod period, IScenario scenario)
-        {
-            ICriteria crit = Session.CreateCriteria(typeof(Note))
-                .Add(Restrictions.Between("NoteDate", period.StartDateTime, period.EndDateTime))
-                .Add(Restrictions.Eq("Scenario", scenario));
-            IList<INote> retList = crit.List<INote>();
-            return retList;
-        }
         
         public ICollection<INote> Find(DateOnlyPeriod dateOnlyPeriod, IEnumerable<IPerson> personCollection, IScenario scenario)
         {

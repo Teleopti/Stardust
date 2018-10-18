@@ -53,11 +53,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _storage.Get<INote>(id);
 		}
 
-		public IList<INote> Find(DateTimePeriod period, IScenario scenario)
-		{
-			throw new NotImplementedException();
-		}
-
 		public ICollection<INote> Find(DateOnlyPeriod dateOnlyPeriod, IEnumerable<IPerson> personCollection, IScenario scenario)
 		{
 			return _storage.LoadAll<INote>().Where(x => x.Scenario == scenario && x.BelongsToPeriod(dateOnlyPeriod) && personCollection.Contains(x.Person)).ToList();
