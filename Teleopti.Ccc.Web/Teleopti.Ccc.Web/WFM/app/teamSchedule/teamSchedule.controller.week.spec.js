@@ -117,6 +117,14 @@
 			expect(serviceDateFormatHelper.getDateOnly(controller.weekDays[6].date)).toEqual('2018-07-01');
 		});
 
+		it('should get group pages with correct period', function () {
+			viewStateKeeper.save({ selectedDate: '2018-07-01' });
+
+			var controller = setUpController();
+			expect(groupPageService.period.StartDate).toEqual('2018-06-25');
+			expect(groupPageService.period.EndDate).toEqual('2018-07-01');
+		});
+
 		function fakeCurrentUserInfo() {
 			return {
 				CurrentUserInfo: function () {
@@ -200,6 +208,14 @@
 			expect(serviceDateFormatHelper.getDateOnly(controller.weekDays[6].date)).toEqual('2018-07-07');
 		});
 
+		it('should get group pages with correct period', function () {
+			viewStateKeeper.save({ selectedDate: '2018-07-01' });
+
+			var controller = setUpController();
+			expect(groupPageService.period.StartDate).toEqual('2018-07-01');
+			expect(groupPageService.period.EndDate).toEqual('2018-07-07');
+		});
+
 		function fakeCurrentUserInfo() {
 			return {
 				CurrentUserInfo: function () {
@@ -255,7 +271,7 @@
 	function GroupPageService() {
 		this.period = {};
 		this.fetchAvailableGroupPages = function (startDate, endDate) {
-			this.period = { date: startDate };
+			this.period = { StartDate: startDate, EndDate: endDate };
 			return {
 				then: function (cb) {
 				}
