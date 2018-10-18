@@ -78,16 +78,12 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 			templateUrl: function () {
 				if (toggles.RTA_DurationOfHistoricalEvents_76470)
 					return 'app/rta/rta/historical/rta-historical.durationOfHistoricalEvents_76470.html';
-				if (toggles.RTA_EasilySpotLateForWork_75668)
-					return 'app/rta/rta/historical/rta-historical.easilySpotLateForWork_75668.html';
-				return 'app/rta/rta/historical/rta-historical.restrictModifyAdherenceWithPermission_74898.html';
+				return 'app/rta/rta/historical/rta-historical.easilySpotLateForWork_75668.html';
 			},
 			controllerProvider: function () {
 				if (toggles.RTA_DurationOfHistoricalEvents_76470)
 					return 'RtaHistoricalController76470 as vm';
-				if (toggles.RTA_EasilySpotLateForWork_75668)
-					return 'RtaHistoricalController75668 as vm';
-				return 'RtaHistoricalController74898 as vm';
+				return 'RtaHistoricalController75668 as vm';
 			}
 		})
 		.state('rta-teams-legacy', {

@@ -83,7 +83,6 @@
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDay.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayLoaderHistoricalOverview.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayLoaderDurationOfEvents.cs" />
-    <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayLoaderFromEventStore.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayLoaderLateForWork.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayWithDurationOfEvents.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayWithEventStore.cs" />

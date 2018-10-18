@@ -52,7 +52,6 @@ using Teleopti.Wfm.Adherence.Tracer;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
-	[Toggle(Domain.FeatureFlags.Toggles.RTA_EasilySpotLateForWork_75668)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_DurationOfHistoricalEvents_76470)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_ReviewHistoricalAdherence_74770)]
 	public class DomainTestAttribute : IoCTestAttribute
