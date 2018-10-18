@@ -1726,7 +1726,6 @@
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.controller.spec.js" />
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.html" />
     <Content Include="WFM\app\rta\rta\historical\rta-historical.durationOfHistoricalEvents_76470.html" />
-    <Content Include="WFM\app\rta\rta\historical\rta-historical.easilySpotLateForWork_75668.html" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA.timepicking.ie.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA.timepicking.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA_47230.spec.js" />
@@ -1734,7 +1733,6 @@
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.durationOfHistoricalEvents_76470.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.outOfAdherences.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.removeApprovedOOA_47721.spec.js" />
-    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.easilySpotLateForWork_75668.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.restrictModifyAdherenceWithPermission_74898.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.timeline.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.easilySpotLateForWork_75668.spec.js" />

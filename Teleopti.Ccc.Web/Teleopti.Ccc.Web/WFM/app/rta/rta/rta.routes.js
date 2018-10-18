@@ -76,14 +76,10 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 		.state('rta-historical', {
 			url: '/rta/agent-historical/:personId/:date?open',
 			templateUrl: function () {
-				if (toggles.RTA_DurationOfHistoricalEvents_76470)
-					return 'app/rta/rta/historical/rta-historical.durationOfHistoricalEvents_76470.html';
-				return 'app/rta/rta/historical/rta-historical.easilySpotLateForWork_75668.html';
+				return 'app/rta/rta/historical/rta-historical.durationOfHistoricalEvents_76470.html';
 			},
 			controllerProvider: function () {
-				if (toggles.RTA_DurationOfHistoricalEvents_76470)
-					return 'RtaHistoricalController76470 as vm';
-				return 'RtaHistoricalController75668 as vm';
+				return 'RtaHistoricalController76470 as vm';
 			}
 		})
 		.state('rta-teams-legacy', {
