@@ -61,7 +61,6 @@
 		}
 
 		vm.lastCommandTrackId = '';
-		vm.showDatePicker = false;
 		vm.currentSettings = {};
 
 		vm.getSearch = function () {

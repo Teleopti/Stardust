@@ -10,7 +10,7 @@
 		groupPageService,
 		toggle;
 
-	describe("teamschedule week controller tests", function () {
+	describe("#teamschedule week controller tests#", function () {
 		beforeEach(function () {
 			module("wfm.teamSchedule");
 			module(function ($provide) {
@@ -52,7 +52,7 @@
 			var controller = setUpController();
 
 			expect(controller.searchOptions.keyword).toEqual('search');
-			expect(controller.scheduleDate).toEqual('2018-07-04');
+			expect(controller.scheduleDate).toEqual('2018-07-02');
 			expect(controller.teamNameMap).toEqual('1 team selected');
 			expect(controller.sortOption).toEqual('Name DESC');
 
@@ -60,7 +60,6 @@
 			expect(controller.selectedGroups.groupIds).toEqual([]);
 			expect(controller.staffingEnabled).toEqual(true);
 			expect(controller.timezone).toEqual("Europe/Berlin");
-			expect(controller.startOfWeek).toEqual('2018-07-04');
 		});
 
 		it("should clear group weeks and set person count when selected person larger than 500", function () {
@@ -114,20 +113,8 @@
 			controller.scheduleDate = '2018-07-01';
 			controller.onScheduleDateChanged();
 
-			expect(controller.startOfWeek).toEqual('2018-06-25');
 			expect(serviceDateFormatHelper.getDateOnly(controller.weekDays[0].date)).toEqual('2018-06-25');
 			expect(serviceDateFormatHelper.getDateOnly(controller.weekDays[6].date)).toEqual('2018-07-01');
-		});
-
-		it('should send get group page command with correct data', function () {
-			var state = {
-				selectedDate: '2018-08-30'
-			};
-			viewStateKeeper.save(state);
-
-			setUpController();
-
-			expect(groupPageService.period.date).toEqual('2018-08-30');
 		});
 
 		function fakeCurrentUserInfo() {
@@ -136,7 +123,8 @@
 					return {
 						FirstDayOfWeek: 1,
 						DateFormatLocale: 'sv-SE',
-						DefaultTimeZone: 'Europe/Berlin'
+						DefaultTimeZone: 'Europe/Berlin',
+						DayNames: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 					};
 				}
 			};
@@ -208,7 +196,6 @@
 			controller.scheduleDate = "2018-07-01";
 			controller.onScheduleDateChanged();
 
-			expect(controller.startOfWeek).toEqual("2018-07-01");
 			expect(serviceDateFormatHelper.getDateOnly(controller.weekDays[0].date)).toEqual('2018-07-01');
 			expect(serviceDateFormatHelper.getDateOnly(controller.weekDays[6].date)).toEqual('2018-07-07');
 		});
@@ -267,8 +254,8 @@
 
 	function GroupPageService() {
 		this.period = {};
-		this.fetchAvailableGroupPagesForDate = function (scheduleDate) {
-			this.period = { date: scheduleDate };
+		this.fetchAvailableGroupPages = function (startDate, endDate) {
+			this.period = { date: startDate };
 			return {
 				then: function (cb) {
 				}

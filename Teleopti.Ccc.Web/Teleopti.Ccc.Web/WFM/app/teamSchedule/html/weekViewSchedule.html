@@ -7,7 +7,7 @@
 	</div>
 </div>
 
-<div class="team-schedule panel wfm-block material-depth-1 week-view" ng-click="vm.showDatePicker && (vm.showDatePicker = false)"
+<div class="team-schedule panel wfm-block material-depth-1 week-view" 
 	 wait-for="vm.boostrap">
 	<div class="teamschedule-header">
 		<div class="leftside-part">
@@ -26,7 +26,7 @@
 			</div>
 
 			<span class="datepicker-container" ng-click="$event.stopPropagation()">
-				<team-schedule-datepicker selected-date="vm.scheduleDate" status="vm.showDatePicker" on-date-change="vm.onScheduleDateChanged()" step="7"></team-schedule-datepicker>
+				<team-schedule-datepicker ng-model="vm.scheduleDate" update-value="vm.updateScheduleDate" ng-change="vm.onScheduleDateChanged()" step="7"></team-schedule-datepicker>
 			</span>
 
 			<view-changer selected-date="vm.scheduleDate"

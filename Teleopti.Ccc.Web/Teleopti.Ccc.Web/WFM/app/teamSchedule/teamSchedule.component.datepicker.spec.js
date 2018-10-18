@@ -24,56 +24,55 @@
 			$rootScope = _$rootScope_;
 			$timeout = _$timeout_;
 		}));
-
-		it('should render datepicker correctly', function () {
-			var result = setUp();
-			var vm = result.commandControl;
-			expect(vm).not.toBeNull();
-		});
-
-		it('should get date from outside controller', function () {
+		
+		it('should render correctly', function () {
 			var result = setUp(moment('2016-06-01').toDate());
 			var vm = result.commandControl;
 
-			var dateStringInput = angular.element(result.container[0].querySelector("#teamschedule-datepicker-input"));
-			expect(moment(vm.selectedDate).format('YYYY-MM-DD')).toBe('2016-06-01');
-			expect(moment(new Date(dateStringInput.val())).format('YYYY-MM-DD')).toBe('2016-06-01');
+			var dateStringInput = result.container[0].querySelector("#teamschedule-datepicker-input");
+			expect(dateStringInput.value).toBe('6/1/16');
 		});
 
-		it('should update date string when selected day is changed', function () {
+		it('should update ngModel value when selected day is changed', function () {
 			var result = setUp('2016-06-01');
-			var vm = result.commandControl;
 
 			var inputEl = result.container[0].querySelector(".teamschedule-datepicker #teamschedule-datepicker-input");
-			expect(vm.selectedDate).toBe('2016-06-01');
 			expect(inputEl.value).toBe('6/1/16');
 
 			inputEl.value = '6/2/16';
 			angular.element(inputEl).triggerHandler('change');
 
 			$timeout(function () {
-				expect(vm.selectedDate).toBe('2016-06-02');
-				expect(inputEl.value).toBe('6/2/16');
+				expect(result.scope.curDate).toBe('2016-06-02');
 			}, 300);
 
 			$timeout.flush();
-
 		});
 
-		it('should remember preselected the date when selected day is changed with incorrect date', function () {
+		it('should back to previous date when date is null or invalid', function () {
 			var result = setUp(moment('2016-06-01').toDate());
-			var vm = result.commandControl;
 
-			expect(moment(vm.selectedDate).format('YYYY-MM-DD')).toBe('2016-06-01');
+			var inputEl = result.container[0].querySelector(".teamschedule-datepicker #teamschedule-datepicker-input");
+			inputEl.value = "";
+			angular.element(inputEl).triggerHandler('change');
 
-			vm.selectedDate = "";
-			vm.onDateInputChange();
 			$timeout(function () {
-				expect(moment(vm.selectedDate).format("YYYY-MM-DD")).toBe('2016-06-01');
+				expect(inputEl.value).toBe('6/1/16');
+			}, 300);
+			$timeout.flush();
+		});
+
+		it('should display date as the ngModel when ngModel is changed from outside', function () {
+			var result = setUp('2018-10-09');
+
+			result.scope.curDate = '2018-10-10';
+			result.scope.$apply();
+
+			$timeout(function () {
+			var inputEl = result.container[0].querySelector(".teamschedule-datepicker #teamschedule-datepicker-input");
+				expect(inputEl.value).toBe('10/10/18');
 			}, 300);
 		});
-
-
 	});
 
 	describe('<teamschedule-datepicker> in ar-OM', function () {
@@ -148,7 +147,7 @@
 
 	function setUp(inputDate) {
 		var date;
-		var html = '<team-schedule-datepicker selected-date="curDate" on-date-change="onScheduleDateChanged()" />';
+		var html = '<team-schedule-datepicker ng-model="curDate" ng-change="onScheduleDateChanged()" ></team-schedule-datepicker>';
 		var scope = $rootScope.$new();
 
 		if (inputDate == null)
@@ -157,9 +156,6 @@
 			date = inputDate;
 
 		scope.curDate = date;
-		scope.onScheduleDateChanged = function () {
-
-		};
 
 		var container = $compile(html)(scope);
 		scope.$apply();

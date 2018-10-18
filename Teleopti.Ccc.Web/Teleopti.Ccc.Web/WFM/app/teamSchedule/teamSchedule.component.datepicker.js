@@ -1,44 +1,36 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.teamSchedule').directive('teamScheduleDatepicker', teamScheduleDatePicker);
-
-	function teamScheduleDatePicker() {
-		return {
+	angular.module('wfm.teamSchedule')
+		.component('teamScheduleDatepicker',
+		{
 			templateUrl: 'app/teamSchedule/html/teamscheduledatepicker.html',
-			scope: {
-				selectedDate: '=',
-				step: '@?',
-				isCalendarOpened: '=?status',
-				onDateChange: '&',
-				options: '=?'
+			require: {
+				ngModelCtrl: 'ngModel'
+			},
+			bindings: {
+				ngModel: '<',
+				step: '<?',
+				updateValue: '='
 			},
 			controller: teamScheduleDatePickerCtrl,
-			controllerAs: 'vm',
-			bindToController: true
-		};
-	}
+			controllerAs: 'vm'
+		});
 
 	teamScheduleDatePickerCtrl.$inject = ['$timeout', '$locale', 'serviceDateFormatHelper', 'CurrentUserInfo', 'throttleDebounce'];
+
 	function teamScheduleDatePickerCtrl($timeout, $locale, serviceDateFormatHelper, CurrentUserInfo, throttleDebounce) {
 		var vm = this;
 		vm.dateFormat = $locale.DATETIME_FORMATS.shortDate;
 		vm.step = parseInt(vm.step) || 1;
-		vm.selectedDateObj = moment(vm.selectedDate).toDate();
+		vm.selectedDateObj = moment(vm.ngModel).toDate();
 		vm.dateOptions = { startingDay: CurrentUserInfo.CurrentUserInfo().FirstDayOfWeek };
 
-		var date = vm.selectedDate;
+		vm.$onChanges = function () {
+			vm.selectedDateObj = moment(vm.ngModel).toDate();
+		}
 
-		vm.onDateInputChange = throttleDebounce(
-			function () {
-				if (!vm.selectedDateObj || !moment(vm.selectedDateObj).isValid()) {
-					vm.selectedDate = date;
-					return;
-				}
-				date = vm.selectedDateObj;
-				vm.selectedDate = serviceDateFormatHelper.getDateOnly(vm.selectedDateObj);
-				vm.onDateChange && $timeout(function () { vm.onDateChange({ date: serviceDateFormatHelper.getDateOnly(vm.selectedDateObj) }) });
-			}, 300);
+		vm.onDateInputChange = throttleDebounce(changeDate, 300);
 
 		vm.gotoPreviousDate = function () {
 			vm.selectedDateObj = moment(vm.selectedDateObj).add(-(vm.step), 'day').toDate();
@@ -53,6 +45,23 @@
 		vm.toggleCalendar = function () {
 			vm.isCalendarOpened = !vm.isCalendarOpened;
 		};
+
+		function changeDate() {
+			if (!vm.selectedDateObj || !moment(vm.selectedDateObj).isValid()) {
+				vm.selectedDateObj = moment(vm.ngModel).toDate();
+				return;
+			}
+
+			var date = serviceDateFormatHelper.getDateOnly(vm.selectedDateObj);
+			if (vm.updateValue) {
+				date = vm.updateValue(date);
+			}
+			if (date !== vm.ngModel)
+				vm.ngModelCtrl.$setViewValue(date);
+			else
+				vm.selectedDateObj = moment(date).toDate();
+
+		}
 	}
 
 })();

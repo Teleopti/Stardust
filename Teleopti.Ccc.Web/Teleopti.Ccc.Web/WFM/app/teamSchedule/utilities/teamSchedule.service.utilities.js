@@ -1,4 +1,5 @@
-﻿(function () {
+﻿
+(function () {
 	'use strict';
 	angular.module("wfm.teamSchedule").service("UtilityService", utilityService);
 
@@ -8,6 +9,7 @@
 
 		var self = this;
 		var tick = 15;
+		var currentUserInfo = CurrentUserInfo.CurrentUserInfo();
 
 		self.getWeekdayNames = getWeekdayNames;
 		self.getWeekdays = getWeekDays;
@@ -16,6 +18,7 @@
 		self.nowInSelectedTimeZone = formattedNowInSelectedTimeZone;
 		self.setNowDate = setNowDate;
 		self.now = now;
+		self.getFirstDayOfWeek = getFirstDayOfWeek;
 
 		var fakeNowDate;
 
@@ -41,7 +44,7 @@
 		}
 
 		function nowInUserTimeZone() {
-			return nowMoment().clone().tz(CurrentUserInfo.CurrentUserInfo().DefaultTimeZone);
+			return nowMoment().clone().tz(currentUserInfo.DefaultTimeZone);
 		}
 
 		function nowInSelectedTimeZone(timezone) {
@@ -50,10 +53,9 @@
 
 
 		function getWeekdayNames() {
-			var localeData = moment.localeData();
-			var names = localeData.weekdays();
+			var names = currentUserInfo.DayNames || [];
 			var defaultIdx = [0, 1, 2, 3, 4, 5, 6];
-			var fdow = localeData.firstDayOfWeek();
+			var fdow = currentUserInfo.FirstDayOfWeek;
 			var result = [];
 			var startIndex = defaultIdx.indexOf(fdow);
 			for (var i = 0; i < 7; i++) {
@@ -62,9 +64,17 @@
 			return result;
 		}
 
+		function getFirstDayOfWeek(date) {
+			var momentCopy = [moment].slice(0)[0];
+			momentCopy.updateLocale(currentUserInfo.DateFormatLocale, {
+				week: { dow: currentUserInfo.FirstDayOfWeek }
+			});
+			return serviceDateFormatHelper.getDateOnly(momentCopy(date).startOf('week'));
+		}
+
 		function getWeekDays(date) {
 			var names = getWeekdayNames();
-			var startOfWeek = moment(date);
+			var startOfWeek = moment(getFirstDayOfWeek(date));
 
 			var dates = [];
 			for (var i = 0; i < 7; i++) {
@@ -84,11 +94,11 @@
 
 			start.hours() < 8 && start.hours(8) && start.minutes(0);
 
-			return format(moment.tz(start.format('YYYY-MM-DD HH:mm'),timezone));
+			return format(moment.tz(start.format('YYYY-MM-DD HH:mm'), timezone));
 		}
 
 		function format(dateMoment) {
-			
+
 			return serviceDateFormatHelper.getDateByFormat(dateMoment, 'YYYY-MM-DDTHH:mm:ssZ');
 		}
 	}
