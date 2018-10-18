@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 		public IEnumerable<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people, DateOnlyPeriod period, string function)
 		{
-			throw new NotImplementedException();
+			return _permittedPeople;
 		}
 	}
 }
