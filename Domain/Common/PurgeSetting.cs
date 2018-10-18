@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-
-namespace Teleopti.Ccc.Domain.Common
+﻿namespace Teleopti.Ccc.Domain.Common
 {
 	public class PurgeSetting
 	{

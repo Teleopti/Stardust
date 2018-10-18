@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using log4net;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;

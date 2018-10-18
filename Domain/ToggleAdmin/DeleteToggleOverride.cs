@@ -1,6 +1,3 @@
-using System;
-using Teleopti.Ccc.Domain.FeatureFlags;
-
 namespace Teleopti.Ccc.Domain.ToggleAdmin
 {
 	public class DeleteToggleOverride

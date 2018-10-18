@@ -3,7 +3,6 @@ using System.Drawing;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
-using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
@@ -110,7 +109,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             {
                 //find first none full weekend
                 int indexToMoveTo = _functions.FindFirstNoneLockedAccompanyingSingleDayWeekendDayOff(weekendList);
-                //else find first empty weekend ? eller som h‰r
+                //else find first empty weekend ? eller som h√§r
                 if (indexToMoveTo == -1)
                 {
                     for (int i = 0; i < weekendList.Count; i++)
