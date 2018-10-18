@@ -1,47 +1,113 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 {
 	[TestFixture]
-	public class AbsenceTypesProviderTest
+	[DomainTest]
+	public class AbsenceTypesProviderTest : IIsolateSystem
 	{
+		public AbsenceTypesProvider Target;
+		public FakeToggleManager ToggleManager;
+		public FakeAbsenceRepository AbsenceRepository;
+		public FakeLoggedOnUser LoggedOnUser;
+		public FakePersonRepository PersonRepository;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public FakeThreadPrincipalContext ThreadPrincipalContext;
+		public FakeDatabase Database;
+		public MutableNow _now;
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<AbsenceTypesProvider>().For<IAbsenceTypesProvider>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+		}
+
 		[Test]
 		public void ShouldReturnAbsenceTypes()
 		{
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			var absenceRepository = MockRepository.GenerateMock<IAbsenceRepository>();
-			var expected = new List<IAbsence> {new Absence()};
-			absenceRepository.Stub(x => x.LoadRequestableAbsence()).Return(expected);
-
-			var target = new AbsenceTypesProvider(absenceRepository, loggedOnUser);
-			var result = target.GetRequestableAbsences();
-
-			result.Should().Be.SameInstanceAs(expected);
+			ToggleManager.Disable(Toggles.MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446);
+			var ret = Target.GetRequestableAbsences();
+			ret.Should().Not.Be.Null();
 		}
 
 		[Test]
 		public void ShouldReturnReportableAbsenceTypes()
 		{
-			var expected = new List<IAbsence> { new Absence() };
+			var ret = Target.GetReportableAbsences();
+			ret.Should().Not.Be.Null();
+		}
 
-			var wfcs = MockRepository.GenerateMock<IWorkflowControlSet>();
-			wfcs.Stub(x => x.AllowedAbsencesForReport).Return(expected);
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			loggedOnUser.Stub(x => x.CurrentUser().WorkflowControlSet).Return(wfcs);
+		[Test]
+		public void ShouldGetAbsencesByWFCSet()
+		{
+			var requestDate = DateOnly.Today;
+			_now.Is(requestDate.Date);
+			var expactedAbsenceName = "requestableAbsence";
+			var openPeriod = new DateOnlyPeriod(requestDate.AddDays(-2), requestDate.AddDays(2));
+			setupData(expactedAbsenceName, openPeriod);
+			ToggleManager.Enable(Toggles.MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446);
+			var ret = Target.GetRequestableAbsences();
+			ret.ToList().First().Name.Should().Be.EqualTo(expactedAbsenceName);
+		}
 
-			var absenceRepository = MockRepository.GenerateMock<IAbsenceRepository>();
+		[Test]
+		public void ShouldNotGetAbsenceWhenRequestDateOutOfAbsenceOpenPeriod()
+		{
+			var requestDate = DateOnly.Today;
+			_now.Is(requestDate.Date);
+			var expactedAbsenceName = "requestableAbsence";
+			var openPeriod = new DateOnlyPeriod(requestDate.AddDays(2), requestDate.AddDays(4));
+			setupData(expactedAbsenceName, openPeriod);
+			ToggleManager.Enable(Toggles.MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446);
+			var ret = Target.GetRequestableAbsences();
+			ret.Should().Be.Empty();
+		}
 
-			var target = new AbsenceTypesProvider(absenceRepository, loggedOnUser);
-			var result = target.GetReportableAbsences();
+		private void setupData(string absenceName, DateOnlyPeriod openPeriod)
+		{
+			var personId = Guid.NewGuid();
+			var wfcId = Guid.NewGuid();
+			var absenceOpenRequest = new AbsenceRequestOpenDatePeriod
+			{
+				Absence = new Absence{Description = new Description(absenceName) },
+				OpenForRequestsPeriod = openPeriod
+			}; 
 
-			result.Should().Be.SameInstanceAs(expected);
+			Database.WithOpenAbsenceRequestWorkflowConrolSet(wfcId, absenceOpenRequest)
+				.WithPerson(personId);
+
+			setPrincipal(personId);
+		}
+
+		private void setPrincipal(Guid personId)
+		{
+			var currentUser = PersonRepository.Get(personId);
+			LoggedOnUser.SetFakeLoggedOnUser(currentUser);
+			var principal = new TeleoptiPrincipal(
+				new TeleoptiIdentity(
+					"Fake Login",
+					null,
+					BusinessUnitRepository.LoadAll().FirstOrDefault(),
+					null,
+					null
+				),
+				currentUser);
+			ThreadPrincipalContext.SetCurrentPrincipal(principal);
 		}
 	}
 }
