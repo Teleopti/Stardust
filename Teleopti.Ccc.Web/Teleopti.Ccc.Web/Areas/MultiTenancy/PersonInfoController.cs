@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		[TenantUnitOfWork]
 		protected virtual void PersistInternal(PersonInfoModel personInfoModel)
 		{
-			_persister.Persist(_mapper.Map(personInfoModel));
+			_persister.Persist(new GenericPersistApiCallActionObj() { PersonInfo =  _mapper.Map(personInfoModel)});
 		}
 
 		[HttpPost, Route("PersonInfo/Delete")]

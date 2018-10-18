@@ -7,12 +7,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 	{
 		private bool _rollbacked = false;
 
-		public string Persist(PersonInfo personInfo, bool throwOnError)
+		public string Persist(GenericPersistApiCallActionObj genericPersistApiCallAction)
 		{
-			LastPersist = personInfo;
-			if (personInfo.ApplicationLogonInfo.LogonName == "existingId@teleopti.com")
+			LastPersist = genericPersistApiCallAction.PersonInfo;
+			if (genericPersistApiCallAction.PersonInfo.ApplicationLogonInfo.LogonName == "existingId@teleopti.com")
 			{
-				if (throwOnError)
+				if (genericPersistApiCallAction.ThrowOnError)
 				{
 					throw new DuplicateApplicationLogonNameException(Guid.NewGuid());
 				}
