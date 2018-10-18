@@ -1596,8 +1596,8 @@ ul.select2-results li ul li.select2-result.select2-highlighted > div {
 
 .fab {
 	position: fixed;
-	bottom: 3%;
-	right: 5%;
+	bottom: 15px;
+	right: 15px;
 	z-index: 115;
 	background: #5acdf9;
 	width: 50px;

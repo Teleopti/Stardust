@@ -1915,7 +1915,7 @@
 					RealScheduleNegativeGap: 0
 				}
 			],
-	
+
 			PersonToInfos: [
 				{
 					PeriodStart: moment('2018-06-30'),
@@ -1928,7 +1928,7 @@
 				}
 			]
 		};
-	
+
 		var ajax = {
 			Ajax: function(options) {
 				if (
@@ -1939,17 +1939,18 @@
 				) {
 					options.success({ IsEnabled: true });
 				}
-	
+
 				if (options.url === 'Requests/ShiftTradeRequestSchedule') {
 					options.success(schedules);
 				}
-	
+
 				if (options.url === 'Requests/ShiftTradeMultiDaysSchedule') {
 					options.success(createMultiSchedulesForShiftTrade());
 				}
-	
+
 				if (options.url === 'Requests/GetWFCTolerance?personToId=id') {
-					options.success(toleranceInfo);``
+					options.success(toleranceInfo);
+					``;
 				}
 			}
 		};
@@ -1974,6 +1975,219 @@
 
 		equal(viewModel.agentChoosed() != null, true);
 		equal(Teleopti.MyTimeWeb.Request.RequestNavigationViewModel().hideFab(), true);
+	});
+
+	test('should show fab button after go back to previous page', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
+			return true;
+		};
+		var schedules = {
+			MySchedule: {
+				ScheduleLayers: [{}],
+				ContractTimeInMinute: 480
+			},
+			PossibleTradeSchedules: [
+				{
+					ScheduleLayers: [{}],
+					ContractTimeInMinute: 425
+				}
+			],
+			TimeLineHours: [
+				{
+					HourText: '',
+					StartTime: '2017-01-01 00:00:00'
+				},
+				{
+					HourText: '07:00',
+					StartTime: '2017-01-01 07:00:00'
+				}
+			]
+		};
+		var toleranceInfo = {
+			IsNeedToCheck: true,
+			MyInfos: [
+				{
+					PeriodStart: moment('2018-06-30'),
+					PeriodEnd: moment('2018-07-29'),
+					ContractTimeMinutes: 1000,
+					NegativeToleranceMinutes: 800,
+					PositiveToleranceMinutes: 90,
+					RealSchedulePositiveGap: 0,
+					RealScheduleNegativeGap: 0
+				}
+			],
+
+			PersonToInfos: [
+				{
+					PeriodStart: moment('2018-06-30'),
+					PeriodEnd: moment('2018-07-29'),
+					ContractTimeMinutes: 1000,
+					NegativeToleranceMinutes: 89,
+					PositiveToleranceMinutes: 1189,
+					RealSchedulePositiveGap: 0,
+					RealScheduleNegativeGap: 0
+				}
+			]
+		};
+
+		var ajax = {
+			Ajax: function(options) {
+				if (
+					options.url === '../ToggleHandler/IsEnabled?toggle=MyTimeWeb_Request_CleanUpRequestHisotry_77776' ||
+					options.url ===
+						'../ToggleHandler/IsEnabled?toggle=MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408' ||
+					options.url == '../ToggleHandler/IsEnabled?toggle=MyTimeWeb_Request_CleanUpRequestHisotry_77776'
+				) {
+					options.success({ IsEnabled: true });
+				}
+
+				if (options.url === 'Requests/ShiftTradeRequestSchedule') {
+					options.success(schedules);
+				}
+
+				if (options.url === 'Requests/ShiftTradeMultiDaysSchedule') {
+					options.success(createMultiSchedulesForShiftTrade());
+				}
+
+				if (options.url === 'Requests/GetWFCTolerance?personToId=id') {
+					options.success(toleranceInfo);
+					``;
+				}
+			}
+		};
+
+		$('body').append('<div id="Requests-body-inner"></div>');
+		Teleopti.MyTimeWeb.Common.Init({ baseUrl: '' }, ajax);
+		Teleopti.MyTimeWeb.Common.FakeToggles({
+			MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409: true
+		});
+
+		Teleopti.MyTimeWeb.Request.RequestPartialInit(function() {}, function() {}, ajax);
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
+		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(
+			null,
+			null,
+			null,
+			'Ashley',
+			'id',
+			false
+		);
+		viewModel.chooseAgent(agent);
+
+		equal(viewModel.agentChoosed() != null, true);
+		equal(Teleopti.MyTimeWeb.Request.RequestNavigationViewModel().hideFab(), true);
+
+		viewModel.previousPage();
+		equal(Teleopti.MyTimeWeb.Request.RequestNavigationViewModel().hideFab(), false);
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
+	});
+
+	test('should show fab button after cancel adding request', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
+			return true;
+		};
+		var schedules = {
+			MySchedule: {
+				ScheduleLayers: [{}],
+				ContractTimeInMinute: 480
+			},
+			PossibleTradeSchedules: [
+				{
+					ScheduleLayers: [{}],
+					ContractTimeInMinute: 425
+				}
+			],
+			TimeLineHours: [
+				{
+					HourText: '',
+					StartTime: '2017-01-01 00:00:00'
+				},
+				{
+					HourText: '07:00',
+					StartTime: '2017-01-01 07:00:00'
+				}
+			]
+		};
+		var toleranceInfo = {
+			IsNeedToCheck: true,
+			MyInfos: [
+				{
+					PeriodStart: moment('2018-06-30'),
+					PeriodEnd: moment('2018-07-29'),
+					ContractTimeMinutes: 1000,
+					NegativeToleranceMinutes: 800,
+					PositiveToleranceMinutes: 90,
+					RealSchedulePositiveGap: 0,
+					RealScheduleNegativeGap: 0
+				}
+			],
+
+			PersonToInfos: [
+				{
+					PeriodStart: moment('2018-06-30'),
+					PeriodEnd: moment('2018-07-29'),
+					ContractTimeMinutes: 1000,
+					NegativeToleranceMinutes: 89,
+					PositiveToleranceMinutes: 1189,
+					RealSchedulePositiveGap: 0,
+					RealScheduleNegativeGap: 0
+				}
+			]
+		};
+
+		var ajax = {
+			Ajax: function(options) {
+				if (
+					options.url === '../ToggleHandler/IsEnabled?toggle=MyTimeWeb_Request_CleanUpRequestHisotry_77776' ||
+					options.url ===
+						'../ToggleHandler/IsEnabled?toggle=MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408' ||
+					options.url == '../ToggleHandler/IsEnabled?toggle=MyTimeWeb_Request_CleanUpRequestHisotry_77776'
+				) {
+					options.success({ IsEnabled: true });
+				}
+
+				if (options.url === 'Requests/ShiftTradeRequestSchedule') {
+					options.success(schedules);
+				}
+
+				if (options.url === 'Requests/ShiftTradeMultiDaysSchedule') {
+					options.success(createMultiSchedulesForShiftTrade());
+				}
+
+				if (options.url === 'Requests/GetWFCTolerance?personToId=id') {
+					options.success(toleranceInfo);
+					``;
+				}
+			}
+		};
+
+		$('body').append('<div id="Requests-body-inner"></div>');
+		Teleopti.MyTimeWeb.Common.Init({ baseUrl: '' }, ajax);
+		Teleopti.MyTimeWeb.Common.FakeToggles({
+			MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409: true
+		});
+
+		Teleopti.MyTimeWeb.Request.RequestPartialInit(function() {}, function() {}, ajax);
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
+		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(
+			null,
+			null,
+			null,
+			'Ashley',
+			'id',
+			false
+		);
+		viewModel.chooseAgent(agent);
+
+		equal(viewModel.agentChoosed() != null, true);
+		equal(Teleopti.MyTimeWeb.Request.RequestNavigationViewModel().hideFab(), true);
+
+		viewModel.cartMenuClick();
+		viewModel.cancelRequest();
+		equal(Teleopti.MyTimeWeb.Request.RequestNavigationViewModel().hideFab(), false);
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
 	function createMultiSchedulesForShiftTrade(myContractTime, personToContractTime) {

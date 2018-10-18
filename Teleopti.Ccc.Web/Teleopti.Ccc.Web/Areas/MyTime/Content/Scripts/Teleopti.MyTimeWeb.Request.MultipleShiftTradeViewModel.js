@@ -163,6 +163,8 @@
 
 	self.previousPage = function() {
 		if (self.showCartPanel()) return self.showCartPanel(!self.showCartPanel());
+
+		Teleopti.MyTimeWeb.Request.HideFab(false);
 		return self.cancelRequest();
 	};
 
@@ -445,6 +447,9 @@
 		self.chooseAgent(null);
 		self.selectedInternal(false);
 		self.showCartPanel(false);
+
+		Teleopti.MyTimeWeb.Request.HideFab(false);
+
 		if (self.subject() !== undefined) {
 			self.subject('');
 		}
