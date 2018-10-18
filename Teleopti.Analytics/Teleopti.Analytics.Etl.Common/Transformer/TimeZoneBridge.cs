@@ -4,12 +4,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 {
 	public class TimeZoneBridge
 	{
-		private readonly DateTime _date;
-		private readonly int _intervalId;
-		private readonly DateTime _localDate;
-		private readonly int _localIntervalId;
-		private readonly string _timeZoneCode;
-
 		private TimeZoneBridge()
 		{
 		}
@@ -17,39 +11,23 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		public TimeZoneBridge(DateTime date, TimeZoneInfo timeZoneInfo, int intervalsPerDay)
 			: this()
 		{
-			TimeZoneInfo TimeZoneInfo = timeZoneInfo;
-			var localDateTime = TimeZoneInfo.ConvertTimeFromUtc(date, TimeZoneInfo);
+			var localDateTime = TimeZoneInfo.ConvertTimeFromUtc(date, timeZoneInfo);
 
-			_date = date.Date;
-			_intervalId = new Interval(date, intervalsPerDay).Id;
-			_timeZoneCode = timeZoneInfo.Id;
-			_localDate = localDateTime.Date;
-			_localIntervalId = new Interval(localDateTime, intervalsPerDay).Id;
+			Date = date.Date;
+			IntervalId = new IntervalBase(date, intervalsPerDay).Id;
+			TimeZoneCode = timeZoneInfo.Id;
+			LocalDate = localDateTime.Date;
+			LocalIntervalId = new IntervalBase(localDateTime, intervalsPerDay).Id;
 		}
 
-		public DateTime Date
-		{
-			get { return _date; }
-		}
+		public DateTime Date { get; }
 
-		public int IntervalId
-		{
-			get { return _intervalId; }
-		}
+		public int IntervalId { get; }
 
-		public string TimeZoneCode
-		{
-			get { return _timeZoneCode; }
-		}
+		public string TimeZoneCode { get; }
 
-		public DateTime LocalDate
-		{
-			get { return _localDate; }
-		}
+		public DateTime LocalDate { get; }
 
-		public int LocalIntervalId
-		{
-			get { return _localIntervalId; }
-		}
+		public int LocalIntervalId { get; }
 	}
 }
