@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             double? result = SkillStaffPeriodHelper.CalculateAbsoluteRootMeanSquare(_skillStaffPeriods);
 
             // RMS of {1, -1, 0} >> SQRT(2/3)
-            Assert.AreEqual(Math.Sqrt(2d / 3d) + 3, result.Value, 0.001);
+            Assert.AreEqual(Math.Sqrt(2d / 3d), result.Value, 0.001);
         }
 
         [Test]

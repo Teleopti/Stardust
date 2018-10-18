@@ -15,26 +15,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     /// </remarks>
     public static class SkillStaffPeriodHelper
     {
-
-        /// <summary>
-        /// The calculation method how the Difference Hours are calculation from the ISkillStaffPeriods.
-        /// </summary>
-        private delegate IList<double> skillStaffPeriodsDifferenceHoursCalculationMethod(
-            IEnumerable<ISkillStaffPeriod> skillStaffPeriods, bool considerMinStaffing, bool considerMaxStaffing);
-
-        /// <summary>
-        /// Gets the intraday absolut differences in hours between forecasted and scheduled resources in the specified
-        /// <see cref="ISkillStaffPeriod"/> list.
-        /// </summary>
-        /// <param name="skillStaffPeriods">The skill staff periods.</param>
-        /// <param name="considerMinStaffing">if set to <c>true</c> then consider the preset minimum staffing.</param>
-        /// <param name="considerMaxStaffing">if set to <c>true</c> then consider the preset maximum staffing.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// This method is used for getting the absolut diference in hours for a day, preceding by a method
-        /// that gets the <see cref="ISkillStaffPeriod"/> list for a given day. This method is called by
-        /// that <see cref="ISkillStaffPeriod"/> list as parameter.
-        /// </remarks>
         public static IList<double> SkillStaffPeriodsAbsoluteDifferenceHours(IEnumerable<ISkillStaffPeriod> skillStaffPeriods, bool considerMinStaffing, bool considerMaxStaffing)
         {
             if(considerMinStaffing && considerMaxStaffing)
@@ -224,8 +204,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// <returns></returns>
         public static double? CalculateAbsoluteRootMeanSquare(IEnumerable<ISkillStaffPeriod> skillStaffPeriods)
         {
-            skillStaffPeriodsDifferenceHoursCalculationMethod calculationMethod = SkillStaffPeriodsAbsoluteDifferenceHours;
-            return CalculateSkillStaffPeriodsRootMeanSquare(calculationMethod, skillStaffPeriods);
+            return CalculateSkillStaffPeriodsRootMeanSquare(skillStaffPeriods);
         }
 
         /// <summary>
@@ -237,10 +216,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// <param name="considerMaxStaffing">if set to <c>true</c> [consider max staffing].</param>
         /// <param name="considerHighestIntraIntervalDeviation">if set to <c>true</c> [consider highest intra interval deviation].</param>
         /// <returns></returns>
-        private static double? CalculateSkillStaffPeriodsRootMeanSquare(skillStaffPeriodsDifferenceHoursCalculationMethod calculationMethod, IEnumerable<ISkillStaffPeriod> skillStaffPeriods)
+        private static double? CalculateSkillStaffPeriodsRootMeanSquare(IEnumerable<ISkillStaffPeriod> skillStaffPeriods)
         {
             double highestIntraIntervalDeviation = 0;
-            IList<double> intradayDifferences = calculationMethod(skillStaffPeriods, false, false);
+            IList<double> intradayDifferences = SkillStaffPeriodsAbsoluteDifferenceHours(skillStaffPeriods, false, false);
 			
             return CalculateRootMeanSquare(intradayDifferences, highestIntraIntervalDeviation);
         }

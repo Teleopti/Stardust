@@ -26,8 +26,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public double PeriodValue(IterationOperationOption iterationOperationOption)
         {
-            return CalculateInitialValue(iterationOperationOption);
-        }
+			var values = _scheduleDays.Select(s => dayValue(s, iterationOperationOption)).Where(s => s.HasValue).Select(s => s.Value).ToArray();
+			if (!values.Any()) return 0;
+
+			return iterationOperationOption == IterationOperationOption.DayOffOptimization
+				? Calculation.Variances.StandardDeviation(values)
+				: Calculation.Variances.RMS(values);
+		}
 
         public double? DayValueForSkills(DateOnly scheduleDay, IList<ISkill> skillList)
         {
@@ -50,33 +55,23 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return SkillStaffPeriodHelper.CalculateRootMeanSquare(intradayDifferences, 0);
         }
 
-        public double? DayValueForSkillsForDayOffOptimization(DateOnly scheduleDay, IList<ISkill> skillList)
-        {
-            DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-                scheduleDay.Date, scheduleDay.Date.AddDays(1), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
-
-            IList<ISkillStaffPeriod> skillStaffPeriods =
-                _stateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(skillList, dateTimePeriod);
-
-            return SkillStaffPeriodHelper.RelativeDifference(skillStaffPeriods);
-        }
-
-        private double CalculateInitialValue(IterationOperationOption iterationOperationOption)
-        {
-	        var values = _scheduleDays.Select(s => DayValue(s, iterationOperationOption)).Where(s => s.HasValue).Select(s => s.Value).ToArray();
-	        if (!values.Any()) return 0;
-
-	        return iterationOperationOption == IterationOperationOption.DayOffOptimization
-		               ? Calculation.Variances.StandardDeviation(values)
-		               : Calculation.Variances.RMS(values);
-        }
-
-        public double? DayValue(DateOnly scheduleDay, IterationOperationOption iterationOperationOption)
+        private double? dayValue(DateOnly scheduleDay, IterationOperationOption iterationOperationOption)
         {
             if (iterationOperationOption == IterationOperationOption.DayOffOptimization)
-                return DayValueForSkillsForDayOffOptimization(scheduleDay, _activeSkills);
+                return dayValueForSkillsForDayOffOptimization(scheduleDay, _activeSkills);
 
             return DayValueForSkills(scheduleDay, _activeSkills);
         }
-    }
+
+		private double? dayValueForSkillsForDayOffOptimization(DateOnly scheduleDay, IList<ISkill> skillList)
+		{
+			DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
+				scheduleDay.Date, scheduleDay.Date.AddDays(1), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+
+			IList<ISkillStaffPeriod> skillStaffPeriods =
+				_stateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(skillList, dateTimePeriod);
+
+			return SkillStaffPeriodHelper.RelativeDifference(skillStaffPeriods);
+		}
+	}
 }
