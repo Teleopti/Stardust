@@ -200,31 +200,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             _skillStaffPeriods = new List<ISkillStaffPeriod> { _skillStaffPeriod1, _skillStaffPeriod2, _skillStaffPeriod3 };
 
-            double? result = SkillStaffPeriodHelper.CalculateAbsoluteRootMeanSquare(_skillStaffPeriods);
+            double? result = SkillStaffPeriodHelper.SkillDayRootMeanSquare(_skillStaffPeriods);
 
             // RMS of {1, -1, 0} >> SQRT(2/3)
             Assert.AreEqual(Math.Sqrt(2d/3d), result.Value, 0.001);
-        }
-
-        [Test]
-        public void VerifyCalculateAbsoluteRootMeanSquareWithMaxIntraIntraday()
-        {
-            SkillStaffPeriodFactory.InjectMockedAbsoluteDifference(_skillStaffPeriod1, 4);
-            SkillStaffPeriodFactory.InjectMockedAbsoluteDifference(_skillStaffPeriod2, -4);
-            SkillStaffPeriodFactory.InjectMockedAbsoluteDifference(_skillStaffPeriod3, 0);
-
-            SkillStaffPeriodFactory.InjectMockedIntraIntervalDeviation(_skillStaffPeriod1, 1);
-            SkillStaffPeriodFactory.InjectMockedIntraIntervalDeviation(_skillStaffPeriod2, 2);
-            SkillStaffPeriodFactory.InjectMockedIntraIntervalDeviation(_skillStaffPeriod3, 3);
-
-            _mockRepository.ReplayAll();
-
-            _skillStaffPeriods = new List<ISkillStaffPeriod> { _skillStaffPeriod1, _skillStaffPeriod2, _skillStaffPeriod3 };
-
-            double? result = SkillStaffPeriodHelper.CalculateAbsoluteRootMeanSquare(_skillStaffPeriods);
-
-            // RMS of {1, -1, 0} >> SQRT(2/3)
-            Assert.AreEqual(Math.Sqrt(2d / 3d), result.Value, 0.001);
         }
 
         [Test]

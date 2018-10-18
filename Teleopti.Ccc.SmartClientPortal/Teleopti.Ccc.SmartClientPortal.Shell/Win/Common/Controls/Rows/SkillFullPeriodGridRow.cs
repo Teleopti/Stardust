@@ -45,11 +45,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows
 
 		private IEnumerable<ISkillStaffPeriod> getSkillStaffPeriods()
         {
-			//DateOnlyPeriod period = GetDateOnlyPeriodFromColum(cellInfo);
-			//IList<ISkillStaffPeriod> skillStaffPeriods;
-			//if (_rowManager.DataSource[0].TryGetValue(period, out skillStaffPeriods))
-			//    return skillStaffPeriods;
-
 			foreach (var kvp in _rowManager.DataSource[0])
 			{
 				return kvp.Value;
@@ -84,7 +79,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows
 				return SkillStaffPeriodHelper.ScheduledTime(SkillStaffPeriodList);
 
 			if (DisplayMember == "AbsoluteDifference")
-				return SkillStaffPeriodHelper.AbsoluteDifference(SkillStaffPeriodList, false, false);
+				return SkillStaffPeriodHelper.AbsoluteDifference(SkillStaffPeriodList);
 
 			if (DisplayMember == "RelativeDifference")
 				return SkillStaffPeriodHelper.RelativeDifferenceForDisplay(SkillStaffPeriodList);

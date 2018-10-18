@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		public static double? SkillDayRootMeanSquare(IEnumerable<IOvertimeSkillPeriodData> skillStaffingIntervals)
 		{
 			var intradayDifferences = skillStaffingIntervals.Select(s => s.AbsoluteDifference * s.CalculationPeriod.ElapsedTime().TotalHours).ToList();
-			return SkillStaffPeriodHelper.CalculateRootMeanSquare(intradayDifferences, 0);
+			return SkillStaffPeriodHelper.CalculateRootMeanSquare(intradayDifferences);
 		}
 	}
 }

@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		                                                                                              useMinPersonnel,
 		                                                                                              useMaxPersonnel);
 
-            return SkillStaffPeriodHelper.CalculateRootMeanSquare(intradayDifferences, 0);
+            return SkillStaffPeriodHelper.CalculateRootMeanSquare(intradayDifferences);
         }
 
         private double? dayValue(DateOnly scheduleDay, IterationOperationOption iterationOperationOption)
