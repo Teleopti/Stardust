@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Tracer;
@@ -78,6 +76,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			ICollection<ExternalUserState> externalUserStateBatch)
 		{
 			_tracer.ProcessReceived("SaveBatchExternalUserState", externalUserStateBatch?.Count);
+			if (externalUserStateBatch?.Count == 0) return 0;
+
 			IEnumerable<BatchStateInputModel> states = (
 					from s in externalUserStateBatch
 					select new BatchStateInputModel
