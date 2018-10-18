@@ -73,8 +73,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 					return error(waitlistingIsEnabled);
 				}
 
-				var numberDays = 0;
-				var numberMinutes = 0d;
 				var isAccountDay = affectedAccount is AccountDay;
 				var isAccountTime = affectedAccount is AccountTime;
 
@@ -87,31 +85,29 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				var scheduleDays =
 					new List<IScheduleDay>(scheduleRange.ScheduledDayCollection(intersectingPeriod.Value));
 
-				var affectedTimePerAccount = TimeSpan.Zero; 
-				foreach (var day in scheduleDays)
-				{
-					if (isAccountDay)
-					{
-						if (absenseOnDay(day, personRequest))
-							continue;
+				var affectedTimePerAccount = TimeSpan.Zero;
 
-						numberDays = calculateDays(day, numberDays);
-						if (TimeSpan.FromDays(numberDays) > affectedAccount.Remaining)
-						{
-							return error(waitlistingIsEnabled);
-						}
-						affectedTimePerAccount = TimeSpan.FromDays(numberDays);
-					}
-					else if (isAccountTime)
+				if (isAccountDay)
+				{
+					var numberDays = calculateDays(personRequest, scheduleDays);
+					if (TimeSpan.FromDays(numberDays) > affectedAccount.Remaining)
 					{
-						numberMinutes = calculateMinutes(personRequest, day, numberMinutes);
-						if (TimeSpan.FromMinutes(numberMinutes).TotalMinutes > affectedAccount.Remaining.TotalMinutes)
-						{
-							return error(waitlistingIsEnabled);
-						}
-						affectedTimePerAccount = TimeSpan.FromMinutes(numberMinutes);
+						return error(waitlistingIsEnabled);
 					}
+
+					affectedTimePerAccount = TimeSpan.FromDays(numberDays);
 				}
+				else if (isAccountTime)
+				{
+					var numberMinutes = calculateMinutes(personRequest, scheduleDays);
+					if (TimeSpan.FromMinutes(numberMinutes).TotalMinutes > affectedAccount.Remaining.TotalMinutes)
+					{
+						return error(waitlistingIsEnabled);
+					}
+
+					affectedTimePerAccount = TimeSpan.FromMinutes(numberMinutes);
+				}
+
 				validatedRequest.AffectedTimePerAccount.AddOrUpdate(affectedAccount, affectedTimePerAccount,
 					(account, span) => affectedTimePerAccount);
 			}
@@ -125,45 +121,80 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return day.PersonAbsenceCollection().Any(x => x.Layer.Payload == absenceRequest.Absence);
 		}
 
-		private int calculateDays(IScheduleDay day, int numberDays)
+		private int calculateDays(IPersonRequest personRequest, List<IScheduleDay> scheduleDays)
 		{
-			var significantPart = day.SignificantPart();
-			var isContractDayOff = _hasContractDayOffDefinition.IsDayOff(day);
-			
-			if (significantPart == SchedulePartView.MainShift || !isContractDayOff)
-				numberDays++;
-			
+			int numberDays = 0;
+			foreach (var day in scheduleDays)
+			{
+				if (absenseOnDay(day, personRequest))
+					continue;
+				var significantPart = day.SignificantPart();
+				var isContractDayOff = _hasContractDayOffDefinition.IsDayOff(day);
+
+				if (significantPart == SchedulePartView.MainShift || !isContractDayOff)
+					numberDays++;
+			}
+
 			return numberDays;
 		}
 
-		private double calculateMinutes(IPersonRequest personRequest, IScheduleDay day, double numberMinutes)
+		private double calculateMinutes(IPersonRequest personRequest, List<IScheduleDay> scheduleDays)
 		{
-			var visualLayerCollection = day.ProjectionService().CreateProjection();
-			var visualLayerCollectionPeriod = visualLayerCollection.Period();
-			var isContractDayOff = _hasContractDayOffDefinition.IsDayOff(day);
-			if (day.IsScheduled() && visualLayerCollectionPeriod.HasValue)
+			double numberMinutes = 0;
+			foreach (var day in scheduleDays)
 			{
-				var contractTime = day.ProjectionService().CreateProjection()
-					.FilterLayers(personRequest.Request.Period).ContractTime();
-				numberMinutes += contractTime.TotalMinutes;
-			}
-			else if (!day.HasDayOff() && !day.IsFullDayAbsence() && !isContractDayOff)
-			{
-				var timeZone = personRequest.Person.PermissionInformation.DefaultTimeZone();
-				var requestedPeriod = personRequest.Request.Period;
-				var personPeriod = personRequest.Person.PersonPeriods(requestedPeriod.ToDateOnlyPeriod(timeZone)).FirstOrDefault();
-				var personContract = personPeriod.PersonContract;
-				var averageWorktimePerDayInMinutes = personContract.Contract.WorkTime.AvgWorkTimePerDay.TotalMinutes;
-				var partTimePercentage = personContract.PartTimePercentage.Percentage.Value;
-				var averageContractTimeSpan = TimeSpan.FromMinutes(averageWorktimePerDayInMinutes * partTimePercentage);
 
-				var requestedTime = TimeSpan.Zero;
-				requestedTime += requestedPeriod.ElapsedTime() < averageContractTimeSpan
-					? requestedPeriod.ElapsedTime()
-					: averageContractTimeSpan;
-				numberMinutes += requestedTime.TotalMinutes;
+				var isContractDayOff = _hasContractDayOffDefinition.IsDayOff(day);
+				if (day.HasDayOff() || day.IsFullDayAbsence() || isContractDayOff)
+				{
+					return numberMinutes;
+				}
+
+				var timeZone = personRequest.Person.PermissionInformation.DefaultTimeZone();
+				var scheduleDayDate = TimeZoneHelper.ConvertToUtc(day.DateOnlyAsPeriod.DateOnly.Date, timeZone);
+				var requestedPeriod = personRequest.Request.Period;
+				if (requestedPeriod.StartDateTime < scheduleDayDate)
+				{
+					requestedPeriod = new DateTimePeriod(scheduleDayDate, requestedPeriod.EndDateTime);
+				}
+
+				if (requestedPeriod.EndDateTime > scheduleDayDate.AddDays(1))
+				{
+					requestedPeriod = new DateTimePeriod(requestedPeriod.StartDateTime, scheduleDayDate.AddDays(1));
+				}
+
+				var visualLayerCollection = day.ProjectionService().CreateProjection();
+				var visualLayerCollectionPeriod = visualLayerCollection.Period();
+				if (day.IsScheduled() && visualLayerCollectionPeriod.HasValue)
+				{
+					var contractTime = visualLayerCollection.FilterLayers(requestedPeriod).ContractTime();
+					if (contractTime == TimeSpan.Zero)
+					{
+						contractTime = scheduleDays[0].ProjectionService().CreateProjection().FilterLayers(requestedPeriod)
+							.ContractTime();
+					}
+
+					numberMinutes += contractTime.TotalMinutes;
+				}
+				else
+				{
+					var personPeriod = personRequest.Person.PersonPeriods(requestedPeriod.ToDateOnlyPeriod(timeZone))
+						.FirstOrDefault();
+					var personContract = personPeriod.PersonContract;
+					var averageWorktimePerDayInMinutes =
+						personContract.Contract.WorkTime.AvgWorkTimePerDay.TotalMinutes;
+					var partTimePercentage = personContract.PartTimePercentage.Percentage.Value;
+					var averageContractTimeSpan =
+						TimeSpan.FromMinutes(averageWorktimePerDayInMinutes * partTimePercentage);
+
+					var requestedTime = requestedPeriod.ElapsedTime() < averageContractTimeSpan
+						? requestedPeriod.ElapsedTime()
+						: averageContractTimeSpan;
+
+					numberMinutes += requestedTime.TotalMinutes;
+				}
 			}
-			
+
 			return numberMinutes;
 		}
 
