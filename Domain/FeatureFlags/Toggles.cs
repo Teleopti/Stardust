@@ -16,7 +16,7 @@
 
 		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
 
-		RTA_KillFattyIntradayUntilItDies_74939,
+		RTA_KillFattyIntradayUntilItDies_74939, //remove april 2019
 		RTA_RestrictModifyAdherenceWithPermission_74898,
 		RTA_EasilySpotLateForWork_75668,
 		LevelUp_HangfireStatistics_76139_76373,
