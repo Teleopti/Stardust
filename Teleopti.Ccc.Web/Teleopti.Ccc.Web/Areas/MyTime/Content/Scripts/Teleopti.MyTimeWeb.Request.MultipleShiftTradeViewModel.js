@@ -325,6 +325,8 @@
 
 		self.showToloranceMessageDetail(false);
 
+		if (agent != null) Teleopti.MyTimeWeb.Request.HideFab(true);
+
 		if (!Teleopti.MyTimeWeb.Common.IsHostAMobile()) self.showCartPanel(true);
 
 		self.selectedSchedulePairs([]);

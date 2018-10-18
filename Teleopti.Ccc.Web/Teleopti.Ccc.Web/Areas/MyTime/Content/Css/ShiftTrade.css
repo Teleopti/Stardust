@@ -758,6 +758,7 @@
 }
 .multi-shift-trade-cart-text {
 	text-align: center;
+	font-size: 12px;
 }
 .multi-shift-trade-cart-selection {
 	display: flex;
@@ -771,4 +772,7 @@
 }
 .add-shift-trade-request-block {
 	padding: 5px;
+}
+.cart-cancel-button {
+	border: 1px solid #cccccc;
 }

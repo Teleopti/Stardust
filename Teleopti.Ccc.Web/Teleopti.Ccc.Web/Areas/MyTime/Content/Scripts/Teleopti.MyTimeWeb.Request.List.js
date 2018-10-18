@@ -486,7 +486,9 @@
 	}
 
 	return {
-		Init: function(readyForInteractionCallback, completelyLoadedCallback) {
+		Init: function(readyForInteractionCallback, completelyLoadedCallback, parseAjax) {
+			if (parseAjax) ajax = parseAjax;
+
 			pageViewModel = new RequestPageViewModel(readyForInteractionCallback, completelyLoadedCallback);
 
 			_initScrollPaging();
