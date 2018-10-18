@@ -77,9 +77,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows
 
         	_skillStaffPeriodList = getSkillStaffPeriods(); //(cellInfo);
 
-			//if (DisplayMember == "MaxUsedSeats")
-			//    return SkillStaffPeriodHelper.MaxUsedSeats(SkillStaffPeriodList);
-
 			if (DisplayMember == "ForecastedHours")
 				return SkillStaffPeriodHelper.ForecastedTime(SkillStaffPeriodList);
 
@@ -92,17 +89,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows
 			if (DisplayMember == "RelativeDifference")
 				return SkillStaffPeriodHelper.RelativeDifferenceForDisplay(SkillStaffPeriodList);
 
-			//if (DisplayMember == "RootMeanSquare")
-			//    return SkillStaffPeriodHelper.SkillDayRootMeanSquare(SkillStaffPeriodList);
-
 			if (DisplayMember == "DailySmoothness")
 			{
 				var skillStaffPeriodOfFullPeriod = getSkillStaffPeriodsForFullPeriod();
 				return SkillStaffPeriodHelper.SkillPeriodGridSmoothness(skillStaffPeriodOfFullPeriod);
 			}
-
-			//if (DisplayMember == "HighestDeviationInPeriod")
-			//    return SkillStaffPeriodHelper.GetHighestIntraIntervalDeviation(SkillStaffPeriodList);
 
 			if (DisplayMember == "ForecastedHoursIncoming")
 				return SkillStaffPeriodHelper.ForecastedIncoming(SkillStaffPeriodList);

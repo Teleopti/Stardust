@@ -215,21 +215,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
         /// <summary>
-        /// Gets the highest intra interval deviation in the periods in the specified <see cref="ISkillStaffPeriod"/> list.
-        /// </summary>
-        /// <param name="skillStaffPeriods">The skill staff periods.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// This method is used for getting the the highest intra-interval deviation for a day, preceding by a method
-        /// that gets the <see cref="ISkillStaffPeriod"/> list for a given day. This method is called by
-        /// that <see cref="ISkillStaffPeriod"/> list as parameter.
-        /// </remarks>
-        public static double? GetHighestIntraIntervalDeviation(IEnumerable<ISkillStaffPeriod> skillStaffPeriods)
-        {
-            return skillStaffPeriods.Any() ? skillStaffPeriods.Max(p => p.IntraIntervalDeviation) : (double?)null;
-        }
-
-        /// <summary>
         /// Calculates the root mean square from the absolute values.
         /// </summary>
         /// <param name="skillStaffPeriods">The skill staff periods.</param>
@@ -237,11 +222,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// <param name="considerMaxStaffing">if set to <c>true</c> [consider max staffing].</param>
         /// <param name="considerHighestIntraIntervalDeviation">if set to <c>true</c> [consider highest intra interval deviation].</param>
         /// <returns></returns>
-        public static double? CalculateAbsoluteRootMeanSquare(IEnumerable<ISkillStaffPeriod> skillStaffPeriods, bool considerMinStaffing, bool considerMaxStaffing, bool considerHighestIntraIntervalDeviation)
+        public static double? CalculateAbsoluteRootMeanSquare(IEnumerable<ISkillStaffPeriod> skillStaffPeriods)
         {
             skillStaffPeriodsDifferenceHoursCalculationMethod calculationMethod = SkillStaffPeriodsAbsoluteDifferenceHours;
-            return CalculateSkillStaffPeriodsRootMeanSquare(calculationMethod, skillStaffPeriods, considerMinStaffing,
-                                                            considerMaxStaffing, considerHighestIntraIntervalDeviation);
+            return CalculateSkillStaffPeriodsRootMeanSquare(calculationMethod, skillStaffPeriods);
         }
 
         /// <summary>
@@ -253,15 +237,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// <param name="considerMaxStaffing">if set to <c>true</c> [consider max staffing].</param>
         /// <param name="considerHighestIntraIntervalDeviation">if set to <c>true</c> [consider highest intra interval deviation].</param>
         /// <returns></returns>
-        private static double? CalculateSkillStaffPeriodsRootMeanSquare(skillStaffPeriodsDifferenceHoursCalculationMethod calculationMethod, IEnumerable<ISkillStaffPeriod> skillStaffPeriods, bool considerMinStaffing, bool considerMaxStaffing, bool considerHighestIntraIntervalDeviation)
+        private static double? CalculateSkillStaffPeriodsRootMeanSquare(skillStaffPeriodsDifferenceHoursCalculationMethod calculationMethod, IEnumerable<ISkillStaffPeriod> skillStaffPeriods)
         {
             double highestIntraIntervalDeviation = 0;
-            IList<double> intradayDifferences = calculationMethod(skillStaffPeriods, considerMinStaffing, considerMaxStaffing);
-            if (considerHighestIntraIntervalDeviation)
-            {
-                double? highestIntraIntervalDeviationOrNull = GetHighestIntraIntervalDeviation(skillStaffPeriods);
-                highestIntraIntervalDeviation = highestIntraIntervalDeviationOrNull.HasValue ? highestIntraIntervalDeviationOrNull.Value : 0;
-            }
+            IList<double> intradayDifferences = calculationMethod(skillStaffPeriods, false, false);
+			
             return CalculateRootMeanSquare(intradayDifferences, highestIntraIntervalDeviation);
         }
 
@@ -285,7 +265,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public static double? SkillDayRootMeanSquare(IEnumerable<ISkillStaffPeriod> skillStaffPeriods)
         {
-            return CalculateAbsoluteRootMeanSquare(skillStaffPeriods, false, false, false);
+            return CalculateAbsoluteRootMeanSquare(skillStaffPeriods);
         }
 
         public static double? SkillDayGridSmoothness(IEnumerable<ISkillStaffPeriod> skillStaffPeriods)

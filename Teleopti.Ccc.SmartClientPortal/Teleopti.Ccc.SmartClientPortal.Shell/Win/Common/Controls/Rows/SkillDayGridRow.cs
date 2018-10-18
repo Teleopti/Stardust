@@ -85,9 +85,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows
             if (DisplayMember == "DailySmoothness")
                 return SkillStaffPeriodHelper.SkillDayGridSmoothness(SkillStaffPeriodList);
 
-            if (DisplayMember == "HighestDeviationInPeriod")
-                return SkillStaffPeriodHelper.GetHighestIntraIntervalDeviation(SkillStaffPeriodList);
-
             if (DisplayMember == "ForecastedHoursIncoming")
                 return SkillStaffPeriodHelper.ForecastedIncoming(SkillStaffPeriodList);
 

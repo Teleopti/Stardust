@@ -40,8 +40,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		public double IntraIntervalDeviation { get; private set; }
 
-		public double IntraIntervalRootMeanSquare { get; private set; }
-
 		public double RelativeBoostedDifferenceForDisplayOnly { get; set; }
 
 		public bool HasIntraIntervalIssue { get; set; }
@@ -308,14 +306,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			IPeriodDistribution periodDistribution)
 		{
 			IntraIntervalDeviation = calculatedValues.StandardDeviation;
-			IntraIntervalRootMeanSquare = calculatedValues.RootMeanSquare;
 			_periodDistribution = periodDistribution;
 		}
 
 		public void ClearIntraIntervalDistribution()
 		{
 			IntraIntervalDeviation = 0;
-			IntraIntervalRootMeanSquare = 0;
 		}
 
 		public void SetSkillDay(ISkillDay skillDay)
