@@ -23,16 +23,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly Policy _retryPolicy;
 		private readonly IStardustJobFeedback _stardustJobFeedback;
-		private readonly IRemoveDeletedStaffingHeads _removeDeletedStaffingHeads;
+		private readonly UpdateStaffingLevelReadModelStartDate _updateStaffingLevelReadModelStartDate;
 
 		public SkillCombinationResourceRepository(INow now, ICurrentUnitOfWork currentUnitOfWork,
-			ICurrentBusinessUnit currentBusinessUnit, IStardustJobFeedback stardustJobFeedback, IRemoveDeletedStaffingHeads removeDeletedStaffingHeads)
+			ICurrentBusinessUnit currentBusinessUnit, IStardustJobFeedback stardustJobFeedback, UpdateStaffingLevelReadModelStartDate updateStaffingLevelReadModelStartDate)
 		{
 			_now = now;
 			_currentUnitOfWork = currentUnitOfWork;
 			_currentBusinessUnit = currentBusinessUnit;
 			_stardustJobFeedback = stardustJobFeedback;
-			_removeDeletedStaffingHeads = removeDeletedStaffingHeads;
+			_updateStaffingLevelReadModelStartDate = updateStaffingLevelReadModelStartDate;
+			//_removeDeletedStaffingHeads = removeDeletedStaffingHeads;
 			_retryPolicy = Policy.Handle<TimeoutException>()
 				.Or<SqlException>(DetectTransientSqlException.IsTransient)
 				.OrInner<SqlException>(DetectTransientSqlException.IsTransient)
@@ -277,7 +278,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					dt.Columns.Add("BusinessUnit", typeof(Guid));
 					var insertedOn = _now.UtcDateTime();
 
-					var minStartDateTime = _removeDeletedStaffingHeads.GetStartDate(skillCombinationResources.Min(x => x.StartDateTime));
+					//var minStartDateTime = _removeDeletedStaffingHeads.GetStartDate(skillCombinationResources.Min(x => x.StartDateTime));
+					var minStartDateTime = _updateStaffingLevelReadModelStartDate.StartDateTime;
 					using (var transaction = connection.BeginTransaction())
 					{
 						var skillCombinations = loadSkillCombination(connection, transaction);

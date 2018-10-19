@@ -36,8 +36,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ExportStaffingPeriodValidationProvider>().As<ExportStaffingPeriodValidationProvider>().SingleInstance();
 
 			builder.RegisterType<UpdateStaffingLevelReadModelStartDate>().SingleInstance();
-			builder.RegisterType<RemoveDeletedStaffingHeads>().As<IRemoveDeletedStaffingHeads>().SingleInstance();
-
 			
 		}
 	}
