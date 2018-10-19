@@ -36,14 +36,13 @@ group-page-picker {
 			}
 		}
 
-		.none-selected {
+		.none-selected > .selected-text {
 			color: $text-color-muted;
-			border-bottom-color: $NG-MATERIAL-DEFAULT;
 		}
 
 		.invalid {
 			color: $text-color-muted;
-			border-bottom-color: rgb(255,109,0) !important;
+			border-color: rgb(255,109,0) !important;
 		}
 	}
 }
