@@ -75,8 +75,6 @@
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,
 		ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348,
 		ResourcePlanner_SeamlessPlanningForPreferences_76288,
-		
-		Wfm_CopyScheduleForPast_77958,
 
 		Wfm_DisplayOnlineHelp_39402,
 
