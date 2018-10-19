@@ -3102,6 +3102,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				toolStripProgressBar1.Visible = true;
 				toolStripProgressBar1.Value = 0;
 			}
+
+			_personsToValidate.Clear();
+			if(_scheduleView != null && _validation)
+				_scheduleView.AllSelectedPersons(scheduleDays).ForEach(_personsToValidate.Add);
+
 			_backgroundWorkerRunning = true;
 			backgroundWorker.RunWorkerAsync(argument);
 		}
