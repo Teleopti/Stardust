@@ -801,14 +801,11 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScheduleDictionary dictionary)
 		{
-			var scheduleParts = new List<IScheduleDay>();
-			foreach (IPerson person in dictionary.Keys)
+			return dictionary.Keys.GroupBy(p => p.PermissionInformation.DefaultTimeZone()).SelectMany(g =>
 			{
-				var dateOnlyPeriod = period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
-				scheduleParts.AddRange(dictionary[person].ScheduledDayCollection(dateOnlyPeriod));
-			}
-
-			return scheduleParts;
+				var dateOnlyPeriod = period.ToDateOnlyPeriod(g.Key);
+				return dictionary.SchedulesForPeriod(dateOnlyPeriod, g.ToArray());
+			}).ToArray();
 		}
 
 		public IList<IDayOffTemplate> LoadDayOff()

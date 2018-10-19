@@ -51,64 +51,25 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			_jobParameters = jobParameters;
 		}
 
-		public IList<IScenario> ScenarioCollection
-		{
-			get { return _scenarioCollection ?? (_scenarioCollection = _jobParameters.Helper.Repository.LoadScenario()); }
-		}
+		public IList<IScenario> ScenarioCollection => _scenarioCollection ?? (_scenarioCollection = _jobParameters.Helper.Repository.LoadScenario());
 
-		public IList<ISkill> SkillCollection
-		{
-			get {
-				return _skillCollection ?? (_skillCollection = _jobParameters.Helper.Repository.LoadSkill(ActivityCollection));
-			}
-		}
+		public IList<ISkill> SkillCollection => _skillCollection ?? (_skillCollection = _jobParameters.Helper.Repository.LoadSkill(ActivityCollection));
 
-		public IList<IOptionalColumn> OptionalColumnCollectionAvailableAsGroupPage {
-			get
-			{
-				return _optionalColumnCollection ??
-						 (_optionalColumnCollection = _jobParameters.Helper.Repository.LoadOptionalColumnAvailableAsGroupPage());
-			}
-		}
+		public IList<IOptionalColumn> OptionalColumnCollectionAvailableAsGroupPage => _optionalColumnCollection ??
+																					  (_optionalColumnCollection = _jobParameters.Helper.Repository.LoadOptionalColumnAvailableAsGroupPage());
 
-		public IList<IActivity> ActivityCollection
-		{
-			get { return _activityCollection ?? (_activityCollection = _jobParameters.Helper.Repository.LoadActivity()); }
-		}
+		public IList<IActivity> ActivityCollection => _activityCollection ?? (_activityCollection = _jobParameters.Helper.Repository.LoadActivity());
 
-		public IList<IAbsence> AbsenceCollection
-		{
-			get { return _absenceCollection ?? (_absenceCollection = _jobParameters.Helper.Repository.LoadAbsence()); }
-		}
+		public IList<IAbsence> AbsenceCollection => _absenceCollection ?? (_absenceCollection = _jobParameters.Helper.Repository.LoadAbsence());
 
-		public IList<IShiftCategory> ShiftCategoryCollection
-		{
-			get {
-				return _shiftCategoryCollection ?? (_shiftCategoryCollection = _jobParameters.Helper.Repository.LoadShiftCategory());
-			}
-		}
+		public IList<IShiftCategory> ShiftCategoryCollection => _shiftCategoryCollection ?? (_shiftCategoryCollection = _jobParameters.Helper.Repository.LoadShiftCategory());
 
-		public IList<IDayOffTemplate> DayOffTemplateCollection
-		{
-			get {
-				return _dayOffTemplateCollection ?? (_dayOffTemplateCollection = _jobParameters.Helper.Repository.LoadDayOff());
-			}
-		}
+		public IList<IDayOffTemplate> DayOffTemplateCollection => _dayOffTemplateCollection ?? (_dayOffTemplateCollection = _jobParameters.Helper.Repository.LoadDayOff());
 
-		public IList<IApplicationFunction> ApplicationFunctionCollection
-		{
-			get {
-				return _applicationFunctionCollection ??
-					   (_applicationFunctionCollection = _jobParameters.Helper.Repository.LoadApplicationFunction());
-			}
-		}
+		public IList<IApplicationFunction> ApplicationFunctionCollection => _applicationFunctionCollection ??
+																			(_applicationFunctionCollection = _jobParameters.Helper.Repository.LoadApplicationFunction());
 
-		public IList<IAvailableData> AvailableDataCollection
-		{
-			get {
-				return _availableDataCollection ?? (_availableDataCollection = _jobParameters.Helper.Repository.LoadAvailableData());
-			}
-		}
+		public IList<IAvailableData> AvailableDataCollection => _availableDataCollection ?? (_availableDataCollection = _jobParameters.Helper.Repository.LoadAvailableData());
 
 		public IList<IScenario> ScenarioCollectionDeletedExcluded
 		{
@@ -117,8 +78,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				IList<IScenario> returnList = new List<IScenario>();
 				foreach (IScenario scenario in ScenarioCollection)
 				{
-					IDeleteTag myScenario = scenario as IDeleteTag;
-					if (myScenario != null && !myScenario.IsDeleted)
+					if (scenario is IDeleteTag myScenario && !myScenario.IsDeleted)
 					{
 						returnList.Add(scenario);
 					}
@@ -127,13 +87,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			}
 		}
 
-		public IList<IApplicationRole> ApplicationRoleCollection
-		{
-			get {
-				return _applicationRoleCollection ??
-					   (_applicationRoleCollection = _jobParameters.Helper.Repository.LoadApplicationRole(this));
-			}
-		}
+		public IList<IApplicationRole> ApplicationRoleCollection => _applicationRoleCollection ??
+																	(_applicationRoleCollection = _jobParameters.Helper.Repository.LoadApplicationRole(this));
 
 		public IScenario DefaultScenario
 		{
@@ -175,10 +130,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			}
 		}
 
-		public IEnumerable<IPerson> PersonCollection
-		{
-			get { return _personCollection ?? (_personCollection = _jobParameters.Helper.Repository.LoadPerson(this)); }
-		}
+		public IEnumerable<IPerson> PersonCollection => _personCollection ?? (_personCollection = _jobParameters.Helper.Repository.LoadPerson(this));
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
 		public IList<IPerson> PersonsWithIds(List<Guid> ids)
@@ -186,31 +138,15 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			return PersonCollection.Where(person => ids.Contains(person.Id.GetValueOrDefault())).ToList();
 		}
 
-		public IEnumerable<IContract> ContractCollection
-		{
-			get { return _contractCollection ?? (_contractCollection = _jobParameters.Helper.Repository.LoadContract()); }
-		}
+		public IEnumerable<IContract> ContractCollection => _contractCollection ?? (_contractCollection = _jobParameters.Helper.Repository.LoadContract());
 
-		public IEnumerable<IContractSchedule> ContractScheduleCollection
-		{
-			get {
-				return _contractScheduleCollection ??
-					   (_contractScheduleCollection = _jobParameters.Helper.Repository.LoadContractSchedule());
-			}
-		}
+		public IEnumerable<IContractSchedule> ContractScheduleCollection => _contractScheduleCollection ??
+																			(_contractScheduleCollection = _jobParameters.Helper.Repository.LoadContractSchedule());
 
-		public IEnumerable<IPartTimePercentage> PartTimePercentageCollection
-		{
-			get {
-				return _partTimePercentageCollection ??
-					   (_partTimePercentageCollection = _jobParameters.Helper.Repository.LoadPartTimePercentage());
-			}
-		}
+		public IEnumerable<IPartTimePercentage> PartTimePercentageCollection => _partTimePercentageCollection ??
+																				(_partTimePercentageCollection = _jobParameters.Helper.Repository.LoadPartTimePercentage());
 
-		public IEnumerable<IRuleSetBag> RuleSetBagCollection
-		{
-			get { return _ruleSetBagCollection ?? (_ruleSetBagCollection = _jobParameters.Helper.Repository.LoadRuleSetBag()); }
-		}
+		public IEnumerable<IRuleSetBag> RuleSetBagCollection => _ruleSetBagCollection ?? (_ruleSetBagCollection = _jobParameters.Helper.Repository.LoadRuleSetBag());
 
 		public IEnumerable<IGroupPage> UserDefinedGroupings(IScheduleDictionary schedules)
 		{
@@ -218,15 +154,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 						 (_userDefinedGroupings = _jobParameters.Helper.Repository.LoadUserDefinedGroupings());
 		}
 
-		public IBusinessUnit BusinessUnit
-		{
-			get { return ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit; }
-		}
+		public IBusinessUnit BusinessUnit => ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit;
 
-		public DateOnlyPeriod SelectedPeriod
-		{
-			get { return new DateOnlyPeriod(DateOnly.Today, DateOnly.Today); }
-		}
+		public DateOnlyPeriod SelectedPeriod => DateOnly.Today.ToDateOnlyPeriod();
 
 		public IScheduleDictionary GetSchedules(DateTimePeriod period, IScenario scenario)
 		{
@@ -238,27 +168,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			}
 			return scheduleDictionary;
 		}
-
-		public IDictionary<DateTimePeriod, IScheduleDictionary> GetSchedules(IList<IScheduleChangedReadModel> changed, IScenario scenario)
-		{
-			_dictionaryCache = new Dictionary<DateTimePeriod, IScheduleDictionary>();
-
-			var groupedChanged = changed.GroupBy(c => c.Date);
-			foreach (var changedReadModels in groupedChanged)
-			{
-				var theDate = changedReadModels.Key;
-				// detta måste fixas med tidszon, eller???
-				var utcDate = new DateTime(theDate.Date.Ticks, DateTimeKind.Utc);
-				var period = new DateTimePeriod(utcDate, utcDate.AddDays(1).AddMilliseconds(-1));
-				var personsIds = changedReadModels.Select(scheduleChangedReadModel => scheduleChangedReadModel.Person).ToList();
-				var persons = PersonsWithIds(personsIds);
-				var scheduleDictionary = _jobParameters.Helper.Repository.LoadSchedule(period, scenario, persons);
-				_dictionaryCache.Add(period, scheduleDictionary);
-			}
-
-			return _dictionaryCache;
-		}
-
+		
 		public IDictionary<DateOnly, IScheduleDictionary> GetSchedules(HashSet<IStudentAvailabilityDay> days, IScenario scenario)
 		{
 			var dictionary = new Dictionary<DateOnly, IScheduleDictionary>();
@@ -389,27 +299,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			return true;
 		}
 
-		public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetCollection
-		{
-			get
-			{
-				return _multiplicatorDefinitionSetCollection ??
-						 (_multiplicatorDefinitionSetCollection = _jobParameters.Helper.Repository.LoadMultiplicatorDefinitionSet());
-			}
-		}
+		public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetCollection => _multiplicatorDefinitionSetCollection ??
+																						  (_multiplicatorDefinitionSetCollection = _jobParameters.Helper.Repository.LoadMultiplicatorDefinitionSet());
 
-		public IList<TimeZonePeriod> PeriodToLoadBridgeTimeZone
-		{
-			get
-			{
-				if (_bridgeTimeZonePeriodList == null)
-				{
-					_bridgeTimeZonePeriodList = _jobParameters.Helper.Repository.GetBridgeTimeZoneLoadPeriod(_jobParameters.DefaultTimeZone);
-				}
-
-				return _bridgeTimeZonePeriodList;
-			}
-		}
+		public IList<TimeZonePeriod> PeriodToLoadBridgeTimeZone => _bridgeTimeZonePeriodList ?? (_bridgeTimeZonePeriodList =
+																	   _jobParameters.Helper.Repository.GetBridgeTimeZoneLoadPeriod(_jobParameters.DefaultTimeZone)
+																   );
 
 		//This only to be used in Test to avoid a load of too much data
 		public void SetLoadBridgeTimeZonePeriod(DateTimePeriod period, string timeZoneCode)

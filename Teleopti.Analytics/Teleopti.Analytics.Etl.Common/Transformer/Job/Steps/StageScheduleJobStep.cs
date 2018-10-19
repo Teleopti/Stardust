@@ -43,7 +43,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 				// Extract one schedulepart per each person and date
 				var rootList = _jobParameters.StateHolder.GetSchedulePartPerPersonAndDate(scheduleDictionary);
 
-				_raptorTransformer.Transform(rootList, DateTime.Now, _jobParameters, new ThreadPool());
+				using (var threadPool = new ThreadPool())
+					_raptorTransformer.Transform(rootList, DateTime.Now, _jobParameters, threadPool);
 			}
 
 			return Result.RowsAffected.GetValueOrDefault(0);
