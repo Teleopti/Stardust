@@ -157,12 +157,12 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 
 			var personInfo1 = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo1.ApplicationLogonInfo.SetLogonName(string.Empty);
-			target.PersistIdentity(personInfo1);
+			target.PersistIdentity(new IdentityChangeActionObj() { PersonInfo = personInfo1 });
 			Assert.DoesNotThrow(session.Flush);
 			
 			var personInfo2 = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo2.ApplicationLogonInfo.SetLogonName(string.Empty);
-			target.PersistIdentity(personInfo2);
+			target.PersistIdentity(new IdentityChangeActionObj() { PersonInfo = personInfo2 });
 			Assert.DoesNotThrow(session.Flush);
 
 			var result = session.Query<PersonInfo>().ToList();
@@ -175,11 +175,11 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var session = _tenantUnitOfWorkManager.CurrentSession();
 
 			var personInfo1 = new PersonInfo(tenant, Guid.NewGuid());
-			target.PersistApplicationLogonName(personInfo1);
+			target.PersistApplicationLogonName(new AppLogonChangeActionObj() { PersonInfo = personInfo1 });
 			Assert.DoesNotThrow(session.Flush);
 
 			var personInfo2 = new PersonInfo(tenant, Guid.NewGuid());
-			target.PersistApplicationLogonName(personInfo2);
+			target.PersistApplicationLogonName(new AppLogonChangeActionObj() { PersonInfo = personInfo2 });
 			Assert.DoesNotThrow(session.Flush);
 
 			var result = session.Query<PersonInfo>().ToList();
@@ -268,7 +268,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 
 			var personInfo = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), "password1", new OneWayEncryption());
-			target.PersistApplicationLogonName(personInfo);
+			target.PersistApplicationLogonName(new AppLogonChangeActionObj() { PersonInfo = personInfo });
 
 			var p1 = session.Get<PersonInfo>(personInfo.Id);
 			var auditRecords = session.Query<TenantAudit>().ToList();
@@ -288,7 +288,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var personInfo = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), "password1", new OneWayEncryption());
 			personInfo.SetIdentity(RandomName.Make());
-			target.PersistIdentity(personInfo);
+			target.PersistIdentity(new IdentityChangeActionObj(){PersonInfo = personInfo});
 
 			var p1 = session.Get<PersonInfo>(personInfo.Id);
 			var auditRecords = session.Query<TenantAudit>().ToList();

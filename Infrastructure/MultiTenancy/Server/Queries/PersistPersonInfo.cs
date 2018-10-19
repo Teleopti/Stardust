@@ -1,7 +1,10 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Aspects;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
@@ -35,15 +38,15 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 
 
 		[TenantAudit(PersistActionIntent.IdentityChange)]
-		public virtual string PersistIdentity(PersonInfo personInfo, bool throwOnError = true)
+		public virtual string PersistIdentity(IdentityChangeActionObj identityChangeActionObj)
 		{
-			return persistHelper(_personInfoPersister.PersistIdentity, personInfo, throwOnError);
+			return persistHelper(_personInfoPersister.PersistIdentity, identityChangeActionObj.PersonInfo, identityChangeActionObj.ThrowOnError);
 		}
 
 		[TenantAudit(PersistActionIntent.AppLogonChange)]
-		public virtual string PersistApplicationLogonName(PersonInfo personInfo, bool throwOnError = true)
+		public virtual string PersistApplicationLogonName(AppLogonChangeActionObj appLogonChangeActionObj)
 		{
-			return persistHelper(_personInfoPersister.PersistApplicationLogonName, personInfo, throwOnError);
+			return persistHelper(_personInfoPersister.PersistApplicationLogonName, appLogonChangeActionObj.PersonInfo, appLogonChangeActionObj.ThrowOnError);
 		}
 
 		private string persistHelper(Action<PersonInfo> persist, PersonInfo personInfo, bool throwOnError = true)
@@ -124,6 +127,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 		}
 
 		//[TenantAudit(PersistActionIntent.GenericPersistApiCall)]
+		[AuditTrail]
 		public virtual string Persist(GenericPersistApiCallActionObj genericPersistAuditAction)
 		{
 			var res = ValidatePersonInfo(genericPersistAuditAction.PersonInfo, genericPersistAuditAction.ThrowOnError);
@@ -139,15 +143,15 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 
 
 		//[TenantAudit(PersistActionIntent.IdentityChange)]
-		public virtual string PersistIdentity(PersonInfo personInfo, bool throwOnError = true)
+		public virtual string PersistIdentity(IdentityChangeActionObj identityChangeActionObj)
 		{
-			return persistHelper(_personInfoPersister.PersistIdentity, personInfo, throwOnError);
+			return persistHelper(_personInfoPersister.PersistIdentity, identityChangeActionObj.PersonInfo, identityChangeActionObj.ThrowOnError);
 		}
 
 		//[TenantAudit(PersistActionIntent.AppLogonChange)]
-		public virtual string PersistApplicationLogonName(PersonInfo personInfo, bool throwOnError = true)
+		public virtual string PersistApplicationLogonName(AppLogonChangeActionObj appLogonChangeActionObj)
 		{
-			return persistHelper(_personInfoPersister.PersistApplicationLogonName, personInfo, throwOnError);
+			return persistHelper(_personInfoPersister.PersistApplicationLogonName, appLogonChangeActionObj.PersonInfo, appLogonChangeActionObj.ThrowOnError);
 		}
 
 		private string persistHelper(Action<PersonInfo> persist, PersonInfo personInfo, bool throwOnError = true)
@@ -208,18 +212,62 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 		public bool ThrowOnError = true;
 	}
 
-	//public class IdentityChangeActionObj : TenantAuditAction
-	//{
+	public class IdentityChangeActionObj : TenantAuditAction
+	{
 
-	//}
+	}
 
-	//public class AppLogonChangeActionObj : TenantAuditAction
-	//{
+	public class AppLogonChangeActionObj : TenantAuditAction
+	{
 
-	//}
+	}
 
 	public class GenericPersistApiCallActionObj : TenantAuditAction
 	{
 
 	}
+
+	public class TenantAccessAuditContext : IHandleContextAction<GenericPersistApiCallActionObj>,
+		IHandleContextAction<AppLogonChangeActionObj>, IHandleContextAction<IdentityChangeActionObj>
+	{
+		private readonly ITenantAuditPersister _tenantAuditPersister;
+		private readonly ICurrentHttpContext _currentHttpContext;
+
+		public TenantAccessAuditContext(ITenantAuditPersister tenantAuditPersister, ICurrentHttpContext currentHttpContext)
+		{
+			_tenantAuditPersister = tenantAuditPersister;
+			_currentHttpContext = currentHttpContext;
+		}
+
+		public void Handle(GenericPersistApiCallActionObj command)
+		{
+			AuditPersist(command.PersonInfo, PersistActionIntent.GenericPersistApiCall);
+		}
+
+		public void Handle(AppLogonChangeActionObj command)
+		{
+			AuditPersist(command.PersonInfo, PersistActionIntent.AppLogonChange);
+		}
+
+		public void Handle(IdentityChangeActionObj command)
+		{
+			AuditPersist(command.PersonInfo, PersistActionIntent.IdentityChange);
+		}
+
+		private void AuditPersist(PersonInfo personInfo, PersistActionIntent intent)
+		{
+			var tenantUser = _currentHttpContext.Current().Items[WebTenantAuthenticationConfiguration.PersonInfo] as PersonInfo;
+
+			var data = Newtonsoft.Json.JsonConvert.SerializeObject(new
+			{
+				Identity = personInfo.Identity ?? string.Empty,
+				AppLogonName = personInfo.ApplicationLogonInfo.LogonName ?? string.Empty,
+				AppLogonPwd = string.IsNullOrEmpty(personInfo.ApplicationLogonInfo.LogonPassword) ? string.Empty : "<pwd-hash-set>"
+			});
+
+			var ta = new TenantAudit(tenantUser.Id, personInfo.Id, intent.ToString(), data);
+			_tenantAuditPersister.Persist(ta);
+		}
+	}
+
 }
