@@ -162,6 +162,25 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			
 			RunSchedulingWithoutPreferences(alreadyScheduledAgents, @event, agents, selectedPeriod, schedulingOptions, schedulingCallback, schedulingProgress, blockPreferenceProvider);
 
+			if (schedulingOptions.PreferencesDaysOnly||schedulingOptions.UsePreferencesMustHaveOnly)
+			{
+				var schedules = _schedulerStateHolder().Schedules;
+
+				foreach (var agent in agents)
+				{
+					var range = schedules[agent];
+					foreach (var date in selectedPeriod.DayCollection())
+					{
+						var scheduleDay = range.ScheduledDay(date);
+						if (scheduleDay.HasDayOff() && (scheduleDay.PreferenceDay() == null))
+						{
+							scheduleDay.DeleteDayOff();
+						}
+						schedules.Modify(scheduleDay, new DoNothingScheduleDayChangeCallBack());
+					}
+				}
+			}
+			
 			if(@event.RunDayOffOptimization)
 			{
 				_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate),

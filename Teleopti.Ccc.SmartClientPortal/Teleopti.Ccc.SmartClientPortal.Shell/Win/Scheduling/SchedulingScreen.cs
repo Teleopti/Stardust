@@ -2185,7 +2185,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			setThreadCulture();
 			if (_scheduleView != null)
 			{
-				_scheduleView.ValidatePersons(_personsToValidate);
+				_scheduleView.ValidatePersons(_personsToValidate, _validation);
 			}
 		}
 
