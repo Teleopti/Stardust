@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
@@ -206,7 +207,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 			_owner.AddControlHelpContext(tabSkillData);
 
 			_scheduleView = new IntradayScheduleView(_skillIntradayGridControl, _owner, _presenter.SchedulerStateHolder, _gridLockManager, SchedulePartFilter.None, _clipHandlerSchedule,
-				 _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, NullScheduleTag.Instance);
+				 _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, NullScheduleTag.Instance, new UndoRedoContainer());
 
 			wpfShiftEditor1.LoadFromStateHolder(_presenter.SchedulerStateHolder.CommonStateHolder);
 			wpfShiftEditor1.CommitChanges += shiftEditorCommitChanges;
