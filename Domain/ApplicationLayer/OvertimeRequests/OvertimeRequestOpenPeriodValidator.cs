@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			getOvertimeRequestOpenPeriodSkillTypeGroups(
 				IEnumerable<IOvertimeRequestOpenPeriod> overtimeRequestOpenPeriods, IPerson person, DateOnlyPeriod dateOnlyPeriod)
 		{
-			var personPeriod = person.PersonPeriods(dateOnlyPeriod).ToArray();
+			var personPeriod = person.PersonPeriods(dateOnlyPeriod);
 			var defaultSkillType = getDefaultSkillType();
 			var personSkillTypeDescriptions = personPeriod.SelectMany(p => _personalSkills.PersonSkills(p))
 				.Select(p => p.Skill.SkillType.Description).ToList();

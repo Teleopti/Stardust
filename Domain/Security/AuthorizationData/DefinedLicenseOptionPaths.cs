@@ -42,17 +42,6 @@
         /// <summary>
         /// Constant string for Early bird base option
         /// </summary>
-        public const string TeleoptiCccPilotCustomersBase = DefinedLicenseSchemaCodes.TeleoptiWFMPilotCustomersSchema + "/Base";
-        public const string TeleoptiCccPilotCustomersForecasts = DefinedLicenseSchemaCodes.TeleoptiWFMPilotCustomersSchema + "/Forecasts";
-        public const string TeleoptiCccPilotCustomersShifts = DefinedLicenseSchemaCodes.TeleoptiWFMPilotCustomersSchema + "/Shifts";
-        public const string TeleoptiCccPilotCustomersPeople = DefinedLicenseSchemaCodes.TeleoptiWFMPilotCustomersSchema + "/People";
-        public const string TeleoptiCccPilotCustomersAgentPortal = DefinedLicenseSchemaCodes.TeleoptiWFMPilotCustomersSchema + "/AgentPortal";
-        public const string TeleoptiCccPilotCustomersOptions = DefinedLicenseSchemaCodes.TeleoptiWFMPilotCustomersSchema + "/Options";
-        public const string TeleoptiCccPilotCustomersScheduler = DefinedLicenseSchemaCodes.TeleoptiWFMPilotCustomersSchema + "/Scheduler";
-        public const string TeleoptiCccPilotCustomersIntraday = DefinedLicenseSchemaCodes.TeleoptiWFMPilotCustomersSchema + "/Intraday";
-        public const string TeleoptiCccPilotCustomersPermissions = DefinedLicenseSchemaCodes.TeleoptiWFMPilotCustomersSchema + "/Permissions";
-        public const string TeleoptiCccPilotCustomersReports = DefinedLicenseSchemaCodes.TeleoptiWFMPilotCustomersSchema + "/Reports";
-
         public const string TeleoptiCccPilotCustomersBpoExchange = DefinedLicenseSchemaCodes.TeleoptiWFMSchema + "/BpoExchange";
 	}
 }

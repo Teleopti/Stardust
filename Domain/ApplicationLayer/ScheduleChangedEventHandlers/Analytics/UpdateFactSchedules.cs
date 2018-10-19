@@ -5,6 +5,7 @@ using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -107,9 +108,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				throw new ScenarioMissingInAnalyticsException();
 			}
 
-			_analyticsScheduleRepository.DeleteFactSchedules(dateIds, person.Id.GetValueOrDefault(),
-				analyticsScenario.ScenarioId);
-
+			foreach (var dateIdsBatch in dateIds.Batch(365))
+			{
+				_analyticsScheduleRepository.DeleteFactSchedules(dateIdsBatch, person.Id.GetValueOrDefault(),
+					analyticsScenario.ScenarioId);
+			}
 
 			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(true, true, true), new DateOnlyPeriod(dates.Min(), dates.Max()), scenario);

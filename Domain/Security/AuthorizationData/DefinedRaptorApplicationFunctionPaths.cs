@@ -99,6 +99,7 @@
 
 		// Reports
 		public const string ViewBadgeLeaderboardUnderReports = "Raptor/Reports/ViewBadgeLeaderboard";
+		public const string GeneralAuditTrailWebReport = "Raptor/Reports/GeneralAuditTrailWebReport";
 
 		// Agent Portal Web
 		public const string StudentAvailability = "Raptor/MyTimeWeb/StudentAvailability";

@@ -6,7 +6,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -27,7 +26,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 {
 	public class WorksheetStateHolder : IDisposable
 	{
-		private readonly bool _peopleSpeedUpOpening76365;
 		private  IDictionary<ViewType, IRotationStateHolder> _rotationStateHolderCache = new Dictionary<ViewType, IRotationStateHolder>();
 		private readonly List<PersonGeneralModel> _tobeDeleteFromGridDataAfterRomove = new List<PersonGeneralModel>();
 		private readonly List<Culture> _cultureCollection = new List<Culture>();
@@ -42,12 +40,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		private IList<IPersonRotation> _childrenPersonRotationCollection = new List<IPersonRotation>();
 		private IList<IPersonAvailability> _childrenPersonAvailabilityCollection = new List<IPersonAvailability>();
 		private List<IPersonAccountChildModel> _personaccountGridViewChildCollection;
-
-		[RemoveMeWithToggle(Toggles.People_SpeedUpOpening_76365)]
-		public WorksheetStateHolder(bool peopleSpeedUpOpening76365)
-		{
-			_peopleSpeedUpOpening76365 = peopleSpeedUpOpening76365;
-		}
 
 		public TypedBindingCollection<IContract> ContractCollection { get; } = new TypedBindingCollection<IContract>();
 
@@ -81,52 +73,28 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			Culture uiCulture;
 
 			CultureInfo[] cInfo = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
-			if (_peopleSpeedUpOpening76365)
+			for (int i = 0; i < cInfo.Length - 1; i++)
 			{
-				for (int i = 0; i < cInfo.Length - 1; i++)
+				var cultureToTest = cInfo[i];
+				try
 				{
-					var cultureToTest = cInfo[i];
-					try
-					{
-						if(cultureToTest.LCID == 4096)
-							continue;
-						// ReSharper disable ReturnValueOfPureMethodIsNotUsed
-						CultureInfo.GetCultureInfo(cultureToTest.LCID);
-						// ReSharper restore ReturnValueOfPureMethodIsNotUsed
-
-						culture = new Culture(cultureToTest.LCID, cultureToTest.DisplayName);
-						_cultureCollection.Add(culture);
-
-						uiCulture = new Culture(cultureToTest.LCID, cultureToTest.Name);
-						_uiCultureCollection.Add(uiCulture);
-					}
-					catch (CultureNotFoundException)
-					{ }
-				}
-			}
-			else
-			{
-				for (int i = 0; i < cInfo.Length - 1; i++)
-				{
-					try
-					{
-						// ReSharper disable ReturnValueOfPureMethodIsNotUsed
-						CultureInfo.GetCultureInfo(cInfo[i].LCID);
-						// ReSharper restore ReturnValueOfPureMethodIsNotUsed
-					}
-					catch (Exception)
-					{
+					if (cultureToTest.LCID == 4096)
 						continue;
-					}
+					// ReSharper disable ReturnValueOfPureMethodIsNotUsed
+					CultureInfo.GetCultureInfo(cultureToTest.LCID);
+					// ReSharper restore ReturnValueOfPureMethodIsNotUsed
 
-					culture = new Culture(cInfo[i].LCID, cInfo[i].DisplayName);
+					culture = new Culture(cultureToTest.LCID, cultureToTest.DisplayName);
 					_cultureCollection.Add(culture);
 
-					uiCulture = new Culture(cInfo[i].LCID, cInfo[i].Name);
+					uiCulture = new Culture(cultureToTest.LCID, cultureToTest.Name);
 					_uiCultureCollection.Add(uiCulture);
 				}
+				catch (CultureNotFoundException)
+				{
+				}
 			}
-			
+
 			_cultureCollection.Sort(
 				 (c1, c2) => string.Compare(c1.DisplayName, c2.DisplayName, StringComparison.CurrentCulture));
 			_uiCultureCollection.Sort(

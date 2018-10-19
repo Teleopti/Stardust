@@ -19,46 +19,6 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 			var optionPaths = new Dictionary<string, bool>
 			{
 				{
-					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersBase,
-					licenseService.TeleoptiCccPilotCustomersBaseEnabled
-				},
-				{
-					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersForecasts,
-					licenseService.TeleoptiCccPilotCustomersForecastsEnabled
-				},
-				{
-					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersShifts,
-					licenseService.TeleoptiCccPilotCustomersShiftsEnabled
-				},
-				{
-					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersPeople,
-					licenseService.TeleoptiCccPilotCustomersPeopleEnabled
-				},
-				{
-					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersAgentPortal,
-					licenseService.TeleoptiCccPilotCustomersAgentPortalEnabled
-				},
-				{
-					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersOptions,
-					licenseService.TeleoptiCccPilotCustomersOptionsEnabled
-				},
-				{
-					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersScheduler,
-					licenseService.TeleoptiCccPilotCustomersSchedulerEnabled
-				},
-				{
-					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersIntraday,
-					licenseService.TeleoptiCccPilotCustomersIntradayEnabled
-				},
-				{
-					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersPermissions,
-					licenseService.TeleoptiCccPilotCustomersPermissionsEnabled
-				},
-				{
-					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersReports,
-					licenseService.TeleoptiCccPilotCustomersReportsEnabled
-				},
-				{
 					DefinedLicenseOptionPaths.TeleoptiCccBase,
 					licenseService.TeleoptiCccBaseEnabled
 				},

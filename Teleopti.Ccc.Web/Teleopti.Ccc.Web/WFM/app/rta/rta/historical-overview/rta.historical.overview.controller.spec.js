@@ -204,7 +204,7 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		expect(vm.cards[0].Agents[0].Days[0].Color).toBe('hsl(0,0%,100%)');
 	});
 
-	it('should display white when adherence is empty', function (t) {
+	it('should display empty adherence percentage bar when no interval adherence', function (t) {
 		t.stateParams.teamIds = ['teamAvalancheId'];
 		t.backend.with.historicalOverview(
 			{

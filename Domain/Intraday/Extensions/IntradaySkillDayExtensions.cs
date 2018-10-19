@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Interfaces.Domain;
@@ -15,51 +16,24 @@ namespace Teleopti.Ccc.Domain.Intraday.Extensions
 			DateTime endAtUtc,
 			int minutesPerInterval)
 		{
-			var skillStatsRange = new List<SkillDayStatsRange>();
-			foreach (var skillDay in skillDays)
-			{
-				var templateTaskPeriods = getTemplateTaskPeriods(skillDay, minutesPerInterval, startAtUtc, endAtUtc).ToList();
-				skillStatsRange.Add(getSkillStatsRange(templateTaskPeriods, skillDay));
-			}
-
-			return skillStatsRange;
+			return skillDays.Select(getSkillStatsRange).ToList();
 		}
 
-		private static SkillDayStatsRange getSkillStatsRange(IEnumerable<ISkillStaffPeriodView> templateTaskPeriods,
-			ISkillDay skillDay)
+		private static SkillDayStatsRange getSkillStatsRange(ISkillDay skillDay)
 		{
-			if (!templateTaskPeriods.Any())
-				return new SkillDayStatsRange();
+			var timePeriods = skillDay.OpenHours();
+			if (timePeriods.IsEmpty()) return new SkillDayStatsRange();
 
-			var startTime = new DateTime();
-			var endTime = new DateTime();
-			foreach (var workloadDay in skillDay.WorkloadDayCollection)
-			{
-				var openTaskPeriodList = workloadDay.OpenTaskPeriodList;
-				if (openTaskPeriodList.Count <= 0)
-					continue;
+			var start = timePeriods.Min(t => t.StartTime);
+			var end = timePeriods.Max(t => t.EndTime);
 
-				var start = openTaskPeriodList.Min(x => x.Period.StartDateTime);
-				var end = openTaskPeriodList.Max(x => x.Period.EndDateTime);
-				if (startTime != null || startTime > start)
-					startTime = start;
-				if (end != null || endTime < end)
-					endTime = end;
-			}
-
-			return new SkillDayStatsRange()
+			return new SkillDayStatsRange
 			{
 				SkillId = skillDay.Skill.Id.Value,
 				SkillDayDate = skillDay.CurrentDate,
-				RangePeriod = new DateTimePeriod(startTime, endTime)
+				RangePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(skillDay.CurrentDate.Date.Add(start),
+					skillDay.CurrentDate.Date.Add(end), skillDay.Skill.TimeZone)
 			};
-		}
-
-		private static IEnumerable<ISkillStaffPeriodView> getTemplateTaskPeriods(ISkillDay skillDay, int minutesPerInterval,
-			DateTime startOfPeriodUtc, DateTime endOfPeriodUtc)
-		{
-			return skillDay.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(minutesPerInterval)).Where(t =>
-						t.Period.StartDateTime >= startOfPeriodUtc && t.Period.StartDateTime < endOfPeriodUtc);
 		}
 	}
 }
