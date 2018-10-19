@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 {
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_ReviewHistoricalAdherence_74770)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_ReviewHistoricalAdherence_Domain_74770)]
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
 		public static string DefaultTenantName = "default";

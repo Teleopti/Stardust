@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 using Teleopti.Wfm.Adherence.Tracer;
@@ -67,6 +68,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		private readonly ICurrentEventPublisher _currentEventPublisher;
 		private readonly LateForWorkEventPublisher _lateForWorkEventPublisher;
 		private readonly IRtaTracer _tracer;
+		private readonly IAdherenceDayStartEventPublisher _adherenceDayStartEventPublisher;
 
 		public AgentStateProcessor(
 			ShiftEventPublisher shiftEventPublisher,
@@ -77,8 +79,8 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			IEventPublisherScope eventPublisherScope,
 			ICurrentEventPublisher currentEventPublisher,
 			LateForWorkEventPublisher lateForWorkEventPublisher,
-			IRtaTracer tracer
-		)
+			IRtaTracer tracer,
+			IAdherenceDayStartEventPublisher adherenceDayStartEventPublisher)
 		{
 			_shiftEventPublisher = shiftEventPublisher;
 			_activityEventPublisher = activityEventPublisher;
@@ -89,6 +91,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			_currentEventPublisher = currentEventPublisher;
 			_lateForWorkEventPublisher = lateForWorkEventPublisher;
 			_tracer = tracer;
+			_adherenceDayStartEventPublisher = adherenceDayStartEventPublisher;
 		}
 
 		[LogInfo]
@@ -115,28 +118,30 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 
 		private AgentState processRelevantMoments(ProcessInput processInput)
 		{
-			var times = new[] {processInput.CurrentTime};
+			Console.WriteLine("processRelevantMoments" + processInput.CurrentTime);
 
-			if (processInput.Stored.ReceivedTime != null)
-			{
-				var from = processInput.Stored.ReceivedTime;
-				var to = processInput.CurrentTime;
+			var from = processInput.Stored.ReceivedTime ?? processInput.CurrentTime.AddHours(-1);
+			var to = processInput.CurrentTime;
 
-				var startingActivities = processInput.Schedule
-					.Where(x => x.StartDateTime > from && x.StartDateTime <= to)
-					.Select(x => x.StartDateTime);
+			var startingActivities = processInput.Schedule.Select(x => x.StartDateTime);
+			var endingActivities = processInput.Schedule.Select(x => x.EndDateTime);
+			//optimize add only one hour before first activity of shift
+			var oneHourBeforeStartingActivities = processInput.Schedule
+				.Select(x => x.StartDateTime.AddHours(-1));
 
-				var endingActivities = processInput.Schedule
-					.Where(x => x.EndDateTime > from && x.EndDateTime <= to)
-					.Select(x => x.EndDateTime);
-
-				times = times
-					.Concat(startingActivities)
-					.Concat(endingActivities)
-					.Distinct()
-					.OrderBy(x => x)
-					.ToArray();
-			}
+			var times = processInput.CurrentTime.AsArray()
+				.Concat(startingActivities)
+				.Concat(endingActivities)
+				.Concat(oneHourBeforeStartingActivities)
+				.Where(x =>
+				{
+					if (x == to)
+						return true;
+					return x > @from && x <= to;
+				})
+				.Distinct()
+				.OrderBy(x => x)
+				.ToArray();
 
 			var workingState = processInput.Stored;
 			AgentState outState = null;
@@ -170,6 +175,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			_ruleEventPublisher.Publish(context);
 			_adherenceEventPublisher.Publish(context);
 			_lateForWorkEventPublisher.Publish(context);
+			_adherenceDayStartEventPublisher.Publish(context);
 
 			_currentEventPublisher.Current().Publish(new AgentStateChangedEvent
 			{

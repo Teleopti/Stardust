@@ -52,15 +52,9 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		public ScheduleInfo Schedule { get; }
 		public AdherenceInfo Adherence { get; }
 
-		public bool FirstTimeProcessingAgent()
-		{
-			return Stored.ReceivedTime == null;
-		}
+		public bool FirstTimeProcessingAgent() => Stored.ReceivedTime == null;
 
-		public bool HasInput()
-		{
-			return _input != null;
-		}
+		public bool HasInput() => _input != null;
 
 		public bool ShouldProcessState()
 		{
@@ -74,14 +68,14 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 				return true;
 			if (SnapshotId != Stored.SnapshotId)
 				return true;
+			if (Schedule.ShiftStartsInOneHour())
+				return true;
 			return false;
 		}
 
 		// for logging
-		public override string ToString()
-		{
-			return $"Time: {Time}, UserCode: {_input?.UserCode}, StateCode: {_input?.StateCode}, SourceId: {_input?.SourceId}, PersonId: {PersonId}, BusinessUnitId: {BusinessUnitId}, TeamId: {TeamId}, SiteId: {SiteId}";
-		}
+		public override string ToString() =>
+			$"Time: {Time}, UserCode: {_input?.UserCode}, StateCode: {_input?.StateCode}, SourceId: {_input?.SourceId}, PersonId: {PersonId}, BusinessUnitId: {BusinessUnitId}, TeamId: {TeamId}, SiteId: {SiteId}";
 
 		public string InputStateCode() => _input?.StateCode;
 		public string InputStateDescription() => _input?.StateDescription;

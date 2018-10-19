@@ -162,6 +162,13 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			return null;
 		}
 
+		public bool ShiftStartsInOneHour()
+		{
+			if (CurrentActivity() == null && NextActivity() != null)
+				return _context.Time == NextActivity().StartDateTime.AddHours(-1);
+			return false;
+		}
+
 		public static DateTime? NextCheck(IEnumerable<ScheduledActivity> schedule, int? lastTimeWindowCheckSum, DateTime? lastCheck)
 		{
 			// note to self: return null means check now ;)
@@ -183,6 +190,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			return new[]
 			{
 				current?.EndDateTime,
+				next?.StartDateTime.AddHours(-1), // optimize more please
 				next?.StartDateTime,
 				activityEntersTimeWindowAt,
 				noSchedule

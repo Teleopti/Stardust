@@ -254,6 +254,7 @@
     <Compile Include="Domain\Service\PersonRuleChangedEventTest.cs" />
     <Compile Include="Domain\Service\PersonShiftEndEventTest.cs" />
     <Compile Include="Domain\Service\PersonShiftStartEventTest.cs" />
+    <Compile Include="Domain\Service\PersonAdherenceDayStartEventTest.cs" />
     <Compile Include="Domain\Service\PersonStateChangedEventTest.cs" />
     <Compile Include="Domain\Service\QueueTest.cs" />
     <Compile Include="Domain\Service\RuleMappingTest.cs" />

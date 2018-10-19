@@ -1859,11 +1859,8 @@
     <Compile Include="ApplicationLayer\Events\PersonAbsenceModifiedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonActivityActualStartEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\PersonActivityStartEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonCollectionChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonDeletedEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\PersonShiftEndEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\PersonShiftStartEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonTeamChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonTerminalDateChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduledResourcesChangedEvent.cs" />

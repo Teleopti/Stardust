@@ -123,6 +123,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			else
 				builder.RegisterType<ScheduleLoader>().As<IScheduleLoader>().SingleInstance();
 			builder.RegisterType<AdherencePercentageCalculator>().SingleInstance();
+			
+			if (_config.Toggle(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306))
+				builder.RegisterType<AdherenceDayStartEventPublisher>().As<IAdherenceDayStartEventPublisher>().SingleInstance();
+			else
+				builder.RegisterType<NoAdherenceDayStartEventPublisher>().As<IAdherenceDayStartEventPublisher>().SingleInstance();
 
 			builder.RegisterType<ShiftEventPublisher>().SingleInstance();
 			builder.RegisterType<AdherenceEventPublisher>().SingleInstance();
