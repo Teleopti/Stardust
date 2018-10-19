@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -45,6 +46,27 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			schedulingHintError.ResourceName.Should().Be.EqualTo(agent.Name.ToString());
 			schedulingHintError.ValidationErrors.Single(x => x.ResourceType == ValidationResourceType.Preferences).ErrorResource
 				.Should().Be.EqualTo(nameof(Resources.AgentScheduledWithoutPreferences));
+		}
+		
+		[Test]
+		public void ShouldNotDisplayHintWhenNotAllDaysGetScheduled()
+		{
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(new DateOnly(2018,10,15), 1);
+			var agent = new Person().WithSchedulePeriodOneWeek(period.StartDate).WithPersonPeriod(new ContractScheduleWorkingMondayToFriday(),new Skill())
+				.WithName(new Name(Guid.NewGuid().ToString(), Guid.NewGuid().ToString())).WithId();
+			var scenario = ScenarioRepository.Has();
+			var currentSchedule = new ScheduleDictionaryForTest(scenario, period.ToDateTimePeriod(TimeZoneInfo.Utc));
+			currentSchedule.AddScheduleData(agent, new PreferenceDay(agent, period.StartDate, new PreferenceRestriction
+			{
+				DayOffTemplate = new DayOffTemplate()
+			}));
+			currentSchedule.AddPersonAssignment(new PersonAssignment(agent, scenario, period.StartDate.AddDays(5)).WithDayOff());
+			currentSchedule.AddPersonAssignment(new PersonAssignment(agent, scenario, period.StartDate.AddDays(6)).WithDayOff());
+
+			var schedulingHintError = Target.Execute(new HintInput(currentSchedule, new[] { agent }, period, null, false))
+				.InvalidResources.Single();
+			schedulingHintError.ResourceName.Should().Be.EqualTo(agent.Name.ToString());
+			schedulingHintError.ValidationErrors.SingleOrDefault(x => x.ResourceType == ValidationResourceType.Preferences).Should().Be.Null();
 		}
 		
 		[Test]

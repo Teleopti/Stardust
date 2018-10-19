@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					stateHolder.SchedulingResultState.SkillDays,
 					stateHolder.Schedules,
 					stateHolder.SchedulingResultState.LoadedAgents,
-					NewBusinessRuleCollection.AllForScheduling(stateHolder.SchedulingResultState),
+					NewBusinessRuleCollection.MinimumAndPersonAccount(stateHolder.SchedulingResultState, stateHolder.SchedulingResultState.AllPersonAccounts),
 					teamBlockGenerator,
 					blockPreferenceProvider);
 
