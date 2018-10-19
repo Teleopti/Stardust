@@ -18,6 +18,7 @@
 
 		RTA_KillFattyIntradayUntilItDies_74939, //remove april 2019
 		RTA_ReviewHistoricalAdherence_Domain_74770,
+		RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306,
 		RTA_ReviewHistoricalAdherence_74770,
 
 		MyTimeWeb_SortRequestList_40711,
