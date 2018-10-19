@@ -49,16 +49,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 			Browser.Interactions.ClickContaining(".tree-handle-wrapper", team);
 		}
 
-		[When(@"I pick new dates")]
-		public void WhenIPickNewDates()
-		{
-			// not very pretty
-			Browser.Interactions.ClickUsingJQuery("date-range-picker .popup-control");
-			Browser.Interactions.ClickUsingJQuery(".wfm-datepicker-popup-row > div:not(.ng-hide) .date-range-start-date span:contains(02):first");
-			Browser.Interactions.ClickUsingJQuery(".wfm-datepicker-popup-row > div:not(.ng-hide) .date-range-end-date span:contains(02):first");
-			Browser.Interactions.ClickUsingJQuery("date-range-picker .popup-control");
-		}
-
 		[When(@"I run archiving")]
 		[When(@"I run importing")]
         public void WhenIRunArchiving()

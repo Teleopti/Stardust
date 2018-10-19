@@ -22,7 +22,6 @@ Scenario: Run copying for one agent
 	When I am viewing copy schedule page
 	And I wait 3 seconds to allow tracking to be setup
 	And I select 'To' as to scenario
-	And I pick new dates
 	And I select the team 'Team 1'
 	And I run archiving
 	And I confirm to run archiving
@@ -51,7 +50,6 @@ Scenario: Run copying from non-default scenario
 	And I wait 3 seconds to allow tracking to be setup
 	And I select 'From' as from scenario
 	And I select 'To' as to scenario
-	And I pick new dates
 	And I select the team 'Team 1'
 	And I run archiving
 	And I confirm to run archiving
