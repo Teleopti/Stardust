@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		[TestCase(true)]
 		[TestCase(false)]
 		[Ignore("78279 to be fixed")]
-		public void ShouldPoop(bool useShiftCategoryLimitations)
+		public void ShouldMoveDayOffLastDayInSchedulePeriodUsingShiftCategoryLimitations(bool useShiftCategoryLimitations)
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
