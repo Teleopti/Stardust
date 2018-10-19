@@ -5,11 +5,12 @@ import { NzTreeNode, NzTreeNodeOptions } from 'ng-zorro-antd';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { Moment } from '../../../../../node_modules/moment';
 import { UserService } from '../../../core/services';
-import { AuditTrailService, OrgUnit, ScheduleAuditTrailReportQuery, SearchResult } from '../../services';
+import { AuditTrailService } from '../../services';
+import { Person } from '../../../shared/types';
 
 const mapToISODate = date => format(date, 'YYYY-MM-DD');
 const toISORange = ([startDate, endDate]: DateRange): DateRange => [mapToISODate(startDate), mapToISODate(endDate)];
-const orgTreeToNgTree = (unit: OrgUnit): NzTreeNodeOptions => {
+/*const orgTreeToNgTree = (unit: OrgUnit): NzTreeNodeOptions => {
 	const tree: NzTreeNodeOptions = {
 		title: unit.Name,
 		key: unit.Id
@@ -20,7 +21,7 @@ const orgTreeToNgTree = (unit: OrgUnit): NzTreeNodeOptions => {
 		tree.isLeaf = true;
 	}
 	return tree;
-};
+};*/
 
 interface DateRange extends Array<string> {
 	[0]: string;
@@ -38,9 +39,10 @@ export class GeneralAuditTrailComponent implements OnInit {
 	moment: Moment;
 
 	searchForm: FormGroup;
-	changedBy = this.auditTrailService.personsWhoChangedSchedules();
+	//changedBy = this.auditTrailService.personsWhoChangedSchedules();
 	orgTree: NzTreeNode[] = [];
-	auditData: SearchResult = [];
+	//auditData: SearchResult = [];
+	person: Person;
 
 	constructor(
 		private fb: FormBuilder,
@@ -49,57 +51,32 @@ export class GeneralAuditTrailComponent implements OnInit {
 	) {
 		this.userService.getPreferences().subscribe({
 			next: prefs => {
-				console.log(prefs.DateFormatLocale);
-				//console.log(this.moment.locale(prefs.DateFormatLocale));
 				this.moment = moment().locale(prefs.DateFormatLocale);
-				//this.dateformat = this.moment.localeData().longDateFormat('L');
 			}
 		});
 	}
 
 	ngOnInit() {
 		this.setupForm();
-		this.updateOrganizationList();
+		this.getPersonByKeyword();
 	}
 
-	get scheduleRange(): AbstractControl {
-		return this.searchForm.get('scheduleRange');
-	}
-
-	get orgSelection(): AbstractControl {
-		return this.searchForm.get('orgSelection');
+	getPersonByKeyword(): any {
+		this.auditTrailService.getPersonByKeyword('ash').subscribe({
+			next: results => {
+				return results;
+			}
+		});
+		//	return '';
 	}
 
 	setupForm() {
 		this.searchForm = this.fb.group({
-			scheduleRange: [[new Date(), new Date()]],
-			changedRange: [[new Date(), new Date()]],
-			auditTarget: '',
-			orgSelection: [[]]
+			personPicker: this.person,
+			changedRange: [[new Date(), new Date()]]
 		});
 	}
-
-	updateOrganizationList() {
-		const teamsFromDateRange = ([startDate, endDate]: DateRange) => {
-			return this.auditTrailService.getTeams({ startDate, endDate });
-		};
-		const orgTreesToNzTreeNodes = orgTrees => orgTrees.map(orgTreeToNgTree).map(node => new NzTreeNode(node));
-		this.scheduleRange.valueChanges
-			.pipe(
-				filter(dateRange => dateRange.length > 0),
-				map(dateRange => toISORange(dateRange)),
-				switchMap(dateRange => teamsFromDateRange(dateRange)),
-				map(orgTrees => orgTreesToNzTreeNodes(orgTrees))
-			)
-			.subscribe({
-				next: teams => {
-					this.orgTree = teams;
-				}
-			});
-		// Trigger value change
-		this.scheduleRange.updateValueAndValidity();
-	}
-
+	/*
 	get selectedTeamIds() {
 		const findCheckedLeaves = (nodes: NzTreeNode[]) => {
 			return nodes.reduce((acc, node) => {
@@ -121,11 +98,9 @@ export class GeneralAuditTrailComponent implements OnInit {
 		const teamIds = this.selectedTeamIds;
 
 		const body: ScheduleAuditTrailReportQuery = {
-			// AffectedPeriodStartDate: '2018-01-01',
 			AffectedPeriodStartDate: scheduleStart,
 			AffectedPeriodEndDate: scheduleEnd,
 			ChangedByPersonId: auditTarget,
-			// ChangesOccurredStartDate: '2018-01-01',
 			ChangesOccurredStartDate: changedStart,
 			ChangesOccurredEndDate: changedEnd,
 			MaximumResults: 100,
@@ -144,5 +119,5 @@ export class GeneralAuditTrailComponent implements OnInit {
 				});
 			}
 		});
-	}
+	}*/
 }

@@ -10,12 +10,26 @@
     <nz-form-item>
         <nz-form-label>{{'ChangedBy' | translate}}</nz-form-label>
         <nz-form-control>
-            <nz-select style="width: 200px;" nzShowSearch formControlName="auditTarget">
-                <nz-option [nzLabel]="'Anyone' | translate" nzValue=""></nz-option>
-                <ng-container *ngFor="let person of changedBy | async">
-                    <nz-option [nzLabel]="person.Name" [nzValue]="person.Id"></nz-option>
-                </ng-container>
-            </nz-select>
+            <nz-input-group style="width: 200px;" nzSize="medium" [nzSuffix]="suffixIcon">
+                <input placeholder="Select person" fromControlName="personPicker" nz-input (ngModelChange)="onChange($event)" [nzAutocomplete]="auto"
+                />
+            </nz-input-group>
+            <ng-template #suffixIcon>
+                <i class="anticon anticon-search"></i>
+            </ng-template>
+            <nz-autocomplete #auto>
+                <nz-auto-optgroup *ngFor="let group of optionGroups" [nzLabel]="groupTitle">
+                    <ng-template #groupTitle>
+                        <span>{{group.title}}
+                            <a class="more-link" href="https://www.google.com/search?q=ng+zorro" target="_blank">更多</a>
+                        </span>
+                    </ng-template>
+                    <nz-auto-option *ngFor="let option of group.children" [nzLabel]="option.title" [nzValue]="option">
+                        {{option.title}}
+                        <span class="certain-search-item-count">{{option.count}} 人 关注</span>
+                    </nz-auto-option>
+                </nz-auto-optgroup>
+            </nz-autocomplete>
         </nz-form-control>
     </nz-form-item>
 
