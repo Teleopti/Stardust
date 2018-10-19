@@ -72,7 +72,6 @@ const wfm = angular.module('wfm', [
 	'wfm.staffing',
 	'wfm.dataProtection',
 	'wfm.templates',
-	'wfm.workPicker',
 	'wfm.badge',
 	'wfm.skillPicker',
 	'wfm.skillPickerOld',
