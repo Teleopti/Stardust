@@ -39,7 +39,7 @@ WebByPassDefaultPermissionCheck_37984 = true
 
 # LevelUp #
 RTA_KillFattyIntradayUntilItDies_74939 = true
-RTA_ReviewHistoricalAdherence_Domain_74770 = RC
+RTA_ReviewHistoricalAdherence_Domain_74770 = true
 RTA_ReviewHistoricalAdherence_74770 = RC
 
 # Dumplings, can any of these be removed? #
