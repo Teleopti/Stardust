@@ -280,14 +280,16 @@ Scenario: Adding invalid absence request values
 @suppressHangfireQueue
 Scenario: Adding too long message on absence request
 	Given I am an agent
+	And I am american
 	And I am viewing requests
 	When I click to add a new absence request
 	And I try to input too long message request values
 	Then I should see message adjusted to maximum length
-	
+
 	@NotKeyExample
 Scenario: Adding too long subject on absence request
 	Given I am an agent
+	And I am american
 	And I am viewing requests
 	When I click to add a new absence request
 	And I input too long subject request values
