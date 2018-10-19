@@ -1,0 +1,65 @@
+<div style="padding-bottom: 10px;" nz-row>
+    <div nz-col>
+        <h1>
+            <i class="mdi mdi-database-search"></i> Audit trail
+        </h1>
+    </div>
+</div>
+
+<form nz-form nzLayout="vertical" [formGroup]="searchForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <nz-form-label>{{'ChangedBy' | translate}}</nz-form-label>
+        <nz-form-control>
+            <nz-select style="width: 200px;" nzShowSearch formControlName="auditTarget">
+                <nz-option [nzLabel]="'Anyone' | translate" nzValue=""></nz-option>
+                <ng-container *ngFor="let person of changedBy | async">
+                    <nz-option [nzLabel]="person.Name" [nzValue]="person.Id"></nz-option>
+                </ng-container>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label>{{'ChangeDateColon' | translate}}</nz-form-label>
+        <nz-form-control>
+            <nz-range-picker formControlName="changedRange" [nzFormat]="dateformat"></nz-range-picker>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-control>
+            <button nz-button nzType="primary">
+                <i class="anticon anticon-search"></i>{{'Search' | translate}}</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>
+
+<nz-table #auditTable nzSize="middle" [nzData]="auditData" nzPageSize="100" nzHideOnSinglePage>
+    <thead nzSingleSort>
+        <tr>
+            <th nzShowSort nzSortKey="ModifiedAt">Timestamp</th>
+            <th nzShowSort nzSortKey="ModifiedBy">Person</th>
+            <th nzShowSort nzSortKey="ScheduledAgent">Action</th>
+            <th>
+                <telop-table-options-menu enableCsvExport [data]="auditTable.data"></telop-table-options-menu>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-template ngFor let-data [ngForOf]="auditTable.data">
+            <tr>
+                <td nzShowExpand [(nzExpand)]="data.expand"></td>
+                <td>{{data.name}}</td>
+                <td>{{data.age}}</td>
+                <td>{{data.address}}</td>
+                <td>
+                    <a href="#">Delete</a>
+                </td>
+            </tr>
+            <tr [nzExpand]="data.expand">
+                <td></td>
+                <td colspan="4">{{data.description}}</td>
+            </tr>
+        </ng-template>
+    </tbody>
+</nz-table>

@@ -28,25 +28,12 @@ interface DateRange extends Array<string> {
 }
 
 @Component({
-	selector: 'report-audit-trail',
-	templateUrl: './schedule-audit-trail.component.html',
-	styleUrls: ['./schedule-audit-trail.component.scss'],
+	selector: 'general-audit-trail',
+	templateUrl: './general-audit-trail.component.html',
+	styleUrls: ['./general-audit-trail.component.scss'],
 	providers: []
 })
-export class ScheduleAuditTrail implements OnInit {
-	constructor(
-		private fb: FormBuilder,
-		private auditTrailService: AuditTrailService,
-		private userService: UserService
-	) {
-		this.userService.getPreferences().subscribe({
-			next: prefs => {
-				//this.moment = moment().locale(prefs.DateFormatLocale);
-				this.dateformat = this.moment.localeData().longDateFormat('L');
-			}
-		});
-	}
-
+export class GeneralAuditTrailComponent implements OnInit {
 	dateformat = 'YYYY-MM-DD';
 	moment: Moment;
 
@@ -55,17 +42,32 @@ export class ScheduleAuditTrail implements OnInit {
 	orgTree: NzTreeNode[] = [];
 	auditData: SearchResult = [];
 
+	constructor(
+		private fb: FormBuilder,
+		private auditTrailService: AuditTrailService,
+		private userService: UserService
+	) {
+		this.userService.getPreferences().subscribe({
+			next: prefs => {
+				console.log(prefs.DateFormatLocale);
+				//console.log(this.moment.locale(prefs.DateFormatLocale));
+				this.moment = moment().locale(prefs.DateFormatLocale);
+				//this.dateformat = this.moment.localeData().longDateFormat('L');
+			}
+		});
+	}
+
+	ngOnInit() {
+		this.setupForm();
+		this.updateOrganizationList();
+	}
+
 	get scheduleRange(): AbstractControl {
 		return this.searchForm.get('scheduleRange');
 	}
 
 	get orgSelection(): AbstractControl {
 		return this.searchForm.get('orgSelection');
-	}
-
-	ngOnInit() {
-		this.setupForm();
-		this.updateOrganizationList();
 	}
 
 	setupForm() {

@@ -8,6 +8,7 @@ import { authenticationComponents } from './app/authentication/authentication.mo
 import { BootstrapComponent } from './app/bootstrap/bootstrap.component';
 import { navigationComponents } from './app/navigation/navigation.module';
 import { peopleComponents } from './app/people/people.module';
+import { reportsComponents } from './app/reports/reports.module';
 import { WorkspaceComponent } from './app/pm/components';
 import { sharedComponents } from './app/shared/shared.module';
 import { environment } from './environments/environment';
@@ -99,6 +100,7 @@ const downgradeHelper = (downgradableComponents: DowngradeableComponent[] | Down
 
 // Use this to downgrade module components
 downgradeHelper(peopleComponents);
+downgradeHelper(reportsComponents);
 downgradeHelper(sharedComponents);
 downgradeHelper(navigationComponents);
 downgradeHelper(authenticationComponents);

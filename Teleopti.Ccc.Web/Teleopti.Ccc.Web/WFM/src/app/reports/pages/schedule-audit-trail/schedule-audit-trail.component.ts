@@ -28,12 +28,12 @@ interface DateRange extends Array<string> {
 }
 
 @Component({
-	selector: 'general-audit-trail',
-	templateUrl: './general-audit-trail.component.html',
-	styleUrls: ['./general-audit-trail.component.scss'],
+	selector: 'report-audit-trail',
+	templateUrl: './schedule-audit-trail.component.html',
+	styleUrls: ['./schedule-audit-trail.component.scss'],
 	providers: []
 })
-export class GeneralAuditTrail implements OnInit {
+export class ScheduleAuditTrailComponent implements OnInit {
 	constructor(
 		private fb: FormBuilder,
 		private auditTrailService: AuditTrailService,
