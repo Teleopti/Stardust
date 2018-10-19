@@ -86,10 +86,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 					Name = requestableAbsence.Description.Name
 				}).ToList();
 			var hasAnyAbsence = absenceTypes.Any();
-			if(!absenceTypes.Any()) absenceTypes.Add(new AbsenceTypeViewModel{Name = Resources.NoAbsenceTypesOpenForRequests, Id = null});
+			//if(!absenceTypes.Any()) absenceTypes.Add(new AbsenceTypeViewModel{Name = Resources.NoAbsenceTypesOpenForRequests, Id = null});
 			return new RequestsViewModel
 			{
-				HasAnyAbsenceTypes = hasAnyAbsence,
+				HasAnyAbsenceTypes = true,
 				AbsenceTypes = absenceTypes,
 				AbsenceTypesForReport =
 					_absenceTypesProvider.GetReportableAbsences().Select(x => new AbsenceTypeViewModel
