@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public static class SchedulePeriodExtensions
 	{
-		public static ISchedulePeriod NumberOfDaysOf(this ISchedulePeriod schedulePeriod, int numberOfDaysOff)
+		public static ISchedulePeriod NumberOfDaysOff(this ISchedulePeriod schedulePeriod, int numberOfDaysOff)
 		{
 			schedulePeriod.SetDaysOff(numberOfDaysOff);
 			return schedulePeriod;

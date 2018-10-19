@@ -352,7 +352,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var skill = SkillRepository.Has("skill", activity);
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1);
 			var scenario = ScenarioRepository.Has("some name");
-			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1).NumberOfDaysOf(1);
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1).NumberOfDaysOff(1);
 			var shiftCategory = new ShiftCategory("allowed").WithId();
 			var shiftCategoryNotAllowed = new ShiftCategory("not allowed").WithId();
 			var allowedRuleset = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
@@ -430,7 +430,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var skillExtra2 = SkillRepository.Has("skillextra2", activity);
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
 			var scenario = ScenarioRepository.Has("some name");
-			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1).NumberOfDaysOf(1);
+			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1).NumberOfDaysOff(1);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var agent = PersonRepository.Has(schedulePeriod, ruleSet, skill);
@@ -467,7 +467,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var skill = SkillRepository.Has("skill", activity);
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
 			var scenario = ScenarioRepository.Has();
-			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1).NumberOfDaysOf(1);
+			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1).NumberOfDaysOff(1);
 			var shiftCategory = new ShiftCategory().WithId();
 			//two shifts - 0-12 and 12-24
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(0, 0, 12, 0, 60*13), new TimePeriodWithSegment(12, 0, 24, 0, 60*13), shiftCategory));
