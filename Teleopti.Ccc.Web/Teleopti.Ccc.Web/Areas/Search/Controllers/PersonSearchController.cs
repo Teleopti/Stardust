@@ -19,4 +19,5 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 			var persons = _personSearchProvider.FindPersonsByKeywords(keywords);
 			return Ok(new FindPersonViewModel(persons));
 		}
+	}
 }
