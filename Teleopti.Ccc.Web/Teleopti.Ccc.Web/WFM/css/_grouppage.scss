@@ -9,19 +9,26 @@ group-page-picker {
 
 	.group-picker-wrapper {
 		$NG-MATERIAL-DEFAULT: rgba(0,0,0,0.12);
-		$DEFAULT-WIDTH: 12em;
+		$DEFAULT-WIDTH: 14em;
 		cursor: pointer;
 
 		.md-select-value {
 			width: $DEFAULT-WIDTH;
-			border-bottom-color: $NG-MATERIAL-DEFAULT;
-			outline: none !important;
-			line-height: 20px;
-			min-height: 20px !important;
-			padding-top: 8px;
+			box-sizing: border-box;
+			border: 1px solid $hover;
+			color: $text-color-standard;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			background: $white;
+			min-height: 32px;
+			padding: 4px 11px;
+			border-radius: 4px;
 
-			&:focus {
-				border-bottom: 1px solid $blue-100;
+			&:not([disabled]):focus .md-select-value {
+				outline: none;
+				border: 1px solid $primary;
+				box-shadow: 0 0 0 2px rgba($primary, 0.2);
+				padding: 4px 11px;
 			}
 
 			.selected-text {
