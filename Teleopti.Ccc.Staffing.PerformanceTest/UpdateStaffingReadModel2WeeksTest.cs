@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
@@ -21,13 +22,14 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		public IDataSourceScope DataSource;
 		public AsSystem AsSystem;
 		public IConfigReader ConfigReader;
+		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 
 		public override void OneTimeSetUp()
 		{
 			Now.Is("2016-03-26 07:00");
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
-			
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			WithUnitOfWork.Do(() =>
 			{
 				using (var connection = new SqlConnection(ConfigReader.ConnectionString("Tenancy")))

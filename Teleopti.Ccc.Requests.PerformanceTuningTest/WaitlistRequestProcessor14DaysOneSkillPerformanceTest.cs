@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		private DateTime _nowDateTime;
 		private ICollection<IPerson> _personList;
 		private List<IWorkflowControlSet> _wfcs;
+		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 
 
 		public override void OneTimeSetUp()
@@ -79,6 +80,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			}
 
 			var now = Now.UtcDateTime();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(14));
 			requests = new List<IPersonRequest>();
 			WithUnitOfWork.Do(() =>

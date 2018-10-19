@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		public IActivityRepository ActivityRepository;
 		public IAbsencePersister AbsencePersister;
 		public AddOverTime AddOverTime;
+		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 
 		private IList<IPersonRequest> requests;
 		private DateTime _nowDateTime;
@@ -75,6 +76,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			var now = Now.UtcDateTime();
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(1));
 			requests = new List<IPersonRequest>();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			WithUnitOfWork.Do(() =>
 			{
 				WorkflowControlSetRepository.LoadAll();

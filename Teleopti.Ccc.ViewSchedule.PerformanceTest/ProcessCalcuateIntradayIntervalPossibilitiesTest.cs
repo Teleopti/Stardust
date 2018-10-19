@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Requests.PerformanceTuningTest;
@@ -68,6 +69,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		public AbsenceStaffingPossibilityCalculator AbsenceStaffingPossibilityCalculator;
 		public OvertimeStaffingPossibilityCalculator OvertimeStaffingPossibilityCalculator;
 		public FakeLoggedOnUser LoggedOnUser;
+		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 
 		private LicenseSchema schema;
 
@@ -79,6 +81,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(1));
 			updateStaffingLevel(period);
 			var personIds = loadPersonIds();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			WithUnitOfWork.Do(() =>
 			{
 				var personCount = personIds.Length;
