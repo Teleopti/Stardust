@@ -356,6 +356,7 @@ Scenario: Delete waitlisted absence request
 	When I delete the existing request in the list
 	Then I should not see any requests in the list
 
+	@ignore
 Scenario: Can not edit approved absence requests
 	Given I am an agent
 	And I have an approved absence request
@@ -365,6 +366,7 @@ Scenario: Can not edit approved absence requests
 	And I should not be able to edit the values for the existing absence request
 	And I should not be able to submit possible changes for the existing request
 
+	@ignore
 Scenario: Can not edit denied absence requests
 	Given I am an agent
 	And I have a denied absence request
