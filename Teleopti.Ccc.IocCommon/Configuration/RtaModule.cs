@@ -113,12 +113,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<NoRtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance();
 			builder.RegisterType<RtaEventStoreSynchronizerProcess>().AsSelf().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 
-			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
+			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_Domain_74770))
 				builder.RegisterType<AgentAdherenceDayLoaderHistoricalOverview>().As<IAgentAdherenceDayLoader>().SingleInstance();
 			else
 				builder.RegisterType<AgentAdherenceDayLoaderDurationOfEvents>().As<IAgentAdherenceDayLoader>().SingleInstance();
 
-			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
+			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_Domain_74770))
 				builder.RegisterType<ScheduleLoaderHistoricalOverview>().As<IScheduleLoader>().SingleInstance();
 			else
 				builder.RegisterType<ScheduleLoader>().As<IScheduleLoader>().SingleInstance();
