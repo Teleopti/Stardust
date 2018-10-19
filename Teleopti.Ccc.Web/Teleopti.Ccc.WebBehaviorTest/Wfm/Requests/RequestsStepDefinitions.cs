@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -9,7 +8,6 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
 using AbsenceRequestConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.AbsenceRequestConfigurable;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
@@ -178,6 +176,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		[Then(@"I should see a absence and text request from '(.*)' in the list")]
 		public void ThenIShouldSeeAAbsenceAndTextRequestFromInTheList(string userName)
 		{
+			Thread.Sleep(1000);
 			Browser.Interactions.WaitScopeCondition(".ui-grid", "vm.isLoading", false,
 				() =>
 				{
