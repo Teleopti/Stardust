@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		private Guid[] skillIds;
 		private IMultiplicatorDefinitionSet oneMulti;
 		private DateTime now = new DateTime(2016, 08, 10, 7, 0, 0).Utc();
+		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 
 		public override void OneTimeSetUp()
 		{
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 
 			skillIds = new[] {new Guid("0165E0EA-210A-4393-B25A-A15000925656")};
 			var period = new DateTimePeriod(now.AddDays(-2), now.AddDays(2));
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			WithUnitOfWork.Do(() =>
 			{
 				UpdateStaffingLevel.Update(period);

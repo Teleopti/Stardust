@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Perfo
 	[Category("LongRunning")]
 	[DatabaseTest]
 	[Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770)]
+	[Toggle(Toggles.RTA_ReviewHistoricalAdherence_Domain_74770)]
 	public class MeasureEventStoreTest
 	{
 		public ConcurrencyRunner Run;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
@@ -220,6 +221,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not see any requests in the list")]
 		public void ThenIShouldNotSeeAnyRequestsInTheList()
 		{
+			Thread.Sleep(1000);
 			Browser.Interactions.AssertNotExists(".request-list", ".request-list .request");
 		}
 

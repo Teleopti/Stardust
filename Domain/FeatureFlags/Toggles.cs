@@ -17,6 +17,7 @@
 		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
 
 		RTA_KillFattyIntradayUntilItDies_74939, //remove april 2019
+		RTA_ReviewHistoricalAdherence_Domain_74770,
 		RTA_ReviewHistoricalAdherence_74770,
 
 		MyTimeWeb_SortRequestList_40711,
@@ -75,8 +76,7 @@
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,
 		ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348,
 		ResourcePlanner_SeamlessPlanningForPreferences_76288,
-		
-		Wfm_CopyScheduleForPast_77958,
+		ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941,
 
 		Wfm_DisplayOnlineHelp_39402,
 

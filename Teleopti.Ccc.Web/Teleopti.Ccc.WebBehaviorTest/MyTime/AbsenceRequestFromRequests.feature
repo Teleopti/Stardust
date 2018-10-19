@@ -280,14 +280,16 @@ Scenario: Adding invalid absence request values
 @suppressHangfireQueue
 Scenario: Adding too long message on absence request
 	Given I am an agent
+	And I am american
 	And I am viewing requests
 	When I click to add a new absence request
 	And I try to input too long message request values
 	Then I should see message adjusted to maximum length
-	
+
 	@NotKeyExample
 Scenario: Adding too long subject on absence request
 	Given I am an agent
+	And I am american
 	And I am viewing requests
 	When I click to add a new absence request
 	And I input too long subject request values
@@ -354,6 +356,7 @@ Scenario: Delete waitlisted absence request
 	When I delete the existing request in the list
 	Then I should not see any requests in the list
 
+	@ignore
 Scenario: Can not edit approved absence requests
 	Given I am an agent
 	And I have an approved absence request
@@ -363,6 +366,7 @@ Scenario: Can not edit approved absence requests
 	And I should not be able to edit the values for the existing absence request
 	And I should not be able to submit possible changes for the existing request
 
+	@ignore
 Scenario: Can not edit denied absence requests
 	Given I am an agent
 	And I have a denied absence request
@@ -372,6 +376,7 @@ Scenario: Can not edit denied absence requests
 	And I should not be able to edit the values for the existing absence request
 	And I should not be able to submit possible changes for the existing request
 
+	@ignore
 Scenario: Can not edit waitlisted absence requests
 	Given I am an agent
 	And I have an open workflow control set with absence request waitlisting enabled

@@ -23,7 +23,6 @@
 			'defaultScenarioFilter',
 			'$translate',
 			'$stateParams',
-			'Toggle',
 			function (ManageScheduleSrvc,
 				guidgenerator,
 				$timeout,
@@ -31,8 +30,7 @@
 				NoticeService,
 				defaultScenarioFilter,
 				$translate,
-				$stateParams,
-				toggleSvc) {
+				$stateParams) {
 				var vm = this;
 				vm.isImportSchedule = $stateParams.isImportSchedule;
 				vm.CopyScheduleOrImportSchedule = !vm.isImportSchedule ? 'CopySchedule' : 'ImportSchedule';
@@ -98,7 +96,7 @@
 						validationResult.messages.push($translate.instant('PickAtleastOneTeamDot'));
 					if (moment(period.endDate).diff(period.startDate, 'days') > 65)
 						validationResult.messages.push($translate.instant('PickASmallerDatePeriodDot'));
-					if (!toggleSvc.Wfm_CopyScheduleForPast_77958 || vm.isImportSchedule) {
+					if (vm.isImportSchedule) {
 						if (moment(period.startDate).diff(moment().startOf('day'), 'days') < 1)
 							validationResult.messages.push($translate.instant('YouNeedToSelectADateInTheFutureDot'));
 					}

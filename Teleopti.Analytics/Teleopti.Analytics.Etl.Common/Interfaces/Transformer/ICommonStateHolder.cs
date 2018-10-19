@@ -31,10 +31,7 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
         IList<IScheduleDay> GetSchedulePartPerPersonAndDate(IScheduleDictionary scheduleDictionary);
     	IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetCollection { get; }		
 		IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScenario scenario);
-
-	    IDictionary<DateTimePeriod, IScheduleDictionary> GetSchedules(IList<IScheduleChangedReadModel> changed,
-																	IScenario scenario);
-
+		
 	    IDictionary<DateOnly, IScheduleDictionary> GetSchedules(HashSet<IStudentAvailabilityDay> days,
 		    IScenario scenario);
 	    IDictionary<DateTimePeriod, IScheduleDictionary> GetScheduleCache();

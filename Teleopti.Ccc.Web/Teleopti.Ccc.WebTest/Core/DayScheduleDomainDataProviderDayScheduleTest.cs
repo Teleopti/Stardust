@@ -288,7 +288,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(45);
 
 			result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(0);
-			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(15);
+			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(0);
 		}
 
 		[Test]

@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see an absence type called (.*) in droplist")]
 		public void ThenIShouldSeeAAbsenceTypeCalledVacationInDroplist(string name)
 		{
-			Browser.Interactions.AssertFirstContains(".request-new-absence option", name);
+			Browser.Interactions.AssertAnyContains(".request-new-absence option", name);
 		}
 	}
 }

@@ -15842,4 +15842,10 @@ Applikationen kommer nu att stängas. </value>
     <value>Inga restriktioner inom perioden</value>
     <comment>No restrictions in period</comment>
   </data>
+  <data name="CopySchedule" xml:space="preserve">
+    <value>Kopiera schema</value>
+  </data>
+  <data name="CopyScheduleDescription" xml:space="preserve">
+    <value>Kopiera schema från vilket scenario som helst till vilket scenario som helst, förutom standardscenariot. Eventuellt tidigare schema i målscenariot för den valda perioden kommer att skrivas över.</value>
+  </data>
 </root>

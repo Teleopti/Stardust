@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.ClassicLegacy;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
@@ -15,6 +17,40 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
+	public interface IScheduleAllRemovedDaysOrRollback
+	{
+		void Execute(ScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, IOptimizationPreferences optimizationPreferences, IList<DateOnly> removedDays, SchedulePartModifyAndRollbackService rollbackService);
+	}
+
+	public class ScheduleAllRemovedDaysOrRollback : IScheduleAllRemovedDaysOrRollback
+	{
+		private readonly ScheduleBlankSpots _scheduleBlankSpots;
+
+		public ScheduleAllRemovedDaysOrRollback(ScheduleBlankSpots scheduleBlankSpots)
+		{
+			_scheduleBlankSpots = scheduleBlankSpots;
+		}
+		public void Execute(ScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, IOptimizationPreferences optimizationPreferences, IList<DateOnly> removedDays, SchedulePartModifyAndRollbackService rollbackService)
+		{
+			if (removedDays.IsEmpty()) return;
+
+			_scheduleBlankSpots.Execute(new[] { matrixOriginalStateContainer }, optimizationPreferences);
+
+			if (removedDays.Any(removedDay => !matrixOriginalStateContainer.ScheduleMatrix.GetScheduleDayByKey(removedDay).DaySchedulePart().IsScheduled()))
+			{
+				rollbackService.Rollback();
+			}
+		}
+	}
+
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941)]
+	public class ScheduleAllRemovedDaysOrRollbackDoNothing : IScheduleAllRemovedDaysOrRollback
+	{
+		public void Execute(ScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, IOptimizationPreferences optimizationPreferences, IList<DateOnly> removedDays, SchedulePartModifyAndRollbackService rollbackService)
+		{
+		}
+	}
+
 	public class DayOffOptimization
 	{
 		private readonly TeamBlockDayOffOptimizer _teamBlockDayOffOptimizer;
@@ -30,6 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
 		private readonly IBlockPreferenceProviderForPlanningPeriod _blockPreferenceProviderForPlanningPeriod;
 		private readonly IDayOffOptimizationPreferenceProviderForPlanningPeriod _dayOffOptimizationPreferenceProviderForPlanningPeriod;
+		private readonly IScheduleAllRemovedDaysOrRollback _scheduleAllRemovedDaysOrRollback;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly MatrixListFactory _matrixListFactory;
@@ -49,7 +86,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			IOptimizationPreferencesProvider optimizationPreferencesProvider,
 			IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod,
-			IDayOffOptimizationPreferenceProviderForPlanningPeriod dayOffOptimizationPreferenceProviderForPlanningPeriod)
+			IDayOffOptimizationPreferenceProviderForPlanningPeriod dayOffOptimizationPreferenceProviderForPlanningPeriod,
+			IScheduleAllRemovedDaysOrRollback scheduleAllRemovedDaysOrRollback)
 		{
 			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
@@ -64,11 +102,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_optimizationPreferencesProvider = optimizationPreferencesProvider;
 			_blockPreferenceProviderForPlanningPeriod = blockPreferenceProviderForPlanningPeriod;
 			_dayOffOptimizationPreferenceProviderForPlanningPeriod = dayOffOptimizationPreferenceProviderForPlanningPeriod;
+			_scheduleAllRemovedDaysOrRollback = scheduleAllRemovedDaysOrRollback;
 			_userTimeZone = userTimeZone;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_matrixListFactory = matrixListFactory;
 		}
-		
+
 		public void Execute(DateOnlyPeriod selectedPeriod,
 			IEnumerable<IPerson> selectedAgents,
 			bool runWeeklyRestSolver, // desktop client runs this explicitly afterwards so sending in false here
@@ -100,7 +139,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 					var workShiftBackToLegalStateService = _workShiftBackToLegalStateServiceProFactory.Create();
 					foreach (var matrixOriginalStateContainer in matrixListOriginalStateContainer)
 					{
-						workShiftBackToLegalStateService.Execute(matrixOriginalStateContainer.ScheduleMatrix, schedulingOptions, new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling)));
+						var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+						workShiftBackToLegalStateService.Execute(matrixOriginalStateContainer.ScheduleMatrix, schedulingOptions, rollbackService );
+						_scheduleAllRemovedDaysOrRollback.Execute(matrixOriginalStateContainer, optimizationPreferences, workShiftBackToLegalStateService.RemovedDays, rollbackService);
 					}
 					_scheduleBlankSpots.Execute(matrixListOriginalStateContainer, optimizationPreferences);
 					//////////////////

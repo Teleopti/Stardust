@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 {
 	public class RequestsViewModel
 	{
+		public bool HasAnyAbsenceTypes { get; set; }
 		public IEnumerable<AbsenceTypeViewModel> AbsenceTypes { get; set; }
 		public IEnumerable<AbsenceTypeViewModel> AbsenceTypesForReport { get; set; }
 		public RequestPermission RequestPermission { get; set; }

@@ -19,7 +19,7 @@
 			</label>
 			<div class="row">
 				<div class="col-md-3 col-sm-6 col-xs-12">
-					<select class="request-new-absence request-absence input-sm form-control" data-bind="value: AbsenceId">
+					<select class="request-new-absence request-absence input-sm form-control" data-bind="value: AbsenceId , enable: '@(Model.HasAnyAbsenceTypes)' == 'True' ">
 						@foreach(var absenceType in Model.AbsenceTypes) {
 						<option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
 						}
@@ -118,7 +118,7 @@
 		<div class="request-new-error alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage"></div>
 		<div class="pull-right">
 			<button class="request-new-cancel btn" data-bind="click: $parent.CancelAddingNewRequest">@Resources.Cancel</button>
-			<button class="request-new-send btn btn-primary" data-bind="click: AddRequest, enable: !IsPostingData()">@Resources.Save</button>
+			<button class="request-new-send btn btn-primary" data-bind="click: AddRequest, enable: !IsPostingData() && '@(Model.HasAnyAbsenceTypes)' == 'True'">@Resources.Save</button>
 		</div>
 	</div>
 </div>

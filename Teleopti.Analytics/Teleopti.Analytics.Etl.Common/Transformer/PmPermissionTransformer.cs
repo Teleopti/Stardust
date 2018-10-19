@@ -24,8 +24,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 				foreach (IApplicationRole applicationRole in person.PermissionInformation.ApplicationRoleCollection)
 				{
-					var deleteTag = applicationRole as IDeleteTag;
-					if (deleteTag != null && !deleteTag.IsDeleted)
+					if (applicationRole is IDeleteTag deleteTag && !deleteTag.IsDeleted)
 					{
 						personUsers.Add(getPermission(person.Id.GetValueOrDefault(), applicationRole, permissionExtractor, unitOfWorkFactory));
 					}

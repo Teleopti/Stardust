@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		public IStardustJobFeedback StardustJobFeedback;
 		public IOvertimeRequestProcessor OvertimeRequestProcessor;
 		public IMultiplicatorDefinitionSetRepository MultiplicatorDefinitionSetRepository;
+		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 
 		public ISiteRepository SiteRepository;
 
@@ -61,6 +63,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			var now = Now.UtcDateTime();
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(1));
 			requests = new List<IPersonRequest>();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			WithUnitOfWork.Do(() =>
 			{
 				MultiplicatorDefinitionSetRepository.LoadAll();

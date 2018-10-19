@@ -1,6 +1,5 @@
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
-using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 {
@@ -17,8 +16,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new StageScenarioJobStep(jobParameters));
 			Add(new StageShiftCategoryJobStep(jobParameters));
 			Add(new StageScheduleJobStep(jobParameters));
-			//Add(new StageScheduleForecastSkillJobStep(jobParameters));
-			
 			Add(new StageScheduleForecastSkillJobStepWithBpo(jobParameters));
 			Add(new StageScheduleDayOffCountJobStep(jobParameters));
 			Add(new StageSchedulePreferenceJobStep(jobParameters));

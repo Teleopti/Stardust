@@ -39,6 +39,7 @@ WebByPassDefaultPermissionCheck_37984 = true
 
 # LevelUp #
 RTA_KillFattyIntradayUntilItDies_74939 = true
+RTA_ReviewHistoricalAdherence_Domain_74770 = true
 RTA_ReviewHistoricalAdherence_74770 = RC
 
 # Dumplings, can any of these be removed? #
@@ -101,8 +102,8 @@ ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production. Don't modify this line!
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348 = RC
-Wfm_CopyScheduleForPast_77958 = RC
 ResourcePlanner_SeamlessPlanningForPreferences_76288 = RC # will make perf unhappy. needs to be addressed before setting to true
+ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941 = RC
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
