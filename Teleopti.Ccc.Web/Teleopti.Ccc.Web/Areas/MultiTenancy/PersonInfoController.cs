@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 					.Select(p =>
 					{
 						var model = new PersonInfoModel { PersonId = p.PersonId, ApplicationLogonName = p.ApplicationLogonName };
-						return new { PersistResult = _persister.PersistApplicationLogonName(_mapper.Map(model), throwOnError: false), p.PersonId };
+						return new { PersistResult = _persister.PersistApplicationLogonName(new AppLogonChangeActionObj(){PersonInfo =  _mapper.Map(model),ThrowOnError =  false}), p.PersonId };
 					})
 					.Where(r => !string.IsNullOrEmpty(r.PersistResult))
 					.Select(r => (object)new PersonInfoGenericModel { Message = r.PersistResult, PersonId = r.PersonId }).ToList()
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 					.Select(p =>
 					{
 						var model = new PersonInfoModel { PersonId = p.PersonId, Identity = p.Identity };
-						return new { PersistResult = _persister.PersistIdentity(_mapper.Map(model), throwOnError: false), p.PersonId };
+						return new { PersistResult = _persister.PersistIdentity(new IdentityChangeActionObj(){PersonInfo = _mapper.Map(model),ThrowOnError =  false}), p.PersonId };
 					})
 					.Where(r => !string.IsNullOrEmpty(r.PersistResult))
 					.Select(r => (object)new PersonInfoGenericModel { Message = r.PersistResult, PersonId = r.PersonId }).ToList()

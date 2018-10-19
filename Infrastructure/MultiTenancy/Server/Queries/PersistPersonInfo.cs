@@ -142,13 +142,13 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 		}
 
 
-		//[TenantAudit(PersistActionIntent.IdentityChange)]
+		[AuditTrail]
 		public virtual string PersistIdentity(IdentityChangeActionObj identityChangeActionObj)
 		{
 			return persistHelper(_personInfoPersister.PersistIdentity, identityChangeActionObj.PersonInfo, identityChangeActionObj.ThrowOnError);
 		}
 
-		//[TenantAudit(PersistActionIntent.AppLogonChange)]
+		[AuditTrail]
 		public virtual string PersistApplicationLogonName(AppLogonChangeActionObj appLogonChangeActionObj)
 		{
 			return persistHelper(_personInfoPersister.PersistApplicationLogonName, appLogonChangeActionObj.PersonInfo, appLogonChangeActionObj.ThrowOnError);
