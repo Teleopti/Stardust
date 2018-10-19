@@ -14,7 +14,7 @@ Background:
 	| Access to absence requests | False					     |
 	And there is an absence with
 	| Field       | Value    |
-	| Name        | Vacation |
+	| Name        | Holiday |
 	| Color       | Red      |
 	| Requestable | True     |
 	| TrackerType | Day      |
@@ -34,7 +34,7 @@ Scenario: Add absence request from week schedule view
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day symbol area for date '2013-10-03'
 	And I click to add a new absence request
-	And I input absence request values with 'Vacation' for date '2013-10-03'
+	And I input absence request values with 'Holiday' for date '2013-10-03'
 	And I click send request button
 	Then I should see a symbol at the top of the schedule for date '2013-10-03'
 	
@@ -111,18 +111,18 @@ Given I am an agent
 And I am american
 And I have a personal account with
 | Field    | Value           |
-| Absence  | Vacation |
+| Absence  | Holiday |
 | FromDate | 2014-01-01      |
 | Accrued  | 25              |
 And I have an absence with
 | Field     | Value            |
-| Name      | Vacation  |
+| Name      | Holiday  |
 | StartTime | 2014-01-01 00:00 |
 | EndTime   | 2014-01-03 23:59 |
 And I view my week schedule for date '2014-10-03'
 When I click on the day summary for date '2014-10-03'
 And I click to add a new absence request
-And I input absence request values with 'Vacation' for date '2014-10-03'
+And I input absence request values with 'Holiday' for date '2014-10-03'
 Then I should see the remaining days is '22 Days'
 And I should see the used days is '3 Days'
 
@@ -173,7 +173,7 @@ And I have a personal account with
 | Accrued     | 250:00     |
 And I have a personal account with
 | Field    | Value           |
-| Absence  | Vacation |
+| Absence  | Holiday |
 | FromDate | 2014-01-01      |
 | Accrued  | 25              |
 And I view my week schedule for date '2014-10-03'
@@ -182,7 +182,7 @@ And I click to add a new absence request
 And I input absence request values with 'Illness' for date '2014-10-03'
 And I see the remaining time is '250:00'
 And I see the used time is '0:00'
-And I input absence request values with 'Vacation' for date '2014-10-03'
+And I input absence request values with 'Holiday' for date '2014-10-03'
 Then I should see the remaining days is '25 Days'
 And I should see the used days is '0 Days'
 
@@ -201,26 +201,26 @@ Given I am an agent
 And I am american
 And I have a personal account with
 | Field    | Value           |
-| Absence  | Vacation |
+| Absence  | Holiday |
 | FromDate | 2014-01-01      |
 | Accrued  | 25              |
 And I have an absence with
 | Field     | Value            |
-| Name      | Vacation  |
+| Name      | Holiday  |
 | StartTime | 2014-01-01 00:00 |
 | EndTime   | 2014-01-03 23:59 |
 And I have a personal account with
 | Field    | Value           |
-| Absence  | Vacation |
+| Absence  | Holiday |
 | FromDate | 2015-01-01      |
 | Accrued  | 25              |
 And I view my week schedule for date '2014-10-03'
 And I click on the day summary for date '2014-10-03'
 And I click to add a new absence request
-And I input absence request values with 'Vacation' for date '2014-10-03'
+And I input absence request values with 'Holiday' for date '2014-10-03'
 And I see the remaining time is '22 Days'
 And I see the used time is '3 Days'
-When I input absence request values with 'Vacation' for date '2015-10-03'
+When I input absence request values with 'Holiday' for date '2015-10-03'
 Then I should see the remaining days is '25 Days'
 And I should see the used days is '0 Days'
 
@@ -231,23 +231,23 @@ Given I am an agent
 And I am american
 And I have a personal account with
 | Field    | Value           |
-| Absence  | Vacation |
+| Absence  | Holiday |
 | FromDate | 2014-01-01      |
 | Accrued  | 25              |
 And I have a personal account with
 | Field    | Value           |
-| Absence  | Vacation |
+| Absence  | Holiday |
 | FromDate | 2015-01-01      |
 | Accrued  | 25              |
 And I have an absence with
 | Field     | Value            |
-| Name      | Vacation  |
+| Name      | Holiday  |
 | StartTime | 2014-01-01 00:00 |
 | EndTime   | 2014-01-04 23:59 |
 And I view my week schedule for date '2014-10-03'
 When I click on the day summary for date '2014-10-03'
 And I click to add a new absence request
-And I input absence request values with "Vacation" from "2014-12-28" to "2015-10-22"
+And I input absence request values with "Holiday" from "2014-12-28" to "2015-10-22"
 Then I should see the remaining days is '25 Days'
 And I should see the used days is '0 Days'
 
