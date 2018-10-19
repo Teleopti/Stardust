@@ -351,6 +351,7 @@
     <Compile Include="Scheduling\Rules\MaximumWorkdayRuleTest.cs" />
     <Compile Include="Scheduling\SchedulerStateHolderLoadRequestsTest.cs" />
     <Compile Include="Scheduling\Tracking\PersonAccountProjectionServicePermissionTest.cs" />
+    <Compile Include="Search\PersonSearchProviderTest.cs" />
     <Compile Include="Security\ImplementationDetails\Authentication\AvailableBusinessUnitsProviderTest.cs" />
     <Compile Include="Security\ImplementationDetails\Authentication\DummyPasswordPolicyTest.cs" />
     <Compile Include="Security\ImplementationDetails\Authentication\EnvironmentWindowsUserProviderTest.cs" />

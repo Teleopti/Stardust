@@ -394,6 +394,8 @@
     <Compile Include="Areas\Global\ChatConfigurationController.cs" />
     <Compile Include="Areas\Global\TenantCredential.cs" />
     <Compile Include="Areas\Reports\Controllers\AuditTrailController.cs" />
+    <Compile Include="Areas\Search\Controllers\PersonSearchController.cs" />
+    <Compile Include="Areas\Search\Models\PersonSearchModels.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleDayOffViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleShiftViewModel.cs" />
