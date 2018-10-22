@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly DeleteScheduleDayFromUnsolvedPersonWeek _deleteScheduleDayFromUnsolvedPersonWeek;
 		private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
 		private readonly IPersonWeekViolatingWeeklyRestSpecification  _personWeekViolatingWeeklyRestSpecification;
-		private readonly IBrokenWeekCounterForAPerson  _brokenWeekCounterForAPerson;
+		private readonly BrokenWeekCounterForAPerson  _brokenWeekCounterForAPerson;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ResolvingWeek;
 
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			DeleteScheduleDayFromUnsolvedPersonWeek deleteScheduleDayFromUnsolvedPersonWeek,
 			IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification, 
 			IPersonWeekViolatingWeeklyRestSpecification personWeekViolatingWeeklyRestSpecification, 
-			IBrokenWeekCounterForAPerson brokenWeekCounterForAPerson,
+			BrokenWeekCounterForAPerson brokenWeekCounterForAPerson,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator)
 		{
 			_weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;

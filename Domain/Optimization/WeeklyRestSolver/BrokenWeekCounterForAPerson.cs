@@ -5,12 +5,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 
 namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 {
-	public interface IBrokenWeekCounterForAPerson
-	{
-		int CountBrokenWeek(IEnumerable<IScheduleDay> selectedPeriodScheduleDays, IScheduleRange personScheduleRange);
-	}
-
-	public class BrokenWeekCounterForAPerson : IBrokenWeekCounterForAPerson
+	public class BrokenWeekCounterForAPerson
 	{
 		private readonly IWeeksFromScheduleDaysExtractor  _weeksFromScheduleDaysExtractor;
 		private readonly IEnsureWeeklyRestRule  _ensureWeeklyRestRule;
