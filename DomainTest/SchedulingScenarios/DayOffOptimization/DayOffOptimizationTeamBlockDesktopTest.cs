@@ -290,7 +290,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 		[TestCase(true)]
 		[TestCase(false)]
-		[Ignore("78279 to be fixed")]
 		public void ShouldMoveDayOffLastDayInSchedulePeriodUsingShiftCategoryLimitations(bool useShiftCategoryLimitations)
 		{
 			var firstDay = new DateOnly(2015, 10, 12);

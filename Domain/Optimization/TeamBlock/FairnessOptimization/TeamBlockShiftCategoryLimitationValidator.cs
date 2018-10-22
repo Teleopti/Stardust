@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 				foreach (var groupMember in teamInfo.GroupMembers)
 				{
 					var matrix = teamInfo.MatrixForMemberAndDate(groupMember, dateOnly);
-					if (matrix == null || !checkPerson(groupMember, dateOnly, matrix.ActiveScheduleRange))
+					if (matrix != null && !checkPerson(groupMember, dateOnly, matrix.ActiveScheduleRange))
 						return false;
 				}
 			}
