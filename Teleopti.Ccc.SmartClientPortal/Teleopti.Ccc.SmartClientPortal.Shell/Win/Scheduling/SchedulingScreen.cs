@@ -3597,6 +3597,31 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						skillStaffPeriod.CalculateEstimatedServiceLevel();
 					}
 				}
+
+				var workShiftWorkTime = _container.Resolve<IWorkShiftWorkTime>();
+				var shiftBags = new HashSet<IRuleSetBag>();
+				var ruleSets = new HashSet<IWorkShiftRuleSet>();
+				foreach (var person in SchedulerState.ChoosenAgents)
+				{
+					if (person.Period(requestPeriod.StartDate) != null &&
+						person.Period(requestPeriod.StartDate).RuleSetBag != null)
+					{
+						shiftBags.Add(person.Period(requestPeriod.StartDate).RuleSetBag);
+					}
+				}
+
+				foreach (var ruleSetBag in shiftBags)
+				{
+					foreach (var workShiftRuleSet in ruleSetBag.RuleSetCollection)
+					{
+						ruleSets.Add(workShiftRuleSet);
+					}
+				}
+
+				foreach (var ruleSet in ruleSets)
+				{
+					workShiftWorkTime.CalculateMinMax(ruleSet, new EffectiveRestriction());
+				}
 			}
 
 			if (e.Cancel)
