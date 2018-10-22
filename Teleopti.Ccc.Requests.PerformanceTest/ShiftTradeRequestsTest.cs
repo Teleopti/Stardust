@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public IWorkShiftRuleSetRepository WorkShiftRuleSetRepository;
 		public IShiftCategoryRepository ShiftCategoryRepository;
 
-		private const string tenantName = DataSourceHelper.TestTenantName;
+		private const string tenantName = "Teleopti WFM";
 		private LicenseSchema schema;
 		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 
