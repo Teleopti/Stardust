@@ -115,7 +115,9 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 				.Select(offset => opensAtLocal.AddMinutes(offset * intervalLength))
 				.ToArray();
 
-			var endTimeForEslUtc = DateTime.SpecifyKind((timeOfLastIntervalWithDataUtc.HasValue ? timeOfLastIntervalWithDataUtc.Value.AddMinutes(intervalLength) : nowUtc), DateTimeKind.Utc);
+			var endTimeForEslUtc = DateTime.SpecifyKind(
+				((timeOfLastIntervalWithDataUtc.HasValue && timeOfLastIntervalWithDataUtc.Value != default(DateTime) ) ? timeOfLastIntervalWithDataUtc.Value.AddMinutes(intervalLength) : nowUtc), 
+				DateTimeKind.Utc);
 			var eslIntervals = _forecastingService.CalculateEstimatedServiceLevels(skillDays, opensAtUtc, endTimeForEslUtc);
 
 			var estServiceLevels = new List<double?>();
