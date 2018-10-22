@@ -68,19 +68,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldRetrieveHasAnyAbsenceTypesforViewModel()
-		{
-			setUpWorkFlowControlSet();
-
-			var absence = new Absence { Description = new Description("Vacation"), Requestable = true }.WithId();
-			FakeAbsenceRepository.Add(absence);
-
-			var result = RequestsViewModelFactory.CreatePageViewModel();
-
-			result.HasAnyAbsenceTypes.Should().Be.True();
-		}
-
-		[Test]
 		public void ShouldRetrieveAbsenceTypesforViewModel()
 		{
 			setUpWorkFlowControlSet();

@@ -19,11 +19,15 @@
 	</label>
 	<div class="row">
 		<div class="col-xs-6" style="padding-top: 6px;">
-			<select class="request-edit-absence form-control" data-bind="value: AbsenceId, enable: IsEditable && '@(Model.HasAnyAbsenceTypes)' == 'True'">
-				@foreach (var absenceType in Model.AbsenceTypes)
+			<select class="request-edit-absence form-control" data-bind="value: AbsenceId, enable: IsEditable && '@(Model.AbsenceTypes.Count > 0)' == 'True'">
+				@if (Model.AbsenceTypes.Count > 0)
 				{
-					<option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
+					foreach (var absenceType in Model.AbsenceTypes)
+					{
+						<option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
+					}
 				}
+				else { <option value="null">@Resources.NoAbsenceTypesOpenForRequests</option>}
 			</select>
 		</div>
 		<!-- ko if: ShowAbsenceAccount -->
@@ -103,5 +107,5 @@
 </label>
 <div class="request-edit-error alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage"></div>
 <div class="clearfix" data-bind="if: IsEditable">
-	<button class="request-edit-update btn btn-primary pull-right" data-bind="click: AddRequest, enable: '@(Model.HasAnyAbsenceTypes)' == 'True'">@Resources.Save</button>
+	<button class="request-edit-update btn btn-primary pull-right" data-bind="click: AddRequest">@Resources.Save</button>
 </div>

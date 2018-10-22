@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
@@ -79,18 +78,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		public RequestsViewModel CreatePageViewModel()
 		{
 			var dateFormat = _loggedOnUser.CurrentUser().PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
-			var absenceTypes = _absenceTypesProvider.GetRequestableAbsences().Select(requestableAbsence =>
-				new AbsenceTypeViewModel
-				{
-					Id = requestableAbsence.Id,
-					Name = requestableAbsence.Description.Name
-				}).ToList();
-			var hasAnyAbsence = absenceTypes.Any();
-			//if(!absenceTypes.Any()) absenceTypes.Add(new AbsenceTypeViewModel{Name = Resources.NoAbsenceTypesOpenForRequests, Id = null});
 			return new RequestsViewModel
 			{
-				HasAnyAbsenceTypes = true,
-				AbsenceTypes = absenceTypes,
+				AbsenceTypes = _absenceTypesProvider.GetRequestableAbsences().Select(requestableAbsence =>
+					new AbsenceTypeViewModel
+					{
+						Id = requestableAbsence.Id,
+						Name = requestableAbsence.Description.Name
+					}).ToList(),
 				AbsenceTypesForReport =
 					_absenceTypesProvider.GetReportableAbsences().Select(x => new AbsenceTypeViewModel
 					{
