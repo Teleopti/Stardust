@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Aop
 		[Test]
 		public void ShouldThrowRepositoriesMustNotBeUsedException()
 		{
-			Assert.Throws<RepositoriesMustNotBeUsedException>(() =>
+			Assert.Throws<RepositoryMustNotBeUsedException>(() =>
 			{
 				SomeRepository.LoadAll();
 			});

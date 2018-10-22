@@ -422,13 +422,14 @@
     <Compile Include="IoC\IntegrationTestAttribute.cs" />
     <Compile Include="IoC\ITestInterceptor.cs" />
     <Compile Include="IoC\RealPermissionsAttribute.cs" />
-    <Compile Include="IoC\RepositoriesMustNotBeUsedException.cs" />
+    <Compile Include="IoC\RepositoryMustNotBeUsedException.cs" />
     <Compile Include="IoC\ServiceBusTestAttribute.cs" />
     <Compile Include="IoC\SetupThrowingTestDoublesForRepositories.cs" />
     <Compile Include="IoC\SystemImpl.cs" />
     <Compile Include="IoC\TestDoubles.cs" />
     <Compile Include="IoC\TestModule.cs" />
     <Compile Include="IoC\ThrowIfRepositoriesAreUsedAttribute.cs" />
+    <Compile Include="IoC\ThrowRepositoryInterceptor.cs" />
     <Compile Include="IoC\UseEventPublisherAttribute.cs" />
     <Compile Include="IoC\LoggedOnAppDomainAttribute.cs" />
     <Compile Include="DbManagerLog4Net.cs" />
