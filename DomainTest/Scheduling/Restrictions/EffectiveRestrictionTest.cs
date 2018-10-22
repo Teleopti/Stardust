@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		private IWorkShiftProjection _info5;
 
         private IActivity _activity;
-		private ICommonActivity _commonActivity;
+		private CommonActivity _commonActivity;
 
 		[SetUp]
         public void Setup()
