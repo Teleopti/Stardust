@@ -1,5 +1,7 @@
 ﻿function _initMomentLanguageWithFallback() {
-	var ietfLanguageTag = $('html').attr('lang').toLowerCase();;
+	var ietfLanguageTag = $('html')
+		.attr('lang')
+		.toLowerCase();
 	var baseLang = 'en'; //Base
 	var languages = [ietfLanguageTag, ietfLanguageTag.split('-')[0], baseLang];
 

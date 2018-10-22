@@ -1,4 +1,4 @@
-﻿Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
+﻿Teleopti.MyTimeWeb.PollScheduleUpdates = (function($) {
 	var interval;
 	var currentListener;
 	var settings = null;
@@ -7,8 +7,7 @@
 
 	function _setListener(name, callback) {
 		currentListener = { name: name, callback: callback };
-	};
-
+	}
 
 	function _checkIfScheduleHasUpdates() {
 		var deferred = $.Deferred();
@@ -16,10 +15,10 @@
 			url: 'Asm/CheckIfScheduleHasUpdates',
 			dataType: 'json',
 			type: 'POST',
-			success: function (data) {
+			success: function(data) {
 				deferred.resolve(data);
 			},
-			error: function (jqXHR, textStatus, errorThrown) {
+			error: function(jqXHR, textStatus, errorThrown) {
 				deferred.reject(false);
 			}
 		});
@@ -29,7 +28,7 @@
 	function _showNotice() {
 		var notifyText = _getNotifyText();
 		if (!notificerDisplayTime) {
-			Teleopti.MyTimeWeb.AlertActivity.GetNotificationDisplayTime(function (displayTime) {
+			Teleopti.MyTimeWeb.AlertActivity.GetNotificationDisplayTime(function(displayTime) {
 				notificerDisplayTime = displayTime;
 				settings.timeout = displayTime * 1000;
 				Teleopti.MyTimeWeb.Notifier.Notify(settings, notifyText);
@@ -39,13 +38,15 @@
 		Teleopti.MyTimeWeb.Notifier.Notify(settings, notifyText);
 	}
 
-
 	function _subscribeToMessageBroker(ajax) {
-		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
-			successCallback: _resetInterval,
-			domainType: "IScheduleChangedInDefaultScenario",
-			page: "Teleopti.MyTimeWeb.PollSchedueUpdates"
-		}, ajax);
+		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker(
+			{
+				successCallback: _resetInterval,
+				domainType: 'IScheduleChangedInDefaultScenario',
+				page: 'Teleopti.MyTimeWeb.PollSchedueUpdates'
+			},
+			ajax
+		);
 	}
 
 	function _clearInterval() {
@@ -61,28 +62,33 @@
 	}
 
 	function _validNotificationPeriod(notification) {
-		var messageStartDate = moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate)).add('days', -1).toDate();
-		var messageEndDate = moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate)).add('days', 1).toDate();
+		var messageStartDate = moment(
+			Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate)
+		)
+			.add('days', -1)
+			.toDate();
+		var messageEndDate = moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate))
+			.add('days', 1)
+			.toDate();
 		var notifyPeriod = _getNotifyPeriod();
 		var listeningStartDate = notifyPeriod.startDate;
 		var listeningEndDate = notifyPeriod.endDate;
 		return messageStartDate < listeningEndDate && messageEndDate > listeningStartDate;
 	}
 
-
 	function _setUpInterval() {
 		if (settings.intervalTimeout === 0) {
 			_handleListenersCallback();
 			return;
 		}
-		interval = setInterval(function () {
+		interval = setInterval(function() {
 			_handleListenersCallback();
 		}, settings.intervalTimeout);
 	}
 
 	function _handleListenersCallback() {
 		var nofityPeriod = _getNotifyPeriod();
-		_checkIfScheduleHasUpdates().done(function (data) {
+		_checkIfScheduleHasUpdates().done(function(data) {
 			if (!!data && !!data.HasUpdates) {
 				_showNotice();
 				currentListener && currentListener.callback && currentListener.callback(nofityPeriod);
@@ -95,20 +101,29 @@
 	}
 
 	function _getNotifyPeriod() {
-		var noticeListeningStartDate = moment(new Date(new Date().getTeleoptiTime())).add('hours', -1).toDate();
+		var noticeListeningStartDate = moment(new Date(new Date().getTeleoptiTime()))
+			.add('hours', -1)
+			.toDate();
 		return {
 			startDate: noticeListeningStartDate,
-			endDate: moment(new Date(noticeListeningStartDate.getTime())).add('days', 1).toDate()
+			endDate: moment(new Date(noticeListeningStartDate.getTime()))
+				.add('days', 1)
+				.toDate()
 		};
 	}
 
 	function _init(options) {
 		ajax = new Teleopti.MyTimeWeb.Ajax();
-		settings = $.extend({
-			intervalTimeout: 1000 * 60 * 5
-		}, options);
+		settings = $.extend(
+			{
+				intervalTimeout: 1000 * 60 * 5
+			},
+			options
+		);
 
-		var noticeListeningStartDate = moment(new Date(new Date().getTeleoptiTime())).add('hours', -1).toDate();
+		var noticeListeningStartDate = moment(new Date(new Date().getTeleoptiTime()))
+			.add('hours', -1)
+			.toDate();
 
 		_setUpInterval();
 		_subscribeToMessageBroker(ajax);

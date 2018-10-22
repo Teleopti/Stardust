@@ -1,39 +1,53 @@
-﻿Teleopti.MyTimeWeb.MyAdherence = (function () {
-
+﻿Teleopti.MyTimeWeb.MyAdherence = (function() {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
-	
+
 	function MyAdherenceViewModel(loadDataMethod, date) {
 		var self = this;
 
 		self.selectedDateInternal = ko.observable(date);
 		self.datePickerFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
-		
+
 		self.dataAvailable = ko.observable();
-		self.goToAnotherDay = function (toDate) {
-			Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/Adherence" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(toDate.format('YYYY-MM-DD')));
+		self.goToAnotherDay = function(toDate) {
+			Teleopti.MyTimeWeb.Portal.NavigateTo(
+				'MyReport/Adherence' + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(toDate.format('YYYY-MM-DD'))
+			);
 		};
 		self.selectedDate = ko.computed({
-			read: function () {
+			read: function() {
 				return self.selectedDateInternal();
 			},
-			write: function (value) {
+			write: function(value) {
 				if (value.format('YYYYMMDD') == date.format('YYYYMMDD')) return;
 				self.goToAnotherDay(value);
 			}
 		});
-		self.nextDay = function () {
-			self.goToAnotherDay(self.selectedDate().clone().add('days', 1));
+		self.nextDay = function() {
+			self.goToAnotherDay(
+				self
+					.selectedDate()
+					.clone()
+					.add('days', 1)
+			);
 		};
-		self.previousDay = function () {
-			self.goToAnotherDay(self.selectedDate().clone().add('days', -1));
+		self.previousDay = function() {
+			self.goToAnotherDay(
+				self
+					.selectedDate()
+					.clone()
+					.add('days', -1)
+			);
 		};
-		self.dateFormat = function () {
+		self.dateFormat = function() {
 			return self.datePickerFormat;
 		};
 
-		self.goToOverview = function () {
-			Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/Index" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(self.selectedDateInternal().format('YYYY-MM-DD')));
+		self.goToOverview = function() {
+			Teleopti.MyTimeWeb.Portal.NavigateTo(
+				'MyReport/Index' +
+					Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(self.selectedDateInternal().format('YYYY-MM-DD'))
+			);
 		};
 
 		self.totalAdherence = ko.observable();
@@ -41,14 +55,14 @@
 		self.intervalsPerDay = ko.observable();
 		self.startInterval = ko.observable();
 		self.lastInterval = ko.observable();
-		self.intervalMinutes = ko.computed(function () {
+		self.intervalMinutes = ko.computed(function() {
 			return 1440 / self.intervalsPerDay();
 		});
-		self.intervalsPerHour = ko.computed(function () {
+		self.intervalsPerHour = ko.computed(function() {
 			return self.intervalsPerDay() / 24;
 		});
 
-		self.timeLines = ko.computed(function () {
+		self.timeLines = ko.computed(function() {
 			var times = [];
 			var startInterval = self.startInterval();
 			var lastInterval = self.lastInterval();
@@ -56,11 +70,17 @@
 				var start = startInterval.IntervalId;
 				var rest = start % self.intervalsPerHour();
 				var time = start - rest;
-				var end = lastInterval.IntervalId + self.intervalsPerHour() - (lastInterval.IntervalId % self.intervalsPerHour());
+				var end =
+					lastInterval.IntervalId +
+					self.intervalsPerHour() -
+					(lastInterval.IntervalId % self.intervalsPerHour());
 				while (time <= end) {
 					times.push({
-						'Time': moment().startOf('day').add('minutes', time * self.intervalMinutes()).format("HH:mm"),
-						'Position': intervalLeftPos(time)
+						Time: moment()
+							.startOf('day')
+							.add('minutes', time * self.intervalMinutes())
+							.format('HH:mm'),
+						Position: intervalLeftPos(time)
 					});
 					time = time + self.intervalsPerHour();
 				}
@@ -71,15 +91,15 @@
 		function intervalLeftPos(intervalId) {
 			var intervalsPerDay = self.intervalsPerDay();
 			var startInterval = self.startInterval().IntervalId;
-			startInterval = startInterval - startInterval % self.intervalsPerHour();
+			startInterval = startInterval - (startInterval % self.intervalsPerHour());
 			if (intervalId < startInterval) {
 				intervalId = intervalId + intervalsPerDay;
 			}
 			var number = intervalId - startInterval;
-			return (number * 15) + 'px';
-		};
+			return number * 15 + 'px';
+		}
 
-		self.schedules = ko.computed(function () {
+		self.schedules = ko.computed(function() {
 			var schedules = [];
 			var intervals = self.intervalAdherence();
 			if (self.startInterval() && self.lastInterval()) {
@@ -91,10 +111,10 @@
 					if (currentInterval) {
 						var barLength = 80 * currentInterval.Adherence;
 						schedules.push({
-							'Color': currentInterval.Color,
-							'Position': intervalLeftPos(currentInterval.IntervalId),
-							'BarLength': barLength + 'px',
-							'Margin': (80 - barLength) + 'px',
+							Color: currentInterval.Color,
+							Position: intervalLeftPos(currentInterval.IntervalId),
+							BarLength: barLength + 'px',
+							Margin: 80 - barLength + 'px'
 						});
 					}
 					time = time + 1;
@@ -107,13 +127,12 @@
 	}
 
 	function fillData(date) {
-		
 		ajax.Ajax({
 			url: 'MyReport/AdherenceDetails',
 			dataType: 'json',
 			cache: false,
 			data: { date: Teleopti.MyTimeWeb.Common.FormatServiceDate(date) },
-			success: function (data) {
+			success: function(data) {
 				vm.selectedDateInternal(date);
 				vm.totalAdherence(data.TotalAdherence);
 				vm.intervalsPerDay(data.IntervalsPerDay);
@@ -124,13 +143,15 @@
 				}
 				vm.dataAvailable(data.DataAvailable);
 			}
-
 		});
 	}
 
 	function bindData() {
-		return Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
-			$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
+		return Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function(data) {
+			$('.moment-datepicker').attr(
+				'data-bind',
+				'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }'
+			);
 			vm = new MyAdherenceViewModel(fillData, getDate());
 			var elementToBind = $('.myadherence')[0];
 			ko.applyBindings(vm, elementToBind);
@@ -140,19 +161,24 @@
 	function getDate() {
 		var date = Teleopti.MyTimeWeb.Portal.ParseHash().dateHash;
 		if (date != '') {
-			return moment(date, "YYYYMMDD");
+			return moment(date, 'YYYYMMDD');
 		} else {
-			return moment(new Date(new Date().getTeleoptiTime())).add('days', -1).startOf('day');
+			return moment(new Date(new Date().getTeleoptiTime()))
+				.add('days', -1)
+				.startOf('day');
 		}
 	}
 
 	return {
-		Init: function () {
-			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('MyReport/Adherence',
-									Teleopti.MyTimeWeb.MyAdherence.MyAdherencePartialInit, Teleopti.MyTimeWeb.MyAdherence.MyAdherencePartialDispose);
+		Init: function() {
+			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack(
+				'MyReport/Adherence',
+				Teleopti.MyTimeWeb.MyAdherence.MyAdherencePartialInit,
+				Teleopti.MyTimeWeb.MyAdherence.MyAdherencePartialDispose
+			);
 		},
 
-		MyAdherencePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
+		MyAdherencePartialInit: function(readyForInteractionCallback, completelyLoadedCallback) {
 			$('#page').removeClass('fixed-non-responsive');
 			if (!$('.myadherence').length) {
 				return;
@@ -164,11 +190,11 @@
 			completelyLoadedCallback();
 		},
 
-		MyAdherencePartialDispose: function () {
+		MyAdherencePartialDispose: function() {
 			$('#page').addClass('fixed-non-responsive');
 		},
 
-		ForDay: function (date) {
+		ForDay: function(date) {
 			fillData(date);
 		}
 	};

@@ -1,11 +1,10 @@
-﻿Teleopti.MyTimeWeb.MyReport = (function () {
-
+﻿Teleopti.MyTimeWeb.MyReport = (function() {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
-	
+
 	function MyReportViewModel(loadDataMethod, date) {
 		var self = this;
-		
+
 		self.adherence = ko.observable();
 		self.answeredCalls = ko.observable();
 		self.averageAfterCallWork = ko.observable();
@@ -19,32 +18,50 @@
 		var format = Teleopti.MyTimeWeb.Common.DateFormat;
 		self.datePickerFormat(format);
 		self.dataAvailable = ko.observable();
-		self.goToAnotherDay = function (toDate) {
-			Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/Index" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(toDate.format('YYYY-MM-DD')));
+		self.goToAnotherDay = function(toDate) {
+			Teleopti.MyTimeWeb.Portal.NavigateTo(
+				'MyReport/Index' + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(toDate.format('YYYY-MM-DD'))
+			);
 		};
-		self.goToAdherence = function () {
-			Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/Adherence" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(self.selectedDateInternal().format('YYYY-MM-DD')));
+		self.goToAdherence = function() {
+			Teleopti.MyTimeWeb.Portal.NavigateTo(
+				'MyReport/Adherence' +
+					Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(self.selectedDateInternal().format('YYYY-MM-DD'))
+			);
 		};
-		self.goToQueueMetrics = function () {
+		self.goToQueueMetrics = function() {
 			if (self.queueMetricsEnabled())
-				Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/QueueMetrics" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(self.selectedDateInternal().format('YYYY-MM-DD')));
+				Teleopti.MyTimeWeb.Portal.NavigateTo(
+					'MyReport/QueueMetrics' +
+						Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(self.selectedDateInternal().format('YYYY-MM-DD'))
+				);
 		};
 		self.selectedDate = ko.computed({
-			read: function () {
+			read: function() {
 				return self.selectedDateInternal();
 			},
-			write: function (value) {
+			write: function(value) {
 				if (value.format('YYYYMMDD') == date.format('YYYYMMDD')) return;
 				self.goToAnotherDay(value);
 			}
 		});
-		self.nextDay = function () {
-			self.goToAnotherDay(self.selectedDate().clone().add('days', 1));
+		self.nextDay = function() {
+			self.goToAnotherDay(
+				self
+					.selectedDate()
+					.clone()
+					.add('days', 1)
+			);
 		};
-		self.previousDay = function () {
-			self.goToAnotherDay(self.selectedDate().clone().add('days', -1));
+		self.previousDay = function() {
+			self.goToAnotherDay(
+				self
+					.selectedDate()
+					.clone()
+					.add('days', -1)
+			);
 		};
-		self.dateFormat = function () {
+		self.dateFormat = function() {
 			return self.datePickerFormat;
 		};
 		loadDataMethod(date);
@@ -56,7 +73,7 @@
 			dataType: 'json',
 			cache: false,
 			data: { date: Teleopti.MyTimeWeb.Common.FormatServiceDate(date) },
-			success: function (data) {
+			success: function(data) {
 				vm.selectedDateInternal(date);
 				vm.adherence(data.Adherence);
 				vm.answeredCalls(data.AnsweredCalls);
@@ -67,35 +84,41 @@
 				vm.dataAvailable(data.DataAvailable);
 				vm.queueMetricsEnabled(data.QueueMetricsEnabled);
 			}
-
 		});
 	}
 
 	function bindData() {
-		return Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
-			$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
+		return Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function(data) {
+			$('.moment-datepicker').attr(
+				'data-bind',
+				'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }'
+			);
 			vm = new MyReportViewModel(fillData, getDate());
 			var elementToBind = $('.myreport-daily-metrics')[0];
 			ko.applyBindings(vm, elementToBind);
 		});
 	}
 
-
 	function getDate() {
 		var date = Teleopti.MyTimeWeb.Portal.ParseHash().dateHash;
 		if (date != '') {
-			return moment(date, "YYYYMMDD");
+			return moment(date, 'YYYYMMDD');
 		} else {
-			return moment(new Date(new Date().getTeleoptiTime())).add('days', -1).startOf('day');
+			return moment(new Date(new Date().getTeleoptiTime()))
+				.add('days', -1)
+				.startOf('day');
 		}
 	}
 
 	return {
-		Init: function () {
-			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('MyReport/Index',
-									Teleopti.MyTimeWeb.MyReport.MyReportPartialInit, Teleopti.MyTimeWeb.MyReport.MyReportPartialDispose);
+		Init: function() {
+			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack(
+				'MyReport/Index',
+				Teleopti.MyTimeWeb.MyReport.MyReportPartialInit,
+				Teleopti.MyTimeWeb.MyReport.MyReportPartialDispose
+			);
 		},
-		MyReportPartialInit: function () {
+		MyReportPartialInit: function() {
 			$('#page').removeClass('fixed-non-responsive');
 			if (!$('.myreport-daily-metrics').length) {
 				return;
@@ -103,10 +126,10 @@
 
 			bindData();
 		},
-		MyReportPartialDispose: function () {
+		MyReportPartialDispose: function() {
 			$('#page').addClass('fixed-non-responsive');
 		},
-		ForDay: function (date) {
+		ForDay: function(date) {
 			fillData(date);
 		}
 	};
