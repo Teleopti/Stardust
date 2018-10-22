@@ -330,7 +330,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<ShiftCategoryWeekRemover>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftCategoryPeriodRemover>().InstancePerLifetimeScope();
-			builder.RegisterType<ShiftCategoryLimitCounter>().As<IShiftCategoryLimitCounter>().SingleInstance();
+			builder.RegisterType<ShiftCategoryLimitCounter>().SingleInstance();
 
 			builder.RegisterType<TeamBlockDayOffsInPeriodValidator>().SingleInstance();
 

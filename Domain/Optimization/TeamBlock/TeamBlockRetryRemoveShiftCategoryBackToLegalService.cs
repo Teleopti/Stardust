@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly TeamBlockClearer _teamBlockClearer;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
-		private readonly IShiftCategoryLimitCounter _shiftCategoryLimitCounter;
+		private readonly ShiftCategoryLimitCounter _shiftCategoryLimitCounter;
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly RemoveScheduleDayProsBasedOnShiftCategoryLimitation _removeScheduleDayProsBasedOnShiftCategoryLimitation;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			TeamBlockClearer teamBlockClearer, 
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, 
-			IShiftCategoryLimitCounter shiftCategoryLimitCounter, 
+			ShiftCategoryLimitCounter shiftCategoryLimitCounter, 
 			IWorkShiftSelector workShiftSelector, 
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
 			RemoveScheduleDayProsBasedOnShiftCategoryLimitation removeScheduleDayProsBasedOnShiftCategoryLimitation,
