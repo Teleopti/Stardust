@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.IoC
 		protected override void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddModule(new WebModule(configuration, null));
-			extend.AddModule(new PeopleAreaModule());
+			extend.AddModule(new PeopleAreaModule(configuration));
 			extend.AddService<FakeStorage>();
 		}
 

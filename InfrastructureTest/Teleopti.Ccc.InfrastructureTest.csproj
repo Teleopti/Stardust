@@ -226,6 +226,7 @@
     <Compile Include="MessageBroker\MailboxNotSignedInTest.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAspectTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindExternalApplicationAccessTest.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\PersistPersonInfoWithAuditTrailTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\TenantAuditTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\TenantPersonLogonQuerierTest.cs" />
     <Compile Include="Performance\NumberOfDbCallsTest.cs" />

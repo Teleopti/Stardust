@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), new FakeToggleManager());
 			_containerBuilder = new ContainerBuilder();
 			_containerBuilder.RegisterModule(new WebAppModule(configuration));
-			_containerBuilder.RegisterModule(new PeopleAreaModule());
+			_containerBuilder.RegisterModule(new PeopleAreaModule(configuration));
 			_containerBuilder.RegisterModule(new Web.Areas.People.Core.IoC.PeopleAreaModule());
 		}
 

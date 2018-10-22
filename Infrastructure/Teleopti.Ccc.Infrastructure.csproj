@@ -269,6 +269,9 @@
     <Compile Include="MultiTenancy\AllTenantNames.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAspect.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAttribute.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\PersistPersonInfoWithAuditTrail.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\TenantAccessAuditContext.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\TenantAuditActions.cs" />
     <Compile Include="MultiTenancy\Server\Queries\TenantAuditPersisterFake.cs" />
     <Compile Include="MultiTenancy\Server\TenantAudit.cs" />
     <Compile Include="MultiTenancy\Server\ExternalApplicationAccess.cs" />
