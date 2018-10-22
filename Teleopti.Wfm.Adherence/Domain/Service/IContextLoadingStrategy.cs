@@ -216,8 +216,8 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 				.Where(x =>
 				{
 					var activities = _scheduleCache.Read(x.PersonId);
-					var nextCheck = ScheduleInfo.NextCheck(activities, x.LastTimeWindowCheckSum, x.LastCheck);
-					return nextCheck == null || nextCheck <= CurrentTime;
+					var nextCheck = ScheduleInfo.NextCheck(activities, x.LastTimeWindowCheckSum, x.LastCheck, CurrentTime);
+					return nextCheck <= CurrentTime;
 				})
 				.Select(x => x.PersonId)
 				.ToArray();

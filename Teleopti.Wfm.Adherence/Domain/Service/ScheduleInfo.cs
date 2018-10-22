@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Adherence.Domain.Service
@@ -183,43 +184,44 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		{
 			return schedule.Select(x => startTimeOfShift(schedule, x)).Distinct();
 		}
-		
-		private static DateTime? oneHourBeforeNextShift(IEnumerable<ScheduledActivity> schedule, DateTime time)
-		{
-			var nextValidShiftStart = ShiftStartTimes(schedule).FirstOrDefault(t => t.AddHours(-1) > time);
 
-			return nextValidShiftStart > DateTime.MinValue ? nextValidShiftStart.AddHours(-1) as DateTime? : null;
+		public static DateTime NextCheck(IEnumerable<ScheduledActivity> schedule, int? lastTimeWindowCheckSum, DateTime? lastCheck, DateTime currentTime)
+		{
+			var timeWindowCheckSum = timeWindowActivities(schedule, currentTime).CheckSum();
+			var timeWindowChanged = lastTimeWindowCheckSum != timeWindowCheckSum;
+
+			var firstTime = !lastCheck.HasValue;
+			var nowIsRelevant = firstTime || timeWindowChanged;
+			var relevantMoments = RelevantMoments(schedule, lastCheck.GetValueOrDefault(), currentTime, nowIsRelevant);
+
+			return relevantMoments
+				.Append(DateTime.MaxValue)
+				.Min();
 		}
-				
-		public static DateTime? NextCheck(IEnumerable<ScheduledActivity> schedule, int? lastTimeWindowCheckSum, DateTime? lastCheck)
+
+		public static IEnumerable<DateTime> RelevantMoments(IEnumerable<ScheduledActivity> schedule, DateTime? from, DateTime now, bool nowIsRelevant)
 		{
-			// note to self: return null means check now ;)
+			if (!from.HasValue)
+				from = now.AddHours(-1);
 
-			if (!lastCheck.HasValue)
-				return null;
+			var startingActivities = schedule.Select(x => x.StartDateTime);
+			var endingActivities = schedule.Select(x => x.EndDateTime);
+			var oneHourBeforeShifts = ShiftStartTimes(schedule).Select(x => x.AddHours(-1));
+			var activitiesEntersTimeWindowAts = schedule.Select(x => x.StartDateTime.Subtract(timeWindowFuture));
 
-			var timeWindowCheckSum = timeWindowActivities(schedule, lastCheck.Value).CheckSum();
-			if (lastTimeWindowCheckSum != timeWindowCheckSum)
-				return null;
+			var times = startingActivities
+				.Concat(endingActivities)
+				.Concat(oneHourBeforeShifts)
+				.Concat(activitiesEntersTimeWindowAts)
+				.Where(x => x > @from && x <= now);
 
-			var current = currentActivity(schedule, lastCheck.Value);
-			var next = nextActivity(schedule, current, lastCheck.Value);
-						
-			var oneHourBeforeNextShiftStart = oneHourBeforeNextShift(schedule, lastCheck.Value);			
-			var activityEnteringTimeWindow = schedule.FirstOrDefault(x => x.StartDateTime >= timeWindowEnd(lastCheck.Value));
-			var activityEntersTimeWindowAt = activityEnteringTimeWindow?.StartDateTime.Subtract(timeWindowFuture);
-			var noSchedule = DateTime.MaxValue;
-		
+			if (nowIsRelevant)
+				times = times.Append(now);
 
-			// {null, null, 2017-11-29 10:00, DateTime.MaxValue}.Min() = 2017-11-29 10:00
-			return new[]
-			{
-				current?.EndDateTime,
-				oneHourBeforeNextShiftStart, 
-				next?.StartDateTime,
-				activityEntersTimeWindowAt,
-				noSchedule
-			}.Min();
+			return times
+				.Distinct()
+				.OrderBy(x => x)
+				.ToArray();
 		}
 	}
 }

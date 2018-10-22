@@ -118,30 +118,11 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 
 		private AgentState processRelevantMoments(ProcessInput processInput)
 		{
-			var from = processInput.Stored.ReceivedTime ?? processInput.CurrentTime.AddHours(-1);
-			var to = processInput.CurrentTime;
-
-			var startingActivities = processInput.Schedule.Select(x => x.StartDateTime);
-			var endingActivities = processInput.Schedule.Select(x => x.EndDateTime);
-			var oneHourBeforeStartingActivities = ScheduleInfo.ShiftStartTimes(processInput.Schedule).Select(x => x.AddHours(-1));
-
-			var times = processInput.CurrentTime.AsArray()
-				.Concat(startingActivities)
-				.Concat(endingActivities)
-				.Concat(oneHourBeforeStartingActivities)
-				.Where(x =>
-				{
-					if (x == to)
-						return true;
-					return x > @from && x <= to;
-				})
-				.Distinct()
-				.OrderBy(x => x)
-				.ToArray();
+			var relevantMoments = ScheduleInfo.RelevantMoments(processInput.Schedule, processInput.Stored.ReceivedTime, processInput.CurrentTime, true);
 
 			var workingState = processInput.Stored;
 			AgentState outState = null;
-			times.ForEach(time =>
+			relevantMoments.ForEach(time =>
 			{
 				var input = time == processInput.CurrentTime ? processInput.Input : null;
 				var context = new Context(
