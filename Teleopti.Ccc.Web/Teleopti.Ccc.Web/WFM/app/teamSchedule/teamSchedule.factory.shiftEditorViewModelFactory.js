@@ -44,10 +44,6 @@
 			return new ShiftLayerViewModel(copyLayer, this.Date, this.Timezone, this.Timezone);
 		}
 
-		ScheduleViewModel.prototype.GetSummaryTimeSpan = function (info) {
-			return info.TimeSpan;
-		};
-
 		function createShiftLayers(projections, date, timezone, currentTimezone) {
 			var layers = [];
 			projections &&

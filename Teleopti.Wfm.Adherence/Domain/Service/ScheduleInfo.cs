@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Adherence.Domain.Service
@@ -75,7 +76,12 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 
 		private DateTime startTimeOfShift(ScheduledActivity activity)
 		{
-			return activity == null ? DateTime.MinValue : activitiesThisShift(activity).Select(x => x.StartDateTime).Min();
+			return startTimeOfShift(_schedule.Value, activity);
+		}
+
+		private static DateTime startTimeOfShift(IEnumerable<ScheduledActivity> schedule, ScheduledActivity activity)
+		{
+			return activity == null ? DateTime.MinValue : activitiesThisShift(schedule, activity).Select(x => x.StartDateTime).Min();
 		}
 
 		private DateTime endTimeOfShift(ScheduledActivity activity)
@@ -85,7 +91,12 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 
 		private IEnumerable<ScheduledActivity> activitiesThisShift(ScheduledActivity activity)
 		{
-			return from l in _schedule.Value
+			return activitiesThisShift(_schedule.Value, activity);
+		}
+
+		private static IEnumerable<ScheduledActivity> activitiesThisShift(IEnumerable<ScheduledActivity> schedule, ScheduledActivity activity)
+		{
+			return from l in schedule
 				where l.BelongsToDate == activity.BelongsToDate
 				select l;
 		}
@@ -162,31 +173,55 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			return null;
 		}
 
-		public static DateTime? NextCheck(IEnumerable<ScheduledActivity> schedule, int? lastTimeWindowCheckSum, DateTime? lastCheck)
+		public bool ShiftStartsInOneHour()
 		{
-			// note to self: return null means check now ;)
+			if (CurrentActivity() == null && NextActivity() != null)
+				return _context.Time == NextActivity().StartDateTime.AddHours(-1);
+			return false;
+		}
 
-			if (!lastCheck.HasValue)
-				return null;
+		public static IEnumerable<DateTime> ShiftStartTimes(IEnumerable<ScheduledActivity> schedule)
+		{
+			return schedule.Select(x => startTimeOfShift(schedule, x)).Distinct();
+		}
 
-			var timeWindowCheckSum = timeWindowActivities(schedule, lastCheck.Value).CheckSum();
-			if (lastTimeWindowCheckSum != timeWindowCheckSum)
-				return null;
+		public static DateTime NextCheck(IEnumerable<ScheduledActivity> schedule, int? lastTimeWindowCheckSum, DateTime? lastCheck, DateTime currentTime)
+		{
+			var timeWindowCheckSum = timeWindowActivities(schedule, currentTime).CheckSum();
+			var timeWindowChanged = lastTimeWindowCheckSum != timeWindowCheckSum;
 
-			var current = currentActivity(schedule, lastCheck.Value);
-			var next = nextActivity(schedule, current, lastCheck.Value);
-			var activityEnteringTimeWindow = schedule.FirstOrDefault(x => x.StartDateTime >= timeWindowEnd(lastCheck.Value));
-			var activityEntersTimeWindowAt = activityEnteringTimeWindow?.StartDateTime.Subtract(timeWindowFuture);
-			var noSchedule = DateTime.MaxValue;
+			var firstTime = !lastCheck.HasValue;
+			var nowIsRelevant = firstTime || timeWindowChanged;
+			var relevantMoments = RelevantMoments(schedule, lastCheck.GetValueOrDefault(), currentTime, nowIsRelevant);
 
-			// {null, null, 2017-11-29 10:00, DateTime.MaxValue}.Min() = 2017-11-29 10:00
-			return new[]
-			{
-				current?.EndDateTime,
-				next?.StartDateTime,
-				activityEntersTimeWindowAt,
-				noSchedule
-			}.Min();
+			return relevantMoments
+				.Append(DateTime.MaxValue)
+				.Min();
+		}
+
+		public static IEnumerable<DateTime> RelevantMoments(IEnumerable<ScheduledActivity> schedule, DateTime? from, DateTime now, bool nowIsRelevant)
+		{
+			if (!from.HasValue)
+				from = now.AddHours(-1);
+
+			var startingActivities = schedule.Select(x => x.StartDateTime);
+			var endingActivities = schedule.Select(x => x.EndDateTime);
+			var oneHourBeforeShifts = ShiftStartTimes(schedule).Select(x => x.AddHours(-1));
+			var activitiesEntersTimeWindowAts = schedule.Select(x => x.StartDateTime.Subtract(timeWindowFuture));
+
+			var times = startingActivities
+				.Concat(endingActivities)
+				.Concat(oneHourBeforeShifts)
+				.Concat(activitiesEntersTimeWindowAts)
+				.Where(x => x > @from && x <= now);
+
+			if (nowIsRelevant)
+				times = times.Append(now);
+
+			return times
+				.Distinct()
+				.OrderBy(x => x)
+				.ToArray();
 		}
 	}
 }

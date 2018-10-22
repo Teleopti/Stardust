@@ -28,11 +28,11 @@
 			<div ng-if="vm.isFullDayAbsence">
 				<h3>{{'From'|translate}}: </h3>
 				<div class="con-row">
-					<team-schedule-datepicker class="start-date" selected-date="vm.timeRange.startTime" ></team-schedule-datepicker>
+					<team-schedule-datepicker class="start-date" ng-model="vm.timeRange.startTime" ></team-schedule-datepicker>
 				</div>
 				<h3>{{'To'|translate}}: </h3>
 				<div class="con-row">
-					<team-schedule-datepicker class="end-date" selected-date="vm.timeRange.endTime" ></team-schedule-datepicker>
+					<team-schedule-datepicker class="end-date" ng-model="vm.timeRange.endTime" ></team-schedule-datepicker>
 				</div>
 			</div>
 			

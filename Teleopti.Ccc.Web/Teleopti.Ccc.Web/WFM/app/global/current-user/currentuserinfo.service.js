@@ -27,6 +27,8 @@
 		var dateFormatLocale;
 		var timeout;
 		var firstDayOfWeek;
+		var dayNames;
+
 		var isTeleoptiApplicationLogon;
 		this.SetCurrentUserInfo = SetCurrentUserInfo;
 		this.CurrentUserInfo = CurrentUserInfo;
@@ -43,6 +45,7 @@
 			language = data.Language;
 			dateFormatLocale = data.DateFormatLocale;
 			firstDayOfWeek = data.FirstDayOfWeek;
+			dayNames = data.DayNames;
 			isTeleoptiApplicationLogon = data.IsTeleoptiApplicationLogon;
 		}
 
@@ -54,7 +57,8 @@
 				Language: language,
 				DateFormatLocale: dateFormatLocale,
 				FirstDayOfWeek: firstDayOfWeek,
-				IsTeleoptiApplicationLogon: isTeleoptiApplicationLogon
+				IsTeleoptiApplicationLogon: isTeleoptiApplicationLogon,
+				DayNames: dayNames || []
 			};
 		}
 

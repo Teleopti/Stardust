@@ -78,7 +78,7 @@
 						});
 					}
 
-					var schedules = groupScheduleFactory.Create(schedulesToDisplay, scheduleStartDate, 48);
+					var schedules = groupScheduleFactory.Create(schedulesToDisplay, scheduleStartDate.format('YYYY-MM-DD'), currentUserTimezone, 48);
 					showShiftDetail && showShiftDetail({ params: { left: position.left, top: position.top, schedules: schedules}});
 				});
 		}

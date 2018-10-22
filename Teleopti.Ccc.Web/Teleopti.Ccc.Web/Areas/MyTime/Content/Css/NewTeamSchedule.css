@@ -1,8 +1,7 @@
-﻿.new-teamschedule-view {
-	height: 100%;
-	overflow-x: hidden;
-	max-height: calc(100vh - 50px - 5px);
+﻿.pagebody.new-teamschedule-view {
+	overflow: hidden;
 	-webkit-transform: translate3d(0, 0, 0);
+	padding: 0;
 }
 .new-teamschedule-view .relative {
 	-webkit-transform: translate3d(0, 0, 0);
@@ -52,7 +51,7 @@
 		padding-right: 15px;
 	}
 }
-.new-teamschedule-view i,
+.new-teamschedule-view-nav i,
 .select2-container .select2-choice .select2-arrow {
 	transform: scale(1.3);
 }
@@ -257,7 +256,7 @@
 	z-index: 10;
 	width: 30px;
 	min-width: 30px;
-	height: 100%;
+	height: 50px;
 	border-right: 1px solid #dfdfdf;
 	background: white;
 }
@@ -363,7 +362,7 @@
 	overflow-x: hidden;
 	max-width: 100%;
 	padding: 0;
-	height: calc(100% - 51px);
+	height: calc(100% - 51px - 20px);
 	font-size: 0;
 	display: flex;
 	z-index: 9;
@@ -676,8 +675,11 @@ div.new-teamschedule-no-result-indicator {
 /*On mobile*/
 .new-teamschedule-view.new-teamschedule-view-mobile,
 .new-teamschedule-view.new-teamschedule-view-ipad {
-	max-height: calc(100vh - 50px);
+	margin: 0;
+	padding: 0;
 	cursor: pointer;
+	overflow: hidden;
+	height: calc(100vh - 51px - 50px) !important;
 }
 .new-teamschedule-view-mobile .teammates-schedules-container.relative {
 	max-width: calc(100% - 30px - 70px);
@@ -731,6 +733,7 @@ div.new-teamschedule-no-result-indicator {
 	max-width: calc(100% - 30px - 70px);
 	overflow-y: hidden;
 	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
 }
 .new-teamschedule-view.new-teamschedule-view-mobile .teammates-schedules-column {
 	width: 50px;
@@ -790,10 +793,10 @@ div.new-teamschedule-no-result-indicator {
 .new-teamschedule-view-mobile .end-time-slider-end-label {
 	font-size: 12px;
 }
-.new-teamschedule-view-mobile .new-teamschedule-day-off-toggle {
+.new-teamschedule-panel .new-teamschedule-day-off-toggle {
 	padding: 15px 0 5px 0;
 }
-.new-teamschedule-view-mobile .new-teamschedule-day-off-toggle label {
+.new-teamschedule-panel .new-teamschedule-day-off-toggle label {
 	transform: scale(1.3);
 }
 .new-teamschedule-view-mobile .new-teamschedule-submit-buttons {

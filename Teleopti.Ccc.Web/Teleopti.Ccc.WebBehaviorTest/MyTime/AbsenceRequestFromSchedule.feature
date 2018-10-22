@@ -14,7 +14,7 @@ Background:
 	| Access to absence requests | False					     |
 	And there is an absence with
 	| Field       | Value    |
-	| Name        | Vacation |
+	| Name        | Holiday |
 	| Color       | Red      |
 	| Requestable | True     |
 	| TrackerType | Day      |
@@ -27,13 +27,14 @@ Scenario: Open add absence request form from day summary
 	And I click to add a new absence request
 	Then I should see the add absence request form
 
+	@OnlyRunIfDisabled('MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446')
 Scenario: Add absence request from week schedule view
 	Given I am an agent
 	And I have the role 'Full access to mytime'
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day symbol area for date '2013-10-03'
 	And I click to add a new absence request
-	And I input absence request values with 'Vacation' for date '2013-10-03'
+	And I input absence request values with 'Holiday' for date '2013-10-03'
 	And I click send request button
 	Then I should see a symbol at the top of the schedule for date '2013-10-03'
 	
@@ -77,7 +78,7 @@ Scenario: Default absence request values from week schedule when checked Fullday
 	
 Scenario: Cancel adding absence request
 	Given I have the role 'Full access to mytime'
-	And I have a requestable absence called Vacation
+	And I have an open workflow control set with absence request waitlisting enabled
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day summary for date '2013-10-03'
 	And I click to add a new absence request
@@ -98,32 +99,34 @@ Scenario: Adding invalid absence request values
 	
 Scenario: View absence types
 	Given I have the role 'Full access to mytime'
-	And I have a requestable absence called Vacation
+	And I have an open workflow control set with absence request waitlisting enabled
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day symbol area for date '2013-10-03'
 	And I click to add a new absence request
 	Then I should see an absence type called Vacation in droplist
 
+@OnlyRunIfDisabled('MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446')
 Scenario: When requesting absence tracked as days view remaining and used days
 Given I am an agent
 And I am american
 And I have a personal account with
 | Field    | Value           |
-| Absence  | Vacation |
+| Absence  | Holiday |
 | FromDate | 2014-01-01      |
 | Accrued  | 25              |
 And I have an absence with
 | Field     | Value            |
-| Name      | Vacation  |
+| Name      | Holiday  |
 | StartTime | 2014-01-01 00:00 |
 | EndTime   | 2014-01-03 23:59 |
 And I view my week schedule for date '2014-10-03'
 When I click on the day summary for date '2014-10-03'
 And I click to add a new absence request
-And I input absence request values with 'Vacation' for date '2014-10-03'
+And I input absence request values with 'Holiday' for date '2014-10-03'
 Then I should see the remaining days is '22 Days'
 And I should see the used days is '3 Days'
 
+@OnlyRunIfDisabled('MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446')
 @NotKeyExample
 Scenario: When requesting absence tracked by hours view remaining and used time
 Given I am an agent
@@ -154,6 +157,7 @@ And I input absence request values with 'Illness' for date '2014-10-03'
 Then I should see the used time is '24:00'
 And I should see the remaining time is '226:00'
 
+@OnlyRunIfDisabled('MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446')
 Scenario: When changing absence type update remaining and used time
 Given I am an agent
 And I am american
@@ -169,7 +173,7 @@ And I have a personal account with
 | Accrued     | 250:00     |
 And I have a personal account with
 | Field    | Value           |
-| Absence  | Vacation |
+| Absence  | Holiday |
 | FromDate | 2014-01-01      |
 | Accrued  | 25              |
 And I view my week schedule for date '2014-10-03'
@@ -178,73 +182,72 @@ And I click to add a new absence request
 And I input absence request values with 'Illness' for date '2014-10-03'
 And I see the remaining time is '250:00'
 And I see the used time is '0:00'
-And I input absence request values with 'Vacation' for date '2014-10-03'
+And I input absence request values with 'Holiday' for date '2014-10-03'
 Then I should see the remaining days is '25 Days'
 And I should see the used days is '0 Days'
 
 Scenario: Do not show personal account when select an absence type not tracked
 Given I am an agent
-And there is an absence with
-| Field       | Value    |
-| Name        | Vacation |
-| Requestable | True     |
+And I have an open workflow control set with absence request waitlisting enabled
 And I view my week schedule for date '2014-10-03'
 When I click on the day summary for date '2014-10-03'
 And I click to add a new absence request
 And I input absence request values with 'Vacation' for date '2014-10-03'
 Then I should not see the remaining and used time
 
+@OnlyRunIfDisabled('MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446')
 Scenario: When changing request date change remaining and used time
 Given I am an agent
 And I am american
 And I have a personal account with
 | Field    | Value           |
-| Absence  | Vacation |
+| Absence  | Holiday |
 | FromDate | 2014-01-01      |
 | Accrued  | 25              |
 And I have an absence with
 | Field     | Value            |
-| Name      | Vacation  |
+| Name      | Holiday  |
 | StartTime | 2014-01-01 00:00 |
 | EndTime   | 2014-01-03 23:59 |
 And I have a personal account with
 | Field    | Value           |
-| Absence  | Vacation |
+| Absence  | Holiday |
 | FromDate | 2015-01-01      |
 | Accrued  | 25              |
 And I view my week schedule for date '2014-10-03'
 And I click on the day summary for date '2014-10-03'
 And I click to add a new absence request
-And I input absence request values with 'Vacation' for date '2014-10-03'
+And I input absence request values with 'Holiday' for date '2014-10-03'
 And I see the remaining time is '22 Days'
 And I see the used time is '3 Days'
-When I input absence request values with 'Vacation' for date '2015-10-03'
+When I input absence request values with 'Holiday' for date '2015-10-03'
 Then I should see the remaining days is '25 Days'
 And I should see the used days is '0 Days'
 
+@OnlyRunIfDisabled('MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446')
 @NotKeyExample
 Scenario: When requesting absence over multiple account periods show remaining and used time according to end date period
 Given I am an agent
 And I am american
 And I have a personal account with
 | Field    | Value           |
-| Absence  | Vacation |
+| Absence  | Holiday |
 | FromDate | 2014-01-01      |
 | Accrued  | 25              |
 And I have a personal account with
 | Field    | Value           |
-| Absence  | Vacation |
+| Absence  | Holiday |
 | FromDate | 2015-01-01      |
 | Accrued  | 25              |
 And I have an absence with
 | Field     | Value            |
-| Name      | Vacation  |
+| Name      | Holiday  |
 | StartTime | 2014-01-01 00:00 |
 | EndTime   | 2014-01-04 23:59 |
 And I view my week schedule for date '2014-10-03'
 When I click on the day summary for date '2014-10-03'
 And I click to add a new absence request
-And I input absence request values with "Vacation" from "2014-12-28" to "2015-10-22"
+And I input absence request values with "Holiday" from "2014-12-28" to "2015-10-22"
 Then I should see the remaining days is '25 Days'
 And I should see the used days is '0 Days'
 
@@ -254,6 +257,7 @@ Given there is a role with
 | Name                               | No access to personal absence account |
 | Access to personal absence account | False                                 |
 And I have the role 'No access to personal absence account'
+And I have an open workflow control set with absence request waitlisting enabled
 And I have a personal account with
 | Field    | Value           |
 | Absence  | Vacation |

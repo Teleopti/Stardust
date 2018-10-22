@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 				DateFormatLocale = regionnal.Culture.Name,
 				CultureInfo.CurrentCulture.NumberFormat,
 				FirstDayOfWeek = (int)regionnal.Culture.DateTimeFormat.FirstDayOfWeek,
+				regionnal.Culture.DateTimeFormat.DayNames,
 				IsTeleoptiApplicationLogon = sessionData?.IsTeleoptiApplicationLogon ?? false
 			};
 		}

@@ -434,6 +434,36 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldMapTimeLineWhenScheduleStaredFromZeroOnFetchDayData()
+		{
+			var date = new DateOnly(2015, 03, 29);
+			var timePeriod = new DateTimePeriod("2015-03-29 00:00".Utc(), "2015-03-29 17:00".Utc());
+			var personAssignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
+			var phone = new Activity("p");
+			personAssignment.AddActivity(phone, timePeriod);
+			PersonAssignmentRepository.Has(personAssignment);
+
+			var viewModel = Target.FetchDayData(date);
+			viewModel.TimeLine.First().TimeLineDisplay.Should().Be("00:00");
+			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("17:15");
+		}
+
+		[Test]
+		public void ShouldMapTimeLineWhenScheduleEndedAtZeroOnFetchDayData()
+		{
+			var date = new DateOnly(2015, 03, 29);
+			var timePeriod = new DateTimePeriod("2015-03-29 17:00".Utc(), "2015-03-30 00:00".Utc());
+			var personAssignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
+			var phone = new Activity("p");
+			personAssignment.AddActivity(phone, timePeriod);
+			PersonAssignmentRepository.Has(personAssignment);
+
+			var viewModel = Target.FetchDayData(date);
+			viewModel.TimeLine.First().TimeLineDisplay.Should().Be("16:45");
+			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("00:00");
+		}
+
+		[Test]
 		public void ShouldMapTimeLineCorrectlyOnDayBeforeDstOnFetchDayData()
 		{
 			UserTimeZone.IsSweden();

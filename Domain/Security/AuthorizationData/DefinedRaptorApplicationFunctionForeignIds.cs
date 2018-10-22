@@ -46,7 +46,7 @@
 		public const string ModifyAvailabilities = "0087";
 		public const string PublishSchedule = "0105";
 		public const string OrganizeCascadingSkills = "0131";
-		public const string ArchiveSchedule = "0137";
+		public const string CopySchedule = "0137";
 		public const string ImportSchedule = "0138";
 		public const string SaveFavoriteSearch = "0141";
 

@@ -1,5 +1,4 @@
-﻿Teleopti.MyTimeWeb.MyQueueMetrics = (function () {
-
+﻿Teleopti.MyTimeWeb.MyQueueMetrics = (function() {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
 
@@ -11,30 +10,45 @@
 		var format = Teleopti.MyTimeWeb.Common.DateFormat;
 		self.datePickerFormat(format);
 		self.dataAvailable = ko.observable();
-		self.goToAnotherDay = function (toDate) {
-			Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/QueueMetrics" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(toDate.format('YYYY-MM-DD')));
+		self.goToAnotherDay = function(toDate) {
+			Teleopti.MyTimeWeb.Portal.NavigateTo(
+				'MyReport/QueueMetrics' + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(toDate.format('YYYY-MM-DD'))
+			);
 		};
 		self.selectedDate = ko.computed({
-			read: function () {
+			read: function() {
 				return self.selectedDateInternal();
 			},
-			write: function (value) {
+			write: function(value) {
 				if (value.format('YYYYMMDD') == date.format('YYYYMMDD')) return;
 				self.goToAnotherDay(value);
 			}
 		});
-		self.nextDay = function () {
-			self.goToAnotherDay(self.selectedDate().clone().add('days', 1));
+		self.nextDay = function() {
+			self.goToAnotherDay(
+				self
+					.selectedDate()
+					.clone()
+					.add('days', 1)
+			);
 		};
-		self.previousDay = function () {
-			self.goToAnotherDay(self.selectedDate().clone().add('days', -1));
+		self.previousDay = function() {
+			self.goToAnotherDay(
+				self
+					.selectedDate()
+					.clone()
+					.add('days', -1)
+			);
 		};
-		self.dateFormat = function () {
+		self.dateFormat = function() {
 			return self.datePickerFormat;
 		};
 
-		self.goToOverview = function () {
-			Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/Index" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(self.selectedDateInternal().format('YYYY-MM-DD')));
+		self.goToOverview = function() {
+			Teleopti.MyTimeWeb.Portal.NavigateTo(
+				'MyReport/Index' +
+					Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(self.selectedDateInternal().format('YYYY-MM-DD'))
+			);
 		};
 
 		self.myQueues = ko.observableArray();
@@ -45,21 +59,23 @@
 	function fillData(date) {
 		ajax.Ajax({
 			url: 'MyReport/QueueMetricsDetails',
-		    dataType: 'json',
-		    cache: false,
-		    data: { date: Teleopti.MyTimeWeb.Common.FormatServiceDate(date) },
-			success: function (data) {
+			dataType: 'json',
+			cache: false,
+			data: { date: Teleopti.MyTimeWeb.Common.FormatServiceDate(date) },
+			success: function(data) {
 				vm.selectedDateInternal(date);
 				vm.myQueues(data);
 				vm.dataAvailable(data[0].DataAvailable);
 			}
-
 		});
 	}
 
 	function bindData() {
-		return Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
-			$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
+		return Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function(data) {
+			$('.moment-datepicker').attr(
+				'data-bind',
+				'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }'
+			);
 			vm = new MyQueueMetricsViewModel(fillData, getDate());
 			var elementToBind = $('#queueMetric')[0];
 			ko.applyBindings(vm, elementToBind);
@@ -69,20 +85,24 @@
 	function getDate() {
 		var date = Teleopti.MyTimeWeb.Portal.ParseHash().dateHash;
 		if (date != '') {
-			return moment(date, "YYYYMMDD");
+			return moment(date, 'YYYYMMDD');
 		} else {
-			return moment(new Date(new Date().getTeleoptiTime())).add('days', -1).startOf('day');
+			return moment(new Date(new Date().getTeleoptiTime()))
+				.add('days', -1)
+				.startOf('day');
 		}
 	}
 
 	return {
-		Init: function () {
-			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('MyReport/QueueMetrics',
-									Teleopti.MyTimeWeb.MyQueueMetrics.MyQueueMetricsPartialInit, Teleopti.MyTimeWeb.MyQueueMetrics.MyQueueMetricsPartialDispose);
+		Init: function() {
+			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack(
+				'MyReport/QueueMetrics',
+				Teleopti.MyTimeWeb.MyQueueMetrics.MyQueueMetricsPartialInit,
+				Teleopti.MyTimeWeb.MyQueueMetrics.MyQueueMetricsPartialDispose
+			);
 		},
 
-		MyQueueMetricsPartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
-			//$('#page').removeClass('fixed-non-responsive');
+		MyQueueMetricsPartialInit: function(readyForInteractionCallback, completelyLoadedCallback) {
 			if (!$('#queueMetric').length) {
 				return;
 			}
@@ -93,11 +113,9 @@
 			completelyLoadedCallback();
 		},
 
-		MyQueueMetricsPartialDispose: function () {
-			//$('#page').addClass('fixed-non-responsive');
-		},
+		MyQueueMetricsPartialDispose: function() {},
 
-		ForDay: function (date) {
+		ForDay: function(date) {
 			fillData(date);
 		}
 	};

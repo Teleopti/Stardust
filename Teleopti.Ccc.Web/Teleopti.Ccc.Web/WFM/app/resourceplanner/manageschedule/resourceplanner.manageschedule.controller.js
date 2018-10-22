@@ -23,7 +23,6 @@
 			'defaultScenarioFilter',
 			'$translate',
 			'$stateParams',
-			'Toggle',
 			function (ManageScheduleSrvc,
 				guidgenerator,
 				$timeout,
@@ -31,13 +30,12 @@
 				NoticeService,
 				defaultScenarioFilter,
 				$translate,
-				$stateParams,
-				toggleSvc) {
+				$stateParams) {
 				var vm = this;
 				vm.isImportSchedule = $stateParams.isImportSchedule;
-				vm.ArchiveScheduleOrImportSchedule = !vm.isImportSchedule ? 'ArchiveSchedule' : 'ImportSchedule';
-				vm.ArchivingOrImporting = !vm.isImportSchedule ? 'Archiving' : 'Importing';
-				vm.ArchiveOrImport = !vm.isImportSchedule ? 'Archive' : 'Import';
+				vm.CopyScheduleOrImportSchedule = !vm.isImportSchedule ? 'CopySchedule' : 'ImportSchedule';
+				vm.CopyingOrImporting = !vm.isImportSchedule ? 'Copying' : 'Importing';
+				vm.CopyOrImport = !vm.isImportSchedule ? 'Copy' : 'Import';
 				vm.scenarios = [];
 				vm.dateRangeTemplateType = 'popup';
 				vm.selection = {
@@ -87,20 +85,18 @@
 					var validationResult = { messages: [] };
 
 					if (fromScenario == null)
-						validationResult.messages.push($translate.instant('YouNeedToPickAScenarioTo' + vm.ArchiveOrImport + 'FromDot'));
+						validationResult.messages.push($translate.instant('YouNeedToPickAScenarioTo' + vm.CopyOrImport + 'FromDot'));
 					else if (vm.isImportSchedule && fromScenario.DefaultScenario)
 						validationResult.messages.push($translate.instant('TheScenarioYouImportFromMustNotBeTheDefaultScenarioDot'));
 					if (toScenario == null)
-						validationResult.messages.push($translate.instant('YouNeedToPickAScenarioTo' + vm.ArchiveOrImport + 'ToDot'));
-					else if (!vm.isImportSchedule && toScenario.DefaultScenario)
-						validationResult.messages.push($translate.instant('TheScenarioYouArchiveToMustNotBeTheDefaultScenarioDot'));
+						validationResult.messages.push($translate.instant('YouNeedToPickAScenarioTo' + vm.CopyOrImport + 'ToDot'));
 					else if (vm.isImportSchedule && !toScenario.DefaultScenario)
 						validationResult.messages.push($translate.instant('TheScenarioYouImportToMustBeTheDefaultScenarioDot'));
 					if (teamSelection.length === 0)
 						validationResult.messages.push($translate.instant('PickAtleastOneTeamDot'));
 					if (moment(period.endDate).diff(period.startDate, 'days') > 65)
 						validationResult.messages.push($translate.instant('PickASmallerDatePeriodDot'));
-					if (!toggleSvc.Wfm_ArchiveScheduleForPast_77958 || vm.isImportSchedule) {
+					if (vm.isImportSchedule) {
 						if (moment(period.startDate).diff(moment().startOf('day'), 'days') < 1)
 							validationResult.messages.push($translate.instant('YouNeedToSelectADateInTheFutureDot'));
 					}
@@ -128,7 +124,7 @@
 					if (vm.tracking.totalPeople === 0) {
 						NoticeService.info($translate.instant('YourSelectionResultedInZeroPeopleDot'), null, true);
 					} else {
-						NoticeService.success($translate.instant('Done' + vm.ArchivingOrImporting + 'ForXPeopleDot').replace('{0}', vm.tracking.totalPeople), null, true);
+						NoticeService.success($translate.instant('Done' + vm.CopyingOrImporting + 'ForXPeopleDot').replace('{0}', vm.tracking.totalPeople), null, true);
 					}
 
 					$timeout(function () {
@@ -150,7 +146,7 @@
 						});
 						return;
 					}
-					vm.confirmationText = $translate.instant(vm.ArchivingOrImporting + 'ConfirmationWithParameters')
+					vm.confirmationText = $translate.instant(vm.CopyingOrImporting + 'ConfirmationWithParameters')
 						.replace('{0}', vm.isImportSchedule? fromScenario.Name : toScenario.Name)
 						.replace('{1}', moment(period.startDate).format('L'))
 						.replace('{2}', moment(period.endDate).format('L'));

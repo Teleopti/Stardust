@@ -3,7 +3,40 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { flatMap, map, switchMap } from 'rxjs/operators';
 
-export interface PersonWhoChangedSchedule {
+export interface Person {
+	Id: string;
+	Name: string;
+}
+
+@Injectable()
+export class AuditTrailService {
+	constructor(private http: HttpClient) {}
+
+	getPersonByKeyword(keyword: string): Observable<Person> {
+		const response = this.http.get('../api/Search/FindPersonsByKeywords');
+		console.log(response);
+		return response as Observable<Person>;
+	}
+	/*personsWhoChangedSchedules(): Observable<PersonsWhoChangedSchedulesResponse> {
+		const response = this.http.get('../api/Reports/PersonsWhoChangedSchedules');
+		return response as Observable<PersonsWhoChangedSchedulesResponse>;
+	}
+
+	getTeams({ startDate, endDate }): Observable<OrgUnitsResponse> {
+		const response = this.http.post('../api/Reports/OrganizationSelectionAuditTrail', {
+			startDate,
+			endDate
+		});
+		return response as Observable<OrgUnitsResponse>;
+	}
+
+	search(body: ScheduleAuditTrailReportQuery): Observable<SearchResult> {
+		const response = this.http.post('../api/Reports/ScheduleAuditTrailReport', body);
+		return response as Observable<SearchResult>;
+	}*/
+}
+
+/*export interface PersonWhoChangedSchedule {
 	Id: string;
 	Name: string;
 }
@@ -62,3 +95,5 @@ export class AuditTrailService {
 		return response as Observable<SearchResult>;
 	}
 }
+
+*/

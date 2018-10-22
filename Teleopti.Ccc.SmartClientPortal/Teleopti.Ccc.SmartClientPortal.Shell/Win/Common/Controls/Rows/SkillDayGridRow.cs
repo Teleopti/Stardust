@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows
                 return SkillStaffPeriodHelper.ScheduledTime(SkillStaffPeriodList);
 
             if (DisplayMember == "AbsoluteDifference")
-                return SkillStaffPeriodHelper.AbsoluteDifference(SkillStaffPeriodList, false, false);
+                return SkillStaffPeriodHelper.AbsoluteDifference(SkillStaffPeriodList);
 
             if (DisplayMember == "RelativeDifference")
                 return SkillStaffPeriodHelper.RelativeDifferenceForDisplay(SkillStaffPeriodList);
@@ -84,9 +84,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows
 
             if (DisplayMember == "DailySmoothness")
                 return SkillStaffPeriodHelper.SkillDayGridSmoothness(SkillStaffPeriodList);
-
-            if (DisplayMember == "HighestDeviationInPeriod")
-                return SkillStaffPeriodHelper.GetHighestIntraIntervalDeviation(SkillStaffPeriodList);
 
             if (DisplayMember == "ForecastedHoursIncoming")
                 return SkillStaffPeriodHelper.ForecastedIncoming(SkillStaffPeriodList);

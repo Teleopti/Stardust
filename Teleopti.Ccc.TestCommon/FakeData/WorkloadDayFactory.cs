@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			if (setIdOnWorkLoad)
 				workload1.SetId(Guid.NewGuid());
 
-			IList<ITemplateTaskPeriod> taskPeriods = new List<ITemplateTaskPeriod>();
 			ITemplateTaskPeriod templateTaskPeriod;
 			if (alwaysMakeWorkloadDayOpen)
 			{
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 					dt.Add(TimeSpan.FromHours(11)), dt.Add(TimeSpan.FromHours(14)),
 					skill.TimeZone);
 				templateTaskPeriod = new TemplateTaskPeriod(task, period);
-				taskPeriods.Add(templateTaskPeriod);
 			}
 
 			WorkloadDay workloadDay = new WorkloadDay();
@@ -57,12 +55,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			if (setIdOnWorkLoad)
 				workload2.SetId(Guid.NewGuid());
 
-			taskPeriods = new List<ITemplateTaskPeriod>();
 			templateTaskPeriod = new TemplateTaskPeriod(new Task(300, TimeSpan.FromSeconds(240), TimeSpan.FromSeconds(40)),
 							TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
 																		 dt.Add(TimeSpan.FromHours(13)), dt.Add(TimeSpan.FromHours(17)),
 																		 skill.TimeZone));
-			taskPeriods.Add(templateTaskPeriod);
 			workloadDay = new WorkloadDay();
 			workloadDay.Create(new DateOnly(dt), workload2, new List<TimePeriod>());
 			workloadDay.Lock();

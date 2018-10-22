@@ -17,28 +17,6 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 			_deserializer = deserializer;
 		}
 
-		[RemoveMeWithToggle(Toggles.LevelUp_HangfireStatistics_76139_76373)]
-		public Statistics Build()
-		{
-			var totalEvents = _hangfireRepository.CountActiveJobs();
-			var succeededEvents = _hangfireRepository.CountSucceededJobs();
-			var oldestEvents = _hangfireRepository.OldestEvents();
-			return new Statistics
-			{
-				Time = DateTime.UtcNow.ToString("HH:mm:ss"),
-				TotalEventCount = totalEvents,
-				SucceededEventCount = succeededEvents,
-				OldestEvents = oldestEvents
-			};
-		}
-		
-		[RemoveMeWithToggle(Toggles.LevelUp_HangfireStatistics_76139_76373)]
-		public IEnumerable<EventCount> BuildTypesOfEvents(string stateName)
-		{
-			return _hangfireRepository.EventCounts(stateName);
-		}
-
-
 		public HangfireStatisticsViewModel BuildStatistics()
 		{
 			return new HangfireStatisticsViewModel
@@ -129,29 +107,5 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 	{
 		public string Arguments { get; set; }
 		public string Data { get; set; }
-	}
-
-	[RemoveMeWithToggle(Toggles.LevelUp_HangfireStatistics_76139_76373)]	
-	public class Statistics
-	{
-		public string Time { get; set; }
-		public long TotalEventCount { get; set; }
-		public long SucceededEventCount { get; set; }
-		public IEnumerable<OldEvent> OldestEvents { get; set; }
-	}
-	
-	[RemoveMeWithToggle(Toggles.LevelUp_HangfireStatistics_76139_76373)]
-	public class EventCount
-	{
-		public string Type { get; set; }
-		public int Count { get; set; }
-	}
-
-	[RemoveMeWithToggle(Toggles.LevelUp_HangfireStatistics_76139_76373)]	
-	public class OldEvent
-	{
-		public string Type { get; set; }
-		public string CreatedAt { get; set; }
-		public string Duration { get; set; }
 	}
 }

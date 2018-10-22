@@ -23,11 +23,11 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 	public delegate void RowsUpdatedEventHandler(object sender, RowsUpdatedEventArgs e);
 
 
-	public class ThreadPool : IThreadPool
+	public class ThreadPool : IThreadPool, IDisposable
 	{
-		private static DoWork _doWork;
+		private DoWork _doWork;
 		private readonly object _lockObject = new object();
-		private BackgroundWorker[] _bgw;
+		private Dictionary<BackgroundWorker, ManualResetEventSlim> _bgw;
 		private Queue<ITaskParameters> _taskQueue;
 
 		public event RowsUpdatedEventHandler RowsUpdatedEvent;
@@ -36,19 +36,20 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public void Load(IEnumerable<ITaskParameters> taskParameters, DoWork doWork)
 		{
-			int aff;
-			if (!int.TryParse(ConfigurationManager.AppSettings["concurrentThreads"], out aff))
+			if (!int.TryParse(ConfigurationManager.AppSettings["concurrentThreads"], out var aff))
 			{
 				aff = 1;
 			}
 
-			_bgw = new BackgroundWorker[aff];
+			_bgw = new Dictionary<BackgroundWorker,ManualResetEventSlim>(aff);
 
 			for (int i = 0; i < aff; i++)
 			{
-				_bgw[i] = new BackgroundWorker();
-				_bgw[i].DoWork += worker_DoWork;
-				_bgw[i].RunWorkerCompleted += workerRunWorkerCompleted;
+				var worker = new BackgroundWorker();
+				worker.DoWork += worker_DoWork;
+				worker.RunWorkerCompleted += workerRunWorkerCompleted;
+
+				_bgw.Add(worker, new ManualResetEventSlim());
 			}
 
 			_doWork = doWork;
@@ -59,7 +60,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			lock (_lockObject)
 			{
-				foreach (BackgroundWorker worker in _bgw)
+				foreach (var worker in _bgw)
 				{
 					if (_taskQueue.Count > 0)
 					{
@@ -70,34 +71,33 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 						var task = _taskQueue.Dequeue();
 						if (task != null)
 						{
-							_busyThreads++;
-							worker.RunWorkerAsync(task);
+							worker.Key.RunWorkerAsync(task);
 						}
 					}
 				}
 			}
 
-
-			while (_busyThreads > 0)
+			foreach (var manualResetEventSlim in _bgw)
 			{
-				Thread.Sleep(500);
+				manualResetEventSlim.Value.Wait();
 			}
-
 		}
-
-		private int _busyThreads;
+		
 		private Exception _threadError;
 
 		void workerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
+			var backgroundWorker = (BackgroundWorker)sender;
 			if (ThreadError != null)
 			{
+				_bgw[backgroundWorker].Set();
 				return;
 			}
+
 			if (e.Error != null)
 			{
 				_threadError = new ScheduleTransformerException(e.Error.Message, e.Error.StackTrace);
-				_busyThreads = 0;
+				_bgw[backgroundWorker].Set();
 				return;
 			}
 			var rowsUpdated = (int)e.Result;
@@ -110,11 +110,11 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				if (_taskQueue.Count > 0)
 				{
 					var task = _taskQueue.Dequeue();
-					((BackgroundWorker)sender).RunWorkerAsync(task);
+					backgroundWorker.RunWorkerAsync(task);
 				}
 				else
 				{
-					_busyThreads--;
+					_bgw[backgroundWorker].Set();
 				}
 			}
 		}
@@ -126,6 +126,16 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			Thread.CurrentThread.CurrentCulture = taskParameters.JobParameters.CurrentCulture;
 
 			e.Result = _doWork(taskParameters);
+		}
+
+		public void Dispose()
+		{
+			foreach (var item in _bgw)
+			{
+				item.Value?.Dispose();
+				item.Key?.Dispose();
+			}
+			_bgw.Clear();
 		}
 	}
 }

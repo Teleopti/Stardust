@@ -39,8 +39,8 @@
 			</div>
 
 			<span class="datepicker-container">
-				<team-schedule-datepicker selected-date="vm.scheduleDate" status="vm.showDatePicker"
-										  on-date-change="vm.onScheduleDateChanged()"
+				<team-schedule-datepicker ng-model="vm.scheduleDate"
+										  ng-change="vm.onScheduleDateChanged()"
 										  class="inline-block"></team-schedule-datepicker>
 			</span>
 

@@ -1,12 +1,11 @@
+#Requests-body-inner {
+	height: 100%;
+}
 #Request-add-shift-trade {
 	padding: 0;
 	margin: 0;
 	background: white;
-	height: calc(100vh - 51px - 2 * 52px - 20px);
-}
-#Request-add-shift-trade.request-add-shift-trade-mobile {
-	height: calc(100vh - 51px - 20px);
-	margin-bottom: 10px;
+	height: 100%;
 }
 #Request-add-shift-trade > div:last-child {
 	height: 100%;
@@ -28,6 +27,9 @@
 .shift-trade-schedule-container {
 	padding: 5px;
 }
+.request-add-shift-trade-mobile .shift-trade-schedule-container {
+	margin-bottom: 60px;
+}
 .shift-trade-add-schedule {
 	position: relative;
 	white-space: nowrap;
@@ -35,6 +37,9 @@
 }
 
 /*Old Shift Trade*/
+#Requests-data-binding-area {
+	padding-top: 10px;
+}
 .shift-trade-my-schedule-row,
 .shift-trade-person-schedule-row {
 	height: 31px;
@@ -491,7 +496,8 @@
 	margin-top: 50px;
 	height: calc(100% - 50px);
 	max-height: calc(100% - 50px);
-	overflow-y: auto;
+	overflow-y: scroll;
+	overflow-x: hidden;
 	-webkit-overflow-scrolling: touch;
 }
 .multi-shift-trade-error-detail::-webkit-scrollbar,
@@ -691,16 +697,14 @@
 	flex: 1 1 30%;
 	background: white;
 	border-left: 1px solid rgba(0, 0, 0, 0.1);
+	height: 100%;
 }
 .multi-shift-trade-cart-container {
 	overflow-x: hidden;
 	overflow-y: scroll;
 	-webkit-overflow-scrolling: touch;
-	flex-grow: 1;
+	height: calc(100% - 240px);
 	padding-bottom: 5px;
-}
-.multi-shift-trade-cart-mobile .multi-shift-trade-cart-container {
-	height: 360px;
 }
 .multi-shift-trade-cart-wrapper {
 	display: flex;
@@ -758,6 +762,7 @@
 }
 .multi-shift-trade-cart-text {
 	text-align: center;
+	font-size: 12px;
 }
 .multi-shift-trade-cart-selection {
 	display: flex;
@@ -771,4 +776,9 @@
 }
 .add-shift-trade-request-block {
 	padding: 5px;
+	height: 240px;
+	overflow: hidden;
+}
+.cart-cancel-button {
+	border: 1px solid #cccccc;
 }

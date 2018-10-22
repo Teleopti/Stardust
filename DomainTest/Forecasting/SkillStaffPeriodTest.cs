@@ -97,13 +97,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             using (mock.Playback())
             {
                 Assert.AreEqual(0, _target.IntraIntervalDeviation);
-                Assert.AreEqual(0, _target.IntraIntervalRootMeanSquare);
 
 				_populationStatisticsCalculatedValues = new PopulationStatisticsCalculatedValues(1,2);
                 _target.SetDistributionValues(_populationStatisticsCalculatedValues, periodDistribution);
                 
                 Assert.AreNotEqual(0, _target.IntraIntervalDeviation);
-                Assert.AreNotEqual(0, _target.IntraIntervalRootMeanSquare);
             }
         }
 

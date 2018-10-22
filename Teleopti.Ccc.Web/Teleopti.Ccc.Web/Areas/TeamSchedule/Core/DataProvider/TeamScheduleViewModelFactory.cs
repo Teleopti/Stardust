@@ -189,6 +189,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				.GetPermittedPersonList(matchedPersons, date, DefinedRaptorApplicationFunctionPaths.ViewSchedules)
 				.ToList();
 		}
+
+		private List<IPerson> getPermittedPersons(Guid[] targetIds, DateOnlyPeriod period)
+		{
+			var matchedPersons = _personRepository.FindPeople(targetIds);
+			return _searchProvider
+				.GetPermittedPersonList(matchedPersons, period, DefinedRaptorApplicationFunctionPaths.ViewSchedules)
+				.ToList();
+		}
 		private GroupScheduleViewModel createViewModelForPeople(IList<Guid> targetIds, SearchDaySchedulesInput input)
 		{
 			var permittedPersons = new List<IPerson>();
@@ -292,7 +300,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var people = new List<IPerson>();
 			foreach (var batch in personIds.Batch(251))
 			{
-				var batchPermittedPersons = getPermittedPersons(batch.ToArray(), input.DateInUserTimeZone);
+				var batchPermittedPersons = getPermittedPersons(batch.ToArray(), week);
 				people.AddRange(batchPermittedPersons);
 				if (isResultTooMany(people))
 				{

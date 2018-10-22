@@ -17,9 +17,19 @@ namespace Teleopti.Ccc.Web.Core.Extensions
 			return instance.ToString(FixedDateTimeFormat);
 		}
 
+		public static string ToServiceDateTimeFormat(this DateTime instance)
+		{
+			return instance.ToString(FixedDateTimeFormat, CultureInfo.GetCultureInfo("en").DateTimeFormat);
+		}
+
 		public static string ToFixedDateFormat(this DateTime instance)
 		{
 			return instance.ToString(FixedDateFormat);
+		}
+
+		public static string ToServiceDateFormat(this DateTime instance)
+		{
+			return instance.ToString(FixedDateFormat, CultureInfo.GetCultureInfo("en").DateTimeFormat);
 		}
 
 		public static string ToLocalizedDateTimeFormatWithTSpliting(this DateTime instance)

@@ -43,8 +43,14 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static IPersonAssignment WithDayOff(this IPersonAssignment assignment)
 		{
-			assignment.SetDayOff(new DayOffTemplate());
+			return assignment.WithDayOff(new DayOffTemplate());
+		}
+		
+		public static IPersonAssignment WithDayOff(this IPersonAssignment assignment, IDayOffTemplate dayOffTemplate)
+		{
+			assignment.SetDayOff(dayOffTemplate);
 			return assignment;
 		}
+
 	}
 }

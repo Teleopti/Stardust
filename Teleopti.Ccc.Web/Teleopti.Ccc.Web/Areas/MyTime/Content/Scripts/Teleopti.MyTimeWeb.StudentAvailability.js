@@ -12,6 +12,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function($) {
 		editFormViewModel = null,
 		vm = null,
 		periodFeedbackVM = null,
+		completelyLoaded,
 		isHostAMobile = Teleopti.MyTimeWeb.Common.IsHostAMobile(),
 		isHostAniPad = Teleopti.MyTimeWeb.Common.IsHostAniPad();
 
@@ -144,7 +145,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function($) {
 			dayViewModels,
 			periodData.Date
 		);
-		periodFeedbackVM.LoadFeedback();
+		periodFeedbackVM.LoadFeedback(completelyLoaded);
 
 		var template = $('#StudentAvailability-period');
 		ko.applyBindings(periodFeedbackVM, template[0]);
@@ -294,7 +295,8 @@ Teleopti.MyTimeWeb.StudentAvailability = (function($) {
 				Teleopti.MyTimeWeb.StudentAvailability.StudentAvailabilityPartialDispose
 			);
 		},
-		StudentAvailabilityPartialInit: function() {
+		StudentAvailabilityPartialInit: function(readyForInteractionCallback, completelyLoadedCallback) {
+			completelyLoaded = completelyLoadedCallback;
 			if (!$('#StudentAvailability-body').length) {
 				return;
 			}

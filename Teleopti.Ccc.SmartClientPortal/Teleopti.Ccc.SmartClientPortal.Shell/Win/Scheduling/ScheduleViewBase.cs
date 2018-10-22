@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
@@ -964,10 +965,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             ViewPasteCompleted?.Invoke(this, EventArgs.Empty);
         }
 
-        public void ValidatePersons(IEnumerable<IPerson> listPersons)
-        {
-            Presenter.SchedulerState.Schedules.ValidateBusinessRulesOnPersons(listPersons,
-																					Presenter.SchedulerState.SchedulingResultState.GetRulesToRun());
+        public void ValidatePersons(IEnumerable<IPerson> listPersons, bool allValidators)
+		{
+			var businessRulesToRun = allValidators
+				? NewBusinessRuleCollection.All(Presenter.SchedulerState.SchedulingResultState)
+				: NewBusinessRuleCollection.MinimumAndPersonAccount(Presenter.SchedulerState.SchedulingResultState,
+					Presenter.SchedulerState.SchedulingResultState.AllPersonAccounts);
+            Presenter.SchedulerState.Schedules.ValidateBusinessRulesOnPersons(listPersons, businessRulesToRun);
         }
 
 	    public virtual void InvalidateSelectedRow(IScheduleDay schedulePart)

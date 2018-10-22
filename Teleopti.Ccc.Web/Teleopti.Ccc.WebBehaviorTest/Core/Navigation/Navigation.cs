@@ -606,9 +606,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			GoToPage("wfm/#/resourceplanner/planningperiods");
 		}
 
-		public static void GoToWfmArchiveSchedule()
+		public static void GoToWfmCopySchedule()
 		{
-			GoToPage("wfm/#/resourceplanner/archiveschedule");
+			GoToPage("wfm/#/resourceplanner/copyschedule");
 		}
 
 		public static void GoToWfmImportSchedule()

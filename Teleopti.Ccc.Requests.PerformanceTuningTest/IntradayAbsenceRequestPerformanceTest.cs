@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		public IActivityRepository ActivityRepository;
 		public IAbsencePersister AbsencePersister;
 		public AddOverTime AddOverTime;
+		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 
 		private IList<IPersonRequest> requests;
 		private DateTime _nowDateTime;
@@ -72,6 +73,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			}
 
 			var now = Now.UtcDateTime();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(1));
 			requests = new List<IPersonRequest>();
 			WithUnitOfWork.Do(() =>
@@ -100,7 +102,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		public void Run200Requests()
 		{
 			Now.Is("2016-03-16 07:01");
-
+			
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 			StardustJobFeedback.SendProgress($"Will process {requests.Count} requests");

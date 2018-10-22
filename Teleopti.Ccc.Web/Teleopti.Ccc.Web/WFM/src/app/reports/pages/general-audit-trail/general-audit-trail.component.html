@@ -1,0 +1,79 @@
+<div style="padding-bottom: 10px;" nz-row>
+    <div nz-col>
+        <h1>
+            <i class="mdi mdi-database-search"></i> Audit trail
+        </h1>
+    </div>
+</div>
+
+<form nz-form nzLayout="vertical" [formGroup]="searchForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <nz-form-label>{{'ChangedBy' | translate}}</nz-form-label>
+        <nz-form-control>
+            <nz-input-group style="width: 200px;" nzSize="medium" [nzSuffix]="suffixIcon">
+                <input placeholder="Select person" fromControlName="personPicker" nz-input (ngModelChange)="onChange($event)" [nzAutocomplete]="auto"
+                />
+            </nz-input-group>
+            <ng-template #suffixIcon>
+                <i class="anticon anticon-search"></i>
+            </ng-template>
+            <nz-autocomplete #auto>
+                <nz-auto-optgroup *ngFor="let group of optionGroups" [nzLabel]="groupTitle">
+                    <ng-template #groupTitle>
+                        <span>{{group.title}}
+                            <a class="more-link" href="https://www.google.com/search?q=ng+zorro" target="_blank">更多</a>
+                        </span>
+                    </ng-template>
+                    <nz-auto-option *ngFor="let option of group.children" [nzLabel]="option.title" [nzValue]="option">
+                        {{option.title}}
+                        <span class="certain-search-item-count">{{option.count}} 人 关注</span>
+                    </nz-auto-option>
+                </nz-auto-optgroup>
+            </nz-autocomplete>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label>{{'ChangeDateColon' | translate}}</nz-form-label>
+        <nz-form-control>
+            <nz-range-picker formControlName="changedRange" [nzFormat]="dateformat"></nz-range-picker>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-control>
+            <button nz-button nzType="primary">
+                <i class="anticon anticon-search"></i>{{'Search' | translate}}</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>
+
+<nz-table #auditTable nzSize="middle" [nzData]="auditData" nzPageSize="100" nzHideOnSinglePage>
+    <thead nzSingleSort>
+        <tr>
+            <th nzShowSort nzSortKey="ModifiedAt">Timestamp</th>
+            <th nzShowSort nzSortKey="ModifiedBy">Person</th>
+            <th nzShowSort nzSortKey="ScheduledAgent">Action</th>
+            <th>
+                <telop-table-options-menu enableCsvExport [data]="auditTable.data"></telop-table-options-menu>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-template ngFor let-data [ngForOf]="auditTable.data">
+            <tr>
+                <td nzShowExpand [(nzExpand)]="data.expand"></td>
+                <td>{{data.name}}</td>
+                <td>{{data.age}}</td>
+                <td>{{data.address}}</td>
+                <td>
+                    <a href="#">Delete</a>
+                </td>
+            </tr>
+            <tr [nzExpand]="data.expand">
+                <td></td>
+                <td colspan="4">{{data.description}}</td>
+            </tr>
+        </ng-template>
+    </tbody>
+</nz-table>

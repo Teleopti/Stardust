@@ -18,6 +18,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
@@ -56,15 +57,16 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public IWorkShiftRuleSetRepository WorkShiftRuleSetRepository;
 		public IShiftCategoryRepository ShiftCategoryRepository;
 
-		private const string tenantName = DataSourceHelper.TestTenantName;
+		private const string tenantName = "Teleopti WFM";
 		private LicenseSchema schema;
+		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 
 		[Test]
 		public void ShouldBePerformantWhenValidatingAndReferringShiftTradeRequests()
 		{
 			schema = LicenseDataFactory.CreateDefaultActiveLicenseSchemaForTest();
 			LicenseSchema.SetActiveLicenseSchema(tenantName, schema);
-
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			using (DataSource.OnThisThreadUse(tenantName))
 			{
 				var businessId = WithUnitOfWork.Get(() => BusinessUnitRepository.LoadAll().First()).Id.Value;

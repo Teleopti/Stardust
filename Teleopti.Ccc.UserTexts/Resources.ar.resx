@@ -12737,7 +12737,7 @@
   <data name="ArchiveScheduleDescription" xml:space="preserve">
     <value>أرشفة الجدول من السيناريو التلقائي إلىى السيناريو الآخر، نسخ أى جدول قديم فى السيناريو المرجو للفترة المعطاة </value>
   </data>
-  <data name="ArchivingConfirmationWithParameters" xml:space="preserve">
+  <data name="CopyingConfirmationWithParameters" xml:space="preserve">
     <value>أنت على وشك نسخ كل الجدول الموجود للسيناريو (0) فى الفترة (1) - (2) و الفرق المختارة.</value>
   </data>
   <data name="AreYouSure" xml:space="preserve">

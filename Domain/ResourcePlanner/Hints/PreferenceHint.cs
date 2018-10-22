@@ -26,9 +26,12 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 
 			foreach (var matrix in matrixes)
 			{
-				if (_restrictionOverLimitDecider.PreferencesOverLimit(new Percent(1), matrix).BrokenDays.Any())
+				if (_restrictionOverLimitDecider.PreferencesOverLimit(new Percent(1), matrix).BrokenDays.Any()&&matrix.IsFullyScheduled())
 				{
-					hintResult.Add(new PersonHintError(matrix.Person){ErrorResource = nameof(Resources.AgentScheduledWithoutPreferences)}, GetType(),ValidationResourceType.Preferences);					
+					if (!hintResult.InvalidResources.Any(x =>x.ResourceId == matrix.Person.Id && x.ValidationErrors.Any(y => y.ResourceType == ValidationResourceType.Preferences)))
+					{
+						hintResult.Add(new PersonHintError(matrix.Person){ErrorResource = nameof(Resources.AgentScheduledWithoutPreferences)}, GetType(),ValidationResourceType.Preferences);	
+					}
 				}
 			}
 		}

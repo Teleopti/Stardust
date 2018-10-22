@@ -57,14 +57,7 @@
 			if ($location.url() == $state.current.url && toState.name == 'teams') $state.go('teams.dayView');
 			if (toState.name.indexOf('teams.') === 0) {
 				FavoriteSearchDataService.setModule('wfm.teamSchedule');
-				switch (toState.name) {
-					case 'teams.weekView':
-						GroupPageService.setModule('wfm.teamSchedule.weekView');
-						break;
-					default:
-						GroupPageService.setModule('wfm.teamSchedule.dayView');
-						break;
-				}
+				GroupPageService.setModule('wfm.teamSchedule');
 			}
 			
 		});

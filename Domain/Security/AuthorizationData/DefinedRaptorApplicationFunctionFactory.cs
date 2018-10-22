@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities, "xxModifyAvailabilities", DefinedRaptorApplicationFunctionForeignIds.ModifyAvailabilities);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PublishSchedule, "xxPublishSchedule", DefinedRaptorApplicationFunctionForeignIds.PublishSchedule);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.OrganizeCascadingSkills, "xxOrganizeCascadingSkills", DefinedRaptorApplicationFunctionForeignIds.OrganizeCascadingSkills);
-			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ArchiveSchedule, "xxArchiveSchedule", DefinedRaptorApplicationFunctionForeignIds.ArchiveSchedule);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.CopySchedule, "xxCopySchedule", DefinedRaptorApplicationFunctionForeignIds.CopySchedule);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ImportSchedule, "xxImportSchedule", DefinedRaptorApplicationFunctionForeignIds.ImportSchedule);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.SaveFavoriteSearch, "xxSaveFavoriteSearch", DefinedRaptorApplicationFunctionForeignIds.SaveFavoriteSearch);
 

@@ -192,7 +192,7 @@ Layout = null;
 	<!-- ko if: isCommandEnable -->
 	<button class="close-fab-overlay" data-bind="visible: menuIsVisible() || focusingRequestForm(), click: hideMenuAndRequestForm"></button>
 	<button class="fab" data-bind="visible: menuIconIsVisible, click: showMenu" tabindex="0"></button>
-	<div class="navbar navbar-teleopti subnavbar" data-bind="css: {'menu-focusing': menuIsVisible}, visible: menuIsVisible">
+	<div class="navbar navbar-teleopti subnavbar request-menu-list" data-bind="css: {'menu-focusing': menuIsVisible}, visible: menuIsVisible">
 		<ul class="nav navbar-nav navbar-teleopti row submenu">
 			@if (Model.RequestLicense.IsOvertimeAvailabilityEnabled)
 			{

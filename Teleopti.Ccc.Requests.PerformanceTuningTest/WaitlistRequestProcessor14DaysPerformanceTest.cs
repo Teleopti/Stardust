@@ -50,18 +50,20 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		public IActivityRepository ActivityRepository;
 		public IAbsencePersister AbsencePersister;
 		public AddOverTime AddOverTime;
+		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 
 		private IList<IPersonRequest> requests;
 		private DateTime _nowDateTime;
 		private ICollection<IPerson> _personList;
 		private List<IWorkflowControlSet> _wfcs;
-
+		
 
 		public override void OneTimeSetUp()
 		{
 			_wfcs = new List<IWorkflowControlSet>();
 			_nowDateTime = new DateTime(2016, 04, 06, 6, 58, 0).Utc();
 			Now.Is(_nowDateTime);
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 

@@ -16,8 +16,8 @@
 
 		function create(groupSchedules, queryDate, maximumViewRange) {
 			var hourPoints = [];
-			
-			var baseDate = queryDate.startOf("day");
+
+			var baseDate = queryDate.clone().startOf("day");
 			if (maximumViewRange) {
 				defaultViewRange.start = maximumViewRange.startMoment.diff(baseDate, 'minute');
 				defaultViewRange.end = maximumViewRange.endMoment.diff(baseDate, 'minute');
@@ -27,7 +27,7 @@
 			var end = endMinutes(groupSchedules, baseDate);
 			var percentPerMinute = calculateLengthPercentPerMinute(start, end);
 			var timePoint = start;
-			var isLabelVisibleEvenly = percentPerMinute < 0.1;
+			var isLabelVisibleEvenly = percentPerMinute < 0.1; // it means hours less that 16.
 			var isLabelHidden = false;
 
 			while (timePoint < end + 1) {
@@ -64,7 +64,7 @@
 			var sortedProjections = availibleProjectionsTodayAndYesterday.sort(compareProjectionByStartTime);
 
 			var minStartOrMaxEndProjection = sortedProjections[0];
-			return moment(minStartOrMaxEndProjection.Start).diff(baseDate, 'minutes');
+			return minStartOrMaxEndProjection.StartMoment.diff(baseDate, 'minutes');
 		};
 
 		function getMaxEndTimeInMinute(schedules, baseDate) {
@@ -83,8 +83,7 @@
 			var sortedProjections = availibleProjections.sort(compareProjectionByEndTime);
 
 			var minStartOrMaxEndProjection = sortedProjections[0];
-			return moment(minStartOrMaxEndProjection.Start)
-				.add(minStartOrMaxEndProjection.Minutes, 'minutes')
+			return minStartOrMaxEndProjection.EndMoment
 				.diff(baseDate, 'minutes');
 		};
 
@@ -93,13 +92,13 @@
 
 			if (angular.isUndefined(start) || start >= 1440) // 1440 means 0:00 of next day, to make sure we alwayse show timelines for current day
 				return shiftHelper.MinutesForHourOfDay(8);
-										
+
 			start = start > defaultViewRange.start ? start : defaultViewRange.start;
 
 			if ((start !== defaultViewRange.start) && (start % 60 === 0)) {
 				start = shiftHelper.MinutesAddHours(start, -1);
 			}
-				
+
 			return shiftHelper.MinutesStartOfHour(start);
 		};
 
@@ -110,7 +109,7 @@
 			if (angular.isUndefined(end) || end <= 0) // 0 means 0:00 of current day, to make sure we alwayse show timelines for current day
 				return shiftHelper.MinutesForHourOfDay(16);
 
-			end = end < defaultViewRange.end ? end : defaultViewRange.end; 			
+			end = end < defaultViewRange.end ? end : defaultViewRange.end;
 
 			if (end % 60 === 0 && end !== defaultViewRange.end) {
 				end = shiftHelper.MinutesAddHours(end, 1);
@@ -120,8 +119,8 @@
 		};
 
 		function compareProjectionByStartTime(currentProjection, nextProjection) {
-			var currentProjectionStartTime = moment(currentProjection.Start);
-			var nextProjectionStartTime = moment(nextProjection.Start);
+			var currentProjectionStartTime = currentProjection.StartMoment;
+			var nextProjectionStartTime = nextProjection.StartMoment;
 
 			if (currentProjectionStartTime > nextProjectionStartTime)
 				return 1;
@@ -132,8 +131,8 @@
 		};
 
 		function compareProjectionByEndTime(currentProjection, nextProjection) {
-			var currentProjectionEndTime = moment(currentProjection.End);
-			var nextProjectionEndTime = moment(nextProjection.End);
+			var currentProjectionEndTime = currentProjection.EndMoment;
+			var nextProjectionEndTime = nextProjection.EndMoment;
 
 			if (currentProjectionEndTime > nextProjectionEndTime)
 				return -1;
@@ -149,12 +148,10 @@
 		};
 
 		function hourPointViewModel(baseDate, minutes, start, percentPerMinute, isLabelHidden) {
-			var time = ((angular.isUndefined(baseDate))
-				? moment()
-				: moment(baseDate)).startOf('day').add(minutes, 'minutes');
+			var time = baseDate.clone().startOf('day').add(minutes, 'minutes');
 
-			var isCurrentDay = minutes >=0 && minutes < 1440; 
-			var isNextDay = minutes >= 1440; 
+			var isCurrentDay = minutes >= 0 && minutes < 1440;
+			var isNextDay = minutes >= 1440;
 
 			var formattedTime = isCurrentDay ? time.format('LT') : (isNextDay ? time.format('LT') + " +1" : time.format('LT') + " -1");
 

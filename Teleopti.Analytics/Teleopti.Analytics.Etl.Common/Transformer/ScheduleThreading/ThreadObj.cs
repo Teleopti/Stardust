@@ -15,9 +15,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 			ScheduleDataRowFactory = new ScheduleDataRowCollectionFactory();
 		}
 
-		public IList<ScheduleProjection> ScheduleProjectionServiceList { private set; get; }
-		public DateTime InsertDateTime { private set; get; }
-		public IJobParameters JobParameters { private set; get; }
+		public IList<ScheduleProjection> ScheduleProjectionServiceList { get; }
+		public DateTime InsertDateTime { get; }
+		public IJobParameters JobParameters { get; }
 		public ScheduleDataRowCollectionFactory ScheduleDataRowFactory { set; get; }
 		public DataTable ScheduleTable { get; set; }
 	}

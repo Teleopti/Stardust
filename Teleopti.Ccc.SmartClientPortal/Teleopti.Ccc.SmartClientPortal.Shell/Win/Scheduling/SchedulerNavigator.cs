@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				enableOrganizeCascadingSkills();
 
 				toolStripSeparator1.Visible = false;
-				enableArchiveSchedule();
+				enableCopySchedule();
 				enableImportSchedule();
 
 				SetTexts();
@@ -384,17 +384,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				Process.Start(url);
 		}
 
-		private void enableArchiveSchedule()
+		private void enableCopySchedule()
 		{
-			var permitted = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ArchiveSchedule);
-			toolStripButtonArchiveSchedule.Visible = permitted;
-			if (toolStripButtonArchiveSchedule.Visible)
+			var permitted = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.CopySchedule);
+			toolStripButtonCopySchedule.Visible = permitted;
+			if (toolStripButtonCopySchedule.Visible)
 				toolStripSeparator1.Visible = true;
 		}
 
-		private void toolStripButtonArchiveScheduleClick(object sender, EventArgs e)
+		private void toolStripButtonCopyScheduleClick(object sender, EventArgs e)
 		{
-			openResourcePlannerInWfm("archiveschedule");
+			openResourcePlannerInWfm("copyschedule");
 		}
 
 		private void enableImportSchedule()

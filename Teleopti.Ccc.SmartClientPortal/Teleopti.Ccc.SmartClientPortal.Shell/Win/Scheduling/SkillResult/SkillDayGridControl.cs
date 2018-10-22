@@ -196,13 +196,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 					&& !skill.IsVirtual )
 				{
 					gridRow = new SkillDayGridIntervalIssues(_rowManager, "ReadOnlyPercentCell", "HighestDeviationInPeriod", Resources.LowestIntraIntervalBalance);
+					gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
+					GridRows.Add(_rowManager.AddRow(gridRow));
 				}
-				else
-				{
-					gridRow = new SkillDayGridRow(_rowManager, "NumericReadOnlyCell", "HighestDeviationInPeriod", Resources.HighestStdev);
-				}
-				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
-				GridRows.Add(_rowManager.AddRow(gridRow));
 
 				gridRow = new SkillDayGridRow(_rowManager, "ReadOnlyPercentCell", "EstimatedServiceLevelShrinkage", UserTexts.Resources.ESL);
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);

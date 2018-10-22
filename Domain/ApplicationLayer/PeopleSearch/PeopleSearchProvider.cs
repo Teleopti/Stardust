@@ -59,11 +59,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 		}
 
 
-		public List<Guid> FindPersonIdsInPeriodWithDynamicGroup(DateOnlyPeriod period,Guid groupPageId, string[] dynamicValues, IDictionary<PersonFinderField, string> searchCriteria)
+		public List<Guid> FindPersonIdsInPeriodWithDynamicGroup(DateOnlyPeriod period, Guid groupPageId, string[] dynamicValues, IDictionary<PersonFinderField, string> searchCriteria)
 		{
-			return _searchRepository.FindPersonIdsInDynamicOptionalGroupPages(period,groupPageId, dynamicValues, searchCriteria);
+			return _searchRepository.FindPersonIdsInDynamicOptionalGroupPages(period, groupPageId, dynamicValues, searchCriteria);
 		}
-		
+
 		public IEnumerable<IPerson> SearchPermittedPeople(PersonFinderSearchCriteria searchCriteria,
 			DateOnly dateInUserTimeZone, string function)
 		{
@@ -89,19 +89,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 		public IEnumerable<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people, DateOnly currentDate,
 			string function)
 		{
+			return people.Where(p => checkIfPersonHasOrganisationDetailPermission(function, p, currentDate));
+		}
+
+		public IEnumerable<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people, DateOnlyPeriod period,
+			string function)
+		{
+			return people.Where(p => period.DayCollection().Any(date => checkIfPersonHasOrganisationDetailPermission(function, p, date)));
+		}
+
+		private bool checkIfPersonHasOrganisationDetailPermission(string function, IPerson p, DateOnly date)
+		{
 			var businessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault();
-			return
-				people.Where(p =>
-				{
-					var myTeam = p.MyTeam(currentDate);
-					return _permissionProvider.HasOrganisationDetailPermission(function, currentDate, new PersonFinderDisplayRow
-					{
-						PersonId = p.Id.GetValueOrDefault(),
-						TeamId = myTeam?.Id,
-						SiteId = myTeam?.Site.Id,
-						BusinessUnitId = businessUnitId
-					});
-				});
+			var myTeam = p.MyTeam(date);
+			return _permissionProvider.HasOrganisationDetailPermission(function, date, new PersonFinderDisplayRow
+			{
+				PersonId = p.Id.GetValueOrDefault(),
+				TeamId = myTeam?.Id,
+				SiteId = myTeam?.Site.Id,
+				BusinessUnitId = businessUnitId
+			});
 		}
 
 		public PersonFinderSearchCriteria CreatePersonFinderSearchCriteria(IDictionary<PersonFinderField, string> criteriaDictionary,
@@ -115,10 +122,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 			return search;
 		}
 
+
 		public void PopulateSearchCriteriaResult(PersonFinderSearchCriteria search)
 		{
 			_searchRepository.Find(search);
 		}
+
+
 
 		private IEnumerable<Guid> getPermittedPersonIdList(IDictionary<PersonFinderField, string> criteriaDictionary,
 			int pageSize, int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns, string function)

@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		public ISkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public ScheduledStaffingViewModelCreator StaffingViewModelCreator;
 		public ISkillRepository SkillRepository;
+		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 
 		private IEnumerable<ISkill> skills;
 
@@ -43,6 +44,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			var now = Now.UtcDateTime();
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(4));
 			var deltas = new List<SkillCombinationResource>();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			WithUnitOfWork.Do((uow) =>
 			{
 

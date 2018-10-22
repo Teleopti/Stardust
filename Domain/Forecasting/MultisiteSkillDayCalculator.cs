@@ -82,17 +82,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
             {
                 if (_multisiteSkill.ChildSkills.Contains(childSkill))
                 {
-                    IDictionary<DateTime, ISkillStaffPeriod> foundSkillStaffPeriods;
-                    if (!_childSkillStaffPeriods.TryGetValue(childSkill, out foundSkillStaffPeriods))
-                    {
-                        foundSkillStaffPeriods = new Dictionary<DateTime, ISkillStaffPeriod>();
-                        foreach (
-                            var skillStaffPeriod in
-                                _childSkillDays[childSkill].SelectMany(
-                                    currentSkillDay => currentSkillDay.CompleteSkillStaffPeriodCollection))
-                        {
-                            foundSkillStaffPeriods.Add(skillStaffPeriod.Period.StartDateTime, skillStaffPeriod);
-                        }
+					if (!_childSkillStaffPeriods.TryGetValue(childSkill, out var foundSkillStaffPeriods))
+					{
+						foundSkillStaffPeriods = _childSkillDays[childSkill].SelectMany(
+								currentSkillDay => currentSkillDay.CompleteSkillStaffPeriodCollection)
+							.ToDictionary(skillStaffPeriod => skillStaffPeriod.Period.StartDateTime);
                         _childSkillStaffPeriods.Add(childSkill, foundSkillStaffPeriods);
                     }
 
@@ -169,8 +163,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                          childIndex < childSkillDay.CompleteSkillStaffPeriodCollection.Length;
                          childIndex++)
                     {
-                        StaffingResource staffingResource;
-                        if (!calculatedResources.TryGetValue(childIndex, out staffingResource))
+						if (!calculatedResources.TryGetValue(childIndex, out var staffingResource))
                         {
                             staffingResource = new StaffingResource();
                             calculatedResources.Add(childIndex, staffingResource);
@@ -184,8 +177,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 }
                 for (var i = 0; i < calculatedResources.Count; i++)
                 {
-                    StaffingResource staffingResource;
-                    if (!calculatedResources.TryGetValue(i, out staffingResource)) continue;
+					if (!calculatedResources.TryGetValue(i, out var staffingResource)) continue;
                     skillDay.CompleteSkillStaffPeriodCollection[i].SetCalculatedResource65(
                         staffingResource.CalculatedResource);
                     skillDay.CompleteSkillStaffPeriodCollection[i].Payload.CalculatedLoggedOn =

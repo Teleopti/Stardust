@@ -1,12 +1,12 @@
-﻿if (typeof (Teleopti) === 'undefined') {
+﻿if (typeof Teleopti === 'undefined') {
 	Teleopti = {};
 
-	if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
+	if (typeof Teleopti.MyTimeWeb === 'undefined') {
 		Teleopti.MyTimeWeb = {};
 	}
 }
 
-Teleopti.MyTimeWeb.Portal = (function ($) {
+Teleopti.MyTimeWeb.Portal = (function($) {
 	var _settings = {};
 	var _partialViewInitCallback = {};
 	var _partialViewDisposeCallback = {};
@@ -26,56 +26,58 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	//disable navigation controls on ajax-begin
 	function _disablePortalControls() {
-		$('#Team-Picker').select2("enable", false);
+		$('#Team-Picker').select2('enable', false);
 		$('#body-inner').hide();
 	}
 
 	function _attachAjaxEvents() {
-		$('#loading').hide();  // hide it initially
+		$('#loading').hide(); // hide it initially
 
-		$(document).ajaxStart(function () {
+		$(document).ajaxStart(function() {
 			var bodyInner = $('#body-inner');
 			$('#loading')
 				.css({
-					'width': $(bodyInner).width(),
-					'height': $(bodyInner).height() + 10
+					width: $(bodyInner).width(),
+					height: $(bodyInner).height() + 10
 				})
 				.show();
-			$('img', $('#loading')[0])
-				.css({
-					'top': 50 + $(window).scrollTop()
-				});
+			$('img', $('#loading')[0]).css({
+				top: 50 + $(window).scrollTop()
+			});
 		});
-		$(document).ajaxStop(function () {
+		$(document).ajaxStop(function() {
 			$('#loading').hide();
 		});
 	}
 
 	function _showDayScheduleForStartPage() {
-		return Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_DayScheduleForStartPage_43446");
+		return Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_DayScheduleForStartPage_43446');
 	}
 
 	function _initNavigation(awindow) {
-		$('#innerNavBar a[data-mytime-action]')
-			.click(function (e) {
-				e.preventDefault();
-				_navigateTo($(this).data('mytime-action'));
-			});
+		$('#innerNavBar a[data-mytime-action]').click(function(e) {
+			e.preventDefault();
+			_navigateTo($(this).data('mytime-action'));
+		});
 
 		if (awindow.location.hash.length <= 1) {
 			var isMobile = _isMobile(awindow);
 			if (_showDayScheduleForStartPage() && isMobile) {
-				awindow.location.replace("#Schedule/MobileDay");
+				awindow.location.replace('#Schedule/MobileDay');
 			} else {
-				awindow.location.replace("#" + (isMobile ? "Schedule/MobileWeek" : _settings.defaultNavigation));
+				awindow.location.replace('#' + (isMobile ? 'Schedule/MobileWeek' : _settings.defaultNavigation));
 			}
 		}
 
 		var asmWindow;
-		$('#asm-link').click(function (ev) {
-			$(".dropdown#user-settings").removeClass("open");
+		$('#asm-link').click(function(ev) {
+			$('.dropdown#user-settings').removeClass('open');
 
-			asmWindow = window.open(_settings.baseUrl + 'Asm', 'AsmWindow', 'width=435,height=100;channelmode=1,directories=0,left=0,location=0,menubar=0,resizable=1,scrollbars=0,status=0,titlebar=0,toolbar=0,top=0');
+			asmWindow = window.open(
+				_settings.baseUrl + 'Asm',
+				'AsmWindow',
+				'width=435,height=100;channelmode=1,directories=0,left=0,location=0,menubar=0,resizable=1,scrollbars=0,status=0,titlebar=0,toolbar=0,top=0'
+			);
 
 			if (asmWindow.focus) {
 				asmWindow.focus();
@@ -89,7 +91,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 			return false;
 		});
-		$('#signout').click(function () {
+		$('#signout').click(function() {
 			if (asmWindow != undefined && !asmWindow.closed) {
 				asmWindow.close();
 			}
@@ -100,25 +102,29 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		var viewRegex = '[a-z]+';
 		var actionRegex = '[a-z]+';
 		var dateRegex = '\\d{8}';
-		var intOptionRegex = "\\d{1}";
+		var intOptionRegex = '\\d{1}';
 		var yearsRegex = '\\d{4}';
 		var monthRegex = '\\d{2}';
 		var dayRegex = '\\d{2}';
 
-		crossroads.addRoute(new RegExp('^(MyReport)/(' + actionRegex + ')/(' + yearsRegex + ')/(' + monthRegex + ')/(' + dayRegex + ')$', 'i'),
-			function (view, action, year, month, day) {
+		crossroads.addRoute(
+			new RegExp(
+				'^(MyReport)/(' + actionRegex + ')/(' + yearsRegex + ')/(' + monthRegex + ')/(' + dayRegex + ')$',
+				'i'
+			),
+			function(view, action, year, month, day) {
 				var viewAction = view + '/' + action;
 				var hashInfo = _parseHash('#' + viewAction);
 				if (viewAction == currentViewId) {
 					var parsedDate = new Date(year, month - 1, day);
 					var actionUpperCase = action.toUpperCase();
-					if (actionUpperCase === "INDEX") {
+					if (actionUpperCase === 'INDEX') {
 						Teleopti.MyTimeWeb.MyReport.ForDay(moment(parsedDate));
 					}
-					if (actionUpperCase === "ADHERENCE") {
+					if (actionUpperCase === 'ADHERENCE') {
 						Teleopti.MyTimeWeb.MyAdherence.ForDay(moment(parsedDate));
 					}
-					if (actionUpperCase === "QUEUEMETRICS") {
+					if (actionUpperCase === 'QUEUEMETRICS') {
 						Teleopti.MyTimeWeb.MyQueueMetrics.ForDay(moment(parsedDate));
 					}
 					return;
@@ -126,10 +132,12 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 				_invokeDisposeCallback(currentViewId);
 				_adjustTabs(hashInfo);
 				_loadContent(hashInfo);
-			});
+			}
+		);
 
-		crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(ShiftTrade)/(' + dateRegex + ')$', 'i'),
-			function (view, action, secondAction, date) {
+		crossroads.addRoute(
+			new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(ShiftTrade)/(' + dateRegex + ')$', 'i'),
+			function(view, action, secondAction, date) {
 				var hashInfo = _parseHash('#' + view + '/' + action);
 
 				var parsedDate;
@@ -141,14 +149,18 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 				}
 				_invokeDisposeCallback(currentViewId);
 				_adjustTabs(hashInfo);
-				_loadContent(hashInfo,
-					function () {
-						Teleopti.MyTimeWeb.Request.ShiftTradeRequest(parsedDate);
-					});
-			});
+				_loadContent(hashInfo, function() {
+					Teleopti.MyTimeWeb.Request.ShiftTradeRequest(parsedDate);
+				});
+			}
+		);
 
-		crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(ShiftTradeBulletinBoard)/(' + dateRegex + ')$', 'i'),
-			function (view, action, secondAction, date) {
+		crossroads.addRoute(
+			new RegExp(
+				'^(' + viewRegex + ')/(' + actionRegex + ')/(ShiftTradeBulletinBoard)/(' + dateRegex + ')$',
+				'i'
+			),
+			function(view, action, secondAction, date) {
 				var hashInfo = _parseHash('#' + view + '/' + action);
 
 				var parsedDate;
@@ -160,14 +172,15 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 				}
 				_invokeDisposeCallback(currentViewId);
 				_adjustTabs(hashInfo);
-				_loadContent(hashInfo,
-					function () {
-						Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardRequest(parsedDate);
-					});
-			});
+				_loadContent(hashInfo, function() {
+					Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardRequest(parsedDate);
+				});
+			}
+		);
 
-		crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(PostShiftForTrade)/(' + dateRegex + ')$', 'i'),
-			function (view, action, secondAction, date) {
+		crossroads.addRoute(
+			new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(PostShiftForTrade)/(' + dateRegex + ')$', 'i'),
+			function(view, action, secondAction, date) {
 				var hashInfo = _parseHash('#' + view + '/' + action);
 
 				var parsedDate;
@@ -179,49 +192,68 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 				}
 				_invokeDisposeCallback(currentViewId);
 				_adjustTabs(hashInfo);
-				_loadContent(hashInfo,
-					function () {
-						Teleopti.MyTimeWeb.Request.PostShiftForTradeRequest(parsedDate);
-					});
-			});
+				_loadContent(hashInfo, function() {
+					Teleopti.MyTimeWeb.Request.PostShiftForTradeRequest(parsedDate);
+				});
+			}
+		);
 
-		crossroads.addRoute(new RegExp("^(" + viewRegex + ")/(" + actionRegex + ")/(" + yearsRegex + ")/(" + monthRegex
-			+ ")/(" + dayRegex + ")/Probability/(" + intOptionRegex + ")$", "i"),
-			function (view, action, year, month, day, probability) {
-				var hashInfo = _parseHash("#" + view + "/" + action);
-				_invokeDisposeCallback(currentViewId);
-				_adjustTabs(hashInfo);
-				_loadContent(hashInfo);
-			});
-
-		crossroads.addRoute(new RegExp("^(" + viewRegex + ")/(" + actionRegex + ")/Probability/(" + intOptionRegex + ")$", "i"),
-			function (view, action, probability) {
-				var hashInfo = _parseHash("#" + view + "/" + action);
-				_invokeDisposeCallback(currentViewId);
-				_adjustTabs(hashInfo);
-				_loadContent(hashInfo);
-			});
-
-		crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(' + actionRegex + ')/(' + dateRegex + ')$', 'i'),
-			function (view, action, secondAction, date) {
+		crossroads.addRoute(
+			new RegExp(
+				'^(' +
+					viewRegex +
+					')/(' +
+					actionRegex +
+					')/(' +
+					yearsRegex +
+					')/(' +
+					monthRegex +
+					')/(' +
+					dayRegex +
+					')/Probability/(' +
+					intOptionRegex +
+					')$',
+				'i'
+			),
+			function(view, action, year, month, day, probability) {
 				var hashInfo = _parseHash('#' + view + '/' + action);
 				_invokeDisposeCallback(currentViewId);
 				_adjustTabs(hashInfo);
 				_loadContent(hashInfo);
-			});
+			}
+		);
 
-		crossroads.addRoute(new RegExp('^(.*)$', 'i'),
-			function (hash) {
-				var hashInfo = _parseHash('#' + hash);
+		crossroads.addRoute(
+			new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/Probability/(' + intOptionRegex + ')$', 'i'),
+			function(view, action, probability) {
+				var hashInfo = _parseHash('#' + view + '/' + action);
 				_invokeDisposeCallback(currentViewId);
 				_adjustTabs(hashInfo);
 				_loadContent(hashInfo);
-			});
+			}
+		);
+
+		crossroads.addRoute(
+			new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(' + actionRegex + ')/(' + dateRegex + ')$', 'i'),
+			function(view, action, secondAction, date) {
+				var hashInfo = _parseHash('#' + view + '/' + action);
+				_invokeDisposeCallback(currentViewId);
+				_adjustTabs(hashInfo);
+				_loadContent(hashInfo);
+			}
+		);
+
+		crossroads.addRoute(new RegExp('^(.*)$', 'i'), function(hash) {
+			var hashInfo = _parseHash('#' + hash);
+			_invokeDisposeCallback(currentViewId);
+			_adjustTabs(hashInfo);
+			_loadContent(hashInfo);
+		});
 	}
 
 	function _initializeHasher() {
 		hasher.prependHash = '';
-		var parseHash = function (newHash, oldHash) {
+		var parseHash = function(newHash, oldHash) {
 			crossroads.parse(newHash);
 		};
 		hasher.initialized.add(parseHash);
@@ -238,7 +270,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			hash += date;
 		}
 		if (id) {
-			hash += "/" + id;
+			hash += '/' + id;
 		}
 		hasher.setHash(hash);
 	}
@@ -249,32 +281,43 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	function _isMobile(mywindow) {
 		var ua = mywindow.navigator.userAgent;
-		if (ua.match(/Android/i) && ua.match(/Mobile/i) || ua.match(/webOS/i) || ua.match(/iPhone/i) || ua.match(/iPod/i)) {
+		if (
+			(ua.match(/Android/i) && ua.match(/Mobile/i)) ||
+			ua.match(/webOS/i) ||
+			ua.match(/iPhone/i) ||
+			ua.match(/iPod/i)
+		) {
 			return true;
 		}
 		return false;
 	}
 
 	function _parseHash(hash) {
-		var isWeekSchedule = hash.indexOf("#Schedule") >= 0;
+		var isWeekSchedule = hash.indexOf('#Schedule') >= 0;
 
-		if (_endsWith(hash, "Tab")) {
-			var suffix = (hash.indexOf("#Schedule") === 0) ? (_isMobile(window) ? (_showDayScheduleForStartPage() ? "/MobileDay" : "/MobileWeek") : "/Week") : "/Index";
+		if (_endsWith(hash, 'Tab')) {
+			var suffix =
+				hash.indexOf('#Schedule') === 0
+					? _isMobile(window)
+						? _showDayScheduleForStartPage()
+							? '/MobileDay'
+							: '/MobileWeek'
+						: '/Week'
+					: '/Index';
 			hash = hash.substring(0, hash.length - 'Tab'.length) + suffix;
 		}
-
 
 		if (hash.length > 0) {
 			hash = hash.substring(1);
 		}
 
 		var parts = $.merge(hash.split('/'), [null, null, null, null, null, null, null, null]);
-		parts.length = 8;// why set length to 8?
+		parts.length = 8; // why set length to 8?
 
 		var probability = undefined;
 		if (isWeekSchedule) {
-			parts.forEach(function (p, i, arr) {
-				if (p === "Probability" && arr[i + 1]) {
+			parts.forEach(function(p, i, arr) {
+				if (p === 'Probability' && arr[i + 1]) {
 					probability = parseInt(arr[i + 1]);
 				}
 			});
@@ -282,12 +325,11 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 		var controller = parts[0];
 		var action = parts[1];
-		var actionHash = controller + "/" + action;
+		var actionHash = controller + '/' + action;
 
-		var dateHash = "";
+		var dateHash = '';
 		var dateMatch = hash.match(/\d{4}\/\d{2}\/\d{2}/);
-		if (dateMatch)
-			dateHash = dateMatch[0];
+		if (dateMatch) dateHash = dateMatch[0];
 		return {
 			hash: hash,
 			parts: parts,
@@ -306,10 +348,12 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	function _adjustTabs(hashInfo) {
 		var tabHref = '#' + hashInfo.controller + 'Tab';
 		$('#bs-example-navbar-collapse-1 .nav li').removeClass('active');
-		$('a[href="' + tabHref + '"]').parent().addClass('active');
+		$('a[href="' + tabHref + '"]')
+			.parent()
+			.addClass('active');
 
 		// hide off canvas menu when it has been clicked
-		var offCanvasMenu = $(".navbar-offcanvas");
+		var offCanvasMenu = $('.navbar-offcanvas');
 		if (offCanvasMenu.hasClass('in')) {
 			offCanvasMenu.offcanvas('hide');
 		}
@@ -340,19 +384,15 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _invokeDisposeCallback(viewId) {
-		if (viewId != null)
-			viewId = viewId.toUpperCase();
+		if (viewId != null) viewId = viewId.toUpperCase();
 		var partialDispose = _partialViewDisposeCallback[viewId];
-		if ($.isFunction(partialDispose))
-			partialDispose();
+		if ($.isFunction(partialDispose)) partialDispose();
 	}
 
 	function _invokeInitCallback(viewId, secondAction) {
-		if (viewId != null)
-			viewId = viewId.toUpperCase();
+		if (viewId != null) viewId = viewId.toUpperCase();
 		var partialInit = _partialViewInitCallback[viewId];
-		if ($.isFunction(partialInit))
-			partialInit(_readyForInteraction, _completelyLoaded);
+		if ($.isFunction(partialInit)) partialInit(_readyForInteraction, _completelyLoaded);
 		Teleopti.MyTimeWeb.Common.PartialInit();
 		if ($.isFunction(secondAction)) {
 			secondAction();
@@ -360,16 +400,53 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _readyForInteraction() {
-		Teleopti.MyTimeWeb.Test.TestMessage("Ready for interaction");
+		Teleopti.MyTimeWeb.Test.TestMessage('Ready for interaction');
 	}
 
 	function _completelyLoaded() {
-		Teleopti.MyTimeWeb.Test.TestMessage("Completely loaded");
+		$(document).ready(function() {
+			var topMenuBarHeight = '51px'; //#innerNavBar
+			var pageBodyMarginTop = '10px';
+			setTimeout(function() {
+				$('.pagebody').css({
+					height:
+						'calc(100vh - ' +
+						topMenuBarHeight +
+						' - ' +
+						pageBodyMarginTop +
+						' - ' +
+						$('.pagebody')
+							.prev()
+							.height() +
+						'px)'
+				});
+
+				$(window).resize(function() {
+					$('.pagebody').css({
+						height:
+							'calc(100vh - ' +
+							topMenuBarHeight +
+							' - ' +
+							pageBodyMarginTop +
+							' - ' +
+							$('.pagebody')
+								.prev()
+								.height() +
+							'px)'
+					});
+				});
+			}, 50);
+		});
+
+		Teleopti.MyTimeWeb.Test.TestMessage('Completely loaded');
 	}
 
 	function _setUpLogoHref(mywindow) {
-		$(document).ready(function () {
-			if (Teleopti.MyTimeWeb.Portal.IsMobile(mywindow) && Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_DayScheduleForStartPage_43446')) {
+		$(document).ready(function() {
+			if (
+				Teleopti.MyTimeWeb.Portal.IsMobile(mywindow) &&
+				Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
+			) {
 				var brand = $('a.navbar-brand');
 				brand.attr({ href: '#Schedule/MobileDay' });
 
@@ -382,7 +459,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	return {
-		Init: function (settings, thewindow, ajax) {
+		Init: function(settings, thewindow, ajax) {
 			_ajax = ajax ? ajax : new Teleopti.MyTimeWeb.Ajax();
 			Teleopti.MyTimeWeb.AjaxSettings = settings;
 			Teleopti.MyTimeWeb.Common.Init(settings, _ajax);
@@ -396,36 +473,35 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			_setUpLogoHref(thewindow);
 		},
 
-		NavigateTo: function (action, date, id) {
+		NavigateTo: function(action, date, id) {
 			_navigateTo(action, date, id);
 		},
-		ResetParsedHash: function () {
+		ResetParsedHash: function() {
 			_resetParsedHash();
 		},
-		ParseHash: function (locationObj) {
+		ParseHash: function(locationObj) {
 			var location = locationObj || window.location;
 			return _parseHash(location.hash);
 		},
-		RegisterPartialCallBack: function (viewId, callBack, disposeCallback) {
+		RegisterPartialCallBack: function(viewId, callBack, disposeCallback) {
 			_registerPartialCallback(viewId, callBack, disposeCallback);
 		},
-		CurrentFixedDate: function () {
+		CurrentFixedDate: function() {
 			return currentFixedDate;
 		},
-		InitPeriodSelection: function (rangeSelectorId, periodData, actionSuffix) {
-		},
-		IsMobile: function (mywindow) { 
+		InitPeriodSelection: function(rangeSelectorId, periodData, actionSuffix) {},
+		IsMobile: function(mywindow) {
 			mywindow = mywindow || window;
-			return _isMobile(mywindow); 
+			return _isMobile(mywindow);
 		}
 	};
 })(jQuery);
 
-Teleopti.MyTimeWeb.Portal.Layout = (function ($) {
+Teleopti.MyTimeWeb.Portal.Layout = (function($) {
 	return {
-		ActivateHorizontalScroll: function () {
-			$(window).scroll(function () {
-				$('header').css("left", -$(window).scrollLeft() + "px");
+		ActivateHorizontalScroll: function() {
+			$(window).scroll(function() {
+				$('header').css('left', -$(window).scrollLeft() + 'px');
 			});
 		}
 	};

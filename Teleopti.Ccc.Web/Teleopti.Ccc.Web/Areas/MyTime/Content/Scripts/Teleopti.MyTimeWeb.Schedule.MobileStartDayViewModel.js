@@ -136,7 +136,7 @@
 				true,
 				null,
 				undefined,
-				true
+				false
 			);
 			layer.isLastLayer = index == rawPeriods.length - 1;
 			return layer;

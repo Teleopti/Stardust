@@ -808,11 +808,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToBpoExchange();
 		}
 
-		[When(@"I am viewing archive schedule page")]
-		public void GivenIViewArchiveSchedule()
+		[When(@"I am viewing copy schedule page")]
+		public void GivenIViewCopySchedule()
 		{
 			TestControllerMethods.Logon();
-			Navigation.GoToWfmArchiveSchedule();
+			Navigation.GoToWfmCopySchedule();
 		}
 
 		[When(@"I am viewing import schedule page")]

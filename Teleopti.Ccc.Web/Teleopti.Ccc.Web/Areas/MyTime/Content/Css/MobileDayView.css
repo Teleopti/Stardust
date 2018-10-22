@@ -8,6 +8,9 @@
 	justify-content: space-between;
 	align-items: center;
 }
+.mobile-start-day .request-menu-list {
+	padding: 0;
+}
 .mobile-start-day .mobile-start-day-nav span.input-group-btn .btn.btn-default {
 	padding: 9px 10px;
 }

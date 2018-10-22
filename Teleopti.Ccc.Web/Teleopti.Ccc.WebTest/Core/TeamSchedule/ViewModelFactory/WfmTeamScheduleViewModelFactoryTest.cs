@@ -102,6 +102,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			meetingActivity.Description.Should().Be.EqualTo("test meeting");
 			meetingActivity.Start.Should().Be.EqualTo("2018-04-03 10:00");
 			meetingActivity.End.Should().Be.EqualTo("2018-04-03 11:00");
+			meetingActivity.StartInUtc.Should().Be.EqualTo("2018-04-03 10:00");
+			meetingActivity.EndInUtc.Should().Be.EqualTo("2018-04-03 11:00");
 		}
 
 		[Test, SetCulture("zh-CN")]
@@ -133,6 +135,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			personalActivity.Description.Should().Be.EqualTo("activity");
 			personalActivity.Start.Should().Be.EqualTo("2018-04-03 10:00");
 			personalActivity.End.Should().Be.EqualTo("2018-04-03 11:00");
+			personalActivity.StartInUtc.Should().Be.EqualTo("2018-04-03 10:00");
+			personalActivity.EndInUtc.Should().Be.EqualTo("2018-04-03 11:00");
 		}
 
 
@@ -167,6 +171,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			personalAbsence.Description.Should().Be.EqualTo("absence");
 			personalAbsence.Start.Should().Be.EqualTo("2018-04-03 10:00");
 			personalAbsence.End.Should().Be.EqualTo("2018-04-03 11:00");
+			personalAbsence.StartInUtc.Should().Be.EqualTo("2018-04-03 10:00");
+			personalAbsence.EndInUtc.Should().Be.EqualTo("2018-04-03 11:00");
 		}
 
 		[Test, SetCulture("zh-CN")]
@@ -200,6 +206,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			personalAbsence.Description.Should().Be.EqualTo("absence");
 			personalAbsence.Start.Should().Be.EqualTo("2018-04-03 06:00");
 			personalAbsence.End.Should().Be.EqualTo("2018-04-03 07:00");
+			personalAbsence.StartInUtc.Should().Be.EqualTo("2018-04-03 06:00");
+			personalAbsence.EndInUtc.Should().Be.EqualTo("2018-04-03 07:00");
 		}
 
 		[Test, SetCulture("zh-CN")]
@@ -310,6 +318,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			partTimeAbsence.Description.Should().Be.EqualTo("absence");
 			partTimeAbsence.Start.Should().Be.EqualTo("2018-07-23 08:00");
 			partTimeAbsence.End.Should().Be.EqualTo("2018-07-24 10:00");
+			partTimeAbsence.StartInUtc.Should().Be.EqualTo("2018-07-23 08:00");
+			partTimeAbsence.EndInUtc.Should().Be.EqualTo("2018-07-24 10:00");
 		}
 
 		[Test, SetCulture("zh-CN")]
@@ -346,6 +356,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			partTimeAbsence.Description.Should().Be.EqualTo("absence");
 			partTimeAbsence.Start.Should().Be.EqualTo("2018-07-24 15:00");
 			partTimeAbsence.End.Should().Be.EqualTo("2018-07-24 17:00");
+			partTimeAbsence.StartInUtc.Should().Be.EqualTo("2018-07-24 15:00");
+			partTimeAbsence.EndInUtc.Should().Be.EqualTo("2018-07-24 17:00");
 		}
 
 
@@ -435,6 +447,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			personalAbsence.Description.Should().Be.EqualTo(ConfidentialPayloadValues.Description.Name);
 			personalAbsence.Start.Should().Be.EqualTo("2018-04-03 10:00");
 			personalAbsence.End.Should().Be.EqualTo("2018-04-03 11:00");
+			personalAbsence.StartInUtc.Should().Be.EqualTo("2018-04-03 10:00");
+			personalAbsence.EndInUtc.Should().Be.EqualTo("2018-04-03 11:00");
 		}
 
 		[Test]
@@ -909,10 +923,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			projectionVm[0].Description.Should().Be.EqualTo("activity1");
 			projectionVm[0].Start.Should().Be.EqualTo("2020-01-01 08:00");
+			projectionVm[0].End.Should().Be.EqualTo("2020-01-01 09:00");
+			projectionVm[0].StartInUtc.Should().Be.EqualTo("2020-01-01 08:00");
+			projectionVm[0].EndInUtc.Should().Be.EqualTo("2020-01-01 09:00");
 			projectionVm[0].Minutes.Should().Be.EqualTo(60);
 
 			projectionVm[1].Description.Should().Be.EqualTo("activity2");
 			projectionVm[1].Start.Should().Be.EqualTo("2020-01-01 09:00");
+			projectionVm[1].End.Should().Be.EqualTo("2020-01-01 11:00");
+			projectionVm[1].StartInUtc.Should().Be.EqualTo("2020-01-01 09:00");
+			projectionVm[1].EndInUtc.Should().Be.EqualTo("2020-01-01 11:00");
 			projectionVm[1].Minutes.Should().Be.EqualTo(120);
 		}
 
@@ -1070,6 +1090,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			schedule.DayOff.DayOffName.Should().Be.EqualTo("DayOff");
 			schedule.DayOff.Start.Should().Be.EqualTo("2020-01-01 00:00");
+			schedule.DayOff.StartInUtc.Should().Be.EqualTo("2020-01-01 00:00");
+			schedule.DayOff.End.Should().Be.EqualTo("2020-01-02 00:00");
+			schedule.DayOff.EndInUtc.Should().Be.EqualTo("2020-01-02 00:00");
 			schedule.DayOff.Minutes.Should().Be.EqualTo(1440);
 		}
 
@@ -1150,6 +1173,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			projectionVm.Count.Should().Be.EqualTo(1);
 			projectionVm.Single().Description.Should().Be.EqualTo(personAbsence.Layer.Payload.Description.Name);
 			projectionVm.Single().Start.Should().Be.EqualTo("2020-01-01 08:00");
+			projectionVm.Single().End.Should().Be.EqualTo("2020-01-01 16:00");
+			projectionVm.Single().StartInUtc.Should().Be.EqualTo("2020-01-01 08:00");
+			projectionVm.Single().EndInUtc.Should().Be.EqualTo("2020-01-01 16:00");
 			projectionVm.Single().Minutes.Should().Be.EqualTo(480);
 		}
 
@@ -1192,6 +1218,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			projectionVm.Count.Should().Be.EqualTo(1);
 			projectionVm.Single().Description.Should().Be.EqualTo(personAbsence.Layer.Payload.Description.Name);
 			projectionVm.Single().Start.Should().Be.EqualTo("2020-01-01 09:00");
+			projectionVm.Single().End.Should().Be.EqualTo("2020-01-01 15:00");
+			projectionVm.Single().StartInUtc.Should().Be.EqualTo("2020-01-01 09:00");
+			projectionVm.Single().EndInUtc.Should().Be.EqualTo("2020-01-01 15:00");
 			projectionVm.Single().Minutes.Should().Be.EqualTo(360);
 		}
 
@@ -1234,6 +1263,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			projectionVm.Count.Should().Be.EqualTo(1);
 			projectionVm.Single().Description.Should().Be.EqualTo(personAbsence.Layer.Payload.Description.Name);
 			projectionVm.Single().Start.Should().Be.EqualTo("2020-01-01 08:00");
+			projectionVm.Single().End.Should().Be.EqualTo("2020-01-01 16:00");
+			projectionVm.Single().StartInUtc.Should().Be.EqualTo("2020-01-01 08:00");
+			projectionVm.Single().EndInUtc.Should().Be.EqualTo("2020-01-01 16:00");
 			projectionVm.Single().Minutes.Should().Be.EqualTo(480);
 		}
 
@@ -1286,6 +1318,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			projectionVm.Count.Should().Be.EqualTo(1);
 			projectionVm.Single().Description.Should().Be.EqualTo(personAbsence.Layer.Payload.Description.Name);
 			projectionVm.Single().Start.Should().Be.EqualTo("2020-01-04 08:00");
+			projectionVm.Single().End.Should().Be.EqualTo("2020-01-04 16:00");
+			projectionVm.Single().StartInUtc.Should().Be.EqualTo("2020-01-04 08:00");
+			projectionVm.Single().EndInUtc.Should().Be.EqualTo("2020-01-04 16:00");
 			projectionVm.Single().Minutes.Should().Be.EqualTo(480);
 		}
 
@@ -1340,11 +1375,17 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			projectionVm[0].Description.Should().Be.EqualTo(ConfidentialPayloadValues.Description.Name);
 			projectionVm[0].Color.Should().Be.EqualTo(ConfidentialPayloadValues.DisplayColorHex);
 			projectionVm[0].Start.Should().Be.EqualTo("2020-01-01 09:00");
+			projectionVm[0].End.Should().Be.EqualTo("2020-01-01 10:00");
+			projectionVm[0].StartInUtc.Should().Be.EqualTo("2020-01-01 09:00");
+			projectionVm[0].EndInUtc.Should().Be.EqualTo("2020-01-01 10:00");
 			projectionVm[0].Minutes.Should().Be.EqualTo(60);
 
 			projectionVm[1].Description.Should().Be.EqualTo("activity1");
 			projectionVm[1].Color.Should().Be.EqualTo(Color.White.ToHtml());
 			projectionVm[1].Start.Should().Be.EqualTo("2020-01-01 10:00");
+			projectionVm[1].End.Should().Be.EqualTo("2020-01-01 15:00");
+			projectionVm[1].StartInUtc.Should().Be.EqualTo("2020-01-01 10:00");
+			projectionVm[1].EndInUtc.Should().Be.EqualTo("2020-01-01 15:00");
 			projectionVm[1].Minutes.Should().Be.EqualTo(300);
 		}
 
@@ -1397,11 +1438,17 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			projectionVm[0].Description.Should().Be.EqualTo("secret");
 			projectionVm[0].Color.Should().Be.EqualTo(secretAbs.DisplayColor.ToHtml());
 			projectionVm[0].Start.Should().Be.EqualTo("2020-01-01 09:00");
+			projectionVm[0].End.Should().Be.EqualTo("2020-01-01 10:00");
+			projectionVm[0].StartInUtc.Should().Be.EqualTo("2020-01-01 09:00");
+			projectionVm[0].EndInUtc.Should().Be.EqualTo("2020-01-01 10:00");
 			projectionVm[0].Minutes.Should().Be.EqualTo(60);
 
 			projectionVm[1].Description.Should().Be.EqualTo("activity1");
 			projectionVm[1].Color.Should().Be.EqualTo(Color.White.ToHtml());
 			projectionVm[1].Start.Should().Be.EqualTo("2020-01-01 10:00");
+			projectionVm[1].End.Should().Be.EqualTo("2020-01-01 15:00");
+			projectionVm[1].StartInUtc.Should().Be.EqualTo("2020-01-01 10:00");
+			projectionVm[1].EndInUtc.Should().Be.EqualTo("2020-01-01 15:00");
 			projectionVm[1].Minutes.Should().Be.EqualTo(300);
 		}
 

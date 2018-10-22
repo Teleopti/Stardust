@@ -142,7 +142,6 @@
     <Compile Include="AgentInfo\OvertimeRequestUnderStaffingSkillProviderToggle74944On.cs" />
     <Compile Include="AgentInfo\OvertimeStaffingPossibilityCalculator.cs" />
     <Compile Include="AgentInfo\PersonExternalLogonInfo.cs" />
-    <Compile Include="AgentInfo\PersonIdentityInfo.cs" />
     <Compile Include="AgentInfo\PlanningGroupStaffLoader.cs" />
     <Compile Include="AgentInfo\CalculatedPossibilityModel.cs" />
     <Compile Include="AgentInfo\EnumerablePersonExtensions.cs" />
@@ -581,6 +580,7 @@
     <Compile Include="ResourcePlanner\IDayOffOptimizationPreferenceProviderForPlanningPeriod.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionsAbleToBeScheduled.cs" />
     <Compile Include="Scheduling\ShiftCategorySelection.cs" />
+    <Compile Include="Search\PersonSearchProvider.cs" />
     <Compile Include="Security\DataTokenManager.cs" />
     <Compile Include="Security\IDataTokenManager.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccOvertimeRequestsLicenseOption.cs" />
@@ -717,9 +717,9 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\SkillCombinationResourceReadModelValidator.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SlimSkillResourceCalculationPeriodWrapper.cs" />
     <Compile Include="ApplicationLayer\AllowFailuresAttribute.cs" />
-    <Compile Include="ApplicationLayer\Archiving\ArchiveScheduleHandler.cs" />
-    <Compile Include="ApplicationLayer\Archiving\ImportScheduleHandler.cs" />
-    <Compile Include="ApplicationLayer\Archiving\ScheduleManagementHandlerBase.cs" />
+    <Compile Include="ApplicationLayer\ManageSchedule\CopyScheduleHandler.cs" />
+    <Compile Include="ApplicationLayer\ManageSchedule\ImportScheduleHandler.cs" />
+    <Compile Include="ApplicationLayer\ManageSchedule\ScheduleManagementHandlerBase.cs" />
     <Compile Include="ApplicationLayer\AttemptsAttribute.cs" />
     <Compile Include="ApplicationLayer\Commands\AddOvertimeActivityCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddOvertimeActivityCommandHandler.cs" />
@@ -1871,11 +1871,8 @@
     <Compile Include="ApplicationLayer\Events\PersonAbsenceModifiedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonActivityActualStartEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\PersonActivityStartEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonCollectionChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonDeletedEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\PersonShiftEndEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\PersonShiftStartEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonTeamChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonTerminalDateChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduledResourcesChangedEvent.cs" />
@@ -2112,7 +2109,6 @@
     <Compile Include="Forecasting\Angel\HistoricalPeriodProvider.cs" />
     <Compile Include="Forecasting\Angel\IHistoricalPeriodProvider.cs" />
     <Compile Include="Forecasting\Angel\IntradayForecaster.cs" />
-    <Compile Include="Forecasting\Angel\Methods\AhtAndAcw.cs" />
     <Compile Include="Forecasting\Angel\Methods\DateAndTask.cs" />
     <Compile Include="Forecasting\Angel\Methods\ForecastMethodProvider.cs" />
     <Compile Include="Forecasting\Angel\Methods\ForecastMethodType.cs" />

@@ -73,6 +73,29 @@ namespace Teleopti.Ccc.DomainTest.Intraday.ApplicationLayer
 			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(1);
 			Math.Round(result.DataSeries.EstimatedServiceLevels.First().Value, 5).Should().Be.EqualTo(Math.Round(esl * 100, 5));
 		}
+		[Test]
+		public void ShouldHandleNoCalculatedCalls()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 16, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			var startTime = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 15), false);
+			var skillDay = createSkillDay(skill, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 15), false);
+
+			var scheduledStaffingList = createScheduledStaffing(skillDay);
+
+			// Create stats with Calculated calls = null
+			createStatistics(startTime, userNow, new DateTime(2016, 8, 26, 0, 0, 0, DateTimeKind.Utc));
+
+			SkillRepository.Has(skill);
+			SkillDayRepository.Add(skillDay);
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue,scheduledStaffingList);
+
+			var result = Target.GeneratePerformanceViewModel(new Guid[] { skill.Id.Value });
+
+			result.PerformanceHasData.Should().Be.False();
+		}
 
 		[Test]
 		public void ShouldReturnEslFromStartOfOpenHour()

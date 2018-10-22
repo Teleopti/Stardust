@@ -20,7 +20,8 @@
 				Language: '',
 				DateFormatLocale: '',
 				NumberFormat: '',
-				FirstDayOfWeek: 0
+				FirstDayOfWeek: 0,
+				DayNames: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 			};
 
 			CurrentUserInfo.SetCurrentUserInfo(data);
@@ -29,6 +30,7 @@
 			expect(result).not.toBe(null);
 			expect(result.UserName).toBe('Ashley');
 			expect(result.FirstDayOfWeek).toBe(0);
+			expect(result.DayNames).toBe(data.DayNames);
 		}));
 
 		it('should get the current user from the server', function(done) {

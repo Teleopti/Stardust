@@ -1,6 +1,4 @@
 ﻿@RTA
-@OnlyRunIfEnabled('RTA_DurationOfHistoricalEvents_76470')
-
 Feature: Duration of historical events
   As an adherence analyst I need to see duration spent in one event
   so that I don't have to calculate it myself

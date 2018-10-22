@@ -113,30 +113,28 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<NoRtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance();
 			builder.RegisterType<RtaEventStoreSynchronizerProcess>().AsSelf().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 
-			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
+			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_Domain_74770))
 				builder.RegisterType<AgentAdherenceDayLoaderHistoricalOverview>().As<IAgentAdherenceDayLoader>().SingleInstance();
-			else if (_config.Toggle(Toggles.RTA_DurationOfHistoricalEvents_76470))
-				builder.RegisterType<AgentAdherenceDayLoaderDurationOfEvents>().As<IAgentAdherenceDayLoader>().SingleInstance();
-			else if (_config.Toggle(Toggles.RTA_EasilySpotLateForWork_75668))
-				builder.RegisterType<AgentAdherenceDayLoaderLateForWork>().As<IAgentAdherenceDayLoader>().SingleInstance();
 			else
-				builder.RegisterType<AgentAdherenceDayLoaderFromEventStore>().As<IAgentAdherenceDayLoader>().SingleInstance();
+				builder.RegisterType<AgentAdherenceDayLoaderDurationOfEvents>().As<IAgentAdherenceDayLoader>().SingleInstance();
 
-			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
+			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_Domain_74770))
 				builder.RegisterType<ScheduleLoaderHistoricalOverview>().As<IScheduleLoader>().SingleInstance();
-			else if (_config.Toggle(Toggles.RTA_DurationOfHistoricalEvents_76470))
+			else
 				builder.RegisterType<ScheduleLoader>().As<IScheduleLoader>().SingleInstance();
 			builder.RegisterType<AdherencePercentageCalculator>().SingleInstance();
+			
+			if (_config.Toggle(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306))
+				builder.RegisterType<AdherenceDayStartEventPublisher>().As<IAdherenceDayStartEventPublisher>().SingleInstance();
+			else
+				builder.RegisterType<NoAdherenceDayStartEventPublisher>().As<IAdherenceDayStartEventPublisher>().SingleInstance();
 
 			builder.RegisterType<ShiftEventPublisher>().SingleInstance();
 			builder.RegisterType<AdherenceEventPublisher>().SingleInstance();
 			builder.RegisterType<StateEventPublisher>().SingleInstance();
 			builder.RegisterType<ActivityEventPublisher>().SingleInstance();
 			builder.RegisterType<RuleEventPublisher>().SingleInstance();
-			if (_config.Toggle(Toggles.RTA_EasilySpotLateForWork_75668))
-				builder.RegisterType<LateForWorkEventPublisher>().As<ILateForWorkEventPublisher>().SingleInstance();
-			else
-				builder.RegisterType<NoLateForWorkEventPublisher>().As<ILateForWorkEventPublisher>().SingleInstance();
+			builder.RegisterType<LateForWorkEventPublisher>().SingleInstance();
 
 			builder.RegisterType<CurrentBelongsToDate>().SingleInstance();
 

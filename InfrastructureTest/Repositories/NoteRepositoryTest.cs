@@ -51,24 +51,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
-        public void VerifyFind()
-        {
-            INote note = CreateAggregateWithCorrectBusinessUnit();
-            PersistAndRemoveFromUnitOfWork(note);
-            var repository = new NoteRepository(CurrUnitOfWork);
-            Assert.AreEqual(1, repository.Find(new DateTimePeriod(2010, 4, 1, 2010, 4, 2), note.Scenario).Count);
-        }
-
-        [Test]
-        public void VerifyDoNotFind()
-        {
-            INote note = CreateAggregateWithCorrectBusinessUnit();
-            PersistAndRemoveFromUnitOfWork(note);
-            var repository = new NoteRepository(CurrUnitOfWork);
-            Assert.AreEqual(0, repository.Find(new DateTimePeriod(2010, 4, 14, 2010, 4, 21), note.Scenario).Count);
-        }
-
-        [Test]
         public void VerifyLoadAggregate()
         {
             INote note = CreateAggregateWithCorrectBusinessUnit();

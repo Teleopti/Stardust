@@ -32,7 +32,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 
 			foreach (IScenario scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded)
 			{
-				IList<IScheduleDay> scheduleParts = _jobParameters.StateHolder.LoadSchedulePartsPerPersonAndDate(period, scenario);
+				var scheduleParts = _jobParameters.StateHolder.LoadSchedulePartsPerPersonAndDate(period, scenario);
 				//Remove parts ending too late. This because the schedule repository fetches restrictions on larger period than schedule.
 				scheduleParts = ScheduleDayRestrictor.RemoveScheduleDayEndingTooLate(scheduleParts, period.EndDateTime);
 				Transformer.Transform(scheduleParts, BulkInsertDataTable1);

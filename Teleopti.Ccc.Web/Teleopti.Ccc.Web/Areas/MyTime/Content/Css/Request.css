@@ -454,21 +454,12 @@ input.use-default-startTime {
 	display: none;
 }
 
-.cart-cancel-button {
-	background-color: buttonface;
-	border: 1px solid #cccccc;
-}
-
 .not-visible {
 	visibility: hidden;
 }
 
 .cart-text {
 	margin-bottom: 3px;
-}
-
-.cart-text-time {
-	font-size: 12px;
 }
 
 .cart-menu {
@@ -498,4 +489,8 @@ input.use-default-startTime {
 .text-indicator-mobile {
 	width: 100%;
 	margin-bottom: 0px;
+}
+
+.with-fab .navbar-teleopti {
+	padding: 0;
 }

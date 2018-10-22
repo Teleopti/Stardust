@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows
 			return skillStaffPeriodsOfOneMonth;
 		}
 
-        protected object GetValue	(CellInfo cellInfo)
+        protected object GetValue(CellInfo cellInfo)
         {
             _skillStaffPeriodList = getSkillStaffPeriodsForColumn	(cellInfo);
 
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows
 				return SkillStaffPeriodHelper.ScheduledTime(SkillStaffPeriodList);
 
 			if (DisplayMember == "AbsoluteDifference")
-				return SkillStaffPeriodHelper.AbsoluteDifference(SkillStaffPeriodList, false, false);
+				return SkillStaffPeriodHelper.AbsoluteDifference(SkillStaffPeriodList);
 
 			if (DisplayMember == "RelativeDifference")
 				return SkillStaffPeriodHelper.RelativeDifferenceForDisplay(SkillStaffPeriodList);

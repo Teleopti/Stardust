@@ -15,13 +15,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		}
 	}
 
-	public class ArchiveScheduleEvent : ManageScheduleBaseEvent
+	public class CopyScheduleEvent : ManageScheduleBaseEvent
 	{
-		public ArchiveScheduleEvent()
+		public CopyScheduleEvent()
 		{
 
 		}
-		public ArchiveScheduleEvent(params Guid[] personIds) : base(personIds)
+		public CopyScheduleEvent(params Guid[] personIds) : base(personIds)
 		{
 		}
 	}

@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 	[TestFixture]
 	[PrincipalAndStateTest]
 	[Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770)]
+	[Toggle(Toggles.RTA_ReviewHistoricalAdherence_Domain_74770)]
 	public class RtaEventStoreSynchronizerTest
 	{
 		public MutableNow Now;

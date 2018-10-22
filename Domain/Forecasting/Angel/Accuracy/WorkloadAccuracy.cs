@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
+﻿using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 {

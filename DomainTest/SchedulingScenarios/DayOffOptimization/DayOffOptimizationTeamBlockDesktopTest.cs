@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var skill = new Skill("_").WithId().For(activity).IsOpen();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSetBag = RuleSetBagRepository.Has(new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory))) {Description = new Description("_")});
+			var ruleSetBag = RuleSetBagRepository.Has(new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory))) { Description = new Description("_") });
 			var team = new Team { Site = new Site("_") };
 			var agents = new List<IPerson>();
 			for (var i = 0; i < 2; i++)
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				{
 					var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));
 					asses.Add(ass);
-					if (i == 5 || i==6)
+					if (i == 5 || i == 6)
 					{
 						ass.SetDayOff(new DayOffTemplate()); //saturday/sunday
 					}
@@ -70,8 +70,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, agents, asses, skillDays);
 			var optPrefs = new OptimizationPreferences
 			{
-				General = {ScheduleTag = new ScheduleTag()},
-				Extra = {UseTeamSameDaysOff = true, UseTeams = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.RuleSetBag)}
+				General = { ScheduleTag = new ScheduleTag() },
+				Extra = { UseTeamSameDaysOff = true, UseTeams = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.RuleSetBag) }
 			};
 
 			Target.Execute(period, agents, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new NoOptimizationCallback());
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var optPrefs = new OptimizationPreferences
 			{
 				General = { ScheduleTag = new ScheduleTag() },
-				Extra = { UseTeamSameDaysOff = true, UseTeams = true, TeamGroupPage = new GroupPageLight("Contract", GroupPageType.Contract, "Contract")}
+				Extra = { UseTeamSameDaysOff = true, UseTeams = true, TeamGroupPage = new GroupPageLight("Contract", GroupPageType.Contract, "Contract") }
 			};
 
 			Target.Execute(period, agents, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new NoOptimizationCallback());
@@ -165,11 +165,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 					ass.SetDayOff(dayOffTemplate); //saturday/sunday
 				}
 			}
-			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] {agent}, asses, skillDays1.Union(skillDays2));
+			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, asses, skillDays1.Union(skillDays2));
 			var optPrefs = new OptimizationPreferences
 			{
 				General = { ScheduleTag = new ScheduleTag(), OptimizationStepDaysOff = true },
-				Extra = { UseBlockSameShift = true, UseTeamBlockOption = true, BlockTypeValue = BlockFinderType.BetweenDayOff}
+				Extra = { UseBlockSameShift = true, UseTeamBlockOption = true, BlockTypeValue = BlockFinderType.BetweenDayOff }
 			};
 
 			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new NoOptimizationCallback());
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var directSales = new Skill("B").For(activity).WithId().IsOpen();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15),new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 3);
 			schedulePeriod.SetDaysOff(6);
 
@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 					{
 						if (day == 3 || day == 4 || day == 11 || day == 12 || day == 19 || day == 20)
 						{
-							ass.SetDayOff(dayOffTemplate); 
+							ass.SetDayOff(dayOffTemplate);
 						}
 					}
 
@@ -236,28 +236,28 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 					{
 						if (day == 5 || day == 6 || day == 12 || day == 13 || day == 16 || day == 17)
 						{
-							ass.SetDayOff(dayOffTemplate); 
+							ass.SetDayOff(dayOffTemplate);
 						}
 					}
 					asses.Add(ass);
 				}
 			}
-			
 
-			var skillDaysChannelSales = channelSales.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,	171.35, 135.06, 142.09, 139.48, 125.52, 0, 0,
+
+			var skillDaysChannelSales = channelSales.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 171.35, 135.06, 142.09, 139.48, 125.52, 0, 0,
 																													171.35, 135.06, 142.09, 139.48, 125.52, 0, 0,
 																													171.35, 135.06, 142.09, 139.48, 125.52, 0, 0);
 
 
-			var skillDaysDirectSales = directSales.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,	707.35, 693.22, 641.34, 629.57, 649.46, 422.20, 194.16,
+			var skillDaysDirectSales = directSales.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 707.35, 693.22, 641.34, 629.57, 649.46, 422.20, 194.16,
 																													707.35, 693.22, 641.34, 629.57, 649.46, 422.20, 194.16,
 																													707.35, 693.22, 641.34, 629.57, 649.46, 422.20, 194.16);
 
-			var stateHolder = SchedulerStateHolder.Fill(scenario, period, agents, asses, skillDaysChannelSales.Union(skillDaysDirectSales) );
+			var stateHolder = SchedulerStateHolder.Fill(scenario, period, agents, asses, skillDaysChannelSales.Union(skillDaysDirectSales));
 			var optPrefs = new OptimizationPreferences
 			{
-				General = { ScheduleTag = new ScheduleTag(), OptimizationStepDaysOff = true},
-				Extra = { UseBlockSameShiftCategory = true, UseTeamBlockOption = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.RuleSetBag)}
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepDaysOff = true },
+				Extra = { UseBlockSameShiftCategory = true, UseTeamBlockOption = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.RuleSetBag) }
 			};
 			var dayOffsPreferences = new DaysOffPreferences
 			{
@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			Target.Execute(period, new[] { agents[0] }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences), new NoOptimizationCallback());
 
 			var consecutiveDaysOff = 0;
-			for (var day = 0; day < 21; day ++)
+			for (var day = 0; day < 21; day++)
 			{
 				if (stateHolder.Schedules[agents[0]].ScheduledDay(firstDay.AddDays(day)).HasDayOff())
 				{
@@ -281,11 +281,44 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				else
 				{
 					if (consecutiveDaysOff == 0)
-							continue;
+						continue;
 					consecutiveDaysOff.Should().Be.EqualTo(2);
 					consecutiveDaysOff = 0;
 				}
 			}
+		}
+
+		[TestCase(true)]
+		[TestCase(false)]
+		[Ignore("78279 to be fixed")]
+		public void ShouldMoveDayOffLastDayInSchedulePeriodUsingShiftCategoryLimitations(bool useShiftCategoryLimitations)
+		{
+			var firstDay = new DateOnly(2015, 10, 12);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var activity = new Activity();
+			var skill = new Skill().WithId().For(activity).IsOpen();
+			var scenario = new Scenario();
+			var shiftCategory = new ShiftCategory().WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var agentToOptimize = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneWeek(firstDay);
+			var otherAgent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skill);
+			agentToOptimize.SchedulePeriod(firstDay).SetDaysOff(2);
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 25, 25);
+			var assesAgentToOptimize = Enumerable.Range(0, 7).Select(i => new PersonAssignment(agentToOptimize, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16))).ToArray();
+			var assesOtherAgent = Enumerable.Range(0, 7).Select(i => new PersonAssignment(otherAgent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16))).ToArray();
+			assesAgentToOptimize[5].WithDayOff();
+			assesAgentToOptimize[6].WithDayOff();
+			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agentToOptimize, otherAgent }, assesAgentToOptimize.Union(assesOtherAgent), skillDays);
+			var optimizationPreferences = new OptimizationPreferences
+			{
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepDaysOff = true, UseShiftCategoryLimitations = useShiftCategoryLimitations },
+				Extra = { UseBlockSameShiftCategory = true, UseTeamBlockOption = true, BlockTypeValue = BlockFinderType.BetweenDayOff }
+			};
+
+			Target.Execute(period, new[] { agentToOptimize }, optimizationPreferences, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new NoOptimizationCallback());
+
+			stateHolder.Schedules[agentToOptimize].ScheduledDay(firstDay.AddDays(5)).HasDayOff().Should().Be.False();
+			stateHolder.Schedules[agentToOptimize].ScheduledDay(firstDay.AddDays(6)).HasDayOff().Should().Be.False();
 		}
 
 		public DayOffOptimizationTeamBlockDesktopTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)

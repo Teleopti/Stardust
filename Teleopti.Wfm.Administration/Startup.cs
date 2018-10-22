@@ -10,6 +10,7 @@ using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Modules;
 using System.Web.Http;
+using Teleopti.Wfm.Administration.Core.Hangfire;
 
 namespace Teleopti.Wfm.Administration
 {
@@ -38,7 +39,7 @@ namespace Teleopti.Wfm.Administration
 				AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie
 			});
 
-			container.Resolve<HangfireDashboardStarter>().Start(app);
+			container.Resolve<HangfireDashboardStarter>().Start(app, ()=>new MvcAntiforgery());
 			container.Resolve<RecurrentEventTimer>().Init(TimeSpan.FromDays(1)); 
 		}
 	}

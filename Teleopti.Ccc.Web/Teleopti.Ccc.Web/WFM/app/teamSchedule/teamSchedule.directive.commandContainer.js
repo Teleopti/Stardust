@@ -54,9 +54,10 @@
 			if (!vm.date) {
 				vm.setReady(true);
 			} else {
+
 				if (vm.isSelectAll) {
 					teamScheduleSvc.searchSchedules(vm.getLoadAllParams()).then(function (result) {
-						vm.scheduleManagementSvc.resetSchedules(result.data.Schedules, moment(vm.date), vm.timezone);
+						vm.scheduleManagementSvc.resetSchedules(result.data.Schedules, vm.getDate(), vm.timezone);
 						personSelectionSvc.selectAllPerson(vm.scheduleManagementSvc.groupScheduleVm.Schedules);
 						personSelectionSvc.updatePersonInfo(vm.scheduleManagementSvc.groupScheduleVm.Schedules);
 						vm.setReady(true);
@@ -67,7 +68,7 @@
 						vm.setReady(true);
 					} else {
 						teamScheduleSvc.getSchedules(vm.date, selectedPersonIds).then(function (data) {
-							vm.scheduleManagementSvc.resetSchedules(data.Schedules, moment(vm.date), vm.timezone);
+							vm.scheduleManagementSvc.resetSchedules(data.Schedules, vm.getDate(), vm.timezone);
 							personSelectionSvc.syncProjectionSelection(vm.scheduleManagementSvc.schedules());
 							vm.setReady(true);
 						});

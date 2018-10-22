@@ -295,13 +295,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function(ajax, portal) {
 		});
 	}
 
-	function _setWeeklyWorkTimeWidth() {
-		var isShow = $('#showweeklyworktime').val();
-		if (isShow == 'True') {
-			$('#Preference-body-inner').addClass('preference-body-width');
-		}
-	}
-
 	function _initAddExtendedButton() {
 		var button = $('.Preference-add-extended-button');
 
@@ -693,7 +686,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function(ajax, portal) {
 				return;
 			}
 
-			_setWeeklyWorkTimeWidth();
 			_initAddExtendedButton();
 			_initViewModels(_soon, function() {
 				_initPeriodSelection();

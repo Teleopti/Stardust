@@ -232,6 +232,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 		[Test]
 		public void ShouldGetProjection()
 		{
+			shouldGetProjection();
+		}
+
+		private void shouldGetProjection()
+		{
+			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
 			SetupProjectionProvider();
 			var date = new DateTime(2015, 01, 01, 0, 0, 0, DateTimeKind.Utc);
 			var person1 = PersonFactory.CreatePersonWithGuid("agent", "1");
@@ -298,6 +304,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			var vm = Target.Projection(scheduleDayOnePerson1, true, CommonAgentNameProvider.CommonAgentNameSettings);
 
+			vm.Date.Should().Be.EqualTo("2015-01-01");
+
 			vm.DayOff.Should().Be(null);
 			vm.Name.Should().Be("agent1");
 			vm.Projection.Count().Should().Be(8);
@@ -307,34 +315,47 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			vm.Projection.ElementAt(0).ActivityId.Should().Be.EqualTo(phoneActivity.Id);
 			vm.Projection.ElementAt(0).Description.Should().Be(phoneActivity.Description.Name);
 			vm.Projection.ElementAt(0).FloatOnTop.Should().Be.False();
+			vm.Projection.ElementAt(0).StartInUtc.Should().Be.EqualTo("2015-01-01 08:00");
+			vm.Projection.ElementAt(0).EndInUtc.Should().Be.EqualTo("2015-01-01 11:00");
 
 			vm.Projection.ElementAt(1).ActivityId.Should().Be.EqualTo(lunchActivity.Id);
 			vm.Projection.ElementAt(1).Description.Should().Be(lunchActivity.Description.Name);
 			vm.Projection.ElementAt(1).FloatOnTop.Should().Be.True();
+			vm.Projection.ElementAt(1).StartInUtc.Should().Be.EqualTo("2015-01-01 11:00");
+			vm.Projection.ElementAt(1).EndInUtc.Should().Be.EqualTo("2015-01-01 12:00");
 
 			var personAbsenceProjection = vm.Projection.ElementAt(2);
 			personAbsenceProjection.ParentPersonAbsences.First().Should().Be(personAbsence.Id);
 			personAbsenceProjection.Description.Should().Be(testAbsence.Name);
 			personAbsenceProjection.FloatOnTop.Should().Be(true);
+			personAbsenceProjection.StartInUtc.Should().Be.EqualTo("2015-01-01 12:00");
+			personAbsenceProjection.EndInUtc.Should().Be.EqualTo("2015-01-01 13:00");
 
 			vm.Projection.ElementAt(3).ActivityId.Should().Be.EqualTo(shortBreakActivity.Id);
 			vm.Projection.ElementAt(3).Description.Should().Be(shortBreakActivity.Description.Name);
 			vm.Projection.ElementAt(3).FloatOnTop.Should().Be.True();
+			vm.Projection.ElementAt(3).StartInUtc.Should().Be.EqualTo("2015-01-01 13:00");
+			vm.Projection.ElementAt(3).EndInUtc.Should().Be.EqualTo("2015-01-01 13:15");
 
 			vm.Projection.ElementAt(4).ActivityId.Should().Be.EqualTo(phoneActivity.Id);
 			vm.Projection.ElementAt(4).Description.Should().Be(phoneActivity.Description.Name);
 			vm.Projection.ElementAt(4).FloatOnTop.Should().Be.False();
-
+			vm.Projection.ElementAt(4).StartInUtc.Should().Be.EqualTo("2015-01-01 13:15");
+			vm.Projection.ElementAt(4).EndInUtc.Should().Be.EqualTo("2015-01-01 14:00");
 
 			vm.Projection.ElementAt(5).ActivityId.Should().Be.EqualTo(personalActivity.Id);
 			vm.Projection.ElementAt(5).Description.Should().Be(personalActivity.Description.Name);
 			vm.Projection.ElementAt(5).IsPersonalActivity.Should().Be(true);
 			vm.Projection.ElementAt(5).FloatOnTop.Should().Be(true);
+			vm.Projection.ElementAt(5).StartInUtc.Should().Be.EqualTo("2015-01-01 14:00");
+			vm.Projection.ElementAt(5).EndInUtc.Should().Be.EqualTo("2015-01-01 15:00");
 
 			vm.Projection.ElementAt(6).ActivityId.Should().Be(overtimeActivity.Id);
 			vm.Projection.ElementAt(6).Description.Should().Be(overtimeActivity.Description.Name);
 			vm.Projection.ElementAt(6).IsOvertime.Should().Be(true);
 			vm.Projection.ElementAt(6).FloatOnTop.Should().Be(true);
+			vm.Projection.ElementAt(6).StartInUtc.Should().Be.EqualTo("2015-01-01 15:00");
+			vm.Projection.ElementAt(6).EndInUtc.Should().Be.EqualTo("2015-01-01 16:00");
 
 			vm.Projection.ElementAt(7).IsMeeting.Should().Be(true);
 			vm.Projection.ElementAt(7).FloatOnTop.Should().Be(true);
@@ -342,30 +363,16 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			vm.ContractTimeMinutes.Should().Be(420);
 			vm.WorkTimeMinutes.Should().Be(345);
 		}
-		[Test]
-		public void ShouldGetProjectionWithStartInUTC() {
-			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
 
-			SetupProjectionProvider();
-			var date = new DateTime(2018, 10, 27, 0, 0, 0, DateTimeKind.Utc);
-			var person1 = PersonFactory.CreatePersonWithGuid("agent", "1");
-
-			var assignment1Person1 = PersonAssignmentFactory.CreatePersonAssignment(person1, scenario, new DateOnly(date));
-			var scheduleDayOnePerson1 = ScheduleDayFactory.Create(new DateOnly(date), person1, scenario);
-			var phoneActivityPeriod = new DateTimePeriod(date.AddHours(10), date.AddHours(11));
-
-			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
-			assignment1Person1.AddActivity(phoneActivity, phoneActivityPeriod);
-
-			scheduleDayOnePerson1.Add(assignment1Person1);
-
-			var vm = Target.Projection(scheduleDayOnePerson1, true, CommonAgentNameProvider.CommonAgentNameSettings);
-			vm.Projection.ElementAt(0).StartInUtc.Should().Be.EqualTo("2018-10-27 10:00");
-			vm.Projection.ElementAt(0).Start.Should().Be.EqualTo("2018-10-27 18:00");
+		[Test, SetUICulture("fa-IR")]
+		public void ShouldGetProjectionWithStartAndEndInServiceDateFormat()
+		{
+			shouldGetProjection();
 		}
 
 		[Test]
-		public void ShouldGetProjectionWithEndInDST() {
+		public void ShouldGetProjectionWithEndInDST()
+		{
 			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.GmtTimeZoneInfo());
 
 			SetupProjectionProvider();
@@ -731,6 +738,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			projections[1].IsOvertime.Should().Be.True();
 			projections[2].Start.Should().Be("2015-01-01 15:30");
 			projections[2].End.Should().Be("2015-01-01 17:00");
+			projections[2].StartInUtc.Should().Be("2015-01-01 15:30");
+			projections[2].EndInUtc.Should().Be("2015-01-01 17:00");
 			projections[2].IsOvertime.Should().Be.False();
 		}
 
@@ -772,7 +781,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 		[Test]
 		public void ShouldSplitMergedPersonalActivityInProjectionWithSinglePersonalLayer()
 		{
-			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
 			SetupProjectionProvider();
 
 			var date = new DateTime(2015, 01, 01, 0, 0, 0, DateTimeKind.Utc);
@@ -804,24 +813,27 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			visualLayers[0].Description.Should().Be("Meeting");
 			visualLayers[0].ActivityId.Should().Be(meetingActivity.Id);
 			visualLayers[0].ShiftLayerIds.Single().Should().Be(assignment1Person1.ShiftLayers.Single(l => l is MainShiftLayer && l.Payload.Description.Name == "Meeting").Id);
-			visualLayers[0].Start.Should().Be("2015-01-01 08:00");
+			visualLayers[0].Start.Should().Be("2015-01-01 16:00");
 			visualLayers[0].StartInUtc.Should().Be("2015-01-01 08:00");
-			visualLayers[0].End.Should().Be("2015-01-01 08:30");
+			visualLayers[0].End.Should().Be("2015-01-01 16:30");
+			visualLayers[0].EndInUtc.Should().Be("2015-01-01 08:30");
 			visualLayers[0].Minutes.Should().Be(30);
 
 			visualLayers[1].Description.Should().Be("Meeting");
 			visualLayers[1].ActivityId.Should().Be(meetingActivity.Id);
 			visualLayers[1].ShiftLayerIds.Single().Should().Be(assignment1Person1.ShiftLayers.Single(l => l is PersonalShiftLayer && l.Payload.Description.Name == "Meeting").Id);
-			visualLayers[1].Start.Should().Be("2015-01-01 08:30");
-			visualLayers[1].End.Should().Be("2015-01-01 10:00");
-			visualLayers[1].Minutes.Should().Be(90);
+			visualLayers[1].Start.Should().Be("2015-01-01 16:30");
+			visualLayers[1].End.Should().Be("2015-01-01 18:00");
 			visualLayers[1].StartInUtc.Should().Be("2015-01-01 08:30");
+			visualLayers[1].EndInUtc.Should().Be("2015-01-01 10:00");
+			visualLayers[1].Minutes.Should().Be(90);
 
 			visualLayers[2].Description.Should().Be("Phone");
 			visualLayers[2].ActivityId.Should().Be(phoneActivity.Id);
-			visualLayers[2].Start.Should().Be("2015-01-01 10:00");
+			visualLayers[2].Start.Should().Be("2015-01-01 18:00");
 			visualLayers[2].StartInUtc.Should().Be("2015-01-01 10:00");
-			visualLayers[2].End.Should().Be("2015-01-01 15:00");
+			visualLayers[2].End.Should().Be("2015-01-01 23:00");
+			visualLayers[2].EndInUtc.Should().Be("2015-01-01 15:00");
 			visualLayers[2].Minutes.Should().Be(300);
 		}
 
@@ -858,18 +870,24 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			visualLayers[0].Description.Should().Be("Meeting");
 			visualLayers[0].ShiftLayerIds.Single().Should().Be(assignment1Person1.ShiftLayers.Single(l => l is MainShiftLayer && l.Payload.Description.Name == "Meeting").Id);
 			visualLayers[0].Start.Should().Be("2015-01-01 08:00");
+			visualLayers[0].StartInUtc.Should().Be("2015-01-01 08:00");
 			visualLayers[0].End.Should().Be("2015-01-01 08:30");
+			visualLayers[0].EndInUtc.Should().Be("2015-01-01 08:30");
 			visualLayers[0].Minutes.Should().Be(30);
 
 			visualLayers[1].Description.Should().Be("Meeting");
 			visualLayers[1].ShiftLayerIds.Single().Should().Be(assignment1Person1.ShiftLayers.Single(l => l is PersonalShiftLayer && l.Payload.Description.Name == "Meeting").Id);
 			visualLayers[1].Start.Should().Be("2015-01-01 08:30");
+			visualLayers[1].StartInUtc.Should().Be("2015-01-01 08:30");
 			visualLayers[1].End.Should().Be("2015-01-01 10:00");
+			visualLayers[1].EndInUtc.Should().Be("2015-01-01 10:00");
 			visualLayers[1].Minutes.Should().Be(90);
 
 			visualLayers[2].Description.Should().Be("Phone");
 			visualLayers[2].Start.Should().Be("2015-01-01 10:00");
+			visualLayers[2].StartInUtc.Should().Be("2015-01-01 10:00");
 			visualLayers[2].End.Should().Be("2015-01-01 15:00");
+			visualLayers[2].EndInUtc.Should().Be("2015-01-01 15:00");
 			visualLayers[2].Minutes.Should().Be(300);
 		}
 
@@ -907,24 +925,32 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			visualLayers[0].Description.Should().Be("Meeting");
 			visualLayers[0].Start.Should().Be("2015-01-01 08:00");
 			visualLayers[0].End.Should().Be("2015-01-01 09:00");
+			visualLayers[0].StartInUtc.Should().Be("2015-01-01 08:00");
+			visualLayers[0].EndInUtc.Should().Be("2015-01-01 09:00");
 			visualLayers[0].Minutes.Should().Be(60);
 			visualLayers[0].ShiftLayerIds.First().Should().Be(shiftLayers[1].Id);
 
 			visualLayers[1].Description.Should().Be("Meeting");
 			visualLayers[1].Start.Should().Be("2015-01-01 09:00");
 			visualLayers[1].End.Should().Be("2015-01-01 09:30");
+			visualLayers[1].StartInUtc.Should().Be("2015-01-01 09:00");
+			visualLayers[1].EndInUtc.Should().Be("2015-01-01 09:30");
 			visualLayers[1].Minutes.Should().Be(30);
 			visualLayers[1].ShiftLayerIds.First().Should().Be(shiftLayers[2].Id);
 
 			visualLayers[2].Description.Should().Be("Meeting");
 			visualLayers[2].Start.Should().Be("2015-01-01 09:30");
 			visualLayers[2].End.Should().Be("2015-01-01 10:30");
+			visualLayers[2].StartInUtc.Should().Be("2015-01-01 09:30");
+			visualLayers[2].EndInUtc.Should().Be("2015-01-01 10:30");
 			visualLayers[2].Minutes.Should().Be(60);
 			visualLayers[2].ShiftLayerIds.First().Should().Be(shiftLayers[3].Id);
 
 			visualLayers[3].Description.Should().Be("Phone");
 			visualLayers[3].Start.Should().Be("2015-01-01 10:30");
 			visualLayers[3].End.Should().Be("2015-01-01 15:00");
+			visualLayers[3].StartInUtc.Should().Be("2015-01-01 10:30");
+			visualLayers[3].EndInUtc.Should().Be("2015-01-01 15:00");
 			visualLayers[3].Minutes.Should().Be(270);
 			visualLayers[3].ShiftLayerIds.First().Should().Be(shiftLayers[0].Id);
 		}

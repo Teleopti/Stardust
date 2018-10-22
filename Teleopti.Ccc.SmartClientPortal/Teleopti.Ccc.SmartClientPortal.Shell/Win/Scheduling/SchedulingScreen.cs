@@ -419,9 +419,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			SchedulerState.SetRequestedScenario(loadScenario);
 			SchedulerState.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(loadingPeriod,
 				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
-#pragma warning disable 618
-			SchedulerState.UndoRedoContainer = _undoRedo;
-#pragma warning restore 618
+
 			_schedulerMeetingHelper = new SchedulerMeetingHelper(_schedulerMessageBrokerHandler,
 																SchedulerState,
 																_container.Resolve<IResourceCalculation>(),
@@ -1019,7 +1017,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripMenuItemPublish.Visible = publishScedule;
 
 			backStageButtonManiMenuImport.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ImportSchedule);
-			backStageButtonMainMenuArchive.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ArchiveSchedule);
+			backStageButtonMainMenuCopy.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.CopySchedule);
 
 			setPermissionOnControls();
 			schedulerSplitters1.MultipleHostControl3.GotFocus += multipleHostControl3OnGotFocus;
@@ -2185,7 +2183,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			setThreadCulture();
 			if (_scheduleView != null)
 			{
-				_scheduleView.ValidatePersons(_personsToValidate);
+				_scheduleView.ValidatePersons(_personsToValidate, _validation);
 			}
 		}
 
@@ -3102,6 +3100,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				toolStripProgressBar1.Visible = true;
 				toolStripProgressBar1.Value = 0;
 			}
+
+			_personsToValidate.Clear();
+			if(_scheduleView != null && _validation)
+				_scheduleView.AllSelectedPersons(scheduleDays).ForEach(_personsToValidate.Add);
+
 			_backgroundWorkerRunning = true;
 			backgroundWorker.RunWorkerAsync(argument);
 		}
@@ -3593,6 +3596,31 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					{
 						skillStaffPeriod.CalculateEstimatedServiceLevel();
 					}
+				}
+
+				var workShiftWorkTime = _container.Resolve<IWorkShiftWorkTime>();
+				var shiftBags = new HashSet<IRuleSetBag>();
+				var ruleSets = new HashSet<IWorkShiftRuleSet>();
+				foreach (var person in SchedulerState.ChoosenAgents)
+				{
+					if (person.Period(requestPeriod.StartDate) != null &&
+						person.Period(requestPeriod.StartDate).RuleSetBag != null)
+					{
+						shiftBags.Add(person.Period(requestPeriod.StartDate).RuleSetBag);
+					}
+				}
+
+				foreach (var ruleSetBag in shiftBags)
+				{
+					foreach (var workShiftRuleSet in ruleSetBag.RuleSetCollection)
+					{
+						ruleSets.Add(workShiftRuleSet);
+					}
+				}
+
+				foreach (var ruleSet in ruleSets)
+				{
+					workShiftWorkTime.CalculateMinMax(ruleSet, new EffectiveRestriction());
 				}
 			}
 
@@ -4520,7 +4548,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					restrictionViewMode(false);
 					_grid.BringToFront();
 					_scheduleView = new DayViewNew(_grid, SchedulerState, LockManager, SchedulePartFilter, ClipsHandlerSchedule,
-						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag);
+						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _undoRedo);
 					_scheduleView.SetSelectedDateLocal(_dateNavigateControl.SelectedDate);
 					_grid.ContextMenuStrip = contextMenuViews;
 					ActiveControl = _grid;
@@ -4529,7 +4557,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					restrictionViewMode(false);
 					_grid.BringToFront();
 					_scheduleView = new WeekView(_grid, SchedulerState, LockManager, SchedulePartFilter, ClipsHandlerSchedule,
-						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag);
+						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _undoRedo);
 					_grid.ContextMenuStrip = contextMenuViews;
 					ActiveControl = _grid;
 					break;
@@ -4537,7 +4565,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					restrictionViewMode(false);
 					_grid.BringToFront();
 					_scheduleView = new PeriodView(_grid, SchedulerState, LockManager, SchedulePartFilter, ClipsHandlerSchedule,
-						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag);
+						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _undoRedo);
 					_grid.ContextMenuStrip = contextMenuViews;
 					ActiveControl = _grid;
 					break;
@@ -4545,14 +4573,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					restrictionViewMode(false);
 					_grid.BringToFront();
 					_scheduleView = new OverviewView(_grid, SchedulerState, LockManager, SchedulePartFilter, ClipsHandlerSchedule,
-						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag);
+						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _undoRedo);
 					_grid.ContextMenuStrip = contextMenuViews;
 					ActiveControl = _grid;
 					break;
 				case ZoomLevel.RequestView:
 					restrictionViewMode(false);
 					_scheduleView = new PeriodView(_grid, SchedulerState, LockManager, SchedulePartFilter, ClipsHandlerSchedule,
-						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag);
+						_overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _undoRedo);
 					_elementHostRequests.BringToFront();
 					_elementHostRequests.ContextMenuStrip = contextMenuStripRequests;
 					enableRibbonForRequests(true);
@@ -4564,7 +4592,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					_grid.BringToFront();
 					_scheduleView = new AgentRestrictionsDetailView(_grid, SchedulerState,
 						LockManager, SchedulePartFilter, ClipsHandlerSchedule, _overriddenBusinessRulesHolder, callback,
-						_defaultScheduleTag, _workShiftWorkTime);
+						_defaultScheduleTag, _workShiftWorkTime, _undoRedo);
 					_scheduleView.TheGrid.ContextMenuStrip = contextMenuStripRestrictionView;
 					prepareAgentRestrictionView(_scheduleView, selectedPersons, selectedPeriod);
 
@@ -4685,7 +4713,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 
 			backStageButtonManiMenuImport.Visible = _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576);
-			backStageButtonMainMenuArchive.Visible = _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576);
+			backStageButtonMainMenuCopy.Visible = _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576);
 
 			foreach (var scenario in scenarios)
 			{
@@ -5342,7 +5370,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			backStageButtonOptions.Click -= toolStripButtonOptionsClick;
 			backStageButtonSystemExit.Click -= toolStripButtonSystemExitClick;
 			backStageButtonManiMenuImport.Click -= backStageButtonManiMenuImportClick;
-			backStageButtonMainMenuArchive.Click -= backStageButtonMainMenuArchiveClick;
+			backStageButtonMainMenuCopy.Click -= backStageButtonMainMenuCopyClick;
 			backStage1.VisibleChanged -= backStage1VisibleChanged;
 
 			if (flowLayoutExportToScenario != null && flowLayoutExportToScenario.ContainerControl != null)
@@ -6996,9 +7024,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			openResourcePlannerInWfm("importschedule");
 		}
 
-		private void backStageButtonMainMenuArchiveClick(object sender, EventArgs e)
+		private void backStageButtonMainMenuCopyClick(object sender, EventArgs e)
 		{
-			openResourcePlannerInWfm("archiveschedule");
+			openResourcePlannerInWfm("copyschedule");
 		}
 
 		private void openResourcePlannerInWfm(string what)

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -40,8 +39,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		public IActiveAgentCount ActiveAgentCount { get; set; }
 
 		public double IntraIntervalDeviation { get; private set; }
-
-		public double IntraIntervalRootMeanSquare { get; private set; }
 
 		public double RelativeBoostedDifferenceForDisplayOnly { get; set; }
 
@@ -309,14 +306,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			IPeriodDistribution periodDistribution)
 		{
 			IntraIntervalDeviation = calculatedValues.StandardDeviation;
-			IntraIntervalRootMeanSquare = calculatedValues.RootMeanSquare;
 			_periodDistribution = periodDistribution;
 		}
 
 		public void ClearIntraIntervalDistribution()
 		{
 			IntraIntervalDeviation = 0;
-			IntraIntervalRootMeanSquare = 0;
 		}
 
 		public void SetSkillDay(ISkillDay skillDay)

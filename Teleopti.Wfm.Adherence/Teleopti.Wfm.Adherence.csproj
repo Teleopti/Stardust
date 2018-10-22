@@ -83,8 +83,6 @@
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDay.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayLoaderHistoricalOverview.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayLoaderDurationOfEvents.cs" />
-    <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayLoaderFromEventStore.cs" />
-    <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayLoaderLateForWork.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayWithDurationOfEvents.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayWithEventStore.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayWithHistoricalOverview.cs" />
@@ -119,11 +117,15 @@
     <Compile Include="Domain\Events\IRtaStoredEvent.cs" />
     <Compile Include="Domain\Events\ISolidProof.cs" />
     <Compile Include="Domain\Events\PeriodApprovedAsInAdherenceEvent.cs" />
+    <Compile Include="Domain\Events\PersonActivityStartEvent.cs" />
+    <Compile Include="Domain\Events\PersonAdherenceDayStartEvent.cs" />
     <Compile Include="Domain\Events\PersonArrivedLateForWorkEvent.cs" />
     <Compile Include="Domain\Events\PersonInAdherenceEvent.cs" />
     <Compile Include="Domain\Events\PersonNeutralAdherenceEvent.cs" />
     <Compile Include="Domain\Events\PersonOutOfAdherenceEvent.cs" />
     <Compile Include="Domain\Events\PersonRuleChangedEvent.cs" />
+    <Compile Include="Domain\Events\PersonShiftEndEvent.cs" />
+    <Compile Include="Domain\Events\PersonShiftStartEvent.cs" />
     <Compile Include="Domain\Events\PersonStateChangedEvent.cs" />
     <Compile Include="Domain\Events\RtaEventStoreSynchronizer.cs" />
     <Compile Include="Domain\Events\RtaMapChangedEvent.cs" />
@@ -132,6 +134,7 @@
     <Compile Include="Domain\Service\ActivityChangeChecker.cs" />
     <Compile Include="Domain\Service\ActivityEventPublisher.cs" />
     <Compile Include="Domain\Service\ActualAgentStateExtension.cs" />
+    <Compile Include="Domain\Service\AdherenceDayStartEventPublisher.cs" />
     <Compile Include="Domain\Service\AdherenceEventPublisher.cs" />
     <Compile Include="Domain\Service\AdherenceInfo.cs" />
     <Compile Include="Domain\Service\AgentState.cs" />

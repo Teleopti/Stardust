@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Requests.PerformanceTuningTest;
@@ -68,6 +69,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		public AbsenceStaffingPossibilityCalculator AbsenceStaffingPossibilityCalculator;
 		public OvertimeStaffingPossibilityCalculator OvertimeStaffingPossibilityCalculator;
 		public FakeLoggedOnUser LoggedOnUser;
+		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 
 		private LicenseSchema schema;
 
@@ -76,6 +78,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		{
 			initialise();
 			var now = Now.UtcDateTime();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(1));
 			updateStaffingLevel(period);
 			var personIds = loadPersonIds();
@@ -96,6 +99,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		{
 			initialise();
 			var now = Now.UtcDateTime();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(13));
 			updateStaffingLevel(period);
 			var dateOnlyPeriod = new DateOnlyPeriod(Now.ServerDate_DontUse(), Now.ServerDate_DontUse().AddDays(13));
@@ -117,6 +121,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		{
 			initialise();
 			var now = Now.UtcDateTime();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(13));
 			updateStaffingLevel(period);
 			var dateOnlyPeriod = new DateOnlyPeriod(Now.ServerDate_DontUse(), Now.ServerDate_DontUse().AddDays(13));

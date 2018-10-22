@@ -29,12 +29,14 @@
 					headerCellClass: 'request-type-header',
 					enableSorting: false,
 					visible: true,
-					filterHeaderTemplate: '<md-select ng-repeat=\"colFilter in col.filters\" md-on-close=\"grid.appScope.typeFilterClose()\" ng-model-options=\"{trackBy: \'$value.Id\'}\"'
+					filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\">'
+					+ '<md-select md-on-close=\"grid.appScope.typeFilterClose()\" ng-model-options=\"{trackBy: \'$value.Id\'}\"'
 					+ 'multiple ng-model=\"grid.appScope.selectedTypes\" placeholder=\"{{\'FilterColon\' | translate}} {{\'Type\' | translate}}\" aria-label=\"{{\'Type\' | translate}}\">'
 					+ '<md-option ng-repeat=\"item in grid.appScope.AllRequestTypes\" ng-value=\"item\">'
 					+ '<span>{{ item.Name | translate}}</span>'
 					+ '</md-option>'
 					+ '</md-select>'
+					+ '</div>'
 				},
 				{
 					displayName: 'Subject',
@@ -80,12 +82,14 @@
 					cellClass: 'request-status',
 					headerCellClass: 'request-status-header',
 					enableSorting: false,
-					filterHeaderTemplate: '<md-select class=\"test-status-selector\" ng-model-options=\"{trackBy: \'$value.Id\'}\" ng-repeat=\"colFilter in col.filters\" md-on-close=\"grid.appScope.statusFilterClose()\"'
+					filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\">'
+					+ '<md-select class=\"test-status-selector\" ng-model-options=\"{trackBy: \'$value.Id\'}\" md-on-close=\"grid.appScope.statusFilterClose()\"'
 					+ 'multiple ng-model=\"grid.appScope.selectedRequestStatuses\" placeholder=\"{{\'FilterColon\' | translate}} {{\'Status\' | translate}}\" aria-label=\"{{\'Status\' | translate}}\">'
 					+ '<md-option ng-repeat=\"item in grid.appScope.allRequestStatuses\" ng-value=\"item\">'
 					+ '<span>{{item.Name | translate}}</span>'
 					+ '</md-option>'
 					+ '</md-select>'
+					+ '</div>'
 				},
 				{ displayName: 'CreatedOn', field: 'FormatedCreatedTime()', headerCellFilter: 'translate', cellClass: 'request-created-time', headerCellClass: 'request-created-time-header' },
 				{ displayName: 'UpdatedOn', field: 'FormatedUpdatedTime()', headerCellFilter: 'translate', cellClass: 'request-updated-time', visible: false, headerCellClass: 'request-updated-time-header' }

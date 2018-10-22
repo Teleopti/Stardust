@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			}
 
 			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
-				new ScheduleDictionaryLoadOptions(true, true, true), new DateOnlyPeriod(dates.Min(), dates.Max()), scenario);
+				new ScheduleDictionaryLoadOptions(true, false, true), new DateOnlyPeriod(dates.Min(), dates.Max()), scenario);
 
 			IList<AnalyticsDayOff> dayOffs = null;
 			foreach (var date in dates)

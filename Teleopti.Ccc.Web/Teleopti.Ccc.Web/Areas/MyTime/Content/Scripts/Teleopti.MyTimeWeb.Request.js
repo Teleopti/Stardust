@@ -144,7 +144,7 @@ Teleopti.MyTimeWeb.Request = (function($) {
 				Teleopti.MyTimeWeb.Request.RequestPartialDispose
 			);
 		},
-		RequestPartialInit: function(readyForInteractionCallback, completelyLoadedCallback) {
+		RequestPartialInit: function(readyForInteractionCallback, completelyLoadedCallback, ajax) {
 			readyForInteraction = readyForInteractionCallback;
 			completelyLoaded = completelyLoadedCallback;
 
@@ -155,7 +155,7 @@ Teleopti.MyTimeWeb.Request = (function($) {
 			}
 
 			Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.Init();
-			Teleopti.MyTimeWeb.Request.List.Init(readyForInteraction, completelyLoaded);
+			Teleopti.MyTimeWeb.Request.List.Init(readyForInteraction, completelyLoaded, ajax);
 
 			_initNavigationViewModel();
 			Teleopti.MyTimeWeb.Request.RequestDetail.Init();

@@ -23,6 +23,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 		IEnumerable<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people, DateOnly currentDate,
 			string function);
 
+		IEnumerable<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people, DateOnlyPeriod period,
+			string function);
+
 		void PopulateSearchCriteriaResult(PersonFinderSearchCriteria search);
 
 		List<Guid> FindPersonIds(DateOnly date, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria);
