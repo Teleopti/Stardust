@@ -78,10 +78,10 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		{
 			initialise();
 			var now = Now.UtcDateTime();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(1));
 			updateStaffingLevel(period);
 			var personIds = loadPersonIds();
-			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			WithUnitOfWork.Do(() =>
 			{
 				var personCount = personIds.Length;
@@ -99,6 +99,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		{
 			initialise();
 			var now = Now.UtcDateTime();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(13));
 			updateStaffingLevel(period);
 			var dateOnlyPeriod = new DateOnlyPeriod(Now.ServerDate_DontUse(), Now.ServerDate_DontUse().AddDays(13));
@@ -120,6 +121,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		{
 			initialise();
 			var now = Now.UtcDateTime();
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(13));
 			updateStaffingLevel(period);
 			var dateOnlyPeriod = new DateOnlyPeriod(Now.ServerDate_DontUse(), Now.ServerDate_DontUse().AddDays(13));

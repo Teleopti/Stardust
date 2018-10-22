@@ -103,6 +103,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 			_nowDateTime = new DateTime(2016, 03, 16, 7, 0, 0).Utc();
 			Now.Is(_nowDateTime);
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var startDateTime = new DateTime(2016, 03, 16, 7, 0, 0).Utc();
 			var resolution = 15;
 			var periods = new List<DateTime>();
