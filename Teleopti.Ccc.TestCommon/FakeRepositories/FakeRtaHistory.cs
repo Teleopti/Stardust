@@ -17,6 +17,30 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_store = store;
 		}
 
+		public FakeRtaHistory ShiftStart(Guid personId, string shiftStartTime, string shiftEndTime)
+		{
+			_store.Add(new PersonShiftStartEvent
+			{
+				PersonId = personId,
+				BelongsToDate = shiftStartTime.Date(),
+				ShiftStartTime = shiftStartTime.Utc(),
+				ShiftEndTime = shiftEndTime.Utc()
+			}, DeadLockVictim.No);
+			return this;
+		}
+		
+		public FakeRtaHistory ShiftEnd(Guid personId, string shiftStartTime, string shiftEndTime)
+		{
+			_store.Add(new PersonShiftEndEvent
+			{
+				PersonId = personId,
+				BelongsToDate = shiftStartTime.Date(),
+				ShiftStartTime = shiftStartTime.Utc(),
+				ShiftEndTime = shiftEndTime.Utc()
+			}, DeadLockVictim.No);
+			return this;
+		}
+
 		public FakeRtaHistory StateChanged(Guid personId, string time) =>
 			StateChanged(personId, time, null, null, null, null, null, null);
 

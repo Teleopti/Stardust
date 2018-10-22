@@ -28,6 +28,14 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			_now = floorToSeconds(now);
 		}
 
+		public void Apply(PersonShiftStartEvent @event)
+		{
+		}
+
+		public void Apply(PersonShiftEndEvent @event)
+		{
+		}
+
 		public void Apply(PersonStateChangedEvent @event) => applySolidProof(@event);
 
 		public void Apply(PersonRuleChangedEvent @event) => applySolidProof(@event);
@@ -138,7 +146,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 		public DateTimePeriod Period() => _period;
 
 		public IEnumerable<HistoricalChangeModel> Changes() => _changes;
-		
+
 		public IEnumerable<AdherencePeriod> RecordedOutOfAdherences() => _recordedOutOfAdherences.ToArray();
 
 		public IEnumerable<ApprovedPeriod> ApprovedPeriods() =>

@@ -202,6 +202,7 @@
     <Compile Include="Domain\AgentAdherenceDay\ApprovedPeriodTest.cs" />
     <Compile Include="Domain\AgentAdherenceDay\ChangesTest.cs" />
     <Compile Include="Domain\AgentAdherenceDay\DurationOfEventsTest.cs" />
+    <Compile Include="Domain\AgentAdherenceDay\NotApplicableEventsTest.cs" />
     <Compile Include="Domain\AgentAdherenceDay\LateForWorkTest.cs" />
     <Compile Include="Domain\AgentAdherenceDay\PercentageTest.cs" />
     <Compile Include="Domain\AgentAdherenceDay\RecordedAdherenceTest.cs" />

@@ -33,6 +33,14 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			_now = floorToSeconds(now);
 		}
 
+		public void Apply(PersonShiftStartEvent @event)
+		{
+		}
+
+		public void Apply(PersonShiftEndEvent @event)
+		{
+		}
+		
 		public void Apply(PersonStateChangedEvent @event) => applySolidProof(@event);
 
 		public void Apply(PersonRuleChangedEvent @event) => applySolidProof(@event);
@@ -60,10 +68,10 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 
 			_recordedNeutralAdherences = removeTinyPeriods(_recordedNeutralAdherences);
 			_recordedNeutralAdherences = mergePeriods(_recordedNeutralAdherences);
-			
+
 			_outOfAhderencesWithinShift = withinShift(_shift, OutOfAdherences().Select(x => new DateTimePeriod(x.StartTime, x.EndTime.Value)));
 			_neutralAdherencesWithinShift = withinShift(_shift, neutralAdherencePeriods());
-			
+
 			calculateAdherence(_shift, _neutralAdherencesWithinShift, _outOfAhderencesWithinShift, _now);
 		}
 
@@ -78,15 +86,15 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 
 			var lastProof = _changes.LastOrDefault();
 			if (lastProof != null && !isSameProof(lastProof, @event))
-				lastProof.Duration = floorToSeconds(@event.Timestamp).Subtract(floorToSeconds(lastProof.Timestamp)).ToString();	
-			
+				lastProof.Duration = floorToSeconds(@event.Timestamp).Subtract(floorToSeconds(lastProof.Timestamp)).ToString();
+
 			var needNewProof = (lastProof == null || !isSameProof(lastProof, @event));
 			if (needNewProof)
 			{
 				var proof = createProof(@event);
 				_changes.Add(proof);
 				return proof;
-			}	
+			}
 
 			lastProof.Timestamp = @event.Timestamp;
 			return lastProof;
@@ -157,7 +165,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 		public DateTimePeriod Period() => _period;
 
 		public IEnumerable<HistoricalChangeModel> Changes() => _changes;
-		
+
 		public IEnumerable<AdherencePeriod> RecordedOutOfAdherences() => _recordedOutOfAdherences.ToArray();
 
 		public IEnumerable<ApprovedPeriod> ApprovedPeriods() =>
@@ -174,12 +182,12 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 		public int? SecondsInAherence() => _secondsInAdherence;
 
 		public int? SecondsOutOfAdherence() => _secondsOutOfAdherence;
-		
+
 		private IEnumerable<DateTimePeriod> neutralAdherencePeriods()
 		{
 			return subtractPeriods(_recordedNeutralAdherences.Select(x => new DateTimePeriod(x.StartTime, x.EndTime.Value)), _approvedPeriods).ToArray();
 		}
-		
+
 		private void calculateAdherence(DateTimePeriod? shift, IEnumerable<DateTimePeriod> neutralPeriods, IEnumerable<DateTimePeriod> outPeriods, DateTime now)
 		{
 			if (!shift.HasValue)
@@ -193,17 +201,17 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			var timeToAdhere = shiftTime - timeNeutral;
 			if (timeToAdhere == TimeSpan.Zero)
 				return;
-			
+
 			var timeOut = time(outPeriods);
 			var timeIn = shiftTime - timeOut - timeNeutral;
 
 			_secondsInAdherence = Convert.ToInt32(timeIn.TotalSeconds);
 			_secondsOutOfAdherence = Convert.ToInt32(timeOut.TotalSeconds);
 			_adherencePercentage = Convert.ToInt32((timeIn.TotalSeconds / timeToAdhere.TotalSeconds) * 100);
-		}		
-				
+		}
+
 		private static TimeSpan time(IEnumerable<DateTimePeriod> periods) =>
-			TimeSpan.FromSeconds(periods.Sum(x => (x.EndDateTime - x.StartDateTime).TotalSeconds));		
+			TimeSpan.FromSeconds(periods.Sum(x => (x.EndDateTime - x.StartDateTime).TotalSeconds));
 
 		//difficult to grasp the linq
 		private static IEnumerable<DateTimePeriod> subtractPeriods(IEnumerable<DateTimePeriod> periods, IEnumerable<DateTimePeriod> toSubtract) =>
