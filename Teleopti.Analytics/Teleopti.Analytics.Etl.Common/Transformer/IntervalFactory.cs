@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer
 {
@@ -6,14 +7,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 	{
 		public static IList<Interval> CreateIntervalCollection(int intervalsPerDay)
 		{
-			IList<Interval> retList = new List<Interval>();
-
-			for (int i = 0; i < intervalsPerDay; i++)
-			{
-				var interval = new Interval(i, intervalsPerDay);
-				retList.Add(interval);
-			}
-			return retList;
+			return Enumerable.Range(0,intervalsPerDay).Select(i => new Interval(i, intervalsPerDay)).ToArray();
 		}
 	}
 }

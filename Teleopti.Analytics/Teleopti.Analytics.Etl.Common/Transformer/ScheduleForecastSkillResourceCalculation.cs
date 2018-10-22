@@ -95,7 +95,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 					{
 						IScheduleForecastSkillKey scheduleForecastSkillKey =
 							 new ScheduleForecastSkillKey(skillStaffPeriodView.Period.StartDateTime,
-																new Interval(skillStaffPeriodView.Period.StartDateTime,
+																new IntervalBase(skillStaffPeriodView.Period.StartDateTime,
 																				 _intervalsPerDay).Id, skillDay.Skill.Id.GetValueOrDefault(),
 																skillDay.Scenario.Id.GetValueOrDefault());
 						IScheduleForecastSkill scheduleForecastSkill;

@@ -1067,6 +1067,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
+		public FakeDatabase WithOpenAbsenceRequestWorkflowConrolSet(Guid id, AbsenceRequestOpenDatePeriod absenceOpenRequest)
+		{
+			ensureExists(_workflowControlSets, null, () => WithWorkflowControlSet(null, null));
+			_workflowControlSet.AddOpenAbsenceRequestPeriod(absenceOpenRequest);
+			return this;
+		}
+
 		public FakeDatabase WithMultiSchedulesForShiftTradeWorkflow(DateTime publishedDate, ISkill skill)
 		{
 			ensureExists(_workflowControlSets, null, () => WithWorkflowControlSet(null, null));

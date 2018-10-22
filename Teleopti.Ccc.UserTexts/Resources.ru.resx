@@ -13242,7 +13242,7 @@ Teleopti R&amp;D</value>
   <data name="ValidatingPersons2" xml:space="preserve">
     <value>Проверка {0} человек(-а) из {1}</value>
   </data>
-  <data name="ArchivingConfirmationWithParameters" xml:space="preserve">
+  <data name="CopyingConfirmationWithParameters" xml:space="preserve">
     <value>Вы собираетесь перезаписать все существующее раписание на сценарии '{0}' за период {1} - {2} для выбранных групп.</value>
   </data>
   <data name="AreYouSure" xml:space="preserve">

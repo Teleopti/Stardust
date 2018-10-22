@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 
 		public AgentRestrictionsDetailPresenter(IAgentRestrictionsDetailView view, IAgentRestrictionsDetailModel model, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
 			ClipHandler<IScheduleDay> clipHandler, SchedulePartFilter schedulePartFilter,IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, 
-			IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag)
-			: base(view, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag)
+			IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag, IUndoRedoContainer undoRedoContainer)
+			: base(view, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag, undoRedoContainer)
 		{
 			_model = model;
 		}

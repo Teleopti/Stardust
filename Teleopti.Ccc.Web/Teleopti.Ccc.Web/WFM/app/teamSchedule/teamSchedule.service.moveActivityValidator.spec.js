@@ -20,9 +20,10 @@
 					"Color": "#80FF80",
 					"Description": "Email",
 					"Start": scheduleDate + " 07:00",
-					"StartInUtc": scheduleDate + " 07:00",
+					"StartInUtc": "2016-05-11 23:00",
 					"Minutes": 480,
 					"End": scheduleDate + " 15:00",
+					"EndInUtc": scheduleDate + " 07:00"
 				}
 			],
 			"IsFullDayAbsence": false,
@@ -92,7 +93,7 @@
 				var localSchedule = JSON.parse(JSON.stringify(schedule));
 				localSchedule.MultiplicatorDefinitionSetIds = [definitionSetId];
 
-				scheduleMgmt.resetSchedules([localSchedule], moment(scheduleDate));
+				scheduleMgmt.resetSchedules([localSchedule], scheduleDate);
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 
 				personSchedule.IsSelected = true;
@@ -114,7 +115,7 @@
 					var localSchedule = JSON.parse(JSON.stringify(schedule));
 					localSchedule.MultiplicatorDefinitionSetIds = [definitionSetId];
 
-					scheduleMgmt.resetSchedules([localSchedule], moment(scheduleDate));
+					scheduleMgmt.resetSchedules([localSchedule], scheduleDate);
 					var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 
 					personSchedule.IsSelected = true;
@@ -140,7 +141,7 @@
 
 					localSchedule.Timezone.IanaId = "America/Chicago";  //UTC-6
 
-					scheduleMgmt.resetSchedules([localSchedule], moment(scheduleDate));
+					scheduleMgmt.resetSchedules([localSchedule], scheduleDate);
 					var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 
 					personSchedule.IsSelected = true;
@@ -165,7 +166,7 @@
 
 					localSchedule.Timezone.IanaId = "America/Chicago";  //UTC-6
 
-					scheduleMgmt.resetSchedules([localSchedule], moment(scheduleDate));
+					scheduleMgmt.resetSchedules([localSchedule], scheduleDate);
 					var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 
 					personSchedule.IsSelected = true;
@@ -186,7 +187,7 @@
 					var localSchedule = JSON.parse(JSON.stringify(schedule));
 					localSchedule.MultiplicatorDefinitionSetIds = [definitionSetId];
 					localSchedule.Timezone.IanaId = "America/Chicago";  //UTC-6
-					scheduleMgmt.resetSchedules([localSchedule], moment(scheduleDate));
+					scheduleMgmt.resetSchedules([localSchedule], scheduleDate);
 					var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 					personSchedule.Date = '2016-04-12';
 					personSchedule.IsSelected = true;
@@ -206,7 +207,7 @@
 
 			it('should return false when moving to time changes the schedule start date', function () {
 				var localSchedule = JSON.parse(JSON.stringify(schedule));
-				scheduleMgmt.resetSchedules([localSchedule], moment(scheduleDate));
+				scheduleMgmt.resetSchedules([localSchedule], scheduleDate);
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 
 				personSchedule.IsSelected = true;
@@ -235,9 +236,10 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"Start": scheduleDate + " 01:00",
-							"StartInUtc": scheduleDate + " 01:00",
+							"StartInUtc": "2016-05-11 17:00",
 							"Minutes": 480,
-							"End": scheduleDate + " 10:00"
+							"End": scheduleDate + " 10:00",
+							"EndInUtc": scheduleDate + " 02:00"
 						},
 						{
 							"ShiftLayerIds": ["layer2"],
@@ -246,14 +248,15 @@
 							"Description": "Phone",
 							"Start": scheduleDate + " 10:00",
 							"End": scheduleDate + " 18:00",
-							"StartInUtc": scheduleDate + " 10:00",
+							"StartInUtc": scheduleDate + " 02:00",
+							"EndInUtc": scheduleDate + " 10:00",
 							"Minutes": 480
 						}
 					],
 					"IsFullDayAbsence": false,
 					"DayOff": null
 				}
-				scheduleMgmt.resetSchedules([localSchedule], moment(scheduleDate));
+				scheduleMgmt.resetSchedules([localSchedule], scheduleDate);
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.Shifts[0].Projections[1].Selected = true;
 				personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[1]);
@@ -280,35 +283,29 @@
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Email",
-							"Start": previousDay + " 22:00",
 							"StartInUtc": previousDay + " 14:00",
-							"Minutes": 180,
-							"End": scheduleDate + " 01:00"
+							"EndInUtc": previousDay + " 17:00"
 						}, {
 							"ShiftLayerIds": ["layer2"],
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Short Break",
-							"Start": scheduleDate + " 01:00",
-							"End": scheduleDate + " 02:00",
 							"StartInUtc": previousDay + " 17:00",
-							"Minutes": 60
+							"EndInUtc": scheduleDate + " 18:00"
 						}, {
 							"ShiftLayerIds": ["layer3"],
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Email",
-							"Start": scheduleDate + " 02:00",
-							"End": scheduleDate + " 04:00",
 							"StartInUtc": scheduleDate + " 18:00",
-							"Minutes": 120
+							"EndInUtc": scheduleDate + " 20:00"
 						}
 					],
 					"IsFullDayAbsence": false,
 					"DayOff": null
 				};
 
-				scheduleMgmt.resetSchedules([localSchedule], moment(previousDay));
+				scheduleMgmt.resetSchedules([localSchedule], previousDay);
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.Shifts[0].Projections[1].Selected = true;
 				personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[1], personSchedule);
@@ -344,7 +341,7 @@
 					"DayOff": null
 				};
 
-				scheduleMgmt.resetSchedules([localSchedule], moment(scheduleDate));
+				scheduleMgmt.resetSchedules([localSchedule], scheduleDate);
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.Shifts[0].Projections[0].Selected = true;
 				personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[0], personSchedule);
@@ -380,7 +377,7 @@
 					"DayOff": null
 				};
 
-				scheduleMgmt.resetSchedules([localSchedule], moment(scheduleDate), "Asia/Hong_Kong");
+				scheduleMgmt.resetSchedules([localSchedule], scheduleDate, "Asia/Hong_Kong");
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.Shifts[0].Projections[0].Selected = true;
 				personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[0], personSchedule);
@@ -406,17 +403,15 @@
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Email",
-							"Start": nextDay + " 01:00",
-							"End": nextDay + " 04:00",
 							"StartInUtc": scheduleDate + " 17:00",
-							"Minutes": 180
+							"EndInUtc": scheduleDate + " 20:00"
 						}
 					],
 					"IsFullDayAbsence": false,
 					"DayOff": null
 				};
 
-				scheduleMgmt.resetSchedules([localSchedule], moment(scheduleDate), "Asia/Hong_Kong");
+				scheduleMgmt.resetSchedules([localSchedule], scheduleDate, "Asia/Hong_Kong");
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.Shifts[0].Projections[0].Selected = true;
 				personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[0], personSchedule);
@@ -441,10 +436,8 @@
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Email",
-							"Start": scheduleDate + " 06:00",
-							"End": scheduleDate + " 08:00",
 							"StartInUtc": "2016-05-11 22:00",
-							"Minutes": 120,
+							"EndInUtc": "2016-05-12 00:00",
 							"IsOvertime": true
 						},
 						{
@@ -452,16 +445,14 @@
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Phone",
-							"Start": scheduleDate + " 10:00",
-							"End": scheduleDate + " 18:00",
 							"StartInUtc": scheduleDate + " 02:00",
-							"Minutes": 480
+							"EndInUtc": scheduleDate + " 10:00"
 						}
 					],
 					"IsFullDayAbsence": false,
 					"DayOff": null
 				}
-				scheduleMgmt.resetSchedules([localSchedule], moment(scheduleDate));
+				scheduleMgmt.resetSchedules([localSchedule], scheduleDate);
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.Shifts[0].Projections[0].Selected = true;
 				personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[0]);
@@ -486,17 +477,15 @@
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Email",
-							"Start": scheduleDate + " 08:00",
-							"End": scheduleDate + " 16:00",
 							"StartInUtc": scheduleDate + " 00:00",
-							"Minutes": 480
+							"EndInUtc": scheduleDate + " 08:00"
 						}
 					],
 					"IsFullDayAbsence": false,
 					"DayOff": null
 				};
 
-				scheduleMgmt.resetSchedules([localSchedule], moment(scheduleDate), "Asia/Hong_Kong");
+				scheduleMgmt.resetSchedules([localSchedule], scheduleDate, "Asia/Hong_Kong");
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.IsSelected = true;
 				personSelection.updatePersonSelection(personSchedule);
@@ -522,10 +511,8 @@
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Email",
-							"Start": scheduleDate + " 08:00",
 							"StartInUtc": scheduleDate + " 00:00",
-							"End": scheduleDate + " 17:00",
-							"Minutes": 540
+							"EndInUtc": scheduleDate + " 09:00"
 						}
 					],
 					"IsFullDayAbsence": false,
@@ -545,17 +532,15 @@
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Email",
-							"Start": nextDay + " 08:00",
 							"StartInUtc": nextDay + " 00:00",
-							"End": nextDay + " 17:00",
-							"Minutes": 540
+							"EndInUtc": nextDay + " 09:00"
 						}
 					],
 					"IsFullDayAbsence": false,
 					"DayOff": null
 				};
 
-				scheduleMgmt.resetSchedules([localSchedule, nextDaySchedule], moment(scheduleDate), "America/Denver");
+				scheduleMgmt.resetSchedules([localSchedule, nextDaySchedule], scheduleDate, "America/Denver");
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.IsSelected = true;
 				personSelection.updatePersonSelection(personSchedule);
@@ -581,17 +566,15 @@
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Email",
-							"Start": scheduleDate + " 08:00",
-							"End": scheduleDate + " 16:00",
 							"StartInUtc": scheduleDate + " 00:00",
-							"Minutes": 480
+							"EndInUtc": scheduleDate + " 08:00"
 						}
 					],
 					"IsFullDayAbsence": false,
 					"DayOff": null
 				};
 
-				scheduleMgmt.resetSchedules([localSchedule], moment(scheduleDate), "Asia/Hong_Kong");
+				scheduleMgmt.resetSchedules([localSchedule], scheduleDate, "Asia/Hong_Kong");
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.IsSelected = true;
 				personSelection.updatePersonSelection(personSchedule);
@@ -617,10 +600,8 @@
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Email",
-							"Start": scheduleDate + " 08:00",
-							"End": scheduleDate + " 18:00",
 							"StartInUtc": scheduleDate + " 00:00",
-							"Minutes": 600
+							"EndInUtc": scheduleDate + " 10:00"
 						}
 					],
 					"IsFullDayAbsence": false,
@@ -640,17 +621,15 @@
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Email",
-							"Start": nextDay + " 05:00",
-							"End": nextDay + " 13:00",
 							"StartInUtc": scheduleDate + " 21:00",
-							"Minutes": 480
+							"EndInUtc": nextDay + " 05:00"
 						}
 					],
 					"IsFullDayAbsence": false,
 					"DayOff": null
 				};
 
-				scheduleMgmt.resetSchedules([scheduleToday, scheduleNextDay], moment(scheduleDate), "Asia/Hong_Kong");
+				scheduleMgmt.resetSchedules([scheduleToday, scheduleNextDay], scheduleDate, "Asia/Hong_Kong");
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.IsSelected = true;
 				personSelection.updatePersonSelection(personSchedule);
@@ -676,10 +655,8 @@
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Email",
-							"Start": scheduleDate + " 08:00",
-							"End": scheduleDate + " 18:00",
 							"StartInUtc": scheduleDate + " 00:00",
-							"Minutes": 600
+							"EndInUtc": scheduleDate + " 10:00"
 						}
 					],
 					"IsFullDayAbsence": false,
@@ -699,17 +676,15 @@
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Email",
-							"Start": nextDay + " 08:00",
-							"End": nextDay + " 16:00",
 							"StartInUtc": nextDay + " 00:00",
-							"Minutes": 480
+							"EndInUtc": nextDay + " 08:00"
 						}
 					],
 					"IsFullDayAbsence": false,
 					"DayOff": null
 				};
 
-				scheduleMgmt.resetSchedules([scheduleToday, scheduleNextDay], moment(scheduleDate), "Asia/Hong_Kong");
+				scheduleMgmt.resetSchedules([scheduleToday, scheduleNextDay], scheduleDate, "Asia/Hong_Kong");
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.IsSelected = true;
 				personSelection.updatePersonSelection(personSchedule);
@@ -735,10 +710,8 @@
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Email",
-							"Start": scheduleDate + " 13:00",
-							"End": scheduleDate + " 21:00",
 							"StartInUtc": scheduleDate + " 05:00",
-							"Minutes": 480
+							"EndInUtc": scheduleDate + " 13:00"
 						}
 					],
 					"IsFullDayAbsence": false,
@@ -758,21 +731,19 @@
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Email",
-							"Start": prevDay + " 23:00",
-							"End": scheduleDate + " 07:00",
 							"StartInUtc": prevDay + " 15:00",
-							"Minutes": 480
+							"EndInUtc": prevDay + " 23:00"
 						}
 					],
 					"IsFullDayAbsence": false,
 					"DayOff": null
 				};
 
-				scheduleMgmt.resetSchedules([scheduleToday, scheduleNextDay], moment(scheduleDate), "Asia/Hong_Kong");
+				scheduleMgmt.resetSchedules([scheduleToday, scheduleNextDay], scheduleDate, "Asia/Hong_Kong");
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.IsSelected = true;
 				personSelection.updatePersonSelection(personSchedule);
-				var newStartMoment = moment.tz(scheduleDate + " 5:00", "Asia/Hong_Kong");
+				var newStartMoment = moment.tz(scheduleDate + " 05:00", "Asia/Hong_Kong");
 
 				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
@@ -793,9 +764,8 @@
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Email",
-							"Start": scheduleDate + " 08:00",
-							"End": scheduleDate + " 16:00",
 							"StartInUtc": scheduleDate + " 00:00",
+							"EndInUtc": scheduleDate + " 08:00",
 							"Minutes": 480
 						}
 					],
@@ -803,7 +773,7 @@
 					"DayOff": null
 				};
 
-				scheduleMgmt.resetSchedules([scheduleToday], moment(scheduleDate), "Asia/Hong_Kong");
+				scheduleMgmt.resetSchedules([scheduleToday], scheduleDate, "Asia/Hong_Kong");
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.IsSelected = true;
 				personSelection.updatePersonSelection(personSchedule);
@@ -828,7 +798,7 @@
 					"DayOff": null
 				};
 
-				scheduleMgmt.resetSchedules([scheduleToday], moment(scheduleDate), "Asia/Hong_Kong");
+				scheduleMgmt.resetSchedules([scheduleToday], scheduleDate, "Asia/Hong_Kong");
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.IsSelected = true;
 				personSelection.updatePersonSelection(personSchedule);
@@ -853,17 +823,15 @@
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Email",
-							"Start": scheduleDate + " 11:00",
 							"StartInUtc": scheduleDate + " 03:00",
-							"End": scheduleDate + " 19:00",
-							"Minutes": 480
+							"EndInUtc": scheduleDate + " 11:00"
 						}
 					],
 					"IsFullDayAbsence": false,
 					"DayOff": null
 				};
 
-				scheduleMgmt.resetSchedules([scheduleToday], moment(scheduleDate), "Asia/Hong_Kong");
+				scheduleMgmt.resetSchedules([scheduleToday], scheduleDate, "Asia/Hong_Kong");
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.IsSelected = true;
 				personSelection.updatePersonSelection(personSchedule);
@@ -891,17 +859,15 @@
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Email",
-							"Start": scheduleDate + " 23:00",
 							"StartInUtc": scheduleDate + " 15:00",
-							"End": "2016-05-13 23:00",
-							"Minutes": 1440
+							"EndInUtc": "2016-05-14 15:00"
 						}
 					],
 					"IsFullDayAbsence": false,
 					"DayOff": null
 				};
 
-				scheduleMgmt.resetSchedules([scheduleToday], moment(scheduleDate), "Asia/Hong_Kong");
+				scheduleMgmt.resetSchedules([scheduleToday], scheduleDate, "Asia/Hong_Kong");
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.IsSelected = true;
 				personSelection.updatePersonSelection(personSchedule);
@@ -929,10 +895,8 @@
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Email",
-							"Start": scheduleDate + " 23:00",
 							"StartInUtc": scheduleDate + " 15:00",
-							"End": "2016-05-13 23:00",
-							"Minutes": 1440
+							"StartInUtc": "2016-05-14 15:00"
 						}
 					],
 					"IsFullDayAbsence": false,
@@ -940,7 +904,7 @@
 					"MultiplicatorDefinitionSetIds": []
 				};
 
-				scheduleMgmt.resetSchedules([scheduleToday], moment(scheduleDate), "Asia/Hong_Kong");
+				scheduleMgmt.resetSchedules([scheduleToday], scheduleDate, "Asia/Hong_Kong");
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.IsSelected = true;
 				personSelection.updatePersonSelection(personSchedule);

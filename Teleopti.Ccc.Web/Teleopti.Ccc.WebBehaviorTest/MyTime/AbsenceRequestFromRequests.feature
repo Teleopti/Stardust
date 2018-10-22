@@ -4,7 +4,7 @@ Feature: Absence request from requests
 	As an agent
 	I want to be able to submit requests as absence
 
-
+@OnlyRunIfDisabled('MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446')
 Scenario: When requesting absence tracked as days view remaining and used days
 Given I am an agent
 And I am american
@@ -32,7 +32,7 @@ And I should see the used days is '3 Days'
 @suppressHangfireQueue
 Scenario: Should show request list when cancel add absence request
 	Given I am an agent
-	And I have a requestable absence called Vacation
+	And I have an open workflow control set with absence request waitlisting enabled
 	And I am viewing requests
 	When I click to add a new absence request
 	And I input absence request values with Vacation
@@ -43,6 +43,7 @@ Scenario: Should show request list when cancel add absence request
 	And I cancel to add absence request
 	Then I should see the request of type 'Vacation' in the list
 
+@OnlyRunIfDisabled('MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446')
 @NotKeyExample
 Scenario: When requesting absence tracked by hours view remaining and used time
 Given I am an agent
@@ -70,6 +71,7 @@ And I input absence request values with 'Illness' for date '2014-10-03'
 Then I should see the used time is '24:00'
 And I should see the remaining time is '226:00'
 
+@OnlyRunIfDisabled('MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446')
 Scenario: When changing absence type update remaining and used time
 Given I am an agent
 And I am american
@@ -102,14 +104,13 @@ And I should see the used days is '0 Days'
 
 Scenario: Do not show personal account when select an absence type not tracked
 Given I am an agent
-And I have a requestable absence with
-| Field       | Value    |
-| Name        | Vacation |
+And I have an open workflow control set with absence request waitlisting enabled
 And I am viewing requests
 When I click to add a new absence request
 And I input absence request values with 'Vacation' for date '2014-10-03'
 Then I should not see the remaining and used time
 
+@OnlyRunIfDisabled('MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446')
 Scenario: When changing request date change remaining and used time
 Given I am an agent
 And I am american
@@ -141,6 +142,7 @@ When I input absence request values with 'Vacation' for date '2015-10-03'
 Then I should see the remaining days is '25 Days'
 And I should see the used days is '0 Days'
 
+@OnlyRunIfDisabled('MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446')
 @NotKeyExample
 Scenario: When requesting absence over multiple account periods show remaining and used time according to end date period
 Given I am an agent
@@ -210,7 +212,7 @@ Then I should not see the remaining and used time
 @suppressHangfireQueue
 Scenario: Add absence request
 	Given I am an agent
-	And I have a requestable absence called Vacation
+	And I have an open workflow control set with absence request waitlisting enabled
 	And I am viewing requests
 	When I click to add a new absence request
 	And I input absence request values with Vacation
@@ -219,6 +221,7 @@ Scenario: Add absence request
 
 	@NotKeyExample
 @suppressHangfireQueue
+@OnlyRunIfDisabled('MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446')
 Scenario: Add absence request when multiple absences exist
 	Given I am an agent
 	And I have a requestable absence called Vacation
@@ -239,7 +242,7 @@ Scenario: Can not add absence request from request view if no permission
 
 Scenario: Default absence request values from request view
 	Given I am an agent
-	And I have a requestable absence called Vacation
+	And I have an open workflow control set with absence request waitlisting enabled
 	And I am viewing requests
 	When I click to add a new absence request
 	Then I should see the request form with today's date as default
@@ -277,14 +280,16 @@ Scenario: Adding invalid absence request values
 @suppressHangfireQueue
 Scenario: Adding too long message on absence request
 	Given I am an agent
+	And I am american
 	And I am viewing requests
 	When I click to add a new absence request
 	And I try to input too long message request values
 	Then I should see message adjusted to maximum length
-	
+
 	@NotKeyExample
 Scenario: Adding too long subject on absence request
 	Given I am an agent
+	And I am american
 	And I am viewing requests
 	When I click to add a new absence request
 	And I input too long subject request values
@@ -295,11 +300,12 @@ Scenario: Adding too long subject on absence request
 	@NotKeyExample
 Scenario: View absence types
 	Given I am an agent
-	And I have a requestable absence called Vacation
+	And I have an open workflow control set with absence request waitlisting enabled
 	And I am viewing requests
 	When I click to add a new absence request
 	Then I should see an absence type called Vacation in droplist
 
+	@OnlyRunIfDisabled('MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446')
 	@NotKeyExample
 Scenario: View absence request details
 	Given I am an agent
@@ -321,19 +327,19 @@ Scenario: View absence request waitlist
 
 Scenario: Edit absence request
 	Given I am an agent
-	And I have a requestable absence called Illness
+	And I have an open workflow control set with absence request waitlisting enabled
 	And I have an existing absence request
 	And I am viewing requests
 	When I click on the existing request in the list
 	And I change the absence request values with
-	| Field         | Value          |
-	| Absence       | Illness        |
-	| Subject       | my new subject |
+	| Field   | Value          |
+	| Absence | Vacation       |
+	| Subject | my new subject |
 	And I submit my changes for the existing text request
 	Then I should see the updated values for the existing absence request in the list with
-	| Field         | Value          |
-	| Absence       | Illness        |
-	| Subject       | my new subject |
+	| Field   | Value          |
+	| Absence | Vacation       |
+	| Subject | my new subject |
 
 Scenario: Delete absence request
 	Given I am an agent
@@ -368,6 +374,7 @@ Scenario: Can not edit denied absence requests
 	And I should not be able to edit the values for the existing absence request
 	And I should not be able to submit possible changes for the existing request
 
+	@ignore
 Scenario: Can not edit waitlisted absence requests
 	Given I am an agent
 	And I have an open workflow control set with absence request waitlisting enabled

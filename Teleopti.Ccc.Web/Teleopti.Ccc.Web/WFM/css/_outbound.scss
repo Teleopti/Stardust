@@ -13,7 +13,7 @@
 	}
 	//Move this to styleguide and refactor
 	campaign-commands-pane input.ng-invalid.ng-dirty {
-		border-bottom: 2px solid $red-700;
+		border: 1px solid $red-700;
 	}
 	.enhanced-gantt-header {
 		cursor: pointer;

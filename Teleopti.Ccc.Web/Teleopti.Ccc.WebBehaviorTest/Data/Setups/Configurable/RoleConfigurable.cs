@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AddActivity { get; set; }
 		public bool MoveActivity { get; set; }
 		public bool RemoveActivity { get; set; }
-		public bool ArchiveSchedules { get; set; }
+		public bool CopySchedules { get; set; }
 		public bool ImportSchedules { get; set; }
 
 		public bool QuickForecaster { get; set; }
@@ -308,8 +308,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			if (!AccessToStaffing)
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebStaffing);
 
-			if (!ArchiveSchedules)
-				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ArchiveSchedule);
+			if (!CopySchedules)
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.CopySchedule);
 
 			if (!ImportSchedules)
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ImportSchedule);

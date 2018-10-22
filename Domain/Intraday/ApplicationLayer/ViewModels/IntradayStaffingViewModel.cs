@@ -1,5 +1,3 @@
-using Teleopti.Ccc.Domain.Staffing;
-
 namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer.ViewModels
 {
 	public class IntradayStaffingViewModel

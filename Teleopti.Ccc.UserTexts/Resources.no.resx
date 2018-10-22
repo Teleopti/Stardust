@@ -11586,7 +11586,7 @@ Lokasjon(er) åpningstider</value>
   <data name="ArchiveScheduleDescription" xml:space="preserve">
     <value>Arkiver tidsplan fra standard scenario til et annet scenario, overskriver eventuelle tidligere tidsplanen for målscenario for perioden som er satt.</value>
   </data>
-  <data name="ArchivingConfirmationWithParameters" xml:space="preserve">
+  <data name="CopyingConfirmationWithParameters" xml:space="preserve">
     <value>Du er på vei til å overskrive alle eksisterende planen for scenario {0} for perioden {1} - {2} og de valgte teamene</value>
   </data>
   <data name="AreYouSure" xml:space="preserve">

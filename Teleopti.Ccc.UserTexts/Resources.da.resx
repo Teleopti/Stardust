@@ -13531,7 +13531,7 @@ Disse muligheder er aktiveret:
   <data name="ArchiveScheduleDescription" xml:space="preserve">
     <value>Arkiver vagtplan fra standard scenarie til et andet scenarie, overskriv alle tidligere vagtplaner i mål scenariet for den givne periode</value>
   </data>
-  <data name="ArchivingConfirmationWithParameters" xml:space="preserve">
+  <data name="CopyingConfirmationWithParameters" xml:space="preserve">
     <value>Du er ved at overskrive alle eksisterende vagtplaner for scenarie '{0} for perioden {1} - {2} og de valgte teams.</value>
   </data>
   <data name="AreYouSure" xml:space="preserve">

@@ -106,15 +106,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			foreach (var skill in skills)
 			{
-				IResourceCalculationPeriodDictionary skillStaffDictionary;
-				if (!skillStaffPeriodDictionary.TryGetValue(skill, out skillStaffDictionary)) continue;
+				if (!skillStaffPeriodDictionary.TryGetValue(skill, out var skillStaffDictionary)) continue;
 
-				var skillStaffPeriodDictionaryToReturn = new Dictionary<DateTimePeriod, IResourceCalculationPeriod>();
-				foreach (var skillStaffPeriod in skillStaffDictionary.Items())
-				{
-					if (!skillStaffPeriod.Key.Intersect(keyPeriod)) continue;
-					skillStaffPeriodDictionaryToReturn.Add(skillStaffPeriod.Key, skillStaffPeriod.Value);
-				}
+				var skillStaffPeriodDictionaryToReturn = skillStaffDictionary.Items()
+					.Where(skillStaffPeriod => skillStaffPeriod.Key.Intersect(keyPeriod))
+					.ToDictionary(k => k.Key, v => v.Value);
 
 				result.Add(new KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>(skill, new ResourceCalculationPeriodDictionary(skillStaffPeriodDictionaryToReturn)));
 			}

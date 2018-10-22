@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			return people.Select(p => p.Id.Value).ToList();
 		}
 
-	
+
 
 		private PersonFinderDisplayRow toPersonFinderDisplayRow(IPerson p, DateOnly date, int rowNumber)
 		{
@@ -213,6 +213,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			var firstName = searchCriteria[PersonFinderField.FirstName];
 			people = people.Where(p => p.Name.FirstName.IndexOf(firstName, StringComparison.OrdinalIgnoreCase) > -1);
 			return people;
+		}
+
+		public IEnumerable<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people, DateOnlyPeriod period, string function)
+		{
+			return _permittedPeople;
 		}
 	}
 }

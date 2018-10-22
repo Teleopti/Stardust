@@ -1,5 +1,7 @@
+using Antlr.Runtime.Misc;
 using Hangfire;
 using Hangfire.Dashboard;
+using Hangfire.Dashboard.Owin;
 using Microsoft.Owin;
 using Owin;
 using Teleopti.Ccc.Domain.Config;
@@ -19,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			_config = config;
 		}
 
-		public void Start(IAppBuilder app)
+		public void Start(IAppBuilder app, Func<IOwinDashboardAntiforgery> antiForgery)
 		{
 			_starter.Start(_config.ConnectionString("Hangfire"));
 
@@ -28,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				{
 					Authorization = new[] {new HangfireDashboardAuthorization()},
 					AppPath = null,
-				});
+				}, JobStorage.Current, antiForgery());
 		}
 	}
 

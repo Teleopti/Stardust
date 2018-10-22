@@ -80,8 +80,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			var dateFormat = _loggedOnUser.CurrentUser().PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
 			return new RequestsViewModel
 			{
-				AbsenceTypes =
-					_absenceTypesProvider.GetRequestableAbsences().Select(requestableAbsence => new AbsenceTypeViewModel
+				AbsenceTypes = _absenceTypesProvider.GetRequestableAbsences().Select(requestableAbsence =>
+					new AbsenceTypeViewModel
 					{
 						Id = requestableAbsence.Id,
 						Name = requestableAbsence.Description.Name

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -3210,15 +3210,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ArchiveScheduleDescription {
             get {
                 return ResourceManager.GetString("ArchiveScheduleDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You are about to overwrite all existing schedule for scenario &apos;{0}&apos; for the period {1} - {2} and the selected teams..
-        /// </summary>
-        public static string ArchivingConfirmationWithParameters {
-            get {
-                return ResourceManager.GetString("ArchivingConfirmationWithParameters", resourceCulture);
             }
         }
         
@@ -7561,6 +7552,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are about to overwrite all existing schedule for scenario &apos;{0}&apos; for the period {1} - {2} and the selected teams..
+        /// </summary>
+        public static string CopyingConfirmationWithParameters {
+            get {
+                return ResourceManager.GetString("CopyingConfirmationWithParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy of.
         /// </summary>
         public static string CopyOf {
@@ -7593,6 +7593,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CopyRuleSetBag {
             get {
                 return ResourceManager.GetString("CopyRuleSetBag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy schedule.
+        /// </summary>
+        public static string CopySchedule {
+            get {
+                return ResourceManager.GetString("CopySchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy schedule from any scenario to any non-default scenario, overwriting any previous schedule in the target scenario for the given period..
+        /// </summary>
+        public static string CopyScheduleDescription {
+            get {
+                return ResourceManager.GetString("CopyScheduleDescription", resourceCulture);
             }
         }
         
@@ -10231,6 +10249,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string DoneArchivingForXPeopleDot {
             get {
                 return ResourceManager.GetString("DoneArchivingForXPeopleDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done copying for {0} people..
+        /// </summary>
+        public static string DoneCopyingForXPeopleDot {
+            get {
+                return ResourceManager.GetString("DoneCopyingForXPeopleDot", resourceCulture);
             }
         }
         
@@ -21199,6 +21226,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoAbsenceToRemoveInCurrentShift {
             get {
                 return ResourceManager.GetString("NoAbsenceToRemoveInCurrentShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No absence types open for requests.
+        /// </summary>
+        public static string NoAbsenceTypesOpenForRequests {
+            get {
+                return ResourceManager.GetString("NoAbsenceTypesOpenForRequests", resourceCulture);
             }
         }
         
@@ -40378,6 +40414,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string YouNeedToPickAScenarioToArchiveToDot {
             get {
                 return ResourceManager.GetString("YouNeedToPickAScenarioToArchiveToDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You need to pick a scenario to copy from..
+        /// </summary>
+        public static string YouNeedToPickAScenarioToCopyFromDot {
+            get {
+                return ResourceManager.GetString("YouNeedToPickAScenarioToCopyFromDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You need to pick a scenario to copy to..
+        /// </summary>
+        public static string YouNeedToPickAScenarioToCopyToDot {
+            get {
+                return ResourceManager.GetString("YouNeedToPickAScenarioToCopyToDot", resourceCulture);
             }
         }
         

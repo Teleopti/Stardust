@@ -1,5 +1,7 @@
-Teleopti.MyTimeWeb.MessageBroker = (function () {
-	var listeners = [], conn, hub;
+Teleopti.MyTimeWeb.MessageBroker = (function() {
+	var listeners = [],
+		conn,
+		hub;
 
 	function _oneTime(options) {
 		hub = $.connection.MessageBrokerHub;
@@ -8,9 +10,9 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 			$.connection.hub.error(options.errCallback);
 		}
 
-		hub.client.onEventMessage = function (notification, route) {
+		hub.client.onEventMessage = function(notification, route) {
 			//cant use "dictionary" array. may be multiple subscription with same route
-			$.each(listeners, function (key, value) {
+			$.each(listeners, function(key, value) {
 				if (value.Route == route) {
 					try {
 						value.Callback(notification);
@@ -34,39 +36,43 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 
 		_startConnection();
 
-		if (!!_getListeners(options.page, options.domainType).length)
-			return;
+		if (!!_getListeners(options.page, options.domainType).length) return;
 
-		conn
-			.done(function () {
-				hub.server.addSubscription({
-					'DomainType': options.domainType,
-					'BusinessUnitId': options.businessUnitId,
-					'DataSource': options.datasource,
-					'DomainReferenceId': options.referenceId
+		conn.done(function() {
+			hub.server
+				.addSubscription({
+					DomainType: options.domainType,
+					BusinessUnitId: options.businessUnitId,
+					DataSource: options.datasource,
+					DomainReferenceId: options.referenceId
 				})
-					.done(function (route) {
-						listeners.push({ Route: route, Callback: options.callback, Page: options.page, DomainType: options.domainType  });
+				.done(function(route) {
+					listeners.push({
+						Route: route,
+						Callback: options.callback,
+						Page: options.page,
+						DomainType: options.domainType
 					});
-			});
+				});
+		});
 	}
 
 	function _getListeners(page, domainType) {
-		return listeners.filter(function (listener) {
+		return listeners.filter(function(listener) {
 			var isInSamePage = listener.Page != undefined && listener.Page === page;
 			var isSameDomainType = listener.DomainType === domainType;
 			return isInSamePage && isSameDomainType;
 		});
 	}
 	function _remove(arr, lambda) {
-		for (var i = arr.length; i--;) {
+		for (var i = arr.length; i--; ) {
 			if (lambda(arr[i])) {
 				arr.splice(i, 1);
 			}
 		}
 	}
 	return {
-		AddSubscription: function (options) {
+		AddSubscription: function(options) {
 			/// <summary>Adds an event subscription.</summary>
 			/// <param name="options">
 			/// url = url to signalr server,
@@ -79,22 +85,22 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 			/// </param>
 			_addSubscription(options);
 		},
-		ConvertMbDateTimeToJsDate: function (mbDateTime) {
+		ConvertMbDateTimeToJsDate: function(mbDateTime) {
 			var splitDatetime = mbDateTime.split('T');
 			var splitDate = splitDatetime[0].split('-');
 			return new Date(splitDate[0].substr(1), splitDate[1] - 1, splitDate[2]);
 		},
-		Stop: function () {
+		Stop: function() {
 			$.connection.hub.stop(false, true);
 		},
-		RemoveListeners: function (page) {
+		RemoveListeners: function(page) {
 			/// <summary>Removes all message callbacks that are used on the current page.</summary>
 			/// <param name="page">
 			/// The name of the current page
 			/// </param>
-			_remove(listeners, function (item) {
+			_remove(listeners, function(item) {
 				return item.Page != undefined && item.Page === page;
 			});
 		}
 	};
-})(jQuery)
+})(jQuery);

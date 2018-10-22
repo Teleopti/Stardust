@@ -22,5 +22,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public bool IsMeeting { get; set; }
 
 		public string StartInUtc { get; set; }
+		public string EndInUtc { get; set; }
 	}
 }

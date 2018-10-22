@@ -58,7 +58,7 @@
 		"ngstorage": "0.3.9",
 		"papaparse": "4.6.0",
 		"rxjs": "6.2.2",
-		"teleopti-styleguide": "1.23.4",
+		"teleopti-styleguide": "^1.23.5",
 		"zone.js": "0.8.26"
 	},
 	"devDependencies": {
@@ -124,6 +124,7 @@
 		"test:teamcity": "ng test --karma-config test/karma.conf.teamcity.js",
 		"pretest:rta": "grunt concat:concatJsDependencies",
 		"test:rta": "ng test --karma-config test/karma.conf.rta.js",
+		"test:teams": "ng test --karma-config test/karma.conf.teams.js",
 		"test:angular": "ng test --karma-config test/karma.conf.angular.js",
 		"start": "run-p iis:web iis:admin iis:open:web dev:watch",
 		"iis:open:web": "start http://localhost:52858/TeleoptiWFM/Web/",

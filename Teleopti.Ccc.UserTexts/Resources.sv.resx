@@ -13908,7 +13908,7 @@ Dessa val är aktiverade:
   <data name="ArchiveScheduleDescription" xml:space="preserve">
     <value>Arkivering av schema från standardscenariot till annat scenario. Befintligt schema i målscenariot skrivs över för den angivna perioden.</value>
   </data>
-  <data name="ArchivingConfirmationWithParameters" xml:space="preserve">
+  <data name="CopyingConfirmationWithParameters" xml:space="preserve">
     <value>Du är på väg att skriva över allt befintligt schema i scenario {0} för den angivna perioden {1} - {2} och de valda teamen. </value>
   </data>
   <data name="PickAtleastOneTeamDot" xml:space="preserve">
@@ -15841,5 +15841,11 @@ Applikationen kommer nu att stängas. </value>
   <data name="RestrictionNotAbleToBeScheduledReasonNoRestrictions" xml:space="preserve">
     <value>Inga restriktioner inom perioden</value>
     <comment>No restrictions in period</comment>
+  </data>
+  <data name="CopySchedule" xml:space="preserve">
+    <value>Kopiera schema</value>
+  </data>
+  <data name="CopyScheduleDescription" xml:space="preserve">
+    <value>Kopiera schema från vilket scenario som helst till vilket scenario som helst, förutom standardscenariot. Eventuellt tidigare schema i målscenariot för den valda perioden kommer att skrivas över.</value>
   </data>
 </root>

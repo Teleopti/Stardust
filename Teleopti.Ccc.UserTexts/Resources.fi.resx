@@ -12993,7 +12993,7 @@ Seuraavat ominaisuudet ovat aktivoitu:
   <data name="AreYouSure" xml:space="preserve">
     <value>Oletko varma?</value>
   </data>
-  <data name="ArchivingConfirmationWithParameters" xml:space="preserve">
+  <data name="CopyingConfirmationWithParameters" xml:space="preserve">
     <value>Olet korvaamassa koko työvuorolistaa skenaariossa '{0}' jaksolle {1} - {2} ja valituille tiimeille. </value>
   </data>
   <data name="ArchiveScheduleDescription" xml:space="preserve">

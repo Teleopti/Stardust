@@ -11589,7 +11589,7 @@ Le schéma de clé d'activation produit est "{3}". Ces options sont activées: {
   <data name="ArchiveScheduleDescription" xml:space="preserve">
     <value>Archiver emploi du temps depuis le scénario par défaut vers un autre scénario, écrase tout scénario précédent dans le scénario cible pour la période choisie.</value>
   </data>
-  <data name="ArchivingConfirmationWithParameters" xml:space="preserve">
+  <data name="CopyingConfirmationWithParameters" xml:space="preserve">
     <value>Vous êtes sur le point d'écraser tout emploi du temps pour le scénario '{0}' pour la période {1} - {2} et les équipes sélectionnées.</value>
   </data>
   <data name="AreYouSure" xml:space="preserve">

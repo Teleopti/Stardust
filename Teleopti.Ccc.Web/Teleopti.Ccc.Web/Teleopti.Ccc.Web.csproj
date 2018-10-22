@@ -67,10 +67,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Autofac.Configuration, Version=3.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Autofac.Configuration.3.3.0\lib\net40\Autofac.Configuration.dll</HintPath>
-    </Reference>
     <Reference Include="Autofac.Extras.DynamicProxy2, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Autofac.Extras.DynamicProxy2.3.0.4\lib\net40\Autofac.Extras.DynamicProxy2.dll</HintPath>
@@ -121,11 +117,11 @@
     <Reference Include="Hangfire.Autofac, Version=2.3.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Hangfire.Autofac.2.3.1\lib\net45\Hangfire.Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Hangfire.Core, Version=1.6.17.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Hangfire.Core.1.6.17\lib\net45\Hangfire.Core.dll</HintPath>
+    <Reference Include="Hangfire.Core, Version=1.6.20.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Hangfire.Core.1.6.20\lib\net45\Hangfire.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Hangfire.SqlServer, Version=1.6.17.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Hangfire.SqlServer.1.6.17\lib\net45\Hangfire.SqlServer.dll</HintPath>
+    <Reference Include="Hangfire.SqlServer, Version=1.6.20.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Hangfire.SqlServer.1.6.20\lib\net45\Hangfire.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Ical.Net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\packages\Ical.Net.3.0.15\lib\netstandard1.3\Ical.Net.dll</HintPath>
@@ -1575,9 +1571,6 @@
     <Content Include="WFM\app\global\utilities\serviceDateFormatHelper.service.js" />
     <Content Include="WFM\app\global\utilities\skill.type.service.js" />
     <Content Include="WFM\app\global\utilities\skillIcon.service.js" />
-    <Content Include="WFM\app\global\work-hour-picker\work-hour-picker.component.js" />
-    <Content Include="WFM\app\global\work-hour-picker\work-hour-picker.component.spec.js" />
-    <Content Include="WFM\app\global\work-hour-picker\work-hour-picker.tpl.html" />
     <Content Include="WFM\app\intraday\components\intradayPerformanceChart.component.js" />
     <Content Include="WFM\app\intraday\components\intradayPerformanceChart.html" />
     <Content Include="WFM\app\intraday\components\intradayStaffingChart.component.js" />
@@ -1732,19 +1725,13 @@
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.controller.spec.js" />
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.html" />
     <Content Include="WFM\app\rta\rta\historical\rta-historical.durationOfHistoricalEvents_76470.html" />
-    <Content Include="WFM\app\rta\rta\historical\rta-historical.easilySpotLateForWork_75668.html" />
-    <Content Include="WFM\app\rta\rta\historical\rta-historical.removeApprovedOOA_47721.html" />
-    <Content Include="WFM\app\rta\rta\historical\rta-historical.restrictModifyAdherenceWithPermission_74898.html" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA.timepicking.ie.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA.timepicking.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA_47230.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.durationOfHistoricalEvents_76470.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.durationOfHistoricalEvents_76470.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.outOfAdherences.spec.js" />
-    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.removeApprovedOOA_47721.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.removeApprovedOOA_47721.spec.js" />
-    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.easilySpotLateForWork_75668.js" />
-    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.restrictModifyAdherenceWithPermission_74898.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.restrictModifyAdherenceWithPermission_74898.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.timeline.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.easilySpotLateForWork_75668.spec.js" />
@@ -1856,6 +1843,7 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.underlyingInfo.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.underlyingInfo.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.controller.week.spec.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.factory.groupSchedule.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.shiftEditorViewModelFactory.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.timezoneListFactory.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.exportScheduleService.spec.js" />
@@ -1870,7 +1858,6 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffingChart.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.timezone.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.bootstrapData.js" />
-    <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.currentTimezone.js" />
     <Content Include="WFM\app\teapot\controller.js" />
     <Content Include="WFM\app\teapot\view.html" />
     <Content Include="WFM\app\teapot\teapot.state.provider.js" />
@@ -2092,18 +2079,16 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.commandMenu.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.commandContainer.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.commandContainer.spec.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.directive.datepicker.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.component.datepicker.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.removeAbsence.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.removeActivity.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.directive.datepicker.spec.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.component.datepicker.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.scheduletable.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.swapShifts.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.viewChanger.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.groupSchedule.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.personSchedule.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.factory.personSchedule.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.personWeekView.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.factory.timeline.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.timeLine.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.filter.timerange.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.activity.js" />

@@ -42,7 +42,7 @@
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
 		vm.scheduleDateMoment = function () {
-			return moment(vm.scheduleDate);
+			return moment(vm.scheduleDate, vm.currentTimezone);
 		};
 		vm.preSelectPersonIds = $stateParams.personId ? [$stateParams.personId] : [];
 		vm.scheduleDate = $stateParams.selectedDate || viewState.selectedDate || new Date();
@@ -61,7 +61,6 @@
 		}
 
 		vm.lastCommandTrackId = '';
-		vm.showDatePicker = false;
 		vm.currentSettings = {};
 
 		vm.getSearch = function () {
@@ -269,7 +268,7 @@
 			$mdSidenav(settingsContainerId).toggle();
 		};
 
-		vm.isExportScheduleEnabled = function() {
+		vm.isExportScheduleEnabled = function () {
 			return vm.toggles.WfmTeamSchedule_ExportSchedulesToExcel_45795 && vm.permissions.HasExportSchedulePermission;
 		}
 
@@ -329,7 +328,7 @@
 			var currentDate = serviceDateFormatHelper.getDateOnly(vm.scheduleDate);
 
 			teamScheduleSvc.getSchedules(currentDate, selectedPersonIdList).then(function (result) {
-				scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
+				scheduleMgmtSvc.resetSchedules(result.Schedules, currentDate, vm.currentTimezone);
 				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules, currentDate);
 			});
 		}
@@ -410,8 +409,8 @@
 		}
 
 		vm.changeTimezone = function () {
-			scheduleMgmtSvc.recreateScheduleVm(vm.scheduleDateMoment(), vm.currentTimezone);
-			personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
+			scheduleMgmtSvc.recreateScheduleVm(serviceDateFormatHelper.getDateOnly(vm.scheduleDate), vm.currentTimezone);
+			personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.schedules());
 		};
 
 		vm.loadSchedules = function () {
@@ -420,10 +419,11 @@
 
 			if (vm.searchEnabled) {
 				var params = getParamsForLoadingSchedules();
+				var scheduleDate = serviceDateFormatHelper.getDateOnly(vm.scheduleDate);
 
 				teamScheduleSvc.searchSchedules(params).then(function (response) {
 					var result = response.data;
-					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment(), vm.currentTimezone);
+					scheduleMgmtSvc.resetSchedules(result.Schedules, scheduleDate, vm.currentTimezone);
 					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, vm.scheduleDateMoment());
 					afterSchedulesLoaded(result);
 
@@ -441,7 +441,7 @@
 				var date = serviceDateFormatHelper.getDateOnly(vm.scheduleDate);
 
 				teamScheduleSvc.getSchedules(date, vm.preSelectPersonIds).then(function (result) {
-					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment(), vm.currentTimezone);
+					scheduleMgmtSvc.resetSchedules(result.Schedules, date, vm.currentTimezone);
 					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, vm.scheduleDateMoment());
 					afterSchedulesLoaded(result);
 
@@ -482,7 +482,7 @@
 
 		vm.updateSchedules = function (personIdList) {
 			vm.isLoading = true;
-			scheduleMgmtSvc.updateScheduleForPeoples(personIdList, vm.scheduleDateMoment(), vm.currentTimezone, function () {
+			scheduleMgmtSvc.updateScheduleForPeoples(personIdList, serviceDateFormatHelper.getDateOnly(vm.scheduleDate), vm.currentTimezone, function () {
 				personSelectionSvc.clearPersonInfo();
 				vm.isLoading = false;
 				vm.hasSelectedAllPeopleInEveryPage = false;
@@ -592,7 +592,7 @@
 			pageSetting: teamScheduleSvc.PromiseForGetAgentsPerPageSetting(),
 			loggedonUsersTeamId: loggedonUsersTeamId.promise,
 			defaultFavoriteSearch: vm.onFavoriteSearchInitDefer.promise,
-			bootstrapReady:bootstrapCommon.ready()
+			bootstrapReady: bootstrapCommon.ready()
 		};
 
 		if (!vm.searchEnabled) {

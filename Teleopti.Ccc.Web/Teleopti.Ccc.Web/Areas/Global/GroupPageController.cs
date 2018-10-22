@@ -23,13 +23,6 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			return Ok(_groupPageViewModelFactory.CreateViewModel(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules));
 		}
 
-		[UnitOfWork, HttpGet, Route("api/GroupPage/AvailableStructuredGroupPagesForDate")]
-		public virtual IHttpActionResult AvailableStructuredGroupPagesForDate(DateTime date)
-		{
-			var period = DateHelper.GetWeekPeriod(new DateOnly(date), DateTimeFormatExtensions.FirstDayOfWeek);
-			return Ok(_groupPageViewModelFactory.CreateViewModel(period, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules));
-		}
-
 		[UnitOfWork, HttpGet, Route("api/GroupPage/AvailableGroupPages")]
 		public virtual IHttpActionResult AvailableGroupPages(DateTime date)
 		{

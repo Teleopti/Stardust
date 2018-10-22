@@ -42,12 +42,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 
 			if (scheduleProjectionServiceList.Count > 0)
 			{
-				int chunkTimeSpan;
-				if (!int.TryParse(ConfigurationManager.AppSettings["chunkTimeSpan"], out chunkTimeSpan))
+				if (!int.TryParse(ConfigurationManager.AppSettings["chunkTimeSpan"], out var chunkTimeSpan))
 				{
 					chunkTimeSpan = 7;
 				}
-				List<ITaskParameters> objs2 = ThreadObjects.GetThreadObjectsSplitByPeriod(scheduleProjectionServiceList,
+				var objs2 = ThreadObjects.GetThreadObjectsSplitByPeriod(scheduleProjectionServiceList,
 																												  insertDateTime, chunkTimeSpan,
 																												  jobParameters);
 
@@ -66,10 +65,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 
 		void threadPool_RowsUpdatedEvent(object sender, Common.Infrastructure.RowsUpdatedEventArgs e)
 		{
-			if (RowsUpdatedEvent != null)
-			{
-				RowsUpdatedEvent(this, new RowsUpdatedEventArgs(e.AffectedRows));
-			}
+			RowsUpdatedEvent?.Invoke(this, new RowsUpdatedEventArgs(e.AffectedRows));
 		}
 
 	}

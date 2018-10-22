@@ -224,7 +224,7 @@
 		equal(viewModel.layers().length, 0);
 	});
 
-	test('should set timespan without +1 for overnight activity', function() {
+	test('should set timespan with +1 for overnight activity', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment().format('YYYY-MM-DD'),
@@ -263,7 +263,7 @@
 		viewModel.readData(rawData);
 
 		equal(viewModel.layers().length, 1);
-		equal(viewModel.layers()[0].timeSpan(), '22:00 - 04:00');
+		equal(viewModel.layers()[0].timeSpan(), '22:00 - 04:00 +1');
 	});
 
 	test('should call out menu list when clicking plus icon at bottom right', function() {

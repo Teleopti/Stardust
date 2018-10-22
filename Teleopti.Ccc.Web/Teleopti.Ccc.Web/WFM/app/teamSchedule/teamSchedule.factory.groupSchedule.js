@@ -1,102 +1,158 @@
 'use strict';
 
-angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', ['TeamScheduleTimeLineFactory', 'PersonSchedule', GroupScheduleFactoryFn]);
+angular.module('wfm.teamSchedule').factory('GroupScheduleFactory',
+	['TeamScheduleTimeLineFactory',
+		'PersonSchedule',
+		'serviceDateFormatHelper',
+		'$filter',
+		GroupScheduleFactory]);
 
-function GroupScheduleFactoryFn(timeLineFactory, personSchedule) {
+function GroupScheduleFactory(timeLineFactory, personSchedule, serviceDateFormatHelper, $filter) {
 
 	var groupScheduleFactory = {
 		Create: create
 	};
 
-	function create(groupSchedules, queryDateMoment, useNextDayScheduleData, maxPeriodInHour) {
-		var maximumViewRange = {
-			startMoment: queryDateMoment.clone().startOf('day'),
-			endMoment: queryDateMoment.clone().startOf('day').add(maxPeriodInHour ? maxPeriodInHour : 30, 'hour')
-		};
-		
-		var schedulesInRange = groupSchedules.filter(function(schedule) {
-			return isScheduleWithinViewRange(schedule, queryDateMoment, maximumViewRange, useNextDayScheduleData);
+	function create(rawSchedules, queryDate, timezone, maximumHours) {
+
+		var timezoneAdjustedSchedules = rawSchedules.map(function (schedule) {
+			return convertScheduleToTimezone(schedule, queryDate, timezone);
 		});
 
-		var extraSchedules = groupSchedules.filter(function(schedule) {
+		var queryDateInTimezone = moment.tz(queryDate, timezone);
+
+		var maximumViewRange = {
+			startMoment: queryDateInTimezone.clone().startOf('day'),
+			endMoment: queryDateInTimezone.clone().startOf('day').add(maximumHours || 30, 'hour')
+		};
+
+		var schedulesInRange = timezoneAdjustedSchedules.filter(function (schedule) {
+			return isScheduleWithinViewRange(schedule, queryDate, maximumViewRange);
+		});
+
+		var extraSchedules = timezoneAdjustedSchedules.filter(function (schedule) {
 			return schedulesInRange.indexOf(schedule) < 0;
 		});
-		
-		var timeLine = timeLineFactory.Create(schedulesInRange, queryDateMoment, maximumViewRange);
+
+		var timeline = timeLineFactory.Create(schedulesInRange, queryDateInTimezone, maximumViewRange);
+
 		return {
-			TimeLine: timeLine,
-			Schedules: createSchedulesFromGroupSchedules(schedulesInRange, timeLine, extraSchedules)
+			TimeLine: timeline,
+			Schedules: createSchedulesFromGroupSchedules(schedulesInRange, timeline, extraSchedules)
 		};
 	}
 
-	function createSchedulesFromGroupSchedules(groupSchedules, timeLine, extraSchedules) {
-		var existedSchedulesDictionary = {};
-		var schedules = [];
+	function convertScheduleToTimezone(schedule, queryDate, timezone) {
+		var copiedSchedule = angular.copy(schedule);
 
-		groupSchedules.forEach(function(schedule, index) {
+		function covertToTimezone(item) {
+			item.StartMoment = moment.tz(item.StartInUtc, 'ETC/UTC').tz(timezone);
+			item.Start = serviceDateFormatHelper.getDateTime(item.StartMoment);
+			item.EndMoment = moment.tz(item.EndInUtc, 'ETC/UTC').tz(timezone);
+			item.End = serviceDateFormatHelper.getDateTime(item.EndMoment);
+		}
+
+		function covertSummaryToTimezone(summary) {
+			covertToTimezone(summary);
+			var isNotSameDay = !summary.StartMoment.isSame(summary.EndMoment, 'day')
+				|| !summary.StartMoment.isSame(moment.tz(queryDate, timezone), 'day');
+			summary.TimeSpan = getFormatedTimeSpan(summary.StartMoment, summary.EndMoment, isNotSameDay);
+			return summary;
+		}
+
+		function convertProjectionToTimezone(projection) {
+			covertToTimezone(projection);
+			var isNotSameDay = !projection.StartMoment.isSame(projection.EndMoment, 'day');
+			projection.TimeSpan = getFormatedTimeSpan(projection.StartMoment, projection.EndMoment, isNotSameDay);
+			return projection;
+		}
+
+		angular.forEach(copiedSchedule.Projection, convertProjectionToTimezone);
+
+		var underlyingScheduleSummary = copiedSchedule.UnderlyingScheduleSummary;
+		if (!!underlyingScheduleSummary) {
+			angular.forEach(underlyingScheduleSummary.PersonalActivities, covertSummaryToTimezone);
+			angular.forEach(underlyingScheduleSummary.PersonPartTimeAbsences, covertSummaryToTimezone);
+			angular.forEach(underlyingScheduleSummary.PersonMeetings, covertSummaryToTimezone);
+		}
+
+		if (copiedSchedule.DayOff) {
+			covertToTimezone(copiedSchedule.DayOff);
+		}
+		return copiedSchedule;
+	}
+
+	function getFormatedTimeSpan(startMoment, endMoment, isNotSameDay) {
+		if (isNotSameDay) {
+			return startMoment.format("L LT") + ' - ' + endMoment.format("L LT");
+		}
+		return startMoment.format("LT") + ' - ' + endMoment.format("LT");
+	}
+
+
+	function createSchedulesFromGroupSchedules(schedules, timeLine, extraSchedules) {
+		var existedSchedulesDictionary = {};
+		var scheduleVms = [];
+
+		schedules.forEach(function (schedule, index) {
 			var existedPersonSchedule = existedSchedulesDictionary[schedule.PersonId];
 			if (existedPersonSchedule == null) {
 				var personScheduleVm = personSchedule.Create(schedule, timeLine, index);
 				existedSchedulesDictionary[schedule.PersonId] = personScheduleVm;
-				schedules.push(personScheduleVm);
+				scheduleVms.push(personScheduleVm);
 			} else {
 				existedPersonSchedule.Merge(schedule, timeLine);
 			}
 		});
 
-		extraSchedules.forEach(function(schedule) {
+		extraSchedules.forEach(function (schedule) {
 			if (existedSchedulesDictionary[schedule.PersonId] && existedSchedulesDictionary[schedule.PersonId].MergeExtra) {
 				existedSchedulesDictionary[schedule.PersonId].MergeExtra(schedule, timeLine);
 			}
 		});
 
-		return schedules;
+		return scheduleVms;
 	}
 
-	function isScheduleWithinViewRange(schedule, queryDateMoment, maximumViewRange, useNextDayScheduleData) {
-		var scheduleDateMoment = moment(schedule.Date);
+	function isScheduleWithinViewRange(schedule, queryDate, maximumViewRange) {
+		if (queryDate == schedule.Date) return true;
 
-		if (scheduleDateMoment.isSame(queryDateMoment, 'day')) return true;
-
-		if (scheduleDateMoment.isBefore(queryDateMoment, 'day')) {
-			if (schedule.Projection.length > 0) {
-				var endTimes = schedule.Projection.map(function(p) {
-					return moment(p.End);
+		if (schedule.Date < queryDate) {
+			if (schedule.Projection && schedule.Projection.length > 0) {
+				var endTimes = schedule.Projection.map(function (p) {
+					return p.EndMoment;
 				});
-				return endTimes.reduce(function(prev, cur) {
+				return endTimes.reduce(function (prev, cur) {
 					if (!prev) return cur;
 					if (prev < cur) return cur;
 					return prev;
 				}).isAfter(maximumViewRange.startMoment);
-			} else if (schedule.DayOff) {
-				return moment(schedule.DayOff.End).isAfter(maximumViewRange.startMoment);
-			} else {
-				return false;
 			}
+			if (schedule.DayOff) {
+				return schedule.DayOff.EndMoment.isAfter(maximumViewRange.startMoment);
+			}
+			return false;
 		}
 
-		if (scheduleDateMoment.isAfter(queryDateMoment, 'day')) {
-			if (!useNextDayScheduleData) return false;
-
+		if (schedule.Date > queryDate) {
 			if (schedule.DayOff) {
-				return moment(schedule.DayOff.Start).isBefore(maximumViewRange.endMoment);
-			} else if (schedule.Projection.length > 0) {
-				var startTimes = schedule.Projection.map(function(p) {
-					return moment(p.Start);
+				return schedule.DayOff.StartMoment.isBefore(maximumViewRange.endMoment);
+			}
+			if (schedule.Projection && schedule.Projection.length > 0) {
+				var startTimes = schedule.Projection.map(function (p) {
+					return p.StartMoment;
 				});
 
-				var time = startTimes.reduce(function(prev, cur) {
+				return startTimes.reduce(function (prev, cur) {
 					if (!cur) return prev;
 					if (cur.isBefore(prev)) return cur;
 					return prev;
-				});
-
-				return time.isBefore(maximumViewRange.endMoment);
-			} else {
-				return false;
+				}).isBefore(maximumViewRange.endMoment);
 			}
+			return false;
 		}
 	}
+
 
 	return groupScheduleFactory;
 }

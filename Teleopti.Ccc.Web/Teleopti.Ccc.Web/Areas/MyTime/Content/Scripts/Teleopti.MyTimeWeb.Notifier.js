@@ -4,13 +4,14 @@
 	var header = '';
 	var autoCloseTimeout = 10000;
 	var blinkTitleTimer;
-	var webNotification = function() { return true; }; //default also send as web notification if possible
+	var webNotification = function() {
+		return true;
+	}; //default also send as web notification if possible
 	var webNotifications = new Array();
 	var showingText = null;
 
 	function _setOptions(options) {
-		if (options && options.originalDocumentTitle)
-			originalDocumentTitle = options.originalDocumentTitle;
+		if (options && options.originalDocumentTitle) originalDocumentTitle = options.originalDocumentTitle;
 		if (options && options.baseUrl) {
 			baseUrl = options.baseUrl;
 		}
@@ -29,7 +30,7 @@
 	}
 
 	function htmlDecode(notifyText) {
-		var div = document.createElement("div");
+		var div = document.createElement('div');
 		div.innerHTML = notifyText;
 		return div.childNodes[0].nodeValue;
 	}
@@ -54,21 +55,21 @@
 	}
 
 	function _webNotification(notifyText) {
-		if (window.Notification && Notification.permission !== "granted") {
+		if (window.Notification && Notification.permission !== 'granted') {
 			Notification.requestPermission(function(status) {
 				if (Notification.permission !== status) {
 					Notification.permission = status;
 				}
 			});
 		}
-		if (window.Notification && Notification.permission === "granted") {
+		if (window.Notification && Notification.permission === 'granted') {
 			if (webNotification() && !isShowing(notifyText)) {
 				var iconUrl = baseUrl + 'content/favicon.ico?v=2';
 				var decodedText = htmlDecode(notifyText);
 				var options = {
 					body: decodedText,
 					icon: iconUrl,
-					requireInteraction: true//supported in chrome to keep displaying notification
+					requireInteraction: true //supported in chrome to keep displaying notification
 				};
 				var notification = new Notification(header, options);
 
@@ -102,11 +103,11 @@
 		if (blinkTitleTimer) {
 			clearInterval(blinkTitleTimer);
 		}
-		blinkTitleTimer = window.setInterval(function () {
+		blinkTitleTimer = window.setInterval(function() {
 			var decodedTitle = htmlDecode(notifyText);
-			top.document.title == decodedTitle ?
-										top.document.title = originalDocumentTitle :
-										top.document.title = decodedTitle;
+			top.document.title == decodedTitle
+				? (top.document.title = originalDocumentTitle)
+				: (top.document.title = decodedTitle);
 		}, blinkTimeout);
 	}
 
@@ -120,7 +121,7 @@
 	}
 
 	return {
-		Notify: function (options, notifyText) {
+		Notify: function(options, notifyText) {
 			if (showingText === notifyText) return;
 			showingText = notifyText;
 

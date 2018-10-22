@@ -5,15 +5,15 @@
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
 		<h1>
-			<i class="mdi mdi-calendar"></i> {{ vm.ArchiveScheduleOrImportSchedule | translate}}
+			<i class="mdi mdi-calendar"></i> {{ vm.CopyScheduleOrImportSchedule | translate}}
 		</h1>
-		<p> {{ vm.ArchiveScheduleOrImportSchedule + 'Description' | translate}}</p>
+		<p> {{ vm.CopyScheduleOrImportSchedule + 'Description' | translate}}</p>
 	</div>
 	<div class="fab-wrapper">
 		<button id="manage-btn" class="wfm-fab material-depth-1" ng-click="vm.validateAndShowModal(vm.selection.fromScenario, vm.selection.toScenario, vm.selection.period, vm.selection.teams)"
 		 ng-disabled="!vm.canRunManaging()">
 			<i class="mdi mdi-file-document"></i>
-			<md-tooltip>{{ 'Run' + vm.ArchivingOrImporting | translate}}</md-tooltip>
+			<md-tooltip>{{ vm.isImportSchedule?'RunImporting':'Copy' | translate}}</md-tooltip>
 		</button>
 	</div>
 </div>
@@ -22,7 +22,7 @@
 		<div class="panel material-depth-1" style="height: 100%;">
 			<div class="con-row">
 				<div class="con-flex inline-flex manage-schedule-period-picker">
-					<date-range-picker ng-model="vm.selection.period" template-type="vm.dateRangeTemplateType"></date-range-picker>
+					<wfm-date-range-picker ng-model="vm.selection.period" template-type="vm.dateRangeTemplateType" popup-mode="true"></wfm-date-range-picker>
 				</div>
 				<div class="con-flex inline-flex manage-schedule-scenario-picker">
 					<div class="con-flex inline-flex manage-schedule-scenario-picker">

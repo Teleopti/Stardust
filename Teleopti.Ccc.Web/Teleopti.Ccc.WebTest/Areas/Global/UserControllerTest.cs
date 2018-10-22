@@ -105,6 +105,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			dynamic result = target.CurrentUser();
 			Assert.AreEqual(result.FirstDayOfWeek, 1);
 		}
+
+
+		[Test]
+		public void ShouldGetDayNamesForTheCurrentLoggonUserCulture()
+		{
+			var person = PersonFactory.CreatePerson();
+			var culture = CultureInfoFactory.CreateChineseCulture();
+			person.PermissionInformation.SetCulture(culture);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Pelle", null, null, null, null), person);
+			var currentPrinciple = new FakeCurrentTeleoptiPrincipal(principal);
+			var target = new UserController(currentPrinciple, new FakeIanaTimeZoneProvider(), session);
+			dynamic result = target.CurrentUser();
+			Assert.AreEqual(result.DayNames, culture.DateTimeFormat.DayNames);
+		}
 	}
 
 	public class FakeIanaTimeZoneProvider : IIanaTimeZoneProvider

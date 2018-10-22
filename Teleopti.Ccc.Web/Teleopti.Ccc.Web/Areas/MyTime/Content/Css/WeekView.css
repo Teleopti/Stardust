@@ -8,13 +8,13 @@
 }
 
 .body-weekview-inner {
-	background-color: #f9f9f9;
 	border: 1px solid #dfdfdf;
 	white-space: nowrap;
 	font-size: 0;
 	display: none;
 	position: relative;
-	width: 100%;
+	width: 955px;
+	margin: 0 auto;
 }
 
 .weekview-day {

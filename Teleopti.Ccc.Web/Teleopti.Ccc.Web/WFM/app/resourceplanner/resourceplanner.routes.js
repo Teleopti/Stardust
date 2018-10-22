@@ -108,8 +108,8 @@
 			url: '/planninggroup/:groupId/setting/:filterId',
 			templateUrl: 'app/resourceplanner/resource_planner_planning_group_setting/groupsetting.createform.html',
 			controller: 'planningGroupSettingEditController as vm'
-		}).state('resourceplanner.archiveschedule', {
-			url: '/archiveschedule',
+		}).state('resourceplanner.copyschedule', {
+			url: '/copyschedule',
 			templateUrl: 'app/resourceplanner/manageschedule/manageschedule.html',
 			controller: 'ResourceplannerManageScheduleCtrl as vm'
 		}).state('resourceplanner.importschedule', {

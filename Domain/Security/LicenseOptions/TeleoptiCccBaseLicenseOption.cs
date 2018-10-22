@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				DefinedRaptorApplicationFunctionPaths.PublishSchedule,
 				DefinedRaptorApplicationFunctionPaths.RequestSchedulerViewAllowance,
 				DefinedRaptorApplicationFunctionPaths.OrganizeCascadingSkills,
-				DefinedRaptorApplicationFunctionPaths.ArchiveSchedule,
+				DefinedRaptorApplicationFunctionPaths.CopySchedule,
 				DefinedRaptorApplicationFunctionPaths.ImportSchedule,
 				DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports,
 				DefinedRaptorApplicationFunctionPaths.ViewStaffingInfo,

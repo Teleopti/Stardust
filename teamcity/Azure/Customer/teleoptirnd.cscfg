@@ -5,7 +5,7 @@
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="RnD" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIICLQYJKoZIhvcNAQcDoIICHjCCAhoCAQAxggHeMIIB2gIBADCBwTCBtDELMAkGA1UEBhMCVVMxEDAOBgNVBAgTB0FyaXpvbmExEzARBgNVBAcTClNjb3R0c2RhbGUxGjAYBgNVBAoTEUdvRGFkZHkuY29tLCBJbmMuMS0wKwYDVQQLEyRodHRwOi8vY2VydHMuZ29kYWRkeS5jb20vcmVwb3NpdG9yeS8xMzAxBgNVBAMTKkdvIERhZGR5IFNlY3VyZSBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkgLSBHMgIIECFiTe76nTwwDQYJKoZIhvcNAQEBBQAEggEACUd9OJYebEp4L5wrYTEoGBvDR2iKljrz+j5fAl3jWCA50iVc/KP7vZ7reJVW6jLmHYwaw89yVQJVhij3rVgfAN4FSEcHYyMPxtmr0cH/edeQBHSYUipv8KOtPyLsmoPFJH+SQT50QY/e9aMIrNlXzAYTeDeRh3sf9GAPb3A0G6x2qiXZMRspnXRMYjR7/7pwoaJrnl4roMMQinUaoezylAcqbqthtvRxtBmUvSKcqmrjSia42ZOhcpV6mYY7njHCYq5dKu9egkqrBAMTr/9o/SUdNV/5hvoOvA5JXssVuCllA1R43dk9BXxr1uxkjtN8hLwaQ76WQRwe4HojLd3LjzAzBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECB5r0aXjzxm2gBBq0IG2uXLaAyroASDSw8I/" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIICLgYJKoZIhvcNAQcDoIICHzCCAhsCAQAxggHfMIIB2wIBADCBwjCBtDELMAkGA1UEBhMCVVMxEDAOBgNVBAgTB0FyaXpvbmExEzARBgNVBAcTClNjb3R0c2RhbGUxGjAYBgNVBAoTEUdvRGFkZHkuY29tLCBJbmMuMS0wKwYDVQQLEyRodHRwOi8vY2VydHMuZ29kYWRkeS5jb20vcmVwb3NpdG9yeS8xMzAxBgNVBAMTKkdvIERhZGR5IFNlY3VyZSBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkgLSBHMgIJAO5kXei14EmqMA0GCSqGSIb3DQEBAQUABIIBADuCZvTTFLc4Ml3z0++3L6SDVvofsHB9+ph11uzNNElF8Z7yVnGYzBsP2uNRPOQW5S/uBTKKj7x+FWtsHZ//ZN8O27kR/2zRiwpHe83gIVdVQTf4TqGw1a9gYBE5RFlKrXtbEHVRuKlTU1CAjE6Iap31ZE0PyLNpy7CNOXvUUgSI5nzRsyCJ9q3CaWMVBiaWtLeIyM8IBexfOzlKjgp6vHo6mawqiatQTQBO/x0cuu2X4sYWwGpvJbjxIgLAXapT0GJtn/P3mJHNrkdc70L3sQaVbdiwfjOyEEcCCgroHnQZpK1yxVqs/92JQ6eu3ydsaqP4ICNfixvyxgZCvWROi7swMwYJKoZIhvcNAQcBMBQGCCqGSIb3DQMHBAgDi+FS7dSkWIAQjhKvpnTfIeOlwyYsUqsk5w==" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2020-12-31T23:59:59.0000000+01:00" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="true" />
 	  <Setting name="TeleoptiDriveMap.BlobPath" value="http://teleopticcc7.blob.core.windows.net/" />
@@ -16,7 +16,7 @@
 	  <Setting name="TeleoptiSetting.VmSize" value="Standard_A2_v2" />
     </ConfigurationSettings>
     <Certificates>
-	  <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="B4801CD7F6B859F960941D0D2B9133755BACEC03" thumbprintAlgorithm="sha1" />
+	  <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="570BFA116439CAB373E61D53053F13D96FB4EC11" thumbprintAlgorithm="sha1" />
 	  <Certificate name="fakedress.teleopticloud.com" thumbprint="570BFA116439CAB373E61D53053F13D96FB4EC11" thumbprintAlgorithm="sha1"/>
     </Certificates>
   </Role>

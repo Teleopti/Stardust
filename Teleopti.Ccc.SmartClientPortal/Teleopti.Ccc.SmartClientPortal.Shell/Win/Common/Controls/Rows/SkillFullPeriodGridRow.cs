@@ -45,11 +45,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows
 
 		private IEnumerable<ISkillStaffPeriod> getSkillStaffPeriods()
         {
-			//DateOnlyPeriod period = GetDateOnlyPeriodFromColum(cellInfo);
-			//IList<ISkillStaffPeriod> skillStaffPeriods;
-			//if (_rowManager.DataSource[0].TryGetValue(period, out skillStaffPeriods))
-			//    return skillStaffPeriods;
-
 			foreach (var kvp in _rowManager.DataSource[0])
 			{
 				return kvp.Value;
@@ -77,9 +72,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows
 
         	_skillStaffPeriodList = getSkillStaffPeriods(); //(cellInfo);
 
-			//if (DisplayMember == "MaxUsedSeats")
-			//    return SkillStaffPeriodHelper.MaxUsedSeats(SkillStaffPeriodList);
-
 			if (DisplayMember == "ForecastedHours")
 				return SkillStaffPeriodHelper.ForecastedTime(SkillStaffPeriodList);
 
@@ -87,22 +79,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows
 				return SkillStaffPeriodHelper.ScheduledTime(SkillStaffPeriodList);
 
 			if (DisplayMember == "AbsoluteDifference")
-				return SkillStaffPeriodHelper.AbsoluteDifference(SkillStaffPeriodList, false, false);
+				return SkillStaffPeriodHelper.AbsoluteDifference(SkillStaffPeriodList);
 
 			if (DisplayMember == "RelativeDifference")
 				return SkillStaffPeriodHelper.RelativeDifferenceForDisplay(SkillStaffPeriodList);
-
-			//if (DisplayMember == "RootMeanSquare")
-			//    return SkillStaffPeriodHelper.SkillDayRootMeanSquare(SkillStaffPeriodList);
 
 			if (DisplayMember == "DailySmoothness")
 			{
 				var skillStaffPeriodOfFullPeriod = getSkillStaffPeriodsForFullPeriod();
 				return SkillStaffPeriodHelper.SkillPeriodGridSmoothness(skillStaffPeriodOfFullPeriod);
 			}
-
-			//if (DisplayMember == "HighestDeviationInPeriod")
-			//    return SkillStaffPeriodHelper.GetHighestIntraIntervalDeviation(SkillStaffPeriodList);
 
 			if (DisplayMember == "ForecastedHoursIncoming")
 				return SkillStaffPeriodHelper.ForecastedIncoming(SkillStaffPeriodList);

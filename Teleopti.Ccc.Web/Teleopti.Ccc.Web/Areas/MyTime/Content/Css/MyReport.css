@@ -3,10 +3,6 @@
 	overflow: auto;
 }
 
-.fixed-non-responsive.container {
-	width: 99%;
-}
-
 table th.right-align-cell,
 table td.right-align-cell {
 	text-align: right;

@@ -43,7 +43,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			DataRow dataRow = table.NewRow();
 
 			dataRow["date"] = forecastSkill.StartDateTime.Date;
-			dataRow["interval_id"] = new Interval(forecastSkill.StartDateTime, _intervalsPerDay).Id;
+			dataRow["interval_id"] = new IntervalBase(forecastSkill.StartDateTime, _intervalsPerDay).Id;
 			dataRow["skill_code"] = forecastSkill.SkillCode;
 			dataRow["scenario_code"] = forecastSkill.ScenarioCode;
 			dataRow["forecasted_resources_m"] = forecastSkill.ForecastedResourcesMinutes;

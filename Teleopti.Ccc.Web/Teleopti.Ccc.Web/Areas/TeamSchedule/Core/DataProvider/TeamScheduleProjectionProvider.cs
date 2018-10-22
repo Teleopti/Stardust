@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			{
 				PersonId = person.Id.GetValueOrDefault().ToString(),
 				Name = agentNameSetting.BuildFor(person),
-				Date = date.Date.ToGregorianDateTimeString().Remove(10),
+				Date = date.Date.ToServiceDateFormat(),
 				Projection = new List<GroupScheduleProjectionViewModel>(),
 				MultiplicatorDefinitionSetIds =
 				(personPeriod?.PersonContract?.Contract.MultiplicatorDefinitionSetCollection.Count > 0)
@@ -112,8 +112,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					.Select(personAbsence => new Summary
 					{
 						Description = !canViewConfidential && (personAbsence.Layer.Payload as IAbsence).Confidential ? ConfidentialPayloadValues.Description.Name : personAbsence.Layer.Payload.Description.Name,
-						Start = TimeZoneInfo.ConvertTimeFromUtc(personAbsence.Period.StartDateTime, timezone).ToFixedDateTimeFormat(),
-						End = TimeZoneInfo.ConvertTimeFromUtc(personAbsence.Period.EndDateTime, timezone).ToFixedDateTimeFormat()
+						Start = TimeZoneInfo.ConvertTimeFromUtc(personAbsence.Period.StartDateTime, timezone).ToServiceDateTimeFormat(),
+						End = TimeZoneInfo.ConvertTimeFromUtc(personAbsence.Period.EndDateTime, timezone).ToServiceDateTimeFormat(),
+						StartInUtc = personAbsence.Period.StartDateTime.ToServiceDateTimeFormat(),
+						EndInUtc = personAbsence.Period.EndDateTime.ToServiceDateTimeFormat()
 					})
 					.ToArray() : null;
 			}
@@ -122,8 +124,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				.Select(personalActivity => new Summary
 				{
 					Description = personalActivity.Payload.Description.Name,
-					Start = TimeZoneInfo.ConvertTimeFromUtc(personalActivity.Period.StartDateTime, timezone).ToFixedDateTimeFormat(),
-					End = TimeZoneInfo.ConvertTimeFromUtc(personalActivity.Period.EndDateTime, timezone).ToFixedDateTimeFormat()
+					Start = TimeZoneInfo.ConvertTimeFromUtc(personalActivity.Period.StartDateTime, timezone).ToServiceDateTimeFormat(),
+					End = TimeZoneInfo.ConvertTimeFromUtc(personalActivity.Period.EndDateTime, timezone).ToServiceDateTimeFormat(),
+					StartInUtc = personalActivity.Period.StartDateTime.ToServiceDateTimeFormat(),
+					EndInUtc = personalActivity.Period.EndDateTime.ToServiceDateTimeFormat()
 				})
 				.ToArray() : null;
 
@@ -131,8 +135,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				.Select(personMeeting => new Summary
 				{
 					Description = personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()),
-					Start = TimeZoneInfo.ConvertTimeFromUtc(personMeeting.Period.StartDateTime, timezone).ToFixedDateTimeFormat(),
-					End = TimeZoneInfo.ConvertTimeFromUtc(personMeeting.Period.EndDateTime, timezone).ToFixedDateTimeFormat()
+					Start = TimeZoneInfo.ConvertTimeFromUtc(personMeeting.Period.StartDateTime, timezone).ToServiceDateTimeFormat(),
+					End = TimeZoneInfo.ConvertTimeFromUtc(personMeeting.Period.EndDateTime, timezone).ToServiceDateTimeFormat(),
+					StartInUtc = personMeeting.Period.StartDateTime.ToServiceDateTimeFormat(),
+					EndInUtc = personMeeting.Period.EndDateTime.ToServiceDateTimeFormat()
 				})
 				.ToArray() : null;
 
@@ -157,7 +163,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			{
 				PersonId = scheduleDay.Person.Id.GetValueOrDefault().ToString(),
 				Name = agentNameSetting.BuildFor(scheduleDay.Person),
-				Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToGregorianDateTimeString().Remove(10),
+				Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToServiceDateFormat(),
 				IsFullDayAbsence = scheduleDay.IsFullDayAbsence(),
 				ShiftCategory = getShiftCategoryDescription(scheduleDay),
 				Timezone = new TimeZoneViewModel
@@ -187,8 +193,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				scheduleVm.DayOff = new GroupScheduleDayOffViewModel
 				{
 					DayOffName = dayOff != null ? dayOff.Description.Name : "",
-					Start = TimeZoneInfo.ConvertTimeFromUtc(dayOffStart, userTimeZone).ToGregorianDateTimeString().Replace("T", " ").Remove(16),
-					End = TimeZoneInfo.ConvertTimeFromUtc(dayOffEnd, userTimeZone).ToGregorianDateTimeString().Replace("T", " ").Remove(16),
+					Start = TimeZoneInfo.ConvertTimeFromUtc(dayOffStart, userTimeZone).ToServiceDateTimeFormat(),
+					End = TimeZoneInfo.ConvertTimeFromUtc(dayOffEnd, userTimeZone).ToServiceDateTimeFormat(),
+					StartInUtc = dayOffStart.ToServiceDateTimeFormat(),
+					EndInUtc = dayOffEnd.ToServiceDateTimeFormat(),
 					Minutes = (int)dayOffEnd.Subtract(dayOffStart).TotalMinutes
 				};
 			}
@@ -230,7 +238,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 						var matchedShiftLayers = isMainShiftLayer ? _projectionHelper.GetMatchedShiftLayers(scheduleDay, layer, isOvertime) : null;
 						var reportLevelDetail = (layer.Payload as IActivity)?.ReportLevelDetail;
-						
+
 						var projection = new GroupScheduleProjectionViewModel
 						{
 							ParentPersonAbsences = isPayloadAbsence ? _projectionHelper.GetMatchedAbsenceLayers(scheduleDay, layer).ToArray() : null,
@@ -243,15 +251,16 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 														? ConfidentialPayloadValues.DisplayColorHex
 														: ((IAbsence)layer.Payload).DisplayColor.ToHtml())
 													: layer.Payload.ConfidentialDisplayColor(scheduleDay.Person).ToHtml(),
-							Start = startDateTimeInUserTimeZone.ToGregorianDateTimeString().Replace("T", " ").Remove(16),
-							StartInUtc = layer.Period.StartDateTime.ToGregorianDateTimeString().Replace("T", " ").Remove(16),
-							End = endDateTimeInUserTimeZone.ToGregorianDateTimeString().Replace("T", " ").Remove(16),
+							Start = startDateTimeInUserTimeZone.ToServiceDateTimeFormat(),
+							StartInUtc = layer.Period.StartDateTime.ToServiceDateTimeFormat(),
+							End = endDateTimeInUserTimeZone.ToServiceDateTimeFormat(),
+							EndInUtc = layer.Period.EndDateTime.ToServiceDateTimeFormat(),
 							Minutes = (int)layer.Period.ElapsedTime().TotalMinutes,
 							IsOvertime = isOvertime,
 							FloatOnTop = reportLevelDetail == ReportLevelDetail.Lunch
 										|| reportLevelDetail == ReportLevelDetail.ShortBreak
-										|| isOvertime 
-										|| matchedPersonalLayers.Any() 
+										|| isOvertime
+										|| matchedPersonalLayers.Any()
 										|| isPayloadAbsence
 										|| isMeeting,
 							IsPersonalActivity = matchedPersonalLayers.Any(),
@@ -268,9 +277,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			scheduleVm.Projection = projections;
 			return scheduleVm;
 		}
-
-
-
+		
 		public AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential)
 		{
 			var ret = new AgentInTeamScheduleViewModel
@@ -447,5 +454,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				}
 			}
 		}
+
 	}
 }

@@ -227,7 +227,7 @@
 				</div>
 			</div>
 
-			<div class="modal-inner-content">
+			<div class="modal-inner-content-forecast">
 				<wfm-date-range-picker ng-model="vm.forecastPeriod"></wfm-date-range-picker>
 			</div>
 
@@ -252,7 +252,7 @@
 				</div>
 			</div>
 
-			<div class="modal-inner-content">
+			<div class="modal-inner-content-forecast">
 				<wfm-date-range-picker ng-model="vm.forecastPeriod"></wfm-date-range-picker>
 			</div>
 
@@ -275,7 +275,7 @@
 				</div>
 			</div>
 
-			<div class="modal-inner-content">
+			<div class="modal-inner-content-forecast">
 				<wfm-date-range-picker ng-model="vm.forecastPeriod"></wfm-date-range-picker>
 			</div>
 
@@ -299,7 +299,7 @@
 				</div>
 			</div>
 
-			<form class="form-radio">
+			<form class="form-radio-forecast">
 				<md-radio-group ng-model="vm.targetScenario" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
 					<md-radio-button ng-repeat="scenario in vm.scenarios" ng-value="scenario" aria-label="radio">{{scenario.Name}}</md-radio-button>
 				</md-radio-group>
@@ -319,11 +319,11 @@
 </section>
 
 <section>
-	<div ng-cloak class="modal-box">
+	<div ng-cloak>
 		<div ng-cloak ng-show="vm.confirmDiscardDialog">
 			<div class="modalbg">
 				<div class="dialog-mini material-depth-1">
-					<div class="modal-inner-content">
+					<div class="modal-inner-content-forecast">
 						<h3>{{'ThisScenarioHasChanges' | translate}}</h3>
 						{{'ConfirmDiscardAllModifications' | translate}}
 					</div>
@@ -347,11 +347,11 @@
 </section>
 
 <section>
-	<div ng-cloak class="modal-box">
+	<div ng-cloak>
 		<div ng-cloak ng-show="vm.closeConfirmation">
 			<div class="modalbg">
 				<div class="dialog-mini material-depth-1">
-					<div class="modal-inner-content">
+					<div class="modal-inner-content-forecast">
 						<h3>{{'ThisScenarioHasChanges' | translate}}</h3>
 						{{'ConfirmExitForecastWithoutSaving' | translate}}
 					</div>
@@ -375,11 +375,11 @@
 </section>
 
 <section>
-	<div ng-cloak class="modal-box">
+	<div ng-cloak>
 		<div ng-cloak ng-show="vm.closeConfirmationOnForecasting">
 			<div class="modalbg">
 				<div class="dialog-mini material-depth-1">
-					<div class="modal-inner-content">
+					<div class="modal-inner-content-forecast">
 						<h3>{{'ForecastNotFinishedYet' | translate}}</h3>
 						{{'ConfirmExitOnForecasting' | translate}}
 					</div>
@@ -404,15 +404,15 @@
 </section>
 
 <section>
-	<div ng-cloak class="modal-box">
+	<div ng-cloak>
 		<div ng-cloak ng-show="vm.reforecastConfirmation">
 			<div class="modalbg">
 				<div class="dialog-mini material-depth-1">
-					<div class="modal-inner-content">
+					<div class="modal-inner-content-forecast">
 						<h3>{{'ThisScenarioHasChanges' | translate}}</h3>
 						{{'ConfirmReforecastWithoutSaving' | translate}}
 					</div>
-					<div class="modal-actions">
+					<div class="modal-actions-forecast">
 						<aside>
 							<button type="button" focus-me="vm.closeConfirmation" id="confirmReforecastButton" ng-click="vm.reforecastConfirmation=false; vm.forecastModal=true; $event.stopPropagation();"
 									class="wfm-btn wfm-btn-invis-default">

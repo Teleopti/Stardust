@@ -31,7 +31,7 @@ Background:
 	| Subject      | Subject - Illness request from Ashley |
 	| Message      | Message - Illness request from Ashley |
 
-Scenario: Should view absence and text requests 
+Scenario: Should view absence and text requests
 	When I view wfm requests
 	And I select to go to absence and text requests view
 	And I select date range from '2015-10-01' to '2015-10-20'

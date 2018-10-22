@@ -4,19 +4,7 @@ using Teleopti.Wfm.Adherence.Domain.Events;
 
 namespace Teleopti.Wfm.Adherence.Domain.Service
 {
-	public interface ILateForWorkEventPublisher
-	{
-		void Publish(Context context);
-	}
-
-	public class NoLateForWorkEventPublisher : ILateForWorkEventPublisher
-	{
-		public void Publish(Context context)
-		{
-		}
-	}
-
-	public class LateForWorkEventPublisher : ILateForWorkEventPublisher
+	public class LateForWorkEventPublisher
 	{
 		private readonly IEventPopulatingPublisher _eventPublisher;
 		private readonly TimeSpan threshold = TimeSpan.FromMinutes(1);

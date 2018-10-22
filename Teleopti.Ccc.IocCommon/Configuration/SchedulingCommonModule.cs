@@ -283,7 +283,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<MatrixClosedDaysLockerDoNothing>().As<IMatrixClosedDayLocker>().InstancePerLifetimeScope();
 			}
-			
+
+			if (_configuration.Toggle(Toggles.ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941))
+			{
+				builder.RegisterType<ScheduleAllRemovedDaysOrRollback>().As<IScheduleAllRemovedDaysOrRollback>().InstancePerLifetimeScope();
+			}
+			else
+			{
+				builder.RegisterType<ScheduleAllRemovedDaysOrRollbackDoNothing>().As<IScheduleAllRemovedDaysOrRollback>().InstancePerLifetimeScope();
+			}
+
+
 			builder.RegisterType<MatrixNotPermittedLocker>().SingleInstance();
 			builder.RegisterType<ScheduleMatrixValueCalculatorProFactory>().As<IScheduleMatrixValueCalculatorProFactory>().SingleInstance();
 			builder.RegisterType<WorkShiftLegalStateDayIndexCalculator>().SingleInstance();

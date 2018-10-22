@@ -11957,7 +11957,7 @@ Quieres participar?</value>
   <data name="YouAreGoingToChangeThisPlanningPeriodFrom" xml:space="preserve">
     <value>Vas a cambiar este período a planificar a {0} - {1}.</value>
   </data>
-  <data name="ArchivingConfirmationWithParameters" xml:space="preserve">
+  <data name="CopyingConfirmationWithParameters" xml:space="preserve">
     <value>Está a punto de sobrescribir todo la planificación existente para el escenario '{0}' para el período {1} - {2} y los equipos seleccionados.</value>
   </data>
   <data name="ImportingConfirmationWithParameters" xml:space="preserve">

@@ -385,12 +385,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		{
 			throw new NotImplementedException();
 		}
-
-		public IDictionary<DateTimePeriod, IScheduleDictionary> GetSchedules(IList<IScheduleChangedReadModel> changed, IScenario scenario)
-		{
-			throw new NotImplementedException();
-		}
-
+		
 		public IDictionary<DateOnly, IScheduleDictionary> GetSchedules(HashSet<IStudentAvailabilityDay> days, IScenario scenario)
 		{
 			throw new NotImplementedException();

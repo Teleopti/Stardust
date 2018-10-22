@@ -23,13 +23,13 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 			var batchDays = dayCollection.Batch(span);
 			foreach (IEnumerable<DateOnly> dateOnlyCollcetion in batchDays)
 			{
-				var minDate = dateOnlyCollcetion.Min();
-				var maxDate = dateOnlyCollcetion.Max();
+				var minDate = dateOnlyCollcetion.First();
+				var maxDate = dateOnlyCollcetion.Last();
 				IList<ScheduleProjection> scheduleProjectionChunkList =
 					 scheduleProjectionServiceList.Where(
 						  s =>
 						  (s.SchedulePart.DateOnlyAsPeriod.DateOnly <= maxDate) &&
-						  (s.SchedulePart.DateOnlyAsPeriod.DateOnly >= minDate)).ToList();
+						  (s.SchedulePart.DateOnlyAsPeriod.DateOnly >= minDate)).ToArray();
 
 				taskParameterList.Add(new ThreadObj(
 								 scheduleProjectionChunkList,
