@@ -88,6 +88,8 @@ task PatchDatabase -depends InitSetup, TeardownAndPrepare, CreateDatabase -descr
 task DataModifications -depends InitSetup, TeardownAndPrepare, CreateDatabase, PatchDatabase -description "Run Security Modifications" {
 
 	Write-Output "##teamcity[blockOpened name='<DataModifications>']"
+	Write-Host "Waiting 30 sec before running 'Datamodifications'..."
+	Start-Sleep -s 30
     Datamodifications
 	Write-Output "##teamcity[blockClosed name='<DataModifications>']"
 }
