@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
+using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Aspects;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.UserTexts;
 
@@ -270,4 +275,94 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 		}
 	}
 
+	public class TenantAccessContextReaderService
+	{
+		//private object _tenantAccessAuditRepository;
+
+		public IEnumerable<AuditServiceModel> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate)
+		{
+			//var staffingAudit = _tenantAccessAuditRepository.LoadAudits(personId, startDate, endDate);
+
+			//return getAuditServiceModel(staffingAudit);
+			return null;
+		}
+
+		private IEnumerable<AuditServiceModel> getAuditServiceModel(IEnumerable<TenantAudit> staffingAudit)
+		{
+			var auditServiceModelList = new List<AuditServiceModel>();
+			//foreach (var audit in staffingAudit)
+			//{
+			//	var auditServiceModel = new AuditServiceModel()
+			//	{
+			//		TimeStamp = audit.TimeStamp,
+			//		Context = "Staffing",
+			//		Action = audit.Action,
+			//		ActionPerformedBy = audit.ActionPerformedBy
+			//	};
+			//	if (audit.Action.Equals(StaffingAuditActionConstants.ImportBPO))
+			//		auditServiceModel.Data = $"File name: {audit.Data}";
+			//	else
+			//	{
+			//		var deserialized = JsonConvert.DeserializeObject<ClearBpoActionObj>(audit.Data);
+			//		var bpoName = _skillCombinationResourceRepository.LoadActiveBpos()
+			//			.FirstOrDefault(x => x.Id.Equals(deserialized.BpoGuid)).Source;
+			//		var startDate = deserialized.StartDate.Date.ToString("d", _userCulture.GetCulture());
+			//		var endDate = deserialized.EndDate.Date.ToString("d", _userCulture.GetCulture());
+			//		auditServiceModel.Data = $"BPO name: {bpoName}{Environment.NewLine}Period from {startDate} to {endDate}";
+			//	}
+
+			//	auditServiceModelList.Add(auditServiceModel);
+			//}
+
+			return auditServiceModelList;
+		}
+	}
+
+	public class PersonAccessContextReaderService
+	{
+		private readonly PersonAccessAuditRepository _personAccessAuditRepository;
+
+		public PersonAccessContextReaderService(PersonAccessAuditRepository personAccessAuditRepository)
+		{
+			_personAccessAuditRepository = personAccessAuditRepository;
+		}
+
+		public IEnumerable<AuditServiceModel> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate)
+		{
+			//var staffingAudit = _personAccessAuditRepository.LoadAudits(personId, startDate, endDate);
+
+			//return getAuditServiceModel(staffingAudit);
+			return null;
+		}
+
+		private IEnumerable<AuditServiceModel> getAuditServiceModel(IEnumerable<IPersonAccess> staffingAudit)
+		{
+			var auditServiceModelList = new List<AuditServiceModel>();
+			//foreach (var audit in staffingAudit)
+			//{
+			//	var auditServiceModel = new AuditServiceModel()
+			//	{
+			//		TimeStamp = audit.TimeStamp,
+			//		Context = "Staffing",
+			//		Action = audit.Action,
+			//		ActionPerformedBy = audit.ActionPerformedBy
+			//	};
+			//	if (audit.Action.Equals(StaffingAuditActionConstants.ImportBPO))
+			//		auditServiceModel.Data = $"File name: {audit.Data}";
+			//	else
+			//	{
+			//		var deserialized = JsonConvert.DeserializeObject<ClearBpoActionObj>(audit.Data);
+			//		var bpoName = _skillCombinationResourceRepository.LoadActiveBpos()
+			//			.FirstOrDefault(x => x.Id.Equals(deserialized.BpoGuid)).Source;
+			//		var startDate = deserialized.StartDate.Date.ToString("d", _userCulture.GetCulture());
+			//		var endDate = deserialized.EndDate.Date.ToString("d", _userCulture.GetCulture());
+			//		auditServiceModel.Data = $"BPO name: {bpoName}{Environment.NewLine}Period from {startDate} to {endDate}";
+			//	}
+
+			//	auditServiceModelList.Add(auditServiceModel);
+			//}
+
+			return auditServiceModelList;
+		}
+	}
 }
