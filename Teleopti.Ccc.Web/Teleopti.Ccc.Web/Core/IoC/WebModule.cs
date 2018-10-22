@@ -1,6 +1,5 @@
 ﻿using System.Web.Http;
 using Autofac;
-using Autofac.Configuration;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
@@ -102,8 +101,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule(new MartAreaModule(_configuration));
 
 			builder.RegisterType<PersonToRoleAssociation>().SingleInstance();
-
-			builder.RegisterModule(new ConfigurationSettingsReader());
+			
 			builder.RegisterModule<SeatPlannerAreaModule>();
 			builder.RegisterModule(new OutboundAreaModule(true));
 			builder.RegisterModule<Web.Areas.People.Core.IoC.PeopleAreaModule>();
