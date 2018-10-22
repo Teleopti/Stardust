@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			_skillDayIntraIntervalIssueExtractor = skillDayIntraIntervalIssueExtractor;
 		}
 
-		public IIntraIntervalIssues CalculateIssues(ISchedulingResultStateHolder schedulingResultStateHolder, ISkill skill, DateOnly dateOnly)
+		public IntraIntervalIssues CalculateIssues(ISchedulingResultStateHolder schedulingResultStateHolder, ISkill skill, DateOnly dateOnly)
 		{
 			var result = new IntraIntervalIssues();
 			

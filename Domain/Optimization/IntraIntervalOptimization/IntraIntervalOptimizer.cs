@@ -52,10 +52,10 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			_shiftProjectionCachesForIntraInterval = shiftProjectionCachesForIntraInterval;
 		}
 
-		public IIntraIntervalIssues Optimize(SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences,
+		public IntraIntervalIssues Optimize(SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService, ISchedulingResultStateHolder schedulingResultStateHolder,
 			IPerson person, DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> allScheduleMatrixPros,
-			IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IIntraIntervalIssues intervalIssuesBefore, bool checkDayAfter)
+			IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IntraIntervalIssues intervalIssuesBefore, bool checkDayAfter)
 		{
 			const double limit = 0.7999;
 

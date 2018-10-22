@@ -3,13 +3,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 {
-	public interface IIntraIntervalIssues
-	{
-		IList<ISkillStaffPeriod> IssuesOnDay { get; set; }
-		IList<ISkillStaffPeriod> IssuesOnDayAfter { get; set; }
-	}
-
-	public class IntraIntervalIssues : IIntraIntervalIssues
+	public class IntraIntervalIssues
 	{
 		public IntraIntervalIssues() 
 		{
