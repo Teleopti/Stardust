@@ -40,7 +40,8 @@ namespace Teleopti.Wfm.Api.Query
 						StartTime = l.Period.StartDateTime,
 						EndTime = l.Period.EndDateTime,
 						PayloadId = l.Payload.Id.GetValueOrDefault(),
-						IsAbsence = l.Payload is IAbsence
+						IsAbsence = l.Payload is IAbsence,
+						DisplayColor = l.Payload.ConfidentialDisplayColor(person).ToArgb()
 					}).ToArray(),
 					PersonId = person.Id.GetValueOrDefault(),
 					TimeZoneId = person.PermissionInformation.DefaultTimeZone().Id
