@@ -3362,7 +3362,6 @@
     <Compile Include="Win\Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesTabPanel.Designer.cs">
       <DependentUpon>SchedulingSessionPreferencesTabPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\AbsenceOnContractDayOffPainter.cs" />
     <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\ActivityPreferencePainter.cs" />
     <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\DisabledPainter.cs" />
     <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\EffectiveRestrictionPainter.cs" />
