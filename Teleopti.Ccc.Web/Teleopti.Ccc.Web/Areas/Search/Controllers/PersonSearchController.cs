@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Search;
 using Teleopti.Ccc.Web.Areas.Search.Models;
 
@@ -13,6 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 			_personSearchProvider = personSearchProvider;
 		}
 
+		[UnitOfWork]
 		[HttpGet, Route("api/Search/FindPersonsByKeywords")]
 		public virtual IHttpActionResult FindPersonsByKeywords(string keywords)
 		{

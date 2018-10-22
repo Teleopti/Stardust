@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Domain.Search
 			_personRepository = personRepository;
 		}
 
-		[UnitOfWork]
 		public virtual IList<IPerson> FindPersonsByKeywords(string keywords)
 		{
 			var separateKeywords = keywords.Split(' ');
@@ -44,17 +43,6 @@ namespace Teleopti.Ccc.Domain.Search
 				dictionary.Add(person, 0);
 
 			dictionary[person]++;
-		}
-
-		[UnitOfWork]
-		public virtual IList<IPerson> FindPersonsByKeywordsOld(string keywords)
-		{
-			var separateKeywords = keywords.Split(' ');
-			var persons = _personRepository.LoadAll();
-			var allMatches = separateKeywords.SelectMany(k =>
-				persons.Where(p => p.Name.FirstName.Contains(k) || p.Name.LastName.Contains(k))).Distinct();
-
-			return allMatches.ToList();
 		}
 	}
 }
