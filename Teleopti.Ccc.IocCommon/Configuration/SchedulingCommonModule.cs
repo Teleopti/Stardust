@@ -573,7 +573,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftCategoryPoints>().As<IShiftCategoryPoints>().SingleInstance();
 			builder.RegisterType<ShiftCategoryPointExtractor>().As<IShiftCategoryPointExtractor>().SingleInstance();
 			builder.RegisterType<SeniorityExtractor>().As<ISeniorityExtractor>().SingleInstance();
-			builder.RegisterType<DetermineTeamBlockPriority>().As<IDetermineTeamBlockPriority>().SingleInstance();
+			builder.RegisterType<DetermineTeamBlockPriority>().SingleInstance();
 			builder.RegisterType<TeamBlockSwapValidator>().As<ITeamBlockSwapValidator>().SingleInstance();
 			builder.RegisterType<TeamBlockSwapDayValidator>().As<ITeamBlockSwapDayValidator>().SingleInstance();
 			builder.RegisterType<TeamBlockSwap>().As<ITeamBlockSwap>();
