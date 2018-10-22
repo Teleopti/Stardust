@@ -313,7 +313,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();
 			builder.RegisterType<EditableShiftMapper>().As<IEditableShiftMapper>().SingleInstance();
 			builder.RegisterType<MaxMovedDaysOverLimitValidator>().As<IMaxMovedDaysOverLimitValidator>().SingleInstance();
-			builder.RegisterType<TeamBlockRestrictionOverLimitValidator>().As<ITeamBlockRestrictionOverLimitValidator>().SingleInstance();
+			builder.RegisterType<TeamBlockRestrictionOverLimitValidator>().SingleInstance();
 			builder.RegisterType<TeamBlockOptimizationLimits>().As<ITeamBlockOptimizationLimits>().SingleInstance();
 			builder.RegisterType<RestrictionOverLimitValidator>().SingleInstance();
 			builder.RegisterType<DayOffOptimization>().InstancePerLifetimeScope();
