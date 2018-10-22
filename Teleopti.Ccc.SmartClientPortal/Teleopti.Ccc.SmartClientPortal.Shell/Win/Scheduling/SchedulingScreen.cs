@@ -133,11 +133,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private GridRowInChartSettingButtons _gridrowInChartSettingButtons;
 		private GridRow _currentSelectedGridRow;
 		private readonly GridControl _grid;
-		private readonly ChartControl _chartControlSkillData;
-		private readonly TeleoptiLessIntelligentSplitContainer _splitContainerAdvMain;
-		private readonly TeleoptiLessIntelligentSplitContainer _splitContainerAdvResultGraph;
-		private readonly TeleoptiLessIntelligentSplitContainer _splitContainerLessIntellegentEditor;
-		private readonly TeleoptiLessIntelligentSplitContainer _splitContainerLessIntellegentRestriction;
 		private readonly TabControlAdv _tabSkillData;
 		private readonly ElementHost _elementHostRequests;
 		private readonly HandlePersonRequestView _handlePersonRequestView1;
@@ -166,12 +161,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private bool _showInfoPanel = true;
 		private ControlType _controlType;
 		private SchedulerMessageBrokerHandler _schedulerMessageBrokerHandler;
-		private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
 		private readonly ContextMenuStrip _contextMenuSkillGrid = new ContextMenuStrip();
 		private readonly SchedulingOptions _schedulingOptions;
 		private readonly IOptimizationPreferences _optimizationPreferences;
 		private readonly IBudgetPermissionService _budgetPermissionService;
-		private readonly IRestrictionExtractor _restrictionExtractor;
 		private readonly IResourceOptimizationHelperExtended _optimizationHelperExtended;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly IPeopleAndSkillLoaderDecider _peopleAndSkillLoaderDecider;
@@ -229,11 +222,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var hostDatePicker = new ToolStripControlHost(_dateNavigateControl);
 			toolStripExScheduleViews.Items.Add(hostDatePicker);
 			_grid = schedulerSplitters1.Grid;
-			_chartControlSkillData = schedulerSplitters1.ChartControlSkillData;
-			_splitContainerAdvMain = schedulerSplitters1.SplitContainerAdvMainContainer;
-			_splitContainerAdvResultGraph = schedulerSplitters1.SplitContainerAdvResultGraph;
-			_splitContainerLessIntellegentEditor = schedulerSplitters1.SplitContainerLessIntelligent1;
-			_splitContainerLessIntellegentRestriction = schedulerSplitters1.SplitContainerView;
 			_elementHostRequests = schedulerSplitters1.ElementHostRequests;
 			_handlePersonRequestView1 = schedulerSplitters1.HandlePersonRequestView1;
 			_tabSkillData = schedulerSplitters1.TabSkillData;
@@ -410,7 +398,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_budgetPermissionService = _container.Resolve<IBudgetPermissionService>();
 			SchedulerState = _container.Resolve<ISchedulerStateHolder>();
 			_groupPagesProvider = _container.Resolve<SchedulerGroupPagesProvider>();
-			_restrictionExtractor = _container.Resolve<IRestrictionExtractor>();
 			_optimizationHelperExtended = _container.Resolve<IResourceOptimizationHelperExtended>();
 			_skillDayLoadHelper = _container.Resolve<ISkillDayLoadHelper>();
 			_externalStaffProvider = _container.Resolve<ExternalStaffProvider>();
@@ -460,7 +447,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			instantiateClipboardControlRestrictions();
 
 			AddControlHelpContext(_grid);
-			AddControlHelpContext(_chartControlSkillData);
+			AddControlHelpContext(schedulerSplitters1.ChartControlSkillData);
 			AddControlHelpContext(_skillDayGridControl);
 			AddControlHelpContext(_skillIntradayGridControl);
 			AddControlHelpContext(_skillWeekGridControl);
@@ -984,7 +971,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripProgressBar1.Maximum = SchedulerState.RequestedPeriod.DateOnlyPeriod.DayCount() + 19;
 			toolStripProgressBar1.Visible = true;
 
-			_splitContainerAdvMain.Visible = false;
+			schedulerSplitters1.SplitContainerAdvMainContainer.Visible = false;
 			_clipboardControl.SetButtonState(ClipboardAction.Paste, true);
 			_clipboardControlRestrictions.SetButtonState(ClipboardAction.Paste, true);
 
@@ -1407,7 +1394,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					clone.PersonAssignment(true).SetDayOff(dayOffTemplate);
 					_scheduleView.Presenter.ClipHandlerSchedule.Clear();
 					_scheduleView.Presenter.ClipHandlerSchedule.AddClip(1, 1, clone);
-					_externalExceptionHandler.AttemptToUseExternalResource(
+					new ExternalExceptionHandler().AttemptToUseExternalResource(
 						() => Clipboard.SetData("PersistableScheduleData", new int()));
 					_cutPasteHandlerFactory.For(_controlType).PasteDayOff();
 					_scheduleView.Presenter.ClipHandlerSchedule.Clear();
@@ -1641,139 +1628,139 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void toolStripMenuItemLockAllRestrictionsMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.LockAllRestrictions(e.Button);
 		}
 
 		private void toolStripMenuItemAllPreferencesMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllPreferences(e.Button);
 		}
 
 		private void toolStripMenuItemAllDaysOffMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllDaysOff(e.Button);
 		}
 
 		private void toolStripMenuItemAllShiftsPreferencesMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllShiftsPreferences(e.Button);
 		}
 
 		private void toolStripMenuItemAllMustHaveMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllMustHave(e.Button);
 		}
 
 		private void toolStripMenuItemAllFulfilledMustHaveMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllFulfilledMustHave(e.Button);
 		}
 
 		private void toolStripMenuItemAllFulFilledPreferencesMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllFulfilledPreferences(e.Button);
 		}
 
 		private void toolStripMenuItemAllAbsencePreferenceMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllAbsencePreference(e.Button);
 		}
 
 		private void toolStripMenuItemAllFulFilledAbsencesPreferencesMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllFulfilledAbsencesPreferences(e.Button);
 		}
 
 		private void toolStripMenuItemAllFulFilledDaysOffPreferencesMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllFulfilledDaysOffPreferences(e.Button);
 		}
 
 		private void toolStripMenuItemAllFulFilledShiftsPreferencesMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllFulfilledShiftsPreferences(e.Button);
 		}
 
 		private void toolStripMenuItemAllRotationsMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllRotations(e.Button);
 		}
 
 		private void toolStripMenuItemAllDaysOffRotationsMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllDaysOffRotations(e.Button);
 		}
 
 		private void toolStripMenuItemAllShiftsRotationsMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllShiftsRotations(e.Button);
 		}
 
 		private void toolStripMenuItemAllFulFilledRotationsMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllFulfilledRotations(e.Button);
 		}
 
 		private void toolStripMenuItemAllFulFilledDaysOffRotationsMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllFulfilledDaysOffRotations(e.Button);
 		}
 
 		private void toolStripMenuItemAllFulFilledShiftsRotationsMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllFulfilledShiftsRotations(e.Button);
 		}
 
 		private void toolStripMenuItemAllUnavailableStudentAvailabilityMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllUnavailableStudentAvailability(e.Button);
 		}
 
 		private void toolStripMenuItemAllAvailableStudentAvailabilityMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllAvailableStudentAvailability(e.Button);
 		}
 
 		private void toolStripMenuItemAllFulFilledStudentAvailabilityMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllFulfilledStudentAvailability(e.Button);
 		}
 
 		private void toolStripMenuItemAllUnavailableAvailabilityMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllUnavailableAvailability(e.Button);
 		}
 
 		private void toolStripMenuItemAllAvailableAvailabilityMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllAvailableAvailability(e.Button);
 		}
 
 		private void toolStripMenuItemAllFulFilledAvailabilityMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
+			var executer = new LockExecuter(_grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllFulfilledAvailability(e.Button);
 		}
 
@@ -2509,7 +2496,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (schedulerSplitters1.PinnedPage != null)
 				schedulerSplitters1.TabSkillData.SelectedTab = schedulerSplitters1.PinnedPage;
 
-			_splitContainerAdvMain.Visible = true;
+			schedulerSplitters1.SplitContainerAdvMainContainer.Visible = true;
 			toolStripStatusLabelScheduleTag.Visible = true;
 			toolStripStatusLabelNumberOfAgents.Text = LanguageResourceHelper.Translate("XXAgentsColon") + @" " +
 													  SchedulerState.FilteredCombinedAgentsDictionary.Count + @" " +
@@ -2945,12 +2932,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void chartControlSkillDataChartRegionMouseHover(object sender, ChartRegionMouseEventArgs e)
 		{
-			GridChartManager.SetChartToolTip(e.Region, _chartControlSkillData);
+			GridChartManager.SetChartToolTip(e.Region, schedulerSplitters1.ChartControlSkillData);
 		}
 
 		private void chartControlSkillDataChartRegionClick(object sender, ChartRegionMouseEventArgs e)
 		{
-			int column = Math.Max(1, (int)GridChartManager.GetIntervalValueForChartPoint(_chartControlSkillData, e.Point));
+			int column = Math.Max(1, (int)GridChartManager.GetIntervalValueForChartPoint(schedulerSplitters1.ChartControlSkillData, e.Point));
 			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Week) && !_chartInIntradayMode)
 				_skillWeekGridControl.ScrollCellInView(0, column);
 
@@ -4356,7 +4343,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var chartsetteinghost = new ToolStripControlHost(_gridrowInChartSettingButtons);
 			toolStripExGridRowInChartButtons.Items.Add(chartsetteinghost);
 			_gridrowInChartSettingButtons.SetButtons();
-			_gridChartManager = new GridChartManager(_chartControlSkillData, true, true, true);
+			_gridChartManager = new GridChartManager(schedulerSplitters1.ChartControlSkillData, true, true, true);
 			_gridChartManager.Create();
 			ColorHelper.SetRibbonQuickAccessTexts(ribbonControlAdv1);
 			ribbonControlAdv1.MenuButtonText = Resources.File;
@@ -4406,7 +4393,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var outerPeriod = new DateOnlyPeriod(requestedPeriod.StartDate.AddDays(-7), requestedPeriod.EndDate.AddDays(7));
 
 			_agentInfoControl = new AgentInfoControl(_groupPagesProvider, _container, outerPeriod,
-				requestedPeriod, _restrictionExtractor, SchedulerState, _optionalColumns);
+				requestedPeriod, _container.Resolve<IRestrictionExtractor>(), SchedulerState, _optionalColumns);
 			schedulerSplitters1.InsertAgentInfoControl(_agentInfoControl);
 
 			//container can fix this to one row
@@ -4501,7 +4488,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			if (persons.Count == 0) return;
 			var view = (AgentRestrictionsDetailView)detailView;
-			_splitContainerLessIntellegentRestriction.SplitterDistance = 300;
+			schedulerSplitters1.SplitContainerView.SplitterDistance = 300;
 			schedulerSplitters1.SetSelectedAgentsOnAgentsNotPossibleToSchedule(persons, selectedPeriod, view);
 		}
 
@@ -5094,7 +5081,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				_gridChartManager.ReloadChart(_skillDayGridControl, description);
 				_chartInIntradayMode = false;
 			}
-			_chartControlSkillData.Visible = true;
+			schedulerSplitters1.ChartControlSkillData.Visible = true;
 		}
 
 		private void schedulerSplitters1RestrictionsNotAbleToBeScheduledProgress(object sender,
@@ -5166,8 +5153,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			_gridrowInChartSettingButtons.LineInChartSettingsChanged += gridlinesInChartSettingsLineInChartSettingsChanged;
 			_gridrowInChartSettingButtons.LineInChartEnabledChanged += gridrowInChartSettingLineInChartEnabledChanged;
-			_chartControlSkillData.ChartRegionMouseHover += chartControlSkillDataChartRegionMouseHover;
-			_chartControlSkillData.ChartRegionClick += chartControlSkillDataChartRegionClick;
+			schedulerSplitters1.ChartControlSkillData.ChartRegionMouseHover += chartControlSkillDataChartRegionMouseHover;
+			schedulerSplitters1.ChartControlSkillData.ChartRegionClick += chartControlSkillDataChartRegionClick;
 			_undoRedo.ChangedHandler += undoRedoChanged;
 
 			#region eventaggregator
@@ -5631,10 +5618,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				_gridrowInChartSettingButtons.LineInChartEnabledChanged -= gridrowInChartSettingLineInChartEnabledChanged;
 			}
 
-			if (_chartControlSkillData != null)
+			if (schedulerSplitters1 != null && schedulerSplitters1.ChartControlSkillData != null)
 			{
-				_chartControlSkillData.ChartRegionMouseHover -= chartControlSkillDataChartRegionMouseHover;
-				_chartControlSkillData.ChartRegionClick -= chartControlSkillDataChartRegionClick;
+				schedulerSplitters1.ChartControlSkillData.ChartRegionMouseHover -= chartControlSkillDataChartRegionMouseHover;
+				schedulerSplitters1.ChartControlSkillData.ChartRegionClick -= chartControlSkillDataChartRegionClick;
 			}
 
 			if (_clipboardControl != null)
@@ -6068,7 +6055,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void toolStripTabItemChartClick(object sender, EventArgs e)
 		{
-			ActiveControl = _chartControlSkillData;
+			ActiveControl = schedulerSplitters1.ChartControlSkillData;
 		}
 
 		private void toolStripTabItemHomeClick(object sender, EventArgs e)
@@ -6255,11 +6242,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				{
 					_splitterManager = new SplitterManagerRestrictionView
 					{
-						MainSplitter = _splitContainerAdvMain,
+						MainSplitter = schedulerSplitters1.SplitContainerAdvMainContainer,
 						LeftMainSplitter = schedulerSplitters1.SplitContainerAdvMain,
-						GraphResultSplitter = _splitContainerAdvResultGraph,
-						GridEditorSplitter = _splitContainerLessIntellegentEditor,
-						RestrictionViewSplitter = _splitContainerLessIntellegentRestriction
+						GraphResultSplitter = schedulerSplitters1.SplitContainerAdvResultGraph,
+						GridEditorSplitter = schedulerSplitters1.SplitContainerLessIntelligent1,
+						RestrictionViewSplitter = schedulerSplitters1.SplitContainerView
 					};
 				}
 				return _splitterManager;
@@ -6591,7 +6578,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void findMatching(IScheduleDay selected)
 		{
 			using (
-				var form = new FindMatchingNew(_restrictionExtractor, selected.Person, selected.DateOnlyAsPeriod.DateOnly,
+				var form = new FindMatchingNew(_container.Resolve<IRestrictionExtractor>(), selected.Person, selected.DateOnlyAsPeriod.DateOnly,
 					new ScheduleDayForPerson(() => new ScheduleRangeForPerson(() => SchedulerState.SchedulingResultState)),
 					SchedulerState.FilteredCombinedAgentsDictionary.Values)
 				)
