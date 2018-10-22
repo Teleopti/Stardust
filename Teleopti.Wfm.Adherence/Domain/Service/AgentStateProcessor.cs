@@ -118,16 +118,12 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 
 		private AgentState processRelevantMoments(ProcessInput processInput)
 		{
-			Console.WriteLine("processRelevantMoments" + processInput.CurrentTime);
-
 			var from = processInput.Stored.ReceivedTime ?? processInput.CurrentTime.AddHours(-1);
 			var to = processInput.CurrentTime;
 
 			var startingActivities = processInput.Schedule.Select(x => x.StartDateTime);
 			var endingActivities = processInput.Schedule.Select(x => x.EndDateTime);
-			//optimize add only one hour before first activity of shift
-			var oneHourBeforeStartingActivities = processInput.Schedule
-				.Select(x => x.StartDateTime.AddHours(-1));
+			var oneHourBeforeStartingActivities = ScheduleInfo.ShiftStartTimes(processInput.Schedule).Select(x => x.AddHours(-1));
 
 			var times = processInput.CurrentTime.AsArray()
 				.Concat(startingActivities)

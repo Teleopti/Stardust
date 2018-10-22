@@ -75,7 +75,12 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 
 		private DateTime startTimeOfShift(ScheduledActivity activity)
 		{
-			return activity == null ? DateTime.MinValue : activitiesThisShift(activity).Select(x => x.StartDateTime).Min();
+			return startTimeOfShift(_schedule.Value, activity);
+		}
+
+		private static DateTime startTimeOfShift(IEnumerable<ScheduledActivity> schedule, ScheduledActivity activity)
+		{
+			return activity == null ? DateTime.MinValue : activitiesThisShift(schedule, activity).Select(x => x.StartDateTime).Min();
 		}
 
 		private DateTime endTimeOfShift(ScheduledActivity activity)
@@ -85,7 +90,12 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 
 		private IEnumerable<ScheduledActivity> activitiesThisShift(ScheduledActivity activity)
 		{
-			return from l in _schedule.Value
+			return activitiesThisShift(_schedule.Value, activity);
+		}
+
+		private static IEnumerable<ScheduledActivity> activitiesThisShift(IEnumerable<ScheduledActivity> schedule, ScheduledActivity activity)
+		{
+			return from l in schedule
 				where l.BelongsToDate == activity.BelongsToDate
 				select l;
 		}
@@ -169,6 +179,18 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			return false;
 		}
 
+		public static IEnumerable<DateTime> ShiftStartTimes(IEnumerable<ScheduledActivity> schedule)
+		{
+			return schedule.Select(x => startTimeOfShift(schedule, x)).Distinct();
+		}
+		
+		private static DateTime? oneHourBeforeNextShift(IEnumerable<ScheduledActivity> schedule, DateTime time)
+		{
+			var nextValidShiftStart = ShiftStartTimes(schedule).FirstOrDefault(t => t.AddHours(-1) > time);
+
+			return nextValidShiftStart > DateTime.MinValue ? nextValidShiftStart.AddHours(-1) as DateTime? : null;
+		}
+				
 		public static DateTime? NextCheck(IEnumerable<ScheduledActivity> schedule, int? lastTimeWindowCheckSum, DateTime? lastCheck)
 		{
 			// note to self: return null means check now ;)
@@ -182,15 +204,18 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 
 			var current = currentActivity(schedule, lastCheck.Value);
 			var next = nextActivity(schedule, current, lastCheck.Value);
+						
+			var oneHourBeforeNextShiftStart = oneHourBeforeNextShift(schedule, lastCheck.Value);			
 			var activityEnteringTimeWindow = schedule.FirstOrDefault(x => x.StartDateTime >= timeWindowEnd(lastCheck.Value));
 			var activityEntersTimeWindowAt = activityEnteringTimeWindow?.StartDateTime.Subtract(timeWindowFuture);
 			var noSchedule = DateTime.MaxValue;
+		
 
 			// {null, null, 2017-11-29 10:00, DateTime.MaxValue}.Min() = 2017-11-29 10:00
 			return new[]
 			{
 				current?.EndDateTime,
-				next?.StartDateTime.AddHours(-1), // optimize more please
+				oneHourBeforeNextShiftStart, 
 				next?.StartDateTime,
 				activityEntersTimeWindowAt,
 				noSchedule
