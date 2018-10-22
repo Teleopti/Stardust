@@ -95,28 +95,6 @@
 			}
 		};
 
-		vm.hasHiddenScheduleAtStart = function (personSchedule) {
-			if (!personSchedule.Shifts) return false;
-
-			var result = false;
-			personSchedule.Shifts.forEach(function (shift) {
-				if (moment(shift.ProjectionTimeRange.Start) < personSchedule.ViewRange.startMoment)
-					result = true;
-			});
-			return result;
-		};
-
-		vm.hasHiddenScheduleAtEnd = function (personSchedule) {
-			if (!personSchedule.Shifts) return false;
-
-			var result = false;
-			personSchedule.Shifts.forEach(function (shift) {
-				if (moment(shift.ProjectionTimeRange.End) > personSchedule.ViewRange.endMoment)
-					result = true;
-			});
-			return result;
-		};
-
 		vm.checkBusinessRulesWarningMessage = function (personId) {
 			return ValidateRulesService.checkValidationForPerson(personId);
 		};
@@ -155,6 +133,10 @@
 				timezone: vm.selectedTimezone,
 				date: serviceDateFormatHelper.getDateOnly(vm.selectedDate)
 			});
+		}
+
+		vm.isNotSameTimezone = function (personTimezone) {
+			return vm.selectedTimezone && personTimezone.IanaId !== vm.selectedTimezone;
 		}
 
 		function isAllInCurrentPageSelected() {

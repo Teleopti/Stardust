@@ -5,14 +5,12 @@
 		'Toggle',
 		'teamsPermissions',
 		'serviceDateFormatHelper',
-		'currentTimezone',
 		personScheduleFactory]);
 
 	function personScheduleFactory($filter,
 		toggleSvc,
 		permissions,
-		serviceDateFormatHelper,
-		currentTimezoneSvc) {
+		serviceDateFormatHelper) {
 
 		var personScheduleFactory = {
 			Create: create
@@ -54,7 +52,9 @@
 
 			return {
 				Start: schedule.Projection[0].Start,
-				End: schedule.Projection[schedule.Projection.length - 1].End
+				StartMoment: schedule.Projection[0].StartMoment,
+				End: schedule.Projection[schedule.Projection.length - 1].End,
+				EndMoment: schedule.Projection[schedule.Projection.length - 1].EndMoment,
 			};
 		}
 
@@ -63,15 +63,16 @@
 
 			var personSchedule = new PersonSchedule(schedule, timeLine, index);
 
-			var shiftVm = new ShiftViewModel(schedule, personSchedule, timeLine);
+			var shiftVm = new ShiftViewModel(schedule, personSchedule);
 			var projectionVms = createProjections(schedule.Projection, timeLine, shiftVm);
 			shiftVm.Projections = projectionVms;
 
 			var dayOffVm = createDayOffViewModel(schedule.Date, schedule.DayOff, timeLine, personSchedule);
 
 			if (angular.isDefined(projectionVms)) personSchedule.Shifts = [shiftVm];
-			if (angular.isDefined(dayOffVm)) personSchedule.DayOffs = [dayOffVm];
 
+			if (angular.isDefined(dayOffVm)) personSchedule.DayOffs = [dayOffVm];
+			
 			return personSchedule;
 		}
 
@@ -102,11 +103,8 @@
 			var timelineEndMinute = timeLine.EndMinute;
 			var lengthPercentPerMinute = timeLine.LengthPercentPerMinute;
 
-			var startTime = moment(dayOff.Start);
-			var startTimeMinutes = startTime.diff(timeLine.Offset, 'minutes');
-
-			var endTime = moment(dayOff.End);
-			var endTimeMinutes = endTime.diff(timeLine.Offset, 'minutes');
+			var startTimeMinutes = dayOff.StartMoment.diff(timeLine.Offset, 'minutes');
+			var endTimeMinutes = dayOff.EndMoment.diff(timeLine.Offset, 'minutes');
 
 			if (startTimeMinutes > timelineEndMinute || endTimeMinutes < timelineStartMinute) {
 				return undefined;
@@ -144,29 +142,21 @@
 			var g = parseInt(hexcolor.substr(2, 2), 16);
 			var b = parseInt(hexcolor.substr(4, 2), 16);
 			var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-			return (yiq >= 128) ? 'black' : 'white';
-		}
-
-		function getOffsetMinutesFromTimeLineBase(startTimeInUtc, timeLineBase) {
-			var currentTimezone = currentTimezoneSvc.get();
-            var time = moment.tz(startTimeInUtc, 'etc/UTC').tz(currentTimezone);
-            var timeLineBaseUnderCurrentTimezone = moment.tz(timeLineBase.format('YYYY-MM-DD HH:mm'), currentTimezone);
-            return time.diff(timeLineBaseUnderCurrentTimezone, 'minutes');
+			return (yiq >= 128) ? '#000000' : '#ffffff';
 		}
 
 		function createShiftProjectionViewModel(projection, timeLine, shiftVm) {
 			if (!projection) projection = {};
-			
-			var endTimeInUtcStr = moment.tz(projection.StartInUtc, 'etc/UTC').add(projection.Minutes, 'minutes').format('YYYY-MM-DD HH:mm');
-			var startTimeMinutes = getOffsetMinutesFromTimeLineBase(projection.StartInUtc, timeLine.Offset);
-			var endTimeMinutes = getOffsetMinutesFromTimeLineBase(endTimeInUtcStr, timeLine.Offset);
+
+			var startTimeMinutes = projection.StartMoment.diff(timeLine.Offset, 'minutes');
+			var endTimeMinutes = projection.EndMoment.diff(timeLine.Offset, 'minutes');
 
 			var timelineStartMinute = timeLine.StartMinute;
 			var timelineEndMinute = timeLine.EndMinute;
 
-			var projectionMinutes = projection.Minutes;
+			var projectionMinutes = projection.EndMoment.diff(projection.StartMoment, 'minutes');
 
-			if ((startTimeMinutes > timelineEndMinute) || ((startTimeMinutes + projectionMinutes) <= timelineStartMinute)) {
+			if ((startTimeMinutes >= timelineEndMinute) || ((startTimeMinutes + projectionMinutes) <= timelineStartMinute)) {
 				return undefined;
 			}
 
@@ -259,16 +249,6 @@
 			this.UnderlyingScheduleSummary = schedule.UnderlyingScheduleSummary;
 		}
 
-		PersonSchedule.prototype.GetSummaryTimeSpan = function (summary, selectedDate) {
-			var start = moment(summary.Start);
-			var end = moment(summary.End);
-			var selectedDateMoment = moment(selectedDate);
-			if (!start.isSame(end, 'day') || !start.isSame(selectedDateMoment, 'day')) {
-				return $filter('date')(start.toDate(), 'short') + ' - ' + $filter('date')(end.toDate(), 'short');
-			}
-			return $filter('date')(start.toDate(), 'shortTime') + ' - ' + $filter('date')(end.toDate(), 'shortTime');
-		};
-
 		PersonSchedule.prototype.IsDayOff = function () {
 			var date = this.Date;
 			return !!this.DayOffs.filter(function (d) {
@@ -280,23 +260,16 @@
 			return toggleSvc.WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 && !!this.UnderlyingScheduleSummary;
 		}
 
-
 		PersonSchedule.prototype.AbsenceCount = function () {
-			var shiftsOnCurrentDate = this.Shifts.filter(function (shift) {
-				return this.Date === shift.Date;
-			}, this);
-			if (shiftsOnCurrentDate.length > 0) {
-				return shiftsOnCurrentDate[0].AbsenceCount();
+			if (this.Shifts[0] && this.Shifts[0].Date === this.Date) {
+				return this.Shifts[0].AbsenceCount();
 			}
 			return 0;
 		};
 
 		PersonSchedule.prototype.ActivityCount = function () {
-			var shiftsOnCurrentDate = this.Shifts.filter(function (shift) {
-				return this.Date === shift.Date;
-			}, this);
-			if (shiftsOnCurrentDate.length > 0) {
-				return shiftsOnCurrentDate[0].ActivityCount();
+			if (this.Shifts[0] && this.Shifts[0].Date === this.Date) {
+				return this.Shifts[0].ActivityCount();
 			}
 			return 0;
 		};
@@ -312,28 +285,36 @@
 		PersonSchedule.prototype.MergeExtra = mergeExtra;
 
 		PersonSchedule.prototype.ScheduleEndTime = function () {
-			var scheduleDate = this.Date;
-			var end = moment(scheduleDate).endOf('day');
-			for (var i = 0; i < this.Shifts.length; i++) {
-				if (this.Shifts[i].Date === scheduleDate && this.Shifts[i].Projections.length > 0) {
-					end = moment(this.Shifts[i].Projections[this.Shifts[i].Projections.length - 1].Start)
-						.add(this.Shifts[i].Projections[this.Shifts[i].Projections.length - 1].Minutes, 'minutes');
-				}
+			var shift = this.Shifts[0];
+			if (shift && shift.Date === this.Date && !!shift.Projections.length) {
+				return serviceDateFormatHelper.getDateByFormat(shift.Projections[shift.Projections.length - 1].EndMoment, 'YYYY-MM-DDTHH:mm:00');
 			}
-			return serviceDateFormatHelper.getDateByFormat(end, 'YYYY-MM-DDTHH:mm:00');
+			return this.Date + 'T23:59:00';
 		};
 
 		PersonSchedule.prototype.ScheduleStartTime = function () {
-			var start = this.Date;
-			for (var i = 0; i < this.Shifts.length; i++) {
-				if (this.Shifts[i].Date === start && this.Shifts[i].Projections.length > 0) {
-					start = this.Shifts[i].Projections[0].Start;
-				}
+			var shift = this.Shifts[0];
+			if (shift && shift.Date === this.Date && !!shift.Projections.length) {
+				return serviceDateFormatHelper.getDateByFormat(shift.Projections[0].StartMoment, 'YYYY-MM-DDTHH:mm:00');
 			}
-			return serviceDateFormatHelper.getDateByFormat(start, 'YYYY-MM-DDTHH:mm:00');
+			return this.Date + 'T00:00:00';
 		};
 
-		function ShiftViewModel(schedule, personSchedule, timeLine) {
+		PersonSchedule.prototype.HasHiddenScheduleAtStart = function () {
+			return !!this.Shifts.length
+				&& this.Shifts.some(function (shift) {
+					return shift.Projections.length && shift.ProjectionTimeRange.StartMoment.isBefore(this.ViewRange.startMoment);
+				}, this);
+		}
+
+		PersonSchedule.prototype.HasHiddenScheduleAtEnd = function () {
+			return !!this.Shifts.length
+				&& this.Shifts.some(function (shift) {
+				return shift.Projections.length && shift.ProjectionTimeRange.EndMoment.isAfter(this.ViewRange.endMoment);
+				}, this);
+		}
+
+		function ShiftViewModel(schedule, personSchedule) {
 			this.Date = schedule.Date;
 			this.Parent = personSchedule;
 			this.Projections = [];
@@ -349,28 +330,22 @@
 			this.Description = projection.Description;
 			this.IsOvertime = projection.IsOvertime;
 			this.Length = length;
-			this.Minutes = projection.Minutes;
 			this.Parent = shiftVm;
 			this.ParentPersonAbsences = projection.ParentPersonAbsences;
 			this.ShiftLayerIds = projection.ShiftLayerIds;
 			this.Start = projection.Start;
 			this.End = projection.End;
+			this.StartMoment = projection.StartMoment;
+			this.EndMoment = projection.EndMoment;
 			this.StartPosition = startPosition;
 			this.UseLighterBorder = useLightColor(projection.Color);
+			this.TimeSpan = projection.TimeSpan;
+			this.Minutes = projection.EndMoment.diff(projection.StartMoment, 'minutes');
 		}
 
 		ProjectionViewModel.prototype.ShowDividedLine = false;
 
 		ProjectionViewModel.prototype.Selected = false;
-
-		ProjectionViewModel.prototype.TimeSpan = function () {
-			var start = moment(this.Start);
-			var end = moment(this.End);
-			if (!start.isSame(end, 'day')) {
-				return $filter('date')(start.toDate(), 'short') + ' - ' + $filter('date')(end.toDate(), 'short');
-			}
-			return $filter('date')(start.toDate(), 'shortTime') + ' - ' + $filter('date')(end.toDate(), 'shortTime');
-		};
 
 		ProjectionViewModel.prototype.Selectable = function () {
 			if (this.ParentPersonAbsences && this.ParentPersonAbsences.length > 0)
@@ -398,9 +373,9 @@
 		}
 
 		function ShiftCategory(shiftCategory) {
-			this.Name = shiftCategory.Name || null;
-			this.ShortName = shiftCategory.ShortName || null;
-			this.DisplayColor = shiftCategory.DisplayColor || null;
+			this.Name = shiftCategory.Name;
+			this.ShortName = shiftCategory.ShortName;
+			this.DisplayColor = shiftCategory.DisplayColor;
 			this.ContrastColor = getContrastColor(this.DisplayColor);
 		}
 

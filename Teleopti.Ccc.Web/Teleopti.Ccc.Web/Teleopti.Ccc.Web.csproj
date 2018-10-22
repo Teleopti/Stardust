@@ -1844,6 +1844,7 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.underlyingInfo.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.underlyingInfo.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.controller.week.spec.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.factory.groupSchedule.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.shiftEditorViewModelFactory.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.timezoneListFactory.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.exportScheduleService.spec.js" />
@@ -1858,7 +1859,6 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffingChart.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.timezone.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.bootstrapData.js" />
-    <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.currentTimezone.js" />
     <Content Include="WFM\app\teapot\controller.js" />
     <Content Include="WFM\app\teapot\view.html" />
     <Content Include="WFM\app\teapot\teapot.state.provider.js" />
@@ -2089,9 +2089,7 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.viewChanger.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.groupSchedule.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.personSchedule.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.factory.personSchedule.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.personWeekView.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.factory.timeline.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.timeLine.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.filter.timerange.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.activity.js" />

@@ -541,9 +541,7 @@
 		};
 
 		var viewModel = target.CreateSchedule('2018-06-01', 'Asia/Hong_Kong', schedule);
-		expect(viewModel.GetSummaryTimeSpan(viewModel.UnderlyingScheduleSummary.PersonalActivities[0])).toEqual(
-			'2018-06-02 04:00 - 2018-06-02 05:00'
-		);
+		expect(viewModel.UnderlyingScheduleSummary.PersonalActivities[0].TimeSpan).toEqual('2018-06-02 04:00 - 2018-06-02 05:00');
 	});
 
 	describe('in locale en-UK', function () {
