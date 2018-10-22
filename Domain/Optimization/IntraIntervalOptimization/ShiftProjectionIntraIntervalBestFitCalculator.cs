@@ -6,12 +6,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 
 namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 {
-	public interface IShiftProjectionIntraIntervalBestFitCalculator
-	{
-		IWorkShiftCalculationResultHolder GetShiftProjectionCachesSortedByBestIntraIntervalFit(IEnumerable<IWorkShiftCalculationResultHolder> workShiftCalculationResults, IList<ISkillStaffPeriod> issues, ISkill skill, double limit);
-	}
-
-	public class ShiftProjectionIntraIntervalBestFitCalculator : IShiftProjectionIntraIntervalBestFitCalculator
+	public class ShiftProjectionIntraIntervalBestFitCalculator
 	{
 		private readonly ISkillStaffPeriodIntraIntervalPeriodFinder _skillStaffPeriodIntraIntervalPeriodFinder;
 		private readonly ISkillActivityCounter _skillActivityCounter;
@@ -23,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			_skillActivityCounter = skillActivityCounter;
 			_shiftProjectionCacheIntraIntervalValueCalculator = shiftProjectionCacheIntraIntervalValueCalculator;
 		}
-
 
 		public IWorkShiftCalculationResultHolder GetShiftProjectionCachesSortedByBestIntraIntervalFit(IEnumerable<IWorkShiftCalculationResultHolder> workShiftCalculationResults, IList<ISkillStaffPeriod> issues, ISkill skill, double limit)
 		{
