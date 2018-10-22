@@ -3372,7 +3372,6 @@
     <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\NotValidPainter.cs" />
     <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\NotValidSpecification.cs" />
     <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\PreferenceCellPainterBase.cs" />
-    <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\PreferredAbsenceOnContractDayOffPainter.cs" />
     <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\PreferredAbsencePainter.cs" />
     <Compile Include="Win\Scheduling\SingleAgentRestriction\RestrictionWeekHeaderViewCellModel.cs" />
     <Compile Include="Win\Scheduling\SingleAgentRestriction\SplitterManagerRestrictionView.cs" />
