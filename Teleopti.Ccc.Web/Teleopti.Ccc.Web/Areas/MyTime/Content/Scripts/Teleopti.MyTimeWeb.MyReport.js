@@ -119,16 +119,13 @@
 			);
 		},
 		MyReportPartialInit: function() {
-			$('#page').removeClass('fixed-non-responsive');
 			if (!$('.myreport-daily-metrics').length) {
 				return;
 			}
 
 			bindData();
 		},
-		MyReportPartialDispose: function() {
-			$('#page').addClass('fixed-non-responsive');
-		},
+		MyReportPartialDispose: function() {},
 		ForDay: function(date) {
 			fillData(date);
 		}

@@ -7,22 +7,22 @@
 
 @if (Model.GrantEnabled)
 {
-	<script src="@Url.Content("~/Content/botchat/botchat.js")"> </script>
-	<link href="@Url.Content("~/Content/botchat/botchat.css")" rel="stylesheet" />
+<script src='@Url.Content("~/Content/botchat/botchat.js")'></script>
+<link href='@Url.Content("~/Content/botchat/botchat.css")' rel="stylesheet" />
 }
-	<script type="text/javascript">
-		$(function () {
-			Teleopti.MyTimeWeb.Portal.Init(
-				{
-					defaultNavigation: '@Html.Portal().GetDefaultAction(Model)',
-					baseUrl: '@Url.Content("~/MyTime/")',
-					startBaseUrl: '@Url.Content("~/Start/")'
-				}, window);
+<script type="text/javascript">
+	$(function () {
+		Teleopti.MyTimeWeb.Portal.Init(
+			{
+				defaultNavigation: '@Html.Portal().GetDefaultAction(Model)',
+				baseUrl: '@Url.Content("~/MyTime/")',
+				startBaseUrl: '@Url.Content("~/Start/")'
+			}, window);
 
-			@if (Model.AsmEnabled) {
-				<text>
-					Teleopti.MyTimeWeb.AlertActivity.StartAlertNextActivity({
-						comingMessageTemplate: '@Resources.NextActivityComingMessage',
+		@if (Model.AsmEnabled) {
+			<text>
+				Teleopti.MyTimeWeb.AlertActivity.StartAlertNextActivity({
+					comingMessageTemplate: '@Resources.NextActivityComingMessage',
 endingMessageTemplate: '@Resources.ShiftEndingMessage',
 originalDocumentTitle: document.title,
 baseUrl: '@Url.Content("~/")',
@@ -30,70 +30,70 @@ header: '@Resources.Teleopti'
 });
 Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges(
                         {
-						notifyText: '@Resources.YourScheduleTheDATEHasChanged',
+					notifyText: '@Resources.YourScheduleTheDATEHasChanged',
 originalDocumentTitle: document.title,
 baseUrl: '@Url.Content("~/")',
 header: '@Resources.Teleopti'
 },
                         function(notification) {
-						Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);
-					Teleopti.MyTimeWeb.AlertActivity.RefreshAlertNextActivity();
-				},
-				'IScheduleChangedInDefaultScenario'
-			);
-			Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges(
+					Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);
+				Teleopti.MyTimeWeb.AlertActivity.RefreshAlertNextActivity();
+			},
+			'IScheduleChangedInDefaultScenario'
+		);
+		Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges(
                         {
-						notifyText: '@Resources.ShiftTradeRequestScheduleChanged',
+					notifyText: '@Resources.ShiftTradeRequestScheduleChanged',
 originalDocumentTitle: document.title,
 baseUrl: '@Url.Content("~/")',
 header: '@Resources.Teleopti'
 },
                         function(notification) {
-						Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification, true);
-					Teleopti.MyTimeWeb.AlertActivity.RefreshAlertNextActivity();
-				},
-				'IShiftTradeScheduleChangedInDefaultScenario'
-			);
+					Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification, true);
+				Teleopti.MyTimeWeb.AlertActivity.RefreshAlertNextActivity();
+			},
+			'IShiftTradeScheduleChangedInDefaultScenario'
+		);
 
-			Teleopti.MyTimeWeb.AsmMessage.Init();
+		Teleopti.MyTimeWeb.AsmMessage.Init();
 
 					if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PollToCheckScheduleChanges_46595")) {
-						Teleopti.MyTimeWeb.PollScheduleUpdates.Init({
-							notifyText: '@Resources.YourScheduleHasChanged',
-							originalDocumentTitle: document.title,
-							baseUrl: '@Url.Content("~/")',
-							header: '@Resources.Teleopti'
-						});
-					}
-                </text>
-			}
-
-			Teleopti.MyTimeWeb.TeamScheduleNew.Init();
-
-		});
-
-		StoreDeviceInstanceToken = function (token) {
-			var optionForBusinessUnits = {
-				url: "Start/UserToken",
-				dataType: "json",
-				type: 'POST',
-				cache: false,
-				data: { '': token },
-				success: function (responseData, textStatus, jqXHR) {
-				},
-				error: function () {
+					Teleopti.MyTimeWeb.PollScheduleUpdates.Init({
+						notifyText: '@Resources.YourScheduleHasChanged',
+						originalDocumentTitle: document.title,
+						baseUrl: '@Url.Content("~/")',
+						header: '@Resources.Teleopti'
+					});
 				}
-			};
+                </text>
+		}
 
-			$.ajax(optionForBusinessUnits);
+		Teleopti.MyTimeWeb.TeamScheduleNew.Init();
+
+	});
+
+	StoreDeviceInstanceToken = function (token) {
+		var optionForBusinessUnits = {
+			url: "Start/UserToken",
+			dataType: "json",
+			type: 'POST',
+			cache: false,
+			data: { '': token },
+			success: function (responseData, textStatus, jqXHR) {
+			},
+			error: function () {
+			}
 		};
-	</script>
+
+		$.ajax(optionForBusinessUnits);
+	};
+</script>
 }
 
 <header dir="ltr">
 	@Html.Partial("Navigation", Model)
 </header>
-<section id="page" class="fixed-non-responsive">
+<section id="page">
 	<article id="body">
 		<div id="body-inner">
 		</div>

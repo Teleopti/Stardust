@@ -3,11 +3,6 @@
 	z-index: 1;
 }
 
-.schedule-table-container {
-	max-width: 100%;
-	overflow-x: auto;
-}
-
 .schedule-table-container > .container {
 	padding: 0;
 }

@@ -40,6 +40,11 @@
 	margin: 5px;
 }
 
+#StudentAvailability-period {
+	margin: 0 auto 10px auto;
+	width: 965px; /*same with #StudentAvailability-body*/
+}
+
 #StudentAvailability-body {
 	width: 965px;
 	margin: auto;
@@ -52,7 +57,6 @@
 }
 
 .alert-student-availability {
-	width: 965px;
 	margin: auto;
 }
 
@@ -87,16 +91,6 @@
 	margin: 10px 0;
 }
 
-#StudentAvailability-period,
-.student-availability-body-container {
-	max-width: 100%;
-	overflow-x: auto;
-	-webkit-overflow-scrolling: touch;
-}
-.student-availability-body-container {
-	margin-bottom: 50px;
-}
-
 @media (max-width: 768px) {
 	.phone-form-availability .form-student-availability {
 		position: fixed;
@@ -119,9 +113,6 @@
 		left: 0;
 	}
 
-	.phone-warning-indicator + .student-availability-body-container {
-		overflow-x: auto;
-	}
 	.overtime-availability-start-time,
 	.overtime-availability-end-time {
 		padding-left: 5px;

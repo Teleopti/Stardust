@@ -1,5 +1,6 @@
-﻿.guide-container {
+﻿.pagebody.guide-container {
 	font-size: 16px;
+	height: calc(100vh - 51px - 10px);
 }
 
 .guide-container .row {

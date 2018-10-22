@@ -179,7 +179,6 @@
 		},
 
 		MyAdherencePartialInit: function(readyForInteractionCallback, completelyLoadedCallback) {
-			$('#page').removeClass('fixed-non-responsive');
 			if (!$('.myadherence').length) {
 				return;
 			}
@@ -190,9 +189,7 @@
 			completelyLoadedCallback();
 		},
 
-		MyAdherencePartialDispose: function() {
-			$('#page').addClass('fixed-non-responsive');
-		},
+		MyAdherencePartialDispose: function() {},
 
 		ForDay: function(date) {
 			fillData(date);

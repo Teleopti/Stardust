@@ -164,3 +164,7 @@
 	border: none;
 	white-space: pre-line;
 }
+
+.pagebody.message-page-body {
+	height: calc(100vh - 51px - 10px);
+}

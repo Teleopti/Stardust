@@ -568,6 +568,7 @@ header,
 
 body {
 	padding-top: 50px;
+	overflow: hidden;
 }
 
 header {
@@ -1444,10 +1445,6 @@ select.time-input {
 	max-width: 965px;
 }
 
-.fixed-non-responsive.container {
-	width: 965px;
-}
-
 .visibility {
 	overflow: visible !important;
 }
@@ -1547,6 +1544,10 @@ ul.select2-results li ul li.select2-result.select2-highlighted > div {
 }
 .pagebody {
 	margin-top: 10px;
+	height: calc(100vh - 51px - 53px - 10px);
+	max-width: 100%;
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
 }
 .m-b-10 {
 	margin-bottom: 10px;

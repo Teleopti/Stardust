@@ -103,7 +103,6 @@
 		},
 
 		MyQueueMetricsPartialInit: function(readyForInteractionCallback, completelyLoadedCallback) {
-			//$('#page').removeClass('fixed-non-responsive');
 			if (!$('#queueMetric').length) {
 				return;
 			}
@@ -114,9 +113,7 @@
 			completelyLoadedCallback();
 		},
 
-		MyQueueMetricsPartialDispose: function() {
-			//$('#page').addClass('fixed-non-responsive');
-		},
+		MyQueueMetricsPartialDispose: function() {},
 
 		ForDay: function(date) {
 			fillData(date);

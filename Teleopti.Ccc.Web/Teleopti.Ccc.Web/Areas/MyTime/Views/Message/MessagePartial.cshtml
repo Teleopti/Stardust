@@ -2,9 +2,9 @@
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Message
 @model MessageViewModel
 @{
-	Layout = null;
+Layout = null;
 }
-<div class="container pagebody">
+<div class="container pagebody message-page-body">
 	<div class="asm-messages relative">
 		<div class="alert alert-info no-messages" data-bind="visible: shouldShowMessage">
 			@Resources.NoMessagesFound
@@ -80,7 +80,8 @@
 								<!-- /ko -->
 							</div>
 							<div data-bind="visible: allowDialogueReply">
-								<textarea class="form-control text-reply" data-bind="value: reply, valueUpdate: ['afterkeydown', 'afterpaste', 'change']" rows="4" cols="40"></textarea>
+								<textarea class="form-control text-reply" data-bind="value: reply, valueUpdate: ['afterkeydown', 'afterpaste', 'change']"
+								 rows="4" cols="40"></textarea>
 							</div>
 							<div class="btn-group-vertical" data-bind="visible: userMustSelectReplyOption" data-toggle="buttons">
 								<!-- ko foreach: replyOptions -->

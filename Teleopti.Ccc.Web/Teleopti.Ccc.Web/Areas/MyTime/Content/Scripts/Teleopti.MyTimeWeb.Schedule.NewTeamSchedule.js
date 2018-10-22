@@ -66,7 +66,7 @@
 
 	function registerUserInfoLoadedCallback(initialMomentDate) {
 		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function(data) {
-			$('.new-teamschedule-view .moment-datepicker').attr(
+			$('.new-teamschedule-view-nav .moment-datepicker').attr(
 				'data-bind',
 				"datepicker: selectedDate, datepickerOptions: { calendarPlacement: 'center', autoHide: true, weekStart: " +
 					data.WeekStart +

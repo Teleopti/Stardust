@@ -7,24 +7,12 @@
 }
 
 .alert-preference {
-	width: 1024px;
 	margin: auto;
 }
 
 .form-preference {
 	max-width: 954px;
 	margin: auto;
-}
-
-#Preference-body,
-#Preference-period-feedback-view {
-	max-width: 100%;
-	overflow-x: auto;
-	-webkit-overflow-scrolling: touch;
-}
-
-#Preference-body {
-	margin-bottom: 50px;
 }
 
 #Preference-body-inner .calendarview-week li.date-is-selected .day-header,
@@ -533,8 +521,9 @@ div.qtip-content {
 	font-weight: bold;
 }
 
-.preference-body-width {
-	width: 1024px !important;
+#Preference-period-feedback-view {
+	width: 1024px; /*same with #Preference-body-inner*/
+	margin: 0 auto 10px auto;
 }
 
 #Preference-body-inner {

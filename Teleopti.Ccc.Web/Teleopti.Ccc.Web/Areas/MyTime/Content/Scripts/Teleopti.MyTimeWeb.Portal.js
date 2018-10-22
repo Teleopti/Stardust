@@ -404,6 +404,40 @@ Teleopti.MyTimeWeb.Portal = (function($) {
 	}
 
 	function _completelyLoaded() {
+		$(document).ready(function() {
+			var topMenuBarHeight = '51px'; //#innerNavBar
+			var pageBodyMarginTop = '10px';
+			setTimeout(function() {
+				$('.pagebody').css({
+					height:
+						'calc(100vh - ' +
+						topMenuBarHeight +
+						' - ' +
+						pageBodyMarginTop +
+						' - ' +
+						$('.pagebody')
+							.prev()
+							.height() +
+						'px)'
+				});
+
+				$(window).resize(function() {
+					$('.pagebody').css({
+						height:
+							'calc(100vh - ' +
+							topMenuBarHeight +
+							' - ' +
+							pageBodyMarginTop +
+							' - ' +
+							$('.pagebody')
+								.prev()
+								.height() +
+							'px)'
+					});
+				});
+			}, 50);
+		});
+
 		Teleopti.MyTimeWeb.Test.TestMessage('Completely loaded');
 	}
 

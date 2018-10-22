@@ -3,9 +3,9 @@
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 @model TeamSchedulePermissionViewModel
 @{
-	Layout = null;
-	const int scheduleWidth = 695;
-	var left = Html.HtmlStyleLeft();
+Layout = null;
+const int scheduleWidth = 695;
+var left = Html.HtmlStyleLeft();
 }
 
 <div data-bind="ifnot: showFabButton">
@@ -14,20 +14,21 @@
 			<ul class="nav navbar-nav navbar-teleopti row submenu ts-menu">
 				@if (Model.ShiftTradePermisssion)
 				{
-					<li class="col-xs-12 col-sm-3">
-						<a class="initialize-shift-trade" href="#" data-bind="click: initializeShiftTrade"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
-					</li>
+				<li class="col-xs-12 col-sm-3">
+					<a class="initialize-shift-trade" href="#" data-bind="click: initializeShiftTrade"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+				</li>
 				}
 
 				@if (Model.ShiftTradeBulletinBoardPermission)
 				{
-					<li class="col-xs-12 col-sm-3">
-						<a class="initialize-shift-trade-bulletin-board" href="#" data-bind="click: initializeShiftTradeBulletinBoard"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
-					</li>
+				<li class="col-xs-12 col-sm-3">
+					<a class="initialize-shift-trade-bulletin-board" href="#" data-bind="click: initializeShiftTradeBulletinBoard"><i
+						 class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
+				</li>
 
-					<li class="col-xs-12 col-sm-3">
-						<a class="initialize-post-shift-for-trade" href="#" data-bind="click: initializePostShiftForTrade"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
-					</li>
+				<li class="col-xs-12 col-sm-3">
+					<a class="initialize-post-shift-for-trade" href="#" data-bind="click: initializePostShiftForTrade"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
+				</li>
 				}
 			</ul>
 		</div>
@@ -41,20 +42,21 @@
 		<ul class="nav navbar-nav navbar-teleopti row submenu ts-menu">
 			@if (Model.ShiftTradePermisssion)
 			{
-				<li class="col-xs-12 col-sm-3">
-					<a class="initialize-shift-trade" href="#" data-bind="click: initializeShiftTrade"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
-				</li>
+			<li class="col-xs-12 col-sm-3">
+				<a class="initialize-shift-trade" href="#" data-bind="click: initializeShiftTrade"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+			</li>
 			}
 
 			@if (Model.ShiftTradeBulletinBoardPermission)
 			{
-				<li class="col-xs-12 col-sm-3">
-					<a class="initialize-shift-trade-bulletin-board" href="#" data-bind="click: initializeShiftTradeBulletinBoard"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
-				</li>
+			<li class="col-xs-12 col-sm-3">
+				<a class="initialize-shift-trade-bulletin-board" href="#" data-bind="click: initializeShiftTradeBulletinBoard"><i
+					 class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
+			</li>
 
-				<li class="col-xs-12 col-sm-3">
-					<a class="initialize-post-shift-for-trade" href="#" data-bind="click: initializePostShiftForTrade"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
-				</li>
+			<li class="col-xs-12 col-sm-3">
+				<a class="initialize-post-shift-for-trade" href="#" data-bind="click: initializePostShiftForTrade"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
+			</li>
 			}
 		</ul>
 	</div>
@@ -63,7 +65,7 @@
 <div class="container pagebody">
 	<div id="teamschedule-body-inner" class="teamschedule-body-inner relative">
 		<div id="existsWhenLoadingStarts" data-bind="if: isLocked"></div>
-		<div id="draw-schedule-container" class="well well-sm fixed-non-responsive">
+		<div id="draw-schedule-container" class="well well-sm">
 			<div class="row">
 				<div class="col-sm-6 col-md-6 col-lg-3">
 					<div id="ScheduleDatePicker" class="input-group schedule-filter-component">
@@ -73,7 +75,8 @@
 							</button>
 						</span>
 						<![if (!IE)|(gt IE 8)]>
-						<input data-bind="value: requestedDate().format(DatePickerFormat())" style="width: 100%" type="text" class="text-center form-control date-input-style" readonly>
+						<input data-bind="value: requestedDate().format(DatePickerFormat())" style="width: 100%" type="text" class="text-center form-control date-input-style"
+						 readonly>
 						<![endif]>
 						<!--[if lte IE 8]>
 							<input type="text" class="col-lg-2 form-control add-shifttrade-datepicker" data-bind="value: requestedDate().format(DatePickerFormat())" readonly="readonly" />
@@ -94,23 +97,23 @@
 				<div>
 					@if (Model.ViewTeamsPermission)
 					{
-						<!-- ko if: showTeamPicker -->
-						<div class="col-sm-6 col-md-6 col-lg-3 teams-select-container">
-							<div class="schedule-filter-component">
-								<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam, onOpening: initTeamsPicker}">
-									<!-- ko if: $parent.showGroupings -->
-									<optgroup data-bind="attr: { label: $data.text }, foreach: $data.children">
-										<option data-bind="text: $data.text, value: $data.id"></option>
-									</optgroup>
-									<!-- /ko -->
-									<!-- ko ifnot: $parent.showGroupings-->
+					<!-- ko if: showTeamPicker -->
+					<div class="col-sm-6 col-md-6 col-lg-3 teams-select-container">
+						<div class="schedule-filter-component">
+							<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam, onOpening: initTeamsPicker}">
+								<!-- ko if: $parent.showGroupings -->
+								<optgroup data-bind="attr: { label: $data.text }, foreach: $data.children">
 									<option data-bind="text: $data.text, value: $data.id"></option>
-									<!-- /ko -->
-								</select>
-							</div>
-
+								</optgroup>
+								<!-- /ko -->
+								<!-- ko ifnot: $parent.showGroupings-->
+								<option data-bind="text: $data.text, value: $data.id"></option>
+								<!-- /ko -->
+							</select>
 						</div>
-						<!-- /ko -->
+
+					</div>
+					<!-- /ko -->
 					}
 					<div class="col-sm-7 col-md-6 col-lg-4">
 						<div class="row">
