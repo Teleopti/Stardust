@@ -436,12 +436,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
     	private IUnsavedDaysInfo _unsavedDays;
 	    private bool _resize = true;
 
-	    protected bool LockUpdate
-        {
-            get { return _lockUpdate; }
-            set { _lockUpdate = value; }
-        }
-
         protected override void OnSaveCellInfo(GridSaveCellInfoEventArgs e)
         {
             base.OnSaveCellInfo(e);
