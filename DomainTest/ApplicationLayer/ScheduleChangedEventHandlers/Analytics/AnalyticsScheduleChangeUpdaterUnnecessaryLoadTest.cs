@@ -23,11 +23,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		public IScenarioRepository Scenarios;
 		public IPersonRepository Persons;
 		public FakeAnalyticsScenarioRepository AnalyticsScenarios;
+		public FakeAnalyticsPersonPeriodRepository AnalyticsPersonPeriods;
 		
 		[Test]
 		public void ShouldNotLoadUnnecessaryData()
 		{
-			AnalyticsDates.HasDatesBetween(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31));
+			AnalyticsDates.HasDatesBetween(new DateTime(2017, 12, 31), new DateTime(2019, 12, 31));
 			var date = new DateOnly(2018,10,22);
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("Default BU").WithId();
 			var scenario = ScenarioFactory.CreateScenario("Default", true, true).WithId();
@@ -45,11 +46,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			Persons.Add(person);
 			Schedules.Add(assignment);
 			AnalyticsScenarios.AddScenario(analyticsScenario);
+			AnalyticsPersonPeriods.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod
+			{
+				PersonId = 1,
+				BusinessUnitId = 2,
+				PersonPeriodCode = personPeriod.Id.Value
+			});
 
 			Assert.DoesNotThrow(() => Target.Handle(new ScheduleChangedEvent
 			{
-				StartDateTime = date.Date.ToUniversalTime(),
-				EndDateTime = date.Date.ToUniversalTime(),
+				StartDateTime = date.Date.ToUniversalTime().AddDays(-1),
+				EndDateTime = date.Date.ToUniversalTime().AddDays(1),
 				ScenarioId = scenario.Id.Value,
 				LogOnBusinessUnitId = businessUnit.Id.Value,
 				PersonId = person.Id.Value
