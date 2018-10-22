@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
@@ -76,6 +77,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<AllTenantNames>().As<IAllTenantNames>().SingleInstance();
 
 			fromServerModule(builder);
+
+			builder.RegisterType<TenantAccessAuditContext>()
+				.As<IHandleContextAction<IdentityChangeActionObj>, 
+					IHandleContextAction<GenericPersistApiCallActionObj>, 
+					IHandleContextAction<AppLogonChangeActionObj>>().SingleInstance();
 
 			builder.RegisterType<FalsePryl>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<TenantUserPersister>().As<ITenantUserPersister>().SingleInstance().ApplyAspects();

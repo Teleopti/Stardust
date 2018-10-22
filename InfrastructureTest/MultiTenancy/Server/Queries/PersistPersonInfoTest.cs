@@ -314,7 +314,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var personInfo = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), "password1", new OneWayEncryption());
 			personInfo.SetIdentity(RandomName.Make());
-			target.PersistIdentity(new IdentityChangeActionObj(){PersonInfo = personInfo});
+			target.PersistIdentity(new IdentityChangeActionObj {PersonInfo = personInfo});
 
 			var p1 = session.Get<PersonInfo>(personInfo.Id);
 			var auditRecords = session.Query<TenantAudit>().ToList();
