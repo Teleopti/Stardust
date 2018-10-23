@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return database.WithAgent(personId, name, null, teamId, siteId, businessUnitId, null, null);
 		}
-		
+
 		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? personId, string name, Guid? teamId, Guid? siteId, Guid? businessUnitId, int? employmentNumber)
 		{
 			return database.WithAgent(personId, name, null, teamId, siteId, businessUnitId, null, employmentNumber);
@@ -189,6 +189,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return database.WithHistoricalStateChange(null, time, adherence);
 		}
+
+		public static FakeDatabase WithHistoricalAdherenceDayStart(this FakeDatabase database, string time, Adherence adherence)
+		{
+			return database.WithHistoricalAdherenceDayStart(null, time, adherence);
+		}
 	}
 
 	public static class FakeDatabaseRuleExtensions
@@ -258,7 +263,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return database.WithMappedRule(ruleId, stateCode, activityId, staffingEffect, name, adherence, null);
 		}
-		
+
 		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode, Guid? activityId, int staffingEffect, string name, Adherence? adherence, Color color)
 		{
 			return database.WithMappedRule(Guid.NewGuid(), stateCode, activityId, staffingEffect, name, adherence, color);
@@ -572,7 +577,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public AgentState StoredState => _agentStates.LockNLoad(_agentStates.FindForCheck().Select(x => x.PersonId), DeadLockVictim.Yes).AgentStates.SingleOrDefault();
 		public AgentState StoredStateFor(Guid personId) => _agentStates.ForPersonId(personId);
 		public IEnumerable<IRtaState> StateCodes => _stateGroups.LoadAll().Single().StateCollection;
-		
+
 		public string TenantName()
 		{
 			return _tenants.Tenants().Single().Name;
@@ -960,7 +965,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			ensureExists(_scenarios, null, () => WithScenario(null, true));
 			_meeting = new Meeting(
 				_person,
-				new[] { new MeetingPerson(_person, false) },
+				new[] {new MeetingPerson(_person, false)},
 				subject,
 				null,
 				null,
@@ -1141,19 +1146,20 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public FakeDatabase WithLoggedOutStateGroup(string name)
-		{	
+		{
 			return WithStateGroup(null, name, _stateGroups.LoadAll().IsEmpty(), true);
 		}
+
 		public FakeDatabase WithStateGroup(string name)
 		{
 			return WithStateGroup(null, name, _stateGroups.LoadAll().IsEmpty(), false);
 		}
-		
+
 		public FakeDatabase WithStateGroup(Guid? id, string name)
 		{
 			return WithStateGroup(id, name, _stateGroups.LoadAll().IsEmpty(), false);
 		}
-		
+
 		public FakeDatabase WithStateGroup(Guid? id, string name, bool @default)
 		{
 			return WithStateGroup(id, name, @default, false);
@@ -1308,7 +1314,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_rtaHistory.StateChanged(_person.Id.Value, time, _stateGroup?.Name, _activity?.Name, _activity?.DisplayColor, _rule?.Description.Name, _rule?.DisplayColor, _rule?.Adherence);
 			return this;
 		}
-		
+
+		public FakeDatabase WithHistoricalAdherenceDayStart(Guid? id, string time, Adherence adherence)
+		{
+			_rtaHistory.AdherenceDayStart(id ?? _person.Id.Value, time, null, null, null, null, null, adherence);
+			return this;
+		}
+
 		public FakeDatabase WithArrivedLateForWork(string shiftStart, string time)
 		{
 			_rtaHistory.ArrivedLateForWork(_person.Id.Value, shiftStart, time);
@@ -1378,7 +1390,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_personRequests.Add(_personRequest);
 			return this;
 		}
-
-		
 	}
 }

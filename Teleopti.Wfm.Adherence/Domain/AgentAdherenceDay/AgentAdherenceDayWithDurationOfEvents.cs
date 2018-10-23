@@ -139,7 +139,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 
 		private static IList<AdherencePeriod> removeTinyPeriods(IEnumerable<AdherencePeriod> periods)
 			=> periods
-				.Select(x => new AdherencePeriod(floorToSeconds(x.StartTime), floorToSeconds(x.EndTime.Value)))
+				.Select(x => new AdherencePeriod(floorToSeconds(x.StartTime.Value), floorToSeconds(x.EndTime.Value)))
 				.Where(x => x.EndTime - x.StartTime >= TimeSpan.FromSeconds(1))
 				.ToList();
 
@@ -154,14 +154,14 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 				.ToArray();
 
 		public IEnumerable<AdherencePeriod> OutOfAdherences() =>
-			subtractPeriods(_recordedOutOfAdherences.Select(x => new DateTimePeriod(x.StartTime, x.EndTime.Value)), _approvedPeriods)
+			subtractPeriods(_recordedOutOfAdherences.Select(x => new DateTimePeriod(x.StartTime.Value, x.EndTime.Value)), _approvedPeriods)
 				.Select(x => new AdherencePeriod(x.StartDateTime, x.EndDateTime))
 				.ToArray();
 
 		public int? Percentage()
 		{
-			var neutralAdherences = subtractPeriods(_recordedNeutralAdherences.Select(x => new DateTimePeriod(x.StartTime, x.EndTime.Value)), _approvedPeriods);
-			var outOfAhderencesWithinShift = withinShift(_shift, OutOfAdherences().Select(x => new DateTimePeriod(x.StartTime, x.EndTime.Value)));
+			var neutralAdherences = subtractPeriods(_recordedNeutralAdherences.Select(x => new DateTimePeriod(x.StartTime.Value, x.EndTime.Value)), _approvedPeriods);
+			var outOfAhderencesWithinShift = withinShift(_shift, OutOfAdherences().Select(x => new DateTimePeriod(x.StartTime.Value, x.EndTime.Value)));
 			var neutralAdherencesWithinShift = withinShift(_shift, neutralAdherences);
 			return new AdherencePercentageCalculator().Calculate(_shift, neutralAdherencesWithinShift, outOfAhderencesWithinShift, _now);
 		}

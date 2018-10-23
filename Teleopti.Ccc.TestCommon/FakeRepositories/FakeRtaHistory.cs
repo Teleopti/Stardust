@@ -100,5 +100,21 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			}, DeadLockVictim.No);
 			return this;
 		}
+
+		public FakeRtaHistory AdherenceDayStart(Guid personId, string time, string state, string activity, Color? activityColor, string rule, Color? ruleColor, Adherence? adherence)
+		{
+			_store.Add(new PersonAdherenceDayStartEvent
+			{
+				PersonId = personId,
+				Timestamp = time.Utc(),
+				StateName = state,
+				ActivityName = activity,
+				ActivityColor = activityColor?.ToArgb(),
+				RuleName = rule,
+				RuleColor = ruleColor?.ToArgb(),
+				Adherence = adherence == null ? null : (EventAdherence?) Enum.Parse(typeof(EventAdherence), adherence.ToString())
+			}, DeadLockVictim.No);
+			return this;
+		}
 	}
 }
