@@ -96,7 +96,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 						Thread.Sleep(1500);
 					}
 					if (!_assertRetryStrategy.WithinRetryStrategy())
-						Assert.Fail("Unable to perform Tier 2 Assertion. Exceeded the maximum number of reties.");
+						Assert.Fail("Unable to perform Tier 2 Assertion. Exceeded the maximum number of retries.");
 
 				}
 			}
@@ -196,7 +196,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 						Thread.Sleep(1000);
 					}
 					if (!_assertRetryStrategy.WithinRetryStrategy())
-						Assert.Fail("Unable to perform Tier 1 Assertion. Exceeded the maximum number of reties.");
+						Assert.Fail("Unable to perform Tier 1 Assertion. Exceeded the maximum number of retries.");
 				}
 			}
 		}
