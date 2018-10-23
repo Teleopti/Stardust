@@ -436,6 +436,7 @@
 	self.sendRequest = function() {
 		self.saveNewShiftTrade();
 		self.chooseAgent(null);
+		self.showCartPanel(false);
 		Teleopti.MyTimeWeb.Request.List.HideRequests(false);
 		self.goToFirstPage();
 		Teleopti.MyTimeWeb.Request.ResetToolbarActiveButtons();

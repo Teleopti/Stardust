@@ -1262,6 +1262,35 @@
 		equal(viewModel.myToleranceMessages()[0].periodEnd, '2018-07-29');
 	});
 
+	test('should reset showCartPanel after send request', function() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) {
+			if (toggleName === 'MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408') return true;
+			return false;
+		};
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url === 'Requests/ShiftTradeRequest') {
+					options.success();
+				}
+			}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
+		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(
+			null,
+			null,
+			null,
+			'Ashley',
+			'123',
+			false
+		);
+		viewModel.chooseAgent(agent);
+
+		viewModel.showCartPanel(true);
+		viewModel.sendRequest();
+
+		equal(viewModel.showCartPanel(), false);
+	});
+
 	test('should show correct tolerance exceed', function() {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
 			if (toggleName === 'MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408') return true;
