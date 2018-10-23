@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 				var auditServiceModel = new AuditServiceModel()
 				{
 					TimeStamp = audit.TimeStamp, Context = "Staffing", Action = audit.Action,
-					ActionPerformedBy = audit.ActionPerformedBy
+					ActionPerformedBy = audit.ActionPerformedBy.Name.ToString(NameOrderOption.FirstNameLastName)
 				};
 				if (audit.Action.Equals(StaffingAuditActionConstants.ImportBPO))
 					auditServiceModel.Data = $"File name: {audit.Data}";
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 	public class AuditServiceModel
 	{
 		public DateTime TimeStamp { get; set; }
-		public IPerson ActionPerformedBy{ get; set; }
+		public string ActionPerformedBy{ get; set; }
 		public string Action { get; set; }
 		public string Context { get; set; }
 		public string Data { get; set; }
