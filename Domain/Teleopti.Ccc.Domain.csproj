@@ -183,6 +183,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\FilterOutRequestsHandledByReadmodel.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistPreloadService.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistProcessPublisher.cs" />
+    <Compile Include="ApplicationLayer\Audit\PersonAccessContextReaderService.cs" />
     <Compile Include="ApplicationLayer\Availability\HandleMultipleAnalyticsAvailabilityDays.cs" />
     <Compile Include="ApplicationLayer\Availability\HandleOneAnalyticsAvailabilityDay.cs" />
     <Compile Include="ApplicationLayer\Badge\IPushMessageSender.cs" />
@@ -640,6 +641,8 @@
     <Compile Include="Staffing\IExportBpoFile.cs" />
     <Compile Include="Staffing\ImportBpoFile.cs" />
     <Compile Include="Staffing\ISkillCombinationBpoTimeLineReader.cs" />
+    <Compile Include="Staffing\IPersonAccessAuditRepository.cs" />
+    <Compile Include="Staffing\IStaffingAudit.cs" />
     <Compile Include="Staffing\IStaffingAuditRepository.cs" />
     <Compile Include="Staffing\StaffingAudit.cs" />
     <Compile Include="ApplicationLayer\Audit\StaffingContextReaderService.cs" />

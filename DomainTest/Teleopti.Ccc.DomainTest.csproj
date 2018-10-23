@@ -1543,6 +1543,7 @@
     <Compile Include="Staffing\ImportBpoFileTest.cs" />
     <Compile Include="Staffing\RequiredStaffingProviderTest.cs" />
     <Compile Include="Staffing\ScheduledSTaffingVIewModelCreatorTest.cs" />
+    <Compile Include="Staffing\PersonAccessContextReaderServiceTest.cs" />
     <Compile Include="Staffing\StaffingContextReaderServiceTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSettingsTest.cs" />
     <Compile Include="TestWithStaticDependenciesDONOTUSEAttribute.cs" />

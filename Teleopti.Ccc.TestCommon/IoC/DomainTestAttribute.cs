@@ -164,6 +164,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			}
 			else
 			{
+				isolate.UseTestDouble<FakePersonAccessAuditRepository>().For<IPersonAccessAuditRepository>();
 				isolate.UseTestDouble<FakeSkillCombinationResourceReader>().For<ISkillCombinationResourceReader>();
 				isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository, IProxyForId<IPerson>, IPersonLoadAllWithAssociation>();
 				isolate.UseTestDouble<FakeMultisiteDayRepository>().For<IMultisiteDayRepository>();

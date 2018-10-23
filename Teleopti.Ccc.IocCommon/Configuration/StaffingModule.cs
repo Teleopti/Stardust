@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<AuditableBpoOperationsToggleOn>().As<IAuditableBpoOperations>().SingleInstance()
 					.ApplyAspects();
-				builder.RegisterType<StaffingContextReaderService>().SingleInstance();
 			}
 
 			else

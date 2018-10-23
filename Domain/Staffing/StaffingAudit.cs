@@ -30,13 +30,4 @@ namespace Teleopti.Ccc.Domain.Staffing
 		public virtual string Data { get; set; }
 		public virtual string Area { get; set; }
 	}
-
-	public interface IStaffingAudit : IAggregateRoot
-	{
-		DateTime TimeStamp { get; set; }
-		IPerson ActionPerformedBy { get; set; }
-		string Action { get; set; }
-		string Data { get; set; }
-		string Area { get; set; }
-	}
 }
