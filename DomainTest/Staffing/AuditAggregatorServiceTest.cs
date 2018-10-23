@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public void ShouldReturnStaffingAuditOnImportBpoAction()
 		{
 			var person = PersonFactory.CreatePersonWithId();
-			StaffingAuditRepository.Add(new StaffingAudit(person, StaffingAuditActionConstants.ImportBPO, "abc.txt", "BPO"){TimeStamp = new DateTime(2018, 10, 14,10,0,0,DateTimeKind.Utc) });
+			StaffingAuditRepository.Add(new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "abc.txt", "BPO"){TimeStamp = new DateTime(2018, 10, 14,10,0,0,DateTimeKind.Utc) });
 			var startDate = new DateTime(2018, 10, 13);
 			var endDate = new DateTime(2018,10,15);
 			var audits =  Target.Load(person.Id.GetValueOrDefault(), startDate,endDate);
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			
 			var singaporeUser = PersonFactory.CreatePerson().WithId();
 
-			StaffingAuditRepository.Add(new StaffingAudit(singaporeUser, StaffingAuditActionConstants.ImportBPO, "abc.txt", "BPO") { TimeStamp = new DateTime(2018, 10, 14, 14, 0, 0, DateTimeKind.Utc) });
+			StaffingAuditRepository.Add(new StaffingAudit(singaporeUser, StaffingAuditActionConstants.ImportBpo, "abc.txt", "BPO") { TimeStamp = new DateTime(2018, 10, 14, 14, 0, 0, DateTimeKind.Utc) });
 			var startDate = new DateTime(2018, 10, 13);
 			var endDate = new DateTime(2018, 10, 15);
 			var audits = Target.Load(singaporeUser.Id.GetValueOrDefault(), startDate, endDate);

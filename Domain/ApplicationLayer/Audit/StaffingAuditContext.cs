@@ -22,14 +22,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 
 		public void Handle(ClearBpoActionObj clearBpoAction)
 		{
-			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), StaffingAuditActionConstants.ClearBPO, JsonConvert.SerializeObject(clearBpoAction), "BPO");
+			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), StaffingAuditActionConstants.ClearBpo, JsonConvert.SerializeObject(clearBpoAction), "BPO");
 			staffingAudit.TimeStamp = _now.UtcDateTime();
 			_staffingAuditRepository.Add(staffingAudit);
 		}
 
 		public void Handle(ImportBpoActionObj importBpoAction)
 		{
-			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), StaffingAuditActionConstants.ImportBPO,  importBpoAction.FileName, "BPO");
+			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), StaffingAuditActionConstants.ImportBpo,  importBpoAction.FileName, "BPO");
 			staffingAudit.TimeStamp = _now.UtcDateTime();
 			_staffingAuditRepository.Add(staffingAudit);
 		}
@@ -53,8 +53,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 
 	public static class StaffingAuditActionConstants
 	{
-		public const string ImportBPO = "ImportBPO";
-		public const string ClearBPO = "ClearBpoStaffing";
+		public const string ImportBpo = "ImportBpo";
+		public const string ClearBpo = "ClearBpoStaffing";
 	}
 
 

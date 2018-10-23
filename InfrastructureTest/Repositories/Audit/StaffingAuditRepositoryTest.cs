@@ -77,9 +77,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			WithUnitOfWork.Do(() =>
 			{
 				PersonRepository.Add(person);
-				var staffingAudit1 = new StaffingAudit(person, StaffingAuditActionConstants.ImportBPO, "", "BPO") { TimeStamp = new DateTime(2018, 10, 01, 08, 08, 08, DateTimeKind.Utc) };
-				var staffingAudit2 = new StaffingAudit(person, StaffingAuditActionConstants.ImportBPO, "", "BPO") { TimeStamp = new DateTime(2018, 10, 02, 08, 08, 08, DateTimeKind.Utc) };
-				var staffingAudit3 = new StaffingAudit(person, StaffingAuditActionConstants.ImportBPO, "", "BPO") { TimeStamp = new DateTime(2018, 10, 03, 08, 08, 08, DateTimeKind.Utc) };
+				var staffingAudit1 = new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "", "BPO") { TimeStamp = new DateTime(2018, 10, 01, 08, 08, 08, DateTimeKind.Utc) };
+				var staffingAudit2 = new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "", "BPO") { TimeStamp = new DateTime(2018, 10, 02, 08, 08, 08, DateTimeKind.Utc) };
+				var staffingAudit3 = new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "", "BPO") { TimeStamp = new DateTime(2018, 10, 03, 08, 08, 08, DateTimeKind.Utc) };
 				Target.Add(staffingAudit1);
 				Target.Add(staffingAudit2);
 				Target.Add(staffingAudit3);
@@ -104,8 +104,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				PersonRepository.Add(person1);
 				PersonRepository.Add(person2);
-				var staffingAudit1 = new StaffingAudit(person1, StaffingAuditActionConstants.ImportBPO, "", "BPO") { TimeStamp = new DateTime(2018, 10, 01, 08, 08, 08, DateTimeKind.Utc) };
-				var staffingAudit2 = new StaffingAudit(person2, StaffingAuditActionConstants.ImportBPO, "", "BPO") { TimeStamp = new DateTime(2018, 10, 02, 08, 08, 08, DateTimeKind.Utc) };
+				var staffingAudit1 = new StaffingAudit(person1, StaffingAuditActionConstants.ImportBpo, "", "BPO") { TimeStamp = new DateTime(2018, 10, 01, 08, 08, 08, DateTimeKind.Utc) };
+				var staffingAudit2 = new StaffingAudit(person2, StaffingAuditActionConstants.ImportBpo, "", "BPO") { TimeStamp = new DateTime(2018, 10, 02, 08, 08, 08, DateTimeKind.Utc) };
 				Target.Add(staffingAudit1);
 				Target.Add(staffingAudit2);
 
