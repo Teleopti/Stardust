@@ -7,40 +7,17 @@ using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
-{
-	public interface IContainingSkillIntervalPeriodFinder
-	{
-		DateTime? Find(IDictionary<DateTime, ISkillIntervalData> skillIntervals, DateTime periodKey, int resolution);
-	}
-
-	public class ContainingSkillIntervalPeriodFinder : IContainingSkillIntervalPeriodFinder
-	{
-		public DateTime? Find(IDictionary<DateTime, ISkillIntervalData> skillIntervals, DateTime periodKey, int resolution)
-		{
-			if (resolution < 60) return null;
-			foreach (var skillIntervalData in skillIntervals)
-			{
-				if (!skillIntervalData.Value.Period.Contains(periodKey)) continue;
-				return skillIntervalData.Key;
-			}
-
-			return null;
-		}
-	}
-		
+{	
 	public class WorkShiftValueCalculator
 	{
 		private readonly IWorkShiftPeriodValueCalculator _workShiftPeriodValueCalculator;
 		private readonly IWorkShiftLengthValueCalculator _workShiftLengthValueCalculator;
-		private readonly IContainingSkillIntervalPeriodFinder _containingSkillIntervalPeriodFinder;
 
 		public WorkShiftValueCalculator(IWorkShiftPeriodValueCalculator workShiftPeriodValueCalculator,
-			IWorkShiftLengthValueCalculator workShiftLengthValueCalculator,
-			IContainingSkillIntervalPeriodFinder containingSkillIntervalPeriodFinder)
+			IWorkShiftLengthValueCalculator workShiftLengthValueCalculator)
 		{
 			_workShiftPeriodValueCalculator = workShiftPeriodValueCalculator;
 			_workShiftLengthValueCalculator = workShiftLengthValueCalculator;
-			_containingSkillIntervalPeriodFinder = containingSkillIntervalPeriodFinder;
 		}
 
 		public double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity,
@@ -76,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				ISkillIntervalData currentStaffPeriod;
 				if (!skillIntervalDataDic.TryGetValue(currentSkillStaffPeriodKey, out currentStaffPeriod))
 				{
-					var containingPeriodKey = _containingSkillIntervalPeriodFinder.Find(skillIntervalDataDic, currentSkillStaffPeriodKey, resolution.Value);
+					var containingPeriodKey = findContainingSkillIntervalPeriod(skillIntervalDataDic, currentSkillStaffPeriodKey, resolution.Value);
 					if (containingPeriodKey.HasValue)
 					{
 						currentSkillStaffPeriodKey = containingPeriodKey.Value;
@@ -120,6 +97,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
 			return _workShiftLengthValueCalculator.CalculateShiftValueForPeriod(periodValue, resourceInMinutes,
 				periodValueCalculationParameters.LengthFactor);
+		}
+
+		private DateTime? findContainingSkillIntervalPeriod(IDictionary<DateTime, ISkillIntervalData> skillIntervals, DateTime periodKey, int resolution)
+		{
+			if (resolution < 60) return null;
+			foreach (var skillIntervalData in skillIntervals)
+			{
+				if (!skillIntervalData.Value.Period.Contains(periodKey)) continue;
+				return skillIntervalData.Key;
+			}
+
+			return null;
 		}
 	}
 }

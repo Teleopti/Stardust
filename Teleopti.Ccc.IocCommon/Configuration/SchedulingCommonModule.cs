@@ -229,7 +229,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftFinderService>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftProjectionCacheFactory>().SingleInstance();
 			builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();	
-			builder.RegisterType<ContainingSkillIntervalPeriodFinder>().As<IContainingSkillIntervalPeriodFinder>().SingleInstance();
 			builder.RegisterType<TeamBlockRoleModelSelector>().InstancePerLifetimeScope();			
 			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>().SingleInstance();
 			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().SingleInstance();
