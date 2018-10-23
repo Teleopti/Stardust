@@ -6,7 +6,7 @@ import { debounceTime } from 'rxjs/operators';
 import { Moment } from '../../../../../node_modules/moment';
 import { UserService } from '../../../core/services';
 import { AuditTrailService } from '../../services';
-import { Person } from '../../../shared/types';
+import { Person, AuditEntry } from '../../../shared/types';
 
 const mapToISODate = date => format(date, 'YYYY-MM-DD');
 const toISORange = ([startDate, endDate]: DateRange): DateRange => [mapToISODate(startDate), mapToISODate(endDate)];
@@ -29,6 +29,7 @@ export class GeneralAuditTrailComponent implements OnInit {
 	person: Person;
 	personList: Array<Person>;
 	selectedPerson: Person;
+	auditTrailData: Array<AuditEntry>;
 
 	searchForm = this.fb.group({
 		personPicker: [''],
@@ -80,6 +81,12 @@ export class GeneralAuditTrailComponent implements OnInit {
 	}
 
 	submitForm() {
-		console.log(this.searchForm.value);
+		this.auditTrailService
+			.getStaffingAuditTrail('10957AD5-5489-48E0-959A-9B5E015B2B5C', '2017-01-01', '2018-10-23')
+			.subscribe(results => {
+				this.auditTrailData = results.AuditEntries;
+				console.log(results);
+				console.log(this.auditTrailData);
+			});
 	}
 }

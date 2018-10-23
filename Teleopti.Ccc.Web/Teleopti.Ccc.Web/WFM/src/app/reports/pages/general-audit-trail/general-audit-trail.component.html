@@ -41,7 +41,7 @@
     </nz-form-item>
 </form>
 
-<nz-table #auditTable nzSize="middle" [nzData]="auditData" nzPageSize="100" nzHideOnSinglePage>
+<nz-table #auditTable nzSize="middle" [nzData]="auditTrailData" nzPageSize="100" nzHideOnSinglePage>
     <thead nzSingleSort>
         <tr>
             <th nzShowSort nzSortKey="ModifiedAt">Timestamp</th>
@@ -56,7 +56,7 @@
         <ng-template ngFor let-data [ngForOf]="auditTable.data">
             <tr>
                 <td nzShowExpand [(nzExpand)]="data.expand"></td>
-                <td>{{data.name}}</td>
+                <td>{{data}}</td>
                 <td>{{data.age}}</td>
                 <td>{{data.address}}</td>
                 <td>
