@@ -111,7 +111,7 @@ WfmIntraday_MonitorActualvsForecasted_35176 = true
 WFM_Modify_Skill_Groups_43727 = true
 WFM_Remember_My_Selection_In_Intraday_47254 = true
 WFM_Intraday_Refactoring_74652 = true
-WFM_Intraday_Redesign_77214 = RC
+WFM_Intraday_Redesign_77214 = DEV
 
 # Ziggy #
 WfmStaffing_AddOvertime_42524 = RC
