@@ -492,3 +492,7 @@ card-panel-content {
 	display: none;
 	// background-color: pink;
 }
+
+.manage-schedule-period-picker wfm-date-range-picker{
+  z-index: 40;
+}
