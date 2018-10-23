@@ -60,6 +60,7 @@
 				vm.runManaging = runManaging;
 				vm.fecthSelectedTeamsId = fecthSelectedTeamsId;
 				vm.validateAndShowModal = validateAndShowModal;
+				vm.validateManagingParameters = validateManagingParameters;
 
 				resetTracking();
 				fetchOrgData();
