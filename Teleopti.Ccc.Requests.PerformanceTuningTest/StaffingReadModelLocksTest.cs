@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		public AddOverTime AddOverTime;
 		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 
-		private IList<IPersonRequest> requests;
+		private IList<IPersonRequest> _requests;
 		private DateTime _nowDateTime;
 
 		public override void OneTimeSetUp()
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 
 			var now = Now.UtcDateTime();
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(1));
-			requests = new List<IPersonRequest>();
+			_requests = new List<IPersonRequest>();
 			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			WithUnitOfWork.Do(() =>
 			{
@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				DayOffTemplateRepository.LoadAll();
 
 				UpdateStaffingLevel.Update(period);
-				requests = PersonRequestRepository.FindPersonRequestWithinPeriod(new DateTimePeriod(new DateTime(2016, 03, 16, 7, 0, 0).Utc(), new DateTime(2016, 03, 16, 10, 0, 0).Utc()));
-				PersonRepository.FindPeople(requests.Select(x => x.Person.Id.GetValueOrDefault()));
+				_requests = PersonRequestRepository.FindPersonRequestWithinPeriod(new DateTimePeriod(new DateTime(2016, 03, 16, 7, 0, 0).Utc(), new DateTime(2016, 03, 16, 10, 0, 0).Utc()));
+				PersonRepository.FindPeople(_requests.Select(x => x.Person.Id.GetValueOrDefault()));
 			});
 		}
 
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 			_nowDateTime = new DateTime(2016, 03, 16, 7, 0, 0).Utc();
 			Now.Is(_nowDateTime);
-			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-2).AddHours(1));
 			var startDateTime = new DateTime(2016, 03, 16, 7, 0, 0).Utc();
 			var resolution = 15;
 			var periods = new List<DateTime>();
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				{
 
 					StardustJobFeedback.SendProgress($"Starting processing for period start " + periods[intervalIndex].ToLongDateString());
-					foreach (var request in requests)
+					foreach (var request in _requests)
 					{
 						WithUnitOfWork.Do(() =>
 						{
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			var r3 = Task.Run(() => WithUnitOfWork.Do(() =>
 			{
 				StardustJobFeedback.SendProgress($"Starting processing for update readmodel R3");
-				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
+				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(6), Now.UtcDateTime().AddDays(10)));
 				StardustJobFeedback.SendProgress($"Finised processing for update readmodel R3");
 			}));
 			taskList.Add(r3);
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		[Test, Ignore("Can not provoke daed locks, but leave the code for the future")]
 		public void AbsencesWithUpdateReadModelAndOvertimeDeadLock()
 		{
-			var someRequests = requests.Batch(100);
+			var someRequests = _requests.Batch(100);
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 			_nowDateTime = new DateTime(2016, 03, 16, 7, 0, 0).Utc();
@@ -296,7 +296,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 
 			taskList.Add(Task.Run(() =>
 			{
-				foreach (var request in requests)
+				foreach (var request in _requests)
 				{
 					WithUnitOfWork.Do(() =>
 					{
