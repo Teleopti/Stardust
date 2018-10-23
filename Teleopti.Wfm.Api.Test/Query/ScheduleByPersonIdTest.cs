@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
@@ -34,6 +35,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 			PersonRepository.Add(person);
 			var scenario = ScenarioRepository.Has("Default");
 			var activity = ActivityRepository.Has("Phone").WithId();
+			activity.DisplayColor = Color.FromName("blue");
 			var personAssignment = new PersonAssignment(person,scenario,new DateOnly(2001,1,1)).WithId();
 			personAssignment.AddActivity(activity,new TimePeriod(8,17));
 			PersonAssignmentRepository.Add(personAssignment);
@@ -53,6 +55,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 			obj["Shift"][0]["Name"].Value<string>().Should().Be.EqualTo("Phone");
 			obj["Shift"][0]["StartTime"].Value<DateTime>().Should().Be.EqualTo(new DateTime(2001,1,1,8,0,0));
 			obj["Shift"][0]["EndTime"].Value<DateTime>().Should().Be.EqualTo(new DateTime(2001,1,1,17,0,0));
+			obj["Shift"][0]["DisplayColor"].Value<int>().Should().Be.EqualTo(Color.FromName("blue").ToArgb());
 		}
 
 		[Test]
