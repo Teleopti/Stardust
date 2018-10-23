@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Autofac.Builder;
-using Autofac.Extras.DynamicProxy2;
+using Autofac.Extras.DynamicProxy;
 using Autofac.Features.Scanning;
 using Castle.DynamicProxy;
 using Teleopti.Ccc.Domain.Aop.Core;

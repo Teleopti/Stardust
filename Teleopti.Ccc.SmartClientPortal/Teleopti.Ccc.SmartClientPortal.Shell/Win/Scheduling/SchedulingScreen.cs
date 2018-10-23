@@ -331,7 +331,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				.As<IWorkflowControlSetPublishDatePersister>()
 				.InstancePerLifetimeScope();
 
+#pragma warning disable 618
 			updater.Update(_container.ComponentRegistry);
+#pragma warning restore 618
 		}
 
 		public SchedulingScreen(IComponentContext componentContext, DateOnlyPeriod loadingPeriod, IScenario loadScenario,
