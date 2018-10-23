@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
@@ -51,7 +52,12 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			var events = _eventStore.Load(personId, period);
 
 			var obj = new AgentAdherenceDaySpeedUpRemoveLastBefore(personId, period, shift, until);
-			events.ForEach(x => obj.Apply((dynamic) x));
+			events.ForEach(x =>
+			{
+				var method = obj.GetType().GetMethod("Apply", new[] {x.GetType()});
+				if (method != null)
+					obj.Apply((dynamic) x);
+			});
 			obj.ApplyDone();
 
 			return obj;
