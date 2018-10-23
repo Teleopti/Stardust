@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 		}
 		
 		
-		[Test]
+		[Test, Ignore("#78398")]
 		public void ExistingShiftNotMatchingStartTimForDayLightSaving()
 		{
 			var startDate = new DateOnly(2018, 10, 22);

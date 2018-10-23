@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				if (personPeriods.Any(x => x.PersonContract.Contract.EmploymentType == EmploymentType.HourlyStaff)) continue;
 				var person = schedule.Key;
 				if (!people.Contains(person)) continue;
-				var agentTimezone = person.PermissionInformation.DefaultTimeZone();
 				var blockOption = blockPreferenceProvider.ForAgent(person, period.StartDate);
 
 				if (blockOption.BlockTypeValue == BlockFinderType.SchedulePeriod)
@@ -91,7 +90,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 											assignmentj != null &&
 											assignmenti.ShiftLayers.Count() != 0 &&
 											assignmentj.ShiftLayers.Count() != 0 &&
-											assignmenti.Period.StartDateTimeLocal(agentTimezone).TimeOfDay != assignmentj.Period.StartDateTimeLocal(agentTimezone).TimeOfDay)
+											assignmenti.Period.StartDateTime.TimeOfDay != assignmentj.Period.StartDateTime.TimeOfDay)
 										{
 											addValidationResult(validationResult, person,
 												nameof(Resources.ExistingShiftNotMatchStartTime),
@@ -184,7 +183,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 						if (personAssignment != null && personAssignment.ShiftLayers.Count() != 0 && personAssignment.ShiftCategory!= null)
 						{
 							var shiftCategory = personAssignment.ShiftCategory;
-							var startTime = personAssignment.Period.StartDateTimeLocal(agentTimezone);
+							var startTime = personAssignment.Period.StartDateTime;
 							if (blockOption.UseBlockSameShiftCategory)
 							{
 								if (firstShiftCategory == null)
@@ -220,9 +219,9 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 									{
 										addValidationResult(validationResult, person,
 											nameof(Resources.ExistingShiftNotMatchStartTime),
-											firstStartTime.Value.ToUniversalTime(),
+											firstStartTime.Value,
 											firstDate.Value.Date,
-											startTime.ToUniversalTime(),
+											startTime,
 											personAssignment.Date.Date);
 										break;
 									}
