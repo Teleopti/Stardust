@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Interfaces.Domain;
 
@@ -12,11 +13,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 	{
 		private readonly IPersonAccessAuditRepository _personAccessAuditRepository;
 		private readonly IUserCulture _userCulture;
+		private readonly IApplicationRoleRepository _applicationRoleRepository;
 
-		public PersonAccessContextReaderService(IPersonAccessAuditRepository personAccessAuditRepository, IUserCulture userCulture)
+		public PersonAccessContextReaderService(IPersonAccessAuditRepository personAccessAuditRepository, IUserCulture userCulture, IApplicationRoleRepository applicationRoleRepository)
 		{
 			_personAccessAuditRepository = personAccessAuditRepository;
 			_userCulture = userCulture;
+			_applicationRoleRepository = applicationRoleRepository;
 		}
 
 		public IEnumerable<AuditServiceModel> LoadAll()
@@ -37,21 +40,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 					TimeStamp = audit.TimeStamp, Context = "PersonAccess", Action = audit.Action,
 					ActionPerformedBy = audit.ActionPerformedBy
 				};
-				//if (audit.Action.Equals(StaffingAuditActionConstants.ImportBpo))
-				//	auditServiceModel.Data = $"File name: {audit.Data}";
-				//else
-				//{
-				//	var deserialized = JsonConvert.DeserializeObject<ClearBpoActionObj>(audit.Data);
-				//	var bpoName = _skillCombinationResourceRepository.LoadActiveBpos()
-				//		.FirstOrDefault(x => x.Id.Equals(deserialized.BpoGuid)).Source;
-				//	var startDate = deserialized.StartDate.Date.ToString("d", _userCulture.GetCulture());
-				//	var endDate = deserialized.EndDate.Date.ToString("d", _userCulture.GetCulture());
-				//	auditServiceModel.Data = $"BPO name: {bpoName}{Environment.NewLine}Period from {startDate} to {endDate}";
-				//}
-				//var x = new {RoleId = role.Id, Name = role.DescriptionText};
-				var deserialized = JsonConvert.DeserializeObject<PersonAccessModel>(audit.Data);
-				auditServiceModel.Data = $"RoleId: {deserialized.RoleId} Name: {deserialized.Name}";
-
+				var deserializedRole = JsonConvert.DeserializeObject<PersonAccessModel>(audit.Data);
+				var appRole = _applicationRoleRepository.Load(deserializedRole.RoleId);
+				auditServiceModel.Data = $"Role: {appRole.Name} Action: {audit.Action}";
 				auditServiceModelList.Add(auditServiceModel);
 			}
 

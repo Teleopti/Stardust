@@ -12,10 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core
 {
-	public interface IAuditHelper
-	{
-		void AuditCall(PersonAuditActionType actionType, PersonRolesBaseModel inputmodel);
-	}
+	
 
 	public class AuditHelper : IAuditHelper
 	{
