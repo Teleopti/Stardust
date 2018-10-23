@@ -317,7 +317,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var skill = new Skill().For(activity).WithId().IsOpen();
 			var scenario = new Scenario();
 			var shiftCategory = new ShiftCategory().WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(16, 0, 16, 0, 15), new TimePeriodWithSegment(24, 0, 25, 0, 15), shiftCategory));
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(16, 0, 16, 0, 15), new TimePeriodWithSegment(24, 0, 24, 0, 15), shiftCategory));
 			var agent = new Person().WithId().WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneWeek(date);
 			agent.SchedulePeriod(date).SetDaysOff(1);
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, 1, 1, 1, 1, 1, 1, 1);
