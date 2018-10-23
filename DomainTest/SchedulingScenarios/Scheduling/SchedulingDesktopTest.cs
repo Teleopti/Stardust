@@ -307,6 +307,31 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Count(x => x.HasDayOff()).Should().Be.EqualTo(2);
 		}
 
+		[TestCase(12, ExpectedResult = true)]
+		[TestCase(6, ExpectedResult = false)]
+		[Ignore("78357 to be fixed")]
+		public bool ShouldScheduleWhereShiftDoNotInterfereWithDayOff(int anchor)
+		{
+			var date = new DateOnly(2018, 8, 27);
+			var activity = new Activity();
+			var skill = new Skill().For(activity).WithId().IsOpen();
+			var scenario = new Scenario();
+			var shiftCategory = new ShiftCategory().WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(16, 0, 16, 0, 15), new TimePeriodWithSegment(24, 0, 25, 0, 15), shiftCategory));
+			var agent = new Person().WithId().WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneWeek(date);
+			agent.SchedulePeriod(date).SetDaysOff(1);
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, 1, 1, 1, 1, 1, 1, 1);
+			var dayOff = new DayOffTemplate { Anchor = TimeSpan.FromHours(anchor) };
+			dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.Zero);
+			var ass = new PersonAssignment(agent, scenario, date.AddDays(6)).WithDayOff(dayOff);
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date.AddDays(7)), new[] { agent }, new[] { ass }, skillDays);
+			var schedulingOptions = new SchedulingOptions { ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff };
+
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, new DateOnlyPeriod(date.AddDays(5), date.AddDays(5)));
+
+			return schedulerStateHolder.Schedules[agent].ScheduledDay(date.AddDays(5)).IsScheduled();
+		}
+
 		public SchedulingDesktopTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}
