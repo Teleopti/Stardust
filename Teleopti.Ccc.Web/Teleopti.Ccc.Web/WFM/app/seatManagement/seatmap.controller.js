@@ -72,7 +72,7 @@
 			createDocumentListeners();
 			vm.isLoading = true;
 
-			canvasUtils.loadSeatMap(null, vm.selectedDate, canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
+			canvasUtils.loadSeatMap(null, moment(vm.selectedDate).format('YYYY-MM-DD'), canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
 		vm.getCanvas = function () {
@@ -125,10 +125,12 @@
 		vm.handleBreadcrumbClick = function (id) {
 			vm.isLoading = true;
 			vm.rightPanelOptions.panelState = false;
-			canvasUtils.loadSeatMap(id, vm.selectedDate, canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
+			canvasUtils.loadSeatMap(id, moment(vm.selectedDate).format('YYYY-MM-DD'), canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
 		vm.refreshSeatMap = function (date) {
+			if(!date) date = moment(vm.selectedDate).format('YYYY-MM-DD');
+
 			vm.isLoading = true;
 			canvasUtils.loadSeatMap(vm.seatMapId, date, canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 			resize();
@@ -177,7 +179,7 @@
 
 		function loadSeatMapOnLocationClick(location) {
 			vm.isLoading = true;
-			canvasUtils.loadSeatMap(location.id, vm.selectedDate, canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
+			canvasUtils.loadSeatMap(location.id, moment(vm.selectedDate).format('YYYY-MM-DD'), canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
 		function resetOnLoad(data) {
