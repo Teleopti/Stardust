@@ -1,7 +1,7 @@
 ﻿<div class="row seatplan-report">
 	<div class="seatplan-report-header">
 
-		<button class="wfm-btn pull-left" ng-click="vm.toggle()">
+		<button class="wfm-btn pull-left wfm-btn-invis-primary" ng-click="vm.toggle()">
 			<i class="mdi mdi-reply"></i>
 		</button>
 
@@ -44,7 +44,7 @@
 													</label>
 												</div>
 												<div class="wfm-radio">
-													<input type="radio"  name="unseated-agents-toggle" id="showUnseatedToggle" ng-click="vm.setShowAllAgents(false)"/>
+													<input type="radio" name="unseated-agents-toggle" id="showUnseatedToggle" ng-click="vm.setShowAllAgents(false)" />
 													<label for="showUnseatedToggle">
 														<span class="wfm-radio-toggle"></span>
 														<span class="wfm-radio-label">{{'ShowOnlyAgentsWithNoSeat' | translate}}</span>
@@ -55,7 +55,8 @@
 									</div>
 									<div class="con-footer">
 										<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancelFilter()">{{'Cancel' | translate}}</button>
-										<button class="wfm-btn wfm-btn-invis-primary" ng-class="vm.dateFilterIsValid() ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-click="vm.applyFilter()">{{'Apply' | translate}}</button>
+										<button class="wfm-btn wfm-btn-invis-primary" ng-class="vm.dateFilterIsValid() ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'"
+										 ng-click="vm.applyFilter()">{{'Apply' | translate}}</button>
 									</div>
 								</md-content>
 							</md-tab>
