@@ -35,7 +35,6 @@ namespace Teleopti.Wfm.Api.Test.Query
 			PersonRepository.Add(person);
 			var scenario = ScenarioRepository.Has("Default");
 			var activity = ActivityRepository.Has("Phone").WithId();
-			activity.DisplayColor = Color.FromName("blue");
 			var personAssignment = new PersonAssignment(person,scenario,new DateOnly(2001,1,1)).WithId();
 			personAssignment.AddActivity(activity,new TimePeriod(8,17));
 			PersonAssignmentRepository.Add(personAssignment);
@@ -55,7 +54,6 @@ namespace Teleopti.Wfm.Api.Test.Query
 			obj["Shift"][0]["Name"].Value<string>().Should().Be.EqualTo("Phone");
 			obj["Shift"][0]["StartTime"].Value<DateTime>().Should().Be.EqualTo(new DateTime(2001,1,1,8,0,0));
 			obj["Shift"][0]["EndTime"].Value<DateTime>().Should().Be.EqualTo(new DateTime(2001,1,1,17,0,0));
-			obj["Shift"][0]["DisplayColor"].Value<int>().Should().Be.EqualTo(Color.FromName("blue").ToArgb());
 		}
 
 		[Test]
@@ -112,6 +110,32 @@ namespace Teleopti.Wfm.Api.Test.Query
 			var obj = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Result"][0];
 			
 			obj["TimeZoneId"].Value<string>().Should().Be.EqualTo(timezone.Id);
+		}
+
+		[Test]
+		public void ShouldGetActivityDisplayColor()
+		{
+			Client.Authorize();
+
+			var person = PersonFactory.CreatePerson().WithId();
+			PersonRepository.Add(person);
+			var scenario = ScenarioRepository.Has("Default");
+			var activity = ActivityRepository.Has("Phone").WithId();
+			activity.DisplayColor = Color.FromName("blue");
+			var personAssignment = new PersonAssignment(person, scenario, new DateOnly(2001, 1, 1)).WithId();
+			personAssignment.AddActivity(activity, new TimePeriod(8, 17));
+			PersonAssignmentRepository.Add(personAssignment);
+
+			var result = Client.PostAsync("/query/Schedule/ScheduleByPersonId",
+				new StringContent(JsonConvert.SerializeObject(new
+				{
+					PersonId = person.Id.GetValueOrDefault(),
+					StartDate = new DateTime(2001, 1, 1),
+					EndDate = new DateTime(2001, 1, 1)
+				}), Encoding.UTF8, "application/json"));
+			var obj = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Result"][0];
+
+			obj["Shift"][0]["DisplayColor"].Value<int>().Should().Be.EqualTo(Color.FromName("blue").ToArgb());
 		}
 	}
 }
