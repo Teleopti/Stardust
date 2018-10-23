@@ -11,24 +11,17 @@
         <nz-form-label>{{'ChangedBy' | translate}}</nz-form-label>
         <nz-form-control>
             <nz-input-group style="width: 200px;" nzSize="medium" [nzSuffix]="suffixIcon">
-                <input placeholder="Select person" fromControlName="personPicker" nz-input (ngModelChange)="onChange($event)" [nzAutocomplete]="auto"
-                />
+                <input placeholder="Select person" formControlName="personPicker" nz-input [nzAutocomplete]="auto" />
             </nz-input-group>
             <ng-template #suffixIcon>
                 <i class="anticon anticon-search"></i>
             </ng-template>
             <nz-autocomplete #auto>
-                <nz-auto-optgroup *ngFor="let group of optionGroups" [nzLabel]="groupTitle">
-                    <ng-template #groupTitle>
-                        <span>{{group.title}}
-                            <a class="more-link" href="https://www.google.com/search?q=ng+zorro" target="_blank">更多</a>
-                        </span>
-                    </ng-template>
-                    <nz-auto-option *ngFor="let option of group.children" [nzLabel]="option.title" [nzValue]="option">
-                        {{option.title}}
-                        <span class="certain-search-item-count">{{option.count}} 人 关注</span>
-                    </nz-auto-option>
-                </nz-auto-optgroup>
+                <nz-auto-option *ngFor="let person of personList" [nzLabel]="person.FirstName + ' ' + person.LastName" [nzValue]="person">
+                    <span>
+                        {{person.FirstName + " " + person.LastName}}
+                    </span>
+                </nz-auto-option>
             </nz-autocomplete>
         </nz-form-control>
     </nz-form-item>
@@ -42,7 +35,7 @@
 
     <nz-form-item>
         <nz-form-control>
-            <button nz-button nzType="primary">
+            <button type="submit" nz-button nzType="primary">
                 <i class="anticon anticon-search"></i>{{'Search' | translate}}</button>
         </nz-form-control>
     </nz-form-item>

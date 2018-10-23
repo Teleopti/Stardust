@@ -2,20 +2,20 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { flatMap, map, switchMap } from 'rxjs/operators';
+import { Person } from '../../shared/types';
 
-export interface Person {
-	Id: string;
-	Name: string;
+export interface PersonByKeyWordResponse {
+	Persons: Person[];
 }
 
 @Injectable()
 export class AuditTrailService {
 	constructor(private http: HttpClient) {}
 
-	getPersonByKeyword(keyword: string): Observable<Person> {
-		const response = this.http.get('../api/Search/FindPersonsByKeywords');
+	getPersonByKeyword(keyword: string): Observable<PersonByKeyWordResponse> {
+		const response = this.http.get('../api/Search/FindPersonsByKeywords?keywords=' + keyword);
 		console.log(response);
-		return response as Observable<Person>;
+		return response as Observable<PersonByKeyWordResponse>;
 	}
 	/*personsWhoChangedSchedules(): Observable<PersonsWhoChangedSchedulesResponse> {
 		const response = this.http.get('../api/Reports/PersonsWhoChangedSchedules');
