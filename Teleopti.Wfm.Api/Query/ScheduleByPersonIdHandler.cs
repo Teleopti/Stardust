@@ -12,12 +12,14 @@ namespace Teleopti.Wfm.Api.Query
 		private readonly IPersonRepository _personRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IScheduleStorage _scheduleStorage;
+		private readonly ILoggedOnUser _loggedOnUser;
 
-		public ScheduleByPersonIdHandler(IPersonRepository personRepository, IScenarioRepository scenarioRepository, IScheduleStorage scheduleStorage)
+		public ScheduleByPersonIdHandler(IPersonRepository personRepository, IScenarioRepository scenarioRepository, IScheduleStorage scheduleStorage, ILoggedOnUser loggedOnUser)
 		{
 			_personRepository = personRepository;
 			_scenarioRepository = scenarioRepository;
 			_scheduleStorage = scheduleStorage;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		[UnitOfWork]
@@ -36,12 +38,12 @@ namespace Teleopti.Wfm.Api.Query
 					Date = p.DateOnlyAsPeriod.DateOnly.Date,
 					Shift = p.ProjectionService().CreateProjection().Select(l => new ShiftLayerDto
 					{
-						Name = l.Payload.ConfidentialDescription(person).Name,
+						Name = l.Payload.ConfidentialDescription(_loggedOnUser.CurrentUser()).Name,
 						StartTime = l.Period.StartDateTime,
 						EndTime = l.Period.EndDateTime,
 						PayloadId = l.Payload.Id.GetValueOrDefault(),
 						IsAbsence = l.Payload is IAbsence,
-						DisplayColor = l.Payload.ConfidentialDisplayColor(person).ToArgb()
+						DisplayColor = l.Payload.ConfidentialDisplayColor(_loggedOnUser.CurrentUser()).ToArgb()
 					}).ToArray(),
 					PersonId = person.Id.GetValueOrDefault(),
 					TimeZoneId = person.PermissionInformation.DefaultTimeZone().Id
