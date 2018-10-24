@@ -88,8 +88,6 @@ task PatchDatabase -depends InitSetup, TeardownAndPrepare, CreateDatabase -descr
 task DataModifications -depends InitSetup, TeardownAndPrepare, CreateDatabase, PatchDatabase -description "Run Security Modifications" {
 
 	Write-Output "##teamcity[blockOpened name='<DataModifications>']"
-	Write-Host "Waiting 30 sec before running 'Datamodifications'..."
-	Start-Sleep -s 30
     Datamodifications
 	Write-Output "##teamcity[blockClosed name='<DataModifications>']"
 }
@@ -361,28 +359,29 @@ function global:RevokeServerRoles () {
 
 function global:PatchDatabaseWithDboOnly () {
 
-    if (!($global:SQLEdition -eq $SQLAzure)) {
-
-		$Params = "$global:DBManagerString -D$MartDB -OTeleoptiAnalytics -F$DatabasePath"
-		$Prms = $Params.Split(" ")
-		& "$DbManagerExe" $Prms
-			
-			if ($lastexitcode -ne 0) {
-				Log "Something went wrong during creation of: '$MartDB'"
-				Log "lastexitcode: $lastexitcode" 
-				exit 1
-	       	}
-       
-		$Params = "$global:DBManagerString -D$AppDB -OTeleoptiCCC7 -F$DatabasePath"
-		$Prms = $Params.Split(" ")
-		& "$DbManagerExe" $Prms
+    $Params = "$global:DBManagerString -D$AppDB -OTeleoptiCCC7 -F$DatabasePath"
+	$Prms = $Params.Split(" ")
+	& "$DbManagerExe" $Prms
         
-			if ($lastexitcode -ne 0) {
-				Log "Something went wrong during creation of: '$AppDB'"
-	       		Log "lastexitcode: $lastexitcode" 
-				exit 1
-			}
+	if ($lastexitcode -ne 0) {
+		Log "Something went wrong during creation of: '$AppDB'"
+		Log "lastexitcode: $lastexitcode" 
+		exit 1
+	}
 
+	$Params = "$global:DBManagerString -D$MartDB -OTeleoptiAnalytics -F$DatabasePath"
+	$Prms = $Params.Split(" ")
+	& "$DbManagerExe" $Prms
+			
+	if ($lastexitcode -ne 0) {
+		Log "Something went wrong during creation of: '$MartDB'"
+		Log "lastexitcode: $lastexitcode" 
+		exit 1
+	}
+       
+				
+	if (!($global:SQLEdition -eq $SQLAzure)) {
+		
 		$Params = "$global:DBManagerString -D$global:AggDB -OTeleoptiCCCAgg -F$DatabasePath"
 		$Prms = $Params.Split(" ")
 		& "$DbManagerExe" $Prms
@@ -392,7 +391,7 @@ function global:PatchDatabaseWithDboOnly () {
 				Log "lastexitcode: $lastexitcode" 
 				exit 1
 			}		
-    }
+	}	
 }
 
 function global:DataModificationsOLD () {
@@ -418,12 +417,20 @@ function global:DataModifications () {
 
 	do{
 		try{
-			& "$SecurityExe" $Prms -ErrorAction Stop
+			& "$SecurityExe" $Prms
+			
+			if ($lastexitcode -ne 0) {
+				
+				Log "Something went wrong during the running of security EXE..."
+				Log "lastexitcode: $lastexitcode"
+				throw "Will try to rerun..."
+			}
+			
 			$success = $true
 		}
 		catch{
-			Write-Output "Next attempt in 10 seconds"
-			Start-sleep -Seconds 10
+			Write-Output "Next attempt in 10 seconds..."
+			Start-sleep -Seconds 20
 		}
     
 			$count++

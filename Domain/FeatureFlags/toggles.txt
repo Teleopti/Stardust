@@ -40,7 +40,7 @@ WebByPassDefaultPermissionCheck_37984 = true
 # LevelUp #
 RTA_KillFattyIntradayUntilItDies_74939 = true
 RTA_ReviewHistoricalAdherence_Domain_74770 = true
-RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306 = DEV
+RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306 = false
 RTA_ReviewHistoricalAdherence_74770 = false
 
 # Dumplings, can any of these be removed? #
@@ -96,6 +96,7 @@ Staffing_Info_Configuration_44687 = true
 # Kittens, Bugs&Roses and Micke #
 Wfm_SkillPriorityRoutingGUI_39885 = RC #Skill priorities, aka Cascading, is not ready for release just yet
 Wfm_WebPlan_Pilot_46815 = RC #Switch this on to try out the new web based scheduling in Plans#
+SchedulePeriod_HideChineseMonth_78424 = RC
 ResourcePlanner_HideSkillPrioSliders_41312 = RC #Skill priorities, aka Cascading, is not ready for release yet
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = true
 ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = true
