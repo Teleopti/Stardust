@@ -87,16 +87,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 		void Reassociate(IAggregateRoot root);
 
 		/// <summary>
-		/// Reassociates the specified collection of root collections.
-		/// </summary>
-		/// <param name="rootCollectionsCollection">The root collection.</param>
-		/// <remarks>
-		/// Created by: rogerkr
-		/// Created date: 2010-07-05
-		/// </remarks>
-		void Reassociate<T>(params IEnumerable<T>[] rootCollectionsCollection) where T : IAggregateRoot;
-
-		/// <summary>
 		/// Refreshes the specified root.
 		/// </summary>
 		/// <param name="root">The root.</param>
@@ -139,6 +129,5 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 		/// </summary>
 		/// <param name="action"></param>
 		void AfterSuccessfulTx(Action action);
-
 	}
 }
