@@ -6,6 +6,7 @@ using Autofac;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -18,6 +19,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
@@ -153,6 +155,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 		{
 			if (selectedGuids == null || selectedGuids.IsEmpty()) return;
 			var saviour = _container.Resolve<ITenantDataManager>();
+			var toggle78424 = _container.Resolve<IToggleManager>()
+				.IsEnabled(Toggles.SchedulePeriod_HideChineseMonth_78424);
 			_gracefulDataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() =>
 			{
 				IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork();
@@ -183,6 +187,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 				filteredPeopleHolder.SetAvailabilityCollection(state.AllAvailabilities);
 
 				filteredPeopleHolder.ReassociateSelectedPeopleWithNewUowOpenPeople(foundPeople, logonData);
+				foreach (var person in filteredPeopleHolder.PersonCollection)
+				{
+					foreach (var schedulePeriod in person.PersonSchedulePeriodCollection)
+					{
+						((SchedulePeriod) schedulePeriod).Toggle78424 = toggle78424;
+					}
+				}
 
 				openPeopleAdmin(state, filteredPeopleHolder, _mainWindow);
 			});

@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -131,7 +132,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 					break;
 
 				case ViewType.SchedulePeriodView:
-					view = new SchedulePeriodGridView(new GridControl(), _filteredPeopleHolder);
+					var toggleView = new SchedulePeriodGridView(new GridControl(), _filteredPeopleHolder);
+					toggleView.Toggle78424 = _toggleManager.IsEnabled(Toggles.SchedulePeriod_HideChineseMonth_78424);
+					view = toggleView;
 					break;
 
 				case ViewType.EmptyView:
