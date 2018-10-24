@@ -57,3 +57,33 @@ Scenario: Should be able to see week view toggle button in day view
 Scenario: Should be able to see day view toggle button in week view
 	When I view wfm team schedules
 	Then I should be able to see day view toggle button
+
+
+Scenario: should keep the selection of group pages when back to day view if the selection is cleared and changed in week view
+	Given today is '2018-10-22'
+	And there is a site named 'Yellow site'
+	And there is a team named 'Team yellow' on 'Yellow site'
+	And John has a person period with
+	| Field      | Value      |
+	| Start date | 2016-01-01 |
+	| Team       | Team yellow |
+	| Skill      | A skill    |
+	And there is a site named 'Red site'
+	And there is a team named 'Team red' on 'Red site'
+	And Ashley has a person period with
+	| Field      | Value      |
+	| Start date | 2016-01-01 |
+	| Team       | Team red |
+	When I view wfm team schedules
+	And I open group pages picker
+	Then I select group 'Yellow site' on group page picker
+	Then I close group pages picker
+	And I click button to search for schedules
+	When I toggle week view
+	And I open group pages picker
+	Then I click clear button in group pages picker
+	And I select group 'Red site' on group page picker
+	And I close group pages picker
+	When I toggle day view
+	Then I should see agent 'Ashley' in the table
+
