@@ -211,6 +211,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			Session.Lock(root, LockMode.None);
 		}
 
+		public void Reassociate<T>(params IEnumerable<T>[] rootCollectionsCollection) where T : IAggregateRoot
+		{
+			rootCollectionsCollection.ForEach(coll => coll.ForEach(r => Reassociate(r)));
+		}
+
 		public void Refresh(IAggregateRoot root)
 		{
 			Session.Refresh(root);
