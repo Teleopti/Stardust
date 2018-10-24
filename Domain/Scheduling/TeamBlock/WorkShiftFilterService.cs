@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			shiftList = runFiltersForRoleModel(schedules, dateOnly, effectiveRestriction, schedulingOptions, shiftList, person, matrixList, isSameOpenHoursInBlock);
 			shiftList = runPersonalShiftFilterForEachMember(schedules, shiftList, teamBlockInfo);
-			if(schedulingOptions.UseBlock && schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.BetweenDayOff && !schedulingOptions.BlockSameShiftCategory)		
+			if(schedulingOptions.IsClassic() ||schedulingOptions.UseBlock && schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.BetweenDayOff && !schedulingOptions.BlockSameShiftCategory)		
 				shiftList = _businessRulesShiftFilter.Filter(schedules, person, shiftList, dateOnly);
 
 			if (schedulingOptions.UseBlock && schedulingOptions.BlockSameShift)

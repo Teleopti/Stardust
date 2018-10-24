@@ -309,7 +309,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		[TestCase(12, ExpectedResult = true)]
 		[TestCase(6, ExpectedResult = false)]
-		[Ignore("78357 to be fixed")]
 		public bool ShouldScheduleWhereShiftDoNotInterfereWithDayOff(int anchor)
 		{
 			var date = new DateOnly(2018, 8, 27);
