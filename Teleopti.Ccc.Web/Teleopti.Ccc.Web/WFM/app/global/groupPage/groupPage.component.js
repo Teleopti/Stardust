@@ -10,7 +10,7 @@
 				onClose: '&?',
 				groupPages: '<',
 				selectedGroups: '<',
-				required:'<'
+				required: '<'
 			}
 		});
 
@@ -49,7 +49,7 @@
 
 		Object.defineProperty(ctrl, 'selectedIndex',
 			{
-				get: function() {
+				get: function () {
 					return selectedIndex;
 				},
 				set: function (value) {
@@ -260,11 +260,11 @@
 			return results;
 		};
 
-		ctrl.groupFocused = function(groupCopy) {
+		ctrl.groupFocused = function (groupCopy) {
 			groupCopy.isFocused = true;
 		};
 
-		ctrl.groupBlurred = function(groupCopy) {
+		ctrl.groupBlurred = function (groupCopy) {
 			groupCopy.isFocused = false;
 		};
 
@@ -292,7 +292,7 @@
 		function resetSelectedGroups() {
 			resetSelectionInGroupsInView(ctrl.selectedGroups.mode);
 
-			ctrl.selectedGroups.groupIds = [];
+			ctrl.selectedGroups.groupIds.length = 0;
 			ctrl.selectedGroups.groupPageId = '';
 		}
 
