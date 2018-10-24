@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-(function() {
+(function () {
 
-	var requestsShiftDetailDirective = function(teamScheduleSvc, groupScheduleFactory, currentUserInfo) {
+	var requestsShiftDetailDirective = function (teamScheduleSvc, groupScheduleFactory, currentUserInfo) {
 		return {
 			restrict: "A",
 			scope: {
@@ -20,7 +20,7 @@
 			var targetTimezone = scope.targetTimezone;
 			var showShiftDetail = scope.showShiftDetail;
 
-			elem.bind("click", function(oEvent) {
+			elem.bind("click", function (oEvent) {
 				var position = getShiftDetailDisplayPosition(oEvent);
 				updateShiftStatusForSelectedPerson(personIds, moment(scheduleDate), targetTimezone, position, showShiftDetail);
 				oEvent.stopPropagation();
@@ -50,8 +50,8 @@
 			var currentUserTimezone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
 
 			teamScheduleSvc.getSchedules(currentDate, personIds)
-				.then(function(result) {
-					var schedulesToDisplay = result.Schedules.filter(function(schedule) {
+				.then(function (result) {
+					var schedulesToDisplay = result.Schedules.filter(function (schedule) {
 						return schedule.Date === currentDate;
 					});
 
@@ -62,10 +62,10 @@
 						var timeDifferent = targetUserUtcOffset - currentUserUtcOffset;
 
 						scheduleStartDate = moment(new Date(8640000000000000)); // Maximum date in js
-						schedulesToDisplay.forEach(function(schedule) {
+						schedulesToDisplay.forEach(function (schedule) {
 							// Time returned from server side is in current user's timezone;
 							// Need convert into target timezone
-							schedule.Projection.forEach(function(projection) {
+							schedule.Projection.forEach(function (projection) {
 								var startMoment = moment(projection.Start).add(timeDifferent, "minutes");
 								projection.Start = startMoment.format("YYYY-MM-DD HH:mm");
 								if (startMoment.isBefore(scheduleStartDate, "day")) {
@@ -77,9 +77,8 @@
 							});
 						});
 					}
-
-					var schedules = groupScheduleFactory.Create(schedulesToDisplay, scheduleStartDate.format('YYYY-MM-DD'), currentUserTimezone, 48);
-					showShiftDetail && showShiftDetail({ params: { left: position.left, top: position.top, schedules: schedules}});
+					var schedules = groupScheduleFactory.Create(schedulesToDisplay, scheduleStartDate.format('YYYY-MM-DD'), targetTimezone, 48);
+					showShiftDetail && showShiftDetail({ params: { left: position.left, top: position.top, schedules: schedules } });
 				});
 		}
 	};
