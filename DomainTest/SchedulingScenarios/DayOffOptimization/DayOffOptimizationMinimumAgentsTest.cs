@@ -419,10 +419,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			doDates.Should().Contain(date.AddDays(6));
 		}
 		
-		
-		
 		[Test]
-		[Ignore("to be fixed - have to use flexible day off")]
 		public void ShouldTryToPutDoOnADayThatWasUnsuccessfulEarlierInOptimization()
 		{
 			var date = new DateOnly(2015, 10, 12);
@@ -433,7 +430,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1).NumberOfDaysOff(2);
 			var shiftCategory = new ShiftCategory().WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(23, 0, 23, 0, 60), new TimePeriodWithSegment(31, 0, 31, 0, 60), shiftCategory));
-			var agent = PersonRepository.Has(schedulePeriod, ruleSet, skill);
+			var contract = new Contract("_"){WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1),TimeSpan.FromHours(48),TimeSpan.FromHours(11),TimeSpan.FromHours(1))};
+			var agent = PersonRepository.Has(contract, schedulePeriod, ruleSet, skill);
 			var alreadyScheduledAgent = PersonRepository.Has(skill);
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date,
 					0.1, 
@@ -448,9 +446,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			skillDays[5].SetMinimumAgents(new TimePeriod(23, 24), 2);
 			skillDays[6].SetMinimumAgents(new TimePeriod(23, 24), 3);
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(23, 0, 31, 0));
-			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate).WithDayOff();
-			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate).WithDayOff();
-			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, date.AddDays(7), new TimePeriod(1, 2)); //prevents replacing last DO
+			var dayOff = new DayOffTemplate(){Anchor = TimeSpan.FromHours(12)};
+			dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(9));
+			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate).WithDayOff(dayOff);
+			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate).WithDayOff(dayOff);
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, date.AddDays(7), new TimePeriod(17, 18)); //prevents replacing last DO
 			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(23, 0, 31, 0));
 
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
