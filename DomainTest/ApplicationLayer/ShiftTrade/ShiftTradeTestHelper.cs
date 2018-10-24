@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_businessRuleProvider = businessRuleProvider;
 			_currentScenario = currentScenario;
 
-			_scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage, CurrentUnitOfWork.Make(), new EmptyScheduleDayDifferenceSaver());
+			_scheduleDifferenceSaver = new ScheduleDifferenceSaver( new EmptyScheduleDayDifferenceSaver(), new PersistScheduleChanges(_scheduleStorage, CurrentUnitOfWork.Make()));
 			_shiftTradePendingReasonsService = new ShiftTradePendingReasonsService();
 
 			_globalSettingDataRepository = globalSettingDataRepository;

@@ -297,6 +297,7 @@
     <Compile Include="NHibernateConfiguration\TransientErrorHandling\ResilientSqlDbConnection.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Persisters\Schedules\PersistScheduleChanges.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterWithConflictSolve.cs" />
     <Compile Include="MultiTenancy\Server\Queries\TenantPersonLogonQuerier.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\AgentStateReadModelPersister.cs" />

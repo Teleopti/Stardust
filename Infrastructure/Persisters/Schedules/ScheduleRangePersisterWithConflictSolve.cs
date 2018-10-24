@@ -15,20 +15,20 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceCollectionService;
 		private readonly IScheduleRangeConflictCollector _scheduleRangeConflictCollector;
-		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private readonly IInitiatorIdentifier _initiatorIdentifier;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IClearScheduleEvents _clearScheduleEvents;
+		private readonly PersistScheduleChanges _persistScheduleChanges;
 
-		public ScheduleRangePersisterWithConflictSolve(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService, IScheduleRangeConflictCollector scheduleRangeConflictCollector, IScheduleDifferenceSaver scheduleDifferenceSaver, IInitiatorIdentifier initiatorIdentifier, IScheduleStorage scheduleStorage, IClearScheduleEvents clearScheduleEvents)
+		public ScheduleRangePersisterWithConflictSolve(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService, IScheduleRangeConflictCollector scheduleRangeConflictCollector, IInitiatorIdentifier initiatorIdentifier, IScheduleStorage scheduleStorage, IClearScheduleEvents clearScheduleEvents, PersistScheduleChanges persistScheduleChanges)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_differenceCollectionService = differenceCollectionService;
 			_scheduleRangeConflictCollector = scheduleRangeConflictCollector;
-			_scheduleDifferenceSaver = scheduleDifferenceSaver;
 			_initiatorIdentifier = initiatorIdentifier;
 			_scheduleStorage = scheduleStorage;
 			_clearScheduleEvents = clearScheduleEvents;
+			_persistScheduleChanges = persistScheduleChanges;
 		}
 
 		public SchedulePersistResult Persist(IScheduleRange scheduleRange, DateOnlyPeriod period)
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 				diff.Where(x => !solved.Contains(x)).ForEach(x => unsavedWithoutConflicts.Add(x));
 
 				_clearScheduleEvents.Execute(diff);
-				_scheduleDifferenceSaver.SaveChanges(unsavedWithoutConflicts, (IUnvalidatedScheduleRangeUpdate) scheduleRange, true);
+				_persistScheduleChanges.Execute(unsavedWithoutConflicts, (IUnvalidatedScheduleRangeUpdate) scheduleRange);
 				var modifiedRoots = uow.PersistAll(_initiatorIdentifier);
 
 				return new SchedulePersistResult
