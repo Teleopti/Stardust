@@ -3869,6 +3869,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 
 				loader.Initialize();
+
+				if(_container.Resolve<IToggleManager>().IsEnabled(Toggles.SchedulePeriod_HideChineseMonth_78424))
+				{
+					foreach (var schedulerStateChoosenAgent in SchedulerState.ChoosenAgents)
+					{
+						foreach (var schedulePeriod in schedulerStateChoosenAgent.PersonSchedulePeriodCollection)
+						{
+							((SchedulePeriod) schedulePeriod).Toggle78424 = true;
+						}
+					}
+				}
 			}
 			// part of the workaround because we can't press cancel before this / Ola
 			toggleQuickButtonEnabledState(toolStripButtonQuickAccessCancel, true);
