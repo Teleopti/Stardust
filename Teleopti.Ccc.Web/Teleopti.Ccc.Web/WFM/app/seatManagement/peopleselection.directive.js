@@ -1,15 +1,19 @@
 ﻿'use strict';
 
-(function () {
-	function peopleSelectionList(uiGridConstants) {
+(function() {
+	angular
+		.module('wfm.peopleold')
+		.directive('peopleSelectionList', ['$translate', 'uiGridConstants', peopleSelectionList]);
+
+	function peopleSelectionList($translate, uiGridConstants) {
 		return {
-			controller: "PeopleStartCtrl",
+			controller: 'PeopleStartCtrl',
 			scope: {
 				selectedPeopleList: '=selectedPeople',
-				clearSelectedPeople : '='
+				clearSelectedPeople: '='
 			},
 			templateUrl: 'app/peopleold/html/people-list.html',
-			link: function (scope, element, attrs) {
+			link: function(scope, element, attrs) {
 				scope.gridOptions.enableGridMenu = false;
 				scope.gridOptions.enableColumnMenus = false;
 				scope.dynamicColumnLoaded = true;
@@ -19,13 +23,26 @@
 				scope.clearSelectedPeople = scope.clearCart;
 
 				scope.gridOptions.columnDefs = [
-					{ displayName: 'FirstName', field: 'FirstName', headerCellFilter: 'translate', cellClass: 'first-name', minWidth: 100 },
-					{ displayName: 'LastName', field: 'LastName', headerCellFilter: 'translate', sort: { direction: uiGridConstants.ASC, priority: 0 }, minWidth: 100 },
-					{ displayName: 'Team', field: 'Team', headerCellFilter: 'translate', enableSorting: false, minWidth: 100 }
+					{
+						displayName: $translate.instant('FirstName'),
+						field: 'FirstName',
+						cellClass: 'first-name',
+						minWidth: 100
+					},
+					{
+						displayName: $translate.instant('LastName'),
+						field: 'LastName',
+						sort: { direction: uiGridConstants.ASC, priority: 0 },
+						minWidth: 100
+					},
+					{
+						displayName: $translate.instant('Team'),
+						field: 'Team',
+						enableSorting: false,
+						minWidth: 100
+					}
 				];
 			}
-		}
+		};
 	}
-
-	angular.module('wfm.peopleold').directive("peopleSelectionList", ['uiGridConstants', peopleSelectionList]);
 })();
