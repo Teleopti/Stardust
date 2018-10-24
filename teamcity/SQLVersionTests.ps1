@@ -418,17 +418,25 @@ function global:DataModifications () {
 
 	do{
 		try{
-			& "$SecurityExe" $Prms -ErrorAction Stop
+			& "$SecurityExe" $Prms
+			
+			if ($lastexitcode -ne 0) {
+				
+				Log "Something went wrong during the running of security EXE..."
+				Log "lastexitcode: $lastexitcode"
+				throw "Will try to rerun..."
+			}
+			
 			$success = $true
 		}
 		catch{
-			Write-Output "Next attempt in 10 seconds"
+			Write-Output "Next attempt in 10 seconds..."
 			Start-sleep -Seconds 10
 		}
     
 			$count++
     
-		}until($count -eq 5 -or $success)
+		}until($count -eq 10 -or $success)
 		
 		if(-not($success)){ exit 1 }
 }
