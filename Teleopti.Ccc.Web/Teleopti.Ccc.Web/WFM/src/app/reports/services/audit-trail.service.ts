@@ -18,7 +18,7 @@ export class AuditTrailService {
 
 	getPersonByKeyword(keyword: string): Observable<PersonByKeyWordResponse> {
 		const response = this.http.get('../api/Search/FindPersonsByKeywords?keywords=' + keyword);
-		console.log(response);
+
 		return response as Observable<PersonByKeyWordResponse>;
 	}
 
@@ -26,7 +26,6 @@ export class AuditTrailService {
 		const response = this.http.get(
 			'../api/Reports/getauditlogs?personId=' + personId + '&startDate=' + startDate + '&endDate=' + endDate
 		);
-		console.log(response);
 		return response as Observable<AuditTrailsResponse>;
 	}
 }

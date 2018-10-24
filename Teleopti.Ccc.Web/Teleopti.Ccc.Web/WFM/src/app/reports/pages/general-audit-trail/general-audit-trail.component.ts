@@ -8,14 +8,6 @@ import { UserService } from '../../../core/services';
 import { AuditTrailService } from '../../services';
 import { Person, AuditEntry } from '../../../shared/types';
 
-const mapToISODate = date => format(date, 'YYYY-MM-DD');
-const toISORange = ([startDate, endDate]: DateRange): DateRange => [mapToISODate(startDate), mapToISODate(endDate)];
-
-interface DateRange extends Array<string> {
-	[0]: string;
-	[1]: string;
-}
-
 @Component({
 	selector: 'general-audit-trail',
 	templateUrl: './general-audit-trail.component.html',
@@ -23,8 +15,7 @@ interface DateRange extends Array<string> {
 	providers: []
 })
 export class GeneralAuditTrailComponent implements OnInit {
-	dateformat = 'YYYY-MM-DD';
-	moment: Moment;
+	locale = 'en-US';
 
 	person: Person;
 	personList: Array<Person>;
@@ -43,12 +34,13 @@ export class GeneralAuditTrailComponent implements OnInit {
 	) {
 		this.userService.getPreferences().subscribe({
 			next: prefs => {
-				this.moment = moment().locale(prefs.DateFormatLocale);
+				this.locale = prefs.DateFormatLocale;
 			}
 		});
 	}
 
 	ngOnInit() {
+		this.auditTrailData = [];
 		this.searchForm
 			.get('personPicker')
 			.valueChanges.pipe(debounceTime(700))
@@ -80,13 +72,37 @@ export class GeneralAuditTrailComponent implements OnInit {
 		this.personList = persons;
 	}
 
-	submitForm() {
+	addAuditEntriesToTable(AuditEntries): void {
+		var parsedEntries = AuditEntries.map(row => {
+			return this.formatTimestampInRow(row);
+		});
+
+		this.auditTrailData = AuditEntries;
+	}
+
+	formatTimestampInRow(AuditEntry) {
+		AuditEntry.TimeStamp = moment(AuditEntry.TimeStamp)
+			.locale(this.locale)
+			.format('L LTS');
+		return AuditEntry;
+	}
+
+	notValidFields(): boolean {
+		if (this.searchForm.value.personPicker.Id) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	submitForm(): void {
+		console.log(this.searchForm.value.changedRange[0]);
 		this.auditTrailService
-			.getStaffingAuditTrail('10957AD5-5489-48E0-959A-9B5E015B2B5C', '2017-01-01', '2018-10-23')
-			.subscribe(results => {
-				this.auditTrailData = results.AuditEntries;
-				console.log(results);
-				console.log(this.auditTrailData);
-			});
+			.getStaffingAuditTrail(
+				this.searchForm.value.personPicker.Id,
+				moment(this.searchForm.value.changedRange[0]).format('YYYY-MM-DD'),
+				moment(this.searchForm.value.changedRange[1]).format('YYYY-MM-DD')
+			)
+			.subscribe(results => this.addAuditEntriesToTable(results.AuditEntries));
 	}
 }

@@ -35,7 +35,7 @@
 
     <nz-form-item>
         <nz-form-control>
-            <button type="submit" nz-button nzType="primary">
+            <button [disabled]="notValidFields()" type="submit" nz-button nzType="primary">
                 <i class="anticon anticon-search"></i>{{'Search' | translate}}</button>
         </nz-form-control>
     </nz-form-item>
@@ -44,28 +44,25 @@
 <nz-table #auditTable nzSize="middle" [nzData]="auditTrailData" nzPageSize="100" nzHideOnSinglePage>
     <thead nzSingleSort>
         <tr>
-            <th nzShowSort nzSortKey="ModifiedAt">Timestamp</th>
-            <th nzShowSort nzSortKey="ModifiedBy">Person</th>
-            <th nzShowSort nzSortKey="ScheduledAgent">Action</th>
-            <th>
-                <telop-table-options-menu enableCsvExport [data]="auditTable.data"></telop-table-options-menu>
-            </th>
+            <th nzShowExpand></th>
+            <th>Timestamp</th>
+            <th>Person</th>
+            <th>Action</th>
+            <th>Context</th>
         </tr>
     </thead>
     <tbody>
         <ng-template ngFor let-data [ngForOf]="auditTable.data">
             <tr>
                 <td nzShowExpand [(nzExpand)]="data.expand"></td>
-                <td>{{data}}</td>
-                <td>{{data.age}}</td>
-                <td>{{data.address}}</td>
-                <td>
-                    <a href="#">Delete</a>
-                </td>
+                <td>{{data.TimeStamp}}</td>
+                <td>{{data.ActionPerformedBy}}</td>
+                <td>{{data.Action}}</td>
+                <td>{{data.Context}}</td>
             </tr>
             <tr [nzExpand]="data.expand">
                 <td></td>
-                <td colspan="4">{{data.description}}</td>
+                <td colspan="4">{{data.Data}}</td>
             </tr>
         </ng-template>
     </tbody>
