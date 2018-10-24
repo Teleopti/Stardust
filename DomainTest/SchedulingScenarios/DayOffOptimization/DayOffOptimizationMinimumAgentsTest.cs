@@ -395,7 +395,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 					1,
 					1,
 					1, //DO from beginning
-					1) //DO from beginning
+					1, //DO from beginning
+					1) 
 			);
 			skillDays[5].SetMinimumAgents(new TimePeriod(23, 24), 2);
 			skillDays[6].SetMinimumAgents(new TimePeriod(23, 24), 3);
