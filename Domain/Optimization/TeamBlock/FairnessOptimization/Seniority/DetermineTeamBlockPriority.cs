@@ -5,12 +5,7 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority
 {
-    public interface IDetermineTeamBlockPriority
-    {
-		ITeamBlockPriorityDefinitionInfo CalculatePriority(IList<ITeamBlockInfo> teamBlockInfos, IList<IShiftCategory> shiftCategories);
-    }
-
-    public class DetermineTeamBlockPriority : IDetermineTeamBlockPriority
+    public class DetermineTeamBlockPriority
     {
 	    private readonly ISeniorityExtractor _seniorityExtractor;
 	    private readonly IShiftCategoryPointExtractor _shiftCategoryPointInfoExtractor;

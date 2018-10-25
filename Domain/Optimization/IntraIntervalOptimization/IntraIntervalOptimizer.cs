@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		private readonly DeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly IntraIntervalIssueCalculator _intraIntervalIssueCalculator;
 		private readonly TeamScheduling _teamScheduling;
-		private readonly IShiftProjectionIntraIntervalBestFitCalculator _shiftProjectionIntraIntervalBestFitCalculator;
+		private readonly ShiftProjectionIntraIntervalBestFitCalculator _shiftProjectionIntraIntervalBestFitCalculator;
 		private readonly ISkillDayIntraIntervalIssueExtractor _skillDayIntraIntervalIssueExtractor;
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			DeleteAndResourceCalculateService deleteAndResourceCalculateService,
 			IntraIntervalIssueCalculator intraIntervalIssueCalculator,
 			TeamScheduling teamScheduling,
-			IShiftProjectionIntraIntervalBestFitCalculator shiftProjectionIntraIntervalBestFitCalculator,
+			ShiftProjectionIntraIntervalBestFitCalculator shiftProjectionIntraIntervalBestFitCalculator,
 			ISkillDayIntraIntervalIssueExtractor skillDayIntraIntervalIssueExtractor,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
@@ -52,10 +52,10 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			_shiftProjectionCachesForIntraInterval = shiftProjectionCachesForIntraInterval;
 		}
 
-		public IIntraIntervalIssues Optimize(SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences,
+		public IntraIntervalIssues Optimize(SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService, ISchedulingResultStateHolder schedulingResultStateHolder,
 			IPerson person, DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> allScheduleMatrixPros,
-			IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IIntraIntervalIssues intervalIssuesBefore, bool checkDayAfter)
+			IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IntraIntervalIssues intervalIssuesBefore, bool checkDayAfter)
 		{
 			const double limit = 0.7999;
 

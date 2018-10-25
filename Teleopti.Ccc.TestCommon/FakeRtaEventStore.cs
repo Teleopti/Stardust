@@ -56,7 +56,8 @@ namespace Teleopti.Ccc.TestCommon
 				.Where(x => x.PersonId == personId &&
 							x.Period.StartDateTime <= period.EndDateTime &&
 							x.Period.EndDateTime >= period.StartDateTime)
-				.Select(e => e.Event);
+				.Select(e => e.Event)
+				.ToArray();
 		}
 
 		public IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp, DeadLockVictim deadLockVictim)
@@ -73,7 +74,8 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			var events = _events
 				.Where(e => e.Id > latestSynchronizedEvent)
-				.Select(e => e.Event);
+				.Select(e => e.Event)
+				.ToArray();
 			
 			var maxId = _events.Max(e => e.Id);
 			

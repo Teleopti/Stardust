@@ -9,9 +9,9 @@
 			controller: AddDayOffCtrl
 		});
 
-	AddDayOffCtrl.$inject = ['$scope', 'PersonSelection', 'DayOffService', 'teamScheduleNotificationService','serviceDateFormatHelper'];
+	AddDayOffCtrl.$inject = ['$scope', '$translate', 'PersonSelection', 'DayOffService', 'teamScheduleNotificationService', 'serviceDateFormatHelper'];
 
-	function AddDayOffCtrl($scope, personSelectionSvc, dayOffService, teamScheduleNotificationService, serviceDateFormatHelper) {
+	function AddDayOffCtrl($scope, $translate, personSelectionSvc, dayOffService, teamScheduleNotificationService, serviceDateFormatHelper) {
 		var ctrl = this;
 		ctrl.runningCommand = false;
 		ctrl.label = 'AddDayOff';
@@ -59,8 +59,8 @@
 				actionCb && actionCb(ctrl.trackId, personIds);
 
 				teamScheduleNotificationService.reportActionResult({
-					success: 'SuccessfulMessageForAddingDayOff',
-					warning: 'PartialSuccessMessageForAddingDayOff'
+					success: $translate.instant('SuccessfulMessageForAddingDayOff'),
+					warning: $translate.instant('PartialSuccessMessageForAddingDayOff')
 				},
 					agents.map(function (x) {
 						return {

@@ -617,12 +617,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
             Cursor.Current = Cursors.Default;
         }
 
-		private void ValidateTerminalDateChange()
-		{
-			throw new NotImplementedException();
-		}
-
-
 		private void notifySaveChanges()
         {
             var handler = PeopleWorksheetSaved;

@@ -6,50 +6,20 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 {
 	public class ScheduleDifferenceSaver : IScheduleDifferenceSaver
 	{
-		private readonly IScheduleStorage _scheduleStorage;
-		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly IScheduleDayDifferenceSaver _scheduleDayDifferenceSaver;
+		private readonly PersistScheduleChanges _persistScheduleChanges;
 
-		public ScheduleDifferenceSaver(IScheduleStorage scheduleStorage, ICurrentUnitOfWork currentUnitOfWork,
-			IScheduleDayDifferenceSaver scheduleDayDifferenceSaver)
+		public ScheduleDifferenceSaver(IScheduleDayDifferenceSaver scheduleDayDifferenceSaver,
+			PersistScheduleChanges persistScheduleChanges)
 		{
-			_scheduleStorage = scheduleStorage;
-			_currentUnitOfWork = currentUnitOfWork;
 			_scheduleDayDifferenceSaver = scheduleDayDifferenceSaver;
+			_persistScheduleChanges = persistScheduleChanges;
 		}
 
-		public void SaveChanges(IDifferenceCollection<IPersistableScheduleData> scheduleChanges,
-			IUnvalidatedScheduleRangeUpdate stateInMemoryUpdater, bool fromPlans = false)
+		public void SaveChanges(IDifferenceCollection<IPersistableScheduleData> scheduleChanges, IUnvalidatedScheduleRangeUpdate stateInMemoryUpdater)
 		{
-			if (!fromPlans)
-			{
-				var scheduleRange = stateInMemoryUpdater as IScheduleRange;
-				_scheduleDayDifferenceSaver.SaveDifferences(scheduleRange);
-			}
-
-			foreach (var scheduleChange in scheduleChanges)
-			{
-				switch (scheduleChange.Status)
-				{
-					case DifferenceStatus.Added:
-						var currentItem = scheduleChange.CurrentItem;
-						_scheduleStorage.Add(currentItem);
-						stateInMemoryUpdater.SolveConflictBecauseOfExternalInsert(currentItem, true);
-						break;
-					case DifferenceStatus.Deleted:
-						var orgItem = scheduleChange.OriginalItem;
-						_scheduleStorage.Remove(orgItem);
-						stateInMemoryUpdater.SolveConflictBecauseOfExternalDeletion(orgItem.Id.GetValueOrDefault(), true);
-						break;
-					case DifferenceStatus.Modified:
-						var unitOfWork = _currentUnitOfWork.Current();
-						unitOfWork.Reassociate(scheduleChange.OriginalItem);
-						var merged = unitOfWork.Merge(scheduleChange.CurrentItem);
-						stateInMemoryUpdater.SolveConflictBecauseOfExternalUpdate(merged, true);
-						break;
-				}
-			}
-
+			_scheduleDayDifferenceSaver.SaveDifferences((IScheduleRange)stateInMemoryUpdater);
+			_persistScheduleChanges.Execute(scheduleChanges, stateInMemoryUpdater);
 		}
 	}
 }

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_eventPublisher = eventPublisher;
 		}
 
-		public void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public virtual void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var roots = modifiedRoots.Select(r => r.Root);
 			var personAssignments = roots.OfType<IPersonAssignment>().Cast<IPersistableScheduleData>();
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					return x;
 				})
 				.ToArray();
-			
+
 			if (!scheduleData.Any()) return;
 
 			var scheduleChangesPerPerson = scheduleData

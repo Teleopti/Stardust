@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             ForecastScheduleValuePair result = new ForecastScheduleValuePair();
 
-            IList<ForecastScheduleValuePair> intradayResults = CalculateIntradayForecastAndScheduleDataForSkill(skill, scheduleDay);
+            IList<ForecastScheduleValuePair> intradayResults = calculateIntradayForecastAndScheduleDataForSkill(skill, scheduleDay);
 
             foreach (ForecastScheduleValuePair forecastScheduleValuePair in intradayResults)
             {
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return result;
         }
 
-        public ForecastScheduleValuePair[] CalculateIntradayForecastAndScheduleDataForSkill(ISkill skill, DateOnly scheduleDay)
+        private ForecastScheduleValuePair[] calculateIntradayForecastAndScheduleDataForSkill(ISkill skill, DateOnly scheduleDay)
         {
             var dateTimePeriod = createDateTimePeriodFromScheduleDay(scheduleDay);
 

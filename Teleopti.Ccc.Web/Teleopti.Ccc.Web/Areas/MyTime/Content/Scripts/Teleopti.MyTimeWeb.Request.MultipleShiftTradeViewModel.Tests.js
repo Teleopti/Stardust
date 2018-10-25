@@ -1262,6 +1262,35 @@
 		equal(viewModel.myToleranceMessages()[0].periodEnd, '2018-07-29');
 	});
 
+	test('should reset showCartPanel after send request', function() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
+			if (toggleName === 'MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408') return true;
+			return false;
+		};
+		var ajax = {
+			Ajax: function(options) {
+				if (options.url === 'Requests/ShiftTradeRequest') {
+					options.success();
+				}
+			}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
+		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(
+			null,
+			null,
+			null,
+			'Ashley',
+			'123',
+			false
+		);
+		viewModel.chooseAgent(agent);
+
+		viewModel.showCartPanel(true);
+		viewModel.sendRequest();
+
+		equal(viewModel.showCartPanel(), false);
+	});
+
 	test('should show correct tolerance exceed', function() {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
 			if (toggleName === 'MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408') return true;
@@ -2190,6 +2219,109 @@
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
+	test('should hide previous contract time violation warning message panel when cancel and choose another agent', function() {
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel({});
+		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(
+			null,
+			null,
+			null,
+			'Ashley',
+			null,
+			false
+		);
+		viewModel.chooseAgent(agent);
+		viewModel.showToloranceMessageDetail(true);
+		viewModel.cancelRequest();
+		var anotherAgent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(
+			null,
+			null,
+			null,
+			'Jon',
+			null,
+			false
+		);
+		viewModel.chooseAgent(anotherAgent);
+		equal(viewModel.showToloranceMessageDetail(), false);
+	});
+
+	test('should show cart panl when cancel and choose another agent', function() {
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
+		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(
+			null,
+			null,
+			null,
+			'Ashley',
+			null,
+			false
+		);
+		viewModel.chooseAgent(agent);
+		viewModel.cancelRequest();
+		var anotherAgent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(
+			null,
+			null,
+			null,
+			'Jon',
+			null,
+			false
+		);
+		viewModel.chooseAgent(anotherAgent);
+		equal(viewModel.showCartPanel(), true);
+	});
+
+	test('should load 15 days period of schedule ', function() {
+		var expectedStartDate, expectedEndDate;
+		var ajax = {
+			Ajax: function(options) {
+				if (options.url === 'Requests/ShiftTradeMultiDaysSchedule') {
+					expectedStartDate = JSON.parse(options.data).StartDate;
+					expectedEndDate = JSON.parse(options.data).EndDate;
+					options.success(createMultiSchedulesForShiftTrade());
+				}
+
+				if (options.url === 'Requests/ShiftTradeRequestPeriod') {
+					options.success({
+						HasWorkflowControlSet: true,
+						MiscSetting: { AnonymousTrading: true },
+						OpenPeriodRelativeStart: 1,
+						OpenPeriodRelativeEnd: 365,
+						NowYear: moment().year(),
+						NowMonth: moment().month() + 1,
+						NowDay: moment().date()
+					});
+				}
+			}
+		};
+
+		Teleopti.MyTimeWeb.Common.Init({ baseUrl: '' }, ajax);
+		Teleopti.MyTimeWeb.Request.RequestPartialInit(function() {}, function() {}, ajax);
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
+		viewModel.loadPeriod(new Date());
+		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(
+			null,
+			null,
+			null,
+			'Ashley',
+			'id',
+			false
+		);
+		viewModel.chooseAgent(agent);
+
+		equal(viewModel.shiftPageSize, 15);
+		equal(
+			expectedStartDate,
+			moment()
+				.add(1, 'days')
+				.format('YYYY-MM-DD')
+		);
+		equal(
+			expectedEndDate,
+			moment()
+				.add(1, 'days')
+				.add(viewModel.shiftPageSize, 'days')
+				.format('YYYY-MM-DD')
+		);
+	});
+
 	function createMultiSchedulesForShiftTrade(myContractTime, personToContractTime) {
 		return {
 			MultiSchedulesForShiftTrade: [
@@ -2264,53 +2396,4 @@
 			]
 		};
 	}
-
-	test('should hide previous contract time violation warning message panel when cancel and choose another agent', function() {
-		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel({});
-		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(
-			null,
-			null,
-			null,
-			'Ashley',
-			null,
-			false
-		);
-		viewModel.chooseAgent(agent);
-		viewModel.showToloranceMessageDetail(true);
-		viewModel.cancelRequest();
-		var anotherAgent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(
-			null,
-			null,
-			null,
-			'Jon',
-			null,
-			false
-		);
-		viewModel.chooseAgent(anotherAgent);
-		equal(viewModel.showToloranceMessageDetail(), false);
-	});
-
-	test('should show cart panl when cancel and choose another agent', function() {
-		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
-		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(
-			null,
-			null,
-			null,
-			'Ashley',
-			null,
-			false
-		);
-		viewModel.chooseAgent(agent);
-		viewModel.cancelRequest();
-		var anotherAgent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(
-			null,
-			null,
-			null,
-			'Jon',
-			null,
-			false
-		);
-		viewModel.chooseAgent(anotherAgent);
-		equal(viewModel.showCartPanel(), true);
-	});
 });

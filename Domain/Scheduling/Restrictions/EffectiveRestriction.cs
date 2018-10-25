@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
@@ -489,6 +490,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 	    public bool NotAllowedForDayOffs { get; set; }
 	    public IEditableShift CommonMainShift { get; set; }
-	    public ICommonActivity CommonActivity { get; set; }
+	    public CommonActivity CommonActivity { get; set; }
     }
 }

@@ -32,9 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da">
-      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Autofac, Version=4.8.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.8.1\lib\net45\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="LinFu.DynamicProxy, Version=1.0.4.16035, Culture=neutral, PublicKeyToken=62a6874124340d6e">
       <HintPath>..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
@@ -202,6 +201,7 @@
     <Compile Include="Domain\AgentAdherenceDay\ApprovedPeriodTest.cs" />
     <Compile Include="Domain\AgentAdherenceDay\ChangesTest.cs" />
     <Compile Include="Domain\AgentAdherenceDay\DurationOfEventsTest.cs" />
+    <Compile Include="Domain\AgentAdherenceDay\NotApplicableEventsTest.cs" />
     <Compile Include="Domain\AgentAdherenceDay\LateForWorkTest.cs" />
     <Compile Include="Domain\AgentAdherenceDay\PercentageTest.cs" />
     <Compile Include="Domain\AgentAdherenceDay\RecordedAdherenceTest.cs" />

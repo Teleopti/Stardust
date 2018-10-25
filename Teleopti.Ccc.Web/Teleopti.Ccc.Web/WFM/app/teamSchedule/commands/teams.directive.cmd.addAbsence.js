@@ -31,6 +31,7 @@
 		'teamScheduleNotificationService',
 		'$locale',
 		'$scope',
+		'$translate',
 		'CommandCheckService',
 		'belongsToDateDecider',
 		'Toggle',
@@ -42,6 +43,7 @@
 		teamScheduleNotificationService,
 		$locale,
 		$scope,
+		$translate,
 		CommandCheckService,
 		belongsToDateDecider,
 		Toggle,
@@ -190,8 +192,8 @@
 					vm.getActionCb(vm.label)(vm.trackId, requestData.PersonIds);
 				}
 				teamScheduleNotificationService.reportActionResult({
-					success: 'AddAbsenceSuccessedResult',
-					warning: 'AddAbsenceTotalResult'
+					success: $translate.instant('AddAbsenceSuccessedResult'),
+					warning: $translate.instant('AddAbsenceTotalResult')
 				}, vm.selectedAgents.map(function (x) {
 					return {
 						PersonId: x.PersonId,

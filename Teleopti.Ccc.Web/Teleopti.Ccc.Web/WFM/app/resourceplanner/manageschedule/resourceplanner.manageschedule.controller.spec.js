@@ -6,17 +6,19 @@ describe('ResourceplannerManageScheduleCtrl', function () {
 		$scope,
 		controller,
 		$controller,
-		manageScheduleSrvc;
+		manageScheduleSrvc,
+		$translate;
 
 	beforeEach(function () {
 		module('wfm.resourceplanner');
 	});
 
-	beforeEach(inject(function (_$q_, _$rootScope_, _$controller_, _$httpBackend_) {
+	beforeEach(inject(function (_$q_, _$rootScope_, _$controller_, _$httpBackend_, _$translate_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$controller = _$controller_;
 		$httpBackend = _$httpBackend_;
+		$translate = _$translate_;
 		manageScheduleSrvc = setUpManageScheduleServ();
 		$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
 	}));
@@ -101,6 +103,31 @@ describe('ResourceplannerManageScheduleCtrl', function () {
 		expect(controller.showConfirmModal).toEqual(false);
 	});
 
+	it('should validate start date', function () {
+		controller = setUpController($controller);
+
+		var input = setupHappyPath();
+		input.period.startDate = null;
+
+		controller.isImportSchedule = true;
+		let result = controller.validateManagingParameters(input.fromScenario, input.toScenario, input.period, input.teamSelection);
+		
+		expect(result.messages[0]).toEqual($translate.instant('SelectStartDate'));
+
+	});
+
+	it('should validate end date', function () {
+		controller = setUpController($controller);
+
+		var input = setupHappyPath();
+		input.period.endDate = null;
+
+		controller.isImportSchedule = true;
+		let result = controller.validateManagingParameters(input.fromScenario, input.toScenario, input.period, input.teamSelection);
+		
+		expect(result.messages[0]).toEqual($translate.instant('SelectEndDate'));
+
+	});
 
 	function setUpController($controller) {
 		$scope = $rootScope.$new();

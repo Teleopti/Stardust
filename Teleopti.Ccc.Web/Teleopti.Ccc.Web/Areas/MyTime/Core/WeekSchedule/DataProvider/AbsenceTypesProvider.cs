@@ -41,7 +41,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 				var agentToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone));
 				foreach (var openPeriod in _loggedOnUser.CurrentUser().WorkflowControlSet.AbsenceRequestOpenPeriods)
 				{
-					if (openPeriod.OpenForRequestsPeriod.Contains(agentToday) && !absencesForRequest.Contains(openPeriod.Absence)) absencesForRequest.Add(openPeriod.Absence);
+					if (openPeriod.Absence.Requestable
+						&& openPeriod.OpenForRequestsPeriod.Contains(agentToday) 
+						&& !absencesForRequest.Contains(openPeriod.Absence) ) absencesForRequest.Add(openPeriod.Absence);
 				}
 			}
 			else absencesForRequest = _absenceRepository.LoadRequestableAbsence().ToList();

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             ForecastScheduleValuePair result = new ForecastScheduleValuePair();
 
-            IList<ForecastScheduleValuePair> intradayResults = CalculateIntradayForecastAndScheduleDataForSkill(skill, scheduleDay);
+            IList<ForecastScheduleValuePair> intradayResults = calculateIntradayForecastAndScheduleDataForSkill(skill, scheduleDay);
 
             foreach (ForecastScheduleValuePair forecastScheduleValuePair in intradayResults)
             {
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return result;
         }
 
-        public ForecastScheduleValuePair[] CalculateIntradayForecastAndScheduleDataForSkill(ISkill skill, DateOnly scheduleDay)
+        private ForecastScheduleValuePair[] calculateIntradayForecastAndScheduleDataForSkill(ISkill skill, DateOnly scheduleDay)
         {
             DateTimePeriod dateTimePeriod = CreateDateTimePeriodFromScheduleDay(scheduleDay);
 
@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				.Select(skillStaffPeriod => CalculateSkillStaffPeriodForecastAndScheduledValue(skill, skillStaffPeriod)).ToArray();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public double CalculateSkillStaffPeriod(ISkill skill, ISkillStaffPeriod skillStaffPeriod)
         {
             var ret = new ForecastScheduleValuePair();

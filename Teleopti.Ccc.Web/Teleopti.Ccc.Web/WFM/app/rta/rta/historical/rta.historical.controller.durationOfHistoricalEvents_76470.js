@@ -140,7 +140,7 @@
 					return o
 				});
 		}
-		
+
 		var startTime;
 		Object.defineProperty(vm, 'approveStartTimeString', {
 			get: function () {
@@ -276,16 +276,24 @@
 		}
 
 		function buildInterval(timeline, interval) {
-			var startTime = moment(interval.StartTime);
-			var endTime = moment(interval.EndTime);
+			var startTime = interval.StartTime ? moment(interval.StartTime) : moment(timeline.StartTime);
+			var startTimeDisplay = undefined;
+			if (interval.StartTime) {
+				startTimeDisplay = startTime.isBefore(timeline.StartTime) ?
+					startTime.format('LLL') :
+					startTime.format('LTS');
+			}
+			var endTime = interval.EndTime ? moment(interval.EndTime) : moment(timeline.EndTime);
+			var endTimeDisplay = undefined;
+			if (interval.EndTime) {
+				endTimeDisplay = endTime.format('LTS');
+			}
 
 			return {
 				Width: calculate.Width(startTime, endTime),
 				Offset: calculate.Offset(startTime),
-				StartTime: startTime.isBefore(timeline.StartTime) ?
-					startTime.format('LLL') :
-					startTime.format('LTS'),
-				EndTime: endTime.format('LTS')
+				StartTime: startTimeDisplay,
+				EndTime: endTimeDisplay
 			};
 		}
 

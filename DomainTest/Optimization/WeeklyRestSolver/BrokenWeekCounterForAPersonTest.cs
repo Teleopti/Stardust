@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 {
 	public class BrokenWeekCounterForAPersonTest
 	{
-		private IBrokenWeekCounterForAPerson _target;
+		private BrokenWeekCounterForAPerson _target;
 		private IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;
 		private IEnsureWeeklyRestRule _ensureWeeklyRestRule;
 		private IContractWeeklyRestForPersonWeek _contractWeeklyRestForPersonWeek;

@@ -495,7 +495,8 @@
 			var element = $('#Requests-data-binding-area')[0];
 			if (element) ko.applyBindings(pageViewModel, element);
 		},
-		AddItemAtTop: function(request, isProcessing) {
+		AddItemAtTop: function (request, isProcessing) {
+			if (pageViewModel == null) return;
 			pageViewModel.AddRequest(request, isProcessing);
 		},
 		GetRequestItemViewModel: function() {

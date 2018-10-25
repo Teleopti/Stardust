@@ -164,19 +164,24 @@ Teleopti.MyTimeWeb.Request = (function($) {
 			Teleopti.MyTimeWeb.Request.List.Dispose();
 			Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.Dispose();
 		},
-		ResetToolbarActiveButtons: function() {
+		ResetToolbarActiveButtons: function () {
+			if (requestNavigationViewModel == null) return;
 			requestNavigationViewModel.resetToolbarActiveButtons();
 		},
-		ActiveRequestList: function() {
+		ActiveRequestList: function () {
+			if (requestNavigationViewModel == null) return;
 			requestNavigationViewModel.requestListActive(true);
 		},
-		ShiftTradeRequest: function(date) {
+		ShiftTradeRequest: function (date) {
+			if (requestNavigationViewModel == null) return;
 			requestNavigationViewModel.addShiftTradeRequest(date);
 		},
-		ShiftTradeBulletinBoardRequest: function(date) {
+		ShiftTradeBulletinBoardRequest: function (date) {
+			if (requestNavigationViewModel == null) return;
 			requestNavigationViewModel.addShiftTradeBulletinBoardRequest(date);
 		},
-		PostShiftForTradeRequest: function(date) {
+		PostShiftForTradeRequest: function (date) {
+			if (requestNavigationViewModel == null) return;
 			requestNavigationViewModel.addPostShiftForTradeRequest(date);
 		},
 		HideFab: function(show) {

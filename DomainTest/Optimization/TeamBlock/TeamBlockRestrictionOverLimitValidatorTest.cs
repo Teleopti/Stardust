@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 	[TestFixture]
 	public class TeamBlockRestrictionOverLimitValidatorTest
 	{
-		private ITeamBlockRestrictionOverLimitValidator _target;
+		private TeamBlockRestrictionOverLimitValidator _target;
 		private MockRepository _mocks;
 		private OptimizationPreferences _optimizerPreferences;
 		private IRestrictionOverLimitDecider _restrictionOverLimitDecider;

@@ -16,9 +16,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 	public class TeamBlockOptimizationLimits : ITeamBlockOptimizationLimits
 	{
-		private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
+		private readonly TeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
 
-		public TeamBlockOptimizationLimits(ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
+		public TeamBlockOptimizationLimits(TeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
 		{
 			_teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
 		}

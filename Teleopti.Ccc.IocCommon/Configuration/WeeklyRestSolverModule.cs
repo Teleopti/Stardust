@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleDayIsLockedSpecification>().As<IScheduleDayIsLockedSpecification>().SingleInstance();
 			builder.RegisterType<AllTeamMembersInSelectionSpecification>().As<IAllTeamMembersInSelectionSpecification>().SingleInstance();
 			builder.RegisterType<PersonWeekViolatingWeeklyRestSpecification>().As<IPersonWeekViolatingWeeklyRestSpecification>().SingleInstance();
-			builder.RegisterType<BrokenWeekCounterForAPerson>().As<IBrokenWeekCounterForAPerson>().SingleInstance();
+			builder.RegisterType<BrokenWeekCounterForAPerson>().SingleInstance();
 			builder.RegisterType<WeeklyRestSolverExecuter>().InstancePerLifetimeScope();
 		}
 	}

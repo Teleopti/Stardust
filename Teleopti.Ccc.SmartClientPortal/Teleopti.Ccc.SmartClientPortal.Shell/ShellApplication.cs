@@ -160,7 +160,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				//if exception -> replace with a toggle manager returning false for everything
 				var updater = new ContainerBuilder();
 				updater.RegisterType<FalseToggleManager>().SingleInstance().As<IToggleManager>();
+#pragma warning disable CS0618 // Type or member is obsolete
 				updater.Update(container);
+#pragma warning restore CS0618 // Type or member is obsolete
 			}
 		}
 

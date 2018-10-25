@@ -83,10 +83,11 @@
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDay.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayLoaderHistoricalOverview.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayLoaderDurationOfEvents.cs" />
+    <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayLoaderSpeedUpRemoveLastBefore.cs" />
+    <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayLoaderSpeedUpRemoveScheduleDependency.cs" />
+    <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDaySpeedUpRemoveLastBefore.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayWithDurationOfEvents.cs" />
-    <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayWithEventStore.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayWithHistoricalOverview.cs" />
-    <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDayWithLateForWork.cs" />
     <Compile Include="Domain\AgentAdherenceDay\HistoricalChangeAdherence.cs" />
     <Compile Include="Domain\AgentAdherenceDay\HistoricalChangeModel.cs" />
     <Compile Include="Domain\AgentAdherenceDay\IAgentAdherenceDay.cs" />

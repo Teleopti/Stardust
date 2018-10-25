@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Intraday
 { 
-	public class ForecastedCallsProvider : IForecastedCallsProvider
+	public class ForecastedCallsProvider
 	{
 		private readonly IUserTimeZone _timeZone;
 		private readonly ITaskPeriodsProvider _taskPeriodsProvider;

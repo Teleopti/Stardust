@@ -9,9 +9,9 @@
 			controller: MoveShiftCtrl
 		});
 
-	MoveShiftCtrl.$inject = ['$scope', '$locale', '$element', 'ActivityValidator', 'PersonSelection', 'ActivityService', 'teamScheduleNotificationService', 'serviceDateFormatHelper'];
+	MoveShiftCtrl.$inject = ['$scope', '$locale', '$element', '$translate', 'ActivityValidator', 'PersonSelection', 'ActivityService', 'teamScheduleNotificationService', 'serviceDateFormatHelper'];
 
-	function MoveShiftCtrl($scope, $locale, $element, validator, personSelectionSvc, activitySvc, teamScheduleNotificationService, serviceDateFormatHelper) {
+	function MoveShiftCtrl($scope, $locale, $element, $translate, validator, personSelectionSvc, activitySvc, teamScheduleNotificationService, serviceDateFormatHelper) {
 		var ctrl = this;
 		ctrl.label = 'MoveShift';
 		ctrl.processingCommand = false;
@@ -34,7 +34,7 @@
 			}
 			if (isTimeValid) {
 				var currentTimezone = ctrl.containerCtrl.getCurrentTimezone();
-				validator.validateMoveToTimeForShift(ctrl.containerCtrl.scheduleManagementSvc, getMoveToStartTimeMoment() , currentTimezone);
+				validator.validateMoveToTimeForShift(ctrl.containerCtrl.scheduleManagementSvc, getMoveToStartTimeMoment(), currentTimezone);
 				invalidAgents = invalidAgents.concat(validator.getInvalidPeople());
 			}
 			ctrl.invalidAgents = filterAgentArray(invalidAgents);
@@ -83,8 +83,8 @@
 							ctrl.containerCtrl.getActionCb(ctrl.label)(ctrl.trackId, validAgentIds);
 						}
 						teamScheduleNotificationService.reportActionResult({
-							success: 'SuccessfulMessageForMovingShift',
-							warning: 'PartialSuccessMessageForMovingShift'
+							success: $translate.instant('SuccessfulMessageForMovingShift'),
+							warning: $translate.instant('PartialSuccessMessageForMovingShift')
 						},
 							validAgents.map(function (x) {
 								return {

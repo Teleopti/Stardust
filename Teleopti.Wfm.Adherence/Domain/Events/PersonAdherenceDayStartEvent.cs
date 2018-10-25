@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Wfm.Adherence.Domain.Events
 {
-	public class PersonAdherenceDayStartEvent : IEvent, ISolidProof
+	public class PersonAdherenceDayStartEvent : IEvent, ISolidProof, IRtaStoredEvent
 	{
 		public Guid PersonId { get; set; }
 		public DateTime Timestamp { get; set; }
@@ -18,5 +18,12 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 //		public DateOnly? BelongsToDate { get; set; }
 //		public DateTime ShiftStartTime { get; set; }
 //		public DateTime ShiftEndTime { get; set; }
+		public QueryData QueryData() =>
+			new QueryData
+			{
+				PersonId = PersonId,
+				StartTime = Timestamp,
+				EndTime = Timestamp
+			};
 	}
 }

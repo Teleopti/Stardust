@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHand
 	/// </remarks>
 	public class ResilientAdoNetTransactionFactory : AdoNetTransactionFactory, ITransactionFactory
 	{
-		public new ITransaction CreateTransaction(ISessionImplementor session)
+		public override ITransaction CreateTransaction(ISessionImplementor session)
 		{
 			return new ResilientAdoTransaction(session);
 		}
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHand
 		/// <param name="session">The NHibernate session</param>
 		/// <param name="work">The work to execute</param>
 		/// <param name="transacted">Whether or not to wrap the work in a transaction</param>
-		public new void ExecuteWorkInIsolation(ISessionImplementor session, IIsolatedWork work, bool transacted)
+		public override void ExecuteWorkInIsolation(ISessionImplementor session, IIsolatedWork work, bool transacted)
 		{
 			var connection = (ResilientSqlDbConnection)session.Connection;
 

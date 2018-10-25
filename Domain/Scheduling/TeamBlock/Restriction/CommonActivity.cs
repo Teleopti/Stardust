@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 {
-	public class CommonActivity : ICommonActivity
+	public class CommonActivity
 	{
 		public IActivity Activity { get; set; }
 		public IList<DateTimePeriod> Periods { get; set; }

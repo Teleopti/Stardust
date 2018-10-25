@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
@@ -10,15 +8,12 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
-using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
-using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 {
 	public class HistoricalOverviewViewModelBuilder
 	{
 		private readonly ICommonAgentNameProvider _nameDisplaySetting;
-		private readonly INow _now;
 		private readonly IHistoricalOverviewReadModelReader _reader;
 		private readonly IPersonRepository _persons;
 		private readonly ITeamRepository _teams;
@@ -26,12 +21,10 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 
 		public HistoricalOverviewViewModelBuilder(
 			ICommonAgentNameProvider nameDisplaySetting,
-			INow now,
 			IHistoricalOverviewReadModelReader reader,
 			IPersonRepository persons, ITeamRepository teams, IUserNow userNow)
 		{
 			_nameDisplaySetting = nameDisplaySetting;
-			_now = now;
 			_reader = reader;
 			_persons = persons;
 			_teams = teams;

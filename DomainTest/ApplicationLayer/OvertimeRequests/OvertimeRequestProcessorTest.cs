@@ -42,12 +42,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public const int MinimumApprovalThresholdTimeInMinutes = 15;
 		public MutableNow Now;
 		public IRequestApprovalServiceFactory RequestApprovalServiceFactory;
-		public IScheduleStorage ScheduleStorage;
 		public FakeSkillRepository SkillRepository;
 		public FakeSkillCombinationResourceRepository CombinationRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillTypeRepository SkillTypeRepository;
 		public ICurrentScenario Scenario;
+		public IScheduleStorage ScheduleStorage;
 		public ISchedulingResultStateHolder SchedulingResultStateHolder;
 		public FakeActivityRepository ActivityRepository;
 		public FakeUserTimeZone UserTimeZone;
@@ -78,7 +78,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			isolate.UseTestDouble(fakeMultiplicatorDefinitionSetRepository).For<IProxyForId<IMultiplicatorDefinitionSet>>();
 
 			isolate.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
-			isolate.UseTestDouble<ScheduleStorage>().For<IScheduleStorage>();
 			isolate.UseTestDouble<MutableNow>().For<INow, IMutateNow>();
 			_intervals = createIntervals();
 		}
@@ -150,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var lunch = ActivityFactory.CreateActivity("lunch").WithId();
 			lunch.InContractTime = false;
 			pa.AddActivity(lunch, new DateTimePeriod(2017, 7, 17, 11, 2017, 7, 17, 12));
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var personRequest = createOvertimeRequest(11, 1);
 			getTarget().Process(personRequest);
@@ -435,6 +434,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 				BetweenDays = new MinMax<int>(0, 30)
 			});
 			person.WorkflowControlSet = workflowControlSet;
+			SkillTypeRepository.Add(_phoneSkillType);
 
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
@@ -442,7 +442,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var period = new DateTimePeriod(2017, 7, 17, 8, 2017, 7, 17, 18);
 			var pa = createMainPersonAssignment(person, period);
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			getTarget().Process(personRequest);
 
@@ -462,7 +462,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var period = new DateTimePeriod(2017, 12, 31, 8, 2017, 12, 31, 18);
 			var assignment = PersonAssignmentFactory.CreateEmptyAssignment(LoggedOnUser.CurrentUser(), Scenario.Current(), period).WithId();
-			ScheduleStorage.Add(assignment);
+			PersonAssignmentRepository.Add(assignment);
 
 			var corssMonthPersonRequest = createOvertimeRequest(new DateTime(2017, 12, 31, 23, 0, 0, DateTimeKind.Utc), 2);
 			getTarget().Process(corssMonthPersonRequest);
@@ -491,7 +491,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var period = new DateTimePeriod(2017, 7, 17, 8, 2017, 7, 17, 18);
 			var pa = createMainPersonAssignment(LoggedOnUser.CurrentUser(), period);
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			getTarget().Process(personRequest);
 
@@ -522,7 +522,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var period = new DateTimePeriod(2017, 7, 17, 8, 2017, 7, 17, 18);
 			var pa = createMainPersonAssignment(LoggedOnUser.CurrentUser(), period);
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			getTarget().Process(personRequest);
 
@@ -548,7 +548,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var period = new DateTimePeriod(2017, 7, 17, 8, 2017, 7, 17, 18);
 			var pa = createMainPersonAssignment(LoggedOnUser.CurrentUser(), period);
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			getTarget().Process(personRequest);
 

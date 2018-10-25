@@ -5,13 +5,7 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
-	public interface ITeamBlockRestrictionOverLimitValidator
-	{
-		bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
-		bool Validate(ITeamInfo teamInfo, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
-	}
-
-	public class TeamBlockRestrictionOverLimitValidator : ITeamBlockRestrictionOverLimitValidator
+	public class TeamBlockRestrictionOverLimitValidator
 	{
 		private readonly IMaxMovedDaysOverLimitValidator _maxMovedDaysOverLimitValidator;
 		private readonly RestrictionOverLimitValidator _restrictionOverLimitValidator;

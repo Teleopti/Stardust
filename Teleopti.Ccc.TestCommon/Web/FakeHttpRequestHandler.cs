@@ -9,26 +9,6 @@ namespace Teleopti.Ccc.TestCommon.Web
 	{
 		private HttpResponseMessage _responseMessage;
 
-		public HttpResponseMessage Get(string url)
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public HttpResponseMessage Post(string url, HttpContent content)
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public Task<HttpResponseMessage> GetAsync(string url)
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public Task<HttpResponseMessage> PostAsync(string url, HttpContent content)
-		{
-			throw new System.NotImplementedException();
-		}
-
 		public Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
 		{
 			return Task.FromResult(_responseMessage ?? new HttpResponseMessage(HttpStatusCode.OK));

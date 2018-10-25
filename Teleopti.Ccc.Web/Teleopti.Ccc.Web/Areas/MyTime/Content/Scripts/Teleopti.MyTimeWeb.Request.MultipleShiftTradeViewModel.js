@@ -63,7 +63,7 @@
 
 	self.toloranceInvalid = ko.observable(false);
 
-	self.shiftPageSize = 7;
+	self.shiftPageSize = 15;
 	self.isLoadingSchedules = ko.observable(false);
 	self.isLoadingSchedulesOnTop = ko.observable(false);
 	self.isLoadingSchedulesOnBottom = ko.observable(false);
@@ -436,6 +436,7 @@
 	self.sendRequest = function() {
 		self.saveNewShiftTrade();
 		self.chooseAgent(null);
+		self.showCartPanel(false);
 		Teleopti.MyTimeWeb.Request.List.HideRequests(false);
 		self.goToFirstPage();
 		Teleopti.MyTimeWeb.Request.ResetToolbarActiveButtons();
@@ -1096,8 +1097,8 @@
 			contentType: 'application/json; charset=utf-8',
 			type: 'POST',
 			data: JSON.stringify({
-				StartDate: startDate,
-				EndDate: endDate,
+				StartDate: startDate.format('YYYY-MM-DD'),
+				EndDate: endDate.format('YYYY-MM-DD'),
 				PersonToId: agentId
 			}),
 			success: function(data) {

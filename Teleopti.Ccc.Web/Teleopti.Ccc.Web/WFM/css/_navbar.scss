@@ -48,6 +48,11 @@
 		padding: $full-padding;
 		border-bottom: 1px solid $gray012;
 		font-size: 14px;
+		
+		i {
+			margin-right: 3px;
+			vertical-align: middle;
+		}
 	}
 
 	.main-menu-link-active > .main-menu-link {
