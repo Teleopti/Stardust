@@ -34,8 +34,11 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			_shiftEndTimeForPreviousActivity = new Lazy<DateTime>(() => endTimeOfShift(_previousActivity.Value));
 			_belongsToDate = new Lazy<DateOnly?>(() =>
 			{
-				var activity = CurrentActivity() ?? activityNear(context.Time);
-				return activity?.BelongsToDate;
+				var activity = CurrentActivity() ?? startingActivity() ?? endedActivity();
+				if (activity != null)
+					return activity?.BelongsToDate;
+				var agentsTime = TimeZoneInfo.ConvertTimeFromUtc(_context.Time, _context.PersonTimeZone);
+				return new DateOnly(agentsTime);
 			});
 			_timeWindowActivities = new Lazy<IEnumerable<ScheduledActivity>>(timeWindowActivities);
 			_timeWindowCheckSum = new Lazy<int>(() => _timeWindowActivities.Value.CheckSum());
@@ -116,16 +119,36 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			return nextActivity(_schedule.Value, _currentActivity.Value, _context.Time);
 		}
 
-		private ScheduledActivity activityNear(DateTime time)
+		private ScheduledActivity endedActivity()
 		{
 			return (
-				from l in _schedule.Value
-				let ended = l.EndDateTime >= _context.Time.AddHours(-1) && l.StartDateTime < time
-				let starting = l.StartDateTime <= _context.Time.AddHours(1) && l.EndDateTime > time
-				where ended || starting
-				select l
+				from activity in _schedule.Value
+				let ended = activity.EndDateTime >= _context.Time.AddHours(-1) && activity.StartDateTime < _context.Time
+				where ended
+				select activity
 			).FirstOrDefault();
 		}
+
+		private ScheduledActivity startingActivity()
+		{
+			return (
+				from activity in _schedule.Value
+				let starting = activity.StartDateTime <= _context.Time.AddHours(1) && activity.EndDateTime > _context.Time
+				where starting
+				select activity
+			).FirstOrDefault();
+		}
+//
+//		private ScheduledActivity activityNear(DateTime time)
+//		{
+//			return (
+//				from activity in _schedule.Value
+//				let ended = activity.EndDateTime >= _context.Time.AddHours(-1) && activity.StartDateTime < time
+//				let starting = activity.StartDateTime <= _context.Time.AddHours(1) && activity.EndDateTime > time
+//				where ended || starting
+//				select activity
+//			).LastOrDefault();
+//		}
 
 
 		private static readonly TimeSpan timeWindowFuture = TimeSpan.FromHours(3);

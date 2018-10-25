@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 		public IEnumerable<ExternalLogonReadModel> Read()
 		{
 			return _unitOfWork.Current()
-				.CreateSqlQuery("SELECT PersonId, DataSourceId, UserCode, Deleted, Added FROM ReadModel.ExternalLogon WHERE Added = 0")
+				.CreateSqlQuery("SELECT PersonId, DataSourceId, UserCode, TimeZone, Deleted, Added FROM ReadModel.ExternalLogon WHERE Added = 0")
 				.SetResultTransformer(Transformers.AliasToBean<ExternalLogonReadModel>())
 				.SetReadOnly(true)
 				.List<ExternalLogonReadModel>();
@@ -35,10 +35,11 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 		public void Add(ExternalLogonReadModel model)
 		{
 			_unitOfWork.Current()
-				.CreateSqlQuery("INSERT INTO ReadModel.ExternalLogon VALUES (:PersonId, :DataSourceId, :UserCode, 0, 1)")
+				.CreateSqlQuery("INSERT INTO ReadModel.ExternalLogon (PersonId, DataSourceId, UserCode, TimeZone, Deleted, Added) VALUES (:PersonId, :DataSourceId, :UserCode, :TimeZone, 0, 1)")
 				.SetParameter("PersonId", model.PersonId)
 				.SetParameter("DataSourceId", model.DataSourceId)
 				.SetParameter("UserCode", model.UserCode)
+				.SetParameter("TimeZone", model.TimeZone)
 				.ExecuteUpdate();
 		}
 

@@ -8,6 +8,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		public Guid PersonId { get; set; }
 		public int? DataSourceId { get; set; }
 		public string UserCode { get; set; }
+		public string TimeZone { get; set; }
 
 		public bool Deleted { get; set; }
 		public bool Added { get; set; }

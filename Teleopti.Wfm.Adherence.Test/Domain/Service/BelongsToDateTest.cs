@@ -3,8 +3,11 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Wfm.Adherence.Domain.Events;
@@ -20,6 +23,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 		public FakeEventPublisher Publisher;
 		public MutableNow Now;
 		public Rta Target;
+		public FakeExternalLogonReadModelPersister ExternalLogons;
 
 		[Test]
 		public void ShouldPublishWithBelongsToDateFromCurrentSchedule()
@@ -45,7 +49,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 		}
 
 		[Test]
-		public void ShouldPublishWithBelongsToDateFromShiftEnded()
+		public void ShouldBelongToShiftEnded()
 		{
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
@@ -68,7 +72,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 		}
 
 		[Test]
-		public void ShouldPublishWithBelongsToDateFromShiftStarting()
+		public void ShouldBelongToShiftStarting()
 		{
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
@@ -88,55 +92,6 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
 				.Single()
 				.BelongsToDate.Should().Be("2015-02-20".Date());
-		}
-
-		[Test]
-		public void ShouldNotPublishWhenNoScheduleNear()
-		{
-			var personId = Guid.NewGuid();
-			var phone = Guid.NewGuid();
-			Database
-				.WithAgent("usercode", personId)
-				.WithSchedule(personId, phone, null, "2015-02-20", "2015-02-20 8:00", "2015-02-20 17:00")
-				.WithSchedule(personId, phone, null, "2015-02-20", "2015-02-20 20:00", "2015-02-20 21:00")
-				.WithMappedRule("phone", null, 0)
-				;
-
-			Now.Is("2015-02-20 18:01");
-			Target.ProcessState(new StateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "phone"
-			});
-			Now.Is("2015-02-20 18:59");
-			Target.ProcessState(new StateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "phone"
-			});
-
-			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
-				.Single()
-				.BelongsToDate.Should().Be(null);
-		}
-
-		[Test]
-		public void ShouldNotPublishIfNoSchedule()
-		{
-			var personId = Guid.NewGuid();
-			Database
-				.WithAgent("usercode", personId)
-				.WithMappedRule("phone", null, 0);
-			Now.Is("2015-02-20 18:01");
-			Target.ProcessState(new StateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "phone"
-			});
-
-			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
-				.Single()
-				.BelongsToDate.Should().Be(null);
 		}
 
 		[Test]
@@ -222,6 +177,25 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 		}
 
 		[Test]
+		public void ShouldPublishShiftEndEventWithWithDateOfShiftNotEndedYesterday()
+		{
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", personId)
+				.WithSchedule(personId, activityId, "2015-07-05 10:00", "2015-07-05 11:00")
+				.WithSchedule(personId, activityId, "2015-07-06 10:00", "2015-07-06 11:00");
+
+			Now.Is("2015-07-05 10:59");
+			Target.CheckForActivityChanges(Database.TenantName(), personId);
+			Now.Is("2015-07-06 09:01");
+			Target.CheckForActivityChanges(Database.TenantName(), personId);
+
+			var @event = Publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Single();
+			@event.BelongsToDate.Should().Be("2015-07-05".Date());
+		}
+
+		[Test]
 		public void ShouldPublishActivityStartEventWithBelongsToDate()
 		{
 			var personId = Guid.NewGuid();
@@ -237,8 +211,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 				.Single()
 				.BelongsToDate.Should().Be("2015-02-19".Date());
 		}
-
-		[Test]
+		
 		public void ShouldPublishStateChangedEventWithBelongsToDate()
 		{
 			var personId = Guid.NewGuid();
@@ -282,22 +255,120 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 				.BelongsToDate.Should().Be("2015-02-19".Date());
 		}
 
+
 		[Test]
-		public void ShouldPublishWithShiftNotEndedYesterday()
+		public void ShouldPublishPersonAdherenceDayStartEventWithBelongsToDate()
 		{
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			Database
 				.WithAgent("usercode", personId)
-				.WithSchedule(personId, activityId, "2015-07-05 10:00", "2015-07-05 11:00")
-				.WithSchedule(personId, activityId, "2015-07-06 10:00", "2015-07-06 11:00");
+				.WithSchedule(personId, activityId, "2018-10-25 10:00", "2018-10-25 11:00");
 
-			Now.Is("2015-07-05 10:59");
-			Target.CheckForActivityChanges(Database.TenantName(), personId);
-			Now.Is("2015-07-06 09:01");
-			Target.CheckForActivityChanges(Database.TenantName(), personId);
-			var @event = Publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Single();
-			@event.BelongsToDate.Should().Be("2015-07-05".Date());
+			Now.Is("2018-10-25 09:00");
+			Target.CheckForActivityChanges(Database.TenantName());
+
+			var @event = Publisher.PublishedEvents.OfType<PersonAdherenceDayStartEvent>().Single();
+			@event.BelongsToDate.Should().Be("2018-10-25".Date());
+		}
+
+		[Test]
+		public void ShouldBelongToNextShiftWhenNear2Shifts()
+		{
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", personId)
+				.WithSchedule(personId, activityId, "2018-10-24", "2018-10-24 23:00", "2018-10-25 07:00")
+				.WithSchedule(personId, activityId, "2018-10-25", "2018-10-25 08:00", "2018-10-25 17:00")
+				.WithStateGroup(null, "default", true)
+				;
+
+			Now.Is("2018-10-25 07:01");
+			Target.ProcessState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+
+			Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single().BelongsToDate
+				.Should().Be("2018-10-25".Date());
+		}
+
+		[Test]
+		public void ShouldBelongToAgentsDateInChinaWhenNotNearPastShift()
+		{
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			Database
+				.WithAgent(personId, "usercode", TimeZoneInfoFactory.ChinaTimeZoneInfo())
+				.WithSchedule(personId, activityId, "2018-10-25", "2018-10-25 08:00", "2018-10-25 17:00")
+				.WithStateGroup(null, "default", true)
+				;
+
+			Now.Is("2018-10-25 18:01");
+			Target.ProcessState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+
+			Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single().BelongsToDate
+				.Should().Be("2018-10-26".Date());
+		}
+
+		[Test]
+		public void ShouldBelongToAgentsDateInAustraliaWhenNotNearPastShift()
+		{
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			Database
+				.WithAgent(personId, "usercode", TimeZoneInfoFactory.AustralianTimeZoneInfo())
+				.WithSchedule(personId, activityId, "2018-10-25", "2018-10-25 08:00", "2018-10-25 13:00")
+				.WithStateGroup(null, "default", true)
+				;
+
+			Now.Is("2018-10-25 14:01");
+			Target.ProcessState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+
+			Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single().BelongsToDate
+				.Should().Be("2018-10-26".Date());
+		}
+
+		[Test]
+		public void ShouldNotBreakWithNullTimeZone()
+		{
+			ExternalLogons.Add(new ExternalLogonReadModel
+			{
+				DataSourceId = Database.CurrentDataSourceId(),
+				PersonId = Guid.NewGuid(),
+				TimeZone = null,
+				UserCode = "usercode"
+			});
+			ExternalLogons.Refresh();
+			Database.WithAgent("usercode");
+
+			Assert.DoesNotThrow(() => { Target.CheckForActivityChanges(Database.TenantName()); });
+		}
+
+		[Test]
+		public void ShouldNotBreakWithIncorrectTimeZone()
+		{
+			ExternalLogons.Add(new ExternalLogonReadModel
+			{
+				DataSourceId = Database.CurrentDataSourceId(),
+				PersonId = Guid.NewGuid(),
+				TimeZone = "incorrect",
+				UserCode = "usercode"
+			});
+			ExternalLogons.Refresh();
+			Database.WithAgent("usercode");
+
+			Assert.DoesNotThrow(() => { Target.CheckForActivityChanges(Database.TenantName()); });
 		}
 	}
 }

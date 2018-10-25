@@ -156,7 +156,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				ExternalLogons = externalLogons,
 				FirstName = person?.Name.FirstName,
 				LastName = person?.Name.LastName,
-				EmploymentNumber = person?.EmploymentNumber
+				EmploymentNumber = person?.EmploymentNumber,
+				TimeZone = person?.PermissionInformation.DefaultTimeZone().Id,
 			}, checkSum);
 		}
 
@@ -197,6 +198,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				hashCode = (hashCode * 397) ^ (@event.FirstName?.GetHashCode() ?? 0);
 				hashCode = (hashCode * 397) ^ (@event.LastName?.GetHashCode() ?? 0);
 				hashCode = (hashCode * 397) ^ (@event.EmploymentNumber?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (@event.TimeZone?.GetHashCode() ?? 0);
 
 				return hashCode;
 			}

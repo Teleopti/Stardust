@@ -38,7 +38,8 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
 				{
 					PersonId = @event.PersonId,
 					UserCode = x.UserCode,
-					DataSourceId = x.DataSourceId
+					DataSourceId = x.DataSourceId,
+					TimeZone = @event.TimeZone
 				})
 				.ForEach(model => _persister.Add(model));
 		}

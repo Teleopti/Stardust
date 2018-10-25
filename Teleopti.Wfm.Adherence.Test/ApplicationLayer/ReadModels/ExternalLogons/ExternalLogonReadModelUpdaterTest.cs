@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
@@ -15,10 +16,8 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ReadModels.ExternalLogons
 	[DomainTest]
 	public class ExternalLogonReadModelUpdaterTest
 	{
-		public MutableNow Now;
 		public ExternalLogonReadModelUpdater Target;
 		public FakeExternalLogonReadModelPersister Persister;
-		public IKeyValueStorePersister KeyValueStore;
 
 		[Test]
 		public void ShouldContainLogon()
@@ -141,7 +140,7 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ReadModels.ExternalLogons
 			Target.Handle(new PersonAssociationChangedEvent
 			{
 				PersonId = person,
-				ExternalLogons = new[] { new ExternalLogon { DataSourceId = 2, UserCode = "usercode" } }
+				ExternalLogons = new[] {new ExternalLogon {DataSourceId = 2, UserCode = "usercode"}}
 			});
 			Target.Handle(new TenantMinuteTickEvent());
 			Target.Handle(new PersonAssociationChangedEvent
@@ -153,8 +152,6 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ReadModels.ExternalLogons
 
 			Persister.Read().Should().Be.Empty();
 		}
-
-
 
 
 		[Test]
@@ -263,6 +260,28 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ReadModels.ExternalLogons
 			Persister.Read().Single().UserCode.Should().Be("usercode");
 		}
 
-	}
+		[Test]
+		public void ShouldContainTimeZone()
+		{
+			var person = Guid.NewGuid();
 
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				PersonId = person,
+				TimeZone = TimeZoneInfoFactory.ChinaTimeZoneInfo().Id,
+				ExternalLogons = new[]
+				{
+					new ExternalLogon
+					{
+						DataSourceId = 2,
+						UserCode = "usercode"
+					}
+				}
+			});
+			Target.Handle(new TenantMinuteTickEvent());
+
+			var mapping = Persister.Read().Single();
+			mapping.TimeZone.Should().Be(TimeZoneInfoFactory.ChinaTimeZoneInfo().Id);
+		}
+	}
 }

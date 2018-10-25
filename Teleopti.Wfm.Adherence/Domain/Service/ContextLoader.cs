@@ -63,7 +63,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		public virtual void ForClosingSnapshot(DateTime snapshotId, string sourceId) => Process(new ClosingSnapshotStrategy(snapshotId, sourceId, _now.UtcDateTime(), _config, _agentStatePersister, _stateMapper, _dataSourceMapper, _tracer));
 
 		[LogInfo]
-		public virtual void ForActivityChanges() => Process(new ActivityChangesStrategy(_now.UtcDateTime(), _config, _agentStatePersister, _keyValues, _scheduleCache, _tracer));
+		public virtual void ForActivityChanges() => Process(new ActivityChangesStrategy(_now.UtcDateTime(), _config, _agentStatePersister, _keyValues, _scheduleCache, _externalLogonMapper, _tracer));
 
 		protected void Process(IContextLoadingStrategy strategy)
 		{
@@ -83,11 +83,16 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 
 				var transactions = items
 					.Batch(transactionSize)
-					.Select(some => new Func<IEnumerable<Tuple<AgentState, StateTraceLog>>>(() =>
+					.Select(some => new Func<IEnumerable<AgentInTransaction>>(() =>
 					{
 						var result = _agentStatePersister.LockNLoad(some, strategy.DeadLockVictim);
 						refreshCaches(strategy, strategyContext, result.ScheduleVersion, result.MappingVersion);
-						return result.AgentStates.Select(x => new Tuple<AgentState, StateTraceLog>(x, strategy.GetTraceFor(x)));
+						return result.AgentStates
+							.Select(x => new AgentInTransaction
+							{
+								State = x,
+								Trace = strategy.GetTraceFor(x)
+							});
 					}))
 					.ToArray();
 
@@ -130,7 +135,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		private void processTransactions(
 			string tenant,
 			IContextLoadingStrategy strategy,
-			IEnumerable<Func<IEnumerable<Tuple<AgentState, StateTraceLog>>>> transactions,
+			IEnumerable<Func<IEnumerable<AgentInTransaction>>> transactions,
 			ConcurrentBag<Exception> exceptions)
 		{
 			// transaction spreading over sql clustered index strategy optimization...
@@ -151,7 +156,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		protected virtual void ProcessTransaction(
 			string tenant,
 			IContextLoadingStrategy strategy,
-			Func<IEnumerable<Tuple<AgentState, StateTraceLog>>> transaction,
+			Func<IEnumerable<AgentInTransaction>> transaction,
 			ConcurrentBag<Exception> exceptions)
 		{
 			try
@@ -167,9 +172,15 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			}
 		}
 
+		public class AgentInTransaction
+		{
+			public AgentState State;
+			public StateTraceLog Trace;
+		}
+
 		private void transaction(
 			IContextLoadingStrategy strategy,
-			Func<IEnumerable<Tuple<AgentState, StateTraceLog>>> agentStates
+			Func<IEnumerable<AgentInTransaction>> agentStates
 		)
 		{
 			WithUnitOfWork(() =>
@@ -180,12 +191,13 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 							new ProcessInput(
 								strategy.CurrentTime,
 								strategy.DeadLockVictim,
-								strategy.GetInputFor(x.Item1),
-								x.Item1,
-								_scheduleCache.Read(x.Item1.PersonId),
+								strategy.GetInputFor(x.State),
+								x.State,
+								_externalLogonMapper.TimeZoneFor(x.State.PersonId),
+								_scheduleCache.Read(x.State.PersonId),
 								_stateMapper,
 								_appliedAlarm,
-								x.Item2
+								x.Trace
 							)
 						)
 						.Select(x => _processor.Process(x))
