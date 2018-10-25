@@ -254,13 +254,6 @@ namespace Teleopti.Ccc.Domain.Collection
 			return source.Where(x => !predicate(x));
 		}
 
-		public static IEnumerable<T> Append<T>(this IEnumerable<T> source, T item)
-		{
-			foreach (var a in source)
-				yield return a;
-			yield return item;
-		}
-
 		public static IEnumerable<T> Infinite<T>(this IEnumerable<T> source)
 		{
 			while (true)
