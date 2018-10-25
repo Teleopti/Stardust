@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { interval } from 'rxjs';
 import { filter, first, switchMap } from 'rxjs/operators';
-import { MainControllerStyle } from '../../main.controller';
-import { ThemeService } from '../core/services';
+import { MainControllerStyle } from '../../../main.controller';
+import { ThemeService } from '../../core/services';
 
 @Component({
 	selector: 'bootstrap',

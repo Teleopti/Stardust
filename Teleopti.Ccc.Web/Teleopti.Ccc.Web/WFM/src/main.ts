@@ -3,9 +3,9 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { downgradeComponent as ngDowngradeComponent, downgradeModule } from '@angular/upgrade/static';
 import { IControllerConstructor, IRootScopeService } from 'angular';
 import { apiAccessComponents } from './app/api-access/api-access.module';
-import { AppModule } from './app/app.module';
+import { appComponents, AppModule } from './app/app.module';
 import { authenticationComponents } from './app/authentication/authentication.module';
-import { BootstrapComponent } from './app/bootstrap/bootstrap.component';
+import { menuComponents } from './app/menu/menu.module';
 import { navigationComponents } from './app/navigation/navigation.module';
 import { peopleComponents } from './app/people/people.module';
 import { WorkspaceComponent } from './app/pm/components';
@@ -60,7 +60,6 @@ const wfm = angular.module('wfm', [
 	'wfm.rtaTracer',
 	'wfm.teapot',
 	'wfm.start',
-	'wfm.businessunits',
 	'wfm.teamSchedule',
 	'wfm.intraday',
 	'wfm.requests',
@@ -102,13 +101,12 @@ downgradeHelper(sharedComponents);
 downgradeHelper(navigationComponents);
 downgradeHelper(authenticationComponents);
 downgradeHelper(apiAccessComponents);
+downgradeHelper(appComponents);
+downgradeHelper(menuComponents);
 
 // Use this to downgrade components
 // that has no containing module
-downgradeHelper([
-	{ ng1Name: 'ng2Bootstrap', ng2Component: BootstrapComponent },
-	{ ng1Name: 'ng2PmWorkspacePage', ng2Component: WorkspaceComponent }
-]);
+downgradeHelper([{ ng1Name: 'ng2PmWorkspacePage', ng2Component: WorkspaceComponent }]);
 
 wfm.config([
 	'$stateProvider',

@@ -6,7 +6,7 @@
 	}
 </style>
 
-<div class="con-row" style="margin-left: 40px;">
+<div class="con-row" style="margin-left: 40px; height:100%;">
 	<a ng-controller="AppInsightsController as vm"></a>
 	<div class="con-flex inline-flex align-row-center" style="align-items: center!important;">
 		<!-- home link -->
@@ -18,33 +18,11 @@
 		</div>
 
 		<!-- bu selector -->
-		<div ng-controller="BusinessUnitsController as businessunit" style="margin-left:15px;">
-			<div ng-click="toggleBuPopup = !toggleBuPopup" class="flex" id="bu-select">
-				<div class="inline-flex pointer">
-					<div tabindex=0 class="context-menu card-context even-icon">
-						<i class="mdi mdi-vector-square"></i>
-					</div>
-				</div>
-
-				<div style="margin-top: 8px;" class="pointer">
-					<span ng-cloak class="businessunit-list text-white">
-						{{businessunit.data.selectedBu.Name}}
-						<i class="mdi mdi-menu-down"></i>
-					</span>
-				</div>
-				<md-tooltip>
-					{{'BusinessUnit'|translate}}
-				</md-tooltip>
-			</div>
-
-			<wfm-popup show="toggleBuPopup" class="datepicker-popup">
-				<ul class="wfm-list" id="business-unit-dropdown">
-					<li ng-repeat="bu in businessunit.data.businessUnits" ng-cloak ng-click="businessunit.changeBusinessUnit(bu)">
-						<i class="mdi mdi-vector-square businessunit-menu-icon"></i>
-						{{bu.Name}}
-					</li>
-				</ul>
-			</wfm-popup>
+		<div style="margin-left:15px;">
+			<ng2-business-unit-selector></ng2-business-unit-selector>
+			<md-tooltip>
+				{{'BusinessUnit'|translate}}
+			</md-tooltip>
 		</div>
 
 	</div>

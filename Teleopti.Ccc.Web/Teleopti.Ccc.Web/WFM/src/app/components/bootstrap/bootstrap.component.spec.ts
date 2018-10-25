@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { configureTestSuite } from '../../configure-test-suit';
-import { ThemeService } from '../core/services';
+import { configureTestSuite } from '../../../configure-test-suit';
+import { ThemeService } from '../../core/services';
 import { BootstrapComponent } from './bootstrap.component';
 
 const ThemeServiceMock = {

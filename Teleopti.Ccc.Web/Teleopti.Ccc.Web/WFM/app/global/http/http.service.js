@@ -23,6 +23,11 @@
 				}, 2000);
 				return q.promise;
 			}
+
+			// Register the current business unit as a header
+			var businessUnitId = sessionStorage.getItem('buid') || '';
+			config.headers['X-Business-Unit-Filter'] = businessUnitId;
+
 			return config;
 		}
 

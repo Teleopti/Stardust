@@ -40,7 +40,6 @@ var wfm = angular
 		'wfm.help',
 		'wfm.rta',
 		'wfm.start',
-		'wfm.businessunits',
 		'wfm.teamSchedule',
 		'wfm.intraday',
 		'wfm.requests',

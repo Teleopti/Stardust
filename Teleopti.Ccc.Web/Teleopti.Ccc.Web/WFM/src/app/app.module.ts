@@ -1,16 +1,18 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { NgModule, Injectable } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
-import { TranslateLoader, TranslateModule, TranslateService, TranslateParser } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule, TranslateParser, TranslateService } from '@ngx-translate/core';
+import { DowngradeableComponent } from '@wfm/types';
 import { ApiAccessModule } from './api-access/api-access.module';
+import { AuthenticationModule } from './authentication/authentication.module';
+import { BootstrapComponent } from './components/bootstrap/bootstrap.component';
 import { CoreModule } from './core/core.module';
 import { UserPreferences, UserService } from './core/services';
-import { LanguageLoaderFactory, CustomTranslateParser, Zorroi18nService } from './core/translation';
-import { PeopleModule } from './people/people.module';
-import { AuthenticationModule } from './authentication/authentication.module';
-import { BootstrapComponent } from './bootstrap/bootstrap.component';
+import { CustomTranslateParser, LanguageLoaderFactory, Zorroi18nService } from './core/translation';
+import { MenuModule } from './menu/menu.module';
 import { NavigationModule } from './navigation/navigation.module';
+import { PeopleModule } from './people/people.module';
 import { PmModule } from './pm/pm.module';
 
 @NgModule({
@@ -25,6 +27,7 @@ import { PmModule } from './pm/pm.module';
 		ApiAccessModule,
 		HttpClientModule,
 		PmModule,
+		MenuModule,
 		TranslateModule.forRoot({
 			loader: {
 				provide: TranslateLoader,
@@ -55,3 +58,5 @@ export class AppModule {
 		});
 	}
 }
+
+export const appComponents: DowngradeableComponent[] = [{ ng1Name: 'ng2Bootstrap', ng2Component: BootstrapComponent }];
