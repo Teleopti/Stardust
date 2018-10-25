@@ -141,29 +141,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			return BlockFinderType.SingleDay != (BlockFinderType) comboBoxBlockType.SelectedValue && checkBoxBlockSameShift.Checked;
 		}
 
-		public bool ValidateDefaultValuesForTeam()
-		{
-			if (isTeamSelected())
-			{
-				//check if none of the options are not checked. Set the default values
-				if (
-					!(checkBoxTeamSameShiftCategory.Checked || checkBoxTeamSameStartTime.Checked || checkBoxTeamSameEndTime.Checked ||
-					  checkBoxTeamSameActivity.Checked))
-					return false;
-			}
-			return true;
-		}
-
-		public bool ValidateDefaultValuesForBlock()
-		{
-			if (isBlockSelected())
-			{
-				if (!(checkBoxBlockSameShift.Checked || checkBoxBlockSameStartTime.Checked || checkBoxBlockSameShiftCategory.Checked))
-					return false;
-			}
-			return true;
-		}
-
         private void setTeamBlockPerData()
         {
         	  checkBoxBlockSameShiftCategory.Checked = Preferences.UseBlockSameShiftCategory;

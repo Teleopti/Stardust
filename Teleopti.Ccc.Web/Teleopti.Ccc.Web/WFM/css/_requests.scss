@@ -128,7 +128,7 @@ wfm-multiple-search-input {
 			flex-wrap: wrap;
 			flex-grow: 1;
 			justify-content: flex-start;
-			padding-top: 5px;
+			align-items: center;
 
 			.request-date-range-picker {
 				padding: 8px 10px;
@@ -140,6 +140,7 @@ wfm-multiple-search-input {
 		.right-part {
 			display: flex;
 			justify-content: flex-end;
+			align-items: center;
 		}
 
 		@media screen and (min-width: 500px) {
@@ -205,7 +206,8 @@ wfm-multiple-search-input {
 			padding: 0 5px;
 		}
 
-		input, md-select-value {
+		input,
+		md-select-value {
 			height: 28px;
 			min-height: 28px;
 		}

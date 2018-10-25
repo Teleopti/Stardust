@@ -63,10 +63,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Autofac, Version=4.8.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.4.8.1\lib\net45\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging, Version=2.1.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Common.Logging.2.1.1\lib\net40\Common.Logging.dll</HintPath>
@@ -106,6 +104,7 @@
     <Reference Include="Microsoft.ApplicationInsights.Log4NetAppender, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.ApplicationInsights.Log4NetAppender.2.2.0\lib\net45\Microsoft.ApplicationInsights.Log4NetAppender.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Practices.Composite.Presentation.1.0.0\lib\3.5\Microsoft.Practices.Composite.dll</HintPath>
     </Reference>
@@ -268,12 +267,13 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.261\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.262\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.261\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.262\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -3361,7 +3361,6 @@
     <Compile Include="Win\Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesTabPanel.Designer.cs">
       <DependentUpon>SchedulingSessionPreferencesTabPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\AbsenceOnContractDayOffPainter.cs" />
     <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\ActivityPreferencePainter.cs" />
     <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\DisabledPainter.cs" />
     <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\EffectiveRestrictionPainter.cs" />
@@ -3371,7 +3370,6 @@
     <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\NotValidPainter.cs" />
     <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\NotValidSpecification.cs" />
     <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\PreferenceCellPainterBase.cs" />
-    <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\PreferredAbsenceOnContractDayOffPainter.cs" />
     <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\PreferredAbsencePainter.cs" />
     <Compile Include="Win\Scheduling\SingleAgentRestriction\RestrictionWeekHeaderViewCellModel.cs" />
     <Compile Include="Win\Scheduling\SingleAgentRestriction\SplitterManagerRestrictionView.cs" />

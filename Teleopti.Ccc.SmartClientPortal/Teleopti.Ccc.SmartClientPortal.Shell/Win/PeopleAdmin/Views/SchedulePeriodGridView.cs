@@ -486,6 +486,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			grid.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
 		}
 
+		public bool Toggle78424 { get; set; }
+
 		public override void SetView(IShiftCategoryLimitationView view)
 		{
 			_shiftCategoryLimitationView = view;
@@ -535,10 +537,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			_childGridNumberColumn.CellChanged += ChildColumn_CellChanged;
 			_childGridColumns.Add(_childGridNumberColumn);
 
+			var dropDownList = LanguageResourceHelper.TranslateEnumToList<SchedulePeriodType>();
+			if(Toggle78424)
+				dropDownList.RemoveAt(dropDownList.Count-1);
+			
 			_childGridScheduleTypeColumn = new DropDownColumnForSchedulePeriodGrids<SchedulePeriodChildModel,
 				KeyValuePair<SchedulePeriodType, string>>("PeriodType",
 									 UserTexts.Resources.Type,
-									 LanguageResourceHelper.TranslateEnumToList<SchedulePeriodType>(),
+									 dropDownList,
 									"value", "key", typeof(SchedulePeriodType));
 			_childGridScheduleTypeColumn.CellDisplayChanged += ChildColumn_CellDisplayChanged;
 			_childGridScheduleTypeColumn.CellChanged += ChildColumn_CellChanged;
@@ -629,9 +635,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			_numberColumn.CellChanged += ParentColumn_CellChanged;
 			_numberColumn.ColumnComparer = new SchedulePeriodNumberComparer();
 			_gridColumns.Add(_numberColumn);
+			var dropDownList = LanguageResourceHelper.TranslateEnumToList<SchedulePeriodType>();
+			if (Toggle78424)
+				dropDownList.RemoveAt(dropDownList.Count - 1);
 
 			_scheduleTypeColumn = new DropDownColumnForSchedulePeriodGrids<SchedulePeriodModel, KeyValuePair<SchedulePeriodType, string>>
-				("PeriodType", UserTexts.Resources.Type, LanguageResourceHelper.TranslateEnumToList<SchedulePeriodType>(), "value", "key", typeof(SchedulePeriodType));
+				("PeriodType", UserTexts.Resources.Type, dropDownList, "value", "key", typeof(SchedulePeriodType));
 			//_scheduleTypeColumn.CellDisplayChanged += ParentColumn_CellDisplayChanged;
 			//_scheduleTypeColumn.CellChanged += ParentColumn_CellChanged;
 			//_scheduleTypeColumn.ColumnComparer = new SchedulePeriodUnitComparer();

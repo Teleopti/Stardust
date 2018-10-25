@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntraIntervalOptimizationService>().InstancePerDependency();
 			builder.RegisterType<IntraIntervalIssueCalculator>().SingleInstance();
 			builder.RegisterType<ShiftProjectionCacheIntraIntervalValueCalculator>().As<IShiftProjectionCacheIntraIntervalValueCalculator>().SingleInstance();
-			builder.RegisterType<ShiftProjectionIntraIntervalBestFitCalculator>().As<IShiftProjectionIntraIntervalBestFitCalculator>().SingleInstance();
+			builder.RegisterType<ShiftProjectionIntraIntervalBestFitCalculator>().SingleInstance();
 			builder.RegisterType<SkillStaffPeriodIntraIntervalPeriodFinder>().As<ISkillStaffPeriodIntraIntervalPeriodFinder>().SingleInstance();
 			builder.RegisterType<MainShiftOptimizeActivitySpecificationSetter>().As<IMainShiftOptimizeActivitySpecificationSetter>().SingleInstance();
 		}

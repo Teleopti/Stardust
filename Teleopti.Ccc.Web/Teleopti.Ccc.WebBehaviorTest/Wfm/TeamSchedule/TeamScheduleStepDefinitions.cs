@@ -168,8 +168,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 						{"vm.isFullDayAbsence", $"{(values.FullDay ? "true" : "false")}"}
 					};
 			Browser.Interactions.SetScopeValues(".add-absence", absenceInput);
-			Browser.Interactions.SetScopeValues(".add-absence .start-time teams-time-picker", new Dictionary<string, string>{{"$ctrl.dateTimeObj", $"new Date('{values.StartTime}')"}}, true);
-			Browser.Interactions.SetScopeValues(".add-absence .end-time teams-time-picker", new Dictionary<string, string>{{ "$ctrl.dateTimeObj", $"new Date('{values.EndTime}')"}}, true);
+			Browser.Interactions.SetScopeValues(".add-absence .start-time teams-time-picker", new Dictionary<string, string> { { "$ctrl.dateTimeObj", $"new Date('{values.StartTime}')" } }, true);
+			Browser.Interactions.SetScopeValues(".add-absence .end-time teams-time-picker", new Dictionary<string, string> { { "$ctrl.dateTimeObj", $"new Date('{values.EndTime}')" } }, true);
 		}
 
 		[Then(@"I should be able to apply my new activity")]
@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
 				() =>
 				{
-					Browser.Interactions.AssertExistsUsingJQuery(".person-name-column", agent);
+					Browser.Interactions.ClickContaining(".md-label", agent);
 				});
 		}
 
@@ -412,6 +412,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.AssertAnyContains(".team-schedule .view-changer-wrapper .view-option", "DAY");
 		}
 
+		[When(@"I toggle week view")]
+		public void WhenIToggleWeekView()
+		{
+			Browser.Interactions.ClickContaining(".team-schedule .view-changer-wrapper .view-option", "WEEK");
+		}
+
+		[When(@"I toggle day view")]
+		public void WhenIToggleDayView()
+		{
+			Browser.Interactions.ClickContaining(".team-schedule .view-changer-wrapper .view-option", "DAY");
+		}
+	
 		[When(@"I toggle ""(.*)"" view")]
 		public void WhenIToggleView(string view)
 		{

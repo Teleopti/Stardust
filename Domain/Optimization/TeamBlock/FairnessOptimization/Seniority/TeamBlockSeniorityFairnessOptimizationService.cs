@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
     public class TeamBlockSeniorityFairnessOptimizationService : ITeamBlockSeniorityFairnessOptimizationService
     {
         private readonly IConstructTeamBlock _constructTeamBlock;
-		private readonly IDetermineTeamBlockPriority _determineTeamBlockPriority;
+		private readonly DetermineTeamBlockPriority _determineTeamBlockPriority;
 	    private readonly ITeamBlockPeriodValidator _teamBlockPeriodValidator;
 	    private readonly ITeamBlockSeniorityValidator _teamBlockSeniorityValidator;
 	    private readonly ITeamBlockSwap _teamBlockSwap;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 		
         public TeamBlockSeniorityFairnessOptimizationService(IConstructTeamBlock constructTeamBlock, 
-															IDetermineTeamBlockPriority determineTeamBlockPriority,
+															DetermineTeamBlockPriority determineTeamBlockPriority,
 															ITeamBlockPeriodValidator teamBlockPeriodValidator,
 															ITeamBlockSeniorityValidator teamBlockSeniorityValidator,
 															ITeamBlockSwap teamBlockSwap,

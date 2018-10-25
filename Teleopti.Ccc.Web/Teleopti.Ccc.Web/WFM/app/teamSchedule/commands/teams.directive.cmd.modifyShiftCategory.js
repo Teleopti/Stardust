@@ -1,4 +1,4 @@
-﻿(function(){
+﻿(function () {
 	'use strict';
 
 	angular.module('wfm.teamSchedule').directive('modifyShiftCategory', modifyShiftCategoryDirective);
@@ -26,9 +26,9 @@
 		};
 	}
 
-	modifyShiftCategoryCtrl.$inject = ['ScheduleManagement', 'ShiftCategoryService', 'PersonSelection', 'teamScheduleNotificationService'];
+	modifyShiftCategoryCtrl.$inject = ['$translate', 'ScheduleManagement', 'ShiftCategoryService', 'PersonSelection', 'teamScheduleNotificationService'];
 
-	function modifyShiftCategoryCtrl(scheduleMgmtSvc, shiftCategorySvc, personSelectionSvc, teamScheduleNotificationService){
+	function modifyShiftCategoryCtrl($translate, scheduleMgmtSvc, shiftCategorySvc, personSelectionSvc, teamScheduleNotificationService) {
 		var vm = this;
 
 		vm.label = 'EditShiftCategory';
@@ -47,7 +47,7 @@
 			var invalidAgents = {};
 			vm.selectedAgents = personSelectionSvc.getCheckedPersonInfoList();
 
-			for(var i = 0; i < vm.selectedAgents.length; i++) {
+			for (var i = 0; i < vm.selectedAgents.length; i++) {
 				var agent = vm.selectedAgents[i];
 				if (agent.Timezone.IanaId !== vm.getCurrentTimezone()) {
 					invalidAgents[agent.PersonId] = {
@@ -57,9 +57,9 @@
 					continue;
 				}
 				var agentSchedule = scheduleMgmtSvc.findPersonScheduleVmForPersonId(agent.PersonId);
-				var hasDayOffSelected = agentSchedule.DayOffs.filter(function(d) {
+				var hasDayOffSelected = agentSchedule.DayOffs.filter(function (d) {
 					return d.Date === vm.selectedDate();
-					}).length > 0;
+				}).length > 0;
 				if (agentSchedule.IsFullDayAbsence || hasDayOffSelected) {
 					invalidAgents[agent.PersonId] = {
 						PersonId: agent.PersonId,
@@ -67,7 +67,7 @@
 					}
 				}
 			}
-			return Object.keys(invalidAgents).map(function(key) { return invalidAgents[key] });
+			return Object.keys(invalidAgents).map(function (key) { return invalidAgents[key] });
 		}
 
 		function anyValidAgent() {
@@ -82,7 +82,7 @@
 			return (yiq >= 128) ? 'black' : 'white';
 		}
 
-		shiftCategorySvc.fetchShiftCategories().then(function(response){
+		shiftCategorySvc.fetchShiftCategories().then(function (response) {
 			vm.shiftCategoriesList = response.data;
 			if (angular.isArray(response.data)) {
 				response.data.forEach(function (shiftCat) {
@@ -94,8 +94,8 @@
 		});
 
 		vm.modifyShiftCategory = function () {
-			var invalidAgentIds = vm.invalidAgents.map(function(a) { return a.PersonId; });
-			var validAgents = vm.selectedAgents.filter(function(agent) {
+			var invalidAgentIds = vm.invalidAgents.map(function (a) { return a.PersonId; });
+			var validAgents = vm.selectedAgents.filter(function (agent) {
 				return invalidAgentIds.indexOf(agent.PersonId) < 0;
 			});
 
@@ -116,8 +116,8 @@
 				}
 
 				teamScheduleNotificationService.reportActionResult({
-					success: 'SuccessfulMessageForEditingShiftCategory',
-					warning: 'PartialSuccessMessageForEditingShiftCategory'
+					success: $translate.instant('SuccessfulMessageForEditingShiftCategory'),
+					warning: $translate.instant('PartialSuccessMessageForEditingShiftCategory')
 				}, vm.selectedAgents.map(function (agent) {
 					return {
 						PersonId: agent.PersonId,

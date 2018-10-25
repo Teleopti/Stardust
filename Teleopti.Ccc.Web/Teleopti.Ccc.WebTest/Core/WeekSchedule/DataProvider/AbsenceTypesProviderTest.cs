@@ -66,6 +66,19 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		}
 
 		[Test]
+		public void ShouldNotGetAbsenceIfItIsNotRequestable()
+		{
+			var requestDate = DateOnly.Today;
+			_now.Is(requestDate.Date);
+			var expactedAbsenceName = "requestableAbsence";
+			var openPeriod = new DateOnlyPeriod(requestDate.AddDays(-2), requestDate.AddDays(2));
+			setupData(expactedAbsenceName, openPeriod, false);
+			ToggleManager.Enable(Toggles.MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446);
+			var ret = Target.GetRequestableAbsences();
+			ret.Should().Be.Empty();
+		}
+
+		[Test]
 		public void ShouldNotGetAbsenceWhenRequestDateOutOfAbsenceOpenPeriod()
 		{
 			var requestDate = DateOnly.Today;
@@ -78,13 +91,13 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			ret.Should().Be.Empty();
 		}
 
-		private void setupData(string absenceName, DateOnlyPeriod openPeriod)
+		private void setupData(string absenceName, DateOnlyPeriod openPeriod, bool requestable = true)
 		{
 			var personId = Guid.NewGuid();
 			var wfcId = Guid.NewGuid();
 			var absenceOpenRequest = new AbsenceRequestOpenDatePeriod
 			{
-				Absence = new Absence{Description = new Description(absenceName) },
+				Absence = new Absence{Description = new Description(absenceName) , Requestable = requestable },
 				OpenForRequestsPeriod = openPeriod
 			}; 
 

@@ -15,14 +15,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly IScheduledStaffingProvider _scheduledStaffingProvider;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorService;
-		private readonly IForecastedCallsProvider _forecastedCallsProvider;
+		private readonly ForecastedCallsProvider _forecastedCallsProvider;
 		private readonly IForecastedStaffingProvider _forecastedStaffingProvider;
 
 		public EstimatedServiceLevelProvider(
 			IScheduledStaffingProvider scheduledStaffingProvider,
 			IUserTimeZone timeZone,
 			IStaffingCalculatorServiceFacade staffingCalculatorService,
-			IForecastedCallsProvider forecastedCallsProvider,
+			ForecastedCallsProvider forecastedCallsProvider,
 			IForecastedStaffingProvider forecastedStaffingProvider)
 		{
 			_scheduledStaffingProvider = scheduledStaffingProvider;

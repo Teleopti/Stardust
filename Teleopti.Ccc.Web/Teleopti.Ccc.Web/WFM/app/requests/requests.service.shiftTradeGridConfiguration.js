@@ -6,13 +6,12 @@
 		.factory('ShiftTradeGridConfiguration', [
 			'$filter',
 			'$translate',
-			'Toggle',
 			'requestsDefinitions',
 			'CurrentUserInfo',
 			ShiftTradeGridConfiguration
 		]);
 
-	function ShiftTradeGridConfiguration($filter, $translate, toggleSvc, requestDefinitions, currentUserInfo) {
+	function ShiftTradeGridConfiguration($filter, $translate, requestDefinitions, currentUserInfo) {
 		var columns = [];
 		var service = {
 			columnDefinitions: columnDefinitions,
@@ -155,9 +154,8 @@
 		function setupStandardColumns() {
 			columns = [
 				{
-					displayName: 'StartTime',
+					displayName: $translate.instant('StartTime'),
 					field: 'FormatedPeriodStartTime()',
-					headerCellFilter: 'translate',
 					cellClass: 'request-period-start-time',
 					headerCellClass: 'request-period-start-time-header',
 					visible: false,
@@ -166,9 +164,8 @@
 					minWidth: 100
 				},
 				{
-					displayName: 'EndTime',
+					displayName: $translate.instant('EndTime'),
 					field: 'FormatedPeriodEndTime()',
-					headerCellFilter: 'translate',
 					cellClass: 'request-period-end-time',
 					headerCellClass: 'request-period-end-time-header',
 					visible: false,
@@ -177,9 +174,8 @@
 					minWidth: 100
 				},
 				{
-					displayName: 'Duration',
+					displayName: $translate.instant('Duration'),
 					field: 'GetDuration()',
-					headerCellFilter: 'translate',
 					cellClass: 'request-period-duration',
 					enableSorting: false,
 					visible: false,
@@ -189,10 +185,8 @@
 					minWidth: 100
 				},
 				{
-					displayName: 'AgentName',
+					displayName: $translate.instant('AgentName'),
 					field: 'AgentName',
-					headerCellFilter: 'translate',
-					//cellClass: 'request-agent-name',
 					cellTemplate:
 						'<table style="width: 100%; height: 100%;"><tr><td> {{row.entity[col.field]}}</td></tr><tr><td> {{row.entity["PersonTo"]}}</td></tr></table>',
 					headerCellClass: 'request-agent-name-header',
@@ -202,9 +196,8 @@
 					minWidth: 100
 				},
 				{
-					displayName: 'TimeZone',
+					displayName: $translate.instant('TimeZone'),
 					field: 'TimeZone',
-					headerCellFilter: 'translate',
 					cellClass: 'request-time-zone',
 					headerCellClass: 'request-time-zone-header',
 					enableSorting: false,
@@ -214,9 +207,8 @@
 					minWidth: 100
 				},
 				{
-					displayName: 'Team',
+					displayName: $translate.instant('Team'),
 					field: 'Team',
-					headerCellFilter: 'translate',
 					cellClass: 'request-team',
 					headerCellClass: 'request-team-header',
 					cellTemplate:
@@ -227,9 +219,8 @@
 					minWidth: 100
 				},
 				{
-					displayName: 'Seniority',
+					displayName: $translate.instant('Seniority'),
 					field: 'Seniority',
-					headerCellFilter: 'translate',
 					cellClass: 'request-seniority',
 					headerCellClass: 'request-seniority-header',
 					visible: false,
@@ -238,9 +229,8 @@
 					minWidth: 100
 				},
 				{
-					displayName: 'Subject',
+					displayName: $translate.instant('Subject'),
 					field: 'Subject',
-					headerCellFilter: 'translate',
 					cellClass: 'request-subject',
 					headerCellClass: 'request-subject-header',
 					filter: {
@@ -259,9 +249,8 @@
 						'ng-attr-placeholder="{{colFilter.placeholder || \'\'}}" aria-label="{{colFilter.ariaLabel || aria.defaultFilterLabel}}" /></div>'
 				},
 				{
-					displayName: 'Message',
+					displayName: $translate.instant('Message'),
 					field: 'Message',
-					headerCellFilter: 'translate',
 					cellClass: 'request-message',
 					headerCellClass: 'request-message-header',
 					visible: false,
@@ -280,9 +269,8 @@
 						'ng-attr-placeholder="{{colFilter.placeholder || \'\'}}" aria-label="{{colFilter.ariaLabel || aria.defaultFilterLabel}}" /></div>'
 				},
 				{
-					displayName: 'DenyReason',
+					displayName: $translate.instant('DenyReason'),
 					field: 'DenyReason',
-					headerCellFilter: 'translate',
 					cellClass: 'request-deny-reason',
 					headerCellClass: 'request-deny-reason-header',
 					visible: false,
@@ -292,9 +280,8 @@
 					cellTooltip: true
 				},
 				{
-					displayName: 'Status',
+					displayName: $translate.instant('Status'),
 					field: 'StatusText',
-					headerCellFilter: 'translate',
 					cellClass: 'request-status',
 					headerCellClass: 'request-status-header',
 					visible: true,
@@ -303,7 +290,7 @@
 					enablePinning: false,
 					minWidth: 100,
 					filterHeaderTemplate:
-						'<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\">' +
+						'<div class="ui-grid-filter-container" ng-repeat="colFilter in col.filters">' +
 						'<md-select ng-model-options="{trackBy: \'$value.Id\'}" md-on-close="grid.appScope.statusFilterClose()"' +
 						'multiple ng-model="grid.appScope.selectedRequestStatuses" placeholder="{{\'FilterColon\' | translate}} {{\'Status\' | translate}}" aria-label="{{\'Status\' | translate}}">' +
 						'<md-option ng-repeat="item in grid.appScope.allRequestStatuses" ng-value="item">' +
@@ -313,9 +300,8 @@
 						'</div>'
 				},
 				{
-					displayName: 'CreatedOn',
+					displayName: $translate.instant('CreatedOn'),
 					field: 'FormatedCreatedTime()',
-					headerCellFilter: 'translate',
 					cellClass: 'request-created-time',
 					headerCellClass: 'request-created-time-header',
 					pinnedRight: true,
@@ -323,9 +309,8 @@
 					minWidth: 100
 				},
 				{
-					displayName: 'UpdatedOn',
+					displayName: $translate.instant('UpdatedOn'),
 					field: 'FormatedUpdatedTime()',
-					headerCellFilter: 'translate',
 					cellClass: 'request-updated-time',
 					visible: false,
 					headerCellClass: 'request-updated-time-header',
@@ -342,7 +327,7 @@
 			var numberOfDays = maximum.diff(minimum, 'days') + 1;
 
 			return {
-				displayName: 'ShiftTrade',
+				displayName: $translate.instant('ShiftTrade'),
 				field: 'AgentName',
 				enablePinning: false,
 				enableColumnMenu: false,
@@ -361,9 +346,8 @@
 				setupStandardColumns();
 
 				var brokenRulesColumn = {
-					displayName: 'BrokenRules',
+					displayName: $translate.instant('BrokenRules'),
 					field: 'GetBrokenRules()',
-					headerCellFilter: 'translate',
 					cellClass: 'request-broken-rules',
 					cellTooltip: true,
 					visible: true,

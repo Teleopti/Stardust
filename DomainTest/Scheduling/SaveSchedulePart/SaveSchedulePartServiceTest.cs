@@ -245,23 +245,5 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 			var resources = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(2017, 5, 20, 8, 2017, 5, 20, 10)).ToList();
 			resources.Count.Should().Be.EqualTo(0);
 		}
-		[Test]
-		public void ShouldNotInvokeScheduleDifferenceSaverWhenSavingFromPlans()
-		{
-			var saver = new FakeScheduleDayDifferenceSaver();
-			var target =
-				new ScheduleDifferenceSaver(
-				new ScheduleStorage(new CurrentUnitOfWork(CurrentUnitOfWorkFactory), RepositoryFactory,
-				new PersistableScheduleDataPermissionChecker(),
-				new ScheduleStorageRepositoryWrapper(RepositoryFactory, new CurrentUnitOfWork(CurrentUnitOfWorkFactory))),
-				new CurrentUnitOfWork(CurrentUnitOfWorkFactory), saver);
-		
-			target.SaveChanges(new DifferenceCollection<IPersistableScheduleData>(),
-				new ScheduleRange(new FakeScheduleDictionary(),
-					new ScheduleParameters(new Scenario("_"), new Person(), new DateTimePeriod()),
-					new PersistableScheduleDataPermissionChecker()),true);
-			saver.InvokeSave.Should().Be.EqualTo(false);
-		}
 	}
-
 }

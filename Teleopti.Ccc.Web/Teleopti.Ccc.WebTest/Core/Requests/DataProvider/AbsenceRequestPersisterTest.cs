@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Repositories;
@@ -19,7 +18,6 @@ using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -1201,6 +1199,80 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldDenyFullDayRequestWhenTodayHasOvernightScheduleAndPersonalAccountIsNotEnough()
+		{
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
+				, CurrentScenario.Current(),
+				_today.ToDateTimePeriod(
+					new TimePeriod(TimeSpan.FromHours(16), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(2))),
+					UserTimeZone.TimeZone())));
+
+			_absence = createAbsence();
+			_absence.Tracker = Tracker.CreateTimeTracker();
+
+			var accountTime = new AccountTime(_today)
+			{
+				Accrued = TimeSpan.FromHours(9)
+			};
+			createPersonAbsenceAccount(_person, _absence, accountTime);
+
+			setWorkflowControlSet(usePersonAccountValidator: true);
+
+			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
+			var skill = SkillFactory.CreateSkill("Phone");
+			skill.MidnightBreakOffset = TimeSpan.FromHours(1);
+			setupPersonSkills(skill, skillOpenPeriod);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(0)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(24))
+			});
+			form.FullDay = true;
+
+			Persister.Persist(form);
+
+			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
+			request.IsDenied.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldDenyFullDayRequestWhenTodayHasNoScheduleAndPersonalAccountIsNotEnough()
+		{
+			_absence = createAbsence();
+			_absence.Tracker = Tracker.CreateTimeTracker();
+
+			var accountTime = new AccountTime(_today)
+			{
+				Accrued = TimeSpan.FromHours(7)
+			};
+			createPersonAbsenceAccount(_person, _absence, accountTime);
+
+			setWorkflowControlSet(usePersonAccountValidator: true);
+
+			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
+			var skill = SkillFactory.CreateSkill("Phone");
+			skill.MidnightBreakOffset = TimeSpan.FromHours(1);
+			setupPersonSkills(skill, skillOpenPeriod);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(0)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(24))
+			});
+			form.FullDay = true;
+
+			Persister.Persist(form);
+
+			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
+			request.IsDenied.Should().Be.True();
 		}
 
 		[Test]

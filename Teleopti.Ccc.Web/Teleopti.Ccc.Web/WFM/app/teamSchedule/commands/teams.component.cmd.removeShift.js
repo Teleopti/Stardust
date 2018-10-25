@@ -7,8 +7,8 @@
 			},
 			controller: RemoveShiftCtrl
 		});
-	RemoveShiftCtrl.$inject = ['$scope', '$wfmConfirmModal', 'PersonSelection', 'ActivityService', 'teamScheduleNotificationService','serviceDateFormatHelper'];
-	function RemoveShiftCtrl($scope, $wfmModal, personSelectionSvc, activityService, teamScheduleNotificationService, serviceDateFormatHelper) {
+	RemoveShiftCtrl.$inject = ['$scope', '$translate', '$wfmConfirmModal', 'PersonSelection', 'ActivityService', 'teamScheduleNotificationService', 'serviceDateFormatHelper'];
+	function RemoveShiftCtrl($scope, $translate, $wfmModal, personSelectionSvc, activityService, teamScheduleNotificationService, serviceDateFormatHelper) {
 		var ctrl = this;
 		ctrl.runningCommand = false;
 		ctrl.label = 'RemoveShift';
@@ -23,9 +23,9 @@
 
 		ctrl.popDialog = function () {
 			var personInfos = getCheckedPersonInfoListWithShift();
-			var title = ctrl.label;
+			var title = $translate.instant('RemoveShift');
 			var message = teamScheduleNotificationService.buildConfirmationMessage(
-				'AreYouSureToRemoveSelectedShift',
+				$translate.instant('AreYouSureToRemoveSelectedShift'),
 				personInfos.length,
 				personInfos.length,
 				true
@@ -52,8 +52,8 @@
 					ctrl.getActionCb(ctrl.label)(ctrl.trackId, personIds);
 				}
 				teamScheduleNotificationService.reportActionResult({
-					"success": 'FinishedRemoveShift',
-					"warning": 'PartialSuccessMessageForRemovingShift'
+					"success": $translate.instant('FinishedRemoveShift'),
+					"warning": $translate.instant('PartialSuccessMessageForRemovingShift')
 				}, personInfos.map(function (x) {
 					return {
 						PersonId: x.PersonId,

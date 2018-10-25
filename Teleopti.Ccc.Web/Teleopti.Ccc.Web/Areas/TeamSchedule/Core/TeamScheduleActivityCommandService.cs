@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
+using Teleopti.Ccc.Domain.Collection;
 using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;

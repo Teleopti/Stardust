@@ -115,11 +115,13 @@
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.261\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.262\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.261\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.262\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -253,7 +255,6 @@
     <Compile Include="Intraday\Domain\IntradayForecastInterval.cs" />
     <Compile Include="Intraday\Extensions\IntradaySkillDayExtensions.cs" />
     <Compile Include="Intraday\Domain\IEmailBacklogProvider.cs" />
-    <Compile Include="Intraday\IForecastedCallsProvider.cs" />
     <Compile Include="Intraday\Domain\IForecastedStaffingProvider.cs" />
     <Compile Include="Intraday\IForecastedStaffingToDataSeries.cs" />
     <Compile Include="Intraday\Domain\IntradayForecastingService.cs" />
@@ -881,7 +882,6 @@
     <Compile Include="InterfaceLegacy\Domain\IChildPersonGroup.cs" />
     <Compile Include="InterfaceLegacy\Domain\IChildSkill.cs" />
     <Compile Include="InterfaceLegacy\Domain\ICloneableEntity.cs" />
-    <Compile Include="InterfaceLegacy\Domain\ICommonActivity.cs" />
     <Compile Include="InterfaceLegacy\Domain\ICommonNameDescriptionSetting.cs" />
     <Compile Include="InterfaceLegacy\Domain\IContract.cs" />
     <Compile Include="InterfaceLegacy\Domain\IContractSchedule.cs" />

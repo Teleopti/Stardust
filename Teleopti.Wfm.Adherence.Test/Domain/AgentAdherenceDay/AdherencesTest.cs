@@ -55,14 +55,15 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.AgentAdherenceDay
 		{
 			Now.Is("2016-10-12 12:00");
 			var person = Guid.NewGuid();
-
-			Database.WithAgent(person, "nicklas")
+			Database
+				.WithAgent(person)
 				.WithHistoricalStateChange(person, "2016-10-11 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalAdherenceDayStart("2016-10-12 00:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
 				;
 
 			var data = Target.LoadUntilNow(person, "2016-10-12".Date());
 
-			data.OutOfAdherences().Single().StartTime.Should().Be("2016-10-11 09:00:00".Utc());
+			data.OutOfAdherences().Single().StartTime.Should().Be(null);
 		}
 
 		[Test]
@@ -71,14 +72,35 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.AgentAdherenceDay
 			Now.Is("2016-10-12 12:00");
 			var person = Guid.NewGuid();
 
-			Database.WithAgent(person, "nicklas")
+			Database
+				.WithAgent(person)
 				.WithHistoricalStateChange(person, "2016-10-11 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalAdherenceDayStart(person, "2016-10-12 00:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
 				.WithHistoricalStateChange(person, "2016-10-12 11:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				;
 
 			var data = Target.LoadUntilNow(person, "2016-10-12".Date());
 
-			data.OutOfAdherences().Single().StartTime.Should().Be("2016-10-11 09:00:00".Utc());
+			data.OutOfAdherences().Single().StartTime.Should().Be(null);
+			data.OutOfAdherences().Single().EndTime.Should().Be("2016-10-12 11:00:00".Utc());
+		}
+
+		[Test]
+		public void ShouldReadOutOfAdherenceStartedTwoDaysAgo()
+		{
+			Now.Is("2016-10-12 12:00");
+			var person = Guid.NewGuid();
+
+			Database.WithAgent(person)
+				.WithHistoricalStateChange(person, "2016-10-10 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange(person, "2016-10-11 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalAdherenceDayStart(person, "2016-10-12 00:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange(person, "2016-10-12 11:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				;
+
+			var data = Target.LoadUntilNow(person, "2016-10-12".Date());
+
+			data.OutOfAdherences().Single().StartTime.Should().Be(null);
 			data.OutOfAdherences().Single().EndTime.Should().Be("2016-10-12 11:00:00".Utc());
 		}
 
@@ -87,16 +109,15 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.AgentAdherenceDay
 		{
 			Now.Is("2016-10-12 12:00");
 			var person = Guid.NewGuid();
-
-			Database.WithAgent(person, "nicklas")
-				.WithHistoricalStateChange(person, "2016-10-11 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+			Database.WithAgent(person)
+				.WithHistoricalStateChange(person, "2016-10-12 00:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
 				.WithHistoricalStateChange(person, "2016-10-12 10:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral)
 				.WithHistoricalStateChange(person, "2016-10-12 11:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				;
 
 			var data = Target.LoadUntilNow(person, "2016-10-12".Date());
 
-			data.OutOfAdherences().Single().StartTime.Should().Be("2016-10-11 09:00:00".Utc());
+			data.OutOfAdherences().Single().StartTime.Should().Be(null);
 			data.OutOfAdherences().Single().EndTime.Should().Be("2016-10-12 10:00:00".Utc());
 		}
 
@@ -105,14 +126,28 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.AgentAdherenceDay
 		{
 			Now.Is("2018-02-01 10:00");
 			var person = Guid.NewGuid();
-
-			Database.WithAgent(person, "nicklas")
+			Database.WithAgent(person)
 				.WithHistoricalStateChange(person, "2018-02-01 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
 				;
 
 			var data = Target.LoadUntilNow(person, "2018-02-01".Date());
 
 			data.OutOfAdherences().Single().EndTime.Should().Be("2018-02-01 10:00:00".Utc());
+		}
+
+		[Test]
+		public void ShouldNotEndOpenOutOfAdherenceIfUnknown()
+		{
+			Now.Is("2018-02-03 09:00");
+			var person = Guid.NewGuid();
+			Database.WithAgent(person)
+				.WithHistoricalStateChange(person, "2018-02-01 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange(person, "2018-02-02 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				;
+
+			var data = Target.LoadUntilNow(person, "2018-02-01".Date());
+
+			data.OutOfAdherences().Single().EndTime.Should().Be(null);
 		}
 	}
 }

@@ -24,6 +24,8 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Perfo
 	[DatabaseTest]
 	[Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770)]
 	[Toggle(Toggles.RTA_ReviewHistoricalAdherence_Domain_74770)]
+	[Toggle(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306)]
+	[Toggle(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485)]
 	public class MeasureEventStoreTest
 	{
 		public ConcurrencyRunner Run;

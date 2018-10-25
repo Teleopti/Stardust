@@ -61,15 +61,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CurrentPreCommitHooks>().As<ICurrentPreCommitHooks>();
 			builder.RegisterType<SetSourceOnPersonAssignment>().As<IPreCommitHook>();
 			builder.RegisterType<CurrentSchedulingSource>().As<ICurrentSchedulingSource>().As<ISchedulingSourceScope>().SingleInstance();
-
-			/**************************************/
-			/*         Order dependant            */
-			builder.RegisterType<EventsMessageSender>().As<ITransactionHook>();
+			
 			if (_configuration.Args().OptimizeScheduleChangedEvents_DontUseFromWeb)
-				builder.RegisterType<ScheduleChangedEventPublisher>().As<ITransactionHook>();
-			/*           End                      */
-			/**************************************/
-		
+			{
+				builder.RegisterType<ScheduleChangedEventPublisher>();
+			}
+			else
+			{
+				builder.RegisterType<NoScheduleChangedEventPublisher>().As<ScheduleChangedEventPublisher>();
+			}
+			builder.RegisterType<EventsMessageSender>();
+			builder.RegisterType<CompositeScheduleEventsPublisher>().As<ITransactionHook>();
 			builder.RegisterType<ScheduleChangedEventFromMeetingPublisher>().As<ITransactionHook>();
 			builder.RegisterType<GroupPageCollectionChangedEventPublisher>().As<ITransactionHook>();
 			builder.RegisterType<PersonCollectionChangedEventPublisher>().As<ITransactionHook>();

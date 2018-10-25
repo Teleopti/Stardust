@@ -12,7 +12,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class SchedulePersistModule : Module
+	internal class SchedulePersistModule : Module
 	{		
 		protected override void Load(ContainerBuilder builder)
 		{
@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterGeneric(typeof (DifferenceEntityCollectionService<>)).As(typeof (IDifferenceCollectionService<>)).SingleInstance();
 			builder.RegisterType<ScheduleRangeConflictCollector>().As<IScheduleRangeConflictCollector>().SingleInstance();
 			builder.RegisterType<ScheduleDifferenceSaver>().As<IScheduleDifferenceSaver>().SingleInstance();
+			builder.RegisterType<PersistScheduleChanges>().SingleInstance();
 			builder.RegisterType<LazyLoadingManagerWrapper>().As<ILazyLoadingManager>().SingleInstance();
 			builder.RegisterType<EmptyInitiatorIdentifier>().As<IInitiatorIdentifier>().SingleInstance(); // shouldnt be registered at all, inject ICurrentInitiatorIdentifier!
 			builder.RegisterType<dontReassociateDataForSchedules>().As<IReassociateDataForSchedules>().SingleInstance();

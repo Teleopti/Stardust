@@ -141,7 +141,11 @@
 	};
 
 	function loadAbsenceAccount(forceAccountUpdate) {
-		if (!self.PersonalAccountPermission || self.AbsenceId() == undefined || self.AbsenceId() == null || self.DateFrom().isAfter(self.DateTo()))
+		if (!self.PersonalAccountPermission
+			|| self.AbsenceId() == undefined
+			|| self.AbsenceId() == null
+			|| self.AbsenceId() === ""
+			|| self.DateFrom().isAfter(self.DateTo()))
 			return;
 
 		var absenceChanged = self.AbsenceId() != self.PreviousAbsenceId();

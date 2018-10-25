@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 					StartDate = new DateOnly(2012, 5, 11),
 					EndDate = new DateOnly(2012, 5, 11),
 					StartTime = new TimeOfDay(TimeSpan.Zero),
-					EndTime = new TimeOfDay(TimeSpan.FromDays(1).Subtract(TimeSpan.FromMinutes(1))),
+					EndTime = new TimeOfDay(TimeSpan.FromDays(1).Subtract(TimeSpan.FromMinutes(1)))
 				}
 			};
 
@@ -106,6 +106,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var expected = new DateTimePeriod(startTime, endTime);
 
 			result.Request.Period.Should().Be(expected);
+			(result.Request as IAbsenceRequest).FullDay.Should().Be(true);
 		}
 
 		[Test]

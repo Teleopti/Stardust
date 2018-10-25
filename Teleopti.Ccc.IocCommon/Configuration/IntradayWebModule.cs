@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<StaffingViewModelCreator>().As<IStaffingViewModelCreator>().SingleInstance();
-			builder.RegisterType<ForecastedCallsProvider>().As<IForecastedCallsProvider>().SingleInstance();
+			builder.RegisterType<ForecastedCallsProvider>().SingleInstance();
 			builder.RegisterType<RequiredStaffingProvider>().As<IRequiredStaffingProvider>().SingleInstance();
 			builder.RegisterType<ScheduledStaffingProvider>().As<IScheduledStaffingProvider>().SingleInstance();
 			builder.RegisterType<ScheduledStaffingToDataSeries>().As<IScheduledStaffingToDataSeries>().SingleInstance();

@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 		}
 
-		private ICommonActivity getCommonActivity()
+		private CommonActivity getCommonActivity()
 		{
 			return new CommonActivity
 				{

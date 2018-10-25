@@ -301,7 +301,7 @@
     <value>Taux de prêt (%)</value>
   </data>
   <data name="ResReadyTime" xml:space="preserve">
-    <value>Temps prêt</value>
+    <value>Temps en production</value>
   </data>
   <data name="ResAdherenceCalculationColon" xml:space="preserve">
     <value>Calcul d'adhérence: </value>
@@ -316,7 +316,7 @@
     <value>Trier par:</value>
   </data>
   <data name="ResReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
-    <value>Temps prêt / Temps prêt planifié (%)</value>
+    <value>Temps en production / Temps planifié en production (%)</value>
   </data>
   <data name="ResScheduledAgentsReady" xml:space="preserve">
     <value>Agents prêts planifié</value>
@@ -337,7 +337,7 @@
     <value>Déviation / Intervalle (m)</value>
   </data>
   <data name="ResQueueColon" xml:space="preserve">
-    <value>File:</value>
+    <value>Flux:</value>
   </data>
   <data name="ResScheduledAbsenceTime" xml:space="preserve">
     <value>Temps absence planifié (hh:mm)</value>
@@ -559,7 +559,7 @@
     <value>Durée moyenne de communication</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
-    <value>Métriques file agent</value>
+    <value>Métriques flux agent</value>
   </data>
   <data name="ResReportActivityTimePerAgent" xml:space="preserve">
     <value>Temps d'activité par agent</value>
@@ -607,7 +607,7 @@
     <value>Niveau de service et agents en prêt</value>
   </data>
   <data name="ResScheduledReadyTime" xml:space="preserve">
-    <value>Temps prêt planifié</value>
+    <value>Temps en production planifié</value>
   </data>
   <data name="ResScheduledvsReady" xml:space="preserve">
     <value>Agents planifiés contre prêt</value>
@@ -631,7 +631,7 @@
     <value>Appels décrochés / Heure prête planifiée</value>
   </data>
   <data name="ResReportQueueStatistics" xml:space="preserve">
-    <value>Statistiques file</value>
+    <value>Statistiques flux</value>
   </data>
   <data name="ResAbandonedCallsWithinSL" xml:space="preserve">
     <value>Abandonnés en niveau de service</value>
@@ -652,7 +652,7 @@
     <value>Appels transférés </value>
   </data>
   <data name="ResQueue" xml:space="preserve">
-    <value>File</value>
+    <value>Flux</value>
   </data>
   <data name="ResTimeZoneColon" xml:space="preserve">
     <value>Fuseau horaire:</value>
@@ -673,7 +673,7 @@
     <value>Temps connecté</value>
   </data>
   <data name="ResNotReadyTime" xml:space="preserve">
-    <value>Temps non prêt</value>
+    <value>Temps hors production</value>
   </data>
   <data name="ResDateInterval" xml:space="preserve">
     <value>Date / Intervalle </value>
@@ -757,13 +757,13 @@
     <value>Appels décrochés  dans le seuil de niveau de service / Appels acceptés</value>
   </data>
   <data name="ResReadyTimeVsContractScheduleTime" xml:space="preserve">
-    <value>Temps prêt contre temps de planification contrat</value>
+    <value>Temps en production contre temps de planification contrat</value>
   </data>
   <data name="ResReadyTimeVsScheduledReadyTime" xml:space="preserve">
-    <value>Temps prêt contre temps prêt planifié</value>
+    <value>Temps en production contre temps en production planifié</value>
   </data>
   <data name="ResReadyTimeVsScheduledTime" xml:space="preserve">
-    <value>Temps prêt contre temps planifié (incluant période avant et après début de quart)</value>
+    <value>Temps en production contre temps planifié (incluant période avant et après début de quart)</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
     <value>Catégorie de quarts et absence journée entière par jour </value>
@@ -811,7 +811,7 @@
     <value>Durée d'abandon (s)</value>
   </data>
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
-    <value>Statistiques file agent </value>
+    <value>Statistiques flux agent </value>
   </data>
   <data name="ResAdminTime" xml:space="preserve">
     <value>Temps admin</value>
@@ -902,9 +902,6 @@
   </data>
   <data name="ResForecastedHoursIncludingShrinkageH" xml:space="preserve">
     <value>Heures prévues (réduction) (hh:mm)</value>
-  </data>
-  <data name="LogInSuccessTitleText" xml:space="preserve">
-    <value> </value>
   </data>
   <data name="ResRequestTypeAbsence" xml:space="preserve">
     <value>Absence</value>
@@ -1121,5 +1118,20 @@
   </data>
   <data name="ResESLPercent" xml:space="preserve">
     <value>NSE (%)</value>
+  </data>
+  <data name="ResReadyTimeAdherencePercent" xml:space="preserve">
+    <value>Adhérence temps en production (%)</value>
+  </data>
+  <data name="ResReadyTimeAdherencePerIntervalPercent" xml:space="preserve">
+    <value>Adhérence temps en production / Intervalle (%)</value>
+  </data>
+  <data name="ResReadyTimeAdherenceCalculationColon" xml:space="preserve">
+    <value>Calcul d'adhérence temps en production:</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerAgent" xml:space="preserve">
+    <value>Calcul d'adhérence temps en production par Agent</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerDay" xml:space="preserve">
+    <value>Calcul d'adhérence temps en production par Jour</value>
   </data>
 </root>

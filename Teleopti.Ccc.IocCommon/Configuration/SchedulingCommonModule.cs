@@ -229,7 +229,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftFinderService>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftProjectionCacheFactory>().SingleInstance();
 			builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();	
-			builder.RegisterType<ContainingSkillIntervalPeriodFinder>().As<IContainingSkillIntervalPeriodFinder>().SingleInstance();
 			builder.RegisterType<TeamBlockRoleModelSelector>().InstancePerLifetimeScope();			
 			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>().SingleInstance();
 			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().SingleInstance();
@@ -313,7 +312,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();
 			builder.RegisterType<EditableShiftMapper>().As<IEditableShiftMapper>().SingleInstance();
 			builder.RegisterType<MaxMovedDaysOverLimitValidator>().As<IMaxMovedDaysOverLimitValidator>().SingleInstance();
-			builder.RegisterType<TeamBlockRestrictionOverLimitValidator>().As<ITeamBlockRestrictionOverLimitValidator>().SingleInstance();
+			builder.RegisterType<TeamBlockRestrictionOverLimitValidator>().SingleInstance();
 			builder.RegisterType<TeamBlockOptimizationLimits>().As<ITeamBlockOptimizationLimits>().SingleInstance();
 			builder.RegisterType<RestrictionOverLimitValidator>().SingleInstance();
 			builder.RegisterType<DayOffOptimization>().InstancePerLifetimeScope();
@@ -324,15 +323,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<AffectedDayOffs>().SingleInstance();
 
-			builder.RegisterType<TeamBlockRemoveShiftCategoryOnBestDateService>().As<ITeamBlockRemoveShiftCategoryOnBestDateService>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamBlockRemoveShiftCategoryOnBestDateService>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockRetryRemoveShiftCategoryBackToLegalService>().InstancePerLifetimeScope();
 			builder.RegisterType<RemoveScheduleDayProsBasedOnShiftCategoryLimitation>().InstancePerLifetimeScope();
 
 			builder.RegisterType<ShiftCategoryWeekRemover>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftCategoryPeriodRemover>().InstancePerLifetimeScope();
-			builder.RegisterType<ShiftCategoryLimitCounter>().As<IShiftCategoryLimitCounter>().SingleInstance();
+			builder.RegisterType<ShiftCategoryLimitCounter>().SingleInstance();
 
-			builder.RegisterType<TeamBlockDayOffsInPeriodValidator>().As<TeamBlockDayOffsInPeriodValidator>().As<ITeamBlockDayOffsInPeriodValidator>().SingleInstance();
+			builder.RegisterType<TeamBlockDayOffsInPeriodValidator>().SingleInstance();
 
 			//ITeamBlockRestrictionOverLimitValidator
 			builder.RegisterType<BestSpotForAddingDayOffFinder>().As<IBestSpotForAddingDayOffFinder>().SingleInstance();
@@ -498,25 +497,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<NextPlanningPeriodProvider>().SingleInstance().As<INextPlanningPeriodProvider>();
 			builder.RegisterType<CheckScheduleHints>().SingleInstance();
 			builder.RegisterType<GetValidations>().SingleInstance();
-			builder.RegisterType<BusinessRulesHint>().As<IScheduleHint>().SingleInstance();
-			if (!_configuration.Args().IsFatClient)
-			{
-				builder.RegisterType<MissingForecastHint>().AsSelf().As<IScheduleHint>().SingleInstance();
-				builder.RegisterType<PersonSchedulePeriodHint>().As<IScheduleHint>().SingleInstance();				
-			}
-			builder.RegisterType<ScheduleStartOnWrongDateHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<PersonSkillHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<PersonPeriodHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<PersonShiftBagHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<PersonPartTimePercentageHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<PersonContractHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<PersonContractScheduleHint>().As<IScheduleHint>().SingleInstance();
 			
-			builder.RegisterType<BlockSchedulingNotMatchShiftBagHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<BlockSchedulingPreviousShiftNotMatchingEachOtherHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<BlockSchedulingExistingShiftNotMatchingEachOtherHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<BlockSchedulingPreferenceHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<AgentsWithWhiteSpots>().SingleInstance();
 			if(_configuration.Toggle(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288))
 			{
 				builder.RegisterType<AlreadyScheduledAgents>().As<IAlreadyScheduledAgents>().SingleInstance();
@@ -530,6 +511,26 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<AlreadyScheduledAgentsNullObject>().As<IAlreadyScheduledAgents>().SingleInstance();
 			}
+			
+			builder.RegisterType<AgentsWithWhiteSpots>().SingleInstance();
+			builder.RegisterType<BlockSchedulingPreferenceHint>().As<IScheduleHint>().SingleInstance();
+			builder.RegisterType<BlockSchedulingExistingShiftNotMatchingEachOtherHint>().As<IScheduleHint>().SingleInstance();
+			builder.RegisterType<BlockSchedulingPreviousShiftNotMatchingEachOtherHint>().As<IScheduleHint>().SingleInstance();
+			builder.RegisterType<BlockSchedulingNotMatchShiftBagHint>().As<IScheduleHint>().SingleInstance();
+
+			builder.RegisterType<PersonContractScheduleHint>().As<IScheduleHint>().SingleInstance();
+			builder.RegisterType<PersonContractHint>().As<IScheduleHint>().SingleInstance();
+			builder.RegisterType<PersonPartTimePercentageHint>().As<IScheduleHint>().SingleInstance();
+			builder.RegisterType<PersonShiftBagHint>().As<IScheduleHint>().SingleInstance();
+			builder.RegisterType<PersonPeriodHint>().As<IScheduleHint>().SingleInstance();
+			builder.RegisterType<PersonSkillHint>().As<IScheduleHint>().SingleInstance();
+			builder.RegisterType<ScheduleStartOnWrongDateHint>().As<IScheduleHint>().SingleInstance();
+			if (!_configuration.Args().IsFatClient)
+			{
+				builder.RegisterType<MissingForecastHint>().AsSelf().As<IScheduleHint>().SingleInstance();
+				builder.RegisterType<PersonSchedulePeriodHint>().As<IScheduleHint>().SingleInstance();
+			}
+			builder.RegisterType<BusinessRulesHint>().As<IScheduleHint>().SingleInstance();
 		}
 
 		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)
@@ -573,7 +574,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftCategoryPoints>().As<IShiftCategoryPoints>().SingleInstance();
 			builder.RegisterType<ShiftCategoryPointExtractor>().As<IShiftCategoryPointExtractor>().SingleInstance();
 			builder.RegisterType<SeniorityExtractor>().As<ISeniorityExtractor>().SingleInstance();
-			builder.RegisterType<DetermineTeamBlockPriority>().As<IDetermineTeamBlockPriority>().SingleInstance();
+			builder.RegisterType<DetermineTeamBlockPriority>().SingleInstance();
 			builder.RegisterType<TeamBlockSwapValidator>().As<ITeamBlockSwapValidator>().SingleInstance();
 			builder.RegisterType<TeamBlockSwapDayValidator>().As<ITeamBlockSwapDayValidator>().SingleInstance();
 			builder.RegisterType<TeamBlockSwap>().As<ITeamBlockSwap>();

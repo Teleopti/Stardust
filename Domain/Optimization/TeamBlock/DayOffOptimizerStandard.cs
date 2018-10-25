@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly TeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
-		private readonly ITeamBlockDayOffsInPeriodValidator _teamBlockDayOffsInPeriodValidator;
+		private readonly TeamBlockDayOffsInPeriodValidator _teamBlockDayOffsInPeriodValidator;
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly DayOffOptimizerPreMoveResultPredictor _dayOffOptimizerPreMoveResultPredictor;
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			TeamBlockClearer teamBlockClearer,
 			ITeamBlockOptimizationLimits teamBlockOptimizationLimits,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
-			ITeamBlockDayOffsInPeriodValidator teamBlockDayOffsInPeriodValidator,
+			TeamBlockDayOffsInPeriodValidator teamBlockDayOffsInPeriodValidator,
 			IWorkShiftSelector workShiftSelector,
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
 			DayOffOptimizerPreMoveResultPredictor dayOffOptimizerPreMoveResultPredictor,

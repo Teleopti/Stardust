@@ -15,9 +15,9 @@
 		};
 	}
 
-	addActivityCtrl.$inject = ['$scope', 'ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleHelper', 'teamScheduleNotificationService', 'CommandCheckService', 'belongsToDateDecider', 'serviceDateFormatHelper'];
+	addActivityCtrl.$inject = ['$scope', '$translate', 'ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleHelper', 'teamScheduleNotificationService', 'CommandCheckService', 'belongsToDateDecider', 'serviceDateFormatHelper'];
 
-	function addActivityCtrl($scope, activityService, personSelectionSvc, utility, scheduleHelper, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider, serviceDateFormatHelper) {
+	function addActivityCtrl($scope, $translate, activityService, personSelectionSvc, utility, scheduleHelper, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider, serviceDateFormatHelper) {
 		var vm = this;
 
 		vm.label = 'AddActivity';
@@ -48,7 +48,7 @@
 			endTime: getDefaultActvityEndTime()
 		};
 
-		
+
 		activityService.fetchAvailableActivities().then(function (activities) {
 			vm.availableActivities = activities;
 			vm.availableActivitiesLoaded = true;
@@ -116,8 +116,8 @@
 							vm.getActionCb(vm.label)(vm.trackId, personIds);
 						}
 						teamScheduleNotificationService.reportActionResult({
-							success: 'SuccessfulMessageForAddingActivity',
-							warning: 'PartialSuccessMessageForAddingActivity'
+							success: $translate.instant('SuccessfulMessageForAddingActivity'),
+							warning: $translate.instant('PartialSuccessMessageForAddingActivity')
 						},
 							vm.selectedAgents.map(function (x) {
 								return {
@@ -168,7 +168,7 @@
 				});
 		};
 
-		function getDefaultActvityStartTime () {
+		function getDefaultActvityStartTime() {
 			var curDateMoment = moment(vm.selectedDate());
 			var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
 			var schedules = vm.containerCtrl.scheduleManagementSvc.schedules();
@@ -198,7 +198,7 @@
 			return serviceDateFormatHelper.getDateTime(defaultStart);
 		}
 
-		function getDefaultActvityEndTime () {
+		function getDefaultActvityEndTime() {
 			return serviceDateFormatHelper.getDateTime(moment(getDefaultActvityStartTime()).add(1, 'hour'));
 		};
 

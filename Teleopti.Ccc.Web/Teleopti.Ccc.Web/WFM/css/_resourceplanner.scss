@@ -326,7 +326,6 @@ table.overview {
 	}
 
 	.plan-filter-container {
-		padding:10px 0px;
 		margin:5px;
 	}
 
@@ -396,10 +395,6 @@ card-panel-header {
 		background-color: $blue-100 ;
 		border-radius: 15px;
 	}
-}
-
-input.pg-setting-name {
-	margin-top: 10px;
 }
 
 card-panel-content {
@@ -491,4 +486,8 @@ card-panel-content {
 .filter-hidden {
 	display: none;
 	// background-color: pink;
+}
+
+.manage-schedule-period-picker wfm-date-range-picker{
+  z-index: 40;
 }

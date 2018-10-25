@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
@@ -56,6 +57,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_number = number;
 		}
 
+		[RemoveMeWithToggle(Toggles.SchedulePeriod_HideChineseMonth_78424)]
+		public virtual bool Toggle78424 { get; set; }
+
 		/// <summary>
 		/// gets or sets date from
 		/// </summary>
@@ -79,7 +83,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		/// </remarks>
 		public virtual SchedulePeriodType PeriodType
 		{
-			get { return _periodType; }
+			get
+			{
+				if (Toggle78424 && _periodType == SchedulePeriodType.ChineseMonth)
+					return SchedulePeriodType.Month;
+
+				return _periodType;
+			}
 			set { _periodType = value; }
 		}
 

@@ -166,6 +166,9 @@
 		.gantt-body-columns {
 			pointer-events: auto;
 		}
+		.gantt-header-row .gantt-column-header {
+			padding-top: 0;
+		}
 	}
 	.week-days-header {
 		display: flex;

@@ -4,12 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-	public interface IShiftCategoryLimitCounter
-	{
-		bool HaveMaxOfShiftCategory(IShiftCategoryLimitation shiftCategoryLimitation, ITeamInfo teamInfo, DateOnly dateOnly);
-	}
-
-	public class ShiftCategoryLimitCounter : IShiftCategoryLimitCounter
+	public class ShiftCategoryLimitCounter
 	{
 		public bool HaveMaxOfShiftCategory(IShiftCategoryLimitation shiftCategoryLimitation, ITeamInfo teamInfo, DateOnly dateOnly)
 		{

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
-		private readonly IForecastedCallsProvider _forecastedCallsProvider;
+		private readonly ForecastedCallsProvider _forecastedCallsProvider;
 		private readonly IRequiredStaffingProvider _requiredStaffingProvider;
 		private readonly IIntradayQueueStatisticsLoader _intradayQueueStatisticsLoader;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		public StaffingViewModelCreator(
 			INow now,
 			IUserTimeZone timeZone,
-			IForecastedCallsProvider forecastedCallsProvider,
+			ForecastedCallsProvider forecastedCallsProvider,
 			IRequiredStaffingProvider requiredStaffingProvider,
 			IIntradayQueueStatisticsLoader intradayQueueStatisticsLoader,
 			IIntervalLengthFetcher intervalLengthFetcher,

@@ -1,14 +1,4 @@
-﻿
-if (typeof (Teleopti) === 'undefined') {
-	Teleopti = {};
-
-	if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
-		Teleopti.MyTimeWeb = {};
-	}
-}
-
-Teleopti.MyTimeWeb.UserInfo = (function ($) {
-	
+﻿Teleopti.MyTimeWeb.UserInfo = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 
 	var promise = ajax.Ajax({
@@ -25,5 +15,4 @@ Teleopti.MyTimeWeb.UserInfo = (function ($) {
 			return promise;
 		}
 	};
-
 })(jQuery);

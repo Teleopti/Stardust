@@ -35,15 +35,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupPerson(8, 21);
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumTimeEnabled = true,
-					OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny,
-					OvertimeRequestMaximumTime = TimeSpan.Zero
-				};
 			var person = LoggedOnUser.CurrentUser();
-			person.WorkflowControlSet = workflowControlSet;
+			var workflowControlSet = person.WorkflowControlSet;
+			workflowControlSet.OvertimeRequestMaximumTimeEnabled = true;
+			workflowControlSet.OvertimeRequestMaximumTimeHandleType = OvertimeValidationHandleType.Deny;
+			workflowControlSet.OvertimeRequestMaximumTime = TimeSpan.Zero;
 
 			var personRequest = createOvertimeRequest(18, 3);
 			getTarget().Process(personRequest);

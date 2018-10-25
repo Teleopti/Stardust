@@ -24,17 +24,8 @@
 	width: 100%;
 	z-index: 2;
 	border-bottom: 1px solid #e1e2e3;
-
-	.return-button:hover {
-		background: #0099ff !important;
-		color: $white !important;
-	}
 	.wfm-fab {
 		transition-duration: 0s;
-	}
-	.button-active {
-		background: #0099ff !important;
-		color: $white !important;
 	}
 	.seatmap-view-datepicker {
 		height: 100%;

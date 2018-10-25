@@ -359,28 +359,29 @@ function global:RevokeServerRoles () {
 
 function global:PatchDatabaseWithDboOnly () {
 
-    if (!($global:SQLEdition -eq $SQLAzure)) {
-
-		$Params = "$global:DBManagerString -D$MartDB -OTeleoptiAnalytics -F$DatabasePath"
-		$Prms = $Params.Split(" ")
-		& "$DbManagerExe" $Prms
-			
-			if ($lastexitcode -ne 0) {
-				Log "Something went wrong during creation of: '$MartDB'"
-				Log "lastexitcode: $lastexitcode" 
-				exit 1
-	       	}
-       
-		$Params = "$global:DBManagerString -D$AppDB -OTeleoptiCCC7 -F$DatabasePath"
-		$Prms = $Params.Split(" ")
-		& "$DbManagerExe" $Prms
+    $Params = "$global:DBManagerString -D$AppDB -OTeleoptiCCC7 -F$DatabasePath"
+	$Prms = $Params.Split(" ")
+	& "$DbManagerExe" $Prms
         
-			if ($lastexitcode -ne 0) {
-				Log "Something went wrong during creation of: '$AppDB'"
-	       		Log "lastexitcode: $lastexitcode" 
-				exit 1
-			}
+	if ($lastexitcode -ne 0) {
+		Log "Something went wrong during creation of: '$AppDB'"
+		Log "lastexitcode: $lastexitcode" 
+		exit 1
+	}
 
+	$Params = "$global:DBManagerString -D$MartDB -OTeleoptiAnalytics -F$DatabasePath"
+	$Prms = $Params.Split(" ")
+	& "$DbManagerExe" $Prms
+			
+	if ($lastexitcode -ne 0) {
+		Log "Something went wrong during creation of: '$MartDB'"
+		Log "lastexitcode: $lastexitcode" 
+		exit 1
+	}
+       
+				
+	if (!($global:SQLEdition -eq $SQLAzure)) {
+		
 		$Params = "$global:DBManagerString -D$global:AggDB -OTeleoptiCCCAgg -F$DatabasePath"
 		$Prms = $Params.Split(" ")
 		& "$DbManagerExe" $Prms
@@ -390,10 +391,10 @@ function global:PatchDatabaseWithDboOnly () {
 				Log "lastexitcode: $lastexitcode" 
 				exit 1
 			}		
-    }
+	}	
 }
 
-function global:DataModifications () {
+function global:DataModificationsOLD () {
 
     $Params = "$global:SecurityExeString -AP$AppDB -AN$MartDB -CD$global:AggDB"
     $Prms = $Params.Split(" ")
@@ -404,6 +405,39 @@ function global:DataModifications () {
 			Log "lastexitcode: $lastexitcode"
 			exit 1
     	}
+}
+
+function global:DataModifications () {
+
+	$Params = "$global:SecurityExeString -AP$AppDB -AN$MartDB -CD$global:AggDB"
+    $Prms = $Params.Split(" ")
+	
+	$count = 0
+	$success = $null
+
+	do{
+		try{
+			& "$SecurityExe" $Prms
+			
+			if ($lastexitcode -ne 0) {
+				
+				Log "Something went wrong during the running of security EXE..."
+				Log "lastexitcode: $lastexitcode"
+				throw "Will try to rerun..."
+			}
+			
+			$success = $true
+		}
+		catch{
+			Write-Output "Next attempt in 10 seconds..."
+			Start-sleep -Seconds 20
+		}
+    
+			$count++
+    
+		}until($count -eq 5 -or $success)
+		
+		if(-not($success)){ exit 1 }
 }
 
 function global:CheckPKAndIndex

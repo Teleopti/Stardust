@@ -51,9 +51,9 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		expect(controller.outOfAdherences[1].Offset).toEqual((15 * 60 + 7200) / (12 * 3600) * 100 + '%');
 	});
 
-	it('should display out of adherence start date when started a long time ago', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend.with.historicalAdherence({
+	it('should display out of adherence start date when started a long time ago', function (t) {
+		t.stateParams.personId = '1';
+		t.backend.with.historicalAdherence({
 			PersonId: '1',
 			AgentName: 'Mikkey Dee',
 			Timeline: {
@@ -65,9 +65,9 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 			}]
 		});
 
-		var controller = tester.createController();
+		var vm = t.createController();
 
-		expect(controller.outOfAdherences[0].StartTime).toEqual(moment('2016-10-09 17:00:00').format('LLL'));
+		expect(vm.outOfAdherences[0].StartTime).toEqual(moment('2016-10-09 17:00:00').format('LLL'));
 	});
 
 	it('should display out of adherence started a long time ago within timeline ', function (t) {
@@ -90,6 +90,50 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		var vm = t.createController();
 
 		expect(vm.outOfAdherences[0].Offset).toEqual("0%");
+		expect(vm.outOfAdherences[0].Width).toEqual("10%");
+	});
+	
+	it('should not display out of adherence start time when not known', function (t) {
+		t.stateParams.personId = '1';
+		t.backend.with.historicalAdherence({
+			PersonId: '1',
+			AgentName: 'Mikkey Dee',
+			Timeline: {
+				StartTime: '2018-10-23T10:00:00',
+				EndTime: '2018-10-23T20:00:00'
+			},
+			OutOfAdherences: [{
+				EndTime: '2018-10-23T11:00:00'
+			}]
+		});
+
+		var vm = t.createController();
+
+		expect(vm.outOfAdherences[0].StartTime).toBeUndefined();
+		expect(vm.outOfAdherences[0].EndTime).toEqual(moment('2018-10-23T11:00:00').format('LTS'));
+		expect(vm.outOfAdherences[0].Offset).toEqual("0%");
+		expect(vm.outOfAdherences[0].Width).toEqual("10%");
+	});
+	
+	it('should not display out of adherence end time when not known', function (t) {
+		t.stateParams.personId = '1';
+		t.backend.with.historicalAdherence({
+			PersonId: '1',
+			AgentName: 'Mikkey Dee',
+			Timeline: {
+				StartTime: '2018-10-23T10:00:00',
+				EndTime: '2018-10-23T20:00:00'
+			},
+			OutOfAdherences: [{
+				StartTime: '2018-10-23T19:00:00'
+			}]
+		});
+
+		var vm = t.createController();
+
+		expect(vm.outOfAdherences[0].StartTime).toEqual(moment('2018-10-23T19:00:00').format('LTS'));
+		expect(vm.outOfAdherences[0].EndTime).toBeUndefined();
+		expect(vm.outOfAdherences[0].Offset).toEqual("90%");
 		expect(vm.outOfAdherences[0].Width).toEqual("10%");
 	});
 

@@ -9,5 +9,6 @@ namespace Teleopti.Wfm.Api.Query
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
 		public bool IsAbsence { get; set; }
+		public int DisplayColor { get; set; }
 	}
 }

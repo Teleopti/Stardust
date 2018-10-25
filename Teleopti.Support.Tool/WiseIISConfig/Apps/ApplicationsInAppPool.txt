@@ -7,4 +7,4 @@ Level2;SDK;Teleopti SDK;v4.0;app;None;None;SDK
 Level2;Web;Teleopti Web;v4.0;app;None;aspnet_isapi;Web
 Level2;AuthenticationBridge;Teleopti Web;v4.0;app;None;aspnet_isapi;AuthenticationBridge
 Level2;WindowsIdentityProvider;Teleopti Web;v4.0;app;None;aspnet_isapi;WindowsIdentityProvider
-Level2;Administration;Teleopti Web;v4.0;app;None;aspnet_isapi;Administration
+Level2;Administration;Teleopti Admin;v4.0;app;None;aspnet_isapi;Administration
