@@ -8,7 +8,7 @@ import { authenticationComponents } from './app/authentication/authentication.mo
 import { menuComponents } from './app/menu/menu.module';
 import { navigationComponents } from './app/navigation/navigation.module';
 import { peopleComponents } from './app/people/people.module';
-import { WorkspaceComponent } from './app/pm/components';
+import { pmComponents } from './app/pm/pm.module';
 import { sharedComponents } from './app/shared/shared.module';
 import { environment } from './environments/environment';
 import { MainController } from './main.controller';
@@ -103,10 +103,7 @@ downgradeHelper(authenticationComponents);
 downgradeHelper(apiAccessComponents);
 downgradeHelper(appComponents);
 downgradeHelper(menuComponents);
-
-// Use this to downgrade components
-// that has no containing module
-downgradeHelper([{ ng1Name: 'ng2PmWorkspacePage', ng2Component: WorkspaceComponent }]);
+downgradeHelper(pmComponents);
 
 wfm.config([
 	'$stateProvider',

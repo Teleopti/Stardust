@@ -1,20 +1,18 @@
 import { NgModule } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
-import { SharedModule } from '../shared/shared.module';
-import {
-    WorkspaceComponent
-} from './components';
-// import { NavigationService, RolesService, SearchOverridesService, SearchService, WorkspaceService } from './services';
+import { DowngradeableComponent } from '@wfm/types';
+import { WorkspaceComponent } from './components';
 
 @NgModule({
-    declarations: [
-        WorkspaceComponent
-    ],
-    imports: [],
-    providers: [],
-    exports: [],
-    entryComponents: [WorkspaceComponent]
+	declarations: [WorkspaceComponent],
+	imports: [],
+	providers: [],
+	exports: [],
+	entryComponents: [WorkspaceComponent]
 })
 export class PmModule {
-    ngDoBootstrap() {}
+	ngDoBootstrap() {}
 }
+
+export const pmComponents: DowngradeableComponent[] = [
+	{ ng1Name: 'ng2PmWorkspacePage', ng2Component: WorkspaceComponent }
+];
