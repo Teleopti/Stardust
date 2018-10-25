@@ -154,8 +154,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						new DateOnly(personRequest.Request.Period.EndDateTime.Date));
 					var skillDaysBySkills = _skillDayLoadHelper.LoadSchedulerSkillDays(dateOnlyPeriod8, allSkills, _currentScenario.Current());
 
-					calculateForecastedAgentsForEmailSkills(personRequest.Request.Period, false, skillDaysBySkills,
-						timeZone);
+					calculateForecastedAgentsForEmailSkills(personRequest.Request.Period, false, skillDaysBySkills);
 					
 					var useShrinkage = staffingThresholdValidators.Any(x => x.GetType() == typeof(StaffingThresholdWithShrinkageValidator));
 					var skillStaffingIntervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(personRequest.Request.Period, combinationResources.ToList(), useShrinkage);
@@ -238,7 +237,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		}
 
 		private void calculateForecastedAgentsForEmailSkills(DateTimePeriod period, bool useShrinkage,
-			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, TimeZoneInfo timeZone)
+			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)
 		{
 			var skillGroupsByResuolution = skillDays.Keys
 				.Where(SkillTypesWithBacklog.IsBacklogSkillType)
@@ -257,9 +256,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					{
 						foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 						{
-							var intervalStartLocal = TimeZoneHelper.ConvertFromUtc(skillStaffPeriod.Period.StartDateTime, timeZone);
 							var scheduledStaff =
-								scheduledStaffingPerSkill[skill.Id.Value].FirstOrDefault(x => x.StartDateTime == intervalStartLocal);
+								scheduledStaffingPerSkill[skill.Id.Value].FirstOrDefault(x => x.StartDateTime == skillStaffPeriod.Period.StartDateTime);
 							skillStaffPeriod.SetCalculatedResource65(0);
 							if (scheduledStaff.StaffingLevel > 0)
 								skillStaffPeriod.SetCalculatedResource65(scheduledStaff.StaffingLevel);
