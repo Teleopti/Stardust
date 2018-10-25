@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -80,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 
 			list.FirstOrDefault().TimeStamp.Should().Be.EqualTo(staffingAudit.TimeStamp);
 			list.FirstOrDefault().Action.Should().Be.EqualTo(StaffingAuditActionConstants.ImportBpo);
-			list.FirstOrDefault().ActionPerformedBy.Should().Be.EqualTo(person);
+			list.FirstOrDefault().ActionPerformedBy.Should().Be.EqualTo(person.Name.ToString(NameOrderOption.FirstNameLastName));
 			list.FirstOrDefault().Context.Should().Be.EqualTo("Staffing");
 		}
 	}
