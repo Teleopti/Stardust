@@ -1543,8 +1543,8 @@ ul.select2-results li ul li.select2-result.select2-highlighted > div {
 	transition: height 0.001s;
 }
 .pagebody {
-	margin-top: 10px;
-	height: calc(100vh - 51px - 53px - 10px);
+	padding-top: 10px;
+	height: calc(100vh - 51px - 53px);
 	max-width: 100%;
 	overflow: auto;
 	-webkit-overflow-scrolling: touch;
