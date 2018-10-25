@@ -176,21 +176,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 					{
 						case (int)SeasonVolumeGridControl.GridRowTypes.AverageTasks:
 							chartPoint = new ChartPoint(j, (double)_seasonVolumeGridControl[i, j].CellValue);
-							if (chartSeries != null) chartSeries.Points.Add(chartPoint);
+							chartSeries?.Points.Add(chartPoint);
 							break;
 						case (int)SeasonVolumeGridControl.GridRowTypes.AverageTalkTime:
-							if (_seasonVolumeGridControl.SkillType.DisplayTimeSpanAsMinutes)
-								chartPoint = new ChartPoint(j, ((TimeSpan)_seasonVolumeGridControl[i, j].CellValue).TotalSeconds/60);
-							else
-								chartPoint = new ChartPoint(j, ((TimeSpan)_seasonVolumeGridControl[i, j].CellValue).TotalSeconds);
-							if (secondSeries != null) secondSeries.Points.Add(chartPoint);
-							break;
 						case (int)SeasonVolumeGridControl.GridRowTypes.AverageAfterWorkTime:
-							if (_seasonVolumeGridControl.SkillType.DisplayTimeSpanAsMinutes)
-								chartPoint = new ChartPoint(j, ((TimeSpan)_seasonVolumeGridControl[i, j].CellValue).TotalSeconds/60);
-							else
-								chartPoint = new ChartPoint(j, ((TimeSpan)_seasonVolumeGridControl[i, j].CellValue).TotalSeconds);
-							if (secondSeries != null) secondSeries.Points.Add(chartPoint);
+							chartPoint = _seasonVolumeGridControl.SkillType.DisplayTimeSpanAsMinutes
+								? new ChartPoint(j,
+									((TimeSpan) _seasonVolumeGridControl[i, j].CellValue).TotalSeconds / 60)
+								: new ChartPoint(j, ((TimeSpan) _seasonVolumeGridControl[i, j].CellValue).TotalSeconds);
+							secondSeries?.Points.Add(chartPoint);
 							break;
 					}
 				}
@@ -276,19 +270,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 
 		private void ReleaseManagedResources()
 		{
-			if (_secondaryYAxis != null)
-				_secondaryYAxis.Dispose();
+			_secondaryYAxis?.Dispose();
 			_owner = null;
 			_volumeYear = null;
-			if (_chartControl != null)
-			{
-				_chartControl.Dispose();
-			}
-			if (_seasonVolumeGridControl != null)
-			{
-				_seasonVolumeGridControl.Dispose();
-				_seasonVolumeGridControl = null;
-			}
+			_chartControl?.Dispose();
+			_seasonVolumeGridControl?.Dispose();
+			_seasonVolumeGridControl = null;
 		}
 	}
 }

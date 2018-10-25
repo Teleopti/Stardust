@@ -217,20 +217,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
             splitContainerAdv1.DoubleClick -= splitContainerAdv1_DoubleClick;
         }
 
-        private void ReleaseManagedResources()
-        {
-            _owner = null;
-            _workload = null;
-            _currentHistoricPeriod = null;
-            _totalVolume = null;
-            if (_volumes != null)
-                _volumes.Clear();
-            if (_totalVolumeGridControl != null)
-            {
-                _totalVolumeGridControl.Dispose();
-                _totalVolumeGridControl = null;
-            }
-            //Kill presenter?!?!
-        }
-    }
+		private void ReleaseManagedResources()
+		{
+			_owner = null;
+			_workload = null;
+			_currentHistoricPeriod = null;
+			_totalVolume = null;
+			_volumes?.Clear();
+			_totalVolumeGridControl?.Dispose();
+			_totalVolumeGridControl = null;
+		}
+	}
 }
