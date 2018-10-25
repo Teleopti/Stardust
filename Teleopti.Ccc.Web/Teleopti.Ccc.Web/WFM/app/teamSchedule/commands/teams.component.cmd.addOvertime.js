@@ -9,9 +9,9 @@
 			controller: AddOvertimeCtrl
 		});
 
-	AddOvertimeCtrl.$inject = ['PersonSelection', 'ActivityService', 'ActivityValidator', 'belongsToDateDecider', 'teamScheduleNotificationService', 'serviceDateFormatHelper'];
+	AddOvertimeCtrl.$inject = ['$translate', 'PersonSelection', 'ActivityService', 'ActivityValidator', 'belongsToDateDecider', 'teamScheduleNotificationService', 'serviceDateFormatHelper'];
 
-	function AddOvertimeCtrl(personSelectionSvc, activityService, activityValidator, belongsToDateDecider, teamScheduleNotificationService, serviceDateFormatHelper) {
+	function AddOvertimeCtrl($translate, personSelectionSvc, activityService, activityValidator, belongsToDateDecider, teamScheduleNotificationService, serviceDateFormatHelper) {
 		var ctrl = this;
 		var defaultWorkStartInHour = 8,
 			defaultWorkEndInHour = 17;
@@ -85,8 +85,8 @@
 							ctrl.containerCtrl.getActionCb(ctrl.label)(ctrl.trackId, validAgents.map(function (a) { return a.PersonId; }));
 						}
 						teamScheduleNotificationService.reportActionResult({
-							success: 'SuccessfulMessageForAddingOvertime',
-							warning: 'PartialSuccessMessageForAddingOvertime'
+							success: $translate.instant('SuccessfulMessageForAddingOvertime'),
+							warning: $translate.instant('PartialSuccessMessageForAddingOvertime')
 						},
 							validAgents.map(function (x) {
 								return {

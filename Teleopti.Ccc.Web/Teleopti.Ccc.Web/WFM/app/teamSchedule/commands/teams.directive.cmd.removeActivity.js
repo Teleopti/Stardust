@@ -13,21 +13,21 @@
 			bindToController: true,
 			require: ['^teamscheduleCommandContainer', 'removeActivity'],
 			link: function (scope, elem, attrs, ctrls) {
-					var containerCtrl = ctrls[0],
-						selfCtrl = ctrls[1];
+				var containerCtrl = ctrls[0],
+					selfCtrl = ctrls[1];
 
-					scope.vm.selectedDate = containerCtrl.getDate;
-					scope.vm.trackId = containerCtrl.getTrackId();
-					scope.vm.getActionCb = containerCtrl.getActionCb;
-					scope.vm.resetActiveCmd = containerCtrl.resetActiveCmd;
-					selfCtrl.init();
-				}
+				scope.vm.selectedDate = containerCtrl.getDate;
+				scope.vm.trackId = containerCtrl.getTrackId();
+				scope.vm.getActionCb = containerCtrl.getActionCb;
+				scope.vm.resetActiveCmd = containerCtrl.resetActiveCmd;
+				selfCtrl.init();
+			}
 		};
 	}
 
-	removeActivityCtrl.$inject = ['$scope', 'ActivityService', 'PersonSelection', 'teamScheduleNotificationService', '$wfmConfirmModal', 'ScenarioTestUtil'];
+	removeActivityCtrl.$inject = ['$scope', '$translate', 'ActivityService', 'PersonSelection', 'teamScheduleNotificationService', '$wfmConfirmModal', 'ScenarioTestUtil'];
 
-	function removeActivityCtrl($scope, ActivityService, PersonSelection, notification, $wfmModal, ScenarioTestUtil) {
+	function removeActivityCtrl($scope, $translate, ActivityService, PersonSelection, notification, $wfmModal, ScenarioTestUtil) {
 		var vm = this;
 		vm.label = 'RemoveActivity';
 
@@ -37,13 +37,13 @@
 			var personProjectionsWithSelectedActivities = vm.selectedPersonProjections.filter(function (x) {
 				return (angular.isArray(x.SelectedActivities) && x.SelectedActivities.length > 0);
 			});
-			
-			var requestData = {				
-				PersonActivities: personProjectionsWithSelectedActivities.map(function(x) {
+
+			var requestData = {
+				PersonActivities: personProjectionsWithSelectedActivities.map(function (x) {
 					return {
 						PersonId: x.PersonId,
 						Name: x.Name,
-						ShiftLayers: x.SelectedActivities.map(function(activity) {
+						ShiftLayers: x.SelectedActivities.map(function (activity) {
 							return {
 								ShiftLayerId: activity.shiftLayerId,
 								Date: activity.date,
@@ -72,16 +72,16 @@
 					});
 				});
 				notification.reportActionResult({
-					"success": 'SuccessfulMessageForRemovingActivity',
-					"warning": 'PartialSuccessMessageForRemovingActivity'
+					"success": $translate.instant('SuccessfulMessageForRemovingActivity'),
+					"warning": $translate.instant('PartialSuccessMessageForRemovingActivity')
 				}, personActivities, response.data);
 			});
 		};
 
 		vm.popDialog = function () {
-			var title = vm.label;
+			var title = $translate.instant('RemoveActivity');
 			var message = notification.buildConfirmationMessage(
-				'AreYouSureToRemoveSelectedActivity',
+				$translate.instant('AreYouSureToRemoveSelectedActivity'),
 				PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.PersonCount,
 				PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount,
 				true
@@ -89,7 +89,7 @@
 			$wfmModal.confirm(message, title).then(function (result) {
 				vm.resetActiveCmd();
 
-				if (result) {					
+				if (result) {
 					$scope.$emit('teamSchedule.show.loading');
 					vm.removeActivity();
 				}

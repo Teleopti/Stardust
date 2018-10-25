@@ -15,9 +15,9 @@
 		};
 	}
 
-	addPersonalActivityCtrl.$inject = ['$scope', 'ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleHelper', 'teamScheduleNotificationService', 'CommandCheckService', 'belongsToDateDecider', 'serviceDateFormatHelper'];
+	addPersonalActivityCtrl.$inject = ['$scope', '$translate', 'ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleHelper', 'teamScheduleNotificationService', 'CommandCheckService', 'belongsToDateDecider', 'serviceDateFormatHelper'];
 
-	function addPersonalActivityCtrl($scope, activityService, personSelectionSvc, utility, scheduleHelper, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider, serviceDateFormatHelper) {
+	function addPersonalActivityCtrl($scope, $translate, activityService, personSelectionSvc, utility, scheduleHelper, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider, serviceDateFormatHelper) {
 		var vm = this;
 
 		vm.label = 'AddPersonalActivity';
@@ -117,8 +117,8 @@
 						vm.getActionCb(vm.label)(vm.trackId, personIds);
 					}
 					teamScheduleNotificationService.reportActionResult({
-						success: 'SuccessfulMessageForAddingActivity',
-						warning: 'PartialSuccessMessageForAddingActivity'
+						success: $translate.instant('SuccessfulMessageForAddingActivity'),
+						warning: $translate.instant('PartialSuccessMessageForAddingActivity')
 					}, vm.selectedAgents.map(function (x) {
 						return {
 							PersonId: x.PersonId,
@@ -165,7 +165,7 @@
 				addPersonalActivity(data);
 			});
 		};
-		
+
 		function getDefaultActvityStartTime() {
 			var curDateMoment = moment(vm.selectedDate());
 			var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
@@ -195,7 +195,7 @@
 			return serviceDateFormatHelper.getDateTime(defaultStart);
 		}
 
-		
+
 		function getDefaultActvityEndTime() {
 			return serviceDateFormatHelper.getDateTime(moment(vm.getDefaultActvityStartTime()).add(1, 'hour'));
 		};

@@ -12,24 +12,24 @@
 			bindToController: true,
 			require: ['^teamscheduleCommandContainer', 'undoSchedule'],
 			link: function (scope, elem, attrs, ctrls) {
-					var containerCtrl = ctrls[0],
-						selfCtrl = ctrls[1];
+				var containerCtrl = ctrls[0],
+					selfCtrl = ctrls[1];
 
-					scope.vm.containerCtrl = containerCtrl;
+				scope.vm.containerCtrl = containerCtrl;
 
-					scope.vm.selectedDate = containerCtrl.getDate;
-					scope.vm.trackId = containerCtrl.getTrackId();
-					scope.vm.getActionCb = containerCtrl.getActionCb;
-					scope.vm.resetActiveCmd = containerCtrl.resetActiveCmd;
+				scope.vm.selectedDate = containerCtrl.getDate;
+				scope.vm.trackId = containerCtrl.getTrackId();
+				scope.vm.getActionCb = containerCtrl.getActionCb;
+				scope.vm.resetActiveCmd = containerCtrl.resetActiveCmd;
 
-					selfCtrl.init();
-				}
+				selfCtrl.init();
+			}
 		};
 	}
 
-	undoScheduleCtrl.$inject = ['$scope', 'PersonSelection', 'ActivityService', '$wfmConfirmModal', 'teamScheduleNotificationService', 'ScenarioTestUtil'];
+	undoScheduleCtrl.$inject = ['$scope', '$translate', 'PersonSelection', 'ActivityService', '$wfmConfirmModal', 'teamScheduleNotificationService', 'ScenarioTestUtil'];
 
-	function undoScheduleCtrl($scope, PersonSelection, ActivityService, $wfmModal, notification, ScenarioTestUtil) {
+	function undoScheduleCtrl($scope, $translate, PersonSelection, ActivityService, $wfmModal, notification, ScenarioTestUtil) {
 		var vm = this;
 		vm.label = 'Undo';
 
@@ -40,7 +40,7 @@
 		vm.undoSchedule = function () {
 
 			var personDates = [];
-			personIds.forEach(function(personId) {
+			personIds.forEach(function (personId) {
 				var personScheduleVm = vm.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(personId);
 
 				personDates.push({
@@ -48,9 +48,9 @@
 					Date: vm.selectedDate()
 				});
 
-				personScheduleVm.Shifts.filter(function(shift) {
-						return shift.Projections && shift.Projections.length > 0;
-					})
+				personScheduleVm.Shifts.filter(function (shift) {
+					return shift.Projections && shift.Projections.length > 0;
+				})
 					.forEach(function (shift) {
 						if (shift.Date !== vm.selectedDate())
 							personDates.push({
@@ -64,8 +64,8 @@
 				PersonDates: personDates,
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			}
-			       
-			
+
+
 			ActivityService.undoScheduleChange(requestData).then(function (reponse) {
 				$scope.$emit('teamSchedule.hide.loading');
 				if (vm.getActionCb(vm.label)) {
@@ -73,9 +73,9 @@
 				}
 
 				notification.reportActionResult({
-					'success': 'SuccessfulMessageForUndoSchedule',
-					'warning': 'PartialSuccessMessageForUndoSchedule',
-					'error': 'FailedMessageForUndoSchedule'
+					'success': $translate.instant('SuccessfulMessageForUndoSchedule'),
+					'warning': $translate.instant('PartialSuccessMessageForUndoSchedule'),
+					'error': $translate.instant('FailedMessageForUndoSchedule')
 				}, vm.selectedPersonInfo.map(function (agent) {
 					return {
 						PersonId: agent.PersonId,
@@ -85,10 +85,10 @@
 			});
 		};
 
-		vm.popDialog = function() {
-			var title = vm.label;
+		vm.popDialog = function () {
+			var title = $translate.instant('Undo');
 			var message = notification.buildConfirmationMessage(
-				'AreYouSureToUndoSelectedSchedule',
+				$translate.instant('AreYouSureToUndoSelectedSchedule'),
 				PersonSelection.getTotalSelectedPersonAndProjectionCount.CheckedPersonCount,
 				null,
 				true

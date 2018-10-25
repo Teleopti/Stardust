@@ -13,22 +13,22 @@
 			bindToController: true,
 			require: ['^teamscheduleCommandContainer', 'swapShifts'],
 			link: function (scope, elem, attrs, ctrls) {
-					var containerCtrl = ctrls[0],
-						selfCtrl = ctrls[1];
+				var containerCtrl = ctrls[0],
+					selfCtrl = ctrls[1];
 
-					scope.vm.selectedDate = containerCtrl.getDate;
-					scope.vm.trackId = containerCtrl.getTrackId();
-					scope.vm.getActionCb = containerCtrl.getActionCb;
-					scope.vm.resetActiveCmd = containerCtrl.resetActiveCmd;
+				scope.vm.selectedDate = containerCtrl.getDate;
+				scope.vm.trackId = containerCtrl.getTrackId();
+				scope.vm.getActionCb = containerCtrl.getActionCb;
+				scope.vm.resetActiveCmd = containerCtrl.resetActiveCmd;
 
-					selfCtrl.init();
-				}
+				selfCtrl.init();
+			}
 		};
 	}
 
-	swapShiftsCtrl.$inject = ['$scope', 'SwapShifts', 'PersonSelection', 'teamScheduleNotificationService'];
+	swapShiftsCtrl.$inject = ['$scope', '$translate', 'SwapShifts', 'PersonSelection', 'teamScheduleNotificationService'];
 
-	function swapShiftsCtrl($scope, SwapShiftsSvc, PersonSelection, notification) {
+	function swapShiftsCtrl($scope, $translate, SwapShiftsSvc, PersonSelection, notification) {
 		var vm = this;
 		vm.label = 'SwapShifts';
 
@@ -51,8 +51,8 @@
 				}
 
 				notification.reportActionResult({
-					"success": 'FinishedSwapShifts',
-					"warning": 'FailedToSwapShifts'
+					"success": $translate.instant('FinishedSwapShifts'),
+					"warning": $translate.instant('FailedToSwapShifts')
 				}, vm.selectedPersonInfo.map(function (x) {
 					return {
 						PersonId: x.PersonId,
