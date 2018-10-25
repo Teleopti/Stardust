@@ -20,14 +20,6 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 		void Synchronize();
 	}
 
-
-	public class NoRtaEventStoreSynchronizer : IRtaEventStoreSynchronizer
-	{
-		public void Synchronize()
-		{
-		}
-	}
-
 	public class RtaEventStoreSynchronizer : IRtaEventStoreSynchronizer
 	{
 		private readonly IRtaEventStoreReader _events;
@@ -91,36 +83,36 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 
 			var personsTimeZones = _persons.FindPeople(toBeSynched.Select(x => x.PersonId).Distinct())
 				.ToDictionary(k => k.Id.GetValueOrDefault(), v => v.PermissionInformation.DefaultTimeZone());
-						
+
 			toBeSynched.ForEach(x =>
 			{
 				if (!personsTimeZones.TryGetValue(x.PersonId, out var personTimeZone))
 					personTimeZone = TimeZoneInfo.Utc;
-				
+
 				var shouldSynchPreviousDay = toBeSynched
-							.FirstOrDefault(
-								y => y.PersonId == x.PersonId &&
-									 y.Day == x.Day.AddDays(-1)) == null;
+												 .FirstOrDefault(
+													 y => y.PersonId == x.PersonId &&
+														  y.Day == x.Day.AddDays(-1)) == null;
 
 				if (shouldSynchPreviousDay)
 					synchronizeAdherenceDay(x.PersonId, x.Day.AddDays(-1), personTimeZone);
 				synchronizeAdherenceDay(x.PersonId, x.Day, personTimeZone);
 			});
 		}
-		
+
 		private void synchronizeAdherenceDay(Guid personId, DateOnly day, TimeZoneInfo timeZone)
 		{
 			var adherenceDay = _adherenceDayLoader.Load(personId, day);
 
 			if (adherenceDay.Changes().Any())
-			{				
+			{
 				var lateForWork = adherenceDay.Changes().FirstOrDefault(c => c.LateForWork != null);
 				var lateForWorkText = lateForWork != null ? lateForWork.LateForWork : "0";
 				var minutesLateForWork = int.Parse(Regex.Replace(lateForWorkText, "[^0-9.]", ""));
 				var shiftStartTime = adherenceDay.Period().StartDateTime.AddHours(1);
-				
+
 				var dayInAgentTimeZone = TimeZoneInfo.ConvertTimeFromUtc(shiftStartTime, timeZone).ToDateOnly();
-				
+
 				_readModels.Upsert(new HistoricalOverviewReadModel
 				{
 					PersonId = personId,
@@ -131,7 +123,6 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 					SecondsOutOfAdherence = adherenceDay.SecondsOutOfAdherence(),
 				});
 			}
-
 		}
 	}
 }
