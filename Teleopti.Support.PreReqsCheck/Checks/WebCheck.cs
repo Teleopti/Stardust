@@ -100,14 +100,8 @@ namespace CheckPreRequisites.Checks
                 if (ndpKey?.GetValue("Release") != null)
                 {
                     var installed = (int)ndpKey.GetValue("Release");
-	                if (installed == 394271 || installed == 394254)
+	                if (installed == 461808 || installed == 461814)
 		                _form1.printFeatureStatus(true, ".Net framework 4.7.2 is installed", lineNumber);
-					else if (installed == 394802 || installed == 394806)
-						_form1.printFeatureStatus(true, ".Net framework 4.6.2 is installed", lineNumber);
-					else if(installed== 460798 || installed == 460805)
-						_form1.printFeatureStatus(true,".Net framework 4.7 is installed", lineNumber);
-					else if (installed == 461808)
-						_form1.printFeatureStatus(true, ".Net framework 4.7.2 is installed", lineNumber);
 					else 
                         _form1.printFeatureStatus(false, ".Net framework 4.7.2 is not installed", lineNumber);
                 }
