@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 			splitContainerAdv2.Panel2.Controls.Add(_seasonVolumeGridControl);
 
 			_chartControl = new ChartControl();
+			_chartControl.AddRandomSeries = false;
 			splitContainerAdv2.Panel1.Controls.Add(_chartControl);
 			_chartControl.Dock = DockStyle.Fill;
 
@@ -51,10 +52,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 			_chartControl.ChartRegionClick += _chartControl_ChartRegionClick;
 		}
 
-		public WFSeasonalityTabs Owner
-		{
-			get { return _owner; }
-		}
+		public WFSeasonalityTabs Owner => _owner;
 
 		protected override void OnLoad(EventArgs e)
 		{
@@ -118,7 +116,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 			_secondaryYAxis.ValueType = ChartValueType.Double;
 			_secondaryYAxis.RangeType = ChartAxisRangeType.Auto;
 			_secondaryYAxis.LocationType = ChartAxisLocationType.Auto;
-
+			
 			_chartControl.PrimaryYAxis.LocationType = ChartAxisLocationType.Auto;
 
 			_chartControl.Axes.Add(_secondaryYAxis);
