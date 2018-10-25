@@ -107,6 +107,7 @@ ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348 = RC
 ResourcePlanner_SeamlessPlanningForPreferences_76288 = RC # will make perf unhappy. needs to be addressed before setting to true
 ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941 = RC
+ResourcePlanner_RemoveOldInterceptorProbablyNotNeeded_00000 = true
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true

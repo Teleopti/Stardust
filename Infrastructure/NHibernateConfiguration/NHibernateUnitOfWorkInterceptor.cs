@@ -25,8 +25,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		private readonly ICollection<IAggregateRoot> rootsWithModifiedChildren = new HashSet<IAggregateRoot>();
 		private readonly ICurrentPreCommitHooks _currentPreCommitHooks;
 
-		private readonly VersionStateRollbackInterceptor _entityStateRollbackInterceptor = new VersionStateRollbackInterceptor();
-
 		public NHibernateUnitOfWorkInterceptor(IUpdatedBy updatedBy, ICurrentPreCommitHooks currentPreCommitHooks)
 		{
 			_updatedBy = updatedBy;
@@ -38,13 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		{
 			rootsWithModifiedChildren.Clear();
 			modifiedRoots.Clear();
-			_entityStateRollbackInterceptor.Clear();
 			Iteration = InterceptorIteration.Normal;
-		}
-
-		public override void AfterTransactionCompletion(ITransaction tx)
-		{
-			_entityStateRollbackInterceptor.AfterTransactionCompletion(tx);
 		}
 
 		public InterceptorIteration Iteration { get; set; }
@@ -106,8 +98,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		public override bool OnFlushDirty(object entity, object id, object[] currentState, object[] previousState,
 													 string[] propertyNames, IType[] types)
 		{
-			_entityStateRollbackInterceptor.OnFlushDirty(entity, id, currentState, previousState, propertyNames, types);
-
 			var ent = entity as IEntity;
 			var entityToCheck = entity as IRestrictionChecker;
 			entityToCheck?.CheckRestrictions();
@@ -128,8 +118,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		public override bool OnSave(object entity, object id, object[] state, string[] propertyNames, IType[] types)
 		{
 			var ret = false;
-			_entityStateRollbackInterceptor.OnSave(entity, id, state, propertyNames, types);
-
 			var ent = entity as IEntity;
 			var entityToCheck = entity as IRestrictionChecker;
 			entityToCheck?.CheckRestrictions();

@@ -80,6 +80,7 @@
 		ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348,
 		ResourcePlanner_SeamlessPlanningForPreferences_76288,
 		ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941,
+		ResourcePlanner_RemoveOldInterceptorProbablyNotNeeded_00000,
 
 		Wfm_DisplayOnlineHelp_39402,
 
