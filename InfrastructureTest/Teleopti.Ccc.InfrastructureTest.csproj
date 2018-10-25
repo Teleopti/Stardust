@@ -11,7 +11,7 @@
     <RootNamespace>Teleopti.Ccc.InfrastructureTest</RootNamespace>
     <AssemblyName>Teleopti.Ccc.InfrastructureTest</AssemblyName>
     <SignAssembly>false</SignAssembly>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
