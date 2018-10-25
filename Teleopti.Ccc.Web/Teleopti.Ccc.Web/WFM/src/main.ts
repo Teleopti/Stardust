@@ -1,25 +1,23 @@
 import { enableProdMode, StaticProvider } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { downgradeComponent as ngDowngradeComponent, downgradeModule } from '@angular/upgrade/static';
-import { IControllerConstructor, IRootScopeService } from 'angular';
+import { IRootScopeService } from 'angular';
+import { IStateProvider, IUrlRouterProvider } from 'angular-ui-router';
 import { apiAccessComponents } from './app/api-access/api-access.module';
 import { appComponents, AppModule } from './app/app.module';
 import { authenticationComponents } from './app/authentication/authentication.module';
 import { menuComponents } from './app/menu/menu.module';
 import { navigationComponents } from './app/navigation/navigation.module';
-import { peopleComponents } from './app/people/people.module';
+import { peopleComponents, peopleRouterConfig } from './app/people/people.module';
 import { pmComponents } from './app/pm/pm.module';
 import { sharedComponents } from './app/shared/shared.module';
 import { environment } from './environments/environment';
 import { MainController } from './main.controller';
-import { DowngradeableComponent } from './types';
+import { DowngradeableComponent, RouterConfigFunction } from './types';
 
 export interface IWfmRootScopeService extends IRootScopeService {
 	_: any;
 	isAuthenticated: boolean;
-
-	setTheme(theme: string): any;
-
 	version: any;
 }
 
@@ -41,7 +39,6 @@ const wfm = angular.module('wfm', [
 	'wfm.permissions',
 	'wfm.apiaccess',
 	'wfm.peopleold',
-	'wfm.people',
 	'wfm.pm',
 	'wfm.outbound',
 	'wfm.forecasting',
@@ -83,8 +80,13 @@ const wfm = angular.module('wfm', [
 	'wfm.ai'
 ]);
 
-wfm.controller('MainController', MainController as IControllerConstructor);
+wfm.controller('MainController', MainController);
 
+/**
+ * Downgrade components with a graceful syntax
+ * @param downgradableComponents a list of components
+ * which implements the DowngradableComponents interface
+ */
 const downgradeHelper = (downgradableComponents: DowngradeableComponent[] | DowngradeableComponent) => {
 	if (Array.isArray(downgradableComponents)) {
 		downgradableComponents.forEach(downgradeHelper);
@@ -105,6 +107,15 @@ downgradeHelper(appComponents);
 downgradeHelper(menuComponents);
 downgradeHelper(pmComponents);
 
+/**
+ * Use this if your module is purely Angular and you want mount some routes
+ */
+const routerHelper = (routerConfig: RouterConfigFunction) => {
+	wfm.config(['$stateProvider', '$urlRouterProvider', routerConfig]);
+};
+
+routerHelper(peopleRouterConfig);
+
 wfm.config([
 	'$stateProvider',
 	'$urlRouterProvider',
@@ -113,8 +124,8 @@ wfm.config([
 	'$mdGestureProvider',
 	'tmhDynamicLocaleProvider',
 	function(
-		$stateProvider,
-		$urlRouterProvider,
+		$stateProvider: IStateProvider,
+		$urlRouterProvider: IUrlRouterProvider,
 		$translateProvider,
 		$httpProvider,
 		$mdGestureProvider,
