@@ -239,31 +239,6 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 		}
 
 		[Test]
-		[Ignore("Reason mandatory for NUnit 3")]
-		public void ShouldPublishActivityActualStartEventWithBelongsToDate()
-		{
-			var personId = Guid.NewGuid();
-			var admin = Guid.NewGuid();
-			Database
-				.WithAgent("usercode", personId)
-				.WithSchedule(personId, admin, null, "2015-02-19", "2015-02-20 1:00", "2015-02-20 7:00")
-				.WithMappedRule("admin", admin, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
-				;
-
-			Now.Is("2015-02-20 2:00");
-			Target.CheckForActivityChanges(Database.TenantName(), personId);
-			Target.ProcessState(new StateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "admin"
-			});
-
-			Publisher.PublishedEvents.OfType<PersonActivityActualStartEvent>()
-				.Single()
-				.BelongsToDate.Should().Be("2015-02-19".Date());
-		}
-
-		[Test]
 		public void ShouldPublishStateChangedEventWithBelongsToDate()
 		{
 			var personId = Guid.NewGuid();
