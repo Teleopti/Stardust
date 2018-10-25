@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
+using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
@@ -18,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 	public class AuditAggregatorServiceTest : IIsolateSystem
 	{
 		public IStaffingAuditRepository StaffingAuditRepository;
+		public IPersonAccessAuditRepository PersonAccessAuditRepository;
 		public AuditAggregatorService Target;
 		public ISkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeLoggedOnUser LoggedOnUser;
@@ -54,6 +57,32 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var audits = Target.Load(singaporeUser.Id.GetValueOrDefault(), startDate, endDate);
 			audits.Count.Should().Be.EqualTo(1);
 			audits.First().TimeStamp.Should().Be.EqualTo(stockholmTime);
+		}
+
+		[Test]
+		public void ShouldReturnStaffingAuditAndPersonAccessAudit()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			var staffingAudit = new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "abc.txt", "BPO")
+				{TimeStamp = new DateTime(2018, 10, 14, 10, 0, 0, DateTimeKind.Utc)};
+			dynamic role = new { RoleId = Guid.NewGuid(), Name = "Name" };
+			var personAccessAudit = new PersonAccess(
+				person,
+				person,
+				PersonAuditActionType.GrantRole.ToString(),
+				PersonAuditActionResult.Change.ToString(),
+				JsonConvert.SerializeObject(role))
+			{ TimeStamp = new DateTime(2018, 10, 14, 10, 0, 0, DateTimeKind.Utc) };
+
+			StaffingAuditRepository.Add(staffingAudit);
+			PersonAccessAuditRepository.Add(personAccessAudit);
+
+			var startDate = new DateTime(2018, 10, 13);
+			var endDate = new DateTime(2018, 10, 15);
+			var audits = Target.Load(person.Id.GetValueOrDefault(), startDate, endDate);
+			audits.Count.Should().Be.EqualTo(2);
+			audits.Count(f => f.Action == staffingAudit.Action).Should().Be(1);
+			audits.Count(f => f.Action == personAccessAudit.Action).Should().Be(1);
 		}
 
 	}
