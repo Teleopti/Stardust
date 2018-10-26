@@ -10,7 +10,6 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 {
 	public class AgentAdherenceDaySpeedUpRemoveLastBefore : IAgentAdherenceDay
 	{
-		private readonly Guid _personId;
 		private readonly DateTimePeriod _period;
 		private readonly DateTimePeriod? _shift;
 		private readonly DateTime _now;
@@ -26,9 +25,8 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 		private int? _secondsInAdherence;
 		private int? _secondsOutOfAdherence;
 
-		public AgentAdherenceDaySpeedUpRemoveLastBefore(Guid personId, DateTimePeriod period, DateTimePeriod? shift, DateTime now)
+		public AgentAdherenceDaySpeedUpRemoveLastBefore(DateTimePeriod period, DateTimePeriod? shift, DateTime now)
 		{
-			_personId = personId;
 			_period = period;
 			_shift = shift;
 			_now = floorToSeconds(now);
