@@ -86,7 +86,6 @@
 		"grunt-contrib-less": "2.0.0",
 		"grunt-contrib-uglify": "2.0.0",
 		"grunt-contrib-watch": "0.6.1",
-		"grunt-eslint": "20.1.0",
 		"grunt-msbuild": "0.4.2",
 		"grunt-processhtml": "0.3.8",
 		"jasmine-core": "^2.2.0",
