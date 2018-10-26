@@ -337,7 +337,7 @@
     <value>Déviation / Intervalle (m)</value>
   </data>
   <data name="ResQueueColon" xml:space="preserve">
-    <value>File:</value>
+    <value>Flux:</value>
   </data>
   <data name="ResScheduledAbsenceTime" xml:space="preserve">
     <value>Temps absence planifié (hh:mm)</value>
@@ -559,7 +559,7 @@
     <value>Durée moyenne de communication</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
-    <value>Métriques file agent</value>
+    <value>Métriques flux agent</value>
   </data>
   <data name="ResReportActivityTimePerAgent" xml:space="preserve">
     <value>Temps d'activité par agent</value>
@@ -631,7 +631,7 @@
     <value>Appels décrochés / Heure ready planifiée</value>
   </data>
   <data name="ResReportQueueStatistics" xml:space="preserve">
-    <value>Statistiques file</value>
+    <value>Statistiques flux</value>
   </data>
   <data name="ResAbandonedCallsWithinSL" xml:space="preserve">
     <value>Abandonnés en niveau de service</value>
@@ -652,7 +652,7 @@
     <value>Appels transférés </value>
   </data>
   <data name="ResQueue" xml:space="preserve">
-    <value>File</value>
+    <value>Flux</value>
   </data>
   <data name="ResTimeZoneColon" xml:space="preserve">
     <value>Fuseau horaire:</value>
@@ -811,7 +811,7 @@
     <value>Durée d'abandon (s)</value>
   </data>
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
-    <value>Statistiques file agent </value>
+    <value>Statistiques flux agent </value>
   </data>
   <data name="ResAdminTime" xml:space="preserve">
     <value>Temps admin</value>
@@ -902,9 +902,6 @@
   </data>
   <data name="ResForecastedHoursIncludingShrinkageH" xml:space="preserve">
     <value>Heures prévues (réduction) (hh:mm)</value>
-  </data>
-  <data name="LogInSuccessTitleText" xml:space="preserve">
-    <value> </value>
   </data>
   <data name="ResRequestTypeAbsence" xml:space="preserve">
     <value>Absence</value>
@@ -1121,5 +1118,20 @@
   </data>
   <data name="ResESLPercent" xml:space="preserve">
     <value>NSE (%)</value>
+  </data>
+  <data name="ResReadyTimeAdherencePercent" xml:space="preserve">
+    <value>Adhérence temps ready (%)</value>
+  </data>
+  <data name="ResReadyTimeAdherencePerIntervalPercent" xml:space="preserve">
+    <value>Adhérence temps ready / Intervalle (%)</value>
+  </data>
+  <data name="ResReadyTimeAdherenceCalculationColon" xml:space="preserve">
+    <value>Calcul d'adhérence temps ready:</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerAgent" xml:space="preserve">
+    <value>Calcul d'adhérence temps ready par Agent</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerDay" xml:space="preserve">
+    <value>Calcul d'adhérence temps ready par Jour</value>
   </data>
 </root>

@@ -143,59 +143,89 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			double numberMinutes = 0;
 			foreach (var day in scheduleDays)
 			{
-
 				var isContractDayOff = _hasContractDayOffDefinition.IsDayOff(day);
 				if (day.HasDayOff() || day.IsFullDayAbsence() || isContractDayOff)
 				{
 					return numberMinutes;
 				}
 
-				var timeZone = personRequest.Person.PermissionInformation.DefaultTimeZone();
-				var scheduleDayDate = TimeZoneHelper.ConvertToUtc(day.DateOnlyAsPeriod.DateOnly.Date, timeZone);
-				var requestedPeriod = personRequest.Request.Period;
-				if (requestedPeriod.StartDateTime < scheduleDayDate)
-				{
-					requestedPeriod = new DateTimePeriod(scheduleDayDate, requestedPeriod.EndDateTime);
-				}
-
-				if (requestedPeriod.EndDateTime > scheduleDayDate.AddDays(1))
-				{
-					requestedPeriod = new DateTimePeriod(requestedPeriod.StartDateTime, scheduleDayDate.AddDays(1));
-				}
+				var requestedPeriod = calculateRequestPeriod(personRequest, day);
 
 				var visualLayerCollection = day.ProjectionService().CreateProjection();
 				var visualLayerCollectionPeriod = visualLayerCollection.Period();
 				if (day.IsScheduled() && visualLayerCollectionPeriod.HasValue)
 				{
-					var contractTime = visualLayerCollection.FilterLayers(requestedPeriod).ContractTime();
-					if (contractTime == TimeSpan.Zero)
-					{
-						contractTime = scheduleDays[0].ProjectionService().CreateProjection().FilterLayers(requestedPeriod)
-							.ContractTime();
-					}
-
-					numberMinutes += contractTime.TotalMinutes;
+					numberMinutes += calculateMinutesBasedOnActualContractTime(personRequest, scheduleDays, requestedPeriod, visualLayerCollection);
 				}
 				else
 				{
-					var personPeriod = personRequest.Person.PersonPeriods(requestedPeriod.ToDateOnlyPeriod(timeZone))
-						.FirstOrDefault();
-					var personContract = personPeriod.PersonContract;
-					var averageWorktimePerDayInMinutes =
-						personContract.Contract.WorkTime.AvgWorkTimePerDay.TotalMinutes;
-					var partTimePercentage = personContract.PartTimePercentage.Percentage.Value;
-					var averageContractTimeSpan =
-						TimeSpan.FromMinutes(averageWorktimePerDayInMinutes * partTimePercentage);
-
-					var requestedTime = requestedPeriod.ElapsedTime() < averageContractTimeSpan
-						? requestedPeriod.ElapsedTime()
-						: averageContractTimeSpan;
-
-					numberMinutes += requestedTime.TotalMinutes;
+					numberMinutes += calculateMinutesBasedOnAverageContractTime(personRequest, requestedPeriod);
 				}
 			}
 
 			return numberMinutes;
+		}
+
+		private static DateTimePeriod calculateRequestPeriod(IPersonRequest personRequest, IScheduleDay day)
+		{
+			var timeZone = personRequest.Person.PermissionInformation.DefaultTimeZone();
+			var scheduleDayDate = TimeZoneHelper.ConvertToUtc(day.DateOnlyAsPeriod.DateOnly.Date, timeZone);
+			var requestedPeriod = personRequest.Request.Period;
+			if (requestedPeriod.StartDateTime < scheduleDayDate)
+			{
+				requestedPeriod = new DateTimePeriod(scheduleDayDate, requestedPeriod.EndDateTime);
+			}
+
+			if (requestedPeriod.EndDateTime > scheduleDayDate.AddDays(1))
+			{
+				requestedPeriod = new DateTimePeriod(requestedPeriod.StartDateTime, scheduleDayDate.AddDays(1));
+			}
+
+			return requestedPeriod;
+		}
+
+		private static double calculateMinutesBasedOnActualContractTime(IPersonRequest personRequest, List<IScheduleDay> scheduleDays,  DateTimePeriod requestedPeriod, IVisualLayerCollection visualLayerCollection)
+		{
+			double numberMinutes;
+
+			if (personRequest.Request is IAbsenceRequest absenceRequest && absenceRequest.FullDay)
+			{
+				numberMinutes = visualLayerCollection.ContractTime().TotalMinutes;
+			}
+			else
+			{
+				var contractTime = visualLayerCollection.FilterLayers(requestedPeriod).ContractTime();
+				if (contractTime == TimeSpan.Zero)
+				{
+					contractTime = scheduleDays[0].ProjectionService().CreateProjection()
+						.FilterLayers(requestedPeriod)
+						.ContractTime();
+				}
+
+				numberMinutes = contractTime.TotalMinutes;
+			}
+
+			return numberMinutes;
+		}
+
+		private static double calculateMinutesBasedOnAverageContractTime(IPersonRequest personRequest, DateTimePeriod requestedPeriod)
+		{
+			var timeZone = personRequest.Person.PermissionInformation.DefaultTimeZone();
+
+			var personPeriod = personRequest.Person.PersonPeriods(requestedPeriod.ToDateOnlyPeriod(timeZone))
+									.FirstOrDefault();
+			var personContract = personPeriod.PersonContract;
+			var averageWorktimePerDayInMinutes =
+				personContract.Contract.WorkTime.AvgWorkTimePerDay.TotalMinutes;
+			var partTimePercentage = personContract.PartTimePercentage.Percentage.Value;
+			var averageContractTimeSpan =
+				TimeSpan.FromMinutes(averageWorktimePerDayInMinutes * partTimePercentage);
+
+			var requestedTime = requestedPeriod.ElapsedTime() < averageContractTimeSpan
+				? requestedPeriod.ElapsedTime()
+				: averageContractTimeSpan;
+
+			return requestedTime.TotalMinutes;
 		}
 
 		private static IValidatedRequest error(bool waitlistingIsenabled)

@@ -44,8 +44,7 @@
 </style>
 <!-- /ko -->
 
-
-<div class="navbar navbar-teleopti subnavbar new-teamschedule-view-nav">
+<div class="nav navbar navbar-teleopti new-teamschedule-view-nav" data-bind="css: {'new-teamschedule-view-nav-mobile': isHostAMobile}">
 	<div class="container">
 		<ul class="nav navbar-nav navbar-teleopti row submenu">
 			<li class="mobile-datepicker">
@@ -216,6 +215,7 @@
 		<!-- /ko -->
 	</div>
 
+	<!-- ko if: !isHostAMobile && !isHostAniPad -->
 	<div class="teamschedule-scroll-block-container" data-bind="style: {border: isScrollbarVisible() ? '1px dashed rgba(0, 0, 0, 0.1)' : 'none'}">
 		<!-- ko if: isScrollbarVisible -->
 		<div class="teamschedule-scroll-block">
@@ -223,9 +223,10 @@
 		</div>
 		<!-- /ko -->
 	</div>
+	<!-- /ko -->
 
 	<!-- ko if: isPanelVisible -->
-	<div class="new-teamschedule-panel">
+	<div class="new-teamschedule-panel" data-bind="css: {'new-teamschedule-panel-mobile': isHostAMobile}">
 		<!-- ko if: isHostAMobile-->
 		<div class="new-teamschedule-filter-component">
 			<label>
@@ -245,42 +246,48 @@
 			<input type="submit" style="display: none" />
 		</form>
 		<!--/ko-->
-		<div class="new-teamschedule-time-slider-container">
-			<label>@Resources.StartTime:</label>
-			<!-- ko if: isHostAMobile-->
-			<span class="start-time-clear-button cursorpointer floatright">
-				<i class="glyphicon glyphicon-remove"></i>
-			</span>
-			<!--/ko-->
-			<div class="new-teamschedule-time-slider-line relative">
-				<span class="start-time-slider-start-label" data-bind="text: startTimeStart, visible: showStartTimeStart"></span>
-				<span class="start-time-slider-end-label" data-bind="text: startTimeEnd"></span>
-				<div class="start-time-slider"></div>
-			</div>
-			<!-- ko ifnot: isHostAMobile-->
-			<span class="start-time-clear-button cursorpointer">
-				<i class="glyphicon glyphicon-remove"></i>
-			</span>
-			<!--/ko-->
-		</div>
 
-		<div class="new-teamschedule-time-slider-container">
-			<label>@Resources.EndTime:</label>
-			<!-- ko if: isHostAMobile-->
-			<span class="end-time-clear-button cursorpointer floatright">
-				<i class="glyphicon glyphicon-remove"></i>
-			</span>
-			<!--/ko-->
-			<div class="new-teamschedule-time-slider-line relative">
-				<span class="end-time-slider-start-label" data-bind="text: endTimeStart, visible: showEndTimeStart"></span>
-				<span class="end-time-slider-end-label" data-bind="text: endTimeEnd"></span>
-				<div class="end-time-slider"></div>
+		<div class="new-teamschedule-time-slider-block relative">
+			<!-- ko if: showOnlyDayOff -->
+			<div class="new-teamschedule-time-slider-block-backdrop"></div>
+			<!-- /ko -->
+			<div class="new-teamschedule-time-slider-container">
+				<label>@Resources.StartTime:</label>
+				<!-- ko if: isHostAMobile-->
+				<span class="start-time-clear-button cursorpointer floatright">
+					<i class="glyphicon glyphicon-remove"></i>
+				</span>
+				<!--/ko-->
+				<div class="new-teamschedule-time-slider-line relative">
+					<span class="start-time-slider-start-label" data-bind="text: startTimeStart, visible: showStartTimeStart"></span>
+					<span class="start-time-slider-end-label" data-bind="text: startTimeEnd"></span>
+					<div class="start-time-slider"></div>
+				</div>
+				<!-- ko ifnot: isHostAMobile-->
+				<span class="start-time-clear-button cursorpointer">
+					<i class="glyphicon glyphicon-remove"></i>
+				</span>
+				<!--/ko-->
 			</div>
-			<!-- ko ifnot: isHostAMobile-->
-			<span class="end-time-clear-button cursorpointer">
-				<i class="glyphicon glyphicon-remove"></i>
-			</span>
-			<!--/ko-->
+
+			<div class="new-teamschedule-time-slider-container">
+				<label>@Resources.EndTime:</label>
+				<!-- ko if: isHostAMobile-->
+				<span class="end-time-clear-button cursorpointer floatright">
+					<i class="glyphicon glyphicon-remove"></i>
+				</span>
+				<!--/ko-->
+				<div class="new-teamschedule-time-slider-line relative">
+					<span class="end-time-slider-start-label" data-bind="text: endTimeStart, visible: showEndTimeStart"></span>
+					<span class="end-time-slider-end-label" data-bind="text: endTimeEnd"></span>
+					<div class="end-time-slider"></div>
+				</div>
+				<!-- ko ifnot: isHostAMobile-->
+				<span class="end-time-clear-button cursorpointer">
+					<i class="glyphicon glyphicon-remove"></i>
+				</span>
+				<!--/ko-->
+			</div>
 		</div>
 		<!-- ko if: isHostAMobile-->
 		<div class="new-teamschedule-day-off-toggle">

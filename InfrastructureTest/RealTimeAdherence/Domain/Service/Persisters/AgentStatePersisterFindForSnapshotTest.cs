@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Castle.Core.Internal;
+using Teleopti.Ccc.Domain.Collection;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;

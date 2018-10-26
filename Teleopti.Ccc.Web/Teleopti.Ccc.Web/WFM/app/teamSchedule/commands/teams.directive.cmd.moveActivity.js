@@ -55,7 +55,7 @@
 			return vm.nextDay ?
 				serviceDateFormatHelper.getDateOnly(moment(vm.selectedDate()).add(1, 'days')) : vm.selectedDate();
 		}
-		
+
 		vm.anyValidAgent = function () {
 			return vm.invalidAgents.length !== vm.selectedAgents.length;
 		}
@@ -75,7 +75,7 @@
 			var people = validator.getInvalidPeopleNameList().join(', ');
 			return people;
 		};
-		 
+
 		vm.moveActivity = function () {
 			var requestData = getRequestData();
 			vm.checkingCommand = true;
@@ -97,8 +97,8 @@
 						vm.getActionCb(vm.label)(vm.trackId, personIds);
 					}
 					teamScheduleNotificationService.reportActionResult({
-						success: 'SuccessfulMessageForMovingActivity',
-						warning: 'PartialSuccessMessageForMovingActivity'
+						success: $translate.instant('SuccessfulMessageForMovingActivity'),
+						warning: $translate.instant('PartialSuccessMessageForMovingActivity')
 					}, vm.selectedAgents.map(function (x) {
 						return {
 							PersonId: x.PersonId,

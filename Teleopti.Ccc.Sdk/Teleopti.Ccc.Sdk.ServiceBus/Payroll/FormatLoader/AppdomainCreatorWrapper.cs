@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Remoting.Messaging;
 using System.Security;
 using System.Security.Permissions;
 using System.Xml;
@@ -184,12 +185,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 				{
 					var	files = Directory.GetFiles(
 						Directory.Exists(tenantSpecificPath) ? tenantSpecificPath : path, "*.dll", SearchOption.TopDirectoryOnly);
-				
-					foreach (var file in files)
+					var filePaths = files.ToList().ConvertAll(input => new FileInfo(input));
+					var dllFilesOnly = filePaths.Where(f => f.Extension.Equals(".dll")).Select(f => f.FullName).ToList();
+					foreach (var file in dllFilesOnly)
 					{
 						Assembly.Load(AssemblyName.GetAssemblyName(file));
 					}
-					foreach (var file in files)
+					foreach (var file in dllFilesOnly)
 					{
 						var assembly = Assembly.Load(AssemblyName.GetAssemblyName(file));
 						foreach (var type in assembly.GetExportedTypes())

@@ -29,13 +29,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 		[When(@"I open group pages picker")]
 		public void WhenIOpenGroupPagesPicker()
 		{
-			Browser.Interactions.ClickVisibleOnly(".group-picker-container");
+			Browser.Interactions.Click("group-page-picker");
 		}
 
 		[Then(@"I close group pages picker")]
 		public void ThenICloseGroupPagesPicker()
 		{
 			Browser.Interactions.ClickVisibleOnly(".group-page-picker-menu .footer .selection-done");
+		}
+
+		[Then(@"I click clear button in group pages picker")]
+		public void WhenIClearSelectionInTheHierarchy_Picker()
+		{
+			Browser.Interactions.Click(".group-page-picker-menu .footer .selection-clear");
 		}
 
 		[Then(@"I should see group pages picker tab")]
@@ -60,6 +66,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 						Resources.Skill);
 				}
 			);
+		}
+
+		[Then(@"I select group '(.*)' on group page picker")]
+		public void ThenISelectSite(string group)
+		{
+			Browser.Interactions.WaitScopeCondition(".group-page-picker-menu md-tabs-content-wrapper", "$parent.$ctrl.isDataAvailable", true, () =>
+				{
+					Browser.Interactions.ClickContaining(".group-page-picker-menu .virtual-repeat .repeated-item .md-button", group);
+				});
 		}
 
 		public class BusinessUnitData

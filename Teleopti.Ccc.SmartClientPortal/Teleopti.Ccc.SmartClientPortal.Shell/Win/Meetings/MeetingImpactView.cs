@@ -347,11 +347,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			tabControlSkillResultGrid.Select();
 		}
 
-		public void NotifyMeetingTimeChanged()
-		{
-			_meetingComposerView.NotifyMeetingTimeChanged(this);
-		}
-
 		public void SetStartDate(DateOnly startDate)
 		{
 			dateTimePickerAdvStartDate.Value = startDate.Date;

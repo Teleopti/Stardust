@@ -66,24 +66,5 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.AgentAdherenceDay
 			result.RecordedOutOfAdherences().Second().StartTime.Should().Be("2017-12-08 11:00".Utc());
 			result.RecordedOutOfAdherences().Second().EndTime.Should().Be("2017-12-08 12:00".Utc());
 		}
-
-		[Test, Ignore("Later")]
-		public void ShouldCloseOutOfAdherenceEndingInTheFuture()
-		{
-			Now.Is("2017-12-08 20:00");
-			var person = Guid.NewGuid();
-			Database
-				.WithAgent(person)
-				.WithAssignment(person, "2017-12-08")
-				.WithActivity(null, "phone")
-				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
-				.WithHistoricalStateChange("2017-12-08 08:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
-				.WithHistoricalStateChange("2017-12-10 12:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
-
-			var result = Target.Load(person);
-
-			result.RecordedOutOfAdherences().First().StartTime.Should().Be("2017-12-08 08:00".Utc());
-			result.RecordedOutOfAdherences().First().EndTime.Should().Be("2017-12-10 12:00".Utc());
-		}
 	}
 }

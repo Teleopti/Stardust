@@ -17,6 +17,30 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_store = store;
 		}
 
+		public FakeRtaHistory ShiftStart(Guid personId, string shiftStartTime, string shiftEndTime)
+		{
+			_store.Add(new PersonShiftStartEvent
+			{
+				PersonId = personId,
+				BelongsToDate = shiftStartTime.Date(),
+				ShiftStartTime = shiftStartTime.Utc(),
+				ShiftEndTime = shiftEndTime.Utc()
+			}, DeadLockVictim.No);
+			return this;
+		}
+		
+		public FakeRtaHistory ShiftEnd(Guid personId, string shiftStartTime, string shiftEndTime)
+		{
+			_store.Add(new PersonShiftEndEvent
+			{
+				PersonId = personId,
+				BelongsToDate = shiftStartTime.Date(),
+				ShiftStartTime = shiftStartTime.Utc(),
+				ShiftEndTime = shiftEndTime.Utc()
+			}, DeadLockVictim.No);
+			return this;
+		}
+
 		public FakeRtaHistory StateChanged(Guid personId, string time) =>
 			StateChanged(personId, time, null, null, null, null, null, null);
 
@@ -67,6 +91,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				PersonId = personId,
 				Timestamp = time.Utc(),
 				ShiftStart = shiftStart.Utc(),
+				StateName = state,
+				ActivityName = activity,
+				ActivityColor = activityColor?.ToArgb(),
+				RuleName = rule,
+				RuleColor = ruleColor?.ToArgb(),
+				Adherence = adherence == null ? null : (EventAdherence?) Enum.Parse(typeof(EventAdherence), adherence.ToString())
+			}, DeadLockVictim.No);
+			return this;
+		}
+
+		public FakeRtaHistory AdherenceDayStart(Guid personId, string time, string state, string activity, Color? activityColor, string rule, Color? ruleColor, Adherence? adherence)
+		{
+			_store.Add(new PersonAdherenceDayStartEvent
+			{
+				PersonId = personId,
+				Timestamp = time.Utc(),
 				StateName = state,
 				ActivityName = activity,
 				ActivityColor = activityColor?.ToArgb(),

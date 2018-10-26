@@ -28,9 +28,9 @@
 		}
 	}
 
-	removeAbsenceCtrl.$inject = ['$scope', 'PersonAbsence', 'PersonSelection', 'teamScheduleNotificationService', '$wfmConfirmModal', 'ScenarioTestUtil'];
+	removeAbsenceCtrl.$inject = ['$scope', '$translate', 'PersonAbsence', 'PersonSelection', 'teamScheduleNotificationService', '$wfmConfirmModal', 'ScenarioTestUtil'];
 
-	function removeAbsenceCtrl($scope, PersonAbsenceSvc, PersonSelection, notification, $wfmModal, ScenarioTestUtil) {
+	function removeAbsenceCtrl($scope, $translate, PersonAbsenceSvc, PersonSelection, notification, $wfmModal, ScenarioTestUtil) {
 		var vm = this;
 		vm.label = 'RemoveAbsence';
 
@@ -39,9 +39,9 @@
 			var personIds = vm.selectedPersonProjections.map(function (x) { return x.PersonId; });
 			var selectedPersonAbsences = [];
 
-			vm.selectedPersonProjections.forEach(function(selection) {
+			vm.selectedPersonProjections.forEach(function (selection) {
 				if (!selection.SelectedAbsences || selection.SelectedAbsences.length === 0) return;
-				var absenceDates = selection.SelectedAbsences.map(function(selectedAbsence) {
+				var absenceDates = selection.SelectedAbsences.map(function (selectedAbsence) {
 					return {
 						PersonAbsenceId: selectedAbsence.absenceId,
 						Date: selectedAbsence.date
@@ -56,7 +56,7 @@
 			});
 
 			var requestData = {
-				SelectedPersonAbsences: selectedPersonAbsences,			
+				SelectedPersonAbsences: selectedPersonAbsences,
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			};
 
@@ -67,8 +67,8 @@
 				}
 
 				notification.reportActionResult({
-					"success": 'FinishedRemoveAbsence',
-					"warning": 'PartialSuccessMessageForRemovingAbsence'
+					"success": $translate.instant('FinishedRemoveAbsence'),
+					"warning": $translate.instant('PartialSuccessMessageForRemovingAbsence')
 				}, selectedPersonAbsences.map(function (x) {
 					return {
 						PersonId: x.PersonId,
@@ -79,14 +79,14 @@
 		};
 
 		vm.popDialog = function () {
-			var title = vm.label;
+			var title = $translate.instant('RemoveAbsence');
 			var message = notification.buildConfirmationMessage(
-				'AreYouSureToRemoveSelectedAbsence',
+				$translate.instant('AreYouSureToRemoveSelectedAbsence'),
 				PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.PersonCount,
 				PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.AbsenceCount,
 				true
 			);
-			$wfmModal.confirm(message, title).then(function (result) {				
+			$wfmModal.confirm(message, title).then(function (result) {
 				vm.resetActiveCmd();
 				if (result) {
 					$scope.$emit('teamSchedule.show.loading');

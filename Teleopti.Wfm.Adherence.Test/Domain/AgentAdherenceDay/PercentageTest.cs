@@ -164,6 +164,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.AgentAdherenceDay
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
 			Database.WithHistoricalStateChange("2017-12-01 00:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out);
+			Database.WithHistoricalAdherenceDayStart("2017-12-08 07:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out);
 
 			var result = Target.Load(person);
 
@@ -276,7 +277,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.AgentAdherenceDay
 		}
 
 		[Test]
-		public void ShouldNotExcludeNeutralInTheMorning()
+		public void ShouldExcludeOneHourNeutralInTheMorning()
 		{
 			Now.Is("2017-12-08 23:00");
 			var person = Guid.NewGuid();
@@ -286,6 +287,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 09:00", "2017-12-08 20:00")
 				.WithHistoricalStateChange("2017-12-08 06:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral)
+				.WithHistoricalAdherenceDayStart("2017-12-08 08:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral)
 				.WithHistoricalStateChange("2017-12-08 10:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
 				.WithHistoricalStateChange("2017-12-08 11:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				;

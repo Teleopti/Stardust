@@ -8,13 +8,13 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 		{
 		}
 		
-		public AdherencePeriod(DateTime startTime, DateTime endTime)
+		public AdherencePeriod(DateTime? startTime, DateTime? endTime)
 		{
 			StartTime = startTime;
 			EndTime = endTime;
 		}
 		
-		public DateTime StartTime { get; set; }
+		public DateTime? StartTime { get; set; }
 		public DateTime? EndTime { get; set; }
 	}
 }

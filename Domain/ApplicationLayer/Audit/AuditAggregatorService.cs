@@ -13,12 +13,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 		private readonly IPersonRepository _personRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
 
-		public AuditAggregatorService(StaffingContextReaderService staffingContextReaderService, IPersonRepository personRepository, ILoggedOnUser loggedOnUser, PersonAccessContextReaderService personAccessContextReaderService)
+		public AuditAggregatorService(StaffingContextReaderService staffingContextReaderService, PersonAccessContextReaderService personAccessContextReaderService, IPersonRepository personRepository, ILoggedOnUser loggedOnUser)
 		{
 			_staffingContextReaderService = staffingContextReaderService;
+			_personAccessContextReaderService = personAccessContextReaderService;
 			_personRepository = personRepository;
 			_loggedOnUser = loggedOnUser;
-			_personAccessContextReaderService = personAccessContextReaderService;
 		}
 
 		public IList<AuditServiceModel> Load(Guid personId, DateTime startDate, DateTime endDate)
@@ -34,12 +34,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 
 		}
 
-		private IEnumerable<AuditServiceModel> getPersonAccessAudits(Guid personId, DateTime startDate, DateTime endDate)
-		{
-			var person = _personRepository.Load(personId);
-			return _personAccessContextReaderService.LoadAudits(person, startDate, endDate);
-		}
-
 		private void fixUserTimeZone(List<AuditServiceModel> aggregatedAudits)
 		{
 			aggregatedAudits.ForEach(x =>
@@ -53,6 +47,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 		{
 			var person = _personRepository.Load(personId);
 			return  _staffingContextReaderService.LoadAudits(person, startDate, endDate);
+		}
+
+		private IEnumerable<AuditServiceModel> getPersonAccessAudits(Guid personId, DateTime startDate, DateTime endDate)
+		{
+			var person = _personRepository.Load(personId);
+			return _personAccessContextReaderService.LoadAudits(person, startDate, endDate);
 		}
 	}
 }

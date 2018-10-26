@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 				var auditServiceModel = new AuditServiceModel
 				{
 					TimeStamp = audit.TimeStamp, Context = "PersonAccess", Action = audit.Action,
-					ActionPerformedBy = audit.ActionPerformedBy
+					ActionPerformedBy = audit.ActionPerformedBy.Name.ToString(NameOrderOption.FirstNameLastName)
 				};
 				var deserializedRole = JsonConvert.DeserializeObject<PersonAccessModel>(audit.Data);
 				var appRole = _applicationRoleRepository.Load(deserializedRole.RoleId);

@@ -10,13 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
-	public interface ITeamBlockRemoveShiftCategoryOnBestDateService
-	{
-		IScheduleDayPro Execute(IShiftCategory shiftCategory, SchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, DateOnlyPeriod dateOnlyPeriod, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService);
-		bool IsThisDayCorrectShiftCategory(IScheduleDayPro scheduleDayPro, IShiftCategory shiftCategory);
-	}
-
-	public class TeamBlockRemoveShiftCategoryOnBestDateService : ITeamBlockRemoveShiftCategoryOnBestDateService
+	public class TeamBlockRemoveShiftCategoryOnBestDateService
 	{
 		private readonly IScheduleMatrixValueCalculatorProFactory _scheduleMatrixValueCalculatorProFactory;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;

@@ -1,9 +1,7 @@
-using System;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
@@ -41,8 +39,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var period = new DateTimePeriodFormMapper(_userTimeZone).Map(source.Period);
 
 			personRequest.TrySetMessage(source.Message ?? string.Empty);
-			personRequest.Request = new AbsenceRequest(_absenceRepository.Load(source.AbsenceId), period);
-
+			personRequest.Request = new AbsenceRequest(_absenceRepository.Load(source.AbsenceId), period)
+				{FullDay = source.FullDay};
 			return personRequest;
 		}
 	}

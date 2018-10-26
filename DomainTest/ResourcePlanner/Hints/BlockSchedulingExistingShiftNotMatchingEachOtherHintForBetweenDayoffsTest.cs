@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
@@ -205,6 +204,45 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			result.First().ValidationErrors.Count(x => x.ErrorResource == nameof(Resources.ExistingShiftNotMatchStartTime)).Should().Be.EqualTo(1);
 			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First()).Should().Be.EqualTo(string.Format(Resources.ExistingShiftNotMatchStartTime, personAssignment.Period.StartDateTime, startDate.Date, personAssignment2.Period.StartDateTime, startDate.AddDays(1).Date));
+		}
+		
+		[Test]
+		public void ExistingDifferentStartTimesWithinSameWeekForDayLightSaving()
+		{
+			var startDate = new DateOnly(2018, 10, 22);
+			var endDate = new DateOnly(2018, 10, 28);
+			var planningPeriod = new DateOnlyPeriod(startDate, endDate);
+			var scenario = new Scenario { DefaultScenario = true };
+			ScenarioRepository.Has(scenario);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var contract = new Contract("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(startDate, SchedulePeriodType.Week, 1), ruleSet, skill);
+			agent.InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			var currentSchedule = new ScheduleDictionaryForTest(scenario, planningPeriod.Inflate(1).ToDateTimePeriod(TimeZoneInfo.Utc));
+
+			var dayOff1 = new PersonAssignment(agent, scenario, endDate.AddDays(-2)).WithDayOff();
+			var personAssignment = new PersonAssignment(agent, scenario, endDate.AddDays(-1)).WithLayer(activity, new TimePeriod(9, 16)).ShiftCategory(shiftCategory);
+			var personAssignment2 = new PersonAssignment(agent, scenario, endDate).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory);
+			var dayOff2 = new PersonAssignment(agent, scenario, endDate.AddDays(1)).WithDayOff();
+			currentSchedule.AddPersonAssignment(personAssignment);
+			currentSchedule.AddPersonAssignment(personAssignment2);
+			currentSchedule.AddPersonAssignment(dayOff1);
+			currentSchedule.AddPersonAssignment(dayOff2);
+
+			var result =
+				Target.Execute(new HintInput(currentSchedule, new[] {agent}, planningPeriod,
+					new FixedBlockPreferenceProvider(new ExtraPreferences
+					{
+						UseTeamBlockOption = true,
+						BlockTypeValue = BlockFinderType.BetweenDayOff,
+						UseBlockSameStartTime = true
+					}), false)).InvalidResources;
+
+			result.First().ValidationErrors.Count(x => x.ErrorResource == nameof(Resources.ExistingShiftNotMatchStartTime)).Should().Be.EqualTo(1);
+			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First()).Should().Be.EqualTo(string.Format(Resources.ExistingShiftNotMatchStartTime, personAssignment.Period.StartDateTime, endDate.Date.AddDays(-1), personAssignment2.Period.StartDateTime, endDate.Date));
 		}
 
 		[Test]

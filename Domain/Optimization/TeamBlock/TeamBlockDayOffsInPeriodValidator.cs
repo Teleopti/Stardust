@@ -5,12 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
-	public interface ITeamBlockDayOffsInPeriodValidator
-	{
-		bool Validate(ITeamInfo teamInfo, ISchedulingResultStateHolder schedulingResultStateHolder);
-	}
-
-	public class TeamBlockDayOffsInPeriodValidator : ITeamBlockDayOffsInPeriodValidator
+	public class TeamBlockDayOffsInPeriodValidator
 	{
 		public bool Validate(ITeamInfo teamInfo, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{

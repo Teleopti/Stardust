@@ -583,7 +583,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		public void ShouldRegisterEventsMessageSender()
 		{
 			requestContainer.Resolve<IEnumerable<ITransactionHook>>()
-				.OfType<EventsMessageSender>()
+				.OfType<CompositeScheduleEventsPublisher>()
 				.Single()
 				.Should().Not.Be.Null();
 		}

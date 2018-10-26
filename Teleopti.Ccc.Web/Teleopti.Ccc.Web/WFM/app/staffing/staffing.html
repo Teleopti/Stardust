@@ -11,36 +11,28 @@
 			</button>
 		</div>
 	</div>
-
-	<div class="con-row">
-		<div class="con-flex">
-			<div class="panel material-depth-1">
-				<div class="con-row align-row-center staffing-toolbar" ng-class="{'locked':vm.isSearchRequested}" style="flex-wrap:wrap">
-					<div class="con-flex" style="min-width: 520px">
-						<div class="pull-left" style="min-width: 450px; margin-right: 10px">
-							<the-skill-picker skills="vm.allSkills" skill-groups="vm.allSkillAreas" on-skill-selected="vm.selectedSkillChange(skill)"
-							 on-skill-group-selected="vm.selectedAreaChange(skillGroup)" preselected-skill="vm.selectedSkill"
-							 preselected-skill-group="vm.selectedSkillArea">
-							</the-skill-picker>
-						</div>
-						<div>
-							<skill-group-manager-button id="manage_skill_group_button" ng-if="vm.HasPermissionToModifySkillArea" ng-click="vm.configMode()"></skill-group-manager-button>
-						</div>
-					</div>
-
-					<div class="con-flex">
-						<wfm-date-picker ng-model="vm.selectedDate" show-week="true" popup-mode="true" on-date-change="vm.navigateToNewDay(vm.selectedDate)"></wfm-date-picker>
-					</div>
-
-					<div class="con-flex">
-						<md-checkbox class="pull-right" ng-change="vm.useShrinkageForStaffing()" ng-model="vm.useShrinkage" aria-label="Checkbox">{{'UseShrinkage'|
-							translate}}</md-checkbox>
-					</div>
+    <div class="con-row">
+        <div class="con-flex"
+             style="flex: 2 1 0">
+            <div class="panel material-depth-1">
+                <div class="con-row align-row-center staffing-toolbar" ng-class="{'locked':vm.isSearchRequested}">
+                    <the-skill-picker class="con-flex pull-left"
+										skills="vm.allSkills"
+										skill-groups="vm.allSkillAreas"
+										on-skill-selected="vm.selectedSkillChange(skill)"
+										on-skill-group-selected="vm.selectedAreaChange(skillGroup)"
+										preselected-skill="vm.selectedSkill"
+										preselected-skill-group="vm.selectedSkillArea">
+                    </the-skill-picker>
+					<skill-group-manager-button id="manage_skill_group_button" ng-if="vm.HasPermissionToModifySkillArea" ng-click="vm.configMode()">
+					</skill-group-manager-button>
+					<wfm-date-picker class="con-flex" style="margin-left: 10px" ng-model="vm.selectedDate" show-week="true" popup-mode="true" on-date-change="vm.navigateToNewDay(vm.selectedDate)"></wfm-date-picker>
+					<md-checkbox class="pull-right" style="margin-right: 10px" ng-change="vm.useShrinkageForStaffing()" ng-model="vm.useShrinkage" aria-label="Checkbox">{{'UseShrinkage'|translate}}</md-checkbox>
 					<md-progress-linear md-mode="indeterminate" ng-if="vm.isSearchRequested"></md-progress-linear>
-				</div>
-			</div>
-		</div>
-	</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 	<modal-dialog show='vm.exportModal' ng-cloak>
 		<div ng-if="vm.showBpoInterface && vm.hasPermissionForBpoExchange">

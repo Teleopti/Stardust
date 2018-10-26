@@ -237,16 +237,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			fillGridListControlDefaultSearch();
 		}
 
-		private bool logonContains(LogonInfoModel model, string lowerSearchText, CultureInfo cultureInfo)
-		{
-			var logon = "";
-			if (!string.IsNullOrEmpty(model.Identity))
-				logon = model.Identity.ToLower(cultureInfo);
-			if (!string.IsNullOrEmpty(model.LogonName))
-				logon += model.LogonName.ToLower(cultureInfo);
-			return logon.Contains(lowerSearchText);
-		}
-
 		private void buttonAdd_Click(object sender, EventArgs e)
 		{
 			if (gridListControlDefaultSearch.SelectedItem == null) return;

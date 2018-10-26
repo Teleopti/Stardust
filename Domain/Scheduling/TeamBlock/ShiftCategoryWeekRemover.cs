@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public class ShiftCategoryWeekRemover
 	{
-		private readonly ITeamBlockRemoveShiftCategoryOnBestDateService _teamBlockRemoveShiftCategoryOnBestDateService;
+		private readonly TeamBlockRemoveShiftCategoryOnBestDateService _teamBlockRemoveShiftCategoryOnBestDateService;
 
-		public ShiftCategoryWeekRemover(ITeamBlockRemoveShiftCategoryOnBestDateService teamBlockRemoveShiftCategoryOnBestDateService)
+		public ShiftCategoryWeekRemover(TeamBlockRemoveShiftCategoryOnBestDateService teamBlockRemoveShiftCategoryOnBestDateService)
 		{
 			_teamBlockRemoveShiftCategoryOnBestDateService = teamBlockRemoveShiftCategoryOnBestDateService;
 		}

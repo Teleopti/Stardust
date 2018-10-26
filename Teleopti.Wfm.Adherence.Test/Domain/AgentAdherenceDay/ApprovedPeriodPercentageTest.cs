@@ -39,7 +39,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.AgentAdherenceDay
 		}
 
 		[Test]
-		public void ShouldApproveNeutralPeriodAsInAdherence_Fokklokiklilogogoblipblopblapp_For()
+		public void ShouldApproveNeutralPeriodAsInAdherence()
 		{
 			Now.Is("2017-12-08 21:00");
 			var person = Guid.NewGuid();
@@ -59,7 +59,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.AgentAdherenceDay
 		}
 
 		[Test]
-		public void ShouldApproveNeutralPeriodAsInAdherence_Fokklokiklilogogoblipblopblapp()
+		public void ShouldApproveNeutralPeriodAsInAdherence2()
 		{
 			Now.Is("2017-12-08 21:00");
 			var person = Guid.NewGuid();

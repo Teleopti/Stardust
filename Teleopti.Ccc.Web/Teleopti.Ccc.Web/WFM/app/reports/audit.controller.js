@@ -67,7 +67,7 @@
 
 		init();
 		function init() {
-			getChangedBy();
+			//getChangedBy();
 			getOrgData();
 			updateLabel();
 		}

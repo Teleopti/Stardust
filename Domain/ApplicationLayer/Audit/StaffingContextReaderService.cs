@@ -38,15 +38,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 				var auditServiceModel = new AuditServiceModel()
 				{
 					TimeStamp = audit.TimeStamp, Context = "Staffing", Action = audit.Action,
-					ActionPerformedBy = audit.ActionPerformedBy
+					ActionPerformedBy = audit.ActionPerformedBy.Name.ToString(NameOrderOption.FirstNameLastName)
 				};
 				if (audit.Action.Equals(StaffingAuditActionConstants.ImportBpo))
 					auditServiceModel.Data = $"File name: {audit.Data}";
 				else
 				{
 					var deserialized = JsonConvert.DeserializeObject<ClearBpoActionObj>(audit.Data);
-					var bpoName = _skillCombinationResourceRepository.LoadActiveBpos()
-						.FirstOrDefault(x => x.Id.Equals(deserialized.BpoGuid)).Source;
+					//var bpoName = _skillCombinationResourceRepository.LoadActiveBpos()
+					//	.FirstOrDefault(x => x.Id.Equals(deserialized.BpoGuid)).Source;
+					var bpoName = _skillCombinationResourceRepository.GetSourceBpoByGuid(deserialized.BpoGuid);
 					var startDate = deserialized.StartDate.Date.ToString("d", _userCulture.GetCulture());
 					var endDate = deserialized.EndDate.Date.ToString("d", _userCulture.GetCulture());
 					auditServiceModel.Data = $"BPO name: {bpoName}{Environment.NewLine}Period from {startDate} to {endDate}";
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 	public class AuditServiceModel
 	{
 		public DateTime TimeStamp { get; set; }
-		public IPerson ActionPerformedBy{ get; set; }
+		public string ActionPerformedBy{ get; set; }
 		public string Action { get; set; }
 		public string Context { get; set; }
 		public string Data { get; set; }

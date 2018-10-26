@@ -54,22 +54,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 		}
 	}
 
-	public class FakeScheduleDayDifferenceSaver : IScheduleDayDifferenceSaver
-	{
-		public bool InvokeSave;
-
-		public IEnumerable<SkillCombinationResource> SaveDifferences(IScheduleRange scheduleRange)
-		{
-			InvokeSave = true;
-			return new List<SkillCombinationResource>();
-		}
-
-		public IEnumerable<SkillCombinationResource> GetDifferences(IScheduleRange scheduleRange)
-		{
-			throw new System.NotImplementedException();
-		}
-	}
-
 	public class EmptyScheduleDayDifferenceSaver : IScheduleDayDifferenceSaver
 	{
 		public IEnumerable<SkillCombinationResource> SaveDifferences(IScheduleRange scheduleRange)
