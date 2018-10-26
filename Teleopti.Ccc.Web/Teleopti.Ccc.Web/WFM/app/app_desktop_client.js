@@ -27,7 +27,6 @@ var wfm = angular
 		'wfm.exceptionHandler',
 		'wfm.permissions',
 		'wfm.peopleold',
-		'wfm.people',
 		'wfm.outbound',
 		'wfm.forecasting',
 		'wfm.resourceplanner',
