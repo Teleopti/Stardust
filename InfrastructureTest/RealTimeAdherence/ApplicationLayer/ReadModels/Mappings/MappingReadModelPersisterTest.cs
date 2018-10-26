@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		public void ShouldPersist()
 		{
 			var businessUnit = Guid.NewGuid();
-			var platformType = Guid.NewGuid();
 			var group = Guid.NewGuid();
 			var activity = Guid.NewGuid();
 			var rule = Guid.NewGuid();

@@ -135,7 +135,6 @@ Insurance,20121028 02:45,20121028 03:00,17,179,0,4.05");
 		[SetCulture("en-US")]
 		public void ShouldHandleIsoDateTimeFormatInUs()
 		{
-			var culture = Thread.CurrentThread.CurrentCulture;
 			_fileContent = Encoding.UTF8.GetBytes(@"Insurance,2012-10-28 02:00,2012-10-28 02:15,17,179,0,4.05");
 			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			var forecastRows = _target.LoadContent(_fileContent, timeZone).ToArray();
@@ -195,7 +194,6 @@ Insurance;20121027 02:45;20121027 03:00;17;179;0;4.05");
 			_fileContent = Encoding.UTF8.GetBytes(@"skillname;startdatetime;enddatetime;tasks;tasktime;aftertasktime;agents
 Insurance;20121027 02:00;20121027 02:15;17;179;0;4.05
 Insurance,20121027 02:45,20121027 03:00,17,179,0,4.05");
-			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			Assert.Throws<ValidationException>(() => _target.LoadContent(_fileContent, _timeZone),
 				"There are more or less columns than expected");
 		}
