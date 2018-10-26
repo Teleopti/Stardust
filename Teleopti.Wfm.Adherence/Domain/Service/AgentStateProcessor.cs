@@ -29,9 +29,9 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		public readonly ProperAlarm AppliedAlarm;
 		public readonly IEnumerable<ScheduledActivity> Schedule;
 		public readonly StateMapper StateMapper;
+		public readonly ExternalLogonMapper ExternalLogonMapper;
 		public readonly InputInfo Input;
 		public readonly AgentState Stored;
-		public readonly TimeZoneInfo PersonTimeZone;
 		public readonly StateTraceLog TraceLog;
 
 		public ProcessInput(
@@ -39,17 +39,17 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			DeadLockVictim deadLockVictim,
 			InputInfo input,
 			AgentState stored,
-			TimeZoneInfo personTimeZone,
 			IEnumerable<ScheduledActivity> schedule,
 			StateMapper stateMapper,
+			ExternalLogonMapper externalLogonMapper,
 			ProperAlarm appliedAlarm,
 			StateTraceLog traceLog)
 		{
+			ExternalLogonMapper = externalLogonMapper;
 			CurrentTime = currentTime;
 			DeadLockVictim = deadLockVictim;
 			Input = input;
 			Stored = stored;
-			PersonTimeZone = personTimeZone;
 			Schedule = schedule;
 			StateMapper = stateMapper;
 			AppliedAlarm = appliedAlarm;
@@ -133,10 +133,11 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 					processInput.DeadLockVictim,
 					input,
 					workingState,
-					processInput.PersonTimeZone,
 					processInput.Schedule,
 					processInput.StateMapper,
-					processInput.AppliedAlarm);
+					processInput.ExternalLogonMapper,
+					processInput.AppliedAlarm
+					);
 				if (context.ShouldProcessState())
 				{
 					process(context);

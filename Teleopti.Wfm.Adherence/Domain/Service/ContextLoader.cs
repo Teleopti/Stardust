@@ -34,11 +34,21 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		private readonly ICurrentEventPublisher _eventPublisher;
 		private readonly IRtaTracer _tracer;
 
-		public ContextLoader(ICurrentDataSource dataSource, DataSourceMapper dataSourceMapper, INow now,
-			StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache,
-			IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config,
-			DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, AgentStateProcessor processor,
-			ICurrentEventPublisher eventPublisher, IRtaTracer tracer)
+		public ContextLoader(
+			ICurrentDataSource dataSource, 
+			DataSourceMapper dataSourceMapper, 
+			INow now,
+			StateMapper stateMapper, 
+			ExternalLogonMapper externalLogonMapper, 
+			ScheduleCache scheduleCache,
+			IAgentStatePersister agentStatePersister, 
+			ProperAlarm appliedAlarm, 
+			IConfigReader config,
+			DeadLockRetrier deadLockRetrier, 
+			IKeyValueStorePersister keyValues, 
+			AgentStateProcessor processor,
+			ICurrentEventPublisher eventPublisher, 
+			IRtaTracer tracer)
 		{
 			_dataSource = dataSource;
 			_dataSourceMapper = dataSourceMapper;
@@ -193,9 +203,9 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 								strategy.DeadLockVictim,
 								strategy.GetInputFor(x.State),
 								x.State,
-								_externalLogonMapper.TimeZoneFor(x.State.PersonId),
 								_scheduleCache.Read(x.State.PersonId),
 								_stateMapper,
+								_externalLogonMapper,
 								_appliedAlarm,
 								x.Trace
 							)

@@ -21,7 +21,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		private readonly Lazy<int> _timeWindowCheckSum;
 		private readonly Lazy<IEnumerable<ScheduledActivity>> _timeWindowActivities;
 
-		public ScheduleInfo(Context context, Lazy<IEnumerable<ScheduledActivity>> schedule)
+		public ScheduleInfo(Context context, Lazy<IEnumerable<ScheduledActivity>> schedule, ExternalLogonMapper externalLogonMapper)
 		{
 			_context = context;
 			_schedule = schedule;
@@ -37,7 +37,8 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 				var activity = CurrentActivity() ?? startingActivity() ?? endedActivity();
 				if (activity != null)
 					return activity?.BelongsToDate;
-				var agentsTime = TimeZoneInfo.ConvertTimeFromUtc(_context.Time, _context.PersonTimeZone);
+				var timeZone = externalLogonMapper.TimeZoneFor(_context.PersonId);
+				var agentsTime = TimeZoneInfo.ConvertTimeFromUtc(_context.Time, timeZone);
 				return new DateOnly(agentsTime);
 			});
 			_timeWindowActivities = new Lazy<IEnumerable<ScheduledActivity>>(timeWindowActivities);
