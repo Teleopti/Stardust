@@ -1,5 +1,9 @@
 import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
 
+/**
+ * This is a workaround for Angular to preserve the TestBed module
+ * between each test. This is not always desirable, but will speed up test runs.
+ */
 export const configureTestSuite = () => {
 	const testBedApi: any = getTestBed();
 	const originReset = TestBed.resetTestingModule;

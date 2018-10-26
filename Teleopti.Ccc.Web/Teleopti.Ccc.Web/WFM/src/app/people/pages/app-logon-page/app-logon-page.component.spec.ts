@@ -1,17 +1,27 @@
 import { HttpClientModule } from '@angular/common/http';
-import { DebugElement } from '@angular/core';
+import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockTranslationModule } from '@wfm/mocks/translation';
+import { configureTestSuite, PageObject } from '@wfm/test';
 import { NzButtonModule, NzFormModule, NzGridModule, NzTableModule, NzToolTipModule } from 'ng-zorro-antd';
-import { configureTestSuite } from '../../../../configure-test-suit';
+import { BehaviorSubject } from 'rxjs';
 import { LogonInfoService } from '../../../shared/services';
-import { MockTitleBarModule, WorkspaceComponent } from '../../components';
+import { MockTitleBarModule } from '../../components';
 import { adina, adinaLogon, fakeBackendProvider } from '../../mocks';
 import { NavigationService, SearchService, WorkspaceService } from '../../shared';
 import { AppLogonPageComponent } from './app-logon-page.component';
+
+@Component({
+	selector: 'people-workspace',
+	template: `MockWorkspace`
+})
+class MockWorkspaceComponent {}
+
+class MockWorkspaceService implements Partial<WorkspaceService> {
+	people$ = new BehaviorSubject([adina]);
+}
 
 describe('AppLogonPageComponent', () => {
 	let component: AppLogonPageComponent;
@@ -23,7 +33,7 @@ describe('AppLogonPageComponent', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [AppLogonPageComponent, WorkspaceComponent],
+			declarations: [AppLogonPageComponent, MockWorkspaceComponent],
 			imports: [
 				MockTitleBarModule,
 				MockTranslationModule,
@@ -36,7 +46,13 @@ describe('AppLogonPageComponent', () => {
 				NzButtonModule,
 				NzToolTipModule
 			],
-			providers: [fakeBackendProvider, WorkspaceService, NavigationService, LogonInfoService, SearchService]
+			providers: [
+				fakeBackendProvider,
+				{ provide: WorkspaceService, useClass: MockWorkspaceService },
+				{ provide: NavigationService, useValue: {} },
+				LogonInfoService,
+				SearchService
+			]
 		}).compileComponents();
 	}));
 
@@ -44,9 +60,6 @@ describe('AppLogonPageComponent', () => {
 		fixture = TestBed.createComponent(AppLogonPageComponent);
 		component = fixture.componentInstance;
 		page = new Page(fixture);
-		workspaceService = fixture.debugElement.injector.get(WorkspaceService);
-
-		fixture.detectChanges();
 	});
 
 	it('should create', () => {
@@ -54,25 +67,14 @@ describe('AppLogonPageComponent', () => {
 	});
 
 	it('should display person app logon', () => {
-		workspaceService.selectPerson(adina);
 		fixture.detectChanges();
 		let input: HTMLInputElement = page.logonFields[0].nativeElement;
 		expect(input.value).toEqual(adinaLogon.LogonName);
 	});
 });
 
-class Page {
+class Page extends PageObject {
 	get logonFields() {
 		return this.queryAll('[data-test-application-logon] [data-test-person-logon]');
-	}
-
-	fixture: ComponentFixture<AppLogonPageComponent>;
-
-	constructor(fixture: ComponentFixture<AppLogonPageComponent>) {
-		this.fixture = fixture;
-	}
-
-	private queryAll(selector: string): DebugElement[] {
-		return this.fixture.debugElement.queryAll(By.css(selector));
 	}
 }

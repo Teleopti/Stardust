@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { configureTestSuite } from '@wfm/test';
 import { NzButtonModule, NzDropDownModule } from 'ng-zorro-antd';
 import { of } from 'rxjs';
-import { configureTestSuite } from '../../../../configure-test-suit';
 import { BusinessUnitService } from '../../shared/businessunit.service';
 import { BusinessUnitSelectorComponent } from './businessunit-selector.component';
 

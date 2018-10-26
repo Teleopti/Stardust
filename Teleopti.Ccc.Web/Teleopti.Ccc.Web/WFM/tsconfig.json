@@ -15,7 +15,8 @@
 		"lib": ["es2017", "dom"],
 		"paths": {
 			"@wfm/mocks/*": ["src/mocks/*"],
-			"@wfm/types": ["src/types/index"]
+			"@wfm/types": ["src/types/index"],
+			"@wfm/test": ["src/test/index"]
 		}
 	},
 	"include": ["app", "src", "e2e"],

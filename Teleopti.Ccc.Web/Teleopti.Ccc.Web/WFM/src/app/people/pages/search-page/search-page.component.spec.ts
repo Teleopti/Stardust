@@ -1,13 +1,11 @@
 import { HttpClientModule } from '@angular/common/http';
-import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockTranslationModule } from '@wfm/mocks/translation';
+import { configureTestSuite, PageObject } from '@wfm/test';
 import { NzButtonModule, NzFormModule, NzInputModule, NzTableModule, NzToolTipModule } from 'ng-zorro-antd';
 import { of } from 'rxjs';
-import { configureTestSuite } from '../../../../configure-test-suit';
 import { MockTitleBarModule, WorkspaceComponent } from '../../components';
 import { adina, eva, fakeBackendProvider, myles } from '../../mocks';
 import {
@@ -50,7 +48,7 @@ describe('SearchPageComponent', () => {
 				WorkspaceService,
 				SearchService,
 				SearchOverridesService,
-				NavigationService,
+				{ provide: NavigationService, useValue: {} },
 				RolesService
 			]
 		}).compileComponents();
@@ -144,7 +142,7 @@ describe('SearchPageComponent', () => {
 	}));
 });
 
-class Page {
+class Page extends PageObject {
 	get resultRows() {
 		return this.queryAll('[data-test-search] [data-test-person]');
 	}
@@ -159,15 +157,5 @@ class Page {
 
 	get sortOnFirstName() {
 		return this.queryAll('[data-test-sort-fn]')[0];
-	}
-
-	fixture: ComponentFixture<SearchPageComponent>;
-
-	constructor(fixture: ComponentFixture<SearchPageComponent>) {
-		this.fixture = fixture;
-	}
-
-	private queryAll(selector: string): DebugElement[] {
-		return this.fixture.debugElement.queryAll(By.css(selector));
 	}
 }

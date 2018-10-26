@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { configureTestSuite } from '@wfm/test';
 import { NzFormModule } from '../../../../../node_modules/ng-zorro-antd';
-import { configureTestSuite } from '../../../../configure-test-suit';
 import { ExternalApplicationService, NavigationService } from '../../services';
 import { AddAppPageComponent } from './add-app-page.component';
 

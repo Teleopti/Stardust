@@ -1,13 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockTranslationModule } from '@wfm/mocks/translation';
+import { configureTestSuite, PageObject } from '@wfm/test';
 import { NzButtonModule, NzFormModule, NzInputModule, NzMessageModule, NzModalModule } from 'ng-zorro-antd';
 import { of } from 'rxjs';
-import { configureTestSuite } from '../../../../configure-test-suit';
 import { PasswordService } from '../../services/password.service';
 import { ChangePasswordComponent } from './change-password.component';
 
@@ -113,7 +111,7 @@ describe('ChangePasswordComponent', () => {
 	});
 });
 
-class Page {
+class Page extends PageObject {
 	get currentPasswordField() {
 		return this.queryAll('[data-test-change-password-modal] [data-test-item-current-password]')[0];
 	}
@@ -128,15 +126,5 @@ class Page {
 
 	get okButton() {
 		return this.queryAll('[data-test-change-password-modal] .ant-btn-primary')[0];
-	}
-
-	fixture: ComponentFixture<ChangePasswordComponent>;
-
-	constructor(fixture: ComponentFixture<ChangePasswordComponent>) {
-		this.fixture = fixture;
-	}
-
-	private queryAll(selector: string): DebugElement[] {
-		return this.fixture.debugElement.queryAll(By.css(selector));
 	}
 }
