@@ -2,12 +2,12 @@
 	'use strict';
 
 	angular
-		.module('wfm.http', ['currentUserInfoService', 'wfm.notice', 'pascalprecht.translate'])
+		.module('wfm.http', ['currentUserInfoService', 'wfm.notice', 'pascalprecht.translate', 'wfm.versionService'])
 		.factory('httpInterceptor', httpInterceptor);
 
-	httpInterceptor.$inject = ['$q', '$injector', '$timeout', '$translate', '$window'];
+	httpInterceptor.$inject = ['$q', '$injector', '$timeout', '$translate', '$window', 'versionService'];
 
-	function httpInterceptor($q, $injector, $timeout, $translate, $window) {
+	function httpInterceptor($q, $injector, $timeout, $translate, $window, versionService) {
 		var connected = true;
 
 		var service = {
@@ -28,8 +28,8 @@
 			var businessUnitId = sessionStorage.getItem('buid');
 			if (businessUnitId) config.headers['X-Business-Unit-Filter'] = businessUnitId;
 
-			var clientVersion = sessionStorage.getItem('X-Client-Version');
-			if (clientVersion) config.headers['X-Client-Version'] = clientVersion;
+			var clientVersion = versionService.getVersion();
+			if (clientVersion.length !== 0) config.headers['X-Client-Version'] = clientVersion;
 
 			return config;
 		}

@@ -18,7 +18,6 @@ import { DowngradeableComponent, RouterConfigFunction } from './types';
 export interface IWfmRootScopeService extends IRootScopeService {
 	_: any;
 	isAuthenticated: boolean;
-	version: any;
 }
 
 if (environment.production) {
@@ -34,6 +33,7 @@ const wfm = angular.module('wfm', [
 	'currentUserInfoService',
 	'toggleService',
 	'shortcutsService',
+	'wfm.versionService',
 	'wfm.http',
 	'wfm.exceptionHandler',
 	'wfm.permissions',

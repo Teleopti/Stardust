@@ -2,32 +2,45 @@ import { DOCUMENT } from '@angular/common';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
+import { VersionService } from '../services';
 
 @Injectable()
 export class ClientOutdatedInterceptor implements HttpInterceptor {
-	constructor(@Inject(DOCUMENT) private document: Document) {}
+	constructor(@Inject(DOCUMENT) private document: Document, private versionService: VersionService) {}
 
-	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-		const clientVersion = sessionStorage.getItem('X-Client-Version');
-		if (clientVersion) {
-			const clientVersionHeader = { 'X-Client-Version': clientVersion };
-			const requestWithClientVersionHeader = req.clone({ setHeaders: clientVersionHeader });
-			return next.handle(requestWithClientVersionHeader).pipe(
-				tap(
-					event => {},
-					error => {
-						if (error instanceof HttpErrorResponse && error.status == 418) {
-							this.handleOldClientError();
-						}
-					}
-				)
-			);
-		}
-		return next.handle(req);
+	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+		return this.versionService.getVersion().pipe(
+			switchMap(version => {
+				if (version.length === 0) {
+					return next.handle(request);
+				}
+
+				const newRequest = this.createNewRequest(request, version);
+				return this.getReponseHandler(next, newRequest);
+			})
+		);
 	}
 
-	handleOldClientError() {
+	private getReponseHandler<T>(next: HttpHandler, request: HttpRequest<T>) {
+		return next.handle(request).pipe(
+			tap(
+				event => {},
+				error => {
+					if (error instanceof HttpErrorResponse && error.status == 418) {
+						this.handleOldClientError();
+					}
+				}
+			)
+		);
+	}
+
+	private createNewRequest<T>(request: HttpRequest<T>, version): HttpRequest<T> {
+		const clientVersionHeader = { 'X-Client-Version': version };
+		return request.clone({ setHeaders: clientVersionHeader });
+	}
+
+	private handleOldClientError() {
 		this.document.location.reload(true);
 	}
 }

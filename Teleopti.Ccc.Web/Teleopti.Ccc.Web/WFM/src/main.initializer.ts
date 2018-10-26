@@ -16,6 +16,7 @@ export const mainInitializer = [
 	'rtaDataService',
 	'$q',
 	'$http',
+	'versionService',
 	function(
 		$rootScope: IWfmRootScopeService,
 		$state,
@@ -29,7 +30,8 @@ export const mainInitializer = [
 		TabShortCut,
 		rtaDataService,
 		$q: IQService,
-		$http
+		$http,
+		versionService
 	) {
 		$rootScope.isAuthenticated = false;
 
@@ -54,8 +56,7 @@ export const mainInitializer = [
 		preloads.push(
 			$http.get('../api/Global/Version').then(function(response) {
 				var version = response.data;
-				$rootScope.version = version;
-				sessionStorage.setItem('X-Client-Version', version);
+				versionService.setVersion(version);
 			})
 		);
 		var preloadDone = false;
