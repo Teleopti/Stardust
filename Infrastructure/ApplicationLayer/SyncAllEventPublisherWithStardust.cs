@@ -1,6 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {

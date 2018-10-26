@@ -1,10 +1,12 @@
-﻿using System.Data.SqlClient;
+﻿using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Reflection;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
-using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling;
-using Teleopti.Wfm.Adherence.Domain.Service;
 using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
@@ -22,12 +24,19 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		public static string ForDesktop() => "Teleopti.Wfm.SmartClientPortal.Shell";
 	}
 
+	public class DataSourceMappingAssembly
+	{
+		public Assembly Assembly;
+	}
+
 	public class DataSourceConfigurationSetter : IDataSourceConfigurationSetter
 	{
+		private readonly IEnumerable<DataSourceMappingAssembly> _mappingAssemblies;
 		public const string NoDataSourceName = "[not set]";
 
-		public DataSourceConfigurationSetter(DataSourceApplicationName applicationName, IConfigReader configReader)
+		public DataSourceConfigurationSetter(DataSourceApplicationName applicationName, IConfigReader configReader, IEnumerable<DataSourceMappingAssembly> mappingAssemblies)
 		{
+			_mappingAssemblies = mappingAssemblies ?? Enumerable.Empty<DataSourceMappingAssembly>();
 			ApplicationName = string.Empty;
 			if (applicationName?.Name != null)
 				ApplicationName = applicationName.Name;
@@ -42,8 +51,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		{
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.DefaultSchema, "dbo");
-			nhConfiguration.AddAssembly(typeof(Person).Assembly);
-			nhConfiguration.AddAssembly(typeof(Rta).Assembly);
+			_mappingAssemblies.ForEach(x => nhConfiguration.AddAssembly(x.Assembly));
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.SqlExceptionConverter,
 				typeof(SqlServerExceptionConverter).AssemblyQualifiedName);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.UseSecondLevelCache, "false");

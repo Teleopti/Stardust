@@ -13,6 +13,7 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Support.Library;
+using Teleopti.Wfm.Adherence.Domain.Service;
 using Environment = NHibernate.Cfg.Environment;
 using ServiceLocatorForLegacy = Teleopti.Ccc.Infrastructure.ServiceLocatorForLegacy;
 
@@ -31,10 +32,14 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return new DataSourceFactoryFactory(() =>
 			{
+				var mappingAssemblies = new[] {new DataSourceMappingAssembly {Assembly = typeof(Person).Assembly}, new DataSourceMappingAssembly {Assembly = typeof(Rta).Assembly}};
 				enversConfiguration = enversConfiguration ?? new EnversConfiguration();
 				return new DataSourcesFactory(
 					enversConfiguration,
-					new DataSourceConfigurationSetter(new DataSourceApplicationName{Name = DataSourceApplicationName.ForTest()}, new ConfigReader()),
+					new DataSourceConfigurationSetter(
+						new DataSourceApplicationName {Name = DataSourceApplicationName.ForTest()}, 
+						new ConfigReader(), 
+						mappingAssemblies),
 					new MemoryNHibernateConfigurationCache(),
 					new UnitOfWorkFactoryFactory(
 						new NoPreCommitHooks(),
@@ -268,6 +273,5 @@ namespace Teleopti.Ccc.TestCommon
 			var database = application();
 			database.ConfigureSystem().TryAddTenantAdminUser();
 		}
-		
 	}
 }

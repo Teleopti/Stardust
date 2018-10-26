@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.LogObject;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -80,16 +79,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList LoadAgentQueueStat(DateTime startDate, DateTime endDate, string timeZoneId, Guid personCode)
 		{
 			return new List<object>();
-		}
-
-		public IList<AgentStateReadModel> LoadActualAgentState(IEnumerable<IPerson> persons)
-		{
-			return new List<AgentStateReadModel>();
-		}
-
-		public AgentStateReadModel LoadOneActualAgentState(Guid value)
-		{
-			return new AgentStateReadModel();
 		}
 	}
 }

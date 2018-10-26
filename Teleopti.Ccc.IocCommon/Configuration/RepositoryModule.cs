@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -12,6 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.MachineLearning;
+using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
@@ -21,7 +23,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	internal class RepositoryModule : Module
 	{
 		private readonly IocConfiguration _configuration;
-		private readonly Type repositoryConstructorType = typeof (ICurrentUnitOfWork);
+		private readonly Type repositoryConstructorType = typeof(ICurrentUnitOfWork);
 
 		public RepositoryModule(IocConfiguration configuration)
 		{
@@ -38,7 +40,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 						.AsImplementedInterfaces()
 						.SingleInstance();
 				}
-				else if (type.GetConstructor(new[] { repositoryConstructorType }) != null)
+				else if (type.GetConstructor(new[] {repositoryConstructorType}) != null)
 				{
 					builder.RegisterType(type)
 						.UsingConstructor(repositoryConstructorType)
@@ -47,8 +49,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				}
 			}
 
+			typeof(RtaStateGroupRepository).Assembly
+				.GetExportedTypes()
+				.Where(t => isRepository(t) && hasCorrectCtor(t))
+				.ForEach(t => { builder.RegisterType(t).AsImplementedInterfaces().SingleInstance(); });
+
 			builder.RegisterType<PersonLoadAllWithAssociation>().As<IPersonLoadAllWithAssociation>().SingleInstance();
-			
+
 			builder.RegisterType<ScheduleStorageRepositoryWrapper>().As<IScheduleStorageRepositoryWrapper>();
 			builder.RegisterType<ProjectionVersionPersister>()
 				.As<IProjectionVersionPersister>()
@@ -73,13 +80,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IStatisticRepository>();
 
 			builder.RegisterType<DefaultScenarioFromRepository>()
-			       .As<ICurrentScenario>()
-			       .SingleInstance();
+				.As<ICurrentScenario>()
+				.SingleInstance();
 
 			builder.RegisterType<LoadUserUnauthorized>()
 				.As<ILoadUserUnauthorized>()
 				.SingleInstance();
-			
+
 			builder.RegisterType<AggregateRootInitilizer>()
 				.As<IAggregateRootInitializer>()
 				.SingleInstance();
@@ -118,6 +125,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 						return true;
 				}
 			}
+
 			return false;
 		}
 

@@ -37,6 +37,8 @@ namespace Teleopti.Support.Library.Folders
 				return @"..\..\..\Database";
 			if (System.IO.Directory.Exists(@"..\..\Database"))
 				return @"..\..\Database";
+			if (System.IO.Directory.Exists(@"..\Database"))
+				return @"..\Database";
 			return null;
 		}
 
