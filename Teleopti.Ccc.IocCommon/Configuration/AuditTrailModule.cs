@@ -7,18 +7,19 @@ using Teleopti.Ccc.Domain.Search;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class AuditTrailContextHandlersModule : Module
+	public class AuditTrailModule : Module
 	{
 		private readonly IocConfiguration _config;
 
-		public AuditTrailContextHandlersModule(IocConfiguration config)
+		public AuditTrailModule(IocConfiguration config)
 		{
 			_config = config;
 		}
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<AuditTrailAspect>().As<IAspect>().SingleInstance();
+			builder.RegisterType<PreActionAuditAspect>().As<IAspect>().SingleInstance();
+			builder.RegisterType<PostActionAuditAspect>().As<IAspect>().SingleInstance();
 
 			builder.RegisterAssemblyTypes(typeof(IHandleContextAction<>).Assembly)
 				.Where(t =>

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_bpoFile = bpoFile;
 		}
 
-		[AuditTrail]
+		[PostActionAudit]
 		public virtual ClearBpoReturnObject ClearBpoForPeriod(ClearBpoActionObj clearBpoActionObj)
 		{
 			var result = _bpoProvider.ClearBpoResources(clearBpoActionObj.BpoGuid, clearBpoActionObj.StartDate, clearBpoActionObj.EndDate.AddDays(1).AddMinutes(-1));
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 		}
 
-		[AuditTrail]
+		[PostActionAudit]
 		public virtual ImportBpoFileResult ImportBpo(ImportBpoActionObj fileContents)
 		{
 			var result = _bpoFile.ImportFile(fileContents.FileContent, CultureInfo.InvariantCulture, fileContents.FileName);

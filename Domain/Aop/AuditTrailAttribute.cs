@@ -4,11 +4,18 @@ using Teleopti.Ccc.Domain.Aop.Core;
 namespace Teleopti.Ccc.Domain.Aop
 {
 	[AttributeUsage(AttributeTargets.Method)]
-	public class AuditTrailAttribute : AspectAttribute
+	public class PreActionAuditAttribute : AspectAttribute
 	{
-		public AuditTrailAttribute() : base(typeof(AuditTrailAspect))
+		public PreActionAuditAttribute() : base(typeof(PreActionAuditAspect))
+		{ 
+		}
+	}
+
+	[AttributeUsage(AttributeTargets.Method)]
+	public class PostActionAuditAttribute : AspectAttribute
+	{
+		public PostActionAuditAttribute() : base(typeof(PostActionAuditAspect))
 		{
 		}
-
 	}
 }

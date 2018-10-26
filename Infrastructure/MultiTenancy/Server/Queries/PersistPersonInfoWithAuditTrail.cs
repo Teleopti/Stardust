@@ -18,8 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			_personInfoPersister = personInfoPersister;
 		}
 
-		//[TenantAudit(PersistActionIntent.GenericPersistApiCall)]
-		[AuditTrail]
+		[PreActionAudit]
 		public virtual string Persist(GenericPersistApiCallActionObj genericPersistAuditAction)
 		{
 			var res = ValidatePersonInfo(genericPersistAuditAction.PersonInfo, genericPersistAuditAction.ThrowOnError);
@@ -34,13 +33,13 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 		}
 
 
-		[AuditTrail]
+		[PreActionAudit]
 		public virtual string PersistIdentity(IdentityChangeActionObj identityChangeActionObj)
 		{
 			return persistHelper(_personInfoPersister.PersistIdentity, identityChangeActionObj.PersonInfo, identityChangeActionObj.ThrowOnError);
 		}
 
-		[AuditTrail]
+		[PreActionAudit]
 		public virtual string PersistApplicationLogonName(AppLogonChangeActionObj appLogonChangeActionObj)
 		{
 			return persistHelper(_personInfoPersister.PersistApplicationLogonName, appLogonChangeActionObj.PersonInfo, appLogonChangeActionObj.ThrowOnError);

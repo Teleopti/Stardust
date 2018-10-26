@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			extend.AddService<PersistPersonInfo>(true);
 			extend.AddService<TenantAuditAttribute>();
 			extend.AddService<FakeCurrentHttpContext>();
-			extend.AddModule(new AuditTrailContextHandlersModule(configuration));
+			extend.AddModule(new AuditTrailModule(configuration));
 		}
 	}
 

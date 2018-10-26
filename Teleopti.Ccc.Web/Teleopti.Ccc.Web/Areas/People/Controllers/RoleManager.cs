@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
@@ -33,7 +34,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		}
 
 		[AuditPerson]
-		//[AuditTrail]
 		public virtual void GrantRoles(GrantRolesInputModel grantModel)
 		{
 			var persons = personRepository.FindPeople(grantModel.Persons);
@@ -51,6 +51,57 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		}
 
 		[AuditPerson]
+		public virtual void RevokeRoles(RevokeRolesInputModel revokeModel)
+		{
+			var persons = personRepository.FindPeople(revokeModel.Persons);
+			var allRoles = roleRepository.LoadAll();
+			var selectedRoles = allRoles.Where(x => revokeModel.Roles.ToList().Contains(x.Id ?? Guid.Empty));
+
+			foreach (var person in persons)
+			{
+				if (!principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.PeopleAccess, DateOnly.Today, person))
+				{
+					continue;
+				}
+				selectedRoles.ForEach(role => person.PermissionInformation.RemoveApplicationRole(role));
+			}
+		}
+	}
+
+	public class RoleManagerUsingAuditTrail : IRoleManager
+	{
+		private readonly IPersonRepository personRepository;
+		private readonly IApplicationRoleRepository roleRepository;
+		private readonly IAuthorization principalAuthorization;
+
+		public RoleManagerUsingAuditTrail(IPersonRepository personRepository,
+			IApplicationRoleRepository roleRepository,
+			IAuthorization principalAuthorization)
+
+		{
+			this.roleRepository = roleRepository;
+			this.personRepository = personRepository;
+			this.principalAuthorization = principalAuthorization;
+		}
+
+		[PreActionAudit]
+		public virtual void GrantRoles(GrantRolesInputModel grantModel)
+		{
+			var persons = personRepository.FindPeople(grantModel.Persons);
+			var allRoles = roleRepository.LoadAll();
+			var selectedRoles = allRoles.Where(x => grantModel.Roles.ToList().Contains(x.Id ?? Guid.Empty));
+
+			foreach (var person in persons)
+			{
+				if (!principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.PeopleAccess, DateOnly.Today, person))
+				{
+					continue;
+				}
+				selectedRoles.ForEach(role => person.PermissionInformation.AddApplicationRole(role));
+			}
+		}
+
+		[PreActionAudit]
 		public virtual void RevokeRoles(RevokeRolesInputModel revokeModel)
 		{
 			var persons = personRepository.FindPeople(revokeModel.Persons);

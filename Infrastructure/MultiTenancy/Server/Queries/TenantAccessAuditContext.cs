@@ -18,20 +18,20 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 
 		public void Handle(GenericPersistApiCallActionObj command)
 		{
-			AuditPersist(command.PersonInfo, PersistActionIntent.GenericPersistApiCall);
+			auditPersist(command.PersonInfo, PersistActionIntent.GenericPersistApiCall);
 		}
 
 		public void Handle(AppLogonChangeActionObj command)
 		{
-			AuditPersist(command.PersonInfo, PersistActionIntent.AppLogonChange);
+			auditPersist(command.PersonInfo, PersistActionIntent.AppLogonChange);
 		}
 
 		public void Handle(IdentityChangeActionObj command)
 		{
-			AuditPersist(command.PersonInfo, PersistActionIntent.IdentityChange);
+			auditPersist(command.PersonInfo, PersistActionIntent.IdentityChange);
 		}
 
-		private void AuditPersist(PersonInfo personInfo, PersistActionIntent intent)
+		private void auditPersist(PersonInfo personInfo, PersistActionIntent intent)
 		{
 			var tenantUser = _currentHttpContext.Current().Items[WebTenantAuthenticationConfiguration.PersonInfo] as PersonInfo;
 
