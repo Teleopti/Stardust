@@ -105,7 +105,7 @@ ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production. Don't modify this line!
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348 = RC
-ResourcePlanner_SeamlessPlanningForPreferences_76288 = RC # will make perf unhappy. needs to be addressed before setting to true
+ResourcePlanner_SeamlessPlanningForPreferences_76288 = true # Perf will go down and we will fix with additional stories
 ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941 = RC
 
 # DeBockers #
@@ -150,7 +150,7 @@ MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408 = RC #Depending on MyTime
 MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409 = RC #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
 WFM_Gamification_Permission_76546 = true
 MyTimeWeb_Request_CleanUpRequestHisotry_77776 = RC
-MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446 = RC
+MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446 = true
 
 # Tech #
 WFM_ChatBot_77547 = DEV
