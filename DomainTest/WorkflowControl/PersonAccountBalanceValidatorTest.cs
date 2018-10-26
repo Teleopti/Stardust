@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 				true);
 			var period = new DateTimePeriod(2016, 9, 9, 9, 2016, 9, 9, 17);
 			var absenceRequest = new AbsenceRequest(absence, period);
-
+			new PersonRequest(person, absenceRequest);
 			var schedulingResultStateHolder = new SchedulingResultStateHolder();
 			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
 			var absenceLayer = new AbsenceLayer(absence, period);
@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 				true);
 			var period = new DateTimePeriod(2016, 9, 9, 9, 2016, 9, 9, 17);
 			var absenceRequest = new AbsenceRequest(absence, period);
-
+			new PersonRequest(person, absenceRequest);
 			var schedulingResultStateHolder = new SchedulingResultStateHolder();
 			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
 			var absenceLayer = new AbsenceLayer(absence, period);
