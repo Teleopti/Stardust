@@ -99,9 +99,10 @@
 								<div ng-cloak class="animate-input-message" ng-show="!vm.queueSelected">
 									<div class="form-input-message formInvalidInput">{{ 'Required' | translate }}</div>
 								</div>
-								<div class="skill-queues">
-									<div class="big-table-wrapper material-depth-1 queue-list">
-										<div ui-i18n="en" ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-resize-colums ui-grid-selection ui-grid-disable-animation class="myGrid"></div>
+
+								<div class="material-depth-1">
+									<div class="big-table-wrapper" ui-i18n="en">
+										<div ui-grid="vm.gridOptions" ui-grid-resize-colums ui-grid-selection ui-grid-emptyBaseLayer></div>
 									</div>
 								</div>
 							</div>
