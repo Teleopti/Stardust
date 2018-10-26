@@ -21,7 +21,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		private readonly Lazy<int> _timeWindowCheckSum;
 		private readonly Lazy<IEnumerable<ScheduledActivity>> _timeWindowActivities;
 
-		public ScheduleInfo(Context context, Lazy<IEnumerable<ScheduledActivity>> schedule, ExternalLogonMapper externalLogonMapper)
+		public ScheduleInfo(Context context, Lazy<IEnumerable<ScheduledActivity>> schedule)
 		{
 			_context = context;
 			_schedule = schedule;
@@ -32,15 +32,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			_previousActivity = new Lazy<ScheduledActivity>(() => (from l in _schedule.Value where l.EndDateTime <= context.Time select l).LastOrDefault());
 			_shiftStartTimeForPreviousActivity = new Lazy<DateTime>(() => startTimeOfShift(_previousActivity.Value));
 			_shiftEndTimeForPreviousActivity = new Lazy<DateTime>(() => endTimeOfShift(_previousActivity.Value));
-			_belongsToDate = new Lazy<DateOnly?>(() =>
-			{
-				var activity = CurrentActivity() ?? startingActivity() ?? endedActivity();
-				if (activity != null)
-					return activity?.BelongsToDate;
-				var timeZone = externalLogonMapper.TimeZoneFor(_context.PersonId);
-				var agentsTime = TimeZoneInfo.ConvertTimeFromUtc(_context.Time, timeZone);
-				return new DateOnly(agentsTime);
-			});
+			_belongsToDate = new Lazy<DateOnly?>(() => _context.BelongsToDateMapper.BelongsToDate(_schedule.Value, _context.Time, () => _context.ExternalLogonMapper.TimeZoneFor(_context.PersonId)));
 			_timeWindowActivities = new Lazy<IEnumerable<ScheduledActivity>>(timeWindowActivities);
 			_timeWindowCheckSum = new Lazy<int>(() => _timeWindowActivities.Value.CheckSum());
 		}
@@ -119,38 +111,6 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		{
 			return nextActivity(_schedule.Value, _currentActivity.Value, _context.Time);
 		}
-
-		private ScheduledActivity endedActivity()
-		{
-			return (
-				from activity in _schedule.Value
-				let ended = activity.EndDateTime >= _context.Time.AddHours(-1) && activity.StartDateTime < _context.Time
-				where ended
-				select activity
-			).FirstOrDefault();
-		}
-
-		private ScheduledActivity startingActivity()
-		{
-			return (
-				from activity in _schedule.Value
-				let starting = activity.StartDateTime <= _context.Time.AddHours(1) && activity.EndDateTime > _context.Time
-				where starting
-				select activity
-			).FirstOrDefault();
-		}
-//
-//		private ScheduledActivity activityNear(DateTime time)
-//		{
-//			return (
-//				from activity in _schedule.Value
-//				let ended = activity.EndDateTime >= _context.Time.AddHours(-1) && activity.StartDateTime < time
-//				let starting = activity.StartDateTime <= _context.Time.AddHours(1) && activity.EndDateTime > time
-//				where ended || starting
-//				select activity
-//			).LastOrDefault();
-//		}
-
 
 		private static readonly TimeSpan timeWindowFuture = TimeSpan.FromHours(3);
 		private static readonly TimeSpan timeWindowPast = TimeSpan.FromHours(-1);

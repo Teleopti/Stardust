@@ -30,6 +30,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		public readonly IEnumerable<ScheduledActivity> Schedule;
 		public readonly StateMapper StateMapper;
 		public readonly ExternalLogonMapper ExternalLogonMapper;
+		public readonly BelongsToDateMapper BelongsToDateMapper;
 		public readonly InputInfo Input;
 		public readonly AgentState Stored;
 		public readonly StateTraceLog TraceLog;
@@ -42,10 +43,12 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			IEnumerable<ScheduledActivity> schedule,
 			StateMapper stateMapper,
 			ExternalLogonMapper externalLogonMapper,
+			BelongsToDateMapper belongsToDateMapper,
 			ProperAlarm appliedAlarm,
 			StateTraceLog traceLog)
 		{
 			ExternalLogonMapper = externalLogonMapper;
+			BelongsToDateMapper = belongsToDateMapper;
 			CurrentTime = currentTime;
 			DeadLockVictim = deadLockVictim;
 			Input = input;
@@ -136,6 +139,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 					processInput.Schedule,
 					processInput.StateMapper,
 					processInput.ExternalLogonMapper,
+					processInput.BelongsToDateMapper,
 					processInput.AppliedAlarm
 					);
 				if (context.ShouldProcessState())

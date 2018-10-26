@@ -163,6 +163,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return database.WithAgent(id, name, null, null, null, null, timeZone, null);
 		}
 
+		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, TimeZoneInfo timeZone)
+		{
+			return database.WithAgent(id, null, null, null, null, null, timeZone, null);
+		}
+		
 		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name, string terminalDate, Guid? teamId, Guid? siteId, Guid? businessUnitId, TimeZoneInfo timeZone, int? employeeNumber)
 		{
 			database.WithPerson(id, name, terminalDate, timeZone, null, null, employeeNumber);

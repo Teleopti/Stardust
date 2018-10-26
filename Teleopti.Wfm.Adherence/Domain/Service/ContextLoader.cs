@@ -24,6 +24,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		private readonly INow _now;
 		private readonly StateMapper _stateMapper;
 		private readonly ExternalLogonMapper _externalLogonMapper;
+		private readonly BelongsToDateMapper _belongsToDateMapper;
 		private readonly ScheduleCache _scheduleCache;
 		private readonly IAgentStatePersister _agentStatePersister;
 		private readonly ProperAlarm _appliedAlarm;
@@ -40,6 +41,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			INow now,
 			StateMapper stateMapper, 
 			ExternalLogonMapper externalLogonMapper, 
+			BelongsToDateMapper belongsToDateMapper,
 			ScheduleCache scheduleCache,
 			IAgentStatePersister agentStatePersister, 
 			ProperAlarm appliedAlarm, 
@@ -55,6 +57,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			_now = now;
 			_stateMapper = stateMapper;
 			_externalLogonMapper = externalLogonMapper;
+			_belongsToDateMapper = belongsToDateMapper;
 			_scheduleCache = scheduleCache;
 			_agentStatePersister = agentStatePersister;
 			_appliedAlarm = appliedAlarm;
@@ -206,6 +209,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 								_scheduleCache.Read(x.State.PersonId),
 								_stateMapper,
 								_externalLogonMapper,
+								_belongsToDateMapper,
 								_appliedAlarm,
 								x.Trace
 							)

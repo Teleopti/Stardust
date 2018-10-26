@@ -207,6 +207,7 @@
     <Compile Include="Domain\AgentAdherenceDay\RecordedAdherenceTest.cs" />
     <Compile Include="Domain\AgentAdherenceDay\ResolutionTest.cs" />
     <Compile Include="Domain\ApprovePeriodAsInAdherence\ApprovedPeriodTest.cs" />
+    <Compile Include="Domain\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceBelongsToDateCommandHandlerTest.cs" />
     <Compile Include="Domain\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceCommandHandlerTest.cs" />
     <Compile Include="Domain\ApprovePeriodAsInAdherence\RemoveApprovedPeriodTest.cs" />
     <Compile Include="Domain\ApprovePeriodAsInAdherence\RemovePeriodAsInAdherenceCommandHandlerTest.cs" />
