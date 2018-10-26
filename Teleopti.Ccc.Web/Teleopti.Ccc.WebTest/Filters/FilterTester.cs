@@ -26,11 +26,8 @@ namespace Teleopti.Ccc.WebTest.Filters
 		private string _method = "GET";
 		private Uri _uri = new Uri("http://tempuri.org/foo");
 
-		public ActionResult InvokeFilter(IAuthorizationFilter authorizationFilter) { return InvokeFilter(new FilterTestActionInvoker(authorizationFilter)); }
 		public ActionResult InvokeFilter(AuthorizeAttribute authorizationFilter) { return InvokeFilter(new FilterTestActionInvoker(authorizationFilter)); }
 		public ActionResult InvokeFilter(IExceptionFilter exceptionFilter) { return InvokeFilter(new FilterTestActionInvoker(exceptionFilter)); }
-		public ActionResult InvokeFilter(IResultFilter resultFilter) { return InvokeFilter(new FilterTestActionInvoker(resultFilter)); }
-		public ActionResult InvokeFilter(IActionFilter actionFilter) { return InvokeFilter(new FilterTestActionInvoker(actionFilter)); }
 		public ActionResult InvokeFilter(ActionFilterAttribute actionFilter) { return InvokeFilter(new FilterTestActionInvoker(actionFilter)); }
 		
 		public FilterTester()
