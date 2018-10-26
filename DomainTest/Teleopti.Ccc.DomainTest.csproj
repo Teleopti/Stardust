@@ -688,7 +688,6 @@
     <Compile Include="SeatPlanning\SeatMapPersisterTests.cs" />
     <Compile Include="SeatPlanning\SeatPlannerTests.cs" />
     <Compile Include="SeatPlanning\SeatPlanPersisterTests.cs" />
-    <Compile Include="ApplicationLayer\FakePersonAbsenceWriteSideRepository.cs" />
     <Compile Include="ApplicationLayer\ModifyPersonAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommandTest.cs" />
     <Compile Include="ApplicationLayer\EventTrackerTest.cs" />
