@@ -266,8 +266,6 @@
     <Compile Include="Common\PublishPersonNameChangedEventTest.cs" />
     <Compile Include="Common\PublishPersonTeamChangedEventTest.cs" />
     <Compile Include="Common\TimePassingSimulatorTest.cs" />
-    <Compile Include="Forecasting\Angel\Accuracy\FakeHistoricalData.cs" />
-    <Compile Include="Forecasting\Angel\Accuracy\FakeHistoricalDataWithCounter.cs" />
     <Compile Include="Forecasting\SkillStaffPeriodFake.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportModelCreatorTest.cs" />
     <Compile Include="Forecasting\Import\ForecastsFileContentProviderTest.cs" />
@@ -690,7 +688,6 @@
     <Compile Include="SeatPlanning\SeatMapPersisterTests.cs" />
     <Compile Include="SeatPlanning\SeatPlannerTests.cs" />
     <Compile Include="SeatPlanning\SeatPlanPersisterTests.cs" />
-    <Compile Include="ApplicationLayer\FakePersonAbsenceWriteSideRepository.cs" />
     <Compile Include="ApplicationLayer\ModifyPersonAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommandTest.cs" />
     <Compile Include="ApplicationLayer\EventTrackerTest.cs" />
@@ -952,7 +949,6 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityWorkDayRanksTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityWorkDayTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointExtractorTest.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointInfoExtractorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointsTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockInfoPriorityTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockPriorityDefinitionInfoTest.cs" />

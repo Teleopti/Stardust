@@ -226,7 +226,6 @@
     <Compile Include="Areas\Global\ChatConfigurationControllerTest.cs" />
     <Compile Include="Areas\Global\Core\GroupPageViewModelFactoryTest.cs" />
     <Compile Include="Areas\Global\GroupPageControllerTest.cs" />
-    <Compile Include="Areas\Anywhere\FakeClientBuilder.cs" />
     <Compile Include="Areas\Anywhere\Rta\ThemeSettingProviderTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\WorkloadNameBuilderTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillControllerTest.cs" />
@@ -281,7 +280,6 @@
     <Compile Include="Areas\People\RoleControllerAuditTest.cs" />
     <Compile Include="Areas\People\RoleControllerTest.cs" />
     <Compile Include="Areas\Reporting\Controller\ScheduleAuditTrailControllerTest.cs" />
-    <Compile Include="Areas\Reports\ResReportTranslationPlaceholder.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestAllowanceViewModelFactoryTest.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningGroupControllerTest.cs" />
     <Compile Include="Areas\Staffing\BpoControllerTest.cs" />
@@ -470,7 +468,6 @@
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateViewModelMappingTest.cs" />
     <Compile Include="Areas\Anywhere\PersonScheduleViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\PersonScheduleViewModelMapperTest.cs" />
-    <Compile Include="Areas\Anywhere\TestHubBuilder.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\MyTimeWebPersonRequestCheckAuthorizationTest.cs" />
     <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayFormTest.cs" />
     <Compile Include="Areas\SSO\Contollers\OpenIdControllerTest.cs" />

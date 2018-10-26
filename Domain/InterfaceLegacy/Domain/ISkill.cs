@@ -208,6 +208,5 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		int? CascadingIndex { get; }
 		bool IsChildSkill { get; }
 		bool IsCascading();
-	    bool CanBeCascading();
     }
 }

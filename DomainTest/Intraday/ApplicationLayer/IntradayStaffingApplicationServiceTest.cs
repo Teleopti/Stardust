@@ -1440,9 +1440,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday.ApplicationLayer
 			var listdeviationPerInterval = new List<double>();
 			var divisionFactor = skillDay.Skill.DefaultResolution / minutesPerInterval;
 
-			var periods = skillDay.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(minutesPerInterval));
-			var periods2 = skillDay.CompleteSkillStaffPeriodCollection.Where(x => x.Period.StartDateTime >= periods.First().Period.StartDateTime && x.Period.EndDateTime <= periods.Last().Period.EndDateTime);
-
 			foreach (var actualCallsPerInterval in actualCallsStats)
 			{
 				var actualCalls = actualCallsPerInterval.Calls;
