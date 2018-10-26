@@ -4,7 +4,7 @@
 		<ul class="wfm-list">
 			<li class="item" ng-repeat="option in $ctrl.availableOptions" ng-click="$ctrl.select(option)">
 				<div>
-					<span >{{option.key | translate}}</span>
+					<span >{{option.name}}</span>
 					<i ng-show="option.isSelected" class="mdi mdi-check"></i>
 				</div>
 			</li>

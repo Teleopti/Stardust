@@ -2,14 +2,14 @@
 	<div>
 		<h1 class="modal-title" translate>{{'EditNote'}}</h1>
 		<md-tabs md-dynamic-height md-border-bottom>
-			<md-tab label="{{vm.internalNoteTab | translate}}">
+			<md-tab label="{{'InternalNote' | translate}}">
 				<md-content class="md-padding">
 					<div class="modal-inner-content internal-note">
 						<textarea ng-model="vm.internalNotes" maxlength="255"></textarea>
 					</div>
 				</md-content>
 			</md-tab>
-			<md-tab label="{{vm.publicNoteTab | translate}}">
+			<md-tab label="{{'PublicNote' | translate}}">
 				<md-content class="md-padding">
 					<div class="modal-inner-content public-note">
 						<textarea ng-model="vm.publicNotes" maxlength="255"></textarea>
