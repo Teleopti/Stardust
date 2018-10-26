@@ -25,8 +25,11 @@
 			}
 
 			// Register the current business unit as a header
-			var businessUnitId = sessionStorage.getItem('buid') || '';
-			config.headers['X-Business-Unit-Filter'] = businessUnitId;
+			var businessUnitId = sessionStorage.getItem('buid');
+			if (businessUnitId) config.headers['X-Business-Unit-Filter'] = businessUnitId;
+
+			var clientVersion = sessionStorage.getItem('X-Client-Version');
+			if (clientVersion) config.headers['X-Client-Version'] = clientVersion;
 
 			return config;
 		}
@@ -85,6 +88,7 @@
 					break;
 
 				case rejection.status === 418:
+					// The client is old => refresh
 					$window.location.reload();
 					break;
 

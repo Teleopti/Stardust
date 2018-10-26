@@ -1,4 +1,4 @@
-import { IHttpService, IQService, ITimeoutService } from 'angular';
+import { IQService, ITimeoutService } from 'angular';
 import { IState } from 'angular-ui-router';
 import { IWfmRootScopeService } from './main';
 
@@ -29,7 +29,7 @@ export const mainInitializer = [
 		TabShortCut,
 		rtaDataService,
 		$q: IQService,
-		$http: IHttpService
+		$http
 	) {
 		$rootScope.isAuthenticated = false;
 
@@ -53,8 +53,9 @@ export const mainInitializer = [
 		);
 		preloads.push(
 			$http.get('../api/Global/Version').then(function(response) {
-				$rootScope.version = response.data;
-				$http.defaults.headers.common['X-Client-Version'] = $rootScope.version;
+				var version = response.data;
+				$rootScope.version = version;
+				sessionStorage.setItem('X-Client-Version', version);
 			})
 		);
 		var preloadDone = false;
