@@ -479,14 +479,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return absenceRequest;
 		}
 
-		private PersonRequest createApprovedPersonRequest(IPerson person, AbsenceRequest absenceRequest)
+		private void createApprovedPersonRequest(IPerson person, AbsenceRequest absenceRequest)
 		{
 			var personRequest = new PersonRequest(person, absenceRequest).WithId();
 			RequestRepository.Add(personRequest);
 
 			personRequest.Pending();
 			personRequest.Approve(ApprovalService, PersonRequestAuthorizationChecker);
-			return personRequest;
 		}
 
 		private void createPersonAbsence(IAbsence absence, DateTimePeriod dateTimePeriodOfAbsenceRequest, IPerson person)

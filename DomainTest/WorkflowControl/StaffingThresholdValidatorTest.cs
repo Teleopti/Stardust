@@ -441,7 +441,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			Assert.IsFalse(validatedUnderStaffing.IsValid);
 		}
 
-		private ISkillDay createSkillDay(DateTimePeriod period)
+		private void createSkillDay(DateTimePeriod period)
 		{
 			_skillDay = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(period.StartDateTime));
 
@@ -454,7 +454,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var updatedValues = new NewSkillStaffPeriodValues(new List<ISkillStaffPeriod> { skillStaffPeriod });
 			_skillDay.SetCalculatedStaffCollection(updatedValues);
 			updatedValues.BatchCompleted();
-			return _skillDay;
 		}
 
 		private void createSkill()
