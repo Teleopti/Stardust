@@ -51,8 +51,9 @@ namespace Teleopti.Ccc.DBManager.Library
 				ExecuteSql().Execute(c => { });
 				return true;
 			}
-			catch
+			catch(Exception e)
 			{
+				_log.Write($"An error occurred: {e}\n{e.StackTrace}", "WARN");
 				return false;
 			}
 		}
