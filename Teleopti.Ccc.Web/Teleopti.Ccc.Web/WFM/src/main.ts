@@ -9,7 +9,7 @@ import { authenticationComponents } from './app/authentication/authentication.mo
 import { menuComponents } from './app/menu/menu.module';
 import { navigationComponents } from './app/navigation/navigation.module';
 import { peopleComponents, peopleRouterConfig } from './app/people/people.module';
-import { pmComponents } from './app/pm/pm.module';
+import { pmComponents, pmRouterConfig } from './app/pm/pm.module';
 import { sharedComponents } from './app/shared/shared.module';
 import { environment } from './environments/environment';
 import { MainController } from './main.controller';
@@ -39,7 +39,6 @@ const wfm = angular.module('wfm', [
 	'wfm.permissions',
 	'wfm.apiaccess',
 	'wfm.peopleold',
-	'wfm.pm',
 	'wfm.outbound',
 	'wfm.forecasting',
 	'wfm.resourceplanner',
@@ -115,6 +114,7 @@ const routerHelper = (routerConfig: RouterConfigFunction) => {
 };
 
 routerHelper(peopleRouterConfig);
+routerHelper(pmRouterConfig);
 
 wfm.config([
 	'$stateProvider',
