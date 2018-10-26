@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 				var auditServiceModel = new AuditServiceModel
 				{
 					TimeStamp = audit.TimeStamp, Context = "PersonAccess", Action = audit.Action,
-					ActionPerformedBy = audit.ActionPerformedBy
+					ActionPerformedBy = audit.ActionPerformedBy.Name.ToString(NameOrderOption.FirstNameLastName)
 				};
 				//if (audit.Action.Equals(StaffingAuditActionConstants.ImportBpo))
 				//	auditServiceModel.Data = $"File name: {audit.Data}";

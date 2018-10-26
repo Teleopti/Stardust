@@ -132,7 +132,27 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return bpoList;
 		}
 
-		
+		public string GetSourceBpoByGuid(Guid bpoGuid)
+		{
+			var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
+			string bpoSource = "";
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				using (var command = new SqlCommand("select Source from [BusinessProcessOutsourcer] where Id = @guid ", connection))
+				{
+					command.Parameters.AddWithValue("guid", bpoGuid);
+					using (var reader = command.ExecuteReader())
+					{
+						if (reader.HasRows)
+							while (reader.Read())
+								bpoSource = reader.GetString(0);
+					}
+				}
+				connection.Close();
+			}
+			return bpoSource;
+		}
 
 		public void PersistSkillCombinationResourceBpo(List<ImportSkillCombinationResourceBpo> combinationResources)
 		{
