@@ -389,9 +389,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 
 			IActivity phoneActivity = new Activity("act");
 			phoneActivity.InWorkTime = true;
-			PersonAssignmentRepository.Has(person, scenario, phoneActivity, new DateOnlyPeriod(today, today), new TimePeriod(0, 1));
-			PersonAssignmentRepository.Has(person, scenario, phoneActivity, new DateOnlyPeriod(tomorrow, tomorrow), new TimePeriod(0, 2));
-
+			PersonAssignmentRepository.Has(person, scenario, phoneActivity, new DateOnlyPeriod(today, today), new TimePeriod(4, 5));
+			PersonAssignmentRepository.Has(person, scenario, phoneActivity, new DateOnlyPeriod(tomorrow, tomorrow), new TimePeriod(4, 6));
+			
 			Target.Handle(new ScheduleChangedEvent
 			{
 				PersonId = personCode,
