@@ -66,9 +66,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			{
 				return vm;
 			}
-
-			var isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly, person);
-			if (isPublished || canViewUnpublished)
+			
+			if (scheduleDay.IsFullyPublished || canViewUnpublished)
 			{
 				vm = Projection(scheduleDay, canViewConfidential, agentNameSetting);
 				if (isScheduleDate)
@@ -425,14 +424,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			return null;
 		}
 
-		private static bool isSchedulePublished(DateOnly date, IPerson person)
-		{
-			var workflowControlSet = person.WorkflowControlSet;
-			if (workflowControlSet == null)
-				return false;
-			return workflowControlSet.SchedulePublishedToDate.HasValue &&
-				   workflowControlSet.SchedulePublishedToDate.Value >= date.Date;
-		}
 
 		private static MeetingViewModel mapMeeting(IMeetingPayload meetingPayload)
 		{
