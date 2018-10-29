@@ -1,9 +1,11 @@
 using System;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Adherence.Domain.Events
 {
+	[JsonObject(Id = "ApprovedPeriodRemoved")]
 	public class ApprovedPeriodRemovedEvent : IRtaStoredEvent, IEvent
 	{
 		public Guid PersonId { get; set; }

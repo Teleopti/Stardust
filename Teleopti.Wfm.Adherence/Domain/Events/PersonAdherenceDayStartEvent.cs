@@ -1,9 +1,11 @@
 using System;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Adherence.Domain.Events
 {
+	[JsonObject(Id = "AdherenceDayStart")]
 	public class PersonAdherenceDayStartEvent : IEvent, ISolidProof, IRtaStoredEvent
 	{
 		public Guid PersonId { get; set; }

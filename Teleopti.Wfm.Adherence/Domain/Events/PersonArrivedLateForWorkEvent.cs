@@ -1,8 +1,10 @@
 using System;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Wfm.Adherence.Domain.Events
 {
+	[JsonObject(Id = "ArrivedLateForWork")]
 	public class PersonArrivedLateForWorkEvent : IRtaStoredEvent, IEvent, ISolidProof
 	{
 		public Guid PersonId { get; set; }
