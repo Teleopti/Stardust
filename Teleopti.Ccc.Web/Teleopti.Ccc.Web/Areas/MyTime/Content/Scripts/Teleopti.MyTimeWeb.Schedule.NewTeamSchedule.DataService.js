@@ -31,6 +31,7 @@
 					filteredStartTimes: filter.filteredStartTimes,
 					filteredEndTimes: filter.filteredEndTimes,
 					isDayOff: filter.isDayOff,
+					onlyNightShift: filter.onlyNightShift,
 					searchNameText: filter.searchNameText,
 					teamIds: filter.selectedTeamIds.join(',')
 				},

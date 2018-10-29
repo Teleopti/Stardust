@@ -47,6 +47,9 @@
 	self.totalAgentCount = 0;
 	self.loadedAgentIndex = 0;
 	self.showOnlyDayOff = ko.observable(false);
+	self.showOnlyDayOffSubscription = undefined;
+	self.showOnlyNightShift = ko.observable(false);
+	self.showOnlyNightShiftSubscription = undefined;
 	self.isPanelVisible = ko.observable(false);
 	self.isScrollbarVisible = ko.observable(false);
 	self.searchNameText = ko.observable('');
@@ -68,7 +71,8 @@
 		filteredEndTimes: '',
 		searchNameText: '',
 		selectedTeamIds: [],
-		isDayOff: false
+		isDayOff: false,
+		onlyNightShift: false
 	};
 
 	self.paging = {
@@ -102,20 +106,6 @@
 		self.isLoadingMoreAgentSchedules = false;
 	};
 
-	self.showOnlyDayOff.subscribe(function(value) {
-		if (!self.isMobileEnabled) {
-			self.filter.isDayOff = value;
-			self.filter.searchNameText = self.searchNameText();
-
-			if (value) {
-				self.paging.skip = 0;
-			}
-			self.loadedAgentIndex = 0;
-			self.lastAgentIndexInDom = 0;
-			self.filterChangedCallback(self.selectedDate());
-		}
-	});
-
 	self.openTeamSelectorPanel = function(data, event) {
 		var sibling = $($(event.target).siblings()[0]);
 		if (self.isTeamsAndGroupsLoaded()) {
@@ -132,14 +122,17 @@
 		}
 	};
 
-	self.isPanelVisible.subscribe(function(value) {
+	self.isPanelVisible.subscribe(function() {
 		self.showOnlyDayOff(self.filter.isDayOff);
+		self.showOnlyNightShift(self.filter.onlyNightShift);
 	});
 
 	self.cancelClick = function() {
 		self.searchNameText(self.filter.searchNameText);
 		self.selectedTeam(self.filter.selectedTeamIds[0]);
 		self.isPanelVisible(false);
+		self.showOnlyDayOff(self.filter.isDayOff);
+		self.showOnlyNightShift(self.filter.onlyNightShift);
 	};
 
 	self.submitSearchForm = function() {
@@ -147,6 +140,7 @@
 		self.filter.searchNameText = self.searchNameText();
 		self.filter.selectedTeamIds = self.selectedTeamIds.concat();
 		self.filter.isDayOff = self.showOnlyDayOff();
+		self.filter.onlyNightShift = self.showOnlyNightShift();
 
 		if (self.startTimeStart() === defaultFilterTime && self.startTimeEnd() === defaultFilterTime) {
 			self.filter.filteredStartTimes = '';
@@ -206,6 +200,8 @@
 
 	self.readScheduleData = function(data, date) {
 		disposeSelectedDateSubscription();
+		disposeShowOnlyDayOffSubscription();
+		disposeShowOnlyNightShiftSubscription();
 
 		self.selectedDate(moment(date));
 		self.displayDate(moment(date).format(dateOnlyFormat));
@@ -226,8 +222,6 @@
 		self.loadedAgentIndex = data.AgentSchedules.length - 1;
 		self.lastAgentIndexInDom = data.AgentSchedules.length - 1;
 
-		setSelectedDateSubscription();
-
 		if (data.PageCount > 0) self.totalPageNum = data.PageCount;
 		self.totalAgentCount = data.TotalAgentCount;
 
@@ -242,6 +236,10 @@
 		if (!self.emptySearchResult() && self.isPanelVisible()) {
 			self.isPanelVisible(false);
 		}
+
+		setSelectedDateSubscription();
+		setShowOnlyDayOffSubscription();
+		setShowOnlyNightShiftSubscription();
 
 		readScheduleDataCallback && readScheduleDataCallback();
 		self.isAgentScheduleLoaded(true);
@@ -308,6 +306,58 @@
 		});
 
 		return agentNames;
+	}
+
+	function setShowOnlyNightShiftSubscription() {
+		self.showOnlyNightShiftSubscription = self.showOnlyNightShift.subscribe(function(value) {
+			disposeShowOnlyDayOffSubscription();
+			self.showOnlyDayOff(false);
+			if (!self.isMobileEnabled) {
+				self.filter.isDayOff = false;
+
+				self.loadedAgentIndex = 0;
+				self.lastAgentIndexInDom = 0;
+
+				self.filter.onlyNightShift = value;
+				self.filter.searchNameText = self.searchNameText();
+
+				self.filterChangedCallback(self.selectedDate());
+			}
+
+			setShowOnlyDayOffSubscription();
+		});
+	}
+
+	function disposeShowOnlyNightShiftSubscription() {
+		if (self.showOnlyNightShiftSubscription) self.showOnlyNightShiftSubscription.dispose();
+	}
+
+	function setShowOnlyDayOffSubscription() {
+		self.showOnlyDayOffSubscription = self.showOnlyDayOff.subscribe(function(value) {
+			disposeShowOnlyNightShiftSubscription();
+
+			self.showOnlyNightShift(false);
+			if (!self.isMobileEnabled) {
+				self.filter.onlyNightShift = false;
+
+				if (value) {
+					self.paging.skip = 0;
+				}
+				self.loadedAgentIndex = 0;
+				self.lastAgentIndexInDom = 0;
+
+				self.filter.isDayOff = value;
+				self.filter.searchNameText = self.searchNameText();
+
+				self.filterChangedCallback(self.selectedDate());
+			}
+
+			setShowOnlyNightShiftSubscription();
+		});
+	}
+
+	function disposeShowOnlyDayOffSubscription() {
+		if (self.showOnlyDayOffSubscription) self.showOnlyDayOffSubscription.dispose();
 	}
 
 	function setSelectedDateSubscription() {
