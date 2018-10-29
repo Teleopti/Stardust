@@ -62,6 +62,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				}
 			};
 
+			if (scheduleDay == null)
+			{
+				return vm;
+			}
+
 			var isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly, person);
 			if (isPublished || canViewUnpublished)
 			{
@@ -277,7 +282,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			scheduleVm.Projection = projections;
 			return scheduleVm;
 		}
-		
+
 		public AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential)
 		{
 			var ret = new AgentInTeamScheduleViewModel

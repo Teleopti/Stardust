@@ -34,9 +34,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public IEnumerable<GroupScheduleShiftViewModel> GroupSchedule { get; set; }
 		public int TotalPages { get; set; }
 	}
-
+	
 	public class GroupScheduleViewModel
 	{
+		public GroupScheduleViewModel() => Schedules = new List<GroupScheduleShiftViewModel>();
 		public IEnumerable<GroupScheduleShiftViewModel> Schedules { get; set; }
 		public int Total { get; set; }
 		public string Keyword { get; set; }
@@ -132,5 +133,5 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 	}
 
-	
+
 }

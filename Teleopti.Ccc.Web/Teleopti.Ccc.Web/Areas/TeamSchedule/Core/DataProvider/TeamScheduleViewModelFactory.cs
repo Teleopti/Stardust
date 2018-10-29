@@ -57,12 +57,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		public GroupScheduleViewModel CreateViewModel(SearchDaySchedulesInput input)
 		{
 			if (input.NoGroupInput)
-				return new GroupScheduleViewModel
-				{
-					Schedules = new List<GroupScheduleShiftViewModel>(),
-					Keyword = "",
-					Total = 0
-				};
+				return new GroupScheduleViewModel();
+
 			var period = new DateOnlyPeriod(input.DateInUserTimeZone, input.DateInUserTimeZone);
 			var personIds = _toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552) ||
 							_toggleManager.IsEnabled(Toggles.Wfm_GroupPages_45057)
@@ -73,7 +69,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			return createViewModelForPeople(personIds, input);
 		}
-
 
 		public GroupWeekScheduleViewModel CreateWeekScheduleViewModel(SearchSchedulesInput input)
 		{
@@ -146,8 +141,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			};
 		}
 
-	
-
 		private static bool isSchedulePublished(DateOnly date, IPerson person)
 		{
 			var workflowControlSet = person.WorkflowControlSet;
@@ -186,7 +179,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		{
 			var matchedPersons = _personRepository.FindPeople(targetIds);
 			return _searchProvider
-				.GetPermittedPersonList(matchedPersons, date, DefinedRaptorApplicationFunctionPaths.ViewSchedules)
+				.GetPermittedPersonList(matchedPersons, date, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules)
 				.ToList();
 		}
 
@@ -194,7 +187,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		{
 			var matchedPersons = _personRepository.FindPeople(targetIds);
 			return _searchProvider
-				.GetPermittedPersonList(matchedPersons, period, DefinedRaptorApplicationFunctionPaths.ViewSchedules)
+				.GetPermittedPersonList(matchedPersons, period, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules)
 				.ToList();
 		}
 		private GroupScheduleViewModel createViewModelForPeople(IList<Guid> targetIds, SearchDaySchedulesInput input)
@@ -222,13 +215,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					};
 				}
 			}
-
+		
 			var peopleCanSeeConfidentialAbsencesFor = _searchProvider.GetPermittedPersonIdList(permittedPersons, input.DateInUserTimeZone,
 					DefinedRaptorApplicationFunctionPaths.ViewConfidential).ToList();
 
 
+
 			var scheduleDays = _scheduleProvider.GetScheduleForPersons(input.DateInUserTimeZone, permittedPersons, true).ToArray();
-			var scheduleDayLookup = scheduleDays.ToLookup(s => s.Person);
+			var scheduleDayLookup = scheduleDays.ToDictionary(s => s.Person);
 
 
 			if (input.IsOnlyAbsences)
@@ -243,7 +237,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				}).Select(s => s.Person).ToList();
 			}
 
-			var personScheduleDaysToSort = permittedPersons.Select(s => new Tuple<IPerson, IScheduleDay>(s, scheduleDayLookup[s].FirstOrDefault())).ToArray();
+			var personScheduleDaysToSort = permittedPersons.Select(s => new Tuple<IPerson, IScheduleDay>(s, scheduleDayLookup[s])).ToArray();
 			personScheduleDaysToSort = sortSchedules(personScheduleDaysToSort, input.SortOption, canSeeUnpublishedSchedules);
 
 			var personScheduleDayPairsForCurrentPage = input.PageSize > 0
@@ -269,21 +263,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				var isPreviousDayScheduled = scheduleDaysForPreviousDayLookup.Contains(person);
 				var schedulePreviousDay = isPreviousDayScheduled ? scheduleDaysForPreviousDayLookup[person].FirstOrDefault() : null;
 
-				if (currentScheduleDay != null)
-				{
-					list.Add(_teamScheduleProjectionProvider.MakeViewModel(person, input.DateInUserTimeZone, currentScheduleDay, schedulePreviousDay, canViewConfidential, canSeeUnpublishedSchedules, true, agentNameSetting));
-				}
+				list.Add(_teamScheduleProjectionProvider.MakeViewModel(person, input.DateInUserTimeZone, currentScheduleDay, schedulePreviousDay, canViewConfidential, canSeeUnpublishedSchedules, true, agentNameSetting));
 
-				if (schedulePreviousDay != null)
-				{
-					list.Add(_teamScheduleProjectionProvider.MakeViewModel(person, previousDay, schedulePreviousDay,
-						null, canViewConfidential, canSeeUnpublishedSchedules, false, agentNameSetting));
-				}
+				list.Add(_teamScheduleProjectionProvider.MakeViewModel(person, previousDay, schedulePreviousDay,
+					null, canViewConfidential, canSeeUnpublishedSchedules, false, agentNameSetting));
 
-				if (scheduleDaysForNextDayLookup.Contains(person))
-				{
-					list.Add(_teamScheduleProjectionProvider.MakeViewModel(person, nextDay, scheduleDaysForNextDayLookup[person].First(), currentScheduleDay, canViewConfidential, canSeeUnpublishedSchedules, false, agentNameSetting));
-				}
+				list.Add(_teamScheduleProjectionProvider.MakeViewModel(person, nextDay, scheduleDaysForNextDayLookup[person].First(), currentScheduleDay, canViewConfidential, canSeeUnpublishedSchedules, false, agentNameSetting));
+
 			}
 
 			return new GroupScheduleViewModel

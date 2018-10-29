@@ -332,7 +332,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			PersonRepo.Has(personInUtc);
 			PersonFinderReadOnlyRepository.Has(personInUtc);
-			
+
 
 			var periodToday = new DateTimePeriod(new DateTime(2018, 07, 24, 8, 0, 0, DateTimeKind.Utc), new DateTime(2018, 07, 24, 16, 0, 0, DateTimeKind.Utc));
 			var paToday = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, periodToday);
@@ -417,7 +417,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PersonRepo.Has(personInUtc);
 			PersonFinderReadOnlyRepository.Has(personInUtc);
 
-			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, new PersonAuthorization
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, date, new PersonAuthorization
 			{
 				SiteId = team.Site.Id.GetValueOrDefault(),
 				TeamId = team.Id.GetValueOrDefault()
@@ -474,7 +474,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var pa = PersonAssignmentFactory.CreateEmptyAssignment(personInUtc, scenario, period);
 			pa.AddPersonalActivity(activity, period);
 			PersonAssignmentRepository.Has(pa);
-			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, new PersonAuthorization
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, date, new PersonAuthorization
 			{
 				SiteId = team.Site.Id.GetValueOrDefault(),
 				TeamId = team.Id.GetValueOrDefault()
@@ -1462,7 +1462,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			{
 				SchedulePublishedToDate = new DateTime(2019, 12, 30)
 			};
-			PeopleSearchProvider.Add(personInUtc);
+		
 			var scenario = CurrentScenario.Has("Default");
 
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(personInUtc, scenario, new DateOnly(scheduleDate));
