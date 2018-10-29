@@ -511,7 +511,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<AlreadyScheduledAgentsNullObject>().As<IAlreadyScheduledAgents>().SingleInstance();
 			}
-			builder.RegisterType<SchedulingFilterAgentsByHints>().SingleInstance();
 			
 			builder.RegisterType<AgentsWithWhiteSpots>().SingleInstance();
 			builder.RegisterType<BlockSchedulingPreferenceHint>().As<IScheduleHint>().SingleInstance();
