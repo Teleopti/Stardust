@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		public bool IsDayOff { get; set; }
 		public bool IsEmptyDay { get; set; }
 		public bool IsWorkingDay { get; set; }
+		public bool OnlyNightShift { get; set; }
 
 		#region			Equals
 
