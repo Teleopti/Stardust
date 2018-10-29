@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
@@ -127,9 +128,25 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		}
 		
 		[UnitOfWork, HttpGet, Route("api/staffing/exportforecastandstaffing")]
-		public virtual IHttpActionResult ExportForecastAndStaffing(Guid skillId, DateTime exportStartDate, DateTime exportEndDate, bool useShrinkage)
+		public virtual IHttpActionResult ExportForecastAndStaffing(Guid skillId, string stringExportStartDate, string stringExportEndDate, bool useShrinkage)
 		{
-			return Ok(_exportForecastAndStaffingFile.ExportForecastAndStaffing(skillId, exportStartDate, exportEndDate, 
+			var returnVal = new ExportStaffingReturnObject();
+
+			var validationObject = getDateOnly(stringExportStartDate, out var dateOnlyStartDate);
+			if (!validationObject.Result)
+			{
+				returnVal.ErrorMessage = validationObject.ErrorMessage;
+				return Ok(returnVal);
+			}
+
+			validationObject = getDateOnly(stringExportEndDate, out var dateOnlyEndDate);
+			if (!validationObject.Result)
+			{
+				returnVal.ErrorMessage = validationObject.ErrorMessage;
+				return Ok(returnVal);
+			}
+
+			return Ok(_exportForecastAndStaffingFile.ExportForecastAndStaffing(skillId, dateOnlyStartDate, dateOnlyEndDate, 
 				useShrinkage));
 		}
 		
@@ -221,6 +238,21 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 				}
 
 			}
+		}
+
+		private ExportStaffingValidationObject getDateOnly(string dateTimeString, out DateOnly dateOnly)
+		{
+			var validationObject = new ExportStaffingValidationObject { Result = true };
+			var dateFormatter = "yyyy-MM-dd";
+			dateOnly = DateOnly.MinValue;
+			if (DateTime.TryParseExact(dateTimeString, dateFormatter, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dateTime))
+			{
+				dateOnly = new DateOnly(dateTime);
+				return validationObject;
+			}
+			validationObject.ErrorMessage = $"The date formart is invalid {dateTimeString}";
+			validationObject.Result = false;
+			return validationObject;
 		}
 
 		class returnObj
