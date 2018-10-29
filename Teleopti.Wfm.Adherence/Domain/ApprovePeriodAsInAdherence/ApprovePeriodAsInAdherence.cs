@@ -21,9 +21,9 @@ namespace Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence
 			_publisher.Publish(new PeriodApprovedAsInAdherenceEvent
 			{
 				PersonId = period.PersonId,
+				BelongsToDate = _belongsToDate.BelongsToDate(period.PersonId, p.StartDateTime, p.EndDateTime),
 				StartTime = p.StartDateTime,
-				EndTime = p.EndDateTime,
-				BelongsToDate = _belongsToDate.BelongsToDate(period.PersonId, p.StartDateTime, p.EndDateTime)
+				EndTime = p.EndDateTime
 			});
 		}
 	}
