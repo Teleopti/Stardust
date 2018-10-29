@@ -1,7 +1,7 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { AuthenticatedInterceptor, BusinessUnitInterceptor } from './interceptors';
-import { ThemeService, TogglesService, UserService } from './services';
+import { AuthenticatedInterceptor, BusinessUnitInterceptor, ClientOutdatedInterceptor } from './interceptors';
+import { ThemeService, TogglesService, UserService, VersionService } from './services';
 
 @NgModule({
 	imports: [HttpClientModule],
@@ -10,7 +10,7 @@ import { ThemeService, TogglesService, UserService } from './services';
 		TogglesService,
 		UserService,
 		ThemeService,
-		// VersionService,
+		VersionService,
 		{
 			provide: HTTP_INTERCEPTORS,
 			useClass: AuthenticatedInterceptor,
@@ -20,12 +20,12 @@ import { ThemeService, TogglesService, UserService } from './services';
 			provide: HTTP_INTERCEPTORS,
 			useClass: BusinessUnitInterceptor,
 			multi: true
+		},
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: ClientOutdatedInterceptor,
+			multi: true
 		}
-		// {
-		// 	provide: HTTP_INTERCEPTORS,
-		// 	useClass: ClientOutdatedInterceptor,
-		// 	multi: true
-		// }
 	],
 	entryComponents: []
 })
