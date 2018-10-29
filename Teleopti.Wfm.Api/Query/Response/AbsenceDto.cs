@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Wfm.Api.Query
+namespace Teleopti.Wfm.Api.Query.Response
 {
 	public class AbsenceDto
 	{

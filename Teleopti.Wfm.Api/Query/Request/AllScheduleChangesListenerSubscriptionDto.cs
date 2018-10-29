@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Wfm.Api.Query
+﻿namespace Teleopti.Wfm.Api.Query.Request
 {
 	public class AllScheduleChangesListenerSubscriptionDto : IQueryDto
 	{

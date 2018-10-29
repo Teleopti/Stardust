@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Teleopti.Wfm.Api.Query
+namespace Teleopti.Wfm.Api.Query.Response
 {
 	public class ScheduleChangesListenerSubscriptionDto
 	{
