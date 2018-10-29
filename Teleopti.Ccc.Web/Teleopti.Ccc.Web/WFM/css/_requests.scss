@@ -130,8 +130,13 @@ wfm-multiple-search-input {
 			justify-content: flex-start;
 			align-items: center;
 
+			.people-search-container {
+				display: flex;
+				align-items: center;
+			}
 			.request-date-range-picker {
-				padding: 8px 10px;
+				display: flex;
+				align-items: center;
 				position: relative;
 				z-index: 10;
 			}
