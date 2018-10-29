@@ -90,7 +90,7 @@ namespace Teleopti.Wfm.Api
 
 			var args = new IocArgs(new ConfigReader())
 			{
-				DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForApi()
+				DataSourceApplicationName = DataSourceApplicationName.ForApi()
 			};
 			var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args));
 			builder.RegisterModule(new ApiModule());
