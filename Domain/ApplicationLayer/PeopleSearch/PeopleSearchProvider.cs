@@ -16,19 +16,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IOptionalColumnRepository _optionalColumnRepository;
 		private readonly ICurrentBusinessUnit _businessUnitProvider;
+		private readonly ILoggedOnUser _loggedOnUser;
 
 		public PeopleSearchProvider(
 			IPersonFinderReadOnlyRepository searchRepository,
 			IPersonRepository personRepository,
 			IPermissionProvider permissionProvider,
 			IOptionalColumnRepository optionalColumnRepository,
-			ICurrentBusinessUnit businessUnitProvider)
+			ICurrentBusinessUnit businessUnitProvider,
+			ILoggedOnUser loggedOnUser)
 		{
 			_searchRepository = searchRepository;
 			_personRepository = personRepository;
 			_permissionProvider = permissionProvider;
 			_optionalColumnRepository = optionalColumnRepository;
 			_businessUnitProvider = businessUnitProvider;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public PeopleSummaryModel SearchPermittedPeopleSummary(IDictionary<PersonFinderField, string> criteriaDictionary,
@@ -86,16 +89,42 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 			return GetPermittedPersonList(people, currentDate, function).Select(x => x.Id.GetValueOrDefault());
 		}
 
-		public IEnumerable<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people, DateOnly currentDate,
+		public IEnumerable<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people, DateOnly date,
 			string function)
 		{
-			return people.Where(p => checkIfPersonHasOrganisationDetailPermission(function, p, currentDate));
+			var permittedPeople = people.GroupBy(p => p.MyTeam(date))
+				.Where(team => team.Key != null && _permissionProvider.HasTeamPermission(function, date, team.Key))
+				.SelectMany(gp => gp.ToList())
+				.ToList();
+
+			var loggedOnUser = _loggedOnUser.CurrentUser();
+			var loggedOnUserId = loggedOnUser.Id;
+
+			if (people.Any(p => p.Id == loggedOnUserId)
+				&& !permittedPeople.Any(p => p.Id == loggedOnUserId)
+				&& checkIfPersonHasOrganisationDetailPermission(function, loggedOnUser, date))
+			{
+				permittedPeople.Add(loggedOnUser);
+			}
+
+			return permittedPeople;
 		}
 
 		public IEnumerable<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people, DateOnlyPeriod period,
 			string function)
 		{
-			return people.Where(p => period.DayCollection().Any(date => checkIfPersonHasOrganisationDetailPermission(function, p, date)));
+			var uncheckedPeople = people.ToList();
+			var permittedPeople = new List<IPerson>();
+			foreach (var day in period.DayCollection())
+			{
+				if (!uncheckedPeople.Any())
+				{
+					break;
+				}
+				permittedPeople.AddRange(GetPermittedPersonList(uncheckedPeople, day, function));
+				uncheckedPeople = people.Where(p => !permittedPeople.Any(pp => pp.Id == p.Id)).ToList();
+			}
+			return permittedPeople;
 		}
 
 		private bool checkIfPersonHasOrganisationDetailPermission(string function, IPerson p, DateOnly date)
