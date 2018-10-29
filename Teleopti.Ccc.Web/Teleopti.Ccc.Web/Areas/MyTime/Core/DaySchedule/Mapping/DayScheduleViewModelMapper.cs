@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 
 			var isOnEnteringDstDay = isEnteringDST(date, daylightTime, timezone);
 			var localDayLightTimeStart =
-				isOnEnteringDstDay ? TimeZoneHelper.ConvertFromUtc(daylightTime.Start, timezone) : new DateTime();
+				isOnEnteringDstDay ? TimeZoneHelper.ConvertFromUtc(daylightTime.Start, timezone) : DateTime.MinValue;
 			var isCrossDSTStartTime = timelinePeriod.Contains(localDayLightTimeStart.TimeOfDay);
 
 			var diff = endTime - startTime;
@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 				yield return new TimeLineViewModel
 				{
 					Time = times[i],
-					TimeLineDisplay = new DateTime().Add(times[i]).ToLocalizedTimeFormat(),
+					TimeLineDisplay = DateTime.MinValue.Add(times[i]).ToLocalizedTimeFormat(),
 					PositionPercentage = diff == TimeSpan.Zero ? 0 : (decimal)(time - startTime).Ticks / diff.Ticks
 				};
 			}

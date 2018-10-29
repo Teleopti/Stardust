@@ -205,6 +205,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 				_chartControl.PrimaryYAxis.Range.Max = _chartControl.PrimaryYAxis.Range.Max + _chartControl.PrimaryYAxis.Range.Interval;
 			}
 
+			if (_secondaryYAxis.Range.Interval < 0.1)
+			{
+				_secondaryYAxis.Range.Interval = Math.Truncate(_secondaryYAxis.Range.Max / 5);
+				_secondaryYAxis.Range.Max = _secondaryYAxis.Range.Max + _secondaryYAxis.Range.Interval;
+			}
+
 			if (_chartControl.PrimaryYAxis.Range.NumberOfIntervals > 7)
 			{
 				_chartControl.PrimaryYAxis.Range.Interval = _chartControl.PrimaryYAxis.Range.Interval * 4;

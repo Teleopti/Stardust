@@ -439,7 +439,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			return personPeriod;
 		}
 
-		private PreferenceDay setupPreferenceDay(DateTime date, IPreferenceRestriction preferenceRestriction, out IPerson person, out IScenario scenario)
+		private void setupPreferenceDay(DateTime date, IPreferenceRestriction preferenceRestriction, out IPerson person, out IScenario scenario)
 		{
 			person = PersonFactory.CreatePersonWithGuid("firstName", "lastName");
 			PersonRepository.Add(person);
@@ -454,21 +454,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			var preferenceDay = new PreferenceDay(person, new DateOnly(date), preferenceRestriction);
 			preferenceDay.WithId();
 			PreferenceDayRepository.Add(preferenceDay);
-			return preferenceDay;
 		}
 
-		private PreferenceDay setupValidPreferenceDay(DateTime date, out IPerson person, out IScenario scenario)
+		private void setupValidPreferenceDay(DateTime date, out IPerson person, out IScenario scenario)
 		{
 			var preferenceRestrictionNew = new PreferenceRestriction
 			{
 				ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("hej")
 			};
-			return setupPreferenceDay(date, preferenceRestrictionNew, out person, out scenario);
+			setupPreferenceDay(date, preferenceRestrictionNew, out person, out scenario);
 		}
 
-		private PreferenceDay setupInvalidPreferenceDay(DateTime date, out IPerson person)
+		private void setupInvalidPreferenceDay(DateTime date, out IPerson person)
 		{
-			return setupPreferenceDay(date, new PreferenceRestriction(), out person, out _);
+			setupPreferenceDay(date, new PreferenceRestriction(), out person, out _);
 		}
 
 		private static AnalyticsPersonPeriod newTestAnalyticsPersonPeriod(IPerson person, Guid personPeriodCode)

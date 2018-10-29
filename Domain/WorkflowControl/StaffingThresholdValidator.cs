@@ -220,20 +220,19 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return result;
 		}
 
-		private IValidatedRequest ValidateSeriousUnderstaffing(ISkill skill, IEnumerable<IValidatePeriod> skillStaffPeriodList,
+		private void ValidateSeriousUnderstaffing(ISkill skill, IEnumerable<IValidatePeriod> skillStaffPeriodList,
 			TimeZoneInfo timeZone, UnderstaffingDetails result)
 		{
 			if (skillStaffPeriodList == null) throw new ArgumentNullException(nameof(skillStaffPeriodList));
 			var intervalHasSeriousUnderstaffing = getIntervalsForSeriousUnderstaffing(skill);
 			var seriousUnderStaffPeriods = skillStaffPeriodList.Where(intervalHasSeriousUnderstaffing.IsSatisfiedBy).ToArray();
 
-			if (!seriousUnderStaffPeriods.Any()) return new ValidatedRequest {IsValid = true};
+			if (!seriousUnderStaffPeriods.Any()) return;
 			seriousUnderStaffPeriods.Select(s => s.DateTimePeriod).ForEach(result.AddUnderstaffingPeriod);
 			seriousUnderStaffPeriods.ForEach(
 				s =>
 					result.AddUnderstaffingDay(
 						new DateOnly(TimeZoneHelper.ConvertFromUtc(s.DateTimePeriod.StartDateTime, timeZone).Date)));
-			return new ValidatedRequest {IsValid = false};
 		}
 
 		public IValidatedRequest ValidateUnderstaffing(ISkill skill, IEnumerable<IValidatePeriod> skillStaffPeriodList,

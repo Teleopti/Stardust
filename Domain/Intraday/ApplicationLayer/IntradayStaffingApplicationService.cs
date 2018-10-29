@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 					.SelectMany(x => x.Value);
 
 			var forecast = skillDays
-				.SelectMany(x => x.SkillStaffPeriodViewCollection(resolution).Select(i => new {SkillDay = x, StaffPeriod = i}))
+				.SelectMany(x => x.SkillStaffPeriodViewCollection(resolution,useShrinkage).Select(i => new {SkillDay = x, StaffPeriod = i}))
 				.Where(x => x.StaffPeriod.Period.StartDateTime >= fromTimeUtc && x.StaffPeriod.Period.EndDateTime <= toTimeUtc);
 
 			if (!forecast.Any())

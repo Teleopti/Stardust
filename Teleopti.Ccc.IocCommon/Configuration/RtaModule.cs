@@ -19,6 +19,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
+using Teleopti.Wfm.Adherence.Domain;
 using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Wfm.Adherence.Domain.Configuration;
@@ -101,6 +102,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ApprovePeriodAsInAdherence>().SingleInstance();
 			builder.RegisterType<RemoveApprovedPeriodCommandHandler>().SingleInstance();
 			builder.RegisterType<RemoveApprovedPeriod>().SingleInstance();
+			builder.RegisterType<BelongsToDateMapper>().SingleInstance();
 
 			builder.RegisterType<RtaEventStore>()
 				.As<IRtaEventStore>()

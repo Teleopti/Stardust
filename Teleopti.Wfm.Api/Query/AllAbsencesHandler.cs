@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Wfm.Api.Query.Request;
+using Teleopti.Wfm.Api.Query.Response;
 
 namespace Teleopti.Wfm.Api.Query
 {

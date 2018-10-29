@@ -14,9 +14,10 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			DeadLockVictim deadLockVictim,
 			InputInfo input,
 			AgentState stored,
-			TimeZoneInfo personTimeZone,
 			IEnumerable<ScheduledActivity> schedule,
 			StateMapper stateMapper,
+			ExternalLogonMapper externalLogonMapper,
+			BelongsToDateMapper belongsToDateMapper,
 			ProperAlarm appliedAlarm)
 		{
 			Stored = stored;
@@ -24,11 +25,12 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			Time = time;
 			DeadLockVictim = deadLockVictim;
 			PersonId = stored.PersonId;
-			PersonTimeZone = personTimeZone;
 			BusinessUnitId = stored.BusinessUnitId;
 			TeamId = stored.TeamId.GetValueOrDefault();
 			SiteId = stored.SiteId.GetValueOrDefault();
 			StateMapper = stateMapper;
+			ExternalLogonMapper = externalLogonMapper;
+			BelongsToDateMapper = belongsToDateMapper;
 
 			_appliedAlarm = appliedAlarm;
 			_schedule = schedule;
@@ -42,12 +44,13 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		public DateTime Time { get; }
 
 		public Guid PersonId { get; }
-		public TimeZoneInfo PersonTimeZone { get; }
 		public Guid BusinessUnitId { get; }
 		public Guid TeamId { get; }
 		public Guid SiteId { get; }
 
 		public StateMapper StateMapper { get; }
+		public ExternalLogonMapper ExternalLogonMapper { get; }
+		public BelongsToDateMapper BelongsToDateMapper { get; }
 
 		public AgentState Stored { get; }
 

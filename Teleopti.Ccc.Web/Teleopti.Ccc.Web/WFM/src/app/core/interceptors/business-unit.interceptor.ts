@@ -7,9 +7,12 @@ export class BusinessUnitInterceptor implements HttpInterceptor {
 	constructor() {}
 
 	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-		const businessUnitId = sessionStorage.getItem('buid') || '';
-		const businessUnitHeader = { 'X-Business-Unit-Filter': businessUnitId };
-		const requestWithBusinessUnitHeader = req.clone({ setHeaders: businessUnitHeader });
-		return next.handle(requestWithBusinessUnitHeader);
+		const businessUnitId = sessionStorage.getItem('buid');
+		if (businessUnitId) {
+			const businessUnitHeader = { 'X-Business-Unit-Filter': businessUnitId };
+			const requestWithBusinessUnitHeader = req.clone({ setHeaders: businessUnitHeader });
+			return next.handle(requestWithBusinessUnitHeader);
+		}
+		return next.handle(req);
 	}
 }

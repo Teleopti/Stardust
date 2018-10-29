@@ -268,32 +268,5 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				AverageHandleTime = totalAverageHandlingTime
 			};
 		}
-
-		public MultisiteSkill CreateMultisiteSkillPhone(int intervalLength, string skillName, TimePeriod openHours, IActivity activity)
-		{
-			var skill = new MultisiteSkill(skillName, skillName, Color.Empty, intervalLength, 
-				new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony))
-			{
-				TimeZone = TimeZoneInfo.Utc,
-				Activity = activity
-			}.WithId();
-
-			skill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
-
-			var childSkill1 = new ChildSkill(skillName + 1, skillName + 1, Color.Empty,
-				skill).WithId();
-
-			var childSkill2 = new ChildSkill(skillName + 2, skillName + 2, Color.Empty,
-				skill).WithId();
-		
-			skill.AddChildSkill(childSkill1);
-			skill.AddChildSkill(childSkill2);
-
-			WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours).WithId(Guid.NewGuid());
-			WorkloadFactory.CreateWorkloadWithOpenHours(childSkill1, openHours).WithId(Guid.NewGuid());
-			WorkloadFactory.CreateWorkloadWithOpenHours(childSkill2, openHours).WithId(Guid.NewGuid());
-
-			return skill;
-		}
 	}
 }

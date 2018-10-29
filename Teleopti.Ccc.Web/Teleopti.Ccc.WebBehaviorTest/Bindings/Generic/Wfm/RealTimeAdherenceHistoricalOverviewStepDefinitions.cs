@@ -16,16 +16,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void WhenIReviewHistoricalOverviewForTeam(string name)
 		{
 			TestControllerMethods.Logon();
-			var teamId = idForTeam(name);
-			Navigation.GoToHistoricalOverview(teamId);
-
-			var selector = ".card-panel-header-wrapper";
-			var findCardPanel = $@"
-var element = document.querySelector(""{selector}"");
-return 'OK';
-";
-			Browser.Interactions.AssertJavascriptResultContains(findCardPanel, "OK");
-			Browser.Interactions.Click(selector);
+			Navigation.GoToHistoricalOverview(idForTeam(name));
+			// if this becomes flaky again, lets:
+			// - open the team automatically if there's only one selected
+			// - or pass an open=true argument. But ^^^ seems nicer
+			Browser.Interactions.Click(".card-panel-header-wrapper");
 		}
 
 		[Then(@"I should see '(.*)' having adherence percent of '(.*)' on '(.*)'")]
@@ -33,20 +28,20 @@ return 'OK';
 		{
 			Browser.Interactions.AssertFirstContains($".agent-adherence-period[data-agent='{name}'] .daily-adherence-percent[data-day='{day}']", percent);
 		}
-		
+
 		[Then(@"I should see '(.*)' having adherence percent of '(.*)' for period")]
 		public void ThenIShouldSeePersonHavingAdherencePercentOfForPeriod(string name, string percent)
 		{
 			Browser.Interactions.AssertFirstContains($".agent-adherence-period[data-agent='{name}'] .adherence-value", percent);
 		}
-		
+
 		[Then(@"I should see '(.*)' is late for work in total of '(.*)' minutes for '(.*)' times during period")]
 		public void ThenIShouldSeePersonIsLateForWorkInTotalOfMinutesAndTimes(string name, string minutes, string times)
 		{
 			Browser.Interactions.AssertFirstContains($".agent-adherence-period[data-agent='{name}'] .late-for-work", times);
 			Browser.Interactions.AssertFirstContains($".agent-adherence-period[data-agent='{name}'] .minutes-late-for-work", minutes);
 		}
-		
+
 		private static Guid idForTeam(string teamName)
 		{
 			var teamId = (from t in DataMaker.Data().UserDatasOfType<TeamConfigurable>()

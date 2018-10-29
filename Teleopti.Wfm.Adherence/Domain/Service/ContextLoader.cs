@@ -24,6 +24,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		private readonly INow _now;
 		private readonly StateMapper _stateMapper;
 		private readonly ExternalLogonMapper _externalLogonMapper;
+		private readonly BelongsToDateMapper _belongsToDateMapper;
 		private readonly ScheduleCache _scheduleCache;
 		private readonly IAgentStatePersister _agentStatePersister;
 		private readonly ProperAlarm _appliedAlarm;
@@ -34,17 +35,29 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		private readonly ICurrentEventPublisher _eventPublisher;
 		private readonly IRtaTracer _tracer;
 
-		public ContextLoader(ICurrentDataSource dataSource, DataSourceMapper dataSourceMapper, INow now,
-			StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache,
-			IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config,
-			DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, AgentStateProcessor processor,
-			ICurrentEventPublisher eventPublisher, IRtaTracer tracer)
+		public ContextLoader(
+			ICurrentDataSource dataSource, 
+			DataSourceMapper dataSourceMapper, 
+			INow now,
+			StateMapper stateMapper, 
+			ExternalLogonMapper externalLogonMapper, 
+			BelongsToDateMapper belongsToDateMapper,
+			ScheduleCache scheduleCache,
+			IAgentStatePersister agentStatePersister, 
+			ProperAlarm appliedAlarm, 
+			IConfigReader config,
+			DeadLockRetrier deadLockRetrier, 
+			IKeyValueStorePersister keyValues, 
+			AgentStateProcessor processor,
+			ICurrentEventPublisher eventPublisher, 
+			IRtaTracer tracer)
 		{
 			_dataSource = dataSource;
 			_dataSourceMapper = dataSourceMapper;
 			_now = now;
 			_stateMapper = stateMapper;
 			_externalLogonMapper = externalLogonMapper;
+			_belongsToDateMapper = belongsToDateMapper;
 			_scheduleCache = scheduleCache;
 			_agentStatePersister = agentStatePersister;
 			_appliedAlarm = appliedAlarm;
@@ -193,9 +206,10 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 								strategy.DeadLockVictim,
 								strategy.GetInputFor(x.State),
 								x.State,
-								_externalLogonMapper.TimeZoneFor(x.State.PersonId),
 								_scheduleCache.Read(x.State.PersonId),
 								_stateMapper,
+								_externalLogonMapper,
+								_belongsToDateMapper,
 								_appliedAlarm,
 								x.Trace
 							)

@@ -21,7 +21,6 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service.AgentStateReadModel
 		[Test]
 		public void ShouldPersist()
 		{
-			var person = Guid.NewGuid();
 			Database
 				.WithAgent("usercode")
 				;

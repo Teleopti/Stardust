@@ -1,3 +1,5 @@
+import { IQService, ITimeoutService } from 'angular';
+import { IState } from 'angular-ui-router';
 import { IWfmRootScopeService } from './main';
 
 export const mainInitializer = [
@@ -14,11 +16,12 @@ export const mainInitializer = [
 	'rtaDataService',
 	'$q',
 	'$http',
+	'versionService',
 	function(
 		$rootScope: IWfmRootScopeService,
 		$state,
 		$translate,
-		$timeout,
+		$timeout: ITimeoutService,
 		$locale,
 		currentUserInfo,
 		toggleService,
@@ -26,8 +29,9 @@ export const mainInitializer = [
 		noticeService,
 		TabShortCut,
 		rtaDataService,
-		$q,
-		$http
+		$q: IQService,
+		$http,
+		versionService
 	) {
 		$rootScope.isAuthenticated = false;
 
@@ -51,13 +55,13 @@ export const mainInitializer = [
 		);
 		preloads.push(
 			$http.get('../api/Global/Version').then(function(response) {
-				$rootScope.version = response.data;
-				$http.defaults.headers.common['X-Client-Version'] = $rootScope.version;
+				var version = response.data;
+				versionService.setVersion(version);
 			})
 		);
 		var preloadDone = false;
 
-		$rootScope.$on('$stateChangeStart', function(event, next, toParams) {
+		$rootScope.$on('$stateChangeStart', function(event, next: IState, toParams) {
 			if (preloadDone) {
 				if (!permitted(internalNameOf(next), urlOf(next))) {
 					event.preventDefault();
@@ -83,7 +87,7 @@ export const mainInitializer = [
 
 		var areas;
 		var permittedAreas;
-		var alwaysPermittedAreas = [
+		var alwaysPermittedAreas: string[] = [
 			'main',
 			'skillprio',
 			'teapot',
@@ -93,7 +97,7 @@ export const mainInitializer = [
 			'dataprotection'
 		];
 
-		function initializePermissionCheck() {
+		function initializePermissionCheck(): Promise<void> {
 			return areasService.getAreasWithPermission().then(function(data) {
 				permittedAreas = data;
 				return areasService.getAreasList().then(function(data) {
@@ -102,7 +106,7 @@ export const mainInitializer = [
 			});
 		}
 
-		function permitted(name, url) {
+		function permitted(name: string, url: string): boolean {
 			var permitted = alwaysPermittedAreas.some(function(a) {
 				return a === name.toLowerCase();
 			});
@@ -114,7 +118,7 @@ export const mainInitializer = [
 			return permitted;
 		}
 
-		function notPermitted(internalName) {
+		function notPermitted(internalName: string) {
 			noticeService.error(
 				"<span class='test-alert'></span>" +
 					$translate.instant('NoPermissionToViewWFMModuleErrorMessage').replace('{0}', nameOf(internalName)),
@@ -124,18 +128,18 @@ export const mainInitializer = [
 			$state.go('main');
 		}
 
-		function internalNameOf(o) {
+		function internalNameOf(o: IState): string {
 			var name = o.name;
 			name = name.split('.')[0];
 			name = name.split('-')[0];
 			return name;
 		}
 
-		function urlOf(o) {
-			return o.url && o.url.split('/')[1];
+		function urlOf(o: IState) {
+			return o.url && o.url.toString().split('/')[1];
 		}
 
-		function nameOf(internalName) {
+		function nameOf(internalName: string): string {
 			var name;
 			areas.forEach(function(area) {
 				if (area.InternalName == internalName) name = area.Name;

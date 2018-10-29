@@ -204,140 +204,109 @@ module.exports = function(grunt) {
 		}
 	};
 
-	grunt.initConfig(
-		{
-			watch,
-			ngtemplates,
-			processhtml,
-			less,
-			concat: {
-				concatJsDependencies,
-				concatJsWfm,
-				concatStyleguideClassic,
-				concatStyleguideDark,
-				concatCssDependencies
-			},
-			uglify,
-			msbuild: {
-				rebuild: {
-					src: ['../../../CruiseControl.sln'],
-					options: {
-						projectConfiguration: 'Debug',
-						targets: ['Rebuild'],
-						version: 15.0,
-						maxCpuCount: null,
-						buildParameters: {
-							WarningLevel: 2
-						},
-						verbosity: 'normal'
-					}
-				},
-				build: {
-					src: ['../../../CruiseControl.sln'],
-					options: {
-						projectConfiguration: 'Debug',
-						targets: ['build'],
-						version: 15.0,
-						maxCpuCount: null,
-						buildParameters: {
-							WarningLevel: 2
-						},
-						verbosity: 'normal'
-					}
-				},
-				buildWeb: {
-					src: ['../Teleopti.Ccc.Web.csproj'],
-					options: {
-						projectConfiguration: 'Debug',
-						targets: ['build'],
-						version: 15.0,
-						maxCpuCount: null,
-						buildParameters: {
-							WarningLevel: 2
-						},
-						verbosity: 'normal'
-					}
+	grunt.initConfig({
+		watch,
+		ngtemplates,
+		processhtml,
+		less,
+		concat: {
+			concatJsDependencies,
+			concatJsWfm,
+			concatStyleguideClassic,
+			concatStyleguideDark,
+			concatCssDependencies
+		},
+		uglify,
+		msbuild: {
+			rebuild: {
+				src: ['../../../CruiseControl.sln'],
+				options: {
+					projectConfiguration: 'Debug',
+					targets: ['Rebuild'],
+					version: 15.0,
+					maxCpuCount: null,
+					buildParameters: {
+						WarningLevel: 2
+					},
+					verbosity: 'normal'
 				}
 			},
-
-			copy: {
-				locales: {
-					files: [
-						{
-							expand: true,
-							cwd: './node_modules/angular-i18n/',
-							src: ['angular-locale_*.js'],
-							dest: 'dist/angular-i18n/'
-						}
-					]
-				},
-				sourceMaps: {
-					files: [
-						// includes files within path
-						{
-							expand: true,
-							cwd: 'vendor',
-							flatten: true,
-							src: ['*/*.map'],
-							dest: 'dist/resources',
-							filter: 'isFile'
-						}
-					]
-				},
-				extras: {
-					files: [
-						{
-							expand: true,
-							cwd: 'node_modules/angular-ui-grid',
-							src: ['*.ttf', '*.woff', '*.eot'],
-							dest: 'dist/',
-							filter: 'isFile'
-						}
-					]
-				},
-				bootstrap: {
-					files: [
-						{
-							expand: true,
-							cwd: 'node_modules/bootstrap/fonts',
-							src: ['*.ttf', '*.woff', '*.eot'],
-							dest: 'dist/fonts',
-							filter: 'isFile'
-						}
-					]
+			build: {
+				src: ['../../../CruiseControl.sln'],
+				options: {
+					projectConfiguration: 'Debug',
+					targets: ['build'],
+					version: 15.0,
+					maxCpuCount: null,
+					buildParameters: {
+						WarningLevel: 2
+					},
+					verbosity: 'normal'
+				}
+			},
+			buildWeb: {
+				src: ['../Teleopti.Ccc.Web.csproj'],
+				options: {
+					projectConfiguration: 'Debug',
+					targets: ['build'],
+					version: 15.0,
+					maxCpuCount: null,
+					buildParameters: {
+						WarningLevel: 2
+					},
+					verbosity: 'normal'
 				}
 			}
+		},
+
+		copy: {
+			locales: {
+				files: [
+					{
+						expand: true,
+						cwd: './node_modules/angular-i18n/',
+						src: ['angular-locale_*.js'],
+						dest: 'dist/angular-i18n/'
+					}
+				]
+			},
+			sourceMaps: {
+				files: [
+					// includes files within path
+					{
+						expand: true,
+						cwd: 'vendor',
+						flatten: true,
+						src: ['*/*.map'],
+						dest: 'dist/resources',
+						filter: 'isFile'
+					}
+				]
+			},
+			extras: {
+				files: [
+					{
+						expand: true,
+						cwd: 'node_modules/angular-ui-grid',
+						src: ['*.ttf', '*.woff', '*.eot'],
+						dest: 'dist/',
+						filter: 'isFile'
+					}
+				]
+			},
+			bootstrap: {
+				files: [
+					{
+						expand: true,
+						cwd: 'node_modules/bootstrap/fonts',
+						src: ['*.ttf', '*.woff', '*.eot'],
+						dest: 'dist/fonts',
+						filter: 'isFile'
+					}
+				]
+			}
 		}
-		// eslint: {
-		// 	global: {
-		// 		src: ['app/global/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/global/i18n/*.js']
-		// 	},
-		// 	rta: {
-		// 		src: ['app/rta/**/*.js', '!app/rta/rta/rta.faketime.service.js']
-		// 	},
-		// 	schedule: {
-		// 		src: [
-		// 			'app/resourceplanner/resource_planner_agent_group/**/*.js',
-		// 			'app/resourceplanner/resource_planner_day_off_rule/**/*.js',
-		// 			'app/resourceplanner/resource_planner_planning_period/**/*.js',
-		// 			'app/resourceplanner/resource_planner_v2/**/*.js'
-		// 		]
-		// 	},
-		// 	dev: {
-		// 		src: [
-		// 			//add your path to module here
-		// 			'app/permissions/refact/**/*js',
-		// 			'app/staffing/**/*.js',
-		// 			'app/skillPrio/**/*.js',
-		// 			'app/requests/**/*.js',
-		// 			'app/teamSchedule/**/*.js',
-		// 			'app/rtaTool/**/*.js',
-		// 			'!app/**/*.spec.js',
-		// 			'!app/**/*.fake.js'
-		// 		]
-		// 	}
-		// },
-	);
+	});
 
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -347,7 +316,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-msbuild');
 	grunt.loadNpmTasks('grunt-angular-templates');
 	grunt.loadNpmTasks('grunt-processhtml');
-	grunt.loadNpmTasks('grunt-eslint');
 
 	grunt.registerTask('devBuild', ['concat', 'copy', 'ngtemplates', 'less', 'processhtml']);
 	grunt.registerTask('devWatch', ['devBuild', 'watch']);

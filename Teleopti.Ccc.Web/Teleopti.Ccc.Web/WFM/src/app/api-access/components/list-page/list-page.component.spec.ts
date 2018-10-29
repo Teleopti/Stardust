@@ -1,9 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
-import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { configureTestSuite, PageObject } from '@wfm/test';
 import { NzTableModule } from '../../../../../node_modules/ng-zorro-antd';
-import { configureTestSuite } from '../../../../configure-test-suit';
 import { ExternalApplicationService, fakeBackendProvider, NavigationService } from '../../services';
 import { ListPageComponent } from './list-page.component';
 
@@ -40,18 +38,8 @@ describe('ListPageComponent', () => {
 	}));
 });
 
-class Page {
+class Page extends PageObject {
 	get resultRows() {
 		return this.queryAll('[data-test-app-item]');
-	}
-
-	fixture: ComponentFixture<ListPageComponent>;
-
-	constructor(fixture: ComponentFixture<ListPageComponent>) {
-		this.fixture = fixture;
-	}
-
-	private queryAll(selector: string): DebugElement[] {
-		return this.fixture.debugElement.queryAll(By.css(selector));
 	}
 }

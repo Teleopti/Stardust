@@ -17808,4 +17808,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>No absence types open for requests</value>
     <comment>Use in MyTime Request, for Absence request when there is no any absence type in absence type dropdown list.</comment>
   </data>
+  <data name="ShowOnlyNightShifts" xml:space="preserve">
+    <value>Show only night shifts</value>
+    <comment>Show only night shifts toggle text in TeamSchedule/MyTime</comment>
+  </data>
 </root>

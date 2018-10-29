@@ -29,6 +29,6 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 	{
 		IEnumerable<IEvent> LoadAllForTest();
 		int LoadLastIdForTest();
-		IEnumerable<string>	LoadAllEventTypes();
+		IEnumerable<string>	LoadAllEventTypeIds();
 	}
 }

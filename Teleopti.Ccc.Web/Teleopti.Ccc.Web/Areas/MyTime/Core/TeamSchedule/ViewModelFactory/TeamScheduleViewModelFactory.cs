@@ -121,68 +121,82 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			return new Tuple<List<AgentInTeamScheduleViewModel>, int, int>(agentSchedules, pageCount, totalAgentCount);
 		}
 
-		private static IEnumerable<Tuple<IPerson, IScheduleDay>> filterSchedules(
+		private IEnumerable<Tuple<IPerson, IScheduleDay>> filterSchedules(
 			IEnumerable<Tuple<IPerson, IScheduleDay>> personScheduleDays, TeamScheduleViewModelData data)
 		{
-			if (data.TimeFilter == null) return personScheduleDays;
+			if (data.TimeFilter == null)
+			{
+				return personScheduleDays;
+			}
 
-			DateTime? startTimeStart, startTimeEnd, endTimeStart, endTimeEnd;
 			if (data.TimeFilter.IsDayOff)
 			{
-				personScheduleDays = personScheduleDays
-					.Where(a => a.Item2.HasDayOff() == data.TimeFilter.IsDayOff);
+				return personScheduleDays.Where(a => a.Item2.HasDayOff() == data.TimeFilter.IsDayOff);
 			}
-			else
+
+			if (data.TimeFilter.OnlyNightShift)
 			{
-				if (!data.TimeFilter.StartTimes.IsNullOrEmpty() && !data.TimeFilter.EndTimes.IsNullOrEmpty())
+				var timeZone = _logonUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+				return personScheduleDays.Where(p =>
 				{
-					startTimeStart = data.TimeFilter.StartTimes.ElementAt(0).StartDateTime;
-					startTimeEnd = data.TimeFilter.StartTimes.ElementAt(0).EndDateTime;
+					var projections = p.Item2.ProjectionService().CreateProjection();
+					if (projections == null || !projections.Any()) return false;
 
-					endTimeStart = data.TimeFilter.EndTimes.ElementAt(0).StartDateTime;
-					endTimeEnd = data.TimeFilter.EndTimes.ElementAt(0).EndDateTime;
+					var startDateTime = projections.First().Period.StartDateTime;
+					var endDateTime = projections.Last().Period.EndDateTime;
+					var start = TimeZoneHelper.ConvertFromUtc(startDateTime, timeZone);
+					var end = TimeZoneHelper.ConvertFromUtc(endDateTime, timeZone);
+					return end.Date > start.Date && end.TimeOfDay > TimeSpan.FromMinutes(0);
+				});
+			}
 
-					personScheduleDays = personScheduleDays.Where(p =>
-						{
-							var projections = p.Item2.ProjectionService().CreateProjection();
-							if (projections == null || !projections.Any()) return false;
+			DateTime? startTimeStart, startTimeEnd, endTimeStart, endTimeEnd;
+			if (!data.TimeFilter.StartTimes.IsNullOrEmpty() && !data.TimeFilter.EndTimes.IsNullOrEmpty())
+			{
+				startTimeStart = data.TimeFilter.StartTimes.ElementAt(0).StartDateTime;
+				startTimeEnd = data.TimeFilter.StartTimes.ElementAt(0).EndDateTime;
 
-							var start = projections.First().Period.StartDateTime;
-							var end = projections.Last().Period.EndDateTime;
-							return startTimeStart <= start && start <= startTimeEnd && endTimeStart <= end &&
-								   end <= endTimeEnd;
-						}
-					);
-				}
-				else if (!data.TimeFilter.StartTimes.IsNullOrEmpty())
-				{
-					startTimeStart = data.TimeFilter.StartTimes.ElementAt(0).StartDateTime;
-					startTimeEnd = data.TimeFilter.StartTimes.ElementAt(0).EndDateTime;
-					personScheduleDays = personScheduleDays.Where(p =>
-						{
-							var projections = p.Item2.ProjectionService().CreateProjection();
-							if (projections == null || !projections.Any()) return false;
+				endTimeStart = data.TimeFilter.EndTimes.ElementAt(0).StartDateTime;
+				endTimeEnd = data.TimeFilter.EndTimes.ElementAt(0).EndDateTime;
 
-							var start = projections.First().Period.StartDateTime;
-							return startTimeStart <= start && start <= startTimeEnd;
-						}
-					);
-				}
-				else if (!data.TimeFilter.EndTimes.IsNullOrEmpty())
-				{
-					endTimeStart = data.TimeFilter.EndTimes.ElementAt(0).StartDateTime;
-					endTimeEnd = data.TimeFilter.EndTimes.ElementAt(0).EndDateTime;
-					personScheduleDays = personScheduleDays.Where(p =>
+				personScheduleDays = personScheduleDays.Where(p =>
 					{
 						var projections = p.Item2.ProjectionService().CreateProjection();
 						if (projections == null || !projections.Any()) return false;
 
+						var start = projections.First().Period.StartDateTime;
 						var end = projections.Last().Period.EndDateTime;
-						return endTimeStart <= end && end <= endTimeEnd;
-					});
-				}
+						return startTimeStart <= start && start <= startTimeEnd && endTimeStart <= end && end <= endTimeEnd;
+					}
+				);
 			}
+			else if (!data.TimeFilter.StartTimes.IsNullOrEmpty())
+			{
+				startTimeStart = data.TimeFilter.StartTimes.ElementAt(0).StartDateTime;
+				startTimeEnd = data.TimeFilter.StartTimes.ElementAt(0).EndDateTime;
+				personScheduleDays = personScheduleDays.Where(p =>
+					{
+						var projections = p.Item2.ProjectionService().CreateProjection();
+						if (projections == null || !projections.Any()) return false;
 
+						var start = projections.First().Period.StartDateTime;
+						return startTimeStart <= start && start <= startTimeEnd;
+					}
+				);
+			}
+			else if (!data.TimeFilter.EndTimes.IsNullOrEmpty())
+			{
+				endTimeStart = data.TimeFilter.EndTimes.ElementAt(0).StartDateTime;
+				endTimeEnd = data.TimeFilter.EndTimes.ElementAt(0).EndDateTime;
+				personScheduleDays = personScheduleDays.Where(p =>
+				{
+					var projections = p.Item2.ProjectionService().CreateProjection();
+					if (projections == null || !projections.Any()) return false;
+
+					var end = projections.Last().Period.EndDateTime;
+					return endTimeStart <= end && end <= endTimeEnd;
+				});
+			}
 			return personScheduleDays;
 		}
 

@@ -1,6 +1,13 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 
 namespace Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence
 {
@@ -23,7 +30,7 @@ namespace Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence
 			{
 				PersonId = command.PersonId,
 				StartTime = startDateTime,
-				EndTime = endDateTime
+				EndTime = endDateTime,
 			});
 		}
 	}

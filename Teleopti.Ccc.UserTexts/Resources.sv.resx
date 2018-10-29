@@ -15848,4 +15848,16 @@ Applikationen kommer nu att stängas. </value>
   <data name="CopyScheduleDescription" xml:space="preserve">
     <value>Kopiera schema från vilket scenario som helst till vilket scenario som helst, förutom standardscenariot. Eventuellt tidigare schema i målscenariot för den valda perioden kommer att skrivas över.</value>
   </data>
+  <data name="NoAbsenceTypesOpenForRequests" xml:space="preserve">
+    <value>Ingen frånvarotyp öppen för förfrågningar</value>
+  </data>
+  <data name="DoneCopyingForXPeopleDot" xml:space="preserve">
+    <value>Färdig med kopiering för {0} personer.</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToCopyFromDot" xml:space="preserve">
+    <value>Du måste välja ett scenario att kopiera från.</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToCopyToDot" xml:space="preserve">
+    <value>Du måste välja ett scenario att kopiera till.</value>
+  </data>
 </root>

@@ -19,30 +19,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         void Init(IList<IScheduleDay> selectedSchedules);
 
         /// <summary>
-        /// Determines whether it is legal to swap assignments between specified selected schedules.
-        /// </summary>
-        /// <returns>
-        /// 	<c>true</c> if this instance can swap assignments; otherwise, <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-09-04
-        /// </remarks>
-        bool CanSwapAssignments();
-
-        ///// <summary>
-        ///// Determines whether it is legal to swap days off between specified selected schedules.
-        ///// </summary>
-        ///// <returns>
-        ///// 	<c>true</c> if this instance can swap days off; otherwise, <c>false</c>.
-        ///// </returns>
-        ///// <remarks>
-        ///// Created by: micke
-        ///// Created date: 2008-09-04
-        ///// </remarks>
-        /////bool CanSwapDaysOff();
-
-        /// <summary>
         /// Swaps two assignments if permitted.
         /// </summary>
         /// <returns></returns>
@@ -51,17 +27,5 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created date: 2008-09-04
         /// </remarks>
         IList<IScheduleDay> SwapAssignments(IScheduleDictionary schedules, bool ignoreAssignmentPermission);
-
-        ///// <summary>
-        ///// Swaps the days off if permitted.
-        ///// </summary>
-        ///// <param name="schedules">The schedule ranges needed to do the swap.</param>
-        ///// <param name="swapAssignmentsAsWell">if set to <c>true</c> swaps the assignments as well.</param>
-        ///// <returns></returns>
-        ///// <remarks>
-        ///// Created by: micke
-        ///// Created date: 2008-09-05
-        ///// </remarks>
-        /////IList<ISchedulePart> SwapDaysOff(IScheduleDictionary schedules, bool swapAssignmentsAsWell);
     }
 }

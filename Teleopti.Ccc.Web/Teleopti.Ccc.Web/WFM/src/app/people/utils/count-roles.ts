@@ -1,13 +1,11 @@
 import { Person } from '../../shared/types';
 
 export function countUniqueRolesFromPeople(people: Person[]) {
-	return Object.keys(
-		people.reduce((acc, person) => {
-			person.Roles.forEach(role => {
-				if (typeof acc[role.Id] !== 'number') acc[role.Id] = 1;
-				else acc[role.Id]++;
-			});
-			return acc;
-		}, {})
-	).length;
+	const roles = new Set();
+	people.forEach(person => {
+		person.Roles.forEach(role => {
+			roles.add(role.Id);
+		});
+	});
+	return roles.size;
 }

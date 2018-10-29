@@ -72,15 +72,14 @@ namespace Teleopti.Ccc.Intraday.TestCommon
 			dbCommand.ExecuteNonQuery(parameterList);
 		}
 
-		private int bulkInsert(DataTable dataTable)
+		private void bulkInsert(DataTable dataTable)
 		{
 			if (dataTable == null)
-				return 0;
+				return;
 
 			var tableName = "mart.fact_queue";
 			new BulkWriter().WriteWithRetries(dataTable, _connectionString, tableName);
 			Trace.WriteLine("Rows bulk-inserted into '" + tableName + "' : " + dataTable.Rows.Count);
-			return dataTable.Rows.Count;
 		}
 	}
 }
