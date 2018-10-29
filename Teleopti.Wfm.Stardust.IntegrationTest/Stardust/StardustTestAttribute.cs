@@ -28,7 +28,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public IDataSourceScope DataSource;
 		public WithUnitOfWork WithUnitOfWork;
 		public IBusinessUnitRepository BusinessUnits;
-		public HangfireClientStarter HangfireClientStarter;
+		public IHangfireClientStarter HangfireClientStarter;
 		public HangfireUtilities Hangfire;
 		public IConfigReader ConfigReader;
 		public TestLog TestLog;

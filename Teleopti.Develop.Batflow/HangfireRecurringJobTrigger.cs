@@ -38,7 +38,7 @@ namespace Teleopti.Develop.Batflow
 			builder.RegisterModule(new CommonModule(configuration));
 			using (var container = builder.Build())
 			{
-				container.Resolve<HangfireClientStarter>().Start();
+				container.Resolve<IHangfireClientStarter>().Start();
 				container.Resolve<RecurringEventPublishings>().UpdatePublishings();
 				container.Resolve<HangfireUtilities>().TriggerReccuringJobs();
 			}

@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -85,7 +84,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
-			extend.AddService<SaveSchedulePartService>();
 			extend.AddService<MyTeamRemovePersonAbsenceCommandHandler>();
 		}
 	}

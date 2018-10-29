@@ -144,6 +144,7 @@
     <Compile Include="Configuration\AspectsModule.cs" />
     <Compile Include="Configuration\BackToLegalShiftModule.cs" />
     <Compile Include="Configuration\BadgeCalculationModule.cs" />
+    <Compile Include="Configuration\AbsenceModule.cs" />
     <Compile Include="Configuration\DataSourceModule.cs" />
     <Compile Include="Configuration\EqualNumberOfCategoryFairnessModule.cs" />
     <Compile Include="Configuration\ApplicationInsightsModule.cs" />

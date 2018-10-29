@@ -294,9 +294,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<RemoveSelectedPersonAbsenceCommandHandler>().For<RemoveSelectedPersonAbsenceCommandHandler>();
-			isolate.UseTestDouble<PersonAbsenceCreator>().For<IPersonAbsenceCreator>();
-			isolate.UseTestDouble<PersonAbsenceRemover>().For<IPersonAbsenceRemover>();
-			isolate.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 		}
 	}

@@ -315,7 +315,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			backStage1.Controls.Remove(backStageButtonSignCustomerWeb);
 
-			_container.Resolve<HangfireClientStarter>().Start();
+			_container.Resolve<IHangfireClientStarter>().Start();
 		}
 
 

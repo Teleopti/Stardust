@@ -174,7 +174,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<AbsenceCommandConverter>().For<IAbsenceCommandConverter>();
 			isolate.UseTestDouble<FakePersonRepository>().For<IProxyForId<IPerson>>();
 			isolate.UseTestDouble<FakeAbsenceRepository>().For<IProxyForId<IAbsence>>();
 		}

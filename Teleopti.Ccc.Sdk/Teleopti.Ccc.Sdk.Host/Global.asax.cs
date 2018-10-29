@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			DataSourceForTenantServiceLocator.Set(container.Resolve<IDataSourceForTenant>());
 
-			container.Resolve<HangfireClientStarter>().Start();
+			container.Resolve<IHangfireClientStarter>().Start();
 
 			Logger.Info("Initialized application");
 		}

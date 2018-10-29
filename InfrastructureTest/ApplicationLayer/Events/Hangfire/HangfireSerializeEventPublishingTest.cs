@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		public Lazy<HangfireUtilities> Hangfire;
 		public IEventPublisher Publisher;
 		public IRecurringEventPublisher Recurring;
-		public HangfireClientStarter Starter;
 		public TestHandler Handler;
 		
 		public void Extend(IExtend extend, IocConfiguration configuration)

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		public IDataSourceScope DataSource;
 		public WithUnitOfWork WithUnitOfWork;
 		public IBusinessUnitRepository BusinessUnits;
-		public HangfireClientStarter HangfireClientStarter;
+		public IHangfireClientStarter HangfireClientStarter;
 
 		public override void BeforeTest(ITest testDetails)
 		{

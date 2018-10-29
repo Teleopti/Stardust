@@ -13,7 +13,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 {
 	public class WfmAdminTestAttribute : IoCTestAttribute
 	{
-		public HangfireClientStarter HangfireClientStarter;
+		public IHangfireClientStarter HangfireClientStarter;
 
 		protected override FakeConfigReader Config()
 		{

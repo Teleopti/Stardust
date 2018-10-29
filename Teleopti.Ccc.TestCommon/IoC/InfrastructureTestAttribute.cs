@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public FakeTransactionHook TransactionHook;
 		public IDataSourceForTenant DataSourceForTenant;
 		public IEventPublisher Publisher;
-		public HangfireClientStarter HangfireClientStarter;
+		public IHangfireClientStarter HangfireClientStarter;
 		private IDisposable _transactionHookScope;
 		
 		protected override FakeConfigReader Config()

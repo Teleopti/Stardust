@@ -1,11 +1,8 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Web.Http;
 using System.Xml.Linq;
 using Autofac;
-using log4net;
 using log4net.Config;
-using log4net.Core;
 using NSwag.AspNet.Owin;
 using Owin;
 using Teleopti.Ccc.Domain.Common;
@@ -16,6 +13,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon;
@@ -82,6 +80,7 @@ namespace Teleopti.Wfm.Api
 				container.Resolve<ILogOnOff>(), container.Resolve<IAuthenticationQuerier>());
 
 			app.UseWebApi(httpConfiguration);
+			container.Resolve<IHangfireClientStarter>().Start();
 		}
 
 		private IContainer configureContainer()

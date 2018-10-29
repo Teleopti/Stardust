@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			IntegrationIoCTest.Container.Resolve<IMessageBrokerUrl>().Configure(TestSiteConfigurationSetup.URL.ToString());
 			IntegrationIoCTest.Container.Resolve<ISignalRClient>().StartBrokerService();
-			IntegrationIoCTest.Container.Resolve<HangfireClientStarter>().Start();
+			IntegrationIoCTest.Container.Resolve<IHangfireClientStarter>().Start();
 			Hangfire = IntegrationIoCTest.Container.Resolve<HangfireUtilities>();
 		}
 	}
