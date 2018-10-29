@@ -9,28 +9,43 @@ using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
-	public class DataSourceApplicationName
-	{
-		public string Name;
-
-		public static string ForTest() => "unit tests";
-		public static string ForEtl() => "Teleopti.Wfm.Etl";
-		public static string ForSdk() => "Teleopti.Wfm.Sdk.Host";
-		public static string ForServiceBus() => "Teleopti.Wfm.ServiceBus.Host";
-		public static string ForWeb() => "Teleopti.Wfm.Web";
-		public static string ForApi() => "Teleopti.Wfm.Api";
-		public static string ForDesktop() => "Teleopti.Wfm.SmartClientPortal.Shell";
-	}
-
 	public class DataSourceConfigurationSetter : IDataSourceConfigurationSetter
 	{
+		public static IDataSourceConfigurationSetter ForTest()
+		{
+			return new DataSourceConfigurationSetter("unit tests", new ConfigReader());
+		}
+		public static IDataSourceConfigurationSetter ForEtl()
+		{
+			return new DataSourceConfigurationSetter("Teleopti.Wfm.Etl", new ConfigReader());
+		}
+		public static IDataSourceConfigurationSetter ForSdk()
+		{
+			return new DataSourceConfigurationSetter("Teleopti.Wfm.Sdk.Host", new ConfigReader());
+		}
+		public static IDataSourceConfigurationSetter ForServiceBus()
+		{
+			return new DataSourceConfigurationSetter("Teleopti.Wfm.ServiceBus.Host", new ConfigReader());
+		}
+		public static IDataSourceConfigurationSetter ForWeb()
+		{
+			return new DataSourceConfigurationSetter("Teleopti.Wfm.Web", new ConfigReader());
+		}
+		public static IDataSourceConfigurationSetter ForApi()
+		{
+			return new DataSourceConfigurationSetter("Teleopti.Wfm.Api", new ConfigReader());
+		}
+		public static IDataSourceConfigurationSetter ForDesktop()
+		{
+			return new DataSourceConfigurationSetter("Teleopti.Wfm.SmartClientPortal.Shell", new ConfigReader());
+		}
+
 		public const string NoDataSourceName = "[not set]";
 
-		public DataSourceConfigurationSetter(DataSourceApplicationName applicationName, IConfigReader configReader)
+		protected DataSourceConfigurationSetter(string applicationName,
+			IConfigReader configReader)
 		{
-			ApplicationName = string.Empty;
-			if (applicationName != null)
-				ApplicationName = applicationName.Name;
+			ApplicationName = applicationName ?? string.Empty;
 			if (!string.IsNullOrEmpty(configReader.AppConfig("latency")))
 				UseLatency = true;
 		}
@@ -64,7 +79,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		{
 			var connString = nhConfiguration.GetProperty(Environment.ConnectionString);
 			var connStringObj = new SqlConnectionStringBuilder(connString);
-			if (connStringObj.ToString().Contains("Application Name"))
+			if (connStringObj.ToString().Contains("Application Name")) 
 				return;
 			connStringObj.ApplicationName = ApplicationName;
 			nhConfiguration.SetProperty(Environment.ConnectionString, connStringObj.ToString());

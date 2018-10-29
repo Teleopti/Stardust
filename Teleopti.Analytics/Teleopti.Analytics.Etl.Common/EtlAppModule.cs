@@ -18,7 +18,7 @@ namespace Teleopti.Analytics.Etl.Common
 		{
 			var iocArgs = new IocArgs(_configReader)
 			{
-				DataSourceApplicationName = DataSourceApplicationName.ForEtl()
+				DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForEtl()
 			};
 			var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
 			builder.RegisterModule(new CommonModule(configuration));

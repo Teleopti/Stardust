@@ -28,13 +28,13 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 				.Should()
 				.Be.EqualTo(typeof(ResilientAdoNetTransactionFactory).AssemblyQualifiedName);
 		}
-
+		
 		[Test]
 		public void ShouldSetApplicationNameOnConnectionString()
 		{
 			var cfg = new Configuration();
 			cfg.SetProperty(Environment.ConnectionString,
-				"Data Source=teleopti730;Initial Catalog=PBI17774_Demoreg_TeleoptiCCC7;user id=sa;password=cadadi");
+			                "Data Source=teleopti730;Initial Catalog=PBI17774_Demoreg_TeleoptiCCC7;user id=sa;password=cadadi");
 			var target = new dataSourceConfigurationSetterForTest("application name", new ConfigReader());
 			target.AddDefaultSettingsTo(cfg);
 			cfg.GetProperty(Environment.ConnectionString).Should().Contain(@"Application Name=""application name""");
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		{
 			var cfg = new Configuration();
 			cfg.SetProperty(Environment.ConnectionString,
-				"Data Source=teleopti730;Initial Catalog=PBI17774_Demoreg_TeleoptiCCC7;user id=sa;password=cadadi;Application Name=Teleopti.CCC.Client");
+								 "Data Source=teleopti730;Initial Catalog=PBI17774_Demoreg_TeleoptiCCC7;user id=sa;password=cadadi;Application Name=Teleopti.CCC.Client");
 			var target = new dataSourceConfigurationSetterForTest("application name", new ConfigReader());
 			target.AddDefaultSettingsTo(cfg);
 			cfg.GetProperty(Environment.ConnectionString).Should().Contain("Application Name=Teleopti.CCC.Client");
@@ -90,22 +90,21 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			const string cfgValue = "user defined";
 			var cfg = new Configuration();
 			var keys = new[]
-			{
-				Environment.ConnectionProvider,
-				Environment.DefaultSchema,
-				Environment.ProxyFactoryFactoryClass,
-				Environment.SqlExceptionConverter,
-				Environment.CacheProvider,
-				Environment.UseSecondLevelCache,
-				Environment.UseQueryCache,
-				Environment.TransactionStrategy,
-				Environment.SessionFactoryName
-			};
+			           	{
+			           		Environment.ConnectionProvider,
+			           		Environment.DefaultSchema,
+			           		Environment.ProxyFactoryFactoryClass,
+			           		Environment.SqlExceptionConverter,
+			           		Environment.CacheProvider,
+			           		Environment.UseSecondLevelCache,
+			           		Environment.UseQueryCache,
+			           		Environment.TransactionStrategy,
+			           		Environment.SessionFactoryName
+			           	};
 			foreach (var key in keys)
 			{
 				cfg.SetProperty(key, cfgValue);
 			}
-
 			cfg.SetProperty(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName);
 			var target = new dataSourceConfigurationSetterForTest(null, new ConfigReader());
 			target.AddDefaultSettingsTo(cfg);
@@ -126,10 +125,45 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			cfg.GetProperty(Environment.Dialect).Should().Be.EqualTo(dialect);
 		}
 
+		[Test]
+		public void VerifyEtlConfig()
+		{
+			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForEtl();
+			target.ApplicationName.Should().Be.EqualTo("Teleopti.Wfm.Etl");
+		}
+
+		[Test]
+		public void VerifySdkConfig()
+		{
+			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForSdk();
+			target.ApplicationName.Should().Be.EqualTo("Teleopti.Wfm.Sdk.Host");
+		}
+
+		[Test]
+		public void VerifyServiceBusConfig()
+		{
+			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForServiceBus();
+			target.ApplicationName.Should().Be.EqualTo("Teleopti.Wfm.ServiceBus.Host");
+		}
+
+		[Test]
+		public void VerifyWebConfig()
+		{
+			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForWeb();
+			target.ApplicationName.Should().Be.EqualTo("Teleopti.Wfm.Web");
+		}
+
+		[Test]
+		public void VerifyDesktopConfig()
+		{
+			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForDesktop();
+			target.ApplicationName.Should().Be.EqualTo("Teleopti.Wfm.SmartClientPortal.Shell");
+		}
+		
 		private class dataSourceConfigurationSetterForTest : DataSourceConfigurationSetter
 		{
 			public dataSourceConfigurationSetterForTest(string applicationName, IConfigReader configReader)
-				: base(new DataSourceApplicationName{Name = applicationName}, configReader)
+				: base(applicationName, configReader)
 			{
 			}
 		}

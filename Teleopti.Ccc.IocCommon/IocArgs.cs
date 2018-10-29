@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.IocCommon
 
 		public bool MessageBrokerListeningEnabled { get; set; }
 		public IContainer SharedContainer { get; set; }
-		public string DataSourceApplicationName { get; set; }
+		public IDataSourceConfigurationSetter DataSourceConfigurationSetter { get; set; }
 		public Type ImplementationTypeForCurrentUnitOfWork { get; set; }
 
 		public bool BehaviorTestServer { get; set; }
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.IocCommon
 			AllEventPublishingsAsSync = configReader.ReadValue("AllEventPublishingsAsSync", false);
 			OptimizeScheduleChangedEvents_DontUseFromWeb = configReader.ReadValue("OptimizeScheduleChangedEvents_DontUseFromWeb", false);
 			ConfigReader = configReader;
-			DataSourceApplicationName = Infrastructure.NHibernateConfiguration.DataSourceApplicationName.ForDesktop();
+			DataSourceConfigurationSetter = Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForDesktop();
 			ImplementationTypeForCurrentUnitOfWork = typeof(CurrentUnitOfWork);
 			MessageBrokerUrl = configReader.AppConfig("MessageBroker");
 		}

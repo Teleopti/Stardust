@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 				new Dictionary<string, string> {{configKey, configValue}}))
 			{
 				SharedContainer = sharedContainer,
-				DataSourceApplicationName = DataSourceApplicationName.ForServiceBus(),
+				DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForServiceBus(),
 				OptimizeScheduleChangedEvents_DontUseFromWeb = true
 			}, _toggleManager);
 			build.RegisterModule(new CommonModule(configuration));
