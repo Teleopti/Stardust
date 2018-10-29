@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -185,40 +186,33 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 		[Test]
 		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleViewDesktop_76313)]
-		public void ShouldGetTeamSchedulesFilterOnlyWithDayoff()
+		public void ShouldGetTeamSchedulesFilterWithOnlyDayoff()
 		{
-			var result = Target.GetTeamSchedulesFilter(_testDate, null, null, true);
+			var scheduleFilter = new ScheduleFilter {IsDayOff = true};
+
+			var result = Target.GetTeamSchedulesFilter(_testDate, scheduleFilter);
 
 			result.IsDayOff.Should().Be.True();
 		}
+		
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleViewDesktop_76313)]
+		public void ShouldGetTeamSchedulesFilterWithOnlyNightShift()
+		{
+			var scheduleFilter = new ScheduleFilter{OnlyNightShift = true};
 
+			var result = Target.GetTeamSchedulesFilter(_testDate, scheduleFilter);
+
+			result.OnlyNightShift.Should().Be.True();
+		}
+		
 		[Test]
 		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleViewDesktop_76313)]
 		public void ShouldGetTeamSchedulesFilterWithNothing()
 		{
-			var result = Target.GetTeamSchedulesFilter(_testDate, null, null, false);
+			var result = Target.GetTeamSchedulesFilter(_testDate, new ScheduleFilter());
 
 			result.Should().Be.Null();
-		}
-
-		[Test]
-		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleViewDesktop_76313)]
-		public void ShouldGetTeamSchedulesFilterWithBothTimeAsUtcAndDayoff()
-		{
-			setTimeZoneToSweden();
-
-			const string startTime = "8:00-10:00";
-			const string endTime = "16:00-18:00";
-			const bool isDayOff = true;
-			var result = Target.GetTeamSchedulesFilter(_testDate, startTime, endTime, isDayOff);
-
-			var utcTime = new DateTime(2015, 3, 2, 7, 0, 0, DateTimeKind.Utc);
-
-			result.StartTimes.First().StartDateTime.Should().Be.EqualTo(utcTime);
-			result.StartTimes.First().EndDateTime.Should().Be.EqualTo(utcTime.AddHours(2));
-			result.EndTimes.First().StartDateTime.Should().Be.EqualTo(utcTime.AddHours(8));
-			result.EndTimes.First().EndDateTime.Should().Be.EqualTo(utcTime.AddHours(10));
-			result.IsDayOff.Should().Be.True();
 		}
 
 		[Test]
@@ -227,10 +221,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		{
 			setTimeZoneToSweden();
 
-			const string startTime = "8:00-10:00";
-			const string endTime = "16:00-18:00";
-			const bool isDayOff = false;
-			var result = Target.GetTeamSchedulesFilter(_testDate, startTime, endTime, isDayOff);
+			var scheduleFilter = new ScheduleFilter
+			{
+				FilteredStartTimes = "8:00-10:00",
+				FilteredEndTimes = "16:00-18:00",
+				IsDayOff = false
+			};
+
+			var result = Target.GetTeamSchedulesFilter(_testDate, scheduleFilter);
 
 			var utcTime = new DateTime(2015, 3, 2, 7, 0, 0, DateTimeKind.Utc);
 
@@ -247,8 +245,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		{
 			setTimeZoneToSweden();
 
-			const string startTime = "06:00-08:00";
-			var result = Target.GetTeamSchedulesFilter(_testDate, startTime, "", false);
+			var scheduleFilter = new ScheduleFilter
+			{
+				FilteredStartTimes = "06:00-08:00",
+				FilteredEndTimes = "",
+				IsDayOff = false
+			};
+
+			var result = Target.GetTeamSchedulesFilter(_testDate, scheduleFilter);
 
 			var utcTime = new DateTime(2015, 3, 2, 5, 0, 0, DateTimeKind.Utc);
 
@@ -263,8 +267,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		{
 			setTimeZoneToSweden();
 
-			const string endTime = "06:00-08:00";
-			var result = Target.GetTeamSchedulesFilter(_testDate, "", endTime, false);
+			var scheduleFilter = new ScheduleFilter
+			{
+				FilteredStartTimes = "",
+				FilteredEndTimes = "06:00-08:00",
+				IsDayOff = false
+			};
+
+			var result = Target.GetTeamSchedulesFilter(_testDate, scheduleFilter);
 
 			var utcTime = new DateTime(2015, 3, 2, 5, 0, 0, DateTimeKind.Utc);
 

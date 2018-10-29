@@ -51,36 +51,34 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return filter;
 		}
 
-		public TimeFilterInfo GetTeamSchedulesFilter(DateOnly selectedDate, string filterStartTimes, string filterEndTimes,
-			bool isDayOff)
+		public TimeFilterInfo GetTeamSchedulesFilter(DateOnly selectedDate, ScheduleFilter scheduleFilter)
 		{
-			TimeFilterInfo filter;
-			if (string.IsNullOrEmpty(filterStartTimes) && string.IsNullOrEmpty(filterEndTimes))
+			if (scheduleFilter.IsDayOff)
 			{
-				if (isDayOff)
+				return new TimeFilterInfo
 				{
-					filter = new TimeFilterInfo
-					{
-						StartTimes = convertStringToUtcTimesForTeamSchedules(selectedDate, filterStartTimes, false),
-						EndTimes = convertStringToUtcTimesForTeamSchedules(selectedDate, filterEndTimes, false),
-						IsDayOff = true
-					};
-				}
-				else
-				{
-					filter = null;
-				}
-			}
-			else
-			{
-				filter = new TimeFilterInfo
-				{
-					StartTimes = convertStringToUtcTimesForTeamSchedules(selectedDate, filterStartTimes, true),
-					EndTimes = convertStringToUtcTimesForTeamSchedules(selectedDate, filterEndTimes, true, true),
-					IsDayOff = isDayOff
+					IsDayOff = true
 				};
 			}
-			return filter;
+
+			if (scheduleFilter.OnlyNightShift)
+			{
+				return new TimeFilterInfo
+				{
+					OnlyNightShift = true
+				};
+			}
+
+			if (!string.IsNullOrEmpty(scheduleFilter.FilteredStartTimes) || !string.IsNullOrEmpty(scheduleFilter.FilteredEndTimes))
+			{
+				return new TimeFilterInfo
+				{
+					StartTimes = convertStringToUtcTimesForTeamSchedules(selectedDate, scheduleFilter.FilteredStartTimes, true),
+					EndTimes = convertStringToUtcTimesForTeamSchedules(selectedDate, scheduleFilter.FilteredEndTimes, true, true)
+				};
+			}
+
+			return null;
 		}
 
 		private IList<DateTimePeriod> convertStringToUtcTimesForTeamSchedules(DateOnly selectedDate, string timesString, bool isFullDay, bool isEndFilter = false)

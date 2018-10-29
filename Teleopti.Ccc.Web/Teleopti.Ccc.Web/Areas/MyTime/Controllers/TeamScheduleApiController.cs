@@ -83,8 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				ScheduleDate = new DateOnly(teamScheduleRequest.SelectedDate),
 				TeamIdList = allTeamIds,
 				Paging = teamScheduleRequest.Paging,
-				TimeFilter = _timeFilterHelper.GetTeamSchedulesFilter(new DateOnly(teamScheduleRequest.SelectedDate), teamScheduleRequest.ScheduleFilter.FilteredStartTimes, teamScheduleRequest.ScheduleFilter.FilteredEndTimes,
-					teamScheduleRequest.ScheduleFilter.IsDayOff),
+				TimeFilter = _timeFilterHelper.GetTeamSchedulesFilter(new DateOnly(teamScheduleRequest.SelectedDate), teamScheduleRequest.ScheduleFilter),
 				SearchNameText = teamScheduleRequest.ScheduleFilter.SearchNameText,
 				TimeSortOrder = teamScheduleRequest.ScheduleFilter.TimeSortOrder
 			};
