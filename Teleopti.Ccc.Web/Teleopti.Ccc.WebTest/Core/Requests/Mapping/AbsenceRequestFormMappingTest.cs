@@ -2,11 +2,11 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeUserTimeZone UserTimeZone;
 		public FakeAbsenceRepository AbsenceRepository;
-		public AbsenceRequestFormMapper Target;
+		public AbsenceRequestModelMapper Target;
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapPerson()
 		{
-			var result = Target.MapNewAbsenceRequest(new AbsenceRequestForm());
+			var result = Target.MapNewAbsenceRequest(new AbsenceRequestForm().ToModel(UserTimeZone));
 
 			result.Person.Should().Be(LoggedOnUser.CurrentUser());
 		}
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var form = new AbsenceRequestForm { Subject = "Test" };
 
-			var result = Target.MapNewAbsenceRequest(form);
+			var result = Target.MapNewAbsenceRequest(form.ToModel(UserTimeZone));
 
 			result.GetSubject(new NoFormatting()).Should().Be("Test");
 		}
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapToAbsenceRequest()
 		{
-			var result = Target.MapNewAbsenceRequest(new AbsenceRequestForm());
+			var result = Target.MapNewAbsenceRequest(new AbsenceRequestForm().ToModel(UserTimeZone));
 
 			result.Request.Should().Be.OfType<AbsenceRequest>();
 		}
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var form = new AbsenceRequestForm { Message = "Message" };
 
-			var result = Target.MapNewAbsenceRequest(form);
+			var result = Target.MapNewAbsenceRequest(form.ToModel(UserTimeZone));
 
 			result.GetMessage(new NoFormatting()).Should().Be("Message");
 		}
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var form = new AbsenceRequestForm { AbsenceId = absence.Id.GetValueOrDefault() };
 
-			var result = Target.MapNewAbsenceRequest(form);
+			var result = Target.MapNewAbsenceRequest(form.ToModel(UserTimeZone));
 
 			((AbsenceRequest)result.Request).Absence.Should().Be(absence);
 		}
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				}
 			};
 
-			var result = Target.MapNewAbsenceRequest(form);
+			var result = Target.MapNewAbsenceRequest(form.ToModel(UserTimeZone));
 
 			var startTime = TimeZoneHelper.ConvertToUtc(new DateTime(2012, 5, 11, 0, 0, 0), timeZone);
 			var endTime = TimeZoneHelper.ConvertToUtc(new DateTime(2012, 5, 11, 23, 59, 0), timeZone);
@@ -124,9 +124,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 					EndTime = new TimeOfDay(TimeSpan.FromHours(13))
 				}
 			};
-			var result = Target.MapNewAbsenceRequest(form);
+			var result = Target.MapNewAbsenceRequest(form.ToModel(UserTimeZone));
 
-			var expected = new DateTimePeriodFormMapper(UserTimeZone).Map(form.Period);
+			var expected = form.Period.Map(UserTimeZone);
 			result.Request.Period.Should().Be(expected);
 		}
 
@@ -135,9 +135,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var form = new AbsenceRequestForm { Subject = "Test" };
 
-			var existingAbsenceRequest = Target.MapNewAbsenceRequest(form);
+			var existingAbsenceRequest = Target.MapNewAbsenceRequest(form.ToModel(UserTimeZone));
 			form.Subject = "Test1";
-			Target.MapExistingAbsenceRequest(form, existingAbsenceRequest);
+			Target.MapExistingAbsenceRequest(form.ToModel(UserTimeZone), existingAbsenceRequest);
 
 			existingAbsenceRequest.GetSubject(new NoFormatting()).Should().Be("Test1");
 		}
@@ -147,9 +147,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var form = new AbsenceRequestForm { Message = "Test" };
 
-			var existingAbsenceRequest = Target.MapNewAbsenceRequest(form);
+			var existingAbsenceRequest = Target.MapNewAbsenceRequest(form.ToModel(UserTimeZone));
 			form.Message = "Test1";
-			Target.MapExistingAbsenceRequest(form, existingAbsenceRequest);
+			Target.MapExistingAbsenceRequest(form.ToModel(UserTimeZone), existingAbsenceRequest);
 
 			existingAbsenceRequest.GetMessage(new NoFormatting()).Should().Be("Test1");
 		}
@@ -164,9 +164,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var form = new AbsenceRequestForm { AbsenceId = absence1.Id.GetValueOrDefault()};
 
-			var existingAbsenceRequest = Target.MapNewAbsenceRequest(form);
+			var existingAbsenceRequest = Target.MapNewAbsenceRequest(form.ToModel(UserTimeZone));
 			form.AbsenceId = absence2.Id.GetValueOrDefault();
-			Target.MapExistingAbsenceRequest(form, existingAbsenceRequest);
+			Target.MapExistingAbsenceRequest(form.ToModel(UserTimeZone), existingAbsenceRequest);
 
 			((AbsenceRequest)existingAbsenceRequest.Request).Absence.Should().Be(absence2);
 		}
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				}
 			};
 
-			var existingAbsenceRequest = Target.MapNewAbsenceRequest(form);
+			var existingAbsenceRequest = Target.MapNewAbsenceRequest(form.ToModel(UserTimeZone));
 			form.FullDay = false;
 			form.Period = new DateTimePeriodForm
 			{
@@ -195,9 +195,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				StartTime = new TimeOfDay(TimeSpan.FromHours(1)),
 				EndTime = new TimeOfDay(TimeSpan.FromHours(2))
 			};
-			Target.MapExistingAbsenceRequest(form, existingAbsenceRequest);
+			Target.MapExistingAbsenceRequest(form.ToModel(UserTimeZone), existingAbsenceRequest);
 
-			var expected = new DateTimePeriodFormMapper(UserTimeZone).Map(form.Period);
+			var expected = form.Period.Map(UserTimeZone);
 			existingAbsenceRequest.Request.Period.Should().Be(expected);
 		}
 	}

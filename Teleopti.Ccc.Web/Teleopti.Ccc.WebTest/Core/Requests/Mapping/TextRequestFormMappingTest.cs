@@ -1,6 +1,5 @@
 ﻿using System;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
@@ -18,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 	public class TextRequestFormMappingTest
 	{
 		private ILoggedOnUser loggedOnUser;
-		private IUserTimeZone userTimeZone;
+		private FakeUserTimeZone userTimeZone;
 		private TextRequestFormMapper target;
 		private IPerson person;
 
@@ -27,9 +26,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			person = new Person();
 			loggedOnUser = new FakeLoggedOnUser(person);
-			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			userTimeZone = new FakeUserTimeZone();
 			
-			target = new TextRequestFormMapper(loggedOnUser,userTimeZone,new DateTimePeriodFormMapper(userTimeZone));
+			target = new TextRequestFormMapper(loggedOnUser,userTimeZone);
 		}	
 		
 		[Test]
@@ -70,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapPeriod()
 		{
 			var timeZone = TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", "");
-			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
+			userTimeZone.Is(timeZone);
 			var form = new TextRequestForm
 			           	{
 							Period = new DateTimePeriodForm
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			           	};
 			var result = target.Map(form);
 
-			var expected = new DateTimePeriodFormMapper(new FakeUserTimeZone(timeZone)).Map(form.Period);
+			var expected = form.Period.Map(new FakeUserTimeZone(timeZone));
 			result.Request.Period.Should().Be(expected);
 		}
 
@@ -144,7 +143,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapFullDayRequest()
 		{
 			var timeZone = TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", "");
-			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
+			userTimeZone.Is(timeZone);
 			var form = new TextRequestForm { FullDay = true };
 
 			var result = target.Map(form);

@@ -17,6 +17,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Util
 		}
 
 		[Test]
+		public void ShouldFinishExecuteWithoutRetry()
+		{
+			var executed = Retry.Handle<InvalidOperationException>()
+				.Execute(() => true);
+			executed.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldFinishAfterOneRetry()
 		{
 			var executed = false;
@@ -28,6 +36,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Util
 					iteration++;
 					if (iteration == 1) throw new InvalidOperationException("For test");
 					executed = true;
+				});
+			executed.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldFinishExecuteAfterOneRetry()
+		{
+			var iteration = 0;
+			var executed = Retry.Handle<InvalidOperationException>()
+				.WaitAndRetry(TimeSpan.Zero)
+				.Execute(() =>
+				{
+					iteration++;
+					if (iteration == 1) throw new InvalidOperationException("For test");
+					return true;
 				});
 			executed.Should().Be.True();
 		}

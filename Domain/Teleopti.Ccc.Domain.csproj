@@ -177,6 +177,12 @@
     <Compile Include="Aop\IUnitOfWorkNoCommitAspect.cs" />
     <Compile Include="Aop\ReadonlyUnitOfWorkAttribute.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\FilterOutRequestsHandledByReadmodel.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\AbsenceRequestModel.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\AbsenceRequestModelMapper.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\AbsenceRequestPersister.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\ExistingAbsenceRequestHandler.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\IAbsenceRequestPersister.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\NewAbsenceRequestHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistPreloadService.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistProcessPublisher.cs" />
     <Compile Include="ApplicationLayer\Availability\HandleMultipleAnalyticsAvailabilityDays.cs" />

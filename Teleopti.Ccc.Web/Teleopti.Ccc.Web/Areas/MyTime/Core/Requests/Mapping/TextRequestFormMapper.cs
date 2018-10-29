@@ -10,13 +10,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IUserTimeZone _userTimeZone;
-		private readonly DateTimePeriodFormMapper _dateTimePeriodFormMapper;
 
-		public TextRequestFormMapper(ILoggedOnUser loggedOnUser, IUserTimeZone userTimeZone, DateTimePeriodFormMapper dateTimePeriodFormMapper)
+		public TextRequestFormMapper(ILoggedOnUser loggedOnUser, IUserTimeZone userTimeZone)
 		{
 			_loggedOnUser = loggedOnUser;
 			_userTimeZone = userTimeZone;
-			_dateTimePeriodFormMapper = dateTimePeriodFormMapper;
 		}
 
 		public IPersonRequest Map(TextRequestForm source, IPersonRequest destination = null)
@@ -38,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 			else
 			{
-				period = _dateTimePeriodFormMapper.Map(source.Period);
+				period = source.Period.Map(_userTimeZone);
 			}
 
 			destination.TrySetMessage(source.Message ?? "");

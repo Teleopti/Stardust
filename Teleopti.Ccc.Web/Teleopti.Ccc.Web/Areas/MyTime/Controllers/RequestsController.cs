@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Net;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
@@ -24,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	[RequestPermission]
 	public class RequestsController : Controller
 	{
-		public IAbsenceRequestDetailViewModelFactory AbsenceRequestDetailViewModelFactory { get; set; }
+		private readonly IAbsenceRequestDetailViewModelFactory _absenceRequestDetailViewModelFactory;
 		private readonly IRequestsViewModelFactory _requestsViewModelFactory;
 		private readonly ITextRequestPersister _textRequestPersister;
 		private readonly IAbsenceRequestPersister _absenceRequestPersister;
@@ -34,6 +38,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly ITimeFilterHelper _timeFilterHelper;
 		private readonly IRequestsShiftTradeScheduleViewModelFactory _shiftTradeScheduleViewModelFactory;
 		private readonly ICancelAbsenceRequestCommandProvider _cancelAbsenceRequestCommandProvider;
+		private readonly RequestsViewModelMapper _viewModelMapper;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory,
 			ITextRequestPersister textRequestPersister,
@@ -44,9 +50,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			ITimeFilterHelper timeFilterHelper,
 			IRequestsShiftTradeScheduleViewModelFactory shiftTradeScheduleViewModelFactory,
 			IAbsenceRequestDetailViewModelFactory absenceRequestDetailViewModelFactory,
-			ICancelAbsenceRequestCommandProvider cancelAbsenceRequestCommandProvider)
+			ICancelAbsenceRequestCommandProvider cancelAbsenceRequestCommandProvider,
+			RequestsViewModelMapper viewModelMapper,
+			IUserTimeZone userTimeZone)
 		{
-			AbsenceRequestDetailViewModelFactory = absenceRequestDetailViewModelFactory;
+			_absenceRequestDetailViewModelFactory = absenceRequestDetailViewModelFactory;
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_textRequestPersister = textRequestPersister;
 			_absenceRequestPersister = absenceRequestPersister;
@@ -56,6 +64,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_timeFilterHelper = timeFilterHelper;
 			_shiftTradeScheduleViewModelFactory = shiftTradeScheduleViewModelFactory;
 			_cancelAbsenceRequestCommandProvider = cancelAbsenceRequestCommandProvider;
+			_viewModelMapper = viewModelMapper;
+			_userTimeZone = userTimeZone;
 		}
 
 		[HttpGet]
@@ -156,7 +166,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			}
 			try
 			{
-				return Json(_absenceRequestPersister.Persist(form));
+				var model = form.ToModel(_userTimeZone);
+				var result = Retry.Handle<DeadLockVictimException>()
+					.WaitAndRetry(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(4))
+					.Execute(() => _absenceRequestPersister.Persist(model));
+				var viewModel = _viewModelMapper.Map(result);
+				return Json(viewModel);
 			}
 			catch (InvalidOperationException e)
 			{
@@ -299,7 +314,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public virtual JsonResult AbsenceRequestDetail(Guid id)
 		{
-			return Json(AbsenceRequestDetailViewModelFactory.CreateAbsenceRequestDetailViewModel(id),
+			return Json(_absenceRequestDetailViewModelFactory.CreateAbsenceRequestDetailViewModel(id),
 				JsonRequestBehavior.AllowGet);
 		}
 	}

@@ -5,28 +5,22 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
@@ -46,73 +40,55 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 	[TestFixture]
 	[DomainTest]
 	[WebTest]
-	[DefaultData]
 	public class AbsenceRequestPersisterTest : IIsolateSystem
 	{
 		public IPersonRequestRepository PersonRequestRepository;
 		public IUserTimeZone UserTimeZone;
 		public IAbsenceRepository AbsenceRepository;
-		public IScheduleStorage ScheduleStorage;
-		public ICurrentScenario CurrentScenario;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakePersonAbsenceRepository PersonAbsenceRepository;
+		public FakeScenarioRepository ScenarioRepository;
+		public FakePersonRepository PersonRepository;
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
-		public IAbsenceRequestPersister Persister;
+		public IAbsenceRequestPersister Target;
 		public FakeCommandDispatcher CommandDispatcher;
+		public MutableNow Now;
+		public FakeLoggedOnUser LoggedOnUser;
 
 		private static readonly DateTime nowTime = new DateTime(2016, 10, 18, 8, 0, 0, DateTimeKind.Utc);
 		private DateOnly _today = new DateOnly(nowTime);
-		private IWorkflowControlSet _workflowControlSet;
-		private IAbsence _absence;
-		private IPerson _person;
-		private ThisIsNow _now;
-
+		
 		public void Isolate(IIsolate isolate)
 		{
-			_person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
-			_person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
-			_person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
-			_workflowControlSet = new WorkflowControlSet().WithId();
-			_person.WorkflowControlSet = _workflowControlSet;
-
-			var personRepository = new FakePersonRepositoryLegacy { _person };
-			_now = new ThisIsNow(nowTime);
-
-			isolate.UseTestDouble(personRepository).For<IPersonRepository>();
-			isolate.UseTestDouble<FakeAbsenceRepository>().For<IAbsenceRepository>();
 			isolate.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
-			isolate.UseTestDouble(new FakeLoggedOnUser(_person)).For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			isolate.UseTestDouble(new FakeLinkProvider()).For<ILinkProvider>();
-			isolate.UseTestDouble(_now).For<INow>();
-			isolate.UseTestDouble<AbsenceRequestFormMapper>().For<AbsenceRequestFormMapper>();
-			isolate.UseTestDouble<RequestsViewModelMapper>().For<RequestsViewModelMapper>();
-			isolate.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
-			isolate.UseTestDouble<FakeGlobalSettingDataRepository>().For<IGlobalSettingDataRepository>();
-			isolate.UseTestDouble<FakeDisableDeletedFilter>().For<IDisableDeletedFilter>();
-			isolate.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
-			isolate.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
-			isolate.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
-			isolate.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
-			isolate.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
-			isolate.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
-			var tenants = new FakeTenants();
-			var DefaultTenantName = "default";
-			tenants.Has(DefaultTenantName, "a key");
-			isolate.UseTestDouble(tenants)
-				.For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants, IFindTenantByName, IAllTenantNames>();
-
+			//isolate.UseTestDouble<AbsenceRequestModelMapper>().For<AbsenceRequestModelMapper>();
+			//isolate.UseTestDouble<RequestsViewModelMapper>().For<RequestsViewModelMapper>();
 		}
 
 		[Test]
 		public void ShouldAddRequest()
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
-			_absence = createAbsence();
+			var scenario = ScenarioRepository.Has("Default");
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 
-			setWorkflowControlSet(usePersonAccountValidator: true);
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			var absence = createAbsence();
 
-			setupPersonSkills();
-			var personRequest = setupSimpleAbsenceRequest();
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true);
+
+			setupPersonSkills(person);
+			var personRequest = setupSimpleAbsenceRequest(person,absence);
 
 			personRequest.Should().Not.Be.Null();
 			personRequest.IsDenied.Should().Be.False();
@@ -122,23 +98,33 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldHandleRequestDirectlyWhenRequestShorterThan24HoursAndEndsWithin24HourWindow()
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
-			_absence = createAbsence();
+			var scenario = ScenarioRepository.Has("Default");
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 
-			setWorkflowControlSet();
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			var absence = createAbsence();
 
-			_workflowControlSet.AbsenceRequestOpenPeriods[0].StaffingThresholdValidator = new StaffingThresholdValidator();
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			setWorkflowControlSet(workflowControlSet,absence,_today);
+
+			workflowControlSet.AbsenceRequestOpenPeriods[0].StaffingThresholdValidator = new StaffingThresholdValidator();
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today,
 				StartTime = new TimeOfDay(TimeSpan.FromHours(9)),
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			});
-			setupPersonSkills();
+			setupPersonSkills(person);
 
-			Persister.Persist(form);
+			Target.Persist(form.ToModel(UserTimeZone));
 
 			QueuedAbsenceRequestRepository.LoadAll().Should().Be.Empty();
 			CommandDispatcher.LatestCommand.Should().Not.Be.Null();
@@ -147,12 +133,22 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyWhenPersonHasNoWorkflowControlSet()
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
-			_absence = createAbsence();
-			_person.WorkflowControlSet = null;
+			var scenario = ScenarioRepository.Has("Default");
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 
-			var personRequest = setupSimpleAbsenceRequest();
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			var absence = createAbsence();
+			person.WorkflowControlSet = null;
+
+			var personRequest = setupSimpleAbsenceRequest(person, absence);
 
 			personRequest.Should().Not.Be(null);
 			personRequest.IsDenied.Should().Be(true);
@@ -162,29 +158,39 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldNotDenyWhenPersonHasZeroBalanceButWorkflowControlSetHasNoPersonAccountValidation()
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
-			_absence = createAbsence();
+			var scenario = ScenarioRepository.Has("Default");
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 
-			setWorkflowControlSet();
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			var absence = createAbsence();
+
+			setWorkflowControlSet(workflowControlSet, absence, _today);
 
 			var accountDay = new AccountDay(_today)
 			{
 				Accrued = TimeSpan.FromDays(0)
 			};
-			createPersonAbsenceAccount(_person, _absence, accountDay);
+			createPersonAbsenceAccount(person, absence, accountDay);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today,
 				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			});
-			setupPersonSkills();
+			setupPersonSkills(person);
 
-			var personRequest = Persister.Persist(form);
-			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
 			request.IsDenied.Should().Be(false);
@@ -194,13 +200,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyExpiredRequest([Values]bool autoGrant)
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
-			_absence = createAbsence();
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 
-			setWorkflowControlSet(15, autoGrant);
+			var scenario = ScenarioRepository.Has("Default");
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			var absence = createAbsence();
 
-			var personRequest = setupSimpleAbsenceRequest();
+			setWorkflowControlSet(workflowControlSet, absence, _today, 15, autoGrant);
+
+			var personRequest = setupSimpleAbsenceRequest(person, absence);
 
 			personRequest.Should().Not.Be(null);
 			personRequest.IsDenied.Should().Be(true);
@@ -210,13 +226,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyWhenAutoDenyIsOn()
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
-			_absence = createAbsence();
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 
-			setWorkflowControlSet(autoDeny: true);
+			var scenario = ScenarioRepository.Has("Default");
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			var absence = createAbsence();
 
-			var personRequest = setupSimpleAbsenceRequest();
+			setWorkflowControlSet(workflowControlSet, absence, _today, autoDeny: true);
+
+			var personRequest = setupSimpleAbsenceRequest(person, absence);
 
 			personRequest.Should().Not.Be(null);
 			personRequest.IsDenied.Should().Be(true);
@@ -226,11 +252,21 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyWhenAlreadyAbsent([Values]bool autoGrant)
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
-			_absence = createAbsence();
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 
-			setWorkflowControlSet(autoGrant: autoGrant);
+			var scenario = ScenarioRepository.Has("Default");
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			var absence = createAbsence();
+
+			setWorkflowControlSet(workflowControlSet, absence, _today, autoGrant: autoGrant);
 
 			var dateTimePeriodForm = new DateTimePeriodForm
 			{
@@ -240,14 +276,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			};
 
-			var form = createAbsenceRequestForm(dateTimePeriodForm);
+			var form = createAbsenceRequestForm(absence, dateTimePeriodForm);
 
-			ScheduleStorage.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, CurrentScenario.Current()
+			PersonAbsenceRepository.Add(PersonAbsenceFactory.CreatePersonAbsence(person, scenario
 				, _today.ToDateTimePeriod(new TimePeriod(dateTimePeriodForm.StartTime.Time, dateTimePeriodForm.EndTime.Time)
-					, UserTimeZone.TimeZone()), _absence).WithId());
+					, UserTimeZone.TimeZone()), absence).WithId());
 
-			var personRequest = Persister.Persist(form);
-			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
 			request.IsDenied.Should().Be(true);
@@ -257,6 +293,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyWhenAlreadyAbsentAndAbsenceStartsTheDayBefore([Values]bool autoGrant)
 		{
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
 			var dateTimePeriodForm = new DateTimePeriodForm
 			{
 				StartDate = _today,
@@ -268,19 +314,19 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var alreadyAbsentPeriod = _today.ToDateTimePeriod(new TimePeriod(dateTimePeriodForm.StartTime.Time, dateTimePeriodForm.EndTime.Time)
 												  , UserTimeZone.TimeZone()).ChangeStartTime(TimeSpan.FromDays(-1));
 
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), alreadyAbsentPeriod));
-			_absence = createAbsence();
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, alreadyAbsentPeriod));
+			var absence = createAbsence();
 
-			setWorkflowControlSet(autoGrant: autoGrant);
+			setWorkflowControlSet(workflowControlSet, absence, _today, autoGrant: autoGrant);
 
-			var form = createAbsenceRequestForm(dateTimePeriodForm);
+			var form = createAbsenceRequestForm(absence, dateTimePeriodForm);
 
-			ScheduleStorage.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, CurrentScenario.Current()
-				, alreadyAbsentPeriod, _absence).WithId());
+			PersonAbsenceRepository.Add(PersonAbsenceFactory.CreatePersonAbsence(person, scenario
+				, alreadyAbsentPeriod, absence).WithId());
 
-			var personRequest = Persister.Persist(form);
-			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
 			request.IsDenied.Should().Be(true);
@@ -290,6 +336,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldNotDenyWhenAbsentTheDayBeforeAndShiftSpansOverMidnight([Values]bool autoGrant)
 		{
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
 			var requestDate = _today.AddDays(2);
 			var dateTimePeriodForm = new DateTimePeriodForm
 			{
@@ -305,20 +361,20 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var alreadyAbsentPeriod = requestDate.AddDays(-1).ToDateTimePeriod(new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(9))
 												  , UserTimeZone.TimeZone());
 
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), shiftPeriod));
-			_absence = createAbsence();
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, shiftPeriod));
+			var absence = createAbsence();
 
-			setWorkflowControlSet(autoGrant: autoGrant);
+			setWorkflowControlSet(workflowControlSet, absence, _today, autoGrant: autoGrant);
 
-			var form = createAbsenceRequestForm(dateTimePeriodForm);
+			var form = createAbsenceRequestForm(absence, dateTimePeriodForm);
 
-			ScheduleStorage.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, CurrentScenario.Current()
-				, alreadyAbsentPeriod, _absence).WithId());
-			setupPersonSkills();
+			PersonAbsenceRepository.Add(PersonAbsenceFactory.CreatePersonAbsence(person, scenario
+				, alreadyAbsentPeriod, absence).WithId());
+			setupPersonSkills(person);
 
-			var personRequest = Persister.Persist(form);
-			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
 			request.IsDenied.Should().Be(false);
@@ -328,21 +384,31 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyWhenUpdateAbsenceOutOfDate()
 		{
-			_absence = createAbsence();
-			_workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			ScenarioRepository.Has("Default");
+			var absence = createAbsence();
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
 			{
-				Absence = _absence,
+				Absence = absence,
 				AbsenceRequestProcess = new GrantAbsenceRequest(),
 				OpenForRequestsPeriod = new DateOnlyPeriod(_today, _today),
 				Period = new DateOnlyPeriod(_today, _today),
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
 			});
-			setupPersonSkills();
+			setupPersonSkills(person);
 
-			var newPersonRequest = setupSimpleAbsenceRequest();
+			var newPersonRequest = setupSimpleAbsenceRequest(person, absence);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today.AddDays(1),
@@ -351,8 +417,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 			form.EntityId = newPersonRequest.Id.GetValueOrDefault();
 
-			var personRequest = Persister.Persist(form);
-			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.IsDenied.Should().Be(true);
 		}
@@ -360,21 +426,31 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyWhenPersonAccountDaysAreExceeded([Values]bool autoGrant)
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
-			_absence = createAbsence();
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			var absence = createAbsence();
 
 			var isWaitlisted = autoGrant;
 
-			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: autoGrant, absenceRequestWaitlistEnabled: isWaitlisted);
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true, autoGrant: autoGrant, absenceRequestWaitlistEnabled: isWaitlisted);
 
 			var accountDay = new AccountDay(_today)
 			{
 				Accrued = TimeSpan.FromDays(1)
 			};
-			createPersonAbsenceAccount(_person, _absence, accountDay);
+			createPersonAbsenceAccount(person, absence, accountDay);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today.AddDays(1),
@@ -382,8 +458,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			});
 
-			var personRequest = Persister.Persist(form);
-			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
 			request.IsDenied.Should().Be.True();
@@ -394,21 +470,31 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldNotCountDaysDisabledInContractScheduleAndUnscheduled()
 		{
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			ScenarioRepository.Has("Default");
 			var saturday = _today.AddDays(4);
-			setupPersonSkillAlwaysOpen(saturday);
-			_absence = createAbsence();
+			setupPersonSkillAlwaysOpen(person, saturday);
+			var absence = createAbsence();
 
 			var isWaitlisted = true;
 
-			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: true, absenceRequestWaitlistEnabled: isWaitlisted);
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true, autoGrant: true, absenceRequestWaitlistEnabled: isWaitlisted);
 
 			var accountDay = new AccountDay(_today)
 			{
 				Accrued = TimeSpan.FromDays(0)
 			};
-			createPersonAbsenceAccount(_person, _absence, accountDay);
+			createPersonAbsenceAccount(person, absence, accountDay);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = saturday,
 				EndDate = saturday,
@@ -416,8 +502,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(new TimeSpan(18, 0, 0))
 			});
 
-			var personRequest = Persister.Persist(form);
-			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
 			request.DenyReason.Should().Be.Empty();
@@ -432,23 +518,33 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldCountDaysDisabledInContractScheduleButScheduled()
 		{
-			setupPersonSkills();
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
+			setupPersonSkills(person);
 			var saturday = _today.AddDays(4);
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), saturday.ToDateTimePeriod(UserTimeZone.TimeZone())));
-			_absence = createAbsence();
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, saturday.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			var absence = createAbsence();
 
 			var isWaitlisted = false;
 
-			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: true, absenceRequestWaitlistEnabled: isWaitlisted);
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true, autoGrant: true, absenceRequestWaitlistEnabled: isWaitlisted);
 
 			var accountDay = new AccountDay(_today)
 			{
 				Accrued = TimeSpan.FromDays(0)
 			};
-			createPersonAbsenceAccount(_person, _absence, accountDay);
+			createPersonAbsenceAccount(person, absence, accountDay);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = saturday,
 				EndDate = saturday,
@@ -456,8 +552,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(new TimeSpan(8, 0, 0))
 			});
 
-			var personRequest = Persister.Persist(form);
-			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
 			request.DenyReason.Should().Not.Be.Empty();
@@ -470,25 +566,34 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldNotCountAbsenceTimeOnContractDaysOff()
 		{
-			setupPersonSkillAlwaysOpen(_today);
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
+			setupPersonSkillAlwaysOpen(person, _today);
 			var thursday = _today.AddDays(2); // 20oct 2016
 			var friday = _today.AddDays(3);
-			var saturday = _today.AddDays(4);
 			var sunday = _today.AddDays(5);
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), thursday.ToDateTimePeriod(UserTimeZone.TimeZone())));
-			_absence = createAbsence();
-			_absence.Tracker = Tracker.CreateTimeTracker();
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, thursday.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			var absence = createAbsence();
+			absence.Tracker = Tracker.CreateTimeTracker();
 
 			var isWaitlisted = false;
 
-			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: true, absenceRequestWaitlistEnabled: isWaitlisted);
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true, autoGrant: true, absenceRequestWaitlistEnabled: isWaitlisted);
 
 			var accountDay = new AccountTime(_today)
 			{
 				Accrued = TimeSpan.FromHours(22)
 			};
-			createPersonAbsenceAccount(_person, _absence, accountDay);
+			createPersonAbsenceAccount(person, absence, accountDay);
 			var period = new DateTimePeriodForm
 			{
 				StartDate = friday,
@@ -498,15 +603,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			};
 			var form = new AbsenceRequestForm
 			{
-				AbsenceId = _absence.Id.Value,
+				AbsenceId = absence.Id.Value,
 				Subject = "test",
 				Period = period
 			};
-
-
-
-			var personRequest = Persister.Persist(form);
-			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+			
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
 			request.DenyReason.Should().Be.Empty();
@@ -519,26 +622,36 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldNotCountAbsenceTimeOnContractDaysOffWithDayOff()
 		{
-			setupPersonSkillAlwaysOpen(_today);
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
+			setupPersonSkillAlwaysOpen(person, _today);
 			var thursday = _today.AddDays(2); // 20oct 2016
 			var friday = _today.AddDays(3);
 			var saturday = _today.AddDays(4);
 			var sunday = _today.AddDays(5);
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), thursday.ToDateTimePeriod(UserTimeZone.TimeZone())));
-			_absence = createAbsence();
-			_absence.Tracker = Tracker.CreateTimeTracker();
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, CurrentScenario.Current(), saturday, new DayOffTemplate(new Description("test"))));
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, CurrentScenario.Current(), sunday, new DayOffTemplate(new Description("test"))));
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, thursday.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			var absence = createAbsence();
+			absence.Tracker = Tracker.CreateTimeTracker();
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario, saturday, new DayOffTemplate(new Description("test"))));
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario, sunday, new DayOffTemplate(new Description("test"))));
 			var isWaitlisted = false;
 
-			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: true, absenceRequestWaitlistEnabled: isWaitlisted);
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true, autoGrant: true, absenceRequestWaitlistEnabled: isWaitlisted);
 
 			var accountDay = new AccountTime(_today)
 			{
 				Accrued = TimeSpan.FromHours(22)
 			};
-			createPersonAbsenceAccount(_person, _absence, accountDay);
+			createPersonAbsenceAccount(person, absence, accountDay);
 			var period = new DateTimePeriodForm
 			{
 				StartDate = friday,
@@ -548,15 +661,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			};
 			var form = new AbsenceRequestForm
 			{
-				AbsenceId = _absence.Id.Value,
+				AbsenceId = absence.Id.Value,
 				Subject = "test",
 				Period = period
 			};
-
-
-
-			var personRequest = Persister.Persist(form);
-			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+			
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
 			request.DenyReason.Should().Be.Empty();
@@ -569,13 +680,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyWhenPersonAccountTimeIsExceeded([Values]bool autoGrant)
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
-			_absence = createAbsence();
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			var absence = createAbsence();
 
 			var isWaitlisted = autoGrant;
 
-			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: autoGrant, absenceRequestWaitlistEnabled: isWaitlisted);
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true, autoGrant: autoGrant, absenceRequestWaitlistEnabled: isWaitlisted);
 
 			var accountTime1 = new AccountTime(_today)
 			{
@@ -585,12 +706,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			{
 				Accrued = TimeSpan.FromMinutes(20)
 			};
-			createPersonAbsenceAccount(_person, _absence, accountTime1, accountTime2);
+			createPersonAbsenceAccount(person, absence, accountTime1, accountTime2);
 
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), _today.AddDays(1).ToDateTimePeriod(UserTimeZone.TimeZone())));
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, _today.AddDays(1).ToDateTimePeriod(UserTimeZone.TimeZone())));
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today.AddDays(1),
@@ -598,8 +719,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromMinutes(21))
 			});
 
-			var personRequest = Persister.Persist(form);
-			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
 			request.IsDenied.Should().Be(true);
@@ -610,15 +731,25 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyWhenPersonAccountIsMissing([Values]bool autoGrant)
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
-			_absence = createAbsence();
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			var absence = createAbsence();
 
 			var isWaitlisted = autoGrant;
-			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: autoGrant, absenceRequestWaitlistEnabled: isWaitlisted);
-			_absence.Tracker = Tracker.CreateDayTracker();
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true, autoGrant: autoGrant, absenceRequestWaitlistEnabled: isWaitlisted);
+			absence.Tracker = Tracker.CreateDayTracker();
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today.AddDays(1),
@@ -626,8 +757,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			});
 
-			var personRequest = Persister.Persist(form);
-			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
 			request.IsDenied.Should().Be.True();
@@ -638,9 +769,19 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldNotUpdateQueuedRequestPeriodIfItsSameAsRequest()
 		{
-			_absence = createAbsence();
-			setWorkflowControlSet();
-			var newPersonRequest = setupSimpleAbsenceRequest();
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			ScenarioRepository.Has("Default");
+			var absence = createAbsence();
+			setWorkflowControlSet(workflowControlSet, absence, _today);
+			var newPersonRequest = setupSimpleAbsenceRequest(person, absence);
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
@@ -649,7 +790,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndDateTime = newPersonRequest.Request.Period.EndDateTime
 			});
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today,
@@ -658,9 +799,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 
 			form.EntityId = newPersonRequest.Id.GetValueOrDefault();
-			setupPersonSkills();
+			setupPersonSkills(person);
 
-			Persister.Persist(form);
+			Target.Persist(form.ToModel(UserTimeZone));
 
 			var queuedRequest = QueuedAbsenceRequestRepository.LoadAll().FirstOrDefault();
 			queuedRequest.StartDateTime.Should().Be.EqualTo(_today.Date.Add(TimeSpan.FromHours(8)));
@@ -671,11 +812,21 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldNotUpdateQueuedRequestPeriodIfNoStaffingValidatorIsUsed()
 		{
-			_absence = createAbsence();
-			setWorkflowControlSet();
-			_workflowControlSet.AbsenceRequestOpenPeriods.ElementAt(0).StaffingThresholdValidator = new AbsenceRequestNoneValidator();
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			ScenarioRepository.Has("Default");
+			var absence = createAbsence();
+			setWorkflowControlSet(workflowControlSet, absence, _today);
+			workflowControlSet.AbsenceRequestOpenPeriods.ElementAt(0).StaffingThresholdValidator = new AbsenceRequestNoneValidator();
+
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today,
@@ -683,13 +834,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(21))
 			});
 
-			setupPersonSkills();
+			setupPersonSkills(person);
 
-			var result = Persister.Persist(form);
+			var result = Target.Persist(form.ToModel(UserTimeZone));
 
-			form.EntityId = Guid.Parse(result.Id);
+			form.EntityId = result.Id;
 			form.Period.StartTime = new TimeOfDay(TimeSpan.FromHours(1));
-			Persister.Persist(form);
+			Target.Persist(form.ToModel(UserTimeZone));
 
 			QueuedAbsenceRequestRepository.UpdateRequestPeriodWasCalled.Should().Be.False();
 		}
@@ -697,10 +848,20 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldNotUpdateQueuedRequestPeriodIfIntradayRequestAndStaffingThresholdValidatorEnabled()
 		{
-			_absence = createAbsence();
-			setWorkflowControlSet();
-			_workflowControlSet.AbsenceRequestOpenPeriods.ElementAt(0).StaffingThresholdValidator = new StaffingThresholdValidator();
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			ScenarioRepository.Has("Default");
+			var absence = createAbsence();
+			setWorkflowControlSet(workflowControlSet, absence, _today);
+			workflowControlSet.AbsenceRequestOpenPeriods.ElementAt(0).StaffingThresholdValidator = new StaffingThresholdValidator();
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today,
@@ -708,13 +869,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(21))
 			});
 
-			setupPersonSkills();
+			setupPersonSkills(person);
 
-			var result = Persister.Persist(form);
+			var result = Target.Persist(form.ToModel(UserTimeZone));
 
-			form.EntityId = Guid.Parse(result.Id);
+			form.EntityId = result.Id;
 			form.Period.StartTime = new TimeOfDay(TimeSpan.FromHours(1));
-			Persister.Persist(form);
+			Target.Persist(form.ToModel(UserTimeZone));
 
 			QueuedAbsenceRequestRepository.UpdateRequestPeriodWasCalled.Should().Be.False();
 		}
@@ -722,10 +883,20 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test, Ignore("we need to handle no toggle")]
 		public void ShouldUpdateQueuedRequestForNonIntradayRequest()
 		{
-			_absence = createAbsence();
-			setWorkflowControlSet();
-			_workflowControlSet.AbsenceRequestOpenPeriods.ElementAt(0).StaffingThresholdValidator = new StaffingThresholdValidator();
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			ScenarioRepository.Has("Default");
+			var absence = createAbsence();
+			setWorkflowControlSet(workflowControlSet, absence, _today);
+			workflowControlSet.AbsenceRequestOpenPeriods.ElementAt(0).StaffingThresholdValidator = new StaffingThresholdValidator();
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today.AddDays(2),
 				EndDate = _today.AddDays(2),
@@ -733,13 +904,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(21))
 			});
 
-			setupPersonSkills();
+			setupPersonSkills(person);
 
-			var result = Persister.Persist(form);
+			var result = Target.Persist(form.ToModel(UserTimeZone));
 
-			form.EntityId = Guid.Parse(result.Id);
+			form.EntityId = result.Id;
 			form.Period.StartTime = new TimeOfDay(TimeSpan.FromHours(1));
-			Persister.Persist(form);
+			Target.Persist(form.ToModel(UserTimeZone));
 
 			QueuedAbsenceRequestRepository.UpdateRequestPeriodWasCalled.Should().Be.True();
 			var queuedRequest = QueuedAbsenceRequestRepository.LoadAll().FirstOrDefault();
@@ -750,10 +921,20 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldUpdateQueuedRequestForBudgetGroupValidator()
 		{
-			_absence = createAbsence();
-			setWorkflowControlSet();
-			_workflowControlSet.AbsenceRequestOpenPeriods.ElementAt(0).StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			ScenarioRepository.Has("Default");
+			var absence = createAbsence();
+			setWorkflowControlSet(workflowControlSet, absence, _today);
+			workflowControlSet.AbsenceRequestOpenPeriods.ElementAt(0).StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today,
@@ -761,13 +942,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(21))
 			});
 
-			setupPersonSkills();
+			setupPersonSkills(person);
 
-			var result = Persister.Persist(form);
+			var result = Target.Persist(form.ToModel(UserTimeZone));
 
-			form.EntityId = Guid.Parse(result.Id);
+			form.EntityId = result.Id;
 			form.Period.StartTime = new TimeOfDay(TimeSpan.FromHours(1));
-			Persister.Persist(form);
+			Target.Persist(form.ToModel(UserTimeZone));
 
 			QueuedAbsenceRequestRepository.UpdateRequestPeriodWasCalled.Should().Be.True();
 			var queuedRequest = QueuedAbsenceRequestRepository.LoadAll().FirstOrDefault();
@@ -778,21 +959,31 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldApproveFullDayRequestWhenPreviousDayIsAbsentWithCrossDayShift()
 		{
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
 			var startDateTime = new DateTime(2017, 3, 21, 0, 0, 0, DateTimeKind.Utc);
 
-			_absence = createAbsence();
+			var absence = createAbsence();
 
 			// create the first day night shift
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), new DateTimePeriod(startDateTime.AddHours(23), startDateTime.AddDays(1).AddHours(7))));
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, new DateTimePeriod(startDateTime.AddHours(23), startDateTime.AddDays(1).AddHours(7))));
 
 			// create cross day night shift
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), new DateTimePeriod(startDateTime.AddDays(1).AddHours(23), startDateTime.AddDays(2).AddHours(7))));
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, new DateTimePeriod(startDateTime.AddDays(1).AddHours(23), startDateTime.AddDays(2).AddHours(7))));
 
-			setWorkflowControlSet(autoGrant: true);
+			setWorkflowControlSet(workflowControlSet, absence, _today, autoGrant: true);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = new DateOnly(startDateTime.AddDays(1)),
 				EndDate = new DateOnly(startDateTime.AddDays(1)),
@@ -801,12 +992,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 
 			// create cross day absence
-			ScheduleStorage.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, CurrentScenario.Current()
-				, new DateTimePeriod(startDateTime.AddHours(23), startDateTime.AddDays(1).AddHours(7)), _absence).WithId());
+			PersonAbsenceRepository.Add(PersonAbsenceFactory.CreatePersonAbsence(person, scenario
+				, new DateTimePeriod(startDateTime.AddHours(23), startDateTime.AddDays(1).AddHours(7)), absence).WithId());
 
-			setupPersonSkills();
+			setupPersonSkills(person);
 
-			var personRequest1 = Persister.Persist(form);
+			var personRequest1 = Target.Persist(form.ToModel(UserTimeZone));
 
 			personRequest1.IsDenied.Should().Be(false);
 			personRequest1.IsPending.Should().Be(true);
@@ -815,13 +1006,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldApproveRequestWhenChangingToAutoGrant()
 		{
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			ScenarioRepository.Has("Default");
 			var absence1 = createAbsence();
 			var absence2 = createAbsence("absence2");
 
 			var absenceRequestAutoGrantOnProcess = (IProcessAbsenceRequest)new GrantAbsenceRequest();
 			var absenceRequestAutoGrantOffProcess = new PendingAbsenceRequest();
 
-			_workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
 			{
 				Absence = absence1,
 				AbsenceRequestProcess = absenceRequestAutoGrantOnProcess,
@@ -830,7 +1031,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				PersonAccountValidator = new AbsenceRequestNoneValidator()
 			});
 
-			_workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
 			{
 				Absence = absence2,
 				AbsenceRequestProcess = absenceRequestAutoGrantOffProcess,
@@ -846,14 +1047,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			};
-			_workflowControlSet.AbsenceRequestOpenPeriods[1].StaffingThresholdValidator = new StaffingThresholdValidator();
+			workflowControlSet.AbsenceRequestOpenPeriods[1].StaffingThresholdValidator = new StaffingThresholdValidator();
 
 			var form = createAbsenceRequestForm(dateTimePeriodForm, absence2.Id.Value);
-			var formId = form.EntityId;
-			setupPersonSkills();
+			form.EntityId = null;
+			setupPersonSkills(person);
 
-			var personRequest = Persister.Persist(form);
-			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
 			request.IsPending.Should().Be(true);
@@ -867,8 +1068,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			};
 
 			form = createAbsenceRequestForm(dateTimePeriodForm, absence1.Id.Value);
-			form.EntityId = formId;
-			Persister.Persist(form);
+			form.EntityId = personRequest.Id;
+			Target.Persist(form.ToModel(UserTimeZone));
 
 			CommandDispatcher.LatestCommand.Should().Not.Be.Null();
 		}
@@ -876,12 +1077,22 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyOffHourRequest()
 		{
-			_absence = createAbsence();
-			setWorkflowControlSet();
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 
-			setupPersonSkills();
+			ScenarioRepository.Has("Default");
+			var absence = createAbsence();
+			setWorkflowControlSet(workflowControlSet, absence, _today);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			setupPersonSkills(person);
+
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today.AddDays(1),
@@ -889,7 +1100,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromMinutes(21))
 			});
 
-			Persister.Persist(form);
+			Target.Persist(form.ToModel(UserTimeZone));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.True();
@@ -900,15 +1111,25 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldApproveWithOvernightSkillOpenHour()
 		{
-			_absence = createAbsence();
-			setWorkflowControlSet();
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			ScenarioRepository.Has("Default");
+			var absence = createAbsence();
+			setWorkflowControlSet(workflowControlSet, absence, _today);
 
 			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
 			var skill = SkillFactory.CreateSkill("Phone");
 			skill.MidnightBreakOffset = TimeSpan.FromHours(1);
-			setupPersonSkills(skill, skillOpenPeriod);
+			setupPersonSkills(person, skill, skillOpenPeriod);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today.AddDays(1),
 				EndDate = _today.AddDays(1),
@@ -916,7 +1137,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
 			});
 
-			Persister.Persist(form);
+			Target.Persist(form.ToModel(UserTimeZone));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.False();
@@ -925,32 +1146,42 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldApproveOvernightAbsenceRequestWhenNextDayIsDayoffAndPersonalAccountIsEnough()
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(),
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario,
 				_today.ToDateTimePeriod(
 					new TimePeriod(TimeSpan.FromHours(16), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(1))),
 					UserTimeZone.TimeZone())));
 
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_person
-				, CurrentScenario.Current(), _today.AddDays(1), new DayOffTemplate(new Description("test"))));
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(person
+				, scenario, _today.AddDays(1), new DayOffTemplate(new Description("test"))));
 
-			_absence = createAbsence();
-			_absence.Tracker = Tracker.CreateTimeTracker();
+			var absence = createAbsence();
+			absence.Tracker = Tracker.CreateTimeTracker();
 
 			var accountTime = new AccountTime(_today)
 			{
 				Accrued = TimeSpan.FromHours(2)
 			};
-			createPersonAbsenceAccount(_person, _absence, accountTime);
+			createPersonAbsenceAccount(person, absence, accountTime);
 
-			setWorkflowControlSet(usePersonAccountValidator: true);
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true);
 
 			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
 			var skill = SkillFactory.CreateSkill("Phone");
 			skill.MidnightBreakOffset = TimeSpan.FromHours(1);
-			setupPersonSkills(skill, skillOpenPeriod);
+			setupPersonSkills(person, skill, skillOpenPeriod);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today.AddDays(1),
@@ -958,7 +1189,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
 			});
 
-			Persister.Persist(form);
+			Target.Persist(form.ToModel(UserTimeZone));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.False();
@@ -967,29 +1198,39 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldApproveOvernightAbsenceRequestWhenPersonalAccountIsEnough()
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(),
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario,
 				_today.ToDateTimePeriod(
 					new TimePeriod(TimeSpan.FromHours(16), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(1))),
 					UserTimeZone.TimeZone())));
 
-			_absence = createAbsence();
-			_absence.Tracker = Tracker.CreateTimeTracker();
+			var absence = createAbsence();
+			absence.Tracker = Tracker.CreateTimeTracker();
 
 			var accountTime = new AccountTime(_today)
 			{
 				Accrued = TimeSpan.FromHours(2)
 			};
-			createPersonAbsenceAccount(_person, _absence, accountTime);
+			createPersonAbsenceAccount(person, absence, accountTime);
 
-			setWorkflowControlSet(usePersonAccountValidator: true);
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true);
 
 			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
 			var skill = SkillFactory.CreateSkill("Phone");
 			skill.MidnightBreakOffset = TimeSpan.FromHours(1);
-			setupPersonSkills(skill, skillOpenPeriod);
+			setupPersonSkills(person, skill, skillOpenPeriod);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today.AddDays(1),
@@ -997,7 +1238,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
 			});
 
-			Persister.Persist(form);
+			Target.Persist(form.ToModel(UserTimeZone));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.False();
@@ -1006,23 +1247,33 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldApproveOvernightAbsenceRequestWhenTodayIsEmpty()
 		{
-			_absence = createAbsence();
-			_absence.Tracker = Tracker.CreateTimeTracker();
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			ScenarioRepository.Has("Default");
+			var absence = createAbsence();
+			absence.Tracker = Tracker.CreateTimeTracker();
 
 			var accountTime = new AccountTime(_today)
 			{
 				Accrued = TimeSpan.FromHours(2)
 			};
-			createPersonAbsenceAccount(_person, _absence, accountTime);
+			createPersonAbsenceAccount(person, absence, accountTime);
 
-			setWorkflowControlSet(usePersonAccountValidator: true);
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true);
 
 			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
 			var skill = SkillFactory.CreateSkill("Phone");
 			skill.MidnightBreakOffset = TimeSpan.FromHours(1);
-			setupPersonSkills(skill, skillOpenPeriod);
+			setupPersonSkills(person, skill, skillOpenPeriod);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today.AddDays(1),
@@ -1030,7 +1281,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
 			});
 
-			Persister.Persist(form);
+			Target.Persist(form.ToModel(UserTimeZone));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.False();
@@ -1039,20 +1290,30 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldApproveOvernightAbsenceRequestWhenTodayIsEmptyInStockholmTimeZone()
 		{
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
 			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateEmptyAssignment(_person, CurrentScenario.Current(),
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateEmptyAssignment(person, scenario,
 				_today.AddDays(1).ToDateTimePeriod(timeZone)));
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateEmptyAssignment(_person, CurrentScenario.Current(),
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateEmptyAssignment(person, scenario,
 				_today.AddDays(2).ToDateTimePeriod(timeZone)));
 
-			_person.PermissionInformation.SetDefaultTimeZone(timeZone);
+			person.PermissionInformation.SetDefaultTimeZone(timeZone);
 			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
 			var skill = SkillFactory.CreateSkill("Phone");
 			skill.MidnightBreakOffset = TimeSpan.FromHours(1);
-			setupPersonSkills(skill, skillOpenPeriod);
+			setupPersonSkills(person, skill, skillOpenPeriod);
 
-			_absence = createAbsence("Time Off In Lieu");
-			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: true);
+			var absence = createAbsence("Time Off In Lieu");
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true, autoGrant: true);
 
 			var accountTime = new AccountTime(_today.AddDays(-1))
 			{
@@ -1061,19 +1322,19 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				Extra = TimeSpan.FromMinutes(0),
 				LatestCalculatedBalance = TimeSpan.Zero
 			};
-			createPersonAbsenceAccount(_person, _absence, accountTime);
+			createPersonAbsenceAccount(person, absence, accountTime);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today.AddDays(1),
 				EndDate = _today.AddDays(2),
 				StartTime = new TimeOfDay(TimeSpan.FromHours(20)),
 				EndTime = new TimeOfDay(TimeSpan.FromHours(4))
 			});
-			setupPersonSkills();
+			setupPersonSkills(person);
 
-			var personRequest = Persister.Persist(form);
-			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.IsDenied.Should().Be(false);
 		}
@@ -1081,29 +1342,39 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyOvernightRequestWhenFirstDayRequestTimeEqualsRemainingTimeAndPersonalAccountIsNotEnough()
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(),
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario,
 				_today.ToDateTimePeriod(
 					new TimePeriod(TimeSpan.FromHours(16), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(1))),
 					UserTimeZone.TimeZone())));
 
-			_absence = createAbsence();
-			_absence.Tracker = Tracker.CreateTimeTracker();
+			var absence = createAbsence();
+			absence.Tracker = Tracker.CreateTimeTracker();
 
 			var accountTime = new AccountTime(_today)
 			{
 				Accrued = TimeSpan.FromHours(2)
 			};
-			createPersonAbsenceAccount(_person, _absence, accountTime);
+			createPersonAbsenceAccount(person, absence, accountTime);
 
-			setWorkflowControlSet(usePersonAccountValidator: true);
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true);
 
 			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
 			var skill = SkillFactory.CreateSkill("Phone");
 			skill.MidnightBreakOffset = TimeSpan.FromHours(1);
-			setupPersonSkills(skill, skillOpenPeriod);
+			setupPersonSkills(person, skill, skillOpenPeriod);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today.AddDays(1),
@@ -1111,7 +1382,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
 			});
 
-			Persister.Persist(form);
+			Target.Persist(form.ToModel(UserTimeZone));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.True();
@@ -1120,29 +1391,39 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyOvernightRequestWhenFirstDayRequestTimeLessThanRemainingTimeAndPersonalAccountIsNotEnough()
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(),
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario,
 				_today.ToDateTimePeriod(
 					new TimePeriod(TimeSpan.FromHours(16), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(1))),
 					UserTimeZone.TimeZone())));
 
-			_absence = createAbsence();
-			_absence.Tracker = Tracker.CreateTimeTracker();
+			var absence = createAbsence();
+			absence.Tracker = Tracker.CreateTimeTracker();
 
 			var accountTime = new AccountTime(_today)
 			{
 				Accrued = TimeSpan.FromHours(1).Add(TimeSpan.FromMinutes(15))
 			};
-			createPersonAbsenceAccount(_person, _absence, accountTime);
+			createPersonAbsenceAccount(person, absence, accountTime);
 
-			setWorkflowControlSet(usePersonAccountValidator: true);
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true);
 
 			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
 			var skill = SkillFactory.CreateSkill("Phone");
 			skill.MidnightBreakOffset = TimeSpan.FromHours(1);
-			setupPersonSkills(skill, skillOpenPeriod);
+			setupPersonSkills(person, skill, skillOpenPeriod);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today.AddDays(1),
@@ -1150,7 +1431,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
 			});
 
-			Persister.Persist(form);
+			Target.Persist(form.ToModel(UserTimeZone));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.True();
@@ -1159,35 +1440,45 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldApproveOvernightRequestWhenNextDayIsScheduledAndPersonalAccountIsEnough()
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(),
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario,
 				_today.ToDateTimePeriod(
 					new TimePeriod(TimeSpan.FromHours(16), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(1))),
 					UserTimeZone.TimeZone())));
 
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(),
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario,
 				_today.AddDays(1).ToDateTimePeriod(
 					new TimePeriod(TimeSpan.FromHours(16), TimeSpan.FromHours(20)),
 					UserTimeZone.TimeZone())));
 
-			_absence = createAbsence();
-			_absence.Tracker = Tracker.CreateTimeTracker();
+			var absence = createAbsence();
+			absence.Tracker = Tracker.CreateTimeTracker();
 
 			var accountTime = new AccountTime(_today)
 			{
 				Accrued = TimeSpan.FromHours(2)
 			};
-			createPersonAbsenceAccount(_person, _absence, accountTime);
+			createPersonAbsenceAccount(person, absence, accountTime);
 
-			setWorkflowControlSet(usePersonAccountValidator: true);
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true);
 
 			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
 			var skill = SkillFactory.CreateSkill("Phone");
 			skill.MidnightBreakOffset = TimeSpan.FromHours(1);
-			setupPersonSkills(skill, skillOpenPeriod);
+			setupPersonSkills(person, skill, skillOpenPeriod);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today.AddDays(1),
@@ -1195,7 +1486,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
 			});
 
-			Persister.Persist(form);
+			Target.Persist(form.ToModel(UserTimeZone));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.False();
@@ -1204,29 +1495,39 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyFullDayRequestWhenTodayHasOvernightScheduleAndPersonalAccountIsNotEnough()
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(),
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario,
 				_today.ToDateTimePeriod(
 					new TimePeriod(TimeSpan.FromHours(16), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(2))),
 					UserTimeZone.TimeZone())));
 
-			_absence = createAbsence();
-			_absence.Tracker = Tracker.CreateTimeTracker();
+			var absence = createAbsence();
+			absence.Tracker = Tracker.CreateTimeTracker();
 
 			var accountTime = new AccountTime(_today)
 			{
 				Accrued = TimeSpan.FromHours(9)
 			};
-			createPersonAbsenceAccount(_person, _absence, accountTime);
+			createPersonAbsenceAccount(person, absence, accountTime);
 
-			setWorkflowControlSet(usePersonAccountValidator: true);
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true);
 
 			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
 			var skill = SkillFactory.CreateSkill("Phone");
 			skill.MidnightBreakOffset = TimeSpan.FromHours(1);
-			setupPersonSkills(skill, skillOpenPeriod);
+			setupPersonSkills(person, skill, skillOpenPeriod);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today,
@@ -1235,7 +1536,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 			form.FullDay = true;
 
-			Persister.Persist(form);
+			Target.Persist(form.ToModel(UserTimeZone));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.True();
@@ -1244,23 +1545,33 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyFullDayRequestWhenTodayHasNoScheduleAndPersonalAccountIsNotEnough()
 		{
-			_absence = createAbsence();
-			_absence.Tracker = Tracker.CreateTimeTracker();
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			ScenarioRepository.Has("Default");
+			var absence = createAbsence();
+			absence.Tracker = Tracker.CreateTimeTracker();
 
 			var accountTime = new AccountTime(_today)
 			{
 				Accrued = TimeSpan.FromHours(7)
 			};
-			createPersonAbsenceAccount(_person, _absence, accountTime);
+			createPersonAbsenceAccount(person, absence, accountTime);
 
-			setWorkflowControlSet(usePersonAccountValidator: true);
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true);
 
 			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
 			var skill = SkillFactory.CreateSkill("Phone");
 			skill.MidnightBreakOffset = TimeSpan.FromHours(1);
-			setupPersonSkills(skill, skillOpenPeriod);
+			setupPersonSkills(person, skill, skillOpenPeriod);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today,
@@ -1269,7 +1580,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 			form.FullDay = true;
 
-			Persister.Persist(form);
+			Target.Persist(form.ToModel(UserTimeZone));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.True();
@@ -1278,8 +1589,18 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyRequestWhenSkillOpenHourIsClosedOnPreviousDay()
 		{
-			_absence = createAbsence();
-			setWorkflowControlSet();
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			ScenarioRepository.Has("Default");
+			var absence = createAbsence();
+			setWorkflowControlSet(workflowControlSet, absence, _today);
 
 			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
 			var skill = SkillFactory.CreateSkill("Phone");
@@ -1290,9 +1611,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				{DayOfWeek.Thursday, skillOpenPeriod}
 			});
 			var date = new DateOnly(2016, 10, 18);
-			_person.AddSkill(skill, date);
+			person.AddSkill(skill, date);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today.AddDays(1),
 				EndDate = _today.AddDays(1),
@@ -1300,7 +1621,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
 			});
 
-			Persister.Persist(form);
+			Target.Persist(form.ToModel(UserTimeZone));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.True();
@@ -1310,8 +1631,18 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldApproveRequestWhenOvernightSkillOpenHourIsOpenOnToday()
 		{
-			_absence = createAbsence();
-			setWorkflowControlSet();
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			ScenarioRepository.Has("Default");
+			var absence = createAbsence();
+			setWorkflowControlSet(workflowControlSet, absence, _today);
 
 			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
 			var skill = SkillFactory.CreateSkill("Phone");
@@ -1322,9 +1653,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				{DayOfWeek.Thursday, skillOpenPeriod}
 			});
 			var date = new DateOnly(2016, 10, 18);
-			_person.AddSkill(skill, date);
+			person.AddSkill(skill, date);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today.AddDays(1),
 				EndDate = _today.AddDays(1),
@@ -1332,7 +1663,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
 			});
 
-			Persister.Persist(form);
+			Target.Persist(form.ToModel(UserTimeZone));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.False();
@@ -1341,15 +1672,25 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldNotDenyRequestWhenPeriodIsOutsideSkillOpenHoursAndOnSkillessActivity()
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
-			_absence = createAbsence();
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 
-			setWorkflowControlSet(usePersonAccountValidator: true);
+			var scenario = ScenarioRepository.Has("Default");
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			var absence = createAbsence();
 
-			setupPersonSkills();
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			setupPersonSkills(person);
+
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today,
@@ -1357,7 +1698,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(7))
 			});
 
-			var personRequest = Persister.Persist(form);
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
 
 			personRequest.Should().Not.Be.Null();
 			personRequest.IsDenied.Should().Be.False();
@@ -1367,11 +1708,21 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyWhenRemainingHourIsNotEnoughOnEmptyDay()
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateEmptyAssignment(_person, CurrentScenario.Current(),
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateEmptyAssignment(person, scenario,
 				_today.AddDays(1).ToDateTimePeriod(UserTimeZone.TimeZone())));
 
-			_absence = createAbsence("Time Off In Lieu");
-			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: true);
+			var absence = createAbsence("Time Off In Lieu");
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true, autoGrant: true);
 
 			var accountTime = new AccountTime(_today.AddDays(-1))
 			{
@@ -1380,19 +1731,19 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				Extra = TimeSpan.FromMinutes(0),
 				LatestCalculatedBalance = TimeSpan.Zero
 			};
-			createPersonAbsenceAccount(_person, _absence, accountTime);
+			createPersonAbsenceAccount(person, absence, accountTime);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today.AddDays(1),
 				EndDate = _today.AddDays(1),
 				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			});
-			setupPersonSkills();
+			setupPersonSkills(person);
 
-			var personRequest = Persister.Persist(form);
-			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
 			request.IsDenied.Should().Be(true);
@@ -1402,13 +1753,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyWhenRemainingHourIsNotEnoughForMultipleEmptyDays()
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateEmptyAssignment(_person, CurrentScenario.Current(),
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateEmptyAssignment(person, scenario,
 				_today.AddDays(1).ToDateTimePeriod(UserTimeZone.TimeZone())));
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateEmptyAssignment(_person, CurrentScenario.Current(),
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateEmptyAssignment(person, scenario,
 				_today.AddDays(2).ToDateTimePeriod(UserTimeZone.TimeZone())));
 
-			_absence = createAbsence("Time Off In Lieu");
-			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: true);
+			var absence = createAbsence("Time Off In Lieu");
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true, autoGrant: true);
 
 			var accountTime = new AccountTime(_today.AddDays(-1))
 			{
@@ -1417,19 +1778,19 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				Extra = TimeSpan.FromMinutes(0),
 				LatestCalculatedBalance = TimeSpan.Zero
 			};
-			createPersonAbsenceAccount(_person, _absence, accountTime);
+			createPersonAbsenceAccount(person, absence, accountTime);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today.AddDays(1),
 				EndDate = _today.AddDays(2),
 				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			});
-			setupPersonSkills();
+			setupPersonSkills(person);
 
-			var personRequest = Persister.Persist(form);
-			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
 			request.IsDenied.Should().Be(true);
@@ -1439,11 +1800,21 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldApproveWhenRemainingHourIsEnoughOnEmptyDay()
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateEmptyAssignment(_person, CurrentScenario.Current(),
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateEmptyAssignment(person, scenario,
 				_today.AddDays(1).ToDateTimePeriod(UserTimeZone.TimeZone())));
 
-			_absence = createAbsence("Time Off In Lieu");
-			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: true);
+			var absence = createAbsence("Time Off In Lieu");
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true, autoGrant: true);
 
 			var accountTime = new AccountTime(_today.AddDays(-1))
 			{
@@ -1452,19 +1823,19 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				Extra = TimeSpan.FromMinutes(0),
 				LatestCalculatedBalance = TimeSpan.Zero
 			};
-			createPersonAbsenceAccount(_person, _absence, accountTime);
+			createPersonAbsenceAccount(person, absence, accountTime);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today.AddDays(1),
 				EndDate = _today.AddDays(1),
 				StartTime = new TimeOfDay(TimeSpan.FromMinutes(480)),
 				EndTime = new TimeOfDay(TimeSpan.FromMinutes(510))
 			});
-			setupPersonSkills();
+			setupPersonSkills(person);
 
-			var personRequest = Persister.Persist(form);
-			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
 			request.IsDenied.Should().Be(false);
@@ -1474,14 +1845,24 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyOnTechnicalIssuesWhenNoSkillCombinations()
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
-			_absence = createAbsence();
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 
-			setWorkflowControlSet();
+			var scenario = ScenarioRepository.Has("Default");
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			var absence = createAbsence();
 
-			_workflowControlSet.AbsenceRequestOpenPeriods[0].StaffingThresholdValidator = new StaffingThresholdValidator();
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			setWorkflowControlSet(workflowControlSet, absence, _today);
+
+			workflowControlSet.AbsenceRequestOpenPeriods[0].StaffingThresholdValidator = new StaffingThresholdValidator();
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today,
@@ -1489,9 +1870,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			});
 
-			setupPersonSkills();
+			setupPersonSkills(person);
 
-			Persister.Persist(form);
+			Target.Persist(form.ToModel(UserTimeZone));
 
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
 			((DenyRequestCommand)CommandDispatcher.LatestCommand).DenyReason.Should().Be
@@ -1501,25 +1882,33 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldUsePersonTimezoneWhenCheckingRequest47148()
 		{
-			_now = new ThisIsNow(new DateTime(2017, 12, 09, 1, 0, 0, DateTimeKind.Utc));
-			ServiceLocatorForEntity.Now = _now;
+			Now.Is(new DateTime(2017, 12, 09, 1, 0, 0, DateTimeKind.Utc));
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
 			var today = new DateOnly(2017, 12, 08);
-			_person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Hawaiian Standard Time"));
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), today.ToDateTimePeriod(UserTimeZone.TimeZone())));
-			_absence = createAbsence();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Hawaiian Standard Time"));
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			var absence = createAbsence();
 
 			var absenceRequestProcess = new GrantAbsenceRequest();
-			_workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenRollingPeriod()
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenRollingPeriod()
 			{
-				Absence = _absence,
+				Absence = absence,
 				AbsenceRequestProcess = absenceRequestProcess,
 				OpenForRequestsPeriod = new DateOnlyPeriod(2017, 12, 1, 2017, 12, 31),
 				BetweenDays = new MinMax<int>(0, 15),
 				PersonAccountValidator = new AbsenceRequestNoneValidator()
 			});
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = today,
 				EndDate = today,
@@ -1527,8 +1916,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			});
 
-			setupPersonSkills();
-			Persister.Persist(form);
+			setupPersonSkills(person);
+			Target.Persist(form.ToModel(UserTimeZone));
 			CommandDispatcher.LatestCommand.Should().Not.Be.Null();
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
 		}
@@ -1536,21 +1925,31 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldDenyWhenPersonAccountIsOutsidePeriod()
 		{
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
-			_absence = createAbsence();
+			Now.Is(nowTime);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var workflowControlSet = new WorkflowControlSet().WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			PersonRepository.Has(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var scenario = ScenarioRepository.Has("Default");
+			PersonAssignmentRepository.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(person
+				, scenario, _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			var absence = createAbsence();
 
 			var isWaitlisted = false;
 
-			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: false, absenceRequestWaitlistEnabled: isWaitlisted);
+			setWorkflowControlSet(workflowControlSet, absence, _today, usePersonAccountValidator: true, autoGrant: false, absenceRequestWaitlistEnabled: isWaitlisted);
 
 			var accountDay = new AccountDay(_today.AddDays(10))
 			{
 				Accrued = TimeSpan.FromDays(100)
 			};
-			createPersonAbsenceAccount(_person, _absence, accountDay);
+			createPersonAbsenceAccount(person, absence, accountDay);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today.AddDays(1),
@@ -1558,8 +1957,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			});
 
-			var personRequest = Persister.Persist(form);
-			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
 			request.IsDenied.Should().Be.True();
@@ -1567,35 +1966,35 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			request.DenyReason.Should().Be(Resources.RequestDenyReasonPersonAccount);
 		}
 
-		private void setWorkflowControlSet(int? absenceRequestExpiredThreshold = null, bool autoGrant = false
+		private static void setWorkflowControlSet(IWorkflowControlSet workflowControlSet, IAbsence absence, DateOnly today, int? absenceRequestExpiredThreshold = null, bool autoGrant = false
 			, bool usePersonAccountValidator = false, bool autoDeny = false, bool absenceRequestWaitlistEnabled = false)
 		{
-			_workflowControlSet.AbsenceRequestWaitlistEnabled = absenceRequestWaitlistEnabled;
-			_workflowControlSet.AbsenceRequestExpiredThreshold = absenceRequestExpiredThreshold;
+			workflowControlSet.AbsenceRequestWaitlistEnabled = absenceRequestWaitlistEnabled;
+			workflowControlSet.AbsenceRequestExpiredThreshold = absenceRequestExpiredThreshold;
 			var absenceRequestProcess = autoGrant
 				? (IProcessAbsenceRequest)new GrantAbsenceRequest()
 				: new PendingAbsenceRequest();
 			if (autoDeny)
 				absenceRequestProcess = new DenyAbsenceRequest();
-			_workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
 			{
-				Absence = _absence,
+				Absence = absence,
 				AbsenceRequestProcess = absenceRequestProcess,
-				OpenForRequestsPeriod = new DateOnlyPeriod(_today, DateOnly.Today.AddDays(30)),
-				Period = new DateOnlyPeriod(_today, DateOnly.Today.AddDays(30)),
+				OpenForRequestsPeriod = new DateOnlyPeriod(today, DateOnly.Today.AddDays(30)),
+				Period = new DateOnlyPeriod(today, DateOnly.Today.AddDays(30)),
 				PersonAccountValidator = usePersonAccountValidator ? (IAbsenceRequestValidator)new PersonAccountBalanceValidator() : new AbsenceRequestNoneValidator()
 			});
 		}
 
-		private IPersonRequest setupSimpleAbsenceRequest()
+		private IPersonRequest setupSimpleAbsenceRequest(IPerson person, IAbsence absence)
 		{
 			var accountDay = new AccountDay(_today)
 			{
 				Accrued = TimeSpan.FromDays(1)
 			};
-			createPersonAbsenceAccount(_person, _absence, accountDay);
+			createPersonAbsenceAccount(person, absence, accountDay);
 
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			var form = createAbsenceRequestForm(absence, new DateTimePeriodForm
 			{
 				StartDate = _today,
 				EndDate = _today,
@@ -1603,8 +2002,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			});
 
-			var personRequest = Persister.Persist(form);
-			return PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			return PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 		}
 
 		private void createPersonAbsenceAccount(IPerson person, IAbsence absence, params IAccount[] accounts)
@@ -1625,11 +2024,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			PersonAbsenceAccountRepository.Add(personAbsenceAccount);
 		}
 
-		private AbsenceRequestForm createAbsenceRequestForm(DateTimePeriodForm period)
+		private AbsenceRequestForm createAbsenceRequestForm(IAbsence absence, DateTimePeriodForm period)
 		{
 			var form = new AbsenceRequestForm
 			{
-				AbsenceId = _absence.Id.Value,
+				AbsenceId = absence.Id.Value,
 				Subject = "test",
 				Period = period
 			};
@@ -1652,30 +2051,29 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			var absence = AbsenceFactory.CreateAbsence(name).WithId();
 			absence.Description = new Description("desc" + name);
-			absence.SetBusinessUnit(BusinessUnitFactory.CreateWithId("temp" + name));
 			AbsenceRepository.Add(absence);
 			return absence;
 		}
 
-		private void setupPersonSkills()
+		private void setupPersonSkills(IPerson person)
 		{
 			var skill = SkillFactory.CreateSkill("Phone");
-			setupPersonSkills(skill);
+			setupPersonSkills(person, skill);
 		}
 
-		private void setupPersonSkills(ISkill skill, TimePeriod? skillOpenPeriod = null)
+		private void setupPersonSkills(IPerson person, ISkill skill, TimePeriod? skillOpenPeriod = null)
 		{
 			var timePeriods = skillOpenPeriod.HasValue ? new[] { skillOpenPeriod.Value } : Enumerable.Repeat(new TimePeriod(8, 18), 5).ToArray();
 			WorkloadFactory.CreateWorkloadClosedOnWeekendsWithOpenHours(skill, timePeriods);
 			var date = new DateOnly(2016, 10, 18);
-			_person.AddSkill(skill, date);
+			person.AddSkill(skill, date);
 		}
 
-		private void setupPersonSkillAlwaysOpen(DateOnly personPeriodDate)
+		private void setupPersonSkillAlwaysOpen(IPerson person, DateOnly personPeriodDate)
 		{
 			var skill = SkillFactory.CreateSkill("Phone");
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
-			_person.AddSkill(skill, personPeriodDate);
+			person.AddSkill(skill, personPeriodDate);
 		}
 	}
 }

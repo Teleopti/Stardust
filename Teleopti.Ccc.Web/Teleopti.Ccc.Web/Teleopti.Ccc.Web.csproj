@@ -383,6 +383,7 @@
     </Compile>
     <Compile Include="Areas\Global\ChatConfigurationController.cs" />
     <Compile Include="Areas\Global\TenantCredential.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormExtensions.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleDayOffViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleShiftViewModel.cs" />
@@ -1156,11 +1157,8 @@
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferencePeriodFeedbackViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\DataProvider\IPersonPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\DataProvider\PersonPersister.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DateTimePeriodFormMapper.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\AbsenceRequestForm.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\AbsenceRequestPersister.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IAbsenceRequestPersister.cs" />
     <Compile Include="Areas\Start\Controllers\AuthenticationApiController.cs" />
     <Compile Include="Areas\Start\Controllers\AuthenticationController.cs" />
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\BusinessUnitsViewModelFactory.cs" />
