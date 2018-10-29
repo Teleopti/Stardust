@@ -304,6 +304,17 @@ module.exports = function(grunt) {
 						filter: 'isFile'
 					}
 				]
+			},
+			images: {
+				files: [
+					{
+						expand: true,
+						cwd: 'app/seatManagement/images',
+						src: ['*.svg', '*.jpg', '*.png'],
+						dest: 'dist/images',
+						filter: 'isFile'
+					}
+				]
 			}
 		}
 	});

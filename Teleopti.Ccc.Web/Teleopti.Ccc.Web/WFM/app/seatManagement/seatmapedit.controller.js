@@ -1,16 +1,23 @@
 ﻿'use strict';
 
-(function () {
-
-	angular.module('wfm.seatPlan')
-		.controller('SeatMapEditCtrl', seatMapEditDirectiveController);
+(function() {
+	angular.module('wfm.seatPlan').controller('SeatMapEditController', seatMapEditDirectiveController);
 
 	seatMapEditDirectiveController.$inject = [
-		'$scope', '$document', '$window', 'seatMapCanvasUtilsService', 'seatMapCanvasEditService', 'NoticeService', '$translate'
+		'$scope',
+		'$translate',
+		'seatMapCanvasUtilsService',
+		'seatMapCanvasEditService',
+		'NoticeService'
 	];
 
-	function seatMapEditDirectiveController($scope, $document, $window, utils, editor, NoticeService, $translate) {
-
+	function seatMapEditDirectiveController(
+		$scope,
+		$translate,
+		seatMapCanvasUtils,
+		seatMapCanvasEditSvc,
+		NoticeService
+	) {
 		var vm = this;
 		vm.newLocationName = '';
 		vm.showLocationDialog = false;
@@ -18,20 +25,21 @@
 		vm.fileCallbackFunction = null;
 		vm.hasCopiedObjectBool = false;
 
-		vm.init = function () {
-			canvas().on('object:selected', function (e) {
+		vm.init = function() {
+			canvas().on('object:selected', function(e) {
 				vm.parentVm.getActiveObjects();
 			});
 
-			canvas().on('selection:created', function (e) {
+			canvas().on('selection:created', function(e) {
 				if (e.e && e.e.shiftKey) {
 					vm.parentVm.getActiveObjects();
 				}
 			});
 
-			canvas().on('before:selection:cleared', function (e) {
+			canvas().on('before:selection:cleared', function(e) {
 				vm.parentVm.rightPanelOptions.panelState = false;
 				vm.parentVm.rightPanelOptions.showPopupButton = true;
+				$scope.$apply();
 			});
 
 			createDocumentListeners();
@@ -39,187 +47,184 @@
 
 		vm.save = saveData;
 
-		vm.addImage = function () {
+		vm.addImage = function() {
 			vm.showFileDialog = true;
 			vm.fileCallbackFunction = vm.addChosenImage;
 		};
 
-		vm.addChosenImage = function (image) {
+		vm.addChosenImage = function(image) {
 			var imagePreviewElement = document.getElementById('image-preview');
 			var sizeFromImagePreview = { height: imagePreviewElement.height, width: imagePreviewElement.width };
 			vm.showFileDialog = false;
-			editor.addImage(canvas(), image, sizeFromImagePreview);
+			seatMapCanvasEditSvc.addImage(canvas(), image, sizeFromImagePreview);
 		};
 
-		vm.setBackgroundImage = function () {
+		vm.setBackgroundImage = function() {
 			vm.showFileDialog = true;
 			vm.fileCallbackFunction = vm.setChosenBackgroundImage;
 		};
 
-		vm.clearBackgroundImage = function () {
+		vm.clearBackgroundImage = function() {
 			vm.setChosenBackgroundImage(null);
 		};
 
-		vm.setChosenBackgroundImage = function (image) {
+		vm.setChosenBackgroundImage = function(image) {
 			var imagePreviewElement = document.getElementById('image-preview');
 			vm.showFileDialog = false;
-			editor.setBackgroundImage(canvas(), image, imagePreviewElement);
+			seatMapCanvasEditSvc.setBackgroundImage(canvas(), image, imagePreviewElement);
 		};
 
-		vm.addLocation = function () {
+		vm.addLocation = function() {
 			vm.newLocationName = '';
 			vm.showLocationDialog = true;
 		};
 
-		vm.addNamedLocation = function () {
+		vm.addNamedLocation = function() {
 			vm.showLocationDialog = false;
-			editor.addLocation(canvas(), vm.newLocationName);
+			seatMapCanvasEditSvc.addLocation(canvas(), vm.newLocationName);
 		};
 
-		vm.addSeat = function () {
-			editor.addSeat(canvas(), false, afterAddSeat);
-
+		vm.addSeat = function() {
+			seatMapCanvasEditSvc.addSeat(canvas(), false, afterAddSeat);
 		};
 
-		vm.addText = function () {
-			editor.addText(canvas(), $translate.instant('DoubleClickHereToEditText'));
+		vm.addText = function() {
+			seatMapCanvasEditSvc.addText(canvas(), $translate.instant('DoubleClickHereToEditText'));
 		};
 
-		vm.copy = function () {
+		vm.copy = function() {
 			vm.hasCopiedObjectBool = true;
-			editor.copy(canvas());
+			seatMapCanvasEditSvc.copy(canvas());
 		};
 
-		vm.paste = function () {
-			editor.paste(canvas(), afterPaste);
+		vm.paste = function() {
+			seatMapCanvasEditSvc.paste(canvas(), afterPaste);
 		};
 
-		vm.cut = function () {
-			editor.copy(canvas());
+		vm.cut = function() {
+			seatMapCanvasEditSvc.copy(canvas());
 			vm.delete();
-		}
-
-		vm.group = function () {
-			editor.group(canvas());
 		};
 
-		vm.ungroup = function () {
-			editor.ungroup(canvas());
+		vm.group = function() {
+			seatMapCanvasEditSvc.group(canvas());
 		};
 
-		vm.sendToBack = function () {
-			editor.sendToBack(canvas());
+		vm.ungroup = function() {
+			seatMapCanvasEditSvc.ungroup(canvas());
 		};
 
-		vm.sendBackward = function () {
-			editor.sendBackward(canvas());
+		vm.sendToBack = function() {
+			seatMapCanvasEditSvc.sendToBack(canvas());
 		};
 
-		vm.bringForward = function () {
-			editor.bringForward(canvas());
+		vm.sendBackward = function() {
+			seatMapCanvasEditSvc.sendBackward(canvas());
 		};
 
-		vm.bringToFront = function () {
-			editor.bringToFront(canvas());
+		vm.bringForward = function() {
+			seatMapCanvasEditSvc.bringForward(canvas());
 		};
 
-		vm.alignLeft = function () {
-			editor.alignLeft(canvas());
+		vm.bringToFront = function() {
+			seatMapCanvasEditSvc.bringToFront(canvas());
 		};
 
-		vm.alignRight = function () {
-			editor.alignRight(canvas());
+		vm.alignLeft = function() {
+			seatMapCanvasEditSvc.alignLeft(canvas());
 		};
 
-		vm.alignTop = function () {
-			editor.alignTop(canvas());
+		vm.alignRight = function() {
+			seatMapCanvasEditSvc.alignRight(canvas());
 		};
 
-		vm.alignBottom = function () {
-			editor.alignBottom(canvas());
+		vm.alignTop = function() {
+			seatMapCanvasEditSvc.alignTop(canvas());
 		};
 
-		vm.rotate45 = function () {
-			editor.rotate45(canvas());
+		vm.alignBottom = function() {
+			seatMapCanvasEditSvc.alignBottom(canvas());
 		};
 
-		vm.spaceActiveGroupVertical = function () {
-			editor.spaceActiveGroupVertical(canvas());
+		vm.rotate45 = function() {
+			seatMapCanvasEditSvc.rotate45(canvas());
 		};
 
-		vm.spaceActiveGroupHorizontal = function () {
-			editor.spaceActiveGroupHorizontal(canvas());
+		vm.spaceActiveGroupVertical = function() {
+			seatMapCanvasEditSvc.spaceActiveGroupVertical(canvas());
 		};
 
-		vm.delete = function () {
-			editor.remove(canvas());
+		vm.spaceActiveGroupHorizontal = function() {
+			seatMapCanvasEditSvc.spaceActiveGroupHorizontal(canvas());
+		};
+
+		vm.delete = function() {
+			seatMapCanvasEditSvc.remove(canvas());
 			updateSeatObjects();
 		};
 
+		vm.flip = function(horizontal) {
+			seatMapCanvasEditSvc.flip(canvas(), horizontal);
+		};
 
-		vm.flip = function (horizontal) {
-			editor.flip(canvas(), horizontal);
-		}
-
-		vm.hasObjectSelected = function () {
+		vm.hasObjectSelected = function() {
 			return (canvas().getActiveObject() || canvas().getActiveGroup()) != null;
 		};
 
-		vm.hasChanges = function () {
-			var seatPropertiesChanged = vm.parentVm.loadedSeatsData != JSON.stringify(vm.parentVm.seats);
-			return ((vm.parentVm.loadedJsonData != JSON.stringify(canvas()) || seatPropertiesChanged)
-					&& (vm.parentVm.loadedJsonData == undefined ? canvas()._objects.length != 0 : true))
-				|| (vm.parentVm.prefixOrSuffixChanged);
+		vm.hasChanges = function() {
+			var seatPropertiesChanged = vm.parentVm.loadedSeatsData != angular.toJson(vm.parentVm.seats);
+			return (
+				((vm.parentVm.loadedJsonData != angular.toJson(canvas()) || seatPropertiesChanged) &&
+					(angular.isUndefined(vm.parentVm.loadedJsonData) ? canvas()._objects.length != 0 : true)) ||
+				vm.parentVm.prefixOrSuffixChanged
+			);
 		};
 
-		vm.refreshSeatMap = function () {
+		vm.refreshSeatMap = function() {
 			vm.parentVm.refreshSeatMap();
 		};
 
 		function canvas() {
 			return vm.parentVm.getCanvas();
-		};
+		}
 
 		function updateSeatObjects() {
-			var removedSeatIds = utils.getSeatsNotInArray(canvas(), vm.parentVm.seats);
-			
-			utils.updateSeatNumberOnDelete(canvas(), removedSeatIds, vm.parentVm.seats);
+			var removedSeatIds = seatMapCanvasUtils.getSeatsNotInArray(canvas(), vm.parentVm.seats);
 
-			vm.parentVm.seats = vm.parentVm.seats.filter(function (seat) {
+			seatMapCanvasUtils.updateSeatNumberOnDelete(canvas(), removedSeatIds, vm.parentVm.seats);
+
+			vm.parentVm.seats = vm.parentVm.seats.filter(function(seat) {
 				return removedSeatIds.indexOf(seat.Id) === -1;
 			});
-
-			
-		};
-
+		}
 
 		function afterAddSeat(newSeat) {
 			vm.parentVm.seats.push(newSeat);
 			createDocumentListeners();
-		};
+		}
 
 		function afterPaste(seats) {
 			vm.parentVm.seats = vm.parentVm.seats.concat(seats);
 			createDocumentListeners();
-		};
+		}
 
 		function createDocumentListeners() {
 			document.onkeydown = onKeyDownHandler;
-		};
+		}
 
 		function suspendDocumentListeners() {
 			document.onkeydown = null;
-		};
+		}
 
 		function onKeyDownHandler(event) {
 			performKeyDownAction(canvas(), event);
-		};
+		}
 
 		function preventDefaultEvent(event) {
 			// ie <11 doesnt have e.preventDefault();
 			if (event.preventDefault) event.preventDefault();
 			event.returnValue = false;
-		};
+		}
 
 		function performKeyDownAction(canvas, event) {
 			if (vm.parentVm.isLoading) return;
@@ -230,10 +235,10 @@
 					suspendDocumentListeners();
 					vm.addSeat();
 					break;
-			    case 46: // delete
-			        if (event.target.nodeName.toLowerCase() !== 'input') {
-			            vm.delete();
-			        }
+				case 46: // delete
+					if (event.target.nodeName.toLowerCase() !== 'input') {
+						vm.delete();
+					}
 					break;
 				case 67: // Ctrl+C
 					if (event.ctrlKey) {
@@ -282,20 +287,20 @@
 					}
 					break;
 
-			    case 88: //X
-			        if (event.target.nodeName.toLowerCase() !== 'input') {
-			            if (event.ctrlKey) {
-			                preventDefaultEvent(event);
+				case 88: //X
+					if (event.target.nodeName.toLowerCase() !== 'input') {
+						if (event.ctrlKey) {
+							preventDefaultEvent(event);
 
-			                vm.cut();
-			            }
-			        }
+							vm.cut();
+						}
+					}
 
-			        break;
+					break;
 				default:
 					break;
 			}
-		};
+		}
 
 		function saveData() {
 			if (!vm.hasChanges()) return;
@@ -304,27 +309,26 @@
 
 			updateSeatObjects();
 
-
 			var data = {
-				SeatMapData: JSON.stringify(canvas()),
+				SeatMapData: angular.toJson(canvas()),
 				Id: vm.parentVm.seatMapId,
-				ChildLocations: utils.getLocations(canvas()),
+				ChildLocations: seatMapCanvasUtils.getLocations(canvas()),
 				Seats: vm.parentVm.seats,
 				LocationPrefix: vm.parentVm.locationPrefix,
 				LocationSuffix: vm.parentVm.locationSuffix
 			};
 
-			editor.save(data, onSaveSuccess);
+			seatMapCanvasEditSvc.save(data, onSaveSuccess);
 			vm.parentVm.rightPanelOptions.panelState = false;
 			vm.parentVm.prefixSuffixPanelOptions.panelState = false;
 			vm.parentVm.prefixOrSuffixChanged = false;
-		};
+		}
 
 		function onSaveSuccess() {
-
-			NoticeService.success("Seat map saved successfully.", 5000, false);
+			//should use $translate key
+			NoticeService.success('Seat map saved successfully.', 5000, false);
 
 			vm.refreshSeatMap();
-		};
-	};
-}());
+		}
+	}
+})();

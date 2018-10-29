@@ -1,32 +1,26 @@
 ﻿'use strict';
 
-(function () {
+(function() {
+	angular.module('wfm.seatMap').directive('seatmapCanvas', seatmapCanvasDirective);
 
-	var directive = function () {
-
+	function seatmapCanvasDirective() {
 		return {
-			controller: 'SeatMapCanvasCtrl',
+			controller: 'SeatMapCanvasController',
 			controllerAs: 'vm',
 			bindToController: true,
 			scope: {
 				toggle: '&toggle',
 				selectedDate: '=date'
 			},
-			templateUrl: "app/seatManagement/html/seatmapcanvas.html",
-			link: linkFunction
+			templateUrl: 'app/seatManagement/html/seatmapcanvas.html',
+			link: function(scope, element, attributes, vm) {
+				vm.showEditor = 'edit' in attributes;
+				vm.isInEditMode = 'edit' in attributes;
+
+				vm.showOccupancy = 'occupancy' in attributes;
+
+				vm.init();
+			}
 		};
-	};
-
-	function linkFunction(scope, element, attributes, vm) {
-		vm.showEditor = 'edit' in attributes;
-		vm.isInEditMode = 'edit' in attributes;
-
-		vm.showOccupancy = 'occupancy' in attributes;
-
-		vm.init();
-	};
-
-	angular.module('wfm.seatMap')
-		.directive('seatmapCanvas', directive);
-
-}());
+	}
+})();

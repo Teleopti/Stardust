@@ -195,7 +195,7 @@ angular.module('wfm.seatMap')
 
 			var seatPriority = utils.getHighestSeatPriority(canvas) + 1;
 
-			var imgName = 'app/seatManagement/images/';
+			var imgName = 'dist/images/';
 			if (withDesk) {
 				imgName += 'seatAndDesk.svg';
 			} else {
