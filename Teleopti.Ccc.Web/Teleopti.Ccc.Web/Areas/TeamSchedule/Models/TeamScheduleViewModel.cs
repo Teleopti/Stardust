@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public GroupScheduleViewModel() => Schedules = new List<GroupScheduleShiftViewModel>();
 		public IEnumerable<GroupScheduleShiftViewModel> Schedules { get; set; }
 		public int Total { get; set; }
-		public string Keyword { get; set; }
+	
 	}
 
 	public class GroupWeekScheduleViewModel

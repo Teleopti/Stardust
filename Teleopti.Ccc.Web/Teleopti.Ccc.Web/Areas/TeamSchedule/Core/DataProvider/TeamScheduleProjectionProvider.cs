@@ -70,18 +70,18 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				}
 			};
 
-			var isScheduleDate = date == scheduleDay.DateOnlyAsPeriod.DateOnly;
+			var needToLoadNoteAndUnderlyingSummary = date == scheduleDay.DateOnlyAsPeriod.DateOnly;
 
 			if (scheduleDay.IsFullyPublished || canViewUnpublished)
 			{
 				vm = Projection(scheduleDay, canViewConfidential);
-				if (isScheduleDate)
+				if (needToLoadNoteAndUnderlyingSummary)
 				{
 					vm.UnderlyingScheduleSummary = getUnderlyingScheduleSummary(scheduleDay, previousScheduleDay, canViewConfidential);
 				}
 			}
 
-			if (isScheduleDate)
+			if (needToLoadNoteAndUnderlyingSummary)
 			{
 				var note = scheduleDay.NoteCollection().FirstOrDefault();
 				vm.InternalNotes = note?.GetScheduleNote(new NormalizeText()) ?? string.Empty;

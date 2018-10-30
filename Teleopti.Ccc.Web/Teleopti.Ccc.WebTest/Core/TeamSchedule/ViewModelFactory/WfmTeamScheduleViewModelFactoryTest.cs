@@ -481,7 +481,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var pa = PersonAssignmentFactory.CreateEmptyAssignment(personInUtc, scenario, period);
 			pa.AddPersonalActivity(activity, period);
 			PersonAssignmentRepository.Has(pa);
-			
+
 
 			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
 			{
@@ -1465,7 +1465,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			{
 				SchedulePublishedToDate = new DateTime(2019, 12, 30)
 			};
-		
+
 			var scenario = CurrentScenario.Has("Default");
 
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(personInUtc, scenario, new DateOnly(scheduleDate));
@@ -1996,6 +1996,27 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModelForPeople(
 				new[] { personInUtc.Id.Value }, new DateOnly());
 
+			result.Total.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldNotReturnScheduleForPeopleWhoDoesNotHaveTeamsPermission()
+		{
+			PermissionProvider.Enable();
+
+			var scheduleDate = new DateTime(2018, 10, 30, 00, 00, 00, DateTimeKind.Utc);
+			var scheduleDateOnly = new DateOnly(scheduleDate);
+
+			var person = PersonFactory.CreatePerson("Test").WithId();
+			var scenario = CurrentScenario.Has("Default");
+
+			var personAssignment1 = new PersonAssignment(person, scenario, scheduleDateOnly);
+			personAssignment1.AddActivity(new Activity("activity1"), new DateTimePeriod(scheduleDate.AddHours(7), scheduleDate.AddHours(18)));
+			ScheduleStorage.Add(personAssignment1);
+
+			var result = Target.CreateViewModelForPeople(new[] { person.Id.Value }, scheduleDateOnly);
+
+			result.Schedules.Should().Be.Empty();
 			result.Total.Should().Be(0);
 		}
 
