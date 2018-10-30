@@ -89,13 +89,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 			return GetPermittedPersonList(people, currentDate, function).Select(x => x.Id.GetValueOrDefault());
 		}
 
-		public IEnumerable<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people, DateOnly date,
-			string function)
+		public IEnumerable<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people, DateOnly date, string function)
 		{
-			var permittedPeople = people.GroupBy(p => p.MyTeam(date))
+			var peopleByTeam = people.ToList().GroupBy(p => p.MyTeam(date));
+
+			var permittedPeople = peopleByTeam
 				.Where(team => team.Key != null && _permissionProvider.HasTeamPermission(function, date, team.Key))
 				.SelectMany(gp => gp.ToList())
-				.ToList();
+				.ToList() ?? new List<IPerson>();
+
+			var uncheckedPeople = peopleByTeam.Where(pg => pg.Key == null).SelectMany(gp => gp.ToList());
+			if (uncheckedPeople.Any())
+			{
+				permittedPeople.AddRange(uncheckedPeople.Where(p => checkIfPersonHasOrganisationDetailPermission(function, p, date)));
+			}
 
 			var loggedOnUser = _loggedOnUser.CurrentUser();
 			var loggedOnUserId = loggedOnUser.Id;
@@ -106,6 +113,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 			{
 				permittedPeople.Add(loggedOnUser);
 			}
+
 
 			return permittedPeople;
 		}
