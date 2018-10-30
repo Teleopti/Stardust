@@ -22,14 +22,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 
 		public void Handle(ClearBpoActionObj clearBpoAction)
 		{
-			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), StaffingAuditActionConstants.ClearBPO, "BPO", "", Guid.NewGuid(), clearBpoAction.StartDate,clearBpoAction.EndDate);
-			staffingAudit.TimeStamp = _now.UtcDateTime();
+			var utcStartDate = DateTime.SpecifyKind(clearBpoAction.StartDate,DateTimeKind.Utc);
+			var utcEndDate = DateTime.SpecifyKind(clearBpoAction.EndDate, DateTimeKind.Utc);
+			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), StaffingAuditActionConstants.ClearBPO, "BPO", "",
+				clearBpoAction.BpoGuid, utcStartDate, utcEndDate) {TimeStamp = _now.UtcDateTime()};
 			_staffingAuditRepository.Add(staffingAudit);
 		}
 
 		public void Handle(ImportBpoActionObj importBpoAction)
 		{
-			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), StaffingAuditActionConstants.ImportBPO, "BPO", "2015-10-05IMPORTFILEFORTELIA");
+			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), StaffingAuditActionConstants.ImportBPO, "BPO", importBpoAction.FileName);
 			staffingAudit.TimeStamp = _now.UtcDateTime();
 			_staffingAuditRepository.Add(staffingAudit);
 		}
