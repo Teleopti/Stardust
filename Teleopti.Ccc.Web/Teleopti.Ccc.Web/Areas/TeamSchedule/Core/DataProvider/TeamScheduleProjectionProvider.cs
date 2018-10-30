@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			bool canViewUnpublished)
 		{
 			var timezone = person.PermissionInformation.DefaultTimeZone();
-
+			
 			var vm = new GroupScheduleShiftViewModel
 			{
 				PersonId = person.Id.GetValueOrDefault().ToString(),
@@ -69,11 +69,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					DisplayName = timezone.DisplayName
 				}
 			};
-
-			if (scheduleDay == null)
-			{
-				return vm;
-			}
 
 			var isScheduleDate = date == scheduleDay.DateOnlyAsPeriod.DateOnly;
 
