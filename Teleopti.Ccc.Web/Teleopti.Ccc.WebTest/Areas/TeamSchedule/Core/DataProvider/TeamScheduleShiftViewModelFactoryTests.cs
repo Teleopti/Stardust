@@ -30,9 +30,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 {
 	[TestFixture, TeamScheduleTest]
-	public class TeamScheduleProjectionProviderTests : IIsolateSystem
+	public class TeamScheduleShiftViewModelFactoryTests : IIsolateSystem
 	{
-		public TeamScheduleProjectionProvider Target;
+		public TeamScheduleShiftViewModelFactory Target;
 		private readonly Scenario scenario = new Scenario("d");
 		public FakeCommonAgentNameProvider CommonAgentNameProvider;
 		public Areas.Global.FakePermissionProvider PermissionProvider;

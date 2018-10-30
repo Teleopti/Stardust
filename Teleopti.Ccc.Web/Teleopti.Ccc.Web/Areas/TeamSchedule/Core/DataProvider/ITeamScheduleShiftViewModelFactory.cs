@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 {
-	public interface ITeamScheduleProjectionProvider
+	public interface ITeamScheduleShiftViewModelFactory
 	{
 		GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential);
 		AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential);

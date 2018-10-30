@@ -2489,12 +2489,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			result.Total.Should().Be(1);
 
 			var first = result.PersonWeekSchedules.First();
-
-			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
-			first.DaySchedules.Count.Should().Be(7);
-			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 29));
-			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 4));
-			first.DaySchedules[3].Date.Should().Be(new DateOnly(2020, 1, 1));
 			first.DaySchedules[3].Title.Should().Be(null);
 			first.DaySchedules[3].IsDayOff.Should().Be.False();
 		}

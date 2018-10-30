@@ -19,7 +19,7 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 {
-	public class TeamScheduleProjectionProvider : ITeamScheduleProjectionProvider
+	public class TeamScheduleShiftViewModelFactory : ITeamScheduleShiftViewModelFactory
 	{
 		private readonly IProjectionProvider _projectionProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly ICommonNameDescriptionSetting _agentNameSetting;
 
-		public TeamScheduleProjectionProvider(IProjectionProvider projectionProvider,
+		public TeamScheduleShiftViewModelFactory(IProjectionProvider projectionProvider,
 			ILoggedOnUser loggedOnUser,
 			IScheduleProjectionHelper projectionHelper,
 			IProjectionSplitter projectionSplitter,
