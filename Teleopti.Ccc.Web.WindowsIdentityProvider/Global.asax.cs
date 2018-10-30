@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider
 
 			var args = new IocArgs(configReader)
 			{
-				DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForWeb()
+				DataSourceApplicationName = DataSourceApplicationName.ForWeb()
 			};
 			var configuration = new IocConfiguration(args, new FalseToggleManager());
 			builder.RegisterModule(new CommonModule(configuration));

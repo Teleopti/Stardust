@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.IocCommon
 		{
 			var iocArgs = new IocArgs(new ConfigReader())
 			{
-				DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest()
+				DataSourceApplicationName = DataSourceApplicationName.ForTest()
 			};
 			return new CommonModule(new IocConfiguration(iocArgs, toggleManager));
 		}
