@@ -1546,6 +1546,7 @@
     <Compile Include="Staffing\ScheduledSTaffingVIewModelCreatorTest.cs" />
     <Compile Include="Staffing\PersonAccessContextReaderServiceTest.cs" />
     <Compile Include="Staffing\StaffingContextReaderServiceTest.cs" />
+    <Compile Include="Staffing\TenantContextReaderServiceTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSettingsTest.cs" />
     <Compile Include="TestWithStaticDependenciesDONOTUSEAttribute.cs" />
     <Compile Include="SiteOpenHours\SiteOpenHoursPersisterTest.cs" />

@@ -180,12 +180,14 @@
     <Compile Include="Aop\IUnitOfWorkNoCommitAspect.cs" />
     <Compile Include="Aop\ReadonlyUnitOfWorkAttribute.cs" />
     <Compile Include="ApplicationLayer\Audit\AuditAggregatorService.cs" />
+    <Compile Include="ApplicationLayer\Audit\AuditServiceModel.cs" />
     <Compile Include="ApplicationLayer\Audit\PersonAccessAuditContext.cs" />
     <Compile Include="ApplicationLayer\Audit\StaffingAuditContext.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\FilterOutRequestsHandledByReadmodel.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistPreloadService.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistProcessPublisher.cs" />
     <Compile Include="ApplicationLayer\Audit\PersonAccessContextReaderService.cs" />
+    <Compile Include="ApplicationLayer\Audit\TenantContextReaderService.cs" />
     <Compile Include="ApplicationLayer\Availability\HandleMultipleAnalyticsAvailabilityDays.cs" />
     <Compile Include="ApplicationLayer\Availability\HandleOneAnalyticsAvailabilityDay.cs" />
     <Compile Include="ApplicationLayer\Badge\IPushMessageSender.cs" />
@@ -203,6 +205,7 @@
     <Compile Include="ApplicationLayer\Intraday\ISkillStaffingIntervalProvider.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedule.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsDateMapper.cs" />
+    <Compile Include="Auditing\ITenantAudit.cs" />
     <Compile Include="Budgeting\BudgetGroupAllowanceCalculatorExtended.cs" />
     <Compile Include="Budgeting\BudgetGroupHeadCountSpecificationExtended.cs" />
     <Compile Include="Common\DefaultSchedulePeriodProvider.cs" />
@@ -645,6 +648,7 @@
     <Compile Include="Staffing\IPersonAccessAuditRepository.cs" />
     <Compile Include="Staffing\IStaffingAudit.cs" />
     <Compile Include="Staffing\IStaffingAuditRepository.cs" />
+    <Compile Include="Staffing\ITenantAuditRepository.cs" />
     <Compile Include="Staffing\StaffingAudit.cs" />
     <Compile Include="ApplicationLayer\Audit\StaffingContextReaderService.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
@@ -4021,6 +4025,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Staffing\TenantAudit.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Staffing\StaffingAudit.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>

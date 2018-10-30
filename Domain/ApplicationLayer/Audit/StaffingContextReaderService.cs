@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 					var bpoName = _skillCombinationResourceRepository.GetSourceBpoByGuid(deserialized.BpoGuid);
 					var startDate = deserialized.StartDate.Date.ToString("d", _userCulture.GetCulture());
 					var endDate = deserialized.EndDate.Date.ToString("d", _userCulture.GetCulture());
-					auditServiceModel.Data = $"BPO name: {bpoName}{Environment.NewLine}Period from {startDate} to {endDate}";
+					auditServiceModel.Data = $"BPO name: {bpoName} Period from {startDate} to {endDate}";
 				}
 
 				auditServiceModelList.Add(auditServiceModel);
@@ -65,14 +65,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 
 			return getAuditServiceModel(staffingAudit);
 		}
-	}
-
-	public class AuditServiceModel
-	{
-		public DateTime TimeStamp { get; set; }
-		public string ActionPerformedBy{ get; set; }
-		public string Action { get; set; }
-		public string Context { get; set; }
-		public string Data { get; set; }
 	}
 }

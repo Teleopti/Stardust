@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<PersonSearchProvider>().SingleInstance();
 			builder.RegisterType<PersonAccessContextReaderService>().SingleInstance();
+			builder.RegisterType<TenantContextReaderService>().SingleInstance();
 			builder.RegisterType<StaffingContextReaderService>().SingleInstance();
 			////may be we should move it to domain or its own module or a global module
 			//if (_config.Toggle(Toggles.Wfm_AuditTrail_StaffingAuditTrail_78125))
