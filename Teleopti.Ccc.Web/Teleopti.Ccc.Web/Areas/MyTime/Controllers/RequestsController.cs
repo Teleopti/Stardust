@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly ICancelAbsenceRequestCommandProvider _cancelAbsenceRequestCommandProvider;
 		private readonly RequestsViewModelMapper _viewModelMapper;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly ILoggedOnUser _loggedOnUser;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory,
 			ITextRequestPersister textRequestPersister,
@@ -52,7 +53,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			IAbsenceRequestDetailViewModelFactory absenceRequestDetailViewModelFactory,
 			ICancelAbsenceRequestCommandProvider cancelAbsenceRequestCommandProvider,
 			RequestsViewModelMapper viewModelMapper,
-			IUserTimeZone userTimeZone)
+			IUserTimeZone userTimeZone,
+			ILoggedOnUser loggedOnUser)
 		{
 			_absenceRequestDetailViewModelFactory = absenceRequestDetailViewModelFactory;
 			_requestsViewModelFactory = requestsViewModelFactory;
@@ -66,6 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_cancelAbsenceRequestCommandProvider = cancelAbsenceRequestCommandProvider;
 			_viewModelMapper = viewModelMapper;
 			_userTimeZone = userTimeZone;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		[HttpGet]
@@ -166,7 +169,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			}
 			try
 			{
-				var model = form.ToModel(_userTimeZone);
+				var model = form.ToModel(_userTimeZone, _loggedOnUser);
 				var result = Retry.Handle<DeadLockVictimException>()
 					.WaitAndRetry(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(4))
 					.Execute(() => _absenceRequestPersister.Persist(model));

@@ -56,10 +56,12 @@
     <Compile Include="CommandDtoProvider.cs" />
     <Compile Include="Command\ActivityLayerDto.cs" />
     <Compile Include="Command\AddAbsenceDto.cs" />
+    <Compile Include="Command\AddIntradayAbsenceRequestHandler.cs" />
     <Compile Include="Command\AddAbsenceHandler.cs" />
+    <Compile Include="Command\AddIntradayAbsenceRequestDto.cs" />
     <Compile Include="Command\RemoveAbsenceDto.cs" />
     <Compile Include="Command\RemoveAbsenceHandler.cs" />
-    <Compile Include="Command\ScheduleChangesListenerDto.cs" />
+    <Compile Include="Command\AddScheduleChangesListenerDto.cs" />
     <Compile Include="Command\AddScheduleChangesListenerHandler.cs" />
     <Compile Include="Command\SetMainShiftDto.cs" />
     <Compile Include="Command\SetMainShiftHandler.cs" />

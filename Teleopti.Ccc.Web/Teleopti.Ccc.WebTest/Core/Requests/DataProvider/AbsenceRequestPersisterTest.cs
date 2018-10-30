@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 			setupPersonSkills(person);
 
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			QueuedAbsenceRequestRepository.LoadAll().Should().Be.Empty();
 			CommandDispatcher.LatestCommand.Should().Not.Be.Null();
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 			setupPersonSkills(person);
 
-			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				, _today.ToDateTimePeriod(new TimePeriod(dateTimePeriodForm.StartTime.Time, dateTimePeriodForm.EndTime.Time)
 					, UserTimeZone.TimeZone()), absence).WithId());
 
-			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
@@ -325,7 +325,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			PersonAbsenceRepository.Add(PersonAbsenceFactory.CreatePersonAbsence(person, scenario
 				, alreadyAbsentPeriod, absence).WithId());
 
-			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				, alreadyAbsentPeriod, absence).WithId());
 			setupPersonSkills(person);
 
-			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
@@ -417,7 +417,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 			form.EntityId = newPersonRequest.Id.GetValueOrDefault();
 
-			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.IsDenied.Should().Be(true);
@@ -458,7 +458,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			});
 
-			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
@@ -502,7 +502,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(new TimeSpan(18, 0, 0))
 			});
 
-			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
@@ -552,7 +552,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(new TimeSpan(8, 0, 0))
 			});
 
-			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
@@ -608,7 +608,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				Period = period
 			};
 			
-			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
@@ -666,7 +666,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				Period = period
 			};
 			
-			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
@@ -719,7 +719,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromMinutes(21))
 			});
 
-			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
@@ -757,7 +757,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			});
 
-			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
@@ -801,7 +801,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			form.EntityId = newPersonRequest.Id.GetValueOrDefault();
 			setupPersonSkills(person);
 
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			var queuedRequest = QueuedAbsenceRequestRepository.LoadAll().FirstOrDefault();
 			queuedRequest.StartDateTime.Should().Be.EqualTo(_today.Date.Add(TimeSpan.FromHours(8)));
@@ -836,11 +836,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			setupPersonSkills(person);
 
-			var result = Target.Persist(form.ToModel(UserTimeZone));
+			var result = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			form.EntityId = result.Id;
 			form.Period.StartTime = new TimeOfDay(TimeSpan.FromHours(1));
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			QueuedAbsenceRequestRepository.UpdateRequestPeriodWasCalled.Should().Be.False();
 		}
@@ -871,11 +871,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			setupPersonSkills(person);
 
-			var result = Target.Persist(form.ToModel(UserTimeZone));
+			var result = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			form.EntityId = result.Id;
 			form.Period.StartTime = new TimeOfDay(TimeSpan.FromHours(1));
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			QueuedAbsenceRequestRepository.UpdateRequestPeriodWasCalled.Should().Be.False();
 		}
@@ -906,11 +906,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			setupPersonSkills(person);
 
-			var result = Target.Persist(form.ToModel(UserTimeZone));
+			var result = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			form.EntityId = result.Id;
 			form.Period.StartTime = new TimeOfDay(TimeSpan.FromHours(1));
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			QueuedAbsenceRequestRepository.UpdateRequestPeriodWasCalled.Should().Be.True();
 			var queuedRequest = QueuedAbsenceRequestRepository.LoadAll().FirstOrDefault();
@@ -944,11 +944,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			setupPersonSkills(person);
 
-			var result = Target.Persist(form.ToModel(UserTimeZone));
+			var result = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			form.EntityId = result.Id;
 			form.Period.StartTime = new TimeOfDay(TimeSpan.FromHours(1));
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			QueuedAbsenceRequestRepository.UpdateRequestPeriodWasCalled.Should().Be.True();
 			var queuedRequest = QueuedAbsenceRequestRepository.LoadAll().FirstOrDefault();
@@ -997,7 +997,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			setupPersonSkills(person);
 
-			var personRequest1 = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest1 = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			personRequest1.IsDenied.Should().Be(false);
 			personRequest1.IsPending.Should().Be(true);
@@ -1053,7 +1053,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			form.EntityId = null;
 			setupPersonSkills(person);
 
-			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
@@ -1069,7 +1069,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			form = createAbsenceRequestForm(dateTimePeriodForm, absence1.Id.Value);
 			form.EntityId = personRequest.Id;
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			CommandDispatcher.LatestCommand.Should().Not.Be.Null();
 		}
@@ -1100,7 +1100,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromMinutes(21))
 			});
 
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.True();
@@ -1137,7 +1137,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
 			});
 
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.False();
@@ -1189,7 +1189,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
 			});
 
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.False();
@@ -1238,7 +1238,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
 			});
 
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.False();
@@ -1281,7 +1281,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
 			});
 
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.False();
@@ -1333,7 +1333,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 			setupPersonSkills(person);
 
-			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.IsDenied.Should().Be(false);
@@ -1382,7 +1382,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
 			});
 
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.True();
@@ -1431,7 +1431,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
 			});
 
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.True();
@@ -1486,7 +1486,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
 			});
 
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.False();
@@ -1536,7 +1536,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 			form.FullDay = true;
 
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.True();
@@ -1580,7 +1580,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 			form.FullDay = true;
 
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.True();
@@ -1621,7 +1621,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
 			});
 
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.True();
@@ -1663,7 +1663,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
 			});
 
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
 			request.IsDenied.Should().Be.False();
@@ -1698,7 +1698,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(7))
 			});
 
-			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			personRequest.Should().Not.Be.Null();
 			personRequest.IsDenied.Should().Be.False();
@@ -1742,7 +1742,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 			setupPersonSkills(person);
 
-			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
@@ -1789,7 +1789,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 			setupPersonSkills(person);
 
-			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
@@ -1834,7 +1834,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 			setupPersonSkills(person);
 
-			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
@@ -1872,7 +1872,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			setupPersonSkills(person);
 
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
 			((DenyRequestCommand)CommandDispatcher.LatestCommand).DenyReason.Should().Be
@@ -1917,7 +1917,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			});
 
 			setupPersonSkills(person);
-			Target.Persist(form.ToModel(UserTimeZone));
+			Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 			CommandDispatcher.LatestCommand.Should().Not.Be.Null();
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
 		}
@@ -1957,7 +1957,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			});
 
-			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 			var request = PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 
 			request.Should().Not.Be(null);
@@ -2002,7 +2002,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
 			});
 
-			var personRequest = Target.Persist(form.ToModel(UserTimeZone));
+			var personRequest = Target.Persist(form.ToModel(UserTimeZone, LoggedOnUser));
 			return PersonRequestRepository.Get(personRequest.Id.GetValueOrDefault());
 		}
 

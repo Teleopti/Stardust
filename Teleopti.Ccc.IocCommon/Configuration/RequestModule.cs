@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
@@ -87,7 +88,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<RequestStrategySettingsReader>().As<IRequestStrategySettingsReader>().SingleInstance();
 			builder.RegisterType<RequestProcessor>().As<IRequestProcessor>().SingleInstance();
-			
+			builder.RegisterType<AbsenceRequestPersister>().As<IAbsenceRequestPersister>();
+			builder.RegisterType<AbsenceRequestModelMapper>().SingleInstance();
+			builder.RegisterType<NewAbsenceRequestHandler>().SingleInstance();
+			builder.RegisterType<ExistingAbsenceRequestHandler>().SingleInstance();
+
 			builder.RegisterType<AbsenceRequestFourteenDaySetting>().As<IAbsenceRequestSetting>().SingleInstance();
 			
 			if (_configuration.Toggle(Toggles.OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944))

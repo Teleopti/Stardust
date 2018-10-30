@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -1036,6 +1037,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldPersistAbsenceRequestForm()
 		{
+			PersonRepository.Add(LoggedOnUser.CurrentUser());
 			var absence = new Absence().WithId();
 			AbsenceRepository.Add(absence);
 			var form = new AbsenceRequestForm
@@ -1495,6 +1497,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldValidatePermissionForCancelAbsenceRequest()
 		{
 			var person = PersonFactory.CreatePerson("Bill", "Bloggins").WithId();
+			PersonRepository.Add(person);
+
 			var data = doCancelAbsenceRequestMyTimeSpecificValidation(person, new DateTimePeriod(2016, 03, 02, 2016, 03, 03),
 				false);
 			data.ErrorMessages.Should().Contain(Resources.InsufficientPermission);
@@ -1503,10 +1507,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldValidateCancellationThresholdForCancelAbsenceRequest()
 		{
-			var today = DateTime.Today.ToUniversalTime();
-			Now.Is(today.Date.AddDays(12));
-
 			var person = PersonFactory.CreatePerson("Bill", "Bloggins").WithId();
+			PersonRepository.Add(LoggedOnUser.CurrentUser());
+			PersonRepository.Add(person);
+
+			var today = DateTime.Today.Utc();
+			Now.Is(today.Date.AddDays(12));
 
 			var data = doCancelAbsenceRequestMyTimeSpecificValidation(person, new DateTimePeriod(today, today.AddDays(1)), true, 10);
 

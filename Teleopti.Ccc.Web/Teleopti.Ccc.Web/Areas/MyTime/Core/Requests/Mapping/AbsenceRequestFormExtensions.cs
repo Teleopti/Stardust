@@ -6,12 +6,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
 	public static class AbsenceRequestFormExtensions
 	{
-		public static AbsenceRequestModel ToModel(this AbsenceRequestForm form, IUserTimeZone timeZone)
+		public static AbsenceRequestModel ToModel(this AbsenceRequestForm form, IUserTimeZone timeZone, ILoggedOnUser loggedOnUser)
 		{
 			return new AbsenceRequestModel
 			{
 				Period = form.Period.Map(timeZone), AbsenceId = form.AbsenceId, FullDay = form.FullDay,
-				Message = form.Message, Subject = form.Subject, PersonRequestId = form.EntityId
+				Message = form.Message, Subject = form.Subject, PersonRequestId = form.EntityId,
+				PersonId = loggedOnUser.CurrentUser().Id.GetValueOrDefault()
 			};
 		}
 	}

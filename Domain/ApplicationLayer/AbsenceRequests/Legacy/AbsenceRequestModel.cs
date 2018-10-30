@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy
 		public DateTimePeriod Period;
 		public string Message;
 		public Guid AbsenceId;
+		public Guid PersonId;
 		public bool FullDay;
 		public Guid? PersonRequestId;
 		public bool IsNew => !PersonRequestId.HasValue;

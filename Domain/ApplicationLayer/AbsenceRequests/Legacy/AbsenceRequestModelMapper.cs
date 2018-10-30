@@ -6,13 +6,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy
 {
 	public class AbsenceRequestModelMapper
 	{
-		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IAbsenceRepository _absenceRepository;
+		private readonly IPersonRepository _personRepository;
 
-		public AbsenceRequestModelMapper(ILoggedOnUser loggedOnUser, IAbsenceRepository absenceRepository)
+		public AbsenceRequestModelMapper(IAbsenceRepository absenceRepository, IPersonRepository personRepository)
 		{
-			_loggedOnUser = loggedOnUser;
 			_absenceRepository = absenceRepository;
+			_personRepository = personRepository;
 		}
 
 		public IPersonRequest MapExistingAbsenceRequest(AbsenceRequestModel source, IPersonRequest existingPersonRequest)
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy
 
 		public IPersonRequest MapNewAbsenceRequest(AbsenceRequestModel source)
 		{
-			var personRequest = new PersonRequest(_loggedOnUser.CurrentUser()) {Subject = source.Subject};
+			var personRequest = new PersonRequest(_personRepository.Get(source.PersonId)) {Subject = source.Subject};
 			
 			personRequest.TrySetMessage(source.Message ?? string.Empty);
 			personRequest.Request = new AbsenceRequest(_absenceRepository.Load(source.AbsenceId), source.Period)

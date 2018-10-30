@@ -49,26 +49,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy
 			_absenceRequestSetting = absenceRequestSetting;
 		}
 
-		public IPersonRequest Persist(AbsenceRequestModel form)
+		public IPersonRequest Persist(AbsenceRequestModel model)
 		{
-			if (form.IsNew)
+			if (model.IsNew)
 			{
-				var personRequest = addRequest(form);
+				var personRequest = addRequest(model);
 				_newAbsenceRequestHandler.Handle(personRequest);
 				return personRequest;
 			}
 			else
 			{
-				var personRequest = _personRequestRepository.Find(form.PersonRequestId.Value);
-				updateRequest(form, personRequest);
+				var personRequest = _personRequestRepository.Find(model.PersonRequestId.Value);
+				updateRequest(model, personRequest);
 				_existingAbsenceRequestHandler.Handle(personRequest);
 				return personRequest;
 			}
 		}
 
-		private IPersonRequest addRequest(AbsenceRequestModel form)
+		private IPersonRequest addRequest(AbsenceRequestModel model)
 		{
-			var personRequest = _mapper.MapNewAbsenceRequest(form);
+			var personRequest = _mapper.MapNewAbsenceRequest(model);
 			using (_disableDeletedFilter.Disable())
 			{
 				_skillTypeRepository.LoadAll();
@@ -80,10 +80,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy
 			return personRequest;
 		}
 
-		private void updateRequest(AbsenceRequestModel form, IPersonRequest personRequest)
+		private void updateRequest(AbsenceRequestModel model, IPersonRequest personRequest)
 		{
 			var existingPeriod = personRequest.Request.Period;
-			_mapper.MapExistingAbsenceRequest(form, personRequest);
+			_mapper.MapExistingAbsenceRequest(model, personRequest);
 
 			executeSynchronousValidations(personRequest);
 

@@ -129,7 +129,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ShiftTradeRequestPersonToPermissionValidator>().As<IShiftTradeRequestPersonToPermissionValidator>();
 			builder.RegisterType<ShiftExchangeOfferPersister>().As<IShiftExchangeOfferPersister>();
 			builder.RegisterType<ShiftTradeRequestPersister>().As<IShiftTradeRequestPersister>();
-			builder.RegisterType<AbsenceRequestPersister>().As<IAbsenceRequestPersister>();
 			builder.RegisterType<OvertimeRequestPersister>().As<IOvertimeRequestPersister>();
 			builder.RegisterType<ShiftTradeRequestProvider>().As<IShiftTradeRequestProvider>().SingleInstance();
 			builder.RegisterType<RespondToShiftTrade>().As<IRespondToShiftTrade>();
@@ -191,9 +190,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<DayScheduleViewModelMapper>().SingleInstance();
 			builder.RegisterType<ExtendedPreferenceTemplateMapper>().SingleInstance();
 			builder.RegisterType<TextRequestFormMapper>().SingleInstance();
-			builder.RegisterType<AbsenceRequestModelMapper>().SingleInstance();
-			builder.RegisterType<NewAbsenceRequestHandler>().SingleInstance();
-			builder.RegisterType<ExistingAbsenceRequestHandler>().SingleInstance();
 			builder.RegisterType<OvertimeRequestFormMapper>().SingleInstance();
 			builder.RegisterType<PreferenceNightRestChecker>().As<IPreferenceNightRestChecker>().SingleInstance();
 			builder.RegisterType<ShiftTradeMultiSchedulesSelectableChecker>().As<IShiftTradeMultiSchedulesSelectableChecker>().SingleInstance();
