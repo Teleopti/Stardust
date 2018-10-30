@@ -46,28 +46,27 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		public GroupScheduleShiftViewModel MakeViewModel(
 			IPerson person,
 			DateOnly date,
-			IScheduleDay scheduleDay, 
+			IScheduleDay scheduleDay,
 			IScheduleDay previousScheduleDay,
-			bool canViewConfidential, 
-			bool canViewUnpublished, 
-			bool isScheduleDate)
+			bool canViewConfidential,
+			bool canViewUnpublished)
 		{
-			var personPeriod = person.Period(date);
+			var timezone = person.PermissionInformation.DefaultTimeZone();
+
 			var vm = new GroupScheduleShiftViewModel
 			{
 				PersonId = person.Id.GetValueOrDefault().ToString(),
 				Name = _agentNameSetting.BuildFor(person),
 				Date = date.Date.ToServiceDateFormat(),
 				Projection = new List<GroupScheduleProjectionViewModel>(),
-				MultiplicatorDefinitionSetIds =
-				(personPeriod?.PersonContract?.Contract.MultiplicatorDefinitionSetCollection.Count > 0)
-					? personPeriod.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Select(s => s.Id.GetValueOrDefault())
-						.ToList()
-					: null,
+				MultiplicatorDefinitionSetIds = person.Period(date)?
+												.PersonContract?
+												.Contract?
+												.MultiplicatorDefinitionSetCollection?.Select(s => s.Id.GetValueOrDefault()).ToList(),
 				Timezone = new TimeZoneViewModel
 				{
-					IanaId = _ianaTimeZoneProvider.WindowsToIana(person.PermissionInformation.DefaultTimeZone().Id),
-					DisplayName = person.PermissionInformation.DefaultTimeZone().DisplayName
+					IanaId = _ianaTimeZoneProvider.WindowsToIana(timezone.Id),
+					DisplayName = timezone.DisplayName
 				}
 			};
 
@@ -75,7 +74,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			{
 				return vm;
 			}
-			
+
+			var isScheduleDate = date == scheduleDay.DateOnlyAsPeriod.DateOnly;
+
 			if (scheduleDay.IsFullyPublished || canViewUnpublished)
 			{
 				vm = Projection(scheduleDay, canViewConfidential);
@@ -91,7 +92,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				vm.InternalNotes = note?.GetScheduleNote(new NormalizeText()) ?? string.Empty;
 
 				var publicNote = scheduleDay.PublicNoteCollection().FirstOrDefault();
-				vm.PublicNotes = publicNote?.GetScheduleNote(new NormalizeText()) ?? String.Empty;
+				vm.PublicNotes = publicNote?.GetScheduleNote(new NormalizeText()) ?? string.Empty;
 			}
 
 			var pa = scheduleDay.PersonAssignment();

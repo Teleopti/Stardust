@@ -73,9 +73,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			var canViewConfidential = false;
 			var canViewUnpublished = false;
-			var includeNote = false;
 
-			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, canViewConfidential, canViewUnpublished, includeNote);
+			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, canViewConfidential, canViewUnpublished);
 
 			viewModel.PersonId.Should().Be.EqualTo(person.Id.Value.ToString());
 			viewModel.Name.Should().Be.EqualTo("billgates");
@@ -120,11 +119,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			var canViewConfidential = false;
 			var canViewUnpublished = false;
-			var includeNote = false;
 
-			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, canViewConfidential, canViewUnpublished, includeNote);
+			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, canViewConfidential, canViewUnpublished);
 
-			var viewModelForPerson2 = Target.MakeViewModel(person2, date, scheduleDayForPerson2, null, canViewConfidential, canViewUnpublished, includeNote);
+			var viewModelForPerson2 = Target.MakeViewModel(person2, date, scheduleDayForPerson2, null, canViewConfidential, canViewUnpublished);
 
 			viewModel.IsProtected.Should().Be(true);
 			viewModelForPerson2.IsProtected.Should().Be(false);
@@ -143,18 +141,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			var canViewConfidential = false;
 			var canViewUnpublished = false;
-			var includeNote = false;
 
-			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, canViewConfidential, canViewUnpublished, includeNote);
-
-			viewModel.PersonId.Should().Be.EqualTo(person.Id.Value.ToString());
-			viewModel.Name.Should().Be.EqualTo("billgates");
-			viewModel.Date.Should().Be.EqualTo(date.Date.ToGregorianDateTimeString().Remove(10));
-			viewModel.Projection.Count().Should().Be(0);
+			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, canViewConfidential, canViewUnpublished);
+			
 			viewModel.MultiplicatorDefinitionSetIds.Should().Be.Null();
-			viewModel.InternalNotes.Should().Be.NullOrEmpty();
-			viewModel.Timezone.IanaId.Should().Be(timezoneChina.Id);
-			viewModel.Timezone.DisplayName.Should().Be(timezoneChina.DisplayName);
 		}
 
 		[Test]
@@ -178,18 +168,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			var canViewConfidential = false;
 			var canViewUnpublished = false;
-			var includeNote = false;
 
-			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, canViewConfidential, canViewUnpublished, includeNote);
-
-			viewModel.PersonId.Should().Be.EqualTo(person.Id.Value.ToString());
-			viewModel.Name.Should().Be.EqualTo("billgates");
-			viewModel.Date.Should().Be.EqualTo(date.Date.ToGregorianDateTimeString().Remove(10));
-			viewModel.Projection.Count().Should().Be(0);
-			viewModel.MultiplicatorDefinitionSetIds.Should().Be.Null();
-			viewModel.InternalNotes.Should().Be.NullOrEmpty();
-			viewModel.Timezone.IanaId.Should().Be(timezoneChina.Id);
-			viewModel.Timezone.DisplayName.Should().Be(timezoneChina.DisplayName);
+			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, canViewConfidential, canViewUnpublished);
+			viewModel.MultiplicatorDefinitionSetIds.Should().Be.Empty();
 		}
 
 		[Test]
@@ -213,7 +194,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var note = new PublicNote(person, date, scenario, "Oh my God");
 			scheduleDay.Add(note);
 
-			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, false, false, true);
+			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, false, false);
 
 			viewModel.PublicNotes.Should().Be.EqualTo("Oh my God");
 		}

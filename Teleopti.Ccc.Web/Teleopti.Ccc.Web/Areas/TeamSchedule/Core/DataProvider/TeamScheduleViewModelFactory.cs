@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							  let scheduleDay = personScheduleRange.ScheduledDay(date)
 							  where scheduleDay != null
 							  select _teamScheduleProjectionProvider.MakeViewModel(person, date, scheduleDay, personScheduleRange.ScheduledDay(date.AddDays(-1)), canViewConfidential,
-								  canSeeUnpublishedSchedules, date == scheduleDate));
+								  canSeeUnpublishedSchedules));
 			}
 
 			return new GroupScheduleViewModel
@@ -274,11 +274,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				var isPreviousDayScheduled = scheduleDaysForPreviousDayLookup.Contains(person);
 				var schedulePreviousDay = isPreviousDayScheduled ? scheduleDaysForPreviousDayLookup[person].FirstOrDefault() : null;
 
-				list.Add(_teamScheduleProjectionProvider.MakeViewModel(person, date, currentScheduleDay, schedulePreviousDay, canViewConfidential, canSeeUnpublishedSchedules, true));
+				list.Add(_teamScheduleProjectionProvider.MakeViewModel(person, date, currentScheduleDay, schedulePreviousDay, canViewConfidential, canSeeUnpublishedSchedules));
 
-				list.Add(_teamScheduleProjectionProvider.MakeViewModel(person, previousDay, schedulePreviousDay, null, canViewConfidential, canSeeUnpublishedSchedules, false));
+				list.Add(_teamScheduleProjectionProvider.MakeViewModel(person, previousDay, schedulePreviousDay, null, canViewConfidential, canSeeUnpublishedSchedules));
 
-				list.Add(_teamScheduleProjectionProvider.MakeViewModel(person, nextDay, scheduleDaysForNextDayLookup[person].First(), currentScheduleDay, canViewConfidential, canSeeUnpublishedSchedules, false));
+				list.Add(_teamScheduleProjectionProvider.MakeViewModel(person, nextDay, scheduleDaysForNextDayLookup[person].First(), currentScheduleDay, canViewConfidential, canSeeUnpublishedSchedules));
 
 			}
 
