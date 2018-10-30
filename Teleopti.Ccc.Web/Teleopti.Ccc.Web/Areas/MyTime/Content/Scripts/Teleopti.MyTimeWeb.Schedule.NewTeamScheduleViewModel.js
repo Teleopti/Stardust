@@ -162,7 +162,8 @@
 			self.startTimeStart() != defaultFilterTime ||
 				self.startTimeEnd() != defaultFilterTime ||
 				self.endTimeStart() != defaultFilterTime ||
-				self.endTimeEnd() != defaultFilterTime
+				self.endTimeEnd() != defaultFilterTime ||
+				self.showOnlyNightShift() == true
 		);
 
 		self.loadedAgentIndex = 0;
@@ -323,7 +324,7 @@
 
 				self.filterChangedCallback(self.selectedDate());
 			}
-
+			self.hasTimeFiltered(value);
 			setShowOnlyDayOffSubscription();
 		});
 	}
@@ -337,6 +338,7 @@
 			disposeShowOnlyNightShiftSubscription();
 
 			self.showOnlyNightShift(false);
+			self.hasTimeFiltered(false);
 			if (!self.isMobileEnabled) {
 				self.filter.onlyNightShift = false;
 

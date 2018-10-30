@@ -116,11 +116,11 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.263\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.264\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.263\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.264\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -177,6 +177,12 @@
     <Compile Include="Aop\IUnitOfWorkNoCommitAspect.cs" />
     <Compile Include="Aop\ReadonlyUnitOfWorkAttribute.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\FilterOutRequestsHandledByReadmodel.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\AbsenceRequestModel.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\AbsenceRequestModelMapper.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\AbsenceRequestPersister.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\ExistingAbsenceRequestHandler.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\IAbsenceRequestPersister.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\NewAbsenceRequestHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistPreloadService.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistProcessPublisher.cs" />
     <Compile Include="ApplicationLayer\Availability\HandleMultipleAnalyticsAvailabilityDays.cs" />
@@ -290,6 +296,7 @@
     <Compile Include="Scheduling\AgentsWithWhiteSpots.cs" />
     <Compile Include="Scheduling\AlreadyScheduledAgents.cs" />
     <Compile Include="Scheduling\ReducedSkillsProvider.cs" />
+    <Compile Include="Scheduling\SchedulingFilterAgentsByHints.cs" />
     <Compile Include="Scheduling\WebClearScheduleStardustHandler.cs" />
     <Compile Include="Scheduling\IPredictShiftCategory.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModelLoader.cs" />

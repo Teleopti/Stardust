@@ -30,6 +30,15 @@ namespace Teleopti.Ccc.Infrastructure.Util
 
 				policy.Execute(action);
 			}
+			
+			public T Execute<T>(Func<T> action)
+			{
+				var policy = _waitTimes.IsEmpty()
+					? (Policy)Policy.NoOp()
+					: Policy.Handle<TException>().WaitAndRetry(_waitTimes);
+
+				return policy.Execute(action);
+			}
 		}
 	}
 }

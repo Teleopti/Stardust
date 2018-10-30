@@ -30,9 +30,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private static void registerDataSourcesFactoryDependencies(ContainerBuilder builder)
 		{
 			builder.RegisterType<NoLicenseServiceInitialization>().As<IInitializeLicenseServiceForTenant>().SingleInstance();
-			builder.Register(c => DataSourceConfigurationSetter.ForServiceBus())
-				.As<IDataSourceConfigurationSetter>()
-				.SingleInstance();
 		}
 
 	}

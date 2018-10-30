@@ -107,6 +107,7 @@ ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348 = RC
 ResourcePlanner_SeamlessPlanningForPreferences_76288 = true # Perf will go down and we will fix with additional stories
 ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941 = RC
+ResourcePlanner_FasterSeamlessPlanningForPreferences_78286 = DEV
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true

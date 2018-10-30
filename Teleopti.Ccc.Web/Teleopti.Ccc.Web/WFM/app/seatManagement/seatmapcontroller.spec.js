@@ -34,7 +34,7 @@ describe('seatmap controller tests', function() {
 
 	function setUpController($controller) {
 		var scope = $rootScope.$new();
-		return $controller('SeatMapCanvasCtrl', {
+		return $controller('SeatMapCanvasController', {
 			$scope: scope,
 			canvasUtils: seatMapCanvasUtilsService
 		});

@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		public override AgentsAndOccupancy AgentsUseOccupancy(double serviceLevel, int serviceTime, double tasks, double aht, TimeSpan periodLength,
 			double minOcc, double maxOcc, int maxParallelTasks, double abandonRate)
 		{
-			var result = _agentsNeededAbandonment.CalculateNumberOfAgentsNeededAbandon(tasks / maxParallelTasks, aht, serviceTime, serviceLevel,
+			var result = _agentsNeededAbandonment.Execute(tasks / maxParallelTasks, aht, serviceTime, serviceLevel,
 				(int)periodLength.TotalSeconds, minOcc, maxOcc, abandonRate);
 
 
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				return LinearEsl(forecastedAgents, agents, sla);
 			}
 
-			return EstimatedServiceLevelAbandonment.CalculateServiceLevelAbandonment(agents, calls / maxParellelTasks, aht, (int)serviceTime, (int)intervalLength.TotalSeconds, 
+			return EstimatedServiceLevelAbandonment.Execute(agents, calls / maxParellelTasks, aht, (int)serviceTime, (int)intervalLength.TotalSeconds, 
 				forecastedAgents, sla, abandonRate);
 		}
 
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				return LinearEsl(forecastedAgents, agents, sla);
 			}
 
-			return _estimatedServiceLevel.CalculateEstimatedServiceLevel(agents, calls / maxParellelTasks, aht, 10000000, (int) serviceTime, (int) intervalLength.TotalSeconds, forecastedAgents,sla);
+			return _estimatedServiceLevel.Execute(agents, calls / maxParellelTasks, aht, 10000000, (int) serviceTime, (int) intervalLength.TotalSeconds, forecastedAgents,sla);
 		}
 	}
 
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		public override AgentsAndOccupancy AgentsUseOccupancy(double serviceLevel, int serviceTime, double tasks, double aht, TimeSpan periodLength,
 			double minOcc, double maxOcc, int maxParallelTasks, double abandonRate)
 		{
-			var result = _agentsNeeded.CalculateNumberOfAgentsNeeded(tasks / maxParallelTasks, aht, 10000000, serviceTime, serviceLevel,
+			var result = _agentsNeeded.Execute(tasks / maxParallelTasks, aht, 10000000, serviceTime, serviceLevel,
 				(int)periodLength.TotalSeconds, minOcc, maxOcc);
 
 			return new AgentsAndOccupancy()

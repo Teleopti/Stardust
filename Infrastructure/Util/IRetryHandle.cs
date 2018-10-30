@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Infrastructure.Util
 	{
 		IRetryHandle WaitAndRetry(params TimeSpan[] waitTimes);
 		void Do(Action action);
+		T Execute<T>(Func<T> action);
 	}
 }
