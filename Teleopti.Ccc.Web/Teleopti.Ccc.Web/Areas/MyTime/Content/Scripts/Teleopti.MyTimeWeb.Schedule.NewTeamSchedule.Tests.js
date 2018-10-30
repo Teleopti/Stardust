@@ -1079,6 +1079,7 @@
 
 		equal(completeLoadedCount, 2);
 		equal(ajaxOption.ScheduleFilter.onlyNightShift, true);
+		equal(vm.hasTimeFiltered(), true);
 		equal($('.teammates-schedules-container .teammates-schedules-column').length == 2, true);
 	});
 
@@ -1109,6 +1110,7 @@
 		equal(completeLoadedCount, 3);
 		equal(ajaxOption.ScheduleFilter.isDayOff, true);
 		equal(ajaxOption.ScheduleFilter.onlyNightShift, false);
+		equal(vm.hasTimeFiltered(), false);
 	});
 
 	test('should restore show only day off toggle state after clicking cancel button on mobile', function() {
@@ -1132,6 +1134,24 @@
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
+	test('should set showOnlyNightShift after turn on show only night shifts toggle and click search button on mobile', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
+			return true;
+		};
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		$('.new-teamschedule-team-filter a').click();
+		$('.show-only-night-shift-toggle input').click();
+		$('.new-teamschedule-submit-buttons .btn-primary').click();
+
+		equal(vm.showOnlyNightShift(), true);
+		equal(vm.hasTimeFiltered(), true);
+
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
+	});
+
 	test('should restore show only night shifts toggle state after clicking cancel button on mobile', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
@@ -1150,6 +1170,8 @@
 
 		equal(completeLoadedCount, 2);
 		equal(vm.showOnlyNightShift(), true);
+		equal(vm.hasTimeFiltered(), true);
+
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
@@ -1188,6 +1210,7 @@
 
 		equal(completeLoadedCount, 1);
 		equal(vm.showOnlyNightShift(), false);
+		equal(vm.hasTimeFiltered(), false);
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
