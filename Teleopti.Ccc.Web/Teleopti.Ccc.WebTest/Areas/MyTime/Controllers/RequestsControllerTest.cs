@@ -1477,7 +1477,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var date = new DateOnly(2016, 03, 02);
 			Now.Is(new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc));
-			//var skill = SkillFactory.CreateSkill("skill", SkillTypeFactory.CreateSkillType(), 15);
 			var personSkill = PersonSkillFactory.CreatePersonSkill("skill",1);
 			SkillRepository.Add(personSkill.Skill);
 			var currentUser = ThreadPrincipalContext.Current().GetPerson(PersonRepository);
