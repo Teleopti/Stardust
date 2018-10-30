@@ -511,7 +511,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<AlreadyScheduledAgentsNullObject>().As<IAlreadyScheduledAgents>().SingleInstance();
 			}
-			builder.RegisterType<SchedulingFilterAgentsByHints>().SingleInstance();
+
+			if (_configuration.Toggle(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288))
+			{
+				builder.RegisterType<SchedulingFilterAgentsByHints>().As<ISchedulingFilterAgentsByHints>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<NoSchedulingFilterAgentsByHints>().As<ISchedulingFilterAgentsByHints>().SingleInstance();
+			}
+
+			
 			
 			builder.RegisterType<AgentsWithWhiteSpots>().SingleInstance();
 			builder.RegisterType<BlockSchedulingPreferenceHint>().As<IScheduleHint>().SingleInstance();

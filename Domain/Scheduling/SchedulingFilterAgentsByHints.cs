@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public class SchedulingFilterAgentsByHints
+	public class SchedulingFilterAgentsByHints : ISchedulingFilterAgentsByHints
 	{
 		private readonly CheckScheduleHints _basicCheckScheduleHints;
 
@@ -24,6 +24,22 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var agentIdsWithHint = validationResult.InvalidResources.Where(x=> x.ValidationErrors.Any(y => y.ErrorResource != nameof(Resources.NoMatchingSchedulePeriod))).Select(x => x.ResourceId);
 			var agentsWithoutHints = agents.Where(agent => !agentIdsWithHint.Contains(agent.Id.Value)).ToList();
 			return agentsWithoutHints;
+		}
+	}
+	
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_FasterSeamlessPlanningForPreferences_78286)]
+	public interface ISchedulingFilterAgentsByHints
+	{
+		IEnumerable<IPerson> Execute(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod, IBlockPreferenceProvider blockPreferenceProvider);
+	}
+
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_FasterSeamlessPlanningForPreferences_78286)]
+	public class NoSchedulingFilterAgentsByHints : ISchedulingFilterAgentsByHints
+	{
+		public IEnumerable<IPerson> Execute(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod,
+			IBlockPreferenceProvider blockPreferenceProvider)
+		{
+			return agents;
 		}
 	}
 }
