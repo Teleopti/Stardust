@@ -218,15 +218,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				}
 			}
 
-			var peopleCanSeeConfidentialAbsencesFor = _searchProvider.GetPermittedPersonIdList(permittedPersons, date,
-					DefinedRaptorApplicationFunctionPaths.ViewConfidential).ToList();
-
 			if (!input.IsOnlyAbsences)
 			{
-				peopleCanViewUnpublishedFor = _searchProvider
-					.GetPermittedPersonIdList(permittedPersons, date, DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)
-				   .ToList();
-
 				scheduleDays = _scheduleProvider.GetScheduleForPersons(date, permittedPersons, true).ToList();
 			}
 
@@ -241,6 +234,19 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				: personScheduleDaysToSort.ToList();
 
 			var personsForCurrentPage = personScheduleDayPairsForCurrentPage.Select(pair => pair.Item1).ToList();
+
+			var peopleCanSeeConfidentialAbsencesFor = _searchProvider.GetPermittedPersonIdList(personsForCurrentPage, date,
+				DefinedRaptorApplicationFunctionPaths.ViewConfidential).ToList();
+			if (!input.IsOnlyAbsences)
+			{
+				peopleCanViewUnpublishedFor = _searchProvider
+					.GetPermittedPersonIdList(personsForCurrentPage, date, DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)
+				   .ToList();
+			}
+			else
+			{
+				peopleCanViewUnpublishedFor = peopleCanViewUnpublishedFor.Where(pid => personsForCurrentPage.Any(p => p.Id == pid)).ToList();
+			}
 
 			var previousDay = date.AddDays(-1);
 			var scheduleDaysForPreviousDayLookup = _scheduleProvider.GetScheduleForPersons(previousDay, personsForCurrentPage).ToLookup(p => p.Person);
@@ -296,7 +302,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					};
 				}
 			}
-			
+
 			var pagedPeople = input.PageSize > 0
 				? people.OrderBy(p => p.Name.LastName).Skip(input.PageSize * (input.CurrentPageIndex - 1)).Take(input.PageSize).ToList()
 				: people.ToList();
@@ -315,17 +321,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var peopleCanSeeConfidentialFor =
 				weekDays.ToDictionary(d => d, d => _searchProvider.GetPermittedPersonIdList(pagedPeople, input.DateInUserTimeZone,
 					DefinedRaptorApplicationFunctionPaths.ViewConfidential));
-			
+
 			return new GroupWeekScheduleViewModel
 			{
 				PersonWeekSchedules = pagedPeople
-				.Select(person=> _shiftViewModelFactory.MakeWeekViewModel(person, weekDays, scheduleDays, peopleCanSeeUnpublishedSchedulesFor, peopleCanSeeConfidentialFor))
+				.Select(person => _shiftViewModelFactory.MakeWeekViewModel(person, weekDays, scheduleDays, peopleCanSeeUnpublishedSchedulesFor, peopleCanSeeConfidentialFor))
 				.ToList(),
 				Total = people.Count
 			};
 		}
 
-		
+
 
 		private bool isResultTooMany(IList<IPerson> people)
 		{
