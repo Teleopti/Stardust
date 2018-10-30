@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using NHibernate;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -66,6 +67,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		   
 
 			return ret;
+		}
+
+		public IDictionary<IPerson, IPersonAccountCollection> FindByUsersAndPeriod(IEnumerable<IPerson> persons, DateOnlyPeriod period)
+		{
+			return new dic(new Dictionary<IPerson, IPersonAccountCollection>());
 		}
 
 		public IPersonAccountCollection Find(IPerson person)

@@ -8,9 +8,13 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using System;
+using NHibernate.Criterion;
+using NHibernate.Proxy;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -109,6 +113,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(false, result.ContainsKey(person2));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(result[person1].Find(abs).AccountCollection()));    
         }
+
+		[Test]
+		[Ignore("78487 to be fixed")]
+		public void ShouldFindByUsersAndPeriod()
+		{
+			var period = new DateOnlyPeriod(new DateOnly(2018, 10, 1), new DateOnly(2018, 10, 20));
+			var absence = createAbsenceInDb();
+			var personToFind = createPersonInDb();
+			var otherPerson = createPersonInDb();
+			var personToFindAbsenceAccount = new PersonAbsenceAccount(personToFind, absence);
+			var otherPersonAbsenceAccount = new PersonAbsenceAccount(otherPerson, absence);
+			var accountToFind = new AccountTime(period.StartDate);
+			var otherAccount = new AccountTime(period.StartDate.AddDays(-1));
+			var otherPersonAccount = new AccountTime(period.StartDate);
+			personToFindAbsenceAccount.Add(accountToFind);
+			personToFindAbsenceAccount.Add(otherAccount);
+			otherPersonAbsenceAccount.Add(otherPersonAccount);
+			PersistAndRemoveFromUnitOfWork(personToFindAbsenceAccount);
+			PersistAndRemoveFromUnitOfWork(otherPersonAbsenceAccount);
+			var repository = new PersonAbsenceAccountRepository(UnitOfWork);
+
+			var result = repository.FindByUsersAndPeriod(new[] {personToFind}, period);
+
+			result.Count.Should().Be.EqualTo(1);
+			result[personToFind].PersonAbsenceAccounts().Single().AccountCollection().Single().Should().Be.EqualTo(accountToFind);
+		}
 
 
         [Test]
