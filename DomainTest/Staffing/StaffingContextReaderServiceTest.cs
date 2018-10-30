@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		[Test]
 		public void ShouldLoadStaffingAuditContext()
 		{
-			StaffingAuditRepository.Add(new StaffingAudit(PersonFactory.CreatePersonWithId(), StaffingAuditActionConstants.ImportBPO, "", "BPO"));
+			StaffingAuditRepository.Add(new StaffingAudit(PersonFactory.CreatePersonWithId(), StaffingAuditActionConstants.ImportBPO,  "BPO", "abc.txt"));
 			Target.LoadAll().Should().Not.Be.Empty();
 		}
 
@@ -53,8 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			clearBPOAction.BpoGuid = activeBPOModel.Id;
 			clearBPOAction.StartDate = new DateTime(2018,10,01);
 			clearBPOAction.EndDate = new DateTime(2019,10,01);
-			var data = JsonConvert.SerializeObject(clearBPOAction);
-			StaffingAuditRepository.Add(new StaffingAudit(person, StaffingAuditActionConstants.ClearBPO, data, "BPO"));
+			StaffingAuditRepository.Add(new StaffingAudit(person, StaffingAuditActionConstants.ClearBPO,  "BPO", "",clearBPOAction.BpoGuid,clearBPOAction.StartDate,clearBPOAction.EndDate));
 
 			Target.LoadAll().FirstOrDefault().Data.Should().Be.EqualTo(expectedResult);
 		}
@@ -63,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public void ShouldReturnStaffingAuditOnImportBpoAction()
 		{
 			var expectedResult = "File name: abc.txt";
-			StaffingAuditRepository.Add(new StaffingAudit(PersonFactory.CreatePersonWithId(), StaffingAuditActionConstants.ImportBPO, "abc.txt", "BPO"));
+			StaffingAuditRepository.Add(new StaffingAudit(PersonFactory.CreatePersonWithId(), StaffingAuditActionConstants.ImportBPO, "BPO", "abc.txt"));
 			Target.LoadAll().FirstOrDefault().Data.Should().Be.EqualTo(expectedResult);
 		}
 
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public void ShouldReturnStaffingAuditForTheGivenParameters()
 		{
 			var person = PersonFactory.CreatePersonWithId();
-			var staffingAudit = new StaffingAudit(person, StaffingAuditActionConstants.ImportBPO, "", "BPO");
+			var staffingAudit = new StaffingAudit(person, StaffingAuditActionConstants.ImportBPO,  "BPO", "abc.txt");
 			staffingAudit.TimeStamp = DateTime.UtcNow;			
 			StaffingAuditRepository.Add(staffingAudit);
 			var list = Target.LoadAll();

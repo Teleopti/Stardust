@@ -23,18 +23,33 @@
 					not-null="true"
 					length="255"
 					type="string" />
-	  
-	  <property name="Data"
-			 access="property"
-				not-null="true"
-				length="8001"
-				type="string" />
 	
-	  <property name="Area"
+     <property name="Area"
 				access="property"
 				not-null="true"
 				length="255"
 				type="string" />
+	 
+	  <property name="ImportFileName"
+				access="property"
+				not-null="false"
+				length="500"
+				type="string" />
+
+	 <property name="BpoId"
+				access="property"
+				not-null="false"
+				type="guid" />
+	  
+	  <property name="ClearPeriodStart"
+				access="property"
+				not-null="false"
+				type="UtcDateTime" />
+	  
+	  <property name="ClearPeriodEnd"
+				access="property"
+				not-null="false"
+				type="UtcDateTime" />
 	  
     <many-to-one name="ActionPerformedBy"
       class="Teleopti.Ccc.Domain.Common.Person"

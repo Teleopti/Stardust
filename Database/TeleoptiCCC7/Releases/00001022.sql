@@ -3,8 +3,11 @@ CREATE TABLE [Auditing].[StaffingAudit](
 	[TimeStamp] [datetime] NOT NULL,
 	[ActionPerformedBy] [uniqueidentifier] NOT NULL,
 	[Action] [nvarchar](255) NOT NULL,
-	[Data] [nvarchar](max) NOT NULL,
 	[Area] [nvarchar](255) NOT NULL,
+	[ImportFileName] [nvarchar](500),
+	[BpoId] [uniqueidentifier],
+	[ClearPeriodStart] [datetime],
+	[ClearPeriodEnd] [datetime],
  CONSTRAINT [PK_StaffingAudit] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

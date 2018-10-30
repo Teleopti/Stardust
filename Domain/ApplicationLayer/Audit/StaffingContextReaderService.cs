@@ -41,14 +41,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 					ActionPerformedBy = audit.ActionPerformedBy.Name.ToString(NameOrderOption.FirstNameLastName)
 				};
 				if (audit.Action.Equals(StaffingAuditActionConstants.ImportBPO))
-					auditServiceModel.Data = $"File name: {audit.Data}";
+					auditServiceModel.Data = $"File name: {audit.ImportFileName}";
 				else
 				{
-					var deserialized = JsonConvert.DeserializeObject<ClearBpoActionObj>(audit.Data);
+					//var deserialized = JsonConvert.DeserializeObject<ClearBpoActionObj>(audit.Data);
 					var bpoName = _skillCombinationResourceRepository.LoadActiveBpos()
-						.FirstOrDefault(x => x.Id.Equals(deserialized.BpoGuid)).Source;
-					var startDate = deserialized.StartDate.Date.ToString("d", _userCulture.GetCulture());
-					var endDate = deserialized.EndDate.Date.ToString("d", _userCulture.GetCulture());
+						.FirstOrDefault(x => x.Id.Equals(audit.BpoId)).Source;
+					var startDate = audit.ClearPeriodStart.Value.ToString("d", _userCulture.GetCulture());
+					var endDate = audit.ClearPeriodEnd.Value.ToString("d", _userCulture.GetCulture());
 					auditServiceModel.Data = $"BPO name: {bpoName}{Environment.NewLine}Period from {startDate} to {endDate}";
 				}
 

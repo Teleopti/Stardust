@@ -11,15 +11,31 @@ namespace Teleopti.Ccc.Domain.Staffing
 		{
 		}
 
-		public StaffingAudit(IPerson actionBy, string action, string actionData, string area)
+		public StaffingAudit(IPerson actionBy, string action, string area, string importFileName, Guid? bpoId = null, DateTime? clearPeriodStart = null, DateTime? clearPeriodEnd=null)
 			: this()
 		{
 			ActionPerformedBy = actionBy;
 			Action = action;
-			Data = actionData;
 			TimeStamp = DateTime.UtcNow;
 			Area = area;
+			ImportFileName = importFileName;
+			BpoId = bpoId;
+			ClearPeriodStart = clearPeriodStart;
+			ClearPeriodEnd = clearPeriodEnd;
 		}
+
+		//public StaffingAudit(IPerson actionBy, string action, string area, string importFileName)
+		//	: this()
+		//{
+		//	ActionPerformedBy = actionBy;
+		//	Action = action;
+		//	TimeStamp = DateTime.UtcNow;
+		//	Area = area;
+		//	ImportFileName = importFileName;
+		//	BpoName = "";
+		//	ClearPeriodStart = null;
+		//	ClearPeriodEnd = null;
+		//}
 
 		public virtual DateTime TimeStamp { get; set; }
 
@@ -27,8 +43,11 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 		//public IPerson ActionPerformedOn { get; set; }
 		public virtual string Action { get; set; }
-		public virtual string Data { get; set; }
 		public virtual string Area { get; set; }
+		public virtual string ImportFileName { get; set; }
+		public virtual Guid? BpoId { get; set; }
+		public virtual DateTime? ClearPeriodStart { get; set; }
+		public virtual DateTime? ClearPeriodEnd { get; set; }
 	}
 
 	public interface IStaffingAudit : IAggregateRoot
@@ -36,7 +55,10 @@ namespace Teleopti.Ccc.Domain.Staffing
 		DateTime TimeStamp { get; set; }
 		IPerson ActionPerformedBy { get; set; }
 		string Action { get; set; }
-		string Data { get; set; }
 		string Area { get; set; }
+		string ImportFileName { get; set; }
+		Guid? BpoId { get; set; }
+		DateTime? ClearPeriodStart { get; set; }
+		DateTime? ClearPeriodEnd { get; set; }
 	}
 }
