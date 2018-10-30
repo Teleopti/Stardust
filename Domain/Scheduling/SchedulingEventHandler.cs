@@ -22,19 +22,22 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	[RemoveMeWithToggle("merge with base class", Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288)]
 	public class SchedulingEventHandlerNew : SchedulingEventHandler
 	{
+		private readonly SchedulingFilterAgentsByHints _schedulingFilterAgentsByHints;
 		private readonly AgentsWithPreferences _agentsWithPreferences;
 		private readonly AgentsWithWhiteSpots _agentsWithWhiteSpots;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly ScheduleExecutor _scheduleExecutor;
 		
-		public SchedulingEventHandlerNew(AgentsWithPreferences agentsWithPreferences, AgentsWithWhiteSpots agentsWithWhiteSpots, Func<ISchedulerStateHolder> schedulerStateHolder, FillSchedulerStateHolder fillSchedulerStateHolder, ScheduleExecutor scheduleExecutor, ISchedulingOptionsProvider schedulingOptionsProvider, ICurrentSchedulingCallback currentSchedulingCallback, ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland, IGridlockManager gridlockManager, ISchedulingSourceScope schedulingSourceScope, ExtendSelectedPeriodForMonthlyScheduling extendSelectedPeriodForMonthlyScheduling, IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod, DayOffOptimization dayOffOptimization, IAlreadyScheduledAgents alreadyScheduledAgents) : base(schedulerStateHolder, fillSchedulerStateHolder, scheduleExecutor, schedulingOptionsProvider, currentSchedulingCallback, synchronizeSchedulesAfterIsland, gridlockManager, schedulingSourceScope, extendSelectedPeriodForMonthlyScheduling, blockPreferenceProviderForPlanningPeriod, dayOffOptimization, alreadyScheduledAgents)
+		
+		protected SchedulingEventHandlerNew(SchedulingFilterAgentsByHints schedulingFilterAgentsByHints, AgentsWithPreferences agentsWithPreferences, AgentsWithWhiteSpots agentsWithWhiteSpots, Func<ISchedulerStateHolder> schedulerStateHolder, FillSchedulerStateHolder fillSchedulerStateHolder, ScheduleExecutor scheduleExecutor, ISchedulingOptionsProvider schedulingOptionsProvider, ICurrentSchedulingCallback currentSchedulingCallback, ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland, IGridlockManager gridlockManager, ISchedulingSourceScope schedulingSourceScope, ExtendSelectedPeriodForMonthlyScheduling extendSelectedPeriodForMonthlyScheduling, IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod, DayOffOptimization dayOffOptimization, IAlreadyScheduledAgents alreadyScheduledAgents) : base(schedulerStateHolder, fillSchedulerStateHolder, scheduleExecutor, schedulingOptionsProvider, currentSchedulingCallback, synchronizeSchedulesAfterIsland, gridlockManager, schedulingSourceScope, extendSelectedPeriodForMonthlyScheduling, blockPreferenceProviderForPlanningPeriod, dayOffOptimization, alreadyScheduledAgents)
 		{
+			_schedulingFilterAgentsByHints = schedulingFilterAgentsByHints;
 			_agentsWithPreferences = agentsWithPreferences;
 			_agentsWithWhiteSpots = agentsWithWhiteSpots;
 			_schedulerStateHolder = schedulerStateHolder;
 			_scheduleExecutor = scheduleExecutor;
 		}
-
+		
 		protected override void RunSchedulingWithoutPreferences(
 			IDictionary<IPerson, IEnumerable<DateOnly>> alreadyScheduledAgents, SchedulingWasOrdered @event, IEnumerable<IPerson> agents,
 			DateOnlyPeriod selectedPeriod, SchedulingOptions schedulingOptions, ISchedulingCallback schedulingCallback,
@@ -43,10 +46,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (!@event.ScheduleWithoutPreferencesForFailedAgents) 
 				return;
 			var schedules = _schedulerStateHolder().Schedules;
-			var agentsWithPreferences = _agentsWithPreferences.Execute(schedules, agents, selectedPeriod);
-			var agentsWithWhiteSpotsAndPreferences = _agentsWithWhiteSpots.Execute(schedules, agentsWithPreferences, selectedPeriod);
-			
-			foreach (var agent in agentsWithWhiteSpotsAndPreferences)
+			var filteredAgents = filterAgents(agents, selectedPeriod, blockPreferenceProvider, schedules);
+
+			foreach (var agent in filteredAgents)
 			{
 				var range = schedules[agent];
 				foreach (var date in selectedPeriod.DayCollection())
@@ -63,12 +65,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				}
 			}
 			schedulingOptions.UsePreferences = false;
-			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, agentsWithWhiteSpotsAndPreferences,
-				selectedPeriod, blockPreferenceProvider);
+			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, filteredAgents, selectedPeriod, blockPreferenceProvider);
+		}
+
+		private IEnumerable<IPerson> filterAgents(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod, IBlockPreferenceProvider blockPreferenceProvider, IScheduleDictionary schedules)
+		{
+			var agentsWithPreferences = _agentsWithPreferences.Execute(schedules, agents, selectedPeriod);
+			var agentsWithWhiteSpotsAndPreferences = _agentsWithWhiteSpots.Execute(schedules, agentsWithPreferences, selectedPeriod);
+			var agentsWithoutHints = _schedulingFilterAgentsByHints.Execute(agentsWithWhiteSpotsAndPreferences, selectedPeriod, blockPreferenceProvider);
+			return agentsWithoutHints;
 		}
 	}
-	
-	
+
+
 	[InstancePerLifetimeScope]
 	[DisabledBy(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288)]
 	public class SchedulingEventHandler : IRunInSyncInFatClientProcess, IHandleEvent<SchedulingWasOrdered>
@@ -86,7 +95,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly DayOffOptimization _dayOffOptimization;
 		private readonly IAlreadyScheduledAgents _alreadyScheduledAgents;
 
-		public SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder,
+		protected SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder,
 						FillSchedulerStateHolder fillSchedulerStateHolder,
 						ScheduleExecutor scheduleExecutor, 
 						ISchedulingOptionsProvider schedulingOptionsProvider,
@@ -155,9 +164,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				new FixedBlockPreferenceProvider(schedulingOptions);
 			selectedPeriod = _extendSelectedPeriodForMonthlyScheduling.Execute(@event, schedulerStateHolder, selectedPeriod);
 			var agents = schedulerStateHolder.SchedulingResultState.LoadedAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray();
-
-			var alreadyScheduledAgents = _alreadyScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod, agents);
 			
+			var alreadyScheduledAgents = _alreadyScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod, agents);
 			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, agents, selectedPeriod, blockPreferenceProvider);
 			
 			RunSchedulingWithoutPreferences(alreadyScheduledAgents, @event, agents, selectedPeriod, schedulingOptions, schedulingCallback, schedulingProgress, blockPreferenceProvider);
