@@ -89,7 +89,7 @@
 						<div class="con-flex split-3-1">
 							<div class="form-input-wrap">
 								<label>{{ 'OpenHours' | translate }}:</label>
-								<working-hours-picker disable-next-day="disableNextDay" working-hours="vm.model.workingHours" max-hours-range=""></working-hours-picker>
+								<working-hours-picker disable-next-day="true" working-hours="vm.model.workingHours"></working-hours-picker>
 								<div ng-cloak class="animate-input-message" ng-show="vm.noOpenHoursWarning()">
 									<div class="form-input-message">{{ 'AllDaysAreClosed' | translate }}</div>
 								</div>
