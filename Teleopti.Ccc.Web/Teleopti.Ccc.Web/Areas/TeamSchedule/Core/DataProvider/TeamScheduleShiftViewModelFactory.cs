@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			bool canViewUnpublished)
 		{
 			var timezone = person.PermissionInformation.DefaultTimeZone();
-			
+
 			var vm = new GroupScheduleShiftViewModel
 			{
 				PersonId = person.Id.GetValueOrDefault().ToString(),
@@ -93,6 +93,101 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var pa = scheduleDay.PersonAssignment();
 			vm.IsProtected = pa?.Person.PersonWriteProtection.IsWriteProtected(date) ?? false;
 			return vm;
+		}
+
+		public PersonWeekScheduleViewModel MakeWeekViewModel(
+				IPerson person,
+				IList<DateOnly> weekDays,
+				IDictionary<PersonDate, IScheduleDay> scheduleDays,
+				IDictionary<DateOnly, IEnumerable<Guid>> peopleCanSeeUnpublishedSchedulesFor,
+				IDictionary<DateOnly, IEnumerable<Guid>> viewableConfidentialAbsenceAgents)
+		{
+			var daySchedules = weekDays
+				.Select(d =>
+				{
+					var pd = new PersonDate
+					{
+						PersonId = person.Id.GetValueOrDefault(),
+						Date = d
+					};
+
+					var dayScheduleViewModel = new PersonDayScheduleSummayViewModel
+					{
+						IsTerminated = person.TerminalDate.HasValue && person.TerminalDate.Value < d,
+						Date = d,
+						DayOfWeek = (int)d.DayOfWeek
+					};
+
+					if (!scheduleDays.TryGetValue(pd, out var scheduleDay) || dayScheduleViewModel.IsTerminated)
+					{
+						return dayScheduleViewModel;
+					}
+
+					var canViewConfidentialAbsence = viewableConfidentialAbsenceAgents[pd.Date].Contains(pd.PersonId);
+					var canSeeUnpublishedSchedules = peopleCanSeeUnpublishedSchedulesFor[pd.Date].Contains(pd.PersonId);
+
+					if (!scheduleDay.IsFullyPublished && !canSeeUnpublishedSchedules) return dayScheduleViewModel;
+
+					var significantPart = scheduleDay.SignificantPartForDisplay();
+					var personAssignment = scheduleDay.PersonAssignment();
+					var absenceCollection = scheduleDay.PersonAbsenceCollection();
+					var visualLayerCollection = _projectionProvider.Projection(scheduleDay);
+
+					if (visualLayerCollection != null && visualLayerCollection.HasLayers)
+					{
+						dayScheduleViewModel.ContractTimeMinutes = visualLayerCollection.ContractTime().TotalMinutes;
+					}
+
+					if (significantPart == SchedulePartView.DayOff)
+					{
+						dayScheduleViewModel.Title = personAssignment.DayOff().Description.Name;
+						dayScheduleViewModel.IsDayOff = true;
+					}
+					else if (significantPart == SchedulePartView.MainShift)
+					{
+						dayScheduleViewModel.Title = personAssignment.ShiftCategory.Description.Name;
+						var timeZone = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
+						dayScheduleViewModel.Timezone = new TimeZoneViewModel
+						{
+							IanaId = _ianaTimeZoneProvider.WindowsToIana(timeZone.Id),
+							DisplayName = timeZone.DisplayName
+						};
+						dayScheduleViewModel.DateTimeSpan = scheduleDay.ProjectionService().CreateProjection().Period();
+
+						if (personAssignment.ShiftCategory != null)
+						{
+							dayScheduleViewModel.Color =
+								$"rgb({personAssignment.ShiftCategory.DisplayColor.R},{personAssignment.ShiftCategory.DisplayColor.G},{personAssignment.ShiftCategory.DisplayColor.B})";
+						}
+					}
+					else if (significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff)
+					{
+						var absence = absenceCollection.OrderBy(a => a.Layer.Payload.Priority)
+							.ThenByDescending(a => absenceCollection.IndexOf(a)).First().Layer.Payload;
+
+						dayScheduleViewModel.IsDayOff = significantPart == SchedulePartView.ContractDayOff;
+
+						if (absence.Confidential && !canViewConfidentialAbsence)
+						{
+							dayScheduleViewModel.Title = ConfidentialPayloadValues.Description.Name;
+							dayScheduleViewModel.Color = ConfidentialPayloadValues.DisplayColorHex;
+						}
+						else
+						{
+							dayScheduleViewModel.Title = absence.Description.Name;
+							dayScheduleViewModel.Color = $"rgb({absence.DisplayColor.R},{absence.DisplayColor.G},{absence.DisplayColor.B})";
+						}
+					}
+					return dayScheduleViewModel;
+				}).ToList();
+
+			return new PersonWeekScheduleViewModel
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				Name = _agentNameSetting.BuildFor(person),
+				DaySchedules = daySchedules,
+				ContractTimeMinutes = daySchedules.Sum(s => s.ContractTimeMinutes)
+			};
 		}
 
 		private UnderlyingScheduleSummary getUnderlyingScheduleSummary(IScheduleDay scheduleDay, IScheduleDay previousScheduleDay, bool canViewConfidential)

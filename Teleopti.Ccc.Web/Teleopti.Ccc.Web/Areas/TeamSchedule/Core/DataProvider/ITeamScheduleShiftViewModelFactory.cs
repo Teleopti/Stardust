@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
@@ -12,10 +14,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 		GroupScheduleShiftViewModel MakeViewModel(IPerson person,
 			DateOnly date,
-			IScheduleDay scheduleDay, 
+			IScheduleDay scheduleDay,
 			IScheduleDay previousScheduleDay,
-			bool canViewConfidential, 
+			bool canViewConfidential,
 			bool canViewUnpublished);
+
+		PersonWeekScheduleViewModel MakeWeekViewModel(
+				IPerson person,
+				IList<DateOnly> weekDays,
+				IDictionary<PersonDate, IScheduleDay> scheduleDays,
+				IDictionary<DateOnly, IEnumerable<Guid>> peopleCanSeeUnpublishedSchedulesFor,
+				IDictionary<DateOnly, IEnumerable<Guid>> viewableConfidentialAbsenceAgents);
 
 		bool IsOvertimeOnDayOff(IScheduleDay scheduleDay);
 	}

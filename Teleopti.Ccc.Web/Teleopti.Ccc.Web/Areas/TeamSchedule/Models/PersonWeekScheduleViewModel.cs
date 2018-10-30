@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 	{
 		public Guid PersonId { get; set; }
 		public string Name { get; set; }				
-		public List<PersonDayScheduleSummayViewModel> DaySchedules { get; set; }
+		public IList<PersonDayScheduleSummayViewModel> DaySchedules { get; set; }
 		public double ContractTimeMinutes { get; set; }
 	}
 }
