@@ -465,20 +465,23 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var date = new DateOnly(2018, 04, 03);
 			var site = SiteFactory.CreateSiteWithOneTeam().WithId();
 			var team = site.TeamCollection.First().WithId();
+
 			personInUtc.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
 			PersonRepo.Has(personInUtc);
 			PersonFinderReadOnlyRepository.Has(personInUtc);
+
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, date, new PersonAuthorization
+			{
+				SiteId = team.Site.Id.GetValueOrDefault(),
+				TeamId = team.Id.GetValueOrDefault()
+			});
 
 			var period = new DateTimePeriod(new DateTime(2018, 04, 03, 10, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 11, 0, 0, DateTimeKind.Utc));
 			var activity = ActivityFactory.CreateActivity("activity");
 			var pa = PersonAssignmentFactory.CreateEmptyAssignment(personInUtc, scenario, period);
 			pa.AddPersonalActivity(activity, period);
 			PersonAssignmentRepository.Has(pa);
-			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, date, new PersonAuthorization
-			{
-				SiteId = team.Site.Id.GetValueOrDefault(),
-				TeamId = team.Id.GetValueOrDefault()
-			});
+			
 
 			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
 			{
