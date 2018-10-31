@@ -36,7 +36,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = new Activity().WithId();
 			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
 			var scenario = new Scenario();
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(new ContractScheduleWorkingMondayToFriday(), skill).WithSchedulePeriodOneWeek(date);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet,new ContractScheduleWorkingMondayToFriday(), skill).WithSchedulePeriodOneWeek(date);
 			var skillDays = skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1);
 			var dayToSchedule = date.AddDays(5);
 			var asses = new List<IPersonAssignment>();
@@ -287,9 +288,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldNotPlaceMissingDayOffsOnPartlySelectedSchedulePeriod()
 		{
+			var activity = new Activity().WithId();
 			var period = new DateOnlyPeriod(new DateOnly(2018, 2, 1), new DateOnly(2018, 3, 4));
-			var skill = new Skill().For(new Activity().WithId()).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(new ContractWithMaximumTolerance(), skill).WithSchedulePeriodOneMonth(new DateOnly(2018, 1, 1));
+			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 15, 15), new ShiftCategory("_").WithId()));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, new ContractWithMaximumTolerance(), skill).WithSchedulePeriodOneMonth(new DateOnly(2018, 1, 1));
 			var contractSchedule = new ContractSchedule("_");
 			var contractScheduleWeek = new ContractScheduleWeek();
 			contractScheduleWeek.SetWorkdaysExcept(DayOfWeek.Saturday, DayOfWeek.Sunday);
