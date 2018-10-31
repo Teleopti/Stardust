@@ -771,7 +771,7 @@
     <Compile Include="Areas\TeamSchedule\Models\FavoriteSearchViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\MoveNonoverwritableLayersFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\CheckingResult.cs" />
-    <Compile Include="Areas\TeamSchedule\Core\DataProvider\ITeamScheduleShiftViewModelFactory.cs" />
+    <Compile Include="Areas\TeamSchedule\Core\DataProvider\ITeamScheduleShiftViewModelProvider.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\ProjectionSplitter.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\ScheduleValidationProvider.cs" />
     <Compile Include="Areas\TeamSchedule\Models\AddOvertimeActivityForm.cs" />
@@ -1024,7 +1024,7 @@
     <Compile Include="Areas\TeamSchedule\Models\CheckPersonWriteProtectionFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\TeamScheduleViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\TeamScheduleController.cs" />
-    <Compile Include="Areas\TeamSchedule\Core\DataProvider\TeamScheduleShiftViewModelFactory.cs" />
+    <Compile Include="Areas\TeamSchedule\Core\DataProvider\TeamScheduleShiftViewModelProvider.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\TeamScheduleViewModelFactory.cs" />
     <Compile Include="Areas\TeamSchedule\IoC\TeamScheduleAreaModule.cs" />
     <Compile Include="Areas\TeamSchedule\PermissionChecker.cs" />

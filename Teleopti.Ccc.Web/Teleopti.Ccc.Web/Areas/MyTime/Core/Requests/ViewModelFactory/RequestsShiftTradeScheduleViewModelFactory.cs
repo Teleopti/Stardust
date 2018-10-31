@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 {
 	public class RequestsShiftTradeScheduleViewModelFactory : IRequestsShiftTradeScheduleViewModelFactory
 	{
-		private readonly ITeamScheduleShiftViewModelFactory _shiftViewModelFactory;
+		private readonly ITeamScheduleShiftViewModelProvider _shiftViewModelProvider;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
 		private readonly IShiftTradeTimeLineHoursViewModelMapper _shiftTradeTimeLineHoursViewModelMapper;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly IShiftTradePersonScheduleViewModelMapper _personScheduleViewModelMapper;
 		private readonly IShiftTradeSiteOpenHourFilter _shiftTradeSiteOpenHourFilter;
 
-		public RequestsShiftTradeScheduleViewModelFactory(ITeamScheduleShiftViewModelFactory shiftViewModelFactory,
+		public RequestsShiftTradeScheduleViewModelFactory(ITeamScheduleShiftViewModelProvider shiftViewModelProvider,
 			IPermissionProvider permissionProvider,
 			IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider,
 			IShiftTradeTimeLineHoursViewModelMapper shiftTradeTimeLineHoursViewModelMapper,
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			IShiftTradePersonScheduleViewModelMapper personScheduleViewModelMapper,
 			IShiftTradeSiteOpenHourFilter shiftTradeSiteOpenHourFilter)
 		{
-			_shiftViewModelFactory = shiftViewModelFactory;
+			_shiftViewModelProvider = shiftViewModelProvider;
 			_permissionProvider = permissionProvider;
 			_possibleShiftTradePersonsProvider = possibleShiftTradePersonsProvider;
 			_shiftTradeTimeLineHoursViewModelMapper = shiftTradeTimeLineHoursViewModelMapper;
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 				var allPossiblePersonSchedules = allPossibleTradedPersonList.Select(
 						p => new Tuple<IPerson, IScheduleDay>(p, allPossibleTradeSchedules.SingleOrDefault(s => s.Person.Id == p.Id)))
 					.Where(ps => !ps.Item2.IsFullDayAbsence()
-								 && !_shiftViewModelFactory.IsOvertimeOnDayOff(ps.Item2)
+								 && !_shiftViewModelProvider.IsOvertimeOnDayOff(ps.Item2)
 								 && _shiftTradeSiteOpenHourFilter.FilterSchedule(ps.Item2, mySchedule))
 					.ToArray();
 				pageCount = (int)Math.Ceiling((double)allPossiblePersonSchedules.Length / inputData.Paging.Take);
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 					{
 						var person = pair.Item1;
 						var scheduleDay = pair.Item2;
-						var scheduleReadModel = _shiftViewModelFactory.MakeScheduleReadModel(person, scheduleDay, canViewConfidential);
+						var scheduleReadModel = _shiftViewModelProvider.MakeScheduleReadModel(person, scheduleDay, canViewConfidential);
 						return new ShiftTradeAddPersonScheduleViewModel(scheduleReadModel);
 					}).ToList();
 			}
