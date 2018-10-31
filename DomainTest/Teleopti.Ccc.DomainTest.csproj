@@ -326,6 +326,7 @@
     <Compile Include="SchedulingScenarios\Scheduling\DaysOffSchedulingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingAndDoTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCommandHandlerExternalStaffDesktopTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\SchedulingFilterAgentsByHintsTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingFulfillPreferencesTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingFulfillPreferenceDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingReduceSkillsDesktopTest.cs" />
