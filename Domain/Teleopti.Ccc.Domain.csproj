@@ -1812,7 +1812,6 @@
     <Compile Include="Scheduling\Overtime\ScheduleOvertimeWithoutStateHolder.cs" />
     <Compile Include="Staffing\AddOverTime.cs" />
     <Compile Include="Staffing\IPersonForOvertimeProvider.cs" />
-    <Compile Include="SystemSetting\GlobalSetting\DataProtectionResponse.cs" />
     <Compile Include="SystemSetting\GlobalSetting\NotificationDurationTime.cs" />
     <Compile Include="ToggleAdmin\AllToggleNamesWithoutOverrides.cs" />
     <Compile Include="ToggleAdmin\DeleteToggleOverride.cs" />
