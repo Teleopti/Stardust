@@ -77,6 +77,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		readonly int homeCommand = CommandIds.RegisterUserCommand("StartPage");
 		private bool showCustomerWebMenu = true;
 		private readonly WebUrlHolder _webUrlHolder;
+		private bool showDataProtectionWebPage;
 
 		protected SmartClientShellForm()
 		{
@@ -95,13 +96,50 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			KeyDown += formKeyDown;
 			KeyPress += Form_KeyPress;
 
+			webViewDataProtection.RegisterJSExtensionFunction("yesResponseCallback", yesResponse);
+			webViewDataProtection.RegisterJSExtensionFunction("noOrNotNowResponseCallback", noResponse);
 			EO.Base.Runtime.Exception += handlingEoRuntimeErrors;
 		}
 
+		private void yesResponse(object sender, JSExtInvokeArgs jsExtInvokeArgs)
+		{
+			logInfo(" Yes was clicked on DataProtection EO:URL= " + webViewDataProtection.Url);
+			showDataProtectionWebPage = false;
+			webControlDataProtection.Visible = false;
+			webControl1.Visible = true;
+			gotoCustomerWebAndLogOn();
+		}
+
+		private void noResponse(object sender, JSExtInvokeArgs jsExtInvokeArgs)
+		{
+			logInfo(" No was clicked on DataProtection EO:URL= " + webViewDataProtection.Url);
+			showDataProtectionWebPage = false;
+			webControlDataProtection.Visible = false;
+			webControl1.Visible = true;
+			gotoCustomerWeb();
+		}
 
 		private void logInfo(string message)
 		{
 			_customLogger.Info("SmartClientPortal: EoBrowser: " + message);
+		}
+
+		private void setBusinessUnitInDataProtectionWebView()
+		{
+			var bu = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id;
+			var request = new Request(webServer + "Start/AuthenticationApi/Logon");
+			request.PostData.AddValue("businessUnitId", bu.GetValueOrDefault().ToString());
+			request.Method = "POST";
+			webViewDataProtection.LoadCompleted += dataProtectionWebViewOnLoadCompletedSetBusinessUnit;
+			logInfo("setBusinessUnitInDataProtectionWebView: Setting the business unit");
+			webViewDataProtection.LoadRequest(request);
+		}
+
+		private void dataProtectionWebViewOnLoadCompletedSetBusinessUnit(object sender, LoadCompletedEventArgs loadCompletedEventArgs)
+		{
+			logInfo(" Bu loaded for data protection EO:URL= " + webViewDataProtection.Url);
+			webViewDataProtection.LoadCompleted -= dataProtectionWebViewOnLoadCompletedSetBusinessUnit;
+			webViewDataProtection.LoadUrl($"{webServer}WFM/index_desktop_client.html?r={DateTime.UtcNow.Ticks.ToString()}#/fdpa");
 		}
 
 		void formKeyDown(object sender, KeyEventArgs e)
@@ -160,6 +198,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			_portalSettings = _container.Resolve<PortalSettings>();
 			_toggleManager = _container.Resolve<IToggleManager>();
 			_webUrlHolder = _container.Resolve<WebUrlHolder>();
+			setBusinessUnitInDataProtectionWebView();
+
 		}
 
 		void toolStripButtonHelpClick(object sender, EventArgs e)
@@ -187,8 +227,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			Close();
 		}
 
-		public StatusStrip MainStatusStrip
-		{
+		public StatusStrip MainStatusStrip {
 			get { return _mainStatusStrip; }
 		}
 
@@ -281,10 +320,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 
 
-		private string webServer
-		{
-			get
-			{
+		private string webServer {
+			get {
 				return _webUrlHolder.WebUrl;
 			}
 		}
@@ -538,11 +575,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				webControl1.Visible = false;
 				wfmWebControl.Visible = false;
+				webControlDataProtection.Visible = false;
 				return;
 			}
 
-			wfmWebControl.Visible = false;
-			webControl1.Visible = true;
+			if (showDataProtectionWebPage)
+			{
+				wfmWebControl.Visible = false;
+				webControl1.Visible = false;
+				webControlDataProtection.Visible = true;
+			}
+			else
+			{
+				wfmWebControl.Visible = false;
+				webControlDataProtection.Visible = false;
+				webControl1.Visible = true;
+			}
 
 
 			if (uc is SchedulerNavigator || uc is PeopleNavigator)
@@ -575,6 +623,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			var menuItem = new EO.WebBrowser.MenuItem(UserTexts.Resources.StartPage, homeCommand);
 
 			e.Menu.Items.Add(menuItem);
+		}
+
+		private void webViewDataProtectionBeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
+		{
+			e.Menu.Items.Clear();
 		}
 
 		private void toolStripButtonCustomerWebClick(object sender, EventArgs e)
@@ -661,8 +714,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private void goToPublicPage(bool gotoStart)
 		{
 			wfmWebControl.Visible = false;
+			webControlDataProtection.Visible = false;
 			webControl1.Visible = true;
-			if (!checkInternetConnection() || !_toggleManager.IsEnabled(Toggles.WFM_Connect_NewLandingPage_Remove_GDPR_78132))
+			if (!checkInternetConnection())
 			{
 				showCustomerWebMenu = false;
 				goToLocalPage();
@@ -670,8 +724,29 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 			showCustomerWebMenu = true;
 			if (!gotoStart && webView1.Url != "") return;
+			if (string.IsNullOrWhiteSpace(LoggedOnPerson.Email))
+			{
+				pleaseRegisterAnEmailAddress(UserTexts.Resources.PleaseConfigureYourEmailAddress);
+				return;
+			}
 
-			gotoCustomerWebAndLogOn();
+			var dataProtectionResponse = dataProtectionSetting();
+			switch (dataProtectionResponse)
+			{
+				case DataProtectionEnum.Yes:
+					gotoCustomerWebAndLogOn();
+					break;
+				case DataProtectionEnum.No:
+					gotoCustomerWeb();
+					break;
+				default:
+					showDataProtectionWebPage = true;
+					wfmWebControl.Visible = false;
+					webControl1.Visible = false;
+					webControlDataProtection.Visible = true;
+					//setBusinessUnitInDataProtectionWebView();
+					break;
+			}
 		}
 
 		private bool checkInternetConnection()
@@ -728,10 +803,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		}
 
-		private IPerson LoggedOnPerson
+		private DataProtectionEnum dataProtectionSetting()
 		{
-			get
+			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
+				ISettingDataRepository settingDataRepository = new PersonalSettingDataRepository(uow);
+				var dataProtectionResponse = settingDataRepository.FindValueByKey(DataProtectionResponse.Key, new DataProtectionResponse());
+				return dataProtectionResponse.Response;
+			}
+		}
+
+		private IPerson LoggedOnPerson {
+			get {
 				using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
 					return TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(unitOfWork)));
@@ -762,6 +845,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			});
 		}
 
+		private void handlingCertificateErrorswebViewDataProtection(object sender, CertificateErrorEventArgs e)
+		{
+			handleCertificateError(e, () =>
+			{
+				webViewDataProtection.LoadHtml($"<!doctype html><html><head></head><body>The following url is missing a certificate. <br/> {e.Url} </body></html>");
+				_customLogger.Error("The following url is missing a certificate. " + e.Url + "  EO:URL " + webViewDataProtection.Url);
+				_logger.Error("The following url is missing a certificate. " + e.Url);
+			});
+		}
 
 		private void handleCertificateError(CertificateErrorEventArgs e, Action errorCallback)
 		{
@@ -779,6 +871,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private void handlingEoRuntimeErrors(object sender, ExceptionEventArgs e)
 		{
 			_logger.Error("Error in the EO browser", e.ErrorException);
+		}
+
+		private void handlingLoadFailedError(object sender, LoadFailedEventArgs e)
+		{
+			_logger.Error(e.ErrorMessage + "Url: " + e.Url);
+			e.UseDefaultMessage();
 		}
 
 		private Uri buildWfmUri(string relativePath)

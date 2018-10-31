@@ -134,8 +134,7 @@
 		Wfm_PmNextGen_78059,
 
 		Wfm_Payroll_SupportMultiDllPayrolls_75959,
-		Wfm_Stardust_EnableScaleout_77366,
-		WFM_Connect_NewLandingPage_Remove_GDPR_78132
+		Wfm_Stardust_EnableScaleout_77366
 		// ReSharper restore InconsistentNaming
 	}
 }

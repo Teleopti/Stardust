@@ -1,0 +1,21 @@
+﻿<div class="con-row" style="margin-top: 2%;">
+	<div class="con-flex"></div>
+	<div class="con-flex split-1-2">
+		<div class="panel material-depth-1">
+			<div class="sub-header">
+				<h1>{{'TeleoptiCustomerWeb' | translate}}</h1>
+			</div>
+			<div class="con-row">
+				<div class="con-flex" ng-bind-html="vm.dataProtectionQuestionText">
+					<pre></pre>
+				</div>
+			</div>
+			<div class="con-footer">
+				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.sendNoResponse()">{{'NoThanks' | translate}}</button>
+				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.notNowResponse()">{{'AskMeLater' | translate}}</button>
+				<button class="wfm-btn wfm-btn-primary" ng-click="vm.sendYesResponse()">{{'Participate' | translate}}</button>
+			</div>
+		</div>
+	</div>
+	<div class="con-flex"></div>
+</div>

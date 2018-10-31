@@ -231,6 +231,7 @@
     <Compile Include="Areas\Forecasting\Controllers\SkillControllerTest.cs" />
     <Compile Include="Areas\Global\ApplicationControllerTest.cs" />
     <Compile Include="Areas\Global\AreaWithPermissionPathProviderTest.cs" />
+    <Compile Include="Areas\Global\DataProtectionControllerTest.cs" />
     <Compile Include="Areas\Global\FakePeopleSearchProvider.cs" />
     <Compile Include="Areas\Global\FakePermissionProvider.cs" />
     <Compile Include="Areas\Global\GlobalAreaControllerTest.cs" />

@@ -21,6 +21,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
             using (var customerWebProxy = new CustomerWebProxy())
             {
                 var ticket = new Hashtable();
+                var email = loggedOnPerson.Email.Trim();
+                ticket.Add("email", email);
+                ticket.Add("firstname", loggedOnPerson.Name.FirstName);
+                ticket.Add("lastname", loggedOnPerson.Name.LastName);
+                ticket.Add("language", loggedOnPerson.PermissionInformation.UICulture().Name);
+                ticket.Add("company", getCustomerName());
                 ticket.Add("guid", token);
                 var iv = "qwertyui";
                 var key = "12345678";
