@@ -115,7 +115,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
 		[Test]
-		[Ignore("78487 to be fixed")]
 		public void ShouldFindSelectedUserWithAccountForSelectedPeriod()
 		{
 			var period = new DateOnlyPeriod(new DateOnly(2018, 10, 1), new DateOnly(2018, 10, 20));
@@ -138,6 +137,47 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result[personToFind].PersonAbsenceAccounts().Single().AccountCollection().Single().Should().Be.EqualTo(accountToFind);
 		}
 
+		[Test]
+		[Ignore("78487 to be fixed")]
+		public void ShouldNotFindAccountStartingAfterSelectedPeriod()
+		{
+			var period = new DateOnlyPeriod(new DateOnly(2018, 10, 1), new DateOnly(2018, 10, 20));
+			var absence = createAbsenceInDb();
+			var personToFind = createPersonInDb();
+			var personToFindAbsenceAccount = new PersonAbsenceAccount(personToFind, absence);
+			var accountToFind = new AccountTime(period.StartDate.AddDays(-10));
+			var otherAccount = new AccountTime(period.EndDate.AddDays(10));
+			personToFindAbsenceAccount.Add(accountToFind);
+			personToFindAbsenceAccount.Add(otherAccount);
+			PersistAndRemoveFromUnitOfWork(personToFindAbsenceAccount);
+			var repository = new PersonAbsenceAccountRepository(UnitOfWork);
+
+			var result = repository.FindByUsersAndPeriod(new[] { personToFind }, period);
+
+			//Måste man ladda alla accounts? Kanske kolla IsInitialized istället?
+			result[personToFind].PersonAbsenceAccounts().Single().AccountCollection().Single().Should().Be.EqualTo(accountToFind);
+		}
+
+		[Test]
+		[Ignore("78487 to be fixed")]
+		public void ShouldNotFindAccountEndingBeforeSelectedPeriod()
+		{
+			var period = new DateOnlyPeriod(new DateOnly(2018, 10, 1), new DateOnly(2018, 10, 20));
+			var absence = createAbsenceInDb();
+			var personToFind = createPersonInDb();
+			var personToFindAbsenceAccount = new PersonAbsenceAccount(personToFind, absence);
+			var accountToFind = new AccountTime(period.StartDate.AddDays(-10));
+			var otherAccount = new AccountTime(period.StartDate.AddDays(-50));
+			personToFindAbsenceAccount.Add(accountToFind);
+			personToFindAbsenceAccount.Add(otherAccount);
+			PersistAndRemoveFromUnitOfWork(personToFindAbsenceAccount);
+			var repository = new PersonAbsenceAccountRepository(UnitOfWork);
+
+			var result = repository.FindByUsersAndPeriod(new[] { personToFind }, period);
+
+			//Måste man ladda alla accounts? Kanske kolla IsInitialized istället?
+			result[personToFind].PersonAbsenceAccounts().Single().AccountCollection().Single().Should().Be.EqualTo(accountToFind);
+		}
 
         [Test]
         public void NoDuplicatePersonAbsences()
