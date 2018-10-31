@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ScheduleExecutor _scheduleExecutor;
 		
 		
-		protected SchedulingEventHandlerNew(AgentsWithPreferences agentsWithPreferences, AgentsWithWhiteSpots agentsWithWhiteSpots, Func<ISchedulerStateHolder> schedulerStateHolder, FillSchedulerStateHolder fillSchedulerStateHolder, ScheduleExecutor scheduleExecutor, ISchedulingOptionsProvider schedulingOptionsProvider, ICurrentSchedulingCallback currentSchedulingCallback, ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland, IGridlockManager gridlockManager, ISchedulingSourceScope schedulingSourceScope, ExtendSelectedPeriodForMonthlyScheduling extendSelectedPeriodForMonthlyScheduling, IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod, DayOffOptimization dayOffOptimization, IAlreadyScheduledAgents alreadyScheduledAgents, ISchedulingFilterAgentsByHints schedulingFilterAgentsByHints) : base(schedulerStateHolder, fillSchedulerStateHolder, scheduleExecutor, schedulingOptionsProvider, currentSchedulingCallback, synchronizeSchedulesAfterIsland, gridlockManager, schedulingSourceScope, extendSelectedPeriodForMonthlyScheduling, blockPreferenceProviderForPlanningPeriod, dayOffOptimization, alreadyScheduledAgents, schedulingFilterAgentsByHints)
+		protected SchedulingEventHandlerNew(AgentsWithPreferences agentsWithPreferences, AgentsWithWhiteSpots agentsWithWhiteSpots, Func<ISchedulerStateHolder> schedulerStateHolder, FillSchedulerStateHolder fillSchedulerStateHolder, ScheduleExecutor scheduleExecutor, ISchedulingOptionsProvider schedulingOptionsProvider, ICurrentSchedulingCallback currentSchedulingCallback, ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland, IGridlockManager gridlockManager, ISchedulingSourceScope schedulingSourceScope, ExtendSelectedPeriodForMonthlyScheduling extendSelectedPeriodForMonthlyScheduling, IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod, DayOffOptimization dayOffOptimization, IAlreadyScheduledAgents alreadyScheduledAgents, IExcludeAgentsWithHints excludeAgentsWithHints) : base(schedulerStateHolder, fillSchedulerStateHolder, scheduleExecutor, schedulingOptionsProvider, currentSchedulingCallback, synchronizeSchedulesAfterIsland, gridlockManager, schedulingSourceScope, extendSelectedPeriodForMonthlyScheduling, blockPreferenceProviderForPlanningPeriod, dayOffOptimization, alreadyScheduledAgents, excludeAgentsWithHints)
 		{
 			_agentsWithPreferences = agentsWithPreferences;
 			_agentsWithWhiteSpots = agentsWithWhiteSpots;
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IBlockPreferenceProviderForPlanningPeriod _blockPreferenceProviderForPlanningPeriod;
 		private readonly DayOffOptimization _dayOffOptimization;
 		private readonly IAlreadyScheduledAgents _alreadyScheduledAgents;
-		private readonly ISchedulingFilterAgentsByHints _schedulingFilterAgentsByHints;
+		private readonly IExcludeAgentsWithHints _excludeAgentsWithHints;
 
 		protected SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder,
 						FillSchedulerStateHolder fillSchedulerStateHolder,
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod,
 						DayOffOptimization dayOffOptimization,
 						IAlreadyScheduledAgents alreadyScheduledAgents,
-						ISchedulingFilterAgentsByHints schedulingFilterAgentsByHints)
+						IExcludeAgentsWithHints excludeAgentsWithHints)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_blockPreferenceProviderForPlanningPeriod = blockPreferenceProviderForPlanningPeriod;
 			_dayOffOptimization = dayOffOptimization;
 			_alreadyScheduledAgents = alreadyScheduledAgents;
-			_schedulingFilterAgentsByHints = schedulingFilterAgentsByHints;
+			_excludeAgentsWithHints = excludeAgentsWithHints;
 		}
 
 		[TestLog]
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				new FixedBlockPreferenceProvider(schedulingOptions);
 			selectedPeriod = _extendSelectedPeriodForMonthlyScheduling.Execute(@event, schedulerStateHolder, selectedPeriod);
 			var agents = schedulerStateHolder.SchedulingResultState.LoadedAgents.Where(x => @event.Agents.Contains(x.Id.Value));
-			var agentsWithoutHints = _schedulingFilterAgentsByHints.Execute(agents, selectedPeriod, blockPreferenceProvider).ToArray();
+			var agentsWithoutHints = _excludeAgentsWithHints.Execute(agents, selectedPeriod, blockPreferenceProvider).ToArray();
 			
 			var alreadyScheduledAgents = _alreadyScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod, agentsWithoutHints);
 			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, agentsWithoutHints, selectedPeriod, blockPreferenceProvider);

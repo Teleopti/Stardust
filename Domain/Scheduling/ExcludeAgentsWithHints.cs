@@ -9,11 +9,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public class SchedulingFilterAgentsByHints : ISchedulingFilterAgentsByHints
+	public class ExcludeAgentsWithHints : IExcludeAgentsWithHints
 	{
 		private readonly CheckScheduleHints _basicCheckScheduleHints;
 
-		public SchedulingFilterAgentsByHints(CheckScheduleHints basicCheckScheduleHints)
+		public ExcludeAgentsWithHints(CheckScheduleHints basicCheckScheduleHints)
 		{
 			_basicCheckScheduleHints = basicCheckScheduleHints;
 		}
@@ -27,14 +27,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 	}
 	
+	
+	
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_FasterSeamlessPlanningForPreferences_78286)]
-	public interface ISchedulingFilterAgentsByHints
+	public interface IExcludeAgentsWithHints
 	{
 		IEnumerable<IPerson> Execute(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod, IBlockPreferenceProvider blockPreferenceProvider);
 	}
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_FasterSeamlessPlanningForPreferences_78286)]
-	public class NoSchedulingFilterAgentsByHints : ISchedulingFilterAgentsByHints
+	public class NoExcludeAgentsWithHints : IExcludeAgentsWithHints
 	{
 		public IEnumerable<IPerson> Execute(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod,
 			IBlockPreferenceProvider blockPreferenceProvider)

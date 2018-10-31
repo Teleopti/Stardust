@@ -296,8 +296,8 @@
     <Compile Include="Scheduling\AgentsWithPreferences.cs" />
     <Compile Include="Scheduling\AgentsWithWhiteSpots.cs" />
     <Compile Include="Scheduling\AlreadyScheduledAgents.cs" />
+    <Compile Include="Scheduling\ExcludeAgentsWithHints.cs" />
     <Compile Include="Scheduling\ReducedSkillsProvider.cs" />
-    <Compile Include="Scheduling\SchedulingFilterAgentsByHints.cs" />
     <Compile Include="Scheduling\WebClearScheduleStardustHandler.cs" />
     <Compile Include="Scheduling\IPredictShiftCategory.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModelLoader.cs" />
