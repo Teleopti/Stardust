@@ -1,12 +1,9 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.Auditing;
-using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
-	//TODO Toggle file?
-	public class TenantAudit : SimpleAggregateRoot, ITenantAudit
+
+	public class TenantAudit 
 	{
 
 		protected TenantAudit()
@@ -25,6 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			TimeStamp = DateTime.UtcNow;
 		}
 
+		public virtual Guid? Id { get; set; }
 		public virtual DateTime TimeStamp { get; set; }
 		public virtual Guid ActionPerformedBy { get; set; }
 		public virtual Guid ActionPerformedOn { get; set; }

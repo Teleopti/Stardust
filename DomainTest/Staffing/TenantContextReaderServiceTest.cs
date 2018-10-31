@@ -20,24 +20,25 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 	[TestFixture]
 	[DomainTest]
 	[AllTogglesOn]
-	public class TenantContextReaderServiceTest : IIsolateSystem
+	public class TenantContextReaderServiceTest 
+		//: IIsolateSystem
 	{
-		public ITenantAuditRepository TenantAuditRepository;
-		public TenantContextReaderService Target;
-		public FakeLoggedOnUser LoggedOnUser;
-		public FakeUserCulture UserCulture;
+		//public ITenantAuditRepository TenantAuditRepository;
+		//public TenantContextReaderService Target;
+		//public FakeLoggedOnUser LoggedOnUser;
+		//public FakeUserCulture UserCulture;
 
-		public void Isolate(IIsolate isolate)
-		{
-			isolate.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
-			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-		}
+		//public void Isolate(IIsolate isolate)
+		//{
+		//	isolate.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
+		//	isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+		//}
 
-		[Test]
-		public void ShouldLoadTenantAuditContext()
-		{
-			TenantAuditRepository.Add(new TenantAudit(new Guid(), new Guid(), PersistActionIntent.AppLogonChange.ToString(), ""));
-			Target.LoadAll().Should().Not.Be.Empty();
-		}
+		//[Test]
+		//public void ShouldLoadTenantAuditContext()
+		//{
+		//	TenantAuditRepository.Add(new TenantAudit(new Guid(), new Guid(), PersistActionIntent.AppLogonChange.ToString(), ""));
+		//	Target.LoadAll().Should().Not.Be.Empty();
+		//}
 	}
 }
