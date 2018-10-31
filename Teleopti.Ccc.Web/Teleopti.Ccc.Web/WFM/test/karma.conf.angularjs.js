@@ -15,7 +15,8 @@ module.exports = function(config) {
 
 			{
 				pattern: 'node_modules/angular-i18n/angular-locale_*.js',
-				watched: false
+				watched: false,
+				included: false
 			},
 
 			//served seat image file at browser because addSeat function need to create seat object from image in seatManagement test.
