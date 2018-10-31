@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 					TimeStamp = audit.TimeStamp, Context = "Staffing", Action = audit.Action,
 					ActionPerformedBy = audit.ActionPerformedBy.Name.ToString(NameOrderOption.FirstNameLastName)
 				};
-				if (audit.Action.Equals(StaffingAuditActionConstants.ImportBPO))
+				if (audit.Action.Equals(StaffingAuditActionConstants.ImportBpo))
 					auditServiceModel.Data = $"File name: {audit.ImportFileName}";
 				else
 				{
