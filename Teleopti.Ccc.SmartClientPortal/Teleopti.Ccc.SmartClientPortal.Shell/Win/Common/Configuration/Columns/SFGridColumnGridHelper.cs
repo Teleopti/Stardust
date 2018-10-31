@@ -251,30 +251,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns
             ((List<T>)_sourceList).AddRange(_originalCopy);
         }
 
-        public void Add(IRepository<T> rep)
+        public void Add()
         {
             if (_grid.CurrentCell != null)
             {
-                int colIndex = _grid.CurrentCell.ColIndex;
+                var colIndex = _grid.CurrentCell.ColIndex;
                 _grid.CurrentCell.MoveTo(_grid.RowCount, colIndex, GridSetCurrentCellOptions.SetFocus);
             }
 
-            Insert(rep);
-        }
-
-        public void Insert(IRepository<T> rep)
-        {
-            T source = OnNewSourceEntityWanted();
-            _sourceList.Insert(_grid.CurrentCell.RowIndex, source);
-            _originalCopy.Insert(_grid.CurrentCell.RowIndex, source);
-            //MarkForInsert(source);
-            _grid.Select();
-            _grid.RowCount = _sourceList.Count;
-            _grid.CurrentCell.MoveTo(_grid.CurrentCell.RowIndex + 1, _grid.CurrentCell.ColIndex, GridSetCurrentCellOptions.NoSetFocus);
-            if (rep != null)
-            {
-                rep.Add(source);
-            }
+			var source = OnNewSourceEntityWanted();
+			_sourceList.Insert(_grid.CurrentCell.RowIndex, source);
+			_originalCopy.Insert(_grid.CurrentCell.RowIndex, source);
+			_grid.Select();
+			_grid.RowCount = _sourceList.Count;
+			_grid.CurrentCell.MoveTo(_grid.CurrentCell.RowIndex + 1, _grid.CurrentCell.ColIndex, GridSetCurrentCellOptions.NoSetFocus);
         }
 
         public void AddFromClipboard(IRepository<T> rep)
