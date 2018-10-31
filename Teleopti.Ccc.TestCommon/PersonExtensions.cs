@@ -90,6 +90,11 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return agent.WithPersonPeriod(ruleSet, contract, null, skills);
 		}
+		
+		public static Person WithPersonPeriod(this Person agent, IWorkShiftRuleSet ruleSet, IContract contract, IContractSchedule contractSchedule)
+		{
+			return agent.WithPersonPeriod(new RuleSetBag(ruleSet), contract, contractSchedule, null,null);
+		}
 
 		public static Person WithPersonPeriod(this Person agent, IWorkShiftRuleSet ruleSet, IContract contract, ITeam team, params ISkill[] skills)
 		{

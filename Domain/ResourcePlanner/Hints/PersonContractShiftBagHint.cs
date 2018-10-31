@@ -1,18 +1,27 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
 	public class PersonContractShiftBagHint : IScheduleHint
 	{
+		private readonly IRuleSetProjectionService _ruleSetProjectionService;
+
+		public PersonContractShiftBagHint(IRuleSetProjectionService ruleSetProjectionService)
+		{
+			_ruleSetProjectionService = ruleSetProjectionService;
+		}
+		
 		public void FillResult(HintResult hintResult, HintInput input)
 		{
 			var people = input.People;
 			var range = input.Period;
 			foreach (var person in people)
 			{
-				var longestShift = 0d;
-				var shortestShift = 10000d;
+				var longestShift = TimeSpan.MinValue;
+				var shortestShift = TimeSpan.MaxValue;
 				var period = person.PersonPeriods(range).FirstOrDefault();
 				var contract = period?.PersonContract.Contract;
 
@@ -23,29 +32,29 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 
 				foreach (var ruleSet in period.RuleSetBag.RuleSetCollection)
 				{
-					foreach (var workShift in ruleSet.TemplateGenerator.Generate())
+					foreach (var workShift in _ruleSetProjectionService.ProjectionCollection(ruleSet, null))
 					{
-						var shiftLength = workShift.Projection.ContractTime().TotalMinutes;
-						if (shiftLength > longestShift)
+						var contractTime = workShift.ContractTime;
+						if (contractTime > longestShift)
 						{
-							longestShift = shiftLength;
+							longestShift = contractTime;
 						}
 
-						if (shiftLength < shortestShift)
+						if (contractTime < shortestShift)
 						{
-							shortestShift = shiftLength;
+							shortestShift = contractTime;
 						}
 					}
 				}
 
 
 				var virtualSchedulePeriod = person.VirtualSchedulePeriod(range.StartDate);
-				var targetTime = virtualSchedulePeriod.PeriodTarget().TotalMinutes;
-				var lowerTarget = targetTime - contract.NegativePeriodWorkTimeTolerance.TotalMinutes;
-				var upperTarget = targetTime + contract.PositivePeriodWorkTimeTolerance.TotalMinutes;
+				var targetTime = virtualSchedulePeriod.PeriodTarget();
+				var lowerTarget = targetTime - contract.NegativePeriodWorkTimeTolerance;
+				var upperTarget = targetTime + contract.PositivePeriodWorkTimeTolerance;
 				var workDays = virtualSchedulePeriod.Workdays();
 
-				if (workDays * longestShift < lowerTarget || workDays * shortestShift > upperTarget)
+				if (workDays * longestShift.Ticks < lowerTarget.Ticks || workDays * shortestShift.Ticks > upperTarget.Ticks)
 				{
 					hintResult.Add(new PersonHintError(person)
 					{
