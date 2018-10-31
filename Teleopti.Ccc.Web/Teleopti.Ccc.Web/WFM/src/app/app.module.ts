@@ -12,8 +12,8 @@ import { UserPreferences, UserService, VersionService } from './core/services';
 import { CustomTranslateParser, LanguageLoaderFactory, Zorroi18nService } from './core/translation';
 import { MenuModule } from './menu/menu.module';
 import { NavigationModule } from './navigation/navigation.module';
-import { PeopleModule } from './people/people.module';
 import { ReportModule } from './reports/reports.module';
+import { PeopleModule } from './people/people.module';
 import { PmModule } from './pm/pm.module';
 
 @NgModule({

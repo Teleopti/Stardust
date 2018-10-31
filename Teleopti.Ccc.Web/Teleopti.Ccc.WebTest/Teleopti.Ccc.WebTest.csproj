@@ -283,6 +283,7 @@
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestAllowanceViewModelFactoryTest.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningGroupControllerTest.cs" />
     <Compile Include="Areas\Staffing\BpoControllerTest.cs" />
+    <Compile Include="Areas\Staffing\StaffingAuditContextTest.cs" />
     <Compile Include="Areas\Staffing\StaffingControllerTest.cs" />
     <Compile Include="Areas\Start\Core\IanaTimeZoneProviderTest.cs" />
     <Compile Include="Areas\TeamSchedule\Core\AbsenceHandler\AbsencePersisterTest_NoMock.cs" />
