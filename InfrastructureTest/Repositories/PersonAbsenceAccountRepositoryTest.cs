@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(otherPersonAbsenceAccount);
 			var repository = new PersonAbsenceAccountRepository(UnitOfWork);
 
-			var result = repository.FindByUsersAndPeriod(new[] {personToFind}, period);
+			var result = repository.FindByUsers(new[] {personToFind}, period);
 
 			result.Count.Should().Be.EqualTo(1);
 			result[personToFind].PersonAbsenceAccounts().Single().AccountCollection().Single().Should().Be.EqualTo(accountToFind);
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personToFindAbsenceAccount);
 			var repository = new PersonAbsenceAccountRepository(UnitOfWork);
 
-			var result = repository.FindByUsersAndPeriod(new[] { personToFind }, period);
+			var result = repository.FindByUsers(new[] { personToFind }, period);
 
 			result[personToFind].PersonAbsenceAccounts().Single().AccountCollection().Single().Should().Be.EqualTo(accountToFind);
 		}
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personToFindAbsenceAccount);
 			var repository = new PersonAbsenceAccountRepository(UnitOfWork);
 
-			var result = repository.FindByUsersAndPeriod(new[] { personToFind }, period);
+			var result = repository.FindByUsers(new[] { personToFind }, period);
 
 			result[personToFind].PersonAbsenceAccounts().Single().AccountCollection().Single().Should().Be.EqualTo(accountToFind);
 		}
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personToFindAbsenceAccount);
 			var repository = new PersonAbsenceAccountRepository(UnitOfWork);
 
-			var result = repository.FindByUsersAndPeriod(new[] { personToFind }, period);
+			var result = repository.FindByUsers(new[] { personToFind }, period);
 
 			Session.Close();
 			result[personToFind].PersonAbsenceAccounts().Single().AccountCollection().Any().Should().Be.True();

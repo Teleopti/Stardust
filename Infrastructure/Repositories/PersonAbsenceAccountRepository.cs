@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return ret;
 		}
 
-		public IDictionary<IPerson, IPersonAccountCollection> FindByUsersAndPeriod(IEnumerable<IPerson> persons, DateOnlyPeriod period)
+		public IDictionary<IPerson, IPersonAccountCollection> FindByUsers(IEnumerable<IPerson> persons, DateOnlyPeriod period)
 		{
 			var ret = new dic(new Dictionary<IPerson, IPersonAccountCollection>());
 
