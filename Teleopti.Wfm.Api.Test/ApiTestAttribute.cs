@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Authentication;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
@@ -106,6 +107,7 @@ namespace Teleopti.Wfm.Api.Test
 			isolate.UseTestDouble<FakeDataSourcesFactory>().For<IDataSourcesFactory>();
 			isolate.UseTestDouble<FakeAllLicenseActivatorProvider>().For<ILicenseActivatorProvider>();
 			isolate.UseTestDouble(userUnauthorized).For<ILoadUserUnauthorized>();
+			isolate.UseTestDouble<DummyHangfireClientStarter>().For<IHangfireClientStarter>();
 			
 			var businessUnitRepository = new FakeBusinessUnitRepository();
 			businessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);

@@ -69,9 +69,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<ScheduleChangedEventDetector>().For<IHandleEvent<ScheduleChangedEvent>>();
-			isolate.UseTestDouble<PersonAbsenceRemover>().For<IPersonAbsenceRemover>();
-			isolate.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
-			isolate.UseTestDouble<PersonAbsenceCreator>().For<IPersonAbsenceCreator>();
 			isolate.UseTestDouble<PersonRequestAuthorizationCheckerConfigurable>().For<IPersonRequestCheckAuthorization>();
 			isolate.UseTestDouble<ApprovalServiceForTest>().For<IRequestApprovalService>();
 			isolate.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();
@@ -479,14 +476,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return absenceRequest;
 		}
 
-		private PersonRequest createApprovedPersonRequest(IPerson person, AbsenceRequest absenceRequest)
+		private void createApprovedPersonRequest(IPerson person, AbsenceRequest absenceRequest)
 		{
 			var personRequest = new PersonRequest(person, absenceRequest).WithId();
 			RequestRepository.Add(personRequest);
 
 			personRequest.Pending();
 			personRequest.Approve(ApprovalService, PersonRequestAuthorizationChecker);
-			return personRequest;
 		}
 
 		private void createPersonAbsence(IAbsence absence, DateTimePeriod dateTimePeriodOfAbsenceRequest, IPerson person)

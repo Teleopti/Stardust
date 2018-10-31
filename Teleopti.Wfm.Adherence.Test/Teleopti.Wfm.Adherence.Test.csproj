@@ -207,6 +207,7 @@
     <Compile Include="Domain\AgentAdherenceDay\RecordedAdherenceTest.cs" />
     <Compile Include="Domain\AgentAdherenceDay\ResolutionTest.cs" />
     <Compile Include="Domain\ApprovePeriodAsInAdherence\ApprovedPeriodTest.cs" />
+    <Compile Include="Domain\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceBelongsToDateCommandHandlerTest.cs" />
     <Compile Include="Domain\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceCommandHandlerTest.cs" />
     <Compile Include="Domain\ApprovePeriodAsInAdherence\RemoveApprovedPeriodTest.cs" />
     <Compile Include="Domain\ApprovePeriodAsInAdherence\RemovePeriodAsInAdherenceCommandHandlerTest.cs" />
@@ -244,7 +245,6 @@
     <Compile Include="Domain\Service\IncorrectOutOfAdherenceCount35829.cs" />
     <Compile Include="Domain\Service\LateForWorkEventTest.cs" />
     <Compile Include="Domain\Service\MeetingTest.cs" />
-    <Compile Include="Domain\Service\PersonActivityActualStartEventTest.cs" />
     <Compile Include="Domain\Service\PersonActivityStartEventTest.cs" />
     <Compile Include="Domain\Service\PersonAdherenceEventsTest.cs" />
     <Compile Include="Domain\Service\PersonAdherenceScheduleRemovedTest.cs" />

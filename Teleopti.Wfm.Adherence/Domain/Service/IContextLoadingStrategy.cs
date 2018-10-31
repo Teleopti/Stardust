@@ -72,8 +72,14 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		private readonly int _dataSourceId;
 		private IDictionary<Guid, BatchStateInputModel> _matches;
 
-		public BatchStrategy(BatchInputModel batch, DateTime time, IConfigReader config, IAgentStatePersister persister,
-			DataSourceMapper dataSourceMapper, ExternalLogonMapper externalLogonMapper, IRtaTracer tracer) : base(config,
+		public BatchStrategy(
+			BatchInputModel batch, 
+			DateTime time, 
+			IConfigReader config, 
+			IAgentStatePersister persister,
+			DataSourceMapper dataSourceMapper, 
+			ExternalLogonMapper externalLogonMapper, 
+			IRtaTracer tracer) : base(config,
 			persister, time)
 		{
 			_externalLogonMapper = externalLogonMapper;
@@ -187,6 +193,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 	{
 		private readonly IKeyValueStorePersister _keyValues;
 		private readonly ScheduleCache _scheduleCache;
+		private readonly ExternalLogonMapper _externalLogonMapper;
 		private readonly IRtaTracer _tracer;
 
 		public ActivityChangesStrategy(
@@ -195,10 +202,12 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			IAgentStatePersister persister,
 			IKeyValueStorePersister keyValues,
 			ScheduleCache scheduleCache,
+			ExternalLogonMapper externalLogonMapper,
 			IRtaTracer tracer) : base(config, persister, time)
 		{
 			_keyValues = keyValues;
 			_scheduleCache = scheduleCache;
+			_externalLogonMapper = externalLogonMapper;
 			_tracer = tracer;
 			ParallelTransactions = Config.ReadValue("RtaActivityChangesParallelTransactions", 7);
 			MaxTransactionSize = Config.ReadValue("RtaActivityChangesMaxTransactionSize", 100);
@@ -207,6 +216,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 
 		public override IEnumerable<Guid> PersonIds(StrategyContext context)
 		{
+			_externalLogonMapper.Refresh();
 			IEnumerable<PersonForCheck> persons = null;
 			CurrentScheduleReadModelVersion version = null;
 			context.WithReadModelUnitOfWork(() => { version = _keyValues.Get("CurrentScheduleReadModelVersion", null); });

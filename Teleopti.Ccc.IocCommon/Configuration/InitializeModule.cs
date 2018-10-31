@@ -18,10 +18,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterInstance(_iocConfiguration.Args().DataSourceConfigurationSetter);
+			builder.RegisterInstance(new DataSourceApplicationName {Name = _iocConfiguration.Args().DataSourceApplicationName});
+			builder.RegisterType<DataSourceConfigurationSetter>().As<IDataSourceConfigurationSetter>().SingleInstance();
 			builder.RegisterType<InitializeApplication>().As<IInitializeApplication>().SingleInstance();
 			builder.RegisterType<MemoryNHibernateConfigurationCache>().SingleInstance();
-			builder.RegisterType<UnitOfWorkFactoryFactory>().SingleInstance();				
+			builder.RegisterType<UnitOfWorkFactoryFactory>().SingleInstance();
 			builder.RegisterType<DataSourcesFactory>().As<IDataSourcesFactory>().SingleInstance();
 			builder.RegisterType<InitializeLicenseServiceForTenant>().As<IInitializeLicenseServiceForTenant>().SingleInstance();
 			builder.RegisterType<LicenseVerifierFactory>().As<ILicenseVerifierFactory>().SingleInstance();

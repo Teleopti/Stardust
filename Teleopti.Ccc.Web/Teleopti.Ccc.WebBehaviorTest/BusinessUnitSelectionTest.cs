@@ -38,12 +38,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.AssertNoContains(".wfm-list", ".wfm-list li", "role 1");
 			Browser.Interactions.AssertNoContains(".wfm-list", ".wfm-list li", "role 2");
 
-			Browser.Interactions.Click("#bu-select");
-			Browser.Interactions.ClickUsingJQuery("#business-unit-dropdown > li:contains(business unit 1)");
+			Browser.Interactions.Click("[data-test-bu-select]");
+			Browser.Interactions.ClickUsingJQuery("[data-test-bu-list] > li:contains(business unit 1)");
 			Browser.Interactions.AssertAnyContains(".wfm-list li", "role 1");
 
-			Browser.Interactions.Click("#bu-select");
-			Browser.Interactions.ClickUsingJQuery("#business-unit-dropdown > li:contains(business unit 2)");
+			Browser.Interactions.Click("[data-test-bu-select]");
+			Browser.Interactions.ClickUsingJQuery("[data-test-bu-list] > li:contains(business unit 2)");
 			Browser.Interactions.AssertAnyContains(".wfm-list li", "role 2");
 		}
 
@@ -64,14 +64,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			TestControllerMethods.Logon();
 			Navigation.GotoRealTimeAdherenceAgents();
 
-			Browser.Interactions.Click("#bu-select");
-			Browser.Interactions.ClickUsingJQuery("#business-unit-dropdown > li:contains(business unit 1)");
+			Browser.Interactions.Click("[data-test-bu-select]");
+			Browser.Interactions.ClickUsingJQuery("[data-test-bu-list] > li:contains(business unit 1)");
 			Browser.Interactions.Click(".organization-picker");
 			Browser.Interactions.AssertAnyContains(".organization-picker .md-label", "site 1");
 			Browser.Interactions.AssertNoContains(".organization-picker", ".md-label", "site 2");
 
-			Browser.Interactions.Click("#bu-select");
-			Browser.Interactions.ClickUsingJQuery("#business-unit-dropdown > li:contains(business unit 2)");
+			Browser.Interactions.Click("[data-test-bu-select]");
+			Browser.Interactions.ClickUsingJQuery("[data-test-bu-list] > li:contains(business unit 2)");
 			Browser.Interactions.Click(".organization-picker");
 			Browser.Interactions.AssertAnyContains(".organization-picker .md-label", "site 2");
 			Browser.Interactions.AssertNoContains(".organization-picker", ".md-label", "site 1");

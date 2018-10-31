@@ -51,4 +51,20 @@ $(document).ready(function() {
 
 		resetLocale();
 	});
+
+	test("should set correct time format for fi-fi", function() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
+		Teleopti.MyTimeWeb.Common.SetupCalendar({
+			UseJalaaliCalendar: false,
+			DateFormat: 'YYYY/MM/DD',
+			TimeFormat: 'H.mm'
+		});
+
+		var shiftExchangeOfferViewModel = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel();
+		shiftExchangeOfferViewModel.StartTime("08:00");
+		shiftExchangeOfferViewModel.EndTime("17:00");
+
+		equal(shiftExchangeOfferViewModel.startTimeInternal(), "08.00");
+		equal(shiftExchangeOfferViewModel.endTimeInternal(), "17.00");
+	});
 });

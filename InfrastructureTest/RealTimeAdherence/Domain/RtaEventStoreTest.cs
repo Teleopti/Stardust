@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -107,24 +108,12 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 		}
 
 		[Test]
-		public void ShouldStoreAnyTypeOfEvent()
-		{
-			var id = Guid.NewGuid();
-
-			Target.Publish(new TestEvent {Id = id});
-
-			WithUnitOfWork.Get(() => Events.LoadAllForTest())
-				.Cast<TestEvent>()
-				.Single().Id.Should().Be(id);
-		}
-
-		[Test]
 		public void ShouldStorePersonRuleChangedEvent()
 		{
 			Target.Publish(new PersonRuleChangedEvent());
 
 			WithUnitOfWork.Get(() => Events.LoadAllForTest())
-				.Should().Not.Be.Empty();
+				.Single().Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -133,7 +122,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 			Target.Publish(new PeriodApprovedAsInAdherenceEvent());
 
 			WithUnitOfWork.Get(() => Events.LoadAllForTest())
-				.Should().Not.Be.Empty();
+				.Single().Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -142,13 +131,43 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 			WithUnitOfWork.Do(() => Target.Publish(new PersonArrivedLateForWorkEvent()));
 
 			WithUnitOfWork.Get(() => Events.LoadAllForTest())
-				.Should().Not.Be.Empty();
+				.Single().Should().Not.Be.Null();
 		}
 
-		public class TestEvent : IRtaStoredEvent, IEvent
+		[Test]
+		public void ShouldStoreApprovedPeriodRemovedEvent()
 		{
-			public Guid Id;
-			public QueryData QueryData() => new QueryData();
+			WithUnitOfWork.Do(() => Target.Publish(new ApprovedPeriodRemovedEvent()));
+
+			WithUnitOfWork.Get(() => Events.LoadAllForTest())
+				.Single().Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldStorePersonAdherenceDayStartEvent()
+		{
+			WithUnitOfWork.Do(() => Target.Publish(new PersonAdherenceDayStartEvent()));
+
+			WithUnitOfWork.Get(() => Events.LoadAllForTest())
+				.Single().Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldStorePersonShiftEndEvent()
+		{
+			WithUnitOfWork.Do(() => Target.Publish(new PersonShiftEndEvent()));
+
+			WithUnitOfWork.Get(() => Events.LoadAllForTest())
+				.Single().Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldStorePersonShiftStartEvent()
+		{
+			WithUnitOfWork.Do(() => Target.Publish(new PersonShiftStartEvent()));
+
+			WithUnitOfWork.Get(() => Events.LoadAllForTest())
+				.Single().Should().Not.Be.Null();
 		}
 	}
 }

@@ -11,28 +11,24 @@
 			</button>
 		</div>
 	</div>
-    <div class="con-row">
-        <div class="con-flex"
-             style="flex: 2 1 0">
-            <div class="panel material-depth-1">
-                <div class="con-row align-row-center staffing-toolbar" ng-class="{'locked':vm.isSearchRequested}">
-                    <the-skill-picker class="con-flex pull-left"
-										skills="vm.allSkills"
-										skill-groups="vm.allSkillAreas"
-										on-skill-selected="vm.selectedSkillChange(skill)"
-										on-skill-group-selected="vm.selectedAreaChange(skillGroup)"
-										preselected-skill="vm.selectedSkill"
-										preselected-skill-group="vm.selectedSkillArea">
-                    </the-skill-picker>
+	<div class="con-row">
+		<div class="con-flex" style="flex: 2 1 0">
+			<div class="panel material-depth-1">
+				<div class="con-row align-row-center staffing-toolbar" ng-class="{'locked':vm.isSearchRequested}">
+					<the-skill-picker class="con-flex pull-left" skills="vm.allSkills" skill-groups="vm.allSkillAreas" on-skill-selected="vm.selectedSkillChange(skill)"
+					 on-skill-group-selected="vm.selectedAreaChange(skillGroup)" preselected-skill="vm.selectedSkill" preselected-skill-group="vm.selectedSkillArea">
+					</the-skill-picker>
 					<skill-group-manager-button id="manage_skill_group_button" ng-if="vm.HasPermissionToModifySkillArea" ng-click="vm.configMode()">
 					</skill-group-manager-button>
-					<wfm-date-picker class="con-flex" style="margin-left: 10px" ng-model="vm.selectedDate" show-week="true" popup-mode="true" on-date-change="vm.navigateToNewDay(vm.selectedDate)"></wfm-date-picker>
-					<md-checkbox class="pull-right" style="margin-right: 10px" ng-change="vm.useShrinkageForStaffing()" ng-model="vm.useShrinkage" aria-label="Checkbox">{{'UseShrinkage'|translate}}</md-checkbox>
+					<wfm-date-picker class="con-flex" style="margin-left: 10px" ng-model="vm.selectedDate" show-week="true" popup-mode="true"
+					 on-date-change="vm.navigateToNewDay(vm.selectedDate)"></wfm-date-picker>
+					<md-checkbox class="pull-right" style="margin-right: 10px" ng-change="vm.useShrinkageForStaffing()" ng-model="vm.useShrinkage"
+					 aria-label="Checkbox">{{'UseShrinkage'|translate}}</md-checkbox>
 					<md-progress-linear md-mode="indeterminate" ng-if="vm.isSearchRequested"></md-progress-linear>
-                </div>
-            </div>
-        </div>
-    </div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<modal-dialog show='vm.exportModal' ng-cloak>
 		<div ng-if="vm.showBpoInterface && vm.hasPermissionForBpoExchange">
@@ -92,7 +88,9 @@
 				</div>
 				<div class="con-footer">
 					<div ng-show="vm.showBpoInterface && vm.hasPermissionForBpoExchange" style="padding-left: 50px; width: max-content; text-align: left;">
-						<div><b>{{'ImportBpoFileImportInfoHeader' | translate}}</b></div>
+						<h5>
+							<b>{{'ImportBpoFileImportInfoHeader' | translate}}</b>
+						</h5>
 						<div ng-repeat="x in vm.importedBboInfos">
 							<div>
 								{{x.Source}} - {{x.ImportFilename}}
@@ -133,21 +131,18 @@
 						<div class="con-flex">
 							<h3>{{'Duration' | translate}}</h3>
 							<div class="con-row">
-								<div uib-timepicker required ng-change="vm.validSettings(vm.overtimeForm)" ng-model="vm.overtimeForm.MinMinutesToAdd"
-								 show-meridian="false"></div>
+								<div uib-timepicker required ng-change="vm.validSettings(vm.overtimeForm)" ng-model="vm.overtimeForm.MinMinutesToAdd" show-meridian="false"></div>
 								-
-								<div uib-timepicker required ng-change="vm.validSettings(vm.overtimeForm)" ng-model="vm.overtimeForm.MaxMinutesToAdd"
-								 show-meridian="false"></div>
+								<div uib-timepicker required ng-change="vm.validSettings(vm.overtimeForm)" ng-model="vm.overtimeForm.MaxMinutesToAdd" show-meridian="false"></div>
 							</div>
 						</div>
 						<div class="con-flex x3"></div>
 					</div>
 					<div class="con-footer">
 						<button class="wfm-btn" ng-class="!vm.overtimeForm.$valid||!vm.validSettings(vm.overtimeForm) ? 'wfm-btn-primary-disabled' : 'wfm-btn-primary'"
-						 ng-disabled="!vm.overtimeForm.$valid || !vm.validSettings(vm.overtimeForm)" type="submit">{{'GetSuggestionsForOvertime'
-							| translate}}</button>
-						<button class="wfm-btn" ng-class="vm.hasSuggestionData ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'"
-						 ng-disabled="!vm.hasSuggestionData" ng-click="vm.addOvertime()">{{'ApplySuggestion' | translate}}</button>
+						 ng-disabled="!vm.overtimeForm.$valid || !vm.validSettings(vm.overtimeForm)" type="submit">{{'GetSuggestionsForOvertime' | translate}}</button>
+						<button class="wfm-btn" ng-class="vm.hasSuggestionData ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-disabled="!vm.hasSuggestionData"
+						 ng-click="vm.addOvertime()">{{'ApplySuggestion' | translate}}</button>
 					</div>
 				</div>
 			</form>

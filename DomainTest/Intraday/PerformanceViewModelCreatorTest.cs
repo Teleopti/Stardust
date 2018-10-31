@@ -625,7 +625,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var latestStatsTime = new DateTime(2016, 8, 26, 0, 0, 0, DateTimeKind.Utc);
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 
-			var scenario = fakeScenarioAndIntervalLength();
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(0, 0, 0, 30), false);
 			var skillDay = createSkillDay(skill, userNow, new TimePeriod(0, 0, 0, 30), true);
 

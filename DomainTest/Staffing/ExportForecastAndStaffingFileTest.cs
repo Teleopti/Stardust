@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			SkillRepository.Add(skill);
 
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 18), new DateOnly(2017, 8, 19));
-			var exportStaffingReturnObject = Target.ExportForecastAndStaffing(new Guid(), period.StartDate.Date, period.EndDate.Date, false);
+			var exportStaffingReturnObject = Target.ExportForecastAndStaffing(new Guid(), period.StartDate, period.EndDate, false);
 			exportStaffingReturnObject.ErrorMessage.Should().Contain("Cannot find skill with id");
 		}
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			SkillRepository.Add(skill);
 
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 9), new DateOnly(2017, 8, 16));
-			var exportStaffingReturnObject = Target.ExportForecastAndStaffing(skill.Id.GetValueOrDefault(), period.StartDate.Date, period.EndDate.Date, false);
+			var exportStaffingReturnObject = Target.ExportForecastAndStaffing(skill.Id.GetValueOrDefault(), period.StartDate, period.EndDate, false);
 			exportStaffingReturnObject.ErrorMessage.Should().Contain("datumintervallet 2017-08-10 - 2017-09-01");
 		}
 
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			SkillRepository.Add(skill);
 
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
-			var exportStaffingReturnObject = Target.ExportForecastAndStaffing(skill.Id.GetValueOrDefault(), period.StartDate.Date, period.EndDate.Date, false);
+			var exportStaffingReturnObject = Target.ExportForecastAndStaffing(skill.Id.GetValueOrDefault(), period.StartDate, period.EndDate, false);
 			exportStaffingReturnObject.ErrorMessage.Should().Be.Empty();
 		}
 

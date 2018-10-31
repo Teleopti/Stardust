@@ -1,14 +1,25 @@
 'use strict';
 
-(function () {
+(function() {
+	angular.module('wfm.seatMap').controller('SeatMapCanvasController', seatMapCanvasDirectiveController);
 
-	angular.module('wfm.seatMap')
-		.controller('SeatMapCanvasCtrl', seatMapCanvasDirectiveController);
+	seatMapCanvasDirectiveController.$inject = [
+		'$scope',
+		'$translate',
+		'$window',
+		'seatMapCanvasUtilsService',
+		'PermissionsServiceRefact',
+		'$timeout'
+	];
 
-	seatMapCanvasDirectiveController.$inject = ['$scope', '$translate', '$document', '$window', 'seatMapCanvasUtilsService', 'seatMapCanvasEditService', 'PermissionsServiceRefact', 'NoticeService', '$timeout'];
-
-	function seatMapCanvasDirectiveController($scope, $translate, $document, $window, canvasUtils, editor, PermissionsServiceRefact, NoticeService, $timeout) {
-
+	function seatMapCanvasDirectiveController(
+		$scope,
+		$translate,
+		$window,
+		canvasUtils,
+		PermissionsServiceRefact,
+		$timeout
+	) {
 		var vm = this;
 		vm.isLoading = true;
 		vm.breadcrumbs = [];
@@ -47,8 +58,8 @@
 
 		var canvas = new fabric.CanvasWithViewport('c');
 
-		vm.init = function () {
-			fabric.util.addListener(document.getElementsByClassName('upper-canvas')[0], 'contextmenu', function (e) {
+		vm.init = function() {
+			fabric.util.addListener(document.getElementsByClassName('upper-canvas')[0], 'contextmenu', function(e) {
 				if (e.preventDefault) e.preventDefault();
 				e.returnValue = false;
 				return false;
@@ -61,42 +72,50 @@
 
 			resize();
 
-			angular.element($window).bind('resize', function () {
+			angular.element($window).bind('resize', function() {
 				resize();
 			});
 
-			$scope.$on('sidenav:toggle', function () {
+			$scope.$on('sidenav:toggle', function() {
 				resize();
 			});
 
 			createDocumentListeners();
 			vm.isLoading = true;
 
-			canvasUtils.loadSeatMap(null, moment(vm.selectedDate).format('YYYY-MM-DD'), canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
+			canvasUtils.loadSeatMap(
+				null,
+				moment(vm.selectedDate).format('YYYY-MM-DD'),
+				canvas,
+				vm.isInEditMode,
+				vm.showOccupancy,
+				onLoadSeatMapSuccess,
+				onLoadSeatMapNoSeatMapJson
+			);
 		};
 
-		vm.getCanvas = function () {
+		vm.getCanvas = function() {
 			return canvas;
 		};
 
-		vm.isMoveMode = function () {
+		vm.isMoveMode = function() {
 			return canvas.isGrabMode;
 		};
-		vm.zoom = function () {
+		vm.zoom = function() {
 			canvasUtils.zoom(canvas, vm.zoomData.zoomValue);
 		};
 
-		vm.toggleMoveMode = function () {
+		vm.toggleMoveMode = function() {
 			canvasUtils.toggleMoveMode(canvas);
 		};
 
-		vm.getRoles = function () {
-			PermissionsServiceRefact.roles.query().$promise.then(function (rolesData) {
+		vm.getRoles = function() {
+			PermissionsServiceRefact.roles.query().$promise.then(function(rolesData) {
 				vm.roles = rolesData;
 			});
 		};
 
-		vm.getActiveObjects = function () {
+		vm.getActiveObjects = function() {
 			vm.activeSeats = [];
 			vm.otherActiveObjects = [];
 
@@ -104,9 +123,11 @@
 
 			canvasUtils.getActiveSeatObjects(canvas, vm.seats, vm.activeSeats);
 
-			vm.otherActiveObjects = vm.otherActiveObjects.concat(canvasUtils.getActiveFabricObjectsByType(canvas, 'location'),
-														canvasUtils.getActiveFabricObjectsByType(canvas, 'image'),
-														canvasUtils.getActiveFabricObjectsByType(canvas, 'i-text'));
+			vm.otherActiveObjects = vm.otherActiveObjects.concat(
+				canvasUtils.getActiveFabricObjectsByType(canvas, 'location'),
+				canvasUtils.getActiveFabricObjectsByType(canvas, 'image'),
+				canvasUtils.getActiveFabricObjectsByType(canvas, 'i-text')
+			);
 
 			vm.prefixSuffixPanelOptions.showPopupButton = false;
 			vm.prefixSuffixPanelOptions.panelState = false;
@@ -120,77 +141,101 @@
 				vm.rightPanelOptions.showPopupButton = false;
 				vm.rightPanelOptions.panelState = false;
 			}
+			$scope.$apply();
 		};
 
-		vm.handleBreadcrumbClick = function (id) {
+		vm.handleBreadcrumbClick = function(id) {
 			vm.isLoading = true;
 			vm.rightPanelOptions.panelState = false;
-			canvasUtils.loadSeatMap(id, moment(vm.selectedDate).format('YYYY-MM-DD'), canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
+			canvasUtils.loadSeatMap(
+				id,
+				moment(vm.selectedDate).format('YYYY-MM-DD'),
+				canvas,
+				vm.isInEditMode,
+				vm.showOccupancy,
+				onLoadSeatMapSuccess,
+				onLoadSeatMapNoSeatMapJson
+			);
 		};
 
-		vm.refreshSeatMap = function (date) {
-			if(!date) date = moment(vm.selectedDate).format('YYYY-MM-DD');
+		vm.refreshSeatMap = function(date) {
+			if (!date) date = moment(vm.selectedDate).format('YYYY-MM-DD');
 
 			vm.isLoading = true;
-			canvasUtils.loadSeatMap(vm.seatMapId, date, canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
+			canvasUtils.loadSeatMap(
+				vm.seatMapId,
+				date,
+				canvas,
+				vm.isInEditMode,
+				vm.showOccupancy,
+				onLoadSeatMapSuccess,
+				onLoadSeatMapNoSeatMapJson
+			);
 			resize();
 		};
 
-		vm.onChangeOfDate = function (date) {
+		vm.onChangeOfDate = function(date) {
 			vm.refreshSeatMap(moment(date).format('YYYY-MM-DD'));
 		};
 
 		vm.updateSeatNumber = function(seat, newNumber) {
 			canvasUtils.updateSeatNumber(canvas, seat, newNumber, vm.seats);
-		}
+		};
 
 		function resize() {
 			canvasUtils.resize(canvas);
-		};
+		}
 
 		function scrollZooming() {
 			vm.zoomData.zoomValue = canvasUtils.scrollZooming($window, canvas, vm.scrollListen, vm.zoomData);
 			$scope.$apply();
-		};
+		}
 
 		function resetZoom() {
 			vm.zoomData.zoomValue = 1;
 			canvasUtils.zoom(canvas, vm.zoomData.zoomValue);
 			canvasUtils.resetPosition(canvas);
-		};
+		}
 
 		function createDocumentListeners() {
 			document.onmousewheel = scrollZooming;
-		};
+		}
 
 		function setupLocationDoubleClickHandler() {
 			setupObjectTypeDoubleClickHandler('location', loadSeatMapOnLocationClick);
-		};
+		}
 
 		function setupObjectTypeDoubleClickHandler(objectType, callback) {
-			canvasUtils.getObjectsByType(canvas, objectType).forEach(function (object) {
-				object.on('object:dblclick', function (e) {
+			canvasUtils.getObjectsByType(canvas, objectType).forEach(function(object) {
+				object.on('object:dblclick', function(e) {
 					if (object != null) {
 						callback(object);
 					}
 				});
 			});
-		};
+		}
 
 		function loadSeatMapOnLocationClick(location) {
 			vm.isLoading = true;
-			canvasUtils.loadSeatMap(location.id, moment(vm.selectedDate).format('YYYY-MM-DD'), canvas, vm.isInEditMode, vm.showOccupancy, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
-		};
+			canvasUtils.loadSeatMap(
+				location.id,
+				moment(vm.selectedDate).format('YYYY-MM-DD'),
+				canvas,
+				vm.isInEditMode,
+				vm.showOccupancy,
+				onLoadSeatMapSuccess,
+				onLoadSeatMapNoSeatMapJson
+			);
+		}
 
 		function resetOnLoad(data) {
-
 			setupLocationDoubleClickHandler();
-			if (data.Id != undefined) {
+			if (angular.isDefined(data.Id)) {
 				vm.parentId = data.ParentId;
 				vm.seatMapId = data.Id;
 				vm.breadcrumbs = data.BreadcrumbInfo;
 				vm.loadedJsonData = data.SeatMapJsonData;
-				vm.loadedSeatsData = JSON.stringify(data.Seats);
+				vm.loadedSeatsData = angular.toJson(data.Seats);
 				vm.seats = data.Seats;
 				vm.locationPrefix = data.LocationPrefix;
 				vm.locationSuffix = data.LocationSuffix;
@@ -200,18 +245,18 @@
 			vm.isLoading = false;
 			canvas.fire('seatmaplocation:loaded', { data: data });
 
-			$timeout(function () {
+			$timeout(function() {
 				$scope.$apply();
 				resize();
 			});
-		};
+		}
 
 		function onLoadSeatMapSuccess(data) {
 			resetOnLoad(data);
-		};
+		}
 
 		function onLoadSeatMapNoSeatMapJson(data) {
 			resetOnLoad(data);
-		};
-	};
-}());
+		}
+	}
+})();

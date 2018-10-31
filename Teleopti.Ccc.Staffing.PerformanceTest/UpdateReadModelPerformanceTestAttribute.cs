@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		protected override void Startup(IComponentContext container)
 		{
 			base.Startup(container);
-			container.Resolve<HangfireClientStarter>().Start();
+			container.Resolve<IHangfireClientStarter>().Start();
 		}
 	}
 }

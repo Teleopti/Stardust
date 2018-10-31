@@ -31,10 +31,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			isolate.UseTestDouble<RemovePartPersonAbsenceCommandHandler>().For<RemovePartPersonAbsenceCommandHandler>();
 			isolate.UseTestDouble<businessRulesForPersonalAccountUpdateWithNewPersonAccountRuleHaltModify>()
 				.For<BusinessRulesForPersonalAccountUpdate>();
-			isolate.UseTestDouble<PersonAbsenceCreator>().For<IPersonAbsenceCreator>();
-			isolate.UseTestDouble<PersonAbsenceRemover>().For<PersonAbsenceRemover>();
-			isolate.UseTestDouble<PersonAbsenceRemover>().For<IPersonAbsenceRemover>();
-			isolate.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
 		}
 
 		[Test]

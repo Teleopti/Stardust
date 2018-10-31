@@ -282,7 +282,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday.ApplicationLayer
 			IntradayMonitorDataLoader.AddInterval(_secondInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var old = Old.Load_old(new[] { Guid.NewGuid() });
 			var viewModel = Target.GenerateIncomingTrafficViewModel(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.AverageHandleTime.Length.Should().Be.EqualTo(2);

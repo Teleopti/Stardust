@@ -38,14 +38,14 @@
     <Reference Include="Microsoft.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.4.0.0\lib\net451\Microsoft.Owin.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.FileSystems, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.FileSystems.3.1.0\lib\net45\Microsoft.Owin.FileSystems.dll</HintPath>
+    <Reference Include="Microsoft.Owin.FileSystems, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.FileSystems.4.0.0\lib\net451\Microsoft.Owin.FileSystems.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin.Hosting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Hosting.4.0.0\lib\net451\Microsoft.Owin.Hosting.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.StaticFiles, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.StaticFiles.3.1.0\lib\net45\Microsoft.Owin.StaticFiles.dll</HintPath>
+    <Reference Include="Microsoft.Owin.StaticFiles, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.StaticFiles.4.0.0\lib\net451\Microsoft.Owin.StaticFiles.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin.Testing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Testing.4.0.0\lib\net451\Microsoft.Owin.Testing.dll</HintPath>
@@ -103,12 +103,14 @@
     <Compile Include="AuthorizationTest.cs" />
     <Compile Include="CommandListingTest.cs" />
     <Compile Include="Command\AddAbsenceTest.cs" />
+    <Compile Include="Command\AddIntradayAbsenceRequestTest.cs" />
     <Compile Include="Command\AddScheduleChangesListenerTest.cs" />
     <Compile Include="Command\RemoveAbsenceTest.cs" />
     <Compile Include="Command\SetMainShiftTest.cs" />
     <Compile Include="FakeTokenVerifier.cs" />
     <Compile Include="IApiHttpClient.cs" />
     <Compile Include="QueryListingTest.cs" />
+    <Compile Include="Query\AbsenceRequestRulesByPersonIdTest.cs" />
     <Compile Include="Query\AllAbsencesTest.cs" />
     <Compile Include="Query\GetAllActivitiesTest.cs" />
     <Compile Include="Query\PermittedFunctionsByPersonTest.cs" />

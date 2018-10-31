@@ -14,9 +14,6 @@ namespace Teleopti.Ccc.WebTest.TestHelper
 	/// </summary>
 	public class TestControllerBuilder
 	{
-		
-		protected TempDataDictionary _tempData;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TestControllerBuilder"/> class
 		/// using the first available mocking framework available.

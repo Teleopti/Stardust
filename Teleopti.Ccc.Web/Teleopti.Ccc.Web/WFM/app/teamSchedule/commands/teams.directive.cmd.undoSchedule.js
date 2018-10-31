@@ -90,9 +90,7 @@
 			var message = notification.buildConfirmationMessage(
 				$translate.instant('AreYouSureToUndoSelectedSchedule'),
 				PersonSelection.getTotalSelectedPersonAndProjectionCount.CheckedPersonCount,
-				null,
-				true
-			);
+				null);
 			$wfmModal.confirm(message, title).then(function (result) {
 				vm.resetActiveCmd();
 				if (result) {

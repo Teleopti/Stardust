@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.Booter
 					{
 						var taskType = t.GetType();
 						var attributePrio = (TaskPriorityAttribute)taskType.GetCustomAttributes(typeof(TaskPriorityAttribute), false).FirstOrDefault();
-						return attributePrio != null ? attributePrio.Priority : int.MaxValue;
+						return attributePrio?.Priority ?? int.MaxValue;
 					})
 				.ToArray();
 			return bootstrapperTasks.Select(t => t.Execute(application)).Where(x => x != null).ToArray();

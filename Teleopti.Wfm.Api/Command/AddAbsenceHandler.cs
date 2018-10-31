@@ -1,18 +1,13 @@
 ﻿using System;
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
-
-/* DO NOT USE! 
-It only contains vary simple logic. 
-Used for staffhub integration only until further notice */
-
-//TODO personal account 
 namespace Teleopti.Wfm.Api.Command
 {
 	public class AddAbsenceHandler : ICommandHandler<AddAbsenceDto>
@@ -21,15 +16,17 @@ namespace Teleopti.Wfm.Api.Command
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IAbsenceRepository _absenceRepository;
 		private readonly ILog _logger = LogManager.GetLogger(typeof(AddAbsenceHandler));
-		private readonly IPersonAbsenceRepository _personAbsenceRepository;
+		private readonly IScheduleStorage _scheduleStorage;
+		private readonly IPersonAbsenceCreator _personAbsenceCreator; 
 
 		public AddAbsenceHandler(IPersonRepository personRepository,
-			IScenarioRepository scenarioRepository, IAbsenceRepository absenceRepository, IPersonAbsenceRepository personAbsenceRepository)
+			IScenarioRepository scenarioRepository, IAbsenceRepository absenceRepository, IScheduleStorage scheduleStorage, IPersonAbsenceCreator personAbsenceCreator)
 		{
 			_personRepository = personRepository;
 			_scenarioRepository = scenarioRepository;
 			_absenceRepository = absenceRepository;
-			_personAbsenceRepository = personAbsenceRepository;
+			_scheduleStorage = scheduleStorage;
+			_personAbsenceCreator = personAbsenceCreator;
 		}
 
 		[UnitOfWork] 
@@ -50,12 +47,25 @@ namespace Teleopti.Wfm.Api.Command
 
 				var person = _personRepository.Load(command.PersonId);
 				var absence = _absenceRepository.Load(command.AbsenceId);
-				var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(command.UtcStartTime.Utc(), command.UtcEndTime.Utc()));
-				var personAbsence = new PersonAbsence(person, scenario, absenceLayer);
-				((IRepository<IPersonAbsence>)_personAbsenceRepository).Add(personAbsence);
+				var dateTimePeriod = new DateTimePeriod(command.UtcStartTime.Utc(), command.UtcEndTime.Utc());
+				var dateOnlyPeriod = dateTimePeriod.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
+
+				var scheduleRange = _scheduleStorage
+					.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), dateOnlyPeriod.Inflate(1),
+						scenario)[person];
+				var scheduleDay = scheduleRange.ScheduledDay(dateOnlyPeriod.StartDate);
+
+				_personAbsenceCreator.Create(new AbsenceCreatorInfo
+				{
+					Absence = absence,
+					AbsenceTimePeriod = dateTimePeriod,
+					Person = person,
+					ScheduleDay = scheduleDay,
+					ScheduleRange = scheduleRange
+				}, false);
+
 				return new ResultDto
 				{
-					Id = personAbsence.Id,
 					Successful = true
 				};
 			}

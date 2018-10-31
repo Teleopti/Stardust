@@ -55,29 +55,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
             }
         }
 
-        [Test]
-        public void SetIdToNullToNewlyAddedRootsIfTranRollback()
-        {
-            IPerson cantBePersisted;
-            using (var uow1 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
-            {
-                var repository = new PersonRepository(new ThisUnitOfWork(uow1));
-                cantBePersisted = PersonFactory.CreatePerson();
-                repository.Add(cantBePersisted);
-                cantBePersisted.Email = null;
-                try
-                {
-                    uow1.PersistAll();
-                }
-                catch (DataSourceException)
-                {
-                }
-            }
-
-            Assert.IsTrue(SetupFixtureForAssembly.loggedOnPerson.Id.HasValue);
-            Assert.IsFalse(cantBePersisted.Id.HasValue);
-        }
-
 		[Test]
 		public void ShouldIncludeTypeInMergingTransientRootErrorMessage()
 		{

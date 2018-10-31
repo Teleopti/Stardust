@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 
 		public WorkloadDayFilterGridControl(IWorkload workload, IWorkloadDayTemplate workloadDayTemplate)
 		{
-			if (workload == null) throw new ArgumentNullException("workload");
-			if (workloadDayTemplate == null) throw new ArgumentNullException("workloadDayTemplate");
+			if (workload == null) throw new ArgumentNullException(nameof(workload));
+			if (workloadDayTemplate == null) throw new ArgumentNullException(nameof(workloadDayTemplate));
 			_workload = workload;
 			_workloadDayTemplate = workloadDayTemplate;
 			_skillType = workload.Skill.SkillType;
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 
 		public void LoadTaskOwnerDaysWithFilterStatus(WorkloadDayTemplateFilterStatus filterStatus)
 		{
-			if (filterStatus == null) throw new ArgumentNullException("filterStatus");
+			if (filterStatus == null) throw new ArgumentNullException(nameof(filterStatus));
 			var workloadDays = filterStatus.WorkloadDaysWithFilterStatus;
 			_dateTimes = workloadDays.Select(v => v.WorkloadDay.CurrentDate).ToList();
 			_workloadDays = workloadDays.ToList();
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 				return taskPeriod.StatisticTask.StatAverageTaskTimeSeconds;
 			if (rowName.Equals(_manager.WordDictionary["AverageAfterTaskTime"]))
 				return taskPeriod.StatisticTask.StatAverageAfterTaskTimeSeconds;
-			throw new ArgumentException("Row name is not mached.");
+			throw new ArgumentException("Row name is not matched.");
 		}
 
 		protected override void OnQueryCellInfo(GridQueryCellInfoEventArgs e)
@@ -247,15 +247,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 			}
 		}
 
-		public override WorkingInterval WorkingInterval
-		{
-			get { return WorkingInterval.Intraday; }
-		}
+		public override WorkingInterval WorkingInterval => WorkingInterval.Intraday;
 
-		public override TimeSpan ChartResolution
-		{
-			get { return TimeSpan.FromMinutes(60); }
-		}
+		public override TimeSpan ChartResolution => TimeSpan.FromMinutes(60);
 
 		public string GridRowShowInChart
 		{
@@ -315,7 +309,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 
 		protected IDictionary<DateTime, double> GetColumnDataForChart(GridRangeInfo gridRangeInfo)
 		{
-			if (gridRangeInfo == null) throw new ArgumentNullException("gridRangeInfo");
+			if (gridRangeInfo == null) throw new ArgumentNullException(nameof(gridRangeInfo));
 			var keyValueCollection = new Dictionary<DateTime, double>();
 			
 			var currentCellDate = _dateTimes[gridRangeInfo.Left - 1];
@@ -351,32 +345,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 			return this[rowIndex, 0].CellValue;
 		}
 
-		public int TemplateIndex
-		{
-			get { return _templateIndex; }
-		}
+		public int TemplateIndex => _templateIndex;
 
-		public override DateTime FirstDate
-		{
-			get
-			{
-                return TimeZoneInfo.ConvertTimeFromUtc(_firstTime, _timeZone);
-			}
-		}
+		public override DateTime FirstDate => TimeZoneInfo.ConvertTimeFromUtc(_firstTime, _timeZone);
 
-		public override DateTime LastDate
-		{
-			get
-			{
-                return TimeZoneInfo.ConvertTimeFromUtc(_lastTime, _timeZone);
-			}
-		}
+		public override DateTime LastDate => TimeZoneInfo.ConvertTimeFromUtc(_lastTime, _timeZone);
 
 		public event EventHandler<FilterDataToChartEventArgs> FilterDataToChart;
 
 		protected void TriggerFilterDataToChart(GridRangeInfo gridRangeInfo)
 		{
-			if (gridRangeInfo == null) throw new ArgumentNullException("gridRangeInfo");
+			if (gridRangeInfo == null) throw new ArgumentNullException(nameof(gridRangeInfo));
 
 			var handler = FilterDataToChart;
 			if (handler != null)
@@ -402,8 +381,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 
 		public void TriggerFilterDataSelectionChanged(FilterDataSelectionChangedEventArgs e)
 		{
-			var handler = FilterDataSelectionChanged;
-			if (handler != null) handler(this, e);
+			FilterDataSelectionChanged?.Invoke(this, e);
 		}
 		
 		public void InitializeAllGridColumnsToChart()

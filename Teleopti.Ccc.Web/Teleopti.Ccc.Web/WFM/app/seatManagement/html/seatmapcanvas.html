@@ -24,21 +24,17 @@
 				</span>
 			</div>
 
-			<div class="seatmap-right-panel pull-right">
-
+			<div class="seatmap-right-panel">
 				<wfm-right-panel panel-options="vm.rightPanelOptions" on-open="vm.getRoles()">
-
 					<seatmap-occupancy-detail schedule-date="vm.selectedDate" refresh-seat-map="vm.refreshSeatMap()" ng-if="vm.showOccupancy"></seatmap-occupancy-detail>
 
 					<seatmap-object-property roles="vm.roles" seats="vm.activeSeats" update-seat-number="vm.updateSeatNumber(seat, newNumber)"
 					 ng-if="vm.showEditor"></seatmap-object-property>
-
 				</wfm-right-panel>
 
 				<div class="clearfix" ng-if="vm.showEditor"></div>
 
 				<wfm-right-panel panel-options="vm.prefixSuffixPanelOptions">
-
 					<div class="con-row">
 						<div class="con-flex">
 							{{'Prefix' | translate}}
@@ -51,9 +47,7 @@
 							 placeholder="{{'Suffix' | translate}}..." />
 						</div>
 					</div>
-
 				</wfm-right-panel>
-
 			</div>
 
 			<canvas id="c" ng-mouseenter="vm.scrollListen = true" ng-mouseleave="vm.scrollListen = false"></canvas>

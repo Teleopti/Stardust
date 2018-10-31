@@ -1,10 +1,8 @@
 import { HttpClientModule } from '@angular/common/http';
-import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { MockTranslationModule } from '@wfm/mocks/translation';
+import { configureTestSuite, PageObject } from '@wfm/test';
 import { NzButtonModule, NzTableModule, NzToolTipModule } from 'ng-zorro-antd';
-import { configureTestSuite } from '../../../../configure-test-suit';
 import { adina, eva, fakeBackendProvider, myles } from '../../mocks';
 import { SearchService, WorkspaceService } from '../../shared';
 import { WorkspaceComponent } from './workspace.component';
@@ -64,7 +62,7 @@ describe('WorkspaceComponent', () => {
 	});
 });
 
-class Page {
+class Page extends PageObject {
 	get getPeople() {
 		return this.queryAll('[data-test-workspace] [data-test-person]');
 	}
@@ -75,15 +73,5 @@ class Page {
 
 	get clearButton() {
 		return this.queryAll('[data-test-workspace] [data-test-clear-button]')[0];
-	}
-
-	fixture: ComponentFixture<WorkspaceComponent>;
-
-	constructor(fixture: ComponentFixture<WorkspaceComponent>) {
-		this.fixture = fixture;
-	}
-
-	private queryAll(selector: string): DebugElement[] {
-		return this.fixture.debugElement.queryAll(By.css(selector));
 	}
 }

@@ -22,6 +22,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	self.StartTime = ko.observable();
 	self.EndTime = ko.observable();
 	self.DateFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
+	self.TimeFormat = ko.observable(Teleopti.MyTimeWeb.Common.TimeFormat);
 
 	self.isReadyLoaded = ko.observable(false);
 
@@ -121,6 +122,8 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 				|| self.StartTime().indexOf(Teleopti.MyTimeWeb.Common.Meridiem.PM) > -1 ) {
 				var start = self.convert12To24Hour(self.StartTime());
 				self.startTimeInternal(start);
+			} else if (Teleopti.MyTimeWeb.Common.TimeFormat.indexOf(".") > -1) {
+				self.startTimeInternal(self.StartTime().replace(":", "."));
 			} else {
 				self.startTimeInternal(self.StartTime());
 			}
@@ -129,7 +132,9 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 				|| self.EndTime().indexOf(Teleopti.MyTimeWeb.Common.Meridiem.PM) > -1) {
 				var end = self.convert12To24Hour(self.EndTime());
 				self.endTimeInternal(end);
-			} else {
+			} else if (Teleopti.MyTimeWeb.Common.TimeFormat.indexOf(".") > -1) {
+				self.endTimeInternal(self.EndTime().replace(":", "."));
+			}else {
 				self.endTimeInternal(self.EndTime());
 			}
 		}		

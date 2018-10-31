@@ -74,6 +74,7 @@
 			enableSelectAll: true,
 			enableFullRowSelection: true,
 			enableSorting: true,
+			enableHorizontalScrollbar: 2,
 			columnDefs: [
 				{
 					displayName: "Name",

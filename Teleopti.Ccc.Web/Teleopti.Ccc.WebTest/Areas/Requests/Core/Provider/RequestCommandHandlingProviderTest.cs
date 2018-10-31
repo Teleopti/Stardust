@@ -5,7 +5,6 @@ using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -13,7 +12,6 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -54,10 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		{
 			isolate.UseTestDouble<PersonRequestAuthorizationCheckerConfigurable>().For<IPersonRequestCheckAuthorization>();
 			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario {DefaultScenario = true})).For<IScenarioRepository>();
-			isolate.UseTestDouble<PersonAbsenceRemover>().For<IPersonAbsenceRemover>();
 			isolate.UseTestDouble<RequestCommandHandlingProvider>().For<IRequestCommandHandlingProvider>();
-			isolate.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
-			isolate.UseTestDouble<PersonAbsenceCreator>().For<IPersonAbsenceCreator>();
 			_absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
 		}
 

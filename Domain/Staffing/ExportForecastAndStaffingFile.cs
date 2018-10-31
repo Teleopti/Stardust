@@ -33,12 +33,9 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_periodValidationProvider = periodValidationProvider;
 		}
 		
-		public virtual ExportStaffingReturnObject ExportForecastAndStaffing(Guid skillId, DateTime exportStartDate, DateTime exportEndDate, bool useShrinkage)
+		public virtual ExportStaffingReturnObject ExportForecastAndStaffing(Guid skillId, DateOnly exportStartDateOnly, DateOnly exportEndDateOnly, bool useShrinkage)
 		{
 			var returnVal = new ExportStaffingReturnObject();
-			
-			var exportStartDateOnly = new DateOnly(exportStartDate);
-			var exportEndDateOnly = new DateOnly(exportEndDate);
 
 			var validationObject = _periodValidationProvider.ValidateExportStaffingPeriod(exportStartDateOnly, exportEndDateOnly);
 			if (validationObject.Result == false)

@@ -69,8 +69,10 @@
 	}
 }
 .seatmap-right-panel {
-	min-height: 35px;
-	margin-top: 10px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
 }
 seatmap-editor {
 	z-index: 40;
@@ -203,9 +205,6 @@ seatmap-editor {
 	flex-direction: column;
 	flex-grow: 1;
 
-	&.booking-view {
-	}
-
 	.wfm-block {
 		flex-grow: 1;
 		margin: 0;
@@ -213,8 +212,6 @@ seatmap-editor {
 		position: relative;
 		box-shadow: none;
 		-webkit-box-shadow: none;
-	}
-	.wfm-block.wfm-block-edit-mode {
 	}
 }
 .wfm-block-edit-mode {
@@ -228,20 +225,7 @@ seatmap-editor {
 		padding: 0;
 	}
 	.layout-padding .input-prepend {
-		position: absolute;
-		top: 40px;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		height: 20px;
-	}
-	.seat-roles {
-		position: absolute;
-		top: 65px;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		overflow: auto;
+		height: 40px;
 	}
 	.seat-number-input {
 		margin-left: 10px;
@@ -249,15 +233,6 @@ seatmap-editor {
 }
 .seatmap-canvas .resizable {
 	min-width: 500px;
-}
-.seat-property-message {
-	position: absolute;
-	right: 0;
-	top: 0;
-	height: 30px;
-	background: $white;
-	z-index: 2;
-	padding: 5px;
 }
 .planning-period-content {
 	max-width: 1600px;

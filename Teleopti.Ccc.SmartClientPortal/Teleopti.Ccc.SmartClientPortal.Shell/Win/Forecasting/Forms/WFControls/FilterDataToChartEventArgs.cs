@@ -19,24 +19,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 			_removeColumn = removeColumn;
 		}
 
-		public bool RemoveColumn
-		{
-			get { return _removeColumn; }
-		}
+		public bool RemoveColumn => _removeColumn;
 
-		public IDictionary<DateTime, double> Values
-		{
-			get { return _values; }
-		}
+		public IDictionary<DateTime, double> Values => _values;
 
-		public string HeaderText
-		{
-			get { return _headerText; }
-		}
+		public string HeaderText => _headerText;
 
-		public int ColumnIndex
-		{
-			get { return _columnIndex; }
-		}
+		public int ColumnIndex => _columnIndex;
 	}
 }

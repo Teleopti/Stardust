@@ -65,6 +65,65 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		}
 
 		[Test]
+		public void ShouldHavePmNextGenAreaWhenFeatureEnabledAndPermitted()
+		{
+			ApplicationFunctionsToggleFilter.AddFakeFunction(
+				new ApplicationFunction {FunctionCode = DefinedRaptorApplicationFunctionPaths.PmNextGen}, o => true);
+
+			PermissionProvider.Enable();
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.PmNextGen);
+
+			ToggleManager.Enable(Toggles.Wfm_PmNextGen_78059);
+
+			var area = Target.GetWfmAreasWithPermissions().Single();
+			area.Path.Should().Be(DefinedRaptorApplicationFunctionPaths.PmNextGen);
+			area.Name.Should().Be(Resources.PmNextGen);
+			area.InternalName.Should().Be("pm");
+		}
+
+		[Test]
+		public void ShouldNotHavePmNextGenWhenNotLicensed()
+		{
+			ApplicationFunctionsToggleFilter.AddFakeFunction(
+				new ApplicationFunction {FunctionCode = DefinedRaptorApplicationFunctionPaths.PmNextGen}, o => false);
+
+			PermissionProvider.Enable();
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.PmNextGen);
+
+			ToggleManager.Enable(Toggles.Wfm_PmNextGen_78059);
+
+			var areas = Target.GetWfmAreasWithPermissions();
+			areas.Count(a=>a.Path == DefinedRaptorApplicationFunctionPaths.PmNextGen).Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldNotHavePmNextGenWhenItNotPermitted()
+		{
+			ApplicationFunctionsToggleFilter.AddFakeFunction(
+				new ApplicationFunction {FunctionCode = DefinedRaptorApplicationFunctionPaths.PmNextGen}, o => true);
+
+			PermissionProvider.Enable();
+
+			ToggleManager.Enable(Toggles.Wfm_PmNextGen_78059);
+
+			var areas = Target.GetWfmAreasWithPermissions();
+			areas.Count(a=>a.Path == DefinedRaptorApplicationFunctionPaths.PmNextGen).Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldNotHavePmNextGenWhenToggleNotEnabled()
+		{
+			ApplicationFunctionsToggleFilter.AddFakeFunction(
+				new ApplicationFunction {FunctionCode = DefinedRaptorApplicationFunctionPaths.PmNextGen}, o => true);
+
+			PermissionProvider.Enable();
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.PmNextGen);
+
+			var areas = Target.GetWfmAreasWithPermissions();
+			areas.Count(a=>a.Path == DefinedRaptorApplicationFunctionPaths.PmNextGen).Should().Be(0);
+		}
+
+		[Test]
 		public void ShouldHaveTeamsWhenPermittedAndFeatureEnabled()
 		{
 			ApplicationFunctionsToggleFilter

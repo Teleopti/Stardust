@@ -356,6 +356,5 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 				});
 			});
 		}
-
 	}
 }

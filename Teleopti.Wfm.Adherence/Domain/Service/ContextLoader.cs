@@ -24,6 +24,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		private readonly INow _now;
 		private readonly StateMapper _stateMapper;
 		private readonly ExternalLogonMapper _externalLogonMapper;
+		private readonly BelongsToDateMapper _belongsToDateMapper;
 		private readonly ScheduleCache _scheduleCache;
 		private readonly IAgentStatePersister _agentStatePersister;
 		private readonly ProperAlarm _appliedAlarm;
@@ -34,17 +35,29 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		private readonly ICurrentEventPublisher _eventPublisher;
 		private readonly IRtaTracer _tracer;
 
-		public ContextLoader(ICurrentDataSource dataSource, DataSourceMapper dataSourceMapper, INow now,
-			StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache,
-			IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config,
-			DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, AgentStateProcessor processor,
-			ICurrentEventPublisher eventPublisher, IRtaTracer tracer)
+		public ContextLoader(
+			ICurrentDataSource dataSource, 
+			DataSourceMapper dataSourceMapper, 
+			INow now,
+			StateMapper stateMapper, 
+			ExternalLogonMapper externalLogonMapper, 
+			BelongsToDateMapper belongsToDateMapper,
+			ScheduleCache scheduleCache,
+			IAgentStatePersister agentStatePersister, 
+			ProperAlarm appliedAlarm, 
+			IConfigReader config,
+			DeadLockRetrier deadLockRetrier, 
+			IKeyValueStorePersister keyValues, 
+			AgentStateProcessor processor,
+			ICurrentEventPublisher eventPublisher, 
+			IRtaTracer tracer)
 		{
 			_dataSource = dataSource;
 			_dataSourceMapper = dataSourceMapper;
 			_now = now;
 			_stateMapper = stateMapper;
 			_externalLogonMapper = externalLogonMapper;
+			_belongsToDateMapper = belongsToDateMapper;
 			_scheduleCache = scheduleCache;
 			_agentStatePersister = agentStatePersister;
 			_appliedAlarm = appliedAlarm;
@@ -63,7 +76,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		public virtual void ForClosingSnapshot(DateTime snapshotId, string sourceId) => Process(new ClosingSnapshotStrategy(snapshotId, sourceId, _now.UtcDateTime(), _config, _agentStatePersister, _stateMapper, _dataSourceMapper, _tracer));
 
 		[LogInfo]
-		public virtual void ForActivityChanges() => Process(new ActivityChangesStrategy(_now.UtcDateTime(), _config, _agentStatePersister, _keyValues, _scheduleCache, _tracer));
+		public virtual void ForActivityChanges() => Process(new ActivityChangesStrategy(_now.UtcDateTime(), _config, _agentStatePersister, _keyValues, _scheduleCache, _externalLogonMapper, _tracer));
 
 		protected void Process(IContextLoadingStrategy strategy)
 		{
@@ -83,11 +96,16 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 
 				var transactions = items
 					.Batch(transactionSize)
-					.Select(some => new Func<IEnumerable<Tuple<AgentState, StateTraceLog>>>(() =>
+					.Select(some => new Func<IEnumerable<AgentInTransaction>>(() =>
 					{
 						var result = _agentStatePersister.LockNLoad(some, strategy.DeadLockVictim);
 						refreshCaches(strategy, strategyContext, result.ScheduleVersion, result.MappingVersion);
-						return result.AgentStates.Select(x => new Tuple<AgentState, StateTraceLog>(x, strategy.GetTraceFor(x)));
+						return result.AgentStates
+							.Select(x => new AgentInTransaction
+							{
+								State = x,
+								Trace = strategy.GetTraceFor(x)
+							});
 					}))
 					.ToArray();
 
@@ -130,7 +148,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		private void processTransactions(
 			string tenant,
 			IContextLoadingStrategy strategy,
-			IEnumerable<Func<IEnumerable<Tuple<AgentState, StateTraceLog>>>> transactions,
+			IEnumerable<Func<IEnumerable<AgentInTransaction>>> transactions,
 			ConcurrentBag<Exception> exceptions)
 		{
 			// transaction spreading over sql clustered index strategy optimization...
@@ -151,7 +169,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		protected virtual void ProcessTransaction(
 			string tenant,
 			IContextLoadingStrategy strategy,
-			Func<IEnumerable<Tuple<AgentState, StateTraceLog>>> transaction,
+			Func<IEnumerable<AgentInTransaction>> transaction,
 			ConcurrentBag<Exception> exceptions)
 		{
 			try
@@ -167,9 +185,15 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			}
 		}
 
+		public class AgentInTransaction
+		{
+			public AgentState State;
+			public StateTraceLog Trace;
+		}
+
 		private void transaction(
 			IContextLoadingStrategy strategy,
-			Func<IEnumerable<Tuple<AgentState, StateTraceLog>>> agentStates
+			Func<IEnumerable<AgentInTransaction>> agentStates
 		)
 		{
 			WithUnitOfWork(() =>
@@ -180,12 +204,14 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 							new ProcessInput(
 								strategy.CurrentTime,
 								strategy.DeadLockVictim,
-								strategy.GetInputFor(x.Item1),
-								x.Item1,
-								_scheduleCache.Read(x.Item1.PersonId),
+								strategy.GetInputFor(x.State),
+								x.State,
+								_scheduleCache.Read(x.State.PersonId),
 								_stateMapper,
+								_externalLogonMapper,
+								_belongsToDateMapper,
 								_appliedAlarm,
-								x.Item2
+								x.Trace
 							)
 						)
 						.Select(x => _processor.Process(x))

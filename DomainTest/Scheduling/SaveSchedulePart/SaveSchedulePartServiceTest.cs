@@ -118,7 +118,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
 			isolate.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 			isolate.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 		}

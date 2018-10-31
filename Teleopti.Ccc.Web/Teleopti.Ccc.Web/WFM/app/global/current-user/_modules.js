@@ -1,12 +1,5 @@
 (function() {
-  'use strict';
+	'use strict';
 
-  angular
-  .module('currentUserInfoService', [
-    'angularMoment',
-    'ngStorage',
-    'wfm.i18n',
-    'wfm.businessunits'
-    ]);
-
+	angular.module('currentUserInfoService', ['angularMoment', 'ngStorage', 'wfm.i18n']);
 })();

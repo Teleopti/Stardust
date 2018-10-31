@@ -394,7 +394,7 @@ function global:PatchDatabaseWithDboOnly () {
 	}	
 }
 
-function global:DataModificationsOLD () {
+function global:DataModifications () {
 
     $Params = "$global:SecurityExeString -AP$AppDB -AN$MartDB -CD$global:AggDB"
     $Prms = $Params.Split(" ")
@@ -407,7 +407,7 @@ function global:DataModificationsOLD () {
     	}
 }
 
-function global:DataModifications () {
+function global:DataModificationsTST () {
 
 	$Params = "$global:SecurityExeString -AP$AppDB -AN$MartDB -CD$global:AggDB"
     $Prms = $Params.Split(" ")

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using Polly;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Support.Library;
 using Teleopti.Support.Library.Folders;
@@ -48,11 +49,14 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			try
 			{
-				ExecuteSql().Execute(c => { });
+				Policy.Handle<SqlException>()
+					.WaitAndRetry(3, i => TimeSpan.FromSeconds(Math.Pow(i, 2)))
+					.Execute(()=>ExecuteSql().Execute(c => { }));
 				return true;
 			}
-			catch
+			catch(Exception e)
 			{
+				_log.Write($"An error occurred: {e}\n{e.StackTrace}", "WARN");
 				return false;
 			}
 		}

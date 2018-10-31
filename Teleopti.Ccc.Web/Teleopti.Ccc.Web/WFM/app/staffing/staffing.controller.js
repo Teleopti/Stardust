@@ -460,8 +460,8 @@
 			vm.exporting = true;
 			var request = staffingService.exportStaffingData.get({
 				skillId: vm.selectedSkill.Id,
-				exportStartDate: vm.exportStaffingDataDate.startDate,
-				exportEndDate: vm.exportStaffingDataDate.endDate,
+				stringExportStartDate:  moment(vm.exportStaffingDataDate.startDate).format('YYYY-MM-DD') ,
+				stringExportEndDate: moment(vm.exportStaffingDataDate.endDate).format('YYYY-MM-DD') ,
 				useShrinkage: vm.useShrinkage
 			});
 			request.$promise.then(function(response) {

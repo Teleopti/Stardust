@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Http;
 using Autofac;
 using Teleopti.Wfm.Api.Query;
+using Teleopti.Wfm.Api.Query.Response;
 
 namespace Teleopti.Wfm.Api.Controllers
 {

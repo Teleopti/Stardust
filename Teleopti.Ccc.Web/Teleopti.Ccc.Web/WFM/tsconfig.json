@@ -16,8 +16,12 @@
 		"paths": {
 			"@wfm/mocks/*": ["src/mocks/*"],
 			"@wfm/types": ["src/types/index"],
+<<<<<<< HEAD
 			"stream": [ "./node_modules/readable-stream" ],
 			
+=======
+			"@wfm/test": ["src/test/index"]
+>>>>>>> master
 		}
 	},
 	"include": ["app", "src", "e2e"],

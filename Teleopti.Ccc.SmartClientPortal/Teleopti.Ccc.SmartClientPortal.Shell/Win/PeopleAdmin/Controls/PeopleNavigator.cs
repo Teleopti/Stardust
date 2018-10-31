@@ -282,11 +282,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 			toolStripButtonOpen.PerformClick();
 		}
 
-		public void AddNew()
-		{
-			OpenNewPerson();
-		}
-
 		public bool SendMessageVisible
 		{
 			get { return toolStripButtonSendInstantMessage.Visible; }

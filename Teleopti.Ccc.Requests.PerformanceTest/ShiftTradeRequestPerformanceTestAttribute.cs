@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			// normal test injection is not working...
 			((MutableNow) container.Resolve<INow>()).Is (new DateTime (2016, 04, 01, 10, 00, 00, DateTimeKind.Utc));
 			
-			container.Resolve<HangfireClientStarter>().Start();
+			container.Resolve<IHangfireClientStarter>().Start();
 		}
 	}
 }

@@ -28,8 +28,9 @@
 		.service('teamScheduleNotificationService', ['NoticeService', '$translate', teamScheduleNotificationService]);
 
 	function teamScheduleNotificationService(NoticeService, $translate) {
-		this.notify = notify;
+		var notificationDisplayTime = 5000;
 
+		this.notify = notify;
 		this.reportActionResult = reportActionResult;
 		this.buildConfirmationMessage = buildConfirmationMessage;
 
@@ -46,80 +47,40 @@
 				if (x.WarningMessages && x.WarningMessages.length > 0) {
 					warningActionResults.push({
 						PersonId: x.PersonId,
-						Warnings: x.WarningMessages
+						Messages: x.WarningMessages
 					});
 				}
 			});
+
 			var actionInfo = [actionTargets.length, actionTargets.length - failActionResults.length, failActionResults.length];
-			var successMessage = !!commandInfo.success ? replaceParams($translate.instant(commandInfo.success), actionInfo) : '';
-			var warningMessage = !!commandInfo.warning ? replaceParams($translate.instant(commandInfo.warning), actionInfo) : '';
 
-			var warningResults = {};
-			if (failActionResults.length === 0 && warningActionResults.length === 0) {
-				NoticeService.success(successMessage, 5000, true);
-				return;
-			}
-			else if (failActionResults.length === 0 && warningActionResults.length > 0) {
-				NoticeService.success(successMessage, 5000, true);
-
-				angular.forEach(warningActionResults, function (result) {
-					var messages = result.Warnings;
-					var personName = actionTargets.find(function (t) { return t.PersonId === result.PersonId; }).Name;
-					angular.forEach(messages, function (message) {
-						collectResult(message, personName, warningResults);
-					});
-				});
-				angular.forEach(warningResults, function (value, key) {
-					var warning = key + " : " + value.join(", ");
-					NoticeService.warning(warning, null, true);
-				});
+			if (failActionResults.length === 0) {
+				var successMessage = replaceParams(commandInfo.success, actionInfo);
+				NoticeService.success(successMessage, notificationDisplayTime, true);
+				noticeWarningMessagesIfHave(warningActionResults, actionTargets);
 				return;
 			}
 
 			if (!!commandInfo.warning) {
-				NoticeService.warning(warningMessage, 5000, true);
+				var warningMessage = replaceParams(commandInfo.warning, actionInfo);
+				NoticeService.warning(warningMessage, notificationDisplayTime, true);
 			}
 
-			var errorResults = {}
+			noticeErrorMessagesIfHave(failActionResults, actionTargets);
 
-			angular.forEach(failActionResults, function (result) {
-				var messages = result.Messages;
-				var personName = actionTargets.find(function (t) { return t.PersonId === result.PersonId; }).Name;
-				angular.forEach(messages, function (message) {
-					collectResult(message, personName, errorResults);
-				});
-			});
-
-			angular.forEach(errorResults, function (value, key) {
-				var errorMessage = key + " : " + (value.length > 20 ? $translate.instant('AffectingXAgents').replace('{0}', value.length) : value.join(", "));
-				NoticeService.error(errorMessage, null, true);
-			});
-			angular.forEach(warningActionResults, function (result) {
-				var messages = result.Warnings;
-				var personName = actionTargets.find(function (t) { return t.PersonId === result.PersonId; }).Name;
-				angular.forEach(messages, function (message) {
-					collectResult(message, personName, warningResults);
-				});
-			});
-			angular.forEach(warningResults, function (value, key) {
-				var warning = key + " : " + value.join(", ");
-				NoticeService.warning(warning, null, true);
-			});
+			noticeWarningMessagesIfHave(warningActionResults, actionTargets);
 
 		}
 
-		function buildConfirmationMessage(template, personCount, activityCount, needTranslate) {
-			var text = needTranslate ? $translate.instant(template) : template;
-
-			return activityCount != null ? replaceParams(text, [activityCount, personCount]) : replaceParams(text, [personCount]);
+		function buildConfirmationMessage(text, personCount, activityCount) {
+			return replaceParams(text, [activityCount, personCount]);
 		}
 
-		function notify(type, template, params) {
-			var translatedTemplate = $translate.instant(template);
-			var message = replaceParams(translatedTemplate, params);
+		function notify(type, text, params) {
+			var message = replaceParams(text, params);
 			switch (type) {
 				case 'success':
-					NoticeService.success(message, 5000, true);
+					NoticeService.success(message, notificationDisplayTime, true);
 					break;
 
 				case 'error':
@@ -127,13 +88,44 @@
 					break;
 
 				case 'warning':
-					NoticeService.warning(message, 5000, true);
+					NoticeService.warning(message, notificationDisplayTime, true);
 					break;
 
 				default:
 					break;
 			}
 			return message;
+		}
+
+
+		function noticeErrorMessagesIfHave(actionResults, actionTargets) {
+			noticeIfHave(actionResults, actionTargets, function (value, key) {
+				var agentInfo = value.length > 20 ? $translate.instant('AffectingXAgents').replace('{0}', value.length) : value.join(", ");
+				var errorMessage = key + " : " + agentInfo;
+				NoticeService.error(errorMessage, null, true);
+			});
+		}
+
+		function noticeWarningMessagesIfHave(actionResults, actionTargets) {
+			noticeIfHave(actionResults, actionTargets, function (value, key) {
+				var warning = key + " : " + value.join(", ");
+				NoticeService.warning(warning, null, true);
+			});
+		}
+
+		function noticeIfHave(actionResults, actionTargets, doNotice) {
+			if (!actionResults || !actionResults.length) return;
+			var results = {};
+			angular.forEach(actionResults, function (result) {
+				var messages = result.Messages;
+				var personName = actionTargets.find(function (t) { return t.PersonId === result.PersonId; }).Name;
+				angular.forEach(messages, function (message) {
+					collectResult(message, personName, results);
+				});
+			});
+
+			angular.forEach(results, doNotice);
+			return results;
 		}
 
 		function collectResult(key, value, results) {
@@ -144,11 +136,11 @@
 		};
 
 		function replaceParams(text, params) {
-			if (params) {
-				params.forEach(function (element, index) {
-					text = text.replace('{' + index + '}', element);
-				});
-			}
+			if (!text) return '';
+			params && params.forEach(function (param, index) {
+				if (angular.isDefined(param))
+					text = text.replace('{' + index + '}', param);
+			});
 			return text;
 		}
 	}

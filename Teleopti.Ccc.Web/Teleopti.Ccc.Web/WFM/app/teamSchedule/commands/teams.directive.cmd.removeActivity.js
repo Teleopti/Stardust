@@ -83,9 +83,7 @@
 			var message = notification.buildConfirmationMessage(
 				$translate.instant('AreYouSureToRemoveSelectedActivity'),
 				PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.PersonCount,
-				PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount,
-				true
-			);
+				PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount);
 			$wfmModal.confirm(message, title).then(function (result) {
 				vm.resetActiveCmd();
 

@@ -107,9 +107,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			setDummyPrincipalBeforeContainerRegistrations();
 			ContainerForLegacy.Container = configureContainer();
-#if (!DEBUG)
-//NHibernateProfiler.Initialize();
-			 SetReleaseMode();
+
+			SetReleaseMode();
 			 populateFeatureToggleFlags_THISMUSTHAPPENBEFORELOGON_SEEBUG30359(ContainerForLegacy.Container);
 			 var applicationStarter = ContainerForLegacy.Container.Resolve<ApplicationStartup>();
 			 if (applicationStarter.LogOn())
@@ -123,17 +122,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					 handleException(exception);
 				 }
 			 }
-
-#endif
-
-#if (DEBUG)
-			populateFeatureToggleFlags_THISMUSTHAPPENBEFORELOGON_SEEBUG30359(ContainerForLegacy.Container);
-			var applicationStarter = ContainerForLegacy.Container.Resolve<ApplicationStartup>();
-			if (applicationStarter.LogOn())
-			{
-				applicationStarter.LoadShellApplication();
-			}
-#endif
 		}
 
 		private static void setDummyPrincipalBeforeContainerRegistrations()

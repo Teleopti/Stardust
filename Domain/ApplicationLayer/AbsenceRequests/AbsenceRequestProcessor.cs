@@ -1,6 +1,5 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var startDateTime = _now.UtcDateTime();
 			var intradayPeriod = new DateTimePeriod(startDateTime, startDateTime.AddHours(_absenceRequestSetting.ImmediatePeriodInHours));
 
-			var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest) personRequest.Request);
+			var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest) personRequest.Request);
 
 			if (!_absenceRequestValidatorProvider.IsAnyStaffingValidatorEnabled(mergedPeriod))
 			{

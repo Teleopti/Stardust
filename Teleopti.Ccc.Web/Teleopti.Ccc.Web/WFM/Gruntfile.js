@@ -1,3 +1,5 @@
+const sassImplementation = require('node-sass');
+
 module.exports = function(grunt) {
 	const isDev = grunt.option('development') || false;
 	const isProd = !isDev;
@@ -18,6 +20,10 @@ module.exports = function(grunt) {
 		antThemes: {
 			files: ['src/themes/*.less'],
 			tasks: ['less']
+		},
+		styleguideStyle: {
+			files: ['css/styleguide/**/*.scss'],
+			tasks: ['sass']
 		}
 	};
 
@@ -31,6 +37,20 @@ module.exports = function(grunt) {
 			files: {
 				'dist/ant_classic.css': 'src/themes/ant_classic.less',
 				'dist/ant_dark.css': 'src/themes/ant_dark.less'
+			}
+		}
+	};
+
+	const sass = {
+		themes: {
+			options: {
+				implementation: sassImplementation,
+				sourceMap: true,
+				outputStyle: isProd ? 'compressed' : 'nested'
+			},
+			files: {
+				'dist/styleguide_classic.css': 'css/styleguide/styleguide_classic.scss',
+				'dist/styleguide_dark.css': 'css/styleguide/styleguide_dark.scss'
 			}
 		}
 	};
@@ -93,8 +113,6 @@ module.exports = function(grunt) {
 			'node_modules/angular-gantt/assets/angular-gantt-plugins.js',
 			'node_modules/angular-gantt/assets/angular-gantt-table-plugin.js',
 			'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.js',
-			'node_modules/teleopti-styleguide/styleguide/dist/wfmdirectives.min.js',
-			'node_modules/teleopti-styleguide/styleguide/dist/templates.js',
 			'node_modules/filesaver.js/FileSaver.min.js',
 			'node_modules/jquery/dist/jquery.min.js',
 			'node_modules/hammerjs/hammer.min.js',
@@ -139,16 +157,6 @@ module.exports = function(grunt) {
 		dest: 'dist/main.js'
 	};
 	// TODO: Add desktop concat
-
-	const concatStyleguideClassic = {
-		src: ['node_modules/teleopti-styleguide/styleguide/dist/main.min.css'],
-		dest: 'dist/styleguide_classic.css'
-	};
-
-	const concatStyleguideDark = {
-		src: ['node_modules/teleopti-styleguide/styleguide/dist/main_dark.min.css'],
-		dest: 'dist/styleguide_dark.css'
-	};
 
 	const concatCssDependencies = {
 		src: [
@@ -204,154 +212,133 @@ module.exports = function(grunt) {
 		}
 	};
 
-	grunt.initConfig(
-		{
-			watch,
-			ngtemplates,
-			processhtml,
-			less,
-			concat: {
-				concatJsDependencies,
-				concatJsWfm,
-				concatStyleguideClassic,
-				concatStyleguideDark,
-				concatCssDependencies
-			},
-			uglify,
-			msbuild: {
-				rebuild: {
-					src: ['../../../CruiseControl.sln'],
-					options: {
-						projectConfiguration: 'Debug',
-						targets: ['Rebuild'],
-						version: 15.0,
-						maxCpuCount: null,
-						buildParameters: {
-							WarningLevel: 2
-						},
-						verbosity: 'normal'
-					}
-				},
-				build: {
-					src: ['../../../CruiseControl.sln'],
-					options: {
-						projectConfiguration: 'Debug',
-						targets: ['build'],
-						version: 15.0,
-						maxCpuCount: null,
-						buildParameters: {
-							WarningLevel: 2
-						},
-						verbosity: 'normal'
-					}
-				},
-				buildWeb: {
-					src: ['../Teleopti.Ccc.Web.csproj'],
-					options: {
-						projectConfiguration: 'Debug',
-						targets: ['build'],
-						version: 15.0,
-						maxCpuCount: null,
-						buildParameters: {
-							WarningLevel: 2
-						},
-						verbosity: 'normal'
-					}
+	grunt.initConfig({
+		watch,
+		ngtemplates,
+		processhtml,
+		less,
+		sass,
+		concat: {
+			concatJsDependencies,
+			concatJsWfm,
+			concatCssDependencies
+		},
+		uglify,
+		msbuild: {
+			rebuild: {
+				src: ['../../../CruiseControl.sln'],
+				options: {
+					projectConfiguration: 'Debug',
+					targets: ['Rebuild'],
+					version: 15.0,
+					maxCpuCount: null,
+					buildParameters: {
+						WarningLevel: 2
+					},
+					verbosity: 'normal'
 				}
 			},
-
-			copy: {
-				locales: {
-					files: [
-						{
-							expand: true,
-							cwd: './node_modules/angular-i18n/',
-							src: ['angular-locale_*.js'],
-							dest: 'dist/angular-i18n/'
-						}
-					]
-				},
-				sourceMaps: {
-					files: [
-						// includes files within path
-						{
-							expand: true,
-							cwd: 'vendor',
-							flatten: true,
-							src: ['*/*.map'],
-							dest: 'dist/resources',
-							filter: 'isFile'
-						}
-					]
-				},
-				extras: {
-					files: [
-						{
-							expand: true,
-							cwd: 'node_modules/angular-ui-grid',
-							src: ['*.ttf', '*.woff', '*.eot'],
-							dest: 'dist/',
-							filter: 'isFile'
-						}
-					]
-				},
-				bootstrap: {
-					files: [
-						{
-							expand: true,
-							cwd: 'node_modules/bootstrap/fonts',
-							src: ['*.ttf', '*.woff', '*.eot'],
-							dest: 'dist/fonts',
-							filter: 'isFile'
-						}
-					]
+			build: {
+				src: ['../../../CruiseControl.sln'],
+				options: {
+					projectConfiguration: 'Debug',
+					targets: ['build'],
+					version: 15.0,
+					maxCpuCount: null,
+					buildParameters: {
+						WarningLevel: 2
+					},
+					verbosity: 'normal'
+				}
+			},
+			buildWeb: {
+				src: ['../Teleopti.Ccc.Web.csproj'],
+				options: {
+					projectConfiguration: 'Debug',
+					targets: ['build'],
+					version: 15.0,
+					maxCpuCount: null,
+					buildParameters: {
+						WarningLevel: 2
+					},
+					verbosity: 'normal'
 				}
 			}
+		},
+
+		copy: {
+			locales: {
+				files: [
+					{
+						expand: true,
+						cwd: './node_modules/angular-i18n/',
+						src: ['angular-locale_*.js'],
+						dest: 'dist/angular-i18n/'
+					}
+				]
+			},
+			sourceMaps: {
+				files: [
+					// includes files within path
+					{
+						expand: true,
+						cwd: 'vendor',
+						flatten: true,
+						src: ['*/*.map'],
+						dest: 'dist/resources',
+						filter: 'isFile'
+					}
+				]
+			},
+			extras: {
+				files: [
+					{
+						expand: true,
+						cwd: 'node_modules/angular-ui-grid',
+						src: ['*.ttf', '*.woff', '*.eot'],
+						dest: 'dist/',
+						filter: 'isFile'
+					}
+				]
+			},
+			bootstrap: {
+				files: [
+					{
+						expand: true,
+						cwd: 'node_modules/bootstrap/fonts',
+						src: ['*.ttf', '*.woff', '*.eot'],
+						dest: 'dist/fonts',
+						filter: 'isFile'
+					}
+				]
+			},
+			images: {
+				files: [
+					{
+						expand: true,
+						cwd: 'app/seatManagement/images',
+						src: ['*.svg', '*.jpg', '*.png'],
+						dest: 'dist/images',
+						filter: 'isFile'
+					}
+				]
+			}
 		}
-		// eslint: {
-		// 	global: {
-		// 		src: ['app/global/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/global/i18n/*.js']
-		// 	},
-		// 	rta: {
-		// 		src: ['app/rta/**/*.js', '!app/rta/rta/rta.faketime.service.js']
-		// 	},
-		// 	schedule: {
-		// 		src: [
-		// 			'app/resourceplanner/resource_planner_agent_group/**/*.js',
-		// 			'app/resourceplanner/resource_planner_day_off_rule/**/*.js',
-		// 			'app/resourceplanner/resource_planner_planning_period/**/*.js',
-		// 			'app/resourceplanner/resource_planner_v2/**/*.js'
-		// 		]
-		// 	},
-		// 	dev: {
-		// 		src: [
-		// 			//add your path to module here
-		// 			'app/permissions/refact/**/*js',
-		// 			'app/staffing/**/*.js',
-		// 			'app/skillPrio/**/*.js',
-		// 			'app/requests/**/*.js',
-		// 			'app/teamSchedule/**/*.js',
-		// 			'app/rtaTool/**/*.js',
-		// 			'!app/**/*.spec.js',
-		// 			'!app/**/*.fake.js'
-		// 		]
-		// 	}
-		// },
-	);
+	});
 
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-less');
+	grunt.loadNpmTasks('grunt-sass');
 	grunt.loadNpmTasks('grunt-msbuild');
 	grunt.loadNpmTasks('grunt-angular-templates');
 	grunt.loadNpmTasks('grunt-processhtml');
-	grunt.loadNpmTasks('grunt-eslint');
 
-	grunt.registerTask('devBuild', ['concat', 'copy', 'ngtemplates', 'less', 'processhtml']);
+	grunt.registerTask('devBuild', ['concat', 'copy', 'ngtemplates', 'less', 'sass', 'processhtml']);
 	grunt.registerTask('devWatch', ['devBuild', 'watch']);
-	grunt.registerTask('prodBuild', ['concat', 'copy', 'ngtemplates', 'less', 'processhtml', 'uglify']);
+	grunt.registerTask('prodBuild', ['concat', 'copy', 'ngtemplates', 'less', 'sass', 'processhtml', 'uglify']);
 
 	grunt.registerTask('default', ['devWatch']);
 

@@ -495,7 +495,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			teamScheduleViewModel.AgentSchedules.Length.Should().Be(1);
 		}
 
-		[Test] [Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
 		public void ShouldFilterAgentSchedulesUsingStartTimeFilter()
 		{
 			var today = new DateOnly(2014, 12, 15);
@@ -1821,6 +1822,262 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			};
 			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
 			teamScheduleViewModel.TotalAgentCount.Should().Be(1);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldNotReturnAgentWithShiftStartsNextDayWithOnlyNightShiftFilter()
+		{
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var person2 = PersonFactory.CreatePersonWithGuid("test", "agent");
+			person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			PersonRepository.Add(person2);
+			person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var startTime = DateTime.SpecifyKind(today.Date.AddDays(1), DateTimeKind.Utc);
+			var endTime = DateTime.SpecifyKind(today.Date.AddDays(1).AddHours(8), DateTimeKind.Utc);
+
+			var overtimeAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, Scenario.Current(), new DateTimePeriod(startTime, endTime));
+			ScheduleData.Add(overtimeAssignment);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString(),
+					OnlyNightShift = true
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+			teamScheduleViewModel.TotalAgentCount.Should().Be(0);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldReturnAgentWithOvernightShiftStartsBeforeMidnightWithOnlyNightShiftFilter()
+		{
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var person2 = PersonFactory.CreatePersonWithGuid("test", "agent");
+			person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			PersonRepository.Add(person2);
+			person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var startTime = DateTime.SpecifyKind(today.Date.AddHours(23).AddMinutes(59), DateTimeKind.Utc);
+			var endTime = DateTime.SpecifyKind(today.Date.AddDays(1).AddHours(8), DateTimeKind.Utc);
+
+			var overtimeAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, Scenario.Current(), new DateTimePeriod(startTime, endTime));
+			ScheduleData.Add(overtimeAssignment);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString(),
+					OnlyNightShift = true
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+			teamScheduleViewModel.TotalAgentCount.Should().Be(1);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldNotReturnAgentWithShiftEndsBeforeMidnightWithOnlyNightShiftFilter()
+		{
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var person2 = PersonFactory.CreatePersonWithGuid("test", "agent");
+			person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			PersonRepository.Add(person2);
+			person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var startTime = DateTime.SpecifyKind(today.Date.AddHours(16), DateTimeKind.Utc);
+			var endTime = DateTime.SpecifyKind(today.Date.AddHours(23).AddMinutes(59), DateTimeKind.Utc);
+
+			var overtimeAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, Scenario.Current(), new DateTimePeriod(startTime, endTime));
+			ScheduleData.Add(overtimeAssignment);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString(),
+					OnlyNightShift = true
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+			teamScheduleViewModel.TotalAgentCount.Should().Be(0);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldNotReturnAgentWithShiftEndsAtMidnightWithOnlyNightShiftFilter()
+		{
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var person2 = PersonFactory.CreatePersonWithGuid("test", "agent");
+			person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			PersonRepository.Add(person2);
+			person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var startTime = DateTime.SpecifyKind(today.Date.AddHours(16), DateTimeKind.Utc);
+			var endTime = DateTime.SpecifyKind(today.Date.AddDays(1), DateTimeKind.Utc);
+
+			var overtimeAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, Scenario.Current(), new DateTimePeriod(startTime, endTime));
+			ScheduleData.Add(overtimeAssignment);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString(),
+					OnlyNightShift = true
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+			teamScheduleViewModel.TotalAgentCount.Should().Be(0);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldNotReturnAgentWithShiftEndsAtMidnightNextYearWithOnlyNightShiftFilter()
+		{
+			var today = new DateOnly(2014, 12, 31);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var person2 = PersonFactory.CreatePersonWithGuid("test", "agent");
+			person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			PersonRepository.Add(person2);
+			person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var startTime = DateTime.SpecifyKind(today.Date.AddHours(23), DateTimeKind.Utc);
+			var endTime = DateTime.SpecifyKind(today.Date.AddDays(1), DateTimeKind.Utc);
+
+			var overtimeAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, Scenario.Current(), new DateTimePeriod(startTime, endTime));
+			ScheduleData.Add(overtimeAssignment);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString(),
+					OnlyNightShift = true
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+			teamScheduleViewModel.TotalAgentCount.Should().Be(0);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldNotReturnAgentWithShiftEndsAtMidnightWithOnlyNightShiftFilterInDifferentTimeZone()
+		{
+			UserTimeZone.IsNewYork();
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.NewYorkTimeZoneInfo());
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var person2 = PersonFactory.CreatePersonWithGuid("test", "agent");
+			person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			PersonRepository.Add(person2);
+			person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var startTime = DateTime.SpecifyKind(today.Date.AddHours(1), DateTimeKind.Utc);
+			var endTime = DateTime.SpecifyKind(today.Date.AddDays(1).AddHours(5), DateTimeKind.Utc);
+
+			var overtimeAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, Scenario.Current(), new DateTimePeriod(startTime, endTime));
+			ScheduleData.Add(overtimeAssignment);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString(),
+					OnlyNightShift = true
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+			teamScheduleViewModel.TotalAgentCount.Should().Be(0);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldNotReturnAgentWithOvernightShiftWithOnlyNightShiftFilterInDifferentTimeZone()
+		{
+			UserTimeZone.IsNewYork();
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.NewYorkTimeZoneInfo());
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var person2 = PersonFactory.CreatePersonWithGuid("test", "agent");
+			person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.NewYorkTimeZoneInfo());
+			PersonRepository.Add(person2);
+			person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var startTime = DateTime.SpecifyKind(today.Date.AddHours(16), DateTimeKind.Utc);
+			var endTime = DateTime.SpecifyKind(today.Date.AddDays(1).AddHours(4), DateTimeKind.Utc);
+
+			var overtimeAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, Scenario.Current(), new DateTimePeriod(startTime, endTime));
+			ScheduleData.Add(overtimeAssignment);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString(),
+					OnlyNightShift = true
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+			teamScheduleViewModel.TotalAgentCount.Should().Be(0);
 		}
 
 		[Test]

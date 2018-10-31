@@ -1,7 +1,6 @@
 ﻿'use strict';
 
-describe('seatmap editor controller tests', function () {
-
+describe('seatmap editor controller tests', function() {
 	var $q,
 		$rootScope,
 		$translate,
@@ -9,56 +8,59 @@ describe('seatmap editor controller tests', function () {
 		seatMapServiceParams,
 		seatMapCanvasUtilsService,
 		seatMapCanvasEditService;
-	
-	beforeEach(function () {
+
+	beforeEach(function() {
 		module('wfm.seatPlan');
 		module('wfm.seatMap');
 	});
 
-	beforeEach(inject(function (_$q_, _$rootScope_, _$controller_, _seatMapCanvasUtilsService_, _seatMapCanvasEditService_, seatMapService, _$translate_) {
+	beforeEach(inject(function(
+		_$q_,
+		_$rootScope_,
+		_$controller_,
+		_seatMapCanvasUtilsService_,
+		_seatMapCanvasEditService_,
+		seatMapService,
+		_$translate_
+	) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$translate = _$translate_;
 		seatMapCanvasUtilsService = _seatMapCanvasUtilsService_;
 		seatMapCanvasEditService = _seatMapCanvasEditService_;
-		seatMapCanvasUtilsService.loadSeatMap = function () { };
+		seatMapCanvasUtilsService.loadSeatMap = function() {};
 
 		setupFakeSeatMapService(seatMapService);
 		setUpController(_$controller_);
 	}));
 
-
 	//ROBTODO: why is this failing?
-	xit('should be able to add seats to parentVm Seat array', function (done) {
-
+	xit('should be able to add seats to parentVm Seat array', function(done) {
 		controller.addSeat();
 		controller.addSeat();
 		controller.addSeat();
 		controller.addSeat();
 
-		setTimeout(function () {
-
+		setTimeout(function() {
 			controller.save();
 
 			expect(seatMapServiceParams.Id).toEqual(undefined);
 			expect(seatMapServiceParams.Location).toEqual(undefined);
 			expect(seatMapServiceParams.ChildLocations.length).toEqual(0);
 			expect(seatMapServiceParams.Seats.length).toEqual(4);
-			seatMapServiceParams.Seats.forEach(function (seat) {
+			seatMapServiceParams.Seats.forEach(function(seat) {
 				expect(seat.RoleIdList.length).toEqual(0);
 			});
 
 			done();
 		}, 4000);
-
 	});
-
 
 	function setUpController($controller) {
 		var scope = $rootScope.$new();
 		var canvas = new fabric.CanvasWithViewport('c');
 
-		controller = $controller('SeatMapEditCtrl', {
+		controller = $controller('SeatMapEditController', {
 			$scope: scope,
 			utils: seatMapCanvasUtilsService,
 			editor: seatMapCanvasEditService
@@ -66,13 +68,14 @@ describe('seatmap editor controller tests', function () {
 
 		controller.parentVm = {
 			seats: [],
-			getCanvas: function () { return canvas; },
+			getCanvas: function() {
+				return canvas;
+			},
 			rightPanelOptions: {}
 		};
-	};
+	}
 
 	function setupFakeSeatMapService(seatMapService) {
-
 		seatMapServiceParams = {};
 
 		seatMapService.seatMap = {
@@ -83,7 +86,7 @@ describe('seatmap editor controller tests', function () {
 				queryDeferred.resolve(result);
 				return { $promise: queryDeferred.promise };
 			},
-			save: function (param) {
+			save: function(param) {
 				seatMapServiceParams = param;
 				var queryDeferred = $q.defer();
 				var result = [];
@@ -92,6 +95,4 @@ describe('seatmap editor controller tests', function () {
 			}
 		};
 	}
-
-
 });

@@ -72,12 +72,12 @@
 
 		vm.applyCommandFix = function () {
 			vm.config.actionOptions.forEach(function (option) {
-				if (option === vm.currentActionOptionValue) {
-					if (option === 'DoNotModifyForTheseAgents') {
+				if (option.key === vm.currentActionOptionValue) {
+					if (option.key === 'DoNotModifyForTheseAgents') {
 						CommandCheckService.completeCommandCheck(getAgentListModifier(false));
-					} else if (option === 'OverrideForTheseAgents') {
+					} else if (option.key === 'OverrideForTheseAgents') {
 						CommandCheckService.completeCommandCheck(getAgentListModifier(true));
-					} else if (option === 'MoveNonoverwritableActivityForTheseAgents') {
+					} else if (option.key === 'MoveNonoverwritableActivityForTheseAgents') {
 						CommandCheckService.completeCommandCheck(function (requestData) {
 							requestData.MoveConflictLayerAllowed = true;
 							return requestData;
@@ -107,7 +107,7 @@
 			});
 
 			vm.config = CommandCheckService.getCheckConfig();
-			vm.currentActionOptionValue = vm.config.actionOptions[0];
+			vm.currentActionOptionValue = vm.config.actionOptions[0].key;
 
 			vm.initFinished = true;
 		};

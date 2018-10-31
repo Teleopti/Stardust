@@ -145,11 +145,11 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.262\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.264\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.262\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.264\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -268,7 +268,7 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\Schedules\CurrentScheduleReadModelPersisterTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\Schedules\CurrentScheduleReadModelUpdaterTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\RtaEventStoreSynchronizerTest.cs" />
-    <Compile Include="RealTimeAdherence\Domain\RtaEventStoreEventVersionTest.cs" />
+    <Compile Include="RealTimeAdherence\Domain\RtaEventStoreEventIdTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\RtaEventStoreLoadLastBeforeTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Repositories\RtaMapRepositoryTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Repositories\RtaRuleRepositoryTest.cs" />
@@ -308,7 +308,6 @@
     <Compile Include="Repositories\Analytics\AnalyticsSiteRepositoryTest.cs" />
     <Compile Include="Repositories\ASMScheduleChangeTimeRepositoryTest.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReportTest.cs" />
-    <Compile Include="Repositories\Audit\StaffingAuditRepositoryTest.cs" />
     <Compile Include="Repositories\Bug47522.cs" />
     <Compile Include="Repositories\ExtensiveLogRepositoryTest.cs" />
     <Compile Include="Repositories\ExternalPerformanceDataRepositoryTest.cs" />
@@ -673,7 +672,6 @@
     <Compile Include="UnitOfWork\ConnectionStringTest.cs" />
     <Compile Include="UnitOfWork\DifferentPersistAllTest.cs" />
     <Compile Include="UnitOfWork\DisableFilterScopeTest.cs" />
-    <Compile Include="UnitOfWork\DoNotReuseTransactionLevelTest.cs" />
     <Compile Include="UnitOfWork\EventsPackageMessageTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\GroupPageCollectionChangedEventPublisherTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\MeetingMessageSenderTest.cs" />

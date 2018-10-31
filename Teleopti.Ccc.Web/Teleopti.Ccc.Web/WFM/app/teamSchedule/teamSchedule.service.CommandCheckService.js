@@ -2,9 +2,9 @@
 	'use strict';
 	angular.module('wfm.teamSchedule').service('CommandCheckService', CommandCheckService);
 
-	CommandCheckService.$inject = ['$http', '$q'];
+	CommandCheckService.$inject = ['$http', '$q', '$translate'];
 
-	function CommandCheckService($http, $q) {
+	function CommandCheckService($http, $q, $translate) {
 		var checkOverlappingUrl = "../api/TeamScheduleData/CheckOverlapppingCertainActivities";
 		var checkOverlappingMoveActivityUrl = "../api/TeamScheduleData/CheckMoveActivityOverlapppingCertainActivities";
 		var checkPersonalAccountsUrl = '../api/TeamScheduleData/CheckPersonAccounts';
@@ -97,25 +97,33 @@
 		}
 
 		function populateAllCheckConfigs() {
+			var actionOptionsForOverride = [
+				{ key: 'DoNotModifyForTheseAgents', name: $translate.instant('DoNotModifyForTheseAgents') },
+				{ key: 'OverrideForTheseAgents', name: $translate.instant('OverrideForTheseAgents') }];
+
 			checkConfigs.checkAddActivityOverlapping = {
-				subject: 'ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping',
-				body: 'TheFollowingAgentsHaveAffectedActivities',
-				actionOptions: ['MoveNonoverwritableActivityForTheseAgents', 'DoNotModifyForTheseAgents', 'OverrideForTheseAgents'],
+				subject: $translate.instant('ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping'),
+				body: $translate.instant('TheFollowingAgentsHaveAffectedActivities'),
+				actionOptions: [
+					{
+						key: 'MoveNonoverwritableActivityForTheseAgents',
+						name: $translate.instant('MoveNonoverwritableActivityForTheseAgents')
+					}].concat(actionOptionsForOverride),
 			};
 			checkConfigs.checkAddPersonalActivityOverlapping = {
-				subject: 'ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping',
-				body: 'TheFollowingAgentsHaveAffectedActivities',
-				actionOptions: ['DoNotModifyForTheseAgents', 'OverrideForTheseAgents'],
+				subject: $translate.instant('ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping'),
+				body: $translate.instant('TheFollowingAgentsHaveAffectedActivities'),
+				actionOptions: actionOptionsForOverride,
 			};
 			checkConfigs.checkMoveActivityOverlapping = {
-				subject: 'ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping',
-				body: 'TheFollowingAgentsHaveAffectedActivities',
-				actionOptions: ['DoNotModifyForTheseAgents', 'OverrideForTheseAgents'],
+				subject: $translate.instant('ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping'),
+				body: $translate.instant('TheFollowingAgentsHaveAffectedActivities'),
+				actionOptions: actionOptionsForOverride,
 			};
 			checkConfigs.checkPersonalAccounts = {
-				subject: 'ThisAbsenceWillExceedPersonAccountLimits',
-				body: 'TheFollowingAgentsPersonAccountsWillBeAffected',
-				actionOptions: ['DoNotModifyForTheseAgents', 'OverrideForTheseAgents'],
+				subject: $translate.instant('ThisAbsenceWillExceedPersonAccountLimits'),
+				body: $translate.instant('TheFollowingAgentsPersonAccountsWillBeAffected'),
+				actionOptions: actionOptionsForOverride,
 			};
 		}
 	}

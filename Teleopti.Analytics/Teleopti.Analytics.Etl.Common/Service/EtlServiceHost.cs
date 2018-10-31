@@ -44,7 +44,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new EtlAppModule());
 			_container = builder.Build();
-			_container.Resolve<HangfireClientStarter>().Start();
+			_container.Resolve<IHangfireClientStarter>().Start();
 			return _container.Resolve<EtlService>();
 		}
 

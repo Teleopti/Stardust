@@ -5,7 +5,6 @@ using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -45,7 +44,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			isolate.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();
 			isolate.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
 			isolate.UseTestDouble<FakeWriteSideRepository<IAbsence>>().For<IProxyForId<IAbsence>>();
-			isolate.UseTestDouble<AbsenceCommandConverter>().For<IAbsenceCommandConverter>();
 			isolate.UseTestDouble<PersonNameProvider>().For<IPersonNameProvider>();
 			isolate.UseTestDouble<NameFormatSettingsPersisterAndProvider>().For<ISettingsPersisterAndProvider<NameFormatSettings>>();
 			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();

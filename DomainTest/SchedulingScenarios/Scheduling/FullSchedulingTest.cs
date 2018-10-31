@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeStudentAvailabilityDayRepository StudentAvailabilityDayRepository;
 		public FakeSkillCombinationResourceReader SkillCombinationResourceReader;
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
-		public FakePreferenceDayRepository PreferenceDayRepository;
 		
 		[Test]
 		public void ShouldNotCreateTags()

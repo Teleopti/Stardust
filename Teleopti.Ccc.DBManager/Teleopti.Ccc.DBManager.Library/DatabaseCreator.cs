@@ -27,6 +27,9 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			var scriptFile = _databaseFolder.AzureCreateScriptsPath().ScriptFilePath(type);
 			createDatabaseByScriptFile(scriptFile, type, name);
+
+			scriptFile = _databaseFolder.AzureCreateScriptsPath().ScriptFilePath("WaitForDatabaseOnline");
+			createDatabaseByScriptFile(scriptFile, type, name);
 		}
 
 		private void createDatabaseByScriptFile(string scriptFile, DatabaseType type, string name)

@@ -1,27 +1,29 @@
 import { enableProdMode, StaticProvider } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { downgradeComponent as ngDowngradeComponent, downgradeModule } from '@angular/upgrade/static';
-import { IControllerConstructor, IRootScopeService } from 'angular';
+import { IRootScopeService } from 'angular';
+import { IStateProvider, IUrlRouterProvider } from 'angular-ui-router';
 import { apiAccessComponents } from './app/api-access/api-access.module';
-import { AppModule } from './app/app.module';
+import { appComponents, AppModule } from './app/app.module';
 import { authenticationComponents } from './app/authentication/authentication.module';
-import { BootstrapComponent } from './app/bootstrap/bootstrap.component';
+import { menuComponents } from './app/menu/menu.module';
 import { navigationComponents } from './app/navigation/navigation.module';
+<<<<<<< HEAD
 import { peopleComponents } from './app/people/people.module';
 import { reportsComponents } from './app/reports/reports.module';
 import { WorkspaceComponent } from './app/pm/components';
+=======
+import { peopleComponents, peopleRouterConfig } from './app/people/people.module';
+import { pmComponents, pmRouterConfig } from './app/pm/pm.module';
+>>>>>>> master
 import { sharedComponents } from './app/shared/shared.module';
 import { environment } from './environments/environment';
 import { MainController } from './main.controller';
-import { DowngradeableComponent } from './types';
-
+import { mainInitializer } from './main.initializer';
+import { DowngradeableComponent, RouterConfigFunction } from './types';
 export interface IWfmRootScopeService extends IRootScopeService {
 	_: any;
 	isAuthenticated: boolean;
-
-	setTheme(theme: string): any;
-
-	version: any;
 }
 
 if (environment.production) {
@@ -37,13 +39,12 @@ const wfm = angular.module('wfm', [
 	'currentUserInfoService',
 	'toggleService',
 	'shortcutsService',
+	'wfm.versionService',
 	'wfm.http',
 	'wfm.exceptionHandler',
 	'wfm.permissions',
 	'wfm.apiaccess',
 	'wfm.peopleold',
-	'wfm.people',
-	'wfm.pm',
 	'wfm.outbound',
 	'wfm.forecasting',
 	'wfm.resourceplanner',
@@ -61,7 +62,6 @@ const wfm = angular.module('wfm', [
 	'wfm.rtaTracer',
 	'wfm.teapot',
 	'wfm.start',
-	'wfm.businessunits',
 	'wfm.teamSchedule',
 	'wfm.intraday',
 	'wfm.requests',
@@ -85,8 +85,13 @@ const wfm = angular.module('wfm', [
 	'wfm.ai'
 ]);
 
-wfm.controller('MainController', MainController as IControllerConstructor);
+wfm.controller('MainController', MainController);
 
+/**
+ * Downgrade components with a graceful syntax
+ * @param downgradableComponents a list of components
+ * which implements the DowngradableComponents interface
+ */
 const downgradeHelper = (downgradableComponents: DowngradeableComponent[] | DowngradeableComponent) => {
 	if (Array.isArray(downgradableComponents)) {
 		downgradableComponents.forEach(downgradeHelper);
@@ -104,13 +109,19 @@ downgradeHelper(sharedComponents);
 downgradeHelper(navigationComponents);
 downgradeHelper(authenticationComponents);
 downgradeHelper(apiAccessComponents);
+downgradeHelper(appComponents);
+downgradeHelper(menuComponents);
+downgradeHelper(pmComponents);
 
-// Use this to downgrade components
-// that has no containing module
-downgradeHelper([
-	{ ng1Name: 'ng2Bootstrap', ng2Component: BootstrapComponent },
-	{ ng1Name: 'ng2PmWorkspacePage', ng2Component: WorkspaceComponent }
-]);
+/**
+ * Use this if your module is purely Angular and you want mount some routes
+ */
+const routerHelper = (routerConfig: RouterConfigFunction) => {
+	wfm.config(['$stateProvider', '$urlRouterProvider', routerConfig]);
+};
+
+routerHelper(peopleRouterConfig);
+routerHelper(pmRouterConfig);
 
 wfm.config([
 	'$stateProvider',
@@ -120,8 +131,8 @@ wfm.config([
 	'$mdGestureProvider',
 	'tmhDynamicLocaleProvider',
 	function(
-		$stateProvider,
-		$urlRouterProvider,
+		$stateProvider: IStateProvider,
+		$urlRouterProvider: IUrlRouterProvider,
 		$translateProvider,
 		$httpProvider,
 		$mdGestureProvider,
@@ -149,149 +160,6 @@ wfm.config([
 		tmhDynamicLocaleProvider.localeLocationPattern('dist/angular-i18n/angular-locale_{{locale}}.js');
 		//	tmhDynamicLocaleProvider.defaultLocale("en-gb");  -- causes problems with unit tests due to reinit of scope
 	}
-]).run([
-	'$rootScope',
-	'$state',
-	'$translate',
-	'$timeout',
-	'$locale',
-	'CurrentUserInfo',
-	'Toggle',
-	'areasService',
-	'NoticeService',
-	'TabShortCut',
-	'rtaDataService',
-	'$q',
-	'$http',
-	function(
-		$rootScope: IWfmRootScopeService,
-		$state,
-		$translate,
-		$timeout,
-		$locale,
-		currentUserInfo,
-		toggleService,
-		areasService,
-		noticeService,
-		TabShortCut,
-		rtaDataService,
-		$q,
-		$http
-	) {
-		$rootScope.isAuthenticated = false;
-
-		$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function() {
-			$timeout(function() {
-				$rootScope.$broadcast('sidenav:toggle');
-			}, 500);
-		});
-
-		$rootScope.$on('$localeChangeSuccess', function() {
-			if ($locale.id === 'zh-cn') $locale.DATETIME_FORMATS.FIRSTDAYOFWEEK = 0;
-		});
-
-		var preloads = [];
-		preloads.push(toggleService.togglesLoaded);
-		preloads.push(
-			$q.all([initializeUserInfo(), initializePermissionCheck()]).then(function() {
-				// any preloads than requires selected business unit and/or permission check
-				if (permitted('rta', undefined)) rtaDataService.load(); // dont return promise, async call
-			})
-		);
-		preloads.push(
-			$http.get('../api/Global/Version').then(function(response) {
-				$rootScope.version = response.data;
-				$http.defaults.headers.common['X-Client-Version'] = $rootScope.version;
-			})
-		);
-		var preloadDone = false;
-
-		$rootScope.$on('$stateChangeStart', function(event, next, toParams) {
-			if (preloadDone) {
-				if (!permitted(internalNameOf(next), urlOf(next))) {
-					event.preventDefault();
-					notPermitted(internalNameOf(next));
-				}
-				return;
-			}
-			preloadDone = true;
-			event.preventDefault();
-			$q.all(preloads).then(function() {
-				$state.go(next, toParams);
-			});
-		});
-
-		$rootScope._ = (<any>window)._;
-
-		function initializeUserInfo() {
-			return currentUserInfo.initContext().then(function(data) {
-				$rootScope.isAuthenticated = true;
-				return $translate.use(data.Language);
-			});
-		}
-
-		var areas;
-		var permittedAreas;
-		var alwaysPermittedAreas = [
-			'main',
-			'skillprio',
-			'teapot',
-			'rtatool',
-			'rtatracer',
-			'resourceplanner',
-			'dataprotection'
-		];
-
-		function initializePermissionCheck() {
-			return areasService.getAreasWithPermission().then(function(data) {
-				permittedAreas = data;
-				return areasService.getAreasList().then(function(data) {
-					areas = data;
-				});
-			});
-		}
-
-		function permitted(name, url) {
-			var permitted = alwaysPermittedAreas.some(function(a) {
-				return a === name.toLowerCase();
-			});
-			if (!permitted)
-				permitted = permittedAreas.some(function(a) {
-					if (url && (a.InternalName.indexOf(url) > -1 || url.indexOf(a.InternalName) > -1)) return true;
-					else return a.InternalName === name;
-				});
-			return permitted;
-		}
-
-		function notPermitted(internalName) {
-			noticeService.error(
-				"<span class='test-alert'></span>" +
-					$translate.instant('NoPermissionToViewWFMModuleErrorMessage').replace('{0}', nameOf(internalName)),
-				null,
-				false
-			);
-			$state.go('main');
-		}
-
-		function internalNameOf(o) {
-			var name = o.name;
-			name = name.split('.')[0];
-			name = name.split('-')[0];
-			return name;
-		}
-
-		function urlOf(o) {
-			return o.url && o.url.split('/')[1];
-		}
-
-		function nameOf(internalName) {
-			var name;
-			areas.forEach(function(area) {
-				if (area.InternalName == internalName) name = area.Name;
-			});
-			return name;
-		}
-
-		TabShortCut.unifyFocusStyle();
-	}
 ]);
+
+wfm.run(mainInitializer);

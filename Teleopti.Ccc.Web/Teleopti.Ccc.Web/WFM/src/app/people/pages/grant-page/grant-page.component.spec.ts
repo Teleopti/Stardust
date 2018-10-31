@@ -1,9 +1,9 @@
 import { HttpClientModule } from '@angular/common/http';
-import { DebugElement } from '@angular/core';
+import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { By } from '@angular/platform-browser';
 import { MockTranslationModule } from '@wfm/mocks/translation';
+import { configureTestSuite, PageObject } from '@wfm/test';
 import {
 	NzButtonModule,
 	NzCheckboxModule,
@@ -12,25 +12,34 @@ import {
 	NzTableModule,
 	NzToolTipModule
 } from 'ng-zorro-antd';
-import { configureTestSuite } from '../../../../configure-test-suit';
-import { MockTitleBarModule, WorkspaceComponent } from '../../components';
+import { BehaviorSubject } from 'rxjs';
+import { MockTitleBarModule } from '../../components';
 import { adina, eva, fakeBackendProvider, myles } from '../../mocks';
 import { NavigationService, RolesService, SearchOverridesService, SearchService, WorkspaceService } from '../../shared';
 import { countUniqueRolesFromPeople } from '../../utils';
 import { GrantPageComponent } from './grant-page.component';
 import { GrantPageService } from './grant-page.service';
 
+@Component({
+	selector: 'people-workspace',
+	template: `MockWorkspace`
+})
+class MockWorkspaceComponent {}
+
+class MockWorkspaceService implements Partial<WorkspaceService> {
+	people$ = new BehaviorSubject([adina, myles, eva]);
+}
+
 describe('GrantPageComponent', () => {
 	let component: GrantPageComponent;
 	let fixture: ComponentFixture<GrantPageComponent>;
 	let page: Page;
-	let workspaceService: WorkspaceService;
 
 	configureTestSuite();
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [GrantPageComponent, WorkspaceComponent],
+			declarations: [GrantPageComponent, MockWorkspaceComponent],
 			imports: [
 				MockTitleBarModule,
 				MockTranslationModule,
@@ -47,10 +56,10 @@ describe('GrantPageComponent', () => {
 				GrantPageService,
 				RolesService,
 				fakeBackendProvider,
-				WorkspaceService,
+				{ provide: WorkspaceService, useClass: MockWorkspaceService },
 				SearchService,
 				SearchOverridesService,
-				NavigationService
+				{ provide: NavigationService, useValue: {} }
 			]
 		}).compileComponents();
 	}));
@@ -59,7 +68,6 @@ describe('GrantPageComponent', () => {
 		fixture = TestBed.createComponent(GrantPageComponent);
 		component = fixture.componentInstance;
 		page = new Page(fixture);
-		workspaceService = fixture.debugElement.injector.get(WorkspaceService);
 	}));
 
 	it('should create', () => {
@@ -67,28 +75,18 @@ describe('GrantPageComponent', () => {
 	});
 
 	it('should show current roles', () => {
-		workspaceService.selectPeople([adina, myles, eva]);
 		fixture.detectChanges();
-		expect(page.currentChips.length).toEqual(countUniqueRolesFromPeople([adina, myles, eva]));
+		const uniqueRoleCount = countUniqueRolesFromPeople([adina, myles, eva]);
+		expect(page.currentChips.length).toEqual(uniqueRoleCount);
 	});
 });
 
-class Page {
+class Page extends PageObject {
 	get currentChips() {
 		return this.queryAll('[data-test-grant-current] [data-test-chip]');
 	}
 
 	get availableChips() {
 		return this.queryAll('[data-test-grant-available] [data-test-chip]');
-	}
-
-	fixture: ComponentFixture<GrantPageComponent>;
-
-	constructor(fixture: ComponentFixture<GrantPageComponent>) {
-		this.fixture = fixture;
-	}
-
-	private queryAll(selector: string): DebugElement[] {
-		return this.fixture.debugElement.queryAll(By.css(selector));
 	}
 }

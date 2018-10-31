@@ -331,7 +331,7 @@
 				<div class="multi-shift-trade-selection"></div>
 			</div>
 
-			<div class="multi-shift-trade-schedules-list-panel" data-bind="event:{scroll: scrolled},css:{'cursorpointer': isMobile || isiPad}">
+			<div class="multi-shift-trade-schedules-list-panel" data-bind="event:{scroll: scrolled}, css:{'cursorpointer': isMobile || isiPad}">
 				<div class="loading-gradient" data-bind="if: isLoadingSchedulesOnTop">
 					<div class="loading"></div>
 				</div>
@@ -480,8 +480,8 @@
 						<!--/ko-->
 					</div>
 
-					<div class="multi-shift-trade-selection">
-						<span class="shift-trade-select-checkbox relative" data-bind="css: {'shift-trade-select-checkbox-disabled': !isEnable}, tooltip:{title:reason, placement: 'left'}">
+					<div class="multi-shift-trade-selection relative">
+						<span class="shift-trade-select-checkbox" data-bind="css: {'shift-trade-select-checkbox-disabled': !isEnable}, tooltip:{title:reason, placement: 'left'}">
 							<input type="checkbox" data-bind="attr: {'id': 'shift-trade-' + $index()}, enable: isEnable, checked: isSelected, click:$root.select" />
 							<label class="cursorpointer" data-bind="attr: {'for': 'shift-trade-' + $index()}"></label>
 							<i class="glyphicon glyphicon-ban-circle cursorpointer"></i>

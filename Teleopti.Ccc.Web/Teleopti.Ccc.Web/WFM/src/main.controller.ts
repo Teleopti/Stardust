@@ -7,7 +7,11 @@ export interface MainControllerStyle {
 	isFullyLoaded: boolean;
 }
 
-export function MainController($scope: IScope, $rootScope: IWfmRootScopeService, $q: IQService) {
+export function MainController<IControllerConstructor>(
+	$scope: IScope,
+	$rootScope: IWfmRootScopeService,
+	$q: IQService
+) {
 	var vm = this;
 
 	vm.style = {
