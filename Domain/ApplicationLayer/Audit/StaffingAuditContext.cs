@@ -24,14 +24,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 		{
 			var utcStartDate = DateTime.SpecifyKind(clearBpoAction.StartDate,DateTimeKind.Utc);
 			var utcEndDate = DateTime.SpecifyKind(clearBpoAction.EndDate, DateTimeKind.Utc);
-			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), StaffingAuditActionConstants.ClearBPO, "BPO", "",
+			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), StaffingAuditActionConstants.ClearBpo, "BPO", "",
 				clearBpoAction.BpoGuid, utcStartDate, utcEndDate) {TimeStamp = _now.UtcDateTime()};
 			_staffingAuditRepository.Add(staffingAudit);
 		}
 
 		public void Handle(ImportBpoActionObj importBpoAction)
 		{
-			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), StaffingAuditActionConstants.ImportBPO, "BPO", importBpoAction.FileName);
+			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), StaffingAuditActionConstants.ImportBpo, "BPO", importBpoAction.FileName);
 			staffingAudit.TimeStamp = _now.UtcDateTime();
 			_staffingAuditRepository.Add(staffingAudit);
 		}
@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 
 	public static class StaffingAuditActionConstants
 	{
-		public const string ImportBPO = "ImportBPO";
-		public const string ClearBPO = "ClearBpoStaffing";
+		public const string ImportBpo = "ImportBpo";
+		public const string ClearBpo = "ClearBpoStaffing";
 	}
 
 }
