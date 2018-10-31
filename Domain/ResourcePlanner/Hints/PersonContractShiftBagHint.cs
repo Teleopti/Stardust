@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				var period = person.PersonPeriods(range).FirstOrDefault();
 				var contract = period?.PersonContract.Contract;
 
-				if (period == null || contract == null)
+				if (period == null || contract == null || period.RuleSetBag == null)
 				{
 					continue;
 				}
