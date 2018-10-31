@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 										: skills;
 				var staffingPerSkill = _scheduledStaffingProvider.StaffingPerSkill(skillsToFetch.ToList(),  skillDaysPeriod, false);
 
-				SetSkillStaffPeriodWithFStaffAndEsl(staffingPerSkill.ToList(), skills, skillDaysBySkills, timeZoneInfo);
+				SetSkillStaffPeriodWithFStaffAndEsl(staffingPerSkill.ToList(), skills, skillDaysBySkills);
 
 				foreach (var skill in skills)
 				{
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			return returnList;
 		}
 
-		private void SetSkillStaffPeriodWithFStaffAndEsl(List<SkillStaffingInterval> skillStaffingIntervals, ISkill[] skills, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysPerSkill, TimeZoneInfo timeZone)
+		private void SetSkillStaffPeriodWithFStaffAndEsl(List<SkillStaffingInterval> skillStaffingIntervals, ISkill[] skills, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysPerSkill)
 		{
 
 			foreach (var skill in skills)
