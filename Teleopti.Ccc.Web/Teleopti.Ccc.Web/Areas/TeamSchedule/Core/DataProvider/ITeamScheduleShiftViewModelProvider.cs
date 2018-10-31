@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				IPerson person,
 				IList<DateOnly> weekDays,
 				IScheduleRange scheduleRange,
+				IDictionary<DateOnly, IEnumerable<Guid>> peopleCanSeeSchedulesFor,
 				IDictionary<DateOnly, IEnumerable<Guid>> peopleCanSeeUnpublishedSchedulesFor,
 				IDictionary<DateOnly, IEnumerable<Guid>> viewableConfidentialAbsenceAgents);
 

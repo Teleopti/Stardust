@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				var batchPersons = _personRepository.FindPeople(targetIds);
 				var batchPermittedPersons = _searchProvider
 					.GetPermittedPersonList(batchPersons, date, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules)
-				   .ToList();
+					.ToList();
 
 				if (input.IsOnlyAbsences)
 				{
@@ -281,26 +281,46 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		{
 			var week = DateHelper.GetWeekPeriod(input.DateInUserTimeZone, DateTimeFormatExtensions.FirstDayOfWeek);
 			var weekDays = week.DayCollection();
-			var people = new List<IPerson>();
+			var permittedPeopleByDate = new Dictionary<DateOnly, IEnumerable<IPerson>>();
+			var permittedPeopleIds = new HashSet<Guid>();
+
 			foreach (var batch in personIds.Batch(251))
 			{
-				var batchPermittedPersons = getPermittedPersons(batch.ToArray(), week);
-				people.AddRange(batchPermittedPersons);
-				if (isResultTooMany(people))
+				var batchedPeople = _personRepository.FindPeople(batch);
+				var batchPermittedPersons = weekDays.ToDictionary(d => d, d => _searchProvider.GetPermittedPersonList(batchedPeople, input.DateInUserTimeZone,
+					 DefinedRaptorApplicationFunctionPaths.MyTeamSchedules));
+
+				batchPermittedPersons.ForEach(pg =>
+				{
+					permittedPeopleByDate.Add(pg.Key, pg.Value);
+					pg.Value.ForEach(p => permittedPeopleIds.Add(p.Id.GetValueOrDefault()));
+				});
+
+				if (isResultTooMany(permittedPeopleIds))
 				{
 					return new GroupWeekScheduleViewModel
 					{
 						PersonWeekSchedules = new List<PersonWeekScheduleViewModel>(),
-						Total = people.Count
+						Total = permittedPeopleIds.Count
 					};
 				}
 			}
+			var allPermittedPeople = permittedPeopleByDate
+					.SelectMany(pg => pg.Value)
+					.ToLookup(p => p.Id)
+					.Select(p => p.First())
+					.ToList();
 
 			var pagedPeople = input.PageSize > 0
-				? people.OrderBy(p => p.Name.LastName).Skip(input.PageSize * (input.CurrentPageIndex - 1)).Take(input.PageSize).ToList()
-				: people.ToList();
+				? allPermittedPeople
+					.OrderBy(p => p.Name.LastName)
+					.Skip(input.PageSize * (input.CurrentPageIndex - 1))
+					.Take(input.PageSize).ToList()
+				: allPermittedPeople.ToList();
 
 			var scheduleDic = _scheduleDayProvider.GetScheduleDictionary(week, pagedPeople);
+
+			var peopleCanSeeSchedulesFor = permittedPeopleByDate.ToDictionary(pg => pg.Key, pg => pagedPeople.Where(p => pg.Value.Any(pp => pp.Id == p.Id)).Select(p => p.Id.GetValueOrDefault()));
 
 			var peopleCanSeeUnpublishedSchedulesFor =
 				weekDays.ToDictionary(d => d, d => _searchProvider.GetPermittedPersonIdList(pagedPeople, input.DateInUserTimeZone,
@@ -313,18 +333,18 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			return new GroupWeekScheduleViewModel
 			{
 				PersonWeekSchedules = pagedPeople
-				.Select(person => _shiftViewModelProvider.MakeWeekViewModel(person, weekDays, scheduleDic[person], peopleCanSeeUnpublishedSchedulesFor, peopleCanSeeConfidentialFor))
+				.Select(person => _shiftViewModelProvider.MakeWeekViewModel(person, weekDays, scheduleDic[person], peopleCanSeeSchedulesFor, peopleCanSeeUnpublishedSchedulesFor, peopleCanSeeConfidentialFor))
 				.ToList(),
-				Total = people.Count
+				Total = permittedPeopleIds.Count
 			};
 		}
 
 
 
-		private bool isResultTooMany(IList<IPerson> people)
+		private bool isResultTooMany<T>(IEnumerable<T> people)
 		{
 			var max = _toggleManager.IsEnabled(Toggles.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871) ? 750 : 500;
-			return people.Count > max;
+			return people.Count() > max;
 
 		}
 	}

@@ -98,6 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				IPerson person,
 				IList<DateOnly> weekDays,
 				IScheduleRange scheduleRange,
+				IDictionary<DateOnly, IEnumerable<Guid>> peopleCanSeeSchedulesFor,
 				IDictionary<DateOnly, IEnumerable<Guid>> peopleCanSeeUnpublishedSchedulesFor,
 				IDictionary<DateOnly, IEnumerable<Guid>> viewableConfidentialAbsenceAgents)
 		{
@@ -106,6 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				{
 					var personId = person.Id.GetValueOrDefault();
 					var isTerminated = person.IsTerminated(date);
+					var canSeeSchedules = peopleCanSeeSchedulesFor[date].Contains(personId);
 
 					var dayScheduleViewModel = new PersonDayScheduleSummayViewModel
 					{
@@ -114,7 +116,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						DayOfWeek = (int)date.DayOfWeek
 					};
 
-					if (isTerminated) return dayScheduleViewModel;
+					if (isTerminated || !canSeeSchedules) return dayScheduleViewModel;
 
 					var scheduleDay = scheduleRange.ScheduledDay(date);
 
