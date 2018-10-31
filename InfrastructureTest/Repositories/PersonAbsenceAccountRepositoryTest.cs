@@ -8,13 +8,10 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using System;
-using NHibernate.Criterion;
-using NHibernate.Proxy;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -22,7 +19,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     [Category("BucketB")]
     public class PersonAbsenceAccountRepositoryTest : RepositoryTest<IPersonAbsenceAccount>
     {
-
         protected override IPersonAbsenceAccount CreateAggregateWithCorrectBusinessUnit()
         {
             var person = createPersonInDb();
@@ -115,7 +111,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
 		[Test]
-		[Ignore("78487 to be fixed")]
 		public void ShouldFindSelectedUserWithAccountForSelectedPeriod()
 		{
 			var period = new DateOnlyPeriod(new DateOnly(2018, 10, 1), new DateOnly(2018, 10, 20));
@@ -139,7 +134,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		[Ignore("78487 to be fixed")]
+		[Ignore("78487 maybe to be fixed?")]
 		public void ShouldNotFindAccountStartingAfterSelectedPeriod()
 		{
 			var period = new DateOnlyPeriod(new DateOnly(2018, 10, 1), new DateOnly(2018, 10, 20));
@@ -155,12 +150,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var result = repository.FindByUsersAndPeriod(new[] { personToFind }, period);
 
-			//Måste man kanske ladda alla IAccount? I så fall kanske kolla IsInitialized på accountToFind + otherAccount istället?
 			result[personToFind].PersonAbsenceAccounts().Single().AccountCollection().Single().Should().Be.EqualTo(accountToFind);
 		}
 
 		[Test]
-		[Ignore("78487 to be fixed")]
+		[Ignore("78487 maybe to be fixed?")]
 		public void ShouldNotFindAccountEndingBeforeSelectedPeriod()
 		{
 			var period = new DateOnlyPeriod(new DateOnly(2018, 10, 1), new DateOnly(2018, 10, 20));
@@ -176,8 +170,27 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var result = repository.FindByUsersAndPeriod(new[] { personToFind }, period);
 
-			//Måste man kanske ladda alla IAccount? I så fall kanske kolla IsInitialized på accountToFind + otherAccount istället?
 			result[personToFind].PersonAbsenceAccounts().Single().AccountCollection().Single().Should().Be.EqualTo(accountToFind);
+		}
+
+		[Test]
+		public void ShouldIncludeAccountCollection()
+		{
+			var period = new DateOnlyPeriod(new DateOnly(2018, 10, 1), new DateOnly(2018, 10, 20));
+			var absence = createAbsenceInDb();
+			var personToFind = createPersonInDb();
+			var personToFindAbsenceAccount = new PersonAbsenceAccount(personToFind, absence);
+			var accountToFind = new AccountTime(period.StartDate.AddDays(-10));
+			var otherAccount = new AccountTime(period.StartDate.AddDays(-50));
+			personToFindAbsenceAccount.Add(accountToFind);
+			personToFindAbsenceAccount.Add(otherAccount);
+			PersistAndRemoveFromUnitOfWork(personToFindAbsenceAccount);
+			var repository = new PersonAbsenceAccountRepository(UnitOfWork);
+
+			var result = repository.FindByUsersAndPeriod(new[] { personToFind }, period);
+
+			Session.Close();
+			result[personToFind].PersonAbsenceAccounts().Single().AccountCollection().Any().Should().Be.True();
 		}
 
         [Test]

@@ -7,10 +7,8 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using NHibernate;
-using NHibernate.SqlCommand;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -74,27 +72,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IDictionary<IPerson, IPersonAccountCollection> FindByUsersAndPeriod(IEnumerable<IPerson> persons, DateOnlyPeriod period)
 		{
-			throw new NotImplementedException();
+			var ret = new dic(new Dictionary<IPerson, IPersonAccountCollection>());
 
-			//var ret = new dic(new Dictionary<IPerson, IPersonAccountCollection>());
+			foreach (var personBatch in persons.Batch(400))
+			{
+				var result = Session.CreateCriteria(typeof(PersonAbsenceAccount))
+					.SetFetchMode("accountCollection", FetchMode.Join)
+					.Add(Restrictions.InG("Person", personBatch.ToArray()))
+					.SetResultTransformer(Transformers.DistinctRootEntity)
+					.List<IPersonAbsenceAccount>();
 
-			//foreach (var personBatch in persons.Batch(400))
-			//{
-			//	var result = Session.CreateCriteria(typeof(PersonAbsenceAccount))
-			//		.SetFetchMode("accountCollection", FetchMode.Join)
-			//		.SetFetchMode("Person", FetchMode.Join)
-			//		.SetFetchMode("Absence", FetchMode.Join)
-			//		.Add(Restrictions.InG("Person", personBatch.ToArray()))
-			//		.SetResultTransformer(Transformers.DistinctRootEntity)
-			//		.List<IPersonAbsenceAccount>();
+				foreach (var paAcc in result)
+				{
+					ret[paAcc.Person].Add(paAcc);
+				}
+			}
 
-			//	foreach (var paAcc in result)
-			//	{
-			//		ret[paAcc.Person].Add(paAcc);
-			//	}
-			//}
-
-			//return ret;
+			return ret;
 		}
 
 		public IPersonAccountCollection Find(IPerson person)
