@@ -515,6 +515,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Toggle(Toggles.ResourcePlanner_FasterSeamlessPlanningForPreferences_78286))
 			{
 				builder.RegisterType<SchedulingFilterAgentsByHints>().As<ISchedulingFilterAgentsByHints>().SingleInstance();
+				builder.RegisterType<PersonContractShiftBagHint>().As<IScheduleHint>().SingleInstance();
 			}
 			else
 			{
@@ -533,11 +534,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersonContractHint>().As<IScheduleHint>().SingleInstance();
 			builder.RegisterType<PersonPartTimePercentageHint>().As<IScheduleHint>().SingleInstance();
 			builder.RegisterType<PersonShiftBagHint>().As<IScheduleHint>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_FasterSeamlessPlanningForPreferences_78286))
-			{
-				builder.RegisterType<PersonContractShiftBagHint>().As<IScheduleHint>().SingleInstance();
-			}
-			builder.RegisterType<PersonPeriodHint>().As<IScheduleHint>().SingleInstance();
 			builder.RegisterType<PersonSkillHint>().As<IScheduleHint>().SingleInstance();
 			builder.RegisterType<ScheduleStartOnWrongDateHint>().As<IScheduleHint>().SingleInstance();
 			if (!_configuration.Args().IsFatClient)

@@ -674,7 +674,6 @@
     <Compile Include="ResourcePlanner\Hints\PersonContractScheduleHint.cs" />
     <Compile Include="ResourcePlanner\Hints\PersonContractHint.cs" />
     <Compile Include="ResourcePlanner\Hints\PersonPartTimePercentageHint.cs" />
-    <Compile Include="ResourcePlanner\Hints\PersonPeriodHint.cs" />
     <Compile Include="ResourcePlanner\Hints\PersonSchedulePeriodHint.cs" />
     <Compile Include="ResourcePlanner\Hints\PersonShiftBagHint.cs" />
     <Compile Include="ResourcePlanner\Hints\PersonSkillHint.cs" />

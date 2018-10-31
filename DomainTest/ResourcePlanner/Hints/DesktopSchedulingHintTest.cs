@@ -1,9 +1,12 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -20,12 +23,13 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 		public void ShouldRunRealValidators()
 		{
 			//simply take one of the validators to see that real code is executed
-			var agentMissingPersonPeriod = new Person();
-
-			var result = Target.Execute(new HintInput(null, new[] {agentMissingPersonPeriod}, new DateOnlyPeriod(2000, 1, 1, 2000, 2, 1), null, false));
+			var agent = new Person().WithPersonPeriod();
+			((IDeleteTag)agent.Period(DateOnly.Today).PersonContract.Contract).SetDeleted();
+			
+			var result = Target.Execute(new HintInput(null, new[] {agent}, new DateOnlyPeriod(2000, 1, 1, 2000, 2, 1), null, false));
 
 			result.InvalidResources.SelectMany(x => x.ValidationTypes)
-				.Any(x => x == typeof(PersonPeriodHint))
+				.Any(x => x == typeof(PersonContractHint))
 				.Should().Be.True();
 		}
 

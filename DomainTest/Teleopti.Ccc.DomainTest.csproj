@@ -543,7 +543,6 @@
     <Compile Include="ResourcePlanner\Hints\PersonContractScheduleHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\PersonContractHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\PersonPartTimePercentageHintTest.cs" />
-    <Compile Include="ResourcePlanner\Hints\PersonPeriodHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\PersonSchedulePeriodHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\PersonShiftBagHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\PersonSkillHintTest.cs" />
