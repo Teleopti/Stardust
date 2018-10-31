@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Criterion;
@@ -73,25 +74,27 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IDictionary<IPerson, IPersonAccountCollection> FindByUsersAndPeriod(IEnumerable<IPerson> persons, DateOnlyPeriod period)
 		{
-			var ret = new dic(new Dictionary<IPerson, IPersonAccountCollection>());
+			throw new NotImplementedException();
 
-			foreach (var personBatch in persons.Batch(400))
-			{
-				var result = Session.CreateCriteria(typeof(PersonAbsenceAccount))
-					.SetFetchMode("accountCollection", FetchMode.Join)
-					.SetFetchMode("Person", FetchMode.Join)
-					.SetFetchMode("Absence", FetchMode.Join)
-					.Add(Restrictions.InG("Person", personBatch.ToArray()))
-					.SetResultTransformer(Transformers.DistinctRootEntity)
-					.List<IPersonAbsenceAccount>();
+			//var ret = new dic(new Dictionary<IPerson, IPersonAccountCollection>());
 
-				foreach (var paAcc in result)
-				{
-					ret[paAcc.Person].Add(paAcc);
-				}
-			}
+			//foreach (var personBatch in persons.Batch(400))
+			//{
+			//	var result = Session.CreateCriteria(typeof(PersonAbsenceAccount))
+			//		.SetFetchMode("accountCollection", FetchMode.Join)
+			//		.SetFetchMode("Person", FetchMode.Join)
+			//		.SetFetchMode("Absence", FetchMode.Join)
+			//		.Add(Restrictions.InG("Person", personBatch.ToArray()))
+			//		.SetResultTransformer(Transformers.DistinctRootEntity)
+			//		.List<IPersonAbsenceAccount>();
 
-			return ret;
+			//	foreach (var paAcc in result)
+			//	{
+			//		ret[paAcc.Person].Add(paAcc);
+			//	}
+			//}
+
+			//return ret;
 		}
 
 		public IPersonAccountCollection Find(IPerson person)
