@@ -25,9 +25,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_skillStaffingDataSkillTypeFilter = skillStaffingDataSkillTypeFilter;
 		}
 
-		public IList<CalculatedPossibilityModel> CalculateIntradayIntervalPossibilities(DateOnlyPeriod period, bool satisfyAllSkills)
+		public IList<CalculatedPossibilityModel> CalculateIntradayIntervalPossibilities(IPerson person, DateOnlyPeriod period, bool satisfyAllSkills)
 		{
-			var person = _loggedOnUser.CurrentUser();
 			var defaultTimeZone = person.PermissionInformation.DefaultTimeZone();
 
 			var skills = new List<ISkill>();

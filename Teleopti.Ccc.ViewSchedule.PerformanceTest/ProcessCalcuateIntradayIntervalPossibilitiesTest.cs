@@ -163,8 +163,8 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 				var stopwatch = new Stopwatch();
 				stopwatch.Start();
 				var possibilities = staffingPossiblityType == StaffingPossiblityType.Absence
-					? AbsenceStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(datePeriod)
-					: OvertimeStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(datePeriod, true);
+					? AbsenceStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(person, datePeriod)
+					: OvertimeStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(person, datePeriod, true);
 				stopwatch.Stop();
 				totalElapsedMilliseconds += stopwatch.ElapsedMilliseconds;
 				if (!possibilities.Any())

@@ -2,9 +2,9 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.Staffing;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.DaySchedule;
 using Teleopti.Interfaces.Domain;
 
@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.ViewModelFactory
 		private readonly IDayScheduleDomainDataProvider _dayScheduleDomainDataProvider;
 		private readonly IPushMessageProvider _pushMessageProvider;
 		private readonly IScheduleDayMinMaxTimeCalculator _scheduleDayMinMaxTimeCalculator;
+		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IStaffingDataAvailablePeriodProvider _staffingDataAvailablePeriodProvider;
 
 		public ScheduleDayViewModelFactory(
@@ -23,13 +24,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.ViewModelFactory
 			IPushMessageProvider pushMessageProvider,
 			IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider,
 			IDayScheduleDomainDataProvider dayScheduleDomainDataProvider,
-			IScheduleDayMinMaxTimeCalculator scheduleDayMinMaxTimeCalculator)
+			IScheduleDayMinMaxTimeCalculator scheduleDayMinMaxTimeCalculator,
+			ILoggedOnUser loggedOnUser)
 		{
 			_scheduleViewModelMapper = scheduleViewModelMapper;
 			_pushMessageProvider = pushMessageProvider;
 			_staffingDataAvailablePeriodProvider = staffingDataAvailablePeriodProvider;
 			_dayScheduleDomainDataProvider = dayScheduleDomainDataProvider;
 			_scheduleDayMinMaxTimeCalculator = scheduleDayMinMaxTimeCalculator;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public DayScheduleViewModel CreateDayViewModel(DateOnly date, StaffingPossiblityType staffingPossiblityType)
@@ -111,7 +114,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.ViewModelFactory
 		private bool needAdjustTimeline(StaffingPossiblityType staffingPossiblityType, DateOnly date, bool forThisWeek)
 		{
 			return staffingPossiblityType == StaffingPossiblityType.Overtime &&
-				   _staffingDataAvailablePeriodProvider.GetPeriodForAbsence(date, forThisWeek).HasValue;
+				   _staffingDataAvailablePeriodProvider.GetPeriodForAbsence(_loggedOnUser.CurrentUser(), date, forThisWeek).HasValue;
 		}
 	}
 }

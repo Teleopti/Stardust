@@ -560,6 +560,8 @@
     <Compile Include="Foundation\IConnectionStrings.cs" />
     <Compile Include="RealTimeAdherence\SqlDataReaderExtensions.cs" />
     <Compile Include="ServiceLocatorForEntity.cs" />
+    <Compile Include="Staffing\IStaffingDataAvailablePeriodProvider.cs" />
+    <Compile Include="Staffing\StaffingDataAvailablePeriodProvider.cs" />
     <Compile Include="SystemCheck\CheckMessageBrokerMailBox.cs" />
     <Compile Include="Toggle\Admin\FetchAllToggleOverrides.cs" />
     <Compile Include="Toggle\ApplicationFunctionsToggleFilter.cs" />

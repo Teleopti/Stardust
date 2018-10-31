@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.Staffing;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
@@ -15,13 +16,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		private readonly IMonthScheduleDomainDataProvider _monthScheduleDomainDataProvider;
 		private readonly IScheduleWeekMinMaxTimeCalculator _scheduleWeekMinMaxTimeCalculator;
 		private readonly IStaffingDataAvailablePeriodProvider _staffingDataAvailablePeriodProvider;
+		private readonly ILoggedOnUser _loggedOnUser;
 
 		public ScheduleViewModelFactory(MonthScheduleViewModelMapper monthMapper,
 			WeekScheduleViewModelMapper scheduleViewModelMapper,
 			IWeekScheduleDomainDataProvider weekScheduleDomainDataProvider,
 			IMonthScheduleDomainDataProvider monthScheduleDomainDataProvider,
 			IScheduleWeekMinMaxTimeCalculator scheduleWeekMinMaxTimeCalculator,
-			IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider)
+			IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider,
+			ILoggedOnUser loggedOnUser)
 		{
 			_monthMapper = monthMapper;
 			_scheduleViewModelMapper = scheduleViewModelMapper;
@@ -29,6 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			_monthScheduleDomainDataProvider = monthScheduleDomainDataProvider;
 			_scheduleWeekMinMaxTimeCalculator = scheduleWeekMinMaxTimeCalculator;
 			_staffingDataAvailablePeriodProvider = staffingDataAvailablePeriodProvider;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public MonthScheduleViewModel CreateMonthViewModel(DateOnly dateOnly)
@@ -59,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		private bool needAdjustTimeline(StaffingPossiblityType staffingPossiblityType, DateOnly date, bool forThisWeek)
 		{
 			return staffingPossiblityType == StaffingPossiblityType.Overtime &&
-				   _staffingDataAvailablePeriodProvider.GetPeriodForAbsence(date, forThisWeek).HasValue;
+				   _staffingDataAvailablePeriodProvider.GetPeriodForAbsence(_loggedOnUser.CurrentUser(), date, forThisWeek).HasValue;
 		}
 	}
 }

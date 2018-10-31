@@ -5,9 +5,9 @@ using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Infrastructure.Staffing;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
@@ -36,9 +36,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		public TimePeriod? GetMergedSkillOpenHourPeriod(IList<IScheduleDay> scheduleDays)
 		{
-			var staffingDataAvailablePeriod = _staffingDataAvailablePeriodProvider.GetPeriodForAbsence(scheduleDays.First().DateOnlyAsPeriod.DateOnly, true);
+			var currentUser = _loggedOnUser.CurrentUser();
+			var date = scheduleDays.First().DateOnlyAsPeriod.DateOnly;
+			var staffingDataAvailablePeriod = _staffingDataAvailablePeriodProvider.GetPeriodForAbsence(currentUser, date, true);
 			if (!staffingDataAvailablePeriod.HasValue)
 				return null;
+
 			var validScheduleDays = scheduleDays.OrderBy(s => s.DateOnlyAsPeriod.DateOnly)
 				.Where(s => staffingDataAvailablePeriod.Value.Contains(s.DateOnlyAsPeriod.DateOnly)).ToList();
 

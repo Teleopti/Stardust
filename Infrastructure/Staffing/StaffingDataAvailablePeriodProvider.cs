@@ -7,38 +7,36 @@ using Teleopti.Ccc.Infrastructure.Requests;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
+namespace Teleopti.Ccc.Infrastructure.Staffing
 {
 	public class StaffingDataAvailablePeriodProvider : IStaffingDataAvailablePeriodProvider
 	{
 		private readonly INow _now;
 		private readonly IToggleManager _toggleManager;
-		private readonly ILoggedOnUser _user;
 		private readonly IOvertimeRequestOpenPeriodProvider _mergedOvertimeRequestOpenPeriodProvider;
 
-		public StaffingDataAvailablePeriodProvider(INow now, IToggleManager toggleManager, ILoggedOnUser user, IOvertimeRequestOpenPeriodProvider mergedOvertimeRequestOpenPeriodProvider)
+		public StaffingDataAvailablePeriodProvider(INow now, IToggleManager toggleManager,
+			IOvertimeRequestOpenPeriodProvider mergedOvertimeRequestOpenPeriodProvider)
 		{
 			_now = now;
 			_toggleManager = toggleManager;
-			_user = user;
 			_mergedOvertimeRequestOpenPeriodProvider = mergedOvertimeRequestOpenPeriodProvider;
 		}
 
-		public DateOnlyPeriod? GetPeriodForAbsence(DateOnly date, bool forThisWeek)
+		public DateOnlyPeriod? GetPeriodForAbsence(IPerson person, DateOnly date, bool forThisWeek)
 		{
-			return getStaffingDataAvailablePeriod(date, forThisWeek);
+			return getStaffingDataAvailablePeriod(person, date, forThisWeek);
 		}
 
-		public List<DateOnlyPeriod> GetPeriodsForOvertime(DateOnly date, bool forThisWeek = false)
+		public List<DateOnlyPeriod> GetPeriodsForOvertime(IPerson person, DateOnly date, bool forThisWeek = false)
 		{
-			var person = _user.CurrentUser();
 			var workflowControlSet = person.WorkflowControlSet;
 			if (workflowControlSet == null)
 				return new List<DateOnlyPeriod>();
 
 			if (workflowControlSet.OvertimeRequestOpenPeriods.Count == 0)
 			{
-				var staffingDataAvailablePeriod = getStaffingDataAvailablePeriod(date, forThisWeek);
+				var staffingDataAvailablePeriod = getStaffingDataAvailablePeriod(person, date, forThisWeek);
 				return staffingDataAvailablePeriod.HasValue
 					? new List<DateOnlyPeriod> {staffingDataAvailablePeriod.Value}
 					: new List<DateOnlyPeriod>();
@@ -64,6 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 					availableDays.Add(day);
 				}
 			}
+
 			if (availableDays.Count == 0)
 			{
 				return new List<DateOnlyPeriod>();
@@ -84,16 +83,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return returnPeriods;
 		}
 
-		private DateOnlyPeriod? getStaffingDataAvailablePeriod(DateOnly date, bool forThisWeek)
+		private DateOnlyPeriod? getStaffingDataAvailablePeriod(IPerson person, DateOnly date, bool forThisWeek)
 		{
 			var period = date.ToDateOnlyPeriod();
 			if (forThisWeek)
 			{
 				period = DateHelper.GetWeekPeriod(date, CultureInfo.CurrentCulture);
 			}
-			var today =
-				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(),
-					_user.CurrentUser().PermissionInformation.DefaultTimeZone()));
+
+			var timeZone = person.PermissionInformation.DefaultTimeZone();
+			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone));
 
 			var staffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager);
 			var maxEndDate = today.AddDays(staffingInfoAvailableDays);

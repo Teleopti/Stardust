@@ -60,6 +60,7 @@ using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Staffing;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
@@ -425,6 +426,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftMinMaxCalculatorSkipWeekCheck>().InstancePerLifetimeScope();
 			builder.RegisterType<RestrictionNotAbleToBeScheduledReport>().InstancePerLifetimeScope();
 			builder.RegisterType<AdvancedAgentsFilter>().SingleInstance();
+			builder.RegisterType<StaffingDataAvailablePeriodProvider>().As<IStaffingDataAvailablePeriodProvider>().SingleInstance();
 
 			if (_configuration.Args().IsFatClient)
 			{

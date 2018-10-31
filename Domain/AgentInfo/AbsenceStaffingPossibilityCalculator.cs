@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_skillStaffingIntervalUnderstaffing = skillStaffingIntervalUnderstaffing;
 		}
 
-		public IList<CalculatedPossibilityModel> CalculateIntradayIntervalPossibilities(DateOnlyPeriod period)
+		public IList<CalculatedPossibilityModel> CalculateIntradayIntervalPossibilities(IPerson person, DateOnlyPeriod period)
 		{
-			var scheduleDictionary = loadScheduleDictionary(period);
+			var scheduleDictionary = loadScheduleDictionary(person, period);
 			var skills = getSupportedPersonSkills(period).Select(s => s.Skill).ToArray();
 			var useShrinkage = isShrinkageValidatorEnabled();
 			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills, period, useShrinkage, isCheckingIntradayStaffing);
@@ -71,13 +71,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(_now.ServerDate_DontUse(), date);
 		}
 
-		private IScheduleDictionary loadScheduleDictionary(DateOnlyPeriod period)
+		private IScheduleDictionary loadScheduleDictionary(IPerson person, DateOnlyPeriod period)
 		{
-			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
-				new[] { _loggedOnUser.CurrentUser() },
-				new ScheduleDictionaryLoadOptions(false, false) { LoadAgentDayScheduleTags = false },
-				period,
-				_scenarioRepository.Current());
+			var loadOption = new ScheduleDictionaryLoadOptions(false, false) {LoadAgentDayScheduleTags = false};
+			var scenario = _scenarioRepository.Current();
+
+			var scheduleDictionary =
+				_scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] {person}, loadOption, period, scenario);
 			return scheduleDictionary;
 		}
 
