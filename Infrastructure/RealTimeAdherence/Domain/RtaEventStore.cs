@@ -19,7 +19,7 @@ using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain
 {
-	public class RtaEventStore : IRtaEventStore, IRtaEventStoreReader, IRtaEventStoreTestReader
+	public class RtaEventStore : IRtaEventStore, IRtaEventStoreReader, IRtaEventStoreTester, IRtaEventStoreUpgradeWriter
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly DeadLockVictimPriority _deadLockVictimPriority;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain
 			_deserializer = deserializer;
 		}
 
-		public void Add(IEvent @event, DeadLockVictim deadLockVictim)
+		public void Add(IEvent @event, DeadLockVictim deadLockVictim, int version)
 		{
 			_deadLockVictimPriority.Specify(deadLockVictim);
 
@@ -49,21 +49,27 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain
 INSERT INTO [rta].[Events] (
 	[Type],
 	[PersonId], 
+	[BelongsToDate], 
 	[StartTime], 
 	[EndTime],
-	[Event]
+	[Event],
+	[StoreVersion]
 ) VALUES (
 	:Type,
 	:PersonId, 
+	:BelongsToDate, 
 	:StartTime, 
 	:EndTime,
-	:Event
+	:Event,
+	:StoreVersion
 )")
 				.SetParameter("PersonId", queryData.PersonId)
+				.SetParameter("BelongsToDate", queryData.BelongsToDate?.Date)
 				.SetParameter("StartTime", queryData.StartTime == DateTime.MinValue ? null : queryData.StartTime)
 				.SetParameter("EndTime", queryData.EndTime == DateTime.MinValue ? null : queryData.EndTime)
 				.SetParameter("Type", eventTypeId(@event))
 				.SetParameter("Event", _serializer.SerializeEvent(@event))
+				.SetParameter("StoreVersion", version)
 				.ExecuteUpdate();
 		}
 
@@ -80,6 +86,39 @@ WHERE
 				.SetParameter("ts", until)
 				.SetParameter("nRows", maxEventsToRemove)
 				.ExecuteUpdate();
+
+		public IEnumerable<UpgradeEvent> LoadForUpgrade(int fromVersion, int batchSize)
+		{
+			return load(
+				_unitOfWork.Current().Session()
+					.CreateSQLQuery(@"
+SELECT
+	[Id],
+	[Type],
+	[Event] 
+FROM 
+	[rta].[Events]
+WHERE
+	StoreVersion = :fromVersion
+")
+					.SetParameter("fromVersion", fromVersion)
+					.SetMaxResults(batchSize)
+			).Select(e => new UpgradeEvent
+			{
+				Id = e.Id,
+				Event = e.DeserializedEvent as IRtaStoredEvent
+			}).ToArray();
+		}
+
+		public void Upgrade(UpgradeEvent @event, int toVersion)
+		{
+			_unitOfWork.Current().Session()
+				.CreateSQLQuery(@"UPDATE [rta].[Events] SET [Event] = :Event, StoreVersion = :toVersion WHERE Id = :Id")
+				.SetParameter("toVersion", toVersion)
+				.SetParameter("Id", @event.Id)
+				.SetParameter("Event", _serializer.SerializeEvent(@event.Event))
+				.ExecuteUpdate();
+		}
 
 		public IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period) =>
 			loadEvents(
@@ -99,6 +138,24 @@ ORDER BY [Id] ASC
 					.SetParameter("PersonId", personId)
 					.SetParameter("StartTime", period.StartDateTime)
 					.SetParameter("EndTime", period.EndDateTime)
+			);
+
+		public IEnumerable<IEvent> Load(Guid personId, DateOnly date) =>
+			loadEvents(
+				_unitOfWork.Current().Session()
+					.CreateSQLQuery(@"
+SELECT 
+	[Type],
+	[Event] 
+FROM 
+	[rta].[Events] WITH (NOLOCK)
+WHERE
+	PersonId = :personId AND
+	BelongsToDate = :date
+ORDER BY [Id] ASC
+")
+					.SetParameter("personId", personId)
+					.SetParameter("date", date.Date)
 			);
 
 		public IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp, DeadLockVictim deadLockVictim)

@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 {
 	[TestFixture]
 	[DatabaseTest]
-	public class RtaEventStoreEventIdTest
+	public class RtaEventStoreEventTypeIdTest
 	{
 		public IEventPublisher Publisher;
-		public IRtaEventStoreTestReader Events;
+		public IRtaEventStoreTester Events;
 		public WithUnitOfWork WithUnitOfWork;
 
 		[Test]

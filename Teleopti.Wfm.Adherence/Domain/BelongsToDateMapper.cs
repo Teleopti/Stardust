@@ -12,23 +12,29 @@ namespace Teleopti.Wfm.Adherence.Domain
 	public class BelongsToDateMapper
 	{
 		private readonly IPersonRepository _persons;
-		private readonly IScheduleStorage _scheduleStorage;
+		private readonly IBusinessUnitRepository _businessUnits;
+		private readonly IScenarioRepository _scenarios;
 		private readonly ICurrentScenario _scenario;
+		private readonly IScheduleStorage _scheduleStorage;
 
 		public BelongsToDateMapper(
 			IPersonRepository persons,
-			IScheduleStorage scheduleStorage,
-			ICurrentScenario scenario
+			IBusinessUnitRepository businessUnits,
+			IScenarioRepository scenarios,
+			ICurrentScenario scenario,
+			IScheduleStorage scheduleStorage
 		)
 		{
 			_persons = persons;
-			_scheduleStorage = scheduleStorage;
+			_businessUnits = businessUnits;
+			_scenarios = scenarios;
 			_scenario = scenario;
+			_scheduleStorage = scheduleStorage;
 		}
 
 		public DateOnly? BelongsToDate(Guid personId, DateTime startDateTime, DateTime endDateTime)
 		{
-			var person = _persons.Load(personId);
+			var person = _persons.Get(personId);
 			if (person == null)
 				return startDateTime.ToDateOnly();
 
@@ -98,11 +104,19 @@ namespace Teleopti.Wfm.Adherence.Domain
 			var to = period.EndDateTime.ToDateOnly().AddDays(1);
 			var days = new DateOnlyPeriod(from, to);
 
+			var businessUnitId = person.Period(from)?.Team?.Site?.BusinessUnit?.Id;
+			if (businessUnitId == null)
+				return Enumerable.Empty<dateForPeriod>();
+			var businessUnit = _businessUnits.Load(businessUnitId.GetValueOrDefault());
+			var scenario = _scenarios.LoadDefaultScenario(businessUnit);
+			if (scenario == null)
+				return Enumerable.Empty<dateForPeriod>();
+
 			var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 				new[] {person},
 				new ScheduleDictionaryLoadOptions(false, false),
 				days,
-				_scenario.Current());
+				scenario);
 
 			return (
 					from scheduleDay in schedules[person].ScheduledDayCollection(days)

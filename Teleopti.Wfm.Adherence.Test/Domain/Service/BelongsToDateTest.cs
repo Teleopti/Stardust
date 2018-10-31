@@ -212,6 +212,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 				.BelongsToDate.Should().Be("2015-02-19".Date());
 		}
 		
+		[Test]
 		public void ShouldPublishStateChangedEventWithBelongsToDate()
 		{
 			var personId = Guid.NewGuid();
@@ -370,5 +371,34 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 
 			Assert.DoesNotThrow(() => { Target.CheckForActivityChanges(Database.TenantName()); });
 		}
+		
+		[Test]
+		public void ShouldPublishArrivedLateForWorkEventWithBelongsToDate()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", personId)
+				.WithSchedule(personId, phone, "2018-10-31 08:00", "2018-10-31 17:00")
+				.WithStateGroup("Phone").WithStateCode("phone")
+				.WithLoggedOutStateGroup("Logged Out").WithStateCode("loggedOut")
+				;
+			Now.Is("2018-10-30 17:00");
+			Target.ProcessState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "loggedOut"
+			});
+			Now.Is("2018-10-31 08:30");
+
+			Target.ProcessState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+
+			Publisher.PublishedEvents.OfType<PersonArrivedLateForWorkEvent>().Single().BelongsToDate
+				.Should().Be("2018-10-31".Date());
+		}		
 	}
 }

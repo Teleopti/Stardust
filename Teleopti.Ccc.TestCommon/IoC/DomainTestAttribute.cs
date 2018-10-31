@@ -47,6 +47,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
+using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Tracer;
 
@@ -64,16 +65,17 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			base.Extend(extend, configuration);
 			extend.AddService<FakeDataSources>();
-			
+
 			extend.AddService<FakeDatabase>();
 			if (QueryAllAttributes<DontSendEventsAtPersistAttribute>().Any())
 			{
-				extend.AddService<FakeStorageSimple>();				
+				extend.AddService<FakeStorageSimple>();
 			}
 			else
 			{
 				extend.AddService<FakeStorage>();
 			}
+
 			extend.AddService<FakeSchedulingSourceScope>();
 			extend.AddService<FakeRtaHistory>();
 		}
@@ -100,7 +102,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			isolate.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
 			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 			isolate.UseTestDouble<ThrowExceptions>().For<ISyncEventProcessingExceptionHandler>();
-			isolate.UseTestDouble<FakeRtaEventStore>().For<IRtaEventStore, IRtaEventStoreReader>();
+			isolate.UseTestDouble<FakeRtaEventStore>().For<IRtaEventStore, IRtaEventStoreReader, IRtaEventStoreUpgradeWriter>();
 			QueryAllAttributes<UseEventPublisherAttribute>()
 				.ForEach(a => isolate.UseTestDoubleForType(a.EventPublisher).For<IEventPublisher>());
 			isolate.UseTestDouble<FakeRecurringEventPublisher>().For<IRecurringEventPublisher>();
@@ -121,7 +123,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			isolate.UseTestDouble<FakeAgentStatePersister>().For<IAgentStatePersister>();
 
 			isolate.UseTestDouble<FakeAgentStateReadModelPersister>().For<IAgentStateReadModelPersister, IAgentStateReadModelReader>();
-			
+
 			isolate.UseTestDouble<FakeHistoricalOverviewReadModelPersister>().For<IHistoricalOverviewReadModelPersister, IHistoricalOverviewReadModelReader>();
 
 			isolate.UseTestDouble<FakeAllLicenseActivatorProvider>().For<ILicenseActivatorProvider>();
@@ -153,7 +155,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// licensing
 			isolate.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();
-			
+
 
 			// Repositories
 			if (QueryAllAttributes<ThrowIfRepositoriesAreUsedAttribute>().Any())
@@ -274,7 +276,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeAgentBadgeRepository>().For<IAgentBadgeRepository>();
 				isolate.UseTestDouble<SkillIntradayStaffingFactory>().For<SkillIntradayStaffingFactory>();
 				isolate.UseTestDouble<FakePersonScheduleDayReadModelPersister>().For<IPersonScheduleDayReadModelPersister>();
-				
+
 				isolate.UseTestDouble<FakeGamificationSettingRepository>().For<IGamificationSettingRepository>();
 				isolate.UseTestDouble<FakeForecastDayOverrideRepository>().For<IForecastDayOverrideRepository>();
 				isolate.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();

@@ -214,6 +214,7 @@
     <Compile Include="Domain\Configuration\DefaultStateGroupMissingInConfigurationTest.cs" />
     <Compile Include="Domain\Configuration\LoggedOutStateGroupMissingInConfigurationTest.cs" />
     <Compile Include="Domain\Configuration\LoggedOutStateGroupMissingInRtaServiceTest.cs" />
+    <Compile Include="Domain\EventStore\RtaEventStoreUpgradeTest.cs" />
     <Compile Include="Domain\Service\AgentStateMaintainerTest.cs" />
     <Compile Include="Domain\Service\AgentStateReadModel\CheckForActivityChangesTest.cs" />
     <Compile Include="Domain\Service\AgentStateReadModel\StartTime\AlarmStartTimeTest.cs" />

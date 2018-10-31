@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Wfm.Adherence.Domain;
 using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence
 			{
 				try
 				{
-					withUnitOfWork(dataSource, () => storedEvents.ForEach(@event => _store.Add(@event, DeadLockVictim.No)));
+					withUnitOfWork(dataSource, () => storedEvents.ForEach(@event => _store.Add(@event, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion)));
 				}
 				catch (Exception e)
 				{

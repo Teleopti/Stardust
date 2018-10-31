@@ -92,7 +92,6 @@
     <Compile Include="Domain\AgentAdherenceDay\HistoricalChangeModel.cs" />
     <Compile Include="Domain\AgentAdherenceDay\IAgentAdherenceDay.cs" />
     <Compile Include="Domain\AgentAdherenceDay\IAgentAdherenceDayLoader.cs" />
-    <Compile Include="Domain\AgentAdherenceDay\IRtaEventStore.cs" />
     <Compile Include="Domain\AgentAdherenceDay\IScheduleLoader.cs" />
     <Compile Include="Domain\AgentAdherenceDay\ScheduleLoader.cs" />
     <Compile Include="Domain\AgentAdherenceDay\ScheduleLoaderHistoricalOverview.cs" />
@@ -116,6 +115,8 @@
     <Compile Include="Domain\Configuration\RtaStateHolder.cs" />
     <Compile Include="Domain\Events\ApprovedPeriodRemovedEvent.cs" />
     <Compile Include="Domain\Events\EventAdherence.cs" />
+    <Compile Include="Domain\Events\IRtaEventStore.cs" />
+    <Compile Include="Domain\Events\IRtaEventStoreUpgrader.cs" />
     <Compile Include="Domain\Events\IRtaStoredEvent.cs" />
     <Compile Include="Domain\Events\ISolidProof.cs" />
     <Compile Include="Domain\Events\PeriodApprovedAsInAdherenceEvent.cs" />
@@ -133,6 +134,8 @@
     <Compile Include="Domain\Events\RtaMapChangedEvent.cs" />
     <Compile Include="Domain\Events\RtaRuleChangedEvent.cs" />
     <Compile Include="Domain\Events\RtaStateGroupChangedEvent.cs" />
+    <Compile Include="Domain\RtaEventStoreUpgrader.cs" />
+    <Compile Include="Domain\RtaEventStoreVersion.cs" />
     <Compile Include="Domain\Service\ActivityChangeChecker.cs" />
     <Compile Include="Domain\Service\ActivityEventPublisher.cs" />
     <Compile Include="Domain\Service\ActualAgentStateExtension.cs" />

@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 	public class SynchronzieWaiter
 	{
 		private readonly IKeyValueStorePersister _keyValueStore;
-		private readonly IRtaEventStoreTestReader _events;
+		private readonly IRtaEventStoreTester _events;
 
-		public SynchronzieWaiter(IKeyValueStorePersister keyValueStore, IRtaEventStoreTestReader events)
+		public SynchronzieWaiter(IKeyValueStorePersister keyValueStore, IRtaEventStoreTester events)
 		{
 			_keyValueStore = keyValueStore;
 			_events = events;

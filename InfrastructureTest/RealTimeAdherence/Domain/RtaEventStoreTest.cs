@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 	public class RtaEventStoreTest
 	{
 		public IEventPublisher Target;
-		public IRtaEventStoreTestReader Events;
+		public IRtaEventStoreTester Events;
 		public WithUnitOfWork WithUnitOfWork;
 
 		[Test]
@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 		{
 			Target.Publish(new PersonStateChangedEvent());
 
-			var actal = WithUnitOfWork.Get(() => Events.LoadAllForTest());
+			var actual = WithUnitOfWork.Get(() => Events.LoadAllForTest());
 
-			actal.Should().Not.Be.Empty();
+			actual.Should().Not.Be.Empty();
 		}
 
 		[Test]

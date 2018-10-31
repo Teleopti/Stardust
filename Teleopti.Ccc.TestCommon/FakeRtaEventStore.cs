@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Interfaces.Domain;
@@ -10,16 +11,19 @@ using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeRtaEventStore : IRtaEventStore, IRtaEventStoreReader
+	public class FakeRtaEventStore : IRtaEventStore, IRtaEventStoreReader, IRtaEventStoreUpgradeWriter
 	{
 		private readonly Lazy<IRtaEventStoreSynchronizer> _synchronizer;
 
-		private class storedEvent
+		public class StoredEvent
 		{
-			public Guid PersonId;
-			public DateTimePeriod Period;
-			public IEvent Event;
 			public int Id;
+			public int StoreVersion;
+			public Guid PersonId;
+			public DateOnly? BelongsToDate;
+			public DateTime StartTime;
+			public DateTime EndTime;
+			public IEvent Event;
 		}
 
 		private int _id;
@@ -29,56 +33,87 @@ namespace Teleopti.Ccc.TestCommon
 			_synchronizer = synchronizer;
 		}
 
-		private readonly IList<storedEvent> _events = new List<storedEvent>();
+		public IEnumerable<StoredEvent> Data = Enumerable.Empty<StoredEvent>();
 
-		public void Add(IEvent @event, DeadLockVictim deadLockVictim)
+		public void Add(IEvent @event, DeadLockVictim deadLockVictim, int version)
 		{
-			var rtaStoredEvent = (@event as IRtaStoredEvent).QueryData();
-			if (rtaStoredEvent == null)
+			var queryData = (@event as IRtaStoredEvent).QueryData();
+			if (queryData == null)
 				return;
 
-			_events.Add(new storedEvent
+			Data = Data.Append(new StoredEvent
 			{
 				Id = _id = _id + 1,
-				PersonId = rtaStoredEvent.PersonId.Value,
-				Period = new DateTimePeriod(rtaStoredEvent.StartTime.Value, rtaStoredEvent.EndTime.Value),
+				StoreVersion = version,
+				PersonId = queryData.PersonId.Value,
+				BelongsToDate = queryData.BelongsToDate,
+				StartTime = queryData.StartTime.Value,
+				EndTime = queryData.EndTime.Value,
 				Event = @event
-			});
+			}).ToArray();
 
 			_synchronizer.Value.Synchronize();
 		}
 
 		public int Remove(DateTime removeUntil, int maxEventsToRemove) => throw new NotImplementedException();
 
+		public IEnumerable<UpgradeEvent> LoadForUpgrade(int fromVersion, int batchSize)
+		{
+			return Data
+				.Where(x => x.StoreVersion == fromVersion)
+				.Select(e => new UpgradeEvent
+				{
+					Id = e.Id,
+					Event = e.Event.CopyBySerialization(e.Event.GetType()) as IRtaStoredEvent
+				}).ToArray();
+		}
+
+		public void Upgrade(UpgradeEvent @event, int toVersion)
+		{
+			var toUpdate = Data.Single(e => e.Id == @event.Id);
+			toUpdate.Event = @event.Event as IEvent;
+			toUpdate.StoreVersion = toVersion;
+		}
+
 		public IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period)
 		{
-			return _events
+			return Data
 				.Where(x => x.PersonId == personId &&
-							x.Period.StartDateTime <= period.EndDateTime &&
-							x.Period.EndDateTime >= period.StartDateTime)
+							x.StartTime <= period.EndDateTime &&
+							x.EndTime >= period.StartDateTime)
+				.Select(e => e.Event)
+				.ToArray();
+		}
+
+		public IEnumerable<IEvent> Load(Guid personId, DateOnly date)
+		{
+			return Data
+				.Where(x => x.PersonId == personId &&
+							x.BelongsToDate == date)
 				.Select(e => e.Event)
 				.ToArray();
 		}
 
 		public IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp, DeadLockVictim deadLockVictim)
 		{
-			return _events
+			return Data
 				.Where(e => e.PersonId == personId &&
-							e.Period.EndDateTime < timestamp)
-				.OrderBy(x => x.Period.EndDateTime)
+							e.EndTime < timestamp)
+				.OrderBy(x => x.EndTime)
 				.LastOrDefault()
 				?.Event;
 		}
 
 		public LoadedEvents LoadFrom(int latestSynchronizedEvent)
 		{
-			var events = _events
+			var events = Data
 				.Where(e => e.Id > latestSynchronizedEvent)
-				.Select(e => e.Event)
+				.Select(e => e.Event.CopyBySerialization(e.Event.GetType()))
+				.Cast<IEvent>()
 				.ToArray();
-			
-			var maxId = _events.Max(e => e.Id);
-			
+
+			var maxId = Data.Max(e => e.Id);
+
 			return new LoadedEvents
 			{
 				MaxId = maxId,

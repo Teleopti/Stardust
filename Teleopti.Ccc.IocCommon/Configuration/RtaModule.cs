@@ -107,8 +107,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RtaEventStore>()
 				.As<IRtaEventStore>()
 				.As<IRtaEventStoreReader>()
-				.As<IRtaEventStoreTestReader>()
+				.As<IRtaEventStoreTester>()
+				.As<IRtaEventStoreUpgradeWriter>()
 				.SingleInstance();
+			builder.RegisterType<RtaEventStoreUpgrader>().As<IRtaEventStoreUpgrader>().SingleInstance().ApplyAspects();
 			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
 			{
 				builder.RegisterType<RtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance().ApplyAspects();

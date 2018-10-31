@@ -267,8 +267,9 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\Mappings\MappingReadModelUpdaterTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\Schedules\CurrentScheduleReadModelPersisterTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\Schedules\CurrentScheduleReadModelUpdaterTest.cs" />
+    <Compile Include="RealTimeAdherence\Domain\RtaEventStoreReadByDateTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\RtaEventStoreSynchronizerTest.cs" />
-    <Compile Include="RealTimeAdherence\Domain\RtaEventStoreEventIdTest.cs" />
+    <Compile Include="RealTimeAdherence\Domain\RtaEventStoreEventTypeIdTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\RtaEventStoreLoadLastBeforeTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Repositories\RtaMapRepositoryTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Repositories\RtaRuleRepositoryTest.cs" />
@@ -277,6 +278,8 @@
     <Compile Include="RealTimeAdherence\Domain\RtaEventStoreApprovedReadTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\RtaEventStoreReadTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\RtaEventStoreTest.cs" />
+    <Compile Include="RealTimeAdherence\Domain\RtaEventStoreUpgradeTest.cs" />
+    <Compile Include="RealTimeAdherence\Domain\RtaEventStoreUpgradeWriterTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\CyrillicCharactersTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\DataSourceReaderTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\DeadlockTest.cs" />

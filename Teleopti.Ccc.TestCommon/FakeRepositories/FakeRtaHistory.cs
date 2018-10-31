@@ -2,6 +2,8 @@ using System;
 using System.Drawing;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.RealTimeAdherence;
+using Teleopti.Wfm.Adherence.Domain;
 using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
@@ -25,7 +27,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				BelongsToDate = shiftStartTime.Date(),
 				ShiftStartTime = shiftStartTime.Utc(),
 				ShiftEndTime = shiftEndTime.Utc()
-			}, DeadLockVictim.No);
+			}, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion);
 			return this;
 		}
 		
@@ -37,7 +39,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				BelongsToDate = shiftStartTime.Date(),
 				ShiftStartTime = shiftStartTime.Utc(),
 				ShiftEndTime = shiftEndTime.Utc()
-			}, DeadLockVictim.No);
+			}, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion);
 			return this;
 		}
 
@@ -57,7 +59,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				RuleName = rule,
 				RuleColor = ruleColor?.ToArgb(),
 				Adherence = adherence == null ? null : (EventAdherence?) Enum.Parse(typeof(EventAdherence), adherence.ToString()),
-			}, DeadLockVictim.No);
+			}, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion);
 			return this;
 		}
 
@@ -77,7 +79,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				RuleName = rule,
 				RuleColor = ruleColor?.ToArgb(),
 				Adherence = adherence == null ? null : (EventAdherence?) Enum.Parse(typeof(EventAdherence), adherence.ToString()),
-			}, DeadLockVictim.No);
+			}, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion);
 			return this;
 		}
 
@@ -89,6 +91,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_store.Add(new PersonArrivedLateForWorkEvent
 			{
 				PersonId = personId,
+				BelongsToDate = shiftStart.Date(),
 				Timestamp = time.Utc(),
 				ShiftStart = shiftStart.Utc(),
 				StateName = state,
@@ -97,7 +100,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				RuleName = rule,
 				RuleColor = ruleColor?.ToArgb(),
 				Adherence = adherence == null ? null : (EventAdherence?) Enum.Parse(typeof(EventAdherence), adherence.ToString())
-			}, DeadLockVictim.No);
+			}, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion);
 			return this;
 		}
 
@@ -106,6 +109,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_store.Add(new PersonAdherenceDayStartEvent
 			{
 				PersonId = personId,
+				BelongsToDate = time.Date(),
 				Timestamp = time.Utc(),
 				StateName = state,
 				ActivityName = activity,
@@ -113,7 +117,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				RuleName = rule,
 				RuleColor = ruleColor?.ToArgb(),
 				Adherence = adherence == null ? null : (EventAdherence?) Enum.Parse(typeof(EventAdherence), adherence.ToString())
-			}, DeadLockVictim.No);
+			}, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion);
 			return this;
 		}
 	}

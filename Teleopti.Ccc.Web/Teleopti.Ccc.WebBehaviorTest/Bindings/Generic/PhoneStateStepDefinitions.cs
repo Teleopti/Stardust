@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class PhoneStateStepDefinitions
 	{
-		private readonly IRtaEventStoreTestReader _events;
+		private readonly IRtaEventStoreTester _events;
 		private readonly DataMakerImpl _data;
 
 		// this is the analytics data source id
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		// and is sent with the state
 		public static string SourceId = "8";
 
-		public PhoneStateStepDefinitions(IRtaEventStoreTestReader events, DataMakerImpl data)
+		public PhoneStateStepDefinitions(IRtaEventStoreTester events, DataMakerImpl data)
 		{
 			_events = events;
 			_data = data;
