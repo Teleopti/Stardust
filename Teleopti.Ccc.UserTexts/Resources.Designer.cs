@@ -12944,6 +12944,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter team schedules by time.
+        /// </summary>
+        public static string FilterTeamSchedulesByTime {
+            get {
+                return ResourceManager.GetString("FilterTeamSchedulesByTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter....
         /// </summary>
         public static string FilterThreeDots {
@@ -32770,6 +32779,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The shifts in the shift bag {0} can not fulfill the contract time for the contract {1}. .
+        /// </summary>
+        public static string ShiftsInShiftBagCanNotFulFillContractTime {
+            get {
+                return ResourceManager.GetString("ShiftsInShiftBagCanNotFulFillContractTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shifts inside the period:.
         /// </summary>
         public static string ShiftsInsideThePeriodColon {
@@ -33370,6 +33388,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShowOnlyDayOff {
             get {
                 return ResourceManager.GetString("ShowOnlyDayOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show only night shifts.
+        /// </summary>
+        public static string ShowOnlyNightShifts {
+            get {
+                return ResourceManager.GetString("ShowOnlyNightShifts", resourceCulture);
             }
         }
         

@@ -124,7 +124,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<ScheduleSaveHandler>().For<IScheduleSaveHandler>();
-			isolate.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
 		}
 	}
 }

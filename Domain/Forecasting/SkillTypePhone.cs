@@ -34,20 +34,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
         }
 
-        public override int DefaultResolution
-        {
-            get { return 15; }
-        }
+        public override int DefaultResolution => 15;
 
-        public override ITaskTimeDistributionService TaskTimeDistributionService
-        {
-            get { return _service; }
-        }
+		public override ITaskTimeDistributionService TaskTimeDistributionService => _service;
 
-        public override bool DisplayTimeSpanAsMinutes
-        {
-            get { return false; }
-        }
+		public override bool DisplayTimeSpanAsMinutes => false;
 
 		public override IStaffingCalculatorServiceFacade StaffingCalculatorService
         {

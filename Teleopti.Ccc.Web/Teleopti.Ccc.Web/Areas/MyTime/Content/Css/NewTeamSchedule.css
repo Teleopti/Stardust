@@ -2,13 +2,13 @@
 	overflow: hidden;
 	-webkit-transform: translate3d(0, 0, 0);
 	transform: translate3d(0, 0, 0);
-	padding: 0;
+	padding-left: 0;
+	padding-right: 0;
 }
 .new-teamschedule-view .relative {
 	-webkit-transform: translate3d(0, 0, 0);
 	transform: translate3d(0, 0, 0);
 }
-
 .new-teamschedule-view-nav {
 	padding: 0;
 }
@@ -23,8 +23,11 @@
 	align-items: center;
 	height: 50px;
 }
-.new-teamschedule-view-nav .navbar-teleopti > li > * {
+.new-teamschedule-view-nav .navbar-teleopti.navbar-nav > li > a,
+.new-teamschedule-view-nav .navbar-teleopti.navbar-nav > li > a:hover,
+.new-teamschedule-view-nav .navbar-teleopti.navbar-nav > li > a:focus {
 	cursor: pointer;
+	background-color: transparent;
 }
 .new-teamschedule-view-nav input.form-control {
 	background: transparent !important;
@@ -68,12 +71,15 @@
 	min-width: 35px;
 	margin: 0 10px;
 }
-.new-teamschedule-day-off-toggle input[type='checkbox'] {
+.new-teamschedule-toggle {
+	display: inline-block;
+}
+.new-teamschedule-toggle input[type='checkbox'] {
 	height: 0;
 	width: 0;
 	display: none;
 }
-.new-teamschedule-day-off-toggle label {
+.new-teamschedule-toggle label {
 	cursor: pointer;
 	text-indent: -9999px;
 	width: 40px;
@@ -84,7 +90,7 @@
 	display: inline-block;
 	margin: 0;
 }
-.new-teamschedule-day-off-toggle label:after {
+.new-teamschedule-toggle label:after {
 	content: '';
 	position: absolute;
 	top: 0;
@@ -96,20 +102,49 @@
 	transition: left 0.2s ease;
 	box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.1);
 }
-.new-teamschedule-day-off-toggle input:checked + label {
+.new-teamschedule-toggle input:checked + label {
 	background: #bada55;
 	transition: all 0.3s ease;
 	display: inline-block;
 }
-.new-teamschedule-day-off-toggle input:checked + label:after {
+.new-teamschedule-toggle input:checked + label:after {
 	left: 20px;
 }
-.new-teamschedule-day-off-toggle label:active:after {
+.new-teamschedule-toggle label:active:after {
 	width: 20px;
 }
-.new-teamschedule-day-off-toggle span {
+.new-teamschedule-toggle span {
 	display: inline-block;
 	padding: 10px;
+}
+.new-teamschedule-team-filter a span,
+.new-teamschedule-time-filter a span {
+	visibility: hidden;
+}
+.new-teamschedule-team-filter.new-teamschedule-has-time-filter a span,
+.new-teamschedule-time-filter.new-teamschedule-has-time-filter a span {
+	content: '';
+	visibility: visible;
+	width: 8px;
+	height: 8px;
+	position: absolute;
+	top: 6px;
+	right: 11px;
+	background: orange;
+	border-radius: 50%;
+}
+.new-teamschedule-time-filter.new-teamschedule-has-time-filter a span {
+	top: 10.5px;
+	right: 8px;
+}
+.new-teamschedule-team-filter-detail {
+	text-align: left;
+}
+.new-teamschedule-team-filter-detail p {
+	margin: 0;
+}
+.new-teamschedule-team-filter-disable-time .new-teamschedule-team-filter-detail-time {
+	text-decoration: line-through;
 }
 .new-teamschedule-view-nav .submenu li.new-teamschedule-filter-component {
 	width: 220px;
@@ -554,11 +589,12 @@ div.new-teamschedule-no-result-indicator {
 }
 .new-teamschedule-panel {
 	position: absolute;
-	top: 1px;
+	top: 0;
 	left: 1px;
 	right: initial;
 	bottom: initial;
 	width: calc(100% - 2px);
+	border-top: 1px solid rgba(0, 0, 0, 0.2);
 	box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2);
 	background: white;
 	padding: 15px;
@@ -581,14 +617,6 @@ div.new-teamschedule-no-result-indicator {
 	z-index: 1;
 	background: rgba(222, 222, 222, 0.5);
 }
-.new-teamschedule-panel-mobile .new-teamschedule-time-slider-block-backdrop {
-	top: 0;
-	right: -15px;
-	bottom: -10px;
-	left: -15px;
-	cursor: pointer;
-}
-
 .new-teamschedule-filter-component .select2-container {
 	width: 100% !important;
 }
@@ -600,7 +628,7 @@ div.new-teamschedule-no-result-indicator {
 .new-teamschedule-time-slider-container {
 	display: flex;
 	align-items: center;
-	height: 40px;
+	height: 50px;
 }
 .new-teamschedule-time-slider-container > label {
 	width: 120px;
@@ -610,7 +638,7 @@ div.new-teamschedule-no-result-indicator {
 }
 .new-teamschedule-time-slider-container .new-teamschedule-time-slider-line {
 	height: 4px;
-	flex: 1 1 100%;
+	flex: 1 1 auto;
 	margin: 0 10px;
 }
 .new-teamschedule-time-slider-container .ui-slider-horizontal {
@@ -681,9 +709,14 @@ div.new-teamschedule-no-result-indicator {
 	color: #ffa500;
 }
 .new-teamschedule-submit-buttons {
-	display: flex;
-	justify-content: flex-end;
 	margin-bottom: 0;
+}
+.show-only-night-shift-toggle {
+	margin-left: 120px;
+}
+.new-teamschedule-panel-mobile .new-teamschedule-submit-buttons {
+	display: flex;
+	justify-content: space-between;
 }
 .new-teamschedule-submit-buttons button {
 	width: 45%;
@@ -702,11 +735,13 @@ div.new-teamschedule-no-result-indicator {
 }
 .new-teamschedule-view.new-teamschedule-view-mobile,
 .new-teamschedule-view.new-teamschedule-view-ipad {
-	margin: 0;
 	padding: 0;
 	cursor: pointer;
 	overflow: hidden;
 	height: calc(100vh - 51px - 50px) !important;
+}
+.new-teamschedule-view.new-teamschedule-view-mobile {
+	margin: 0;
 }
 .new-teamschedule-view.new-teamschedule-view-mobile .new-teamschedule-table.relative,
 .new-teamschedule-view.new-teamschedule-view-ipad .new-teamschedule-table.relative {
@@ -796,8 +831,16 @@ div.new-teamschedule-no-result-indicator {
 	box-shadow: 0 -2px 2px 2px rgba(0, 0, 0, 0.2);
 }
 .new-teamschedule-view-mobile .new-teamschedule-panel,
-.new-teamschedule-view-ipad .new-teamschedule-panel {
+.new-teamschedule-view-ipad .new-teamschedule-panel,
+.new-teamschedule-view-mobile .new-teamschedule-time-slider-block-backdrop,
+.new-teamschedule-view-ipad .new-teamschedule-time-slider-block-backdrop {
 	cursor: pointer;
+}
+.new-teamschedule-panel-mobile .new-teamschedule-time-slider-block-backdrop {
+	top: 0;
+	right: -15px;
+	bottom: 0;
+	left: -15px;
 }
 .new-teamschedule-view-mobile .new-teamschedule-time-slider-container {
 	display: block;
@@ -824,11 +867,11 @@ div.new-teamschedule-no-result-indicator {
 .new-teamschedule-view-mobile .end-time-slider-end-label {
 	font-size: 12px;
 }
-.new-teamschedule-panel .new-teamschedule-day-off-toggle {
-	padding: 15px 0 5px 0;
-}
-.new-teamschedule-panel .new-teamschedule-day-off-toggle label {
+.new-teamschedule-panel-mobile .new-teamschedule-toggle label {
 	transform: scale(1.3);
+}
+.new-teamschedule-panel-mobile .show-only-night-shift-toggle {
+	margin: 0;
 }
 .new-teamschedule-view-mobile .new-teamschedule-submit-buttons {
 	justify-content: space-between;

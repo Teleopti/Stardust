@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 
 			var pastRequests = getPastRequests(notConflictingRequests, initialPeriod);
-			var pastRequestIds = getPastRequestIds(pastThresholdTime, initialPeriod, pastRequests, windowSize);
+			var pastRequestIds = getPastRequestIds(initialPeriod, pastRequests, windowSize);
 			return pastRequestIds;
 		}
 
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			return result;
 		}
 
-		private IList<IEnumerable<IQueuedAbsenceRequest>> getPastRequestIds(DateTime pastThresholdTime, DateOnlyPeriod period, IList<IQueuedAbsenceRequest> pastRequests, int windowSize)
+		private IList<IEnumerable<IQueuedAbsenceRequest>> getPastRequestIds(DateOnlyPeriod period, IList<IQueuedAbsenceRequest> pastRequests, int windowSize)
 		{
 			var result = new List<IEnumerable<IQueuedAbsenceRequest>>();
 			//Add Min check to stop in time if a request is "missed in the list" bug #40891

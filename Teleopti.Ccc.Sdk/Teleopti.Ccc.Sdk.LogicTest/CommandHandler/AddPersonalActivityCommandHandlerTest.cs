@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
@@ -125,7 +124,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		{
 			extend.AddService<AddPersonalActivityCommandHandler>();
 			extend.AddService<ScheduleSaveHandler>();
-			extend.AddService<SaveSchedulePartService>();
 			extend.AddModule(new AssemblerModule());
 		}
 

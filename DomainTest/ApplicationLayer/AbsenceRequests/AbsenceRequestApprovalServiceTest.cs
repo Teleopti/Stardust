@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				RequestApprovalServiceFactory.MakeAbsenceRequestApprovalService(_scheduleDictionary, Scenario.Current(), person);
 		}
 
-		private PersonAbsenceAccount createAccount(IPerson person, IAbsence absence, params IAccount[] accountDays)
+		private void createAccount(IPerson person, IAbsence absence, params IAccount[] accountDays)
 		{
 			var personAbsenceAccount = new PersonAbsenceAccount(person, absence);
 			personAbsenceAccount.Absence.Tracker = Tracker.CreateDayTracker();
@@ -200,7 +200,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				personAbsenceAccount.Add(accountDay);
 			}
 			PersonAbsenceAccountRepository.Add(personAbsenceAccount);
-			return personAbsenceAccount;
 		}
 
 		private AccountDay createAccountDay(DateOnly startDate, TimeSpan? balance = null)

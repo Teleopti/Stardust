@@ -7,10 +7,12 @@ namespace Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence
 	public class ApprovePeriodAsInAdherence
 	{
 		private readonly IEventPublisher _publisher;
+		private readonly BelongsToDateMapper _belongsToDate;
 
-		public ApprovePeriodAsInAdherence(IEventPublisher publisher)
+		public ApprovePeriodAsInAdherence(IEventPublisher publisher, BelongsToDateMapper belongsToDate)
 		{
 			_publisher = publisher;
+			_belongsToDate = belongsToDate;
 		}
 
 		public void Approve(ApprovedPeriod period)
@@ -19,6 +21,7 @@ namespace Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence
 			_publisher.Publish(new PeriodApprovedAsInAdherenceEvent
 			{
 				PersonId = period.PersonId,
+				BelongsToDate = _belongsToDate.BelongsToDate(period.PersonId, p.StartDateTime, p.EndDateTime),
 				StartTime = p.StartDateTime,
 				EndTime = p.EndDateTime
 			});

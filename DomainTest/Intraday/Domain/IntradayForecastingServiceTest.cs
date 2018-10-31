@@ -192,24 +192,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday.Domain
 			Math.Round(eslResults[3].Value, 7).Should().Be.EqualTo(Math.Round(eslTargets[3], 7));
 		}
 
-		private IMultisiteSkill CreateMultiSiteSkill(int intervalLength, string skillName, TimePeriod openHours,
-			bool isClosedOnWeekends, IActivity activity = null)
-		{
-			if (activity == null)
-				activity = new Activity("activity_" + skillName).WithId();
-			var skill =
-				new MultisiteSkill(skillName, skillName, Color.Empty, intervalLength,
-					new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony))
-				{
-					Activity = activity,
-					TimeZone = TimeZoneInfo.Utc
-				}.WithId();
-
-			this.CreateWorkload(skill, new List<TimePeriod> { openHours }, isClosedOnWeekends);
-			return skill;
-		}
-
-		private IWorkload CreateWorkload(ISkill skill, IList<TimePeriod> openHours, bool isClosedOnWeekends)
+		private void CreateWorkload(ISkill skill, IList<TimePeriod> openHours, bool isClosedOnWeekends)
 		{
 			IWorkload workload = new Workload(skill);
 			workload.Description = "desc from factory";
@@ -232,8 +215,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday.Domain
 			{
 				workload.TemplateWeekCollection.ForEach(x => x.Value.ChangeOpenHours(openHours));
 			}
-
-			return workload;
 		}
 
 		private ISkillDay CreateSkillDay(ISkill skill, IScenario scenario, DateOnly date, TimePeriod openHours)

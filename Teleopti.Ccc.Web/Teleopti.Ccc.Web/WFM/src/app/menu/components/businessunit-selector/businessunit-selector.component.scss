@@ -1,0 +1,15 @@
+@media (max-width: 768px) {
+	.businessunit-name {
+		display: none;
+	}
+}
+nz-dropdown {
+	button.trigger-btn {
+		color: white;
+		&:hover,
+		&:active,
+		&focus {
+			color: white;
+		}
+	}
+}

@@ -256,7 +256,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var notPermittedLocker = new MatrixNotPermittedLocker(new ThisAuthorization(new FullPermission()));
 			var personListExtraxtor = new PersonListExtractorFromScheduleParts();
 			var periodExtractor = new PeriodExtractorFromScheduleParts();
-			var matrixClosedDayLocker = new MatrixClosedDaysLockerDoNothing();
 			var matrixListFactory = new MatrixListFactory(matrixUserLocker, notPermittedLocker, personListExtraxtor, periodExtractor);
 			return new ShiftTradeTargetTimeSpecification(
 				() => new SchedulerStateHolder(SchedulingResultStateHolder, new CommonStateHolder(null), TimeZoneGuard)

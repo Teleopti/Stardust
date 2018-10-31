@@ -331,10 +331,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			// 997 is the forecasted value when statistics time is 100 for all days in history with no outliers removed
 			// 1400 is the forecasted value when statistics time is 200 for all days in history with no outliers removed
-			forecastedTaskTime.Should().Be.GreaterThan(997);
-			forecastedAfterTaskTime.Should().Be.GreaterThan(997);
-			forecastedTaskTime.Should().Be.LessThan(1400);
-			forecastedAfterTaskTime.Should().Be.LessThan(1400);
+			forecastedTaskTime.Should().Be.GreaterThanOrEqualTo(997);
+			forecastedAfterTaskTime.Should().Be.GreaterThanOrEqualTo(997);
+			forecastedTaskTime.Should().Be.LessThanOrEqualTo(1400);
+			forecastedAfterTaskTime.Should().Be.LessThanOrEqualTo(1400);
 		}
 
 		[Test]
@@ -381,10 +381,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			// 83 is the forecasted value when statistics time is 100 for all days in history with no outliers removed
 			// 166 is the forecasted value when statistics time is 200 for all days in history with no outliers removed
-			forecastedTaskTime.Should().Be.GreaterThan(83);
-			forecastedAfterTaskTime.Should().Be.GreaterThan(83);
-			forecastedTaskTime.Should().Be.LessThan(166);
-			forecastedAfterTaskTime.Should().Be.LessThan(166);
+			forecastedTaskTime.Should().Be.GreaterThanOrEqualTo(83);
+			forecastedAfterTaskTime.Should().Be.GreaterThanOrEqualTo(83);
+			forecastedTaskTime.Should().Be.LessThanOrEqualTo(166);
+			forecastedAfterTaskTime.Should().Be.LessThanOrEqualTo(166);
 		}
 
 		[Test]
@@ -431,10 +431,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			// 129 is the forecasted value when statistics time is 100 for all days in history with no outliers removed
 			// 211 is the forecasted value when statistics time is 200 for all days in history with no outliers removed
-			forecastedTaskTime.Should().Be.GreaterThan(129);
-			forecastedAfterTaskTime.Should().Be.GreaterThan(129);
-			forecastedTaskTime.Should().Be.LessThan(211);
-			forecastedAfterTaskTime.Should().Be.LessThan(211);
+			forecastedTaskTime.Should().Be.GreaterThanOrEqualTo(129);
+			forecastedAfterTaskTime.Should().Be.GreaterThanOrEqualTo(129);
+			forecastedTaskTime.Should().Be.LessThanOrEqualTo(211);
+			forecastedAfterTaskTime.Should().Be.LessThanOrEqualTo(211);
 		}
 
 		[Test]

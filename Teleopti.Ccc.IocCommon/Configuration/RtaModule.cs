@@ -19,6 +19,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
+using Teleopti.Wfm.Adherence.Domain;
 using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Wfm.Adherence.Domain.Configuration;
@@ -101,6 +102,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ApprovePeriodAsInAdherence>().SingleInstance();
 			builder.RegisterType<RemoveApprovedPeriodCommandHandler>().SingleInstance();
 			builder.RegisterType<RemoveApprovedPeriod>().SingleInstance();
+			builder.RegisterType<BelongsToDateMapper>().SingleInstance();
 
 			builder.RegisterType<RtaEventStore>()
 				.As<IRtaEventStore>()
@@ -108,10 +110,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IRtaEventStoreTestReader>()
 				.SingleInstance();
 			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
+			{
 				builder.RegisterType<RtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance().ApplyAspects();
-			else
-				builder.RegisterType<NoRtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance();
-			builder.RegisterType<RtaEventStoreSynchronizerProcess>().AsSelf().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
+				builder.RegisterType<RtaEventStoreSynchronizerProcess>().AsSelf().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
+			}
 
 			if (_config.Toggle(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485))
 				builder.RegisterType<AgentAdherenceDayLoaderSpeedUpRemoveScheduleDependency>().As<IAgentAdherenceDayLoader>().SingleInstance();

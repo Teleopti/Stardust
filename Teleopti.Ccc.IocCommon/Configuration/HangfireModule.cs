@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<HangfireStarter>().SingleInstance();
 			builder.RegisterType<HangfireServerStarter>().SingleInstance();
-			builder.RegisterType<HangfireClientStarter>().SingleInstance();
+			builder.RegisterType<HangfireClientStarter>().As<IHangfireClientStarter>().SingleInstance();
 			builder.RegisterType<HangfireDashboardStarter>().SingleInstance();
 
 			builder.RegisterType<HangfireEventServer>().SingleInstance();

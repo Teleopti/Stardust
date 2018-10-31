@@ -605,7 +605,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			return personAbsence;
 		}
 
-		private PersonAssignment addDayOff(IPerson personTo, string name, string shortName, Color displayColor, DateOnly date)
+		private void addDayOff(IPerson personTo, string name, string shortName, Color displayColor, DateOnly date)
 		{
 			var personAssignment = new PersonAssignment(personTo, Scenario.Current(), date);
 			var dayOff = new DayOffTemplate(new Description(name, shortName)) { DisplayColor = displayColor };
@@ -613,7 +613,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			personAssignment.SetDayOff(dayOff);
 
 			ScheduleStorage.Add(personAssignment);
-			return personAssignment;
 		}
 
 		private void runSingleShiftTradeRequestTest()

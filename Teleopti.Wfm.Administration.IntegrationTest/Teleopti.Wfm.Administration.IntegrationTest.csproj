@@ -144,7 +144,6 @@
     <Compile Include="Core\RestorePersonInfoOnDetachTest.cs" />
     <Compile Include="Core\PurgeNoneEmployeeDataTest.cs" />
     <Compile Include="Core\PurgeOldSignInAttemptsTest.cs" />
-    <Compile Include="FakeAbsenceRepository.cs" />
     <Compile Include="FakeHangfireCookie.cs" />
     <Compile Include="FakeStardustRepository.cs" />
     <Compile Include="GetImportUsersFake.cs" />

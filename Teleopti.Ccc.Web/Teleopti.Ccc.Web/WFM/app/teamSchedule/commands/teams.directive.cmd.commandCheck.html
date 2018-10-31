@@ -4,16 +4,16 @@
         <div class="command-info">
             <p>
                 <span><i class="mdi mdi-alert"></i></span>
-                {{vm.config.subject | translate}} 
+                {{vm.config.subject}} 
             </p>
             <p>
-                {{vm.config.body | translate}}
+                {{vm.config.body}}
             </p>
         </div>
 
         <md-select class="command-check-selector" ng-model="vm.currentActionOptionValue" placeholder="{{'SelectAnOption' | translate}}" autofocus>
-            <md-option ng-repeat="action in vm.config.actionOptions" ng-value="action">
-                <span> {{action | translate}}</span>
+            <md-option ng-repeat="actionOption in vm.config.actionOptions" ng-value="actionOption.key">
+                <span> {{actionOption.name}}</span>
             </md-option>
         </md-select>
 

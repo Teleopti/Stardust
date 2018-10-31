@@ -363,10 +363,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 			var today = DateOnly.Today;
 			var tomorrow = DateOnly.Today.AddDays(1);
 			var person = PersonFactory.CreatePersonWithPersonPeriod(today.AddDays(-1)).WithId(personCode);
-			var personPeriod = person.PersonPeriodCollection.First();
-			personPeriod.SetId(personPeroidId);
-			var scenario = new Scenario("Asd");
-			scenario.SetId(scenarioCode);
+			person.PersonPeriodCollection.First().WithId(personPeroidId);
+			var scenario = new Scenario("Asd").WithId(scenarioCode);
 			scenario.EnableReporting = true;
 
 			PersonRepository.Add(person);
@@ -389,9 +387,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 
 			IActivity phoneActivity = new Activity("act");
 			phoneActivity.InWorkTime = true;
-			PersonAssignmentRepository.Has(person, scenario, phoneActivity, new DateOnlyPeriod(today, today), new TimePeriod(0, 1));
-			PersonAssignmentRepository.Has(person, scenario, phoneActivity, new DateOnlyPeriod(tomorrow, tomorrow), new TimePeriod(0, 2));
-
+			PersonAssignmentRepository.Has(person, scenario, phoneActivity, new DateOnlyPeriod(today, today), new TimePeriod(4, 5));
+			PersonAssignmentRepository.Has(person, scenario, phoneActivity, new DateOnlyPeriod(tomorrow, tomorrow), new TimePeriod(4, 6));
+			
 			Target.Handle(new ScheduleChangedEvent
 			{
 				PersonId = personCode,

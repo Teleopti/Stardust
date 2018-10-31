@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 			splitContainerAdv2.Panel2.Controls.Add(_seasonVolumeGridControl);
 
 			_chartControl = new ChartControl();
+			_chartControl.AddRandomSeries = false;
 			splitContainerAdv2.Panel1.Controls.Add(_chartControl);
 			_chartControl.Dock = DockStyle.Fill;
 
@@ -51,10 +52,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 			_chartControl.ChartRegionClick += _chartControl_ChartRegionClick;
 		}
 
-		public WFSeasonalityTabs Owner
-		{
-			get { return _owner; }
-		}
+		public WFSeasonalityTabs Owner => _owner;
 
 		protected override void OnLoad(EventArgs e)
 		{
@@ -118,7 +116,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 			_secondaryYAxis.ValueType = ChartValueType.Double;
 			_secondaryYAxis.RangeType = ChartAxisRangeType.Auto;
 			_secondaryYAxis.LocationType = ChartAxisLocationType.Auto;
-
+			
 			_chartControl.PrimaryYAxis.LocationType = ChartAxisLocationType.Auto;
 
 			_chartControl.Axes.Add(_secondaryYAxis);
@@ -176,21 +174,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 					{
 						case (int)SeasonVolumeGridControl.GridRowTypes.AverageTasks:
 							chartPoint = new ChartPoint(j, (double)_seasonVolumeGridControl[i, j].CellValue);
-							if (chartSeries != null) chartSeries.Points.Add(chartPoint);
+							chartSeries?.Points.Add(chartPoint);
 							break;
 						case (int)SeasonVolumeGridControl.GridRowTypes.AverageTalkTime:
-							if (_seasonVolumeGridControl.SkillType.DisplayTimeSpanAsMinutes)
-								chartPoint = new ChartPoint(j, ((TimeSpan)_seasonVolumeGridControl[i, j].CellValue).TotalSeconds/60);
-							else
-								chartPoint = new ChartPoint(j, ((TimeSpan)_seasonVolumeGridControl[i, j].CellValue).TotalSeconds);
-							if (secondSeries != null) secondSeries.Points.Add(chartPoint);
-							break;
 						case (int)SeasonVolumeGridControl.GridRowTypes.AverageAfterWorkTime:
-							if (_seasonVolumeGridControl.SkillType.DisplayTimeSpanAsMinutes)
-								chartPoint = new ChartPoint(j, ((TimeSpan)_seasonVolumeGridControl[i, j].CellValue).TotalSeconds/60);
-							else
-								chartPoint = new ChartPoint(j, ((TimeSpan)_seasonVolumeGridControl[i, j].CellValue).TotalSeconds);
-							if (secondSeries != null) secondSeries.Points.Add(chartPoint);
+							chartPoint = _seasonVolumeGridControl.SkillType.DisplayTimeSpanAsMinutes
+								? new ChartPoint(j,
+									((TimeSpan) _seasonVolumeGridControl[i, j].CellValue).TotalSeconds / 60)
+								: new ChartPoint(j, ((TimeSpan) _seasonVolumeGridControl[i, j].CellValue).TotalSeconds);
+							secondSeries?.Points.Add(chartPoint);
 							break;
 					}
 				}
@@ -211,6 +203,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 			{
 				_chartControl.PrimaryYAxis.Range.Interval = Math.Truncate(_chartControl.PrimaryYAxis.Range.Max / 5);
 				_chartControl.PrimaryYAxis.Range.Max = _chartControl.PrimaryYAxis.Range.Max + _chartControl.PrimaryYAxis.Range.Interval;
+			}
+
+			if (_secondaryYAxis.Range.Interval < 0.1)
+			{
+				_secondaryYAxis.Range.Interval = Math.Truncate(_secondaryYAxis.Range.Max / 5);
+				_secondaryYAxis.Range.Max = _secondaryYAxis.Range.Max + _secondaryYAxis.Range.Interval;
 			}
 
 			if (_chartControl.PrimaryYAxis.Range.NumberOfIntervals > 7)
@@ -276,19 +274,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 
 		private void ReleaseManagedResources()
 		{
-			if (_secondaryYAxis != null)
-				_secondaryYAxis.Dispose();
+			_secondaryYAxis?.Dispose();
 			_owner = null;
 			_volumeYear = null;
-			if (_chartControl != null)
-			{
-				_chartControl.Dispose();
-			}
-			if (_seasonVolumeGridControl != null)
-			{
-				_seasonVolumeGridControl.Dispose();
-				_seasonVolumeGridControl = null;
-			}
+			_chartControl?.Dispose();
+			_seasonVolumeGridControl?.Dispose();
+			_seasonVolumeGridControl = null;
 		}
 	}
 }

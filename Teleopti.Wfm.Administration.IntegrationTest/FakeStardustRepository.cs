@@ -60,7 +60,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 
 		public Job GetJobByJobId(Guid jobId)
 		{
-			return !_jobs.Any() ? null : _jobs.FirstOrDefault(x => x.JobId == jobId);
+			return _jobs.FirstOrDefault(x => x.JobId == jobId);
 		}
 
 		public IList<JobDetail> GetJobDetailsByJobId(Guid jobId)

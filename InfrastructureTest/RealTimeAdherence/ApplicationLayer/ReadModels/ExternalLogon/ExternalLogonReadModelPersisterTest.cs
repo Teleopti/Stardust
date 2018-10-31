@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			{
 				PersonId = person,
 				DataSourceId = 3,
-				UserCode = "usercode"
+				UserCode = "usercode",
+				TimeZone = "timezone"
 			});
 			Target.Refresh();
 
@@ -38,6 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			result.PersonId.Should().Be(person);
 			result.DataSourceId.Should().Be(3);
 			result.UserCode.Should().Be("usercode");
+			result.TimeZone.Should().Be("timezone");
 		}
 
 		[Test]

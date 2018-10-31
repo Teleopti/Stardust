@@ -104,6 +104,7 @@
     <Compile Include="Domain\ApprovePeriodAsInAdherence\RemoveApprovedPeriodCommand.cs" />
     <Compile Include="Domain\ApprovePeriodAsInAdherence\RemoveApprovedPeriodCommandHandler.cs" />
     <Compile Include="Domain\ApprovePeriodAsInAdherence\RemovedPeriod.cs" />
+    <Compile Include="Domain\BelongsToDateMapper.cs" />
     <Compile Include="Domain\Configuration\ConfigurationValidationViewModel.cs" />
     <Compile Include="Domain\Configuration\ConfigurationValidator.cs" />
     <Compile Include="Domain\Configuration\DefaultStateGroupException.cs" />

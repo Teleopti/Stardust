@@ -18,9 +18,7 @@ namespace Teleopti.Ccc.TestCommon
 			_person = PersonFactory.CreatePersonWithId();
 			_person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 		}
-
-	
-
+		
 		public void SetFakeLoggedOnUser(IPerson person)
 		{
 			_person = person;

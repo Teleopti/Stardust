@@ -62,28 +62,33 @@
 					</span>
 				</div>
 			</li>
-			<li class="mobile-today" data-bind="click: today">
+			<li class="mobile-today" data-bind="click: today, tooltip: { title: '@Resources.Today', html: true, trigger: 'hover', placement: 'bottom'}">
 				<a>
 					<i class="glyphicon glyphicon-home"></i>
 				</a>
 			</li>
 
 			<!-- ko if: isHostAMobile -->
-			<li class="new-teamschedule-team-filter">
-				<a>
-					<i class="glyphicon glyphicon-filter" data-bind="style: {color: hasFiltered() ? 'yellow' : 'white'}"></i>
+			<li class="new-teamschedule-team-filter" data-bind="css: {'new-teamschedule-has-time-filter': hasFilteredOnMobile}">
+				<a class="relative">
+					<i class="glyphicon glyphicon-filter"></i>
+					<span></span>
 				</a>
 			</li>
 			<!-- /ko -->
 			<!-- ko ifnot: isHostAMobile -->
-			<li class="new-teamschedule-time-filter">
+			<li class="new-teamschedule-time-filter" data-bind="css: {'new-teamschedule-has-time-filter': hasTimeFiltered}, tooltip: { title: buildFilterDetails('@Resources.FilterTeamSchedulesByTime', '@Resources.StartTime', '@Resources.EndTime', '@Resources.ShowOnlyNightShifts'), html: true, trigger: 'hover', placement: 'bottom'}">
 				<a>
-					<i class="glyphicon glyphicon-time" data-bind="style: {color: hasTimeFiltered() ? 'yellow': 'white'}"></i>
+					<i class="glyphicon glyphicon-filter"></i>
+					<span></span>
 				</a>
 			</li>
-			<li class="new-teamschedule-day-off-toggle" data-bind="tooltip: { title: '@Resources.ShowOnlyDayOff', html: true, trigger: 'hover', placement: 'bottom'}">
-				<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />
-				<label class="relative" for="show-only-day-off-switch">Day off switch</label>
+			<li class="new-teamschedule-toggle show-only-day-off-toggle" data-bind="tooltip: { title: '@Resources.ShowOnlyDayOff', html: true, trigger: 'hover', placement: 'bottom'}">
+				<a>
+
+					<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />
+					<label class="relative" for="show-only-day-off-switch">Day off switch</label>
+				</a>
 			</li>
 			<li class="new-teamschedule-filter-component relative">
 				<div data-bind="click: openTeamSelectorPanel"></div>
@@ -248,7 +253,7 @@
 		<!--/ko-->
 
 		<div class="new-teamschedule-time-slider-block relative">
-			<!-- ko if: showOnlyDayOff -->
+			<!-- ko if: showOnlyDayOff() || showOnlyNightShift() -->
 			<div class="new-teamschedule-time-slider-block-backdrop"></div>
 			<!-- /ko -->
 			<div class="new-teamschedule-time-slider-container">
@@ -290,10 +295,15 @@
 			</div>
 		</div>
 		<!-- ko if: isHostAMobile-->
-		<div class="new-teamschedule-day-off-toggle">
+		<div class="new-teamschedule-toggle show-only-day-off-toggle">
 			<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />
 			<label class="relative" for="show-only-day-off-switch">Day off switch</label>
 			<span>@Resources.ShowOnlyDayOff</span>
+		</div>
+		<div class="new-teamschedule-toggle show-only-night-shift-toggle">
+			<input type="checkbox" id="show-only-night-shift-switch" data-bind="checked: showOnlyNightShift" />
+			<label class="relative" for="show-only-night-shift-switch">Night shift switch</label>
+			<span>@Resources.ShowOnlyNightShifts</span>
 		</div>
 		<div class="empty-search-result">
 			<!-- ko if: emptySearchResult -->
@@ -302,12 +312,23 @@
 			</label>
 			<!--/ko-->
 		</div>
-		<!--/ko-->
-
 		<div class="new-teamschedule-submit-buttons">
 			<button class="btn btn-default" data-bind="click: cancelClick">@Resources.Cancel</button>
 			<button class="btn btn-primary" data-bind="click: submitSearchForm">@Resources.Search</button>
 		</div>
+		<!--/ko-->
+		<!-- ko if: !isHostAMobile-->
+		<div class="new-teamschedule-submit-buttons clearfix">
+			<div class="new-teamschedule-toggle show-only-night-shift-toggle">
+				<input type="checkbox" id="show-only-night-shift-switch" data-bind="checked: showOnlyNightShift" />
+				<label class="relative" for="show-only-night-shift-switch">Night shift switch</label>
+				<span>@Resources.ShowOnlyNightShifts</span>
+			</div>
+			<button class="btn btn-primary pull-right" data-bind="click: submitSearchForm">@Resources.Search</button>
+			<button class="btn btn-default pull-right" data-bind="click: cancelClick">@Resources.Cancel</button>
+		</div>
+		<!--/ko-->
+
 	</div>
 	<!-- /ko -->
 </div>

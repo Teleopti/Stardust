@@ -14,7 +14,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Secrets.Licensing;
-using IsolationLevel = System.Data.IsolationLevel;
 using TransactionException = NHibernate.TransactionException;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private readonly Action _clearContext;
 		private readonly ISession _session;
-		private readonly TransactionIsolationLevel _isolationLevel;
 		private readonly ICurrentTransactionHooks _transactionHooks;
 		private readonly NHibernateFilterManager _filterManager;
 		private readonly NHibernateUnitOfWorkInterceptor _interceptor;
@@ -36,14 +34,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		protected internal NHibernateUnitOfWork(
 			Action clearContext,
 			ISession session,
-			TransactionIsolationLevel isolationLevel,
 			NHibernateUnitOfWorkInterceptor interceptor,
 			ICurrentTransactionHooks transactionHooks)
 		{
 			_clearContext = clearContext;
 			_session = session;
 			_session.FlushMode = FlushMode.Manual;
-			_isolationLevel = isolationLevel;
 			_interceptor = interceptor;
 			_transactionHooks = transactionHooks ?? new NoTransactionHooks();
 			_filterManager = new NHibernateFilterManager(session);
@@ -181,9 +177,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 			try
 			{
-				_transaction = _isolationLevel == TransactionIsolationLevel.Default
-					? _session.BeginTransaction()
-					: _session.BeginTransaction(IsolationLevel.Serializable);
+				_transaction = _session.BeginTransaction();
 			}
 			catch (TransactionException transactionException)
 			{

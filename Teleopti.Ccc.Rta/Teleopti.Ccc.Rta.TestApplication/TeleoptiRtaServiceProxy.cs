@@ -26,27 +26,4 @@ namespace Teleopti.Ccc.Rta.TestApplication
             get { return true; }
         }
     }
-
-	public static class ProxyExtensions
-	{
-		public static ExternalUserState ToDto(ITeleoptiRtaState state)
-		{
-			return new ExternalUserState
-			{
-				BatchId = state.BatchId,
-				BatchIdSpecified = true,
-				IsLoggedOn = true,
-				IsLoggedOnSpecified = true,
-				IsSnapshot = state.IsSnapshot,
-				IsSnapshotSpecified = true,
-				SecondsInState = (int)state.TimeInState.TotalSeconds,
-				SecondsInStateSpecified = true,
-				StateCode = state.StateCode,
-				StateDescription = state.StateCode,
-				Timestamp = state.Timestamp,
-				TimestampSpecified = true,
-				UserCode = state.LogOn
-			};
-		}
-	}
 }

@@ -57,9 +57,7 @@
 			var message = teamScheduleNotificationService.buildConfirmationMessage(
 				$translate.instant('AreYouSureToRemoveSelectedDayOff'),
 				personInfos.length,
-				personInfos.length,
-				true
-			);
+				personInfos.length);
 			$wfmModal.confirm(message, title).then(function (result) {
 				ctrl.resetActiveCmd();
 				if (result) {

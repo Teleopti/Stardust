@@ -83,9 +83,7 @@
 			var message = notification.buildConfirmationMessage(
 				$translate.instant('AreYouSureToRemoveSelectedAbsence'),
 				PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.PersonCount,
-				PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.AbsenceCount,
-				true
-			);
+				PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.AbsenceCount);
 			$wfmModal.confirm(message, title).then(function (result) {
 				vm.resetActiveCmd();
 				if (result) {

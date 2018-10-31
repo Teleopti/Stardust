@@ -36,23 +36,29 @@
 	padding-top: 1%;
 }
 .lable-skilltype {
-	touch-action: manipulation;
-	font-weight: 400;
-	height: 19px;
+	cursor: pointer !important;
+	color: rgba(0,0,0,.87);
+	display: inline-block !important;
+	margin-bottom: 1.6%;
 }
 .select-text {
 	height:30px;
 }
 .option-text {
-	height: 19px;
-	 
-}
-.select-skilltype {
-	height: 74px;
+	cursor: pointer;
+	position: relative;
+	display: flex;
+	align-items: center;
+	width: auto;
+	padding: 0 16px 0 16px;
+	height: 48px;
 }
 .wfm-btn-forecast {
 	margin: 0;
 }
 .overflow-wrap-forecast {
 	overflow-wrap: break-word;
+}
+.ui-grid-icon-ok:before, .ui-grid-menu-item > .ui-grid-icon-cancel:before {
+	height: 18.2px;
 }

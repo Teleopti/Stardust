@@ -72,11 +72,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			result.Count.Should().Be(1);
 		}
 
-		private IPerson setCurrentLoggedOnUser()
+		private void setCurrentLoggedOnUser()
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			LoggedOnUser.SetFakeLoggedOnUser(person);
-			return person;
 		}
 
 		private IJobResult createValidJob()

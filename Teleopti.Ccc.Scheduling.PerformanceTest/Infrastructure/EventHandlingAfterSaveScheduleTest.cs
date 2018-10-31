@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 
 		public HangfireUtilities Hangfire;
 		public TestLog TestLog;
-		public HangfireClientStarter HangfireClientStarter;
+		public IHangfireClientStarter HangfireClientStarter;
 
 		[Test]
 		public void MeasurePerformance()

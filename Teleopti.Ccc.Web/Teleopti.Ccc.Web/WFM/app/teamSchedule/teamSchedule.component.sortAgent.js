@@ -8,8 +8,8 @@
 		}
 	});
 
-	SortAgentCtrl.$inject = ['$scope'];
-	function SortAgentCtrl($scope) {
+	SortAgentCtrl.$inject = ['$scope', '$translate'];
+	function SortAgentCtrl($scope, $translate) {
 		var ctrl = this;
 		ctrl.selectedOption = ctrl.ngModel;
 		ctrl.availableOptions = [];
@@ -18,22 +18,27 @@
 			ctrl.availableOptions = [
 				{
 					key: "FirstName",
+					name: $translate.instant('FirstName'),
 					isSelected: false
 				},
 				{
 					key: "LastName",
+					name: $translate.instant('LastName'),
 					isSelected: false
 				},
 				{
 					key: "EmploymentNumber",
+					name: $translate.instant('EmploymentNumber'),
 					isSelected: false
 				},
 				{
 					key: "StartTime",
+					name: $translate.instant('StartTime'),
 					isSelected: false
 				},
 				{
 					key: "EndTime",
+					name: $translate.instant('EndTime'),
 					isSelected: false
 				}
 			];

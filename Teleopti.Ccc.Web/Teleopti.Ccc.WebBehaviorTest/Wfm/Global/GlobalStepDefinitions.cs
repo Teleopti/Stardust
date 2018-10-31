@@ -14,16 +14,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 		public void ThenIShouldHaveAvailableBusinessUnitsWith(Table table)
 		{
 			var buNames = table.CreateSet<BusinessUnitData>();
-			Browser.Interactions.Click("#bu-select");
-			buNames.ForEach(bu => Browser.Interactions.AssertExistsUsingJQuery($"#business-unit-dropdown > li:contains({bu.Name})"));
+			Browser.Interactions.Click("[data-test-bu-select]");
+			buNames.ForEach(bu => Browser.Interactions.AssertExistsUsingJQuery($"[data-test-bu-list] > li:contains({bu.Name})"));
 		}
 
 
 		[When(@"I pick business unit '(.*)'")]
 		public void WhenIPickBusinessUnit(string businessUnit)
 		{
-			Browser.Interactions.Click("#bu-select");
-			Browser.Interactions.ClickUsingJQuery($"#business-unit-dropdown > li:contains({businessUnit})");
+			Browser.Interactions.Click("[data-test-bu-select]");
+			Browser.Interactions.ClickUsingJQuery($"[data-test-bu-list] > li:contains({businessUnit})");
 		}
 
 		[When(@"I open group pages picker")]

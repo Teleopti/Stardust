@@ -16,6 +16,8 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			AgentState stored,
 			IEnumerable<ScheduledActivity> schedule,
 			StateMapper stateMapper,
+			ExternalLogonMapper externalLogonMapper,
+			BelongsToDateMapper belongsToDateMapper,
 			ProperAlarm appliedAlarm)
 		{
 			Stored = stored;
@@ -27,6 +29,8 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			TeamId = stored.TeamId.GetValueOrDefault();
 			SiteId = stored.SiteId.GetValueOrDefault();
 			StateMapper = stateMapper;
+			ExternalLogonMapper = externalLogonMapper;
+			BelongsToDateMapper = belongsToDateMapper;
 
 			_appliedAlarm = appliedAlarm;
 			_schedule = schedule;
@@ -45,6 +49,8 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		public Guid SiteId { get; }
 
 		public StateMapper StateMapper { get; }
+		public ExternalLogonMapper ExternalLogonMapper { get; }
+		public BelongsToDateMapper BelongsToDateMapper { get; }
 
 		public AgentState Stored { get; }
 

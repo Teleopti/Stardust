@@ -32,11 +32,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			_previousActivity = new Lazy<ScheduledActivity>(() => (from l in _schedule.Value where l.EndDateTime <= context.Time select l).LastOrDefault());
 			_shiftStartTimeForPreviousActivity = new Lazy<DateTime>(() => startTimeOfShift(_previousActivity.Value));
 			_shiftEndTimeForPreviousActivity = new Lazy<DateTime>(() => endTimeOfShift(_previousActivity.Value));
-			_belongsToDate = new Lazy<DateOnly?>(() =>
-			{
-				var activity = CurrentActivity() ?? activityNear(context.Time);
-				return activity?.BelongsToDate;
-			});
+			_belongsToDate = new Lazy<DateOnly?>(() => _context.BelongsToDateMapper.BelongsToDate(_schedule.Value, _context.Time, () => _context.ExternalLogonMapper.TimeZoneFor(_context.PersonId)));
 			_timeWindowActivities = new Lazy<IEnumerable<ScheduledActivity>>(timeWindowActivities);
 			_timeWindowCheckSum = new Lazy<int>(() => _timeWindowActivities.Value.CheckSum());
 		}
@@ -115,18 +111,6 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		{
 			return nextActivity(_schedule.Value, _currentActivity.Value, _context.Time);
 		}
-
-		private ScheduledActivity activityNear(DateTime time)
-		{
-			return (
-				from l in _schedule.Value
-				let ended = l.EndDateTime >= _context.Time.AddHours(-1) && l.StartDateTime < time
-				let starting = l.StartDateTime <= _context.Time.AddHours(1) && l.EndDateTime > time
-				where ended || starting
-				select l
-			).FirstOrDefault();
-		}
-
 
 		private static readonly TimeSpan timeWindowFuture = TimeSpan.FromHours(3);
 		private static readonly TimeSpan timeWindowPast = TimeSpan.FromHours(-1);

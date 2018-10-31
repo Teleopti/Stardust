@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using Autofac;
+using Newtonsoft.Json;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
@@ -38,9 +41,8 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain
 		public void Add(IEvent @event, DeadLockVictim deadLockVictim)
 		{
 			_deadLockVictimPriority.Specify(deadLockVictim);
-			
+
 			var queryData = (@event as IRtaStoredEvent).QueryData();
-			var eventType = $"{@event.GetType().FullName}, {@event.GetType().Assembly.GetName().Name}";
 
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
@@ -60,11 +62,10 @@ INSERT INTO [rta].[Events] (
 				.SetParameter("PersonId", queryData.PersonId)
 				.SetParameter("StartTime", queryData.StartTime == DateTime.MinValue ? null : queryData.StartTime)
 				.SetParameter("EndTime", queryData.EndTime == DateTime.MinValue ? null : queryData.EndTime)
-				.SetParameter("Type", eventType)
+				.SetParameter("Type", eventTypeId(@event))
 				.SetParameter("Event", _serializer.SerializeEvent(@event))
 				.ExecuteUpdate();
 		}
-
 
 		public int Remove(DateTime until, int maxEventsToRemove) =>
 			_unitOfWork.Current().Session()
@@ -103,7 +104,7 @@ ORDER BY [Id] ASC
 		public IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp, DeadLockVictim deadLockVictim)
 		{
 			_deadLockVictimPriority.Specify(deadLockVictim);
-			
+
 			return loadEvents(_unitOfWork.Current().Session()
 					.CreateSQLQuery(@"
 SELECT TOP 1 
@@ -119,8 +120,8 @@ ORDER BY [Id] DESC
 ")
 					.SetParameterList("Types", new[]
 					{
-						$"{typeof(PersonStateChangedEvent).FullName}, {typeof(PersonStateChangedEvent).Assembly.GetName().Name}",
-						$"{typeof(PersonRuleChangedEvent).FullName}, {typeof(PersonRuleChangedEvent).Assembly.GetName().Name}"
+						eventTypeId<PersonStateChangedEvent>(),
+						eventTypeId<PersonRuleChangedEvent>(),
 					})
 					.SetParameter("PersonId", personId)
 					.SetParameter("Timestamp", timestamp))
@@ -142,8 +143,8 @@ WHERE
 	[Id] > :FromEventId
 ORDER BY [Id]
 ")
-				.SetParameter("FromEventId", fromEventId)
-				);
+					.SetParameter("FromEventId", fromEventId)
+			);
 			return new LoadedEvents
 			{
 				MaxId = events.IsNullOrEmpty() ? fromEventId : events.Last().Id,
@@ -161,7 +162,7 @@ ORDER BY [Id]
 				.List<internalModel>()
 				.Select(x =>
 				{
-					x.DeserializedEvent = _deserializer.DeserializeEvent(x.Event, Type.GetType(x.Type)) as IEvent;
+					x.DeserializedEvent = _deserializer.DeserializeEvent(x.Event, typeForId[x.Type]) as IEvent;
 					return x;
 				});
 
@@ -176,14 +177,30 @@ ORDER BY [Id]
 #pragma warning restore 649
 		}
 
+		private static string eventTypeId(IEvent @event) => eventTypeId(@event.GetType());
+		private static string eventTypeId(Type type) => type.GetCustomAttribute<JsonObjectAttribute>().Id;
+		private static string eventTypeId<T>() => typeof(T).GetCustomAttribute<JsonObjectAttribute>().Id;
+		private static readonly IDictionary<string, Type> typeForId = buildTypeForId();
+
+		private static Dictionary<string, Type> buildTypeForId()
+		{
+			var example = typeof(PersonStateChangedEvent);
+			return example.Assembly
+				.GetTypes()
+				.Where(x => x.Namespace == example.Namespace)
+				.Where(x => x.IsClass)
+				.Where(x => x.IsAssignableTo<IRtaStoredEvent>())
+				.ToDictionary(eventTypeId, x => x);
+		}
+
 
 		public IEnumerable<IEvent> LoadAllForTest() =>
 			loadEvents(_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT [Type], [Event] FROM [rta].[Events]"));
-		
+
 		public int LoadLastIdForTest() =>
 			_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT MAX([Id]) FROM [rta].[Events] WITH (NOLOCK)").UniqueResult<int>();
 
-		public IEnumerable<string> LoadAllEventTypes() => _unitOfWork.Current().Session()
+		public IEnumerable<string> LoadAllEventTypeIds() => _unitOfWork.Current().Session()
 			.CreateSQLQuery(@"SELECT [Type] FROM [rta].[Events]")
 			.List<string>();
 	}

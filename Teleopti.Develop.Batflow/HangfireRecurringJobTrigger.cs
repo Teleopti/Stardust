@@ -33,12 +33,12 @@ namespace Teleopti.Develop.Batflow
 				IntegratedSecurity = true,
 				InitialCatalog = command.ApplicationDatabase
 			}.ConnectionString);
-			var args = new IocArgs(config) {DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest()};
+			var args = new IocArgs(config) {DataSourceApplicationName = DataSourceApplicationName.ForTest()};
 			var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args));
 			builder.RegisterModule(new CommonModule(configuration));
 			using (var container = builder.Build())
 			{
-				container.Resolve<HangfireClientStarter>().Start();
+				container.Resolve<IHangfireClientStarter>().Start();
 				container.Resolve<RecurringEventPublishings>().UpdatePublishings();
 				container.Resolve<HangfireUtilities>().TriggerReccuringJobs();
 			}

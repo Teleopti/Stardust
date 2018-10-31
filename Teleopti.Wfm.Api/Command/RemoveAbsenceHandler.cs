@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
-/* DO NOT USE! 
-It only contains vary simple logic. 
-Used for staffhub integration only until further notice */
-
-//TODO personal account
 namespace Teleopti.Wfm.Api.Command
 {
 	public class RemoveAbsenceHandler : ICommandHandler<RemoveAbsenceDto>
@@ -20,13 +15,20 @@ namespace Teleopti.Wfm.Api.Command
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IPersonAbsenceRepository _personAbsenceRepository;
+		private readonly IScheduleStorage _scheduleStorage;
+		private readonly ISaveSchedulePartService _saveSchedulePartService;
+		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 
 		public RemoveAbsenceHandler(IScenarioRepository scenarioRepository, IPersonRepository personRepository, 
-			IPersonAbsenceRepository personAbsenceRepository)
+			IPersonAbsenceRepository personAbsenceRepository, IScheduleStorage scheduleStorage, 
+			ISaveSchedulePartService saveSchedulePartService, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
 		{
 			_scenarioRepository = scenarioRepository;
 			_personRepository = personRepository;
 			_personAbsenceRepository = personAbsenceRepository;
+			_scheduleStorage = scheduleStorage;
+			_saveSchedulePartService = saveSchedulePartService;
+			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 		}
 
 		[UnitOfWork]
@@ -47,21 +49,32 @@ namespace Teleopti.Wfm.Api.Command
 
 				var person = _personRepository.Load(command.PersonId);
 				var period = new DateTimePeriod(command.PeriodStartUtc.Utc(), command.PeriodEndUtc.Utc());
-				var personAbsences = _personAbsenceRepository.Find(new[] {person},
-					period, scenario);
-				foreach (var absence in personAbsences)
+				var dateOnlyPeriod = period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
+
+				var scheduleRange = _scheduleStorage
+					.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), dateOnlyPeriod.Inflate(1),
+						scenario)[person];
+				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
+
+				foreach (var dateOnly in dateOnlyPeriod.DayCollection())
 				{
-					IEnumerable<IPersonAbsence> splittedAbsences = new List<IPersonAbsence>();
-					if (absence.Period.StartDateTime < command.PeriodStartUtc || absence.Period.EndDateTime > command.PeriodEndUtc)
+					var scheduleDay = scheduleRange.ScheduledDay(dateOnly);
+					var absences = scheduleDay.PersonAbsenceCollection(true);
+					foreach (var personAbsence in absences)
 					{
-						splittedAbsences = absence.Split(period);
+						var splitPeriods = personAbsence.Split(period);
+						if (splitPeriods.Count > 0 || period.Contains(personAbsence.Layer.Period))
+						{
+							scheduleDay.Remove(personAbsence);
+							foreach (var splitPeriod in splitPeriods)
+							{
+								scheduleDay.Add(splitPeriod);
+							}
+						}
 					}
-					((IRepository<IPersonAbsence>)_personAbsenceRepository).Remove(absence);
-					foreach (var splittedAbsence in splittedAbsences)
-					{
-						((IRepository<IPersonAbsence>)_personAbsenceRepository).Add(splittedAbsence);
-					}
+					_saveSchedulePartService.Save(scheduleDay, rules, scheduleDay.ScheduleTag());
 				}
+
 				return new ResultDto
 				{
 					Successful = true

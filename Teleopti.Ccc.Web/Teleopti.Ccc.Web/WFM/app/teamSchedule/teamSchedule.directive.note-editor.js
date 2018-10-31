@@ -54,8 +54,6 @@
 
 	function noteEditorCtrl($scope, ScheduleNoteMgmt, NoticeService) {
 		var vm = this;
-		vm.internalNoteTab = 'InternalNote';
-		vm.publicNoteTab = 'PublicNote';
 		vm.submit = function () {
 			var note = {
 				internalNotes: vm.internalNotes,

@@ -34,10 +34,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.Register(c => new ReportUrlConstructor(_configuration.Args().ReportServer, c.Resolve<IConfigReader>()))
 				.As<IReportUrl>()
 				.SingleInstance();
-
-			builder.RegisterType<PersonAbsenceCreator>().As<IPersonAbsenceCreator>();
-			builder.RegisterType<PersonAbsenceRemover>().As<IPersonAbsenceRemover>();
-			builder.RegisterType<AbsenceCommandConverter>().As<IAbsenceCommandConverter>();
 		}
 	}
 }

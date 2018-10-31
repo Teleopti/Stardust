@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			DataSourceForTenantServiceLocator.Set(container.Resolve<IDataSourceForTenant>());
 
-			container.Resolve<HangfireClientStarter>().Start();
+			container.Resolve<IHangfireClientStarter>().Start();
 
 			Logger.Info("Initialized application");
 		}
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			var iocArgs = new IocArgs(new ConfigReader())
 			{
-				DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForSdk(),
+				DataSourceApplicationName = DataSourceApplicationName.ForSdk(),
 				OptimizeScheduleChangedEvents_DontUseFromWeb = true
 			};
 			var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 				 .As<IWindowsUserProvider>()
 				 .InstancePerDependency();
 
-			registerSdkFactories(builder, configuration);
+			registerSdkFactories(builder);
 
 			builder.RegisterType<LicenseCache>().As<ILicenseCache>();
 			builder.RegisterType<UserCultureProvider>().As<IUserCultureProvider>().InstancePerLifetimeScope();
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			builder.RegisterType<NoLicenseServiceInitialization>().As<IInitializeLicenseServiceForTenant>().SingleInstance();
 		}
 
-		private static void registerSdkFactories(ContainerBuilder builder, IocConfiguration configuration)
+		private static void registerSdkFactories(ContainerBuilder builder)
 		{
 			builder.RegisterType<TeleoptiCccSdkService>();
 			builder.RegisterType<GetPayrollResultById.MultiTenancyPayrollLogon>().As<GetPayrollResultById.IPayrollLogon>().InstancePerLifetimeScope();

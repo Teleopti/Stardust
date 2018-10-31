@@ -2,7 +2,7 @@ using Teleopti.Ccc.Domain.Config;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
-	public class HangfireClientStarter
+	public class HangfireClientStarter : IHangfireClientStarter
 	{
 		private readonly HangfireStarter _starter;
 		private readonly IConfigReader _config;
@@ -20,6 +20,19 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				connectionString = _config.AppConfig("Hangfire"); //WHA..t?
 
 			_starter.Start(connectionString);
+		}
+	}
+
+	public interface IHangfireClientStarter
+	{
+		 void Start();
+	}
+
+	public class DummyHangfireClientStarter : IHangfireClientStarter
+	{
+		public void Start()
+		{
+			// Do nothing
 		}
 	}
 }

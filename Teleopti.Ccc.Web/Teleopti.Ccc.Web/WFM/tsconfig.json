@@ -16,8 +16,7 @@
 		"paths": {
 			"@wfm/mocks/*": ["src/mocks/*"],
 			"@wfm/types": ["src/types/index"],
-			"stream": [ "./node_modules/readable-stream" ],
-			
+			"@wfm/test": ["src/test/index"]
 		}
 	},
 	"include": ["app", "src", "e2e"],

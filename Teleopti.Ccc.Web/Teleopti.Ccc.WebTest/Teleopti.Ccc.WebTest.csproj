@@ -91,11 +91,11 @@
     <Reference Include="Microsoft.AspNet.SignalR.SqlServer, Version=2.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.AspNet.SignalR.SqlServer.2.2.2\lib\net45\Microsoft.AspNet.SignalR.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Owin.3.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    <Reference Include="Microsoft.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Owin.4.0.0\lib\net451\Microsoft.Owin.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Owin.Security.3.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.4.0.0\lib\net451\Microsoft.Owin.Security.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -196,11 +196,11 @@
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.262\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.264\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.262\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.264\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WebGrease">
@@ -226,7 +226,6 @@
     <Compile Include="Areas\Global\ChatConfigurationControllerTest.cs" />
     <Compile Include="Areas\Global\Core\GroupPageViewModelFactoryTest.cs" />
     <Compile Include="Areas\Global\GroupPageControllerTest.cs" />
-    <Compile Include="Areas\Anywhere\FakeClientBuilder.cs" />
     <Compile Include="Areas\Anywhere\Rta\ThemeSettingProviderTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\WorkloadNameBuilderTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillControllerTest.cs" />
@@ -281,11 +280,10 @@
     <Compile Include="Areas\People\RoleControllerAuditTest.cs" />
     <Compile Include="Areas\People\RoleControllerTest.cs" />
     <Compile Include="Areas\Reporting\Controller\ScheduleAuditTrailControllerTest.cs" />
-    <Compile Include="Areas\Reports\ResReportTranslationPlaceholder.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestAllowanceViewModelFactoryTest.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningGroupControllerTest.cs" />
     <Compile Include="Areas\Staffing\BpoControllerTest.cs" />
-    <Compile Include="Areas\Staffing\StaffingAuditContextTest.cs" />
+    <Compile Include="Areas\Staffing\StaffingControllerTest.cs" />
     <Compile Include="Areas\Start\Core\IanaTimeZoneProviderTest.cs" />
     <Compile Include="Areas\TeamSchedule\Core\AbsenceHandler\AbsencePersisterTest_NoMock.cs" />
     <Compile Include="Areas\TeamSchedule\Core\ChangeActivityTypeFormValidatorTest.cs" />
@@ -471,7 +469,6 @@
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateViewModelMappingTest.cs" />
     <Compile Include="Areas\Anywhere\PersonScheduleViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\PersonScheduleViewModelMapperTest.cs" />
-    <Compile Include="Areas\Anywhere\TestHubBuilder.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\MyTimeWebPersonRequestCheckAuthorizationTest.cs" />
     <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayFormTest.cs" />
     <Compile Include="Areas\SSO\Contollers\OpenIdControllerTest.cs" />

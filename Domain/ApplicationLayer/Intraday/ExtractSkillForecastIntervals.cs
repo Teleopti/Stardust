@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -13,19 +14,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 	public class ExtractSkillForecastIntervals
 	{
 		private readonly ICurrentScenario _currentScenario;
-		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+		private readonly ISkillDayRepository _skillDayRepository;
 
-		public ExtractSkillForecastIntervals(ICurrentScenario currentScenario, ISkillDayLoadHelper skillDayLoadHelper)
+		public ExtractSkillForecastIntervals(ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario)
 		{
 			_currentScenario = currentScenario;
-			_skillDayLoadHelper = skillDayLoadHelper;
+			_skillDayRepository = skillDayRepository;
 		}
 
 		public IEnumerable<SkillStaffingInterval> GetBySkills(IList<ISkill> skills, DateTimePeriod period, bool useShrinkage)
 		{
 			var returnList = new HashSet<SkillStaffingInterval>();
-			var skillDays = _skillDayLoadHelper.LoadSchedulerSkillDaysFlat(period.ToDateOnlyPeriod(TimeZoneInfo.Utc).Inflate(1), skills, _currentScenario.Current()); 
-			
+			var skillDays =  _skillDayRepository.FindReadOnlyRange(GetLongestPeriod(skills, period), skills, _currentScenario.Current());
+
 			foreach (var skillDay in skillDays)
 			{
 				skillDay.RecalculateDailyTasks();

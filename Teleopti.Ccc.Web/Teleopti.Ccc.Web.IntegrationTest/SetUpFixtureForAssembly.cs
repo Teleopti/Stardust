@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(container);
 
-			container.Resolve<HangfireClientStarter>().Start();
+			container.Resolve<IHangfireClientStarter>().Start();
 
 			loggedOnPerson = PersonFactory.CreatePerson("logged on person");
 

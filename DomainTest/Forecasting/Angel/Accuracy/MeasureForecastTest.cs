@@ -88,11 +88,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			yield break;
 		}
 
-		protected virtual IEnumerable<IValidatedVolumeDay> ValidatedVolumeDays()
-		{
-			yield break;
-		}
-
 		private ICollection<ISkillDay> _currentSkillDays;
 		protected virtual ICollection<ISkillDay> CurrentSkillDays()
 		{

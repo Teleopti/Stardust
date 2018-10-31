@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Wfm.Adherence.Domain.Service
 {
@@ -14,6 +15,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		private readonly PerTenant<string> _version;
 		private readonly PerTenant<ILookup<key, Guid>> _personIdForDataSourceAndUserCode;
 		private readonly PerTenant<ILookup<string, Guid>> _personIdForUserCode;
+		private readonly PerTenant<IDictionary<Guid, TimeZoneInfo>> _timeZoneForPersonId;
 
 		public ExternalLogonMapper(IExternalLogonReader externalLogonReader, IKeyValueStorePersister keyValueStore, ICurrentDataSource dataSource)
 		{
@@ -22,6 +24,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			_version = new PerTenant<string>(dataSource);
 			_personIdForDataSourceAndUserCode = new PerTenant<ILookup<key, Guid>>(dataSource);
 			_personIdForUserCode = new PerTenant<ILookup<string, Guid>>(dataSource);
+			_timeZoneForPersonId = new PerTenant<IDictionary<Guid, TimeZoneInfo>>(dataSource);
 		}
 
 		public IEnumerable<Guid> PersonIdsFor(int dataSourceId, string userCode)
@@ -36,6 +39,11 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		public IEnumerable<Guid> PersonIdsFor(string userCode)
 		{
 			return _personIdForUserCode.Value[userCode];
+		}
+
+		public TimeZoneInfo TimeZoneFor(Guid personId)
+		{
+			return _timeZoneForPersonId.Value[personId];
 		}
 
 		[ReadModelUnitOfWork]
@@ -58,8 +66,24 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			_personIdForUserCode.Set(
 				data.ToLookup(x => x.UserCode, x => x.PersonId)
 			);
+			_timeZoneForPersonId.Set(
+				data.Select(x => new
+					{
+						x.PersonId,
+						x.TimeZone
+					})
+					.Distinct()
+					.ToDictionary(
+						x => x.PersonId,
+						x => allTimeZoneIds.Contains(x.TimeZone) ? TimeZoneInfo.FindSystemTimeZoneById(x.TimeZone) : TimeZoneInfo.Utc
+					)
+			);
 			_version.Set(latestVersion);
 		}
+
+		private static readonly HashSet<string> allTimeZoneIds =
+			new HashSet<string>(TimeZoneInfo.GetSystemTimeZones()
+				.Select(tz => tz.Id));
 
 		private class key
 		{

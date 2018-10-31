@@ -119,45 +119,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			}
 		}
 
-		[Ignore("need help to understand")]
-		public void ShouldCreateDataRowIfSignificantPartIsContractDayOff()
-		{
-			var mocks = new MockRepository();
-			var scheduleDay = mocks.StrictMock<IScheduleDay>();
-			var dateOnlyAsPeriod = mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
-			IList<DataRow> dataRowCollection;
-			_schedules = new List<IScheduleDay> { scheduleDay };
-
-			using (mocks.Record())
-			{
-				Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.ContractDayOff).Repeat.Twice();
-				Expect.Call(scheduleDay.Person).Return(_person).Repeat.Twice();
-				Expect.Call(scheduleDay.Scenario).Return(_scenario).Repeat.Any();
-				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsPeriod);
-				Expect.Call(dateOnlyAsPeriod.DateOnly).Return(new DateOnly(2011, 1, 1));
-				Expect.Call(scheduleDay.PersonAssignment()).Return(null);
-			}
-			using (mocks.Playback())
-			{
-				using (var dataTable = new DataTable())
-				{
-					dataTable.Locale = Thread.CurrentThread.CurrentCulture;
-					ScheduleDayOffCountInfrastructure.AddColumnsToDataTable(dataTable);
-					dataRowCollection = ScheduleDayOffCountTransformer.CreateDataRows(_schedules, dataTable);
-				}
-			}
-
-			Assert.AreEqual(1, dataRowCollection.Count);
-			Assert.AreEqual(new DateTime(2011, 1, 1), dataRowCollection[0]["schedule_date_local"]);
-			Assert.AreEqual(_person.Id, dataRowCollection[0]["person_code"]);
-			Assert.AreEqual(_scenario.Id, dataRowCollection[0]["scenario_code"]);
-			Assert.AreEqual(new DateTime(2011, 1, 1).AddHours(12), dataRowCollection[0]["starttime"]);
-			Assert.AreEqual(DBNull.Value, dataRowCollection[0]["day_off_code"]);
-			Assert.AreEqual(1, dataRowCollection[0]["day_count"]);
-			Assert.AreEqual(RaptorTransformerHelper.CurrentBusinessUnit.Id, dataRowCollection[0]["business_unit_code"]);
-			Assert.AreEqual(new DateTime(2059, 12, 31), dataRowCollection[0]["datasource_update_date"]);
-		}
-
 		[Test]
 		public void ShouldReturnNullIfDataTableIsNull()
 		{

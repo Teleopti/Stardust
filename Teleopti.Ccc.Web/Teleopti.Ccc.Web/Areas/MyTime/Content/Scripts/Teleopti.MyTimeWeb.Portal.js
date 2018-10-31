@@ -406,14 +406,12 @@ Teleopti.MyTimeWeb.Portal = (function($) {
 	function _completelyLoaded() {
 		$(document).ready(function() {
 			var topMenuBarHeight = '51px'; //#innerNavBar
-			var pageBodyMarginTop = '10px';
+
 			setTimeout(function() {
 				$('.pagebody').css({
 					height:
 						'calc(100vh - ' +
 						topMenuBarHeight +
-						' - ' +
-						pageBodyMarginTop +
 						' - ' +
 						$('.pagebody')
 							.prev()
@@ -426,8 +424,6 @@ Teleopti.MyTimeWeb.Portal = (function($) {
 						height:
 							'calc(100vh - ' +
 							topMenuBarHeight +
-							' - ' +
-							pageBodyMarginTop +
 							' - ' +
 							$('.pagebody')
 								.prev()

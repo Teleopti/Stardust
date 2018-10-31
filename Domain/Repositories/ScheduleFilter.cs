@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		public string SearchNameText { get; set; }
 
 		public string TimeSortOrder { get; set; }
+		public bool OnlyNightShift { get; set; }
 
 
 		#region			Equals

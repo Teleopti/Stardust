@@ -1,9 +1,11 @@
 ﻿using System;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Adherence.Domain.Events
 {
+	[JsonObject(Id = "RuleChanged")]
 	public class PersonRuleChangedEvent : IRtaStoredEvent, IEvent, ISolidProof
 	{
 		public Guid PersonId { get; set; }

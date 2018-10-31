@@ -68,20 +68,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public IUnitOfWork CreateAndOpenUnitOfWork()
 		{
-			return createAndOpenUnitOfWork(TransactionIsolationLevel.Default, QueryFilter.BusinessUnit);
-		}
-
-		public IUnitOfWork CreateAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel)
-		{
-			return createAndOpenUnitOfWork(isolationLevel, QueryFilter.BusinessUnit);
+			return CreateAndOpenUnitOfWork(QueryFilter.BusinessUnit);
 		}
 
 		public IUnitOfWork CreateAndOpenUnitOfWork(IQueryFilter businessUnitFilter)
-		{
-			return createAndOpenUnitOfWork(TransactionIsolationLevel.Default, businessUnitFilter);
-		}
-
-		private IUnitOfWork createAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel, IQueryFilter businessUnitFilter)
 		{
 			_nestedUnitOfWorkStrategy.Strategize(_context);
 
@@ -98,7 +88,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var unitOfWork = new NHibernateUnitOfWork(
 				_context.Clear,
 				session,
-				isolationLevel,
 				interceptor,
 				_transactionHooks);
 			_context.Set(unitOfWork);

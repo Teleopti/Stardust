@@ -36,9 +36,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
-			isolate.UseTestDouble<PersonAbsenceCreator>().For<IPersonAbsenceCreator>();
-			isolate.UseTestDouble<AbsenceCommandConverter>().For<IAbsenceCommandConverter>();
-			isolate.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
 			isolate.UseTestDouble<FakePersonRepository>().For<IProxyForId<IPerson>>();
 			isolate.UseTestDouble<FakeAbsenceRepository>().For<IProxyForId<IAbsence>>();
 			isolate.UseTestDouble<AddIntradayAbsenceCommandHandler>().For<IHandleCommand<AddIntradayAbsenceCommand>>();

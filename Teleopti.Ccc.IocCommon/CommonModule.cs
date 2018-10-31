@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.IocCommon
 		{
 			var iocArgs = new IocArgs(new ConfigReader())
 			{
-				DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest()
+				DataSourceApplicationName = DataSourceApplicationName.ForTest()
 			};
 			return new CommonModule(new IocConfiguration(iocArgs, toggleManager));
 		}
@@ -90,6 +90,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new ApplicationInsightsModule());
 			builder.RegisterModule<NotificationModule>();
 			builder.RegisterModule(new AuditTrailModule(_configuration));
+			builder.RegisterModule<AbsenceModule>();
 		}
 
 		public static IToggleManager ToggleManagerForIoc(IocArgs iocArgs)

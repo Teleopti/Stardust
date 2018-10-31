@@ -116,11 +116,11 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.262\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.264\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.262\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.264\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -184,6 +184,12 @@
     <Compile Include="ApplicationLayer\Audit\PersonAccessAuditContext.cs" />
     <Compile Include="ApplicationLayer\Audit\StaffingAuditContext.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\FilterOutRequestsHandledByReadmodel.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\AbsenceRequestModel.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\AbsenceRequestModelMapper.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\AbsenceRequestPersister.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\ExistingAbsenceRequestHandler.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\IAbsenceRequestPersister.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\NewAbsenceRequestHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistPreloadService.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistProcessPublisher.cs" />
     <Compile Include="ApplicationLayer\Audit\PersonAccessContextReaderService.cs" />
@@ -295,12 +301,14 @@
     <Compile Include="ResourceCalculation\ShiftProjectionCacheFactory.cs" />
     <Compile Include="ResourceCalculation\SkillsOnAgentsProvider.cs" />
     <Compile Include="ResourcePlanner\Hints\GetValidations.cs" />
+    <Compile Include="ResourcePlanner\Hints\PersonContractShiftBagHint.cs" />
     <Compile Include="ResourcePlanner\Hints\PreferenceHint.cs" />
     <Compile Include="Scheduling\AddReducedSkillDaysToStateHolder.cs" />
     <Compile Include="Scheduling\AgentsWithPreferences.cs" />
     <Compile Include="Scheduling\AgentsWithWhiteSpots.cs" />
     <Compile Include="Scheduling\AlreadyScheduledAgents.cs" />
     <Compile Include="Scheduling\ReducedSkillsProvider.cs" />
+    <Compile Include="Scheduling\SchedulingFilterAgentsByHints.cs" />
     <Compile Include="Scheduling\WebClearScheduleStardustHandler.cs" />
     <Compile Include="Scheduling\IPredictShiftCategory.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModelLoader.cs" />
@@ -1401,7 +1409,6 @@
     <Compile Include="InterfaceLegacy\Infrastructure\IWriteToFile.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\MessageBrokerException.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\ReadModelValidationResult.cs" />
-    <Compile Include="InterfaceLegacy\Infrastructure\TransactionIsolationLevel.cs" />
     <Compile Include="InterfaceLegacy\IPlanningPeriod.cs" />
     <Compile Include="InterfaceLegacy\IValidatePeriod.cs" />
     <Compile Include="InterfaceLegacy\Messages\Denormalize\DenormalizeScheduleProjection.cs" />
@@ -1877,7 +1884,6 @@
     <Compile Include="ApplicationLayer\Events\ICommandIdentifier.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceModifiedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceAddedEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\PersonActivityActualStartEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonCollectionChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonDeletedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonTeamChangedEvent.cs" />

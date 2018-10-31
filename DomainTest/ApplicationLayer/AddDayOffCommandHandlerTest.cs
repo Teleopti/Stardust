@@ -134,8 +134,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			DayOffTemplateRepository.Has(dayOffTemplate);
 			var anotherDayOffTemplate = DayOffFactory.CreateDayOff(new Description("another template")).WithId();
 			DayOffTemplateRepository.Has(anotherDayOffTemplate);
-			var dayOffAss = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario, date, dayOffTemplate);
-
 			var trackId = Guid.NewGuid();
 			var command = new AddDayOffCommand
 			{

@@ -1,0 +1,14 @@
+<nz-dropdown [nzTrigger]="'click'" id="business-unit-dropdown">
+  <button class="trigger-btn" nz-button nz-dropdown nzType="primary" nzGhost data-test-bu-select>
+    <span>
+      <i class="mdi mdi-vector-square"></i>
+      <span *ngIf="selectedBusinessUnit" class="businessunit-name">
+        {{selectedBusinessUnit.Name}}
+        <i class="anticon anticon-down"></i>
+      </span>
+    </span>
+  </button>
+  <ul nz-menu data-test-bu-list>
+    <li *ngFor="let bu of businessUnits" (click)="handleSelect(bu)" nz-menu-item>{{bu.Name}}</li>
+  </ul>
+</nz-dropdown>

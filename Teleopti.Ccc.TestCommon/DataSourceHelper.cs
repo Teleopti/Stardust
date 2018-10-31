@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using NHibernate.Dialect;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Web;
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon
 				enversConfiguration = enversConfiguration ?? new EnversConfiguration();
 				return new DataSourcesFactory(
 					enversConfiguration,
-					DataSourceConfigurationSetter.ForTest(),
+					new DataSourceConfigurationSetter(new DataSourceApplicationName{Name = DataSourceApplicationName.ForTest()}, new ConfigReader()),
 					new MemoryNHibernateConfigurationCache(),
 					new UnitOfWorkFactoryFactory(
 						new NoPreCommitHooks(),

@@ -38,12 +38,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			}
 		}
 
-        public IOpenAbsenceRequestPeriodProjection Projection
-        {
-            get { return new OpenAbsenceRequestPeriodProjection(this); }
-        }
+        public IOpenAbsenceRequestPeriodProjection Projection => new OpenAbsenceRequestPeriodProjection(this);
 
-        public OpenAbsenceRequestPeriodExtractor(IWorkflowControlSet workflowControlSet, IAbsence absence)
+		public OpenAbsenceRequestPeriodExtractor(IWorkflowControlSet workflowControlSet, IAbsence absence)
         {
             ViewpointDate = DateOnly.Today;
             _workflowControlSet = workflowControlSet;
