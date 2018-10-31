@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 	[TestFixture, TeamScheduleTest]
 	public class TeamScheduleShiftViewModelFactoryTests : IIsolateSystem
 	{
-		public TeamScheduleShiftViewModelFactory Target;
+		public TeamScheduleShiftViewModelProvider Target;
 		private readonly Scenario scenario = new Scenario("d");
 		public FakeCommonAgentNameProvider CommonAgentNameProvider;
 		public Areas.Global.FakePermissionProvider PermissionProvider;
