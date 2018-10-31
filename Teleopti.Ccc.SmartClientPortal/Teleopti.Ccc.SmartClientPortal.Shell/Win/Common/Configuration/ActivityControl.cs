@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// Sets the row index to 0 when there's no data available in the source
 			setSelectedCellWhenNoSourceAvailable<IActivity>(GridType.Activity);
 
-			_gridColumnHelper.Add(null);
+			_gridColumnHelper.Add();
 			
 			gridControlActivities.Invalidate();
 
