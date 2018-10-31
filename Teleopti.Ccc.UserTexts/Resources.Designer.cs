@@ -12944,6 +12944,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter team schedules by time.
+        /// </summary>
+        public static string FilterTeamSchedulesByTime {
+            get {
+                return ResourceManager.GetString("FilterTeamSchedulesByTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter....
         /// </summary>
         public static string FilterThreeDots {

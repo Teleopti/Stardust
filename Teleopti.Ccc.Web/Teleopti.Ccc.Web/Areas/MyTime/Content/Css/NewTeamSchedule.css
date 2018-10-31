@@ -23,8 +23,11 @@
 	align-items: center;
 	height: 50px;
 }
-.new-teamschedule-view-nav .navbar-teleopti > li > * {
+.new-teamschedule-view-nav .navbar-teleopti.navbar-nav > li > a,
+.new-teamschedule-view-nav .navbar-teleopti.navbar-nav > li > a:hover,
+.new-teamschedule-view-nav .navbar-teleopti.navbar-nav > li > a:focus {
 	cursor: pointer;
+	background-color: transparent;
 }
 .new-teamschedule-view-nav input.form-control {
 	background: transparent !important;
@@ -68,7 +71,6 @@
 	min-width: 35px;
 	margin: 0 10px;
 }
-
 .new-teamschedule-toggle {
 	display: inline-block;
 }
@@ -114,6 +116,26 @@
 .new-teamschedule-toggle span {
 	display: inline-block;
 	padding: 10px;
+}
+.new-teamschedule-team-filter a span,
+.new-teamschedule-time-filter a span {
+	visibility: hidden;
+}
+.new-teamschedule-team-filter.new-teamschedule-has-time-filter a span,
+.new-teamschedule-time-filter.new-teamschedule-has-time-filter a span {
+	content: '';
+	visibility: visible;
+	width: 8px;
+	height: 8px;
+	position: absolute;
+	top: 6px;
+	right: 11px;
+	background: orange;
+	border-radius: 50%;
+}
+.new-teamschedule-time-filter.new-teamschedule-has-time-filter a span {
+	top: 10.5px;
+	right: 8px;
 }
 .new-teamschedule-view-nav .submenu li.new-teamschedule-filter-component {
 	width: 220px;
