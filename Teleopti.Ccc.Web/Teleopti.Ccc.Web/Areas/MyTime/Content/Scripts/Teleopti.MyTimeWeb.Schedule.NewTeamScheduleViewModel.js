@@ -1,7 +1,8 @@
 ﻿Teleopti.MyTimeWeb.Schedule.NewTeamScheduleViewModel = function(
 	filterChangedCallback,
 	loadGroupAndTeams,
-	readScheduleDataCallback
+	readScheduleDataCallback,
+	rebuildTooltipForTimeFilterIcon
 ) {
 	var self = this,
 		constants = Teleopti.MyTimeWeb.Common.Constants,
@@ -53,7 +54,7 @@
 	self.isPanelVisible = ko.observable(false);
 	self.isScrollbarVisible = ko.observable(false);
 	self.searchNameText = ko.observable('');
-	self.hasFiltered = ko.observable(false);
+	self.hasFilteredOnMobile = ko.observable(false);
 	self.hasTimeFiltered = ko.observable(false);
 	self.emptySearchResult = ko.observable(false);
 	self.isAgentScheduleLoaded = ko.observable(false);
@@ -142,27 +143,11 @@
 		self.filter.isDayOff = self.showOnlyDayOff();
 		self.filter.onlyNightShift = self.showOnlyNightShift();
 
-		if (self.startTimeStart() === defaultFilterTime && self.startTimeEnd() === defaultFilterTime) {
-			self.filter.filteredStartTimes = '';
-		} else {
-			self.filter.filteredStartTimes =
-				(self.startTimeStart() ? self.startTimeStart() : '') +
-				'-' +
-				(self.startTimeEnd() ? self.startTimeEnd() : '');
-		}
-
-		if (self.endTimeStart() === defaultFilterTime && self.endTimeEnd() === defaultFilterTime) {
-			self.filter.filteredEndTimes = '';
-		} else {
-			self.filter.filteredEndTimes =
-				(self.endTimeStart() ? self.endTimeStart() : '') + '-' + (self.endTimeEnd() ? self.endTimeEnd() : '');
-		}
+		setTimeFilterData();
 
 		self.hasTimeFiltered(
-			self.startTimeStart() != defaultFilterTime ||
-				self.startTimeEnd() != defaultFilterTime ||
-				self.endTimeStart() != defaultFilterTime ||
-				self.endTimeEnd() != defaultFilterTime ||
+			self.filter.filteredStartTimes.length > 0 ||
+				self.filter.filteredEndTimes.length > 0 ||
 				self.showOnlyNightShift() == true
 		);
 
@@ -230,7 +215,7 @@
 		if (data.PageCount > 0) self.totalPageNum = data.PageCount;
 		self.totalAgentCount = data.TotalAgentCount;
 
-		self.hasFiltered(
+		self.hasFilteredOnMobile(
 			self.hasTimeFiltered() ||
 				!!self.filter.searchNameText ||
 				((self.selectedTeamIds[0] && self.selectedTeamIds[0] != self.defaultTeamId) ||
@@ -276,6 +261,13 @@
 		callback && callback();
 	};
 
+	self.buildFilterDetails = function(title, startTimeStr, endTimeStr, onlyNightShiftStr) {
+		if (self.isHostAniPad || self.isHostAMobile) return '';
+
+		rebuildTooltipForTimeFilterIcon(title, startTimeStr, endTimeStr, onlyNightShiftStr);
+		return title;
+	};
+
 	function mergeRawTimeLine(rawTimeline, newTimeLine) {
 		rawTimeline = rawTimeline.concat(newTimeLine);
 
@@ -313,9 +305,28 @@
 		return agentNames;
 	}
 
+	function setTimeFilterData() {
+		if (self.startTimeStart() === defaultFilterTime && self.startTimeEnd() === defaultFilterTime) {
+			self.filter.filteredStartTimes = '';
+		} else {
+			self.filter.filteredStartTimes =
+				(self.startTimeStart() ? self.startTimeStart() : '') +
+				'-' +
+				(self.startTimeEnd() ? self.startTimeEnd() : '');
+		}
+
+		if (self.endTimeStart() === defaultFilterTime && self.endTimeEnd() === defaultFilterTime) {
+			self.filter.filteredEndTimes = '';
+		} else {
+			self.filter.filteredEndTimes =
+				(self.endTimeStart() ? self.endTimeStart() : '') + '-' + (self.endTimeEnd() ? self.endTimeEnd() : '');
+		}
+	}
+
 	function setShowOnlyNightShiftSubscription() {
 		self.showOnlyNightShiftSubscription = self.showOnlyNightShift.subscribe(function(value) {
 			disposeShowOnlyDayOffSubscription();
+
 			self.showOnlyDayOff(false);
 			if (!self.isMobileEnabled) {
 				self.filter.isDayOff = false;
@@ -326,9 +337,14 @@
 				self.filter.onlyNightShift = value;
 				self.filter.searchNameText = self.searchNameText();
 
+				setTimeFilterData();
 				self.filterChangedCallback(self.selectedDate(), true);
 			}
-			self.hasTimeFiltered(value);
+
+			self.hasTimeFiltered(
+				value || self.filter.filteredStartTimes.length > 0 || self.filter.filteredEndTimes.length > 0
+			);
+
 			setShowOnlyDayOffSubscription();
 		});
 	}
@@ -342,7 +358,7 @@
 			disposeShowOnlyNightShiftSubscription();
 
 			self.showOnlyNightShift(false);
-			self.hasTimeFiltered(false);
+
 			if (!self.isMobileEnabled) {
 				self.filter.onlyNightShift = false;
 
@@ -355,7 +371,16 @@
 				self.filter.isDayOff = value;
 				self.filter.searchNameText = self.searchNameText();
 
+				setTimeFilterData();
 				self.filterChangedCallback(self.selectedDate());
+			}
+
+			if (value) {
+				self.hasTimeFiltered(false);
+			} else {
+				self.hasTimeFiltered(
+					self.filter.filteredStartTimes.length > 0 || self.filter.filteredEndTimes.length > 0
+				);
 			}
 
 			setShowOnlyNightShiftSubscription();
