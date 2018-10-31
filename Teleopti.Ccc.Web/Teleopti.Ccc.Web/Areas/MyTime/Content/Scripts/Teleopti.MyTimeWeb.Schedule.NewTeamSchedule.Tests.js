@@ -1083,6 +1083,53 @@
 		equal($('.teammates-schedules-container .teammates-schedules-column').length == 2, true);
 	});
 
+	test('should keep panel open after turn on show only night shifts toggle on desktop', function() {
+		$('body').append(agentSchedulesHtml);
+
+		initVm();
+
+		//turn on show only night shfits toggle
+		$('.new-teamschedule-time-filter').click();
+		$('.show-only-night-shift-toggle input').click();
+
+		equal(vm.isPanelVisible(), true);
+	});
+
+	test('should keep panel open after turn off show only night shifts toggle on desktop', function() {
+		$('body').append(agentSchedulesHtml);
+
+		initVm();
+
+		//turn on show only night shfits toggle
+		$('.new-teamschedule-time-filter').click();
+		$('.show-only-night-shift-toggle input').click();
+		$('.new-teamschedule-time-filter').click();
+
+		//turn off show only night shfits toggle
+		$('.new-teamschedule-time-filter').click();
+		$('.show-only-night-shift-toggle input').click();
+
+		equal(vm.isPanelVisible(), true);
+	});
+
+	test('should filter schedules with start and end time when toggling off show only night shifts on desktop', function() {
+		$('body').append(agentSchedulesHtml);
+
+		initVm();
+
+		$('.new-teamschedule-time-filter').click();
+		vm.startTimeStart('06:00');
+		vm.startTimeEnd('10:00');
+		$('.new-teamschedule-submit-buttons .btn-primary').click(); //search schedule with start time
+
+		$('.new-teamschedule-time-filter').click();
+		$('.show-only-night-shift-toggle input').click();
+		$('.show-only-night-shift-toggle input').click();
+
+		equal(vm.hasTimeFiltered(), true);
+		equal(ajaxOption.ScheduleFilter.filteredStartTimes, '06:00-10:00');
+	});
+
 	test('should set show only day off to false when changing show only night shifts toggle on desktop', function() {
 		$('body').append(agentSchedulesHtml);
 
@@ -1150,6 +1197,17 @@
 		equal(vm.hasTimeFiltered(), true);
 
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
+	});
+
+	test('should close panel after clicking search button on desktop', function() {
+		$('body').append(agentSchedulesHtml);
+
+		initVm();
+
+		$('.new-teamschedule-time-filter').click();
+		$('.new-teamschedule-submit-buttons .btn-primary').click();
+
+		equal(vm.isPanelVisible(), false);
 	});
 
 	test('should restore show only night shifts toggle state after clicking cancel button on mobile', function() {
@@ -1892,27 +1950,31 @@
 			'					</span>',
 			'				</div>',
 			'			</li>',
-			'			<li class="mobile-today" data-bind="click: today">',
+			"			<li class=\"mobile-today\" data-bind=\"click: today, tooltip: { title: '@Resources.Today', html: true, trigger: 'hover', placement: 'bottom'}\">",
 			'				<a>',
 			'					<i class="glyphicon glyphicon-home"></i>',
 			'				</a>',
 			'			</li>',
 			'			<!-- ko if: isHostAMobile -->',
-			'			<li class="new-teamschedule-team-filter">',
-			'				<a>',
-			'					<i class="glyphicon glyphicon-filter" data-bind="style: {color: hasFiltered() ? \'yellow\' : \'white\'}"></i>',
+			'			<li class="new-teamschedule-team-filter" data-bind="css: {\'new-teamschedule-has-time-filter\': hasFilteredOnMobile}">',
+			'				<a class="relative">',
+			'					<i class="glyphicon glyphicon-filter"></i>',
+			'					<span></span>',
 			'				</a>',
 			'			</li>',
 			'			<!-- /ko -->',
 			'			<!-- ko ifnot: isHostAMobile -->',
-			'			<li class="new-teamschedule-time-filter">',
+			"			<li class=\"new-teamschedule-time-filter\" data-bind=\"css: {'new-teamschedule-has-time-filter': hasTimeFiltered}, tooltip: { title: '@Resources.FilterTeamSchedulesByTime', html: true, trigger: 'hover', placement: 'bottom'}\">",
 			'				<a>',
-			'					<i class="glyphicon glyphicon-time" data-bind="style: {color: hasTimeFiltered() ? \'yellow\': \'white\'}"></i>',
+			'					<i class="glyphicon glyphicon-filter"></i>',
+			'					<span></span>',
 			'				</a>',
 			'			</li>',
 			"			<li class=\"new-teamschedule-toggle show-only-day-off-toggle\" data-bind=\"tooltip: { title: '@Resources.ShowOnlyDayOff', html: true, trigger: 'hover', placement: 'bottom'}\">",
-			'				<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />',
-			'				<label class="relative" for="show-only-day-off-switch">Day off switch</label>',
+			'				<a>',
+			'					<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />',
+			'					<label class="relative" for="show-only-day-off-switch">Day off switch</label>',
+			'				</a>',
 			'			</li>',
 			'			<li class="new-teamschedule-filter-component relative">',
 			'				<div data-bind="click: openTeamSelectorPanel"></div>',
@@ -2118,7 +2180,7 @@
 			'		<div class="new-teamschedule-toggle show-only-night-shift-toggle">',
 			'			<input type="checkbox" id="show-only-night-shift-switch" data-bind="checked: showOnlyNightShift" />',
 			'			<label class="relative" for="show-only-night-shift-switch">Night shift switch</label>',
-			'			<span>Show only night shifts</span>',
+			'			<span>@Resources.ShowOnlyNightShifts</span>',
 			'		</div>',
 			'		<div class="empty-search-result">',
 			'			<!-- ko if: emptySearchResult -->',
@@ -2137,7 +2199,7 @@
 			'			<div class="new-teamschedule-toggle show-only-night-shift-toggle">',
 			'				<input type="checkbox" id="show-only-night-shift-switch" data-bind="checked: showOnlyNightShift" />',
 			'				<label class="relative" for="show-only-night-shift-switch">Night shift switch</label>',
-			'				<span>Show only night shifts</span>',
+			'				<span>@Resources.ShowOnlyNightShifts</span>',
 			'			</div>',
 			'			<button class="btn btn-primary pull-right" data-bind="click: submitSearchForm">@Resources.Search</button>',
 			'			<button class="btn btn-default pull-right" data-bind="click: cancelClick">@Resources.Cancel</button>',

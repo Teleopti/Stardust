@@ -31,7 +31,8 @@
 		vm = new Teleopti.MyTimeWeb.Schedule.NewTeamScheduleViewModel(
 			filterChangedCallback,
 			loadGroupAndTeams,
-			setDraggableScrollBlockOnDesktop
+			setDraggableScrollBlockOnDesktop,
+			rebuildTooltipForTimeFilterIcon
 		);
 		applyBindings();
 	}
@@ -108,6 +109,7 @@
 			e.stopPropagation();
 		});
 
+		//close panel on body click
 		$('body').on('mousedown', function(event) {
 			var excludedClassList = [
 				'new-teamschedule-time-filter',
@@ -132,6 +134,48 @@
 			},
 			true
 		);
+	}
+
+	function rebuildTooltipForTimeFilterIcon(title, startTimeStr, endTimeStr, onlyNightShiftStr) {
+		//rebuild tooltip for time filter icon
+		$('.new-teamschedule-time-filter').on('mouseover', function() {
+			var ele = document.createElement('div');
+			var htmlStr = '<div class="new-teamschedule-team-filter-detail"><span>' + title + '</span>';
+
+			if (vm.filter.filteredStartTimes.length > 0)
+				htmlStr +=
+					'<p>' +
+					startTimeStr +
+					': <span class="new-teamschedule-team-filter-detail-time">' +
+					vm.filter.filteredStartTimes +
+					'</span></p>';
+
+			if (vm.filter.filteredEndTimes.length > 0)
+				htmlStr +=
+					'<p>' +
+					endTimeStr +
+					': <span class="new-teamschedule-team-filter-detail-time">' +
+					vm.filter.filteredEndTimes +
+					'</span></p>';
+
+			if (vm.showOnlyNightShift()) {
+				htmlStr += '<p> ' + onlyNightShiftStr + ': ' + vm.showOnlyNightShift() + '</p>';
+			}
+
+			if (vm.showOnlyNightShift() || vm.showOnlyDayOff()) {
+				htmlStr = htmlStr.replace(
+					'new-teamschedule-team-filter-detail',
+					'new-teamschedule-team-filter-detail new-teamschedule-team-filter-disable-time'
+				);
+			}
+
+			htmlStr += '</div>';
+			ele.innerHTML = htmlStr;
+
+			$(this)
+				.attr('title', ele.innerHTML)
+				.tooltip('fixTitle');
+		});
 	}
 
 	function setupTeamScheduleColumnClickBinding() {
@@ -566,7 +610,7 @@
 		);
 	}
 
-	function filterChangedCallback(momentDate) {
+	function filterChangedCallback(momentDate, keepPanelOpen) {
 		showLoadingGif();
 		vm.isAgentScheduleLoaded(false);
 		visibleAgentsIndexRange.start = 0;
@@ -579,7 +623,7 @@
 			vm.selectedDate().format('YYYY/MM/DD');
 
 		dataService.loadScheduleData(dateStr, vm.paging, vm.filter, function(schedules) {
-			vm.readScheduleData(schedules, dateStr);
+			vm.readScheduleData(schedules, dateStr, keepPanelOpen);
 
 			focusMySchedule();
 			fetchDataSuccessCallback();

@@ -17812,4 +17812,12 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Show only night shifts</value>
     <comment>Show only night shifts toggle text in TeamSchedule/MyTime</comment>
   </data>
+  <data name="ShiftsInShiftBagCanNotFulFillContractTime" xml:space="preserve">
+    <value>The shifts in the shift bag {0} can not fulfill the contract time for the contract {1}. </value>
+    <comment>Shown when validating agents in Plans (web) and an agent has a contract that with contract time that can't be fulfilled with the assigned shift bag</comment>
+  </data>
+  <data name="FilterTeamSchedulesByTime" xml:space="preserve">
+    <value>Filter team schedules by time</value>
+    <comment>Filter team schedules by time - a icon tooltip used in TeamSchedule/MyTime</comment>
+  </data>
 </root>

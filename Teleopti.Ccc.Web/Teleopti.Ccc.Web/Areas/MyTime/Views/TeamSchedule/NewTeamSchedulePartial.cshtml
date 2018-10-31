@@ -62,28 +62,33 @@
 					</span>
 				</div>
 			</li>
-			<li class="mobile-today" data-bind="click: today">
+			<li class="mobile-today" data-bind="click: today, tooltip: { title: '@Resources.Today', html: true, trigger: 'hover', placement: 'bottom'}">
 				<a>
 					<i class="glyphicon glyphicon-home"></i>
 				</a>
 			</li>
 
 			<!-- ko if: isHostAMobile -->
-			<li class="new-teamschedule-team-filter">
-				<a>
-					<i class="glyphicon glyphicon-filter" data-bind="style: {color: hasFiltered() ? 'yellow' : 'white'}"></i>
+			<li class="new-teamschedule-team-filter" data-bind="css: {'new-teamschedule-has-time-filter': hasFilteredOnMobile}">
+				<a class="relative">
+					<i class="glyphicon glyphicon-filter"></i>
+					<span></span>
 				</a>
 			</li>
 			<!-- /ko -->
 			<!-- ko ifnot: isHostAMobile -->
-			<li class="new-teamschedule-time-filter">
+			<li class="new-teamschedule-time-filter" data-bind="css: {'new-teamschedule-has-time-filter': hasTimeFiltered}, tooltip: { title: buildFilterDetails('@Resources.FilterTeamSchedulesByTime', '@Resources.StartTime', '@Resources.EndTime', '@Resources.ShowOnlyNightShifts'), html: true, trigger: 'hover', placement: 'bottom'}">
 				<a>
-					<i class="glyphicon glyphicon-time" data-bind="style: {color: hasTimeFiltered() ? 'yellow': 'white'}"></i>
+					<i class="glyphicon glyphicon-filter"></i>
+					<span></span>
 				</a>
 			</li>
 			<li class="new-teamschedule-toggle show-only-day-off-toggle" data-bind="tooltip: { title: '@Resources.ShowOnlyDayOff', html: true, trigger: 'hover', placement: 'bottom'}">
-				<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />
-				<label class="relative" for="show-only-day-off-switch">Day off switch</label>
+				<a>
+
+					<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />
+					<label class="relative" for="show-only-day-off-switch">Day off switch</label>
+				</a>
 			</li>
 			<li class="new-teamschedule-filter-component relative">
 				<div data-bind="click: openTeamSelectorPanel"></div>

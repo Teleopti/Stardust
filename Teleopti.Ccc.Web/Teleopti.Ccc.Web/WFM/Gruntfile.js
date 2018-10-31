@@ -1,3 +1,5 @@
+const sassImplementation = require('node-sass');
+
 module.exports = function(grunt) {
 	const isDev = grunt.option('development') || false;
 	const isProd = !isDev;
@@ -18,6 +20,10 @@ module.exports = function(grunt) {
 		antThemes: {
 			files: ['src/themes/*.less'],
 			tasks: ['less']
+		},
+		styleguideStyle: {
+			files: ['css/styleguide/**/*.scss'],
+			tasks: ['sass']
 		}
 	};
 
@@ -31,6 +37,20 @@ module.exports = function(grunt) {
 			files: {
 				'dist/ant_classic.css': 'src/themes/ant_classic.less',
 				'dist/ant_dark.css': 'src/themes/ant_dark.less'
+			}
+		}
+	};
+
+	const sass = {
+		themes: {
+			options: {
+				implementation: sassImplementation,
+				sourceMap: true,
+				outputStyle: isProd ? 'compressed' : 'nested'
+			},
+			files: {
+				'dist/styleguide_classic.css': 'css/styleguide/styleguide_classic.scss',
+				'dist/styleguide_dark.css': 'css/styleguide/styleguide_dark.scss'
 			}
 		}
 	};
@@ -93,8 +113,6 @@ module.exports = function(grunt) {
 			'node_modules/angular-gantt/assets/angular-gantt-plugins.js',
 			'node_modules/angular-gantt/assets/angular-gantt-table-plugin.js',
 			'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.js',
-			'node_modules/teleopti-styleguide/styleguide/dist/wfmdirectives.min.js',
-			'node_modules/teleopti-styleguide/styleguide/dist/templates.js',
 			'node_modules/filesaver.js/FileSaver.min.js',
 			'node_modules/jquery/dist/jquery.min.js',
 			'node_modules/hammerjs/hammer.min.js',
@@ -139,16 +157,6 @@ module.exports = function(grunt) {
 		dest: 'dist/main.js'
 	};
 	// TODO: Add desktop concat
-
-	const concatStyleguideClassic = {
-		src: ['node_modules/teleopti-styleguide/styleguide/dist/main.min.css'],
-		dest: 'dist/styleguide_classic.css'
-	};
-
-	const concatStyleguideDark = {
-		src: ['node_modules/teleopti-styleguide/styleguide/dist/main_dark.min.css'],
-		dest: 'dist/styleguide_dark.css'
-	};
 
 	const concatCssDependencies = {
 		src: [
@@ -209,11 +217,10 @@ module.exports = function(grunt) {
 		ngtemplates,
 		processhtml,
 		less,
+		sass,
 		concat: {
 			concatJsDependencies,
 			concatJsWfm,
-			concatStyleguideClassic,
-			concatStyleguideDark,
 			concatCssDependencies
 		},
 		uglify,
@@ -324,13 +331,14 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-less');
+	grunt.loadNpmTasks('grunt-sass');
 	grunt.loadNpmTasks('grunt-msbuild');
 	grunt.loadNpmTasks('grunt-angular-templates');
 	grunt.loadNpmTasks('grunt-processhtml');
 
-	grunt.registerTask('devBuild', ['concat', 'copy', 'ngtemplates', 'less', 'processhtml']);
+	grunt.registerTask('devBuild', ['concat', 'copy', 'ngtemplates', 'less', 'sass', 'processhtml']);
 	grunt.registerTask('devWatch', ['devBuild', 'watch']);
-	grunt.registerTask('prodBuild', ['concat', 'copy', 'ngtemplates', 'less', 'processhtml', 'uglify']);
+	grunt.registerTask('prodBuild', ['concat', 'copy', 'ngtemplates', 'less', 'sass', 'processhtml', 'uglify']);
 
 	grunt.registerTask('default', ['devWatch']);
 

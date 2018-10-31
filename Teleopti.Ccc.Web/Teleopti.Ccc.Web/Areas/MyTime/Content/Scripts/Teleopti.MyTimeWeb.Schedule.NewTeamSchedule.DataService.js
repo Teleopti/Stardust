@@ -28,12 +28,12 @@
 			data: JSON.stringify({
 				SelectedDate: date,
 				ScheduleFilter: {
-					filteredStartTimes: filter.filteredStartTimes,
-					filteredEndTimes: filter.filteredEndTimes,
+					teamIds: filter.selectedTeamIds.join(','),
+					searchNameText: filter.searchNameText,
 					isDayOff: filter.isDayOff,
 					onlyNightShift: filter.onlyNightShift,
-					searchNameText: filter.searchNameText,
-					teamIds: filter.selectedTeamIds.join(',')
+					filteredStartTimes: filter.filteredStartTimes,
+					filteredEndTimes: filter.filteredEndTimes
 				},
 				Paging: {
 					Take: paging == null ? 20 : paging.take,

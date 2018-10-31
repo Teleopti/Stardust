@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
@@ -7,15 +6,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
-
-/* DO NOT USE! 
-It only contains vary simple logic. 
-Used for staffhub integration only until further notice */
-
-//TODO personal account 
 namespace Teleopti.Wfm.Api.Command
 {
 	public class AddAbsenceHandler : ICommandHandler<AddAbsenceDto>

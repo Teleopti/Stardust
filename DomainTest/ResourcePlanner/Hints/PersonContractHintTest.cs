@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -45,8 +44,8 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var planningPeriod = new DateOnlyPeriod(startDate, endDate);
 
 			var person = PersonFactory.CreatePerson().WithId();
-			var personcontract = new PersonContract(new Contract("Contract"),new PartTimePercentage("_"),new ContractSchedule("_")  );
-			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(startDate, personcontract,new Team());
+			var personContract = new PersonContract(new Contract("Contract"),new PartTimePercentage("_"),new ContractSchedule("_")  );
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(startDate, personContract,new Team());
 			((IDeleteTag)personPeriod.PersonContract.Contract).SetDeleted();
 			person.AddPersonPeriod(personPeriod);
 

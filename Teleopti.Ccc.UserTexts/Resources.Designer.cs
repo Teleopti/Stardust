@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -12940,6 +12940,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string FilterTeams {
             get {
                 return ResourceManager.GetString("FilterTeams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter team schedules by time.
+        /// </summary>
+        public static string FilterTeamSchedulesByTime {
+            get {
+                return ResourceManager.GetString("FilterTeamSchedulesByTime", resourceCulture);
             }
         }
         
@@ -32766,6 +32775,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShiftsForFlexibleWorkTime {
             get {
                 return ResourceManager.GetString("ShiftsForFlexibleWorkTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The shifts in the shift bag {0} can not fulfill the contract time for the contract {1}. .
+        /// </summary>
+        public static string ShiftsInShiftBagCanNotFulFillContractTime {
+            get {
+                return ResourceManager.GetString("ShiftsInShiftBagCanNotFulFillContractTime", resourceCulture);
             }
         }
         
