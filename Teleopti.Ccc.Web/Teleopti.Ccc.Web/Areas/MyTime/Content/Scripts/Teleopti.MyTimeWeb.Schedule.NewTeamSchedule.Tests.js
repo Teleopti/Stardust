@@ -1083,6 +1083,35 @@
 		equal($('.teammates-schedules-container .teammates-schedules-column').length == 2, true);
 	});
 
+	test('should keep panel open after turn on show only night shifts toggle on desktop', function() {
+		$('body').append(agentSchedulesHtml);
+
+		initVm();
+
+		//turn on show only night shfits toggle
+		$('.new-teamschedule-time-filter').click();
+		$('.show-only-night-shift-toggle input').click();
+
+		equal(vm.isPanelVisible(), true);
+	});
+
+	test('should keep panel open after turn off show only night shifts toggle on desktop', function() {
+		$('body').append(agentSchedulesHtml);
+
+		initVm();
+
+		//turn on show only night shfits toggle
+		$('.new-teamschedule-time-filter').click();
+		$('.show-only-night-shift-toggle input').click();
+		$('.new-teamschedule-time-filter').click();
+
+		//turn off show only night shfits toggle
+		$('.new-teamschedule-time-filter').click();
+		$('.show-only-night-shift-toggle input').click();
+
+		equal(vm.isPanelVisible(), true);
+	});
+
 	test('should set show only day off to false when changing show only night shifts toggle on desktop', function() {
 		$('body').append(agentSchedulesHtml);
 
@@ -1150,6 +1179,17 @@
 		equal(vm.hasTimeFiltered(), true);
 
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
+	});
+
+	test('should close panel after clicking search button on desktop', function() {
+		$('body').append(agentSchedulesHtml);
+
+		initVm();
+
+		$('.new-teamschedule-time-filter').click();
+		$('.new-teamschedule-submit-buttons .btn-primary').click();
+
+		equal(vm.isPanelVisible(), false);
 	});
 
 	test('should restore show only night shifts toggle state after clicking cancel button on mobile', function() {

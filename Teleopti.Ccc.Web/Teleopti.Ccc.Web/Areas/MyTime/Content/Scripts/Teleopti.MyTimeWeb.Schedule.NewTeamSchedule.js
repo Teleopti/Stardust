@@ -566,7 +566,7 @@
 		);
 	}
 
-	function filterChangedCallback(momentDate) {
+	function filterChangedCallback(momentDate, keepPanelOpen) {
 		showLoadingGif();
 		vm.isAgentScheduleLoaded(false);
 		visibleAgentsIndexRange.start = 0;
@@ -579,7 +579,7 @@
 			vm.selectedDate().format('YYYY/MM/DD');
 
 		dataService.loadScheduleData(dateStr, vm.paging, vm.filter, function(schedules) {
-			vm.readScheduleData(schedules, dateStr);
+			vm.readScheduleData(schedules, dateStr, keepPanelOpen);
 
 			focusMySchedule();
 			fetchDataSuccessCallback();
