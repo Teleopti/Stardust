@@ -21,3 +21,5 @@
 | `npm run dev:watch`       | Watch and build the entire frontend   |
 | `npm run dev:build`       | Build the entire frontend in dev env  |
 | `npm run prod:build`      | Build the entire frontend in prod env |
+
+.
