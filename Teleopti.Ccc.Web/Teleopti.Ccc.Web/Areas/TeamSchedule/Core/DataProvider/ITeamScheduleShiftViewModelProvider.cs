@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		PersonWeekScheduleViewModel MakeWeekViewModel(
 				IPerson person,
 				IList<DateOnly> weekDays,
-				IDictionary<PersonDate, IScheduleDay> scheduleDays,
+				IScheduleRange scheduleRange,
 				IDictionary<DateOnly, IEnumerable<Guid>> peopleCanSeeUnpublishedSchedulesFor,
 				IDictionary<DateOnly, IEnumerable<Guid>> viewableConfidentialAbsenceAgents);
 

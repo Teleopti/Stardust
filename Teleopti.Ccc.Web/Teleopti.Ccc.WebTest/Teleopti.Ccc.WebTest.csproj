@@ -24,7 +24,7 @@
     <RestorePackages>true</RestorePackages>
     <WebGreaseLibPath>..\..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <TargetFrameworkProfile />
-	<NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -441,6 +441,7 @@
     <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamSchedulePermissionViewModelFactoryTest.cs" />
     <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelFactoryTest.cs" />
     <Compile Include="Core\TeamSchedule\ViewModelFactory\WfmTeamScheduleViewModelFactoryTest.cs" />
+    <Compile Include="Core\TeamSchedule\ViewModelFactory\WfmTeamScheduleViewModelFactoryTestNotUseFakeScheduleStorage.cs" />
     <Compile Include="Core\TeamsProviderTest.cs" />
     <Compile Include="Core\TranslatedTextsTest.cs" />
     <Compile Include="Core\WeekScheduleDomainDataProviderWeekScheduleTest.cs" />
