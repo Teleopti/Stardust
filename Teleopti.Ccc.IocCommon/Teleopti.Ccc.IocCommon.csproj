@@ -140,9 +140,9 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AuditTrailContextHandlersModule.cs" />
     <Compile Include="Configuration\AnalyticsUnitOfWorkModule.cs" />
     <Compile Include="Configuration\AspectsModule.cs" />
+    <Compile Include="Configuration\AuditTrailContextHandlersModule.cs" />
     <Compile Include="Configuration\BackToLegalShiftModule.cs" />
     <Compile Include="Configuration\BadgeCalculationModule.cs" />
     <Compile Include="Configuration\AbsenceModule.cs" />
