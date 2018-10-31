@@ -54,12 +54,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// Sets the row index to 0 when there's no data available in the source
 			setSelectedCellWhenNoSourceAvailable<IActivity>(GridType.Activity);
 
-			// Adds tehe new source entity to repository
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var activityRepository = new ActivityRepository(uow);
-				_gridColumnHelper.Add(activityRepository);
-			}
+			_gridColumnHelper.Add(null);
 			
 			gridControlActivities.Invalidate();
 
