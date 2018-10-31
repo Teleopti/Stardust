@@ -166,6 +166,10 @@
 				self.showOnlyNightShift() == true
 		);
 
+		if (!self.isHostAMobile) {
+			self.isPanelVisible(false);
+		}
+
 		self.loadedAgentIndex = 0;
 		self.lastAgentIndexInDom = 0;
 		self.filterChangedCallback(self.selectedDate());
@@ -199,7 +203,7 @@
 		setSelectedTeamSubscription();
 	};
 
-	self.readScheduleData = function(data, date) {
+	self.readScheduleData = function(data, date, keepPanelOpen) {
 		disposeSelectedDateSubscription();
 		disposeShowOnlyDayOffSubscription();
 		disposeShowOnlyNightShiftSubscription();
@@ -234,7 +238,7 @@
 		);
 		self.emptySearchResult(data.AgentSchedules.length == 0);
 
-		if (!self.emptySearchResult() && self.isPanelVisible()) {
+		if (!self.emptySearchResult() && !keepPanelOpen) {
 			self.isPanelVisible(false);
 		}
 
@@ -322,7 +326,7 @@
 				self.filter.onlyNightShift = value;
 				self.filter.searchNameText = self.searchNameText();
 
-				self.filterChangedCallback(self.selectedDate());
+				self.filterChangedCallback(self.selectedDate(), true);
 			}
 			self.hasTimeFiltered(value);
 			setShowOnlyDayOffSubscription();
