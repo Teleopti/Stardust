@@ -137,6 +137,15 @@
 	top: 10.5px;
 	right: 8px;
 }
+.new-teamschedule-team-filter-detail {
+	text-align: left;
+}
+.new-teamschedule-team-filter-detail p {
+	margin: 0;
+}
+.new-teamschedule-team-filter-disable-time .new-teamschedule-team-filter-detail-time {
+	text-decoration: line-through;
+}
 .new-teamschedule-view-nav .submenu li.new-teamschedule-filter-component {
 	width: 220px;
 	flex: 1 1 auto;
@@ -726,11 +735,13 @@ div.new-teamschedule-no-result-indicator {
 }
 .new-teamschedule-view.new-teamschedule-view-mobile,
 .new-teamschedule-view.new-teamschedule-view-ipad {
-	margin: 0;
 	padding: 0;
 	cursor: pointer;
 	overflow: hidden;
 	height: calc(100vh - 51px - 50px) !important;
+}
+.new-teamschedule-view.new-teamschedule-view-mobile {
+	margin: 0;
 }
 .new-teamschedule-view.new-teamschedule-view-mobile .new-teamschedule-table.relative,
 .new-teamschedule-view.new-teamschedule-view-ipad .new-teamschedule-table.relative {

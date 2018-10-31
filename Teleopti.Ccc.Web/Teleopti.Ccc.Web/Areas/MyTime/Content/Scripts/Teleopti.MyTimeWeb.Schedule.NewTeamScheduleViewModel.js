@@ -1,7 +1,8 @@
 ﻿Teleopti.MyTimeWeb.Schedule.NewTeamScheduleViewModel = function(
 	filterChangedCallback,
 	loadGroupAndTeams,
-	readScheduleDataCallback
+	readScheduleDataCallback,
+	rebuildTooltipForTimeFilterIcon
 ) {
 	var self = this,
 		constants = Teleopti.MyTimeWeb.Common.Constants,
@@ -260,6 +261,13 @@
 		callback && callback();
 	};
 
+	self.buildFilterDetails = function(title, startTimeStr, endTimeStr, onlyNightShiftStr) {
+		if (self.isHostAniPad || self.isHostAMobile) return '';
+
+		rebuildTooltipForTimeFilterIcon(title, startTimeStr, endTimeStr, onlyNightShiftStr);
+		return title;
+	};
+
 	function mergeRawTimeLine(rawTimeline, newTimeLine) {
 		rawTimeline = rawTimeline.concat(newTimeLine);
 
@@ -350,7 +358,7 @@
 			disposeShowOnlyNightShiftSubscription();
 
 			self.showOnlyNightShift(false);
-			self.hasTimeFiltered(false);
+
 			if (!self.isMobileEnabled) {
 				self.filter.onlyNightShift = false;
 
@@ -363,7 +371,16 @@
 				self.filter.isDayOff = value;
 				self.filter.searchNameText = self.searchNameText();
 
+				setTimeFilterData();
 				self.filterChangedCallback(self.selectedDate());
+			}
+
+			if (value) {
+				self.hasTimeFiltered(false);
+			} else {
+				self.hasTimeFiltered(
+					self.filter.filteredStartTimes.length > 0 || self.filter.filteredEndTimes.length > 0
+				);
 			}
 
 			setShowOnlyNightShiftSubscription();
