@@ -290,6 +290,7 @@
     <Compile Include="ResourceCalculation\ShiftProjectionCacheFactory.cs" />
     <Compile Include="ResourceCalculation\SkillsOnAgentsProvider.cs" />
     <Compile Include="ResourcePlanner\Hints\GetValidations.cs" />
+    <Compile Include="ResourcePlanner\Hints\PersonContractShiftBagHint.cs" />
     <Compile Include="ResourcePlanner\Hints\PreferenceHint.cs" />
     <Compile Include="Scheduling\AddReducedSkillDaysToStateHolder.cs" />
     <Compile Include="Scheduling\AgentsWithPreferences.cs" />
