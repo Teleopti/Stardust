@@ -3,14 +3,17 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
 	[TestFixture]
 	[ScheduleDictionaryPersistTest]
-	public class ScheduleDictionaryPersisterTest
+	public class ScheduleDictionaryPersisterTest : IIsolateSystem
 	{
 		public IScheduleDictionaryPersister Target;
 		public IScheduleDictionaryPersistTestHelper Helper;
@@ -32,6 +35,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			Target.Persist(schedules);
 
 			WithUnitOfWork.Do(() => PersonAssignments.LoadAll().Single().Person.Should().Be(person));
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
 		}
 	}
 }

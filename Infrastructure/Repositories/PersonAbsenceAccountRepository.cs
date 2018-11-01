@@ -36,12 +36,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						.SetFetchMode("Absence",FetchMode.Join)
 						.SetResultTransformer(Transformers.DistinctRootEntity)
 						.List<IPersonAbsenceAccount>();
-			return result.GroupBy(k => k.Person).ToDictionary(k => k.Key, v =>
+			return new dic(result.GroupBy(k => k.Person).ToDictionary(k => k.Key, v =>
 			{
 				IPersonAccountCollection collection = new PersonAccountCollection(v.Key);
 				v.ForEach(collection.Add);
 				return collection;
-			});
+			}));
 		}
 
 		public IDictionary<IPerson, IPersonAccountCollection> FindByUsers(IEnumerable<IPerson> persons)
@@ -58,12 +58,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					   .List<IPersonAbsenceAccount>());    
 			}
 
-			return result.GroupBy(k => k.Person).ToDictionary(k => k.Key, v =>
+			return new dic(result.GroupBy(k => k.Person).ToDictionary(k => k.Key, v =>
 			{
 				IPersonAccountCollection collection = new PersonAccountCollection(v.Key);
 				v.ForEach(collection.Add);
 				return collection;
-			});
+			}));
 		}
 
 		public IDictionary<IPerson, IPersonAccountCollection> FindByUsers(IEnumerable<IPerson> persons, DateOnlyPeriod period)
@@ -78,12 +78,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.List<IPersonAbsenceAccount>());
 			}
 			
-			return result.GroupBy(k => k.Person).ToDictionary(k => k.Key, v =>
+			return new dic(result.GroupBy(k => k.Person).ToDictionary(k => k.Key, v =>
 			{
 				IPersonAccountCollection collection = new PersonAccountCollection(v.Key);
 				v.ForEach(collection.Add);
 				return collection;
-			});
+			}));
 		}
 
 		public IPersonAccountCollection Find(IPerson person)
@@ -99,6 +99,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				personAccountCollection.Add(personAbsenceAccount);
 			}
 			return personAccountCollection;
+		}
+
+		private class dic : AbstractDictionary<IPerson, IPersonAccountCollection>
+		{
+			public dic(IDictionary<IPerson, IPersonAccountCollection> dictionary) : base(dictionary)
+			{
+			}
+
+			public override IPersonAccountCollection this[IPerson key]
+			{
+				get {
+					if (base.TryGetValue(key, out var collection))
+					{
+						return collection;
+					}
+					collection = new PersonAccountCollection(key);
+					base.Add(key,collection);
+					return collection;
+				}
+			}
 		}
 	}
 }

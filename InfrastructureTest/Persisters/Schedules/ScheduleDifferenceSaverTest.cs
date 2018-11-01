@@ -12,14 +12,16 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
 	[InfrastructureTest]
-	public class ScheduleDifferenceSaverTest
+	public class ScheduleDifferenceSaverTest : IIsolateSystem
 	{
 		public IScheduleDifferenceSaver Target;
 		public IPersonAssignmentRepository PersonAssignmentRepository;
@@ -85,6 +87,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				session.Flush();
 				session.Transaction.Commit();
 			}
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
 		}
 	}
 }

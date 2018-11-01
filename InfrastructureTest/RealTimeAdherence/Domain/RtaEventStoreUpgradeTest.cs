@@ -4,9 +4,11 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Domain;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
@@ -14,7 +16,7 @@ using Teleopti.Wfm.Adherence.Domain.Service;
 namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 {
 	[PrincipalAndStateTest]
-	public class RtaEventStoreUpgradeTest
+	public class RtaEventStoreUpgradeTest : IIsolateSystem
 	{
 		public IRtaEventStore Events;
 		public IRtaEventStoreTester EventsT;
@@ -70,6 +72,11 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 				WithUnitOfWork.Get(() => EventsT.LoadAllForTest())
 					.OfType<PersonStateChangedEvent>().Single().BelongsToDate.Should().Be("2018-10-31".Date());
 			}
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
 		}
 	}
 }
