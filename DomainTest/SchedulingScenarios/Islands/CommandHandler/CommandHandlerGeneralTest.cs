@@ -196,8 +196,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 		{
 			var skillA = new Skill("A").WithId();
 			var skillB = new Skill("B").WithId();
-			var agentsA = Enumerable.Range(0, 10).Select(x => new Person().WithPersonPeriod(skillA));
-			var agentsAB = Enumerable.Range(0, 10).Select(x => new Person().WithPersonPeriod(skillA, skillB));
+			var agentsA = Enumerable.Range(0, 10).Select(x => new Person().WithPersonPeriod(skillA).WithId());
+			var agentsAB = Enumerable.Range(0, 10).Select(x => new Person().WithPersonPeriod(skillA, skillB).WithId());
 			agentsA.Union(agentsAB).ForEach(x => PersonRepository.Has(x));
 
 			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod());
