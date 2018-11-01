@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
@@ -58,25 +59,6 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 			var data = Target.Build(null, new[] {teamId}).First();
 
 			data.Agents.Single().Days.Select(x => x.Date).Should().Have.SameValuesAs("20180924", "20180925", "20180926", "20180927", "20180928", "20180929", "20180930");
-		}		
-		
-		[Test]
-		public void ShouldDisplayAdherenceOnDayOfAgentTimeZone()
-		{
-			Now.Is("2018-10-02 23:00");
-			var teamId = Guid.NewGuid();
-			var personId = Guid.NewGuid();
-			Database
-				.WithTeam(teamId)
-				.WithAgent(personId, "erik", TimeZoneInfoFactory.StockholmTimeZoneInfo())
-				.WithAssignment("2018-10-02")
-				.WithAssignedActivity("2018-10-02 23:00", "2018-10-03 02:00")
-				.WithHistoricalStateChange("2018-10-02 23:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
-			Now.Is("2018-10-04 23:00");
-
-			var data = Target.Build(null, new[] {teamId}).First();
-
-			data.Agents.Single().Days.Last().Adherence.Should().Be("100");
-		}		
+		}				
 	}
 }

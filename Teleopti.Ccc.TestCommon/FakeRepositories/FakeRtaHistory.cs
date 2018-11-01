@@ -3,6 +3,7 @@ using System.Drawing;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence.Domain;
 using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.Events;
@@ -13,30 +14,38 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakeRtaHistory
 	{
 		private readonly IRtaEventStore _store;
+		private readonly BelongsToDateMapper _belongsToDate;
 
-		public FakeRtaHistory(IRtaEventStore store)
+		public FakeRtaHistory(IRtaEventStore store, BelongsToDateMapper belongsToDate)
 		{
 			_store = store;
+			_belongsToDate = belongsToDate;
 		}
 
-		public FakeRtaHistory ShiftStart(Guid personId, string shiftStartTime, string shiftEndTime)
+		public FakeRtaHistory ShiftStart(Guid personId, string shiftStartTime, string shiftEndTime) =>
+			ShiftStart(personId, null, shiftStartTime, shiftEndTime);
+
+		public FakeRtaHistory ShiftStart(Guid personId, string date, string shiftStartTime, string shiftEndTime)
 		{
 			_store.Add(new PersonShiftStartEvent
 			{
 				PersonId = personId,
-				BelongsToDate = shiftStartTime.Date(),
+				BelongsToDate = belongsToDate(personId, shiftStartTime, date),
 				ShiftStartTime = shiftStartTime.Utc(),
 				ShiftEndTime = shiftEndTime.Utc()
 			}, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion);
 			return this;
 		}
-		
-		public FakeRtaHistory ShiftEnd(Guid personId, string shiftStartTime, string shiftEndTime)
+
+		public FakeRtaHistory ShiftEnd(Guid personId, string shiftStartTime, string shiftEndTime) =>
+			ShiftEnd(personId, null, shiftStartTime, shiftEndTime);
+
+		public FakeRtaHistory ShiftEnd(Guid personId, string date, string shiftStartTime, string shiftEndTime)
 		{
 			_store.Add(new PersonShiftEndEvent
 			{
 				PersonId = personId,
-				BelongsToDate = shiftStartTime.Date(),
+				BelongsToDate = belongsToDate(personId, shiftStartTime, date),
 				ShiftStartTime = shiftStartTime.Utc(),
 				ShiftEndTime = shiftEndTime.Utc()
 			}, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion);
@@ -44,14 +53,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public FakeRtaHistory StateChanged(Guid personId, string time) =>
-			StateChanged(personId, time, null, null, null, null, null, null);
+			StateChanged(personId, time, null, null, null, null, null, null, null);
 
-		public FakeRtaHistory StateChanged(Guid personId, string time, string state, string activity, Color? activityColor, string rule, Color? ruleColor, Adherence? adherence)
+		public FakeRtaHistory StateChanged(Guid personId, string time, string date, string state, string activity, Color? activityColor, string rule, Color? ruleColor, Adherence? adherence)
 		{
 			_store.Add(new PersonStateChangedEvent
 			{
 				PersonId = personId,
-				BelongsToDate = time.Date(),
+				BelongsToDate = belongsToDate(personId, time, date),
 				Timestamp = time.Utc(),
 				StateName = state,
 				ActivityName = activity,
@@ -64,14 +73,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public FakeRtaHistory RuleChanged(Guid personId, string time, string rule) =>
-			RuleChanged(personId, time, null, null, null, rule, null, null);
+			RuleChanged(personId, time, null, null, null, null, rule, null, null);
 
-		public FakeRtaHistory RuleChanged(Guid personId, string time, string state, string activity, Color? activityColor, string rule, Color? ruleColor, Adherence? adherence)
+		public FakeRtaHistory RuleChanged(Guid personId, string time, string state, string activity, Color? activityColor, string rule, Color? ruleColor, Adherence? adherence) =>
+			RuleChanged(personId, time, null, state, activity, activityColor, rule, ruleColor, adherence);
+
+		public FakeRtaHistory RuleChanged(Guid personId, string time, string date, string state, string activity, Color? activityColor, string rule, Color? ruleColor, Adherence? adherence)
 		{
 			_store.Add(new PersonRuleChangedEvent
 			{
 				PersonId = personId,
-				BelongsToDate = time.Date(),
+				BelongsToDate = belongsToDate(personId, time, date),
 				Timestamp = time.Utc(),
 				StateName = state,
 				ActivityName = activity,
@@ -84,14 +96,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public FakeRtaHistory ArrivedLateForWork(Guid personId, string shiftStart, string time) =>
-			ArrivedLateForWork(personId, shiftStart, time, null, null, null, null, null, null);
+			ArrivedLateForWork(personId, shiftStart, time, null, null, null, null, null, null, null);
 
-		public FakeRtaHistory ArrivedLateForWork(Guid personId, string shiftStart, string time, string state, string activity, Color? activityColor, string rule, Color? ruleColor, Adherence? adherence)
+		public FakeRtaHistory ArrivedLateForWork(Guid personId, string shiftStart, string time, string state, string activity, Color? activityColor, string rule, Color? ruleColor, Adherence? adherence) =>
+			ArrivedLateForWork(personId, shiftStart, time, null, state, activity, activityColor, rule, ruleColor, adherence);
+
+		public FakeRtaHistory ArrivedLateForWork(Guid personId, string shiftStart, string time, string date, string state, string activity, Color? activityColor, string rule, Color? ruleColor, Adherence? adherence)
 		{
 			_store.Add(new PersonArrivedLateForWorkEvent
 			{
 				PersonId = personId,
-				BelongsToDate = shiftStart.Date(),
+				BelongsToDate = belongsToDate(personId, time, date),
 				Timestamp = time.Utc(),
 				ShiftStart = shiftStart.Utc(),
 				StateName = state,
@@ -104,12 +119,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeRtaHistory AdherenceDayStart(Guid personId, string time, string state, string activity, Color? activityColor, string rule, Color? ruleColor, Adherence? adherence)
+		public FakeRtaHistory AdherenceDayStart(Guid personId, string time, string state, string activity, Color? activityColor, string rule, Color? ruleColor, Adherence? adherence) =>
+			AdherenceDayStart(personId, time, null, state, activity, activityColor, rule, ruleColor, adherence);
+
+		public FakeRtaHistory AdherenceDayStart(Guid personId, string time, string date, string state, string activity, Color? activityColor, string rule, Color? ruleColor, Adherence? adherence)
 		{
 			_store.Add(new PersonAdherenceDayStartEvent
 			{
 				PersonId = personId,
-				BelongsToDate = time.Date(),
+				BelongsToDate = belongsToDate(personId, time, date),
 				Timestamp = time.Utc(),
 				StateName = state,
 				ActivityName = activity,
@@ -120,5 +138,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			}, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion);
 			return this;
 		}
+
+		private DateOnly? belongsToDate(Guid personId, string time, string date) =>
+			date?.Date() ??
+			_belongsToDate.BelongsToDate(personId, time.Utc(), time.Utc());
 	}
 }
