@@ -49,35 +49,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			var userLocks = _gridLockManager.LockInfos();
 			var events = new List<SchedulingWasOrdered>();
 			var islands = CreateIslands(command.Period, command);
+			var allAgentsToSchedule = RemoveAgentsWithHints(command.AgentsToSchedule, command.Period);
 			if (teamScheduling(command))
 			{
-				var agentsToSchedule = command.AgentsToSchedule;
-				var agentsAndSkills = _crossAgentsAndSkills.Execute(islands, agentsToSchedule);
-				addEvent(events, command, agentsToSchedule, agentsAndSkills.Agents, agentsAndSkills.Skills, userLocks);
+				var agentsAndSkills = _crossAgentsAndSkills.Execute(islands, allAgentsToSchedule);
+				addEvent(events, command, allAgentsToSchedule, agentsAndSkills.Agents, agentsAndSkills.Skills, userLocks);
 			}
 			else
 			{
 				foreach (var island in islands)
 				{
 					var agentsInIslands = island.AgentsInIsland().ToArray();
-					var agentsToSchedule = command.AgentsToSchedule;
-					addEvent(events, command, agentsToSchedule, agentsInIslands.Select(x => x.Id.Value), island.SkillIds(), userLocks);
+					addEvent(events, command, allAgentsToSchedule, agentsInIslands.Select(x => x.Id.Value), island.SkillIds(), userLocks);
 				}
 			}
 
 			_eventPublisher.Publish(events.ToArray());
 		}
 
-		private void addEvent(ICollection<SchedulingWasOrdered> events, SchedulingCommand command, IEnumerable<IPerson> agentsToSchedule, 
+		private static void addEvent(ICollection<SchedulingWasOrdered> events, SchedulingCommand command, IEnumerable<IPerson> allAgentsToSchedule, 
 			IEnumerable<Guid> agentsInIslandsIds, IEnumerable<Guid> skillsInIslandsIds, IEnumerable<LockInfo> userLocks)
 		{
-			var agentsToScheduleInIsland = agentsToSchedule.Where(x => agentsInIslandsIds.Contains(x.Id.Value));
-			var filteredAgentsToSchedule = RemoveAgentsWithHints(agentsToScheduleInIsland, command.Period).Select(x => x.Id.Value);
-			if (filteredAgentsToSchedule.Any())
+			var agentsToScheduleInIsland = allAgentsToSchedule.Where(x => agentsInIslandsIds.Contains(x.Id.Value)).ToArray();
+			if (agentsToScheduleInIsland.Any())
 			{
 				events.Add(new SchedulingWasOrdered
 				{
-					Agents = filteredAgentsToSchedule,
+					Agents = agentsToScheduleInIsland.Select(x => x.Id.Value),
 					AgentsInIsland = agentsInIslandsIds,
 					StartDate = command.Period.StartDate,
 					EndDate = command.Period.EndDate,
