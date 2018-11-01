@@ -9,7 +9,7 @@ import { ReportConfig } from '../../models/ReportConfig.model';
 	styleUrls: ['./workspace.component.scss']
 })
 export class WorkspaceComponent implements OnInit {
-	@Input() initialized: bool;
+	@Input() initialized: boolean;
 	@Input() reportConfig: ReportConfig;
 
 	constructor(private pbiService: PowerBIService) {
