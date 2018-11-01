@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			}
 		}
 
-		[UnitOfWork]
+		[ReadonlyUnitOfWork]
 		[TestLog]
 		protected virtual IEnumerable<IPerson> RemoveAgentsWithHints(IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			}
 		}
 
-		[UnitOfWork]
+		[ReadonlyUnitOfWork]
 		protected virtual IEnumerable<Island> CreateIslands(DateOnlyPeriod period, SchedulingCommand command)
 		{
 			using (CommandScope.Create(command))
