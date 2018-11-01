@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 
 	public class GroupWeekScheduleViewModel
 	{
+		public GroupWeekScheduleViewModel() => PersonWeekSchedules = new List<PersonWeekScheduleViewModel>();
 		public List<PersonWeekScheduleViewModel> PersonWeekSchedules { get; set; }
 		public int Total { get; set; }
 		public string Keyword { get; set; }

@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
-using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Extensions;
 using Teleopti.Interfaces.Domain;
 
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly ITeamScheduleShiftViewModelProvider _shiftViewModelProvider;
 		private readonly IPeopleSearchProvider _searchProvider;
 		private readonly IPersonRepository _personRepository;
-		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly IToggleManager _toggleManager;
 		private readonly IUserUiCulture _userUiCulture;
 		private readonly IScheduleDayProvider _scheduleDayProvider;
@@ -36,7 +34,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			ITeamScheduleShiftViewModelProvider shiftViewModelProvider,
 			IPeopleSearchProvider searchProvider,
 			IPersonRepository personRepository,
-			IIanaTimeZoneProvider ianaTimeZoneProvider,
 			IToggleManager toggleManager,
 			IUserUiCulture userUiCulture,
 			IScheduleDayProvider scheduleDayProvider)
@@ -46,7 +43,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_shiftViewModelProvider = shiftViewModelProvider;
 			_searchProvider = searchProvider;
 			_personRepository = personRepository;
-			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 			_toggleManager = toggleManager;
 			_userUiCulture = userUiCulture;
 			_scheduleDayProvider = scheduleDayProvider;
@@ -103,6 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var people = _personRepository.FindPeople(personIds);
 
 			var permittedPeople = _searchProvider.GetPermittedPersonList(people, scheduleDate, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			if(!permittedPeople.Any()) return new GroupScheduleViewModel();
 
 			var peopleCanViewUnpublishedFor = _searchProvider
 					.GetPermittedPersonIdList(permittedPeople, scheduleDate, DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)
@@ -168,13 +165,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			return personScheduleDaysToSort;
 		}
 
-		private List<IPerson> getPermittedPersons(Guid[] targetIds, DateOnlyPeriod period)
-		{
-			var matchedPersons = _personRepository.FindPeople(targetIds);
-			return _searchProvider
-				.GetPermittedPersonList(matchedPersons, period, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules)
-				.ToList();
-		}
 		private GroupScheduleViewModel createViewModelForPeople(IList<Guid> targetIds, SearchDaySchedulesInput input)
 		{
 			var date = input.DateInUserTimeZone;
@@ -185,7 +175,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			foreach (var batch in targetIds.Batch(251))
 			{
-				var batchPersons = _personRepository.FindPeople(targetIds);
+				var batchPersons = _personRepository.FindPeople(batch);
 				var batchPermittedPersons = _searchProvider
 					.GetPermittedPersonList(batchPersons, date, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules)
 					.ToList();
@@ -212,11 +202,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				{
 					return new GroupScheduleViewModel
 					{
-						Schedules = new List<GroupScheduleShiftViewModel>(),
 						Total = targetIds.Count
 					};
 				}
 			}
+
+			if(!permittedPersons.Any()) return new GroupScheduleViewModel();
 
 			if (!input.IsOnlyAbsences)
 			{
@@ -292,19 +283,27 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 				batchPermittedPersons.ForEach(pg =>
 				{
-					permittedPeopleByDate.Add(pg.Key, pg.Value);
-					pg.Value.ForEach(p => permittedPeopleIds.Add(p.Id.GetValueOrDefault()));
+					if (pg.Value.Any())
+					{
+						permittedPeopleByDate.Add(pg.Key, pg.Value);
+						pg.Value.ForEach(p => permittedPeopleIds.Add(p.Id.GetValueOrDefault()));
+					}
 				});
 
 				if (isResultTooMany(permittedPeopleIds))
 				{
-					return new GroupWeekScheduleViewModel
+					return new GroupWeekScheduleViewModel()
 					{
-						PersonWeekSchedules = new List<PersonWeekScheduleViewModel>(),
 						Total = permittedPeopleIds.Count
 					};
 				}
 			}
+
+			if (!permittedPeopleByDate.Any())
+			{
+				return new GroupWeekScheduleViewModel();
+			}
+
 			var allPermittedPeople = permittedPeopleByDate
 					.SelectMany(pg => pg.Value)
 					.ToLookup(p => p.Id)

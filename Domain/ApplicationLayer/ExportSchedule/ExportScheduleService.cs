@@ -46,11 +46,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 		{
 			var processResult = new ProcessExportResult();
 			var people = peopleToExport(input);
+			if (!people.Any()) return processResult;
+
 			if (people.Count > 1000)
 			{
-				processResult.FailReason = string.Format(Resources.MaximumAgentToExport, people.Count); 
+				processResult.FailReason = string.Format(Resources.MaximumAgentToExport, people.Count);
 				return processResult;
 			}
+
 			var exportData = prepareExportData(input, people);
 
 			var excelCreator = new TeamsExcelCreator();
