@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			{
 				var matchedPersons = _personRepository.FindPeople(batch);
 				var permittedPeopleBatch = _searchProvider
-					.GetPermittedPersonList(matchedPersons, input.StartDate, DefinedRaptorApplicationFunctionPaths.ViewSchedules);
+					.GetPermittedPersonList(matchedPersons, input.StartDate, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 				people.AddRange(permittedPeopleBatch);
 			}
 			return people;
@@ -105,11 +105,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			}
 			var scheduleDayLookup = _scheduleProvider.GetScheduleDays(period, peopleToExport, scenario).ToLookup(x => x.Person);
 
-			var hasPermissionToViewUnpublished =
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths
-					.ViewUnpublishedSchedules);
-			var hasPermissionToViewConfidential =
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential);
+			var peoplePermittedToViewUnpublished = peopleToExport.Where(p =>
+				_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules,
+					input.StartDate, p)).Select(p => p.Id.GetValueOrDefault());
+			var peoplePermittedToViewConfidential = peopleToExport.Where(p =>
+				_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential, input.StartDate,
+					p)).Select(p => p.Id.GetValueOrDefault());
 			var nameDescriptionSetting = _commonAgentNameProvider.CommonAgentNameSettings;
 
 			var selectedOptionalColumns = input.OptionalColumnIds == null ? new List<IOptionalColumn>()
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 				.Contains(p.Id.GetValueOrDefault())).OrderBy(t => t.Name).ToList();
 
 			var personRows = scheduleDayLookup.Select(sl => 
-			createPersonScheduleRow(sl, selectedOptionalColumns, timeZone, hasPermissionToViewUnpublished, hasPermissionToViewConfidential, nameDescriptionSetting))
+			createPersonScheduleRow(sl, selectedOptionalColumns, timeZone, peoplePermittedToViewUnpublished.Contains(sl.Key.Id.GetValueOrDefault()), peoplePermittedToViewConfidential.Contains(sl.Key.Id.GetValueOrDefault()), nameDescriptionSetting))
 			.OrderBy(r => r.Name).ToArray();
 
 			var optionalColumnNames = selectedOptionalColumns.Select(oc => oc.Name).ToArray();
