@@ -75,9 +75,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		private void addEvent(ICollection<SchedulingWasOrdered> events, SchedulingCommand command, IEnumerable<IPerson> agentsToSchedule, 
 			IEnumerable<Guid> agentsInIslandsIds, IEnumerable<Guid> skillsInIslandsIds, IEnumerable<LockInfo> userLocks)
 		{
-			if (agentsToSchedule.Any())
+			var agentsToScheduleInIsland = agentsToSchedule.Where(x => agentsInIslandsIds.Contains(x.Id.Value));
+			if (agentsToScheduleInIsland.Any())
 			{
-				var filteredAgentsToSchedule = _excludeAgentsWithHints.Execute(agentsToSchedule, command.Period, null).Select(x => x.Id.Value);
+				var filteredAgentsToSchedule = _excludeAgentsWithHints.Execute(agentsToScheduleInIsland, command.Period, null).Select(x => x.Id.Value);
 				events.Add(new SchedulingWasOrdered
 				{
 					Agents = filteredAgentsToSchedule,

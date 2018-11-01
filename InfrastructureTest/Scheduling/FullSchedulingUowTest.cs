@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -21,6 +22,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 {
+	[Toggle(Toggles.ResourcePlanner_FasterSeamlessPlanningForPreferences_78286)]
+	[Ignore("To be fixed")]
+	public class FullSchedulingUowTest_EnabledToggle : FullSchedulingUowTest
+	{
+	}
+	
 	[DatabaseTest]
 	public class FullSchedulingUowTest: IIsolateSystem
 	{
