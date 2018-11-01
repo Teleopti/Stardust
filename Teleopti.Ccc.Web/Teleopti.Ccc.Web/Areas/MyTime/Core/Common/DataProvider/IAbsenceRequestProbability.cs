@@ -1,6 +1,6 @@
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
+namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 {
 	public interface IAbsenceRequestProbability
 	{
