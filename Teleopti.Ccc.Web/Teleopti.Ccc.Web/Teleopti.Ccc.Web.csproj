@@ -186,6 +186,12 @@
     <Reference Include="Microsoft.Build.Engine" />
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=3.19.8.16603, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.19.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory.Platform, Version=3.19.8.16603, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.19.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Owin.4.0.0\lib\net451\Microsoft.Owin.dll</HintPath>
     </Reference>
@@ -200,6 +206,9 @@
     </Reference>
     <Reference Include="Microsoft.Owin.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Owin.Security.4.0.0\lib\net451\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.PowerBI.Api, Version=2.0.14.18205, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.PowerBI.Api.2.0.14\lib\portable-net45+win+wpa81+MonoAndroid10+MonoTouch10+xamarinios10+xamarinmac20\Microsoft.PowerBI.Api.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.dll</HintPath>
@@ -224,6 +233,9 @@
     <Reference Include="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Microsoft.ReportViewer.2015.12.0.2.2402\lib\net40\Microsoft.ReportViewer.WebForms.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Rest.ClientRuntime, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Rest.ClientRuntime.2.0.1\lib\net45\Microsoft.Rest.ClientRuntime.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ServiceBus, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\WindowsAzure.ServiceBus.3.4.5\lib\net45-full\Microsoft.ServiceBus.dll</HintPath>
@@ -275,6 +287,7 @@
       <HintPath>..\..\packages\Stardust.Manager.1.0.0.837\lib\net451\Stardust.Manager.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Diagnostics.DiagnosticSource.4.4.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
@@ -286,6 +299,7 @@
     </Reference>
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
@@ -359,6 +373,7 @@
       <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml.Linq" />
@@ -384,6 +399,8 @@
     <Compile Include="Areas\Global\ChatConfigurationController.cs" />
     <Compile Include="Areas\Global\TenantCredential.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormExtensions.cs" />
+    <Compile Include="Areas\PmNextGen\Controllers\PowerBIReportController.cs" />
+    <Compile Include="Areas\PmNextGen\PmNextGenAreaRegistration.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleDayOffViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleShiftViewModel.cs" />
@@ -417,6 +434,7 @@
     <Compile Include="Areas\Global\Models\GroupPagesViewModel.cs" />
     <Compile Include="Areas\Global\FavoriteSearchController.cs" />
     <Compile Include="Areas\Global\FavoriteSearchFormData.cs" />
+    <Compile Include="Areas\Global\DataProtectionController.cs" />
     <Compile Include="Areas\Global\Core\GroupPageViewModelFactory.cs" />
     <Compile Include="Areas\Global\DataTokenController.cs" />
     <Compile Include="Areas\Global\ScenarioController.cs" />
@@ -1492,8 +1510,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="WFM\ai.js" />
-    <Content Include="WFM\appInsights.js" />
     <Content Include="WFM\app\api-access\api-access.routes.js" />
     <Content Include="WFM\app\api-access\api-access.start.controller.js" />
     <Content Include="WFM\app\api-access\_modules.js" />
@@ -1573,10 +1589,6 @@
     <Content Include="WFM\app\people\people.start.controller.js" />
     <Content Include="WFM\app\people\_modules.js" />
     <Content Include="WFM\app\permissions\functionsrefact\permissions.function.component.js" />
-    <Content Include="WFM\app\pm\pm.default.controller.js" />
-    <Content Include="WFM\app\pm\pm.routes.js" />
-    <Content Include="WFM\app\pm\pm.start.controller.js" />
-    <Content Include="WFM\app\pm\_modules.js" />
     <Content Include="WFM\app\reports\audit.controller.spec.js" />
     <Content Include="WFM\app\forecasting\component\forecast.chart.component.js" />
     <Content Include="WFM\app\forecasting\html\modify.html" />
@@ -1938,8 +1950,6 @@
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.bootstrapCommon.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.permissions.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.toggles.js" />
-    <Content Include="WFM\index_desktop_client.tpl.html" />
-    <Content Include="WFM\index.tpl.html" />
     <Content Include="WFM\app\app_desktop_client.js" />
     <Content Include="WFM\app\forecasting\routes.js" />
     <Content Include="WFM\app\forecasting\html\skillCreate.html" />
@@ -2823,6 +2833,7 @@
     <Folder Include="Areas\Mart\Views\Shared\" />
     <Folder Include="Areas\MyTime\Core\BadgeLeaderBoardReport\DataProvider\" />
     <Folder Include="Areas\MyTime\Core\Mapping\" />
+    <Folder Include="Areas\PmNextGen\Models\" />
     <Folder Include="Areas\SSO\Views\Authentication\" />
     <Folder Include="Areas\Start\Views\Config\" />
     <Folder Include="Areas\TeamSchedule\Views\TeamScheduleData\" />
