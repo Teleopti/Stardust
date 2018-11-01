@@ -294,7 +294,6 @@
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingPreferenceHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingPreviousShiftNotMatchingEachOtherHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\GetValidationsTest.cs" />
-    <Compile Include="ResourcePlanner\Hints\PersonContractShiftBagHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\PreferenceHintDesktopTest.cs" />
     <Compile Include="ResourcePlanner\Hints\PreferenceHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\ScheduleStartOnWrongDateHintTest.cs" />
