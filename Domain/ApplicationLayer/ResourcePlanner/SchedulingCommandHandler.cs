@@ -78,9 +78,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		private SchedulingWasOrdered createEvent(SchedulingCommand command, IEnumerable<IPerson> agentsToSchedule, IEnumerable<Guid> agentsInIslandsIds, 
 			IEnumerable<Guid> skillIds, IEnumerable<LockInfo> userLocks)
 		{
-			//preferenceprovider? wrong or not needed?
-			var filteredAgentsToSchedule = _excludeAgentsWithHints.Execute(agentsToSchedule, command.Period,
-				new FixedBlockPreferenceProvider(new SchedulingOptions())).Select(x => x.Id.Value);
+			var filteredAgentsToSchedule = _excludeAgentsWithHints.Execute(agentsToSchedule, command.Period, null).Select(x => x.Id.Value);
 			return new SchedulingWasOrdered
 			{
 				Agents = filteredAgentsToSchedule,
