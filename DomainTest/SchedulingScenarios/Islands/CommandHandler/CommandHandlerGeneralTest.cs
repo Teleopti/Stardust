@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
@@ -17,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 	public class CommandHandlerGeneralTest : ResourcePlannerCommandHandlerTest
 	{
 		public FakeEventPublisher EventPublisher;
-		public FakePersonRepository PersonRepository;
 		public MergeIslandsSizeLimit MergeIslandsSizeLimit;
 
 		[Test]
@@ -106,21 +104,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 
 			var @event = EventPublisher.PublishedEvents.OfType<IIslandInfo>().Single();
 			@event.Agents.Should().Have.SameValuesAs(@event.AgentsInIsland);
-		}
-
-		[Test]
-		public void ShouldSetAgentsToOptimizeToAllInIslandIfNullIsPassed()
-		{
-			var skill = new Skill().WithId();
-			var agent1 = new Person().WithId().WithPersonPeriod(skill);
-			var agent2 = new Person().WithId().WithPersonPeriod(skill);
-			PersonRepository.Has(agent1);
-			PersonRepository.Has(agent2);
-
-			ExecuteTarget(new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), null);
-
-			var @event = EventPublisher.PublishedEvents.OfType<IIslandInfo>().Single();
-			@event.Agents.Should().Have.SameValuesAs(agent1.Id.Value, agent2.Id.Value);
 		}
 
 		[Test]
@@ -229,7 +212,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			PersonRepository.Has(agent1);
 			PersonRepository.Has(agent2);
 
-			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod(),null, TeamBlockType.Team);
+			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod(), new[]{agent1, agent2}, TeamBlockType.Team);
 
 			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Single().Agents.Count().Should().Be.EqualTo(2);
 		}

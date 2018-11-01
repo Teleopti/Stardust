@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 	{
 		private readonly IEventPublisher _eventPublisher;
 		private readonly IGridlockManager _gridLockManager;
-		private readonly IAllStaff _allStaff;
 		private readonly CrossAgentsAndSkills _crossAgentsAndSkills;
 		private readonly CreateIslands _createIslands;
 		private readonly IExcludeAgentsWithHints _excludeAgentsWithHints;
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 
 		public SchedulingCommandHandler(IEventPublisher eventPublisher, 
 				IGridlockManager gridLockManager,
-				IAllStaff allStaff,
 				ISchedulingOptionsProvider schedulingOptionsProvider,
 				CrossAgentsAndSkills crossAgentsAndSkills,
 				CreateIslands createIslands,
@@ -38,7 +36,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		{
 			_eventPublisher = eventPublisher;
 			_gridLockManager = gridLockManager;
-			_allStaff = allStaff;
 			_schedulingOptionsProvider = schedulingOptionsProvider;
 			_crossAgentsAndSkills = crossAgentsAndSkills;
 			_createIslands = createIslands;
@@ -54,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			var islands = CreateIslands(command.Period, command);
 			if (teamScheduling(command))
 			{
-				var agentsToSchedule = command.AgentsToSchedule ?? AllAgents_DeleteThisLater(command).Where(x => !x.IsExternalAgent);
+				var agentsToSchedule = command.AgentsToSchedule;
 				var agentsAndSkills = _crossAgentsAndSkills.Execute(islands, agentsToSchedule);
 				addEvent(events, command, agentsToSchedule, agentsAndSkills.Agents, agentsAndSkills.Skills, userLocks);
 			}
@@ -63,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				foreach (var island in islands)
 				{
 					var agentsInIslands = island.AgentsInIsland().ToArray();
-					var agentsToSchedule = command.AgentsToSchedule ?? agentsInIslands;
+					var agentsToSchedule = command.AgentsToSchedule;
 					addEvent(events, command, agentsToSchedule, agentsInIslands.Select(x => x.Id.Value), island.SkillIds(), userLocks);
 				}
 			}
@@ -103,12 +100,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			return _excludeAgentsWithHints.Execute(agents, period, null);
 		}
 
-		//REMOVE ME WHEN SCHEDULING + ISLANDS WORKS
-		[UnitOfWork]
-		public virtual IEnumerable<IPerson> AllAgents_DeleteThisLater(SchedulingCommand command)
-		{
-			return _allStaff.Agents(command.Period);
-		}
 		private bool teamScheduling(SchedulingCommand command)
 		{
 			using (CommandScope.Create(command))
@@ -116,7 +107,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				return _schedulingOptionsProvider.Fetch(null).UseTeam;
 			}
 		}
-		//
 
 		[UnitOfWork]
 		protected virtual IEnumerable<Island> CreateIslands(DateOnlyPeriod period, SchedulingCommand command)

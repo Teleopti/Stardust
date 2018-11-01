@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -16,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 	[TestFixture(SUT.Scheduling)]
 	[TestFixture(SUT.DayOffOptimization)]
 	[DomainTest]
-	public abstract class ResourcePlannerCommandHandlerTest
+	public abstract class ResourcePlannerCommandHandlerTest : ITestInterceptor
 	{
 		private readonly SUT _sut;
 
@@ -25,6 +28,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 		public DayOffOptimizationCommandHandler DayOffOptimizationCommandHandler;
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
+		public FakePersonRepository PersonRepository;
 
 		protected ResourcePlannerCommandHandlerTest(SUT sut)
 		{
@@ -38,12 +42,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 		
 		protected ICommandIdentifier ExecuteTarget(DateOnlyPeriod period)
 		{
-			return ExecuteTarget(period, null);
+			return ExecuteTarget(period, PersonRepository.LoadAll());
 		}
 		
 		protected ICommandIdentifier ExecuteTarget(DateOnlyPeriod period, TeamBlockType teamBlockType)
 		{
-			return ExecuteTarget(period, null, teamBlockType);
+			return ExecuteTarget(period, PersonRepository.LoadAll(), teamBlockType);
 		}
 
 		protected ICommandIdentifier ExecuteTarget(DateOnlyPeriod period, IEnumerable<IPerson> agents)
@@ -91,6 +95,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 				default:
 					throw new NotSupportedException();
 			}
+		}
+
+		public virtual void OnBefore()
+		{
+			//hack to remove logon user when using "loadall" in executetarget methods
+			PersonRepository.LoadAll().ToArray().ForEach(x => PersonRepository.Remove(x));
 		}
 	}
 }
