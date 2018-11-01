@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var people = _personRepository.FindPeople(personIds);
 
 			var permittedPeople = _searchProvider.GetPermittedPersonList(people, scheduleDate, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
-			if(!permittedPeople.Any()) return new GroupScheduleViewModel();
+			if (!permittedPeople.Any()) return new GroupScheduleViewModel();
 
 			var peopleCanViewUnpublishedFor = _searchProvider
 					.GetPermittedPersonIdList(permittedPeople, scheduleDate, DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				}
 			}
 
-			if(!permittedPersons.Any()) return new GroupScheduleViewModel();
+			if (!permittedPersons.Any()) return new GroupScheduleViewModel();
 
 			if (!input.IsOnlyAbsences)
 			{
@@ -272,20 +272,20 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		{
 			var week = DateHelper.GetWeekPeriod(input.DateInUserTimeZone, DateTimeFormatExtensions.FirstDayOfWeek);
 			var weekDays = week.DayCollection();
-			var permittedPeopleByDate = new Dictionary<DateOnly, IEnumerable<IPerson>>();
+			var permittedPeopleByDate = weekDays.ToDictionary(d => d, d => new List<IPerson>());
 			var permittedPeopleIds = new HashSet<Guid>();
 
 			foreach (var batch in personIds.Batch(251))
 			{
 				var batchedPeople = _personRepository.FindPeople(batch);
 				var batchPermittedPersons = weekDays.ToDictionary(d => d, d => _searchProvider.GetPermittedPersonList(batchedPeople, input.DateInUserTimeZone,
-					 DefinedRaptorApplicationFunctionPaths.MyTeamSchedules));
+					 DefinedRaptorApplicationFunctionPaths.MyTeamSchedules).ToList());
 
 				batchPermittedPersons.ForEach(pg =>
 				{
 					if (pg.Value.Any())
 					{
-						permittedPeopleByDate.Add(pg.Key, pg.Value);
+						permittedPeopleByDate[pg.Key].AddRange(pg.Value);
 						pg.Value.ForEach(p => permittedPeopleIds.Add(p.Id.GetValueOrDefault()));
 					}
 				});
