@@ -652,9 +652,9 @@
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\OutboundThresholdSettingPersistorAndProvider.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\ITeamSchedulePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamSchedulePersonsProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceRequestProbability.cs" />
-    <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbability.cs" />
-    <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbabilityProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceRequestProbability.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAbsenceRequestProbability.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAbsenceRequestProbabilityProvider.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\ChangePasswordResultInfo.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignVisualizationProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\ICampaignVisualizationProvider.cs" />
@@ -958,7 +958,7 @@
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayFeedbackViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\IStudentAvailabilityPeriodFeedbackViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\StudentAvailabilityPeriodFeedbackViewModelFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceRequestProbabilityProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeAddPersonScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeAddScheduleLayerViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeScheduleViewModelMapper.cs" />
