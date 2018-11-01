@@ -108,12 +108,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			}
 			var scheduleDayLookup = _scheduleProvider.GetScheduleDays(period, peopleToExport, scenario).ToLookup(x => x.Person);
 
-			var peoplePermittedToViewUnpublished = _searchProvider.GetPermittedPersonList(peopleToExport, input.StartDate,
-					DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)
-				.Select(p => p.Id.GetValueOrDefault());
-			var peoplePermittedToViewConfidential = _searchProvider.GetPermittedPersonList(peopleToExport, input.StartDate,
-					DefinedRaptorApplicationFunctionPaths.ViewConfidential)
-				.Select(p => p.Id.GetValueOrDefault()); ;
+			var peoplePermittedToViewUnpublished = _searchProvider.GetPermittedPersonIdList(peopleToExport, input.StartDate,
+					DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+			var peoplePermittedToViewConfidential = _searchProvider.GetPermittedPersonIdList(peopleToExport, input.StartDate,
+					DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 			var nameDescriptionSetting = _commonAgentNameProvider.CommonAgentNameSettings;
 
 			var selectedOptionalColumns = input.OptionalColumnIds == null ? new List<IOptionalColumn>()
