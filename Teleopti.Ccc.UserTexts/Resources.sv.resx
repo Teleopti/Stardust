@@ -15860,4 +15860,13 @@ Applikationen kommer nu att stängas. </value>
   <data name="YouNeedToPickAScenarioToCopyToDot" xml:space="preserve">
     <value>Du måste välja ett scenario att kopiera till.</value>
   </data>
+  <data name="ShowOnlyNightShifts" xml:space="preserve">
+    <value>Visa endast nattskift</value>
+  </data>
+  <data name="ShiftsInShiftBagCanNotFulFillContractTime" xml:space="preserve">
+    <value>Skiften i skiftpåsen {0} kan inte uppfylla kontraktstiden för kontraktet {1}. </value>
+  </data>
+  <data name="FilterTeamSchedulesByTime" xml:space="preserve">
+    <value>Filtrera teamscheman på tid</value>
+  </data>
 </root>
