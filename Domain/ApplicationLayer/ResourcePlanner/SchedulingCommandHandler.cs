@@ -6,8 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Islands;
-using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
@@ -55,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				var agentsToSchedule = command.AgentsToSchedule ?? AllAgents_DeleteThisLater(command).Where(x => !x.IsExternalAgent);
 				var agentsAndSkills = _crossAgentsAndSkills.Execute(islands, agentsToSchedule);
 
-				events.Add(createEvent(command, agentsToSchedule, agentsAndSkills.Agents, agentsAndSkills.Skills, userLocks));
+				addEvent(events, command, agentsToSchedule, agentsAndSkills.Agents, agentsAndSkills.Skills, userLocks);
 			}
 			else
 			{
@@ -66,8 +64,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 
 					if (agentsToSchedule.Any())
 					{
-						var @event = createEvent(command, agentsToSchedule, agentsInIslands.Select(x => x.Id.Value), island.SkillIds(), userLocks);
-						events.Add(@event);
+						addEvent(events, command, agentsToSchedule, agentsInIslands.Select(x => x.Id.Value), island.SkillIds(), userLocks);
 					}
 				}
 			}
@@ -75,24 +72,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			_eventPublisher.Publish(events.ToArray());
 		}
 
-		private SchedulingWasOrdered createEvent(SchedulingCommand command, IEnumerable<IPerson> agentsToSchedule, IEnumerable<Guid> agentsInIslandsIds, 
-			IEnumerable<Guid> skillIds, IEnumerable<LockInfo> userLocks)
+		private void addEvent(ICollection<SchedulingWasOrdered> events, SchedulingCommand command, IEnumerable<IPerson> agentsToSchedule, 
+			IEnumerable<Guid> agentsInIslandsIds, IEnumerable<Guid> skillsInIslandsIds, IEnumerable<LockInfo> userLocks)
 		{
-			var filteredAgentsToSchedule = _excludeAgentsWithHints.Execute(agentsToSchedule, command.Period, null).Select(x => x.Id.Value);
-			return new SchedulingWasOrdered
+			if (agentsToSchedule.Any())
 			{
-				Agents = filteredAgentsToSchedule,
-				AgentsInIsland = agentsInIslandsIds,
-				StartDate = command.Period.StartDate,
-				EndDate = command.Period.EndDate,
-				CommandId = command.CommandId,
-				UserLocks = userLocks,
-				Skills = skillIds,
-				FromWeb = command.FromWeb,
-				ScheduleWithoutPreferencesForFailedAgents = command.ScheduleWithoutPreferencesForFailedAgents,
-				PlanningPeriodId = command.PlanningPeriodId,
-				RunDayOffOptimization = command.RunDayOffOptimization
-			};
+				var filteredAgentsToSchedule = _excludeAgentsWithHints.Execute(agentsToSchedule, command.Period, null).Select(x => x.Id.Value);
+				events.Add(new SchedulingWasOrdered
+				{
+					Agents = filteredAgentsToSchedule,
+					AgentsInIsland = agentsInIslandsIds,
+					StartDate = command.Period.StartDate,
+					EndDate = command.Period.EndDate,
+					CommandId = command.CommandId,
+					UserLocks = userLocks,
+					Skills = skillsInIslandsIds,
+					FromWeb = command.FromWeb,
+					ScheduleWithoutPreferencesForFailedAgents = command.ScheduleWithoutPreferencesForFailedAgents,
+					PlanningPeriodId = command.PlanningPeriodId,
+					RunDayOffOptimization = command.RunDayOffOptimization
+				});				
+			}
 		}
 
 		//REMOVE ME WHEN SCHEDULING + ISLANDS WORKS
