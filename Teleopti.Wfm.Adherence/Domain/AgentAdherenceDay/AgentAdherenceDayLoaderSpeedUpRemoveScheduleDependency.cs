@@ -44,13 +44,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			var period = new DateTimePeriod(time, time.AddDays(1));
 			var events = _eventStore.Load(personId, date);
 
-			var obj = new AgentAdherenceDaySpeedUpRemoveScheduleDependency(until, period, () =>
-			{
-				var schedule = _scheduleLoader.Load(personId, date);
-				if (schedule.Any())
-					return new DateTimePeriod(schedule.Min(x => x.Period.StartDateTime), schedule.Max(x => x.Period.EndDateTime));
-				return null;
-			});
+			var obj = new AgentAdherenceDaySpeedUpRemoveScheduleDependency(until, period, () => shiftFromSchedule(personId, date));
 			events.ForEach(x =>
 			{
 				var method = obj.GetType().GetMethod("Apply", new[] {x.GetType()});
@@ -60,6 +54,14 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			obj.ApplyDone();
 
 			return obj;
+		}
+
+		private DateTimePeriod? shiftFromSchedule(Guid personId, DateOnly date)
+		{
+			var schedule = _scheduleLoader.Load(personId, date);
+			if (schedule.Any())
+				return new DateTimePeriod(schedule.Min(x => x.Period.StartDateTime), schedule.Max(x => x.Period.EndDateTime));
+			return null;
 		}
 	}
 }

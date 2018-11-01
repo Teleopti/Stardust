@@ -13,7 +13,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 	{
 		private DateTimePeriod? _period;
 		private readonly DateTimePeriod _fullDay;
-		private readonly Func<DateTimePeriod?> _getPeriodFromSchedule;
+		private readonly Func<DateTimePeriod?> _shiftFromSchedule;
 		private DateTimePeriod? _shift;
 		private readonly DateTime _now;
 
@@ -28,10 +28,10 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 		private int? _secondsInAdherence;
 		private int? _secondsOutOfAdherence;
 
-		public AgentAdherenceDaySpeedUpRemoveScheduleDependency(DateTime now, DateTimePeriod fullDay, Func<DateTimePeriod?> getPeriodFromSchedule)
+		public AgentAdherenceDaySpeedUpRemoveScheduleDependency(DateTime now, DateTimePeriod fullDay, Func<DateTimePeriod?> shiftFromSchedule)
 		{
 			_fullDay = fullDay;
-			_getPeriodFromSchedule = getPeriodFromSchedule;
+			_shiftFromSchedule = shiftFromSchedule;
 			_now = floorToSeconds(now);
 		}
 
@@ -94,7 +94,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 				_shift = new DateTimePeriod(@event.ShiftStartTime, @event.ShiftEndTime);
 
 			if (_shift == null)
-				_shift = _getPeriodFromSchedule.Invoke();
+				_shift = _shiftFromSchedule.Invoke();
 
 			_period = _shift == null ? _fullDay : new DateTimePeriod(_shift.Value.StartDateTime.AddHours(-1), _shift.Value.EndDateTime.AddHours(1));
 		}
