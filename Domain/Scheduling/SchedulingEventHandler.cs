@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				foreach (var date in selectedPeriod.DayCollection())
 				{
 					var scheduleDay = range.ScheduledDay(date);
-					if (scheduleDay.HasDayOff() && (scheduleDay.PreferenceDay() == null))
+					if (scheduleDay.HasDayOff() && (scheduleDay.PreferenceDay()?.Restriction.DayOffTemplate == null))
 					{
 						scheduleDay.DeleteDayOff();
 					}
