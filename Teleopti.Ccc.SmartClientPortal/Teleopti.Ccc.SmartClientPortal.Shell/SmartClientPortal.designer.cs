@@ -272,12 +272,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.webControlDataProtection.TabStop = false;
 			this.webControlDataProtection.Text = "webControlDataProtection";
 			this.webControlDataProtection.WebView = this.webViewDataProtection;
-			// 
-			// webViewDataProtection
-			// 
-			this.webViewDataProtection.BeforeContextMenu += new EO.WebBrowser.BeforeContextMenuHandler(this.webViewDataProtectionBeforeContextMenu);
-			this.webViewDataProtection.CertificateError += new EO.WebBrowser.CertificateErrorHandler(this.handlingCertificateErrorswebViewDataProtection);
-			this.webViewDataProtection.LoadFailed += new EO.WebBrowser.LoadFailedEventHandler(this.handlingLoadFailedError);
+
 			// 
 			// gridWorkspace
 			// 
