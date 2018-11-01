@@ -56,7 +56,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			{
 				var agentsToSchedule = command.AgentsToSchedule ?? AllAgents_DeleteThisLater(command).Where(x => !x.IsExternalAgent);
 				var agentsAndSkills = _crossAgentsAndSkills.Execute(islands, agentsToSchedule);
-
 				addEvent(events, command, agentsToSchedule, agentsAndSkills.Agents, agentsAndSkills.Skills, userLocks);
 			}
 			else
@@ -65,11 +64,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				{
 					var agentsInIslands = island.AgentsInIsland().ToArray();
 					var agentsToSchedule = command.AgentsToSchedule?.Where(x => agentsInIslands.Contains(x)).ToArray() ?? agentsInIslands;
-
-					if (agentsToSchedule.Any())
-					{
-						addEvent(events, command, agentsToSchedule, agentsInIslands.Select(x => x.Id.Value), island.SkillIds(), userLocks);
-					}
+					addEvent(events, command, agentsToSchedule, agentsInIslands.Select(x => x.Id.Value), island.SkillIds(), userLocks);
 				}
 			}
 
@@ -80,9 +75,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			IEnumerable<Guid> agentsInIslandsIds, IEnumerable<Guid> skillsInIslandsIds, IEnumerable<LockInfo> userLocks)
 		{
 			var agentsToScheduleInIsland = agentsToSchedule.Where(x => agentsInIslandsIds.Contains(x.Id.Value));
-			if (agentsToScheduleInIsland.Any())
+			var filteredAgentsToSchedule = RemoveAgentsWithHints(agentsToScheduleInIsland, command.Period).Select(x => x.Id.Value);
+			if (filteredAgentsToSchedule.Any())
 			{
-				var filteredAgentsToSchedule = RemoveAgentsWithHints(agentsToScheduleInIsland, command.Period).Select(x => x.Id.Value);
 				events.Add(new SchedulingWasOrdered
 				{
 					Agents = filteredAgentsToSchedule,
