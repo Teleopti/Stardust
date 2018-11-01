@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				foreach (var island in islands)
 				{
 					var agentsInIslands = island.AgentsInIsland().ToArray();
-					var agentsToSchedule = command.AgentsToSchedule?.Where(x => agentsInIslands.Contains(x)).ToArray() ?? agentsInIslands;
+					var agentsToSchedule = command.AgentsToSchedule ?? agentsInIslands;
 					addEvent(events, command, agentsToSchedule, agentsInIslands.Select(x => x.Id.Value), island.SkillIds(), userLocks);
 				}
 			}
