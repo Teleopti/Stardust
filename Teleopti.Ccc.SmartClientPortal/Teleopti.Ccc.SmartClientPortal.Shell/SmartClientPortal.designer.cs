@@ -73,8 +73,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.webControl1 = new EO.WinForm.WebControl();
 			this.webView1 = new EO.WebBrowser.WebView();
 			this.wfmWebControl = new EO.WinForm.WebControl();
-			this.webControlDataProtection = new EO.WinForm.WebControl();
-			this.webViewDataProtection = new EO.WebBrowser.WebView();
 			this.gridWorkspace = new Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.GridWorkspace();
 			this.ribbonControlAdv1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.RibbonControlAdvFixed();
 			this.backStageViewMain = new Syncfusion.Windows.Forms.BackStageView(this.components);
@@ -210,7 +208,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.splitContainer.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.splitContainer.Panel2.Controls.Add(this.webControl1);
 			this.splitContainer.Panel2.Controls.Add(this.wfmWebControl);
-			this.splitContainer.Panel2.Controls.Add(this.webControlDataProtection);
 			this.splitContainer.Panel2.Controls.Add(this.gridWorkspace);
 			this.splitContainer.Panel2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.splitContainer.Size = new System.Drawing.Size(1024, 635);
@@ -260,20 +257,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.wfmWebControl.TabIndex = 1;
 			this.wfmWebControl.TabStop = false;
 			this.wfmWebControl.Text = "webControl2";
-			// 
-			// webControlDataProtection
-			// 
-			this.webControlDataProtection.BackColor = System.Drawing.Color.White;
-			this.webControlDataProtection.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.webControlDataProtection.Location = new System.Drawing.Point(0, 0);
-			this.webControlDataProtection.Name = "webControlDataProtection";
-			this.webControlDataProtection.Size = new System.Drawing.Size(669, 635);
-			this.webControlDataProtection.TabIndex = 1;
-			this.webControlDataProtection.TabStop = false;
-			this.webControlDataProtection.Text = "webControlDataProtection";
-			this.webControlDataProtection.WebView = this.webViewDataProtection;
 
-			// 
 			// gridWorkspace
 			// 
 			this.gridWorkspace.AutoSize = true;
@@ -609,8 +593,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private EO.WebBrowser.WebView webView1;
         private TabPageAdv tabPageAdv1;
 		  private WebControl wfmWebControl;
-		private WebControl webControlDataProtection;
-		private WebView webViewDataProtection;
 	}
 }
 
