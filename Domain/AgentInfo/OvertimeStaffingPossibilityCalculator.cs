@@ -10,16 +10,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 {
 	public class OvertimeStaffingPossibilityCalculator : IOvertimeStaffingPossibilityCalculator
 	{
-		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ISkillStaffingDataLoader _skillStaffingDataLoader;
 		private readonly IOvertimeRequestSkillProvider _overtimeRequestSkillProvider;
 		private readonly ISkillStaffingDataSkillTypeFilter _skillStaffingDataSkillTypeFilter;
 
-		public OvertimeStaffingPossibilityCalculator(ILoggedOnUser loggedOnUser,
-			ISkillStaffingDataLoader skillStaffingDataLoader,
-			IOvertimeRequestSkillProvider overtimeRequestSkillProvider, ISkillStaffingDataSkillTypeFilter skillStaffingDataSkillTypeFilter)
+		public OvertimeStaffingPossibilityCalculator(ISkillStaffingDataLoader skillStaffingDataLoader,
+			IOvertimeRequestSkillProvider overtimeRequestSkillProvider,
+			ISkillStaffingDataSkillTypeFilter skillStaffingDataSkillTypeFilter)
 		{
-			_loggedOnUser = loggedOnUser;
 			_skillStaffingDataLoader = skillStaffingDataLoader;
 			_overtimeRequestSkillProvider = overtimeRequestSkillProvider;
 			_skillStaffingDataSkillTypeFilter = skillStaffingDataSkillTypeFilter;
@@ -38,18 +36,16 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var useShrinkage = person.WorkflowControlSet.OvertimeRequestStaffingCheckMethod ==
 							OvertimeRequestStaffingCheckMethod.IntradayWithShrinkage;
 
-			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills.Distinct().ToList(), period, useShrinkage, isSiteOpened);
+			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills.Distinct().ToList(), period, useShrinkage,
+				date =>
+				{
+					var siteOpenHour = person.SiteOpenHour(date);
+					return siteOpenHour == null || !siteOpenHour.IsClosed;
+				});
 
 			var filteredSkillStaffingDatas = _skillStaffingDataSkillTypeFilter.Filter(skillStaffingDatas);
 
 			return calculatePossibilities(filteredSkillStaffingDatas, satisfyAllSkills);
-		}
-
-		private bool isSiteOpened(DateOnly date)
-		{
-			var siteOpenHour = _loggedOnUser.CurrentUser().SiteOpenHour(date);
-			if (siteOpenHour == null) return true;
-			return !siteOpenHour.IsClosed;
 		}
 
 		private IList<CalculatedPossibilityModel> calculatePossibilities(
