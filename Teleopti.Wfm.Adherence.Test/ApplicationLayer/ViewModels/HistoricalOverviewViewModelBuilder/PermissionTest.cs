@@ -3,6 +3,10 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -11,16 +15,21 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 	[DomainTest]
 	[DefaultData]
 	[TestFixture]
-	[RealPermissions]
-	public class PermissionTest
+	[FakePermissions]
+	public class PermissionTest : IIsolateSystem
 	{
 		public Adherence.ApplicationLayer.ViewModels.HistoricalOverviewViewModelBuilder Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
+		public FakeLoggedOnUser LoggedOnUser;
+		public FakePermissions FakePermissions;
 
 		[Test]
 		public void ShouldCalculateAdherenceWithoutPermissions()
 		{
+			FakePermissions.HasPermission(DefinedRaptorApplicationFunctionPaths.ModifySchedule);
+			FakePermissions.HasPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules);
+
 			Now.Is("2018-08-17 08:00");
 			var teamId = Guid.NewGuid();
 			Database
@@ -35,6 +44,11 @@ namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalOver
 			var data = Target.Build(null, new[] {teamId}).First();
 
 			data.Agents.Single().Days.First().Adherence.Should().Be("50");
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 		}
 	}
 }
