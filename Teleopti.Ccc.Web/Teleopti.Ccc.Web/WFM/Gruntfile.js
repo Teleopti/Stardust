@@ -137,7 +137,8 @@ module.exports = function(grunt) {
 			'vendor/angular-bootstrap-persian-datepicker-master/persian-datepicker-tpls.js',
 			'../Content/signalr/jquery.signalR-2.2.2.js',
 			'../Content/signalr/broker-hubs.js',
-			'node_modules/lodash/lodash.min.js'
+			'node_modules/lodash/lodash.min.js',
+			'node_modules/powerbi-client/dist/powerbi.min.js'
 		],
 		dest: 'dist/resources/modules.js'
 	};
