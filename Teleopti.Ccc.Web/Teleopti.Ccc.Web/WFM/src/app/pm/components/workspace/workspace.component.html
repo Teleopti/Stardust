@@ -1,16 +1,17 @@
 <div class="workspace">
-    <h1>
-        <i class="mdi mdi-elevation-rise"></i>
-        Hello, This is PM workspace!
-    </h1>
+	<h1>
+		<i class="mdi mdi-elevation-rise"></i>
+		Hello, This is PM workspace!
+	</h1>
 
-    <div *ngIf="initialized">
-        <ngx-powerbi-component type="report"
-                        id="{{reportConfig.ReportId}}"
-                        embedUrl="{{reportConfig.ReportUrl}}"
-                        tokenType="Embed"
-                        accessToken="{{reportConfig.AccessToken}}"
-                        on-embedded="onEmbedded($event)">
-        </ngx-powerbi-component>
-    </div>
+	<div *ngIf="initialized" style="height:900px;">
+		<ngx-powerbi-component
+			type="report"
+			id="{{reportConfig.ReportId}}"
+			embedUrl="{{reportConfig.ReportUrl}}"
+			tokenType="Embed"
+			accessToken="{{reportConfig.AccessToken}}"
+			on-embedded="onEmbedded($event)">
+		</ngx-powerbi-component>
+	</div>
 </div>

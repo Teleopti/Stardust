@@ -9,18 +9,17 @@ import { ReportConfig } from '../../models/ReportConfig.model';
 	styleUrls: ['./workspace.component.scss']
 })
 export class WorkspaceComponent implements OnInit {
-    @Input() initialized;
-    @Input() reportConfig;
+	@Input() initialized: bool;
+	@Input() reportConfig: ReportConfig;
 
 	constructor(private pbiService: PowerBIService) {
-			this.initialized = false;
+		this.initialized = false;
 	}
 
 	ngOnInit() {
 		this.pbiService.getReportConfig().then((config) => {
 			this.reportConfig = config;
 			this.initialized = true;
-			console.log(JSON.stringify(config));
 		});
 	}
 
