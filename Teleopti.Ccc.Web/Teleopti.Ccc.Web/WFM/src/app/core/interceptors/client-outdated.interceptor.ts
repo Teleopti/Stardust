@@ -1,5 +1,13 @@
 import { DOCUMENT } from '@angular/common';
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import {
+	HttpErrorResponse,
+	HttpEvent,
+	HttpHandler,
+	HttpHeaders,
+	HttpInterceptor,
+	HttpRequest,
+	HttpResponse
+} from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -9,35 +17,28 @@ import { VersionService } from '../services';
 export class ClientOutdatedInterceptor implements HttpInterceptor {
 	constructor(@Inject(DOCUMENT) private document: Document, private versionService: VersionService) {}
 
-	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-		const version = this.versionService.getVersion();
-		if (version.length === 0) {
-			return next.handle(request);
-		}
-
-		const newRequest = this.createNewRequest(request, version);
-		return this.getReponseHandler(next, newRequest);
-	}
-
-	private getReponseHandler<T>(next: HttpHandler, request: HttpRequest<T>) {
-		return next.handle(request).pipe(
+	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+		return next.handle(req).pipe(
 			tap(
-				event => {},
+				event => {
+					if (event instanceof HttpResponse) {
+						this.versionCheck(event.headers);
+					}
+				},
 				error => {
-					if (error instanceof HttpErrorResponse && error.status == 418) {
-						this.handleOldClientError();
+					if (error instanceof HttpErrorResponse) {
+						this.versionCheck(error.headers);
 					}
 				}
 			)
 		);
 	}
 
-	private createNewRequest<T>(request: HttpRequest<T>, version): HttpRequest<T> {
-		const clientVersionHeader = { 'X-Client-Version': version };
-		return request.clone({ setHeaders: clientVersionHeader });
-	}
-
-	private handleOldClientError() {
-		this.document.location.reload(true);
+	versionCheck(headers: HttpHeaders) {
+		const version = this.versionService.getVersion();
+		const newVersion = headers.get('X-Server-Version') || '';
+		if (newVersion.length === 0) return;
+		else if (version.length === 0) this.versionService.setVersion(newVersion);
+		else if (version !== newVersion) this.document.location.reload(true);
 	}
 }
