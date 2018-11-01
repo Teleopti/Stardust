@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			{
 				foreach (var island in islands)
 				{
-					var agentsInIslands = island.AgentsInIsland().ToArray();
-					addEvent(events, command, allAgentsToSchedule, agentsInIslands.Select(x => x.Id.Value), island.SkillIds(), userLocks);
+					var agentsInIslandIds = island.AgentsInIsland().Select(x => x.Id.Value).ToArray();
+					addEvent(events, command, allAgentsToSchedule, agentsInIslandIds, island.SkillIds(), userLocks);
 				}
 			}
 
@@ -68,15 +68,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		}
 
 		private static void addEvent(ICollection<SchedulingWasOrdered> events, SchedulingCommand command, IEnumerable<IPerson> allAgentsToSchedule, 
-			IEnumerable<Guid> agentsInIslandsIds, IEnumerable<Guid> skillsInIslandsIds, IEnumerable<LockInfo> userLocks)
+			IEnumerable<Guid> agentsInIslandIds, IEnumerable<Guid> skillsInIslandsIds, IEnumerable<LockInfo> userLocks)
 		{
-			var agentsToScheduleInIsland = allAgentsToSchedule.Where(x => agentsInIslandsIds.Contains(x.Id.Value)).ToArray();
+			var agentsToScheduleInIsland = allAgentsToSchedule.Where(x => agentsInIslandIds.Contains(x.Id.Value)).ToArray();
 			if (agentsToScheduleInIsland.Any())
 			{
 				events.Add(new SchedulingWasOrdered
 				{
 					Agents = agentsToScheduleInIsland.Select(x => x.Id.Value),
-					AgentsInIsland = agentsInIslandsIds,
+					AgentsInIsland = agentsInIslandIds,
 					StartDate = command.Period.StartDate,
 					EndDate = command.Period.EndDate,
 					CommandId = command.CommandId,
