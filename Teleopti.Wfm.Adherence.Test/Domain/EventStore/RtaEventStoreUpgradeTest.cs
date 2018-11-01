@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Domain;
 using Teleopti.Wfm.Adherence.Domain.Events;
@@ -21,6 +22,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.EventStore
 	{
 		public FakeRtaEventStore Events;
 		public FakeDatabase Database;
+		public FakeKeyValueStorePersister KeyValues;
 		public IRtaEventStoreUpgrader Target;
 
 		[Test]
@@ -28,7 +30,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.EventStore
 		{
 			var person = Guid.NewGuid();
 			Events.Add(new PersonStateChangedEvent {PersonId = person, Timestamp = "2018-10-30 08:00".Utc()}, DeadLockVictim.No, RtaEventStoreVersion.WithoutBelongsToDate);
-	
+
 			Target.Upgrade();
 
 			Events.LoadFrom(0).Events
@@ -88,7 +90,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.EventStore
 		{
 			var person = Guid.NewGuid();
 			Events.Add(new PersonStateChangedEvent {PersonId = person, Timestamp = "2018-10-30 08:00".Utc()}, DeadLockVictim.No, RtaEventStoreVersion.WithoutBelongsToDate);
-			
+
 			Target.Upgrade();
 			Events.Data.Select(x => x.Event).Cast<PersonStateChangedEvent>().Single().BelongsToDate = null;
 			Target.Upgrade();
@@ -108,6 +110,26 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.EventStore
 
 			Events.LoadFrom(0).Events
 				.OfType<PersonStateChangedEvent>().Single().BelongsToDate.Should().Be("2018-10-31".Date());
+		}
+
+		[Test]
+		public void ShouldNotUpgradeIfUpgraded()
+		{
+			KeyValues.Update("RtaEventStoreVersion", RtaEventStoreVersion.StoreVersion);
+			Events.Add(new PersonStateChangedEvent {PersonId = Guid.NewGuid(), Timestamp = "2018-10-30 08:00".Utc()}, DeadLockVictim.No, RtaEventStoreVersion.WithoutBelongsToDate);
+
+			Target.Upgrade();
+
+			Events.LoadFrom(0).Events.OfType<PersonStateChangedEvent>()
+				.Single().BelongsToDate.Should().Be(null);
+		}
+
+		[Test]
+		public void ShouldFlagUpgraded()
+		{
+			Target.Upgrade();
+
+			KeyValues.Get("RtaEventStoreVersion", 0).Should().Be(RtaEventStoreVersion.StoreVersion);
 		}
 	}
 }

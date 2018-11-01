@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		}
 	}
 
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485)]
 	public class InfrastructureTestAttribute : IoCTestAttribute
 	{
 		public ITransactionHooksScope TransactionHooksScope;

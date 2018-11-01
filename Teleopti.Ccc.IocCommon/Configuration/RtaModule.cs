@@ -110,7 +110,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IRtaEventStoreTester>()
 				.As<IRtaEventStoreUpgradeWriter>()
 				.SingleInstance();
-			builder.RegisterType<RtaEventStoreUpgrader>().As<IRtaEventStoreUpgrader>().SingleInstance().ApplyAspects();
+			if (_config.Toggle(Toggles.RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485))
+			{
+				builder.RegisterType<RtaEventStoreUpgrader>().As<IRtaEventStoreUpgrader>().SingleInstance().ApplyAspects();
+				builder.RegisterType<RtaEventStoreUpgraderProcess>().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
+			}
 			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
 			{
 				builder.RegisterType<RtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance().ApplyAspects();

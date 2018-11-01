@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Wfm.Adherence.Domain.Events;
 
@@ -10,27 +11,42 @@ namespace Teleopti.Wfm.Adherence.Domain
 	{
 		private readonly IRtaEventStoreUpgradeWriter _writer;
 		private readonly BelongsToDateMapper _mapper;
+		private readonly IKeyValueStorePersister _keyValueStore;
 
-		public RtaEventStoreUpgrader(IRtaEventStoreUpgradeWriter writer, BelongsToDateMapper mapper)
+		public RtaEventStoreUpgrader(IRtaEventStoreUpgradeWriter writer, BelongsToDateMapper mapper, IKeyValueStorePersister keyValueStore)
 		{
 			_writer = writer;
 			_mapper = mapper;
+			_keyValueStore = keyValueStore;
 		}
-		
+
 		public void Upgrade()
 		{
+			if (IsUpgraded())
+				return;
+
 			var upgraded = 0;
 			do
 			{
-				var events = read();
+				var events = Read();
 				upgraded = events.Count();
-				upgrade(events);
-				write(events);
+				Upgrade(events);
+				Write(events);
 			} while (upgraded > 0);
+
+			FlagUpgraded();
 		}
 
+		[ReadModelUnitOfWork]
+		protected virtual bool IsUpgraded() =>
+			_keyValueStore.Get("RtaEventStoreVersion", 0) == RtaEventStoreVersion.StoreVersion;
+
+		[ReadModelUnitOfWork]
+		protected virtual void FlagUpgraded() =>
+			_keyValueStore.Update("RtaEventStoreVersion", RtaEventStoreVersion.StoreVersion);
+
 		[AllBusinessUnitsUnitOfWork]
-		protected virtual void upgrade(IEnumerable<UpgradeEvent> events)
+		protected virtual void Upgrade(IEnumerable<UpgradeEvent> events)
 		{
 			events.ForEach(loadedEvent =>
 			{
@@ -42,11 +58,11 @@ namespace Teleopti.Wfm.Adherence.Domain
 		}
 
 		[UnitOfWork]
-		protected virtual IEnumerable<UpgradeEvent> read() =>
+		protected virtual IEnumerable<UpgradeEvent> Read() =>
 			_writer.LoadForUpgrade(1, 1000);
 
 		[UnitOfWork]
-		protected virtual void write(IEnumerable<UpgradeEvent> events) =>
+		protected virtual void Write(IEnumerable<UpgradeEvent> events) =>
 			events.ForEach(loadedEvent => { _writer.Upgrade(loadedEvent, 2); });
 	}
 }

@@ -41,6 +41,7 @@ WebByPassDefaultPermissionCheck_37984 = true
 RTA_KillFattyIntradayUntilItDies_74939 = true
 RTA_ReviewHistoricalAdherence_Domain_74770 = true
 RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306 = true
+RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485 = true
 RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485 = DEV
 RTA_ReviewHistoricalAdherence_74770 = false
 
