@@ -8,6 +8,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -58,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var range = new ScheduleRange(scheduleDictionary,
 			                              new ScheduleParameters(_personAssignmentListContainer.Scenario,
 			                                                     _personAssignmentListContainer.ContainedPersons.First().Value,
-			                                                     _inPeriod), new PersistableScheduleDataPermissionChecker());
+			                                                     _inPeriod), new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())), PrincipalAuthorization.Current());
 			scheduleDictionary.AddTestItem(_personAssignmentListContainer.ContainedPersons.First().Value,range);
 			range.Add(_personAssignmentListContainer.PersonAssignmentListForActivityDividerTest[0]);
 			

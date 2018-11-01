@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing;
-using System.IdentityModel.Claims;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
@@ -50,7 +49,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[DomainTest]
 	[WebTest]
 	[RequestsTest]
-	[RealPermissions]
 	public class RequestsControllerTest : IIsolateSystem
 	{
 		public RequestsController Target;
@@ -65,21 +63,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public IRequestCommandHandlingProvider CommandHandlingProvider;
 		public IPermissionProvider PermissionProvider;
 		public FakePersonScheduleDayReadModelFinder PersonScheduleDayReadModelFinder;
-		public FakeThreadPrincipalContext ThreadPrincipalContext;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
 		public FakeDatabase Database;
-		public IThreadPrincipalContext PrincipalContext;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakeActivityRepository ActivityRepository;
-		public MutableNow _now;
 		public FakeGlobalSettingDataRepository GlobalSettingDataRepository;
 		public FakeSkillRepository SkillRepository;
 
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<FakeThreadPrincipalContext>().For<IThreadPrincipalContext>();
-			isolate.UseTestDouble<PrincipalAuthorization>().For<IAuthorization>();
 			isolate.UseTestDouble<FakeLinkProvider>().For<ILinkProvider>();
 			isolate.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
 			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
@@ -116,7 +109,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldRetriveMultiSchedulesForShiftTrade()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(5);
 			var form = prepareData(startDate, endDate, endDate.AddDays(10).Date);
@@ -130,7 +123,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldRetriveSchedulesWithinOpenPeriodStart()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(-5);
 			var endDate = startDate.AddDays(11);
 			var form = prepareData(startDate, endDate, endDate.AddDays(10).Date);
@@ -144,7 +137,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldRetriveSchedulesWithinOpenPeriodEnd()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(11);
 			var form = prepareData(startDate, endDate, endDate.AddDays(10).Date);
@@ -158,7 +151,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotRetriveSchedulesWhenRequestEarlierThanOpenPeriod()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(-15);
 			var endDate = startDate.AddDays(11);
 			var form = prepareData(startDate, endDate, DateTime.MaxValue);
@@ -172,7 +165,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotRetriveSchedulesWhenRequestLateThanOpenPeriod()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(15);
 			var endDate = startDate.AddDays(11);
 			var form = prepareData(startDate, endDate, DateTime.MaxValue);
@@ -184,9 +177,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		[FakePermissions]
 		public void ShouldNotRetriveUnpublishedSchedulesWithoutPermission()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(9);
 			var form = prepareData(startDate, endDate, DateOnly.Today.Date);
@@ -200,7 +194,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldRetriveUnpublishedSchedulesWithPermission()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(9);
 			var form = prepareData(startDate, endDate, DateOnly.Today.Date);
@@ -213,9 +207,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		[FakePermissions]
 		public void ShouldOnlyRetrivePublishedSchedules()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(9);
 			var form = prepareData(startDate, endDate, new DateTime(DateOnly.Today.AddDays(2).Date.Ticks, DateTimeKind.Utc));
@@ -230,10 +225,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetCorrectColorOfSchedule()
 		{
 			var targetColor = Color.Blue;
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(9);
-			var form = prepareData(startDate, endDate, new DateTime(DateOnly.Today.AddDays(1).Date.Ticks, DateTimeKind.Utc));
+			var form = prepareData(startDate, endDate, DateOnly.Today.AddDays(1).Date.Utc());
 			setScheduleColor(targetColor);
 
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
@@ -245,7 +240,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldSighOvertimeForMyOwnSchedule()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(9);
 			var form = prepareData(startDate, endDate, new DateTime(DateOnly.Today.AddDays(1).Date.Ticks, DateTimeKind.Utc));
@@ -259,7 +254,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotSelectableWhenOtherAgentShiftStartBeforeTradeDate()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var siteOpenHour = new SiteOpenHour { IsClosed = false, TimePeriod = new TimePeriod(8, 17), WeekDay = startDate.DayOfWeek };
 			var form = createShiftWithOvertime(startDate, -5, TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(-5), "", ""), siteOpenHour);
@@ -276,7 +271,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotSelectableWhenOtherAgentShiftStartAfterTradeDate()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var siteOpenHour = new SiteOpenHour { IsClosed = false, TimePeriod = new TimePeriod(8, 17), WeekDay = startDate.DayOfWeek };
 			var form = createShiftWithOvertime(startDate, 12, TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(5), "", ""), siteOpenHour);
@@ -293,7 +288,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldSighOvertimeForPersonToSchedule()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(9);
 			var form = prepareData(startDate, endDate, new DateTime(DateOnly.Today.AddDays(1).Date.Ticks, DateTimeKind.Utc));
@@ -307,7 +302,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldSighIntradayAbsenceForPersonToSchedule()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(9);
 			var form = prepareData(startDate, endDate, new DateTime(DateOnly.Today.AddDays(1).Date.Ticks, DateTimeKind.Utc));
@@ -321,8 +316,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetScheduleBaseMyTimeZone()
 		{
-			_now.Is(new DateTime(2018, 07, 09, 0, 0, 0, DateTimeKind.Utc));
-			var startDate = new DateOnly(_now.UtcDateTime()).AddDays(-1);
+			Now.Is(new DateTime(2018, 07, 09, 0, 0, 0, DateTimeKind.Utc));
+			var startDate = new DateOnly(Now.UtcDateTime()).AddDays(-1);
 			var endDate = startDate.AddDays(9);
 			var form = prepareData(startDate, endDate, 
 				new DateTime(DateOnly.Today.AddDays(1).Date.Ticks, DateTimeKind.Utc), 
@@ -337,7 +332,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapDateForRetrivedSchedules()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(9);
 			var form = prepareData(startDate, endDate, new DateTime(DateOnly.Today.AddDays(2).Date.Ticks, DateTimeKind.Utc));
@@ -352,7 +347,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldLoadScheduleWhenPersonToHasAbsence()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(2);
 			var endDate = startDate;
 			var form = createDataWithAbsence(startDate, endDate, endDate.AddDays(10).Date, 2);
@@ -367,7 +362,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetDateAsString()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(2);
 			var endDate = startDate;
 			var form = createDataWithAbsence(startDate, endDate, endDate.AddDays(10).Date, 2);
@@ -381,7 +376,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotSelectableWhenPersonToHasAbsence()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(2);
 			var endDate = startDate;
 			var form = createDataWithAbsence(startDate, endDate, endDate.AddDays(10).Date, 2);
@@ -396,7 +391,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotSelectableWhenSkillNotMatch()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(9);
 			var siteOpenHour = new SiteOpenHour { IsClosed = false, TimePeriod = new TimePeriod(8, 17), WeekDay = startDate.DayOfWeek };
@@ -418,7 +413,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldSelectableForNormalCase()
 		{
 			setGlobaleSetting(typeof(NonMainShiftActivityRule).FullName, false, RequestHandleOption.AutoDeny);
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var siteOpenHour = new SiteOpenHour { IsClosed = false, TimePeriod = new TimePeriod(8, 19), WeekDay = startDate.DayOfWeek };
 			var form = createShiftWithOvertime(startDate, 0, TimeZoneInfo.Utc, siteOpenHour);
@@ -433,7 +428,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotSelectableWhenTradedShiftOutofSiteOpenHour()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var siteOpenHour = new SiteOpenHour { IsClosed = false, TimePeriod = new TimePeriod(8, 17), WeekDay = startDate.DayOfWeek };
 			var form = createShiftWithOvertime(startDate, 1, TimeZoneInfo.Utc, siteOpenHour);
@@ -449,7 +444,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotSelectableWhenTradedSiteClosed()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var siteOpenHour = new SiteOpenHour { IsClosed = true, TimePeriod = new TimePeriod(8, 17), WeekDay = startDate.DayOfWeek };
 			var form = createShiftWithOvertime(startDate, 0, TimeZoneInfo.Utc, siteOpenHour);
@@ -466,7 +461,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldNotSelectableWhenHasOvertimeAndNonMainShiftRuleAutoDeny()
 		{
 			setGlobaleSetting(typeof(NonMainShiftActivityRule).FullName, true, RequestHandleOption.AutoDeny);
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var siteOpenHour = new SiteOpenHour { IsClosed = false, TimePeriod = new TimePeriod(8, 19), WeekDay = startDate.DayOfWeek };
 			var form = createShiftWithOvertime(startDate, 0, TimeZoneInfo.Utc, siteOpenHour);
@@ -482,7 +477,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldSetSelectableWhenNonMainShiftRulePending()
 		{
 			setGlobaleSetting(typeof(NonMainShiftActivityRule).FullName, true, RequestHandleOption.Pending);
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var siteOpenHour = new SiteOpenHour { IsClosed = false, TimePeriod = new TimePeriod(8, 19), WeekDay = startDate.DayOfWeek };
 			var form = createShiftWithOvertime(startDate, 0, TimeZoneInfo.Utc, siteOpenHour);
@@ -497,7 +492,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldSetSelectableWhenNonOverwriteRulePending()
 		{
 			setGlobaleSetting(typeof(NotOverwriteLayerRule).FullName, true, RequestHandleOption.Pending);
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var siteOpenHour = new SiteOpenHour { IsClosed = false, TimePeriod = new TimePeriod(8, 19), WeekDay = startDate.DayOfWeek };
 			var form = createShiftWithOvertime(startDate, 0, TimeZoneInfo.Utc, siteOpenHour);
@@ -512,7 +507,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldNotSelectableWhenHasPersonalActivityAndNonOverwriteRuleAutoDeny()
 		{
 			setGlobaleSetting(typeof(NotOverwriteLayerRule).FullName, true, RequestHandleOption.AutoDeny);
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var form = createScheduleWithPersonalActivity(startDate, startDate.Date.AddHours(8).ToString(), startDate.Date.AddHours(9).ToString());
 
@@ -527,7 +522,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldSelectableWhenPersonalActivityHasNotIntersectWithSchedule()
 		{
 			setGlobaleSetting(typeof(NotOverwriteLayerRule).FullName, true, RequestHandleOption.AutoDeny);
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var form = createScheduleWithPersonalActivity(startDate, startDate.Date.AddHours(18).ToString(), startDate.Date.AddHours(19).ToString());
 			
@@ -541,7 +536,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldSelectableWhanHasNotOverSchedulePersonalAcitvity()
 		{
 			setGlobaleSetting(typeof(NonMainShiftActivityRule).FullName, true, RequestHandleOption.AutoDeny);
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var form = createScheduleWithPersonalActivity(startDate, startDate.Date.AddHours(8).ToString(), startDate.Date.AddHours(9).ToString());
 
@@ -555,7 +550,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldNotSelectableWhanHasOverSchedulePersonalAcitvity()
 		{
 			setGlobaleSetting(typeof(NonMainShiftActivityRule).FullName, true, RequestHandleOption.AutoDeny);
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var form = createScheduleWithPersonalActivity(startDate, startDate.Date.AddHours(18).ToString(), startDate.Date.AddHours(19).ToString());
 
@@ -569,7 +564,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotSelectableWhenIHaveAbsence()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(2);
 			var endDate = startDate;
 			var form = createDataWithAbsence(startDate, endDate, endDate.AddDays(10).Date, 1);
@@ -585,7 +580,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldNotSelectableWhenOutOpenPeriod()
 		{
 			setGlobaleSetting(typeof(NotOverwriteLayerRule).FullName, true, RequestHandleOption.AutoDeny);
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(4);
 			var form = createShiftWithDifferentWFC(startDate);
 			var personTo = PersonRepository.Get(form.PersonToId);
@@ -601,7 +596,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldLoadScheduleWhenIHaveAbsence()
 		{
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(2);
 			var endDate = startDate;
 			var form = createDataWithAbsence(startDate, endDate, endDate.AddDays(10).Date, 1);
@@ -617,7 +612,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetShortNameForIntradayAbsence()
 		{
 			var expactedShortName = "IA";
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(2);
 			var form = createDataWithIntradayAbsence(startDate, expactedShortName, Color.Blue);
 
@@ -631,7 +626,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetColorForIntradayAbsence()
 		{
 			var expactedColor = ColorTranslator.ToHtml(Color.FromArgb(Color.Blue.ToArgb()));
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(2);
 			var form = createDataWithIntradayAbsence(startDate, "bla", Color.Blue);
 
@@ -645,7 +640,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldNotCheckToleranceWhenSettingIsFalse()
 		{
 			setGlobaleSetting(typeof(ShiftTradeTargetTimeSpecification).FullName, false, RequestHandleOption.AutoDeny);
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var form = createShiftWithDifferentWFC(startDate);
 
@@ -659,7 +654,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldNotCheckToleranceWhenSettingIsSendToAdmin()
 		{
 			setGlobaleSetting(typeof(ShiftTradeTargetTimeSpecification).FullName, true, RequestHandleOption.Pending);
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var form = createShiftWithDifferentWFC(startDate);
 
@@ -673,7 +668,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldCheckToleranceWhenSettingIsDeny()
 		{
 			setGlobaleSetting(typeof(ShiftTradeTargetTimeSpecification).FullName, true, RequestHandleOption.AutoDeny);
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var form = createShiftWithDifferentWFC(startDate);
 
@@ -687,14 +682,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetToleranceBlanceAccordingToWFCSetting()
 		{
 			setGlobaleSetting(typeof(ShiftTradeTargetTimeSpecification).FullName, true, RequestHandleOption.AutoDeny);
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var form = createShiftWithDifferentWFC(startDate);
 			LoggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(1, 20, 0);
 			PersonRepository.Get(form.PersonToId).WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(1, 30, 0);
 			var schedulePeriod = new DateOnlyPeriod(startDate, new DateOnly(startDate.Date.AddDays(6)));
 			var totalSettingContract = 480 * schedulePeriod.DayCount();
-			var expactedRealGap = totalSettingContract - 540;
+			var expectedRealGap = totalSettingContract - 540;
 
 			var result = Target.GetWFCTolerance(form.PersonToId);
 			var data = (result as JsonResult)?.Data as ShiftTradeToleranceInfoViewModel;
@@ -703,7 +698,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			data.MyInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(80);
 			data.MyInfos.First().PositiveToleranceMinutes.Should().Be.EqualTo(80);
 			data.MyInfos.First().RealSchedulePositiveGap.Should().Be.EqualTo(0);
-			data.MyInfos.First().RealScheduleNegativeGap.Should().Be.EqualTo(expactedRealGap);
+			data.MyInfos.First().RealScheduleNegativeGap.Should().Be.EqualTo(expectedRealGap);
 			data.PersonToInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(90);
 			data.PersonToInfos.First().PositiveToleranceMinutes.Should().Be.EqualTo(90);
 		}
@@ -712,7 +707,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetContractTimeAccordingToSchedulePeriodSetting()
 		{
 			setGlobaleSetting(typeof(ShiftTradeTargetTimeSpecification).FullName, true, RequestHandleOption.AutoDeny);
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var form = createShiftWithDifferentWFC(startDate);
 			var expactedContractTime = 540;
@@ -729,7 +724,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetToleranceTimeBaseOnAllFacts()
 		{
 			setGlobaleSetting(typeof(ShiftTradeTargetTimeSpecification).FullName, true, RequestHandleOption.AutoDeny);
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var form = createShiftWithDifferentWFC(startDate);
 			var personTo = PersonRepository.Get(form.PersonToId);
@@ -752,7 +747,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetPeriodAccordingToSchedulePeriodSetting()
 		{
 			setGlobaleSetting(typeof(ShiftTradeTargetTimeSpecification).FullName, true, RequestHandleOption.AutoDeny);
-			_now.Is(DateOnly.Today.Date);
+			Now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var form = createShiftWithDifferentWFC(startDate);
 
@@ -789,6 +784,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var personFromId = Guid.NewGuid();
 			var personToId = Guid.NewGuid();
 
+			CurrentScenario.Current().SetId(scenarioId);
 			foreach (var date in period.DayCollection())
 			{
 				Database.WithMultiSchedulesForShiftTradeWorkflow(publishedDate, new Skill("must"))
@@ -806,7 +802,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 					.WithAssignedOvertimeActivity(date.Date.AddHours(17).ToString(), date.Date.AddHours(18).ToString());
 			}
 
-			setPrincipal(personFromId, scenarioId);
+			var person = PersonRepository.Get(personFromId);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 
 			return PersonRepository.Get(personToId);
 		}
@@ -832,6 +829,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var personFromId = Guid.NewGuid();
 			var personToId = Guid.NewGuid();
 
+			CurrentScenario.Current().WithId(scenarioId);
 			Database.WithMultiSchedulesForShiftTradeWorkflow(DateTime.Today.AddDays(10), new Skill("must"))
 				.WithPerson(personFromId, "logOn", timeZone)
 				.WithPeriod(DateOnly.MinValue.ToString(), siteOpenHour)
@@ -843,8 +841,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				.WithPeriod(DateOnly.MinValue.ToString(), siteOpenHour)
 				.WithTerminalDate(DateOnly.MaxValue.ToString())
 				.WithSchedule(date.Date.AddHours(8 + hourDiff).ToString(), date.Date.AddHours(17 + hourDiff).ToString());
-
-			setPrincipal(personFromId, scenarioId);
+			
+			var person = PersonRepository.Get(personFromId);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 
 			return new ShiftTradeMultiSchedulesForm
 			{
@@ -860,6 +859,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var personFromId = Guid.NewGuid();
 			var personToId = Guid.NewGuid();
 
+			CurrentScenario.Current().WithId(scenarioId);
 			var siteOpenHour = new SiteOpenHour { IsClosed = false, TimePeriod = new TimePeriod(8, 19), WeekDay = date.DayOfWeek };
 			Database.WithMultiSchedulesForShiftTradeWorkflow(DateTime.Today.AddDays(10), new Skill("must"))
 				.WithPerson(personFromId, "logOn", TimeZoneInfo.Utc)
@@ -872,8 +872,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				.WithPeriod(DateOnly.MinValue.ToString(), siteOpenHour)
 				.WithTerminalDate(DateOnly.MaxValue.ToString())
 				.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString());
-
-			setPrincipal(personFromId, scenarioId);
+			
+			var person = PersonRepository.Get(personFromId);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 
 			return new ShiftTradeMultiSchedulesForm
 			{
@@ -890,6 +891,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var personToId = Guid.NewGuid();
 			var siteOpenHour = new SiteOpenHour { IsClosed = false, TimePeriod = new TimePeriod(8, 19), WeekDay = date.DayOfWeek };
 			var skill = new Skill("must");
+
+			CurrentScenario.Current().WithId(scenarioId);
 			Database.WithMultiSchedulesForShiftTradeWorkflow(DateTime.Today.AddDays(10), skill)
 				.WithPerson(personFromId, "logOn", TimeZoneInfo.Utc)
 				.WithPeriod(DateOnly.MinValue.ToString(), siteOpenHour)
@@ -903,7 +906,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				.WithTerminalDate(DateOnly.MaxValue.ToString())
 				.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString());
 
-			setPrincipal(personFromId, scenarioId);
+			var person = PersonRepository.Get(personFromId);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 
 			var workflowControl = new WorkflowControlSet("personToWFC");
 			workflowControl.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(1, 2);
@@ -919,30 +923,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				PersonToId = personToId
 			};
 		}
-
-		private void setPrincipal(Guid personId, Guid scenarioId)
-		{
-			var currentUser = PersonRepository.Get(personId);
-			LoggedOnUser.SetFakeLoggedOnUser(currentUser);
-			var principal = new TeleoptiPrincipal(
-				new TeleoptiIdentity(
-					"Fake Login",
-					null,
-					BusinessUnitRepository.LoadAll().FirstOrDefault(),
-					null,
-					null
-				),
-				currentUser);
-			ThreadPrincipalContext.SetCurrentPrincipal(principal);
-			setPermissions(DefinedRaptorApplicationFunctionPaths.ViewSchedules);
-			CurrentScenario.Current().SetId(scenarioId);
-		}
-
+		
 		private ShiftTradeMultiSchedulesForm createDataWithIntradayAbsence(DateOnly date, string shortName, Color color)
 		{
 			var personFromId = Guid.NewGuid();
 			var personToId = Guid.NewGuid();
 			var scenarioId = Guid.NewGuid();
+
+			CurrentScenario.Current().SetId(scenarioId);
 			Database.WithMultiSchedulesForShiftTradeWorkflow(DateTime.Today.AddDays(10), new Skill("must"))
 				.WithPerson(personFromId)
 				.WithPeriod(DateOnly.MinValue.ToString())
@@ -953,7 +941,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				.WithPerson(personToId)
 				.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString());
 
-			setPrincipal(personFromId, scenarioId);
+			var person = PersonRepository.Get(personFromId);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 
 			return new ShiftTradeMultiSchedulesForm
 			{
@@ -972,11 +961,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var personToId = Guid.NewGuid();
 			var scenarioId = Guid.NewGuid();
 
+			var skill = new Skill("must");
+			CurrentScenario.Current().WithId(scenarioId);
 			if (personWithAbsence == 1)
 			{ 
 				foreach (var date in period.DayCollection())
 				{
-					Database.WithMultiSchedulesForShiftTradeWorkflow(publishedDate, new Skill("must"))
+					Database.WithMultiSchedulesForShiftTradeWorkflow(publishedDate, skill)
 						.WithPerson(personFromId)
 						.WithPeriod(DateOnly.MinValue.ToString())
 						.WithTerminalDate(DateOnly.MaxValue.ToString())
@@ -991,7 +982,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			{
 				foreach (var date in period.DayCollection())
 				{
-					Database.WithMultiSchedulesForShiftTradeWorkflow(publishedDate, new Skill("must"))
+					Database.WithMultiSchedulesForShiftTradeWorkflow(publishedDate, skill)
 						.WithPerson(personFromId)	
 						.WithPeriod(DateOnly.MinValue.ToString())
 						.WithTerminalDate(DateOnly.MaxValue.ToString())
@@ -1002,7 +993,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				}
 			}
 
-			setPrincipal(personFromId, scenarioId);
+			var person = PersonRepository.Get(personFromId);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 
 			return new ShiftTradeMultiSchedulesForm
 			{
@@ -1082,21 +1074,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			person.WorkflowControlSet = workflowControlSet;
 			PersonRepository.Add(person);
 			LoggedOnUser.SetFakeLoggedOnUser(person);
-
-
+			
 			var date = DateOnly.Today;
 			
 			var personSkill = PersonSkillFactory.CreatePersonSkill("skill", 1);
 			SkillRepository.Add(personSkill.Skill);
-			//var currentUser = ThreadPrincipalContext.Current().GetPerson(PersonRepository);
-			setPrincipal(person.Id.GetValueOrDefault(), Guid.NewGuid());
+			
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date));
 			person.AddSkill(personSkill, person.PersonPeriodCollection.FirstOrDefault());
 			PersonAssignmentRepository.Has(person, CurrentScenario.Current(), new Activity(), new ShiftCategory("test"),
 				date, new TimePeriod(8, 10));
-
-
-
+			
 			var form = new AbsenceRequestForm
 			{
 				AbsenceId = absence.Id.Value,
@@ -1247,8 +1235,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			setPermissions(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb);
 			var today = DateOnly.Today;
-			var personFrom = ThreadPrincipalContext.Current().GetPerson(PersonRepository);
-			LoggedOnUser.SetFakeLoggedOnUser(personFrom);
+			var personFrom = LoggedOnUser.CurrentUser();
 
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(today).WithId();
 			var myTeam = TeamFactory.CreateTeam("Team", "Site").WithId();
@@ -1265,8 +1252,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			setPermissions(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb);
 			var today = DateOnly.Today;
-			var personFrom = ThreadPrincipalContext.Current().GetPerson(PersonRepository);
-			LoggedOnUser.SetFakeLoggedOnUser(personFrom);
+			var personFrom = LoggedOnUser.CurrentUser();
 
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(today).WithId();
 			var myTeam = new Team().WithId();
@@ -1479,8 +1465,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Now.Is(new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc));
 			var personSkill = PersonSkillFactory.CreatePersonSkill("skill",1);
 			SkillRepository.Add(personSkill.Skill);
-			var currentUser = ThreadPrincipalContext.Current().GetPerson(PersonRepository);
-			setPrincipal(currentUser.Id.GetValueOrDefault(), Guid.NewGuid());
+			var currentUser = LoggedOnUser.CurrentUser();
 			currentUser.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date));
 			currentUser.AddSkill(personSkill, currentUser.PersonPeriodCollection.FirstOrDefault());
 			PersonAssignmentRepository.Has(currentUser, CurrentScenario.Current(), new Activity(), new ShiftCategory("test"),
@@ -1493,11 +1478,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		[FakePermissions]
 		public void ShouldValidatePermissionForCancelAbsenceRequest()
 		{
 			var person = PersonFactory.CreatePerson("Bill", "Bloggins").WithId();
-			PersonRepository.Add(person);
-
+			((FakePermissions)PrincipalAuthorization.Current()).HasPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb);
+			
 			var data = doCancelAbsenceRequestMyTimeSpecificValidation(person, new DateTimePeriod(2016, 03, 02, 2016, 03, 03),
 				false);
 			data.ErrorMessages.Should().Contain(Resources.InsufficientPermission);
@@ -1508,8 +1494,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var person = PersonFactory.CreatePerson("Bill", "Bloggins").WithId();
 			PersonRepository.Add(LoggedOnUser.CurrentUser());
-			PersonRepository.Add(person);
-
+			
 			var today = DateTime.Today.Utc();
 			Now.Is(today.Date.AddDays(12));
 
@@ -1544,8 +1529,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				IsDayOff = true
 			};
 
-			var currentUser = ThreadPrincipalContext.Current().GetPerson(PersonRepository);
-			LoggedOnUser.SetFakeLoggedOnUser(currentUser);
+			var currentUser = LoggedOnUser.CurrentUser();
 			currentUser.WorkflowControlSet = new WorkflowControlSet("test")
 			{
 				SchedulePublishedToDate = new DateTime(2018, 1, 1)
@@ -1577,7 +1561,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				.WithPerson(personFromId, "logOn", TimeZoneInfo.Utc)
 				.WithScenario(scenarioId)
 				.WithPerson(personToId);
-			setPrincipal(personFromId, scenarioId);
+
+			var person = PersonRepository.Get(personFromId);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 			bool hasException = false;
 			try
 			{
@@ -1594,15 +1580,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		private void setPermissions(params string[] functionPaths)
 		{
-			var teleoptiPrincipal = ThreadPrincipalContext.Current();
-			var claims = functionPaths.Select(functionPath => new Claim(string.Concat(
-					TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
-					, "/", functionPath)
-				, new AuthorizeEveryone(), Rights.PossessProperty)).ToList();
-			claims.Add(new Claim(
-				string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
-					"/AvailableData"), new AuthorizeEveryone(), Rights.PossessProperty));
-			teleoptiPrincipal.AddClaimSet(new DefaultClaimSet(ClaimSet.System, claims));
+			var role = ApplicationRoleFactory.CreateRole("test", "test");
+			role.AvailableData = new AvailableData { AvailableDataRange = AvailableDataRangeOption.Everyone };
+			LoggedOnUser.CurrentUser().PermissionInformation.AddApplicationRole(role);
+
+			var factory = new DefinedRaptorApplicationFunctionFactory();
+			foreach (var functionPath in functionPaths)
+			{
+				role.AddApplicationFunction(ApplicationFunction.FindByPath(factory.ApplicationFunctions,functionPath));
+			}
 		}
 
 		private void shouldHandleTeamIdsCorrectly(string teamIds)
@@ -1642,6 +1628,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			person.WorkflowControlSet = workflowControlSet;
 			LoggedOnUser.SetFakeLoggedOnUser(person);
+			PersonRepository.Has(person);
 
 			var result = Target.AbsenceRequest(new AbsenceRequestForm
 			{

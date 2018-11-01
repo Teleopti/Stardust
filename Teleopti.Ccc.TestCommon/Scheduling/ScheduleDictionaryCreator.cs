@@ -5,6 +5,8 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.Scheduling
@@ -30,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 			IEnumerable<IPerson> agents)
 		{
 			var dateTimePeriod = period.ToDateTimePeriod(TimeZoneInfo.Utc);
-			var ret = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(dateTimePeriod, agents), new PersistableScheduleDataPermissionChecker());
+			var ret = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(dateTimePeriod, agents), new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())), PrincipalAuthorization.Current());
 			using (TurnoffPermissionScope.For(ret))
 			{
 				foreach (var scheduleData in persistableScheduleData)

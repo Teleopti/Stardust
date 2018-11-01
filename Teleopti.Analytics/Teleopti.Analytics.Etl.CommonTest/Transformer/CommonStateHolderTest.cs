@@ -13,6 +13,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
@@ -52,7 +54,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			{
 				IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(new DateTimePeriod());
 				Expect.Call(_raptorRepository.LoadSchedule(period, scenario, _target)).Return(new ScheduleDictionary(scenario,
-																										   scheduleDateTimePeriod, new PersistableScheduleDataPermissionChecker()));
+																										   scheduleDateTimePeriod, new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())), PrincipalAuthorization.Current()));
 			}
 
 			using (_mocks.Playback())

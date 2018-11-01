@@ -30,65 +30,60 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IDictionary<IPerson, IPersonAccountCollection> LoadAllAccounts()
 		{
-			var ret = new dic(new Dictionary<IPerson, IPersonAccountCollection>());
-
 			var result = Session.CreateCriteria(typeof (PersonAbsenceAccount))
 						.SetFetchMode("accountCollection", FetchMode.Join)
 						.SetFetchMode("Person",FetchMode.Join)
 						.SetFetchMode("Absence",FetchMode.Join)
 						.SetResultTransformer(Transformers.DistinctRootEntity)
 						.List<IPersonAbsenceAccount>();
-			foreach (var paAcc in result)
+			return result.GroupBy(k => k.Person).ToDictionary(k => k.Key, v =>
 			{
-				ret[paAcc.Person].Add(paAcc);
-			}
-
-			return ret;
+				IPersonAccountCollection collection = new PersonAccountCollection(v.Key);
+				v.ForEach(collection.Add);
+				return collection;
+			});
 		}
 
 		public IDictionary<IPerson, IPersonAccountCollection> FindByUsers(IEnumerable<IPerson> persons)
 		{
-			var ret = new dic(new Dictionary<IPerson, IPersonAccountCollection>());
-
+			var result = new List<IPersonAbsenceAccount>();
 			foreach (var personBatch in persons.Batch(400))
 			{
-				var result = Session.CreateCriteria(typeof(PersonAbsenceAccount))
+				result.AddRange(Session.CreateCriteria(typeof(PersonAbsenceAccount))
 					   .SetFetchMode("accountCollection", FetchMode.Join)
 					   .SetFetchMode("Person", FetchMode.Join)
 					   .SetFetchMode("Absence", FetchMode.Join)
 					   .Add(Restrictions.InG("Person", personBatch.ToArray()))
 					   .SetResultTransformer(Transformers.DistinctRootEntity)
-					   .List<IPersonAbsenceAccount>();
-
-				foreach (var paAcc in result)
-				{
-					ret[paAcc.Person].Add(paAcc);
-				}    
+					   .List<IPersonAbsenceAccount>());    
 			}
-		   
 
-			return ret;
+			return result.GroupBy(k => k.Person).ToDictionary(k => k.Key, v =>
+			{
+				IPersonAccountCollection collection = new PersonAccountCollection(v.Key);
+				v.ForEach(collection.Add);
+				return collection;
+			});
 		}
 
 		public IDictionary<IPerson, IPersonAccountCollection> FindByUsers(IEnumerable<IPerson> persons, DateOnlyPeriod period)
 		{
-			var ret = new dic(new Dictionary<IPerson, IPersonAccountCollection>());
-
+			var result = new List<IPersonAbsenceAccount>();
 			foreach (var personBatch in persons.Batch(400))
 			{
-				var result = Session.CreateCriteria(typeof(PersonAbsenceAccount))
+				result.AddRange(Session.CreateCriteria(typeof(PersonAbsenceAccount))
 					.SetFetchMode("accountCollection", FetchMode.Join)
 					.Add(Restrictions.InG("Person", personBatch.ToArray()))
 					.SetResultTransformer(Transformers.DistinctRootEntity)
-					.List<IPersonAbsenceAccount>();
-
-				foreach (var paAcc in result)
-				{
-					ret[paAcc.Person].Add(paAcc);
-				}
+					.List<IPersonAbsenceAccount>());
 			}
-
-			return ret;
+			
+			return result.GroupBy(k => k.Person).ToDictionary(k => k.Key, v =>
+			{
+				IPersonAccountCollection collection = new PersonAccountCollection(v.Key);
+				v.ForEach(collection.Add);
+				return collection;
+			});
 		}
 
 		public IPersonAccountCollection Find(IPerson person)
@@ -104,31 +99,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				personAccountCollection.Add(personAbsenceAccount);
 			}
 			return personAccountCollection;
-		}
-
-
-		private class dic : AbstractDictionary<IPerson, IPersonAccountCollection>
-		{
-			public dic(IDictionary<IPerson, IPersonAccountCollection> dic)
-				: base(dic)
-			{
-			}
-
-			public override IPersonAccountCollection this[IPerson key]
-			{
-				get
-				{
-					//for now
-					IPersonAccountCollection ret;
-					if (!TryGetValue(key, out ret))
-					{
-						ret = new PersonAccountCollection(key);
-						base[key] = ret;
-					}
-					return ret;
-				}
-				set { base[key] = value; }
-			}
 		}
 	}
 }

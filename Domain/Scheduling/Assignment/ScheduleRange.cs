@@ -17,30 +17,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	public class ScheduleRange : Schedule, IScheduleRange, IValidateScheduleRange, IUnvalidatedScheduleRangeUpdate
 	{
 		private readonly IPersistableScheduleDataPermissionChecker _permissionChecker;
+		private readonly IAuthorization _authorization;
 		private IList<IScheduleData> _scheduleObjectsWithNoPermissions;
 		private ScheduleRange _snapshot;
 		private TargetScheduleSummary _targetScheduleSummary;
 		private CurrentScheduleSummary _currentScheduleSummary;
 		private readonly Lazy<IEnumerable<DateOnlyPeriod>> _availablePeriods;
 		private IShiftCategoryFairnessHolder _shiftCategoryFairnessHolder;
-
-
-		public ScheduleRange(IScheduleDictionary owner, IScheduleParameters parameters, IPersistableScheduleDataPermissionChecker permissionChecker)
+		
+		public ScheduleRange(IScheduleDictionary owner, IScheduleParameters parameters, IPersistableScheduleDataPermissionChecker permissionChecker, IAuthorization authorization)
 			: base(owner, parameters)
 		{
 			_permissionChecker = permissionChecker;
+			_authorization = authorization;
 			_scheduleObjectsWithNoPermissions = new List<IScheduleData>();
 			_availablePeriods = new Lazy<IEnumerable<DateOnlyPeriod>>(() =>
 				{
 					var timeZone = Person.PermissionInformation.DefaultTimeZone();
 					var dop = Period.ToDateOnlyPeriod(timeZone);
-					return PrincipalAuthorization.Current()
-												 .PermittedPeriods(DefinedRaptorApplicationFunctionPaths.ViewSchedules, dop,
-																   Person);
+					return authorization.PermittedPeriods(DefinedRaptorApplicationFunctionPaths.ViewSchedules, dop, Person);
 				});
 		}
 
-		public ScheduleRange Snapshot => _snapshot ?? (_snapshot = new ScheduleRange(Owner, this, _permissionChecker));
+		public ScheduleRange Snapshot => _snapshot ?? (_snapshot = new ScheduleRange(Owner, this, _permissionChecker, _authorization));
 
 		public bool CanSeeUnpublishedSchedules { get; set; } = false;
 

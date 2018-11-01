@@ -6,6 +6,8 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
@@ -25,12 +27,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         public void Setup()
         {
             _scenario = new Scenario("default");
-            dic = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)), new PersistableScheduleDataPermissionChecker());
+			dic = new ScheduleDictionary(_scenario,
+				new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)),
+				new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())),
+				PrincipalAuthorization.Current());
             _person = new Person();
             _gridlockManager = new GridlockManager();
             _schedules = new List<IScheduleDay>();
            
-
             _schedulePart1 = ExtractedSchedule.CreateScheduleDay(dic, _person, new DateOnly(2000,1,1));
             _schedulePart2 = ExtractedSchedule.CreateScheduleDay(dic, _person, new DateOnly(2000, 1, 3));
 

@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		public void SwapSelectedSchedules(IHandleBusinessRuleResponse handleBusinessRuleResponse, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder)
 		{
 			ISwapServiceNew swapService = new SwapServiceNew();
-			var swapAndModifyServiceNew = new SwapAndModifyServiceNew(swapService, _scheduleDayChangeCallback, new PersistableScheduleDataPermissionChecker());
+			var swapAndModifyServiceNew = new SwapAndModifyServiceNew(swapService, _scheduleDayChangeCallback, new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())));
 
 			IList<IScheduleDay> selectedSchedules = _scheduleView.SelectedSchedules();
 			if (selectedSchedules.Count > 1)
