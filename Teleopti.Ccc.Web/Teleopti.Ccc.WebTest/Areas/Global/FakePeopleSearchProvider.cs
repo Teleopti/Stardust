@@ -13,8 +13,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 	public class FakePeopleSearchProvider : IPeopleSearchProvider
 	{
 		private readonly PeopleSummaryModel _model;
-		private readonly IList<IPerson> _permittedPeople;
-		private readonly IList<IPerson> _peopleWithConfidentialAbsencePermission;
+		private readonly List<IPerson> _permittedPeople;
+		private readonly List<IPerson> _peopleWithConfidentialAbsencePermission;
 		private readonly IDictionary<DateOnly, List<IPerson>> _permittedPeopleByDate;
 		private bool _enableDateFilter;
 		private readonly IDictionary<IPerson, string> _personApplicationRoleDictionary;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			return _model;
 		}
 
-		public IEnumerable<IPerson> SearchPermittedPeople(PersonFinderSearchCriteria searchCriteria,
+		public List<IPerson> SearchPermittedPeople(PersonFinderSearchCriteria searchCriteria,
 			DateOnly dateInUserTimeZone, string function)
 		{
 			if (_enableDateFilter)
@@ -66,12 +66,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			return new PersonFinderSearchCriteria(criteriaDictionary, pageSize, currentDate, sortedColumns, currentDate);
 		}
 
-		public IEnumerable<Guid> GetPermittedPersonIdList(IEnumerable<IPerson> people, DateOnly currentDate, string function)
+		public List<Guid> GetPermittedPersonIdList(IEnumerable<IPerson> people, DateOnly currentDate, string function)
 		{
-			return GetPermittedPersonList(people, currentDate, function).Select(p => p.Id.GetValueOrDefault());
+			return GetPermittedPersonList(people, currentDate, function).Select(p => p.Id.GetValueOrDefault()).ToList();
 		}
 
-		public IEnumerable<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people, DateOnly currentDate, string function)
+		public List<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people, DateOnly currentDate, string function)
 		{
 			if (_enableDateFilter)
 			{
@@ -215,9 +215,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			return people;
 		}
 
-		public IEnumerable<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people, DateOnlyPeriod period, string function)
-		{
-			return _permittedPeople;
-		}
 	}
 }

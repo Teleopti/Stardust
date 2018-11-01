@@ -98,9 +98,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				IPerson person,
 				IList<DateOnly> weekDays,
 				IScheduleRange scheduleRange,
-				IDictionary<DateOnly, IEnumerable<Guid>> peopleCanSeeSchedulesFor,
-				IDictionary<DateOnly, IEnumerable<Guid>> peopleCanSeeUnpublishedSchedulesFor,
-				IDictionary<DateOnly, IEnumerable<Guid>> viewableConfidentialAbsenceAgents)
+				IDictionary<DateOnly, List<Guid>> peopleCanSeeSchedulesFor,
+				IDictionary<DateOnly, List<Guid>> peopleCanSeeUnpublishedSchedulesFor,
+				IDictionary<DateOnly, List<Guid>> viewableConfidentialAbsenceAgents)
 		{
 			var daySchedules = weekDays
 				.Select(date =>
