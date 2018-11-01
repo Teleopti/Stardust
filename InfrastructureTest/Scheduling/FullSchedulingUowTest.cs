@@ -23,7 +23,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 {
 	[Toggle(Toggles.ResourcePlanner_FasterSeamlessPlanningForPreferences_78286)]
-	[Ignore("To be fixed")]
 	public class FullSchedulingUowTest_EnabledToggle : FullSchedulingUowTest
 	{
 	}

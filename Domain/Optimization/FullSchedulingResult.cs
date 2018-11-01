@@ -54,28 +54,25 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[UnitOfWork]
 		public virtual FullSchedulingResultModel Create(DateOnlyPeriod period, IEnumerable<IPerson> selectedAgents, IPlanningGroup planningGroup, bool usePreferences)
 		{
-			//TODO: investigate, hackelihack
-			_currentUnitOfWork.Current().Reassociate(selectedAgents);
-			var planningGroupSkills = selectedAgents.SelectMany(person => person.PersonPeriods(period)).SelectMany(p => p.PersonSkillCollection.Select(s => s.Skill)).Distinct().ToArray();
-			_currentUnitOfWork.Current().Reassociate(planningGroupSkills);
-			//
-
 			var schedulerStateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period);
 			var resultStateHolder = schedulerStateHolder.SchedulingResultState;
+			var loadedSelectedAgents = resultStateHolder.LoadedAgents;
+			var planningGroupSkills = loadedSelectedAgents.Where(selectedAgents.Contains)
+				.SelectMany(person => person.PersonPeriods(period)).SelectMany(p => p.PersonSkillCollection.Select(s => s.Skill)).Distinct().ToArray();
 			using (_resourceCalculationContextFactory.Create(resultStateHolder, true, period.Inflate(1)))
 			{
 				_resourceCalculation.ResourceCalculate(period.Inflate(1),
 					new ResourceCalculationData(resultStateHolder, false, false));
 			}
 			var allSkillsForAgentGroup = getAllSkillsForPlanningGroup(planningGroupSkills, resultStateHolder);
-			var scheduleOfSelectedPeople = _findSchedulesForPersons.FindSchedulesForPersons(_currentScenario.Current(), selectedAgents, 
-				new ScheduleDictionaryLoadOptions(usePreferences, false, usePreferences), period.ToDateTimePeriod(_userTimeZone.TimeZone()), selectedAgents, true);
-			var validationResults = _checkScheduleHints.Execute(new HintInput(scheduleOfSelectedPeople, selectedAgents, period, _blockPreferenceProviderUsingFiltersFactory.Create(planningGroup), usePreferences)).InvalidResources;
-			var nonScheduledAgents = _agentsWithWhiteSpots.Execute(scheduleOfSelectedPeople, selectedAgents, period);
+			var scheduleOfSelectedPeople = _findSchedulesForPersons.FindSchedulesForPersons(_currentScenario.Current(), loadedSelectedAgents, 
+				new ScheduleDictionaryLoadOptions(usePreferences, false, usePreferences), period.ToDateTimePeriod(_userTimeZone.TimeZone()), loadedSelectedAgents, true);
+			var validationResults = _checkScheduleHints.Execute(new HintInput(scheduleOfSelectedPeople, loadedSelectedAgents, period, _blockPreferenceProviderUsingFiltersFactory.Create(planningGroup), usePreferences)).InvalidResources;
+			var nonScheduledAgents = _agentsWithWhiteSpots.Execute(scheduleOfSelectedPeople, loadedSelectedAgents, period);
 			var result = new FullSchedulingResultModel
 			{
-				ScheduledAgentsCount = selectedAgents.Count() - nonScheduledAgents.Count(),
+				ScheduledAgentsCount = loadedSelectedAgents.Count() - nonScheduledAgents.Count(),
 				BusinessRulesValidationResults = validationResults
 			};
 			if (resultStateHolder.SkillDays != null)

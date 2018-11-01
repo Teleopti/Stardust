@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		private readonly CrossAgentsAndSkills _crossAgentsAndSkills;
 		private readonly CreateIslands _createIslands;
 		private readonly IExcludeAgentsWithHints _excludeAgentsWithHints;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
 		//REMOVE ME WHEN SCHEDULING + ISLANDS WORKS
 		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
@@ -31,7 +33,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				ISchedulingOptionsProvider schedulingOptionsProvider,
 				CrossAgentsAndSkills crossAgentsAndSkills,
 				CreateIslands createIslands,
-				IExcludeAgentsWithHints excludeAgentsWithHints)
+				IExcludeAgentsWithHints excludeAgentsWithHints,
+				ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_eventPublisher = eventPublisher;
 			_gridLockManager = gridLockManager;
@@ -40,6 +43,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			_crossAgentsAndSkills = crossAgentsAndSkills;
 			_createIslands = createIslands;
 			_excludeAgentsWithHints = excludeAgentsWithHints;
+			_currentUnitOfWork = currentUnitOfWork;
 		}
 
 		[TestLog]
@@ -78,7 +82,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			var agentsToScheduleInIsland = agentsToSchedule.Where(x => agentsInIslandsIds.Contains(x.Id.Value));
 			if (agentsToScheduleInIsland.Any())
 			{
-				var filteredAgentsToSchedule = _excludeAgentsWithHints.Execute(agentsToScheduleInIsland, command.Period, null).Select(x => x.Id.Value);
+				var filteredAgentsToSchedule = RemoveAgentsWithHints(agentsToScheduleInIsland, command.Period).Select(x => x.Id.Value);
 				events.Add(new SchedulingWasOrdered
 				{
 					Agents = filteredAgentsToSchedule,
@@ -94,6 +98,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 					RunDayOffOptimization = command.RunDayOffOptimization
 				});				
 			}
+		}
+
+		[UnitOfWork]
+		[TestLog]
+		protected virtual IEnumerable<IPerson> RemoveAgentsWithHints(IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		{
+			_currentUnitOfWork.Current().Reassociate(agents);
+			return _excludeAgentsWithHints.Execute(agents, period, null);
 		}
 
 		//REMOVE ME WHEN SCHEDULING + ISLANDS WORKS
