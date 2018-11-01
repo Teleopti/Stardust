@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Islands;
@@ -21,10 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		private readonly CreateIslands _createIslands;
 		private readonly IExcludeAgentsWithHints _excludeAgentsWithHints;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
-
-		//REMOVE ME WHEN SCHEDULING + ISLANDS WORKS
 		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
-		//
 
 		public SchedulingCommandHandler(IEventPublisher eventPublisher, 
 				IGridlockManager gridLockManager,
@@ -46,24 +42,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		[TestLog]
 		public virtual void Execute(SchedulingCommand command)
 		{
-			var userLocks = _gridLockManager.LockInfos();
 			var events = new List<SchedulingWasOrdered>();
-			var islands = CreateIslands(command.Period, command);
-			var allAgentsToSchedule = RemoveAgentsWithHints(command.AgentsToSchedule, command.Period);
-			if (teamScheduling(command))
+			using (CommandScope.Create(command))
 			{
-				var agentsAndSkills = _crossAgentsAndSkills.Execute(islands, allAgentsToSchedule);
-				addEvent(events, command, allAgentsToSchedule, agentsAndSkills.Agents, agentsAndSkills.Skills, userLocks);
-			}
-			else
-			{
-				foreach (var island in islands)
+				var userLocks = _gridLockManager.LockInfos();
+				var islands = CreateIslands(command.Period, command);
+				var allAgentsToSchedule = RemoveAgentsWithHints(command.AgentsToSchedule, command.Period);
+				if (_schedulingOptionsProvider.Fetch(null).UseTeam)
 				{
-					var agentsInIslandIds = island.AgentsInIsland().Select(x => x.Id.Value).ToArray();
-					addEvent(events, command, allAgentsToSchedule, agentsInIslandIds, island.SkillIds(), userLocks);
+					var agentsAndSkills = _crossAgentsAndSkills.Execute(islands, allAgentsToSchedule);
+					addEvent(events, command, allAgentsToSchedule, agentsAndSkills.Agents, agentsAndSkills.Skills, userLocks);
 				}
+				else
+				{
+					foreach (var island in islands)
+					{
+						var agentsInIslandIds = island.AgentsInIsland().Select(x => x.Id.Value).ToArray();
+						addEvent(events, command, allAgentsToSchedule, agentsInIslandIds, island.SkillIds(), userLocks);
+					}
+				}	
 			}
-
 			_eventPublisher.Publish(events.ToArray());
 		}
 
@@ -98,21 +96,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			return _excludeAgentsWithHints.Execute(agents, period, null);
 		}
 
-		private bool teamScheduling(SchedulingCommand command)
-		{
-			using (CommandScope.Create(command))
-			{
-				return _schedulingOptionsProvider.Fetch(null).UseTeam;
-			}
-		}
-
 		[ReadonlyUnitOfWork]
 		protected virtual IEnumerable<Island> CreateIslands(DateOnlyPeriod period, SchedulingCommand command)
 		{
-			using (CommandScope.Create(command))
-			{
-				return _createIslands.Create(period);
-			}
+			return _createIslands.Create(period);
 		}
 	}
 }
