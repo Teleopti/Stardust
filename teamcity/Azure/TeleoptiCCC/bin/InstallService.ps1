@@ -58,6 +58,9 @@ Try
 	ReinstallService "TeleoptiEtlService" "E:\approot\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe"
 	ReinstallService "TeleoptiServiceBus" "E:\approot\Services\ServiceBus\Teleopti.CCC.Sdk.ServiceBus.Host.exe"
 	
+	#Setting $Env:TeleoptiIsAzure = $true
+	[Environment]::SetEnvironmentVariable("TeleoptiIsAzure", "true", "Process")
+	
 	$ServiceBus = "TeleoptiServiceBus"
 	& sc.exe failure $ServiceBus reset= 0 actions= restart/60000/restart/60000/restart/60000
 
