@@ -919,8 +919,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(2);
 			var possibleSchedules = result.PossibleTradeSchedules.ToList();
 
-			possibleSchedules[0].Name.Should().Be.EqualTo("person3 dayoff");
-			possibleSchedules[1].Name.Should().Be.EqualTo("person4 empty");
+			possibleSchedules[0].Name.Should().Be.EqualTo("dayoff person3");
+			possibleSchedules[1].Name.Should().Be.EqualTo("empty person4");
 		}
 
 		[Test]
