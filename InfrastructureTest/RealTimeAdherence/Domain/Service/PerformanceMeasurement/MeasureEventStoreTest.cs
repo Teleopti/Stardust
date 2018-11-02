@@ -97,7 +97,6 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Perfo
 				.WithAssignedActivity("phone", "2018-10-18 10:00", "2018-10-18 18:00");
 
 			var personId = Database.CurrentPersonId();
-			var done = false;
 			var eventTime = "2018-10-18 10:00".Utc();
 			var eventDate = "2018-10-18".Date();
 			var personsIds = Enumerable.Range(0, 99).Select(x => Guid.NewGuid())
