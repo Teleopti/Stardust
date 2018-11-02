@@ -14,10 +14,10 @@
 		self.setNoteForPerson = setNoteForPerson;
 		self.submitNoteForPerson = submitNoteForPerson;
 
-		function resetScheduleNotes(scheduleData, selectedDateMoment) {
+		function resetScheduleNotes(scheduleData, date) {
 			noteDict = {};
 			scheduleData.forEach(function (schedule) {
-				if (selectedDateMoment.isSame(schedule.Date, 'day')) {
+				if (date === schedule.Date) {
 					noteDict[schedule.PersonId] = {
 						internalNotes: schedule.InternalNotes,
 						publicNotes: schedule.PublicNotes
