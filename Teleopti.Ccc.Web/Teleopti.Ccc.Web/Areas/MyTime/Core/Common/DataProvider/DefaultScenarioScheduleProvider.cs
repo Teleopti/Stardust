@@ -76,7 +76,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				options,
 				period,
 				defaultScenario);
-
 			return dictionary.SchedulesForPeriod(period, people);
 		}
 

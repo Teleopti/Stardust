@@ -5,7 +5,6 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -90,18 +89,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		[UnitOfWork, HttpPost, Route("api/TeamSchedule/SearchSchedules")]
 		public virtual JsonResult<GroupScheduleViewModel> SearchSchedules(SearchDaySchedulesFormData input)
 		{
-			var currentDate = input.Date;
-			var criDic = SearchTermParser.Parse(input.Keyword);
-			if (!input.Keyword.IsNullOrEmpty() && criDic.IsEmpty())
-			{
-				return Json(new GroupScheduleViewModel
-				{
-					Schedules = new List<GroupScheduleShiftViewModel>(),
-					Keyword = input.Keyword,
-					Total = 0
-				});
-			}
-
 			var result =
 				_teamScheduleViewModelFactory.CreateViewModel(new SearchDaySchedulesInput
 				{
@@ -109,13 +96,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 					GroupPageId = input.SelectedGroupPageId,
 					DynamicOptionalValues = input.DynamicOptionalValues,
 					CriteriaDictionary = SearchTermParser.Parse(input.Keyword),
-					DateInUserTimeZone = currentDate,
+					DateInUserTimeZone = input.Date,
 					PageSize = input.PageSize,
 					CurrentPageIndex = input.CurrentPageIndex,
 					IsOnlyAbsences = input.IsOnlyAbsences,
 					SortOption = input.SortOption
 				});
-			result.Keyword = input.Keyword;
 
 			return Json(result);
 		}
@@ -123,22 +109,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		[UnitOfWork, HttpPost, Route("api/TeamSchedule/SearchWeekSchedules")]
 		public virtual JsonResult<GroupWeekScheduleViewModel> SearchWeekSchedules(SearchSchedulesFormData input)
 		{
-			var currentDate = input.Date;
-
-			var criteriaDictionary = SearchTermParser.Parse(input.Keyword);
-
 			var result =
 				_teamScheduleViewModelFactory.CreateWeekScheduleViewModel(new SearchSchedulesInput
 				{
 					GroupPageId = input.SelectedGroupPageId,
 					GroupIds = input.GroupIds,
 					DynamicOptionalValues = input.DynamicOptionalValues,
-					CriteriaDictionary = criteriaDictionary,
-					DateInUserTimeZone = currentDate,
+					CriteriaDictionary = SearchTermParser.Parse(input.Keyword),
+					DateInUserTimeZone = input.Date,
 					PageSize = input.PageSize,
 					CurrentPageIndex = input.CurrentPageIndex
 				});
-			result.Keyword = input.Keyword;
 
 			return Json(result);
 		}

@@ -690,13 +690,13 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			});
 
 			var agentSchedules = result.AgentSchedules;
-			agentSchedules[0].Name.Should().Be.EqualTo("person a");
-			agentSchedules[1].Name.Should().Be.EqualTo("p3 b");
-			agentSchedules[2].Name.Should().Be.EqualTo("person 1");
-			agentSchedules[3].Name.Should().Be.EqualTo("p6 p6");
-			agentSchedules[4].Name.Should().Be.EqualTo("p4 p4");
-			agentSchedules[5].Name.Should().Be.EqualTo("p5 p5");
-			agentSchedules[6].Name.Should().Be.EqualTo("Unpublish_person 3");
+			agentSchedules[0].Name.Should().Be.EqualTo("person@a");
+			agentSchedules[1].Name.Should().Be.EqualTo("p3@b");
+			agentSchedules[2].Name.Should().Be.EqualTo("person@1");
+			agentSchedules[3].Name.Should().Be.EqualTo("p6@p6");
+			agentSchedules[4].Name.Should().Be.EqualTo("p4@p4");
+			agentSchedules[5].Name.Should().Be.EqualTo("p5@p5");
+			agentSchedules[6].Name.Should().Be.EqualTo("Unpublish_person@3");
 		}
 
 		[Test]

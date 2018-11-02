@@ -46,11 +46,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 		{
 			var processResult = new ProcessExportResult();
 			var people = peopleToExport(input);
+			if (!people.Any()) return processResult;
+
 			if (people.Count > 1000)
 			{
-				processResult.FailReason = string.Format(Resources.MaximumAgentToExport, people.Count); 
+				processResult.FailReason = string.Format(Resources.MaximumAgentToExport, people.Count);
 				return processResult;
 			}
+
 			var exportData = prepareExportData(input, people);
 
 			var excelCreator = new TeamsExcelCreator();
@@ -72,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			{
 				var matchedPersons = _personRepository.FindPeople(batch);
 				var permittedPeopleBatch = _searchProvider
-					.GetPermittedPersonList(matchedPersons, input.StartDate, DefinedRaptorApplicationFunctionPaths.ViewSchedules);
+					.GetPermittedPersonList(matchedPersons, input.StartDate, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 				people.AddRange(permittedPeopleBatch);
 			}
 			return people;
@@ -105,11 +108,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			}
 			var scheduleDayLookup = _scheduleProvider.GetScheduleDays(period, peopleToExport, scenario).ToLookup(x => x.Person);
 
-			var hasPermissionToViewUnpublished =
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths
-					.ViewUnpublishedSchedules);
-			var hasPermissionToViewConfidential =
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential);
+			var peoplePermittedToViewUnpublished = _searchProvider.GetPermittedPersonIdList(peopleToExport, input.StartDate,
+					DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+			var peoplePermittedToViewConfidential = _searchProvider.GetPermittedPersonIdList(peopleToExport, input.StartDate,
+					DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 			var nameDescriptionSetting = _commonAgentNameProvider.CommonAgentNameSettings;
 
 			var selectedOptionalColumns = input.OptionalColumnIds == null ? new List<IOptionalColumn>()
@@ -118,7 +120,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 				.Contains(p.Id.GetValueOrDefault())).OrderBy(t => t.Name).ToList();
 
 			var personRows = scheduleDayLookup.Select(sl => 
-			createPersonScheduleRow(sl, selectedOptionalColumns, timeZone, hasPermissionToViewUnpublished, hasPermissionToViewConfidential, nameDescriptionSetting))
+			createPersonScheduleRow(sl, selectedOptionalColumns, timeZone, peoplePermittedToViewUnpublished.Contains(sl.Key.Id.GetValueOrDefault()), peoplePermittedToViewConfidential.Contains(sl.Key.Id.GetValueOrDefault()), nameDescriptionSetting))
 			.OrderBy(r => r.Name).ToArray();
 
 			var optionalColumnNames = selectedOptionalColumns.Select(oc => oc.Name).ToArray();

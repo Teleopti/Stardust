@@ -394,7 +394,7 @@
     <Compile Include="Areas\TeamSchedule\Core\AbsenceHandler\AbsencePersisterTest.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\AgentsPerPagePersisterAndProviderTest.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\TeamScheduleDataProviderTest.cs" />
-    <Compile Include="Areas\TeamSchedule\Core\DataProvider\TeamScheduleProjectionProviderTests.cs" />
+    <Compile Include="Areas\TeamSchedule\Core\DataProvider\TeamScheduleShiftViewModelProviderTests.cs" />
     <Compile Include="Areas\TeamSchedule\Core\TeamScheduleCommandHandlingProviderTest.cs" />
     <Compile Include="Areas\TeamSchedule\PermissionCheckerTest.cs" />
     <Compile Include="Areas\TeamSchedule\SwapMainShiftForTwoPersonsHandlerTest.cs" />
@@ -440,6 +440,7 @@
     <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamSchedulePermissionViewModelFactoryTest.cs" />
     <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelFactoryTest.cs" />
     <Compile Include="Core\TeamSchedule\ViewModelFactory\WfmTeamScheduleViewModelFactoryTest.cs" />
+    <Compile Include="Core\TeamSchedule\ViewModelFactory\WfmTeamScheduleViewModelFactoryTestNotUseFakeScheduleStorage.cs" />
     <Compile Include="Core\TeamsProviderTest.cs" />
     <Compile Include="Core\TranslatedTextsTest.cs" />
     <Compile Include="Core\WeekScheduleDomainDataProviderWeekScheduleTest.cs" />

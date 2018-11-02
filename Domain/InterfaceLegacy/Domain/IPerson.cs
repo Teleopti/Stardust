@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		void AddExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod);
 		void ResetExternalLogOn(IPersonPeriod personPeriod);
 		void RemoveExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod);
-		bool IsTerminated();
+		bool IsTerminated(DateOnly? date = null);
 		PersonWorkDay[] AverageWorkTimes(DateOnlyPeriod period);
 		ISiteOpenHour SiteOpenHour(DateOnly dateOnly);
 		void RemoveAllPeriodsAfter(DateOnly date);
