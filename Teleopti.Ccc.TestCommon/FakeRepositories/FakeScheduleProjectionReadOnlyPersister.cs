@@ -19,7 +19,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 									&& d.BelongsToDate <= period.EndDate).Select(d => new PayloadWorkTime
 									{
 										TotalContractTime = d.ContractTime.Ticks,
-										BelongsToDate = d.BelongsToDate.Date
+										BelongsToDate = d.BelongsToDate.Date,
+										HeadCounts = 1
 									});
 		}
 

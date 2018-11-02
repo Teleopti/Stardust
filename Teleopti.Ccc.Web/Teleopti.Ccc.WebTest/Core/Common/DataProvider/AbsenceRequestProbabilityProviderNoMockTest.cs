@@ -52,7 +52,126 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		{
 			Now.Is(_today);
 		}
-		
+
+		[Test]
+		public void ShouldCalculateFairIfOneLeft()
+		{
+			setupCommonData();
+
+			addRollingAbsenceRequestPeriod(new MinMax<int>(1, 2), new BudgetGroupHeadCountValidator());
+
+			var period = new DateOnlyPeriod(2016, 10, 26, 2016, 10, 29);
+
+			addReadModelActivity(period);
+			addBudgetDays(period, 2);
+
+			var absenceRequestProbabilities = getAbsenceRequestProbabilityForPeriod(period);
+
+			assertAbsenceRequestProbability(absenceRequestProbabilities, new DateOnly(2016, 10, 26), BudgetCssClass.Fair, UserTexts.Resources.Fair);
+		}
+
+		[Test]
+		public void ShouldCalculateGoodIfManyLeft()
+		{
+			setupCommonData();
+
+			addRollingAbsenceRequestPeriod(new MinMax<int>(1, 2), new BudgetGroupHeadCountValidator());
+
+			var period = new DateOnlyPeriod(2016, 10, 26, 2016, 10, 29);
+
+			addReadModelActivity(period);
+			addBudgetDays(period, 3);
+
+			var absenceRequestProbabilities = getAbsenceRequestProbabilityForPeriod(period);
+
+			assertAbsenceRequestProbability(absenceRequestProbabilities, new DateOnly(2016, 10, 26), BudgetCssClass.Good, UserTexts.Resources.Good);
+		}
+
+		[Test]
+		public void ShouldCalculatePoorIfNoOneLeft()
+		{
+			setupCommonData();
+
+			addRollingAbsenceRequestPeriod(new MinMax<int>(1, 2), new BudgetGroupHeadCountValidator());
+
+			var period = new DateOnlyPeriod(2016, 10, 26, 2016, 10, 29);
+
+			addReadModelActivity(period);
+			addBudgetDays(period, 1);
+
+			var absenceRequestProbabilities = getAbsenceRequestProbabilityForPeriod(period);
+
+			assertAbsenceRequestProbability(absenceRequestProbabilities, new DateOnly(2016, 10, 26), BudgetCssClass.Poor, UserTexts.Resources.Poor);
+		}
+
+		[Test]
+		public void ShouldNotCrashIfNoAllowance()
+		{
+			setupCommonData();
+
+			addRollingAbsenceRequestPeriod(new MinMax<int>(1, 2), new BudgetGroupHeadCountValidator());
+
+			var period = new DateOnlyPeriod(2016, 10, 26, 2016, 10, 29);
+
+			addReadModelActivity(period);
+			addBudgetDays(period, 0);
+
+			var absenceRequestProbabilities = getAbsenceRequestProbabilityForPeriod(period);
+
+			assertAbsenceRequestProbability(absenceRequestProbabilities, new DateOnly(2016, 10, 26), BudgetCssClass.Poor, UserTexts.Resources.Poor);
+		}
+
+		[Test]
+		public void ShouldCalculateGoodOnBudgetGroup()
+		{
+			setupCommonData();
+
+			addRollingAbsenceRequestPeriod(new MinMax<int>(1, 4), new BudgetGroupAllowanceValidator());
+
+			var period = new DateOnlyPeriod(2016, 10, 26, 2016, 10, 29);
+
+			addReadModelActivity(period);
+			addBudgetDays(period, 3, 8);
+
+			var absenceRequestProbabilities = getAbsenceRequestProbabilityForPeriod(period);
+
+			assertAbsenceRequestProbability(absenceRequestProbabilities, new DateOnly(2016, 10, 26), BudgetCssClass.Good, UserTexts.Resources.Good);
+		}
+
+		[Test]
+		public void ShouldCalculateFairOnBudgetGroup()
+		{
+			setupCommonData();
+
+			addRollingAbsenceRequestPeriod(new MinMax<int>(1, 4), new BudgetGroupAllowanceValidator());
+
+			var period = new DateOnlyPeriod(2016, 10, 26, 2016, 10, 29);
+
+			addReadModelActivity(period);
+			addBudgetDays(period, 2, 8);
+
+			var absenceRequestProbabilities = getAbsenceRequestProbabilityForPeriod(period);
+
+			assertAbsenceRequestProbability(absenceRequestProbabilities, new DateOnly(2016, 10, 26), BudgetCssClass.Fair, UserTexts.Resources.Fair);
+		}
+
+		[Test]
+		public void ShouldCalculatePoorOnBudgetGroup()
+		{
+			setupCommonData();
+
+			addRollingAbsenceRequestPeriod(new MinMax<int>(1, 4), new BudgetGroupAllowanceValidator());
+
+			var period = new DateOnlyPeriod(2016, 10, 26, 2016, 10, 29);
+
+			addReadModelActivity(period);
+			addBudgetDays(period, 1, 8);
+
+			var absenceRequestProbabilities = getAbsenceRequestProbabilityForPeriod(period);
+
+			assertAbsenceRequestProbability(absenceRequestProbabilities, new DateOnly(2016, 10, 26), BudgetCssClass.Poor, UserTexts.Resources.Poor);
+		}
+
 		[Test]
 		public void ShouldOnlySetCssClassInAbsenceRequestProbabilityForBudgetGroupHeadCountAbsencePeriod()
 		{
@@ -62,16 +181,20 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			addRollingAbsenceRequestPeriod(new MinMax<int>(3, 4), new BudgetGroupHeadCountValidator());
 
 			var period = new DateOnlyPeriod(2016, 10, 26, 2016, 10, 29);
+
+			addReadModelActivity(period);
+			addBudgetDays(period, 2);
+
 			var absenceRequestProbabilities = getAbsenceRequestProbabilityForPeriod(period);
 
 			assertAbsenceRequestProbability(absenceRequestProbabilities, new DateOnly(2016, 10, 26), string.Empty, string.Empty);
 			assertAbsenceRequestProbability(absenceRequestProbabilities, new DateOnly(2016, 10, 27), string.Empty, string.Empty);
-			assertAbsenceRequestProbability(absenceRequestProbabilities, new DateOnly(2016, 10, 28), "yellow", UserTexts.Resources.Fair);
-			assertAbsenceRequestProbability(absenceRequestProbabilities, new DateOnly(2016, 10, 29), "yellow", UserTexts.Resources.Fair);
+			assertAbsenceRequestProbability(absenceRequestProbabilities, new DateOnly(2016, 10, 28), BudgetCssClass.Fair, UserTexts.Resources.Fair);
+			assertAbsenceRequestProbability(absenceRequestProbabilities, new DateOnly(2016, 10, 29), BudgetCssClass.Fair, UserTexts.Resources.Fair);
 		}
 
 		[Test]
-		public void ShouldOnlySetCssClassInAbsenceRequestProbabilityForBudgetGroupHeadCountAllowanceAbsencePeriod()
+		public void ShouldOnlySetCssClassInAbsenceRequestProbabilityForBudgetGroupAllowanceAbsencePeriod()
 		{
 			setupCommonData();
 
@@ -79,12 +202,16 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			addRollingAbsenceRequestPeriod(new MinMax<int>(3, 4), new BudgetGroupAllowanceValidator());
 
 			var period = new DateOnlyPeriod(2016, 10, 26, 2016, 10, 29);
+
+			addReadModelActivity(period);
+			addBudgetDays(period, 1);
+
 			var absenceRequestProbabilities = getAbsenceRequestProbabilityForPeriod(period);
 
 			assertAbsenceRequestProbability(absenceRequestProbabilities, new DateOnly(2016, 10, 26), string.Empty, string.Empty);
 			assertAbsenceRequestProbability(absenceRequestProbabilities, new DateOnly(2016, 10, 27), string.Empty, string.Empty);
-			assertAbsenceRequestProbability(absenceRequestProbabilities, new DateOnly(2016, 10, 28), "red", UserTexts.Resources.Poor);
-			assertAbsenceRequestProbability(absenceRequestProbabilities, new DateOnly(2016, 10, 29), "red", UserTexts.Resources.Poor);
+			assertAbsenceRequestProbability(absenceRequestProbabilities, new DateOnly(2016, 10, 28), BudgetCssClass.Poor, UserTexts.Resources.Poor);
+			assertAbsenceRequestProbability(absenceRequestProbabilities, new DateOnly(2016, 10, 29), BudgetCssClass.Poor, UserTexts.Resources.Poor);
 		}
 
 		private void setupCommonData()
@@ -116,9 +243,6 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 		private List<IAbsenceRequestProbability> getAbsenceRequestProbabilityForPeriod(DateOnlyPeriod period)
 		{
-			addReadModelActivity(period);
-			addBudgetDays(period);
-
 			var allowanceProvider = new AllowanceProvider(BudgetDayRepository, LoggedOnUser, ScenarioRepository,
 				ExtractBudgetGroupPeriods, Now);
 			var absenceTimeProvider = new AbsenceTimeProvider(LoggedOnUser, ScenarioRepository, ScheduleProjectionReadOnlyPersister,
@@ -144,7 +268,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			}
 		}
 
-		private void addBudgetDays(DateOnlyPeriod period)
+		private void addBudgetDays(DateOnlyPeriod period, double shrinkedAllowance = 1, double fulltimeEquivalentHours = 0)
 		{
 			var personPeriod = LoggedOnUser.CurrentUser().Period(new DateOnly(_today));
 			var days = period.DayCollection();
@@ -152,9 +276,8 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			{
 				var budgetDay = new BudgetDay(personPeriod.BudgetGroup, _scenario, day)
 				{
-					ShrinkedAllowance = 1,
-					FulltimeEquivalentHours = 8,
-					AbsenceOverride = 1
+					FulltimeEquivalentHours = fulltimeEquivalentHours,
+					ShrinkedAllowance = shrinkedAllowance
 				};
 				BudgetDayRepository.Add(budgetDay);
 			}
@@ -169,6 +292,5 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			absenceRequestProbability.CssClass.Should().Be(cssClass);
 			absenceRequestProbability.Text.Should().Be(text);
 		}
-
 	}
 }

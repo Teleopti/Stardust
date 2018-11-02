@@ -22,6 +22,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -195,7 +196,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			}
 
 			var result = Target.GetWeekSchedule(date);
-			result.Days.Single(d => d.Date == lastDayOfWeek).ProbabilityClass.Should().Be.EqualTo("red");
+			result.Days.Single(d => d.Date == lastDayOfWeek).ProbabilityClass.Should().Be.EqualTo(BudgetCssClass.Poor);
 		}
 
 		[Test]

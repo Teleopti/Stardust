@@ -8,13 +8,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 {
 	public class AbsenceRequestProbabilityProvider : IAbsenceRequestProbabilityProvider
 	{
-		private static readonly string[] _cssClass = 
-		{
-			"red",
-			"yellow",
-			"green"
-		};
-
 		private readonly IAllowanceProvider _allowanceProvider;
 		private readonly IAbsenceTimeProvider _absenceTimeProvider;
 		private readonly INow _now;
@@ -31,12 +24,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 		public List<IAbsenceRequestProbability> GetAbsenceRequestProbabilityForPeriod(DateOnlyPeriod period)
 		{
-			var texts = new[]
-			{
-				UserTexts.Resources.Poor,
-				UserTexts.Resources.Fair,
-				UserTexts.Resources.Good
-			};
 			var absenceTimeCollection = _absenceTimeProvider.GetAbsenceTimeForPeriod(period).ToList();
 			var allowanceCollection = _allowanceProvider.GetAllowanceForPeriod(period).ToList();
 
@@ -82,8 +69,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				ret.Add(new AbsenceRequestProbability
 				{
 					Date = dateOnly,
-					CssClass = probabilityIndex >= 0 ? _cssClass[probabilityIndex] : string.Empty,
-					Text = probabilityIndex >= 0 ? texts[probabilityIndex] : string.Empty,
+					CssClass = getBudgetCssClass(probabilityIndex),
+					Text = getAbsenceProbabilityText(probabilityIndex),
 					Availability = allowanceDay != null && allowanceDay.Availability
 				});
 			}
@@ -131,5 +118,34 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			}
 			return probabilityIndex;
 		}
+
+		private static string getBudgetCssClass(int probabilityIndex)
+		{
+			switch (probabilityIndex)
+			{
+				case 0: return BudgetCssClass.Poor;
+				case 1: return BudgetCssClass.Fair;
+				case 2: return BudgetCssClass.Good;
+				default: return string.Empty;
+			}
+		}
+
+		private static string getAbsenceProbabilityText(int probabilityIndex)
+		{
+			switch (probabilityIndex)
+			{
+				case 0: return UserTexts.Resources.Poor;
+				case 1: return UserTexts.Resources.Fair;
+				case 2: return UserTexts.Resources.Good;
+				default: return string.Empty;
+			}
+		}
+	}
+
+	public static class BudgetCssClass
+	{
+		internal const string Poor = "poor";
+		internal const string Fair = "fair";
+		internal const string Good = "good";
 	}
 }
