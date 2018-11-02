@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			personAssignment.AddActivity(new Activity("activity"), period);
 			var scheduleDictionary = ScheduleDictionaryForTest.WithPersonAssignment(_scenario, period, personAssignment);
 			var personSchedule = new ScheduleRange(scheduleDictionary,
-				new ScheduleParameters(personAssignment.Scenario, person, period), new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())), PrincipalAuthorization.Current());
+				new ScheduleParameters(personAssignment.Scenario, person, period), new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
 			personSchedule.Add(personAssignment);
 			return personSchedule;
 		}

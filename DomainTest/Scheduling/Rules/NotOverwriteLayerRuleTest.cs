@@ -16,7 +16,6 @@ using Teleopti.Ccc.TestCommon.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.TestCommon.IoC;
 using System.Threading;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
@@ -245,8 +244,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			personAssignment.AddActivity(new Activity("activity"), mainPeriod);
 			personAssignment.AddPersonalActivity(new Activity("activity"), overlapPeriod);
 			var scheduleDictionary = ScheduleDictionaryForTest.WithPersonAssignment(_scenario, mainPeriod, personAssignment);
-			var authorization = PrincipalAuthorization.Current();
-			var persistableScheduleDataPermissionChecker = new PersistableScheduleDataPermissionChecker(new PermissionProvider(authorization));
+			var authorization = CurrentAuthorization.Make();
+			var persistableScheduleDataPermissionChecker = new PersistableScheduleDataPermissionChecker(authorization);
 			var personScheduleRange = new ScheduleRange(scheduleDictionary,
 				new ScheduleParameters(personAssignment.Scenario, person, mainPeriod), persistableScheduleDataPermissionChecker, authorization);
 			personScheduleRange.Add(personAssignment);

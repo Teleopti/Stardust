@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	public class ScheduleRange : Schedule, IScheduleRange, IValidateScheduleRange, IUnvalidatedScheduleRangeUpdate
 	{
 		private readonly IPersistableScheduleDataPermissionChecker _permissionChecker;
-		private readonly IAuthorization _authorization;
+		private readonly ICurrentAuthorization _authorization;
 		private IList<IScheduleData> _scheduleObjectsWithNoPermissions;
 		private ScheduleRange _snapshot;
 		private TargetScheduleSummary _targetScheduleSummary;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private readonly Lazy<IEnumerable<DateOnlyPeriod>> _availablePeriods;
 		private IShiftCategoryFairnessHolder _shiftCategoryFairnessHolder;
 		
-		public ScheduleRange(IScheduleDictionary owner, IScheduleParameters parameters, IPersistableScheduleDataPermissionChecker permissionChecker, IAuthorization authorization)
+		public ScheduleRange(IScheduleDictionary owner, IScheduleParameters parameters, IPersistableScheduleDataPermissionChecker permissionChecker, ICurrentAuthorization authorization)
 			: base(owner, parameters)
 		{
 			_permissionChecker = permissionChecker;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				{
 					var timeZone = Person.PermissionInformation.DefaultTimeZone();
 					var dop = Period.ToDateOnlyPeriod(timeZone);
-					return authorization.PermittedPeriods(DefinedRaptorApplicationFunctionPaths.ViewSchedules, dop, Person);
+					return authorization.Current().PermittedPeriods(DefinedRaptorApplicationFunctionPaths.ViewSchedules, dop, Person);
 				});
 		}
 
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IScheduleDay ScheduledDay(DateOnly day)
 		{
-			return ScheduledDay(day, _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules));
+			return ScheduledDay(day, _authorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules));
 		}
 
 		public void ValidateBusinessRules(INewBusinessRuleCollection newBusinessRuleCollection)

@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 			IEnumerable<IPerson> agents)
 		{
 			var dateTimePeriod = period.ToDateTimePeriod(TimeZoneInfo.Utc);
-			var ret = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(dateTimePeriod, agents), new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())), PrincipalAuthorization.Current());
+			var ret = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(dateTimePeriod, agents), new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
 			using (TurnoffPermissionScope.For(ret))
 			{
 				foreach (var scheduleData in persistableScheduleData)

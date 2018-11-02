@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
@@ -169,8 +168,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
 				ITraceableRefreshService service = new TraceableRefreshService(_currentScenario,
 					new ScheduleStorage(currentUnitOfWork, repositoryFactory,
-						new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())),
-						new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), PrincipalAuthorization.Current()));
+						new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
+						new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), CurrentAuthorization.Make()));
 
 				var filteredPeopleHolder = new FilteredPeopleHolder(service, accounts, saviour, _personRepository)
 				{
@@ -266,7 +265,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 				}
 				var repositoryFactory = new RepositoryFactory();
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
-				ITraceableRefreshService cacheServiceForPersonAccounts = new TraceableRefreshService(_currentScenario, new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), PrincipalAuthorization.Current()));
+				ITraceableRefreshService cacheServiceForPersonAccounts = new TraceableRefreshService(_currentScenario, new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), CurrentAuthorization.Make()));
 				var state = new WorksheetStateHolder();
 				var saviour = _container.Resolve<ITenantDataManager>();
 				var filteredPeopleHolder = new FilteredPeopleHolder(cacheServiceForPersonAccounts, accounts, saviour, _personRepository)

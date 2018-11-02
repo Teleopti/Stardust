@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             IScenario scenario = new Scenario("Scenario");
             var scheduleDictionary = new ScheduleDictionaryForTest(scenario, scheduleDateTimePeriod, new Dictionary<IPerson, IScheduleRange>());
             IScheduleParameters parameters = new ScheduleParameters(scenario, person, dayPeriod);
-            IScheduleRange range = new ScheduleRange(scheduleDictionary, parameters, new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())), PrincipalAuthorization.Current());
+            IScheduleRange range = new ScheduleRange(scheduleDictionary, parameters, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
             scheduleDictionary.AddTestItem(person, range);
             stateHolder.Schedules = scheduleDictionary;
 

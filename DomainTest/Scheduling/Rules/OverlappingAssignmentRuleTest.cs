@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(dic.Scenario).Return(_scenario).Repeat.Any();
 			}
 			_scheduleRange = new ScheduleRange(dic, new ScheduleParameters(_scenario, _person, _schedulePeriod),
-				new PersistableScheduleDataPermissionChecker(new PermissionProvider(new FullPermission())), new FullPermission());
+				new PersistableScheduleDataPermissionChecker(new FullPermission()), new FullPermission());
 		}
 
 		[Test]

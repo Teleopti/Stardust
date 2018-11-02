@@ -604,10 +604,9 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				var repositoryFactory = new RepositoryFactory();
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
 				var scheduleRepository = new ScheduleStorage(currentUnitOfWork, repositoryFactory,
-					new PersistableScheduleDataPermissionChecker(
-						new PermissionProvider(PrincipalAuthorization.Current())),
+					new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
 					new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork),
-					PrincipalAuthorization.Current());
+					CurrentAuthorization.Make());
 				var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, false, true) { LoadDaysAfterLeft = true };
 
 				var schedulesDictionary = scheduleRepository.FindSchedulesForPersons(scenario, persons, scheduleDictionaryLoadOptions, period, persons, false);

@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -30,10 +29,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 		private void setup()
         {
-	        permissionChecker = new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current()));
+	        permissionChecker = new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make());
 			newRules = NewBusinessRuleCollection.Minimum();
             target = new MoveDataBetweenSchedules(newRules, new DoNothingScheduleDayChangeCallBack());
-            destination = new ScheduleDictionary(new Scenario("dest scen"), new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 10)), permissionChecker, PrincipalAuthorization.Current());
+            destination = new ScheduleDictionary(new Scenario("dest scen"), new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 10)), permissionChecker, CurrentAuthorization.Make());
         }
 
         [Test]
@@ -197,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             IScenario scenario = data.Scenario;
             if (scenario == null)
                 scenario = new Scenario("sdf");
-            IScheduleDictionary dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(data.Period), new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())), PrincipalAuthorization.Current());
+            IScheduleDictionary dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(data.Period), new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
             var part = ExtractedSchedule.CreateScheduleDay(dic, data.Person, dateOnly);
             part.Add(data);
             return part;

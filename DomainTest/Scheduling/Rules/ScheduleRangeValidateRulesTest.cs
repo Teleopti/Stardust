@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void Setup()
 		{
 			_scenario = ScenarioFactory.CreateScenarioAggregate();
-			_permissionChecker = new PersistableScheduleDataPermissionChecker(new PermissionProvider(new FullPermission()));
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make());
 			_person = PersonFactory.CreatePerson();
 			var dic = new Dictionary<IPerson, IScheduleRange>();
 			_schedulePeriod = new DateTimePeriod(2007, 8, 1, 2007, 9, 1);
@@ -70,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				team));
 
 			var per = new ScheduleDateTimePeriod(_schedulePeriod);
-			var dic = new ScheduleDictionary(_scenario, per, _permissionChecker, PrincipalAuthorization.Current());
+			var dic = new ScheduleDictionary(_scenario, per, _permissionChecker, CurrentAuthorization.Make());
 			dic.Modify(ScheduleModifier.Scheduler, schedulePart, NewBusinessRuleCollection.Minimum(),
 				new DoNothingScheduleDayChangeCallBack(), new ScheduleTagSetter(NullScheduleTag.Instance));
 

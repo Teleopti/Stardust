@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -30,10 +29,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 		private void setup()
 		{
-			permissionChecker = new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current()));
+			permissionChecker = new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make());
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			dic = new ScheduleDictionary(new Scenario("sd"), new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2200, 1, 1)), permissionChecker, PrincipalAuthorization.Current());
+			dic = new ScheduleDictionary(new Scenario("sd"), new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2200, 1, 1)), permissionChecker, CurrentAuthorization.Make());
 			scheduleDay = ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2000, 1, 1));
 			target = new ScheduleProjectionService(scheduleDay, new ProjectionPayloadMerger());
 		}
@@ -595,7 +594,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			setup();
 			const int nextDay = 24;
 			var scheduleRange = new ScheduleRange(scheduleDay.Owner,
-				new ScheduleParameters(scheduleDay.Scenario, scheduleDay.Person, scheduleDay.Owner.Period.VisiblePeriod), permissionChecker, PrincipalAuthorization.Current());
+				new ScheduleParameters(scheduleDay.Scenario, scheduleDay.Person, scheduleDay.Owner.Period.VisiblePeriod), permissionChecker, CurrentAuthorization.Make());
 
 			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scheduleDay.Person,
 				scheduleDay.Scenario, createPeriod(20, nextDay + 12));

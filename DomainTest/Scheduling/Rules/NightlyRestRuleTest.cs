@@ -7,8 +7,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -31,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void Setup()
 		{
 			_scenario = ScenarioFactory.CreateScenarioAggregate();
-			_permissionChecker = new PersistableScheduleDataPermissionChecker(new PermissionProvider(new FullPermission()));
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(new FullPermission());
 
 			_person = PersonFactory.CreatePerson();
 			_nightlyRest = new TimeSpan(8, 0, 0);

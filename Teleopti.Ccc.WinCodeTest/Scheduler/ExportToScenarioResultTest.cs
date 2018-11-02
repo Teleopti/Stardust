@@ -15,7 +15,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Text = Rhino.Mocks.Constraints.Text;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.TestCommon;
@@ -243,8 +242,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			var uow = mocks.DynamicMock<IUnitOfWork>();
 			var dic = new ScheduleDictionary(orginalScenario, new ScheduleDateTimePeriod(new DateTimePeriod()),
-				new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())),
-				PrincipalAuthorization.Current());
+				new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
+				CurrentAuthorization.Make());
 			target.SetPersistingDic(dic);
 			using (mocks.Record())
 			{
@@ -262,8 +261,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void ShouldCallViewToShowErrorOnDataSourceException()
 		{
 			var dic = new ScheduleDictionary(orginalScenario, new ScheduleDateTimePeriod(new DateTimePeriod()),
-				new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())),
-				PrincipalAuthorization.Current());
+				new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
+				CurrentAuthorization.Make());
 			target.SetPersistingDic(dic);
 			var err = new DataSourceException();
 

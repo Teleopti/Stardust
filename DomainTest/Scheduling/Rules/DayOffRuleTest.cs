@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
            _start = new DateTime(2007, 8, 2, 8, 30, 0, DateTimeKind.Utc);
            _end = new DateTime(2007, 8, 2, 17, 30, 0, DateTimeKind.Utc);
             _range = new DateTimePeriod(2007, 8, 1, 2007, 8, 5);
-			_permissionChecker = new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current()));
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make());
 
 
 		   _scenario = ScenarioFactory.CreateScenarioAggregate();
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
            _mocks.Replay(_dic);
            _scheduleRange =
                new ScheduleRange(_dic,
-                   new ScheduleParameters(_scenario, _person, _range), _permissionChecker, PrincipalAuthorization.Current());
+                   new ScheduleParameters(_scenario, _person, _range), _permissionChecker, CurrentAuthorization.Make());
         }
 
         private void createDayOffRule()
@@ -231,7 +230,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 						var personDayOff2 = PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, _scenario, new DateOnly(2007, 8, 5), dOff);
             
 
-           _scheduleRange = new ScheduleRange(_dic, new ScheduleParameters(_scenario, _person, _range), _permissionChecker, PrincipalAuthorization.Current());
+           _scheduleRange = new ScheduleRange(_dic, new ScheduleParameters(_scenario, _person, _range), _permissionChecker, CurrentAuthorization.Make());
 
            ((Schedule)_scheduleRange).Add(personDayOff);
            ((Schedule)_scheduleRange).Add(personDayOff2);

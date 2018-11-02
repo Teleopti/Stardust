@@ -133,7 +133,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			if (_scheduleDictionary != null)
 				return _scheduleDictionary;
 			IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(new DateTimePeriod());
-			return new ScheduleDictionary(scenario, scheduleDateTimePeriod, new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())), PrincipalAuthorization.Current());
+			return new ScheduleDictionary(scenario, scheduleDateTimePeriod, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
 		}
 		public void SetLoadSchedule(IScheduleDictionary scheduleDictionary)
 		{

@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _person = new Person().InTimeZone(TimeZoneInfo.Utc);
             _scenario = new Scenario("for test");
             _mocker = new MockRepository();
-            _scheduleDictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000,1,1,2002,1,1)), new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())), PrincipalAuthorization.Current());
+            _scheduleDictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000,1,1,2002,1,1)), new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
             _part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(2001,1,1));
             _mocker.BackToRecordAll();
             _mockedPart = _mocker.StrictMock<IScheduleDay>();

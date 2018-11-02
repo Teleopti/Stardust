@@ -40,13 +40,13 @@ namespace Teleopti.Ccc.Domain.Collection
 		private bool _permissionEnabled = true;
 		private readonly object _permissionLockObject = new object();
 		private readonly IPersistableScheduleDataPermissionChecker _dataPermissionChecker;
-		private readonly IAuthorization _authorization;
+		private readonly ICurrentAuthorization _authorization;
 		private const string SetPermissionExMessage = "Can't reset _permissionEnabled to the same value ({0}). Threading issue?";
 		public ICollection<IPersonAbsenceAccount> ModifiedPersonAccounts { get; private set; }
 
 		protected ScheduleDictionary(IScenario scenario,
 									IScheduleDateTimePeriod period,
-									IDictionary<IPerson, IScheduleRange> dictionary, IPersistableScheduleDataPermissionChecker dataPermissionChecker, IAuthorization authorization)
+									IDictionary<IPerson, IScheduleRange> dictionary, IPersistableScheduleDataPermissionChecker dataPermissionChecker, ICurrentAuthorization authorization)
 			: this(scenario, period, dataPermissionChecker, authorization)
 		{
 			_dictionary = dictionary;
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		public ScheduleDictionary(IScenario scenario,
 								IScheduleDateTimePeriod period,
-								IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService, IPersistableScheduleDataPermissionChecker dataPermissionChecker, IAuthorization authorization)
+								IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService, IPersistableScheduleDataPermissionChecker dataPermissionChecker, ICurrentAuthorization authorization)
 		{
 			ModifiedPersonAccounts = new HashSet<IPersonAbsenceAccount>();
 			_scenario = scenario;
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Collection
 			_authorization = authorization;
 		}
 
-		public ScheduleDictionary(IScenario scenario, IScheduleDateTimePeriod period, IPersistableScheduleDataPermissionChecker dataPermissionChecker, IAuthorization authorization)
+		public ScheduleDictionary(IScenario scenario, IScheduleDateTimePeriod period, IPersistableScheduleDataPermissionChecker dataPermissionChecker, ICurrentAuthorization authorization)
 			: this(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>(), dataPermissionChecker, authorization)
 		{
 		}
@@ -650,7 +650,7 @@ namespace Teleopti.Ccc.Domain.Collection
 		{
 			_editable = true;
 		}
-		public ReadOnlyScheduleDictionary(IScenario scenario, IScheduleDateTimePeriod scheduleDateTimePeriod, IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService, IPersistableScheduleDataPermissionChecker dataPermissionChecker, IAuthorization authorization)
+		public ReadOnlyScheduleDictionary(IScenario scenario, IScheduleDateTimePeriod scheduleDateTimePeriod, IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService, IPersistableScheduleDataPermissionChecker dataPermissionChecker, ICurrentAuthorization authorization)
 			: base(scenario, scheduleDateTimePeriod, differenceCollectionService, dataPermissionChecker, authorization)
 		{
 		}

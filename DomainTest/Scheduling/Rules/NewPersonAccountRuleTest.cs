@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _stateHolder = new SchedulingResultStateHolder();
             _allAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
             _target = new NewPersonAccountRule(_stateHolder.Schedules, _allAccounts);
-			_permissionChecker = new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current()));
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make());
         }
 
         [Test]
@@ -73,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
                 var otherScenario = ScenarioFactory.CreateScenarioAggregate("what if?", false);
                 _stateHolder.Schedules = new ScheduleDictionary(otherScenario,
-                                                                new ScheduleDateTimePeriod(new DateTimePeriod()), new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())), PrincipalAuthorization.Current());
+                                                                new ScheduleDateTimePeriod(new DateTimePeriod()), new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
 
                 _target.Validate(new Dictionary<IPerson, IScheduleRange> { { person, null } }, new[] { scheduleDay }).Should().Be.Empty();
             }
@@ -100,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
             _allAccounts.Add(person, personAccountCollection);
             var scenario = new Scenario("Default") { DefaultScenario = true };
-            _stateHolder.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(range), _permissionChecker, PrincipalAuthorization.Current());
+            _stateHolder.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(range), _permissionChecker, CurrentAuthorization.Make());
 
             using (mocks.Record())
             {
@@ -118,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			        {
 				        person,
 				        new ScheduleRange(_stateHolder.Schedules,
-					        new ScheduleParameters(scenario, person, range), _permissionChecker, PrincipalAuthorization.Current())
+					        new ScheduleParameters(scenario, person, range), _permissionChecker, CurrentAuthorization.Make())
 			        }
 		        }, new Collection<IScheduleDay> {scheduleDay}).ToArray();
 		        Assert.That(responses.Length, Is.EqualTo(1));
@@ -166,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			_allAccounts.Add(person2, personAccountCollection2);
 
 			var scenario = new Scenario("Default") { DefaultScenario = true };
-			_stateHolder.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(range), _permissionChecker, PrincipalAuthorization.Current());
+			_stateHolder.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(range), _permissionChecker, CurrentAuthorization.Make());
 
 			var scheduleRange1 = _stateHolder.Schedules[person1];
 			var scheduleRange2 = _stateHolder.Schedules[person2];

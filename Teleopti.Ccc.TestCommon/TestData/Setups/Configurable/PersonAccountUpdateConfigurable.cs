@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		{
 			var repository = new PersonAbsenceAccountRepository(unitOfWork);
 			var repositoryFactory = new RepositoryFactory();
-			var scheduleRepository = new ScheduleStorage(unitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())), new ScheduleStorageRepositoryWrapper(repositoryFactory, unitOfWork), PrincipalAuthorization.Current());
+			var scheduleRepository = new ScheduleStorage(unitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), new ScheduleStorageRepositoryWrapper(repositoryFactory, unitOfWork), CurrentAuthorization.Make());
 			var traceableService = new TraceableRefreshService(CurrentScenario, scheduleRepository);
 			var updater = new PersonAccountUpdater(repository, traceableService);
 			updater.Update(person);

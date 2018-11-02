@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -169,10 +168,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			var team = TeamFactory.CreateSimpleTeam();
 			var personContract = PersonContractFactory.CreatePersonContract();
 
-			var authorization = PrincipalAuthorization.Current();
+			var authorization = CurrentAuthorization.Make();
 			var dic = new ScheduleDictionary(scDefault,
 				new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2200, 1, 1)),
-				new PersistableScheduleDataPermissionChecker(new PermissionProvider(authorization)), authorization);
+				new PersistableScheduleDataPermissionChecker(authorization), authorization);
 			
 			createActivitiesAndAddToContainer(container);
 			createSkillsAndAddToContainer(container);

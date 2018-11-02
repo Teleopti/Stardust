@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             DateTimePeriod dayPeriod = new DateTimePeriod(2000, 01, 01, 2000, 01, 10);
             IScheduleParameters parameters = new ScheduleParameters(scenario, _person, dayPeriod);
-            IScheduleRange range = new ScheduleRange(scheduleDictionary, parameters, new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())), PrincipalAuthorization.Current());
+            IScheduleRange range = new ScheduleRange(scheduleDictionary, parameters, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
 
             scheduleDictionary.AddTestItem(_person, range);
 

@@ -46,7 +46,6 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -4733,9 +4732,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var allNewRules = SchedulerState.SchedulingResultState.GetRulesToRun();
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			var uowFactory = UnitOfWorkFactory.Current;
+			var currentAuthorization = CurrentAuthorization.Make();
 			var scheduleRepository = new ScheduleStorage(new FromFactory(() => uowFactory), new RepositoryFactory(),
-				new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())),
-				_container.Resolve<IScheduleStorageRepositoryWrapper>(), PrincipalAuthorization.Current());
+				new PersistableScheduleDataPermissionChecker(currentAuthorization),
+				_container.Resolve<IScheduleStorageRepositoryWrapper>(), currentAuthorization);
 			var exportToScenarioAccountPersister = new ExportToScenarioAccountPersister(_container.Resolve<IPersonAccountPersister>());
 			var exportToScenarioAbsenceFinder = new ExportToScenarioAbsenceFinder();
 			using (

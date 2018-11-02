@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		private void expectLoadOfSchedules()
 		{
-			_scheduleRange = new ScheduleRange(_scheduleDictionary, new ScheduleParameters(_scenario, _person, _period), new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())), PrincipalAuthorization.Current());
+			_scheduleRange = new ScheduleRange(_scheduleDictionary, new ScheduleParameters(_scenario, _person, _period), new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
 			_scheduleDictionary.Stub(x => x[_person]).Return(_scheduleRange);
 			_scheduleDictionary.Stub(x => x.Scenario).Return(_scenario);
 		}

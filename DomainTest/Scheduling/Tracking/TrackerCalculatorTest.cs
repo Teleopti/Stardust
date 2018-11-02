@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 	    [SetUp]
         public void Setup()
         {
-			_permissionChecker = new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current()));
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make());
             _target = new TrackerCalculator();
         }
 
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
         {
             IPerson person = new Person();
             IScenario scenario = new Scenario("For Test");
-            var dictionary = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000,1,1,2002,1,1)), _permissionChecker, PrincipalAuthorization.Current());
+            var dictionary = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000,1,1,2002,1,1)), _permissionChecker, CurrentAuthorization.Make());
             var baseDateTime = new DateTime(2001, 1, 1, 8, 0, 0, DateTimeKind.Utc);
             IAbsence absenceToCount = new Absence();
             IActivity underlyingActivity = new Activity("For test");
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
         {
             IPerson person = new Person();
             IScenario scenario = new Scenario("For Test");
-            var dictionary = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2002, 1, 1)), _permissionChecker, PrincipalAuthorization.Current());
+            var dictionary = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2002, 1, 1)), _permissionChecker, CurrentAuthorization.Make());
             var baseDateTime = new DateTime(2001, 1, 1, 8, 0, 0, DateTimeKind.Utc);
             IAbsence absenceToCount = new Absence {InContractTime = true};
             IActivity underlyingActivity = new Activity("For test");

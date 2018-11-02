@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             authorization = MockRepository.GenerateMock<IAuthorization>();
             parameters = new ScheduleParameters(scenario, person, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			dic = MockRepository.GenerateMock<IScheduleDictionary>();
-            target = new ScheduleRange(dic, parameters, new PersistableScheduleDataPermissionChecker(new PermissionProvider(authorization)), authorization);
+            target = new ScheduleRange(dic, parameters, new PersistableScheduleDataPermissionChecker(new ThisAuthorization(authorization)), new ThisAuthorization(authorization));
         }
 
         [Test]

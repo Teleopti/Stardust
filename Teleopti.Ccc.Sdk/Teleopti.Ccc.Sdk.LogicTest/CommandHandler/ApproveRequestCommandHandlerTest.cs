@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
@@ -144,8 +143,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             var request = _mock.StrictMock<IPersonRequest>();
 			var dictionary = new ReadOnlyScheduleDictionary(_scenario, new ScheduleDateTimePeriod(_period),
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
-				new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())),
-				PrincipalAuthorization.Current());
+				new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
+				CurrentAuthorization.Make());
 
             using (_mock.Record())
             {

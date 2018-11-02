@@ -9,15 +9,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 	public class TeamSchedulePermissionViewModelFactory : ITeamSchedulePermissionViewModelFactory
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IAuthorization _authorization;
 
-		public TeamSchedulePermissionViewModelFactory(ILoggedOnUser loggedOnUser)
+		public TeamSchedulePermissionViewModelFactory(ILoggedOnUser loggedOnUser, IAuthorization authorization)
 		{
 			_loggedOnUser = loggedOnUser;
+			_authorization = authorization;
 		}
 
 		public TeamSchedulePermissionViewModel CreateTeamSchedulePermissionViewModel()
 		{
-			var authorization = PrincipalAuthorization.Current();
 			var hasPermissionToViewTeams = _loggedOnUser.CurrentUser().PermissionInformation
 				.ApplicationRoleCollection?
 				.Any(role => role.AvailableData?.AvailableDataRange != AvailableDataRangeOption.MyOwn 
@@ -26,8 +27,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 
 			return new TeamSchedulePermissionViewModel
 			{
-				ShiftTradePermisssion = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb),
-				ShiftTradeBulletinBoardPermission = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard),
+				ShiftTradePermisssion = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb),
+				ShiftTradeBulletinBoardPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard),
 				ViewTeamsPermission = hasPermissionToViewTeams
 			};
 		}

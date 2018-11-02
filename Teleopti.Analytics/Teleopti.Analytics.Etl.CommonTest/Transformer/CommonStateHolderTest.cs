@@ -54,7 +54,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			{
 				IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(new DateTimePeriod());
 				Expect.Call(_raptorRepository.LoadSchedule(period, scenario, _target)).Return(new ScheduleDictionary(scenario,
-																										   scheduleDateTimePeriod, new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())), PrincipalAuthorization.Current()));
+																										   scheduleDateTimePeriod, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make()));
 			}
 
 			using (_mocks.Playback())

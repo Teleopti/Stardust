@@ -15,7 +15,6 @@ using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UndoRedo;
@@ -159,13 +158,13 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			scheduleDayChangeCallback = mocks.DynamicMock<IScheduleDayChangeCallback>();
 			period = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			scenario = ScenarioFactory.CreateScenarioAggregate();
-			dataPermissionChecker = new PersistableScheduleDataPermissionChecker(new PermissionProvider(authorization));
-			target = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>(), dataPermissionChecker, authorization);
+			dataPermissionChecker = new PersistableScheduleDataPermissionChecker(new ThisAuthorization(authorization));
+			target = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>(), dataPermissionChecker, new ThisAuthorization(authorization));
 			dummyPerson = PersonFactory.CreatePerson();
 			IScheduleRange justToCreateTheScheduleRangeForTests = target[dummyPerson];
 			dummyFunction = DefinedRaptorApplicationFunctionPaths.ViewSchedules;
 			_dummyScheduleRange =
-				new ScheduleRange(target, new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), dummyPerson, new DateTimePeriod(2000, 1, 1, 2001, 1, 1)), dataPermissionChecker, authorization);
+				new ScheduleRange(target, new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), dummyPerson, new DateTimePeriod(2000, 1, 1, 2001, 1, 1)), dataPermissionChecker, new ThisAuthorization(authorization));
 
 			_noNewRules = NewBusinessRuleCollection.Minimum();
 
@@ -184,13 +183,13 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			target.PartModified += target_PartModified;
 			eventFired = false;
 		}
-
+		
 		[Test]
 		public void VerifyAddKeyValuePairNotSupported()
 		{
 			var item =
 				new KeyValuePair<IPerson, IScheduleRange>(dummyPerson,
-				new ScheduleRange(target, new ScheduleParameters(scenario, dummyPerson, new DateTimePeriod(2001, 1, 1, 2002, 1, 1)), dataPermissionChecker, authorization));
+				new ScheduleRange(target, new ScheduleParameters(scenario, dummyPerson, new DateTimePeriod(2001, 1, 1, 2002, 1, 1)), dataPermissionChecker, new ThisAuthorization(authorization)));
 			Assert.Throws<NotSupportedException>(() => target.Add(item));
 		}
 
@@ -351,7 +350,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[Test]
 		public void VerifyCorrectParametersToDifferenceSinceSnapshot()
 		{
-			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, PrincipalAuthorization.Current());
+			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, CurrentAuthorization.Make());
 			IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson, scenario, new DateTimePeriod(2000, 11, 2, 2001, 1, 1));
 			pAss.SetId(Guid.NewGuid());
 
@@ -557,7 +556,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[Test]
 		public void VerifyUpdateFromDataSourcePersonWithNoPermission()
 		{
-			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, authorization);
+			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, new ThisAuthorization(authorization));
 			target.PartModified += target_PartModified;
 			var dummy = target[dummyPerson];
 
@@ -590,7 +589,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[Test]
 		public void VerifyMeetingUpdateFromDataSourcePersonWithNoPermission()
 		{
-			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, authorization);
+			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, new ThisAuthorization(authorization));
 			target.PartModified += target_PartModified;
 			var personAtMeeting = PersonFactory.CreatePerson();
 			var dummy = target[dummyPerson];
@@ -723,7 +722,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[Test]
 		public void VerifySchedulePeriodWhenPublishingDateAndPreferenceDateDoesNotCorrespond()
 		{
-			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, authorization);
+			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, new ThisAuthorization(authorization));
 			IPerson person = PersonFactory.CreatePerson();
 			ITeam team = TeamFactory.CreateSimpleTeam("MyTeam");
 			IWorkflowControlSet workflowControlSet = new WorkflowControlSet("d");
@@ -769,7 +768,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		public void VerifyFunctionPermission()
 		{
 			//what should happen if no permission on function? Right now - does nothing
-			target = new ScheduleDictionary(scenario, period, diffSvc, new PersistableScheduleDataPermissionChecker(new PermissionProvider(authorization)), authorization);
+			target = new ScheduleDictionary(scenario, period, diffSvc, new PersistableScheduleDataPermissionChecker(new ThisAuthorization(authorization)), new ThisAuthorization(authorization));
 
 			IDayOffTemplate dOff1 = DayOffFactory.CreateDayOff(new Description("test"));
 			dOff1.Anchor = TimeSpan.Zero;
@@ -843,7 +842,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void VerifyWriteProtection()
 		{
-			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, authorization);
+			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, new ThisAuthorization(authorization));
 			IPerson per = PersonFactory.CreatePerson();
 			using (mocks.Record())
 			{
@@ -874,7 +873,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[Test]
 		public void ShouldNotModifyWhenNoRightsToModifyCurrentScenario()
 		{
-			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, authorization);
+			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, new ThisAuthorization(authorization));
 			var per = PersonFactory.CreatePerson();
 			var dop = period.VisiblePeriod.ToDateOnlyPeriod(per.PermissionInformation.DefaultTimeZone());
 
@@ -1560,7 +1559,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[Test]
 		public void VerifySet()
 		{
-			Assert.Throws<NotSupportedException>(() => target[dummyPerson] = new ScheduleRange(target, new ScheduleParameters(scenario, dummyPerson, new DateTimePeriod(2001, 1, 1, 2002, 1, 1)), dataPermissionChecker, authorization));
+			Assert.Throws<NotSupportedException>(() => target[dummyPerson] = new ScheduleRange(target, new ScheduleParameters(scenario, dummyPerson, new DateTimePeriod(2001, 1, 1, 2002, 1, 1)), dataPermissionChecker, new ThisAuthorization(authorization)));
 		}
 
 

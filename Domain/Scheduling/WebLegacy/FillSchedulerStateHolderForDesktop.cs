@@ -63,8 +63,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			var stateHolderFrom = _desktopContext.CurrentContext().SchedulerStateHolderFrom;
-			var authorization = PrincipalAuthorization.Current();
-			var scheduleDictionary = new ScheduleDictionary(scenario, stateHolderFrom.Schedules.Period, new PersistableScheduleDataPermissionChecker(new PermissionProvider(authorization)), authorization);
+			var authorization = CurrentAuthorization.Make();
+			var scheduleDictionary = new ScheduleDictionary(scenario, stateHolderFrom.Schedules.Period, new PersistableScheduleDataPermissionChecker(authorization), authorization);
 			using (TurnoffPermissionScope.For(scheduleDictionary))
 			{
 				moveSchedules(stateHolderFrom, scheduleDictionary, agents);

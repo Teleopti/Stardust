@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			{
 				var repositoryFactory = new RepositoryFactory();
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
-				var service = new TraceableRefreshService(new ThisCurrentScenario(exportScenario), new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), PrincipalAuthorization.Current()));
+				var service = new TraceableRefreshService(new ThisCurrentScenario(exportScenario), new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), CurrentAuthorization.Make()));
 				var refreshedPersonAbsenceAccounts = new List<IPersonAbsenceAccount>();
 				
 				foreach (var person in persons)

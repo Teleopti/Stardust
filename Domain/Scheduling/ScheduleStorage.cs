@@ -20,9 +20,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly IPersistableScheduleDataPermissionChecker _dataPermissionChecker;
 		private readonly IScheduleStorageRepositoryWrapper _scheduleStorageRepositoryWrapper;
-		private readonly IAuthorization _authorization;
+		private readonly ICurrentAuthorization _authorization;
 
-		public ScheduleStorage(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory, IPersistableScheduleDataPermissionChecker dataPermissionChecker, IScheduleStorageRepositoryWrapper scheduleStorageRepositoryWrapper, IAuthorization authorization)
+		public ScheduleStorage(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory, IPersistableScheduleDataPermissionChecker dataPermissionChecker, IScheduleStorageRepositoryWrapper scheduleStorageRepositoryWrapper, ICurrentAuthorization authorization)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
 			_repositoryFactory = repositoryFactory;

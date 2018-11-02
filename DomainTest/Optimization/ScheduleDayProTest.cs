@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _stateHolder = new SchedulingResultStateHolder();
             _person = PersonFactory.CreatePerson("Testor");
-			_permissionChecker = new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current()));
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make());
 
             DateTimePeriod wholePeriod = new DateTimePeriod(1999, 12, 15, 2000, 01, 14);
             IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(wholePeriod);
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             DateTimePeriod dayPeriod = new DateTimePeriod(2000, 01, 01, 2000, 01, 10);
             IScheduleParameters parameters = new ScheduleParameters(scenario, _person, dayPeriod);
-            IScheduleRange range = new ScheduleRange(scheduleDictionary, parameters, _permissionChecker, PrincipalAuthorization.Current());
+            IScheduleRange range = new ScheduleRange(scheduleDictionary, parameters, _permissionChecker, CurrentAuthorization.Make());
 
             scheduleDictionary.AddTestItem(_person, range);
 
@@ -73,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             DateTimePeriod dayPeriod = new DateTimePeriod(2000, 01, 01, 2000, 01, 10);
             IScheduleParameters parameters = new ScheduleParameters(scenario, _person, dayPeriod);
-            IScheduleRange range = new ScheduleRange(scheduleDictionary, parameters, _permissionChecker, PrincipalAuthorization.Current());
+            IScheduleRange range = new ScheduleRange(scheduleDictionary, parameters, _permissionChecker, CurrentAuthorization.Make());
 
             scheduleDictionary.AddTestItem(_person, range);
 

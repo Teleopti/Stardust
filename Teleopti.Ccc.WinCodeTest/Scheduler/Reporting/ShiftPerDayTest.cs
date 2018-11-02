@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Ccc.TestCommon;
@@ -74,8 +73,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             _dateTimePeriod = new DateTimePeriod(2009, 2, 2, 2009, 2, 3);
             _parameters = new ScheduleParameters(_scenario, _person1, _dateTimePeriod);
             _parameters2 = new ScheduleParameters(_scenario, _person2, _dateTimePeriod);
-			var authorization = PrincipalAuthorization.Current();
-			var permissionChecker = new PersistableScheduleDataPermissionChecker(new PermissionProvider(authorization));
+			var authorization = CurrentAuthorization.Make();
+			var permissionChecker = new PersistableScheduleDataPermissionChecker(authorization);
 
 			_scheduleRange = new ScheduleRange(_dic, _parameters, permissionChecker, authorization);
             _scheduleRange2 = new ScheduleRange(_dic, _parameters2, permissionChecker, authorization);
