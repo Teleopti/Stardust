@@ -3,9 +3,9 @@ using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class ScheduleStartOnWrongDateHint : IScheduleHint
+	public class ScheduleStartOnWrongDateHint : ISchedulePostHint
 	{
-		public void FillResult(HintResult hintResult, HintInput input)
+		public void FillResult(HintResult hintResult, SchedulePostHintInput input)
 		{
 			var agents = input.People;
 			var period = input.Period;

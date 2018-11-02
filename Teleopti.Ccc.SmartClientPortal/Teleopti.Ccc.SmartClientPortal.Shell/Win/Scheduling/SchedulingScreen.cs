@@ -2203,7 +2203,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					var endDay = scheduleDays.Last();
 					var selectedPeriod = new DateOnlyPeriod(startDay.DateOnlyAsPeriod.DateOnly, endDay.DateOnlyAsPeriod.DateOnly);
 					var validationResult = _container.Resolve<CheckScheduleHints>()
-						.Execute(new HintInput(SchedulerState.Schedules, _scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()),
+						.Execute(new SchedulePostHintInput(SchedulerState.Schedules, _scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()),
 							selectedPeriod, new FixedBlockPreferenceProvider(_schedulingOptions), _schedulingOptions.UsePreferences));
 
 					foreach (var result in validationResult.InvalidResources)

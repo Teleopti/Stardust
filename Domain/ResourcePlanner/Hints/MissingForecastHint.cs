@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class MissingForecastHint : IScheduleHint
+	public class MissingForecastHint : ISchedulePreHint
 	{
 		private readonly IExistingForecastRepository _existingForecastRepository;
 		private readonly IScenarioRepository _scenarioRepository;
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			return result;
 		}
 
-		public void FillResult(HintResult hintResult, HintInput input)
+		public void FillResult(HintResult hintResult, ScheduleHintInput input)
 		{
 			var people = input.People;
 			var range = input.Period;

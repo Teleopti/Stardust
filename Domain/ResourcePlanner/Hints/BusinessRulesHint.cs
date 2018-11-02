@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class BusinessRulesHint : IScheduleHint
+	public class BusinessRulesHint : ISchedulePostHint
 	{
 		private readonly DayOffBusinessRuleValidation _dayOffBusinessRuleValidation;
 
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			_dayOffBusinessRuleValidation = dayOffBusinessRuleValidation;
 		}
 
-		public void FillResult(HintResult validationResult, HintInput input)
+		public void FillResult(HintResult validationResult, SchedulePostHintInput input)
 		{
 			var schedules = input.Schedules;
 			var agents = input.People;

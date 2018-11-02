@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class BlockSchedulingExistingShiftNotMatchingEachOtherHint : IScheduleHint
+	public class BlockSchedulingExistingShiftNotMatchingEachOtherHint : ISchedulePostHint
 	{
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			_scheduleDayEquator = scheduleDayEquator;
 		}
 
-		public void FillResult(HintResult validationResult, HintInput input)
+		public void FillResult(HintResult validationResult, SchedulePostHintInput input)
 		{
 			if (input.Schedules == null) return;
 			var people = input.People;

@@ -4,9 +4,9 @@ using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class PersonShiftBagHint : IScheduleHint
+	public class PersonShiftBagHint : ISchedulePreHint
 	{
-		public void FillResult(HintResult hintResult, HintInput input)
+		public void FillResult(HintResult hintResult, ScheduleHintInput input)
 		{
 			var people = input.People;
 			var range = input.Period;

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public IEnumerable<IPerson> Execute(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod, IBlockPreferenceProvider blockPreferenceProvider)
 		{
-			var validationResult = _basicCheckScheduleHints.Execute(new HintInput(null, agents, selectedPeriod, blockPreferenceProvider, true));
+			var validationResult = _basicCheckScheduleHints.Execute(new ScheduleHintInput(agents, selectedPeriod, blockPreferenceProvider, true));
 			var agentIdsWithHint = validationResult.InvalidResources.Where(x=> x.ValidationErrors.Any(y => y.ErrorResource != nameof(Resources.NoMatchingSchedulePeriod))).Select(x => x.ResourceId);
 			var agentsWithoutHints = agents.Where(agent => !agentIdsWithHint.Contains(agent.Id.Value)).ToList();
 			return agentsWithoutHints;

@@ -504,13 +504,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AgentsWithPreferences>().SingleInstance();
 			if (!_configuration.Args().IsFatClient)
 			{
-				builder.RegisterType<PreferenceHint>().As<IScheduleHint>().SingleInstance();
+				builder.RegisterType<PreferenceHint>().As<ISchedulePostHint>().SingleInstance();
 			}
 
 			if (_configuration.Toggle(Toggles.ResourcePlanner_FasterSeamlessPlanningForPreferences_78286))
 			{
 				builder.RegisterType<ExcludeAgentsWithHints>().As<IExcludeAgentsWithHints>().SingleInstance();
-				builder.RegisterType<PersonContractShiftBagHint>().As<IScheduleHint>().SingleInstance();
+				builder.RegisterType<PersonContractShiftBagHint>().As<ISchedulePreHint>().SingleInstance();
 			}
 			else
 			{
@@ -519,23 +519,23 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		
 			builder.RegisterType<AgentsWithWhiteSpots>().SingleInstance();
 			builder.RegisterType<RemoveNonPreferenceDaysOffs>().SingleInstance();
-			builder.RegisterType<BlockSchedulingPreferenceHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<BlockSchedulingExistingShiftNotMatchingEachOtherHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<BlockSchedulingPreviousShiftNotMatchingEachOtherHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<BlockSchedulingNotMatchShiftBagHint>().As<IScheduleHint>().SingleInstance();
+			builder.RegisterType<BlockSchedulingPreferenceHint>().As<ISchedulePostHint>().SingleInstance();
+			builder.RegisterType<BlockSchedulingExistingShiftNotMatchingEachOtherHint>().As<ISchedulePostHint>().SingleInstance();
+			builder.RegisterType<BlockSchedulingPreviousShiftNotMatchingEachOtherHint>().As<ISchedulePostHint>().SingleInstance();
+			builder.RegisterType<BlockSchedulingNotMatchShiftBagHint>().As<ISchedulePostHint>().SingleInstance();
 
-			builder.RegisterType<PersonContractScheduleHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<PersonContractHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<PersonPartTimePercentageHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<PersonShiftBagHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<PersonSkillHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<ScheduleStartOnWrongDateHint>().As<IScheduleHint>().SingleInstance();
+			builder.RegisterType<PersonContractScheduleHint>().As<ISchedulePreHint>().SingleInstance();
+			builder.RegisterType<PersonContractHint>().As<ISchedulePreHint>().SingleInstance();
+			builder.RegisterType<PersonPartTimePercentageHint>().As<ISchedulePreHint>().SingleInstance();
+			builder.RegisterType<PersonShiftBagHint>().As<ISchedulePreHint>().SingleInstance();
+			builder.RegisterType<PersonSkillHint>().As<ISchedulePreHint>().SingleInstance();
+			builder.RegisterType<ScheduleStartOnWrongDateHint>().As<ISchedulePostHint>().SingleInstance();
 			if (!_configuration.Args().IsFatClient)
 			{
-				builder.RegisterType<MissingForecastHint>().AsSelf().As<IScheduleHint>().SingleInstance();
-				builder.RegisterType<PersonSchedulePeriodHint>().As<IScheduleHint>().SingleInstance();
+				builder.RegisterType<MissingForecastHint>().AsSelf().As<ISchedulePreHint>().SingleInstance();
+				builder.RegisterType<PersonSchedulePeriodHint>().As<ISchedulePreHint>().SingleInstance();
 			}
-			builder.RegisterType<BusinessRulesHint>().As<IScheduleHint>().SingleInstance();
+			builder.RegisterType<BusinessRulesHint>().As<ISchedulePostHint>().SingleInstance();
 		}
 
 		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)

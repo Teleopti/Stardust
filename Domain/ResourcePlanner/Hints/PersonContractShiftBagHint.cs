@@ -7,7 +7,7 @@ using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class PersonContractShiftBagHint : IScheduleHint
+	public class PersonContractShiftBagHint : ISchedulePreHint
 	{
 		private readonly IRuleSetProjectionService _ruleSetProjectionService;
 
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			_ruleSetProjectionService = ruleSetProjectionService;
 		}
 		
-		public void FillResult(HintResult hintResult, HintInput input)
+		public void FillResult(HintResult hintResult, ScheduleHintInput input)
 		{
 			var people = input.People;
 			var range = input.Period;

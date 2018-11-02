@@ -290,8 +290,10 @@
     <Compile Include="ResourceCalculation\ShiftProjectionCacheFactory.cs" />
     <Compile Include="ResourceCalculation\SkillsOnAgentsProvider.cs" />
     <Compile Include="ResourcePlanner\Hints\GetValidations.cs" />
+    <Compile Include="ResourcePlanner\Hints\ISchedulePreHint.cs" />
     <Compile Include="ResourcePlanner\Hints\PersonContractShiftBagHint.cs" />
     <Compile Include="ResourcePlanner\Hints\PreferenceHint.cs" />
+    <Compile Include="ResourcePlanner\Hints\ScheduleHintInput.cs" />
     <Compile Include="Scheduling\AddReducedSkillDaysToStateHolder.cs" />
     <Compile Include="Scheduling\AgentsWithPreferences.cs" />
     <Compile Include="Scheduling\AgentsWithWhiteSpots.cs" />
@@ -573,7 +575,7 @@
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingPreviousShiftNotMatchingEachOtherHint.cs" />
     <Compile Include="ResourcePlanner\Hints\HintsHelper.cs" />
     <Compile Include="ResourcePlanner\Hints\ScheduleStartOnWrongDateHint.cs" />
-    <Compile Include="ResourcePlanner\Hints\HintInput.cs" />
+    <Compile Include="ResourcePlanner\Hints\SchedulePostHintInput.cs" />
     <Compile Include="ResourcePlanner\IBlockPreferenceProviderForPlanningPeriod.cs" />
     <Compile Include="Scheduling\AdvancedAgentsFilter.cs" />
     <Compile Include="Scheduling\IShiftCategorySelection.cs" />
@@ -642,7 +644,7 @@
     <Compile Include="Staffing\ImportBpoFile.cs" />
     <Compile Include="Staffing\ISkillCombinationBpoTimeLineReader.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
-    <Compile Include="ResourcePlanner\Hints\IScheduleHint.cs" />
+    <Compile Include="ResourcePlanner\Hints\ISchedulePostHint.cs" />
     <Compile Include="Scheduling\Overtime\IOvertimeSkillPeriodData.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IDateWithDuplicate.cs" />
     <Compile Include="InterfaceLegacy\Messages\InputWithLogOnContext.cs" />

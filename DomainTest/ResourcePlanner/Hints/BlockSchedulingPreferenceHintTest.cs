@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			}));
 
 			var result =
-				Target.Execute(new HintInput(currentSchedule, new[] { agent }, planningPeriod,
+				Target.Execute(new SchedulePostHintInput(currentSchedule, new[] { agent }, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			}));
 
 			var result =
-				Target.Execute(new HintInput(currentSchedule, new[] { agent }, planningPeriod,
+				Target.Execute(new SchedulePostHintInput(currentSchedule, new[] { agent }, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 				}));
 
 			var result =
-				Target.Execute(new HintInput(currentSchedule, new[] { agent }, planningPeriod,
+				Target.Execute(new SchedulePostHintInput(currentSchedule, new[] { agent }, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 				}));
 
 			var result =
-				Target.Execute(new HintInput(currentSchedule, new[] { agent }, planningPeriod,
+				Target.Execute(new SchedulePostHintInput(currentSchedule, new[] { agent }, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			}));
 
 			var result =
-				Target.Execute(new HintInput(currentSchedule, new[] { agent }, planningPeriod,
+				Target.Execute(new SchedulePostHintInput(currentSchedule, new[] { agent }, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,

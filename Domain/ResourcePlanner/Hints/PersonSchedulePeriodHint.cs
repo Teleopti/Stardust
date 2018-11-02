@@ -7,9 +7,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class PersonSchedulePeriodHint : IScheduleHint
+	public class PersonSchedulePeriodHint : ISchedulePreHint
 	{
-		public void FillResult(HintResult hintResult, HintInput input)
+		public void FillResult(HintResult hintResult, ScheduleHintInput input)
 		{
 			var people = input.People;
 			var range = input.Period;

@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class PreferenceHint : IScheduleHint
+	public class PreferenceHint : ISchedulePostHint
 	{
 		private readonly IRestrictionOverLimitDecider _restrictionOverLimitDecider;
 		private readonly MatrixListFactory _matrixListFactory;
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			_matrixListFactory = matrixListFactory;
 		}
 
-		public void FillResult(HintResult hintResult, HintInput input)
+		public void FillResult(HintResult hintResult, SchedulePostHintInput input)
 		{
 			if (input.Schedules == null)
 				return;

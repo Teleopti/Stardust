@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public void Isolate(IIsolate isolate)
 		{
 			//dont want to block agents from being scheduled in these tests
-			isolate.UseTestDouble(Enumerable.Empty<IScheduleHint>()).For<IEnumerable<IScheduleHint>>();
+			isolate.UseTestDouble(Enumerable.Empty<ISchedulePostHint>()).For<IEnumerable<ISchedulePostHint>>();
 		}
 	}
 }
