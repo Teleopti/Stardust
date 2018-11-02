@@ -77,8 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IScheduleDay ScheduledDay(DateOnly day)
 		{
-			var dayAndPeriod = new DateOnlyAsDateTimePeriod(day, Person.PermissionInformation.DefaultTimeZone());
-			return ScheduleDay(dayAndPeriod, PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules), _availablePeriods.Value);
+			return ScheduledDay(day, _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules));
 		}
 
 		public void ValidateBusinessRules(INewBusinessRuleCollection newBusinessRuleCollection)
