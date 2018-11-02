@@ -8,9 +8,10 @@ using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.InfrastructureTest.Persisters.Schedules;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeInitiatorIdentifier>().For<IInitiatorIdentifier>();
+			isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
 		}
 
 		[Test]
@@ -81,8 +83,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 			message.DomainUpdateType.Should().Be(DomainUpdateType.NotApplicable);
 			message.BinaryData.Should().Contain(person.Id.ToString());
 		}
-
-
+		
 		[Test]
 		public void ShouldSendWithInitiatorId()
 		{
@@ -123,6 +124,5 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 			MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single()
 				.ModuleIdAsGuid().Should().Be(InitiatorIdentifier.InitiatorId);
 		}
-
 	}
 }

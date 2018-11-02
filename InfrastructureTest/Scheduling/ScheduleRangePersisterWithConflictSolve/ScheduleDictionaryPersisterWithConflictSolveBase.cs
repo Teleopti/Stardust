@@ -9,8 +9,10 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -18,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling.ScheduleRangePersisterWithC
 {
 	[Category("BucketC")]
 	[InfrastructureTest]
-	public abstract class ScheduleRangePersisterWithConflictSolveBase
+	public abstract class ScheduleRangePersisterWithConflictSolveBase : IIsolateSystem
 	{
 		public WithUnitOfWork WithUnitOfWork { get; set; }
 
@@ -115,5 +117,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling.ScheduleRangePersisterWithC
 		protected abstract void ModifySecond(IScheduleDictionary scheduleDictionary);
 
 		protected abstract void VerifyResult(IScheduleDictionary result);
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
+		}
 	}
 }
