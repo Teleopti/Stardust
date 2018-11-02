@@ -17820,4 +17820,16 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Filter team schedules by time</value>
     <comment>Filter team schedules by time - a icon tooltip used in TeamSchedule/MyTime</comment>
   </data>
+  <data name="ApproveOrDenyRequest" xml:space="preserve">
+    <value>Approve/Deny Request</value>
+    <comment>Use in WFM Permission for approve or deny request model</comment>
+  </data>
+  <data name="EditSiteOpenHours" xml:space="preserve">
+    <value>Edit Site Open Hours</value>
+    <comment>Use in WFM Permission for edit site open hours</comment>
+  </data>
+  <data name="ReplyRequest" xml:space="preserve">
+    <value>Reply Request</value>
+    <comment>Use in WFM Permission for reply request model</comment>
+  </data>
 </root>

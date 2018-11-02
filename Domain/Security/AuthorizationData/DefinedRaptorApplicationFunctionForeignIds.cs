@@ -147,6 +147,7 @@
 		public const string WebIntraday = "0127";
 		public const string WebModifySkillGroup = "0128";
 		public const string WebCancelRequest = "0130";
+		public const string WebApproveOrDenyRequest = "0166";
 		public const string WebOvertimeRequest = "0149";
 		public const string WebStaffing = "0140";
 		public const string RemoveOvertime = "0142";
