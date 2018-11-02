@@ -30,15 +30,12 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 				stateHolder.SchedulingResultState.LoadedAgents.Add(agent);
 			}
 			stateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
-			var uniqueSkills = new HashSet<ISkill>();
-			foreach (var skillDay in skillDays)
+			var skillDayBySkill = skillDays.ToLookup(s => s.Skill);
+		
+			stateHolder.SchedulingResultState.AddSkills(skillDayBySkill.Select(s => s.Key).ToArray());
+			foreach (var uniqueSkill in skillDayBySkill)
 			{
-				uniqueSkills.Add(skillDay.Skill);
-			}
-			stateHolder.SchedulingResultState.AddSkills(uniqueSkills.ToArray());
-			foreach (var uniqueSkill in uniqueSkills)
-			{
-				stateHolder.SchedulingResultState.SkillDays[uniqueSkill] = skillDays.Where(skillDay => skillDay.Skill.Equals(uniqueSkill));
+				stateHolder.SchedulingResultState.SkillDays[uniqueSkill.Key] = skillDayBySkill[uniqueSkill.Key];
 			}
 			stateHolder.SchedulingResultState.ExternalStaff = bpoResources;
 			stateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, timeZone);
