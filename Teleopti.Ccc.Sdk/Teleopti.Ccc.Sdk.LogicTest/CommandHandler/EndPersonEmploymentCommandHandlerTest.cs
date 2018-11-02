@@ -32,8 +32,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			personRepository.Has(person);
 			var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(null);
 			var target = new EndPersonEmploymentCommandHandler(personRepository, currentUnitOfWorkFactory, null, new PersonAccountUpdaterDummy());
-			
-			target.Handle(endPersonEmploymentCommandDto);
+
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				target.Handle(endPersonEmploymentCommandDto);
+			}
 
 			person.TerminalDate.Should().Be.EqualTo(endPersonEmploymentCommandDto.Date.ToDateOnly());
 			endPersonEmploymentCommandDto.Result.AffectedItems.Should().Be.EqualTo(1);
@@ -83,7 +86,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				new ClearPersonRelatedInformation(personAssignmentRepository, new FakeScenarioRepository(scenario),
 					new FakePersonAbsenceRepository(null)), new PersonAccountUpdaterDummy());
 
-			target.Handle(endPersonEmploymentCommandDto);
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				target.Handle(endPersonEmploymentCommandDto);
+			}
 
 			person.TerminalDate.Should().Be.EqualTo(endPersonEmploymentCommandDto.Date.ToDateOnly());
 			endPersonEmploymentCommandDto.Result.AffectedItems.Should().Be.EqualTo(1);
@@ -112,7 +118,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				new ClearPersonRelatedInformation(personAssignmentRepository, new FakeScenarioRepository(scenario),
 					new FakePersonAbsenceRepository(null)), new PersonAccountUpdaterDummy());
 
-			target.Handle(endPersonEmploymentCommandDto);
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				target.Handle(endPersonEmploymentCommandDto);
+			}
 
 			person.TerminalDate.Should().Be.EqualTo(endPersonEmploymentCommandDto.Date.ToDateOnly());
 			endPersonEmploymentCommandDto.Result.AffectedItems.Should().Be.EqualTo(1);

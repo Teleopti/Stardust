@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
@@ -60,7 +63,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			Expect.Call(_personRep.Get(id)).Return(person);
 			Expect.Call(person.SchedulePeriod(new DateOnly(2013, 6, 12))).Return(null);
 			_mocks.ReplayAll();
-			_target.Handle(command);
+
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.Handle(command);
+			}
+
 			Assert.That(command.Result.AffectedItems, Is.EqualTo(0));
 			_mocks.VerifyAll();
 		}
@@ -82,7 +90,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			Expect.Call(_uow.PersistAll()).Return(new List<IRootChangeInfo> {new RootChangeInfo()});
 			Expect.Call(period.Id).Return(periodId);
 			_mocks.ReplayAll();
-			_target.Handle(command);
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.Handle(command);
+			}
+
 			Assert.That(command.Result.AffectedItems, Is.EqualTo(1));
 			Assert.That(command.Result.AffectedId, Is.EqualTo(periodId));
 			_mocks.VerifyAll();

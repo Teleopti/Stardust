@@ -58,7 +58,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
                 var command = new SetPersonOptionalValuesForPersonCommandDto { PersonId = person.Id.GetValueOrDefault() };
                 command.OptionalValueCollection.Add(new OptionalValueDto { Key = "Shoe size", Value = "42" });
-                target.Handle(command);
+
+				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+				{
+					target.Handle(command);
+				}
 
 				var result = command.Result;
 				result.AffectedItems.Should().Be.EqualTo(1);
@@ -91,9 +95,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             {
                 var command = new SetPersonOptionalValuesForPersonCommandDto { PersonId = person.Id.GetValueOrDefault() };
                 command.OptionalValueCollection.Add(new OptionalValueDto { Key = "Shoe size", Value = "" });
-                target.Handle(command);
+				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+				{
+					target.Handle(command);
+				}
 
-                person.GetColumnValue(optionalColumn).Should().Be.Null();
+				person.GetColumnValue(optionalColumn).Should().Be.Null();
             }
         }
 

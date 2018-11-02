@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -32,11 +33,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private DateTime _end3;
 		private IShiftCategory _shiftCategory;
 		private IMultiplicatorDefinitionSet _multiplicatorDefinitionSet;
+		private IDisposable auth;
 
 
 		[SetUp]
 		public void Setup()
 		{
+			auth = CurrentAuthorization.ThreadlyUse(new FullPermission());
 			_multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			_activity1 = new Activity("activity1");
 			_activity2 = new Activity("activity2");
@@ -56,7 +59,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_source.CreateAndAddActivity(_activity1, _period1, _shiftCategory);
 			_source.CreateAndAddActivity(_activity2,_period2,_shiftCategory);
 			_destination = ScheduleDayFactory.Create(_dateOnly);
+
 			_target = new PasteAsOvertime(_source, _destination, _multiplicatorDefinitionSet);
+		}
+
+		[TearDown]
+		public void Teardown()
+		{
+			auth?.Dispose();
 		}
 
 		[Test]

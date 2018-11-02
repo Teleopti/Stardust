@@ -377,34 +377,39 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void VerifyBrokenRulesAndCancel()
 		{
-			_requestViewAdapters.RemoveAt(2);
-			_requestViewAdapters.RemoveAt(1);
-			
-			_schedules = new ScheduleDictionaryForTest(_scenario,_dateTimePeriod);
-			var newBusinessRuleCollection = new FakeNewBusinessRuleCollection();
-			newBusinessRuleCollection.SetRuleResponse(new[]
+			using (var auth = CurrentAuthorization.ThreadlyUse(new FullPermission()))
 			{
-				new BusinessRuleResponse(typeof(DayOffRule), "Error", true, false, _dateTimePeriod,
-					_person1, new DateOnlyPeriod(), "tjillevippen")
-			});
-			_handleBusinessRuleResponse.WithDialogResult(DialogResult.Cancel);
-			
-			foreach (PersonRequestViewModel adapter in _requestViewAdapters)
-			{
-				Assert.IsTrue(adapter.PersonRequest.IsPending);
-			}
+				_requestViewAdapters.RemoveAt(2);
+				_requestViewAdapters.RemoveAt(1);
 
-			//Change status
-			_requestPresenter.ApproveOrDeny(_requestViewAdapters,
-											new ApprovePersonRequestCommand(_view, _schedules, _scenario,
-																			_requestPresenter,
-																			_handleBusinessRuleResponse,
-																			new PersonRequestAuthorizationCheckerForTest
-																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), _globalSettingRepo, _personAbsenceAccountRepository, new FakePersonRequestRepository()), string.Empty);
+				_schedules = new ScheduleDictionaryForTest(_scenario, _dateTimePeriod);
+				var newBusinessRuleCollection = new FakeNewBusinessRuleCollection();
+				newBusinessRuleCollection.SetRuleResponse(new[]
+				{
+					new BusinessRuleResponse(typeof(DayOffRule), "Error", true, false, _dateTimePeriod,
+						_person1, new DateOnlyPeriod(), "tjillevippen")
+				});
+				_handleBusinessRuleResponse.WithDialogResult(DialogResult.Cancel);
 
-			foreach (PersonRequestViewModel adapter in _requestViewAdapters)
-			{
-				Assert.IsTrue(adapter.PersonRequest.IsPending);
+				foreach (PersonRequestViewModel adapter in _requestViewAdapters)
+				{
+					Assert.IsTrue(adapter.PersonRequest.IsPending);
+				}
+
+				//Change status
+				_requestPresenter.ApproveOrDeny(_requestViewAdapters,
+					new ApprovePersonRequestCommand(_view, _schedules, _scenario,
+						_requestPresenter,
+						_handleBusinessRuleResponse,
+						new PersonRequestAuthorizationCheckerForTest
+							(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(),
+						new DoNothingScheduleDayChangeCallBack(), _globalSettingRepo, _personAbsenceAccountRepository,
+						new FakePersonRequestRepository()), string.Empty);
+
+				foreach (PersonRequestViewModel adapter in _requestViewAdapters)
+				{
+					Assert.IsTrue(adapter.PersonRequest.IsPending);
+				}
 			}
 		}
 

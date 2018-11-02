@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
             _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
             _personSelectorPresenter = _mocks.StrictMock<IPersonSelectorPresenter>();
             _meetingOverviewFactory = _mocks.StrictMock<IMeetingOverviewViewFactory>();
-            _target = new AddMeetingFromPanelCommand(_repositoryFactory, _unitOfWorkFactory, _personSelectorPresenter, _meetingOverviewFactory);
         }
 
         [Test]
@@ -53,9 +52,13 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 
         [Test]
         public void ShouldReturnTrueIfAllowed()
-        {
-            Assert.That(_target.CanExecute(), Is.True);
-        }
+		{
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target = new AddMeetingFromPanelCommand(_repositoryFactory, _unitOfWorkFactory, _personSelectorPresenter, _meetingOverviewFactory);
+				Assert.That(_target.CanExecute(), Is.True);
+			}
+		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldGetScenarioAndPersonsFromRepositoryAndCallView()
@@ -93,8 +96,14 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
                 () => _meetingOverviewFactory.ShowMeetingComposerView(view, null, true)).IgnoreArguments();
             Expect.Call(view.Cursor = Cursors.Default);
             _mocks.ReplayAll();
-            _target.Execute();
-            _mocks.VerifyAll();
+
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target = new AddMeetingFromPanelCommand(_repositoryFactory, _unitOfWorkFactory, _personSelectorPresenter, _meetingOverviewFactory);
+				_target.Execute();
+			}
+
+			_mocks.VerifyAll();
 
         }
 
@@ -109,8 +118,14 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
             Expect.Call(() => view.ShowDataSourceException(exception, Resources.AddMeeting));
             Expect.Call(view.Cursor = Cursors.Default);
             _mocks.ReplayAll();
-            _target.Execute();
-            _mocks.VerifyAll();
+
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target = new AddMeetingFromPanelCommand(_repositoryFactory, _unitOfWorkFactory, _personSelectorPresenter, _meetingOverviewFactory);
+				_target.Execute();
+			}
+
+			_mocks.VerifyAll();
 
         }
 
@@ -128,8 +143,13 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
             Expect.Call(uow.Dispose);
             Expect.Call(view.Cursor = Cursors.Default);
             _mocks.ReplayAll();
-            _target.Execute();
-            _mocks.VerifyAll();
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target = new AddMeetingFromPanelCommand(_repositoryFactory, _unitOfWorkFactory, _personSelectorPresenter, _meetingOverviewFactory);
+				_target.Execute();
+			}
+
+			_mocks.VerifyAll();
         }
     }
 

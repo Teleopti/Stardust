@@ -55,8 +55,11 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
 			personSelectorView.Stub(x => x.VisiblePersonIds).Return(new List<Guid> { olaPersonId, mickePersonId, robinPersonId });
 			personSelectorView.Stub(x => x.PreselectedPersonIds).Return(new HashSet<Guid> { olaPersonId });
 			personSelectorView.Stub(x => x.ExpandSelected).Return(true);
-			
-			target.Execute();
+
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				target.Execute();
+			}
 
 			personSelectorView.AssertWasCalled(x => x.ResetTreeView(new TreeNodeAdv[0]), o => o.IgnoreArguments());
 		}
@@ -88,7 +91,10 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
 			personSelectorView.Stub(x => x.PreselectedPersonIds).Return(new HashSet<Guid> { olaPersonId });
 			personSelectorView.Stub(x => x.ExpandSelected).Return(true);
 
-			target.Execute();
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				target.Execute();
+			}
 
 			personSelectorView.AssertWasCalled(x => x.ResetTreeView(new TreeNodeAdv[0]), o => o.Constraints(new PredicateConstraint<TreeNodeAdv[]>(t => t[0].Nodes.Count == 2)));
 		}
@@ -131,8 +137,14 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
 			var personSelectorReadOnlyRepository = MockRepository.GenerateMock<IPersonSelectorReadOnlyRepository>();
 			var personSelectorView = MockRepository.GenerateMock<IPersonSelectorView>();
 			var commonNameSetting = new CommonNameDescriptionSetting();
-			var target = new LoadBuiltInTabsCommand(PersonSelectorField.Contract, unitOfWorkFactory, personSelectorReadOnlyRepository, personSelectorView, "Contract", commonNameSetting, _myApplicationFunction, Guid.Empty);
-			Assert.That(target.Key, Is.EqualTo("Contract"));
+
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				var target = new LoadBuiltInTabsCommand(PersonSelectorField.Contract, unitOfWorkFactory,
+					personSelectorReadOnlyRepository, personSelectorView, "Contract", commonNameSetting,
+					_myApplicationFunction, Guid.Empty);
+				Assert.That(target.Key, Is.EqualTo("Contract"));
+			}
 		}
 	}
 

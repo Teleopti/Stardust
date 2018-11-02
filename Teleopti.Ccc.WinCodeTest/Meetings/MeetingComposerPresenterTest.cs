@@ -291,8 +291,12 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _view.OnModificationOccurred(_model.Meeting, true);
 
             _mocks.ReplayAll();
-            _target.DeleteMeeting();
-            _mocks.VerifyAll();
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.DeleteMeeting();
+			}
+
+			_mocks.VerifyAll();
         }
 
         [Test]

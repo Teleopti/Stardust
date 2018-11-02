@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -125,9 +126,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             }
 
             using (_mock.Playback())
-            {
-                _target.Handle(_employPersonCommandDto);
-            }
+			{
+				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+				{
+					_target.Handle(_employPersonCommandDto);
+				}
+			}
         }
 
         [Test]
@@ -171,8 +175,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                         SiteAndTeam = teamX.SiteAndTeam
                     };
 
-                    _target.Handle(_employPersonCommandDto);
-                }
+					using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+					{
+						_target.Handle(_employPersonCommandDto);
+					}
+				}
             });
             ex.Message.Should().Contain("Adding references to items from a different business unit than the currently specified in the header is not allowed");
         }

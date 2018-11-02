@@ -65,11 +65,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private DateOnly _baseDateTime;
         private IDictionary<IPerson, IScheduleRange> _underlyingDictionary;
 	    private IPersistableScheduleDataPermissionChecker _permissionChecker;
-			
+		private IDisposable auth;
+
 		[SetUp]
         public void Setup()
-        {
-            _layerFactory = new VisualLayerFactory();
+		{
+			auth = CurrentAuthorization.ThreadlyUse(new FullPermission());
+			_layerFactory = new VisualLayerFactory();
             _scenario = ScenarioFactory.CreateScenarioAggregate();
 			_permissionChecker = new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make());
             IPerson person = PersonFactory.CreatePerson();
@@ -155,6 +157,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[TearDown]
 		public void Teardown()
 		{
+			auth?.Dispose();
 			TimeZoneGuard.Instance.TimeZone = null;
 		}
 
@@ -396,36 +399,36 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyRuleConflictToolTip()
-        {
-            var schedulePeriod = new DateTimePeriod(2000, 11, 1, 2001, 5, 1);
-            _param = new ScheduleParameters(_scenario, _agent,
-                                           schedulePeriod);
+		{
+				var schedulePeriod = new DateTimePeriod(2000, 11, 1, 2001, 5, 1);
+				_param = new ScheduleParameters(_scenario, _agent,
+					schedulePeriod);
 
-            _scheduleRange = new ScheduleRange(_dic, _param, _permissionChecker, CurrentAuthorization.Make());
-            _underlyingDictionary[_agent] = _scheduleRange;
-            ITeam team = TeamFactory.CreateSimpleTeam();
+				_scheduleRange = new ScheduleRange(_dic, _param, _permissionChecker, CurrentAuthorization.Make());
+				_underlyingDictionary[_agent] = _scheduleRange;
+				ITeam team = TeamFactory.CreateSimpleTeam();
 
-            _agent.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1),
-                                       new PersonContract(_contract, new PartTimePercentage("sdf"), new ContractSchedule("sdf")),
-                                       team));
-
-
-            var noRest = CreateNoRestAss();
-            _scheduleRange.Add(noRest);
-
-			_scheduleRange.Add(_ass1);
+				_agent.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1),
+					new PersonContract(_contract, new PartTimePercentage("sdf"), new ContractSchedule("sdf")),
+					team));
 
 
-            var newRules = NewBusinessRuleCollection.Minimum();
-			newRules.Add(new NewNightlyRestRule(new WorkTimeStartEndExtractor()));
-            _dic.ValidateBusinessRulesOnPersons(new List<IPerson>{_agent}, newRules);
+				var noRest = CreateNoRestAss();
+				_scheduleRange.Add(noRest);
 
-            var parts = _scheduleRange.ScheduledDay(new DateOnly(2001,1,1));
+				_scheduleRange.Add(_ass1);
 
-            string tt = ViewBaseHelper.GetToolTip(parts);
-            int pos = tt.IndexOf("There must be a nightly rest of at least",StringComparison.OrdinalIgnoreCase );
-            Assert.AreNotEqual(-1, pos);
-        }
+
+				var newRules = NewBusinessRuleCollection.Minimum();
+				newRules.Add(new NewNightlyRestRule(new WorkTimeStartEndExtractor()));
+				_dic.ValidateBusinessRulesOnPersons(new List<IPerson> {_agent}, newRules);
+
+				var parts = _scheduleRange.ScheduledDay(new DateOnly(2001, 1, 1));
+
+				string tt = ViewBaseHelper.GetToolTip(parts);
+				int pos = tt.IndexOf("There must be a nightly rest of at least", StringComparison.OrdinalIgnoreCase);
+				Assert.AreNotEqual(-1, pos);
+		}
 
         [Test]
         public void VerifyGetLayerRectangle()

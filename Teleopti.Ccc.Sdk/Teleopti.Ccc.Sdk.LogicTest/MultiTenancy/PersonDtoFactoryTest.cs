@@ -13,6 +13,7 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.WcfHost.Service.Factory;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -79,11 +80,17 @@ namespace Teleopti.Ccc.Sdk.LogicTest.MultiTenancy
 			TenantLogonDataManager.SetLogon(pers.Id.GetValueOrDefault(), "inloggningsnamn", "DOMAIN/NAME");
 			TenantLogonDataManager.SetLogon(pers2.Id.GetValueOrDefault(), "pers2", "DOMAIN/pers2");
 			TenantLogonDataManager.SetLogon(pers3.Id.GetValueOrDefault(), "pers3", "DOMAIN/pers3");
-			var res = PersonDtoFactory.GetPersonsByTeam(new TeamDto{Id = team.Id},DateTime.UtcNow, new PersonCollection("Raptor/Global/ViewSchedules", new List<Person>{pers, pers2, pers3}, new DateOnly(DateTime.UtcNow)) );
-			res.Count.Should().Be(3);
-			res.Count(r => r.ApplicationLogOnName.Equals("inloggningsnamn")).Should().Be(1);
-			res.Count(r => r.ApplicationLogOnName.Equals("pers2")).Should().Be(1);
-			res.Count(r => r.ApplicationLogOnName.Equals("pers3")).Should().Be(1);
+
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				var res = PersonDtoFactory.GetPersonsByTeam(new TeamDto {Id = team.Id}, DateTime.UtcNow,
+					new PersonCollection("Raptor/Global/ViewSchedules", new List<Person> {pers, pers2, pers3},
+						new DateOnly(DateTime.UtcNow)));
+				res.Count.Should().Be(3);
+				res.Count(r => r.ApplicationLogOnName.Equals("inloggningsnamn")).Should().Be(1);
+				res.Count(r => r.ApplicationLogOnName.Equals("pers2")).Should().Be(1);
+				res.Count(r => r.ApplicationLogOnName.Equals("pers3")).Should().Be(1);
+			}
 		}
 
 		[Test]

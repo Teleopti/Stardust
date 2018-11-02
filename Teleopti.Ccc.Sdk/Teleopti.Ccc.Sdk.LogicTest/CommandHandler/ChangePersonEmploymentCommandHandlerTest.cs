@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -20,7 +21,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
-    [TestFixture]
     public class ChangePersonEmploymentCommandHandlerTest
     {
         private IAssembler<IPersonPeriod, PersonSkillPeriodDto> _personSkillPeriodAssembler;
@@ -151,9 +151,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 .Return(_team);
             _externalLogOnRepository.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn>());
 
-            _target.Handle(_changePersonEmploymentCommandDto);
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.Handle(_changePersonEmploymentCommandDto);
+			}
 
-            unitOfWork.AssertWasCalled(x => x.PersistAll());
+			unitOfWork.AssertWasCalled(x => x.PersistAll());
         }
 
         [Test]
@@ -232,9 +235,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _changePersonEmploymentCommandDto.PersonSkillPeriodCollection[0].SkillCollection.Add(_skill.Id.GetValueOrDefault());
 #pragma warning restore 618
             _changePersonEmploymentCommandDto.PersonSkillCollection.Add(new PersonSkillDto{Active = false,Proficiency = 0.9,SkillId = _skill.Id.GetValueOrDefault()});
-            _target.Handle(_changePersonEmploymentCommandDto);
 
-            var personSkill = _person.PersonPeriodCollection.First().PersonSkillCollection.First();
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.Handle(_changePersonEmploymentCommandDto);
+			}
+
+			var personSkill = _person.PersonPeriodCollection.First().PersonSkillCollection.First();
             Assert.AreEqual(_skill, personSkill.Skill);
             Assert.AreEqual(.9, personSkill.SkillPercentage.Value);
             Assert.AreEqual(false, personSkill.Active);
@@ -269,9 +276,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _changePersonEmploymentCommandDto.PersonSkillPeriodCollection = null;
 #pragma warning restore 618
             _changePersonEmploymentCommandDto.PersonSkillCollection.Add(new PersonSkillDto { Active = false, Proficiency = 0.9, SkillId = _skill.Id.GetValueOrDefault() });
-            _target.Handle(_changePersonEmploymentCommandDto);
 
-            var personSkill = _person.PersonPeriodCollection.First().PersonSkillCollection.First();
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.Handle(_changePersonEmploymentCommandDto);
+			}
+
+			var personSkill = _person.PersonPeriodCollection.First().PersonSkillCollection.First();
             Assert.AreEqual(_skill, personSkill.Skill);
             Assert.AreEqual(.9, personSkill.SkillPercentage.Value);
             Assert.AreEqual(false, personSkill.Active);
@@ -306,9 +317,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _changePersonEmploymentCommandDto.PersonSkillPeriodCollection[0].SkillCollection.Add(_skill.Id.GetValueOrDefault());
 #pragma warning restore 618
             _changePersonEmploymentCommandDto.PersonSkillCollection = null;
-            _target.Handle(_changePersonEmploymentCommandDto);
 
-            var personSkill = _person.PersonPeriodCollection.First().PersonSkillCollection.First();
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.Handle(_changePersonEmploymentCommandDto);
+			}
+
+			var personSkill = _person.PersonPeriodCollection.First().PersonSkillCollection.First();
             Assert.AreEqual(_skill, personSkill.Skill);
             Assert.AreEqual(1, personSkill.SkillPercentage.Value);
             Assert.AreEqual(true, personSkill.Active);
@@ -344,9 +359,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 #pragma warning disable 618
             _changePersonEmploymentCommandDto.PersonSkillPeriodCollection[0].SkillCollection.Add( _skill.Id.GetValueOrDefault());
 #pragma warning restore 618
-            _target.Handle(_changePersonEmploymentCommandDto);
 
-            var personSkill = _person.PersonPeriodCollection.First().PersonSkillCollection.First();
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.Handle(_changePersonEmploymentCommandDto);
+			}
+
+			var personSkill = _person.PersonPeriodCollection.First().PersonSkillCollection.First();
             Assert.AreEqual(_skill, personSkill.Skill);
             Assert.AreEqual(1, personSkill.SkillPercentage.Value);
             Assert.AreEqual(true, personSkill.Active);
@@ -380,8 +399,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 .Return(new PersonSkillPeriodDto());
             _externalLogOnRepository.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn>());
 
-            _target.Handle(_changePersonEmploymentCommandDto);
-            unitOfWork.AssertWasCalled(x => x.PersistAll());
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.Handle(_changePersonEmploymentCommandDto);
+			}
+
+			unitOfWork.AssertWasCalled(x => x.PersistAll());
         }
 
         [Test]
@@ -399,10 +422,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 _contractRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractId.GetValueOrDefault())).Return(_contract);
                 _contractScheduleRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault())).Return(_contractSchedule);
                 _externalLogOnRepository.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn>());
-                
-                _target.Handle(_changePersonEmploymentCommandDto);
 
-                unitOfWork.AssertWasCalled(x => x.PersistAll());
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.Handle(_changePersonEmploymentCommandDto);
+			}
+
+			unitOfWork.AssertWasCalled(x => x.PersistAll());
         }
 
 		[Test]
@@ -423,8 +449,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_contractScheduleRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault())).Return(_contractSchedule);
 			_externalLogOnRepository.Stub(x => x.LoadAll()).Return(new List<IExternalLogOn>());
 			_personSkillPeriodAssembler.Stub(x => x.DomainEntityToDto(personPeriod)).Return(new PersonSkillPeriodDto());
-
-			_target.Handle(_changePersonEmploymentCommandDto);
+			
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.Handle(_changePersonEmploymentCommandDto);
+			}
 
 			var newPeriod = _person.Period(DateOnly.Today);
 			newPeriod.BudgetGroup.Should().Be.EqualTo(personPeriod.BudgetGroup);
@@ -453,9 +482,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _changePersonEmploymentCommandDto.PersonSkillPeriodCollection = null;
 #pragma warning restore 618
             _changePersonEmploymentCommandDto.PersonSkillCollection.Add(new PersonSkillDto{Active = false,Proficiency = .9,SkillId = _skill.Id.GetValueOrDefault()});
-            
-            _target.Handle(_changePersonEmploymentCommandDto);
-            _person.PersonPeriodCollection[0].PersonSkillCollection.Count().Should().Be.EqualTo(1);
+
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.Handle(_changePersonEmploymentCommandDto);
+			}
+
+			_person.PersonPeriodCollection[0].PersonSkillCollection.Count().Should().Be.EqualTo(1);
             unitOfWork.AssertWasCalled(x => x.PersistAll());
         }
 

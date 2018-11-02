@@ -1,5 +1,3 @@
-
-
 using NUnit.Framework;
 using Teleopti.Ccc.Sdk.LogicTest.OldTests;
 
@@ -16,6 +14,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 	    public void RunBeforeAnyTest()
         {
             LogOn.RunAsPeterWestlinJunior();
-        }
+		}
     }
 }

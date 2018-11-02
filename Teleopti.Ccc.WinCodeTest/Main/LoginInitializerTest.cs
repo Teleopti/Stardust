@@ -51,8 +51,11 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			loggedOnUnitOfWorkFactory.Expect(l => l.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null, null)).IgnoreArguments();
 
-			var result = _target.InitializeApplication(datasourceContainer);
-			result.Should().Be.True();
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				var result = _target.InitializeApplication(datasourceContainer);
+				result.Should().Be.True();
+			}
 		}
 
 		[Test]
@@ -71,8 +74,11 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			loggedOnUnitOfWorkFactory.Expect(l => l.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null, null)).IgnoreArguments();
 
-			var result = _target.InitializeApplication(datasourceContainer);
-			result.Should().Be.False();
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				var result = _target.InitializeApplication(datasourceContainer);
+				result.Should().Be.False();
+			}
 		}
 
 		[Test]
@@ -91,8 +97,11 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			loggedOnUnitOfWorkFactory.Expect(l => l.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null, null)).IgnoreArguments();
 
-			var result = _target.InitializeApplication(datasourceContainer);
-			result.Should().Be.False();
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				var result = _target.InitializeApplication(datasourceContainer);
+				result.Should().Be.False();
+			}
 		}
 
 

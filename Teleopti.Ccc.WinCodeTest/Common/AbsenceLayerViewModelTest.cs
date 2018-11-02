@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -175,11 +176,13 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			testRunner.RunInSTA(
 				delegate
 				{
-				
-					DateTimePeriodPanel panel = GetPanel();
-					_target.SchedulePart = scheduleDay;
-					_target.StartTimeChanged(panel, 1);
-					Assert.AreEqual(_expectMovePermitted, _target.IsChanged);
+					using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+					{
+						DateTimePeriodPanel panel = GetPanel();
+						_target.SchedulePart = scheduleDay;
+						_target.StartTimeChanged(panel, 1);
+						Assert.AreEqual(_expectMovePermitted, _target.IsChanged);
+					}
 				});
 		}
 
@@ -200,11 +203,13 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			testRunner.RunInSTA(
 				delegate
 				{
-					
-					DateTimePeriodPanel panel = GetPanel();
-					_target.SchedulePart = scheduleDay;
-					_target.EndTimeChanged(panel, 1);
-					Assert.AreEqual(_expectMovePermitted, _target.IsChanged);
+					using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+					{
+						DateTimePeriodPanel panel = GetPanel();
+						_target.SchedulePart = scheduleDay;
+						_target.EndTimeChanged(panel, 1);
+						Assert.AreEqual(_expectMovePermitted, _target.IsChanged);
+					}
 				});
 		}
 
@@ -215,11 +220,13 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			testRunner.RunInSTA(
 				delegate
 				{
-					
-					DateTimePeriodPanel panel = GetPanel();
-					_target.SchedulePart = scheduleDay;
-					_target.TimeChanged(panel, 1);
-					Assert.AreEqual(_expectMovePermitted, _target.IsChanged);
+					using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+					{
+						DateTimePeriodPanel panel = GetPanel();
+						_target.SchedulePart = scheduleDay;
+						_target.TimeChanged(panel, 1);
+						Assert.AreEqual(_expectMovePermitted, _target.IsChanged);
+					}
 				});
 		}
 

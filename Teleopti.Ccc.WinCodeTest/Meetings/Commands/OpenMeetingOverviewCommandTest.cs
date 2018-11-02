@@ -51,51 +51,59 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 
         [Test]
         public void ShouldReturnTrueIfAllowed()
-        {
-            Assert.That(_target.CanExecute(), Is.True);
-        }
+		{
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target = new OpenMeetingsOverviewCommand(_repositoryFactory, _unitOfWorkFactory, _personSelectorPresenter, _meetingOverviewFactory);
+				Assert.That(_target.CanExecute(), Is.True);
+			}
+		}
 
         [Test]
         public void ShouldGetScenarioAndPersonsFromRepositoryAndCallView()
-        {
-            var view = _mocks.StrictMock<IPersonSelectorView>();
-            var uow = _mocks.StrictMock<IUnitOfWork>();
-            var scenarioRep = _mocks.StrictMock<IScenarioRepository>();
-            var scenario = _mocks.StrictMock<IScenario>();
-            var guids = new HashSet<Guid>();
-            var date = new DateOnly(2012, 1, 30);
-            Expect.Call(_personSelectorPresenter.View).Return(view);
-            Expect.Call(view.Cursor = Cursors.WaitCursor);
-            Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
-            Expect.Call(_repositoryFactory.CreateScenarioRepository(uow)).Return(scenarioRep);
-            Expect.Call(scenarioRep.LoadDefaultScenario()).Return(scenario);
-            Expect.Call(_personSelectorPresenter.SelectedPersonGuids).Return(guids);
-            Expect.Call(_personSelectorPresenter.SelectedDate).Return(date).Repeat.Twice();
-            Expect.Call(uow.Dispose);
-            Expect.Call(
-                () => _meetingOverviewFactory.Create(guids, new DateOnlyPeriod(date, date), scenario));
-            Expect.Call(view.Cursor = Cursors.Default);
-            _mocks.ReplayAll();
-            _target.Execute();
-            _mocks.VerifyAll();
-
-        }
+		{
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				var view = _mocks.StrictMock<IPersonSelectorView>();
+				var uow = _mocks.StrictMock<IUnitOfWork>();
+				var scenarioRep = _mocks.StrictMock<IScenarioRepository>();
+				var scenario = _mocks.StrictMock<IScenario>();
+				var guids = new HashSet<Guid>();
+				var date = new DateOnly(2012, 1, 30);
+				Expect.Call(_personSelectorPresenter.View).Return(view);
+				Expect.Call(view.Cursor = Cursors.WaitCursor);
+				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+				Expect.Call(_repositoryFactory.CreateScenarioRepository(uow)).Return(scenarioRep);
+				Expect.Call(scenarioRep.LoadDefaultScenario()).Return(scenario);
+				Expect.Call(_personSelectorPresenter.SelectedPersonGuids).Return(guids);
+				Expect.Call(_personSelectorPresenter.SelectedDate).Return(date).Repeat.Twice();
+				Expect.Call(uow.Dispose);
+				Expect.Call(
+					() => _meetingOverviewFactory.Create(guids, new DateOnlyPeriod(date, date), scenario));
+				Expect.Call(view.Cursor = Cursors.Default);
+				_mocks.ReplayAll();
+				_target.Execute();
+				_mocks.VerifyAll();
+			}
+		}
 
         [Test]
         public void ShouldCallViewToShowErrorOnDataSourceError()
-        {
-            var view = _mocks.StrictMock<IPersonSelectorView>();
-            var exception = new DataSourceException();
-            Expect.Call(_personSelectorPresenter.View).Return(view);
-            Expect.Call(view.Cursor = Cursors.WaitCursor);
-            Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Throw(exception);
-            Expect.Call(() => view.ShowDataSourceException(exception, Resources.MeetingOverview));
-            Expect.Call(view.Cursor = Cursors.Default);
-            _mocks.ReplayAll();
-            _target.Execute();
-            _mocks.VerifyAll();
-
-        }
+		{
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				var view = _mocks.StrictMock<IPersonSelectorView>();
+				var exception = new DataSourceException();
+				Expect.Call(_personSelectorPresenter.View).Return(view);
+				Expect.Call(view.Cursor = Cursors.WaitCursor);
+				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Throw(exception);
+				Expect.Call(() => view.ShowDataSourceException(exception, Resources.MeetingOverview));
+				Expect.Call(view.Cursor = Cursors.Default);
+				_mocks.ReplayAll();
+				_target.Execute();
+				_mocks.VerifyAll();
+			}
+		}
     }
 
 }

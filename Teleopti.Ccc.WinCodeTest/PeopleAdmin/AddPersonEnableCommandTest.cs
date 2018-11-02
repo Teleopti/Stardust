@@ -1,18 +1,23 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Commands;
+using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
 {
     [TestFixture]
     public class AddPersonEnableCommandTest
     {
-        private readonly IAddPersonEnableCommand _target = new AddPersonEnableCommand();
-
         [Test]
         public void ShouldReturnTrue()
         {
-            _target.CanExecute().Should().Be.True();
-        }
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				var target = new AddPersonEnableCommand();
+
+				target.CanExecute().Should().Be.True();
+			}
+		}
     }
 }

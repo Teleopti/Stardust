@@ -84,7 +84,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				ExternalLogOn = new List<ExternalLogOnDto> { new ExternalLogOnDto { AcdLogOnName = externalLogon.AcdLogOnName, AcdLogOnOriginalId = externalLogon.AcdLogOnOriginalId, Id = externalLogon.Id.GetValueOrDefault()} }
 			};
 
-			_target.Handle(setPersonExternalLogOnCommandDto);
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.Handle(setPersonExternalLogOnCommandDto);
+			}
 
 			person.PersonPeriodCollection.Count.Should().Be.EqualTo(2);
 			var currentPeriod = person.Period(setPersonExternalLogOnCommandDto.PeriodStartDate.ToDateOnly());
@@ -112,7 +115,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				ExternalLogOn = new List<ExternalLogOnDto> { new ExternalLogOnDto { AcdLogOnName = externalLogon.AcdLogOnName, AcdLogOnOriginalId = externalLogon.AcdLogOnOriginalId, Id = externalLogon.Id.GetValueOrDefault() } }
 			};
 
-			_target.Handle(setPersonExternalLogOnCommandDto);
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.Handle(setPersonExternalLogOnCommandDto);
+			}
 
 			person.PersonPeriodCollection.Count.Should().Be.EqualTo(1);
 			var currentPeriod = person.Period(setPersonExternalLogOnCommandDto.PeriodStartDate.ToDateOnly());

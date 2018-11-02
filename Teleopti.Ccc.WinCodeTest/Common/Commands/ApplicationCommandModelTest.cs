@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
+using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Commands
 {
@@ -71,17 +72,20 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Commands
 
         [Test]
         public void VerifyFactory()
-        {
-            ApplicationCommandModel model1 = CommandModelFactory.CreateApplicationCommandModel(testOnExecute,
-                                                                                              testCanExecute, "text",
-                                                                                              _functionPath);
+		{
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				ApplicationCommandModel model1 = CommandModelFactory.CreateApplicationCommandModel(testOnExecute,
+					testCanExecute, "text",
+					_functionPath);
 
-            ApplicationCommandModel model2 = CommandModelFactory.CreateApplicationCommandModel(testOnExecute
-                                                                                              , "text",
-                                                                                              _functionPath);
-            Assert.IsTrue(_models.CanExecute(model1));
-            Assert.IsTrue(_models.CanExecute(model2));
-        }
+				ApplicationCommandModel model2 = CommandModelFactory.CreateApplicationCommandModel(testOnExecute
+					, "text",
+					_functionPath);
+				Assert.IsTrue(_models.CanExecute(model1));
+				Assert.IsTrue(_models.CanExecute(model2));
+			}
+		}
 
         private bool testCanExecute()
         {

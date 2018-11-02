@@ -28,8 +28,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private readonly DateOnly _noteDate = new DateOnly(2010, 4, 1);
         private IDateOnlyAsDateTimePeriod _period;
         private IPerson _person;
+		private IDisposable auth;
 
-        [SetUp]
+		[SetUp]
         public void Setup()
         {
             _mockRep = new MockRepository();
@@ -43,7 +44,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _model1 = null;
             _model2 = null;
             _model3 = null;
-        }
+
+			auth = CurrentAuthorization.ThreadlyUse(new FullPermission());
+		}
+
+		[TearDown]
+		public void Teardown()
+		{
+			auth?.Dispose();
+		}
 
         [Test]
         public void VerifyCanCreateModel()

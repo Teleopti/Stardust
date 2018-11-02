@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
@@ -52,13 +53,16 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 
 			groupingReadOnlyRepository.Has(new ReadOnlyGroupDetail {PersonId = person.Id.Value, GroupId = groupPageGroupId});
 
-			var result = target.Handle(new GetPeopleForShiftTradeByGroupPageGroupQueryDto
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
 			{
-				GroupPageGroupId = groupPageGroupId, QueryDate = new DateOnlyDto {DateTime = dateOnly.Date},
-				PersonId = queryPerson.Id.Value
-			});
-			result.Count.Should().Be.EqualTo(1);
-			result.First().ApplicationLogOnName.Should().Be.EqualTo("aaa");
+				var result = target.Handle(new GetPeopleForShiftTradeByGroupPageGroupQueryDto
+				{
+					GroupPageGroupId = groupPageGroupId, QueryDate = new DateOnlyDto {DateTime = dateOnly.Date},
+					PersonId = queryPerson.Id.Value
+				});
+				result.Count.Should().Be.EqualTo(1);
+				result.First().ApplicationLogOnName.Should().Be.EqualTo("aaa");
+			}
 		}
 	}
 }

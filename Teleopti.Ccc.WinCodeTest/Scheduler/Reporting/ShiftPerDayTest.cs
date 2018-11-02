@@ -38,8 +38,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 		IDictionary<IPerson, string> _persons;
 
         private PdfFont _font;
+		private IDisposable auth;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
         {
             _target = new ShiftsPerDayToPdfManager();
@@ -98,7 +99,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 					ass2.AddActivity(breakActivity, new DateTimePeriod(new DateTime(2009, 2, 2, 14, 0, 0, DateTimeKind.Utc), new DateTime(2009, 2, 2, 14, 15, 0, DateTimeKind.Utc)));
 					ass2.AddActivity(breakActivity, new DateTimePeriod(new DateTime(2009, 2, 2, 17, 15, 0, DateTimeKind.Utc), new DateTime(2009, 2, 2, 17, 30, 0, DateTimeKind.Utc)));
 					_scheduleRange2.Add(ass2);
-        }
+
+			auth = CurrentAuthorization.ThreadlyUse(new FullPermission());
+		}
+
+		[TearDown]
+		public void Teardown()
+		{
+			auth?.Dispose();
+		}
 
         [Test]
         public void CanCreateChineseReport()

@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -41,14 +42,21 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				unitOfWorkFactory);
 			var dateOnly = new DateOnly(2012, 4, 30);
 
-			var result =
-				target.Handle(new GetPeopleByGroupPageGroupForDateRangeQueryDto
-				{
-					GroupPageGroupId = groupPageGroupId,
-					QueryRange = new DateOnlyPeriodDto {StartDate = new DateOnlyDto { DateTime = dateOnly.Date },EndDate = new DateOnlyDto {DateTime = dateOnly.Date } }
-				});
-			result.Count.Should().Be.EqualTo(1);
-			result.First().ApplicationLogOnName.Should().Be.EqualTo("aaa");
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				var result =
+					target.Handle(new GetPeopleByGroupPageGroupForDateRangeQueryDto
+					{
+						GroupPageGroupId = groupPageGroupId,
+						QueryRange = new DateOnlyPeriodDto
+						{
+							StartDate = new DateOnlyDto {DateTime = dateOnly.Date},
+							EndDate = new DateOnlyDto {DateTime = dateOnly.Date}
+						}
+					});
+				result.Count.Should().Be.EqualTo(1);
+				result.First().ApplicationLogOnName.Should().Be.EqualTo("aaa");
+			}
 		}
 	}
 }

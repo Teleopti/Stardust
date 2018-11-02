@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		private Guid _guid2;
 		private Guid _guid3;
 		private IPersistableScheduleDataPermissionChecker _permissionChecker;
+		private IDisposable auth;
 
 		[SetUp]
 		public void Setup()
@@ -64,7 +65,13 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			target.SetRequestedScenario(scenario);
 			mocks = new MockRepository();
 			_permissionChecker = new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make());
+			auth = CurrentAuthorization.ThreadlyUse(new FullPermission());
+		}
 
+		[TearDown]
+		public void Teardown()
+		{
+			auth?.Dispose();
 		}
 
 		[Test]
@@ -159,9 +166,11 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 				Expect.Call(repositoryFactory.CreatePersonRequestRepository(unitOfWork)).Return(personRequestRepository);
 				Expect.Call(personRequestRepository.FindAllRequestModifiedWithinPeriodOrPending(personList, new DateTimePeriod(2001, 1, 1, 2001, 1, 2))).Return(requestList).IgnoreArguments();
 			}
+
 			using (mocks.Playback())
 			{
-				target.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest(), 10);
+				target.LoadPersonRequests(unitOfWork, repositoryFactory,
+					new PersonRequestAuthorizationCheckerForTest(), 10);
 			}
 
 			Assert.AreSame(requestList[0].Id, target.PersonRequests[0].Id);
@@ -245,16 +254,24 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 				var unitOfWork = MockRepository.GenerateStrictMock<IUnitOfWork>();
 				var repositoryFactory = MockRepository.GenerateStrictMock<IRepositoryFactory>();
 				var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
-				repositoryFactory.Expect(r => r.CreatePersonRequestRepository(unitOfWork)).Return(personRequestRepository);
+				repositoryFactory.Expect(r => r.CreatePersonRequestRepository(unitOfWork))
+					.Return(personRequestRepository);
 
-			const int passedNumberOfDays = 12;
-				var expectedPeriod = new DateTimePeriod(DateTime.UtcNow.Date.AddDays(-passedNumberOfDays), DateTime.SpecifyKind(DateTime.MaxValue.Date, DateTimeKind.Utc));
+				const int passedNumberOfDays = 12;
+				var expectedPeriod = new DateTimePeriod(DateTime.UtcNow.Date.AddDays(-passedNumberOfDays),
+					DateTime.SpecifyKind(DateTime.MaxValue.Date, DateTimeKind.Utc));
 
-			personRequestRepository.Expect(x => x.FindAllRequestModifiedWithinPeriodOrPending((IList<IPerson>) null, new DateTimePeriod())).IgnoreArguments().Return(new List<IPersonRequest>());
+				personRequestRepository
+					.Expect(x =>
+						x.FindAllRequestModifiedWithinPeriodOrPending((IList<IPerson>) null, new DateTimePeriod()))
+					.IgnoreArguments().Return(new List<IPersonRequest>());
 
-				target.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest(), passedNumberOfDays);
+				target.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest(),
+					passedNumberOfDays);
 
-				personRequestRepository.AssertWasCalled(x => x.FindAllRequestModifiedWithinPeriodOrPending(Arg<IList<IPerson>>.Is.Anything, Arg<DateTimePeriod>.Is.Equal(expectedPeriod)));
+				personRequestRepository.AssertWasCalled(x =>
+					x.FindAllRequestModifiedWithinPeriodOrPending(Arg<IList<IPerson>>.Is.Anything,
+						Arg<DateTimePeriod>.Is.Equal(expectedPeriod)));
 		}
 
 		[Test]
