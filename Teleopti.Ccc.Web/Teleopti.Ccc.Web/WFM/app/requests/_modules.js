@@ -16,7 +16,6 @@
 			'wfm.multiplesearchinput',
 			'wfm.favoriteSearch',
 			'wfm.organizationPicker',
-			'wfm.focusInput',
 			'wfm.ngEnter'
 		])
 		.constant('REQUESTS_TAB_NAMES', {

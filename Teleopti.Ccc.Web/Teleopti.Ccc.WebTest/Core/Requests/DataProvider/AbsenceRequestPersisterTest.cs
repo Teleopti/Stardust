@@ -29,14 +29,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
-	class FakeDisableDeletedFilter : IDisableDeletedFilter
-	{
-		public IDisposable Disable()
-		{
-			return null;
-		}
-	}
-
 	[TestFixture]
 	[DomainTest]
 	[WebTest]

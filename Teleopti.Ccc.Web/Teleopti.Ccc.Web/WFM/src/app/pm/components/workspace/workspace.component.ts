@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, OnInit } from '@angular/core';
 import * as pbi from 'powerbi-client';
 
 import { PowerBIService } from '../../core/powerbi.service';
@@ -10,13 +10,22 @@ import { ReportConfig } from '../../models/ReportConfig.model';
 	styleUrls: ['./workspace.component.scss']
 })
 export class WorkspaceComponent implements OnInit {
-	public initialized: boolean;
-	public reportConfig: ReportConfig;
+	@Input() initialized: boolean;
+	public canEditReport = false;
+	public reportPermission: pbi.models.Permissions;
+	public enableFilter: boolean;
+	public enableNavContent: boolean;
 
 	private pbiCoreService: pbi.service.Service;
 
 	constructor(private pbiService: PowerBIService) {
 		this.initialized = false;
+
+		this.canEditReport = false;
+		this.enableFilter = true;
+		this.enableNavContent = true;
+		this.reportPermission = pbi.models.Permissions.All;
+
 		this.pbiCoreService = new pbi.service.Service(
 			pbi.factories.hpmFactory,
 			pbi.factories.wpmpFactory,
@@ -25,6 +34,13 @@ export class WorkspaceComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		this.loadReport();
+	}
+
+	onEmbedded() {
+	}
+
+	loadReport() {
 		this.pbiService.getReportConfig().then((config) => {
 			// Refer to https://github.com/Microsoft/PowerBI-JavaScript/wiki/Embed-Configuration-Details for more details
 			const embedConfig = {
@@ -33,11 +49,11 @@ export class WorkspaceComponent implements OnInit {
 				accessToken: config.AccessToken,
 				embedUrl: config.ReportUrl,
 				id: config.ReportId,
-				permissions: pbi.models.Permissions.All,
-				viewMode: pbi.models.ViewMode.Edit,
+				permissions: this.reportPermission,
+				viewMode: this.canEditReport ? pbi.models.ViewMode.Edit : pbi.models.ViewMode.View,
 				settings: {
-					filterPaneEnabled: true,
-					navContentPaneEnabled: true,
+					filterPaneEnabled: this.enableFilter,
+					navContentPaneEnabled: this.enableNavContent,
 					localeSettings: {
 						language: 'en',
 						formatLocale: 'en'
@@ -54,13 +70,32 @@ export class WorkspaceComponent implements OnInit {
 
 			// Report.on will add an event handler which prints to Log window.
 			report.on('loaded', function() {
-				console.log('Report loaded :-)');
+				// console.log('Report loaded');
 			});
 
 			this.initialized = true;
 		});
 	}
 
-	onEmbedded() {
+	public onCanEditReportChanged() {
+		this.canEditReport = !this.canEditReport;
+		if (this.canEditReport) {
+			this.enableFilter = true;
+			this.enableNavContent = true;
+		}
+	}
+
+	public onEnableFilterChanged() {
+		this.enableFilter = !this.enableFilter;
+		if (!this.enableNavContent || !this.enableNavContent) {
+			this.canEditReport = false;
+		}
+	}
+
+	public onEnableNavContentChanged() {
+		this.enableNavContent = !this.enableNavContent;
+		if (!this.enableNavContent || !this.enableNavContent) {
+			this.canEditReport = false;
+		}
 	}
 }

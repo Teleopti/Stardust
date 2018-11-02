@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private readonly IRtaEventStore _events;
 		private readonly IRtaEventStoreSynchronizer _synchronizer;
-		private readonly IKeyValueStorePersister _keyValueStore;
 
 
 		public RtaTestDataController(
@@ -50,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			IActivityRepository activities,
 			IDifferenceCollectionService<IPersistableScheduleData> differenceService,
 			IScheduleDifferenceSaver scheduleDifferenceSaver,
-			IRtaEventStore events, IRtaEventStoreSynchronizer synchronizer, IKeyValueStorePersister keyValueStore)
+			IRtaEventStore events, IRtaEventStoreSynchronizer synchronizer)
 		{
 			_persons = persons;
 			_schedules = schedules;
@@ -60,7 +59,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			_scheduleDifferenceSaver = scheduleDifferenceSaver;
 			_events = events;
 			_synchronizer = synchronizer;
-			_keyValueStore = keyValueStore;
 		}
 
 		[HttpGet, Route("api/RtaTestData/MakeStuff")]

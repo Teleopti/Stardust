@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			var iocTestContext = new FakeIoCTestContext();
 			var target = new ResourcePlannerTestParameters(new []{Toggles.TestToggle}, separateWebRequest);
 
-			target.SimulateNewRequest(iocTestContext);
+			target.MightSimulateNewRequest(iocTestContext);
 
 			return iocTestContext.SimulateNewRequestWasCalled;
 		}

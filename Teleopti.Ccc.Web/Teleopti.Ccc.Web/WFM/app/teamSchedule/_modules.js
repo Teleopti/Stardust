@@ -16,7 +16,6 @@
 			'wfm.confirmModal',
 			'wfm.favoriteSearch',
 			'wfm.organizationPicker',
-			'wfm.focusInput',
 			'wfm.groupPage',
 			'wfm.skillGroup',
 			'wfm.throttle'
@@ -59,7 +58,6 @@
 				FavoriteSearchDataService.setModule('wfm.teamSchedule');
 				GroupPageService.setModule('wfm.teamSchedule');
 			}
-			
 		});
 	}
 
