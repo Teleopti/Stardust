@@ -510,6 +510,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Toggle(Toggles.ResourcePlanner_FasterSeamlessPlanningForPreferences_78286))
 			{
 				builder.RegisterType<ExcludeAgentsWithHints>().As<IExcludeAgentsWithHints>().SingleInstance();
+				builder.RegisterType<PersonContractShiftBagHint>().As<IScheduleHint>().SingleInstance();
 			}
 			else
 			{
