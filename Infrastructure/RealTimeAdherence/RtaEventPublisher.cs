@@ -42,20 +42,24 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence
 			if (!storedEvents.Any())
 				return;
 
+			Exception exception = null;
 			var dataSource = _currentDataSource.CurrentName();
 			var thread = new Thread(() =>
 			{
 				try
 				{
-					withUnitOfWork(dataSource, () => storedEvents.ForEach(@event => _store.Add(@event, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion)));
+					withUnitOfWork(dataSource, () => _store.Add(storedEvents, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion));
 				}
 				catch (Exception e)
 				{
-					_exceptionHandler.Handle(e);
+					exception = e;
 				}
 			});
 			thread.Start();
 			thread.Join();
+			
+			if (exception != null)
+				_exceptionHandler.Handle(exception);
 		}
 
 		[TenantScope]

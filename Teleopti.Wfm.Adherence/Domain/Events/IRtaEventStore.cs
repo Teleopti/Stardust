@@ -8,8 +8,8 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 {
 	public interface IRtaEventStoreUpgradeWriter
 	{
-		IEnumerable<UpgradeEvent> LoadForUpgrade(int fromVersion, int batchSize);
-		void Upgrade(UpgradeEvent @event, int toVersion);
+		IEnumerable<UpgradeEvent> LoadForUpgrade(int fromStoreVersion, int batchSize);
+		void Upgrade(UpgradeEvent @event, int toStoreVersion);
 	}
 	
 	public class UpgradeEvent
@@ -20,7 +20,8 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 
 	public interface IRtaEventStore
 	{
-		void Add(IEvent @event, DeadLockVictim deadLockVictim, int version);
+		void Add(IEvent @event, DeadLockVictim deadLockVictim, int storeVersion);
+		void Add(IEnumerable<IEvent> events, DeadLockVictim deadLockVictim, int storeVersion);
 		// maybe segregate this stuff
 		int Remove(DateTime removeUntil, int maxEventsToRemove);
 	}

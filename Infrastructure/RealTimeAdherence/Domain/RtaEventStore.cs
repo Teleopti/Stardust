@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -7,6 +8,7 @@ using Newtonsoft.Json;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -25,52 +27,75 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain
 		private readonly DeadLockVictimPriority _deadLockVictimPriority;
 		private readonly IJsonEventSerializer _serializer;
 		private readonly IJsonEventDeserializer _deserializer;
+		private readonly IConfigReader _config;
 
 		public RtaEventStore(
 			ICurrentUnitOfWork unitOfWork,
 			DeadLockVictimPriority deadLockVictimPriority,
 			IJsonEventSerializer serializer,
-			IJsonEventDeserializer deserializer)
+			IJsonEventDeserializer deserializer,
+			IConfigReader config)
 		{
 			_unitOfWork = unitOfWork;
 			_deadLockVictimPriority = deadLockVictimPriority;
 			_serializer = serializer;
 			_deserializer = deserializer;
+			_config = config;
 		}
 
-		public void Add(IEvent @event, DeadLockVictim deadLockVictim, int version)
+		public void Add(IEvent @event, DeadLockVictim deadLockVictim, int storeVersion) => Add(new[] {@event}, deadLockVictim, storeVersion);
+
+		public void Add(IEnumerable<IEvent> events, DeadLockVictim deadLockVictim, int storeVersion)
 		{
 			_deadLockVictimPriority.Specify(deadLockVictim);
 
-			var queryData = (@event as IRtaStoredEvent).QueryData();
+			var batchSize = _config.ReadValue("RtaEventStoreBatchSize", 10);
 
-			_unitOfWork.Current().Session()
-				.CreateSQLQuery(@"
+			events.Batch(batchSize).ForEach(batch =>
+			{
+				var sqlValues = batch.Select((m, i) =>
+					$@"
+(
+:PersonId{i},
+:BelongsToDate{i},
+:StartTime{i},
+:EndTime{i},
+:StoreVersion,
+:Type{i},
+:Event{i}
+)").Aggregate((current, next) => current + ", " + next);
+
+				var query = _unitOfWork.Current().Session()
+					.CreateSQLQuery($@"
 INSERT INTO [rta].[Events] (
-	[Type],
 	[PersonId], 
 	[BelongsToDate], 
 	[StartTime], 
 	[EndTime],
-	[Event],
-	[StoreVersion]
-) VALUES (
-	:Type,
-	:PersonId, 
-	:BelongsToDate, 
-	:StartTime, 
-	:EndTime,
-	:Event,
-	:StoreVersion
-)")
-				.SetParameter("PersonId", queryData.PersonId)
-				.SetParameter("BelongsToDate", queryData.BelongsToDate?.Date)
-				.SetParameter("StartTime", queryData.StartTime == DateTime.MinValue ? null : queryData.StartTime)
-				.SetParameter("EndTime", queryData.EndTime == DateTime.MinValue ? null : queryData.EndTime)
-				.SetParameter("Type", eventTypeId(@event))
-				.SetParameter("Event", _serializer.SerializeEvent(@event))
-				.SetParameter("StoreVersion", version)
-				.ExecuteUpdate();
+	[StoreVersion],
+	[Type],
+	[Event]
+) VALUES {sqlValues}");
+
+				batch.Select((e, i) => new {e, i})
+					.ForEach(x =>
+					{
+						var queryData = (x.e as IRtaStoredEvent).QueryData();
+						var i = x.i;
+						var @event = x.e;
+						query
+							.SetParameter("PersonId" + i, queryData.PersonId)
+							.SetParameter("BelongsToDate" + i, queryData.BelongsToDate?.Date)
+							.SetParameter("StartTime" + i, queryData.StartTime == DateTime.MinValue ? null : queryData.StartTime)
+							.SetParameter("EndTime" + i, queryData.EndTime == DateTime.MinValue ? null : queryData.EndTime)
+							.SetParameter("Type" + i, eventTypeId(@event))
+							.SetParameter("Event" + i, _serializer.SerializeEvent(@event));
+					});
+
+				query
+					.SetParameter("StoreVersion", storeVersion)
+					.ExecuteUpdate();
+			});
 		}
 
 		public int Remove(DateTime until, int maxEventsToRemove) =>
@@ -87,7 +112,7 @@ WHERE
 				.SetParameter("nRows", maxEventsToRemove)
 				.ExecuteUpdate();
 
-		public IEnumerable<UpgradeEvent> LoadForUpgrade(int fromVersion, int batchSize)
+		public IEnumerable<UpgradeEvent> LoadForUpgrade(int fromStoreVersion, int batchSize)
 		{
 			return load(
 				_unitOfWork.Current().Session()
@@ -101,7 +126,7 @@ FROM
 WHERE
 	StoreVersion = :fromVersion
 ")
-					.SetParameter("fromVersion", fromVersion)
+					.SetParameter("fromVersion", fromStoreVersion)
 					.SetMaxResults(batchSize)
 			).Select(e => new UpgradeEvent
 			{
@@ -110,11 +135,12 @@ WHERE
 			}).ToArray();
 		}
 
-		public void Upgrade(UpgradeEvent @event, int toVersion)
+		public void Upgrade(UpgradeEvent @event, int toStoreVersion)
 		{
+			// this needs to update columns ffs
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery(@"UPDATE [rta].[Events] SET [Event] = :Event, StoreVersion = :toVersion WHERE Id = :Id")
-				.SetParameter("toVersion", toVersion)
+				.SetParameter("toVersion", toStoreVersion)
 				.SetParameter("Id", @event.Id)
 				.SetParameter("Event", _serializer.SerializeEvent(@event.Event))
 				.ExecuteUpdate();

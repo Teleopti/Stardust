@@ -267,6 +267,7 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\Mappings\MappingReadModelUpdaterTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\Schedules\CurrentScheduleReadModelPersisterTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\Schedules\CurrentScheduleReadModelUpdaterTest.cs" />
+    <Compile Include="RealTimeAdherence\Domain\RtaEventStoreBatchInsertTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\RtaEventStoreReadByDateTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\RtaEventStoreSynchronizerTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\RtaEventStoreEventTypeIdTest.cs" />

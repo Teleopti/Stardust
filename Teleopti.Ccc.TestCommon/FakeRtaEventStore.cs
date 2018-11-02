@@ -35,32 +35,39 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IEnumerable<StoredEvent> Data = Enumerable.Empty<StoredEvent>();
 
-		public void Add(IEvent @event, DeadLockVictim deadLockVictim, int version)
+		public void Add(IEvent @event, DeadLockVictim deadLockVictim, int storeVersion) => 
+			Add(new[] {@event}, deadLockVictim, storeVersion);
+		
+		public void Add(IEnumerable<IEvent> events, DeadLockVictim deadLockVictim, int storeVersion)
 		{
-			var queryData = (@event as IRtaStoredEvent).QueryData();
-			if (queryData == null)
-				return;
+			events.ForEach(@event =>
+				{
+					var queryData = (@event as IRtaStoredEvent).QueryData();
+					if (queryData == null)
+						return;
 
-			Data = Data.Append(new StoredEvent
-			{
-				Id = _id = _id + 1,
-				StoreVersion = version,
-				PersonId = queryData.PersonId.Value,
-				BelongsToDate = queryData.BelongsToDate,
-				StartTime = queryData.StartTime.Value,
-				EndTime = queryData.EndTime.Value,
-				Event = @event
-			}).ToArray();
-
+					Data = Data.Append(new StoredEvent
+					{
+						Id = _id = _id + 1,
+						StoreVersion = storeVersion,
+						PersonId = queryData.PersonId.Value,
+						BelongsToDate = queryData.BelongsToDate,
+						StartTime = queryData.StartTime.Value,
+						EndTime = queryData.EndTime.Value,
+						Event = @event
+					}).ToArray();
+				}
+			);
+			
 			_synchronizer.Value.Synchronize();
 		}
 
 		public int Remove(DateTime removeUntil, int maxEventsToRemove) => throw new NotImplementedException();
 
-		public IEnumerable<UpgradeEvent> LoadForUpgrade(int fromVersion, int batchSize)
+		public IEnumerable<UpgradeEvent> LoadForUpgrade(int fromStoreVersion, int batchSize)
 		{
 			return Data
-				.Where(x => x.StoreVersion == fromVersion)
+				.Where(x => x.StoreVersion == fromStoreVersion)
 				.Select(e => new UpgradeEvent
 				{
 					Id = e.Id,
@@ -68,11 +75,11 @@ namespace Teleopti.Ccc.TestCommon
 				}).ToArray();
 		}
 
-		public void Upgrade(UpgradeEvent @event, int toVersion)
+		public void Upgrade(UpgradeEvent @event, int toStoreVersion)
 		{
 			var toUpdate = Data.Single(e => e.Id == @event.Id);
 			toUpdate.Event = @event.Event as IEvent;
-			toUpdate.StoreVersion = toVersion;
+			toUpdate.StoreVersion = toStoreVersion;
 		}
 
 		public IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period)
