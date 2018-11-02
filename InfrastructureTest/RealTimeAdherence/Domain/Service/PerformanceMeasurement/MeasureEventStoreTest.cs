@@ -22,10 +22,11 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Perfo
 	[Explicit]
 	[Category("LongRunning")]
 	[DatabaseTest]
-	[Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770)]
 	[Toggle(Toggles.RTA_ReviewHistoricalAdherence_Domain_74770)]
 	[Toggle(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306)]
+	[Toggle(Toggles.RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485)]
 	[Toggle(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485)]
+	[Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770)]
 	public class MeasureEventStoreTest
 	{
 		public ConcurrencyRunner Run;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Perfo
 			var personId = Database.CurrentPersonId();
 			var done = false;
 			var eventTime = "2018-10-18 10:00".Utc();
+			var eventDate = "2018-10-18".Date();
 			var personsIds = Enumerable.Range(0, 99).Select(x => Guid.NewGuid())
 				.Concat(personId.AsArray())
 				.ToArray();
@@ -61,7 +63,8 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Perfo
 						select new PersonStateChangedEvent
 						{
 							PersonId = s.personId,
-							Timestamp = eventTime.AddMilliseconds(s.number)
+							Timestamp = eventTime.AddMilliseconds(s.number),
+							BelongsToDate = eventDate
 						})
 						.Randomize()
 						.ToArray();
@@ -69,7 +72,6 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Perfo
 				}
 			});
 
-			Console.WriteLine(personId);
 			var stopwatch = new Stopwatch();
 			stopwatch.Start();
 			Run.InParallel(() =>

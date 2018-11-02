@@ -49,6 +49,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.AgentAdherenceDay
 			return new QueryData
 			{
 				PersonId = PersonId,
+				BelongsToDate = "2018-10-22".Date(),
 				StartTime = "2018-10-22 09:00".Utc(),
 				EndTime = "2018-10-22 09:00".Utc()
 			};

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Teleopti.Ccc.Domain.Collection;
@@ -41,18 +42,9 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 
 			var time = TimeZoneInfo.ConvertTimeToUtc(date.Date, person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc);
 			var period = new DateTimePeriod(time, time.AddDays(1));
+			var events = _eventStore.Load(personId, date);
 
-			var schedule = _scheduleLoader.Load(personId, date);
-			var shift = default(DateTimePeriod?);
-			if (schedule.Any())
-			{
-				shift = new DateTimePeriod(schedule.Min(x => x.Period.StartDateTime), schedule.Max(x => x.Period.EndDateTime));
-				period = new DateTimePeriod(shift.Value.StartDateTime.AddHours(-1), shift.Value.EndDateTime.AddHours(1));
-			}
-
-			var events = _eventStore.Load(personId, period);
-
-			var obj = new AgentAdherenceDaySpeedUpRemoveLastBefore(period, shift, until);
+			var obj = new AgentAdherenceDaySpeedUpRemoveScheduleDependency(until, period, () => shiftFromSchedule(personId, date));
 			events.ForEach(x =>
 			{
 				var method = obj.GetType().GetMethod("Apply", new[] {x.GetType()});
@@ -62,6 +54,14 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			obj.ApplyDone();
 
 			return obj;
+		}
+
+		private DateTimePeriod? shiftFromSchedule(Guid personId, DateOnly date)
+		{
+			var schedule = _scheduleLoader.Load(personId, date);
+			if (schedule.Any())
+				return new DateTimePeriod(schedule.Min(x => x.Period.StartDateTime), schedule.Max(x => x.Period.EndDateTime));
+			return null;
 		}
 	}
 }

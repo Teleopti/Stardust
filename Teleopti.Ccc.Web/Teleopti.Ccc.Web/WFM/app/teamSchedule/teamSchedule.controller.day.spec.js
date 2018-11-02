@@ -11,6 +11,7 @@
 			teamScheduleService,
 			staffingConfigStorageService,
 			$controller,
+			$httpBackend,
 			viewStateKeeper;
 
 		beforeEach(function () {
@@ -29,7 +30,7 @@
 		});
 
 		beforeEach(inject(function (_$q_, _$mdSidenav_, _$rootScope_, _$controller_, _TeamSchedule_, _PersonSelection_,
-			_ScheduleManagement_, _TeamsStaffingConfigurationStorageService_, _ViewStateKeeper_) {
+			_ScheduleManagement_, _TeamsStaffingConfigurationStorageService_, _ViewStateKeeper_, _$httpBackend_) {
 			$q = _$q_;
 			$mdSidenav = _$mdSidenav_;
 			$controller = _$controller_;
@@ -39,6 +40,7 @@
 			setupMockTeamScheduleService(_TeamSchedule_);
 			teamScheduleService = _TeamSchedule_;
 			viewStateKeeper = _ViewStateKeeper_;
+			$httpBackend = _$httpBackend_;
 
 			staffingConfigStorageService = _TeamsStaffingConfigurationStorageService_;
 			staffingConfigStorageService.clearConfig();
@@ -229,6 +231,42 @@
 			controller.currentSettings.onlyLoadScheduleWithAbsence = false;
 			controller.toggleShowAbsenceOnly();
 			expect(teamScheduleService.currentInput().IsOnlyAbsences).toEqual(false);
+		});
+
+		it("should get warnings with correct data when validate warning is enabled", function () {
+			controller.scheduleDate = new Date("2018-11-02");
+
+			controller.searchOptions = {
+				focusingSearch: true
+			};
+			controller.currentSettings.validateWarningEnabled = true;
+			controller.loadSchedules();
+			controller.selectAllForAllPages();
+
+			controller.checkValidationWarningForCurrentPage();
+			$httpBackend.whenPOST('../api/TeamScheduleData/FetchRuleValidationResult', {
+				Date: '2018-11-02',
+				PersonIds: ['221B-Baker-SomeoneElse', '221B-Sherlock']
+			}).respond([]);
+			$httpBackend.flush();
+		});
+
+		it("should update warnings for the targets of a command with correct data", function () {
+			controller.scheduleDate = new Date("2018-11-02");
+
+			controller.searchOptions = {
+				focusingSearch: true
+			};
+			controller.currentSettings.validateWarningEnabled = true;
+			controller.loadSchedules();
+			controller.selectAllForAllPages();
+
+			controller.checkValidationWarningForCommandTargets(['221B-Baker-SomeoneElse', '221B-Sherlock']);
+			$httpBackend.whenPOST('../api/TeamScheduleData/FetchRuleValidationResult', {
+				Date: '2018-11-02',
+				PersonIds: ['221B-Baker-SomeoneElse', '221B-Sherlock']
+			}).respond([]);
+			$httpBackend.flush();
 		});
 
 		it("should remember skill selection when skill changed",

@@ -6,9 +6,12 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
@@ -16,7 +19,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Test
 {
-	public class SetUpCascadingShifts
+	public class SetUpCascadingShifts : IIsolateSystem
 	{
 		public ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
 		public ITenantUnitOfWork TenantUnitOfWork;
@@ -995,6 +998,11 @@ namespace Teleopti.Wfm.Test
 			var shift = new ShiftForDate(dayLocal, TimeSpan.FromHours(startHour), TimeSpan.FromHours(startHour + lenghtHour), true, scenario, shiftCategory, activityPhone, activityLunch, null);
 
 			Data.Person(onPerson).Apply(shift);
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
 		}
 	}
 }

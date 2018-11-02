@@ -4,14 +4,12 @@ using SharpTestsEx;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -20,6 +18,8 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon;
@@ -51,13 +51,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var scheduleRanges = new Dictionary<IPerson, IScheduleRange>();
 			schedulingResultState.Schedules = new ScheduleDictionaryForTest(scenario,
 				new ScheduleDateTimePeriod(new DateTimePeriod()), scheduleRanges);
-			var permissionChecker = new PersistableScheduleDataPermissionChecker();
+			var permissionChecker = new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current()));
 			scheduleRanges.Add(fromPerson,
 				new ScheduleRange(schedulingResultState.Schedules,
-					new ScheduleParameters(scenario, fromPerson, new DateTimePeriod()), permissionChecker));
+					new ScheduleParameters(scenario, fromPerson, new DateTimePeriod()), permissionChecker, PrincipalAuthorization.Current()));
 			scheduleRanges.Add(toPerson,
 				new ScheduleRange(schedulingResultState.Schedules, new ScheduleParameters(scenario, toPerson, new DateTimePeriod()),
-					permissionChecker));
+					permissionChecker, PrincipalAuthorization.Current()));
 			loader = MockRepository.GenerateMock<ILoadSchedulesForRequestWithoutResourceCalculation>();
 			businessRuleProvider = new FakeBusinessRuleProvider();
 			newBusinessRuleCollection = new FakeNewBusinessRuleCollection();

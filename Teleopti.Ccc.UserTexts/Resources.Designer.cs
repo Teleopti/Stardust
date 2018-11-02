@@ -3196,6 +3196,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Approve/Deny Request.
+        /// </summary>
+        public static string ApproveOrDenyRequest {
+            get {
+                return ResourceManager.GetString("ApproveOrDenyRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Archive schedule.
         /// </summary>
         public static string ArchiveSchedule {
@@ -10789,6 +10798,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string EditShiftCategory {
             get {
                 return ResourceManager.GetString("EditShiftCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Site Open Hours.
+        /// </summary>
+        public static string EditSiteOpenHours {
+            get {
+                return ResourceManager.GetString("EditSiteOpenHours", resourceCulture);
             }
         }
         
@@ -27653,6 +27671,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ReplyColon {
             get {
                 return ResourceManager.GetString("ReplyColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reply Request.
+        /// </summary>
+        public static string ReplyRequest {
+            get {
+                return ResourceManager.GetString("ReplyRequest", resourceCulture);
             }
         }
         

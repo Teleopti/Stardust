@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -16,8 +15,9 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.IocCommon;
 using System.Threading;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
@@ -245,8 +245,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			personAssignment.AddActivity(new Activity("activity"), mainPeriod);
 			personAssignment.AddPersonalActivity(new Activity("activity"), overlapPeriod);
 			var scheduleDictionary = ScheduleDictionaryForTest.WithPersonAssignment(_scenario, mainPeriod, personAssignment);
+			var authorization = PrincipalAuthorization.Current();
+			var persistableScheduleDataPermissionChecker = new PersistableScheduleDataPermissionChecker(new PermissionProvider(authorization));
 			var personScheduleRange = new ScheduleRange(scheduleDictionary,
-				new ScheduleParameters(personAssignment.Scenario, person, mainPeriod), new PersistableScheduleDataPermissionChecker());
+				new ScheduleParameters(personAssignment.Scenario, person, mainPeriod), persistableScheduleDataPermissionChecker, authorization);
 			personScheduleRange.Add(personAssignment);
 			ranges.Add(person, personScheduleRange);
 
@@ -260,7 +262,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			personAssignmentForPerson2.AddActivity(lunch, overlapPeriod);
 			var scheduleDictionaryForPerson2 = ScheduleDictionaryForTest.WithPersonAssignment(_scenario, mainPeriod, personAssignmentForPerson2);
 			var personScheduleRangeForPerson2 = new ScheduleRange(scheduleDictionaryForPerson2,
-				new ScheduleParameters(personAssignmentForPerson2.Scenario, person2, mainPeriod), new PersistableScheduleDataPermissionChecker());
+				new ScheduleParameters(personAssignmentForPerson2.Scenario, person2, mainPeriod), persistableScheduleDataPermissionChecker, authorization);
 			personScheduleRangeForPerson2.Add(personAssignmentForPerson2);
 			ranges.Add(person2, personScheduleRangeForPerson2);
 

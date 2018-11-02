@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var scenario = new Scenario("scenario");
 			var dic = new ScheduleDictionaryForTest(scenario, visibleDateTimePeriod);
 			var scheduleParameters = new ScheduleParameters(scenario, person, new DateTimePeriod(2016, 01, 26, 2016, 01, 30));
-			var range = new ScheduleRange(dic, scheduleParameters, new PersistableScheduleDataPermissionChecker());
+			var range = new ScheduleRange(dic, scheduleParameters, new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())), PrincipalAuthorization.Current());
 
 			var personDateTime = TimeZoneHelper.ConvertToUtc(date.AddDays(-1).Date, person.PermissionInformation.DefaultTimeZone());
 			var assignment = new PersonAssignment(person, scenario, date.AddDays(-1));
@@ -78,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			
 			var dic = new ScheduleDictionaryForTest(scenario, visibleDateTimePeriod);
 			var scheduleParameters = new ScheduleParameters(scenario, person, new DateTimePeriod(2016, 01, 26, 2016, 01, 30));
-			var range = new ScheduleRange(dic, scheduleParameters, new PersistableScheduleDataPermissionChecker());
+			var range = new ScheduleRange(dic, scheduleParameters, new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())), PrincipalAuthorization.Current());
 
 			var personDateTime = TimeZoneHelper.ConvertToUtc(date.AddDays(-1).Date, person.PermissionInformation.DefaultTimeZone());
 			var assignment = new PersonAssignment(person, scenario, date.AddDays(-1));

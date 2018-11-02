@@ -35,7 +35,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			if (!enabled) return true;
 			return
 				_teamPermissionData.Any(
-					x => x.ApplicationFunctionPath == applicationFunctionPath && x.Date == date && x.Team.Id == team.Id);
+					x => x.ApplicationFunctionPath == applicationFunctionPath && x.Date == date && x.Team.Id == team.Id)
+					|| _groupPermissionData.Any(
+					x => x.ApplicationFunctionPath == applicationFunctionPath && x.Date == date && x.PersonAuthorization.TeamId == team.Id);
 		}
 
 		public bool HasSitePermission(string applicationfunctionpath, DateOnly today, ISite site)

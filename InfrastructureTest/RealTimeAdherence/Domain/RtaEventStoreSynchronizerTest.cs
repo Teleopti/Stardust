@@ -5,8 +5,11 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
 using Teleopti.Wfm.Adherence.Domain.Events;
@@ -17,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 	[PrincipalAndStateTest]
 	[Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770)]
 	[Toggle(Toggles.RTA_ReviewHistoricalAdherence_Domain_74770)]
-	public class RtaEventStoreSynchronizerTest
+	public class RtaEventStoreSynchronizerTest : IIsolateSystem
 	{
 		public MutableNow Now;
 		public Database Database;
@@ -79,6 +82,11 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 			var data = UnitOfWork.Get(() => Target.Build(null, new[] {teamId}).First());
 			
 			data.Agents.Single().Days.Last().Adherence.Should().Be(100);
-		}		
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
+		}
 	}
 }

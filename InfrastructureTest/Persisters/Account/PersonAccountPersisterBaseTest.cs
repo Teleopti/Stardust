@@ -7,6 +7,8 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
@@ -66,8 +68,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 						new ScheduleStorage(
 							currUnitOfWork, 
 							repositoryFactory, 
-							new PersistableScheduleDataPermissionChecker(),
-							new ScheduleStorageRepositoryWrapper(repositoryFactory, currUnitOfWork))),
+							new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())),
+							new ScheduleStorageRepositoryWrapper(repositoryFactory, currUnitOfWork), PrincipalAuthorization.Current())),
 					new PersonAbsenceAccountRepository(currUnitOfWork)));
 		}
 

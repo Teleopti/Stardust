@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
+			isolate.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
 		}
 
 		[Test]

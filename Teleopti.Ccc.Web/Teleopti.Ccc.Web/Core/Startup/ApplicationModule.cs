@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			{
 				if (_isDisposed) return;
 				checkForStartupErrors();
-				validateClientVersion();
+				appendServerVersionHeader();
 			};
 			application.PostAuthenticateRequest += (s, e) =>
 			{
@@ -75,18 +75,11 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			_systemVersion = container.Resolve<SystemVersion>();
 		}
 
-		private static void validateClientVersion()
+		private static void appendServerVersionHeader()
 		{
-			var clientVersion = HttpContext.Current.Request.Headers["X-Client-Version"];
-			var versionValidationDisabled = string.IsNullOrEmpty(clientVersion);
-			if (versionValidationDisabled)
-				return;
-			var clientVersionIsOk = clientVersion == _systemVersion.Version();
-			if (clientVersionIsOk)
-				return;
-
-			HttpContext.Current.Response.StatusCode = 418;
-			HttpContext.Current.Response.End();
+			var serverVersion = _systemVersion.Version();
+			var response = HttpContext.Current.Response;
+			response.AppendHeader("X-Server-Version", serverVersion);
 		}
 
 		private static void setupPrincipal()

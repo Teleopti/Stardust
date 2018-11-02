@@ -12,10 +12,12 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -23,7 +25,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 {
 	[DatabaseTest]
-	public class PersonAccountConflictResolverTest : IExtendSystem
+	public class PersonAccountConflictResolverTest : IExtendSystem, IIsolateSystem
 	{
 		public IPersonAccountConflictResolver Target;
 		public ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
@@ -79,8 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 			personAbsenceAccount.AccountCollection().Single()
 				.LatestCalculatedBalance.Should().Be.EqualTo(TimeSpan.FromDays(1));
 		}
-
-
+		
 		[Test]
 		public void ShouldTrackCorrectAccountDay()
 		{
@@ -132,6 +133,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<PersonAccountConflictResolver>();
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
 		}
 	}
 }

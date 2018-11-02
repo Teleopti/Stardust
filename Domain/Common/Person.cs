@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 			if (!(personPeriod.PersonSkillCollection.FirstOrDefault(s => s.Skill.Equals(personSkill.Skill)) is IPersonSkillModify modify))
 			{
-				((IPersonPeriodModifySkills) personPeriod).AddPersonSkill(personSkill);
+				((IPersonPeriodModifySkills)personPeriod).AddPersonSkill(personSkill);
 			}
 			else
 			{
@@ -217,9 +217,10 @@ namespace Teleopti.Ccc.Domain.Common
 			addPersonPeriodChangedEvent();
 		}
 
-		public virtual bool IsTerminated()
+		public virtual bool IsTerminated(DateOnly? date = null)
 		{
-			return TerminalDate.HasValue && TerminalDate.Value < DateOnly.Today;
+			date = date ?? DateOnly.Today;
+			return TerminalDate.HasValue && TerminalDate.Value < date;
 		}
 
 		public virtual void ActivateSkill(ISkill skill, IPersonPeriod personPeriod)
@@ -249,14 +250,14 @@ namespace Teleopti.Ccc.Domain.Common
 			InParameter.NotNull(nameof(personPeriod), personPeriod);
 			var personSkill = personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill));
 			if (personSkill != null)
-				((IPersonPeriodModifySkills) personPeriod).DeletePersonSkill(personSkill);
+				((IPersonPeriodModifySkills)personPeriod).DeletePersonSkill(personSkill);
 		}
 
 		public virtual void ChangeSkillProficiency(ISkill skill, Percent proficiency, IPersonPeriod personPeriod)
 		{
 			InParameter.NotNull(nameof(skill), skill);
 			InParameter.NotNull(nameof(personPeriod), personPeriod);
-			IPersonSkillModify personSkill = (IPersonSkillModify) personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill));
+			IPersonSkillModify personSkill = (IPersonSkillModify)personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill));
 			if (personSkill != null)
 				personSkill.SkillPercentage = proficiency;
 		}
@@ -745,8 +746,8 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual PersonWorkDay[] AverageWorkTimes(DateOnlyPeriod period)
 		{
-			var personPeriods = PersonPeriods(period).Select(p => new {Period = new DateOnlyPeriod(p.StartDate, p.EndDate()), p});
-			var schedulePeriods = PersonSchedulePeriods(period).Select(p => new {Period = new DateOnlyPeriod(p.DateFrom, p.RealDateTo()), p});
+			var personPeriods = PersonPeriods(period).Select(p => new { Period = new DateOnlyPeriod(p.StartDate, p.EndDate()), p });
+			var schedulePeriods = PersonSchedulePeriods(period).Select(p => new { Period = new DateOnlyPeriod(p.DateFrom, p.RealDateTo()), p });
 			var days = period.DayCollection();
 
 			return days.Select(

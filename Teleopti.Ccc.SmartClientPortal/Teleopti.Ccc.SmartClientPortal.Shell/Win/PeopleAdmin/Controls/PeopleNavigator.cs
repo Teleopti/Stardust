@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
@@ -168,8 +169,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
 				ITraceableRefreshService service = new TraceableRefreshService(_currentScenario,
 					new ScheduleStorage(currentUnitOfWork, repositoryFactory,
-						new PersistableScheduleDataPermissionChecker(),
-						new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork)));
+						new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())),
+						new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), PrincipalAuthorization.Current()));
 
 				var filteredPeopleHolder = new FilteredPeopleHolder(service, accounts, saviour, _personRepository)
 				{
@@ -254,10 +255,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 			_gracefulDataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() =>
 			{
 				IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork();
-				var accounts = new PersonAbsenceAccountRepository(uow).LoadAllAccounts();
+				IDictionary<IPerson, IPersonAccountCollection> accounts = new Dictionary<IPerson, IPersonAccountCollection>();
+				if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487))
+				{
+					accounts = new PersonAbsenceAccountRepository(uow).FindByUsers(new List<IPerson>());
+				}
+				else
+				{
+					accounts = new PersonAbsenceAccountRepository(uow).LoadAllAccounts();
+				}
 				var repositoryFactory = new RepositoryFactory();
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
-				ITraceableRefreshService cacheServiceForPersonAccounts = new TraceableRefreshService(_currentScenario, new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork)));
+				ITraceableRefreshService cacheServiceForPersonAccounts = new TraceableRefreshService(_currentScenario, new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), PrincipalAuthorization.Current()));
 				var state = new WorksheetStateHolder();
 				var saviour = _container.Resolve<ITenantDataManager>();
 				var filteredPeopleHolder = new FilteredPeopleHolder(cacheServiceForPersonAccounts, accounts, saviour, _personRepository)

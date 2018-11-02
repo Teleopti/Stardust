@@ -3,15 +3,19 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.ReadModels.Schedules
 {
 	[TestFixture]
 	[DatabaseTest]
-	public class CurrentScheduleReadModelUpdaterTest
+	public class CurrentScheduleReadModelUpdaterTest : IIsolateSystem
 	{
 		public Database Database;
 		public ScheduleChangeProcessor Target;
@@ -35,6 +39,10 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			WithUnitOfWork.Get(() => Reader.Read())
 				.Single().Schedule.Single().Name.Should().Be("phone");
 		}
-		
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
+		}
 	}
 }

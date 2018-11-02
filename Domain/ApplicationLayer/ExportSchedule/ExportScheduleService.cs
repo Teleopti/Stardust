@@ -46,11 +46,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 		{
 			var processResult = new ProcessExportResult();
 			var people = peopleToExport(input);
+			
 			if (people.Count > 1000)
 			{
-				processResult.FailReason = string.Format(Resources.MaximumAgentToExport, people.Count); 
+				processResult.FailReason = string.Format(Resources.MaximumAgentToExport, people.Count);
 				return processResult;
 			}
+
 			var exportData = prepareExportData(input, people);
 
 			var excelCreator = new TeamsExcelCreator();
@@ -72,7 +74,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			{
 				var matchedPersons = _personRepository.FindPeople(batch);
 				var permittedPeopleBatch = _searchProvider
-					.GetPermittedPersonList(matchedPersons, input.StartDate, DefinedRaptorApplicationFunctionPaths.ViewSchedules);
+					.GetPermittedPersonList(matchedPersons, input.StartDate, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 				people.AddRange(permittedPeopleBatch);
 			}
 			return people;
@@ -103,23 +105,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 				var selectedGroups = _optionalColumnRepository.UniqueValuesOnColumn(selectedGroupPage.Id.GetValueOrDefault()).Where(ocv => input.SelectedGroups.DynamicOptionalValues.Contains(ocv.Description));
 				selectedGroupNames = string.Join(",", selectedGroups.Select(g => selectedGroupPage.Name + "/" + g.Description));
 			}
-			var scheduleDayLookup = _scheduleProvider.GetScheduleDays(period, peopleToExport, scenario).ToLookup(x => x.Person);
-
-			var hasPermissionToViewUnpublished =
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths
-					.ViewUnpublishedSchedules);
-			var hasPermissionToViewConfidential =
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential);
-			var nameDescriptionSetting = _commonAgentNameProvider.CommonAgentNameSettings;
-
+			var personRows = new PersonRow[0];
 			var selectedOptionalColumns = input.OptionalColumnIds == null ? new List<IOptionalColumn>()
 				: _optionalColumnRepository.GetOptionalColumns<Person>()
-				.Where(p => input.OptionalColumnIds
-				.Contains(p.Id.GetValueOrDefault())).OrderBy(t => t.Name).ToList();
+					.Where(p => input.OptionalColumnIds
+						.Contains(p.Id.GetValueOrDefault())).OrderBy(t => t.Name).ToList();
+			if (peopleToExport.Any())
+			{
+				var scheduleDayLookup = _scheduleProvider.GetScheduleDays(period, peopleToExport, scenario).ToLookup(x => x.Person);
 
-			var personRows = scheduleDayLookup.Select(sl => 
-			createPersonScheduleRow(sl, selectedOptionalColumns, timeZone, hasPermissionToViewUnpublished, hasPermissionToViewConfidential, nameDescriptionSetting))
-			.OrderBy(r => r.Name).ToArray();
+				var peoplePermittedToViewUnpublished = _searchProvider.GetPermittedPersonIdList(peopleToExport, input.StartDate,
+					DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+				var peoplePermittedToViewConfidential = _searchProvider.GetPermittedPersonIdList(peopleToExport, input.StartDate,
+					DefinedRaptorApplicationFunctionPaths.ViewConfidential);
+				var nameDescriptionSetting = _commonAgentNameProvider.CommonAgentNameSettings;
+
+				personRows = scheduleDayLookup.Select(sl =>
+						createPersonScheduleRow(sl, selectedOptionalColumns, timeZone, peoplePermittedToViewUnpublished.Contains(sl.Key.Id.GetValueOrDefault()), peoplePermittedToViewConfidential.Contains(sl.Key.Id.GetValueOrDefault()), nameDescriptionSetting))
+					.OrderBy(r => r.Name).ToArray();
+			}
 
 			var optionalColumnNames = selectedOptionalColumns.Select(oc => oc.Name).ToArray();
 			return new ScheduleExcelExportData

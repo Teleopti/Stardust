@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
@@ -171,7 +172,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			rtaStateHolder.BackToRecord();
             var createLayerViewModelService = mocks.DynamicMock<ICreateLayerViewModelService>();
             var range = new ScheduleRange(scheduleDictionary,
-                                          new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), person, period), new PersistableScheduleDataPermissionChecker());
+                                          new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), person, period), new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())), PrincipalAuthorization.Current());
             using (mocks.Record())
             {
                 Expect.Call(rtaStateHolder.SchedulingResultStateHolder).Return(schedulingResultStateHolder);

@@ -10,16 +10,14 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 {
-	public class CommandHandlerIncreaseIslandsTest : ResourcePlannerCommandHandlerTest, ITestInterceptor
+	public class CommandHandlerIncreaseIslandsTest : ResourcePlannerCommandHandlerTest
 	{
 		public FakeEventPublisher EventPublisher;
-		public FakePersonRepository PersonRepository;
 		public ReduceIslandsLimits ReduceIslandsLimits;
 		public MergeIslandsSizeLimit MergeIslandsSizeLimit;
 
@@ -300,8 +298,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 		{
 		}
 
-		public void OnBefore()
+		public override void OnBefore()
 		{
+			base.OnBefore();
 			MergeIslandsSizeLimit.TurnOff_UseOnlyFromTest();
 		}
 	}

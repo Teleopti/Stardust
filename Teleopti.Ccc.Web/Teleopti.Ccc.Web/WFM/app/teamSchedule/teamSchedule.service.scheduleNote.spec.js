@@ -14,7 +14,7 @@ describe("teamschedule schedule note management service tests", function () {
 
 	var scheduleDate = "2016-01-02";
 	var yesterday = "2016-01-01";
-	var scheduleDateMoment = moment(scheduleDate);
+
 	var schedule1 = {
 		"PersonId": "221B-Baker-SomeoneElse",
 		"Name": "SomeoneElse",
@@ -40,7 +40,7 @@ describe("teamschedule schedule note management service tests", function () {
 
 	function commonTestsInDifferentLocale() {
 		it("Can create note dictionary for selected date", inject(function () {
-			target.resetScheduleNotes([schedule1, schedule3, schedule2], scheduleDateMoment);
+			target.resetScheduleNotes([schedule1, schedule3, schedule2], scheduleDate);
 			var note1 = target.getNoteForPerson("221B-Baker-SomeoneElse");
 			var note2 = target.getNoteForPerson("221B-Sherlock");
 			expect(note1.internalNotes).toEqual("test");

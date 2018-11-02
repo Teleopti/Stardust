@@ -9,6 +9,8 @@ using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
@@ -22,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 	    [SetUp]
         public void Setup()
         {
-			_permissionChecker = new PersistableScheduleDataPermissionChecker();
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current()));
             _target = new TrackerCalculator();
         }
 
@@ -31,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
         {
             IPerson person = new Person();
             IScenario scenario = new Scenario("For Test");
-            var dictionary = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000,1,1,2002,1,1)), _permissionChecker);
+            var dictionary = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000,1,1,2002,1,1)), _permissionChecker, PrincipalAuthorization.Current());
             var baseDateTime = new DateTime(2001, 1, 1, 8, 0, 0, DateTimeKind.Utc);
             IAbsence absenceToCount = new Absence();
             IActivity underlyingActivity = new Activity("For test");
@@ -63,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
         {
             IPerson person = new Person();
             IScenario scenario = new Scenario("For Test");
-            var dictionary = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2002, 1, 1)), _permissionChecker);
+            var dictionary = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2002, 1, 1)), _permissionChecker, PrincipalAuthorization.Current());
             var baseDateTime = new DateTime(2001, 1, 1, 8, 0, 0, DateTimeKind.Utc);
             IAbsence absenceToCount = new Absence {InContractTime = true};
             IActivity underlyingActivity = new Activity("For test");

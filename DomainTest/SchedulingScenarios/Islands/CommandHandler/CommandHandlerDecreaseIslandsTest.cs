@@ -7,14 +7,12 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 {
 	public class CommandHandlerDecreaseIslandsTest : ResourcePlannerCommandHandlerTest
 	{
 		public MergeIslandsSizeLimit MergeIslandsSizeLimit;
-		public FakePersonRepository PersonRepository;
 		public FakeEventPublisher EventPublisher;
 
 		[Test]

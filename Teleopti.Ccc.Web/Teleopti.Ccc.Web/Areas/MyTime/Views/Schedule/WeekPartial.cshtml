@@ -170,27 +170,26 @@ Layout = null;
 					<!-- /ko -->
 				</div>
 				<div class="weekview-day-symbol" data-bind="click: $parent.showAddRequestForm, css: { 'weekview-day-show-request': requestPermission }">
-					<div class="weekview-day-symbol-request pull-right weekview-day-icon" data-bind="visible: hasRequests, tooltip: { title: requestsText, html: true }, click: navigateToRequests">
-						<i class="glyphicon glyphicon-comment"></i>
-					</div>
-					<div class="holiday-agents weekview-day-show-request pull-right weekview-day-icon" data-bind="visible: absenceRequestPermission, tooltip: { title: holidayChanceText, html: true }">
-						<div class="small-circle" data-bind="style: {background: holidayChanceColor()}">
-						</div>
-					</div>
-					<div class="overtime-availability-symbol floatright weekview-day-icon" data-bind="visible: overtimeAvailability().HasOvertimeAvailability, tooltip: { title: textOvertimeAvailabilityText, html: true }">
-						<i class="glyphicon glyphicon-time floatright" />
-					</div>
-
-					<div class="seatbooking-symbol pull-right weekview-day-icon " data-bind="visible: seatBookingIconVisible(), tooltip: { title: seatBookingMessage, html: true }">
-						<i class="mdi mdi-chair-school" />
-					</div>
-
 					<!-- ko if: hasNote -->
-					<div class="pull-right weekview-day-icon" data-bind="tooltip: { title: noteMessage, html: true }">
+					<div class="weekview-day-icon" data-bind="tooltip: { title: noteMessage, html: true }">
 						<i class="glyphicon glyphicon-exclamation-sign"></i>
 					</div>
 					<!-- /ko -->
-					<div id="add-request-cell" data-bind="css:{'add-request-space show-request': requestPermission}">
+
+					<div class="seatbooking-symbol weekview-day-icon " data-bind="visible: seatBookingIconVisible(), tooltip: { title: seatBookingMessage, html: true }">
+						<i class="mdi mdi-chair-school"></i>
+					</div>
+
+					<div class="overtime-availability-symbol floatright weekview-day-icon" data-bind="visible: overtimeAvailability().HasOvertimeAvailability, tooltip: { title: textOvertimeAvailabilityText, html: true }">
+						<i class="glyphicon glyphicon-time floatright"></i>
+					</div>
+
+					<div class="weekview-day-symbol-request weekview-day-icon" data-bind="visible: hasRequests, tooltip: { title: requestsText, html: true }, click: navigateToRequests">
+						<i class="glyphicon glyphicon-comment"></i>
+					</div>
+
+					<div class="holiday-agents weekview-day-icon cursorpointer" data-bind="visible: absenceRequestPermission, tooltip: { title: holidayChanceText, html: true }">
+						<div class="small-circle" data-bind="style: {background: holidayChanceColor()}"></div>
 					</div>
 				</div>
 				<div>

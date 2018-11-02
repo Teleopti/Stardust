@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.IoC
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<TeamScheduleProjectionProvider>().As<ITeamScheduleProjectionProvider>().SingleInstance();
+			builder.RegisterType<TeamScheduleShiftViewModelProvider>().As<ITeamScheduleShiftViewModelProvider>().SingleInstance();
 			builder.RegisterType<TeamScheduleViewModelFactory>().As<ITeamScheduleViewModelFactory>().SingleInstance();
 			builder.RegisterType<AbsencePersister>().As<IAbsencePersister>().SingleInstance();
 			builder.RegisterType<PermissionChecker>().As<IPermissionChecker>().SingleInstance();

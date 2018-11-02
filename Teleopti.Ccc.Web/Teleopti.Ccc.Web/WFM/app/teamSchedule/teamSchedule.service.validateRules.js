@@ -35,7 +35,7 @@
 			currentEnabledTypes[type] = checked;
 		}
 
-		function getValidateRulesResultForCurrentPage(momentDate, personIds) {
+		function getValidateRulesResultForCurrentPage(date, personIds) {
 			warningDict = {};
 			personIds.forEach(function (id) {
 				warningDict[id] = {
@@ -43,10 +43,10 @@
 					warnings: []
 				}
 			});
-			getValidateRulesResult(momentDate, personIds);
+			getValidateRulesResult(date, personIds);
 		}
 
-		function updateValidateRulesResultForPeople(momentDate, personIds) {
+		function updateValidateRulesResultForPeople(date, personIds) {
 			var personIdOnCurrentPage = [];
 			personIds.forEach(function (id) {
 				if (warningDict[id]) {
@@ -58,12 +58,12 @@
 				}
 			});
 
-			getValidateRulesResult(momentDate, personIdOnCurrentPage);
+			getValidateRulesResult(date, personIdOnCurrentPage);
 		}
 
-		function getValidateRulesResult(momentDate, personIds) {
+		function getValidateRulesResult(date, personIds) {
 			var postData = {
-				Date: serviceDateFormatHelper.getDateOnly(momentDate),
+				Date: date,
 				PersonIds: personIds
 			};
 

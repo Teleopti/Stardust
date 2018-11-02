@@ -39,7 +39,6 @@ describe('teamschedule note editor directive tests', function () {
 	}
 
 	var scheduleDate = "2016-01-02";
-	var scheduleDateMoment = moment(scheduleDate);
 
 	var schedule = {
 		"PersonId": "221B-Sherlock",
@@ -51,7 +50,7 @@ describe('teamschedule note editor directive tests', function () {
 
 	it("Can set schedule note for person", inject(function () {
 		$httpBackend.expectPOST("../api/TeamScheduleCommand/EditScheduleNote").respond(200, []);
-		noteMgmt.resetScheduleNotes([schedule], scheduleDateMoment);
+		noteMgmt.resetScheduleNotes([schedule], scheduleDate);
 
 		controller = setUp();
 		controller.internalNotes = "newNotes for sherlock";
@@ -66,7 +65,7 @@ describe('teamschedule note editor directive tests', function () {
 
 	it("Should not set schedule note for person when http responds error", inject(function () {
 		$httpBackend.expectPOST("../api/TeamScheduleCommand/EditScheduleNote").respond(200, [{ PersonId: '221B-Sherlock', ErrorMessages: ['error'] }]);
-		noteMgmt.resetScheduleNotes([schedule], scheduleDateMoment);
+		noteMgmt.resetScheduleNotes([schedule], scheduleDate);
 
 		controller = setUp();
 		controller.internalNotes = "newNotes for sherlock";

@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 	public class CommandHandlerExternalStaffTest : ResourcePlannerCommandHandlerTest
 	{
 		public FakeEventPublisher EventPublisher;
-		public FakePersonRepository PersonRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeSkillCombinationResourceReader SkillCombinationResourceReader;
 
@@ -49,6 +48,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			var agent1 = new Person().WithId().WithPersonPeriod(skill);
 			var agent2 = new Person().WithId().WithPersonPeriod(skill);
 			var period = new DateTimePeriod(new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 13, 0, 0, DateTimeKind.Utc));
+			
 			PersonRepository.Has(agent1);
 			PersonRepository.Has(agent2);
 			SkillRepository.Has(skill);

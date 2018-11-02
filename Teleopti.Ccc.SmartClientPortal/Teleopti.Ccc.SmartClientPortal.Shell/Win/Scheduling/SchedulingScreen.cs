@@ -46,6 +46,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -3704,7 +3705,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void loadAccounts(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
 		{
 			var rep = new PersonAbsenceAccountRepository(uow);
-			SchedulerState.SchedulingResultState.AllPersonAccounts = rep.LoadAllAccounts();
+			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487))
+			{
+				SchedulerState.SchedulingResultState.AllPersonAccounts = rep.FindByUsers(SchedulerState.ChoosenAgents, SchedulerState.RequestedPeriod.DateOnlyPeriod);
+			}
+			else
+			{
+				SchedulerState.SchedulingResultState.AllPersonAccounts = rep.LoadAllAccounts();
+			}
 		}
 
 		private void loadDefinitionSets(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
@@ -4725,7 +4733,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var allNewRules = SchedulerState.SchedulingResultState.GetRulesToRun();
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			var uowFactory = UnitOfWorkFactory.Current;
-			var scheduleRepository = new ScheduleStorage(new FromFactory(() => uowFactory), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker(), _container.Resolve<IScheduleStorageRepositoryWrapper>());
+			var scheduleRepository = new ScheduleStorage(new FromFactory(() => uowFactory), new RepositoryFactory(),
+				new PersistableScheduleDataPermissionChecker(new PermissionProvider(PrincipalAuthorization.Current())),
+				_container.Resolve<IScheduleStorageRepositoryWrapper>(), PrincipalAuthorization.Current());
 			var exportToScenarioAccountPersister = new ExportToScenarioAccountPersister(_container.Resolve<IPersonAccountPersister>());
 			var exportToScenarioAbsenceFinder = new ExportToScenarioAbsenceFinder();
 			using (
