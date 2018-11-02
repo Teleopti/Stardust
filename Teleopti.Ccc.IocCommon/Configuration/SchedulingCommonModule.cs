@@ -509,12 +509,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_configuration.Toggle(Toggles.ResourcePlanner_FasterSeamlessPlanningForPreferences_78286))
 			{
-				builder.RegisterType<ExcludeAgentsWithHints>().As<IExcludeAgentsWithHints>().SingleInstance();
+				builder.RegisterType<ExcludeAgentsWithHints>().As<IExcludeAgentsWithHints>().SingleInstance().ApplyAspects();
+				builder.RegisterType<ExcludeAgentsWithRestrictionWarnings>().As<IExcludeAgentsWithRestrictionWarnings>().InstancePerLifetimeScope().ApplyAspects();
 				builder.RegisterType<PersonContractShiftBagHint>().As<ISchedulePreHint>().SingleInstance();
 			}
 			else
 			{
 				builder.RegisterType<NoExcludeAgentsWithHints>().As<IExcludeAgentsWithHints>().SingleInstance();
+				builder.RegisterType<NotExcludeAgentsWithRestrictionWarnings>().As<IExcludeAgentsWithRestrictionWarnings>().SingleInstance();
 			}
 		
 			builder.RegisterType<AgentsWithWhiteSpots>().SingleInstance();

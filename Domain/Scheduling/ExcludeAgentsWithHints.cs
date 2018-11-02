@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
@@ -17,7 +18,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_basicCheckScheduleHints = basicCheckScheduleHints;
 		}
 
-		public IEnumerable<IPerson> Execute(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod)
+		[TestLog]
+		public virtual IEnumerable<IPerson> Execute(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod)
 		{
 			var validationResult = _basicCheckScheduleHints.Execute(new ScheduleHintInput(agents, selectedPeriod, true));
 			var agentIdsWithHint = validationResult.InvalidResources.Where(x=> x.ValidationErrors.Any(y => y.ErrorResource != nameof(Resources.NoMatchingSchedulePeriod))).Select(x => x.ResourceId);
