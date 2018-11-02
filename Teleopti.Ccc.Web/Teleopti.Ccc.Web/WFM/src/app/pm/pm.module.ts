@@ -4,12 +4,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { DowngradeableComponent } from '@wfm/types';
 import { IStateProvider, IUrlRouterProvider } from 'angular-ui-router';
 import { WorkspaceComponent } from './components';
-import { NgxPowerBiModule } from '../../../node_modules/ngx-powerbi';
 import { PowerBIService } from './core/powerbi.service';
 
 @NgModule({
 	declarations: [WorkspaceComponent],
-	imports: [CommonModule, NgxPowerBiModule],
+	imports: [CommonModule],
 	providers: [PowerBIService],
 	exports: [],
 	entryComponents: [WorkspaceComponent]
