@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
 
@@ -18,6 +20,9 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 		{
 			var people = input.People;
 			var range = input.Period;
+
+			var shiftBagShiftLengths = new Dictionary<Guid,ShiftBagShiftLengths>();
+			
 			foreach (var person in people)
 			{
 				var longestShift = TimeSpan.MinValue;
@@ -30,23 +35,35 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 					continue;
 				}
 
-				foreach (var ruleSet in period.RuleSetBag.RuleSetCollection)
+				if (period.RuleSetBag.Id.HasValue && shiftBagShiftLengths.ContainsKey(period.RuleSetBag.Id.Value))
 				{
-					foreach (var workShift in _ruleSetProjectionService.ProjectionCollection(ruleSet, null))
+					shortestShift = shiftBagShiftLengths[period.RuleSetBag.Id.Value].ShortestShift;
+					longestShift = shiftBagShiftLengths[period.RuleSetBag.Id.Value].LongestShift;
+				}
+				else
+				{
+					foreach (var ruleSet in period.RuleSetBag.RuleSetCollection)
 					{
-						var contractTime = workShift.ContractTime;
-						if (contractTime > longestShift)
+						foreach (var workShift in _ruleSetProjectionService.ProjectionCollection(ruleSet, null))
 						{
-							longestShift = contractTime;
-						}
+							var contractTime = workShift.ContractTime;
+							if (contractTime > longestShift)
+							{
+								longestShift = contractTime;
+							}
 
-						if (contractTime < shortestShift)
-						{
-							shortestShift = contractTime;
+							if (contractTime < shortestShift)
+							{
+								shortestShift = contractTime;
+							}
 						}
 					}
-				}
 
+					if (period.RuleSetBag.Id.HasValue)
+					{
+						shiftBagShiftLengths.Add(period.RuleSetBag.Id.Value,new ShiftBagShiftLengths(){ShortestShift = shortestShift,LongestShift = longestShift});
+					}
+				}
 
 				var virtualSchedulePeriod = person.VirtualSchedulePeriod(range.StartDate);
 				var targetTime = virtualSchedulePeriod.PeriodTarget();
@@ -64,6 +81,12 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 					}, GetType());
 				}
 			}
+		}
+
+		private class ShiftBagShiftLengths
+		{
+			public TimeSpan ShortestShift { get; set; }
+			public TimeSpan LongestShift { get; set; }
 		}
 	}
 }

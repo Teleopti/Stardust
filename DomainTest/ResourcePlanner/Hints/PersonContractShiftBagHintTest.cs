@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
  
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(new Activity("_"), new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), new ShiftCategory("_").WithId()));
 			var agent = new Person().WithId()
-				.WithPersonPeriod(ruleSet, contract, new ContractScheduleWorkingMondayToFriday())
+				.WithPersonPeriod(new RuleSetBag(ruleSet).WithId(), contract, new ContractScheduleWorkingMondayToFriday(),new PartTimePercentage("_") , null)
 				.WithSchedulePeriodOneWeek(startDate);
 			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod, null, false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)));
  
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			};
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(new Activity("_"), new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), new ShiftCategory().WithId()));
 			var agent = new Person().WithId()
-				.WithPersonPeriod(ruleSet, contract, new ContractScheduleWorkingMondayToFriday())
+				.WithPersonPeriod(new RuleSetBag(ruleSet).WithId(), contract, new ContractScheduleWorkingMondayToFriday(),new PartTimePercentage("_") , null)
 				.WithSchedulePeriodOneWeek(startDate);
 			
 			var result = Target.Execute(new HintInput(null, new[] { agent }, planningPeriod, null, false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)));
@@ -91,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var ruleSet = new WorkShiftRuleSet(workShiftTemplateGenerator);
 			ruleSet.AddExtender(new ActivityAbsoluteStartExtender(activityNotInContractTime,new TimePeriodWithSegment(1,0,1,0,15),new TimePeriodWithSegment(12,0,12,0,15)));
 			var agent = new Person().WithId()
-				.WithPersonPeriod(ruleSet, contract, new ContractScheduleWorkingMondayToFriday())
+					.WithPersonPeriod(new RuleSetBag(ruleSet).WithId(), contract, new ContractScheduleWorkingMondayToFriday(),new PartTimePercentage("_") , null)
 				.WithSchedulePeriodOneWeek(date);
 			
 			Target.Execute(new HintInput(null, new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), null, false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)))
