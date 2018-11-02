@@ -35,11 +35,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		protected override void Isolate(IIsolate isolate)
 		{
 			base.Isolate(isolate);
-			isolate.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
 			isolate.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
 			isolate.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
 			isolate.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();
 			isolate.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
+			isolate.UseTestDouble(new FakeCommonAgentNameProvider("{LastName} {FirstName}")).For<ICommonAgentNameProvider>();
 		}
 	}
 
@@ -83,6 +83,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			me.AddPersonPeriod(personPeriod);
 			PersonRepository.Add(me);
 			LoggedOnUser.SetFakeLoggedOnUser(me);
+			
 		}
 
 		private void setUpMySchedule()

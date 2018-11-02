@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 	{
 		public TeamScheduleShiftViewModelProvider Target;
 		private readonly Scenario scenario = new Scenario("d");
-		public FakeCommonAgentNameProvider CommonAgentNameProvider;
 		public Areas.Global.FakePermissionProvider PermissionProvider;
 		public FakeLoggedOnUser LoggedOnUser;
 		public IScheduleStorage ScheduleStorage;
@@ -39,10 +38,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 		public void Isolate(IIsolate isolate)
 		{
-			CommonAgentNameProvider = new FakeCommonAgentNameProvider("{FirstName}{LastName}");
-
 			isolate.UseTestDouble<FakeIanaTimeZoneProvider>().For<IIanaTimeZoneProvider>();
-			isolate.UseTestDouble(CommonAgentNameProvider).For<ICommonAgentNameProvider>();
+			isolate.UseTestDouble(new FakeCommonAgentNameProvider("{FirstName}{LastName}")).For<ICommonAgentNameProvider>();
 		}
 	
 
