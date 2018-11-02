@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -18,66 +17,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.Scheduling
 {
 	[InstancePerLifetimeScope]
-	[EnabledBy(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288)]
-	[RemoveMeWithToggle("merge with base class", Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288)]
-	public class SchedulingEventHandlerNew : SchedulingEventHandler
-	{
-		private readonly AgentsWithPreferences _agentsWithPreferences;
-		private readonly AgentsWithWhiteSpots _agentsWithWhiteSpots;
-		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly ScheduleExecutor _scheduleExecutor;
-		
-		
-		protected SchedulingEventHandlerNew(AgentsWithPreferences agentsWithPreferences, AgentsWithWhiteSpots agentsWithWhiteSpots, Func<ISchedulerStateHolder> schedulerStateHolder, FillSchedulerStateHolder fillSchedulerStateHolder, ScheduleExecutor scheduleExecutor, ISchedulingOptionsProvider schedulingOptionsProvider, ICurrentSchedulingCallback currentSchedulingCallback, ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland, IGridlockManager gridlockManager, ISchedulingSourceScope schedulingSourceScope, ExtendSelectedPeriodForMonthlyScheduling extendSelectedPeriodForMonthlyScheduling, IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod, DayOffOptimization dayOffOptimization, IAlreadyScheduledAgents alreadyScheduledAgents) : base(schedulerStateHolder, fillSchedulerStateHolder, scheduleExecutor, schedulingOptionsProvider, currentSchedulingCallback, synchronizeSchedulesAfterIsland, gridlockManager, schedulingSourceScope, extendSelectedPeriodForMonthlyScheduling, blockPreferenceProviderForPlanningPeriod, dayOffOptimization, alreadyScheduledAgents)
-		{
-			_agentsWithPreferences = agentsWithPreferences;
-			_agentsWithWhiteSpots = agentsWithWhiteSpots;
-			_schedulerStateHolder = schedulerStateHolder;
-			_scheduleExecutor = scheduleExecutor;
-		}
-		
-		protected override void RunSchedulingWithoutPreferences(
-			IDictionary<IPerson, IEnumerable<DateOnly>> alreadyScheduledAgents, SchedulingWasOrdered @event, IEnumerable<IPerson> agents,
-			DateOnlyPeriod selectedPeriod, SchedulingOptions schedulingOptions, ISchedulingCallback schedulingCallback,
-			ISchedulingProgress schedulingProgress, IBlockPreferenceProvider blockPreferenceProvider)
-		{
-			if (!@event.ScheduleWithoutPreferencesForFailedAgents) 
-				return;
-			var schedules = _schedulerStateHolder().Schedules;
-			var filteredAgents = filterAgents(agents, selectedPeriod, schedules);
-
-			foreach (var agent in filteredAgents)
-			{
-				var range = schedules[agent];
-				foreach (var date in selectedPeriod.DayCollection())
-				{
-					if(alreadyScheduledAgents.TryGetValue(agent, out var alreadyScheduleDates) && alreadyScheduleDates.Contains(date))
-						continue;
-						
-					var scheduleDay = range.ScheduledDay(date);
-					scheduleDay.PersonAssignment(true).ClearMainActivities();
-					scheduleDay.PersonAssignment().SetDayOff(null);
-
-					//Correct, res calc numbers?!?!?
-					schedules.Modify(scheduleDay, new DoNothingScheduleDayChangeCallBack());
-				}
-			}
-			schedulingOptions.UsePreferences = false;
-			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, filteredAgents, selectedPeriod, blockPreferenceProvider);
-		}
-
-		private IEnumerable<IPerson> filterAgents(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod, IScheduleDictionary schedules)
-		{
-			var agentsWithPreferences = _agentsWithPreferences.Execute(schedules, agents, selectedPeriod);
-			var agentsWithWhiteSpotsAndPreferences = _agentsWithWhiteSpots.Execute(schedules, agentsWithPreferences, selectedPeriod);
-			return agentsWithWhiteSpotsAndPreferences;
-		}
-
-	}
-
-
-	[InstancePerLifetimeScope]
-	[DisabledBy(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288)]
 	public class SchedulingEventHandler : IRunInSyncInFatClientProcess, IHandleEvent<SchedulingWasOrdered>
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
@@ -91,7 +30,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ExtendSelectedPeriodForMonthlyScheduling _extendSelectedPeriodForMonthlyScheduling;
 		private readonly IBlockPreferenceProviderForPlanningPeriod _blockPreferenceProviderForPlanningPeriod;
 		private readonly DayOffOptimization _dayOffOptimization;
-		private readonly IAlreadyScheduledAgents _alreadyScheduledAgents;
+		private readonly AlreadyScheduledAgents _alreadyScheduledAgents;
+		private readonly AgentsWithPreferences _agentsWithPreferences;
+		private readonly AgentsWithWhiteSpots _agentsWithWhiteSpots;
 
 		protected SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder,
 						FillSchedulerStateHolder fillSchedulerStateHolder,
@@ -104,7 +45,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						ExtendSelectedPeriodForMonthlyScheduling extendSelectedPeriodForMonthlyScheduling,
 						IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod,
 						DayOffOptimization dayOffOptimization,
-						IAlreadyScheduledAgents alreadyScheduledAgents)
+						AlreadyScheduledAgents alreadyScheduledAgents,
+						AgentsWithPreferences agentsWithPreferences, 
+						AgentsWithWhiteSpots agentsWithWhiteSpots)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -118,6 +61,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_blockPreferenceProviderForPlanningPeriod = blockPreferenceProviderForPlanningPeriod;
 			_dayOffOptimization = dayOffOptimization;
 			_alreadyScheduledAgents = alreadyScheduledAgents;
+			_agentsWithPreferences = agentsWithPreferences;
+			_agentsWithWhiteSpots = agentsWithWhiteSpots;
 		}
 
 		[TestLog]
@@ -166,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var alreadyScheduledAgents = _alreadyScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod, agents);
 			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, agents, selectedPeriod, blockPreferenceProvider);
 			
-			RunSchedulingWithoutPreferences(alreadyScheduledAgents, @event, agents, selectedPeriod, schedulingOptions, schedulingCallback, schedulingProgress, blockPreferenceProvider);
+			runSchedulingWithoutPreferences(alreadyScheduledAgents, @event, agents, selectedPeriod, schedulingOptions, schedulingCallback, schedulingProgress, blockPreferenceProvider);
 
 			removeNonPreferenceDaysOffs(selectedPeriod, schedulingOptions, agents);
 			
@@ -200,12 +145,42 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			}
 		}
 
-		protected virtual void RunSchedulingWithoutPreferences(
+		private void runSchedulingWithoutPreferences(
 			IDictionary<IPerson, IEnumerable<DateOnly>> alreadyScheduledAgents, SchedulingWasOrdered @event,IEnumerable<IPerson> agents,
 			DateOnlyPeriod selectedPeriod, SchedulingOptions schedulingOptions,
 			ISchedulingCallback schedulingCallback, ISchedulingProgress schedulingProgress,
 			IBlockPreferenceProvider blockPreferenceProvider)
 		{
+			if (!@event.ScheduleWithoutPreferencesForFailedAgents) 
+				return;
+			var schedules = _schedulerStateHolder().Schedules;
+			var filteredAgents = filterAgents(agents, selectedPeriod, schedules);
+
+			foreach (var agent in filteredAgents)
+			{
+				var range = schedules[agent];
+				foreach (var date in selectedPeriod.DayCollection())
+				{
+					if(alreadyScheduledAgents.TryGetValue(agent, out var alreadyScheduleDates) && alreadyScheduleDates.Contains(date))
+						continue;
+						
+					var scheduleDay = range.ScheduledDay(date);
+					scheduleDay.PersonAssignment(true).ClearMainActivities();
+					scheduleDay.PersonAssignment().SetDayOff(null);
+
+					//Correct, res calc numbers?!?!?
+					schedules.Modify(scheduleDay, new DoNothingScheduleDayChangeCallBack());
+				}
+			}
+			schedulingOptions.UsePreferences = false;
+			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, filteredAgents, selectedPeriod, blockPreferenceProvider);
+		}
+		
+		private IEnumerable<IPerson> filterAgents(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod, IScheduleDictionary schedules)
+		{
+			var agentsWithPreferences = _agentsWithPreferences.Execute(schedules, agents, selectedPeriod);
+			var agentsWithWhiteSpotsAndPreferences = _agentsWithWhiteSpots.Execute(schedules, agentsWithPreferences, selectedPeriod);
+			return agentsWithWhiteSpotsAndPreferences;
 		}
 	}
 }

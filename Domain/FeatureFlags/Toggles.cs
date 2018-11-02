@@ -80,7 +80,6 @@
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,
 		ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348,
-		ResourcePlanner_SeamlessPlanningForPreferences_76288,
 		ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941,
 		ResourcePlanner_FasterSeamlessPlanningForPreferences_78286,
 		ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487,

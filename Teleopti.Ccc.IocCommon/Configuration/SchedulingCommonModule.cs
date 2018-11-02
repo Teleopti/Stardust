@@ -500,18 +500,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CheckScheduleHints>().SingleInstance();
 			builder.RegisterType<GetValidations>().SingleInstance();
 			
-			if(_configuration.Toggle(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288))
+			builder.RegisterType<AlreadyScheduledAgents>().SingleInstance();
+			builder.RegisterType<AgentsWithPreferences>().SingleInstance();
+			if (!_configuration.Args().IsFatClient)
 			{
-				builder.RegisterType<AlreadyScheduledAgents>().As<IAlreadyScheduledAgents>().SingleInstance();
-				builder.RegisterType<AgentsWithPreferences>().SingleInstance();
-				if (!_configuration.Args().IsFatClient)
-				{
-					builder.RegisterType<PreferenceHint>().As<IScheduleHint>().SingleInstance();
-				}
-			}
-			else
-			{
-				builder.RegisterType<AlreadyScheduledAgentsNullObject>().As<IAlreadyScheduledAgents>().SingleInstance();
+				builder.RegisterType<PreferenceHint>().As<IScheduleHint>().SingleInstance();
 			}
 
 			if (_configuration.Toggle(Toggles.ResourcePlanner_FasterSeamlessPlanningForPreferences_78286))

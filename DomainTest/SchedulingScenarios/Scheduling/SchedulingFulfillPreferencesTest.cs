@@ -2,9 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -36,9 +34,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldScheduleWithoutPreferencesIfPreferencesCannotBeFulfilled()
 		{
-			if (!ResourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288))
-				Assert.Ignore("only works with toggle on");
-
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var date = new DateOnly(2015, 10, 12); //mon;
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
@@ -60,9 +55,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldScheduleWithoutPreferencesIfSomePreferencesCannotBeFulfilled()
 		{
-			if (!ResourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288))
-				Assert.Ignore("only works with toggle on");
-
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var date = new DateOnly(2015, 10, 12); //mon;
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
@@ -88,9 +80,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[TestCase(false, ExpectedResult = false)]
 		public bool ShouldGiveHintForAgentsScheduledWithoutPreference(bool blockedByPreference)
 		{
-			if (!ResourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288))
-				Assert.Ignore("only works with toggle on");
-
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var date = new DateOnly(2015, 10, 12); //mon;
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
@@ -114,9 +103,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldDeleteBeforeRescheduleWhenPreferencesCantBeFulfilled()
 		{
-			if (!ResourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288))
-				Assert.Ignore("only works with toggle on");
-
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var date = new DateOnly(2015, 10, 12); //mon;
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
@@ -171,9 +157,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldManageToRescheduleWhenPersonalActivityExist()
 		{
-			if (!ResourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288))
-				Assert.Ignore("only works with toggle on");
-
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var date = new DateOnly(2015, 10, 12); //mon;
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
@@ -237,9 +220,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldRemoveDaysOffAndManageToRescheduleAllDays()
 		{
-			if (!ResourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288))
-				Assert.Ignore("only works with toggle on");
-
 			var dayOffTemplate = DayOffFactory.CreateDayOff();
 			DayOffTemplateRepository.Has(dayOffTemplate);
 			var date = new DateOnly(2015, 10, 12); //mon;

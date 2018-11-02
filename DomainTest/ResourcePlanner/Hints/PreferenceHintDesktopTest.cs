@@ -18,7 +18,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288)]
 	[UseIocForFatClient]
 	public class PreferenceHintDesktopTest
 	{

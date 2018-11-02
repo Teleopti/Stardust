@@ -20,7 +20,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_SeamlessPlanningForPreferences_76288)]
 	public class PreferenceHintTest
 	{
 		public CheckScheduleHints Target;
