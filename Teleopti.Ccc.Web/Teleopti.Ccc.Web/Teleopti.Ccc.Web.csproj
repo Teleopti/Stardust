@@ -434,7 +434,6 @@
     <Compile Include="Areas\Global\Models\GroupPagesViewModel.cs" />
     <Compile Include="Areas\Global\FavoriteSearchController.cs" />
     <Compile Include="Areas\Global\FavoriteSearchFormData.cs" />
-    <Compile Include="Areas\Global\DataProtectionController.cs" />
     <Compile Include="Areas\Global\Core\GroupPageViewModelFactory.cs" />
     <Compile Include="Areas\Global\DataTokenController.cs" />
     <Compile Include="Areas\Global\ScenarioController.cs" />
