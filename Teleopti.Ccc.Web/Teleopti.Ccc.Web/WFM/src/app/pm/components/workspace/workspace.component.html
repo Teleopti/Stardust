@@ -4,7 +4,24 @@
 		PM Next Generation
 	</h1>
 
-	<div [hidden]="!initialized">
-		<div id="reportContainer" style="height:900px;"></div>
+	<div class="material-depth-1 con-row full-padding align-row-baseline">
+		<span>
+			<input type="checkbox" name="canEditReport" id="canEditReport" [checked]="canEditReport" (change)="onCanEditReportChanged()">
+			<label for="canEditReport">Enabled report editing</label>
+		</span>
+		&nbsp;&nbsp;&nbsp;
+		<span>
+			<input type="checkbox" name="enableNavContent" id="enableNavContent" [checked]="enableNavContent" (change)="onEnableNavContentChanged()">
+			<label for="enableNavContent">Enabled navigation content</label>
+		</span>
+		&nbsp;&nbsp;&nbsp;
+		<span>
+			<input type="checkbox" name="enableFilter" id="enableFilter" [checked]="enableFilter" (change)="onEnableFilterChanged()">
+			<label for="enableFilter">Enabled filter</label>
+		</span>
+		<input type="button" class="wfm-btn wfm-btn-invis-primary ng-binding ng-scope" id="btnReloadReport" value="Reload" (click)="loadReport()">
+	</div>
+	<div [hidden]="!initialized" class="panel con-flex material-depth-1">
+		<div id="reportContainer" style="height:850px;"></div>
 	</div>
 </div>

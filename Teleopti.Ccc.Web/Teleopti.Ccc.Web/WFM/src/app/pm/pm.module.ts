@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { DowngradeableComponent } from '@wfm/types';
 import { IStateProvider, IUrlRouterProvider } from 'angular-ui-router';
@@ -8,7 +9,7 @@ import { PowerBIService } from './core/powerbi.service';
 
 @NgModule({
 	declarations: [WorkspaceComponent],
-	imports: [CommonModule],
+	imports: [CommonModule, FormsModule],
 	providers: [PowerBIService],
 	exports: [],
 	entryComponents: [WorkspaceComponent]
