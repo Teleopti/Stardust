@@ -13,9 +13,11 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
@@ -207,6 +209,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
+			isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
 		}
 	}
 }
