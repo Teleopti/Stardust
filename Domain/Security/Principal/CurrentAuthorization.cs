@@ -53,7 +53,12 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		public static IDisposable ThreadlyUse(IAuthorization authorization)
 		{
 			_threadAuthorization.Value.Push(authorization);
-			return new GenericDisposable(() => _threadAuthorization.Value.Pop());
+			_defaultAuthorization = authorization;
+			return new GenericDisposable(() =>
+			{
+				_threadAuthorization.Value.Pop();
+				_defaultAuthorization = null;
+			});
 		}
 
 		public IDisposable OnThisThreadUse(IAuthorization authorization)
@@ -69,6 +74,5 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 				return _defaultAuthorization;
 			return _authorization;
 		}
-
 	}
 }

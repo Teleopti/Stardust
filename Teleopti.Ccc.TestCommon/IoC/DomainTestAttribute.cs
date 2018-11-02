@@ -297,6 +297,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			else
 				isolate.UseTestDouble<FakeThreadPrincipalContext>().For<IThreadPrincipalContext>();
 
+			CurrentAuthorization.DefaultTo(null);
 			if (fullPermissions())
 				isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
 			if (fakePermissions())
@@ -329,7 +330,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// because DomainTest project has OneTimeSetUp that sets FullPermissions globally... 
 			// ... we need to scope real/fake/full for this test
 			if (realPermissions())
+			{
 				_authorizationScope = AuthorizationScope.OnThisThreadUse((PrincipalAuthorization) Authorization);
+			}
 			else if (fakePermissions())
 				_authorizationScope = AuthorizationScope.OnThisThreadUse((FakePermissions) Authorization);
 			else
@@ -404,6 +407,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			base.AfterTest();
 
+			CurrentAuthorization.DefaultTo(null);
 			_tenantScope?.Dispose();
 			_authorizationScope?.Dispose();
 		}
