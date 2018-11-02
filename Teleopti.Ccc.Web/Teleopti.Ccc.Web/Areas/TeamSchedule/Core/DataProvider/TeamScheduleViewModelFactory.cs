@@ -294,7 +294,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				}
 			}
 
-			if (!permittedPeopleByDate.Any())
+			if (!permittedPeopleByDate.All(pd => pd.Value.Any()))
 			{
 				return new GroupWeekScheduleViewModel();
 			}
