@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.TestCommon;
@@ -14,6 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 		public IRtaEventStore Events;
 		public IRtaEventStoreUpgradeWriter Target;
 		public IRtaEventStoreTester Tester;
+		public IRtaEventStoreReader EventStore;
 
 		[Test]
 		public void ShouldLoadForUpgrade()
@@ -82,6 +84,19 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 
 			Tester.LoadAllForTest().Cast<PersonStateChangedEvent>().Single().BelongsToDate
 				.Should().Be("2018-10-31".Date());
+		}		
+		
+		[Test]
+		public void ShouldUpgradeBelongsToDate()
+		{
+			var personId = Guid.NewGuid();
+			Events.Add(new PersonStateChangedEvent() {PersonId = personId}, DeadLockVictim.No, RtaEventStoreVersion.WithoutBelongsToDate);
+			var @event = Target.LoadForUpgrade(RtaEventStoreVersion.WithoutBelongsToDate, 1).Single();
+			(@event.Event as PersonStateChangedEvent).BelongsToDate = "2018-11-02".Date();
+
+			Target.Upgrade(@event, RtaEventStoreVersion.StoreVersion);
+
+			EventStore.Load(personId, "2018-11-02".Date()).Should().Have.Count.EqualTo(1);
 		}
 	}
 }

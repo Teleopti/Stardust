@@ -137,11 +137,18 @@ WHERE
 
 		public void Upgrade(UpgradeEvent @event, int toStoreVersion)
 		{
-			// this needs to update columns ffs
 			_unitOfWork.Current().Session()
-				.CreateSQLQuery(@"UPDATE [rta].[Events] SET [Event] = :Event, StoreVersion = :toVersion WHERE Id = :Id")
-				.SetParameter("toVersion", toStoreVersion)
+				.CreateSQLQuery(@"
+UPDATE [rta].[Events] 
+SET 
+	[Event] = :Event, 
+	StoreVersion = :toStoreVersion,
+	BelongsToDate = :BelongsToDate 
+WHERE Id = :Id
+")
+				.SetParameter("toStoreVersion", toStoreVersion)
 				.SetParameter("Id", @event.Id)
+				.SetParameter("BelongsToDate", @event.Event.QueryData().BelongsToDate?.Date)
 				.SetParameter("Event", _serializer.SerializeEvent(@event.Event))
 				.ExecuteUpdate();
 		}
