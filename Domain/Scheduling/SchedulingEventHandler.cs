@@ -71,28 +71,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[TestLog]
 		public virtual void Handle(SchedulingWasOrdered @event)
 		{
-			if (@event.FromWeb)
+			using (_schedulingSourceScope.OnThisThreadUse(@event.FromWeb ? ScheduleSource.WebScheduling : null))
 			{
-				using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
+				var schedulerStateHolder = _schedulerStateHolder();
+				var selectedPeriod = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
+				using (CommandScope.Create(@event))
 				{
-					run(@event);
-				}
-			}
-			else
-			{
-				run(@event);
-			}
-		}
-
-		private void run(SchedulingWasOrdered @event)
-		{
-			var schedulerStateHolder = _schedulerStateHolder();
-			var selectedPeriod = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
-			using (CommandScope.Create(@event))
-			{
-				DoScheduling(@event, schedulerStateHolder, selectedPeriod);
+					DoScheduling(@event, schedulerStateHolder, selectedPeriod);
 				
-				_synchronizeSchedulesAfterIsland.Synchronize(schedulerStateHolder.Schedules, selectedPeriod);
+					_synchronizeSchedulesAfterIsland.Synchronize(schedulerStateHolder.Schedules, selectedPeriod);
+				}
 			}
 		}
 
@@ -102,15 +90,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsInIsland, new LockInfoForStateHolder(_gridlockManager, @event.UserLocks), selectedPeriod, @event.Skills);
 			var schedulingCallback = _currentSchedulingCallback.Current();
 			var schedulingProgress = schedulingCallback is IConvertSchedulingCallbackToSchedulingProgress converter ? converter.Convert() : new NoSchedulingProgress();
-
 			var schedulingOptions = _schedulingOptionsProvider.Fetch(schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate);
-
 			var blockPreferenceProvider = @event.FromWeb ? 
 				_blockPreferenceProviderForPlanningPeriod.Fetch(@event.PlanningPeriodId) : 
 				new FixedBlockPreferenceProvider(schedulingOptions);
 			selectedPeriod = _extendSelectedPeriodForMonthlyScheduling.Execute(@event, schedulerStateHolder, selectedPeriod);
 			var agents = schedulerStateHolder.SchedulingResultState.LoadedAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray();
-			
 			var alreadyScheduledAgents = _alreadyScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod, agents);
 			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, agents, selectedPeriod, blockPreferenceProvider);
 			
