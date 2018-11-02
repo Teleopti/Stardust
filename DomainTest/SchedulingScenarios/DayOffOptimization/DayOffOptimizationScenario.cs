@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 		public void OnBefore()
 		{
-			ResourcePlannerTestParameters.SimulateNewRequest(IoCTestContext);
+			ResourcePlannerTestParameters.MightSimulateNewRequest(IoCTestContext);
 		}
 
 		public void Configure(FakeToggleManager toggleManager)

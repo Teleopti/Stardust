@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public virtual void OnBefore()
 		{
 			CurrentAuthorization.DefaultTo(new FullPermission());
-			ResourcePlannerTestParameters.SimulateNewRequest(IoCTestContext);
+			ResourcePlannerTestParameters.MightSimulateNewRequest(IoCTestContext);
 		}
 
 		public void Configure(FakeToggleManager toggleManager)

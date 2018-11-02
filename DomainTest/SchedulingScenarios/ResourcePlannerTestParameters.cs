@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			return _parameters.Count();
 		}
 
-		public void SimulateNewRequest(IIoCTestContext iocTestContext)
+		public void MightSimulateNewRequest(IIoCTestContext iocTestContext)
 		{
 			if (_parameters.Any(x => x is SeparateWebRequest separateWebRequest &&
 				separateWebRequest == SeparateWebRequest.SimulateSecondRequestOrScheduler))
