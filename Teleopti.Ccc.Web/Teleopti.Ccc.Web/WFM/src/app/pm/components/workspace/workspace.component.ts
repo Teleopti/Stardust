@@ -1,4 +1,4 @@
-import { Component, Input， Output, OnInit } from '@angular/core';
+import { Component, Input, Output, OnInit } from '@angular/core';
 import * as pbi from 'powerbi-client';
 
 import { PowerBIService } from '../../core/powerbi.service';
