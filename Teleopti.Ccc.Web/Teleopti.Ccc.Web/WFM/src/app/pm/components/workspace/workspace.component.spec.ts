@@ -4,6 +4,7 @@ import { configureTestSuite, PageObject } from '@wfm/test';
 import { NzButtonModule, NzTableModule, NzToolTipModule } from 'ng-zorro-antd';
 import { MockTranslationModule } from '../../../../mocks/translation';
 import { WorkspaceComponent } from './workspace.component';
+import { PowerBIService } from '../../core/powerbi.service';
 // import { adina, eva, fakeBackendProvider, myles, SearchService, WorkspaceService } from '../../services';
 
 describe('WorkspaceComponent', () => {
@@ -17,7 +18,7 @@ describe('WorkspaceComponent', () => {
 		TestBed.configureTestingModule({
 			declarations: [WorkspaceComponent],
 			imports: [MockTranslationModule, HttpClientModule, NzTableModule, NzButtonModule, NzToolTipModule],
-			providers: []
+			providers: [PowerBIService]
 		}).compileComponents();
 	}));
 

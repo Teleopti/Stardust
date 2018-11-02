@@ -19,7 +19,9 @@
 
 		function ensureClientIsUpToDate(headers) {
 			var version = versionService.getVersion();
-			var newVersion = headers['X-Server-Version'] || '';
+			var newVersion = "";
+			if (headers)
+				newVersion = headers['X-Server-Version'] || '';
 			if (newVersion.length === 0) return;
 			else if (version.length === 0) versionService.setVersion(newVersion);
 			else if (version !== newVersion) $window.location.reload(true);
