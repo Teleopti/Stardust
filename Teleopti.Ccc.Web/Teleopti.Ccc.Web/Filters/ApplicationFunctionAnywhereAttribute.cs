@@ -25,28 +25,4 @@ namespace Teleopti.Ccc.Web.Filters
 		{
 		}
 	}
-
-	public sealed class RemoveAbsencePermissionAttribute : ApplicationFunctionApiAttribute
-	{
-		public RemoveAbsencePermissionAttribute()
-			: base(DefinedRaptorApplicationFunctionPaths.RemoveAbsence)
-		{
-		}
-	}
-
-	public sealed class AddActivityPermissionAttribute : ApplicationFunctionApiAttribute
-	{
-		public AddActivityPermissionAttribute()
-			: base(DefinedRaptorApplicationFunctionPaths.AddActivity)
-		{
-		}
-	}
-
-	public sealed class MoveActivityPermissionAttribute : ApplicationFunctionApiAttribute
-	{
-		public MoveActivityPermissionAttribute()
-			: base(DefinedRaptorApplicationFunctionPaths.MoveActivity)
-		{
-		}
-	}
 }
