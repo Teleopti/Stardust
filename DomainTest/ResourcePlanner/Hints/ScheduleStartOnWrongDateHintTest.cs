@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 		{
 			Assert.DoesNotThrow(() =>
 			{			
-				Target.Execute(new ScheduleHintInput(new[]{new Person(), }, DateOnly.Today.ToDateOnlyPeriod(), null, false));
+				Target.Execute(new ScheduleHintInput(new[]{new Person(), }, DateOnly.Today.ToDateOnlyPeriod(), false));
 			});
 		}
 

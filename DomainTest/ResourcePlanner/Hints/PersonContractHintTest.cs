@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var person = PersonFactory.CreatePerson().WithId();
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(startDate));
 
-			var result = Target.Execute(new ScheduleHintInput(new[] { person }, planningPeriod, null, false)).InvalidResources
+			var result = Target.Execute(new ScheduleHintInput(new[] { person }, planningPeriod, false)).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonContractHint)));
 
 			result.Should().Be.Empty();
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			((IDeleteTag)personPeriod.PersonContract.Contract).SetDeleted();
 			person.AddPersonPeriod(personPeriod);
 
-			var result = Target.Execute(new ScheduleHintInput(new[] { person }, planningPeriod, null, false)).InvalidResources
+			var result = Target.Execute(new ScheduleHintInput(new[] { person }, planningPeriod, false)).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonContractHint)));
 
 			result.Should().Not.Be.Empty();

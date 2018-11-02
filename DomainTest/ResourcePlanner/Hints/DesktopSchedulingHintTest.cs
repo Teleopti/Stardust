@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var agent = new Person().WithPersonPeriod();
 			((IDeleteTag)agent.Period(DateOnly.Today).PersonContract.Contract).SetDeleted();
 			
-			var result = Target.Execute(new ScheduleHintInput(new[] {agent}, new DateOnlyPeriod(2000, 1, 1, 2000, 2, 1), null, false));
+			var result = Target.Execute(new ScheduleHintInput(new[] {agent}, new DateOnlyPeriod(2000, 1, 1, 2000, 2, 1), false));
 
 			result.InvalidResources.SelectMany(x => x.ValidationTypes)
 				.Any(x => x == typeof(PersonContractHint))
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var startDate = new DateOnly(2000,1,1);
 			var agent = new Person().WithSchedulePeriodOneMonth(startDate);
 
-			var result = Target.Execute(new ScheduleHintInput(new[] {agent}, new DateOnlyPeriod(startDate, startDate.AddDays(1)), null, false));
+			var result = Target.Execute(new ScheduleHintInput(new[] {agent}, new DateOnlyPeriod(startDate, startDate.AddDays(1)), false));
 
 			result.InvalidResources.SelectMany(x => x.ValidationTypes)
 				.Any(x => x == typeof(PersonSchedulePeriodHint))
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 		{
 			var agent = new Person();
 
-			var result = Target.Execute(new ScheduleHintInput(new[] { agent }, new DateOnlyPeriod(2000, 1, 1, 2000, 2, 1), null, false));
+			var result = Target.Execute(new ScheduleHintInput(new[] { agent }, new DateOnlyPeriod(2000, 1, 1, 2000, 2, 1), false));
 
 			result.InvalidResources.SelectMany(x => x.ValidationTypes)
 				.Any(x => x == typeof(MissingForecastHint))

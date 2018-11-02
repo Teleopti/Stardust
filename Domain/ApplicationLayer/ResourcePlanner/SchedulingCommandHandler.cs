@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		protected virtual IEnumerable<IPerson> RemoveAgentsWithHints(IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			_currentUnitOfWork.Current().Reassociate(agents);
-			return _excludeAgentsWithHints.Execute(agents, period, null);
+			return _excludeAgentsWithHints.Execute(agents, period);
 		}
 
 		[ReadonlyUnitOfWork]

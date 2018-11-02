@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var agent = new Person().WithId()
 				.WithPersonPeriod(new RuleSetBag(ruleSet).WithId(), contract, new ContractScheduleWorkingMondayToFriday(),new PartTimePercentage("_") , null)
 				.WithSchedulePeriodOneWeek(startDate);
-			var result = Target.Execute(new ScheduleHintInput(new[] { agent }, planningPeriod, null, false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)));
+			var result = Target.Execute(new ScheduleHintInput(new[] { agent }, planningPeriod, false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)));
  
 			result.Count().Should().Be.EqualTo(1);
 			
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 				.WithPersonPeriod(new RuleSetBag(ruleSet).WithId(), contract, new ContractScheduleWorkingMondayToFriday(),new PartTimePercentage("_") , null)
 				.WithSchedulePeriodOneWeek(startDate);
 			
-			var result = Target.Execute(new ScheduleHintInput(new[] { agent }, planningPeriod, null, false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)));
+			var result = Target.Execute(new ScheduleHintInput(new[] { agent }, planningPeriod, false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)));
  
 			result.Count().Should().Be.EqualTo(0);
 		}
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 					.WithPersonPeriod(new RuleSetBag(ruleSet).WithId(), contract, new ContractScheduleWorkingMondayToFriday(),new PartTimePercentage("_") , null)
 				.WithSchedulePeriodOneWeek(date);
 			
-			Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), null, false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)))
+			Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)))
 				.Should().Be.Empty();
 		}
 
