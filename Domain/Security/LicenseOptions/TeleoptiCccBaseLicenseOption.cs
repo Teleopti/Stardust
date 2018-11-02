@@ -89,6 +89,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				DefinedRaptorApplicationFunctionPaths.WebRequests,
 				DefinedRaptorApplicationFunctionPaths.WebApproveOrDenyRequest,
 				DefinedRaptorApplicationFunctionPaths.WebReplyRequest,
+				DefinedRaptorApplicationFunctionPaths.WebEditSiteOpenHours,
 				DefinedRaptorApplicationFunctionPaths.WebIntraday,
 				DefinedRaptorApplicationFunctionPaths.WebPeople,
 				DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup,

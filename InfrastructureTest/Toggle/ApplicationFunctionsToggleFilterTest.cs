@@ -81,6 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		[TestCase(DefinedRaptorApplicationFunctionPaths.PmNextGenEditReport)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.WebApproveOrDenyRequest)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.WebReplyRequest)]
+		[TestCase(DefinedRaptorApplicationFunctionPaths.WebEditSiteOpenHours)]
 		public void ShouldHideApplicationFunctionWithToggleOff(string applicationFunctionPath)
 		{
 			var toggleManager = new FakeToggleManager();

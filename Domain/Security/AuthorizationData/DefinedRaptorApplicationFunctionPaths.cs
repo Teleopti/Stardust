@@ -160,6 +160,7 @@
 		public const string WebCancelRequest = "Raptor/Anywhere/WebRequests/CancelRequest";
 		public const string WebApproveOrDenyRequest = "Raptor/Anywhere/WebRequests/ApproveOrDenyRequest";
 		public const string WebReplyRequest = "Raptor/Anywhere/WebRequests/WebReplyRequest";
+		public const string WebEditSiteOpenHours = "Raptor/Anywhere/WebRequests/WebEditSiteOpenHours";
 		public const string WebOvertimeRequest = "Raptor/Anywhere/WebRequests/OvertimeRequest";
 		public const string WebModifySkill = "Raptor/Anywhere/WebForecasts/WebModifySkill";
 		public const string WebStaffing = "Raptor/Anywhere/WebStaffing";
