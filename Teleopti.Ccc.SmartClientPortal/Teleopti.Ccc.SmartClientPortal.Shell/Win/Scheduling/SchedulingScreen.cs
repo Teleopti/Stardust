@@ -3705,7 +3705,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void loadAccounts(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
 		{
 			var rep = new PersonAbsenceAccountRepository(uow);
-			SchedulerState.SchedulingResultState.AllPersonAccounts = rep.LoadAllAccounts();
+			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487))
+			{
+				SchedulerState.SchedulingResultState.AllPersonAccounts = rep.FindByUsers(SchedulerState.ChoosenAgents, SchedulerState.RequestedPeriod.DateOnlyPeriod);
+			}
+			else
+			{
+				SchedulerState.SchedulingResultState.AllPersonAccounts = rep.LoadAllAccounts();
+			}
 		}
 
 		private void loadDefinitionSets(IUnitOfWork uow, ISchedulerStateHolder stateHolder)

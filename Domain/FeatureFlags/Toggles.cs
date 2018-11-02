@@ -83,6 +83,7 @@
 		ResourcePlanner_SeamlessPlanningForPreferences_76288,
 		ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941,
 		ResourcePlanner_FasterSeamlessPlanningForPreferences_78286,
+		ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487,
 
 		Wfm_DisplayOnlineHelp_39402,
 
