@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.DayOff
 			var dayOffTemplate = _dayOffTemplateRepository.Get(@event.DayOffTemplateId);
 			if (dayOffTemplate == null)
 			{
-				logger.Warn($"DayOff '{@event.DayOffTemplateId}' was not found in applicationd database.");
+				logger.Warn($"DayOff '{@event.DayOffTemplateId}' was not found in application database.");
 				return;
 			}
 			var dayOff = new AnalyticsDayOff

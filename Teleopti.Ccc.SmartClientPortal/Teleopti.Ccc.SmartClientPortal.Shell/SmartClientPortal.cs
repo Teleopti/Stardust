@@ -711,23 +711,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 		}
 
-		private void pleaseRegisterAnEmailAddress(string message)
-		{
-			const string html = "<!doctype html><html><head></head><body style='font-family:Sans-Serif'>{0}</body></html>";
-			webView1.LoadHtml(string.Format(html, message));
-			showCustomerWebMenu = true;
-		}
-
-		private async void gotoCustomerWeb()
-		{
-			await Task.Run(() =>
-			{
-				webView1.Url = "https://www.teleopti.com/wfm/landing-pages/wfm_landing-pages_aspx.aspx";
-				showCustomerWebMenu = true;
-			});
-
-		}
-
 		private IPerson LoggedOnPerson
 		{
 			get
