@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<PermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
 		}
 
 		[Test]
@@ -554,7 +555,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			(teamScheduleViewModel != null).Should().Be(true);
 			(teamScheduleViewModel.AgentSchedules != null).Should().Be(true);
 			teamScheduleViewModel.AgentSchedules.Length.Should().Be(1);
-			teamScheduleViewModel.AgentSchedules.First().Name.Should().Be("test agent2");
+			teamScheduleViewModel.AgentSchedules.First().Name.Should().Be("test@agent2");
 		}
 
 		[Test]
@@ -616,7 +617,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			(teamScheduleViewModel != null).Should().Be(true);
 			(teamScheduleViewModel.AgentSchedules != null).Should().Be(true);
 			teamScheduleViewModel.AgentSchedules.Length.Should().Be(1);
-			teamScheduleViewModel.AgentSchedules.First().Name.Should().Be("test agent2");
+			teamScheduleViewModel.AgentSchedules.First().Name.Should().Be("test@agent2");
 		}
 
 		[Test]
@@ -696,7 +697,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			(teamScheduleViewModel != null).Should().Be(true);
 			(teamScheduleViewModel.AgentSchedules != null).Should().Be(true);
 			teamScheduleViewModel.AgentSchedules.Length.Should().Be(1);
-			teamScheduleViewModel.AgentSchedules.First().Name.Should().Be("test agent3");
+			teamScheduleViewModel.AgentSchedules.First().Name.Should().Be("test@agent3");
 		}
 
 		[Test]
@@ -1720,7 +1721,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
 			var agentName = teamScheduleViewModel.AgentSchedules[0].Name;
 
-			agentName.Should().Be("test agent");;
+			agentName.Should().Be("test@agent");;
 		}
 
 		[Test]
