@@ -515,9 +515,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<NoExcludeAgentsWithHints>().As<IExcludeAgentsWithHints>().SingleInstance();
 			}
-			
-			
+		
 			builder.RegisterType<AgentsWithWhiteSpots>().SingleInstance();
+			builder.RegisterType<RemoveNonPreferenceDaysOffs>().SingleInstance();
 			builder.RegisterType<BlockSchedulingPreferenceHint>().As<IScheduleHint>().SingleInstance();
 			builder.RegisterType<BlockSchedulingExistingShiftNotMatchingEachOtherHint>().As<IScheduleHint>().SingleInstance();
 			builder.RegisterType<BlockSchedulingPreviousShiftNotMatchingEachOtherHint>().As<IScheduleHint>().SingleInstance();

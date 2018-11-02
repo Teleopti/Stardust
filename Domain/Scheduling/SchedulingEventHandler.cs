@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly AlreadyScheduledAgents _alreadyScheduledAgents;
 		private readonly AgentsWithPreferences _agentsWithPreferences;
 		private readonly AgentsWithWhiteSpots _agentsWithWhiteSpots;
+		private readonly RemoveNonPreferenceDaysOffs _removeNonPreferenceDaysOffs;
 
 		protected SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder,
 						FillSchedulerStateHolder fillSchedulerStateHolder,
@@ -47,7 +48,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						DayOffOptimization dayOffOptimization,
 						AlreadyScheduledAgents alreadyScheduledAgents,
 						AgentsWithPreferences agentsWithPreferences, 
-						AgentsWithWhiteSpots agentsWithWhiteSpots)
+						AgentsWithWhiteSpots agentsWithWhiteSpots,
+						RemoveNonPreferenceDaysOffs removeNonPreferenceDaysOffs)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -63,6 +65,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_alreadyScheduledAgents = alreadyScheduledAgents;
 			_agentsWithPreferences = agentsWithPreferences;
 			_agentsWithWhiteSpots = agentsWithWhiteSpots;
+			_removeNonPreferenceDaysOffs = removeNonPreferenceDaysOffs;
 		}
 
 		[TestLog]
@@ -113,35 +116,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			
 			runSchedulingWithoutPreferences(alreadyScheduledAgents, @event, agents, selectedPeriod, schedulingOptions, schedulingCallback, schedulingProgress, blockPreferenceProvider);
 
-			removeNonPreferenceDaysOffs(selectedPeriod, schedulingOptions, agents);
+			if (schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly)
+			{
+				_removeNonPreferenceDaysOffs.Execute(schedulerStateHolder.Schedules, agents, selectedPeriod);
+			}
 			
-			if(@event.RunDayOffOptimization)
+			if (@event.RunDayOffOptimization)
 			{
 				_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate),
 					agents,
 					true,
 					@event.PlanningPeriodId);
-			}
-		}
-
-		private void removeNonPreferenceDaysOffs(DateOnlyPeriod selectedPeriod, SchedulingOptions schedulingOptions, IEnumerable<IPerson> agents)
-		{
-			if (!schedulingOptions.PreferencesDaysOnly && !schedulingOptions.UsePreferencesMustHaveOnly) return;
-			var schedules = _schedulerStateHolder().Schedules;
-
-			foreach (var agent in agents)
-			{
-				var range = schedules[agent];
-				foreach (var date in selectedPeriod.DayCollection())
-				{
-					var scheduleDay = range.ScheduledDay(date);
-					if (scheduleDay.HasDayOff() && (scheduleDay.PreferenceDay()?.Restriction.DayOffTemplate == null))
-					{
-						scheduleDay.DeleteDayOff();
-					}
-
-					schedules.Modify(scheduleDay, new DoNothingScheduleDayChangeCallBack());
-				}
 			}
 		}
 
@@ -154,7 +139,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (!@event.ScheduleWithoutPreferencesForFailedAgents) 
 				return;
 			var schedules = _schedulerStateHolder().Schedules;
-			var filteredAgents = filterAgents(agents, selectedPeriod, schedules);
+			var agentsWithPreferences = _agentsWithPreferences.Execute(schedules, agents, selectedPeriod);
+			var filteredAgents = _agentsWithWhiteSpots.Execute(schedules, agentsWithPreferences, selectedPeriod);
 
 			foreach (var agent in filteredAgents)
 			{
@@ -174,13 +160,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			}
 			schedulingOptions.UsePreferences = false;
 			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, filteredAgents, selectedPeriod, blockPreferenceProvider);
-		}
-		
-		private IEnumerable<IPerson> filterAgents(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod, IScheduleDictionary schedules)
-		{
-			var agentsWithPreferences = _agentsWithPreferences.Execute(schedules, agents, selectedPeriod);
-			var agentsWithWhiteSpotsAndPreferences = _agentsWithWhiteSpots.Execute(schedules, agentsWithPreferences, selectedPeriod);
-			return agentsWithWhiteSpotsAndPreferences;
 		}
 	}
 }
