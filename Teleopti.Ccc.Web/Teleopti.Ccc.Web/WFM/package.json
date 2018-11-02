@@ -55,8 +55,7 @@
 		"rxjs": "6.2.2",
 		"teleopti-styleguide": "^1.23.8",
 		"zone.js": "0.8.26",
-		"powerbi-client": "2.6.5",
-		"ngx-powerbi": "1.0.4"
+		"powerbi-client": "2.6.5"
 	},
 	"devDependencies": {
 		"@angular-devkit/build-angular": "~0.6.0",
