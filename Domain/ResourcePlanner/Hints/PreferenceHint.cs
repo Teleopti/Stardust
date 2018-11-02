@@ -19,9 +19,6 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 
 		public void FillResult(HintResult hintResult, SchedulePostHintInput input)
 		{
-			if (input.Schedules == null)
-				return;
-			
 			var matrixes = _matrixListFactory.CreateMatrixListForSelection(input.Schedules, input.People, input.Period);
 
 			foreach (var matrix in matrixes)

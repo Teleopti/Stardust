@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			var schedules = input.Schedules;
 			var agents = input.People;
 			var period = input.Period;
-			if (schedules == null) return;
 			foreach (var item in schedules)
 			{
 				if (!agents.Contains(item.Key)) continue;

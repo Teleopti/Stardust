@@ -10,8 +10,6 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			var agents = input.People;
 			var period = input.Period;
 			var schedules = input.Schedules;
-			if (schedules == null)
-				return;
 			
 			var scheduleDays = schedules.SchedulesForPeriod(period, agents.ToArray());
 			foreach (var scheduleDay in scheduleDays)

@@ -17,8 +17,6 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 
 		public void FillResult(HintResult hintResult, SchedulePostHintInput input)
 		{
-			if (input.Schedules == null)
-				return;
 			var people = input.People;
 			var period = input.Period;
 			var blockPreferenceProvider = input.BlockPreferenceProvider;
