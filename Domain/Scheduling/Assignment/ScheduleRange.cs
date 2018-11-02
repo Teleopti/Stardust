@@ -231,8 +231,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IEnumerable<IScheduleDay> ScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod)
 		{
-			var hasViewUnpublishedSchedulesPermission =
-				PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+			var hasViewUnpublishedSchedulesPermission = _authorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 			return getScheduledDayCollection(dateOnlyPeriod, hasViewUnpublishedSchedulesPermission || CanSeeUnpublishedSchedules);
 		}
 
