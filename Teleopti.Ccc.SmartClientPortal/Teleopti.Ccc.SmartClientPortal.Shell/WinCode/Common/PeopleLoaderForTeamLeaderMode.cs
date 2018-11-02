@@ -38,7 +38,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             	_repositoryFactory.CreateWorkflowControlSetRepository(_unitOfWork).LoadAll();
             	_repositoryFactory.CreateSiteRepository(_unitOfWork).LoadAll();
             	_repositoryFactory.CreateTeamRepository(_unitOfWork).LoadAll();
-            }
+				_repositoryFactory.CreateBudgetGroupRepository(_unitOfWork).LoadAll();
+			}
 
             foreach (IPerson person in _peopleInOrg.Value)
             {
