@@ -29,6 +29,8 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 				DefinedRaptorApplicationFunctionForeignIds.Gamification);
 			hideAppFunctionWithToggleOff(functions, Toggles.WFM_Request_View_Permissions_77731,
 				DefinedRaptorApplicationFunctionForeignIds.WebApproveOrDenyRequest);
+			hideAppFunctionWithToggleOff(functions, Toggles.WFM_Request_View_Permissions_77731,
+				DefinedRaptorApplicationFunctionForeignIds.WebReplyRequest);
 
 			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.BpoExchange);
 			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.ChatBot);
