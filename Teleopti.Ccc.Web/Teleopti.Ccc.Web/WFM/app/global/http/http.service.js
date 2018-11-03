@@ -19,9 +19,7 @@
 
 		function ensureClientIsUpToDate(headers) {
 			var version = versionService.getVersion();
-			var newVersion = "";
-			if (headers)
-				newVersion = headers['X-Server-Version'] || '';
+			var newVersion = headers('X-Server-Version') || '';
 			if (newVersion.length === 0) return;
 			else if (version.length === 0) versionService.setVersion(newVersion);
 			else if (version !== newVersion) $window.location.reload(true);
@@ -53,7 +51,9 @@
 			var NoticeService = $injector.get('NoticeService');
 			var Settings = $injector.get('Settings');
 
-			ensureClientIsUpToDate(rejection.headers);
+			if (typeof rejection.headers === 'function') {
+				ensureClientIsUpToDate(rejection.headers);
+			}
 
 			switch (true) {
 				case rejection.config &&
