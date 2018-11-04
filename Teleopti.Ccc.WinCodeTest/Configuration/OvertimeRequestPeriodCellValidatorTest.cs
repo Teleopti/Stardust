@@ -1,12 +1,11 @@
-﻿using System;
-using NUnit.Framework;
-using Teleopti.Ccc.Domain.FeatureFlags;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Requests;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Configuration
@@ -21,28 +20,22 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		private OvertimeRequestDatePeriodEndCellValidator _datePeriodEndCellValidator;
 		private OvertimeRequestRollingPeriodStartCellValidator _rollingPeriodStartCellValidator;
 		private OvertimeRequestRollingPeriodEndCellValidator _rollingPeriodEndCellValidator;
-		private FakeToggleManager _fakeToggleManager;
-
-		[DatapointSource]
-		public Toggles[] ToggleList = {};
-
+		
 		[SetUp]
 		public void Setup()
 		{
-			_workflowControlSet = new WorkflowControlSet("My Workflow Control Set");
-			_workflowControlSet.SetId(Guid.NewGuid());
+			_workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
 			_workflowControlSetModel = new WorkflowControlSetModel(_workflowControlSet);
-			_fakeToggleManager = new FakeToggleManager();
-			_datePeriodStartCellValidator = new OvertimeRequestDatePeriodStartCellValidator(_fakeToggleManager);
-			_datePeriodEndCellValidator = new OvertimeRequestDatePeriodEndCellValidator(_fakeToggleManager);
-			_rollingPeriodStartCellValidator = new OvertimeRequestRollingPeriodStartCellValidator(_fakeToggleManager);
-			_rollingPeriodEndCellValidator = new OvertimeRequestRollingPeriodEndCellValidator(_fakeToggleManager);
+			var fakeToggleManager = new FakeToggleManager();
+			_datePeriodStartCellValidator = new OvertimeRequestDatePeriodStartCellValidator(fakeToggleManager);
+			_datePeriodEndCellValidator = new OvertimeRequestDatePeriodEndCellValidator(fakeToggleManager);
+			_rollingPeriodStartCellValidator = new OvertimeRequestRollingPeriodStartCellValidator(fakeToggleManager);
+			_rollingPeriodEndCellValidator = new OvertimeRequestRollingPeriodEndCellValidator(fakeToggleManager);
 		}
 
 		[Theory]
-		public void ShouldReturnTrueWhenDatePeriodWithinAvailableDays(Toggles toggles)
+		public void ShouldReturnTrueWhenDatePeriodWithinAvailableDays()
 		{
-			_fakeToggleManager.Enable(toggles);
 			_overtimeRequestOpenPeriod = new OvertimeRequestOpenDatePeriod();
 			var model = new OvertimeRequestPeriodModel(_overtimeRequestOpenPeriod, _workflowControlSetModel)
 			{
@@ -55,9 +48,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		}
 
 		[Theory]
-		public void ShouldReturnFalseWhenDatePeriodTotallyExceedsAvailableDays(Toggles toggles)
+		public void ShouldReturnFalseWhenDatePeriodTotallyExceedsAvailableDays()
 		{
-			_fakeToggleManager.Enable(toggles);
 			var staffingAvailableDays = getStaffingAvailableDays();
 			_overtimeRequestOpenPeriod = new OvertimeRequestOpenDatePeriod();
 			var model = new OvertimeRequestPeriodModel(_overtimeRequestOpenPeriod, _workflowControlSetModel)
@@ -71,9 +63,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		}
 
 		[Theory]
-		public void ShouldReturnFalseWhenStartDateIsEarlierThanToday(Toggles toggles)
+		public void ShouldReturnFalseWhenStartDateIsEarlierThanToday()
 		{
-			_fakeToggleManager.Enable(toggles);
 			_overtimeRequestOpenPeriod = new OvertimeRequestOpenDatePeriod();
 			var model = new OvertimeRequestPeriodModel(_overtimeRequestOpenPeriod, _workflowControlSetModel)
 			{
@@ -85,9 +76,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		}
 
 		[Theory]
-		public void ShouldReturnFalseWhenEndDateIsLaterThanTheEndDateOfAvailableDaysRange(Toggles toggles)
+		public void ShouldReturnFalseWhenEndDateIsLaterThanTheEndDateOfAvailableDaysRange()
 		{
-			_fakeToggleManager.Enable(toggles);
 			_overtimeRequestOpenPeriod = new OvertimeRequestOpenDatePeriod();
 			var model = new OvertimeRequestPeriodModel(_overtimeRequestOpenPeriod, _workflowControlSetModel)
 			{
@@ -99,9 +89,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		}
 
 		[Theory]
-		public void ShouldReturnTrueWhenRollingPeriodWithinAvailableDays(Toggles toggles)
+		public void ShouldReturnTrueWhenRollingPeriodWithinAvailableDays()
 		{
-			_fakeToggleManager.Enable(toggles);
 			_overtimeRequestOpenPeriod = new OvertimeRequestOpenRollingPeriod();
 			var model = new OvertimeRequestPeriodModel(_overtimeRequestOpenPeriod, _workflowControlSetModel)
 			{
@@ -114,9 +103,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		}
 
 		[Theory]
-		public void ShouldReturnFalseWhenRollingPeriodExceedsAvailableDays(Toggles toggles)
+		public void ShouldReturnFalseWhenRollingPeriodExceedsAvailableDays()
 		{
-			_fakeToggleManager.Enable(toggles);
 			_overtimeRequestOpenPeriod = new OvertimeRequestOpenRollingPeriod();
 			var model = new OvertimeRequestPeriodModel(_overtimeRequestOpenPeriod, _workflowControlSetModel)
 			{
@@ -128,9 +116,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		}
 
 		[Theory]
-		public void ShouldReturnFalseWhenRollingPeriodIsTotallyOutsideAvailableDaysRange(Toggles toggles)
+		public void ShouldReturnFalseWhenRollingPeriodIsTotallyOutsideAvailableDaysRange()
 		{
-			_fakeToggleManager.Enable(toggles);
 			var staffingAvailableDays = getStaffingAvailableDays();
 			_overtimeRequestOpenPeriod = new OvertimeRequestOpenRollingPeriod();
 			var model = new OvertimeRequestPeriodModel(_overtimeRequestOpenPeriod, _workflowControlSetModel)
@@ -145,9 +132,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 
 		[Theory]
 		[SetCulture("en-US")]
-		public void ShouldReturnErrorMessageWhenDateOpenPeriodIsOutOfRange(Toggles toggles)
+		public void ShouldReturnErrorMessageWhenDateOpenPeriodIsOutOfRange()
 		{
-			_fakeToggleManager.Enable(toggles);
 			var staffingAvailableDays = getStaffingAvailableDays();
 			_overtimeRequestOpenPeriod = new OvertimeRequestOpenDatePeriod();
 			var model = new OvertimeRequestPeriodModel(_overtimeRequestOpenPeriod, _workflowControlSetModel)
@@ -168,9 +154,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 
 		[Theory]
 		[SetCulture("en-US")]
-		public void ShouldReturnErrorMessageWhenRollingOpenPeriodIsOutOfRange(Toggles toggles)
+		public void ShouldReturnErrorMessageWhenRollingOpenPeriodIsOutOfRange()
 		{
-			_fakeToggleManager.Enable(toggles);
 			var staffingAvailableDays = getStaffingAvailableDays();
 			_overtimeRequestOpenPeriod = new OvertimeRequestOpenRollingPeriod();
 			var model = new OvertimeRequestPeriodModel(_overtimeRequestOpenPeriod, _workflowControlSetModel)
@@ -190,7 +175,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 
 		private int getStaffingAvailableDays()
 		{
-			return StaffingInfoAvailableDaysProvider.GetDays(_fakeToggleManager);
+			return StaffingInfoAvailableDaysProvider.GetDays(new FakeToggleManager());
 		}
 	}
 }

@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -25,7 +24,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Configuration
 {
-	[TestFixture]
 	[DomainTest]
 	public class WorkflowControlSetPresenterOvertimeTest : IIsolateSystem
 	{
@@ -59,15 +57,10 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		{
 			_view?.Dispose();
 		}
-
-		[DatapointSource]
-		public Toggles[] ToggleList = {};
-
+		
 		[Theory]
-		public void VerifyAddNewDateOpenPeriod(Toggles toggles)
+		public void VerifyAddNewDateOpenPeriod()
 		{
-			ToggleManager.Enable(toggles);
-
 			initializeWithDefaultWorkflowControlSet();
 			SkillTypeRepository.AddRange(_skillTypes);
 
@@ -84,10 +77,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		}
 
 		[Theory]
-		public void VerifyAddNewRollingOpenPeriod(Toggles toggles)
+		public void VerifyAddNewRollingOpenPeriod()
 		{
-			ToggleManager.Enable(toggles);
-
 			initializeWithDefaultWorkflowControlSet();
 			_view.RefreshOvertimeOpenPeriodsGrid();
 
