@@ -87,14 +87,14 @@ export class WorkspaceComponent implements OnInit {
 
 	public onEnableFilterChanged() {
 		this.enableFilter = !this.enableFilter;
-		if (!this.enableNavContent || !this.enableNavContent) {
+		if (!this.enableNavContent || !this.enableFilter) {
 			this.canEditReport = false;
 		}
 	}
 
 	public onEnableNavContentChanged() {
 		this.enableNavContent = !this.enableNavContent;
-		if (!this.enableNavContent || !this.enableNavContent) {
+		if (!this.enableNavContent || !this.enableFilter) {
 			this.canEditReport = false;
 		}
 	}
