@@ -325,7 +325,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AffectedDayOffs>().SingleInstance();
 
 			builder.RegisterType<TeamBlockRemoveShiftCategoryOnBestDateService>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamBlockRetryRemoveShiftCategoryBackToLegalService>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamBlockRetryRemoveShiftCategoryBackToLegalService>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<RemoveScheduleDayProsBasedOnShiftCategoryLimitation>().InstancePerLifetimeScope();
 
 			builder.RegisterType<ShiftCategoryWeekRemover>().InstancePerLifetimeScope();
