@@ -92,17 +92,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		}
 
 		[UnitOfWork]
-		protected virtual ILookup<Guid, PersonAssociationCheckSum> LoadAllCheckSums() => _checkSums.Get().ToLookup(c => c.PersonId);
+		protected virtual ILookup<Guid, PersonAssociationCheckSum> LoadAllCheckSums() =>
+			_checkSums.Get().ToLookup(c => c.PersonId);
 
-		[UnitOfWork]
 		protected virtual void PublishForPersons(DateTime now, IEnumerable<IPerson> persons, Func<Guid, int> checkSum)
 		{
-			persons.ForEach(person =>
-			{
-				var personId = person.Id.Value;
-				publishForPerson(person.Id.Value, person, now, checkSum(personId));
-			});
+			var checkSums = persons.Select(person =>
+				{
+					var personId = person.Id.Value;
+					return publishForPerson(person.Id.Value, person, now, checkSum(personId));
+				})
+				.Where(x => x != null)
+				.ToArray();
+
+			UpdateCheckSums(checkSums);
 		}
+
+		[UnitOfWork]
+		protected virtual void UpdateCheckSums(IEnumerable<PersonAssociationCheckSum> checkSums) => 
+			_checkSums.Persist(checkSums);
 
 		[UnitOfWork]
 		protected virtual void PublishForPerson(Guid personId)
@@ -115,7 +123,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			);
 		}
 
-		private void publishForPerson(Guid personId, IPerson person, DateTime now, int checkSum)
+		private PersonAssociationCheckSum publishForPerson(Guid personId, IPerson person, DateTime now, int checkSum)
 		{
 			var timeZone = person?.PermissionInformation.DefaultTimeZone();
 			var agentDate = person == null ? (DateOnly?) null : new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(now, timeZone));
@@ -144,7 +152,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				externalLogons = new ExternalLogon[] { };
 			}
 
-			publishIfChanged(new PersonAssociationChangedEvent
+			return publishIfChanged(new PersonAssociationChangedEvent
 			{
 				PersonId = personId,
 				BusinessUnitId = businessUnitId,
@@ -161,21 +169,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			}, checkSum);
 		}
 
-		private void publishIfChanged(PersonAssociationChangedEvent @event, int lastCheckSum)
+		private PersonAssociationCheckSum publishIfChanged(PersonAssociationChangedEvent @event, int lastCheckSum)
 		{
 			var currentCheckSum = calculateCheckSum(@event);
-
 			if (currentCheckSum == lastCheckSum)
-				return;
-
-			var personId = @event.PersonId;
-			_checkSums.Persist(new PersonAssociationCheckSum
-			{
-				PersonId = personId,
-				CheckSum = currentCheckSum
-			});
-
+				return null;
 			_eventPublisher.Current().Publish(@event);
+			return new PersonAssociationCheckSum
+			{
+				PersonId = @event.PersonId,
+				CheckSum = currentCheckSum
+			};
 		}
 
 		private int calculateCheckSum(PersonAssociationChangedEvent @event)

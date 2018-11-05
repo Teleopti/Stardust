@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -32,38 +35,70 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.UniqueResult<PersonAssociationCheckSum>();
 		}
 
-		public void Persist(PersonAssociationCheckSum checkSum)
+		public void Persist(PersonAssociationCheckSum checkSum) => Persist(checkSum.AsArray());
+
+		public void Persist(IEnumerable<PersonAssociationCheckSum> checkSums)
 		{
-			if (checkSum.CheckSum == 0)
+			var toBeDeleted = checkSums.Where(x => x.CheckSum == 0).Select(x => x.PersonId).ToArray();
+			if (toBeDeleted.Any())
 			{
 				_unitOfWork.Current().Session()
 					.CreateSQLQuery(@"
 DELETE dbo.PersonAssociationCheckSum 
 WHERE
-PersonId = :PersonId")
-					.SetParameter("PersonId", checkSum.PersonId)
+PersonId IN (:PersonIds)")
+					.SetParameterList("PersonIds", toBeDeleted)
 					.ExecuteUpdate();
-				return;
 			}
 
-			var updated = _unitOfWork.Current().Session()
-				.CreateSQLQuery(@"
-UPDATE dbo.PersonAssociationCheckSum 
-SET  CheckSum = :CheckSum 
-WHERE
-PersonId = :PersonId")
-				.SetParameter("PersonId", checkSum.PersonId)
-				.SetParameter("CheckSum", checkSum.CheckSum)
-				.ExecuteUpdate();
+			var mergedCheckSums = checkSums.Where(x => x.CheckSum != 0).ToArray();
+			if (mergedCheckSums.IsEmpty())
+				return;
+			
+			var sqlValues = mergedCheckSums.Select((m, i) =>
+				$@"
+(
+:PersonId{i},
+:CheckSum{i}
+)").Aggregate((current, next) => current + ", " + next);
 
-			if (updated == 0)
-				_unitOfWork.Current().Session()
-					.CreateSQLQuery(@"
-INSERT INTO dbo.PersonAssociationCheckSum (PersonId, [CheckSum])
-VALUES (:PersonId, :CheckSum)")
-					.SetParameter("PersonId", checkSum.PersonId)
-					.SetParameter("CheckSum", checkSum.CheckSum)
-					.ExecuteUpdate();
-		}
+			var query = _unitOfWork.Current()
+				.Session().CreateSQLQuery($@"
+MERGE INTO dbo.PersonAssociationCheckSum AS T
+	USING (
+		VALUES
+		{sqlValues}
+	) AS S (
+			PersonId,
+			CheckSum
+		)
+	ON 
+		T.PersonId = S.PersonId
+	WHEN NOT MATCHED THEN
+		INSERT
+		(
+			PersonId,
+			CheckSum
+		) VALUES (
+			S.PersonId,
+			S.CheckSum
+		)
+	WHEN MATCHED THEN
+		UPDATE SET
+			CheckSum = S.CheckSum
+		;");
+			
+			mergedCheckSums.Select((m, i) => new {m, i})
+				.ForEach(x =>
+				{
+					var i = x.i;
+					var mapping = x.m;
+					query
+						.SetParameter("PersonId" + i, mapping.PersonId)
+						.SetParameter("CheckSum" + i, mapping.CheckSum);
+				});
+
+			query.ExecuteUpdate();
+		}		
 	}
 }
