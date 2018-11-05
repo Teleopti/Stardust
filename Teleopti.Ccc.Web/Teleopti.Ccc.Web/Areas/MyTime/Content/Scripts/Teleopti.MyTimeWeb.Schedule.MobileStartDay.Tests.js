@@ -50,6 +50,7 @@
 	});
 
 	test('should navigate to default start day view when clicking logo', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle) {
 			if (toggle == 'MyTimeWeb_DayScheduleForStartPage_43446') return true;
 		};
@@ -89,9 +90,11 @@
 		equal(vm.selectedDate().format('YYYY-MM-DD'), vm.currentUserDate().format('YYYY-MM-DD'));
 
 		$('.fake-navbar-brand').remove();
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempFn;
 	});
 
 	test('should navigate to default start date when clicking schedule menu item', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle) {
 			if (toggle == 'MyTimeWeb_DayScheduleForStartPage_43446') return true;
 		};
@@ -157,6 +160,7 @@
 		equal($('ul.navbar-nav li a[href="#Schedule/MobileDay"]').attr('data-mytime-action'), 'Schedule/MobileDay');
 
 		$('#bs-example-navbar-collapse-1').remove();
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempFn;
 	});
 
 	test('should navigate to next date when swiping left', function() {
@@ -344,6 +348,7 @@
 	});
 
 	test('should navigate to messages', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === 'MyTimeWeb_DayScheduleForStartPage_43446') return true;
 			return false;
@@ -360,6 +365,7 @@
 		vm.navigateToMessages();
 
 		equal(hash, 'MessageTab');
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempFn;
 	});
 
 	test('should show request link for current day when there are requests', function() {
@@ -774,6 +780,52 @@
 		);
 	});
 
+	test("should show poor 'traffic light' on mobile", function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === 'MyTimeWeb_TrafficLightOnMobileDayView_77447') return true;
+			return false;
+		};
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
+			fakeReadyForInteractionCallback,
+			fakeCompletelyLoadedCallback,
+			ajax
+		);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+
+		startDayData.Schedule.ProbabilityClass = 'poor';
+		startDayData.Schedule.ProbabilityText = 'Poor';
+
+		vm.nextDay();
+
+		equal(vm.trafficLightColor(), 'red');
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempFn;
+	});
+
+	test("should update 'traffic light' base on absence proability data on mobile", function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === 'MyTimeWeb_TrafficLightOnMobileDayView_77447') return true;
+			return false;
+		};
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
+			fakeReadyForInteractionCallback,
+			fakeCompletelyLoadedCallback,
+			ajax
+		);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+
+		startDayData.Schedule.ProbabilityClass = 'good';
+		startDayData.Schedule.ProbabilityText = 'Good';
+
+		vm.nextDay();
+
+		equal(vm.trafficLightColor(), 'green');
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempFn;
+	});
+
 	test("should show probability toggle by agent's timezone", function() {
 		startDayData.BaseUtcOffsetInMinutes = -600;
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
@@ -999,6 +1051,7 @@
 	});
 
 	test('should not show overtime probability option if Overtime Probability is disabled and selectedProbability is overtime', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === 'Staffing_Info_Configuration_44687') return true;
 			return false;
@@ -1013,6 +1066,7 @@
 		startDayData.OvertimeProbabilityEnabled = false;
 		vm.nextDay();
 		equal(vm.selectedProbabilityOptionValue(), 0);
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempFn;
 	});
 
 	function createPropabilities(periods, date) {
@@ -1060,8 +1114,12 @@
 	function setup() {
 		fetchDayDataRequestCount = 0;
 		probabilityAjaxCallCount = 0;
+
+		setupDayData();
+		setupRequestSuccessData();
 		setupAjax();
 		setupElement();
+
 		initContext();
 	}
 
@@ -1070,9 +1128,6 @@
 	}
 
 	function setupAjax() {
-		setupDayData();
-		setupRequestSuccessData();
-
 		var requestUrls = [
 			'Requests/TextRequest',
 			'Requests/AbsenceRequest',
@@ -1282,8 +1337,8 @@
 				DayOfWeekNumber: 5,
 				Availability: false,
 				HasNote: false,
-				ProbabilityClass: '',
-				ProbabilityText: '',
+				ProbabilityClass: 'poor',
+				ProbabilityText: 'Poor',
 				SeatBookings: []
 			},
 			RequestPermission: {

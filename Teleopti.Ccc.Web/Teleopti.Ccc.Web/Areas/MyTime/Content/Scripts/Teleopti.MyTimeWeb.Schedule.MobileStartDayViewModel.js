@@ -15,6 +15,10 @@
 	self.textColor = ko.observable();
 	self.summaryName = ko.observable();
 	self.summaryTime = ko.observable();
+	self.showTrafficLight = ko.observable(
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_TrafficLightOnMobileDayView_77447')
+	);
+	self.trafficLightColor = ko.observable('');
 	self.dayOfWeek = ko.observable();
 	self.isFullDayAbsence = false;
 	self.isDayOff = ko.observable(false);
@@ -95,6 +99,7 @@
 		self.textColor(Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.summaryColor()));
 		self.summaryName(data.Schedule.Summary.Title);
 		self.summaryTime(data.Schedule.Summary.TimeSpan);
+		self.trafficLightColor(getTrafficLightColor(data.Schedule.ProbabilityClass));
 		self.isDayOff(data.Schedule.IsDayOff);
 		self.isFullDayAbsence = data.Schedule.IsFullDayAbsence;
 		self.periods = data.Schedule.Periods;
@@ -230,6 +235,22 @@
 
 	function disposeSelectedDateSubscription() {
 		if (self.selectedDateSubscription) self.selectedDateSubscription.dispose();
+	}
+
+	function getTrafficLightColor(probability) {
+		switch (probability) {
+			case 'poor': {
+				return 'red';
+			}
+			case 'fair': {
+				return 'yellow';
+			}
+			case 'good': {
+				return 'green';
+			}
+			default:
+				return '';
+		}
 	}
 
 	function fillRequestFormData(requestViewModel) {

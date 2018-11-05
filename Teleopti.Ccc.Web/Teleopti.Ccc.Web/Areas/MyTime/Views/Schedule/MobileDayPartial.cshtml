@@ -125,6 +125,11 @@ Layout = null;
 				<!-- /ko -->
 			</div>
 
+			<!-- ko if: showTrafficLight() && trafficLightColor().length > 0 -->
+			<div class="holiday-agents cursorpointer displayinline-block" data-bind="visible: absenceRequestPermission, tooltip: { title: 'dddddddddddddddd', html: true }">
+				<div class="small-circle" data-bind="style: {background: trafficLightColor()}"></div>
+			</div>
+			<!-- /ko -->
 			<!-- ko if: showProbabilityOptionsToggleIcon-->
 			<span class="probability-toggle-container">
 				<a class="btn btn-default" data-bind="style: {color: textColor}, click: toggleProbabilityOptionsPanel">
