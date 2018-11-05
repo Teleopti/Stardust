@@ -444,7 +444,6 @@
     <Compile Include="Core\TeamsProviderTest.cs" />
     <Compile Include="Core\TranslatedTextsTest.cs" />
     <Compile Include="Core\WeekScheduleDomainDataProviderWeekScheduleTest.cs" />
-    <Compile Include="Core\Common\DataProvider\AbsenceRequestProbabilityProviderNoMockTest.cs" />
     <Compile Include="Core\Common\DataProvider\AbsenceRequestProbabilityProviderTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeAddPersonScheduleViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeAddScheduleLayerViewModelMapperTest.cs" />

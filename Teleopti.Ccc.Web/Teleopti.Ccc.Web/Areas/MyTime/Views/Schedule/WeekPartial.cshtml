@@ -171,25 +171,25 @@ Layout = null;
 				</div>
 				<div class="weekview-day-symbol" data-bind="click: $parent.showAddRequestForm, css: { 'weekview-day-show-request': requestPermission }">
 					<!-- ko if: hasNote -->
-					<div class="weekview-day-icon" data-bind="tooltip: { title: noteMessage, html: true }">
+					<div class="weekview-day-icon cursorpointer" data-bind="tooltip: { title: noteMessage, html: true }">
 						<i class="glyphicon glyphicon-exclamation-sign"></i>
 					</div>
 					<!-- /ko -->
 
-					<div class="seatbooking-symbol weekview-day-icon " data-bind="visible: seatBookingIconVisible(), tooltip: { title: seatBookingMessage, html: true }">
+					<div class="seatbooking-symbol weekview-day-icon cursorpointer" data-bind="visible: seatBookingIconVisible(), tooltip: { title: seatBookingMessage, html: true }">
 						<i class="mdi mdi-chair-school"></i>
 					</div>
 
-					<div class="overtime-availability-symbol floatright weekview-day-icon" data-bind="visible: overtimeAvailability().HasOvertimeAvailability, tooltip: { title: textOvertimeAvailabilityText, html: true }">
+					<div class="overtime-availability-symbol floatright weekview-day-icon cursorpointer" data-bind="visible: overtimeAvailability().HasOvertimeAvailability, tooltip: { title: textOvertimeAvailabilityText, html: true }">
 						<i class="glyphicon glyphicon-time floatright"></i>
 					</div>
 
-					<div class="weekview-day-symbol-request weekview-day-icon" data-bind="visible: hasRequests, tooltip: { title: requestsText, html: true }, click: navigateToRequests">
+					<div class="weekview-day-symbol-request weekview-day-icon cursorpointer" data-bind="visible: hasRequests, tooltip: { title: requestsText, html: true }, click: navigateToRequests">
 						<i class="glyphicon glyphicon-comment"></i>
 					</div>
 
 					<div class="holiday-agents weekview-day-icon cursorpointer" data-bind="visible: absenceRequestPermission, tooltip: { title: holidayChanceText, html: true }">
-						<div class="small-circle" data-bind="style: {background: holidayChanceColor()}"></div>
+						<div class="small-circle" data-bind="style: {background: absenceChanceColor}"></div>
 					</div>
 				</div>
 				<div>

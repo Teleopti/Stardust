@@ -61,7 +61,23 @@
 
 	self.requestsCount = ko.observable(scheduleDay.RequestsCount);
 	self.overtimeAvailability = ko.observable(scheduleDay.OvertimeAvailabililty);
-	self.probabilityClass = ko.observable(scheduleDay.ProbabilityClass);
+
+	switch (scheduleDay.ProbabilityClass) {
+		case 'poor': {
+			self.absenceChanceColor = 'red';
+			break;
+		}
+		case 'fair': {
+		self.absenceChanceColor = 'yellow';
+			break;
+		}
+		case 'good': {
+		self.absenceChanceColor = 'green';
+			break;
+		}
+		default: self.absenceChanceColor = '';
+	}
+	
 	self.probabilityText = ko.observable(scheduleDay.ProbabilityText);
 	self.probabilities = ko.observableArray();
 
@@ -70,10 +86,6 @@
 		if (probabilityText)
             return parent.userTexts.ChanceOfGettingAbsenceRequestGranted + probabilityText;
 		return probabilityText;
-	});
-
-	self.holidayChanceColor = ko.computed(function () {
-		return self.probabilityClass();
 	});
 
 	self.hasRequests = ko.computed(function () {
