@@ -355,7 +355,7 @@ Try
     EventlogSource-Create "$JOB"
 	
 	#Setting $Env:TeleoptiIsAzure = $true
-	[Environment]::SetEnvironmentVariable("TeleoptiIsAzure", "true", "Process")
+	[Environment]::SetEnvironmentVariable("TeleoptiIsAzure", "true", "Machine")
     
 	$DBManagerFolder = $directory + "\..\Tools\Database"
     $settingsFile = "settings.txt"
