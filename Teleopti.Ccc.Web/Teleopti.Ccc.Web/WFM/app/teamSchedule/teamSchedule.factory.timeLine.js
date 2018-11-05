@@ -148,7 +148,7 @@
 
 		function calculateLengthPercentPerMinute(start, end) {
 			var lengthInMin = end - start;
-			return lengthInMin > 0 ? 100 / lengthInMin : 0;
+			return lengthInMin > 0 ? new Number(100 / lengthInMin).toFixed(3) : 0;
 		};
 
 		function hourPointViewModel(baseDate, minutes, start, percentPerMinute, isLabelHidden) {

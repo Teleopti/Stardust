@@ -26,7 +26,7 @@
 				});
 			});
 		});
-		
+
 		beforeEach(inject(function (GroupScheduleFactory) {
 			target = GroupScheduleFactory;
 		}));
@@ -182,9 +182,9 @@
 				"DayOff": null
 			};
 
-			var personSchedule = target.Create([schedule], '2018-10-16', 'etc/UTC').Schedules[0];
-			expect(personSchedule.Shifts[0].Projections[0].StartPosition).toBe(60 * (100 / 240));
-			expect(personSchedule.Shifts[0].Projections[0].Length).toBe(120 * (100 / 240));
+			var vm = target.Create([schedule], '2018-10-16', 'etc/UTC');
+			expect(vm.Schedules[0].Shifts[0].Projections[0].StartPosition).toBe(60 * vm.TimeLine.LengthPercentPerMinute);
+			expect(vm.Schedules[0].Shifts[0].Projections[0].Length).toBe(120 * vm.TimeLine.LengthPercentPerMinute);
 		});
 
 		it('should set start position to 0 when having overnight shift from yesterday ', function () {
@@ -225,8 +225,8 @@
 				"DayOff": null
 			};
 
-			var personSchedule = target.Create([schedule], '2018-10-17', 'etc/UTC').Schedules[0];
-			expect(personSchedule.Shifts[0].Projections[0].Length).toBe((100 / 540) * 480);
+			var vm = target.Create([schedule], '2018-10-17', 'etc/UTC');
+			expect(vm.Schedules[0].Shifts[0].Projections[0].Length).toBe(480 * vm.TimeLine.LengthPercentPerMinute);
 		});
 
 		it('should get correct projection length and timespan when having 2-hour projection starts at 2018-10-28 1:00 under Europe/London timezone', function () {
@@ -246,9 +246,9 @@
 				"DayOff": null
 			};
 
-			var personSchedule = target.Create([schedule], '2018-10-28', 'Europe/London').Schedules[0];
-			expect(personSchedule.Shifts[0].Projections[0].Length).toBe((100 / 240) * 120);
-			expect(personSchedule.Shifts[0].Projections[0].TimeSpan).toBe('1:00 AM - 2:00 AM');
+			var vm = target.Create([schedule], '2018-10-28', 'Europe/London');
+			expect(vm.Schedules[0].Shifts[0].Projections[0].Length).toBe(120 * vm.TimeLine.LengthPercentPerMinute);
+			expect(vm.Schedules[0].Shifts[0].Projections[0].TimeSpan).toBe('1:00 AM - 2:00 AM');
 		})
 
 		it('should get projection with correct length, start position and timespan on end of DST', function () {
@@ -282,17 +282,18 @@
 				"DayOff": null
 			};
 
-			var personSchedule = target.Create([schedule], '2018-10-28', 'Europe/London').Schedules[0];
+			var vm = target.Create([schedule], '2018-10-28', 'Europe/London');
+			var personSchedule = vm.Schedules[0];
 			expect(personSchedule.Shifts[0].Projections[0].StartPosition).toBe(0);
-			expect(personSchedule.Shifts[0].Projections[0].Length).toBe((100 / 300) * 90);
+			expect(personSchedule.Shifts[0].Projections[0].Length).toBe(vm.TimeLine.LengthPercentPerMinute * 90);
 			expect(personSchedule.Shifts[0].Projections[0].TimeSpan).toBe('12:00 AM - 1:30 AM');
 
-			expect(personSchedule.Shifts[0].Projections[1].StartPosition).toBe((100 / 300) * 90);
-			expect(personSchedule.Shifts[0].Projections[1].Length).toBe((100 / 300) * 30);
+			expect(personSchedule.Shifts[0].Projections[1].StartPosition).toBe(vm.TimeLine.LengthPercentPerMinute * 90);
+			expect(personSchedule.Shifts[0].Projections[1].Length).toBe(vm.TimeLine.LengthPercentPerMinute * 30);
 			expect(personSchedule.Shifts[0].Projections[1].TimeSpan).toBe('1:30 AM - 1:00 AM');
 
-			expect(personSchedule.Shifts[0].Projections[2].StartPosition).toBe((100 / 300) * 120);
-			expect(personSchedule.Shifts[0].Projections[2].Length).toBe((100 / 300) * 120);
+			expect(personSchedule.Shifts[0].Projections[2].StartPosition).toBe(vm.TimeLine.LengthPercentPerMinute * 120);
+			expect(personSchedule.Shifts[0].Projections[2].Length).toBe(vm.TimeLine.LengthPercentPerMinute * 120);
 			expect(personSchedule.Shifts[0].Projections[2].TimeSpan).toBe('1:00 AM - 3:00 AM');
 		});
 
@@ -313,9 +314,10 @@
 				"DayOff": null
 			};
 
-			var personSchedule = target.Create([schedule], '2018-03-25', 'Europe/Berlin').Schedules[0];
-			expect(personSchedule.Shifts[0].Projections[0].StartPosition).toBe((100 / 240) * 60);
-			expect(personSchedule.Shifts[0].Projections[0].Length).toBe((100 / 240) * 120);
+			var vm = target.Create([schedule], '2018-03-25', 'Europe/Berlin');
+			var personSchedule = vm.Schedules[0];
+			expect(personSchedule.Shifts[0].Projections[0].StartPosition).toBe(vm.TimeLine.LengthPercentPerMinute * 60);
+			expect(personSchedule.Shifts[0].Projections[0].Length).toBe(vm.TimeLine.LengthPercentPerMinute * 120);
 		});
 
 		it("should get  person schedule with correct day off", function () {
@@ -332,11 +334,12 @@
 						"Minutes": 1440
 					}
 			};
-			var personSchedule = target.Create([schedule], "2018-10-16", "etc/UTC").Schedules[0];
+			var vm = target.Create([schedule], "2018-10-16", "etc/UTC");
+			var personSchedule = vm.Schedules[0];
 
 			expect(personSchedule.DayOffs.length).toEqual(1);
 			expect(personSchedule.DayOffs[0].DayOffName).toEqual("DayOff");
-			expect(personSchedule.DayOffs[0].Length).toEqual((100 / 480) * 480);
+			expect(personSchedule.DayOffs[0].Length).toEqual(vm.TimeLine.LengthPercentPerMinute * 480);
 			expect(personSchedule.DayOffs[0].StartPosition).toEqual(0);
 		});
 
@@ -367,12 +370,13 @@
 				}]
 			};
 
-			var personSchedule = target.Create([scheduleForPerson1, scheduleForPerson2], "2018-10-16", "Asia/Hong_Kong").Schedules[0];
+			var vm = target.Create([scheduleForPerson1, scheduleForPerson2], "2018-10-16", "Asia/Hong_Kong")
+			var personSchedule = vm.Schedules[0];
 
 			expect(personSchedule.DayOffs.length).toEqual(1);
 			expect(personSchedule.DayOffs[0].DayOffName).toEqual("DayOff");
-			expect(personSchedule.DayOffs[0].Length).toEqual((100 / 360) * 180);
-			expect(personSchedule.DayOffs[0].StartPosition).toEqual((100 / 360) * 180);
+			expect(personSchedule.DayOffs[0].Length).toEqual(vm.TimeLine.LengthPercentPerMinute * 180);
+			expect(personSchedule.DayOffs[0].StartPosition).toEqual(vm.TimeLine.LengthPercentPerMinute * 180);
 		});
 
 		it("can get person schedule with full day absence", function () {
@@ -1092,7 +1096,7 @@
 			expect(timelineVm.Offset.format("YYYY-MM-DD HH:mm:ss")).toEqual("2018-10-17 00:00:00");
 			expect(timelineVm.StartMinute).toEqual(420);
 			expect(timelineVm.EndMinute).toEqual(660);
-			expect(timelineVm.LengthPercentPerMinute).toEqual(100 / (660 - 420));
+			expect(timelineVm.LengthPercentPerMinute).toEqual(new Number(100 / (660 - 420)).toFixed(3));
 		});
 
 		it("should display 1 extra hour line when schedule starts or ends at hour point", function () {
@@ -1151,11 +1155,9 @@
 			expect(firstHourPoint.TimeLabel).toEqual("7:00 AM");
 			expect(firstHourPoint.Position()).toEqual(0);
 
-			expect(timelineVm.HourPoints[1].Position()).toEqual((100 / 840) * 60);
-
 			var lastHourPoint = timelineVm.HourPoints[timelineVm.HourPoints.length - 1];
 			expect(lastHourPoint.TimeLabel).toEqual("9:00 PM");
-			expect(lastHourPoint.Position()).toEqual(100);
+			expect(lastHourPoint.Position()).toEqual(840 * timelineVm.LengthPercentPerMinute);
 		});
 
 		it('should show all time labels when time range length is less or equal to 16 hours', function () {
@@ -1508,7 +1510,7 @@
 
 			var lastHourPoint = timeLine.HourPoints[14];
 			expect(lastHourPoint.TimeLabel).toEqual("9:00 PM");
-			expect(lastHourPoint.Position()).toEqual(100);
+			expect(lastHourPoint.Position()).toEqual(840 * timeLine.LengthPercentPerMinute);
 		});
 
 		it('should get correct time label on start date of DST', function () {
@@ -1713,7 +1715,7 @@
 
 			var lastHourPoint = timelineVm.HourPoints[timelineVm.HourPoints.length - 1];
 			expect(lastHourPoint.TimeLabel).toEqual("21:00");
-			expect(lastHourPoint.Position()).toEqual(100);
+			expect(lastHourPoint.Position()).toEqual(840 * timelineVm.LengthPercentPerMinute);
 		});
 	});
 })();
