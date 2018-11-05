@@ -64,6 +64,7 @@ using Teleopti.Ccc.Infrastructure.Staffing;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
+using Teleopti.Interfaces.Domain;
 using IWorkShiftCalculator = Teleopti.Ccc.Domain.Scheduling.IWorkShiftCalculator;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -507,7 +508,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<PreferenceHint>().As<ISchedulePostHint>().SingleInstance();
 			}
 
-			if (_configuration.Toggle(Toggles.ResourcePlanner_FasterSeamlessPlanningForPreferences_78286))
+			if (_configuration.Toggle(Toggles.ResourcePlanner_FasterSeamlessPlanningForPreferences_78286) && DateOnly.Today > DateOnly.MaxValue)
 			{
 				builder.RegisterType<ExcludeAgentsWithHints>().As<IExcludeAgentsWithHints>().SingleInstance().ApplyAspects();
 				builder.RegisterType<ExcludeAgentsWithRestrictionWarnings>().As<IExcludeAgentsWithRestrictionWarnings>().InstancePerLifetimeScope().ApplyAspects();
