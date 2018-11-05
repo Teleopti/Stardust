@@ -338,7 +338,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<BestSpotForAddingDayOffFinder>().As<IBestSpotForAddingDayOffFinder>().SingleInstance();
 			builder.RegisterType<HasContractDayOffDefinition>().As<IHasContractDayOffDefinition>().SingleInstance();
 			builder.RegisterType<ScheduleDayDataMapper>().As<IScheduleDayDataMapper>().SingleInstance();
-			builder.RegisterType<MatrixDataListCreator>().As<IMatrixDataListCreator>().SingleInstance();
+			builder.RegisterType<MatrixDataListCreator>().SingleInstance();
 			builder.RegisterType<MatrixDataWithToFewDaysOff>().As<IMatrixDataWithToFewDaysOff>().InstancePerLifetimeScope();
 
 			builder.RegisterType<ScheduleResultDataExtractorProvider>().As<IScheduleResultDataExtractorProvider>().SingleInstance();

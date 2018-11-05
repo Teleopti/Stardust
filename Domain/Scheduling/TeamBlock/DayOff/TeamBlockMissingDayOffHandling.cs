@@ -10,11 +10,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
 	public class TeamBlockMissingDayOffHandling
 	{
 		private readonly IMissingDayOffBestSpotDecider _missingDayOffBestSpotDecider;
-		private readonly IMatrixDataListCreator _matrixDataListCreator;
+		private readonly MatrixDataListCreator _matrixDataListCreator;
 		private readonly IMatrixDataWithToFewDaysOff _matrixDataWithToFewDaysOff;
 		private readonly ISplitSchedulePeriodToWeekPeriod _splitSchedulePeriodToWeekPeriod;
 
-		public TeamBlockMissingDayOffHandling(IMissingDayOffBestSpotDecider missingDayOffBestSpotDecider, IMatrixDataListCreator matrixDataListCreator, IMatrixDataWithToFewDaysOff matrixDataWithToFewDaysOff, ISplitSchedulePeriodToWeekPeriod splitSchedulePeriodToWeekPeriod)
+		public TeamBlockMissingDayOffHandling(IMissingDayOffBestSpotDecider missingDayOffBestSpotDecider, MatrixDataListCreator matrixDataListCreator, IMatrixDataWithToFewDaysOff matrixDataWithToFewDaysOff, ISplitSchedulePeriodToWeekPeriod splitSchedulePeriodToWeekPeriod)
 		{
 			_missingDayOffBestSpotDecider = missingDayOffBestSpotDecider;
 			_matrixDataListCreator = matrixDataListCreator;

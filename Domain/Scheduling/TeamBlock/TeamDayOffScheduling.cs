@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly IHasContractDayOffDefinition _hasContractDayOffDefinition;
-		private readonly IMatrixDataListCreator _matrixDataListCreator;
+		private readonly MatrixDataListCreator _matrixDataListCreator;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IScheduleDayAvailableForDayOffSpecification _scheduleDayAvailableForDayOffSpecification;
 		private readonly ICurrentAuthorization _authorization;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IDayOffsInPeriodCalculator dayOffsInPeriodCalculator,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IHasContractDayOffDefinition hasContractDayOffDefinition,
-			IMatrixDataListCreator matrixDataListCreator,
+			MatrixDataListCreator matrixDataListCreator,
 			Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 			IScheduleDayAvailableForDayOffSpecification scheduleDayAvailableForDayOffSpecification,
 			ICurrentAuthorization authorization)
