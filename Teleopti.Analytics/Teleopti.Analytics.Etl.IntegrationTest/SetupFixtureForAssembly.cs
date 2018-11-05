@@ -1,16 +1,12 @@
-﻿using System.IO;
-using Autofac;
+﻿using System;
+using System.IO;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
@@ -21,6 +17,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 	public class SetupFixtureForAssembly
 	{
 		public static IDataSource DataSource;
+		private static IDisposable auth;
 
 		[OneTimeSetUp]
 		public void Setup()
@@ -64,12 +61,14 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			DataSourceHelper.ClearAnalyticsData();
 
 			openUnitOfWork();
+			auth = CurrentAuthorization.ThreadlyUse(new FullPermission());
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
 			TestState.TestDataFactory = TestDataFactory.Make(TestState.UnitOfWork, tenantUnitOfWorkManager);
 		}
 
 		public static void EndTest()
 		{
+			auth?.Dispose();
 			disposeUnitOfWork();
 		}
 	}
