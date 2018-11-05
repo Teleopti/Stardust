@@ -305,7 +305,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _param = new ScheduleParameters(_scenario, _agent,
                                new DateTimePeriod(2006, 1, 1, 2006, 1, 10));
 
-            _scheduleRange = new ScheduleRange(_dic, _param, _permissionChecker, CurrentAuthorization.Make());
+			var currentAuthorization = CurrentAuthorization.Make();
+			_scheduleRange = new ScheduleRange(_dic, _param, _permissionChecker, currentAuthorization);
 
             _scheduleRange.Add(confidentialPersonAbsence);
 
