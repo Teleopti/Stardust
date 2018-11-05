@@ -101,8 +101,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var agents = schedulerStateHolder.SchedulingResultState.LoadedAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray();
 			var agentsMightBeAbleToScheduleWithRestrictions = _excludeAgentsWithRestrictionWarnings.Execute(agents, selectedPeriod).ToArray();
 			var agentsWithExistingShiftsBeforeSchedule = _alreadyScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod, agentsMightBeAbleToScheduleWithRestrictions);
-			if(@event.ScheduleWithoutPreferencesForFailedAgents)
-				schedulingOptions.UsePreferences = false;
 			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, agentsMightBeAbleToScheduleWithRestrictions, selectedPeriod, blockPreferenceProvider);
 			
 			runSchedulingWithoutPreferences(agentsWithExistingShiftsBeforeSchedule, @event, agents, selectedPeriod, schedulingOptions, schedulingCallback, schedulingProgress, blockPreferenceProvider);
