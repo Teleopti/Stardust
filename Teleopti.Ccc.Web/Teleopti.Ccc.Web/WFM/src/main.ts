@@ -8,14 +8,10 @@ import { appComponents, AppModule } from './app/app.module';
 import { authenticationComponents } from './app/authentication/authentication.module';
 import { menuComponents } from './app/menu/menu.module';
 import { navigationComponents } from './app/navigation/navigation.module';
-<<<<<<< HEAD
-import { peopleComponents } from './app/people/people.module';
 import { reportsComponents } from './app/reports/reports.module';
 import { WorkspaceComponent } from './app/pm/components';
-=======
 import { peopleComponents, peopleRouterConfig } from './app/people/people.module';
 import { pmComponents, pmRouterConfig } from './app/pm/pm.module';
->>>>>>> master
 import { sharedComponents } from './app/shared/shared.module';
 import { environment } from './environments/environment';
 import { MainController } from './main.controller';

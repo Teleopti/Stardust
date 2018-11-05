@@ -45,8 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 				else
 				{
 					//var deserialized = JsonConvert.DeserializeObject<ClearBpoActionObj>(audit.Data);
-					var bpoName = _skillCombinationResourceRepository.LoadActiveBpos()
-						.FirstOrDefault(x => x.Id.Equals(audit.BpoId)).Source;
+					var bpoName = _skillCombinationResourceRepository.GetSourceBpoByGuid(audit.BpoId.GetValueOrDefault());
 					var startDate = audit.ClearPeriodStart.Value.ToString("d", _userCulture.GetCulture());
 					var endDate = audit.ClearPeriodEnd.Value.ToString("d", _userCulture.GetCulture());
 					auditServiceModel.Data = $"BPO name: {bpoName}{Environment.NewLine}Period from {startDate} to {endDate}";
