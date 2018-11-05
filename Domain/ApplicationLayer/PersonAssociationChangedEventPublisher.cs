@@ -204,35 +204,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			}
 		}
 	}
-
-	public class X
-	{
-		public int? something;
-		public int? something2;
-		public string something3;
-
-		protected bool Equals(X other)
-		{
-			return something == other.something && something2 == other.something2 && string.Equals(something3, other.something3);
-		}
-
-		public override bool Equals(object obj)
-		{
-			if (ReferenceEquals(null, obj)) return false;
-			if (ReferenceEquals(this, obj)) return true;
-			if (obj.GetType() != this.GetType()) return false;
-			return Equals((X) obj);
-		}
-
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				var hashCode = something.GetHashCode();
-				hashCode = (hashCode * 397) ^ something2.GetHashCode();
-				hashCode = (hashCode * 397) ^ (something3 != null ? something3.GetHashCode() : 0);
-				return hashCode;
-			}
-		}
-	}
 }
