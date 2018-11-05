@@ -139,7 +139,7 @@ ETL_Optimize_Memory_Usage_76761 = true
 WFM_Forecast_Show_History_Data_76432 = DEV
 ETL_Show_Web_Based_ETL_Tool_74837 = true
 ETL_Show_Tenant_Name_In_History_75767 = true
-WFM_Connect_NewLandingPage_Remove_GDPR_78132 = RC
+WFM_Connect_NewLandingPage_Remove_GDPR_78132 = true
 
 # Dragonfly #
 WFM_Gamification_Setting_With_External_Quality_Values_45003 = true
