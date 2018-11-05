@@ -78,7 +78,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 
 			list.FirstOrDefault().TimeStamp.Should().Be.EqualTo(staffingAudit.TimeStamp);
 			list.FirstOrDefault().Action.Should().Be.EqualTo(StaffingAuditActionConstants.ImportBpo);
-			list.FirstOrDefault().Action.Should().Be.EqualTo(StaffingAuditActionConstants.ImportBpo);
 			list.FirstOrDefault().ActionPerformedBy.Should().Be.EqualTo(person.Name.ToString(NameOrderOption.FirstNameLastName));
 			list.FirstOrDefault().Context.Should().Be.EqualTo("Staffing");
 		}
