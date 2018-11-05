@@ -51,16 +51,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_deletedFilter = deletedFilter;
 		}
 
+		private class triggerLock
+		{
+		}
+
+		private class runLock
+		{
+		}
+
 		[ReadModelUnitOfWork]
 		public virtual void Handle(TenantMinuteTickEvent @event)
 		{
-			_distributedLock.TryLockForTypeOf(this, () =>
+			_distributedLock.TryLockForTypeOf(new triggerLock(), () =>
 			{
-				if (_keyValueStore.Get("PersonAssociationChangedPublishTrigger", false))
-				{
+				if (!_keyValueStore.Get("PersonAssociationChangedPublishTrigger", false))
+					return;
+				if (publishForAllPersons())
 					_keyValueStore.Update("PersonAssociationChangedPublishTrigger", false);
-					publishForAllPersons();
-				}
 			});
 		}
 
@@ -72,16 +79,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		public void Handle(PersonTerminalDateChangedEvent @event) => PublishForPerson(@event.PersonId);
 		public void Handle(PersonDeletedEvent @event) => PublishForPerson(@event.PersonId);
 
-		private void publishForAllPersons()
+		private bool publishForAllPersons()
 		{
-			var now = _now.UtcDateTime();
-			var checkSums = LoadAllCheckSums();
+			var ran = false;
+			_distributedLock.TryLockForTypeOf(new runLock(), () =>
+			{
+				ran = true;
+				var now = _now.UtcDateTime();
+				var checkSums = LoadAllCheckSums();
 
-			LoadAllPersons()
-				.Batch(100)
-				.ForEach(batch =>
-					PublishForPersons(now, batch, id => checkSums[id].SingleOrDefault()?.CheckSum ?? 0)
-				);
+				LoadAllPersons()
+					.Batch(100)
+					.ForEach(batch =>
+						publishForPersons(now, batch, id => checkSums[id].SingleOrDefault()?.CheckSum ?? 0)
+					);
+			});
+			return ran;
 		}
 
 		[UnitOfWork]
@@ -95,7 +108,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		protected virtual ILookup<Guid, PersonAssociationCheckSum> LoadAllCheckSums() =>
 			_checkSums.Get().ToLookup(c => c.PersonId);
 
-		protected virtual void PublishForPersons(DateTime now, IEnumerable<IPerson> persons, Func<Guid, int> checkSum)
+		private void publishForPersons(DateTime now, IEnumerable<IPerson> persons, Func<Guid, int> checkSum)
 		{
 			var checkSums = persons.Select(person =>
 				{
@@ -109,7 +122,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		}
 
 		[UnitOfWork]
-		protected virtual void UpdateCheckSums(IEnumerable<PersonAssociationCheckSum> checkSums) => 
+		protected virtual void UpdateCheckSums(IEnumerable<PersonAssociationCheckSum> checkSums) =>
 			_checkSums.Persist(checkSums);
 
 		[UnitOfWork]
