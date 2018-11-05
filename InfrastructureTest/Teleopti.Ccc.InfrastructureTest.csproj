@@ -197,6 +197,7 @@
     <Compile Include="ApplicationLayer\PersonAssociationChanged\SimpleTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationPublisherCheckSumPersisterTest.cs" />
     <Compile Include="ApplicationLayer\PersonEmploymentChangedTests.cs" />
+    <Compile Include="ApplicationLayer\PersonLoadAllWithAssociationTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyPersisterConcurrencyTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyPersisterTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyCheckerTest.cs" />
