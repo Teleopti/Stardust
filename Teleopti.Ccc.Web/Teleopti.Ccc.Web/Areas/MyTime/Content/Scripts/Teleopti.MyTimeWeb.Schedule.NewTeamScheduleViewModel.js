@@ -261,11 +261,10 @@
 		callback && callback();
 	};
 
-	self.buildFilterDetails = function(title, startTimeStr, endTimeStr, onlyNightShiftStr) {
+	self.buildFilterDetails = function() {
 		if (self.isHostAniPad || self.isHostAMobile) return '';
 
-		rebuildTooltipForTimeFilterIcon(title, startTimeStr, endTimeStr, onlyNightShiftStr);
-		return title;
+		return rebuildTooltipForTimeFilterIcon();
 	};
 
 	function mergeRawTimeLine(rawTimeline, newTimeLine) {
