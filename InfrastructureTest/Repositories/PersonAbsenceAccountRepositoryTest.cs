@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
 		[Test]
-		public void ShouldFindSelectedUserWithAccountForSelectedPeriod()
+		public void ShouldFindSelectedUserWithAccount()
 		{
 			var period = new DateOnlyPeriod(new DateOnly(2018, 10, 1), new DateOnly(2018, 10, 20));
 			var absence = createAbsenceInDb();
@@ -127,49 +127,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(otherPersonAbsenceAccount);
 			var repository = new PersonAbsenceAccountRepository(UnitOfWork);
 
-			var result = repository.FindByUsers(new[] {personToFind}, period);
+			var result = repository.LoadByUsers(new[] {personToFind});
 
 			result.Count.Should().Be.EqualTo(1);
-			result[personToFind].PersonAbsenceAccounts().Single().AccountCollection().Single().Should().Be.EqualTo(accountToFind);
-		}
-
-		[Test]
-		[Ignore("78487 maybe to be fixed?")]
-		public void ShouldNotFindAccountStartingAfterSelectedPeriod()
-		{
-			var period = new DateOnlyPeriod(new DateOnly(2018, 10, 1), new DateOnly(2018, 10, 20));
-			var absence = createAbsenceInDb();
-			var personToFind = createPersonInDb();
-			var personToFindAbsenceAccount = new PersonAbsenceAccount(personToFind, absence);
-			var accountToFind = new AccountTime(period.StartDate.AddDays(-10));
-			var otherAccount = new AccountTime(period.EndDate.AddDays(10));
-			personToFindAbsenceAccount.Add(accountToFind);
-			personToFindAbsenceAccount.Add(otherAccount);
-			PersistAndRemoveFromUnitOfWork(personToFindAbsenceAccount);
-			var repository = new PersonAbsenceAccountRepository(UnitOfWork);
-
-			var result = repository.FindByUsers(new[] { personToFind }, period);
-
-			result[personToFind].PersonAbsenceAccounts().Single().AccountCollection().Single().Should().Be.EqualTo(accountToFind);
-		}
-
-		[Test]
-		[Ignore("78487 maybe to be fixed?")]
-		public void ShouldNotFindAccountEndingBeforeSelectedPeriod()
-		{
-			var period = new DateOnlyPeriod(new DateOnly(2018, 10, 1), new DateOnly(2018, 10, 20));
-			var absence = createAbsenceInDb();
-			var personToFind = createPersonInDb();
-			var personToFindAbsenceAccount = new PersonAbsenceAccount(personToFind, absence);
-			var accountToFind = new AccountTime(period.StartDate.AddDays(-10));
-			var otherAccount = new AccountTime(period.StartDate.AddDays(-50));
-			personToFindAbsenceAccount.Add(accountToFind);
-			personToFindAbsenceAccount.Add(otherAccount);
-			PersistAndRemoveFromUnitOfWork(personToFindAbsenceAccount);
-			var repository = new PersonAbsenceAccountRepository(UnitOfWork);
-
-			var result = repository.FindByUsers(new[] { personToFind }, period);
-
 			result[personToFind].PersonAbsenceAccounts().Single().AccountCollection().Single().Should().Be.EqualTo(accountToFind);
 		}
 
@@ -187,7 +147,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personToFindAbsenceAccount);
 			var repository = new PersonAbsenceAccountRepository(UnitOfWork);
 
-			var result = repository.FindByUsers(new[] { personToFind }, period);
+			var result = repository.LoadByUsers(new[] { personToFind });
 
 			Session.Close();
 			result[personToFind].PersonAbsenceAccounts().Single().AccountCollection().Any().Should().Be.True();

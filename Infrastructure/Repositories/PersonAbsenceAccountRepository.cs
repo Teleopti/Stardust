@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}));
 		}
 
-		public IDictionary<IPerson, IPersonAccountCollection> FindByUsers(IEnumerable<IPerson> persons, DateOnlyPeriod period)
+		public IDictionary<IPerson, IPersonAccountCollection> LoadByUsers(IEnumerable<IPerson> persons)
 		{
 			var result = new List<IPersonAbsenceAccount>();
 			foreach (var personBatch in persons.Batch(400))
