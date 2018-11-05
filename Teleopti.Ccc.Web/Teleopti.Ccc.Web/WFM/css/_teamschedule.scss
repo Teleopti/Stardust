@@ -277,7 +277,7 @@
 
 //Header
 .teamschedule-header {
-	padding: 0.8em 0.5em 0.2em 0.5em;
+	padding: 0.8em 0.5em;
 	min-height: 60px;
 	border-bottom: 1px solid $gray026;
 	display: -ms-flexbox;
@@ -288,9 +288,8 @@
 	-ms-flex-pack: justify;
 	justify-content: space-between;
 
-	& > div {
-		-ms-flex: none;
-		flex: 0 1 auto;
+	wfm-multiple-search-input {
+		margin: 0 5px;
 	}
 
 	& > * {
@@ -304,10 +303,7 @@
 		flex-wrap: wrap;
 		justify-content: flex-start;
 		height: 100%;
-
-		.timezone-picker {
-			padding-top: 5px;
-		}
+		align-items: center;
 	}
 
 	.rightside-part {
@@ -317,18 +313,16 @@
 		justify-content: flex-start;
 		align-self: auto;
 		min-width: 135px;
+		align-items: center;
 	}
 
 	timezone-picker {
-		margin: 4px 10px;
-
-		.md-select-value {
-			min-height: initial;
-		}
+		margin-left: 5px;
+		margin-right: 5px;
 	}
 
 	md-switch {
-		margin: 10px;
+		margin: 0 10px;
 		padding: 0 60px 0 0;
 		text-align: right;
 	}
