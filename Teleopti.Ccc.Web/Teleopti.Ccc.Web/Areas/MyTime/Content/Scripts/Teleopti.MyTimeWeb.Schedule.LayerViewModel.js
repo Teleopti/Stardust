@@ -12,14 +12,60 @@
 	var common = Teleopti.MyTimeWeb.Common;
 	var userTexts = common.GetUserTexts();
 	var constants = common.Constants;
+	var scheduleHeight = Teleopti.MyTimeWeb.Schedule.GetScheduleHeight();
 
-	self.title = ko.observable(layer.Title);
-	self.hasMeeting = ko.computed(function() {
-		return layer.Meeting !== null;
-	});
+	self.title = layer.Title;
+	self.hasMeeting = layer.Meeting !== null;
+	self.timeSpan = getTimeSpan(layer.TimeSpan, cleanOvernightNumber);
+	self.tooltipText = buildTooltipText(self.title, self.timeSpan, self.hasMeeting);
+	self.backgroundColor = Teleopti.MyTimeWeb.Common.ConvertColorToRGB(layer.Color);
+	self.textColor = Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.backgroundColor);
+	self.startPositionPercentage = layer.StartPositionPercentage;
+	self.endPositionPercentage = layer.EndPositionPercentage;
+	self.overtimeAvailabilityYesterday = layer.OvertimeAvailabilityYesterday;
+	self.isOvertimeAvailability = layer.IsOvertimeAvailability;
+	self.isOvertime = layer.IsOvertime;
 
-	self.timeSpan = ko.computed(function() {
-		var originalTimespan = layer.TimeSpan;
+	self.top = getTopValue(
+		self.startPositionPercentage,
+		scheduleHeight,
+		useFixedContainerHeight,
+		timelineStart,
+		layer.StartTime,
+		offset
+	);
+
+	self.height = getHeight(
+		self.endPositionPercentage,
+		scheduleHeight,
+		useFixedContainerHeight,
+		timelineStart,
+		layer.EndTime,
+		offset,
+		self.top
+	);
+
+	self.topPx = self.top + 'px';
+	self.heightPx = self.height + 'px';
+	self.heightDouble = scheduleHeight * (self.endPositionPercentage - self.startPositionPercentage);
+	self.widthPx = getWidth(layer.IsOvertimeAvailability, parent && parent.probabilities(), layersOnMobile);
+
+	self.overTimeLighterBackgroundStyle = getOverTimeLighterBackgroundStyle(self.backgroundColor);
+	self.overTimeDarkerBackgroundStyle = !self.overTimeLighterBackgroundStyle;
+
+	self.showTitle = self.heightDouble > constants.pixelToDisplayTitle;
+	self.showDetail = self.heightDouble > constants.pixelToDisplayAll;
+
+	self.styleJson = {
+		top: self.topPx,
+		width: self.widthPx,
+		height: self.heightPx,
+		color: self.textColor,
+		'background-size': self.isOvertime ? '11px 11px' : 'initial',
+		'background-color': self.backgroundColor
+	};
+
+	function getTimeSpan(originalTimespan, cleanOvernightNumber) {
 		// Remove extra space for extreme long timespan (For example: "10:00 PM - 12:00 AM +1")
 		var realTimespan =
 			originalTimespan.length >= 22
@@ -31,12 +77,12 @@
 			realTimespan = realTimespan.replace('-1', '').replace('+1', '');
 		}
 		return realTimespan;
-	});
+	}
 
-	self.tooltipText = ko.computed(function() {
-		var tooltipContent = '<div>{0}</div>'.format(self.title());
-		if (!self.hasMeeting()) {
-			return tooltipContent + self.timeSpan();
+	function buildTooltipText(title, timeSpan, hasMeeting) {
+		var tooltipContent = '<div>{0}</div>'.format(title);
+		if (!hasMeeting) {
+			return tooltipContent + timeSpan;
 		}
 
 		var meetingDescription = layer.Meeting.Description;
@@ -51,7 +97,7 @@
 			"<div class='tooltip-wordwrap' style='white-space: normal'><i>{5}</i> {6}</div>" +
 			'</div>'
 		).format(
-			self.timeSpan(),
+			timeSpan,
 			userTexts.SubjectColon,
 			$('<div/>')
 				.text(layer.Meeting.Title)
@@ -67,37 +113,20 @@
 		);
 
 		return tooltipContent + text;
-	});
+	}
 
-	self.backgroundColor = ko.observable(Teleopti.MyTimeWeb.Common.ConvertColorToRGB(layer.Color));
-
-	self.textColor = ko.computed(function() {
-		if (layer.Color !== null && layer.Color !== undefined) {
-			var backgroundColor = self.backgroundColor();
-			return Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(backgroundColor);
-		}
-		return 'black';
-	});
-
-	self.startPositionPercentage = ko.observable(layer.StartPositionPercentage);
-	self.endPositionPercentage = ko.observable(layer.EndPositionPercentage);
-	self.overtimeAvailabilityYesterday = layer.OvertimeAvailabilityYesterday;
-	self.isOvertimeAvailability = ko.observable(layer.IsOvertimeAvailability);
-	self.isOvertime = layer.IsOvertime;
-
-	var scheduleHeight = Teleopti.MyTimeWeb.Schedule.GetScheduleHeight();
-	self.top = ko.computed(function() {
+	function getTopValue(startPos, scheduleHeight, useFixedContainerHeight, timelineStart, layerStartTime, offset) {
 		if (useFixedContainerHeight) {
-			return Math.round(scheduleHeight * self.startPositionPercentage()) + (offset || 0);
+			return Math.round(scheduleHeight * startPos) + (offset || 0);
 		} else if (timelineStart) {
 			var milisecondsToTimeLineStart = 0;
 			if (timelineStart.indexOf('T') > -1) {
-				milisecondsToTimeLineStart = moment(layer.StartTime) - moment(timelineStart);
+				milisecondsToTimeLineStart = moment(layerStartTime) - moment(timelineStart);
 			} else {
 				var startStr = timelineStart.length == 10 ? timelineStart.slice(-8, -3) : timelineStart.slice(0, 5);
 
-				milisecondsToTimeLineStart = moment.duration(layer.StartTime.split('T')[1]) - moment.duration(startStr);
-				if (!moment(layer.StartTime.split('T')[0]).isSame(moment(selectedDate), 'day')) {
+				milisecondsToTimeLineStart = moment.duration(layerStartTime.split('T')[1]) - moment.duration(startStr);
+				if (!moment(layerStartTime.split('T')[0]).isSame(moment(selectedDate), 'day')) {
 					milisecondsToTimeLineStart += 24 * 60 * 60 * 1000;
 				}
 			}
@@ -108,22 +137,22 @@
 				(offset || 0);
 			return top;
 		}
-	});
+	}
 
-	self.height = ko.computed(function() {
+	function getHeight(endPos, scheduleHeight, useFixedContainerHeight, timelineStart, layerEndTime, offset, top) {
 		var bottom = 0;
 
 		if (useFixedContainerHeight) {
-			bottom = Math.round(scheduleHeight * self.endPositionPercentage()) + 1 + (offset || 0);
+			bottom = Math.round(scheduleHeight * endPos) + 1 + (offset || 0);
 		} else if (timelineStart) {
 			var bottomDurationInMiliseconds = 0;
 			if (timelineStart.indexOf('T') > -1) {
-				bottomDurationInMiliseconds = moment(layer.EndTime) - moment(timelineStart);
+				bottomDurationInMiliseconds = moment(layerEndTime) - moment(timelineStart);
 			} else {
 				var startStr = timelineStart.length == 10 ? timelineStart.slice(-8, -3) : timelineStart.slice(0, 5);
 
-				bottomDurationInMiliseconds = moment.duration(layer.EndTime.split('T')[1]) - moment.duration(startStr);
-				if (!moment(layer.EndTime.split('T')[0]).isSame(moment(selectedDate), 'day')) {
+				bottomDurationInMiliseconds = moment.duration(layerEndTime.split('T')[1]) - moment.duration(startStr);
+				if (!moment(layerEndTime.split('T')[0]).isSame(moment(selectedDate), 'day')) {
 					bottomDurationInMiliseconds += 24 * 60 * 60 * 1000;
 				}
 			}
@@ -134,73 +163,38 @@
 				(offset || 0);
 		}
 
-		var top = self.top();
-
 		return bottom > top ? bottom - top : 0;
-	});
-	self.topPx = ko.computed(function() {
-		return self.top() + 'px';
-	});
-	self.widthPx = ko.computed(function() {
-		return getWidth(layer.IsOvertimeAvailability, parent && parent.probabilities(), layersOnMobile);
-	});
-	self.heightPx = ko.computed(function() {
-		return self.height() + 'px';
-	});
-	self.overTimeLighterBackgroundStyle = ko.computed(function() {
-		var getLumi = function(cstring) {
+	}
+
+	function getWidth(isOvertimeAvailability, probabilities, layersOnMobile) {
+		var width;
+		if (isOvertimeAvailability) {
+			width = 20 + '%';
+		} else if (probabilities && probabilities.length > 0 && layersOnMobile) {
+			width = 'calc(100% - 28px)'; //MobileDayView.css .mobile-start-day .probability-vertical-bar{width: 28px;}
+		} else {
+			width = 'calc(' + 98 + '%)';
+		}
+		return width;
+	}
+
+	function getOverTimeLighterBackgroundStyle(bgColor) {
+		function getLumi(cstring) {
 			var matched = /#([\w\d]{2})([\w\d]{2})([\w\d]{2})/.exec(cstring);
 			if (!matched) return null;
 			return (
 				(299 * parseInt(matched[1], 16) + 587 * parseInt(matched[2], 16) + 114 * parseInt(matched[3], 16)) /
 				1000
 			);
-		};
+		}
 
 		var lightColor = '#00ffff';
 		var darkColor = '#795548';
-		var backgroundColor = common.RGBTohex(self.backgroundColor());
+		var backgroundColor = common.RGBTohex(bgColor);
 		var useLighterStyle =
 			Math.abs(getLumi(backgroundColor) - getLumi(lightColor)) >
 			Math.abs(getLumi(backgroundColor) - getLumi(darkColor));
 
 		return useLighterStyle;
-	});
-
-	self.overTimeDarkerBackgroundStyle = ko.computed(function() {
-		return !self.overTimeLighterBackgroundStyle();
-	});
-
-	self.styleJson = ko.computed(function() {
-		return {
-			top: self.topPx,
-			width: self.widthPx,
-			height: self.heightPx,
-			color: self.textColor,
-			'background-size': self.isOvertime ? '11px 11px' : 'initial',
-			'background-color': self.backgroundColor
-		};
-	});
-
-	self.heightDouble = ko.computed(function() {
-		return scheduleHeight * (self.endPositionPercentage() - self.startPositionPercentage());
-	});
-	self.showTitle = ko.computed(function() {
-		return self.heightDouble() > constants.pixelToDisplayTitle;
-	});
-	self.showDetail = ko.computed(function() {
-		return self.heightDouble() > constants.pixelToDisplayAll;
-	});
-};
-
-function getWidth(isOvertimeAvailability, probabilities, layersOnMobile) {
-	var width;
-	if (isOvertimeAvailability) {
-		width = 20 + '%';
-	} else if (probabilities && probabilities.length > 0 && layersOnMobile) {
-		width = 'calc(100% - 28px)'; //MobileDayView.css .mobile-start-day .probability-vertical-bar{width: 28px;}
-	} else {
-		width = 'calc(' + 98 + '%)';
 	}
-	return width;
-}
+};

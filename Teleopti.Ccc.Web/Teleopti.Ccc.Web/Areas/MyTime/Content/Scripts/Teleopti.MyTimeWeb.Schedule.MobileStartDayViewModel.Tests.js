@@ -263,7 +263,7 @@
 		viewModel.readData(rawData);
 
 		equal(viewModel.layers().length, 1);
-		equal(viewModel.layers()[0].timeSpan(), '22:00 - 04:00 +1');
+		equal(viewModel.layers()[0].timeSpan, '22:00 - 04:00 +1');
 	});
 
 	test('should call out menu list when clicking plus icon at bottom right', function() {

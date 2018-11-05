@@ -640,7 +640,7 @@
 				.stop()
 				.animate(
 					{
-						scrollTop: vm.mySchedule().layers[0].top() - (timeLineOffset + 10)
+						scrollTop: vm.mySchedule().layers[0].top - (timeLineOffset + 10)
 					},
 					0
 				);

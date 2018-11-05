@@ -197,12 +197,12 @@ Layout = null;
 						<div class="weekview-day-time-indicator relative" data-bind="style: {width: probabilities().length > 0 ? '114px' : '129px'}">
 						</div>
 						<!-- ko foreach: layers -->
-						<!-- ko if: isOvertimeAvailability() -->
+						<!-- ko if: isOvertimeAvailability -->
 						<div class="weekview-day-schedule-layer absolute overtime-availability-bar" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, click: $parent.showOvertimeAvailability">
 							<i class="glyphicon glyphicon-time"></i>
 						</div>
 						<!-- /ko -->
-						<!-- ko ifnot: isOvertimeAvailability() -->
+						<!-- ko ifnot: isOvertimeAvailability -->
 						<div class="weekview-day-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, css:{'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle}">
 							<div data-bind="visible: showTitle">
 								<strong class="weekview-day-schedule-layer-activity truncate" data-bind="text: title"></strong>
