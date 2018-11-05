@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         [SetUp]
         public void Setup()
         {
-			_sourceCollection = new LayerViewModelCollection(null, new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null);
+			_sourceCollection = new LayerViewModelCollection(null, new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null, new FullPermission());
             //load with some absence/mainshifts
             SchedulePartFactoryForDomain schedulePartFactoryForDomain = new SchedulePartFactoryForDomain();
             _sourceCollection.AddFromSchedulePart(schedulePartFactoryForDomain.CreateSchedulePartWithMainShiftAndAbsence());

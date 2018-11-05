@@ -36,7 +36,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.IocCommon;
@@ -46,7 +45,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
-using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Tracer;
@@ -296,8 +294,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeAppDomainPrincipalContext>().For<IThreadPrincipalContext>();
 			else
 				isolate.UseTestDouble<FakeThreadPrincipalContext>().For<IThreadPrincipalContext>();
-
-			CurrentAuthorization.DefaultTo(null);
+			
 			if (fullPermissions())
 				isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
 			if (fakePermissions())
@@ -312,8 +309,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public IPersonRepository Persons;
 		public Lazy<FakeDatabase> Database;
 		public FakeEventPublisher FakeEventPublisher;
-
-		private IDisposable _authorizationScope;
+		
 		private IDisposable _tenantScope;
 		private Person _loggedOnPerson;
 
@@ -326,17 +322,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			fakeSignin();
 
 			createDefaultData();
-
-			// because DomainTest project has OneTimeSetUp that sets FullPermissions globally... 
-			// ... we need to scope real/fake/full for this test
-			if (realPermissions())
-			{
-				_authorizationScope = AuthorizationScope.OnThisThreadUse((PrincipalAuthorization) Authorization);
-			}
-			else if (fakePermissions())
-				_authorizationScope = AuthorizationScope.OnThisThreadUse((FakePermissions) Authorization);
-			else
-				_authorizationScope = AuthorizationScope.OnThisThreadUse((FullPermission) Authorization);
 		}
 
 		private void extendScope()
@@ -406,10 +391,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		protected override void AfterTest()
 		{
 			base.AfterTest();
-
-			CurrentAuthorization.DefaultTo(null);
+			
 			_tenantScope?.Dispose();
-			_authorizationScope?.Dispose();
 		}
 	}
 }

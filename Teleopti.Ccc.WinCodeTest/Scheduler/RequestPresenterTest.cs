@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -27,6 +28,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
 	[TestFixture, SetUICulture("en-US")]
+	[FullPermissions]
 	public class RequestPresenterTest
 	{
 		private IRequestPresenter _requestPresenter;
@@ -377,8 +379,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void VerifyBrokenRulesAndCancel()
 		{
-			using (var auth = CurrentAuthorization.ThreadlyUse(new FullPermission()))
-			{
 				_requestViewAdapters.RemoveAt(2);
 				_requestViewAdapters.RemoveAt(1);
 
@@ -410,7 +410,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				{
 					Assert.IsTrue(adapter.PersonRequest.IsPending);
 				}
-			}
 		}
 
 		[Test]

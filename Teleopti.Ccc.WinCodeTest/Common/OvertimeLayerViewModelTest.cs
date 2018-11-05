@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor;
@@ -36,7 +35,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		private IPerson _person;
 	    private TesterForCommandModels _testerForCommandModels;
 	    private DateTimePeriod _period;
-		private IDisposable auth;
 
 		[SetUp]
 		public void Setup()
@@ -54,9 +52,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TimeZoneHelper.CurrentSessionTimeZone)).Repeat.Any();
 
 			_mocks.ReplayAll();
-			_target = new OvertimeLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, new PersonAssignment(_person, new Scenario(), DateOnly.Today), null);
+			_target = new OvertimeLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, new PersonAssignment(_person, new Scenario(), DateOnly.Today), null, new FullPermission());
 			_testRunner = new CrossThreadTestRunner();
-			auth = CurrentAuthorization.ThreadlyUse(new FullPermission());
 		}
 
 		[Test]
@@ -197,7 +194,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		{
 			var layerObserver = MockRepository.GenerateMock<ILayerViewModelObserver>();
 
-			_target = new OvertimeLayerViewModel(layerObserver, _layerWithPayload, new PersonAssignment(_person, new Scenario(), DateOnly.Today), null);
+			_target = new OvertimeLayerViewModel(layerObserver, _layerWithPayload, new PersonAssignment(_person, new Scenario(), DateOnly.Today), null, new FullPermission());
 			
 			_target.IsChanged = true;
 			_target.UpdatePeriod();
@@ -310,7 +307,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[TearDown]
 		public void Teardown()
 		{
-			auth?.Dispose();
 			_mocks.VerifyAll();
 		}
     }

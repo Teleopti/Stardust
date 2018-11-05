@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             _dateTimePeriod = new DateTimePeriod(2009, 2, 2, 2009, 2, 3);
             _parameters = new ScheduleParameters(_scenario, _person1, _dateTimePeriod);
             _parameters2 = new ScheduleParameters(_scenario, _person2, _dateTimePeriod);
-			var authorization = CurrentAuthorization.Make();
+			var authorization = new FullPermission();
 			var permissionChecker = new PersistableScheduleDataPermissionChecker(authorization);
 
 			_scheduleRange = new ScheduleRange(_dic, _parameters, permissionChecker, authorization);
@@ -99,16 +99,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 					ass2.AddActivity(breakActivity, new DateTimePeriod(new DateTime(2009, 2, 2, 14, 0, 0, DateTimeKind.Utc), new DateTime(2009, 2, 2, 14, 15, 0, DateTimeKind.Utc)));
 					ass2.AddActivity(breakActivity, new DateTimePeriod(new DateTime(2009, 2, 2, 17, 15, 0, DateTimeKind.Utc), new DateTime(2009, 2, 2, 17, 30, 0, DateTimeKind.Utc)));
 					_scheduleRange2.Add(ass2);
-
-			auth = CurrentAuthorization.ThreadlyUse(new FullPermission());
 		}
-
-		[TearDown]
-		public void Teardown()
-		{
-			auth?.Dispose();
-		}
-
+		
         [Test]
         public void CanCreateChineseReport()
         {

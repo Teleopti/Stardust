@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters2 =
 				new ScheduleParameters(scenario, person2, new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime));
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime), CurrentAuthorization.Make());
 
 			var personAbsenceDest = new PersonAbsence(person2, scenario, new AbsenceLayer(new Absence(), period2));
 
@@ -76,9 +76,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters2 =
 				new ScheduleParameters(scenario, person2, new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime));
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime), CurrentAuthorization.Make());
 
 			var personAbsenceDest = new PersonAbsence(person2, scenario, new AbsenceLayer(new Absence(), period2));
 
@@ -125,9 +125,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters2 =
 				new ScheduleParameters(scenario, person2, new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime));
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime), CurrentAuthorization.Make());
 
 			var personAssignmentDest = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(person2,
 				scenario, ActivityFactory.CreateActivity("sdfsdf"), period3.MovePeriod(TimeSpan.FromDays(1)), ShiftCategoryFactory.CreateShiftCategory("shiftCategory"));
@@ -157,9 +157,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters2 =
 				new ScheduleParameters(scenario, person2, new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime));
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime), CurrentAuthorization.Make());
 
 			var personAbsenceDest = new PersonAbsence(person2, scenario, new AbsenceLayer(new Absence(), period2));
 
@@ -192,9 +192,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters2 =
 				new ScheduleParameters(scenario, person2, new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime));
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime), CurrentAuthorization.Make());
 
 			source.PersonAssignment(true).SetDayOff(DayOffFactory.CreateDayOff());
 
@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters2 =
 				new ScheduleParameters(scenario, person2, new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime));
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime), CurrentAuthorization.Make());
 
 			destination.PersonAssignment(true).SetDayOff(DayOffFactory.CreateDayOff());
 			IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters2 =
 				new ScheduleParameters(scenario, person2, new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime));
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime), new FullPermission());
 
 			var personAbsenceDest = new PersonAbsence(person2, scenario, new AbsenceLayer(new Absence(), period2));
 
@@ -272,9 +272,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters2 =
 				new ScheduleParameters(scenario, person2, new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime));
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime), CurrentAuthorization.Make());
 
 			IPreferenceRestriction preferenceRestriction = new PreferenceRestriction();
 			IPreferenceRestriction preferenceRestriction2 = new PreferenceRestriction();
@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters1 =
 				new ScheduleParameters(scenario, person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
 			IPreferenceRestriction preferenceRestriction = new PreferenceRestriction();
 			IPreferenceDay preferenceDay = new PreferenceDay(source.Person, new DateOnly(source.Period.StartDateTimeLocal(timeZoneInfoTokyo)), preferenceRestriction);
@@ -332,7 +332,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters1 =
 				new ScheduleParameters(scenario, person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
 			INote note = new Note(source.Person, new DateOnly(source.Period.StartDateTimeLocal(timeZoneInfoTokyo)), source.Scenario, "Oh my God");
 			source.Add(note);
@@ -357,9 +357,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters2 =
 				new ScheduleParameters(scenario, person2, new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime));
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime), CurrentAuthorization.Make());
 
 			IStudentAvailabilityRestriction studentAvailabilityRestriction = new StudentAvailabilityRestriction();
 			studentAvailabilityRestriction.SetId(Guid.NewGuid());
@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters1 =
 				new ScheduleParameters(scenario, person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
 			IStudentAvailabilityRestriction studentAvailabilityRestriction = new StudentAvailabilityRestriction();
 			IList<IStudentAvailabilityRestriction> list = new List<IStudentAvailabilityRestriction>();
@@ -416,7 +416,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters1 =
 				new ScheduleParameters(scenario, person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
 			var overtimeAvailabilityDay = new OvertimeAvailability(source.Person, new DateOnly(source.Period.StartDateTimeLocal(timeZoneInfoTokyo)), TimeSpan.FromHours(17), TimeSpan.FromHours(19));
 
@@ -438,7 +438,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters1 =
 				new ScheduleParameters(scenario, person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
 			DateTime absStart1 = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			DateTime absEnd1 = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
@@ -492,7 +492,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters1 =
 				new ScheduleParameters(scenario, person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
 			DateTime absStart1 = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			DateTime absEnd1 = new DateTime(2000, 1, 1, 23, 59, 0, DateTimeKind.Utc);
@@ -527,7 +527,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters1 =
 				new ScheduleParameters(scenario, person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
 			DateTime absStart1 = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			DateTime absEnd1 = new DateTime(2000, 1, 1, 23, 59, 0, DateTimeKind.Utc);
@@ -568,9 +568,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters2 =
 				new ScheduleParameters(scenario, person2, new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime));
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime), CurrentAuthorization.Make());
 
 			var personAbsenceDest = new PersonAbsence(person2, scenario, new AbsenceLayer(new Absence(), period2));
 
@@ -613,9 +613,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters2 =
 				new ScheduleParameters(scenario, person2, new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime));
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime), CurrentAuthorization.Make());
 
 			var personAbsenceDest = new PersonAbsence(person2, scenario, new AbsenceLayer(new Absence(), period2));
 			var personAbsenceSource = new PersonAbsence(person1, scenario, new AbsenceLayer(AbsenceFactory.CreateAbsence("abs"), parameters1.Period));
@@ -647,9 +647,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters2 =
 				new ScheduleParameters(scenario, person2, new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime));
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime), CurrentAuthorization.Make());
 
 			var personAbsenceDest = new PersonAbsence(person2, scenario, new AbsenceLayer(new Absence(), period2));
 
@@ -686,9 +686,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters2 =
 				new ScheduleParameters(scenario, person2, new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime));
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime), CurrentAuthorization.Make());
 
 			var personAbsenceDest = new PersonAbsence(person2, scenario, new AbsenceLayer(new Absence(), period2));
 
@@ -733,8 +733,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			var periodAbsence = new DateTimePeriod(dateTimeAbsenceStart, dateTimeAbsenceEnd);
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, person1, date);
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, person1, date.AddDays(10));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, person1, date, CurrentAuthorization.Make());
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, person1, date.AddDays(10), CurrentAuthorization.Make());
 
 			var absenceService = MockRepository.GenerateMock<ISignificantPartService>();
 			((ExtractedSchedule)source).ServiceForSignificantPart = absenceService;
@@ -758,8 +758,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(rangePeriod), underlyingDictionary);
 
 			var expectedDiff = new TimeSpan(2, 0, 0, 0);
-			var testSource = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2010, 3, 23));
-			var testDestination = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2010, 3, 25));
+			var testSource = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2010, 3, 23), CurrentAuthorization.Make());
+			var testDestination = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2010, 3, 25), CurrentAuthorization.Make());
 			TimeSpan diff = testDestination.CalculatePeriodOffset(testSource.Period);
 			Assert.AreEqual(expectedDiff, diff);
 		}
@@ -774,8 +774,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(rangePeriod), underlyingDictionary);
 
 			var expectedDiff = new TimeSpan(5, 0, 0, 0);
-			var testSource = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2010, 3, 23));
-			var testDestination = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2010, 3, 28));
+			var testSource = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2010, 3, 23), CurrentAuthorization.Make());
+			var testDestination = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2010, 3, 28), CurrentAuthorization.Make());
 			var diff = testDestination.CalculatePeriodOffset(testSource.Period);
 			Assert.AreEqual(expectedDiff, diff);
 		}
@@ -790,8 +790,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(rangePeriod), underlyingDictionary);
 
 			var expectedDiff = new TimeSpan(6, 23, 0, 0);
-			var testSource = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2010, 3, 23));
-			var testDestination = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2010, 3, 30));
+			var testSource = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2010, 3, 23), CurrentAuthorization.Make());
+			var testDestination = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2010, 3, 30), CurrentAuthorization.Make());
 			var diff = testDestination.CalculatePeriodOffset(testSource.Period);
 			Assert.AreEqual(expectedDiff, diff);
 		}
@@ -806,8 +806,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(rangePeriod), underlyingDictionary);
 
 			var expectedDiff = new TimeSpan(-6, -23, 0, 0);
-			var testSource = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2010, 3, 30));
-			var testDestination = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2010, 3, 23));
+			var testSource = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2010, 3, 30), CurrentAuthorization.Make());
+			var testDestination = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2010, 3, 23), CurrentAuthorization.Make());
 			var diff = testDestination.CalculatePeriodOffset(testSource.Period);
 			Assert.AreEqual(expectedDiff, diff);
 		}
@@ -827,9 +827,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters2 =
 				new ScheduleParameters(scenario, person2, new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime));
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime), CurrentAuthorization.Make());
 
 			var personAbsenceDest = new PersonAbsence(person2, scenario, new AbsenceLayer(new Absence(), period2));
 
@@ -895,9 +895,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters2 =
 				new ScheduleParameters(scenario, person2, new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime));
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime), CurrentAuthorization.Make());
 
 			var personAbsenceDest = new PersonAbsence(person2, scenario, new AbsenceLayer(new Absence(), period2));
 
@@ -943,8 +943,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var destinationPeriod = new DateTimePeriod(2016, 3, 26, 23, 2016, 3, 27, 22);
 			var shiftSourcePeriod = new DateTimePeriod(2016, 3, 26, 9, 2016, 3, 26, 10);
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(sourcePeriod.StartDateTime));
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(destinationPeriod.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(sourcePeriod.StartDateTime), CurrentAuthorization.Make());
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(destinationPeriod.StartDateTime), CurrentAuthorization.Make());
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person1, scenario);
 
 			personAssignment.AddPersonalActivity(ActivityFactory.CreateActivity("activity"), shiftSourcePeriod);
@@ -966,8 +966,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var destinationPeriod = new DateTimePeriod(2016, 10, 31, 22, 2016, 11, 01, 22);
 			var shiftSourcePeriod = new DateTimePeriod(2016, 10, 25, 9, 2016, 10, 25, 10);
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(sourcePeriod.StartDateTime));
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(destinationPeriod.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(sourcePeriod.StartDateTime), CurrentAuthorization.Make());
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(destinationPeriod.StartDateTime), CurrentAuthorization.Make());
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person1, scenario);
 
 			personAssignment.AddPersonalActivity(ActivityFactory.CreateActivity("activity"), shiftSourcePeriod);
@@ -997,7 +997,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTime start = new DateTime(2011, 2, 10, 16, 0, 0, 0, DateTimeKind.Utc);
 			DateTime end = new DateTime(2011, 2, 10, 20, 0, 0, 0, DateTimeKind.Utc);
 
-			IScheduleDay sourceDay = ExtractedSchedule.CreateScheduleDay(dic, sourcePerson, day);
+			IScheduleDay sourceDay = ExtractedSchedule.CreateScheduleDay(dic, sourcePerson, day, CurrentAuthorization.Make());
 			IActivity activity = ActivityFactory.CreateActivity("Test");
 
 			DateTimePeriod period = new DateTimePeriod(start, end);
@@ -1005,8 +1005,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var mainShift = EditableShiftFactory.CreateEditorShift(activity, period, shiftCategory);
 			sourceDay.AddMainShift(mainShift);
 
-			IScheduleDay targetDaySameTimezone = ExtractedSchedule.CreateScheduleDay(dic, targetPersonInSameTimezone, day);
-			IScheduleDay targetDayDifferentTimezone = ExtractedSchedule.CreateScheduleDay(dic, targetPersonInDifferentTimezone, day);
+			IScheduleDay targetDaySameTimezone = ExtractedSchedule.CreateScheduleDay(dic, targetPersonInSameTimezone, day, CurrentAuthorization.Make());
+			IScheduleDay targetDayDifferentTimezone = ExtractedSchedule.CreateScheduleDay(dic, targetPersonInDifferentTimezone, day, CurrentAuthorization.Make());
 
 			targetDaySameTimezone.Merge(sourceDay, false, false);
 
@@ -1035,8 +1035,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			var dateTimePeriod1 = new DateTimePeriod(start, end);
 
-			var sourceDay = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2014, 3, 27));
-			var targetDay = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2014, 3, 30));
+			var sourceDay = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2014, 3, 27), new FullPermission());
+			var targetDay = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2014, 3, 30), new FullPermission());
 			sourceDay.CreateAndAddActivity(activity, dateTimePeriod1, shiftCategory);
 
 			targetDay.Merge(sourceDay, false);
@@ -1058,9 +1058,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var parameters2 =
 				new ScheduleParameters(scenario, person2, new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
 
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime));
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, parameters2.Person, new DateOnly(parameters2.Period.StartDateTime), CurrentAuthorization.Make());
 
 			var definitionSet = new MultiplicatorDefinitionSet("Overtime", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(person1, definitionSet);

@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCodeTest.Common.Commands;
 using Teleopti.Ccc.WinCodeTest.Helpers;
 using Teleopti.Interfaces.Domain;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             _mocker = new MockRepository();
             _layer1 = _mocker.StrictMock<ILayerViewModel>();
             _layer2 = _mocker.StrictMock<ILayerViewModel>();
-			_layers = new LayerViewModelCollection(null, new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null);
+			_layers = new LayerViewModelCollection(null, new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null, new FullPermission());
             _layers.Add(_layer1);
             _layers.Add(_layer2);
             _target = new ExpandedLayersViewModel(_layers);

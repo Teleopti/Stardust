@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -24,6 +25,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
 	[DomainTest]
+	[FullPermissions]
 	public class SwapAndModifyServiceNewByFakeTest : IIsolateSystem, IExtendSystem
 	{
 		public SwapAndModifyServiceNew Target;
@@ -71,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var agent1Assignment = PersonAssignmentRepository.GetSingle(date,agent1) as PersonAssignment;
 			agent1Assignment.PopAllEvents();
 
-			var scheduleDictionary = ScheduleDictionaryForTest.WithPersonAssignment(scenario,date.Date,agent1Assignment);
+			var scheduleDictionary = ScheduleDictionaryForTest.WithPersonAssignment(scenario,date.Date,agent1Assignment, new FullPermission());
 
 			Target.Swap(agent1,agent2,
 				new List<DateOnly> { date },new List<DateOnly>(),scheduleDictionary,NewBusinessRuleCollection.Minimum(),new ScheduleTagSetter(NullScheduleTag.Instance));
@@ -103,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			agent1Assignment.PopAllEvents();
 
 			var agent2Assignment = PersonAssignmentRepository.GetSingle(date,agent2) as PersonAssignment;
-			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, date.ToDateTimePeriod(TimeZoneInfo.Local), agent1Assignment, agent2Assignment);
+			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, date.ToDateTimePeriod(TimeZoneInfo.Local), new FullPermission(), agent1Assignment, agent2Assignment);
 			
 			Target.Swap(agent1,agent2,
 				new List<DateOnly> { date },new List<DateOnly>(),scheduleDictionary,NewBusinessRuleCollection.Minimum(),new ScheduleTagSetter(NullScheduleTag.Instance));

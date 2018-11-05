@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -19,11 +20,12 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 				IEnumerable<IScheduleData> persistableScheduleData,
 				IEnumerable<ISkillDay> skillDays,
 				IEnumerable<ExternalStaff> bpoResources,
-				TimeZoneInfo timeZone)
+				TimeZoneInfo timeZone,
+			ICurrentAuthorization currentAuthorization = null)
 		{
 			var stateHolder = stateHolderFunc();
 			stateHolder.SetRequestedScenario(scenario);
-			stateHolder.SchedulingResultState.Schedules = ScheduleDictionaryCreator.WithData(scenario, period, persistableScheduleData, agents);
+			stateHolder.SchedulingResultState.Schedules = ScheduleDictionaryCreator.WithData(scenario, period, persistableScheduleData, agents, currentAuthorization);
 			foreach (var agent in agents)
 			{
 				stateHolder.ChoosenAgents.Add(agent);
@@ -60,9 +62,10 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 			DateOnlyPeriod period,
 			IEnumerable<IPerson> agents,
 			IEnumerable<IScheduleData> persistableScheduleData,
-			IEnumerable<ISkillDay> skillDays)
+			IEnumerable<ISkillDay> skillDays,
+			ICurrentAuthorization currentAuthorization = null)
 		{
-			return Fill(stateHolderFunc, scenario, period, agents, persistableScheduleData, skillDays, Enumerable.Empty<ExternalStaff>(), TimeZoneInfo.Utc);
+			return Fill(stateHolderFunc, scenario, period, agents, persistableScheduleData, skillDays, Enumerable.Empty<ExternalStaff>(), TimeZoneInfo.Utc, currentAuthorization);
 		}
 		
 		public static ISchedulerStateHolder Fill(this Func<ISchedulerStateHolder> stateHolderFunc,
@@ -70,9 +73,10 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 			DateOnly date,
 			IEnumerable<IPerson> agents,
 			IScheduleData persistableScheduleData,
-			ISkillDay skillDay)
+			ISkillDay skillDay,
+			ICurrentAuthorization currentAuthorization)
 		{
-			return Fill(stateHolderFunc, scenario, date.ToDateOnlyPeriod(), agents, new[]{persistableScheduleData}, new[]{skillDay}, Enumerable.Empty<ExternalStaff>(), TimeZoneInfo.Utc);
+			return Fill(stateHolderFunc, scenario, date.ToDateOnlyPeriod(), agents, new[]{persistableScheduleData}, new[]{skillDay}, Enumerable.Empty<ExternalStaff>(), TimeZoneInfo.Utc, currentAuthorization);
 		}
 		
 		public static ISchedulerStateHolder Fill(this Func<ISchedulerStateHolder> stateHolderFunc,

@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				ReassociateDataFor(Person);
 				var repositoryFactory = new RepositoryFactory();
 				var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-				var rep = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), CurrentAuthorization.Make());
+				var rep = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(new FullPermission()), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), new FullPermission());
 				var dictionary = rep.FindSchedulesForPersons(Scenario,
 																								 new[] { Person },
 																								 new ScheduleDictionaryLoadOptions(true, true),

@@ -26,16 +26,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         public void Setup()
         {
             _scenario = new Scenario("default");
+			var currentAuthorization = CurrentAuthorization.Make();
 			dic = new ScheduleDictionary(_scenario,
 				new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)),
-				new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
-				CurrentAuthorization.Make());
+				new PersistableScheduleDataPermissionChecker(currentAuthorization),
+				currentAuthorization);
             _person = new Person();
             _gridlockManager = new GridlockManager();
             _schedules = new List<IScheduleDay>();
            
-            _schedulePart1 = ExtractedSchedule.CreateScheduleDay(dic, _person, new DateOnly(2000,1,1));
-            _schedulePart2 = ExtractedSchedule.CreateScheduleDay(dic, _person, new DateOnly(2000, 1, 3));
+            _schedulePart1 = ExtractedSchedule.CreateScheduleDay(dic, _person, new DateOnly(2000,1,1), currentAuthorization);
+            _schedulePart2 = ExtractedSchedule.CreateScheduleDay(dic, _person, new DateOnly(2000, 1, 3), currentAuthorization);
 
             _schedules.Add(_schedulePart1);
         }

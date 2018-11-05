@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -49,13 +48,13 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		    var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TimeZoneHelper.CurrentSessionTimeZone);
 		    scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
 
-		    _target = new AbsenceLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _personAbsence, null);
+		    _target = new AbsenceLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _personAbsence, null, new FullPermission());
 	    }
 
 		[Test]
         public void VerifyCannotMoveAbsenceLayerVertical()
         {
-	        LayerViewModelCollection collection = new LayerViewModelCollection(_eventAggregator, new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null);
+	        LayerViewModelCollection collection = new LayerViewModelCollection(_eventAggregator, new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null, new FullPermission());
             IScheduleDay part = _factory.CreateSchedulePartWithMainShiftAndAbsence();
             collection.AddFromSchedulePart(part);
 
@@ -176,13 +175,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			testRunner.RunInSTA(
 				delegate
 				{
-					using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-					{
-						DateTimePeriodPanel panel = GetPanel();
-						_target.SchedulePart = scheduleDay;
-						_target.StartTimeChanged(panel, 1);
-						Assert.AreEqual(_expectMovePermitted, _target.IsChanged);
-					}
+					DateTimePeriodPanel panel = GetPanel();
+					_target.SchedulePart = scheduleDay;
+					_target.StartTimeChanged(panel, 1);
+					Assert.AreEqual(_expectMovePermitted, _target.IsChanged);
 				});
 		}
 
@@ -203,13 +199,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			testRunner.RunInSTA(
 				delegate
 				{
-					using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-					{
-						DateTimePeriodPanel panel = GetPanel();
-						_target.SchedulePart = scheduleDay;
-						_target.EndTimeChanged(panel, 1);
-						Assert.AreEqual(_expectMovePermitted, _target.IsChanged);
-					}
+					DateTimePeriodPanel panel = GetPanel();
+					_target.SchedulePart = scheduleDay;
+					_target.EndTimeChanged(panel, 1);
+					Assert.AreEqual(_expectMovePermitted, _target.IsChanged);
 				});
 		}
 
@@ -220,13 +213,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			testRunner.RunInSTA(
 				delegate
 				{
-					using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
-					{
-						DateTimePeriodPanel panel = GetPanel();
-						_target.SchedulePart = scheduleDay;
-						_target.TimeChanged(panel, 1);
-						Assert.AreEqual(_expectMovePermitted, _target.IsChanged);
-					}
+					DateTimePeriodPanel panel = GetPanel();
+					_target.SchedulePart = scheduleDay;
+					_target.TimeChanged(panel, 1);
+					Assert.AreEqual(_expectMovePermitted, _target.IsChanged);
 				});
 		}
 

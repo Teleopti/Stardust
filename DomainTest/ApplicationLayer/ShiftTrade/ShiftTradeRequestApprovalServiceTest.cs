@@ -6,8 +6,10 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -19,6 +21,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 {
 	[DomainTest]
+	[FullPermissions]
 	public class ShiftTradeRequestApprovalServiceTest : IIsolateSystem
 	{
 		public IRequestApprovalServiceFactory RequestApprovalServiceFactory;
@@ -27,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 		public FakePersonRequestRepository PersonRequestRepository;
 		public IScheduleStorage ScheduleStorage;
+		public ICurrentAuthorization CurrentAuthorization;
 
 		private IRequestApprovalService _requestApprovalService;
 		private IScheduleDictionary _scheduleDictionary;
@@ -48,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var scheduleDatas = createScheduleDatas(new DateOnlyPeriod(2016, 11, 23, 2016, 11, 23), new TimePeriod(8, 17), personFrom).ToList();
 			scheduleDatas.AddRange(createScheduleDatas(new DateOnlyPeriod(2016, 11, 23, 2016, 11, 23), new TimePeriod(7, 18), personTo1,
 				personTo2, personTo3));
-			_scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(Scenario.Current(), new DateTimePeriod(2016, 11, 23, 7, 2016, 11, 23, 18), scheduleDatas.ToArray());
+			_scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(Scenario.Current(), new DateTimePeriod(2016, 11, 23, 7, 2016, 11, 23, 18), CurrentAuthorization, scheduleDatas.ToArray());
 
 			var requestDate = new DateOnly(2016, 11, 23);
 			var shiftTradeRequest1 = createPersonShiftTradeRequest(personFrom, personTo1, requestDate);
@@ -105,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			PersonRequestRepository.Add(personRequest3);
 
 			_scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(Scenario.Current()
-				, new DateTimePeriod(2007, 01, 01, 7, 2007, 01, 01, 18), agent1Shift.PersonAssignment(),
+				, new DateTimePeriod(2007, 01, 01, 7, 2007, 01, 01, 18), CurrentAuthorization, agent1Shift.PersonAssignment(),
 				agent2Shift.PersonAssignment(), agent3Shift.PersonAssignment());
 
 			setShiftTradeRequestApprovalService(agent1);

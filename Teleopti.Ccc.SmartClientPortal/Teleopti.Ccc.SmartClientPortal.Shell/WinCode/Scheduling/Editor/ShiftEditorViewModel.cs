@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time.Timeline;
@@ -115,7 +116,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor
 		}
 
 		public ShiftEditorViewModel(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, IEditableShiftMapper editableShiftMapper)
-			: this(new LayerViewModelCollection(eventAggregator, createLayerViewModelService, new RemoveLayerFromSchedule(), new ReplaceLayerInSchedule()), eventAggregator, createLayerViewModelService, showMeetingsInContextMenu, editableShiftMapper)
+			: this(new LayerViewModelCollection(eventAggregator, createLayerViewModelService, new RemoveLayerFromSchedule(), new ReplaceLayerInSchedule(), PrincipalAuthorization.Current()), eventAggregator, createLayerViewModelService, showMeetingsInContextMenu, editableShiftMapper)
         {
 
         }

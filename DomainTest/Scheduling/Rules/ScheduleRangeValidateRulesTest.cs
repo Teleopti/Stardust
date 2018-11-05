@@ -56,7 +56,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void VerifyValidate()
 		{
 			addPersonAssignmentsToSchedulePart();
-			var schedulePart = ExtractedSchedule.CreateScheduleDay(scheduleDic, _person, new DateOnly(2007, 8, 3));
+			var currentAuthorization = CurrentAuthorization.Make();
+			var schedulePart = ExtractedSchedule.CreateScheduleDay(scheduleDic, _person, new DateOnly(2007, 8, 3), currentAuthorization);
 			// add another assigment too close to the last one
 			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(
 				new DateTime(2007, 8, 3, 20, 0, 0, DateTimeKind.Utc),
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				team));
 
 			var per = new ScheduleDateTimePeriod(_schedulePeriod);
-			var dic = new ScheduleDictionary(_scenario, per, _permissionChecker, CurrentAuthorization.Make());
+			var dic = new ScheduleDictionary(_scenario, per, _permissionChecker, currentAuthorization);
 			dic.Modify(ScheduleModifier.Scheduler, schedulePart, NewBusinessRuleCollection.Minimum(),
 				new DoNothingScheduleDayChangeCallBack(), new ScheduleTagSetter(NullScheduleTag.Instance));
 

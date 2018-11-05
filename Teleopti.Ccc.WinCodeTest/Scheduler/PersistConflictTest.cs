@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 					conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(pDayOff, pDayOff.EntityClone()), dbData));
 			ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, pDayOff,
 				new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
-				PrincipalAuthorization.Current());
+				CurrentAuthorization.Make());
 
             using(mocks.Record())
             {

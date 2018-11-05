@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
@@ -404,7 +403,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				_param = new ScheduleParameters(_scenario, _agent,
 					schedulePeriod);
 
-				_scheduleRange = new ScheduleRange(_dic, _param, _permissionChecker, CurrentAuthorization.Make());
+				_scheduleRange = new ScheduleRange(_dic, _param, _permissionChecker, new FullPermission());
 				_underlyingDictionary[_agent] = _scheduleRange;
 				ITeam team = TeamFactory.CreateSimpleTeam();
 
@@ -680,7 +679,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IPersonAssignment personAssWholeToday = PersonAssignmentFactory.CreateAssignmentWithMainShift(PersonFactory.CreatePerson(), _scenario, _periodWholeDay);
 
             IScheduleDictionary scheduleDictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period), _permissionChecker, CurrentAuthorization.Make());
-            var schedulePart = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, PersonFactory.CreatePerson(), new DateOnly(2000,1,2));
+            var schedulePart = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, PersonFactory.CreatePerson(), new DateOnly(2000,1,2), CurrentAuthorization.Make());
 
             Assert.AreEqual(DisplayMode.EndsToday, ViewBaseHelper.GetAssignmentDisplayMode(personAssEndsToday, schedulePart));
             Assert.AreEqual(DisplayMode.BeginsToday, ViewBaseHelper.GetAssignmentDisplayMode(personAssBeginsToday, schedulePart));

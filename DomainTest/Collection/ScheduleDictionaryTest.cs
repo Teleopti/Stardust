@@ -8,6 +8,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -348,9 +349,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		}
 
 		[Test]
+		[FullPermissions]
 		public void VerifyCorrectParametersToDifferenceSinceSnapshot()
 		{
-			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, CurrentAuthorization.Make());
+			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, new FullPermission());
 			IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson, scenario, new DateTimePeriod(2000, 11, 2, 2001, 1, 1));
 			pAss.SetId(Guid.NewGuid());
 

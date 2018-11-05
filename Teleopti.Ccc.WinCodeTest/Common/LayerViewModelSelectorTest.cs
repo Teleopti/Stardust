@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _mocks = new MockRepository();
             _layerViewModelObserver = _mocks.StrictMock<ILayerViewModelObserver>();
             _scheduleDay = new SchedulePartFactoryForDomain().CreatePartWithMainShiftWithDifferentActivities();
-            _models = new CreateLayerViewModelService().CreateViewModelsFromSchedule(_scheduleDay, null, TimeSpan.FromMinutes(2), _layerViewModelObserver);
+            _models = new CreateLayerViewModelService().CreateViewModelsFromSchedule(_scheduleDay, null, TimeSpan.FromMinutes(2), _layerViewModelObserver, new FullPermission());
 
 
 
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyThatLayerWithSamePeriodAndActivityGetsSelected()
         {
             //create another list, because it could be a EQUAL ScheduleDay, but not the same
-            IList<ILayerViewModel> anotherListOfEqualModels = new CreateLayerViewModelService().CreateViewModelsFromSchedule(_scheduleDay, null, TimeSpan.FromMinutes(2), _layerViewModelObserver);
+            IList<ILayerViewModel> anotherListOfEqualModels = new CreateLayerViewModelService().CreateViewModelsFromSchedule(_scheduleDay, null, TimeSpan.FromMinutes(2), _layerViewModelObserver, new FullPermission());
 
             ILayerViewModelSelector target = new LayerViewModelSelector(_models[3]);
 

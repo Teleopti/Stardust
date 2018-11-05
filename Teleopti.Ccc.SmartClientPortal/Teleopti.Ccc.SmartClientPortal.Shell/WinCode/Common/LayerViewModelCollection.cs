@@ -8,6 +8,7 @@ using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Collections;
 using Teleopti.Interfaces.Domain;
 
@@ -32,18 +33,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         private IScheduleDay _schedule;
         private readonly IRemoveLayerFromSchedule _removeService;
 	    private readonly IReplaceLayerInSchedule _replaceService;
-	    private readonly IEventAggregator _eventAggregator;
+		private readonly IAuthorization _authorization;
+		private readonly IEventAggregator _eventAggregator;
         private readonly ICreateLayerViewModelService _createLayerViewModelService;
         private readonly ObservableCollection<LayerGroupViewModel> _groups = new ObservableCollection<LayerGroupViewModel>();
 	    private readonly HashSet<ILayerViewModel> _layersThatShouldBeUpdated = new HashSet<ILayerViewModel>();
-
-
-	    public LayerViewModelCollection(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, IRemoveLayerFromSchedule removeService, IReplaceLayerInSchedule replaceService)
+		
+	    public LayerViewModelCollection(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, IRemoveLayerFromSchedule removeService, IReplaceLayerInSchedule replaceService, IAuthorization authorization)
         {
             _eventAggregator = eventAggregator;
             _createLayerViewModelService = createLayerViewModelService;
 			_removeService = removeService;
 			_replaceService = replaceService;
+			_authorization = authorization;
 			CreateGroups();
         }
 
@@ -167,7 +169,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             if (scheduleDay == null) return;
             Clear();
             _schedule = scheduleDay;
-            var layers = _createLayerViewModelService.CreateViewModelsFromSchedule(selector, scheduleDay, _eventAggregator, Interval, this);
+            var layers = _createLayerViewModelService.CreateViewModelsFromSchedule(selector, scheduleDay, _eventAggregator, Interval, this, _authorization);
             layers.ForEach(Add);
 
             foreach (IVisualLayer visualLayer in scheduleDay.ProjectionService().CreateProjection())
@@ -193,7 +195,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         {
             Clear();
             _createLayerViewModelService.CreateProjectionViewModelsFromSchedule(range, period,
-                                                                                _eventAggregator, Interval).ForEach(Add);
+                                                                                _eventAggregator, Interval, _authorization).ForEach(Add);
         }
 
         public void AddFromSchedulePart(IScheduleDay scheduleDay)
@@ -201,7 +203,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             if (scheduleDay == null) return;
             Clear();
             _schedule = scheduleDay;
-            var layers = _createLayerViewModelService.CreateViewModelsFromSchedule(scheduleDay, _eventAggregator, Interval, this);
+            var layers = _createLayerViewModelService.CreateViewModelsFromSchedule(scheduleDay, _eventAggregator, Interval, this, _authorization);
             layers.ForEach(Add);
         }
 
@@ -226,7 +228,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 			ShouldBeUpdated(sender);
             foreach (ILayerViewModel model in this.Where(l => l.CanMoveAll))
             {
-                if ((model.ShouldBeIncludedInGroupMove(sender)))
+                if (model.ShouldBeIncludedInGroupMove(sender))
                 {
 					ShouldBeUpdated(model);
 	                if (model != sender)

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private IShiftCategoryFairnessHolder _shiftCategoryFairnessHolder;
 		
 		public ScheduleRange(IScheduleDictionary owner, IScheduleParameters parameters, IPersistableScheduleDataPermissionChecker permissionChecker, ICurrentAuthorization authorization)
-			: base(owner, parameters)
+			: base(owner, parameters, authorization)
 		{
 			_permissionChecker = permissionChecker;
 			_authorization = authorization;

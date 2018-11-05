@@ -17,6 +17,7 @@ using Teleopti.Analytics.Etl.CommonTest.Transformer.Job;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -30,6 +31,7 @@ using WorkloadFactory = Teleopti.Ccc.TestCommon.FakeData.WorkloadFactory;
 namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 {
 	[DomainTest]
+	[FullPermissions]
 	public class PBI41857 : IExtendSystem
 	{
 		public IComponentContext ComponentContext;
@@ -57,7 +59,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(primarySkill, secondarySkill).WithId();
 			var ass = new PersonAssignment(agent, scenario, date);
 			ass.AddActivity(activity, new TimePeriod(0, 24));
-			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, new DateTimePeriod(dateAsUtc, dateAsUtc.AddDays(1)), ass);
+			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, new DateTimePeriod(dateAsUtc, dateAsUtc.AddDays(1)), new FullPermission(), ass);
 			var raptorRep = new RaptorRepositoryForTest();
 			raptorRep.SetLoadSkillWithSkillDays(new[] { primarySkill, secondarySkill });
 			raptorRep.SetLoadScenario(scenario);
@@ -114,7 +116,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(primarySkill, secondarySkill).WithId();
 			var ass = new PersonAssignment(agent, scenario, date);
 			ass.AddActivity(activity, new TimePeriod(0, 24));
-			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, new DateTimePeriod(dateAsUtc, dateAsUtc.AddDays(1)), ass);
+			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, new DateTimePeriod(dateAsUtc, dateAsUtc.AddDays(1)), new FullPermission(), ass);
 			var raptorRep = new RaptorRepositoryForTest();
 			raptorRep.SetLoadSkillWithSkillDays(new [] {primarySkill, secondarySkill});
 			raptorRep.SetLoadScenario(scenario);
@@ -173,7 +175,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 			var ass2 = new PersonAssignment(agent2, scenario, date);
 			ass1.AddActivity(activity, new TimePeriod(0, 24));
 			ass2.AddActivity(activity, new TimePeriod(0, 24));
-			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, new DateTimePeriod(dateAsUtc, dateAsUtc.AddDays(1)),ass1,ass2);
+			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, new DateTimePeriod(dateAsUtc, dateAsUtc.AddDays(1)), new FullPermission(),ass1,ass2);
 			
 			var raptorRep = new RaptorRepositoryForTest();
 			raptorRep.SetLoadSkillWithSkillDays(new[] { primarySkill, secondarySkill });

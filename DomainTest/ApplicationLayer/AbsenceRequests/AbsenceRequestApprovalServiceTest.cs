@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
@@ -22,6 +23,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
+	[FullPermissions]
 	public class AbsenceRequestApprovalServiceTest : IIsolateSystem
 	{
 		private IScheduleDictionary _scheduleDictionary;
@@ -225,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					scheduleDatas.Add(addAssignment(person, dateOnlyPeriod.ToDateTimePeriod(new TimePeriod(0, 0, 23, 0), timeZone)));
 				}
 			}
-			_scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(Scenario.Current(), dateTimePeriod, scheduleDatas.ToArray());
+			_scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(Scenario.Current(), dateTimePeriod, Permission, data: scheduleDatas.ToArray());
 		}
 
 		private IPersonAssignment addAssignment(IPerson person, DateTimePeriod dateTimePeriod)

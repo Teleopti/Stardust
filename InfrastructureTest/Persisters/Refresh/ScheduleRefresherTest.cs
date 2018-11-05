@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 				new noMessageQueueRemoval()
 				);
 			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-			var scheduleRange = new ScheduleRange(scheduleDictionary, new ScheduleParameters(personAssignment.Scenario, person, period), new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
+			var scheduleRange = new ScheduleRange(scheduleDictionary, new ScheduleParameters(personAssignment.Scenario, person, period), new PersistableScheduleDataPermissionChecker(new FullPermission()), new FullPermission());
 			scheduleRange.Add(personAssignment);
 
 			scheduleDictionary.Stub(x => x.Scenario).Return(personAssignment.Scenario);

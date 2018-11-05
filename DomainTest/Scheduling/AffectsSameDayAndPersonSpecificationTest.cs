@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         public void VerifyReturnsTrueIfItsTheSameDateAndPerson()
         {
 			var currentAuthorization = CurrentAuthorization.Make();
-			IScheduleDay scheduleDay = ExtractedSchedule.CreateScheduleDay(new ScheduleDictionary(_scenario,_period, _permissionChecker, currentAuthorization), _person, _date);
-            IScheduleDay scheduleWithSameDateAndPerson = ExtractedSchedule.CreateScheduleDay(new ScheduleDictionary(_scenario,_period, _permissionChecker, currentAuthorization), _person, _date);
+			IScheduleDay scheduleDay = ExtractedSchedule.CreateScheduleDay(new ScheduleDictionary(_scenario,_period, _permissionChecker, currentAuthorization), _person, _date, CurrentAuthorization.Make());
+            IScheduleDay scheduleWithSameDateAndPerson = ExtractedSchedule.CreateScheduleDay(new ScheduleDictionary(_scenario,_period, _permissionChecker, currentAuthorization), _person, _date, CurrentAuthorization.Make());
             ScheduleAffectsSameDayAndPerson scheduleAffectsSameDayAndPerson = new ScheduleAffectsSameDayAndPerson(scheduleDay);
             
             Assert.IsTrue(scheduleAffectsSameDayAndPerson.IsSatisfiedBy(scheduleWithSameDateAndPerson));
@@ -48,9 +48,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             DateOnly anotherDate = new DateOnly(2001,1,15);
 
 			var currentAuthorization = CurrentAuthorization.Make();
-			IScheduleDay scheduleDay = ExtractedSchedule.CreateScheduleDay(new ScheduleDictionary(_scenario, _period, _permissionChecker, currentAuthorization), _person, _date);
-            IScheduleDay scheduleWithAnotherPerson = ExtractedSchedule.CreateScheduleDay(new ScheduleDictionary(_scenario, _period, _permissionChecker, currentAuthorization), anotherPerson, _date);
-            IScheduleDay scheduleWithAnotherDate = ExtractedSchedule.CreateScheduleDay(new ScheduleDictionary(_scenario, _period, _permissionChecker, currentAuthorization), _person, anotherDate);
+			IScheduleDay scheduleDay = ExtractedSchedule.CreateScheduleDay(new ScheduleDictionary(_scenario, _period, _permissionChecker, currentAuthorization), _person, _date, CurrentAuthorization.Make());
+            IScheduleDay scheduleWithAnotherPerson = ExtractedSchedule.CreateScheduleDay(new ScheduleDictionary(_scenario, _period, _permissionChecker, currentAuthorization), anotherPerson, _date, CurrentAuthorization.Make());
+            IScheduleDay scheduleWithAnotherDate = ExtractedSchedule.CreateScheduleDay(new ScheduleDictionary(_scenario, _period, _permissionChecker, currentAuthorization), _person, anotherDate, CurrentAuthorization.Make());
 
             ScheduleAffectsSameDayAndPerson scheduleAffectsSameDayAndPerson = new ScheduleAffectsSameDayAndPerson(scheduleDay);
             Assert.IsFalse(scheduleAffectsSameDayAndPerson.IsSatisfiedBy(scheduleWithAnotherPerson),"Is not satisfied because its another person");
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         [Test]
         public void VerifyIsNotSatisfiedIfAnyOfTheParametersAreNull()
         {
-            IScheduleDay scheduleDay = ExtractedSchedule.CreateScheduleDay(new ScheduleDictionary(_scenario, _period, _permissionChecker, CurrentAuthorization.Make()), _person, _date);
+            IScheduleDay scheduleDay = ExtractedSchedule.CreateScheduleDay(new ScheduleDictionary(_scenario, _period, _permissionChecker, CurrentAuthorization.Make()), _person, _date, CurrentAuthorization.Make());
             ScheduleAffectsSameDayAndPerson scheduleAffectsSameDayAndPerson = new ScheduleAffectsSameDayAndPerson(scheduleDay);
             Assert.IsFalse(scheduleAffectsSameDayAndPerson.IsSatisfiedBy(null),"returns false instead of throwing an error for easier use");
         }

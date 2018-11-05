@@ -9,49 +9,38 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
     public class AbsenceLayerViewModel : LayerViewModel
     {
-	    public AbsenceLayerViewModel(ILayerViewModelObserver observer, IPersonAbsence personAbsence, IEventAggregator eventAggregator)
-				: base(observer, personAbsence.Layer, eventAggregator, false, personAbsence.Person)
-			{
-			}
+		private readonly IAuthorization _authorization;
 
-			public AbsenceLayerViewModel(IVisualLayer layer, IPerson person)
+		public AbsenceLayerViewModel(ILayerViewModelObserver observer, IPersonAbsence personAbsence, IEventAggregator eventAggregator, IAuthorization authorization = null)
+				: base(observer, personAbsence.Layer, eventAggregator, false, personAbsence.Person)
+		{
+			_authorization = authorization ?? PrincipalAuthorization.Current();
+		}
+
+			public AbsenceLayerViewModel(IVisualLayer layer, IPerson person, IAuthorization authorization = null)
 				: base(null, layer, null, true, person)
 			{
+				_authorization = authorization ?? PrincipalAuthorization.Current();
 			}
 
-        public override string LayerDescription
-        {
-            get { return UserTexts.Resources.Absence; }
-        }
+        public override string LayerDescription => UserTexts.Resources.Absence;
 
-        public override int VisualOrderIndex
-        {
-            get
-            {
-                return 400;
-            }
-        }
+		public override int VisualOrderIndex => 400;
 
-        public override bool IsMovePermitted()
+		public override bool IsMovePermitted()
         {
             if (SchedulePart != null)
             {
-                return PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence);
+                return _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence);
             }
             return true;
         }
 
-        public override bool CanMoveUp
-        {
-            get { return false; }
-        }
+        public override bool CanMoveUp => false;
 
-        public override bool CanMoveDown
-        {
-            get { return false;}
-        }
+		public override bool CanMoveDown => false;
 
-        protected override void DeleteLayer()
+		protected override void DeleteLayer()
         {
             if (ParentObservingCollection != null)
             {
@@ -62,7 +51,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 
 		protected override void Replace()
 		{
-			if (ParentObservingCollection!=null) ParentObservingCollection.ReplaceAbsence(this, Layer as ILayer<IAbsence>, SchedulePart);
+			ParentObservingCollection?.ReplaceAbsence(this, Layer as ILayer<IAbsence>, SchedulePart);
 		}
     }
 }

@@ -28,8 +28,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 		private readonly IPerson _person;
 		private bool _isSelected;
 		private IPayload _payload;
-
-
+		
 		protected LayerViewModel(ILayerViewModelObserver observer, ILayer<IPayload> layer, IEventAggregator eventAggregator, bool isProjectionLayer, IPerson person)
 		{
 			_payload = layer.Payload;
@@ -44,15 +43,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 			IsProjectionLayer = isProjectionLayer;
 		}
 
-		protected ILayerViewModelObserver ParentObservingCollection
-		{
-			get { return _parentObservingCollection; }
-		}
+		protected ILayerViewModelObserver ParentObservingCollection => _parentObservingCollection;
 
-		protected IEventAggregator LocalEventAggregator
-		{
-			get { return _eventAggregator; }
-		}
+		protected IEventAggregator LocalEventAggregator => _eventAggregator;
 
 		public bool CanMoveAll
 		{
@@ -141,11 +134,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 			}
 		}
 
+		public TimeSpan ElapsedTime => Period.ElapsedTime();
 
-		public TimeSpan ElapsedTime
-		{
-			get { return Period.ElapsedTime(); }
-		}
 		public string Description
 		{
 			get
@@ -161,14 +151,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 		public bool IsProjectionLayer
 		{
 			get;
-			private set;
 		}
-
-
-		public virtual bool Opaque
-		{
-			get { return false; }
-		}
+		
+		public virtual bool Opaque => false;
 
 		public CommandModel MoveUpCommand { get; protected set; }
 		public CommandModel MoveDownCommand { get; protected set; }
@@ -223,10 +208,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 		{
 			if (IsChanged)
 			{
-				if (ParentObservingCollection != null)
-				{
-					ParentObservingCollection.UpdateAllMovedLayers();
-				}
+				ParentObservingCollection?.UpdateAllMovedLayers();
 				if (_part != null)
 				{
 					new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
@@ -239,8 +221,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 		protected virtual void Replace()
 		{
 		}
-
-
+		
 		public abstract int VisualOrderIndex { get; }
 
 		public void Delete()
@@ -253,10 +234,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 
 		public abstract bool IsMovePermitted();
 
-		public virtual bool IsPayloadChangePermitted
-		{
-			get { return true; }
-		}
+		public virtual bool IsPayloadChangePermitted => true;
 
 		public void StartTimeChanged(FrameworkElement parent, double change)
 		{
@@ -305,22 +283,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 		public void MoveLayer(TimeSpan span)
 		{
 			IsChanged = true;
-			if (ParentObservingCollection != null)
-			{
-				ParentObservingCollection.MoveAllLayers(this, span);
-			}
+			ParentObservingCollection?.MoveAllLayers(this, span);
 		}
 
 		public abstract bool CanMoveUp { get; }
 		public abstract bool CanMoveDown { get; }
-
-
+		
 		public virtual IPayload Payload
 		{
-			get
-			{
-				return _payload;
-			}
+			get => _payload;
 			set
 			{
 				if (IsPayloadChangePermitted)

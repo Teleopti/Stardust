@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeDatabase Database;
 		public FakePersonRepository PersonRepository;
 		public ILogOnOff LogOnOff;
+		public ICurrentAuthorization CurrentAuthorization;
 
 		[TestCase(true, ExpectedResult = true)]
 		[TestCase(false, ExpectedResult = false)]
@@ -64,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var contract = new ContractWithMaximumTolerance();
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, contract, skill).WithSchedulePeriodOneWeek(firstDay);
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 10, 10, 10, 10, 10, 10, 10);
-			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, Enumerable.Empty<IPersonAssignment>(), skillDays);
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, Enumerable.Empty<IPersonAssignment>(), skillDays, CurrentAuthorization);
 			var schedulingOptions = new SchedulingOptions { ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff };
 			LockManager().AddLock(agent, firstDay, LockType.WriteProtected);
 
@@ -97,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var otherAgentsSchedule = new PersonAssignment(otherAgent, scenario, date).WithLayer(activity, new TimePeriod(8, 9));
 			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(new TimePeriod(8, 9), 1.5));
 			LogOnOff.LogOn("_", agent, Database.CurrentBusinessUnitId());	
-			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, date, new[] { agent, otherAgent }, otherAgentsSchedule, skillDay);
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, date, new[] { agent, otherAgent }, otherAgentsSchedule, skillDay, CurrentAuthorization);
 
 			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, date.ToDateOnlyPeriod());
 

@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Wfm.Adherence.Domain.Configuration;
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
                 if (currentPersonPeriod != null)
                     team = currentPersonPeriod.Team;
 
-				var layerViewModelCollection = new LayerViewModelCollection(_eventAggregator, new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), new ReplaceLayerInSchedule());
+				var layerViewModelCollection = new LayerViewModelCollection(_eventAggregator, new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), new ReplaceLayerInSchedule(), PrincipalAuthorization.Current());
                 var model = new DayLayerModel(person, period.Period(), team, layerViewModelCollection, commonNameDescription);
 
                 rebuildLayerViewModelCollection(model);

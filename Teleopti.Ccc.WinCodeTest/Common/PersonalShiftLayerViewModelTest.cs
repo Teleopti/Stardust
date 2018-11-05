@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		private IPerson person;
 	    private TesterForCommandModels _testerForCommandModels;
 	    private DateTimePeriod _period;
-		private IDisposable auth;
 
 		[SetUp]
 		public void Setup()
@@ -51,10 +50,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			_mocks.ReplayAll();
 
-			_target = new PersonalShiftLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, new PersonAssignment(person, new Scenario(), DateOnly.Today), null);
+			_target = new PersonalShiftLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, new PersonAssignment(person, new Scenario(), DateOnly.Today), null, new FullPermission());
 
 			_testRunner = new CrossThreadTestRunner();
-			auth = CurrentAuthorization.ThreadlyUse(new FullPermission());
 		}
 		
 		[Test]

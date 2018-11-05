@@ -29,13 +29,12 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         [SetUp]
         public void Setup()
         {
-
             _mocker = new MockRepository();
             _observer = _mocker.StrictMock<ILayerViewModelObserver>();
             _scheduleDay = new SchedulePartFactoryForDomain().CreatePartWithMainShift();
             _eventAggregator = new EventAggregator();
             _service = _mocker.StrictMock<ICreateLayerViewModelService>();
-			_collection = new LayerViewModelCollection(_eventAggregator, _service, new RemoveLayerFromSchedule(), null);
+			_collection = new LayerViewModelCollection(_eventAggregator, _service, new RemoveLayerFromSchedule(), null, new FullPermission());
 	        _editableShiftMapper = _mocker.StrictMock<IEditableShiftMapper>();
             _shifteditorViewModel = new ShiftEditorViewModel(_collection, _eventAggregator, _service, true, _editableShiftMapper);
         }
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
            
             using(_mocker.Record())
             {
-                Expect.Call(_service.CreateViewModelsFromSchedule(_scheduleDay, _eventAggregator, TimeSpan.FromMinutes(15), _observer))
+                Expect.Call(_service.CreateViewModelsFromSchedule(_scheduleDay, _eventAggregator, TimeSpan.FromMinutes(15), _observer, new FullPermission()))
                     .Return(new List<ILayerViewModel>())
                     .IgnoreArguments();
             }
@@ -56,8 +55,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
                 _shifteditorViewModel.LoadSchedulePart(_scheduleDay);   
             }
         }
-
-
+		
         [Test, Apartment(ApartmentState.STA)]
         public void VerifyThatSelectedLayerStillSelectedByCallingWithASelectorIfALayerIsSelected()
         {
@@ -68,7 +66,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             using (_mocker.Record())
             {
                 //when having a selected layer
-                Expect.Call(_service.CreateViewModelsFromSchedule(null,_scheduleDay, _eventAggregator, TimeSpan.FromMinutes(15), _observer))
+                Expect.Call(_service.CreateViewModelsFromSchedule(null,_scheduleDay, _eventAggregator, TimeSpan.FromMinutes(15), _observer, new FullPermission()))
                     .Return(new List<ILayerViewModel>())
                     .IgnoreArguments();
 
@@ -79,9 +77,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
                 _shifteditorViewModel.LoadSchedulePart(_scheduleDay);
 
             }
-        }
-
-       
-                
+        }     
     }
 }

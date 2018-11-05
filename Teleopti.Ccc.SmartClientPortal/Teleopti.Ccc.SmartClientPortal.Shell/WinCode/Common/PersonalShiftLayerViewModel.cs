@@ -13,40 +13,30 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 	{
 		private readonly PersonalShiftLayer _layer;
 		private readonly IPersonAssignment _parent;
+		private readonly IAuthorization _authorization;
 
-		public PersonalShiftLayerViewModel(ILayerViewModelObserver observer, PersonalShiftLayer layer, IPersonAssignment parent, IEventAggregator eventAggregator)
+		public PersonalShiftLayerViewModel(ILayerViewModelObserver observer, PersonalShiftLayer layer, IPersonAssignment parent, IEventAggregator eventAggregator, IAuthorization authorization = null)
 			: base(observer, layer, eventAggregator, false, parent.Person)
 		{
 			_layer = layer;
 			_parent = parent;
+			_authorization = authorization ?? PrincipalAuthorization.Current();
 		}
 
-		public override string LayerDescription
-		{
-			get { return UserTexts.Resources.PersonalShifts; }
-		}
+		public override string LayerDescription => UserTexts.Resources.PersonalShifts;
 
-		public override int VisualOrderIndex
-		{
-			get { return 200 + _parent.PersonalActivities().ToList().IndexOf(_layer); }
-		}
+		public override int VisualOrderIndex => 200 + _parent.PersonalActivities().ToList().IndexOf(_layer);
 
 		public override bool IsMovePermitted()
 		{
 			if (SchedulePart != null)
 			{
-				return PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
+				return _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
 			}
 			return true;
 		}
 
-		public override bool CanMoveUp
-		{
-			get
-			{
-				return _parent != null && _parent.PersonalActivities().ToList().IndexOf(_layer) > 0;
-			}
-		}
+		public override bool CanMoveUp => _parent != null && _parent.PersonalActivities().ToList().IndexOf(_layer) > 0;
 
 		public override bool CanMoveDown
 		{
@@ -86,8 +76,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 
 		protected override void Replace()
 		{
-			if (ParentObservingCollection != null)
-				ParentObservingCollection.ReplaceActivity(this, _layer, SchedulePart);
+			ParentObservingCollection?.ReplaceActivity(this, _layer, SchedulePart);
 		}
 
 		private void LayerMoved()

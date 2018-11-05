@@ -893,8 +893,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             using (_mocks.Playback())
             {
                 _schedulerState.SchedulingResultState.Schedules = _scheduleDictionary;
-                _day1 = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(2011, 1, 1));
-                _day2 = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(2011, 1, 2));
+                _day1 = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(2011, 1, 1), new FullPermission());
+                _day2 = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(2011, 1, 2), new FullPermission());
                 _selectedSchedules = new List<IScheduleDay> { _day1, _day2 };
                 _gridlockManager.AddLock(new List<IScheduleDay> { _day1 }, LockType.Normal);
                 _target.AddAbsence(_selectedSchedules, null);
@@ -1095,7 +1095,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IDictionary<IPerson, IScheduleRange> underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();
             DateTimePeriod rangePeriod = new DateTimePeriod(2000, 1, 1, 2001, 6, 1);
             ScheduleDictionaryForTest dic = new ScheduleDictionaryForTest(parameters.Scenario, new ScheduleDateTimePeriod(rangePeriod), underlyingDictionary);
-            IScheduleDay part = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2001, 1, 1));
+            IScheduleDay part = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2001, 1, 1), new FullPermission());
 
             DateTimePeriod period = AddActivityCommand.GetDefaultPeriodFromPart(part);
 

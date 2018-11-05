@@ -6,12 +6,12 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
 	[UseIocForFatClient]
+	[FullPermissions]
 	public class BusinessRulesHintDesktopTest
 	{
 		public CheckScheduleHints Target;
@@ -113,6 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 	}
 
 	[DomainTest]
+	[FullPermissions]
 	public class BusinessRulesHintTest : IIsolateSystem
 	{
 		public CheckScheduleHints Target;

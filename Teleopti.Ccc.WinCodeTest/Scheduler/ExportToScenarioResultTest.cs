@@ -377,7 +377,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 															   new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1,
 																											 2000, 1, 2)),
 															   new Dictionary<IPerson, IScheduleRange>());
-			return ExtractedSchedule.CreateScheduleDay(tempDictionary, person, new DateOnly(2000, 1, 1));
+			return ExtractedSchedule.CreateScheduleDay(tempDictionary, person, new DateOnly(2000, 1, 1), new FullPermission());
 		}
 
 		private static IEnumerable<IBusinessRuleResponse> threeRuleResponsesTwoWithSameMessageAndPerson()

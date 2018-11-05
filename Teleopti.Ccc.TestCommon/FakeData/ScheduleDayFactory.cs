@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			var period = new DateTimePeriod(1800, 1, 1, 2100, 1, 1);
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(period), new Dictionary<IPerson, IScheduleRange>());
 			var parameters = new ScheduleParameters(scenario, person, period);
-			var ret = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, parameters.Person, dateOnly);
+			var ret = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, parameters.Person, dateOnly, new FullPermission());
 			return ret;
 		}
 

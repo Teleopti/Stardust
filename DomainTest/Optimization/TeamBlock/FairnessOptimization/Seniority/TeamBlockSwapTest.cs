@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			_scheduleDay1 = ScheduleDayFactory.Create(_dateOnlyPeriod.StartDate, _person1);
 			_scheduleDictionary = _scheduleDay1.Owner;
-			_scheduleDay2 = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person2, _dateOnlyPeriod.StartDate);
+			_scheduleDay2 = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person2, _dateOnlyPeriod.StartDate, CurrentAuthorization.Make());
 
 			_teamBlockInfo1 = new TeamBlockInfo(new TeamInfo(new Group(new List<IPerson> {_person1}, ""), new List<IList<IScheduleMatrixPro>>()),new BlockInfo(_dateOnlyPeriod));
 			_teamBlockInfo2 = new TeamBlockInfo(new TeamInfo(new Group(new List<IPerson> {_person2}, ""), new List<IList<IScheduleMatrixPro>>()),new BlockInfo(_dateOnlyPeriod));

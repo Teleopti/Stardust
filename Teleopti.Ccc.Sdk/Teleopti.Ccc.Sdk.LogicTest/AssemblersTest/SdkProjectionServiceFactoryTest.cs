@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var person = new Person();
 			var scenario = new Scenario("d");
 			var dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2200, 1, 1)), new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
-			scheduleDay = ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2000, 1, 1));
+			scheduleDay = ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2000, 1, 1), CurrentAuthorization.Make());
 			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 			var abs = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 			scheduleDay.Add(ass);

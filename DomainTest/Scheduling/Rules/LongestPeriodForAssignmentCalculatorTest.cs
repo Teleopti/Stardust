@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -54,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                                       new PersonContract(contract, new PartTimePercentage("sdf"), new ContractSchedule("sdf")),
                                       new Team()));
             var scheduleRange =
-                new ScheduleRange(dic, new ScheduleParameters(scenario, person, range), new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
+                new ScheduleRange(dic, new ScheduleParameters(scenario, person, range), new PersistableScheduleDataPermissionChecker(new FullPermission()), new FullPermission());
             underlyingDictionary.Add(person, scheduleRange);
 
             scheduleRange.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario, new DateOnly(2007, 8, 3), dayOff));

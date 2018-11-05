@@ -223,28 +223,28 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			container.ContainedPersons["Person4"].AddPersonPeriod(ppPerson4);
 			container.ContainedPersons["Person4"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneB"], 1), ppPerson4);
 
-			var scheduleRange = ExtractedSchedule.CreateScheduleDay(dic, container.ContainedPersons["Person1"], new DateOnly(2008, 1, 2));
+			var scheduleRange = ExtractedSchedule.CreateScheduleDay(dic, container.ContainedPersons["Person1"], new DateOnly(2008, 1, 2), authorization);
 			scheduleRange.Add(assignment1);
 			container.PersonAssignmentListForActivityDividerTest.Add(assignment1);
 			var svc = scheduleRange.ProjectionService();
 			svc.CreateProjection();
 			list.Add(new Tuple<IProjectionService, IPerson>(svc, container.ContainedPersons["Person1"]));
 
-			scheduleRange = ExtractedSchedule.CreateScheduleDay(dic, container.ContainedPersons["Person2"], new DateOnly(2008, 1, 2));
+			scheduleRange = ExtractedSchedule.CreateScheduleDay(dic, container.ContainedPersons["Person2"], new DateOnly(2008, 1, 2), authorization);
 			scheduleRange.Add(assignment2);
 			container.PersonAssignmentListForActivityDividerTest.Add(assignment2);
 			svc = scheduleRange.ProjectionService();
 			svc.CreateProjection();
 			list.Add(new Tuple<IProjectionService, IPerson>(svc,container.ContainedPersons["Person2"]));
 
-			scheduleRange = ExtractedSchedule.CreateScheduleDay(dic, container.ContainedPersons["Person3"], new DateOnly(2008, 1, 2));
+			scheduleRange = ExtractedSchedule.CreateScheduleDay(dic, container.ContainedPersons["Person3"], new DateOnly(2008, 1, 2), authorization);
 			scheduleRange.Add(assignment3);
 			container.PersonAssignmentListForActivityDividerTest.Add(assignment3);
 			svc = scheduleRange.ProjectionService();
 			svc.CreateProjection();
 			list.Add(new Tuple<IProjectionService, IPerson>(svc, container.ContainedPersons["Person3"]));
 
-			scheduleRange = ExtractedSchedule.CreateScheduleDay(dic, container.ContainedPersons["Person4"], new DateOnly(2008, 1, 2));
+			scheduleRange = ExtractedSchedule.CreateScheduleDay(dic, container.ContainedPersons["Person4"], new DateOnly(2008, 1, 2), authorization);
 			scheduleRange.Add(assignment4);
 			container.PersonAssignmentListForActivityDividerTest.Add(assignment4);
 			svc = scheduleRange.ProjectionService();

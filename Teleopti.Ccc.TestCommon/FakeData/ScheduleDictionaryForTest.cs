@@ -12,28 +12,45 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class ScheduleDictionaryForTest : ScheduleDictionary, IReadOnlyScheduleDictionary
 	{
-		public ScheduleDictionaryForTest(IScenario scenario, DateTime date)
-			: this(scenario, new DateTimePeriod(DateTime.SpecifyKind(date.Date,DateTimeKind.Utc), DateTime.SpecifyKind(date.Date.AddHours(24),DateTimeKind.Utc))) { }
+		private ICurrentAuthorization _currentAuthorization;
 
-		public ScheduleDictionaryForTest(IScenario scenario, DateTime startDate, DateTime endDate)
-			: this(scenario, new DateTimePeriod(DateTime.SpecifyKind(startDate.Date,DateTimeKind.Utc), DateTime.SpecifyKind(endDate.Date.AddHours(24),DateTimeKind.Utc))) { }
-
-		public ScheduleDictionaryForTest(IScenario scenario, IScheduleDateTimePeriod period, IDictionary<IPerson, IScheduleRange> dictionary)
-			: base(scenario, period, dictionary, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make()) { }
-
-		public ScheduleDictionaryForTest(IScenario scenario, DateTimePeriod period)
-			: base(scenario, new ScheduleDateTimePeriod(period), new Dictionary<IPerson, IScheduleRange>(), new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make()) { }
-
-
-
-		public static IScheduleDictionary WithPersonAssignment(IScenario scenario, DateTime date, IPersonAssignment personAssignment)
+		public ScheduleDictionaryForTest(IScenario scenario, DateTime date,
+			ICurrentAuthorization currentAuthorization = null)
+			: this(scenario,
+				new DateTimePeriod(DateTime.SpecifyKind(date.Date, DateTimeKind.Utc),
+					DateTime.SpecifyKind(date.Date.AddHours(24), DateTimeKind.Utc)), currentAuthorization)
 		{
-			return WithPersonAssignment(scenario, new DateTimePeriod(DateTime.SpecifyKind(date.Date,DateTimeKind.Utc), DateTime.SpecifyKind(date.Date.AddHours(24),DateTimeKind.Utc)), personAssignment);
 		}
 
-		public static IScheduleDictionary WithPersonAssignment(IScenario scenario, DateTimePeriod period, IPersonAssignment personAssignment)
+		public ScheduleDictionaryForTest(IScenario scenario, DateTime startDate, DateTime endDate, ICurrentAuthorization currentAuthorization = null)
+			: this(scenario, new DateTimePeriod(DateTime.SpecifyKind(startDate.Date,DateTimeKind.Utc), DateTime.SpecifyKind(endDate.Date.AddHours(24),DateTimeKind.Utc)), currentAuthorization) { }
+
+		public ScheduleDictionaryForTest(IScenario scenario, IScheduleDateTimePeriod period,
+			IDictionary<IPerson, IScheduleRange> dictionary, ICurrentAuthorization currentAuthorization = null)
+			: base(scenario, period, dictionary,
+				new PersistableScheduleDataPermissionChecker(currentAuthorization ?? new FullPermission()),
+				currentAuthorization ?? new FullPermission())
 		{
-			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period);
+			_currentAuthorization = currentAuthorization ?? new FullPermission();
+		}
+
+		public ScheduleDictionaryForTest(IScenario scenario, DateTimePeriod period,
+			ICurrentAuthorization currentAuthorization = null)
+			: base(scenario, new ScheduleDateTimePeriod(period), new Dictionary<IPerson, IScheduleRange>(),
+				new PersistableScheduleDataPermissionChecker(currentAuthorization ?? new FullPermission()),
+				currentAuthorization ?? new FullPermission())
+		{
+			_currentAuthorization = currentAuthorization ?? new FullPermission();
+		}
+
+		public static IScheduleDictionary WithPersonAssignment(IScenario scenario, DateTime date, IPersonAssignment personAssignment, ICurrentAuthorization currentAuthorization = null)
+		{
+			return WithPersonAssignment(scenario, new DateTimePeriod(DateTime.SpecifyKind(date.Date,DateTimeKind.Utc), DateTime.SpecifyKind(date.Date.AddHours(24),DateTimeKind.Utc)), personAssignment, currentAuthorization);
+		}
+
+		public static IScheduleDictionary WithPersonAssignment(IScenario scenario, DateTimePeriod period, IPersonAssignment personAssignment, ICurrentAuthorization currentAuthorization = null)
+		{
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period, currentAuthorization);
 			scheduleDictionary.AddPersonAssignment(personAssignment);
 			return scheduleDictionary;
 		}
@@ -47,16 +64,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			}
 			else
 			{
-				var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, person, Period.VisiblePeriod), new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
+				var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, person, Period.VisiblePeriod), new PersistableScheduleDataPermissionChecker(_currentAuthorization), _currentAuthorization);
 				scheduleRange.Add(personAssignment);
 				BaseDictionary[person] = scheduleRange;
 			}
 			TakeSnapshot();
 		}
 
-		public static IScheduleDictionary WithPersonAbsence(IScenario scenario, DateTimePeriod period, IPersonAbsence personAbsence)
+		public static IScheduleDictionary WithPersonAbsence(IScenario scenario, DateTimePeriod period, IPersonAbsence personAbsence, ICurrentAuthorization currentAuthorization = null)
 		{
-			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period);
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period, currentAuthorization);
 			scheduleDictionary.AddPersonAbsence(personAbsence);
 			return scheduleDictionary;
 		}
@@ -70,16 +87,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			}
 			else
 			{
-				var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, personAbsence.Person, Period.VisiblePeriod), new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
+				var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, personAbsence.Person, Period.VisiblePeriod), new PersistableScheduleDataPermissionChecker(_currentAuthorization), _currentAuthorization);
 				scheduleRange.Add(personAbsence);
 				BaseDictionary.Add(personAbsence.Person, scheduleRange);
 				TakeSnapshot();	
 			}	
 		}
 
-		public static IScheduleDictionary WithScheduleData(IPerson person, IScenario scenario, DateTimePeriod period, params IScheduleData[] data)
+		public static IScheduleDictionary WithScheduleData(IPerson person, IScenario scenario, DateTimePeriod period, ICurrentAuthorization currentAuthorization = null, params IScheduleData[] data)
 		{
-			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period);
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period, currentAuthorization);
 			if (data != null)
 			{
 				scheduleDictionary.AddScheduleData(person, data);
@@ -94,15 +111,15 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 					 
 		public void AddScheduleData(IPerson person, params IScheduleData[] data)
 		{
-			var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, person, Period.VisiblePeriod), new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
+			var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, person, Period.VisiblePeriod), new PersistableScheduleDataPermissionChecker(_currentAuthorization), _currentAuthorization);
 			scheduleRange.AddRange(data);
 			BaseDictionary.Add(person, scheduleRange);
 			TakeSnapshot();
 		}
 
-		public static IScheduleDictionary WithScheduleDataForManyPeople(IScenario scenario, DateTimePeriod period, params IScheduleData[] data)
+		public static IScheduleDictionary WithScheduleDataForManyPeople(IScenario scenario, DateTimePeriod period, ICurrentAuthorization currentAuthorization = null, params IScheduleData[] data)
 		{
-			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period);
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period, currentAuthorization);
 			scheduleDictionary.AddScheduleDataManyPeople(data);
 			return scheduleDictionary;
 		}
@@ -115,7 +132,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 				if (!BaseDictionary.TryGetValue (scheduleData.Person, out scheduleRange))
 				{
-					scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, scheduleData.Person, Period.VisiblePeriod), new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
+					scheduleRange = new ScheduleRange(this,
+						new ScheduleParameters(Scenario, scheduleData.Person, Period.VisiblePeriod),
+						new PersistableScheduleDataPermissionChecker(_currentAuthorization), _currentAuthorization);
 					BaseDictionary.Add(scheduleData.Person, scheduleRange);
 				}
 

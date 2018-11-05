@@ -58,13 +58,9 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 
 		protected override void Isolate(IIsolate isolate)
 		{
-			var principalAuthorization = new FullPermission();
-
-			CurrentAuthorization.DefaultTo(principalAuthorization);
-
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			isolate.UseTestDouble(new FakePermissionProvider(false)).For<IPermissionProvider>();
-			isolate.UseTestDouble(principalAuthorization).For<IAuthorization>();
+			isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
 			isolate.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();
 			isolate.UseTestDouble<FakeSeatBookingRepository>().For<ISeatBookingRepository>();
 			var scenarioRepository = new FakeScenarioRepository();
