@@ -21,11 +21,9 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemCheck;
-using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Hangfire;
@@ -66,7 +64,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 	public partial class SmartClientShellForm : BaseRibbonForm, IDummyInterface
 	{
 		private readonly ILog _logger = LogManager.GetLogger(typeof(SmartClientShellForm));
-		private readonly ILog _customLogger = LogManager.GetLogger("CustomEOLogger");
 		private readonly IComponentContext _container;
 
 		private readonly SystemCheckerValidator _systemChecker;
@@ -96,12 +93,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			KeyPress += Form_KeyPress;
 
 			EO.Base.Runtime.Exception += handlingEoRuntimeErrors;
-		}
-
-
-		private void logInfo(string message)
-		{
-			_customLogger.Info("SmartClientPortal: EoBrowser: " + message);
 		}
 
 		void formKeyDown(object sender, KeyEventArgs e)

@@ -342,11 +342,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			comboBoxAdvShiftCategory.Enabled = checkBoxUseShiftCategory.Checked;
 		}
 
-		private void trackBar1ValueChanged(object sender, EventArgs e)
-		{
-			exchangeIfDataLoaded();
-		}
-
 		private void checkBoxOnlyAvailabilityDaysCheckedChanged(object sender, EventArgs e)
 		{
 			exchangeIfDataLoaded();

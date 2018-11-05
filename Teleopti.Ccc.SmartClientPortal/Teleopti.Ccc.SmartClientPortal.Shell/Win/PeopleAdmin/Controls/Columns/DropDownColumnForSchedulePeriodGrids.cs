@@ -49,14 +49,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls.Columns
             _valueMember = valueMember;
         }
 
-		public DropDownColumnForSchedulePeriodGrids(string bindingProperty, string headerText, IEnumerable<TItems> comboItems,
-                                            string displayMember, bool allwoNullValue)
-            : this(bindingProperty, headerText, comboItems, displayMember)
-        {
-            _allowNullValue = allwoNullValue;
-        }
-
-
         private bool tryGetItemByDisplayMember(string displayMember, out TItems comboItem)
         {
             foreach (TItems theComboItem in _comboItems)

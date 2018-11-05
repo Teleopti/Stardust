@@ -42,15 +42,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls.Columns
 	        _allowNullValue = allowNullValue;
 
         }
-
-        public DropDownColumnForPeriodGrids(string bindingProperty, string headerText,
-                                            IEnumerable<TItems> comboItems,
-                                            string displayMember, string valueMember, Type baseClass)
-            : this(bindingProperty, headerText, comboItems, displayMember, baseClass)
-        {
-            _valueMember = valueMember;
-        }
-
+		
         public DropDownColumnForPeriodGrids(string bindingProperty, string headerText, IEnumerable<TItems> comboItems,
                                             string displayMember, bool allowNullValue)
             : this(bindingProperty, headerText, comboItems, displayMember)
