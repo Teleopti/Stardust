@@ -327,7 +327,7 @@ namespace Teleopti.Ccc.TestCommon
 		public virtual Database WithExternalLogon(string name)
 		{
 			var person = this.person();
-			return withExternalLogon(name, person, person.PersonPeriodCollection.Single());
+			return withExternalLogon(name, person, person.PersonPeriodCollection.Last());
 		}
 
 		private Database withExternalLogon(string name, IPerson person, IPersonPeriod personPeriod)
