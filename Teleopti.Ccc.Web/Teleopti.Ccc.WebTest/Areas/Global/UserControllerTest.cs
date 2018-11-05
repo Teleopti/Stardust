@@ -119,6 +119,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			dynamic result = target.CurrentUser();
 			Assert.AreEqual(result.DayNames, culture.DateTimeFormat.DayNames);
 		}
+
+		[Test]
+		public void ShouldGetDateTimeFormatForTheCurrentLoggonUserCulture()
+		{
+			var person = PersonFactory.CreatePerson();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
+			var culture = CultureInfoFactory.CreateChineseCulture();
+			person.PermissionInformation.SetCulture(culture);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Pelle", null, null, null, null), person);
+			var currentPrinciple = new FakeCurrentTeleoptiPrincipal(principal);
+			var target = new UserController(currentPrinciple, new FakeIanaTimeZoneProvider(), session);
+			dynamic result = target.CurrentUser();
+			Assert.AreEqual(result.DateTimeFormat.ShortTimePattern, culture.DateTimeFormat.ShortTimePattern);
+			Assert.AreEqual(result.DateTimeFormat.AMDesignator, culture.DateTimeFormat.AMDesignator);
+			Assert.AreEqual(result.DateTimeFormat.PMDesignator, culture.DateTimeFormat.PMDesignator);
+		}
 	}
 
 	public class FakeIanaTimeZoneProvider : IIanaTimeZoneProvider

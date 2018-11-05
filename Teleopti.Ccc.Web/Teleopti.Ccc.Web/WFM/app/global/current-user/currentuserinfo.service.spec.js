@@ -18,7 +18,12 @@
 			DateFormatLocale: '',
 			NumberFormat: '',
 			FirstDayOfWeek: 0,
-			DayNames: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+			DayNames: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+			DateTimeFormat: {
+				ShortTimePattern: 'HH:mm',
+				AMDesignator: 'AM',
+				PMDesignator: 'PM'
+			}
 		};
 
 		CurrentUserInfo.SetCurrentUserInfo(data);
@@ -28,7 +33,30 @@
 		expect(result.UserName).toBe('Ashley');
 		expect(result.FirstDayOfWeek).toBe(0);
 		expect(result.DayNames).toBe(data.DayNames);
+		expect(result.DateTimeFormat.ShortTimePattern).toBe('HH:mm');
+		expect(result.DateTimeFormat.AMDesignator).toBe('AM');
+		expect(result.DateTimeFormat.PMDesignator).toBe('PM');
+		expect(result.DateTimeFormat.ShowMeridian).toBeFalsy();
+										 
+
 	}));
+
+	it('should set the current user info with correct ShortTimePattern', inject(function(CurrentUserInfo) {
+		var data = {
+			DateTimeFormat: {
+				ShortDatePattern: 'YYYY-MM-DD',
+				ShortTimePattern: 'h:mm tt',
+				AMDesignator: 'AM',
+				PMDesignator: 'PM'
+			}
+		};
+
+		CurrentUserInfo.SetCurrentUserInfo(data);
+
+		var result = CurrentUserInfo.CurrentUserInfo();
+		expect(result.DateTimeFormat.ShortTimePattern).toBe('h:mm A');
+		expect(result.DateTimeFormat.ShowMeridian).toBeTruthy();
+	})); 
 
 	it('should get the current user from the server', function(done) {
 		inject(function(CurrentUserInfo) {

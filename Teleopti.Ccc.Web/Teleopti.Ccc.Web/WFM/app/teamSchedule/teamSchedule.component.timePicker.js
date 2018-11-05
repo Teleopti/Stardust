@@ -17,18 +17,15 @@
 			controller: timePickerCtrl
 		});
 
-	timePickerCtrl.$inject = ['$scope', '$element', '$attrs', '$locale', 'serviceDateFormatHelper'];
+	timePickerCtrl.$inject = ['$scope', '$element', '$attrs', '$locale', 'serviceDateFormatHelper', 'CurrentUserInfo'];
 
-	function timePickerCtrl($scope, $element, $attrs, $locale, serviceDateFormatHelper) {
+	function timePickerCtrl($scope, $element, $attrs, $locale, serviceDateFormatHelper, currentUserInfo) {
 		var ctrl = this;
 
 		ctrl.dateTimeObj = typeof (ctrl.ngModel) === 'string' ?
 			moment('1900-01-01 ' + serviceDateFormatHelper.getTimeOnly(moment.tz(ctrl.ngModel, 'UTC'))).toDate() : undefined;
 
-		var meridianInfo = getMeridiemInfoFromMoment($locale);
-		ctrl.showMeridian = meridianInfo.showMeridian;
-		ctrl.meridians = ctrl.showMeridian ? [meridianInfo.am, meridianInfo.pm] : [];
-
+		setMeridiemInfo();
 
 		ctrl.$onChanges = function () {
 			ctrl.onTimeChange();
@@ -60,18 +57,10 @@
 			return serviceDateFormatHelper.getDateOnly(ctrl.date) + ' ' + time;
 		}
 
-		function getMeridiemInfoFromMoment($locale) {
-			var timeFormat = $locale.DATETIME_FORMATS.shortTime;
-			var info = {};
-
-			if (/h:/.test(timeFormat)) {
-				info.showMeridian = true;
-				info.am = $locale.DATETIME_FORMATS.AMPMS[0];
-				info.pm = $locale.DATETIME_FORMATS.AMPMS[1];
-			} else {
-				info.showMeridian = false;
-			}
-			return info;
+		function setMeridiemInfo() {
+			var dateTimeFormat = currentUserInfo.CurrentUserInfo().DateTimeFormat || {};
+			ctrl.showMeridian = dateTimeFormat.ShowMeridian;
+			ctrl.meridians = ctrl.showMeridian ? [dateTimeFormat.AMDesignator, dateTimeFormat.PMDesignator] : [];
 		}
 	}
 })();
