@@ -3,6 +3,7 @@ using SharpTestsEx;
 using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -33,13 +34,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldIncludeUsersWithPeopleManageUsersPermission()
 		{
 			var canSeeUsers = true;
+			var bu = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams(out var iteams);
+			PersistAndRemoveFromUnitOfWork(bu);
 
-			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
-			var team2 = TeamFactory.CreateTeam("Dummy Site2", "Dummy Team2");
+			var teams = iteams.ToList();
 
-			var p1 = createPersonsWithTeam(team, "testAgent", "test");
-			var p2 = createPersonsWithTeam(team2);
-			var p3 = createPersonsWithTeam(team, "Dummy", "dummy");
+			var p1 = createPersonsWithTeam(teams[0], "testAgent", "test");
+			var p2 = createPersonsWithTeam(teams[1]);
+			var p3 = createPersonsWithTeam(teams[0], "Dummy", "dummy");
 			var p4 = createPersonWithoutPersonPeriod();
 
 			var personList = new Guid[] {p1.Id.GetValueOrDefault(), p2.Id.GetValueOrDefault(), p3.Id.GetValueOrDefault(), p4.Id.GetValueOrDefault() };
@@ -64,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var searchCriteria = new PeoplePersonFinderSearchWithPermissionCriteria(PersonFinderField.All, "dummy", 1, 10,
 				new DateOnly(2018, 05, 28), 1, 0, new DateOnly(2018, 05, 28),
 				currentUser.Id.GetValueOrDefault(),
-				DefinedRaptorApplicationFunctionForeignIds.PeopleAccess, canSeeUsers);
+				DefinedRaptorApplicationFunctionForeignIds.PeopleAccess, canSeeUsers, bu.Id.GetValueOrDefault());
 			_target.FindPeopleWithDataPermission(searchCriteria);
 
 			searchCriteria.DisplayRows.Select(p => p.FirstName).Should().Contain("dummyUser");
@@ -74,16 +76,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldNotGetAnyResultsWithoutPermission()
 		{
 			var canSeeUsers = false;
-			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
+			var bu = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams(out var iteams);
+			PersistAndRemoveFromUnitOfWork(bu);
 
-			var p1 = createPersonsWithTeam(team);
+			var teams = iteams.ToList();
+
+			var p1 = createPersonsWithTeam(teams[0]);
 			var p2 = createPersonWithoutPersonPeriod();
 
 			var personList = new Guid[] { p1.Id.GetValueOrDefault(), p2.Id.GetValueOrDefault() };
 			_target.UpdateFindPerson(personList);
 
 			var currentUser = createPersonWithoutPersonPeriod("currentUser", "currentUser");
-
+			
 			var testRole = ApplicationRoleFactory.CreateRole("testRole", "Role with permission");
 
 			PersistAndRemoveFromUnitOfWork(testRole);
@@ -98,11 +103,47 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var searchCriteria = new PeoplePersonFinderSearchWithPermissionCriteria(PersonFinderField.All, "dummy", 1, 10,
 				new DateOnly(2018, 05, 28), 1, 0, new DateOnly(2018, 05, 28),
-				currentUser.Id.GetValueOrDefault(),
-				DefinedRaptorApplicationFunctionForeignIds.PeopleAccess, canSeeUsers);
+				currentUser.Id.GetValueOrDefault(), DefinedRaptorApplicationFunctionForeignIds.PeopleAccess, canSeeUsers, bu.Id.GetValueOrDefault());
 			_target.FindPeopleWithDataPermission(searchCriteria);
 
 			searchCriteria.DisplayRows.Count.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldOnlyGetAgentsFromSelectedBusinessunit()
+		{
+			var bu1 = CreateBusinessUnitForTestAndPersist();
+			var bu2 = CreateBusinessUnitForTestAndPersist();
+			var bu1Teams = bu1.SiteCollection.SelectMany(s => s.TeamCollection).ToList();
+			var bu2Teams = bu2.SiteCollection.SelectMany(s => s.TeamCollection).ToList();
+
+			var bu1Person = createPersonsWithTeam(bu1Teams[0], "Magnus", "dummy");
+			var bu2Person = createPersonsWithTeam(bu2Teams[0], "Dan", "dummy");
+			var bu2Person2 = createPersonsWithTeam(bu2Teams[0], "Emil", "dummy");
+
+			_target.UpdateFindPerson(new [] { bu1Person.Id.GetValueOrDefault(), bu2Person.Id.GetValueOrDefault(), bu2Person2.Id.GetValueOrDefault()});
+
+			var currentUser = createPersonWithoutPersonPeriod("currentUser", "currentUser");
+			var testRole = ApplicationRoleFactory.CreateRole("testRole", "Role with permission");
+
+			createAndAddPermissionsToRole(_factory, testRole);
+
+			PersistAndRemoveFromUnitOfWork(testRole);
+			_availableData.ApplicationRole = testRole;
+			_availableData.AvailableDataRange = AvailableDataRangeOption.Everyone;
+			PersistAndRemoveFromUnitOfWork(_availableData);
+
+
+			currentUser.PermissionInformation.AddApplicationRole(testRole);
+			PersistAndRemoveFromUnitOfWork(currentUser);
+
+			var searchCriteria = new PeoplePersonFinderSearchWithPermissionCriteria(PersonFinderField.All, "dummy", 1, 10,
+				new DateOnly(2018, 05, 28), 1, 0, new DateOnly(2018, 05, 28),
+				currentUser.Id.GetValueOrDefault(), DefinedRaptorApplicationFunctionForeignIds.PeopleAccess, true, bu1.Id.GetValueOrDefault());
+			_target.FindPeopleWithDataPermission(searchCriteria);
+
+			searchCriteria.DisplayRows.Count.Should().Be(1);
+			searchCriteria.DisplayRows.First().FirstName.Equals(bu1Person.Name.FirstName);
 		}
 
 		private void createAndAddPermissionsToRole(DefinedRaptorApplicationFunctionFactory factory, ApplicationRole testRole)
@@ -136,7 +177,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			testRole.AddApplicationFunction(peopleAccess);
 		}
 
-		private IPerson createPersonsWithTeam(Team team, string firstName = "dummyAgent", string lastName = "dummy")
+		private IPerson createPersonsWithTeam(ITeam team, string firstName = "dummyAgent", string lastName = "dummy")
 		{
 			var scheduleDate = new DateOnly(2018, 01, 25);
 
@@ -159,6 +200,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_target.UpdateFindPerson(new[] { personToTest.Id.GetValueOrDefault() });
 
 			return personToTest;
+		}
+
+		private IBusinessUnit CreateBusinessUnitForTestAndPersist()
+		{
+			// Teams
+			var team1 = TeamFactory.CreateSimpleTeam("Team Raptor");
+			var team2 = TeamFactory.CreateSimpleTeam("Team Pro");
+			var team3 = TeamFactory.CreateSimpleTeam("Team CCC");
+
+			// Sites
+			var danderydUnit = SiteFactory.CreateSimpleSite("Danderyd");
+			var strangnasUnit = SiteFactory.CreateSimpleSite("Strangnas");
+			danderydUnit.AddTeam(team1);
+			danderydUnit.AddTeam(team2);
+			strangnasUnit.AddTeam(team3);
+
+			// BusinessUnits
+			var swedenBusinessUnit = new BusinessUnit("Sweden");
+			swedenBusinessUnit.AddSite(danderydUnit);
+			swedenBusinessUnit.AddSite(strangnasUnit);
+
+			PersistAndRemoveFromUnitOfWork(swedenBusinessUnit);
+			PersistAndRemoveRangeFromUnitOfWork(danderydUnit, strangnasUnit);
+			PersistAndRemoveRangeFromUnitOfWork(team1, team2, team3);
+
+			return swedenBusinessUnit;
 		}
 
 		private IPerson createPersonWithoutPersonPeriod(string firstName = "dummyUser", string lastName = "dummy")

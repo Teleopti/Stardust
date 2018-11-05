@@ -1,9 +1,9 @@
-﻿using System;
+﻿using NUnit.Framework;
+using SharpTestsEx;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using NUnit.Framework;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			_target = new PersonForScheduleFinder(UnitOfWork);
 			var teamIdList = new List<Guid> {team.Id.GetValueOrDefault()};
+			
 			var result = _target.GetPersonFor(date, teamIdList, "anna");
-
 			result.Count.Should().Be.EqualTo(1);
 			result.First().PersonId.Should().Be.EqualTo(person.Id.Value);
 			result.First().TeamId.Should().Be.EqualTo(team.Id.Value);
@@ -56,6 +56,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			person2.WorkflowControlSet = workflowControlSet;
 
 			PersistAndRemoveFromUnitOfWork(businessUnit);
+
+			// Handle businessunit change.
+			((TeleoptiIdentity) ClaimsPrincipal.Current.Identity).BusinessUnit = businessUnit;
+			Session.EnableFilter("businessUnitFilter").SetParameter("businessUnitParameter", businessUnit.Id.GetValueOrDefault());
+
 			PersistAndRemoveFromUnitOfWork(site);
 			PersistAndRemoveFromUnitOfWork(team);
 			PersistAndRemoveFromUnitOfWork(person1Period.PersonContract.ContractSchedule);
@@ -68,8 +73,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(person1);
 			PersistAndRemoveFromUnitOfWork(person2);
 
-			var businessUnitId = ((ITeleoptiIdentity)ClaimsPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
-
 			const string populateReadModelQuery
 				= @"INSERT INTO [ReadModel].[GroupingReadOnly] ([PersonId],[FirstName],[LastName],[StartDate],[TeamId],"
 				+ "[SiteId],[BusinessUnitId],[GroupId],[PageId]) VALUES (:personId,:firstName,:lastName,:startDate,:teamId,:siteId,:businessUnitId,:groupId,:pageId)";
@@ -81,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				.SetDateTime("startDate", new DateTime(2012,02,02))
 				.SetGuid("teamId",team.Id.GetValueOrDefault())
 				.SetGuid("siteId",site.Id.GetValueOrDefault())
-				.SetGuid("businessUnitId", businessUnitId)
+				.SetGuid("businessUnitId", businessUnit.Id.GetValueOrDefault())
 				.SetGuid("groupId", team.Id.GetValueOrDefault())
 				.SetGuid("pageId", Guid.NewGuid())
 				.ExecuteUpdate();

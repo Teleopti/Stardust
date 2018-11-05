@@ -142,6 +142,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		string PermissionAppFuncForeignId { get; set; }
 
 		bool CanSeeUsers { get; set; }
+
+		Guid CurrentBusinessUnit { get; set; }
 	}
 
 	/// <summary>

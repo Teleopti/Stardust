@@ -17,12 +17,15 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 	    void SetDescription(Description value);
 
-	    /// <summary>
-        /// Gets the teams.
-        /// Read only wrapper around the actual list.
-        /// </summary>
-        /// <value>The teams.</value>
-        ReadOnlyCollection<ITeam> TeamCollection { get; }
+		void SetBusinessUnit(IBusinessUnit value);
+
+
+		/// <summary>
+		/// Gets the teams.
+		/// Read only wrapper around the actual list.
+		/// </summary>
+		/// <value>The teams.</value>
+		ReadOnlyCollection<ITeam> TeamCollection { get; }
 
 		/// <summary>
 		/// Gets the teams.

@@ -1,9 +1,11 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -16,7 +18,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		protected override void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddModule(new WebModule(configuration, null));
-
 		    extend.AddService<FakeStorage>();
 		}
 
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			isolate.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
 			isolate.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();
 			isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			isolate.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
 		}
 	}
 }

@@ -22,7 +22,8 @@ CREATE PROCEDURE [ReadModel].[PersonFinderWithDataPermission]
 @perm_date datetime, 
 @perm_userid uniqueidentifier, 
 @perm_foreignId nvarchar(255),
-@can_see_users bit
+@can_see_users bit,
+@current_business_unit uniqueidentifier
 AS
 SET NOCOUNT ON
 
@@ -168,7 +169,7 @@ IF (@allAvailable = 1)
         INNER JOIN dbo.Team t ON t.Id = pp.Team
         INNER JOIN dbo.Site s ON t.Site = s.Id
         WHERE 
-        @perm_date BETWEEN pp.StartDate AND pp.EndDate
+        @perm_date BETWEEN pp.StartDate AND pp.EndDate AND s.BusinessUnit = @current_business_unit 
 		IF(@can_see_users = 1)
 		BEGIN
 			INSERT INTO #PermittedIds
@@ -183,7 +184,7 @@ ELSE
         INNER JOIN dbo.Team t ON t.Id = pp.Team
         INNER JOIN dbo.Site s ON t.Site = s.Id
         WHERE 
-        @perm_date BETWEEN pp.StartDate AND pp.EndDate AND
+        @perm_date BETWEEN pp.StartDate AND pp.EndDate AND s.BusinessUnit = @current_business_unit AND
         (EXISTS (SELECT 1 FROM #AvailableTeams WHERE team=t.Id) OR
         EXISTS (SELECT 1 FROM #AvailableSites WHERE site=s.Id) OR
         EXISTS (SELECT 1 FROM #AvailableBusinessUnits WHERE businessunit=s.BusinessUnit))

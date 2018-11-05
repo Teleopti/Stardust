@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Search.Controllers;
 using Teleopti.Ccc.Web.Areas.Search.Models;
 using Teleopti.Ccc.WebTest.Areas.Global;
@@ -18,14 +19,14 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.Search
 {
 	[GlobalSearchTest]
-	public class PeopleSearchControllerTest
+	public class PeopleSearchControllerTest : IoCTestAttribute
 	{
 		public PeopleSearchController target;
 		public FakePersonFinderReadOnlyRepository PersonFinderRepository;
 		public FakePersonRepository PersonRepository;
-
+		public FakeCurrentBusinessUnit CurrentFakeBusinessUnit;
 		private ILoggedOnUser loggonUser;
-
+		
 		[SetUp]
 		public void Setup()
 		{
@@ -35,6 +36,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		[Test]
 		public void ShouldReturnPeopleSummary()
 		{
+			CurrentFakeBusinessUnit.OnThisThreadUse(new BusinessUnit("Sweden").WithId(Guid.NewGuid()));
+
 			var team = TeamFactory.CreateTeam("TestTeam", "TestSite");
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.Today.AddDays(-1),
 				team);
@@ -79,6 +82,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		[Test]
 		public void ShouldSortPeopleByLastName()
 		{
+			CurrentFakeBusinessUnit.OnThisThreadUse(new BusinessUnit("Sweden").WithId(Guid.NewGuid()));
+
 			var firstPerson = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
 			var secondPerson = PersonFactory.CreatePersonWithGuid("Abc", "Bac");
 
@@ -97,6 +102,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		[Test]
 		public void ShouldReturnMyTeamMembersByDefault()
 		{
+			CurrentFakeBusinessUnit.OnThisThreadUse(new BusinessUnit("Sweden").WithId(Guid.NewGuid()));
+
 			var currentUser = loggonUser.CurrentUser();
 			currentUser.SetId(Guid.NewGuid());
 			currentUser.WithName(new Name("firstName", "lastName"));
@@ -121,6 +128,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		[Test]
 		public void ShouldSortPeopleByThreeCriterials()
 		{
+			CurrentFakeBusinessUnit.OnThisThreadUse(new BusinessUnit("Sweden").WithId(Guid.NewGuid()));
+
 			var firstPerson = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
 			firstPerson.SetEmploymentNumber("1");
 			var secondPerson = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
@@ -145,6 +154,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		[Test]
 		public void FindPeople_ShouldReturnPeopleViewModelWithCriteria()
 		{
+			CurrentFakeBusinessUnit.OnThisThreadUse(new BusinessUnit("Sweden").WithId(Guid.NewGuid()));
+
 			var p1 = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
 			var p2 = PersonFactory.CreatePersonWithGuid("Aston", "Karlsson");
 			var p3 = PersonFactory.CreatePersonWithGuid("Kalle", "Anka");
@@ -178,6 +189,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		[Test]
 		public void FindPeople_ShouldPaginate()
 		{
+			CurrentFakeBusinessUnit.OnThisThreadUse(new BusinessUnit("Sweden").WithId(Guid.NewGuid()));
+
 			for (int i = 0; i < 33; i++)
 			{
 				var ash = PersonFactory.CreatePersonWithGuid($"Ashley {i}", $"Andeen {i}");
@@ -240,6 +253,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		[Test]
 		public void FindPeople_ShouldMapSearchResultsToViewModel()
 		{
+			CurrentFakeBusinessUnit.OnThisThreadUse(new BusinessUnit("Sweden").WithId(Guid.NewGuid()));
 			var ash = PersonFactory.CreatePersonWithGuid($"Ashley", $"Andeen");
 			PersonFinderRepository.Has(ash);
 			var appRole = ApplicationRoleFactory.CreateRole("AgentZero", "Agent Zero Description").WithId();
@@ -260,6 +274,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 				new PeopleSearchController(
 					new FakePeopleSearchProvider(new[] { ash }, new List<IOptionalColumn>()), loggonUser,
 					PersonFinderRepository, PersonRepository, new FullPermission());
+			CurrentFakeBusinessUnit.OnThisThreadUse(new BusinessUnit("Sweden").WithId(Guid.NewGuid()));
 
 			var result = target.FindPeople(inputModel);
 			result.People.Count().Should().Be.EqualTo(1);
@@ -278,6 +293,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		[Test]
 		public void FindPeople_ShouldSortResultBasedOnFirstName()
 		{
+			CurrentFakeBusinessUnit.OnThisThreadUse(new BusinessUnit("Sweden").WithId(Guid.NewGuid()));
+
 			for (int i = 65; i <= 90; i++)
 			{
 				var asciiChar = Convert.ToChar(i);
@@ -315,6 +332,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		[Test]
 		public void FindPeople_ShouldSortDescending()
 		{
+			CurrentFakeBusinessUnit.OnThisThreadUse(new BusinessUnit("Sweden").WithId(Guid.NewGuid()));
+
 			for (int i = 65; i <= 90; i++)
 			{
 				var asciiChar = Convert.ToChar(i);
