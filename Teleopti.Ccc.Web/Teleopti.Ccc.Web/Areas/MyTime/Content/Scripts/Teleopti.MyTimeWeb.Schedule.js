@@ -9,7 +9,6 @@
 Teleopti.MyTimeWeb.Schedule = (function($) {
 	var vm,
 		timeIndicatorDateTime,
-		timeLineOffset = 119,
 		ajax = new Teleopti.MyTimeWeb.Ajax(),
 		completelyLoaded,
 		daylightSavingAdjustment,
@@ -648,7 +647,7 @@ Teleopti.MyTimeWeb.Schedule = (function($) {
 			return new Teleopti.MyTimeWeb.Schedule.TimelineViewModel(
 				item,
 				constants.scheduleHeight,
-				timeLineOffset,
+				0,
 				true
 			);
 		});
@@ -693,7 +692,6 @@ Teleopti.MyTimeWeb.Schedule = (function($) {
 		}
 
 		var timelineHeight = Teleopti.MyTimeWeb.Common.Constants.scheduleHeight;
-		var offset = 123;
 		var timeindicatorHeight = 2;
 
 		var hours = theDate.hours();
@@ -714,7 +712,7 @@ Teleopti.MyTimeWeb.Schedule = (function($) {
 
 		if (timelineStartMinutes <= clientNowMinutes && clientNowMinutes <= timelineEndMinutes) {
 			timeIndicator.css('top', position).show();
-			timeIndicatorTimeLine.css('top', position + offset).show();
+			timeIndicatorTimeLine.css('top', position).show();
 		} else {
 			timeIndicator.hide();
 			timeIndicatorTimeLine.hide();
