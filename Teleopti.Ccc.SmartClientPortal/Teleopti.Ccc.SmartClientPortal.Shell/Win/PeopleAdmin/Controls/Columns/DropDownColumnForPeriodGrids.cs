@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls.Columns
 {
     internal class DropDownColumnForPeriodGrids<TData, TItems> : ColumnBase<TData>
     {
-        private readonly string _valueMember;
         private readonly PropertyReflector _propertyReflector = new PropertyReflector();
 
         private readonly string _headerText;
@@ -102,12 +101,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls.Columns
 				//e.Style.DataSource = null;
 				e.Style.DisplayMember = _displayMember;
 				e.Style.DataSource = _comboItems;
-				
-
-                if (!string.IsNullOrEmpty(_valueMember))
-                {
-                    e.Style.ValueMember = _valueMember;
-                }
 
                 OnCellDisplayChanged(dataItem, e);
 				e.Style.CellValue = _propertyReflector.GetValue(dataItem, BindingProperty);	
@@ -126,11 +119,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls.Columns
                 TData dataItem = dataItems[e.RowIndex - 1];
 
                 var typeOfItem = typeof (TItems);
-                if (!string.IsNullOrEmpty(_valueMember))
-                {
-
-                }
-
                 if (typeOfItem.IsInstanceOfType(e.Style.CellValue) ||
                     typeOfItem == e.Style.CellValue.GetType().BaseType ||
                     typeOfItem == e.Style.CellValue.GetType() || _baseClass == e.Style.CellValue.GetType() ||
