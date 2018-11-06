@@ -644,12 +644,7 @@ Teleopti.MyTimeWeb.Schedule = (function($) {
 		self.staffingInfoAvailableDays = data.StaffingInfoAvailableDays;
 		var timelines = ko.utils.arrayMap(data.TimeLine, function(item) {
 			// "Week schedule" module will be shown on PC only, so continue apply fixed schedule height
-			return new Teleopti.MyTimeWeb.Schedule.TimelineViewModel(
-				item,
-				constants.scheduleHeight,
-				0,
-				true
-			);
+			return new Teleopti.MyTimeWeb.Schedule.TimelineViewModel(item, constants.scheduleHeight, 0, true);
 		});
 		self.timeLines(timelines);
 

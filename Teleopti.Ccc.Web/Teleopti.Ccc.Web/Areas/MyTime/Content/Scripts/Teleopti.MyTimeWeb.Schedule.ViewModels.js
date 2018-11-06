@@ -1,15 +1,15 @@
-﻿Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, parent) {
+﻿Teleopti.MyTimeWeb.Schedule.DayViewModel = function(scheduleDay, parent) {
 	var self = this;
 
-	var constants = Teleopti.MyTimeWeb.Common.Constants;
-
 	self.fixedDate = ko.observable(scheduleDay.FixedDate);
-	self.formattedFixedDate = ko.computed(function () {
-		return moment(self.fixedDate()).format("YYYY-MM-DD");
+	self.formattedFixedDate = ko.computed(function() {
+		return moment(self.fixedDate()).format('YYYY-MM-DD');
 	});
-	self.currentUserDate = ko.observable(moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(parent.baseUtcOffsetInMinutes)).startOf("day"));
-	self.formatedCurrentUserDate = ko.computed(function () {
-		return moment(self.currentUserDate()).format("YYYY-MM-DD");
+	self.currentUserDate = ko.observable(
+		moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(parent.baseUtcOffsetInMinutes)).startOf('day')
+	);
+	self.formatedCurrentUserDate = ko.computed(function() {
+		return moment(self.currentUserDate()).format('YYYY-MM-DD');
 	});
 
 	self.date = ko.observable(scheduleDay.Date);
@@ -20,24 +20,24 @@
 	self.periods = scheduleDay.Periods;
 	self.openHourPeriod = scheduleDay.OpenHourPeriod;
 
-	var dayDescription = "";
-	var dayNumberDisplay = "";
+	var dayDescription = '';
+	var dayNumberDisplay = '';
 	var dayDate = moment(scheduleDay.FixedDate, Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly);
 
 	if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
-		self.headerTitle = ko.observable(dayDate.format("dddd"));
+		self.headerTitle = ko.observable(dayDate.format('dddd'));
 		self.dayOfWeek = ko.observable(dayDate.weekday());
 		dayNumberDisplay = dayDate.jDate();
 
 		if (dayNumberDisplay === 1 || self.dayOfWeek() === parent.weekStart) {
-			dayDescription = dayDate.format("jMMMM");
+			dayDescription = dayDate.format('jMMMM');
 		}
 	} else {
 		self.headerTitle = ko.observable(scheduleDay.Header.Title);
 		self.dayOfWeek = ko.observable(scheduleDay.DayOfWeekNumber);
 		dayNumberDisplay = dayDate.date();
 		if (dayNumberDisplay === 1 || self.dayOfWeek() === parent.weekStart) {
-			dayDescription = dayDate.format("MMMM");
+			dayDescription = dayDate.format('MMMM');
 		}
 	}
 
@@ -54,10 +54,10 @@
 	self.summary = ko.observable(scheduleDay.Summary.Summary);
 	self.hasOvertime = scheduleDay.HasOvertime && !scheduleDay.IsFullDayAbsence;
 	self.hasShift = scheduleDay.Summary.Color !== null ? true : false;
-	self.noteMessage = ko.computed(function () {
-		//need to html encode due to not bound to "text" in ko
-		return $("<div/>").text(scheduleDay.Note.Message).html();
-	});
+
+	self.noteMessage = $('<div/>')
+		.text(scheduleDay.Note.Message)
+		.html(); //need to html encode due to not bound to "text" in ko
 
 	self.requestsCount = ko.observable(scheduleDay.RequestsCount);
 	self.overtimeAvailability = ko.observable(scheduleDay.OvertimeAvailabililty);
@@ -68,115 +68,104 @@
 			break;
 		}
 		case 'fair': {
-		self.absenceChanceColor = 'yellow';
+			self.absenceChanceColor = 'yellow';
 			break;
 		}
 		case 'good': {
-		self.absenceChanceColor = 'green';
+			self.absenceChanceColor = 'green';
 			break;
 		}
-		default: self.absenceChanceColor = '';
+		default:
+			self.absenceChanceColor = '';
 	}
-	
+
 	self.probabilityText = ko.observable(scheduleDay.ProbabilityText);
 	self.probabilities = ko.observableArray();
 
-	self.holidayChanceText = ko.computed(function () {
-		var probabilityText = self.probabilityText();
-		if (probabilityText)
-            return parent.userTexts.ChanceOfGettingAbsenceRequestGranted + probabilityText;
-		return probabilityText;
-	});
+	self.holidayChanceText =
+		self.probabilityText() && self.probabilityText().length > 0
+			? parent.userTexts.ChanceOfGettingAbsenceRequestGranted + self.probabilityText()
+			: '';
 
-	self.hasRequests = ko.computed(function () {
+	self.hasRequests = ko.computed(function() {
 		return self.requestsCount() > 0;
 	});
 
 	self.hasNote = ko.observable(scheduleDay.HasNote);
-	self.seatBookings = ko.observableArray(scheduleDay.SeatBookings);
+	self.seatBookings = scheduleDay.SeatBookings;
 
-	self.seatBookingIconVisible = ko.computed(function () {
-		return self.seatBookings().length > 0;
+	self.seatBookingIconVisible = ko.computed(function() {
+		return self.seatBookings.length > 0;
 	});
 
-	var getValueOrEmptyString = function (object) {
-		return object || "";
-	}
-
-	var formatSeatBooking = function (seatBooking) {
-		var bookingText = "<tr><td>{0} - {1}</td><td>{2}</td></tr>";
-
-		var fullSeatName = seatBooking.LocationPath !== "" ? seatBooking.LocationPath + "/" : "";
-		fullSeatName += getValueOrEmptyString(seatBooking.LocationPrefix) + seatBooking.SeatName + getValueOrEmptyString(seatBooking.LocationSuffix);
-
-		return bookingText.format(
-				Teleopti.MyTimeWeb.Common.FormatTime(seatBooking.StartDateTime),
-				Teleopti.MyTimeWeb.Common.FormatTime(seatBooking.EndDateTime),
-				fullSeatName
-				);
+	var getValueOrEmptyString = function(object) {
+		return object || '';
 	};
 
-	self.seatBookingMessage = ko.computed(function () {
-		var message = "<div class='seatbooking-tooltip'>" +
-            "<span class='tooltip-header'>{0}</span><table>".format(parent.userTexts.SeatBookings);
+	var formatSeatBooking = function(seatBooking) {
+		var bookingText = '<tr><td>{0} - {1}</td><td>{2}</td></tr>';
 
-		var messageEnd = "</table></div>";
+		var fullSeatName = seatBooking.LocationPath !== '' ? seatBooking.LocationPath + '/' : '';
+		fullSeatName +=
+			getValueOrEmptyString(seatBooking.LocationPrefix) +
+			seatBooking.SeatName +
+			getValueOrEmptyString(seatBooking.LocationSuffix);
 
-		if (self.seatBookings() !== null) {
-			self.seatBookings().forEach(function (seatBooking) {
-				message += formatSeatBooking(seatBooking);
-			});
-		}
-		message += messageEnd;
+		return bookingText.format(
+			Teleopti.MyTimeWeb.Common.FormatTime(seatBooking.StartDateTime),
+			Teleopti.MyTimeWeb.Common.FormatTime(seatBooking.EndDateTime),
+			fullSeatName
+		);
+	};
 
-		return message;
-	});
+	self.seatBookingMessage = getSeatBookingMessage(self.seatBookings, parent.userTexts);
 
-	self.requestsText = ko.computed(function () {
-		return parent.userTexts.XRequests.format(self.requestsCount());
-	});
+	self.requestsText = parent.userTexts.XRequests.format(self.requestsCount());
 
-	self.textOvertimeAvailabilityText = ko.computed(function () {
-		return self.overtimeAvailability().StartTime + " - " + self.overtimeAvailability().EndTime;
-	});
+	self.textOvertimeAvailabilityText =
+		self.overtimeAvailability().StartTime + ' - ' + self.overtimeAvailability().EndTime;
 
-	self.classForDaySummary = ko.computed(function () {
-		var showRequestClass = self.requestPermission() ? "weekview-day-summary weekview-day-show-request " : "weekview-day-summary ";
+	self.classForDaySummary = ko.computed(function() {
+		var showRequestClass = self.requestPermission()
+			? 'weekview-day-summary weekview-day-show-request '
+			: 'weekview-day-summary ';
 		if (self.summaryStyleClassName() !== null && self.summaryStyleClassName() !== undefined) {
 			return showRequestClass + self.summaryStyleClassName(); //last one needs to be becuase of "stripes" and similar
 		}
 		return showRequestClass; //last one needs to be becuase of "stripes" and similar
 	});
 
-	self.colorForDaySummary = ko.computed(function () {
+	self.colorForDaySummary = ko.computed(function() {
 		return parent.styles() && parent.styles()[self.summaryStyleClassName()];
 	});
 
-	self.textColor = ko.computed(function () {
+	self.textColor = ko.computed(function() {
 		var backgroundColor = parent.styles()[self.summaryStyleClassName()];
 		if (backgroundColor !== null && backgroundColor !== undefined) {
 			return Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(backgroundColor);
 		}
-		return "black";
+		return 'black';
 	});
 	self.availability = ko.observable(scheduleDay.Availability);
 
-	self.absenceRequestPermission = ko.computed(function () {
-		return (parent.absenceRequestPermission() && self.availability());
+	self.absenceRequestPermission = ko.computed(function() {
+		return parent.absenceRequestPermission() && self.availability();
 	});
 
-	self.navigateToRequests = function () {
+	self.navigateToRequests = function() {
 		parent.navigateToRequestsMethod();
 	};
 
-	self.showOvertimeAvailability = function (data) {
+	self.showOvertimeAvailability = function(data) {
 		var date = self.fixedDate();
 		var momentDate = moment(date, Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly);
+
 		if (data.startPositionPercentage === 0 && data.overtimeAvailabilityYesterday) {
 			momentDate.add("days", -1);
 		}
+
 		date = Teleopti.MyTimeWeb.Common.FormatServiceDate(momentDate);
-		var day = ko.utils.arrayFirst(parent.days(), function (item) {
+		var day = ko.utils.arrayFirst(parent.days(), function(item) {
 			return item.fixedDate() === date;
 		});
 		if (day) {
@@ -186,19 +175,37 @@
 		}
 	};
 
-	self.showStaffingProbabilityBar = ko.computed(function () {
+	self.showStaffingProbabilityBar = ko.computed(function() {
 		var fixedDateMoment = moment(self.fixedDate());
 		var currentUserDate = moment(self.formatedCurrentUserDate());
-		if (parent.staffingProbabilityForMultipleDaysEnabled)
-		{
-			return (fixedDateMoment >= currentUserDate) &&
-				(fixedDateMoment < currentUserDate.add('day', parent.staffingInfoAvailableDays));
+		if (parent.staffingProbabilityForMultipleDaysEnabled) {
+			return (
+				fixedDateMoment >= currentUserDate &&
+				fixedDateMoment < currentUserDate.add('day', parent.staffingInfoAvailableDays)
+			);
 		}
 
 		return self.formattedFixedDate() === self.formatedCurrentUserDate();
 	});
 
-	self.layers = ko.utils.arrayMap(scheduleDay.Periods, function (item) {
+	self.layers = ko.utils.arrayMap(scheduleDay.Periods, function(item) {
 		return new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, self, false, 0, true);
 	});
+
+	function getSeatBookingMessage(seatBookings, userTexts) {
+		var message =
+			"<div class='seatbooking-tooltip'>" +
+			"<span class='tooltip-header'>{0}</span><table>".format(userTexts.SeatBookings);
+
+		var messageEnd = '</table></div>';
+
+		if (seatBookings !== null) {
+			seatBookings.forEach(function(seatBooking) {
+				message += formatSeatBooking(seatBooking);
+			});
+		}
+		message += messageEnd;
+
+		return message;
+	}
 };
