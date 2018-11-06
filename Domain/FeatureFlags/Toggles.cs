@@ -21,6 +21,7 @@
 		RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306,
 		RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485,
 		RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485,
+		RTA_TooManyPersonAssociationChangedEvents_Packages_78669,
 		RTA_ReviewHistoricalAdherence_74770,
 
 		MyTimeWeb_SortRequestList_40711,

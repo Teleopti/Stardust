@@ -6,7 +6,9 @@ using Autofac;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Aop;
 
 namespace Teleopti.Ccc.IocCommon.Toggle
@@ -79,7 +81,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 					yield return new HandlerInfo
 					{
 						Type = i,
-						Method = t.GetMethod("Handle")
+						Method = t.GetMethod("Handle", typeof(IEnumerable<IEvent>).AsArray())
 					};
 				}
 			}
