@@ -76,12 +76,15 @@
     <Compile Include="QueryDtoProvider.cs" />
     <Compile Include="QueryHandlerProvider.cs" />
     <Compile Include="QueryResultDto.cs" />
+    <Compile Include="Query\AbsenceRequestByIdHandler.cs" />
     <Compile Include="Query\Request\AbsencePossibilityByPersonIdDto.cs" />
+    <Compile Include="Query\Request\AbsenceRequestByIdDto.cs" />
     <Compile Include="Query\Response\AbsencePossibilityDto.cs" />
     <Compile Include="Query\AbsenceRequestRulesByPersonIdHandler.cs" />
     <Compile Include="Query\AbsencePossibilityHandler.cs" />
     <Compile Include="Query\Request\AbsenceRequestRulesByPersonIdDto.cs" />
     <Compile Include="Query\Response\AbsenceDto.cs" />
+    <Compile Include="Query\Response\AbsenceRequestDto.cs" />
     <Compile Include="Query\Response\AbsenceRequestRuleDto.cs" />
     <Compile Include="Query\Response\AbsenceRequestRuleProjectionDto.cs" />
     <Compile Include="Query\Response\ActivityDto.cs" />

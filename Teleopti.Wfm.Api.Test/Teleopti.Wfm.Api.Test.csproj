@@ -113,6 +113,7 @@
     <Compile Include="Query\AbsencePossibilityHandlerTest.cs" />
     <Compile Include="Query\AbsenceRequestRulesByPersonIdTest.cs" />
     <Compile Include="Query\AllAbsencesTest.cs" />
+    <Compile Include="Query\GetAbsenceRequestByIdTest.cs" />
     <Compile Include="Query\GetAllActivitiesTest.cs" />
     <Compile Include="Query\PermittedFunctionsByPersonTest.cs" />
     <Compile Include="Query\PersonalAccountBalanceTest.cs" />
