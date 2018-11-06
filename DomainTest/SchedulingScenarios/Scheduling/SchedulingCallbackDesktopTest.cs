@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
 	[UseIocForFatClient]
-	public class SchedulingCallbackTest : SchedulingScenario, IIsolateSystem
+	public class SchedulingCallbackTest : SchedulingScenario
 	{
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
@@ -92,12 +92,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		public SchedulingCallbackTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
-		}
-
-		public void Isolate(IIsolate isolate)
-		{
-			//dont want to block agents from being scheduled due to hints in these tests
-			isolate.UseTestDouble(Enumerable.Empty<ISchedulePreHint>()).For<IEnumerable<ISchedulePreHint>>();
 		}
 	}
 }
