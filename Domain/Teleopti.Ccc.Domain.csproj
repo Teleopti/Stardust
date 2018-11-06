@@ -299,7 +299,6 @@
     <Compile Include="Scheduling\AgentsWithPreferences.cs" />
     <Compile Include="Scheduling\AgentsWithWhiteSpots.cs" />
     <Compile Include="Scheduling\AlreadyScheduledAgents.cs" />
-    <Compile Include="Scheduling\ExcludeAgentsWithRestrictionWarnings.cs" />
     <Compile Include="Scheduling\ReducedSkillsProvider.cs" />
     <Compile Include="Scheduling\RemoveNonPreferenceDaysOffs.cs" />
     <Compile Include="Scheduling\WebClearScheduleStardustHandler.cs" />
