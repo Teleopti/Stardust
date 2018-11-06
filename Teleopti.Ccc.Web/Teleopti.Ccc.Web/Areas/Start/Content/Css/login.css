@@ -1,27 +1,20 @@
-﻿.panel-info, .panel-heading, .panel-info>.panel-heading {
-    background-color: #0099FF;
-    border-color: #0099FF;
+﻿.panel-info,
+.panel-heading,
+.panel-info > .panel-heading {
+	background-color: #0099ff;
+	border-color: #0099ff;
 }
 
-body, .login-header { 
-    color: #000; 
-    font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif;
+body,
+.login-header {
+	color: #000;
+	font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
 }
 
 .login-header {
-    text-align: center;
+	text-align: center;
 }
 
-.login-form {
-	max-width: 300px;
-	margin-right: auto;
-	margin-left: auto;
-}
-.login-warning {
-	max-width: 300px;
-	margin-right: auto;
-	margin-left: auto;
-}
 .placeholder {
-	color: #AAA !important;
+	color: #aaa !important;
 }
