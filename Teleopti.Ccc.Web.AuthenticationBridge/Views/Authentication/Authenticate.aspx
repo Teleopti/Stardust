@@ -13,6 +13,12 @@
 				<div class="sub-header">
 					<h1>TELEOPTI WFM</h1>
 				</div>
+				<div class="login-message formError">
+					<% if (!string.IsNullOrEmpty(Model.ErrorMessage))
+						{ %>
+					<p class="alert alert-warning formError material-depth-1"><%="Technical information: " + Model.ErrorMessage%></p>
+					<% } %>
+				</div>
 				<div id="spinnerwrapper"></div>
 				<div class="con-row">
 					<div class="con-flex">
@@ -31,18 +37,6 @@
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		<div class="con-flex"></div>
-	</div>
-	<div class="con-row">
-		<div class="con-flex"></div>
-		<div class="con-flex split-1-2">
-			<div class="login-message formError">
-				<% if (!string.IsNullOrEmpty(Model.ErrorMessage))
-					{ %>
-				<p class="alert alert-warning formError material-depth-1"><%="Technical information: " + Model.ErrorMessage%></p>
-				<% } %>
 			</div>
 		</div>
 		<div class="con-flex"></div>
