@@ -82,6 +82,7 @@
 		ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348,
 		ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941,
 		ResourcePlanner_FasterSeamlessPlanningForPreferences_78286,
+		ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717,
 		ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487,
 
 		Wfm_DisplayOnlineHelp_39402,

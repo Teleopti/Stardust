@@ -507,10 +507,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<PreferenceHint>().As<ISchedulePostHint>().SingleInstance();
 			}
 
+			if (_configuration.Toggle(Toggles.ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717))
+			{
+				builder.RegisterType<PersonContractShiftBagHint>().As<ISchedulePreHint>().SingleInstance();
+			}
 			if (_configuration.Toggle(Toggles.ResourcePlanner_FasterSeamlessPlanningForPreferences_78286))
 			{
 				builder.RegisterType<ExcludeAgentsWithRestrictionWarnings>().As<IExcludeAgentsWithRestrictionWarnings>().InstancePerLifetimeScope().ApplyAspects();
-				builder.RegisterType<PersonContractShiftBagHint>().As<ISchedulePreHint>().SingleInstance();
 			}
 			else
 			{
