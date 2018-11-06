@@ -511,14 +511,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<PersonContractShiftBagHint>().As<ISchedulePreHint>().SingleInstance();
 			}
-			if (_configuration.Toggle(Toggles.ResourcePlanner_FasterSeamlessPlanningForPreferences_78286))
-			{
-				builder.RegisterType<ExcludeAgentsWithRestrictionWarnings>().As<IExcludeAgentsWithRestrictionWarnings>().InstancePerLifetimeScope().ApplyAspects();
-			}
-			else
-			{
-				builder.RegisterType<NotExcludeAgentsWithRestrictionWarnings>().As<IExcludeAgentsWithRestrictionWarnings>().SingleInstance();
-			}
 		
 			builder.RegisterType<AgentsWithWhiteSpots>().SingleInstance();
 			builder.RegisterType<RemoveNonPreferenceDaysOffs>().SingleInstance();
