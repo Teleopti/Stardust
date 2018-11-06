@@ -44,7 +44,7 @@ RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306 = true
 RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485 = true
 RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485 = true
 RTA_TooManyPersonAssociationChangedEvents_Packages_78669 = true
-RTA_StateQueueFloodPrevention_77710 = false
+RTA_StateQueueFloodPrevention_77710 = RC
 RTA_ReviewHistoricalAdherence_74770 = false
 
 # Dumplings, can any of these be removed? #
