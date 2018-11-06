@@ -267,6 +267,8 @@
     <Compile Include="Domain\RtaTestAttribute.cs" />
     <Compile Include="Domain\Service\QueueFloodTest.cs" />
     <Compile Include="Domain\Service\RtaExtensions.cs" />
+    <Compile Include="Domain\Service\StateMappingTest.cs" />
+    <Compile Include="Domain\Service\UpdateAgentStateTest.cs" />
     <Compile Include="InfrastructureTesting\AnalyticsDatabaseTestAttribute.cs" />
     <Compile Include="InfrastructureTesting\AnalyticsUnitOfWorkTestAttribute.cs" />
     <Compile Include="InfrastructureTesting\DatabaseTest.cs" />
@@ -347,7 +349,6 @@
     <Compile Include="Domain\Service\AgentStateReadModel\UpdateAgentStateReadModelShiftTest.cs" />
     <Compile Include="Domain\Service\AgentStateReadModel\UpdateAgentStateReadModelSnapshotTests.cs" />
     <Compile Include="Domain\Service\AgentStateReadModel\UpdateAgentStateReadModelTest.cs" />
-    <Compile Include="Domain\Service\AgentStateReadModel\UpdateAgentStateTest.cs" />
     <Compile Include="Domain\Service\AuthenticationKeyTenantTest.cs" />
     <Compile Include="Domain\Service\BelongsToDateTest.cs" />
     <Compile Include="Domain\Service\CaseInsensitiveTest.cs" />

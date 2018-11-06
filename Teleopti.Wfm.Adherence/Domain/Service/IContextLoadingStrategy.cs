@@ -112,7 +112,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 						});
 				})
 				.GroupBy(x => x.id, x => x.state)
-				.ToDictionary(x => x.Key, x => x.First());
+				.ToDictionary(x => x.Key, x => x.Last());
 			return _matches.Keys
 				.OrderBy(x => new SqlGuid(x))
 				.ToArray();
