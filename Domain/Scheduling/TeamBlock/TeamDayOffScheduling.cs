@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -116,7 +117,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					continue;
 
 				part.CreateAndAddDayOff(restriction.DayOffTemplate);
-				rollbackService.Modify(part);
+				rollbackService.Modify(part, NewBusinessRuleCollection.Minimum());
 
 				schedulingCallback.Scheduled(new SchedulingCallbackInfo(part, true));
 				if (schedulingCallback.IsCancelled)
@@ -166,7 +167,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 							var personAssignment = bestScheduleDay.PersonAssignment();
 							if (!authorization.IsPermitted(personAssignment.FunctionPath, bestScheduleDay.DateOnlyAsPeriod.DateOnly, bestScheduleDay.Person)) continue;
 
-							rollbackService.Modify(bestScheduleDay);
+							rollbackService.Modify(bestScheduleDay, NewBusinessRuleCollection.Minimum());
 							foundSpot = true;
 						}
 						catch (DayOffOutsideScheduleException)
