@@ -96,7 +96,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
 
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
-			resultDto["Result"].Count().Should().Be.EqualTo(24 * 4 * 2);
+			resultDto["Result"].Count().Should().Be.EqualTo((17 - 8) * 4 * 2);
 			Console.WriteLine(resultDto["Result"].Count(x => x["Possibility"].Value<int>() == 1));
 			resultDto["Result"].All(x => x["Possibility"].Value<int>() == 1).Should().Be
 				.EqualTo(forecastStaffPerInterval < scheduledStaffPerInterval);
