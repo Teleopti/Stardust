@@ -41,5 +41,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return StaffingAuditList.Where(x => x.TimeStamp >= startDate && x.TimeStamp <= endDate.AddDays(1).AddMinutes(-1));
 		}
+
+		public void PurgeOldAudits(DateTime daysBack)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

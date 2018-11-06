@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 	public interface IStaffingAuditRepository : IRepository<IStaffingAudit>
 	{
 		IEnumerable<IStaffingAudit> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate);
+		void PurgeOldAudits(DateTime daysBack);
 	}
 }

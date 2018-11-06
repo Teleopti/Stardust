@@ -66,4 +66,11 @@ Select s from StaffingAudit s
 
 ]]>
 </query>
+	<query name="PurgeStaffingAudit">
+		<![CDATA[
+DELETE from StaffingAudit
+			where TimeStamp < : DaysBack
+
+]]>
+	</query>
 </hibernate-mapping>

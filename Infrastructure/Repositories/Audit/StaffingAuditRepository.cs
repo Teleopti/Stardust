@@ -24,5 +24,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				.List<IStaffingAudit>());
 			return results;
 		}
+
+		public void PurgeOldAudits(DateTime daysBack)
+		{
+			Session.GetNamedQuery("PurgeStaffingAudit")
+				.SetDateTime("DaysBack", daysBack).ExecuteUpdate();
+
+		}
 	}
 }
