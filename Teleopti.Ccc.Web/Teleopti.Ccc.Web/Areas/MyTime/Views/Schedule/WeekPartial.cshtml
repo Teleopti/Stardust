@@ -176,11 +176,11 @@ Layout = null;
 					</div>
 					<!-- /ko -->
 
-					<div class="seatbooking-symbol weekview-day-icon cursorpointer" data-bind="visible: seatBookingIconVisible(), tooltip: { title: seatBookingMessage, html: true }">
+					<div class="seatbooking-symbol weekview-day-icon cursorpointer" data-bind="visible: seatBookingIconVisible, tooltip: { title: seatBookingMessage, html: true }">
 						<i class="mdi mdi-chair-school"></i>
 					</div>
 
-					<div class="overtime-availability-symbol floatright weekview-day-icon cursorpointer" data-bind="visible: overtimeAvailability().HasOvertimeAvailability, tooltip: { title: textOvertimeAvailabilityText, html: true }">
+					<div class="overtime-availability-symbol floatright weekview-day-icon cursorpointer" data-bind="visible: overtimeAvailability.HasOvertimeAvailability, tooltip: { title: textOvertimeAvailabilityText, html: true }">
 						<i class="glyphicon glyphicon-time floatright"></i>
 					</div>
 
@@ -193,8 +193,8 @@ Layout = null;
 					</div>
 				</div>
 				<div>
-					<div class="weekview-day-schedule relative" data-bind="style: {width: probabilities().length > 0 ? '116px' : '129px'}">
-						<div class="weekview-day-time-indicator relative" data-bind="style: {width: probabilities().length > 0 ? '114px' : '129px'}">
+					<div class="weekview-day-schedule relative" data-bind="style: {width: probabilities.length > 0 ? '116px' : '129px'}">
+						<div class="weekview-day-time-indicator relative" data-bind="style: {width: probabilities.length > 0 ? '114px' : '129px'}">
 						</div>
 						<!-- ko foreach: layers -->
 						<!-- ko if: isOvertimeAvailability -->

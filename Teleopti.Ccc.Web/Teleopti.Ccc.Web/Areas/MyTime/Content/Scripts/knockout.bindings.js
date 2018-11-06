@@ -128,9 +128,14 @@ var TooltipBinding = function() {
 		ko.utils.extend(options, ko.bindingHandlers.tooltip.options);
 		ko.utils.extend(options, local);
 
-		$(element)
-			.attr('title', options.title)
-			.tooltip('fixTitle');
+		if (options.html) {
+			//just call $(el).tooltip('fixTitle')
+			$(element).tooltip('fixTitle');
+		} else {
+			$(element)
+				.attr('title', options.title)
+				.tooltip('fixTitle');
+		}
 	};
 };
 ko.bindingHandlers.tooltip = new TooltipBinding();

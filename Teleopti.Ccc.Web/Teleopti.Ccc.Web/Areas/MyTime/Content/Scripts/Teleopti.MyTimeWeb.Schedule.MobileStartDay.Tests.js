@@ -827,11 +827,6 @@
 	});
 
 	test("should set tooltip text for 'traffic light' base on absence proability data on mobile", function() {
-		var orginUserText = Teleopti.MyTimeWeb.Common.GetUserTexts();
-		Teleopti.MyTimeWeb.Common.SetUserTexts({
-			ChanceOfGettingAbsenceRequestGranted: '@Resources.ChanceOfGettingAbsenceRequestGranted: '
-		});
-
 		var tempFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === 'MyTimeWeb_TrafficLightOnMobileDayView_77447') return true;
@@ -854,7 +849,6 @@
 		equal(vm.trafficLightTooltip(), '@Resources.ChanceOfGettingAbsenceRequestGranted: Good');
 
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempFn;
-		Teleopti.MyTimeWeb.Common.SetUserTexts(orginUserText);
 	});
 
 	test("should show probability toggle by agent's timezone", function() {

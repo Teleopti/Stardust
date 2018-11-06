@@ -14,17 +14,12 @@
 	var basedDate = momentWithLocale(
 		Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)
 	).format('YYYY-MM-DD');
-	var userTexts = Teleopti.MyTimeWeb.Schedule.FakeData.userTexts;
 
 	var fakeLicenseAvailabilityData = false;
 	var tempAjax;
 
 	function getFakeScheduleData() {
 		return Teleopti.MyTimeWeb.Schedule.FakeData.getFakeScheduleData();
-	}
-
-	function initUserTexts() {
-		Teleopti.MyTimeWeb.Common.SetUserTexts(userTexts);
 	}
 
 	function setupHash() {
@@ -61,7 +56,6 @@
 	});
 
 	test('should read absence report permission', function() {
-		initUserTexts();
 		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
 		vm.initializeData(getFakeScheduleData());
 
@@ -74,18 +68,17 @@
 
 		vm.initializeData(fakeScheduleData);
 		equal(vm.days().length, 2);
-		equal(vm.days()[0].headerTitle(), fakeScheduleData.Days[0].Header.Title);
-		equal(vm.days()[0].summary(), fakeScheduleData.Days[0].Summary.Summary);
-		equal(vm.days()[0].summaryTitle(), fakeScheduleData.Days[0].Summary.Title);
-		equal(vm.days()[0].summaryTimeSpan(), fakeScheduleData.Days[0].Summary.TimeSpan);
-		equal(vm.days()[0].summaryStyleClassName(), fakeScheduleData.Days[0].Summary.StyleClassName);
+		equal(vm.days()[0].headerTitle, fakeScheduleData.Days[0].Header.Title);
+		equal(vm.days()[0].summary, fakeScheduleData.Days[0].Summary.Summary);
+		equal(vm.days()[0].summaryTitle, fakeScheduleData.Days[0].Summary.Title);
+		equal(vm.days()[0].summaryTimeSpan, fakeScheduleData.Days[0].Summary.TimeSpan);
+		equal(vm.days()[0].summaryStyleClassName, fakeScheduleData.Days[0].Summary.StyleClassName);
 		equal(vm.days()[0].hasShift, true);
 		equal(vm.days()[0].noteMessage.indexOf(fakeScheduleData.Days[0].Note.Message) > -1, true);
 		equal(vm.days()[0].seatBookings, fakeScheduleData.Days[0].SeatBookings);
 	});
 
 	test('should read timelines', function() {
-		initUserTexts();
 		var fakeScheduleData = getFakeScheduleData();
 		//9:30 ~ 17:00 makes 9 timeline points
 		fakeScheduleData.TimeLine = [
@@ -114,7 +107,6 @@
 
 	test('should refresh and modify url after changing date', function() {
 		setupHash();
-		initUserTexts();
 		var fakeScheduleData = getFakeScheduleData();
 		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
 
@@ -138,7 +130,6 @@
 	});
 
 	test('should read overtime request permission', function() {
-		initUserTexts();
 		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
 		vm.initializeData(getFakeScheduleData());
 
@@ -187,9 +178,9 @@
 		vm.initializeData(getFakeScheduleData());
 
 		var scheduleDayViewModel = $.grep(vm.days(), function(item) {
-			return item.fixedDate() === requestDate;
+			return item.fixedDate === requestDate;
 		})[0];
-		scheduleDayViewModel.requestsCount(0);
+		scheduleDayViewModel.requestsCount = 0;
 
 		vm.showAddOvertimeRequestForm();
 		var overtimeRequestViewModel = vm.requestViewModel().model;
@@ -202,7 +193,7 @@
 		overtimeRequestViewModel.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 		overtimeRequestViewModel.AddRequest();
 
-		equal(scheduleDayViewModel.requestsCount(), 1);
+		equal(scheduleDayViewModel.requestsCount, 1);
 
 		Date.prototype.getTeleoptiTime = tempFn1;
 		Date.prototype.getTeleoptiTimeInUserTimezone = tempFn2;

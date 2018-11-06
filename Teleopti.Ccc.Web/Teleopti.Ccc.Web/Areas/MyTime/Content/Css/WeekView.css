@@ -31,7 +31,7 @@
 	border-bottom: 1px solid #dfdfdf;
 }
 
-.weekview-timeline  + .weekview-day{
+.weekview-timeline + .weekview-day {
 	border-left: 1px solid #dfdfdf;
 }
 
@@ -61,6 +61,7 @@
 .weekview-day-summary {
 	height: 66px;
 	overflow: hidden;
+	cursor: pointer;
 }
 
 .weekview-probability-toggle {

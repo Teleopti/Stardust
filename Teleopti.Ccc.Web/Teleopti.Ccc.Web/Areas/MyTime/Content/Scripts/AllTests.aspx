@@ -98,6 +98,7 @@
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Notifier.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.PollScheduleUpdates.js?bust=<%=version %>"></script>
 		
+		<!--Test files-->
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Test.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Common.Tests.js?bust=<%=version%>"></script>
 

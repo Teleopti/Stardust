@@ -1,7 +1,27 @@
-﻿$(document).ready(function () {
-	module("Teleopti.MyTimeWeb.Schedule.DayViewModel");
-	
-	Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+﻿$(document).ready(function() {
+	var toggleFnTemp;
+
+	module('Teleopti.MyTimeWeb.Schedule.DayViewModel', {
+		setup: function() {
+			setup();
+		},
+		teardown: function() {
+			restoreFn();
+		}
+	});
+
+	Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
+
+	function setup() {
+		toggleFnTemp = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle) {
+			return true;
+		};
+	}
+
+	function restoreFn() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = toggleFnTemp;
+	}
 
 	var fakeAddRequestViewModel = function() {
 		return {
@@ -10,13 +30,16 @@
 			}
 		};
 	};
-	var basedDate = moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).format('YYYY-MM-DD');
+	var basedDate = moment(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).format(
+		'YYYY-MM-DD'
+	);
 
-	function getFakeScheduleData(){
+	function getFakeScheduleData() {
 		return {
 			PeriodSelection: null,
 			BaseUtcOffsetInMinutes: 60,
-			Days: [{
+			Days: [
+				{
 					FixedDate: basedDate,
 					IsDayOff: false,
 					IsFullDayAbsence: false,
@@ -32,8 +55,16 @@
 					Summary: {
 						Title: 'Early',
 						TimeSpan: '09:30 - 16:45',
-						StartTime: moment(basedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-						EndTime: moment(basedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
+						StartTime: moment(basedDate)
+							.startOf('day')
+							.add('hour', 9)
+							.add('minute', 30)
+							.format('YYYY-MM-DDTHH:mm:ss'),
+						EndTime: moment(basedDate)
+							.startOf('day')
+							.add('hour', 16)
+							.add('minute', 45)
+							.format('YYYY-MM-DDTHH:mm:ss'),
 						Summary: '7:15',
 						StyleClassName: 'color_80FF80',
 						Meeting: null,
@@ -52,19 +83,29 @@
 						DefaultEndTimeNextDay: false
 					},
 					SeatBookings: [],
-					Periods: [{
-						'Title': 'Phone',
-						'TimeSpan': '09:30 - 16:45',
-						'StartTime': moment(basedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-						'EndTime': moment(basedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
-						'Summary': '7:15',
-						'StyleClassName': 'color_80FF80',
-						'Meeting': null,
-						'StartPositionPercentage': 0.1896551724137931034482758621,
-						'EndPositionPercentage': 1,
-						'Color': '128,255,128',
-						'IsOvertime': false
-					}]
+					Periods: [
+						{
+							Title: 'Phone',
+							TimeSpan: '09:30 - 16:45',
+							StartTime: moment(basedDate)
+								.startOf('day')
+								.add('hour', 9)
+								.add('minute', 30)
+								.format('YYYY-MM-DDTHH:mm:ss'),
+							EndTime: moment(basedDate)
+								.startOf('day')
+								.add('hour', 16)
+								.add('minute', 45)
+								.format('YYYY-MM-DDTHH:mm:ss'),
+							Summary: '7:15',
+							StyleClassName: 'color_80FF80',
+							Meeting: null,
+							StartPositionPercentage: 0.1896551724137931034482758621,
+							EndPositionPercentage: 1,
+							Color: '128,255,128',
+							IsOvertime: false
+						}
+					]
 				}
 			],
 			AbsenceProbabilityEnabled: true,
@@ -80,94 +121,144 @@
 				ShiftTradeBulletinBoardPermission: true,
 				PersonAccountPermission: true
 			},
-			TimeLine: [{
-					Time: "09:15:00",
-					TimeLineDisplay: "09:15",
+			TimeLine: [
+				{
+					Time: '09:15:00',
+					TimeLineDisplay: '09:15',
 					PositionPercentage: 0,
 					TimeFixedFormat: null
 				},
 				{
-					Time: "17:00:00",
-					TimeLineDisplay: "17:00",
+					Time: '17:00:00',
+					TimeLineDisplay: '17:00',
 					PositionPercentage: 1,
 					TimeFixedFormat: null
-				}],
+				}
+			],
 			SiteOpenHourIntradayPeriod: null
-			};
+		};
 	}
 
-	test("should read date", function () {
+	test('should read date', function() {
 		var fakeScheduleData = getFakeScheduleData();
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(
+			fakeAddRequestViewModel,
+			null,
+			null,
+			null,
+			undefined
+		);
 		week.initializeData(fakeScheduleData);
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeScheduleData.Days[0], week);
 
-		equal(vm.fixedDate(), basedDate);
+		equal(vm.fixedDate, basedDate);
 	});
 
-	test("should read permission", function () {
+	test('should read permission', function() {
 		var fakeScheduleData = getFakeScheduleData();
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(
+			fakeAddRequestViewModel,
+			null,
+			null,
+			null,
+			undefined
+		);
 		week.initializeData(fakeScheduleData);
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeScheduleData.Days[0], week);
 
-		equal(vm.textRequestPermission(), true);
-		equal(vm.requestPermission(), true);
+		equal(vm.textRequestPermission, true);
+		equal(vm.requestPermission, true);
 	});
 
-	test("should load shift category data", function () {
+	test('should load shift category data', function() {
 		var fakeScheduleData = getFakeScheduleData();
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(
+			fakeAddRequestViewModel,
+			null,
+			null,
+			null,
+			undefined
+		);
 		week.initializeData(fakeScheduleData);
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeScheduleData.Days[0], week);
-		equal(vm.summaryTitle(), fakeScheduleData.Days[0].Summary.Title);
-		equal(vm.summaryTimeSpan(), fakeScheduleData.Days[0].Summary.TimeSpan);
-		equal(vm.summaryStyleClassName(), fakeScheduleData.Days[0].Summary.StyleClassName);
+		equal(vm.summaryTitle, fakeScheduleData.Days[0].Summary.Title);
+		equal(vm.summaryTimeSpan, fakeScheduleData.Days[0].Summary.TimeSpan);
+		equal(vm.summaryStyleClassName, fakeScheduleData.Days[0].Summary.StyleClassName);
 	});
 
-	test("should read dayoff data", function () {
+	test('should read dayoff data', function() {
 		var fakeData = getFakeScheduleData();
 		fakeData.Days[0].IsDayOff = true;
 		var fakeScheduleData = getFakeScheduleData();
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(
+			fakeAddRequestViewModel,
+			null,
+			null,
+			null,
+			undefined
+		);
 		week.initializeData(fakeScheduleData);
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeData.Days[0], week);
 
-		equal(vm.isDayOff(), true);
+		equal(vm.isDayOff, true);
 	});
 
-	test("should indicate has shift", function () {
+	test('should indicate has shift', function() {
 		var fakeScheduleData = getFakeScheduleData();
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(
+			fakeAddRequestViewModel,
+			null,
+			null,
+			null,
+			undefined
+		);
 		week.initializeData(fakeScheduleData);
-		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeScheduleData.Days[0],  week);
+		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeScheduleData.Days[0], week);
 		equal(vm.hasShift, true);
 	});
 
-	test("should read week day header titles", function () {
+	test('should read week day header titles', function() {
 		var fakeScheduleData = getFakeScheduleData();
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(
+			fakeAddRequestViewModel,
+			null,
+			null,
+			null,
+			undefined
+		);
 		week.initializeData(fakeScheduleData);
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeScheduleData.Days[0], week);
 
-		equal(vm.headerTitle(), "Today");
+		equal(vm.headerTitle, 'Today');
 	});
 
-	test("should read summary timespan when there is overtime and overtime availability", function () {
+	test('should read summary timespan when there is overtime and overtime availability', function() {
 		var fakeScheduleData = getFakeScheduleData();
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(
+			fakeAddRequestViewModel,
+			null,
+			null,
+			null,
+			undefined
+		);
 		week.initializeData(fakeScheduleData);
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeScheduleData.Days[0], week);
-		equal(vm.summaryTimeSpan(), fakeScheduleData.Days[0].Summary.TimeSpan);
+		equal(vm.summaryTimeSpan, fakeScheduleData.Days[0].Summary.TimeSpan);
 		equal(vm.layers.length, 1);
 	});
 
-	test("should show staffing probability bar when current date is within staffing info available days", function () {
+	test('should show staffing probability bar when current date is within staffing info available days', function() {
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.StaffingInfoAvailableDays = 14;
-		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, undefined);
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(
+			fakeAddRequestViewModel,
+			null,
+			null,
+			null,
+			undefined
+		);
 		week.initializeData(fakeScheduleData);
 		var vm = new Teleopti.MyTimeWeb.Schedule.DayViewModel(fakeScheduleData.Days[0], week);
-		equal(vm.showStaffingProbabilityBar(), true);
+		equal(vm.showStaffingProbabilityBar, true);
 	});
 });
