@@ -103,6 +103,41 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			dayCount[5].RelativeDifference.Should().Be.EqualTo(-0.96);
 			dayCount[6].RelativeDifference.Should().Be.EqualTo(-0.96);
 		}
+		
+		[Test, Ignore("test issue, to be fixed")]
+		public void HintsShouldIncludeSelectedAgentsOnly()
+		{
+			setup();
+
+			var firstDay = new DateOnly(2015, 10, 12); //mon
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("relevant skill", activity, new TimePeriod(8, 16));
+
+			var scenario = ScenarioRepository.Has("some name");
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
+			var filterContract = new Contract("_");
+			var dayOff = new DayOffTemplate(new Description("_"));
+			DayOffTemplateRepository.Has(dayOff);
+			var contractScheduleWorkingMondayToFriday = new ContractScheduleWorkingMondayToFriday();
+			var partTimePercentage = new PartTimePercentage("_");
+			var team = new Team {Site = new Site("site")};
+			var agentToSchedule = PersonRepository.Has(filterContract, contractScheduleWorkingMondayToFriday, partTimePercentage, team, schedulePeriod, skill);
+			PersonRepository.Has(new Contract("_2"), contractScheduleWorkingMondayToFriday, partTimePercentage, team, schedulePeriod, skill);
+
+			var planningGroup = new PlanningGroup("_").AddFilter(new ContractFilter(filterContract));
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, SchedulePeriodType.Week, planningGroup);
+			PlanningGroupRepository.Has(planningGroup);
+
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1), 2));
+
+			Target.Execute(planningPeriod.Id.Value);
+
+			var lastJobResult = JobResultRepository.LoadAll().First();
+			var result = JsonConvert.DeserializeObject<FullSchedulingResultModel>(lastJobResult.Details.Last().Message);
+			var validationResults = result.BusinessRulesValidationResults.ToList();
+			validationResults.Count.Should().Be.EqualTo(1);
+			validationResults.Single().ResourceId.Should().Be.EqualTo(agentToSchedule.Id.Value);
+		}
 
 		public SchedulePlanningPeriodCommandHandlerHeatMapTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
