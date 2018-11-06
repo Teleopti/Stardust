@@ -9,30 +9,27 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Api.Command
 {
-	public class RemoveAbsenceHandler : ICommandHandler<RemoveAbsenceDto>
+	public class RemovePersonAbsenceHandler : ICommandHandler<RemovePersonAbsenceDto>
 	{
-		private readonly ILog _logger = LogManager.GetLogger(typeof(RemoveAbsenceHandler));
+		private readonly ILog _logger = LogManager.GetLogger(typeof(RemovePersonAbsenceHandler));
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IPersonRepository _personRepository;
-		private readonly IPersonAbsenceRepository _personAbsenceRepository;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ISaveSchedulePartService _saveSchedulePartService;
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 
-		public RemoveAbsenceHandler(IScenarioRepository scenarioRepository, IPersonRepository personRepository, 
-			IPersonAbsenceRepository personAbsenceRepository, IScheduleStorage scheduleStorage, 
+		public RemovePersonAbsenceHandler(IScenarioRepository scenarioRepository, IPersonRepository personRepository, IScheduleStorage scheduleStorage, 
 			ISaveSchedulePartService saveSchedulePartService, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
 		{
 			_scenarioRepository = scenarioRepository;
 			_personRepository = personRepository;
-			_personAbsenceRepository = personAbsenceRepository;
 			_scheduleStorage = scheduleStorage;
 			_saveSchedulePartService = saveSchedulePartService;
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 		}
 
 		[UnitOfWork]
-		public virtual ResultDto Handle(RemoveAbsenceDto command)
+		public virtual ResultDto Handle(RemovePersonAbsenceDto command)
 		{
 			try
 			{
@@ -40,7 +37,7 @@ namespace Teleopti.Wfm.Api.Command
 					return new ResultDto
 					{
 						Successful = false,
-						Message = "PeriodEndUtc must be greater than PeriodStartUtc"
+						Message = "UtcEndTime must be greater than UtcStartTime"
 					};
 
 				var scenario = command.ScenarioId == null

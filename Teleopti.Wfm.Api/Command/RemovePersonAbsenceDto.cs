@@ -2,7 +2,7 @@
 
 namespace Teleopti.Wfm.Api.Command
 {
-	public class RemoveAbsenceDto : ICommandDto
+	public class RemovePersonAbsenceDto : ICommandDto
 	{
 		public Guid PersonId;
 		public DateTime UtcStartTime;
