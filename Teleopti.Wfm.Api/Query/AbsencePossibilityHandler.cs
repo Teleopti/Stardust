@@ -31,7 +31,7 @@ namespace Teleopti.Wfm.Api.Query
 		}
 		
 		[UnitOfWork]
-		public QueryResultDto<AbsencePossibilityDto> Handle(AbsencePossibilityByPersonIdDto query)
+		public virtual QueryResultDto<AbsencePossibilityDto> Handle(AbsencePossibilityByPersonIdDto query)
 		{
 			var person = _personRepository.Get(query.PersonId);
 			if (person == null)
