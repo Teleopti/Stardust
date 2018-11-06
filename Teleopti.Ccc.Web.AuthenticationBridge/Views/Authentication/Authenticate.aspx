@@ -6,7 +6,7 @@
 	Teleopti Authentication Bridge
 </asp:Content>
 <asp:Content ID="loginContent" ContentPlaceHolderID="MainContent" runat="server">
-	<div class="con-row" style="margin-top: 2%;">
+	<div class="con-row">
 		<div class="con-flex"></div>
 		<div class="con-flex split-1-2">
 			<div class="panel material-depth-1 line-center">
