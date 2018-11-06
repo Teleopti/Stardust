@@ -34,8 +34,13 @@ namespace Teleopti.Wfm.Adherence.Domain.Infrastructure.Service
 		[LogInfo]
 		public virtual BatchInputModel Dequeue()
 		{
+			//https://www.mssqltips.com/sqlservertip/1257/processing-data-queues-in-sql-server-with-readpast-and-updlock/
 			return _unitOfWork.Current().Session()
-				.CreateSQLQuery(@"DELETE TOP (1) FROM RTA.StateQueue OUTPUT DELETED.Model")
+				.CreateSQLQuery(@"
+DELETE TOP (1) 
+FROM RTA.StateQueue WITH (READPAST, UPDLOCK, ROWLOCK)
+OUTPUT DELETED.Model
+")
 				.List<string>()
 				.Select(x => _deserializer.DeserializeObject<BatchInputModel>(x))
 				.SingleOrDefault();
