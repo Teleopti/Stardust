@@ -91,5 +91,14 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.Persisters
 			result.States.Single().StateCode.Should().Be("AUX2");
 			result.States.Single().StateDescription.Should().Be("phone");
 		}
+
+		[Test]
+		public void ShouldCount()
+		{
+			Writer.Enqueue(new BatchForTest());
+			Writer.Enqueue(new BatchForTest());
+
+			Reader.Count().Should().Be(2);
+		}
 	}
 }

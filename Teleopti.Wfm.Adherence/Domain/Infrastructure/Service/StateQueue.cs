@@ -30,7 +30,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Infrastructure.Service
 				.SetParameter("model", _serializer.SerializeObject(model), NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 		}
-
+		
 		[LogInfo]
 		public virtual BatchInputModel Dequeue()
 		{
@@ -46,9 +46,12 @@ OUTPUT DELETED.Model
 				.SingleOrDefault();
 		}
 
-		public int Count()
+		[LogInfo]
+		public virtual int Count()
 		{
-			throw new System.NotImplementedException();
+			return _unitOfWork.Current().Session()
+				.CreateSQLQuery(@"SELECT COUNT(*) FROM RTA.StateQueue WITH (NOLOCK)")
+				.UniqueResult<int>();
 		}
 	}
 }
