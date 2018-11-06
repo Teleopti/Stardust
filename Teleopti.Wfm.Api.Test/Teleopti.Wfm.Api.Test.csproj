@@ -102,7 +102,7 @@
     <Compile Include="ApiTestAttribute.cs" />
     <Compile Include="AuthorizationTest.cs" />
     <Compile Include="CommandListingTest.cs" />
-    <Compile Include="Command\AddAbsenceTest.cs" />
+    <Compile Include="Command\AddPersonAbsenceTest.cs" />
     <Compile Include="Command\AddIntradayAbsenceRequestTest.cs" />
     <Compile Include="Command\AddScheduleChangesListenerTest.cs" />
     <Compile Include="Command\RemovePersonAbsenceTest.cs" />

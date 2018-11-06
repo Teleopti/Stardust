@@ -10,16 +10,16 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Api.Command
 {
-	public class AddAbsenceHandler : ICommandHandler<AddAbsenceDto>
+	public class AddPersonAbsenceHandler : ICommandHandler<AddPersonAbsenceDto>
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IAbsenceRepository _absenceRepository;
-		private readonly ILog _logger = LogManager.GetLogger(typeof(AddAbsenceHandler));
+		private readonly ILog _logger = LogManager.GetLogger(typeof(AddPersonAbsenceHandler));
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonAbsenceCreator _personAbsenceCreator; 
 
-		public AddAbsenceHandler(IPersonRepository personRepository,
+		public AddPersonAbsenceHandler(IPersonRepository personRepository,
 			IScenarioRepository scenarioRepository, IAbsenceRepository absenceRepository, IScheduleStorage scheduleStorage, IPersonAbsenceCreator personAbsenceCreator)
 		{
 			_personRepository = personRepository;
@@ -30,7 +30,7 @@ namespace Teleopti.Wfm.Api.Command
 		}
 
 		[UnitOfWork] 
-		public virtual ResultDto Handle(AddAbsenceDto command)
+		public virtual ResultDto Handle(AddPersonAbsenceDto command)
 		{
 			try
 			{

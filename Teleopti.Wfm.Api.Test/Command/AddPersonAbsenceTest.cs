@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Wfm.Api.Test.Command
 {
 	[ApiTest]
-	public class AddAbsenceTest
+	public class AddPersonAbsenceTest
 	{
 		public IApiHttpClient Client;
 		public FakePersonRepository PersonRepository;
@@ -35,15 +35,15 @@ namespace Teleopti.Wfm.Api.Test.Command
 			PersonRepository.Add(person);
 			var absence = AbsenceFactory.CreateAbsence("absence").WithId();
 			AbsenceRepository.Has(absence);
-			var addAbsenceDto = new {
+			var addPersonAbsenceDto = new {
 				PersonId = person.Id.GetValueOrDefault(),
 				AbsenceId = absence.Id.GetValueOrDefault(),
 				UtcStartTime = new DateTime(2018, 1, 1),
 				UtcEndTime = new DateTime(2018, 1, 2)
 			};
 
-			var result = Client.PostAsync("/command/AddAbsence",
-				new StringContent(JsonConvert.SerializeObject(addAbsenceDto), Encoding.UTF8, "application/json"));
+			var result = Client.PostAsync("/command/AddPersonAbsence",
+				new StringContent(JsonConvert.SerializeObject(addPersonAbsenceDto), Encoding.UTF8, "application/json"));
 			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
 			PersonAbsenceRepository.LoadAll().Count().Should().Be.EqualTo(1);
@@ -59,15 +59,15 @@ namespace Teleopti.Wfm.Api.Test.Command
 			PersonRepository.Add(person);
 			var absence = AbsenceFactory.CreateAbsence("absence").WithId();
 			AbsenceRepository.Has(absence);
-			var addAbsenceDto = new {
+			var addPersonAbsenceDto = new {
 				PersonId = person.Id.GetValueOrDefault(),
 				AbsenceId = absence.Id.GetValueOrDefault(),
 				UtcStartTime = new DateTime(2018, 1, 1),
 				UtcEndTime = new DateTime(2018, 1, 1)
 			};
 
-			var result = Client.PostAsync("/command/AddAbsence",
-				new StringContent(JsonConvert.SerializeObject(addAbsenceDto), Encoding.UTF8, "application/json"));
+			var result = Client.PostAsync("/command/AddPersonAbsence",
+				new StringContent(JsonConvert.SerializeObject(addPersonAbsenceDto), Encoding.UTF8, "application/json"));
 			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(false);
 			PersonAbsenceRepository.LoadAll().Count().Should().Be.EqualTo(0);
@@ -91,7 +91,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 			var personAbsenceAccount =
 				PersonAbsenceAccountFactory.CreatePersonAbsenceAccount(person, absence, account).WithId();
 			PersonAbsenceAccountRepository.Add(personAbsenceAccount);
-			var addAbsenceDto = new
+			var addPersonAbsenceDto = new
 			{
 				PersonId = person.Id.GetValueOrDefault(),
 				AbsenceId = absence.Id.GetValueOrDefault(),
@@ -99,8 +99,8 @@ namespace Teleopti.Wfm.Api.Test.Command
 				UtcEndTime = period.EndDateTime
 			};
 
-			var result = Client.PostAsync("/command/AddAbsence",
-				new StringContent(JsonConvert.SerializeObject(addAbsenceDto), Encoding.UTF8, "application/json"));
+			var result = Client.PostAsync("/command/AddPersonAbsence",
+				new StringContent(JsonConvert.SerializeObject(addPersonAbsenceDto), Encoding.UTF8, "application/json"));
 			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
 			PersonAbsenceRepository.LoadAll().Count().Should().Be.EqualTo(1);
