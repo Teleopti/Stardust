@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -84,22 +85,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
             get { return _scheduleTags; }
         }
 
-        public IEnumerable<IScheduleTag> ActiveScheduleTags
-        {
-            get
-            {
-				return _scheduleTags.Where(scheduleTag => !scheduleTag.IsDeleted).ToArray();
-            }
-        }
-
-		public IEnumerable<IAbsence> ActiveAbsences
-		{
-			get
-			{
-				return _absences.Where(a => !((IDeleteTag)a).IsDeleted).ToArray();
-			}
-		}
-
         public IEnumerable<IAbsence> Absences
         {
             get { return _absences; }
@@ -110,16 +95,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
             get { return _dayOffs; }
         }
 
-        public IEnumerable<IDayOffTemplate> ActiveDayOffs
-        {
-			get { return _dayOffs.Where(d => !((IDeleteTag)d).IsDeleted).ToArray(); }
-        }
-
 	    public IDayOffTemplate DefaultDayOffTemplate
 	    {
 		    get
 		    {
-				var displayList = ActiveDayOffs.ToList();
+				var displayList = DayOffs.NonDeleted().ToList();
 				displayList.Sort(new DayOffTemplateSorter());
 
 				return displayList[0];
@@ -135,17 +115,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         {
             get { return _shiftCategories; }
         }
-
-		public IEnumerable<IShiftCategory> ActiveShiftCategories
-		{
-			get { return _shiftCategories.Where(s => !((IDeleteTag)s).IsDeleted).ToArray(); }
-		}
-
-		public IEnumerable<IActivity> ActiveActivities
-        {
-			get { return _activities.Where(a => !a.IsDeleted).ToArray(); }
-        }
-
 
 		private void loadPartTimePercentage(IRepository<IPartTimePercentage> ptpRepository)
 	    {

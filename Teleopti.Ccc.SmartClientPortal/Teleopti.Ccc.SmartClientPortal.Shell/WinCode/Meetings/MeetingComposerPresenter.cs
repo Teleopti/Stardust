@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
         public static MeetingViewModel CreateDefaultMeeting(IPerson organizer, ISchedulerStateHolder schedulerStateHolder, DateOnly startDate, IEnumerable<IPerson> participants, INow now)
         {
             return CreateDefaultMeeting(organizer, schedulerStateHolder.RequestedScenario,
-										schedulerStateHolder.CommonStateHolder.ActiveActivities.FirstOrDefault(), startDate, participants,
+										schedulerStateHolder.CommonStateHolder.Activities.NonDeleted().FirstOrDefault(), startDate, participants,
                                         schedulerStateHolder.CommonNameDescription, schedulerStateHolder.TimeZoneInfo, now);
         }
 

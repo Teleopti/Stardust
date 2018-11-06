@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		{
 			var currContext = _desktopContext.CurrentContext();
 			schedulerStateHolderTo.SchedulingResultState.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
-			var dayOffTemplate = currContext.SchedulerStateHolderFrom.CommonStateHolder.ActiveDayOffs.First();
+			var dayOffTemplate = currContext.SchedulerStateHolderFrom.CommonStateHolder.DayOffs.NonDeleted().First();
 			schedulerStateHolderTo.CommonStateHolder.SetDayOffTemplate(dayOffTemplate);
 			schedulerStateHolderTo.RequestedPeriod = currContext.SchedulerStateHolderFrom.RequestedPeriod;
 			schedulerStateHolderTo.ConsiderShortBreaks = false; //TODO check if this is the wanted behaviour in other cases than intraday optimization

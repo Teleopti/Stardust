@@ -648,7 +648,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						_scheduleView.Presenter.AddOvertime(definitionSets.ToList());
 						break;
 					case ClipboardItems.Absence:
-						if (!SchedulerState.CommonStateHolder.ActiveAbsences.Any())
+						if (!SchedulerState.CommonStateHolder.Absences.NonDeleted().Any())
 						{
 							ShowInformationMessage(Resources.NoAbsenceDefined, Resources.NoAbsenceDefinedCaption);
 							return;
@@ -1118,8 +1118,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				using (var optimizationPreferencesDialog =
 					new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider,
-						SchedulerState.CommonStateHolder.ActiveScheduleTags,
-						SchedulerState.CommonStateHolder.ActiveActivities,
+						SchedulerState.CommonStateHolder.ScheduleTags.NonDeleted(),
+						SchedulerState.CommonStateHolder.Activities.NonDeleted(),
 						SchedulerState.DefaultSegmentLength, SchedulerState.Schedules,
 						_scheduleView.AllSelectedPersons(selectedSchedules), _daysOffPreferences))
 				{
@@ -1348,7 +1348,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				if (SchedulerState.FilteredCombinedAgentsDictionary.Count > 0)
 				{
-					IList<IDayOffTemplate> displayList = SchedulerState.CommonStateHolder.ActiveDayOffs.ToList();
+					IList<IDayOffTemplate> displayList = SchedulerState.CommonStateHolder.DayOffs.NonDeleted().ToList();
 					if (displayList.Count <= 0)
 						return;
 
@@ -2988,9 +2988,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					}
 
 					using (var options = new SchedulingSessionPreferencesDialog(_schedulingOptions,
-							SchedulerState.CommonStateHolder.ActiveShiftCategories,
-							_groupPagesProvider, SchedulerState.CommonStateHolder.ActiveScheduleTags,
-							"SchedulingOptions", SchedulerState.CommonStateHolder.ActiveActivities))
+							SchedulerState.CommonStateHolder.ShiftCategories.NonDeleted(),
+							_groupPagesProvider, SchedulerState.CommonStateHolder.ScheduleTags.NonDeleted(),
+							"SchedulingOptions", SchedulerState.CommonStateHolder.Activities.NonDeleted()))
 					{
 						if (options.ShowDialog(this) == DialogResult.OK)
 						{
@@ -3027,9 +3027,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Free;
 				using (
 					var options = new SchedulingSessionPreferencesDialog(_schedulingOptions,
-						SchedulerState.CommonStateHolder.ActiveShiftCategories,
-						_groupPagesProvider, SchedulerState.CommonStateHolder.ActiveScheduleTags, "SchedulingOptionsActivities",
-						SchedulerState.CommonStateHolder.ActiveActivities))
+						SchedulerState.CommonStateHolder.ShiftCategories.NonDeleted(),
+						_groupPagesProvider, SchedulerState.CommonStateHolder.ScheduleTags.NonDeleted(), "SchedulingOptionsActivities",
+						SchedulerState.CommonStateHolder.Activities.NonDeleted()))
 				{
 					if (options.ShowDialog(this) == DialogResult.OK)
 					{
@@ -3617,7 +3617,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			SchedulerState.SchedulingResultState.Schedules.ModifiedPersonAccounts.Clear();
 			backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXInitializingTreeDots"));
 
-			foreach (var tag in SchedulerState.CommonStateHolder.ActiveScheduleTags)
+			foreach (var tag in SchedulerState.CommonStateHolder.ScheduleTags.NonDeleted())
 			{
 				if (tag.Id != _currentSchedulingScreenSettings.DefaultScheduleTag) continue;
 				_defaultScheduleTag = tag;
@@ -6918,9 +6918,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				var showUseSkills = SchedulerState.SchedulingResultState.Skills.Any(x => x.IsCascading());
 
-				using (var options = new OvertimePreferencesDialog(SchedulerState.CommonStateHolder.ActiveScheduleTags,
+				using (var options = new OvertimePreferencesDialog(SchedulerState.CommonStateHolder.ScheduleTags.NonDeleted(),
 																"OvertimePreferences",
-																SchedulerState.CommonStateHolder.ActiveActivities,
+																SchedulerState.CommonStateHolder.Activities.NonDeleted(),
 																resolution,
 																definitionSets,
 																ruleSetBags,

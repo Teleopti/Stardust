@@ -534,7 +534,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         public void ShouldUseAnActiveActivityAsDefaultActivityForMeeting()
         {
             var commonStateHolder = _mocks.DynamicMock<ICommonStateHolder>();
-            Expect.Call(commonStateHolder.ActiveActivities).Return(new [] {_activity});
+            Expect.Call(commonStateHolder.Activities).Return(new [] {_activity});
 
             Expect.Call(_schedulerStateHolder.RequestedScenario).Return(_scenario);
             Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(_timeZone);

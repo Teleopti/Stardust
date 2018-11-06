@@ -50,10 +50,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			DateTimePeriod defaultDateTimePeriod = DefaultPeriod ?? filteredScheduleParts[0].Period;
 
 			//Pick the first one instead (alphabetic)
-			var activeShiftCategories = SchedulerStateHolder.CommonStateHolder.ActiveShiftCategories.Take(1).ToArray();
+			var activeShiftCategories = SchedulerStateHolder.CommonStateHolder.ShiftCategories.NonDeleted().Take(1).ToArray();
 
 			IAddActivityViewModel dialog1 =
-				ScheduleViewBase.CreateAddActivityViewModel(SchedulerStateHolder.CommonStateHolder.ActiveActivities,
+				ScheduleViewBase.CreateAddActivityViewModel(SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted(),
 															activeShiftCategories,
 															defaultDateTimePeriod,
 															SchedulerStateHolder.TimeZoneInfo,

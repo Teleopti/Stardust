@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				IList<IPerson> selectedActivePersons =
 					selectedPersons.Where(new PersonIsActiveSpecification(meetingStartOrToday).IsSatisfiedBy).ToList();
 
-				if (!_schedulerStateHolder.CommonStateHolder.ActiveActivities.Any() || selectedActivePersons.Count == 0) return;
+				if (!_schedulerStateHolder.CommonStateHolder.Activities.NonDeleted().Any() || selectedActivePersons.Count == 0) return;
 
 				using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{

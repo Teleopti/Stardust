@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 					{
 						syncSmartDayOffContainerWithMatrix(
 							backToLegalStateSolverContainer,
-							_schedulerStateHolder().CommonStateHolder.ActiveDayOffs.ToList()[0],
+							_schedulerStateHolder().CommonStateHolder.DayOffs.NonDeleted().ToList()[0],
 							_scheduleDayChangeCallback,
 							new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling),
 							_scheduleMatrixLockableBitArrayConverterEx,
