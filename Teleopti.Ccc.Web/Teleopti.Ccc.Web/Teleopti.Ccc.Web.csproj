@@ -1594,7 +1594,6 @@
     <Content Include="WFM\app\forecasting\spec\modify.controller.spec.js" />
     <Content Include="WFM\app\global\areas\menu-component.html" />
     <Content Include="WFM\app\global\areas\menu.component.js" />
-    <Content Include="WFM\app\global\businessunits\businessunits.controller.spec.js" />
     <Content Include="WFM\app\global\current-user\authentication-requests.service.js" />
     <Content Include="WFM\app\global\current-user\settings.service.js" />
     <Content Include="WFM\app\global\current-user\_modules.js" />
@@ -1604,7 +1603,6 @@
     <Content Include="WFM\app\global\favoriteSearch\favoriteSearch.tpl.html" />
     <Content Include="WFM\app\global\favoriteSearch\favoriteSearchPanel.tpl.html" />
     <Content Include="WFM\app\global\favoriteSearch\_modules.js" />
-    <Content Include="WFM\app\global\focusInput\focusInput.directive.js" />
     <Content Include="WFM\app\global\groupPage\groupPage.component.js" />
     <Content Include="WFM\app\global\groupPage\groupPage.component.spec.js" />
     <Content Include="WFM\app\global\groupPage\groupPage.service.js" />
@@ -1949,8 +1947,6 @@
     <Content Include="WFM\app\forecasting\html\skillCreate.html" />
     <Content Include="WFM\app\forecasting\spec\skill.create.controller.spec.js" />
     <Content Include="WFM\app\global\areas\areas.controller.spec.js" />
-    <Content Include="WFM\app\global\businessunits\businessunits.service.js" />
-    <Content Include="WFM\app\global\businessunits\_modules.js" />
     <Content Include="WFM\app\global\current-user\currentuserinfo.service.spec.js" />
     <Content Include="WFM\app\global\exception-handling\exceptionhandler.js" />
     <Content Include="WFM\app\global\http\http.spec.js" />
@@ -1958,11 +1954,6 @@
     <Content Include="WFM\app\global\signalR\signalR.service.js" />
     <Content Include="WFM\app\global\shortcuts\shortcuts.service.js" />
     <Content Include="WFM\app\global\shortcuts\shortcuts.service.spec.js" />
-    <Content Include="WFM\app\global\wfm-themes\wfm.themespicker.controller.spec.js" />
-    <Content Include="WFM\app\global\wfm-themes\wfm.themes.service.js" />
-    <Content Include="WFM\app\global\wfm-themes\wfm.themes.service.spec.js" />
-    <Content Include="WFM\app\global\wfm-themes\wfm.themespicker.controller.js" />
-    <Content Include="WFM\app\global\wfm-themes\_modules.js" />
     <Content Include="WFM\app\global\i18n\wfm.i18n.service.spec.js" />
     <Content Include="WFM\app\intraday\intraday-area.html" />
     <Content Include="WFM\app\intraday\intraday.area.controller.js" />
@@ -1973,9 +1964,6 @@
     <Content Include="WFM\app\peopleold\people.routes.js" />
     <Content Include="WFM\app\permissions\permissions.routes.js" />
     <Content Include="WFM\app\reports\html\leaderboard.html" />
-    <Content Include="WFM\app\reports\images\bronze.png" />
-    <Content Include="WFM\app\reports\images\gold.png" />
-    <Content Include="WFM\app\reports\images\silver.png" />
     <Content Include="WFM\app\reports\leaderboard.agentBadge.factory.js" />
     <Content Include="WFM\app\reports\leaderboard.agentBadge.factory.spec.js" />
     <Content Include="WFM\app\reports\leaderboard.service.js" />
@@ -2165,7 +2153,6 @@
     <Content Include="WFM\app\global\help\help.controller.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-datepicker-jalaali-ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali.js" />
-    <Content Include="WFM\app\global\businessunits\businessunits.controller.js" />
     <Content Include="WFM\app\global\toggles\toggle.service.js" />
     <Content Include="WFM\app\outbound\c3-fix.js" />
     <Content Include="WFM\app\outbound\outbound.service.activity.js" />
@@ -2224,10 +2211,6 @@
     <Content Include="WFM\app\seatManagement\seatmapedit.controller.js" />
     <Content Include="WFM\app\seatManagement\seatmapedit.directive.js" />
     <Content Include="WFM\app\seatManagement\seatplaninit.directive.js" />
-    <Content Include="WFM\vendor\c3\c3-angular.min.js" />
-    <Content Include="WFM\vendor\c3\c3.min.css" />
-    <Content Include="WFM\vendor\c3\c3.min.js" />
-    <Content Include="WFM\vendor\d3\d3.js" />
     <Content Include="WFM\vendor\d3\d3.min.js" />
     <Content Include="WFM\css\_intraday.scss" />
     <None Include="WFM\css\_layout.scss" />
@@ -2480,11 +2463,6 @@
     <Content Include="WFM\vendor\MaterialDesignIcons\css\materialdesignicons.css" />
     <Content Include="WFM\vendor\MaterialDesignIcons\css\materialdesignicons.min.css" />
     <Content Include="WFM\vendor\MaterialDesignIcons\fonts\materialdesignicons-webfont.svg" />
-    <Content Include="WFM\vendor\MaterialDesignIcons\license.txt" />
-    <Content Include="WFM\vendor\ng-image-input-with-preview\ng-image-input-with-preview.css" />
-    <Content Include="WFM\vendor\ng-image-input-with-preview\ng-image-input-with-preview.js" />
-    <Content Include="WFM\vendor\ng-image-input-with-preview\ng-image-input-with-preview.min.css" />
-    <Content Include="WFM\vendor\ng-image-input-with-preview\ng-image-input-with-preview.min.js" />
     <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.css" />
     <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.min.css" />
     <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker.js" />
@@ -2700,8 +2678,6 @@
       <SubType>Designer</SubType>
     </Content>
     <None Include="Properties\PublishProfiles\Local iis.pubxml" />
-    <Content Include="WFM\css\style.scss" />
-    <Content Include="WFM\css\darkstyle.scss" />
     <Content Include="WFM\vendor\MaterialDesignIcons\fonts\materialdesignicons-webfont.eot" />
     <Content Include="WFM\vendor\MaterialDesignIcons\fonts\materialdesignicons-webfont.ttf" />
     <Content Include="WFM\vendor\MaterialDesignIcons\fonts\materialdesignicons-webfont.woff" />
@@ -2713,18 +2689,15 @@
     <Content Include="WFM\vendor\MaterialDesignIcons\scss\_icons.scss" />
     <Content Include="WFM\vendor\MaterialDesignIcons\scss\_path.scss" />
     <Content Include="WFM\vendor\MaterialDesignIcons\scss\_variables.scss" />
-    <Content Include="WFM\vendor\d3\LICENSE" />
     <Content Include="WFM\css\_people.scss" />
     <Content Include="WFM\css\_seatmap.scss" />
     <Content Include="WFM\css\_permissions.scss" />
-    <Content Include="WFM\vendor\c3\c3-angular.min.js.map" />
     <Content Include="WFM\css\_resourceplanner.scss" />
     <Content Include="WFM\css\_seatplan.scss" />
     <Content Include="WFM\css\_rta.scss" />
     <Content Include="WFM\app\outbound\outbound.service.misc.js" />
     <Content Include="WFM\css\_teamschedule.scss" />
     <Content Include="WFM\css\_requests.scss" />
-    <Content Include="WFM\css\_start.scss" />
     <Content Include="WFM\css\_reports.scss" />
     <Content Include="WFM\vendor\angular-bootstrap-persian-datepicker-master\README.md" />
     <Content Include="WFM\manifest.webmanifest.json" />
