@@ -781,7 +781,6 @@
     <Compile Include="Common\PropertyPageAndWizard\WizardNameChangedEventArgsTest.cs" />
     <Compile Include="Common\PropertyReflectorTest.cs" />
     <Compile Include="Common\SchedulerStateHolderTest.cs" />
-    <Compile Include="Common\CommonStateHolderTest.cs" />
     <Compile Include="Common\PasteOptionsTest.cs" />
     <Compile Include="Common\GuiHelpers\ListBoxItemTest.cs" />
     <Compile Include="Forecasting\OpenHourHelperTest.cs" />
