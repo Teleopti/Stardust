@@ -172,7 +172,7 @@
 	self.showOvertimeAvailability = function (data) {
 		var date = self.fixedDate();
 		var momentDate = moment(date, Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly);
-		if (data.startPositionPercentage() === 0 && data.overtimeAvailabilityYesterday) {
+		if (data.startPositionPercentage === 0 && data.overtimeAvailabilityYesterday) {
 			momentDate.add("days", -1);
 		}
 		date = Teleopti.MyTimeWeb.Common.FormatServiceDate(momentDate);
