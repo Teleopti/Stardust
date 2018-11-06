@@ -5,12 +5,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.InfrastructureTest.Repositories;
 using Teleopti.Wfm.Adherence.Domain.Configuration;
+using Teleopti.Wfm.Adherence.Domain.Infrastructure.Repositories;
+using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Repositories
+namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Repositories
 {
     [TestFixture]
     [Category("BucketB")]
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Repositories
         {
             return new RtaRule(new Description("Wrong state"), Color.DarkTurquoise, TimeSpan.FromSeconds(15).Seconds, 0.8)
             {
-	            Adherence = Adherence.In
+	            Adherence = Ccc.Domain.InterfaceLegacy.Domain.Adherence.In
             };
         }
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Repositories
             Assert.AreEqual(org.DisplayColor.ToArgb(), loadedAggregateFromDatabase.DisplayColor.ToArgb());
             Assert.AreEqual(org.ThresholdTime,loadedAggregateFromDatabase.ThresholdTime);
             Assert.AreEqual(0.8, loadedAggregateFromDatabase.StaffingEffect );
-			Assert.AreEqual(Adherence.In, loadedAggregateFromDatabase.Adherence);
+			Assert.AreEqual(Ccc.Domain.InterfaceLegacy.Domain.Adherence.In, loadedAggregateFromDatabase.Adherence);
         }
 
         protected override Repository<IRtaRule> TestRepository(ICurrentUnitOfWork currentUnitOfWork)

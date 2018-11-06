@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 
-namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence
+namespace Teleopti.Wfm.Adherence.Domain.Infrastructure
 {
 	public static class SqlDataReaderExtensions
 	{

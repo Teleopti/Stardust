@@ -9,7 +9,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.PerformanceMeasurement
+namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.PerformanceMeasurement
 {
 	[TestFixture]
 	[Explicit]

@@ -12,12 +12,9 @@ using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Hangfire;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Tracer;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence;
+using Teleopti.Wfm.Adherence.ApplicationLayer.Infrastructure;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
 using Teleopti.Wfm.Adherence.Domain;
@@ -25,9 +22,12 @@ using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Wfm.Adherence.Domain.Configuration;
 using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Domain.Infrastructure;
+using Teleopti.Wfm.Adherence.Domain.Infrastructure.Service;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Tool;
 using Teleopti.Wfm.Adherence.Tracer;
+using Teleopti.Wfm.Adherence.Tracer.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {

@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.UnitOfWork;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence
+namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 {
 	public class WithUnitOfWorkWithRecurringEvents
 	{

@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.InfrastructureTest.Helper
+﻿namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 {
 	public abstract class DatabaseTestWithoutTransaction : DatabaseTest
 	{

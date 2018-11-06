@@ -4,12 +4,12 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 using Teleopti.Wfm.Adherence.Tracer;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Tracer
+namespace Teleopti.Wfm.Adherence.Test.Tracer.Infrastructure
 {
 	[AnalyticsDatabaseTest]
 	[Setting("RtaTracerBufferSize", 0)]

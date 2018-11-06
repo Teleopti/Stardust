@@ -14,8 +14,9 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.PerformanceMeasurement
+namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.PerformanceMeasurement
 {
 	[TestFixture]
 	[Explicit]

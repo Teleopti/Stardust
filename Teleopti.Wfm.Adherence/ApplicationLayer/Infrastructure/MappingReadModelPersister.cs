@@ -8,7 +8,7 @@ using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
+namespace Teleopti.Wfm.Adherence.ApplicationLayer.Infrastructure
 {
 	public class MappingReadModelPersister : IMappingReadModelPersister
 	{
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 
 		public bool Invalid()
 		{
-			return _keyValueStore.Get("RuleMappingsInvalido", true);
+			return Ccc.Domain.ApplicationLayer.KeyValueStorePersisterExtensions.Get(_keyValueStore, "RuleMappingsInvalido", true);
 		}
 
 		public void Persist(IEnumerable<Mapping> mappings)

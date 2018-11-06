@@ -2,10 +2,9 @@
 using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Domain.Infrastructure.Service
 {
 	public class DataSourceReader : IDataSourceReader
 	{

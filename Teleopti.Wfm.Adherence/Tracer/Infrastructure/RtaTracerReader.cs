@@ -4,9 +4,8 @@ using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
-using Teleopti.Wfm.Adherence.Tracer;
 
-namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Tracer
+namespace Teleopti.Wfm.Adherence.Tracer.Infrastructure
 {
 	public class RtaTracerReader : IRtaTracerReader
 	{

@@ -2,11 +2,9 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Aop.Core;
-using Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.ReadModels.AgentState;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Adherence.Test;
 
-namespace Teleopti.Ccc.InfrastructureTest
+namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 {
 	public class AnalyticsUnitOfWorkTestAttribute : InfrastructureTestAttribute
 	{

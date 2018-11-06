@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
+namespace Teleopti.Wfm.Adherence.ApplicationLayer.Infrastructure
 {
 	public class CurrentScheduleReadModelPersister : IScheduleReader, ICurrentScheduleReadModelPersister
 	{

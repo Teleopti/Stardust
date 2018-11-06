@@ -2,9 +2,8 @@ using System;
 using Hangfire.Server;
 using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Wfm.Adherence.Tracer;
 
-namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Tracer
+namespace Teleopti.Wfm.Adherence.Tracer.Infrastructure
 {
 	public class RtaTracerRefresher : IBackgroundProcess
 	{

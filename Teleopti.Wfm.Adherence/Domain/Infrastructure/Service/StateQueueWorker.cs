@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Domain.Infrastructure.Service
 {
 	public class StateQueueWorker : IBackgroundProcess
 	{

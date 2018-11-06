@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Wfm.Adherence.Domain.Events;
 
-namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain
+namespace Teleopti.Wfm.Adherence.Domain.Infrastructure
 {
 	public class RtaEventStoreUpgraderProcess : IBackgroundProcess
 	{

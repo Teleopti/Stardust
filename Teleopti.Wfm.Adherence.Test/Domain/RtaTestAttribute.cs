@@ -6,7 +6,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Wfm.Adherence.Test
+namespace Teleopti.Wfm.Adherence.Test.Domain
 {
 	[LoggedOff]
 	public class RtaTestAttribute : RtaTestLoggedOnAttribute

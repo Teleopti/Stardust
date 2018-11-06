@@ -4,7 +4,7 @@ using NHibernate.Cfg;
 using NHibernate.Dialect;
 using Teleopti.Ccc.Domain.Config;
 
-namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Tracer
+namespace Teleopti.Wfm.Adherence.Tracer.Infrastructure
 {
 	public class RtaTracerSessionFactory : IDisposable
 	{

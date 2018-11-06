@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persisters
+namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.Persisters
 {
 	public static class AgentStatePersisterUpsert
 	{

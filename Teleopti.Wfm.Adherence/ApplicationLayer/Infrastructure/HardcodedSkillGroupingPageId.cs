@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
+namespace Teleopti.Wfm.Adherence.ApplicationLayer.Infrastructure
 {
 	public class HardcodedSkillGroupingPageId
 	{

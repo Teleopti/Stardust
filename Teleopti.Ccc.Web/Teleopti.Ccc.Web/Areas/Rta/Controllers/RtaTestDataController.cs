@@ -19,7 +19,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence.Domain;

@@ -1,11 +1,8 @@
-﻿using System;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.ReadModels.AgentState;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Adherence.Test;
 
-namespace Teleopti.Ccc.InfrastructureTest
+namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 {
 	public class PrincipalAndStateTestAttribute : InfrastructureTestAttribute, IPrincipalAndStateContext
 	{

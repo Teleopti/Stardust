@@ -6,11 +6,10 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
+namespace Teleopti.Wfm.Adherence.ApplicationLayer.Infrastructure
 {
 	public class AgentStateReadModelReader : IAgentStateReadModelReader
 	{

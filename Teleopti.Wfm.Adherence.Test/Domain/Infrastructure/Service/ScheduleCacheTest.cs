@@ -2,10 +2,10 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service
 {
 	[TestFixture]
 	[DatabaseTest]

@@ -9,7 +9,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Domain.Infrastructure.Service
 {
 	public class AgentStatePersister : IAgentStatePersister
 	{

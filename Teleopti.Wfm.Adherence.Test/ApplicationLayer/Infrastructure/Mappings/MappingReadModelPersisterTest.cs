@@ -3,11 +3,11 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.ReadModels.Mappings
+namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.Infrastructure.Mappings
 {
 	[TestFixture]
 	[ReadModelUnitOfWorkTest]
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 					ActivityId = activity,
 					RuleId = rule,
 					RuleName = "phone",
-					Adherence = Adherence.In,
+					Adherence = Ccc.Domain.InterfaceLegacy.Domain.Adherence.In,
 					StaffingEffect = 0,
 					DisplayColor = Color.Green.ToArgb(),
 					IsAlarm = false,
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			model.ActivityId.Should().Be(activity);
 			model.RuleId.Should().Be(rule);
 			model.RuleName.Should().Be("phone");
-			model.Adherence.Should().Be(Adherence.In);
+			model.Adherence.Should().Be(Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
 			model.StaffingEffect.Should().Be(0);
 			model.DisplayColor.Should().Be(Color.Green.ToArgb());
 			model.IsAlarm.Should().Be(false);

@@ -16,12 +16,12 @@ using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Support.Security;
 using Teleopti.Support.Security.Library;
+using Teleopti.Wfm.Adherence.Domain.Infrastructure.Repositories;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core.Hangfire;
 

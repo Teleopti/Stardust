@@ -6,13 +6,12 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.ReadModels.AgentState;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Domain.Configuration;
-using Teleopti.Wfm.Adherence.Test;
+using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Repositories
+namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Repositories
 {
 	[TestFixture]
 	[PrincipalAndStateTest]

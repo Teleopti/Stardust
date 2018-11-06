@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,14 +10,12 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Domain.Infrastructure.Service;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain
+namespace Teleopti.Wfm.Adherence.Domain.Infrastructure
 {
 	public class RtaEventStore : IRtaEventStore, IRtaEventStoreReader, IRtaEventStoreTester, IRtaEventStoreUpgradeWriter
 	{

@@ -2,7 +2,6 @@ using System;
 using System.Drawing;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence.Domain;
 using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;

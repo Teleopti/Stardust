@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persisters
+namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.Persisters
 {
 	[TestFixture]
 	[UnitOfWorkTest]

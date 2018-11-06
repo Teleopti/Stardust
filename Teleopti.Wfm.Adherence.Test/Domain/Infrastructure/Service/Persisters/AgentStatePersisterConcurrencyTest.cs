@@ -12,8 +12,9 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persisters
+namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.Persisters
 {
 	[TestFixture]
 	[DatabaseTest]

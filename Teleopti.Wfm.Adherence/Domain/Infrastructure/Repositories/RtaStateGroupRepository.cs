@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Wfm.Adherence.Domain.Configuration;
 
-namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Repositories
+namespace Teleopti.Wfm.Adherence.Domain.Infrastructure.Repositories
 {
     public class RtaStateGroupRepository : Repository<IRtaStateGroup>, IRtaStateGroupRepository
     {

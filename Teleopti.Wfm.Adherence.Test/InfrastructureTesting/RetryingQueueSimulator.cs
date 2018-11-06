@@ -5,7 +5,7 @@ using System.Threading;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.TestCommon;
 
-namespace Teleopti.Ccc.InfrastructureTest
+namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 {
 	public class RetryingQueueSimulator
 	{

@@ -5,12 +5,12 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.InfrastructureTest.Repositories;
 using Teleopti.Wfm.Adherence.Domain.Configuration;
+using Teleopti.Wfm.Adherence.Domain.Infrastructure.Repositories;
+using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Repositories
+namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Repositories
 {
 
     [TestFixture]

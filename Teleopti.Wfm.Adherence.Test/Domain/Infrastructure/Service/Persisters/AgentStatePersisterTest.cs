@@ -6,8 +6,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persisters
+namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.Persisters
 {
 	[TestFixture]
 	[UnitOfWorkTest]

@@ -4,8 +4,9 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persisters
+namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.Persisters
 {
 	[TestFixture]
 	[AnalyticsUnitOfWorkTest]

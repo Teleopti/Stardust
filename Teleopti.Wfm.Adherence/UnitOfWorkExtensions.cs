@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
-namespace Teleopti.Ccc.Infrastructure.Repositories
+namespace Teleopti.Wfm.Adherence
 {
 	internal static class UnitOfWorkExtensions
 	{

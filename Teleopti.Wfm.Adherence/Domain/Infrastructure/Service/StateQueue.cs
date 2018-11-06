@@ -3,10 +3,9 @@ using NHibernate;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Domain.Infrastructure.Service
 {
 	public class StateQueue : IStateQueueWriter, IStateQueueReader
 	{

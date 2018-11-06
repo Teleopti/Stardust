@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
+namespace Teleopti.Wfm.Adherence.ApplicationLayer.Infrastructure
 {
 	public class MappingReadModelReader : IMappingReader
 	{
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 			}
 			public new int? Adherence
 			{
-				set { base.Adherence = (Adherence?) value; }
+				set { base.Adherence = (Ccc.Domain.InterfaceLegacy.Domain.Adherence?) value; }
 			}
 			public bool Updated { get; set; }
 		}

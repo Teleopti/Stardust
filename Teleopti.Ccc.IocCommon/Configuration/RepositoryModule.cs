@@ -13,10 +13,10 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.MachineLearning;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
+using Teleopti.Wfm.Adherence.Domain.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {

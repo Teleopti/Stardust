@@ -1,15 +1,12 @@
 using System;
 using System.Threading.Tasks;
 using Hangfire.Server;
-using log4net;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Domain.MultiTenancy;
-using Teleopti.Wfm.Adherence;
 using Teleopti.Wfm.Adherence.Domain.Events;
-using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain
+namespace Teleopti.Wfm.Adherence.Domain.Infrastructure
 {
 	public class RtaEventStoreSynchronizerProcess : IBackgroundProcess
 	{

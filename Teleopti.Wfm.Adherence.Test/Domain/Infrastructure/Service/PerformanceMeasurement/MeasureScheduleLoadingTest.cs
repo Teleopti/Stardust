@@ -17,7 +17,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.PerformanceMeasurement
+namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.PerformanceMeasurement
 {
 	[TestFixture]
 	[Explicit]

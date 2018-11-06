@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Linq;
 using NUnit.Framework;
-//using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
+//using Rhino.Mocks;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
+namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure
 {
 	[TestFixture]
 	[DatabaseTest]

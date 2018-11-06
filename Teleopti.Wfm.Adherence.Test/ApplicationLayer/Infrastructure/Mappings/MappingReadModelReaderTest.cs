@@ -5,7 +5,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -15,8 +14,9 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Domain.Configuration;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.ReadModels.Mappings
+namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.Infrastructure.Mappings
 {
 	[TestFixture]
 	[DatabaseTest]
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				0, 
 				1)
 			{
-				Adherence = Adherence.In,
+				Adherence = Ccc.Domain.InterfaceLegacy.Domain.Adherence.In,
 			};
 			WithUnitOfWork.Do(() =>
 			{
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			mapping.RuleName.Should().Be("InAdherence");
 			mapping.DisplayColor.Should().Be(Color.Blue.ToArgb());
 			mapping.StaffingEffect.Should().Be(1);
-			mapping.Adherence.Should().Be(Adherence.In);
+			mapping.Adherence.Should().Be(Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
 		}
 
 		[Test]

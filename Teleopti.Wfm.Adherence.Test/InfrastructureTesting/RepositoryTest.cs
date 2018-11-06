@@ -13,11 +13,10 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 
-namespace Teleopti.Ccc.InfrastructureTest.Repositories
+namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 {
     /// <summary>
 	/// Base class for repository testsPersistAndRemoveFromUnitOfWork

@@ -9,8 +9,9 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.ReadModels.Schedules
+namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.Infrastructure.Schedules
 {
 	[TestFixture]
 	[DatabaseTest]

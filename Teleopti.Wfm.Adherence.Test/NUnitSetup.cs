@@ -1,8 +1,7 @@
 using System.IO;
 using NUnit.Framework;
 
-
-namespace Teleopti.Ccc.InfrastructureTest
+namespace Teleopti.Wfm.Adherence.Test
 {
 	[SetUpFixture]
 	public class NUnitSetup

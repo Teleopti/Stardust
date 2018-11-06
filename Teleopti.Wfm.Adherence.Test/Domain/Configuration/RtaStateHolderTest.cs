@@ -11,7 +11,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Wfm.Adherence.Domain.Configuration;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Wfm.Adherence.Test
+namespace Teleopti.Wfm.Adherence.Test.Domain.Configuration
 {
     [TestFixture]
     public class RtaStateHolderTest

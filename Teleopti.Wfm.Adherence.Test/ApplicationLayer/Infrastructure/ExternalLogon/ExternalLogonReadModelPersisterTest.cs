@@ -3,8 +3,9 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.ReadModels.ExternalLogon
+namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.Infrastructure.ExternalLogon
 {
 	[TestFixture]
 	[ReadModelUnitOfWorkTest]

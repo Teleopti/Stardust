@@ -1,16 +1,13 @@
-﻿using System.Collections.Generic;
-using NHibernate;
+﻿using NHibernate;
 using NUnit.Framework;
-//using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.ReadModels.AgentState;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Adherence.Test;
+//using Rhino.Mocks;
 
-namespace Teleopti.Ccc.InfrastructureTest.Helper
+namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 {
     public abstract class DatabaseTest : INotCompatibleWithIoCTest
 	{

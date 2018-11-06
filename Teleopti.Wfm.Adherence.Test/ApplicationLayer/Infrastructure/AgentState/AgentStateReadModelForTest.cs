@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.ReadModels.AgentState
+namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.Infrastructure.AgentState
 {
 	public class AgentStateReadModelForTest : AgentStateReadModel
 	{

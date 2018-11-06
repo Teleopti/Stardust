@@ -2,19 +2,14 @@
 using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Wfm.Adherence.Domain;
-using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence
+namespace Teleopti.Wfm.Adherence.Domain.Infrastructure
 {
 	public class RtaEventPublisher : IRtaEventPublisher
 	{

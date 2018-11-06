@@ -1,8 +1,6 @@
-﻿using Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.ReadModels.AgentState;
-using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Adherence.Test;
+﻿using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.InfrastructureTest
+namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 {
 	public class DatabaseTestAttribute : InfrastructureTestAttribute
 	{

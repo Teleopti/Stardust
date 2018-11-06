@@ -14,7 +14,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 
-namespace Teleopti.Wfm.Adherence.Test
+namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 {
 	public class NoMessageSender : IMessageSender
 	{

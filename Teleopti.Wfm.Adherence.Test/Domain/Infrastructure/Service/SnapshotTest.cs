@@ -3,17 +3,16 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service
 {
 	[TestFixture]
 	[MultiDatabaseTest]
@@ -51,12 +50,12 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 				
 				.WithStateGroup("phone")
 				.WithStateCode("phone")
-				.WithRule("InAdherence", 0, Adherence.In)
+				.WithRule("InAdherence", 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
 				.WithMapping("phone", "InAdherence")
 
 				.WithStateGroup(logOutBySnapshot, true, true)
 				.WithStateCode(logOutBySnapshot)
-				.WithRule("OutAdherence", -1, Adherence.Out)
+				.WithRule("OutAdherence", -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
 				.WithMapping(logOutBySnapshot, "OutAdherence")
 
 				.PublishRecurringEvents()

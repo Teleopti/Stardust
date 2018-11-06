@@ -2,15 +2,15 @@
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 using Teleopti.Wfm.Adherence.Tracer;
 
-namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
