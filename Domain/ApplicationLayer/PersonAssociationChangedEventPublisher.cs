@@ -71,7 +71,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			});
 		}
 
-		[Attempts(5)]
 		public void Handle(TenantHourTickEvent @event) => publishForAllPersons();
 
 		public void Handle(PersonTeamChangedEvent @event) => PublishForPerson(@event.PersonId);
