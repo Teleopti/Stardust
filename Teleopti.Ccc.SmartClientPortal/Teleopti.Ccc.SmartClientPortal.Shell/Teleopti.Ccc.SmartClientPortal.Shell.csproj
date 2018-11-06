@@ -1163,6 +1163,7 @@
     <Compile Include="WinCode\Scheduling\ScheduleSortingCommands\SortByStartAscendingCommand.cs" />
     <Compile Include="WinCode\Scheduling\ScheduleSortingCommands\SortByStartDescendingCommand.cs" />
     <Compile Include="WinCode\Scheduling\SchedulingScreenPersister.cs" />
+    <Compile Include="WinCode\Scheduling\SchedulingScreenState.cs" />
     <Compile Include="WinCode\Scheduling\SetTagCommand.cs" />
     <Compile Include="WinCode\Scheduling\ShiftCategoryDistribution\INeedShiftCategoryDistributionModel.cs" />
     <Compile Include="WinCode\Scheduling\ShiftCategoryDistribution\ShiftCategoryDistributionModel.cs" />

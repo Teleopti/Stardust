@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				uow.Reassociate(_owner.SchedulerState.SchedulingResultState.LoadedAgents);
+				uow.Reassociate(_owner.SchedulerState.SchedulerStateHolder.SchedulingResultState.LoadedAgents);
 				uow.Reassociate(dataToReassociate(null));
 				_presenter.DoWork(e);
 			}
@@ -205,13 +205,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					: new IAggregateRoot[] {};
 			return new[]
 					   {
-						   new IAggregateRoot[] {_owner.SchedulerState.RequestedScenario},
+						   new IAggregateRoot[] {_owner.SchedulerState.SchedulerStateHolder.RequestedScenario},
 						   personsToReassociate,
 						   _owner.MultiplicatorDefinitionSet,
-						   _owner.SchedulerState.CommonStateHolder.Absences,
-						   _owner.SchedulerState.CommonStateHolder.DayOffs,
-						   _owner.SchedulerState.CommonStateHolder.Activities,
-						   _owner.SchedulerState.CommonStateHolder.ShiftCategories
+						   _owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.Absences,
+						   _owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.DayOffs,
+						   _owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities,
+						   _owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.ShiftCategories
 					   };
 		}
 
