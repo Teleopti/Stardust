@@ -3528,7 +3528,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					foreach (var method in methods)
 					{
 						backgroundWorkerLoadData.ReportProgress(1, method.StatusStripString);
-						method.Action.Invoke(uow, SchedulerState.SchedulerStateHolder);
+						method.Action.Invoke(uow, SchedulerState);
 						if (backgroundWorkerLoadData.CancellationPending)
 						{
 							e.Cancel = true;
@@ -3702,7 +3702,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_requestPresenter.SetUndoRedoContainer(_undoRedo);
 		}
 
-		private void loadAccounts(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
+		private void loadAccounts(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
 			var rep = new PersonAbsenceAccountRepository(uow);
 			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487))
@@ -3715,14 +3715,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 
-		private void loadDefinitionSets(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
+		private void loadDefinitionSets(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
 			IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository =
 				new MultiplicatorDefinitionSetRepository(uow);
 			MultiplicatorDefinitionSet = multiplicatorDefinitionSetRepository.FindAllDefinitions();
 		}
 
-		private void filteringPeopleAndSkills(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
+		private void filteringPeopleAndSkills(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
 			using (PerformanceOutput.ForOperation("Executing and filtering loader decider"))
 			{
@@ -3744,25 +3744,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				SchedulerState.SchedulerStateHolder.ChoosenAgents.ForEach(peopleInOrg.Add);
 				SchedulerState.SchedulerStateHolder.SchedulingResultState.LoadedAgents = peopleInOrg;
 				log.Info("No, changed my mind... Removed " + (peopleCountFromBeginning - peopleInOrg.Count) + " people.");
-				var skills = stateHolder.SchedulingResultState.Skills;
+				var skills = stateHolder.SchedulerStateHolder.SchedulingResultState.Skills;
 				int orgSkills = skills.Length;
-				int removedSkills = result.FilterSkills(skills, stateHolder.SchedulingResultState.RemoveSkill, s => stateHolder.SchedulingResultState.AddSkills(s));
+				int removedSkills = result.FilterSkills(skills, stateHolder.SchedulerStateHolder.SchedulingResultState.RemoveSkill, s => stateHolder.SchedulerStateHolder.SchedulingResultState.AddSkills(s));
 				log.Info("Removed " + removedSkills + " skill when filtering (original: " + orgSkills + ")");
 			}
 		}
 
-		private void loadSkills(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
+		private void loadSkills(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
 			var staffingCalculatorServiceFacade = _container.Resolve<IStaffingCalculatorServiceFacade>();
-			ICollection<ISkill> skills = new SkillRepository(uow).FindAllWithSkillDays(stateHolder.RequestedPeriod.DateOnlyPeriod);
+			ICollection<ISkill> skills = new SkillRepository(uow).FindAllWithSkillDays(stateHolder.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
 			foreach (ISkill skill in skills)
 			{
 				skill.SkillType.StaffingCalculatorService = staffingCalculatorServiceFacade;
-				stateHolder.SchedulingResultState.AddSkills(skill);
+				stateHolder.SchedulerStateHolder.SchedulingResultState.AddSkills(skill);
 			}
 		}
 
-		private void loadSettings(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
+		private void loadSettings(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
 			using (PerformanceOutput.ForOperation("Loading settings"))
 			{
@@ -3770,23 +3770,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 
-		private void loadAuditingSettings(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
+		private void loadAuditingSettings(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
 			var repository = new AuditSettingRepository(new ThisUnitOfWork(uow));
 			var auditSetting = repository.Read();
 			_isAuditingSchedules = auditSetting.IsScheduleEnabled;
 		}
 
-		private void loadSchedules(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
+		private void loadSchedules(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
-			var period = stateHolder.RequestedPeriod.Period();
+			var period = stateHolder.SchedulerStateHolder.RequestedPeriod.Period();
 			using (PerformanceOutput.ForOperation("Loading schedules " + period))
 			{
 				var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true)
 				{
 					LoadDaysAfterLeft = true
 				};
-				stateHolder.LoadSchedules(_container.Resolve<IFindSchedulesForPersons>(), stateHolder.SchedulingResultState.LoadedAgents, scheduleDictionaryLoadOptions, period);
+				stateHolder.SchedulerStateHolder.LoadSchedules(_container.Resolve<IFindSchedulesForPersons>(), stateHolder.SchedulerStateHolder.SchedulingResultState.LoadedAgents, scheduleDictionaryLoadOptions, period);
 				SchedulerState.SchedulerStateHolder.Schedules.SetUndoRedoContainer(_undoRedo);
 			}
 			SchedulerState.SchedulerStateHolder.Schedules.PartModified += schedulesPartModified;
@@ -3856,7 +3856,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 
-		private void loadPeople(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
+		private void loadPeople(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
 			using (PerformanceOutput.ForOperation("Loading people"))
 			{
@@ -3893,12 +3893,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toggleQuickButtonEnabledState(toolStripButtonQuickAccessCancel, true);
 		}
 
-		private void loadRequests(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
+		private void loadRequests(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
 			using (PerformanceOutput.ForOperation("Loading requests"))
 			{
 				string numberOfDaysToShowNonPendingRequests;
-				stateHolder.LoadPersonRequests(uow, new RepositoryFactory(), _personRequestAuthorizationChecker,
+				stateHolder.SchedulerStateHolder.LoadPersonRequests(uow, new RepositoryFactory(), _personRequestAuthorizationChecker,
 					StateHolderReader.Instance.StateReader.ApplicationScopeData.AppSettings.TryGetValue(
 						"NumberOfDaysToShowNonPendingRequests", out numberOfDaysToShowNonPendingRequests)
 						? Convert.ToInt32(numberOfDaysToShowNonPendingRequests)
@@ -3906,18 +3906,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 
-		private void loadSeniorityWorkingDays(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
+		private void loadSeniorityWorkingDays(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
 			var result = new SeniorityWorkDayRanksRepository(uow).LoadAll();
 			var seniorityWorkDayRankses = result as ISeniorityWorkDayRanks[] ?? result.ToArray();
 			var workDayRanks = seniorityWorkDayRankses.IsEmpty() ? new SeniorityWorkDayRanks() : seniorityWorkDayRankses.First();
-			stateHolder.SchedulingResultState.SeniorityWorkDayRanks = workDayRanks;
+			stateHolder.SchedulerStateHolder.SchedulingResultState.SeniorityWorkDayRanks = workDayRanks;
 		}
 
-		private static void loadCommonStateHolder(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
+		private static void loadCommonStateHolder(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
-			stateHolder.LoadCommonState(uow, new RepositoryFactory());
-			if (!stateHolder.CommonStateHolder.DayOffs.Any())
+			stateHolder.SchedulerStateHolder.LoadCommonState(uow, new RepositoryFactory());
+			if (!stateHolder.SchedulerStateHolder.CommonStateHolder.DayOffs.Any())
 				throw new StateHolderException("You must create at least one Day Off in Options!");
 		}
 
@@ -4936,26 +4936,26 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 
-		private void loadBpos(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
+		private void loadBpos(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
-			stateHolder.SchedulingResultState.ExternalStaff = _container.Resolve<ExternalStaffProvider>().Fetch(stateHolder.SchedulingResultState.Skills, stateHolder.RequestedPeriod.Period());
+			stateHolder.SchedulerStateHolder.SchedulingResultState.ExternalStaff = _container.Resolve<ExternalStaffProvider>().Fetch(stateHolder.SchedulerStateHolder.SchedulingResultState.Skills, stateHolder.SchedulerStateHolder.RequestedPeriod.Period());
 		}
 
-		private void loadSkillDays(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
+		private void loadSkillDays(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
 			if (_teamLeaderMode) return;
 			using (PerformanceOutput.ForOperation("Loading skill days"))
 			{
-				stateHolder.SchedulingResultState.SkillDays = _container.Resolve<ISkillDayLoadHelper>().LoadSchedulerSkillDays(
-					new DateOnlyPeriod(stateHolder.RequestedPeriod.DateOnlyPeriod.StartDate.AddDays(-8),
-						stateHolder.RequestedPeriod.DateOnlyPeriod.EndDate.AddDays(8)), stateHolder.SchedulingResultState.Skills,
-					stateHolder.RequestedScenario);
+				stateHolder.SchedulerStateHolder.SchedulingResultState.SkillDays = _container.Resolve<ISkillDayLoadHelper>().LoadSchedulerSkillDays(
+					new DateOnlyPeriod(stateHolder.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod.StartDate.AddDays(-8),
+						stateHolder.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod.EndDate.AddDays(8)), stateHolder.SchedulerStateHolder.SchedulingResultState.Skills,
+					stateHolder.SchedulerStateHolder.RequestedScenario);
 
-				_container.Resolve<InitMaxSeatForStateHolder>().Execute(stateHolder.SchedulingResultState.MinimumSkillIntervalLength());
+				_container.Resolve<InitMaxSeatForStateHolder>().Execute(stateHolder.SchedulerStateHolder.SchedulingResultState.MinimumSkillIntervalLength());
 
 				IList<ISkillStaffPeriod> skillStaffPeriods =
-				stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
-					stateHolder.SchedulingResultState.Skills, stateHolder.Schedules.Period.LoadedPeriod());
+				stateHolder.SchedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
+					stateHolder.SchedulerStateHolder.SchedulingResultState.Skills, stateHolder.SchedulerStateHolder.Schedules.Period.LoadedPeriod());
 
 				foreach (ISkillStaffPeriod period in skillStaffPeriods)
 				{
