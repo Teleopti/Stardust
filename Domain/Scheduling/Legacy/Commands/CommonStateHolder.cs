@@ -8,6 +8,9 @@ using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
+	/*
+	 *  PLEASE DONT ADD MORE STATE TO THIS TYPE!
+	 */
     public class CommonStateHolder:ICommonStateHolder
     {
 	    private readonly IDisableDeletedFilter _disableDeleteFilter;

@@ -17,6 +17,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
+	/*
+	*  PLEASE DONT ADD MORE STATE TO THIS TYPE!
+	*/
 	public class SchedulerStateHolder : ISchedulerStateHolder, IClearReferredShiftTradeRequests
 	{
 		private readonly ICollection<DateOnly> _daysToResourceCalculate = new HashSet<DateOnly>();

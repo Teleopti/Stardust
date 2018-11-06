@@ -10,6 +10,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
+	/*
+	*  PLEASE DONT ADD MORE STATE TO THIS TYPE!
+	*/
 	public class SchedulingResultStateHolder : ISchedulingResultStateHolder
 	{
 		private IDictionary<ISkill, IEnumerable<ISkillDay>> _skillDays;
