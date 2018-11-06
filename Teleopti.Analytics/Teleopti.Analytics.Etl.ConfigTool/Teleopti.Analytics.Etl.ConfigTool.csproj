@@ -248,7 +248,6 @@
     <Content Include="Lib\AvalonControlsLibrary.dll" />
     <Content Include="Lib\Ricciolo.Controls.TreeListView.dll" />
     <Content Include="Teleopti-WFM-main-icon.ico" />
-    <None Include="Resources\ccc_Cancel_32x32.png" />
     <Resource Include="Resources\ccc_Left.png" />
     <Resource Include="Resources\ccc_Refresh.png" />
     <Resource Include="Resources\ccc_Right.png" />

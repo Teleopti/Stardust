@@ -1657,7 +1657,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Helper\StaffingCalculatorServiceModel.xlsm" />
     <Content Include="..\LicenseFiles\Teleopti_RD.xml">
       <Link>Teleopti_RD.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
