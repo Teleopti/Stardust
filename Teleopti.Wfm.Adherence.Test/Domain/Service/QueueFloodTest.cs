@@ -46,7 +46,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 				Checker.Reset();
 				Target.Enqueue(new BatchForTest());
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 			}
 
