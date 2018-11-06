@@ -1582,10 +1582,6 @@
     <Content Include="WFM\app\intraday\services\intraday.service.js" />
     <Content Include="WFM\app\intraday\services\intraday.time.service.js" />
     <Content Include="WFM\app\intraday\services\intraday.traffic.service.js" />
-    <Content Include="WFM\app\people\people.default.controller.js" />
-    <Content Include="WFM\app\people\people.routes.js" />
-    <Content Include="WFM\app\people\people.start.controller.js" />
-    <Content Include="WFM\app\people\_modules.js" />
     <Content Include="WFM\app\permissions\functionsrefact\permissions.function.component.js" />
     <Content Include="WFM\app\reports\audit.controller.spec.js" />
     <Content Include="WFM\app\forecasting\component\forecast.chart.component.js" />
