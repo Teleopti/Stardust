@@ -36,7 +36,7 @@ namespace Teleopti.Wfm.Api.Command
 		{
 			try
 			{
-				if (command.PeriodStartUtc >= command.PeriodEndUtc)
+				if (command.UtcStartTime >= command.UtcEndTime)
 					return new ResultDto
 					{
 						Successful = false,
@@ -48,7 +48,7 @@ namespace Teleopti.Wfm.Api.Command
 					: _scenarioRepository.Load(command.ScenarioId.GetValueOrDefault());
 
 				var person = _personRepository.Load(command.PersonId);
-				var period = new DateTimePeriod(command.PeriodStartUtc.Utc(), command.PeriodEndUtc.Utc());
+				var period = new DateTimePeriod(command.UtcStartTime.Utc(), command.UtcEndTime.Utc());
 				var dateOnlyPeriod = period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
 
 				var scheduleRange = _scheduleStorage

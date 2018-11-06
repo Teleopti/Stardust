@@ -39,8 +39,8 @@ namespace Teleopti.Wfm.Api.Test.Command
 
 			var removeAbsenceDto = new {
 				PersonId = person.Id.GetValueOrDefault(),
-				PeriodStartUtc = new DateTime(2018, 1, 2),
-				PeriodEndUtc = new DateTime(2018, 1, 1),
+				UtcStartTime = new DateTime(2018, 1, 2),
+				UtcEndTime = new DateTime(2018, 1, 1),
 				ScenarioId = scenario.Id.GetValueOrDefault()
 			};
 
@@ -66,8 +66,8 @@ namespace Teleopti.Wfm.Api.Test.Command
 
 			var removeAbsenceDto = new {
 				PersonId = person.Id.GetValueOrDefault(),
-				PeriodStartUtc = new DateTime(2018,1,1),
-				PeriodEndUtc = new DateTime(2018,1,2),
+				UtcStartTime = new DateTime(2018,1,1),
+				UtcEndTime = new DateTime(2018,1,2),
 				ScenarioId = scenario.Id.GetValueOrDefault()
 			};
 
@@ -96,8 +96,8 @@ namespace Teleopti.Wfm.Api.Test.Command
 
 			var removeAbsenceDto = new {
 				PersonId = person.Id.GetValueOrDefault(),
-				PeriodStartUtc = new DateTime(2018, 1, 3),
-				PeriodEndUtc = new DateTime(2018, 1, 4),
+				UtcStartTime = new DateTime(2018, 1, 3),
+				UtcEndTime = new DateTime(2018, 1, 4),
 				ScenarioId = scenario.Id.GetValueOrDefault()
 			};
 
@@ -126,8 +126,8 @@ namespace Teleopti.Wfm.Api.Test.Command
 			var removeAbsenceDto = new
 			{
 				PersonId = person.Id.GetValueOrDefault(),
-				PeriodStartUtc = new DateTime(2018, 1, 1),
-				PeriodEndUtc = new DateTime(2018, 1, 31),
+				UtcStartTime = new DateTime(2018, 1, 1),
+				UtcEndTime = new DateTime(2018, 1, 31),
 				ScenarioId = scenario.Id.GetValueOrDefault()
 			};
 
@@ -160,8 +160,8 @@ namespace Teleopti.Wfm.Api.Test.Command
 			var removeAbsenceDto = new
 			{
 				PersonId = person.Id.GetValueOrDefault(),
-				PeriodStartUtc = new DateTime(2018, 1, 1),
-				PeriodEndUtc = new DateTime(2018, 1, 9),
+				UtcStartTime = new DateTime(2018, 1, 1),
+				UtcEndTime = new DateTime(2018, 1, 9),
 				ScenarioId = scenario.Id.GetValueOrDefault()
 			};
 
@@ -195,8 +195,8 @@ namespace Teleopti.Wfm.Api.Test.Command
 			var removeAbsenceDto = new
 			{
 				PersonId = person.Id.GetValueOrDefault(),
-				PeriodStartUtc = period.StartDateTime,
-				PeriodEndUtc = period.EndDateTime,
+				UtcStartTime = period.StartDateTime,
+				UtcEndTime = period.EndDateTime,
 				ScenarioId = scenario.Id.GetValueOrDefault()
 			};
 
