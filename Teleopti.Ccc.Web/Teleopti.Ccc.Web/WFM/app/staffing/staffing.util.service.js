@@ -57,15 +57,18 @@
             staffingData.scheduledStaffing.unshift($translate.instant('ScheduledStaff'));
 
             angular.forEach(data.DataSeries.Time,
-                function (value, key) {
-                    staffingData.time.push($filter('date')(value, 'shortTime'));
+				function (value, key) {
+					var newTime = $filter('date')(value, 'shortTime');
+					if (staffingData.time.indexOf(newTime) != -1) {
+						newTime = newTime + ' ';
+					}
+                    staffingData.time.push(newTime);
                 },
                 staffingData.time);
             staffingData.time.unshift('x');
 
             return staffingData;
-        }
-
+		}
 
 
         function prepareSuggestedStaffingData(original, data) {

@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var forecastedStaffing = _intradayStaffingApplicationService.GetForecastedStaffing(
 				skillIdList, 
 				startOfDayUtc, 
-				startOfDayUtc.AddDays(1),
+				startOfDayUtc.AddDays(1).AddHours(1),
 				TimeSpan.FromMinutes(minutesPerInterval), 
 				useShrinkage)
 				.Select(x => new StaffingIntervalModel
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				.GetScheduledStaffing(
 					skillIdList, 
 					startOfDayUtc, 
-					startOfDayUtc.AddDays(1), 
+					startOfDayUtc.AddDays(1).AddHours(1), 
 					TimeSpan.FromMinutes(minutesPerInterval), 
 					useShrinkage)
 				.Select(x => new SkillStaffingIntervalLightModel
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				})
 				.ToList();				
 
-			var timeSeries = TimeSeriesProvider.DataSeries(forecastedStaffing, scheduledStaffingPerSkill, minutesPerInterval, _timeZone.TimeZone());
+			var timeSeries = TimeSeriesProvider.DataSeries(forecastedStaffing, scheduledStaffingPerSkill, minutesPerInterval, _timeZone.TimeZone()).Where(x => x.Date == startOfDayLocal.Date).ToArray();
 
 			var dataSeries = new StaffingDataSeries
 			{
