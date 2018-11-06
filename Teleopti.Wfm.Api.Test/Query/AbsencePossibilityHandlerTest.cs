@@ -11,8 +11,10 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -22,6 +24,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Wfm.Api.Test.Query
 {
 	[ApiTest]
+	[FullPermissions]
 	public class AbsencePossibilityHandlerTest
 	{
 		private const int intervalLengthInMinute = 15;
@@ -38,6 +41,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public SkillIntradayStaffingFactory SkillIntradayStaffingFactory;
 		public MutableNow Now;
+		public FullPermission Permissions;
 		
 		[TestCase(10, 5)]
 		[TestCase(10, 10)]
@@ -61,7 +65,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 			var activity = ActivityRepository.Has("Test Activity").WithId();
 
 			var openHours = new TimePeriod(0, 24);
-			var skill = createSkill(intervalLengthInMinute, "Phone", openHours, activity, false, 0);
+			var skill = createSkill(intervalLengthInMinute, "Phone", openHours, activity);
 			SkillRepository.Has(skill);
 
 			setupScheduleData(skill, today, forecastStaffPerInterval, scheduledStaffPerInterval);
@@ -96,6 +100,84 @@ namespace Teleopti.Wfm.Api.Test.Query
 			Console.WriteLine(resultDto["Result"].Count(x => x["Possibility"].Value<int>() == 1));
 			resultDto["Result"].All(x => x["Possibility"].Value<int>() == 1).Should().Be
 				.EqualTo(forecastStaffPerInterval < scheduledStaffPerInterval);
+		}
+
+		[Test]
+		public void ShouldDenyGetAbsencePossibilityWhenPersonNotFound()
+		{
+			var today = new DateTime(2018, 8, 2, 0, 0, 0, DateTimeKind.Utc);
+			var tomorrow = today.AddDays(1);
+
+			Now.Is(today.AddHours(13));
+			Client.Authorize();
+
+			var personId = Guid.NewGuid();
+			var queryDto = new
+			{
+				PersonId = personId,
+				StartDate = today,
+				EndDate = tomorrow
+			};
+
+			var result = Client.PostAsync("/query/AbsencePossibility/AbsencePossibilityByPersonId",
+				new StringContent(JsonConvert.SerializeObject(queryDto), Encoding.UTF8, "application/json"));
+			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+
+			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(false);
+			resultDto["Message"].Value<string>().Should().Be.EqualTo($"Person with Id {personId} could not be found");
+		}
+
+		[Test]
+		public void ShouldDenyGetAbsencePossibilityWhenNotPermitted()
+		{
+			var today = new DateTime(2018, 8, 2, 0, 0, 0, DateTimeKind.Utc);
+			var tomorrow = today.AddDays(1);
+
+			var dateOnlyToday = new DateOnly(today);
+
+			Now.Is(today.AddHours(13));
+
+			Permissions.AddToBlackList(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb);
+			Client.Authorize();
+
+			var absence = AbsenceFactory.CreateAbsence("Absence").WithId();
+			absence.Requestable = true;
+			AbsenceRepository.Add(absence);
+
+			var scenario = ScenarioRepository.Has("Default").WithId();
+			var activity = ActivityRepository.Has("Test Activity").WithId();
+
+			var openHours = new TimePeriod(0, 24);
+			var skill = createSkill(intervalLengthInMinute, "Phone", openHours, activity);
+			SkillRepository.Has(skill);
+			
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(today.Year, 1, 1), new[] {skill})
+				.WithId();
+			var workflowControlSet = createWorkflowControlSet(today, absence);
+			person.WorkflowControlSet = workflowControlSet;
+
+			PersonRepository.Has(person);
+
+			for (var i = -1; i <= 1; i++)
+			{
+				var personAssignment = new PersonAssignment(person, scenario, dateOnlyToday.AddDays(i));
+				personAssignment.AddActivity(activity, new TimePeriod(8, 17));
+				PersonAssignmentRepository.Add(personAssignment);
+			}
+
+			var queryDto = new
+			{
+				PersonId = person.Id,
+				StartDate = today,
+				EndDate = tomorrow
+			};
+
+			var result = Client.PostAsync("/query/AbsencePossibility/AbsencePossibilityByPersonId",
+				new StringContent(JsonConvert.SerializeObject(queryDto), Encoding.UTF8, "application/json"));
+			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+
+			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(false);
+			resultDto["Message"].Value<string>().Should().Be.EqualTo($"Person with Id {person.Id} is not allowed to request absence in {today:yyyy-MM-dd}");
 		}
 
 		private static WorkflowControlSet createWorkflowControlSet(DateTime today, IAbsence absence)
@@ -139,8 +221,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 				TimeZoneInfo.Utc);
 		}
 
-		private ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours, IActivity activity,
-			bool isClosedOnWeekends, int midnightBreakOffset)
+		private ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours, IActivity activity)
 		{
 			var skillType = SkillTypeFactory.CreateSkillType();
 			var skill = new Skill(skillName, skillName, Color.Empty, intervalLength, skillType)
@@ -148,15 +229,8 @@ namespace Teleopti.Wfm.Api.Test.Query
 				TimeZone = TimeZoneInfo.Utc,
 				Activity = activity
 			}.WithId();
-
-			if (midnightBreakOffset != 0)
-			{
-				skill.MidnightBreakOffset = TimeSpan.FromHours(midnightBreakOffset);
-			}
-
-			var workload = isClosedOnWeekends
-				? WorkloadFactory.CreateWorkloadClosedOnWeekendsWithOpenHours(skill, openHours)
-				: WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours);
+			
+			var workload = WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours);
 			workload.SetId(Guid.NewGuid());
 
 			return skill;

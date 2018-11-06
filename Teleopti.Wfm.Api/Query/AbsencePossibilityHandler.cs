@@ -4,6 +4,8 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Staffing;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Api.Query.Request;
@@ -16,14 +18,16 @@ namespace Teleopti.Wfm.Api.Query
 		private readonly IStaffingDataAvailablePeriodProvider _staffingDataAvailablePeriodProvider;
 		private readonly IAbsenceStaffingPossibilityCalculator _absenceStaffingPossibilityCalculator;
 		private readonly IPersonRepository _personRepository;
+		private readonly ICurrentAuthorization _currentAuthorization;
 
 		public AbsencePossibilityHandler(IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider,
 			IAbsenceStaffingPossibilityCalculator absenceStaffingPossibilityCalculator,
-			IPersonRepository personRepository)
+			IPersonRepository personRepository, ICurrentAuthorization currentAuthorization)
 		{
 			_staffingDataAvailablePeriodProvider = staffingDataAvailablePeriodProvider;
 			_absenceStaffingPossibilityCalculator = absenceStaffingPossibilityCalculator;
 			_personRepository = personRepository;
+			_currentAuthorization = currentAuthorization;
 		}
 		
 		[UnitOfWork]
@@ -35,7 +39,16 @@ namespace Teleopti.Wfm.Api.Query
 				return new QueryResultDto<AbsencePossibilityDto>
 				{
 					Successful = false,
-					Message = $"Person with Id {0} not found"
+					Message = $"Person with Id {query.PersonId} could not be found"
+				};
+			}
+
+			if (!_currentAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb, query.StartDate.ToDateOnly(), person))
+			{
+				return new QueryResultDto<AbsencePossibilityDto>
+				{
+					Successful = false,
+					Message = $"Person with Id {query.PersonId} is not allowed to request absence in {query.StartDate:yyyy-MM-dd}"
 				};
 			}
 
