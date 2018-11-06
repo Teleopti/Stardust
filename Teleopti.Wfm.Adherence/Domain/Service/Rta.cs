@@ -21,6 +21,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		private readonly WithAnalyticsUnitOfWork _analytics;
 		private readonly StateQueueTenants _tenants;
 		private readonly IRtaTracer _tracer;
+		private readonly IStateQueueHealthChecker _queueHealth;
 
 		public Rta(
 			TenantLoader tenantLoader,
@@ -30,7 +31,8 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			IStateQueueReader queueReader,
 			WithAnalyticsUnitOfWork analytics,
 			StateQueueTenants tenants,
-			IRtaTracer tracer)
+			IRtaTracer tracer,
+			IStateQueueHealthChecker queueHealth)
 		{
 			_tenantLoader = tenantLoader;
 			_checker = checker;
@@ -40,11 +42,8 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			_analytics = analytics;
 			_tenants = tenants;
 			_tracer = tracer;
+			_queueHealth = queueHealth;
 		}
-
-		public void Enqueue(BatchInputModel batch) => Enqueue(batch, null);
-		public bool QueueIteration(string tenant) => QueueIteration(tenant, null);
-		public void Process(BatchInputModel batch) => Process(batch, null);
 
 		[LogInfo]
 		[TenantScope]
@@ -58,7 +57,8 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 				batch.States.EmptyIfNull()
 					.ForEach(x => { x.TraceLog = _tracer.StateReceived(x.UserCode, x.StateCode); });
 				_tracer.ProcessEnqueuing(batch?.States?.Count());
-				_analytics.Do(() => _queueWriter.Enqueue(batch));
+				validateQueue();
+				_analytics.Do(() => { _queueWriter.Enqueue(batch); });
 			});
 		}
 
@@ -192,6 +192,12 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 				_tracer.InvalidStateCode(hugeStateCode.TraceLog);
 				throw new InvalidStateCodeException("State code can not exceed 300 characters (including platform type id)");
 			}
+		}
+
+		private void validateQueue()
+		{
+			if (!_queueHealth.Healthy())
+				throw new FloodedStateQueueException("State queue is flooded");
 		}
 
 		[LogInfo]

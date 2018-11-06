@@ -184,6 +184,7 @@
     <Compile Include="Domain\Infrastructure\Service\DataSourceReader.cs" />
     <Compile Include="Domain\Infrastructure\Service\DeadLockVictimPriority.cs" />
     <Compile Include="Domain\Infrastructure\Service\StateQueue.cs" />
+    <Compile Include="Domain\Infrastructure\Service\StateQueueHealthCheckerProcess.cs" />
     <Compile Include="Domain\Infrastructure\Service\StateQueueUtilities.cs" />
     <Compile Include="Domain\Infrastructure\Service\StateQueueWorker.cs" />
     <Compile Include="Domain\Events\ApprovedPeriodRemovedEvent.cs" />
@@ -220,7 +221,6 @@
     <Compile Include="Domain\Service\AgentStateMaintainer.cs" />
     <Compile Include="Domain\Service\AgentStateProcessor.cs" />
     <Compile Include="Domain\Service\AgentStateReadModel.cs" />
-    <Compile Include="Domain\Service\BehaviorTestTenants.cs" />
     <Compile Include="Domain\Service\Context.cs" />
     <Compile Include="Domain\Service\ContextLoader.cs" />
     <Compile Include="Domain\Service\DataSourceMapper.cs" />
@@ -265,9 +265,11 @@
     <Compile Include="Domain\Service\StateEventPublisher.cs" />
     <Compile Include="Domain\Service\StateInputModel.cs" />
     <Compile Include="Domain\Service\StateMapper.cs" />
+    <Compile Include="Domain\Service\StateQueueHealthChecker.cs" />
     <Compile Include="Domain\Service\StateQueueTenants.cs" />
     <Compile Include="Domain\Service\StateRuleInfo.cs" />
     <Compile Include="Domain\Service\TenantLoader.cs" />
+    <Compile Include="Domain\Service\FloodedStateQueueException.cs" />
     <Compile Include="KeyValueStorePersisterExtensions.cs" />
     <Compile Include="TenantFromAuthenticationKey.cs" />
     <Compile Include="Tool\IRtaToolViewModelBuilder.cs" />

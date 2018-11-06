@@ -11,6 +11,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
+using Teleopti.Wfm.Adherence.Test.Domain.Service;
 
 namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service
 {

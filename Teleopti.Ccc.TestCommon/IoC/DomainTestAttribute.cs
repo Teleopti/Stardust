@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485)]
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_StateQueueFloodPrevention_77710)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_ReviewHistoricalAdherence_74770)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
@@ -294,7 +295,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeAppDomainPrincipalContext>().For<IThreadPrincipalContext>();
 			else
 				isolate.UseTestDouble<FakeThreadPrincipalContext>().For<IThreadPrincipalContext>();
-			
+
 			if (fullPermissions())
 				isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
 			if (fakePermissions())
@@ -309,7 +310,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public IPersonRepository Persons;
 		public Lazy<FakeDatabase> Database;
 		public FakeEventPublisher FakeEventPublisher;
-		
+
 		private IDisposable _tenantScope;
 		private Person _loggedOnPerson;
 
@@ -391,7 +392,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		protected override void AfterTest()
 		{
 			base.AfterTest();
-			
+
 			_tenantScope?.Dispose();
 		}
 	}

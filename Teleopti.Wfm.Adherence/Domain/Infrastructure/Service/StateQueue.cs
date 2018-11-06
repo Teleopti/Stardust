@@ -45,5 +45,10 @@ OUTPUT DELETED.Model
 				.Select(x => _deserializer.DeserializeObject<BatchInputModel>(x))
 				.SingleOrDefault();
 		}
+
+		public int Count()
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }

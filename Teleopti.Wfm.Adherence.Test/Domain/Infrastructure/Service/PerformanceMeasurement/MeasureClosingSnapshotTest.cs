@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Test.Domain.Service;
 
 namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.PerformanceMeasurement
 {

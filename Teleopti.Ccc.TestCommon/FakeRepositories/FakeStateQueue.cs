@@ -31,12 +31,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _items.IsEmpty() ? null : _items.Dequeue()?.Model;
 		}
 
-		public class QueueItemInfo
+		public int Count()
 		{
-			public string OnTenant { get; set; }
-			public BatchInputModel Model { get; set; }
+			return _items.Count;
 		}
 
-
+		public class QueueItemInfo
+		{
+			public string OnTenant { get; set; } // remove on refact
+			public BatchInputModel Model { get; set; }
+		}
 	}
 }

@@ -43,12 +43,24 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
+
 			builder.RegisterType<StateQueue>().As<IStateQueueReader>().As<IStateQueueWriter>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateQueueWorker>().AsSelf().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateQueueTenants>().SingleInstance();
+			if (_config.Toggle(Toggles.RTA_StateQueueFloodPrevention_77710))
+			{
+				builder.RegisterType<StateQueueHealthChecker>().As<IStateQueueHealthChecker>().SingleInstance();
+				builder.RegisterType<StateQueueHealthCheckerProcess>().As<IBackgroundProcess>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<AlwaysHealthyChecker>().As<IStateQueueHealthChecker>().SingleInstance();
+			}
+
+			builder.RegisterType<StateQueueUtilities>().SingleInstance().ApplyAspects();
+
 			builder.RegisterType<ActiveTenantsUpdater>().As<IBackgroundProcess>().SingleInstance();
 			builder.RegisterType<ActiveTenants>().SingleInstance();
-			builder.RegisterType<StateQueueUtilities>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateProcessor>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateMapper>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ExternalLogonMapper>().SingleInstance().ApplyAspects();
@@ -116,6 +128,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<RtaEventStoreUpgrader>().As<IRtaEventStoreUpgrader>().SingleInstance().ApplyAspects();
 				builder.RegisterType<RtaEventStoreUpgraderProcess>().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 			}
+
 			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
 			{
 				builder.RegisterType<RtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance().ApplyAspects();

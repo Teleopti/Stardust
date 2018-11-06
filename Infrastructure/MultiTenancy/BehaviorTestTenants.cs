@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.MultiTenancy;
 
-namespace Teleopti.Wfm.Adherence.Domain.Service
+namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 {
 	public class BehaviorTestTenants : IAllTenantNames
 	{
