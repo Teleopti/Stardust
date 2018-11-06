@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         private readonly List<IActivity> _activities = new List<IActivity>();
         private readonly List<IShiftCategory> _shiftCategories = new List<IShiftCategory>();
         private readonly List<IDayOffTemplate> _dayOffs = new List<IDayOffTemplate>();
-        private readonly List<IScheduleTag> _scheduleTags = new List<IScheduleTag>();
 		private readonly List<IWorkflowControlSet> _workflowControlSets = new List<IWorkflowControlSet>();
 		private readonly List<IWorkflowControlSet> _modifiedWorkflowControlSets = new List<IWorkflowControlSet>();
 		private readonly List<IMultiplicatorDefinitionSet> _multiplicatorDefinitionSets = new List<IMultiplicatorDefinitionSet>();
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		    _absences.Clear();
 		    _activities.Clear();
 		    _dayOffs.Clear();
-		    _scheduleTags.Clear();
 		    _shiftCategories.Clear();
 		    _workflowControlSets.Clear();
 		    _multiplicatorDefinitionSets.Clear();
@@ -43,7 +41,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			    LoadShiftCategory(repositoryFactory.CreateShiftCategoryRepository(unitOfWork));
 			    LoadContracts(repositoryFactory.CreateContractRepository(unitOfWork));
 			    LoadContractSchedules(repositoryFactory.CreateContractScheduleRepository(unitOfWork));
-			    loadScheduleTags(repositoryFactory.CreateScheduleTagRepository(unitOfWork));
 			    loadWorkflowControlSets(repositoryFactory.CreateWorkflowControlSetRepository(unitOfWork));
 			    loadPartTimePercentage(repositoryFactory.CreatePartTimePercentageRepository(unitOfWork));
 				loadMultiplicatorDefinitionSet(repositoryFactory.CreateMultiplicatorDefinitionSetRepository(unitOfWork));
@@ -59,11 +56,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	    {
 			get { return _multiplicatorDefinitionSets; }
 	    }
-       private void loadScheduleTags(IScheduleTagRepository scheduleTagRepository)
-        {
-            _scheduleTags.AddRange(scheduleTagRepository.LoadAll().OrderBy(t => t.Description));
-            _scheduleTags.Insert(0, NullScheduleTag.Instance);
-        }
 
 	    private void loadWorkflowControlSets(IWorkflowControlSetRepository workflowControlSetRepository)
 	    {
@@ -79,11 +71,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			get { return _modifiedWorkflowControlSets; }
 		}
-
-        public IEnumerable<IScheduleTag> ScheduleTags
-        {
-            get { return _scheduleTags; }
-        }
 
         public IEnumerable<IAbsence> Absences
         {

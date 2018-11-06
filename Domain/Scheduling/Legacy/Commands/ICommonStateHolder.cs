@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		IEnumerable<IDayOffTemplate> DayOffs { get; }
 		IEnumerable<IActivity> Activities { get; }
 		IEnumerable<IShiftCategory> ShiftCategories { get; }
-	    IEnumerable<IScheduleTag> ScheduleTags { get; }
 	    IDayOffTemplate DefaultDayOffTemplate { get; }
 		ICollection<IWorkflowControlSet> WorkflowControlSets { get; }
 		ICollection<IWorkflowControlSet> ModifiedWorkflowControlSets { get; }

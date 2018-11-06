@@ -1119,7 +1119,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				using (var optimizationPreferencesDialog =
 					new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider,
-						SchedulerState.SchedulerStateHolder.CommonStateHolder.ScheduleTags.NonDeleted(),
+						SchedulerState.ScheduleTags.NonDeleted(),
 						SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted(),
 						SchedulerState.SchedulerStateHolder.DefaultSegmentLength, SchedulerState.SchedulerStateHolder.Schedules,
 						_scheduleView.AllSelectedPersons(selectedSchedules), _daysOffPreferences))
@@ -2990,7 +2990,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 					using (var options = new SchedulingSessionPreferencesDialog(_schedulingOptions,
 							SchedulerState.SchedulerStateHolder.CommonStateHolder.ShiftCategories.NonDeleted(),
-							_groupPagesProvider, SchedulerState.SchedulerStateHolder.CommonStateHolder.ScheduleTags.NonDeleted(),
+							_groupPagesProvider, SchedulerState.ScheduleTags.NonDeleted(),
 							"SchedulingOptions", SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted()))
 					{
 						if (options.ShowDialog(this) == DialogResult.OK)
@@ -3029,7 +3029,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				using (
 					var options = new SchedulingSessionPreferencesDialog(_schedulingOptions,
 						SchedulerState.SchedulerStateHolder.CommonStateHolder.ShiftCategories.NonDeleted(),
-						_groupPagesProvider, SchedulerState.SchedulerStateHolder.CommonStateHolder.ScheduleTags.NonDeleted(), "SchedulingOptionsActivities",
+						_groupPagesProvider, SchedulerState.ScheduleTags.NonDeleted(), "SchedulingOptionsActivities",
 						SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted()))
 				{
 					if (options.ShowDialog(this) == DialogResult.OK)
@@ -3507,6 +3507,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(_scenario);
+				methods.Add(new LoaderMethod(loadSchedulingScreenState, null));
 				methods.Add(new LoaderMethod(loadCommonStateHolder, LanguageResourceHelper.Translate("XXLoadingDataTreeDots")));
 				methods.Add(new LoaderMethod(loadSkills, null));
 				methods.Add(new LoaderMethod(loadSettings, null));
@@ -3618,7 +3619,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			SchedulerState.SchedulerStateHolder.SchedulingResultState.Schedules.ModifiedPersonAccounts.Clear();
 			backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXInitializingTreeDots"));
 
-			foreach (var tag in SchedulerState.SchedulerStateHolder.CommonStateHolder.ScheduleTags.NonDeleted())
+			foreach (var tag in SchedulerState.ScheduleTags.NonDeleted())
 			{
 				if (tag.Id != _currentSchedulingScreenSettings.DefaultScheduleTag) continue;
 				_defaultScheduleTag = tag;
@@ -3919,6 +3920,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			stateHolder.SchedulerStateHolder.LoadCommonState(uow, new RepositoryFactory());
 			if (!stateHolder.SchedulerStateHolder.CommonStateHolder.DayOffs.Any())
 				throw new StateHolderException("You must create at least one Day Off in Options!");
+		}
+
+		private void loadSchedulingScreenState(IUnitOfWork uow, SchedulingScreenState state)
+		{
+			using (_container.Resolve<IDisableDeletedFilter>().Disable())
+			{
+				var scheduleTags = new ScheduleTagRepository(uow).LoadAll().OrderBy(t => t.Description).ToList();
+				scheduleTags.Insert(0, NullScheduleTag.Instance);
+				
+				state.Fill(scheduleTags);
+			}
 		}
 
 		private void disableSave()
@@ -4780,7 +4792,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				toolStripMenuItemLockShiftCategoriesMouseUp);
 
 			var tagsMenuLoader = new TagsMenuLoader(toolStripMenuItemLockTags, toolStripMenuItemLockTagsRM,
-				SchedulerState.SchedulerStateHolder.CommonStateHolder.ScheduleTags, toolStripMenuItemLockTag,
+				SchedulerState.ScheduleTags, toolStripMenuItemLockTag,
 				toolStripSplitButtonChangeTag, toolStripMenuItemChangeTag,
 				toolStripComboBoxAutoTag, _defaultScheduleTag, toolStripMenuItemChangeTagRM);
 			tagsMenuLoader.LoadTags();
@@ -6919,7 +6931,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				var showUseSkills = SchedulerState.SchedulerStateHolder.SchedulingResultState.Skills.Any(x => x.IsCascading());
 
-				using (var options = new OvertimePreferencesDialog(SchedulerState.SchedulerStateHolder.CommonStateHolder.ScheduleTags.NonDeleted(),
+				using (var options = new OvertimePreferencesDialog(SchedulerState.ScheduleTags.NonDeleted(),
 																"OvertimePreferences",
 																SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted(),
 																resolution,

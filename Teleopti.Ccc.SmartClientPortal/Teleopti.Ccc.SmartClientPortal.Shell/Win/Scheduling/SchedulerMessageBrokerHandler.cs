@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			unitOfWork.Reassociate(_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.DayOffs);
 			unitOfWork.Reassociate(_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities);
 			unitOfWork.Reassociate(_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.ShiftCategories);
-			unitOfWork.Reassociate(_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.ScheduleTags.Where(scheduleTag => scheduleTag.Id != null).ToList());
+			unitOfWork.Reassociate(_owner.SchedulerState.ScheduleTags.Where(scheduleTag => scheduleTag.Id != null).ToList());
 		}
 
 		public IEnumerable<IAggregateRoot>[] DataToReassociate(IPerson personToReassociate)
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			       		_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.DayOffs,
 			       		_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities,
 			       		_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.ShiftCategories,
-						_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.ScheduleTags.Where(scheduleTag => scheduleTag.Id != null).ToList()
+						_owner.SchedulerState.ScheduleTags.Where(scheduleTag => scheduleTag.Id != null).ToList()
 			       	};
 		}
 
