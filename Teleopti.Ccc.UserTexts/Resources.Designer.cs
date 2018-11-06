@@ -32815,6 +32815,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The shifts in the shift bag {0} can not fulfill the overridden contract time. .
+        /// </summary>
+        public static string ShiftsInShiftBagCanNotFulFillOverriddenTargetTime {
+            get {
+                return ResourceManager.GetString("ShiftsInShiftBagCanNotFulFillOverriddenTargetTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shifts inside the period:.
         /// </summary>
         public static string ShiftsInsideThePeriodColon {

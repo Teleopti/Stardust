@@ -70,15 +70,28 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				var lowerTarget = targetTime - contract.NegativePeriodWorkTimeTolerance;
 				var upperTarget = targetTime + contract.PositivePeriodWorkTimeTolerance;
 				var workDays = virtualSchedulePeriod.Workdays();
-
+				
+				
 				if (workDays * longestShift.Ticks < lowerTarget.Ticks || workDays * shortestShift.Ticks > upperTarget.Ticks)
 				{
-					hintResult.Add(new PersonHintError(person)
+					if (virtualSchedulePeriod.AverageWorkTimePerDay == virtualSchedulePeriod.Contract.WorkTime.AvgWorkTimePerDay)
 					{
-						ErrorResource = nameof(Resources.ShiftsInShiftBagCanNotFulFillContractTime),
-						ErrorResourceData = new object[] {period.RuleSetBag.Description.Name, contract.Description.Name}
-							.ToList()
-					}, GetType());
+						hintResult.Add(new PersonHintError(person)
+						{
+							ErrorResource = nameof(Resources.ShiftsInShiftBagCanNotFulFillContractTime),
+							ErrorResourceData = new object[] {period.RuleSetBag.Description.Name, contract.Description.Name}
+								.ToList()
+						}, GetType());
+					}
+					else
+					{
+						hintResult.Add(new PersonHintError(person)
+						{
+							ErrorResource = nameof(Resources.ShiftsInShiftBagCanNotFulFillOverriddenTargetTime),
+							ErrorResourceData = new object[] {period.RuleSetBag.Description.Name}
+								.ToList()
+						}, GetType());
+					}
 				}
 			}
 		}
