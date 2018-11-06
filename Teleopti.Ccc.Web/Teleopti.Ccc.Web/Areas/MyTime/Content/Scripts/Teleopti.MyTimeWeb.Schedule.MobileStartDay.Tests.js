@@ -826,6 +826,37 @@
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempFn;
 	});
 
+	test("should set tooltip text for 'traffic light' base on absence proability data on mobile", function() {
+		var orginUserText = Teleopti.MyTimeWeb.Common.GetUserTexts();
+		Teleopti.MyTimeWeb.Common.SetUserTexts({
+			ChanceOfGettingAbsenceRequestGranted: '@Resources.ChanceOfGettingAbsenceRequestGranted: '
+		});
+
+		var tempFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === 'MyTimeWeb_TrafficLightOnMobileDayView_77447') return true;
+			return false;
+		};
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
+			fakeReadyForInteractionCallback,
+			fakeCompletelyLoadedCallback,
+			ajax
+		);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+
+		startDayData.Schedule.ProbabilityClass = 'good';
+		startDayData.Schedule.ProbabilityText = 'Good';
+
+		vm.nextDay();
+
+		equal(vm.trafficLightColor(), 'green');
+		equal(vm.trafficLightTooltip(), '@Resources.ChanceOfGettingAbsenceRequestGranted: Good');
+
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempFn;
+		Teleopti.MyTimeWeb.Common.SetUserTexts(orginUserText);
+	});
+
 	test("should show probability toggle by agent's timezone", function() {
 		startDayData.BaseUtcOffsetInMinutes = -600;
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(

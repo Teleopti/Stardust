@@ -2,27 +2,6 @@
 	module("Teleopti.MyTimeWeb.Schedule.DayViewModel");
 	
 	Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
-	Teleopti.MyTimeWeb.Common.GetUserTexts = function(){
-		return {XRequests: 'XRequests',
-				SubjectColon: 'SubjectColon',
-				LocationColon: 'LocationColon',
-				DescriptionColon: 'DescriptionColon',
-				ChanceOfGettingAbsenceRequestGranted: 'ChanceOfGettingAbsenceRequestGranted',
-				SeatBookings: 'SeatBookings',
-				YouHaveNotBeenAllocatedSeat: 'YouHaveNotBeenAllocatedSeat',
-				Fair: 'Fair',
-				Poor: 'Poor',
-				Good: 'Good',
-				High: 'High',
-				Low: 'Low',
-				ProbabilityToGetAbsenceColon: 'ProbabilityToGetAbsenceColon',
-				ProbabilityToGetOvertimeColon: 'ProbabilityToGetOvertimeColon',
-				HideStaffingInfo: 'HideStaffingInfo',
-				ShowAbsenceProbability: 'ShowAbsenceProbability',
-				ShowOvertimeProbability: 'ShowOvertimeProbability',
-				StaffingInfo: 'StaffingInfo'
-			};
-	};
 
 	var fakeAddRequestViewModel = function() {
 		return {

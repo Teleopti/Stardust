@@ -19,6 +19,7 @@
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_TrafficLightOnMobileDayView_77447')
 	);
 	self.trafficLightColor = ko.observable('');
+	self.trafficLightTooltip = ko.observable('');
 	self.dayOfWeek = ko.observable();
 	self.isFullDayAbsence = false;
 	self.isDayOff = ko.observable(false);
@@ -100,6 +101,7 @@
 		self.summaryName(data.Schedule.Summary.Title);
 		self.summaryTime(data.Schedule.Summary.TimeSpan);
 		self.trafficLightColor(getTrafficLightColor(data.Schedule.ProbabilityClass));
+		self.trafficLightTooltip(buildTrafficLightTooltip(data.Schedule.ProbabilityText));
 		self.isDayOff(data.Schedule.IsDayOff);
 		self.isFullDayAbsence = data.Schedule.IsFullDayAbsence;
 		self.periods = data.Schedule.Periods;
@@ -251,6 +253,11 @@
 			default:
 				return '';
 		}
+	}
+
+	function buildTrafficLightTooltip(text) {
+		var userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
+		return userTexts.ChanceOfGettingAbsenceRequestGranted + text;
 	}
 
 	function fillRequestFormData(requestViewModel) {

@@ -115,7 +115,7 @@ Layout = null;
 	</div>
 
 	<div class="mobile-start-day-body container">
-		<div class="mobile-summary-content" data-bind="style: { backgroundColor: summaryColor, borderColor: summaryColor, color: textColor }, css: {'dayoff': isDayOff}">
+		<div class="mobile-summary-content cursorpointer" data-bind="style: { backgroundColor: summaryColor, borderColor: summaryColor, color: textColor }, css: {'dayoff': isDayOff}">
 			<div class="mobile-summary-content-text">
 				<div data-bind="text: dayOfWeek"></div>
 				<span data-bind="text: summaryName"></span>
@@ -125,8 +125,8 @@ Layout = null;
 				<!-- /ko -->
 			</div>
 
-			<!-- ko if: showTrafficLight() && trafficLightColor().length > 0 -->
-			<div class="holiday-agents cursorpointer displayinline-block" data-bind="visible: absenceRequestPermission, tooltip: { title: 'dddddddddddddddd', html: true }">
+			<!-- ko if: showTrafficLight() && !isLoading() && trafficLightColor().length > 0 -->
+			<div class="holiday-agents cursorpointer displayinline-block" data-bind="visible: absenceRequestPermission, tooltip: { title: trafficLightTooltip(), placement: 'bottom' }">
 				<div class="small-circle" data-bind="style: {background: trafficLightColor()}"></div>
 			</div>
 			<!-- /ko -->
