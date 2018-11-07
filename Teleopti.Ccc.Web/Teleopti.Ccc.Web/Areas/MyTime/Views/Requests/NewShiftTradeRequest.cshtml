@@ -148,7 +148,7 @@
 						<div data-bind="foreach: mySchedule().layers">
 							<!--ko if:!$parent.mySchedule().isDayOff-->
 							<div class="shift-trade-layer-container floatleft">
-								<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
+								<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText }"></div>
 							</div>
 							<!--/ko-->
 							<!--ko if:$parent.mySchedule().isDayOff-->
@@ -161,7 +161,7 @@
 						<!--ko if:!mySchedule().isFullDayAbsence-->
 						<div data-bind="foreach: mySchedule().layers">
 							<div class="shift-trade-layer-container floatleft">
-								<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
+								<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText }"></div>
 							</div>
 						</div>
 						<!--ko if:mySchedule().isDayOff -->
@@ -187,13 +187,13 @@
 						<div data-bind="foreach: $data.layers">
 							<!--ko if:!$parent.isDayOff-->
 							<div class="shift-trade-layer-container floatleft">
-								<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
+								<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText }"></div>
 							</div>
 							<!--/ko-->
 							<!--ko if:$parent.isDayOff-->
 							<div class="shift-trade-layer-container floatleft shift-trade-dayoff">
 								<div class="dayoff" data-bind="text: $parent.dayOffName || titleHeader"></div>
-								<div class="shift-trade-layer add" data-bind="visible:!$parent.isFullDayAbsence, style: styleJson, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
+								<div class="shift-trade-layer add" data-bind="visible:!$parent.isFullDayAbsence, style: styleJson, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText }"></div>
 							</div>
 							<!--/ko-->
 						</div>
@@ -275,7 +275,7 @@
 						<div data-bind="foreach: $data.mySchedule().layers">
 							<!--ko if:!$parent.mySchedule().isDayOff-->
 							<div class="shift-trade-layer-container floatleft">
-								<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
+								<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText }"></div>
 							</div>
 							<!--/ko-->
 							<!--ko if:$parent.mySchedule().isDayOff-->
@@ -288,7 +288,7 @@
 						<!--ko if:!$data.mySchedule().isFullDayAbsence-->
 						<div data-bind="foreach: $data.mySchedule().layers">
 							<div class="shift-trade-layer-container floatleft">
-								<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
+								<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText }"></div>
 							</div>
 						</div>
 						<!--ko if:$data.mySchedule().isDayOff -->
@@ -312,13 +312,13 @@
 						<div data-bind="foreach: $data.selectedSchedule().layers">
 							<!--ko if:!$parent.selectedSchedule().isDayOff-->
 							<div class="shift-trade-layer-container floatleft">
-								<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
+								<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText }"></div>
 							</div>
 							<!--/ko-->
 							<!--ko if:$parent.selectedSchedule().isDayOff-->
 							<div class="shift-trade-layer-container floatleft shift-trade-dayoff">
 								<div class="dayoff" data-bind="text: $parent.selectedSchedule().dayOffName || titleHeader"></div>
-								<div class="shift-trade-layer add" data-bind="visible:!$parent.selectedSchedule().isFullDayAbsence, style: styleJson, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
+								<div class="shift-trade-layer add" data-bind="visible:!$parent.selectedSchedule().isFullDayAbsence, style: styleJson, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText }"></div>
 							</div>
 							<!--/ko-->
 						</div>

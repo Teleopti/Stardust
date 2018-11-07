@@ -1471,8 +1471,8 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.TimelineViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.TimelineViewModel.Tests.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ViewModels.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ViewModels.Tests.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.DayViewModel.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.DayViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AppGuide.WFMApp.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AppGuide.WFMAppViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewNew.js" />

@@ -48,7 +48,7 @@
 	self.topPx = self.top + 'px';
 	self.heightPx = self.height + 'px';
 	self.heightDouble = scheduleHeight * (self.endPositionPercentage - self.startPositionPercentage);
-	self.widthPx = getWidth(layer.IsOvertimeAvailability, parent && parent.probabilities(), layersOnMobile);
+	self.widthPx = getWidth(layer.IsOvertimeAvailability, parent && parent.probabilities, layersOnMobile);
 
 	self.overTimeLighterBackgroundStyle = getOverTimeLighterBackgroundStyle(self.backgroundColor);
 	self.overTimeDarkerBackgroundStyle = !self.overTimeLighterBackgroundStyle;

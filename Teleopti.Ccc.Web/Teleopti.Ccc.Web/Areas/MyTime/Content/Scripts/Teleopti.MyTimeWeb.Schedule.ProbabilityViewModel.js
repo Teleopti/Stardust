@@ -12,7 +12,7 @@
 		else if (rawProbabilityCellData.possibility === constants.probabilityLevel.high)
 			cssClass = constants.probabilityClass.highProbabilityClass;
 
-		if (parent.userNowInMinute() < rawProbabilityCellData.endTimeInMinutes) {
+		if (parent.userNowInMinute < rawProbabilityCellData.endTimeInMinutes) {
 			return cssClass;
 		} else {
 			return cssClass + " " + constants.probabilityClass.expiredProbabilityClass;
@@ -59,7 +59,7 @@
 	}
 
 	function generateTooltips() {
-		if (!options.hideProbabilityEarlierThanNow || parent.userNowInMinute() <= 0 || (parent.userNowInMinute() > 0 && parent.userNowInMinute() < rawProbabilityCellData.endTimeInMinutes)) {
+		if (!options.hideProbabilityEarlierThanNow || parent.userNowInMinute <= 0 || (parent.userNowInMinute > 0 && parent.userNowInMinute < rawProbabilityCellData.endTimeInMinutes)) {
 			var label = "",
 				tooltipTitle = getTooltipsTitle(),
 				intervalTimeSpanText = generateIntervalTimeSpanText(rawProbabilityCellData.startTimeMoment, rawProbabilityCellData.endTimeMoment);

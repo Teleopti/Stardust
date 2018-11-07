@@ -92,7 +92,7 @@ MyTimeWeb_WaitListPositionEnhancement_46301 = true
 MyTimeWeb_NewTeamScheduleView_75989 = RC
 MyTimeWeb_NewTeamScheduleViewDesktop_76313 = RC
 MyTimeWeb_PollToCheckScheduleChanges_46595 = true
-MyTimeWeb_TrafficLightOnMobileDayView_77447 = DEV
+MyTimeWeb_TrafficLightOnMobileDayView_77447 = RC
 
 # China, can any of these be removed? #
 Staffing_Info_Configuration_44687 = true

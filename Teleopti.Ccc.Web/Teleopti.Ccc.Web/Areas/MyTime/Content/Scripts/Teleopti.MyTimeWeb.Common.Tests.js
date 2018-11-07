@@ -304,13 +304,8 @@
 	});
 
 	test('Should get user texts', function() {
-		var userTexts = {
-			Fair: 'Fair'
-		};
-		common.SetUserTexts(userTexts);
-
 		var texts = common.GetUserTexts();
-		equal('Fair', texts.Fair);
+		equal('@Resources.Fair', texts.Fair);
 	});
 
 	test('Should get current user date time', function() {
