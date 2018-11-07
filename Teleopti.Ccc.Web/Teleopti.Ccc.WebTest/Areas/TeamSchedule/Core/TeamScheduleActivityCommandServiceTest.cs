@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -16,6 +16,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Interfaces.Domain;
+using System.Threading;
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 {
@@ -110,6 +111,40 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			Target.AddActivity(input);
 
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldReturnErrorMessagesIfCultureChanged() {
+			var date = new DateOnly(2018, 11, 6);
+
+			PermissionProvider.Enable();
+			Thread.CurrentThread.CurrentUICulture = CultureInfoFactory.CreateEnglishCulture();
+
+			var person1 = PersonFactory.CreatePersonWithGuid("a", "b");
+			PersonRepository.Has(person1);
+
+			var input = new AddActivityFormData
+			{
+				ActivityId = Guid.NewGuid(),
+				StartTime = new DateTime(2018, 11, 6, 8, 0, 0),
+				EndTime = new DateTime(2018, 11, 6, 17, 0, 0),
+				PersonDates = new[]
+				{
+					new PersonDate
+					{
+						PersonId = person1.Id.Value,
+						Date = date
+					}
+				},
+				TrackedCommandInfo = new TrackedCommandInfo()
+			};
+			var results = Target.AddActivity(input);
+			results.Single().ErrorMessages.Single().Contains("No permission to add activity for agent(s)").Should().Be.True();
+
+
+			Thread.CurrentThread.CurrentUICulture = CultureInfoFactory.CreateChineseCulture();
+			results = Target.AddActivity(input);
+			results.Single().ErrorMessages.Single().Contains("没有权限为座席代表添加活动").Should().Be.True();
 		}
 
 		[Test]
