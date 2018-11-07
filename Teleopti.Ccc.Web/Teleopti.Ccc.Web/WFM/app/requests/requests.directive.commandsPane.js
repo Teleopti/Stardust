@@ -59,6 +59,7 @@
 		vm.isCommandEnabled = isCommandEnabled;
 		vm.showApproveOrDenyRequests = requestsPermissions.all().HasApproveOrDenyPermission;
 		vm.showCancelRequests = requestsPermissions.all().HasCancelPermission;
+		vm.showReplyRequests = requestsPermissions.all().HasReplyPermission;
 
 		initWaitlistProcessPeriod();
 

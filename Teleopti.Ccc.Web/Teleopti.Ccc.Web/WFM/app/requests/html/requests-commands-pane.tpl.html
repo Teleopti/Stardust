@@ -36,7 +36,7 @@
 				<i class="mdi mdi-check-all"></i>
 				<span translate>ProcessWaitlist</span>
 			</li>
-			<li ng-if="requestsCommandsPane.isCommandEnabledWithoutShiftTradeView('reply')" ng-click="requestsCommandsPane.displayReplyDialog()"
+			<li ng-if="requestsCommandsPane.isCommandEnabledWithoutShiftTradeView('reply')" ng-show="requestsCommandsPane.showReplyRequests" ng-click="requestsCommandsPane.displayReplyDialog()"
 			 ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}" class="reply-requests">
 				<i class="mdi mdi-arrow-left"></i>
 				<span translate>Reply</span>
