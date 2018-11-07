@@ -48,7 +48,7 @@
 	self.topPx = self.top + 'px';
 	self.heightPx = self.height + 'px';
 	self.heightDouble = scheduleHeight * (self.endPositionPercentage - self.startPositionPercentage);
-	self.widthPx = getWidth(layer.IsOvertimeAvailability, parent && parent.probabilities, layersOnMobile);
+	self.widthPx = getWidth(layer.IsOvertimeAvailability, parent && parent.probabilities(), layersOnMobile);
 
 	self.overTimeLighterBackgroundStyle = getOverTimeLighterBackgroundStyle(self.backgroundColor);
 	self.overTimeDarkerBackgroundStyle = !self.overTimeLighterBackgroundStyle;
@@ -173,7 +173,7 @@
 		} else if (probabilities && probabilities.length > 0 && layersOnMobile) {
 			width = 'calc(100% - 28px)'; //MobileDayView.css .mobile-start-day .probability-vertical-bar{width: 28px;}
 		} else {
-			width = 'calc(' + 98 + '%)';
+			width = 'calc(100% - 2px)';
 		}
 		return width;
 	}

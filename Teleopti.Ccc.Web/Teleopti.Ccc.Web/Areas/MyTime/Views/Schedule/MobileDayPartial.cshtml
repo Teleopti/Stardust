@@ -115,42 +115,47 @@ Layout = null;
 	</div>
 
 	<div class="mobile-start-day-body container">
-		<div class="mobile-summary-content cursorpointer" data-bind="style: { backgroundColor: summaryColor, borderColor: summaryColor, color: textColor }, css: {'dayoff': isDayOff}">
-			<div class="mobile-summary-content-text">
-				<div data-bind="text: dayOfWeek"></div>
-				<span data-bind="text: summaryName"></span>
-				<span data-bind="text: summaryTime"></span>
-				<!-- ko if: hasOvertime-->
-				<span>@Resources.Overtime</span>
+		<div class="mobile-summary-container">
+			<!-- ko if: !isLoading() -->
+			<div class="mobile-summary-content cursorpointer" data-bind="style: { backgroundColor: summaryColor, borderColor: summaryColor, color: textColor }, css: {'dayoff': isDayOff}">
+				<div class="mobile-summary-content-text">
+					<div data-bind="text: dayOfWeek"></div>
+					<span data-bind="text: summaryName"></span>
+					<span data-bind="text: summaryTime"></span>
+					<!-- ko if: hasOvertime-->
+					<span>@Resources.Overtime</span>
+					<!-- /ko -->
+				</div>
+
+				<!-- ko if: showTrafficLight() && trafficLightColor().length > 0 -->
+				<div class="holiday-agents cursorpointer displayinline-block" data-bind="visible: absenceRequestPermission, tooltip: { title: trafficLightTooltip(), placement: 'bottom' }">
+					<div class="small-circle" data-bind="style: {background: trafficLightColor()}"></div>
+				</div>
+				<!-- /ko -->
+				<!-- ko if: showProbabilityOptionsToggleIcon-->
+				<span class="probability-toggle-container">
+					<a class="btn btn-default" data-bind="style: {color: textColor}, click: toggleProbabilityOptionsPanel">
+						<!-- ko if: loadingProbabilityData -->
+						<span>
+							<img class="probability-loading-gif" src='@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader.gif")' alt="..." />
+						</span>
+						<!-- /ko -->
+						<!-- ko ifnot: showingAbsenceProbability() || showingOvertimeProbability() || loadingProbabilityData() -->
+						<span><i class="glyphicon glyphicon-eye-close"></i></span>
+						<!-- /ko -->
+						<!-- ko if: showingAbsenceProbability() && !loadingProbabilityData()-->
+						<span class="absence-probability-label"></span>
+						<!-- /ko -->
+						<!-- ko if: showingOvertimeProbability() && !loadingProbabilityData() -->
+						<span class="overtime-probability-label"></span>
+						<!-- /ko -->
+					</a>
+				</span>
 				<!-- /ko -->
 			</div>
-
-			<!-- ko if: showTrafficLight() && !isLoading() && trafficLightColor().length > 0 -->
-			<div class="holiday-agents cursorpointer displayinline-block" data-bind="visible: absenceRequestPermission, tooltip: { title: trafficLightTooltip(), placement: 'bottom' }">
-				<div class="small-circle" data-bind="style: {background: trafficLightColor()}"></div>
-			</div>
-			<!-- /ko -->
-			<!-- ko if: showProbabilityOptionsToggleIcon-->
-			<span class="probability-toggle-container">
-				<a class="btn btn-default" data-bind="style: {color: textColor}, click: toggleProbabilityOptionsPanel">
-					<!-- ko if: loadingProbabilityData -->
-					<span>
-						<img class="probability-loading-gif" src='@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader.gif")' alt="..." />
-					</span>
-					<!-- /ko -->
-					<!-- ko ifnot: showingAbsenceProbability() || showingOvertimeProbability() || loadingProbabilityData() -->
-					<span><i class="glyphicon glyphicon-eye-close"></i></span>
-					<!-- /ko -->
-					<!-- ko if: showingAbsenceProbability() && !loadingProbabilityData()-->
-					<span class="absence-probability-label"></span>
-					<!-- /ko -->
-					<!-- ko if: showingOvertimeProbability() && !loadingProbabilityData() -->
-					<span class="overtime-probability-label"></span>
-					<!-- /ko -->
-				</a>
-			</span>
 			<!-- /ko -->
 		</div>
+
 
 		<div class="mobile-timeline floatleft" data-bind="style: {height: scheduleHeight}">
 			<!-- ko foreach: timeLines -->
@@ -165,27 +170,30 @@ Layout = null;
 			 alt="..." />
 			<!-- /ko -->
 			<!-- ko if: !isLoading() -->
-			<!-- ko foreach: layers-->
-			<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-availability-bar': isOvertimeAvailability, 'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true">
-				<div data-bind="visible: showTitle && !isOvertimeAvailability">
-					<strong data-bind="text: title"></strong>
-					<!-- ko if: hasMeeting -->
-					<div class="meeting floatright">
-						<i class="meeting-icon mr10">
-							<i class="glyphicon glyphicon-user ml10"></i>
-						</i>
+			<div class="mobile-schedule-layer-container" data-bind="style: {'width': probabilities().length > 0 ? 'calc(100% - 28px)' : '100%' }">
+				<!-- ko foreach: layers-->
+				<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-availability-bar': isOvertimeAvailability, 'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true">
+					<div data-bind="visible: showTitle && !isOvertimeAvailability">
+						<strong data-bind="text: title"></strong>
+						<!-- ko if: hasMeeting -->
+						<div class="meeting floatright">
+							<i class="meeting-icon mr10">
+								<i class="glyphicon glyphicon-user ml10"></i>
+							</i>
+						</div>
+						<!-- /ko -->
+						<span class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
 					</div>
-					<!-- /ko -->
-					<span class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
+					<div data-bind="visible: showTitle && isOvertimeAvailability">
+						<i class="glyphicon glyphicon-time"></i>
+					</div>
 				</div>
-				<div data-bind="visible: showTitle && isOvertimeAvailability">
-					<i class="glyphicon glyphicon-time"></i>
-				</div>
+				<!-- /ko -->
 			</div>
-			<!-- /ko -->
+
 			<!-- ko if: showProbabilityOptionsToggleIcon || probabilities().length > 0 -->
 			<div class="probability-vertical-bar">
-				<!--ko foreach: probabilities-->
+				<!--ko foreach: probabilities()-->
 				<div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true, placement: 'left', trigger: 'click'}, style: styleJson, hideTooltipAfterMouseLeave: true"></div>
 				<!-- /ko -->
 			</div>

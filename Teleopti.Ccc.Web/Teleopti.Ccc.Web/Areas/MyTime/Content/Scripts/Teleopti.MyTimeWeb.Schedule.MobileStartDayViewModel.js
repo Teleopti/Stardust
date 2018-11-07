@@ -22,7 +22,7 @@
 	self.trafficLightTooltip = ko.observable('');
 	self.dayOfWeek = ko.observable();
 	self.isFullDayAbsence = false;
-	self.isDayOff = ko.observable(false);
+	self.isDayOff = false;
 	self.hasOvertime = ko.observable(false);
 	self.timeLines = ko.observableArray();
 	self.periods = [];
@@ -69,7 +69,7 @@
 	self.staffingProbabilityOnMobileEnabled = ko.observable(false);
 	self.loadingProbabilityData = ko.observable(false);
 	self.probabilities = ko.observableArray();
-	self.userNowInMinute = ko.observable(0);
+	self.userNowInMinute = 0;
 	self.userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
 	self.openHourPeriod = null;
 	self.isLoading = ko.observable(false);
@@ -102,7 +102,7 @@
 		self.summaryTime(data.Schedule.Summary.TimeSpan);
 		self.trafficLightColor(getTrafficLightColor(data.Schedule.ProbabilityClass));
 		self.trafficLightTooltip(buildTrafficLightTooltip(data.Schedule.ProbabilityText));
-		self.isDayOff(data.Schedule.IsDayOff);
+		self.isDayOff = data.Schedule.IsDayOff;
 		self.isFullDayAbsence = data.Schedule.IsFullDayAbsence;
 		self.periods = data.Schedule.Periods;
 		self.unreadMessageCount(data.UnReadMessageCount);
@@ -413,7 +413,7 @@
 		if (!self.staffingProbabilityOnMobileEnabled()) return;
 		oneWeekRawProbabilities = rawProbabilities;
 
-		self.fixedDate = self.selectedDate;
+		self.fixedDate = moment(self.selectedDate());
 
 		self.probabilities(
 			Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(

@@ -117,7 +117,7 @@
 		week.updateProbabilityData(fakeProbabilityData);
 
 		week.days().forEach(function(day) {
-			equal(day.probabilities.length, 0);
+			equal(day.probabilities().length, 0);
 		});
 	});
 
@@ -249,11 +249,17 @@
 		week.updateProbabilityData(fakeProbabilityData);
 
 		// Total 9:30 ~ 16:45 = 29 intervals
-		equal(week.days()[0].probabilities.length, 29);
-		equal(week.days()[1].probabilities.length, 0);
-		for (var i = 0; i < week.days()[0].probabilities.length; i++) {
+		equal(week.days()[0].probabilities().length, 29);
+		equal(week.days()[1].probabilities().length, 0);
+		for (var i = 0; i < week.days()[0].probabilities().length; i++) {
 			if (i > 0) {
-				equal(week.days()[0].probabilities[i].tooltips().length > 0, true);
+				equal(
+					week
+						.days()[0]
+						.probabilities()
+						[i].tooltips().length > 0,
+					true
+				);
 			}
 		}
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
@@ -281,10 +287,16 @@
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate);
 		week.updateProbabilityData(fakeProbabilityData);
 
-		equal(week.days()[0].probabilities.length, 96);
-		equal(week.days()[1].probabilities.length, 0);
-		for (var i = 0; i < week.days()[0].probabilities.length; i++) {
-			equal(week.days()[0].probabilities[i].tooltips().length > 0, true);
+		equal(week.days()[0].probabilities().length, 96);
+		equal(week.days()[1].probabilities().length, 0);
+		for (var i = 0; i < week.days()[0].probabilities().length; i++) {
+			equal(
+				week
+					.days()[0]
+					.probabilities()
+					[i].tooltips().length > 0,
+				true
+			);
 		}
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
@@ -300,13 +312,27 @@
 
 		week.days()[0].userNowInMinute = 750; // 12:30
 
-		equal(week.days()[0].probabilities.length, 29);
+		equal(week.days()[0].probabilities().length, 29);
 
-		for (var i = 0; i < week.days()[0].probabilities.length; i++) {
+		for (var i = 0; i < week.days()[0].probabilities().length; i++) {
 			// Schedule started from 09:30, current time is 12:30
 			// Then the first (09:30 - 12:30) * 4 = 12 probabilities should be masked
-			if (i < 12) equal(week.days()[0].probabilities[i].tooltips().length > 0, false);
-			else equal(week.days()[0].probabilities[i].tooltips().length > 0, true);
+			if (i < 12)
+				equal(
+					week
+						.days()[0]
+						.probabilities()
+						[i].tooltips().length > 0,
+					false
+				);
+			else
+				equal(
+					week
+						.days()[0]
+						.probabilities()
+						[i].tooltips().length > 0,
+					true
+				);
 		}
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
@@ -322,9 +348,9 @@
 
 		week.days()[0].userNowInMinute = 750; // 12:30
 
-		equal(week.days()[0].probabilities.length, 29);
-		for (var i = 0; i < week.days()[0].probabilities.length; i++) {
-			var probability = week.days()[0].probabilities[i];
+		equal(week.days()[0].probabilities().length, 29);
+		for (var i = 0; i < week.days()[0].probabilities().length; i++) {
+			var probability = week.days()[0].probabilities()[i];
 			//9:30 ~ 12:30 = 3 * 4 intervals
 			if (i < 12) {
 				equal(probability.tooltips().length, 0);
@@ -347,7 +373,7 @@
 		week.updateProbabilityData(fakeProbabilityData);
 
 		week.days()[0].userNowInMinute = 0;
-		equal(week.days()[0].probabilities.length, 0);
+		equal(week.days()[0].probabilities().length, 0);
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
@@ -360,7 +386,7 @@
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate);
 		week.updateProbabilityData(fakeProbabilityData);
 
-		equal(week.days()[0].probabilities.length, 0);
+		equal(week.days()[0].probabilities().length, 0);
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
@@ -389,9 +415,15 @@
 
 		week.days()[0].userNowInMinute = 0;
 		//08:00 ~ 18:00 = 40 intervals - 2margin = 38
-		equal(week.days()[0].probabilities.length, 38);
-		for (var i = 0; i < week.days()[0].probabilities.length; i++) {
-			equal(week.days()[0].probabilities[i].tooltips().length > 0, true);
+		equal(week.days()[0].probabilities().length, 38);
+		for (var i = 0; i < week.days()[0].probabilities().length; i++) {
+			equal(
+				week
+					.days()[0]
+					.probabilities()
+					[i].tooltips().length > 0,
+				true
+			);
 		}
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
@@ -410,9 +442,15 @@
 
 		week.days()[0].userNowInMinute = 0;
 
-		equal(week.days()[0].probabilities.length, 20);
-		for (var i = 0; i < week.days()[0].probabilities.length; i++) {
-			equal(week.days()[0].probabilities[i].tooltips().length > 0, true);
+		equal(week.days()[0].probabilities().length, 20);
+		for (var i = 0; i < week.days()[0].probabilities().length; i++) {
+			equal(
+				week
+					.days()[0]
+					.probabilities()
+					[i].tooltips().length > 0,
+				true
+			);
 		}
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
@@ -434,9 +472,15 @@
 
 		// In this scenario will show prabability based on length of intraday open hour
 		// So should be (15 - 10) * 4
-		equal(week.days()[0].probabilities.length, 20);
-		for (var i = 0; i < week.days()[0].probabilities.length; i++) {
-			equal(week.days()[0].probabilities[i].tooltips().length > 0, true);
+		equal(week.days()[0].probabilities().length, 20);
+		for (var i = 0; i < week.days()[0].probabilities().length; i++) {
+			equal(
+				week
+					.days()[0]
+					.probabilities()
+					[i].tooltips().length > 0,
+				true
+			);
 		}
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
@@ -468,9 +512,15 @@
 		week.days()[0].userNowInMinute = 0;
 
 		//08:00 ~ 18:00 = 40 intervals - 2margin = 38
-		equal(week.days()[0].probabilities.length, 38);
-		for (var i = 0; i < week.days()[0].probabilities.length; i++) {
-			equal(week.days()[0].probabilities[i].tooltips().length > 0, true);
+		equal(week.days()[0].probabilities().length, 38);
+		for (var i = 0; i < week.days()[0].probabilities().length; i++) {
+			equal(
+				week
+					.days()[0]
+					.probabilities()
+					[i].tooltips().length > 0,
+				true
+			);
 		}
 	});
 
@@ -504,9 +554,15 @@
 		week.days()[0].userNowInMinute = 0;
 
 		//18 * 4 - 1 margin = 71
-		equal(week.days()[0].probabilities.length, 71);
-		for (var i = 0; i < week.days()[0].probabilities.length; i++) {
-			equal(week.days()[0].probabilities[i].tooltips().length > 0, true);
+		equal(week.days()[0].probabilities().length, 71);
+		for (var i = 0; i < week.days()[0].probabilities().length; i++) {
+			equal(
+				week
+					.days()[0]
+					.probabilities()
+					[i].tooltips().length > 0,
+				true
+			);
 		}
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
@@ -527,10 +583,16 @@
 		week.days()[0].userNowInMinute = 0;
 
 		//according to scheduel period 00:00 ~ 16:45 = 16.75 * 4 =
-		equal(week.days()[0].probabilities.length, 67);
+		equal(week.days()[0].probabilities().length, 67);
 
-		for (var i = 0; i < week.days()[0].probabilities.length; i++) {
-			equal(week.days()[0].probabilities[i].tooltips().length > 0, true);
+		for (var i = 0; i < week.days()[0].probabilities().length; i++) {
+			equal(
+				week
+					.days()[0]
+					.probabilities()
+					[i].tooltips().length > 0,
+				true
+			);
 		}
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
@@ -565,7 +627,7 @@
 		week.days()[0].userNowInMinute = 0;
 
 		//9:30 ~ 24:00 = 14.5 * 4 = 58
-		equal(week.days()[0].probabilities.length, 58);
+		equal(week.days()[0].probabilities().length, 58);
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
@@ -578,36 +640,44 @@
 		week.updateProbabilityData(getFakeProbabilityData());
 
 		equal(week.days().length, 2);
-		equal(week.days()[0].probabilities.length, 1);
+		equal(week.days()[0].probabilities().length, 1);
 		equal(
-			week.days()[0].probabilities[0].cssClass(),
+			week
+				.days()[0]
+				.probabilities()[0]
+				.cssClass(),
 			Teleopti.MyTimeWeb.Common.Constants.probabilityClass.lowProbabilityClass
 		);
 		equal(
 			week
 				.days()[0]
-				.probabilities[0].tooltips()
+				.probabilities()[0]
+				.tooltips()
 				.indexOf(userTexts.ProbabilityToGetAbsenceColon) > -1,
 			true
 		);
-		equal(week.days()[0].probabilities[0].styleJson.left != '', true);
-		equal(week.days()[0].probabilities[0].styleJson.width != '', true);
+		equal(week.days()[0].probabilities()[0].styleJson.left != '', true);
+		equal(week.days()[0].probabilities()[0].styleJson.width != '', true);
 
-		equal(week.days()[1].probabilities.length, 1);
-		equal(week.days()[1].probabilities.length, 1);
+		equal(week.days()[1].probabilities().length, 1);
+		equal(week.days()[1].probabilities().length, 1);
 		equal(
-			week.days()[1].probabilities[0].cssClass(),
+			week
+				.days()[1]
+				.probabilities()[0]
+				.cssClass(),
 			Teleopti.MyTimeWeb.Common.Constants.probabilityClass.highProbabilityClass
 		);
 		equal(
 			week
 				.days()[1]
-				.probabilities[0].tooltips()
+				.probabilities()[0]
+				.tooltips()
 				.indexOf(userTexts.ProbabilityToGetAbsenceColon) > -1,
 			true
 		);
-		equal(week.days()[1].probabilities[0].styleJson.left != '', true);
-		equal(week.days()[1].probabilities[0].styleJson.width != '', true);
+		equal(week.days()[1].probabilities()[0].styleJson.left != '', true);
+		equal(week.days()[1].probabilities()[0].styleJson.width != '', true);
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 

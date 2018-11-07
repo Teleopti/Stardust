@@ -193,8 +193,8 @@ Layout = null;
 					</div>
 				</div>
 				<div>
-					<div class="weekview-day-schedule relative" data-bind="style: {width: probabilities.length > 0 ? '116px' : '129px'}">
-						<div class="weekview-day-time-indicator relative" data-bind="style: {width: probabilities.length > 0 ? '114px' : '129px'}">
+					<div class="weekview-day-schedule relative" data-bind="style: {width: probabilities().length > 0 ? '116px' : '127px'}">
+						<div class="weekview-day-time-indicator relative" data-bind="style: {width: probabilities().length > 0 ? '114px' : '129px'}">
 						</div>
 						<!-- ko foreach: layers -->
 						<!-- ko if: isOvertimeAvailability -->
@@ -221,7 +221,7 @@ Layout = null;
 					</div>
 					<!-- ko if: showStaffingProbabilityBar -->
 					<div class="probability-vertical-bar ">
-						<!--ko foreach: probabilities-->
+						<!--ko foreach: probabilities() -->
 						<div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true}, style: styleJson"></div>
 						<!-- /ko -->
 					</div>

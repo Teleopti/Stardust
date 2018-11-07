@@ -49,11 +49,11 @@
 	self.requestsCount = scheduleDay.RequestsCount;
 	self.overtimeAvailability = scheduleDay.OvertimeAvailabililty;
 
-	self.absenceChanceColor = getTrafficLightColor(scheduleDay.probabilityClass);
+	self.absenceChanceColor = getTrafficLightColor(scheduleDay.ProbabilityClass);
 	self.probabilityText = scheduleDay.ProbabilityText;
-	self.probabilities = [];
+	self.probabilities = ko.observableArray();
 
-	self.hasRequests = self.requestsCount > 0;
+	self.hasRequests = ko.observable(self.requestsCount > 0); //use observable because this can be updated in increaseRequestCount
 	self.hasNote = scheduleDay.HasNote;
 	self.seatBookings = scheduleDay.SeatBookings;
 	self.seatBookingIconVisible = self.seatBookings.length > 0;
