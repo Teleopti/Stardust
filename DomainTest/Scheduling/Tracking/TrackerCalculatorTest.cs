@@ -9,6 +9,8 @@ using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
@@ -22,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 	    [SetUp]
         public void Setup()
         {
-			_permissionChecker = new PersistableScheduleDataPermissionChecker();
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(new FullPermission());
             _target = new TrackerCalculator();
         }
 
@@ -31,13 +33,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
         {
             IPerson person = new Person();
             IScenario scenario = new Scenario("For Test");
-            var dictionary = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000,1,1,2002,1,1)), _permissionChecker);
+			var currentAuthorization = new FullPermission();
+			var dictionary = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000,1,1,2002,1,1)), _permissionChecker, currentAuthorization);
             var baseDateTime = new DateTime(2001, 1, 1, 8, 0, 0, DateTimeKind.Utc);
             IAbsence absenceToCount = new Absence();
             IActivity underlyingActivity = new Activity("For test");
-            IScheduleDay schedulePart = ExtractedSchedule.CreateScheduleDay(dictionary, person,new DateOnly(2001,1,2));
-            IScheduleDay schedulePart2 = ExtractedSchedule.CreateScheduleDay(dictionary, person, new DateOnly(2001, 1, 5));
-            IScheduleDay schedulePart3 = ExtractedSchedule.CreateScheduleDay(dictionary, person, new DateOnly(2001, 1, 11));
+            IScheduleDay schedulePart = ExtractedSchedule.CreateScheduleDay(dictionary, person,new DateOnly(2001,1,2), currentAuthorization);
+            IScheduleDay schedulePart2 = ExtractedSchedule.CreateScheduleDay(dictionary, person, new DateOnly(2001, 1, 5), currentAuthorization);
+            IScheduleDay schedulePart3 = ExtractedSchedule.CreateScheduleDay(dictionary, person, new DateOnly(2001, 1, 11), currentAuthorization);
             //Periods:
             var period1 = new DateTimePeriod(baseDateTime.AddDays(1),baseDateTime.AddDays(1).AddHours(4));
             var period2 = new DateTimePeriod(baseDateTime.AddDays(4),baseDateTime.AddDays(4).AddHours(4));
@@ -63,13 +66,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
         {
             IPerson person = new Person();
             IScenario scenario = new Scenario("For Test");
-            var dictionary = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2002, 1, 1)), _permissionChecker);
+			var currentAuthorization = new FullPermission();
+			var dictionary = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2002, 1, 1)), _permissionChecker, currentAuthorization);
             var baseDateTime = new DateTime(2001, 1, 1, 8, 0, 0, DateTimeKind.Utc);
             IAbsence absenceToCount = new Absence {InContractTime = true};
             IActivity underlyingActivity = new Activity("For test");
-            IScheduleDay schedulePart = ExtractedSchedule.CreateScheduleDay(dictionary, person, new DateOnly(2001, 1, 2));
-            IScheduleDay schedulePart2 = ExtractedSchedule.CreateScheduleDay(dictionary, person, new DateOnly(2001, 1, 5));
-            IScheduleDay schedulePart3 = ExtractedSchedule.CreateScheduleDay(dictionary, person, new DateOnly(2001, 1, 11));
+            IScheduleDay schedulePart = ExtractedSchedule.CreateScheduleDay(dictionary, person, new DateOnly(2001, 1, 2), currentAuthorization);
+            IScheduleDay schedulePart2 = ExtractedSchedule.CreateScheduleDay(dictionary, person, new DateOnly(2001, 1, 5), currentAuthorization);
+            IScheduleDay schedulePart3 = ExtractedSchedule.CreateScheduleDay(dictionary, person, new DateOnly(2001, 1, 11), currentAuthorization);
             //Periods:
             var period1 = new DateTimePeriod(baseDateTime.AddDays(1), baseDateTime.AddDays(1).AddHours(4));
             var period2 = new DateTimePeriod(baseDateTime.AddDays(4), baseDateTime.AddDays(4).AddHours(4));

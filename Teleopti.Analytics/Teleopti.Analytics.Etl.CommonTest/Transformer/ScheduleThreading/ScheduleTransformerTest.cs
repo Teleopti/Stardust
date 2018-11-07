@@ -10,10 +10,12 @@ using Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.Job;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer.ScheduleThreading
 {
 	[TestFixture]
+	[FullPermissions]
 	public class ScheduleTransformerTest
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]

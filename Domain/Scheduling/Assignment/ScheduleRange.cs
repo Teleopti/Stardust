@@ -17,30 +17,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	public class ScheduleRange : Schedule, IScheduleRange, IValidateScheduleRange, IUnvalidatedScheduleRangeUpdate
 	{
 		private readonly IPersistableScheduleDataPermissionChecker _permissionChecker;
+		private readonly ICurrentAuthorization _authorization;
 		private IList<IScheduleData> _scheduleObjectsWithNoPermissions;
 		private ScheduleRange _snapshot;
 		private TargetScheduleSummary _targetScheduleSummary;
 		private CurrentScheduleSummary _currentScheduleSummary;
 		private readonly Lazy<IEnumerable<DateOnlyPeriod>> _availablePeriods;
 		private IShiftCategoryFairnessHolder _shiftCategoryFairnessHolder;
-
-
-		public ScheduleRange(IScheduleDictionary owner, IScheduleParameters parameters, IPersistableScheduleDataPermissionChecker permissionChecker)
-			: base(owner, parameters)
+		
+		public ScheduleRange(IScheduleDictionary owner, IScheduleParameters parameters, IPersistableScheduleDataPermissionChecker permissionChecker, ICurrentAuthorization authorization)
+			: base(owner, parameters, authorization)
 		{
 			_permissionChecker = permissionChecker;
+			_authorization = authorization;
 			_scheduleObjectsWithNoPermissions = new List<IScheduleData>();
 			_availablePeriods = new Lazy<IEnumerable<DateOnlyPeriod>>(() =>
 				{
 					var timeZone = Person.PermissionInformation.DefaultTimeZone();
 					var dop = Period.ToDateOnlyPeriod(timeZone);
-					return PrincipalAuthorization.Current()
-												 .PermittedPeriods(DefinedRaptorApplicationFunctionPaths.ViewSchedules, dop,
-																   Person);
+					return authorization.Current().PermittedPeriods(DefinedRaptorApplicationFunctionPaths.ViewSchedules, dop, Person);
 				});
 		}
 
-		public ScheduleRange Snapshot => _snapshot ?? (_snapshot = new ScheduleRange(Owner, this, _permissionChecker));
+		public ScheduleRange Snapshot => _snapshot ?? (_snapshot = new ScheduleRange(Owner, this, _permissionChecker, _authorization));
 
 		public bool CanSeeUnpublishedSchedules { get; set; } = false;
 
@@ -78,8 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IScheduleDay ScheduledDay(DateOnly day)
 		{
-			var dayAndPeriod = new DateOnlyAsDateTimePeriod(day, Person.PermissionInformation.DefaultTimeZone());
-			return ScheduleDay(dayAndPeriod, PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules), _availablePeriods.Value);
+			return ScheduledDay(day, _authorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules));
 		}
 
 		public void ValidateBusinessRules(INewBusinessRuleCollection newBusinessRuleCollection)
@@ -233,8 +231,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IEnumerable<IScheduleDay> ScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod)
 		{
-			var hasViewUnpublishedSchedulesPermission =
-				PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+			var hasViewUnpublishedSchedulesPermission = _authorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 			return getScheduledDayCollection(dateOnlyPeriod, hasViewUnpublishedSchedulesPermission || CanSeeUnpublishedSchedules);
 		}
 

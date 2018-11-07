@@ -76,7 +76,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			unitOfWork.Stub(x => x.PersistAll());
 			unitOfWork.Stub(x => x.Dispose());
 
-			_target.Handle(_importForecastsFileCommandDto);
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.Handle(_importForecastsFileCommandDto);
+			}
 		}
 		
 		[Test]

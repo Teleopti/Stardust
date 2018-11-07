@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
@@ -15,11 +14,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see the time indicator at time '(.*)'")]
 		public void ThenIShouldSeeTheTimeIndicatorAtTime(DateTime date)
 		{
-			const int heightOfDay = 668;
-			const int timeLineOffset = 123;
-			const int timeIndicatorHeight = 2;
-		    TimeSpan minTimelineTime;
-		    TimeSpan maxTimelineTime;
+			TimeSpan minTimelineTime;
+			TimeSpan maxTimelineTime;
 
 			Browser.Interactions.AssertExists(".weekview-timeline-label");
 
@@ -46,18 +42,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			{
 				throw new ValidationException("Could not find timeline end label time.");
 			}
-			var positionPercentage = (decimal)(date.TimeOfDay - minTimelineTime).Ticks /
-									 (maxTimelineTime - minTimelineTime).Ticks;
-			var heightOfTimeIndicator = Math.Round(positionPercentage * heightOfDay, 0) -
-										Math.Round((decimal)(timeIndicatorHeight / 2), 0);
-
-			heightOfTimeIndicator = heightOfTimeIndicator == -1 ? 0 : heightOfTimeIndicator;
-
-			var topIndicatorPx = Math.Round(heightOfTimeIndicator, 0).ToString(CultureInfo.InvariantCulture) + "px";
-			var topIndicatorSmallPx = (Math.Round(heightOfTimeIndicator, 0) + timeLineOffset).ToString(CultureInfo.InvariantCulture) + "px";
 			
-			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-time-indicator[style*='top: {1}']", date.ToString("yyyy-MM-dd"), topIndicatorPx));
-			Browser.Interactions.AssertExists(string.Format(".weekview-day-time-indicator-small[style*='top: {0}']", topIndicatorSmallPx));
+			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-time-indicator", date.ToString("yyyy-MM-dd")));
+			Browser.Interactions.AssertExists(".weekview-day-time-indicator-small");
 		}
 
 		[Then(@"I should not see the time indicator for date '(.*)'")]

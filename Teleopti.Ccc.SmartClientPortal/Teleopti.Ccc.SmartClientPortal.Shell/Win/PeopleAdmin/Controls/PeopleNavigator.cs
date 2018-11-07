@@ -168,8 +168,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
 				ITraceableRefreshService service = new TraceableRefreshService(_currentScenario,
 					new ScheduleStorage(currentUnitOfWork, repositoryFactory,
-						new PersistableScheduleDataPermissionChecker(),
-						new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork)));
+						new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
+						new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), CurrentAuthorization.Make()));
 
 				var filteredPeopleHolder = new FilteredPeopleHolder(service, accounts, saviour, _personRepository)
 				{
@@ -254,10 +254,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 			_gracefulDataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() =>
 			{
 				IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork();
-				var accounts = new PersonAbsenceAccountRepository(uow).LoadAllAccounts();
+				IDictionary<IPerson, IPersonAccountCollection> accounts = new Dictionary<IPerson, IPersonAccountCollection>();
+				if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487))
+				{
+					accounts = new PersonAbsenceAccountRepository(uow).FindByUsers(new List<IPerson>());
+				}
+				else
+				{
+					accounts = new PersonAbsenceAccountRepository(uow).LoadAllAccounts();
+				}
 				var repositoryFactory = new RepositoryFactory();
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
-				ITraceableRefreshService cacheServiceForPersonAccounts = new TraceableRefreshService(_currentScenario, new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork)));
+				ITraceableRefreshService cacheServiceForPersonAccounts = new TraceableRefreshService(_currentScenario, new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), CurrentAuthorization.Make()));
 				var state = new WorksheetStateHolder();
 				var saviour = _container.Resolve<ITenantDataManager>();
 				var filteredPeopleHolder = new FilteredPeopleHolder(cacheServiceForPersonAccounts, accounts, saviour, _personRepository)

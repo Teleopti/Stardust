@@ -25,7 +25,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				ListenerName = "Facebook"
 			};
-			handler.Handle(commandDto);
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				handler.Handle(commandDto);
+			}
 
 			commandDto.Result.AffectedItems.Should().Be.EqualTo(1);
 			repository.FindValueByKey(ScheduleChangeSubscriptions.Key, new ScheduleChangeSubscriptions())

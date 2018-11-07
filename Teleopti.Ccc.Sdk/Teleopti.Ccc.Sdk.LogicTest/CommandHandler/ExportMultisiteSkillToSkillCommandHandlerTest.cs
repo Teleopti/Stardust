@@ -102,9 +102,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             }
 
             using(_mock.Playback())
-            {
-                _target.Handle(_exportMultisiteSkillToSkillCommandDto);
-            }
+			{
+				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+				{
+					_target.Handle(_exportMultisiteSkillToSkillCommandDto);
+				}
+			}
         }
 
         [Test]
@@ -124,9 +127,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(() => _busSender.Publish(new ExportMultisiteSkillsToSkillEvent())).IgnoreArguments();
             }
             using (_mock.Playback())
-            {
-                _target.Handle(_exportMultisiteSkillToSkillCommandDto);
-            }
+			{
+				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+				{
+					_target.Handle(_exportMultisiteSkillToSkillCommandDto);
+				}
+			}
         }
 
         [Test]

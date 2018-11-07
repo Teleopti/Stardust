@@ -351,9 +351,7 @@
     <Compile Include="Scheduling\Restrictions\RestrictionsAbleToBeScheduledTest.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionCombinerTest.cs" />
     <Compile Include="Scheduling\Rules\MaximumWorkdayRuleTest.cs" />
-    <Compile Include="Scheduling\SchedulerStateHolderLoadRequestsTest.cs" />
     <Compile Include="Scheduling\Tracking\PersonAccountProjectionServicePermissionTest.cs" />
-    <Compile Include="Search\PersonSearchProviderTest.cs" />
     <Compile Include="Security\ImplementationDetails\Authentication\AvailableBusinessUnitsProviderTest.cs" />
     <Compile Include="Security\ImplementationDetails\Authentication\DummyPasswordPolicyTest.cs" />
     <Compile Include="Security\ImplementationDetails\Authentication\EnvironmentWindowsUserProviderTest.cs" />
@@ -544,7 +542,6 @@
     <Compile Include="ResourcePlanner\Hints\PersonContractScheduleHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\PersonContractHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\PersonPartTimePercentageHintTest.cs" />
-    <Compile Include="ResourcePlanner\Hints\PersonPeriodHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\PersonSchedulePeriodHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\PersonShiftBagHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\PersonSkillHintTest.cs" />
@@ -1540,9 +1537,9 @@
     <Compile Include="Staffing\ExportBpoFileTest.cs" />
     <Compile Include="Staffing\ExportForecastAndStaffingFileTest.cs" />
     <Compile Include="Staffing\ImportBpoFileTest.cs" />
+    <Compile Include="Staffing\PersonAccessContextReaderServiceTest.cs" />
     <Compile Include="Staffing\RequiredStaffingProviderTest.cs" />
     <Compile Include="Staffing\ScheduledSTaffingVIewModelCreatorTest.cs" />
-    <Compile Include="Staffing\PersonAccessContextReaderServiceTest.cs" />
     <Compile Include="Staffing\StaffingContextReaderServiceTest.cs" />
     <Compile Include="Staffing\TenantContextReaderServiceTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSettingsTest.cs" />
@@ -1663,7 +1660,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Helper\StaffingCalculatorServiceModel.xlsm" />
     <Content Include="..\LicenseFiles\Teleopti_RD.xml">
       <Link>Teleopti_RD.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

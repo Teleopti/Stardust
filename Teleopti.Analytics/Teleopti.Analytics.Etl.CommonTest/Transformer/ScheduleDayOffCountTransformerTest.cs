@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -44,9 +45,9 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			_scenario.SetId(Guid.NewGuid());
 			_period1 = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
 			_dic = new ScheduleDictionaryForTest(_scenario, new ScheduleDateTimePeriod(_period1), new Dictionary<IPerson, IScheduleRange>());
-			_schedulePart1 = ExtractedSchedule.CreateScheduleDay(_dic, _person, new DateOnly(2000, 1, 1));
-			_schedulePart2 = ExtractedSchedule.CreateScheduleDay(_dic, _person, new DateOnly(2000, 1, 3));
-			_schedulePart3 = ExtractedSchedule.CreateScheduleDay(_dic, _person, new DateOnly(2000, 1, 5));
+			_schedulePart1 = ExtractedSchedule.CreateScheduleDay(_dic, _person, new DateOnly(2000, 1, 1), CurrentAuthorization.Make());
+			_schedulePart2 = ExtractedSchedule.CreateScheduleDay(_dic, _person, new DateOnly(2000, 1, 3), CurrentAuthorization.Make());
+			_schedulePart3 = ExtractedSchedule.CreateScheduleDay(_dic, _person, new DateOnly(2000, 1, 5), CurrentAuthorization.Make());
 
 			var dayOff1 = new DayOffTemplate(new Description("test"));
 			dayOff1.SetId(Guid.NewGuid());

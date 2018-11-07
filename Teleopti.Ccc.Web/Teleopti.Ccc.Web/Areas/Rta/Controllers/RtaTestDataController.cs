@@ -21,6 +21,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence.Domain;
 using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
@@ -38,7 +39,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private readonly IRtaEventStore _events;
 		private readonly IRtaEventStoreSynchronizer _synchronizer;
-		private readonly IKeyValueStorePersister _keyValueStore;
 
 
 		public RtaTestDataController(
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			IActivityRepository activities,
 			IDifferenceCollectionService<IPersistableScheduleData> differenceService,
 			IScheduleDifferenceSaver scheduleDifferenceSaver,
-			IRtaEventStore events, IRtaEventStoreSynchronizer synchronizer, IKeyValueStorePersister keyValueStore)
+			IRtaEventStore events, IRtaEventStoreSynchronizer synchronizer)
 		{
 			_persons = persons;
 			_schedules = schedules;
@@ -58,7 +58,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			_scheduleDifferenceSaver = scheduleDifferenceSaver;
 			_events = events;
 			_synchronizer = synchronizer;
-			_keyValueStore = keyValueStore;
 		}
 
 		[HttpGet, Route("api/RtaTestData/MakeStuff")]
@@ -272,7 +271,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			{
 				var q = (e as IRtaStoredEvent)?.QueryData();
 				log.AppendLine($"Adding event {q.PersonId} {q.StartTime} {e.GetType().Name}");			
-				_events.Add(e, DeadLockVictim.No);
+				_events.Add(e, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion);
 			});
 			
 			

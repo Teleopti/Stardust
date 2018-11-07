@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeAnHintForChanceOfAbsenceRequestOn(string text, DateTime date)
 		{
 			Browser.Interactions.AssertKnockoutContextContains($".weekview-day[data-mytime-date={date:yyyy-MM-dd}]",
-				"holidayChanceText()", text);
+				"holidayChanceText", text);
 		}
 
 		[Then(@"I should see no indication for chance of absence request on '(.*)'")]

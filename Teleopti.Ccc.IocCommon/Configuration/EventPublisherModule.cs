@@ -3,8 +3,8 @@ using Hangfire.Server;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Wfm.Adherence.Domain.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {

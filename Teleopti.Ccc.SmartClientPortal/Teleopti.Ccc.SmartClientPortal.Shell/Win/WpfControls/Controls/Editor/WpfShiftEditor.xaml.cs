@@ -78,16 +78,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Editor
 			commitChanges(_model.SchedulePart);
         }
 
-        public void LoadSelectablePayloads()
-		{
-	        using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-	        {
-		        var stateHolder = new CommonStateHolder(new DisableDeletedFilter(new ThisUnitOfWork(uow)));
-		        stateHolder.LoadCommonStateHolder(new RepositoryFactory(), uow);
-		        LoadFromStateHolder(stateHolder);
-	        }
-		}
-
         #region IShiftEditor Members
 
         public void LoadSchedulePart(IScheduleDay schedule)

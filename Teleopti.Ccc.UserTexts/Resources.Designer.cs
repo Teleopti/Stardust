@@ -3196,6 +3196,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Approve/Deny Request.
+        /// </summary>
+        public static string ApproveOrDenyRequest {
+            get {
+                return ResourceManager.GetString("ApproveOrDenyRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Archive schedule.
         /// </summary>
         public static string ArchiveSchedule {
@@ -10789,6 +10798,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string EditShiftCategory {
             get {
                 return ResourceManager.GetString("EditShiftCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Site Open Hours.
+        /// </summary>
+        public static string EditSiteOpenHours {
+            get {
+                return ResourceManager.GetString("EditSiteOpenHours", resourceCulture);
             }
         }
         
@@ -27657,6 +27675,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reply Request.
+        /// </summary>
+        public static string ReplyRequest {
+            get {
+                return ResourceManager.GetString("ReplyRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your message to {0} request(s) has been saved.
         /// </summary>
         public static string ReplySuccess {
@@ -32784,6 +32811,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShiftsInShiftBagCanNotFulFillContractTime {
             get {
                 return ResourceManager.GetString("ShiftsInShiftBagCanNotFulFillContractTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The shifts in the shift bag {0} can not fulfill the overridden contract time. .
+        /// </summary>
+        public static string ShiftsInShiftBagCanNotFulFillOverriddenTargetTime {
+            get {
+                return ResourceManager.GetString("ShiftsInShiftBagCanNotFulFillOverriddenTargetTime", resourceCulture);
             }
         }
         

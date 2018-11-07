@@ -12,6 +12,8 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -36,8 +38,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _person = new Person().InTimeZone(TimeZoneInfo.Utc);
             _scenario = new Scenario("for test");
             _mocker = new MockRepository();
-            _scheduleDictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000,1,1,2002,1,1)), new PersistableScheduleDataPermissionChecker());
-            _part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(2001,1,1));
+            _scheduleDictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000,1,1,2002,1,1)), new PersistableScheduleDataPermissionChecker(new FullPermission()), new FullPermission());
+            _part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(2001,1,1), new FullPermission());
             _mocker.BackToRecordAll();
             _mockedPart = _mocker.StrictMock<IScheduleDay>();
         	_hasContractDayOffDefinition = _mocker.StrictMock<IHasContractDayOffDefinition>();

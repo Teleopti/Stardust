@@ -32,10 +32,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var yesterday = overtimeActivityPeriod.ToDateOnlyPeriod(timeZoneInfo).StartDate.AddDays(-1);
 			var today = overtimeActivityPeriod.ToDateOnlyPeriod(timeZoneInfo).StartDate;
 
+			var scheduleRange = scheduleDictionary[person];
 			var yesterdayGap =
-				calculateValidGapToClosestShift(scheduleDictionary[person].ScheduledDay(yesterday), overtimeActivityPeriod);
+				calculateValidGapToClosestShift(scheduleRange.ScheduledDay(yesterday), overtimeActivityPeriod);
 			var todayGap =
-				calculateValidGapToClosestShift(scheduleDictionary[person].ScheduledDay(today), overtimeActivityPeriod);
+				calculateValidGapToClosestShift(scheduleRange.ScheduledDay(today), overtimeActivityPeriod);
 
 			if (isValidGap(yesterdayGap) && isValidGap(todayGap))
 			{

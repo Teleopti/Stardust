@@ -168,6 +168,9 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebPeople, "xxPeople", DefinedRaptorApplicationFunctionForeignIds.WebPeople);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebRequests, "xxRequests", DefinedRaptorApplicationFunctionForeignIds.WebRequests);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebCancelRequest, "xxCancelRequest", DefinedRaptorApplicationFunctionForeignIds.WebCancelRequest);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebApproveOrDenyRequest, "xxApproveOrDenyRequest", DefinedRaptorApplicationFunctionForeignIds.WebApproveOrDenyRequest);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebReplyRequest, "xxReplyRequest", DefinedRaptorApplicationFunctionForeignIds.WebReplyRequest);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebEditSiteOpenHours, "xxEditSiteOpenHours", DefinedRaptorApplicationFunctionForeignIds.WebEditSiteOpenHours);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebOvertimeRequest, "xxOvertimeRequests", DefinedRaptorApplicationFunctionForeignIds.WebOvertimeRequest);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebModifySkill, "xxModifySkill", DefinedRaptorApplicationFunctionForeignIds.WebModifySkill);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebIntraday, "xxIntraday", DefinedRaptorApplicationFunctionForeignIds.WebIntraday);

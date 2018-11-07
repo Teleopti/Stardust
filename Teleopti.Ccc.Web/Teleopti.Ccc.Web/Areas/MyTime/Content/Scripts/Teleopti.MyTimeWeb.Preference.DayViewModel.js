@@ -57,47 +57,51 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function(ajaxForDate, feedBackData)
 		return self.Preference() != undefined && self.Preference() != '';
 	});
 
-	self.tooltipText = ko.computed(function() {
-		if (!self.Extended()) return undefined;
+	self.tooltipText = ko.computed({
+		read: function() {
+			if (!self.Extended()) return undefined;
 
-		var text = (
-			'<div class="time-limitation"><span class="glyphicon glyphicon-step-backward"></span>{0}</div>' +
-			'<div class="time-limitation"><span class="glyphicon glyphicon-step-forward"></span>{1}</div>' +
-			'<div class="time-limitation"><span class="glyphicon glyphicon-resize-horizontal"></span>{2}</div>' +
-			'<div class="extended-part-title">{3}</div>' +
-			'<div class="time-limitation"><span class="glyphicon glyphicon-step-backward"></span>{4}</div>' +
-			'<div class="time-limitation"><span class="glyphicon glyphicon-step-forward"></span>{5}</div>' +
-			'<div class="time-limitation"><span class="glyphicon glyphicon-resize-horizontal"></span>{6}</div>'
-		).format(
-			$('<div/>')
-				.text(self.StartTimeLimitation())
-				.html(),
-			$('<div/>')
-				.text(self.EndTimeLimitation())
-				.html(),
-			$('<div/>')
-				.text(self.WorkTimeLimitation())
-				.html(),
-			$('<div/>')
-				.text(self.Activity())
-				.html(),
-			$('<div/>')
-				.text(self.ActivityStartTimeLimitation() ? self.ActivityStartTimeLimitation() : '-')
-				.html(),
-			$('<div/>')
-				.text(self.ActivityEndTimeLimitation() ? self.ActivityEndTimeLimitation() : '-')
-				.html(),
-			$('<div/>')
-				.text(self.ActivityTimeLimitation() ? self.ActivityTimeLimitation() : '-')
-				.html()
-		);
+			var text = (
+				'<div class="time-limitation"><span class="glyphicon glyphicon-step-backward"></span>{0}</div>' +
+				'<div class="time-limitation"><span class="glyphicon glyphicon-step-forward"></span>{1}</div>' +
+				'<div class="time-limitation"><span class="glyphicon glyphicon-resize-horizontal"></span>{2}</div>' +
+				'<div class="extended-part-title">{3}</div>' +
+				'<div class="time-limitation"><span class="glyphicon glyphicon-step-backward"></span>{4}</div>' +
+				'<div class="time-limitation"><span class="glyphicon glyphicon-step-forward"></span>{5}</div>' +
+				'<div class="time-limitation"><span class="glyphicon glyphicon-resize-horizontal"></span>{6}</div>'
+			).format(
+				$('<div/>')
+					.text(self.StartTimeLimitation())
+					.html(),
+				$('<div/>')
+					.text(self.EndTimeLimitation())
+					.html(),
+				$('<div/>')
+					.text(self.WorkTimeLimitation())
+					.html(),
+				$('<div/>')
+					.text(self.Activity())
+					.html(),
+				$('<div/>')
+					.text(self.ActivityStartTimeLimitation() ? self.ActivityStartTimeLimitation() : '-')
+					.html(),
+				$('<div/>')
+					.text(self.ActivityEndTimeLimitation() ? self.ActivityEndTimeLimitation() : '-')
+					.html(),
+				$('<div/>')
+					.text(self.ActivityTimeLimitation() ? self.ActivityTimeLimitation() : '-')
+					.html()
+			);
 
-		return '<div class="extended-tooltip"><div class="extended-part-title">{0}</div>{1}</div>'.format(
-			$('<div/>')
-				.text(self.ExtendedTitle())
-				.html(),
-			text
-		);
+			var tooltip = '<div class="extended-tooltip"><div class="extended-part-title">{0}</div>{1}</div>'.format(
+				$('<div/>')
+					.text(self.ExtendedTitle())
+					.html(),
+				text
+			);
+			return tooltip;
+		},
+		write: function() {}
 	});
 
 	self.HasDayOff = ko.computed(function() {

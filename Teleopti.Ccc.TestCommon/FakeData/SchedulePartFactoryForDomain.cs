@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             IScheduleDictionary scheduleDictionary =
                 new ScheduleDictionaryForTest(CurrentScenario, scheduleDateTimePeriod,new Dictionary<IPerson, IScheduleRange>());
             var parameters = new ScheduleParameters(CurrentScenario, CurrentPerson, CurrentPeriod);
-            var ret = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, parameters.Person, dateOnly);
+            var ret = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, parameters.Person, dateOnly, new FullPermission());
             return ret;
         }
 

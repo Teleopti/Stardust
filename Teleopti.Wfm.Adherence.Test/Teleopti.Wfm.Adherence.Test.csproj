@@ -32,8 +32,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f">
+      <HintPath>..\packages\Antlr3.Runtime.3.5.1\lib\net40-client\Antlr3.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Autofac, Version=4.8.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.8.1\lib\net45\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4">
+      <HintPath>..\packages\Iesi.Collections.4.0.4\lib\net461\Iesi.Collections.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="LinFu.DynamicProxy, Version=1.0.4.16035, Culture=neutral, PublicKeyToken=62a6874124340d6e">
       <HintPath>..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
@@ -57,8 +65,20 @@
       <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NHibernate, Version=5.1.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4">
+      <HintPath>..\packages\NHibernate.5.1.3\lib\net461\NHibernate.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.6.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb">
       <HintPath>..\packages\NUnit.3.6.1\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Remotion.Linq, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b">
+      <HintPath>..\packages\Remotion.Linq.2.1.2\lib\net45\Remotion.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Remotion.Linq.EagerFetching, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b">
+      <HintPath>..\packages\Remotion.Linq.EagerFetching.2.1.0\lib\net45\Remotion.Linq.EagerFetching.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SharpTestsEx, Version=1.1.1.0, Culture=neutral, PublicKeyToken=8c60d8070630b1c1">
@@ -75,6 +95,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Console, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <HintPath>..\packages\System.Console.4.0.0\lib\net46\System.Console.dll</HintPath>
       <Private>True</Private>
@@ -140,6 +161,8 @@
       <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.1.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -147,6 +170,41 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\AgentStateReadModelForTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\AgentStateReadModelPersisterExtensions.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\AgentStateReadModelPersisterTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\HistoricalOverviewReadModelPersisterTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\OrganizationReaderBusinessUnitTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\OrganizationReaderSkillsTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\OrganizationReaderTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\Reader\ActiveTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\Reader\EmptyCollectionsTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\Reader\ForCombinationsTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\Reader\ForEntireBusinessUnitTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\Reader\ForExcludingStateGroupsTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\Reader\ForOrganizationAndSkillTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\Reader\ForOrganizationTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\Reader\ForSiteTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\Reader\ForSkillTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\Reader\ForTeamTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\Reader\OrderNameTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\Reader\OrderTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\Reader\TextFilterTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\TeamCardReaderActive.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\TeamCardReaderAgentsCountTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\TeamCardReaderBusinessUnitTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\TeamCardReaderNameTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\TeamCardReaderSiteSkillsTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\TeamCardReaderSitesSkillsTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\TeamCardReaderSitesTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\TeamCardReaderSiteTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\AgentState\UnorderedEventsTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\ExternalLogon\ExternalLogonReadModelPersisterTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\Mappings\MappingReadModelPersisterTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\Mappings\MappingReadModelReaderTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\Mappings\MappingReadModelUpdaterTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\Schedules\CurrentScheduleReadModelPersisterTest.cs" />
+    <Compile Include="ApplicationLayer\Infrastructure\Schedules\CurrentScheduleReadModelUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\ReadModels\AgentState\DeleteTest.cs" />
     <Compile Include="ApplicationLayer\ReadModels\AgentState\PersonAssociationChangedTest.cs" />
     <Compile Include="ApplicationLayer\ReadModels\AgentState\PersonEmploymentNumberChangedTest.cs" />
@@ -195,7 +253,33 @@
     <Compile Include="ApplicationLayer\ViewModels\SiteCardViewModelBuilderPermissionTest.cs" />
     <Compile Include="ApplicationLayer\ViewModels\SiteCardViewModelBuilderTeamsTest.cs" />
     <Compile Include="ApplicationLayer\ViewModels\SiteCardViewModelBuilderTest.cs" />
-    <Compile Include="CacheTest.cs" />
+    <Compile Include="Domain\CacheTest.cs" />
+    <Compile Include="Domain\Configuration\RtaMapTest.cs" />
+    <Compile Include="Domain\Configuration\RtaRuleTest.cs" />
+    <Compile Include="Domain\Configuration\RtaStateGroupTest.cs" />
+    <Compile Include="Domain\Configuration\RtaStateHolderTest.cs" />
+    <Compile Include="Domain\Configuration\RtaStateTest.cs" />
+    <Compile Include="Domain\Infrastructure\RtaEventStoreBatchInsertTest.cs" />
+    <Compile Include="Domain\Infrastructure\RtaEventStoreEventTypeIdTest.cs" />
+    <Compile Include="Domain\Infrastructure\RtaEventStoreReadByDateTest.cs" />
+    <Compile Include="Domain\Infrastructure\RtaEventStoreUpgradeTest.cs" />
+    <Compile Include="Domain\Infrastructure\RtaEventStoreUpgradeWriterTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\EnqueueTest.cs" />
+    <Compile Include="Domain\RtaTestAttribute.cs" />
+    <Compile Include="Domain\Service\QueueFloodTest.cs" />
+    <Compile Include="Domain\Service\RtaExtensions.cs" />
+    <Compile Include="Domain\Service\StateMappingTest.cs" />
+    <Compile Include="Domain\Service\UpdateAgentStateTest.cs" />
+    <Compile Include="InfrastructureTesting\AnalyticsDatabaseTestAttribute.cs" />
+    <Compile Include="InfrastructureTesting\AnalyticsUnitOfWorkTestAttribute.cs" />
+    <Compile Include="InfrastructureTesting\DatabaseTest.cs" />
+    <Compile Include="InfrastructureTesting\DatabaseTestAttribute.cs" />
+    <Compile Include="InfrastructureTesting\DatabaseTestWithoutTransaction.cs" />
+    <Compile Include="InfrastructureTesting\InfrastructureTestStuff.cs" />
+    <Compile Include="InfrastructureTesting\MultiDatabaseTestAttribute.cs" />
+    <Compile Include="InfrastructureTesting\PrincipalAndStateTestAttribute.cs" />
+    <Compile Include="InfrastructureTesting\ReadModelUnitOfWorkTestAttribute.cs" />
+    <Compile Include="InfrastructureTesting\RepositoryTest.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AdherencesTest.cs" />
     <Compile Include="Domain\AgentAdherenceDay\ApprovedPeriodPercentageTest.cs" />
     <Compile Include="Domain\AgentAdherenceDay\ApprovedPeriodTest.cs" />
@@ -214,6 +298,41 @@
     <Compile Include="Domain\Configuration\DefaultStateGroupMissingInConfigurationTest.cs" />
     <Compile Include="Domain\Configuration\LoggedOutStateGroupMissingInConfigurationTest.cs" />
     <Compile Include="Domain\Configuration\LoggedOutStateGroupMissingInRtaServiceTest.cs" />
+    <Compile Include="Domain\EventStore\RtaEventStoreUpgradeTest.cs" />
+    <Compile Include="Domain\Infrastructure\Repositories\RtaMapRepositoryTest.cs" />
+    <Compile Include="Domain\Infrastructure\Repositories\RtaRuleRepositoryTest.cs" />
+    <Compile Include="Domain\Infrastructure\Repositories\RtaStateGroupRepositoryNotSignedInTest.cs" />
+    <Compile Include="Domain\Infrastructure\Repositories\RtaStateGroupRepositoryTest.cs" />
+    <Compile Include="Domain\Infrastructure\RtaEventStoreApprovedReadTest.cs" />
+    <Compile Include="Domain\Infrastructure\RtaEventStoreLoadLastBeforeTest.cs" />
+    <Compile Include="Domain\Infrastructure\RtaEventStoreReadTest.cs" />
+    <Compile Include="Domain\Infrastructure\RtaEventStoreSynchronizerTest.cs" />
+    <Compile Include="Domain\Infrastructure\RtaEventStoreTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\CyrillicCharactersTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\DataSourceReaderTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\DeadlockTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\PerformanceMeasurement\MeasureActivityCheckerTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\PerformanceMeasurement\MeasureBatchTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\PerformanceMeasurement\MeasureClosingSnapshotTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\PerformanceMeasurement\MeasureEventStoreTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\PerformanceMeasurement\MeasureHangfireEventPackageTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\PerformanceMeasurement\MeasureScheduleLoadingTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\PerformanceMeasurement\PerformanceMeasurementTestAttribute.cs" />
+    <Compile Include="Domain\Infrastructure\Service\Persisters\AgentStateForUpsert.cs" />
+    <Compile Include="Domain\Infrastructure\Service\Persisters\AgentStatePersisterConcurrencyTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\Persisters\AgentStatePersisterDataVersionsTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\Persisters\AgentStatePersisterExtensions.cs" />
+    <Compile Include="Domain\Infrastructure\Service\Persisters\AgentStatePersisterFindForCheckTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\Persisters\AgentStatePersisterFindForSnapshotTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\Persisters\AgentStatePersisterGetTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\Persisters\AgentStatePersisterTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\Persisters\StateQueueTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\QueueueueueeTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\ScheduleCacheTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\SnapshotTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\TracingTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\UnrecognizedStatesTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\UnrecognizedStatesTest2.cs" />
     <Compile Include="Domain\Service\AgentStateMaintainerTest.cs" />
     <Compile Include="Domain\Service\AgentStateReadModel\CheckForActivityChangesTest.cs" />
     <Compile Include="Domain\Service\AgentStateReadModel\StartTime\AlarmStartTimeTest.cs" />
@@ -231,7 +350,6 @@
     <Compile Include="Domain\Service\AgentStateReadModel\UpdateAgentStateReadModelShiftTest.cs" />
     <Compile Include="Domain\Service\AgentStateReadModel\UpdateAgentStateReadModelSnapshotTests.cs" />
     <Compile Include="Domain\Service\AgentStateReadModel\UpdateAgentStateReadModelTest.cs" />
-    <Compile Include="Domain\Service\AgentStateReadModel\UpdateAgentStateTest.cs" />
     <Compile Include="Domain\Service\AuthenticationKeyTenantTest.cs" />
     <Compile Include="Domain\Service\BelongsToDateTest.cs" />
     <Compile Include="Domain\Service\CaseInsensitiveTest.cs" />
@@ -261,12 +379,14 @@
     <Compile Include="Domain\Service\SnapshotTests.cs" />
     <Compile Include="Domain\Service\TraceTest.cs" />
     <Compile Include="Domain\Service\UnrecognizedStateTest.cs" />
-    <Compile Include="RtaMapTest.cs" />
-    <Compile Include="RtaRuleTest.cs" />
-    <Compile Include="RtaStateGroupTest.cs" />
-    <Compile Include="RtaStateHolderTest.cs" />
-    <Compile Include="RtaStateTest.cs" />
-    <Compile Include="RtaTestAttribute.cs" />
+    <Compile Include="InfrastructureTesting\RetryingQueueSimulator.cs" />
+    <Compile Include="InfrastructureTesting\UnitOfWorkTestAttribute.cs" />
+    <Compile Include="InfrastructureTesting\WithUnitOfWorkWithRecurringEvents.cs" />
+    <Compile Include="NUnitSetup.cs" />
+    <Compile Include="Tracer\Infrastructure\RtaTracerConfigPersisterTest.cs" />
+    <Compile Include="Tracer\Infrastructure\RtaTracerTest.cs" />
+    <Compile Include="Tracer\Infrastructure\RtaTracerWriterTenantTest.cs" />
+    <Compile Include="Tracer\Infrastructure\RtaTracerWriterTest.cs" />
     <Compile Include="Tracer\RtaTracerActivityCheckTraceTest.cs" />
     <Compile Include="Tracer\RtaTracerCloseSnapshotTraceTest.cs" />
     <Compile Include="Tracer\RtaTracerNoUserCodeTest.cs" />

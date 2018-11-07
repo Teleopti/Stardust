@@ -62,7 +62,17 @@
 		}
 		div[uib-datepicker] {
 			position: absolute;
-			top: 5rem;
+			top: 2rem;
+			border-radius: 5px;
+			box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
+			background: $white;
+		}
+
+		//For fixing flicker issue of uib-datepicker
+		.uib-monthpicker {
+			table tbody tr td:nth-child(n + 4) {
+				display: none;
+			}
 		}
 	}
 	.outbound-gantt-chart {

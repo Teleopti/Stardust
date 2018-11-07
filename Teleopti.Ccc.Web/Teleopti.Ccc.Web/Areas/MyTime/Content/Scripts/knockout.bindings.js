@@ -121,6 +121,22 @@ var TooltipBinding = function() {
 			$(element).tooltip('destroy');
 		});
 	};
+	this.update = function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+		var local = ko.utils.unwrapObservable(valueAccessor()),
+			options = {};
+
+		ko.utils.extend(options, ko.bindingHandlers.tooltip.options);
+		ko.utils.extend(options, local);
+
+		if (options.html) {
+			//just call $(el).tooltip('fixTitle')
+			$(element).tooltip('fixTitle');
+		} else {
+			$(element)
+				.attr('title', options.title)
+				.tooltip('fixTitle');
+		}
+	};
 };
 ko.bindingHandlers.tooltip = new TooltipBinding();
 

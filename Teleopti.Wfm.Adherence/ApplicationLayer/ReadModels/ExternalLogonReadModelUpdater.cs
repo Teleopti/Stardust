@@ -1,16 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DistributedLock;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
 {
 	public class ExternalLogonReadModelUpdater : 
 		IRunOnHangfire,
+		IHandleEvents,
 		IHandleEvent<PersonAssociationChangedEvent>,
 		IHandleEvent<TenantMinuteTickEvent>
 	{
@@ -28,6 +33,19 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
 			_distributedLock = distributedLock;
 		}
 
+		public void Subscribe(SubscriptionRegistrator registrator)
+		{
+			registrator.SubscribeTo<PersonAssociationChangedEvent>();
+		}
+
+		[EnabledBy(Toggles.RTA_TooManyPersonAssociationChangedEvents_Packages_78669)]
+		public void Handle(IEnumerable<IEvent> events)
+		{
+			events.OfType<PersonAssociationChangedEvent>()
+				.ForEach(Handle);
+		}
+		
+		[DisabledBy(Toggles.RTA_TooManyPersonAssociationChangedEvents_Packages_78669)]
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		public void Setup()
 		{
 			_target = new DayLayerModelComparer();
-			var layerviewModelCollection = new LayerViewModelCollection(null, null, null, null);
+			var layerviewModelCollection = new LayerViewModelCollection(null, null, null, null, new FullPermission());
 			var xTeam = new Team().WithDescription(new Description("xTeam"));
 			var yTeam = new Team().WithDescription(new Description("yTeam"));
 			x = new DayLayerModel(PersonFactory.CreatePerson("x", "x"), new DateTimePeriod(2000,01,01,2059,01,01), xTeam, layerviewModelCollection, new CommonNameDescriptionSetting());

@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls.Columns
 			
 			var dataItem = dataItems[e.RowIndex - 1];
 			
-			if (e.Style.CellValue == null || (TimeSpan)e.Style.CellValue == TimeSpan.Zero)
+			if (e.Style.CellValue == null || (TimeSpan)e.Style.CellValue <= TimeSpan.Zero)
 				PeopleAdminHelper.ResetPeriodTime(dataItem);
 			else
 				_propertyReflector.SetValue(dataItem, BindingProperty, e.Style.CellValue);

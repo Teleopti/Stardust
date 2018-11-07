@@ -258,8 +258,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ScheduleDayMinMaxTimeCalculator>().As<IScheduleDayMinMaxTimeCalculator>().SingleInstance();
 			builder.RegisterType<SiteOpenHourProvider>().As<ISiteOpenHourProvider>().SingleInstance();
 			builder.RegisterType<ScheduledSkillOpenHourProvider>().As<IScheduledSkillOpenHourProvider>().SingleInstance();
-
-			builder.RegisterType<StaffingDataAvailablePeriodProvider>().As<IStaffingDataAvailablePeriodProvider>().SingleInstance();
 			builder.RegisterType<IntradayScheduleEdgeTimeCalculator>().As<IIntradayScheduleEdgeTimeCalculator>();
 		}
 

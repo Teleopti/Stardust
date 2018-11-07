@@ -247,8 +247,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             IChildSkill child1 = SkillFactory.CreateChildSkill("testc1", skill1);
             
-            IList<ISkill> children = new List<ISkill> { child1 };
-            PersistAndRemoveFromUnitOfWork(children);
+            PersistAndRemoveFromUnitOfWork(child1);
             
             IQueueSource q = new QueueSource("vågar inte skriva sånt", "peter", 1);
             PersistAndRemoveFromUnitOfWork(q);

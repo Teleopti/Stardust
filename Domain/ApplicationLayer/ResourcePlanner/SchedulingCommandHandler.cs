@@ -1,8 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -15,24 +15,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 	{
 		private readonly IEventPublisher _eventPublisher;
 		private readonly IGridlockManager _gridLockManager;
-		private readonly IAllStaff _allStaff;
 		private readonly CrossAgentsAndSkills _crossAgentsAndSkills;
 		private readonly CreateIslands _createIslands;
-
-		//REMOVE ME WHEN SCHEDULING + ISLANDS WORKS
 		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
-		//
 
 		public SchedulingCommandHandler(IEventPublisher eventPublisher, 
 				IGridlockManager gridLockManager,
-				IAllStaff allStaff,
 				ISchedulingOptionsProvider schedulingOptionsProvider,
 				CrossAgentsAndSkills crossAgentsAndSkills,
 				CreateIslands createIslands)
 		{
 			_eventPublisher = eventPublisher;
 			_gridLockManager = gridLockManager;
-			_allStaff = allStaff;
 			_schedulingOptionsProvider = schedulingOptionsProvider;
 			_crossAgentsAndSkills = crossAgentsAndSkills;
 			_createIslands = createIslands;
@@ -41,81 +35,56 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		[TestLog]
 		public virtual void Execute(SchedulingCommand command)
 		{
-			var userLocks = _gridLockManager.LockInfos();
 			var events = new List<SchedulingWasOrdered>();
-			var islands = CreateIslands(command.Period, command);
-			if (teamScheduling(command))
+			using (CommandScope.Create(command))
 			{
-				var agentsToSchedule = command.AgentsToSchedule ?? AllAgents_DeleteThisLater(command).Where(x => !x.IsExternalAgent);
-				var agentsAndSkills = _crossAgentsAndSkills.Execute(islands, agentsToSchedule);
+				var userLocks = _gridLockManager.LockInfos();
+				var islands = CreateIslands(command.Period, command);
+				if (_schedulingOptionsProvider.Fetch(null).UseTeam)
+				{
+					var agentsAndSkills = _crossAgentsAndSkills.Execute(islands, command.AgentsToSchedule);
+					addEvent(events, command, command.AgentsToSchedule, agentsAndSkills.Agents, agentsAndSkills.Skills, userLocks);
+				}
+				else
+				{
+					foreach (var island in islands)
+					{
+						var agentsInIslandIds = island.AgentsInIsland().Select(x => x.Id.Value).ToArray();
+						addEvent(events, command, command.AgentsToSchedule, agentsInIslandIds, island.SkillIds(), userLocks);
+					}
+				}	
+			}
+			_eventPublisher.Publish(events.ToArray());
+		}
+
+		private static void addEvent(ICollection<SchedulingWasOrdered> events, SchedulingCommand command, IEnumerable<IPerson> allAgentsToSchedule, 
+			IEnumerable<Guid> agentsInIslandIds, IEnumerable<Guid> skillsInIslandsIds, IEnumerable<LockInfo> userLocks)
+		{
+			var agentsToScheduleInIsland = allAgentsToSchedule.Where(x => agentsInIslandIds.Contains(x.Id.Value)).ToArray();
+			if (agentsToScheduleInIsland.Any())
+			{
 				events.Add(new SchedulingWasOrdered
 				{
-					Agents = agentsToSchedule.Select(x => x.Id.Value),
-					AgentsInIsland = agentsAndSkills.Agents,
+					Agents = agentsToScheduleInIsland.Select(x => x.Id.Value),
+					AgentsInIsland = agentsInIslandIds,
 					StartDate = command.Period.StartDate,
 					EndDate = command.Period.EndDate,
 					CommandId = command.CommandId,
 					UserLocks = userLocks,
-					FromWeb= command.FromWeb,
-					ScheduleWithoutPreferencesForFailedAgents= command.ScheduleWithoutPreferencesForFailedAgents,
+					Skills = skillsInIslandsIds,
+					FromWeb = command.FromWeb,
+					ScheduleWithoutPreferencesForFailedAgents = command.ScheduleWithoutPreferencesForFailedAgents,
 					PlanningPeriodId = command.PlanningPeriodId,
-					Skills = agentsAndSkills.Skills,
 					RunDayOffOptimization = command.RunDayOffOptimization
-				});
-			}
-			else
-			{
-				foreach (var island in islands)
-				{
-					var agentsInIsland = island.AgentsInIsland().ToArray();
-					var agentsToSchedule = command.AgentsToSchedule?.Where(x => agentsInIsland.Contains(x)).ToArray() ?? agentsInIsland;
-
-					if (agentsToSchedule.Any())
-					{
-						var @event = new SchedulingWasOrdered
-						{
-							Agents = agentsToSchedule.Select(x=>x.Id.Value),
-							AgentsInIsland = agentsInIsland.Select(x=>x.Id.Value),
-							StartDate = command.Period.StartDate,
-							EndDate = command.Period.EndDate,
-							CommandId = command.CommandId,
-							UserLocks = userLocks,
-							Skills = island.SkillIds(),
-							FromWeb = command.FromWeb,
-							ScheduleWithoutPreferencesForFailedAgents = command.ScheduleWithoutPreferencesForFailedAgents,
-							PlanningPeriodId = command.PlanningPeriodId,
-							RunDayOffOptimization = command.RunDayOffOptimization
-						};
-						events.Add(@event);
-					}
-				}
-			}
-
-			_eventPublisher.Publish(events.ToArray());
-		}
-
-		//REMOVE ME WHEN SCHEDULING + ISLANDS WORKS
-		[UnitOfWork]
-		public virtual IEnumerable<IPerson> AllAgents_DeleteThisLater(SchedulingCommand command)
-		{
-			return _allStaff.Agents(command.Period);
-		}
-		private bool teamScheduling(SchedulingCommand command)
-		{
-			using (CommandScope.Create(command))
-			{
-				return _schedulingOptionsProvider.Fetch(null).UseTeam;
+				});				
 			}
 		}
-		//
 
-		[UnitOfWork]
+		
+		[ReadonlyUnitOfWork]
 		protected virtual IEnumerable<Island> CreateIslands(DateOnlyPeriod period, SchedulingCommand command)
 		{
-			using (CommandScope.Create(command))
-			{
-				return _createIslands.Create(period);
-			}
+			return _createIslands.Create(period);
 		}
 	}
 }

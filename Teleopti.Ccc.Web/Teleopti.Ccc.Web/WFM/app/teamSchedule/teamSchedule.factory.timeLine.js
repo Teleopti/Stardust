@@ -1,9 +1,13 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.teamSchedule').factory('TeamScheduleTimeLineFactory', ['ShiftHelper', TeamScheduleTimeLineFactory]);
+	angular.module('wfm.teamSchedule').factory('TeamScheduleTimeLineFactory',
+		[
+			'ShiftHelper',
+			'CurrentUserInfo',
+			TeamScheduleTimeLineFactory]);
 
-	function TeamScheduleTimeLineFactory(shiftHelper) {
+	function TeamScheduleTimeLineFactory(shiftHelper, currentUserInfo) {
 
 		var timeLineFactory = {
 			Create: create
@@ -144,16 +148,20 @@
 
 		function calculateLengthPercentPerMinute(start, end) {
 			var lengthInMin = end - start;
-			return lengthInMin > 0 ? 100 / lengthInMin : 0;
+			return lengthInMin > 0 ? new Number(100 / lengthInMin).toFixed(3) : 0;
 		};
 
 		function hourPointViewModel(baseDate, minutes, start, percentPerMinute, isLabelHidden) {
+			var dateTimeFormat = currentUserInfo.CurrentUserInfo().DateTimeFormat || {};
+			var shortTimePattern = dateTimeFormat.ShortTimePattern;
 			var time = baseDate.clone().startOf('day').add(minutes, 'minutes');
 
 			var isCurrentDay = minutes >= 0 && minutes < 1440;
 			var isNextDay = minutes >= 1440;
 
-			var formattedTime = isCurrentDay ? time.format('LT') : (isNextDay ? time.format('LT') + " +1" : time.format('LT') + " -1");
+			var formattedTime = isCurrentDay ?
+				time.format(shortTimePattern)
+				: (isNextDay ? time.format(shortTimePattern) + " +1" : time.format(shortTimePattern) + " -1");
 
 			this.TimeLabel = formattedTime;
 			this.IsLabelVisible = !isLabelHidden;

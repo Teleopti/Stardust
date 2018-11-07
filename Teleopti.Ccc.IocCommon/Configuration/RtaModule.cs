@@ -8,15 +8,13 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Logon.Aspects;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Hangfire;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Tracer;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence;
+using Teleopti.Wfm.Adherence.ApplicationLayer.Infrastructure;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
 using Teleopti.Wfm.Adherence.Domain;
@@ -24,9 +22,12 @@ using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Wfm.Adherence.Domain.Configuration;
 using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Domain.Infrastructure;
+using Teleopti.Wfm.Adherence.Domain.Infrastructure.Service;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Tool;
 using Teleopti.Wfm.Adherence.Tracer;
+using Teleopti.Wfm.Adherence.Tracer.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -42,12 +43,24 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
+
 			builder.RegisterType<StateQueue>().As<IStateQueueReader>().As<IStateQueueWriter>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateQueueWorker>().AsSelf().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateQueueTenants>().SingleInstance();
+			if (_config.Toggle(Toggles.RTA_StateQueueFloodPrevention_77710))
+			{
+				builder.RegisterType<StateQueueHealthChecker>().As<IStateQueueHealthChecker>().SingleInstance().ApplyAspects();
+				builder.RegisterType<StateQueueHealthCheckerProcess>().As<IBackgroundProcess>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<AlwaysHealthyChecker>().As<IStateQueueHealthChecker>().SingleInstance();
+			}
+
+			builder.RegisterType<StateQueueUtilities>().SingleInstance().ApplyAspects();
+
 			builder.RegisterType<ActiveTenantsUpdater>().As<IBackgroundProcess>().SingleInstance();
 			builder.RegisterType<ActiveTenants>().SingleInstance();
-			builder.RegisterType<StateQueueUtilities>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateProcessor>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateMapper>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ExternalLogonMapper>().SingleInstance().ApplyAspects();
@@ -107,8 +120,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RtaEventStore>()
 				.As<IRtaEventStore>()
 				.As<IRtaEventStoreReader>()
-				.As<IRtaEventStoreTestReader>()
+				.As<IRtaEventStoreTester>()
+				.As<IRtaEventStoreUpgradeWriter>()
 				.SingleInstance();
+			if (_config.Toggle(Toggles.RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485))
+			{
+				builder.RegisterType<RtaEventStoreUpgrader>().As<IRtaEventStoreUpgrader>().SingleInstance().ApplyAspects();
+				builder.RegisterType<RtaEventStoreUpgraderProcess>().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
+			}
+
 			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
 			{
 				builder.RegisterType<RtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance().ApplyAspects();

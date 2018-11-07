@@ -18,7 +18,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
@@ -189,7 +188,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			unitOfWork.Reassociate(persons);
 			var repositoryFactory = new RepositoryFactory();
 			var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-			stateHolder.LoadSchedules(new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork)), persons, scheduleDictionaryLoadOptions, stateHolder.RequestedPeriod.Period());
+			stateHolder.LoadSchedules(new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), CurrentAuthorization.Make()), persons, scheduleDictionaryLoadOptions, stateHolder.RequestedPeriod.Period());
 		}
 	
 		public static IList<IReportDataParameter> CreateScheduleAuditingParameters(ReportSettingsScheduleAuditingModel model, IFormatProvider culture)

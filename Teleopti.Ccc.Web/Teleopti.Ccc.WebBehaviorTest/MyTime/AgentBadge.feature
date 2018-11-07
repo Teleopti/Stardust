@@ -21,7 +21,7 @@ Background:
 		| AdherenceUsed         | True    |
 		| Silver to bronze rate | 5       |
 		| Gold to silver rate   | 5       |
-		| RollingPeriodSet      | Weekly  |
+		| RollingPeriodSet      | Monthly  |
 	And There are teams applied with settings with
 		| Team       | GamificationSetting |
 		| Team green | setting             |
@@ -70,7 +70,7 @@ Given I have today badges with
 When I am viewing week schedule
 Then I should see I have 9 bronze badge, 2 silver badge and 3 gold badge
 When I view badge details
-And I click next week
+And I click next period
 Then I should see I have 0 bronze badges, 0 silver badge and 0 gold badge for AnsweredCalls
 And I should see I have 0 bronze badges, 0 silver badge and 0 gold badge for AverageHandlingTime
 And I should see I have 0 bronze badges, 0 silver badge and 0 gold badge for Adherence
@@ -85,7 +85,7 @@ Given I have today badges with
 When I am viewing week schedule
 Then I should see I have 9 bronze badge, 2 silver badge and 3 gold badge
 When I view badge details
-And I click previous week
+And I click previous period
 Then I should see I have 0 bronze badges, 0 silver badge and 0 gold badge for AnsweredCalls
 And I should see I have 0 bronze badges, 0 silver badge and 0 gold badge for AverageHandlingTime
 And I should see I have 0 bronze badges, 0 silver badge and 0 gold badge for Adherence

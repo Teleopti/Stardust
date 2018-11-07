@@ -41,7 +41,10 @@ WebByPassDefaultPermissionCheck_37984 = true
 RTA_KillFattyIntradayUntilItDies_74939 = true
 RTA_ReviewHistoricalAdherence_Domain_74770 = true
 RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306 = true
-RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485 = DEV
+RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485 = true
+RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485 = true
+RTA_TooManyPersonAssociationChangedEvents_Packages_78669 = true
+RTA_StateQueueFloodPrevention_77710 = RC
 RTA_ReviewHistoricalAdherence_74770 = false
 
 # Dumplings, can any of these be removed? #
@@ -89,6 +92,7 @@ MyTimeWeb_WaitListPositionEnhancement_46301 = true
 MyTimeWeb_NewTeamScheduleView_75989 = RC
 MyTimeWeb_NewTeamScheduleViewDesktop_76313 = RC
 MyTimeWeb_PollToCheckScheduleChanges_46595 = true
+MyTimeWeb_TrafficLightOnMobileDayView_77447 = RC
 
 # China, can any of these be removed? #
 Staffing_Info_Configuration_44687 = true
@@ -97,17 +101,17 @@ Staffing_Info_Configuration_44687 = true
 # Kittens, Bugs&Roses and Micke #
 Wfm_SkillPriorityRoutingGUI_39885 = RC #Skill priorities, aka Cascading, is not ready for release just yet
 Wfm_WebPlan_Pilot_46815 = RC #Switch this on to try out the new web based scheduling in Plans#
-SchedulePeriod_HideChineseMonth_78424 = RC
+SchedulePeriod_HideChineseMonth_78424 = true
 ResourcePlanner_HideSkillPrioSliders_41312 = RC #Skill priorities, aka Cascading, is not ready for release yet
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = true
 ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = true
 ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production. Don't modify this line!
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
-ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348 = RC
-ResourcePlanner_SeamlessPlanningForPreferences_76288 = true # Perf will go down and we will fix with additional stories
-ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941 = RC
-ResourcePlanner_FasterSeamlessPlanningForPreferences_78286 = DEV
+ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348 = true
+ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941 = true
+ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717 = RC
+ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487 = RC
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
@@ -118,7 +122,7 @@ WFM_Intraday_Redesign_77214 = DEV
 
 # Ziggy #
 WfmStaffing_AddOvertime_42524 = RC
-Wfm_Payroll_SupportMultiDllPayrolls_75959 = RC
+Wfm_Payroll_SupportMultiDllPayrolls_75959 = true
 Wfm_Stardust_EnableScaleout_77366 = true
 Wfm_AuditTrail_StaffingAuditTrail_78125=RC
 Wfm_AuditTrail_GenericAuditTrail_74938=RC
@@ -139,6 +143,7 @@ ETL_Optimize_Memory_Usage_76761 = true
 WFM_Forecast_Show_History_Data_76432 = DEV
 ETL_Show_Web_Based_ETL_Tool_74837 = true
 ETL_Show_Tenant_Name_In_History_75767 = true
+WFM_Connect_NewLandingPage_Remove_GDPR_78132 = true
 
 # Dragonfly #
 WFM_Gamification_Setting_With_External_Quality_Values_45003 = true
@@ -154,6 +159,7 @@ MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409 = RC #Depending on MyTimeWe
 WFM_Gamification_Permission_76546 = true
 MyTimeWeb_Request_CleanUpRequestHisotry_77776 = RC
 MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446 = true
+WFM_Request_View_Permissions_77731 = DEV
 
 # Tech #
 WFM_ChatBot_77547 = DEV

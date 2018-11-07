@@ -58,9 +58,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_applicationRoleRepository.Stub(x => x.Get(_role.Id.GetValueOrDefault())).Return(_role);
 			_person.PermissionInformation.AddApplicationRole(_role);
 
-			_target.Handle(_commandDto);
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.Handle(_commandDto);
+			}
 
-            _commandDto.Result.AffectedItems.Should().Be.EqualTo(1);
+			_commandDto.Result.AffectedItems.Should().Be.EqualTo(1);
             _commandDto.Result.AffectedId.Should().Be.EqualTo(_person.Id.GetValueOrDefault());
             _person.PermissionInformation.ApplicationRoleCollection.Should().Not.Contain(_role);
 			unitOfWork.AssertWasCalled(x => x.PersistAll());
@@ -73,10 +76,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             _personRepository.Stub(x => x.Get(_person.Id.GetValueOrDefault())).Return(null);
             _applicationRoleRepository.Stub(x => x.Get(_role.Id.GetValueOrDefault())).Return(_role);
+			
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.Handle(_commandDto);
+			}
 
-            _target.Handle(_commandDto);
-
-            _commandDto.Result.AffectedItems.Should().Be.EqualTo(0);
+			_commandDto.Result.AffectedItems.Should().Be.EqualTo(0);
             unitOfWork.AssertWasNotCalled(x => x.PersistAll());
         }
 
@@ -87,10 +93,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             _personRepository.Stub(x => x.Get(_person.Id.GetValueOrDefault())).Return(_person);
             _applicationRoleRepository.Stub(x => x.Get(_role.Id.GetValueOrDefault())).Return(null);
+			
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.Handle(_commandDto);
+			}
 
-            _target.Handle(_commandDto);
-
-            _commandDto.Result.AffectedItems.Should().Be.EqualTo(0);
+			_commandDto.Result.AffectedItems.Should().Be.EqualTo(0);
             unitOfWork.AssertWasNotCalled(x => x.PersistAll());
         }
 

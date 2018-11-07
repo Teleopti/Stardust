@@ -105,6 +105,7 @@ namespace Teleopti.Wfm.Api.Test
 			isolate.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
 			isolate.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
 			isolate.UseTestDouble<FakeDataSourcesFactory>().For<IDataSourcesFactory>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			isolate.UseTestDouble<FakeAllLicenseActivatorProvider>().For<ILicenseActivatorProvider>();
 			isolate.UseTestDouble(userUnauthorized).For<ILoadUserUnauthorized>();
 			isolate.UseTestDouble<DummyHangfireClientStarter>().For<IHangfireClientStarter>();

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	{
 	}
 
-	public class AnalyticsUnitOfWork : IUnitOfWork
+	public class AnalyticsUnitOfWork : IUnitOfWork, IHaveSession
 	{
 		private readonly ILog _logger = LogManager.GetLogger(typeof(AnalyticsUnitOfWork));
 
@@ -36,6 +36,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_session = session;
 			_session.FlushMode = FlushMode.Manual;
 		}
+
+		public ISession GetSession() => Session;
 
 		protected internal virtual ISession Session
 		{

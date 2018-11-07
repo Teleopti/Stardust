@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		public void Listen(DateTimePeriod period)
 		{
-			_scheduleMessageSubscriber.Subscribe(_owner.SchedulerState.RequestedScenario.Id.GetValueOrDefault(), period, onEventMessage);
+			_scheduleMessageSubscriber.Subscribe(_owner.SchedulerState.SchedulerStateHolder.RequestedScenario.Id.GetValueOrDefault(), period, onEventMessage);
 
 		}
 
@@ -118,12 +118,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		public void Refresh(ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer, bool loadRequests)
 		{
-			_scheduleScreenRefresher.Refresh(_owner.SchedulerState.Schedules, _messageQueue, refreshedEntitiesBuffer, conflictsBuffer, isRelevantPerson, loadRequests);
+			_scheduleScreenRefresher.Refresh(_owner.SchedulerState.SchedulerStateHolder.Schedules, _messageQueue, refreshedEntitiesBuffer, conflictsBuffer, isRelevantPerson, loadRequests);
 		}
 
 		private bool isRelevantPerson(Guid personId)
 		{
-			return _owner.SchedulerState.SchedulingResultState.LoadedAgents.Any(p => p.Id == personId);
+			return _owner.SchedulerState.SchedulerStateHolder.SchedulingResultState.LoadedAgents.Any(p => p.Id == personId);
 		}
 
 		public void FillReloadedScheduleData(IPersistableScheduleData databaseVersionOfEntity)
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 	  public void ReassociateDataForAllPeople()
 		{
 			var uow = UnitOfWorkFactory.Current.CurrentUnitOfWork();
-			uow.Reassociate(_owner.SchedulerState.SchedulingResultState.LoadedAgents);
+			uow.Reassociate(_owner.SchedulerState.SchedulerStateHolder.SchedulingResultState.LoadedAgents);
 			reassociateScheduleStuff(uow);
 		}
 
@@ -149,13 +149,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void reassociateScheduleStuff(IUnitOfWork unitOfWork)
 		{
-			unitOfWork.Reassociate(_owner.SchedulerState.RequestedScenario);
+			unitOfWork.Reassociate(_owner.SchedulerState.SchedulerStateHolder.RequestedScenario);
 			unitOfWork.Reassociate(_owner.MultiplicatorDefinitionSet);
-			unitOfWork.Reassociate(_owner.SchedulerState.CommonStateHolder.Absences);
-			unitOfWork.Reassociate(_owner.SchedulerState.CommonStateHolder.DayOffs);
-			unitOfWork.Reassociate(_owner.SchedulerState.CommonStateHolder.Activities);
-			unitOfWork.Reassociate(_owner.SchedulerState.CommonStateHolder.ShiftCategories);
-			unitOfWork.Reassociate(_owner.SchedulerState.CommonStateHolder.ScheduleTags.Where(scheduleTag => scheduleTag.Id != null).ToList());
+			unitOfWork.Reassociate(_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.Absences);
+			unitOfWork.Reassociate(_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.DayOffs);
+			unitOfWork.Reassociate(_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities);
+			unitOfWork.Reassociate(_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.ShiftCategories);
+			unitOfWork.Reassociate(_owner.SchedulerState.ScheduleTags.Where(scheduleTag => scheduleTag.Id != null).ToList());
 		}
 
 		public IEnumerable<IAggregateRoot>[] DataToReassociate(IPerson personToReassociate)
@@ -166,14 +166,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				new IAggregateRoot[] {};
 			return new[]
 			       	{
-			       		new IAggregateRoot[] {_owner.SchedulerState.RequestedScenario},
+			       		new IAggregateRoot[] {_owner.SchedulerState.SchedulerStateHolder.RequestedScenario},
 			       		personsToReassociate,
 			       		_owner.MultiplicatorDefinitionSet,
-			       		_owner.SchedulerState.CommonStateHolder.Absences,
-			       		_owner.SchedulerState.CommonStateHolder.DayOffs,
-			       		_owner.SchedulerState.CommonStateHolder.Activities,
-			       		_owner.SchedulerState.CommonStateHolder.ShiftCategories,
-						_owner.SchedulerState.CommonStateHolder.ScheduleTags.Where(scheduleTag => scheduleTag.Id != null).ToList()
+			       		_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.Absences,
+			       		_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.DayOffs,
+			       		_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities,
+			       		_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.ShiftCategories,
+						_owner.SchedulerState.ScheduleTags.Where(scheduleTag => scheduleTag.Id != null).ToList()
 			       	};
 		}
 
@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (Log.IsInfoEnabled)
 				Log.Info("Message broker - Removing " + eventMessage.DomainObjectType + " [" + eventMessage.DomainObjectId + "]");
 
-			return _owner.SchedulerState.Schedules.DeleteFromBroker(eventMessage.DomainObjectId);
+			return _owner.SchedulerState.SchedulerStateHolder.Schedules.DeleteFromBroker(eventMessage.DomainObjectId);
 		}
 
 		private void deleteMeetingOnEvent(IEventMessage message)
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				Log.Info("Message broker - Removing personal meeting belonging to " + message.DomainObjectType + " [" +
 						 message.DomainObjectId + "]");
 
-			_owner.SchedulerState.Schedules.DeleteMeetingFromBroker(message.DomainObjectId);
+			_owner.SchedulerState.SchedulerStateHolder.Schedules.DeleteMeetingFromBroker(message.DomainObjectId);
 		}
 
 		private IPersonRequest deleteOnEventRequest(IEventMessage message)
@@ -261,36 +261,36 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IAgentDayScheduleTag)))
 			{
-				return _owner.SchedulerState.Schedules.UpdateFromBroker(new AgentDayScheduleTagRepository(currentUnitOfWork), eventMessage.DomainObjectId);
+				return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(new AgentDayScheduleTagRepository(currentUnitOfWork), eventMessage.DomainObjectId);
 			}
 
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IPersonAssignment)))
 				{
-				return _owner.SchedulerState.Schedules.UpdateFromBroker(new PersonAssignmentRepository(currentUnitOfWork), eventMessage.DomainObjectId);
+				return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(new PersonAssignmentRepository(currentUnitOfWork), eventMessage.DomainObjectId);
 				}
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IPersonAbsence)))
 				{
-				return _owner.SchedulerState.Schedules.UpdateFromBroker(new PersonAbsenceRepository(currentUnitOfWork), eventMessage.DomainObjectId);
+				return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(new PersonAbsenceRepository(currentUnitOfWork), eventMessage.DomainObjectId);
 				}
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IPreferenceDay)))
 				{
-				return _owner.SchedulerState.Schedules.UpdateFromBroker(new PreferenceDayRepository(currentUnitOfWork), eventMessage.DomainObjectId);
+				return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(new PreferenceDayRepository(currentUnitOfWork), eventMessage.DomainObjectId);
 				}
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(INote)))
 				{
-				return _owner.SchedulerState.Schedules.UpdateFromBroker(new NoteRepository(currentUnitOfWork), eventMessage.DomainObjectId);
+				return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(new NoteRepository(currentUnitOfWork), eventMessage.DomainObjectId);
 				}
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IPublicNote)))
 				{
-				return _owner.SchedulerState.Schedules.UpdateFromBroker(new PublicNoteRepository(currentUnitOfWork), eventMessage.DomainObjectId);
+				return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(new PublicNoteRepository(currentUnitOfWork), eventMessage.DomainObjectId);
 				}
             if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IStudentAvailabilityDay)))
             {
-                return _owner.SchedulerState.Schedules.UpdateFromBroker(new StudentAvailabilityDayRepository(currentUnitOfWork), eventMessage.DomainObjectId);
+                return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(new StudentAvailabilityDayRepository(currentUnitOfWork), eventMessage.DomainObjectId);
             }
             if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IOvertimeAvailability)))
             {
-                return _owner.SchedulerState.Schedules.UpdateFromBroker(new OvertimeAvailabilityRepository (currentUnitOfWork), eventMessage.DomainObjectId);
+                return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(new OvertimeAvailabilityRepository (currentUnitOfWork), eventMessage.DomainObjectId);
             }
 
 			Log.Warn("Message broker - Got a message of an unknown IScheduleData type: " + eventMessage.DomainObjectType);
@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void updateInsertOnEventMeetings(IEventMessage message)
 		{
-			_owner.SchedulerState.Schedules.MeetingUpdateFromBroker(new MeetingRepository(new FromFactory(() => UnitOfWorkFactory.Current)), message.DomainObjectId);
+			_owner.SchedulerState.SchedulerStateHolder.Schedules.MeetingUpdateFromBroker(new MeetingRepository(new FromFactory(() => UnitOfWorkFactory.Current)), message.DomainObjectId);
 		}
 
 		private IPersonRequest updateInsertOnEventRequests(IEventMessage message)

@@ -61,22 +61,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		}
 
 		[Test]
-		public void ShouldExposeIndexKey()
-		{
-			using (_mocks.Record())
-			{
-				commonMocks();
-			}
-
-			using (_mocks.Playback())
-			{
-				_target.Store(_matrix, _schedulingOptions);
-				IScheduleDayData data = _target[DateOnly.MinValue.AddDays(1)];
-				Assert.AreEqual(DateOnly.MinValue.AddDays(1), data.DateOnly);
-			}
-		}
-
-		[Test]
 		public void ShouldExposeTargetDaysOff()
 		{
 			using (_mocks.Record())

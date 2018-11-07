@@ -5,6 +5,8 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
@@ -47,9 +49,10 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 		private static ScheduleRange getSheduleRange(DateTimePeriod period, IScenario scenario, IPerson person)
 		{
 			IScheduleParameters scheduleParams = new ScheduleParameters(scenario, person, period);
-            var dataPermissionChecker = new PersistableScheduleDataPermissionChecker();
-			var dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(period), dataPermissionChecker);
-			return new ScheduleRange(dic, scheduleParams, dataPermissionChecker);
+			var currentAuthorization = new FullPermission();
+			var dataPermissionChecker = new PersistableScheduleDataPermissionChecker(currentAuthorization);
+			var dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(period), dataPermissionChecker, currentAuthorization);
+			return new ScheduleRange(dic, scheduleParams, dataPermissionChecker, currentAuthorization);
 		}
 
 

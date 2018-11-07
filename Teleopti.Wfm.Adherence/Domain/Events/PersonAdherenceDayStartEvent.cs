@@ -23,6 +23,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 			new QueryData
 			{
 				PersonId = PersonId,
+				BelongsToDate = BelongsToDate,
 				StartTime = Timestamp,
 				EndTime = Timestamp
 			};

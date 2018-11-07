@@ -359,7 +359,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					"exec [ReadModel].[PersonFinderWithDataPermission] @search_string=:search_string, @search_type=:search_type, "
 					+ "@leave_after=:leave_after, @start_row =:start_row, @end_row=:end_row, @order_by=:order_by, "
 					+ "@sort_direction=:sort_direction, @culture=:culture, " 
-					+ "@perm_date=:perm_date, @perm_userid=:perm_userid, @perm_foreignId=:perm_foreignId, @can_see_users=:can_see_users")
+					+ "@perm_date=:perm_date, @perm_userid=:perm_userid, @perm_foreignId=:perm_foreignId, @can_see_users=:can_see_users, "
+					+ "@current_business_unit=:current_business_unit")
 				.SetString("search_string", personFinderSearchCriteria.SearchValue)
 				.SetString("search_type", Enum.GetName(typeof(PersonFinderField), personFinderSearchCriteria.Field))
 				.SetDateOnly("leave_after", personFinderSearchCriteria.TerminalDate)
@@ -372,6 +373,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetGuid("perm_userid", personFinderSearchCriteria.PermissionUserId)
 				.SetString("perm_foreignId", personFinderSearchCriteria.PermissionAppFuncForeignId)
 				.SetBoolean("can_see_users", personFinderSearchCriteria.CanSeeUsers)
+				.SetGuid("current_business_unit", personFinderSearchCriteria.CurrentBusinessUnit)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(PersonFinderDisplayRow)))
 				.SetReadOnly(true)
 				.List<IPersonFinderDisplayRow>();
@@ -552,7 +554,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			DateOnly permissionDate, 
 			Guid permissionUserId, 
 			string permissionAppFuncForeignId,
-			bool canSeeUsers) : 
+			bool canSeeUsers,
+			Guid currentBusinessUnit) : 
 				base(field, searchValue, pageSize, terminalDate, sortColumn, sortDirection)
 		{
 			this.CurrentPage = currentPage;
@@ -560,11 +563,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			this.PermissionUserId = permissionUserId;
 			this.PermissionAppFuncForeignId = permissionAppFuncForeignId;
 			this.CanSeeUsers = canSeeUsers;
+			this.CurrentBusinessUnit = currentBusinessUnit;
 		}
 
 		public bool CanSeeUsers { get; set; }
 		public DateOnly PermissionDate { get; set; }
 		public Guid PermissionUserId { get; set; }
 		public string PermissionAppFuncForeignId { get; set; }
+		public Guid CurrentBusinessUnit { get; set; }
 	}
 }

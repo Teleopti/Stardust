@@ -45,8 +45,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 					return _transformer.Transform(scheduleDays);
 				}
 			}
-
-
 		}
 	}
 }

@@ -116,24 +116,24 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _abs1 = CreatePersonAbsence(_period3, _person1, _ab1);
             _abs2 = CreatePersonAbsence(_period3, _person2, _ab2);
             _abs3 = CreatePersonAbsence(_period3, _person3, _ab3);
+			
+			var currentAuthorization = new FullPermission();
+			_schedulePart1 = ExtractedSchedule.CreateScheduleDay(dic, _person1, new DateOnly(2000,1,1), currentAuthorization);
+            _schedulePart11 = ExtractedSchedule.CreateScheduleDay(dic, _person1, new DateOnly(2000, 1, 2), currentAuthorization);
+            _schedulePart111 = ExtractedSchedule.CreateScheduleDay(dic, _person1, new DateOnly(2000, 1, 3), currentAuthorization);
 
+            _schedulePart2 = ExtractedSchedule.CreateScheduleDay(dic, _person2, new DateOnly(2000, 1, 1), currentAuthorization);
+            _schedulePart22 = ExtractedSchedule.CreateScheduleDay(dic, _person2, new DateOnly(2000, 1, 2), currentAuthorization);
+            _schedulePart222 = ExtractedSchedule.CreateScheduleDay(dic, _person2, new DateOnly(2000, 1, 3), currentAuthorization);
 
-            _schedulePart1 = ExtractedSchedule.CreateScheduleDay(dic, _person1, new DateOnly(2000,1,1));
-            _schedulePart11 = ExtractedSchedule.CreateScheduleDay(dic, _person1, new DateOnly(2000, 1, 2));
-            _schedulePart111 = ExtractedSchedule.CreateScheduleDay(dic, _person1, new DateOnly(2000, 1, 3));
+            _schedulePart3 = ExtractedSchedule.CreateScheduleDay(dic, _person3, new DateOnly(2000, 1, 1), currentAuthorization);
+            _schedulePart33 = ExtractedSchedule.CreateScheduleDay(dic, _person3, new DateOnly(2000, 1, 2), currentAuthorization);
+            _schedulePart333 = ExtractedSchedule.CreateScheduleDay(dic, _person3, new DateOnly(2000, 1, 3), currentAuthorization);
 
-            _schedulePart2 = ExtractedSchedule.CreateScheduleDay(dic, _person2, new DateOnly(2000, 1, 1));
-            _schedulePart22 = ExtractedSchedule.CreateScheduleDay(dic, _person2, new DateOnly(2000, 1, 2));
-            _schedulePart222 = ExtractedSchedule.CreateScheduleDay(dic, _person2, new DateOnly(2000, 1, 3));
+            _schedulePart4 = ExtractedSchedule.CreateScheduleDay(dic, _person3, new DateOnly(2000, 1, 4), currentAuthorization);
+            _schedulePart44 = ExtractedSchedule.CreateScheduleDay(dic, _person3, new DateOnly(2000, 1, 4), currentAuthorization);
 
-            _schedulePart3 = ExtractedSchedule.CreateScheduleDay(dic, _person3, new DateOnly(2000, 1, 1));
-            _schedulePart33 = ExtractedSchedule.CreateScheduleDay(dic, _person3, new DateOnly(2000, 1, 2));
-            _schedulePart333 = ExtractedSchedule.CreateScheduleDay(dic, _person3, new DateOnly(2000, 1, 3));
-
-            _schedulePart4 = ExtractedSchedule.CreateScheduleDay(dic, _person3, new DateOnly(2000, 1, 4));
-            _schedulePart44 = ExtractedSchedule.CreateScheduleDay(dic, _person3, new DateOnly(2000, 1, 4));
-
-			_schedulePart5 = ExtractedSchedule.CreateScheduleDay(dic, _person3, new DateOnly(2000, 1, 4));
+			_schedulePart5 = ExtractedSchedule.CreateScheduleDay(dic, _person3, new DateOnly(2000, 1, 4), currentAuthorization);
 			_schedulePart5.Add(_ass4);
 
             _schedulePart1.Add(_ass1);

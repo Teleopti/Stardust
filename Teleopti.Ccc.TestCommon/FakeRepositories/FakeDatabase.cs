@@ -20,13 +20,13 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence.ApplicationLayer.Infrastructure;
 using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Wfm.Adherence.Domain.Configuration;
 using Teleopti.Wfm.Adherence.Domain.Service;
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return database.WithAgent(id, null, null, null, null, null, timeZone, null);
 		}
-		
+
 		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name, string terminalDate, Guid? teamId, Guid? siteId, Guid? businessUnitId, TimeZoneInfo timeZone, int? employeeNumber)
 		{
 			database.WithPerson(id, name, terminalDate, timeZone, null, null, employeeNumber);
@@ -1310,19 +1310,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithHistoricalStateChange(Guid? id, string time, Adherence adherence)
 		{
-			_rtaHistory.StateChanged(id ?? _person.Id.Value, time, null, null, null, null, null, adherence);
+			_rtaHistory.StateChanged(id ?? _person.Id.Value, time, null, null, null, null, null, null, adherence);
 			return this;
 		}
 
 		public FakeDatabase WithHistoricalStateChange(string time)
 		{
-			_rtaHistory.StateChanged(_person.Id.Value, time, _stateGroup?.Name, _activity?.Name, _activity?.DisplayColor, _rule?.Description.Name, _rule?.DisplayColor, _rule?.Adherence);
+			_rtaHistory.StateChanged(_person.Id.Value, time, null, _stateGroup?.Name, _activity?.Name, _activity?.DisplayColor, _rule?.Description.Name, _rule?.DisplayColor, _rule?.Adherence);
 			return this;
 		}
 
 		public FakeDatabase WithHistoricalAdherenceDayStart(Guid? id, string time, Adherence adherence)
 		{
-			_rtaHistory.AdherenceDayStart(id ?? _person.Id.Value, time, null, null, null, null, null, adherence);
+			_rtaHistory.AdherenceDayStart(id ?? _person.Id.Value, time, null, null, null, null, null, null, adherence);
 			return this;
 		}
 

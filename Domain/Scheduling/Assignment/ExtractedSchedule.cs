@@ -16,25 +16,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public class ExtractedSchedule : Schedule, IScheduleDay
 	{
+		private readonly ICurrentAuthorization _currentAuthorization;
+
 		public ISignificantPartService ServiceForSignificantPart { get; set; }
 		public ISignificantPartService ServiceForSignificantPartForDisplay { get; set; }
 
-		private ExtractedSchedule(IScheduleDictionary owner, IScheduleParameters parameters)
-			: base(owner, parameters)
+		private ExtractedSchedule(IScheduleDictionary owner, IScheduleParameters parameters, ICurrentAuthorization currentAuthorization)
+			: base(owner, parameters, currentAuthorization)
 		{
+			_currentAuthorization = currentAuthorization;
 			TimeZone = Person.PermissionInformation.DefaultTimeZone();
 		}
 
-		public static IScheduleDay CreateScheduleDay(IScheduleDictionary owner, IPerson person, DateOnly dateOnly)
+		public static IScheduleDay CreateScheduleDay(IScheduleDictionary owner, IPerson person, DateOnly dateOnly, ICurrentAuthorization currentAuthorization)
 		{
 			var dateAndPeriod = new DateOnlyAsDateTimePeriod(dateOnly, person.PermissionInformation.DefaultTimeZone());
-			return CreateScheduleDay(owner, person, dateAndPeriod);
+			return CreateScheduleDay(owner, person, dateAndPeriod, currentAuthorization);
 		}
 
-		public static IScheduleDay CreateScheduleDay(IScheduleDictionary owner, IPerson person, IDateOnlyAsDateTimePeriod dateAndPeriod)
+		public static IScheduleDay CreateScheduleDay(IScheduleDictionary owner, IPerson person, IDateOnlyAsDateTimePeriod dateAndPeriod, ICurrentAuthorization currentAuthorization)
 		{
 			var param = new ScheduleParameters(owner.Scenario, person, dateAndPeriod.Period());
-			var ret = new ExtractedSchedule(owner, param) { DateOnlyAsPeriod = dateAndPeriod };
+			var ret = new ExtractedSchedule(owner, param, currentAuthorization) { DateOnlyAsPeriod = dateAndPeriod };
 			return ret;
 		}
 
@@ -321,11 +324,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private void mergeDayOff(IScheduleDay source, bool deleteAbsence, bool ignoreAssignmentPermission)
 		{
-			var authorization = PrincipalAuthorization.Current();
-			if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment) && !ignoreAssignmentPermission)
+			if (!_currentAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment) && !ignoreAssignmentPermission)
 				return;
 
-			if (!PersonAbsenceCollection().IsEmpty() && !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
+			if (!PersonAbsenceCollection().IsEmpty() && !_currentAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
 				return;
 
 			TimeSpan diff = CalculatePeriodOffset(source.Period);
@@ -656,8 +658,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void CreateAndAddActivity(IActivity activity, DateTimePeriod period, IShiftCategory shiftCategory)
 		{
-			var authorization = PrincipalAuthorization.Current();
-			if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
+			if (!_currentAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
 				return;
 
 			var ass = PersonAssignment();

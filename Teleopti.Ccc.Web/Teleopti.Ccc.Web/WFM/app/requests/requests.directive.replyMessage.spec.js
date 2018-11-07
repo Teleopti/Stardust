@@ -2,7 +2,8 @@
 
 describe('requestsRepltMessagedirectiveTest', function () {
 	var $compile,
-        $rootScope,
+		$rootScope,
+		requestsPermissions,
         expectedMessage;
 	var cb = function (message) {
 		expectedMessage = message;
@@ -10,6 +11,14 @@ describe('requestsRepltMessagedirectiveTest', function () {
 	beforeEach(function () {
 		module('wfm.templates');
 		module('wfm.requests');
+
+		requestsPermissions = new FakeRequestsPermissions();
+		module(function($provide) {
+			$provide.service('requestsPermissions',
+				function() {
+					return requestsPermissions;
+				});
+		});
 	});
 
 	beforeEach(inject(function (_$rootScope_, _$compile_) {
@@ -90,6 +99,7 @@ describe('requestsRepltMessagedirectiveTest', function () {
 	});
 
 	function setUpTarget(cb) {
+		requestsPermissions.set({ HasApproveOrDenyPermission: true, HasCancelPermission: true });
 		var rootScope = $rootScope.$new();
 		rootScope.requestsCommandsPane = {};
 		expectedMessage = '';
@@ -111,11 +121,23 @@ describe('requestsRepltMessagedirectiveTest', function () {
         'show-reply-dialog="requestsCommandsPane.showReplyDialog"></requests-reply-message>')(rootScope);
 		rootScope.$digest();
 		var target = targetElement.isolateScope();
-
+		
 		return {
 			targetScope: target.requestsReplyMessage,
 			targetElem: targetElement,
 			rootScope: rootScope
+		}
+	}
+
+	function FakeRequestsPermissions() {
+		var permissions;
+
+		this.set = function setPermissions(data) {
+			permissions = data;
+		}
+
+		this.all = function getPermissions() {
+			return permissions;
 		}
 	}
 });

@@ -46,22 +46,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 			ColorValue = NoAlarmColorValue;
         }
 
-	    public ITeam Team
-	    {
-		    get { return _team; }
-	    }
+	    public ITeam Team => _team;
 
-	    public IPerson Person
-	    {
-		    get { return _person; }
-	    }
+		public IPerson Person => _person;
 
-	    public string CommonNameDescription
-        {
-            get { return _commonNameDescriptionSetting.BuildFor(_person); }
-        }
+		public string CommonNameDescription => _commonNameDescriptionSetting.BuildFor(_person);
 
-        public bool IsPinned
+		public bool IsPinned
         {
             get { return _isPinned; }
             set
@@ -72,12 +63,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
             }
         }
 
-        public LayerViewModelCollection Layers
-        {
-            get { return _layerViewModelCollection; }
-        }
+        public LayerViewModelCollection Layers => _layerViewModelCollection;
 
-        public int ColorValue
+		public int ColorValue
         {
             get { return _colorValue; }
             set
@@ -200,12 +188,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
             set { SetValue(ShowNextActivityProperty, value); }
         }
 
-        public DateTimePeriod Period
-        {
-            get { return _period; }
-        }
+        public DateTimePeriod Period => _period;
 
-	    public bool EditLayer
+		public bool EditLayer
 	    {
 		    get { return _editLayer; }
 		    set
@@ -267,12 +252,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 			IsInEditMode = false;
 		}
 
-	    public object TimeInCurrentState
-	    {
-			get { return _elapsedTimeConverter.Convert(EnteredCurrentState,typeof(TimeSpan),null,null); }
-	    }
+	    public object TimeInCurrentState => _elapsedTimeConverter.Convert(EnteredCurrentState,typeof(TimeSpan),null,null);
 
-	    public bool HasAlarm
+		public bool HasAlarm
 	    {
 		    get { return _hasAlarm; }
 		    set

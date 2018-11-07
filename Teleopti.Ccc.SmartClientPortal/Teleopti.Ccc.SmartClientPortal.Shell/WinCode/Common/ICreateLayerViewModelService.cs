@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         /// <param name="eventAggregator">The event aggregator.</param>
         /// <param name="interval">The interval.</param>
         /// <returns>A list of created layerviwemodels</returns>
-        IList<ILayerViewModel> CreateProjectionViewModelsFromSchedule(IScheduleRange scheduleRange, DateTimePeriod period, IEventAggregator eventAggregator, TimeSpan interval);
+        IList<ILayerViewModel> CreateProjectionViewModelsFromSchedule(IScheduleRange scheduleRange, DateTimePeriod period, IEventAggregator eventAggregator, TimeSpan interval, IAuthorization authorization);
 
         /// <summary>
         /// Creates the viewmodels from the projection.
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         /// Created by: henrika
         /// Created date: 2010-06-14
         /// </remarks>
-        IList<ILayerViewModel> CreateViewModelsFromSchedule(IScheduleDay scheduleDay, IEventAggregator eventAggregator, TimeSpan interval, ILayerViewModelObserver observer);
+        IList<ILayerViewModel> CreateViewModelsFromSchedule(IScheduleDay scheduleDay, IEventAggregator eventAggregator, TimeSpan interval, ILayerViewModelObserver observer, IAuthorization authorization);
 
         /// <summary>
         /// Creates a new service that tries to keep the models selected
@@ -61,6 +62,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         /// Created date: 2010-06-14
         /// </remarks>
         //ICreateLayerViewModelService TryToSelect(ISpecification<ILayerViewModel> specification);
-        IList<ILayerViewModel> CreateViewModelsFromSchedule(ILayerViewModelSelector selector, IScheduleDay scheduleDay, IEventAggregator eventAggregator, TimeSpan interval, ILayerViewModelObserver observer);
+        IList<ILayerViewModel> CreateViewModelsFromSchedule(ILayerViewModelSelector selector, IScheduleDay scheduleDay, IEventAggregator eventAggregator, TimeSpan interval, ILayerViewModelObserver observer, IAuthorization authorization);
     }
 }

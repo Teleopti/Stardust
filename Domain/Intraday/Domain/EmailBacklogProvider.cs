@@ -61,16 +61,16 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 						if (!workloadDay.OpenTaskPeriodList.Any())
 							continue;
 						var openingHour = workloadDay.OpenTaskPeriodList.First().Period.StartDateTime;
-						if (!workloadClosedHoursDictionary.ContainsKey(workloadDay.Workload.Id.Value))
+						if (!workloadClosedHoursDictionary.TryGetValue(workloadDay.Workload.Id.Value, out var closePeriod))
 						{
 							workloadClosedHoursDictionary.Add(workloadDay.Workload.Id.Value,
 								new ClosedPeriodWorkload(openingHour.Date, openingHour, false));
 						}
 						else
 						{
-							if (workloadClosedHoursDictionary[workloadDay.Workload.Id.Value].hasBacklogStart)
+							if (closePeriod.hasBacklogStart)
 								continue;
-							var todayStartOpeningHour = workloadClosedHoursDictionary[workloadDay.Workload.Id.Value].Period.EndDateTime;
+							var todayStartOpeningHour = closePeriod.Period.EndDateTime;
 							workloadClosedHoursDictionary[workloadDay.Workload.Id.Value] =
 								new ClosedPeriodWorkload(workloadDay.OpenTaskPeriodList.Last().Period.EndDateTime, todayStartOpeningHour, true);
 						}

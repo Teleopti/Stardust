@@ -15,9 +15,14 @@
 	self.textColor = ko.observable();
 	self.summaryName = ko.observable();
 	self.summaryTime = ko.observable();
+	self.showTrafficLight = ko.observable(
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_TrafficLightOnMobileDayView_77447')
+	);
+	self.trafficLightColor = ko.observable('');
+	self.trafficLightTooltip = ko.observable('');
 	self.dayOfWeek = ko.observable();
 	self.isFullDayAbsence = false;
-	self.isDayOff = ko.observable(false);
+	self.isDayOff = false;
 	self.hasOvertime = ko.observable(false);
 	self.timeLines = ko.observableArray();
 	self.periods = [];
@@ -64,7 +69,7 @@
 	self.staffingProbabilityOnMobileEnabled = ko.observable(false);
 	self.loadingProbabilityData = ko.observable(false);
 	self.probabilities = ko.observableArray();
-	self.userNowInMinute = ko.observable(0);
+	self.userNowInMinute = 0;
 	self.userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
 	self.openHourPeriod = null;
 	self.isLoading = ko.observable(false);
@@ -95,7 +100,9 @@
 		self.textColor(Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.summaryColor()));
 		self.summaryName(data.Schedule.Summary.Title);
 		self.summaryTime(data.Schedule.Summary.TimeSpan);
-		self.isDayOff(data.Schedule.IsDayOff);
+		self.trafficLightColor(getTrafficLightColor(data.Schedule.ProbabilityClass));
+		self.trafficLightTooltip(buildTrafficLightTooltip(data.Schedule.ProbabilityText));
+		self.isDayOff = data.Schedule.IsDayOff;
 		self.isFullDayAbsence = data.Schedule.IsFullDayAbsence;
 		self.periods = data.Schedule.Periods;
 		self.unreadMessageCount(data.UnReadMessageCount);
@@ -230,6 +237,27 @@
 
 	function disposeSelectedDateSubscription() {
 		if (self.selectedDateSubscription) self.selectedDateSubscription.dispose();
+	}
+
+	function getTrafficLightColor(probability) {
+		switch (probability) {
+			case 'poor': {
+				return 'red';
+			}
+			case 'fair': {
+				return 'yellow';
+			}
+			case 'good': {
+				return 'green';
+			}
+			default:
+				return '';
+		}
+	}
+
+	function buildTrafficLightTooltip(text) {
+		var userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
+		return userTexts.ChanceOfGettingAbsenceRequestGranted + text;
 	}
 
 	function fillRequestFormData(requestViewModel) {
@@ -385,7 +413,7 @@
 		if (!self.staffingProbabilityOnMobileEnabled()) return;
 		oneWeekRawProbabilities = rawProbabilities;
 
-		self.fixedDate = self.selectedDate;
+		self.fixedDate = moment(self.selectedDate());
 
 		self.probabilities(
 			Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(

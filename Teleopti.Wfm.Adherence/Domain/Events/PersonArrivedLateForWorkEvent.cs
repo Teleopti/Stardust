@@ -1,6 +1,7 @@
 using System;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Adherence.Domain.Events
 {
@@ -8,6 +9,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 	public class PersonArrivedLateForWorkEvent : IRtaStoredEvent, IEvent, ISolidProof
 	{
 		public Guid PersonId { get; set; }
+		public DateOnly? BelongsToDate { get; set; }
 
 		public DateTime Timestamp { get; set; }
 
@@ -24,6 +26,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 			new QueryData
 			{
 				PersonId = PersonId,
+				BelongsToDate = BelongsToDate,
 				StartTime = Timestamp,
 				EndTime = Timestamp
 			};

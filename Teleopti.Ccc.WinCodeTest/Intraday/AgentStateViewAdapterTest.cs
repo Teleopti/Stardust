@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence.Domain.Configuration;
 
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
                     new Team(),
                     new LayerViewModelCollection(
                         new EventAggregator(),
-						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null),
+						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null, new FullPermission()),
                     new CommonNameDescriptionSetting("test"));
 
             var collection = new Collection<DayLayerModel> { dayLayerModel };
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 					new Team(),
 					new LayerViewModelCollection(
 						new EventAggregator(),
-						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null),
+						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null, new FullPermission()),
 					new CommonNameDescriptionSetting("test"))
 					{
 						CurrentStateDescription = null
@@ -122,7 +123,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 					new Team(),
 					new LayerViewModelCollection(
 						new EventAggregator(),
-						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null),
+						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null, new FullPermission()),
 					new CommonNameDescriptionSetting("test"))
 				{
 					CurrentStateDescription = null
@@ -136,7 +137,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 					new Team(),
 					new LayerViewModelCollection(
 						new EventAggregator(),
-						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null),
+						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null, new FullPermission()),
 					new CommonNameDescriptionSetting("test"))
 				{
 					CurrentStateDescription = "InCall"
@@ -150,7 +151,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 					new Team(),
 					new LayerViewModelCollection(
 						new EventAggregator(),
-						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null),
+						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null, new FullPermission()),
 					new CommonNameDescriptionSetting("test"))
 				{
 					CurrentStateDescription = "LoggedOut"
@@ -187,7 +188,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 					new Team(),
 					new LayerViewModelCollection(
 						new EventAggregator(),
-						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null),
+						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null, new FullPermission()),
 					new CommonNameDescriptionSetting("test"))
 				{
 					CurrentStateDescription = null
@@ -201,7 +202,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 					new Team(),
 					new LayerViewModelCollection(
 						new EventAggregator(),
-						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null),
+						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null, new FullPermission()),
 					new CommonNameDescriptionSetting("test"))
 				{
 					CurrentStateDescription = "InCall"
@@ -215,7 +216,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 					new Team(),
 					new LayerViewModelCollection(
 						new EventAggregator(),
-						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null),
+						new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null, new FullPermission()),
 					new CommonNameDescriptionSetting("test"))
 				{
 					CurrentStateDescription = "LoggedOut"

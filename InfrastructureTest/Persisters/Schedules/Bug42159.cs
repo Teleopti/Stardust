@@ -7,14 +7,16 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
 	[InfrastructureTest]
-	public class Bug42159
+	public class Bug42159 : IIsolateSystem
 	{
 		public IScheduleDictionaryPersister Target;
 		public IPersonAssignmentRepository PersonAssignmentRepository;
@@ -59,6 +61,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				var assignmentAfterInDb = PersonAssignmentRepository.Get(scheduleDay.PersonAssignment().Id.Value).Version;
 				assignmentBefore.Should().Be.EqualTo(assignmentAfterInDb);
 			}
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
 		}
 	}
 }

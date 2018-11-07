@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 	        daylayerModel = new DayLayerModel(person, new DateTimePeriod(2013, 01, 01, 2059, 01, 01), team,
 	                                          new LayerViewModelCollection(new EventAggregator(),
 	                                                                       new CreateLayerViewModelService(),
-	                                                                       new RemoveLayerFromSchedule(), null), null);
+	                                                                       new RemoveLayerFromSchedule(), null, new FullPermission()), null);
 
             target = new DayLayerViewModel(rtaStateHolder, eventAggregator, unitOfWorkFactory, repositoryFactory, testDispatcher);
         }
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			var dictionary = new Dictionary<Guid, AgentStateReadModel> { { (Guid)person.Id, agentStateReadModel } };
 
 			target.Models.Add(new DayLayerModel(person, new DateTimePeriod(DateTime.UtcNow.Date, DateTime.UtcNow.Date),
-												new Team(), new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null), new CommonNameDescriptionSetting()));
+												new Team(), new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null, new FullPermission()), new CommonNameDescriptionSetting()));
 			rtaStateHolder.Expect(r => r.ActualAgentStates).IgnoreArguments().Return(dictionary);
 			mocks.ReplayAll();
 
@@ -171,19 +171,20 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			rtaStateHolder.BackToRecord();
             var createLayerViewModelService = mocks.DynamicMock<ICreateLayerViewModelService>();
             var range = new ScheduleRange(scheduleDictionary,
-                                          new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), person, period), new PersistableScheduleDataPermissionChecker());
-            using (mocks.Record())
+                                          new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), person, period), new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
+			var authorization = CurrentAuthorization.Make().Current();
+			using (mocks.Record())
             {
                 Expect.Call(rtaStateHolder.SchedulingResultStateHolder).Return(schedulingResultStateHolder);
                 Expect.Call(schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
                 Expect.Call(scheduleDictionary[person]).Return(range);
                 Expect.Call(createLayerViewModelService.CreateProjectionViewModelsFromSchedule(range, period, eventAggregator,
-                                                                                               TimeSpan.FromMinutes(15))).Return(
+                                                                                               TimeSpan.FromMinutes(15), authorization)).Return(
                                                                                                 new List<ILayerViewModel>());
             }
             using (mocks.Playback())
             {
-				target.Models.Add(new DayLayerModel(person, period, team, new LayerViewModelCollection(eventAggregator, createLayerViewModelService, new RemoveLayerFromSchedule(), null), null));
+				target.Models.Add(new DayLayerModel(person, period, team, new LayerViewModelCollection(eventAggregator, createLayerViewModelService, new RemoveLayerFromSchedule(), null, authorization), null));
                 target.OnScheduleModified(this, new ModifyEventArgs(ScheduleModifier.MessageBroker, null, period, null));
                 target.OnScheduleModified(this, new ModifyEventArgs(ScheduleModifier.MessageBroker, person, period, null));
             }
@@ -200,7 +201,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             using (mocks.Playback())
             {
                 target = new DayLayerViewModel(null, eventAggregator, unitOfWorkFactory, repositoryFactory, testDispatcher);
-				target.Models.Add(new DayLayerModel(person, period, team, new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null), null));
+				target.Models.Add(new DayLayerModel(person, period, team, new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null, new FullPermission()), null));
                 target.OnScheduleModified(this, new ModifyEventArgs(ScheduleModifier.MessageBroker, person, period, null));
             }
         }

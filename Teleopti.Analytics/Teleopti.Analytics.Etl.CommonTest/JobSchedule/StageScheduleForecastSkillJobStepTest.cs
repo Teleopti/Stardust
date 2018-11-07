@@ -17,6 +17,7 @@ using Teleopti.Analytics.Etl.CommonTest.Transformer.Job;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -29,6 +30,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 {
 	[DomainTest]
+	[FullPermissions]
 	public class StageScheduleForecastSkillJobStepTest : IExtendSystem
 	{
 		public IComponentContext ComponentContext;
@@ -59,7 +61,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 			ass.AddActivity(activity, new TimePeriod(0, 24));
 
 			var period = new DateTimePeriod(dateAsUtc, dateAsUtc.AddDays(1));
-			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, period, ass);
+			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, period, data:ass);
 
 			var externalStaff = new List<ExternalStaff>();
 			var intervals = period.Intervals(TimeSpan.FromMinutes(15));
@@ -119,7 +121,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 			ass.AddActivity(activity, new TimePeriod(0, 24));
 
 			var period = new DateTimePeriod(dateAsUtc, dateAsUtc.AddDays(1));
-			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, period, ass);
+			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, period, data:ass);
 		
 			var intervals = period.Intervals(TimeSpan.FromMinutes(15));
 			var externalStaff = new List<ExternalStaff>();
@@ -183,7 +185,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 			ass.AddActivity(activity, new TimePeriod(0, 24));
 
 			var period = new DateTimePeriod(dateAsUtc, dateAsUtc.AddDays(1));
-			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, period, ass);
+			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, period,data: ass);
 
 			var intervals = period.Intervals(TimeSpan.FromMinutes(15));
 			var externalStaff = new List<ExternalStaff>();

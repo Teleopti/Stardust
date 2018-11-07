@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var scenario = new ScenarioRepository(unitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Scenario));
 			var absence = new AbsenceRepository(unitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Name));
 			var repositoryFactory = new RepositoryFactory();
-			var scheduleRepository = new ScheduleStorage(unitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, unitOfWork));
+			var scheduleRepository = new ScheduleStorage(unitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(new FullPermission()), new ScheduleStorageRepositoryWrapper(repositoryFactory, unitOfWork), new FullPermission());
 			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			var scheduleDifferenceSaver = new SaveSchedulePartService(new ScheduleDifferenceSaver(new EmptyScheduleDayDifferenceSaver(), new PersistScheduleChanges(scheduleRepository, CurrentUnitOfWork.Make())), personAbsenceAccountRepository, new DoNothingScheduleDayChangeCallBack());
 			var businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository, new SchedulingResultStateHolder());

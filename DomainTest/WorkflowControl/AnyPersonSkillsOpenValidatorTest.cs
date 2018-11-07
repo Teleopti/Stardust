@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var scenario = new Scenario();
 			var parameters = new ScheduleParameters(scenario, _person, new DateTimePeriod(2017, 10, 19, 0, 2017, 10, 24, 23));
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, DateTime.Now);
-			_scheduleRange = new ScheduleRange(scheduleDictionary, parameters, new ByPassPersistableScheduleDataPermissionChecker());
+			_scheduleRange = new ScheduleRange(scheduleDictionary, parameters, new ByPassPersistableScheduleDataPermissionChecker(), CurrentAuthorization.Make());
 		}
 		
 		[Test]
@@ -71,7 +72,16 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection, _scheduleRange);
 			validatedRequest.IsValid.Should().Be.False();
 		}
-		
+
+		[Test]
+		public void ShouldDenyRequestIfAllPersonSkillsAreInactive()
+		{
+			var request = new PersonRequest(_person, new AbsenceRequest(_absence, new DateTimePeriod(2017, 10, 23, 6, 2017, 10, 23, 9))).WithId();
+			_person.DeactivateSkill(_skill,_person.PersonPeriodCollection.First());
+			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection, _scheduleRange);
+			validatedRequest.IsValid.Should().Be.False();
+		}
+
 		[Test]
 		public void ShouldHandleMultiDayRequest()
 		{

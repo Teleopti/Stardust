@@ -33,9 +33,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
            _start = new DateTime(2007, 8, 2, 8, 30, 0, DateTimeKind.Utc);
            _end = new DateTime(2007, 8, 2, 17, 30, 0, DateTimeKind.Utc);
             _range = new DateTimePeriod(2007, 8, 1, 2007, 8, 5);
-			_permissionChecker = new PersistableScheduleDataPermissionChecker();
-
-
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(new FullPermission());
+			
 		   _scenario = ScenarioFactory.CreateScenarioAggregate();
            _category = ShiftCategoryFactory.CreateShiftCategory("myCategory");
            _activity = ActivityFactory.CreateActivity("Phone");
@@ -53,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
            _mocks.Replay(_dic);
            _scheduleRange =
                new ScheduleRange(_dic,
-                   new ScheduleParameters(_scenario, _person, _range), _permissionChecker);
+                   new ScheduleParameters(_scenario, _person, _range), _permissionChecker, new FullPermission());
         }
 
         private void createDayOffRule()
@@ -229,7 +228,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 						var personDayOff2 = PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, _scenario, new DateOnly(2007, 8, 5), dOff);
             
 
-           _scheduleRange = new ScheduleRange(_dic, new ScheduleParameters(_scenario, _person, _range), _permissionChecker);
+           _scheduleRange = new ScheduleRange(_dic, new ScheduleParameters(_scenario, _person, _range), _permissionChecker, new FullPermission());
 
            ((Schedule)_scheduleRange).Add(personDayOff);
            ((Schedule)_scheduleRange).Add(personDayOff2);

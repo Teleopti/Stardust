@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		private class dataSourceConfigurationSetterForTest : DataSourceConfigurationSetter
 		{
 			public dataSourceConfigurationSetterForTest(string applicationName, IConfigReader configReader)
-				: base(new DataSourceApplicationName{Name = applicationName}, configReader)
+				: base(new DataSourceApplicationName{Name = applicationName}, configReader, null)
 			{
 			}
 		}

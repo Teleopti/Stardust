@@ -8,7 +8,7 @@ import { ApiAccessModule } from './api-access/api-access.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { BootstrapComponent } from './components/bootstrap/bootstrap.component';
 import { CoreModule } from './core/core.module';
-import { UserPreferences, UserService, VersionService } from './core/services';
+import { UserPreferences, UserService } from './core/services';
 import { CustomTranslateParser, LanguageLoaderFactory, Zorroi18nService } from './core/translation';
 import { MenuModule } from './menu/menu.module';
 import { NavigationModule } from './navigation/navigation.module';
@@ -47,9 +47,7 @@ export class AppModule {
 		private upgrade: UpgradeModule,
 		private userService: UserService,
 		private translate: TranslateService,
-		private zorroi18n: Zorroi18nService,
-		private versionService: VersionService,
-		private http: HttpClient
+		private zorroi18n: Zorroi18nService
 	) {}
 
 	ngDoBootstrap() {
@@ -59,10 +57,6 @@ export class AppModule {
 				this.translate.use(preferences.Language);
 				this.zorroi18n.switchLanguage(preferences.Language);
 			}
-		});
-
-		this.http.get('../api/Global/Version').subscribe((version: string) => {
-			this.versionService.setVersion(version);
 		});
 	}
 }

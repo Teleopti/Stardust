@@ -43,14 +43,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertAnyContains("#BadgePanel .bronze-badge", bronzeBadgeCount.ToString(CultureInfo.InvariantCulture));
 		}
 
-		[When(@"I click next week")]
-		public void WhenIClickNextWeek()
+		[When(@"I click next period")]
+		public void WhenIClickNextPeriod()
 		{
 			Browser.Interactions.Click("#next-period");
 		}
 
-		[When(@"I click previous week")]
-		public void WhenIClickPreviousWeek()
+		[When(@"I click previous period")]
+		public void WhenIClickPreviousPeriod()
 		{
 			Browser.Interactions.Click("#previous-period");
 		}

@@ -18,7 +18,12 @@ using TransactionException = NHibernate.TransactionException;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class NHibernateUnitOfWork : IUnitOfWork
+	public interface IHaveSession
+	{
+		ISession GetSession();
+	}
+	
+	public class NHibernateUnitOfWork : IUnitOfWork, IHaveSession
 	{
 		private readonly ILog _logger = LogManager.GetLogger(typeof(NHibernateUnitOfWork));
 
@@ -44,6 +49,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_transactionHooks = transactionHooks ?? new NoTransactionHooks();
 			_filterManager = new NHibernateFilterManager(session);
 		}
+		
+		public ISession GetSession() => Session;
 
 		protected internal virtual ISession Session
 		{
@@ -271,5 +278,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			return Session.GetHashCode();
 		}
+
 	}
 }

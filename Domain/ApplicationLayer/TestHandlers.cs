@@ -91,5 +91,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		}
 	}
 	
+	public class SameHandlerEnabledByTestToggle :
+		IHandleEvents,
+		IHandleEvent<TestToggleEvent>,
+		IRunOnHangfire
+	{
+		public void Subscribe(SubscriptionRegistrator registrator)
+		{
+		}
+		
+		[EnabledBy(Toggles.TestToggle)]
+		public void Handle(IEnumerable<IEvent> events)
+		{
+		}
+
+		[DisabledBy(Toggles.TestToggle)]
+		public void Handle(TestToggleEvent @event)
+		{
+		}
+	}
+	
 
 }

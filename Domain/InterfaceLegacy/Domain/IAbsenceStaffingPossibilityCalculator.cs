@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	public interface IAbsenceStaffingPossibilityCalculator
 	{
-		IList<CalculatedPossibilityModel> CalculateIntradayIntervalPossibilities(DateOnlyPeriod period);
+		IList<CalculatedPossibilityModel> CalculateIntradayIntervalPossibilities(IPerson person, DateOnlyPeriod period);
 	}
 }

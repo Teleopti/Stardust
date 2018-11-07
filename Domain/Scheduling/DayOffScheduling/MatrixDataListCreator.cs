@@ -4,12 +4,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 {
-	public interface IMatrixDataListCreator
-	{
-		IList<IMatrixData> Create(IEnumerable<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions);
-	}
-
-	public class MatrixDataListCreator : IMatrixDataListCreator
+	public class MatrixDataListCreator
 	{
 		private readonly IScheduleDayDataMapper _scheduleDayDataMapper;
 

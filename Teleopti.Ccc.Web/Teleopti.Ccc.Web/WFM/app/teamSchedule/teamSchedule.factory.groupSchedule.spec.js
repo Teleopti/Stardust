@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
 	"use strict";
 
 	var target;
@@ -6,6 +6,25 @@
 	describe('#teamschedule.factory.groupSchedule#', function () {
 		beforeEach(function () {
 			module("wfm.teamSchedule");
+			module(function ($provide) {
+				$provide.service('CurrentUserInfo', function () {
+					return {
+						CurrentUserInfo: function () {
+							return {
+								DefaultTimeZone: 'Europe/London',
+								DateFormatLocale: 'en',
+								FirstDayOfWeek: 0,
+								DateTimeFormat: {
+									ShowMeridian: true,
+									ShortTimePattern: 'h:mm A',
+									AMDesignator: 'AM',
+									PMDesignator: 'PM'
+								}
+							};
+						}
+					};
+				});
+			});
 		});
 
 		beforeEach(inject(function (GroupScheduleFactory) {
@@ -163,9 +182,9 @@
 				"DayOff": null
 			};
 
-			var personSchedule = target.Create([schedule], '2018-10-16', 'etc/UTC').Schedules[0];
-			expect(personSchedule.Shifts[0].Projections[0].StartPosition).toBe(60 * (100 / 240));
-			expect(personSchedule.Shifts[0].Projections[0].Length).toBe(120 * (100 / 240));
+			var vm = target.Create([schedule], '2018-10-16', 'etc/UTC');
+			expect(vm.Schedules[0].Shifts[0].Projections[0].StartPosition).toBe(60 * vm.TimeLine.LengthPercentPerMinute);
+			expect(vm.Schedules[0].Shifts[0].Projections[0].Length).toBe(120 * vm.TimeLine.LengthPercentPerMinute);
 		});
 
 		it('should set start position to 0 when having overnight shift from yesterday ', function () {
@@ -206,8 +225,8 @@
 				"DayOff": null
 			};
 
-			var personSchedule = target.Create([schedule], '2018-10-17', 'etc/UTC').Schedules[0];
-			expect(personSchedule.Shifts[0].Projections[0].Length).toBe((100 / 540) * 480);
+			var vm = target.Create([schedule], '2018-10-17', 'etc/UTC');
+			expect(vm.Schedules[0].Shifts[0].Projections[0].Length).toBe(480 * vm.TimeLine.LengthPercentPerMinute);
 		});
 
 		it('should get correct projection length and timespan when having 2-hour projection starts at 2018-10-28 1:00 under Europe/London timezone', function () {
@@ -227,9 +246,9 @@
 				"DayOff": null
 			};
 
-			var personSchedule = target.Create([schedule], '2018-10-28', 'Europe/London').Schedules[0];
-			expect(personSchedule.Shifts[0].Projections[0].Length).toBe((100 / 240) * 120);
-			expect(personSchedule.Shifts[0].Projections[0].TimeSpan).toBe('1:00 AM - 2:00 AM');
+			var vm = target.Create([schedule], '2018-10-28', 'Europe/London');
+			expect(vm.Schedules[0].Shifts[0].Projections[0].Length).toBe(120 * vm.TimeLine.LengthPercentPerMinute);
+			expect(vm.Schedules[0].Shifts[0].Projections[0].TimeSpan).toBe('1:00 AM - 2:00 AM');
 		})
 
 		it('should get projection with correct length, start position and timespan on end of DST', function () {
@@ -263,17 +282,18 @@
 				"DayOff": null
 			};
 
-			var personSchedule = target.Create([schedule], '2018-10-28', 'Europe/London').Schedules[0];
+			var vm = target.Create([schedule], '2018-10-28', 'Europe/London');
+			var personSchedule = vm.Schedules[0];
 			expect(personSchedule.Shifts[0].Projections[0].StartPosition).toBe(0);
-			expect(personSchedule.Shifts[0].Projections[0].Length).toBe((100 / 300) * 90);
+			expect(personSchedule.Shifts[0].Projections[0].Length).toBe(vm.TimeLine.LengthPercentPerMinute * 90);
 			expect(personSchedule.Shifts[0].Projections[0].TimeSpan).toBe('12:00 AM - 1:30 AM');
 
-			expect(personSchedule.Shifts[0].Projections[1].StartPosition).toBe((100 / 300) * 90);
-			expect(personSchedule.Shifts[0].Projections[1].Length).toBe((100 / 300) * 30);
+			expect(personSchedule.Shifts[0].Projections[1].StartPosition).toBe(vm.TimeLine.LengthPercentPerMinute * 90);
+			expect(personSchedule.Shifts[0].Projections[1].Length).toBe(vm.TimeLine.LengthPercentPerMinute * 30);
 			expect(personSchedule.Shifts[0].Projections[1].TimeSpan).toBe('1:30 AM - 1:00 AM');
 
-			expect(personSchedule.Shifts[0].Projections[2].StartPosition).toBe((100 / 300) * 120);
-			expect(personSchedule.Shifts[0].Projections[2].Length).toBe((100 / 300) * 120);
+			expect(personSchedule.Shifts[0].Projections[2].StartPosition).toBe(vm.TimeLine.LengthPercentPerMinute * 120);
+			expect(personSchedule.Shifts[0].Projections[2].Length).toBe(vm.TimeLine.LengthPercentPerMinute * 120);
 			expect(personSchedule.Shifts[0].Projections[2].TimeSpan).toBe('1:00 AM - 3:00 AM');
 		});
 
@@ -294,9 +314,10 @@
 				"DayOff": null
 			};
 
-			var personSchedule = target.Create([schedule], '2018-03-25', 'Europe/Berlin').Schedules[0];
-			expect(personSchedule.Shifts[0].Projections[0].StartPosition).toBe((100 / 240) * 60);
-			expect(personSchedule.Shifts[0].Projections[0].Length).toBe((100 / 240) * 120);
+			var vm = target.Create([schedule], '2018-03-25', 'Europe/Berlin');
+			var personSchedule = vm.Schedules[0];
+			expect(personSchedule.Shifts[0].Projections[0].StartPosition).toBe(vm.TimeLine.LengthPercentPerMinute * 60);
+			expect(personSchedule.Shifts[0].Projections[0].Length).toBe(vm.TimeLine.LengthPercentPerMinute * 120);
 		});
 
 		it("should get  person schedule with correct day off", function () {
@@ -313,11 +334,12 @@
 						"Minutes": 1440
 					}
 			};
-			var personSchedule = target.Create([schedule], "2018-10-16", "etc/UTC").Schedules[0];
+			var vm = target.Create([schedule], "2018-10-16", "etc/UTC");
+			var personSchedule = vm.Schedules[0];
 
 			expect(personSchedule.DayOffs.length).toEqual(1);
 			expect(personSchedule.DayOffs[0].DayOffName).toEqual("DayOff");
-			expect(personSchedule.DayOffs[0].Length).toEqual((100 / 480) * 480);
+			expect(personSchedule.DayOffs[0].Length).toEqual(vm.TimeLine.LengthPercentPerMinute * 480);
 			expect(personSchedule.DayOffs[0].StartPosition).toEqual(0);
 		});
 
@@ -348,12 +370,13 @@
 				}]
 			};
 
-			var personSchedule = target.Create([scheduleForPerson1, scheduleForPerson2], "2018-10-16", "Asia/Hong_Kong").Schedules[0];
+			var vm = target.Create([scheduleForPerson1, scheduleForPerson2], "2018-10-16", "Asia/Hong_Kong")
+			var personSchedule = vm.Schedules[0];
 
 			expect(personSchedule.DayOffs.length).toEqual(1);
 			expect(personSchedule.DayOffs[0].DayOffName).toEqual("DayOff");
-			expect(personSchedule.DayOffs[0].Length).toEqual((100 / 360) * 180);
-			expect(personSchedule.DayOffs[0].StartPosition).toEqual((100 / 360) * 180);
+			expect(personSchedule.DayOffs[0].Length).toEqual(vm.TimeLine.LengthPercentPerMinute * 180);
+			expect(personSchedule.DayOffs[0].StartPosition).toEqual(vm.TimeLine.LengthPercentPerMinute * 180);
 		});
 
 		it("can get person schedule with full day absence", function () {
@@ -1012,633 +1035,687 @@
 			expect(personSchedule.HasHiddenScheduleAtEnd()).toBe(true);
 		});
 
-		describe("# time line #", function () {
 
-			it('should get correct timeline', function () {
-				var scheduleForPerson1 = {
-					"PersonId": "person1",
-					"Name": "person1",
-					"Date": '2018-10-17',
-					"Projection": [
-						{
-							"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
-							"Color": "#795548",
-							"Description": "Phone",
-							"StartInUtc": "2018-10-17 08:00",
-							"EndInUtc": "2018-10-17 09:00",
-							"IsOvertime": false
-						},
-						{
-							"ShiftLayerIds": ["41ffe214-3384-4a80-a14c-a83800e23276"],
-							"Color": "#FFFFFF",
-							"Description": "Email",
-							"StartInUtc": "2018-10-17 09:00",
-							"EndInUtc": "2018-10-17 10:00"
+	});
+
+	describe("# time line #", function () {
+		beforeEach(function () {
+			module("wfm.teamSchedule");
+			module(function ($provide) {
+				$provide.service('CurrentUserInfo', function () {
+					return {
+						CurrentUserInfo: function () {
+							return {
+								DefaultTimeZone: 'Europe/London',
+								DateFormatLocale: 'en',
+								FirstDayOfWeek: 0,
+								DateTimeFormat: {
+									ShowMeridian: true,
+									ShortTimePattern: 'h:mm A',
+									AMDesignator: 'AM',
+									PMDesignator: 'PM'
+								}
+							};
 						}
-					],
-					"DayOff": null
-				};
-
-				var timelineVm = target.Create([scheduleForPerson1], '2018-10-17', 'ETC/UTC').TimeLine;
-
-				expect(timelineVm.Offset.format("YYYY-MM-DD HH:mm:ss")).toEqual("2018-10-17 00:00:00");
-				expect(timelineVm.StartMinute).toEqual(420);
-				expect(timelineVm.EndMinute).toEqual(660);
-				expect(timelineVm.LengthPercentPerMinute).toEqual(100 / (660 - 420));
-			});
-
-			it("should display 1 extra hour line when schedule starts or ends at hour point", function () {
-				var scheduleForPerson1 = {
-					"PersonId": "person1",
-					"Name": "person1",
-					"Date": '2018-10-17',
-					"Projection": [
-						{
-							"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
-							"Color": "#795548",
-							"Description": "Phone",
-							"StartInUtc": "2018-10-17 08:00",
-							"EndInUtc": "2018-10-17 09:00",
-							"IsOvertime": false
-						},
-						{
-							"ShiftLayerIds": ["41ffe214-3384-4a80-a14c-a83800e23276"],
-							"Color": "#FFFFFF",
-							"Description": "Email",
-							"StartInUtc": "2018-10-17 09:00",
-							"EndInUtc": "2018-10-17 10:00"
-						}
-					],
-					"DayOff": null
-				};
-
-				var scheduleForPerson2 = {
-					"PersonId": "person2",
-					"Name": "person2",
-					"Date": '2018-10-17',
-					"Projection": [
-						{
-							"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
-							"Color": "#795548",
-							"Description": "Phone",
-							"StartInUtc": "2018-10-17 12:00",
-							"EndInUtc": "2018-10-17 16:00"
-						},
-						{
-							"ShiftLayerIds": ["41ffe214-3384-4a80-a14c-a83800e23276"],
-							"Color": "#FFFFFF",
-							"Description": "Email",
-							"StartInUtc": "2018-10-17 16:00",
-							"EndInUtc": "2018-10-17 20:00"
-						}
-					],
-					"DayOff": null
-				};
-
-				var timelineVm = target.Create([scheduleForPerson1, scheduleForPerson2], '2018-10-17', 'ETC/UTC').TimeLine;
-
-				expect(timelineVm.HourPoints.length).toEqual(15);
-
-				var firstHourPoint = timelineVm.HourPoints[0];
-				expect(firstHourPoint.TimeLabel).toEqual("7:00 AM");
-				expect(firstHourPoint.Position()).toEqual(0);
-
-				expect(timelineVm.HourPoints[1].Position()).toEqual((100 / 840) * 60);
-
-				var lastHourPoint = timelineVm.HourPoints[timelineVm.HourPoints.length - 1];
-				expect(lastHourPoint.TimeLabel).toEqual("9:00 PM");
-				expect(lastHourPoint.Position()).toEqual(100);
-			});
-
-			it('should show all time labels when time range length is less or equal to 16 hours', function () {
-				var scheduleForPerson1 = {
-					"PersonId": "person1",
-					"Name": "person1",
-					"Date": '2018-10-18',
-					"Projection": [
-						{
-							"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
-							"Color": "#795548",
-							"Description": "Phone",
-							"StartInUtc": "2018-10-18 08:00",
-							"EndInUtc": "2018-10-18 15:00",
-							"IsOvertime": false
-						}
-					],
-					"DayOff": null
-				};
-
-				var timelineVm = target.Create([scheduleForPerson1], '2018-10-18', 'etc/UTC').TimeLine;
-				expect(timelineVm.HourPoints.length).toEqual(10);
-
-				expect(timelineVm.HourPoints[0].TimeLabel).toEqual('7:00 AM');
-				expect(timelineVm.HourPoints[0].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[1].TimeLabel).toEqual('8:00 AM');
-				expect(timelineVm.HourPoints[1].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[2].TimeLabel).toEqual('9:00 AM');
-				expect(timelineVm.HourPoints[2].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[3].TimeLabel).toEqual('10:00 AM');
-				expect(timelineVm.HourPoints[3].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[4].TimeLabel).toEqual('11:00 AM');
-				expect(timelineVm.HourPoints[4].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[5].TimeLabel).toEqual('12:00 PM');
-				expect(timelineVm.HourPoints[5].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[6].TimeLabel).toEqual('1:00 PM');
-				expect(timelineVm.HourPoints[6].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[7].TimeLabel).toEqual('2:00 PM');
-				expect(timelineVm.HourPoints[7].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[8].TimeLabel).toEqual('3:00 PM');
-				expect(timelineVm.HourPoints[8].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[9].TimeLabel).toEqual('4:00 PM');
-				expect(timelineVm.HourPoints[9].IsLabelVisible).toEqual(true);
-			});
-
-			it('should show interval time labels when schedules length is larger than 16 hours', function () {
-				var scheduleForPerson1 = {
-					"PersonId": "person1",
-					"Name": "person1",
-					"Date": '2018-10-18',
-					"Projection": [
-						{
-							"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
-							"Color": "#795548",
-							"Description": "Phone",
-							"StartInUtc": "2018-10-18 04:00",
-							"EndInUtc": "2018-10-18 21:00",
-							"IsOvertime": false
-						}
-					],
-					"DayOff": null
-				};
-
-				var timelineVm = target.Create([scheduleForPerson1], '2018-10-18', 'etc/UTC').TimeLine;
-				expect(timelineVm.HourPoints.length).toEqual(20);
-
-				expect(timelineVm.HourPoints[0].TimeLabel).toEqual('3:00 AM');
-				expect(timelineVm.HourPoints[0].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[1].TimeLabel).toEqual('4:00 AM');
-				expect(timelineVm.HourPoints[1].IsLabelVisible).toEqual(false);
-
-				expect(timelineVm.HourPoints[2].TimeLabel).toEqual('5:00 AM');
-				expect(timelineVm.HourPoints[2].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[3].TimeLabel).toEqual('6:00 AM');
-				expect(timelineVm.HourPoints[3].IsLabelVisible).toEqual(false);
-
-				expect(timelineVm.HourPoints[4].TimeLabel).toEqual('7:00 AM');
-				expect(timelineVm.HourPoints[4].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[5].TimeLabel).toEqual('8:00 AM');
-				expect(timelineVm.HourPoints[5].IsLabelVisible).toEqual(false);
-
-				expect(timelineVm.HourPoints[6].TimeLabel).toEqual('9:00 AM');
-				expect(timelineVm.HourPoints[6].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[7].TimeLabel).toEqual('10:00 AM');
-				expect(timelineVm.HourPoints[7].IsLabelVisible).toEqual(false);
-
-				expect(timelineVm.HourPoints[8].TimeLabel).toEqual('11:00 AM');
-				expect(timelineVm.HourPoints[8].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[9].TimeLabel).toEqual('12:00 PM');
-				expect(timelineVm.HourPoints[9].IsLabelVisible).toEqual(false);
-
-				expect(timelineVm.HourPoints[10].TimeLabel).toEqual('1:00 PM');
-				expect(timelineVm.HourPoints[10].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[11].TimeLabel).toEqual('2:00 PM');
-				expect(timelineVm.HourPoints[11].IsLabelVisible).toEqual(false);
-
-				expect(timelineVm.HourPoints[12].TimeLabel).toEqual('3:00 PM');
-				expect(timelineVm.HourPoints[12].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[13].TimeLabel).toEqual('4:00 PM');
-				expect(timelineVm.HourPoints[13].IsLabelVisible).toEqual(false);
-
-				expect(timelineVm.HourPoints[14].TimeLabel).toEqual('5:00 PM');
-				expect(timelineVm.HourPoints[14].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[15].TimeLabel).toEqual('6:00 PM');
-				expect(timelineVm.HourPoints[15].IsLabelVisible).toEqual(false);
-
-				expect(timelineVm.HourPoints[16].TimeLabel).toEqual('7:00 PM');
-				expect(timelineVm.HourPoints[16].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[17].TimeLabel).toEqual('8:00 PM');
-				expect(timelineVm.HourPoints[17].IsLabelVisible).toEqual(false);
-
-				expect(timelineVm.HourPoints[18].TimeLabel).toEqual('9:00 PM');
-				expect(timelineVm.HourPoints[18].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[19].TimeLabel).toEqual('10:00 PM');
-				expect(timelineVm.HourPoints[19].IsLabelVisible).toEqual(false);
-			});
-
-			it("should get correct time line 8:00 to 16:00 when shift is empty or day off", function () {
-				var scheduleForPerson1 = {
-					"PersonId": "person1",
-					"Name": "person1",
-					"Date": '2018-10-18',
-					"Projection": [],
-					"DayOff": null
-				};
-
-				var scheduleForPerson2 = {
-					"PersonId": "person1",
-					"Name": "person1",
-					"Date": '2018-10-18',
-					"Projection": [],
-					"DayOff": {
-						"DayOffName": "Day off",
-						"StartInUtc": "2018-10-18 00:00",
-						"EndInUtc": "2018-10-19 00:00"
-					}
-				};
-
-				var timelineVm = target.Create([scheduleForPerson1, scheduleForPerson2], '2018-10-18', 'ETC/UTC').TimeLine;
-
-				expect(timelineVm.StartMinute).toEqual(480);
-				expect(timelineVm.EndMinute).toEqual(960);
-
-				expect(timelineVm.HourPoints.length).toBe(9);
-
-				expect(timelineVm.HourPoints[0].TimeLabel).toEqual('8:00 AM');
-				expect(timelineVm.HourPoints[0].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[1].TimeLabel).toEqual('9:00 AM');
-				expect(timelineVm.HourPoints[1].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[2].TimeLabel).toEqual('10:00 AM');
-				expect(timelineVm.HourPoints[2].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[3].TimeLabel).toEqual('11:00 AM');
-				expect(timelineVm.HourPoints[3].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[4].TimeLabel).toEqual('12:00 PM');
-				expect(timelineVm.HourPoints[4].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[5].TimeLabel).toEqual('1:00 PM');
-				expect(timelineVm.HourPoints[5].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[6].TimeLabel).toEqual('2:00 PM');
-				expect(timelineVm.HourPoints[6].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[7].TimeLabel).toEqual('3:00 PM');
-				expect(timelineVm.HourPoints[7].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[8].TimeLabel).toEqual('4:00 PM');
-				expect(timelineVm.HourPoints[8].IsLabelVisible).toEqual(true);
-
-			});
-
-			it("should get time line on next day when having shift starts early than 6:00 on the next day ", function () {
-				var scheduleForPerson1 = {
-					"PersonId": "person1",
-					"Name": "person1",
-					"Date": '2018-10-18',
-					"Projection": [
-						{
-							"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
-							"Color": "#795548",
-							"Description": "Phone",
-							"StartInUtc": "2018-10-18 04:00",
-							"EndInUtc": "2018-10-18 07:00",
-							"IsOvertime": false
-						},
-						{
-							"ShiftLayerIds": ["41ffe214-3384-4a80-a14c-a83800e23276"],
-							"Color": "#FFFFFF",
-							"Description": "Email",
-							"StartInUtc": "2018-10-18 07:00",
-							"EndInUtc": "2018-10-18 11:00"
-						}
-					],
-					"DayOff": null
-				};
-
-				var timelineVm = target.Create([scheduleForPerson1], '2018-10-17', 'ETC/UTC').TimeLine;
-
-				expect(timelineVm.StartMinute).toEqual(480);
-				expect(timelineVm.EndMinute).toEqual(1800);
-
-				expect(timelineVm.HourPoints.length).toBe(23);
-
-				expect(timelineVm.HourPoints[0].TimeLabel).toEqual('8:00 AM');
-				expect(timelineVm.HourPoints[0].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[1].TimeLabel).toEqual('9:00 AM');
-				expect(timelineVm.HourPoints[1].IsLabelVisible).toEqual(false);
-
-				expect(timelineVm.HourPoints[2].TimeLabel).toEqual('10:00 AM');
-				expect(timelineVm.HourPoints[2].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[3].TimeLabel).toEqual('11:00 AM');
-				expect(timelineVm.HourPoints[3].IsLabelVisible).toEqual(false);
-
-				expect(timelineVm.HourPoints[4].TimeLabel).toEqual('12:00 PM');
-				expect(timelineVm.HourPoints[4].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[5].TimeLabel).toEqual('1:00 PM');
-				expect(timelineVm.HourPoints[5].IsLabelVisible).toEqual(false);
-
-				expect(timelineVm.HourPoints[6].TimeLabel).toEqual('2:00 PM');
-				expect(timelineVm.HourPoints[6].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[7].TimeLabel).toEqual('3:00 PM');
-				expect(timelineVm.HourPoints[7].IsLabelVisible).toEqual(false);
-
-				expect(timelineVm.HourPoints[8].TimeLabel).toEqual('4:00 PM');
-				expect(timelineVm.HourPoints[8].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[9].TimeLabel).toEqual('5:00 PM');
-				expect(timelineVm.HourPoints[9].IsLabelVisible).toEqual(false);
-
-				expect(timelineVm.HourPoints[10].TimeLabel).toEqual('6:00 PM');
-				expect(timelineVm.HourPoints[10].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[11].TimeLabel).toEqual('7:00 PM');
-				expect(timelineVm.HourPoints[11].IsLabelVisible).toEqual(false);
-
-				expect(timelineVm.HourPoints[12].TimeLabel).toEqual('8:00 PM');
-				expect(timelineVm.HourPoints[12].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[13].TimeLabel).toEqual('9:00 PM');
-				expect(timelineVm.HourPoints[13].IsLabelVisible).toEqual(false);
-
-				expect(timelineVm.HourPoints[14].TimeLabel).toEqual('10:00 PM');
-				expect(timelineVm.HourPoints[14].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[15].TimeLabel).toEqual('11:00 PM');
-				expect(timelineVm.HourPoints[15].IsLabelVisible).toEqual(false);
-
-				expect(timelineVm.HourPoints[16].TimeLabel).toEqual('12:00 AM +1');
-				expect(timelineVm.HourPoints[16].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[17].TimeLabel).toEqual('1:00 AM +1');
-				expect(timelineVm.HourPoints[17].IsLabelVisible).toEqual(false);
-
-				expect(timelineVm.HourPoints[18].TimeLabel).toEqual('2:00 AM +1');
-				expect(timelineVm.HourPoints[18].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[19].TimeLabel).toEqual('3:00 AM +1');
-				expect(timelineVm.HourPoints[19].IsLabelVisible).toEqual(false);
-
-				expect(timelineVm.HourPoints[20].TimeLabel).toEqual('4:00 AM +1');
-				expect(timelineVm.HourPoints[20].IsLabelVisible).toEqual(true);
-
-				expect(timelineVm.HourPoints[21].TimeLabel).toEqual('5:00 AM +1');
-				expect(timelineVm.HourPoints[21].IsLabelVisible).toEqual(false);
-
-				expect(timelineVm.HourPoints[22].TimeLabel).toEqual('6:00 AM +1');
-				expect(timelineVm.HourPoints[22].IsLabelVisible).toEqual(true);
-			});
-
-			it("should display closest earlier hour line for start and later hour for end when they are not at hour point", function () {
-				var scheduleForPerson1 = {
-					"PersonId": "person1",
-					"Name": "person1",
-					"Date": '2018-10-17',
-					"Projection": [
-						{
-							"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
-							"Color": "#795548",
-							"Description": "Phone",
-							"StartInUtc": "2018-10-17 07:05",
-							"EndInUtc": "2018-10-17 09:00",
-							"IsOvertime": false
-						},
-						{
-							"ShiftLayerIds": ["41ffe214-3384-4a80-a14c-a83800e23276"],
-							"Color": "#FFFFFF",
-							"Description": "Email",
-							"StartInUtc": "2018-10-17 09:00",
-							"EndInUtc": "2018-10-17 10:00"
-						}
-					],
-					"DayOff": null
-				};
-
-				var scheduleForPerson2 = {
-					"PersonId": "person2",
-					"Name": "person2",
-					"Date": '2018-10-17',
-					"Projection": [
-						{
-							"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
-							"Color": "#795548",
-							"Description": "Phone",
-							"StartInUtc": "2018-10-17 12:00",
-							"EndInUtc": "2018-10-17 16:00"
-						},
-						{
-							"ShiftLayerIds": ["41ffe214-3384-4a80-a14c-a83800e23276"],
-							"Color": "#FFFFFF",
-							"Description": "Email",
-							"StartInUtc": "2018-10-17 16:00",
-							"EndInUtc": "2018-10-17 20:05"
-						}
-					],
-					"DayOff": null
-				};
-
-				var timeLine = target.Create([scheduleForPerson1, scheduleForPerson2], '2018-10-17', 'ETC/UTC').TimeLine;
-				expect(timeLine.HourPoints.length).toEqual(15);
-
-				var firstHourPoint = timeLine.HourPoints[0];
-				expect(firstHourPoint.TimeLabel).toEqual("7:00 AM");
-				expect(firstHourPoint.Position()).toEqual(0);
-
-				var lastHourPoint = timeLine.HourPoints[14];
-				expect(lastHourPoint.TimeLabel).toEqual("9:00 PM");
-				expect(lastHourPoint.Position()).toEqual(100);
-			});
-
-			it('should get correct time label on start date of DST', function () {
-				var scheduleForPerson1 = {
-					"PersonId": "person1",
-					"Name": "person1",
-					"Date": '2018-03-24',
-					"Projection": [
-						{
-							"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
-							"Color": "#795548",
-							"Description": "Phone",
-							"StartInUtc": "2018-03-24 22:00",
-							"EndInUtc": "2018-03-25 04:00",
-							"IsOvertime": false
-						}
-					],
-					"DayOff": null
-				};
-
-				var timelineVm = target.Create([scheduleForPerson1], '2018-03-25', 'Europe/Berlin').TimeLine;
-				expect(timelineVm.HourPoints.length).toEqual(7);
-
-				expect(timelineVm.HourPoints[0].TimeLabel).toEqual('12:00 AM');
-				expect(timelineVm.HourPoints[1].TimeLabel).toEqual('1:00 AM');
-				expect(timelineVm.HourPoints[2].TimeLabel).toEqual('3:00 AM');
-				expect(timelineVm.HourPoints[3].TimeLabel).toEqual('4:00 AM');
-				expect(timelineVm.HourPoints[4].TimeLabel).toEqual('5:00 AM');
-				expect(timelineVm.HourPoints[5].TimeLabel).toEqual('6:00 AM');
-				expect(timelineVm.HourPoints[6].TimeLabel).toEqual('7:00 AM');
-			});
-
-			it('should get correct time label on end date of DST', function () {
-				var scheduleForPerson1 = {
-					"PersonId": "person1",
-					"Name": "person1",
-					"Date": '2018-10-28',
-					"Projection": [
-						{
-							"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
-							"Color": "#795548",
-							"Description": "Phone",
-							"StartInUtc": "2018-10-27 22:00",
-							"EndInUtc": "2018-10-28 04:00",
-							"IsOvertime": false
-						}
-					],
-					"DayOff": null
-				};
-
-				var timelineVm = target.Create([scheduleForPerson1], '2018-10-28', 'Europe/London').TimeLine;
-				expect(timelineVm.HourPoints.length).toEqual(7);
-
-				expect(timelineVm.HourPoints[0].TimeLabel).toEqual('12:00 AM');
-				expect(timelineVm.HourPoints[1].TimeLabel).toEqual('1:00 AM');
-				expect(timelineVm.HourPoints[2].TimeLabel).toEqual('1:00 AM');
-				expect(timelineVm.HourPoints[3].TimeLabel).toEqual('2:00 AM');
-				expect(timelineVm.HourPoints[4].TimeLabel).toEqual('3:00 AM');
-				expect(timelineVm.HourPoints[5].TimeLabel).toEqual('4:00 AM');
-				expect(timelineVm.HourPoints[6].TimeLabel).toEqual('5:00 AM');
+					};
+				});
 			});
 		});
 
-		describe('in locale zh-CN', function () {
-			beforeAll(function () {
-				moment.locale('zh-CN');
-			});
+		beforeEach(inject(function (GroupScheduleFactory) {
+			target = GroupScheduleFactory;
+		}));
 
-			afterAll(function () {
-				moment.locale('en');
-			});
-
-			it('should get correct formatted underlying schedule timespan', function () {
-				var schedule = {
-					"PersonId": "221B-Baker-Street",
-					"Name": "Sherlock Holmes",
-					"Date": "2018-10-16",
-					"ContractTimeMinutes": 480,
-					"Projection": [
-						{
-							"ShiftLayerIds": ["222"],
-							"Color": "#80FF80",
-							"Description": "Email",
-							"StartInUtc": "2018-10-16 07:00",
-							"EndInUtc": "2018-10-16 11:00"
-						},
-						{
-							"ShiftLayerIds": ["333"],
-							"Color": "#80FF80",
-							"Description": "Email",
-							"StartInUtc": "2018-10-16 11:00",
-							"End": "2018-10-16 16:00"
-						}],
-					"DayOff": null,
-					"UnderlyingScheduleSummary": {
-						"PersonalActivities": [{
-							"Description": "personal activity",
-							"StartInUtc": '2018-10-16 10:00',
-							"EndInUtc": '2018-10-16 11:00'
-						}],
-						"PersonPartTimeAbsences": [{
-							"Description": "holiday",
-							"StartInUtc": '2018-10-16 11:30',
-							"EndInUtc": '2018-10-16 12:00'
-						}],
-						"PersonMeetings": [{
-							"Description": "administration",
-							"StartInUtc": '2018-10-16 14:00',
-							"EndInUtc": '2018-10-16 15:00'
-						}]
+		it('should get correct timeline', function () {
+			var scheduleForPerson1 = {
+				"PersonId": "person1",
+				"Name": "person1",
+				"Date": '2018-10-17',
+				"Projection": [
+					{
+						"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#795548",
+						"Description": "Phone",
+						"StartInUtc": "2018-10-17 08:00",
+						"EndInUtc": "2018-10-17 09:00",
+						"IsOvertime": false
+					},
+					{
+						"ShiftLayerIds": ["41ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#FFFFFF",
+						"Description": "Email",
+						"StartInUtc": "2018-10-17 09:00",
+						"EndInUtc": "2018-10-17 10:00"
 					}
-				};
-				var personScheduleVm = target.Create([schedule], '2018-10-16', 'ETC/UTC').Schedules[0];
-				expect(personScheduleVm.UnderlyingScheduleSummary.PersonalActivities[0].TimeSpan).toEqual("10:00 - 11:00");
-				expect(personScheduleVm.UnderlyingScheduleSummary.PersonPartTimeAbsences[0].TimeSpan).toEqual("11:30 - 12:00");
-				expect(personScheduleVm.UnderlyingScheduleSummary.PersonMeetings[0].TimeSpan).toEqual("14:00 - 15:00");
-			});
+				],
+				"DayOff": null
+			};
 
-			it("should display 1 extra hour line when schedule starts or end at hour point", function () {
-				var scheduleForPerson1 = {
-					"PersonId": "person1",
-					"Name": "person1",
-					"Date": '2018-10-17',
-					"Projection": [
-						{
-							"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
-							"Color": "#795548",
-							"Description": "Phone",
-							"StartInUtc": "2018-10-17 08:00",
-							"EndInUtc": "2018-10-17 09:00",
-							"IsOvertime": false
-						},
-						{
-							"ShiftLayerIds": ["41ffe214-3384-4a80-a14c-a83800e23276"],
-							"Color": "#FFFFFF",
-							"Description": "Email",
-							"StartInUtc": "2018-10-17 09:00",
-							"EndInUtc": "2018-10-17 10:00"
+			var timelineVm = target.Create([scheduleForPerson1], '2018-10-17', 'ETC/UTC').TimeLine;
+
+			expect(timelineVm.Offset.format("YYYY-MM-DD HH:mm:ss")).toEqual("2018-10-17 00:00:00");
+			expect(timelineVm.StartMinute).toEqual(420);
+			expect(timelineVm.EndMinute).toEqual(660);
+			expect(timelineVm.LengthPercentPerMinute).toEqual(new Number(100 / (660 - 420)).toFixed(3));
+		});
+
+		it("should display 1 extra hour line when schedule starts or ends at hour point", function () {
+			var scheduleForPerson1 = {
+				"PersonId": "person1",
+				"Name": "person1",
+				"Date": '2018-10-17',
+				"Projection": [
+					{
+						"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#795548",
+						"Description": "Phone",
+						"StartInUtc": "2018-10-17 08:00",
+						"EndInUtc": "2018-10-17 09:00",
+						"IsOvertime": false
+					},
+					{
+						"ShiftLayerIds": ["41ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#FFFFFF",
+						"Description": "Email",
+						"StartInUtc": "2018-10-17 09:00",
+						"EndInUtc": "2018-10-17 10:00"
+					}
+				],
+				"DayOff": null
+			};
+
+			var scheduleForPerson2 = {
+				"PersonId": "person2",
+				"Name": "person2",
+				"Date": '2018-10-17',
+				"Projection": [
+					{
+						"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#795548",
+						"Description": "Phone",
+						"StartInUtc": "2018-10-17 12:00",
+						"EndInUtc": "2018-10-17 16:00"
+					},
+					{
+						"ShiftLayerIds": ["41ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#FFFFFF",
+						"Description": "Email",
+						"StartInUtc": "2018-10-17 16:00",
+						"EndInUtc": "2018-10-17 20:00"
+					}
+				],
+				"DayOff": null
+			};
+
+			var timelineVm = target.Create([scheduleForPerson1, scheduleForPerson2], '2018-10-17', 'ETC/UTC').TimeLine;
+
+			expect(timelineVm.HourPoints.length).toEqual(15);
+
+			var firstHourPoint = timelineVm.HourPoints[0];
+			expect(firstHourPoint.TimeLabel).toEqual("7:00 AM");
+			expect(firstHourPoint.Position()).toEqual(0);
+
+			var lastHourPoint = timelineVm.HourPoints[timelineVm.HourPoints.length - 1];
+			expect(lastHourPoint.TimeLabel).toEqual("9:00 PM");
+			expect(lastHourPoint.Position()).toEqual(840 * timelineVm.LengthPercentPerMinute);
+		});
+
+		it('should show all time labels when time range length is less or equal to 16 hours', function () {
+			var scheduleForPerson1 = {
+				"PersonId": "person1",
+				"Name": "person1",
+				"Date": '2018-10-18',
+				"Projection": [
+					{
+						"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#795548",
+						"Description": "Phone",
+						"StartInUtc": "2018-10-18 08:00",
+						"EndInUtc": "2018-10-18 15:00",
+						"IsOvertime": false
+					}
+				],
+				"DayOff": null
+			};
+
+			var timelineVm = target.Create([scheduleForPerson1], '2018-10-18', 'etc/UTC').TimeLine;
+			expect(timelineVm.HourPoints.length).toEqual(10);
+
+			expect(timelineVm.HourPoints[0].TimeLabel).toEqual('7:00 AM');
+			expect(timelineVm.HourPoints[0].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[1].TimeLabel).toEqual('8:00 AM');
+			expect(timelineVm.HourPoints[1].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[2].TimeLabel).toEqual('9:00 AM');
+			expect(timelineVm.HourPoints[2].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[3].TimeLabel).toEqual('10:00 AM');
+			expect(timelineVm.HourPoints[3].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[4].TimeLabel).toEqual('11:00 AM');
+			expect(timelineVm.HourPoints[4].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[5].TimeLabel).toEqual('12:00 PM');
+			expect(timelineVm.HourPoints[5].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[6].TimeLabel).toEqual('1:00 PM');
+			expect(timelineVm.HourPoints[6].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[7].TimeLabel).toEqual('2:00 PM');
+			expect(timelineVm.HourPoints[7].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[8].TimeLabel).toEqual('3:00 PM');
+			expect(timelineVm.HourPoints[8].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[9].TimeLabel).toEqual('4:00 PM');
+			expect(timelineVm.HourPoints[9].IsLabelVisible).toEqual(true);
+		});
+
+		it('should show interval time labels when schedules length is larger than 16 hours', function () {
+			var scheduleForPerson1 = {
+				"PersonId": "person1",
+				"Name": "person1",
+				"Date": '2018-10-18',
+				"Projection": [
+					{
+						"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#795548",
+						"Description": "Phone",
+						"StartInUtc": "2018-10-18 04:00",
+						"EndInUtc": "2018-10-18 21:00",
+						"IsOvertime": false
+					}
+				],
+				"DayOff": null
+			};
+
+			var timelineVm = target.Create([scheduleForPerson1], '2018-10-18', 'etc/UTC').TimeLine;
+			expect(timelineVm.HourPoints.length).toEqual(20);
+
+			expect(timelineVm.HourPoints[0].TimeLabel).toEqual('3:00 AM');
+			expect(timelineVm.HourPoints[0].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[1].TimeLabel).toEqual('4:00 AM');
+			expect(timelineVm.HourPoints[1].IsLabelVisible).toEqual(false);
+
+			expect(timelineVm.HourPoints[2].TimeLabel).toEqual('5:00 AM');
+			expect(timelineVm.HourPoints[2].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[3].TimeLabel).toEqual('6:00 AM');
+			expect(timelineVm.HourPoints[3].IsLabelVisible).toEqual(false);
+
+			expect(timelineVm.HourPoints[4].TimeLabel).toEqual('7:00 AM');
+			expect(timelineVm.HourPoints[4].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[5].TimeLabel).toEqual('8:00 AM');
+			expect(timelineVm.HourPoints[5].IsLabelVisible).toEqual(false);
+
+			expect(timelineVm.HourPoints[6].TimeLabel).toEqual('9:00 AM');
+			expect(timelineVm.HourPoints[6].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[7].TimeLabel).toEqual('10:00 AM');
+			expect(timelineVm.HourPoints[7].IsLabelVisible).toEqual(false);
+
+			expect(timelineVm.HourPoints[8].TimeLabel).toEqual('11:00 AM');
+			expect(timelineVm.HourPoints[8].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[9].TimeLabel).toEqual('12:00 PM');
+			expect(timelineVm.HourPoints[9].IsLabelVisible).toEqual(false);
+
+			expect(timelineVm.HourPoints[10].TimeLabel).toEqual('1:00 PM');
+			expect(timelineVm.HourPoints[10].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[11].TimeLabel).toEqual('2:00 PM');
+			expect(timelineVm.HourPoints[11].IsLabelVisible).toEqual(false);
+
+			expect(timelineVm.HourPoints[12].TimeLabel).toEqual('3:00 PM');
+			expect(timelineVm.HourPoints[12].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[13].TimeLabel).toEqual('4:00 PM');
+			expect(timelineVm.HourPoints[13].IsLabelVisible).toEqual(false);
+
+			expect(timelineVm.HourPoints[14].TimeLabel).toEqual('5:00 PM');
+			expect(timelineVm.HourPoints[14].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[15].TimeLabel).toEqual('6:00 PM');
+			expect(timelineVm.HourPoints[15].IsLabelVisible).toEqual(false);
+
+			expect(timelineVm.HourPoints[16].TimeLabel).toEqual('7:00 PM');
+			expect(timelineVm.HourPoints[16].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[17].TimeLabel).toEqual('8:00 PM');
+			expect(timelineVm.HourPoints[17].IsLabelVisible).toEqual(false);
+
+			expect(timelineVm.HourPoints[18].TimeLabel).toEqual('9:00 PM');
+			expect(timelineVm.HourPoints[18].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[19].TimeLabel).toEqual('10:00 PM');
+			expect(timelineVm.HourPoints[19].IsLabelVisible).toEqual(false);
+		});
+
+		it("should get correct time line 8:00 to 16:00 when shift is empty or day off", function () {
+			var scheduleForPerson1 = {
+				"PersonId": "person1",
+				"Name": "person1",
+				"Date": '2018-10-18',
+				"Projection": [],
+				"DayOff": null
+			};
+
+			var scheduleForPerson2 = {
+				"PersonId": "person1",
+				"Name": "person1",
+				"Date": '2018-10-18',
+				"Projection": [],
+				"DayOff": {
+					"DayOffName": "Day off",
+					"StartInUtc": "2018-10-18 00:00",
+					"EndInUtc": "2018-10-19 00:00"
+				}
+			};
+
+			var timelineVm = target.Create([scheduleForPerson1, scheduleForPerson2], '2018-10-18', 'ETC/UTC').TimeLine;
+
+			expect(timelineVm.StartMinute).toEqual(480);
+			expect(timelineVm.EndMinute).toEqual(960);
+
+			expect(timelineVm.HourPoints.length).toBe(9);
+
+			expect(timelineVm.HourPoints[0].TimeLabel).toEqual('8:00 AM');
+			expect(timelineVm.HourPoints[0].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[1].TimeLabel).toEqual('9:00 AM');
+			expect(timelineVm.HourPoints[1].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[2].TimeLabel).toEqual('10:00 AM');
+			expect(timelineVm.HourPoints[2].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[3].TimeLabel).toEqual('11:00 AM');
+			expect(timelineVm.HourPoints[3].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[4].TimeLabel).toEqual('12:00 PM');
+			expect(timelineVm.HourPoints[4].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[5].TimeLabel).toEqual('1:00 PM');
+			expect(timelineVm.HourPoints[5].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[6].TimeLabel).toEqual('2:00 PM');
+			expect(timelineVm.HourPoints[6].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[7].TimeLabel).toEqual('3:00 PM');
+			expect(timelineVm.HourPoints[7].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[8].TimeLabel).toEqual('4:00 PM');
+			expect(timelineVm.HourPoints[8].IsLabelVisible).toEqual(true);
+
+		});
+
+		it("should get time line on next day when having shift starts early than 6:00 on the next day ", function () {
+			var scheduleForPerson1 = {
+				"PersonId": "person1",
+				"Name": "person1",
+				"Date": '2018-10-18',
+				"Projection": [
+					{
+						"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#795548",
+						"Description": "Phone",
+						"StartInUtc": "2018-10-18 04:00",
+						"EndInUtc": "2018-10-18 07:00",
+						"IsOvertime": false
+					},
+					{
+						"ShiftLayerIds": ["41ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#FFFFFF",
+						"Description": "Email",
+						"StartInUtc": "2018-10-18 07:00",
+						"EndInUtc": "2018-10-18 11:00"
+					}
+				],
+				"DayOff": null
+			};
+
+			var timelineVm = target.Create([scheduleForPerson1], '2018-10-17', 'ETC/UTC').TimeLine;
+
+			expect(timelineVm.StartMinute).toEqual(480);
+			expect(timelineVm.EndMinute).toEqual(1800);
+
+			expect(timelineVm.HourPoints.length).toBe(23);
+
+			expect(timelineVm.HourPoints[0].TimeLabel).toEqual('8:00 AM');
+			expect(timelineVm.HourPoints[0].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[1].TimeLabel).toEqual('9:00 AM');
+			expect(timelineVm.HourPoints[1].IsLabelVisible).toEqual(false);
+
+			expect(timelineVm.HourPoints[2].TimeLabel).toEqual('10:00 AM');
+			expect(timelineVm.HourPoints[2].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[3].TimeLabel).toEqual('11:00 AM');
+			expect(timelineVm.HourPoints[3].IsLabelVisible).toEqual(false);
+
+			expect(timelineVm.HourPoints[4].TimeLabel).toEqual('12:00 PM');
+			expect(timelineVm.HourPoints[4].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[5].TimeLabel).toEqual('1:00 PM');
+			expect(timelineVm.HourPoints[5].IsLabelVisible).toEqual(false);
+
+			expect(timelineVm.HourPoints[6].TimeLabel).toEqual('2:00 PM');
+			expect(timelineVm.HourPoints[6].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[7].TimeLabel).toEqual('3:00 PM');
+			expect(timelineVm.HourPoints[7].IsLabelVisible).toEqual(false);
+
+			expect(timelineVm.HourPoints[8].TimeLabel).toEqual('4:00 PM');
+			expect(timelineVm.HourPoints[8].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[9].TimeLabel).toEqual('5:00 PM');
+			expect(timelineVm.HourPoints[9].IsLabelVisible).toEqual(false);
+
+			expect(timelineVm.HourPoints[10].TimeLabel).toEqual('6:00 PM');
+			expect(timelineVm.HourPoints[10].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[11].TimeLabel).toEqual('7:00 PM');
+			expect(timelineVm.HourPoints[11].IsLabelVisible).toEqual(false);
+
+			expect(timelineVm.HourPoints[12].TimeLabel).toEqual('8:00 PM');
+			expect(timelineVm.HourPoints[12].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[13].TimeLabel).toEqual('9:00 PM');
+			expect(timelineVm.HourPoints[13].IsLabelVisible).toEqual(false);
+
+			expect(timelineVm.HourPoints[14].TimeLabel).toEqual('10:00 PM');
+			expect(timelineVm.HourPoints[14].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[15].TimeLabel).toEqual('11:00 PM');
+			expect(timelineVm.HourPoints[15].IsLabelVisible).toEqual(false);
+
+			expect(timelineVm.HourPoints[16].TimeLabel).toEqual('12:00 AM +1');
+			expect(timelineVm.HourPoints[16].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[17].TimeLabel).toEqual('1:00 AM +1');
+			expect(timelineVm.HourPoints[17].IsLabelVisible).toEqual(false);
+
+			expect(timelineVm.HourPoints[18].TimeLabel).toEqual('2:00 AM +1');
+			expect(timelineVm.HourPoints[18].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[19].TimeLabel).toEqual('3:00 AM +1');
+			expect(timelineVm.HourPoints[19].IsLabelVisible).toEqual(false);
+
+			expect(timelineVm.HourPoints[20].TimeLabel).toEqual('4:00 AM +1');
+			expect(timelineVm.HourPoints[20].IsLabelVisible).toEqual(true);
+
+			expect(timelineVm.HourPoints[21].TimeLabel).toEqual('5:00 AM +1');
+			expect(timelineVm.HourPoints[21].IsLabelVisible).toEqual(false);
+
+			expect(timelineVm.HourPoints[22].TimeLabel).toEqual('6:00 AM +1');
+			expect(timelineVm.HourPoints[22].IsLabelVisible).toEqual(true);
+		});
+
+		it("should display closest earlier hour line for start and later hour for end when they are not at hour point", function () {
+			var scheduleForPerson1 = {
+				"PersonId": "person1",
+				"Name": "person1",
+				"Date": '2018-10-17',
+				"Projection": [
+					{
+						"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#795548",
+						"Description": "Phone",
+						"StartInUtc": "2018-10-17 07:05",
+						"EndInUtc": "2018-10-17 09:00",
+						"IsOvertime": false
+					},
+					{
+						"ShiftLayerIds": ["41ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#FFFFFF",
+						"Description": "Email",
+						"StartInUtc": "2018-10-17 09:00",
+						"EndInUtc": "2018-10-17 10:00"
+					}
+				],
+				"DayOff": null
+			};
+
+			var scheduleForPerson2 = {
+				"PersonId": "person2",
+				"Name": "person2",
+				"Date": '2018-10-17',
+				"Projection": [
+					{
+						"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#795548",
+						"Description": "Phone",
+						"StartInUtc": "2018-10-17 12:00",
+						"EndInUtc": "2018-10-17 16:00"
+					},
+					{
+						"ShiftLayerIds": ["41ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#FFFFFF",
+						"Description": "Email",
+						"StartInUtc": "2018-10-17 16:00",
+						"EndInUtc": "2018-10-17 20:05"
+					}
+				],
+				"DayOff": null
+			};
+
+			var timeLine = target.Create([scheduleForPerson1, scheduleForPerson2], '2018-10-17', 'ETC/UTC').TimeLine;
+			expect(timeLine.HourPoints.length).toEqual(15);
+
+			var firstHourPoint = timeLine.HourPoints[0];
+			expect(firstHourPoint.TimeLabel).toEqual("7:00 AM");
+			expect(firstHourPoint.Position()).toEqual(0);
+
+			var lastHourPoint = timeLine.HourPoints[14];
+			expect(lastHourPoint.TimeLabel).toEqual("9:00 PM");
+			expect(lastHourPoint.Position()).toEqual(840 * timeLine.LengthPercentPerMinute);
+		});
+
+		it('should get correct time label on start date of DST', function () {
+			var scheduleForPerson1 = {
+				"PersonId": "person1",
+				"Name": "person1",
+				"Date": '2018-03-24',
+				"Projection": [
+					{
+						"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#795548",
+						"Description": "Phone",
+						"StartInUtc": "2018-03-24 22:00",
+						"EndInUtc": "2018-03-25 04:00",
+						"IsOvertime": false
+					}
+				],
+				"DayOff": null
+			};
+
+			var timelineVm = target.Create([scheduleForPerson1], '2018-03-25', 'Europe/Berlin').TimeLine;
+			expect(timelineVm.HourPoints.length).toEqual(7);
+
+			expect(timelineVm.HourPoints[0].TimeLabel).toEqual('12:00 AM');
+			expect(timelineVm.HourPoints[1].TimeLabel).toEqual('1:00 AM');
+			expect(timelineVm.HourPoints[2].TimeLabel).toEqual('3:00 AM');
+			expect(timelineVm.HourPoints[3].TimeLabel).toEqual('4:00 AM');
+			expect(timelineVm.HourPoints[4].TimeLabel).toEqual('5:00 AM');
+			expect(timelineVm.HourPoints[5].TimeLabel).toEqual('6:00 AM');
+			expect(timelineVm.HourPoints[6].TimeLabel).toEqual('7:00 AM');
+		});
+
+		it('should get correct time label on end date of DST', function () {
+			var scheduleForPerson1 = {
+				"PersonId": "person1",
+				"Name": "person1",
+				"Date": '2018-10-28',
+				"Projection": [
+					{
+						"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#795548",
+						"Description": "Phone",
+						"StartInUtc": "2018-10-27 22:00",
+						"EndInUtc": "2018-10-28 04:00",
+						"IsOvertime": false
+					}
+				],
+				"DayOff": null
+			};
+
+			var timelineVm = target.Create([scheduleForPerson1], '2018-10-28', 'Europe/London').TimeLine;
+			expect(timelineVm.HourPoints.length).toEqual(7);
+
+			expect(timelineVm.HourPoints[0].TimeLabel).toEqual('12:00 AM');
+			expect(timelineVm.HourPoints[1].TimeLabel).toEqual('1:00 AM');
+			expect(timelineVm.HourPoints[2].TimeLabel).toEqual('1:00 AM');
+			expect(timelineVm.HourPoints[3].TimeLabel).toEqual('2:00 AM');
+			expect(timelineVm.HourPoints[4].TimeLabel).toEqual('3:00 AM');
+			expect(timelineVm.HourPoints[5].TimeLabel).toEqual('4:00 AM');
+			expect(timelineVm.HourPoints[6].TimeLabel).toEqual('5:00 AM');
+		});
+	});
+
+	describe('in locale zh-CN', function () {
+		beforeAll(function () {
+			moment.locale('zh-CN');
+		});
+
+		afterAll(function () {
+			moment.locale('en');
+		});
+
+		beforeEach(function () {
+			module("wfm.teamSchedule");
+			module(function ($provide) {
+				$provide.service('CurrentUserInfo', function () {
+					return {
+						CurrentUserInfo: function () {
+							return {
+								DefaultTimeZone: 'Asia/Hong_Kong',
+								DateFormatLocale: 'zh-CN',
+								FirstDayOfWeek: 1,
+								DateTimeFormat: {
+									ShowMeridian: false,
+									ShortTimePattern: 'HH:mm',
+									AMDesignator: '上午',
+									PMDesignator: '下午'
+								}
+
+							};
 						}
-					],
-					"DayOff": null
-				};
-
-				var scheduleForPerson2 = {
-					"PersonId": "person2",
-					"Name": "person2",
-					"Date": '2018-10-17',
-					"Projection": [
-						{
-							"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
-							"Color": "#795548",
-							"Description": "Phone",
-							"StartInUtc": "2018-10-17 12:00",
-							"EndInUtc": "2018-10-17 16:00"
-						},
-						{
-							"ShiftLayerIds": ["41ffe214-3384-4a80-a14c-a83800e23276"],
-							"Color": "#FFFFFF",
-							"Description": "Email",
-							"StartInUtc": "2018-10-17 16:00",
-							"EndInUtc": "2018-10-17 20:00"
-						}
-					],
-					"DayOff": null
-				};
-
-				var timelineVm = target.Create([scheduleForPerson1, scheduleForPerson2], '2018-10-17', 'ETC/UTC').TimeLine;
-
-				expect(timelineVm.HourPoints.length).toEqual(15);
-
-				var firstHourPoint = timelineVm.HourPoints[0];
-				expect(firstHourPoint.TimeLabel).toEqual("07:00");
-				expect(firstHourPoint.Position()).toEqual(0);
-
-				var lastHourPoint = timelineVm.HourPoints[timelineVm.HourPoints.length - 1];
-				expect(lastHourPoint.TimeLabel).toEqual("21:00");
-				expect(lastHourPoint.Position()).toEqual(100);
+					};
+				});
 			});
+		});
+
+		beforeEach(inject(function (GroupScheduleFactory) {
+			target = GroupScheduleFactory;
+		}));
+
+		it('should get correct formatted underlying schedule timespan', function () {
+			var schedule = {
+				"PersonId": "221B-Baker-Street",
+				"Name": "Sherlock Holmes",
+				"Date": "2018-10-16",
+				"ContractTimeMinutes": 480,
+				"Projection": [
+					{
+						"ShiftLayerIds": ["222"],
+						"Color": "#80FF80",
+						"Description": "Email",
+						"StartInUtc": "2018-10-16 07:00",
+						"EndInUtc": "2018-10-16 11:00"
+					},
+					{
+						"ShiftLayerIds": ["333"],
+						"Color": "#80FF80",
+						"Description": "Email",
+						"StartInUtc": "2018-10-16 11:00",
+						"End": "2018-10-16 16:00"
+					}],
+				"DayOff": null,
+				"UnderlyingScheduleSummary": {
+					"PersonalActivities": [{
+						"Description": "personal activity",
+						"StartInUtc": '2018-10-16 10:00',
+						"EndInUtc": '2018-10-16 11:00'
+					}],
+					"PersonPartTimeAbsences": [{
+						"Description": "holiday",
+						"StartInUtc": '2018-10-16 11:30',
+						"EndInUtc": '2018-10-16 12:00'
+					}],
+					"PersonMeetings": [{
+						"Description": "administration",
+						"StartInUtc": '2018-10-16 14:00',
+						"EndInUtc": '2018-10-16 15:00'
+					}]
+				}
+			};
+			var personScheduleVm = target.Create([schedule], '2018-10-16', 'ETC/UTC').Schedules[0];
+			expect(personScheduleVm.UnderlyingScheduleSummary.PersonalActivities[0].TimeSpan).toEqual("10:00 - 11:00");
+			expect(personScheduleVm.UnderlyingScheduleSummary.PersonPartTimeAbsences[0].TimeSpan).toEqual("11:30 - 12:00");
+			expect(personScheduleVm.UnderlyingScheduleSummary.PersonMeetings[0].TimeSpan).toEqual("14:00 - 15:00");
+		});
+
+		it("should display 1 extra hour line when schedule starts or end at hour point", function () {
+			var scheduleForPerson1 = {
+				"PersonId": "person1",
+				"Name": "person1",
+				"Date": '2018-10-17',
+				"Projection": [
+					{
+						"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#795548",
+						"Description": "Phone",
+						"StartInUtc": "2018-10-17 08:00",
+						"EndInUtc": "2018-10-17 09:00",
+						"IsOvertime": false
+					},
+					{
+						"ShiftLayerIds": ["41ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#FFFFFF",
+						"Description": "Email",
+						"StartInUtc": "2018-10-17 09:00",
+						"EndInUtc": "2018-10-17 10:00"
+					}
+				],
+				"DayOff": null
+			};
+
+			var scheduleForPerson2 = {
+				"PersonId": "person2",
+				"Name": "person2",
+				"Date": '2018-10-17',
+				"Projection": [
+					{
+						"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#795548",
+						"Description": "Phone",
+						"StartInUtc": "2018-10-17 12:00",
+						"EndInUtc": "2018-10-17 16:00"
+					},
+					{
+						"ShiftLayerIds": ["41ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#FFFFFF",
+						"Description": "Email",
+						"StartInUtc": "2018-10-17 16:00",
+						"EndInUtc": "2018-10-17 20:00"
+					}
+				],
+				"DayOff": null
+			};
+
+			var timelineVm = target.Create([scheduleForPerson1, scheduleForPerson2], '2018-10-17', 'ETC/UTC').TimeLine;
+
+			expect(timelineVm.HourPoints.length).toEqual(15);
+
+			var firstHourPoint = timelineVm.HourPoints[0];
+			expect(firstHourPoint.TimeLabel).toEqual("07:00");
+			expect(firstHourPoint.Position()).toEqual(0);
+
+			var lastHourPoint = timelineVm.HourPoints[timelineVm.HourPoints.length - 1];
+			expect(lastHourPoint.TimeLabel).toEqual("21:00");
+			expect(lastHourPoint.Position()).toEqual(840 * timelineVm.LengthPercentPerMinute);
 		});
 	});
 })();

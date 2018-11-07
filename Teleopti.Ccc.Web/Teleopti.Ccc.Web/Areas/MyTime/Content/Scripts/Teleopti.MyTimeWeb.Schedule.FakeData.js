@@ -289,22 +289,10 @@
 		return result;
 	}
 
-	var userTexts = {
-		HideStaffingInfo: 'HideStaffingInfo',
-		XRequests: 'XRequests',
-		Fair: 'Fair',
-		ShowAbsenceProbability: 'ShowAbsenceProbability',
-		ProbabilityToGetAbsenceColon: 'ProbabilityToGetAbsenceColon',
-		ProbabilityToGetOvertimeColon: 'ProbabilityToGetOvertimeColon',
-		StaffingInfo: 'StaffingInfo',
-		ShowOvertimeProbability: 'ShowOvertimeProbability'
-	};
-
 	return {
 		getFakeScheduleData: getFakeScheduleData,
 		getFakeProbabilityData: getFakeProbabilityData,
 		fakeProbabilitiesDataLowBeforeTwelveAndHighAfter: fakeProbabilitiesDataLowBeforeTwelveAndHighAfter,
-		userTexts: userTexts,
 		fakeAddRequestViewModel: fakeAddRequestViewModel
 	};
 })(jQuery);

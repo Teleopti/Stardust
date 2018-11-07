@@ -21,7 +21,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.WebTest.Core.IoC;
-using Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		protected override void Isolate(IIsolate isolate)
 		{
 			base.Isolate(isolate);
-			isolate.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
+			isolate.UseTestDouble(new FakeCommonAgentNameProvider("{LastName} {FirstName}")).For<ICommonAgentNameProvider>();
 			isolate.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
 			isolate.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
 			isolate.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
@@ -920,8 +919,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(2);
 			var possibleSchedules = result.PossibleTradeSchedules.ToList();
 
-			possibleSchedules[0].Name.Should().Be.EqualTo("person3 dayoff");
-			possibleSchedules[1].Name.Should().Be.EqualTo("person4 empty");
+			possibleSchedules[0].Name.Should().Be.EqualTo("dayoff person3");
+			possibleSchedules[1].Name.Should().Be.EqualTo("empty person4");
 		}
 
 		[Test]

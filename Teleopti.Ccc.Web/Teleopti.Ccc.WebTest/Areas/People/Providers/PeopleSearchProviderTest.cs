@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 		private IOptionalColumnRepository optionalColumnRepository;
 		private IPermissionProvider permissionProvider;
 		private FakeCurrentBusinessUnit currentBusinessUnit;
+		private FakeLoggedOnUser fakeLoggedOnUser;
 
 		[SetUp]
 		public void Setup()
@@ -38,8 +39,9 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			scenarioRepository.Has("Default");
 			currentBusinessUnit = new FakeCurrentBusinessUnit();
 			currentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("bu"));
+			fakeLoggedOnUser = new FakeLoggedOnUser();
 			target = new PeopleSearchProvider(searchRepository, personRepository,
-				new FakePermissionProvider(), optionalColumnRepository, currentBusinessUnit);
+				new FakePermissionProvider(), optionalColumnRepository, currentBusinessUnit, fakeLoggedOnUser);
 		}
 
 		[Test]
@@ -140,7 +142,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 		{
 			personRepository = new FakePersonRepositoryLegacy();
 			target = new PeopleSearchProvider(searchRepository, personRepository,
-				new FakePermissionProvider(), optionalColumnRepository, currentBusinessUnit);
+				new FakePermissionProvider(), optionalColumnRepository, currentBusinessUnit, fakeLoggedOnUser);
 
 			var searchCriteria = new Dictionary<PersonFinderField, string>
 			{

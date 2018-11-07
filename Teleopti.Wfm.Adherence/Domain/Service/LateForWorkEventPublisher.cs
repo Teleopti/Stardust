@@ -26,11 +26,12 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 				_eventPublisher.Publish(new PersonArrivedLateForWorkEvent
 				{
 					PersonId = context.PersonId,
+					Timestamp = context.Time,
+					BelongsToDate = context.Schedule.BelongsToDate,
 					ActivityName = context.Schedule.CurrentActivityName(),
 					ActivityColor = context.Schedule.CurrentActivity()?.DisplayColor,
 					StateName = context.State.StateGroupName(),
 					ShiftStart = context.Schedule.CurrentShiftStartTime,
-					Timestamp = context.Time,
 					RuleName = context.State.RuleName(),
 					RuleColor = context.State.RuleDisplayColor(),
 					Adherence = context.Adherence.Adherence()

@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
@@ -39,11 +40,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private readonly TimeSpan _averageWorkTimePerDay = new TimeSpan(8, 0, 0);
         IScenario _scenario;
 	    private IWorkShiftMinMaxCalculator workShiftMinMaxCalculator;
+		private IDisposable auth;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"),
-		 SetUp]
+		[SetUp]
 		public void Setup()
 		{
+			auth = CurrentAuthorization.ThreadlyUse(new FullPermission());
 			_dateTime = new DateTime(2009, 12, 12, 0, 0, 0, DateTimeKind.Utc);
 			_dateOnly = new DateOnly(2009, 12, 12);
 			_person = PersonFactory.CreatePersonWithPersonPeriod(_dateOnly, new List<ISkill>());
@@ -66,7 +68,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				new Dictionary<IPerson, IScheduleRange>());
 			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_person, dic.Scenario, _dateOnly,
 				new TimeSpan(), new TimeSpan(), new TimeSpan());
-			var range = new ScheduleRange(dic, dayOff, new PersistableScheduleDataPermissionChecker());
+			var range = new ScheduleRange(dic, dayOff, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
 			range.Add(dayOff);
 			dic.AddTestItem(_person, range);
 			_stateHolder.Schedules = dic;
@@ -85,7 +87,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			workShiftMinMaxCalculator = new WorkShiftMinMaxCalculator(new PossibleMinMaxWorkShiftLengthExtractor(new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation()), new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate()))),new RuleSetBagExtractorProvider()),new SchedulePeriodTargetTimeCalculator(), new WorkShiftWeekMinMaxCalculator() );
 			_target = new AgentInfoHelper(_person, _dateOnly, _stateHolder, _schedulingOptions, _matrixListFactory, workShiftMinMaxCalculator);
 			_target.SchedulePeriodData(true);
+		}
 
+		[TearDown]
+		public void Teardown()
+		{
+			auth?.Dispose();
 		}
 
 		[Test]
@@ -273,7 +280,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IPersonAssignment assignment = getPersonAssignment();
 
             //lägg på schemadata på range
-            var range = new ScheduleRange(dic, parameters, new PersistableScheduleDataPermissionChecker());
+            var range = new ScheduleRange(dic, parameters, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
             range.Add(assignment);
             return range;
         }

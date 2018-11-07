@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void Setup()
 		{
 			_scenario = ScenarioFactory.CreateScenarioAggregate();
-			_permissionChecker = new PersistableScheduleDataPermissionChecker();
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(new FullPermission());
 
 			_person = PersonFactory.CreatePerson();
 			_nightlyRest = new TimeSpan(8, 0, 0);
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var dic = new ScheduleDictionaryForTest(_scenario, new ScheduleDateTimePeriod(_schedulePeriod),
 				new Dictionary<IPerson, IScheduleRange>());
 			_scheduleRange = new ScheduleRange(dic, new ScheduleParameters(_scenario, _person, _schedulePeriod),
-				_permissionChecker);
+				_permissionChecker,new FullPermission());
 			_target = new NightlyRestRule();
 		}
 
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			_person.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1),
 				new PersonContract(_contract, new PartTimePercentage("sdf"), new ContractSchedule("sdf")),
 				TeamFactory.CreateSimpleTeam()));
-			_person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+			_person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 
 			var pointInTime = new DateOnly(2007, 8, 2);
 			var start = new DateTime(2007, 8, 2, 1, 0, 0, DateTimeKind.Utc);

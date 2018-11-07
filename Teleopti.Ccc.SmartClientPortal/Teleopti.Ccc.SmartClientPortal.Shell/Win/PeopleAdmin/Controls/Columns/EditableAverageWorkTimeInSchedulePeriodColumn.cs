@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls.Columns
                 {
                     _propertyReflector.SetValue(dataItem, BindingProperty, (TimeSpan) e.Style.CellValue);
 
-                    if ((TimeSpan) e.Style.CellValue == TimeSpan.Zero)
+                    if ((TimeSpan) e.Style.CellValue <= TimeSpan.Zero)
                     {
                         PeopleAdminHelper.ResetAverageWorkTimePerDay(dataItem);
                     }

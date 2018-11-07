@@ -4,8 +4,8 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -21,6 +21,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
+	[FullPermissions]
 	public class BlockSchedulingExistingShiftNotMatchingEachOtherHintForSchedulePeriodTest
 	{
 		public CheckScheduleHints Target;
@@ -57,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment2);
 
 			var result =
-				Target.Execute(new HintInput(currentSchedule, new[] {agent}, planningPeriod,
+				Target.Execute(new SchedulePostHintInput(currentSchedule, new[] {agent}, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment2);
 
 			var result =
-				Target.Execute(new HintInput(currentSchedule, new[] {agent}, planningPeriod,
+				Target.Execute(new SchedulePostHintInput(currentSchedule, new[] {agent}, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
@@ -129,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment2);
 
 			var result =
-				Target.Execute(new HintInput(currentSchedule, new[] { agent }, planningPeriod,
+				Target.Execute(new SchedulePostHintInput(currentSchedule, new[] { agent }, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
@@ -165,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment2);
 
 			var result =
-				Target.Execute(new HintInput(currentSchedule, new[] {agent}, planningPeriod,
+				Target.Execute(new SchedulePostHintInput(currentSchedule, new[] {agent}, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
@@ -202,7 +203,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment2);
 
 			var result =
-				Target.Execute(new HintInput(currentSchedule, new[] {agent}, planningPeriod,
+				Target.Execute(new SchedulePostHintInput(currentSchedule, new[] {agent}, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
@@ -239,7 +240,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment2);
 
 			var result =
-				Target.Execute(new HintInput(currentSchedule, new[] {agent}, planningPeriod,
+				Target.Execute(new SchedulePostHintInput(currentSchedule, new[] {agent}, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
@@ -277,7 +278,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment2);
 
 			var result =
-				Target.Execute(new HintInput(currentSchedule, new[] { agent }, planningPeriod,
+				Target.Execute(new SchedulePostHintInput(currentSchedule, new[] { agent }, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
@@ -310,7 +311,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment);
 
 			var result =
-				Target.Execute(new HintInput(currentSchedule, new[] { agent }, planningPeriod,
+				Target.Execute(new SchedulePostHintInput(currentSchedule, new[] { agent }, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,
@@ -343,7 +344,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment);
 			currentSchedule.AddPersonAssignment(personAssignmentWithoutShiftCategory);
 
-			Target.Execute(new HintInput(currentSchedule, new[] { agent }, planningPeriod,
+			Target.Execute(new SchedulePostHintInput(currentSchedule, new[] { agent }, planningPeriod,
 				new FixedBlockPreferenceProvider(new ExtraPreferences
 				{
 					UseTeamBlockOption = true,
@@ -373,7 +374,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var personAssignment = new PersonAssignment(agent, scenario, startDate).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory);
 			currentSchedule.AddPersonAssignment(personAssignment);
 
-			Target.Execute(new HintInput(currentSchedule, new[] { agent }, planningPeriod,
+			Target.Execute(new SchedulePostHintInput(currentSchedule, new[] { agent }, planningPeriod,
 				new FixedBlockPreferenceProvider(new ExtraPreferences
 				{
 					UseTeamBlockOption = true,
@@ -406,7 +407,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(personAssignment2);
 
 			var result =
-				Target.Execute(new HintInput(currentSchedule, new[] { agent }, planningPeriod,
+				Target.Execute(new SchedulePostHintInput(currentSchedule, new[] { agent }, planningPeriod,
 					new FixedBlockPreferenceProvider(new ExtraPreferences
 					{
 						UseTeamBlockOption = true,

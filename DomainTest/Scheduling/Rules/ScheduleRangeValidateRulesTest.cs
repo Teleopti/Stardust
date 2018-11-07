@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void Setup()
 		{
 			_scenario = ScenarioFactory.CreateScenarioAggregate();
-			_permissionChecker = new PersistableScheduleDataPermissionChecker();
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make());
 			_person = PersonFactory.CreatePerson();
 			var dic = new Dictionary<IPerson, IScheduleRange>();
 			_schedulePeriod = new DateTimePeriod(2007, 8, 1, 2007, 9, 1);
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2020, 1, 1)),
 				dic);
 			_scheduleRange = new ScheduleRange(scheduleDic, new ScheduleParameters(_scenario, _person, _schedulePeriod),
-				_permissionChecker);
+				_permissionChecker, new FullPermission());
 			dic[_person] = _scheduleRange;
 			_nightlyRest = new TimeSpan(8, 0, 0);
 			_contract = new Contract("for test")
@@ -55,7 +56,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void VerifyValidate()
 		{
 			addPersonAssignmentsToSchedulePart();
-			var schedulePart = ExtractedSchedule.CreateScheduleDay(scheduleDic, _person, new DateOnly(2007, 8, 3));
+			var currentAuthorization = CurrentAuthorization.Make();
+			var schedulePart = ExtractedSchedule.CreateScheduleDay(scheduleDic, _person, new DateOnly(2007, 8, 3), currentAuthorization);
 			// add another assigment too close to the last one
 			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(
 				new DateTime(2007, 8, 3, 20, 0, 0, DateTimeKind.Utc),
@@ -68,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				team));
 
 			var per = new ScheduleDateTimePeriod(_schedulePeriod);
-			var dic = new ScheduleDictionary(_scenario, per, _permissionChecker);
+			var dic = new ScheduleDictionary(_scenario, per, _permissionChecker, currentAuthorization);
 			dic.Modify(ScheduleModifier.Scheduler, schedulePart, NewBusinessRuleCollection.Minimum(),
 				new DoNothingScheduleDayChangeCallBack(), new ScheduleTagSetter(NullScheduleTag.Instance));
 

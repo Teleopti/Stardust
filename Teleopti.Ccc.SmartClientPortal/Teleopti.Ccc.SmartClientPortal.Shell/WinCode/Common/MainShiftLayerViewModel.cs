@@ -9,54 +9,40 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
     public class MainShiftLayerViewModel : MoveableLayerViewModel
     {
-	    private readonly MainShiftLayer _layer;
+		private readonly IAuthorization _authorization;
+		private readonly MainShiftLayer _layer;
 	    private readonly IPersonAssignment _assignment;
 
-	    public MainShiftLayerViewModel(IVisualLayer layer, IPerson person)
+	    public MainShiftLayerViewModel(IVisualLayer layer, IPerson person, IAuthorization authorization = null)
             : base(layer, person)
-        {
-        }
+		{
+			_authorization = authorization ?? PrincipalAuthorization.Current();
+		}
 
-        public MainShiftLayerViewModel(ILayerViewModelObserver observer, MainShiftLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator)
+        public MainShiftLayerViewModel(ILayerViewModelObserver observer, MainShiftLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator, IAuthorization authorization = null)
 				: base(observer, layer, assignment, eventAggregator)
         {
 	        _layer = layer;
 	        _assignment = assignment;
-        }
+			_authorization = authorization ?? PrincipalAuthorization.Current();
+		}
+		
+	    public override string LayerDescription => UserTexts.Resources.Activity;
+		
+		public override int VisualOrderIndex => _assignment.MainActivities().ToList().IndexOf(_layer);
 
-
-	    public override string LayerDescription
-        {
-            get { return UserTexts.Resources.Activity; }
-        }
-
-
-				public override int VisualOrderIndex
-				{
-					get { return _assignment.MainActivities().ToList().IndexOf(_layer); }
-				}
-
-	    public override bool IsMovePermitted()
+		public override bool IsMovePermitted()
         {
             if (SchedulePart != null)
             {
-                return PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
+                return _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
             }
             return true;
         }
 
-	    public override bool CanMoveUp
-	    {
-				get { return _assignment != null && _assignment.MainActivities().ToList().IndexOf(_layer) > 0; }
-	    }
+	    public override bool CanMoveUp => _assignment != null && _assignment.MainActivities().ToList().IndexOf(_layer) > 0;
 
-	    public override bool CanMoveDown
-	    {
-		    get
-		    {
-			    return _assignment != null && !isLayerLast();
-		    }
-	    }
+		public override bool CanMoveDown => _assignment != null && !isLayerLast();
 
 		private bool isLayerLast()
 		{
@@ -66,8 +52,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 
 		protected override void Replace()
 		{
-			if (ParentObservingCollection != null)  ParentObservingCollection.ReplaceActivity(this, Layer as ILayer<IActivity>, SchedulePart);
+			ParentObservingCollection?.ReplaceActivity(this, Layer as ILayer<IActivity>, SchedulePart);
 		}
-
     }
 }

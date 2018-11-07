@@ -10,6 +10,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
 using Teleopti.Ccc.TestCommon;
@@ -130,7 +132,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 				new noMessageQueueRemoval()
 				);
 			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-			var scheduleRange = new ScheduleRange(scheduleDictionary, new ScheduleParameters(personAssignment.Scenario, person, period), new PersistableScheduleDataPermissionChecker());
+			var scheduleRange = new ScheduleRange(scheduleDictionary, new ScheduleParameters(personAssignment.Scenario, person, period), new PersistableScheduleDataPermissionChecker(new FullPermission()), new FullPermission());
 			scheduleRange.Add(personAssignment);
 
 			scheduleDictionary.Stub(x => x.Scenario).Return(personAssignment.Scenario);

@@ -92,6 +92,8 @@ namespace Teleopti.Ccc.Domain.Common
             {
                 _siteCollection.Remove(site);
             }
+
+			site.SetBusinessUnit(this);
             _siteCollection.Add(site);
         }
 

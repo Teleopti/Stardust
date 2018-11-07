@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 
         private PdfFont _font;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
         {
             _target = new ShiftsPerDayToPdfManager();
@@ -72,10 +72,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             _dateTimePeriod = new DateTimePeriod(2009, 2, 2, 2009, 2, 3);
             _parameters = new ScheduleParameters(_scenario, _person1, _dateTimePeriod);
             _parameters2 = new ScheduleParameters(_scenario, _person2, _dateTimePeriod);
-	        var permissionChecker = new PersistableScheduleDataPermissionChecker();
+			var authorization = new FullPermission();
+			var permissionChecker = new PersistableScheduleDataPermissionChecker(authorization);
 
-			_scheduleRange = new ScheduleRange(_dic, _parameters, permissionChecker);
-            _scheduleRange2 = new ScheduleRange(_dic, _parameters2, permissionChecker);
+			_scheduleRange = new ScheduleRange(_dic, _parameters, permissionChecker, authorization);
+            _scheduleRange2 = new ScheduleRange(_dic, _parameters2, permissionChecker, authorization);
 
 						IPersonAssignment ass = new PersonAssignment(_person1, _scenario, new DateOnly(2009, 2, 2));
 
@@ -96,8 +97,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 					ass2.AddActivity(breakActivity, new DateTimePeriod(new DateTime(2009, 2, 2, 14, 0, 0, DateTimeKind.Utc), new DateTime(2009, 2, 2, 14, 15, 0, DateTimeKind.Utc)));
 					ass2.AddActivity(breakActivity, new DateTimePeriod(new DateTime(2009, 2, 2, 17, 15, 0, DateTimeKind.Utc), new DateTime(2009, 2, 2, 17, 30, 0, DateTimeKind.Utc)));
 					_scheduleRange2.Add(ass2);
-        }
-
+		}
+		
         [Test]
         public void CanCreateChineseReport()
         {

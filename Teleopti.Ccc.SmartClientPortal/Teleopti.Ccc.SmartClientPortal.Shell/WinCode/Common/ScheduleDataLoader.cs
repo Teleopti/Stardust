@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 		    var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 			var repositoryFactory = new RepositoryFactory();
 			var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-			var scheduleRepository = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
+			var scheduleRepository = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), CurrentAuthorization.Make());
 			_schedulerStateHolder.LoadSchedules(scheduleRepository, persons, scheduleDictionaryLoadOptions, dateTimePeriod);
 		}
 	}

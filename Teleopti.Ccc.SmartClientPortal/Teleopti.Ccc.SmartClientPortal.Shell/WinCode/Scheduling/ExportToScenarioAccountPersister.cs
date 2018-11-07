@@ -7,6 +7,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
@@ -52,7 +54,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			{
 				var repositoryFactory = new RepositoryFactory();
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
-				var service = new TraceableRefreshService(new ThisCurrentScenario(exportScenario), new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork)));
+				var service = new TraceableRefreshService(new ThisCurrentScenario(exportScenario), new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), CurrentAuthorization.Make()));
 				var refreshedPersonAbsenceAccounts = new List<IPersonAbsenceAccount>();
 				
 				foreach (var person in persons)

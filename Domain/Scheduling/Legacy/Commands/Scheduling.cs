@@ -92,7 +92,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				}
 			}
 
-			//TODO: get rid of _backgroundWorker here...
 			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedAgents, rollbackService, resourceCalculateDelayer,
 				selectedPeriod, matrixes, backgroundWorker, null);
 		}

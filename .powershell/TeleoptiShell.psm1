@@ -1,14 +1,17 @@
+#
+# Author: Emil Sundin - emil.sundin@teleopti.com
+# Version: 1.0.0
+#
+
 # Perform some setup checks
 $powershellRoot = $(Split-Path $PROFILE)
-$WFMRepoPath = (Get-Content "$powershellRoot\WFMPath.txt")
-# $hasRepoPath = [bool](Get-Variable 'WFMRepoPath' -Scope 'Global' -EA 'Ig')
-$hasError = $false
-# if(!$hasRepoPath) {
-#     Write-Warning "You should define `$WFMRepoPath in your profile"
-#     $hasError = $true
-# }
+$WFMRepoPath = (Get-Content "$powershellRoot\WFMPath.txt" -EA 'Ig')
+$hasRepoPath = [bool]($WFMRepoPath -gt 0)
+if(!$hasRepoPath) {
+    Write-Warning "Path to the TeleoptiWFM repository is missing. $powershellRoot\WFMPath.txt might be missing."
+}
 
-if(!$hasError) {
+if($hasRepoPath) {
     # Define a few relative project paths
     $WFMRepoWebPath = $WFMRepoPath + '\Teleopti.Ccc.Web\Teleopti.Ccc.Web'
     $WFMRepoWebWFMPath = $WFMRepoPath + '\Teleopti.Ccc.Web\Teleopti.Ccc.Web\WFM'

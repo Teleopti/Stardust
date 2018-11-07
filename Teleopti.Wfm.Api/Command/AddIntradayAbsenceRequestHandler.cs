@@ -9,6 +9,8 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 
@@ -22,7 +24,7 @@ namespace Teleopti.Wfm.Api.Command
 	public class AddIntradayAbsenceRequestHandler : ICommandHandler<AddIntradayAbsenceRequestDto>
 	{
 		private readonly IAbsenceRequestPersister _absenceRequestPersister;
-
+		
 		public AddIntradayAbsenceRequestHandler(IAbsenceRequestPersister absenceRequestPersister)
 		{
 			_absenceRequestPersister = absenceRequestPersister;

@@ -231,7 +231,6 @@
     <Compile Include="Areas\Forecasting\Controllers\SkillControllerTest.cs" />
     <Compile Include="Areas\Global\ApplicationControllerTest.cs" />
     <Compile Include="Areas\Global\AreaWithPermissionPathProviderTest.cs" />
-    <Compile Include="Areas\Global\DataProtectionControllerTest.cs" />
     <Compile Include="Areas\Global\FakePeopleSearchProvider.cs" />
     <Compile Include="Areas\Global\FakePermissionProvider.cs" />
     <Compile Include="Areas\Global\GlobalAreaControllerTest.cs" />
@@ -280,6 +279,7 @@
     <Compile Include="Areas\People\RoleControllerAuditTest.cs" />
     <Compile Include="Areas\People\RoleControllerTest.cs" />
     <Compile Include="Areas\Reporting\Controller\ScheduleAuditTrailControllerTest.cs" />
+    <Compile Include="Areas\Requests\Controller\RequestsControllerTest.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestAllowanceViewModelFactoryTest.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningGroupControllerTest.cs" />
     <Compile Include="Areas\Staffing\BpoControllerTest.cs" />
@@ -396,7 +396,7 @@
     <Compile Include="Areas\TeamSchedule\Core\AbsenceHandler\AbsencePersisterTest.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\AgentsPerPagePersisterAndProviderTest.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\TeamScheduleDataProviderTest.cs" />
-    <Compile Include="Areas\TeamSchedule\Core\DataProvider\TeamScheduleProjectionProviderTests.cs" />
+    <Compile Include="Areas\TeamSchedule\Core\DataProvider\TeamScheduleShiftViewModelProviderTests.cs" />
     <Compile Include="Areas\TeamSchedule\Core\TeamScheduleCommandHandlingProviderTest.cs" />
     <Compile Include="Areas\TeamSchedule\PermissionCheckerTest.cs" />
     <Compile Include="Areas\TeamSchedule\SwapMainShiftForTwoPersonsHandlerTest.cs" />
@@ -442,11 +442,11 @@
     <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamSchedulePermissionViewModelFactoryTest.cs" />
     <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelFactoryTest.cs" />
     <Compile Include="Core\TeamSchedule\ViewModelFactory\WfmTeamScheduleViewModelFactoryTest.cs" />
+    <Compile Include="Core\TeamSchedule\ViewModelFactory\WfmTeamScheduleViewModelFactoryTestNotUseFakeScheduleStorage.cs" />
     <Compile Include="Core\TeamsProviderTest.cs" />
     <Compile Include="Core\TranslatedTextsTest.cs" />
     <Compile Include="Core\WeekScheduleDomainDataProviderWeekScheduleTest.cs" />
-    <Compile Include="Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProviderNoMockTest.cs" />
-    <Compile Include="Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProviderTest.cs" />
+    <Compile Include="Core\Common\DataProvider\AbsenceRequestProbabilityProviderTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeAddPersonScheduleViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeAddScheduleLayerViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeScheduleViewModelMapperTest.cs" />
@@ -692,7 +692,7 @@
   <ItemGroup>
     <Folder Include="Areas\MyTime\Core\TeamSchedule\Mapping\" />
     <Folder Include="Areas\Outbound\Models\" />
-    <Folder Include="Areas\Requests\Controller\" />
+	<Folder Include="Areas\Requests\Controller\" />
     <Folder Include="Core\Hangfire\" />
     <Folder Include="Properties\" />
   </ItemGroup>

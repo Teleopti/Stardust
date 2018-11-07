@@ -16,7 +16,6 @@ export const mainInitializer = [
 	'rtaDataService',
 	'$q',
 	'$http',
-	'versionService',
 	function(
 		$rootScope: IWfmRootScopeService,
 		$state,
@@ -29,9 +28,7 @@ export const mainInitializer = [
 		noticeService,
 		TabShortCut,
 		rtaDataService,
-		$q: IQService,
-		$http,
-		versionService
+		$q: IQService
 	) {
 		$rootScope.isAuthenticated = false;
 
@@ -51,12 +48,6 @@ export const mainInitializer = [
 			$q.all([initializeUserInfo(), initializePermissionCheck()]).then(function() {
 				// any preloads than requires selected business unit and/or permission check
 				if (permitted('rta', undefined)) rtaDataService.load(); // dont return promise, async call
-			})
-		);
-		preloads.push(
-			$http.get('../api/Global/Version').then(function(response) {
-				var version = response.data;
-				versionService.setVersion(version);
 			})
 		);
 		var preloadDone = false;

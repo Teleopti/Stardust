@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 {
 	public interface IMatrixData
 	{
-		IScheduleDayData this[DateOnly key] { get; }
 		IScheduleMatrixPro Matrix { get; }
 		ReadOnlyCollection<IScheduleDayData> ScheduleDayDataCollection { get; }
 		void Store(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions);
@@ -20,15 +19,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 	{
 		private IScheduleMatrixPro _matrix;
 		private readonly IScheduleDayDataMapper _scheduleDayDataMapper;
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		protected IDictionary<DateOnly, IScheduleDayData> ScheduleDayDataDictionary = new Dictionary<DateOnly, IScheduleDayData>();
 
 		public MatrixData(IScheduleDayDataMapper scheduleDayDataMapper)
 		{
 			_scheduleDayDataMapper = scheduleDayDataMapper;
 		}
-
-		public IScheduleDayData this[DateOnly key] => ScheduleDayDataDictionary[key];
 
 		public bool TryGetValue(DateOnly key, out IScheduleDayData value)
 		{
@@ -41,7 +37,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
 		public ReadOnlyCollection<IScheduleDayData> ScheduleDayDataCollection => new ReadOnlyCollection<IScheduleDayData>(new List<IScheduleDayData>(ScheduleDayDataDictionary.Values));
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public virtual void Store(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
 		{
 			_matrix = matrix;

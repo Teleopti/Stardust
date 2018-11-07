@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 	public class CurrentAuthorization : ICurrentAuthorization, IAuthorizationScope
 	{
 		private readonly IAuthorization _authorization;
-		private static IAuthorization _defaultAuthorization;
 		private static readonly ThreadLocal<Stack<IAuthorization>> _threadAuthorization = new ThreadLocal<Stack<IAuthorization>>(() => new Stack<IAuthorization>());
 
 		public CurrentAuthorization(IAuthorization authorization)
@@ -44,16 +43,14 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		{
 			return new CurrentAuthorization(new PrincipalAuthorization(CurrentTeleoptiPrincipal.Make()));
 		}
-
-		public static void DefaultTo(IAuthorization authorization)
-		{
-			_defaultAuthorization = authorization;
-		}
-		 
+		
 		public static IDisposable ThreadlyUse(IAuthorization authorization)
 		{
 			_threadAuthorization.Value.Push(authorization);
-			return new GenericDisposable(() => _threadAuthorization.Value.Pop());
+			return new GenericDisposable(() =>
+			{
+				_threadAuthorization.Value.Pop();
+			});
 		}
 
 		public IDisposable OnThisThreadUse(IAuthorization authorization)
@@ -65,10 +62,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		{
 			if (_threadAuthorization.Value.Count > 0)
 				return _threadAuthorization.Value.Peek();
-			if (_defaultAuthorization != null)
-				return _defaultAuthorization;
 			return _authorization;
 		}
-
 	}
 }

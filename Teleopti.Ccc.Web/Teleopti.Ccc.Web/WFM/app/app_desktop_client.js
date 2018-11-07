@@ -46,7 +46,6 @@ var wfm = angular
 		'wfm.datePicker',
 		'wfm.dateRangePicker',
 		'wfm.utilities',
-		'wfm.dataProtection',
 		'wfm.templates',
 		'wfm.gamification',
 		'wfm.apiaccess'

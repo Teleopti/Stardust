@@ -48,15 +48,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
             Session.Evict(obj);
         }
 
-        protected void PersistAndRemoveFromUnitOfWork<T>(IEnumerable<T> persistList) where T : IEntity
-        {
-            foreach (var obj in persistList)
-            {
-                PersistAndRemoveFromUnitOfWork(obj);
-            }
-        }
+		protected void PersistAndRemoveRangeFromUnitOfWork<T>(params T[] persistList) where T : IEntity
+		{
+			foreach (var obj in persistList)
+			{
+				PersistAndRemoveFromUnitOfWork(obj);
+			}
+		}
 
-        protected void CleanUpAfterTest()
+		protected void PersistAndRemoveFromUnitOfWork<T>(IEnumerable<T> persistList) where T : IEntity
+		{
+			foreach (var obj in persistList)
+			{
+				PersistAndRemoveFromUnitOfWork(obj);
+			}
+		}
+		
+		protected void CleanUpAfterTest()
         {
 			_loginWithOpenUnitOfWork.CleanUpAfterTest = true;
 		}

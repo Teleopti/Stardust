@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -49,9 +50,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IList<IScheduleDay> ret;
             using(_mocks.Playback())
             {
-                _gridlockManager.AddLock(_day1, LockType.WriteProtected);
-                ret = _target.RemoveLocked(source);
-            }
+				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+				{
+					_gridlockManager.AddLock(_day1, LockType.WriteProtected);
+					ret = _target.RemoveLocked(source);
+				}
+			}
             Assert.AreEqual(2, ret.Count);
         }
 

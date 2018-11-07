@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -19,26 +20,24 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 				IEnumerable<IScheduleData> persistableScheduleData,
 				IEnumerable<ISkillDay> skillDays,
 				IEnumerable<ExternalStaff> bpoResources,
-				TimeZoneInfo timeZone)
+				TimeZoneInfo timeZone,
+			ICurrentAuthorization currentAuthorization = null)
 		{
 			var stateHolder = stateHolderFunc();
 			stateHolder.SetRequestedScenario(scenario);
-			stateHolder.SchedulingResultState.Schedules = ScheduleDictionaryCreator.WithData(scenario, period, persistableScheduleData, agents);
+			stateHolder.SchedulingResultState.Schedules = ScheduleDictionaryCreator.WithData(scenario, period, persistableScheduleData, agents, currentAuthorization);
 			foreach (var agent in agents)
 			{
 				stateHolder.ChoosenAgents.Add(agent);
 				stateHolder.SchedulingResultState.LoadedAgents.Add(agent);
 			}
 			stateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
-			var uniqueSkills = new HashSet<ISkill>();
-			foreach (var skillDay in skillDays)
+			var skillDayBySkill = skillDays.ToLookup(s => s.Skill);
+		
+			stateHolder.SchedulingResultState.AddSkills(skillDayBySkill.Select(s => s.Key).ToArray());
+			foreach (var uniqueSkill in skillDayBySkill)
 			{
-				uniqueSkills.Add(skillDay.Skill);
-			}
-			stateHolder.SchedulingResultState.AddSkills(uniqueSkills.ToArray());
-			foreach (var uniqueSkill in uniqueSkills)
-			{
-				stateHolder.SchedulingResultState.SkillDays[uniqueSkill] = skillDays.Where(skillDay => skillDay.Skill.Equals(uniqueSkill));
+				stateHolder.SchedulingResultState.SkillDays[uniqueSkill.Key] = skillDayBySkill[uniqueSkill.Key];
 			}
 			stateHolder.SchedulingResultState.ExternalStaff = bpoResources;
 			stateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, timeZone);
@@ -63,9 +62,10 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 			DateOnlyPeriod period,
 			IEnumerable<IPerson> agents,
 			IEnumerable<IScheduleData> persistableScheduleData,
-			IEnumerable<ISkillDay> skillDays)
+			IEnumerable<ISkillDay> skillDays,
+			ICurrentAuthorization currentAuthorization = null)
 		{
-			return Fill(stateHolderFunc, scenario, period, agents, persistableScheduleData, skillDays, Enumerable.Empty<ExternalStaff>(), TimeZoneInfo.Utc);
+			return Fill(stateHolderFunc, scenario, period, agents, persistableScheduleData, skillDays, Enumerable.Empty<ExternalStaff>(), TimeZoneInfo.Utc, currentAuthorization);
 		}
 		
 		public static ISchedulerStateHolder Fill(this Func<ISchedulerStateHolder> stateHolderFunc,
@@ -73,9 +73,10 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 			DateOnly date,
 			IEnumerable<IPerson> agents,
 			IScheduleData persistableScheduleData,
-			ISkillDay skillDay)
+			ISkillDay skillDay,
+			ICurrentAuthorization currentAuthorization)
 		{
-			return Fill(stateHolderFunc, scenario, date.ToDateOnlyPeriod(), agents, new[]{persistableScheduleData}, new[]{skillDay}, Enumerable.Empty<ExternalStaff>(), TimeZoneInfo.Utc);
+			return Fill(stateHolderFunc, scenario, date.ToDateOnlyPeriod(), agents, new[]{persistableScheduleData}, new[]{skillDay}, Enumerable.Empty<ExternalStaff>(), TimeZoneInfo.Utc, currentAuthorization);
 		}
 		
 		public static ISchedulerStateHolder Fill(this Func<ISchedulerStateHolder> stateHolderFunc,

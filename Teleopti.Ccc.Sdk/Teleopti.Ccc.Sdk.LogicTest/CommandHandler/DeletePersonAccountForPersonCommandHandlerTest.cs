@@ -76,10 +76,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(() => _traceableRefreshService.Refresh(account));
             }
             using(_mock.Playback())
-            {
-                _target.Handle(_deletePersonAccountForPersonCommandDto);
-                
-            }
+			{
+				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+				{
+					_target.Handle(_deletePersonAccountForPersonCommandDto);
+				}
+			}
         }
 
         [Test]
@@ -94,9 +96,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_personRepository.Get(_deletePersonAccountForPersonCommandDto.PersonId)).Return(null);
             }
             using (_mock.Playback())
-            {
-                Assert.Throws<FaultException>(() => _target.Handle(_deletePersonAccountForPersonCommandDto));
-            }
+			{
+				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+				{
+					Assert.Throws<FaultException>(() => _target.Handle(_deletePersonAccountForPersonCommandDto));
+				}
+			}
         }
 
         [Test]
@@ -112,9 +117,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_absenceRepository.Get(_deletePersonAccountForPersonCommandDto.AbsenceId)).Return(null);
             }
             using (_mock.Playback())
-            {
-                Assert.Throws<FaultException>(() => _target.Handle(_deletePersonAccountForPersonCommandDto));
-            }
+			{
+				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+				{
+					Assert.Throws<FaultException>(() => _target.Handle(_deletePersonAccountForPersonCommandDto));
+				}
+			}
         }
 
         [Test]

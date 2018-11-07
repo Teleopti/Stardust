@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -22,8 +23,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Persist(PersonAssociationCheckSum checkSum)
 		{
-			_data = _data.Except(x => x.PersonId == checkSum.PersonId)
-				.Append(checkSum)
+			Persist(checkSum.AsArray());
+		}
+
+		public void Persist(IEnumerable<PersonAssociationCheckSum> checkSums)
+		{		
+			_data = _data.Where(x => !checkSums.Select(y => y.PersonId).Contains(x.PersonId))
+				.Union(checkSums)
 				.ToArray();
 		}
 	}

@@ -32,8 +32,11 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
             var tab = new TabPageAdv("userDefined"){Tag = command};
             personSelectorView.Stub(x => x.SelectedTab).Return(tab);
 
-            Assert.That(target.CanExecute(), Is.True);
-        }
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				Assert.That(target.CanExecute(), Is.True);
+			}
+		}
 
         [Test]
         public void ShouldCallViewToDeleteGroupPage()
@@ -46,10 +49,13 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
 			
 			personSelectorView.Stub(x => x.SelectedTab).Return(tab);
 	        command.Stub(x => x.Id).Return(id);
-            
-             target.Execute();
 
-	        personSelectorView.AssertWasCalled(x => x.DeleteGroupPage(id, "userDefined"));
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				target.Execute();
+			}
+
+			personSelectorView.AssertWasCalled(x => x.DeleteGroupPage(id, "userDefined"));
         }
     }
 }

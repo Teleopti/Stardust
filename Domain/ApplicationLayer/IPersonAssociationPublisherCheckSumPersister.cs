@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	{
 		IEnumerable<PersonAssociationCheckSum> Get();
 		void Persist(PersonAssociationCheckSum checkSum);
+		void Persist(IEnumerable<PersonAssociationCheckSum> checkSums);
 		PersonAssociationCheckSum Get(Guid personId);
 	}
 

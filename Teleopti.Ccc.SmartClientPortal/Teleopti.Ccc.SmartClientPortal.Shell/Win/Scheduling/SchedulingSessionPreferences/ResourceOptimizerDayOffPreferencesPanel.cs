@@ -75,20 +75,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
             }
         }
 
-
-        public bool KeepFreeWeekendsVisible
-        {
-            get { return checkBoxKeepFreeWeekEnds.Visible; }
-            set { checkBoxKeepFreeWeekEnds.Visible = value; }
-        }   
-
-        public bool KeepFreeWeekendDaysVisible
-        {
-            get { return checkBoxKeepFreeWeekEndDays.Visible; }
-            set { checkBoxKeepFreeWeekEndDays.Visible = value; }
-        }
-
-
         #endregion
 
         #endregion

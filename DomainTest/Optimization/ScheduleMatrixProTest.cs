@@ -8,6 +8,8 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -37,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             DateTimePeriod dayPeriod = new DateTimePeriod(2000, 01, 01, 2000, 01, 10);
             IScheduleParameters parameters = new ScheduleParameters(scenario, _person, dayPeriod);
-            IScheduleRange range = new ScheduleRange(scheduleDictionary, parameters, new PersistableScheduleDataPermissionChecker());
+            IScheduleRange range = new ScheduleRange(scheduleDictionary, parameters, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
 
             scheduleDictionary.AddTestItem(_person, range);
 

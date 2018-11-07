@@ -1,7 +1,6 @@
 using System;
 using Hangfire.Server;
-using Teleopti.Wfm.Adherence;
-using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Ccc.Domain.MultiTenancy;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {

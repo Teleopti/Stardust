@@ -11,44 +11,6 @@ using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
-	public static class RtaExtensions
-	{
-		public static void CheckForActivityChanges(this Wfm.Adherence.Domain.Service.Rta rta, string tenant, Guid personId)
-		{
-			rta.CheckForActivityChanges(tenant);
-		}
-
-		public static void ProcessState(this Wfm.Adherence.Domain.Service.Rta rta, StateForTest input)
-		{
-			rta.Process(new BatchInputModel
-			{
-				AuthenticationKey = input.AuthenticationKey,
-				SourceId = input.SourceId,
-				SnapshotId = input.SnapshotId,
-				States = new[]
-				{
-					new BatchStateInputModel
-					{
-						StateCode = input.StateCode,
-						StateDescription = input.StateDescription,
-						UserCode = input.UserCode
-					}
-				}
-			});
-		}
-
-		public static void CloseSnapshot(this Wfm.Adherence.Domain.Service.Rta rta, CloseSnapshotForTest input)
-		{
-			rta.Process(new BatchInputModel
-			{
-				AuthenticationKey = input.AuthenticationKey,
-				SourceId = input.SourceId,
-				SnapshotId = input.SnapshotId,
-				CloseSnapshot = true
-			});
-		}
-	}
-
 	public class StateForTest
 	{
 		public string AuthenticationKey { get; set; }

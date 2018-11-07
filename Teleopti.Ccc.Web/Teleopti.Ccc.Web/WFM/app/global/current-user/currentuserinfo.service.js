@@ -1,4 +1,4 @@
-(function() {
+﻿(function() {
 	'use strict';
 
 	angular.module('currentUserInfoService').service('CurrentUserInfo', CurrentUserInfo);
@@ -12,8 +12,7 @@
 		var language;
 		var dateFormatLocale;
 		var timeout;
-		var firstDayOfWeek;
-		var dayNames;
+		var firstDayOfWeek, dayNames, dateTimeFormat;
 
 		var isTeleoptiApplicationLogon;
 		this.SetCurrentUserInfo = SetCurrentUserInfo;
@@ -32,10 +31,12 @@
 			dateFormatLocale = data.DateFormatLocale;
 			firstDayOfWeek = data.FirstDayOfWeek;
 			dayNames = data.DayNames;
+			dateTimeFormat = data.DateTimeFormat;
 			isTeleoptiApplicationLogon = data.IsTeleoptiApplicationLogon;
 		}
 
 		function CurrentUserInfo() {
+			
 			return {
 				UserName: userName,
 				DefaultTimeZone: defaultTimeZone,
@@ -44,8 +45,24 @@
 				DateFormatLocale: dateFormatLocale,
 				FirstDayOfWeek: firstDayOfWeek,
 				IsTeleoptiApplicationLogon: isTeleoptiApplicationLogon,
-				DayNames: dayNames || []
+				DayNames: dayNames || [],
+				DateTimeFormat: getDateTimeFormat()
 			};
+		}
+
+		function getDateTimeFormat() {
+			if (!dateTimeFormat) {
+				return {};
+			}
+			var patternArrays = dateTimeFormat.ShortTimePattern.split(' ');
+			var showMeridian = patternArrays.length > 1;
+			var shortTimePattern = showMeridian ? patternArrays[0] + ' A' : dateTimeFormat.ShortTimePattern;
+			return  {
+				ShortTimePattern: shortTimePattern,
+				AMDesignator: dateTimeFormat.AMDesignator,
+				PMDesignator: dateTimeFormat.PMDesignator,
+				ShowMeridian: showMeridian
+			}
 		}
 
 		function getCurrentUserFromServer() {

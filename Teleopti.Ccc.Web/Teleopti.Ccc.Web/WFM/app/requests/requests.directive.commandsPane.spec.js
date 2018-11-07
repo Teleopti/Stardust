@@ -9,6 +9,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function() {
 		mockSignalRBackendServer = {},
 		signalRService,
 		currentUserInfo,
+		requestsPermissions,
 		replyMessage,
 		fakeState = {
 			current: {
@@ -28,6 +29,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function() {
 		requestsNotificationService = new FakeRequestsNotificationService();
 		signalRService = new FakeSingalRService();
 		currentUserInfo = new FakeCurrentUserInfo();
+		requestsPermissions = new FakeRequestsPermissions();
 		module(function($provide) {
 			$provide.service('Toggle', function() {
 				toggles.togglesLoaded = $q(function(resolve, reject) {
@@ -55,6 +57,9 @@ describe('[RequestsCommandPaneDirectiveTests]', function() {
 			});
 			$provide.service('requestsPermissions', function() {
 				return new FakeRequestsPermissions();
+			});
+			$provide.service('requestsPermissions', function () {
+				return requestsPermissions;
 			});
 			$provide.service('$state', function() {
 				return fakeState;
@@ -648,6 +653,25 @@ describe('[RequestsCommandPaneDirectiveTests]', function() {
 				resolve({ Children: [] });
 			});
 		};
+		this.getPermissionsPromise = function () {
+			return {
+				then: function (callback) {
+					callback && callback({ data: { HasApproveOrDenyPermission: true, HasCancelPermission: true, HasReplyPermission: true } }) ;
+				}
+			};
+		}
+	}
+
+	function FakeRequestsPermissions() {
+		var permissions;
+
+		this.set = function setPermissions(data) {
+			permissions = data;
+		}
+
+		this.all = function getPermissions() {
+			return permissions;
+		}
 	}
 
 	function FakeSingalRService() {
@@ -678,7 +702,8 @@ describe('[RequestsCommandPaneDirectiveTests]', function() {
 			$scope: scope,
 			requestsNotificationService: requestsNotificationService,
 			requestsDataService: requestsDataService,
-			CurrentUserInfo: currentUserInfo
+			CurrentUserInfo: currentUserInfo,
+			requestsPermissions: requestsPermissions
 		});
 		scope.$digest();
 
@@ -707,13 +732,5 @@ describe('[RequestsCommandPaneDirectiveTests]', function() {
 
 	function getRequestCommandPaneScope(targetElement) {
 		return targetElement.isolateScope().requestsCommandsPane;
-	}
-
-	function FakeRequestsPermissions() {
-		this.loadPermissions = function() {
-			return $q(function(resolve, reject) {
-				resolve();
-			});
-		};
 	}
 });

@@ -17,6 +17,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Ccc.Infrastructure.Staffing;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -57,13 +58,9 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 
 		protected override void Isolate(IIsolate isolate)
 		{
-			var principalAuthorization = new FullPermission();
-
-			CurrentAuthorization.DefaultTo(principalAuthorization);
-
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			isolate.UseTestDouble(new FakePermissionProvider(false)).For<IPermissionProvider>();
-			isolate.UseTestDouble(principalAuthorization).For<IAuthorization>();
+			isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
 			isolate.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();
 			isolate.UseTestDouble<FakeSeatBookingRepository>().For<ISeatBookingRepository>();
 			var scenarioRepository = new FakeScenarioRepository();

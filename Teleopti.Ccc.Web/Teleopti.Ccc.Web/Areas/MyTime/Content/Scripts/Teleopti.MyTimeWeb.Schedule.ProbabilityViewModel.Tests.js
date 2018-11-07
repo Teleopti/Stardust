@@ -17,8 +17,8 @@
 	var createDayViewModel = function () {
 		return {
 			currentTimeInMinutes: -1,
-			setUserNowInMinutes: function (nowInMinutes) { this.currentTimeInMinutes = nowInMinutes; },
-			userNowInMinute: function () { return this.currentTimeInMinutes; }
+			userNowInMinute: 0,
+			setUserNowInMinutes: function (nowInMinutes) { this.currentTimeInMinutes = nowInMinutes; this.userNowInMinute = nowInMinutes },
 		}
 	}
 

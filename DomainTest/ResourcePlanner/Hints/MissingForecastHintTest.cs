@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 					Periods = new DateOnlyPeriod[] {}
 				}
 			};
-			Target.FillResult(validationResult,new HintInput( null, new[]{person}, range, null, false));
+			Target.FillResult(validationResult,new ScheduleHintInput(new[]{person}, range, false));
 
 			validationResult.InvalidResources.Single().ResourceName.Should().Be(skill.Name);
 		}

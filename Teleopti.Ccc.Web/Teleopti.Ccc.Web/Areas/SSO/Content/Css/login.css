@@ -1,32 +1,22 @@
 ﻿.login-header {
-    text-align: center;
+	text-align: center;
 }
 
 .alert-warning {
-    background-color: #ffc285;
-    border-color: #ffc285;
-    color: rgba(0, 0, 0, 0.541176);
+	background-color: #ffc285;
+	border-color: #ffc285;
+	color: rgba(0, 0, 0, 0.541176);
 }
 
 .btn-primary {
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 3px;
-    text-transform: uppercase;
-    background-color: #09f;
+	border: none;
+	padding: 10px;
+	cursor: pointer;
+	border-radius: 3px;
+	text-transform: uppercase;
+	background-color: #09f;
 }
 
-.login-form {
-	max-width: 300px;
-	margin-right: auto;
-	margin-left: auto;
-}
-.login-warning {
-	max-width: 300px;
-	margin-right: auto;
-	margin-left: auto;
-}
 .placeholder {
-	color: #AAA !important;
+	color: #aaa !important;
 }

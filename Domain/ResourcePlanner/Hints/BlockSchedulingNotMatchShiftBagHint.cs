@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class BlockSchedulingNotMatchShiftBagHint : IScheduleHint
+	public class BlockSchedulingNotMatchShiftBagHint : ISchedulePostHint
 	{
 		private readonly ShiftProjectionCacheManager _shiftProjectionCacheManager;
 
@@ -15,10 +15,8 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			_shiftProjectionCacheManager = shiftProjectionCacheManager;
 		}
 
-		public void FillResult(HintResult hintResult, HintInput input)
+		public void FillResult(HintResult hintResult, SchedulePostHintInput input)
 		{
-			if (input.Schedules == null)
-				return;
 			var people = input.People;
 			var period = input.Period;
 			var blockPreferenceProvider = input.BlockPreferenceProvider;

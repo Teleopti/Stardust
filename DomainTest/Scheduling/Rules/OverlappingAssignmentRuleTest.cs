@@ -7,6 +7,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -50,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(dic.Scenario).Return(_scenario).Repeat.Any();
 			}
 			_scheduleRange = new ScheduleRange(dic, new ScheduleParameters(_scenario, _person, _schedulePeriod),
-				new PersistableScheduleDataPermissionChecker());
+				new PersistableScheduleDataPermissionChecker(new FullPermission()), new FullPermission());
 		}
 
 		[Test]

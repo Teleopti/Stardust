@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using System.Web;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.MultiTenancy;
@@ -22,7 +23,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
 			_tenantUnitOfWork.EnsureUnitOfWorkIsStarted();
-
 			var hasNoTenantAuthenticationAttribute =
 				invocation.Method.GetCustomAttributes(typeof (NoTenantAuthenticationAttribute), false).Any();
 
@@ -31,11 +31,23 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 
 			if (!_tenantAuthentication.Logon())
 			{
-				//include logging here?
+				var methodString = buildMethodString(invocation);
 				_tenantUnitOfWork.CancelAndDisposeCurrent();
-				throw new HttpException(NoTenantAccessHttpErrorCode, "Invalid tenant credentials!");
+				throw new HttpException(NoTenantAccessHttpErrorCode, $"Invalid tenant credentials! Calling method: {methodString}");
 			}
 		}
+		private string buildMethodString(IInvocationInfo invocation)
+		{
+			var sb = new StringBuilder();
+			var className = invocation.Method.DeclaringType.FullName;
+			var methodName = invocation.Method.Name;
+
+			var parameterNames = invocation.Arguments.Select(act => act.ToString());
+			sb.Append($"{className}.{methodName}({string.Join(",", parameterNames)})");
+
+			return sb.ToString();
+		}
+
 
 		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 		{

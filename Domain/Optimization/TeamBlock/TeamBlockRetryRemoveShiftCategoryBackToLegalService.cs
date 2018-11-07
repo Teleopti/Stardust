@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Helper;
@@ -59,7 +60,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_userTimeZone = userTimeZone;
 		}
 
-		public void Execute(SchedulingOptions schedulingOptions, 
+		[TestLog]
+		public virtual void Execute(SchedulingOptions schedulingOptions, 
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IEnumerable<IScheduleMatrixPro> scheduleMatrixListPros,
 			ISchedulingProgress backgroundWorker)

@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Persisters.WriteProtection;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -21,6 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.WriteProtection
 		private IPersonWriteProtectionInfo writeProtection;
 		private IWriteProtectionPersister target;
 		private IWriteProtectionRepository repository;
+		private IDisposable auth;
 
 		[Test]
 		public void ShouldUpdateWriteProtection()
@@ -28,6 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.WriteProtection
 			var newDate = new DateOnly(2010, 1, 1);
 			writeProtection.PersonWriteProtectedDate = newDate;
 			var writeProtectionsToSave = new List<IPersonWriteProtectionInfo> {writeProtection};
+
 
 			target.Persist(writeProtectionsToSave);
 
@@ -51,6 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.WriteProtection
 		protected void Setup()
 		{
 			//something is really wrong with the writeprotection mapping
+			auth = CurrentAuthorization.ThreadlyUse(new FullPermission());
 			repository = new WriteProtectionRepository(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make()));
 			target = new WriteProtectionPersister(CurrentUnitOfWorkFactory.Make(), repository, MockRepository.GenerateMock<IInitiatorIdentifier>());
 			var person = PersonFactory.CreatePerson("persist test");
@@ -64,5 +69,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.WriteProtection
 			writeProtection = person.PersonWriteProtection;
 		}
 
+		[TearDown]
+		public void Teardown()
+		{
+			auth?.Dispose();
+		}
 	}
 }

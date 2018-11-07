@@ -10,6 +10,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
@@ -400,11 +401,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			personAss.AddActivity(act2, period2);
 			IPersonAbsence personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, period4, absence);
 
+			var currentAuthorization = CurrentAuthorization.Make();
 			var day =
 				ExtractedSchedule.CreateScheduleDay(
 					new ScheduleDictionary(scenario,
-										   new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2002, 1, 1)), new PersistableScheduleDataPermissionChecker()),
-					person, new DateOnly(2001, 1, 1));
+										   new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2002, 1, 1)), new PersistableScheduleDataPermissionChecker(currentAuthorization), currentAuthorization),
+					person, new DateOnly(2001, 1, 1), currentAuthorization);
 			day.Add(personAss);
 			day.Add(personAbsence);
 

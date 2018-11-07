@@ -16,6 +16,7 @@ using Teleopti.Ccc.WebTest.Areas.People.IoC;
 
 namespace Teleopti.Ccc.WebTest.Areas.People
 {
+	[WebPeopleTest]
 	public class RoleControllerAuditBase
 	{
 		public RoleController Target;
@@ -245,13 +246,13 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		}
 	}
 
-	[WebPeopleTest]
+
 	public class RoleControllerAuditToggleOffTest : RoleControllerAuditBase
 	{
 
 	}
 
-	[WebPeopleTest]
+	
 	[Toggle(Toggles.Wfm_AuditTrail_GenericAuditTrail_74938)]
 	public class RoleControllerAuditToggleOnTest : RoleControllerAuditBase
 	{

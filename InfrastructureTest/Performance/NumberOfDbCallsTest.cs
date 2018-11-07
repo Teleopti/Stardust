@@ -8,13 +8,16 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Performance
 {	
 	[DatabaseTest]
-	public class NumberOfDbCallsForAssignmentPersistTest
+	public class NumberOfDbCallsForAssignmentPersistTest : IIsolateSystem
 	{
 		public IScheduleDictionaryPersister Target;
 		public IScheduleStorage ScheduleStorage;
@@ -62,6 +65,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Performance
 			//(currently for some strange reason) one batch of update of all layers 
 			CurrentUnitOfWorkFactory.Current().FetchSessionFactory().Statistics.PrepareStatementCount
 				.Should().Be.IncludedIn(1, 5);
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
 		}
 	}
 }

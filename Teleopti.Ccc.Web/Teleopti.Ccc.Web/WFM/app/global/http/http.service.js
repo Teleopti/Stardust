@@ -11,11 +11,21 @@
 		var connected = true;
 
 		var service = {
-			responseError: reject,
-			request: request
+			responseError: onResponseError,
+			request: onRequest,
+			response: onResponse
 		};
 		return service;
-		function request(config) {
+
+		function ensureClientIsUpToDate(headers) {
+			var version = versionService.getVersion();
+			var newVersion = headers('X-Server-Version') || '';
+			if (newVersion.length === 0) return;
+			else if (version.length === 0) versionService.setVersion(newVersion);
+			else if (version !== newVersion) $window.location.reload(true);
+		}
+
+		function onRequest(config) {
 			if (!connected) {
 				var q = $q.defer();
 				$timeout(function() {
@@ -28,16 +38,22 @@
 			var businessUnitId = sessionStorage.getItem('buid');
 			if (businessUnitId) config.headers['X-Business-Unit-Filter'] = businessUnitId;
 
-			var clientVersion = versionService.getVersion();
-			if (clientVersion.length !== 0) config.headers['X-Client-Version'] = clientVersion;
-
 			return config;
 		}
 
+		function onResponse(response) {
+			ensureClientIsUpToDate(response.headers);
+			return response;
+		}
+
 		//This is bad and should be reworked. //Anders Sjöberg 2018-07-31
-		function reject(rejection) {
+		function onResponseError(rejection) {
 			var NoticeService = $injector.get('NoticeService');
 			var Settings = $injector.get('Settings');
+
+			if (typeof rejection.headers === 'function') {
+				ensureClientIsUpToDate(rejection.headers);
+			}
 
 			switch (true) {
 				case rejection.config &&
@@ -85,11 +101,6 @@
 						null,
 						false
 					);
-					break;
-
-				case rejection.status === 418:
-					// The client is old => refresh
-					$window.location.reload();
 					break;
 
 				case rejection.status === 422:

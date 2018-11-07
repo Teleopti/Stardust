@@ -24,7 +24,8 @@ function applyBaseConfig(config) {
 		mochaReporter: {
 			symbols: {
 				success: '✔'
-			}
+			},
+			ignoreSkipped: true
 		},
 		port: 9876,
 

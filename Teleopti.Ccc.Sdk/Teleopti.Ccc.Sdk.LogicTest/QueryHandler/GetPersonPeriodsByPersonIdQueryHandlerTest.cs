@@ -37,8 +37,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 					}
 			};
 			query.PersonIdCollection.Add(person.Id.GetValueOrDefault());
-			var result = target.Handle(query);
-			result.Count.Should().Be.EqualTo(1);
+
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				var result = target.Handle(query);
+				result.Count.Should().Be.EqualTo(1);
+			}
 		}
 
 		[Test]

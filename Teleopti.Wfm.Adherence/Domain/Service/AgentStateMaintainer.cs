@@ -1,13 +1,19 @@
-﻿using Teleopti.Ccc.Domain.Aop;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Wfm.Adherence.Domain.Service
 {
 	public class AgentStateMaintainer :
 		IRunOnHangfire,
-		IHandleEvent<PersonAssociationChangedEvent>
+		IHandleEvent<PersonAssociationChangedEvent>,
+		IHandleEvents
 	{
 		private readonly IAgentStatePersister _persister;
 
@@ -15,7 +21,20 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		{
 			_persister = persister;
 		}
+		
+		public void Subscribe(SubscriptionRegistrator registrator)
+		{
+			registrator.SubscribeTo<PersonAssociationChangedEvent>();
+		}
 
+		[EnabledBy(Toggles.RTA_TooManyPersonAssociationChangedEvents_Packages_78669)]
+		public void Handle(IEnumerable<IEvent> events)
+		{
+			events.OfType<PersonAssociationChangedEvent>()
+				.ForEach(Handle);
+		}
+
+		[DisabledBy(Toggles.RTA_TooManyPersonAssociationChangedEvents_Packages_78669)]
 		[UnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{

@@ -32,8 +32,11 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
 	        {
 		        personSelectorView.Stub(x => x.SelectedTab).Return(tab);
 
-		        Assert.That(target.CanExecute(), Is.False);
-	        }
+				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+				{
+					Assert.That(target.CanExecute(), Is.False);
+				}
+			}
         }
 
         [Test]
@@ -45,9 +48,12 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
 	        using (var tab = new TabPageAdv {Tag = command})
 	        {
 		        personSelectorView.Stub(x => x.SelectedTab).Return(tab);
-		        
-				Assert.That(target.CanExecute(), Is.True);
-	        }
+
+				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+				{
+					Assert.That(target.CanExecute(), Is.True);
+				}
+			}
         }
 
         [Test]
@@ -62,8 +68,11 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
 	        {
 				personSelectorView.Stub(x => x.SelectedTab).Return(tab);
 		        command.Stub(x => x.Id).Return(id);
-		        
-		        target.Execute();
+
+				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+				{
+					target.Execute();
+				}
 
 				personSelectorView.AssertWasCalled(x => x.ModifyGroupPage(id));
 	        }

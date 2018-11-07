@@ -165,23 +165,27 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyWriteProtectionInfo()
 		{
-			IPerson person = PersonFactory.CreatePerson("for", "test");
-			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2000, 1, 1);
-			PersistAndRemoveFromUnitOfWork(person);
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				IPerson person = PersonFactory.CreatePerson("for", "test");
+				person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2000, 1, 1);
+				PersistAndRemoveFromUnitOfWork(person);
 
-			IPerson loaded = Session.Get<Person>(person.Id);
-			Assert.AreEqual(person, loaded);
-			Assert.AreEqual(new DateOnly(2000, 1, 1), loaded.PersonWriteProtection.PersonWriteProtectedDate);
-			Assert.AreEqual(((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person, loaded.PersonWriteProtection.UpdatedBy);
-			Assert.IsNotNull(loaded.PersonWriteProtection.UpdatedOn);
-			Assert.AreSame(loaded, loaded.PersonWriteProtection.BelongsTo);
-			var version = ((IVersioned)loaded).Version;
-			loaded.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2010, 1, 1);
-			PersistAndRemoveFromUnitOfWork(loaded);
-			loaded = Session.Get<Person>(person.Id);
-			Assert.That(loaded.PersonWriteProtection.PersonWriteProtectedDate, Is.EqualTo(new DateOnly(2010, 1, 1)));
-			Assert.That(version, Is.EqualTo(((IVersioned)loaded).Version));
-
+				IPerson loaded = Session.Get<Person>(person.Id);
+				Assert.AreEqual(person, loaded);
+				Assert.AreEqual(new DateOnly(2000, 1, 1), loaded.PersonWriteProtection.PersonWriteProtectedDate);
+				Assert.AreEqual(((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person,
+					loaded.PersonWriteProtection.UpdatedBy);
+				Assert.IsNotNull(loaded.PersonWriteProtection.UpdatedOn);
+				Assert.AreSame(loaded, loaded.PersonWriteProtection.BelongsTo);
+				var version = ((IVersioned) loaded).Version;
+				loaded.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2010, 1, 1);
+				PersistAndRemoveFromUnitOfWork(loaded);
+				loaded = Session.Get<Person>(person.Id);
+				Assert.That(loaded.PersonWriteProtection.PersonWriteProtectedDate,
+					Is.EqualTo(new DateOnly(2010, 1, 1)));
+				Assert.That(version, Is.EqualTo(((IVersioned) loaded).Version));
+			}
 		}
 
 

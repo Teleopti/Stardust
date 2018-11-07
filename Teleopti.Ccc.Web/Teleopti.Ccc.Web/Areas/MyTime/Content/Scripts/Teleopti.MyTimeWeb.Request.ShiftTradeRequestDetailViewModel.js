@@ -345,9 +345,8 @@ Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel = function(
 	self.widthPercentage = ko.computed(function() {
 		return (100 * self.lengthInMinutes()) / shiftLength + '%';
 	});
-	self.tooltipText = ko.computed(function() {
-		return '<div>{0}</div>{1}'.format(layer.TitleHeader, layer.TitleTime);
-	});
+	self.tooltipText = '<div>{0}</div>{1}'.format(layer.TitleHeader, layer.TitleTime);
+
 	var isRtl = Teleopti.MyTimeWeb.Common.IsRtl();
 	self.styleJson = ko.computed(function() {
 		if (isRtl)
@@ -409,9 +408,8 @@ Teleopti.MyTimeWeb.Request.CloneLayerAddShiftTradeViewModel = function(layer, mi
 	self.widthPx = ko.computed(function() {
 		return layer.lengthInMinutes() * self.pixelPerMinute() + 'px';
 	});
-	self.tooltipText = ko.computed(function() {
-		return '<div>{0}</div>{1}'.format(layer.titleHeader, layer.titleTime);
-	});
+	self.tooltipText = '<div>{0}</div>{1}'.format(layer.titleHeader, layer.titleTime);
+
 	var isRtl = Teleopti.MyTimeWeb.Common.IsRtl();
 	self.styleJson = ko.computed(function() {
 		if (isRtl)

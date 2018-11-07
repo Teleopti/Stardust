@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Threading;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time.Timeline
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time.Timeline
     {
         public TimelineControlViewModel(IEventAggregator eventAggregator,ICreateLayerViewModelService createLayerViewModelService)
         {
-            _layers = new LayerViewModelCollection(eventAggregator, createLayerViewModelService,new RemoveLayerFromSchedule(), new ReplaceLayerInSchedule());
+            _layers = new LayerViewModelCollection(eventAggregator, createLayerViewModelService,new RemoveLayerFromSchedule(), new ReplaceLayerInSchedule(), PrincipalAuthorization.Current());
             CurrentDispatcher = Dispatcher.CurrentDispatcher;
             TimeZoom = new TimeZoomViewModel(Period);
             TickMarks = new ObservableCollection<TickMarkViewModel>();

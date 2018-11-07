@@ -227,7 +227,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             var contractRepMock = _mocks.StrictMock<IContractRepository>();
             var contractScheduleRepMock = _mocks.StrictMock<IContractScheduleRepository>();
             var businessUnitRepository = _mocks.StrictMock<IBusinessUnitRepository>();
-            var scheduleTagRepository = _mocks.StrictMock<IScheduleTagRepository>();
 	        var workflowControlSetRepository = _mocks.StrictMock<IWorkflowControlSetRepository>();
 			var multi = _mocks.DynamicMock<IMultiplicatorDefinitionSetRepository>();
 
@@ -241,7 +240,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_repositoryFactory.CreateContractScheduleRepository(unitOfWork)).Return(contractScheduleRepMock);
             Expect.Call(_repositoryFactory.CreatePartTimePercentageRepository(unitOfWork)).Return(_mocks.DynamicMock<IPartTimePercentageRepository>());
             Expect.Call(_repositoryFactory.CreateBusinessUnitRepository(unitOfWork)).Return(businessUnitRepository);
-            Expect.Call(_repositoryFactory.CreateScheduleTagRepository(unitOfWork)).Return(scheduleTagRepository);
 	        Expect.Call(_repositoryFactory.CreateWorkflowControlSetRepository(unitOfWork)).Return(workflowControlSetRepository);
 			Expect.Call(_repositoryFactory.CreateMultiplicatorDefinitionSetRepository(unitOfWork)).Return(multi);
 
@@ -257,7 +255,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(contractRepMock.FindAllContractByDescription()).Return(_contractList);
             Expect.Call(contractScheduleRepMock.LoadAllAggregate()).Return(_contractScheduleColl);
             Expect.Call(businessUnitRepository.LoadAllBusinessUnitSortedByName()).Return(new List<IBusinessUnit>());
-            Expect.Call(scheduleTagRepository.LoadAll()).Return(new List<IScheduleTag>());
 	        Expect.Call(workflowControlSetRepository.LoadAll()).Return(new List<IWorkflowControlSet>());
 	        Expect.Call(multi.LoadAll()).Return(new List<IMultiplicatorDefinitionSet>());
 
@@ -291,8 +288,12 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _view.OnModificationOccurred(_model.Meeting, true);
 
             _mocks.ReplayAll();
-            _target.DeleteMeeting();
-            _mocks.VerifyAll();
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.DeleteMeeting();
+			}
+
+			_mocks.VerifyAll();
         }
 
         [Test]
@@ -530,7 +531,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         public void ShouldUseAnActiveActivityAsDefaultActivityForMeeting()
         {
             var commonStateHolder = _mocks.DynamicMock<ICommonStateHolder>();
-            Expect.Call(commonStateHolder.ActiveActivities).Return(new [] {_activity});
+            Expect.Call(commonStateHolder.Activities).Return(new [] {_activity});
 
             Expect.Call(_schedulerStateHolder.RequestedScenario).Return(_scenario);
             Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(_timeZone);

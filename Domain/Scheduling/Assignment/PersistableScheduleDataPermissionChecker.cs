@@ -9,15 +9,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public class PersistableScheduleDataPermissionChecker : IPersistableScheduleDataPermissionChecker
 	{
+		private readonly ICurrentAuthorization _currentAuthorization;
+
+		public PersistableScheduleDataPermissionChecker(ICurrentAuthorization currentAuthorization)
+		{
+			_currentAuthorization = currentAuthorization;
+		}
+
 		public IList<IPersistableScheduleData> GetPermittedData(
 			IEnumerable<IPersistableScheduleData> persistableScheduleData)
 		{
-			var authorization = PrincipalAuthorization.Current();
 			var permittedData = persistableScheduleData.Where(d =>
 			{
 				var forAuthorization =
 					new PersistableScheduleDataForAuthorization(d);
-				return authorization.IsPermitted(
+				return _currentAuthorization.Current().IsPermitted(
 					forAuthorization.FunctionPath,
 					forAuthorization.DateOnly,
 					forAuthorization.Person);
@@ -27,8 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public bool IsModifyPersonAssPermitted(DateOnly dateOnly, IPerson person)
 		{
-			var authorization = PrincipalAuthorization.Current();
-			return authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, dateOnly, person);
+			return _currentAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, dateOnly, person);
 		}
 	}
 

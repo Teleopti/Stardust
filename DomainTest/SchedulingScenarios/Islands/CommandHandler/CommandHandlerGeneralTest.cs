@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
@@ -17,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 	public class CommandHandlerGeneralTest : ResourcePlannerCommandHandlerTest
 	{
 		public FakeEventPublisher EventPublisher;
-		public FakePersonRepository PersonRepository;
 		public MergeIslandsSizeLimit MergeIslandsSizeLimit;
 
 		[Test]
@@ -109,21 +107,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 		}
 
 		[Test]
-		public void ShouldSetAgentsToOptimizeToAllInIslandIfNullIsPassed()
-		{
-			var skill = new Skill().WithId();
-			var agent1 = new Person().WithId().WithPersonPeriod(skill);
-			var agent2 = new Person().WithId().WithPersonPeriod(skill);
-			PersonRepository.Has(agent1);
-			PersonRepository.Has(agent2);
-
-			ExecuteTarget(new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), null);
-
-			var @event = EventPublisher.PublishedEvents.OfType<IIslandInfo>().Single();
-			@event.Agents.Should().Have.SameValuesAs(agent1.Id.Value, agent2.Id.Value);
-		}
-
-		[Test]
 		public void ShouldSetSpecificAgentsToOptimizeWhenOneIsland()
 		{
 			var skill = new Skill().WithId();
@@ -196,8 +179,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 		{
 			var skillA = new Skill("A").WithId();
 			var skillB = new Skill("B").WithId();
-			var agentsA = Enumerable.Range(0, 10).Select(x => new Person().WithPersonPeriod(skillA));
-			var agentsAB = Enumerable.Range(0, 10).Select(x => new Person().WithPersonPeriod(skillA, skillB));
+			var agentsA = Enumerable.Range(0, 10).Select(x => new Person().WithPersonPeriod(skillA).WithId());
+			var agentsAB = Enumerable.Range(0, 10).Select(x => new Person().WithPersonPeriod(skillA, skillB).WithId());
 			agentsA.Union(agentsAB).ForEach(x => PersonRepository.Has(x));
 
 			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod());
@@ -229,7 +212,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			PersonRepository.Has(agent1);
 			PersonRepository.Has(agent2);
 
-			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod(),null, TeamBlockType.Team);
+			ExecuteTarget(DateOnly.Today.ToDateOnlyPeriod(), new[]{agent1, agent2}, TeamBlockType.Team);
 
 			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Single().Agents.Count().Should().Be.EqualTo(2);
 		}

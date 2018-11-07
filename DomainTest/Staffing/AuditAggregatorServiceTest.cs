@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 	{
 		public IStaffingAuditRepository StaffingAuditRepository;
 		public IPersonAccessAuditRepository PersonAccessAuditRepository;
+		public IApplicationRoleRepository ApplicationRoleRepository;
 		public AuditAggregatorService Target;
 		public ISkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeLoggedOnUser LoggedOnUser;
@@ -65,17 +67,20 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var person = PersonFactory.CreatePersonWithId();
 			var staffingAudit = new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "abc.txt", "BPO")
 				{TimeStamp = new DateTime(2018, 10, 14, 10, 0, 0, DateTimeKind.Utc)};
-			dynamic role = new { RoleId = Guid.NewGuid(), Name = "Name" };
+			IApplicationRole role = new ApplicationRole(){Name = "Name" };
+			role.SetId(Guid.NewGuid());
+			dynamic role2 = new {RoleId = role.Id, Name = "Name"};
 			var personAccessAudit = new PersonAccess(
 				person,
 				person,
 				PersonAuditActionType.GrantRole.ToString(),
 				PersonAuditActionResult.Change.ToString(),
-				JsonConvert.SerializeObject(role))
+				JsonConvert.SerializeObject(role2))
 			{ TimeStamp = new DateTime(2018, 10, 14, 10, 0, 0, DateTimeKind.Utc) };
 
 			StaffingAuditRepository.Add(staffingAudit);
 			PersonAccessAuditRepository.Add(personAccessAudit);
+			ApplicationRoleRepository.Add(role);
 
 			var startDate = new DateTime(2018, 10, 13);
 			var endDate = new DateTime(2018, 10, 15);

@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -23,6 +24,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[DomainTest]
+	[FullPermissions]
 	public class MultipleChangeScheduleCommandHandlerTest : IIsolateSystem
 	{
 		public MultipleChangeScheduleCommandHandler Target;
@@ -39,8 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			isolate.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
 			isolate.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 		}
-
-
+		
 		[Test]
 		public void ShouldChangeActivityType()
 		{

@@ -14389,7 +14389,7 @@ Teleopti R&amp;D</value>
     <value>選擇一個範本</value>
   </data>
   <data name="RemoveDayOff" xml:space="preserve">
-    <value>移除一個休息日</value>
+    <value>移除休息日</value>
   </data>
   <data name="ExportAvailableLimitedTime" xml:space="preserve">
     <value>請注意”匯出到“即將被移除。</value>

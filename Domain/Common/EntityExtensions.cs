@@ -1,4 +1,7 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Common
 {
@@ -13,6 +16,11 @@ namespace Teleopti.Ccc.Domain.Common
 			var entityId = entity.Id;
 			var entityToCompareId = entityToCompare.Id;
 			return entityId.HasValue && entityToCompareId.HasValue && entityId.Equals(entityToCompareId);
+		}
+
+		public static IEnumerable<T> NonDeleted<T>(this IEnumerable<T> aggregates) where T : IAggregateRoot
+		{
+			return aggregates.Where(s => !((IDeleteTag) s).IsDeleted).ToArray();
 		}
 	}
 }

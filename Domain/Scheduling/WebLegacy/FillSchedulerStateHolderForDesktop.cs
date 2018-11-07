@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
@@ -15,12 +17,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		private readonly DesktopContext _desktopContext;
 		private readonly ReducedSkillsProvider _reducedSkillsProvider;
 		private readonly AddReducedSkillDaysToStateHolder _addReducedSkillDaysToStateHolder;
+		private readonly ICurrentAuthorization _currentAuthorization;
 
-		public FillSchedulerStateHolderForDesktop(DesktopContext desktopContext, PersonalSkillsProvider personalSkillsProvider, ReducedSkillsProvider reducedSkillsProvider, AddReducedSkillDaysToStateHolder addReducedSkillDaysToStateHolder) : base(personalSkillsProvider)
+		public FillSchedulerStateHolderForDesktop(DesktopContext desktopContext, PersonalSkillsProvider personalSkillsProvider, ReducedSkillsProvider reducedSkillsProvider, AddReducedSkillDaysToStateHolder addReducedSkillDaysToStateHolder, ICurrentAuthorization currentAuthorization) : base(personalSkillsProvider)
 		{
 			_desktopContext = desktopContext;
 			_reducedSkillsProvider = reducedSkillsProvider;
 			_addReducedSkillDaysToStateHolder = addReducedSkillDaysToStateHolder;
+			_currentAuthorization = currentAuthorization;
 		}
 
 		protected override void FillScenario(ISchedulerStateHolder schedulerStateHolderTo)
@@ -61,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			var stateHolderFrom = _desktopContext.CurrentContext().SchedulerStateHolderFrom;
-			var scheduleDictionary = new ScheduleDictionary(scenario, stateHolderFrom.Schedules.Period, new PersistableScheduleDataPermissionChecker());
+			var scheduleDictionary = new ScheduleDictionary(scenario, stateHolderFrom.Schedules.Period, new PersistableScheduleDataPermissionChecker(_currentAuthorization), _currentAuthorization);
 			using (TurnoffPermissionScope.For(scheduleDictionary))
 			{
 				moveSchedules(stateHolderFrom, scheduleDictionary, agents);
@@ -74,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		{
 			var currContext = _desktopContext.CurrentContext();
 			schedulerStateHolderTo.SchedulingResultState.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
-			var dayOffTemplate = currContext.SchedulerStateHolderFrom.CommonStateHolder.ActiveDayOffs.First();
+			var dayOffTemplate = currContext.SchedulerStateHolderFrom.CommonStateHolder.DayOffs.NonDeleted().First();
 			schedulerStateHolderTo.CommonStateHolder.SetDayOffTemplate(dayOffTemplate);
 			schedulerStateHolderTo.RequestedPeriod = currContext.SchedulerStateHolderFrom.RequestedPeriod;
 			schedulerStateHolderTo.ConsiderShortBreaks = false; //TODO check if this is the wanted behaviour in other cases than intraday optimization

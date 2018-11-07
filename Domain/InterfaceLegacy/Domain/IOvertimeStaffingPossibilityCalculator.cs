@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	public interface IOvertimeStaffingPossibilityCalculator
 	{
-		IList<CalculatedPossibilityModel> CalculateIntradayIntervalPossibilities(DateOnlyPeriod period, bool satisfyAllSkills);
+		IList<CalculatedPossibilityModel> CalculateIntradayIntervalPossibilities(IPerson person, DateOnlyPeriod period, bool satisfyAllSkills);
 	}
 }

@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor;
@@ -33,8 +34,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
         private DateTimePeriod _selectedPeriod;
         Microsoft.Practices.Composite.Events.IEventAggregator _eventAggregator;
 		private IEditableShiftMapper _editableShiftMapper;
+		private IDisposable auth;
 
-        [SetUp]
+		[SetUp]
         public void Setup()
         {
             _selectedPeriod = new DateTimePeriod(2001, 1, 1, 2001, 1, 3);
@@ -45,7 +47,16 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
 	        _editableShiftMapper = _mocker.StrictMock<IEditableShiftMapper>();
             _target = new ShiftEditorViewModel(_eventAggregator, new CreateLayerViewModelService(), true, _editableShiftMapper);
             _partForTest = new SchedulePartFactoryForDomain().CreatePartWithMainShift();
-        }
+
+			auth = CurrentAuthorization.ThreadlyUse(new FullPermission());
+		}
+
+		[TearDown]
+		public void Teardown()
+		{
+			auth?.Dispose();
+			;
+		}
 
         [Test]
         public void VerifyPropertiesOnAreasAreSet()
@@ -219,7 +230,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             }
             using (_mocker.Playback())
             {
-                models.ExecuteCommandModel(_target.CreateMeetingCommand);
+					models.ExecuteCommandModel(_target.CreateMeetingCommand);
             }
         }
 

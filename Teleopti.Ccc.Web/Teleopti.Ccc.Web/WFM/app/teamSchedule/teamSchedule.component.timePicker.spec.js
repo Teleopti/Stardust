@@ -4,6 +4,25 @@
 	beforeEach(function () {
 		module('wfm.templates');
 		module("wfm.teamSchedule");
+		module(function ($provide) {
+			$provide.service('CurrentUserInfo', function () {
+				return {
+					CurrentUserInfo: function () {
+						return {
+							DefaultTimeZone: 'Europe/London',
+							DateFormatLocale: 'en',
+							FirstDayOfWeek: 0,
+							DateTimeFormat: {
+								ShowMeridian: true,
+								ShortTimePattern: 'h:mm A',
+								AMDesignator: 'AM',
+								PMDesignator: 'PM'
+							}
+						};
+					}
+				};
+			});
+		});
 	});
 
 	beforeEach(inject(function (_$rootScope_, _$compile_) {
@@ -79,10 +98,7 @@
 		scope.$apply();
 		expect(angular.element(element[0]).hasClass('ng-invalid-dst')).toBe(true);
 	});
-
-
-
-
+	
 	function setUp(date, timezone, dateTime) {
 		scope.date = date;
 		scope.timezone = timezone;
@@ -95,22 +111,76 @@
 
 describe('<teams-time-picker> in locale sv-SE', function () {
 	var $templateCache, $compile, element, scope;
-	beforeEach(module('wfm.templates'));
-	beforeEach(module('wfm.teamSchedule'));
-
 	beforeEach(function () {
+		module('wfm.templates');
+		module('wfm.teamSchedule');
 		module(function ($provide) {
-			$provide.service('$locale', function () {
+			$provide.service('CurrentUserInfo', function () {
 				return {
-					id: 'sv-se',
-					DATETIME_FORMATS: {
-						AMPMS: ['fm', 'em'],
-						shortTime: 'HH:mm'
+					CurrentUserInfo: function () {
+						return {
+							DefaultTimeZone: 'Europe/Berlin',
+							DateFormatLocale: 'sv-se',
+							FirstDayOfWeek: 0,
+							DateTimeFormat: {
+								ShowMeridian: false,
+								ShortTimePattern: 'HH:mm',
+								AMDesignator: 'fm',
+								PMDesignator: 'em'
+							}
+						};
 					}
 				};
 			});
 		});
 	});
+
+	beforeEach(inject(function (_$compile_, _$rootScope_, _$templateCache_) {
+		$templateCache = _$templateCache_;
+		$compile = _$compile_;
+		scope = _$rootScope_.$new();
+	}));
+
+	it('should not show meridian', function () {
+		element = setUp("2018-04-13");
+		expect(element[0].querySelectorAll('.uib-time.am-pm.ng-hide').length).toEqual(1);
+	});
+
+	function setUp(date, timezone) {
+		scope.timezone = timezone;
+		var element = $compile('<teams-time-picker ng-model="time" timezone="timezone" date="date"></teams-time-picker>')(scope);
+		scope.$apply();
+		return element;
+	}
+});
+
+describe('<teams-time-picker> in locale zh-CN', function () {
+	var $templateCache, $compile, element, scope;
+	beforeEach(function () {
+		module('wfm.templates');
+		module('wfm.teamSchedule');
+		module(function ($provide) {
+			$provide.service('CurrentUserInfo', function () {
+				return {
+					CurrentUserInfo: function () {
+						return {
+							DefaultTimeZone: 'Asia/Hong_Kong',
+							DateFormatLocale: 'zh-CN',
+							FirstDayOfWeek: 1,
+							DateTimeFormat: {
+								ShowMeridian: false,
+								ShortTimePattern: 'HH:mm',
+								AMDesignator: '上午',
+								PMDesignator: '下午'
+							}
+							
+						};
+					}
+				};
+			});
+		});
+	});
+
 
 	beforeEach(inject(function (_$compile_, _$rootScope_, _$templateCache_) {
 		$templateCache = _$templateCache_;

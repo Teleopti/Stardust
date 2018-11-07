@@ -56,9 +56,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			PersonRequest.TrySetMessage(message);
 			PersonRequest.Request = shiftTradeRequest;
 			var repositoryFactory = new RepositoryFactory();
-			var setShiftTraderequestCheckSum = new ShiftTradeRequestSetChecksum(new DefaultScenarioFromRepository(new ScenarioRepository(uow)), new ScheduleStorage(uow, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, uow)));
+			var setShiftTraderequestCheckSum = new ShiftTradeRequestSetChecksum(new DefaultScenarioFromRepository(new ScenarioRepository(uow)), new ScheduleStorage(uow, repositoryFactory, new PersistableScheduleDataPermissionChecker(new FullPermission()), new ScheduleStorageRepositoryWrapper(repositoryFactory, uow), new FullPermission()));
 
-			setShiftTraderequestCheckSum.SetChecksum(shiftTradeRequest);
+			setShiftTraderequestCheckSum.SetChecksum(shiftTradeRequest); 
 			var requestRepository = new PersonRequestRepository(uow);
 			if (Approved)
 			{

@@ -1,60 +1,105 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
-	public class PersonContractShiftBagHint : IScheduleHint
+	public class PersonContractShiftBagHint : ISchedulePreHint
 	{
-		public void FillResult(HintResult hintResult, HintInput input)
+		private readonly IRuleSetProjectionService _ruleSetProjectionService;
+
+		public PersonContractShiftBagHint(IRuleSetProjectionService ruleSetProjectionService)
+		{
+			_ruleSetProjectionService = ruleSetProjectionService;
+		}
+		
+		public void FillResult(HintResult hintResult, ScheduleHintInput input)
 		{
 			var people = input.People;
 			var range = input.Period;
+
+			var shiftBagShiftLengths = new Dictionary<Guid,ShiftBagShiftLengths>();
+			
 			foreach (var person in people)
 			{
-				var longestShift = 0d;
-				var shortestShift = 10000d;
+				var longestShift = TimeSpan.MinValue;
+				var shortestShift = TimeSpan.MaxValue;
 				var period = person.PersonPeriods(range).FirstOrDefault();
 				var contract = period?.PersonContract.Contract;
 
-				if (period == null || contract == null || period.RuleSetBag == null)
+				if (period == null || contract == null || ((IDeleteTag)contract).IsDeleted|| period.RuleSetBag == null || ((IDeleteTag)period.RuleSetBag).IsDeleted)
 				{
 					continue;
 				}
 
-				foreach (var ruleSet in period.RuleSetBag.RuleSetCollection)
+				if (period.RuleSetBag.Id.HasValue && shiftBagShiftLengths.ContainsKey(period.RuleSetBag.Id.Value))
 				{
-					foreach (var workShift in ruleSet.TemplateGenerator.Generate())
+					shortestShift = shiftBagShiftLengths[period.RuleSetBag.Id.Value].ShortestShift;
+					longestShift = shiftBagShiftLengths[period.RuleSetBag.Id.Value].LongestShift;
+				}
+				else
+				{
+					foreach (var ruleSet in period.RuleSetBag.RuleSetCollection)
 					{
-						var shiftLength = workShift.Projection.ContractTime().TotalMinutes;
-						if (shiftLength > longestShift)
+						foreach (var workShift in _ruleSetProjectionService.ProjectionCollection(ruleSet, null))
 						{
-							longestShift = shiftLength;
-						}
+							var contractTime = workShift.ContractTime;
+							if (contractTime > longestShift)
+							{
+								longestShift = contractTime;
+							}
 
-						if (shiftLength < shortestShift)
-						{
-							shortestShift = shiftLength;
+							if (contractTime < shortestShift)
+							{
+								shortestShift = contractTime;
+							}
 						}
+					}
+
+					if (period.RuleSetBag.Id.HasValue)
+					{
+						shiftBagShiftLengths.Add(period.RuleSetBag.Id.Value,new ShiftBagShiftLengths(){ShortestShift = shortestShift,LongestShift = longestShift});
 					}
 				}
 
-
 				var virtualSchedulePeriod = person.VirtualSchedulePeriod(range.StartDate);
-				var targetTime = virtualSchedulePeriod.PeriodTarget().TotalMinutes;
-				var lowerTarget = targetTime - contract.NegativePeriodWorkTimeTolerance.TotalMinutes;
-				var upperTarget = targetTime + contract.PositivePeriodWorkTimeTolerance.TotalMinutes;
+				var targetTime = virtualSchedulePeriod.PeriodTarget();
+				var lowerTarget = targetTime - contract.NegativePeriodWorkTimeTolerance;
+				var upperTarget = targetTime + contract.PositivePeriodWorkTimeTolerance;
 				var workDays = virtualSchedulePeriod.Workdays();
-
-				if (workDays * longestShift < lowerTarget || workDays * shortestShift > upperTarget)
+				
+				
+				if (workDays * longestShift.Ticks < lowerTarget.Ticks || workDays * shortestShift.Ticks > upperTarget.Ticks)
 				{
-					hintResult.Add(new PersonHintError(person)
+					if (virtualSchedulePeriod.AverageWorkTimePerDay == virtualSchedulePeriod.Contract.WorkTime.AvgWorkTimePerDay)
 					{
-						ErrorResource = nameof(Resources.ShiftsInShiftBagCanNotFulFillContractTime),
-						ErrorResourceData = new object[] {period.RuleSetBag.Description.Name, contract.Description.Name}
-							.ToList()
-					}, GetType());
+						hintResult.Add(new PersonHintError(person)
+						{
+							ErrorResource = nameof(Resources.ShiftsInShiftBagCanNotFulFillContractTime),
+							ErrorResourceData = new object[] {period.RuleSetBag.Description.Name, contract.Description.Name}
+								.ToList()
+						}, GetType());
+					}
+					else
+					{
+						hintResult.Add(new PersonHintError(person)
+						{
+							ErrorResource = nameof(Resources.ShiftsInShiftBagCanNotFulFillOverriddenTargetTime),
+							ErrorResourceData = new object[] {period.RuleSetBag.Description.Name}
+								.ToList()
+						}, GetType());
+					}
 				}
 			}
+		}
+
+		private class ShiftBagShiftLengths
+		{
+			public TimeSpan ShortestShift { get; set; }
+			public TimeSpan LongestShift { get; set; }
 		}
 	}
 }

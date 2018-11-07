@@ -61,8 +61,7 @@ namespace Teleopti.Ccc.TestCommon
 			loggedOnPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 		    var principal = new TeleoptiPrincipalFactory().MakePrincipal(loggedOnPerson, logonDataSource, businessUnit, null);
 		    principalContext.SetCurrentPrincipal(principal);
-
-			CurrentAuthorization.DefaultTo(new FullPermission());
+			
 			stateMock.SetApplicationData(appData);
 			
 		    ClearAndSetStateHolder(stateMock);
@@ -103,8 +102,6 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			var principal = new TeleoptiPrincipalFactory().MakePrincipal(loggedOnPerson, dataSource, businessUnit, null);
 			principalContext.SetCurrentPrincipal(principal);
-
-			CurrentAuthorization.DefaultTo(new FullPermission());
 		}
 
         public static IPerson CreateLoggedOnPerson()

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NHibernate;
+using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
 				.SetFetchMode("PersonPeriodCollection.Team.Site", FetchMode.Join)
 				.SetFetchMode("PersonPeriodCollection.ExternalLogOnCollection", FetchMode.Join)
+				.SetResultTransformer(new DistinctRootEntityResultTransformer())
 				.List<Person>();
 		}
 	}

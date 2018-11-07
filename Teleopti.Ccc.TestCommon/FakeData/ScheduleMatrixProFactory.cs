@@ -6,22 +6,23 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
     public static class ScheduleMatrixProFactory
     {
-        public static ScheduleMatrixPro Create(DateOnlyPeriod period, IPerson person)
+        public static ScheduleMatrixPro Create(DateOnlyPeriod period, IPerson person, ICurrentAuthorization currentAuthorization = null)
         {
             ISchedulingResultStateHolder stateHolder = new SchedulingResultStateHolder();
 
             DateTimePeriod dayPeriod = period.ToDateTimePeriod(TimeZoneInfo.Utc);
             IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(dayPeriod);
             IScenario scenario = new Scenario("Scenario");
-            var scheduleDictionary = new ScheduleDictionaryForTest(scenario, scheduleDateTimePeriod, new Dictionary<IPerson, IScheduleRange>());
+            var scheduleDictionary = new ScheduleDictionaryForTest(scenario, scheduleDateTimePeriod, new Dictionary<IPerson, IScheduleRange>(), currentAuthorization);
             IScheduleParameters parameters = new ScheduleParameters(scenario, person, dayPeriod);
-            IScheduleRange range = new ScheduleRange(scheduleDictionary, parameters, new PersistableScheduleDataPermissionChecker());
+            IScheduleRange range = new ScheduleRange(scheduleDictionary, parameters, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
             scheduleDictionary.AddTestItem(person, range);
             stateHolder.Schedules = scheduleDictionary;
 

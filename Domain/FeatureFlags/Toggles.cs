@@ -19,7 +19,10 @@
 		RTA_KillFattyIntradayUntilItDies_74939, //remove april 2019
 		RTA_ReviewHistoricalAdherence_Domain_74770,
 		RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306,
+		RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485,
 		RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485,
+		RTA_TooManyPersonAssociationChangedEvents_Packages_78669,
+		RTA_StateQueueFloodPrevention_77710,
 		RTA_ReviewHistoricalAdherence_74770,
 
 		MyTimeWeb_SortRequestList_40711,
@@ -31,6 +34,7 @@
 		MyTimeWeb_PollToCheckScheduleChanges_46595,
 		MyTimeWeb_NewTeamScheduleView_75989,
 		MyTimeWeb_NewTeamScheduleViewDesktop_76313,
+		MyTimeWeb_TrafficLightOnMobileDayView_77447,
 
 		Wfm_MinimumScaffolding_32659,
 		Wfm_WebPlan_Pilot_46815,
@@ -78,9 +82,9 @@
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,
 		ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348,
-		ResourcePlanner_SeamlessPlanningForPreferences_76288,
 		ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941,
-		ResourcePlanner_FasterSeamlessPlanningForPreferences_78286,
+		ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717,
+		ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487,
 
 		Wfm_DisplayOnlineHelp_39402,
 
@@ -117,6 +121,7 @@
 		ETL_Show_Web_Based_ETL_Tool_74837,
 		WFM_Remember_My_Selection_In_Intraday_47254,
 		WFM_Clear_Data_After_Leaving_Date_47768,
+		WFM_Request_View_Permissions_77731,
 		
 		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889,
 		MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947,
@@ -136,7 +141,8 @@
 		Wfm_Payroll_SupportMultiDllPayrolls_75959,
 		Wfm_Stardust_EnableScaleout_77366,
 		Wfm_AuditTrail_StaffingAuditTrail_78125,
-		Wfm_AuditTrail_GenericAuditTrail_74938
+		Wfm_AuditTrail_GenericAuditTrail_74938,
+		WFM_Connect_NewLandingPage_Remove_GDPR_78132
 		// ReSharper restore InconsistentNaming
 	}
 }

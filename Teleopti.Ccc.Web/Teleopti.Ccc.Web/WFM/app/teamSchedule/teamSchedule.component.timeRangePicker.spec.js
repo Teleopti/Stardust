@@ -1,9 +1,23 @@
 ﻿'use strict';
 describe('<teams-time-range-picker>', function () {
 	var $templateCache, $compile, element, scope;
-
-	beforeEach(module('wfm.templates'));
-	beforeEach(module('wfm.teamSchedule'));
+	
+	beforeEach(function () {
+		module('wfm.templates');
+		module('wfm.teamSchedule');
+		module(function ($provide) {
+			$provide.service('CurrentUserInfo', function () {
+				return {
+					CurrentUserInfo: function () {
+						return {
+							DefaultTimeZone: 'Europe/Berlin',
+							DateFormatLocale: 'sv-se'
+						};
+					}
+				};
+			});
+		});
+	});
 
 	beforeEach(inject(function (_$compile_, _$rootScope_, _$templateCache_) {
 		$templateCache = _$templateCache_;
@@ -119,7 +133,7 @@ describe('<teams-time-range-picker>', function () {
 		var hoursEls = element[0].querySelectorAll('teams-time-picker .hours input');
 		var minutesEls = element[0].querySelectorAll('teams-time-picker .minutes input');
 
-		expect(hoursEls[0].value).toBe("11");
+		expect(hoursEls[0].value).toBe("23");
 		expect(hoursEls[1].value).toBe("01");
 
 		expect(minutesEls[0].value).toBe("00");

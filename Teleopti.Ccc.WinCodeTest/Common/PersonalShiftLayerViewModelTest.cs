@@ -8,6 +8,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon;
@@ -20,7 +21,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
     [TestFixture]
     public class PersonalShiftLayerViewModelTest
     {
-
 	    private bool _expectMovePermitted;
 		private LayerViewModel _target;
 		private MockRepository _mocks;
@@ -50,20 +50,17 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			_mocks.ReplayAll();
 
-			_target = new PersonalShiftLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, new PersonAssignment(person, new Scenario(), DateOnly.Today), null);
+			_target = new PersonalShiftLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, new PersonAssignment(person, new Scenario(), DateOnly.Today), null, new FullPermission());
 
 			_testRunner = new CrossThreadTestRunner();
 		}
-
-	
-
+		
 		[Test]
 		public void VerifyCorrectDescription()
 		{
 			Assert.AreEqual(UserTexts.Resources.PersonalShifts, _target.LayerDescription);
 		}
-
-
+		
 		[Test]
 		public void VerifyProperties()
 		{

@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -73,15 +74,18 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			}
 			using (mocks.Playback())
 			{
-				var result =
-					target.Handle(new GetSchedulesByGroupPageGroupQueryDto
-					              	{
-					              		QueryDate = new DateOnlyDto {DateTime = new DateTime(2012, 5, 2)},
-					              		ScenarioId = scenarioId,
-					              		TimeZoneId = "W. Europe Standard Time",
-					              		GroupPageGroupId = groupPageGroupId
-					              	});
-				result.Count.Should().Be.EqualTo(1);
+				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+				{
+					var result =
+						target.Handle(new GetSchedulesByGroupPageGroupQueryDto
+						{
+							QueryDate = new DateOnlyDto {DateTime = new DateTime(2012, 5, 2)},
+							ScenarioId = scenarioId,
+							TimeZoneId = "W. Europe Standard Time",
+							GroupPageGroupId = groupPageGroupId
+						});
+					result.Count.Should().Be.EqualTo(1);
+				}
 			}
 		}
 
@@ -95,13 +99,16 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			}
 			using (mocks.Playback())
 			{
-				Assert.Throws<FaultException>(() => target.Handle(new GetSchedulesByGroupPageGroupQueryDto
+				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+				{
+					Assert.Throws<FaultException>(() => target.Handle(new GetSchedulesByGroupPageGroupQueryDto
 					{
-						QueryDate = new DateOnlyDto { DateTime = new DateTime(2012, 5, 2) },
+						QueryDate = new DateOnlyDto {DateTime = new DateTime(2012, 5, 2)},
 						ScenarioId = scenarioId,
 						GroupPageGroupId = groupPageGroupId,
 						TimeZoneId = "W. Europe Standard Time"
 					}));
+				}
 			}
 		}
 
@@ -125,17 +132,21 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(scheduleDayAssembler.DomainEntitiesToDtos(null))
 					.Return(new List<SchedulePartDto> {new SchedulePartDto()});
 			}
+
 			using (mocks.Playback())
 			{
-				var result =
-					target.Handle(new GetSchedulesByGroupPageGroupQueryDto
-					{
-						QueryDate = new DateOnlyDto { DateTime = new DateTime(2012, 5, 2) },
-						ScenarioId = null,
-						GroupPageGroupId = groupPageGroupId,
-						TimeZoneId = "W. Europe Standard Time"
-					});
-				result.Count.Should().Be.EqualTo(1);
+				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+				{
+					var result =
+						target.Handle(new GetSchedulesByGroupPageGroupQueryDto
+						{
+							QueryDate = new DateOnlyDto {DateTime = new DateTime(2012, 5, 2)},
+							ScenarioId = null,
+							GroupPageGroupId = groupPageGroupId,
+							TimeZoneId = "W. Europe Standard Time"
+						});
+					result.Count.Should().Be.EqualTo(1);
+				}
 			}
 		}
 	}

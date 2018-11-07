@@ -313,13 +313,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
                 if (!tryGetFirstSelectedSchedule(out scheduleDay)) return;
 
                 var part =
-                    (IScheduleDay) owner.SchedulerState.Schedules[scheduleDay.Person].ReFetch(scheduleDay).Clone();
+                    (IScheduleDay) owner.SchedulerState.SchedulerStateHolder.Schedules[scheduleDay.Person].ReFetch(scheduleDay).Clone();
 
                 part.Clear<IScheduleData>();
                 IEditableShift mainShift = workShift.ToEditorShift(part.DateOnlyAsPeriod,
                     part.Person.PermissionInformation.DefaultTimeZone());
                 var category =
-                    owner.SchedulerState.CommonStateHolder.ShiftCategories.FirstOrDefault(
+                    owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.ShiftCategories.FirstOrDefault(
                         cat => cat.Id.Equals(workShift.ShiftCategory.Id));
                 if (category != null)
                 {

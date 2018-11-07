@@ -124,17 +124,19 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             using (mocks.Playback())
             {
-
-                target = new DayPresenterNewTestClass(viewBase, schedulerState1, gridlockManager,
-                                                      clipHandlerSchedulePart,
-                                                      SchedulePartFilter.None, _scaleCalculator);
-                target.SelectDate(new DateOnly(2011, 1, 1));
-                GridQueryCellInfoEventArgs eventArgs = new GridQueryCellInfoEventArgs(2,
-                                                                                      (int)
-                                                                                      ColumnType.StartScheduleColumns,
-                                                                                      new GridStyleInfo());
-                target.QueryCellInfo(this, eventArgs);
-            }
+				using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+				{
+					target = new DayPresenterNewTestClass(viewBase, schedulerState1, gridlockManager,
+						clipHandlerSchedulePart,
+						SchedulePartFilter.None, _scaleCalculator);
+					target.SelectDate(new DateOnly(2011, 1, 1));
+					GridQueryCellInfoEventArgs eventArgs = new GridQueryCellInfoEventArgs(2,
+						(int)
+						ColumnType.StartScheduleColumns,
+						new GridStyleInfo());
+					target.QueryCellInfo(this, eventArgs);
+				}
+			}
         }
 
 		[Test]

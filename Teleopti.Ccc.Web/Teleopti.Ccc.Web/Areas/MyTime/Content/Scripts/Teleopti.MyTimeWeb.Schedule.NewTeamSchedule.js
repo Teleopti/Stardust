@@ -136,16 +136,21 @@
 		);
 	}
 
-	function rebuildTooltipForTimeFilterIcon(title, startTimeStr, endTimeStr, onlyNightShiftStr) {
+	function rebuildTooltipForTimeFilterIcon() {
 		//rebuild tooltip for time filter icon
 		$('.new-teamschedule-time-filter').on('mouseover', function() {
+			var userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
+
 			var ele = document.createElement('div');
-			var htmlStr = '<div class="new-teamschedule-team-filter-detail"><span>' + title + '</span>';
+			var htmlStr =
+				'<div class="new-teamschedule-team-filter-detail"><span>' +
+				userTexts.FilterTeamSchedulesByTime +
+				'</span>';
 
 			if (vm.filter.filteredStartTimes.length > 0)
 				htmlStr +=
 					'<p>' +
-					startTimeStr +
+					userTexts.StartTime +
 					': <span class="new-teamschedule-team-filter-detail-time">' +
 					vm.filter.filteredStartTimes +
 					'</span></p>';
@@ -153,13 +158,13 @@
 			if (vm.filter.filteredEndTimes.length > 0)
 				htmlStr +=
 					'<p>' +
-					endTimeStr +
+					userTexts.EndTime +
 					': <span class="new-teamschedule-team-filter-detail-time">' +
 					vm.filter.filteredEndTimes +
 					'</span></p>';
 
 			if (vm.showOnlyNightShift()) {
-				htmlStr += '<p> ' + onlyNightShiftStr + ': ' + vm.showOnlyNightShift() + '</p>';
+				htmlStr += '<p> ' + userTexts.ShowOnlyNightShifts + ': ' + vm.showOnlyNightShift() + '</p>';
 			}
 
 			if (vm.showOnlyNightShift() || vm.showOnlyDayOff()) {
@@ -640,7 +645,7 @@
 				.stop()
 				.animate(
 					{
-						scrollTop: vm.mySchedule().layers[0].top() - (timeLineOffset + 10)
+						scrollTop: vm.mySchedule().layers[0].top - (timeLineOffset + 10)
 					},
 					0
 				);

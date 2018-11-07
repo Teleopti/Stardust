@@ -32,8 +32,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var scenario = new Scenario();
 			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1)), new Dictionary<IPerson, IScheduleRange>());
 			var activity = new Activity();
-			var source = ExtractedSchedule.CreateScheduleDay(dic, agent, new DateOnly(2000,1,2));
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, agent, new DateOnly(2000,1,1));
+			var source = ExtractedSchedule.CreateScheduleDay(dic, agent, new DateOnly(2000,1,2), new FullPermission());
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, agent, new DateOnly(2000,1,1), new FullPermission());
 			var nightShiftPeriodForOverTime = new DateTimePeriod(2000, 1, 2, 23, 2000, 1, 3, 7);
 			var periodOnNextDay = new DateTimePeriod(2000, 1, 3, 2, 2000, 1, 3, 3);
 			source.CreateAndAddOvertime(activity, nightShiftPeriodForOverTime, multiplicatorSet);
@@ -62,9 +62,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var agent = new Person().InTimeZone(timeZone);
 			var scenario = new Scenario();
 			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2017, 1, 1, 2018, 1, 1)), new Dictionary<IPerson, IScheduleRange>());
-			var sourceDST = ExtractedSchedule.CreateScheduleDay(dic, agent, new DateOnly(2017, 10, 26));
+			var sourceDST = ExtractedSchedule.CreateScheduleDay(dic, agent, new DateOnly(2017, 10, 26), new FullPermission());
 			sourceDST.CreateAndAddActivity(new Activity(), new DateTimePeriod(2017, 10, 26, 8, 2017, 10, 26, 17), new ShiftCategory("_"));
-			var destinationNonDST = ExtractedSchedule.CreateScheduleDay(dic, agent, new DateOnly(2017, 10, dateNumber));
+			var destinationNonDST = ExtractedSchedule.CreateScheduleDay(dic, agent, new DateOnly(2017, 10, dateNumber), new FullPermission());
 
 			target.Paste(sourceDST, destinationNonDST, new PasteOptions {Default = true});
 

@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Adherence.Domain.Events
 {
@@ -10,6 +11,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 	public class QueryData
 	{
 		public Guid? PersonId;
+		public DateOnly? BelongsToDate;
 		public DateTime? StartTime;
 		public DateTime? EndTime;
 	}

@@ -353,8 +353,11 @@ Try
 
     #create event log source
     EventlogSource-Create "$JOB"
-
-    $DBManagerFolder = $directory + "\..\Tools\Database"
+	
+	#Setting $Env:TeleoptiIsAzure = $true
+	[Environment]::SetEnvironmentVariable("TeleoptiIsAzure", "true", "Machine")
+    
+	$DBManagerFolder = $directory + "\..\Tools\Database"
     $settingsFile = "settings.txt"
     $fullPathsettingsFile =  $DBManagerFolder + "\" + $settingsFile
 

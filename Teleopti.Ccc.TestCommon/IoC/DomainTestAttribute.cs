@@ -38,7 +38,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.IocCommon;
@@ -48,15 +47,19 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
-using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
+using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Tracer;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
-	[Toggle(Domain.FeatureFlags.Toggles.RTA_ReviewHistoricalAdherence_74770)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_ReviewHistoricalAdherence_Domain_74770)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306)]
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485)]
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485)]
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_TooManyPersonAssociationChangedEvents_Packages_78669)]
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_StateQueueFloodPrevention_77710)]
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_ReviewHistoricalAdherence_74770)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
 		public static string DefaultTenantName = "default";
@@ -66,16 +69,17 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			base.Extend(extend, configuration);
 			extend.AddService<FakeDataSources>();
-			
+
 			extend.AddService<FakeDatabase>();
 			if (QueryAllAttributes<DontSendEventsAtPersistAttribute>().Any())
 			{
-				extend.AddService<FakeStorageSimple>();				
+				extend.AddService<FakeStorageSimple>();
 			}
 			else
 			{
 				extend.AddService<FakeStorage>();
 			}
+
 			extend.AddService<FakeSchedulingSourceScope>();
 			extend.AddService<FakeRtaHistory>();
 		}
@@ -102,7 +106,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			isolate.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
 			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 			isolate.UseTestDouble<ThrowExceptions>().For<ISyncEventProcessingExceptionHandler>();
-			isolate.UseTestDouble<FakeRtaEventStore>().For<IRtaEventStore, IRtaEventStoreReader>();
+			isolate.UseTestDouble<FakeRtaEventStore>().For<IRtaEventStore, IRtaEventStoreReader, IRtaEventStoreUpgradeWriter>();
 			QueryAllAttributes<UseEventPublisherAttribute>()
 				.ForEach(a => isolate.UseTestDoubleForType(a.EventPublisher).For<IEventPublisher>());
 			isolate.UseTestDouble<FakeRecurringEventPublisher>().For<IRecurringEventPublisher>();
@@ -123,7 +127,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			isolate.UseTestDouble<FakeAgentStatePersister>().For<IAgentStatePersister>();
 
 			isolate.UseTestDouble<FakeAgentStateReadModelPersister>().For<IAgentStateReadModelPersister, IAgentStateReadModelReader>();
-			
+
 			isolate.UseTestDouble<FakeHistoricalOverviewReadModelPersister>().For<IHistoricalOverviewReadModelPersister, IHistoricalOverviewReadModelReader>();
 
 			isolate.UseTestDouble<FakeAllLicenseActivatorProvider>().For<ILicenseActivatorProvider>();
@@ -155,7 +159,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// licensing
 			isolate.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();
-			
+
 
 			// Repositories
 			if (QueryAllAttributes<ThrowIfRepositoriesAreUsedAttribute>().Any())
@@ -164,8 +168,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			}
 			else
 			{
-				//isolate.UseTestDouble<FakePersonAccessAuditRepository>().For<IPersonAccessAuditRepository>();
-				//isolate.UseTestDouble<FakeTenantAuditRepository>().For<ITenantAuditRepository>();
+				isolate.UseTestDouble<FakePersonAccessAuditRepository>().For<IPersonAccessAuditRepository>();
+				isolate.UseTestDouble<FakeTenantAuditRepository>().For<ITenantAuditRepository>();
 				isolate.UseTestDouble<FakeSkillCombinationResourceReader>().For<ISkillCombinationResourceReader>();
 				isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository, IProxyForId<IPerson>, IPersonLoadAllWithAssociation>();
 				isolate.UseTestDouble<FakeMultisiteDayRepository>().For<IMultisiteDayRepository>();
@@ -278,7 +282,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeAgentBadgeRepository>().For<IAgentBadgeRepository>();
 				isolate.UseTestDouble<SkillIntradayStaffingFactory>().For<SkillIntradayStaffingFactory>();
 				isolate.UseTestDouble<FakePersonScheduleDayReadModelPersister>().For<IPersonScheduleDayReadModelPersister>();
-				
+
 				isolate.UseTestDouble<FakeGamificationSettingRepository>().For<IGamificationSettingRepository>();
 				isolate.UseTestDouble<FakeForecastDayOverrideRepository>().For<IForecastDayOverrideRepository>();
 				isolate.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
@@ -315,7 +319,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public Lazy<FakeDatabase> Database;
 		public FakeEventPublisher FakeEventPublisher;
 
-		private IDisposable _authorizationScope;
 		private IDisposable _tenantScope;
 		private Person _loggedOnPerson;
 
@@ -328,15 +331,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			fakeSignin();
 
 			createDefaultData();
-
-			// because DomainTest project has OneTimeSetUp that sets FullPermissions globally... 
-			// ... we need to scope real/fake/full for this test
-			if (realPermissions())
-				_authorizationScope = AuthorizationScope.OnThisThreadUse((PrincipalAuthorization) Authorization);
-			else if (fakePermissions())
-				_authorizationScope = AuthorizationScope.OnThisThreadUse((FakePermissions) Authorization);
-			else
-				_authorizationScope = AuthorizationScope.OnThisThreadUse((FullPermission) Authorization);
 		}
 
 		private void extendScope()
@@ -408,7 +402,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			base.AfterTest();
 
 			_tenantScope?.Dispose();
-			_authorizationScope?.Dispose();
 		}
 	}
 }

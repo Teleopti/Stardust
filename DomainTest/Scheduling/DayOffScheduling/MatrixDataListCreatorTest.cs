@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 	{
 		private MockRepository _mocks;
 		private SchedulingOptions _schedulingOptions;
-		private IMatrixDataListCreator _target;
+		private MatrixDataListCreator _target;
 		private IScheduleMatrixPro _matrix;
 		private IScheduleDayPro _scheduleDayPro1;
 		private IScheduleDayDataMapper _scheduleDayDataMapper;

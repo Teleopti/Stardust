@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.PersonAssociationChan
 		[Test]
 		public void Swooosh()
 		{
-			const int numberOfAgents = 50_000;
+			const int numberOfAgents = 5000;
 			Context.MakeUsersFaster(Enumerable.Range(0, numberOfAgents).Select(x => $"agent{x}"));
 
 			var stopwatch = new Stopwatch();

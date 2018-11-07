@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                                       new PersonContract(contract, new PartTimePercentage("sdf"), new ContractSchedule("sdf")),
                                       new Team()));
             var scheduleRange =
-                new ScheduleRange(dic, new ScheduleParameters(scenario, person, range), new PersistableScheduleDataPermissionChecker());
+                new ScheduleRange(dic, new ScheduleParameters(scenario, person, range), new PersistableScheduleDataPermissionChecker(new FullPermission()), new FullPermission());
             underlyingDictionary.Add(person, scheduleRange);
 
             scheduleRange.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario, new DateOnly(2007, 8, 3), dayOff));

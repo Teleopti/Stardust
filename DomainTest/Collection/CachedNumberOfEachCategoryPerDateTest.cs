@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -15,6 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Collection
 {
 	[DomainTest]
+	[FullPermissions]
 	public class CachedNumberOfEachCategoryPerDateTest
 	{
 		private ICachedNumberOfEachCategoryPerDate _target;

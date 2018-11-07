@@ -7,8 +7,12 @@ using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Wfm.Api.Test.Command
@@ -20,6 +24,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 		public FakePersonRepository PersonRepository;
 		public FakeAbsenceRepository AbsenceRepository;
 		public FakePersonRequestRepository PersonRequestRepository;
+		public FakeLoggedOnUser LoggedOnUser;
 
 		[Test]
 		public void ShouldAddIntradayAbsenceRequest()
@@ -30,6 +35,13 @@ namespace Teleopti.Wfm.Api.Test.Command
 			AbsenceRepository.Has(absence);
 
 			var person = new Person().WithId();
+			var role = ApplicationRoleFactory.CreateRole("Agent", "Agent");
+			role.AvailableData = new AvailableData {AvailableDataRange = AvailableDataRangeOption.MyOwn};
+			role.AddApplicationFunction(ApplicationFunction.FindByPath(
+				new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions,
+				DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb));
+			person.PermissionInformation.AddApplicationRole(role);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 			PersonRepository.Add(person);
 
 			var result = Client.PostAsync("/command/AddIntradayAbsenceRequest", new StringContent(

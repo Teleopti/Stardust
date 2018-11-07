@@ -10,6 +10,8 @@ using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.TestCommon;
@@ -206,7 +208,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 					pDayOff.SetId(id);
 					var dbData = pDayOff.EntityClone();
 					conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(pDayOff, pDayOff.EntityClone()), dbData));
-            ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, pDayOff, new PersistableScheduleDataPermissionChecker());
+			ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, pDayOff,
+				new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
+				CurrentAuthorization.Make());
 
             using(mocks.Record())
             {
@@ -233,7 +237,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 					var pDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff();
             pDayOff.SetId(id);
 			conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(pDayOff, pDayOff.EntityClone()), null));
-            ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, pDayOff, new PersistableScheduleDataPermissionChecker());
+			ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, pDayOff,
+				new PersistableScheduleDataPermissionChecker(new FullPermission()),
+				new FullPermission());
             
             using (mocks.Record())
             {
@@ -262,7 +268,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var dataDb = dataCurrent.EntityClone();
 
 			conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(dataOrg, dataCurrent), dataDb));
-            ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, dataOrg, new PersistableScheduleDataPermissionChecker());
+            ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, dataOrg, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
 
             using (mocks.Record())
             {
@@ -289,7 +295,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var dataDb = dataOrg.EntityClone();
 
 			conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(dataOrg, null), dataDb));
-            ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, dataOrg, new PersistableScheduleDataPermissionChecker());
+            ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, dataOrg, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
 
             using (mocks.Record())
             {
@@ -316,7 +322,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var dataCurrent = dataOrg.EntityClone();
 
 			conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(dataOrg, dataCurrent), null));
-            ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, dataOrg, new PersistableScheduleDataPermissionChecker());
+            ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, dataOrg, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
 
             using (mocks.Record())
             {

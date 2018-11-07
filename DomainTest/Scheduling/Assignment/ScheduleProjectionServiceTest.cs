@@ -28,11 +28,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 		private void setup()
 		{
-			permissionChecker = new PersistableScheduleDataPermissionChecker();
+			permissionChecker = new PersistableScheduleDataPermissionChecker(new FullPermission());
 			var person = PersonFactory.CreatePerson();
-			person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
-			dic = new ScheduleDictionary(new Scenario("sd"), new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2200, 1, 1)), permissionChecker);
-			scheduleDay = ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2000, 1, 1));
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			dic = new ScheduleDictionary(new Scenario("sd"), new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2200, 1, 1)), permissionChecker, new FullPermission());
+			scheduleDay = ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2000, 1, 1), new FullPermission());
 			target = new ScheduleProjectionService(scheduleDay, new ProjectionPayloadMerger());
 		}
 
@@ -593,7 +593,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			setup();
 			const int nextDay = 24;
 			var scheduleRange = new ScheduleRange(scheduleDay.Owner,
-				new ScheduleParameters(scheduleDay.Scenario, scheduleDay.Person, scheduleDay.Owner.Period.VisiblePeriod), permissionChecker);
+				new ScheduleParameters(scheduleDay.Scenario, scheduleDay.Person, scheduleDay.Owner.Period.VisiblePeriod), permissionChecker, new FullPermission());
 
 			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scheduleDay.Person,
 				scheduleDay.Scenario, createPeriod(20, nextDay + 12));
@@ -754,7 +754,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             schedulePeriod.AverageWorkTimePerDayOverride = TimeSpan.FromHours(6);
             person.AddSchedulePeriod(schedulePeriod);
 
-            var scheduleday = ExtractedSchedule.CreateScheduleDay(dic, person, dateOnly);
+            var scheduleday = ExtractedSchedule.CreateScheduleDay(dic, person, dateOnly, new FullPermission());
             target = new ScheduleProjectionService(scheduleday, new ProjectionPayloadMerger());
 	        var abs = PersonAbsenceFactory.CreatePersonAbsence(person, scheduleday.Scenario,
 		        new DateTimePeriod(new DateTime(2012, 11, 29, 0, 0, 0, DateTimeKind.Utc),

@@ -28,9 +28,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
         [Test]
         public void ShouldReturnTrueIfAllowed()
         {
-            Assert.That(_target.CanExecute(), Is.True);
-        }
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				Assert.That(_target.CanExecute(), Is.True);
+			}
+		}
     }
-
-
 }

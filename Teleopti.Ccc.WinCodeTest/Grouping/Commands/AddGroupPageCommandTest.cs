@@ -35,17 +35,23 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
         [Test]
         public void ShouldReturnTrueModifyAllowed()
         {
-              Assert.That(_target.CanExecute(), Is.True);
-        }
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				Assert.That(_target.CanExecute(), Is.True);
+			}
+		}
 
         [Test]
         public void ShouldCallViewToAddGroupPage()
-        {
-            Expect.Call(() => _personSelectorView.AddNewGroupPage());
-            _mocks.ReplayAll();
-            _target.Execute();
-            _mocks.VerifyAll();
-        }
+		{
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				Expect.Call(() => _personSelectorView.AddNewGroupPage());
+				_mocks.ReplayAll();
+				_target.Execute();
+				_mocks.VerifyAll();
+			}
+		}
     }
 
 

@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Is = Rhino.Mocks.Constraints.Is;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             }
             using (_mocks.Playback())
             {
-                target.CreateViewModelsFromSchedule(selector, scheduleDay, null, TimeSpan.FromMinutes(1), null);
+                target.CreateViewModelsFromSchedule(selector, scheduleDay, null, TimeSpan.FromMinutes(1), null, new FullPermission());
             }
         }
 
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             }
             using (_mocks.Playback())
             {
-                target.CreateViewModelsFromSchedule(selector, scheduleDay, null, TimeSpan.FromMinutes(1), _layerViewModelObserver);
+                target.CreateViewModelsFromSchedule(selector, scheduleDay, null, TimeSpan.FromMinutes(1), _layerViewModelObserver, new FullPermission());
             }
         }
 

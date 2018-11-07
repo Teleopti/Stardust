@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -59,19 +60,20 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 			RaptorTransformerHelper.SetUpdatedOn(abs2, DateTime.Now);
 			RaptorTransformerHelper.SetUpdatedOn(abs3, DateTime.Now);
 
-			var dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(1800, 1, 1, 1801, 1, 1)), new PersistableScheduleDataPermissionChecker());
+			var currentAuthorization = CurrentAuthorization.Make();
+			var dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(1800, 1, 1, 1801, 1, 1)), new PersistableScheduleDataPermissionChecker(currentAuthorization), currentAuthorization);
 
-			IScheduleDay schedulePart1 = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(1800, 1, 1));
-			IScheduleDay schedulePart11 = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(1800, 1, 2));
-			IScheduleDay schedulePart111 = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(1800, 1, 3));
+			IScheduleDay schedulePart1 = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(1800, 1, 1), currentAuthorization);
+			IScheduleDay schedulePart11 = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(1800, 1, 2), currentAuthorization);
+			IScheduleDay schedulePart111 = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(1800, 1, 3), currentAuthorization);
 
-			IScheduleDay schedulePart2 = ExtractedSchedule.CreateScheduleDay(dic, person2, new DateOnly(1800, 1, 1));
-			IScheduleDay schedulePart22 = ExtractedSchedule.CreateScheduleDay(dic, person2, new DateOnly(1800, 1, 2));
-			IScheduleDay schedulePart222 = ExtractedSchedule.CreateScheduleDay(dic, person2, new DateOnly(1800, 1, 3));
+			IScheduleDay schedulePart2 = ExtractedSchedule.CreateScheduleDay(dic, person2, new DateOnly(1800, 1, 1), currentAuthorization);
+			IScheduleDay schedulePart22 = ExtractedSchedule.CreateScheduleDay(dic, person2, new DateOnly(1800, 1, 2), currentAuthorization);
+			IScheduleDay schedulePart222 = ExtractedSchedule.CreateScheduleDay(dic, person2, new DateOnly(1800, 1, 3), currentAuthorization);
 
-			IScheduleDay schedulePart3 = ExtractedSchedule.CreateScheduleDay(dic, person3, new DateOnly(1800, 1, 1));
-			IScheduleDay schedulePart33 = ExtractedSchedule.CreateScheduleDay(dic, person3, new DateOnly(1800, 1, 2));
-			IScheduleDay schedulePart333 = ExtractedSchedule.CreateScheduleDay(dic, person3, new DateOnly(1800, 1, 3));
+			IScheduleDay schedulePart3 = ExtractedSchedule.CreateScheduleDay(dic, person3, new DateOnly(1800, 1, 1), currentAuthorization);
+			IScheduleDay schedulePart33 = ExtractedSchedule.CreateScheduleDay(dic, person3, new DateOnly(1800, 1, 2), currentAuthorization);
+			IScheduleDay schedulePart333 = ExtractedSchedule.CreateScheduleDay(dic, person3, new DateOnly(1800, 1, 3), currentAuthorization);
 
 			schedulePart1.Add(ass1);
 			schedulePart111.Add(abs1);

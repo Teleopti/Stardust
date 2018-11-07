@@ -11,32 +11,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
     {
 	    private readonly OvertimeShiftLayer _layer;
 	    private readonly IPersonAssignment _assignment;
+		private readonly IAuthorization _authorization;
 
-	    public OvertimeLayerViewModel(IVisualLayer layer, IPerson person)
+		public OvertimeLayerViewModel(IVisualLayer layer, IPerson person, IAuthorization authorization = null)
             : base(layer, person)
-        {
-        }
-
-     
-        public OvertimeLayerViewModel(ILayerViewModelObserver observer, OvertimeShiftLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator)
+		{
+			_authorization = authorization ?? PrincipalAuthorization.Current();
+		}
+		
+        public OvertimeLayerViewModel(ILayerViewModelObserver observer, OvertimeShiftLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator, IAuthorization authorization = null)
             : base(observer, layer, assignment, eventAggregator)
         {
 	        _layer = layer;
 	        _assignment = assignment;
-        }
+			_authorization = authorization ?? PrincipalAuthorization.Current();
+		}
 
-	    public override bool CanMoveUp
-	    {
-				get { return _assignment != null && _assignment.OvertimeActivities().ToList().IndexOf(_layer) > 0;  }
-	    }
+	    public override bool CanMoveUp => _assignment != null && _assignment.OvertimeActivities().ToList().IndexOf(_layer) > 0;
 
-	    public override bool CanMoveDown
-	    {
-		    get
-		    {
-			    return _assignment != null && !isLayerLast();
-		    }
-	    }
+		public override bool CanMoveDown => _assignment != null && !isLayerLast();
 
 		private bool isLayerLast()
 		{
@@ -44,41 +37,29 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 			return overtimeLayers.Any() && overtimeLayers.Last().Equals(_layer);
 		}
 
-	    public override bool Opaque
-        {
-            get{ return true; }
-        }
+	    public override bool Opaque => true;
 
-        public override string LayerDescription
-        {
-            get
-            {
-	            return _layer != null ? _layer.DefinitionSet.Name : UserTexts.Resources.Overtime;
-            }
-        }
-			
-				public override int VisualOrderIndex
-				{
-					get { return 100 + _assignment.OvertimeActivities().ToList().IndexOf(_layer); ; }
-				}
+		public override string LayerDescription => _layer != null ? _layer.DefinitionSet.Name : UserTexts.Resources.Overtime;
 
-        public override bool IsMovePermitted()
+		public override int VisualOrderIndex => 100 + _assignment.OvertimeActivities().ToList().IndexOf(_layer);
+
+		public override bool IsMovePermitted()
         {
             if (SchedulePart != null)
             {
-                return PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
+                return _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
             }
             return true;
         }
 
         public override bool ShouldBeIncludedInGroupMove(ILayerViewModel sender)
         {
-            return sender != this && !IsProjectionLayer && ((sender.GetType() == typeof(MainShiftLayerViewModel)) || (sender.GetType() == typeof(OvertimeLayerViewModel)));
+            return sender != this && !IsProjectionLayer && (sender.GetType() == typeof(MainShiftLayerViewModel) || sender.GetType() == typeof(OvertimeLayerViewModel));
         }
 
 		protected override void Replace()
 		{
-			if(ParentObservingCollection!=null)ParentObservingCollection.ReplaceActivity(this,Layer as ILayer<IActivity>,SchedulePart);
+			ParentObservingCollection?.ReplaceActivity(this,Layer as ILayer<IActivity>,SchedulePart);
 		}
     }
 }

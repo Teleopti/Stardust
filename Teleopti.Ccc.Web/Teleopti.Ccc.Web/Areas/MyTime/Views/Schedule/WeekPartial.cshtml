@@ -139,7 +139,7 @@ Layout = null;
 	<div class="schedule-table-container">
 		<div class="week-schedule-ASM-permission-granted" data-bind="if : asmEnabled">yes</div>
 		<div class="week-schedule-current-week" data-bind="if : isCurrentWeek">yes</div>
-		<div class="body-weekview-inner clearfix" style="padding: 0">
+		<div class="body-weekview-inner clearfix">
 			<div class="weekview-timeline floatleft">
 				<div class="weekview-day-time-indicator-small absolute">
 				</div>
@@ -170,40 +170,39 @@ Layout = null;
 					<!-- /ko -->
 				</div>
 				<div class="weekview-day-symbol" data-bind="click: $parent.showAddRequestForm, css: { 'weekview-day-show-request': requestPermission }">
-					<div class="weekview-day-symbol-request pull-right weekview-day-icon" data-bind="visible: hasRequests, tooltip: { title: requestsText, html: true }, click: navigateToRequests">
-						<i class="glyphicon glyphicon-comment"></i>
-					</div>
-					<div class="holiday-agents weekview-day-show-request pull-right weekview-day-icon" data-bind="visible: absenceRequestPermission, tooltip: { title: holidayChanceText, html: true }">
-						<div class="small-circle" data-bind="style: {background: holidayChanceColor()}">
-						</div>
-					</div>
-					<div class="overtime-availability-symbol floatright weekview-day-icon" data-bind="visible: overtimeAvailability().HasOvertimeAvailability, tooltip: { title: textOvertimeAvailabilityText, html: true }">
-						<i class="glyphicon glyphicon-time floatright" />
-					</div>
-
-					<div class="seatbooking-symbol pull-right weekview-day-icon " data-bind="visible: seatBookingIconVisible(), tooltip: { title: seatBookingMessage, html: true }">
-						<i class="mdi mdi-chair-school" />
-					</div>
-
 					<!-- ko if: hasNote -->
-					<div class="pull-right weekview-day-icon" data-bind="tooltip: { title: noteMessage, html: true }">
+					<div class="weekview-day-icon cursorpointer" data-bind="tooltip: { title: noteMessage, html: true }">
 						<i class="glyphicon glyphicon-exclamation-sign"></i>
 					</div>
 					<!-- /ko -->
-					<div id="add-request-cell" data-bind="css:{'add-request-space show-request': requestPermission}">
+
+					<div class="seatbooking-symbol weekview-day-icon cursorpointer" data-bind="visible: seatBookingIconVisible, tooltip: { title: seatBookingMessage, html: true }">
+						<i class="mdi mdi-chair-school"></i>
+					</div>
+
+					<div class="overtime-availability-symbol floatright weekview-day-icon cursorpointer" data-bind="visible: overtimeAvailability.HasOvertimeAvailability, tooltip: { title: textOvertimeAvailabilityText, html: true }">
+						<i class="glyphicon glyphicon-time floatright"></i>
+					</div>
+
+					<div class="weekview-day-symbol-request weekview-day-icon cursorpointer" data-bind="visible: hasRequests, tooltip: { title: requestsText, html: true }, click: navigateToRequests">
+						<i class="glyphicon glyphicon-comment"></i>
+					</div>
+
+					<div class="holiday-agents weekview-day-icon cursorpointer" data-bind="visible: absenceRequestPermission, tooltip: { title: holidayChanceText, html: true }">
+						<div class="small-circle" data-bind="style: {background: absenceChanceColor}"></div>
 					</div>
 				</div>
 				<div>
-					<div class="weekview-day-schedule relative" data-bind="style: {width: probabilities().length > 0 ? '116px' : '129px'}">
+					<div class="weekview-day-schedule relative" data-bind="style: {width: probabilities().length > 0 ? '116px' : '127px'}">
 						<div class="weekview-day-time-indicator relative" data-bind="style: {width: probabilities().length > 0 ? '114px' : '129px'}">
 						</div>
 						<!-- ko foreach: layers -->
-						<!-- ko if: isOvertimeAvailability() -->
+						<!-- ko if: isOvertimeAvailability -->
 						<div class="weekview-day-schedule-layer absolute overtime-availability-bar" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, click: $parent.showOvertimeAvailability">
 							<i class="glyphicon glyphicon-time"></i>
 						</div>
 						<!-- /ko -->
-						<!-- ko ifnot: isOvertimeAvailability() -->
+						<!-- ko ifnot: isOvertimeAvailability -->
 						<div class="weekview-day-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, css:{'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle}">
 							<div data-bind="visible: showTitle">
 								<strong class="weekview-day-schedule-layer-activity truncate" data-bind="text: title"></strong>
@@ -222,7 +221,7 @@ Layout = null;
 					</div>
 					<!-- ko if: showStaffingProbabilityBar -->
 					<div class="probability-vertical-bar ">
-						<!--ko foreach: probabilities-->
+						<!--ko foreach: probabilities() -->
 						<div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true}, style: styleJson"></div>
 						<!-- /ko -->
 					</div>

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
@@ -13,6 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private List<IBusinessRuleResponse> _businessRuleResponseCollection;
 		private readonly IScheduleDictionary _owner;
 		private readonly IScheduleParameters _parameters;
+		private readonly ICurrentAuthorization _currentAuthorization;
 		private List<IScheduleData> _scheduleDataCollection;
 		
 		private readonly object lockObject = new object();
@@ -21,12 +23,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private SchedulePublishedSpecificationForAbsence schedulePublishedSpecificationForAbsence;
 		private SchedulePublishedSpecification schedulePublishedAnySpecification;
 
-		protected Schedule(IScheduleDictionary owner, IScheduleParameters parameters)
+		protected Schedule(IScheduleDictionary owner, IScheduleParameters parameters, ICurrentAuthorization currentAuthorization)
 		{
 			InParameter.NotNull(nameof(parameters), parameters);
 			InParameter.NotNull(nameof(owner), owner);
 			_owner = owner;
 			_parameters = parameters;
+			_currentAuthorization = currentAuthorization;
 			_businessRuleResponseCollection = new List<IBusinessRuleResponse>();
 			_scheduleDataCollection = new List<IScheduleData>();
 
@@ -156,7 +159,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			//this will probably slow things down - fix later
 
 			var schedIsPublished = schedulePublishedSpecification.IsSatisfiedBy(dateAndDateTime.DateOnly);
-			var retObj = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(Owner, Person, dateAndDateTime);
+			var retObj = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(Owner, Person, dateAndDateTime, _currentAuthorization);
 			retObj.FullAccess = availableDatePeriods.Any(a => a.Contains(dateAndDateTime.DateOnly));
 			retObj.IsFullyPublished = schedIsPublished;
 

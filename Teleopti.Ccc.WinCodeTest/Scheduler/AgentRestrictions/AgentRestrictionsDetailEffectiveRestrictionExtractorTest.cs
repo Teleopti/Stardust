@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		{
 			var dateOnly = new DateOnly(_dateTime);
 			var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(30));
-			var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime));
+			var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime), new FullPermission());
 			var absence = AbsenceFactory.CreateAbsence("Sick");
 			var personContract = PersonContractFactory.CreateFulltimePersonContractWithWorkingWeekContractSchedule();
 			var period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_dateTime.AddDays(-10)), personContract, new Team());
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		{
 			var dateOnly = new DateOnly(_dateTime);
 			var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(30));
-			var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime));
+			var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime), new FullPermission());
 			var absence = AbsenceFactory.CreateAbsence("Sick");
 			var layer = new AbsenceLayer(absence, _dateTimePeriod);
 			var mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		{
 			var dateOnly = new DateOnly(_dateTime);
 			var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(30));
-			var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime));
+			var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime), new FullPermission());
 			var dayOff = new DayOffTemplate(new Description("test"));
 			dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(6));
 			dayOff.Anchor = TimeSpan.FromHours(12);
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			var dateOnly = new DateOnly(_dateTime);
 			var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(30));
 			var mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
-			var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime));
+			var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime), new FullPermission());
 			part.AddMainShift(mainShift);
 			var period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_dateTime.AddDays(-10)));
 			_person.AddPersonPeriod(period);

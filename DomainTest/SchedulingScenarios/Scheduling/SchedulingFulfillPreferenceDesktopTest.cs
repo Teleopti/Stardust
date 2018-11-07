@@ -109,7 +109,35 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 		
 		[Test]
-		public void ShouldNotRemoveDaysOffIfScheduledUsingPreferenceDayoff()
+		public void ScheduleMustHavesOnlyShouldNotAddOtherDaysOffOnPreference()
+		{
+			var date = new DateOnly(2015, 10, 12);
+			var activity = new Activity().WithId();
+			var skill = new Skill().For(activity).WithId().InTimeZone(TimeZoneInfo.Utc).IsOpen();
+			var scenario = new Scenario();
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc)
+				.WithPersonPeriod(ruleSet,new ContractScheduleWorkingMondayToFriday(),skill)
+				.WithSchedulePeriodOneWeek(date);
+			var skillDays = skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1);
+			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = shiftCategory};
+			var prefDayOnSaturday = new PreferenceDay(agent, date.AddDays(6), preferenceRestriction);
+			var stateHolder = SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new[] {agent}, new[]{prefDayOnSaturday}, skillDays);
+			var schedulingOptions = new SchedulingOptions
+			{
+				UsePreferences = true,
+				UsePreferencesMustHaveOnly = true
+			};
+
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] {agent}, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1));
+
+			stateHolder.Schedules[agent].ScheduledDay(date.AddDays(6)).HasDayOff().Should().Be.False();
+		}
+		
+		[Test]
+		public void ShouldNotRemoveDaysOffIfScheduledUsingPreferenceDayOff()
 		{
 			var date = new DateOnly(2015, 10, 12);
 			var activity = new Activity().WithId();

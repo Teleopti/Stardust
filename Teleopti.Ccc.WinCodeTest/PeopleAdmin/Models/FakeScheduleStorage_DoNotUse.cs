@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			var absencesPeriod = !periods.Any() ? period : periods.Aggregate((a, b) => a.MaximumPeriod(b));
 
 			var scheduleData = _data.Where(d => d.BelongsToScenario(scenario) && d.Period.Intersect(absencesPeriod)).ToArray();
-			return ScheduleDictionaryForTest.WithScheduleData(person, scenario, absencesPeriod, scheduleData)[person];
+			return ScheduleDictionaryForTest.WithScheduleData(person, scenario, absencesPeriod, data: scheduleData)[person];
 		}
 
 		public IScheduleDictionary FindSchedulesForPersons(IScenario scenario, IEnumerable<IPerson> peopleInOrg, ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateTimePeriod dateTimePeriod, IEnumerable<IPerson> visiblePersons, bool extendPeriodBasedOnVisiblePersons)

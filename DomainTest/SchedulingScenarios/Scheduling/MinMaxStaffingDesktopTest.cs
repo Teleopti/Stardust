@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -21,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
 	[UseIocForFatClient]
+	[FullPermissions]
 	public class MinMaxStaffingDesktopTest : SchedulingScenario
 	{
 		public DesktopScheduling Target;
@@ -40,9 +43,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var skillDayTwo = skill.CreateSkillDayWithDemand(scenario, date.AddDays(1), 1); //lower demand but min staffing
 			var shiftCat = new ShiftCategory("_");
 			var shiftCategoryLimitation = new ShiftCategoryLimitation(shiftCat) { MaxNumberOf = 1 }; //makes it "not legal"
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory().WithId()));
 			var agent = new Person().WithId()
 								.InTimeZone(TimeZoneInfo.Utc)
-								.WithPersonPeriod(skill)
+								.WithPersonPeriod(ruleSet, skill)
 								.WithSchedulePeriodOneWeek(date);
 			agent.SchedulePeriod(date).AddShiftCategoryLimitation(shiftCategoryLimitation);
 			var assDayOne = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCat);
@@ -61,8 +65,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				new DateOnlyPeriod(date, date.AddDays(1))
 			);
 
-			schedulerStateHolder.Schedules[agent].ScheduledDay(date).IsScheduled().Should().Be.False();
-			schedulerStateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)).IsScheduled().Should().Be.True();
+			schedulerStateHolder.Schedules[agent]
+				.ScheduledDayCollection(DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1))
+				.Count(x => shiftCat.Equals(x.PersonAssignment(true).ShiftCategory))
+				.Should().Be.EqualTo(1);
 		}
 
 		[Test]

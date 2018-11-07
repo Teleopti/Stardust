@@ -5,6 +5,7 @@ using System.Web.Http;
 using System.Web.WebPages;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -25,7 +26,6 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 		private readonly IPersonFinderReadOnlyRepository _personFinder;
 		private readonly IAuthorization _auth;
 
-
 		public PeopleSearchController(
 			IPeopleSearchProvider searchProvider,
 			ILoggedOnUser loggonUser,
@@ -45,15 +45,26 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 		public virtual FindPeopleViewModel FindPeople(FindPeopleInputModel searchCritera)
 		{
 			searchCritera.SearchDate = DateTime.Now;
-
 			var canSeeUsers = _auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.PeopleManageUsers, DateOnly.Today, _loggonUser.CurrentUser());
+			var currentBusinessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault();
 
-			var personFinderSearchCriteria = new PeoplePersonFinderSearchWithPermissionCriteria(PersonFinderField.All, searchCritera.KeyWord, searchCritera.PageIndex + 1, searchCritera.PageSize, DateOnly.Today, searchCritera.SortColumn, searchCritera.Direction,
-				searchCritera.SearchDate.ToDateOnly(), _loggonUser.CurrentUser().Id.GetValueOrDefault(), DefinedRaptorApplicationFunctionForeignIds.PeopleAccess, canSeeUsers);
+			var personFinderSearchCriteria = new PeoplePersonFinderSearchWithPermissionCriteria(
+				PersonFinderField.All, 
+				searchCritera.KeyWord, 
+				searchCritera.PageIndex + 1, 
+				searchCritera.PageSize, 
+				DateOnly.Today, 
+				searchCritera.SortColumn, 
+				searchCritera.Direction,
+				searchCritera.SearchDate.ToDateOnly(), 
+				_loggonUser.CurrentUser().Id.GetValueOrDefault(), 
+				DefinedRaptorApplicationFunctionForeignIds.PeopleAccess, 
+				canSeeUsers, 
+				currentBusinessUnit);
+
 			_personFinder.FindPeopleWithDataPermission(personFinderSearchCriteria);
 
 			var findPeopleViewModel = new FindPeopleViewModel();
-
 			var persons = _personRepository.FindPeople(personFinderSearchCriteria.DisplayRows.Select(x => x.PersonId));
 
 			foreach (var personFinderDisplayRow in personFinderSearchCriteria.DisplayRows)

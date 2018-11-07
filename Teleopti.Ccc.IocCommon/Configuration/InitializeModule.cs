@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using Autofac;
-using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -19,6 +21,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterInstance(new DataSourceApplicationName {Name = _iocConfiguration.Args().DataSourceApplicationName});
+			builder.RegisterInstance(new DataSourceMappingAssembly {Assembly = typeof(Person).Assembly});
+			builder.RegisterInstance(new DataSourceMappingAssembly {Assembly = typeof(Rta).Assembly});
 			builder.RegisterType<DataSourceConfigurationSetter>().As<IDataSourceConfigurationSetter>().SingleInstance();
 			builder.RegisterType<InitializeApplication>().As<IInitializeApplication>().SingleInstance();
 			builder.RegisterType<MemoryNHibernateConfigurationCache>().SingleInstance();

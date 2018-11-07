@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -327,6 +328,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				set { throw new NotImplementedException(); }
 			}
 
+			public ShiftTradeRequestStatusCheckerWithSchedule ShiftTradeRequestStatusChecker
+			{
+				get { throw new NotImplementedException(); }
+				set { throw new NotImplementedException(); }
+			}
+
 			public IList<IPersonRequest> PersonRequests
 			{
 				get { throw new NotImplementedException(); }
@@ -345,11 +352,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			public CommonNameDescriptionSetting CommonNameDescription
 			{
 				get { throw new NotImplementedException(); }
-			}
-
-			public bool ChangedRequests()
-			{
-				throw new NotImplementedException();
 			}
 
 			public int DefaultSegmentLength
@@ -405,23 +407,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			public IEnumerable<DateOnly> DaysToRecalculate
 			{
 				get { throw new NotImplementedException(); }
-			}
-
-			public void LoadPersonRequests(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory,
-				IPersonRequestCheckAuthorization authorization, int numberOfDaysToShowNonPendingRequests)
-			{
-				throw new NotImplementedException();
-			}
-
-			public IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId,
-				IScheduleStorage scheduleStorage)
-			{
-				throw new NotImplementedException();
-			}
-
-			public IPersonRequest RequestDeleteFromBroker(Guid personRequestId)
-			{
-				throw new NotImplementedException();
 			}
 
 			public bool AgentFilter()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             return visualLayerViewModel;
         }
 
-        public IList<ILayerViewModel> CreateProjectionViewModelsFromSchedule(IScheduleRange scheduleRange, DateTimePeriod period, IEventAggregator eventAggregator, TimeSpan interval)
+        public IList<ILayerViewModel> CreateProjectionViewModelsFromSchedule(IScheduleRange scheduleRange, DateTimePeriod period, IEventAggregator eventAggregator, TimeSpan interval, IAuthorization authorization)
         {
             IList<ILayerViewModel> retList = new List<ILayerViewModel>();
             var timeZone = scheduleRange.Person.PermissionInformation.DefaultTimeZone();
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             return projectionViewModels;
         }
 
-        public virtual IList<ILayerViewModel> CreateViewModelsFromSchedule(IScheduleDay scheduleDay, IEventAggregator eventAggregator, TimeSpan interval, ILayerViewModelObserver observer)
+        public virtual IList<ILayerViewModel> CreateViewModelsFromSchedule(IScheduleDay scheduleDay, IEventAggregator eventAggregator, TimeSpan interval, ILayerViewModelObserver observer, IAuthorization authorization)
         {
             InParameter.NotNull("scheduleDay", scheduleDay);
             IList<ILayerViewModel> layerViewModels = new List<ILayerViewModel>();
@@ -65,17 +66,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             {
 	            foreach (var layer in assignment.MainActivities())
 	            {
-		            layerViewModels.Add(new MainShiftLayerViewModel(observer, layer, assignment, eventAggregator));
+		            layerViewModels.Add(new MainShiftLayerViewModel(observer, layer, assignment, eventAggregator, authorization));
 	            }
 
 	            foreach (var layer in assignment.OvertimeActivities())
-	            {
-								layerViewModels.Add(new OvertimeLayerViewModel(observer, layer, assignment, eventAggregator));
-	            }
+				{
+					layerViewModels.Add(new OvertimeLayerViewModel(observer, layer, assignment, eventAggregator,
+						authorization));
+				}
 
 	            foreach (var personalLayer in assignment.PersonalActivities())
 	            {
-		            layerViewModels.Add(new PersonalShiftLayerViewModel(observer, personalLayer, assignment, eventAggregator));
+		            layerViewModels.Add(new PersonalShiftLayerViewModel(observer, personalLayer, assignment, eventAggregator, authorization));
 	            }
             }
 			// bug 14478 show meetings even if there is no assignment
@@ -86,7 +88,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 			
             foreach (IPersonAbsence persAbs in scheduleDay.PersonAbsenceCollection())
             {
-                layerViewModels.Add(new AbsenceLayerViewModel(observer, persAbs, eventAggregator));
+                layerViewModels.Add(new AbsenceLayerViewModel(observer, persAbs, eventAggregator, authorization));
             }
 
             //Set interval and part....refact to ctor
@@ -101,9 +103,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 
         }
 
-        public IList<ILayerViewModel> CreateViewModelsFromSchedule(ILayerViewModelSelector selector, IScheduleDay scheduleDay, IEventAggregator eventAggregator, TimeSpan interval, ILayerViewModelObserver observer)
+        public IList<ILayerViewModel> CreateViewModelsFromSchedule(ILayerViewModelSelector selector, IScheduleDay scheduleDay, IEventAggregator eventAggregator, TimeSpan interval, ILayerViewModelObserver observer, IAuthorization authorization)
         {
-             IList<ILayerViewModel> ret = CreateViewModelsFromSchedule(scheduleDay,eventAggregator,interval,observer);
+             IList<ILayerViewModel> ret = CreateViewModelsFromSchedule(scheduleDay,eventAggregator,interval,observer,authorization);
             
             if(selector.ScheduleAffectsSameDayAndPerson(scheduleDay))
             {

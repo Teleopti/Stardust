@@ -59,10 +59,13 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
             Expect.Call(_model.CurrentScenario).Return(scenario);
             Expect.Call(scenario.Restricted).Return(false);
             _mocks.ReplayAll();
-            
-             _target.CanExecute.Should().Be.True();
-           
-            _mocks.VerifyAll();
+
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.CanExecute.Should().Be.True();
+			}
+
+			_mocks.VerifyAll();
         }
     }
 

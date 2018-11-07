@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -27,6 +28,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
 	[TestFixture, SetUICulture("en-US")]
+	[FullPermissions]
 	public class RequestPresenterTest
 	{
 		private IRequestPresenter _requestPresenter;
@@ -63,7 +65,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			_dateTimePeriod = new DateTimePeriod(startDateTime, endDateTime);
 			_scheduleDateTimePeriod = new ScheduleDateTimePeriod(_dateTimePeriod);
-			_schedules = new ScheduleDictionary(_scenario, _scheduleDateTimePeriod, new PersistableScheduleDataPermissionChecker());
+			_schedules = new ScheduleDictionary(_scenario, _scheduleDateTimePeriod,
+				new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
+				CurrentAuthorization.Make());
 			_view = MockRepository.GenerateMock<IViewBase>();
 			_handleBusinessRuleResponse = new FakeBusinessRulesResponseHandler();
 			_requestPresenter = new RequestPresenter(new PersonRequestAuthorizationCheckerForTest());
@@ -375,35 +379,37 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void VerifyBrokenRulesAndCancel()
 		{
-			_requestViewAdapters.RemoveAt(2);
-			_requestViewAdapters.RemoveAt(1);
-			
-			_schedules = new ScheduleDictionaryForTest(_scenario,_dateTimePeriod);
-			var newBusinessRuleCollection = new FakeNewBusinessRuleCollection();
-			newBusinessRuleCollection.SetRuleResponse(new[]
-			{
-				new BusinessRuleResponse(typeof(DayOffRule), "Error", true, false, _dateTimePeriod,
-					_person1, new DateOnlyPeriod(), "tjillevippen")
-			});
-			_handleBusinessRuleResponse.WithDialogResult(DialogResult.Cancel);
-			
-			foreach (PersonRequestViewModel adapter in _requestViewAdapters)
-			{
-				Assert.IsTrue(adapter.PersonRequest.IsPending);
-			}
+				_requestViewAdapters.RemoveAt(2);
+				_requestViewAdapters.RemoveAt(1);
 
-			//Change status
-			_requestPresenter.ApproveOrDeny(_requestViewAdapters,
-											new ApprovePersonRequestCommand(_view, _schedules, _scenario,
-																			_requestPresenter,
-																			_handleBusinessRuleResponse,
-																			new PersonRequestAuthorizationCheckerForTest
-																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), _globalSettingRepo, _personAbsenceAccountRepository, new FakePersonRequestRepository()), string.Empty);
+				_schedules = new ScheduleDictionaryForTest(_scenario, _dateTimePeriod);
+				var newBusinessRuleCollection = new FakeNewBusinessRuleCollection();
+				newBusinessRuleCollection.SetRuleResponse(new[]
+				{
+					new BusinessRuleResponse(typeof(DayOffRule), "Error", true, false, _dateTimePeriod,
+						_person1, new DateOnlyPeriod(), "tjillevippen")
+				});
+				_handleBusinessRuleResponse.WithDialogResult(DialogResult.Cancel);
 
-			foreach (PersonRequestViewModel adapter in _requestViewAdapters)
-			{
-				Assert.IsTrue(adapter.PersonRequest.IsPending);
-			}
+				foreach (PersonRequestViewModel adapter in _requestViewAdapters)
+				{
+					Assert.IsTrue(adapter.PersonRequest.IsPending);
+				}
+
+				//Change status
+				_requestPresenter.ApproveOrDeny(_requestViewAdapters,
+					new ApprovePersonRequestCommand(_view, _schedules, _scenario,
+						_requestPresenter,
+						_handleBusinessRuleResponse,
+						new PersonRequestAuthorizationCheckerForTest
+							(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(),
+						new DoNothingScheduleDayChangeCallBack(), _globalSettingRepo, _personAbsenceAccountRepository,
+						new FakePersonRequestRepository()), string.Empty);
+
+				foreach (PersonRequestViewModel adapter in _requestViewAdapters)
+				{
+					Assert.IsTrue(adapter.PersonRequest.IsPending);
+				}
 		}
 
 		[Test]

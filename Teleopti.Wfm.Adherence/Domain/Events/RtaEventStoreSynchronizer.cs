@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -75,54 +74,32 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 					return new
 					{
 						PersonId = data.PersonId.Value,
-						Day = data.StartTime.Value.ToDateOnly()
+						Day = data.BelongsToDate ?? data.StartTime.Value.ToDateOnly()
 					};
 				})
 				.Distinct()
 				.ToArray();
 
-			var personsTimeZones = _persons.FindPeople(toBeSynched.Select(x => x.PersonId).Distinct())
-				.ToDictionary(k => k.Id.GetValueOrDefault(), v => v.PermissionInformation.DefaultTimeZone());
-
-			toBeSynched.ForEach(x =>
-			{
-				if (!personsTimeZones.TryGetValue(x.PersonId, out var personTimeZone))
-					personTimeZone = TimeZoneInfo.Utc;
-
-				var shouldSynchPreviousDay = toBeSynched
-												 .FirstOrDefault(
-													 y => y.PersonId == x.PersonId &&
-														  y.Day == x.Day.AddDays(-1)) == null;
-
-				if (shouldSynchPreviousDay)
-					synchronizeAdherenceDay(x.PersonId, x.Day.AddDays(-1), personTimeZone);
-				synchronizeAdherenceDay(x.PersonId, x.Day, personTimeZone);
-			});
+			toBeSynched.ForEach(x => { synchronizeAdherenceDay(x.PersonId, x.Day); });
 		}
 
-		private void synchronizeAdherenceDay(Guid personId, DateOnly day, TimeZoneInfo timeZone)
+		private void synchronizeAdherenceDay(Guid personId, DateOnly day)
 		{
 			var adherenceDay = _adherenceDayLoader.Load(personId, day);
 
-			if (adherenceDay.Changes().Any())
+			var lateForWork = adherenceDay.Changes().FirstOrDefault(c => c.LateForWork != null);
+			var lateForWorkText = lateForWork != null ? lateForWork.LateForWork : "0";
+			var minutesLateForWork = int.Parse(Regex.Replace(lateForWorkText, "[^0-9.]", ""));
+
+			_readModels.Upsert(new HistoricalOverviewReadModel
 			{
-				var lateForWork = adherenceDay.Changes().FirstOrDefault(c => c.LateForWork != null);
-				var lateForWorkText = lateForWork != null ? lateForWork.LateForWork : "0";
-				var minutesLateForWork = int.Parse(Regex.Replace(lateForWorkText, "[^0-9.]", ""));
-				var shiftStartTime = adherenceDay.Period().StartDateTime.AddHours(1);
-
-				var dayInAgentTimeZone = TimeZoneInfo.ConvertTimeFromUtc(shiftStartTime, timeZone).ToDateOnly();
-
-				_readModels.Upsert(new HistoricalOverviewReadModel
-				{
-					PersonId = personId,
-					Date = dayInAgentTimeZone,
-					WasLateForWork = lateForWork != null,
-					MinutesLateForWork = minutesLateForWork,
-					SecondsInAdherence = adherenceDay.SecondsInAherence(),
-					SecondsOutOfAdherence = adherenceDay.SecondsOutOfAdherence(),
-				});
-			}
+				PersonId = personId,
+				Date = day,
+				WasLateForWork = lateForWork != null,
+				MinutesLateForWork = minutesLateForWork,
+				SecondsInAdherence = adherenceDay.SecondsInAherence(),
+				SecondsOutOfAdherence = adherenceDay.SecondsOutOfAdherence(),
+			});
 		}
 	}
 }

@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
     [TestFixture]
     public class OvertimeLayerViewModelTest 
     {
-
 	    private bool _expectMovePermitted;
 		private OvertimeLayerViewModel _target;
 		private MockRepository _mocks;
@@ -37,7 +36,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 	    private TesterForCommandModels _testerForCommandModels;
 	    private DateTimePeriod _period;
 
- 
 		[SetUp]
 		public void Setup()
 		{
@@ -54,7 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TimeZoneHelper.CurrentSessionTimeZone)).Repeat.Any();
 
 			_mocks.ReplayAll();
-			_target = new OvertimeLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, new PersonAssignment(_person, new Scenario(), DateOnly.Today), null);
+			_target = new OvertimeLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, new PersonAssignment(_person, new Scenario(), DateOnly.Today), null, new FullPermission());
 			_testRunner = new CrossThreadTestRunner();
 		}
 
@@ -196,7 +194,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		{
 			var layerObserver = MockRepository.GenerateMock<ILayerViewModelObserver>();
 
-			_target = new OvertimeLayerViewModel(layerObserver, _layerWithPayload, new PersonAssignment(_person, new Scenario(), DateOnly.Today), null);
+			_target = new OvertimeLayerViewModel(layerObserver, _layerWithPayload, new PersonAssignment(_person, new Scenario(), DateOnly.Today), null, new FullPermission());
 			
 			_target.IsChanged = true;
 			_target.UpdatePeriod();

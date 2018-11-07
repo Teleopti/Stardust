@@ -8,6 +8,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -30,79 +31,73 @@ namespace Teleopti.Ccc.DomainTest.Collection
 	[DomainTest]
 	public class ScheduleDictionaryNoMockTest
 	{
-		private ScheduleDictionary target;
-		private IScenario _scenario;
-		private IScheduleDateTimePeriod _period;
-
-		[SetUp]
-		public void SetUp()
-		{
-			_period = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-			_scenario = ScenarioFactory.CreateScenarioAggregate();
-			target = new ScheduleDictionary(_scenario, _period, new DifferenceEntityCollectionService<IPersistableScheduleData>(), new PersistableScheduleDataPermissionChecker());
-		}
+		private readonly IScheduleDateTimePeriod _period = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+		
 		[Test]
 		public void CanModifyExistingPermittedData()
 		{
-			var person = PersonFactory.CreatePerson();
-			var noNewRules = NewBusinessRuleCollection.Minimum();
-			var scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
-			IScheduleDay part = target[person].ScheduledDay(new DateOnly(2000, 6, 1));
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
-													  _scenario, new DateTimePeriod(
-					2000, 6,
-					1,
-					2000, 6,
-					2));
-			IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(person, _scenario,
-											  new DateTimePeriod(2000, 6, 1, 2000, 6,
-													 2));
+			var authorizer = new FakePermissions();
 
+			using (CurrentAuthorization.ThreadlyUse(authorizer))
+			{
+				authorizer.HasPermission(DefinedRaptorApplicationFunctionPaths.ModifySchedule);
+				authorizer.HasPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules);
 
-			ass.WithId();
-			abs.WithId();
-			Schedule schedule = (Schedule)part;
-			schedule.Add(ass);
-			schedule.Add(abs);
-			
+				var scenario = ScenarioFactory.CreateScenarioAggregate();
+				var person = PersonFactory.CreatePerson();
+				var noNewRules = NewBusinessRuleCollection.Minimum();
+				var scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
+				
+				var target = new ScheduleDictionary(scenario, _period,
+					new DifferenceEntityCollectionService<IPersistableScheduleData>(),
+					new ByPassPersistableScheduleDataPermissionChecker(), authorizer);
+				var part = target[person].ScheduledDay(new DateOnly(2000, 6, 1));
+				var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2000, 6, 1, 2000, 6, 2)).WithId();
+				var abs = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2000, 6, 1, 2000, 6, 2)).WithId();
 
-			var errors = target.Modify(ScheduleModifier.Scheduler, part, noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance)).ToList();
+				var schedule = (Schedule)part;
+				schedule.Add(ass);
+				schedule.Add(abs);
+				var errors = target.Modify(ScheduleModifier.Scheduler, part, noNewRules, scheduleDayChangeCallback,
+					new ScheduleTagSetter(NullScheduleTag.Instance)).ToList();
 
-			errors.Count.Should().Be.EqualTo(0);
-			target.DifferenceSinceSnapshot().Count().Should().Be.EqualTo(2);
+				errors.Count.Should().Be.EqualTo(0);
+				target.DifferenceSinceSnapshot().Count().Should().Be.EqualTo(2);
+			}
 		}
 
 		[Test]
 		public void CanModifyExistingPermittedDataThroughByPassingDefaultPermission()
 		{
-			var person = PersonFactory.CreatePerson();
-			var noNewRules = NewBusinessRuleCollection.Minimum();
-			var scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
-			IScheduleDay part = target[person].ScheduledDay(new DateOnly(2000, 6, 1));
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
-													  _scenario, new DateTimePeriod(
-					2000, 6,
-					1,
-					2000, 6,
-					2));
-			IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(person, _scenario,
-											  new DateTimePeriod(2000, 6, 1, 2000, 6,
-													 2));
+			var authorizer = new FakePermissions();
 
+			using (CurrentAuthorization.ThreadlyUse(authorizer))
+			{
+				authorizer.HasPermission(DefinedRaptorApplicationFunctionPaths.ModifySchedule);
+				authorizer.HasPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules);
 
-			ass.WithId();
-			abs.WithId();
-			Schedule schedule = (Schedule)part;
-			schedule.Add(ass);
-			schedule.Add(abs);
+				var scenario = ScenarioFactory.CreateScenarioAggregate();
+				var person = PersonFactory.CreatePerson();
+				var noNewRules = NewBusinessRuleCollection.Minimum();
+				var scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
+				var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2000, 6, 1, 2000, 6, 2)).WithId();
+				var abs = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2000, 6, 1, 2000, 6, 2)).WithId();
+				
+				var target = new ScheduleDictionary(scenario, _period,
+					new DifferenceEntityCollectionService<IPersistableScheduleData>(),
+					new ByPassPersistableScheduleDataPermissionChecker(), authorizer);
+				var part = target[person].ScheduledDay(new DateOnly(2000, 6, 1));
+				var schedule = (Schedule)part;
+				schedule.Add(ass);
+				schedule.Add(abs);
+				var errors = target.Modify(ScheduleModifier.Scheduler, part, noNewRules, scheduleDayChangeCallback,
+					new ScheduleTagSetter(NullScheduleTag.Instance)).ToList();
 
-
-			target = new ScheduleDictionary(_scenario, _period, new DifferenceEntityCollectionService<IPersistableScheduleData>(), new ByPassPersistableScheduleDataPermissionChecker());
-			var errors = target.Modify(ScheduleModifier.Scheduler, part, noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance)).ToList();
-
-			errors.Count.Should().Be.EqualTo(0);
-			target.DifferenceSinceSnapshot().Count().Should().Be.EqualTo(2);
+				errors.Count.Should().Be.EqualTo(0);
+				target.DifferenceSinceSnapshot().Count().Should().Be.EqualTo(2);
+			}
 		}
+
 		[Test]
 		public void CanNotModifyExistingDataThroughDefaultPermissionCheckerWhenNoPermisson()
 		{
@@ -110,30 +105,24 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			
 			using (CurrentAuthorization.ThreadlyUse(authorizer))
 			{
+				authorizer.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules);
+				var scenario = ScenarioFactory.CreateScenarioAggregate();
 				var person = PersonFactory.CreatePerson();
 				var noNewRules = NewBusinessRuleCollection.Minimum();
 				var scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
-				IScheduleDay part = target[person].ScheduledDay(new DateOnly(2000, 6, 1));
-				IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
-														  _scenario, new DateTimePeriod(
-						2000, 6,
-						1,
-						2000, 6,
-						2));
-				IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(person, _scenario,
-												  new DateTimePeriod(2000, 6, 1, 2000, 6,
-														 2));
+				
+				var target = new ScheduleDictionary(scenario, _period,
+					new DifferenceEntityCollectionService<IPersistableScheduleData>(),
+					new ByPassPersistableScheduleDataPermissionChecker(), authorizer);
+				var part = target[person].ScheduledDay(new DateOnly(2000, 6, 1));
+				var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2000, 6, 1, 2000, 6, 2)).WithId();
+				var abs = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2000, 6, 1, 2000, 6, 2)).WithId();
 
-
-				ass.WithId();
-				abs.WithId();
 				Schedule schedule = (Schedule)part;
 				schedule.Add(ass);
 				schedule.Add(abs);
-
-				authorizer.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules);
-
-
+				
+				target.UsePermissions(false);
 				target.Modify(ScheduleModifier.Scheduler, part, noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance)).ToList();
 				target.DifferenceSinceSnapshot().Count().Should().Be.EqualTo(0);
 			}
@@ -170,13 +159,13 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			scheduleDayChangeCallback = mocks.DynamicMock<IScheduleDayChangeCallback>();
 			period = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			scenario = ScenarioFactory.CreateScenarioAggregate();
-			dataPermissionChecker = new PersistableScheduleDataPermissionChecker();
-			target = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>(), dataPermissionChecker);
+			dataPermissionChecker = new PersistableScheduleDataPermissionChecker(new ThisAuthorization(authorization));
+			target = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>(), dataPermissionChecker, new ThisAuthorization(authorization));
 			dummyPerson = PersonFactory.CreatePerson();
 			IScheduleRange justToCreateTheScheduleRangeForTests = target[dummyPerson];
 			dummyFunction = DefinedRaptorApplicationFunctionPaths.ViewSchedules;
 			_dummyScheduleRange =
-				new ScheduleRange(target, new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), dummyPerson, new DateTimePeriod(2000, 1, 1, 2001, 1, 1)), dataPermissionChecker);
+				new ScheduleRange(target, new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), dummyPerson, new DateTimePeriod(2000, 1, 1, 2001, 1, 1)), dataPermissionChecker, new ThisAuthorization(authorization));
 
 			_noNewRules = NewBusinessRuleCollection.Minimum();
 
@@ -195,13 +184,13 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			target.PartModified += target_PartModified;
 			eventFired = false;
 		}
-
+		
 		[Test]
 		public void VerifyAddKeyValuePairNotSupported()
 		{
 			var item =
 				new KeyValuePair<IPerson, IScheduleRange>(dummyPerson,
-				new ScheduleRange(target, new ScheduleParameters(scenario, dummyPerson, new DateTimePeriod(2001, 1, 1, 2002, 1, 1)), dataPermissionChecker));
+				new ScheduleRange(target, new ScheduleParameters(scenario, dummyPerson, new DateTimePeriod(2001, 1, 1, 2002, 1, 1)), dataPermissionChecker, new ThisAuthorization(authorization)));
 			Assert.Throws<NotSupportedException>(() => target.Add(item));
 		}
 
@@ -360,9 +349,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		}
 
 		[Test]
+		[FullPermissions]
 		public void VerifyCorrectParametersToDifferenceSinceSnapshot()
 		{
-			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker);
+			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, new FullPermission());
 			IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(dummyPerson, scenario, new DateTimePeriod(2000, 11, 2, 2001, 1, 1));
 			pAss.SetId(Guid.NewGuid());
 
@@ -568,7 +558,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[Test]
 		public void VerifyUpdateFromDataSourcePersonWithNoPermission()
 		{
-			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker);
+			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, new ThisAuthorization(authorization));
 			target.PartModified += target_PartModified;
 			var dummy = target[dummyPerson];
 
@@ -601,7 +591,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[Test]
 		public void VerifyMeetingUpdateFromDataSourcePersonWithNoPermission()
 		{
-			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker);
+			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, new ThisAuthorization(authorization));
 			target.PartModified += target_PartModified;
 			var personAtMeeting = PersonFactory.CreatePerson();
 			var dummy = target[dummyPerson];
@@ -734,7 +724,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[Test]
 		public void VerifySchedulePeriodWhenPublishingDateAndPreferenceDateDoesNotCorrespond()
 		{
-			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker);
+			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, new ThisAuthorization(authorization));
 			IPerson person = PersonFactory.CreatePerson();
 			ITeam team = TeamFactory.CreateSimpleTeam("MyTeam");
 			IWorkflowControlSet workflowControlSet = new WorkflowControlSet("d");
@@ -757,10 +747,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			{
 				Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
 					.Return(false).Repeat.Any();
-				DateOnlyPeriod dop = period.VisiblePeriod.ToDateOnlyPeriod(timeZone);
-				Expect.Call(authorization.PermittedPeriods(dummyFunction, dop, person))
-					.Return(new List<DateOnlyPeriod> { dop });
-
+				var dateOnlyPeriod = new DateOnlyPeriod(2000,1,1,2000,12,31);
+				Expect.Call(authorization.PermittedPeriods(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
+						dateOnlyPeriod, person))
+					.Return(new []{dateOnlyPeriod});
 			}
 			using (mocks.Playback())
 			{
@@ -780,7 +770,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		public void VerifyFunctionPermission()
 		{
 			//what should happen if no permission on function? Right now - does nothing
-			target = new ScheduleDictionary(scenario, period, diffSvc, new PersistableScheduleDataPermissionChecker());
+			target = new ScheduleDictionary(scenario, period, diffSvc, new PersistableScheduleDataPermissionChecker(new ThisAuthorization(authorization)), new ThisAuthorization(authorization));
 
 			IDayOffTemplate dOff1 = DayOffFactory.CreateDayOff(new Description("test"));
 			dOff1.Anchor = TimeSpan.Zero;
@@ -854,7 +844,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void VerifyWriteProtection()
 		{
-			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker);
+			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, new ThisAuthorization(authorization));
 			IPerson per = PersonFactory.CreatePerson();
 			using (mocks.Record())
 			{
@@ -882,10 +872,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void ShouldNotModifyWhenNoRightsToModifyCurrentScenario()
 		{
-			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker);
+			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, new ThisAuthorization(authorization));
 			var per = PersonFactory.CreatePerson();
 			var dop = period.VisiblePeriod.ToDateOnlyPeriod(per.PermissionInformation.DefaultTimeZone());
 
@@ -1571,7 +1561,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[Test]
 		public void VerifySet()
 		{
-			Assert.Throws<NotSupportedException>(() => target[dummyPerson] = new ScheduleRange(target, new ScheduleParameters(scenario, dummyPerson, new DateTimePeriod(2001, 1, 1, 2002, 1, 1)), dataPermissionChecker));
+			Assert.Throws<NotSupportedException>(() => target[dummyPerson] = new ScheduleRange(target, new ScheduleParameters(scenario, dummyPerson, new DateTimePeriod(2001, 1, 1, 2002, 1, 1)), dataPermissionChecker, new ThisAuthorization(authorization)));
 		}
 
 

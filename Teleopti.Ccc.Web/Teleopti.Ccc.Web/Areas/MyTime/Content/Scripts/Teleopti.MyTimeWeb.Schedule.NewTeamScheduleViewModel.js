@@ -261,11 +261,10 @@
 		callback && callback();
 	};
 
-	self.buildFilterDetails = function(title, startTimeStr, endTimeStr, onlyNightShiftStr) {
+	self.buildFilterDetails = function() {
 		if (self.isHostAniPad || self.isHostAMobile) return '';
 
-		rebuildTooltipForTimeFilterIcon(title, startTimeStr, endTimeStr, onlyNightShiftStr);
-		return title;
+		return rebuildTooltipForTimeFilterIcon();
 	};
 
 	function mergeRawTimeLine(rawTimeline, newTimeLine) {
@@ -451,16 +450,9 @@
 				self.selectedDate()
 			);
 
-			myLayerViewModel.showTitle = ko.computed(function() {
-				return myLayerViewModel.height() >= minPixelsToDisplayTitle;
-			});
-			myLayerViewModel.showDetail = ko.computed(function() {
-				return myLayerViewModel.height() >= PIXEL_OF_ONE_HOUR;
-			});
-			myLayerViewModel.timeSpan = ko.computed(function() {
-				return myLayerViewModel.timeSpan().replace(' - ', '-');
-			});
-
+			myLayerViewModel.showTitle = myLayerViewModel.height >= minPixelsToDisplayTitle;
+			myLayerViewModel.showDetail = myLayerViewModel.height >= PIXEL_OF_ONE_HOUR;
+			myLayerViewModel.timeSpan = myLayerViewModel.timeSpan.replace(' - ', '-');
 			myLayerViewModel.isLastLayer = index === periods.length - 1;
 
 			mySchedulePeriods.push(myLayerViewModel);
@@ -496,10 +488,7 @@
 					self.selectedDate()
 				);
 				layerViewModel.isLastLayer = index === periods.length - 1;
-
-				layerViewModel.showTitle = ko.computed(function() {
-					return layerViewModel.height() >= minPixelsToDisplayTitle;
-				});
+				layerViewModel.showTitle = layerViewModel.height >= minPixelsToDisplayTitle;
 
 				layers.push(layerViewModel);
 			});

@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                                                 underlyingDictionary);
             param = new ScheduleParameters(_scenario, _agent,
                                           new DateTimePeriod(2000, 1, 1, 2010, 1, 1));
-            scheduleRange = new ScheduleRange(dic, param, new PersistableScheduleDataPermissionChecker());
+            scheduleRange = new ScheduleRange(dic, param, new PersistableScheduleDataPermissionChecker(new FullPermission()), new FullPermission());
 
             ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_agent,
                              _scenario, ActivityFactory.CreateActivity("PersonalShiftActivity"), TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 0, 0, 0), new DateTime(2001, 1, 2, 0, 0, 0), TimeZoneHelper.CurrentSessionTimeZone), ShiftCategoryFactory.CreateShiftCategory("Morgon"));

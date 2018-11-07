@@ -74,8 +74,13 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
             Expect.Call(_commonNameSetting.BuildFor(lightPerson)).Repeat.Times(3).IgnoreArguments().Return("");
             Expect.Call(() => _personSelectorView.ResetTreeView(new TreeNodeAdv[0])).IgnoreArguments();
             _mocks.ReplayAll();
-            _target.Execute();
-            _mocks.VerifyAll();
+
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				_target.Execute();
+			}
+
+			_mocks.VerifyAll();
         }
 
         [Test]
@@ -109,10 +114,13 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
 
         [Test]
         public void ShouldContainTheGuid()
-        {
-            Assert.That(_target.Id, Is.EqualTo(_guid));
-            Assert.That(_target.Key, Is.EqualTo(_guid.ToString()));
-        }
+		{
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				Assert.That(_target.Id, Is.EqualTo(_guid));
+				Assert.That(_target.Key, Is.EqualTo(_guid.ToString()));
+			}
+		}
     }
 
 }

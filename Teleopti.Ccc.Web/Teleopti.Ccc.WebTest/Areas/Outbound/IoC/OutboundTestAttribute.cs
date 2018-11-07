@@ -29,9 +29,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.IoC
 
 		protected override void Isolate(IIsolate isolate)
 		{
-			var principalAuthorization = new FullPermission();
-			CurrentAuthorization.DefaultTo(principalAuthorization);
-
 			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("Default") {DefaultScenario = true}))
 				.For<IScenarioRepository>();
 			isolate.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
@@ -56,6 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.IoC
 			isolate.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
 			isolate.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
 			isolate.UseTestDouble<FakeOutboundScheduledResourcesCacher>().For<IOutboundScheduledResourcesCacher>();
+			isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
 		}
 	}
 }

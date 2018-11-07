@@ -67,7 +67,6 @@ const wfm = angular.module('wfm', [
 	'wfm.dateRangePicker',
 	'wfm.utilities',
 	'wfm.staffing',
-	'wfm.dataProtection',
 	'wfm.templates',
 	'wfm.badge',
 	'wfm.skillPicker',

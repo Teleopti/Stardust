@@ -27,33 +27,33 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Outlier
 
 			foreach (var day in seasonalVariationForTasks)
 			{
-				if(!historicalDictionary.ContainsKey(day.Key)) continue;
+				if(!historicalDictionary.TryGetValue(day.Key, out var owner)) continue;
 				tasksOutlierModel.Add(new outlierModel
 					{
 						Date = day.Key,
-						HistoricalValue = historicalDictionary[day.Key].TotalStatisticCalculatedTasks,
+						HistoricalValue = owner.TotalStatisticCalculatedTasks,
 						VariationValue = day.Value
 					});
 			}
 
 			foreach (var day in seasonalVariationForTaskTime)
 			{
-				if (!historicalDictionary.ContainsKey(day.Key)) continue;
+				if (!historicalDictionary.TryGetValue(day.Key, out var owner)) continue;
 				taskTimeOutlierModel.Add(new outlierModel
 					{
 						Date = day.Key,
-						HistoricalValue = historicalDictionary[day.Key].TotalStatisticAverageTaskTime.TotalSeconds,
+						HistoricalValue = owner.TotalStatisticAverageTaskTime.TotalSeconds,
 						VariationValue = day.Value
 					});
 			}
 
 			foreach (var day in seasonalVariationForAfterTaskTime)
 			{
-				if (!historicalDictionary.ContainsKey(day.Key)) continue;
+				if (!historicalDictionary.TryGetValue(day.Key, out var owner)) continue;
 				afterTaskTimeOutlierModel.Add(new outlierModel
 					{
 						Date = day.Key,
-						HistoricalValue = historicalDictionary[day.Key].TotalStatisticAverageAfterTaskTime.TotalSeconds,
+						HistoricalValue = owner.TotalStatisticAverageAfterTaskTime.TotalSeconds,
 						VariationValue = day.Value
 					});
 			}
