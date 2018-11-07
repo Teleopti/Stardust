@@ -18,7 +18,7 @@
 		vm.cancel = returnToOverview;
 		vm.deletePlanningGroupText = '';
 		vm.editPlanningGroup = editPlanningGroup;
-		vm.isEditGroup = editPlanningGroup ? true : false;
+		vm.isEditGroup = !!editPlanningGroup;
 		vm.inputFilterData = debounceService.debounce(inputFilterData, 250);
 		vm.selectResultItem = selectResultItem;
 		vm.isValidFilters = isValidFilters;
@@ -39,7 +39,7 @@
 		}
 
 		function inputFilterData() {
-			if (vm.searchString == '')
+			if (vm.searchString === '')
 				return [];
 			return planningGroupService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
 				return vm.filterResults = removeSelectedFiltersInList(data, vm.selectedResults);
@@ -48,11 +48,11 @@
 
 		function removeSelectedFiltersInList(filters, selectedFilters) {
 			var result = angular.copy(filters);
-			if (selectedFilters.length == 0 || filters.length == 0)
+			if (selectedFilters.length === 0 || filters.length === 0)
 				return filters;
 			for (var i = filters.length - 1; i >= 0; i--) {
 				angular.forEach(selectedFilters, function (selectedItem) {
-					if (filters[i].Id == selectedItem.Id) {
+					if (filters[i].Id === selectedItem.Id) {
 						result.splice(i, 1);
 					}
 				});
@@ -78,7 +78,7 @@
 			vm.selectedResults.forEach(function (node) {
 				if (node.Id === item.Id) {
 					check = false;
-				};
+				}
 			});
 			return check;
 		}
@@ -113,7 +113,6 @@
 		function persist() {
 			if (!isValid()) {
 				NoticeService.warning($translate.instant('CouldNotApply'), 5000, true);
-				return;
 			} else if (!vm.requestSent) {
 				vm.requestSent = true;
 				return planningGroupService.savePlanningGroup({

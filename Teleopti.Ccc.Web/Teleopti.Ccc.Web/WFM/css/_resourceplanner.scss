@@ -37,11 +37,10 @@ md-autocomplete-parent-scope > .wfm-chip-wrap {
 
 .priority-color-bar {
 	text-align: center;
-    padding-bottom: 5px;
     background: linear-gradient( 90deg, rgb(128,0,128), rgba(128,0,128,0.05) ) left bottom #f0f0f0 no-repeat;
 	background-size: 100% 6px;
 	margin-left: -10px;
-	padding:5px
+	padding:5px;
 }
 
 /*refactor me: heat map*/
@@ -50,12 +49,8 @@ md-autocomplete-parent-scope > .wfm-chip-wrap {
 	background: 0 0;
     /* outline: gray solid 1px; */
     text-align: center;
-    height: auto;
-    width: auto;
 	position: relative;
     cursor: pointer;
-    margin: 1px;
-    height: 10px;
     margin: 2px;
 }
 
@@ -210,8 +205,6 @@ table.overview {
 
 .grid-scroll-wrap {
 	width: auto;
-	overflow-x: scroll;
-	overflow-y: visible;
 	padding-bottom: 1px;
 	min-height: 100px;
 	margin-left: 175px;

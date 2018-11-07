@@ -17,7 +17,7 @@
         vm.color = {
             render: 'class',
 			className: 'pp-validation-color'
-        }
+        };
 
         getValidationByPpId();
 
@@ -28,8 +28,6 @@
             planningPeriodServiceNew.getValidation({ id: $stateParams.ppId }).$promise.then(function (data) {
 
                 vm.valData.preValidation = data.InvalidResources;
-				
-                // vm.valData.preValidation.sort(localeLanguageSortingService.localeSort('+ResourceName'));
                 vm.valLoading = false;
                 vm.valNumber();
             });
@@ -42,17 +40,16 @@
     }
 
     function planningperiodValidationDirective() {
-        var directive = {
-            restrict: 'EA',
-            scope: {
-                valData: '=',
-                valLoading: '=',
-                valNumber: '&'
-            },
-            templateUrl: 'app/resourceplanner/resource_planner_planning_period/planningperiod.validation.html',
-            controller: 'planningPeriodValidationController as vm',
-            bindToController: true
-        };
-        return directive;
+		return {
+			restrict: 'EA',
+			scope: {
+				valData: '=',
+				valLoading: '=',
+				valNumber: '&'
+			},
+			templateUrl: 'app/resourceplanner/resource_planner_planning_period/planningperiod.validation.html',
+			controller: 'planningPeriodValidationController as vm',
+			bindToController: true
+		};
     }
 })();

@@ -12,20 +12,20 @@
 		var vm = this;
 
 		vm.organizationFilters = vm.planningGroup.Filters.filter(function(filter){
-			return filter.FilterType == 'site' || filter.FilterType == 'team';
+			return filter.FilterType === 'site' || filter.FilterType === 'team';
 		});
 
 		vm.skillFilters = vm.planningGroup.Filters.filter(function(filter){
-			return filter.FilterType == 'skill';
+			return filter.FilterType === 'skill';
 		});
 
 		vm.contractFilters = vm.planningGroup.Filters.filter(function(filter){
-			return filter.FilterType == 'contract';
+			return filter.FilterType === 'contract';
 		});
 	}
 	
 	function planninggroupDetailDirective() {
-		var directive = {
+		return {
 			restrict: 'EA',
 			scope: {
 				planningGroup: '='
@@ -34,6 +34,5 @@
 			controller: 'planningGroupsDetailController as vm',
 			bindToController: true
 		};
-		return directive;
 	}
 })();
