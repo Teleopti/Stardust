@@ -80,33 +80,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return new ResourceCalculationData(this, considerShortBreaks, doIntraIntervalCalculation);
 		}
 
-		public double AddedAbsenceMinutesDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddAbsenceMinutesDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay, double minutes)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void SubtractAbsenceMinutesDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay, double minutes)
-		{
-		}
-
-		public void AddAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
-		{
-			
-		}
-
-		public int AddedAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
-		{
-			return 0;
-		}
-
-		public void SubtractAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
-		{
-		}
 
 		public IEnumerable<ISkillDay> AllSkillDays()
 		{

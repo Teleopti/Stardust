@@ -130,13 +130,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	    bool GuessResourceCalculationHasBeenMade();
 	    ResourceCalculationData ToResourceOptimizationData(bool considerShortBreaks, bool doIntraIntervalCalculation);
 
-	    double AddedAbsenceMinutesDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay);
-		void AddAbsenceMinutesDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay, double minutes);
-	    void SubtractAbsenceMinutesDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay, double minutes);
-
-		void AddAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay);
-	    int AddedAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay);
-	    void SubtractAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay);
 	    IEnumerable<ISkillDay> AllSkillDays();
 	    int MinimumSkillIntervalLength();
     }

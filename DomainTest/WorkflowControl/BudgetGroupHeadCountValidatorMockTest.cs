@@ -62,8 +62,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		    var validatedRequest = _mocks.StrictMock<IValidatedRequest>();
 		    using (_mocks.Record())
 		    {
-
-			    Expect.Call(specification.IsSatisfied(new AbsenceRequstAndSchedules()))
+				IAbsenceRequest request = null;
+				Expect.Call(specification.IsSatisfied(new AbsenceRequstAndSchedules(request, null, null)))
 				    .IgnoreArguments()
 				    .Return(validatedRequest);
 			    Expect.Call(validatedRequest.IsValid).IgnoreArguments().Return(false);
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		    using (_mocks.Playback())
 		    {
 			    var result = _target.Validate(absenceRequest,
-				    new RequiredForHandlingAbsenceRequest(null, null, null, null, specification));
+				    new RequiredForHandlingAbsenceRequest(null, null, null, null, null, specification));
 			    Assert.IsFalse(result.IsValid);
 		    }
 	    }

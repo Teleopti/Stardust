@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 				return AbsenceRequestBudgetGroupValidationHelper.BudgetDaysAreNotEqualToRequestedPeriodDays(language, culture, periodToConsider);
 			}
 
-			var invalidDays = getInvalidDays(absenceRequestAndSchedules.AbsenceRequest, filteredBudgetDays, personPeriod, defaultScenario, culture, absenceRequestAndSchedules.SchedulingResultStateHolder);
+			var invalidDays = getInvalidDays(absenceRequestAndSchedules.AbsenceRequest, filteredBudgetDays, personPeriod, defaultScenario, culture, absenceRequestAndSchedules.SchedulingResultStateHolder, absenceRequestAndSchedules.BudgetGroupState);
 			if (!string.IsNullOrEmpty(invalidDays))
 			{
 				var notEnoughAllowance = Resources.ResourceManager.GetString(nameof(Resources.NotEnoughBudgetAllowanceForTheDay), language);
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 		}
 
 		private string getInvalidDays(IAbsenceRequest absenceRequest, IList<IBudgetDay> budgetDays, IPersonPeriod personPeriod,
-			IScenario defaultScenario, CultureInfo culture, ISchedulingResultStateHolder schedulingResultStateHolder)
+			IScenario defaultScenario, CultureInfo culture, ISchedulingResultStateHolder schedulingResultStateHolder, BudgetGroupState budgetGroupState)
 		{
 			var scheduleRange = schedulingResultStateHolder.Schedules[absenceRequest.Person];
 			var count = 0;
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
 				var remainingAllowanceMinutes = getRemainingAllowanceMinutes(personPeriod, defaultScenario, budgetDay, currentDay);
 				var requestedAbsenceMinutes = calculateRequestedMinutes(currentDay, absenceRequest.Period, scheduleRange, personPeriod, absenceRequest.Person).TotalMinutes;
-				var addedBefore = schedulingResultStateHolder.AddedAbsenceMinutesDuringCurrentRequestHandlingCycle(budgetDay);
+				var addedBefore = budgetGroupState.AddedAbsenceMinutesDuringCurrentRequestHandlingCycle(budgetDay);
 				remainingAllowanceMinutes -= addedBefore;
 
 				if (remainingAllowanceMinutes < requestedAbsenceMinutes)
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 					{
 						alreayAddedMinuteDictionary.ForEach(item =>
 						{
-							schedulingResultStateHolder
+							budgetGroupState
 								.SubtractAbsenceMinutesDuringCurrentRequestHandlingCycle(item.Key, item.Value);
 						});
 					}
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 				}
 				else
 				{
-					schedulingResultStateHolder.AddAbsenceMinutesDuringCurrentRequestHandlingCycle(budgetDay, requestedAbsenceMinutes);
+					budgetGroupState.AddAbsenceMinutesDuringCurrentRequestHandlingCycle(budgetDay, requestedAbsenceMinutes);
 					alreayAddedMinuteDictionary.Add(budgetDay, requestedAbsenceMinutes);
 				}
 			}

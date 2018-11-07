@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		private IValidatedRequest executeValidate(IAbsenceRequest absenceRequest, IPersonAssignment assignment)
 		{
 			var schedulingResultStateHolder = createSchedulingResultStateHolder(assignment);
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(schedulingResultStateHolder, null, null,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(schedulingResultStateHolder,null, null, null,
 				null);
 			return getTarget().Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 		}

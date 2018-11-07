@@ -267,36 +267,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				throw new NotImplementedException();
 			}
 
-			public double AddedAbsenceMinutesDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
-			{
-				throw new NotImplementedException();
-			}
-
-			public void AddAbsenceMinutesDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay, double minutes)
-			{
-				throw new NotImplementedException();
-			}
-
-			public void SubtractAbsenceMinutesDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay, double minutes)
-			{
-				throw new NotImplementedException();
-			}
-
-			public void AddAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
-			{
-				throw new NotImplementedException();
-			}
-
-			public int AddedAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
-			{
-				throw new NotImplementedException();
-			}
-
-			public void SubtractAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
-			{
-				throw new NotImplementedException();
-			}
-
 			public IEnumerable<ISkillDay> AllSkillDays()
 			{
 				throw new NotImplementedException();
@@ -332,11 +302,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			{
 				get { throw new NotImplementedException(); }
 				set { throw new NotImplementedException(); }
-			}
-
-			public IList<IPersonRequest> PersonRequests
-			{
-				get { throw new NotImplementedException(); }
 			}
 
 			public ICommonStateHolder CommonStateHolder
