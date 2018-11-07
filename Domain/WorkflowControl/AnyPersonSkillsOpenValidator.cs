@@ -29,8 +29,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var requestPeriod = absenceRequest.Period;
 			foreach (var personSkill in personSkills)
 			{
-				var skill = personSkill.Skill;
+				if (!personSkill.Active) continue;
 
+				var skill = personSkill.Skill;
 				var dateOnlyPeriod = requestPeriod.ToDateOnlyPeriod(skill.TimeZone);
 
 				foreach (var requestDay in dateOnlyPeriod.DayCollection())

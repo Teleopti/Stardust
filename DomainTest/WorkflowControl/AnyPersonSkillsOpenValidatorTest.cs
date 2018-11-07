@@ -72,7 +72,16 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection, _scheduleRange);
 			validatedRequest.IsValid.Should().Be.False();
 		}
-		
+
+		[Test]
+		public void ShouldDenyRequestIfAllPersonSkillsAreInactive()
+		{
+			var request = new PersonRequest(_person, new AbsenceRequest(_absence, new DateTimePeriod(2017, 10, 23, 6, 2017, 10, 23, 9))).WithId();
+			_person.DeactivateSkill(_skill,_person.PersonPeriodCollection.First());
+			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection, _scheduleRange);
+			validatedRequest.IsValid.Should().Be.False();
+		}
+
 		[Test]
 		public void ShouldHandleMultiDayRequest()
 		{
