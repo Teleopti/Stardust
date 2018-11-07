@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		{
 			_restrictionsAbleToBeScheduled = restrictionsAbleToBeScheduled;
 		}
-		public IEnumerable<RestrictionsNotAbleToBeScheduledResult> Create(DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> persons, ISchedulingProgress backgroundWorker)
+		public IEnumerable<RestrictionsNotAbleToBeScheduledResult> Create(DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> persons, ISchedulingProgress backgroundWorker, bool checkPreferences = true)
 		{
 			var report = new List<RestrictionsNotAbleToBeScheduledResult>();
 			
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			var totalCount = virtualSchedulePeriods.Count;
 			foreach (var virtualSchedulePeriod in virtualSchedulePeriods)
 			{
-				RestrictionsNotAbleToBeScheduledResult failReason = _restrictionsAbleToBeScheduled.Execute(virtualSchedulePeriod);
+				RestrictionsNotAbleToBeScheduledResult failReason = _restrictionsAbleToBeScheduled.Execute(virtualSchedulePeriod, checkPreferences);
 				if (failReason != null)
 					report.Add(failReason);
 

@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				new FixedBlockPreferenceProvider(schedulingOptions);
 			selectedPeriod = _extendSelectedPeriodForMonthlyScheduling.Execute(@event, schedulerStateHolder, selectedPeriod);
 			var agents = schedulerStateHolder.SchedulingResultState.LoadedAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray();
-			var agentsMightBeAbleToScheduleWithRestrictions = _excludeAgentsWithRestrictionWarnings.Execute(agents, selectedPeriod).ToArray();
+			var agentsMightBeAbleToScheduleWithRestrictions = _excludeAgentsWithRestrictionWarnings.Execute(agents, selectedPeriod,true).ToArray();
 			var agentsWithExistingShiftsBeforeSchedule = _alreadyScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod, agentsMightBeAbleToScheduleWithRestrictions);
 			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, agentsMightBeAbleToScheduleWithRestrictions, selectedPeriod, blockPreferenceProvider);
 			
@@ -129,7 +129,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				return;
 			var schedules = _schedulerStateHolder().Schedules;
 			var agentsWithPreferences = _agentsWithPreferences.Execute(schedules, agents, selectedPeriod);
-			var filteredAgents = _agentsWithWhiteSpots.Execute(schedules, agentsWithPreferences, selectedPeriod);
+			var agentsMightBeAbleToScheduleWithoutPreferences = _excludeAgentsWithRestrictionWarnings.Execute(agentsWithPreferences, selectedPeriod,false).ToArray();
+			var filteredAgents = _agentsWithWhiteSpots.Execute(schedules, agentsMightBeAbleToScheduleWithoutPreferences, selectedPeriod);
 
 			foreach (var agent in filteredAgents)
 			{

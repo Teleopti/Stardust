@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 		[TestLog]
-		public virtual IEnumerable<IPerson> Execute(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod)
+		public virtual IEnumerable<IPerson> Execute(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod, bool checkPreferences)
 		{
 			var restrictionReport =
-				_restrictionNotAbleToBeScheduledReport.Create(selectedPeriod, agents, new NoSchedulingProgress());
+				_restrictionNotAbleToBeScheduledReport.Create(selectedPeriod, agents, new NoSchedulingProgress(), checkPreferences);
 
 			var agentsNotAbleToScheduleWithRestriction = new List<IPerson>();
 			foreach (var restrictionResult in restrictionReport)
@@ -42,13 +42,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_FasterSeamlessPlanningForPreferences_78286)]
 	public interface IExcludeAgentsWithRestrictionWarnings
 	{
-		IEnumerable<IPerson> Execute(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod);
+		IEnumerable<IPerson> Execute(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod,bool checkPreferences);
 	}
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_FasterSeamlessPlanningForPreferences_78286)]
 	public class NotExcludeAgentsWithRestrictionWarnings : IExcludeAgentsWithRestrictionWarnings
 	{
-		public IEnumerable<IPerson> Execute(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod)
+		public IEnumerable<IPerson> Execute(IEnumerable<IPerson> agents, DateOnlyPeriod selectedPeriod, bool checkPreferences)
 		{
 			return agents;
 		}
