@@ -359,11 +359,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				throw new NotImplementedException();
 			}
 
-			public string CommonAgentNameScheduleExport(IPerson person)
-			{
-				throw new NotImplementedException();
-			}
-
 			public IEnumerable<DateOnly> DaysToRecalculate
 			{
 				get { throw new NotImplementedException(); }

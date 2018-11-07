@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Specification;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -42,12 +43,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			{
 				var scheduleTags = new ScheduleTagRepository(uow).LoadAll().OrderBy(t => t.Description).ToList();
 				scheduleTags.Insert(0, NullScheduleTag.Instance);
-				ScheduleTags = scheduleTags;	
+				ScheduleTags = scheduleTags;
+
+				CommonNameDescriptionScheduleExport = new GlobalSettingDataRepository(uow).FindValueByKey(CommonNameDescriptionSettingScheduleExport.Key, new CommonNameDescriptionSettingScheduleExport());
 			}
 		}
 		
 		public ISchedulerStateHolder SchedulerStateHolder { get; }
 		public IEnumerable<IScheduleTag> ScheduleTags { get; private set; }
+		public CommonNameDescriptionSettingScheduleExport CommonNameDescriptionScheduleExport { get; private set; }
 		
 		
 		

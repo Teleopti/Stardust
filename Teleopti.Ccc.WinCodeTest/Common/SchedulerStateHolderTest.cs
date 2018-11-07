@@ -120,7 +120,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		public void VerifyCanLoadSettings()
 		{
 			CommonNameDescriptionSetting nameDescriptionSetting = new CommonNameDescriptionSetting();
-			CommonNameDescriptionSettingScheduleExport nameDescriptionSettingScheduleExport = new CommonNameDescriptionSettingScheduleExport();
 
 			DefaultSegment defaultSegment = new DefaultSegment();
 			defaultSegment.SegmentLength = 42;
@@ -131,7 +130,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			Expect.Call(repositoryFactory.CreateGlobalSettingDataRepository(unitOfWork)).Return(settingDataRepository).Repeat.AtLeastOnce();
 			Expect.Call(settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting())).IgnoreArguments().Return(nameDescriptionSetting);
-			Expect.Call(settingDataRepository.FindValueByKey("CommonNameDescriptionScheduleExport", new CommonNameDescriptionSettingScheduleExport())).IgnoreArguments().Return(nameDescriptionSettingScheduleExport);
 			Expect.Call(settingDataRepository.FindValueByKey("DefaultSegment", new DefaultSegment())).IgnoreArguments().Return(defaultSegment).Repeat.Once();
 
 
@@ -141,8 +139,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Assert.AreEqual(nameDescriptionSetting.BuildFor(person), target.CommonAgentName(person));
 			Assert.AreEqual(nameDescriptionSetting,target.CommonNameDescription);
 
-			Assert.AreEqual(nameDescriptionSettingScheduleExport.BuildFor(person), target.CommonAgentNameScheduleExport(person));
-			Assert.AreEqual(nameDescriptionSettingScheduleExport, target.CommonNameDescriptionScheduleExport);
 
 			Assert.AreEqual(42, target.DefaultSegmentLength);
 			mocks.VerifyAll();

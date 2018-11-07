@@ -119,7 +119,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void LoadSettings(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory)
 		{
 			CommonNameDescription = repositoryFactory.CreateGlobalSettingDataRepository(unitOfWork).FindValueByKey(CommonNameDescriptionSetting.Key, new CommonNameDescriptionSetting());
-			CommonNameDescriptionScheduleExport = repositoryFactory.CreateGlobalSettingDataRepository(unitOfWork).FindValueByKey(CommonNameDescriptionSettingScheduleExport.Key, new CommonNameDescriptionSettingScheduleExport());
 			_defaultSegment = repositoryFactory.CreateGlobalSettingDataRepository(unitOfWork).FindValueByKey("DefaultSegment", new DefaultSegment());
 		}
 
@@ -131,11 +130,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public string CommonAgentName(IPerson person)
 		{
 			return CommonNameDescription.BuildFor(person);
-		}
-		
-		public string CommonAgentNameScheduleExport(IPerson person)
-		{
-			return CommonNameDescriptionScheduleExport.BuildFor(person);
 		}
 
 		public void MarkDateToBeRecalculated(DateOnly dateToRecalculate)
@@ -202,9 +196,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public CommonNameDescriptionSetting CommonNameDescription { get; private set; } = new CommonNameDescriptionSetting();
-
-		public CommonNameDescriptionSettingScheduleExport CommonNameDescriptionScheduleExport { get; private set; } = new CommonNameDescriptionSettingScheduleExport();
-
+		
 		public int DefaultSegmentLength => _defaultSegment.SegmentLength;
 
 		public bool AgentFilter()

@@ -6124,7 +6124,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void toolStripMenuItemExportToPdfGraphicalMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Left) return;
-			var exporter = new ExportToPdfGraphical(_scheduleView, this, SchedulerState.SchedulerStateHolder,
+			var exporter = new ExportToPdfGraphical(_scheduleView, this, SchedulerState,
 				TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
 				TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
 			exporter.Export();
@@ -6132,7 +6132,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void exportToPdf(bool shiftsPerDay)
 		{
-			var exporter = new ExportToPdf(_scheduleView, this, SchedulerState.SchedulerStateHolder,
+			var exporter = new ExportToPdf(_scheduleView, this, SchedulerState,
 				TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
 				TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
 			exporter.Export(shiftsPerDay);

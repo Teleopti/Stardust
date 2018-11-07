@@ -63,8 +63,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		string CommonAgentName(IPerson person);
 
-		string CommonAgentNameScheduleExport(IPerson person);
-
 		IEnumerable<DateOnly> DaysToRecalculate { get; }
 		ShiftTradeRequestStatusCheckerWithSchedule ShiftTradeRequestStatusChecker { get; set; }
 
