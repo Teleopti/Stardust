@@ -9,26 +9,26 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 	{
 		private readonly ICollection<IWorkflowControlSet> _workflowControlSets;
 		private readonly DateOnly _publishToDate;
-		private readonly ICommonStateHolder _commonStateHolder;
+		private readonly SchedulingScreenState _schedulingScreenState;
 
 
-		public PublishScheduleCommand(ICollection<IWorkflowControlSet> workflowControlSets, DateOnly publishToDate, ICommonStateHolder commonStateHolder)
+		public PublishScheduleCommand(ICollection<IWorkflowControlSet> workflowControlSets, DateOnly publishToDate, SchedulingScreenState schedulingScreenState)
 		{
 			_workflowControlSets = workflowControlSets;
 			_publishToDate = publishToDate;
-			_commonStateHolder = commonStateHolder;
+			_schedulingScreenState = schedulingScreenState;
 		}
 
 		public void Execute()
 		{
 			foreach (var modifiedControlSet in _workflowControlSets)
 			{
-				foreach (var controlSet in _commonStateHolder.WorkflowControlSets)
+				foreach (var controlSet in _schedulingScreenState.WorkflowControlSets)
 				{
 					if (controlSet.Equals(modifiedControlSet))
 					{
 						controlSet.SchedulePublishedToDate = _publishToDate.Date;
-						_commonStateHolder.ModifiedWorkflowControlSets.Add(controlSet);
+						_schedulingScreenState.ModifiedWorkflowControlSets.Add(controlSet);
 					}
 				}	
 			}

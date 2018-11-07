@@ -545,7 +545,6 @@
     <Compile Include="Scheduler\OptimizationBug37126Test.cs" />
     <Compile Include="Scheduler\OvertimePreferencesDialogPresenterTest.cs" />
     <Compile Include="Scheduler\PasteAsOvertimeTest.cs" />
-    <Compile Include="Scheduler\PublishScheduleCommandTest.cs" />
     <Compile Include="Scheduler\PublishScheduleDatePresenterTest.cs" />
     <Compile Include="Scheduler\Reporting\ScheduledTimePerActivityModelTest.cs" />
     <Compile Include="Scheduler\Requests\HandlePersonRequestComparerTest.cs" />

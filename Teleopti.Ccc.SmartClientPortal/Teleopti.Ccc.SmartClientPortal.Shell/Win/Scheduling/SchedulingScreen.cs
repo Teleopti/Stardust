@@ -3995,7 +3995,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				bool success = persister.TryPersist(SchedulerState.SchedulerStateHolder.Schedules,
 					SchedulerState.PersonRequests,
 					_modifiedWriteProtections,
-					SchedulerState.SchedulerStateHolder.CommonStateHolder.ModifiedWorkflowControlSets,
+					SchedulerState.ModifiedWorkflowControlSets,
 					out foundConflicts);
 
 				if (!success && foundConflicts != null)
@@ -5014,7 +5014,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				return 0;
 
 			if (!SchedulerState.SchedulerStateHolder.Schedules.DifferenceSinceSnapshot().IsEmpty() || SchedulerState.ChangedRequests() ||
-				!_modifiedWriteProtections.IsEmpty() || !SchedulerState.SchedulerStateHolder.CommonStateHolder.ModifiedWorkflowControlSets.IsEmpty())
+				!_modifiedWriteProtections.IsEmpty() || !SchedulerState.ModifiedWorkflowControlSets.IsEmpty())
 			{
 				DialogResult res = ShowConfirmationMessage(Resources.DoYouWantToSaveChangesYouMade, Resources.Save);
 				switch (res)
@@ -6990,8 +6990,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				if (view.ShowDialog(this) != DialogResult.OK) return;
 				var workflowControlSets = view.WorkflowControlSets;
 				var publishToDate = view.PublishScheduleTo;
-				var publishCommand = new PublishScheduleCommand(workflowControlSets, publishToDate,
-					SchedulerState.SchedulerStateHolder.CommonStateHolder);
+				var publishCommand = new PublishScheduleCommand(workflowControlSets, publishToDate, SchedulerState);
 				publishCommand.Execute();
 				enableSave();
 			}

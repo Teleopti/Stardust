@@ -46,14 +46,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				ScheduleTags = scheduleTags;
 
 				CommonNameDescriptionScheduleExport = new GlobalSettingDataRepository(uow).FindValueByKey(CommonNameDescriptionSettingScheduleExport.Key, new CommonNameDescriptionSettingScheduleExport());
+
+				WorkflowControlSets = new WorkflowControlSetRepository(uow).LoadAll();
 			}
+
+			ModifiedWorkflowControlSets = new List<IWorkflowControlSet>();
 		}
 		
 		public ISchedulerStateHolder SchedulerStateHolder { get; }
 		public IEnumerable<IScheduleTag> ScheduleTags { get; private set; }
 		public CommonNameDescriptionSettingScheduleExport CommonNameDescriptionScheduleExport { get; private set; }
-		
-		
+		public IEnumerable<IWorkflowControlSet> WorkflowControlSets { get; private set; }
+		public ICollection<IWorkflowControlSet> ModifiedWorkflowControlSets { get; private set; }
 		
 		
 		

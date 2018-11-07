@@ -13,8 +13,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		IEnumerable<IActivity> Activities { get; }
 		IEnumerable<IShiftCategory> ShiftCategories { get; }
 	    IDayOffTemplate DefaultDayOffTemplate { get; }
-		ICollection<IWorkflowControlSet> WorkflowControlSets { get; }
-		ICollection<IWorkflowControlSet> ModifiedWorkflowControlSets { get; }
 		IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSets { get; }
 	    void SetDayOffTemplate(IDayOffTemplate dayOffTemplate);
 		void SetShiftCategories(IList<IShiftCategory> shiftCategories);
