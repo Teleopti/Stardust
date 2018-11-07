@@ -656,7 +656,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function() {
 		this.getPermissionsPromise = function () {
 			return {
 				then: function (callback) {
-					callback && callback({ data: { HasApproveOrDenyPermission: true } }) ;
+					callback && callback({ data: { HasApproveOrDenyPermission: true, showCancelRequests: true } }) ;
 				}
 			};
 		}
