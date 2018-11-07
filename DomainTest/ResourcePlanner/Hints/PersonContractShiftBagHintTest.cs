@@ -27,22 +27,19 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 		[Test]
 		public void ShouldReturnHintWhenShiftsInShiftBagAreShorterThanTargetTime()
 		{
-			var startDate = new DateOnly(2017, 01, 23);
-			var planningPeriod = new DateOnlyPeriod(startDate, startDate.AddDays(6));
+			var date = new DateOnly(2017, 01, 23);
 			var contract = new Contract("_")
 			{
 				WorkTime = new WorkTime(new TimeSpan(8, 0, 0)),
 				PositivePeriodWorkTimeTolerance = new TimeSpan(0, 0, 0),
 				NegativePeriodWorkTimeTolerance = new TimeSpan(0, 0, 0),
-				PositiveDayOffTolerance = 0,
-				NegativeDayOffTolerance = 0
 			};
  
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(new Activity("_"), new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), new ShiftCategory("_").WithId()));
 			var agent = new Person().WithId()
 				.WithPersonPeriod(new RuleSetBag(ruleSet).WithId(), contract, new ContractScheduleWorkingMondayToFriday(),new PartTimePercentage("_") , null)
-				.WithSchedulePeriodOneWeek(startDate);
-			var result = Target.Execute(new ScheduleHintInput(new[] { agent }, planningPeriod, false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)));
+				.WithSchedulePeriodOneWeek(date);
+			var result = Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)));
  
 			result.Count().Should().Be.EqualTo(1);
 			
@@ -54,22 +51,19 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 		[Test]
 		public void ShouldNotReturnHintWhenShiftsInShiftBagAreWithinTolerance()
 		{
-			var startDate = new DateOnly(2017, 01, 23);
-			var planningPeriod = new DateOnlyPeriod(startDate, startDate.AddDays(6));
+			var date = new DateOnly(2017, 01, 23);
 			var contract = new Contract("_")
 			{
 				WorkTime = new WorkTime(new TimeSpan(8, 0, 0)),
 				PositivePeriodWorkTimeTolerance = new TimeSpan(0, 0, 0),
 				NegativePeriodWorkTimeTolerance = new TimeSpan(5, 0, 0),
-				PositiveDayOffTolerance = 0,
-				NegativeDayOffTolerance = 0
 			};
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(new Activity("_"), new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), new ShiftCategory().WithId()));
 			var agent = new Person().WithId()
 				.WithPersonPeriod(new RuleSetBag(ruleSet).WithId(), contract, new ContractScheduleWorkingMondayToFriday(),new PartTimePercentage("_") , null)
-				.WithSchedulePeriodOneWeek(startDate);
+				.WithSchedulePeriodOneWeek(date);
 			
-			var result = Target.Execute(new ScheduleHintInput(new[] { agent }, planningPeriod, false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)));
+			var result = Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)));
  
 			result.Count().Should().Be.EqualTo(0);
 		}
@@ -99,29 +93,67 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 		[Test]
 		public void ShouldNotReturnHintWhenAverageWorkTimeHasBeenOverridden()
 		{
-			var startDate = new DateOnly(2017, 01, 23);
+			var date = new DateOnly(2017, 01, 23);
 			var contract = new Contract("_")
 			{
 				WorkTime = new WorkTime(new TimeSpan(8, 0, 0)),
 				PositivePeriodWorkTimeTolerance = new TimeSpan(0, 0, 0),
 				NegativePeriodWorkTimeTolerance = new TimeSpan(0, 0, 0),
-				PositiveDayOffTolerance = 0,
-				NegativeDayOffTolerance = 0
 			};
  
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(new Activity("_"), new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
 			var agent = new Person().WithId()
 				.WithPersonPeriod(new RuleSetBag(ruleSet).WithId(), contract, new ContractScheduleWorkingMondayToFriday(),new PartTimePercentage("_") , null)
-				.WithSchedulePeriodOneWeek(startDate);
-			agent.SchedulePeriod(startDate).AverageWorkTimePerDayOverride = new TimeSpan(7,0,0);
+				.WithSchedulePeriodOneWeek(date);
+			agent.SchedulePeriod(date).AverageWorkTimePerDayOverride = new TimeSpan(7,0,0);
 
 			var result = Target
-				.Execute(new ScheduleHintInput(new[] {agent}, DateOnlyPeriod.CreateWithNumberOfWeeks(startDate, 1),
+				.Execute(new ScheduleHintInput(new[] {agent}, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1),
 					false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)));
 			
 			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.Single(x=>x.ErrorResource==nameof(Resources.ShiftsInShiftBagCanNotFulFillOverriddenTargetTime)))
 				.Should()
 				.Be.EqualTo(string.Format(Resources.ShiftsInShiftBagCanNotFulFillOverriddenTargetTime,ruleSet.Description.Name));
+		}
+		
+		[Test]
+		public void ShouldNotReturnHintsWhenShiftBagHasBeenDeleted()
+		{
+			var date = new DateOnly(2017, 01, 23);
+			var contract = new Contract("_")
+			{
+				WorkTime = new WorkTime(new TimeSpan(8, 0, 0)),
+				PositivePeriodWorkTimeTolerance = new TimeSpan(0, 0, 0),
+				NegativePeriodWorkTimeTolerance = new TimeSpan(0, 0, 0),
+			};
+
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(new Activity("_"), new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), new ShiftCategory("_").WithId()));
+			var shiftBag = new RuleSetBag(ruleSet).WithId();
+			
+			shiftBag.SetDeleted();
+			
+			var agent = new Person().WithId().WithPersonPeriod(shiftBag, contract, new ContractScheduleWorkingMondayToFriday(),new PartTimePercentage("_") , null).WithSchedulePeriodOneWeek(date);
+			Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint))).Should().Be.Empty();
+ 
+		}
+		
+		[Test]
+		public void ShouldNotReturnHintsWheContractHasBeenDeleted()
+		{
+			var date = new DateOnly(2017, 01, 23);
+			var contract = new Contract("_")
+			{
+				WorkTime = new WorkTime(new TimeSpan(8, 0, 0)),
+				PositivePeriodWorkTimeTolerance = new TimeSpan(0, 0, 0),
+				NegativePeriodWorkTimeTolerance = new TimeSpan(0, 0, 0),
+			};
+			
+			contract.SetDeleted();
+
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(new Activity("_"), new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), new ShiftCategory("_").WithId()));
+			var agent = new Person().WithId().WithPersonPeriod(new RuleSetBag(ruleSet).WithId(), contract, new ContractScheduleWorkingMondayToFriday(),new PartTimePercentage("_") , null).WithSchedulePeriodOneWeek(date);
+ 
+			Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint))).Should().Be.Empty();
 		}
 
 		public void Isolate(IIsolate isolate)
