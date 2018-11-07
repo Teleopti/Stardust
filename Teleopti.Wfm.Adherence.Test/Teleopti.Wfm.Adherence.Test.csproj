@@ -253,6 +253,7 @@
     <Compile Include="ApplicationLayer\ViewModels\SiteCardViewModelBuilderPermissionTest.cs" />
     <Compile Include="ApplicationLayer\ViewModels\SiteCardViewModelBuilderTeamsTest.cs" />
     <Compile Include="ApplicationLayer\ViewModels\SiteCardViewModelBuilderTest.cs" />
+    <Compile Include="Domain\AgentAdherenceDay\PeriodTest.cs" />
     <Compile Include="Domain\CacheTest.cs" />
     <Compile Include="Domain\Configuration\RtaMapTest.cs" />
     <Compile Include="Domain\Configuration\RtaRuleTest.cs" />
