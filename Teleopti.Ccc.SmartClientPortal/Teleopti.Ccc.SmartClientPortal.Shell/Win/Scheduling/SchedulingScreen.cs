@@ -63,7 +63,6 @@ using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Secrets.Licensing;
-using Teleopti.Ccc.SmartClientPortal.Shell.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
@@ -575,8 +574,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void contextMenuViewsOpened(object sender, EventArgs e)
 		{
-			if (_scheduleView != null)
-				_scheduleView.Presenter.UpdateFromEditor();
+			_scheduleView?.Presenter.UpdateFromEditor();
 		}
 
 		#endregion
@@ -633,33 +631,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void addNewLayer(ClipboardItems addType)
 		{
-			if (_scheduleView != null)
-			{
-				switch (addType)
-				{
-					case ClipboardItems.Shift:
-						_scheduleView.Presenter.AddActivity();
-						break;
-					case ClipboardItems.Overtime:
-						var definitionSets = MultiplicatorDefinitionSet.Where(m => m.MultiplicatorType == MultiplicatorType.Overtime);
-						_scheduleView.Presenter.AddOvertime(definitionSets.ToList());
-						break;
-					case ClipboardItems.Absence:
-						if (!SchedulerState.SchedulerStateHolder.CommonStateHolder.Absences.NonDeleted().Any())
-						{
-							ShowInformationMessage(Resources.NoAbsenceDefined, Resources.NoAbsenceDefinedCaption);
-							return;
-						}
-						_scheduleView.Presenter.AddAbsence();
-						break;
-					case ClipboardItems.PersonalShift:
-						_scheduleView.Presenter.AddPersonalShift();
-						break;
-				}
-				_scheduleView.Presenter.ClipHandlerSchedule.Clear();
+			if (_scheduleView == null)
+				return;
+
+				_scheduleView.AddNewLayer(addType, SchedulerState.SchedulerStateHolder.CommonStateHolder.Absences, MultiplicatorDefinitionSet);
 				RecalculateResources();
 				RunActionWithDelay(updateShiftEditor, 50);
-			}
 		}
 
 		private void editControlNewClicked(object sender, EventArgs e)
@@ -668,7 +645,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				addNewLayer(ClipboardItems.Shift);
 			else
 				_editControl.ToolStripButtonNew.ShowDropDown();
-
 		}
 
 		#endregion
@@ -2150,10 +2126,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void backgroundWorkerValidatePersonsDoWork(object sender, DoWorkEventArgs e)
 		{
 			setThreadCulture();
-			if (_scheduleView != null)
-			{
-				_scheduleView.ValidatePersons(_personsToValidate, _validation);
-			}
+			_scheduleView?.ValidatePersons(_personsToValidate, _validation);
 		}
 
 		private static void setThreadCulture()
@@ -5037,16 +5010,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void selectCellFromPersonDate(IPerson person, DateOnly localDate)
 		{
-			if (_scheduleView != null)
-			{
-				Point point = _scheduleView.GetCellPositionForAgentDay(person, localDate);
-				if (point.X != -1 && point.Y != -1)
-				{
-					_scheduleView.ViewGrid.Selections.Clear(true);
-					schedulerSplitters1.Grid.CurrentCell.MoveTo(point.Y, point.X, GridSetCurrentCellOptions.None);
-					schedulerSplitters1.Grid.Selections.SelectRange(GridRangeInfo.Cell(point.Y, point.X), true);
-				}
-			}
+			_scheduleView?.SelectCellFromPersonDate(person, localDate);
 		}
 
 		private void reloadChart()
@@ -5180,14 +5144,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void schedulerSplitters1ValidationAlertsAgentDoubleClick(object sender, ValidationViewAgentDoubleClickEvenArgs e)
 		{
-			var row = _scheduleView.GetRowForAgent(e.Person);
-			int column = _scheduleView.GetColumnForDate(e.Date);
-			GridRangeInfo info = GridRangeInfo.Cells(row, column, row, column);
-			_scheduleView.TheGrid.Selections.Clear(true);
-			_scheduleView.TheGrid.CurrentCell.Activate(row, column, GridSetCurrentCellOptions.SetFocus);
-			_scheduleView.TheGrid.Selections.ChangeSelection(info, info, true);
-			_scheduleView.TheGrid.CurrentCell.MoveTo(row, column, GridSetCurrentCellOptions.ScrollInView);
-			_scheduleView.SetSelectedDateLocal(e.Date);
+			_scheduleView.SelectCellFromPersonDate(e.Person, e.Date);
 			updateShiftEditor();
 		}
 

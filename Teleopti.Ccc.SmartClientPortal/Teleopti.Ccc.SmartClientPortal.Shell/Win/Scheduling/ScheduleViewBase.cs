@@ -30,10 +30,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
-    /// <summary>
-    /// Base view class
-    /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public abstract class ScheduleViewBase : AddScheduleLayers, IScheduleViewBase, IDisposable, IHelpContext
     {
         private readonly GridControl _grid;
@@ -61,6 +57,50 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             _grid = grid;
             grid.HideCols.ResetRange(0, 300);
         }
+
+		public void AddNewLayer(ClipboardItems addType, IEnumerable<IAbsence> commonStateHolderAbsences, IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets)
+		{
+			switch (addType)
+			{
+				case ClipboardItems.Shift:
+					Presenter.AddActivity();
+					break;
+				case ClipboardItems.Overtime:
+					var definitionSets = multiplicatorDefinitionSets.Where(m => m.MultiplicatorType == MultiplicatorType.Overtime);
+					Presenter.AddOvertime(definitionSets.ToList());
+					break;
+				case ClipboardItems.Absence:
+					if (!commonStateHolderAbsences.NonDeleted().Any())
+					{
+						ShowInformationMessage(Resources.NoAbsenceDefined, Resources.NoAbsenceDefinedCaption);
+						return;
+					}
+					Presenter.AddAbsence();
+					break;
+				case ClipboardItems.PersonalShift:
+					Presenter.AddPersonalShift();
+					break;
+			}
+			Presenter.ClipHandlerSchedule.Clear();
+		}
+
+		public void SelectCellFromPersonDate(IPerson person, DateOnly localDate)
+		{
+			Point point = GetCellPositionForAgentDay(person, localDate);
+			if (point.X != -1 && point.Y != -1)
+			{
+				ViewGrid.Selections.Clear(true);
+				ViewGrid.CurrentCell.MoveTo(point.Y, point.X, GridSetCurrentCellOptions.None);
+				ViewGrid.Selections.SelectRange(GridRangeInfo.Cell(point.Y, point.X), true);
+			}
+
+			//int row = _scheduleView.GetRowForAgent(searchForm.SelectedPerson);
+			//GridRangeInfo info = GridRangeInfo.Cells(row, 0, row, 0);
+			//_scheduleView.TheGrid.Selections.Clear(true);
+			//_scheduleView.TheGrid.CurrentCell.Activate(row, 0, GridSetCurrentCellOptions.SetFocus);
+			//_scheduleView.TheGrid.Selections.ChangeSelection(info, info, true);
+			//_scheduleView.TheGrid.CurrentCell.MoveTo(row, 0, GridSetCurrentCellOptions.ScrollInView);
+		}
 
 		public void Sort(IScheduleSortCommand command)
 		{
