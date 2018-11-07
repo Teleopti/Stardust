@@ -264,6 +264,7 @@
     <Compile Include="Domain\Infrastructure\RtaEventStoreReadByDateTest.cs" />
     <Compile Include="Domain\Infrastructure\RtaEventStoreUpgradeTest.cs" />
     <Compile Include="Domain\Infrastructure\RtaEventStoreUpgradeWriterTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\EnqueueTest.cs" />
     <Compile Include="Domain\RtaTestAttribute.cs" />
     <Compile Include="Domain\Service\QueueFloodTest.cs" />
     <Compile Include="Domain\Service\RtaExtensions.cs" />
