@@ -34,7 +34,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.PerformanceM
 		protected override void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			base.Extend(extend, configuration);
-			
+
 			extend.AddService(this);
 		}
 
@@ -47,13 +47,12 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.PerformanceM
 				isolate.UseTestDouble<FakeEventPublisher>().For<FakeEventPublisher>();
 			else
 				isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
-
 		}
 
 		protected override void BeforeTest()
 		{
-			InfrastructureTestStuff.Before();
-			
+			InfrastructureTestSetup.BeforeWithLogon();
+
 			base.BeforeTest();
 
 			FakePublisher.AddHandler<PersonAssociationChangedEventPublisher>();
@@ -67,7 +66,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.PerformanceM
 		{
 			base.AfterTest();
 
-			InfrastructureTestStuff.After();
+			InfrastructureTestSetup.AfterWithLogon();
 		}
 
 		public IEnumerable<int> ParallelTransactions() => new[] {5, 6, 7, 8, 9};

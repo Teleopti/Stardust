@@ -351,26 +351,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_schedulerMessageBrokerHandler = new SchedulerMessageBrokerHandler(this, _container);
 			updateLifeTimeScopeWith2ThingsWithFullDependencyChain();
 
-			var toggleManager = _container.Resolve<IToggleManager>();
 			_skillDayGridControl = new SkillDayGridControl(_container.Resolve<ISkillPriorityProvider>())
 			{
 				ContextMenu = contextMenuStripResultView.ContextMenu,
-				ToggleManager = toggleManager
 			};
 			_skillWeekGridControl = new SkillWeekGridControl
 			{
 				ContextMenu = contextMenuStripResultView.ContextMenu,
-				ToggleManager = toggleManager
 			};
 			_skillMonthGridControl = new SkillMonthGridControl
 			{
 				ContextMenu = contextMenuStripResultView.ContextMenu,
-				ToggleManager = toggleManager
 			};
 			_skillFullPeriodGridControl = new SkillFullPeriodGridControl
 			{
 				ContextMenu = contextMenuStripResultView.ContextMenu,
-				ToggleManager = toggleManager
 			};
 			_skillResultHighlightGridControl = new SkillResultHighlightGridControl();
 
@@ -387,7 +382,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_workShiftWorkTime = _container.Resolve<IWorkShiftWorkTime>();
 			_temporarySelectedEntitiesFromTreeView = allSelectedEntities;
 			_virtualSkillHelper = _container.Resolve<IVirtualSkillHelper>();
-			SchedulerState = new SchedulingScreenState(_container.Resolve<ISchedulerStateHolder>());
+			SchedulerState = new SchedulingScreenState(_container.Resolve<IDisableDeletedFilter>(), _container.Resolve<ISchedulerStateHolder>());
 			_groupPagesProvider = _container.Resolve<SchedulerGroupPagesProvider>();
 			_optimizationHelperExtended = _container.Resolve<IResourceOptimizationHelperExtended>();
 			SchedulerState.SchedulerStateHolder.SetRequestedScenario(loadScenario);
@@ -2499,7 +2494,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				using (PerformanceOutput.ForOperation("Creating new RequestView"))
 				{
-					_requestView = new RequestView(schedulerSplitters1.HandlePersonRequestView1, SchedulerState.SchedulerStateHolder, _undoRedo,
+					_requestView = new RequestView(schedulerSplitters1.HandlePersonRequestView1, SchedulerState, _undoRedo,
 						SchedulerState.SchedulerStateHolder.SchedulingResultState.AllPersonAccounts, _eventAggregator);
 				}
 
@@ -2649,7 +2644,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 				if (_requestView != null && _requestView.NeedReload)
 				{
-					_requestView.CreatePersonRequestViewModels(SchedulerState.SchedulerStateHolder, schedulerSplitters1.HandlePersonRequestView1);
+					_requestView.CreatePersonRequestViewModels(SchedulerState, schedulerSplitters1.HandlePersonRequestView1);
 					_requestView.NeedReload = false;
 				}
 			}
@@ -3567,7 +3562,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 
 				backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXInitializingTreeDots"));
-				foreach (var skillDay in SchedulerState.SchedulerStateHolder.SchedulingResultState.AllSkillDays())
+				foreach (var skillDay in SchedulerState.SchedulerStateHolder.SchedulingResultState.SkillDays.ToSkillDayEnumerable())
 				{
 					foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 					{
@@ -3901,7 +3896,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			using (PerformanceOutput.ForOperation("Loading requests"))
 			{
 				string numberOfDaysToShowNonPendingRequests;
-				stateHolder.SchedulerStateHolder.LoadPersonRequests(uow, new RepositoryFactory(), _personRequestAuthorizationChecker,
+				stateHolder.LoadPersonRequests(uow, new RepositoryFactory(), _personRequestAuthorizationChecker,
 					StateHolderReader.Instance.StateReader.ApplicationScopeData.AppSettings.TryGetValue(
 						"NumberOfDaysToShowNonPendingRequests", out numberOfDaysToShowNonPendingRequests)
 						? Convert.ToInt32(numberOfDaysToShowNonPendingRequests)
@@ -3926,13 +3921,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void loadSchedulingScreenState(IUnitOfWork uow, SchedulingScreenState state)
 		{
-			using (_container.Resolve<IDisableDeletedFilter>().Disable())
-			{
-				var scheduleTags = new ScheduleTagRepository(uow).LoadAll().OrderBy(t => t.Description).ToList();
-				scheduleTags.Insert(0, NullScheduleTag.Instance);
-				
-				state.Fill(scheduleTags);
-			}
+			state.Fill(uow);
 		}
 
 		private void disableSave()
@@ -4006,9 +3995,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				var persister = _container.Resolve<ISchedulingScreenPersister>();
 				IEnumerable<PersistConflict> foundConflicts;
 				bool success = persister.TryPersist(SchedulerState.SchedulerStateHolder.Schedules,
-					SchedulerState.SchedulerStateHolder.PersonRequests,
+					SchedulerState.PersonRequests,
 					_modifiedWriteProtections,
-					SchedulerState.SchedulerStateHolder.CommonStateHolder.ModifiedWorkflowControlSets,
+					SchedulerState.ModifiedWorkflowControlSets,
 					out foundConflicts);
 
 				if (!success && foundConflicts != null)
@@ -5026,8 +5015,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (SchedulerState.SchedulerStateHolder.Schedules == null)
 				return 0;
 
-			if (!SchedulerState.SchedulerStateHolder.Schedules.DifferenceSinceSnapshot().IsEmpty() || SchedulerState.SchedulerStateHolder.ChangedRequests() ||
-				!_modifiedWriteProtections.IsEmpty() || !SchedulerState.SchedulerStateHolder.CommonStateHolder.ModifiedWorkflowControlSets.IsEmpty())
+			if (!SchedulerState.SchedulerStateHolder.Schedules.DifferenceSinceSnapshot().IsEmpty() || SchedulerState.ChangedRequests() ||
+				!_modifiedWriteProtections.IsEmpty() || !SchedulerState.ModifiedWorkflowControlSets.IsEmpty())
 			{
 				DialogResult res = ShowConfirmationMessage(Resources.DoYouWantToSaveChangesYouMade, Resources.Save);
 				switch (res)
@@ -6137,7 +6126,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void toolStripMenuItemExportToPdfGraphicalMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Left) return;
-			var exporter = new ExportToPdfGraphical(_scheduleView, this, SchedulerState.SchedulerStateHolder,
+			var exporter = new ExportToPdfGraphical(_scheduleView, this, SchedulerState,
 				TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
 				TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
 			exporter.Export();
@@ -6145,7 +6134,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void exportToPdf(bool shiftsPerDay)
 		{
-			var exporter = new ExportToPdf(_scheduleView, this, SchedulerState.SchedulerStateHolder,
+			var exporter = new ExportToPdf(_scheduleView, this, SchedulerState,
 				TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
 				TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
 			exporter.Export(shiftsPerDay);
@@ -6659,7 +6648,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var id = Guid.Empty;
 			var defaultRequest = _requestView.SelectedAdapters().Count > 0
 				? _requestView.SelectedAdapters().First().PersonRequest
-				: SchedulerState.SchedulerStateHolder.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
+				: SchedulerState.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
 			if (defaultRequest != null)
 				id = defaultRequest.Person.Id.GetValueOrDefault();
 			var presenter = _container.BeginLifetimeScope().Resolve<IRequestHistoryViewPresenter>();
@@ -7003,8 +6992,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				if (view.ShowDialog(this) != DialogResult.OK) return;
 				var workflowControlSets = view.WorkflowControlSets;
 				var publishToDate = view.PublishScheduleTo;
-				var publishCommand = new PublishScheduleCommand(workflowControlSets, publishToDate,
-					SchedulerState.SchedulerStateHolder.CommonStateHolder);
+				var publishCommand = new PublishScheduleCommand(workflowControlSets, publishToDate, SchedulerState);
 				publishCommand.Execute();
 				enableSave();
 			}

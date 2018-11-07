@@ -6,14 +6,14 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 	{
 		protected override void BeforeTest()
 		{
-			InfrastructureTestStuff.BeforeWithLogon();
+			InfrastructureTestSetup.BeforeWithLogon();
 			base.BeforeTest();
 		}
 
 		protected override void AfterTest()
 		{
 			base.AfterTest();
-			InfrastructureTestStuff.AfterWithLogon();
+			InfrastructureTestSetup.AfterWithLogon();
 		}
 	}
 }

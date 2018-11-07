@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (selectedTeamMembers.IsEmpty())
 				return Enumerable.Empty<IWorkShiftCalculationResultHolder>();
 
-			var roleModelShift = _roleModelSelector.Select(schedulingResultStateHolder.Schedules, schedulingResultStateHolder.AllSkillDays(), _workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(), schedulingOptions, new EffectiveRestriction(), _groupPersonSkillAggregator);
+			var roleModelShift = _roleModelSelector.Select(schedulingResultStateHolder.Schedules, schedulingResultStateHolder.SkillDays.ToSkillDayEnumerable(), _workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(), schedulingOptions, new EffectiveRestriction(), _groupPersonSkillAggregator);
 
 			return roleModelShift == null ? 
 				Enumerable.Empty<IWorkShiftCalculationResultHolder>() : 
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (restriction == null)
 				return Enumerable.Empty<IWorkShiftCalculationResultHolder>();
 
-			var allSkillDays = schedulingResultStateHolder.AllSkillDays();
+			var allSkillDays = schedulingResultStateHolder.SkillDays.ToSkillDayEnumerable();
 
 			var shifts = _workShiftFilterService.FilterForTeamMember(schedulingResultStateHolder.Schedules, day, person, teamBlockSingleDayInfo, restriction,
 				schedulingOptions, false, allSkillDays);

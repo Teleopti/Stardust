@@ -27,22 +27,25 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 		}
 	}
 
-	public class InfrastructureTestStuff
+	public class InfrastructureTestSetup
 	{
-		//internal static IPerson loggedOnPerson;
-		//internal static IApplicationData ApplicationData;
 		internal static IDataSource DataSource;
-		private static int dataHash = 0;
+		private static int createdDatabaseHash = 0;
 
 		public static void Before()
 		{
-			if (dataHash != 0)
+			if (createdDatabaseHash != 0)
 			{
-				DataSourceHelper.RestoreApplicationDatabase(dataHash);
-				DataSourceHelper.RestoreAnalyticsDatabase(dataHash);
+				DataSourceHelper.RestoreApplicationDatabase(createdDatabaseHash);
+				DataSourceHelper.RestoreAnalyticsDatabase(createdDatabaseHash);
 				return;
 			}
 
+			createdDatabaseHash = createDatabase();
+		}
+
+		private static int createDatabase()
+		{
 			var builder = new ContainerBuilder();
 			var toggles = new FakeToggleManager();
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) {FeatureToggle = "http://notinuse"}, toggles)));
@@ -51,34 +54,16 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 			builder.RegisterType<FakeHangfireEventClient>().As<IHangfireEventClient>().SingleInstance();
 			var container = builder.Build();
 
-//			IDictionary<string, string> appSettings = new Dictionary<string, string>();
-//			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
-//				name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
-
-//			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeFromContainer(container));
 
-			//loggedOnPerson = PersonFactory.CreatePerson("logged on person");
-
-			//ApplicationData = new ApplicationData(appSettings, null);
-
-//			BusinessUnitFactory.BusinessUnitUsedInTest.SetId(null);
-//			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, DataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
-//
-//			StateHolderProxyHelper.ClearAndSetStateHolder(new FakeState {ApplicationScopeData = ApplicationData});
-
-//			persistLoggedOnPerson();
-//			persistBusinessUnit();
-//			deleteAllAggregates();
-			dataHash = 7545;
-
-			DataSourceHelper.BackupApplicationDatabase(dataHash);
-			DataSourceHelper.BackupAnalyticsDatabase(dataHash);
+			const int someHash = 7545;
+			DataSourceHelper.BackupApplicationDatabase(someHash);
+			DataSourceHelper.BackupAnalyticsDatabase(someHash);
+			return someHash;
 		}
 
 		public static void After()
 		{
-			//DataSourceHelper.RestoreApplicationDatabase(dataHash);
 		}
 
 		public static void BeforeWithLogon() => BeforeWithLogon(out _);
@@ -94,18 +79,10 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 				saveBusinessUnitAndPerson(person, unitOfWork);
 				unitOfWork.PersistAll();
 			}
-
-//			return new GenericDisposable(() =>
-//			{
-//				RestoreCcc7Database();
-//				RestoreAnalyticsDatabase();
-//				Logout();
-//			});
 		}
 
 		public static void AfterWithLogon()
 		{
-			//CurrentAuthorization.DefaultTo(null);
 			Logout();
 			After();
 		}
@@ -131,27 +108,12 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 			session.Flush();
 		}
 
-//		private static readonly SelectivePrincipalContext principalContext;
-//
-//		static DatabaseStuff()
-//		{
-//			principalContext = SelectivePrincipalContext.Make();
-//		}
-//
 		public static void Login(IPerson person)
 		{
-//			StateHolderProxyHelper.SetupFakeState(
-//				DataSource,
-//				person,
-//				BusinessUnitFactory.BusinessUnitUsedInTest);
-
 			var principalContext = SelectivePrincipalContext.Make();
 			var principal = new TeleoptiPrincipalFactory().MakePrincipal(person, DataSource, BusinessUnitFactory.BusinessUnitUsedInTest, null);
 			principalContext.SetCurrentPrincipal(principal);
-
-			//CurrentAuthorization.DefaultTo(new FullPermission());
 		}
-
 
 		public static void Logout()
 		{

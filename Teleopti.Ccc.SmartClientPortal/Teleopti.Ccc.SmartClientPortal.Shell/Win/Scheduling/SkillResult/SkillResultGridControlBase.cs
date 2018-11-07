@@ -41,8 +41,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 			}
 		}
 
-		public IToggleManager ToggleManager { get; set; }
-
 		public bool HasHelp
 		{
 			get

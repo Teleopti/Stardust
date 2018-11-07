@@ -253,6 +253,7 @@
     <Compile Include="ApplicationLayer\ViewModels\SiteCardViewModelBuilderPermissionTest.cs" />
     <Compile Include="ApplicationLayer\ViewModels\SiteCardViewModelBuilderTeamsTest.cs" />
     <Compile Include="ApplicationLayer\ViewModels\SiteCardViewModelBuilderTest.cs" />
+    <Compile Include="Domain\AgentAdherenceDay\PeriodTest.cs" />
     <Compile Include="Domain\CacheTest.cs" />
     <Compile Include="Domain\Configuration\RtaMapTest.cs" />
     <Compile Include="Domain\Configuration\RtaRuleTest.cs" />
@@ -264,18 +265,16 @@
     <Compile Include="Domain\Infrastructure\RtaEventStoreReadByDateTest.cs" />
     <Compile Include="Domain\Infrastructure\RtaEventStoreUpgradeTest.cs" />
     <Compile Include="Domain\Infrastructure\RtaEventStoreUpgradeWriterTest.cs" />
+    <Compile Include="Domain\Infrastructure\Service\EnqueueTest.cs" />
     <Compile Include="Domain\RtaTestAttribute.cs" />
     <Compile Include="Domain\Service\QueueFloodTest.cs" />
     <Compile Include="Domain\Service\RtaExtensions.cs" />
     <Compile Include="Domain\Service\StateMappingTest.cs" />
     <Compile Include="Domain\Service\UpdateAgentStateTest.cs" />
-    <Compile Include="InfrastructureTesting\AnalyticsDatabaseTestAttribute.cs" />
     <Compile Include="InfrastructureTesting\AnalyticsUnitOfWorkTestAttribute.cs" />
     <Compile Include="InfrastructureTesting\DatabaseTest.cs" />
     <Compile Include="InfrastructureTesting\DatabaseTestAttribute.cs" />
-    <Compile Include="InfrastructureTesting\DatabaseTestWithoutTransaction.cs" />
-    <Compile Include="InfrastructureTesting\InfrastructureTestStuff.cs" />
-    <Compile Include="InfrastructureTesting\MultiDatabaseTestAttribute.cs" />
+    <Compile Include="InfrastructureTesting\InfrastructureTestSetup.cs" />
     <Compile Include="InfrastructureTesting\PrincipalAndStateTestAttribute.cs" />
     <Compile Include="InfrastructureTesting\ReadModelUnitOfWorkTestAttribute.cs" />
     <Compile Include="InfrastructureTesting\RepositoryTest.cs" />
@@ -378,7 +377,6 @@
     <Compile Include="Domain\Service\SnapshotTests.cs" />
     <Compile Include="Domain\Service\TraceTest.cs" />
     <Compile Include="Domain\Service\UnrecognizedStateTest.cs" />
-    <Compile Include="InfrastructureTesting\RetryingQueueSimulator.cs" />
     <Compile Include="InfrastructureTesting\UnitOfWorkTestAttribute.cs" />
     <Compile Include="InfrastructureTesting\WithUnitOfWorkWithRecurringEvents.cs" />
     <Compile Include="NUnitSetup.cs" />

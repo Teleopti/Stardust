@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		[TestLog]
 		public virtual void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentsInIsland, 
 			LockInfoForStateHolder lockInfoForStateHolder, 
-			DateOnlyPeriod period, IEnumerable<Guid> onlyUseSkills = null)
+			DateOnlyPeriod period, IEnumerable<Guid> onlyUseSkills)
 		{
 			PreFill(schedulerStateHolderTo, period);
 			FillScenario(schedulerStateHolderTo);
@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			FillSchedules(schedulerStateHolderTo, schedulerStateHolderTo.RequestedScenario, schedulerStateHolderTo.SchedulingResultState.LoadedAgents, period);
 			removeUnwantedScheduleRanges(schedulerStateHolderTo);
 			setLocks(schedulerStateHolderTo, lockInfoForStateHolder);
-			schedulerStateHolderTo.ResetFilteredPersons();
 		}
 		
 		private static void setLocks(ISchedulerStateHolder schedulerStateHolderTo, LockInfoForStateHolder lockInfoForStateHolder)

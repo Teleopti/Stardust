@@ -11,7 +11,7 @@ using Teleopti.Wfm.Adherence.Tracer;
 
 namespace Teleopti.Wfm.Adherence.Test.Tracer.Infrastructure
 {
-	[AnalyticsDatabaseTest]
+	[DatabaseTest]
 	[Setting("RtaTracerBufferSize", 0)]
 	[Setting("UseSafeRtaTracer", false)]
 	public class RtaTracerWriterTenantTest : IIsolateSystem

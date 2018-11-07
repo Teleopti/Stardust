@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
 			scheduleDictionary.AddPersonAssignment(assignment);
 			SchedulingResultStateHolder.Schedules = scheduleDictionary;
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, new BudgetGroupState(), null,
 				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 			result.ValidationErrors.Should().Be("There is not enough budget allowance for day 2018-08-15.");
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
 			scheduleDictionary.AddPersonAssignment(assignment);
 			SchedulingResultStateHolder.Schedules = scheduleDictionary;
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, new BudgetGroupState(), null,
 				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 			result.IsValid.Should().Be.EqualTo(true);
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			scheduleDictionary.AddPersonAssignment(assignment);
 			scheduleDictionary.AddPersonAssignment(assignment2);
 			SchedulingResultStateHolder.Schedules = scheduleDictionary;
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, new BudgetGroupState(),null,
 				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 			result.IsValid.Should().Be.EqualTo(true);
@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
 			scheduleDictionary.AddPersonAssignment(assignment);
 			SchedulingResultStateHolder.Schedules = scheduleDictionary;
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, new BudgetGroupState(),null,
 				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 			result.IsValid.Should().Be.EqualTo(true);
@@ -351,7 +351,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			scheduleDictionary.AddPersonAssignment(assignmentLong);
 
 			SchedulingResultStateHolder.Schedules = scheduleDictionary;
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, new BudgetGroupState(),null,
 				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 			result.IsValid.Should().Be.EqualTo(true);
@@ -404,7 +404,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
 			scheduleDictionary.AddPersonAssignment(assignment);
 			SchedulingResultStateHolder.Schedules = scheduleDictionary;
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, new BudgetGroupState(),null,
 				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 			result.IsValid.Should().Be.EqualTo(true);
@@ -472,7 +472,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			scheduleDictionary.AddPersonAssignment(assignmentLong);
 
 			SchedulingResultStateHolder.Schedules = scheduleDictionary;
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, new BudgetGroupState(),null,
 				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 			result.ValidationErrors.Should().Be
@@ -545,7 +545,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			scheduleDictionary.AddPersonAssignment(assignment3);
 
 			SchedulingResultStateHolder.Schedules = scheduleDictionary;
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, new BudgetGroupState(), null,
 				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 			result.IsValid.Should().Be.EqualTo(true);
@@ -599,7 +599,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
 			scheduleDictionary.AddPersonAssignment(assignment);
 			SchedulingResultStateHolder.Schedules = scheduleDictionary;
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, new BudgetGroupState(), null,
 				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 			result.IsValid.Should().Be.EqualTo(true);
@@ -665,7 +665,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			scheduleDictionary.AddPersonAssignment(assignment);
 			scheduleDictionary.AddPersonAssignment(assignment2);
 			SchedulingResultStateHolder.Schedules = scheduleDictionary;
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, new BudgetGroupState(),null,
 				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 			result.ValidationErrors.Should().Be("There is not enough budget allowance for day 2018-08-16.");
@@ -729,7 +729,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 18, 13));
 			scheduleDictionary.AddPersonAssignment(assignment);
 			SchedulingResultStateHolder.Schedules = scheduleDictionary;
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, new BudgetGroupState(),null,
 				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 			result.IsValid.Should().Be.EqualTo(true);
@@ -795,7 +795,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			scheduleDictionary.AddPersonAssignment(assignment);
 			scheduleDictionary.AddPersonAssignment(assignment2);
 			SchedulingResultStateHolder.Schedules = scheduleDictionary;
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, new BudgetGroupState(),null,
 				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 			result.IsValid.Should().Be.EqualTo(true);
@@ -858,7 +858,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
 			scheduleDictionary.AddPersonAssignment(assignment);
 			SchedulingResultStateHolder.Schedules = scheduleDictionary;
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, new BudgetGroupState(),null,
 				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 			result.IsValid.Should().Be.EqualTo(true);
@@ -921,7 +921,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
 			scheduleDictionary.AddPersonAssignment(assignment);
 			SchedulingResultStateHolder.Schedules = scheduleDictionary;
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, new BudgetGroupState(),null,
 				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 			result.ValidationErrors.Should().Be("There is not enough budget allowance for day 2018-08-15.");
@@ -1000,7 +1000,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			scheduleDictionary.AddPersonAssignment(assignment1);
 			scheduleDictionary.AddPersonAssignment(assignment2);
 			SchedulingResultStateHolder.Schedules = scheduleDictionary;
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, new BudgetGroupState(),null,
 				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 			result.IsValid.Should().Be.EqualTo(true);
@@ -1050,7 +1050,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			new PersonRequest(personOne, absenceRequest).WithId();
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
 			SchedulingResultStateHolder.Schedules = scheduleDictionary;
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, new BudgetGroupState(),null,
 				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 			result.ValidationErrors.Should().Be("There is not enough budget allowance for day 2018-08-15.");
@@ -1094,7 +1094,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
 			scheduleDictionary.AddPersonAssignment(assignment);
 			SchedulingResultStateHolder.Schedules = scheduleDictionary;
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, new BudgetGroupState(),null,
 				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 			result.ValidationErrors.Should().Be("There is no budget for this period 2018-08-15 - 2018-08-15");
@@ -1134,7 +1134,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			new PersonRequest(personOne, absenceRequest).WithId();
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
 			SchedulingResultStateHolder.Schedules = scheduleDictionary;
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, new BudgetGroupState(),null,
 				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 			result.ValidationErrors.Should().Be("There is no budget for this period 2018-08-15 - 2018-08-15");
@@ -1203,7 +1203,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			scheduleDictionary.AddPersonAssignment(assignment2);
 
 			SchedulingResultStateHolder.Schedules = scheduleDictionary;
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, new BudgetGroupState(),null,
 				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
 			result.ValidationErrors.Should().Be("There is not enough budget allowance for day 2018-08-15.");

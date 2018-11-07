@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		{
 			var specification = MockRepository.GenerateStrictMock<IBudgetGroupAllowanceSpecification>();
 			var absenceRequest = MockRepository.GenerateStrictMock<IAbsenceRequest>();
-			specification.Stub(x => x.IsSatisfied(new AbsenceRequstAndSchedules())).IgnoreArguments().Return(new ValidatedRequest { IsValid = true, ValidationErrors = string.Empty });
-			var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(null, null, null, specification, null));
+			specification.Stub(x => x.IsSatisfied(new AbsenceRequstAndSchedules(null, null, null))).IgnoreArguments().Return(new ValidatedRequest { IsValid = true, ValidationErrors = string.Empty });
+			var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(null, null, null, null, specification, null));
 			Assert.IsTrue(result.IsValid);
 		}
 
@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		{
 			var specification = MockRepository.GenerateStrictMock<IBudgetGroupAllowanceSpecification>();
 			var absenceRequest = MockRepository.GenerateStrictMock<IAbsenceRequest>();
-			specification.Stub(x => x.IsSatisfied(new AbsenceRequstAndSchedules())).IgnoreArguments().Return(new ValidatedRequest { IsValid = false, ValidationErrors = string.Empty });
-			var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(null, null, null, specification, null));
+			specification.Stub(x => x.IsSatisfied(new AbsenceRequstAndSchedules(null, null, null))).IgnoreArguments().Return(new ValidatedRequest { IsValid = false, ValidationErrors = string.Empty });
+			var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(null, null,null, null, specification, null));
 			Assert.IsFalse(result.IsValid);
 		}
 		
