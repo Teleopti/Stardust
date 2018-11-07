@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
 using Teleopti.Interfaces.Domain;
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Messaging
 					dialogue.DialogueMessages.Select(
 						m =>
 						new DialogueMessageViewModel
-							{Created = m.Created, CreatedAsLocal = TimeZoneHelper.ConvertFromUtc(m.Created, TimeZoneHelper.CurrentSessionTimeZone), Text = m.Text, Sender = m.Sender}).ToList());
+							{Created = m.Created, CreatedAsLocal = TimeZoneHelper.ConvertFromUtc(m.Created, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), Text = m.Text, Sender = m.Sender}).ToList());
 		}
 
         public CommandModel SendReply { get; private set; }
@@ -129,7 +130,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Messaging
 
 			// refresh view models 
 			Messages.Clear();
-			_model.DialogueMessages.ForEach(r => Messages.Add(new DialogueMessageViewModel { Created = r.Created, CreatedAsLocal = TimeZoneHelper.ConvertFromUtc(r.Created, TimeZoneHelper.CurrentSessionTimeZone), Text = r.Text, Sender = r.Sender }));
+			_model.DialogueMessages.ForEach(r => Messages.Add(new DialogueMessageViewModel { Created = r.Created, CreatedAsLocal = TimeZoneHelper.ConvertFromUtc(r.Created, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), Text = r.Text, Sender = r.Sender }));
 
 			ReplyText = string.Empty;
 		}

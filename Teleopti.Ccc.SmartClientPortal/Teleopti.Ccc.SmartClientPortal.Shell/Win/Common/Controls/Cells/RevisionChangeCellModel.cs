@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Panels;
 using Teleopti.Interfaces.Domain;
@@ -176,7 +177,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
                         g.FillRectangle(brush, upperRect);
                         var tipData = new ToolTipData(rect.X, rect.X + rect.Width,
                                                       layer.Payload.ConfidentialDescription(revisionDisplayRow.ScheduleDay.Person) + "  " +
-                                                      layer.Period.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone).ToShortTimeString());
+                                                      layer.Period.TimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).ToShortTimeString());
                         tipDatas.Add(tipData);
                     }
 

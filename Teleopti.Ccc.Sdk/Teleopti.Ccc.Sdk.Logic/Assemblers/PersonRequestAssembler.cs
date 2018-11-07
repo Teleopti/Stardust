@@ -16,16 +16,18 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         private readonly IAssembler<IShiftTradeRequest, ShiftTradeRequestDto> _shiftTradeRequestAssembler;
         private readonly IAssembler<IShiftTradeSwapDetail, ShiftTradeSwapDetailDto> _shiftTradeSwapDetailAssembler;
         private readonly IAssembler<IPerson, PersonDto> _personAssembler;
-        private readonly IBatchShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
-
-        public IPersonRequestRepository PersonRequestRepository { get; set; }
-
-        public PersonRequestAssembler(IAssembler<IRequest, TextRequestDto> textRequestAssembler, IAssembler<IAbsenceRequest, AbsenceRequestDto> absenceRequestAssembler, IAssembler<IShiftTradeRequest,ShiftTradeRequestDto> shiftTradeRequestAssembler, IAssembler<IShiftTradeSwapDetail, ShiftTradeSwapDetailDto> shiftTradeSwapDetailAssembler, IAssembler<IPerson, PersonDto> personAssembler, IBatchShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker)
+		private readonly IPersonRequestRepository _personRequestRepository;
+		private readonly IBatchShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
+		private readonly IUserTimeZone _userTimeZone;
+		
+        public PersonRequestAssembler(IAssembler<IRequest, TextRequestDto> textRequestAssembler, IAssembler<IAbsenceRequest, AbsenceRequestDto> absenceRequestAssembler, IAssembler<IShiftTradeRequest,ShiftTradeRequestDto> shiftTradeRequestAssembler, IAssembler<IShiftTradeSwapDetail, ShiftTradeSwapDetailDto> shiftTradeSwapDetailAssembler, IAssembler<IPerson, PersonDto> personAssembler, IPersonRequestRepository personRequestRepository, IBatchShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker, IUserTimeZone userTimeZone)
         {
             _textRequestAssembler = textRequestAssembler;
             _personAssembler = personAssembler;
-            _shiftTradeRequestStatusChecker = shiftTradeRequestStatusChecker;
-            _absenceRequestAssembler = absenceRequestAssembler;
+			_personRequestRepository = personRequestRepository;
+			_shiftTradeRequestStatusChecker = shiftTradeRequestStatusChecker;
+			_userTimeZone = userTimeZone;
+			_absenceRequestAssembler = absenceRequestAssembler;
             _shiftTradeRequestAssembler = shiftTradeRequestAssembler;
             _shiftTradeSwapDetailAssembler = shiftTradeSwapDetailAssembler;
         }
@@ -52,10 +54,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 	        if (statusId == 4) statusId = 1;
 			personRequestDto.RequestStatus = (RequestStatusDto)statusId;
 
+			var timeZone = _userTimeZone.TimeZone();
             personRequestDto.RequestedDate = entity.RequestedDate;
-            personRequestDto.CreatedDate = entity.CreatedOn.HasValue ? TimeZoneHelper.ConvertFromUtc(entity.CreatedOn.Value, TimeZoneHelper.CurrentSessionTimeZone) : DateTime.MinValue;
-            personRequestDto.UpdatedOn =  entity.UpdatedOn.HasValue ? TimeZoneHelper.ConvertFromUtc(entity.UpdatedOn.Value, TimeZoneHelper.CurrentSessionTimeZone) : DateTime.MinValue;
-            personRequestDto.RequestedDateLocal = TimeZoneHelper.ConvertFromUtc(entity.RequestedDate, TimeZoneHelper.CurrentSessionTimeZone);
+			personRequestDto.CreatedDate = entity.CreatedOn.HasValue ? TimeZoneHelper.ConvertFromUtc(entity.CreatedOn.Value, timeZone) : DateTime.MinValue;
+            personRequestDto.UpdatedOn =  entity.UpdatedOn.HasValue ? TimeZoneHelper.ConvertFromUtc(entity.UpdatedOn.Value, timeZone) : DateTime.MinValue;
+            personRequestDto.RequestedDateLocal = TimeZoneHelper.ConvertFromUtc(entity.RequestedDate, timeZone);
             personRequestDto.Person = _personAssembler.DomainEntityToDto(entity.Person);
             personRequestDto.CanDelete = entity.IsEditable;
             personRequestDto.Request = null;
@@ -97,7 +100,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
         public override IPersonRequest DtoToDomainEntity(PersonRequestDto dto)
         {
-            var personRequestDo = dto.Id.HasValue ? PersonRequestRepository.Load(dto.Id.Value) : null;
+            var personRequestDo = dto.Id.HasValue ? _personRequestRepository.Load(dto.Id.Value) : null;
 
             if (personRequestDo == null)
             {

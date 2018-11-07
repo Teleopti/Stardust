@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _personContract = new PersonContract(contract,partTime,contractSchedule);
             _normalPerson = PersonFactory.CreatePerson();
             _normalPerson.PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
-            _normalPerson.PermissionInformation.SetDefaultTimeZone(StateHolderReader.Instance.StateReader.UserTimeZone); 
+            _normalPerson.PermissionInformation.SetDefaultTimeZone(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone); 
             _normalPerson.AddPersonPeriod(new PersonPeriod(new DateOnly(2008, 1, 1), _personContract, simpleTeam));
             
 			_person1.AddPersonPeriod(new PersonPeriod(new DateOnly(2008, 1, 3), _personContract, simpleTeam));

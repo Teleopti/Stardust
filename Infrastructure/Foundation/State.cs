@@ -13,14 +13,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			_applicationScopeData = applicationData;
 		}
 
-		public virtual IApplicationData ApplicationScopeData
-        {
-            get { return _applicationScopeData; }
-        }
-
-		public TimeZoneInfo UserTimeZone
-		{
-			get { return TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone; }
-		}
+		public virtual IApplicationData ApplicationScopeData => _applicationScopeData;
 	}
 }

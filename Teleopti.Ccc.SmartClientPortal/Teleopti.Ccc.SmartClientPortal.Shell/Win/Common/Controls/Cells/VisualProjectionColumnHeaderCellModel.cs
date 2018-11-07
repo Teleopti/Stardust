@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Runtime.Serialization;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Panels;
 using Teleopti.Interfaces.Domain;
 
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 	        var cellModel = style.CellModel as VisualProjectionColumnHeaderCellModel;
 	        TimeZoneInfo timeZoneInfo = (cellModel != null && cellModel.TimeZoneInfo != null)
 		        ? cellModel.TimeZoneInfo
-		        : TimeZoneHelper.CurrentSessionTimeZone;
+		        : TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 
 	        var timePeriod = (DateTimePeriod)style.Tag;
             var pixelConverter = new LengthToTimeCalculator(timePeriod, cellRectangle.Width);

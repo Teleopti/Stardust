@@ -46,6 +46,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -2207,9 +2208,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						.Execute(new SchedulePostHintInput(SchedulerState.SchedulerStateHolder.Schedules, _scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()),
 							selectedPeriod, new FixedBlockPreferenceProvider(_schedulingOptions), _schedulingOptions.UsePreferences));
 
+					var specificTimeZone = new SpecificTimeZone(SchedulerState.SchedulerStateHolder.TimeZoneInfo);
 					foreach (var result in validationResult.InvalidResources)
 					{
-						HintsHelper.BuildErrorMessages(result.ValidationErrors);
+						HintsHelper.BuildErrorMessages(result.ValidationErrors,specificTimeZone);
 					}
 
 					if (validationResult.InvalidResources.Any())
@@ -2540,7 +2542,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var request = _requestView.SelectedAdapters().FirstOrDefault();
 			if (request == null) return;
 
-			var localDate = TimeZoneHelper.ConvertFromUtc(request.FirstDateInRequest, TimeZoneHelper.CurrentSessionTimeZone);
+			var localDate = TimeZoneHelper.ConvertFromUtc(request.FirstDateInRequest, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 			selectCellFromPersonDate(request.PersonRequest.Person, new DateOnly(localDate));
 		}
 

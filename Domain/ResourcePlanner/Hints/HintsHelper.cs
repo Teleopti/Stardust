@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
 	public class HintsHelper
 	{
-		public static string BuildErrorMessage(ValidationError validationError)
+		public static string BuildErrorMessage(ValidationError validationError, IUserTimeZone userTimeZone)
 		{
 			var localizedString = Resources.ResourceManager.GetString(validationError.ErrorResource ?? string.Empty) ?? validationError.ErrorResource;
 			try
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 					{
 						try
 						{
-							localizedArguments.Add(TimeZoneHelper.ConvertFromUtc(dateTimeArgument, TimeZoneHelper.CurrentSessionTimeZone));
+							localizedArguments.Add(TimeZoneHelper.ConvertFromUtc(dateTimeArgument, userTimeZone.TimeZone()));
 						}
 						catch (Exception)
 						{
@@ -44,19 +45,20 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			}
 		}
 
-		public static void BuildErrorMessages(ICollection<ValidationError> validationErrors)
+		public static void BuildErrorMessages(ICollection<ValidationError> validationErrors, IUserTimeZone userTimeZone)
 		{
 			foreach (var validationError in validationErrors)
 			{
-				validationError.ErrorMessageLocalized = BuildErrorMessage(validationError);
+				validationError.ErrorMessageLocalized = BuildErrorMessage(validationError, userTimeZone);
 			}
 		}
 
-		public static ICollection<SchedulingHintError> BuildBusinessRulesValidationResults(IEnumerable<SchedulingHintError> businessRulesValidationResults)
+		public static ICollection<SchedulingHintError> BuildBusinessRulesValidationResults(
+			IEnumerable<SchedulingHintError> businessRulesValidationResults, IUserTimeZone userTimeZone)
 		{
 			foreach (var schedulingHintError in businessRulesValidationResults)
 			{
-				BuildErrorMessages(schedulingHintError.ValidationErrors);
+				BuildErrorMessages(schedulingHintError.ValidationErrors, userTimeZone);
 			}
 
 			var groups = businessRulesValidationResults.GroupBy(x =>

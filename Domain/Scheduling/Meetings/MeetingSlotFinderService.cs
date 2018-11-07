@@ -17,7 +17,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 
     public class MeetingSlotFinderService : IMeetingSlotFinderService
     {
-        private IEnumerable<IPerson> _personList = new List<IPerson>();
+		private readonly IUserTimeZone _userTimeZone;
+		private IEnumerable<IPerson> _personList = new List<IPerson>();
+
+		public MeetingSlotFinderService(IUserTimeZone userTimeZone)
+		{
+			_userTimeZone = userTimeZone;
+		}
 
 		public IList<TimePeriod> FindSlots(DateOnly dateOnly, TimeSpan duration, TimeSpan startTime, TimeSpan endTime,
             IScheduleDictionary scheduleDictionary, IEnumerable<IPerson> persons)
@@ -29,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
             var allAvailable = true;
             var localStartDateTime = TimeSpan.FromMinutes(0);
             var localEndDateTime = TimeSpan.FromMinutes(1440);
-
+			
             HashSet<TimePeriod> notAllowedPeriods = new HashSet<TimePeriod>();
 
             foreach (var person in _personList)
@@ -46,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
                     var absenceLayerList = proj.FilterLayers<IAbsence>();
                     foreach (IVisualLayer list in absenceLayerList)
                     {
-                        AddNotAllowedPeriods(notAllowedPeriods,list);
+                        AddNotAllowedPeriods(notAllowedPeriods,list, _userTimeZone);
                     }
 
                     // add layers with InWorkTime = false to list
@@ -54,23 +60,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
                     {
                         var activity = visualLayer.Payload as IActivity;
                         if(!((VisualLayer) visualLayer).HighestPriorityActivity.AllowOverwrite)
-                            AddNotAllowedPeriods(notAllowedPeriods, visualLayer);
+                            AddNotAllowedPeriods(notAllowedPeriods, visualLayer, _userTimeZone);
                         if (activity == null || activity.InWorkTime) continue;
-                        AddNotAllowedPeriods(notAllowedPeriods, visualLayer);
+                        AddNotAllowedPeriods(notAllowedPeriods, visualLayer, _userTimeZone);
                     }
                }
 
-                localStartDateTime = GetLocalStartDateTime(part, localStartDateTime, ref localEndDateTime);
+                localStartDateTime = GetLocalStartDateTime(part, _userTimeZone, localStartDateTime, ref localEndDateTime);
             }
 
             GetTimeList(notAllowedPeriods, localStartDateTime, localEndDateTime, allAvailable, endTime, startTime, duration, timeList);
             return timeList;
         }
 
-        private static void AddNotAllowedPeriods(HashSet<TimePeriod> notAllowedPeriods, IVisualLayer visualLayer)
+        private static void AddNotAllowedPeriods(HashSet<TimePeriod> notAllowedPeriods, IVisualLayer visualLayer, IUserTimeZone userTimeZone)
         {
             var period = visualLayer.Period;
-            notAllowedPeriods.Add(period.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone));
+            notAllowedPeriods.Add(period.TimePeriod(userTimeZone.TimeZone()));
         }
 
         private static void GetTimeList(HashSet<TimePeriod> absencePeriods, TimeSpan localStartDateTime, TimeSpan localEndDateTime, bool allAvailable, TimeSpan endTime, TimeSpan startTime, TimeSpan duration, IList<TimePeriod> timeList)
@@ -125,14 +131,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
             }
         }
 
-	    private static TimeSpan GetLocalStartDateTime(IScheduleDay part, TimeSpan localStartDateTime,
+	    private static TimeSpan GetLocalStartDateTime(IScheduleDay part, IUserTimeZone userTimeZone, TimeSpan localStartDateTime,
 		    ref TimeSpan localEndDateTime)
 	    {
 		    var assignment = part.PersonAssignment();
 		    if (assignment == null)
 			    return localStartDateTime;
 
-		    var localPeriod = assignment.Period.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone);
+		    var localPeriod = assignment.Period.TimePeriod(userTimeZone.TimeZone());
 		    var localStartTime = localPeriod.StartTime;
 		    if (localStartTime > localStartDateTime)
 		    {

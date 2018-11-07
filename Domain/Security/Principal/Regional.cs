@@ -12,24 +12,11 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public bool ForceUseGregorianCalendar { get; set; }
 		
-		public CultureInfo Culture
-		{
-			get
-			{
-				return (CultureLCID == 0 ? CultureInfo.CurrentCulture : CultureInfo.GetCultureInfo(CultureLCID)).FixPersianCulture(ForceUseGregorianCalendar); 
-			}
-		}
+		public CultureInfo Culture => (CultureLCID == 0 ? CultureInfo.CurrentCulture : CultureInfo.GetCultureInfo(CultureLCID)).FixPersianCulture(ForceUseGregorianCalendar);
 
-		public CultureInfo UICulture
-		{
-			get
-			{
-				return (UICultureLCID == 0 ? CultureInfo.CurrentUICulture : CultureInfo.GetCultureInfo(UICultureLCID)).FixPersianCulture(ForceUseGregorianCalendar);
-				
-			}
-		}
-		
-		public TimeZoneInfo TimeZone { get; set; }
+		public CultureInfo UICulture => (UICultureLCID == 0 ? CultureInfo.CurrentUICulture : CultureInfo.GetCultureInfo(UICultureLCID)).FixPersianCulture(ForceUseGregorianCalendar);
+
+		public TimeZoneInfo TimeZone { get; }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static IRegional FromPerson(IPerson person)

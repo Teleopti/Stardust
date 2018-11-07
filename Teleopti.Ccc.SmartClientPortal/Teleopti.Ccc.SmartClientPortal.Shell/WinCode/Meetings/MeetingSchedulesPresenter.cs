@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Panels;
@@ -291,7 +292,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 
 				if (!_schedulerStateHolder.RequestedPeriod.DateOnlyPeriod.Contains(_currentPeriod) || _schedulerStateHolder.Schedules==null)
 				{
-					var period = _currentPeriod.ToDateTimePeriod(TimeZoneHelper.CurrentSessionTimeZone);
+					var period = _currentPeriod.ToDateTimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 					var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period,
 																							  _schedulerStateHolder.SchedulingResultState.
 																								LoadedAgents,

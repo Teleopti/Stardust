@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
@@ -37,10 +38,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             var defaultPeriod = new DateTimePeriod();
             if (scheduleDay != null)
             {
-	            var startDateTimeLocal = scheduleDay.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
+	            var startDateTimeLocal = scheduleDay.Period.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 	            defaultPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
                         startDateTimeLocal.Add(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultStartHour)),
-                        startDateTimeLocal.Add(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultEndHour)), TimeZoneHelper.CurrentSessionTimeZone);
+                        startDateTimeLocal.Add(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultEndHour)), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             }
             return defaultPeriod;    
         }

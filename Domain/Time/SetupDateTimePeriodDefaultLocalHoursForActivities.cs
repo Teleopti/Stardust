@@ -1,6 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -8,26 +9,28 @@ namespace Teleopti.Ccc.Domain.Time
 {
     public class SetupDateTimePeriodDefaultLocalHoursForActivities : ISetupDateTimePeriod
     {
-	    private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
+		private readonly IUserTimeZone _userTimeZone;
 
-        public SetupDateTimePeriodDefaultLocalHoursForActivities(IScheduleDay scheduleDay, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
+        public SetupDateTimePeriodDefaultLocalHoursForActivities(IScheduleDay scheduleDay, IUserTimeZone userTimeZone)
         {
-	        _currentTeleoptiPrincipal = currentTeleoptiPrincipal;
+			_userTimeZone = userTimeZone;
 	        Period = getPeriodFromScheduleDays(scheduleDay);
         }
 
         private DateTimePeriod getPeriodFromScheduleDays(IScheduleDay scheduleDay)
 		{
+			var timeZone = _userTimeZone.TimeZone();
 			var defaultPeriod =
 				TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-					scheduleDay.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone)
+					scheduleDay.Period.StartDateTimeLocal(timeZone)
 						.Add(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultStartHour)),
-					scheduleDay.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone)
+					scheduleDay.Period.StartDateTimeLocal(timeZone)
 						.Add(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultEndHour)),
-					_currentTeleoptiPrincipal.Current().Regional.TimeZone);
+					timeZone);
             var setupDateTimePeriodToDefaultLocalHours =
                 new SetupDateTimePeriodToDefaultLocalHours(
 					defaultPeriod,
+					_userTimeZone,
                     scheduleDay.TimeZone);
 
             return setupDateTimePeriodToDefaultLocalHours.Period;

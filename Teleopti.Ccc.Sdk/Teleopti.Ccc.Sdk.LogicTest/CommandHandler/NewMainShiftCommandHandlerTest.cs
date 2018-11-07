@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -81,8 +82,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	        var activityLayerDto = new ActivityLayerDto();
 	        var period = new DateTimePeriodDto();
 	        var dtp = new DateTimePeriod(2013, 1, 1, 8, 2013, 1, 1, 9);
-	        period.LocalStartDateTime = dtp.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
-	        period.LocalEndDateTime = dtp.EndDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
+	        period.LocalStartDateTime = dtp.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+	        period.LocalEndDateTime = dtp.EndDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 			activityLayerDto.Period = period;
 			_activityLayerDtoCollection.Add(new ActivityLayerDto());
             _mainShiftActivityLayerCollection = new Collection<MainShiftLayer>();

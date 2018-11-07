@@ -6,6 +6,7 @@ using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets
             {
                 ExplorerView.ExplorerPresenter.VisualizePresenter.LoadModel(
                     ExplorerView.ExplorerPresenter.Model.SelectedDate.Value,
-										StateHolderReader.Instance.StateReader.UserTimeZone);
+										TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
                 gcProjection.RowCount = 1;// ExplorerView.ExplorerPresenter.VisualizePresenter.ModelCollection.Count;
                 gcProjection.ColCount = 1;
             }

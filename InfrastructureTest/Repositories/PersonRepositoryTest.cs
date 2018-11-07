@@ -587,7 +587,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		private class disabledFakeState : IState
 		{
-			public TimeZoneInfo UserTimeZone { get { throw new NotSupportedException(); } }
 			public IApplicationData ApplicationScopeData { get { throw new NotSupportedException(); } }
 			public void SetApplicationData(IApplicationData applicationData)
 			{

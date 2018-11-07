@@ -70,14 +70,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly DateOnly _dateOnly;
 	    private readonly IScheduleDayForPerson _scheduleDayForPerson;
 	    private readonly ICollection<IPerson> _filteredPersons;
+		private readonly IUserTimeZone _userTimeZone;
 
-		public AvailableHourlyEmployeeFinder(IRestrictionExtractor restrictionExtractor, IPerson sourcePerson, DateOnly dateOnly, IScheduleDayForPerson scheduleDayForPerson, ICollection<IPerson> filteredPersons)
+		public AvailableHourlyEmployeeFinder(IRestrictionExtractor restrictionExtractor, IPerson sourcePerson, DateOnly dateOnly, IScheduleDayForPerson scheduleDayForPerson, ICollection<IPerson> filteredPersons, IUserTimeZone userTimeZone)
 		{
 			_restrictionExtractor = restrictionExtractor;
 			_sourcePerson = sourcePerson;
 			_dateOnly = dateOnly;
 		    _scheduleDayForPerson = scheduleDayForPerson;
 		    _filteredPersons = filteredPersons;
+			_userTimeZone = userTimeZone;
 		}
 
         public IList<AvailableHourlyEmployeeFinderResult> Find()
@@ -118,7 +120,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (yesterday.SignificantPartForDisplay() != SchedulePartView.MainShift)
 				return string.Empty;
 
-			return yesterday.ProjectionService().CreateProjection().Period().Value.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone).ToShortTimeString();
+			return yesterday.ProjectionService().CreateProjection().Period().Value.TimePeriod(_userTimeZone.TimeZone()).ToShortTimeString();
 		}
 
 		private string workTimesTomorrow(IPerson person)
@@ -127,7 +129,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (tomorrow.SignificantPartForDisplay() != SchedulePartView.MainShift)
 				return string.Empty;
 
-			return tomorrow.ProjectionService().CreateProjection().Period().Value.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone).ToShortTimeString();
+			return tomorrow.ProjectionService().CreateProjection().Period().Value.TimePeriod(_userTimeZone.TimeZone()).ToShortTimeString();
 		}
 
 		private string availabilityTimes(IScheduleDay targetScheduleDay)

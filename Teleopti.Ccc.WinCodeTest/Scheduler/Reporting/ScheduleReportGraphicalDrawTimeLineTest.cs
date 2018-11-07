@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Pdf;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -147,8 +148,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
         [Test]
         public void ShouldUseDefaultPeriodOnNoLayers()
         {
-            var dateTimeExpectedStart = TimeZoneHelper.ConvertToUtc(new DateTime(2011, 1, 1, 8, 0, 0), TimeZoneHelper.CurrentSessionTimeZone);
-            var dateTimeExpectedEnd = TimeZoneHelper.ConvertToUtc(new DateTime(2011, 1, 1, 17, 0, 0), TimeZoneHelper.CurrentSessionTimeZone);
+            var dateTimeExpectedStart = TimeZoneHelper.ConvertToUtc(new DateTime(2011, 1, 1, 8, 0, 0), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+            var dateTimeExpectedEnd = TimeZoneHelper.ConvertToUtc(new DateTime(2011, 1, 1, 17, 0, 0), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             var dateOnly = new DateOnly(2011, 1, 1);
             var expectedPeriod = new DateTimePeriod(dateTimeExpectedStart, dateTimeExpectedEnd);
 

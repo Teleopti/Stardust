@@ -2,6 +2,7 @@
 using System.Drawing;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Panels;
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _startDate = new DateOnly(2009, 10, 27);
             _start = new DateTime(2009, 10, 27, 8, 0, 0, DateTimeKind.Utc);
             _end = _start.AddHours(2);
-            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_start, _end, TimeZoneHelper.CurrentSessionTimeZone);
+            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_start, _end, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 
         }
 
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         {
             var start = _startDate.Date;
             var end = start.AddDays(1);
-            var timePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(start, end, TimeZoneHelper.CurrentSessionTimeZone);
+            var timePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(start, end, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             var pixelConverter = new LengthToTimeCalculator(timePeriod, 1440);
             var cellRect = new Rectangle(0, 0, 1440, 0);
 
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         {
             var start = _startDate.Date;
             var end = start.AddDays(1);
-            var timePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(start, end, TimeZoneHelper.CurrentSessionTimeZone);
+            var timePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(start, end, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             var pixelConverter = new LengthToTimeCalculator(timePeriod, 1440);
             var cellRect = new Rectangle(0, 0, 1440, 0);
 
@@ -82,7 +83,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         {
             var start = _startDate.Date;
             var end = start.AddDays(1);
-            var timePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(start, end, TimeZoneHelper.CurrentSessionTimeZone);
+            var timePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(start, end, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             var pixelConverter = new LengthToTimeCalculator(timePeriod, 1440);
             var cellRect = new Rectangle(0, 0, 1440, 0);
 
@@ -104,7 +105,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         {
             var start = _startDate.Date;
             var end = start.AddDays(1);
-            var timePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(start, end, TimeZoneHelper.CurrentSessionTimeZone);
+            var timePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(start, end, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             var pixelConverter = new LengthToTimeCalculator(timePeriod, 1440);
             var cellRect = new Rectangle(0, 0, 1440, 0);
 

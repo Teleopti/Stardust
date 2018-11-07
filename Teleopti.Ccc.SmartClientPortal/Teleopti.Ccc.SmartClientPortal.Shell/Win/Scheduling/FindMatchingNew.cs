@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.UserTexts;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			_sourcePerson = sourcePerson;
 			_dateOnly = dateOnly;
-            _finder = new AvailableHourlyEmployeeFinder(restrictionExtractor, sourcePerson, dateOnly, scheduleDayForPerson, filteredPersons);
+            _finder = new AvailableHourlyEmployeeFinder(restrictionExtractor, sourcePerson, dateOnly, scheduleDayForPerson, filteredPersons, UserTimeZone.Make());
 		}
 
 		public IPerson Selected()

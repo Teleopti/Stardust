@@ -8,6 +8,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -65,7 +66,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			if (!gridControlSchedules.CellModels.ContainsKey("TimeLineHeaderCell"))
 				gridControlSchedules.CellModels.Add("TimeLineHeaderCell",
 													new VisualProjectionColumnHeaderCellModel(gridControlSchedules.Model,
-																							  TimeZoneHelper.CurrentSessionTimeZone));
+																							  TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
 			if (!gridControlSchedules.CellModels.ContainsKey("ScheduleCell"))
 				gridControlSchedules.CellModels.Add("ScheduleCell", new ScheduleCellModel(gridControlSchedules.Model));
 
@@ -92,10 +93,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			outlookTimePickerEndTime.SelectedIndexChanged -= outlookTimePickerEndTimeSelectedIndexChanged;
 		}
 
-		public bool IsRightToLeft
-		{
-			get { return gridControlSchedules.IsRightToLeft(); }
-		}
+		public bool IsRightToLeft => gridControlSchedules.IsRightToLeft();
 
 		public bool TimeFocused
 		{
@@ -192,10 +190,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 		public MeetingSchedulesView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, INotifyComposerMeetingChanged composer)
 			: this()
 		{
-			if (schedulerStateHolder == null) throw new ArgumentNullException("schedulerStateHolder");
+			if (schedulerStateHolder == null) throw new ArgumentNullException(nameof(schedulerStateHolder));
 
 			_stateHolder = schedulerStateHolder;
-			if (composer == null) throw new ArgumentNullException("composer");
+			if (composer == null) throw new ArgumentNullException(nameof(composer));
 			_composer = composer;
 			if (DesignMode) return;
 
@@ -203,7 +201,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			var stateHolderLoader = new SchedulerStateLoader(schedulerStateHolder, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper(), new ScheduleStorageFactory());
 			var meetingMover = new MeetingMover(this, meetingViewModel, schedulerStateHolder.DefaultSegmentLength, TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
 			var meetingMousePositionDecider = new MeetingMousePositionDecider(this);
-			_presenter = new MeetingSchedulesPresenter(this, meetingViewModel, schedulerStateHolder, stateHolderLoader, new MeetingSlotFinderService(), meetingMover, meetingMousePositionDecider);
+			_presenter = new MeetingSchedulesPresenter(this, meetingViewModel, schedulerStateHolder, stateHolderLoader, new MeetingSlotFinderService(UserTimeZone.Make()), meetingMover, meetingMousePositionDecider);
 
 			SetTexts();
 			setTimes();
@@ -306,10 +304,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			SetEndDate(_presenter.Model.EndDate);
 		}
 
-		public IMeetingDetailPresenter Presenter
-		{
-			get { return _presenter; }
-		}
+		public IMeetingDetailPresenter Presenter => _presenter;
 
 		public void ResetSelection()
 		{
@@ -350,15 +345,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			set { office2007OutlookTimePickerEndSpan.SelectedValue = value; }
 		}
 
-		public string GetStartTimeText
-		{
-			get { return outlookTimePickerStartTime.Text; }
-		}
+		public string GetStartTimeText => outlookTimePickerStartTime.Text;
 
-		public string GetEndTimeText
-		{
-			get { return outlookTimePickerEndTime.Text; }
-		}
+		public string GetEndTimeText => outlookTimePickerEndTime.Text;
 
 		public void SetCurrentDate(DateOnly currentDate)
 		{

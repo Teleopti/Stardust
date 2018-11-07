@@ -11,7 +11,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Time
 {
     [TestFixture]
-	[TestWithStaticDependenciesDONOTUSE]
 	public class DateTimePeriodTest
     {
         private readonly DateTime _start = new DateTime(2007, 06, 01, 12, 31, 0, DateTimeKind.Utc);
@@ -403,7 +402,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyDateTimeLocalWorks()
         {
-            TimeZoneInfo timeZoneInfo = StateHolderReader.Instance.StateReader.UserTimeZone;
+            TimeZoneInfo timeZoneInfo = TimeZoneInfoFactory.StockholmTimeZoneInfo();
             DateTime expectedLocalStart =
                 TimeZoneInfo.ConvertTimeFromUtc(_start, timeZoneInfo);
             DateTime expectedLocalEnd =
@@ -456,9 +455,9 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTime startDateTime = new DateTime(2007, 3, 24, 23, 0, 0);
             DateTime endDateTime = new DateTime(2007, 3, 25, 3, 45, 0);
 
-            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime, TimeZoneHelper.CurrentSessionTimeZone);
+            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime, TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
-            IList<IntervalDefinition> list = _period.IntervalsFromHourCollection(15, TimeZoneHelper.CurrentSessionTimeZone);
+            IList<IntervalDefinition> list = _period.IntervalsFromHourCollection(15, TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
             Assert.AreEqual(15, list.Count);
             Assert.AreEqual(23, list[0].TimeSpan.Hours);
@@ -472,9 +471,9 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTime startDateTime = new DateTime(2007, 10, 27, 23, 0, 0);
             DateTime endDateTime = new DateTime(2007, 10, 28, 3, 45, 0);
 
-            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime, TimeZoneHelper.CurrentSessionTimeZone);
+            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime, TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
-            IList<IntervalDefinition> list = _period.IntervalsFromHourCollection(15, TimeZoneHelper.CurrentSessionTimeZone);
+            IList<IntervalDefinition> list = _period.IntervalsFromHourCollection(15, TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
             Assert.AreEqual(23, list.Count);
             Assert.AreEqual(23, list[0].TimeSpan.Hours);
@@ -486,7 +485,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         {
             _period = new DateTimePeriod();
 
-            IList<IntervalDefinition> list = _period.IntervalsFromHourCollection(15, TimeZoneHelper.CurrentSessionTimeZone);
+            IList<IntervalDefinition> list = _period.IntervalsFromHourCollection(15, TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
             Assert.AreEqual(0, list.Count);
         }
@@ -497,8 +496,8 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTime startDateTime = new DateTime(2007, 10, 27, 23, 0, 0);
             DateTime endDateTime = new DateTime(2007, 10, 28, 3, 45, 0);
 
-            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime, TimeZoneHelper.CurrentSessionTimeZone);
-            Assert.Throws<ArgumentException>(() => _period.IntervalsFromHourCollection(0, TimeZoneHelper.CurrentSessionTimeZone));
+            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime, TimeZoneInfoFactory.StockholmTimeZoneInfo());
+            Assert.Throws<ArgumentException>(() => _period.IntervalsFromHourCollection(0, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
         }
 
         [Test]
@@ -507,8 +506,8 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTime startDateTime = new DateTime(2007, 10, 27, 23, 0, 0);
             DateTime endDateTime = new DateTime(2007, 10, 27, 23, 0, 0);
 
-            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime, TimeZoneHelper.CurrentSessionTimeZone);
-            _period.IntervalsFromHourCollection(60, TimeZoneHelper.CurrentSessionTimeZone);
+            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime, TimeZoneInfoFactory.StockholmTimeZoneInfo());
+            _period.IntervalsFromHourCollection(60, TimeZoneInfoFactory.StockholmTimeZoneInfo());
         }
 
         [Test]
@@ -517,8 +516,8 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTime startDateTime = new DateTime(2007, 10, 26, 23, 0, 0);
             DateTime endDateTime = new DateTime(2007, 10, 27, 23, 0, 0);
 
-            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime, TimeZoneHelper.CurrentSessionTimeZone);
-            _period.IntervalsFromHourCollection(120, TimeZoneHelper.CurrentSessionTimeZone);
+            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime, TimeZoneInfoFactory.StockholmTimeZoneInfo());
+            _period.IntervalsFromHourCollection(120, TimeZoneInfoFactory.StockholmTimeZoneInfo());
         }
 
         /// <summary>
@@ -570,23 +569,24 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTime endDate1 = new DateTime(2008, 10, 26, 13, 30, 0, DateTimeKind.Utc);
             _period = new DateTimePeriod(startDate1, endDate1);
 
-            IList<DateTimePeriod> wholeDays = _period.WholeDayCollection(TimeZoneHelper.CurrentSessionTimeZone);
+			var stockholmTimeZoneInfo = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			IList<DateTimePeriod> wholeDays = _period.WholeDayCollection(stockholmTimeZoneInfo);
 
             Assert.AreEqual(2, wholeDays.Count);
             Assert.AreEqual(new TimeSpan(0, 30, 0), wholeDays[1].ElapsedTime());
-	        Assert.AreEqual(wholeDays[0].StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).TimeOfDay,
-		        wholeDays[1].StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).TimeOfDay);
+	        Assert.AreEqual(wholeDays[0].StartDateTimeLocal(stockholmTimeZoneInfo).TimeOfDay,
+		        wholeDays[1].StartDateTimeLocal(stockholmTimeZoneInfo).TimeOfDay);
 
             startDate1 = new DateTime(2008, 3, 29, 12, 00, 0, DateTimeKind.Utc);
             endDate1 = new DateTime(2008, 3, 30, 13, 30, 0, DateTimeKind.Utc);
             _period = new DateTimePeriod(startDate1, endDate1);
 
-            wholeDays = _period.WholeDayCollection(TimeZoneHelper.CurrentSessionTimeZone);
+            wholeDays = _period.WholeDayCollection(stockholmTimeZoneInfo);
 
             Assert.AreEqual(2, wholeDays.Count);
             Assert.AreEqual(new TimeSpan(2, 30, 0), wholeDays[1].ElapsedTime());
-	        Assert.AreEqual(wholeDays[0].StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).TimeOfDay,
-		        wholeDays[1].StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).TimeOfDay);
+	        Assert.AreEqual(wholeDays[0].StartDateTimeLocal(stockholmTimeZoneInfo).TimeOfDay,
+		        wholeDays[1].StartDateTimeLocal(stockholmTimeZoneInfo).TimeOfDay);
         }
 
         [Test]

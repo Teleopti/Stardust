@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting
                             JobCategory = j.JobCategory,
 							Owner = j.Owner.Name.ToString(),
 							Status = determineStatus(j),
-							Timestamp = TimeZoneHelper.ConvertFromUtc(j.Timestamp, TimeZoneHelper.CurrentSessionTimeZone).ToString()
+							Timestamp = TimeZoneHelper.ConvertFromUtc(j.Timestamp, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).ToString()
 						}).ToList();
 			}
 		}
@@ -45,16 +46,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting
             {
                 var jobResult = _jobResultRepository.Get(jobResultModel.JobId.GetValueOrDefault());
 
-				return jobResult.Details.Where(d => (int)d.DetailLevel > detailLevel).OrderByDescending(d => d.Timestamp).Select(m =>
-                        new JobResultDetailModel
-                            {
-                                Message = m.Message,
-                                Timestamp = TimeZoneHelper.ConvertFromUtc(m.Timestamp, TimeZoneHelper.CurrentSessionTimeZone),
-                                ExceptionMessage = m.ExceptionMessage,
-                                ExceptionStackTrace= m.ExceptionStackTrace,
-                                InnerExceptionMessage= m.InnerExceptionMessage,
-                                InnerExceptionStackTrace= m.InnerExceptionStackTrace
-                            }).ToList();
+				var timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+				return jobResult.Details.Where(d => (int)d.DetailLevel > detailLevel).OrderByDescending(d => d.Timestamp).Select(m => new JobResultDetailModel
+				{
+					Message = m.Message,
+					Timestamp = TimeZoneHelper.ConvertFromUtc(m.Timestamp, timeZone),
+					ExceptionMessage = m.ExceptionMessage,
+					ExceptionStackTrace = m.ExceptionStackTrace,
+					InnerExceptionMessage = m.InnerExceptionMessage,
+					InnerExceptionStackTrace = m.InnerExceptionStackTrace
+				}).ToList();
             }
         }
 

@@ -7,25 +7,26 @@ namespace Teleopti.Ccc.Domain.Time
 {
     public class SetupDateTimePeriodDefaultLocalHoursForAbsence: ISetupDateTimePeriod
     {
-	    private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
+		private readonly IUserTimeZone _userTimeZone;
 
-	    public SetupDateTimePeriodDefaultLocalHoursForAbsence(IScheduleDay scheduleDay, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
+		public SetupDateTimePeriodDefaultLocalHoursForAbsence(IScheduleDay scheduleDay, IUserTimeZone userTimeZone)
         {
-	        _currentTeleoptiPrincipal = currentTeleoptiPrincipal;
-	        Period = getPeriodFromScheduleDays(scheduleDay);
+			_userTimeZone = userTimeZone;
+			Period = getPeriodFromScheduleDays(scheduleDay);
         }
 
 	    private DateTimePeriod getPeriodFromScheduleDays(IScheduleDay scheduleDay)
-	    {
+		{
+			var timeZone = _userTimeZone.TimeZone();
 		    var defaultPeriod =
 			    TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-				    scheduleDay.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).Add(TimeSpan.Zero),
-				    scheduleDay.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone)
-					    .Add(TimeSpan.FromHours(23).Add(TimeSpan.FromMinutes(59))),
-				    _currentTeleoptiPrincipal.Current().Regional.TimeZone);
+				    scheduleDay.Period.StartDateTimeLocal(timeZone).Add(TimeSpan.Zero),
+				    scheduleDay.Period.StartDateTimeLocal(timeZone)
+					    .Add(TimeSpan.FromHours(23).Add(TimeSpan.FromMinutes(59))), timeZone);
             var setupDateTimePeriodToDefaultLocalHours =
                 new SetupDateTimePeriodToDefaultLocalHours(
                     defaultPeriod,
+					_userTimeZone,
                     scheduleDay.TimeZone);
 
             return setupDateTimePeriodToDefaultLocalHours.Period;

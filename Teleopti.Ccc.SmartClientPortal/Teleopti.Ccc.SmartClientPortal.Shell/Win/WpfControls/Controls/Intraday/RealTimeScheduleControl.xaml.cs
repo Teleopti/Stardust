@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday.Models;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday
         public RealTimeScheduleControl()
         {
             InitializeComponent();
-            if (StateHolderReader.IsInitialized) VisualTreeTimeZoneInfo.SetTimeZoneInfo(this, StateHolderReader.Instance.StateReader.UserTimeZone);
+            if (StateHolderReader.IsInitialized) VisualTreeTimeZoneInfo.SetTimeZoneInfo(this, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
         }
 
         public RealTimeScheduleViewModel Model

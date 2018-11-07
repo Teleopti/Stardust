@@ -188,9 +188,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					unitOfWork.Reassociate(persons);
 
 					var period = meeting.MeetingPeriod(meeting.StartDate);
-					var start = period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
-					var end = period.EndDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
-					meeting.TimeZone = TimeZoneHelper.CurrentSessionTimeZone;
+					var start = period.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+					var end = period.EndDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+					meeting.TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 					meeting.StartTime = start.TimeOfDay;
 					meeting.EndTime = end.TimeOfDay;
 

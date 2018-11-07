@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
                 factory.CreateContractScheduleRepository(unitOfWork).LoadAllAggregate();
 
                 ICollection<IPerson> persons = rep.FindAllAgents(period, false);
-				return new SchedulerStateHolder(Scenario, new DateOnlyPeriodAsDateTimePeriod(period, TimeZoneHelper.CurrentSessionTimeZone), persons, new DisableDeletedFilter(new ThisUnitOfWork(unitOfWork)), new SchedulingResultStateHolder(), new TimeZoneGuard());
+				return new SchedulerStateHolder(Scenario, new DateOnlyPeriodAsDateTimePeriod(period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), persons, new DisableDeletedFilter(new ThisUnitOfWork(unitOfWork)), new SchedulingResultStateHolder(), new TimeZoneGuard());
             }
         }
 
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
                 if (reportTimeZoneSelector1.Visible)
                     return reportTimeZoneSelector1.TimeZone();
 
-                return StateHolderReader.Instance.StateReader.UserTimeZone;
+                return TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
             }
 
         }
