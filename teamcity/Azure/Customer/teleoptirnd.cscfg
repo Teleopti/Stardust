@@ -23,7 +23,7 @@
    <NetworkConfiguration> 
     <AccessControls> 
       <AccessControl name="RDPRestrict"> 
-        <Rule action="permit" description="PermitRDPTeleoptiDenver" order="100" remoteSubnet="174.16.142.1/32" /> 
+        <Rule action="permit" description="PermitRDPTeleoptiDenver" order="100" remoteSubnet="65.132.155.82/32" /> 
 		<Rule action="permit" description="PermitRDPTeleoptiBeijing2" order="101" remoteSubnet="119.40.52.69/32" /> 
 		<Rule action="permit" description="PermitRDPTeleoptiBeijing" order="102" remoteSubnet="119.40.52.66/32" /> 
 		<Rule action="permit" description="PermitRDPTeleoptiSthlm" order="103" remoteSubnet="195.67.17.194/32" /> 
