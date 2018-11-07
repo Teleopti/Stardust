@@ -1,34 +1,26 @@
 import { Injectable } from '@angular/core';
-
+import { NavigationService as NavigationServiceCore } from './../../core/services';
 @Injectable()
 export class NavigationService {
-	private go(hash: string): void {
-		location.hash = hash;
-		this.resetScroll();
-	}
+	constructor(private navService: NavigationServiceCore) {}
 
 	public navToSearch() {
-		this.go('#/people/search');
+		this.navService.go('people.index');
 	}
 
 	public navToGrant() {
-		this.go('#/people/roles/grant');
+		this.navService.go('people.grant');
 	}
 
 	public navToRevoke() {
-		this.go('#/people/roles/revoke');
+		this.navService.go('people.revoke');
 	}
 
 	public navToApplicationLogon() {
-		this.go('#/people/access/applicationlogon');
+		this.navService.go('people.applicationlogon');
 	}
 
 	public navToIdentityLogon() {
-		this.go('#/people/access/identitylogon');
-	}
-
-	private resetScroll() {
-		var element = document.getElementById('materialcontainer');
-		if (element) element.scrollTop = 0;
+		this.navService.go('people.identitylogon');
 	}
 }

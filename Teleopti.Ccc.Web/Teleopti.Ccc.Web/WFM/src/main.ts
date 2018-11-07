@@ -3,7 +3,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { downgradeComponent as ngDowngradeComponent, downgradeModule } from '@angular/upgrade/static';
 import { IRootScopeService } from 'angular';
 import { IStateProvider, IUrlRouterProvider } from 'angular-ui-router';
-import { apiAccessComponents } from './app/api-access/api-access.module';
+import { apiAccessComponents, apiAccessRouterConfig } from './app/api-access/api-access.module';
 import { appComponents, AppModule } from './app/app.module';
 import { authenticationComponents } from './app/authentication/authentication.module';
 import { menuComponents } from './app/menu/menu.module';
@@ -37,7 +37,6 @@ const wfm = angular.module('wfm', [
 	'wfm.http',
 	'wfm.exceptionHandler',
 	'wfm.permissions',
-	'wfm.apiaccess',
 	'wfm.peopleold',
 	'wfm.outbound',
 	'wfm.forecasting',
@@ -114,6 +113,7 @@ const routerHelper = (routerConfig: RouterConfigFunction) => {
 
 routerHelper(peopleRouterConfig);
 routerHelper(pmRouterConfig);
+routerHelper(apiAccessRouterConfig);
 
 wfm.config([
 	'$stateProvider',

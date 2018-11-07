@@ -1,7 +1,8 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { IStateService } from 'angular-ui-router';
 import { AuthenticatedInterceptor, BusinessUnitInterceptor, ClientOutdatedInterceptor } from './interceptors';
-import { ThemeService, TogglesService, UserService, VersionService } from './services';
+import { NavigationService, ThemeService, TogglesService, UserService, VersionService } from './services';
 
 @NgModule({
 	imports: [HttpClientModule],
@@ -25,7 +26,13 @@ import { ThemeService, TogglesService, UserService, VersionService } from './ser
 			provide: HTTP_INTERCEPTORS,
 			useClass: ClientOutdatedInterceptor,
 			multi: true
-		}
+		},
+		{
+			provide: '$state',
+			useFactory: (i: any): IStateService => i.get('$state'),
+			deps: ['$injector']
+		},
+		NavigationService
 	],
 	entryComponents: []
 })
