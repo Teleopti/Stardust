@@ -227,7 +227,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             var contractRepMock = _mocks.StrictMock<IContractRepository>();
             var contractScheduleRepMock = _mocks.StrictMock<IContractScheduleRepository>();
             var businessUnitRepository = _mocks.StrictMock<IBusinessUnitRepository>();
-	        var workflowControlSetRepository = _mocks.StrictMock<IWorkflowControlSetRepository>();
 			var multi = _mocks.DynamicMock<IMultiplicatorDefinitionSetRepository>();
 
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.AtLeastOnce();
@@ -240,7 +239,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_repositoryFactory.CreateContractScheduleRepository(unitOfWork)).Return(contractScheduleRepMock);
             Expect.Call(_repositoryFactory.CreatePartTimePercentageRepository(unitOfWork)).Return(_mocks.DynamicMock<IPartTimePercentageRepository>());
             Expect.Call(_repositoryFactory.CreateBusinessUnitRepository(unitOfWork)).Return(businessUnitRepository);
-	        Expect.Call(_repositoryFactory.CreateWorkflowControlSetRepository(unitOfWork)).Return(workflowControlSetRepository);
 			Expect.Call(_repositoryFactory.CreateMultiplicatorDefinitionSetRepository(unitOfWork)).Return(multi);
 
 			unitOfWork.Dispose();
@@ -255,7 +253,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(contractRepMock.FindAllContractByDescription()).Return(_contractList);
             Expect.Call(contractScheduleRepMock.LoadAllAggregate()).Return(_contractScheduleColl);
             Expect.Call(businessUnitRepository.LoadAllBusinessUnitSortedByName()).Return(new List<IBusinessUnit>());
-	        Expect.Call(workflowControlSetRepository.LoadAll()).Return(new List<IWorkflowControlSet>());
 	        Expect.Call(multi.LoadAll()).Return(new List<IMultiplicatorDefinitionSet>());
 
             _view.EnableAfterLoadingStateHolder();
