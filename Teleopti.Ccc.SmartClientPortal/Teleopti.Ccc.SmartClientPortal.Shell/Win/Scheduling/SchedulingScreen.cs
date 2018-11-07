@@ -350,26 +350,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_schedulerMessageBrokerHandler = new SchedulerMessageBrokerHandler(this, _container);
 			updateLifeTimeScopeWith2ThingsWithFullDependencyChain();
 
-			var toggleManager = _container.Resolve<IToggleManager>();
 			_skillDayGridControl = new SkillDayGridControl(_container.Resolve<ISkillPriorityProvider>())
 			{
 				ContextMenu = contextMenuStripResultView.ContextMenu,
-				ToggleManager = toggleManager
 			};
 			_skillWeekGridControl = new SkillWeekGridControl
 			{
 				ContextMenu = contextMenuStripResultView.ContextMenu,
-				ToggleManager = toggleManager
 			};
 			_skillMonthGridControl = new SkillMonthGridControl
 			{
 				ContextMenu = contextMenuStripResultView.ContextMenu,
-				ToggleManager = toggleManager
 			};
 			_skillFullPeriodGridControl = new SkillFullPeriodGridControl
 			{
 				ContextMenu = contextMenuStripResultView.ContextMenu,
-				ToggleManager = toggleManager
 			};
 			_skillResultHighlightGridControl = new SkillResultHighlightGridControl();
 
