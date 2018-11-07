@@ -17,7 +17,7 @@ export class NavigationService {
 	}
 
 	public navToApplicationLogon() {
-		this.navService.go('people.applicationlogon');
+		this.navService.go('people.applogon');
 	}
 
 	public navToIdentityLogon() {
