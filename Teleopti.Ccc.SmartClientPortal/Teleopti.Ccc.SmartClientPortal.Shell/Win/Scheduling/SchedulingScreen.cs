@@ -2497,7 +2497,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				using (PerformanceOutput.ForOperation("Creating new RequestView"))
 				{
-					_requestView = new RequestView(schedulerSplitters1.HandlePersonRequestView1, SchedulerState.SchedulerStateHolder, _undoRedo,
+					_requestView = new RequestView(schedulerSplitters1.HandlePersonRequestView1, SchedulerState, _undoRedo,
 						SchedulerState.SchedulerStateHolder.SchedulingResultState.AllPersonAccounts, _eventAggregator);
 				}
 
@@ -2647,7 +2647,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 				if (_requestView != null && _requestView.NeedReload)
 				{
-					_requestView.CreatePersonRequestViewModels(SchedulerState.SchedulerStateHolder, schedulerSplitters1.HandlePersonRequestView1);
+					_requestView.CreatePersonRequestViewModels(SchedulerState, schedulerSplitters1.HandlePersonRequestView1);
 					_requestView.NeedReload = false;
 				}
 			}
@@ -3899,7 +3899,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			using (PerformanceOutput.ForOperation("Loading requests"))
 			{
 				string numberOfDaysToShowNonPendingRequests;
-				stateHolder.SchedulerStateHolder.LoadPersonRequests(uow, new RepositoryFactory(), _personRequestAuthorizationChecker,
+				stateHolder.LoadPersonRequests(uow, new RepositoryFactory(), _personRequestAuthorizationChecker,
 					StateHolderReader.Instance.StateReader.ApplicationScopeData.AppSettings.TryGetValue(
 						"NumberOfDaysToShowNonPendingRequests", out numberOfDaysToShowNonPendingRequests)
 						? Convert.ToInt32(numberOfDaysToShowNonPendingRequests)
@@ -4004,7 +4004,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				var persister = _container.Resolve<ISchedulingScreenPersister>();
 				IEnumerable<PersistConflict> foundConflicts;
 				bool success = persister.TryPersist(SchedulerState.SchedulerStateHolder.Schedules,
-					SchedulerState.SchedulerStateHolder.PersonRequests,
+					SchedulerState.PersonRequests,
 					_modifiedWriteProtections,
 					SchedulerState.SchedulerStateHolder.CommonStateHolder.ModifiedWorkflowControlSets,
 					out foundConflicts);
@@ -5024,7 +5024,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (SchedulerState.SchedulerStateHolder.Schedules == null)
 				return 0;
 
-			if (!SchedulerState.SchedulerStateHolder.Schedules.DifferenceSinceSnapshot().IsEmpty() || SchedulerState.SchedulerStateHolder.ChangedRequests() ||
+			if (!SchedulerState.SchedulerStateHolder.Schedules.DifferenceSinceSnapshot().IsEmpty() || SchedulerState.ChangedRequests() ||
 				!_modifiedWriteProtections.IsEmpty() || !SchedulerState.SchedulerStateHolder.CommonStateHolder.ModifiedWorkflowControlSets.IsEmpty())
 			{
 				DialogResult res = ShowConfirmationMessage(Resources.DoYouWantToSaveChangesYouMade, Resources.Save);
@@ -6657,7 +6657,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var id = Guid.Empty;
 			var defaultRequest = _requestView.SelectedAdapters().Count > 0
 				? _requestView.SelectedAdapters().First().PersonRequest
-				: SchedulerState.SchedulerStateHolder.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
+				: SchedulerState.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
 			if (defaultRequest != null)
 				id = defaultRequest.Person.Id.GetValueOrDefault();
 			var presenter = _container.BeginLifetimeScope().Resolve<IRequestHistoryViewPresenter>();

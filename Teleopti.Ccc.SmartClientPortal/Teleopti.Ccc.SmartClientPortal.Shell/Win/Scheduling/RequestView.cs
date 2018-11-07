@@ -24,25 +24,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         private readonly IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
         private IList<PersonRequestViewModel> _source = new List<PersonRequestViewModel>();
         private readonly HandlePersonRequestViewModel _model;
-	    private readonly ISchedulerStateHolder _schedulerStateHolder;
+	    private readonly SchedulingScreenState _schedulerStateHolder;
         private readonly IPersonRequestCheckAuthorization _authorization;
 		private bool _isWindowLoaded;
 	    private readonly RequestPresenter _presenter;
 
-        public RequestView(FrameworkElement handlePersonRequestView, ISchedulerStateHolder schedulerStateHolder, IUndoRedoContainer container, IDictionary<IPerson, IPersonAccountCollection> allAccountPersonCollection,IEventAggregator eventAggregator)
+        public RequestView(FrameworkElement handlePersonRequestView, SchedulingScreenState schedulerStateHolder, IUndoRedoContainer container, IDictionary<IPerson, IPersonAccountCollection> allAccountPersonCollection,IEventAggregator eventAggregator)
         {
 	        _schedulerStateHolder = schedulerStateHolder;
             _personRequestList = schedulerStateHolder.PersonRequests;
             _authorization = new PersonRequestCheckAuthorization();
 			_presenter = new RequestPresenter(_authorization);
-			_shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerWithSchedule(schedulerStateHolder.Schedules,_authorization);
-            _model = new HandlePersonRequestViewModel(schedulerStateHolder.RequestedPeriod.Period(), schedulerStateHolder.ChoosenAgents, container, allAccountPersonCollection, eventAggregator, _authorization, schedulerStateHolder.TimeZoneInfo);
+			_shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerWithSchedule(schedulerStateHolder.SchedulerStateHolder.Schedules,_authorization);
+            _model = new HandlePersonRequestViewModel(schedulerStateHolder.SchedulerStateHolder.RequestedPeriod.Period(), schedulerStateHolder.SchedulerStateHolder.ChoosenAgents, container, allAccountPersonCollection, eventAggregator, _authorization, schedulerStateHolder.SchedulerStateHolder.TimeZoneInfo);
             CreatePersonRequestViewModels(schedulerStateHolder, handlePersonRequestView);
             
             InitObservableListEvents();
         }
 
-        public void CreatePersonRequestViewModels(ISchedulerStateHolder schedulerStateHolder, FrameworkElement handlePersonRequestView)
+        public void CreatePersonRequestViewModels(SchedulingScreenState schedulerStateHolder, FrameworkElement handlePersonRequestView)
         {
             _model.CreatePersonRequestViewModels(schedulerStateHolder.PersonRequests, _shiftTradeRequestStatusChecker, _authorization);
             handlePersonRequestView.DataContext = _model;
@@ -168,11 +168,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 														 : _schedulerStateHolder.PersonRequests.FirstOrDefault(
 															 r =>
 															 r.Request is AbsenceRequest &&
-															 _schedulerStateHolder.RequestedPeriod.Period().Contains(r.Request.Period));
+															 _schedulerStateHolder.SchedulerStateHolder.RequestedPeriod.Period().Contains(r.Request.Period));
 
 			if (defaultRequest == null)
 			{
-				var allowanceView = new RequestAllowanceView(null, _schedulerStateHolder.RequestedPeriod.DateOnlyPeriod.StartDate);
+				var allowanceView = new RequestAllowanceView(null, _schedulerStateHolder.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod.StartDate);
 
 				if (!_isWindowLoaded)
 				{

@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (Log.IsInfoEnabled)
 				Log.Info("Message broker - Removing person request belonging to " + message.DomainObjectType + " [" + message.DomainObjectId + "]");
 			
-			return _owner.SchedulerState.SchedulerStateHolder.RequestDeleteFromBroker(message.DomainObjectId);
+			return _owner.SchedulerState.RequestDeleteFromBroker(message.DomainObjectId);
 		}
 
 		public IPersistableScheduleData UpdateInsertScheduleData(IEventMessage eventMessage)
@@ -305,7 +305,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private IPersonRequest updateInsertOnEventRequests(IEventMessage message)
 		{
-			return _owner.SchedulerState.SchedulerStateHolder.RequestUpdateFromBroker(new PersonRequestRepository(new FromFactory(() => UnitOfWorkFactory.Current)), message.DomainObjectId, _scheduleStorage);
+			return _owner.SchedulerState.RequestUpdateFromBroker(new PersonRequestRepository(new FromFactory(() => UnitOfWorkFactory.Current)), message.DomainObjectId, _scheduleStorage);
 		}
 
 		private void NotifySchedulesUpdated()
