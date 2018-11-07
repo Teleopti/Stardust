@@ -124,8 +124,8 @@
 		}
 
 		function autoUpdateEndDate() {
+			var startDate = vm.selectedSuggestion.startDate;
 			if (vm.intervalRange == (0 || null)) {
-				var startDate = vm.selectedSuggestion.startDate;
 				vm.selectedSuggestion = {
 					startDate: moment(startDate).toDate(),
 					endDate: null
@@ -133,11 +133,17 @@
 				vm.selectedIsValid = checkSelectedIsValid();
 				return;
 			}
-			var startDate = vm.selectedSuggestion.startDate;
-			vm.selectedSuggestion = {
-				startDate: moment(startDate).toDate(),
-				endDate: moment(startDate).add(vm.intervalRange, vm.intervalType.toLowerCase()).subtract(1, 'day').toDate()
-			};
+			if(startDate){
+				vm.selectedSuggestion = {
+					startDate: moment(startDate).toDate(),
+					endDate: moment(startDate).add(vm.intervalRange, vm.intervalType.toLowerCase()).subtract(1, 'day').toDate()
+				};
+			}else{
+				vm.selectedSuggestion={
+					startDate: null,
+					endDate: null
+				};
+			}
 			vm.selectedIsValid = checkSelectedIsValid();
 			return;
 		}

@@ -319,4 +319,26 @@ describe('planningPeriodSelectController', function () {
             endDate: '2018-09-30'
         });
     });
+
+	it('should validate null start date', function () {
+		vm = $controller('planningPeriodSelectController', {
+			$stateParams: stateparams,
+			planningGroupInfo: planningGroupInfo,
+			planningPeriods: planningPeriodOnlyFirst
+		});
+		vm.getLastPp();
+		vm.lastPp = {
+			startDate: moment('2018-09-01T00:00:00').toDate(),
+			endDate: moment('2018-09-30T00:00:00').toDate()
+		};
+		vm.intervalType = 'Month'
+		vm.intervalRange = 1;
+		vm.selectedSuggestion.startDate = null;
+
+		vm.isSelectedChanged();
+		$httpBackend.flush();
+
+		expect(vm.selectedSuggestion.startDate).toEqual(null);
+		expect(vm.selectedSuggestion.endDate).toEqual(null);
+	});
 });
