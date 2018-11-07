@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		[TestLog]
 		public virtual void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentsInIsland, 
 			LockInfoForStateHolder lockInfoForStateHolder, 
-			DateOnlyPeriod period, IEnumerable<Guid> onlyUseSkills = null)
+			DateOnlyPeriod period, IEnumerable<Guid> onlyUseSkills)
 		{
 			PreFill(schedulerStateHolderTo, period);
 			FillScenario(schedulerStateHolderTo);

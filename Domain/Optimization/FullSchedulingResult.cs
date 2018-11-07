@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public virtual FullSchedulingResultModel Create(DateOnlyPeriod period, IEnumerable<IPerson> selectedAgents, IPlanningGroup planningGroup, bool usePreferences)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
-			_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period);
+			_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period, null);
 			var resultStateHolder = schedulerStateHolder.SchedulingResultState;
 			var loadedSelectedAgents = resultStateHolder.LoadedAgents.Where(selectedAgents.Contains).ToArray();
 			var planningGroupSkills = loadedSelectedAgents
