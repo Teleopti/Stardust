@@ -17,6 +17,7 @@
 		'FavoriteSearchDataService',
 		'CurrentUserInfo',
 		'groupPageService',
+		'requestsPermissions',
 		'RequestsFilter'
 	];
 
@@ -34,6 +35,7 @@
 		FavoriteSearchSvc,
 		CurrentUserInfo,
 		groupPageService,
+		requestsPermissions,
 		requestFilterSvc
 	) {
 		var vm = this;
@@ -312,6 +314,12 @@
 			.then(
 				requestsDataService.getOvertimeLicense().then(function(result) {
 					vm.overtimeRequestsLicenseAvailable = result.data;
+				})
+			)
+			.then(
+				requestsDataService.getPermissionsPromise().then(function (result) {
+					requestsPermissions.set(result.data);
+					vm.permissionInited = true;
 				})
 			)
 			.then(vm.init);

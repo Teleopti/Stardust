@@ -14,6 +14,7 @@
 		'signalRSVC',
 		'NoticeService',
 		'RequestsCommandsConfigurationsService',
+		'requestsPermissions',
 		'REQUESTS_TAB_NAMES'
 	];
 
@@ -25,6 +26,7 @@
 		signalRSVC,
 		NoticeService,
 		requestsCommandsConfigurationsSvc,
+		requestsPermissions,
 		REQUESTS_TAB_NAMES) {
 		var vm = this;
 		vm.approveRequests = approveRequests;
@@ -55,6 +57,7 @@
 		vm.onCloseDialog = onCloseDialog;
 		vm.isCommandEnabledWithoutShiftTradeView = isCommandEnabledWithoutShiftTradeView;
 		vm.isCommandEnabled = isCommandEnabled;
+		vm.showApproveOrDenyRequests = requestsPermissions.all().HasApproveOrDenyPermission;
 
 		initWaitlistProcessPeriod();
 

@@ -401,6 +401,7 @@
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormExtensions.cs" />
     <Compile Include="Areas\PmNextGen\Controllers\PowerBIReportController.cs" />
     <Compile Include="Areas\PmNextGen\PmNextGenAreaRegistration.cs" />
+    <Compile Include="Areas\Requests\Core\ViewModel\RequestsPermissonsViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleDayOffViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleShiftViewModel.cs" />
@@ -1673,6 +1674,7 @@
     <Content Include="WFM\app\requests\requests.directive.synchronizeHeaderHeight.js" />
     <Content Include="WFM\app\requests\requests.uigridFix.js" />
     <Content Include="WFM\app\requests\requests.controller.js" />
+    <Content Include="WFM\app\requests\requests.service.permissions.js" />
     <Content Include="WFM\app\requests\_modules.js" />
     <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.html" />
     <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.controller.js" />
