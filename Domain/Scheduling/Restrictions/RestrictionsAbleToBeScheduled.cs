@@ -43,13 +43,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			_restrictionExtractor = restrictionExtractor;
 		}
 
-		public RestrictionsNotAbleToBeScheduledResult Execute(IVirtualSchedulePeriod schedulePeriod, bool checkPreferences = true)
+		public RestrictionsNotAbleToBeScheduledResult Execute(IVirtualSchedulePeriod schedulePeriod)
 		{
 			var schedulingOptions = new SchedulingOptions { DayOffTemplate = new DayOffTemplate() };
-			if (!checkPreferences)
-			{
-				schedulingOptions.UsePreferences = false;
-			}
 			var schedulingCallBack = new SchedulingCallbackForDesktop(new NoSchedulingProgress(), new SchedulingOptions());
 			var selectedAgents = new List<IPerson> { schedulePeriod.Person };
 			var selectedPeriod = schedulePeriod.DateOnlyPeriod;
