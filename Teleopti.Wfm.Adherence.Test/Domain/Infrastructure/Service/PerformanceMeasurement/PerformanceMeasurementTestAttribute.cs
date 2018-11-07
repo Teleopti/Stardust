@@ -52,7 +52,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.PerformanceM
 
 		protected override void BeforeTest()
 		{
-			InfrastructureTestStuff.Before();
+			InfrastructureTestSetup.Before();
 			
 			base.BeforeTest();
 
@@ -67,7 +67,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.PerformanceM
 		{
 			base.AfterTest();
 
-			InfrastructureTestStuff.After();
+			InfrastructureTestSetup.After();
 		}
 
 		public IEnumerable<int> ParallelTransactions() => new[] {5, 6, 7, 8, 9};
