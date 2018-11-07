@@ -129,8 +129,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				return;
 			var schedules = _schedulerStateHolder().Schedules;
 			var agentsWithPreferences = _agentsWithPreferences.Execute(schedules, agents, selectedPeriod);
-			
-			var filteredAgents = _agentsWithWhiteSpots.Execute(schedules, agentsWithPreferences, selectedPeriod);
+			var agentsMightBeAbleToScheduleWithoutPreferences = _excludeAgentsWithRestrictionWarnings.Execute(agentsWithPreferences, selectedPeriod,false).ToArray();
+			var filteredAgents = _agentsWithWhiteSpots.Execute(schedules, agentsMightBeAbleToScheduleWithoutPreferences, selectedPeriod);
 
 			foreach (var agent in filteredAgents)
 			{
@@ -148,11 +148,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					schedules.Modify(scheduleDay, new DoNothingScheduleDayChangeCallBack());
 				}
 			}
-			
-			var agentsMightBeAbleToScheduleWithoutPreferences = _excludeAgentsWithRestrictionWarnings.Execute(filteredAgents, selectedPeriod,false).ToArray();
-			
 			schedulingOptions.UsePreferences = false;
-			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, agentsMightBeAbleToScheduleWithoutPreferences, selectedPeriod, blockPreferenceProvider);
+			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, filteredAgents, selectedPeriod, blockPreferenceProvider);
 		}
 	}
 }
