@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -23,7 +22,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
-		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
@@ -32,14 +30,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public FullSchedulingResult(Func<ISchedulerStateHolder> schedulerStateHolder, IFindSchedulesForPersons findSchedulesForPersons, 
 			IUserTimeZone userTimeZone, ICurrentScenario currentScenario,  
 			CheckScheduleHints checkScheduleHints, 
-			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory, 
-			ICurrentUnitOfWork currentUnitOfWork, IResourceCalculation resourceCalculation, 
+			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory, IResourceCalculation resourceCalculation, 
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory, FillSchedulerStateHolder fillSchedulerStateHolder,
 			AgentsWithWhiteSpots agentsWithWhiteSpots)
 		{
 			_checkScheduleHints = checkScheduleHints;
 			_blockPreferenceProviderUsingFiltersFactory = blockPreferenceProviderUsingFiltersFactory;
-			_currentUnitOfWork = currentUnitOfWork;
 			_resourceCalculation = resourceCalculation;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -55,11 +51,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public virtual FullSchedulingResultModel Create(DateOnlyPeriod period, IEnumerable<IPerson> selectedAgents, IPlanningGroup planningGroup, bool usePreferences)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
-			_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period);
+			_fillSchedulerStateHolder.Fill(schedulerStateHolder, selectedAgents.Select(x=>x.Id.Value), null, period);
 			var resultStateHolder = schedulerStateHolder.SchedulingResultState;
 			var loadedSelectedAgents = resultStateHolder.LoadedAgents;
-			var planningGroupSkills = loadedSelectedAgents.Where(selectedAgents.Contains)
-				.SelectMany(person => person.PersonPeriods(period)).SelectMany(p => p.PersonSkillCollection.Select(s => s.Skill)).Distinct().ToArray();
+			var planningGroupSkills = loadedSelectedAgents.SelectMany(person => person.PersonPeriods(period)).SelectMany(p => p.PersonSkillCollection.Select(s => s.Skill)).Distinct().ToArray();
 			using (_resourceCalculationContextFactory.Create(resultStateHolder, true, period.Inflate(1)))
 			{
 				_resourceCalculation.ResourceCalculate(period.Inflate(1),
