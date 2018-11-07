@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			FillSchedules(schedulerStateHolderTo, schedulerStateHolderTo.RequestedScenario, schedulerStateHolderTo.SchedulingResultState.LoadedAgents, period);
 			removeUnwantedScheduleRanges(schedulerStateHolderTo);
 			setLocks(schedulerStateHolderTo, lockInfoForStateHolder);
-			schedulerStateHolderTo.ResetFilteredPersons();
 		}
 		
 		private static void setLocks(ISchedulerStateHolder schedulerStateHolderTo, LockInfoForStateHolder lockInfoForStateHolder)
