@@ -110,6 +110,7 @@ ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don'
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348 = true
 ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941 = true
+ResourcePlanner_FasterSeamlessPlanningForPreferences_78286 = DEV
 ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717 = RC
 ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487 = RC
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -40,7 +39,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		
 		private class schedulingFixtureSource : ResourcePlannerFixtureSource
 		{
-			protected override IEnumerable<Toggles> ToggleFlags { get; } = Enumerable.Empty<Toggles>();
+			protected override IEnumerable<Toggles> ToggleFlags { get; } = new[]
+			{
+				Toggles.ResourcePlanner_FasterSeamlessPlanningForPreferences_78286
+			};
 			protected override bool AlsoSimulateSecondRequest { get; } = true;
 		}
 	}
