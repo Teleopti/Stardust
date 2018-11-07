@@ -129,8 +129,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	    void RemoveSkill(ISkill skill);
 	    bool GuessResourceCalculationHasBeenMade();
 	    ResourceCalculationData ToResourceOptimizationData(bool considerShortBreaks, bool doIntraIntervalCalculation);
-
-	    IEnumerable<ISkillDay> AllSkillDays();
 	    int MinimumSkillIntervalLength();
     }
 }

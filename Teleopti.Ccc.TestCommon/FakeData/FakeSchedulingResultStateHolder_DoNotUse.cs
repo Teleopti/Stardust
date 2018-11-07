@@ -80,12 +80,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return new ResourceCalculationData(this, considerShortBreaks, doIntraIntervalCalculation);
 		}
 
-
-		public IEnumerable<ISkillDay> AllSkillDays()
-		{
-			throw new NotImplementedException();
-		}
-
 		public int MinimumSkillIntervalLength()
 		{
 			throw new NotImplementedException();

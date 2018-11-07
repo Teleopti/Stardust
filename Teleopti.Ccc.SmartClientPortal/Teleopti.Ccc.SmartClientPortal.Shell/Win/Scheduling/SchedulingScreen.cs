@@ -3560,7 +3560,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 
 				backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXInitializingTreeDots"));
-				foreach (var skillDay in SchedulerState.SchedulerStateHolder.SchedulingResultState.AllSkillDays())
+				foreach (var skillDay in SchedulerState.SchedulerStateHolder.SchedulingResultState.SkillDays.ToSkillDayEnumerable())
 				{
 					foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 					{

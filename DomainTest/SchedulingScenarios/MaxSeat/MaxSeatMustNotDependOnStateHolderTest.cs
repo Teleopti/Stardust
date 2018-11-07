@@ -267,11 +267,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				throw new NotImplementedException();
 			}
 
-			public IEnumerable<ISkillDay> AllSkillDays()
-			{
-				throw new NotImplementedException();
-			}
-
 			public int MinimumSkillIntervalLength()
 			{
 				throw new NotImplementedException();
