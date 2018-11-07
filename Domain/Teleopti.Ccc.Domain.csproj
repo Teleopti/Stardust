@@ -2667,7 +2667,6 @@
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByAllSkillsExtractor.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitiesSpecification.cs" />
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByPersonalSkillsExtractor.cs" />
-    <Compile Include="Collection\AbstractDictionary.cs" />
     <Compile Include="Optimization\ScheduleMatrixOriginalStateContainer.cs" />
     <Compile Include="Optimization\TimePeriodCanHaveShortBreak.cs" />
     <Compile Include="Optimization\ClassicLegacy\WorkShiftBackToLegalStateServicePro.cs" />
