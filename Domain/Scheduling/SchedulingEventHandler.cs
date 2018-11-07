@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly AgentsWithPreferences _agentsWithPreferences;
 		private readonly AgentsWithWhiteSpots _agentsWithWhiteSpots;
 		private readonly RemoveNonPreferenceDaysOffs _removeNonPreferenceDaysOffs;
+		private readonly IExcludeAgentsWithRestrictionWarnings _excludeAgentsWithRestrictionWarnings;
 
 		protected SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder,
 						FillSchedulerStateHolder fillSchedulerStateHolder,
@@ -49,7 +50,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						AlreadyScheduledAgents alreadyScheduledAgents,
 						AgentsWithPreferences agentsWithPreferences, 
 						AgentsWithWhiteSpots agentsWithWhiteSpots,
-						RemoveNonPreferenceDaysOffs removeNonPreferenceDaysOffs)
+						RemoveNonPreferenceDaysOffs removeNonPreferenceDaysOffs,
+						IExcludeAgentsWithRestrictionWarnings excludeAgentsWithRestrictionWarnings)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -66,6 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_agentsWithPreferences = agentsWithPreferences;
 			_agentsWithWhiteSpots = agentsWithWhiteSpots;
 			_removeNonPreferenceDaysOffs = removeNonPreferenceDaysOffs;
+			_excludeAgentsWithRestrictionWarnings = excludeAgentsWithRestrictionWarnings;
 		}
 
 		[TestLog]
@@ -96,8 +99,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				new FixedBlockPreferenceProvider(schedulingOptions);
 			selectedPeriod = _extendSelectedPeriodForMonthlyScheduling.Execute(@event, schedulerStateHolder, selectedPeriod);
 			var agents = schedulerStateHolder.SchedulingResultState.LoadedAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray();
-			var agentsWithExistingShiftsBeforeSchedule = _alreadyScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod, agents);
-			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, agents, selectedPeriod, blockPreferenceProvider);
+			var agentsMightBeAbleToScheduleWithRestrictions = _excludeAgentsWithRestrictionWarnings.Execute(agents, selectedPeriod).ToArray();
+			var agentsWithExistingShiftsBeforeSchedule = _alreadyScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod, agentsMightBeAbleToScheduleWithRestrictions);
+			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, agentsMightBeAbleToScheduleWithRestrictions, selectedPeriod, blockPreferenceProvider);
 			
 			runSchedulingWithoutPreferences(agentsWithExistingShiftsBeforeSchedule, @event, agents, selectedPeriod, schedulingOptions, schedulingCallback, schedulingProgress, blockPreferenceProvider);
 
