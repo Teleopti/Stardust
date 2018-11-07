@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 	{
 		private SchedulerStateHolder target;
 		private ScheduleDateTimePeriod dtp;
-		private MockRepository mocks;
 		private IScenario scenario;
 		private IList<IPerson> selectedPersons;
 		private IPerson _person1;
@@ -38,7 +37,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		private Guid _guid1;
 		private Guid _guid2;
 		private Guid _guid3;
-		private IPersistableScheduleDataPermissionChecker _permissionChecker;
 		private IDisposable auth;
 
 		[SetUp]
@@ -63,8 +61,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 												dtp.VisiblePeriod.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo()),
 												TimeZoneInfoFactory.UtcTimeZoneInfo()), selectedPersons, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(null))), schedulingResultStateHolder, new TimeZoneGuard());
 			target.SetRequestedScenario(scenario);
-			mocks = new MockRepository();
-			_permissionChecker = new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make());
 			auth = CurrentAuthorization.ThreadlyUse(new FullPermission());
 		}
 
@@ -96,55 +92,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		}
 
 		[Test]
-		public void CanLoadScheduleAndLoadedPeriodIsSet()
-		{
-			IScheduleDateTimePeriod period = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-			IScheduleDictionary scheduleDictionary = new ScheduleDictionary(ScenarioFactory.CreateScenarioAggregate(),period, _permissionChecker, CurrentAuthorization.Make());
-			var scheduleStorage = mocks.StrictMock<IFindSchedulesForPersons>();
-			var personsProvider = Enumerable.Empty<IPerson>();
-			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false,false);
-			using(mocks.Record())
-			{
-				Expect.Call(scheduleStorage.FindSchedulesForPersons(target.RequestedScenario, personsProvider, scheduleDictionaryLoadOptions, scheduleDictionary.Period.VisiblePeriod, selectedPersons, true))
-					.Return(scheduleDictionary);
-			}
-			using(mocks.Playback())
-			{
-				target.LoadSchedules(scheduleStorage, personsProvider, scheduleDictionaryLoadOptions, scheduleDictionary.Period.VisiblePeriod);
-			}
-			Assert.AreSame(scheduleDictionary, target.Schedules);
-			Assert.AreEqual(period.LoadedPeriod(), target.Schedules.Period.LoadedPeriod());
-		}
-
-		[Test]
-		public void VerifyCanLoadSettings()
-		{
-			CommonNameDescriptionSetting nameDescriptionSetting = new CommonNameDescriptionSetting();
-
-			DefaultSegment defaultSegment = new DefaultSegment();
-			defaultSegment.SegmentLength = 42;
-			
-			IUnitOfWork unitOfWork = mocks.StrictMock<IUnitOfWork>();
-			IRepositoryFactory repositoryFactory = mocks.StrictMock<IRepositoryFactory>();
-			ISettingDataRepository settingDataRepository = mocks.StrictMock<ISettingDataRepository>();
-
-			Expect.Call(repositoryFactory.CreateGlobalSettingDataRepository(unitOfWork)).Return(settingDataRepository).Repeat.AtLeastOnce();
-			Expect.Call(settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting())).IgnoreArguments().Return(nameDescriptionSetting);
-			Expect.Call(settingDataRepository.FindValueByKey("DefaultSegment", new DefaultSegment())).IgnoreArguments().Return(defaultSegment).Repeat.Once();
-
-
-			mocks.ReplayAll();
-			IPerson person = PersonFactory.CreatePerson("first", "last");
-			target.LoadSettings(unitOfWork,repositoryFactory);
-			Assert.AreEqual(nameDescriptionSetting.BuildFor(person), target.CommonAgentName(person));
-			Assert.AreEqual(nameDescriptionSetting,target.CommonNameDescription);
-
-
-			Assert.AreEqual(42, target.DefaultSegmentLength);
-			mocks.VerifyAll();
-		}
-
-		[Test]
 		public void VerifyDaysToBeResourceCalculated()
 		{
 			target.MarkDateToBeRecalculated(new DateOnly(2007,01,01));
@@ -164,8 +111,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		public void ShouldThrowExceptionOnNullScheduleRepository()
 		{
 			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false,false);
-			var scheduleDateTimePeriod = mocks.StrictMock<IScheduleDateTimePeriod>();
-			Assert.Throws<ArgumentNullException>(() => target.LoadSchedules(null, Enumerable.Empty<IPerson>(), scheduleDictionaryLoadOptions, scheduleDateTimePeriod.VisiblePeriod));
+			Assert.Throws<ArgumentNullException>(() => target.LoadSchedules(null, Enumerable.Empty<IPerson>(), scheduleDictionaryLoadOptions, new DateTimePeriod()));
 		}
 
 		[Test]
