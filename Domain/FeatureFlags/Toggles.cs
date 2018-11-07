@@ -35,6 +35,7 @@
 		MyTimeWeb_NewTeamScheduleView_75989,
 		MyTimeWeb_NewTeamScheduleViewDesktop_76313,
 		MyTimeWeb_TrafficLightOnMobileDayView_77447,
+		MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640,
 
 		Wfm_MinimumScaffolding_32659,
 		Wfm_WebPlan_Pilot_46815,
@@ -122,7 +123,7 @@
 		WFM_Remember_My_Selection_In_Intraday_47254,
 		WFM_Clear_Data_After_Leaving_Date_47768,
 		WFM_Request_View_Permissions_77731,
-		
+
 		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889,
 		MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947,
 		MyTimeWeb_ShiftTradeRequest_SetNotSelectableShifts_77052,
@@ -134,7 +135,7 @@
 
 		WFM_Intraday_Refactoring_74652,
 		WFM_Intraday_Redesign_77214,
-		
+
 		WFM_ChatBot_77547,
 		WFM_Insights_78059,
 
