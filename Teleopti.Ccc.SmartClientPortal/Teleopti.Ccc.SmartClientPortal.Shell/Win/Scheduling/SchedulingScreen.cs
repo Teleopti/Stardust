@@ -386,7 +386,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_workShiftWorkTime = _container.Resolve<IWorkShiftWorkTime>();
 			_temporarySelectedEntitiesFromTreeView = allSelectedEntities;
 			_virtualSkillHelper = _container.Resolve<IVirtualSkillHelper>();
-			SchedulerState = new SchedulingScreenState(_container.Resolve<ISchedulerStateHolder>());
+			SchedulerState = new SchedulingScreenState(_container.Resolve<IDisableDeletedFilter>(), _container.Resolve<ISchedulerStateHolder>());
 			_groupPagesProvider = _container.Resolve<SchedulerGroupPagesProvider>();
 			_optimizationHelperExtended = _container.Resolve<IResourceOptimizationHelperExtended>();
 			SchedulerState.SchedulerStateHolder.SetRequestedScenario(loadScenario);
@@ -3924,13 +3924,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void loadSchedulingScreenState(IUnitOfWork uow, SchedulingScreenState state)
 		{
-			using (_container.Resolve<IDisableDeletedFilter>().Disable())
-			{
-				var scheduleTags = new ScheduleTagRepository(uow).LoadAll().OrderBy(t => t.Description).ToList();
-				scheduleTags.Insert(0, NullScheduleTag.Instance);
-				
-				state.Fill(scheduleTags);
-			}
+			state.Fill(uow);
 		}
 
 		private void disableSave()

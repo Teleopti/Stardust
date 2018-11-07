@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 			PersonAssignmentRepository.Has(assignment);
 			var stateHolder = SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new[] {agent}, new[] {assignment}, Enumerable.Empty<ISkillDay>(), userTimeZone);
 			stateHolder.SetRequestedScenario(scenario);
-			var target = new SchedulingScreenState(stateHolder);
+			var target = new SchedulingScreenState(null, stateHolder);
 			
 			target.LoadPersonRequests(UnitOfWork, repositoryFactory,
 				new PersonRequestAuthorizationCheckerConfigurable(), 14);

@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Specification;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
@@ -24,15 +27,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 	 */
 	public class SchedulingScreenState
 	{
-		public SchedulingScreenState(ISchedulerStateHolder schedulerStateHolder)
+		private readonly IDisableDeletedFilter _disableDeletedFilter;
+
+		public SchedulingScreenState(IDisableDeletedFilter disableDeletedFilter, ISchedulerStateHolder schedulerStateHolder)
 		{
+			_disableDeletedFilter = disableDeletedFilter;
 			SchedulerStateHolder = schedulerStateHolder;
 		}
 
 		//add more stuff from "domain stateholder" here
-		public void Fill(IEnumerable<IScheduleTag> scheduleTags)
+		public void Fill(IUnitOfWork uow)
 		{
-			ScheduleTags = scheduleTags;
+			using (_disableDeletedFilter.Disable())
+			{
+				var scheduleTags = new ScheduleTagRepository(uow).LoadAll().OrderBy(t => t.Description).ToList();
+				scheduleTags.Insert(0, NullScheduleTag.Instance);
+				ScheduleTags = scheduleTags;	
+			}
 		}
 		
 		public ISchedulerStateHolder SchedulerStateHolder { get; }

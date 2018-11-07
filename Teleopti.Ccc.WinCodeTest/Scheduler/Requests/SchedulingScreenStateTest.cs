@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 				.Return(requestList)
 				.IgnoreArguments();
 
-			var innerTarget = new SchedulingScreenState(target);
+			var innerTarget = new SchedulingScreenState(null, target);
 
 			innerTarget.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest(), 10);
 
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 				.Return(requestList)
 				.IgnoreArguments();
 
-			var innerTarget = new SchedulingScreenState(target);
+			var innerTarget = new SchedulingScreenState(null, target);
 			innerTarget.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest(), 10);
 
 			innerTarget.PersonRequests.Count.Should().Be.EqualTo(0);
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 					x.FindAllRequestModifiedWithinPeriodOrPending((IList<IPerson>) null, new DateTimePeriod()))
 				.IgnoreArguments().Return(new List<IPersonRequest>());
 
-			var innerTarget = new SchedulingScreenState(target);
+			var innerTarget = new SchedulingScreenState(null, target);
 			innerTarget.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest(),
 				passedNumberOfDays);
 
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 				.Return(requestList)
 				.IgnoreArguments();
 
-			var innerTarget = new SchedulingScreenState(target);
+			var innerTarget = new SchedulingScreenState(null, target);
 			innerTarget.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest(), 10);
 
 			innerTarget.PersonRequests.Count.Should().Be.EqualTo(0);
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 
 			IList<IPersonRequest> originalList = new List<IPersonRequest> {personRequest};
 			target.SchedulingResultState.LoadedAgents = new Collection<IPerson> {person1};
-			var innerTarget = new SchedulingScreenState(target);
+			var innerTarget = new SchedulingScreenState(null, target);
 			using (mocks.Record())
 			{
 				Expect.Call(personRequestRepository.Find(personRequest.Id.Value))
@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 
 			IList<IPersonRequest> originalList = new List<IPersonRequest> { personRequest };
 			target.SchedulingResultState.LoadedAgents = new Collection<IPerson> { person1 };
-			var innerTarget = new SchedulingScreenState(target);
+			var innerTarget = new SchedulingScreenState(null, target);
 			using (mocks.Record())
 			{
 				Expect.Call(personRequestRepository.Find(personRequest.Id.Value))
@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 			IPersonRequest personRequest = new PersonRequest(person1);
 			personRequest.SetId(Guid.NewGuid());
 			target.SchedulingResultState.LoadedAgents = new Collection<IPerson> { person1 };
-			var innerTarget = new SchedulingScreenState(target);
+			var innerTarget = new SchedulingScreenState(null, target);
 			using (mocks.Record())
 			{
 				Expect.Call(personRequestRepository.Find(personRequest.Id.Value))
@@ -305,7 +305,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 			IList<IPersonRequest> originalList = new List<IPersonRequest> { personRequest };
 			IList<IPerson> personList = new List<IPerson> { person1 };
 			target.SetRequestedScenario(ScenarioFactory.CreateScenarioAggregate("test", true));
-			var innerTarget = new SchedulingScreenState(target);
+			var innerTarget = new SchedulingScreenState(null, target);
 			using (mocks.Record())
 			{
 				Expect.Call(repositoryFactory.CreatePersonRequestRepository(unitOfWork)).Return(personRequestRepository);
@@ -324,7 +324,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 		[Test]
 		public void VerifyChangedRequests()
 		{
-			var innerTarget = new SchedulingScreenState(target);
+			var innerTarget = new SchedulingScreenState(null, target);
 			innerTarget.PersonRequests.Add(new PersonRequest(PersonFactory.CreatePerson()));
 			Assert.IsFalse(innerTarget.ChangedRequests());
 			
