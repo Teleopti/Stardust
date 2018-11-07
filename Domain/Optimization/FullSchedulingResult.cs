@@ -51,10 +51,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public virtual FullSchedulingResultModel Create(DateOnlyPeriod period, IEnumerable<IPerson> selectedAgents, IPlanningGroup planningGroup, bool usePreferences)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
-			_fillSchedulerStateHolder.Fill(schedulerStateHolder, selectedAgents.Select(x=>x.Id.Value), null, period);
+			_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period);
 			var resultStateHolder = schedulerStateHolder.SchedulingResultState;
-			var loadedSelectedAgents = resultStateHolder.LoadedAgents;
-			var planningGroupSkills = loadedSelectedAgents.SelectMany(person => person.PersonPeriods(period)).SelectMany(p => p.PersonSkillCollection.Select(s => s.Skill)).Distinct().ToArray();
+			var loadedSelectedAgents = resultStateHolder.LoadedAgents.Where(selectedAgents.Contains).ToArray();
+			var planningGroupSkills = loadedSelectedAgents
+				.SelectMany(person => person.PersonPeriods(period)).SelectMany(p => p.PersonSkillCollection.Select(s => s.Skill)).Distinct().ToArray();
 			using (_resourceCalculationContextFactory.Create(resultStateHolder, true, period.Inflate(1)))
 			{
 				_resourceCalculation.ResourceCalculate(period.Inflate(1),

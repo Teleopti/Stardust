@@ -192,6 +192,34 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			result.SkillResultList.Count().Should().Be.EqualTo(1);
 			result.SkillResultList.First().SkillName.Should().Be.EqualTo("active skill");
 		}
+		
+		[Test]
+		public void HintsShouldIncludeSelectedAgentsOnly()
+		{
+			var date = new DateOnly(2015, 10, 12); //mon
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("relevant skill", activity, new TimePeriod(8, 16));
+
+			var scenario = ScenarioRepository.Has("some name");
+			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1);
+			var filterContract = new Contract("_");
+			var contractScheduleWorkingMondayToFriday = new ContractScheduleWorkingMondayToFriday();
+			var partTimePercentage = new PartTimePercentage("_");
+			var team = new Team {Site = new Site("site")};
+			var agentToSchedule = PersonRepository.Has(filterContract, contractScheduleWorkingMondayToFriday, partTimePercentage, team, schedulePeriod, skill);
+			PersonRepository.Has(new Contract("_2"), contractScheduleWorkingMondayToFriday, partTimePercentage, team, schedulePeriod, skill);
+
+			var planningGroup = new PlanningGroup("_").AddFilter(new ContractFilter(filterContract));
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1, SchedulePeriodType.Week, planningGroup);
+			PlanningGroupRepository.Has(planningGroup);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 2));
+
+			var result = Target.DoSchedulingAndDO(planningPeriod.Id.Value);
+
+			var validationResults = result.BusinessRulesValidationResults.ToList();
+			validationResults.Count.Should().Be.EqualTo(1);
+			validationResults.Single().ResourceId.Should().Be.EqualTo(agentToSchedule.Id.Value);
+		}
 
 		public DayOffOptimizationResultTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
