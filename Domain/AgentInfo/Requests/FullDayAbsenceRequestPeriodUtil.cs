@@ -15,17 +15,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var fullDayTimeSpanStart = new TimeSpan(0, 0, 0);
 			var fullDayTimeSpanEnd = new TimeSpan(23, 59, 0);
 			var personTimeZone = person.PermissionInformation.DefaultTimeZone();
-			var absencePeriodUserTime =
-				new DateTimePeriod(
-					DateTime.SpecifyKind(
-						TimeZoneHelper.ConvertFromUtc(period.StartDateTime, personTimeZone),
-						DateTimeKind.Utc),
-					DateTime.SpecifyKind(
-						TimeZoneHelper.ConvertFromUtc(period.EndDateTime, personTimeZone),
-						DateTimeKind.Utc));
+			var localAbsencePeriodStart = period.StartDateTimeLocal(personTimeZone);
+			var localAbsencePeriodEnd = period.EndDateTimeLocal(personTimeZone);
 
-			bool isFullDayAbsenceRequest = (absencePeriodUserTime.StartDateTime.TimeOfDay == fullDayTimeSpanStart &&
-											absencePeriodUserTime.EndDateTime.TimeOfDay == fullDayTimeSpanEnd);
+			bool isFullDayAbsenceRequest = (localAbsencePeriodStart.TimeOfDay == fullDayTimeSpanStart &&
+											localAbsencePeriodEnd.TimeOfDay == fullDayTimeSpanEnd);
 			if (isFullDayAbsenceRequest)
 			{
 				var fullDayAbsenceRequestStartTimeSetting = globalSettingsDataRepository.FindValueByKey("FullDayAbsenceRequestStartTime",
@@ -36,8 +30,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				var settingStartTime = fullDayAbsenceRequestStartTimeSetting.TimeSpanValue;
 				var settingEndTime = fullDayAbsenceRequestEndTimeSetting.TimeSpanValue;
 
-				var startDate = absencePeriodUserTime.StartDateTime.Date.Add(settingStartTime);
-				var endDate = absencePeriodUserTime.EndDateTime.Date.Add(settingEndTime);
+				var startDate = localAbsencePeriodStart.Date.Add(settingStartTime);
+				var endDate = localAbsencePeriodEnd.Date.Add(settingEndTime);
 
 				var personAssignment = dayScheduleForAbsenceReqStart.PersonAssignment();
 				if (dayScheduleForAbsenceReqStart.IsScheduled() && personAssignment != null && !dayScheduleForAbsenceReqStart.HasDayOff() && personAssignment.ShiftLayers.Any())
