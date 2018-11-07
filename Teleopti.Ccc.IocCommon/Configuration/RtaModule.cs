@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StateQueueTenants>().SingleInstance();
 			if (_config.Toggle(Toggles.RTA_StateQueueFloodPrevention_77710))
 			{
-				builder.RegisterType<StateQueueHealthChecker>().As<IStateQueueHealthChecker>().SingleInstance();
+				builder.RegisterType<StateQueueHealthChecker>().As<IStateQueueHealthChecker>().SingleInstance().ApplyAspects();
 				builder.RegisterType<StateQueueHealthCheckerProcess>().As<IBackgroundProcess>().SingleInstance();
 			}
 			else
