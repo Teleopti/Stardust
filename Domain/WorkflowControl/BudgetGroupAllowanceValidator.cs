@@ -15,11 +15,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 			var validatedRequest =
 				requiredForHandlingAbsenceRequest.BudgetGroupAllowanceSpecification.IsSatisfied(
-					new AbsenceRequstAndSchedules
-					{
-						AbsenceRequest = absenceRequest,
-						SchedulingResultStateHolder = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder
-					});
+					new AbsenceRequstAndSchedules(absenceRequest, requiredForHandlingAbsenceRequest.SchedulingResultStateHolder, requiredForHandlingAbsenceRequest.BudgetGroupState));
 
 			return validatedRequest;
 		}

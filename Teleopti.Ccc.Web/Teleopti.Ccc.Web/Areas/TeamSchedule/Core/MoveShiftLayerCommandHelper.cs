@@ -91,10 +91,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 			selectedLayers.ForEach(l =>
 			{
-				if (layerToMoveTimeMap[l.Id.Value] < earliestStart)
-					earliestStart = layerToMoveTimeMap[l.Id.Value];
-				if (layerToMoveTimeMap[l.Id.Value].Add(l.Period.ElapsedTime()) > latestEnd)
-					latestEnd = layerToMoveTimeMap[l.Id.Value].Add(l.Period.ElapsedTime());
+				var layerToMoveTime = layerToMoveTimeMap[l.Id.Value];
+				if (layerToMoveTime < earliestStart)
+					earliestStart = layerToMoveTime;
+				if (layerToMoveTime.Add(l.Period.ElapsedTime()) > latestEnd)
+					latestEnd = layerToMoveTime.Add(l.Period.ElapsedTime());
 			});
 			return latestEnd.Subtract(earliestStart).Duration() <= new TimeSpan(36, 0, 0);
 		}

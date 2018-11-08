@@ -279,6 +279,7 @@
     <Compile Include="Areas\People\RoleControllerAuditTest.cs" />
     <Compile Include="Areas\People\RoleControllerTest.cs" />
     <Compile Include="Areas\Reporting\Controller\ScheduleAuditTrailControllerTest.cs" />
+    <Compile Include="Areas\Requests\Controller\RequestsControllerTest.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestAllowanceViewModelFactoryTest.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningGroupControllerTest.cs" />
     <Compile Include="Areas\Staffing\BpoControllerTest.cs" />
@@ -538,6 +539,7 @@
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceTypesProviderTest.cs" />
     <Compile Include="Filters\ApplicationFunctionApiAttributeTest.cs" />
     <Compile Include="Filters\AsyncTaskAttributeTest.cs" />
+    <Compile Include="Filters\PermissionCheckAttributeTest.cs" />
     <Compile Include="Filters\AuthorizeTeleoptiAttributeTest.cs" />
     <Compile Include="Filters\CustomHttpActionDescriptorForTest.cs" />
     <Compile Include="Filters\HandleOptimisticLockExceptionAttributeTest.cs" />
@@ -690,7 +692,6 @@
   <ItemGroup>
     <Folder Include="Areas\MyTime\Core\TeamSchedule\Mapping\" />
     <Folder Include="Areas\Outbound\Models\" />
-    <Folder Include="Areas\Requests\Controller\" />
     <Folder Include="Core\Hangfire\" />
     <Folder Include="Properties\" />
   </ItemGroup>

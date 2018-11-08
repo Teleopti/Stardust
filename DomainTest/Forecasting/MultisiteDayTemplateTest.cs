@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		[Test]
 		public void VerifyProtectedTemplateUpdatedDateCanBeSet()
 		{
-			var updatedDate = TimeZoneHelper.ConvertToUtc(new DateTime(2010, 12, 2), TimeZoneHelper.CurrentSessionTimeZone);
+			var updatedDate = TimeZoneHelper.ConvertToUtc(new DateTime(2010, 12, 2), TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			var testMultisiteDayTemplate = new TestMultisiteDayTemplate();
 			testMultisiteDayTemplate.SetUpdatedDate(updatedDate);
 			Assert.AreEqual(updatedDate, testMultisiteDayTemplate.UpdatedDate);

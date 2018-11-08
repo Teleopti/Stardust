@@ -16,11 +16,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 	{
 		private readonly IScheduleViewBase _scheduleView;
 		private readonly SchedulingScreen _schedulingScreen;
-		private readonly ISchedulerStateHolder _schedulerStateHolder;
+		private readonly SchedulingScreenState _schedulerStateHolder;
 		private readonly CultureInfo _culture;
 		private readonly bool _rightToLeft;
 
-		public ExportToPdfGraphical(IScheduleViewBase scheduleView, SchedulingScreen schedulingScreen, ISchedulerStateHolder schedulerStateHolder, CultureInfo culture, bool rightToLeft)
+		public ExportToPdfGraphical(IScheduleViewBase scheduleView, SchedulingScreen schedulingScreen, SchedulingScreenState schedulerStateHolder, CultureInfo culture, bool rightToLeft)
 		{
 			_scheduleView = scheduleView;
 			_schedulingScreen = schedulingScreen;
@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_rightToLeft = rightToLeft;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.FileDialog.set_Filter(System.String)")]
 		public void Export()
 		{
 			var model = new ScheduleReportDialogGraphicalModel();
@@ -51,11 +50,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			foreach (var part in selection)
 			{
-
 				if (!personDic.ContainsKey(part.Person))
-					personDic.Add(part.Person, _schedulerStateHolder.CommonAgentNameScheduleExport(part.Person));
-				//personDic.Add(part.Person, _schedulerState.CommonAgentName(part.Person));
-
+					personDic.Add(part.Person, _schedulerStateHolder.CommonNameDescriptionScheduleExport.BuildFor(part.Person));
 			}
 
 			string path;
@@ -90,11 +86,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			if (model.Team)
 				ScheduleToPdfManager.ExportShiftPerDayTeamViewGraphical(_culture, personDic, period,
-																		_schedulerStateHolder.SchedulingResultState,
+																		_schedulerStateHolder.SchedulerStateHolder.SchedulingResultState,
 																		_rightToLeft, _schedulingScreen, path, model);
 			else
 				ScheduleToPdfManager.ExportShiftPerDayAgentViewGraphical(_culture, personDic, period,
-																		 _schedulerStateHolder.SchedulingResultState,
+																		 _schedulerStateHolder.SchedulerStateHolder.SchedulingResultState,
 																		 _rightToLeft, _schedulingScreen, path, model);
 		}
 	}

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				var period = person.PersonPeriods(range).FirstOrDefault();
 				var contract = period?.PersonContract.Contract;
 
-				if (period == null || contract == null || period.RuleSetBag == null)
+				if (period == null || contract == null || ((IDeleteTag)contract).IsDeleted|| period.RuleSetBag == null || ((IDeleteTag)period.RuleSetBag).IsDeleted)
 				{
 					continue;
 				}

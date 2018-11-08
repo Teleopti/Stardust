@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Rows
         [Test]
         public void VerifyTimeZoneInfo()
         {
-            TimeZoneInfo timeZoneInfo = StateHolderReader.Instance.StateReader.UserTimeZone;
+            TimeZoneInfo timeZoneInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
             Assert.AreEqual(timeZoneInfo.DisplayName, _target.TimeZoneInfo.DisplayName);
         }
     }

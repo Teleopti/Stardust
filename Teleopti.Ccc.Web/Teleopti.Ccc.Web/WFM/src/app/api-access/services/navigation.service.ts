@@ -1,22 +1,15 @@
 import { Injectable } from '@angular/core';
+import { NavigationService as NavigationServiceCore } from './../../core/services';
 
 @Injectable()
 export class NavigationService {
-	private go(hash: string): void {
-		location.hash = hash;
-		this.resetScroll();
-	}
+	constructor(private navService: NavigationServiceCore) {}
 
 	public navToAddApp() {
-		this.go('#/api-access/add-app');
+		this.navService.go('apiaccess.addapp');
 	}
 
 	public navToList() {
-		this.go('#/api-access/list');
-	}
-
-	private resetScroll() {
-		var element = document.getElementById('materialcontainer');
-		if (element) element.scrollTop = 0;
+		this.navService.go('apiaccess.index');
 	}
 }

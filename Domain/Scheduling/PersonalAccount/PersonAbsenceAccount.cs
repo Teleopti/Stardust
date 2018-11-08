@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 			var ret = new List<IAccount>(accountCollection);
 			ret.Sort(new AccountDateDescendingComparer());
 
-			return new ReadOnlyCollection<IAccount>(ret);
+			return ret;
 		}
 
 		public virtual IPerson Person => _person;
@@ -57,14 +57,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 
 		public virtual IEnumerable<IAccount> Find(DateOnlyPeriod dateOnlyPeriod)
 		{
-			var retList = new SortedSet<IAccount>(new AccountDateDescendingComparer());
-			foreach (var account in accountCollection)
-			{
-				if (account.Period().Intersection(dateOnlyPeriod).HasValue)
-					retList.Add(account);
-			}
-
-			return retList;
+			return new SortedSet<IAccount>(accountCollection.Where(a => a.Period().Intersection(dateOnlyPeriod).HasValue),
+					new AccountDateDescendingComparer());
 		}
 
 		public virtual void Restore(IPersonAbsenceAccount previousState)

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         IHandleBusinessRuleResponse HandleBusinessRuleResponse { get; }
         void InvalidateSelectedRow(IScheduleDay schedulePart);
         void OnPasteCompleted();
-        GridControl TheGrid { get; }
+        GridControl ViewGrid { get; }
 		
         IList<IScheduleDay> CurrentColumnSelectedSchedules();
 		

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 {
     public class MeetingComposerPresenter : IInitiatorIdentifier, IDisposable
     {
-        private ISchedulerStateHolder _schedulerStateHolder;
+        private SchedulingScreenState _schedulingScreenState;
         private readonly IMeetingComposerView _view;
         private readonly IMeetingViewModel _model;
 	    private readonly IDisableDeletedFilter _disableDeletedFilter;
@@ -50,14 +50,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             UnitOfWorkFactory = Infrastructure.UnitOfWork.UnitOfWorkFactory.Current;
         }
 
-		public MeetingComposerPresenter(IMeetingComposerView view, IMeetingViewModel model, IDisableDeletedFilter disableDeletedFilter, ISchedulerStateHolder schedulerStateHolder, IScheduleStorageFactory scheduleStorageFactory)
+		public MeetingComposerPresenter(IMeetingComposerView view, IMeetingViewModel model, IDisableDeletedFilter disableDeletedFilter, SchedulingScreenState schedulingScreenState, IScheduleStorageFactory scheduleStorageFactory)
 			: this(view, model,disableDeletedFilter, scheduleStorageFactory)
         {
-            _schedulerStateHolder = schedulerStateHolder;
+            _schedulingScreenState = schedulingScreenState;
 
-            if (_schedulerStateHolder != null && model != null)
+            if (_schedulingScreenState != null && model != null)
             {
-                DateOnlyPeriod validPeriod = _schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
+                DateOnlyPeriod validPeriod = _schedulingScreenState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
                 _minDate = validPeriod.StartDate;
                 _maxDate = validPeriod.EndDate;
             }
@@ -112,27 +112,27 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
         {
             var persons = _model.Meeting.MeetingPersons.Select(meetingPerson => meetingPerson.Person).ToList();
 
-	        if (_schedulerStateHolder != null &&
-	            persons.Any(person => !_schedulerStateHolder.ChoosenAgents.Contains(person)))
+	        if (_schedulingScreenState != null &&
+	            persons.Any(person => !_schedulingScreenState.SchedulerStateHolder.ChoosenAgents.Contains(person)))
 	        {
-		        _schedulerStateHolder = null;
+		        _schedulingScreenState = null;
 	        }
 
-            if (_schedulerStateHolder == null)
+            if (_schedulingScreenState == null)
             {
                 _view.DisableWhileLoadingStateHolder();
                 _view.StartLoadingStateHolder();
             }
             else
             {
-                var availablePersons = _schedulerStateHolder.SchedulingResultState.LoadedAgents;
-	            var multi = _schedulerStateHolder.CommonStateHolder.MultiplicatorDefinitionSets;
+                var availablePersons = _schedulingScreenState.SchedulerStateHolder.SchedulingResultState.LoadedAgents;
+	            var multi = _schedulingScreenState.SchedulerStateHolder.CommonStateHolder.MultiplicatorDefinitionSets;
 
-                _schedulerStateHolder = new SchedulerStateHolder(_schedulerStateHolder.RequestedScenario,
-                                                                 _schedulerStateHolder.RequestedPeriod,
-																 availablePersons, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())),new SchedulingResultStateHolder(), new TimeZoneGuard());
-                _schedulerStateHolder.SchedulingResultState.LoadedAgents = new List<IPerson>(availablePersons);
-					((List<IMultiplicatorDefinitionSet>)_schedulerStateHolder.CommonStateHolder.MultiplicatorDefinitionSets).AddRange(multi);
+                _schedulingScreenState = new SchedulingScreenState(_disableDeletedFilter, new SchedulerStateHolder(_schedulingScreenState.SchedulerStateHolder.RequestedScenario,
+                                                                 _schedulingScreenState.SchedulerStateHolder.RequestedPeriod,
+																 availablePersons, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())),new SchedulingResultStateHolder(), new TimeZoneGuard()));
+                _schedulingScreenState.SchedulerStateHolder.SchedulingResultState.LoadedAgents = new List<IPerson>(availablePersons);
+					((List<IMultiplicatorDefinitionSet>)_schedulingScreenState.SchedulerStateHolder.CommonStateHolder.MultiplicatorDefinitionSets).AddRange(multi);
             }
 
             _view.SetRecurrentMeetingActive(_model.IsRecurring);
@@ -158,11 +158,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
         {
             var requestedPeriod =
                 new DateOnlyPeriod(_model.StartDate.AddDays(-1), _model.RecurringEndDate.AddDays(2));
-			_schedulerStateHolder = new SchedulerStateHolder(_model.Meeting.Scenario, new DateOnlyPeriodAsDateTimePeriod(requestedPeriod, Model.TimeZone),
-															 new List<IPerson>(), _disableDeletedFilter, new SchedulingResultStateHolder(), new TimeZoneGuard());
+			_schedulingScreenState = new SchedulingScreenState(_disableDeletedFilter, new SchedulerStateHolder(_model.Meeting.Scenario, new DateOnlyPeriodAsDateTimePeriod(requestedPeriod, Model.TimeZone),
+															 new List<IPerson>(), _disableDeletedFilter, new SchedulingResultStateHolder(), new TimeZoneGuard()));
                                         
             var stateLoader = new SchedulerStateLoader(
-                                                    _schedulerStateHolder,
+                                                    _schedulingScreenState.SchedulerStateHolder,
                                                     RepositoryFactory,
                                                     UnitOfWorkFactory,
 					                                new LazyLoadingManagerWrapper(),
@@ -316,14 +316,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             get { return _instanceId; }
         }
 
-        public ISchedulerStateHolder SchedulerStateHolder
+        public SchedulingScreenState SchedulingScreenState
         {
-            get { return _schedulerStateHolder; }
+            get { return _schedulingScreenState; }
         }
 
         public void ShowAddressBook()
         {
-            var notDeletedPersons = SchedulerStateHolder.SchedulingResultState.LoadedAgents.Cast<IDeleteTag>().Where(person => !person.IsDeleted).Cast<IPerson>().ToList();
+            var notDeletedPersons = SchedulingScreenState.SchedulerStateHolder.SchedulingResultState.LoadedAgents.Cast<IDeleteTag>().Where(person => !person.IsDeleted).Cast<IPerson>().ToList();
             var addressBookViewModel = new AddressBookViewModel(
                     ContactPersonViewModel.Parse(notDeletedPersons,
                                                  CommonNameDescriptionSetting).ToList(), _model.RequiredParticipants,

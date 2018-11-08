@@ -63,8 +63,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             modifyWithNoValidation(_rollbackStack.Pop(), ScheduleModifier.UndoRedo, _scheduleTagSetter, businessRuleCollection);
         }
 
-        public IEnumerable<IScheduleDay> ModificationCollection => _rollbackStack;
-
 	    public void ClearModificationCollection()
         {
             _rollbackStack.Clear();

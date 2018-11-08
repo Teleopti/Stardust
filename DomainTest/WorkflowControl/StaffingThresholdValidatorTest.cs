@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		{
 			DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
 			IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
-			Assert.Throws<ArgumentNullException>(() => _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod), new RequiredForHandlingAbsenceRequest(null, null, _resourceOptimizationHelper, null, null)));
+			Assert.Throws<ArgumentNullException>(() => _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod), new RequiredForHandlingAbsenceRequest(null, null,null, _resourceOptimizationHelper, null, null)));
 		}
 
 		[Test]
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		{
 			DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
 			IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
-			Assert.Throws<ArgumentNullException>(() => _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod), new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder, null, null, null, null)));
+			Assert.Throws<ArgumentNullException>(() => _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod), new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder,null, null, null, null, null)));
 		}
 
 		[Test]
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			_dictionary.AddTestItem(absenceRequest.Person, GetExpectationsForOneDay(date, absence, requestedDateTimePeriod));
 
 			var result = _target.Validate(absenceRequest,
-										  new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
+										  new RequiredForHandlingAbsenceRequest(stateHolder, null,null, _resourceOptimizationHelper, null, null));
 
 			Assert.IsFalse(result.IsValid);
 		}
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
 			_dictionary.AddTestItem(absenceRequest.Person, GetExpectationsForOneDay(date, absence, requestedDateTimePeriod.ChangeEndTime(TimeSpan.FromMinutes(15))));
 
-			var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
+			var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null,null, _resourceOptimizationHelper, null, null));
 			Assert.IsFalse(result.IsValid);
 		}
 
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			stateHolder.Schedules = _dictionary;
 			_dictionary.AddTestItem(absenceRequest.Person, GetExpectationsForOneDay(date, absence, requestedDateTimePeriod));
 
-			var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
+			var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null,null, _resourceOptimizationHelper, null, null));
 			Assert.IsTrue(result.IsValid);
 		}
 
@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
 			_dictionary.AddTestItem(absenceRequest.Person, GetExpectationForTwoDays(date, absence, requestedDateTimePeriod));
 
-			var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
+			var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null,null, _resourceOptimizationHelper, null, null));
 			Assert.IsFalse(result.IsValid);
 		}
 
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
 			GetExpectationForTwoDays(date, absence, requestedDateTimePeriod);
 
-			var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
+			var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder,null, null, _resourceOptimizationHelper, null, null));
 			Assert.IsTrue(result.IsValid);
 		}
 
@@ -314,7 +314,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
 			GetExpectationForTwoDays(date, absence, requestedDateTimePeriod, new List<IVisualLayer> { existingLayerWithSameAbsence });
 
-			var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
+			var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null,null, _resourceOptimizationHelper, null, null));
 			Assert.IsTrue(result.IsValid);
 		}
 		
@@ -505,7 +505,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
 			_dictionary.AddTestItem(absenceRequest.Person, GetExpectationForTwoDays(date, absence, requestedDateTimePeriod));
 
-			var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
+			var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null,null, _resourceOptimizationHelper, null, null));
 			Assert.IsTrue(result.IsValid);
 		}
 
@@ -601,7 +601,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
 			var personSkillProvider = new PersonSkillProvider();
 
-			var result = _target.GetUnderStaffingDays(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null), personSkillProvider);
+			var result = _target.GetUnderStaffingDays(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder,null,null, _resourceOptimizationHelper, null), personSkillProvider);
 			result.UnderstaffingDays.Count().Should().Be.EqualTo(2);
 		}
 

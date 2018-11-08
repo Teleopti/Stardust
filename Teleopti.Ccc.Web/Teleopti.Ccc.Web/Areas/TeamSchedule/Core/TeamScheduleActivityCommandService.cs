@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Interfaces.Domain;
+using System;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 {
@@ -20,14 +21,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		private readonly IPersonRepository _personRepository;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IMoveShiftLayerCommandHelper _helper;
-		private readonly IDictionary<string, string> _permissionDic = new Dictionary<string, string>
+		private readonly IDictionary<string, Func<string>> _permissionResourceDic = new Dictionary<string, Func<string>>
 		{
-			{DefinedRaptorApplicationFunctionPaths.AddActivity,  Resources.NoPermissionAddAgentActivity},
-			{DefinedRaptorApplicationFunctionPaths.AddPersonalActivity,  Resources.NoPermissionAddPersonalActivity},
-			{DefinedRaptorApplicationFunctionPaths.AddOvertimeActivity,  Resources.NoPermissionAddOvertimeActivity},
-			{DefinedRaptorApplicationFunctionPaths.RemoveOvertime, Resources.NoPermissionRemoveOvertimeActivity },
-			{DefinedRaptorApplicationFunctionPaths.RemoveActivity, Resources.NoPermissionRemoveAgentActivity },
-			{DefinedRaptorApplicationFunctionPaths.MoveActivity, Resources.NoPermissionMoveAgentActivity}
+			{DefinedRaptorApplicationFunctionPaths.AddActivity,  ()=> Resources.NoPermissionAddAgentActivity},
+			{DefinedRaptorApplicationFunctionPaths.AddPersonalActivity,  ()=> Resources.NoPermissionAddPersonalActivity},
+			{DefinedRaptorApplicationFunctionPaths.AddOvertimeActivity,  ()=> Resources.NoPermissionAddOvertimeActivity},
+			{DefinedRaptorApplicationFunctionPaths.RemoveOvertime,  ()=>Resources.NoPermissionRemoveOvertimeActivity },
+			{DefinedRaptorApplicationFunctionPaths.RemoveActivity, ()=> Resources.NoPermissionRemoveAgentActivity },
+			{DefinedRaptorApplicationFunctionPaths.MoveActivity,  ()=>Resources.NoPermissionMoveAgentActivity}
 		};
 
 		public TeamScheduleActivityCommandService(
@@ -333,7 +334,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			}
 			if (!_permissionProvider.HasPersonPermission(path, date, agent))
 			{
-				newMessages.Add(_permissionDic[path]);
+				
+				newMessages.Add(_permissionResourceDic[path]());
 			}
 			if (!_permissionProvider.IsPersonSchedulePublished(date, agent) &&
 				!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, date,

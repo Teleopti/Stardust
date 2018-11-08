@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 					absenceRequest.Person.PermissionInformation.DefaultTimeZone()))).Return(true);
 
 			var result = _target.Validate(absenceRequest,
-										  new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder,
+										  new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder, null,
 																				_personAccountBalanceCalculator, null,
 																				null, null));
 			Assert.IsTrue(result.IsValid);
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 					absenceRequest.Person.PermissionInformation.DefaultTimeZone()))).Return(false);
 
 			var result = _target.Validate(absenceRequest,
-										  new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder,
+										  new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder,null,
 																				_personAccountBalanceCalculator, null,
 																				null, null));
 			Assert.IsFalse(result.IsValid);
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
 
 			Assert.Throws<ArgumentNullException>(() => _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod),
-							 new RequiredForHandlingAbsenceRequest(null, _personAccountBalanceCalculator, null, null,
+							 new RequiredForHandlingAbsenceRequest(null,null, _personAccountBalanceCalculator, null, null,
 																   null)));
 		}
 
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 					absenceRequest.Person.PermissionInformation.DefaultTimeZone()))).Return(false);
 
 			var result = _target.Validate(absenceRequest,
-										  new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder,
+										  new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder,null,
 																				_personAccountBalanceCalculator, null,
 																				null, null));
 
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var accountDay = AbsenceAccountFactory.CreateAbsenceAccountDays(person, absence, new DateOnly(2016, 1, 1),
 				TimeSpan.Zero, TimeSpan.Zero, TimeSpan.Zero, TimeSpan.Zero, TimeSpan.Zero, TimeSpan.Zero);
 			var personAccountBalanceCalculator = new PersonAccountBalanceCalculator(new[] { accountDay });
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(schedulingResultStateHolder,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(schedulingResultStateHolder,null,
 				personAccountBalanceCalculator, null, null);
 
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var accountDay = AbsenceAccountFactory.CreateAbsenceAccountDays(person, absence, new DateOnly(2016, 10, 9),
 				TimeSpan.FromDays(10), TimeSpan.FromDays(5), TimeSpan.FromDays(5), TimeSpan.FromDays(5), TimeSpan.FromDays(5), TimeSpan.Zero);
 			var personAccountBalanceCalculator = new PersonAccountBalanceCalculator(new List<AccountDay>{ accountDay });
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(schedulingResultStateHolder,
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(schedulingResultStateHolder,null,
 				personAccountBalanceCalculator, null, null);
 
 			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);

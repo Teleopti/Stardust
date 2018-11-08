@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Time
@@ -8,9 +9,10 @@ namespace Teleopti.Ccc.Domain.Time
     /// </summary>
     public class SetupDateTimePeriodToDefaultLocalHours : ISetupDateTimePeriod
     {
-	    public SetupDateTimePeriodToDefaultLocalHours(DateTimePeriod defaultLocal, TimeZoneInfo info)
-        {
-            Period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(defaultLocal.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone), defaultLocal.EndDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone), info);
+	    public SetupDateTimePeriodToDefaultLocalHours(DateTimePeriod defaultLocal, IUserTimeZone userTimeZone, TimeZoneInfo info)
+		{
+			var timeZone = userTimeZone.TimeZone();
+            Period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(defaultLocal.StartDateTimeLocal(timeZone), defaultLocal.EndDateTimeLocal(timeZone), info);
         }
 
         public DateTimePeriod Period { get;  }

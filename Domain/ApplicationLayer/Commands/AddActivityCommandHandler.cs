@@ -64,18 +64,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				return;
 			}
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
-			var personAssignment = scheduleDay.PersonAssignment();
-			if (personAssignment == null)
-			{
-				var shiftCategory = _shiftCategorySelector.Get(person,command.Date,period);
-				if (shiftCategory != null)
-				{
-					scheduleDay.CreateAndAddActivity(activity, period, shiftCategory);
-					dic.Modify(scheduleDay, NewBusinessRuleCollection.Minimum());
-					_scheduleDifferenceSaver.SaveChanges(scheduleRange.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()), (ScheduleRange)scheduleRange);
-				}
-			}
-			else if (!personAssignment.ShiftLayers.Any())
+			var personAssignment = scheduleDay.PersonAssignment(true);
+			if (!personAssignment.ShiftLayers.Any())
 			{
 				personAssignment.AddActivity(activity, period, command.TrackedCommandInfo);
 

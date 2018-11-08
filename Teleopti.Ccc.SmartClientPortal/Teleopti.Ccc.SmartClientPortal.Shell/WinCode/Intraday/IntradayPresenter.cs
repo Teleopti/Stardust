@@ -347,7 +347,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 		{
 			ISkill skill = _view.SelectedSkill;
 			DateTimePeriod utcDayPeriod =
-				 new DateOnlyPeriod(_intradayDate, _intradayDate).ToDateTimePeriod(TimeZoneHelper.CurrentSessionTimeZone);
+				 new DateOnlyPeriod(_intradayDate, _intradayDate).ToDateTimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 
 			IList<ISkillStaffPeriod> skillStaffPeriods =
 				 SchedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(

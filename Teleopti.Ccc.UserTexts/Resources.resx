@@ -17781,15 +17781,15 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Agent was scheduled without preferences</value>
     <comment>Table column header in RTA historical overview</comment>
   </data>
-  <data name="PmNextGen" xml:space="preserve">
-    <value>PM Next Generation</value>
+  <data name="Insights" xml:space="preserve">
+    <value>Insights</value>
     <comment>Label for permission item</comment>
   </data>
-  <data name="PmNextGenViewReport" xml:space="preserve">
+  <data name="ViewInsightsReport" xml:space="preserve">
     <value>View report</value>
     <comment>Label for permission item</comment>
   </data>
-  <data name="PmNextGenEditReport" xml:space="preserve">
+  <data name="EditInsightsReport" xml:space="preserve">
     <value>Edit report</value>
     <comment>Label for permission item</comment>
   </data>
@@ -17829,11 +17829,23 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>Use in WFM Permission for edit site open hours</comment>
   </data>
   <data name="ReplyRequest" xml:space="preserve">
-    <value>Reply Request</value>
+    <value>Reply to Request</value>
     <comment>Use in WFM Permission for reply request model</comment>
   </data>
-	 <data name="ShiftsInShiftBagCanNotFulFillOverriddenTargetTime" xml:space="preserve">
+  <data name="ShiftsInShiftBagCanNotFulFillOverriddenTargetTime" xml:space="preserve">
     <value>The shifts in the shift bag {0} can not fulfill the overridden contract time. </value>
     <comment>Shown when validating agents in Plans (web) and an agent has overridden contract time that can't be fulfilled with the assigned shift bag</comment>
+  </data>
+  <data name="NoPermissionAddDayOff" xml:space="preserve">
+    <value>No permission to add day off</value>
+  </data>
+  <data name="NoPermissionRemoveDayOff" xml:space="preserve">
+    <value>No permission to remove day off</value>
+  </data>
+  <data name="NoPermissionSwapShifts" xml:space="preserve">
+    <value>No permission to swap shifts</value>
+  </data>
+  <data name="NoPermissionToViewSchedules" xml:space="preserve">
+    <value>No permission to view schedules</value>
   </data>
 </root>

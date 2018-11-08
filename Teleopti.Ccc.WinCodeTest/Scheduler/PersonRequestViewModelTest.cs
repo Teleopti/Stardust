@@ -15,6 +15,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests;
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _personTime.BalanceIn = TimeSpan.FromHours(100);
             _person = PersonFactory.CreatePerson("First", "Last");
             _person.PermissionInformation.SetDefaultTimeZone(
-								StateHolderReader.Instance.StateReader.UserTimeZone);
+								TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             _personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2005, 1, 1), TeamFactory.CreateSimpleTeam());
             _person.AddPersonPeriod(_personPeriod);
             _eventAggregator = new EventAggregator();

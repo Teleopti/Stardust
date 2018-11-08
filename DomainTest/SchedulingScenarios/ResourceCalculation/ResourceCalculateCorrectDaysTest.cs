@@ -18,7 +18,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
-	[FullPermissions]
 	public class ResourceCalculateCorrectDaysTest : ResourceCalculationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;

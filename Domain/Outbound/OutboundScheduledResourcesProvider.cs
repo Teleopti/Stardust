@@ -82,9 +82,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			schedulerStateHolder.SetRequestedScenario(scenario);
 			schedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, timeZone);
 			people.AllPeople.ForEach(schedulerStateHolder.ChoosenAgents.Add);
-			schedulerStateHolder.LoadCommonState(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(),
-				_repositoryFactory);
-			schedulerStateHolder.ResetFilteredPersons();
+			schedulerStateHolder.LoadCommonState(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(), _repositoryFactory);
 			//TODO: using schedulestorage here will load unnecesary big period
 			schedulerStateHolder.LoadSchedules(_scheduleStorage, people.AllPeople,
 				new ScheduleDictionaryLoadOptions(true, false, false),

@@ -45,6 +45,8 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 		public int? SecondsOutOfAdherence() => _secondsOutOfAdherence;
 
 		public void Apply(PersonShiftStartEvent @event) => calculatePeriod(@event);
+		
+		public void Apply(PersonShiftEndEvent @event) => calculatePeriod(@event);
 
 		public void Apply(PersonAdherenceDayStartEvent @event) => applySolidProof(@event);
 
@@ -88,7 +90,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			calculateAdherence();
 		}
 
-		private void calculatePeriod(PersonShiftStartEvent @event)
+		private void calculatePeriod(dynamic @event)
 		{
 			if (@event != null)
 				_shift = new DateTimePeriod(@event.ShiftStartTime, @event.ShiftEndTime);
@@ -98,7 +100,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 
 			_period = _shift == null ? _fullDay : new DateTimePeriod(_shift.Value.StartDateTime.AddHours(-1), _shift.Value.EndDateTime.AddHours(1));
 		}
-
+		
 		private HistoricalChangeModel applySolidProof(ISolidProof @event)
 		{
 			applyAdherencePeriod(_recordedOutOfAdherences, @event.Timestamp, @event.Adherence, EventAdherence.Out);

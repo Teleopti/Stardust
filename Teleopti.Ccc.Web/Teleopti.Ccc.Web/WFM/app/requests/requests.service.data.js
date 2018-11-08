@@ -22,12 +22,17 @@
 		var getBudgetAllowanceUrl = "../api/RequestAllowance/allowances";
 		var overtimeTypesUrl = "../api/MultiplicatorDefinitionSet/Overtime";
 		var overtimeLicenseUrl = "../api/Requests/GetOvertimeRequestsLicenseAvailability";
+		var getPermissionsUrl = "../api/Requests/GetRequestsPermissions";
 		var hierarchyUrl;
 
 		if (toggleSvc.Wfm_HideUnusedTeamsAndSites_42690) {
 			hierarchyUrl = '../api/Requests/GetOrganizationWithPeriod';
 		} else {
 			hierarchyUrl = '../api/Requests/FetchPermittedTeamHierachy';
+		}
+
+		this.getPermissionsPromise = function() {
+			return $http.get(getPermissionsUrl);
 		}
 
 		this.getAbsenceAndTextRequestsPromise = function (filter, sortingOrders, paging) {

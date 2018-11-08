@@ -13413,7 +13413,7 @@ L'application va maintenant se fermer.</value>
   <data name="PeopleDuplicateUsernameInForm" xml:space="preserve">
     <value>Doublon de nom d'utilisateur dans le formulaire</value>
   </data>
-  <data name="PmNextGenEditReport" xml:space="preserve">
+  <data name="EditInsightsReport" xml:space="preserve">
     <value>Editer rapport</value>
   </data>
   <data name="FailedExportToExcel" xml:space="preserve">
@@ -13560,9 +13560,6 @@ L'application va maintenant se fermer.</value>
   <data name="SkillNotSupported" xml:space="preserve">
     <value>Merci d'utiliser le client super utilisateur pour faire des prévisions pour cette compétence.</value>
   </data>
-  <data name="PmNextGen" xml:space="preserve">
-    <value>PM nouvelle génération</value>
-  </data>
   <data name="PreviewTheNewForecasts" xml:space="preserve">
     <value>Aperçu du nouvel outil de prévisions</value>
   </data>
@@ -13686,7 +13683,7 @@ L'application va maintenant se fermer.</value>
   <data name="ValidatedPhoneCalls" xml:space="preserve">
     <value>Appels validés</value>
   </data>
-  <data name="PmNextGenViewReport" xml:space="preserve">
+  <data name="ViewInsightsReport" xml:space="preserve">
     <value>Voir rapport</value>
   </data>
   <data name="WithOvertime" xml:space="preserve">

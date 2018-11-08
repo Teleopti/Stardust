@@ -1,10 +1,12 @@
 using System;
 using System.Web.Http;
+using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
@@ -27,10 +29,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		private readonly ITeamsProvider _teamsProvider;
 		private readonly IToggleManager _toggleManager;
 		private readonly IOvertimeRequestAvailability _overtimeRequestLicense;
+		private readonly IAuthorization _authorization;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory,
 			IRequestCommandHandlingProvider commandHandlingProvider,
-			ILoggedOnUser loggedOnUser, IShiftTradeRequestViewModelFactory shiftTradeRequestViewModelFactory, ITeamsProvider teamsProvider, IToggleManager toggleManager, IOvertimeRequestAvailability overtimeRequestLicense)
+			ILoggedOnUser loggedOnUser, IShiftTradeRequestViewModelFactory shiftTradeRequestViewModelFactory, ITeamsProvider teamsProvider, IToggleManager toggleManager, IOvertimeRequestAvailability overtimeRequestLicense, IAuthorization authorization)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_commandHandlingProvider = commandHandlingProvider;
@@ -39,6 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 			_teamsProvider = teamsProvider;
 			_toggleManager = toggleManager;
 			_overtimeRequestLicense = overtimeRequestLicense;
+			_authorization = authorization;
 		}
 
 		[HttpPost, Route("api/Requests/requests"), UnitOfWork]
@@ -121,6 +125,22 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		public virtual bool GetLicenseAvailability(IOvertimeRequestAvailability overtimeRequestLicense)
 		{
 			return _overtimeRequestLicense.IsEnabledInWebRequest();
+		}
+
+		[UnitOfWork, HttpGet, Route("api/Requests/GetRequestsPermissions")]
+		public virtual JsonResult<RequestsPermissonsViewModel> GetRequestsPermissions()
+		{
+			var permissions = new RequestsPermissonsViewModel
+			{
+				HasApproveOrDenyPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebApproveOrDenyRequest),
+				HasReplyPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebReplyRequest),
+				HasCancelPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebCancelRequest),
+				HasEditSiteOpenHoursPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebEditSiteOpenHours)
+			};
+
+			return _toggleManager.IsEnabled(Toggles.WFM_Request_View_Permissions_77731)
+				? Json(permissions)
+				: Json(new RequestsPermissonsViewModel());
 		}
 	}
 }

@@ -24,7 +24,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[DomainTest]
-	[FullPermissions]
 	public class MultipleChangeScheduleCommandHandlerTest : IIsolateSystem
 	{
 		public MultipleChangeScheduleCommandHandler Target;

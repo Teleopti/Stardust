@@ -1,9 +1,7 @@
 (function() {
 	'use strict';
 
-	angular
-		.module('wfm.areas')
-		.factory('areasService', areasService);
+	angular.module('wfm.areas', ['ngResource']).factory('areasService', areasService);
 
 	areasService.$inject = ['$resource'];
 
@@ -31,23 +29,31 @@
 		}
 
 		function getAreasWithPermissionFromServer() {
-			return $resource('../api/Global/Application/WfmAreasWithPermission', {}, {
-				query: {
-					method: 'GET',
-					params: {},
-					isArray: true
+			return $resource(
+				'../api/Global/Application/WfmAreasWithPermission',
+				{},
+				{
+					query: {
+						method: 'GET',
+						params: {},
+						isArray: true
+					}
 				}
-			}).query().$promise;
+			).query().$promise;
 		}
 
-		function getAreasListFromServer () {
-			return $resource('../api/Global/Application/WfmAreasList', {}, {
-				query: {
-					method: 'GET',
-					params: {},
-					isArray: true
+		function getAreasListFromServer() {
+			return $resource(
+				'../api/Global/Application/WfmAreasList',
+				{},
+				{
+					query: {
+						method: 'GET',
+						params: {},
+						isArray: true
+					}
 				}
-			}).query().$promise;
+			).query().$promise;
 		}
 	}
 })();

@@ -10,7 +10,7 @@ using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.Persisters
 {
 	[TestFixture]
-	[MultiDatabaseTest]
+	[DatabaseTest]
 	public class AgentStatePersisterDataVersionsTest
 	{
 		public IAgentStatePersister Target;

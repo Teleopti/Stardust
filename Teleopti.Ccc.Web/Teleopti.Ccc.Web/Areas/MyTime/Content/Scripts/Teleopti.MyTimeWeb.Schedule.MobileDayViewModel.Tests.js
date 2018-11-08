@@ -149,9 +149,9 @@
 			weekViewModel
 		);
 
-		equal(vm.fixedDate(), basedDate);
-		equal(vm.absenceReportPermission(), false);
-		equal(vm.overtimeAvailabilityPermission(), true);
+		equal(vm.fixedDate, basedDate);
+		equal(vm.absenceReportPermission, false);
+		equal(vm.overtimeAvailabilityPermission, true);
 	});
 
 	test('should read permission', function() {
@@ -163,8 +163,8 @@
 		);
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel({}, false, true, weekViewModel);
 
-		equal(vm.absenceReportPermission(), false);
-		equal(vm.overtimeAvailabilityPermission(), true);
+		equal(vm.absenceReportPermission, false);
+		equal(vm.overtimeAvailabilityPermission, true);
 	});
 
 	test('should load shift category data', function() {
@@ -180,10 +180,10 @@
 			true,
 			weekViewModel
 		);
-		equal(vm.summaryName(), getFakeScheduleData().Days[0].Summary.Title);
-		equal(vm.summaryTimeSpan(), getFakeScheduleData().Days[0].Summary.TimeSpan);
-		equal(vm.summaryColor(), getFakeScheduleData().Days[0].Summary.Color);
-		equal(vm.summaryStyleClassName(), getFakeScheduleData().Days[0].Summary.StyleClassName);
+		equal(vm.summaryName, getFakeScheduleData().Days[0].Summary.Title);
+		equal(vm.summaryTimeSpan, getFakeScheduleData().Days[0].Summary.TimeSpan);
+		equal(vm.summaryColor, getFakeScheduleData().Days[0].Summary.Color);
+		equal(vm.summaryStyleClassName, getFakeScheduleData().Days[0].Summary.StyleClassName);
 		equal(vm.backgroundColor, getFakeScheduleData().Days[0].Summary.Color);
 	});
 
@@ -198,7 +198,7 @@
 		);
 		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(fakeData.Days[0], true, true, weekViewModel);
 
-		equal(vm.isDayoff(), true);
+		equal(vm.isDayoff, true);
 	});
 
 	test('should indicate has shift', function() {
@@ -231,7 +231,7 @@
 			weekViewModel
 		);
 
-		equal(vm.weekDayHeaderTitle(), 'Today');
+		equal(vm.weekDayHeaderTitle, 'Today');
 	});
 
 	test('should read summary timespan when there is overtime and overtime availability', function() {
@@ -247,7 +247,7 @@
 			true,
 			weekViewModel
 		);
-		equal(vm.summaryTimeSpan(), getFakeScheduleData().Days[0].Summary.TimeSpan);
+		equal(vm.summaryTimeSpan, getFakeScheduleData().Days[0].Summary.TimeSpan);
 		equal(vm.layers.length, 1);
 	});
 
@@ -266,6 +266,6 @@
 			true,
 			weekViewModel
 		);
-		equal(vm.showStaffingProbabilityBar(), true);
+		equal(vm.showStaffingProbabilityBar, true);
 	});
 });

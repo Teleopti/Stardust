@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -38,17 +39,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		TimeZoneInfo TimeZoneInfo { get; set; }
 
-		IList<IPersonRequest> PersonRequests { get; }
-
 		ICommonStateHolder CommonStateHolder { get; }
 
 		void LoadCommonState(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory);
 
 		CommonNameDescriptionSetting CommonNameDescription { get; }
-
-		bool ChangedRequests();
-
-		int DefaultSegmentLength { get; }
 
 		void SetRequestedScenario(IScenario scenario);
 
@@ -64,18 +59,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		void MarkDateToBeRecalculated(DateOnly dateToRecalculate);
 
-		string CommonAgentName(IPerson person);
-
-		string CommonAgentNameScheduleExport(IPerson person);
-
 		IEnumerable<DateOnly> DaysToRecalculate { get; }
+		ShiftTradeRequestStatusCheckerWithSchedule ShiftTradeRequestStatusChecker { get; set; }
 
-		void LoadPersonRequests(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory,
-										 IPersonRequestCheckAuthorization authorization, int numberOfDaysToShowNonPendingRequests);
-
-		IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId, IScheduleStorage scheduleStorage);
-
-		IPersonRequest RequestDeleteFromBroker(Guid personRequestId);
 
 		bool AgentFilter();
 	}

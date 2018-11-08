@@ -1,0 +1,151 @@
+.main-menu {
+	height: 100%;
+	text-decoration: none;
+	font-size: 13px;
+
+	.main-menu-ctrls {
+		position: fixed;
+		z-index: 1000;
+		top: -6px;
+		left: 0;
+		margin-top: 10px;
+
+		.main-menu-trigger {
+			user-select: none;
+			cursor: pointer;
+			margin: 5px;
+			padding: 8px;
+			line-height: 16px;
+			border-radius: 50%;
+			transition: 300ms all cubic-bezier(0.33, 0.11, 0.02, 0.99);
+		}
+
+		.main-menu-trigger-icon {
+			position: relative;
+			top: 2px;
+		}
+	}
+
+	.main-menu-link-wrapper {
+		height: 100%;
+		min-width: 200px;
+		overflow-y: auto;
+		box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+	}
+
+	@media screen and (max-width: 768px) {
+		.main-menu-link-wrapper {
+			position: fixed;
+			top: 54px;
+			left: 0;
+			width: 100%;
+			z-index: 1010;
+		}
+	}
+
+	.main-menu-link {
+		padding: 7px;
+
+		i {
+			vertical-align: middle;
+			margin-right: 10px;
+			margin-left: 6px;
+		}
+	}
+	.main-menu-link-active > .main-menu-link {
+		font-weight: bold;
+	}
+}
+
+.my-time-link {
+	.main-menu-link {
+		justify-content: space-between;
+	}
+
+	.open-in-new {
+		color: rgba(0, 0, 0, 0.54);
+		visibility: hidden;
+	}
+
+	&:hover {
+		.open-in-new {
+			visibility: visible;
+		}
+	}
+}
+.divider {
+	display: block;
+	margin: 10px 13px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: rgb(196, 196, 196);
+}
+.divider:last-child {
+	display: none;
+}
+
+:host-context(.angular-theme-classic) {
+	$main-menu-color: rgba(0, 0, 0, 0.87);
+	$main-menu-background-color: #e9e9e9;
+	$main-menu-link-hover-bgcolor: rgba(0, 0, 0, 0.06);
+	$main-menu-link-active-color: #0099ff;
+	$main-menu-link-active-bgcolor: #f4f4f4;
+
+	.main-menu {
+		a {
+			color: $main-menu-color;
+		}
+		.main-menu-link-wrapper {
+			background-color: $main-menu-background-color;
+		}
+		.main-menu-link:hover {
+			background-color: $main-menu-link-hover-bgcolor;
+		}
+		.main-menu-link-active > .main-menu-link {
+			background-color: $main-menu-link-active-bgcolor;
+			color: $main-menu-link-active-color;
+		}
+		.open-in-new {
+			color: $main-menu-color;
+		}
+	}
+	.main-menu-trigger {
+		&:hover {
+			background: rgba(0, 0, 0, 0.16);
+		}
+	}
+
+	.divider {
+	}
+}
+:host-context(.angular-theme-dark) {
+	$main-menu-color: #d1d1d1;
+	$main-menu-background-color: #424242;
+	$main-menu-link-hover-bgcolor: #303030;
+	$main-menu-link-active-color: #0099ff;
+	$main-menu-link-active-bgcolor: #555;
+
+	.main-menu {
+		a {
+			color: $main-menu-color;
+		}
+		.main-menu-link-wrapper {
+			background-color: $main-menu-background-color;
+		}
+		.main-menu-link:hover {
+			background-color: $main-menu-link-hover-bgcolor;
+		}
+		.main-menu-link-active > .main-menu-link {
+			background-color: $main-menu-link-active-bgcolor;
+			color: $main-menu-link-active-color;
+		}
+		.open-in-new {
+			color: $main-menu-color;
+		}
+	}
+	.main-menu-trigger {
+		&:hover {
+			background: rgba(255, 255, 255, 0.16);
+		}
+	}
+}

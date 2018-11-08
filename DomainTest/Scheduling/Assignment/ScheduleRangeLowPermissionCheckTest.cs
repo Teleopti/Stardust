@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	    [Test]
 	    public void VerifySchedulePartGetsFullAccessSetToFalse()
 	    {
-		    var paramStartLocal = new DateOnly(parameters.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone));
+		    var paramStartLocal = new DateOnly(parameters.Period.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
 
 		    var dop = new DateOnlyPeriod(2000, 1, 1, 2000, 12, 31);
 		    authorization.Stub(x => x.PermittedPeriods(function, new DateOnlyPeriod(), parameters.Person))

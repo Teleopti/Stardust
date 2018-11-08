@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 				{
 					toolStripStatusLabelLastUpdate.Text = string.Format(CultureInfo.CurrentCulture,
 						Resources.LastUpdateColonParameter0,
-						TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow, TimeZoneHelper.CurrentSessionTimeZone).
+						TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).
 							ToLongTimeString());
 				}
 			}

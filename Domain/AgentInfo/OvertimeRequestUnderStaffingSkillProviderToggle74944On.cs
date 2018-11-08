@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 			foreach (var skillStaffingDataGroup in skillStaffingDataGroups)
 			{
-				var skillStaffingDataInPeriod = skillStaffingDataGroup.ToList();
+				var skillStaffingDataInPeriod = skillStaffingDataGroup.ToArray();
 				var skill = skillStaffingDataGroup.Key;
 				if (!skillStaffingDataInPeriod.Any())
 					continue;
@@ -54,12 +54,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 					hasCriticalUnderStaffedSkillDictionary[intervalUtc] = true;
 
-					if (!skillStaffLevelDictionary.ContainsKey(intervalUtc))
+					if (!skillStaffLevelDictionary.TryGetValue(intervalUtc, out var staffingLevelList))
 					{
-						skillStaffLevelDictionary.Add(intervalUtc, new List<SkillStaffLevel>());
+						staffingLevelList = new List<SkillStaffLevel>();
+						skillStaffLevelDictionary.Add(intervalUtc, staffingLevelList);
 					}
 
-					skillStaffLevelDictionary[intervalUtc].Add(new SkillStaffLevel()
+					staffingLevelList.Add(new SkillStaffLevel
 					{
 						Skill = skillStaffingData.Skill,
 						StaffLevel = skillStaffingData.SkillStaffingInterval.RelativeDifference

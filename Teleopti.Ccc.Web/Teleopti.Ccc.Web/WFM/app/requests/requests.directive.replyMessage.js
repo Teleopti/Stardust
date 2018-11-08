@@ -4,12 +4,18 @@
 		.controller('requestsReplyMessageController', requestsReplyMessageController)
 		.directive('requestsReplyMessage', replyMessageDirective);
 
-	function requestsReplyMessageController() {
+	requestsReplyMessageController.$inject = [
+		'requestsPermissions'
+	];
+
+	function requestsReplyMessageController(requestsPermissions) {
 		var vm = this;
 		vm.replyAndApprove = replyAndApprove;
 		vm.replyAndCancel = replyAndCancel;
 		vm.replyAndDeny = replyAndDeny;
 		vm.replyOnly = replyOnly;
+		vm.showReplyAndApproveOrDeny = requestsPermissions.all().HasApproveOrDenyPermission;
+		vm.showReplyAndCancel = requestsPermissions.all().HasCancelPermission;
 
 		function replyAndApprove() {
 			vm.approve({ message: vm.replyMessage });

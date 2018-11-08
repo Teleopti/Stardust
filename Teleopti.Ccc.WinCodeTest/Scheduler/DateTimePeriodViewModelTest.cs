@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.WinCodeTest.Common.Commands;
@@ -427,7 +428,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             int hours = 2;
             DateTime baseDate = new DateTime(2001, 1, 1, 8, 0, 0, DateTimeKind.Utc);
-            DateTime localBaseDate = TimeZoneHelper.ConvertFromUtc(baseDate, TimeZoneHelper.CurrentSessionTimeZone);
+            DateTime localBaseDate = TimeZoneHelper.ConvertFromUtc(baseDate, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 
             _target.Start = baseDate;
             _target.End = baseDate.AddHours(hours);

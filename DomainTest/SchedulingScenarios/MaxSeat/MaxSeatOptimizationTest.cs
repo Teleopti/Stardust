@@ -26,8 +26,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 	[DomainTest]
 	[TestFixture(TeamBlockType.Team)]
 	[TestFixture(TeamBlockType.Block)]
-	[FullPermissions]
-	public class MaxSeatOptimizationTest
+	public class MaxSeatOptimizationTest : MaxSeatScenario
 	{
 		private readonly TeamBlockType _teamBlockType;
 		public MaxSeatOptimization Target;

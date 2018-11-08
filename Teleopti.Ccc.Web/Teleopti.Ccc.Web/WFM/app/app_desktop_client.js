@@ -47,8 +47,7 @@ var wfm = angular
 		'wfm.dateRangePicker',
 		'wfm.utilities',
 		'wfm.templates',
-		'wfm.gamification',
-		'wfm.apiaccess'
+		'wfm.gamification'
 	])
 	.config([
 		'$stateProvider',

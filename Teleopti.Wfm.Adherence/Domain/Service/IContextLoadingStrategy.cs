@@ -73,14 +73,14 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		private IDictionary<Guid, BatchStateInputModel> _matches;
 
 		public BatchStrategy(
-			BatchInputModel batch, 
-			DateTime time, 
-			IConfigReader config, 
+			BatchInputModel batch,
+			DateTime time,
+			IConfigReader config,
 			IAgentStatePersister persister,
-			DataSourceMapper dataSourceMapper, 
-			ExternalLogonMapper externalLogonMapper, 
-			IRtaTracer tracer) : base(config,
-			persister, time)
+			DataSourceMapper dataSourceMapper,
+			ExternalLogonMapper externalLogonMapper,
+			IRtaTracer tracer) :
+			base(config, persister, time)
 		{
 			_externalLogonMapper = externalLogonMapper;
 			_tracer = tracer;
@@ -104,6 +104,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 						context.AddException(new InvalidUserCodeException(
 							$"No person found for UserCode {state.UserCode}, DataSourceId {_dataSourceId}, SourceId {_batch.SourceId}"));
 					}
+
 					return personIds.Select(id =>
 						new
 						{

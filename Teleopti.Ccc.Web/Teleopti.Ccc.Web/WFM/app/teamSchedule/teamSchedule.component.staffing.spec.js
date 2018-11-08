@@ -196,6 +196,17 @@
 		expect(_staffingInfoService.date).toEqual('2018-02-11');
 	});
 
+	it("should get staffing by date with correct date if date changed", function () {
+		var scope = $rootScope.$new();
+		scope.selectedDate = "2018-11-08";
+		scope.preselectedSkills = { skillIds: ['XYZ'] };
+		setupComponent('selected-date="selectedDate" preselected-skills="preselectedSkills"', scope);
+
+		scope.selectedDate = '2018-11-09';
+		scope.$apply();
+		expect(_staffingInfoService.date).toEqual('2018-11-09');
+	});
+
 	function enableShowSkillsToggle() {
 		toggles.set({
 			WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202: true

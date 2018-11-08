@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest
 	[DomainTest]
 	public class ScheduleStorageRepositoryWrapperTest
 	{
-		public ScheduleStorageRepositoryWrapper Target;
+		public IScheduleStorageRepositoryWrapper Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
 		public FakePreferenceDayRepository PreferenceDayRepository;

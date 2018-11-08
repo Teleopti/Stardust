@@ -1,4 +1,4 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Criterion;
@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using NHibernate;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -101,23 +100,91 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return personAccountCollection;
 		}
 
-		private class dic : AbstractDictionary<IPerson, IPersonAccountCollection>
+		private class dic : IDictionary<IPerson, IPersonAccountCollection>
 		{
-			public dic(IDictionary<IPerson, IPersonAccountCollection> dictionary) : base(dictionary)
+			private readonly IDictionary<IPerson, IPersonAccountCollection> _dictionary;
+
+			public dic(IDictionary<IPerson, IPersonAccountCollection> dictionary)
 			{
+				_dictionary = dictionary;
 			}
 
-			public override IPersonAccountCollection this[IPerson key]
+			public IEnumerator<KeyValuePair<IPerson, IPersonAccountCollection>> GetEnumerator()
 			{
-				get {
-					if (base.TryGetValue(key, out var collection))
+				return _dictionary.GetEnumerator();
+			}
+
+			public void Add(KeyValuePair<IPerson, IPersonAccountCollection> item)
+			{
+				_dictionary.Add(item);
+			}
+
+			public void Clear()
+			{
+				_dictionary.Clear();
+			}
+
+			public bool Contains(KeyValuePair<IPerson, IPersonAccountCollection> item)
+			{
+				return _dictionary.Contains(item);
+			}
+
+			public void CopyTo(KeyValuePair<IPerson, IPersonAccountCollection>[] array, int arrayIndex)
+			{
+				_dictionary.CopyTo(array, arrayIndex);
+			}
+
+			public bool Remove(KeyValuePair<IPerson, IPersonAccountCollection> item)
+			{
+				return _dictionary.Remove(item);
+			}
+
+			public int Count => _dictionary.Count;
+
+			public bool IsReadOnly => _dictionary.IsReadOnly;
+
+			public bool ContainsKey(IPerson key)
+			{
+				return _dictionary.ContainsKey(key);
+			}
+
+			public void Add(IPerson key, IPersonAccountCollection value)
+			{
+				_dictionary.Add(key, value);
+			}
+
+			public bool Remove(IPerson key)
+			{
+				return _dictionary.Remove(key);
+			}
+
+			public bool TryGetValue(IPerson key, out IPersonAccountCollection value)
+			{
+				return _dictionary.TryGetValue(key, out value);
+			}
+
+			public IPersonAccountCollection this[IPerson key]
+			{
+				get
+				{
+					if (_dictionary.TryGetValue(key, out var collection))
 					{
 						return collection;
 					}
 					collection = new PersonAccountCollection(key);
-					base.Add(key,collection);
+					_dictionary.Add(key, collection);
 					return collection;
 				}
+				set { _dictionary[key] = value; }
+			}
+
+			public ICollection<IPerson> Keys => _dictionary.Keys;
+
+			public ICollection<IPersonAccountCollection> Values => _dictionary.Values;
+
+			IEnumerator IEnumerable.GetEnumerator()
+			{
+				return GetEnumerator();
 			}
 		}
 	}

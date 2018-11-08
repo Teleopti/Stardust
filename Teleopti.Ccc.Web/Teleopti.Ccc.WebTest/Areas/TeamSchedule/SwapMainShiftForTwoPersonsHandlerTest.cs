@@ -10,6 +10,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Interfaces.Domain;
 
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeActivityRepository ActivityRepository;
+		public Global.FakePermissionProvider PermissionProvider;
 		
 		private readonly DateTime scheduleDate = new DateTime(2016, 01, 01);
 		
@@ -56,6 +58,80 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			result.Count().Should().Be.EqualTo(0);
 		}
+
+		[Test]
+		public void ShouldNotAllowSwapShiftsWithoutPermission() {
+			PermissionProvider.Enable();
+
+			var personFrom = PersonFactory.CreatePerson().WithId();
+			PersonRepository.Add(personFrom);
+			var personTo = PersonFactory.CreatePerson().WithId();
+			PersonRepository.Add(personTo);
+
+			var defaultScenario = ScenarioRepository.Has("Default");
+
+			var act = ActivityRepository.Has("Phone");
+			PersonAssignmentRepository.Has(personFrom, defaultScenario, act, new ShiftCategory(), new DateOnly(scheduleDate),
+				new TimePeriod(10, 11));
+
+			var result = Target.SwapShifts(new SwapMainShiftForTwoPersonsCommand
+			{
+				PersonIdFrom = personFrom.Id.Value,
+				PersonIdTo = personTo.Id.Value,
+				ScheduleDate = scheduleDate
+			});
+
+			result.Count().Should().Be(2);
+			result.First().ErrorMessages.Single().Should().Be.EqualTo(Resources.NoPermissionSwapShifts);
+			result.First().PersonId.Should().Be.EqualTo(personFrom.Id);
+			result.Last().ErrorMessages.Single().Should().Be.EqualTo(Resources.NoPermissionSwapShifts);
+			result.Last().PersonId.Should().Be.EqualTo(personTo.Id);
+		}
+
+		[Test]
+		public void ShouldReturnErrorMessagesWithoutPersonFrom() {
+			var personFrom = PersonFactory.CreatePerson().WithId();
+			PersonRepository.Add(personFrom);
+			var personTo = PersonFactory.CreatePerson().WithId();
+			PersonRepository.Add(personTo);
+
+			var defaultScenario = ScenarioRepository.Has("Default");
+
+			var act = ActivityRepository.Has("Phone");
+			PersonAssignmentRepository.Has(personFrom, defaultScenario, act, new ShiftCategory(), new DateOnly(scheduleDate),
+				new TimePeriod(10, 11));
+
+			var result = Target.SwapShifts(new SwapMainShiftForTwoPersonsCommand
+			{
+				PersonIdTo = personTo.Id.Value,
+				ScheduleDate = scheduleDate
+			});
+
+			result.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
+		}
+
+		[Test]
+		public void ShouldReturnErrorMessagesIfPersonFromIsSameAsPersonTo()
+		{
+			var personFrom = PersonFactory.CreatePerson().WithId();
+			PersonRepository.Add(personFrom);
+
+			var defaultScenario = ScenarioRepository.Has("Default");
+
+			var act = ActivityRepository.Has("Phone");
+			PersonAssignmentRepository.Has(personFrom, defaultScenario, act, new ShiftCategory(), new DateOnly(scheduleDate),
+				new TimePeriod(10, 11));
+
+			var result = Target.SwapShifts(new SwapMainShiftForTwoPersonsCommand
+			{
+				PersonIdTo = personFrom.Id.Value,
+				PersonIdFrom = personFrom.Id.Value,
+				ScheduleDate = scheduleDate
+			});
+
+			result.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
+		}
+
 
 		[Test]
 		public void ShouldReturnErrorsWhenBrokenBusinessRules()

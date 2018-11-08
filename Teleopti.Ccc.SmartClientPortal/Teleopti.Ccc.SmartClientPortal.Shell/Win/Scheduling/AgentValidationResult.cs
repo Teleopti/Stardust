@@ -5,6 +5,8 @@ using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Grid.Grouping;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
+using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
@@ -53,7 +55,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					dataRow[0] = validationResultInvalidResource.ResourceName;
 					try
 					{
-						dataRow[1] = HintsHelper.BuildErrorMessage(validationError);
+						dataRow[1] = HintsHelper.BuildErrorMessage(validationError, UserTimeZone.Make());
 					}
 					catch (System.Exception)
 					{

@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IFindSchedulesForPersons>()
 				.AsSelf()
 				.SingleInstance();
-
+			builder.RegisterType<ReplaceLayerInSchedule>().As<IReplaceLayerInSchedule>().SingleInstance();
 			builder.RegisterType<AddReducedSkillDaysToStateHolder>().SingleInstance();
 			builder.RegisterType<AddBpoResourcesToContext>().SingleInstance();
 			builder.RegisterType<SkillCombinationToBpoResourceMapper>().SingleInstance();
@@ -186,6 +186,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TimeZoneGuard>().As<ITimeZoneGuard>().SingleInstance();
 			builder.RegisterType<OverriddenBusinessRulesHolder>().As<IOverriddenBusinessRulesHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulingResultStateHolder>().As<ISchedulingResultStateHolder>().InstancePerLifetimeScope();
+			builder.RegisterType<BudgetGroupState>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulingResultStateHolderProvider>().As<ISchedulingResultStateHolderProvider>().SingleInstance();
 			builder.RegisterType<ScheduleDayForPerson>().As<IScheduleDayForPerson>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleRangeForPerson>().As<IScheduleRangeForPerson>().InstancePerLifetimeScope();
@@ -295,7 +296,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 
 			builder.RegisterType<MatrixNotPermittedLocker>().SingleInstance();
-			builder.RegisterType<ScheduleMatrixValueCalculatorProFactory>().As<IScheduleMatrixValueCalculatorProFactory>().SingleInstance();
+			builder.RegisterType<ScheduleMatrixValueCalculatorProFactory>().SingleInstance();
 			builder.RegisterType<WorkShiftLegalStateDayIndexCalculator>().SingleInstance();
 
 			builder.RegisterType<WorkTimeStartEndExtractor>().As<IWorkTimeStartEndExtractor>().SingleInstance();

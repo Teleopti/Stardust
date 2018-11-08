@@ -317,6 +317,7 @@
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\ResourcePlannerCommandHandlerTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\SUT.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelCompleteTest.cs" />
+    <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatScenario.cs" />
     <Compile Include="SchedulingScenarios\ResourcePlannerFixtureSource.cs" />
     <Compile Include="SchedulingScenarios\ResourcePlannerFixtureSourceTest.cs" />
     <Compile Include="SchedulingScenarios\ResourcePlannerTestParameters.cs" />
@@ -351,7 +352,6 @@
     <Compile Include="Scheduling\Restrictions\RestrictionsAbleToBeScheduledTest.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionCombinerTest.cs" />
     <Compile Include="Scheduling\Rules\MaximumWorkdayRuleTest.cs" />
-    <Compile Include="Scheduling\SchedulerStateHolderLoadRequestsTest.cs" />
     <Compile Include="Scheduling\Tracking\PersonAccountProjectionServicePermissionTest.cs" />
     <Compile Include="Security\ImplementationDetails\Authentication\AvailableBusinessUnitsProviderTest.cs" />
     <Compile Include="Security\ImplementationDetails\Authentication\DummyPasswordPolicyTest.cs" />
@@ -389,7 +389,7 @@
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiCccVacationPlannerLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmChatBotLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmOutboundLicenseOptionTest.cs" />
-    <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmPmNextGenLicenseOptionTest.cs" />
+    <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmInsightsLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmSeatPlannerLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmVNextPilotLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseTest.cs" />

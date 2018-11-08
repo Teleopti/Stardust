@@ -44,8 +44,8 @@ RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306 = true
 RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485 = true
 RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485 = true
 RTA_TooManyPersonAssociationChangedEvents_Packages_78669 = true
-RTA_StateQueueFloodPrevention_77710 = false
-RTA_ReviewHistoricalAdherence_74770 = false
+RTA_StateQueueFloodPrevention_77710 = true
+RTA_ReviewHistoricalAdherence_74770 = RC
 
 # Dumplings, can any of these be removed? #
 WfmTeamSchedule_ShowStaffingInfo_45206 = true
@@ -92,7 +92,7 @@ MyTimeWeb_WaitListPositionEnhancement_46301 = true
 MyTimeWeb_NewTeamScheduleView_75989 = RC
 MyTimeWeb_NewTeamScheduleViewDesktop_76313 = RC
 MyTimeWeb_PollToCheckScheduleChanges_46595 = true
-MyTimeWeb_TrafficLightOnMobileDayView_77447 = DEV
+MyTimeWeb_TrafficLightOnMobileDayView_77447 = RC
 
 # China, can any of these be removed? #
 Staffing_Info_Configuration_44687 = true
@@ -122,7 +122,7 @@ WFM_Intraday_Redesign_77214 = DEV
 
 # Ziggy #
 WfmStaffing_AddOvertime_42524 = RC
-Wfm_Payroll_SupportMultiDllPayrolls_75959 = true
+Wfm_Payroll_SupportMultiDllPayrolls_75959 = false
 Wfm_Stardust_EnableScaleout_77366 = true
 
 # Squids #
@@ -157,8 +157,8 @@ MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409 = RC #Depending on MyTimeWe
 WFM_Gamification_Permission_76546 = true
 MyTimeWeb_Request_CleanUpRequestHisotry_77776 = RC
 MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446 = true
-WFM_Request_View_Permissions_77731 = DEV
+WFM_Request_View_Permissions_77731 = RC
 
 # Tech #
 WFM_ChatBot_77547 = DEV
-Wfm_PmNextGen_78059 = DEV
+WFM_Insights_78059 = DEV

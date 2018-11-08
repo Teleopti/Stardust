@@ -745,7 +745,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			source.Add(absence);
 
 			destination.Merge(source, false);
-			Assert.AreEqual(periodAbsence.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).TimeOfDay, destination.PersonAbsenceCollection()[0].Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).TimeOfDay);
+			Assert.AreEqual(periodAbsence.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).TimeOfDay, destination.PersonAbsenceCollection()[0].Period.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).TimeOfDay);
 		}
 
 		[Test]
@@ -865,9 +865,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				//assert destination have got the source period(Time)
 				Assert.AreEqual(
 					source.PersonAssignment().MainActivities().First().Period.TimePeriod(
-						TimeZoneHelper.CurrentSessionTimeZone),
+						TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone),
 					destination.PersonAssignment().MainActivities().First().Period.TimePeriod(
-						TimeZoneHelper.CurrentSessionTimeZone));
+						TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
 
 				//clear assignments in destination
 				destination.Clear<IPersonAssignment>();

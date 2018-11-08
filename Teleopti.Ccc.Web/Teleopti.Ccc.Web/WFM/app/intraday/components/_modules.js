@@ -1,3 +1,3 @@
 (function() {
-    angular.module('wfm.dateOffset', ['angularMoment']);
+	angular.module('wfm.dateOffset', ['angularMoment']);
 })();

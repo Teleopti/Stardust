@@ -204,6 +204,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsDateMapper.cs" />
     <Compile Include="Budgeting\BudgetGroupAllowanceCalculatorExtended.cs" />
     <Compile Include="Budgeting\BudgetGroupHeadCountSpecificationExtended.cs" />
+    <Compile Include="Budgeting\BudgetGroupState.cs" />
     <Compile Include="Common\DefaultSchedulePeriodProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\MultipleChangeScheduleCommandHandler.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />
@@ -589,7 +590,7 @@
     <Compile Include="Security\IDataTokenManager.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccOvertimeRequestsLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiWfmChatBotLicenseOption.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiWfmPmNextGenLicenseOption.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiWfmInsightsLicenseOption.cs" />
     <Compile Include="Security\SignedArgument.cs" />
     <Compile Include="SkillGroupManagement\ModifySkillGroup.cs" />
     <Compile Include="Intraday\To Staffing\ScheduledStaffingViewModel.cs" />
@@ -1125,7 +1126,6 @@
     <Compile Include="InterfaceLegacy\Domain\IScheduleMatrixOriginalStateContainer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleMatrixPro.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleMatrixValueCalculatorPro.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IScheduleMatrixValueCalculatorProFactory.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleOptimizationService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleParameters.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulePartModifyAndRollbackService.cs" />
@@ -2667,7 +2667,6 @@
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByAllSkillsExtractor.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitiesSpecification.cs" />
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByPersonalSkillsExtractor.cs" />
-    <Compile Include="Collection\AbstractDictionary.cs" />
     <Compile Include="Optimization\ScheduleMatrixOriginalStateContainer.cs" />
     <Compile Include="Optimization\TimePeriodCanHaveShortBreak.cs" />
     <Compile Include="Optimization\ClassicLegacy\WorkShiftBackToLegalStateServicePro.cs" />

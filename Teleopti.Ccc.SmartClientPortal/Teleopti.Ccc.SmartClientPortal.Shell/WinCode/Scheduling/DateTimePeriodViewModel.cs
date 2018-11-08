@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time;
@@ -215,7 +216,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             new UIPropertyMetadata(DateTime.UtcNow, StartPropertyChanged, CoerceStartValue),
             delegate(object value)
             {
-                value = TimeZoneHelper.ConvertToUtc((DateTime)value, TimeZoneHelper.CurrentSessionTimeZone);
+                value = TimeZoneHelper.ConvertToUtc((DateTime)value, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
                 //InParameter.VerifyDateIsUtc("Start", (DateTime)value);
                 return true;
             });
@@ -229,7 +230,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             new UIPropertyMetadata(DateTime.UtcNow, EndPropertyChanged, CoerceEndValue),
             delegate(object value)
             {
-                value = TimeZoneHelper.ConvertToUtc((DateTime)value, TimeZoneHelper.CurrentSessionTimeZone);
+                value = TimeZoneHelper.ConvertToUtc((DateTime)value, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
                 InParameter.VerifyDateIsUtc(nameof(End), (DateTime)value);
                 return true;
             });
@@ -468,14 +469,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         //dateTimePickerAdv uses local datetimes
         public DateTime StartDateTimeAsLocal
         {
-            get { return TimeZoneHelper.ConvertFromUtc(Start, TimeZoneHelper.CurrentSessionTimeZone); }
-            set { SetValue(StartProperty, TimeZoneHelper.ConvertToUtc(value, TimeZoneHelper.CurrentSessionTimeZone)); }
+            get { return TimeZoneHelper.ConvertFromUtc(Start, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone); }
+            set { SetValue(StartProperty, TimeZoneHelper.ConvertToUtc(value, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone)); }
         }
 
         public DateTime EndDateTimeAsLocal
         {
-            get { return TimeZoneHelper.ConvertFromUtc(End, TimeZoneHelper.CurrentSessionTimeZone); }
-            set { SetValue(EndProperty, TimeZoneHelper.ConvertToUtc(value, TimeZoneHelper.CurrentSessionTimeZone)); }
+            get { return TimeZoneHelper.ConvertFromUtc(End, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone); }
+            set { SetValue(EndProperty, TimeZoneHelper.ConvertToUtc(value, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone)); }
         }
 
         public TimeSpan StartTimeAsLocalTimeSpan

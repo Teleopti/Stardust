@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling))
 				return false;
 
-			if (scheduleView.TheGrid.Selections.Count != 1)
+			if (scheduleView.ViewGrid.Selections.Count != 1)
 				return false;
 
 			if (splitterManagerView.ShowRestrictionView)

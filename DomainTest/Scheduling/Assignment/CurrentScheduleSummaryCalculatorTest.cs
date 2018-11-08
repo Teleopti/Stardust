@@ -14,7 +14,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
 	[DomainTest]
-	[FullPermissions]
 	public class CurrentScheduleSummaryCalculatorTest
 	{
 		public IUserTimeZone UserTimeZone;

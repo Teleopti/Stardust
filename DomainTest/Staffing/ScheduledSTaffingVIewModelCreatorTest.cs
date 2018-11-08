@@ -162,6 +162,40 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			vm.DataSeries.ForecastedStaffing[0].Should().Be.EqualTo(6);
 			vm.DataSeries.ForecastedStaffing[1].Should().Be.EqualTo(6);
 		}
-		
+
+		[Test]
+		public void ShouldHandleDaylightSavings()
+		{
+			TimeZone.IsSweden();
+
+			var userNow = new DateTime(2018, 10, 28, 0, 0, 0);
+			var userNowUtc = TimeZoneInfo.ConvertTimeToUtc(userNow, TimeZone.TimeZone());
+			Now.Is(userNowUtc);
+
+			var opensAtUtc = new DateTime(2018, 10, 28, 0, 0, 0, DateTimeKind.Utc);
+			var closesAtUtc = new DateTime(2018, 10, 29, 0, 0, 0, DateTimeKind.Utc);
+			var openHours = new DateTimePeriod(opensAtUtc, closesAtUtc).TimePeriod(TimeZoneInfo.Utc);
+
+			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
+			var act = ActivityRepository.Has("act");
+			var skill = SkillSetupHelper.CreateSkill(minutesPerInterval, "skill1", openHours, false, act);
+			SkillRepository.Has(skill);
+
+			var skillDay = SkillSetupHelper.CreateSkillDay(skill, scenario, userNowUtc, openHours, false);
+			var skillDay2 = SkillSetupHelper.CreateSkillDay(skill, scenario, userNowUtc.AddDays(1), openHours, false);
+			var skillDay3 = SkillSetupHelper.CreateSkillDay(skill, scenario, userNowUtc.AddDays(-1), openHours, false);
+
+			SkillDayRepository.Has(skillDay);
+			SkillDayRepository.Has(skillDay2);
+			SkillDayRepository.Has(skillDay3);
+			SkillSetupHelper.PopulateStaffingReadModels(skill, userNowUtc, userNowUtc.AddMinutes(minutesPerInterval), 2, SkillCombinationResourceRepository);
+			SkillSetupHelper.PopulateStaffingReadModels(skill, userNowUtc.AddMinutes(-minutesPerInterval), userNowUtc, 10, SkillCombinationResourceRepository);
+
+			var vm1 = Target.Load(new[] { skill.Id.GetValueOrDefault()}, new DateOnly(userNow) , false);
+			var vm2 = Target.Load(new[] { skill.Id.GetValueOrDefault()}, new DateOnly(userNow.AddDays(-1)) , false);
+
+			vm1.DataSeries.Time.Length.Should().Be.EqualTo(100);
+			vm2.DataSeries.Time.Length.Should().Be.EqualTo(96);
+		}
 	}
 }

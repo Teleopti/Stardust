@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             scheduleRange = new ScheduleRange(dic, param, new PersistableScheduleDataPermissionChecker(new FullPermission()), new FullPermission());
 
             ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_agent,
-                             _scenario, ActivityFactory.CreateActivity("PersonalShiftActivity"), TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 0, 0, 0), new DateTime(2001, 1, 2, 0, 0, 0), TimeZoneHelper.CurrentSessionTimeZone), ShiftCategoryFactory.CreateShiftCategory("Morgon"));
+                             _scenario, ActivityFactory.CreateActivity("PersonalShiftActivity"), TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 0, 0, 0), new DateTime(2001, 1, 2, 0, 0, 0), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), ShiftCategoryFactory.CreateShiftCategory("Morgon"));
 
             meeting1 = new Meeting(_agent, new List<IMeetingPerson>(), "meeting1", "location1", "description1", ActivityFactory.CreateActivity("activity1"), _scenario);
             meeting1.StartDate = new DateOnly(2001, 1, 1);
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             string meetingPeriod2 = DateTime.MinValue.Add(meeting2.StartTime).ToShortTimeString() +
                                     " - " + DateTime.MinValue.Add(meeting2.EndTime).ToShortTimeString();
-            string expected = " - Personal activity" + ": \r\n    " + "PersonalShiftActivity: " + ass1.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).ToShortTimeString() + " - " + ass1.Period.EndDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).ToShortTimeString() +
+            string expected = " - Personal activity" + ": \r\n    " + "PersonalShiftActivity: " + ass1.Period.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).ToShortTimeString() + " - " + ass1.Period.EndDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).ToShortTimeString() +
 								"\r\n" + " - Meeting: \r\n    " + "meeting1" + ": " + meetingPeriod1 +
                                "\r\n" + " - Meeting: \r\n    " + "meeting2" + ": " + meetingPeriod2 + " (" + UserTexts.Resources.Optional + ")";
 

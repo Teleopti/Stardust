@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 		}
 
-		public GridControl TheGrid { get { return _grid; } }
+		public GridControl ViewGrid { get { return _grid; } }
 		public IList<IScheduleDay> CurrentColumnSelectedSchedules()
 		{
 			throw new NotImplementedException();

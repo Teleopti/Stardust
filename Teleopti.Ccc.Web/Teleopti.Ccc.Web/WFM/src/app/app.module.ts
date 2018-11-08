@@ -13,7 +13,9 @@ import { CustomTranslateParser, LanguageLoaderFactory, Zorroi18nService } from '
 import { MenuModule } from './menu/menu.module';
 import { NavigationModule } from './navigation/navigation.module';
 import { PeopleModule } from './people/people.module';
-import { PmModule } from './pm/pm.module';
+import { InsightsModule } from './insights/insights.module';
+import { IntradayModule } from './intraday/intraday.module';
+import { NzIconService } from 'ng-zorro-antd';
 
 @NgModule({
 	declarations: [BootstrapComponent],
@@ -26,7 +28,7 @@ import { PmModule } from './pm/pm.module';
 		NavigationModule,
 		ApiAccessModule,
 		HttpClientModule,
-		PmModule,
+		InsightsModule,
 		MenuModule,
 		TranslateModule.forRoot({
 			loader: {
@@ -35,7 +37,8 @@ import { PmModule } from './pm/pm.module';
 				deps: [HttpClient]
 			},
 			parser: { provide: TranslateParser, useClass: CustomTranslateParser }
-		})
+		}),
+		IntradayModule
 	],
 	entryComponents: [BootstrapComponent],
 	providers: [Zorroi18nService]
@@ -45,7 +48,8 @@ export class AppModule {
 		private upgrade: UpgradeModule,
 		private userService: UserService,
 		private translate: TranslateService,
-		private zorroi18n: Zorroi18nService
+		private zorroi18n: Zorroi18nService,
+		private iconService: NzIconService
 	) {}
 
 	ngDoBootstrap() {
@@ -56,6 +60,7 @@ export class AppModule {
 				this.zorroi18n.switchLanguage(preferences.Language);
 			}
 		});
+		this.iconService.changeAssetsSource('dist/ng2/');
 	}
 }
 

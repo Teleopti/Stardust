@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
     internal class SchedulerMeetingHelper
     {
         private readonly IInitiatorIdentifier _initiatorIdentifier;
-        private readonly ISchedulerStateHolder _schedulerStateHolder;
+        private readonly SchedulingScreenState _schedulingScreenState;
 	    private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 	    private IList<ModifyMeetingEventArgs> _modifiedMeetingArgs;
 
 		internal SchedulerMeetingHelper(IInitiatorIdentifier initiatorIdentifier,
-			ISchedulerStateHolder schedulerStateHolder,
+			SchedulingScreenState schedulingScreenState,
 			IResourceCalculation resourceOptimizationHelper,
 			ISkillPriorityProvider skillPriorityProvider,
 			IScheduleStorageFactory scheduleStorageFactory,
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 
 			_initiatorIdentifier = initiatorIdentifier;
-			_schedulerStateHolder = schedulerStateHolder;
+			_schedulingScreenState = schedulingScreenState;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_skillPriorityProvider = skillPriorityProvider;
 			_scheduleStorageFactory = scheduleStorageFactory;
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 var enumerable = personMeetings.ToArray();
-                unitOfWork.Reassociate(_schedulerStateHolder.SchedulingResultState.LoadedAgents);
+                unitOfWork.Reassociate(_schedulingScreenState.SchedulerStateHolder.SchedulingResultState.LoadedAgents);
 
                 IMeetingRepository meetingRepository = _repositoryFactory.CreateMeetingRepository(unitOfWork);
                 foreach (IPersonMeeting personMeeting in enumerable)
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				if (!LazyLoadingManager.IsInitialized(reloadedMeeting.Activity))
 					LazyLoadingManager.Initialize(reloadedMeeting.Activity);
 
-				unitOfWork.Reassociate(_schedulerStateHolder.SchedulingResultState.LoadedAgents);
+				unitOfWork.Reassociate(_schedulingScreenState.SchedulerStateHolder.SchedulingResultState.LoadedAgents);
 				var persons = reloadedMeeting.MeetingPersons.Select(m => m.Person).ToArray();
 
 				if (!_meetingParticipantPermittedChecker.ValidatePermittedPersons(persons, reloadedMeeting.StartDate, scheduleViewBase, PrincipalAuthorization.Current())) return;
@@ -169,14 +169,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				IList<IPerson> selectedActivePersons =
 					selectedPersons.Where(new PersonIsActiveSpecification(meetingStartOrToday).IsSatisfiedBy).ToList();
 
-				if (!_schedulerStateHolder.CommonStateHolder.Activities.NonDeleted().Any() || selectedActivePersons.Count == 0) return;
+				if (!_schedulingScreenState.SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted().Any() || selectedActivePersons.Count == 0) return;
 
 				using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
 					meetingViewModel =
 						MeetingComposerPresenter.CreateDefaultMeeting(
 							TeleoptiPrincipal.CurrentPrincipal.GetPerson(_repositoryFactory.CreatePersonRepository(unitOfWork)),
-							_schedulerStateHolder, meetingStartOrToday,
+							_schedulingScreenState.SchedulerStateHolder, meetingStartOrToday,
 							selectedActivePersons, new Now());
 				}
 			}
@@ -188,17 +188,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					unitOfWork.Reassociate(persons);
 
 					var period = meeting.MeetingPeriod(meeting.StartDate);
-					var start = period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
-					var end = period.EndDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
-					meeting.TimeZone = TimeZoneHelper.CurrentSessionTimeZone;
+					var start = period.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+					var end = period.EndDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+					meeting.TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 					meeting.StartTime = start.TimeOfDay;
 					meeting.EndTime = end.TimeOfDay;
 
-					meetingViewModel = new MeetingViewModel(meeting, _schedulerStateHolder.CommonNameDescription);
+					meetingViewModel = new MeetingViewModel(meeting, _schedulingScreenState.SchedulerStateHolder.CommonNameDescription);
 				}
 			}
 
-			using (var meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulerStateHolder, editPermission, viewSchedulesPermission, new EventAggregator(), _resourceOptimizationHelper, _skillPriorityProvider,_scheduleStorageFactory, _staffingCalculatorServiceFacade, _resourceCalculationContextFactory))
+			using (var meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulingScreenState, editPermission, viewSchedulesPermission, new EventAggregator(), _resourceOptimizationHelper, _skillPriorityProvider,_scheduleStorageFactory, _staffingCalculatorServiceFacade, _resourceCalculationContextFactory))
 			{
 				showMeetingComposer(meetingComposerView);
 			}
@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             {
                 if (numberOfMeetings > 1)
                 {
-                    using (MeetingPicker meetingPicker = new MeetingPicker(_schedulerStateHolder.CommonNameDescription.BuildFor(person) + " " +
+                    using (MeetingPicker meetingPicker = new MeetingPicker(_schedulingScreenState.SchedulerStateHolder.CommonNameDescription.BuildFor(person) + " " +
                         theDate.ToShortDateString(), personMeetings))
                     {
                         meetingPicker.ShowDialog();

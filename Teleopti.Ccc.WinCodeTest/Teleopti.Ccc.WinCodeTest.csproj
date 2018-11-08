@@ -545,7 +545,6 @@
     <Compile Include="Scheduler\OptimizationBug37126Test.cs" />
     <Compile Include="Scheduler\OvertimePreferencesDialogPresenterTest.cs" />
     <Compile Include="Scheduler\PasteAsOvertimeTest.cs" />
-    <Compile Include="Scheduler\PublishScheduleCommandTest.cs" />
     <Compile Include="Scheduler\PublishScheduleDatePresenterTest.cs" />
     <Compile Include="Scheduler\Reporting\ScheduledTimePerActivityModelTest.cs" />
     <Compile Include="Scheduler\Requests\HandlePersonRequestComparerTest.cs" />
@@ -554,6 +553,8 @@
     <Compile Include="Scheduler\AgentOvertimeAvailabilityEditCommandTest.cs" />
     <Compile Include="Scheduler\AgentOvertimeAvailabilityPresenterTest.cs" />
     <Compile Include="Scheduler\AgentOvertimeAvailabilityRemoveCommandTest.cs" />
+    <Compile Include="Scheduler\Requests\SchedulerStateHolderLoadRequestsTest.cs" />
+    <Compile Include="Scheduler\Requests\SchedulingScreenStateTest.cs" />
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityPersonFilterTest.cs" />
     <Compile Include="Scheduler\Restriction\HourlyAvailabilityPersonFilterTest.cs" />
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityCreatorTest.cs" />

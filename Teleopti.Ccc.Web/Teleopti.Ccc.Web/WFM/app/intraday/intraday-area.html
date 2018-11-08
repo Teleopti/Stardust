@@ -28,7 +28,8 @@
                             {{vm.latestActualInterval}}
                         </span>
                         <span ng-cloak
-                              ng-show="!vm.latestActualInterval || vm.latestActualInterval == 'undefined - undefined'">--:-- - --:--</span>
+                              ng-show="!vm.latestActualInterval || vm.latestActualInterval == 'undefined - undefined'">--:--
+                            - --:--</span>
                         <i class="mdi mdi-clock"></i>
                         <md-tooltip>{{'LatestActualInterval'|translate}}</md-tooltip>
                     </div>
@@ -73,8 +74,12 @@
                                         <i ng-class="vm.checkIfFilterSkill(skill)"></i>
                                     </span>
                                     <md-tooltip>
-                                        <span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType | translate}} - {{'MultisiteSkill' | translate}}</span>
-                                        <span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType | translate}}</span>
+                                        <span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType |
+                                            translate}}
+                                            - {{'MultisiteSkill' | translate}}</span>
+                                        <span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType
+                                            |
+                                            translate}}</span>
                                         <span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
                                     </md-tooltip>
                                     <span class="chip-text">{{skill.Name}}</span>
@@ -250,7 +255,8 @@
                                                         <tr>
                                                             <td>{{'AverageSpeedOfAnswer'|translate}}</td>
                                                             <td class="number-cell average-speed-of-answer">
-                                                                {{vm.viewObj.summary.summaryAverageSpeedOfAnswer}} {{'SecondShort'|translate}}
+                                                                {{vm.viewObj.summary.summaryAverageSpeedOfAnswer}}
+                                                                {{'SecondShort'|translate}}
                                                             </td>
                                                         </tr>
                                                     </tbody>

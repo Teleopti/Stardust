@@ -12,6 +12,8 @@ using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -23,7 +25,6 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
 	[UseIocForFatClient]
-	[FullPermissions]
 	public class BusinessRulesHintDesktopTest
 	{
 		public CheckScheduleHints Target;
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BusinessRulesHint));
-			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First()).Should()
+			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First(), UserTimeZone.Make()).Should()
 				.Be.EqualTo(string.Format(Resources.TargetDayOffNotFulfilledMessage, 4));
 		}
 
@@ -109,12 +110,11 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BusinessRulesHint));
-			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First()).Should().Be.EqualTo(string.Format(Resources.AgentHasDaysWithoutAnySchedule, 1));
+			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First(), UserTimeZone.Make()).Should().Be.EqualTo(string.Format(Resources.AgentHasDaysWithoutAnySchedule, 1));
 		}
 	}
 
 	[DomainTest]
-	[FullPermissions]
 	public class BusinessRulesHintTest : IIsolateSystem
 	{
 		public CheckScheduleHints Target;
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BusinessRulesHint));
-			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First()).Should()
+			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First(), UserTimeZone.Make()).Should()
 				.Be.EqualTo(string.Format(Resources.TargetDayOffNotFulfilledMessage,2));
 		}
 
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BusinessRulesHint));
-			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First()).Should()
+			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First(), UserTimeZone.Make()).Should()
 				.Be.EqualTo(string.Format(Resources.TargetDayOffNotFulfilledMessage, 4));
 		}
 
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BusinessRulesHint));
-			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First()).Should()
+			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First(), UserTimeZone.Make()).Should()
 				.Be.EqualTo(string.Format(Resources.TargetScheduleTimeNotFullfilled, DateHelper.HourMinutesString(40*60)));
 		}
 
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.Any(x => x.Name == nameof(BusinessRulesHint)).Should().Be.True();
-			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First()).Should().Be.EqualTo(string.Format(Resources.AgentHasDaysWithoutAnySchedule, 6));
+			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.First(), UserTimeZone.Make()).Should().Be.EqualTo(string.Format(Resources.AgentHasDaysWithoutAnySchedule, 6));
 		}
 
 		[Test]

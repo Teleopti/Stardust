@@ -444,7 +444,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		[Test]
 		public void VerifyProtectedTemplateUpdatedDateCanBeSet()
 		{
-			var updatedDate = TimeZoneHelper.ConvertToUtc(new DateTime(2010, 12, 2), TimeZoneHelper.CurrentSessionTimeZone);
+			var updatedDate = TimeZoneHelper.ConvertToUtc(new DateTime(2010, 12, 2), TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			var testWorkloadDayTemplate = new TestWorkloadDayTemplate();
 			testWorkloadDayTemplate.SetUpdatedDate(updatedDate);
 			Assert.AreEqual(updatedDate, testWorkloadDayTemplate.UpdatedDate);

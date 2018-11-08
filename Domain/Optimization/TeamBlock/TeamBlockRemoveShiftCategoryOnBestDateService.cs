@@ -12,14 +12,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public class TeamBlockRemoveShiftCategoryOnBestDateService
 	{
-		private readonly IScheduleMatrixValueCalculatorProFactory _scheduleMatrixValueCalculatorProFactory;
+		private readonly ScheduleMatrixValueCalculatorProFactory _scheduleMatrixValueCalculatorProFactory;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly ITimeZoneGuard _timeZoneGuard;
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 		private readonly IResourceCalculation _resourceCalculation;
 
 		public TeamBlockRemoveShiftCategoryOnBestDateService(
-									IScheduleMatrixValueCalculatorProFactory scheduleMatrixValueCalculatorProFactory,
+									ScheduleMatrixValueCalculatorProFactory scheduleMatrixValueCalculatorProFactory,
 									Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 									ITimeZoneGuard timeZoneGuard,
 									IDeleteSchedulePartService deleteSchedulePartService,

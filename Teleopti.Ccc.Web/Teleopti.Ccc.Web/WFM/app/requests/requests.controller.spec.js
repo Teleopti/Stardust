@@ -7,6 +7,7 @@ describe('Requests controller tests', function() {
 		requestsDataService,
 		groupPageService,
 		requestCommandParamsHolder,
+		requestsPermissions,
 		getParamsFn,
 		fakeState = {
 			current: {
@@ -27,6 +28,7 @@ describe('Requests controller tests', function() {
 
 		requestsDataService = new FakeRequestsDataService();
 		groupPageService = new FakeGroupPageService();
+		requestsPermissions = new FakeRequestsPermissions();
 
 		module(function($provide) {
 			$provide.service('$state', function() {
@@ -40,6 +42,9 @@ describe('Requests controller tests', function() {
 						resolve();
 					})
 				};
+			});
+			$provide.service('requestsPermissions', function () {
+				return requestsPermissions;
 			});
 			$provide.service('requestsDataService', function() {
 				return requestsDataService;
@@ -93,6 +98,13 @@ describe('Requests controller tests', function() {
 
 		controller.activeShiftTradeTab();
 		expect(controller.period).toEqual(periodForShiftTradeRequest);
+	});
+
+	it('should get permissions', function() {
+		setUpTarget();
+
+		expect(requestsPermissions.all().HasApproveOrDenyPermission).toEqual(true);
+		expect(requestsPermissions.all().HasCancelPermission).toEqual(false);
 	});
 
 	it('should active search status after selected teams changed', function() {
@@ -481,6 +493,25 @@ describe('Requests controller tests', function() {
 				}
 			};
 		};
+		this.getPermissionsPromise = function () {
+			return {
+				then: function (callback) {
+					callback && callback({ data: { HasApproveOrDenyPermission: true, HasCancelPermission: false }});
+				}
+			};
+		}
+	}
+
+	function FakeRequestsPermissions() {
+		var permissions;
+
+		this.set = function setPermissions(data) {
+			permissions = data;
+		}
+
+		this.all = function getPermissions() {
+			return permissions;
+		}
 	}
 
 	function FakeGroupPageService() {

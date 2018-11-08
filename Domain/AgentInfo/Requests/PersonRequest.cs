@@ -565,50 +565,23 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				_requestStatusId = requestStatusId;
 			}
 
-			protected internal int RequestStatusId
-			{
-				get { return _requestStatusId; }
-			}
+			protected internal int RequestStatusId => _requestStatusId;
 
-			protected internal virtual bool IsDenied
-			{
-				get { return false; }
-			}
+			protected internal virtual bool IsDenied => false;
 
-			protected internal virtual bool IsAutoDenied
-			{
-				get { return false; }
-			}
+			protected internal virtual bool IsAutoDenied => false;
 
-			protected internal virtual bool IsWaitlisted
-			{
-				get { return false; }
-			}
+			protected internal virtual bool IsWaitlisted => false;
 
-			protected internal virtual bool IsCancelled
-			{
-				get { return false; }
-			}
+			protected internal virtual bool IsCancelled => false;
 
-			protected internal virtual bool IsApproved
-			{
-				get { return false; }
-			}
+			protected internal virtual bool IsApproved => false;
 
-			protected internal virtual bool IsAutoApproved
-			{
-				get { return false; }
-			}
+			protected internal virtual bool IsAutoApproved => false;
 
-			protected internal virtual bool IsPending
-			{
-				get { return false; }
-			}
+			protected internal virtual bool IsPending => false;
 
-			protected internal virtual bool IsNew
-			{
-				get { return false; }
-			}
+			protected internal virtual bool IsNew => false;
 
 			protected internal virtual void Deny(PersonRequestDenyOption denyOption)
 			{
@@ -680,21 +653,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			{
 			}
 
-			protected internal override bool IsApproved
-			{
-				get { return true; }
-			}
+			protected internal override bool IsApproved => true;
 
 			protected internal override void Cancel()
 			{
 				PersonRequest.moveToCancelled();
 			}
-
-
-			protected internal override string StatusText
-			{
-				get { return Resources.Approved; }
-			}
+			
+			protected internal override string StatusText => Resources.Approved;
 		}
 		
 
@@ -705,20 +671,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			{
 			}
 
-			protected internal override bool IsApproved
-			{
-				get { return true; }
-			}
+			protected internal override bool IsApproved => true;
 
-			protected internal override bool IsAutoApproved
-			{
-				get { return true; }
-			}
+			protected internal override bool IsAutoApproved => true;
 
-			protected internal override string StatusText
-			{
-				get { return Resources.Approved; }
-			}
+			protected internal override string StatusText => Resources.Approved;
 		}
 
 		private class deniedPersonRequest : personRequestState
@@ -728,15 +685,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			{
 			}
 
-			protected internal override bool IsDenied
-			{
-				get { return true; }
-			}
+			protected internal override bool IsDenied => true;
 
-			protected internal override string StatusText
-			{
-				get { return Resources.Denied; }
-			}
+			protected internal override string StatusText => Resources.Denied;
 		}
 
 		private class autoDeniedPersonRequest : personRequestState
@@ -746,26 +697,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			{
 			}
 
-			protected internal override bool IsDenied
-			{
-				get { return true; }
-			}
+			protected internal override bool IsDenied => true;
 
-			protected internal override bool IsAutoDenied
-			{
-				get
-				{
-					return true;
-				}
-			}
+			protected internal override bool IsAutoDenied => true;
 
-			protected internal override string StatusText
-			{
-				get
-				{
-					return Resources.Denied;
-				}
-			}
+			protected internal override string StatusText => Resources.Denied;
 		}
 
 		private class waitListedPersonRequest : personRequestState
@@ -774,20 +710,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				: base(personRequest, (int)PersonRequestStatus.Waitlisted)
 			{
 			}
-			protected internal override bool IsDenied
-			{
-				get
-				{
-					return true;
-				}
-			}
+			
+			protected internal override bool IsDenied => true;
 
-			protected internal override bool IsWaitlisted
-			{
-				get { return true; }
-			}
-
-
+			protected internal override bool IsWaitlisted => true;
+			
 			protected internal override void Approve(bool isAutoGrant)
 			{
 				PersonRequest.moveToApproved(isAutoGrant);
@@ -798,16 +725,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				PersonRequest.moveToDenied(denyOption);
 			}
 
-			protected internal override string StatusText
-			{
-				get
-				{
-					return Resources.Waitlisted;
-				}
-			}
+			protected internal override string StatusText => Resources.Waitlisted;
 		}
-
-
+		
 		private class pendingPersonRequest : personRequestState
 		{
 			public pendingPersonRequest(PersonRequest personRequest)
@@ -815,7 +735,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			{
 			}
 			
-
 			protected internal override void Deny(PersonRequestDenyOption denyOption)
 			{
 				PersonRequest.moveToDenied(denyOption);
@@ -831,18 +750,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				PersonRequest.movetoNew();
 			}
 
-			protected internal override string StatusText
-			{
-				get
-				{
-					return Resources.Pending;
-				}
-			}
+			protected internal override string StatusText => Resources.Pending;
 
-			protected internal override bool IsPending
-			{
-				get { return true; }
-			}
+			protected internal override bool IsPending => true;
 		}
 
 		private class cancelledPersonRequest : personRequestState
@@ -852,19 +762,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			{
 			}
 
-			protected internal override bool IsCancelled
-			{
-				get { return true; }
-			}
-
+			protected internal override bool IsCancelled => true;
 			
-			protected internal override string StatusText
-			{
-				get
-				{
-					return Resources.Cancelled;
-				}
-			}
+			protected internal override string StatusText => Resources.Cancelled;
 		}
 
 		private class newPersonRequest : personRequestState
@@ -886,15 +786,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				PersonRequest.moveToPending();
 			}
 
-			protected internal override string StatusText
-			{
-				get { return Resources.New; }
-			}
+			protected internal override string StatusText => Resources.New;
 
-			protected internal override bool IsNew
-			{
-				get { return true; }
-			}
+			protected internal override bool IsNew => true;
 		}
 
 		#endregion

@@ -38,7 +38,7 @@
 				</div>
 
 				<div class="right-part">
-					<requests-commands-pane before-command="vm.onBeforeCommand()" is-shift-trade-view-active="vm.isShiftTradeViewActive()"
+					<requests-commands-pane ng-if="vm.permissionInited" before-command="vm.onBeforeCommand()" is-shift-trade-view-active="vm.isShiftTradeViewActive()"
 					 after-command-success="vm.onCommandSuccess(commandType, changedRequestsCount, requestsCount, waitlistPeriod)"
 					 on-error-messages="vm.onErrorMessages(errorMessages)" after-command-error="vm.onCommandError(error)"
 					 commands-disabled="vm.disableInteraction" on-process-waitlist-finished="vm.onProcessWaitlistFinished(message)"

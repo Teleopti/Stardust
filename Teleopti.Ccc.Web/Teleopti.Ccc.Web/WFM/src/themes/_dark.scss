@@ -1,22 +1,7 @@
 .angular-theme-dark {
 	@import '../../css/styleguide/darkvariables';
 	@import '../../css/main';
-	$menu-background-color: #424242;
 	background-color: #303030;
-
-	.main-menu {
-		.main-menu-link-wrapper {
-			background-color: $menu-background-color;
-		}
-
-		.main-menu-link:hover {
-			background-color: #303030;
-		}
-		.main-menu-link-active > .main-menu-link {
-			background-color: #555;
-			color: #0099ff;
-		}
-	}
 
 	.navbar,
 	.main-menu-ctrls {

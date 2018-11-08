@@ -45,16 +45,6 @@ namespace Teleopti.Interfaces.Domain
 		}
 		
 		/// <summary>
-		/// Gets the current sessions time zone.
-		/// </summary>
-		/// <value>The current sessions time zone.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2007-10-23
-		/// </remarks>
-		public static TimeZoneInfo CurrentSessionTimeZone => StateHolderReader.Instance.StateReader.UserTimeZone;
-
-		/// <summary>
 		/// Creates a new UTC format date time period from local date time.
 		/// </summary>
 		/// <param name="localStartDateTime">The local start date time.</param>

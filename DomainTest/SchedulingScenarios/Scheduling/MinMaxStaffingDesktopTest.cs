@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
 	[UseIocForFatClient]
-	[FullPermissions]
 	public class MinMaxStaffingDesktopTest : SchedulingScenario
 	{
 		public DesktopScheduling Target;

@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
             distribution.Add(_childSkill1, new Percent(0.6));
             distribution.Add(_childSkill2, new Percent(0.4));
             MultisitePeriod multisitePeriod = new MultisitePeriod(
-                TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_dt.Date.Add(TimeSpan.FromHours(4)), _dt.Date.Add(TimeSpan.FromHours(19)), TimeZoneHelper.CurrentSessionTimeZone),
+                TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_dt.Date.Add(TimeSpan.FromHours(4)), _dt.Date.Add(TimeSpan.FromHours(19)), TimeZoneInfoFactory.StockholmTimeZoneInfo()),
                 distribution);
 
             _multisitePeriods = new List<IMultisitePeriod> { multisitePeriod };

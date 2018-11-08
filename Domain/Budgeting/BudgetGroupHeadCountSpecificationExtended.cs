@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 					budgetDaysToProcess.Add(thatDay);
 			}
 			
-			var invalidDays = getInvalidDaysIfExist(budgetDaysToProcess, personPeriod.BudgetGroup, culture, absenceRequestSchedules.SchedulingResultStateHolder);
+			var invalidDays = getInvalidDaysIfExist(budgetDaysToProcess, personPeriod.BudgetGroup, culture, absenceRequestSchedules.BudgetGroupState);
 			if (!string.IsNullOrEmpty(invalidDays))
 			{
 				var notEnoughAllowance = Resources.ResourceManager.GetString(nameof(Resources.NotEnoughBudgetAllowanceForTheDay), language);
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			return new DateTimePeriod(new DateTime(startDateTime.Ticks, DateTimeKind.Utc), new DateTime(endDateTime.Ticks, DateTimeKind.Utc));
 		}
 
-		private string getInvalidDaysIfExist(IEnumerable<IBudgetDay> budgetDays, IBudgetGroup budgetGroup, CultureInfo culture, ISchedulingResultStateHolder schedulingResultStateHolder)
+		private string getInvalidDaysIfExist(IEnumerable<IBudgetDay> budgetDays, IBudgetGroup budgetGroup, CultureInfo culture, BudgetGroupState budgetGroupState)
 		{
 			var count = 0;
 			var invalidDays = string.Empty;
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 				var allowance = budgetDay.ShrinkedAllowance;
 				var alreadyUsedAllowance = _scheduleProjectionReadOnlyPersister.GetNumberOfAbsencesPerDayAndBudgetGroup(
 					budgetGroup.Id.GetValueOrDefault(), currentDay);
-				var addedBefore = schedulingResultStateHolder.AddedAbsenceHeadCountDuringCurrentRequestHandlingCycle(budgetDay);
+				var addedBefore = budgetGroupState.AddedAbsenceHeadCountDuringCurrentRequestHandlingCycle(budgetDay);
 				alreadyUsedAllowance += addedBefore;
 				if (Math.Floor(allowance) <= alreadyUsedAllowance)
 				{
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 					{
 						alreayAddedHeadCountDictionary.ForEach(item =>
 						{
-							schedulingResultStateHolder
+							budgetGroupState
 								.SubtractAbsenceHeadCountDuringCurrentRequestHandlingCycle(item.Key);
 						});
 					}
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 				}
 				else
 				{
-					schedulingResultStateHolder.AddAbsenceHeadCountDuringCurrentRequestHandlingCycle(budgetDay);
+					budgetGroupState.AddAbsenceHeadCountDuringCurrentRequestHandlingCycle(budgetDay);
 					alreayAddedHeadCountDictionary.Add(budgetDay, 1);
 				}
 			}

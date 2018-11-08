@@ -4,10 +4,15 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 {
+	public interface IPrincipalAndStateContext
+	{
+		void Login();
+		void Logout();
+	}
+
 	public class PrincipalAndStateTestAttribute : InfrastructureTestAttribute, IPrincipalAndStateContext
 	{
 		private IPerson person;
-//		private IDisposable _login;
 
 		protected override void Extend(IExtend extend, IocConfiguration configuration)
 		{
@@ -17,36 +22,24 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 
 		protected override void BeforeTest()
 		{
-			InfrastructureTestStuff.BeforeWithLogon(out person);
+			InfrastructureTestSetup.BeforeWithLogon(out person);
 			base.BeforeTest();
-
-//			_login = SetupFixtureForAssembly.CreatePersonAndLogin(out person);
 		}
 
 		protected override void AfterTest()
 		{
 			base.AfterTest();
-			InfrastructureTestStuff.AfterWithLogon();
-//			_login?.Dispose();
-//			_login = null;
+			InfrastructureTestSetup.AfterWithLogon();
 		}
 
 		public void Login()
 		{
-			InfrastructureTestStuff.Login(person);
-//			SetupFixtureForAssembly.Login(person);
+			InfrastructureTestSetup.Login(person);
 		}
 
 		public void Logout()
 		{
-			InfrastructureTestStuff.Logout();
-//			SetupFixtureForAssembly.Logout();
+			InfrastructureTestSetup.Logout();
 		}
-	}
-
-	public interface IPrincipalAndStateContext
-	{
-		void Login();
-		void Logout();
 	}
 }
