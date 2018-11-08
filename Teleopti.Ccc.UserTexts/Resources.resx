@@ -17829,7 +17829,7 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>Use in WFM Permission for edit site open hours</comment>
   </data>
   <data name="ReplyRequest" xml:space="preserve">
-    <value>Reply Request</value>
+    <value>Reply to Request</value>
     <comment>Use in WFM Permission for reply request model</comment>
   </data>
   <data name="ShiftsInShiftBagCanNotFulFillOverriddenTargetTime" xml:space="preserve">
