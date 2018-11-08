@@ -14,8 +14,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 	{
 		MinMax<int> GetMinMaxForShiftCategory(IShiftCategory shiftCategory);
 		double GetAverageForShiftCategory(IShiftCategory shiftCategory);
-		double GetStandardDeviationForShiftCategory(IShiftCategory shiftCategory);
-		double GetSumOfDeviations();
 		event EventHandler ResetNeeded;
 		void SetFilteredPersons(IEnumerable<IPerson> filteredPersons);
 		int ShiftCategoryCount(IPerson person, IShiftCategory shiftCategory);
@@ -24,12 +22,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 		IList<IShiftCategory> GetShiftCategoriesSortedByMinMax(bool ascending, bool min);
 		IList<IShiftCategory> GetShiftCategoriesSortedByAverage(bool ascending);
 		string CommonAgentName(IPerson person);
-		void OnResetNeeded();
 		IList<IPerson> GetSortedPersons(bool ascending);
 		IList<DateOnly> GetSortedDates(bool ascending);
 		IList<IPerson> GetAgentsSortedByNumberOfShiftCategories(IShiftCategory shiftCategory, bool ascending);
 		IList<DateOnly> GetDatesSortedByNumberOfShiftCategories(IShiftCategory shiftCategory, bool ascending);
-		ICachedShiftCategoryDistribution CachedShiftCategoryDistribution { get; }
 		event EventHandler ChartUpdateNeeded;
 		void OnChartUpdateNeeded();
 		bool ShouldUpdateViews { get; set; }
@@ -44,7 +40,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 		private readonly ICachedNumberOfEachCategoryPerPerson _cachedNumberOfEachCategoryPerPerson;
 		private readonly DateOnlyPeriod _periodToMonitor;
 		private readonly ISchedulerStateHolder _schedulerStateHolder;
-		//private int _lastShiftCategoryCount;
 
 		public ShiftCategoryDistributionModel(ICachedShiftCategoryDistribution cachedShiftCategoryDistribution, ICachedNumberOfEachCategoryPerDate cachedNumberOfEachCategoryPerDate, ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson, DateOnlyPeriod periodToMonitor, ISchedulerStateHolder schedulerStateHolder)
 		{
@@ -78,8 +73,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 			return frequency;
 		}
 
-		public ICachedShiftCategoryDistribution CachedShiftCategoryDistribution => _cachedShiftCategoryDistribution;
-
 		public MinMax<int> GetMinMaxForShiftCategory(IShiftCategory shiftCategory)
 		{
 			var dic = _cachedShiftCategoryDistribution.GetMinMaxDictionary(_filteredPersons);
@@ -95,27 +88,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 				values.Add(ShiftCategoryCount(sortedPerson, shiftCategory));
 			}
 			return Domain.Calculation.Variances.Average(values);
-		}
-
-		public double GetStandardDeviationForShiftCategory(IShiftCategory shiftCategory)
-		{
-			var values = new List<double>();
-			foreach (var sortedPerson in GetSortedPersons(false))
-			{
-				values.Add(ShiftCategoryCount(sortedPerson, shiftCategory));
-			}
-			return Domain.Calculation.Variances.StandardDeviation(values);
-		}
-
-		public double GetSumOfDeviations()
-		{
-			double sum = 0;
-			foreach (var category in GetSortedShiftCategories())
-			{
-				sum += GetStandardDeviationForShiftCategory(category);
-			}
-
-			return sum;
 		}
 
 		public event EventHandler ResetNeeded;
