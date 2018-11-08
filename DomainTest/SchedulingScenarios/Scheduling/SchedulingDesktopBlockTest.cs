@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
 	[UseIocForFatClient]
-	[FullPermissions]
 	public class SchedulingDesktopBlockTest : SchedulingScenario
 	{
 		public DesktopScheduling Target;

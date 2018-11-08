@@ -21,7 +21,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 {
 	[DomainTest]
-	[FullPermissions]
 	public class OvertimeOnNonScheduleDaysCascadingTest : OvertimeSchedulingScenario
 	{
 		public ScheduleOvertime Target;

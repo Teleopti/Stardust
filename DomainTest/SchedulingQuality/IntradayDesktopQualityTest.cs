@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingQuality
 	[DomainTest]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	[FullPermissions]
 	[UseIocForFatClient]
 	public class IntradayDesktopQualityTest : IntradayOptimizationScenarioTest
 	{
