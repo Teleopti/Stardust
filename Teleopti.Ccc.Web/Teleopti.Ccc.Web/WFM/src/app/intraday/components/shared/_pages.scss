@@ -1,0 +1,13 @@
+@import '~teleopti-styleguide/styleguide/sass/classicvariables';
+.action-buttons {
+	float: right;
+}
+
+.panel {
+	height: 100%;
+}
+
+[nz-button] {
+	margin-right: 5px;
+	margin-bottom: 10px;
+}
