@@ -2,6 +2,17 @@
 ## Functions
 ##===========
 
+function Hostsfile-Add-Cname {
+    param(
+    [string]$CName
+    )
+
+    If ((Get-Content "$($env:windir)\system32\Drivers\etc\hosts" ) -notcontains "localhost $CName") {
+        Add-Content -Encoding UTF8  "$($env:windir)\system32\Drivers\etc\hosts" "`r`n"
+        Add-Content -Encoding UTF8  "$($env:windir)\system32\Drivers\etc\hosts" "localhost $CName"
+    }
+}
+
 function Get-ScriptDirectory
 {
     $Invocation = (Get-Variable MyInvocation -Scope 1).Value;
@@ -80,6 +91,10 @@ Try
 	#Set environment variables for RoleInstanceID & Rolename
 	[Environment]::SetEnvironmentVariable("RoleName", [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::CurrentRoleInstance.Role.Name, "Machine") 
 	[Environment]::SetEnvironmentVariable("RoleInstanceID", [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::CurrentRoleInstance.Id, "Machine")
+
+    #74478, #76734, #78787
+    $Cname = "$DataSourceName.teleopticloud.com"
+    Hostsfile-Add-Cname -Cname $Cname
     
 }
 Catch [Exception]
