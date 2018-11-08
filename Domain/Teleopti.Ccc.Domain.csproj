@@ -590,7 +590,7 @@
     <Compile Include="Security\IDataTokenManager.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccOvertimeRequestsLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiWfmChatBotLicenseOption.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiWfmPmNextGenLicenseOption.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiWfmInsightsLicenseOption.cs" />
     <Compile Include="Security\SignedArgument.cs" />
     <Compile Include="SkillGroupManagement\ModifySkillGroup.cs" />
     <Compile Include="Intraday\To Staffing\ScheduledStaffingViewModel.cs" />

@@ -37,22 +37,22 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.BpoExchange);
 			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.ChatBot);
 
-			hidePmNextGen(functions);
+			hideInsights(functions);
 
 			return functions;
 		}
 
-		private void hidePmNextGen(AllFunctions functions)
+		private void hideInsights(AllFunctions functions)
 		{
 			hideIfNotLicensed(functions,
-				DefinedRaptorApplicationFunctionForeignIds.PmNextGen,
-				DefinedRaptorApplicationFunctionForeignIds.PmNextGenViewReport,
-				DefinedRaptorApplicationFunctionForeignIds.PmNextGenEditReport);
+				DefinedRaptorApplicationFunctionForeignIds.Insights,
+				DefinedRaptorApplicationFunctionForeignIds.ViewInsightsReport,
+				DefinedRaptorApplicationFunctionForeignIds.EditInsightsReport);
 
 			hideAppFunctionWithToggleOff(functions, Toggles.Wfm_PmNextGen_78059,
-				DefinedRaptorApplicationFunctionForeignIds.PmNextGen,
-				DefinedRaptorApplicationFunctionForeignIds.PmNextGenViewReport,
-				DefinedRaptorApplicationFunctionForeignIds.PmNextGenEditReport);
+				DefinedRaptorApplicationFunctionForeignIds.Insights,
+				DefinedRaptorApplicationFunctionForeignIds.ViewInsightsReport,
+				DefinedRaptorApplicationFunctionForeignIds.EditInsightsReport);
 		}
 
 		private void hideRealTimeReports(AllFunctions functions)

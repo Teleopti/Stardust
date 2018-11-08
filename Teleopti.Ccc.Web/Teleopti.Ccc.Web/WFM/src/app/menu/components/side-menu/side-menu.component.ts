@@ -34,7 +34,7 @@ const GROUPS: AreaGroup[] = [
 		{ InternalName: 'myTime', inNewTab: true, url: '../MyTime', icon: 'mdi mdi-calendar-clock' },
 		{
 			icon: 'mdi mdi-elevation-rise',
-			InternalName: 'pm'
+			InternalName: 'insights'
 		}
 	]
 ];

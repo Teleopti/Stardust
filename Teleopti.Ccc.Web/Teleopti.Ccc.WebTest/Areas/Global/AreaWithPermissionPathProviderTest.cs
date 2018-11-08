@@ -65,62 +65,62 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		}
 
 		[Test]
-		public void ShouldHavePmNextGenAreaWhenFeatureEnabledAndPermitted()
+		public void ShouldHaveInsightsAreaWhenFeatureEnabledAndPermitted()
 		{
 			ApplicationFunctionsToggleFilter.AddFakeFunction(
-				new ApplicationFunction {FunctionCode = DefinedRaptorApplicationFunctionPaths.PmNextGen}, o => true);
+				new ApplicationFunction {FunctionCode = DefinedRaptorApplicationFunctionPaths.Insights}, o => true);
 
 			PermissionProvider.Enable();
-			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.PmNextGen);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.Insights);
 
 			ToggleManager.Enable(Toggles.Wfm_PmNextGen_78059);
 
 			var area = Target.GetWfmAreasWithPermissions().Single();
-			area.Path.Should().Be(DefinedRaptorApplicationFunctionPaths.PmNextGen);
+			area.Path.Should().Be(DefinedRaptorApplicationFunctionPaths.Insights);
 			area.Name.Should().Be(Resources.Insights);
-			area.InternalName.Should().Be("pm");
+			area.InternalName.Should().Be("insights");
 		}
 
 		[Test]
-		public void ShouldNotHavePmNextGenWhenNotLicensed()
+		public void ShouldNotHaveInsightsWhenNotLicensed()
 		{
 			ApplicationFunctionsToggleFilter.AddFakeFunction(
-				new ApplicationFunction {FunctionCode = DefinedRaptorApplicationFunctionPaths.PmNextGen}, o => false);
+				new ApplicationFunction {FunctionCode = DefinedRaptorApplicationFunctionPaths.Insights}, o => false);
 
 			PermissionProvider.Enable();
-			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.PmNextGen);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.Insights);
 
 			ToggleManager.Enable(Toggles.Wfm_PmNextGen_78059);
 
 			var areas = Target.GetWfmAreasWithPermissions();
-			areas.Count(a=>a.Path == DefinedRaptorApplicationFunctionPaths.PmNextGen).Should().Be(0);
+			areas.Count(a=>a.Path == DefinedRaptorApplicationFunctionPaths.Insights).Should().Be(0);
 		}
 
 		[Test]
-		public void ShouldNotHavePmNextGenWhenItNotPermitted()
+		public void ShouldNotHaveInsightsWhenItNotPermitted()
 		{
 			ApplicationFunctionsToggleFilter.AddFakeFunction(
-				new ApplicationFunction {FunctionCode = DefinedRaptorApplicationFunctionPaths.PmNextGen}, o => true);
+				new ApplicationFunction {FunctionCode = DefinedRaptorApplicationFunctionPaths.Insights}, o => true);
 
 			PermissionProvider.Enable();
 
 			ToggleManager.Enable(Toggles.Wfm_PmNextGen_78059);
 
 			var areas = Target.GetWfmAreasWithPermissions();
-			areas.Count(a=>a.Path == DefinedRaptorApplicationFunctionPaths.PmNextGen).Should().Be(0);
+			areas.Count(a=>a.Path == DefinedRaptorApplicationFunctionPaths.Insights).Should().Be(0);
 		}
 
 		[Test]
-		public void ShouldNotHavePmNextGenWhenToggleNotEnabled()
+		public void ShouldNotHaveInsightsWhenToggleNotEnabled()
 		{
 			ApplicationFunctionsToggleFilter.AddFakeFunction(
-				new ApplicationFunction {FunctionCode = DefinedRaptorApplicationFunctionPaths.PmNextGen}, o => true);
+				new ApplicationFunction {FunctionCode = DefinedRaptorApplicationFunctionPaths.Insights}, o => true);
 
 			PermissionProvider.Enable();
-			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.PmNextGen);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.Insights);
 
 			var areas = Target.GetWfmAreasWithPermissions();
-			areas.Count(a=>a.Path == DefinedRaptorApplicationFunctionPaths.PmNextGen).Should().Be(0);
+			areas.Count(a=>a.Path == DefinedRaptorApplicationFunctionPaths.Insights).Should().Be(0);
 		}
 
 		[Test]

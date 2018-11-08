@@ -9,12 +9,13 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.Rest;
+using Teleopti.Ccc.Web.Areas.Insights.Models;
 
-namespace Teleopti.Ccc.Web.Areas.PmNextGen.Controllers
+namespace Teleopti.Ccc.Web.Areas.Insights.Controllers
 {
-	public class PowerBiReportController : ApiController
+	public class InsightsController : ApiController
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(PowerBiReportController));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(InsightsController));
 
 		private static readonly string powerBiUsername = ConfigurationManager.AppSettings["PowerBIUsername"];
 		private static readonly string powerBiPassword = ConfigurationManager.AppSettings["PowerBIPassword"];
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.PmNextGen.Controllers
 		private static readonly string apiUrl = ConfigurationManager.AppSettings["PowerBIApiUrl"];
 		private static readonly string groupId = ConfigurationManager.AppSettings["PowerBIGroupId"];
 
-		[HttpGet, Route("api/PowerBiReport/ReportConfig")]
+		[HttpGet, Route("api/Insights/ReportConfig")]
 		public virtual async Task<EmbedReportConfig> GetReportConfig()
 		{
 			var reportId = "";
@@ -104,13 +105,5 @@ namespace Teleopti.Ccc.Web.Areas.PmNextGen.Controllers
 				return result;
 			}
 		}
-	}
-
-	public class EmbedReportConfig
-	{
-		public string ReportId { get; set; }
-		public string ReportUrl { get; set; }
-		public string TokenType { get; set; }
-		public string AccessToken { get; set; }
 	}
 }

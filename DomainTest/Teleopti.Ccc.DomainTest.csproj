@@ -389,7 +389,7 @@
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiCccVacationPlannerLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmChatBotLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmOutboundLicenseOptionTest.cs" />
-    <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmPmNextGenLicenseOptionTest.cs" />
+    <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmInsightsLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmSeatPlannerLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmVNextPilotLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseTest.cs" />
