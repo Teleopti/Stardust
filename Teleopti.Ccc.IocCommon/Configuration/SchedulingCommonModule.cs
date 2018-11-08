@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IFindSchedulesForPersons>()
 				.AsSelf()
 				.SingleInstance();
-
+			builder.RegisterType<ReplaceLayerInSchedule>().As<IReplaceLayerInSchedule>().SingleInstance();
 			builder.RegisterType<AddReducedSkillDaysToStateHolder>().SingleInstance();
 			builder.RegisterType<AddBpoResourcesToContext>().SingleInstance();
 			builder.RegisterType<SkillCombinationToBpoResourceMapper>().SingleInstance();

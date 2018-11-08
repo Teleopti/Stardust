@@ -286,9 +286,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeExtensiveLogRepository>().For<IExtensiveLogRepository>();
 			}
 
-			isolate.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();
-			isolate.UseTestDouble<ReplaceLayerInSchedule>().For<IReplaceLayerInSchedule>();
-
 			isolate.UseTestDouble<FakeFetchAllToggleOverrides>().For<IFetchAllToggleOverrides>();
 			isolate.UseTestDouble<FakePersistToggleOverride>().For<IPersistToggleOverride>();
 
