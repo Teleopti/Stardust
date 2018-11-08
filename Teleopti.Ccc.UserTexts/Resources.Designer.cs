@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -21752,6 +21752,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No permission to add day off.
+        /// </summary>
+        public static string NoPermissionAddDayOff {
+            get {
+                return ResourceManager.GetString("NoPermissionAddDayOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You do not have permission to add full day absences for {0}.
         /// </summary>
         public static string NoPermissionAddFullDayAbsenceForAgent {
@@ -21815,6 +21824,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No permission to remove day off.
+        /// </summary>
+        public static string NoPermissionRemoveDayOff {
+            get {
+                return ResourceManager.GetString("NoPermissionRemoveDayOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No permission to remove overtime activities for agent(s).
         /// </summary>
         public static string NoPermissionRemoveOvertimeActivity {
@@ -21829,6 +21847,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoPermissionRemovingShift {
             get {
                 return ResourceManager.GetString("NoPermissionRemovingShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No permission to swap shifts.
+        /// </summary>
+        public static string NoPermissionSwapShifts {
+            get {
+                return ResourceManager.GetString("NoPermissionSwapShifts", resourceCulture);
             }
         }
         

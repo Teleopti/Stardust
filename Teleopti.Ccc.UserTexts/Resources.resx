@@ -17832,8 +17832,17 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Reply Request</value>
     <comment>Use in WFM Permission for reply request model</comment>
   </data>
-	 <data name="ShiftsInShiftBagCanNotFulFillOverriddenTargetTime" xml:space="preserve">
+  <data name="ShiftsInShiftBagCanNotFulFillOverriddenTargetTime" xml:space="preserve">
     <value>The shifts in the shift bag {0} can not fulfill the overridden contract time. </value>
     <comment>Shown when validating agents in Plans (web) and an agent has overridden contract time that can't be fulfilled with the assigned shift bag</comment>
+  </data>
+  <data name="NoPermissionAddDayOff" xml:space="preserve">
+    <value>No permission to add day off</value>
+  </data>
+  <data name="NoPermissionRemoveDayOff" xml:space="preserve">
+    <value>No permission to remove day off</value>
+  </data>
+  <data name="NoPermissionSwapShifts" xml:space="preserve">
+    <value>No permission to swap shifts</value>
   </data>
 </root>

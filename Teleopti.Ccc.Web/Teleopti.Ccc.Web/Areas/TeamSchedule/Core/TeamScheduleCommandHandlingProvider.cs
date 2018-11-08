@@ -34,7 +34,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			{DefinedRaptorApplicationFunctionPaths.RemoveAbsence, Resources.NoPermissionRemoveAgentAbsence},
 			{ DefinedRaptorApplicationFunctionPaths.EditShiftCategory, Resources.NoPermissionToEditShiftCategory },
 			{ DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity, Resources.NoPermissionToMoveInvalidOverlappedActivity },
-			{ DefinedRaptorApplicationFunctionPaths.RemoveShift, Resources.NoPermissionRemovingShift }
+			{ DefinedRaptorApplicationFunctionPaths.RemoveShift, Resources.NoPermissionRemovingShift },
+			{ DefinedRaptorApplicationFunctionPaths.AddDayOff, Resources.NoPermissionAddDayOff },
+			{ DefinedRaptorApplicationFunctionPaths.RemoveDayOff, Resources.NoPermissionRemoveDayOff }
 		};
 
 		public TeamScheduleCommandHandlingProvider(
@@ -273,7 +275,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			foreach (var person in people)
 			{
 				var actionResult = new ActionResult(person.Id.GetValueOrDefault());
-				if (checkFunctionPermission(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, input.StartDate, person, actionResult.ErrorMessages))
+				if (checkFunctionPermission(DefinedRaptorApplicationFunctionPaths.AddDayOff, input.StartDate, person, actionResult.ErrorMessages))
 				{
 					var command = new AddDayOffCommand
 					{
@@ -314,7 +316,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			foreach (var person in people)
 			{
 				var actionResult = new ActionResult(person.Id.Value);
-				if (checkFunctionPermission(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, input.Date, person, actionResult.ErrorMessages))
+				if (checkFunctionPermission(DefinedRaptorApplicationFunctionPaths.RemoveDayOff, input.Date, person, actionResult.ErrorMessages))
 				{
 					var command = new RemoveDayOffCommand
 					{
