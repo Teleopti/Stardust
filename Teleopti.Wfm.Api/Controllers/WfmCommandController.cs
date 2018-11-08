@@ -27,23 +27,33 @@ namespace Teleopti.Wfm.Api.Controllers
 		    });
 	    }
 
-	    [HttpPost,Route("command/{commandType}")]
-        public IHttpActionResult Post(string commandType)
-        {
+		[HttpPost, Route("command/{commandType}")]
+		public IHttpActionResult Post(string commandType)
+		{
 			using (var scope = services.Resolve<ILifetimeScope>())
 			{
 				if (!dtoProvider.TryFindType(commandType + "Dto", out var type))
 				{
 					return BadRequest("Issue a GET to /command to list available commands");
 				}
-
-				string text = Request.Content.ReadAsStringAsync().Result;
-				var value = Newtonsoft.Json.JsonConvert.DeserializeObject(text, type);
-				var handler = scope.Resolve(typeof(ICommandHandler<>).MakeGenericType(value.GetType()));
-				var method = handler.GetType().GetMethod("Handle");
-				var result = method.Invoke(handler, new[] {value});
-				return Json(result);
+				try
+				{
+					var text = Request.Content.ReadAsStringAsync().Result;
+					var value = Newtonsoft.Json.JsonConvert.DeserializeObject(text, type);
+					var handler = scope.Resolve(typeof(ICommandHandler<>).MakeGenericType(value.GetType()));
+					var method = handler.GetType().GetMethod("Handle");
+					var result = method.Invoke(handler, new[] {value});
+					return Json(result);
+				}
+				catch (Exception e)
+				{
+					return Json(new ResultDto
+					{
+						Successful = false,
+						Message = e.Message
+					});
+				}
 			}
 		}
-    }
+	}
 }
