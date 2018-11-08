@@ -332,7 +332,6 @@
 		}
 
 		vm.onScheduleDateChanged = function () {
-			$scope.$broadcast("teamSchedule.dateChanged");
 			vm.isLoading = true;
 			personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
 			personSelectionSvc.clearPersonInfo();
