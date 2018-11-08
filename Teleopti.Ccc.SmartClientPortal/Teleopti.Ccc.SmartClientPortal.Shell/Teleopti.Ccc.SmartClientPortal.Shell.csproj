@@ -3380,6 +3380,7 @@
     <Compile Include="Win\Scheduling\SingleAgentRestriction\TeleoptiLessIntelligentSplitContainer.Designer.cs">
       <DependentUpon>TeleoptiLessIntelligentSplitContainer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Win\Scheduling\SkillGridContextMenuBuilder.cs" />
     <Compile Include="Win\Scheduling\SkillGridMenuItemUpdate.cs" />
     <Compile Include="Win\Scheduling\SkillResult\SkillDayGridControl.cs">
       <SubType>Component</SubType>

@@ -139,7 +139,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private EditControl _editControlRestrictions;
 		private bool _uIEnabled = true;
 		private SchedulePartFilter SchedulePartFilter = SchedulePartFilter.None;
-		private bool _chartInIntradayMode;
 		private IHandleBusinessRuleResponse _handleBusinessRuleResponse;
 		private IRequestPresenter _requestPresenter;
 		private readonly IScenario _scenario;
@@ -1795,31 +1794,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void skillGridMenuItemPeriodClick(object sender, EventArgs e)
 		{
-			_skillResultViewSetting = SkillResultViewSetting.Period;
-			updateSkillGridMenuItem();
-		}
-
-		private void skillGridMenuItemMonthClick(object sender, EventArgs e)
-		{
-			_skillResultViewSetting = SkillResultViewSetting.Month;
-			updateSkillGridMenuItem();
-		}
-
-		private void skillGridMenuItemWeekClick(object sender, EventArgs e)
-		{
-			_skillResultViewSetting = SkillResultViewSetting.Week;
-			updateSkillGridMenuItem();
-		}
-
-		private void skillGridMenuItemDayClick(object sender, EventArgs e)
-		{
-			_skillResultViewSetting = SkillResultViewSetting.Day;
-			updateSkillGridMenuItem();
-		}
-
-		private void skillGridMenuItemIntraDayClick(object sender, EventArgs e)
-		{
-			_skillResultViewSetting = SkillResultViewSetting.Intraday;
+			_skillResultViewSetting = (SkillResultViewSetting)((ToolStripMenuItem)sender).Tag;
 			updateSkillGridMenuItem();
 		}
 
@@ -2895,26 +2870,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void chartControlSkillDataChartRegionClick(object sender, ChartRegionMouseEventArgs e)
 		{
 			int column = Math.Max(1, (int)GridChartManager.GetIntervalValueForChartPoint(schedulerSplitters1.ChartControlSkillData, e.Point));
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Week) && !_chartInIntradayMode)
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Week))
 				_skillWeekGridControl.ScrollCellInView(0, column);
 
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Month) && !_chartInIntradayMode)
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Month))
 				_skillMonthGridControl.ScrollCellInView(0, column);
 
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Period) && !_chartInIntradayMode)
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Period))
 				_skillFullPeriodGridControl.ScrollCellInView(0, column);
 
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday) && _chartInIntradayMode)
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
 				_skillIntradayGridControl.ScrollCellInView(0, column);
 
-			if (!_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday) && !_chartInIntradayMode)
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Day))
 			{
 				_skillDayGridControl.ScrollCellInView(0, column);
-				schedulerSplitters1.Grid.ScrollCellInView(0, column + 1);
-			}
-
-			if (!_chartInIntradayMode)
-			{
 				schedulerSplitters1.Grid.ScrollCellInView(0, column + 1);
 			}
 		}
@@ -4185,61 +4155,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void setupContextMenuSkillGrid()
 		{
+			new SkillGridContextMenuBuilder().Build(_skillResultViewSetting, _contextMenuSkillGrid, _shrinkage,
+				skillGridMenuItemPeriodClick, toolStripMenuItemUseShrinkageClick, skillGridMenuItemClick);
 
-			var skillGridMenuItem = new ToolStripMenuItem(Resources.Period)
-			{
-				Name = "Period",
-				Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Period)
-			};
-			skillGridMenuItem.Click += skillGridMenuItemPeriodClick;
-			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
-
-			skillGridMenuItem = new ToolStripMenuItem(Resources.Month)
-			{
-				Name = "Month",
-				Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Month)
-			};
-			skillGridMenuItem.Click += skillGridMenuItemMonthClick;
-			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
-
-			skillGridMenuItem = new ToolStripMenuItem(Resources.Week)
-			{
-				Name = "Week",
-				Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Week)
-			};
-			skillGridMenuItem.Click += skillGridMenuItemWeekClick;
-			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
-
-			skillGridMenuItem = new ToolStripMenuItem(Resources.Day)
-			{
-				Name = "Day",
-				Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Day)
-			};
-			skillGridMenuItem.Click += skillGridMenuItemDayClick;
-			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
-
-			skillGridMenuItem = new ToolStripMenuItem(Resources.Intraday)
-			{
-				Name = "Intraday",
-				Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Intraday)
-			};
-			skillGridMenuItem.Click += skillGridMenuItemIntraDayClick;
-			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
-
-			skillGridMenuItem = new ToolStripMenuItem(Resources.UseShrinkage);
-			skillGridMenuItem.Click += toolStripMenuItemUseShrinkageClick;
-			skillGridMenuItem.Checked = _shrinkage;
-			skillGridMenuItem.Name = "UseShrinkage";
-			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
-			var skillGridMenuSeparator = new ToolStripSeparator();
-			_contextMenuSkillGrid.Items.Add(skillGridMenuSeparator);
-			skillGridMenuItem = new ToolStripMenuItem(Resources.CreateSkillSummery);
-			skillGridMenuItem.Click += skillGridMenuItemClick;
-			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
-			skillGridMenuItem = new ToolStripMenuItem(Resources.EditSkillSummery) { Name = "Edit", Enabled = false };
-			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
-			skillGridMenuItem = new ToolStripMenuItem(Resources.DeleteSkillSummery) { Name = "Delete", Enabled = false };
-			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 			_skillDayGridControl.ContextMenuStrip = _contextMenuSkillGrid;
 			_skillIntradayGridControl.ContextMenuStrip = _contextMenuSkillGrid;
 			_skillWeekGridControl.ContextMenuStrip = _contextMenuSkillGrid;
@@ -5019,34 +4937,29 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Week, _chartDescription);
 				_gridChartManager.ReloadChart(_skillWeekGridControl, description);
-				_chartInIntradayMode = false;
 			}
 
 			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Month))
 			{
 				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Month, _chartDescription);
 				_gridChartManager.ReloadChart(_skillMonthGridControl, description);
-				_chartInIntradayMode = false;
 			}
 
 			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Period))
 			{
 				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Period, _chartDescription);
 				_gridChartManager.ReloadChart(_skillFullPeriodGridControl, description);
-				_chartInIntradayMode = false;
 			}
 
 			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
 			{
 				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Intraday, _chartDescription);
 				_gridChartManager.ReloadChart(_skillIntradayGridControl, description);
-				_chartInIntradayMode = true;
 			}
 			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Day))
 			{
 				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Day, _chartDescription);
 				_gridChartManager.ReloadChart(_skillDayGridControl, description);
-				_chartInIntradayMode = false;
 			}
 			schedulerSplitters1.ChartControlSkillData.Visible = true;
 		}
@@ -6856,9 +6769,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				var definitionSets =
 					MultiplicatorDefinitionSet.Where(set => set.MultiplicatorType == MultiplicatorType.Overtime).ToList();
 				var resolution = 15;
-				IScheduleDay scheduleDay;
 				var selectedSchedules = _scheduleView.SelectedSchedules();
-				if (tryGetFirstSelectedSchedule(selectedSchedules, out scheduleDay))
+				if (tryGetFirstSelectedSchedule(selectedSchedules, out var scheduleDay))
 				{
 					var person = scheduleDay.Person;
 					if (scheduleDay.DateOnlyAsPeriod.DateOnly < person.TerminalDate)
