@@ -1,10 +1,10 @@
 ﻿'use strict';
 (function () {
 	angular.module('wfm.requests')
-		.controller('requestsSiteOpenHoursController', ['requestsDataService', 'requestsNotificationService', requestsSiteOpenHoursController])
+		.controller('requestsSiteOpenHoursController', ['requestsDataService', 'requestsNotificationService', 'requestsPermissions', requestsSiteOpenHoursController])
 		.directive('requestsSiteOpenHours', requestsSiteOpenHoursDirective);
 
-	function requestsSiteOpenHoursController(requestsDataService, requestsNotificationService) {
+	function requestsSiteOpenHoursController(requestsDataService, requestsNotificationService, requestsPermissions) {
 		var vm = this;
 		var sitesBefore, sitesAfter;
 		vm.openHours = [];
@@ -12,6 +12,7 @@
 		vm.save = save;
 		vm.cancel = cancel;
 		vm.selectedSite = null;
+		vm.hasEditPermission = requestsPermissions.all().HasEditSiteOpenHoursPermission;
 		init();
 		function init() {
 			var getSiteProgress = requestsDataService.getSitesPromise();
