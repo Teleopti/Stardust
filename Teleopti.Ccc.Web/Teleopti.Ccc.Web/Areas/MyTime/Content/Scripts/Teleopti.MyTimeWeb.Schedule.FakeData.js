@@ -60,6 +60,7 @@
 			BaseUtcOffsetInMinutes: 60,
 			Days: [
 				{
+					Availability: true,
 					FixedDate: basedDate,
 					Header: {
 						Title: 'Today',
@@ -126,6 +127,7 @@
 					]
 				},
 				{
+					Availability: true,
 					FixedDate: momentWithLocale(basedDate)
 						.add('day', 1)
 						.format('YYYY-MM-DD'),

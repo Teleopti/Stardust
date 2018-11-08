@@ -1757,3 +1757,29 @@ button.btn.absence-report-cancel {
 	background-color: #f6f6f6;
 	opacity: 1;
 }
+
+/*Traffic Light New Icon Style*/
+.traffic-light-progress {
+	width: 21px;
+	transform: rotate(-90deg);
+	border-radius: 6px;
+	border: 1px solid #fff;
+	background: #ddd;
+	height: 13px;
+	cursor: pointer;
+}
+.traffic-light-progress .progress-bar {
+	box-shadow: none;
+}
+.traffic-light-progress-poor .progress-bar {
+	width: 25%;
+	background: red;
+}
+.traffic-light-progress-fair .progress-bar {
+	width: 50%;
+	background: orange;
+}
+.traffic-light-progress-good .progress-bar {
+	width: 80%;
+	background: green;
+}

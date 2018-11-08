@@ -201,7 +201,7 @@
 		};
 		viewModel.readData(rawData);
 
-		equal(viewModel.isDayOff(), rawData.Schedule.IsDayOff);
+		equal(viewModel.isDayOff, rawData.Schedule.IsDayOff);
 	});
 
 	test('should set empty layers when there is no period', function() {

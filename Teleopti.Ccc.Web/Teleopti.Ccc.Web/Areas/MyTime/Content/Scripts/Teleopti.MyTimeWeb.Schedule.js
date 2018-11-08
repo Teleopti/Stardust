@@ -157,6 +157,9 @@ Teleopti.MyTimeWeb.Schedule = (function($) {
 		self.isOvertimeRequestAvailable = ko.observable(true);
 		self.showProbabilityToggle = ko.observable();
 		self.loadingProbabilityData = ko.observable(false);
+		self.newTrafficLightIconEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled(
+			'MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640'
+		);
 
 		self.isCurrentWeek = ko.observable();
 		self.timeLines = ko.observableArray();
