@@ -11,8 +11,6 @@
 		vm.highlighted = {};
 		vm.diamonds = [];
 		vm.cards = [];
-		vm.previousHref;
-		vm.nextHref;
 		$stateParams.open = $stateParams.open === "true";
 		vm.openRecordedOutOfAdherences = $stateParams.open;
 		vm.openApprovedPeriods = $stateParams.open;
@@ -78,13 +76,11 @@
 				if ($stateParams.date > data.Navigation.First) {
 					var previousDay = moment($stateParams.date).subtract(1, 'day');
 					vm.previousHref = $state.href($state.current.name, {personId: vm.personId, date: previousDay.format('YYYYMMDD')});
-					vm.previousTooltip = previousDay.format('L');
 				}
 
 				if ($stateParams.date < data.Navigation.Last) {
 					var nextDay = moment($stateParams.date).add(1, 'day');
 					vm.nextHref = $state.href($state.current.name, {personId: vm.personId, date: nextDay.format('YYYYMMDD')});
-					vm.nextTooltip = nextDay.format('L');
 				}
 			});
 
