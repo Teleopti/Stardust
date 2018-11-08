@@ -41,7 +41,7 @@
                                         (ngModelChange)="onPickSubSkill()">
                             <label nz-radio-button
                                    nzValue="all">
-                                {{translate.instant('All')}}
+                                {{'All' | translate}}
                             </label>
                             <label *ngFor="let skill of selectedSkillOrGroup.Skills"
                                    nz-radio-button
@@ -58,11 +58,11 @@
                         <nz-radio-group [(ngModel)]="selectedChartType"
                                         (click)="onClickTab()">
                             <label nz-radio-button
-                                   nzValue="traffic">{{translate.instant('IncomingTraffic')}}</label>
+                                   nzValue="traffic">{{'IncomingTraffic' | translate}}</label>
                             <label nz-radio-button
-                                   nzValue="performance">{{translate.instant('Performance')}}</label>
+                                   nzValue="performance">{{'Performance' | translate}}</label>
                             <label nz-radio-button
-                                   nzValue="staffing">{{translate.instant('Staffing')}}
+                                   nzValue="staffing">{{'Staffing' | translate}}
                             </label>
                         </nz-radio-group>
                         &nbsp;

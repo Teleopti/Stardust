@@ -1,20 +1,20 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import moment, { Moment } from 'moment';
-import { IntradayDataService } from '../services/intraday-data.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import c3 from 'c3';
+import moment, { Moment } from 'moment';
+import { IntradayDataService } from '../services/intraday-data.service';
 import {
-	SkillPickerItem,
 	IntradayChartType,
+	IntradayPerformanceDataSeries,
+	IntradayPerformanceSummaryData,
+	IntradayPerformanceSummaryItem,
+	IntradayStaffingDataSeries,
 	IntradayTrafficData,
 	IntradayTrafficDataSeries,
-	IntradayTrafficSummaryItem,
 	IntradayTrafficSummaryData,
-	IntradayPerformanceDataSeries,
-	IntradayPerformanceSummaryItem,
-	IntradayPerformanceSummaryData,
-	IntradayStaffingDataSeries,
+	IntradayTrafficSummaryItem,
 	Skill,
+	SkillPickerItem,
 	SkillPickerItemType
 } from '../types';
 
@@ -24,7 +24,7 @@ import {
 	styleUrls: ['./intraday-main.component.scss']
 })
 export class IntradayMainComponent implements OnInit, OnDestroy {
-	constructor(public intradayDataService: IntradayDataService, private translate: TranslateService) {}
+	constructor(public intradayDataService: IntradayDataService, private translateService: TranslateService) {}
 
 	selectedSkillOrGroup: SkillPickerItem;
 	selectedSubSkill: Skill;
@@ -196,10 +196,10 @@ export class IntradayMainComponent implements OnInit, OnDestroy {
 						AHT: '#FB8C00'
 					},
 					names: {
-						Forecasted_calls: this.translate.instant('ForecastedVolume') + ' ←',
-						Calls: this.translate.instant('ActualVolume') + ' ←',
-						Forecasted_AHT: this.translate.instant('ForecastedAverageHandlingTime') + ' →',
-						AHT: this.translate.instant('ActualAverageHandlingTime') + ' →'
+						Forecasted_calls: this.translateService.instant('ForecastedVolume') + ' ←',
+						Calls: this.translateService.instant('ActualVolume') + ' ←',
+						Forecasted_AHT: this.translateService.instant('ForecastedAverageHandlingTime') + ' →',
+						AHT: this.translateService.instant('ActualAverageHandlingTime') + ' →'
 					},
 					axes: {
 						Forecasted_AHT: 'y2',
@@ -218,13 +218,13 @@ export class IntradayMainComponent implements OnInit, OnDestroy {
 		if (input) {
 			const returnData = [
 				{
-					Heading: this.translate.instant('Volume'),
+					Heading: this.translateService.instant('Volume'),
 					Forecasted: input.ForecastedCalls,
 					Actual: input.CalculatedCalls,
 					Difference: input.ForecastedActualHandleTimeDiff
 				},
 				{
-					Heading: this.translate.instant('AverageHandlingTime'),
+					Heading: this.translateService.instant('AverageHandlingTime'),
 					Forecasted: input.ForecastedAverageHandleTime,
 					Actual: input.AverageHandleTime,
 					Difference: input.ForecastedActualHandleTimeDiff
@@ -271,10 +271,10 @@ export class IntradayMainComponent implements OnInit, OnDestroy {
 						AHT: '#FB8C00'
 					},
 					names: {
-						ASA: this.translate.instant('AverageSpeedOfAnswer') + ' ←',
-						Abandoned_rate: this.translate.instant('AbandonedRate') + ' ←',
-						Service_level: this.translate.instant('ServiceLevel') + ' →',
-						ESL: this.translate.instant('ESL') + ' →'
+						ASA: this.translateService.instant('AverageSpeedOfAnswer') + ' ←',
+						Abandoned_rate: this.translateService.instant('AbandonedRate') + ' ←',
+						Service_level: this.translateService.instant('ServiceLevel') + ' →',
+						ESL: this.translateService.instant('ESL') + ' →'
 					},
 					axes: {
 						Service_level: 'y2',
@@ -293,7 +293,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy {
 		if (input) {
 			return [
 				{
-					Heading: this.translate.instant('Average'),
+					Heading: this.translateService.instant('Average'),
 					ServiceLevel: input.ServiceLevel,
 					EstimatedServiceLevel: input.EstimatedServiceLevel,
 					AbandonRate: input.AbandonRate,
@@ -338,10 +338,10 @@ export class IntradayMainComponent implements OnInit, OnDestroy {
 						AHT: '#FB8C00'
 					},
 					names: {
-						Forecasted_staffing: this.translate.instant('ForecastedStaff') + ' ←',
-						Updated_forecasted_staffing: this.translate.instant('ReforecastedStaff') + ' ←',
-						Actual_staffing: this.translate.instant('RequiredStaff') + ' ←',
-						Scheduled_staffing: this.translate.instant('ScheduledStaff') + ' ←'
+						Forecasted_staffing: this.translateService.instant('ForecastedStaff') + ' ←',
+						Updated_forecasted_staffing: this.translateService.instant('ReforecastedStaff') + ' ←',
+						Actual_staffing: this.translateService.instant('RequiredStaff') + ' ←',
+						Scheduled_staffing: this.translateService.instant('ScheduledStaff') + ' ←'
 					},
 					axes: {
 						Forecasted_staffing: 'y',
