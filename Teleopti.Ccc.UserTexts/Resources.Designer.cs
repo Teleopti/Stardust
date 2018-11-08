@@ -21914,6 +21914,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No permission to view schedules.
+        /// </summary>
+        public static string NoPermissionToViewSchedules {
+            get {
+                return ResourceManager.GetString("NoPermissionToViewSchedules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You do not have permission to view {0}..
         /// </summary>
         public static string NoPermissionToViewWFMModuleErrorMessage {

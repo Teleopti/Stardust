@@ -17845,4 +17845,7 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="NoPermissionSwapShifts" xml:space="preserve">
     <value>No permission to swap shifts</value>
   </data>
+  <data name="NoPermissionToViewSchedules" xml:space="preserve">
+    <value>No permission to view schedules</value>
+  </data>
 </root>

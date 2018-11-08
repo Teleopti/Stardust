@@ -1,11 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 {
+	[PermissionCheck(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, nameof(Resources.YouDoNotHavePermissionsToViewTeamSchedules))]
+	[PermissionCheck(DefinedRaptorApplicationFunctionPaths.ViewSchedules, nameof(Resources.NoPermissionToViewSchedules))]
 	public class TeamScheduleActivityCommandController : ApiController
 	{
 		private readonly TeamScheduleActivityCommandService _activityCommandService;

@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	'use strict';
 
 	angular
@@ -28,7 +28,7 @@
 		function onRequest(config) {
 			if (!connected) {
 				var q = $q.defer();
-				$timeout(function() {
+				$timeout(function () {
 					q.reject();
 				}, 2000);
 				return q.promise;
@@ -96,8 +96,10 @@
 					break;
 
 				case rejection.status === 403:
+					var message = $translate.instant('NoPermissionToViewErrorMessage');
+					if (rejection.data && rejection.data.Message) message = rejection.data.Message;
 					NoticeService.error(
-						"<span class='test-alert'></span>" + $translate.instant('NoPermissionToViewErrorMessage'),
+						"<span class='test-alert'></span>" + message,
 						null,
 						false
 					);
@@ -119,12 +121,12 @@
 					//don't remove class test-alert - used in perf tests
 					NoticeService.error(
 						"<span class='test-alert'></span>" +
-							$translate.instant('InternalErrorMessage') +
-							'<a href="mailto:' +
-							Settings.supportEmailSetting +
-							'">' +
-							Settings.supportEmailSetting +
-							'</a>',
+						$translate.instant('InternalErrorMessage') +
+						'<a href="mailto:' +
+						Settings.supportEmailSetting +
+						'">' +
+						Settings.supportEmailSetting +
+						'</a>',
 						null,
 						false
 					);

@@ -1259,6 +1259,7 @@
     <Compile Include="Filters\ISessionAuthenticationModule.cs" />
     <Compile Include="Filters\KeyBasedAuthenticationAttribute.cs" />
     <Compile Include="Filters\LicenseAttribute.cs" />
+    <Compile Include="Filters\PermissionCheckAttribute.cs" />
     <Compile Include="Filters\OptimisticLockExceptionFilterAttribute.cs" />
     <Compile Include="Filters\SessionAuthenticationModule.cs" />
     <Compile Include="Models\Shared\Link.cs" />
