@@ -87,10 +87,10 @@
 		public const string CreatePerformanceManagerReport = "Raptor/PerformanceManager/CreatePerformanceManagerReport";
 		public const string ViewPerformanceManagerReport = "Raptor/PerformanceManager/ViewPerformanceManagerReport";
 
-		// PM Next Gen
-		public const string PmNextGen = Anywhere + "/Insights";
-		public const string PmNextGenEditReport = PmNextGen + "/EditInsightsReport";
-		public const string PmNextGenViewReport = PmNextGen + "/ViewInsightsReport";
+		// Insights
+		public const string Insights = Anywhere + "/Insights";
+		public const string EditInsightsReport = Insights + "/EditInsightsReport";
+		public const string ViewInsightsReport = Insights + "/ViewInsightsReport";
 
 		// Online Reports
 		public const string ScheduledTimePerActivityReport = "Raptor/OnlineReports/ScheduledTimePerActivityReport";

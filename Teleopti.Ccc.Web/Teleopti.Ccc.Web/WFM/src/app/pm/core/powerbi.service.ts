@@ -7,7 +7,7 @@ import { ReportConfig } from '../models/ReportConfig.model';
 export class PowerBIService {
 	constructor(private http: HttpClient) { }
 
-	private api_url = '../api/PowerBiReport/ReportConfig';
+	private api_url = '../api/Insights/ReportConfig';
 	private headers = new Headers({'Content-Type': 'application/json'});
 
 	async getReportConfig(): Promise<ReportConfig> {
@@ -17,7 +17,7 @@ export class PowerBIService {
 	}
 
 	private handleError(error: any): Promise<any> {
-	console.error('An error occurred', error);
-	return Promise.reject(error.message || error);
+		console.error('An error occurred', error);
+		return Promise.reject(error.message || error);
 	}
 }
