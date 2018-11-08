@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// Repositories
 			if (QueryAllAttributes<ThrowIfRepositoriesAreUsedAttribute>().Any())
 			{
-				SetupThrowingTestDoublesForRepositories.Execute(isolate);
+				SetupThrowingTestDoubles.ForAllRepositories(isolate);
 			}
 			else
 			{
