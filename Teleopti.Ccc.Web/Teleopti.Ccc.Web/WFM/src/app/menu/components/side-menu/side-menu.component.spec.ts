@@ -20,7 +20,7 @@ const mockStateService: Partial<IStateService> = {
 	}
 };
 
-fdescribe('SideMenuComponent', () => {
+describe('SideMenuComponent', () => {
 	let component: SideMenuComponent;
 	let fixture: ComponentFixture<SideMenuComponent>;
 	let page: Page;
