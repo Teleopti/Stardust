@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
@@ -908,6 +909,41 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			command.PersonAbsenceId.Should().Be.EqualTo(personAbsenceId);
 			command.Person.Should().Be.EqualTo(person);
 		}
+
+		[Test]
+		public void ShouldReturnErrorBasedOnCurrentCultureWhenRemoveAbsenceWithoutPermission()
+		{
+			PermissionProvider.Enable();
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.Has(scenario);
+
+			var person = PersonFactory.CreatePerson("test").WithId();
+			PersonRepository.Has(person);
+			var trackId = Guid.NewGuid();
+			var personAbsenceId = Guid.NewGuid();
+
+			var removeAbsenceForm = new RemovePersonAbsenceForm
+			{
+				SelectedPersonAbsences = new[] {
+					new SelectedPersonAbsence{
+						AbsenceDates = new []{ new AbsenceDate { Date = new DateOnly(2018,7,23), PersonAbsenceId = personAbsenceId } },
+						PersonId =person.Id.Value
+					}
+				},
+				TrackedCommandInfo = new TrackedCommandInfo { TrackId = trackId }
+			};
+
+			var results = Target.RemoveAbsence(removeAbsenceForm);
+			Thread.CurrentThread.CurrentUICulture = CultureInfoFactory.CreateEnglishCulture();
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo("No permission to remove absence from agents.");
+
+			Thread.CurrentThread.CurrentUICulture = CultureInfoFactory.CreateChineseCulture();
+			results = Target.RemoveAbsence(removeAbsenceForm);
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo("没有权限为座席代表移除缺勤。");
+
+		}
+
 
 	}
 }
