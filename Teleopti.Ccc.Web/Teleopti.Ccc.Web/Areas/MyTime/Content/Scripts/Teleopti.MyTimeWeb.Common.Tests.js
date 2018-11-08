@@ -29,6 +29,45 @@
 		}
 	});
 
+	test('should be able to enable a toggle', function() {
+		try {
+			Teleopti.MyTimeWeb.Common.Init(
+				{
+					defaultNavigation: '/',
+					baseUrl: '/',
+					startBaseUrl: '/'
+				},
+				null
+			);
+
+			Teleopti.MyTimeWeb.Common.EnableToggle('my_toggle_to_be_enabled');
+
+			equal(Teleopti.MyTimeWeb.Common.IsToggleEnabled('my_toggle_to_be_enabled'), true);
+		} catch (error) {
+			equal(error, 'you cannot ask toggle before you initialize it!');
+		}
+	});
+
+	test('should be able to disable a toggle', function() {
+		try {
+			Teleopti.MyTimeWeb.Common.Init(
+				{
+					BusinessUnitId: '',
+					DataSourceName: '',
+					Url: '',
+					AgentId: ''
+				},
+				null
+			);
+			Teleopti.MyTimeWeb.Common.EnableToggle('my_toggle_to_be_disabled');
+			Teleopti.MyTimeWeb.Common.DisableToggle('my_toggle_to_be_disabled');
+
+			equal(Teleopti.MyTimeWeb.Common.IsToggleEnabled('my_toggle_to_be_disabled'), false);
+		} catch (error) {
+			equal(error, 'you cannot ask toggle before you initialize it!');
+		}
+	});
+
 	test('should format moment', function() {
 		common.IsToggleEnabled = function(x) {
 			return true;
