@@ -1,6 +1,33 @@
 ##===========
 ## Functions
 ##===========
+function TeleoptiDriveMapProperty-get {
+    Param(
+      [string]$name
+      )
+    $computer = gc env:computername
+    ## Local debug values
+    if ($computer.ToUpper().StartsWith("TELEOPTI")) {
+		switch ($name){
+		BlobPath		{$TeleoptiDriveMapProperty="http://teleopticcc7.blob.core.windows.net/"; break}
+		ContainerName	{$TeleoptiDriveMapProperty="teleopticcc/Settings"; break}
+		AccountKey		{$TeleoptiDriveMapProperty="IqugZC5poDWLu9wwWocT42TAy5pael77JtbcZtnPcm37QRThCkdrnzOh3HEu8rDD1S8E6dU5D0aqS4sJA1BTxQ=="; break}
+		DataSourceName	{$TeleoptiDriveMapProperty="teleopticcc-dev"; break}
+		default			{$TeleoptiDriveMapProperty="Unknown Value"; break}
+        }
+     }
+    else {
+		switch ($name){
+		BlobPath		{$TeleoptiDriveMapProperty = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.BlobPath"); break}
+        ContainerName	{$TeleoptiDriveMapProperty="teleopticcc/Settings"; break}        
+		AccountKey		{$TeleoptiDriveMapProperty = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.AccountKey"); break}
+		DataSourceName	{$TeleoptiDriveMapProperty = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.DataSourceName"); break}
+		default			{$TeleoptiDriveMapProperty="Unknown Value"; break}
+        }
+           
+    }
+	return $TeleoptiDriveMapProperty
+}
 
 function Hostsfile-Add-Cname {
     param(
@@ -93,6 +120,7 @@ Try
 	[Environment]::SetEnvironmentVariable("RoleInstanceID", [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::CurrentRoleInstance.Id, "Machine")
 
     #74478, #76734, #78787
+    $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
     $Cname = "$DataSourceName.teleopticloud.com"
     Hostsfile-Add-Cname -Cname $Cname
     
