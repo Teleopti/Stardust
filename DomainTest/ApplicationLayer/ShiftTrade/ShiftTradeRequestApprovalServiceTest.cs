@@ -21,7 +21,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 {
 	[DomainTest]
-	[FullPermissions]
 	public class ShiftTradeRequestApprovalServiceTest : IIsolateSystem
 	{
 		public IRequestApprovalServiceFactory RequestApprovalServiceFactory;

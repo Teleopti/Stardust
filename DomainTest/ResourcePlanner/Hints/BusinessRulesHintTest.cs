@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
 	[UseIocForFatClient]
-	[FullPermissions]
 	public class BusinessRulesHintDesktopTest
 	{
 		public CheckScheduleHints Target;
@@ -116,7 +115,6 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 	}
 
 	[DomainTest]
-	[FullPermissions]
 	public class BusinessRulesHintTest : IIsolateSystem
 	{
 		public CheckScheduleHints Target;

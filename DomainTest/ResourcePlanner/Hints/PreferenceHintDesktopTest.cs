@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
 	[UseIocForFatClient]
-	[FullPermissions]
 	public class PreferenceHintDesktopTest
 	{
 		public CheckScheduleHints Target;

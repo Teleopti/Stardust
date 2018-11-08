@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
 	[LoggedOnAppDomain]
 	[DontSendEventsAtPersist]
-	[FullPermissions]
 	[TestFixtureSource(typeof(dayOffFixtureSource))]
 	public abstract class DayOffOptimizationScenario : IIsolateSystem, IExtendSystem, ITestInterceptor, IConfigureToggleManager
 	{

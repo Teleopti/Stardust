@@ -24,7 +24,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Wfm.Api.Test.Query
 {
 	[ApiTest]
-	[FullPermissions]
 	public class AbsencePossibilityHandlerTest
 	{
 		private const int intervalLengthInMinute = 15;

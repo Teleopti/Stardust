@@ -5,7 +5,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 {
 	[DomainTest]
 	[DontSendEventsAtPersist]
-	[FullPermissions]
 	public abstract class IntraIntervalOptimizationScenarioTest
 	{
 	}

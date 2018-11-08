@@ -16,7 +16,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Collection
 {
 	[DomainTest]
-	[FullPermissions]
 	public class CachedNumberOfEachCategoryPerDateTest
 	{
 		private ICachedNumberOfEachCategoryPerDate _target;

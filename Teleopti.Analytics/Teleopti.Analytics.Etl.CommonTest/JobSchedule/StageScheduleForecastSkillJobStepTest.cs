@@ -30,7 +30,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 {
 	[DomainTest]
-	[FullPermissions]
 	public class StageScheduleForecastSkillJobStepTest : IExtendSystem
 	{
 		public IComponentContext ComponentContext;

@@ -23,7 +23,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
-	[FullPermissions]
 	public class BlockSchedulingExistingShiftNotMatchingEachOtherHintForSchedulePeriodTest
 	{
 		public CheckScheduleHints Target;

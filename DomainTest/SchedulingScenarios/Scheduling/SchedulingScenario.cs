@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	[TestFixtureSource(typeof(schedulingFixtureSource))]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	[FullPermissions]
 	[DontSendEventsAtPersist]
 	public abstract class SchedulingScenario : ITestInterceptor, IExtendSystem, IConfigureToggleManager
 	{
