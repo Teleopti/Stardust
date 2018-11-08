@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 				DefinedRaptorApplicationFunctionForeignIds.ViewInsightsReport,
 				DefinedRaptorApplicationFunctionForeignIds.EditInsightsReport);
 
-			hideAppFunctionWithToggleOff(functions, Toggles.Wfm_PmNextGen_78059,
+			hideAppFunctionWithToggleOff(functions, Toggles.WFM_Insights_78059,
 				DefinedRaptorApplicationFunctionForeignIds.Insights,
 				DefinedRaptorApplicationFunctionForeignIds.ViewInsightsReport,
 				DefinedRaptorApplicationFunctionForeignIds.EditInsightsReport);

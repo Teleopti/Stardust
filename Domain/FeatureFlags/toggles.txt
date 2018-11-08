@@ -161,4 +161,4 @@ WFM_Request_View_Permissions_77731 = RC
 
 # Tech #
 WFM_ChatBot_77547 = DEV
-Wfm_PmNextGen_78059 = DEV
+WFM_Insights_78059 = DEV

@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			PermissionProvider.Enable();
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.Insights);
 
-			ToggleManager.Enable(Toggles.Wfm_PmNextGen_78059);
+			ToggleManager.Enable(Toggles.WFM_Insights_78059);
 
 			var area = Target.GetWfmAreasWithPermissions().Single();
 			area.Path.Should().Be(DefinedRaptorApplicationFunctionPaths.Insights);
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			PermissionProvider.Enable();
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.Insights);
 
-			ToggleManager.Enable(Toggles.Wfm_PmNextGen_78059);
+			ToggleManager.Enable(Toggles.WFM_Insights_78059);
 
 			var areas = Target.GetWfmAreasWithPermissions();
 			areas.Count(a=>a.Path == DefinedRaptorApplicationFunctionPaths.Insights).Should().Be(0);
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			PermissionProvider.Enable();
 
-			ToggleManager.Enable(Toggles.Wfm_PmNextGen_78059);
+			ToggleManager.Enable(Toggles.WFM_Insights_78059);
 
 			var areas = Target.GetWfmAreasWithPermissions();
 			areas.Count(a=>a.Path == DefinedRaptorApplicationFunctionPaths.Insights).Should().Be(0);

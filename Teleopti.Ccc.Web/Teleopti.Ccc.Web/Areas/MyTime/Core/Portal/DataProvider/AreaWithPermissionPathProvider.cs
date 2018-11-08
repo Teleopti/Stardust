@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			},
 			{
 				DefinedRaptorApplicationFunctionPaths.Insights,
-				Toggles.Wfm_PmNextGen_78059
+				Toggles.WFM_Insights_78059
 			}
 		};
 

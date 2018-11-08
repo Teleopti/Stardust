@@ -136,7 +136,7 @@
 		WFM_Intraday_Redesign_77214,
 		
 		WFM_ChatBot_77547,
-		Wfm_PmNextGen_78059,
+		WFM_Insights_78059,
 
 		Wfm_Payroll_SupportMultiDllPayrolls_75959,
 		Wfm_Stardust_EnableScaleout_77366,
