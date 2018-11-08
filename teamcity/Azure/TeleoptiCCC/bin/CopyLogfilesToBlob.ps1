@@ -120,10 +120,11 @@ Try
     {
 
         #Create zip logfiles
-        $toZip = gci $sourceFolder\* -Include *.txt,*.log -exclude CopyLogfilesToBlob.txt
+		copy-item $sourceFolder\StartupLog.txt $sourceFolder\StartuplogCopy.txt -Force
+        $toZip = gci $sourceFolder\* -Include *.txt,*.log -exclude CopyLogfilesToBlob.txt,Startuplog.txt
         Compress-Archive -Path $toZip -DestinationPath "LogFiles_$env:computername.zip" -Force
-
-        CopyFileToBlobStorage -SourceFolder "$sourceFolder" -destinationFolder "$destinationFolder" -filename "LogFiles_$env:computername.zip"  
+		
+		CopyFileToBlobStorage -SourceFolder "$sourceFolder" -destinationFolder "$destinationFolder" -filename "LogFiles_$env:computername.zip"  
     }
     else
     {
