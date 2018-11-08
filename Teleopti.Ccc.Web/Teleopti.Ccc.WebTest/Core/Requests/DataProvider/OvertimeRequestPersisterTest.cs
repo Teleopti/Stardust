@@ -77,6 +77,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			isolate.UseTestDouble<RequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
 			isolate.UseTestDouble(new ThisIsNow(_currentDateTime)).For<INow>();
+			isolate.UseTestDouble<SkillIntradayStaffingFactory>().For<SkillIntradayStaffingFactory>();
+
 		}
 
 		[Test]

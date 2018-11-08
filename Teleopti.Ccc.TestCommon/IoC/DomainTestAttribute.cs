@@ -276,7 +276,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeExternalPerformanceDataRepository>().For<IExternalPerformanceDataRepository>();
 				isolate.UseTestDouble<FakeTeamGamificationSettingRepository>().For<ITeamGamificationSettingRepository>();
 				isolate.UseTestDouble<FakeAgentBadgeRepository>().For<IAgentBadgeRepository>();
-				isolate.UseTestDouble<SkillIntradayStaffingFactory>(); //??? shouldn't be here...
 				isolate.UseTestDouble<FakePersonScheduleDayReadModelPersister>().For<IPersonScheduleDayReadModelPersister>();
 				isolate.UseTestDouble<FakeGamificationSettingRepository>().For<IGamificationSettingRepository>();
 				isolate.UseTestDouble<FakeForecastDayOverrideRepository>().For<IForecastDayOverrideRepository>();

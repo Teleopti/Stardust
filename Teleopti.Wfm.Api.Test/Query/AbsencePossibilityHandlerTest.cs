@@ -16,15 +16,17 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Api.Test.Query
 {
 	[ApiTest]
-	public class AbsencePossibilityHandlerTest
+	public class AbsencePossibilityHandlerTest : IExtendSystem
 	{
 		private const int intervalLengthInMinute = 15;
 
@@ -233,6 +235,11 @@ namespace Teleopti.Wfm.Api.Test.Query
 			workload.SetId(Guid.NewGuid());
 
 			return skill;
+		}
+
+		public void Extend(IExtend extend, IocConfiguration configuration)
+		{
+			extend.AddService<SkillIntradayStaffingFactory>();
 		}
 	}
 }
