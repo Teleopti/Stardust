@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.BpoExchange,
 				Resources.BpoExchange, "bpo");
 			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.PmNextGen,
-				Resources.PmNextGen, "pm");
+				Resources.Insights, "pm");
 			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.All, "API access",
 				"apiaccess");
 		}
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			tryToAddArea("HealthCheck", DefinedRaptorApplicationFunctionPaths.WebPermissions, areas);
 			tryToAddAreaWithLicense("Messages", DefinedLicenseOptionPaths.TeleoptiCccSmsLink, areas);
 			tryToAddArea("Reporting", DefinedRaptorApplicationFunctionPaths.AccessToReports, areas);
-			tryToAddArea("PMNextGen", DefinedRaptorApplicationFunctionPaths.PmNextGen, areas);
+			tryToAddArea("Insights", DefinedRaptorApplicationFunctionPaths.PmNextGen, areas);
 			return areas;
 		}
 

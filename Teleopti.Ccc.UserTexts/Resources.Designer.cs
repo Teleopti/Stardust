@@ -10739,6 +10739,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit report.
+        /// </summary>
+        public static string EditInsightsReport {
+            get {
+                return ResourceManager.GetString("EditInsightsReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit Location Property.
         /// </summary>
         public static string EditLocationProperty {
@@ -15831,6 +15840,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string InsertNewPersonFromClipboard {
             get {
                 return ResourceManager.GetString("InsertNewPersonFromClipboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insights.
+        /// </summary>
+        public static string Insights {
+            get {
+                return ResourceManager.GetString("Insights", resourceCulture);
             }
         }
         
@@ -26148,33 +26166,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PM Next Generation.
-        /// </summary>
-        public static string PmNextGen {
-            get {
-                return ResourceManager.GetString("PmNextGen", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Edit report.
-        /// </summary>
-        public static string PmNextGenEditReport {
-            get {
-                return ResourceManager.GetString("PmNextGenEditReport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to View report.
-        /// </summary>
-        public static string PmNextGenViewReport {
-            get {
-                return ResourceManager.GetString("PmNextGenViewReport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Points per shift category.
         /// </summary>
         public static string PointsPerShiftCategory {
@@ -27711,7 +27702,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reply Request.
+        ///   Looks up a localized string similar to Reply to Request.
         /// </summary>
         public static string ReplyRequest {
             get {
@@ -38907,6 +38898,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ViewHistory {
             get {
                 return ResourceManager.GetString("ViewHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View report.
+        /// </summary>
+        public static string ViewInsightsReport {
+            get {
+                return ResourceManager.GetString("ViewInsightsReport", resourceCulture);
             }
         }
         

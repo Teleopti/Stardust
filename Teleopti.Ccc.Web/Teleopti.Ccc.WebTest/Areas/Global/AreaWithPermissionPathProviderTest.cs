@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			var area = Target.GetWfmAreasWithPermissions().Single();
 			area.Path.Should().Be(DefinedRaptorApplicationFunctionPaths.PmNextGen);
-			area.Name.Should().Be(Resources.PmNextGen);
+			area.Name.Should().Be(Resources.Insights);
 			area.InternalName.Should().Be("pm");
 		}
 

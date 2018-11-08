@@ -188,9 +188,9 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ExportSchedule, "xxExportSchedule", DefinedRaptorApplicationFunctionForeignIds.ExportSchedule);
 
 			// PM Next Gen
-			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PmNextGen, "xxPmNextGen", DefinedRaptorApplicationFunctionForeignIds.PmNextGen);
-			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PmNextGenEditReport, "xxPmNextGenEditReport", DefinedRaptorApplicationFunctionForeignIds.PmNextGenEditReport);
-			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PmNextGenViewReport, "xxPmNextGenViewReport", DefinedRaptorApplicationFunctionForeignIds.PmNextGenViewReport);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PmNextGen, "xxInsights", DefinedRaptorApplicationFunctionForeignIds.PmNextGen);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PmNextGenEditReport, "xxEditInsightsReport", DefinedRaptorApplicationFunctionForeignIds.PmNextGenEditReport);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PmNextGenViewReport, "xxViewInsightsReport", DefinedRaptorApplicationFunctionForeignIds.PmNextGenViewReport);
 
 			return result.ToArray();
 		}

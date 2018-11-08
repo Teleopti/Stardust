@@ -54,7 +54,7 @@
 		public const string ModifyPeopleWithinGroupPage = "Raptor/PersonAdmin/ModifyPeopleWithinGroupPage";
 		public const string SendAsm = "Raptor/PersonAdmin/SendAsm";
 		public const string AllowPersonModifications = "Raptor/PersonAdmin/AllowPersonModifications";
-        public const string DeletePerson = "Raptor/PersonAdmin/DeletePerson";
+		public const string DeletePerson = "Raptor/PersonAdmin/DeletePerson";
 		public const string AddPerson = "Raptor/PersonAdmin/AddPerson";
 
 		// Options
@@ -88,9 +88,9 @@
 		public const string ViewPerformanceManagerReport = "Raptor/PerformanceManager/ViewPerformanceManagerReport";
 
 		// PM Next Gen
-		public const string PmNextGen = "Raptor/PmNextGen";
-		public const string PmNextGenEditReport = PmNextGen + "/EditReport";
-		public const string PmNextGenViewReport = PmNextGen + "/ViewReport";
+		public const string PmNextGen = Anywhere + "/Insights";
+		public const string PmNextGenEditReport = PmNextGen + "/EditInsightsReport";
+		public const string PmNextGenViewReport = PmNextGen + "/ViewInsightsReport";
 
 		// Online Reports
 		public const string ScheduledTimePerActivityReport = "Raptor/OnlineReports/ScheduledTimePerActivityReport";
@@ -113,7 +113,7 @@
 		public const string ExtendedPreferencesWeb = "Raptor/MyTimeWeb/ExtendedPreferences";
 		public const string ShiftTradeRequestsWeb = "Raptor/MyTimeWeb/ShiftTradeRequests";
 		public const string OvertimeRequestWeb = "Raptor/MyTimeWeb/OvertimeRequestWeb";
-        public const string ShiftTradeBulletinBoard = "Raptor/MyTimeWeb/ShiftTradeBulletinBoard";
+		public const string ShiftTradeBulletinBoard = "Raptor/MyTimeWeb/ShiftTradeBulletinBoard";
 		public const string ShareCalendar = "Raptor/MyTimeWeb/ShareCalendar";
 		public const string OvertimeAvailabilityWeb = "Raptor/MyTimeWeb/OvertimeAvailabilityWeb";
 		public const string MyReportWeb = "Raptor/MyTimeWeb/MyReportWeb";
