@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 import { DowngradeableComponent } from '@wfm/types';
 import { IStateProvider, IUrlRouterProvider } from 'angular-ui-router';
 import { WorkspaceComponent } from './components';
@@ -14,25 +13,25 @@ import { PowerBIService } from './core/powerbi.service';
 	exports: [],
 	entryComponents: [WorkspaceComponent]
 })
-export class PmModule {
+export class InsightsModule {
 	ngDoBootstrap() {}
 }
 
-export const pmComponents: DowngradeableComponent[] = [
-	{ ng1Name: 'ng2PmWorkspacePage', ng2Component: WorkspaceComponent }
+export const insightsComponents: DowngradeableComponent[] = [
+	{ ng1Name: 'ng2InsightsWorkspacePage', ng2Component: WorkspaceComponent }
 ];
 
-export function pmRouterConfig($stateProvider: IStateProvider, $urlRouterProvider: IUrlRouterProvider) {
-	$urlRouterProvider.when('/pm', '/pm/workspace');
+export function insightsRouterConfig($stateProvider: IStateProvider, $urlRouterProvider: IUrlRouterProvider) {
+	$urlRouterProvider.when('/insights', '/insights/workspace');
 	$stateProvider
-		.state('pm', {
-			url: '/pm',
+		.state('insights', {
+			url: '/insights',
 			template: '<div ui-view="content"></div>'
 		})
-		.state('pm.workspace', {
+		.state('insights.workspace', {
 			url: '/workspace',
 			views: {
-				content: { template: '<ng2-pm-workspace-page></ng2-pm-workspace-page>' }
+				content: { template: '<ng2-insights-workspace-page></ng2-insights-workspace-page>' }
 			}
 		});
 }

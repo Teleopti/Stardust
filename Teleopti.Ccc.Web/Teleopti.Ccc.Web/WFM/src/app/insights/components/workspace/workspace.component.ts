@@ -5,7 +5,7 @@ import { PowerBIService } from '../../core/powerbi.service';
 import { ReportConfig } from '../../models/ReportConfig.model';
 
 @Component({
-	selector: 'app-pm-workspace',
+	selector: 'app-insights-workspace',
 	templateUrl: './workspace.component.html',
 	styleUrls: ['./workspace.component.scss']
 })

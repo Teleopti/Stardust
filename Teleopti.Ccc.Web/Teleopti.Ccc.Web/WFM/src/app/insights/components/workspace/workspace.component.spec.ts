@@ -38,7 +38,7 @@ describe('WorkspaceComponent', () => {
 		fixture.detectChanges();
 	});
 
-	it('should create PMNextGen WorkspaceComponent', () => {
+	it('should create Insights WorkspaceComponent', () => {
 		const reportConfigResponse = {
 			TokenType: 'Embed',
 			AccessToken: 'DummyAccessToken',

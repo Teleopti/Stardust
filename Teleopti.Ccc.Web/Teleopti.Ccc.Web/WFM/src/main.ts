@@ -9,7 +9,7 @@ import { authenticationComponents } from './app/authentication/authentication.mo
 import { menuComponents } from './app/menu/menu.module';
 import { navigationComponents } from './app/navigation/navigation.module';
 import { peopleComponents, peopleRouterConfig } from './app/people/people.module';
-import { pmComponents, pmRouterConfig } from './app/pm/pm.module';
+import { insightsComponents, insightsRouterConfig } from './app/insights/insights.module';
 import { sharedComponents } from './app/shared/shared.module';
 import { environment } from './environments/environment';
 import { MainController } from './main.controller';
@@ -102,7 +102,7 @@ downgradeHelper(authenticationComponents);
 downgradeHelper(apiAccessComponents);
 downgradeHelper(appComponents);
 downgradeHelper(menuComponents);
-downgradeHelper(pmComponents);
+downgradeHelper(insightsComponents);
 downgradeHelper(intradayComponents);
 
 /**
@@ -113,7 +113,7 @@ const routerHelper = (routerConfig: RouterConfigFunction) => {
 };
 
 routerHelper(peopleRouterConfig);
-routerHelper(pmRouterConfig);
+routerHelper(insightsRouterConfig);
 routerHelper(apiAccessRouterConfig);
 
 wfm.config([
@@ -151,7 +151,7 @@ wfm.config([
 		$mdGestureProvider.skipClickHijack();
 
 		tmhDynamicLocaleProvider.localeLocationPattern('dist/angular-i18n/angular-locale_{{locale}}.js');
-		//	tmhDynamicLocaleProvider.defaultLocale("en-gb");  -- causes problems with unit tests due to reinit of scope
+		// tmhDynamicLocaleProvider.defaultLocale("en-gb");  -- causes problems with unit tests due to reinit of scope
 	}
 ]);
 
