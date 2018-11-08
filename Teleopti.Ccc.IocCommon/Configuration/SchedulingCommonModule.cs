@@ -296,7 +296,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 
 			builder.RegisterType<MatrixNotPermittedLocker>().SingleInstance();
-			builder.RegisterType<ScheduleMatrixValueCalculatorProFactory>().As<IScheduleMatrixValueCalculatorProFactory>().SingleInstance();
+			builder.RegisterType<ScheduleMatrixValueCalculatorProFactory>().SingleInstance();
 			builder.RegisterType<WorkShiftLegalStateDayIndexCalculator>().SingleInstance();
 
 			builder.RegisterType<WorkTimeStartEndExtractor>().As<IWorkTimeStartEndExtractor>().SingleInstance();
