@@ -389,7 +389,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 
 			_schedulerMeetingHelper = new SchedulerMeetingHelper(_schedulerMessageBrokerHandler,
-																SchedulerState.SchedulerStateHolder,
+																SchedulerState,
 																_container.Resolve<IResourceCalculation>(),
 																_container.Resolve<ISkillPriorityProvider>(),
 																_container.Resolve<IScheduleStorageFactory>(),
@@ -1093,7 +1093,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider,
 						SchedulerState.ScheduleTags.NonDeleted(),
 						SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted(),
-						SchedulerState.SchedulerStateHolder.DefaultSegmentLength, SchedulerState.SchedulerStateHolder.Schedules,
+						SchedulerState.DefaultSegmentLength, SchedulerState.SchedulerStateHolder.Schedules,
 						_scheduleView.AllSelectedPersons(selectedSchedules), _daysOffPreferences))
 				{
 					if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)

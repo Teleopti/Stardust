@@ -187,21 +187,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			gridControlSchedules.EndUpdate();
 		}
 
-		public MeetingSchedulesView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, INotifyComposerMeetingChanged composer)
+		public MeetingSchedulesView(IMeetingViewModel meetingViewModel, SchedulingScreenState schedulingScreenState, INotifyComposerMeetingChanged composer)
 			: this()
 		{
-			if (schedulerStateHolder == null) throw new ArgumentNullException(nameof(schedulerStateHolder));
+			if (schedulingScreenState == null) throw new ArgumentNullException(nameof(schedulingScreenState));
 
-			_stateHolder = schedulerStateHolder;
+			_stateHolder = schedulingScreenState.SchedulerStateHolder;
 			if (composer == null) throw new ArgumentNullException(nameof(composer));
 			_composer = composer;
 			if (DesignMode) return;
 
 			monthCalendarAdvDateSelection.Culture = CultureInfo.CurrentCulture;
-			var stateHolderLoader = new SchedulerStateLoader(schedulerStateHolder, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper(), new ScheduleStorageFactory());
-			var meetingMover = new MeetingMover(this, meetingViewModel, schedulerStateHolder.DefaultSegmentLength, TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
+			var stateHolderLoader = new SchedulerStateLoader(schedulingScreenState.SchedulerStateHolder, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper(), new ScheduleStorageFactory());
+			var meetingMover = new MeetingMover(this, meetingViewModel, schedulingScreenState.DefaultSegmentLength, TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
 			var meetingMousePositionDecider = new MeetingMousePositionDecider(this);
-			_presenter = new MeetingSchedulesPresenter(this, meetingViewModel, schedulerStateHolder, stateHolderLoader, new MeetingSlotFinderService(UserTimeZone.Make()), meetingMover, meetingMousePositionDecider);
+			_presenter = new MeetingSchedulesPresenter(this, meetingViewModel, schedulingScreenState.SchedulerStateHolder, stateHolderLoader, new MeetingSlotFinderService(UserTimeZone.Make()), meetingMover, meetingMousePositionDecider);
 
 			SetTexts();
 			setTimes();

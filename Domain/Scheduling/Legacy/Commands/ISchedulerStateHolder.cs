@@ -45,8 +45,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		CommonNameDescriptionSetting CommonNameDescription { get; }
 
-		int DefaultSegmentLength { get; }
-
 		void SetRequestedScenario(IScenario scenario);
 
 		void FilterPersonsOvertimeAvailability(IEnumerable<IPerson> selectedPersons);

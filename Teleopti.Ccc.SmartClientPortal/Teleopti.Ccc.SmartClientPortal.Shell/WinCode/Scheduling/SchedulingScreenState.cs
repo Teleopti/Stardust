@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -45,8 +44,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				scheduleTags.Insert(0, NullScheduleTag.Instance);
 				ScheduleTags = scheduleTags;
 
-				CommonNameDescriptionScheduleExport = new GlobalSettingDataRepository(uow).FindValueByKey(CommonNameDescriptionSettingScheduleExport.Key, new CommonNameDescriptionSettingScheduleExport());
-
+				var globalSettingDataRepository = new GlobalSettingDataRepository(uow);
+				CommonNameDescriptionScheduleExport = globalSettingDataRepository.FindValueByKey(CommonNameDescriptionSettingScheduleExport.Key, new CommonNameDescriptionSettingScheduleExport());
+				DefaultSegmentLength = globalSettingDataRepository.FindValueByKey("DefaultSegment", new DefaultSegment()).SegmentLength;
 				WorkflowControlSets = new WorkflowControlSetRepository(uow).LoadAll();
 			}
 
@@ -58,8 +58,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		public CommonNameDescriptionSettingScheduleExport CommonNameDescriptionScheduleExport { get; private set; }
 		public IEnumerable<IWorkflowControlSet> WorkflowControlSets { get; private set; }
 		public ICollection<IWorkflowControlSet> ModifiedWorkflowControlSets { get; private set; }
-		
-		
+		public int DefaultSegmentLength { get; private set; }
 		
 		
 		

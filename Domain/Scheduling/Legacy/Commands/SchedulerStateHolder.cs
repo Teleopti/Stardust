@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public class SchedulerStateHolder : ISchedulerStateHolder, IClearReferredShiftTradeRequests
 	{
 		private readonly ICollection<DateOnly> _daysToResourceCalculate = new HashSet<DateOnly>();
-		private DefaultSegment _defaultSegment = new DefaultSegment();
 		private Lazy<IDictionary<Guid, IPerson>> _combinedFilteredAgents;
 		private IDictionary<Guid, IPerson> _filteredPersonsOvertimeAvailability;
 		private IDictionary<Guid, IPerson> _filteredPersonsHourlyAvailability;
@@ -119,7 +118,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void LoadSettings(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory)
 		{
 			CommonNameDescription = repositoryFactory.CreateGlobalSettingDataRepository(unitOfWork).FindValueByKey(CommonNameDescriptionSetting.Key, new CommonNameDescriptionSetting());
-			_defaultSegment = repositoryFactory.CreateGlobalSettingDataRepository(unitOfWork).FindValueByKey("DefaultSegment", new DefaultSegment());
 		}
 
 		public void LoadCommonState(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory)
@@ -196,8 +194,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public CommonNameDescriptionSetting CommonNameDescription { get; private set; } = new CommonNameDescriptionSetting();
-		
-		public int DefaultSegmentLength => _defaultSegment.SegmentLength;
 
 		public bool AgentFilter()
 		{

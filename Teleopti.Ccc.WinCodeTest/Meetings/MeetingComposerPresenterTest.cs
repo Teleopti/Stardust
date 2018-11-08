@@ -19,6 +19,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
@@ -92,7 +93,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 
             Expect.Call(_schedulerStateHolder.RequestedPeriod).Return(new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod,_timeZone));
             _mocks.Replay(_schedulerStateHolder);
-            _target = new MeetingComposerPresenterForTest(_view, _model, _schedulerStateHolder, _unitOfWorkFactory, _repositoryFactory, _scheduleStorageFactory);
+            _target = new MeetingComposerPresenterForTest(_view, _model, new SchedulingScreenState(null, _schedulerStateHolder), _unitOfWorkFactory, _repositoryFactory, _scheduleStorageFactory);
             _mocks.Verify(_schedulerStateHolder);
             _mocks.BackToRecord(_schedulerStateHolder);
         }
@@ -187,7 +188,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
                                                                                       }, disableDeleteFilter, new SchedulingResultStateHolder(), new TimeZoneGuard());
-            _target = new MeetingComposerPresenter(_view, _model, disableDeleteFilter, schedulerStateHolder, null);
+            _target = new MeetingComposerPresenter(_view, _model, disableDeleteFilter, new SchedulingScreenState(null, schedulerStateHolder), null);
             _view.SetRecurrentMeetingActive(true);
 
             _mocks.ReplayAll();
@@ -558,7 +559,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
                                                                                       }, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(null))), new SchedulingResultStateHolder(), new TimeZoneGuard());
-			_target = new MeetingComposerPresenterForTest(_view, _model, schedulerStateHolder, _unitOfWorkFactory,
+			_target = new MeetingComposerPresenterForTest(_view, _model, new SchedulingScreenState(null, schedulerStateHolder), _unitOfWorkFactory,
 														  _repositoryFactory, _scheduleStorageFactory);
 			_target.TrySave();
 			Assert.IsFalse(_target.TrySave());
@@ -575,7 +576,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
                                                                                       }, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(null))), new SchedulingResultStateHolder(), new TimeZoneGuard());
-            _target = new MeetingComposerPresenterForTest(_view, _model, schedulerStateHolder, _unitOfWorkFactory,
+            _target = new MeetingComposerPresenterForTest(_view, _model, new SchedulingScreenState(null, schedulerStateHolder), _unitOfWorkFactory,
                                                           _repositoryFactory, _scheduleStorageFactory);
 
             _view.SetRecurrentMeetingActive(true);
@@ -640,10 +641,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 
     internal class MeetingComposerPresenterForTest : MeetingComposerPresenter
     {
-        public MeetingComposerPresenterForTest(IMeetingComposerView view, MeetingViewModel model, ISchedulerStateHolder
-
-schedulerStateHolder, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IScheduleStorageFactory scheduleStorageFactory)
-            : base(view, model, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(null))), schedulerStateHolder, scheduleStorageFactory)
+        public MeetingComposerPresenterForTest(IMeetingComposerView view, MeetingViewModel model, SchedulingScreenState schedulingScreenState, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IScheduleStorageFactory scheduleStorageFactory)
+            : base(view, model, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(null))), schedulingScreenState, scheduleStorageFactory)
         {
             RepositoryFactory = repositoryFactory;
             UnitOfWorkFactory = unitOfWorkFactory;
