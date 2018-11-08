@@ -317,7 +317,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
                 e.Style.MergeCell = GridMergeCellDirection.None;
                 if (_schedulerState.FilteredCombinedAgentsDictionary.Count > 0)
                 {
-					var agent = View.TheGrid.Model[e.RowIndex, 1].Tag as IPerson;
+					var agent = View.ViewGrid.Model[e.RowIndex, 1].Tag as IPerson;
 					var localDate = _schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate;
                     localDate = localDate.AddDays(e.ColIndex - (int)ColumnType.StartScheduleColumns);
 
@@ -489,7 +489,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         public virtual void QueryOverviewStyleInfo(GridStyleInfo styleInfo, IPerson person, ColumnType columnType)
         {
             // when running the sheduling on background thread we can get a conflict if we try to get that schedulepart
-            if (!View.TheGrid.Enabled)
+            if (!View.ViewGrid.Enabled)
                 return;
 
 			if (_view.IsOverviewColumnsHidden)
@@ -528,7 +528,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         {
             //TODO:henrika 2008-10-14 refactor this check, this should not be called with these params
             // Happens when switching views (sometimes)
-            if (!View.TheGrid.Enabled)
+            if (!View.ViewGrid.Enabled)
                 return;
 
             if (SelectedPeriod.DateOnlyPeriod.StartDate > DateOnly.MinValue)
@@ -539,7 +539,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
                     SchedulerState.FilteredCombinedAgentsDictionary.Count > 0 &&
                     e.RowIndex - (View.RowHeaders + 1) >= 0)
                 {
-	                var person = View.TheGrid.Model[e.RowIndex, 1].Tag as IPerson;
+	                var person = View.ViewGrid.Model[e.RowIndex, 1].Tag as IPerson;
 	                if (person == null)
 	                {
 		                return;
@@ -616,7 +616,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         {
             if(scheduleParts == null) throw new ArgumentNullException("scheduleParts");
 
-            _view.TheGrid.Invalidate();
+            _view.ViewGrid.Invalidate();
             var rulesToRun = _schedulerState.SchedulingResultState.GetRulesToRun();
             foreach (IScheduleDay part in scheduleParts)
             {

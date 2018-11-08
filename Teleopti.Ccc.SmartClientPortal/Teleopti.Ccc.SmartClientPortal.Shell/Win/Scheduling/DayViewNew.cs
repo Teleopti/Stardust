@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             _presenter.SelectDate(dateOnly);
             _presenter.SortCommand.Execute(dateOnly);
 			base.SetSelectedDateLocal(dateOnly);
-			TheGrid.Refresh();
+			ViewGrid.Refresh();
         }
 
         internal override void CellDrawn(object sender, GridDrawCellEventArgs e)

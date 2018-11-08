@@ -4545,7 +4545,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					_scheduleView = new AgentRestrictionsDetailView(schedulerSplitters1.Grid, SchedulerState.SchedulerStateHolder,
 						LockManager, SchedulePartFilter, ClipsHandlerSchedule, _overriddenBusinessRulesHolder, callback,
 						_defaultScheduleTag, _workShiftWorkTime, _undoRedo);
-					_scheduleView.TheGrid.ContextMenuStrip = contextMenuStripRestrictionView;
+					_scheduleView.ViewGrid.ContextMenuStrip = contextMenuStripRestrictionView;
 					prepareAgentRestrictionView(_scheduleView, selectedPersons, selectedPeriod);
 
 					if (scheduleParts != null)
@@ -6320,7 +6320,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 				else
 				{
-					_scheduleView.TheGrid.Invalidate();
+					_scheduleView.ViewGrid.Invalidate();
 				}
 			}
 		}
@@ -6373,18 +6373,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void displaySearch()
 		{
 			IList<IPerson> persons = new List<IPerson>(SchedulerState.SchedulerStateHolder.FilteredCombinedAgentsDictionary.Values);
-
 			using (var searchForm = new SearchPerson(persons))
 			{
 				if (searchForm.ShowDialog(this) != DialogResult.OK) return;
 				if (searchForm.SelectedPerson == null) return;
 
-				int row = _scheduleView.GetRowForAgent(searchForm.SelectedPerson);
-				GridRangeInfo info = GridRangeInfo.Cells(row, 0, row, 0);
-				_scheduleView.TheGrid.Selections.Clear(true);
-				_scheduleView.TheGrid.CurrentCell.Activate(row, 0, GridSetCurrentCellOptions.SetFocus);
-				_scheduleView.TheGrid.Selections.ChangeSelection(info, info, true);
-				_scheduleView.TheGrid.CurrentCell.MoveTo(row, 0, GridSetCurrentCellOptions.ScrollInView);
+				_scheduleView.SelectCellFromPersonDate(searchForm.SelectedPerson, _dateNavigateControl.SelectedDate);
 			}
 		}
 
