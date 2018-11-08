@@ -354,14 +354,6 @@ Try
     #create event log source
     EventlogSource-Create "$JOB"
 	
-	#Setting $Env:TeleoptiIsAzure = $true
-	[Environment]::SetEnvironmentVariable("TeleoptiIsAzure", "true", "Machine")
-
-	#Set environment variables for RoleInstanceID & Rolename
-	[Environment]::SetEnvironmentVariable("RoleName", [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::CurrentRoleInstance.Role.Name, "Machine") 
-	[Environment]::SetEnvironmentVariable("RoleInstanceID", [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::CurrentRoleInstance.Id, "Machine")
-    
-	
 	$DBManagerFolder = $directory + "\..\Tools\Database"
     $settingsFile = "settings.txt"
     $fullPathsettingsFile =  $DBManagerFolder + "\" + $settingsFile
