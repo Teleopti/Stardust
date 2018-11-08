@@ -7,7 +7,7 @@ function TeleoptiDriveMapProperty-get {
       )
     $computer = gc env:computername
     ## Local debug values
-    if ($computer.ToUpper().StartsWith("TELEOPTI")) {
+    if ($computer.ToUpper().StartsWith("T16284")) {
 		switch ($name){
 		BlobPath		{$TeleoptiDriveMapProperty="http://teleopticcc7.blob.core.windows.net/"; break}
 		ContainerName	{$TeleoptiDriveMapProperty="teleopticcc/Settings"; break}
@@ -34,9 +34,10 @@ function Hostsfile-Add-Cname {
     [string]$CName
     )
 
-    If ((Get-Content "$($env:windir)\system32\Drivers\etc\hosts" ) -notcontains "localhost $CName") {
-        Add-Content -Encoding UTF8  "$($env:windir)\system32\Drivers\etc\hosts" "`r`n"
-        Add-Content -Encoding UTF8  "$($env:windir)\system32\Drivers\etc\hosts" "localhost $CName"
+    $hostsFile = "$($env:windir)\system32\Drivers\etc\hosts"
+    If ((Get-Content "$hostsFile" ) -notcontains "localhost $CName") {
+        Add-Content -Encoding UTF8  "$hostsFile" "`r`n"
+        Add-Content -Encoding UTF8  "$hostsFile" "localhost $CName"
     }
 }
 
@@ -113,11 +114,11 @@ Try
 	}
 
 	#Setting $Env:TeleoptiIsAzure = $true
-	[Environment]::SetEnvironmentVariable("TeleoptiIsAzure", "true", "Machine")
+	#[Environment]::SetEnvironmentVariable("TeleoptiIsAzure", "true", "Machine")
 
 	#Set environment variables for RoleInstanceID & Rolename
-	[Environment]::SetEnvironmentVariable("RoleName", [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::CurrentRoleInstance.Role.Name, "Machine") 
-	[Environment]::SetEnvironmentVariable("RoleInstanceID", [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::CurrentRoleInstance.Id, "Machine")
+	#[Environment]::SetEnvironmentVariable("RoleName", [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::CurrentRoleInstance.Role.Name, "Machine") 
+	#[Environment]::SetEnvironmentVariable("RoleInstanceID", [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::CurrentRoleInstance.Id, "Machine")
 
     #74478, #76734, #78787
     $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
