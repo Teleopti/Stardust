@@ -73,8 +73,7 @@ const wfm = angular.module('wfm', [
 	'wfm.skillGroup',
 	'wfm.popup',
 	'wfm.gamification',
-	'wfm.btnGroup',
-	'wfm.ai'
+	'wfm.btnGroup'
 ]);
 
 wfm.controller('MainController', MainController);

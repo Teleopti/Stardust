@@ -15,6 +15,7 @@ export const mainInitializer = [
 	'TabShortCut',
 	'rtaDataService',
 	'$q',
+	'$window',
 	'$http',
 	function(
 		$rootScope: IWfmRootScopeService,
@@ -28,7 +29,8 @@ export const mainInitializer = [
 		noticeService,
 		TabShortCut,
 		rtaDataService,
-		$q: IQService
+		$q: IQService,
+		$window
 	) {
 		$rootScope.isAuthenticated = false;
 
@@ -65,6 +67,11 @@ export const mainInitializer = [
 			$q.all(preloads).then(function() {
 				$state.go(next, toParams);
 			});
+		});
+
+		// application insight
+		$rootScope.$on('$stateChangeSuccess', function() {
+			if ($window.appInsights) $window.appInsights.trackPageView($state.current.name);
 		});
 
 		$rootScope._ = (<any>window)._;

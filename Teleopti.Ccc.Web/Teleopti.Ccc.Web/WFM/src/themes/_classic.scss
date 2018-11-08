@@ -1,20 +1,5 @@
 .angular-theme-classic {
 	@import '../../css/styleguide/classicvariables';
 	@import '../../css/main';
-	$menu-background-color: #e9e9e9;
 	background-color: #fcfcfc;
-
-	.main-menu {
-		.main-menu-link-wrapper {
-			background-color: $menu-background-color;
-		}
-
-		.main-menu-link:hover {
-			background-color: rgba(0, 0, 0, 0.06);
-		}
-		.main-menu-link-active > .main-menu-link {
-			background-color: #f4f4f4;
-			color: #0099ff;
-		}
-	}
 }

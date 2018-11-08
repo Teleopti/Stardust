@@ -1,0 +1,32 @@
+<div class="main-menu">
+	<h2 class="main-menu-ctrls">
+		<div (click)="toggleMenu()" tabindex="0" class="main-menu-trigger" role="button">
+			<i
+				class="mdi main-menu-trigger-icon text-white"
+				[class.mdi-menu]="!showMenu"
+				[class.mdi-backburger]="showMenu"
+			></i>
+		</div>
+	</h2>
+	<div [hidden]="!showMenu" class="main-menu-slide main-menu-link-wrapper">
+		<ng-container *ngFor="let group of groups">
+			<div *ngFor="let area of group">
+				<a
+					(click)="go($event, area)"
+					[href]="area.url"
+					[ngClass]="{ 'main-menu-link-active': isActive(area), 'my-time-link': area.inNewTab }"
+					[target]="area.inNewTab ? '_blank' : '_self'"
+					data-test-menu-item
+				>
+					<div class="con-flex con-row main-menu-link">
+						<div>
+							<i [class]="area.icon"></i> <span>{{ area.Name }}</span>
+						</div>
+						<div class="open-in-new" *ngIf="area.inNewTab"><i class="mdi mdi-open-in-new"></i></div>
+					</div>
+				</a>
+			</div>
+			<span class="divider"></span>
+		</ng-container>
+	</div>
+</div>
