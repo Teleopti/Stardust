@@ -359,7 +359,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
                     if (_schedulerState.FilteredCombinedAgentsDictionary.Count > 0)
                     {
                         e.Style.Tag = _schedulerState.FilteredCombinedAgentsDictionary.Values.ElementAt(e.RowIndex - (View.RowHeaders + 1));
-                        e.Style.Text = _schedulerState.CommonAgentName((IPerson)e.Style.Tag);
+                        e.Style.Text = _schedulerState.CommonNameDescription.BuildFor((IPerson)e.Style.Tag);
                     }
                 }
             }

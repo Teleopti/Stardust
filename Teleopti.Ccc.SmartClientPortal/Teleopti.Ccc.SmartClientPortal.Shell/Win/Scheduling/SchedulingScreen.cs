@@ -3113,7 +3113,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						if (part != null)
 						{
 							scheduleStatusBarUpdate(string.Format(CultureInfo.CurrentCulture, "{0} {1}",
-								SchedulerState.SchedulerStateHolder.CommonAgentName(part.Person),
+								SchedulerState.SchedulerStateHolder.CommonNameDescription.BuildFor(part.Person),
 								part.DateOnlyAsPeriod.DateOnly.ToShortDateString()));
 						}
 					}

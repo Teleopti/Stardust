@@ -59,8 +59,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		void MarkDateToBeRecalculated(DateOnly dateToRecalculate);
 
-		string CommonAgentName(IPerson person);
-
 		IEnumerable<DateOnly> DaysToRecalculate { get; }
 		ShiftTradeRequestStatusCheckerWithSchedule ShiftTradeRequestStatusChecker { get; set; }
 

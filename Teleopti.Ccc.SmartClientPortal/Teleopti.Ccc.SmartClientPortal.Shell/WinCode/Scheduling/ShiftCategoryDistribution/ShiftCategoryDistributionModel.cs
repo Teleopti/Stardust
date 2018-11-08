@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 
 		public string CommonAgentName(IPerson person)
 		{
-			return _schedulerStateHolder.CommonAgentName(person);
+			return _schedulerStateHolder.CommonNameDescription.BuildFor(person);
 		}
 
 		public virtual void OnResetNeeded()
