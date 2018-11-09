@@ -11,7 +11,7 @@
     <RootNamespace>Teleopti.Ccc.DomainTest</RootNamespace>
     <AssemblyName>Teleopti.Ccc.DomainTest</AssemblyName>
     <SignAssembly>false</SignAssembly>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
