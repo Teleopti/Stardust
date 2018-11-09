@@ -52,7 +52,10 @@ export class SideMenuComponent implements OnInit {
 	constructor(@Inject('$state') private $state: IStateService, private areaService: AreaService) {
 		this.areaService.getAreas().subscribe(areas => {
 			this.areas = areas;
-			this.groups = GROUPS.map(group => this.filterPermittedAreas(group)).map(group => this.addAreaInfo(group));
+			const filterEmptyGroups = (group: AreaGroup) => group.length > 0;
+			this.groups = GROUPS.map(group => this.filterPermittedAreas(group))
+				.filter(group => filterEmptyGroups(group))
+				.map(group => this.addAreaInfo(group));
 		});
 	}
 
