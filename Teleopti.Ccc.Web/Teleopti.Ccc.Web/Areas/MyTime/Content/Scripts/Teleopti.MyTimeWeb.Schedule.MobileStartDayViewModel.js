@@ -15,14 +15,16 @@
 	self.textColor = ko.observable();
 	self.summaryName = ko.observable();
 	self.summaryTime = ko.observable();
-	self.showTrafficLight = ko.observable(
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_TrafficLightOnMobileDayView_77447')
-	);
+
+	self.showTrafficLight = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_TrafficLightOnMobileDayView_77447');
 	self.trafficLightColor = ko.observable('');
 	self.trafficLightIconClass = ko.observable('');
+	self.showOldTrafficLightIconOnMobile = ko.observable(false);
+	self.showNewTrafficLightIconOnMobile = ko.observable(false);
 	self.newTrafficLightIconEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled(
 		'MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640'
 	);
+
 	self.trafficLightTooltip = ko.observable('');
 	self.dayOfWeek = ko.observable();
 	self.isFullDayAbsence = false;
@@ -103,14 +105,6 @@
 		self.textColor(Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.summaryColor()));
 		self.summaryName(data.Schedule.Summary.Title);
 		self.summaryTime(data.Schedule.Summary.TimeSpan);
-
-		if (self.newTrafficLightIconEnabled) {
-			self.trafficLightIconClass(getTrafficLightIconClass(data.Schedule.ProbabilityClass));
-		} else {
-			self.trafficLightColor(getTrafficLightColor(data.Schedule.ProbabilityClass));
-		}
-
-		self.trafficLightTooltip(buildTrafficLightTooltip(data.Schedule.ProbabilityText));
 		self.isDayOff = data.Schedule.IsDayOff;
 		self.isFullDayAbsence = data.Schedule.IsFullDayAbsence;
 		self.periods = data.Schedule.Periods;
@@ -206,6 +200,23 @@
 				self.selectedProbabilityOptionValue() === constants.probabilityType.overtime)
 		)
 			self.reloadProbabilityData(forceReloadProbabilityData);
+
+		if (self.newTrafficLightIconEnabled) {
+			self.trafficLightIconClass(getTrafficLightIconClass(data.Schedule.ProbabilityClass));
+		} else {
+			self.trafficLightColor(getTrafficLightColor(data.Schedule.ProbabilityClass));
+		}
+
+		self.trafficLightTooltip(buildTrafficLightTooltip(data.Schedule.ProbabilityText));
+		self.showOldTrafficLightIconOnMobile(
+			self.showTrafficLight && !self.newTrafficLightIconEnabled && self.trafficLightColor().length > 0
+		);
+		self.showNewTrafficLightIconOnMobile(
+			self.showTrafficLight &&
+				self.newTrafficLightIconEnabled &&
+				self.absenceRequestPermission() &&
+				self.trafficLightIconClass().length > 0
+		);
 
 		setPostShiftTradeMenuVisibility(data);
 		self.currentUserDate(getCurrentUserDate());
