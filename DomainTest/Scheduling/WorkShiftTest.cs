@@ -12,20 +12,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
-    /// <summary>
-    /// Tests for work shift
-    /// </summary>
     [TestFixture]
-	[TestWithStaticDependenciesDONOTUSE]
 	public class WorkShiftTest
     {
         private IWorkShift target;
         private ShiftCategory category;
         private MockRepository mocks;
-
-        /// <summary>
-        /// Run once for every test.
-        /// </summary>
+		
         [SetUp]
         public void Setup()
         {

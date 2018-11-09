@@ -1,10 +1,14 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.Forecasting.Import;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -27,7 +31,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_analyzeQuery = _mocks.DynamicMock<IForecastsAnalyzeQuery>();
 			_feedback = _mocks.DynamicMock<IJobResultFeedback>();
 			_openAndSplitTarget = _mocks.StrictMock<IOpenAndSplitTargetSkill>();
-			_target = new SplitImportForecastMessage(_analyzeQuery, _feedback, _openAndSplitTarget);
+			var person = PersonFactory.CreatePerson(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+			_target = new SplitImportForecastMessage(_analyzeQuery, _feedback, _openAndSplitTarget,
+				new CurrentIdentity(new FakeCurrentTeleoptiPrincipal(new TeleoptiPrincipal(
+					new TeleoptiIdentity(person.Name.ToString(), new DummyDataSource("test"), BusinessUnitFactory.BusinessUnitUsedInTest, null,
+						""), person))));
 		}
 
 		[Test]

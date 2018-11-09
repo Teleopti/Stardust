@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
     [TestFixture]
-	[TestWithStaticDependenciesDONOTUSE]
+	
     public class SchedulePeriodTest
     {
         private DateOnly _from;
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _personContract = new PersonContract(contract,partTime,contractSchedule);
             _normalPerson = PersonFactory.CreatePerson();
             _normalPerson.PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
-            _normalPerson.PermissionInformation.SetDefaultTimeZone(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone); 
+            _normalPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo()); 
             _normalPerson.AddPersonPeriod(new PersonPeriod(new DateOnly(2008, 1, 1), _personContract, simpleTeam));
             
 			_person1.AddPersonPeriod(new PersonPeriod(new DateOnly(2008, 1, 3), _personContract, simpleTeam));

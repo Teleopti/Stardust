@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -10,7 +11,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {
     [TestFixture]
-	[TestWithStaticDependenciesDONOTUSE]
     public class BlockPeriodFinderBetweenDayOffTest
     {
         private MockRepository _mocks;
@@ -36,7 +36,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
 			_scheduleDay3 = _mocks.StrictMock<IScheduleDay>();
 	        _schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
-        }
+
+			TimeZoneGuard.Instance.TimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+		}
+
+		[TearDown]
+		public void Teardown()
+		{
+			TimeZoneGuard.Instance.TimeZone = null;
+		}
 
 		[Test]
 		public void ShouldReturnNullIfRequestedDateIsDayOff()

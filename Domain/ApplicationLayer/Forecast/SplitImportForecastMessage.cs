@@ -4,11 +4,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.General;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
@@ -18,13 +18,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
         private readonly IForecastsAnalyzeQuery _analyzeQuery;
         private readonly IJobResultFeedback _feedback;
 	    private readonly IOpenAndSplitTargetSkill _openAndSplitTargetSkill;
+		private readonly ICurrentIdentity _currentIdentity;
 
-		public SplitImportForecastMessage(IForecastsAnalyzeQuery analyzeQuery, IJobResultFeedback feedback, IOpenAndSplitTargetSkill openAndSplitTargetSkill)
+		public SplitImportForecastMessage(IForecastsAnalyzeQuery analyzeQuery, IJobResultFeedback feedback, IOpenAndSplitTargetSkill openAndSplitTargetSkill, ICurrentIdentity currentIdentity)
         {
             _analyzeQuery = analyzeQuery;
             _feedback = feedback;
 			_openAndSplitTargetSkill = openAndSplitTargetSkill;
-        }
+			_currentIdentity = currentIdentity;
+		}
 
         [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Info(System.String)"), SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public void Process(IEnumerable<IForecastsRow> importForecast, ISkill targetSkill, DateOnlyPeriod period)
@@ -34,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
             _feedback.Info(stepMessage);
             _feedback.ReportProgress(0, stepMessage);
 
-            var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
+            var identity = _currentIdentity.Current();
             var listOfMessages =
                 generateMessages(
                     new OpenAndSplitTargetSkillMessage

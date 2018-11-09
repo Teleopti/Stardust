@@ -6,14 +6,12 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
 	[TestFixture]
-	[TestWithStaticDependenciesDONOTUSE]
 	public class AvailableHourlyEmployeeFinderTest
 	{
 		private IAvailableHourlyEmployeeFinder _target;
@@ -133,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_target =
 				new AvailableHourlyEmployeeFinder(
 					new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation()), _sourcePerson, _date,
-					new FakeScheduleDayForPerson(schedules), filteredPersons, UserTimeZone.Make());
+					new FakeScheduleDayForPerson(schedules), filteredPersons, new SpecificTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 
 			IList<AvailableHourlyEmployeeFinderResult> result = _target.Find();
 			Assert.IsTrue(result[0].NightRestOk);

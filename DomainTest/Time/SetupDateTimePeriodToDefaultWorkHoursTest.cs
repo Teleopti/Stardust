@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Time
 			
 	        var startDateTimeLocal = _targetDateTimePeriod.StartDateTimeLocal(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 	        _defaultLocal = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTimeLocal.Add(localStartTimeOfDay), startDateTimeLocal.Add(localEndTimeOfDay), TimeZoneInfoFactory.StockholmTimeZoneInfo());
-            _target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal, UserTimeZone.Make(), _info);
+            _target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal, new SpecificTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo()), _info);
         }
 
         [Test]

@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 
 			target.Handle(command);
-			var expectedStartInLocal = new DateTime(command.NewStartTime.Ticks, DateTimeKind.Local);
+			var expectedStartInLocal = command.NewStartTime;
 			var expectedStartInUtc = TimeZoneHelper.ConvertToUtc(expectedStartInLocal, userTimeZoneInfo);
 			var @event = personAssignmentRepository.Single().PopAllEvents().OfType<ActivityMovedEvent>().Single();
 			@event.PersonId.Should().Be(personRepository.Single().Id.Value);

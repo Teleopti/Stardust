@@ -11,7 +11,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
     [TestFixture]
-	[TestWithStaticDependenciesDONOTUSE]
 	public class PeriodOffsetCalculatorTest
     {
         private PeriodOffsetCalculator _target;
@@ -35,12 +34,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _mocks = new MockRepository();
             _sourceScheduleDay = _mocks.StrictMock<IScheduleDay>();
             _targetScheduleDay = _mocks.StrictMock<IScheduleDay>();
-            
+
+			TimeZoneGuard.Instance.TimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
             _singaporeTimeZone = TimeZoneInfoFactory.SingaporeTimeZoneInfo(); // -10
             _hawaiiTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo(); // +8
 
             _target = new PeriodOffsetCalculator();
         }
+
+		[TearDown]
+		public void Teardown()
+		{
+			TimeZoneGuard.Instance.TimeZone = null;
+		}
 
         [Test]
         public void VerifyCalculatePeriodOffsetIsZeroWithinSameTimeZoneAndSameDay()

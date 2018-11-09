@@ -16,7 +16,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
 {
     [TestFixture]
-	[TestWithStaticDependenciesDONOTUSE]
 	public class PrincipalAuthorizationTest
     {
         private IAuthorization authorization;

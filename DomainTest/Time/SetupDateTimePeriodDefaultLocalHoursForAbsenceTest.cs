@@ -10,7 +10,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Time
 {
     [TestFixture]
-	[TestWithStaticDependenciesDONOTUSE]
 	public class SetupDateTimePeriodDefaultLocalHoursForAbsenceTest
     {
         private ISetupDateTimePeriod _target;
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             }
             using (_mockRepository.Playback())
             {
-                _target = new SetupDateTimePeriodDefaultLocalHoursForAbsence(_scheduleDay, UserTimeZone.Make());
+                _target = new SetupDateTimePeriodDefaultLocalHoursForAbsence(_scheduleDay, new SpecificTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo()));
                 DateTimePeriod expect = new DateTimePeriod(expectedStartTime, expectedEndTime);
                 Assert.AreEqual(expect, _target.Period);
             }

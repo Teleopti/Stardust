@@ -16,7 +16,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
     [TestFixture]
-	[TestWithStaticDependenciesDONOTUSE]
 	public class ShiftProjectionCacheFilterTest
     {
         private ShiftProjectionCacheFilter _target;

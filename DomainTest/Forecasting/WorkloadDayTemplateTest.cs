@@ -12,7 +12,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Forecasting
 {
     [TestFixture]
-	[TestWithStaticDependenciesDONOTUSE]
 	public class WorkloadDayTemplateTest
     {
         private IWorkloadDayTemplate _workloadDayTemplate;
