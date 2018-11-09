@@ -838,7 +838,7 @@
 		startDayData.Schedule.ProbabilityText = 'Good';
 		vm.nextDay();
 
-		equal(vm.trafficLightColor().length, 0);
+		equal(vm.trafficLightColor(), '');
 		equal(vm.trafficLightIconClass(), 'traffic-light-progress-good');
 	});
 
@@ -857,7 +857,25 @@
 		vm.nextDay();
 
 		equal(vm.trafficLightColor(), 'green');
-		equal(vm.trafficLightIconClass().length, 0);
+		equal(vm.trafficLightIconClass(), '');
+	});
+
+	test("should not show new 'traffic light' icon when there is no data and toggle MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640 is ON", function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_TrafficLightOnMobileDayView_77447');
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640');
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
+			fakeReadyForInteractionCallback,
+			fakeCompletelyLoadedCallback,
+			ajax
+		);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		startDayData.Schedule.ProbabilityClass = '';
+		startDayData.Schedule.ProbabilityText = '';
+		vm.nextDay();
+
+		equal(vm.trafficLightIconClass(), '');
+		equal(vm.showNewTrafficLightIconOnMobile(), false);
 	});
 
 	test("should show probability toggle by agent's timezone", function() {
