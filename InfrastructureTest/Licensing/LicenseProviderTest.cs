@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	            TeleoptiWFMShiftTraderEnabled = true;
 	            TeleoptiWFMVacationPlannerEnabled = true;
 				TeleoptiWFMVNextEnabled = true;
-				TeleoptiWFMPMNextGenEnabled = true;
+				TeleoptiWFMInsightsEnabled = true;
             }
 
             #region Implementation of IDisposable
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
 			public bool TeleoptiWFMOvertimeRequestsEnabled { get; }
 			public bool TeleoptiWFMChatBotEnabled { get; }
-			public bool TeleoptiWFMPMNextGenEnabled { get; }
+			public bool TeleoptiWFMInsightsEnabled { get; }
 
 			public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			  public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
 			  public bool TeleoptiWFMOvertimeRequestsEnabled { get; }
 			  public bool TeleoptiWFMChatBotEnabled { get; }
-			  public bool TeleoptiWFMPMNextGenEnabled { get; }
+			  public bool TeleoptiWFMInsightsEnabled { get; }
 			  public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 			  public int MaxSeats { get; private set; }
 			  public LicenseType LicenseType { get; private set; }
@@ -362,7 +362,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
 			public bool TeleoptiWFMOvertimeRequestsEnabled { get; }
 			public bool TeleoptiWFMChatBotEnabled { get; }
-			public bool TeleoptiWFMPMNextGenEnabled { get; }
+			public bool TeleoptiWFMInsightsEnabled { get; }
 
 			public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
