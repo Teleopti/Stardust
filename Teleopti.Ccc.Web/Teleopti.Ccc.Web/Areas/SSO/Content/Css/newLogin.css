@@ -18,6 +18,7 @@ h1 {
 	padding: 20px 40px;
 	margin: 10px;
 	border-radius: 22px;
+	max-height: 80vh;
 }
 
 .login-message .alert-warning {
@@ -32,10 +33,16 @@ h1 {
 
 #BusinessUnits {
 	list-style-type: none;
+	overflow-y: auto;
+	max-height: 50vh;
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
 }
 
-#selector a.list-group-item, #BusinessUnits a.list-group-item {
+#BusinessUnits a.list-group-item {
+	margin-top: -1px;
 	margin-bottom: -2px;
+	border-bottom: none;
 }
 
 .formError {
@@ -143,7 +150,7 @@ h1 {
 	}
 }
 
-@media screen and (max-width: 550px) and (max-height: 300px) {
+@media screen and max-height: 320px {
 	body {
 		background: #fff;
 	}
@@ -161,11 +168,5 @@ h1 {
 
 	.wfm-form .form-input-wrap {
 		padding: 5px;
-	}
-
-	.list-group {
-		max-height: 145px;
-		overflow-y: auto;
-		border-bottom: 1px solid #ddd;
 	}
 }
