@@ -73,7 +73,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
-using Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.LockMenuBuilders;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel;
@@ -1736,9 +1735,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				toolStripMenuItemViewHistory.Enabled = _isAuditingSchedules;
 
 			toolStripMenuItemSwitchToViewPointOfSelectedAgent.Enabled = _scheduleView.SelectedSchedules().Any();
-
-			toolStripMenuItemViewReport.Visible = !_container.Resolve<IToggleManager>()
-				.IsEnabled(Toggles.Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640);
 		}
 
 		#region Virtual skill handling
@@ -3394,8 +3390,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				toolStripMenuItemDelete, toolStripMenuItemDeleteSpecial, toolStripMenuItemWriteProtectSchedule,
 				toolStripMenuItemWriteProtectSchedule2, toolStripMenuItemAddStudentAvailabilityRestriction,
 				toolStripMenuItemAddStudentAvailability,
-				toolStripMenuItemAddPreferenceRestriction, toolStripMenuItemAddPreference, toolStripMenuItemViewReport,
-				toolStripMenuItemScheduledTimePerActivity);
+				toolStripMenuItemAddPreferenceRestriction, toolStripMenuItemAddPreference);
 			_permissionHelper.SetPermissionOnMenuButtons(toolStripButtonRequestView, backStageButtonOptions,
 				toolStripButtonFilterOvertimeAvailability, ToolStripMenuItemScheduleOvertime,
 				toolStripButtonFilterStudentAvailability);
@@ -5371,7 +5366,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripMenuItemEditMeeting.MouseUp -= toolStripMenuItemEditMeetingMouseUp;
 			toolStripMenuItemRemoveParticipant.MouseUp -= toolStripMenuItemRemoveParticipantMouseUp;
 			toolStripMenuItemDeleteMeeting.MouseUp -= toolStripMenuItemDeleteMeetingMouseUp;
-			toolStripMenuItemScheduledTimePerActivity.MouseUp -= toolStripMenuItemScheduledTimePerActivityMouseUp;
 			toolStripMenuItemExportToPDF.MouseUp -= toolStripMenuItemExportToPdfMouseUp;
 			toolStripMenuItemExportToPDFGraphical.MouseUp -= toolStripMenuItemExportToPdfGraphicalMouseUp;
 			ToolStripMenuItemExportToPDFShiftsPerDay.MouseUp -= toolStripMenuItemExportToPdfShiftsPerDayMouseUp;
@@ -6224,21 +6218,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			Cursor = Cursors.Default;
 
 			refreshSummarySkillIfActive();
-		}
-
-		private void toolStripMenuItemScheduledTimePerActivityMouseUp(object sender, MouseEventArgs e)
-		{
-			if (e.Button != MouseButtons.Left) return;
-			Cursor.Current = Cursors.WaitCursor;
-			if (_scheduleView.SelectedSchedules().Count > 0)
-			{
-				var reportDetail =
-					ReportHandler.CreateReportDetail(
-						ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions,
-							DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport));
-				ReportHandler.ShowReport(reportDetail, _scheduleView, SchedulerState.SchedulerStateHolder.RequestedScenario, CultureInfo.CurrentCulture);
-			}
-			Cursor.Current = Cursors.Default;
 		}
 
 		private void toolStripMenuItemSearchClick(object sender, EventArgs e)
