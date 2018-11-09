@@ -195,7 +195,7 @@ Layout = null;
 					<!-- /ko -->
 
 					<!--ko if: $parent.newTrafficLightIconEnabled && absenceRequestPermission -->
-					<div class="progress traffic-light-progress traffic-light-progress-good" data-bind="tooltip: { title: holidayChanceText, html: true }">
+					<div class="progress traffic-light-progress" data-bind="tooltip: { title: holidayChanceText, html: true}, css: trafficLightClass">
 						<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
 							<span class="sr-only">60% Complete</span>
 						</div>

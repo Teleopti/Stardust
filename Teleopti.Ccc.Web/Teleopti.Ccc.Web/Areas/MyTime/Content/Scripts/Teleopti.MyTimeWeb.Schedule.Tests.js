@@ -45,7 +45,7 @@
 		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
 
 		vm.initializeData(fakeScheduleData);
-		equal(vm.days().length, 2);
+		equal(vm.days().length, 3);
 		equal(vm.days()[0].headerTitle, fakeScheduleData.Days[0].Header.Title);
 		equal(vm.days()[0].summary, fakeScheduleData.Days[0].Summary.Summary);
 		equal(vm.days()[0].summaryTitle, fakeScheduleData.Days[0].Summary.Title);
@@ -266,8 +266,54 @@
 
 		equal($('.traffic-light-progress').length > 0, false);
 		equal($('.holiday-agents.weekview-day-icon').length > 0, true);
+	});
 
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempTogglFn;
+	test('should show correct traffic light when toggle MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640 is ON', function() {
+		var fakeAjax = {
+			Ajax: function(option) {
+				if (option.url === '../api/Schedule/FetchWeekData') {
+					option.success(getFakeScheduleData());
+				}
+				if (option.url === 'UserData/FetchUserData') {
+					option.success({
+						BusinessUnitId: '928dd0bc-bf40-412e-b970-9b5e015aadea',
+						DataSourceName: 'Teleopti WFM',
+						Url: 'http://localhost:52858/TeleoptiWFM/Web/',
+						AgentId: '11610fe4-0130-4568-97de-9b5e015b2564'
+					});
+				}
+			}
+		};
+		Teleopti.MyTimeWeb.Common.Init(
+			{
+				defaultNavigation: '/',
+				baseUrl: '/',
+				startBaseUrl: '/'
+			},
+			fakeAjax
+		);
+
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640');
+
+		$('body').append(setupHtml());
+
+		Teleopti.MyTimeWeb.UserInfo.WhenLoaded = function(callback) {
+			callback({ WeekStart: 1 });
+		};
+
+		Teleopti.MyTimeWeb.Schedule.PartialInit(function() {}, function() {}, fakeAjax);
+		Teleopti.MyTimeWeb.Schedule.SetupViewModel(
+			Teleopti.MyTimeWeb.Common.DateTimeDefaultValues,
+			Teleopti.MyTimeWeb.Schedule.LoadAndBindData
+		);
+
+		var vm = Teleopti.MyTimeWeb.Schedule.Vm();
+		var fakeScheduleData = getFakeScheduleData();
+		vm.initializeData(fakeScheduleData);
+
+		equal($('.traffic-light-progress.traffic-light-progress-poor').length > 0, true);
+		equal($('.traffic-light-progress.traffic-light-progress-fair').length > 0, true);
+		equal($('.traffic-light-progress.traffic-light-progress-good').length > 0, true);
 	});
 
 	function getFakeScheduleData() {
@@ -441,7 +487,7 @@
 			'					</div>',
 			'					<!-- /ko -->',
 			'					<!--ko if: $parent.newTrafficLightIconEnabled && absenceRequestPermission -->',
-			'					<div class="progress traffic-light-progress traffic-light-progress-good" data-bind="tooltip: { title: holidayChanceText, html: true }">',
+			'					<div class="progress traffic-light-progress" data-bind="tooltip: { title: holidayChanceText, html: true}, css: trafficLightClass">',
 			'						<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">',
 			'							<span class="sr-only">60% Complete</span>',
 			'						</div>',
@@ -490,6 +536,7 @@
 			'	</div>',
 			'</div>'
 		].join('');
+
 		html = '<div id="page"> ' + html + '</div>';
 		return html;
 	}
