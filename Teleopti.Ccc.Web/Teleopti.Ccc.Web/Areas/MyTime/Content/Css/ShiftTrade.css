@@ -519,6 +519,7 @@
 	height: 100px;
 	min-height: 100px;
 	border-left: 2px solid #5acdf9;
+	border-right: 1px solid #e3e3e3;
 }
 .multi-shift-trade-row > * {
 	float: left;
