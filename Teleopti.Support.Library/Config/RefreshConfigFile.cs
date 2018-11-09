@@ -26,8 +26,8 @@ namespace Teleopti.Support.Library.Config
 
 		public void ReplaceFile(string destinationFile, string sourceFile, SearchReplaceCollection searchReplaces)
 		{
-			sourceFile = makePath(sourceFile);
-			destinationFile = makePath(destinationFile);
+			sourceFile = MakePath(sourceFile);
+			destinationFile = MakePath(destinationFile);
 
 			var dir = GetDirectories(destinationFile);
 			if (!Directory.Exists(dir))
@@ -36,7 +36,7 @@ namespace Teleopti.Support.Library.Config
 			_fileConfigurator.Configure(sourceFile, destinationFile, searchReplaces);
 		}
 
-		private string makePath(string file)
+		public string MakePath(string file)
 		{
 			if (file.StartsWith("$"))
 			{
