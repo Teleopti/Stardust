@@ -52,10 +52,9 @@
 		try {
 			Teleopti.MyTimeWeb.Common.Init(
 				{
-					BusinessUnitId: '',
-					DataSourceName: '',
-					Url: '',
-					AgentId: ''
+					defaultNavigation: '/',
+					baseUrl: '/',
+					startBaseUrl: '/'
 				},
 				null
 			);
