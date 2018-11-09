@@ -538,6 +538,7 @@
     <Compile Include="Foundation\IConnectionStrings.cs" />
     <Compile Include="ServiceLocatorForEntity.cs" />
     <Compile Include="Staffing\IStaffingDataAvailablePeriodProvider.cs" />
+    <Compile Include="Staffing\StaffingContextReaderService.cs" />
     <Compile Include="Staffing\StaffingDataAvailablePeriodProvider.cs" />
     <Compile Include="SystemCheck\CheckMessageBrokerMailBox.cs" />
     <Compile Include="Toggle\Admin\FetchAllToggleOverrides.cs" />
@@ -911,7 +912,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="RealTimeAdherence\Domain" />
+    <Folder Include="RealTimeAdherence\Domain\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

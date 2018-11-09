@@ -662,7 +662,6 @@
     <Compile Include="Staffing\IStaffingAuditRepository.cs" />
     <Compile Include="Staffing\ITenantAuditRepository.cs" />
     <Compile Include="Staffing\StaffingAudit.cs" />
-    <Compile Include="ApplicationLayer\Audit\StaffingContextReaderService.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
     <Compile Include="ResourcePlanner\Hints\ISchedulePostHint.cs" />
     <Compile Include="Scheduling\Overtime\IOvertimeSkillPeriodData.cs" />

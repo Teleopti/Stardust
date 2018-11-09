@@ -206,6 +206,7 @@
     <Compile Include="ApplicationLayer\SyncCommandDispatcherContextBug48226Test.cs" />
     <Compile Include="Auditing\AuditSettingTest.cs" />
     <Compile Include="Auditing\RevisionTest.cs" />
+    <Compile Include="Staffing\StaffingContextReaderServiceTest.cs" />
     <Compile Include="Authentication\CryptoKeyInfoRepositoryTest.cs" />
     <Compile Include="Authentication\LoadUserUnauthorizedTest.cs" />
     <Compile Include="Authentication\NonceInfoRepositoryTest.cs" />

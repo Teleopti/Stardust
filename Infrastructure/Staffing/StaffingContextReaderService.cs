@@ -1,25 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
+namespace Teleopti.Ccc.Infrastructure.Staffing
 {
-	public class StaffingContextReaderService
+	public class StaffingContextReaderService : IStaffingContextReaderService
 	{
 		private readonly IStaffingAuditRepository _staffingAuditRepository;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly IUserCulture _userCulture;
+		private readonly IPurgeSettingRepository _purgeSettingRepository;
+		private readonly INow _now;
 
-		public StaffingContextReaderService(IStaffingAuditRepository staffingAuditRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository, IUserCulture userCulture)
+		public StaffingContextReaderService(IStaffingAuditRepository staffingAuditRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository, IUserCulture userCulture, IPurgeSettingRepository purgeSettingRepository, INow now)
 		{
 			_staffingAuditRepository = staffingAuditRepository;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 			_userCulture = userCulture;
+			_purgeSettingRepository = purgeSettingRepository;
+			_now = now;
 		}
 
 		public IEnumerable<AuditServiceModel> LoadAll()
@@ -62,6 +66,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 			var staffingAudit = _staffingAuditRepository.LoadAudits(personId, startDate, endDate);
 
 			return getAuditServiceModel(staffingAudit);
+		}
+
+		public void PurgeAudits()
+		{
+			var purgeSettings = _purgeSettingRepository.FindAllPurgeSettings();
+			var monthsToKeepAuditEntry = purgeSettings.SingleOrDefault(p => p.Key == "MonthsToKeepAudit");
+			var dateForPurging = _now.UtcDateTime().AddMonths(-(monthsToKeepAuditEntry?.Value ?? 3));
+			_staffingAuditRepository.PurgeOldAudits(dateForPurging);
 		}
 	}
 }

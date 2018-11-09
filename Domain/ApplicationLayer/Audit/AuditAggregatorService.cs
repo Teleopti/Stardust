@@ -8,12 +8,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 {
 	public class AuditAggregatorService
 	{
-		private readonly StaffingContextReaderService _staffingContextReaderService;
+		private readonly IStaffingContextReaderService _staffingContextReaderService;
 		private readonly PersonAccessContextReaderService _personAccessContextReaderService;
 		private readonly IPersonRepository _personRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
 
-		public AuditAggregatorService(StaffingContextReaderService staffingContextReaderService, PersonAccessContextReaderService personAccessContextReaderService, IPersonRepository personRepository, ILoggedOnUser loggedOnUser)
+		public AuditAggregatorService(IStaffingContextReaderService staffingContextReaderService, PersonAccessContextReaderService personAccessContextReaderService, IPersonRepository personRepository, ILoggedOnUser loggedOnUser)
 		{
 			_staffingContextReaderService = staffingContextReaderService;
 			_personAccessContextReaderService = personAccessContextReaderService;
@@ -54,5 +54,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 			var person = _personRepository.Load(personId);
 			return _personAccessContextReaderService.LoadAudits(person, startDate, endDate);
 		}
+	}
+
+	public interface IStaffingContextReaderService
+	{
+		IEnumerable<AuditServiceModel> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate);
+		void PurgeAudits();
+		IEnumerable<AuditServiceModel> LoadAll();
 	}
 }
