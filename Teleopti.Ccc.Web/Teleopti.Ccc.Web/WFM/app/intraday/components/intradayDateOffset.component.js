@@ -1,17 +1,5 @@
 (function() {
 	'use strict';
-
-	angular.module('wfm.intraday').component('dateOffset', {
-		templateUrl: 'app/intraday/components/intradayDateOffset.html',
-		controller: intradayDateOffsetController,
-		bindings: {
-			chosenOffset: '<',
-			onDateChange: '&'
-		}
-	});
-
-	intradayDateOffsetController.$inject = ['$filter', 'CurrentUserInfo'];
-
 	function intradayDateOffsetController($filter, currentUserInfo) {
 		var ctrl = this;
 		ctrl.dayOffsets = [];
@@ -57,4 +45,15 @@
 			return moment.tz(moment(), currentUserInfo.CurrentUserInfo().DefaultTimeZone);
 		}
 	}
+
+	angular.module('wfm.dateOffset').component('dateOffset', {
+		templateUrl: 'app/intraday/components/intradayDateOffset.html',
+		controller: intradayDateOffsetController,
+		bindings: {
+			chosenOffset: '<',
+			onDateChange: '&'
+		}
+	});
+
+	intradayDateOffsetController.$inject = ['$filter', 'CurrentUserInfo'];
 })();

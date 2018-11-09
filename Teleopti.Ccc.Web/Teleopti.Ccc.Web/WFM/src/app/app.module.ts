@@ -37,8 +37,7 @@ import { NzIconService } from 'ng-zorro-antd';
 				deps: [HttpClient]
 			},
 			parser: { provide: TranslateParser, useClass: CustomTranslateParser }
-		}),
-		IntradayModule
+		})
 	],
 	entryComponents: [BootstrapComponent],
 	providers: [Zorroi18nService]
@@ -48,8 +47,7 @@ export class AppModule {
 		private upgrade: UpgradeModule,
 		private userService: UserService,
 		private translate: TranslateService,
-		private zorroi18n: Zorroi18nService,
-		private iconService: NzIconService
+		private zorroi18n: Zorroi18nService
 	) {}
 
 	ngDoBootstrap() {
@@ -60,7 +58,6 @@ export class AppModule {
 				this.zorroi18n.switchLanguage(preferences.Language);
 			}
 		});
-		this.iconService.changeAssetsSource('dist/ng2/');
 	}
 }
 

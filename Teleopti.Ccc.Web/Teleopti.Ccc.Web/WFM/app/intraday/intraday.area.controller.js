@@ -1,11 +1,11 @@
 (function() {
 	'use strict';
-	angular.module('wfm.intraday').controller('IntradayAreaController', IntradayAreaController);
-	IntradayAreaController.$inject = [
+	angular.module('wfm.intraday').controller('IntradayAreaController', intradayController);
+	intradayController.$inject = [
 		'$scope',
 		'$state',
-		'SkillGroupSvc',
 		'intradayService',
+		'SkillGroupSvc',
 		'$filter',
 		'NoticeService',
 		'$interval',
@@ -17,13 +17,15 @@
 		'intradayLatestTimeService',
 		'Toggle',
 		'skillIconService',
-		'CurrentUserInfo'
+		'CurrentUserInfo',
+		'$log',
+		'$rootScope'
 	];
-	function IntradayAreaController(
+	function intradayController(
 		$scope,
 		$state,
-		SkillGroupSvc,
 		intradayService,
+		SkillGroupSvc,
 		$filter,
 		NoticeService,
 		$interval,
@@ -35,11 +37,15 @@
 		intradayLatestTimeService,
 		toggleSvc,
 		skillIconService,
-		currentUserInfo
+		currentUserInfo,
+		$log,
+		$rootScope
 	) {
 		var vm = this;
 		var polling;
 		var pollingTimeout = 60000;
+		var loadingSkill = true;
+		var loadingSkillGroup = true;
 
 		vm.timeoutPromise = null;
 		vm.viewObj;
@@ -127,7 +133,7 @@
 		};
 
 		vm.onStateChanged = function(evt, to, params, from) {
-			if (to.name !== 'intraday.legacy') return;
+			if (to.name !== 'intraday.area') return;
 			if (params.isNewSkillArea === true) {
 				reloadSkillGroups(true);
 			} else reloadSkillGroups(false);
@@ -404,11 +410,14 @@
 		function reloadSkillGroups(isNew) {
 			SkillGroupSvc.getSkillGroups().then(function(result) {
 				vm.skillGroups = $filter('orderBy')(result.data.SkillAreas, 'Name');
+
 				if (isNew) {
 					vm.latest = $filter('orderBy')(result.data.SkillAreas, 'created_at', true);
 					vm.latest = $filter('orderBy')(result.data.SkillAreas, 'Name');
 				}
+
 				vm.HasPermissionToModifySkillGroup = result.data.HasPermissionToModifySkillArea;
+
 				if (angular.isUndefined(vm.skillGroups)) vm.skillGroups = [];
 				if (vm.skillGroups.length === 0) {
 					vm.skillGroups.push({
@@ -416,10 +425,12 @@
 						Id: -1
 					});
 				}
+
 				SkillGroupSvc.getSkills().then(function(result) {
 					vm.skills = result.data;
 					vm.loadState();
 				});
+
 				if (angular.isUndefined(vm.skills)) vm.skills = [];
 				if (vm.skills.length === 0) {
 					vm.skills.push({
@@ -471,9 +482,7 @@
 			cancelTimeout();
 		});
 
-		$scope.$on('$stateChangeSuccess', function(evt, to, params, from) {
-			vm.onStateChanged(evt, to, params, from);
-		});
+		$scope.$on('$stateChangeSuccess', vm.onStateChanged);
 
 		toggleSvc.togglesLoaded.then(function() {
 			vm.toggles = toggleSvc;

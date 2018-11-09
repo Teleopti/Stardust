@@ -28,8 +28,7 @@
 		'NoticeService',
 		'$translate',
 		'skillIconService',
-		'$rootScope',
-		'Toggle'
+		'$rootScope'
 	];
 
 	function SkillGroupManagerController(
@@ -40,8 +39,7 @@
 		NoticeService,
 		$translate,
 		skillIconService,
-		$rootScope,
-		toggleService
+		$rootScope
 	) {
 		var _ = $rootScope._;
 		var originalGroups = [];
@@ -63,7 +61,6 @@
 		vm.skillNameMaxLength = 50;
 		vm.stateName = '';
 		vm.editGroupNameBox = false;
-		vm.toggles = {};
 
 		//----------- scoped functions ----------------------------------------------------
 
@@ -106,7 +103,15 @@
 		};
 
 		vm.createSkillGroup = function(ev) {
-			vm.newGroup = Object.assign({}, { Name: '', Id: 'New' + _.uniqueId(), Skills: [], Saved: false });
+			vm.newGroup = Object.assign(
+				{},
+				{
+					Name: '',
+					Id: 'New' + _.uniqueId(),
+					Skills: [],
+					Saved: false
+				}
+			);
 			vm.isNew = true;
 			vm.editGroupNameBox = true;
 			ev && ev.stopPropagation();
@@ -140,16 +145,6 @@
 		};
 
 		vm.exitConfigMode = function() {
-			//Special case for the rework of intraday //Anders Sjöberg - 2018-09-07 09:35:53
-			if (toggleService.WFM_Intraday_Redesign_77214 && $state.params.returnState === 'intraday') {
-				$state.go('intraday.modern');
-				return;
-			}
-			if (!toggleService.WFM_Intraday_Redesign_77214 && $state.params.returnState === 'intraday') {
-				$state.go('intraday.legacy');
-				return;
-			}
-
 			if (vm.stateName.length > 0) {
 				$state.go(vm.stateName);
 			} else {
@@ -250,7 +245,10 @@
 			}
 
 			SkillGroupSvc.createSkillGroup
-				.query({ Name: vm.skillGroupName, Skills: selectedSkillIds })
+				.query({
+					Name: vm.skillGroupName,
+					Skills: selectedSkillIds
+				})
 				.$promise.then(function(result) {
 					notifySkillGroupCreation();
 					$state.go('intraday', { isNewSkillArea: true });

@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DowngradeableComponent } from '@wfm/types';
-import { en_US, NgZorroAntdModule, NZ_I18N, NZ_ICON_DEFAULT_TWOTONE_COLOR, NZ_ICONS } from 'ng-zorro-antd';
+import { en_US, NgZorroAntdModule, NZ_I18N } from 'ng-zorro-antd';
 import { FeedbackMessageComponent } from './components';
 import { LogonInfoService } from './services';
 
@@ -26,11 +26,7 @@ import { LogonInfoService } from './services';
 		NgZorroAntdModule,
 		FeedbackMessageComponent
 	],
-	providers: [
-		{ provide: NZ_I18N, useValue: en_US },
-		LogonInfoService,
-		{ provide: NZ_ICON_DEFAULT_TWOTONE_COLOR, useValue: '#00ff00' } // If not provided, Ant Design's official blue would be used
-	],
+	providers: [{ provide: NZ_I18N, useValue: en_US }, LogonInfoService],
 	entryComponents: [FeedbackMessageComponent],
 	declarations: [FeedbackMessageComponent]
 })
