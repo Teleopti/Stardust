@@ -33,10 +33,6 @@ Wfm_DisplayOnlineHelp_39402 = true
 Wfm_MinimumScaffolding_32659 = RC # Set this to true to enable first page link to the new WFM web #
 WfmGlobalLayout_personalOptions_37114 = true
 
-# China, can any of these be removed? #
-Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = true
-WebByPassDefaultPermissionCheck_37984 = true
-
 # LevelUp #
 RTA_KillFattyIntradayUntilItDies_74939 = true
 RTA_ReviewHistoricalAdherence_Domain_74770 = true
@@ -94,9 +90,9 @@ MyTimeWeb_NewTeamScheduleViewDesktop_76313 = RC
 MyTimeWeb_PollToCheckScheduleChanges_46595 = true
 MyTimeWeb_TrafficLightOnMobileDayView_77447 = RC
 MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640 = RC
-
-# China, can any of these be removed? #
 Staffing_Info_Configuration_44687 = true
+Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = true
+WebByPassDefaultPermissionCheck_37984 = true
 
 
 # Kittens, Bugs&Roses and Micke #
