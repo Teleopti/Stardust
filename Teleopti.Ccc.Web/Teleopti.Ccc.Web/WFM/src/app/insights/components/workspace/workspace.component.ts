@@ -17,9 +17,9 @@ export class WorkspaceComponent implements OnInit {
 	public enableFilter: boolean;
 	public enableNavContent: boolean;
 	public reports: Report[];
+	public selectedReport: string;
 
 	private pbiCoreService: pbi.service.Service;
-	private selectedReport: string;
 
 	constructor(private reportSvc: ReportService) {
 		this.initialized = false;
