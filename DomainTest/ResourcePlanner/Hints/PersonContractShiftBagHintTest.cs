@@ -157,6 +157,26 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
  
 			Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint))).Should().Be.Empty();
 		}
+		
+		[Test]
+		public void ShouldNotReturnHintForHourlyStaff()
+		{
+			var date = new DateOnly(2017, 01, 23);
+			var contract = new Contract("_")
+			{
+				WorkTime = new WorkTime(new TimeSpan(8, 0, 0)),
+				PositivePeriodWorkTimeTolerance = new TimeSpan(0, 0, 0),
+				NegativePeriodWorkTimeTolerance = new TimeSpan(0, 0, 0),
+				EmploymentType = EmploymentType.HourlyStaff
+				
+			};
+	
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(new Activity("_"), new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), new ShiftCategory("_").WithId()));
+			var agent = new Person().WithId().WithPersonPeriod(new RuleSetBag(ruleSet).WithId(), contract, new ContractScheduleWorkingMondayToFriday(),new PartTimePercentage("_") , null).WithSchedulePeriodOneWeek(date);
+			
+			Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)))
+				.Should().Be.Empty();
+		}
 
 		public void Isolate(IIsolate isolate)
 		{
