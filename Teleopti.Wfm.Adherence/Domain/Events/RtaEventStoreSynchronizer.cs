@@ -17,7 +17,8 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 	public interface IRtaEventStoreSynchronizer
 	{
 		void Trigger();
-		void Synchronize();
+		void SynchronizeOnTrigger();
+		void SynchronizeNow();
 	}
 
 	public class RtaEventStoreSynchronizer : IRtaEventStoreSynchronizer
@@ -48,14 +49,10 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 			_now = now;
 		}
 
-		[TestLog]
-		public virtual void Trigger()
-		{
+		public void Trigger() =>
 			RunAt(_now.UtcDateTime());
-		}
 
-		[TestLog]
-		public virtual void Synchronize()
+		public void SynchronizeOnTrigger()
 		{
 			var runAt = RunAt();
 			if (_now.UtcDateTime() < runAt) return;
@@ -67,13 +64,13 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 			});
 		}
 
+		public void SynchronizeNow() => synchronize();
+
 		[ReadModelUnitOfWork]
-		[TestLog]
 		protected virtual DateTime RunAt() =>
 			new DateTime(_keyValueStore.Get("RtaEventStoreSynchronizerRunAt", 0L), DateTimeKind.Utc);
 
 		[ReadModelUnitOfWork]
-		[TestLog]
 		protected virtual void RunAt(DateTime time) =>
 			_keyValueStore.Update("RtaEventStoreSynchronizerRunAt", time.Ticks);
 

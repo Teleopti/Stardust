@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.TestCommon
 				}
 			);
 			
-			_synchronizer.Value.Synchronize();
+			_synchronizer.Value.SynchronizeNow();
 		}
 
 		public int Remove(DateTime removeUntil, int maxEventsToRemove) => throw new NotImplementedException();

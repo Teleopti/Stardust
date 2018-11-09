@@ -33,6 +33,6 @@ namespace Teleopti.Wfm.Adherence.Domain.Infrastructure
 		}
 
 		[TenantScope]
-		protected virtual void Synchronize(string tenant) => _synchronizer.Synchronize();
+		protected virtual void Synchronize(string tenant) => _synchronizer.SynchronizeOnTrigger();
 	}
 }
