@@ -50,6 +50,14 @@
 				vm.showIntradayTool = data;
 			});
 
+		function cancelPollingAndShowExpiredDialog() {
+			if (refreshPromise !== null) {
+				$interval.cancel(refreshPromise);
+				refreshPromise = null;
+				window.alert("Your session has expired, please login again");
+			}
+		}
+
 		function refresh() {
 			$http.get("./Stardust/Jobs", tokenHeaderService.getHeadersAndParams({ "from": 1, "to": 5}))
 				.success(function(data) {
@@ -68,6 +76,7 @@
 					if (xhr !== "") {
 						vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
 					}
+					cancelPollingAndShowExpiredDialog();
 				});
 
 			$http.get("./Stardust/FailedJobs", tokenHeaderService.getHeadersAndParams({ "from": 1, "to": 5}))
@@ -87,6 +96,7 @@
 					if (xhr !== "") {
 						vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
 					}
+					cancelPollingAndShowExpiredDialog();
 				});
 
 			$http.get("./Stardust/QueuedJobs", tokenHeaderService.getHeadersAndParams({ "from": 1, "to": 5 }))
@@ -104,6 +114,7 @@
 					if (xhr !== "") {
 						vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
 					}
+					cancelPollingAndShowExpiredDialog();
 				});
 
 			$http.get("./Stardust/QueueCount", tokenHeaderService.getHeaders())
@@ -128,6 +139,7 @@
 					if (xhr !== "") {
 						vm.NodeError = vm.NodeError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
 					}
+					cancelPollingAndShowExpiredDialog();
 				});
 		}
 
