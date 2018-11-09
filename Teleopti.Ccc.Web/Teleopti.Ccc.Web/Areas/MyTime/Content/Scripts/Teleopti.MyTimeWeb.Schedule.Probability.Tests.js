@@ -110,6 +110,8 @@
 	});
 
 	test('should change url after switching selected probability type', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		setupHash();
 
 		var fakeScheduleData = getFakeScheduleData();
@@ -152,6 +154,8 @@
 	});
 
 	test('should keep possibility selection for today when changing date', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		setupHash();
 
 		var fakeScheduleData = getFakeScheduleData();
@@ -195,6 +199,8 @@
 			YouHaveNotBeenAllocatedSeat: '{0} har du inte n&#229;gon tilldelad sittplats.'
 		};
 
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		setupHash();
 
 		var fakeScheduleData = getFakeScheduleData();
@@ -210,6 +216,8 @@
 	});
 
 	test('should keep possibility selection for multiple days when changing date', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		setupHash();
 		var fakeScheduleData = getFakeScheduleData();
 		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
@@ -228,6 +236,8 @@
 	});
 
 	test('should show absence possibility within schedule time range', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		var fakeScheduleData = getFakeScheduleData();
 		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
 		week.initializeData(fakeScheduleData);
@@ -254,6 +264,8 @@
 	});
 
 	test('should show overtime possibility within timeline range', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.TimeLine = [
 			{
@@ -290,6 +302,8 @@
 	});
 
 	test('should hide absence possibility earlier than now', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Possibilities = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter();
 		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
@@ -326,6 +340,8 @@
 	});
 
 	test('should hide overtime possibility earlier than now', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Possibilities = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter();
 		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
@@ -352,6 +368,8 @@
 	});
 
 	test('should show no absence possibility for dayoff', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].IsDayOff = true;
 		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
@@ -366,6 +384,8 @@
 	});
 
 	test('should show no absence possibility for fullday absence', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].IsFullDayAbsence = true;
 		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
@@ -379,6 +399,8 @@
 	});
 
 	test('should show overtime possibility for dayoff', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].IsDayOff = true;
 		fakeScheduleData.TimeLine = [
@@ -417,6 +439,8 @@
 	});
 
 	test('should show overtime possibility based on site open hour', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].OpenHourPeriod = {
 			StartTime: '10:00:00',
@@ -444,6 +468,8 @@
 	});
 
 	test('should show overtime possibility for dayoff based on intraday open hour', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].IsDayOff = true;
 		fakeScheduleData.Days[0].OpenHourPeriod = {
@@ -474,6 +500,8 @@
 	});
 
 	test('should show overtime possibility for fullday absence', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].IsFullDayAbsence = true;
 		fakeScheduleData.TimeLine = [
@@ -513,6 +541,8 @@
 	});
 
 	test('should show correct overtime possibility for cross day schedule', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].StartTime = momentWithLocale(basedDate)
 			.subtract('day', 1)
@@ -556,6 +586,8 @@
 	});
 
 	test('should show correct absence possibility for cross day schedule', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].Periods[0].StartTime = momentWithLocale(basedDate)
 			.subtract('day', 1)
@@ -586,6 +618,8 @@
 	});
 
 	test('should show absence possibility for night shift schedule', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].Periods[0].EndTime = momentWithLocale(basedDate)
 			.add('day', 1)
@@ -620,6 +654,8 @@
 	});
 
 	test('should apply multiple day probabilities to week view model', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
 		equal(week.days().length, 0);
 		week.initializeData(getFakeScheduleData());
@@ -850,6 +886,8 @@
 	});
 
 	test('should reserve parameter when fetching data triggered from ReloadScheduleListener', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		var probabilityParamterValue;
 		var ajax = {
 			Ajax: function(options) {

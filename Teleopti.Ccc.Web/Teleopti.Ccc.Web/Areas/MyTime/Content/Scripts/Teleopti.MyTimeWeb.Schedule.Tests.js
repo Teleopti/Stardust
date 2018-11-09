@@ -5,13 +5,12 @@
 		Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)
 	).format('YYYY-MM-DD');
 
-	module('Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule', {
+	module('Teleopti.MyTimeWeb.Schedule', {
 		setup: function() {
-			$('#page').remove();
+			Teleopti.MyTimeWeb.Common.DisableToggle('MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640');
 		},
 		teardown: function() {
 			$('#page').remove();
-			Teleopti.MyTimeWeb.Common.DisableToggle('MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640');
 		}
 	});
 
