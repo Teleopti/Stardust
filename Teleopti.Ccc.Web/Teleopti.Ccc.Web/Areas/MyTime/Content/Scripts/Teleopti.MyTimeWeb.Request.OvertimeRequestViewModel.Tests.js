@@ -15,20 +15,21 @@ $(document).ready(function() {
 		},
 		fakeAvailableDays = 13,
 		fakeDefaultStartTimeFromBackend = {
-			"IsShiftStartTime": false,
-			"IsShiftEndTime": false,
-			"DefaultStartTimeString":"2018-01-25 10:00"
+			IsShiftStartTime: false,
+			IsShiftEndTime: false,
+			DefaultStartTimeString: '2018-01-25 10:00'
 		},
 		hasFetchDefaultStartTime = false,
 		dateOnlyFormat = Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly,
 		requestDate = moment().format(dateOnlyFormat),
-		toggleFnTemp, tempFn1, tempFn2, enabledTogglesList = [];
+		tempFn1,
+		tempFn2;
 
 	module('Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel', {
 		setup: function() {
 			setup();
 		},
-		teardown: function () {
+		teardown: function() {
 			restoreFn();
 		}
 	});
@@ -42,31 +43,29 @@ $(document).ready(function() {
 
 		tempFn1 = Date.prototype.getTeleoptiTime;
 		Date.prototype.getTeleoptiTime = function() {
-			return new Date("2018-03-05T02:30:00Z").getTime();
+			return new Date('2018-03-05T02:30:00Z').getTime();
 		};
 
 		tempFn2 = Date.prototype.getTeleoptiTimeInUserTimezone;
 		Date.prototype.getTeleoptiTimeInUserTimezone = function() {
-			return "2018-03-04";
-		};		
-
-		toggleFnTemp = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle) {
-			if (enabledTogglesList.indexOf(toggle) > -1)
-				return true;
+			return '2018-03-04';
 		};
 
-		vm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(data) {
-			addedOvertimeRequest = data;
-		}, fakeRequestDetailViewModel, null, false);
+		vm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(
+			ajax,
+			function(data) {
+				addedOvertimeRequest = data;
+			},
+			fakeRequestDetailViewModel,
+			null,
+			false
+		);
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 	}
 
 	function restoreFn() {
 		Date.prototype.getTeleoptiTime = tempFn1;
 		Date.prototype.getTeleoptiTimeInUserTimezone = tempFn2;
-
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = toggleFnTemp;
 	}
 
 	function setupAjax() {
@@ -76,15 +75,14 @@ $(document).ready(function() {
 					sentData = actualRequestData || options.data;
 					if (sentData.Subject === '') {
 						options.error({ responseJSON: { Errors: [requestsMessagesUserTexts.MISSING_SUBJECT] } });
-					}
-					else if (sentData.MultiplicatorDefinitionSet === '') {
+					} else if (sentData.MultiplicatorDefinitionSet === '') {
 						options.error({ responseJSON: { Errors: [requestsMessagesUserTexts.MISSING_OVERTIME_TYPE] } });
 					} else {
 						options.success(fakeOvertimeRequestResponse);
 					}
 				}
 
-				if( options.url === 'OvertimeRequests/GetAvailableDays') {
+				if (options.url === 'OvertimeRequests/GetAvailableDays') {
 					options.success(fakeAvailableDays);
 				}
 
@@ -104,7 +102,7 @@ $(document).ready(function() {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
 		vm.DateFrom(requestDate);
-		vm.StartTime("19:00");
+		vm.StartTime('19:00');
 		vm.RequestDuration('03:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
@@ -133,7 +131,7 @@ $(document).ready(function() {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
 		vm.DateFrom(requestDate);
-		vm.StartTime("19:00");
+		vm.StartTime('19:00');
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
@@ -146,7 +144,7 @@ $(document).ready(function() {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
 		vm.DateFrom(requestDate);
-		vm.StartTime("19:00");
+		vm.StartTime('19:00');
 		vm.RequestDuration('06:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
@@ -154,7 +152,12 @@ $(document).ready(function() {
 
 		equal(sentData.Period.StartDate, requestDate);
 		equal(sentData.Period.StartTime, '19:00');
-		equal(sentData.Period.EndDate, moment(requestDate).add(1, 'days').format(dateOnlyFormat));
+		equal(
+			sentData.Period.EndDate,
+			moment(requestDate)
+				.add(1, 'days')
+				.format(dateOnlyFormat)
+		);
 		equal(sentData.Period.EndTime, '01:00');
 	});
 
@@ -162,7 +165,7 @@ $(document).ready(function() {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
 		vm.DateFrom(requestDate);
-		vm.StartTime("19:30");
+		vm.StartTime('19:30');
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
@@ -178,7 +181,7 @@ $(document).ready(function() {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
 		vm.DateFrom(requestDate);
-		vm.StartTime("9:30 AM");
+		vm.StartTime('9:30 AM');
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
@@ -193,7 +196,7 @@ $(document).ready(function() {
 	test('should not pass validation when post data has no subject', function() {
 		vm.Message('I want to work overtime');
 		vm.DateFrom(requestDate);
-		vm.StartTime("19:00");
+		vm.StartTime('19:00');
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
@@ -220,7 +223,7 @@ $(document).ready(function() {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
 		vm.DateFrom(requestDate);
-		vm.StartTime("19:00");
+		vm.StartTime('19:00');
 		vm.RequestDuration('');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
@@ -230,7 +233,7 @@ $(document).ready(function() {
 		equal(vm.ErrorMessage(), 'Missing duration');
 	});
 
-	test('should not pass validation when duration is 00:00', function () {
+	test('should not pass validation when duration is 00:00', function() {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
 		vm.DateFrom(requestDate);
@@ -245,26 +248,38 @@ $(document).ready(function() {
 	});
 
 	test('should set PeriodEndDate according to available days', function() {
-
-		var vm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(data) {
-			addedOvertimeRequest = data;
-		}, fakeRequestDetailViewModel);
+		var vm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(
+			ajax,
+			function(data) {
+				addedOvertimeRequest = data;
+			},
+			fakeRequestDetailViewModel
+		);
 
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
 		vm.DateFrom(moment().format(dateOnlyFormat));
-		vm.StartTime("19:00");
+		vm.StartTime('19:00');
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
-		equal(vm.PeriodEndDate().format(dateOnlyFormat), moment().add(fakeAvailableDays, 'days').format(dateOnlyFormat));
+		equal(
+			vm.PeriodEndDate().format(dateOnlyFormat),
+			moment()
+				.add(fakeAvailableDays, 'days')
+				.format(dateOnlyFormat)
+		);
 	});
 
-	test('should not pass validation when request date is past date', function () {
+	test('should not pass validation when request date is past date', function() {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
-		vm.DateFrom(moment().add(-1, 'days').format(dateOnlyFormat));
-		vm.StartTime("19:00");
+		vm.DateFrom(
+			moment()
+				.add(-1, 'days')
+				.format(dateOnlyFormat)
+		);
+		vm.StartTime('19:00');
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
@@ -274,11 +289,15 @@ $(document).ready(function() {
 		equal(vm.ErrorMessage(), 'Can not add overtime request on past date');
 	});
 
-	test('should not pass validation when post data has no overtime type', function () {
+	test('should not pass validation when post data has no overtime type', function() {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
-		vm.DateFrom(moment().add(1, 'days').format(dateOnlyFormat));
-		vm.StartTime("19:00");
+		vm.DateFrom(
+			moment()
+				.add(1, 'days')
+				.format(dateOnlyFormat)
+		);
+		vm.StartTime('19:00');
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('');
 
@@ -293,7 +312,7 @@ $(document).ready(function() {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
 		vm.DateFrom(requestDate);
-		vm.StartTime("19:00");
+		vm.StartTime('19:00');
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
@@ -359,12 +378,13 @@ $(document).ready(function() {
 	});
 
 	test('should close request duration time list when clicking outside', function() {
-		var html = 	'<div id="test-duration">' +
-						'<div id="outside-div"></div>' +
-						'<span id="duration-container" data-bind="outsideClickCallback: CloseDropdownTimeList">' +
-							'<input id="duration" data-bind="value: RequestDuration, event:{change:validateDuration}"/>' +
-						'</span>' +
-					'</div>';
+		var html =
+			'<div id="test-duration">' +
+			'<div id="outside-div"></div>' +
+			'<span id="duration-container" data-bind="outsideClickCallback: CloseDropdownTimeList">' +
+			'<input id="duration" data-bind="value: RequestDuration, event:{change:validateDuration}"/>' +
+			'</span>' +
+			'</div>';
 
 		$('body').append(html);
 		ko.applyBindings(vm, $('#test-duration')[0]);
@@ -398,54 +418,97 @@ $(document).ready(function() {
 
 	test('should initialize with data when viewing request detail', function() {
 		var data = {
-			Subject: "subject",
-			Text: "text",
-			DateTimeFrom: "2017-06-30T03:45:00.0000000",
-			DateTimeTo: "2017-06-30T06:45:00.0000000",
-			MultiplicatorDefinitionSet: "9019D62F-0086-44B1-A977-9BB900B8C361"
+			Subject: 'subject',
+			Text: 'text',
+			DateTimeFrom: '2017-06-30T03:45:00.0000000',
+			DateTimeTo: '2017-06-30T06:45:00.0000000',
+			MultiplicatorDefinitionSet: '9019D62F-0086-44B1-A977-9BB900B8C361'
 		};
 		var isViewingDetail = true;
 
-		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(data) {
-			addedOvertimeRequest = data;
-		}, fakeRequestDetailViewModel, null, isViewingDetail);
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(
+			ajax,
+			function(data) {
+				addedOvertimeRequest = data;
+			},
+			fakeRequestDetailViewModel,
+			null,
+			isViewingDetail
+		);
 		requestVm.Initialize(data);
 
-		equal(requestVm.Subject(), "subject");
-		equal(requestVm.Message(), "text");
-		equal(requestVm.DateFrom().format("YYYY-MM-DD"), "2017-06-30");
-		equal(requestVm.StartTime(), "03:45");
-		equal(requestVm.RequestDuration(), "03:00");
-		equal(requestVm.MultiplicatorDefinitionSetId(), "9019D62F-0086-44B1-A977-9BB900B8C361");
+		equal(requestVm.Subject(), 'subject');
+		equal(requestVm.Message(), 'text');
+		equal(requestVm.DateFrom().format('YYYY-MM-DD'), '2017-06-30');
+		equal(requestVm.StartTime(), '03:45');
+		equal(requestVm.RequestDuration(), '03:00');
+		equal(requestVm.MultiplicatorDefinitionSetId(), '9019D62F-0086-44B1-A977-9BB900B8C361');
 	});
 
 	test('should set default start time in AM/PM format when showing Meridian', function() {
-		Teleopti.MyTimeWeb.Common.TimeFormat = "hh:mm A";
-		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
-		equal(requestVm.StartTime(), moment().add(20, 'minutes').format('hh:mm A'));
+		Teleopti.MyTimeWeb.Common.TimeFormat = 'hh:mm A';
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(
+			ajax,
+			function() {},
+			fakeRequestDetailViewModel,
+			null,
+			false
+		);
+		equal(
+			requestVm.StartTime(),
+			moment()
+				.add(20, 'minutes')
+				.format('hh:mm A')
+		);
 	});
 
 	test('should set default start time in 24 hours format when not showing Meridian', function() {
-		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
-		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
+		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(
+			ajax,
+			function() {},
+			fakeRequestDetailViewModel,
+			null,
+			false
+		);
 
-		equal(requestVm.StartTime(), moment().add(20, 'minutes').format('HH:mm'));
+		equal(
+			requestVm.StartTime(),
+			moment()
+				.add(20, 'minutes')
+				.format('HH:mm')
+		);
 	});
 
 	test('should use default start time by default', function() {
-		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
-		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
+		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(
+			ajax,
+			function() {},
+			fakeRequestDetailViewModel,
+			null,
+			false
+		);
 
 		equal(requestVm.UseDefaultStartTime(), true);
 	});
 
 	test('should use default start time from backend as default start date when UseDefaultStartTime toggle is toggled on', function() {
-		var tomorrow = moment().add(1, 'days').hours(17).minutes(0);
+		var tomorrow = moment()
+			.add(1, 'days')
+			.hours(17)
+			.minutes(0);
 
 		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
 
-		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
-		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
+		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(
+			ajax,
+			function() {},
+			fakeRequestDetailViewModel,
+			null,
+			false
+		);
 
 		requestVm.DateFrom(moment());
 		requestVm.UseDefaultStartTime(false);
@@ -455,12 +518,22 @@ $(document).ready(function() {
 		equal(requestVm.DateFrom().format('YYYY-MM-DD'), tomorrow.format('YYYY-MM-DD'));
 	});
 
-	test('should not fetch default start time when viewing overtime request detail', function () {
-		var tomorrow = moment().add(1, 'days').hours(17).minutes(0);
+	test('should not fetch default start time when viewing overtime request detail', function() {
+		var tomorrow = moment()
+			.add(1, 'days')
+			.hours(17)
+			.minutes(0);
 		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
 
-		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
-		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function () { }, fakeRequestDetailViewModel, null, true, true);
+		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(
+			ajax,
+			function() {},
+			fakeRequestDetailViewModel,
+			null,
+			true,
+			true
+		);
 		requestVm.DateFrom(moment());
 		requestVm.UseDefaultStartTime(false);
 		requestVm.UseDefaultStartTime(true);
@@ -469,15 +542,15 @@ $(document).ready(function() {
 			DateFromDayOfMonth: 31,
 			DateFromMonth: 1,
 			DateFromYear: 2018,
-			DateTimeFrom: "2018-01-31T17:00:00.0000000",
-			DateTimeTo: "2018-01-31T20:00:00.0000000",
+			DateTimeFrom: '2018-01-31T17:00:00.0000000',
+			DateTimeTo: '2018-01-31T20:00:00.0000000',
 			DateToDayOfMonth: 31,
 			DateToMonth: 1,
 			DateToYear: 2018,
-			DenyReason: "January contains too much overtime (04:00). Max is 03:00.",
+			DenyReason: 'January contains too much overtime (04:00). Max is 03:00.',
 			ExchangeOffer: null,
-			From: "",
-			Id: "2f4a7e4d-7b34-4005-a1d0-a87900125281",
+			From: '',
+			Id: '2f4a7e4d-7b34-4005-a1d0-a87900125281',
 			IsApproved: false,
 			IsCreatedByUser: false,
 			IsDenied: true,
@@ -487,19 +560,20 @@ $(document).ready(function() {
 			IsPending: false,
 			IsReferred: false,
 			Link: {
-				rel: "self",
-				href: "/TeleoptiWFM/Web/MyTime/Requests/RequestDetail/2f4a7e4d-7b34-4005-a1d0-a87900125281", Methods: "GET",
+				rel: 'self',
+				href: '/TeleoptiWFM/Web/MyTime/Requests/RequestDetail/2f4a7e4d-7b34-4005-a1d0-a87900125281',
+				Methods: 'GET'
 			},
-			MultiplicatorDefinitionSet: "29f7ece8-d340-408f-be40-9bb900b8a4cb",
-			Payload: "Overtime paid",
+			MultiplicatorDefinitionSet: '29f7ece8-d340-408f-be40-9bb900b8a4cb',
+			Payload: 'Overtime paid',
 			PayloadId: null,
-			Status: "Denied",
-			Subject: "31",
-			Text: "31",
-			To: "",
-			Type: "Overtime",
+			Status: 'Denied',
+			Subject: '31',
+			Text: '31',
+			To: '',
+			Type: 'Overtime',
 			TypeEnum: 4,
-			UpdatedOnDateTime: "2018-01-31T02:06:42.6270000"
+			UpdatedOnDateTime: '2018-01-31T02:06:42.6270000'
 		};
 		requestVm.Initialize(fakeData);
 
@@ -509,12 +583,20 @@ $(document).ready(function() {
 	});
 
 	test('should use selected day as default start time when UseDefaultStartTime toggle is toggled off', function() {
-		var tomorrow = moment().add(1, 'days').hours(17).minutes(0);
+		var tomorrow = moment()
+			.add(1, 'days')
+			.hours(17)
+			.minutes(0);
 		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
 
-
-		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
-		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
+		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(
+			ajax,
+			function() {},
+			fakeRequestDetailViewModel,
+			null,
+			false
+		);
 
 		requestVm.DateFrom(moment());
 		requestVm.UseDefaultStartTime(false);
@@ -524,13 +606,22 @@ $(document).ready(function() {
 	});
 
 	test('should use shift start time subtracting duration for default start time', function() {
-		var tomorrow = moment().add(1, 'days').hours(17).minutes(0);
+		var tomorrow = moment()
+			.add(1, 'days')
+			.hours(17)
+			.minutes(0);
 		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
 		fakeDefaultStartTimeFromBackend.IsShiftStartTime = true;
 		fakeDefaultStartTimeFromBackend.IsShiftEndTime = false;
 
-		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
-		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
+		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(
+			ajax,
+			function() {},
+			fakeRequestDetailViewModel,
+			null,
+			false
+		);
 
 		requestVm.DateFrom(moment());
 		requestVm.UseDefaultStartTime(false);
@@ -540,20 +631,31 @@ $(document).ready(function() {
 		equal(requestVm.UseDefaultStartTime(), true);
 		equal(requestVm.DateFrom().format('YYYY-MM-DD'), tomorrow.format('YYYY-MM-DD'));
 
-		var expectedStartTime = tomorrow.add(-requestVm.RequestDuration().split(':')[0], 'hours')
-								.add(-requestVm.RequestDuration().split(':')[1], 'minutes').format('HH:mm');
+		var expectedStartTime = tomorrow
+			.add(-requestVm.RequestDuration().split(':')[0], 'hours')
+			.add(-requestVm.RequestDuration().split(':')[1], 'minutes')
+			.format('HH:mm');
 
 		equal(requestVm.StartTime(), expectedStartTime);
 	});
 
 	test('should not subtract duration from shift end time when setting default start time', function() {
-		var tomorrow = moment().add(1, 'days').hours(7).minutes(0);
+		var tomorrow = moment()
+			.add(1, 'days')
+			.hours(7)
+			.minutes(0);
 		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
 		fakeDefaultStartTimeFromBackend.IsShiftStartTime = false;
 		fakeDefaultStartTimeFromBackend.IsShiftEndTime = true;
 
-		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
-		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
+		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(
+			ajax,
+			function() {},
+			fakeRequestDetailViewModel,
+			null,
+			false
+		);
 
 		requestVm.DateFrom(moment());
 		requestVm.UseDefaultStartTime(false);
@@ -566,13 +668,22 @@ $(document).ready(function() {
 	});
 
 	test('should re-calculate start time when changing duration', function() {
-		var tomorrow = moment().add(1, 'days').hours(7).minutes(0);
+		var tomorrow = moment()
+			.add(1, 'days')
+			.hours(7)
+			.minutes(0);
 		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
 		fakeDefaultStartTimeFromBackend.IsShiftStartTime = true;
 		fakeDefaultStartTimeFromBackend.IsShiftEndTime = false;
 
-		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
-		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
+		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(
+			ajax,
+			function() {},
+			fakeRequestDetailViewModel,
+			null,
+			false
+		);
 
 		requestVm.DateFrom(moment());
 		requestVm.UseDefaultStartTime(false);
@@ -581,20 +692,31 @@ $(document).ready(function() {
 
 		equal(requestVm.DateFrom().format('YYYY-MM-DD'), tomorrow.format('YYYY-MM-DD'));
 
-		var expectedStartTime = tomorrow.add(-requestVm.RequestDuration().split(':')[0], 'hours')
-								.add(-requestVm.RequestDuration().split(':')[1], 'minutes').format('HH:mm');
+		var expectedStartTime = tomorrow
+			.add(-requestVm.RequestDuration().split(':')[0], 'hours')
+			.add(-requestVm.RequestDuration().split(':')[1], 'minutes')
+			.format('HH:mm');
 
 		equal(requestVm.StartTime(), expectedStartTime);
 	});
 
-	test('should not show UseDefaultStartTime toggle when viewing an overtime request', function () {
-		var tomorrow = moment('2018-01-31').add(1, 'days').hours(7).minutes(0);
+	test('should not show UseDefaultStartTime toggle when viewing an overtime request', function() {
+		var tomorrow = moment('2018-01-31')
+			.add(1, 'days')
+			.hours(7)
+			.minutes(0);
 		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
 		fakeDefaultStartTimeFromBackend.IsShiftStartTime = true;
 		fakeDefaultStartTimeFromBackend.IsShiftEndTime = false;
 
-		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
-		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function () { }, fakeRequestDetailViewModel, null, true);
+		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(
+			ajax,
+			function() {},
+			fakeRequestDetailViewModel,
+			null,
+			true
+		);
 
 		requestVm.DateFrom(moment('2018-01-31'));
 		requestVm.UseDefaultStartTime(false);
@@ -605,15 +727,15 @@ $(document).ready(function() {
 			DateFromDayOfMonth: 31,
 			DateFromMonth: 1,
 			DateFromYear: 2018,
-			DateTimeFrom: "2018-01-31T17:00:00.0000000",
-			DateTimeTo: "2018-01-31T20:00:00.0000000",
+			DateTimeFrom: '2018-01-31T17:00:00.0000000',
+			DateTimeTo: '2018-01-31T20:00:00.0000000',
 			DateToDayOfMonth: 31,
 			DateToMonth: 1,
 			DateToYear: 2018,
-			DenyReason: "January contains too much overtime (04:00). Max is 03:00.",
+			DenyReason: 'January contains too much overtime (04:00). Max is 03:00.',
 			ExchangeOffer: null,
-			From: "",
-			Id: "2f4a7e4d-7b34-4005-a1d0-a87900125281",
+			From: '',
+			Id: '2f4a7e4d-7b34-4005-a1d0-a87900125281',
 			IsApproved: false,
 			IsCreatedByUser: false,
 			IsDenied: true,
@@ -623,19 +745,20 @@ $(document).ready(function() {
 			IsPending: false,
 			IsReferred: false,
 			Link: {
-				rel: "self",
-				href: "/TeleoptiWFM/Web/MyTime/Requests/RequestDetail/2f4a7e4d-7b34-4005-a1d0-a87900125281", Methods: "GET",
+				rel: 'self',
+				href: '/TeleoptiWFM/Web/MyTime/Requests/RequestDetail/2f4a7e4d-7b34-4005-a1d0-a87900125281',
+				Methods: 'GET'
 			},
-			MultiplicatorDefinitionSet: "29f7ece8-d340-408f-be40-9bb900b8a4cb",
-			Payload: "Overtime paid",
+			MultiplicatorDefinitionSet: '29f7ece8-d340-408f-be40-9bb900b8a4cb',
+			Payload: 'Overtime paid',
 			PayloadId: null,
-			Status: "Denied",
-			Subject: "31",
-			Text: "31",
-			To: "",
-			Type: "Overtime",
+			Status: 'Denied',
+			Subject: '31',
+			Text: '31',
+			To: '',
+			Type: 'Overtime',
 			TypeEnum: 4,
-			UpdatedOnDateTime: "2018-01-31T02:06:42.6270000",
+			UpdatedOnDateTime: '2018-01-31T02:06:42.6270000'
 		};
 		requestVm.IsEditable(false);
 		requestVm.Initialize(fakeData);
@@ -649,8 +772,20 @@ $(document).ready(function() {
 
 	test('should display default start date and time by agents timezone', function() {
 		fakeRequestDetailViewModel.baseUtcOffsetInMinutes = -600;
-		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
-		equal(requestVm.StartTime(), moment().add(20, 'minutes').zone(-fakeRequestDetailViewModel.baseUtcOffsetInMinutes).format("HH:mm"));
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(
+			ajax,
+			function() {},
+			fakeRequestDetailViewModel,
+			null,
+			false
+		);
+		equal(
+			requestVm.StartTime(),
+			moment()
+				.add(20, 'minutes')
+				.zone(-fakeRequestDetailViewModel.baseUtcOffsetInMinutes)
+				.format('HH:mm')
+		);
 	});
 
 	test('should display error message from server response when missing overtime time', function() {
@@ -659,7 +794,7 @@ $(document).ready(function() {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
 		vm.DateFrom(requestDate);
-		vm.StartTime("19:00");
+		vm.StartTime('19:00');
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 

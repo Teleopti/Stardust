@@ -1,27 +1,5 @@
 ﻿$(document).ready(function() {
-	var toggleFnTemp;
-
-	module('Teleopti.MyTimeWeb.Schedule.DayViewModel', {
-		setup: function() {
-			setup();
-		},
-		teardown: function() {
-			restoreFn();
-		}
-	});
-
 	Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
-
-	function setup() {
-		toggleFnTemp = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle) {
-			return true;
-		};
-	}
-
-	function restoreFn() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = toggleFnTemp;
-	}
 
 	var fakeAddRequestViewModel = function() {
 		return {

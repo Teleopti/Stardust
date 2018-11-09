@@ -50,6 +50,7 @@
 	self.overtimeAvailability = scheduleDay.OvertimeAvailabililty;
 
 	self.absenceChanceColor = getTrafficLightColor(scheduleDay.ProbabilityClass);
+	self.trafficLightClass = getNewTrafficLightCssClass(scheduleDay.ProbabilityClass);
 	self.probabilityText = scheduleDay.ProbabilityText;
 	self.probabilities = ko.observableArray();
 
@@ -121,6 +122,22 @@
 			}
 			case 'good': {
 				return 'green';
+			}
+			default:
+				return '';
+		}
+	}
+
+	function getNewTrafficLightCssClass(trafficLightClass) {
+		switch (trafficLightClass) {
+			case 'poor': {
+				return 'traffic-light-progress-poor';
+			}
+			case 'fair': {
+				return 'traffic-light-progress-fair';
+			}
+			case 'good': {
+				return 'traffic-light-progress-good';
 			}
 			default:
 				return '';

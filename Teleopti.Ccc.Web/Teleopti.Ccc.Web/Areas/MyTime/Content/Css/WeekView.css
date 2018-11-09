@@ -132,6 +132,9 @@
 	height: 16px;
 }
 
+.weekview-day-symbol .traffic-light-progress {
+	margin: 0;
+}
 .weekview-day-symbol div[class='tooltip-inner'] {
 	max-width: none;
 }

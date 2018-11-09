@@ -1,13 +1,15 @@
-﻿if (typeof (Teleopti) === "undefined") {
+﻿if (typeof Teleopti === 'undefined') {
 	Teleopti = {};
 
-	if (typeof (Teleopti.MyTimeWeb) === "undefined") {
+	if (typeof Teleopti.MyTimeWeb === 'undefined') {
 		Teleopti.MyTimeWeb = {};
 	}
 
-	if (typeof (Teleopti.MyTimeWeb.UserInfo) === "undefined") {
+	if (typeof Teleopti.MyTimeWeb.UserInfo === 'undefined') {
 		Teleopti.MyTimeWeb.UserInfo = {
-			WhenLoaded: function (cb) { cb && cb();}
+			WhenLoaded: function(cb) {
+				cb && cb();
+			}
 		};
 	}
 }
@@ -551,6 +553,12 @@ Teleopti.MyTimeWeb.Common = (function($) {
 		GetCurrentUserDateTime: _getCurrentUserDateTime,
 		FakeToggles: function(toggles) {
 			toggleCache = toggles;
+		},
+		DisableToggle: function(toggleName) {
+			toggleCache[toggleName] = false;
+		},
+		EnableToggle: function(toggleName) {
+			toggleCache[toggleName] = true;
 		},
 		ConvertColorToRGB: _convertColorToRGB
 	};

@@ -50,10 +50,7 @@
 	});
 
 	test('should navigate to default start day view when clicking logo', function() {
-		var tempFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle) {
-			if (toggle == 'MyTimeWeb_DayScheduleForStartPage_43446') return true;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
 
 		var html = [
 			'<div class="navbar-header pull-left fake-navbar-brand">',
@@ -90,14 +87,10 @@
 		equal(vm.selectedDate().format('YYYY-MM-DD'), vm.currentUserDate().format('YYYY-MM-DD'));
 
 		$('.fake-navbar-brand').remove();
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempFn;
 	});
 
 	test('should navigate to default start date when clicking schedule menu item', function() {
-		var tempFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle) {
-			if (toggle == 'MyTimeWeb_DayScheduleForStartPage_43446') return true;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
 
 		var html = [
 			'<div class="navbar-offcanvas navmenu-fixed-left offcanvas menu-top-adjust" id="bs-example-navbar-collapse-1">',
@@ -160,7 +153,6 @@
 		equal($('ul.navbar-nav li a[href="#Schedule/MobileDay"]').attr('data-mytime-action'), 'Schedule/MobileDay');
 
 		$('#bs-example-navbar-collapse-1').remove();
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempFn;
 	});
 
 	test('should navigate to next date when swiping left', function() {
@@ -309,12 +301,8 @@
 	});
 
 	test('should not show unreadMessage number if it is zero', function() {
-		var tempFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === 'MyTimeWeb_DayScheduleForStartPage_43446' || x === 'MyTimeWeb_MonthlyScheduleMobileView_45004')
-				return true;
-			return false;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_MonthlyScheduleMobileView_45004');
 
 		startDayData.UnReadMessageCount = 0;
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
@@ -344,15 +332,10 @@
 		equal($('#MobileDayView-message')[0].style['display'], 'none');
 
 		$('#testUnreadMessageHtml').remove();
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempFn;
 	});
 
 	test('should navigate to messages', function() {
-		var tempFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === 'MyTimeWeb_DayScheduleForStartPage_43446') return true;
-			return false;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
 
 		Teleopti.MyTimeWeb.Portal.Init(getDefaultSetting(), getFakeWindow());
 
@@ -365,7 +348,6 @@
 		vm.navigateToMessages();
 
 		equal(hash, 'MessageTab');
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempFn;
 	});
 
 	test('should show request link for current day when there are requests', function() {
@@ -781,11 +763,7 @@
 	});
 
 	test("should show poor 'traffic light' on mobile", function() {
-		var tempFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === 'MyTimeWeb_TrafficLightOnMobileDayView_77447') return true;
-			return false;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_TrafficLightOnMobileDayView_77447');
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
 			fakeReadyForInteractionCallback,
@@ -800,15 +778,10 @@
 		vm.nextDay();
 
 		equal(vm.trafficLightColor(), 'red');
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempFn;
 	});
 
 	test("should update 'traffic light' base on absence proability data on mobile", function() {
-		var tempFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === 'MyTimeWeb_TrafficLightOnMobileDayView_77447') return true;
-			return false;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_TrafficLightOnMobileDayView_77447');
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
 			fakeReadyForInteractionCallback,
@@ -823,15 +796,10 @@
 		vm.nextDay();
 
 		equal(vm.trafficLightColor(), 'green');
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempFn;
 	});
 
 	test("should set tooltip text for 'traffic light' base on absence proability data on mobile", function() {
-		var tempFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === 'MyTimeWeb_TrafficLightOnMobileDayView_77447') return true;
-			return false;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_TrafficLightOnMobileDayView_77447');
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
 			fakeReadyForInteractionCallback,
@@ -847,8 +815,6 @@
 
 		equal(vm.trafficLightColor(), 'green');
 		equal(vm.trafficLightTooltip(), '@Resources.ChanceOfGettingAbsenceRequestGranted: Good');
-
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempFn;
 	});
 
 	test("should show probability toggle by agent's timezone", function() {
@@ -1076,11 +1042,8 @@
 	});
 
 	test('should not show overtime probability option if Overtime Probability is disabled and selectedProbability is overtime', function() {
-		var tempFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === 'Staffing_Info_Configuration_44687') return true;
-			return false;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
 			fakeReadyForInteractionCallback,
 			fakeCompletelyLoadedCallback,
@@ -1091,7 +1054,6 @@
 		startDayData.OvertimeProbabilityEnabled = false;
 		vm.nextDay();
 		equal(vm.selectedProbabilityOptionValue(), 0);
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempFn;
 	});
 
 	function createPropabilities(periods, date) {
@@ -1144,12 +1106,19 @@
 		setupRequestSuccessData();
 		setupAjax();
 		setupElement();
-
+		setupToggles();
 		initContext();
 	}
 
 	function setupElement() {
 		$('body').addClass('mobile-start-day');
+	}
+
+	function setupToggles() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_Command_44209');
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_PollToCheckScheduleChanges_46595');
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_TrafficLightOnMobileDayView_77447');
 	}
 
 	function setupAjax() {

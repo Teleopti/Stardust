@@ -60,6 +60,7 @@
 			BaseUtcOffsetInMinutes: 60,
 			Days: [
 				{
+					Availability: true,
 					FixedDate: basedDate,
 					Header: {
 						Title: 'Today',
@@ -123,9 +124,12 @@
 							Color: '128,255,128',
 							IsOvertime: false
 						}
-					]
+					],
+					ProbabilityClass: 'poor',
+					ProbabilityText: 'Poor'
 				},
 				{
+					Availability: true,
 					FixedDate: momentWithLocale(basedDate)
 						.add('day', 1)
 						.format('YYYY-MM-DD'),
@@ -197,7 +201,86 @@
 							Color: '128,255,128',
 							IsOvertime: false
 						}
-					]
+					],
+					ProbabilityClass: 'fair',
+					ProbabilityText: 'Fair'
+				},
+				{
+					Availability: true,
+					FixedDate: momentWithLocale(basedDate)
+						.add('day', 2)
+						.format('YYYY-MM-DD'),
+					Header: {
+						Title: 'Tomorrow',
+						Date: momentWithLocale(basedDate)
+							.add('day', 2)
+							.format('YYYY-MM-DD'),
+						DayDescription: '',
+						DayNumber: '18'
+					},
+					Note: {
+						Message: 'Note2'
+					},
+					Summary: {
+						Title: 'Early',
+						TimeSpan: '09:30 - 16:45',
+						StartTime: momentWithLocale(basedDate)
+							.add('day', 2)
+							.startOf('day')
+							.add('hour', 9)
+							.add('minute', 30)
+							.format('YYYY-MM-DDTHH:mm:ss'),
+						EndTime: momentWithLocale(basedDate)
+							.add('day', 2)
+							.startOf('day')
+							.add('hour', 16)
+							.add('minute', 45)
+							.format('YYYY-MM-DDTHH:mm:ss'),
+						Summary: '7:15',
+						StyleClassName: 'color_80FF80',
+						Meeting: null,
+						StartPositionPercentage: 0.0,
+						EndPositionPercentage: 0.0,
+						Color: 'rgb(128,255,128)',
+						IsOvertime: false
+					},
+					OvertimeAvailabililty: {
+						HasOvertimeAvailability: false,
+						StartTime: null,
+						EndTime: null,
+						EndTimeNextDay: false,
+						DefaultStartTime: '17:00',
+						DefaultEndTime: '18:00',
+						DefaultEndTimeNextDay: false
+					},
+					SeatBookings: [],
+					Periods: [
+						{
+							Title: 'Phone',
+							TimeSpan: '09:30 - 16:45',
+							StartTime: momentWithLocale(basedDate)
+								.startOf('day')
+								.add('day', 2)
+								.add('hour', 9)
+								.add('minute', 30)
+								.format('YYYY-MM-DDTHH:mm:ss'),
+							EndTime: momentWithLocale(basedDate)
+								.startOf('day')
+								.add('day', 2)
+								.add('hour', 16)
+								.add('minute', 45)
+								.format('YYYY-MM-DDTHH:mm:ss'),
+							Summary: '7:15',
+							StyleClassName: 'color_80FF80',
+							Meeting: null,
+							StartPositionPercentage: 0.1896551724137931034482758621,
+							EndPositionPercentage: 1,
+							Color: '128,255,128',
+							IsOvertime: false
+						}
+					],
+					ProbabilityClass: 'good',
+					ProbabilityText: 'Good'
 				}
 			],
 			IsCurrentWeek: true,
@@ -266,6 +349,14 @@
 					.add('minute', 45)
 					.format('YYYY-MM-DDTHH:mm:ss'),
 				Possibility: 1
+			},
+			{
+				Date: momentWithLocale(basedDate)
+					.add('day', 2)
+					.format('YYYY-MM-DD'),
+				StartTime: '',
+				EndTime: '',
+				Possibility: 0
 			}
 		];
 	}

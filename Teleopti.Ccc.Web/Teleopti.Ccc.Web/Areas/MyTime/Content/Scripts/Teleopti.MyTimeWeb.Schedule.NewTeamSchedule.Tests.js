@@ -16,13 +16,14 @@
 
 	module('Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule', {
 		setup: function() {
-			Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(t) {
-				if (t == 'MyTimeWeb_NewTeamScheduleView_75989' || t == 'MyTimeWeb_NewTeamScheduleViewDesktop_76313')
-					return true;
-			};
+			Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_NewTeamScheduleView_75989');
+			Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_NewTeamScheduleViewDesktop_76313');
 			setup();
 		},
 		teardown: function() {
+			Teleopti.MyTimeWeb.Common.DisableToggle('MyTimeWeb_NewTeamScheduleView_75989');
+			Teleopti.MyTimeWeb.Common.DisableToggle('MyTimeWeb_NewTeamScheduleViewDesktop_76313');
+
 			$('#page').remove();
 
 			completeLoadedCount = 0;
