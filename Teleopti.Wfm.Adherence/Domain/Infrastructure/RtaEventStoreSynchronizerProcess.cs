@@ -32,7 +32,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Infrastructure
 			}
 			finally
 			{
-				context.CancellationToken.WaitHandle.WaitOne(TimeSpan.FromSeconds(1));
+				context.CancellationToken.WaitHandle.WaitOne(TimeSpan.FromSeconds(10));
 			}
 		}
 
