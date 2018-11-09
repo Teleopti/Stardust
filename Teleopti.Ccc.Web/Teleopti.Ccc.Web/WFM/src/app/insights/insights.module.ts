@@ -2,13 +2,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DowngradeableComponent } from '@wfm/types';
+import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { IStateProvider, IUrlRouterProvider } from 'angular-ui-router';
 import { WorkspaceComponent } from './components';
 import { ReportService } from './core/report.service';
 
 @NgModule({
 	declarations: [WorkspaceComponent],
-	imports: [CommonModule, FormsModule],
+	imports: [CommonModule, FormsModule, NgZorroAntdModule],
 	providers: [ReportService],
 	exports: [],
 	entryComponents: [WorkspaceComponent]

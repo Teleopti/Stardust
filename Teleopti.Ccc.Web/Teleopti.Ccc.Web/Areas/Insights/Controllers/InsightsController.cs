@@ -100,11 +100,10 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Controllers
 				return reports.Value.Select(x => new ReportModel
 				{
 					Id = x.Id,
-					//Name = x.Name,
+					Name = x.Name,
 					EmbedUrl = x.EmbedUrl
-					// DatasetId = x.DatasetId
 					// WebUrl = x.WebUrl,
-					// DatasetId = x.DatasetId,
+					// DatasetId = x.DatasetId
 				}).ToArray();
 			}
 		}

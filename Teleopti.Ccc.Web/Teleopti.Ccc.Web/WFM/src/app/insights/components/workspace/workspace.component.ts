@@ -2,7 +2,8 @@ import { Component, Input, Output, OnInit } from '@angular/core';
 import * as pbi from 'powerbi-client';
 
 import { ReportService } from '../../core/report.service';
-import { ReportConfig } from '../../models/ReportConfig.model';
+// import { ReportConfig } from '../../models/ReportConfig.model';
+import { Report } from '../../models/Report.model';
 
 @Component({
 	selector: 'app-insights-workspace',
@@ -15,8 +16,10 @@ export class WorkspaceComponent implements OnInit {
 	public reportPermission: pbi.models.Permissions;
 	public enableFilter: boolean;
 	public enableNavContent: boolean;
+	public reports: Report[];
 
 	private pbiCoreService: pbi.service.Service;
+	private selectedReport: string;
 
 	constructor(private reportSvc: ReportService) {
 		this.initialized = false;
@@ -34,20 +37,20 @@ export class WorkspaceComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.reportSvc.getReports().then((reports) => {
-			// reports.forEach(report => {
-			// 	console.log(report.Id, report.Name, report.EmbedUrl);
-			// });
-			console.log(reports);
-		});
-		this.loadReport();
+		this.loadReportList();
 	}
 
 	onEmbedded() {
 	}
 
-	loadReport() {
-		this.reportSvc.getReportConfig('1b44e7ff-7577-4e5f-a615-09c82ff82e13').then((config) => {
+	loadReportList() {
+		this.reportSvc.getReports().then((reports) => {
+			this.reports = reports;
+		});
+	}
+
+	loadSelectedReport(selectedReportId) {
+		this.reportSvc.getReportConfig(selectedReportId).then((config) => {
 			// Refer to https://github.com/Microsoft/PowerBI-JavaScript/wiki/Embed-Configuration-Details for more details
 			const embedConfig = {
 				type: 'report',
@@ -69,6 +72,8 @@ export class WorkspaceComponent implements OnInit {
 
 			// Embed the report and display it within the div container.
 			const reportContainer = <HTMLElement>document.getElementById('reportContainer');
+
+			this.pbiCoreService.reset(reportContainer);
 			const report = this.pbiCoreService.embed(reportContainer, embedConfig);
 
 			// Report.off removes a given event handler if it exists.
@@ -81,6 +86,15 @@ export class WorkspaceComponent implements OnInit {
 
 			this.initialized = true;
 		});
+	}
+
+	public onReportSelected(selectedReportId) {
+		this.selectedReport = selectedReportId;
+		this.loadSelectedReport(this.selectedReport);
+	}
+
+	public reloadCurrentReport() {
+		this.loadSelectedReport(this.selectedReport);
 	}
 
 	public onCanEditReportChanged() {
