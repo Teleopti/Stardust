@@ -1,7 +1,7 @@
 import { Component, Input, Output, OnInit } from '@angular/core';
 import * as pbi from 'powerbi-client';
 
-import { PowerBIService } from '../../core/powerbi.service';
+import { ReportService } from '../../core/report.service';
 import { ReportConfig } from '../../models/ReportConfig.model';
 
 @Component({
@@ -18,7 +18,7 @@ export class WorkspaceComponent implements OnInit {
 
 	private pbiCoreService: pbi.service.Service;
 
-	constructor(private pbiService: PowerBIService) {
+	constructor(private reportSvc: ReportService) {
 		this.initialized = false;
 
 		this.canEditReport = false;
@@ -34,6 +34,12 @@ export class WorkspaceComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		this.reportSvc.getReports().then((reports) => {
+			// reports.forEach(report => {
+			// 	console.log(report.Id, report.Name, report.EmbedUrl);
+			// });
+			console.log(reports);
+		});
 		this.loadReport();
 	}
 
@@ -41,7 +47,7 @@ export class WorkspaceComponent implements OnInit {
 	}
 
 	loadReport() {
-		this.pbiService.getReportConfig().then((config) => {
+		this.reportSvc.getReportConfig('1b44e7ff-7577-4e5f-a615-09c82ff82e13').then((config) => {
 			// Refer to https://github.com/Microsoft/PowerBI-JavaScript/wiki/Embed-Configuration-Details for more details
 			const embedConfig = {
 				type: 'report',

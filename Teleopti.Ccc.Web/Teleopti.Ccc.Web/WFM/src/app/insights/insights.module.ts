@@ -4,12 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { DowngradeableComponent } from '@wfm/types';
 import { IStateProvider, IUrlRouterProvider } from 'angular-ui-router';
 import { WorkspaceComponent } from './components';
-import { PowerBIService } from './core/powerbi.service';
+import { ReportService } from './core/report.service';
 
 @NgModule({
 	declarations: [WorkspaceComponent],
 	imports: [CommonModule, FormsModule],
-	providers: [PowerBIService],
+	providers: [ReportService],
 	exports: [],
 	entryComponents: [WorkspaceComponent]
 })

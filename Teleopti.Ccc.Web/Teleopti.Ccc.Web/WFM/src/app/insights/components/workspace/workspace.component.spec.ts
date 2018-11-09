@@ -5,14 +5,14 @@ import { NzButtonModule, NzTableModule, NzToolTipModule } from 'ng-zorro-antd';
 import { of } from 'rxjs';
 import { MockTranslationModule } from '../../../../mocks/translation';
 import { WorkspaceComponent } from './workspace.component';
-import { PowerBIService } from '../../core/powerbi.service';
+import { ReportService } from '../../core/report.service';
 
 describe('WorkspaceComponent', () => {
 	let component: WorkspaceComponent;
 	let fixture: ComponentFixture<WorkspaceComponent>;
 
 	// let page: Page;
-	let powerBIService: PowerBIService;
+	let reportSvc: ReportService;
 
 	configureTestSuite();
 
@@ -21,14 +21,14 @@ describe('WorkspaceComponent', () => {
 			declarations: [WorkspaceComponent],
 			imports: [MockTranslationModule, HttpClientModule, NzTableModule, NzButtonModule, NzToolTipModule],
 			providers: [
-				PowerBIService,
+				ReportService,
 				{
 					provide: HttpClient,
 					useValue: {}
 				}
 			]
 		}).compileComponents();
-		powerBIService = TestBed.get(PowerBIService);
+		reportSvc = TestBed.get(ReportService);
 	}));
 
 	beforeEach(() => {
@@ -45,7 +45,7 @@ describe('WorkspaceComponent', () => {
 			ReportUrl: 'https://app.powerbi.com/reportEmbed?reportId=TestReportId&groupId=TestGroupId',
 			ReportId: 'TestReportId'
 		};
-		spyOn(powerBIService, 'getReportConfig').and.returnValue(of(reportConfigResponse));
+		spyOn(reportSvc, 'getReportConfig').and.returnValue(of(reportConfigResponse));
 
 		expect(component).toBeTruthy();
 	});

@@ -3,7 +3,7 @@
 		<i class="mdi mdi-elevation-rise"></i>
 		Insights
 	</h1>
-
+	
 	<div class="material-depth-1 con-row full-padding align-row-baseline">
 		<span>
 			<input type="checkbox" name="canEditReport" id="canEditReport" [checked]="canEditReport" (change)="onCanEditReportChanged()">
@@ -19,6 +19,7 @@
 			<input type="checkbox" name="enableFilter" id="enableFilter" [checked]="enableFilter" (change)="onEnableFilterChanged()">
 			<label for="enableFilter">Enable filter</label>
 		</span>
+		&nbsp;&nbsp;&nbsp;
 		<input type="button" class="wfm-btn wfm-btn-invis-primary ng-binding ng-scope" id="btnReloadReport" value="Reload" (click)="loadReport()">
 	</div>
 	<div [hidden]="!initialized" class="panel con-flex material-depth-1">

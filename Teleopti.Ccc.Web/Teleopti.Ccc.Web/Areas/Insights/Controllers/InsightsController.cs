@@ -26,31 +26,15 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Controllers
 		private static readonly string groupId = ConfigurationManager.AppSettings["PowerBIGroupId"];
 
 		[HttpGet, Route("api/Insights/ReportConfig")]
-		public virtual async Task<EmbedReportConfig> GetReportConfig()
+		public virtual async Task<EmbedReportConfig> GetReportConfig(string reportId)
 		{
-			var reportId = "";
 			var userName = "";
 			var roles = "";
 
 			var result = new EmbedReportConfig();
 
-			// Create a user password credentials.
-			var credential = new UserPasswordCredential(powerBiUsername, powerBiPassword);
-
-			// Authenticate using created credentials
-			var authenticationContext = new AuthenticationContext(authorityUrl);
-			var authenticationResult = await authenticationContext.AcquireTokenAsync(resourceUrl, clientId, credential);
-
-			if (authenticationResult == null)
-			{
-				logger.Error("Authentication Failed.");
-				return result;
-			}
-
-			var tokenCredentials = new TokenCredentials(authenticationResult.AccessToken, "Bearer");
-
 			// Create a Power BI Client object. It will be used to call Power BI APIs.
-			using (var client = new PowerBIClient(new Uri(apiUrl), tokenCredentials))
+			using (var client = await createBiClient())
 			{
 				// Get a list of reports.
 				var reports = await client.Reports.GetReportsInGroupAsync(groupId);
@@ -104,6 +88,47 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Controllers
 
 				return result;
 			}
+		}
+
+		[HttpGet, Route("api/Insights/Reports")]
+		public virtual async Task<ReportModel[]> GetReports()
+		{
+			using (var client = await createBiClient())
+			{
+				var reports = await client.Reports.GetReportsInGroupAsync(groupId);
+
+				return reports.Value.Select(x => new ReportModel
+				{
+					Id = x.Id,
+					//Name = x.Name,
+					EmbedUrl = x.EmbedUrl
+					// DatasetId = x.DatasetId
+					// WebUrl = x.WebUrl,
+					// DatasetId = x.DatasetId,
+				}).ToArray();
+			}
+		}
+
+		private async Task<IPowerBIClient> createBiClient()
+		{
+			// Create a user password credentials.
+			var credential = new UserPasswordCredential(powerBiUsername, powerBiPassword);
+
+			// Authenticate using created credentials
+			var authenticationContext = new AuthenticationContext(authorityUrl);
+			var authenticationResult = await authenticationContext.AcquireTokenAsync(resourceUrl, clientId, credential);
+
+			if (authenticationResult == null)
+			{
+				logger.Error("Authentication Failed.");
+				return null;
+			}
+
+			var tokenCredentials = new TokenCredentials(authenticationResult.AccessToken, "Bearer");
+
+			// Create a Power BI Client object. It will be used to call Power BI APIs.
+			var client = new PowerBIClient(new Uri(apiUrl), tokenCredentials);
+			return client;
 		}
 	}
 }

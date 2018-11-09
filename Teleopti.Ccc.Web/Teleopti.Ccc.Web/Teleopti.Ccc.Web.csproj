@@ -399,8 +399,9 @@
     <Compile Include="Areas\Global\ChatConfigurationController.cs" />
     <Compile Include="Areas\Global\TenantCredential.cs" />
     <Compile Include="Areas\Insights\Models\EmbedReportConfig.cs" />
+    <Compile Include="Areas\Insights\Models\ReportModel.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormExtensions.cs" />
-    <Compile Include="Areas\Insights\Controllers\PowerBIReportController.cs" />
+    <Compile Include="Areas\Insights\Controllers\InsightsController.cs" />
     <Compile Include="Areas\Insights\InsightsAreaRegistration.cs" />
     <Compile Include="Areas\Requests\Core\ViewModel\RequestsPermissonsViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleDayOffViewModel.cs" />
