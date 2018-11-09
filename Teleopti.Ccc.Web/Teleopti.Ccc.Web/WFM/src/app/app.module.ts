@@ -14,8 +14,6 @@ import { MenuModule } from './menu/menu.module';
 import { NavigationModule } from './navigation/navigation.module';
 import { PeopleModule } from './people/people.module';
 import { InsightsModule } from './insights/insights.module';
-import { IntradayModule } from './intraday/intraday.module';
-import { NzIconService } from 'ng-zorro-antd';
 
 @NgModule({
 	declarations: [BootstrapComponent],

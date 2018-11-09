@@ -102,7 +102,6 @@ downgradeHelper(apiAccessComponents);
 downgradeHelper(appComponents);
 downgradeHelper(menuComponents);
 downgradeHelper(insightsComponents);
-downgradeHelper(intradayComponents);
 
 /**
  * Use this if your module is purely Angular and you want mount some routes
