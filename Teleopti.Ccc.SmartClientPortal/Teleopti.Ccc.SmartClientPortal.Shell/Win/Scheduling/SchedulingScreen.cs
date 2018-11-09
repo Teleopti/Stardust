@@ -349,30 +349,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_schedulerMessageBrokerHandler = new SchedulerMessageBrokerHandler(this, _container);
 			updateLifeTimeScopeWith2ThingsWithFullDependencyChain();
 
-			_skillDayGridControl = new SkillDayGridControl(_container.Resolve<ISkillPriorityProvider>())
-			{
-				ContextMenu = contextMenuStripResultView.ContextMenu,
-			};
-			_skillWeekGridControl = new SkillWeekGridControl
-			{
-				ContextMenu = contextMenuStripResultView.ContextMenu,
-			};
-			_skillMonthGridControl = new SkillMonthGridControl
-			{
-				ContextMenu = contextMenuStripResultView.ContextMenu,
-			};
-			_skillFullPeriodGridControl = new SkillFullPeriodGridControl
-			{
-				ContextMenu = contextMenuStripResultView.ContextMenu,
-			};
+			_skillDayGridControl = new SkillDayGridControl(_container.Resolve<ISkillPriorityProvider>());
+			_skillWeekGridControl = new SkillWeekGridControl();
+			_skillMonthGridControl = new SkillMonthGridControl();
+			_skillFullPeriodGridControl = new SkillFullPeriodGridControl();
 			_skillResultHighlightGridControl = new SkillResultHighlightGridControl();
+			_skillIntradayGridControl = new SkillIntradayGridControl("SchedulerSkillIntradayGridAndChart", _container.Resolve<ISkillPriorityProvider>());
+			toolStripButtonChartPeriodView.Tag = SkillResultViewSetting.Period;
+			toolStripButtonChartMonthView.Tag = SkillResultViewSetting.Month;
+			toolStripButtonChartWeekView.Tag = SkillResultViewSetting.Week;
+			toolStripButtonChartDayView.Tag = SkillResultViewSetting.Day;
+			toolStripButtonChartIntradayView.Tag = SkillResultViewSetting.Intraday;
 
 			setUpZomMenu();
 
-			_skillIntradayGridControl = new SkillIntradayGridControl("SchedulerSkillIntradayGridAndChart", _container.Resolve<ISkillPriorityProvider>())
-			{
-				ContextMenu = contextMenuStripResultView.ContextMenu
-			};
 			_schedulingOptions = new SchedulingOptions();
 			_optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
 			_daysOffPreferences = _container.Resolve<IDaysOffPreferences>();
@@ -1112,38 +1102,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void toolStripButtonChartPeriodViewClick(object sender, EventArgs e)
 		{
 			var button = sender as ToolStripButton;
-			if (button == toolStripButtonChartPeriodView) _skillResultViewSetting = SkillResultViewSetting.Period;
-			if (button == toolStripButtonChartMonthView) _skillResultViewSetting = SkillResultViewSetting.Month;
-			if (button == toolStripButtonChartWeekView) _skillResultViewSetting = SkillResultViewSetting.Week;
-			if (button == toolStripButtonChartDayView) _skillResultViewSetting = SkillResultViewSetting.Day;
-			if (button == toolStripButtonChartIntradayView) _skillResultViewSetting = SkillResultViewSetting.Intraday;
+			if (button == null)
+				return;
 
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["IntraDay"]).Checked =
-				_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday);
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Day"]).Checked =
-				_skillResultViewSetting.Equals(SkillResultViewSetting.Day);
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Period"]).Checked =
-				_skillResultViewSetting.Equals(SkillResultViewSetting.Period);
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Month"]).Checked =
-				_skillResultViewSetting.Equals(SkillResultViewSetting.Month);
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Week"]).Checked =
-				_skillResultViewSetting.Equals(SkillResultViewSetting.Week);
-
-			if (toolStripButtonChartIntradayView != null)
-				toolStripButtonChartIntradayView.Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Intraday);
-			if (toolStripButtonChartDayView != null)
-				toolStripButtonChartDayView.Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Day);
-			if (toolStripButtonChartPeriodView != null)
-				toolStripButtonChartPeriodView.Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Period);
-			if (toolStripButtonChartMonthView != null)
-				toolStripButtonChartMonthView.Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Month);
-			if (toolStripButtonChartWeekView != null)
-				toolStripButtonChartWeekView.Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Week);
-
-			_currentSelectedGridRow = null;
-
-			drawSkillGrid();
-			reloadChart();
+			_skillResultViewSetting = (SkillResultViewSetting) button.Tag;
+			updateSkillGridMenuItem();
 		}
 
 		private void toolStripButtonZoomClick(object sender, EventArgs e)
@@ -6315,7 +6278,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void toolStripMenuItemStartTimeDescMouseUp(object sender, MouseEventArgs e)
 		{
-
 			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByStartDescendingCommand(SchedulerState.SchedulerStateHolder));
 		}
 
