@@ -41,6 +41,10 @@
 		teardown: function() {
 			$('body').removeClass('mobile-start-day-body');
 			$('body').removeClass('mobile-start-day');
+
+			Teleopti.MyTimeWeb.Common.DisableToggle('MyTimeWeb_TrafficLightOnMobileDayView_77447');
+			Teleopti.MyTimeWeb.Common.DisableToggle('MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640');
+
 			templates.forEach(function(template) {
 				if (template) {
 					template.remove();
@@ -764,6 +768,7 @@
 
 	test("should show poor 'traffic light' on mobile", function() {
 		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_TrafficLightOnMobileDayView_77447');
+		Teleopti.MyTimeWeb.Common.DisableToggle('MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640');
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
 			fakeReadyForInteractionCallback,
@@ -782,6 +787,7 @@
 
 	test("should update 'traffic light' base on absence proability data on mobile", function() {
 		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_TrafficLightOnMobileDayView_77447');
+		Teleopti.MyTimeWeb.Common.DisableToggle('MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640');
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
 			fakeReadyForInteractionCallback,
@@ -800,6 +806,7 @@
 
 	test("should set tooltip text for 'traffic light' base on absence proability data on mobile", function() {
 		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_TrafficLightOnMobileDayView_77447');
+		Teleopti.MyTimeWeb.Common.DisableToggle('MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640');
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
 			fakeReadyForInteractionCallback,
@@ -815,6 +822,42 @@
 
 		equal(vm.trafficLightColor(), 'green');
 		equal(vm.trafficLightTooltip(), '@Resources.ChanceOfGettingAbsenceRequestGranted: Good');
+	});
+
+	test("should show new 'traffic light' icon when toggle MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640 is ON", function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_TrafficLightOnMobileDayView_77447');
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640');
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
+			fakeReadyForInteractionCallback,
+			fakeCompletelyLoadedCallback,
+			ajax
+		);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		startDayData.Schedule.ProbabilityClass = 'good';
+		startDayData.Schedule.ProbabilityText = 'Good';
+		vm.nextDay();
+
+		equal(vm.trafficLightColor().length, 0);
+		equal(vm.trafficLightIconClass(), 'traffic-light-progress-good');
+	});
+
+	test("should show old 'traffic light' icon when toggle MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640 is OFF", function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_TrafficLightOnMobileDayView_77447');
+		Teleopti.MyTimeWeb.Common.DisableToggle('MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640');
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
+			fakeReadyForInteractionCallback,
+			fakeCompletelyLoadedCallback,
+			ajax
+		);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		startDayData.Schedule.ProbabilityClass = 'good';
+		startDayData.Schedule.ProbabilityText = 'Good';
+		vm.nextDay();
+
+		equal(vm.trafficLightColor(), 'green');
+		equal(vm.trafficLightIconClass().length, 0);
 	});
 
 	test("should show probability toggle by agent's timezone", function() {
@@ -1119,6 +1162,7 @@
 		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
 		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_PollToCheckScheduleChanges_46595');
 		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_TrafficLightOnMobileDayView_77447');
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640');
 	}
 
 	function setupAjax() {

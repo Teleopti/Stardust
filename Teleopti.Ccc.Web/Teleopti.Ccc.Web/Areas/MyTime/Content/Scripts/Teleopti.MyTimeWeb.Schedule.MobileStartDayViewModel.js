@@ -19,6 +19,10 @@
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_TrafficLightOnMobileDayView_77447')
 	);
 	self.trafficLightColor = ko.observable('');
+	self.trafficLightIconClass = ko.observable('');
+	self.newTrafficLightIconEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled(
+		'MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640'
+	);
 	self.trafficLightTooltip = ko.observable('');
 	self.dayOfWeek = ko.observable();
 	self.isFullDayAbsence = false;
@@ -74,7 +78,6 @@
 	self.openHourPeriod = null;
 	self.isLoading = ko.observable(false);
 	self.mobileMonthUrl = '#Schedule/MobileMonth/' + Teleopti.MyTimeWeb.Portal.ParseHash().dateHash;
-
 	self.navigateToMonthView = function() {
 		Teleopti.MyTimeWeb.Portal.NavigateTo('Schedule/MobileMonth');
 	};
@@ -100,7 +103,13 @@
 		self.textColor(Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.summaryColor()));
 		self.summaryName(data.Schedule.Summary.Title);
 		self.summaryTime(data.Schedule.Summary.TimeSpan);
-		self.trafficLightColor(getTrafficLightColor(data.Schedule.ProbabilityClass));
+
+		if (self.newTrafficLightIconEnabled) {
+			self.trafficLightIconClass(getTrafficLightIconClass(data.Schedule.ProbabilityClass));
+		} else {
+			self.trafficLightColor(getTrafficLightColor(data.Schedule.ProbabilityClass));
+		}
+
 		self.trafficLightTooltip(buildTrafficLightTooltip(data.Schedule.ProbabilityText));
 		self.isDayOff = data.Schedule.IsDayOff;
 		self.isFullDayAbsence = data.Schedule.IsFullDayAbsence;
@@ -249,6 +258,22 @@
 			}
 			case 'good': {
 				return 'green';
+			}
+			default:
+				return '';
+		}
+	}
+
+	function getTrafficLightIconClass(probability) {
+		switch (probability) {
+			case 'poor': {
+				return 'traffic-light-progress-poor';
+			}
+			case 'fair': {
+				return 'traffic-light-progress-fair';
+			}
+			case 'good': {
+				return 'traffic-light-progress-good';
 			}
 			default:
 				return '';
