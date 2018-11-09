@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void SetCurrentTime(DateTime time)
 		{
 			DataMaker.EndSetupPhase();
-			navigateOrRequest("Test/SetCurrentTime?ticks=" + time.Ticks);
+			navigateOrRequest("Test/SetCurrentTime?time=" + time.ToString("yyyy-MM-dd HH:mm:ss"));
 		}
 
 		public static void SetVersion(string version)

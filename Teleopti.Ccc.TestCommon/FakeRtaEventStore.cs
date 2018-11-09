@@ -123,9 +123,14 @@ namespace Teleopti.Ccc.TestCommon
 
 			return new LoadedEvents
 			{
-				MaxId = maxId,
+				LastId = maxId,
 				Events = events
 			};
+		}
+
+		public int ReadLastId()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

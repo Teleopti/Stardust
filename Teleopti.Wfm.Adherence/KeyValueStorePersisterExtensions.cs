@@ -23,7 +23,12 @@ namespace Teleopti.Wfm.Adherence
 		{
 			instance.Update(key, value.ToString());
 		}
-
+		
+		public static void Update(this IKeyValueStorePersister instance, string key, long value)
+		{
+			instance.Update(key, value.ToString());
+		}
+		
 		public static bool Get(this IKeyValueStorePersister instance, string key, bool @default)
 		{
 			var value = instance.Get(key);
@@ -40,6 +45,15 @@ namespace Teleopti.Wfm.Adherence
 				return @default;
 			int result;
 			return int.TryParse(value, out result) ? result : @default;
+		}
+		
+		public static long Get(this IKeyValueStorePersister instance, string key, long @default)
+		{
+			var value = instance.Get(key);
+			if (string.IsNullOrEmpty(value))
+				return @default;
+			long result;
+			return long.TryParse(value, out result) ? result : @default;
 		}
 	}
 }

@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Rta.PerformanceTest.Code;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Infrastructure.Service;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		public HangfireUtilities Hangfire;
 		public StateQueueUtilities StateQueue;
 		public TestCommon.PerformanceTest.PerformanceTest PerformanceTest;
-		public SynchronzieWaiter Waiter;
+		public RtaEventStoreSynchronizerWaiter Waiter;
 
 		[Test]
 		[OnlyRunIfEnabled(Toggles.RTA_ReviewHistoricalAdherence_74770)]
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			{
 				States.SendAllAsLargeBatches();
 				StateQueue.WaitForDequeue(TimeSpan.FromMinutes(15));
-				Waiter.WaitForSyncronize(TimeSpan.FromMinutes(15));
+				Waiter.WaitForSynchronize(TimeSpan.FromMinutes(15));
 			});
 		}
 	}
