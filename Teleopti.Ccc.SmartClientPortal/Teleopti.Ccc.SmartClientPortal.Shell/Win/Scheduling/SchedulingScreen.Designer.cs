@@ -160,8 +160,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.toolStripMenuItemEditMeeting = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemRemoveParticipant = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemDeleteMeeting = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItemViewReport = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItemScheduledTimePerActivity = new System.Windows.Forms.ToolStripMenuItem();
 			this.xxExportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemExportToPDF = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemExportToPDFGraphical = new System.Windows.Forms.ToolStripMenuItem();
@@ -379,14 +377,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			// toolStripSpinningProgressControl1
 			// 
 			this.toolStripSpinningProgressControl1.ActiveSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
-			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = false;
+			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = true;
 			this.toolStripSpinningProgressControl1.InactiveSegmentColor = System.Drawing.Color.White;
 			this.toolStripSpinningProgressControl1.Name = "ToolStripSpinningProgress";
 			this.toolStripSpinningProgressControl1.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(25, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 7;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 10;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.SkyBlue;
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -528,7 +526,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             this.toolStripMenuItemUnlock,
             this.toolStripMenuItemLock,
             this.toolStripMenuItemMeetingOrganizer,
-            this.toolStripMenuItemViewReport,
             this.xxExportToolStripMenuItem,
             this.toolStripMenuItemChangeTagRM,
             this.toolStripMenuItemPublish,
@@ -1235,23 +1232,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.toolStripMenuItemDeleteMeeting.Size = new System.Drawing.Size(184, 22);
 			this.toolStripMenuItemDeleteMeeting.Text = "xxDeleteMeeting";
 			this.toolStripMenuItemDeleteMeeting.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemDeleteMeetingMouseUp);
-			// 
-			// toolStripMenuItemViewReport
-			// 
-			this.toolStripMenuItemViewReport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemScheduledTimePerActivity});
-			this.toolStripMenuItemViewReport.Name = "toolStripMenuItemViewReport";
-			this.SetShortcut(this.toolStripMenuItemViewReport, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemViewReport.Size = new System.Drawing.Size(305, 22);
-			this.toolStripMenuItemViewReport.Text = "xxViewReports";
-			// 
-			// toolStripMenuItemScheduledTimePerActivity
-			// 
-			this.toolStripMenuItemScheduledTimePerActivity.Name = "toolStripMenuItemScheduledTimePerActivity";
-			this.SetShortcut(this.toolStripMenuItemScheduledTimePerActivity, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemScheduledTimePerActivity.Size = new System.Drawing.Size(223, 22);
-			this.toolStripMenuItemScheduledTimePerActivity.Text = "xxScheduledTimePerActivity";
-			this.toolStripMenuItemScheduledTimePerActivity.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemScheduledTimePerActivityMouseUp);
 			// 
 			// xxExportToolStripMenuItem
 			// 
@@ -3596,8 +3576,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         private System.Windows.Forms.ToolStripButton toolStripButtonCalculation;
         private System.Windows.Forms.ToolStripButton toolStripButtonValidation;
         private System.Windows.Forms.ToolStripButton toolStripButtonShowTexts;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemViewReport;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemScheduledTimePerActivity;
 		private Syncfusion.Windows.Forms.Tools.ContextMenuStripEx contextMenuViews;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStripRequests;
 		private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemViewDetails;

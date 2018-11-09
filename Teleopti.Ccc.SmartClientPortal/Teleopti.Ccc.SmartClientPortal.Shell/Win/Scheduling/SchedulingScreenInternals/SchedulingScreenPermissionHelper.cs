@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 
 		public void SetPermissionOnContextMenuItems(ToolStripMenuItem insertAbsence, ToolStripMenuItem insertDayOff, ToolStripMenuItem delete, ToolStripMenuItem deleteSpecial,
 			ToolStripMenuItem writeProtectSchedule, ToolStripMenuItem writeProtectSchedule2, ToolStripMenuItem addStudentAvailabilityRestriction, ToolStripMenuItem addStudentAvailability,
-			ToolStripMenuItem addPreferenceRestriction, ToolStripMenuItem addPreference, ToolStripMenuItem viewReport, ToolStripMenuItem scheduledTimePerActivity)
+			ToolStripMenuItem addPreferenceRestriction, ToolStripMenuItem addPreference)
 		{
 			var authorization = PrincipalAuthorization.Current();
 			insertAbsence.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence);
@@ -131,8 +131,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			addStudentAvailability.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction);
 			addPreferenceRestriction.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction);
 			addPreference.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction);
-			viewReport.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AccessToOnlineReports);
-			scheduledTimePerActivity.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport);
 		}
 
 		public void SetPermissionOnMenuButtons(ToolStripButton requestView, BackStageButton options, ToolStripButton filterOvertimeAvailability, ToolStripMenuItem scheduleOvertime, ToolStripButton filterStudentAvailability)
