@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly ISkillPriorityProvider _skillPriorityProvider;
+		private readonly IComponentContext _container;
 
 		private DateNavigateControl _timeNavigationControl;
 		private GridRowInChartSettingButtons _gridrowInChartSetting;
@@ -61,7 +63,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 			IResourceOptimizationHelperExtended resourceOptimizationHelperExtended, IEventPublisher publisher,
 			IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
-			IScheduleDayChangeCallback scheduleDayChangeCallback, ISkillPriorityProvider skillPriorityProvider)
+			IScheduleDayChangeCallback scheduleDayChangeCallback, ISkillPriorityProvider skillPriorityProvider, IComponentContext container)
 		{
 			_eventAggregator = eventAggregator;
 			_overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
@@ -71,6 +73,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_skillPriorityProvider = skillPriorityProvider;
+			_container = container;
 
 			var authorization = PrincipalAuthorization.Current();
 
@@ -668,7 +671,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 			{
 				var reforecastPages = PropertyPagesHelper.GetReforecastFilePages(skills);
 				pages.Initialize(reforecastPages);
-				using (var wizard = new WizardNoRoot<ReforecastModelCollection>(pages))
+				using (var wizard = new WizardNoRoot<ReforecastModelCollection>(pages, _container))
 				{
 					if (wizard.ShowDialog(this) != DialogResult.OK) return;
 

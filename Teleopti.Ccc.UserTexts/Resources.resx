@@ -17848,4 +17848,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="NoPermissionToViewSchedules" xml:space="preserve">
     <value>No permission to view schedules</value>
   </data>
+  <data name="TryTheNewForecasts" xml:space="preserve">
+    <value>Try the new Forecasts!</value>
+    <comment>Try the new Forecasts!</comment>
+  </data>
 </root>

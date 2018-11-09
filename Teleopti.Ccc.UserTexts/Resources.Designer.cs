@@ -37300,6 +37300,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Try the new Forecasts!.
+        /// </summary>
+        public static string TryTheNewForecasts {
+            get {
+                return ResourceManager.GetString("TryTheNewForecasts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tuesday.
         /// </summary>
         public static string Tuesday {

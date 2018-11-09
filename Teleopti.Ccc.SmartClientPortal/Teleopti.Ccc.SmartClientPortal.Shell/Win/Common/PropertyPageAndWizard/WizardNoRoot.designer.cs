@@ -1,3 +1,5 @@
+using System.Drawing;
+
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard
 {
     partial class WizardNoRoot<T>
@@ -44,6 +46,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard
 			this.treeViewPages = new Syncfusion.Windows.Forms.Tools.TreeViewAdv();
 			this.splitContainerVertical = new System.Windows.Forms.SplitContainer();
 			this.gradientPanel1 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
+			this.previewPanel = new System.Windows.Forms.Panel();
+			this.linkLabelPreview = new System.Windows.Forms.LinkLabel();
 			this.labelHeading = new System.Windows.Forms.Label();
 			this.tableLayoutPanelButtonsRtl = new System.Windows.Forms.TableLayoutPanel();
 			this.buttonBack = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -62,6 +66,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard
 			this.splitContainerVertical.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanel1)).BeginInit();
 			this.gradientPanel1.SuspendLayout();
+			this.previewPanel.SuspendLayout();
 			this.tableLayoutPanelButtonsRtl.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -210,12 +215,38 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard
 			this.gradientPanel1.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
 			this.gradientPanel1.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
 			this.gradientPanel1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.gradientPanel1.Controls.Add(this.previewPanel);
 			this.gradientPanel1.Controls.Add(this.labelHeading);
 			this.gradientPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gradientPanel1.Location = new System.Drawing.Point(0, 0);
 			this.gradientPanel1.Name = "gradientPanel1";
 			this.gradientPanel1.Size = new System.Drawing.Size(567, 40);
 			this.gradientPanel1.TabIndex = 0;
+			// 
+			// previewPanel
+			// 
+			this.previewPanel.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.previewPanel.BackColor = System.Drawing.Color.YellowGreen;
+			this.previewPanel.Controls.Add(this.linkLabelPreview);
+			this.previewPanel.Location = new System.Drawing.Point(175, 3);
+			this.previewPanel.Name = "previewPanel";
+			this.previewPanel.Size = new System.Drawing.Size(347, 39);
+			this.previewPanel.TabIndex = 1;
+			// 
+			// linkLabelPreview
+			// 
+			this.linkLabelPreview.AutoSize = false;
+			this.linkLabelPreview.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.linkLabelPreview.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.linkLabelPreview.LinkColor = System.Drawing.Color.White;
+			this.linkLabelPreview.Location = new System.Drawing.Point(0, 0);
+			this.linkLabelPreview.Name = "linkLabelPreview";
+			this.linkLabelPreview.Size = new System.Drawing.Size(175, 17);
+			this.linkLabelPreview.TabIndex = 0;
+			this.linkLabelPreview.TabStop = true;
+			this.linkLabelPreview.Text = "xxTryTheNewForecasts";
+			this.linkLabelPreview.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.linkLabelPreview.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelPreview_LinkClicked);
 			// 
 			// labelHeading
 			// 
@@ -323,6 +354,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanel1)).EndInit();
 			this.gradientPanel1.ResumeLayout(false);
 			this.gradientPanel1.PerformLayout();
+			this.previewPanel.ResumeLayout(false);
+			this.previewPanel.PerformLayout();
 			this.tableLayoutPanelButtonsRtl.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -341,5 +374,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard
         private System.Windows.Forms.SplitContainer splitContainerVertical;
         private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanel1;
         private System.Windows.Forms.Label labelHeading;
-    }
+		private System.Windows.Forms.Panel previewPanel;
+		private System.Windows.Forms.LinkLabel linkLabelPreview;
+	}
 }
