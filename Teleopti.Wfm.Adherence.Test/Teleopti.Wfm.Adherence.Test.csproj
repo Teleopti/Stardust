@@ -438,4 +438,9 @@
     <Target Name="AfterBuild">
     </Target>
     -->
+	<PropertyGroup>
+		<PreBuildEvent>if not exist "$(ProjectDir)App.Config" copy NUL "$(ProjectDir)App.Config"</PreBuildEvent>
+		<PostBuildEvent>
+		</PostBuildEvent>
+	</PropertyGroup>
 </Project>
