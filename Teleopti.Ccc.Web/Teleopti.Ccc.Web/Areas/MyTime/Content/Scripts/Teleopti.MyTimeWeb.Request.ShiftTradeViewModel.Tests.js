@@ -29,9 +29,6 @@
 	});
 
 	test('should not show add button when loading', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
-			return true;
-		};
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		viewModel.agentChoosed({});
 		viewModel.selectedInternal(false);
@@ -70,10 +67,6 @@
 					options.success(schedules);
 				}
 			}
-		};
-
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
-			return true;
 		};
 
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
@@ -149,9 +142,6 @@
 	});
 
 	test('should get date with format', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			return true;
-		};
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY-MM-DD',
@@ -702,9 +692,6 @@
 	});
 
 	test('should not load team when there is no selected team', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			return true;
-		};
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		viewModel.dateChanged(false);
 
@@ -750,10 +737,6 @@
 	});
 
 	test('should update time sort order correctly', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			return true;
-		};
-
 		var optionsData = {};
 		var ajax = {
 			Ajax: function(options) {

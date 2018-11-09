@@ -1,15 +1,17 @@
 ﻿$(document).ready(function() {
 	var hash = '';
 	var fakeAddRequestViewModel = Teleopti.MyTimeWeb.Schedule.FakeData.fakeAddRequestViewModel;
-
 	var basedDate = momentWithLocale(
 		Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)
 	).format('YYYY-MM-DD');
 
 	module('Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule', {
-		setup: function() {},
+		setup: function() {
+			$('#page').remove();
+		},
 		teardown: function() {
 			$('#page').remove();
+			Teleopti.MyTimeWeb.Common.DisableToggle('MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640');
 		}
 	});
 
@@ -113,10 +115,6 @@
 	});
 
 	test('should increase request count after creating an overtime request', function() {
-		var tempTogglFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function() {
-			return true;
-		};
 		var tempFn1 = Date.prototype.getTeleoptiTime;
 		Date.prototype.getTeleoptiTime = function() {
 			return new Date('2018-03-05T02:30:00Z').getTime();
@@ -173,8 +171,6 @@
 
 		Date.prototype.getTeleoptiTime = tempFn1;
 		Date.prototype.getTeleoptiTimeInUserTimezone = tempFn2;
-
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempTogglFn;
 	});
 
 	test('should show only new traffic light icon when toggle MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640 is ON', function() {
@@ -203,10 +199,7 @@
 			fakeAjax
 		);
 
-		var tempTogglFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle) {
-			return toggle === 'MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640';
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640');
 
 		$('body').append(setupHtml());
 
@@ -227,8 +220,6 @@
 		equal(vm.absenceRequestPermission(), true);
 		equal($('.traffic-light-progress').length > 0, true);
 		equal($('.holiday-agents.weekview-day-icon').length > 0, false);
-
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempTogglFn;
 	});
 
 	test('should show only old traffic light icon when toggle MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640 is OFF', function() {
@@ -256,10 +247,7 @@
 			fakeAjax
 		);
 
-		var tempTogglFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle) {
-			return toggle !== 'MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640';
-		};
+		Teleopti.MyTimeWeb.Common.DisableToggle('MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640');
 
 		$('body').append(setupHtml());
 

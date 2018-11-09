@@ -18,9 +18,6 @@
 	});
 
 	test('should get date with format', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			return true;
-		};
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY-MM-DD',
@@ -38,10 +35,6 @@
 	});
 
 	test('should get correct contract time', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			return true;
-		};
-
 		var schedules = {
 			MySchedule: {
 				ScheduleLayers: [{}],

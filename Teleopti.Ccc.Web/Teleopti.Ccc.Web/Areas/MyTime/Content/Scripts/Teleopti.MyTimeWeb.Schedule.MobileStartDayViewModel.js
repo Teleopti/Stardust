@@ -292,18 +292,20 @@
 	};
 
 	function setStaffingProbabilityToggleStates(data) {
-		self.staffingProbabilityOnMobileEnabled(data.ViewPossibilityPermission);
+		self.staffingProbabilityOnMobileEnabled(!!data.ViewPossibilityPermission);
 
 		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('Staffing_Info_Configuration_44687')) {
 			self.absenceProbabilityEnabled(
-				self.staffingProbabilityOnMobileEnabled() &&
-					data.CheckStaffingByIntraday &&
-					data.AbsenceProbabilityEnabled
+				!!data.CheckStaffingByIntraday &&
+					!!data.AbsenceProbabilityEnabled &&
+					self.staffingProbabilityOnMobileEnabled()
 			);
-			self.overtimeProbabilityEnabled(data.OvertimeProbabilityEnabled);
+			self.overtimeProbabilityEnabled(
+				!!data.OvertimeProbabilityEnabled && self.staffingProbabilityOnMobileEnabled()
+			);
 		} else {
-			self.overtimeProbabilityEnabled(true);
-			self.absenceProbabilityEnabled(self.staffingProbabilityOnMobileEnabled() && data.CheckStaffingByIntraday);
+			self.overtimeProbabilityEnabled(false);
+			self.absenceProbabilityEnabled(false);
 		}
 
 		if (
@@ -320,10 +322,6 @@
 			resetProbabilityOption();
 		}
 
-		if (!self.absenceProbabilityEnabled() && !self.overtimeProbabilityEnabled()) {
-			self.staffingProbabilityOnMobileEnabled(false);
-		}
-
 		var withinProbabilityDisplayPeriod =
 			self.selectedDate() >= getCurrentUserDate() &&
 			self.selectedDate() <
@@ -331,7 +329,7 @@
 					.add('day', data.StaffingInfoAvailableDays)
 					.startOf('day');
 		self.showProbabilityOptionsToggleIcon(
-			self.staffingProbabilityOnMobileEnabled() && withinProbabilityDisplayPeriod
+			(self.absenceProbabilityEnabled() || self.overtimeProbabilityEnabled()) && withinProbabilityDisplayPeriod
 		);
 	}
 
@@ -386,6 +384,8 @@
 			moment(oneWeekRawProbabilities[0].Date) <= self.selectedDate() &&
 			self.selectedDate() <= moment(oneWeekRawProbabilities[oneWeekRawProbabilities.length - 1].Date);
 
+		self.fixedDate = moment(self.selectedDate());
+
 		if (!isWithinLoadedProbabilityPeriod || forceReloadProbabilityData) {
 			self.probabilities([]);
 			dataService.fetchProbabilityData(
@@ -410,7 +410,7 @@
 	};
 
 	self.updateProbabilityData = function(rawProbabilities) {
-		if (!self.staffingProbabilityOnMobileEnabled()) return;
+		if (!self.absenceProbabilityEnabled() && !self.overtimeProbabilityEnabled()) return;
 		oneWeekRawProbabilities = rawProbabilities;
 
 		self.fixedDate = moment(self.selectedDate());

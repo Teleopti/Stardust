@@ -89,6 +89,19 @@ var requestsMessagesUserTexts = {
 	ENDTIME_MUST_BE_GREATER_THAN_STARTTIME: 'End time must be greater than start time'
 };
 
+Teleopti.MyTimeWeb.Common.Init(
+	{
+		defaultNavigation: '/',
+		baseUrl: '/',
+		startBaseUrl: '/'
+	},
+	{
+		Ajax: function(option) {}
+	}
+);
+
+Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
+
 Teleopti.MyTimeWeb.Common.SetUserTexts({
 	XRequests: '@Resources.XRequests',
 	SubjectColon: '@Resources.SubjectColon',

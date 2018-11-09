@@ -591,8 +591,8 @@ Teleopti.MyTimeWeb.Schedule = (function($) {
 			);
 			self.overtimeProbabilityEnabled(data.OvertimeProbabilityEnabled);
 		} else {
-			self.overtimeProbabilityEnabled(true);
-			self.absenceProbabilityEnabled(data.CheckStaffingByIntraday && self.staffingProbabilityEnabled);
+			self.overtimeProbabilityEnabled(false);
+			self.absenceProbabilityEnabled(false);
 		}
 
 		if (!self.absenceProbabilityEnabled() && self.selectedProbabilityType === constants.probabilityType.absence) {

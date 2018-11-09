@@ -1,9 +1,10 @@
 ﻿$(document).ready(function() {
 	module('Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel', {
 		setup: function() {
-			Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle) {
-				if (toggle == 'MyTimeWeb_DayScheduleForStartPage_Command_44209') return true;
-			};
+			Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_Command_44209');
+		},
+		teardown: function() {
+			Teleopti.MyTimeWeb.Common.DisableToggle('MyTimeWeb_DayScheduleForStartPage_Command_44209');
 		}
 	});
 
@@ -550,6 +551,8 @@
 	});
 
 	test('should not show probability option icon without permission', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment().format('YYYY-MM-DD'),
@@ -625,6 +628,7 @@
 	});
 
 	test('should not show absence probability option item if CheckStaffingByIntraday is not toggled on ', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment
@@ -643,6 +647,7 @@
 			ViewPossibilityPermission: true,
 			CheckStaffingByIntraday: false,
 			AbsenceProbabilityEnabled: true,
+			OvertimeProbabilityEnabled: true,
 			StaffingInfoAvailableDays: 14
 		};
 		viewModel.readData(rawData);
@@ -651,9 +656,7 @@
 	});
 
 	test('should not show absence probability option item if Absence Probability is toggled off in fat client ', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === 'Staffing_Info_Configuration_44687') return true;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment
@@ -681,9 +684,7 @@
 	});
 
 	test('should not consider AbsenceProbabilityEnabled when Staffing_Info_Configuration_44687 is off ', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === 'Staffing_Info_Configuration_44687') return false;
-		};
+		Teleopti.MyTimeWeb.Common.DisableToggle('Staffing_Info_Configuration_44687');
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment
@@ -705,14 +706,12 @@
 			StaffingInfoAvailableDays: 14
 		};
 		viewModel.readData(rawData);
-		equal(viewModel.showProbabilityOptionsToggleIcon(), true);
-		equal(viewModel.absenceProbabilityEnabled(), true);
+		equal(viewModel.showProbabilityOptionsToggleIcon(), false);
+		equal(viewModel.absenceProbabilityEnabled(), false);
 	});
 
 	test('should not show overtime probability option item if Overtime Probability is toggled off in fat client ', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === 'Staffing_Info_Configuration_44687') return true;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment
@@ -740,9 +739,7 @@
 	});
 
 	test('should not consider OvertimeProbabilityEnabled when Staffing_Info_Configuration_44687 is off ', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === 'Staffing_Info_Configuration_44687') return false;
-		};
+		Teleopti.MyTimeWeb.Common.DisableToggle('Staffing_Info_Configuration_44687');
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment
@@ -761,24 +758,17 @@
 			ViewPossibilityPermission: true,
 			CheckStaffingByIntraday: true,
 			AbsenceProbabilityEnabled: false,
-			OvertimeProbabilityEnabled: false,
+			OvertimeProbabilityEnabled: true,
 			StaffingInfoAvailableDays: 14
 		};
 		viewModel.readData(rawData);
-		equal(viewModel.showProbabilityOptionsToggleIcon(), true);
-		equal(viewModel.overtimeProbabilityEnabled(), true);
+		equal(viewModel.showProbabilityOptionsToggleIcon(), false);
+		equal(viewModel.overtimeProbabilityEnabled(), false);
 	});
 
 	test("should hide probability after selecting 'Hide probability' ", function() {
-		//fake ajax fn to avoid ajax call for test
-		Teleopti.MyTimeWeb.Ajax = function() {
-			return {
-				Ajax: function(option) {
-					//do nothing
-					console.log(option);
-				}
-			};
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		var fakeParent = {
 			ReloadSchedule: function() {}
 		};
@@ -821,6 +811,8 @@
 				ShiftExchangePermission: false
 			},
 			ViewPossibilityPermission: true,
+			AbsenceProbabilityEnabled: true,
+			OvertimeProbabilityEnabled: true,
 			TimeLine: [
 				{
 					Time: '09:15:00',
@@ -854,14 +846,8 @@
 	});
 
 	test("should change probability option value to absence(1) after selecting 'Show absence probability' ", function() {
-		//fake ajax fn to avoid ajax call for test
-		Teleopti.MyTimeWeb.Ajax = function() {
-			return {
-				Ajax: function(option) {
-					//do nothing
-				}
-			};
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		var fakeParent = {
 			ReloadSchedule: function() {}
 		};
@@ -878,6 +864,7 @@
 				Header: { Title: null }
 			},
 			ViewPossibilityPermission: true,
+			AbsenceProbabilityEnabled: true,
 			CheckStaffingByIntraday: true
 		};
 		viewModel.readData(rawData);
@@ -895,6 +882,8 @@
 	});
 
 	test('should show overtime probability within timeline range', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
@@ -935,6 +924,7 @@
 				ShiftExchangePermission: false
 			},
 			ViewPossibilityPermission: true,
+			OvertimeProbabilityEnabled: true,
 			TimeLine: [
 				{
 					Time: '09:15:00',
@@ -976,6 +966,8 @@
 	});
 
 	test('should show correct absence possibility for cross day schedule', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
@@ -1060,6 +1052,8 @@
 	});
 
 	test('should show probability icon when scheduled', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment().format('YYYY-MM-DD'),
@@ -1084,6 +1078,8 @@
 	});
 
 	test('should show probability icon on not scheduled day', function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
+
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment().format('YYYY-MM-DD'),
@@ -1108,14 +1104,13 @@
 	});
 
 	test('should not show probability option icon when OvertimeProbability and AbsenceProbability are disabled', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === 'Staffing_Info_Configuration_44687') return true;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment().format('YYYY-MM-DD'),
 			OvertimeProbabilityEnabled: false,
 			AbsenceProbabilityEnabled: false,
+			ViewPossibilityPermission: true,
 			Schedule: {
 				FixedDate: null,
 				Summary: {
@@ -1124,8 +1119,7 @@
 					TimeSpan: null
 				},
 				Header: { Title: null }
-			},
-			ViewPossibilityPermission: true
+			}
 		};
 		viewModel.readData(rawData);
 		equal(viewModel.showProbabilityOptionsToggleIcon(), false);
