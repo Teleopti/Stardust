@@ -3410,6 +3410,7 @@
     <Compile Include="Win\Scheduling\SkillTabRenderer.cs" />
     <Compile Include="Win\Scheduling\Swapper.cs" />
     <Compile Include="Win\Scheduling\TagsMenuLoader.cs" />
+    <Compile Include="Win\Scheduling\UserLockHelper.cs" />
     <Compile Include="Win\Scheduling\ValidationAlertsView.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -198,6 +198,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private IDaysOffPreferences _daysOffPreferences;
 		private IEnumerable<IOptionalColumn> _optionalColumns;
 		private ReplaceActivityParameters _replaceActivityParameters;
+		private UserLockHelper _userShiftCategoryLockHelper;
 
 		#region Constructors
 
@@ -231,8 +232,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_tmpTimer.Interval = 50;
 			_tmpTimer.Enabled = false;
 
-			//if it disappears again in the designer
-			ribbonControlAdv1.QuickPanelVisible = true;
+			_userShiftCategoryLockHelper = new UserLockHelper(this, schedulerSplitters1.Grid);
+
+		//if it disappears again in the designer
+		ribbonControlAdv1.QuickPanelVisible = true;
 		}
 
 		private void checkSmsLinkLicense()
@@ -1364,20 +1367,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			Cursor = Cursors.Default;
 		}
 
-		private void toolStripMenuItemLockTag(object sender, MouseEventArgs e)
-		{
-			if (e.Button != MouseButtons.Left) return;
-			Cursor = Cursors.WaitCursor;
-			var scheduleTag = (IScheduleTag)((ToolStripMenuItem)sender).Tag;
-			IGridSchedulesExtractor gridSchedulesExtractor = new GridSchedulesExtractor(schedulerSplitters1.Grid);
-			IScheduleDayTagExtractor scheduleDayTagExtractor = new ScheduleDayTagExtractor(gridSchedulesExtractor.Extract());
-			var gridlockTagCommand = new GridlockTagCommand(LockManager, scheduleDayTagExtractor, scheduleTag);
-			gridlockTagCommand.Execute();
-			Refresh();
-			RefreshSelection();
-			Cursor = Cursors.Default;
-		}
-
 		private void toolStripComboBoxAutoTagSelectedIndexChanged(object sender, EventArgs e)
 		{
 			_defaultScheduleTag = (IScheduleTag)toolStripComboBoxAutoTag.SelectedItem;
@@ -1420,118 +1409,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			GridHelper.GridlockSelection(schedulerSplitters1.Grid, LockManager);
 			Refresh();
 			RefreshSelection();
-		}
-
-		private void toolStripMenuItemLockAbsenceDaysClick(object sender, EventArgs e)
-		{
-			lockAllAbsences();
-		}
-
-		private void toolStripMenuItemLockAbsenceDaysMouseUp(object sender, MouseEventArgs e)
-		{
-			if (e.Button != MouseButtons.Left) return;
-			lockAllAbsences();
-		}
-
-		private void lockAllAbsences()
-		{
-			Cursor = Cursors.WaitCursor;
-			GridHelper.GridlockAllAbsences(schedulerSplitters1.Grid, LockManager);
-			Refresh();
-			RefreshSelection();
-			Cursor = Cursors.Default;
-		}
-
-		private void toolStripMenuItemLockFreeDaysClick(object sender, EventArgs e)
-		{
-			lockAllDaysOff();
-		}
-
-		private void toolStripMenuItemDayOffLockRmMouseUp(object sender, MouseEventArgs e)
-		{
-			if (e.Button != MouseButtons.Left) return;
-			lockAllDaysOff();
-		}
-
-		private void lockAllDaysOff()
-		{
-			Cursor = Cursors.WaitCursor;
-			GridHelper.GridlockFreeDays(schedulerSplitters1.Grid, LockManager);
-			Refresh();
-			RefreshSelection();
-			Cursor = Cursors.Default;
-		}
-
-		private void toolStripMenuItemLockSpecificDayOffClick(object sender, EventArgs e)
-		{
-			Cursor = Cursors.WaitCursor;
-			var dayOffTemplate = (IDayOffTemplate)((ToolStripMenuItem)sender).Tag;
-			GridHelper.GridlockSpecificDayOff(schedulerSplitters1.Grid, LockManager, dayOffTemplate);
-			Refresh();
-			RefreshSelection();
-			Cursor = Cursors.Default;
-		}
-
-		private void toolStripMenuItemLockAbsencesClick(object sender, EventArgs e)
-		{
-			lockAbsence(sender);
-		}
-
-		private void toolStripMenuItemAbsenceLockRmMouseUp(object sender, MouseEventArgs e)
-		{
-			if (e.Button != MouseButtons.Left) return;
-			lockAbsence(sender);
-		}
-
-		private void lockAbsence(object sender)
-		{
-			Cursor = Cursors.WaitCursor;
-			var absence = (Absence)((ToolStripMenuItem)sender).Tag;
-			GridHelper.GridlockAbsences(schedulerSplitters1.Grid, LockManager, absence);
-			Refresh();
-			RefreshSelection();
-			Cursor = Cursors.Default;
-		}
-
-		private void toolStripMenuItemLockShiftCategoriesClick(object sender, EventArgs e)
-		{
-			lockShiftCategory(sender);
-		}
-
-		private void toolStripMenuItemLockShiftCategoriesMouseUp(object sender, MouseEventArgs e)
-		{
-			if (e.Button != MouseButtons.Left) return;
-			lockShiftCategory(sender);
-		}
-
-		private void lockShiftCategory(object sender)
-		{
-			Cursor = Cursors.WaitCursor;
-			var shiftCategory = (ShiftCategory)((ToolStripMenuItem)sender).Tag;
-			GridHelper.GridlockShiftCategories(schedulerSplitters1.Grid, LockManager, shiftCategory);
-			Refresh();
-			RefreshSelection();
-			Cursor = Cursors.Default;
-		}
-
-		private void toolStripMenuItemLockShiftCategoryDaysClick(object sender, EventArgs e)
-		{
-			lockAllShiftCategories();
-		}
-
-		private void toolStripMenuItemLockShiftCategoryDaysMouseUp(object sender, MouseEventArgs e)
-		{
-			if (e.Button != MouseButtons.Left) return;
-			lockAllShiftCategories();
-		}
-
-		private void lockAllShiftCategories()
-		{
-			Cursor = Cursors.WaitCursor;
-			GridHelper.GridlockAllShiftCategories(schedulerSplitters1.Grid, LockManager);
-			Refresh();
-			RefreshSelection();
-			Cursor = Cursors.Default;
 		}
 
 		private void toolStripMenuItemNotifyAgentClick(object sender, EventArgs e)
@@ -4613,28 +4490,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (_scheduleView == null) return;
 
 			var lockAbsencesMenuBuilder = new LockAbsencesMenuBuilder();
-			lockAbsencesMenuBuilder.Build(SchedulerState.SchedulerStateHolder.CommonStateHolder.Absences, toolStripMenuItemLockAbsenceDaysClick,
-				toolStripMenuItemLockAbsenceDaysMouseUp, toolStripMenuItemLockAbsence,
-				toolStripMenuItemLockAbsencesRM, toolStripMenuItemLockAbsencesClick,
-				toolStripMenuItemAbsenceLockRmMouseUp);
+			lockAbsencesMenuBuilder.Build(SchedulerState.SchedulerStateHolder.CommonStateHolder.Absences, toolStripMenuItemLockAbsence,
+				toolStripMenuItemLockAbsencesRM, _userShiftCategoryLockHelper);
 
 			var lockDaysOffMenuBuilder = new LockDaysOffMenuBuilder();
-			lockDaysOffMenuBuilder.Build(SchedulerState.SchedulerStateHolder.CommonStateHolder.DayOffs, toolStripMenuItemLockFreeDaysClick,
-				toolStripMenuItemLockSpecificDayOffClick, toolStripMenuItemDayOffLockRmMouseUp,
-				toolStripMenuItemLockDayOff, toolStripMenuItemLockFreeDaysRM);
+			lockDaysOffMenuBuilder.Build(SchedulerState.SchedulerStateHolder.CommonStateHolder.DayOffs,
+				toolStripMenuItemLockDayOff, toolStripMenuItemLockFreeDaysRM, _userShiftCategoryLockHelper);
 
 			var lockShiftCategoriesMenuBuilder = new LockShiftCategoriesMenuBuilder();
 			lockShiftCategoriesMenuBuilder.Build(SchedulerState.SchedulerStateHolder.CommonStateHolder.ShiftCategories,
-				toolStripMenuItemLockShiftCategoryDaysClick,
-				toolStripMenuItemLockShiftCategoryDaysMouseUp,
 				toolStripMenuItemLockShiftCategory, toolStripMenuItemLockShiftCategoriesRM,
-				toolStripMenuItemLockShiftCategoriesClick,
-				toolStripMenuItemLockShiftCategoriesMouseUp);
+				_userShiftCategoryLockHelper);
 
 			var tagsMenuLoader = new TagsMenuLoader(toolStripMenuItemLockTags, toolStripMenuItemLockTagsRM,
-				SchedulerState.ScheduleTags, toolStripMenuItemLockTag,
+				SchedulerState.ScheduleTags,
 				toolStripSplitButtonChangeTag, toolStripMenuItemChangeTag,
-				toolStripComboBoxAutoTag, _defaultScheduleTag, toolStripMenuItemChangeTagRM);
+				toolStripComboBoxAutoTag, _defaultScheduleTag, toolStripMenuItemChangeTagRM, _userShiftCategoryLockHelper);
 			tagsMenuLoader.LoadTags();
 		}
 

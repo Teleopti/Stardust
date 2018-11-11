@@ -13,35 +13,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         private readonly ToolStripMenuItem _toolStripMenuItemRibbon;
         private readonly ToolStripMenuItem _toolStripMenuItemGrid;
         private readonly ToolStripMenuItem _toolStripMenuItemSetTagOnContextMenu;
-        private readonly ToolStripSplitButton _toolStripSetTagOnRibbonButton;
+		private readonly UserLockHelper _userShiftCategoryLockHelper;
+		private readonly ToolStripSplitButton _toolStripSetTagOnRibbonButton;
         private readonly ToolStripComboBox _toolStripAutoTagOnRibbonComboBox;
         private readonly IEnumerable<IScheduleTag> _tags;
-        private readonly WeakReference<MouseEventHandler> _eventHandler;
-        private readonly WeakReference<MouseEventHandler> _eventHandlerChangeTag;
+        private readonly MouseEventHandler _eventHandlerChangeTag;
         private readonly IScheduleTag _autoTag;
 
         public TagsMenuLoader(ToolStripMenuItem toolStripMenuItemRibbon, ToolStripMenuItem toolStripMenuItemGrid, IEnumerable<IScheduleTag> tags, 
-            MouseEventHandler eventHandler, ToolStripSplitButton setTagOnRibbonButton, MouseEventHandler eventHandlerChangeTag, ToolStripComboBox toolStripAutoTagOnRibbonComboBox, IScheduleTag autoTag, ToolStripMenuItem toolStripMenuItemSetTagOnContextMenu)
+            ToolStripSplitButton setTagOnRibbonButton, MouseEventHandler eventHandlerChangeTag, ToolStripComboBox toolStripAutoTagOnRibbonComboBox, IScheduleTag autoTag, ToolStripMenuItem toolStripMenuItemSetTagOnContextMenu, UserLockHelper userShiftCategoryLockHelper)
         {
-            if(toolStripMenuItemRibbon == null) throw new ArgumentNullException(nameof(toolStripMenuItemRibbon));
-            if(toolStripMenuItemGrid == null) throw new ArgumentNullException(nameof(toolStripMenuItemGrid));
-            if (toolStripMenuItemSetTagOnContextMenu == null) throw new ArgumentNullException(nameof(toolStripMenuItemSetTagOnContextMenu));
-            if(setTagOnRibbonButton == null) throw new ArgumentNullException(nameof(setTagOnRibbonButton));
-            if(tags == null) throw new ArgumentNullException(nameof(tags));
-            if(eventHandler == null) throw new ArgumentNullException(nameof(eventHandler));
-            if (eventHandlerChangeTag == null) throw new ArgumentNullException(nameof(eventHandlerChangeTag));
-            if(toolStripAutoTagOnRibbonComboBox == null) throw new ArgumentNullException(nameof(toolStripAutoTagOnRibbonComboBox));
-            if(autoTag == null) throw new ArgumentNullException(nameof(autoTag));
-
             _toolStripMenuItemRibbon = toolStripMenuItemRibbon;
             _toolStripMenuItemGrid = toolStripMenuItemGrid;
             _toolStripMenuItemSetTagOnContextMenu = toolStripMenuItemSetTagOnContextMenu;
-            _toolStripSetTagOnRibbonButton = setTagOnRibbonButton;
+			_userShiftCategoryLockHelper = userShiftCategoryLockHelper;
+			_toolStripSetTagOnRibbonButton = setTagOnRibbonButton;
             _toolStripAutoTagOnRibbonComboBox = toolStripAutoTagOnRibbonComboBox;
             _autoTag = autoTag;
             _tags = tags;
-            _eventHandler = new WeakReference<MouseEventHandler>(eventHandler);
-            _eventHandlerChangeTag = new WeakReference<MouseEventHandler>(eventHandlerChangeTag);
+            _eventHandlerChangeTag = eventHandlerChangeTag;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
@@ -51,10 +41,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             {
                 if (tag.IsDeleted) continue;
 
-				var toolStripMenuItemRibbonTag = createToolStripMenuItemAndRegisterTagToIt(tag, _eventHandler);
-				var toolStripMenuItemGridTag = createToolStripMenuItemAndRegisterTagToIt(tag, _eventHandler);
-				var toolStripMenuItemOnContextMenu = createToolStripMenuItemAndRegisterTagToIt(tag, _eventHandlerChangeTag);
-				var toolStripMenuItemSetTagOmRibbon = createToolStripMenuItemAndRegisterTagToIt(tag, _eventHandlerChangeTag);
+				var toolStripMenuItemRibbonTag = createToolStripMenuItemAndRegisterTagToIt1(tag);
+				var toolStripMenuItemGridTag = createToolStripMenuItemAndRegisterTagToIt1(tag);
+				var toolStripMenuItemOnContextMenu = createToolStripMenuItemAndRegisterTagToIt2(tag, _eventHandlerChangeTag);
+				var toolStripMenuItemSetTagOmRibbon = createToolStripMenuItemAndRegisterTagToIt2(tag, _eventHandlerChangeTag);
 
                 _toolStripMenuItemRibbon.DropDownItems.Add(toolStripMenuItemRibbonTag);
                 _toolStripMenuItemGrid.DropDownItems.Add(toolStripMenuItemGridTag);
@@ -75,22 +65,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             loadDeletedTags(); 
         }
 
-		private static ToolStripMenuItem createToolStripMenuItemAndRegisterTagToIt(IScheduleTag tag, WeakReference<MouseEventHandler> mouseEventHandler)
+		private ToolStripMenuItem createToolStripMenuItemAndRegisterTagToIt1(IScheduleTag tag)
 	    {
 			var toolStripMenuItem = new ToolStripMenuItem();
-			registerTagToToolStripMenuItem(toolStripMenuItem, tag, mouseEventHandler);
-			return toolStripMenuItem;
-	    }
-
-		private static void registerTagToToolStripMenuItem(ToolStripMenuItem toolStripMenuItem, IScheduleTag tag, WeakReference<MouseEventHandler> mouseEventHandler)
-		{
 			toolStripMenuItem.Text = tag.Description;
 			toolStripMenuItem.Tag = tag;
-			if(mouseEventHandler.TryGetTarget(out var target))
-				toolStripMenuItem.MouseUp += target;
+			toolStripMenuItem.MouseUp += _userShiftCategoryLockHelper.ToolStripMenuItemLockTag;
+			return toolStripMenuItem;
+	    }
+		private ToolStripMenuItem createToolStripMenuItemAndRegisterTagToIt2(IScheduleTag tag, MouseEventHandler handler)
+		{
+			var toolStripMenuItem = new ToolStripMenuItem();
+			toolStripMenuItem.Text = tag.Description;
+			toolStripMenuItem.Tag = tag;
+			toolStripMenuItem.MouseUp += handler;
+			return toolStripMenuItem;
 		}
 
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void loadDeletedTags()
         {
             var deleted = _tags.Where (t => t.IsDeleted).ToArray();
@@ -115,11 +107,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
                 toolStripMenuItemRibbonTag.Tag = tag;
                 toolStripMenuItemGridTag.Tag = tag;
 
-	            if (_eventHandler.TryGetTarget(out var target))
-	            {
-		            toolStripMenuItemRibbonTag.MouseUp += target;
-		            toolStripMenuItemGridTag.MouseUp += target;
-	            }
+		            toolStripMenuItemRibbonTag.MouseUp += _userShiftCategoryLockHelper.ToolStripMenuItemLockTag;
+		            toolStripMenuItemGridTag.MouseUp += _userShiftCategoryLockHelper.ToolStripMenuItemLockTag;
 
 	            toolStripMenuItemRibbonDeletedTag.DropDownItems.Add(toolStripMenuItemRibbonTag);
                 toolStripMenuItemGridDeletedTag.DropDownItems.Add(toolStripMenuItemGridTag);

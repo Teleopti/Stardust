@@ -1,0 +1,153 @@
+﻿using System;
+using System.Windows.Forms;
+using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.GridlockCommands;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
+{
+	public class UserLockHelper
+	{
+		private readonly SchedulingScreen _parent;
+		private readonly GridControl _grid;
+
+		public UserLockHelper(SchedulingScreen parent, GridControl grid)
+		{
+			_parent = parent;
+			_grid = grid;
+		}
+
+		internal void ToolStripMenuItemLockShiftCategoryDaysClick(object sender, EventArgs e)
+		{
+			lockAllShiftCategories();
+		}
+
+		internal void ToolStripMenuItemLockShiftCategoriesClick(object sender, EventArgs e)
+		{
+			lockShiftCategory(sender);
+		}
+
+		internal void ToolStripMenuItemLockShiftCategoriesMouseUp(object sender, MouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Left) return;
+			lockShiftCategory(sender);
+		}
+
+		internal void ToolStripMenuItemLockShiftCategoryDaysMouseUp(object sender, MouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Left) return;
+			lockAllShiftCategories();
+		}
+
+		internal void ToolStripMenuItemLockFreeDaysClick(object sender, EventArgs e)
+		{
+			lockAllDaysOff();
+		}
+
+		internal void ToolStripMenuItemDayOffLockRmMouseUp(object sender, MouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Left) return;
+			lockAllDaysOff();
+		}
+
+		private void lockAllDaysOff()
+		{
+			_parent.Cursor = Cursors.WaitCursor;
+			GridHelper.GridlockFreeDays(_grid, _parent.LockManager);
+			_parent.Refresh();
+			_parent.RefreshSelection();
+			_parent.Cursor = Cursors.Default;
+		}
+
+		internal void ToolStripMenuItemLockSpecificDayOffClick(object sender, EventArgs e)
+		{
+			_parent.Cursor = Cursors.WaitCursor;
+			var dayOffTemplate = (IDayOffTemplate)((ToolStripMenuItem)sender).Tag;
+			GridHelper.GridlockSpecificDayOff(_grid, _parent.LockManager, dayOffTemplate);
+			_parent.Refresh();
+			_parent.RefreshSelection();
+			_parent.Cursor = Cursors.Default;
+		}
+
+		private void lockAllShiftCategories()
+		{
+			_parent.Cursor = Cursors.WaitCursor;
+			GridHelper.GridlockAllShiftCategories(_grid, _parent.LockManager);
+			_parent.Refresh();
+			_parent.RefreshSelection();
+			_parent.Cursor = Cursors.Default;
+		}
+
+		private void lockShiftCategory(object sender)
+		{
+			_parent.Cursor = Cursors.WaitCursor;
+			var shiftCategory = (ShiftCategory)((ToolStripMenuItem)sender).Tag;
+			GridHelper.GridlockShiftCategories(_grid, _parent.LockManager, shiftCategory);
+			_parent.Refresh();
+			_parent.RefreshSelection();
+			_parent.Cursor = Cursors.Default;
+		}
+
+
+		internal void ToolStripMenuItemLockAbsenceDaysClick(object sender, EventArgs e)
+		{
+			lockAllAbsences();
+		}
+
+		internal void ToolStripMenuItemLockAbsenceDaysMouseUp(object sender, MouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Left) return;
+			lockAllAbsences();
+		}
+
+		private void lockAllAbsences()
+		{
+			_parent.Cursor = Cursors.WaitCursor;
+			GridHelper.GridlockAllAbsences(_grid, _parent.LockManager);
+			_parent.Refresh();
+			_parent.RefreshSelection();
+			_parent.Cursor = Cursors.Default;
+		}
+
+
+
+		internal void ToolStripMenuItemLockAbsencesClick(object sender, EventArgs e)
+		{
+			lockAbsence(sender);
+		}
+
+		internal void ToolStripMenuItemAbsenceLockRmMouseUp(object sender, MouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Left) return;
+			lockAbsence(sender);
+		}
+
+		private void lockAbsence(object sender)
+		{
+			_parent.Cursor = Cursors.WaitCursor;
+			var absence = (Absence)((ToolStripMenuItem)sender).Tag;
+			GridHelper.GridlockAbsences(_grid, _parent.LockManager, absence);
+			_parent.Refresh();
+			_parent.RefreshSelection();
+			_parent.Cursor = Cursors.Default;
+		}
+
+		internal void ToolStripMenuItemLockTag(object sender, MouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Left) return;
+			_parent.Cursor = Cursors.WaitCursor;
+			var scheduleTag = (IScheduleTag)((ToolStripMenuItem)sender).Tag;
+			IGridSchedulesExtractor gridSchedulesExtractor = new GridSchedulesExtractor(_grid);
+			IScheduleDayTagExtractor scheduleDayTagExtractor = new ScheduleDayTagExtractor(gridSchedulesExtractor.Extract());
+			var gridlockTagCommand = new GridlockTagCommand(_parent.LockManager, scheduleDayTagExtractor, scheduleTag);
+			gridlockTagCommand.Execute();
+			_parent.Refresh();
+			_parent.RefreshSelection();
+			_parent.Cursor = Cursors.Default;
+		}
+	}
+}
