@@ -24,5 +24,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<IPersonAccess>());
 			return results;
 		}
+
+		public void PurgeOldAudits(DateTime dateForPurging)
+		{
+			Session.GetNamedQuery("PurgePersonAccess")
+				.SetDateTime("DaysBack", dateForPurging).ExecuteUpdate();
+		}
 	}
 }

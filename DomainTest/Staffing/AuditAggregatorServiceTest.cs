@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Staffing
 {
@@ -90,65 +89,79 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			audits.Count(f => f.Action == personAccessAudit.Action).Should().Be(1);
 		}
 
-		[Test]
-		public void ShouldPurgeStaffingAuditAndPersonAccessAudit()
-		{
-			var person = PersonFactory.CreatePersonWithId();
-			var staffingAudit = createStaffingAudit(person);
-			var staffingAuditOld = createStaffingAudit(person, DateTime.UtcNow.AddMonths(-5));
-			IApplicationRole role = new ApplicationRole { Name = "Name" };
-			var personAccessAudit = createPersonAccess(person, role);
-			var personAccessAuditOld = createPersonAccess(person, role, DateTime.UtcNow.AddMonths(-4));
+		//[Test]
+		//public void ShouldPurgeStaffingAuditAndPersonAccessAudit()
+		//{
+		//	var person = PersonFactory.CreatePersonWithId();
+		//	var staffingAudit = createStaffingAudit(person);
+		//	var staffingAuditOld = createStaffingAudit(person, DateTime.UtcNow.AddMonths(-5));
+		//	IApplicationRole role = new ApplicationRole { Name = "Name" };
+		//	var personAccessAudit = createPersonAccess(person, role);
+		//	var personAccessAuditOld = createPersonAccess(person, role, DateTime.UtcNow.AddMonths(-4));
 
-			StaffingAuditRepository.Add(staffingAudit);
-			StaffingAuditRepository.Add(staffingAuditOld);
-			PersonAccessAuditRepository.Add(personAccessAudit);
-			PersonAccessAuditRepository.Add(personAccessAuditOld);
-			ApplicationRoleRepository.Add(role);
+		//	StaffingAuditRepository.Add(staffingAudit);
+		//	StaffingAuditRepository.Add(staffingAuditOld);
+		//	PersonAccessAuditRepository.Add(personAccessAudit);
+		//	PersonAccessAuditRepository.Add(personAccessAuditOld);
+		//	ApplicationRoleRepository.Add(role);
+			
+		//	Target.PurgeOldAudits();
 
-			Target.PurgeOldAudits();
+		//	var result = Target.Load(person.Id.GetValueOrDefault(), DateTime.MinValue, DateTime.MaxValue);
 
-			var result = Target.Load(person.Id.GetValueOrDefault(), DateTime.MinValue, DateTime.MaxValue);
+		//	result.Count.Should().Be(2);
+		//}
 
-			result.Count.Should().Be(2);
-		}
+		//[Test]
+		//public void ShouldCallPurgeServiceForStaffing()
+		//{
+		//	var person = PersonFactory.CreatePersonWithId();
+		//	var staffingAudit = createStaffingAudit(person);
+		//	staffingAudit.TimeStamp = DateTime.Now.AddMonths(-5);
+		//	StaffingAuditRepository.Add(staffingAudit);
 
-		private static PersonAccess createPersonAccess(IPerson person = null, IApplicationRole role = null, DateTime? timeStamp = null)
-		{
-			if(person == null)
-				 person = PersonFactory.CreatePersonWithId();
+		//	Target.PurgeOldAudits();
 
-			if(role == null)
-				role = new ApplicationRole { Name = "Name" };
+		//	StaffingAuditRepository.LoadAll().Count().Should().Be.EqualTo(0);
 
-			dynamic role2 = new { RoleId = role.Id, Name = "Name" };
+		//}
 
-			if (timeStamp == null)
-				timeStamp = DateTime.UtcNow;
+		//private static PersonAccess createPersonAccess(IPerson person = null, IApplicationRole role = null, DateTime? timeStamp = null)
+		//{
+		//	if(person == null)
+		//		 person = PersonFactory.CreatePersonWithId();
 
-			var personAccessAudit = new PersonAccess(
-					person,
-					person,
-					PersonAuditActionType.GrantRole.ToString(),
-					PersonAuditActionResult.Change.ToString(),
-					JsonConvert.SerializeObject(role2))
-				{ TimeStamp = timeStamp.GetValueOrDefault() };
+		//	if(role == null)
+		//		role = new ApplicationRole { Name = "Name" };
 
-			return personAccessAudit;
-		}
+		//	dynamic role2 = new { RoleId = role.Id, Name = "Name" };
 
-		private static StaffingAudit createStaffingAudit(IPerson person = null, DateTime? timeStamp = null)
-		{
-			if (person == null)
-				person = PersonFactory.CreatePersonWithId();
+		//	if (timeStamp == null)
+		//		timeStamp = DateTime.UtcNow;
 
-			if(timeStamp == null)
-				timeStamp = DateTime.UtcNow;
-			var staffingAudit = new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "abc.txt", "BPO")
-				{ TimeStamp = timeStamp.GetValueOrDefault() };
+		//	var personAccessAudit = new PersonAccess(
+		//			person,
+		//			person,
+		//			PersonAuditActionType.GrantRole.ToString(),
+		//			PersonAuditActionResult.Change.ToString(),
+		//			JsonConvert.SerializeObject(role2))
+		//		{ TimeStamp = timeStamp.GetValueOrDefault() };
 
-			return staffingAudit;
-		}
+		//	return personAccessAudit;
+		//}
+
+		//private static StaffingAudit createStaffingAudit(IPerson person = null, DateTime? timeStamp = null)
+		//{
+		//	if (person == null)
+		//		person = PersonFactory.CreatePersonWithId();
+
+		//	if(timeStamp == null)
+		//		timeStamp = DateTime.UtcNow;
+		//	var staffingAudit = new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "abc.txt", "BPO")
+		//		{ TimeStamp = timeStamp.GetValueOrDefault() };
+
+		//	return staffingAudit;
+		//}
 
 	}
 }

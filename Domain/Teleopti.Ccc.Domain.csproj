@@ -182,6 +182,7 @@
     <Compile Include="Aop\ReadonlyUnitOfWorkAttribute.cs" />
     <Compile Include="ApplicationLayer\Audit\AuditAggregatorService.cs" />
     <Compile Include="ApplicationLayer\Audit\AuditServiceModel.cs" />
+    <Compile Include="ApplicationLayer\Audit\IPersonAccessContextReaderService.cs" />
     <Compile Include="ApplicationLayer\Audit\IStaffingContextReaderService.cs" />
     <Compile Include="ApplicationLayer\Audit\PersonAccessAuditContext.cs" />
     <Compile Include="ApplicationLayer\Audit\StaffingAuditContext.cs" />
@@ -194,7 +195,6 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\NewAbsenceRequestHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistPreloadService.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistProcessPublisher.cs" />
-    <Compile Include="ApplicationLayer\Audit\PersonAccessContextReaderService.cs" />
     <Compile Include="ApplicationLayer\Audit\TenantContextReaderService.cs" />
     <Compile Include="ApplicationLayer\Availability\HandleMultipleAnalyticsAvailabilityDays.cs" />
     <Compile Include="ApplicationLayer\Availability\HandleOneAnalyticsAvailabilityDay.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
+using Teleopti.Ccc.Infrastructure.Audit;
 using Teleopti.Ccc.Web.Areas.People.Models;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core.Aspects

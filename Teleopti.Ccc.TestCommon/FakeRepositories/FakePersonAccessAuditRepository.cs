@@ -39,5 +39,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return PersonAccesses;
 		}
+
+		public void PurgeOldAudits(DateTime dateForPurging)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

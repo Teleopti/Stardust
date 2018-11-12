@@ -216,6 +216,7 @@
     <Compile Include="ApplicationLayer\SyncCommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\RecurringEventPublishingUpdater.cs" />
     <Compile Include="ApplicationLayer\UnitOfWorkTransactionEventSyncronization.cs" />
+    <Compile Include="Audit\PersonAccessContextReaderService.cs" />
     <Compile Include="Authentication\CryptoKeyInfo.cs" />
     <Compile Include="Authentication\CryptoKeyInfoRepository.cs" />
     <Compile Include="Authentication\ICryptoKeyInfoRepository.cs" />
@@ -538,7 +539,7 @@
     <Compile Include="Foundation\IConnectionStrings.cs" />
     <Compile Include="ServiceLocatorForEntity.cs" />
     <Compile Include="Staffing\IStaffingDataAvailablePeriodProvider.cs" />
-    <Compile Include="Staffing\StaffingContextReaderService.cs" />
+    <Compile Include="Audit\StaffingContextReaderService.cs" />
     <Compile Include="Staffing\StaffingDataAvailablePeriodProvider.cs" />
     <Compile Include="SystemCheck\CheckMessageBrokerMailBox.cs" />
     <Compile Include="Toggle\Admin\FetchAllToggleOverrides.cs" />

@@ -68,6 +68,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				.Single().Should().Be(personAccess2);
 		}
 
+		[Test]
+		public void ShouldPurgeOldAudits()
+		{
+			var rep = new PersonAccessAuditRepository(CurrUnitOfWork);
+
+			var personAccess1 = CreateAggregateWithCorrectBusinessUnit();
+
+			var personAccess2 = CreateAggregateWithCorrectBusinessUnit();
+			personAccess2.TimeStamp = DateTime.UtcNow.AddDays(-50);
+
+			var personAccess3 = CreateAggregateWithCorrectBusinessUnit();
+			personAccess3.TimeStamp = DateTime.UtcNow.AddDays(-100);
+
+			PersistAndRemoveFromUnitOfWork(personAccess1);
+			PersistAndRemoveFromUnitOfWork(personAccess2);
+			PersistAndRemoveFromUnitOfWork(personAccess3);
+			var audits = rep.LoadAudits(LoggedOnPerson, DateTime.UtcNow.AddDays(-200), DateTime.UtcNow);
+			audits.Count().Should().Be(3);
+
+			rep.PurgeOldAudits(DateTime.UtcNow.AddDays(-60));
+
+			audits = rep.LoadAudits(LoggedOnPerson, DateTime.UtcNow.AddDays(-200), DateTime.UtcNow);
+			audits.Count().Should().Be(2);
+		}
+
 		protected override IPersonAccess CreateAggregateWithCorrectBusinessUnit()
 		{
 			return new PersonAccess(

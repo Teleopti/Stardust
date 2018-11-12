@@ -60,4 +60,11 @@ Select s from PersonAccess s
 
 ]]>
 	</query>
+	<query name="PurgePersonAccess">
+		<![CDATA[
+DELETE from PersonAccess
+			where TimeStamp < : DaysBack
+
+]]>
+	</query>
 </hibernate-mapping>

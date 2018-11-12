@@ -9,11 +9,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 	public class AuditAggregatorService
 	{
 		private readonly IStaffingContextReaderService _staffingContextReaderService;
-		private readonly PersonAccessContextReaderService _personAccessContextReaderService;
+		private readonly IPersonAccessContextReaderService _personAccessContextReaderService;
 		private readonly IPersonRepository _personRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
 
-		public AuditAggregatorService(IStaffingContextReaderService staffingContextReaderService, PersonAccessContextReaderService personAccessContextReaderService, IPersonRepository personRepository, ILoggedOnUser loggedOnUser)
+		public AuditAggregatorService(IStaffingContextReaderService staffingContextReaderService, IPersonAccessContextReaderService personAccessContextReaderService, IPersonRepository personRepository, ILoggedOnUser loggedOnUser)
 		{
 			_staffingContextReaderService = staffingContextReaderService;
 			_personAccessContextReaderService = personAccessContextReaderService;
@@ -57,7 +57,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 
 		public void PurgeOldAudits()
 		{
-			throw new NotImplementedException();
+			//make some plugin architecture 
+			_staffingContextReaderService.PurgeAudits();
+			_personAccessContextReaderService.PurgeAudits();
 		}
 	}
 }

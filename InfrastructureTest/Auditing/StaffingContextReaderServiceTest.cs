@@ -12,14 +12,14 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
+
 // ReSharper disable PossibleNullReferenceException
 
-namespace Teleopti.Ccc.InfrastructureTest.Staffing
+namespace Teleopti.Ccc.InfrastructureTest.Auditing
 {
 	[TestFixture]
 	[UnitOfWorkTest]
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Staffing
 		public FakeUserCulture UserCulture;
 		public IPurgeSettingRepository PurgeSettingRepository;
 		public MutableNow Now;
-
+		
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Staffing
 		}
 
 		[Test]
-		public void ShouldPurgeAccordingToSetting()
+		public void ShouldPurgeAccordingToDefaultSetting()
 		{
 			Now.Is(DateTime.UtcNow);
 			var person = PersonFactory.CreatePerson();
@@ -148,16 +148,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Staffing
 			var loggedOnUser = PersonFactory.CreatePersonWithGuid("Ashley", "Aaron");
 			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
 
-			var staffingAudit =
+			var staffingAudit1 =
 				new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt")
 					{ TimeStamp = DateTime.UtcNow };
-			StaffingAuditRepository.Add(staffingAudit);
-			CurrentUnitOfWork.Current().PersistAll();
 			var staffingAudit2 =
 				new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt")
 					{ TimeStamp = DateTime.UtcNow.AddMonths(-4) };
 
-			StaffingAuditRepository.Add(staffingAudit);
+			StaffingAuditRepository.Add(staffingAudit1);
 			StaffingAuditRepository.Add(staffingAudit2);
 			CurrentUnitOfWork.Current().PersistAll();
 
@@ -165,7 +163,54 @@ namespace Teleopti.Ccc.InfrastructureTest.Staffing
 			CurrentUnitOfWork.Current().PersistAll();
 			var loadedAudits = Target.LoadAll();
 			loadedAudits.Count().Should().Be(1);
-			loadedAudits.FirstOrDefault().TimeStamp.Should().Be.EqualTo(staffingAudit.TimeStamp);
+			loadedAudits.FirstOrDefault().TimeStamp.Should().Be.EqualTo(staffingAudit1.TimeStamp);
 		}
+
+		//[Test]
+		//public void ShouldPurgeAccordingToDbSetting()
+		//{
+		//	Now.Is(DateTime.UtcNow);
+		//	var person = PersonFactory.CreatePerson();
+		//	PersonRepository.Add(person);
+		//	var loggedOnUser = PersonFactory.CreatePersonWithGuid("Ashley", "Aaron");
+		//	LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
+
+		//	addPurgeSetting(5);
+
+		//	var staffingAudit1 =
+		//		new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt")
+		//			{ TimeStamp = DateTime.UtcNow };
+		//	var staffingAudit2 =
+		//		new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt")
+		//			{ TimeStamp = DateTime.UtcNow.AddMonths(-4) };
+
+		//	var staffingAudit3 =
+		//		new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt")
+		//			{ TimeStamp = DateTime.UtcNow.AddMonths(-6) };
+
+		//	StaffingAuditRepository.Add(staffingAudit1);
+		//	StaffingAuditRepository.Add(staffingAudit2);
+		//	StaffingAuditRepository.Add(staffingAudit3);
+		//	CurrentUnitOfWork.Current().PersistAll();
+
+		//	Target.PurgeAudits();
+		//	CurrentUnitOfWork.Current().PersistAll();
+		//	var loadedAudits = Target.LoadAll();
+		//	loadedAudits.Count().Should().Be(2);
+		//	loadedAudits.FirstOrDefault().TimeStamp.Should().Be.EqualTo(staffingAudit1.TimeStamp);
+		//}
+
+		//private void addPurgeSetting(int purgeMonthValue)
+		//{
+		//	using (var uow = UnitOfWorkFactory.CreateAndOpenUnitOfWork())
+		//	{
+		//		var session = uow.FetchSession();
+		//		session.CreateSQLQuery(
+		//				$"update dbo.purgeSetting set [Value] = {purgeMonthValue} where [key]='MonthsToKeepAudit'")
+		//			.ExecuteUpdate();
+		//		uow.PersistAll();
+		//	}
+		//}
+
 	}
 }
