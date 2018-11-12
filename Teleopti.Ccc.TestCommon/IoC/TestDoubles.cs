@@ -29,8 +29,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			_registrations.ForEach(r =>
 			{
-				if (r.Action != null)
-					r.Action.Invoke(builder);
+				r.Action?.Invoke(builder);
 			});
 		}
 
@@ -38,10 +37,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			_registrations.ForEach(r =>
 			{
-				var disposable = r.Instance as IDisposable; 
-				if (disposable != null)
-					disposable.Dispose();
+				var disposable = r.Instance as IDisposable;
+				disposable?.Dispose();
 			});
+			_registrations.Clear();
 		}
 	}
 }

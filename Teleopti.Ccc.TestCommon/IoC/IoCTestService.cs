@@ -9,7 +9,7 @@ using Teleopti.Ccc.IocCommon.Toggle;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
-	public class IoCTestService
+	public class IoCTestService : IDisposable
 	{
 		private ILifetimeScope _container;
 		private readonly MethodInfo _method;
@@ -78,6 +78,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public T Resolve<T>()
 		{
 			return _container.Resolve<T>();
+		}
+
+		public void Dispose()
+		{
+			_container?.Dispose();
 		}
 	}
 }

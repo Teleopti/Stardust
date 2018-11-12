@@ -138,6 +138,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		private void disposeContainer()
 		{
+			_service?.Dispose();
 			_container?.Dispose();
 			_container = null;
 		}
