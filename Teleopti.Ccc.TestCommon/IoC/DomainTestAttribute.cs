@@ -22,7 +22,6 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -388,7 +387,21 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			base.AfterTest();
 
+			clearInstance();
+		}
+
+		private void clearInstance()
+		{
 			_tenantScope?.Dispose();
+			_tenantScope = null;
+
+			Authorization = null;
+			AuthorizationScope = null;
+			DataSourceForTenant = null;
+			DataSourceScope = null;
+			Database = null;
+			Persons = null;
+			FakeEventPublisher = null;
 		}
 	}
 }
