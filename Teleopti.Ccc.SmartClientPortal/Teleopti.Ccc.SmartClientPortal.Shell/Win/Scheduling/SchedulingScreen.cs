@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private IDaysOffPreferences _daysOffPreferences;
 		private IEnumerable<IOptionalColumn> _optionalColumns;
 		private ReplaceActivityParameters _replaceActivityParameters;
-		private UserLockHelper _userShiftCategoryLockHelper;
+		private UserLockHelper _userLockHelper;
 
 		#region Constructors
 
@@ -231,8 +231,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			// this timer is just for fixing bug 17948 regarding dateNavigationControl && show agent info when RTL and coming back from File
 			_tmpTimer.Interval = 50;
 			_tmpTimer.Enabled = false;
-
-			_userShiftCategoryLockHelper = new UserLockHelper(this, schedulerSplitters1.Grid);
 
 		//if it disappears again in the designer
 		ribbonControlAdv1.QuickPanelVisible = true;
@@ -351,6 +349,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_schedulerMessageBrokerHandler = new SchedulerMessageBrokerHandler(this, _container);
 			updateLifeTimeScopeWith2ThingsWithFullDependencyChain();
 
+			_userLockHelper = new UserLockHelper(this, schedulerSplitters1.Grid, _container.Resolve<IRestrictionExtractor>());
 			_skillDayGridControl = new SkillDayGridControl(_container.Resolve<ISkillPriorityProvider>());
 			_skillWeekGridControl = new SkillWeekGridControl();
 			_skillMonthGridControl = new SkillMonthGridControl();
@@ -1540,24 +1539,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			var executer = new LockExecuter(schedulerSplitters1.Grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.AllFulfilledStudentAvailability(e.Button);
-		}
-
-		private void toolStripMenuItemAllUnavailableAvailabilityMouseUp(object sender, MouseEventArgs e)
-		{
-			var executer = new LockExecuter(schedulerSplitters1.Grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
-			executer.AllUnavailableAvailability(e.Button);
-		}
-
-		private void toolStripMenuItemAllAvailableAvailabilityMouseUp(object sender, MouseEventArgs e)
-		{
-			var executer = new LockExecuter(schedulerSplitters1.Grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
-			executer.AllAvailableAvailability(e.Button);
-		}
-
-		private void toolStripMenuItemAllFulFilledAvailabilityMouseUp(object sender, MouseEventArgs e)
-		{
-			var executer = new LockExecuter(schedulerSplitters1.Grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
-			executer.AllFulfilledAvailability(e.Button);
 		}
 
 		#endregion
@@ -4491,22 +4472,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			var lockAbsencesMenuBuilder = new LockAbsencesMenuBuilder();
 			lockAbsencesMenuBuilder.Build(SchedulerState.SchedulerStateHolder.CommonStateHolder.Absences, toolStripMenuItemLockAbsence,
-				toolStripMenuItemLockAbsencesRM, _userShiftCategoryLockHelper);
+				toolStripMenuItemLockAbsencesRM, _userLockHelper);
 
 			var lockDaysOffMenuBuilder = new LockDaysOffMenuBuilder();
 			lockDaysOffMenuBuilder.Build(SchedulerState.SchedulerStateHolder.CommonStateHolder.DayOffs,
-				toolStripMenuItemLockDayOff, toolStripMenuItemLockFreeDaysRM, _userShiftCategoryLockHelper);
+				toolStripMenuItemLockDayOff, toolStripMenuItemLockFreeDaysRM, _userLockHelper);
 
 			var lockShiftCategoriesMenuBuilder = new LockShiftCategoriesMenuBuilder();
 			lockShiftCategoriesMenuBuilder.Build(SchedulerState.SchedulerStateHolder.CommonStateHolder.ShiftCategories,
 				toolStripMenuItemLockShiftCategory, toolStripMenuItemLockShiftCategoriesRM,
-				_userShiftCategoryLockHelper);
+				_userLockHelper);
 
 			var tagsMenuLoader = new TagsMenuLoader(toolStripMenuItemLockTags, toolStripMenuItemLockTagsRM,
 				SchedulerState.ScheduleTags,
 				toolStripSplitButtonChangeTag, toolStripMenuItemChangeTag,
-				toolStripComboBoxAutoTag, _defaultScheduleTag, toolStripMenuItemChangeTagRM, _userShiftCategoryLockHelper);
+				toolStripComboBoxAutoTag, _defaultScheduleTag, toolStripMenuItemChangeTagRM, _userLockHelper);
 			tagsMenuLoader.LoadTags();
+
+			var lockRestrictionsMenuBuilder = new LockRestrictionsMenuBuilder();
+			lockRestrictionsMenuBuilder.Build(ToolStripMenuItemLockAvailabilityRM, ToolStripMenuItemLockAvailability, _userLockHelper);
 		}
 
 		private void enableSwapButtons(IList<IScheduleDay> selectedSchedules)
@@ -5227,9 +5211,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			ToolStripMenuItemAllUnavailableStudentAvailabilityRM.MouseUp -= toolStripMenuItemAllUnavailableStudentAvailabilityMouseUp;
 			ToolStripMenuItemAllAvailableStudentAvailabilityRM.MouseUp -= toolStripMenuItemAllAvailableStudentAvailabilityMouseUp;
 			ToolStripMenuItemAllFulFilledStudentAvailabilityRM.MouseUp -= toolStripMenuItemAllFulFilledStudentAvailabilityMouseUp;
-			ToolStripMenuItemAllUnAvailableAvailabilityRM.MouseUp -= toolStripMenuItemAllUnavailableAvailabilityMouseUp;
-			ToolStripMenuItemAllAvailableAvailabilityRM.MouseUp -= toolStripMenuItemAllAvailableAvailabilityMouseUp;
-			ToolStripMenuItemAllFulFilledAvailabilityRM.MouseUp -= toolStripMenuItemAllFulFilledAvailabilityMouseUp;
 			toolStripMenuItemLockAllTagsRM.MouseUp -= toolStripMenuItemLockAllTagsMouseUp;
 			toolStripMenuItemWriteProtectSchedule.MouseUp -= toolStripMenuItemWriteProtectScheduleMouseUp;
 			toolstripMenuRemoveWriteProtection.MouseUp -= toolstripMenuRemoveWriteProtectionMouseUp;
@@ -5259,9 +5240,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			ToolStripMenuItemAllUnavailableStudentAvailability.MouseUp -= toolStripMenuItemAllUnavailableStudentAvailabilityMouseUp;
 			ToolStripMenuItemAllAvailableStudentAvailability.MouseUp -= toolStripMenuItemAllAvailableStudentAvailabilityMouseUp;
 			ToolStripMenuItemAllFulFilledStudentAvailability.MouseUp -= toolStripMenuItemAllFulFilledStudentAvailabilityMouseUp;
-			ToolStripMenuItemAllUnavailableAvailability.MouseUp -= toolStripMenuItemAllUnavailableAvailabilityMouseUp;
-			ToolStripMenuItemAllAvailableAvailability.MouseUp -= toolStripMenuItemAllAvailableAvailabilityMouseUp;
-			ToolStripMenuItemAllFulFilledAvailability.MouseUp -= toolStripMenuItemAllFulFilledAvailabilityMouseUp;
 			toolStripMenuItemLockAllTags.MouseUp -= toolStripMenuItemLockAllTagsMouseUp;
 			ToolStripMenuItemRemoveWriteProtectionToolBar.MouseUp -= toolstripMenuRemoveWriteProtectionMouseUp;
 			toolStripButtonQuickAccessRedo.MouseUp -= toolStripButtonQuickAccessRedoClick1;

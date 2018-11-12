@@ -64,9 +64,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup1 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
-			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup2 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
-			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup3 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
+			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup4 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
+			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup5 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
+			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup6 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SchedulingScreen));
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripSpinningProgressControl1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.SpinningProgress.ToolStripSpinningProgressControl();
@@ -147,9 +147,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.ToolStripMenuItemAllAvailableStudentAvailabilityRM = new System.Windows.Forms.ToolStripMenuItem();
 			this.ToolStripMenuItemAllFulFilledStudentAvailabilityRM = new System.Windows.Forms.ToolStripMenuItem();
 			this.ToolStripMenuItemLockAvailabilityRM = new System.Windows.Forms.ToolStripMenuItem();
-			this.ToolStripMenuItemAllUnAvailableAvailabilityRM = new System.Windows.Forms.ToolStripMenuItem();
-			this.ToolStripMenuItemAllAvailableAvailabilityRM = new System.Windows.Forms.ToolStripMenuItem();
-			this.ToolStripMenuItemAllFulFilledAvailabilityRM = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemLockTagsRM = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemLockAllTagsRM = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
@@ -243,9 +240,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.ToolStripMenuItemAllAvailableStudentAvailability = new System.Windows.Forms.ToolStripMenuItem();
 			this.ToolStripMenuItemAllFulFilledStudentAvailability = new System.Windows.Forms.ToolStripMenuItem();
 			this.ToolStripMenuItemLockAvailability = new System.Windows.Forms.ToolStripMenuItem();
-			this.ToolStripMenuItemAllUnavailableAvailability = new System.Windows.Forms.ToolStripMenuItem();
-			this.ToolStripMenuItemAllAvailableAvailability = new System.Windows.Forms.ToolStripMenuItem();
-			this.ToolStripMenuItemAllFulFilledAvailability = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemLockTags = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemLockAllTags = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
@@ -384,7 +378,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(25, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 10;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 6;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.SkyBlue;
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -1117,38 +1111,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			// 
 			// ToolStripMenuItemLockAvailabilityRM
 			// 
-			this.ToolStripMenuItemLockAvailabilityRM.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ToolStripMenuItemAllUnAvailableAvailabilityRM,
-            this.ToolStripMenuItemAllAvailableAvailabilityRM,
-            this.ToolStripMenuItemAllFulFilledAvailabilityRM});
 			this.ToolStripMenuItemLockAvailabilityRM.Name = "ToolStripMenuItemLockAvailabilityRM";
 			this.SetShortcut(this.ToolStripMenuItemLockAvailabilityRM, System.Windows.Forms.Keys.None);
 			this.ToolStripMenuItemLockAvailabilityRM.Size = new System.Drawing.Size(208, 22);
 			this.ToolStripMenuItemLockAvailabilityRM.Text = "xxLockAvailability";
-			// 
-			// ToolStripMenuItemAllUnAvailableAvailabilityRM
-			// 
-			this.ToolStripMenuItemAllUnAvailableAvailabilityRM.Name = "ToolStripMenuItemAllUnAvailableAvailabilityRM";
-			this.SetShortcut(this.ToolStripMenuItemAllUnAvailableAvailabilityRM, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemAllUnAvailableAvailabilityRM.Size = new System.Drawing.Size(161, 22);
-			this.ToolStripMenuItemAllUnAvailableAvailabilityRM.Text = "xxAllUnAvailable";
-			this.ToolStripMenuItemAllUnAvailableAvailabilityRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllUnavailableAvailabilityMouseUp);
-			// 
-			// ToolStripMenuItemAllAvailableAvailabilityRM
-			// 
-			this.ToolStripMenuItemAllAvailableAvailabilityRM.Name = "ToolStripMenuItemAllAvailableAvailabilityRM";
-			this.SetShortcut(this.ToolStripMenuItemAllAvailableAvailabilityRM, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemAllAvailableAvailabilityRM.Size = new System.Drawing.Size(161, 22);
-			this.ToolStripMenuItemAllAvailableAvailabilityRM.Text = "xxAllAvailable";
-			this.ToolStripMenuItemAllAvailableAvailabilityRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllAvailableAvailabilityMouseUp);
-			// 
-			// ToolStripMenuItemAllFulFilledAvailabilityRM
-			// 
-			this.ToolStripMenuItemAllFulFilledAvailabilityRM.Name = "ToolStripMenuItemAllFulFilledAvailabilityRM";
-			this.SetShortcut(this.ToolStripMenuItemAllFulFilledAvailabilityRM, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemAllFulFilledAvailabilityRM.Size = new System.Drawing.Size(161, 22);
-			this.ToolStripMenuItemAllFulFilledAvailabilityRM.Text = "xxAllFulFilled";
-			this.ToolStripMenuItemAllFulFilledAvailabilityRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledAvailabilityMouseUp);
 			// 
 			// toolStripMenuItemLockTagsRM
 			// 
@@ -1335,21 +1301,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.ribbonControlAdv1.Size = new System.Drawing.Size(1235, 146);
 			this.ribbonControlAdv1.SystemText.QuickAccessCustomizeCaptionText = "Customize QuickAccess Toolbar";
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "";
-			toolStripTabGroup1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-			toolStripTabGroup1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			toolStripTabGroup1.Name = "toolStripTabGroupShiftEditor";
-			toolStripTabGroup1.Visible = true;
-			toolStripTabGroup2.Color = System.Drawing.Color.Blue;
-			toolStripTabGroup2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			toolStripTabGroup2.Name = "toolStripTabGroupMainGrid";
-			toolStripTabGroup2.Visible = true;
-			toolStripTabGroup3.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-			toolStripTabGroup3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			toolStripTabGroup3.Name = "toolStripTabGroupShiftEditor2";
-			toolStripTabGroup3.Visible = true;
-			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup1);
-			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup2);
-			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup3);
+			toolStripTabGroup4.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+			toolStripTabGroup4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			toolStripTabGroup4.Name = "toolStripTabGroupShiftEditor";
+			toolStripTabGroup4.Visible = true;
+			toolStripTabGroup5.Color = System.Drawing.Color.Blue;
+			toolStripTabGroup5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			toolStripTabGroup5.Name = "toolStripTabGroupMainGrid";
+			toolStripTabGroup5.Visible = true;
+			toolStripTabGroup6.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+			toolStripTabGroup6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			toolStripTabGroup6.Name = "toolStripTabGroupShiftEditor2";
+			toolStripTabGroup6.Visible = true;
+			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup4);
+			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup5);
+			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup6);
 			this.ribbonControlAdv1.TabIndex = 5;
 			this.ribbonControlAdv1.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
 			this.ribbonControlAdv1.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
@@ -2239,38 +2205,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			// 
 			// ToolStripMenuItemLockAvailability
 			// 
-			this.ToolStripMenuItemLockAvailability.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ToolStripMenuItemAllUnavailableAvailability,
-            this.ToolStripMenuItemAllAvailableAvailability,
-            this.ToolStripMenuItemAllFulFilledAvailability});
 			this.ToolStripMenuItemLockAvailability.Name = "ToolStripMenuItemLockAvailability";
 			this.SetShortcut(this.ToolStripMenuItemLockAvailability, System.Windows.Forms.Keys.None);
 			this.ToolStripMenuItemLockAvailability.Size = new System.Drawing.Size(194, 22);
 			this.ToolStripMenuItemLockAvailability.Text = "xxLockAvailability";
-			// 
-			// ToolStripMenuItemAllUnavailableAvailability
-			// 
-			this.ToolStripMenuItemAllUnavailableAvailability.Name = "ToolStripMenuItemAllUnavailableAvailability";
-			this.SetShortcut(this.ToolStripMenuItemAllUnavailableAvailability, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemAllUnavailableAvailability.Size = new System.Drawing.Size(151, 22);
-			this.ToolStripMenuItemAllUnavailableAvailability.Text = "xxAllUnavailable";
-			this.ToolStripMenuItemAllUnavailableAvailability.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllUnavailableAvailabilityMouseUp);
-			// 
-			// ToolStripMenuItemAllAvailableAvailability
-			// 
-			this.ToolStripMenuItemAllAvailableAvailability.Name = "ToolStripMenuItemAllAvailableAvailability";
-			this.SetShortcut(this.ToolStripMenuItemAllAvailableAvailability, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemAllAvailableAvailability.Size = new System.Drawing.Size(151, 22);
-			this.ToolStripMenuItemAllAvailableAvailability.Text = "xxAllAvailable";
-			this.ToolStripMenuItemAllAvailableAvailability.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllAvailableAvailabilityMouseUp);
-			// 
-			// ToolStripMenuItemAllFulFilledAvailability
-			// 
-			this.ToolStripMenuItemAllFulFilledAvailability.Name = "ToolStripMenuItemAllFulFilledAvailability";
-			this.SetShortcut(this.ToolStripMenuItemAllFulFilledAvailability, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemAllFulFilledAvailability.Size = new System.Drawing.Size(151, 22);
-			this.ToolStripMenuItemAllFulFilledAvailability.Text = "xxAllFulFilled";
-			this.ToolStripMenuItemAllFulFilledAvailability.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledAvailabilityMouseUp);
 			// 
 			// toolStripMenuItemLockTags
 			// 
@@ -3606,9 +3544,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         private ToolStripMenuItem ToolStripMenuItemAllAvailableStudentAvailability;
         private ToolStripMenuItem ToolStripMenuItemAllFulFilledStudentAvailability;
         private ToolStripMenuItem ToolStripMenuItemLockAvailability;
-        private ToolStripMenuItem ToolStripMenuItemAllUnavailableAvailability;
-        private ToolStripMenuItem ToolStripMenuItemAllAvailableAvailability;
-        private ToolStripMenuItem ToolStripMenuItemAllFulFilledAvailability;
         private ToolStripMenuItem ToolStripMenuItemLockRestrictionsRM;
         private ToolStripMenuItem ToolStripMenuItemAllRM;
         private ToolStripMenuItem ToolStripMenuItemLockPreferencesRM;
@@ -3630,9 +3565,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         private ToolStripMenuItem ToolStripMenuItemAllAvailableStudentAvailabilityRM;
         private ToolStripMenuItem ToolStripMenuItemAllFulFilledStudentAvailabilityRM;
         private ToolStripMenuItem ToolStripMenuItemLockAvailabilityRM;
-        private ToolStripMenuItem ToolStripMenuItemAllUnAvailableAvailabilityRM;
-        private ToolStripMenuItem ToolStripMenuItemAllAvailableAvailabilityRM;
-        private ToolStripMenuItem ToolStripMenuItemAllFulFilledAvailabilityRM;
         private ToolStripMenuItem ToolStripMenuItemAllShiftsRotations;
         private ToolStripMenuItem ToolStripMenuItemAllMustHaveRM;
         private ToolStripMenuItem ToolStripMenuItemAllFulfilledMustHaveRM;

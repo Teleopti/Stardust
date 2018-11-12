@@ -14,11 +14,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 	{
 		private readonly SchedulingScreen _parent;
 		private readonly GridControl _grid;
+		private readonly IRestrictionExtractor _restrictionExtractor;
 
-		public UserLockHelper(SchedulingScreen parent, GridControl grid)
+		public UserLockHelper(SchedulingScreen parent, GridControl grid, IRestrictionExtractor restrictionExtractor)
 		{
 			_parent = parent;
 			_grid = grid;
+			_restrictionExtractor = restrictionExtractor;
 		}
 
 		internal void ToolStripMenuItemLockShiftCategoryDaysClick(object sender, EventArgs e)
@@ -148,6 +150,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_parent.Refresh();
 			_parent.RefreshSelection();
 			_parent.Cursor = Cursors.Default;
+		}
+
+		internal void ToolStripMenuItemAllFulFilledAvailabilityMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllFulfilledAvailability(e.Button);
+		}
+
+		internal void ToolStripMenuItemAllAvailableAvailabilityMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllAvailableAvailability(e.Button);
+		}
+
+		internal void ToolStripMenuItemAllUnavailableAvailabilityMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllUnavailableAvailability(e.Button);
 		}
 	}
 }
