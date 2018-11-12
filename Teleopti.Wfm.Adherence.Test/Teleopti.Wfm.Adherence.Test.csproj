@@ -438,9 +438,4 @@
     <Target Name="AfterBuild">
     </Target>
     -->
-	<PropertyGroup>
-		<PreBuildEvent>if not exist "$(ProjectDir)App.Config" copy "$(ProjectDir)..\BuildArtifacts\Teleopti.Ccc.TestCommon.App.config" "$(ProjectDir)App.Config"</PreBuildEvent>
-		<PostBuildEvent>
-		</PostBuildEvent>
-	</PropertyGroup>
 </Project>
