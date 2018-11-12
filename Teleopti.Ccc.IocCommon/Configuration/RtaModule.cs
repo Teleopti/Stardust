@@ -134,6 +134,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<RtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance().ApplyAspects();
 				builder.RegisterType<RtaEventStoreSynchronizerProcess>().AsSelf().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 			}
+			else
+			{
+				builder.RegisterType<EmptyRtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance();
+			}
 			builder.RegisterType<RtaEventStoreSynchronizerWaiter>().SingleInstance().ApplyAspects();
 
 			if (_config.Toggle(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485))

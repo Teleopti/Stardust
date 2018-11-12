@@ -21,6 +21,21 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 		void SynchronizeNow();
 	}
 
+	public class EmptyRtaEventStoreSynchronizer : IRtaEventStoreSynchronizer
+	{
+		public void Trigger()
+		{
+		}
+
+		public void SynchronizeOnTrigger()
+		{
+		}
+
+		public void SynchronizeNow()
+		{
+		}
+	}
+
 	public class RtaEventStoreSynchronizer : IRtaEventStoreSynchronizer
 	{
 		private readonly IRtaEventStoreReader _events;
