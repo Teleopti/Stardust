@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		public HangfireUtilities Hangfire;
 		public StateQueueUtilities StateQueue;
 		public TestCommon.PerformanceTest.PerformanceTest PerformanceTest;
-		public RtaEventStoreSynchronizerWaiter Waiter;
+		public IRtaEventStoreSynchronizerWaiter Waiter;
 
 		[Test]
 		[OnlyRunIfEnabled(Toggles.RTA_ReviewHistoricalAdherence_74770)]

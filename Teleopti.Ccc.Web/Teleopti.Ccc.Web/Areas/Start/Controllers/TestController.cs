@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IPhysicalApplicationPath _physicalApplicationPath;
 		private readonly IFindPersonInfo _findPersonInfo;
 		private readonly HangfireUtilities _hangfire;
-		private readonly RtaEventStoreSynchronizerWaiter _synchronizerWaiter;
+		private readonly IRtaEventStoreSynchronizerWaiter _synchronizerWaiter;
 		private readonly RecurringEventPublishings _recurringEventPublishings;
 		private readonly SystemVersion _version;
 
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			IPhysicalApplicationPath physicalApplicationPath,
 			IFindPersonInfo findPersonInfo,
 			HangfireUtilities hangfire,
-			RtaEventStoreSynchronizerWaiter synchronizerWaiter,
+			IRtaEventStoreSynchronizerWaiter synchronizerWaiter,
 			RecurringEventPublishings recurringEventPublishings,
 			SystemVersion version)
 		{

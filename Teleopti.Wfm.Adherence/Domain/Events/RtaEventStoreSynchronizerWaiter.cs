@@ -8,7 +8,13 @@ using Teleopti.Ccc.Domain.MultiTenancy;
 
 namespace Teleopti.Wfm.Adherence.Domain.Events
 {
-	public class RtaEventStoreSynchronizerWaiter
+	public interface IRtaEventStoreSynchronizerWaiter
+	{
+		void WaitForSynchronizeAllTenants(TimeSpan timeout);
+		void WaitForSynchronize(TimeSpan timeout);
+	}
+
+	public class RtaEventStoreSynchronizerWaiter : IRtaEventStoreSynchronizerWaiter
 	{
 		private readonly IKeyValueStorePersister _keyValueStore;
 		private readonly IRtaEventStoreReader _events;
@@ -71,5 +77,11 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 			{
 			}
 		}
+	}
+	
+	public class EmptyRtaEventStoreSynchronizerWaiter: IRtaEventStoreSynchronizerWaiter
+	{
+		public void WaitForSynchronizeAllTenants(TimeSpan timeout){}
+		public void WaitForSynchronize(TimeSpan timeout){}
 	}
 }
