@@ -207,34 +207,37 @@ function CheckThisInstanceWeb
 
 	$BaselUrl = "https://$localip/$SubSite"
 
-	add-type @"
-		using System.Net;
-		using System.Security.Cryptography.X509Certificates;
-		public class TrustAllCertsPolicy : ICertificatePolicy {
-        public bool CheckValidationResult(
-            ServicePoint srvPoint, X509Certificate certificate,
-            WebRequest request, int certificateProblem) {
-            return true;
-			}
-		}
+        #C# class to create callback
+        $code = @"
+        public class SSLHandler
+        {
+             public static System.Net.Security.RemoteCertificateValidationCallback GetSSLHandler()
+            {
+
+             return new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate, chain, policyErrors) => { return true; });
+                }
+
+        }
 "@
 
-	[System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
+#compile the class
+Add-Type -TypeDefinition $code
 
-	
-	log-info "Url to check: '$BaselUrl'"
-	$statusCode = $null
-	
-	try {
-	$statusCode = wget $BaselUrl -UseBasicParsing -ErrorAction SilentlyContinue 
-	}
-	catch [System.Net.WebException] {
-		$StatusCode = $_.Exception.Response
-	}
-	catch {
-		log-info $_.Exception
-		return $null
-	}	
+#disable checks using new class
+[System.Net.ServicePointManager]::ServerCertificateValidationCallback = [SSLHandler]::GetSSLHandler()
+
+try
+{
+    $statusCode = wget $BaselUrl -UseBasicParsing -ErrorAction SilentlyContinue
+
+}catch [System.Net.WebException] {
+    $StatusCode = $_.Exception.Response
+    log-info $_.Exception
+	return $null
+} finally {
+   #enable checks again
+   [System.Net.ServicePointManager]::ServerCertificateValidationCallback = $null
+}
 	
 	$StatusCode = $statusCode.StatusCode
 	log-info "Wget return: '$statusCode'"
