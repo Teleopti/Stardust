@@ -14041,11 +14041,11 @@ Reduce the complexity to use these shifts.</value>
     <comment>Tips after remove person absence in WFM team schedule</comment>
   </data>
   <data name="NoPermisionAddIntradayAbsenceForAgent" xml:space="preserve">
-    <value>You do not have permission to add intraday absences for {0}</value>
+    <value>No permission to add intraday absences for agent(s)</value>
     <comment>use in WFM TeamSchedule, a hint message to user that who can only view an agent but cannot add intraday absence for this agent.</comment>
   </data>
   <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
-    <value>You do not have permission to add full day absences for {0}</value>
+    <value>No permission to add full day absences for agent(s)</value>
     <comment>use in WFM TeamSchedule, a hint message to user that who can only view an agent but cannot add full day absence for this agent.</comment>
   </data>
   <data name="ConnectionErrorMessage" xml:space="preserve">
@@ -14550,7 +14550,7 @@ Check your internet connection or contact your administrator.</value>
     <comment>Button in confirm dialog of remove</comment>
   </data>
   <data name="NoPermissionAddPersonalActivity" xml:space="preserve">
-    <value>No permission to add personal activity for agent {0}.</value>
+    <value>No permission to add personal activity for agent(s)</value>
     <comment>No permission to add personal activity message</comment>
   </data>
   <data name="CanNotAddPersonalActivityToAgentWithoutShift" xml:space="preserve">
@@ -15310,7 +15310,7 @@ These options are activated:
     <comment>When the absence request period is too long</comment>
   </data>
   <data name="NoPermissionAddOvertimeActivity" xml:space="preserve">
-    <value>No permission to add overtime activity for agent {0}.</value>
+    <value>No permission to add overtime activity for agent(s)</value>
     <comment>Error message to notify missing permission for moving activity</comment>
   </data>
   <data name="Level" xml:space="preserve">

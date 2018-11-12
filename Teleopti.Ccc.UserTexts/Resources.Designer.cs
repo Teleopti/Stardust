@@ -21752,7 +21752,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You do not have permission to add intraday absences for {0}.
+        ///   Looks up a localized string similar to No permission to add intraday absences for agent(s).
         /// </summary>
         public static string NoPermisionAddIntradayAbsenceForAgent {
             get {
@@ -21779,7 +21779,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You do not have permission to add full day absences for {0}.
+        ///   Looks up a localized string similar to No permission to add full day absences for agent(s).
         /// </summary>
         public static string NoPermissionAddFullDayAbsenceForAgent {
             get {
@@ -21788,7 +21788,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No permission to add overtime activity for agent {0}..
+        ///   Looks up a localized string similar to No permission to add overtime activity for agent(s).
         /// </summary>
         public static string NoPermissionAddOvertimeActivity {
             get {
@@ -21797,7 +21797,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No permission to add personal activity for agent {0}..
+        ///   Looks up a localized string similar to No permission to add personal activity for agent(s).
         /// </summary>
         public static string NoPermissionAddPersonalActivity {
             get {
