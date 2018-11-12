@@ -169,5 +169,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
 			executer.AllUnavailableAvailability(e.Button);
 		}
+
+		internal void ToolStripMenuItemAllFulFilledStudentAvailabilityMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllFulfilledStudentAvailability(e.Button);
+		}
+
+		internal void ToolStripMenuItemAllAvailableStudentAvailabilityMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllAvailableStudentAvailability(e.Button);
+		}
+
+		internal void ToolStripMenuItemAllUnavailableStudentAvailabilityMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllUnavailableStudentAvailability(e.Button);
+		}
+
+
 	}
 }
