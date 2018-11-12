@@ -62,11 +62,21 @@
 					</span>
 				</div>
 			</li>
+			<!-- ko if: isHostAMobile || isHostAniPad -->
+			<li class="mobile-today" data-bind="click: today">
+				<a>
+					<i class="glyphicon glyphicon-home"></i>
+				</a>
+			</li>
+			<!-- /ko -->
+
+			<!-- ko if: isHostADesktop -->
 			<li class="mobile-today" data-bind="click: today, tooltip: { title: '@Resources.Today', html: true, trigger: 'hover', placement: 'bottom'}">
 				<a>
 					<i class="glyphicon glyphicon-home"></i>
 				</a>
 			</li>
+			<!-- /ko -->
 
 			<!-- ko if: isHostAMobile -->
 			<li class="new-teamschedule-team-filter" data-bind="css: {'new-teamschedule-has-time-filter': hasFilteredOnMobile}">
@@ -76,7 +86,8 @@
 				</a>
 			</li>
 			<!-- /ko -->
-			<!-- ko ifnot: isHostAMobile -->
+
+			<!-- ko if: isHostADesktop || isHostAniPad -->
 			<li class="new-teamschedule-time-filter" data-bind="css: {'new-teamschedule-has-time-filter': hasTimeFiltered}, tooltip: { title: buildFilterDetails(), html: true, trigger: 'hover', placement: 'bottom'}">
 				<a>
 					<i class="glyphicon glyphicon-filter"></i>
@@ -85,7 +96,6 @@
 			</li>
 			<li class="new-teamschedule-toggle show-only-day-off-toggle" data-bind="tooltip: { title: '@Resources.ShowOnlyDayOff', html: true, trigger: 'hover', placement: 'bottom'}">
 				<a>
-
 					<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />
 					<label class="relative" for="show-only-day-off-switch">Day off switch</label>
 				</a>
@@ -220,7 +230,7 @@
 		<!-- /ko -->
 	</div>
 
-	<!-- ko if: !isHostAMobile && !isHostAniPad -->
+	<!-- ko if: isHostADesktop -->
 	<div class="teamschedule-scroll-block-container" data-bind="style: {border: isScrollbarVisible() ? '1px dashed rgba(0, 0, 0, 0.1)' : 'none'}">
 		<!-- ko if: isScrollbarVisible -->
 		<div class="teamschedule-scroll-block">

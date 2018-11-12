@@ -16,6 +16,7 @@
 
 	self.isHostAMobile = Teleopti.MyTimeWeb.Common.IsHostAMobile();
 	self.isHostAniPad = Teleopti.MyTimeWeb.Common.IsHostAniPad();
+	self.isHostADesktop = !self.isHostAMobile && !self.isHostAniPad;
 
 	self.isMobileEnabled =
 		self.isHostAMobile && Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_NewTeamScheduleView_75989');
