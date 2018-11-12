@@ -3038,6 +3038,7 @@
     </Compile>
     <Compile Include="Win\Reporting\ViewerFoldingChangedEvent.cs" />
     <Compile Include="Win\Scheduling\AddScheduleLayers.cs" />
+    <Compile Include="Win\Scheduling\LockMenuBuilders\LockRestrictionsMenuBuilder.cs" />
     <Compile Include="Win\Scheduling\ReplaceActivityView.cs">
       <SubType>Form</SubType>
     </Compile>
