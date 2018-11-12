@@ -1,13 +1,7 @@
 ﻿.pagebody.new-teamschedule-view {
 	overflow: hidden;
-	-webkit-transform: translate3d(0, 0, 0);
-	transform: translate3d(0, 0, 0);
 	padding-left: 0;
 	padding-right: 0;
-}
-.new-teamschedule-view .relative {
-	-webkit-transform: translate3d(0, 0, 0);
-	transform: translate3d(0, 0, 0);
 }
 .new-teamschedule-view-nav {
 	padding: 0;
