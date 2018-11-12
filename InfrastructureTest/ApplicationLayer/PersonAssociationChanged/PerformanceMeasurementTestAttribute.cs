@@ -69,7 +69,6 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Perfo
 			SetupFixtureForAssembly.RestoreAnalyticsDatabase();
 		}
 
-		public IEnumerable<int> ParallelTransactions() => new[] {5, 6, 7, 8, 9};
 		public IEnumerable<int> TransactionSize() => new[] {50, 80, 100, 120, 150};
 		public IEnumerable<int> BatchSize() => new[] {50, 250, 500, 750, 1000};
 		public IEnumerable<string> Variation() => new[] {"A", "B", "C"};
