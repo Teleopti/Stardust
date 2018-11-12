@@ -54,12 +54,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 			var person = _personRepository.Load(personId);
 			return _personAccessContextReaderService.LoadAudits(person, startDate, endDate);
 		}
-	}
 
-	public interface IStaffingContextReaderService
-	{
-		IEnumerable<AuditServiceModel> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate);
-		void PurgeAudits();
-		IEnumerable<AuditServiceModel> LoadAll();
+		public void PurgeOldAudits()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

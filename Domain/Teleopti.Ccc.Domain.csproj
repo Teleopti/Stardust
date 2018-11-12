@@ -182,6 +182,7 @@
     <Compile Include="Aop\ReadonlyUnitOfWorkAttribute.cs" />
     <Compile Include="ApplicationLayer\Audit\AuditAggregatorService.cs" />
     <Compile Include="ApplicationLayer\Audit\AuditServiceModel.cs" />
+    <Compile Include="ApplicationLayer\Audit\IStaffingContextReaderService.cs" />
     <Compile Include="ApplicationLayer\Audit\PersonAccessAuditContext.cs" />
     <Compile Include="ApplicationLayer\Audit\StaffingAuditContext.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\FilterOutRequestsHandledByReadmodel.cs" />

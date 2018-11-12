@@ -17,6 +17,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
+// ReSharper disable PossibleNullReferenceException
 
 namespace Teleopti.Ccc.InfrastructureTest.Staffing
 {
@@ -65,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Staffing
 			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
 			var expectedResult = "BPO name: telia" + Environment.NewLine + "Period from 2018-10-01 to 2019-10-01";
 			var bpoGuid = addBpo("telia");
-			var clearBPOAction = new ClearBpoActionObj
+			var clearBpoAction = new ClearBpoActionObj
 			{
 				BpoGuid = bpoGuid,
 				StartDate = new DateTime(2018, 10, 01, 0, 0, 0, DateTimeKind.Utc),
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Staffing
 			};
 			StaffingAuditRepository.Add(
 				new StaffingAudit(person, StaffingAuditActionConstants.ClearBpo,  "BPO", "",
-					clearBPOAction.BpoGuid,clearBPOAction.StartDate,clearBPOAction.EndDate));
+					clearBpoAction.BpoGuid,clearBpoAction.StartDate,clearBpoAction.EndDate));
 			CurrentUnitOfWork.Current().PersistAll();
 
 			Target.LoadAll().FirstOrDefault().Data.Should().Be.EqualTo(expectedResult);
@@ -146,31 +147,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Staffing
 			PersonRepository.Add(person);
 			var loggedOnUser = PersonFactory.CreatePersonWithGuid("Ashley", "Aaron");
 			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
+
 			var staffingAudit =
-				new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt") { TimeStamp = DateTime.UtcNow };
+				new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt")
+					{ TimeStamp = DateTime.UtcNow };
 			StaffingAuditRepository.Add(staffingAudit);
 			CurrentUnitOfWork.Current().PersistAll();
 			var staffingAudit2 =
-				new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt") { TimeStamp = DateTime.UtcNow.AddMonths(-4) };
+				new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt")
+					{ TimeStamp = DateTime.UtcNow.AddMonths(-4) };
+
 			StaffingAuditRepository.Add(staffingAudit);
 			StaffingAuditRepository.Add(staffingAudit2);
 			CurrentUnitOfWork.Current().PersistAll();
 
 			Target.PurgeAudits();
 			CurrentUnitOfWork.Current().PersistAll();
-			Target.LoadAll().Count().Should().Be(1);
-		}
-
-		private void addPurgeSetting(int purgeMonthValue)
-		{
-			using (var uow = CurrentUnitOfWork.Current())
-			{
-				var session = uow.FetchSession();
-				session.CreateSQLQuery(
-						$"update dbo.purgeSetting set [Value] = {purgeMonthValue} where [key]='MonthsToKeepAudit'")
-					.ExecuteUpdate();
-				uow.PersistAll();
-			}
+			var loadedAudits = Target.LoadAll();
+			loadedAudits.Count().Should().Be(1);
+			loadedAudits.FirstOrDefault().TimeStamp.Should().Be.EqualTo(staffingAudit.TimeStamp);
 		}
 	}
 }
