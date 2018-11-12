@@ -1,8 +1,6 @@
 ﻿$(document).ready(function() {
 	module('Teleopti.MyTimeWeb.TeamScheduleViewModel', {
-		setup: function() {
-			Teleopti.MyTimeWeb.Common.IsToggleEnabled = function() {};
-		}
+		setup: function() {}
 	});
 
 	var timeLineTemplate = [
@@ -41,8 +39,6 @@
 	};
 
 	test('should send request to server when I type colleauge`s name in name seach box', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function() {};
-
 		var nameInAjax;
 		var ajax = {
 			Ajax: function(options) {

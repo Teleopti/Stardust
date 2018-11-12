@@ -412,6 +412,5 @@
 		Teleopti.MyTimeWeb.Common.DateTimeDefaultValues = {
 			defaultFulldayStartTime: ''
 		};
-		Teleopti.MyTimeWeb.Common.Init(null, ajax);
 	}
 });

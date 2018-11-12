@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Teleopti.Ccc.TestCommon</RootNamespace>
     <AssemblyName>Teleopti.Ccc.TestCommon</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>
     </SccProjectName>
@@ -151,11 +151,11 @@
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.264\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.271\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.264\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.271\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WebDriver, Version=2.53.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -426,14 +426,14 @@
     <Compile Include="IoC\IntegrationTestAttribute.cs" />
     <Compile Include="IoC\ITestInterceptor.cs" />
     <Compile Include="IoC\RealPermissionsAttribute.cs" />
-    <Compile Include="IoC\RepositoryMustNotBeUsedException.cs" />
+    <Compile Include="IoC\MustNotBeUsedException.cs" />
     <Compile Include="IoC\ServiceBusTestAttribute.cs" />
-    <Compile Include="IoC\SetupThrowingTestDoublesForRepositories.cs" />
+    <Compile Include="IoC\SetupThrowingTestDoubles.cs" />
     <Compile Include="IoC\SystemImpl.cs" />
     <Compile Include="IoC\TestDoubles.cs" />
     <Compile Include="IoC\TestModule.cs" />
     <Compile Include="IoC\ThrowIfRepositoriesAreUsedAttribute.cs" />
-    <Compile Include="IoC\ThrowRepositoryInterceptor.cs" />
+    <Compile Include="IoC\ThrowInterceptor.cs" />
     <Compile Include="IoC\UseEventPublisherAttribute.cs" />
     <Compile Include="IoC\LoggedOnAppDomainAttribute.cs" />
     <Compile Include="DbManagerLog4Net.cs" />

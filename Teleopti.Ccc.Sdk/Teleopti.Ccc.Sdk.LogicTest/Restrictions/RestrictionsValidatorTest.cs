@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -216,7 +217,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                                                                                                            scenario, activity, period);
             var ruleSetBag = _mocks.StrictMock<IRuleSetBag>();
             var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
-        	var dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(dateOnly,TimeZoneHelper.CurrentSessionTimeZone);
+        	var dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(dateOnly,TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 
             using (_mocks.Record())
             {

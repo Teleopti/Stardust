@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Panels;
 using Teleopti.Interfaces.Domain;
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             {
                 _view.SetHandCursor();
                 MeetingMousePosition = MeetingMousePosition.OverStartAndEnd;
-                var dateTime = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(mouseCellPosition, _view.IsRightToLeft), TimeZoneHelper.CurrentSessionTimeZone);
+                var dateTime = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(mouseCellPosition, _view.IsRightToLeft), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
                 var time = dateTime.AddTicks(-(dateTime.Ticks % TimeSpan.TicksPerSecond));
                 DiffStart = time.TimeOfDay.Subtract(startTime);
 

@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
@@ -41,6 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly IRequestFactory _requestFactory;
 		private readonly ICurrentScenario _scenarioRepository;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly BudgetGroupState _budgetGroupState;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly IStardustJobFeedback _feedback;
@@ -78,6 +80,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			ArrangeRequestsByProcessOrder arrangeRequestsByProcessOrder, 
 			IScheduleDayChangeCallback scheduleDayChangeCallback, 
 			ISchedulingResultStateHolder schedulingResultStateHolder, 
+			BudgetGroupState budgetGroupState,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory, 
 			IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, 
 			IPersonRepository personRepository, 
@@ -106,6 +109,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_arrangeRequestsByProcessOrder = arrangeRequestsByProcessOrder;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_budgetGroupState = budgetGroupState;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
 			_personRepository = personRepository;
@@ -301,6 +305,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 					var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(
 						_schedulingResultStateHolder,
+						_budgetGroupState,
 						personAccountBalanceCalculator,
 						_resourceOptimizationHelper,
 						_budgetGroupAllowanceSpecification,
@@ -529,11 +534,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private bool personAlreadyAbsentDuringRequestPeriod(IAbsenceRequest absenceRequest)
 		{
 			return
-				_alreadyAbsentSpecification.IsSatisfiedBy(new AbsenceRequstAndSchedules
-				{
-					AbsenceRequest = absenceRequest,
-					SchedulingResultStateHolder = _schedulingResultStateHolder
-				});
+				_alreadyAbsentSpecification.IsSatisfiedBy(new AbsenceRequstAndSchedules(absenceRequest,
+					_schedulingResultStateHolder, _budgetGroupState));
 		}
 	}
 }

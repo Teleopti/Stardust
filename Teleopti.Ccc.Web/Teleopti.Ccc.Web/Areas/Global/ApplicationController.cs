@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			_globalSettingDataRepository = globalSettingDataRepository;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/Global/Application/WfmAreasWithPermission")]
+		[ReadonlyUnitOfWork, HttpGet, Route("api/Global/Application/WfmAreasWithPermission")]
 		public virtual IEnumerable<object> GetWfmAreasWithPermission()
 		{
 			return _areaWithPermissionPathProvider.GetWfmAreasWithPermissions()

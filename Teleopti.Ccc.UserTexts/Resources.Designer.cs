@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -10739,6 +10739,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit report.
+        /// </summary>
+        public static string EditInsightsReport {
+            get {
+                return ResourceManager.GetString("EditInsightsReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit Location Property.
         /// </summary>
         public static string EditLocationProperty {
@@ -15831,6 +15840,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string InsertNewPersonFromClipboard {
             get {
                 return ResourceManager.GetString("InsertNewPersonFromClipboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insights.
+        /// </summary>
+        public static string Insights {
+            get {
+                return ResourceManager.GetString("Insights", resourceCulture);
             }
         }
         
@@ -21734,7 +21752,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You do not have permission to add intraday absences for {0}.
+        ///   Looks up a localized string similar to No permission to add intraday absences for agent(s).
         /// </summary>
         public static string NoPermisionAddIntradayAbsenceForAgent {
             get {
@@ -21752,7 +21770,16 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You do not have permission to add full day absences for {0}.
+        ///   Looks up a localized string similar to No permission to add day off.
+        /// </summary>
+        public static string NoPermissionAddDayOff {
+            get {
+                return ResourceManager.GetString("NoPermissionAddDayOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No permission to add full day absences for agent(s).
         /// </summary>
         public static string NoPermissionAddFullDayAbsenceForAgent {
             get {
@@ -21761,7 +21788,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No permission to add overtime activity for agent {0}..
+        ///   Looks up a localized string similar to No permission to add overtime activity for agent(s).
         /// </summary>
         public static string NoPermissionAddOvertimeActivity {
             get {
@@ -21770,7 +21797,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No permission to add personal activity for agent {0}..
+        ///   Looks up a localized string similar to No permission to add personal activity for agent(s).
         /// </summary>
         public static string NoPermissionAddPersonalActivity {
             get {
@@ -21815,6 +21842,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No permission to remove day off.
+        /// </summary>
+        public static string NoPermissionRemoveDayOff {
+            get {
+                return ResourceManager.GetString("NoPermissionRemoveDayOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No permission to remove overtime activities for agent(s).
         /// </summary>
         public static string NoPermissionRemoveOvertimeActivity {
@@ -21829,6 +21865,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoPermissionRemovingShift {
             get {
                 return ResourceManager.GetString("NoPermissionRemovingShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No permission to swap shifts.
+        /// </summary>
+        public static string NoPermissionSwapShifts {
+            get {
+                return ResourceManager.GetString("NoPermissionSwapShifts", resourceCulture);
             }
         }
         
@@ -21883,6 +21928,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoPermissionToViewRestrictedScenarios {
             get {
                 return ResourceManager.GetString("NoPermissionToViewRestrictedScenarios", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No permission to view schedules.
+        /// </summary>
+        public static string NoPermissionToViewSchedules {
+            get {
+                return ResourceManager.GetString("NoPermissionToViewSchedules", resourceCulture);
             }
         }
         
@@ -26112,33 +26166,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PM Next Generation.
-        /// </summary>
-        public static string PmNextGen {
-            get {
-                return ResourceManager.GetString("PmNextGen", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Edit report.
-        /// </summary>
-        public static string PmNextGenEditReport {
-            get {
-                return ResourceManager.GetString("PmNextGenEditReport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to View report.
-        /// </summary>
-        public static string PmNextGenViewReport {
-            get {
-                return ResourceManager.GetString("PmNextGenViewReport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Points per shift category.
         /// </summary>
         public static string PointsPerShiftCategory {
@@ -27675,7 +27702,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reply Request.
+        ///   Looks up a localized string similar to Reply to Request.
         /// </summary>
         public static string ReplyRequest {
             get {
@@ -37273,6 +37300,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Try the new Forecasts!.
+        /// </summary>
+        public static string TryTheNewForecasts {
+            get {
+                return ResourceManager.GetString("TryTheNewForecasts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tuesday.
         /// </summary>
         public static string Tuesday {
@@ -38871,6 +38907,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ViewHistory {
             get {
                 return ResourceManager.GetString("ViewHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View report.
+        /// </summary>
+        public static string ViewInsightsReport {
+            get {
+                return ResourceManager.GetString("ViewInsightsReport", resourceCulture);
             }
         }
         

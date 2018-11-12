@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 		private readonly ILifetimeScope _lifetimeScope;
 		private readonly ITenantPeopleSaver _tenantPeopleSaver;
 		private readonly IChangePassword _changePassword;
+		private readonly IUserTimeZone _userTimeZone;
 		private static readonly object PayrollExportLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(TeleoptiCccSdkService));
 		private readonly IAuthenticationFactory _authenticationFactory;
@@ -64,7 +65,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			 ILifetimeScope lifetimeScope,
 			ITenantPeopleSaver tenantPeopleSaver,
 			IChangePassword changePassword, 
-			ICurrentBusinessUnit currentBusinessUnit)
+			ICurrentBusinessUnit currentBusinessUnit,
+			IUserTimeZone userTimeZone)
 		{
 			_authenticationFactory = authenticationFactory;
 			_payrollResultFactory = payrollResultFactory;
@@ -72,6 +74,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			_lifetimeScope = lifetimeScope;
 			_tenantPeopleSaver = tenantPeopleSaver;
 			_changePassword = changePassword;
+			_userTimeZone = userTimeZone;
 			Logger.Info("Creating new instance of the service.");
 		}
 
@@ -1520,7 +1523,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			IList<SiteDto> dtos = new List<SiteDto>();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var localDate = TimeZoneHelper.ConvertFromUtc(utcDateTime, TimeZoneHelper.CurrentSessionTimeZone);
+				var localDate = TimeZoneHelper.ConvertFromUtc(utcDateTime, _userTimeZone.TimeZone());
 				var teamCollection = OrganizationFactory.CreateTeamCollectionLight(uow, func, new DateOnly(localDate));
 				foreach (ISite site in teamCollection.AllPermittedSites)
 				{
@@ -1557,7 +1560,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			List<TeamDto> dtos = new List<TeamDto>();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var localDate = TimeZoneHelper.ConvertFromUtc(utcDateTime, TimeZoneHelper.CurrentSessionTimeZone);
+				var localDate = TimeZoneHelper.ConvertFromUtc(utcDateTime, _userTimeZone.TimeZone());
 				var teamCollection =
 					OrganizationFactory.CreateTeamCollectionLight(uow, func, new DateOnly(localDate));
 
@@ -1659,7 +1662,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			IList<TeamDto> dtos = new List<TeamDto>();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var localDate = TimeZoneHelper.ConvertFromUtc(utcDateTime, TimeZoneHelper.CurrentSessionTimeZone);
+				var localDate = TimeZoneHelper.ConvertFromUtc(utcDateTime, _userTimeZone.TimeZone());
 				teamCollection = OrganizationFactory.CreateTeamCollectionLight(uow, func, new DateOnly(localDate));
 
 				foreach (ITeam team in teamCollection.AllPermittedTeams)
@@ -1688,7 +1691,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var localDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(utcDateTime, TimeZoneHelper.CurrentSessionTimeZone));
+				var localDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(utcDateTime, _userTimeZone.TimeZone()));
 				IPersonCollection personCollection =
 					OrganizationFactory.CreatePersonCollectionLight(unitOfWork, func, localDate);
 				var personDtoFactory = _lifetimeScope.Resolve<PersonDtoFactory>();

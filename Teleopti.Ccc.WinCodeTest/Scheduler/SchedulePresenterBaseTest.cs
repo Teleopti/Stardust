@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
+				Expect.Call(_viewBase.ViewGrid).Return(_grid).Repeat.AtLeastOnce();
 				Expect.Call(_viewBase.IsOverviewColumnsHidden).Return(false);
 				Expect.Call(scheduleDictionary[person]).Return(scheduleRange).Repeat.AtLeastOnce();
 			}
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             using (_mocks.Record())
             {
-                Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
+                Expect.Call(_viewBase.ViewGrid).Return(_grid).Repeat.AtLeastOnce();
                 Expect.Call(_viewBase.IsOverviewColumnsHidden).Return(false);
                 Expect.Call(scheduleDictionary[person]).Return(scheduleRange).Repeat.AtLeastOnce();
             }
@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
+				Expect.Call(_viewBase.ViewGrid).Return(_grid).Repeat.AtLeastOnce();
 				Expect.Call(_viewBase.IsOverviewColumnsHidden).Return(false);
 				Expect.Call(scheduleDictionary[person]).Return(scheduleRange).Repeat.AtLeastOnce();
 				Expect.Call(scheduleRange.CalculatedTargetTimeHolder(_period)).Return(TimeSpan.Zero);
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var startDate= new DateOnly(2017,4,1);
 			var endDate= new DateOnly(2018,3,31);
 			Expect.Call(_viewBase.RowHeaders).Return(1).Repeat.AtLeastOnce();
-			Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
+			Expect.Call(_viewBase.ViewGrid).Return(_grid).Repeat.AtLeastOnce();
 
 			_mocks.ReplayAll();
 
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _viewBase.SetCellBackTextAndBackColor(null, _date, false, false, null);
             LastCall.IgnoreArguments().Repeat.AtLeastOnce();
             Expect.Call(_viewBase.DayHeaderTooltipText(null, DateOnly.MinValue)).IgnoreArguments().Return("test").Repeat.Once();
-            Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
+            Expect.Call(_viewBase.ViewGrid).Return(_grid).Repeat.AtLeastOnce();
 
             _mocks.ReplayAll();
 
@@ -347,7 +347,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_viewBase.ColHeaders).Return(1).Repeat.AtLeastOnce();
             _viewBase.SetCellBackTextAndBackColor(null, _date, false, false, null);
             LastCall.IgnoreArguments().Repeat.AtLeastOnce();
-            Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
+            Expect.Call(_viewBase.ViewGrid).Return(_grid).Repeat.AtLeastOnce();
             Expect.Call(person1.IsAgent(new DateOnly(2008, 11, 04))).Return(true).Repeat.Times(2);
 
             _mocks.ReplayAll();
@@ -393,7 +393,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(person1.Id).Return(Guid.NewGuid()).Repeat.AtLeastOnce();
             Expect.Call(_viewBase.RowHeaders).Return(1).Repeat.AtLeastOnce();
             Expect.Call(_viewBase.ColHeaders).Return(1).Repeat.AtLeastOnce();
-            Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
+            Expect.Call(_viewBase.ViewGrid).Return(_grid).Repeat.AtLeastOnce();
 
             _mocks.ReplayAll();
 
@@ -461,7 +461,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 businessRuleResponses);
             Expect.Call(() => _viewBase.ShowErrorMessage("", "")).IgnoreArguments();
             Expect.Call(_viewBase.HandleBusinessRuleResponse).Return(null);
-            Expect.Call(_viewBase.TheGrid).Return(_grid);
+            Expect.Call(_viewBase.ViewGrid).Return(_grid);
             Expect.Call(businessRuleResponse.Overridden).Return(false).Repeat.AtLeastOnce();
 
             _mocks.ReplayAll();
@@ -484,7 +484,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             handleBusinessRuleResponse.SetResponse(businessRuleResponses);
             LastCall.Repeat.Once();
             Expect.Call(handleBusinessRuleResponse.DialogResult).Return(DialogResult.Cancel);
-            Expect.Call(_viewBase.TheGrid).Return(_grid);
+            Expect.Call(_viewBase.ViewGrid).Return(_grid);
             Expect.Call(businessRuleResponse.Overridden).Return(false).Repeat.AtLeastOnce();
 
             _mocks.ReplayAll();
@@ -515,7 +515,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(() => _viewBase.ShowErrorMessage("", "")).IgnoreArguments();
             Expect.Call(businessRuleResponse.TypeOfRule).Return(typeof(int)).Repeat.AtLeastOnce();
             Expect.Call(businessRuleResponse.Overridden).Return(false).Repeat.AtLeastOnce();
-            Expect.Call(_viewBase.TheGrid).Return(_grid);
+            Expect.Call(_viewBase.ViewGrid).Return(_grid);
             _mocks.ReplayAll();
 
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
@@ -543,7 +543,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(businessRuleResponse.Overridden = true);
             Expect.Call(scheduleDictionary.Modify(ScheduleModifier.Scheduler, (IEnumerable<IScheduleDay>)null, null, _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance))).IgnoreArguments().Return(
                 new List<IBusinessRuleResponse>());
-            Expect.Call(_viewBase.TheGrid).Return(_grid);
+            Expect.Call(_viewBase.ViewGrid).Return(_grid);
             Expect.Call(businessRuleResponse.Overridden).Return(false).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
 
@@ -565,7 +565,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(businessRuleResponse.TypeOfRule).Return(typeof(NightlyRestRule)).Repeat.AtLeastOnce();
             Expect.Call(scheduleDictionary.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay>(), allRules, _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance))).Return(
                 new List<IBusinessRuleResponse>()).IgnoreArguments();
-            Expect.Call(_viewBase.TheGrid).Return(_grid);
+            Expect.Call(_viewBase.ViewGrid).Return(_grid);
 
             _mocks.ReplayAll();
             _overriddenBusinessRulesHolder.AddOverriddenRule(businessRuleResponse);
@@ -579,7 +579,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IScheduleDay schedulePart = _mocks.StrictMock<IScheduleDay>();
             IPerson person = _mocks.StrictMock<IPerson>();
             IScheduleDictionary scheduleDictionary = CreateExpectationForModifySchedulePart(schedulePart, person);
-            Expect.Call(_viewBase.TheGrid).Return(_grid);
+            Expect.Call(_viewBase.ViewGrid).Return(_grid);
 
             _mocks.ReplayAll();
             _gridlockManager.AddLock(person, _date, LockType.Normal);
@@ -634,7 +634,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             Expect.Call(() => _viewBase.ShowErrorMessage(string.Empty, string.Empty)).IgnoreArguments();
             Expect.Call(_viewBase.HandleBusinessRuleResponse).Return(handleBusinessRuleResponse);
-            Expect.Call(_viewBase.TheGrid).Return(_grid);
+            Expect.Call(_viewBase.ViewGrid).Return(_grid);
 
             Expect.Call(businessRuleResponse.Mandatory).Return(true);
             Expect.Call(businessRuleResponse.Message).Return("testar");
@@ -656,7 +656,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(schedulePart.PersonAssignment()).Return(personAssignment).Repeat.AtLeastOnce();
             Expect.Call(personAssignment.CheckRestrictions).Repeat.AtLeastOnce();
             Expect.Call(_viewBase.OnPasteCompleted);
-            Expect.Call(_viewBase.TheGrid).Return(_grid);
+            Expect.Call(_viewBase.ViewGrid).Return(_grid);
 
             _mocks.ReplayAll();
             _target.SchedulerState.SchedulingResultState.Schedules = scheduleDictionary;
@@ -766,7 +766,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                   .IgnoreArguments().Return(_dialog)
                   .Repeat.Once();
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period)).IgnoreArguments().Repeat.AtLeastOnce();
-            Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
+            Expect.Call(_viewBase.ViewGrid).Return(_grid).Repeat.AtLeastOnce();
         }
 
         [Test]
@@ -837,7 +837,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                   .IgnoreArguments()
                   .Return(_dialog);
 			Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period)).IgnoreArguments().Repeat.Once();
-        	Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
+        	Expect.Call(_viewBase.ViewGrid).Return(_grid).Repeat.AtLeastOnce();
 
         }
 
@@ -906,7 +906,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_viewBase.SelectedSchedules()).Return(_selectedSchedules);
 			Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null, TimeZoneInfo.Local)).IgnoreArguments().Return(_dialog).Repeat.Once();
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period)).IgnoreArguments().Repeat.AtLeastOnce();
-            Expect.Call(_viewBase.TheGrid).Return(_grid);
+            Expect.Call(_viewBase.ViewGrid).Return(_grid);
         }
 
         private void ExpectCallsDialogOnShouldNotAddAbsenceOnLockedDay(DateTimePeriod period)
@@ -967,7 +967,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                   .IgnoreArguments().Return(_dialog)
                   .Repeat.Once();
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period)).IgnoreArguments().Repeat.Once();
-            Expect.Call(_viewBase.TheGrid).Return(_grid);
+            Expect.Call(_viewBase.ViewGrid).Return(_grid);
         }
 
         private void ExpectCallsDialogOnShouldAddAbsenceWithDefaultPeriod(DateTimePeriod period)
@@ -1003,7 +1003,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(schedulePart.PersonAssignment()).Return(readOnlyCollection[0]).Repeat.AtLeastOnce();
             IScheduleDictionary scheduleDictionary = CreateExpectationForModifySchedulePart(schedulePart, _person);
             
-            Expect.Call(_viewBase.TheGrid).Return(_grid);
+            Expect.Call(_viewBase.ViewGrid).Return(_grid);
             Expect.Call(schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
 			Expect.Call(scheduleDictionary[_person])
@@ -1241,7 +1241,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(_viewBase.CreateAddOvertimeViewModel( null, _multiplicatorDefinitionSets, null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), TimeZoneInfo.Local)).IgnoreArguments().Return(_overtimeDialog);
 
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period));
-            Expect.Call(_viewBase.TheGrid).Return(_grid);
+            Expect.Call(_viewBase.ViewGrid).Return(_grid);
         }
 
         [Test]
@@ -1348,7 +1348,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(dialog.SelectedItem).Return(selectedItem);
             Expect.Call(dialog.SelectedPeriod).Return(period);
             Expect.Call(() => schedulePart.CreateAndAddPersonalActivity(null, new DateTimePeriod())).IgnoreArguments();
-            Expect.Call(_viewBase.TheGrid).Return(_grid);
+            Expect.Call(_viewBase.ViewGrid).Return(_grid);
             var personAssignment = _mocks.StrictMock<IPersonAssignment>();
 
             IScheduleDictionary scheduleDictionary = CreateExpectationForModifySchedulePart(schedulePart, person);
@@ -1400,7 +1400,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePartDayOne, schedulePartDayTwo });
             Expect.Call(_viewBase.CreateAddActivityViewModel(null, null, defaultPeriod, (TimeZoneInfo.Local), null)).IgnoreArguments().Return(dialog);
-            Expect.Call(_viewBase.TheGrid).Return(_grid);
+            Expect.Call(_viewBase.ViewGrid).Return(_grid);
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(person, defaultPeriod));
         }
 
@@ -1442,7 +1442,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(ass.CheckRestrictions);
             IScheduleDictionary scheduleDictionary = CreateExpectationForModifySchedulePart(schedulePart, person);
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(person, period));
-            Expect.Call(_viewBase.TheGrid).Return(_grid);
+            Expect.Call(_viewBase.ViewGrid).Return(_grid);
             Expect.Call(schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 	        Expect.Call(ass.ShiftLayers).Return(new List<ShiftLayer> {shiftLayer});
             _mocks.ReplayAll();

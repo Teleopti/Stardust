@@ -225,6 +225,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 				$".weekview-day[data-mytime-date='{date:yyyy-MM-dd}'] .holiday-agents[style*='none']");
 		}
 
+		[Then(@"I should see an '(.*)' indication of new icon for chance of absence request on '(.*)'")]
+		public void ThenIShouldSeeAnIndicationOfNewIconForChanceOfAbsenceRequestOn(string probability, DateTime date)
+		{
+			Browser.Interactions.AssertExists(
+				$".weekview-day[data-mytime-date='{date:yyyy-MM-dd}'] .traffic-light-progress-{probability}");
+		}
+
 		[Then(@"I should see an hint '(.*)' for chance of absence request on '(.*)'")]
 		public void ThenIShouldSeeAnHintForChanceOfAbsenceRequestOn(string text, DateTime date)
 		{
@@ -235,9 +242,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see no indication for chance of absence request on '(.*)'")]
 		public void ThenIShouldSeeAnEmptyIndicationForChanceOfAbsenceRequestOn(DateTime date)
 		{
-			Browser.Interactions.AssertNotExistsUsingJQuery(
-				$".weekview-day[data-mytime-date='{date:yyyy-MM-dd}'] .small-circle:not([style])",
-				$".weekview-day[data-mytime-date='{date:yyyy-MM-dd}'] .holiday-agents[style*='none'] :visible");
+			Browser.Interactions.AssertNotExistingUsingJQuery($".weekview-day[data-mytime-date='{date:yyyy-MM-dd}'] .holiday-agents");
+		}
+
+		[Then(@"I should see no indication of new icon for chance of absence request on '(.*)'")]
+		public void ThenIShouldSeeAnEmptyIndicationOfNewIconForChanceOfAbsenceRequestOn(DateTime date)
+		{
+			Browser.Interactions.AssertNotExistingUsingJQuery($".weekview-day[data-mytime-date='{date:yyyy-MM-dd}'] .traffic-light-progress");
 		}
 
 

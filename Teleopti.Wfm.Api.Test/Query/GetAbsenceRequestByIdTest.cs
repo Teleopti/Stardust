@@ -18,7 +18,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Wfm.Api.Test.Query
 {
 	[ApiTest]
-	[FullPermissions]
 	public class GetAbsenceRequestByIdTest
 	{
 		public IApiHttpClient Client;

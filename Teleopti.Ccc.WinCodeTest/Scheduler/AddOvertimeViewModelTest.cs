@@ -4,6 +4,8 @@ using System.Windows.Data;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -27,13 +29,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             _timeZoneInfo = (TimeZoneInfo.Utc);
             _period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
-	        var startDateTimeLocal = _period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
-	        _defaultTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTimeLocal.Add(TimeSpan.FromHours(9)), startDateTimeLocal.Add(TimeSpan.FromHours(13)), TimeZoneHelper.CurrentSessionTimeZone);
+	        var startDateTimeLocal = _period.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+	        _defaultTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTimeLocal.Add(TimeSpan.FromHours(9)), startDateTimeLocal.Add(TimeSpan.FromHours(13)), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             _defaultActivity = ActivityFactory.CreateActivity("default");
             _acticvities = new List<IActivity> { ActivityFactory.CreateActivity("name"), _defaultActivity, ActivityFactory.CreateActivity("anotherName") };
             _definitionSets = new List<IMultiplicatorDefinitionSet>(){MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("m1",MultiplicatorType.OBTime),
             MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("m2",MultiplicatorType.Overtime)};
-            _target = new AddOvertimeViewModel(_acticvities, _definitionSets, _defaultActivity, new SetupDateTimePeriodToDefaultLocalHours(_defaultTimePeriod, _timeZoneInfo), TimeSpan.FromMinutes(10));
+            _target = new AddOvertimeViewModel(_acticvities, _definitionSets, _defaultActivity, new SetupDateTimePeriodToDefaultLocalHours(_defaultTimePeriod, UserTimeZone.Make(), _timeZoneInfo), TimeSpan.FromMinutes(10));
         }
 
         [Test]

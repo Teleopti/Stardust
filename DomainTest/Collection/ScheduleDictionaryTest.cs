@@ -349,7 +349,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		}
 
 		[Test]
-		[FullPermissions]
 		public void VerifyCorrectParametersToDifferenceSinceSnapshot()
 		{
 			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker, new FullPermission());

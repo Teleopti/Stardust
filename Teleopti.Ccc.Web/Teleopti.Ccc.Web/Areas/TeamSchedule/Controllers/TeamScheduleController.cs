@@ -21,7 +21,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 {
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules)]
+	[PermissionCheck(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, nameof(Resources.YouDoNotHavePermissionsToViewTeamSchedules))]
+	[PermissionCheck(DefinedRaptorApplicationFunctionPaths.ViewSchedules, nameof(Resources.NoPermissionToViewSchedules))]
 	public class TeamScheduleController : ApiController
 	{
 		private readonly IAuthorization _authorization;
@@ -130,7 +131,29 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return getSchedulesForPeople(form.PersonIds, form.Date);
 		}
 
-		[HttpPost, UnitOfWork, AddFullDayAbsencePermission, Route("api/TeamSchedule/AddFullDayAbsence")]
+	
+
+		[HttpPost, UnitOfWork, Route("api/TeamSchedule/UpdateAgentsPerPage")]
+		public virtual IHttpActionResult UpdateAgentsPerPageSetting(int agents)
+		{
+			var agentsPerPageSetting = new AgentsPerPageSetting
+			{
+				AgentsPerPage = agents
+			};
+			_agentsPerPagePersisterAndProvider.Persist(agentsPerPageSetting);
+
+			return Ok();
+		}
+
+		[HttpPost, UnitOfWork, Route("api/TeamSchedule/GetAgentsPerPage")]
+		public virtual JsonResult<AgentsPerPageSettingViewModel> GetAgentsPerPageSetting()
+		{
+			var agentsPerPageSetting = _agentsPerPagePersisterAndProvider.GetByOwner(_loggonUser.CurrentUser());
+			return Json(new AgentsPerPageSettingViewModel { Agents = agentsPerPageSetting.AgentsPerPage });
+		}
+
+
+		[HttpPost, UnitOfWork, Route("api/TeamSchedule/AddFullDayAbsence")]
 		public virtual JsonResult<List<ActionResult>> AddFullDayAbsence(FullDayAbsenceForm form)
 		{
 			setTrackedCommandInfo(form.TrackedCommandInfo);
@@ -185,26 +208,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return Ok(failResults);
 		}
 
-		[HttpPost, UnitOfWork, Route("api/TeamSchedule/UpdateAgentsPerPage")]
-		public virtual IHttpActionResult UpdateAgentsPerPageSetting(int agents)
-		{
-			var agentsPerPageSetting = new AgentsPerPageSetting
-			{
-				AgentsPerPage = agents
-			};
-			_agentsPerPagePersisterAndProvider.Persist(agentsPerPageSetting);
-
-			return Ok();
-		}
-
-		[HttpPost, UnitOfWork, Route("api/TeamSchedule/GetAgentsPerPage")]
-		public virtual JsonResult<AgentsPerPageSettingViewModel> GetAgentsPerPageSetting()
-		{
-			var agentsPerPageSetting = _agentsPerPagePersisterAndProvider.GetByOwner(_loggonUser.CurrentUser());
-			return Json(new AgentsPerPageSettingViewModel { Agents = agentsPerPageSetting.AgentsPerPage });
-		}
-
-		[HttpPost, UnitOfWork, SwapShiftPermission, Route("api/TeamSchedule/SwapShifts")]
+		[HttpPost, UnitOfWork, Route("api/TeamSchedule/SwapShifts")]
 		public virtual IHttpActionResult SwapShifts(SwapMainShiftForTwoPersonsCommand command)
 		{
 			setTrackedCommandInfo(command.TrackedCommandInfo);

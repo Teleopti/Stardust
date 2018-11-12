@@ -16,7 +16,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
-	[TestWithStaticDependenciesDONOTUSE]
 	[DomainTest]
 	public class MergeScheduleDayTest
 	{
@@ -745,7 +744,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			source.Add(absence);
 
 			destination.Merge(source, false);
-			Assert.AreEqual(periodAbsence.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).TimeOfDay, destination.PersonAbsenceCollection()[0].Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).TimeOfDay);
+			Assert.AreEqual(periodAbsence.StartDateTimeLocal(TimeZoneInfoFactory.StockholmTimeZoneInfo()).TimeOfDay, destination.PersonAbsenceCollection()[0].Period.StartDateTimeLocal(TimeZoneInfoFactory.StockholmTimeZoneInfo()).TimeOfDay);
 		}
 
 		[Test]
@@ -865,9 +864,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				//assert destination have got the source period(Time)
 				Assert.AreEqual(
 					source.PersonAssignment().MainActivities().First().Period.TimePeriod(
-						TimeZoneHelper.CurrentSessionTimeZone),
+						TimeZoneInfoFactory.StockholmTimeZoneInfo()),
 					destination.PersonAssignment().MainActivities().First().Period.TimePeriod(
-						TimeZoneHelper.CurrentSessionTimeZone));
+						TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 
 				//clear assignments in destination
 				destination.Clear<IPersonAssignment>();

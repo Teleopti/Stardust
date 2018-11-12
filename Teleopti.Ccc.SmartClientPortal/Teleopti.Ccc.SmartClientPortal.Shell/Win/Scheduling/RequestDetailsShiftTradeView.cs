@@ -7,6 +7,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
@@ -117,7 +118,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 				if (e.ColIndex == 0 && e.RowIndex > 0)
 				{
-					e.Style.CellValue = _presenter.CurrentPeriods[e.RowIndex - 1].StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone).ToShortDateString();
+					e.Style.CellValue = _presenter.CurrentPeriods[e.RowIndex - 1].StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).ToShortDateString();
 				}
                 if (e.ColIndex == 1 && e.RowIndex > 0)
                 {

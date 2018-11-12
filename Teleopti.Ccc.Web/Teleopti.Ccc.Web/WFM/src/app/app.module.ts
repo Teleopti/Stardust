@@ -14,7 +14,7 @@ import { MenuModule } from './menu/menu.module';
 import { NavigationModule } from './navigation/navigation.module';
 import { ReportModule } from './reports/reports.module';
 import { PeopleModule } from './people/people.module';
-import { PmModule } from './pm/pm.module';
+import { InsightsModule } from './insights/insights.module';
 
 @NgModule({
 	declarations: [BootstrapComponent],
@@ -27,7 +27,7 @@ import { PmModule } from './pm/pm.module';
 		NavigationModule,
 		ApiAccessModule,
 		HttpClientModule,
-		PmModule,
+		InsightsModule,
 		MenuModule,
 		TranslateModule.forRoot({
 			loader: {

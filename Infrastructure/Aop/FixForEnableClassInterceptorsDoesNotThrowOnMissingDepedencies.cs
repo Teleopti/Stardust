@@ -12,6 +12,8 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 {
 	public static class FixForEnableClassInterceptorsDoesNotThrowOnMissingDepedencies
 	{
+		private static readonly FixedDefaultValueParameter fixedDefaultValueParameter = new FixedDefaultValueParameter();
+
 		public static IRegistrationBuilder<TLimit, ScanningActivatorData, TRegistrationStyle>
 			ApplyFix<TLimit, TRegistrationStyle>(
 			this IRegistrationBuilder<TLimit, ScanningActivatorData, TRegistrationStyle> registration)
@@ -37,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 
 			var fixedDefaultParameters = (
 				from p in defaultParameters
-				let replaced = p.GetType() == typeof (DefaultValueParameter) ? new FixedDefaultValueParameter() : p
+				let replaced = p.GetType() == typeof (DefaultValueParameter) ? fixedDefaultValueParameter : p
 				select replaced
 				).ToArray();
 

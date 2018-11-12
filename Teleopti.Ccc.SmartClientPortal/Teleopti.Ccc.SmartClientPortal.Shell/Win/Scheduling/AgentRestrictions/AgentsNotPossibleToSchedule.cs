@@ -111,12 +111,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			var selected = listViewResult.SelectedItems[0];
 			var matrix = ((RestrictionsNotAbleToBeScheduledResult)selected.Tag).Matrix;
 			_detailView.LoadDetails(matrix, _restrictionExtractor);
-			_detailView.TheGrid.Refresh();
+			_detailView.ViewGrid.Refresh();
 			_detailView.InitializeGrid();
 			_detailView.SelectDateIfExists(matrix.SchedulePeriod.DateOnlyPeriod.StartDate);
-			_detailView.TheGrid.Enabled = true;
+			_detailView.ViewGrid.Enabled = true;
 			_detailView.UpdateShiftEditor();
-			_detailView.TheGrid.Cursor = Cursors.Default;
+			_detailView.ViewGrid.Cursor = Cursors.Default;
 		}
 
 		private void backgroundWorker1DoWork(object sender, DoWorkEventArgs e)
@@ -151,8 +151,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 
 			toolStripButtonRefresh.Enabled = true;
 			toolStripButtonShowNonIssued.Enabled = true;
-			_detailView.TheGrid.Enabled = true;
-			_detailView.TheGrid.Cursor = Cursors.Default;
+			_detailView.ViewGrid.Enabled = true;
+			_detailView.ViewGrid.Cursor = Cursors.Default;
 			Cursor = Cursors.Default;
 		}
 

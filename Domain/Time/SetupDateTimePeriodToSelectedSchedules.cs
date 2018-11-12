@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Time
@@ -19,9 +19,9 @@ namespace Teleopti.Ccc.Domain.Time
         private static DateTimePeriod getPeriodFromScheduleDays(IList<IScheduleDay> scheduleDays)
         {
             if (isOneScheduleDayWithMainShiftProjection(scheduleDays))
-            {
-                ISetupDateTimePeriod setupDateTimePeriodToDefaultLocalHours =
-                    new SetupDateTimePeriodDefaultLocalHoursForActivities(scheduleDays[0], new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()));
+			{
+				ISetupDateTimePeriod setupDateTimePeriodToDefaultLocalHours =
+					new SetupDateTimePeriodDefaultLocalHoursForActivities(scheduleDays[0], UserTimeZone.Make());
 
                 SetupDateTimePeriodToSelectedSchedule setupDateTimePeriodToSelectedSchedule =
                     new SetupDateTimePeriodToSelectedSchedule(scheduleDays[0], setupDateTimePeriodToDefaultLocalHours);

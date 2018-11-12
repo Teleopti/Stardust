@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (mocks.Record())
 			{
 				Expect.Call(viewBase.RowHeaders).Return(1).Repeat.AtLeastOnce();
-				Expect.Call(viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
+				Expect.Call(viewBase.ViewGrid).Return(_grid).Repeat.AtLeastOnce();
 			}
 
 			using(mocks.Playback())

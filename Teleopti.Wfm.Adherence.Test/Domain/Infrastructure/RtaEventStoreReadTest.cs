@@ -134,7 +134,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure
 		{
 			var events = WithUnitOfWork.Get(() => Events.LoadFrom(0));
 
-			events.MaxId.Should().Be.EqualTo(0);			
+			events.LastId.Should().Be.EqualTo(0);			
 		}
 		
 		[Test]
@@ -149,7 +149,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure
 
 			var events = WithUnitOfWork.Get(() => Events.LoadFrom(0));
 
-			events.MaxId.Should().Be.GreaterThan(0);			
+			events.LastId.Should().Be.GreaterThan(0);			
 		}
 		
 		[Test]
@@ -169,7 +169,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure
 
 			var events = WithUnitOfWork.Get(() => Events.LoadFrom(0));
 
-			events.MaxId.Should().Be.GreaterThan(1);			
+			events.LastId.Should().Be.GreaterThan(1);			
 		}		
 		
 		[Test]
@@ -201,7 +201,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure
 				Timestamp = "2018-03-06 08:00".Utc()
 			});
 			var events = WithUnitOfWork.Get(() => Events.LoadFrom(0));
-			var maxId = events.MaxId;
+			var maxId = events.LastId;
 			Publisher.Publish(new PersonStateChangedEvent
 			{
 				PersonId = Guid.NewGuid(),
@@ -210,7 +210,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure
 			
 			var latestEvents = WithUnitOfWork.Get(() => Events.LoadFrom(maxId));
 			
-			latestEvents.MaxId.Should().Be.GreaterThan(maxId);
+			latestEvents.LastId.Should().Be.GreaterThan(maxId);
 			latestEvents.Events.Count().Should().Be(1);			
 		}			
 		
@@ -223,11 +223,11 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure
 				Timestamp = "2018-10-17 08:00".Utc()
 			});						
 			var events = WithUnitOfWork.Get(() => Events.LoadFrom(0));
-			var previousMaxId = events.MaxId;
+			var previousMaxId = events.LastId;
 			
 			var latestEvents = WithUnitOfWork.Get(() => Events.LoadFrom(previousMaxId));
 		
-			latestEvents.MaxId.Should().Be(previousMaxId);
+			latestEvents.LastId.Should().Be(previousMaxId);
 		}		
 		
 	}

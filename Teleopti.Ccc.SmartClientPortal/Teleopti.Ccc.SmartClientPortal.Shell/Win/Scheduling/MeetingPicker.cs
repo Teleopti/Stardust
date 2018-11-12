@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 using Teleopti.Interfaces.Domain;
@@ -18,11 +19,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             if (!DesignMode)
                 SetTexts();
 
+			var timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
             foreach (IPersonMeeting meeting in meetings)
             {
                 TupleItem comboItem = new TupleItem();
                 comboItem.ValueMember = meeting.BelongsToMeeting;
-	            var period = meeting.Period.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone);
+				var period = meeting.Period.TimePeriod(timeZone);
                 comboItem.Text = meeting.BelongsToMeeting.GetSubject(new NoFormatting()) + "  " + period.ToShortTimeString();
                 comboBoxMeetings.Items.Add(comboItem);
             }

@@ -157,6 +157,9 @@ Teleopti.MyTimeWeb.Schedule = (function($) {
 		self.isOvertimeRequestAvailable = ko.observable(true);
 		self.showProbabilityToggle = ko.observable();
 		self.loadingProbabilityData = ko.observable(false);
+		self.newTrafficLightIconEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled(
+			'MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640'
+		);
 
 		self.isCurrentWeek = ko.observable();
 		self.timeLines = ko.observableArray();
@@ -588,8 +591,8 @@ Teleopti.MyTimeWeb.Schedule = (function($) {
 			);
 			self.overtimeProbabilityEnabled(data.OvertimeProbabilityEnabled);
 		} else {
-			self.overtimeProbabilityEnabled(true);
-			self.absenceProbabilityEnabled(data.CheckStaffingByIntraday && self.staffingProbabilityEnabled);
+			self.overtimeProbabilityEnabled(false);
+			self.absenceProbabilityEnabled(false);
 		}
 
 		if (!self.absenceProbabilityEnabled() && self.selectedProbabilityType === constants.probabilityType.absence) {

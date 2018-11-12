@@ -2,12 +2,14 @@ REM Set the value of netfx to install appropriate .NET Framework.
 REM ***** To install .NET 4.5.2 set the variable netfx to "NDP452" *****
 REM ***** To install .NET 4.6 set the variable netfx to "NDP46" *****
 REM ***** To install .NET 4.6.1 set the variable netfx to "NDP461" *****
+REM ***** To install .NET 4.7.2 set the variable netfx to "NDP472" ***** http://go.microsoft.com/fwlink/?LinkId=863262
+
 ::current dir
 SET DIRECTORY=%~dp0
 ::remove trailer slash
 SET DIRECTORY=%DIRECTORY:~0,-1%
 
-set netfx="NDP461"
+set netfx="NDP472"
 
 REM ***** Set script start timestamp *****
 set timehour=%time:~0,2%
@@ -22,7 +24,7 @@ set TMP=%PathToNETFXInstall%
 set TEMP=%PathToNETFXInstall%
 
 REM ***** Setup .NET filenames and registry keys *****
-if %netfx%=="NDP461" goto NDP461
+if %netfx%=="NDP472" goto NDP472
 if %netfx%=="NDP46" goto NDP46
     set "netfxinstallfile=NDP452-KB2901954-Web.exe"
     set netfxregkey="0x5cbf5"
@@ -36,6 +38,11 @@ goto logtimestamp
 :NDP461
 set "netfxinstallfile=NDP461-KB3102438-Web.exe"
 set netfxregkey="0x6041f"
+
+:NDP472
+set "netfxinstallfile=NDP472-KB4054531-Web.exe"
+set netfxregkey="0x70BF6"
+goto logtimestamp
 
 :logtimestamp
 REM ***** Setup LogFile with timestamp *****

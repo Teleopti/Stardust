@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
         ///  Created by: Ola
         ///  Created date: 2008-12-04    
         /// /// </remarks>
-        public GridControl TheGrid
+        public GridControl ViewGrid
         {
             get { return _gridControl; }
         }

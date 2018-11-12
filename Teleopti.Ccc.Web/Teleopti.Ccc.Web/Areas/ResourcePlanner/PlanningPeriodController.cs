@@ -28,11 +28,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly INow _now;
 		private readonly IPlanningGroupRepository _planningGroupRepository;
 		private readonly GetValidations _getValidatons;
+		private readonly IUserTimeZone _userTimeZone;
 
 
 		public PlanningPeriodController(INextPlanningPeriodProvider nextPlanningPeriodProvider,
 			IPlanningPeriodRepository planningPeriodRepository, IPlanningGroupStaffLoader planningGroupStaffLoader, INow now,
-			IPlanningGroupRepository planningGroupRepository, GetValidations getValidatons)
+			IPlanningGroupRepository planningGroupRepository, GetValidations getValidatons, IUserTimeZone userTimeZone)
 		{
 			_nextPlanningPeriodProvider = nextPlanningPeriodProvider;
 			_planningPeriodRepository = planningPeriodRepository;
@@ -40,6 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_now = now;
 			_planningGroupRepository = planningGroupRepository;
 			_getValidatons = getValidatons;
+			_userTimeZone = userTimeZone;
 		}
 
 		[HttpGet, UnitOfWork, Route("api/resourceplanner/planningperiod/{planningPeriodId}/result")]
@@ -53,7 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			if (lastJobResult != null && lastJobResult.FinishedOk)
 			{
 				var fullSchedulingResultModel = JsonConvert.DeserializeObject<FullSchedulingResultModel>(lastJobResult.Details.Last().Message);
-				fullSchedulingResultModel.BusinessRulesValidationResults = HintsHelper.BuildBusinessRulesValidationResults(fullSchedulingResultModel.BusinessRulesValidationResults);
+				fullSchedulingResultModel.BusinessRulesValidationResults = HintsHelper.BuildBusinessRulesValidationResults(fullSchedulingResultModel.BusinessRulesValidationResults, _userTimeZone);
 				return Ok(new
 				{
 					PlanningPeriod = new

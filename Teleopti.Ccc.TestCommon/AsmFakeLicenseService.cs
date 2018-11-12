@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon
 			TeleoptiWFMVNextEnabled = true;
 			TeleoptiWFMOvertimeRequestsEnabled = true;
 			TeleoptiWFMChatBotEnabled = true;
-			TeleoptiWFMPMNextGenEnabled = true;
+			TeleoptiWFMInsightsEnabled = true;
 		}
 
 		public void Dispose()
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.TestCommon
 		public bool TeleoptiCccCalendarLinkEnabled { get; }
 		public bool TeleoptiWFMOvertimeRequestsEnabled { get; }
 		public bool TeleoptiWFMChatBotEnabled { get; }
-		public bool TeleoptiWFMPMNextGenEnabled { get; }
+		public bool TeleoptiWFMInsightsEnabled { get; }
 		public bool TeleoptiCccFreemiumForecastsEnabled { get; }
 		public int MaxSeats => 10;
 		public LicenseType LicenseType => LicenseType.Agent;

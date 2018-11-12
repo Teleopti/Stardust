@@ -31,7 +31,6 @@ using WorkloadFactory = Teleopti.Ccc.TestCommon.FakeData.WorkloadFactory;
 namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 {
 	[DomainTest]
-	[FullPermissions]
 	public class PBI41857 : IExtendSystem
 	{
 		public IComponentContext ComponentContext;

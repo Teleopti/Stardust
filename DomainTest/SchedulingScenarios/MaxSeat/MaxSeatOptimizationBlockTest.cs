@@ -21,8 +21,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 {
 	[DomainTest]
-	[FullPermissions]
-	public class MaxSeatOptimizationBlockTest
+	public class MaxSeatOptimizationBlockTest : MaxSeatScenario
 	{
 		public MaxSeatOptimization Target;
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;

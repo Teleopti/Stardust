@@ -14041,11 +14041,11 @@ Reduce the complexity to use these shifts.</value>
     <comment>Tips after remove person absence in WFM team schedule</comment>
   </data>
   <data name="NoPermisionAddIntradayAbsenceForAgent" xml:space="preserve">
-    <value>You do not have permission to add intraday absences for {0}</value>
+    <value>No permission to add intraday absences for agent(s)</value>
     <comment>use in WFM TeamSchedule, a hint message to user that who can only view an agent but cannot add intraday absence for this agent.</comment>
   </data>
   <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
-    <value>You do not have permission to add full day absences for {0}</value>
+    <value>No permission to add full day absences for agent(s)</value>
     <comment>use in WFM TeamSchedule, a hint message to user that who can only view an agent but cannot add full day absence for this agent.</comment>
   </data>
   <data name="ConnectionErrorMessage" xml:space="preserve">
@@ -14550,7 +14550,7 @@ Check your internet connection or contact your administrator.</value>
     <comment>Button in confirm dialog of remove</comment>
   </data>
   <data name="NoPermissionAddPersonalActivity" xml:space="preserve">
-    <value>No permission to add personal activity for agent {0}.</value>
+    <value>No permission to add personal activity for agent(s)</value>
     <comment>No permission to add personal activity message</comment>
   </data>
   <data name="CanNotAddPersonalActivityToAgentWithoutShift" xml:space="preserve">
@@ -15310,7 +15310,7 @@ These options are activated:
     <comment>When the absence request period is too long</comment>
   </data>
   <data name="NoPermissionAddOvertimeActivity" xml:space="preserve">
-    <value>No permission to add overtime activity for agent {0}.</value>
+    <value>No permission to add overtime activity for agent(s)</value>
     <comment>Error message to notify missing permission for moving activity</comment>
   </data>
   <data name="Level" xml:space="preserve">
@@ -17781,15 +17781,15 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Agent was scheduled without preferences</value>
     <comment>Table column header in RTA historical overview</comment>
   </data>
-  <data name="PmNextGen" xml:space="preserve">
-    <value>PM Next Generation</value>
+  <data name="Insights" xml:space="preserve">
+    <value>Insights</value>
     <comment>Label for permission item</comment>
   </data>
-  <data name="PmNextGenViewReport" xml:space="preserve">
+  <data name="ViewInsightsReport" xml:space="preserve">
     <value>View report</value>
     <comment>Label for permission item</comment>
   </data>
-  <data name="PmNextGenEditReport" xml:space="preserve">
+  <data name="EditInsightsReport" xml:space="preserve">
     <value>Edit report</value>
     <comment>Label for permission item</comment>
   </data>
@@ -17833,11 +17833,27 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>Use in WFM Permission for edit site open hours</comment>
   </data>
   <data name="ReplyRequest" xml:space="preserve">
-    <value>Reply Request</value>
+    <value>Reply to Request</value>
     <comment>Use in WFM Permission for reply request model</comment>
   </data>
-	 <data name="ShiftsInShiftBagCanNotFulFillOverriddenTargetTime" xml:space="preserve">
+  <data name="ShiftsInShiftBagCanNotFulFillOverriddenTargetTime" xml:space="preserve">
     <value>The shifts in the shift bag {0} can not fulfill the overridden contract time. </value>
     <comment>Shown when validating agents in Plans (web) and an agent has overridden contract time that can't be fulfilled with the assigned shift bag</comment>
+  </data>
+  <data name="NoPermissionAddDayOff" xml:space="preserve">
+    <value>No permission to add day off</value>
+  </data>
+  <data name="NoPermissionRemoveDayOff" xml:space="preserve">
+    <value>No permission to remove day off</value>
+  </data>
+  <data name="NoPermissionSwapShifts" xml:space="preserve">
+    <value>No permission to swap shifts</value>
+  </data>
+  <data name="NoPermissionToViewSchedules" xml:space="preserve">
+    <value>No permission to view schedules</value>
+  </data>
+  <data name="TryTheNewForecasts" xml:space="preserve">
+    <value>Try the new Forecasts!</value>
+    <comment>Try the new Forecasts!</comment>
   </data>
 </root>

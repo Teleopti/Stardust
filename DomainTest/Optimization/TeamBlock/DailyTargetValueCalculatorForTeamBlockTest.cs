@@ -10,12 +10,12 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 {
 	[TestFixture]
-	[TestWithStaticDependenciesDONOTUSE]
 	public class DailyTargetValueCalculatorForTeamBlockTest
 	{
 		private MockRepository _mock;
@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		[SetUp]
 		public void Setup()
 		{
+			TimeZoneGuard.Instance.TimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			_mock = new MockRepository();
 			_locateMissingIntervalsIfMidNightBreak = _mock.StrictMock<ILocateMissingIntervalsIfMidNightBreak>();
 			_filterOutIntervalsAfterMidNight = _mock.StrictMock<IFilterOutIntervalsAfterMidNight>();
@@ -79,6 +80,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_extendedDateOnlyList = new List<DateOnly> {DateOnly.Today, DateOnly.Today.AddDays(1)};
 			_skillIntervalData1 = new SkillIntervalData(_period, 5, 3, 3, 0, 0);
 			_skillIntervalData2 = new SkillIntervalData(_period.MovePeriod(TimeSpan.FromMinutes(30)), 6, 0, 0, 0, 0);
+		}
+
+		[TearDown]
+		public void Teardown()
+		{
+			TimeZoneGuard.Instance.TimeZone = null;
 		}
 
 		[Test]

@@ -9,14 +9,12 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
 	[TestFixture]
-	[TestWithStaticDependenciesDONOTUSE]
 	public class OpenHoursRuleTest
 	{
 		private OpenHoursRule _target;
@@ -118,8 +116,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			_mocks.VerifyAll();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"),
-		 Test, SetCulture("sv-SE")]
+		[Test, SetCulture("sv-SE")]
 		public void VerifyValidateActivityStartingBeforeOpenHours()
 		{
 			var activity = ActivityFactory.CreateActivity("adf");
@@ -175,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 			Assert.AreNotEqual(0, response.Count());
 
-			var expectedErrorMessage = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
+			var expectedErrorMessage = string.Format(CultureInfoFactory.CreateSwedishCulture(),
 				UserTexts.Resources.BusinessRuleNoSkillsOpenErrorMessage,
 				layer.Payload.ConfidentialDescription(_person),
 				TimeZoneHelper.ConvertFromUtc(layer.Period.StartDateTime, _timeZone),

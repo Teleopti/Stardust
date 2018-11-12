@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
+using log4net;
 using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Tracer;
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 	{
 		private readonly Wfm.Adherence.Domain.Service.Rta _rta;
 		private readonly IRtaTracer _tracer;
+		private readonly ILog log = LogManager.GetLogger(typeof(TeleoptiRtaService));
 
 		public TeleoptiRtaService(Wfm.Adherence.Domain.Service.Rta rta, IRtaTracer tracer)
 		{
@@ -36,6 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			bool isSnapshot)
 		{
 			_tracer.ProcessReceived("SaveExternalUserState", 1);
+			validateParameters(authenticationKey, platformTypeId, sourceId);
 			userCode = fixUserCode(userCode);
 			stateCode = fixStateCode(stateCode, platformTypeId, isLoggedOn);
 			BatchInputModel input = null;
@@ -76,6 +79,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			ICollection<ExternalUserState> externalUserStateBatch)
 		{
 			_tracer.ProcessReceived("SaveBatchExternalUserState", externalUserStateBatch?.Count);
+			validateParameters(authenticationKey, platformTypeId, sourceId);
+
 			if (externalUserStateBatch?.Count == 0) return 0;
 
 			IEnumerable<BatchStateInputModel> states = (
@@ -106,6 +111,30 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			var exceptionHandler = new LegacyReturnValue();
 			_rta.Enqueue(input, exceptionHandler);
 			return exceptionHandler.ReturnValue;
+		}
+
+		private void validateParameters(string authenticationKey, string platformTypeId, string sourceId)
+		{
+			const string message = @" was not received.
+Make sure the SOAP message contains this value and all parameters are in correct order according to the contract.";
+			if (string.IsNullOrEmpty(authenticationKey))
+				log.Warn($"authenticationKey{message}");
+			if (string.IsNullOrEmpty(platformTypeId))
+			{
+				var m = $"platformTypeId{message}";
+				log.Warn(m);
+				_tracer.ProcessException(new PlatformTypeIdWarning(m));
+			}
+
+			if (string.IsNullOrEmpty(sourceId))
+				log.Warn($"sourceId{message}");
+		}
+
+		private class PlatformTypeIdWarning : Exception
+		{
+			public PlatformTypeIdWarning(string message) : base(message)
+			{
+			}
 		}
 
 		private static bool isClosingSnapshot(string userCode, bool isSnapshot)

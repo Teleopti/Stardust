@@ -18,7 +18,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.BusinessRules
 {
 	[DomainTest]
-	[FullPermissions]
 	public class MinWeeklyRestRuleTest
 	{
 		public Func<ISchedulerStateHolder> StateHolder;

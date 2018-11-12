@@ -1,20 +1,18 @@
-﻿
-$(document).ready(function() {
+﻿$(document).ready(function() {
+	module('Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel');
 
-	module("Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel");
-
-	var resetLocale = function () {
+	var resetLocale = function() {
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			DateFormat: 'YYYY-MM-DD',
 			UseJalaaliCalendar: false
 		});
 	};
 
-	test("should post correct data for wish shift type", function() {
+	test('should post correct data for wish shift type', function() {
 		var ajaxPostData;
 
 		var ajax = {
-			Ajax: function (options) {
+			Ajax: function(options) {
 				ajaxPostData = options.data;
 			}
 		};
@@ -22,7 +20,7 @@ $(document).ready(function() {
 		var option1 = { Id: 'working-shift', Description: 'Woking Shift' };
 		var option2 = { Id: 'empty-day', Description: 'Empty Day' };
 
-		var viewModel = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel(ajax, function () { });
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel(ajax, function() {});
 		viewModel.WishShiftTypeOption(option2);
 		viewModel.AllShiftTypes([option1, option2]);
 		viewModel.DateTo(moment('2015-01-15'));
@@ -31,10 +29,7 @@ $(document).ready(function() {
 		equal(ajaxPostData.WishShiftType, option2.Id);
 	});
 
-
-	test("when using persian display should validate time appropriately", function() {
-		
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
+	test('when using persian display should validate time appropriately', function() {
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: true,
 			DateFormat: 'YYYY/MM/DD',
@@ -44,16 +39,15 @@ $(document).ready(function() {
 		});
 
 		var shiftExchangeOfferViewModel = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel();
-		shiftExchangeOfferViewModel.StartTime("08:00 ق.ظ");
-		shiftExchangeOfferViewModel.EndTime("05:00 ب.ظ");
+		shiftExchangeOfferViewModel.StartTime('08:00 ق.ظ');
+		shiftExchangeOfferViewModel.EndTime('05:00 ب.ظ');
 
 		equal(shiftExchangeOfferViewModel.IsTimeLegal(), true);
 
 		resetLocale();
 	});
 
-	test("should set correct time format for fi-fi", function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
+	test('should set correct time format for fi-fi', function() {
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY/MM/DD',
@@ -61,10 +55,10 @@ $(document).ready(function() {
 		});
 
 		var shiftExchangeOfferViewModel = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel();
-		shiftExchangeOfferViewModel.StartTime("08:00");
-		shiftExchangeOfferViewModel.EndTime("17:00");
+		shiftExchangeOfferViewModel.StartTime('08:00');
+		shiftExchangeOfferViewModel.EndTime('17:00');
 
-		equal(shiftExchangeOfferViewModel.startTimeInternal(), "08.00");
-		equal(shiftExchangeOfferViewModel.endTimeInternal(), "17.00");
+		equal(shiftExchangeOfferViewModel.startTimeInternal(), '08.00');
+		equal(shiftExchangeOfferViewModel.endTimeInternal(), '17.00');
 	});
 });

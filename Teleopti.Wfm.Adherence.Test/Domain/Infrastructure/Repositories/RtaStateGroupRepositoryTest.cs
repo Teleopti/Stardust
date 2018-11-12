@@ -82,23 +82,4 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Repositories
 		}
 		
     }
-
-	[TestFixture]
-	public class RtaStateGroupRepositoryTestWithoutTransaction : DatabaseTestWithoutTransaction
-	{
-		[Test]
-		public void ShouldHardDelete()
-		{
-			var stateGroup = new RtaStateGroup("group 1", false, true);
-			var target = new RtaStateGroupRepository(new ThisUnitOfWork(UnitOfWork));
-			target.Add(stateGroup);
-			UnitOfWork.PersistAll();
-
-			target.Remove(stateGroup);
-			UnitOfWork.PersistAll();
-
-			UnitOfWork.DisableFilter(QueryFilter.Deleted);
-			target.LoadAll().Should().Be.Empty();
-		}
-	}
 }

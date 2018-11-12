@@ -28,7 +28,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
 	[TestFixture, SetUICulture("en-US")]
-	[FullPermissions]
 	public class RequestPresenterTest
 	{
 		private IRequestPresenter _requestPresenter;

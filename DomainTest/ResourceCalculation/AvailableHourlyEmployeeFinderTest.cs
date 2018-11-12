@@ -5,13 +5,13 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
 	[TestFixture]
-	[TestWithStaticDependenciesDONOTUSE]
 	public class AvailableHourlyEmployeeFinderTest
 	{
 		private IAvailableHourlyEmployeeFinder _target;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_target =
 				new AvailableHourlyEmployeeFinder(
 					new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation()), _sourcePerson, _date,
-					new FakeScheduleDayForPerson(_scheduleDay), filteredPersons);
+					new FakeScheduleDayForPerson(_scheduleDay), filteredPersons, UserTimeZone.Make());
 			
 			IList<AvailableHourlyEmployeeFinderResult> result = _target.Find();
 			Assert.AreEqual(0, result.Count);
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var extraSchedule = createScheduleDayFromRestriction(extraPerson, restriction);
 
 			IList<IPerson> filteredPersons = new List<IPerson> { _sourcePerson, fixedPerson, extraPerson };
-			_target = new AvailableHourlyEmployeeFinder(new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation()), _sourcePerson, _date, new FakeScheduleDayForPerson(_scheduleDay, extraSchedule), filteredPersons);
+			_target = new AvailableHourlyEmployeeFinder(new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation()), _sourcePerson, _date, new FakeScheduleDayForPerson(_scheduleDay, extraSchedule), filteredPersons, UserTimeZone.Make());
 
 			IList<AvailableHourlyEmployeeFinderResult> result = _target.Find();
 			Assert.AreEqual(1, result.Count);
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			scheduleDay(extraSchedules);
 
 			IList<IPerson> filteredPersons = new List<IPerson> { _sourcePerson, extraPerson, extraPerson2 };
-			_target = new AvailableHourlyEmployeeFinder(new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation()), _sourcePerson, _date, new FakeScheduleDayForPerson(_scheduleDay, extraSchedules, extraSchedules2), filteredPersons);
+			_target = new AvailableHourlyEmployeeFinder(new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation()), _sourcePerson, _date, new FakeScheduleDayForPerson(_scheduleDay, extraSchedules, extraSchedules2), filteredPersons, UserTimeZone.Make());
             
 			IList<AvailableHourlyEmployeeFinderResult> result = _target.Find();
 			Assert.AreEqual(1, result.Count);
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var extraSchedules2 = createScheduleDayFromRestriction(extraPerson2, restriction);
 			
 			IList<IPerson> filteredPersons = new List<IPerson> { _sourcePerson, extraPerson, extraPerson2, extraPerson3 };
-			_target = new AvailableHourlyEmployeeFinder(new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation()), _sourcePerson, _date, new FakeScheduleDayForPerson(_scheduleDay, extraSchedules2, extraSchedules3), filteredPersons);
+			_target = new AvailableHourlyEmployeeFinder(new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation()), _sourcePerson, _date, new FakeScheduleDayForPerson(_scheduleDay, extraSchedules2, extraSchedules3), filteredPersons, UserTimeZone.Make());
 
 			IList<AvailableHourlyEmployeeFinderResult> result = _target.Find();
 			Assert.AreEqual(3, result.Count);
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_target =
 				new AvailableHourlyEmployeeFinder(
 					new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation()), _sourcePerson, _date,
-					new FakeScheduleDayForPerson(schedules), filteredPersons);
+					new FakeScheduleDayForPerson(schedules), filteredPersons, new SpecificTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 
 			IList<AvailableHourlyEmployeeFinderResult> result = _target.Find();
 			Assert.IsTrue(result[0].NightRestOk);

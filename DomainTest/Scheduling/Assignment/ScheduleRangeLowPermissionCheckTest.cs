@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
     //tests when permissions are disabled on scheduledictionary
     [TestFixture]
-	[TestWithStaticDependenciesDONOTUSE]
     public class ScheduleRangeLowPermissionCheckTest
     {
 	    private const string function = DefinedRaptorApplicationFunctionPaths.ViewSchedules;
@@ -143,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	    [Test]
 	    public void VerifySchedulePartGetsFullAccessSetToFalse()
 	    {
-		    var paramStartLocal = new DateOnly(parameters.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone));
+		    var paramStartLocal = new DateOnly(parameters.Period.StartDateTimeLocal(TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 
 		    var dop = new DateOnlyPeriod(2000, 1, 1, 2000, 12, 31);
 		    authorization.Stub(x => x.PermittedPeriods(function, new DateOnlyPeriod(), parameters.Person))

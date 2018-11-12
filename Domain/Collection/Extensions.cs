@@ -108,12 +108,6 @@ namespace Teleopti.Ccc.Domain.Collection
 			return RandomIterator(list, numberOfElements, onlyUnique);
 		}
 
-		public static IEnumerable<T> RandomIterator<T>(this IEnumerable<T> list)
-		{
-			InParameter.NotNull(nameof(list), list);
-			return RandomIterator(list, list.Count(), true);
-		}
-
 
 		private static IEnumerable<T> RandomIterator<T>(IEnumerable<T> list, int numberOfElements, bool onlyUnique)
 		{
@@ -139,11 +133,6 @@ namespace Teleopti.Ccc.Domain.Collection
 		public static bool IsEmpty<T>(this IEnumerable<T> source)
 		{
 			return !source.Any();
-		}
-
-		public static bool IsEmpty<T>(this IEnumerable<T> source, Func<T, bool> predicate)
-		{
-			return !source.Any(predicate);
 		}
 
 		public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
@@ -198,30 +187,6 @@ namespace Teleopti.Ccc.Domain.Collection
 			return cnt.Values.All(c => c == 0);
 		}
 
-		public static IEnumerable<Pair<T>> WithPrevious<T>(this IEnumerable<T> source)
-		{
-			var previous = default(T);
-			foreach (var @this in source)
-			{
-				if (!EqualityComparer<T>.Default.Equals(previous, default(T)))
-				{
-					yield return new Pair<T>
-					{
-						This = @this,
-						Previous = previous
-					};
-				}
-
-				previous = @this;
-			}
-		}
-
-		public class Pair<T>
-		{
-			public T This { get; set; }
-			public T Previous { get; set; }
-		}
-
 		public static IEnumerable<T> TransitionsOf<T, T2>(this IEnumerable<T> source, Func<T, T2> value)
 		{
 			if (!source.Any())
@@ -252,13 +217,6 @@ namespace Teleopti.Ccc.Domain.Collection
 		public static IEnumerable<T> Except<T>(this IEnumerable<T> source, Func<T, bool> predicate)
 		{
 			return source.Where(x => !predicate(x));
-		}
-
-		public static IEnumerable<T> Append<T>(this IEnumerable<T> source, T item)
-		{
-			foreach (var a in source)
-				yield return a;
-			yield return item;
 		}
 
 		public static IEnumerable<T> Infinite<T>(this IEnumerable<T> source)

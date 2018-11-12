@@ -38,7 +38,8 @@
 				scope: {
 					workingHours: '=',
 					disableNextDay: '=?',
-					maxHoursRange: '=?'
+					maxHoursRange: '=?',
+					enabled: '<?'
 				},
 				templateUrl: 'app/styleguide/workinghourspicker/working-hours-picker.tpl.html',
 				link: postLink
@@ -54,6 +55,9 @@
 					startTime: new Date(2016, 0, 1, 8),
 					endTime: new Date(2016, 0, 1, 17)
 				};
+				if (scope.enabled === undefined) {
+					scope.enabled = true;
+				}
 
 				var weekDays = workingHoursPickerService.createEmptyWorkingPeriod().WeekDaySelections;
 				var translations = [];

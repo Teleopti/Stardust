@@ -9,7 +9,7 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 
 		protected override void BeforeTest()
 		{
-			InfrastructureTestStuff.BeforeWithLogon();
+			InfrastructureTestSetup.BeforeWithLogon();
 			base.BeforeTest();
 			_aspect = Resolve<IUnitOfWorkAspect>();
 			_aspect.OnBeforeInvocation(null);
@@ -20,7 +20,7 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 			base.AfterTest();
 			_aspect?.OnAfterInvocation(null, null);
 			_aspect = null;
-			InfrastructureTestStuff.AfterWithLogon();
+			InfrastructureTestSetup.AfterWithLogon();
 		}
 	}
 }

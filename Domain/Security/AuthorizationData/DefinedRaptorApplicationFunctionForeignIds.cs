@@ -92,7 +92,6 @@
 		// Online reports
 		public const string ScheduledTimePerActivityReport = "0055";
 		public const string ScheduleAuditTrailReport = "0059";
-		public const string GeneralAuditTrailWebReport = "0060";
 		public const string ScheduleTimeVersusTargetTimeReport = "0064";
 
 
@@ -182,10 +181,9 @@
 		// Chatbot
 		public const string ChatBot = "0161";
 
-		// PM Next Gen
-		public const string PmNextGen = "0163";
-		public const string PmNextGenViewReport = "0164";
-		public const string PmNextGenEditReport = "0165";
-		
+		// Insights
+		public const string Insights = "0163";
+		public const string ViewInsightsReport = "0164";
+		public const string EditInsightsReport = "0165";
 	}
 }

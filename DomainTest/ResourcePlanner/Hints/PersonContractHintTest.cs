@@ -6,6 +6,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
+using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -56,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var validationError = result.SingleOrDefault();
 			validationError.ResourceId.Should().Be.EqualTo(person.Id);
 			validationError.ResourceName.Should().Be.EqualTo(person.Name.ToString());
-			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.Single(x=>x.ErrorResource==nameof(Resources.DeletedContractAssigned)))
+			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.Single(x=>x.ErrorResource==nameof(Resources.DeletedContractAssigned)), UserTimeZone.Make())
 				.Should()
 				.Be.EqualTo(string.Format(Resources.DeletedContractAssigned, personPeriod.PersonContract.Contract.Description));
 		}

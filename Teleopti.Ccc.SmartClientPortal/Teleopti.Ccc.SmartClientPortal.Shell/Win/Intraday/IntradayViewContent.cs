@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart;
@@ -216,7 +217,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 			wpfShiftEditor1.AddActivity += wpfShiftEditorAddActivity;
 			wpfShiftEditor1.AddOvertime += wpfShiftEditorAddOvertime;
 			wpfShiftEditor1.AddPersonalShift += wpfShiftEditorAddPersonalShift;
-			wpfShiftEditor1.SetTimeZone(StateHolderReader.Instance.StateReader.UserTimeZone);
+			wpfShiftEditor1.SetTimeZone(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 			dayLayerView1.UpdateShiftEditor += dayLayerView1UpdateShiftEditor;
 			notesEditor1.NotesChanged += notesEditor1NotesChanged;
 			notesEditor1.PublicNotesChanged += notesEditor1NotesChanged;
@@ -570,7 +571,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 
 		private void schedulesPartModified(object sender, ModifyEventArgs e)
 		{
-			_presenter.SchedulerStateHolder.MarkDateToBeRecalculated(new DateOnly(e.ModifiedPeriod.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone)));
+			_presenter.SchedulerStateHolder.MarkDateToBeRecalculated(new DateOnly(e.ModifiedPeriod.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone)));
 			if (e.Modifier != ScheduleModifier.MessageBroker)
 				_owner.EnableSave();
 

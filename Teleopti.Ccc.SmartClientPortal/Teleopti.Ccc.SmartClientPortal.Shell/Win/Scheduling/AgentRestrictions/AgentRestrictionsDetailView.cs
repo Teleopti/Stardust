@@ -186,16 +186,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 
 		public override void SelectFirstDayInGrid()
 		{
-			GridRangeInfo info = GridRangeInfo.Cell(TheGrid.Rows.HeaderCount + 1, TheGrid.Cols.HeaderCount + 1);
-			TheGrid.Selections.Clear(true);
-			TheGrid.CurrentCell.Activate(TheGrid.Rows.HeaderCount + 1, TheGrid.Cols.HeaderCount + 1, GridSetCurrentCellOptions.SetFocus);
-			TheGrid.Selections.ChangeSelection(info, info, true);
-			TheGrid.CurrentCell.MoveTo(TheGrid.Rows.HeaderCount + 1, TheGrid.Cols.HeaderCount + 1);
+			GridRangeInfo info = GridRangeInfo.Cell(ViewGrid.Rows.HeaderCount + 1, ViewGrid.Cols.HeaderCount + 1);
+			ViewGrid.Selections.Clear(true);
+			ViewGrid.CurrentCell.Activate(ViewGrid.Rows.HeaderCount + 1, ViewGrid.Cols.HeaderCount + 1, GridSetCurrentCellOptions.SetFocus);
+			ViewGrid.Selections.ChangeSelection(info, info, true);
+			ViewGrid.CurrentCell.MoveTo(ViewGrid.Rows.HeaderCount + 1, ViewGrid.Cols.HeaderCount + 1);
 		}
 
 		public override DateOnly SelectedDateLocal()
 		{
-			var tag = TheGrid[ViewGrid.CurrentCell.RowIndex, ViewGrid.CurrentCell.ColIndex].Tag;
+			var tag = ViewGrid[ViewGrid.CurrentCell.RowIndex, ViewGrid.CurrentCell.ColIndex].Tag;
 			if ((tag is DateOnly)) return (DateOnly)tag;
 			return Presenter.SelectedPeriod.DateOnlyPeriod.StartDate;
 		}
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 
 			if (point.X != -1 && point.Y != -1)
 			{
-				TheGrid.InvalidateRange(GridRangeInfo.Row(point.X));
+				ViewGrid.InvalidateRange(GridRangeInfo.Row(point.X));
 			}
 		}
 
@@ -227,22 +227,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 
 		public void SelectDateIfExists(DateOnly dateOnly)
 		{
-			var rows = TheGrid.RowCount;
-			var cols = TheGrid.ColCount;
+			var rows = ViewGrid.RowCount;
+			var cols = ViewGrid.ColCount;
 
 			for (var row = 0; row < rows; row++)
 			{
 				for (var col = 0; col < cols; col++)
 				{
-					var tag = TheGrid[row, col].Tag;
+					var tag = ViewGrid[row, col].Tag;
 
 					if (!(tag is DateOnly)) continue;
 					if (!tag.Equals(dateOnly)) continue;
 					var info = GridRangeInfo.Cell(row, col);
-					TheGrid.Selections.Clear(true);
-					TheGrid.CurrentCell.Activate(row, col, GridSetCurrentCellOptions.SetFocus);
-					TheGrid.Selections.ChangeSelection(info, info, true);
-					TheGrid.CurrentCell.MoveTo(row, col);
+					ViewGrid.Selections.Clear(true);
+					ViewGrid.CurrentCell.Activate(row, col, GridSetCurrentCellOptions.SetFocus);
+					ViewGrid.Selections.ChangeSelection(info, info, true);
+					ViewGrid.CurrentCell.MoveTo(row, col);
 
 					break;
 				}

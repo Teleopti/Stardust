@@ -96,8 +96,8 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 					DefinedLicenseOptionPaths.TeleoptiWfmChatBot,
 					licenseService.TeleoptiWFMChatBotEnabled
 				},{
-					DefinedLicenseOptionPaths.TeleoptiWfmPmNextGen,
-					licenseService.TeleoptiWFMPMNextGenEnabled
+					DefinedLicenseOptionPaths.TeleoptiWfmInsights,
+					licenseService.TeleoptiWFMInsightsEnabled
 				}
 			};
 

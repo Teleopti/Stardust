@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 
 		public bool Validate(ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{	
-			var dayIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo, schedulingResultStateHolder.AllSkillDays(), _groupPersonSkillAggregator);
+			var dayIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo, schedulingResultStateHolder.SkillDays.ToSkillDayEnumerable(), _groupPersonSkillAggregator);
 			var firstDate = findFirstNoneDayOffOrFullDayAbsenceDayForAnyTeamMember(teamBlockInfo.BlockInfo.BlockPeriod,
 				teamBlockInfo.TeamInfo.GroupMembers.ToList(), schedulingResultStateHolder);
 			var firstDateActivities = dayIntervalDataPerDateAndActivity[firstDate].Keys.ToList();

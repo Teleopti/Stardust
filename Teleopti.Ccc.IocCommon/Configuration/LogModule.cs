@@ -18,9 +18,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		private static void onComponentPreparing(object sender, PreparingEventArgs e)
 		{
 			var t = e.Component.Activator.LimitType;
+			ResolvedParameter resolvedParameter = new ResolvedParameter((p, i) => p.ParameterType == typeof(ILog), (p, i) => LogManager.GetLogger(t));
 			e.Parameters = e.Parameters.Union(new[]
 				{
-					new ResolvedParameter((p, i) => p.ParameterType == typeof(ILog), (p, i) => LogManager.GetLogger(t))
+					resolvedParameter
 				});
 		}
 	}

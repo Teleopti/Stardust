@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Teleopti.Ccc.WebTest</RootNamespace>
     <AssemblyName>Teleopti.Ccc.WebTest</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>
     </SccProjectName>
@@ -196,11 +196,11 @@
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.264\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.271\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.264\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.271\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WebGrease">
@@ -540,6 +540,7 @@
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceTypesProviderTest.cs" />
     <Compile Include="Filters\ApplicationFunctionApiAttributeTest.cs" />
     <Compile Include="Filters\AsyncTaskAttributeTest.cs" />
+    <Compile Include="Filters\PermissionCheckAttributeTest.cs" />
     <Compile Include="Filters\AuthorizeTeleoptiAttributeTest.cs" />
     <Compile Include="Filters\CustomHttpActionDescriptorForTest.cs" />
     <Compile Include="Filters\HandleOptimisticLockExceptionAttributeTest.cs" />
@@ -692,7 +693,6 @@
   <ItemGroup>
     <Folder Include="Areas\MyTime\Core\TeamSchedule\Mapping\" />
     <Folder Include="Areas\Outbound\Models\" />
-	<Folder Include="Areas\Requests\Controller\" />
     <Folder Include="Core\Hangfire\" />
     <Folder Include="Properties\" />
   </ItemGroup>

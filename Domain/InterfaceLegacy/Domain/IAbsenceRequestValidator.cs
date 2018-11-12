@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -13,12 +14,13 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 	public struct RequiredForHandlingAbsenceRequest
 	{
-		public RequiredForHandlingAbsenceRequest(ISchedulingResultStateHolder schedulingResultStateHolder, IPersonAccountBalanceCalculator personAccountBalanceCalculator, IResourceCalculation resourceOptimizationHelper, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification = null)
+		public RequiredForHandlingAbsenceRequest(ISchedulingResultStateHolder schedulingResultStateHolder, BudgetGroupState budgetGroupState, IPersonAccountBalanceCalculator personAccountBalanceCalculator, IResourceCalculation resourceOptimizationHelper, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification = null)
 		{
 			ResourceOptimizationHelper = resourceOptimizationHelper;
 			BudgetGroupAllowanceSpecification = budgetGroupAllowanceSpecification;
 			BudgetGroupHeadCountSpecification = budgetGroupHeadCountSpecification;
 			SchedulingResultStateHolder = schedulingResultStateHolder;
+			BudgetGroupState = budgetGroupState;
 			PersonAccountBalanceCalculator = personAccountBalanceCalculator;
 		}
 
@@ -31,5 +33,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		public IResourceCalculation ResourceOptimizationHelper { get; }
 
 		public IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification { get; }
+		
+		public BudgetGroupState BudgetGroupState { get; }
 	}
 }

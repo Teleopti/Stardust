@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 					settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
 
 				ReportHandler.CreateScheduledTimeVersusTargetData(unitOfWork, model, data,
-					StateHolderReader.Instance.StateReader.UserTimeZone, commonNameDescriptionSetting);
+					TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone, commonNameDescriptionSetting);
 			}
 
 			return new ReportDataPackage<IScheduledTimeVersusTargetTimeReportData>(data, parameters, false);

@@ -760,6 +760,5 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			var wfmPath = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle");
 			return new Uri($"{wfmPath}{relativePath}");
 		}
-
 	}
 }

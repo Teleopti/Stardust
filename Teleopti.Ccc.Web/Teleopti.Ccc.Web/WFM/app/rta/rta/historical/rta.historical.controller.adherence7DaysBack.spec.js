@@ -52,31 +52,4 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 		expect(c.nextHref).toBe(undefined);
 	});
-
-	it('should display next day in tooltip', function (t) {
-		t.stateParams.personId = '1';
-		t.stateParams.date = '20171220';
-		t.backend.with.historicalAdherence({
-			PersonId: '1',
-			Navigation: {First: '20171215', Last: '20171221'}
-		});
-
-		var c = t.createController();
-
-		expect(c.nextTooltip).toEqual(moment('2017-12-21').format('L'));
-	});
-
-	it('should display previous day in tooltip', function (t) {
-		t.stateParams.personId = '1';
-		t.stateParams.date = '20171220';
-		t.backend.with.historicalAdherence({
-			PersonId: '1',
-			Navigation: {First: '20171215', Last: '20171221'}
-		});
-
-		var c = t.createController();
-
-		expect(c.previousTooltip).toEqual(moment('2017-12-19').format('L'));
-	});
-
 });

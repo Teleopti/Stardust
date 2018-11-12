@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Autofac;
-using Teleopti.Wfm.Api.Query;
-using Teleopti.Wfm.Api.Query.Response;
 
 namespace Teleopti.Wfm.Api.Controllers
 {
     public class WfmQueryController : ApiController
     {
-        readonly IComponentContext services;
-        readonly DtoProvider dtoProvider;
-        readonly QueryDtoProvider queryDtoProvider;
-        readonly QueryHandlerProvider handlerProvider;
+		private readonly IComponentContext services;
+		private readonly DtoProvider dtoProvider;
+		private readonly QueryDtoProvider queryDtoProvider;
+		private readonly QueryHandlerProvider handlerProvider;
 
         public WfmQueryController(IComponentContext services, DtoProvider dtoProvider, QueryDtoProvider queryDtoProvider, QueryHandlerProvider handlerProvider)
         {
@@ -36,18 +33,8 @@ namespace Teleopti.Wfm.Api.Controllers
 	        });
         }
 
-		[HttpGet, Route("query2")]
-		public QueryResultDto<ScheduleDto> AvailableQueries1()
-		{
-			return new QueryResultDto<ScheduleDto>
-			{
-				Result = new List<ScheduleDto>(),
-				Successful = true
-			};
-		}
-
-		[HttpPost,Route("query/{queryType}/{query}")]
-        public IHttpActionResult Post(string queryType, string query)
+		[HttpPost, Route("query/{queryType}/{query}")]
+		public IHttpActionResult Post(string queryType, string query)
 		{
 			using (var scope = services.Resolve<ILifetimeScope>())
 			{
@@ -61,13 +48,24 @@ namespace Teleopti.Wfm.Api.Controllers
 					return BadRequest("Issue a GET to /query to list available queries");
 				}
 
-				string text = Request.Content.ReadAsStringAsync().Result;
-				var value = Newtonsoft.Json.JsonConvert.DeserializeObject(text, kindOfQuery);
-				var handler = scope.Resolve(typeof(IQueryHandler<,>).MakeGenericType(kindOfQuery, type));
-				var method = handler.GetType().GetMethod("Handle");
-				var result = method.Invoke(handler, new[] {value});
-				return Json(result);
+				try
+				{
+					var text = Request.Content.ReadAsStringAsync().Result;
+					var value = Newtonsoft.Json.JsonConvert.DeserializeObject(text, kindOfQuery);
+					var handler = scope.Resolve(typeof(IQueryHandler<,>).MakeGenericType(kindOfQuery, type));
+					var method = handler.GetType().GetMethod("Handle");
+					var result = method.Invoke(handler, new[] {value});
+					return Json(result);
+				}
+				catch (Exception e)
+				{
+					return Json(new ResultDto
+					{
+						Successful = false,
+						Message = e.Message
+					});
+				}
 			}
 		}
-    }
+	}
 }

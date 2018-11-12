@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// Repositories
 			if (QueryAllAttributes<ThrowIfRepositoriesAreUsedAttribute>().Any())
 			{
-				SetupThrowingTestDoublesForRepositories.Execute(isolate);
+				SetupThrowingTestDoubles.ForAllRepositories(isolate);
 			}
 			else
 			{
@@ -280,13 +280,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeExternalPerformanceDataRepository>().For<IExternalPerformanceDataRepository>();
 				isolate.UseTestDouble<FakeTeamGamificationSettingRepository>().For<ITeamGamificationSettingRepository>();
 				isolate.UseTestDouble<FakeAgentBadgeRepository>().For<IAgentBadgeRepository>();
-				isolate.UseTestDouble<SkillIntradayStaffingFactory>().For<SkillIntradayStaffingFactory>();
 				isolate.UseTestDouble<FakePersonScheduleDayReadModelPersister>().For<IPersonScheduleDayReadModelPersister>();
-
 				isolate.UseTestDouble<FakeGamificationSettingRepository>().For<IGamificationSettingRepository>();
 				isolate.UseTestDouble<FakeForecastDayOverrideRepository>().For<IForecastDayOverrideRepository>();
 				isolate.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
-				isolate.UseTestDouble<FakeExtensiveLogRepository>().For<IExtensiveLogRepository>();
 				isolate.UseTestDouble<FakeExtensiveLogRepository>().For<IExtensiveLogRepository>();
 				isolate.UseTestDouble<FakeStaffingAuditRepository>().For<IStaffingAuditRepository>();
 			}

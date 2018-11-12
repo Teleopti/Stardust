@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_config.Toggle(Toggles.RTA_StateQueueFloodPrevention_77710))
 			{
 				builder.RegisterType<StateQueueHealthChecker>().As<IStateQueueHealthChecker>().SingleInstance().ApplyAspects();
-				builder.RegisterType<StateQueueHealthCheckerProcess>().As<IBackgroundProcess>().SingleInstance();
+				builder.RegisterType<StateQueueHealthCheckerProcess>().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 			}
 			else
 			{
@@ -134,6 +134,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<RtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance().ApplyAspects();
 				builder.RegisterType<RtaEventStoreSynchronizerProcess>().AsSelf().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 			}
+
+			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
+				builder.RegisterType<RtaEventStoreSynchronizerWaiter>().As<IRtaEventStoreSynchronizerWaiter>().SingleInstance().ApplyAspects();
+			else
+				builder.RegisterType<EmptyRtaEventStoreSynchronizerWaiter>().As<IRtaEventStoreSynchronizerWaiter>().SingleInstance().ApplyAspects();
 
 			if (_config.Toggle(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485))
 				builder.RegisterType<AgentAdherenceDayLoaderSpeedUpRemoveScheduleDependency>().As<IAgentAdherenceDayLoader>().SingleInstance();

@@ -2,10 +2,6 @@
 	module('Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel');
 
 	test('should get contract time correctly', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
-			return true;
-		};
-
 		var schedules = {
 			MySchedule: {
 				ScheduleLayers: [{}],
@@ -88,9 +84,6 @@
 	});
 
 	test('should get date with format', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			return true;
-		};
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY-MM-DD',
@@ -641,9 +634,6 @@
 	});
 
 	test('should not load team when there is no selected team', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			return true;
-		};
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 		viewModel.dateChanged(false);
 
@@ -689,10 +679,6 @@
 	});
 
 	test('should update time sort order correctly', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			return true;
-		};
-
 		var optionsData = {};
 		var ajax = {
 			Ajax: function(options) {
@@ -911,10 +897,6 @@
 			}
 		};
 
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
-			return true;
-		};
-
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
 		viewModel.requestedDateInternal(moment('2018-07-18'));
 		viewModel.openPeriodEndDate(moment('2018-10-18'));
@@ -1019,10 +1001,6 @@
 					options.success(schedules);
 				}
 			}
-		};
-
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
-			return true;
 		};
 
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
@@ -1131,10 +1109,6 @@
 			}
 		};
 
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
-			return true;
-		};
-
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
 		viewModel.requestedDateInternal(moment('2018-07-18'));
 		viewModel.openPeriodEndDate(moment('2018-10-19'));
@@ -1192,10 +1166,7 @@
 	});
 
 	test('should show period when validate period tolerance', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
-			if (toggleName === 'MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408') return true;
-			return false;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408');
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY-MM-DD',
@@ -1263,10 +1234,8 @@
 	});
 
 	test('should reset showCartPanel after send request', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
-			if (toggleName === 'MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408') return true;
-			return false;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408');
+
 		var ajax = {
 			Ajax: function(options) {
 				if (options.url === 'Requests/ShiftTradeRequest') {
@@ -1292,10 +1261,8 @@
 	});
 
 	test('should show correct tolerance exceed', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
-			if (toggleName === 'MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408') return true;
-			return false;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408');
+
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY-MM-DD',
@@ -1363,10 +1330,8 @@
 	});
 
 	test('should calculate tolerance when real gap have exceed tolerance', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
-			if (toggleName === 'MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408') return true;
-			return false;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408');
+
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY-MM-DD',
@@ -1434,10 +1399,8 @@
 	});
 
 	test('should calculate tolerance for both side at one time', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
-			if (toggleName === 'MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408') return true;
-			return false;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408');
+
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY-MM-DD',
@@ -1505,10 +1468,8 @@
 	});
 
 	test("should not calculate tolerance when there is not diff between two agent' contract time", function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
-			if (toggleName === 'MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408') return true;
-			return false;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408');
+
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY-MM-DD',
@@ -1575,10 +1536,8 @@
 	});
 
 	test('should not show tolerance error when there is no gap between schedules', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
-			if (toggleName === 'MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408') return true;
-			return false;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408');
+
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY-MM-DD',
@@ -1645,10 +1604,7 @@
 	});
 
 	test('should not show error message when there is no schedules', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
-			if (toggleName === 'MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408') return true;
-			return false;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408');
 
 		var agentId = '123';
 		var toleranceInfo = {
@@ -1717,10 +1673,7 @@
 	});
 
 	test('should enable send button when not break tolerance', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
-			if (toggleName === 'MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408') return true;
-			return false;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408');
 
 		var agentId = '123';
 		var toleranceInfo = {
@@ -1789,10 +1742,8 @@
 	});
 
 	test('should not enable send button when has tolerance error message', function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
-			if (toggleName === 'MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408') return true;
-			return false;
-		};
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408');
+
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY-MM-DD',

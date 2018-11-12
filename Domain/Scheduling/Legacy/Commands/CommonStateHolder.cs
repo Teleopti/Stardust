@@ -18,8 +18,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         private readonly List<IActivity> _activities = new List<IActivity>();
         private readonly List<IShiftCategory> _shiftCategories = new List<IShiftCategory>();
         private readonly List<IDayOffTemplate> _dayOffs = new List<IDayOffTemplate>();
-		private readonly List<IWorkflowControlSet> _workflowControlSets = new List<IWorkflowControlSet>();
-		private readonly List<IWorkflowControlSet> _modifiedWorkflowControlSets = new List<IWorkflowControlSet>();
 		private readonly List<IMultiplicatorDefinitionSet> _multiplicatorDefinitionSets = new List<IMultiplicatorDefinitionSet>();
 
 	    public CommonStateHolder(IDisableDeletedFilter disableDeleteFilter)
@@ -33,7 +31,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		    _activities.Clear();
 		    _dayOffs.Clear();
 		    _shiftCategories.Clear();
-		    _workflowControlSets.Clear();
 		    _multiplicatorDefinitionSets.Clear();
 
 		    using (_disableDeleteFilter.Disable())
@@ -44,7 +41,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			    LoadShiftCategory(repositoryFactory.CreateShiftCategoryRepository(unitOfWork));
 			    LoadContracts(repositoryFactory.CreateContractRepository(unitOfWork));
 			    LoadContractSchedules(repositoryFactory.CreateContractScheduleRepository(unitOfWork));
-			    loadWorkflowControlSets(repositoryFactory.CreateWorkflowControlSetRepository(unitOfWork));
 			    loadPartTimePercentage(repositoryFactory.CreatePartTimePercentageRepository(unitOfWork));
 				loadMultiplicatorDefinitionSet(repositoryFactory.CreateMultiplicatorDefinitionSetRepository(unitOfWork));
 		    }
@@ -59,22 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	    {
 			get { return _multiplicatorDefinitionSets; }
 	    }
-
-	    private void loadWorkflowControlSets(IWorkflowControlSetRepository workflowControlSetRepository)
-	    {
-			_workflowControlSets.AddRange(workflowControlSetRepository.LoadAll());   
-	    }
-
-		public ICollection<IWorkflowControlSet> WorkflowControlSets
-	    {
-			get { return _workflowControlSets; }
-	    }
-
-		public ICollection<IWorkflowControlSet> ModifiedWorkflowControlSets
-		{
-			get { return _modifiedWorkflowControlSets; }
-		}
-
+		
         public IEnumerable<IAbsence> Absences
         {
             get { return _absences; }

@@ -16,11 +16,12 @@ namespace Teleopti.Support.Library.Config
 			}
 
 			var webConfigForAuthBridge = authenticationBridgeConfig.Substring(0, authenticationBridgeConfig.IndexOf(','));
-			result.AuthBridgeConfig = webConfigForAuthBridge;
+			var refreshConfigFile = new RefreshConfigFile();
+			result.AuthBridgeConfig = refreshConfigFile.MakePath(webConfigForAuthBridge);
 
-			var directory = Path.GetDirectoryName(webConfigForAuthBridge);
+			var directory = Path.GetDirectoryName(result.AuthBridgeConfig);
 			var claimsPoliciesXml = Path.Combine(directory, "App_Data\\claimsPolicies.xml");
-			result.ClaimPolicies = claimsPoliciesXml;
+			result.ClaimPolicies = refreshConfigFile.MakePath(claimsPoliciesXml);
 
 			var webRootConfigLine = file.FirstOrDefault(f => f.Contains("Web.Root.Web.config"));
 			if (string.IsNullOrEmpty(webRootConfigLine))
@@ -29,7 +30,7 @@ namespace Teleopti.Support.Library.Config
 			}
 
 			var webRootConfig = webRootConfigLine.Substring(0, webRootConfigLine.IndexOf(','));
-			result.WebConfig = webRootConfig;
+			result.WebConfig = refreshConfigFile.MakePath(webRootConfig);
 
 			return result;
 		}

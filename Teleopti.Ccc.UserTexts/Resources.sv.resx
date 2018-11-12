@@ -15832,10 +15832,10 @@ Applikationen kommer nu att stängas. </value>
   <data name="AgentScheduledWithoutPreferences" xml:space="preserve">
     <value>Agenten schemalades utan önskemål</value>
   </data>
-  <data name="PmNextGenViewReport" xml:space="preserve">
+  <data name="ViewInsightsReport" xml:space="preserve">
     <value>Visa rapport</value>
   </data>
-  <data name="PmNextGenEditReport" xml:space="preserve">
+  <data name="EditInsightsReport" xml:space="preserve">
     <value>Ändra rapport</value>
   </data>
   <data name="RestrictionNotAbleToBeScheduledReasonNoRestrictions" xml:space="preserve">
@@ -15868,5 +15868,29 @@ Applikationen kommer nu att stängas. </value>
   </data>
   <data name="FilterTeamSchedulesByTime" xml:space="preserve">
     <value>Filtrera teamscheman på tid</value>
+  </data>
+  <data name="ApproveOrDenyRequest" xml:space="preserve">
+    <value>Godkänn/avslå förfrågan</value>
+  </data>
+  <data name="EditSiteOpenHours" xml:space="preserve">
+    <value>Ändra enhetens öppettider</value>
+  </data>
+  <data name="ReplyRequest" xml:space="preserve">
+    <value>Svara på förfrågan</value>
+  </data>
+  <data name="ShiftsInShiftBagCanNotFulFillOverriddenTargetTime" xml:space="preserve">
+    <value>Den ersatta kontraktstiden kan inte uppnås med skiften i skiftpåsen {0}.</value>
+  </data>
+  <data name="NoPermissionAddDayOff" xml:space="preserve">
+    <value>Rättigheter för att lägga till fridag saknas</value>
+  </data>
+  <data name="NoPermissionRemoveDayOff" xml:space="preserve">
+    <value>Rättigheter för att ta bort fridag saknas</value>
+  </data>
+  <data name="NoPermissionSwapShifts" xml:space="preserve">
+    <value>Rättigheter för att genomföra skiftbyte saknas</value>
+  </data>
+  <data name="NoPermissionToViewSchedules" xml:space="preserve">
+    <value>Rättigheter för att visa scheman saknas</value>
   </data>
 </root>

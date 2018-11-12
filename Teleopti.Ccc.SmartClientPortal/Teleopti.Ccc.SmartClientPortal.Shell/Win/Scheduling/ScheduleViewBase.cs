@@ -30,10 +30,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
-    /// <summary>
-    /// Base view class
-    /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public abstract class ScheduleViewBase : AddScheduleLayers, IScheduleViewBase, IDisposable, IHelpContext
     {
         private readonly GridControl _grid;
@@ -61,6 +57,47 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             _grid = grid;
             grid.HideCols.ResetRange(0, 300);
         }
+
+		public void AddNewLayer(ClipboardItems addType, IEnumerable<IAbsence> commonStateHolderAbsences, IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets)
+		{
+			switch (addType)
+			{
+				case ClipboardItems.Shift:
+					Presenter.AddActivity();
+					break;
+				case ClipboardItems.Overtime:
+					var definitionSets = multiplicatorDefinitionSets.Where(m => m.MultiplicatorType == MultiplicatorType.Overtime);
+					Presenter.AddOvertime(definitionSets.ToList());
+					break;
+				case ClipboardItems.Absence:
+					if (!commonStateHolderAbsences.NonDeleted().Any())
+					{
+						ShowInformationMessage(Resources.NoAbsenceDefined, Resources.NoAbsenceDefinedCaption);
+						return;
+					}
+					Presenter.AddAbsence();
+					break;
+				case ClipboardItems.PersonalShift:
+					Presenter.AddPersonalShift();
+					break;
+			}
+			Presenter.ClipHandlerSchedule.Clear();
+		}
+
+		public void SelectCellFromPersonDate(IPerson person, DateOnly localDate)
+		{
+			Point point = GetCellPositionForAgentDay(person, localDate);
+			if (point.X != -1 && point.Y != -1)
+			{
+				var row = point.Y;
+				var col = point.X;
+				GridRangeInfo info = GridRangeInfo.Cells(row, col, row, col);
+				ViewGrid.Selections.Clear(true);
+				ViewGrid.CurrentCell.Activate(row, col, GridSetCurrentCellOptions.SetFocus);
+				ViewGrid.Selections.ChangeSelection(info, info, true);
+				ViewGrid.CurrentCell.MoveTo(row, col, GridSetCurrentCellOptions.ScrollInView);
+			}
+		}
 
 		public void Sort(IScheduleSortCommand command)
 		{
@@ -199,7 +236,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             CreateCellModels();
 
             Presenter.MergeHeaders();
-            ViewGrid.Model.MergeCells.DelayMergeCells(GridRangeInfo.Table());
+			ViewGrid.Model.MergeCells.DelayMergeCells(GridRangeInfo.Table());
 
             _grid.EndUpdate();
             _grid.Refresh();
@@ -288,14 +325,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         }
 
         /// <summary>
-        /// Get grid
-        /// </summary>
-        public GridControl ViewGrid
-        {
-            get { return _grid; }
-        }
-
-        /// <summary>
         /// CellWidth
         /// </summary>
         protected virtual int CellWidth()
@@ -348,13 +377,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             // Cancel edit
             if (ViewGrid.CurrentCell.IsEditing)
             {
-                ViewGrid.CurrentCell.EndEdit();
+				ViewGrid.CurrentCell.EndEdit();
             }
 
             Presenter.SortColumn(column);
 
-            // Repopulate the grid
-            ViewGrid.Refresh();
+			// Repopulate the grid
+			ViewGrid.Refresh();
         }
 
         /// <summary>
@@ -507,16 +536,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         /// </summary>
         internal virtual void CreateHeaders()
         {
-            ViewGrid.Rows.HeaderCount = 1; //2 row headers, week and date
-            ViewGrid.Cols.HeaderCount = 1;
+			ViewGrid.Rows.HeaderCount = 1; //2 row headers, week and date
+			ViewGrid.Cols.HeaderCount = 1;
 
-            // Reset merge if grid is reused
-            ViewGrid.Model.Options.MergeCellsMode = GridMergeCellsMode.None;
-            // Set merge
-            ViewGrid.Model.Options.MergeCellsMode = GridMergeCellsMode.OnDemandCalculation |
+			// Reset merge if grid is reused
+			ViewGrid.Model.Options.MergeCellsMode = GridMergeCellsMode.None;
+			// Set merge
+			ViewGrid.Model.Options.MergeCellsMode = GridMergeCellsMode.OnDemandCalculation |
                                                     GridMergeCellsMode.MergeColumnsInRow;
-            ViewGrid.Rows.FrozenCount = 1;
-            ViewGrid.Cols.FrozenCount = (int)ColumnType.StartScheduleColumns -1;
+			ViewGrid.Rows.FrozenCount = 1;
+			ViewGrid.Cols.FrozenCount = (int)ColumnType.StartScheduleColumns -1;
         }
 
         /// <summary>
@@ -525,11 +554,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         internal void CreateCellModels()
         {
             if (!ViewGrid.CellModels.ContainsKey("TotalDayOffCell"))
-                ViewGrid.CellModels.Add("TotalDayOffCell", new NumericReadOnlyCellModel(ViewGrid.Model){NumberOfDecimals = 0, MaxValue = 999});
+				ViewGrid.CellModels.Add("TotalDayOffCell", new NumericReadOnlyCellModel(ViewGrid.Model){NumberOfDecimals = 0, MaxValue = 999});
             if (!ViewGrid.CellModels.ContainsKey("TotalTimeCell"))
-                ViewGrid.CellModels.Add("TotalTimeCell", new TimeSpanDurationStaticCellModel(ViewGrid.Model));
+				ViewGrid.CellModels.Add("TotalTimeCell", new TimeSpanDurationStaticCellModel(ViewGrid.Model));
             if (!ViewGrid.CellModels.ContainsKey("RestrictionWeekHeaderViewCellModel"))
-                ViewGrid.Model.CellModels.Add("RestrictionWeekHeaderViewCellModel", new RestrictionWeekHeaderViewCellModel(ViewGrid.Model));
+				ViewGrid.Model.CellModels.Add("RestrictionWeekHeaderViewCellModel", new RestrictionWeekHeaderViewCellModel(ViewGrid.Model));
         }
 
         //return tip for a day header
@@ -993,10 +1022,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         public virtual void SetSelectedDateLocal(DateOnly dateOnly)
         {
             int column = GetColumnForDate(dateOnly);
-            if(TheGrid.CurrentCell.ColIndex != column)
+            if(ViewGrid.CurrentCell.ColIndex != column)
             {
-				TheGrid.CurrentCell.MoveTo(TheGrid.CurrentCell.RowIndex, column);
-            	TheGrid.CurrentCell.ScrollInView(GridScrollCurrentCellReason.MoveTo);
+				ViewGrid.CurrentCell.MoveTo(ViewGrid.CurrentCell.RowIndex, column);
+            	ViewGrid.CurrentCell.ScrollInView(GridScrollCurrentCellReason.MoveTo);
             }  
         }
 
@@ -1227,10 +1256,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             {
                 GridRangeInfo info = GridRangeInfo.Cells(minRow, minCol, maxRow, maxCol);
 
-                TheGrid.Selections.Clear(true);
-                TheGrid.CurrentCell.Activate(minRow, minCol, GridSetCurrentCellOptions.SetFocus);
-                TheGrid.Selections.ChangeSelection(info, info, true);
-                TheGrid.CurrentCell.MoveTo(minRow, minCol, GridSetCurrentCellOptions.ScrollInView);
+                ViewGrid.Selections.Clear(true);
+                ViewGrid.CurrentCell.Activate(minRow, minCol, GridSetCurrentCellOptions.SetFocus);
+                ViewGrid.Selections.ChangeSelection(info, info, true);
+                ViewGrid.CurrentCell.MoveTo(minRow, minCol, GridSetCurrentCellOptions.ScrollInView);
             }
             else
             {
@@ -1240,11 +1269,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
         public virtual void SelectFirstDayInGrid()
         {
-            GridRangeInfo info = GridRangeInfo.Cell(TheGrid.Rows.HeaderCount + 1, (int)ColumnType.StartScheduleColumns);
-            TheGrid.Selections.Clear(true);
-            TheGrid.CurrentCell.Activate(TheGrid.Rows.HeaderCount + 1, (int)ColumnType.StartScheduleColumns, GridSetCurrentCellOptions.SetFocus);
-            TheGrid.Selections.ChangeSelection(info, info, true);
-            TheGrid.CurrentCell.MoveTo(TheGrid.Rows.HeaderCount + 1, (int)ColumnType.StartScheduleColumns);
+            GridRangeInfo info = GridRangeInfo.Cell(ViewGrid.Rows.HeaderCount + 1, (int)ColumnType.StartScheduleColumns);
+            ViewGrid.Selections.Clear(true);
+            ViewGrid.CurrentCell.Activate(ViewGrid.Rows.HeaderCount + 1, (int)ColumnType.StartScheduleColumns, GridSetCurrentCellOptions.SetFocus);
+            ViewGrid.Selections.ChangeSelection(info, info, true);
+            ViewGrid.CurrentCell.MoveTo(ViewGrid.Rows.HeaderCount + 1, (int)ColumnType.StartScheduleColumns);
         }
 
 		public virtual ICollection<DateOnly> AllSelectedDates(IEnumerable<IScheduleDay> selectedSchedules)
@@ -1476,7 +1505,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             get { return _handleBusinessRuleResponse; }
         }
 
-        public GridControl TheGrid
+        public GridControl ViewGrid
         {
             get { return _grid; }
         }

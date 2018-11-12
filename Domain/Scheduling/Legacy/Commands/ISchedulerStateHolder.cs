@@ -45,8 +45,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		CommonNameDescriptionSetting CommonNameDescription { get; }
 
-		int DefaultSegmentLength { get; }
-
 		void SetRequestedScenario(IScenario scenario);
 
 		void FilterPersonsOvertimeAvailability(IEnumerable<IPerson> selectedPersons);
@@ -60,10 +58,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		void LoadSettings(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory);
 
 		void MarkDateToBeRecalculated(DateOnly dateToRecalculate);
-
-		string CommonAgentName(IPerson person);
-
-		string CommonAgentNameScheduleExport(IPerson person);
 
 		IEnumerable<DateOnly> DaysToRecalculate { get; }
 		ShiftTradeRequestStatusCheckerWithSchedule ShiftTradeRequestStatusChecker { get; set; }

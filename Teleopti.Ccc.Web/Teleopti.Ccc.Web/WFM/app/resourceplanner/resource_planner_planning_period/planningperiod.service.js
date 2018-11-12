@@ -33,7 +33,7 @@
 				firstPlanningPeriod: { method: 'POST', params: { planningGroupId: "@planningGroupId", startDate: "@startDate", endDate: "@endDate", schedulePeriodType: "@schedulePeriodType", lengthOfThePeriodType:"@lengthOfThePeriodType" }, url: planningGroupBaseUrl + '/firstplanningperiod' }
 			});
 
-		var service = {
+		return {
 			// PlanningPeriod.Select
 			getPlanningGroupById: planningGroup.get,
 			getPlanningPeriodsForPlanningGroup: planningGroup.getPlanningPeriods,
@@ -53,7 +53,5 @@
 			clearSchedules: planningPeriod.clear,
 			publishPeriod: planningPeriod.publishPeriod
 		};
-
-		return service;
 	}
 })();

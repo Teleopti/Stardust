@@ -20,7 +20,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 {
 	[UseIocForFatClient]
-	[FullPermissions]
 	public class IntraIntervalOptimizationDesktopTest : IntraIntervalOptimizationScenarioTest
 	{
 		public OptimizationDesktopExecuter Target;

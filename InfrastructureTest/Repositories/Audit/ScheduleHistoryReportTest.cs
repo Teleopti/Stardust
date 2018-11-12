@@ -248,7 +248,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		public void ShouldShowTimeInUsersTimeZone()
 		{
 			//changing timezone to -4 GMT
-			regional.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("Pacific SA Standard Time"));
+			regional = new Regional(TimeZoneInfo.FindSystemTimeZoneById("Pacific SA Standard Time"), regional.Culture, regional.UICulture);
+			target = new ScheduleHistoryReport(UnitOfWorkFactory.Current, regional);
 
 			var expected = new ScheduleAuditingReportData
 			{

@@ -10,7 +10,7 @@ using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service
 {
 	[TestFixture]
-	[AnalyticsDatabaseTest]
+	[DatabaseTest]
 	public class DataSourceReaderTest
 	{
 		public IDataSourceReader Reader;

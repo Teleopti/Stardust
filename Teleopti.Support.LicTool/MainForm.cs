@@ -125,7 +125,7 @@ namespace Teleopti.Support.LicTool
 			chkOvertimeRequests.Checked = false;
 			chkBPOExchange.Checked = false;
 			chkChatBot.Checked = false;
-			chkPmNextGen.Checked = false;
+			chkInsights.Checked = false;
 		}
 
 		private void EnterDemoSettings()
@@ -238,7 +238,7 @@ namespace Teleopti.Support.LicTool
 						if (options.Contains("SeatPlanner")) chkSeatPlanner.Checked = true;
 						if (options.Contains("BPOExchange")) chkBPOExchange.Checked = true;
 						if (options.Contains("ChatBot")) chkChatBot.Checked = true;
-						if (options.Contains("PMNextGen")) chkPmNextGen.Checked = true;
+						if (options.Contains("Insights")) chkInsights.Checked = true;
 						
 						//Freemium
 						if (options.Contains("Forecasts")) chkFreemium.Checked = true;
@@ -335,8 +335,8 @@ namespace Teleopti.Support.LicTool
 					elmOptions.AppendChild(xdoc.CreateElement("BPOExchange")).AppendChild(xdoc.CreateTextNode("true"));
 				if (chkChatBot.Checked)
 					elmOptions.AppendChild(xdoc.CreateElement("ChatBot")).AppendChild(xdoc.CreateTextNode("true"));
-				if (chkPmNextGen.Checked)
-					elmOptions.AppendChild(xdoc.CreateElement("PMNextGen")).AppendChild(xdoc.CreateTextNode("true"));
+				if (chkInsights.Checked)
+					elmOptions.AppendChild(xdoc.CreateElement("Insights")).AppendChild(xdoc.CreateTextNode("true"));
 
 				rootNode.AppendChild(elmOptions);
 			}

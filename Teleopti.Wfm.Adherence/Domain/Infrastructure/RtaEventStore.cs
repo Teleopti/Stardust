@@ -233,11 +233,13 @@ ORDER BY [Id]
 			);
 			return new LoadedEvents
 			{
-				MaxId = events.IsNullOrEmpty() ? fromEventId : events.Last().Id,
+				LastId = events.IsNullOrEmpty() ? fromEventId : events.Last().Id,
 				Events = events.Select(e => e.DeserializedEvent).ToArray()
 			};
 		}
 
+		public int ReadLastId() =>
+			_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT MAX([Id]) FROM [rta].[Events] WITH (NOLOCK)").UniqueResult<int>();
 
 		private IEnumerable<IEvent> loadEvents(IQuery query) =>
 			load(query).Select(x => x.DeserializedEvent).ToArray();
@@ -282,9 +284,6 @@ ORDER BY [Id]
 
 		public IEnumerable<IEvent> LoadAllForTest() =>
 			loadEvents(_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT [Type], [Event] FROM [rta].[Events]"));
-
-		public int LoadLastIdForTest() =>
-			_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT MAX([Id]) FROM [rta].[Events] WITH (NOLOCK)").UniqueResult<int>();
 
 		public IEnumerable<string> LoadAllEventTypeIds() => _unitOfWork.Current().Session()
 			.CreateSQLQuery(@"SELECT [Type] FROM [rta].[Events]")

@@ -25,7 +25,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 {
 	[DomainTest]
-	[FullPermissions]
 	[UseIocForFatClient]
 	public class RestrictionsAbleToBeScheduledOutsideSchedulingPeriodTest : SchedulingScenario
 	{

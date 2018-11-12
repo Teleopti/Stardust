@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			var scenarioRepository = new FakeScenarioRepository();
 			scenarioRepository.Has("Default");
 			isolate.UseTestDouble(scenarioRepository).For<IScenarioRepository>();
+			isolate.UseTestDouble<SkillIntradayStaffingFactory>().For<SkillIntradayStaffingFactory>();
 		}
 
 		[Test]

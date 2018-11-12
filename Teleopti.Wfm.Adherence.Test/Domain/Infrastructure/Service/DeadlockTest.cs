@@ -4,11 +4,9 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -20,28 +18,21 @@ using Teleopti.Wfm.Adherence.Test.Domain.Service;
 namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service
 {
 	[TestFixture]
-	[MultiDatabaseTest]
+	[DatabaseTest]
 	[Explicit]
 	[Category("LongRunning")]
-	public class DeadlockTest : IIsolateSystem, IExtendSystem
+	public class DeadlockTest : IIsolateSystem
 	{
 		public Database Database;
 		public AnalyticsDatabase Analytics;
 		public Rta Rta;
 		public ConcurrencyRunner Run;
-		public ICurrentDataSource DataSource;
 		public FakeEventPublisher Publisher;
 		public IKeyValueStorePersister KeyValues;
 		public WithReadModelUnitOfWork WithReadModelUnitOfWork;
 		public WithUnitOfWork UnitOfWork;
-		public RetryingQueueSimulator QueueSimulator;
 		public IPersonRepository Persons;
 		public INow Now;
-		
-		public void Extend(IExtend extend, IocConfiguration configuration)
-		{
-			extend.AddService<RetryingQueueSimulator>();
-		}
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -95,10 +86,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service
 
 		private void triggerExternalLogonAndAgentStatePrepareByPersonAssociation()
 		{
-			WithReadModelUnitOfWork.Do(() =>
-			{
-				KeyValues.Update("PersonAssociationChangedPublishTrigger", true);
-			});
+			WithReadModelUnitOfWork.Do(() => { KeyValues.Update("PersonAssociationChangedPublishTrigger", true); });
 		}
 
 		private void triggerScheduleChanges()
@@ -155,10 +143,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service
 			var stateCodes = createStateCodes();
 			var users = createUsers(500);
 
-			Run.InParallel(() =>
-			{
-				sendBatches(10000, 500, users, stateCodes);
-			});
+			Run.InParallel(() => { sendBatches(10000, 500, users, stateCodes); });
 
 			Run.Wait();
 		}
@@ -171,10 +156,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service
 			var users = createUsers(500);
 			createCrossMappedUsers(500);
 
-			Run.InParallel(() =>
-			{
-				sendBatches(10000, 500, users, stateCodes);
-			});
+			Run.InParallel(() => { sendBatches(10000, 500, users, stateCodes); });
 
 			Run.Wait();
 		}
@@ -248,15 +230,19 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service
 		[Test]
 		public void ShouldNotDeadlockThisMess1() =>
 			shouldNotDeadlockThisMess();
+
 		[Test]
 		public void ShouldNotDeadlockThisMess2() =>
 			shouldNotDeadlockThisMess();
+
 		[Test]
 		public void ShouldNotDeadlockThisMess3() =>
 			shouldNotDeadlockThisMess();
+
 		[Test]
 		public void ShouldNotDeadlockThisMess4() =>
 			shouldNotDeadlockThisMess();
+
 		[Test]
 		public void ShouldNotDeadlockThisMess5() =>
 			shouldNotDeadlockThisMess();

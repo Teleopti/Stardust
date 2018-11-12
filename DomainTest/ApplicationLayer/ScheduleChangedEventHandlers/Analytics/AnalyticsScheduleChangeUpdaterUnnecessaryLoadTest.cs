@@ -65,8 +65,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 		public void Isolate(IIsolate isolate)
 		{
-			SetupThrowingTestDoublesForRepositories.Execute(isolate, typeof(INoteRepository));
-			SetupThrowingTestDoublesForRepositories.Execute(isolate, typeof(IPublicNoteRepository));
+			SetupThrowingTestDoubles.For(isolate, typeof(INoteRepository));
+			SetupThrowingTestDoubles.For(isolate, typeof(IPublicNoteRepository));
 		}
 	}
 }

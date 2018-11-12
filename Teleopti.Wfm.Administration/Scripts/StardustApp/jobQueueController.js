@@ -81,8 +81,17 @@
 					if (xhr !== "") {
 						vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
 					}
+					cancelPollingAndShowExpiredDialog();
 				});
 
+		}
+
+		function cancelPollingAndShowExpiredDialog() {
+			if (refreshPromise !== null) {
+				$interval.cancel(refreshPromise);
+				refreshPromise = null;
+				window.alert("Your session has expired, please login again");
+			}
 		}
 
 		function getNewFreshData() {

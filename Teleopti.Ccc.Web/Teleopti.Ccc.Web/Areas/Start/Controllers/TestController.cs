@@ -26,6 +26,7 @@ using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Wfm.Adherence.Domain.Events;
 using ClaimTypes = System.IdentityModel.Claims.ClaimTypes;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IPhysicalApplicationPath _physicalApplicationPath;
 		private readonly IFindPersonInfo _findPersonInfo;
 		private readonly HangfireUtilities _hangfire;
+		private readonly IRtaEventStoreSynchronizerWaiter _synchronizerWaiter;
 		private readonly RecurringEventPublishings _recurringEventPublishings;
 		private readonly SystemVersion _version;
 
@@ -64,6 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			IPhysicalApplicationPath physicalApplicationPath,
 			IFindPersonInfo findPersonInfo,
 			HangfireUtilities hangfire,
+			IRtaEventStoreSynchronizerWaiter synchronizerWaiter,
 			RecurringEventPublishings recurringEventPublishings,
 			SystemVersion version)
 		{
@@ -81,6 +84,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_physicalApplicationPath = physicalApplicationPath;
 			_findPersonInfo = findPersonInfo;
 			_hangfire = hangfire;
+			_synchronizerWaiter = synchronizerWaiter;
 			_recurringEventPublishings = recurringEventPublishings;
 			_version = version;
 		}
@@ -267,7 +271,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			});
 
 			if (waitForQueue)
+			{
 				_hangfire.WaitForQueue();
+				_synchronizerWaiter.WaitForSynchronizeAllTenants(TimeSpan.FromSeconds(20));
+			}
 		}
 	}
 }

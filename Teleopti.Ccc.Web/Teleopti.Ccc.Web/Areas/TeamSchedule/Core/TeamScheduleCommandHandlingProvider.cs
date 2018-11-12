@@ -28,13 +28,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IActivityRepository _activityRepository;
 		private readonly IChangeActivityTypeFormValidator _changeActivityTypeFormValidator;
-		private readonly IDictionary<string, string> _permissionDic = new Dictionary<string, string>
+		private readonly IDictionary<string, Func<string>> _permissionDic = new Dictionary<string, Func<string>>
 		{
-			{DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, Resources.YouDoNotHavePermissionsToViewTeamSchedules},
-			{DefinedRaptorApplicationFunctionPaths.RemoveAbsence, Resources.NoPermissionRemoveAgentAbsence},
-			{ DefinedRaptorApplicationFunctionPaths.EditShiftCategory, Resources.NoPermissionToEditShiftCategory },
-			{ DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity, Resources.NoPermissionToMoveInvalidOverlappedActivity },
-			{ DefinedRaptorApplicationFunctionPaths.RemoveShift, Resources.NoPermissionRemovingShift }
+			{DefinedRaptorApplicationFunctionPaths.RemoveAbsence,()=> Resources.NoPermissionRemoveAgentAbsence},
+			{ DefinedRaptorApplicationFunctionPaths.EditShiftCategory,()=> Resources.NoPermissionToEditShiftCategory },
+			{ DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity,()=> Resources.NoPermissionToMoveInvalidOverlappedActivity },
+			{ DefinedRaptorApplicationFunctionPaths.RemoveShift,()=> Resources.NoPermissionRemovingShift },
+			{ DefinedRaptorApplicationFunctionPaths.AddDayOff, ()=>Resources.NoPermissionAddDayOff },
+			{ DefinedRaptorApplicationFunctionPaths.RemoveDayOff, ()=>Resources.NoPermissionRemoveDayOff }
 		};
 
 		public TeamScheduleCommandHandlingProvider(
@@ -75,14 +76,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				var absenceDateGroups = selectedPersonAbsence.AbsenceDates.GroupBy(absenceDate => absenceDate.Date, absenceDate => absenceDate.PersonAbsenceId);
 				var person = people[selectedPersonAbsence.PersonId];
 
-
-
 				foreach (var absenceGroup in absenceDateGroups)
 				{
 					var actionResult = new ActionResult(selectedPersonAbsence.PersonId);
 					var date = absenceGroup.Key;
 					var loadOptions = new ScheduleDictionaryLoadOptions(false, false);
-					var period = new DateOnlyPeriod(date.AddDays(-1), date); 
+					var period = new DateOnlyPeriod(date.AddDays(-1), date);
 					var currentScenario = _currentScenario.Current();
 					var dictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, loadOptions, period, currentScenario);
 					var scheduleRange = dictionary?[person];
@@ -273,7 +272,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			foreach (var person in people)
 			{
 				var actionResult = new ActionResult(person.Id.GetValueOrDefault());
-				if (checkFunctionPermission(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, input.StartDate, person, actionResult.ErrorMessages))
+				if (checkFunctionPermission(DefinedRaptorApplicationFunctionPaths.AddDayOff, input.StartDate, person, actionResult.ErrorMessages))
 				{
 					var command = new AddDayOffCommand
 					{
@@ -314,7 +313,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			foreach (var person in people)
 			{
 				var actionResult = new ActionResult(person.Id.Value);
-				if (checkFunctionPermission(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, input.Date, person, actionResult.ErrorMessages))
+				if (checkFunctionPermission(DefinedRaptorApplicationFunctionPaths.RemoveDayOff, input.Date, person, actionResult.ErrorMessages))
 				{
 					var command = new RemoveDayOffCommand
 					{
@@ -377,7 +376,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		public IList<ActionResult> ChangeActivityType(ChangeActivityTypeFormData input)
 		{
 			var result = new List<ActionResult>();
-			
+
 			var validateResult = _changeActivityTypeFormValidator.Validate(input);
 
 			if (!validateResult.IsValid)
@@ -429,7 +428,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			}
 			if (!_permissionProvider.HasPersonPermission(path, date, agent))
 			{
-				newMessages.Add(_permissionDic[path]);
+				newMessages.Add(_permissionDic[path]());
 			}
 			if (!_permissionProvider.IsPersonSchedulePublished(date, agent) &&
 				!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, date,

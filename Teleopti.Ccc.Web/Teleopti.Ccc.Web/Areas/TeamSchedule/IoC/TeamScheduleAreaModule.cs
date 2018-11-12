@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.IoC
 			builder.RegisterType<ExportScheduleService>().SingleInstance();
 			
 			builder.RegisterType<ChangeActivityTypeFormValidator>().As<IChangeActivityTypeFormValidator>().SingleInstance();
-			builder.RegisterType<ReplaceLayerInSchedule>().As<IReplaceLayerInSchedule>().SingleInstance();
 		}
 	}
 }

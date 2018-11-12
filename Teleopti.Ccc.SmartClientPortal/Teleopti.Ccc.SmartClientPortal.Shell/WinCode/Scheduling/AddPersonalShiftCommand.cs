@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 			if (!VerifySelectedSchedule(filteredScheduleParts)) return;
 
-			var fallbackDefaultHours = new SetupDateTimePeriodDefaultLocalHoursForActivities(filteredScheduleParts[0], new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()));
+			var fallbackDefaultHours = new SetupDateTimePeriodDefaultLocalHoursForActivities(filteredScheduleParts[0], UserTimeZone.Make());
 			var periodFromSchedules = new SetupDateTimePeriodToSelectedSchedule(filteredScheduleParts[0], fallbackDefaultHours);
             ISetupDateTimePeriod periodSetup = new SetupDateTimePeriodToDefaultPeriod(DefaultPeriod, periodFromSchedules);
 

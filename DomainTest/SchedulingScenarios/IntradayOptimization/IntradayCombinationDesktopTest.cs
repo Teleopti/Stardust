@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[DomainTest]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	[FullPermissions]
 	[UseIocForFatClient]
 	public class IntradayCombinationDesktopTest : IntradayOptimizationScenarioTest
 	{

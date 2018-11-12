@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				var period = person.PersonPeriods(range).FirstOrDefault();
 				var contract = period?.PersonContract.Contract;
 
-				if (period == null || contract == null || ((IDeleteTag)contract).IsDeleted|| period.RuleSetBag == null || ((IDeleteTag)period.RuleSetBag).IsDeleted)
+				if (period == null || contract == null || ((IDeleteTag)contract).IsDeleted|| contract.EmploymentType == EmploymentType.HourlyStaff || period.RuleSetBag == null || ((IDeleteTag)period.RuleSetBag).IsDeleted)
 				{
 					continue;
 				}

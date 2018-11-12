@@ -48,7 +48,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure
 				});
 
 			using (DataSourceScope.OnThisThreadUse(dataSource))
-				Assert.DoesNotThrow(() => { Synchronizer.Synchronize(); });
+				Assert.DoesNotThrow(() => { Synchronizer.SynchronizeOnTrigger(); });
 		}
 		
 		[Test]
@@ -74,7 +74,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure
 					Adherence = EventAdherence.In
 				});
 				
-				Synchronizer.Synchronize();
+				Synchronizer.SynchronizeOnTrigger();
 			}						
 			Now.Is("2018-09-11 08:00");			
 			Context.Login();

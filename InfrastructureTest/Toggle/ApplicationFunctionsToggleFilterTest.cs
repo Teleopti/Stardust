@@ -76,9 +76,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		[TestCase(DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailWebReport)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.Gamification)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.ChatBot)]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.PmNextGen)]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.PmNextGenViewReport)]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.PmNextGenEditReport)]
+		[TestCase(DefinedRaptorApplicationFunctionPaths.Insights)]
+		[TestCase(DefinedRaptorApplicationFunctionPaths.ViewInsightsReport)]
+		[TestCase(DefinedRaptorApplicationFunctionPaths.EditInsightsReport)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.GeneralAuditTrailWebReport)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.WebApproveOrDenyRequest)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.WebReplyRequest)]
@@ -109,9 +109,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		[Test]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.BpoExchange)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.ChatBot)]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.PmNextGen)]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.PmNextGenViewReport)]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.PmNextGenEditReport)]
+		[TestCase(DefinedRaptorApplicationFunctionPaths.Insights)]
+		[TestCase(DefinedRaptorApplicationFunctionPaths.ViewInsightsReport)]
+		[TestCase(DefinedRaptorApplicationFunctionPaths.EditInsightsReport)]
 		public void ShouldHideApplicationFunctionWithoutLicenseOption(string applicationFunctionPath)
 		{
 			var toggleManager = new TrueToggleManager();

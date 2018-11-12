@@ -25,7 +25,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
 	[DomainTest]
-	[FullPermissions]
 	public class SwapAndModifyServiceNewByFakeTest : IIsolateSystem, IExtendSystem
 	{
 		public SwapAndModifyServiceNew Target;

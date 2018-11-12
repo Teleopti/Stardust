@@ -278,7 +278,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			return log;
 		}
 
-
 		[HttpGet, Route("api/RtaTestData/SynchStuff")]
 		public virtual HttpResponseMessage SynchStuff()
 		{
@@ -286,7 +285,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			var timer = new Stopwatch();
 			log.AppendLine("Starting Synch");
 			timer.Start();
-			_synchronizer.Synchronize();
+			_synchronizer.SynchronizeNow();
 			timer.Stop();
 			log.AppendLine($"Elapsed time: {timer.Elapsed}");
 

@@ -10,7 +10,7 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 	{
 		protected override void BeforeTest()
 		{
-			InfrastructureTestStuff.BeforeWithLogon();
+			InfrastructureTestSetup.BeforeWithLogon();
 			base.BeforeTest();
 			Resolve<IEnumerable<IAspect>>()
 				.OfType<IReadModelUnitOfWorkAspect>()
@@ -25,7 +25,7 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 				.OfType<IReadModelUnitOfWorkAspect>()
 				.Single()
 				.OnAfterInvocation(null, null);
-			InfrastructureTestStuff.AfterWithLogon();
+			InfrastructureTestSetup.AfterWithLogon();
 		}
 	}
 }

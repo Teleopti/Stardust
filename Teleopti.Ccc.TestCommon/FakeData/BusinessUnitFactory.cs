@@ -9,19 +9,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	{
 		private const string businessUnitUsedInTest = "Business unit used in test";
 		
-		private static Lazy<IBusinessUnit> _businessUnitUsedInTest = new Lazy<IBusinessUnit>(() =>
-		{
-			Console.WriteLine("FIRST");
-			return CreateSimpleBusinessUnit(businessUnitUsedInTest).WithId();
-		});
+		private static Lazy<IBusinessUnit> _businessUnitUsedInTest = new Lazy<IBusinessUnit>(() => CreateSimpleBusinessUnit(businessUnitUsedInTest).WithId());
 
 		public static void CreateNewBusinessUnitUsedInTest()
 		{
-			_businessUnitUsedInTest = new Lazy<IBusinessUnit>(() =>
-			{
-				Console.WriteLine("SECOND");
-				return CreateSimpleBusinessUnit(businessUnitUsedInTest).WithId();
-			});
+			_businessUnitUsedInTest = new Lazy<IBusinessUnit>(() => CreateSimpleBusinessUnit(businessUnitUsedInTest).WithId());
 		}
 
 		public static IBusinessUnit BusinessUnitUsedInTest

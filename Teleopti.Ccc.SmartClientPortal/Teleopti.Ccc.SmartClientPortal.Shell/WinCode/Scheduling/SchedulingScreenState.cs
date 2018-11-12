@@ -9,9 +9,12 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Specification;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
@@ -24,23 +27,38 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 	 */
 	public class SchedulingScreenState
 	{
-		public SchedulingScreenState(ISchedulerStateHolder schedulerStateHolder)
+		private readonly IDisableDeletedFilter _disableDeletedFilter;
+
+		public SchedulingScreenState(IDisableDeletedFilter disableDeletedFilter, ISchedulerStateHolder schedulerStateHolder)
 		{
+			_disableDeletedFilter = disableDeletedFilter;
 			SchedulerStateHolder = schedulerStateHolder;
 		}
 
 		//add more stuff from "domain stateholder" here
-		public void Fill(IEnumerable<IScheduleTag> scheduleTags)
+		public void Fill(IUnitOfWork uow)
 		{
-			ScheduleTags = scheduleTags;
+			using (_disableDeletedFilter.Disable())
+			{
+				var scheduleTags = new ScheduleTagRepository(uow).LoadAll().OrderBy(t => t.Description).ToList();
+				scheduleTags.Insert(0, NullScheduleTag.Instance);
+				ScheduleTags = scheduleTags;
+
+				var globalSettingDataRepository = new GlobalSettingDataRepository(uow);
+				CommonNameDescriptionScheduleExport = globalSettingDataRepository.FindValueByKey(CommonNameDescriptionSettingScheduleExport.Key, new CommonNameDescriptionSettingScheduleExport());
+				DefaultSegmentLength = globalSettingDataRepository.FindValueByKey("DefaultSegment", new DefaultSegment()).SegmentLength;
+				WorkflowControlSets = new WorkflowControlSetRepository(uow).LoadAll();
+			}
+
+			ModifiedWorkflowControlSets = new List<IWorkflowControlSet>();
 		}
 		
 		public ISchedulerStateHolder SchedulerStateHolder { get; }
 		public IEnumerable<IScheduleTag> ScheduleTags { get; private set; }
-		
-		
-		
-		
+		public CommonNameDescriptionSettingScheduleExport CommonNameDescriptionScheduleExport { get; private set; }
+		public IEnumerable<IWorkflowControlSet> WorkflowControlSets { get; private set; }
+		public ICollection<IWorkflowControlSet> ModifiedWorkflowControlSets { get; private set; }
+		public int DefaultSegmentLength { get; private set; }
 		
 		
 		

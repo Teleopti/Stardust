@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Teleopti.Ccc.DBManager</RootNamespace>
     <AssemblyName>DBManager</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ManifestCertificateThumbprint>57F54CEBF5302376792A510E275B5FDE4E7E2495</ManifestCertificateThumbprint>
     <ManifestKeyFile>Teleopti.Ccc.DBManager_TemporaryKey.pfx</ManifestKeyFile>

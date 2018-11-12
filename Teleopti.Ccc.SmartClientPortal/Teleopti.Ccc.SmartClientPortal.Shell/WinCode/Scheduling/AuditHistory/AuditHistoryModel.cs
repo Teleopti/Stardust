@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -126,7 +127,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory
 
 	            var historicalDay = _currentScheduleDay.ReFetch();
                 _auditHistoryScheduleDayCreator.Apply(historicalDay, result);
-                var changedOnLocal = TimeZoneHelper.ConvertFromUtc(revision.ModifiedAt, TimeZoneHelper.CurrentSessionTimeZone);
+                var changedOnLocal = TimeZoneHelper.ConvertFromUtc(revision.ModifiedAt, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
                 var row = new RevisionDisplayRow{ScheduleDay = historicalDay, Name = revision.ModifiedBy.Name.ToString(), ChangedOn = changedOnLocal};
                 retList.Add(row);
             }

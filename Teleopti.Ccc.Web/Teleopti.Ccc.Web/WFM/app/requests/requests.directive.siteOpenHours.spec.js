@@ -4,7 +4,8 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 		$rootScope;
 
 	var requestsNotificationService,
-		requestsDataService;
+		requestsDataService,
+		requestsPermissions;
 
 	beforeEach(function () {
 		module('wfm.templates');
@@ -12,6 +13,7 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 
 		requestsNotificationService = new FakeRequestsNotificationService();
 		requestsDataService = new FakeRequestsDataService();
+		requestsPermissions = new FakeRequestsPermissions();
 
 		module(function ($provide) {
 			$provide.service('requestsNotificationService', function () {
@@ -19,6 +21,9 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 			});
 			$provide.service('requestsDataService', function () {
 				return requestsDataService;
+			});
+			$provide.service('requestsPermissions', function () {
+				return requestsPermissions;
 			});
 			$provide.service('workingHoursPickerDirective', function () {
 				return null;
@@ -198,6 +203,7 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 	});
 
 	function setUpTarget() {
+		requestsPermissions.set({ HasEditSiteOpenHoursPermission: true });
 		var targetScope = $rootScope.$new();
 		var targetElem = $compile('<requests-site-open-hours></requests-site-open-hours>')(targetScope);
 		targetScope.$digest();
@@ -235,6 +241,18 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 		}
 		this.getDataBeforeSend = function () {
 			return _dataBeforeSend;
+		}
+	}
+
+	function FakeRequestsPermissions() {
+		var permissions;
+
+		this.set = function setPermissions(data) {
+			permissions = data;
+		}
+
+		this.all = function getPermissions() {
+			return permissions;
 		}
 	}
 });

@@ -3,7 +3,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { downgradeComponent as ngDowngradeComponent, downgradeModule } from '@angular/upgrade/static';
 import { IRootScopeService } from 'angular';
 import { IStateProvider, IUrlRouterProvider } from 'angular-ui-router';
-import { apiAccessComponents } from './app/api-access/api-access.module';
+import { apiAccessComponents, apiAccessRouterConfig } from './app/api-access/api-access.module';
 import { appComponents, AppModule } from './app/app.module';
 import { authenticationComponents } from './app/authentication/authentication.module';
 import { menuComponents } from './app/menu/menu.module';
@@ -11,7 +11,7 @@ import { navigationComponents } from './app/navigation/navigation.module';
 import { reportsComponents } from './app/reports/reports.module';
 import { WorkspaceComponent } from './app/pm/components';
 import { peopleComponents, peopleRouterConfig } from './app/people/people.module';
-import { pmComponents, pmRouterConfig } from './app/pm/pm.module';
+import { insightsComponents, insightsRouterConfig } from './app/insights/insights.module';
 import { sharedComponents } from './app/shared/shared.module';
 import { environment } from './environments/environment';
 import { MainController } from './main.controller';
@@ -39,7 +39,6 @@ const wfm = angular.module('wfm', [
 	'wfm.http',
 	'wfm.exceptionHandler',
 	'wfm.permissions',
-	'wfm.apiaccess',
 	'wfm.peopleold',
 	'wfm.outbound',
 	'wfm.forecasting',
@@ -76,8 +75,7 @@ const wfm = angular.module('wfm', [
 	'wfm.skillGroup',
 	'wfm.popup',
 	'wfm.gamification',
-	'wfm.btnGroup',
-	'wfm.ai'
+	'wfm.btnGroup'
 ]);
 
 wfm.controller('MainController', MainController);
@@ -106,7 +104,7 @@ downgradeHelper(authenticationComponents);
 downgradeHelper(apiAccessComponents);
 downgradeHelper(appComponents);
 downgradeHelper(menuComponents);
-downgradeHelper(pmComponents);
+downgradeHelper(insightsComponents);
 
 /**
  * Use this if your module is purely Angular and you want mount some routes
@@ -116,7 +114,8 @@ const routerHelper = (routerConfig: RouterConfigFunction) => {
 };
 
 routerHelper(peopleRouterConfig);
-routerHelper(pmRouterConfig);
+routerHelper(insightsRouterConfig);
+routerHelper(apiAccessRouterConfig);
 
 wfm.config([
 	'$stateProvider',
@@ -153,7 +152,7 @@ wfm.config([
 		$mdGestureProvider.skipClickHijack();
 
 		tmhDynamicLocaleProvider.localeLocationPattern('dist/angular-i18n/angular-locale_{{locale}}.js');
-		//	tmhDynamicLocaleProvider.defaultLocale("en-gb");  -- causes problems with unit tests due to reinit of scope
+		// tmhDynamicLocaleProvider.defaultLocale("en-gb");  -- causes problems with unit tests due to reinit of scope
 	}
 ]);
 

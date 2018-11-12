@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows
@@ -47,12 +48,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows
         /// Created by: micke
         /// Created date: 2009-03-21
         /// </remarks>
-        public virtual TimeZoneInfo TimeZoneInfo
-        {
-            get { return StateHolderReader.Instance.StateReader.UserTimeZone; }
-        }
+        public virtual TimeZoneInfo TimeZoneInfo => TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 
-        /// <summary>
+		/// <summary>
         /// Gets the grid.
         /// </summary>
         /// <value>The grid.</value>
@@ -60,14 +58,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows
         /// Created by: robink
         /// Created date: 2008-03-26
         /// </remarks>
-        public ITeleoptiGridControl Grid
-        {
-            get {
-                return _grid.Target as ITeleoptiGridControl;
-            }
-        }
+        public ITeleoptiGridControl Grid => _grid.Target as ITeleoptiGridControl;
 
-        /// <summary>
+		/// <summary>
         /// Gets the length of the interval.
         /// </summary>
         /// <value>The length of the interval.</value>
@@ -105,12 +98,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows
         /// Created by: robink
         /// Created date: 2008-03-26
         /// </remarks>
-        public IList<TSource> DataSource
-        {
-            get { return _dataSource; }
-        }
+        public IList<TSource> DataSource => _dataSource;
 
-        /// <summary>
+		/// <summary>
         /// Sets the data source.
         /// </summary>
         /// <param name="dataSource">The data source.</param>
@@ -147,9 +137,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows
         /// Created by: robink
         /// Created date: 2008-03-26
         /// </remarks>
-        public IList<TRow> Rows
-        {
-            get { return _rows; }
-        }
-    }
+        public IList<TRow> Rows => _rows;
+	}
 }

@@ -52,7 +52,7 @@
 			this.chkPerformanceManager = new System.Windows.Forms.CheckBox();
 			this.chkPayrollIntegration = new System.Windows.Forms.CheckBox();
 			this.grpBoxModules = new System.Windows.Forms.GroupBox();
-			this.chkPmNextGen = new System.Windows.Forms.CheckBox();
+			this.chkInsights = new System.Windows.Forms.CheckBox();
 			this.chkChatBot = new System.Windows.Forms.CheckBox();
 			this.chkBPOExchange = new System.Windows.Forms.CheckBox();
 			this.chkVNextPilot = new System.Windows.Forms.CheckBox();
@@ -339,7 +339,7 @@
 			// 
 			// grpBoxModules
 			// 
-			this.grpBoxModules.Controls.Add(this.chkPmNextGen);
+			this.grpBoxModules.Controls.Add(this.chkInsights);
 			this.grpBoxModules.Controls.Add(this.chkChatBot);
 			this.grpBoxModules.Controls.Add(this.chkBPOExchange);
 			this.grpBoxModules.Controls.Add(this.chkVNextPilot);
@@ -366,15 +366,15 @@
 			this.grpBoxModules.TabStop = false;
 			this.grpBoxModules.Text = "Teleopti WFM options";
 			// 
-			// chkPmNextGen
+			// chkInsights
 			// 
-			this.chkPmNextGen.AutoSize = true;
-			this.chkPmNextGen.Location = new System.Drawing.Point(6, 423);
-			this.chkPmNextGen.Name = "chkPmNextGen";
-			this.chkPmNextGen.Size = new System.Drawing.Size(90, 17);
-			this.chkPmNextGen.TabIndex = 45;
-			this.chkPmNextGen.Text = "PM Next Gen";
-			this.chkPmNextGen.UseVisualStyleBackColor = true;
+			this.chkInsights.AutoSize = true;
+			this.chkInsights.Location = new System.Drawing.Point(6, 423);
+			this.chkInsights.Name = "chkInsights";
+			this.chkInsights.Size = new System.Drawing.Size(62, 17);
+			this.chkInsights.TabIndex = 45;
+			this.chkInsights.Text = "Insights";
+			this.chkInsights.UseVisualStyleBackColor = true;
 			// 
 			// chkChatBot
 			// 
@@ -881,7 +881,7 @@
 		private System.Windows.Forms.CheckBox chkPerpetual;
 		private System.Windows.Forms.CheckBox chkBPOExchange;
 		private System.Windows.Forms.CheckBox chkChatBot;
-		private System.Windows.Forms.CheckBox chkPmNextGen;
+		private System.Windows.Forms.CheckBox chkInsights;
 	}
 }
 

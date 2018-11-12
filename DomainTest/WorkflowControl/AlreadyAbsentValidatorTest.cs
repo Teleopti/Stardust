@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			{
 				((ScheduleDictionaryForTest)schedulePart.Owner).AddTestItem(person, range);
 				
-				Assert.False(target.IsSatisfiedBy(new AbsenceRequstAndSchedules {AbsenceRequest = absenceRequest, SchedulingResultStateHolder = stateHolder }));
+				Assert.False(target.IsSatisfiedBy(new AbsenceRequstAndSchedules(absenceRequest, stateHolder, new BudgetGroupState())));
 			}
         }
 
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			{
 				((ScheduleDictionaryForTest)schedulePart.Owner).AddTestItem(person,range);
 				
-				Assert.True(target.IsSatisfiedBy(new AbsenceRequstAndSchedules {AbsenceRequest = absenceRequest, SchedulingResultStateHolder = stateHolder}));
+				Assert.True(target.IsSatisfiedBy(new AbsenceRequstAndSchedules(absenceRequest, stateHolder, new BudgetGroupState())));
 			}
 		}
     }

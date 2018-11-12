@@ -15,10 +15,16 @@
 	self.textColor = ko.observable();
 	self.summaryName = ko.observable();
 	self.summaryTime = ko.observable();
-	self.showTrafficLight = ko.observable(
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_TrafficLightOnMobileDayView_77447')
-	);
+
+	self.showTrafficLight = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_TrafficLightOnMobileDayView_77447');
 	self.trafficLightColor = ko.observable('');
+	self.trafficLightIconClass = ko.observable('');
+	self.showOldTrafficLightIconOnMobile = ko.observable(false);
+	self.showNewTrafficLightIconOnMobile = ko.observable(false);
+	self.newTrafficLightIconEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled(
+		'MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640'
+	);
+
 	self.trafficLightTooltip = ko.observable('');
 	self.dayOfWeek = ko.observable();
 	self.isFullDayAbsence = false;
@@ -74,7 +80,6 @@
 	self.openHourPeriod = null;
 	self.isLoading = ko.observable(false);
 	self.mobileMonthUrl = '#Schedule/MobileMonth/' + Teleopti.MyTimeWeb.Portal.ParseHash().dateHash;
-
 	self.navigateToMonthView = function() {
 		Teleopti.MyTimeWeb.Portal.NavigateTo('Schedule/MobileMonth');
 	};
@@ -100,8 +105,6 @@
 		self.textColor(Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.summaryColor()));
 		self.summaryName(data.Schedule.Summary.Title);
 		self.summaryTime(data.Schedule.Summary.TimeSpan);
-		self.trafficLightColor(getTrafficLightColor(data.Schedule.ProbabilityClass));
-		self.trafficLightTooltip(buildTrafficLightTooltip(data.Schedule.ProbabilityText));
 		self.isDayOff = data.Schedule.IsDayOff;
 		self.isFullDayAbsence = data.Schedule.IsFullDayAbsence;
 		self.periods = data.Schedule.Periods;
@@ -198,6 +201,23 @@
 		)
 			self.reloadProbabilityData(forceReloadProbabilityData);
 
+		if (self.newTrafficLightIconEnabled) {
+			self.trafficLightIconClass(getTrafficLightIconClass(data.Schedule.ProbabilityClass));
+		} else {
+			self.trafficLightColor(getTrafficLightColor(data.Schedule.ProbabilityClass));
+		}
+
+		self.trafficLightTooltip(buildTrafficLightTooltip(data.Schedule.ProbabilityText));
+		self.showOldTrafficLightIconOnMobile(
+			self.showTrafficLight && !self.newTrafficLightIconEnabled && self.trafficLightColor().length > 0
+		);
+		self.showNewTrafficLightIconOnMobile(
+			self.showTrafficLight &&
+				self.newTrafficLightIconEnabled &&
+				self.absenceRequestPermission() &&
+				self.trafficLightIconClass().length > 0
+		);
+
 		setPostShiftTradeMenuVisibility(data);
 		self.currentUserDate(getCurrentUserDate());
 		self.daylightSavingTimeAdjustment = data.DaylightSavingTimeAdjustment;
@@ -255,6 +275,22 @@
 		}
 	}
 
+	function getTrafficLightIconClass(probability) {
+		switch (probability) {
+			case 'poor': {
+				return 'traffic-light-progress-poor';
+			}
+			case 'fair': {
+				return 'traffic-light-progress-fair';
+			}
+			case 'good': {
+				return 'traffic-light-progress-good';
+			}
+			default:
+				return '';
+		}
+	}
+
 	function buildTrafficLightTooltip(text) {
 		var userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
 		return userTexts.ChanceOfGettingAbsenceRequestGranted + text;
@@ -292,18 +328,20 @@
 	};
 
 	function setStaffingProbabilityToggleStates(data) {
-		self.staffingProbabilityOnMobileEnabled(data.ViewPossibilityPermission);
+		self.staffingProbabilityOnMobileEnabled(!!data.ViewPossibilityPermission);
 
 		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('Staffing_Info_Configuration_44687')) {
 			self.absenceProbabilityEnabled(
-				self.staffingProbabilityOnMobileEnabled() &&
-					data.CheckStaffingByIntraday &&
-					data.AbsenceProbabilityEnabled
+				!!data.CheckStaffingByIntraday &&
+					!!data.AbsenceProbabilityEnabled &&
+					self.staffingProbabilityOnMobileEnabled()
 			);
-			self.overtimeProbabilityEnabled(data.OvertimeProbabilityEnabled);
+			self.overtimeProbabilityEnabled(
+				!!data.OvertimeProbabilityEnabled && self.staffingProbabilityOnMobileEnabled()
+			);
 		} else {
-			self.overtimeProbabilityEnabled(true);
-			self.absenceProbabilityEnabled(self.staffingProbabilityOnMobileEnabled() && data.CheckStaffingByIntraday);
+			self.overtimeProbabilityEnabled(false);
+			self.absenceProbabilityEnabled(false);
 		}
 
 		if (
@@ -320,10 +358,6 @@
 			resetProbabilityOption();
 		}
 
-		if (!self.absenceProbabilityEnabled() && !self.overtimeProbabilityEnabled()) {
-			self.staffingProbabilityOnMobileEnabled(false);
-		}
-
 		var withinProbabilityDisplayPeriod =
 			self.selectedDate() >= getCurrentUserDate() &&
 			self.selectedDate() <
@@ -331,7 +365,7 @@
 					.add('day', data.StaffingInfoAvailableDays)
 					.startOf('day');
 		self.showProbabilityOptionsToggleIcon(
-			self.staffingProbabilityOnMobileEnabled() && withinProbabilityDisplayPeriod
+			(self.absenceProbabilityEnabled() || self.overtimeProbabilityEnabled()) && withinProbabilityDisplayPeriod
 		);
 	}
 
@@ -386,6 +420,8 @@
 			moment(oneWeekRawProbabilities[0].Date) <= self.selectedDate() &&
 			self.selectedDate() <= moment(oneWeekRawProbabilities[oneWeekRawProbabilities.length - 1].Date);
 
+		self.fixedDate = moment(self.selectedDate());
+
 		if (!isWithinLoadedProbabilityPeriod || forceReloadProbabilityData) {
 			self.probabilities([]);
 			dataService.fetchProbabilityData(
@@ -410,7 +446,7 @@
 	};
 
 	self.updateProbabilityData = function(rawProbabilities) {
-		if (!self.staffingProbabilityOnMobileEnabled()) return;
+		if (!self.absenceProbabilityEnabled() && !self.overtimeProbabilityEnabled()) return;
 		oneWeekRawProbabilities = rawProbabilities;
 
 		self.fixedDate = moment(self.selectedDate());

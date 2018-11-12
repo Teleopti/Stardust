@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
@@ -48,18 +49,18 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IPersonAccountUpdater _personAccountUpdater;
 		private readonly ICurrentUnitOfWork _unitOfWork;
 
-		public ScheduleValidationProvider(IScheduleStorage scheduleStorage, 
+		public ScheduleValidationProvider(IScheduleStorage scheduleStorage,
 											ICurrentScenario currentScenario,
-											IPersonRepository personRepository, 
+											IPersonRepository personRepository,
 											IPersonWeekViolatingWeeklyRestSpecification personWeekViolating,
-											IUserTimeZone timeZone, 
-											IPersonNameProvider personNameProvider, 
-											IProxyForId<IActivity> activityForId, 
-											INonoverwritableLayerChecker nonoverwritableLayerChecker, 
+											IUserTimeZone timeZone,
+											IPersonNameProvider personNameProvider,
+											IProxyForId<IActivity> activityForId,
+											INonoverwritableLayerChecker nonoverwritableLayerChecker,
 											IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate,
-											IProxyForId<IAbsence> absenceRepository, 
-											IAbsenceCommandConverter absenceCommandConverter, 
-											IPersonAccountUpdater personAccountUpdater, 
+											IProxyForId<IAbsence> absenceRepository,
+											IAbsenceCommandConverter absenceCommandConverter,
+											IPersonAccountUpdater personAccountUpdater,
 											ICurrentUnitOfWork unitOfWork)
 		{
 			_scheduleStorage = scheduleStorage;
@@ -92,7 +93,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				var person = people[personDate.PersonId].SingleOrDefault();
 				var overlapLayers = _nonoverwritableLayerChecker.GetOverlappedLayersWhenAddingActivity(person, personDate.Date, activity, periodInUtc);
 
-				if(overlapLayers.IsEmpty()) continue;
+				if (overlapLayers.IsEmpty()) continue;
 
 				results.Add(new ActivityLayerOverlapCheckingResult
 				{
@@ -137,31 +138,31 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		{
 			var rules = new List<Type>();
 
-			if(ruleFlags.HasFlag(BusinessRuleFlags.NewNightlyRestRule))
+			if (ruleFlags.HasFlag(BusinessRuleFlags.NewNightlyRestRule))
 			{
 				rules.Add(typeof(NewNightlyRestRule));
 			}
-			if(ruleFlags.HasFlag(BusinessRuleFlags.NewDayOffRule))
+			if (ruleFlags.HasFlag(BusinessRuleFlags.NewDayOffRule))
 			{
 				rules.Add(typeof(NewDayOffRule));
 			}
-			if(ruleFlags.HasFlag(BusinessRuleFlags.NotOverwriteLayerRule))
+			if (ruleFlags.HasFlag(BusinessRuleFlags.NotOverwriteLayerRule))
 			{
 				rules.Add(typeof(NotOverwriteLayerRule));
 			}
-			if(ruleFlags.HasFlag(BusinessRuleFlags.MinWeekWorkTimeRule))
+			if (ruleFlags.HasFlag(BusinessRuleFlags.MinWeekWorkTimeRule))
 			{
 				rules.Add(typeof(MinWeekWorkTimeRule));
 			}
-			if(ruleFlags.HasFlag(BusinessRuleFlags.NewMaxWeekWorkTimeRule))
+			if (ruleFlags.HasFlag(BusinessRuleFlags.NewMaxWeekWorkTimeRule))
 			{
 				rules.Add(typeof(NewMaxWeekWorkTimeRule));
 			}
-			if(ruleFlags.HasFlag(BusinessRuleFlags.MinWeeklyRestRule))
+			if (ruleFlags.HasFlag(BusinessRuleFlags.MinWeeklyRestRule))
 			{
-				rules.Add(typeof(MinWeeklyRestRule));				
+				rules.Add(typeof(MinWeeklyRestRule));
 			}
-			
+
 			return rules.Select(getValidationRuleName).ToList();
 		}
 
@@ -173,45 +174,46 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people,
 				new ScheduleDictionaryLoadOptions(false, false),
 				extendedPeriod,
-				scenario);
+				scenario) as ReadOnlyScheduleDictionary;
 			((IReadOnlyScheduleDictionary)schedules).MakeEditable();
 			var results = new List<CheckingResult>();
 
 			var abs = _absenceRepository.Load(input.AbsenceId);
-			var userTimezone = _timeZone.TimeZone();		
-
-			
-			foreach (var person in people)
+			var userTimezone = _timeZone.TimeZone();
+			using (TurnoffPermissionScope.For(schedules))
 			{
-				var absPeriod =
-					input.IsFullDay ? _absenceCommandConverter.GetFullDayAbsencePeriod(person, input.Start, input.End)
-					: new DateTimePeriod(TimeZoneHelper.ConvertToUtc(input.Start, userTimezone), TimeZoneHelper.ConvertToUtc(input.End, userTimezone));
-				var absenceLayer = new AbsenceLayer(abs, absPeriod);
+				foreach (var person in people)
+				{
+					var absPeriod =
+						input.IsFullDay ? _absenceCommandConverter.GetFullDayAbsencePeriod(person, input.Start, input.End)
+						: new DateTimePeriod(TimeZoneHelper.ConvertToUtc(input.Start, userTimezone), TimeZoneHelper.ConvertToUtc(input.End, userTimezone));
+					var absenceLayer = new AbsenceLayer(abs, absPeriod);
 
-				var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(schedules[person]);
-				var scheduleDays = schedules[person].ScheduledDayCollection(extendedPeriod);
-				scheduleDays.Single(d => d.DateOnlyAsPeriod.DateOnly == new DateOnly(input.Start)).CreateAndAddAbsence(absenceLayer);
-				var responses = schedules.CheckBusinessRules(scheduleDays.Where(d => d.DateOnlyAsPeriod.DateOnly == new DateOnly(input.Start)), businessRulesForPersonAccountUpdate);
-				if (responses.Any(r =>
-				{
-					var accountRuleResponse = r as BusinessRuleResponseWithAbsenceId;
-					if (accountRuleResponse == null) return false;
-					return accountRuleResponse.AbsenceId.HasValue && accountRuleResponse.AbsenceId.Value == input.AbsenceId;
-				}))
-				{
-					results.Add(new CheckingResult
+					var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(schedules[person]);
+					var scheduleDays = schedules[person].ScheduledDayCollection(extendedPeriod);
+					scheduleDays.Single(d => d.DateOnlyAsPeriod.DateOnly == new DateOnly(input.Start)).CreateAndAddAbsence(absenceLayer);
+					var responses = schedules.CheckBusinessRules(scheduleDays.Where(d => d.DateOnlyAsPeriod.DateOnly == new DateOnly(input.Start)), businessRulesForPersonAccountUpdate);
+					if (responses.Any(r =>
 					{
-						PersonId = person.Id.Value,
-						Name = _personNameProvider.BuildNameFromSetting(person.Name)
-					});
+						var accountRuleResponse = r as BusinessRuleResponseWithAbsenceId;
+						if (accountRuleResponse == null) return false;
+						return accountRuleResponse.AbsenceId.HasValue && accountRuleResponse.AbsenceId.Value == input.AbsenceId;
+					}))
+					{
+						results.Add(new CheckingResult
+						{
+							PersonId = person.Id.Value,
+							Name = _personNameProvider.BuildNameFromSetting(person.Name)
+						});
+					}
+
+
+					var personAbsenceAccount = _personAccountUpdater.FetchPersonAbsenceAccount(person, abs);
+					if (personAbsenceAccount != null)
+					{
+						_unitOfWork.Current().Remove(personAbsenceAccount);
+					}
 				}
-
-
-				var personAbsenceAccount = _personAccountUpdater.FetchPersonAbsenceAccount(person, abs);
-				if (personAbsenceAccount != null)
-				{
-					_unitOfWork.Current().Remove(personAbsenceAccount);
-				}				
 			}
 			return results;
 		}

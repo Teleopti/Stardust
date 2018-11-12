@@ -59,6 +59,14 @@
 				getJobsByFilter();
 			});
 
+		function cancelPollingAndShowExpiredDialog() {
+			if (refreshPromise !== null) {
+				$interval.cancel(refreshPromise);
+				refreshPromise = null;
+				window.alert("Your session has expired, please login again");
+			}
+		}
+
 		function getJobsByFilter() {
 			var dataSource = null;
 			if (vm.dataSourceFilter !== allTenantsString) {
@@ -86,6 +94,7 @@
 					if (xhr !== "") {
 						vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
 					}
+					cancelPollingAndShowExpiredDialog();
 				});
 		}
 

@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Teleopti.Ccc.Rta.PerformanceTest</RootNamespace>
     <AssemblyName>Teleopti.Ccc.Rta.PerformanceTest</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -78,7 +78,6 @@
     <Compile Include="Code\StateChange.cs" />
     <Compile Include="Service References\TeleoptiRtaService\Reference.cs" />
     <Compile Include="SynchronizeLargeBatchesTest.cs" />
-    <Compile Include="SynchronzieWaiter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

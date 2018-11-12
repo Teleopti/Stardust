@@ -32,7 +32,13 @@ describe('IdentityLogonPageComponent', () => {
 				NzButtonModule,
 				NzToolTipModule
 			],
-			providers: [fakeBackendProvider, WorkspaceService, NavigationService, LogonInfoService, SearchService]
+			providers: [
+				fakeBackendProvider,
+				WorkspaceService,
+				{ provide: NavigationService, useValue: {} },
+				LogonInfoService,
+				SearchService
+			]
 		}).compileComponents();
 	}));
 

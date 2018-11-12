@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -52,8 +53,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			{
 				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons)).Repeat.AtLeastOnce();
 				Expect.Call(() => _cachedShiftCategoryDistribution.SetFilteredPersons(filteredPersons)).Repeat.AtLeastOnce();
-				Expect.Call(_schedulerStateHolder.CommonAgentName(person1)).Return("Bertil").Repeat.AtLeastOnce();
-				Expect.Call(_schedulerStateHolder.CommonAgentName(person2)).Return("Adam").Repeat.AtLeastOnce();
+				Expect.Call(_schedulerStateHolder.CommonNameDescription).Return(new CommonNameDescriptionSetting()).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 				Expect.Call(() => _cachedShiftCategoryDistribution.SetFilteredPersons(filteredPersons));
 				Expect.Call(_cachedShiftCategoryDistribution.AllShiftCategories).Return(new List<IShiftCategory> { cat1, cat2 }).Repeat.AtLeastOnce();
 				Expect.Call(_cachedNumberOfEachCategoryPerPerson.GetValue(person1)).Return(dic).Repeat.AtLeastOnce();
-				Expect.Call(_schedulerStateHolder.CommonAgentName(person1)).Return("Bertil").Repeat.AtLeastOnce();
+				Expect.Call(_schedulerStateHolder.CommonNameDescription).Return(new CommonNameDescriptionSetting()).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())

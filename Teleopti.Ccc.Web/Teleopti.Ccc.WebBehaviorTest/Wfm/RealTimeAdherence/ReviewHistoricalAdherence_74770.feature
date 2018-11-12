@@ -1,6 +1,5 @@
 ﻿@RTA
 @OnlyRunIfEnabled('RTA_ReviewHistoricalAdherence_74770')
-
 Feature: Review historical adherence
   As a Manager or Team Lead I need to see historical adherence (%) for my team/teams,
   so that I can track historical adherence and find where it has been poor.

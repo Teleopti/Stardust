@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -198,7 +199,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					selectedAgents.ToArray(), rollbackService, resourceCalculateDelayer, backgroundWorker,
 					dayOffOptimizationPreferenceProvider);
 
-				_maxSeatOptimization.Optimize(backgroundWorker, selectedPeriod, selectedAgents, _schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.AllSkillDays(), optimizationPreferences, new DesktopMaxSeatCallback(_schedulerStateHolder()));
+				_maxSeatOptimization.Optimize(backgroundWorker, selectedPeriod, selectedAgents, _schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.SkillDays.ToSkillDayEnumerable(), optimizationPreferences, new DesktopMaxSeatCallback(_schedulerStateHolder()));
 			}
 		}
 

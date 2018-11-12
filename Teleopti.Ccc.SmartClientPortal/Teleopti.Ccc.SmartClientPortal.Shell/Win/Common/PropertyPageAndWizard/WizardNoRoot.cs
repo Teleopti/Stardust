@@ -1,11 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Autofac;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard;
 
@@ -17,6 +24,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard
 		private readonly IAbstractPropertyPagesNoRoot<T> _propertyPages;
 		private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();
 		private TreeNodeAdv _rootNode;
+		private readonly IComponentContext _container;
+		private readonly IToggleManager _toggleManager;
 
 		protected WizardNoRoot()
 		{
@@ -30,9 +39,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard
 		labelHeading.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
 		}
 
-		public WizardNoRoot(IAbstractPropertyPagesNoRoot<T> propertyPages)
+		public WizardNoRoot(IAbstractPropertyPagesNoRoot<T> propertyPages, IComponentContext container)
 			: this()
 		{
+			_container = container;
+			_toggleManager = _container.Resolve<IToggleManager>();
 			Name = Name + "." + propertyPages.GetType().Name; // For TestComplete
 			_propertyPages = propertyPages;
 			_propertyPages.Owner = this;
@@ -124,8 +135,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard
 			splitContainerVertical.Panel2.Controls.Clear();
 			c.Dock = DockStyle.Fill;
 			labelHeading.Text = pp.PageName;
+
+			if (labelHeading.Text.Length > 15)
+			{
+				previewPanel.Width = previewPanel.Width - 150;
+				previewPanel.Dock = DockStyle.Right;
+			}
+
 			splitContainerVertical.Panel2.Controls.Add(c);
 			setButtonState();
+			if (!_propertyPages.IsOnFirst() || 
+				!_toggleManager.IsEnabled(Toggles.WFM_Forecaster_Preview_74801) || 
+				!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebForecasts))
+				previewPanel.Hide();
 			treeViewPages.SelectedNodes.Clear();
 			foreach (TreeNodeAdv treeNode in _rootNode.Nodes)
 			{
@@ -187,6 +209,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard
 		{
 			args.Cancel = true;
 		}
+
+		private void linkLabelPreview_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			Process.Start(buildWfmUri("WFM/#/forecast").ToString());
+		}
+
+		private Uri buildWfmUri(string relativePath)
+		{
+			var wfmPath = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle");
+			return new Uri($"{wfmPath}{relativePath}");
+		}
 	}
 
 	internal class ErrorMessageContainer
@@ -220,6 +253,4 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard
 			return error.ToString();
 		}
 	}
-
- 
 }

@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -13,7 +14,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 {
     [TestFixture]
-	[TestWithStaticDependenciesDONOTUSE]
 	public class MeetingSlotFinderServiceTest
     {
         private MeetingSlotFinderService _target;
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             _person2 = new Person();
             _dates = new List<DateOnly>();
             _persons = new List<IPerson>();
-            _target = new MeetingSlotFinderService();
+            _target = new MeetingSlotFinderService(new SpecificTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo()));
             _dictionary = _mocks.StrictMock<IScheduleDictionary>();
             _range1 = _mocks.StrictMock<IScheduleRange>();
             _range2 = _mocks.StrictMock<IScheduleRange>();

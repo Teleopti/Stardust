@@ -1,0 +1,34 @@
+<div class="workspace">
+	<h1>
+		<i class="mdi mdi-elevation-rise"></i>
+		Insights
+	</h1>
+
+	<div class="material-depth-1 con-row full-padding align-row-baseline">
+		<span>
+			<nz-select style="width: 300px;" [(ngModel)]="selectedReport" (ngModelChange)="onReportSelected($event)" nzAllowClear nzPlaceHolder="Select a report...">
+				<nz-option *ngFor="let rep of this.reports" [nzValue]="rep.Id" [nzLabel]="rep.Name"></nz-option>
+			</nz-select>
+		</span>
+		&nbsp;&nbsp;&nbsp;
+		<span>
+			<input type="checkbox" name="canEditReport" id="canEditReport" [checked]="canEditReport" (change)="onCanEditReportChanged()">
+			<label for="canEditReport">Enable report editing</label>
+		</span>
+		&nbsp;&nbsp;&nbsp;
+		<span>
+			<input type="checkbox" name="enableNavContent" id="enableNavContent" [checked]="enableNavContent" (change)="onEnableNavContentChanged()">
+			<label for="enableNavContent">Enable navigation content</label>
+		</span>
+		&nbsp;&nbsp;&nbsp;
+		<span>
+			<input type="checkbox" name="enableFilter" id="enableFilter" [checked]="enableFilter" (change)="onEnableFilterChanged()">
+			<label for="enableFilter">Enable filter</label>
+		</span>
+		&nbsp;&nbsp;&nbsp;
+		<input type="button" class="wfm-btn wfm-btn-invis-primary ng-binding ng-scope" id="btnReloadReport" value="Reload" (click)="reloadCurrentReport()">
+	</div>
+	<div [hidden]="!initialized" class="panel con-flex material-depth-1">
+		<div id="reportContainer" style="height:850px;"></div>
+	</div>
+</div>

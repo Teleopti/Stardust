@@ -47,8 +47,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					absenceAssembler), new PersonAccountUpdaterDummy());
 			var personRequestRepository = new FakePersonRequestRepository();
-			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
-			target.PersonRequestRepository = personRequestRepository;
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, personRequestRepository, batchStatusChecker, new FakeUserTimeZone());
 
 			TextRequest textRequest = new TextRequest(new DateTimePeriod());
 			IPersonRequest personRequest = new PersonRequest(person, textRequest).WithId();
@@ -98,9 +97,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					absenceAssembler), new PersonAccountUpdaterDummy());
 			var personRequestRepository = new FakePersonRequestRepository();
-			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
-			target.PersonRequestRepository = personRequestRepository;
-
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, personRequestRepository, batchStatusChecker, new FakeUserTimeZone());
+			
 			var personDto = new PersonDto { Id = person.Id };
             var textRequestDto = new TextRequestDto {Period = new DateTimePeriodDto()};
             var personRequestDto = new PersonRequestDto
@@ -153,9 +151,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					absenceAssembler), new PersonAccountUpdaterDummy());
 			var personRequestRepository = new FakePersonRequestRepository();
 
-			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
-			target.PersonRequestRepository = personRequestRepository;
-
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, personRequestRepository, batchStatusChecker, new FakeUserTimeZone());
 			var personDto = new PersonDto { Id = person.Id };
             var absenceRequestDto = new AbsenceRequestDto {Period = new DateTimePeriodDto(),Absence = new AbsenceDto {Id = absence.Id.Value} };
             var personRequestDto = new PersonRequestDto
@@ -204,9 +200,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					absenceAssembler), new PersonAccountUpdaterDummy());
 			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler {PersonAssembler = personAssembler};
 			var personRequestRepository = new FakePersonRequestRepository();
-			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
-			target.PersonRequestRepository = personRequestRepository;
-
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, personRequestRepository, batchStatusChecker, new FakeUserTimeZone());
+			
 			var personDto = new PersonDto { Id = person.Id };
             var shiftTradeRequestDto = new ShiftTradeRequestDto {Period = new DateTimePeriodDto()};
 
@@ -265,8 +260,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					absenceAssembler), new PersonAccountUpdaterDummy());
 			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler { PersonAssembler = personAssembler };
 			var personRequestRepository = new FakePersonRequestRepository();
-			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
-			target.PersonRequestRepository = personRequestRepository;
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, personRequestRepository, batchStatusChecker, new FakeUserTimeZone());
 			
 			var existingRequest = new PersonRequest(person,new ShiftTradeRequest(new List<IShiftTradeSwapDetail> {new ShiftTradeSwapDetail(person,person,date,date)})).WithId();
 			personRequestRepository.Add(existingRequest);
@@ -327,8 +321,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					absenceAssembler), new PersonAccountUpdaterDummy());
 			var personRequestRepository = new FakePersonRequestRepository();
-			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
-			target.PersonRequestRepository = personRequestRepository;
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, personRequestRepository, batchStatusChecker, new FakeUserTimeZone());
 			
             var textRequest = new TextRequest(new DateTimePeriod());
             var personRequest = new PersonRequest(person, textRequest);
@@ -363,9 +356,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					absenceAssembler), new PersonAccountUpdaterDummy());
 			var personRequestRepository = new FakePersonRequestRepository();
-			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
-			target.PersonRequestRepository = personRequestRepository;
-
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, personRequestRepository, batchStatusChecker, new FakeUserTimeZone());
+			
 			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod());
             var personRequest = new PersonRequest(person, absenceRequest);
 			
@@ -397,8 +389,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), activityAssembler,
 					absenceAssembler), new PersonAccountUpdaterDummy());
 			var personRequestRepository = new FakePersonRequestRepository();
-			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
-			target.PersonRequestRepository = personRequestRepository;
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, personRequestRepository, batchStatusChecker, new FakeUserTimeZone());
+			
 	        shiftTradeSwapDetailAssembler.PersonAssembler = personAssembler;
 	        shiftTradeSwapDetailAssembler.SchedulePartAssembler = new SchedulePartAssembler(
 		        new PersonAssignmentAssembler(shiftCategoryRepository,
@@ -446,8 +438,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), activityAssembler,
 					absenceAssembler), new PersonAccountUpdaterDummy());
 			var personRequestRepository = new FakePersonRequestRepository();
-			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
-			target.PersonRequestRepository = personRequestRepository;
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, personRequestRepository, batchStatusChecker, new FakeUserTimeZone());
+			
 			shiftTradeSwapDetailAssembler.PersonAssembler = personAssembler;
 			shiftTradeSwapDetailAssembler.SchedulePartAssembler = new SchedulePartAssembler(
 				new PersonAssignmentAssembler(shiftCategoryRepository,
@@ -496,8 +488,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), activityAssembler,
 					absenceAssembler), new PersonAccountUpdaterDummy());
 			var personRequestRepository = new FakePersonRequestRepository();
-			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
-			target.PersonRequestRepository = personRequestRepository;
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, personRequestRepository, batchStatusChecker, new FakeUserTimeZone());
+			
 			shiftTradeSwapDetailAssembler.PersonAssembler = personAssembler;
 			shiftTradeSwapDetailAssembler.SchedulePartAssembler = new SchedulePartAssembler(
 				new PersonAssignmentAssembler(shiftCategoryRepository,
@@ -546,8 +538,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), activityAssembler,
 					absenceAssembler), new PersonAccountUpdaterDummy());
 			var personRequestRepository = new FakePersonRequestRepository();
-			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
-			target.PersonRequestRepository = personRequestRepository;
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, personRequestRepository, batchStatusChecker, new FakeUserTimeZone());
+			
 			shiftTradeSwapDetailAssembler.PersonAssembler = personAssembler;
 			shiftTradeSwapDetailAssembler.SchedulePartAssembler = new SchedulePartAssembler(
 				new PersonAssignmentAssembler(shiftCategoryRepository,
@@ -594,8 +586,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					absenceAssembler), new PersonAccountUpdaterDummy());
 			var personRequestRepository = new FakePersonRequestRepository();
-			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
-			target.PersonRequestRepository = personRequestRepository;
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, personRequestRepository, batchStatusChecker, new FakeUserTimeZone());
+			
 
 			AbsenceRequest absenceRequest = new AbsenceRequest(absence, new DateTimePeriod());
 			IPersonRequest personRequest = new PersonRequest(person, absenceRequest);

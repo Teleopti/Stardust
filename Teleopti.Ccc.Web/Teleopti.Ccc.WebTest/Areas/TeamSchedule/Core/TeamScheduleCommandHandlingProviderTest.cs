@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
@@ -396,6 +397,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			PermissionProvider.Enable();
 			var person = PersonFactory.CreatePersonWithGuid("a", "b");
 			PersonRepository.Has(person);
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, person, new DateOnly(2018, 1, 10));
 
 			var template = DayOffFactory.CreateDayOff(new Description("template")).WithId(); ;
 			DayOffTemplateRepository.Has(template);
@@ -407,7 +409,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				PersonIds = new Guid[] { person.Id.Value },
 				TemplateId = template.Id.Value
 			});
-			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.YouDoNotHavePermissionsToViewTeamSchedules);
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.NoPermissionAddDayOff);
 		}
 
 		[Test]
@@ -418,7 +420,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var person = PersonFactory.CreatePersonWithGuid("a", "b");
 			PersonRepository.Has(person);
 			PermissionProvider.PublishToDate(dateonly.AddDays(-1));
-			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, person, dateonly);
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AddDayOff, person, dateonly);
 
 			var template = DayOffFactory.CreateDayOff(new Description("template")).WithId();
 			DayOffTemplateRepository.Has(template);
@@ -445,7 +447,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var dateonly = new DateOnly(2018, 1, 10);
 			var person = PersonFactory.CreatePersonWithGuid("a", "b");
 			PersonRepository.Has(person);
-			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, person, dateonly);
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AddDayOff, person, dateonly);
 
 			var template = DayOffFactory.CreateDayOff(new Description("template")).WithId();
 			DayOffTemplateRepository.Has(template);
@@ -497,9 +499,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
 		}
 
-
 		[Test]
-		public void ShouldReturnErrorWhenRemoveDayOffWithoutPermissionOnTeamSchedule()
+		public void ShouldReturnErrorWhenRemoveDayOffWithoutPermission()
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Has(person);
@@ -509,7 +510,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				Date = new DateOnly(2018, 1, 12),
 				PersonIds = new[] { person.Id.GetValueOrDefault() }
 			});
-			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.YouDoNotHavePermissionsToViewTeamSchedules);
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.NoPermissionRemoveDayOff);
 		}
 
 		[Test]
@@ -908,6 +909,41 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			command.PersonAbsenceId.Should().Be.EqualTo(personAbsenceId);
 			command.Person.Should().Be.EqualTo(person);
 		}
+
+		[Test]
+		public void ShouldReturnErrorBasedOnCurrentCultureWhenRemoveAbsenceWithoutPermission()
+		{
+			PermissionProvider.Enable();
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.Has(scenario);
+
+			var person = PersonFactory.CreatePerson("test").WithId();
+			PersonRepository.Has(person);
+			var trackId = Guid.NewGuid();
+			var personAbsenceId = Guid.NewGuid();
+
+			var removeAbsenceForm = new RemovePersonAbsenceForm
+			{
+				SelectedPersonAbsences = new[] {
+					new SelectedPersonAbsence{
+						AbsenceDates = new []{ new AbsenceDate { Date = new DateOnly(2018,7,23), PersonAbsenceId = personAbsenceId } },
+						PersonId =person.Id.Value
+					}
+				},
+				TrackedCommandInfo = new TrackedCommandInfo { TrackId = trackId }
+			};
+
+			var results = Target.RemoveAbsence(removeAbsenceForm);
+			Thread.CurrentThread.CurrentUICulture = CultureInfoFactory.CreateEnglishCulture();
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo("No permission to remove absence from agents.");
+
+			Thread.CurrentThread.CurrentUICulture = CultureInfoFactory.CreateChineseCulture();
+			results = Target.RemoveAbsence(removeAbsenceForm);
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo("没有权限为座席代表移除缺勤。");
+
+		}
+
 
 	}
 }

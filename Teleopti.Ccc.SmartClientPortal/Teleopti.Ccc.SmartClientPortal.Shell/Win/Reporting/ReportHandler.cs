@@ -147,7 +147,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			if(endDate > startDate)
 				loadPeriod = new DateOnlyPeriod(startDate, endDate);
 			var stateHolder = new SchedulerStateHolder(model.Scenario, new DateOnlyPeriodAsDateTimePeriod(loadPeriod, timeZoneInfo), model.Persons, new DisableDeletedFilter(new ThisUnitOfWork(unitOfWork)), new SchedulingResultStateHolder(), new TimeZoneGuard());
-			stateHolder.CommonNameDescription.AliasFormat = commonNameDescriptionSetting.AliasFormat;
 			loadSchedules(unitOfWork, model.Persons, stateHolder);
 			
 			personDictionary.ForEach(personSchedulePeriods =>
@@ -166,7 +165,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
 					var targetTime = stateHolder.Schedules[person].CalculatedTargetTimeHolder(schedulePeriod.DateOnlyPeriod);
 
-					detailData.PersonName = stateHolder.CommonAgentName(person);
+					detailData.PersonName = commonNameDescriptionSetting.BuildFor(person);
 					detailData.PeriodFrom = schedulePeriod.DateOnlyPeriod.StartDate.Date;
 					detailData.PeriodTo = schedulePeriod.DateOnlyPeriod.EndDate.Date;
 					if (targetTime.HasValue) detailData.TargetTime = targetTime.Value.TotalMinutes;

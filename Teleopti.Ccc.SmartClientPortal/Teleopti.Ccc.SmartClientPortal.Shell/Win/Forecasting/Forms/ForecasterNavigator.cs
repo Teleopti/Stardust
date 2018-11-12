@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
@@ -73,12 +74,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		private bool _hidePriorityToggle;
 		private bool _showAbandonRate;
 		private readonly IApplicationInsights _applicationInsights;
+		private readonly IComponentContext _container;
 
-		protected ForecasterNavigator(IStatisticHelper statisticHelper, IBusinessRuleConfigProvider businessRuleConfigProvider, IApplicationInsights applicationInsights)
+		protected ForecasterNavigator(IStatisticHelper statisticHelper, IBusinessRuleConfigProvider businessRuleConfigProvider, IApplicationInsights applicationInsights, IComponentContext container)
 		{
 			_statisticHelper = statisticHelper;
 			_businessRuleConfigProvider = businessRuleConfigProvider;
 			_applicationInsights = applicationInsights;
+			_container = container;
 			InitializeComponent();
 			var license = DefinedLicenseDataFactory.GetLicenseActivator(UnitOfWorkFactory.Current.Name);
 			if (license.EnabledLicenseSchemaName == DefinedLicenseSchemaCodes.TeleoptiWFMForecastsSchema)
@@ -120,8 +123,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			IStatisticHelper statisticHelper, 
 			IBusinessRuleConfigProvider businessRuleConfigProvider,
 			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade,
-			IConfigReader configReader, IApplicationInsights applicationInsights)
-			: this(statisticHelper, businessRuleConfigProvider, applicationInsights)
+			IConfigReader configReader, 
+			IApplicationInsights applicationInsights,
+			IComponentContext container)
+			: this(statisticHelper, businessRuleConfigProvider, applicationInsights, container)
 		{
 			_jobHistoryViewFactory = jobHistoryViewFactory;
 			_importForecastViewFactory = importForecastViewFactory;
@@ -1276,7 +1281,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 				using (var wwp = new QuickForecastWizardPages(model))
 				{
 					wwp.Initialize(quickForecastPages);
-					using (var wizard = new WizardNoRoot<QuickForecastModel>(wwp))
+					using (var wizard = new WizardNoRoot<QuickForecastModel>(wwp, _container))
 					{
 						if (wizard.ShowDialog(this) == DialogResult.OK)
 						{
@@ -1406,7 +1411,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 					var exportToFilePages = PropertyPagesHelper.GetExportSkillToFilePages(firstPage);
 
 					pages.Initialize(exportToFilePages);
-					using (var wizard = new WizardNoRoot<ExportSkillModel>(pages))
+					using (var wizard = new WizardNoRoot<ExportSkillModel>(pages, _container))
 					{
 						if (wizard.ShowDialog(this) == DialogResult.OK)
 						{

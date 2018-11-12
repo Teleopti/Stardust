@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	*/
 	[DomainTest]
 	[UseIocForFatClient]
-	[FullPermissions]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	public class DayOffOptimizationDesktopTest : DayOffOptimizationScenario
 	{

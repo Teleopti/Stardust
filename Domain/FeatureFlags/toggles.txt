@@ -33,10 +33,6 @@ Wfm_DisplayOnlineHelp_39402 = true
 Wfm_MinimumScaffolding_32659 = RC # Set this to true to enable first page link to the new WFM web #
 WfmGlobalLayout_personalOptions_37114 = true
 
-# China, can any of these be removed? #
-Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = true
-WebByPassDefaultPermissionCheck_37984 = true
-
 # LevelUp #
 RTA_KillFattyIntradayUntilItDies_74939 = true
 RTA_ReviewHistoricalAdherence_Domain_74770 = true
@@ -45,7 +41,7 @@ RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485 = true
 RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485 = true
 RTA_TooManyPersonAssociationChangedEvents_Packages_78669 = true
 RTA_StateQueueFloodPrevention_77710 = RC
-RTA_ReviewHistoricalAdherence_74770 = false
+RTA_ReviewHistoricalAdherence_74770 = RC
 
 # Dumplings, can any of these be removed? #
 WfmTeamSchedule_ShowStaffingInfo_45206 = true
@@ -93,9 +89,10 @@ MyTimeWeb_NewTeamScheduleView_75989 = RC
 MyTimeWeb_NewTeamScheduleViewDesktop_76313 = RC
 MyTimeWeb_PollToCheckScheduleChanges_46595 = true
 MyTimeWeb_TrafficLightOnMobileDayView_77447 = RC
-
-# China, can any of these be removed? #
+MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640 = RC
 Staffing_Info_Configuration_44687 = true
+Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = true
+WebByPassDefaultPermissionCheck_37984 = true
 
 
 # Kittens, Bugs&Roses and Micke #
@@ -122,7 +119,7 @@ WFM_Intraday_Redesign_77214 = DEV
 
 # Ziggy #
 WfmStaffing_AddOvertime_42524 = RC
-Wfm_Payroll_SupportMultiDllPayrolls_75959 = true
+Wfm_Payroll_SupportMultiDllPayrolls_75959 = RC
 Wfm_Stardust_EnableScaleout_77366 = true
 Wfm_AuditTrail_StaffingAuditTrail_78125=RC
 Wfm_AuditTrail_GenericAuditTrail_74938=RC
@@ -133,7 +130,6 @@ WFM_Export_Forecast_44716 = true
 WFM_TrainingPlanner_44780 = RC #So that large customers can use TP for up to 7 weeks from readmodels. Hard to set to true for everyone as they may book trainings further out...
 Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560 = true
 Report_Remove_Realtime_Scheduled_Time_vs_Target_45559 = true
-Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640 = true
 Report_Remove_Realtime_AuditTrail_44006 = true
 Report_Show_Utc_In_Report_Selection_When_In_Use_45079 = true
 WFM_AuditTrail_44006 = true
@@ -159,8 +155,8 @@ MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409 = RC #Depending on MyTimeWe
 WFM_Gamification_Permission_76546 = true
 MyTimeWeb_Request_CleanUpRequestHisotry_77776 = RC
 MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446 = true
-WFM_Request_View_Permissions_77731 = DEV
+WFM_Request_View_Permissions_77731 = RC
 
 # Tech #
 WFM_ChatBot_77547 = DEV
-Wfm_PmNextGen_78059 = DEV
+WFM_Insights_78059 = DEV

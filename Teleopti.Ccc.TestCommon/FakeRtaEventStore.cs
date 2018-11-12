@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.TestCommon
 				}
 			);
 			
-			_synchronizer.Value.Synchronize();
+			_synchronizer.Value.SynchronizeNow();
 		}
 
 		public int Remove(DateTime removeUntil, int maxEventsToRemove) => throw new NotImplementedException();
@@ -123,9 +123,14 @@ namespace Teleopti.Ccc.TestCommon
 
 			return new LoadedEvents
 			{
-				MaxId = maxId,
+				LastId = maxId,
 				Events = events
 			};
+		}
+
+		public int ReadLastId()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

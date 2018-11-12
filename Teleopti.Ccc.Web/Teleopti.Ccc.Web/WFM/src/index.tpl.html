@@ -53,23 +53,7 @@
 	</div>
 	<div id="nav" ng-include="'html/nav.html'" class="material-depth-1 navbar navbar-default navbar-static-top" role="navigation"></div>
 	<div class="layout-container">
-		<div class="main-menu" ng-controller="AreasController as vm">
-			<h2 class="main-menu-ctrls">
-				<label for="nav-left" ng-click="vm.mainMenuState = !vm.mainMenuState" class="pointer" id="main-menu-trigger">
-					<div tabindex=0 class="context-menu card-context even-icon">
-						<i class="mdi main-menu-trigger-icon text-white" ng-class="{'mdi-menu':!vm.mainMenuState, 'mdi-backburger':vm.mainMenuState}"></i>
-						<md-tooltip ng-cloak>
-							{{'Navigate'|translate}}
-						</md-tooltip>
-					</div>
-				</label>
-			</h2>
-			<div ng-show="vm.mainMenuState" class="main-menu-slide main-menu-link-wrapper material-depth-1">
-				<div ng-repeat="a in vm.areas">
-					<mainmenu data="a" open="vm.mainMenuState" ng-click="vm.toggleMobileMenu();"></mainmenu>
-				</div>
-			</div>
-		</div>
+			<ng2-side-menu></ng2-side-menu>
 		<div id="materialcontainer" class="container content">
 			<div ui-view></div>
 			<wfm-notice notices="$parent.wfmNotices"></wfm-notice>

@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Teleopti.Ccc.SmartClientPortal.Shell</RootNamespace>
     <AssemblyName>Teleopti.Ccc.SmartClientPortal.Shell</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <SignAssembly>false</SignAssembly>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <NoWin32Manifest>true</NoWin32Manifest>
@@ -268,11 +268,11 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.264\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.271\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.264\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.271\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WindowsBase">
@@ -3038,6 +3038,7 @@
     </Compile>
     <Compile Include="Win\Reporting\ViewerFoldingChangedEvent.cs" />
     <Compile Include="Win\Scheduling\AddScheduleLayers.cs" />
+    <Compile Include="Win\Scheduling\LockMenuBuilders\LockRestrictionsMenuBuilder.cs" />
     <Compile Include="Win\Scheduling\ReplaceActivityView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3380,6 +3381,7 @@
     <Compile Include="Win\Scheduling\SingleAgentRestriction\TeleoptiLessIntelligentSplitContainer.Designer.cs">
       <DependentUpon>TeleoptiLessIntelligentSplitContainer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Win\Scheduling\SkillGridContextMenuBuilder.cs" />
     <Compile Include="Win\Scheduling\SkillGridMenuItemUpdate.cs" />
     <Compile Include="Win\Scheduling\SkillResult\SkillDayGridControl.cs">
       <SubType>Component</SubType>
@@ -3409,6 +3411,7 @@
     <Compile Include="Win\Scheduling\SkillTabRenderer.cs" />
     <Compile Include="Win\Scheduling\Swapper.cs" />
     <Compile Include="Win\Scheduling\TagsMenuLoader.cs" />
+    <Compile Include="Win\Scheduling\UserLockHelper.cs" />
     <Compile Include="Win\Scheduling\ValidationAlertsView.cs">
       <SubType>UserControl</SubType>
     </Compile>

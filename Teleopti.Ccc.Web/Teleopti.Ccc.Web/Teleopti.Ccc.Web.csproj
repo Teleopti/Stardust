@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Teleopti.Ccc.Web</RootNamespace>
     <AssemblyName>Teleopti.Ccc.Web</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <BaseIntermediateOutputPath>
     </BaseIntermediateOutputPath>
@@ -378,11 +378,11 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.264\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.271\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.264\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.271\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Validation">
@@ -401,9 +401,11 @@
     <Compile Include="Areas\Reports\Controllers\AuditTrailController.cs" />
     <Compile Include="Areas\Search\Controllers\PersonSearchController.cs" />
     <Compile Include="Areas\Search\Models\PersonSearchModels.cs" />
+    <Compile Include="Areas\Insights\Models\EmbedReportConfig.cs" />
+    <Compile Include="Areas\Insights\Models\ReportModel.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormExtensions.cs" />
-    <Compile Include="Areas\PmNextGen\Controllers\PowerBIReportController.cs" />
-    <Compile Include="Areas\PmNextGen\PmNextGenAreaRegistration.cs" />
+    <Compile Include="Areas\Insights\Controllers\InsightsController.cs" />
+    <Compile Include="Areas\Insights\InsightsAreaRegistration.cs" />
     <Compile Include="Areas\Requests\Core\ViewModel\RequestsPermissonsViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleDayOffViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleProjectionViewModel.cs" />
@@ -1262,6 +1264,7 @@
     <Compile Include="Filters\ISessionAuthenticationModule.cs" />
     <Compile Include="Filters\KeyBasedAuthenticationAttribute.cs" />
     <Compile Include="Filters\LicenseAttribute.cs" />
+    <Compile Include="Filters\PermissionCheckAttribute.cs" />
     <Compile Include="Filters\OptimisticLockExceptionFilterAttribute.cs" />
     <Compile Include="Filters\SessionAuthenticationModule.cs" />
     <Compile Include="Models\Shared\Link.cs" />
@@ -1513,9 +1516,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="WFM\app\api-access\api-access.routes.js" />
-    <Content Include="WFM\app\api-access\api-access.start.controller.js" />
-    <Content Include="WFM\app\api-access\_modules.js" />
     <Content Include="WFM\app\forecasting\component\history.chart.component.js" />
     <Content Include="WFM\app\forecasting\html\history.html" />
     <Content Include="WFM\app\forecasting\controller\history.controller.js" />
@@ -1807,6 +1807,64 @@
     <Content Include="WFM\app\staffing\import_export\importexport.service.js" />
     <Content Include="WFM\app\staffing\staffing.importData.controller.js" />
     <Content Include="WFM\app\staffing\staffing.overtime.service.js" />
+    <Content Include="WFM\app\styleguide\autofocus\wfmautofocus.directive.js" />
+    <Content Include="WFM\app\styleguide\autofocus\wfmautofocus.directive.spec.js" />
+    <Content Include="WFM\app\styleguide\badge\badge.tpl.html" />
+    <Content Include="WFM\app\styleguide\badge\wfm-badge.component.js" />
+    <Content Include="WFM\app\styleguide\btn-group\btn-group.component.js" />
+    <Content Include="WFM\app\styleguide\btn-group\btn-group.tpl.html" />
+    <Content Include="WFM\app\styleguide\card-panel\card-panel.component.js" />
+    <Content Include="WFM\app\styleguide\card-panel\card-panel.template.tpl.html" />
+    <Content Include="WFM\app\styleguide\cardlist\wfmcardlist.directive.js" />
+    <Content Include="WFM\app\styleguide\date-range-picker\date-range-picker.directive.js" />
+    <Content Include="WFM\app\styleguide\date-range-picker\date-range-picker.directive.spec.js" />
+    <Content Include="WFM\app\styleguide\date-range-picker\date-range-picker.tpl.html" />
+    <Content Include="WFM\app\styleguide\modal\wfmmodal.directive.js" />
+    <Content Include="WFM\app\styleguide\modal\wfmmodal.directive.spec.js" />
+    <Content Include="WFM\app\styleguide\notice\notice.directive.js" />
+    <Content Include="WFM\app\styleguide\notice\notice.directive.spec.js" />
+    <Content Include="WFM\app\styleguide\notice\notice.service.js" />
+    <Content Include="WFM\app\styleguide\notice\_modules.js" />
+    <Content Include="WFM\app\styleguide\numeric-value\numeric-value.directive.js" />
+    <Content Include="WFM\app\styleguide\pagination\wfmpagination.directive.js" />
+    <Content Include="WFM\app\styleguide\pagination\wfmpagination.directive.spec.js" />
+    <Content Include="WFM\app\styleguide\popup-menu\popup.component.js" />
+    <Content Include="WFM\app\styleguide\popup-menu\popup.tpl.html" />
+    <Content Include="WFM\app\styleguide\skill-picker-old\skill-picker.old.tpl.html" />
+    <Content Include="WFM\app\styleguide\skill-picker-old\skill.picker.old.component.js" />
+    <Content Include="WFM\app\styleguide\skill-picker-old\skill.picker.old.component.spec.js" />
+    <Content Include="WFM\app\styleguide\skill-picker\skillPicker.component.js" />
+    <Content Include="WFM\app\styleguide\skill-picker\skillPicker.component.spec.js" />
+    <Content Include="WFM\app\styleguide\skill-picker\skillPicker.tpl.html" />
+    <Content Include="WFM\app\styleguide\time-range-picker\time-range-picker.directive.js" />
+    <Content Include="WFM\app\styleguide\time-range-picker\time-range-picker.directive.spec.js" />
+    <Content Include="WFM\app\styleguide\time-range-picker\time-range-picker.tpl.html" />
+    <Content Include="WFM\app\styleguide\tree-picker\tree.component.js" />
+    <Content Include="WFM\app\styleguide\tree-picker\tree.component.pickerfilter.spec.js" />
+    <Content Include="WFM\app\styleguide\tree-picker\tree.component.typeOne.spec.js" />
+    <Content Include="WFM\app\styleguide\tree-picker\tree.component.typeTwo.spec.js" />
+    <Content Include="WFM\app\styleguide\tree-picker\tree_data.tpl.html" />
+    <Content Include="WFM\app\styleguide\wfm-date-picker\wfm-date-picker.gregorian.tpl.html" />
+    <Content Include="WFM\app\styleguide\wfm-date-picker\wfm-date-picker.jalaali.tpl.html" />
+    <Content Include="WFM\app\styleguide\wfm-date-picker\wfm-date-picker.js" />
+    <Content Include="WFM\app\styleguide\wfm-date-picker\wfm-date-picker.spec.js" />
+    <Content Include="WFM\app\styleguide\wfm-date-picker\_modules.js" />
+    <Content Include="WFM\app\styleguide\wfm-date-range-picker\wfm-date-range-picker.basic.spec.js" />
+    <Content Include="WFM\app\styleguide\wfm-date-range-picker\wfm-date-range-picker.custom.spec.js" />
+    <Content Include="WFM\app\styleguide\wfm-date-range-picker\wfm-date-range-picker.gregorian.tpl.html" />
+    <Content Include="WFM\app\styleguide\wfm-date-range-picker\wfm-date-range-picker.jalaali.tpl.html" />
+    <Content Include="WFM\app\styleguide\wfm-date-range-picker\wfm-date-range-picker.js" />
+    <Content Include="WFM\app\styleguide\wfm-date-range-picker\_modules.js" />
+    <Content Include="WFM\app\styleguide\wfm-helping-directives\wfm-helping-directives.js" />
+    <Content Include="WFM\app\styleguide\wfm-multiple-search\wfm-multiple-search-input.directive.js" />
+    <Content Include="WFM\app\styleguide\wfm-multiple-search\wfm-multiple-search-input.directive.spec.js" />
+    <Content Include="WFM\app\styleguide\wfm-multiple-search\wfm-multiple-search-input.tpl.html" />
+    <Content Include="WFM\app\styleguide\wfm-right-panel\wfm-right-panel.directive.js" />
+    <Content Include="WFM\app\styleguide\wfm-right-panel\wfm-right-panel.tpl.html" />
+    <Content Include="WFM\app\styleguide\workinghourspicker\weekdays.filter.js" />
+    <Content Include="WFM\app\styleguide\workinghourspicker\working-hours-picker.directive.js" />
+    <Content Include="WFM\app\styleguide\workinghourspicker\working-hours-picker.tpl.html" />
+    <Content Include="WFM\app\styleguide\workinghourspicker\_modules.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addDayOff.spec.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addDayOff.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addDayOff.js" />
@@ -2806,7 +2864,6 @@
     <Folder Include="Areas\Mart\Views\Shared\" />
     <Folder Include="Areas\MyTime\Core\BadgeLeaderBoardReport\DataProvider\" />
     <Folder Include="Areas\MyTime\Core\Mapping\" />
-    <Folder Include="Areas\PmNextGen\Models\" />
     <Folder Include="Areas\SSO\Views\Authentication\" />
     <Folder Include="Areas\Start\Views\Config\" />
     <Folder Include="Areas\TeamSchedule\Views\TeamScheduleData\" />

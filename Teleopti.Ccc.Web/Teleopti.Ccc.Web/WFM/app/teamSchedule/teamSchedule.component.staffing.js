@@ -14,7 +14,7 @@
 		}
 	});
 
-	StaffingInfoController.$inject = ['$scope', '$document', '$timeout', '$q', 'SkillGroupSvc', 'StaffingInfoService', 'TeamScheduleChartService', 'teamsToggles', 'skillIconService','serviceDateFormatHelper'];
+	StaffingInfoController.$inject = ['$scope', '$document', '$timeout', '$q', 'SkillGroupSvc', 'StaffingInfoService', 'TeamScheduleChartService', 'teamsToggles', 'skillIconService', 'serviceDateFormatHelper'];
 
 	function StaffingInfoController($scope, $document, $timeout, $q, SkillGroupSvc, StaffingInfoService, ChartService, teamsToggles, skillIconService, serviceDateFormatHelper) {
 		var vm = this;
@@ -44,6 +44,9 @@
 			if (staffingDataAvailable && changeObj.chartHeight && changeObj.chartHeight.currentValue !== changeObj.chartHeight.previousValue) {
 				chart.resize({ height: changeObj.chartHeight.currentValue });
 			}
+			if (changeObj.selectedDate && changeObj.selectedDate.currentValue !== changeObj.selectedDate.previousValue) {
+				generateChart();
+			}
 		};
 
 		vm.useShrinkageForStaffing = function () {
@@ -65,7 +68,7 @@
 		}
 
 		vm.setSkill = function (selectedItem) {
-			if (!vm.loadedSkillsData || 
+			if (!vm.loadedSkillsData ||
 				(selectedItem && ((!!vm.selectedSkillGroup && vm.selectedSkillGroup.Id == selectedItem.Id)
 					|| (!!vm.selectedSkill && vm.selectedSkill.Id == selectedItem.Id))))
 				return;
@@ -81,15 +84,12 @@
 				generateChart();
 			}
 
-			vm.onSelectedSkillChanged && vm.onSelectedSkillChanged({skill:vm.selectedSkill, skillGroup: vm.selectedSkillGroup});
+			vm.onSelectedSkillChanged && vm.onSelectedSkillChanged({ skill: vm.selectedSkill, skillGroup: vm.selectedSkillGroup });
 		}
 
 		vm.getSkillIcon = skillIconService.get;
 
-		$scope.$on('teamSchedule.dateChanged',
-			function () {
-				generateChart();
-			});
+
 		$scope.$on('teamSchedule.command.scheduleChangedApplied',
 			function () {
 				generateChart();
@@ -132,7 +132,7 @@
 
 
 		function checkIconForSkills(skills) {
-			skills.forEach(function (skill){
+			skills.forEach(function (skill) {
 				vm.getSkillIcon(skill);
 			});
 		}
@@ -142,7 +142,7 @@
 			vm.selectedSkill = !!skillId ?
 				vm.skills.filter(function (s) {
 					return s.Id === skillId;
-			})[0] : undefined;
+				})[0] : undefined;
 
 			vm.selectedSkillGroup = !!vm.preselectedSkills.skillAreaId ?
 				vm.skillGroups.filter(function (s) {
@@ -156,13 +156,13 @@
 			vm.isLoading = true;
 
 			StaffingInfoService.getStaffingByDate(vm.selectedSkill, vm.selectedSkillGroup, serviceDateFormatHelper.getDateOnly(vm.selectedDate), vm.useShrinkage)
-			.then(function (result) {
-				vm.isLoading = false;
-				if (staffingPrecheck(result.DataSeries)) {
-					var staffingData = ChartService.prepareStaffingData(result);
-					generateChartForView(staffingData);
-				}
-			});
+				.then(function (result) {
+					vm.isLoading = false;
+					if (staffingPrecheck(result.DataSeries)) {
+						var staffingData = ChartService.prepareStaffingData(result);
+						generateChartForView(staffingData);
+					}
+				});
 		}
 
 		function staffingPrecheck(data) {

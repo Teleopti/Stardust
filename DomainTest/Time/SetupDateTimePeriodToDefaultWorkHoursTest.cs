@@ -1,6 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Time
@@ -20,9 +22,9 @@ namespace Teleopti.Ccc.DomainTest.Time
             TimeSpan localStartTimeOfDay = TimeSpan.FromHours(6);
             TimeSpan localEndTimeOfDay = TimeSpan.FromHours(13);
 			
-	        var startDateTimeLocal = _targetDateTimePeriod.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
-	        _defaultLocal = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTimeLocal.Add(localStartTimeOfDay), startDateTimeLocal.Add(localEndTimeOfDay), TimeZoneHelper.CurrentSessionTimeZone);
-            _target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal, _info);
+	        var startDateTimeLocal = _targetDateTimePeriod.StartDateTimeLocal(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+	        _defaultLocal = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTimeLocal.Add(localStartTimeOfDay), startDateTimeLocal.Add(localEndTimeOfDay), TimeZoneInfoFactory.StockholmTimeZoneInfo());
+            _target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal, new SpecificTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo()), _info);
         }
 
         [Test]
@@ -30,10 +32,10 @@ namespace Teleopti.Ccc.DomainTest.Time
         {
 	        setup();
 
-			_target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal, TimeZoneInfo.Utc);
+			_target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal, UserTimeZone.Make(), TimeZoneInfo.Utc);
 
             DateTimePeriod result = _target.Period;
-	        var localPeriod = _defaultLocal.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone);
+	        var localPeriod = _defaultLocal.TimePeriod(TimeZoneInfoFactory.StockholmTimeZoneInfo());
             Assert.AreEqual(localPeriod.StartTime, result.StartDateTime.TimeOfDay);
             Assert.AreEqual(localPeriod.EndTime, result.EndDateTime.TimeOfDay);
         }
@@ -42,10 +44,10 @@ namespace Teleopti.Ccc.DomainTest.Time
         public void TimeIsSetFromLocalTimeZoneInfo()
         {
 			setup();
-			_target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal, _info);
+			_target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal, UserTimeZone.Make(), _info);
 
             DateTimePeriod p = _target.Period;
-	        var localPeriod = _defaultLocal.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone);
+	        var localPeriod = _defaultLocal.TimePeriod(TimeZoneInfoFactory.StockholmTimeZoneInfo());
             Assert.AreEqual(localPeriod.StartTime, p.StartDateTimeLocal(_info).TimeOfDay);
             Assert.AreEqual(localPeriod.EndTime, p.EndDateTimeLocal(_info).TimeOfDay);
         }
@@ -54,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         public void VerifyDateIsFromTheStartDate()
         {
 			setup();
-			_target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal, _info);
+			_target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal, UserTimeZone.Make(), _info);
 
             DateTimePeriod p = _target.Period;
             Assert.AreEqual(_targetDateTimePeriod.StartDateTime.Date, p.StartDateTimeLocal(_info).Date);

@@ -55,9 +55,19 @@ Try
 	
 	log-info "running: $ScriptFileName"
 	
-	ReinstallService "TeleoptiEtlService" "E:\approot\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe"
+	log-info "We are on the following instance: '$env:RoleInstanceID'"
+	
+	if ($env:RoleInstanceID -eq "TeleoptiCCC_IN_0" -or $RoleInstanceID -eq "TeleoptiCCC_IN_1"){
+		
+		ReinstallService "TeleoptiEtlService" "E:\approot\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe"
+	}
+	else {
+		log-info "We are on instance '$env:RoleInstanceID', ETL will not be installed here..."
+	}
+	
 	ReinstallService "TeleoptiServiceBus" "E:\approot\Services\ServiceBus\Teleopti.CCC.Sdk.ServiceBus.Host.exe"
 	
+    
 	$ServiceBus = "TeleoptiServiceBus"
 	& sc.exe failure $ServiceBus reset= 0 actions= restart/60000/restart/60000/restart/60000
 

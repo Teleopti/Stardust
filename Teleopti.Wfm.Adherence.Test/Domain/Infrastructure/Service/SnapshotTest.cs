@@ -16,7 +16,7 @@ using Teleopti.Wfm.Adherence.Test.Domain.Service;
 namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service
 {
 	[TestFixture]
-	[MultiDatabaseTest]
+	[DatabaseTest]
 	public class SnapshotTest : IIsolateSystem
 	{
 		public Database Database;

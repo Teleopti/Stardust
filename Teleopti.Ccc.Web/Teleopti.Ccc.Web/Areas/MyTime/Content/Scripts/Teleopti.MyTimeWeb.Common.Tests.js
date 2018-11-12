@@ -29,10 +29,45 @@
 		}
 	});
 
+	test('should be able to enable a toggle', function() {
+		try {
+			Teleopti.MyTimeWeb.Common.Init(
+				{
+					defaultNavigation: '/',
+					baseUrl: '/',
+					startBaseUrl: '/'
+				},
+				null
+			);
+
+			Teleopti.MyTimeWeb.Common.EnableToggle('my_toggle_to_be_enabled');
+
+			equal(Teleopti.MyTimeWeb.Common.IsToggleEnabled('my_toggle_to_be_enabled'), true);
+		} catch (error) {
+			equal(error, 'you cannot ask toggle before you initialize it!');
+		}
+	});
+
+	test('should be able to disable a toggle', function() {
+		try {
+			Teleopti.MyTimeWeb.Common.Init(
+				{
+					defaultNavigation: '/',
+					baseUrl: '/',
+					startBaseUrl: '/'
+				},
+				null
+			);
+			Teleopti.MyTimeWeb.Common.EnableToggle('my_toggle_to_be_disabled');
+			Teleopti.MyTimeWeb.Common.DisableToggle('my_toggle_to_be_disabled');
+
+			equal(Teleopti.MyTimeWeb.Common.IsToggleEnabled('my_toggle_to_be_disabled'), false);
+		} catch (error) {
+			equal(error, 'you cannot ask toggle before you initialize it!');
+		}
+	});
+
 	test('should format moment', function() {
-		common.IsToggleEnabled = function(x) {
-			return true;
-		};
 		common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'DD/MM/YYYY',
@@ -47,10 +82,6 @@
 	});
 
 	test('should format date', function() {
-		common.IsToggleEnabled = function(x) {
-			return true;
-		};
-
 		common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'DD/MM/YYYY',
@@ -65,9 +96,6 @@
 	});
 
 	test('should format jalaali date', function() {
-		common.IsToggleEnabled = function(x) {
-			return true;
-		};
 		common.SetupCalendar({
 			UseJalaaliCalendar: true,
 			DateFormat: 'DD/MM/YYYY',
@@ -83,10 +111,6 @@
 	});
 
 	test('should format date with month format', function() {
-		common.IsToggleEnabled = function(x) {
-			return true;
-		};
-
 		common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'DD/MM/YYYY',
@@ -101,11 +125,6 @@
 	});
 
 	test('should format date with jalaali month format', function() {
-		var common = Teleopti.MyTimeWeb.Common;
-		common.IsToggleEnabled = function(x) {
-			return true;
-		};
-
 		common.SetupCalendar({
 			UseJalaaliCalendar: true,
 			DateFormat: 'DD/MM/YYYY',
@@ -122,10 +141,6 @@
 	});
 
 	test('should format period with dates', function() {
-		var common = Teleopti.MyTimeWeb.Common;
-		common.IsToggleEnabled = function(x) {
-			return true;
-		};
 		common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'DD/MM/YYYY',
@@ -139,9 +154,6 @@
 	});
 
 	test('should format period with moments', function() {
-		common.IsToggleEnabled = function(x) {
-			return true;
-		};
 		common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'DD/MM/YYYY',
@@ -158,9 +170,6 @@
 	});
 
 	test('should format date and time period', function() {
-		common.IsToggleEnabled = function(x) {
-			return true;
-		};
 		common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'DD/MM/YYYY',
@@ -178,9 +187,6 @@
 	});
 
 	test('should format date and time period on same day to exclude second date', function() {
-		common.IsToggleEnabled = function(x) {
-			return true;
-		};
 		common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'DD/MM/YYYY',
@@ -198,9 +204,6 @@
 	});
 
 	test('should format jalaali date and time period', function() {
-		common.IsToggleEnabled = function(x) {
-			return true;
-		};
 		common.SetupCalendar({
 			UseJalaaliCalendar: true,
 			DateFormat: 'DD/MM/YYYY',
@@ -220,9 +223,6 @@
 	});
 
 	test('should format date format locale', function() {
-		common.IsToggleEnabled = function(x) {
-			return true;
-		};
 		common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'DD/MM/YYYY',

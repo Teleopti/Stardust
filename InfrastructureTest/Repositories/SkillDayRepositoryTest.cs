@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -284,14 +285,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var dateTime = new DateOnly(_date);
 			DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(dateTime, dateTime.AddDays(1),
-				TimeZoneHelper.CurrentSessionTimeZone);
+				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 
 			IList<IWorkloadDay> workloadDays = WorkloadDayFactory.GetWorkloadDaysForTest(_date, _date, _workload);
 			SkillPersonData skillPersonData = new SkillPersonData(0, 0);
 			ISkillDataPeriod skillDataPeriod = new SkillDataPeriod(ServiceAgreement.DefaultValues(), skillPersonData,
 				TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
 					dateTimePeriod.StartDateTime,
-					dateTimePeriod.EndDateTime, TimeZoneHelper.CurrentSessionTimeZone));
+					dateTimePeriod.EndDateTime, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
 			IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod> {skillDataPeriod};
 			ISkillDay skillDay = new SkillDay(dateTime, _skill, _scenario, workloadDays, skillDataPeriods);
 
@@ -314,14 +315,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var dateTime = new DateOnly(_date);
 			DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(dateTime, dateTime.AddDays(1),
-				TimeZoneHelper.CurrentSessionTimeZone);
+				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 
 			IList<IWorkloadDay> workloadDays = WorkloadDayFactory.GetWorkloadDaysForTest(_date, _date, _workload);
 			SkillPersonData skillPersonData = new SkillPersonData(0, 0);
 			ISkillDataPeriod skillDataPeriod = new SkillDataPeriod(ServiceAgreement.DefaultValues(), skillPersonData,
 				TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
 					dateTimePeriod.StartDateTime,
-					dateTimePeriod.EndDateTime, TimeZoneHelper.CurrentSessionTimeZone));
+					dateTimePeriod.EndDateTime, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
 			IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod> { skillDataPeriod };
 			ISkillDay skillDay = new SkillDay(dateTime, _skill, _scenario, workloadDays, skillDataPeriods);
 

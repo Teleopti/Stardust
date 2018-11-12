@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             ISkillDataPeriod skillDataPeriod = new SkillDataPeriod(ServiceAgreement.DefaultValues(), skillPersonData,
                                                                    TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
                                                                        _period.StartDate.Date,
-                                                                       _period.EndDate.Date, TimeZoneHelper.CurrentSessionTimeZone));
+                                                                       _period.EndDate.Date, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
 
             workloadDaysLongTerm[0].CreateFromTemplate(dateTime, workload, templateLongTerm);
 
