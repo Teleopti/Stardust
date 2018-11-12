@@ -27,7 +27,7 @@
 .new-teamschedule-view-nav .navbar-teleopti.navbar-nav > li > a:hover,
 .new-teamschedule-view-nav .navbar-teleopti.navbar-nav > li > a:focus {
 	cursor: pointer;
-	background-color: transparent;
+	border-radius: 3px;
 }
 .new-teamschedule-view-nav input.form-control {
 	background: transparent !important;
@@ -37,10 +37,14 @@
 	font-size: 1.1em;
 	font-weight: bold;
 }
-.new-teamschedule-view-nav span.input-group-btn .btn.btn-default {
+.new-teamschedule-view-nav .mobile-datepicker span.input-group-btn .btn.btn-default {
 	padding: 9px 10px;
+	border-radius: 3px;
 }
-.new-teamschedule-view-nav .input-group {
+.new-teamschedule-view-nav .mobile-datepicker span.input-group-btn .btn.btn-default:focus {
+	outline: none;
+}
+.new-teamschedule-view-nav .mobile-datepicker .input-group {
 	width: 192px;
 }
 @media (max-width: 500px) {
@@ -233,7 +237,7 @@
 	margin-left: 15px;
 }
 .new-teamschedule-view-nav .submenu li.mobile-datepicker {
-	padding: 0 5px 0 0;
+	padding: 0 5px;
 	max-width: 329px;
 	width: 192px;
 }
@@ -771,9 +775,9 @@ div.new-teamschedule-no-result-indicator {
 	width: 100%;
 }
 .new-teamschedule-view-mobile .new-teamschedule-agent-name.my-name.relative {
-	width: 71px;
-	min-width: 71px;
-	max-width: 71px;
+	width: 72px;
+	min-width: 72px;
+	max-width: 72px;
 }
 .new-teamschedule-view-mobile .new-teamschedule-agent-name {
 	width: 50px;
