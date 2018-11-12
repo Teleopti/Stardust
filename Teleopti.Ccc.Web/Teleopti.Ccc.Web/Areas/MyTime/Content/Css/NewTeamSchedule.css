@@ -489,8 +489,6 @@ div.teammates-schedules-column:last-of-type .agent-name {
 .new-teamschedule-view .new-teamschedule-layer {
 	text-align: center;
 	border-left: 0;
-	border-top: 1px solid #dfdfdf;
-	border-bottom: 1px solid #dfdfdf;
 	width: 100% !important;
 	overflow: hidden;
 	z-index: 1;
