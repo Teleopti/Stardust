@@ -40,5 +40,5 @@ $(Repository)Teleopti.Wfm.Test\bin\Release\Teleopti.Wfm.Test.dll.config,$(BuildA
 $(Repository)Teleopti.Ccc.Scheduling.PerformanceTest\bin\Debug\Teleopti.Ccc.Scheduling.PerformanceTest.dll.config,$(BuildArtifacts)PerformanceTest.config
 $(Repository)Teleopti.Ccc.Scheduling.PerformanceTest\bin\Release\Teleopti.Ccc.Scheduling.PerformanceTest.dll.config,$(BuildArtifacts)PerformanceTest.config
 $(Repository)Teleopti.Wfm.Adherence.Test\App.config,$(BuildArtifacts)Teleopti.Ccc.TestCommon.App.config
-$(Repository)Teleopti.Wfm.Adherence.Test\bin\Debug\Teleopti.Ccc.InfrastructureTest.dll.config,$(BuildArtifacts)Teleopti.Ccc.TestCommon.App.config
-$(Repository)Teleopti.Wfm.Adherence.Test\bin\Release\Teleopti.Ccc.InfrastructureTest.dll.config,$(BuildArtifacts)Teleopti.Ccc.TestCommon.App.config
+$(Repository)Teleopti.Wfm.Adherence.Test\bin\Debug\Teleopti.Wfm.Adherence.Test.dll.config,$(BuildArtifacts)Teleopti.Ccc.TestCommon.App.config
+$(Repository)Teleopti.Wfm.Adherence.Test\bin\Release\Teleopti.Wfm.Adherence.Test.dll.config,$(BuildArtifacts)Teleopti.Ccc.TestCommon.App.config
