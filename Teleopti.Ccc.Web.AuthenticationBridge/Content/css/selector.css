@@ -35,14 +35,13 @@ h1 {
 	list-style-type: none;
 	overflow-y: auto;
 	max-height: 50vh;
-	border-top: 1px solid #ddd;
-	border-bottom: 1px solid #ddd;
+	border: 1px solid #ddd;
 }
 
 #BusinessUnits a.list-group-item {
 	margin-top: -1px;
-	margin-bottom: -2px;
-	border-bottom: none;
+	border: none;
+	border-top: 1px solid #ddd;
 }
 
 .formError {
