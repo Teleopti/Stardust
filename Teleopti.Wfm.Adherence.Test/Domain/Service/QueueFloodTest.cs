@@ -26,7 +26,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 				Target.Enqueue(new BatchForTest());
 			});
 			
-			Assert.Throws<FloodedStateQueueException>(() =>
+			Assert.Throws<StateQueueHealthException>(() =>
 			{
 				Checker.Reset();
 				Target.Enqueue(new BatchForTest());
@@ -63,7 +63,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Service
 				Target.Enqueue(new BatchForTest());
 			});
 
-			Assert.Throws<FloodedStateQueueException>(() =>
+			Assert.Throws<StateQueueHealthException>(() =>
 			{
 				Checker.Reset();
 				Target.Enqueue(new BatchForTest());

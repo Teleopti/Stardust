@@ -57,7 +57,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 				batch.States.EmptyIfNull()
 					.ForEach(x => { x.TraceLog = _tracer.StateReceived(x.UserCode, x.StateCode); });
 				_tracer.ProcessEnqueuing(batch?.States?.Count());
-				validateQueue();
+				validateQueueHealth();
 				_analytics.Do(() => { _queueWriter.Enqueue(batch); });
 			});
 		}
@@ -194,10 +194,11 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			}
 		}
 
-		private void validateQueue()
+		private void validateQueueHealth()
 		{
-			if (!_queueHealth.Healthy())
-				throw new FloodedStateQueueException("State queue is flooded");
+			var healthState = _queueHealth.Health();
+			if (!healthState.Healthy)
+				throw new StateQueueHealthException($"State queue is flooded with {healthState.QueueSize} batches");
 		}
 
 		[LogInfo]

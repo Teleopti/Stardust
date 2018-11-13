@@ -270,7 +270,7 @@
     <Compile Include="Domain\Service\StateQueueTenants.cs" />
     <Compile Include="Domain\Service\StateRuleInfo.cs" />
     <Compile Include="Domain\Service\TenantLoader.cs" />
-    <Compile Include="Domain\Service\FloodedStateQueueException.cs" />
+    <Compile Include="Domain\Service\StateQueueHealthException.cs" />
     <Compile Include="KeyValueStorePersisterExtensions.cs" />
     <Compile Include="TenantFromAuthenticationKey.cs" />
     <Compile Include="Tool\IRtaToolViewModelBuilder.cs" />

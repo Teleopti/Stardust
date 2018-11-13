@@ -7,8 +7,14 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 	public interface IStateQueueHealthChecker
 	{
 		void Check();
-		bool Healthy();
+		Health Health();
 		void Reset();
+	}
+
+	public class Health
+	{
+		public bool Healthy;
+		public int QueueSize;
 	}
 
 	public class AlwaysHealthyChecker : IStateQueueHealthChecker
@@ -17,9 +23,9 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		{
 		}
 
-		public bool Healthy()
+		public Health Health()
 		{
-			return true;
+			return new Health {Healthy = true};
 		}
 
 		public void Reset()
@@ -31,31 +37,37 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 	{
 		private readonly IStateQueueReader _reader;
 		private readonly int _maxSize;
-		private readonly PerTenant<bool?> _healthy;
+		private readonly PerTenant<Health> _health;
 
 		public StateQueueHealthChecker(IStateQueueReader reader, IConfigReader config, ICurrentDataSource tenant)
 		{
 			_reader = reader;
 			_maxSize = config.ReadValue("RtaStateQueueMaxSize", 100);
-			_healthy = new PerTenant<bool?>(tenant);
+			_health = new PerTenant<Health>(tenant);
 		}
 
 		[AnalyticsUnitOfWork]
 		public virtual void Check()
 		{
-			_healthy.Set(_reader.Count() < _maxSize);
+			var count = _reader.Count();
+			var healthy = count < _maxSize;
+			_health.Set(new Health
+			{
+				Healthy = healthy,
+				QueueSize = count
+			});
 		}
 
-		public bool Healthy()
+		public Health Health()
 		{
-			if (!_healthy.Value.HasValue)
+			if (_health.Value == null)
 				Check();
-			return _healthy.Value.GetValueOrDefault();
+			return _health.Value;
 		}
 
 		public void Reset()
 		{
-			_healthy.Set(null);
+			_health.Set(null);
 		}
 	}
 }
