@@ -1,13 +1,7 @@
 ﻿.pagebody.new-teamschedule-view {
 	overflow: hidden;
-	-webkit-transform: translate3d(0, 0, 0);
-	transform: translate3d(0, 0, 0);
 	padding-left: 0;
 	padding-right: 0;
-}
-.new-teamschedule-view .relative {
-	-webkit-transform: translate3d(0, 0, 0);
-	transform: translate3d(0, 0, 0);
 }
 .new-teamschedule-view-nav {
 	padding: 0;
@@ -27,7 +21,7 @@
 .new-teamschedule-view-nav .navbar-teleopti.navbar-nav > li > a:hover,
 .new-teamschedule-view-nav .navbar-teleopti.navbar-nav > li > a:focus {
 	cursor: pointer;
-	background-color: transparent;
+	border-radius: 3px;
 }
 .new-teamschedule-view-nav input.form-control {
 	background: transparent !important;
@@ -37,10 +31,14 @@
 	font-size: 1.1em;
 	font-weight: bold;
 }
-.new-teamschedule-view-nav span.input-group-btn .btn.btn-default {
+.new-teamschedule-view-nav .mobile-datepicker span.input-group-btn .btn.btn-default {
 	padding: 9px 10px;
+	border-radius: 3px;
 }
-.new-teamschedule-view-nav .input-group {
+.new-teamschedule-view-nav .mobile-datepicker span.input-group-btn .btn.btn-default:focus {
+	outline: none;
+}
+.new-teamschedule-view-nav .mobile-datepicker .input-group {
 	width: 192px;
 }
 @media (max-width: 500px) {
@@ -233,7 +231,7 @@
 	margin-left: 15px;
 }
 .new-teamschedule-view-nav .submenu li.mobile-datepicker {
-	padding: 0 5px 0 0;
+	padding: 0 5px;
 	max-width: 329px;
 	width: 192px;
 }
@@ -489,8 +487,6 @@ div.teammates-schedules-column:last-of-type .agent-name {
 .new-teamschedule-view .new-teamschedule-layer {
 	text-align: center;
 	border-left: 0;
-	border-top: 1px solid #dfdfdf;
-	border-bottom: 1px solid #dfdfdf;
 	width: 100% !important;
 	overflow: hidden;
 	z-index: 1;
@@ -773,9 +769,9 @@ div.new-teamschedule-no-result-indicator {
 	width: 100%;
 }
 .new-teamschedule-view-mobile .new-teamschedule-agent-name.my-name.relative {
-	width: 71px;
-	min-width: 71px;
-	max-width: 71px;
+	width: 72px;
+	min-width: 72px;
+	max-width: 72px;
 }
 .new-teamschedule-view-mobile .new-teamschedule-agent-name {
 	width: 50px;

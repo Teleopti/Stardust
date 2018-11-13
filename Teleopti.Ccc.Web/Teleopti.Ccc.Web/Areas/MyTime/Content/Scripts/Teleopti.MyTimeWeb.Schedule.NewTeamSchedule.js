@@ -393,6 +393,7 @@
 		vm.agentNames(visibleAgentNames);
 
 		$('.left-filling-block').width(visibleAgentsIndexRange.start * agentScheduleColumnWidth);
+		setupTeamScheduleColumnClickBinding();
 	}
 
 	function loadMoreSchedules(paging, callback) {
