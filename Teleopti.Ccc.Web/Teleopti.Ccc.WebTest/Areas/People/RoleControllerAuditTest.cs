@@ -2,21 +2,23 @@
 using SharpTestsEx;
 using System.Linq;
 using System.Web.Http.Results;
+using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Infrastructure.Audit;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.People.Controllers;
-using Teleopti.Ccc.Web.Areas.People.Core;
-using Teleopti.Ccc.Web.Areas.People.Models;
 using Teleopti.Ccc.WebTest.Areas.People.IoC;
 
 namespace Teleopti.Ccc.WebTest.Areas.People
 {
 	[WebPeopleTest]
-	public class RoleControllerAuditTest
+	public class RoleControllerAuditBase
 	{
 		public RoleController Target;
 		public FakeApplicationRoleRepository ApplicationRoleRepository;
@@ -243,6 +245,19 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			auditRows2.Where(x => x.ActionResult == PersonAuditActionResult.Change.ToString()).Count().Should().Be.EqualTo(4);
 			auditRows2.Where(x => x.ActionResult == PersonAuditActionResult.NoChange.ToString()).Count().Should().Be.EqualTo(2);
 		}
+	}
+
+
+	public class RoleControllerAuditToggleOffTest : RoleControllerAuditBase
+	{
+
+	}
+
+	
+	[Toggle(Toggles.Wfm_AuditTrail_GenericAuditTrail_74938)]
+	public class RoleControllerAuditToggleOnTest : RoleControllerAuditBase
+	{
+
 	}
 }
 

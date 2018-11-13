@@ -1,0 +1,81 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
+using Teleopti.Ccc.Domain.Auditing;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Infrastructure.Audit
+{
+	public class PersonAccessContextReaderService : IPersonAccessContextReaderService
+	{
+		private readonly IPersonAccessAuditRepository _personAccessAuditRepository;
+		private readonly IUserCulture _userCulture;
+		private readonly IApplicationRoleRepository _applicationRoleRepository;
+		private readonly IPurgeSettingRepository _purgeSettingRepository;
+		private readonly INow _now;
+
+		public PersonAccessContextReaderService(IPersonAccessAuditRepository personAccessAuditRepository, IUserCulture userCulture, IApplicationRoleRepository applicationRoleRepository, IPurgeSettingRepository purgeSettingRepository, INow now)
+		{
+			_personAccessAuditRepository = personAccessAuditRepository;
+			_userCulture = userCulture;
+			_applicationRoleRepository = applicationRoleRepository;
+			_purgeSettingRepository = purgeSettingRepository;
+			_now = now;
+		}
+
+		public IEnumerable<AuditServiceModel> LoadAll()
+		{
+			var personAccessAudits = _personAccessAuditRepository.LoadAll();
+
+			return getAuditServiceModel(personAccessAudits);
+
+		}
+
+		private IEnumerable<AuditServiceModel> getAuditServiceModel(IEnumerable<IPersonAccess> personAccessAudit)
+		{
+			var auditServiceModelList = new List<AuditServiceModel>();
+			foreach (var audit in personAccessAudit)
+			{
+				var auditServiceModel = new AuditServiceModel
+				{
+					TimeStamp = audit.TimeStamp, Context = "PersonAccess", Action = audit.Action,
+					ActionPerformedBy = audit.ActionPerformedBy.Name.ToString(NameOrderOption.FirstNameLastName)
+				};
+				var deserializedRole = JsonConvert.DeserializeObject<PersonAccessModel>(audit.Data);
+				var appRole = _applicationRoleRepository.Load(deserializedRole.RoleId);
+				auditServiceModel.Data = $"Role: {appRole.Name} Action: {audit.Action}";
+				auditServiceModelList.Add(auditServiceModel);
+			}
+
+			return auditServiceModelList;
+		}
+
+		public class PersonAccessModel
+		{
+			public Guid RoleId;
+			public string Name;
+		}
+
+		public IEnumerable<AuditServiceModel> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate)
+		{
+			var staffingAudit = _personAccessAuditRepository.LoadAudits(personId, startDate, endDate);
+
+			return getAuditServiceModel(staffingAudit);
+		}
+
+		public void PurgeAudits()
+		{
+			var purgeSettings = _purgeSettingRepository.FindAllPurgeSettings();
+			var monthsToKeepAuditEntry = purgeSettings.SingleOrDefault(p => p.Key == "MonthsToKeepAudit");
+			var dateForPurging = _now.UtcDateTime().AddMonths(-(monthsToKeepAuditEntry?.Value ?? 3));
+			_personAccessAuditRepository.PurgeOldAudits(dateForPurging);
+		}
+	}
+
+	
+}

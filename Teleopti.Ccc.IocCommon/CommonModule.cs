@@ -84,11 +84,12 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new ShiftTradeModule());
 			builder.RegisterModule<CommandDispatcherModule>();
 			builder.RegisterModule(new CommandHandlersModule(_configuration));
-			builder.RegisterModule<PeopleAreaModule>();
+			builder.RegisterModule(new PeopleAreaModule(_configuration));
 			builder.RegisterModule<GamificationAreaModule>();
 			builder.RegisterModule(new ReportModule(_configuration));
 			builder.RegisterModule(new ApplicationInsightsModule());
 			builder.RegisterModule<NotificationModule>();
+			builder.RegisterModule(new AuditTrailModule(_configuration));
 			builder.RegisterModule<AbsenceModule>();
 		}
 

@@ -22,9 +22,12 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Search;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.ToggleAdmin;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -165,6 +168,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			}
 			else
 			{
+				isolate.UseTestDouble<FakePersonAccessAuditRepository>().For<IPersonAccessAuditRepository>();
+				isolate.UseTestDouble<FakeTenantAuditRepository>().For<ITenantAuditRepository>();
 				isolate.UseTestDouble<FakeSkillCombinationResourceReader>().For<ISkillCombinationResourceReader>();
 				isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository, IProxyForId<IPerson>, IPersonLoadAllWithAssociation>();
 				isolate.UseTestDouble<FakeMultisiteDayRepository>().For<IMultisiteDayRepository>();
@@ -280,7 +285,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeForecastDayOverrideRepository>().For<IForecastDayOverrideRepository>();
 				isolate.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
 				isolate.UseTestDouble<FakeExtensiveLogRepository>().For<IExtensiveLogRepository>();
+				isolate.UseTestDouble<FakeStaffingAuditRepository>().For<IStaffingAuditRepository>();
 			}
+
+			isolate.UseTestDouble<PersonSearchProvider>().For<PersonSearchProvider>();
+
+			isolate.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();
+			isolate.UseTestDouble<ReplaceLayerInSchedule>().For<IReplaceLayerInSchedule>();
 
 			isolate.UseTestDouble<FakeFetchAllToggleOverrides>().For<IFetchAllToggleOverrides>();
 			isolate.UseTestDouble<FakePersistToggleOverride>().For<IPersistToggleOverride>();

@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			existingPerson.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make(), new OneWayEncryption());
 
 			var personInfoPersister = new PersistPersonInfo(_tenantUnitOfWorkManager, new PersonInfoPersister(_tenantUnitOfWorkManager));
-			personInfoPersister.Persist(existingPerson);
+			personInfoPersister.Persist(new GenericPersistApiCallActionObj() { PersonInfo = existingPerson});
 			_tenantUnitOfWorkManager.CurrentSession().Flush();
 			target = new ApplicationUserQuery(_tenantUnitOfWorkManager);
 		}

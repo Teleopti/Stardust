@@ -2,7 +2,8 @@
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
-	public class TenantAudit
+
+	public class TenantAudit 
 	{
 
 		protected TenantAudit()
@@ -12,7 +13,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public TenantAudit(Guid actionBy, Guid actionOn, string action, string actionData, Guid? correlation = null)
 			: this()
 		{
-			this.Id = Guid.NewGuid();
 			ActionPerformedBy = actionBy;
 			ActionPerformedOn = actionOn;
 			Action = action;

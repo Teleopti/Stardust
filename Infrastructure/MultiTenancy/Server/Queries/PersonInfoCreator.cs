@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 		public Guid CreateAndPersistPersonInfo(IPersonInfoModel personInfo)
 		{
 			var tenantUser = _infoMapper.Create(personInfo);
-			_persister.Persist(tenantUser);
+			_persister.Persist(new GenericPersistApiCallActionObj(){PersonInfo = tenantUser});
 			return tenantUser.Id;
 		}
 	}

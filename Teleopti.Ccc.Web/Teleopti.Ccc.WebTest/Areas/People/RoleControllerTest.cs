@@ -2,6 +2,7 @@
 using SharpTestsEx;
 using System.Linq;
 using System.Web.Http.Results;
+using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;

@@ -3,6 +3,7 @@ using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -32,6 +33,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.Options.IoC;
 using Teleopti.Ccc.Web.Areas.Outbound.core.IoC;
+using Teleopti.Ccc.Web.Areas.People.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Permissions;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
 using Teleopti.Ccc.Web.Areas.Reports.IoC;
@@ -104,7 +106,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			
 			builder.RegisterModule<SeatPlannerAreaModule>();
 			builder.RegisterModule(new OutboundAreaModule(true));
-			builder.RegisterModule<Web.Areas.People.Core.IoC.PeopleAreaModule>();
+			builder.RegisterModule( new Areas.People.Core.IoC.PeopleAreaModule(_configuration));
+			
 			builder.RegisterModule<TeamScheduleAreaModule>();
 			builder.RegisterModule<RequestsAreaModule>();
 			builder.RegisterModule<ReportsAreaModule>();

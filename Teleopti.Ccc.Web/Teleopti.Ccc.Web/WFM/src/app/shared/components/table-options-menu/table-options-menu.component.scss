@@ -1,0 +1,13 @@
+:host {
+}
+
+.my-wrapper {
+	width: 27px;
+	height: 27px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	&:hover {
+		cursor: pointer;
+	}
+}

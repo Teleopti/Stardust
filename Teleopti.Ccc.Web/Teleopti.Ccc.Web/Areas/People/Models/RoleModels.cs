@@ -40,17 +40,5 @@ namespace Teleopti.Ccc.Web.Areas.People.Models
 		public IEnumerable<Guid> Roles { get; set; }
 	}
 
-	public class RevokeRolesInputModel : PersonRolesBaseModel
-	{
-	}
-
-	public class GrantRolesInputModel : PersonRolesBaseModel
-	{
-	}
-
-	public class PersonRolesBaseModel
-	{
-		public IEnumerable<Guid> Persons { get; set; }
-		public IEnumerable<Guid> Roles { get; set; }
-	}
+	
 }

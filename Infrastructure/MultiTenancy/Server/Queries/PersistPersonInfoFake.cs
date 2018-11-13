@@ -7,12 +7,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 	{
 		private bool _rollbacked = false;
 
-		public string Persist(PersonInfo personInfo, bool throwOnError)
+		public string Persist(GenericPersistApiCallActionObj genericPersistApiCallAction)
 		{
-			LastPersist = personInfo;
-			if (personInfo.ApplicationLogonInfo.LogonName == "existingId@teleopti.com")
+			LastPersist = genericPersistApiCallAction.PersonInfo;
+			if (genericPersistApiCallAction.PersonInfo.ApplicationLogonInfo.LogonName == "existingId@teleopti.com")
 			{
-				if (throwOnError)
+				if (genericPersistApiCallAction.ThrowOnError)
 				{
 					throw new DuplicateApplicationLogonNameException(Guid.NewGuid());
 				}
@@ -24,12 +24,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			return null;
 		}
 
-		public string PersistApplicationLogonName(PersonInfo personInfo, bool throwOnError)
+		public string PersistApplicationLogonName(AppLogonChangeActionObj appLogonChangeActionObj)
 		{
-			LastPersist = personInfo;
-			if (personInfo.ApplicationLogonInfo.LogonName == "existingId@teleopti.com")
+			LastPersist = appLogonChangeActionObj.PersonInfo;
+			if (appLogonChangeActionObj.PersonInfo.ApplicationLogonInfo.LogonName == "existingId@teleopti.com")
 			{
-				if (throwOnError)
+				if (appLogonChangeActionObj.ThrowOnError)
 				{
 					throw new DuplicateApplicationLogonNameException(Guid.NewGuid());
 				}
@@ -41,12 +41,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			return null;
 		}
 
-		public string PersistIdentity(PersonInfo personInfo, bool throwOnError)
+		public string PersistIdentity(IdentityChangeActionObj identityChangeActionObj)
 		{
-			LastPersist = personInfo;
-			if (personInfo.Identity == "existingId@teleopti.com")
+			LastPersist = identityChangeActionObj.PersonInfo;
+			if (identityChangeActionObj.PersonInfo.Identity == "existingId@teleopti.com")
 			{
-				if (throwOnError)
+				if (identityChangeActionObj.ThrowOnError)
 				{
 					throw new DuplicateIdentityException(Guid.NewGuid());
 				}

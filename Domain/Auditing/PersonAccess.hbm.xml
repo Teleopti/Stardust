@@ -53,4 +53,18 @@
 				   not-null="true"
 				   foreign-key="FK_PA_ActionPerformedOn_Person_Id"/>
   </class>
+	<query name="PersonAccessAuditOnCriteria">
+		<![CDATA[
+Select s from PersonAccess s
+			where s.TimeStamp between :StartDate and :EndDate and :PersonId = s.ActionPerformedBy
+
+]]>
+	</query>
+	<query name="PurgePersonAccess">
+		<![CDATA[
+DELETE from PersonAccess
+			where TimeStamp < : DaysBack
+
+]]>
+	</query>
 </hibernate-mapping>

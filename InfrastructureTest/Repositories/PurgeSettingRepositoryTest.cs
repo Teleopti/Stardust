@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				allSettings.First().Key.Should().Be.EqualTo("test");
 			}
 		}
+		
 	}
 
 	

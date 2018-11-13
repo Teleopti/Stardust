@@ -171,8 +171,18 @@
     <Compile Include="AgentInfo\SkillStaffingDataLoader.cs" />
     <Compile Include="AgentInfo\SkillStaffingDataSkillTypeFilter.cs" />
     <Compile Include="Analytics\AnalyticsSite.cs" />
+    <Compile Include="Aop\AuditTrailAspect.cs" />
+    <Compile Include="Aop\PostActionAuditAspect.cs" />
+    <Compile Include="Aop\AuditTrailAttribute.cs" />
+    <Compile Include="Aop\IHandleContextAction.cs" />
     <Compile Include="Aop\IUnitOfWorkNoCommitAspect.cs" />
     <Compile Include="Aop\ReadonlyUnitOfWorkAttribute.cs" />
+    <Compile Include="ApplicationLayer\Audit\AuditAggregatorService.cs" />
+    <Compile Include="ApplicationLayer\Audit\AuditServiceModel.cs" />
+    <Compile Include="ApplicationLayer\Audit\IPersonAccessContextReaderService.cs" />
+    <Compile Include="ApplicationLayer\Audit\IStaffingContextReaderService.cs" />
+    <Compile Include="ApplicationLayer\Audit\PersonAccessAuditContext.cs" />
+    <Compile Include="ApplicationLayer\Audit\StaffingAuditContext.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\FilterOutRequestsHandledByReadmodel.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\AbsenceRequestModel.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\AbsenceRequestModelMapper.cs" />
@@ -182,6 +192,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\Legacy\NewAbsenceRequestHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistPreloadService.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistProcessPublisher.cs" />
+    <Compile Include="ApplicationLayer\Audit\TenantContextReaderService.cs" />
     <Compile Include="ApplicationLayer\Availability\HandleMultipleAnalyticsAvailabilityDays.cs" />
     <Compile Include="ApplicationLayer\Availability\HandleOneAnalyticsAvailabilityDay.cs" />
     <Compile Include="ApplicationLayer\Badge\IPushMessageSender.cs" />
@@ -199,12 +210,14 @@
     <Compile Include="ApplicationLayer\Intraday\ISkillStaffingIntervalProvider.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedule.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsDateMapper.cs" />
+    <Compile Include="Auditing\ITenantAudit.cs" />
     <Compile Include="Budgeting\BudgetGroupAllowanceCalculatorExtended.cs" />
     <Compile Include="Budgeting\BudgetGroupHeadCountSpecificationExtended.cs" />
     <Compile Include="Budgeting\BudgetGroupState.cs" />
     <Compile Include="Common\DefaultSchedulePeriodProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\MultipleChangeScheduleCommandHandler.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />
+    <Compile Include="Exceptions\BusinessRuleBrokenException.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\AccuracyModel.cs" />
     <Compile Include="Forecasting\Angel\Outlier\OutlierRemover.cs" />
     <Compile Include="Forecasting\Angel\Outlier\QueueStatisticsPerType.cs" />
@@ -583,6 +596,7 @@
     <Compile Include="ResourcePlanner\IDayOffOptimizationPreferenceProviderForPlanningPeriod.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionsAbleToBeScheduled.cs" />
     <Compile Include="Scheduling\ShiftCategorySelection.cs" />
+    <Compile Include="Search\PersonSearchProvider.cs" />
     <Compile Include="Security\DataTokenManager.cs" />
     <Compile Include="Security\IDataTokenManager.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccOvertimeRequestsLicenseOption.cs" />
@@ -632,6 +646,7 @@
     <Compile Include="Scheduling\WebLegacy\MoveSchedulesToOriginalStateHolderAfterIsland.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiWfmBpoExchangeLicenseOption.cs" />
     <Compile Include="SkillGroupManagement\ModifySkillGroupInput.cs" />
+    <Compile Include="Staffing\AuditableBpoOperations.cs" />
     <Compile Include="Staffing\BpoProvider.cs" />
     <Compile Include="Staffing\ClearBpoReturnObject.cs" />
     <Compile Include="Staffing\ExportStaffingPeriodValidationProvider.cs" />
@@ -641,6 +656,11 @@
     <Compile Include="Staffing\IExportBpoFile.cs" />
     <Compile Include="Staffing\ImportBpoFile.cs" />
     <Compile Include="Staffing\ISkillCombinationBpoTimeLineReader.cs" />
+    <Compile Include="Staffing\IPersonAccessAuditRepository.cs" />
+    <Compile Include="Staffing\IStaffingAudit.cs" />
+    <Compile Include="Staffing\IStaffingAuditRepository.cs" />
+    <Compile Include="Staffing\ITenantAuditRepository.cs" />
+    <Compile Include="Staffing\StaffingAudit.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
     <Compile Include="ResourcePlanner\Hints\ISchedulePostHint.cs" />
     <Compile Include="Scheduling\Overtime\IOvertimeSkillPeriodData.cs" />
@@ -4009,6 +4029,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Staffing\StaffingAudit.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WorkflowControl\OvertimeRequestOpenPeriodSkillType.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>

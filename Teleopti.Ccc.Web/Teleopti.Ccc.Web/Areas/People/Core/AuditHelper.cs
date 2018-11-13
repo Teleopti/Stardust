@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Audit;
 using Teleopti.Ccc.Web.Areas.People.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core
 {
-	public interface IAuditHelper
-	{
-		void AuditCall(PersonAuditActionType actionType, PersonRolesBaseModel inputmodel);
-	}
+	
 
 	public class AuditHelper : IAuditHelper
 	{
@@ -99,22 +98,5 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 				_personAccessRepository.Add(pa);
 			}
 		}
-	}
-
-	public enum PersonAuditActionResult
-	{
-		Change,
-		NoChange,
-		NotPermitted
-	}
-
-	public enum PersonAuditActionType
-	{
-		GrantRole,
-		RevokeRole,
-		SingleGrantRole,
-		SingleRevokeRole,
-		MultiGrantRole,
-		MultiRevokeRole
 	}
 }

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
@@ -76,9 +78,28 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			fromServerModule(builder);
 
+			builder.RegisterType<TenantAccessAuditContext>()
+				.As<IHandleContextAction<IdentityChangeActionObj>, 
+					IHandleContextAction<GenericPersistApiCallActionObj>, 
+					IHandleContextAction<AppLogonChangeActionObj>>().SingleInstance();
+
 			builder.RegisterType<FalsePryl>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<TenantUserPersister>().As<ITenantUserPersister>().SingleInstance().ApplyAspects();
 
+		}
+
+		private void registerType<T, TToggleOn, TToggleOff>(ContainerBuilder builder, Toggles toggle)
+			where TToggleOn : T
+			where TToggleOff : T
+		{
+			if (_configuration.Toggle(toggle))
+			{
+				builder.RegisterType<TToggleOn>().As<T>().SingleInstance().ApplyAspects();
+			}
+			else
+			{
+				builder.RegisterType<TToggleOff>().As<T>().SingleInstance().ApplyAspects();
+			}
 		}
 
 		private class FalsePryl : ITenantAuthentication
@@ -113,7 +134,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TenantUnitOfWorkAspect>().As<IAspect>().SingleInstance();
 			builder.RegisterType<WithTenantUnitOfWork>().SingleInstance();
 			builder.RegisterType<PersistLogonAttempt>().As<IPersistLogonAttempt>().SingleInstance();
-			builder.RegisterType<PersistPersonInfo>().As<IPersistPersonInfo>().SingleInstance().ApplyAspects();
+			registerType<IPersistPersonInfo, PersistPersonInfoWithAuditTrail, PersistPersonInfo>(builder, Toggles.Wfm_AuditTrail_GenericAuditTrail_74938);
 			builder.RegisterType<PersonInfoPersister>().As<IPersonInfoPersister>().SingleInstance();
 			builder.RegisterType<TenantAuditPersister>().As<ITenantAuditPersister>().SingleInstance();
 			builder.RegisterType<TenantAuditAspect>().As<IAspect>().SingleInstance();
