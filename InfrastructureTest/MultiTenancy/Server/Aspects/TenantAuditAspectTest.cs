@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Aspects
 
 			using (TenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted())
 			{
-				Target.DoSomething(personInfo);
+				Target.DoSomething(new AppLogonChangeActionObj(){PersonInfo = personInfo});
 				var session = TenantUnitOfWorkManager.CurrentSession();
 				session.FlushAndClear();
 				session.Query<TenantAudit>().ToList().Count.Should().Be.EqualTo(1);
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Aspects
 		public class TestAuditService
 		{
 			[TenantAudit(PersistActionIntent.AppLogonChange)]
-			public virtual void DoSomething(PersonInfo personInfo)
+			public virtual void DoSomething(AppLogonChangeActionObj personInfo)
 			{
 			}
 		}
