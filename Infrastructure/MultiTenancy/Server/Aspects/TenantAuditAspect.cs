@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Aspects
 				intent = ((TenantAuditAttribute)tenantAttr).ActionIntent;
 			}
 
-			var personInfo = invocation.Arguments.OfType<PersonInfo>().SingleOrDefault();
+			var action = invocation.Arguments.OfType<TenantAuditAction>().SingleOrDefault();
+			var personInfo = action.PersonInfo;
 			if (personInfo != null && intent != null)
 			{
 				AuditPersist(personInfo, (PersistActionIntent)intent);
