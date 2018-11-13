@@ -188,6 +188,41 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			executer.AllUnavailableStudentAvailability(e.Button);
 		}
 
+		internal void ToolStripMenuItemAllRotationsMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllRotations(e.Button);
+		}
+
+		internal void ToolStripMenuItemAllDaysOffRotationsMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllDaysOffRotations(e.Button);
+		}
+
+		internal void ToolStripMenuItemAllShiftsRotationsMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllShiftsRotations(e.Button);
+		}
+
+		internal void ToolStripMenuItemAllFulFilledRotationsMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllFulfilledRotations(e.Button);
+		}
+
+		internal void ToolStripMenuItemAllFulFilledDaysOffRotationsMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllFulfilledDaysOffRotations(e.Button);
+		}
+
+		internal void ToolStripMenuItemAllFulFilledShiftsRotationsMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllFulfilledShiftsRotations(e.Button);
+		}
 
 	}
 }

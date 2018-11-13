@@ -77,5 +77,74 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.LockMenuBuilders
 			toolStripMenuItemAllFulFilledStudentAvailabilityRM.MouseUp += userLockHelper.ToolStripMenuItemAllFulFilledStudentAvailabilityMouseUp;
 			toolStripMenuItemLockStudentAvailabilityRM.DropDownItems.Add(toolStripMenuItemAllFulFilledStudentAvailabilityRM);
 		}
+
+		public void BuildLockRotation(ToolStripMenuItem toolStripMenuItemLockRotations, ToolStripMenuItem toolStripMenuItemLockRotationsRM, UserLockHelper userLockHelper)
+		{
+			//All, toolStripMenuItemAllRotations, toolStripMenuItemAllRotationsRM, toolStripMenuItemAllRotationsMouseUp
+			var toolStripMenuItemAllRotations = new ToolStripMenuItem(Resources.All)
+				{ Name = "toolStripMenuItemAllRotations" };
+			toolStripMenuItemAllRotations.MouseUp += userLockHelper.ToolStripMenuItemAllRotationsMouseUp;
+			toolStripMenuItemLockRotations.DropDownItems.Add(toolStripMenuItemAllRotations);
+
+			var toolStripMenuItemAllRotationsRM = new ToolStripMenuItem(Resources.All)
+				{ Name = "toolStripMenuItemAllRotationsRM" };
+			toolStripMenuItemAllRotationsRM.MouseUp += userLockHelper.ToolStripMenuItemAllRotationsMouseUp;
+			toolStripMenuItemLockRotationsRM.DropDownItems.Add(toolStripMenuItemAllRotationsRM);
+
+			//AllDaysOff, toolStripMenuItemAllDaysOffRotations, toolStripMenuItemAllDaysOffRotationsRM, toolStripMenuItemAllDaysOffRotationsMouseUp
+			var toolStripMenuItemAllDaysOffRotations = new ToolStripMenuItem(Resources.AllDaysOff)
+				{ Name = "toolStripMenuItemAllDaysOffRotations" };
+			toolStripMenuItemAllDaysOffRotations.MouseUp += userLockHelper.ToolStripMenuItemAllDaysOffRotationsMouseUp;
+			toolStripMenuItemLockRotations.DropDownItems.Add(toolStripMenuItemAllDaysOffRotations);
+
+			var toolStripMenuItemAllDaysOffRotationsRM = new ToolStripMenuItem(Resources.AllDaysOff)
+				{ Name = "toolStripMenuItemAllDaysOffRotationsRM" };
+			toolStripMenuItemAllDaysOffRotationsRM.MouseUp += userLockHelper.ToolStripMenuItemAllDaysOffRotationsMouseUp;
+			toolStripMenuItemLockRotationsRM.DropDownItems.Add(toolStripMenuItemAllDaysOffRotationsRM);
+
+			//AllShifts, toolStripMenuItemAllShiftRotations, toolStripMenuItemAllShiftRotationsRM, toolStripMenuItemAllShiftsRotationsMouseUp
+			var toolStripMenuItemAllShiftRotations = new ToolStripMenuItem(Resources.AllShifts)
+				{ Name = "toolStripMenuItemAllShiftRotations" };
+			toolStripMenuItemAllShiftRotations.MouseUp += userLockHelper.ToolStripMenuItemAllShiftsRotationsMouseUp;
+			toolStripMenuItemLockRotations.DropDownItems.Add(toolStripMenuItemAllShiftRotations);
+
+			var toolStripMenuItemAllShiftRotationsRM = new ToolStripMenuItem(Resources.AllShifts)
+				{ Name = "toolStripMenuItemAllShiftRotationsRM" };
+			toolStripMenuItemAllShiftRotationsRM.MouseUp += userLockHelper.ToolStripMenuItemAllShiftsRotationsMouseUp;
+			toolStripMenuItemLockRotationsRM.DropDownItems.Add(toolStripMenuItemAllShiftRotationsRM);
+
+			//AllFulFilled, toolStripMenuItemAllFulFilledRotations, toolStripMenuItemAllFulFilledRotationsRM, toolStripMenuItemAllFulFilledRotationsMouseUp
+			var toolStripMenuItemAllFulFilledRotations = new ToolStripMenuItem(Resources.AllFulFilled)
+				{ Name = "toolStripMenuItemAllFulFilledRotations" };
+			toolStripMenuItemAllFulFilledRotations.MouseUp += userLockHelper.ToolStripMenuItemAllFulFilledRotationsMouseUp;
+			toolStripMenuItemLockRotations.DropDownItems.Add(toolStripMenuItemAllFulFilledRotations);
+
+			var toolStripMenuItemAllFulFilledRotationsRM = new ToolStripMenuItem(Resources.AllFulFilled)
+				{ Name = "toolStripMenuItemAllFulFilledRotationsRM" };
+			toolStripMenuItemAllFulFilledRotationsRM.MouseUp += userLockHelper.ToolStripMenuItemAllFulFilledRotationsMouseUp;
+			toolStripMenuItemLockRotationsRM.DropDownItems.Add(toolStripMenuItemAllFulFilledRotationsRM);
+
+			//AllFulFilledDaysOff, toolStripMenuItemAllFulFilledDaysOffRotations, toolStripMenuItemAllFulFilledDaysOffRotationsRM, toolStripMenuItemAllFulFilledDaysOffRotationsMouseUp
+			var toolStripMenuItemAllFulFilledDaysOffRotations = new ToolStripMenuItem(Resources.AllFulFilledDaysOff)
+				{ Name = "toolStripMenuItemAllFulFilledDaysOffRotations" };
+			toolStripMenuItemAllFulFilledDaysOffRotations.MouseUp += userLockHelper.ToolStripMenuItemAllFulFilledDaysOffRotationsMouseUp;
+			toolStripMenuItemLockRotations.DropDownItems.Add(toolStripMenuItemAllFulFilledDaysOffRotations);
+
+			var toolStripMenuItemAllFulFilledDaysOffRotationsRM = new ToolStripMenuItem(Resources.AllFulFilledDaysOff)
+				{ Name = "toolStripMenuItemAllFulFilledDaysOffRotationsRM" };
+			toolStripMenuItemAllFulFilledDaysOffRotationsRM.MouseUp += userLockHelper.ToolStripMenuItemAllFulFilledDaysOffRotationsMouseUp;
+			toolStripMenuItemLockRotationsRM.DropDownItems.Add(toolStripMenuItemAllFulFilledDaysOffRotationsRM);
+
+			//AllFulFilledShifts, toolStripMenuItemAllFulFilledShiftsRotations, toolStripMenuItemAllFulFilledShiftsRotationsRM, toolStripMenuItemAllFulFilledShiftsRotationsMouseUp
+			var toolStripMenuItemAllFulFilledShiftsRotations = new ToolStripMenuItem(Resources.AllFulFilledShifts)
+				{ Name = "toolStripMenuItemAllFulFilledShiftsRotations" };
+			toolStripMenuItemAllFulFilledShiftsRotations.MouseUp += userLockHelper.ToolStripMenuItemAllFulFilledShiftsRotationsMouseUp;
+			toolStripMenuItemLockRotations.DropDownItems.Add(toolStripMenuItemAllFulFilledShiftsRotations);
+
+			var toolStripMenuItemAllFulFilledShiftsRotationsRM = new ToolStripMenuItem(Resources.AllFulFilledShifts)
+				{ Name = "toolStripMenuItemAllFulFilledShiftsRotationsRM" };
+			toolStripMenuItemAllFulFilledShiftsRotationsRM.MouseUp += userLockHelper.ToolStripMenuItemAllFulFilledShiftsRotationsMouseUp;
+			toolStripMenuItemLockRotationsRM.DropDownItems.Add(toolStripMenuItemAllFulFilledShiftsRotationsRM);
+		}
 	}
 }

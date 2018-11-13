@@ -136,12 +136,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.ToolStripMenuItemAllFulFilledShiftsPreferencesRM = new System.Windows.Forms.ToolStripMenuItem();
 			this.ToolStripMenuItemAllFulfilledMustHaveRM = new System.Windows.Forms.ToolStripMenuItem();
 			this.ToolStripMenuItemLockRotationsRM = new System.Windows.Forms.ToolStripMenuItem();
-			this.ToolStripMenuItemAllRotationsRM = new System.Windows.Forms.ToolStripMenuItem();
-			this.ToolStripMenuItemAllDaysOffRotationsRM = new System.Windows.Forms.ToolStripMenuItem();
-			this.ToolStripMenuItemAllShiftsRotationsRM = new System.Windows.Forms.ToolStripMenuItem();
-			this.ToolStripMenuItemAllFulFilledRotationsRM = new System.Windows.Forms.ToolStripMenuItem();
-			this.ToolStripMenuItemAllFulFilledDaysOffRotationsRM = new System.Windows.Forms.ToolStripMenuItem();
-			this.ToolStripMenuItemAllFulFilledShiftsRotationsRM = new System.Windows.Forms.ToolStripMenuItem();
 			this.ToolStripMenuItemLockStudentAvailabilityRM = new System.Windows.Forms.ToolStripMenuItem();
 			this.ToolStripMenuItemLockAvailabilityRM = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemLockTagsRM = new System.Windows.Forms.ToolStripMenuItem();
@@ -226,12 +220,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.ToolStripMenuItemAllFulFilledShiftsPreferences = new System.Windows.Forms.ToolStripMenuItem();
 			this.ToolStripMenuItemAllFulfilledMustHave = new System.Windows.Forms.ToolStripMenuItem();
 			this.ToolStripMenuItemLockRotations = new System.Windows.Forms.ToolStripMenuItem();
-			this.ToolStripMenuItemAllRotations = new System.Windows.Forms.ToolStripMenuItem();
-			this.ToolStripMenuItemAllDaysOffRotations = new System.Windows.Forms.ToolStripMenuItem();
-			this.ToolStripMenuItemAllFulFilledRotations = new System.Windows.Forms.ToolStripMenuItem();
-			this.ToolStripMenuItemAllFulFilledDaysOffRotations = new System.Windows.Forms.ToolStripMenuItem();
-			this.ToolStripMenuItemAllFulFilledShiftsRotations = new System.Windows.Forms.ToolStripMenuItem();
-			this.ToolStripMenuItemAllShiftsRotations = new System.Windows.Forms.ToolStripMenuItem();
 			this.ToolStripMenuItemLockStudentAvailability = new System.Windows.Forms.ToolStripMenuItem();
 			this.ToolStripMenuItemLockAvailability = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemLockTags = new System.Windows.Forms.ToolStripMenuItem();
@@ -372,7 +360,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(25, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 0;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 1;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.SkyBlue;
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -520,7 +508,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             this.toolStripMenuItemNotifyAgent});
 			this.contextMenuViews.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(236)))), ((int)(((byte)(249)))));
 			this.contextMenuViews.Name = "contextMenuStrip1";
-			this.contextMenuViews.Size = new System.Drawing.Size(306, 644);
+			this.contextMenuViews.Size = new System.Drawing.Size(306, 666);
 			this.contextMenuViews.Style = Syncfusion.Windows.Forms.Tools.ContextMenuStripEx.ContextMenuStyle.Metro;
 			this.contextMenuViews.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuViewsOpening);
 			// 
@@ -1008,65 +996,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			// 
 			// ToolStripMenuItemLockRotationsRM
 			// 
-			this.ToolStripMenuItemLockRotationsRM.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ToolStripMenuItemAllRotationsRM,
-            this.ToolStripMenuItemAllDaysOffRotationsRM,
-            this.ToolStripMenuItemAllShiftsRotationsRM,
-            this.ToolStripMenuItemAllFulFilledRotationsRM,
-            this.ToolStripMenuItemAllFulFilledDaysOffRotationsRM,
-            this.ToolStripMenuItemAllFulFilledShiftsRotationsRM});
 			this.ToolStripMenuItemLockRotationsRM.Name = "ToolStripMenuItemLockRotationsRM";
 			this.SetShortcut(this.ToolStripMenuItemLockRotationsRM, System.Windows.Forms.Keys.None);
 			this.ToolStripMenuItemLockRotationsRM.Size = new System.Drawing.Size(208, 22);
 			this.ToolStripMenuItemLockRotationsRM.Text = "xxLockRotations";
-			// 
-			// ToolStripMenuItemAllRotationsRM
-			// 
-			this.ToolStripMenuItemAllRotationsRM.Name = "ToolStripMenuItemAllRotationsRM";
-			this.SetShortcut(this.ToolStripMenuItemAllRotationsRM, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemAllRotationsRM.Size = new System.Drawing.Size(184, 22);
-			this.ToolStripMenuItemAllRotationsRM.Text = "xxAll";
-			this.ToolStripMenuItemAllRotationsRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllRotationsMouseUp);
-			// 
-			// ToolStripMenuItemAllDaysOffRotationsRM
-			// 
-			this.ToolStripMenuItemAllDaysOffRotationsRM.Name = "ToolStripMenuItemAllDaysOffRotationsRM";
-			this.SetShortcut(this.ToolStripMenuItemAllDaysOffRotationsRM, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemAllDaysOffRotationsRM.Size = new System.Drawing.Size(184, 22);
-			this.ToolStripMenuItemAllDaysOffRotationsRM.Text = "xxAllDaysOff";
-			this.ToolStripMenuItemAllDaysOffRotationsRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllDaysOffRotationsMouseUp);
-			// 
-			// ToolStripMenuItemAllShiftsRotationsRM
-			// 
-			this.ToolStripMenuItemAllShiftsRotationsRM.Name = "ToolStripMenuItemAllShiftsRotationsRM";
-			this.SetShortcut(this.ToolStripMenuItemAllShiftsRotationsRM, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemAllShiftsRotationsRM.Size = new System.Drawing.Size(184, 22);
-			this.ToolStripMenuItemAllShiftsRotationsRM.Text = "xxAllShifts";
-			this.ToolStripMenuItemAllShiftsRotationsRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllShiftsRotationsMouseUp);
-			// 
-			// ToolStripMenuItemAllFulFilledRotationsRM
-			// 
-			this.ToolStripMenuItemAllFulFilledRotationsRM.Name = "ToolStripMenuItemAllFulFilledRotationsRM";
-			this.SetShortcut(this.ToolStripMenuItemAllFulFilledRotationsRM, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemAllFulFilledRotationsRM.Size = new System.Drawing.Size(184, 22);
-			this.ToolStripMenuItemAllFulFilledRotationsRM.Text = "xxAllFulFilled";
-			this.ToolStripMenuItemAllFulFilledRotationsRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledRotationsMouseUp);
-			// 
-			// ToolStripMenuItemAllFulFilledDaysOffRotationsRM
-			// 
-			this.ToolStripMenuItemAllFulFilledDaysOffRotationsRM.Name = "ToolStripMenuItemAllFulFilledDaysOffRotationsRM";
-			this.SetShortcut(this.ToolStripMenuItemAllFulFilledDaysOffRotationsRM, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemAllFulFilledDaysOffRotationsRM.Size = new System.Drawing.Size(184, 22);
-			this.ToolStripMenuItemAllFulFilledDaysOffRotationsRM.Text = "xxAllFulFilledDaysOff";
-			this.ToolStripMenuItemAllFulFilledDaysOffRotationsRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledDaysOffRotationsMouseUp);
-			// 
-			// ToolStripMenuItemAllFulFilledShiftsRotationsRM
-			// 
-			this.ToolStripMenuItemAllFulFilledShiftsRotationsRM.Name = "ToolStripMenuItemAllFulFilledShiftsRotationsRM";
-			this.SetShortcut(this.ToolStripMenuItemAllFulFilledShiftsRotationsRM, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemAllFulFilledShiftsRotationsRM.Size = new System.Drawing.Size(184, 22);
-			this.ToolStripMenuItemAllFulFilledShiftsRotationsRM.Text = "xxAllFulFilledShifts";
-			this.ToolStripMenuItemAllFulFilledShiftsRotationsRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledShiftsRotationsMouseUp);
 			// 
 			// ToolStripMenuItemLockStudentAvailabilityRM
 			// 
@@ -2074,65 +2007,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			// 
 			// ToolStripMenuItemLockRotations
 			// 
-			this.ToolStripMenuItemLockRotations.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ToolStripMenuItemAllRotations,
-            this.ToolStripMenuItemAllDaysOffRotations,
-            this.ToolStripMenuItemAllFulFilledRotations,
-            this.ToolStripMenuItemAllFulFilledDaysOffRotations,
-            this.ToolStripMenuItemAllFulFilledShiftsRotations,
-            this.ToolStripMenuItemAllShiftsRotations});
 			this.ToolStripMenuItemLockRotations.Name = "ToolStripMenuItemLockRotations";
 			this.SetShortcut(this.ToolStripMenuItemLockRotations, System.Windows.Forms.Keys.None);
 			this.ToolStripMenuItemLockRotations.Size = new System.Drawing.Size(194, 22);
 			this.ToolStripMenuItemLockRotations.Text = "xxLockRotations";
-			// 
-			// ToolStripMenuItemAllRotations
-			// 
-			this.ToolStripMenuItemAllRotations.Name = "ToolStripMenuItemAllRotations";
-			this.SetShortcut(this.ToolStripMenuItemAllRotations, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemAllRotations.Size = new System.Drawing.Size(171, 22);
-			this.ToolStripMenuItemAllRotations.Text = "xxAll";
-			this.ToolStripMenuItemAllRotations.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllRotationsMouseUp);
-			// 
-			// ToolStripMenuItemAllDaysOffRotations
-			// 
-			this.ToolStripMenuItemAllDaysOffRotations.Name = "ToolStripMenuItemAllDaysOffRotations";
-			this.SetShortcut(this.ToolStripMenuItemAllDaysOffRotations, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemAllDaysOffRotations.Size = new System.Drawing.Size(171, 22);
-			this.ToolStripMenuItemAllDaysOffRotations.Text = "xxAllDaysOff";
-			this.ToolStripMenuItemAllDaysOffRotations.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllDaysOffRotationsMouseUp);
-			// 
-			// ToolStripMenuItemAllFulFilledRotations
-			// 
-			this.ToolStripMenuItemAllFulFilledRotations.Name = "ToolStripMenuItemAllFulFilledRotations";
-			this.SetShortcut(this.ToolStripMenuItemAllFulFilledRotations, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemAllFulFilledRotations.Size = new System.Drawing.Size(171, 22);
-			this.ToolStripMenuItemAllFulFilledRotations.Text = "xxAllFulFilled";
-			this.ToolStripMenuItemAllFulFilledRotations.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledRotationsMouseUp);
-			// 
-			// ToolStripMenuItemAllFulFilledDaysOffRotations
-			// 
-			this.ToolStripMenuItemAllFulFilledDaysOffRotations.Name = "ToolStripMenuItemAllFulFilledDaysOffRotations";
-			this.SetShortcut(this.ToolStripMenuItemAllFulFilledDaysOffRotations, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemAllFulFilledDaysOffRotations.Size = new System.Drawing.Size(171, 22);
-			this.ToolStripMenuItemAllFulFilledDaysOffRotations.Text = "xxAllFulFilledDaysOff";
-			this.ToolStripMenuItemAllFulFilledDaysOffRotations.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledDaysOffRotationsMouseUp);
-			// 
-			// ToolStripMenuItemAllFulFilledShiftsRotations
-			// 
-			this.ToolStripMenuItemAllFulFilledShiftsRotations.Name = "ToolStripMenuItemAllFulFilledShiftsRotations";
-			this.SetShortcut(this.ToolStripMenuItemAllFulFilledShiftsRotations, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemAllFulFilledShiftsRotations.Size = new System.Drawing.Size(171, 22);
-			this.ToolStripMenuItemAllFulFilledShiftsRotations.Text = "xxAllFulFilledShifts";
-			this.ToolStripMenuItemAllFulFilledShiftsRotations.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledShiftsRotationsMouseUp);
-			// 
-			// ToolStripMenuItemAllShiftsRotations
-			// 
-			this.ToolStripMenuItemAllShiftsRotations.Name = "ToolStripMenuItemAllShiftsRotations";
-			this.SetShortcut(this.ToolStripMenuItemAllShiftsRotations, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemAllShiftsRotations.Size = new System.Drawing.Size(171, 22);
-			this.ToolStripMenuItemAllShiftsRotations.Text = "xxAllShifts";
-			this.ToolStripMenuItemAllShiftsRotations.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllShiftsRotationsMouseUp);
 			// 
 			// ToolStripMenuItemLockStudentAvailability
 			// 
@@ -3472,11 +3350,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         private ToolStripMenuItem ToolStripMenuItemAllFulFilledDaysOffPreferences;
         private ToolStripMenuItem ToolStripMenuItemAllFulFilledShiftsPreferences;
         private ToolStripMenuItem ToolStripMenuItemLockRotations;
-        private ToolStripMenuItem ToolStripMenuItemAllRotations;
-        private ToolStripMenuItem ToolStripMenuItemAllDaysOffRotations;
-        private ToolStripMenuItem ToolStripMenuItemAllFulFilledRotations;
-        private ToolStripMenuItem ToolStripMenuItemAllFulFilledDaysOffRotations;
-        private ToolStripMenuItem ToolStripMenuItemAllFulFilledShiftsRotations;
         private ToolStripMenuItem ToolStripMenuItemLockStudentAvailability;
         private ToolStripMenuItem ToolStripMenuItemLockAvailability;
         private ToolStripMenuItem ToolStripMenuItemLockRestrictionsRM;
@@ -3489,15 +3362,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         private ToolStripMenuItem ToolStripMenuItemAllFulFilledDaysOffPreferencesRM;
         private ToolStripMenuItem ToolStripMenuItemAllFulFilledShiftsPreferencesRM;
         private ToolStripMenuItem ToolStripMenuItemLockRotationsRM;
-        private ToolStripMenuItem ToolStripMenuItemAllRotationsRM;
-        private ToolStripMenuItem ToolStripMenuItemAllDaysOffRotationsRM;
-        private ToolStripMenuItem ToolStripMenuItemAllShiftsRotationsRM;
-        private ToolStripMenuItem ToolStripMenuItemAllFulFilledRotationsRM;
-        private ToolStripMenuItem ToolStripMenuItemAllFulFilledDaysOffRotationsRM;
-        private ToolStripMenuItem ToolStripMenuItemAllFulFilledShiftsRotationsRM;
         private ToolStripMenuItem ToolStripMenuItemLockStudentAvailabilityRM;
         private ToolStripMenuItem ToolStripMenuItemLockAvailabilityRM;
-        private ToolStripMenuItem ToolStripMenuItemAllShiftsRotations;
         private ToolStripMenuItem ToolStripMenuItemAllMustHaveRM;
         private ToolStripMenuItem ToolStripMenuItemAllFulfilledMustHaveRM;
         private ToolStripMenuItem ToolStripMenuItemAllMustHave;
