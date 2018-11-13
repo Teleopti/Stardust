@@ -878,6 +878,42 @@
 		equal(vm.showNewTrafficLightIconOnMobile(), false);
 	});
 
+	test("should not show old 'traffic light' icon for passed days and MyTimeWeb_TrafficLightOnMobileDayView_77447 is ON", function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_TrafficLightOnMobileDayView_77447');
+		Teleopti.MyTimeWeb.Common.DisableToggle('MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640');
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
+			fakeReadyForInteractionCallback,
+			fakeCompletelyLoadedCallback,
+			ajax
+		);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		startDayData.Schedule.ProbabilityClass = 'good';
+		startDayData.Schedule.ProbabilityText = 'Good';
+		vm.previousDay();
+
+		equal(vm.trafficLightColor(), '');
+		equal(vm.showOldTrafficLightIconOnMobile(), false);
+	});
+
+	test("should not show new 'traffic light' icon for passed days and MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640 is ON", function() {
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_TrafficLightOnMobileDayView_77447');
+		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640');
+
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
+			fakeReadyForInteractionCallback,
+			fakeCompletelyLoadedCallback,
+			ajax
+		);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		startDayData.Schedule.ProbabilityClass = 'good';
+		startDayData.Schedule.ProbabilityText = 'Good';
+		vm.previousDay();
+
+		equal(vm.trafficLightIconClass(), '');
+		equal(vm.showNewTrafficLightIconOnMobile(), false);
+	});
+
 	test("should show probability toggle by agent's timezone", function() {
 		startDayData.BaseUtcOffsetInMinutes = -600;
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(

@@ -116,6 +116,7 @@ var TooltipBinding = function() {
 		ko.utils.extend(options, local);
 
 		$(element).tooltip(options);
+		$(element).attr({ 'binding-tooltip': true });
 
 		ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
 			$(element).tooltip('destroy');
