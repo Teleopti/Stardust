@@ -131,6 +131,11 @@
 	text-transform: uppercase;
 	font-size: 150%;
 }
+.mobile-start-day .holiday-agents {
+	position: absolute;
+	right: 38px;
+	bottom: 5px;
+}
 .mobile-start-day .holiday-agents.traffic-light-progress {
 	position: absolute;
 	right: 38px;
