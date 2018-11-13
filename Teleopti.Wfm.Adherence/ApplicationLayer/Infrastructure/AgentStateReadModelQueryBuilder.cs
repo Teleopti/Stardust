@@ -103,11 +103,20 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.Infrastructure
 			{
 				textFilter.Split(null)
 					.Select(x => x.Trim())
-					.Where(x => !string.IsNullOrWhiteSpace(x))
-					.Select((w, i) => new {word = w, index = i})
+					.Select((x, i) =>
+					{
+						var exclude = x.StartsWith("-");
+						return new
+						{
+							word = exclude ? x.Substring(1) : x,
+							modifier = exclude ? "NOT" : "",
+							index = i
+						};
+					})
+					.Where(x => !string.IsNullOrWhiteSpace(x.word))
 					.ForEach(x =>
 					{
-						_wheres.Add($"a.TextFilter LIKE :textFilter{x.index}");
+						_wheres.Add($"a.TextFilter {x.modifier} LIKE :textFilter{x.index}");
 						_parameters.Add(s => s.SetParameter($"textFilter{x.index}", $"%{x.word}%"));
 					});
 			}

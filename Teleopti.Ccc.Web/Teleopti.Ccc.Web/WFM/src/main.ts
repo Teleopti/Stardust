@@ -9,7 +9,6 @@ import { authenticationComponents } from './app/authentication/authentication.mo
 import { menuComponents } from './app/menu/menu.module';
 import { navigationComponents } from './app/navigation/navigation.module';
 import { reportsComponents } from './app/reports/reports.module';
-import { WorkspaceComponent } from './app/pm/components';
 import { peopleComponents, peopleRouterConfig } from './app/people/people.module';
 import { insightsComponents, insightsRouterConfig } from './app/insights/insights.module';
 import { sharedComponents } from './app/shared/shared.module';

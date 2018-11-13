@@ -47,10 +47,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StateQueue>().As<IStateQueueReader>().As<IStateQueueWriter>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateQueueWorker>().AsSelf().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateQueueTenants>().SingleInstance();
+			
 			if (_config.Toggle(Toggles.RTA_StateQueueFloodPrevention_77710))
 			{
-				builder.RegisterType<StateQueueHealthChecker>().As<IStateQueueHealthChecker>().SingleInstance().ApplyAspects();
-				builder.RegisterType<StateQueueHealthCheckerProcess>().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
+				if (_config.Args().BehaviorTestServer)
+				{
+					builder.RegisterType<AlwaysHealthyChecker>().As<IStateQueueHealthChecker>().SingleInstance();				
+				}
+				else
+				{
+					builder.RegisterType<StateQueueHealthChecker>().As<IStateQueueHealthChecker>().SingleInstance().ApplyAspects();
+					builder.RegisterType<StateQueueHealthCheckerProcess>().As<IBackgroundProcess>().SingleInstance().ApplyAspects();					
+				}
 			}
 			else
 			{

@@ -225,7 +225,7 @@ Add-Type -TypeDefinition $code
 
 #disable checks using new class
 [System.Net.ServicePointManager]::ServerCertificateValidationCallback = [SSLHandler]::GetSSLHandler()
-[Net.ServicePointManager]::SecurityProtocol += [Net.SecurityProtocolType]::Tls12
+[Net.ServicePointManager]::SecurityProtocol = 'Tls12'
 
 try
 {
@@ -266,7 +266,7 @@ function CheckPublicWeb
 "@
 
 	[System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
-	[Net.ServicePointManager]::SecurityProtocol += [Net.SecurityProtocolType]::Tls12
+	[Net.ServicePointManager]::SecurityProtocol = 'Tls12'
 
 	log-info "Url to check: '$PublicUrl'"
 	$statusCode = $null

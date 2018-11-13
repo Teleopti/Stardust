@@ -21,6 +21,7 @@ export class GeneralAuditTrailComponent implements OnInit {
 	personList: Array<Person>;
 	selectedPerson: Person;
 	auditTrailData: Array<AuditEntry>;
+	dateformat: Date;
 
 	searchForm = this.fb.group({
 		personPicker: [''],

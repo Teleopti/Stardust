@@ -14,21 +14,18 @@ namespace Teleopti.Wfm.Adherence.Domain
 		private readonly IPersonRepository _persons;
 		private readonly IBusinessUnitRepository _businessUnits;
 		private readonly IScenarioRepository _scenarios;
-		private readonly ICurrentScenario _scenario;
 		private readonly IScheduleStorage _scheduleStorage;
 
 		public BelongsToDateMapper(
 			IPersonRepository persons,
 			IBusinessUnitRepository businessUnits,
 			IScenarioRepository scenarios,
-			ICurrentScenario scenario,
 			IScheduleStorage scheduleStorage
 		)
 		{
 			_persons = persons;
 			_businessUnits = businessUnits;
 			_scenarios = scenarios;
-			_scenario = scenario;
 			_scheduleStorage = scheduleStorage;
 		}
 
