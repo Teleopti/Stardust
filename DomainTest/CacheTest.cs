@@ -11,7 +11,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 using Module = Autofac.Module;
 
-namespace Teleopti.Wfm.Adherence.Test.Domain
+namespace Teleopti.Ccc.DomainTest
 {
 	[DomainTest]
 	[TestFixture]
