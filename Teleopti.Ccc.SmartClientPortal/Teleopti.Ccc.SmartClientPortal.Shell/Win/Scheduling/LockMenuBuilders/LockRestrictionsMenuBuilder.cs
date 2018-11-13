@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.LockMenuBuilders
 {
 	public class LockRestrictionsMenuBuilder
 	{
-		public void Build(ToolStripMenuItem toolStripMenuItemLockAvailabilityRM, ToolStripMenuItem toolStripMenuItemLockAvailability, UserLockHelper userLockHelper)
+		public void BuildLockAvailability(ToolStripMenuItem toolStripMenuItemLockAvailabilityRM, ToolStripMenuItem toolStripMenuItemLockAvailability, UserLockHelper userLockHelper)
 		{
 			//AllUnavailable
 			var toolStripMenuItemAllUnavailableAvailability = new ToolStripMenuItem(Resources.AllUnavailable)
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.LockMenuBuilders
 			toolStripMenuItemLockAvailability.DropDownItems.Add(toolStripMenuItemAllUnavailableAvailability);
 
 			var toolStripMenuItemAllUnAvailableAvailabilityRM = new ToolStripMenuItem(Resources.AllUnavailable)
-				{ Name = "toolStripMenuItemAllAvailableAvailabilityRM" };
+				{ Name = "toolStripMenuItemAllUnAvailableAvailabilityRM" };
 			toolStripMenuItemAllUnAvailableAvailabilityRM.MouseUp += userLockHelper.ToolStripMenuItemAllUnavailableAvailabilityMouseUp;
 			toolStripMenuItemLockAvailabilityRM.DropDownItems.Add(toolStripMenuItemAllUnAvailableAvailabilityRM);
 
@@ -42,9 +42,40 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.LockMenuBuilders
 			toolStripMenuItemLockAvailabilityRM.DropDownItems.Add(toolStripMenuItemAllFulFilledAvailabilityRM);
 		}
 
-		//private void buildLockAllRestrictions(ToolStripMenuItem toolStripMenuItemLockRestrictions)
-		//{
-		//	//toolStripMenuItemLockAllRestrictions.MouseUp += toolStripMenuItemLockAllRestrictionsMouseUp;
-		//}
+		public void BuildLockStudentAvailability(ToolStripMenuItem toolStripMenuItemLockStudentAvailability, ToolStripMenuItem toolStripMenuItemLockStudentAvailabilityRM, UserLockHelper userLockHelper)
+		{
+			//AllUnavailable
+			var toolStripMenuItemAllUnavailableStudentAvailability = new ToolStripMenuItem(Resources.AllUnavailable)
+			{ Name = "toolStripMenuItemAllUnavailableStudentAvailability" };
+			toolStripMenuItemAllUnavailableStudentAvailability.MouseUp += userLockHelper.ToolStripMenuItemAllUnavailableStudentAvailabilityMouseUp;
+			toolStripMenuItemLockStudentAvailability.DropDownItems.Add(toolStripMenuItemAllUnavailableStudentAvailability);
+
+			var toolStripMenuItemAllUnavailableStudentAvailabilityRM = new ToolStripMenuItem(Resources.AllUnavailable)
+			{ Name = "toolStripMenuItemAllUnavailableStudentAvailabilityRM" };
+			toolStripMenuItemAllUnavailableStudentAvailabilityRM.MouseUp += userLockHelper.ToolStripMenuItemAllUnavailableStudentAvailabilityMouseUp;
+			toolStripMenuItemLockStudentAvailabilityRM.DropDownItems.Add(toolStripMenuItemAllUnavailableStudentAvailabilityRM);
+
+			//AllAvailable
+			var toolStripMenuItemAllAvailableStudentAvailability = new ToolStripMenuItem(Resources.AllAvailable)
+			{ Name = "toolStripMenuItemAllAvailableStudentAvailability" };
+			toolStripMenuItemAllAvailableStudentAvailability.MouseUp += userLockHelper.ToolStripMenuItemAllAvailableStudentAvailabilityMouseUp;
+			toolStripMenuItemLockStudentAvailability.DropDownItems.Add(toolStripMenuItemAllAvailableStudentAvailability);
+
+			var toolStripMenuItemAllAvailableStudentAvailabilityRM = new ToolStripMenuItem(Resources.AllAvailable)
+			{ Name = "toolStripMenuItemAllAvailableStudentAvailabilityRM" };
+			toolStripMenuItemAllAvailableStudentAvailabilityRM.MouseUp += userLockHelper.ToolStripMenuItemAllAvailableStudentAvailabilityMouseUp;
+			toolStripMenuItemLockStudentAvailabilityRM.DropDownItems.Add(toolStripMenuItemAllAvailableStudentAvailabilityRM);
+
+			//AllFulFilled
+			var toolStripMenuItemAllFulFilledStudentAvailability = new ToolStripMenuItem(Resources.AllFulFilled)
+			{ Name = "toolStripMenuItemAllFulFilledStudentAvailability" };
+			toolStripMenuItemAllFulFilledStudentAvailability.MouseUp += userLockHelper.ToolStripMenuItemAllFulFilledStudentAvailabilityMouseUp;
+			toolStripMenuItemLockStudentAvailability.DropDownItems.Add(toolStripMenuItemAllFulFilledStudentAvailability);
+
+			var toolStripMenuItemAllFulFilledStudentAvailabilityRM = new ToolStripMenuItem(Resources.AllFulFilled)
+			{ Name = "toolStripMenuItemAllFulFilledStudentAvailabilityRM" };
+			toolStripMenuItemAllFulFilledStudentAvailabilityRM.MouseUp += userLockHelper.ToolStripMenuItemAllFulFilledStudentAvailabilityMouseUp;
+			toolStripMenuItemLockStudentAvailabilityRM.DropDownItems.Add(toolStripMenuItemAllFulFilledStudentAvailabilityRM);
+		}
 	}
 }

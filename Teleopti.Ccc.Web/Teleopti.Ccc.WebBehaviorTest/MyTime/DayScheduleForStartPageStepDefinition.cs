@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I click show probability toggle")]
 		public void WhenIClickShowProbabilityToggle()
 		{
-			Browser.Interactions.Click("span.probability-toggle-container>a");
+			Browser.Interactions.Click("div.probability-toggle-container>a");
 		}
 
 		[When(@"I click show absence probability")]

@@ -1523,24 +1523,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			executer.AllFulfilledShiftsRotations(e.Button);
 		}
 
-		private void toolStripMenuItemAllUnavailableStudentAvailabilityMouseUp(object sender, MouseEventArgs e)
-		{
-			var executer = new LockExecuter(schedulerSplitters1.Grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
-			executer.AllUnavailableStudentAvailability(e.Button);
-		}
-
-		private void toolStripMenuItemAllAvailableStudentAvailabilityMouseUp(object sender, MouseEventArgs e)
-		{
-			var executer = new LockExecuter(schedulerSplitters1.Grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
-			executer.AllAvailableStudentAvailability(e.Button);
-		}
-
-		private void toolStripMenuItemAllFulFilledStudentAvailabilityMouseUp(object sender, MouseEventArgs e)
-		{
-			var executer = new LockExecuter(schedulerSplitters1.Grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
-			executer.AllFulfilledStudentAvailability(e.Button);
-		}
-
 		#endregion
 
 		private void toolStripMenuItemPasteClick(object sender, EventArgs e)
@@ -4490,7 +4472,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			tagsMenuLoader.LoadTags();
 
 			var lockRestrictionsMenuBuilder = new LockRestrictionsMenuBuilder();
-			lockRestrictionsMenuBuilder.Build(ToolStripMenuItemLockAvailabilityRM, ToolStripMenuItemLockAvailability, _userLockHelper);
+			lockRestrictionsMenuBuilder.BuildLockAvailability(ToolStripMenuItemLockAvailabilityRM, ToolStripMenuItemLockAvailability, _userLockHelper);
+			lockRestrictionsMenuBuilder.BuildLockStudentAvailability(ToolStripMenuItemLockStudentAvailability, ToolStripMenuItemLockStudentAvailabilityRM, _userLockHelper);
 		}
 
 		private void enableSwapButtons(IList<IScheduleDay> selectedSchedules)
@@ -5208,9 +5191,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			ToolStripMenuItemAllFulFilledRotationsRM.MouseUp -= toolStripMenuItemAllFulFilledRotationsMouseUp;
 			ToolStripMenuItemAllFulFilledDaysOffRotationsRM.MouseUp -= toolStripMenuItemAllFulFilledDaysOffRotationsMouseUp;
 			ToolStripMenuItemAllFulFilledShiftsRotationsRM.MouseUp -= toolStripMenuItemAllFulFilledShiftsRotationsMouseUp;
-			ToolStripMenuItemAllUnavailableStudentAvailabilityRM.MouseUp -= toolStripMenuItemAllUnavailableStudentAvailabilityMouseUp;
-			ToolStripMenuItemAllAvailableStudentAvailabilityRM.MouseUp -= toolStripMenuItemAllAvailableStudentAvailabilityMouseUp;
-			ToolStripMenuItemAllFulFilledStudentAvailabilityRM.MouseUp -= toolStripMenuItemAllFulFilledStudentAvailabilityMouseUp;
 			toolStripMenuItemLockAllTagsRM.MouseUp -= toolStripMenuItemLockAllTagsMouseUp;
 			toolStripMenuItemWriteProtectSchedule.MouseUp -= toolStripMenuItemWriteProtectScheduleMouseUp;
 			toolstripMenuRemoveWriteProtection.MouseUp -= toolstripMenuRemoveWriteProtectionMouseUp;
@@ -5237,9 +5217,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			ToolStripMenuItemAllFulFilledDaysOffRotations.MouseUp -= toolStripMenuItemAllFulFilledDaysOffRotationsMouseUp;
 			ToolStripMenuItemAllFulFilledShiftsRotations.MouseUp -= toolStripMenuItemAllFulFilledShiftsRotationsMouseUp;
 			ToolStripMenuItemAllShiftsRotations.MouseUp -= toolStripMenuItemAllShiftsRotationsMouseUp;
-			ToolStripMenuItemAllUnavailableStudentAvailability.MouseUp -= toolStripMenuItemAllUnavailableStudentAvailabilityMouseUp;
-			ToolStripMenuItemAllAvailableStudentAvailability.MouseUp -= toolStripMenuItemAllAvailableStudentAvailabilityMouseUp;
-			ToolStripMenuItemAllFulFilledStudentAvailability.MouseUp -= toolStripMenuItemAllFulFilledStudentAvailabilityMouseUp;
 			toolStripMenuItemLockAllTags.MouseUp -= toolStripMenuItemLockAllTagsMouseUp;
 			ToolStripMenuItemRemoveWriteProtectionToolBar.MouseUp -= toolstripMenuRemoveWriteProtectionMouseUp;
 			toolStripButtonQuickAccessRedo.MouseUp -= toolStripButtonQuickAccessRedoClick1;

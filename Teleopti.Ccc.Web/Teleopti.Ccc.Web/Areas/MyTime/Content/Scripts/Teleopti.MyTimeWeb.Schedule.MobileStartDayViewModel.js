@@ -209,13 +209,17 @@
 
 		self.trafficLightTooltip(buildTrafficLightTooltip(data.Schedule.ProbabilityText));
 		self.showOldTrafficLightIconOnMobile(
-			self.showTrafficLight && !self.newTrafficLightIconEnabled && self.trafficLightColor().length > 0
+			self.showTrafficLight &&
+				!self.newTrafficLightIconEnabled &&
+				self.trafficLightColor().length > 0 &&
+				self.selectedDate() >= getCurrentUserDate()
 		);
 		self.showNewTrafficLightIconOnMobile(
 			self.showTrafficLight &&
 				self.newTrafficLightIconEnabled &&
 				self.absenceRequestPermission() &&
-				self.trafficLightIconClass().length > 0
+				self.trafficLightIconClass().length > 0 &&
+				self.selectedDate() >= getCurrentUserDate()
 		);
 
 		setPostShiftTradeMenuVisibility(data);
@@ -260,6 +264,7 @@
 	}
 
 	function getTrafficLightColor(probability) {
+		if (self.selectedDate() < getCurrentUserDate()) return '';
 		switch (probability) {
 			case 'poor': {
 				return 'red';
@@ -276,6 +281,7 @@
 	}
 
 	function getTrafficLightIconClass(probability) {
+		if (self.selectedDate() < getCurrentUserDate()) return '';
 		switch (probability) {
 			case 'poor': {
 				return 'traffic-light-progress-poor';

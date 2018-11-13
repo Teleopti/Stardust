@@ -133,15 +133,15 @@
 }
 .mobile-start-day .holiday-agents {
 	position: absolute;
-	right: 40px;
-	bottom: 4px;
-	width: 22px;
-	height: 22px;
+	right: 38px;
+	bottom: 5px;
 }
 .mobile-start-day .holiday-agents.traffic-light-progress {
+	position: absolute;
+	right: 38px;
+	bottom: 10px;
 	height: 16px;
-	width: 26px;
-	bottom: 8px;
+	width: 28px;
 	margin: 0;
 }
 .mobile-start-day .holiday-agents .small-circle {
@@ -171,8 +171,8 @@
 }
 .mobile-start-day .probability-toggle-container {
 	position: absolute;
-	right: 4px;
-	bottom: 4px;
+	right: 6px;
+	bottom: 6px;
 }
 .probability-toggle-container .absence-probability-label,
 .probability-toggle-container .overtime-probability-label {

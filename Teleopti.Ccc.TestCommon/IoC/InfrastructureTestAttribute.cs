@@ -142,6 +142,14 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			base.AfterTest();
 
 			_transactionHookScope?.Dispose();
+			DataSourceForTenant?.Dispose();
+			DataSourceForTenant = null;
+			HangfireClientStarter = null;
+			MessageSender = null;
+			Publisher = null;
+			TransactionHook = null;
+			TransactionHooks = null;
+			TransactionHooksScope = null;
 		}
 	}
 }

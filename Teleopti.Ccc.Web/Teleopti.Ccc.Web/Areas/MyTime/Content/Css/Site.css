@@ -1763,13 +1763,16 @@ button.btn.absence-report-cancel {
 	width: 21px;
 	transform: rotate(-90deg);
 	border-radius: 6px;
+	overflow: hidden;
 	border: 1px solid #fff;
-	background: #ddd;
+	background: #f1f1f1;
 	height: 13px;
 	cursor: pointer;
 }
 .traffic-light-progress .progress-bar {
 	box-shadow: none;
+	border-top-left-radius: 6px;
+	border-bottom-left-radius: 6px;
 }
 .traffic-light-progress-poor .progress-bar {
 	width: 25%;

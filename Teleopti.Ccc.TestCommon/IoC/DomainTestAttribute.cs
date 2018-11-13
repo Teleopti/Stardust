@@ -398,7 +398,21 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			base.AfterTest();
 
+			clearInstance();
+		}
+
+		private void clearInstance()
+		{
 			_tenantScope?.Dispose();
+			_tenantScope = null;
+
+			Authorization = null;
+			AuthorizationScope = null;
+			DataSourceForTenant = null;
+			DataSourceScope = null;
+			Database = null;
+			Persons = null;
+			FakeEventPublisher = null;
 		}
 	}
 }

@@ -636,7 +636,6 @@
     <Compile Include="Areas\Reporting\Core\ICommonReportsFactory.cs" />
     <Compile Include="Areas\Reporting\Core\AnalyticsPermissionsUpdater.cs" />
     <Compile Include="Areas\Reporting\Core\IAnalyticsPermissionsUpdater.cs" />
-    <Compile Include="Areas\Reporting\Core\IApplicationPermissionProvider.cs" />
     <Compile Include="Areas\Reporting\Core\IPermissionsConverter.cs" />
     <Compile Include="Areas\Reporting\Core\IReportGenerator.cs" />
     <Compile Include="Areas\Reporting\Core\PermissionsConverter.cs" />

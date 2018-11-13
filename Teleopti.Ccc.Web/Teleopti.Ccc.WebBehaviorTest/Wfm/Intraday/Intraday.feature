@@ -5,13 +5,13 @@ In order to be in control of my part of the business
 As an intraday analyst
 I want to be able to monitor my part of the business
 
-    Background:
-        Given I have a role with
-            | Field              | Value |
-            | Access to Intraday | True  |
-        And There is a skill to monitor called 'Skill A' with queue id '9' and queue name 'queue1' and activity 'activity1'
-        And There is a skill to monitor called 'Skill B' with queue id '7' and queue name 'queue2' and activity 'activity2'
-        And There is an email-like skill to monitor called 'Skill BackOffice' with queue id '3' and queue name 'queue3' and activity 'activity3'
+    #Background:
+    #    Given I have a role with
+    #        | Field              | Value |
+    #        | Access to Intraday | True  |
+    #    And There is a skill to monitor called 'Skill A' with queue id '9' and queue name 'queue1' and activity 'activity1'
+    #    And There is a skill to monitor called 'Skill B' with queue id '7' and queue name 'queue2' and activity 'activity2'
+    #    And There is an email-like skill to monitor called 'Skill BackOffice' with queue id '3' and queue name 'queue3' and activity 'activity3'
 
 	#Scenario: Create Skill Group in SGM
  #       Given I am viewing intraday page
@@ -139,84 +139,84 @@ I want to be able to monitor my part of the business
     #    And I should see the date
 
 	
-    Scenario: We should see export to excel button
-        Given the time is '2016-12-21 14:00'
-        And there is queue statistics for the skill 'Skill A' up until '2016-12-21 17:00'
-        And there is forecast data for skill 'Skill A' for date '2016-12-21'
-        And I am viewing intraday page
-        And Local storage is reset
-        And I pick the skill 'Skill A'
-        Then I should see the export to excel button
+    #Scenario: We should see export to excel button
+    #    Given the time is '2016-12-21 14:00'
+    #    And there is queue statistics for the skill 'Skill A' up until '2016-12-21 17:00'
+    #    And there is forecast data for skill 'Skill A' for date '2016-12-21'
+    #    And I am viewing intraday page
+    #    And Local storage is reset
+    #    And I pick the skill 'Skill A'
+    #    Then I should see the export to excel button
 
     
-    Scenario: We should be able to select skill of type backoffice
-        Given the time is '2016-12-21 14:00'
-        And I am viewing intraday page
-        And Local storage is reset
-        And there is queue statistics for the skill 'Skill BackOffice' up until '2016-12-21 17:00'
-        And there is forecast data for skill 'Skill BackOffice' for date '2016-12-21'
-        When I pick the skill 'Skill BackOffice'
-        Then I should see incoming traffic data in the chart
-
-    
-    Scenario: If an email like skill is chosen a warning for no visible abandonrate should appear
-        Given the time is '2016-12-21 14:00'
-        And I am viewing intraday page
-        And Local storage is reset
-        And there is queue statistics for the skill 'Skill BackOffice' up until '2016-12-21 17:00'
-        And there is forecast data for skill 'Skill BackOffice' for date '2016-12-21'
-        When I pick the skill 'Skill BackOffice'
-        And I am navigating to intraday performance view
-        Then I should see the no abandonrate warning
-
-    
-    Scenario: If an email like skill is chosen a warning for no visible reforcasted should appear
-        Given the time is '2016-12-21 14:00'
-        And I am viewing intraday page
-        And Local storage is reset
-        And there is queue statistics for the skill 'Skill BackOffice' up until '2016-12-21 17:00'
-        And there is forecast data for skill 'Skill BackOffice' for date '2016-12-21'
-        When I pick the skill 'Skill BackOffice'
-        And I am navigating to intraday staffing view
-        Then I should see the no reforcasted warning
-
-    
-    Scenario: If and email like skill is chosen summary for abandonrate should not appear
-        Given the time is '2016-12-21 14:00'
-        And I am viewing intraday page
-        And Local storage is reset
-        And there is queue statistics for the skill 'Skill BackOffice' up until '2016-12-21 17:00'
-        And there is forecast data for skill 'Skill BackOffice' for date '2016-12-21'
-        When I pick the skill 'Skill BackOffice'
-        And I am navigating to intraday performance view
-        Then I should not se summary for abandonrate
-
-    
-    Scenario: Select skill when skill group is selected
-        Given the time is '2016-12-22 14:00'
-        And there is queue statistics for the skill 'Skill B' up until '2016-12-22 17:00'
-        And there is forecast data for skill 'Skill B' for date '2016-12-22'
-        And there is a Skill Area called 'SkillArea1' that monitors skills 'Skill A, Skill B'
-        And I am viewing intraday page
-        And Local storage is reset
-        And I pick the skillgroup 'SkillArea1'
-        When I select skill 'Skill B' from included skills in skill group
-        Then I should see incoming traffic data in the chart
-
-    
-    Scenario: Return to skill group when viewing included skill
-        Given the time is '2016-12-22 14:00'
-        And there is queue statistics for the skill 'Skill B' up until '2016-12-22 17:00'
-        And there is forecast data for skill 'Skill B' for date '2016-12-22'
-        And there is a Skill Area called 'SkillArea1' that monitors skills 'Skill A, Skill B'
-        And I am viewing intraday page
-        And Local storage is reset
-        And I pick the skillgroup 'SkillArea1'
-        And I select skill 'Skill A' from included skills in skill group
-        And There's no data available
-        When I return to skill group from skill 'Skill A'
-        Then I should see incoming traffic data in the chart
-        And I should see a summary of incoming traffic
+#    Scenario: We should be able to select skill of type backoffice
+#        Given the time is '2016-12-21 14:00'
+#        And I am viewing intraday page
+#        And Local storage is reset
+#        And there is queue statistics for the skill 'Skill BackOffice' up until '2016-12-21 17:00'
+#        And there is forecast data for skill 'Skill BackOffice' for date '2016-12-21'
+#        When I pick the skill 'Skill BackOffice'
+#        Then I should see incoming traffic data in the chart
+#
+#    
+#    Scenario: If an email like skill is chosen a warning for no visible abandonrate should appear
+#        Given the time is '2016-12-21 14:00'
+#        And I am viewing intraday page
+#        And Local storage is reset
+#        And there is queue statistics for the skill 'Skill BackOffice' up until '2016-12-21 17:00'
+#        And there is forecast data for skill 'Skill BackOffice' for date '2016-12-21'
+#        When I pick the skill 'Skill BackOffice'
+#        And I am navigating to intraday performance view
+#        Then I should see the no abandonrate warning
+#
+#    
+#    Scenario: If an email like skill is chosen a warning for no visible reforcasted should appear
+#        Given the time is '2016-12-21 14:00'
+#        And I am viewing intraday page
+#        And Local storage is reset
+#        And there is queue statistics for the skill 'Skill BackOffice' up until '2016-12-21 17:00'
+#        And there is forecast data for skill 'Skill BackOffice' for date '2016-12-21'
+#        When I pick the skill 'Skill BackOffice'
+#        And I am navigating to intraday staffing view
+#        Then I should see the no reforcasted warning
+#
+#    
+#    Scenario: If and email like skill is chosen summary for abandonrate should not appear
+#        Given the time is '2016-12-21 14:00'
+#        And I am viewing intraday page
+#        And Local storage is reset
+#        And there is queue statistics for the skill 'Skill BackOffice' up until '2016-12-21 17:00'
+#        And there is forecast data for skill 'Skill BackOffice' for date '2016-12-21'
+#        When I pick the skill 'Skill BackOffice'
+#        And I am navigating to intraday performance view
+#        Then I should not se summary for abandonrate
+#
+#    
+#    Scenario: Select skill when skill group is selected
+#        Given the time is '2016-12-22 14:00'
+#        And there is queue statistics for the skill 'Skill B' up until '2016-12-22 17:00'
+#        And there is forecast data for skill 'Skill B' for date '2016-12-22'
+#        And there is a Skill Area called 'SkillArea1' that monitors skills 'Skill A, Skill B'
+#        And I am viewing intraday page
+#        And Local storage is reset
+#        And I pick the skillgroup 'SkillArea1'
+#        When I select skill 'Skill B' from included skills in skill group
+#        Then I should see incoming traffic data in the chart
+#
+#    
+#    Scenario: Return to skill group when viewing included skill
+#        Given the time is '2016-12-22 14:00'
+#        And there is queue statistics for the skill 'Skill B' up until '2016-12-22 17:00'
+#        And there is forecast data for skill 'Skill B' for date '2016-12-22'
+#        And there is a Skill Area called 'SkillArea1' that monitors skills 'Skill A, Skill B'
+#        And I am viewing intraday page
+#        And Local storage is reset
+#        And I pick the skillgroup 'SkillArea1'
+#        And I select skill 'Skill A' from included skills in skill group
+#        And There's no data available
+#        When I return to skill group from skill 'Skill A'
+#        Then I should see incoming traffic data in the chart
+#        And I should see a summary of incoming traffic
 
 
 # If you need to repeat a test a 100 times.

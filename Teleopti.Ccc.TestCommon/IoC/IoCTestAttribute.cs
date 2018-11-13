@@ -77,7 +77,14 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			AfterTest();
 			disposeContainer();
+			cleanupInstances();
 			disposeTestDoubles();
+		}
+
+		private void cleanupInstances()
+		{
+			_service = null;
+			Now = null;
 		}
 
 		private void buildContainer()
@@ -141,6 +148,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			_service?.Dispose();
 			_container?.Dispose();
 			_container = null;
+			_fixture = null;
 		}
 
 		protected IEnumerable<T> QueryAllExtensions<T>() where T : class =>
