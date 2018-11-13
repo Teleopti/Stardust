@@ -1,13 +1,9 @@
 body {
 	background: #09f;
 	background: linear-gradient(68deg, #09f, #fe96bb);
-	height: 100%;
+	height: 100vh;
 	margin: 0;
 	background-repeat: no-repeat;
-	background-attachment: fixed;
-	position: fixed;
-	left: 0;
-	right: 0;
 }
 
 h1 {
