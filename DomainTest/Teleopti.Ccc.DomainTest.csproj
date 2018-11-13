@@ -304,6 +304,7 @@
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCallbackDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationMinimumAgentsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationMinimumAgentsTest.cs" />
+    <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationShiftCategoryLimitationTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\SchedulingAndDayOffOptimizationStardustResultTest.cs" />
     <Compile Include="SchedulingScenarios\ExtraPreferencesFactory.cs" />
     <Compile Include="SchedulingScenarios\FairnessOptimization\FairnessOptimizationDesktopTest.cs" />
