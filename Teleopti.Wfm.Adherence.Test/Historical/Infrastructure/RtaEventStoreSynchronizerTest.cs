@@ -17,7 +17,7 @@ using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 {
 	[TestFixture]
-	[PrincipalAndStateTest]
+	[DatabaseTest]
 	[Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770)]
 	[Toggle(Toggles.RTA_ReviewHistoricalAdherence_Domain_74770)]
 	public class RtaEventStoreSynchronizerTest : IIsolateSystem
@@ -26,7 +26,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 		public Database Database;
 		public IRtaEventStoreSynchronizer Synchronizer;
 		public IEventPublisher Publisher;
-		public IPrincipalAndStateContext Context;
+		public ILogOnOffContext Context;
 		public ICurrentDataSource DataSource;
 		public IDataSourceScope DataSourceScope;
 		public HistoricalOverviewViewModelBuilder Target;

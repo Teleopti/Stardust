@@ -51,7 +51,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Measurement
 
 		protected override void BeforeTest()
 		{
-			InfrastructureTestSetup.BeforeWithLogon();
+			InfrastructureTestSetup.Before();
 
 			base.BeforeTest();
 
@@ -66,7 +66,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Measurement
 		{
 			base.AfterTest();
 
-			InfrastructureTestSetup.AfterWithLogon();
+			InfrastructureTestSetup.After();
 		}
 
 		public IEnumerable<int> ParallelTransactions() => new[] {5, 6, 7, 8, 9};

@@ -11,12 +11,10 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 
-namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
+namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 {
 	public abstract class RepositoryTest<T> : DatabaseTest where T : IAggregateRoot
 	{

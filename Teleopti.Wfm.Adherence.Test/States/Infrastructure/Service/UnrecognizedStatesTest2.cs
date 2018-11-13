@@ -16,7 +16,7 @@ using Teleopti.Wfm.Adherence.Test.States.Unit.Service;
 namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service
 {
 	[TestFixture]
-	[PrincipalAndStateTest]
+	[DatabaseTest]
 	[ExtendScope(typeof(PersonAssociationChangedEventPublisher))]
 	[ExtendScope(typeof(AgentStateMaintainer))]
 	[ExtendScope(typeof(AgentStateReadModelMaintainer))]
@@ -26,7 +26,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service
 	[ExtendScope(typeof(ExternalLogonReadModelUpdater))]
 	public class UnrecognizedStatesTest2
 	{
-		public IPrincipalAndStateContext Context;
+		public ILogOnOffContext Context;
 		public Rta Target;
 		public Database Database;
 		public AnalyticsDatabase Analytics;

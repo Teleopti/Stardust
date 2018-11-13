@@ -24,12 +24,12 @@ using Teleopti.Wfm.Adherence.Test.States.Unit.Service;
 namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service
 {
 	[TestFixture]
-	[PrincipalAndStateTest]
+	[DatabaseTest]
 	public class UnrecognizedStatesTest : IIsolateSystem, IExtendSystem
 	{
 		public IRtaStateGroupRepository StateGroupRepository;
 		public PersonCreator PersonCreatorr;
-		public IPrincipalAndStateContext Context;
+		public ILogOnOffContext Context;
 		public MutableNow Now;
 		public TheServiceImpl TheService;
 		public Rta Target;

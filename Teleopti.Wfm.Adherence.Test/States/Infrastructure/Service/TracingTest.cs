@@ -14,7 +14,7 @@ using Teleopti.Wfm.Adherence.Tracer;
 namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service
 {
 	[TestFixture]
-	[PrincipalAndStateTest]
+	[DatabaseTest]
 	[Setting("RtaTracerBufferSize", 0)]
 	public class TracingTest : IIsolateSystem
 	{
@@ -24,7 +24,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service
 		public IRtaTracer Tracer;
 		public FakeEventPublisher Publisher;
 		public IRtaTracerReader Reader;
-		public IPrincipalAndStateContext Context;
+		public ILogOnOffContext Context;
 		public ICurrentDataSource DataSource;
 
 		public void Isolate(IIsolate isolate)
