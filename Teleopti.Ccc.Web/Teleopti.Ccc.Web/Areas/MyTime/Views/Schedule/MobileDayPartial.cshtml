@@ -128,13 +128,13 @@ Layout = null;
 				</div>
 
 				<!-- ko if: showOldTrafficLightIconOnMobile -->
-				<div class="holiday-agents cursorpointer displayinline-block" data-bind="visible: absenceRequestPermission, tooltip: { title: trafficLightTooltip(), placement: 'bottom' }, style: {'right': showProbabilityOptionsToggleIcon() ? '38px': '0'}">
+				<div class="holiday-agents cursorpointer displayinline-block" data-bind="visible: absenceRequestPermission, tooltip: { title: trafficLightTooltip(), placement: 'bottom', trigger: 'click'}, hideTooltipAfterMouseLeave: true, style: {'right': showProbabilityOptionsToggleIcon() ? '38px': '0'}">
 					<div class="small-circle" data-bind="style: {background: trafficLightColor()}"></div>
 				</div>
 				<!-- /ko -->
 
 				<!--ko if: showNewTrafficLightIconOnMobile -->
-				<div class="holiday-agents progress traffic-light-progress" data-bind="tooltip: { title: trafficLightTooltip(), html: true, placement: 'bottom'}, css: trafficLightIconClass, style: {'right': showProbabilityOptionsToggleIcon() ? '38px': '0'}">
+				<div class="holiday-agents progress traffic-light-progress" data-bind="tooltip: { title: trafficLightTooltip(), html: true, placement: 'bottom', trigger: 'click'}, hideTooltipAfterMouseLeave: true, css: trafficLightIconClass, style: {'right': showProbabilityOptionsToggleIcon() ? '38px': '0'}">
 					<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
 						<span class="sr-only">60% Complete</span>
 					</div>

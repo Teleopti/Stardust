@@ -432,6 +432,13 @@ Teleopti.MyTimeWeb.Portal = (function($) {
 					});
 				});
 			}, 50);
+
+			//Hide tooltip when the orientation is changed on mobile
+			window.onorientationchange = function() {
+				$('.tooltip')
+					.siblings('*[binding-tooltip=true]')
+					.tooltip('hide');
+			};
 		});
 
 		Teleopti.MyTimeWeb.Test.TestMessage('Completely loaded');
