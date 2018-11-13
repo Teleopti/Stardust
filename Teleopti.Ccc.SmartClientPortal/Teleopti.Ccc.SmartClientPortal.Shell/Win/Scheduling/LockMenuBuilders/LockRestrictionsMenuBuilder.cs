@@ -146,5 +146,118 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.LockMenuBuilders
 			toolStripMenuItemAllFulFilledShiftsRotationsRM.MouseUp += userLockHelper.ToolStripMenuItemAllFulFilledShiftsRotationsMouseUp;
 			toolStripMenuItemLockRotationsRM.DropDownItems.Add(toolStripMenuItemAllFulFilledShiftsRotationsRM);
 		}
+
+		public void BuildLockPreference(ToolStripMenuItem toolStripMenuItemLockPreferences, ToolStripMenuItem toolStripMenuItemLockPreferencesRM, UserLockHelper userLockHelper)
+		{
+			//All, toolStripMenuItemAllPreferences, toolStripMenuItemAllPreferencesRM, toolStripMenuItemAllPreferencesMouseUp
+			var toolStripMenuItemAllPreferences = new ToolStripMenuItem(Resources.All)
+				{ Name = "toolStripMenuItemAllRotations" };
+			toolStripMenuItemAllPreferences.MouseUp += userLockHelper.ToolStripMenuItemAllPreferencesMouseUp;
+			toolStripMenuItemLockPreferences.DropDownItems.Add(toolStripMenuItemAllPreferences);
+
+			var toolStripMenuItemAllPreferencesRM = new ToolStripMenuItem(Resources.All)
+				{ Name = "toolStripMenuItemAllRotationsRM" };
+			toolStripMenuItemAllPreferencesRM.MouseUp += userLockHelper.ToolStripMenuItemAllPreferencesMouseUp;
+			toolStripMenuItemLockPreferencesRM.DropDownItems.Add(toolStripMenuItemAllPreferencesRM);
+
+			//AllAbsences, toolStripMenuItemAllAbsencePreference, toolStripMenuItemAllAbsencePreferenceRM, toolStripMenuItemAllAbsencePreferenceMouseUp
+			var toolStripMenuItemAllAbsencePreference = new ToolStripMenuItem(Resources.AllAbsences)
+				{ Name = "toolStripMenuItemAllAbsencePreference" };
+			toolStripMenuItemAllAbsencePreference.MouseUp += userLockHelper.ToolStripMenuItemAllAbsencePreferenceMouseUp;
+			toolStripMenuItemLockPreferences.DropDownItems.Add(toolStripMenuItemAllAbsencePreference);
+
+			var toolStripMenuItemAllAbsencePreferenceRM = new ToolStripMenuItem(Resources.AllAbsences)
+				{ Name = "toolStripMenuItemAllAbsencePreferenceRM" };
+			toolStripMenuItemAllAbsencePreferenceRM.MouseUp += userLockHelper.ToolStripMenuItemAllAbsencePreferenceMouseUp;
+			toolStripMenuItemLockPreferencesRM.DropDownItems.Add(toolStripMenuItemAllAbsencePreferenceRM);
+
+			//AllDaysOff, toolStripMenuItemAllDaysOff, toolStripMenuItemAllDaysOffRM, toolStripMenuItemAllDaysOffMouseUp
+			var toolStripMenuItemAllDaysOff = new ToolStripMenuItem(Resources.AllDaysOff)
+				{ Name = "toolStripMenuItemAllDaysOff" };
+			toolStripMenuItemAllDaysOff.MouseUp += userLockHelper.ToolStripMenuItemAllDaysOffMouseUp;
+			toolStripMenuItemLockPreferences.DropDownItems.Add(toolStripMenuItemAllDaysOff);
+
+			var toolStripMenuItemAllDaysOffRM = new ToolStripMenuItem(Resources.AllDaysOff)
+				{ Name = "toolStripMenuItemAllDaysOffRM" };
+			toolStripMenuItemAllDaysOffRM.MouseUp += userLockHelper.ToolStripMenuItemAllDaysOffMouseUp;
+			toolStripMenuItemLockPreferencesRM.DropDownItems.Add(toolStripMenuItemAllDaysOffRM);
+
+			//AllShifts, toolStripMenuItemAllShiftsPreferences, toolStripMenuItemAllShiftsPreferencesRM, toolStripMenuItemAllShiftsPreferencesMouseUp
+			var toolStripMenuItemAllShiftsPreferences = new ToolStripMenuItem(Resources.AllShifts)
+				{ Name = "toolStripMenuItemAllShiftsPreferences" };
+			toolStripMenuItemAllShiftsPreferences.MouseUp += userLockHelper.ToolStripMenuItemAllShiftsPreferencesMouseUp;
+			toolStripMenuItemLockPreferences.DropDownItems.Add(toolStripMenuItemAllShiftsPreferences);
+
+			var toolStripMenuItemAllShiftsPreferencesRM = new ToolStripMenuItem(Resources.AllShifts)
+				{ Name = "toolStripMenuItemAllShiftsPreferencesRM" };
+			toolStripMenuItemAllShiftsPreferencesRM.MouseUp += userLockHelper.ToolStripMenuItemAllShiftsPreferencesMouseUp;
+			toolStripMenuItemLockPreferencesRM.DropDownItems.Add(toolStripMenuItemAllShiftsPreferencesRM);
+
+			//AllMustHave, toolStripMenuItemAllMustHave, toolStripMenuItemAllMustHaveRM, toolStripMenuItemAllMustHaveMouseUp
+			var toolStripMenuItemAllMustHave = new ToolStripMenuItem(Resources.AllMustHave)
+				{ Name = "toolStripMenuItemAllMustHave" };
+			toolStripMenuItemAllMustHave.MouseUp += userLockHelper.ToolStripMenuItemAllMustHaveMouseUp;
+			toolStripMenuItemLockPreferences.DropDownItems.Add(toolStripMenuItemAllMustHave);
+
+			var toolStripMenuItemAllMustHaveRM = new ToolStripMenuItem(Resources.AllMustHave)
+				{ Name = "toolStripMenuItemAllMustHaveRM" };
+			toolStripMenuItemAllMustHaveRM.MouseUp += userLockHelper.ToolStripMenuItemAllMustHaveMouseUp;
+			toolStripMenuItemLockPreferencesRM.DropDownItems.Add(toolStripMenuItemAllMustHaveRM);
+
+			//AllFulFilled, toolStripMenuItemAllFulFilledPreferences, toolStripMenuItemAllFulFilledPreferencesRM, toolStripMenuItemAllFulFilledPreferencesMouseUp
+			var toolStripMenuItemAllFulFilledPreferences = new ToolStripMenuItem(Resources.AllFulFilled)
+				{ Name = "toolStripMenuItemAllFulFilledPreferences" };
+			toolStripMenuItemAllFulFilledPreferences.MouseUp += userLockHelper.ToolStripMenuItemAllFulFilledPreferencesMouseUp;
+			toolStripMenuItemLockPreferences.DropDownItems.Add(toolStripMenuItemAllFulFilledPreferences);
+
+			var toolStripMenuItemAllFulFilledPreferencesRM = new ToolStripMenuItem(Resources.AllFulFilled)
+				{ Name = "toolStripMenuItemAllFulFilledPreferencesRM" };
+			toolStripMenuItemAllFulFilledPreferencesRM.MouseUp += userLockHelper.ToolStripMenuItemAllFulFilledPreferencesMouseUp;
+			toolStripMenuItemLockPreferencesRM.DropDownItems.Add(toolStripMenuItemAllFulFilledPreferencesRM);
+
+			//AllFulFilledAbsences, toolStripMenuItemAllFulFilledAbsencesPreferences, toolStripMenuItemAllFulFilledAbsencesPreferencesRM, toolStripMenuItemAllAbsencePreferenceMouseUp
+			var toolStripMenuItemAllFulFilledAbsencesPreferences = new ToolStripMenuItem(Resources.AllFulFilledAbsences)
+				{ Name = "toolStripMenuItemAllFulFilledAbsencesPreferences" };
+			toolStripMenuItemAllFulFilledAbsencesPreferences.MouseUp += userLockHelper.ToolStripMenuItemAllAbsencePreferenceMouseUp;
+			toolStripMenuItemLockPreferences.DropDownItems.Add(toolStripMenuItemAllFulFilledAbsencesPreferences);
+
+			var toolStripMenuItemAllFulFilledAbsencesPreferencesRM = new ToolStripMenuItem(Resources.AllFulFilledAbsences)
+				{ Name = "toolStripMenuItemAllFulFilledAbsencesPreferencesRM" };
+			toolStripMenuItemAllFulFilledAbsencesPreferencesRM.MouseUp += userLockHelper.ToolStripMenuItemAllAbsencePreferenceMouseUp;
+			toolStripMenuItemLockPreferencesRM.DropDownItems.Add(toolStripMenuItemAllFulFilledAbsencesPreferencesRM);
+
+			//AllFulFilledDaysOff, toolStripMenuItemAllFulFilledDaysOffPreferences, toolStripMenuItemAllFulFilledDaysOffPreferencesRM, toolStripMenuItemAllFulFilledDaysOffPreferencesMouseUp
+			var toolStripMenuItemAllFulFilledDaysOffPreferences = new ToolStripMenuItem(Resources.AllFulFilledDaysOff)
+				{ Name = "toolStripMenuItemAllFulFilledDaysOffPreferences" };
+			toolStripMenuItemAllFulFilledDaysOffPreferences.MouseUp += userLockHelper.ToolStripMenuItemAllFulFilledDaysOffPreferencesMouseUp;
+			toolStripMenuItemLockPreferences.DropDownItems.Add(toolStripMenuItemAllFulFilledDaysOffPreferences);
+
+			var toolStripMenuItemAllFulFilledDaysOffPreferencesRM = new ToolStripMenuItem(Resources.AllFulFilledDaysOff)
+				{ Name = "toolStripMenuItemAllFulFilledDaysOffPreferencesRM" };
+			toolStripMenuItemAllFulFilledDaysOffPreferencesRM.MouseUp += userLockHelper.ToolStripMenuItemAllFulFilledDaysOffPreferencesMouseUp;
+			toolStripMenuItemLockPreferencesRM.DropDownItems.Add(toolStripMenuItemAllFulFilledDaysOffPreferencesRM);
+
+			//AllFulFilledShifts, toolStripMenuItemAllFulFilledShiftsPreferences, toolStripMenuItemAllFulFilledShiftsPreferencesRM, toolStripMenuItemAllFulFilledShiftsPreferencesMouseUp
+			var toolStripMenuItemAllFulFilledShiftsPreferences = new ToolStripMenuItem(Resources.AllFulFilledShifts)
+				{ Name = "toolStripMenuItemAllFulFilledShiftsPreferences" };
+			toolStripMenuItemAllFulFilledShiftsPreferences.MouseUp += userLockHelper.ToolStripMenuItemAllFulFilledShiftsPreferencesMouseUp;
+			toolStripMenuItemLockPreferences.DropDownItems.Add(toolStripMenuItemAllFulFilledShiftsPreferences);
+
+			var toolStripMenuItemAllFulFilledShiftsPreferencesRM = new ToolStripMenuItem(Resources.AllFulFilledShifts)
+				{ Name = "toolStripMenuItemAllFulFilledShiftsPreferencesRM" };
+			toolStripMenuItemAllFulFilledShiftsPreferencesRM.MouseUp += userLockHelper.ToolStripMenuItemAllFulFilledShiftsPreferencesMouseUp;
+			toolStripMenuItemLockPreferencesRM.DropDownItems.Add(toolStripMenuItemAllFulFilledShiftsPreferencesRM);
+
+			//AllFulFilledMustHave, toolStripMenuItemAllFulfilledMustHave, toolStripMenuItemAllFulfilledMustHaveRM, toolStripMenuItemAllFulfilledMustHaveMouseUp
+			var toolStripMenuItemAllFulfilledMustHave = new ToolStripMenuItem(Resources.AllFulfilledMustHave)
+				{ Name = "toolStripMenuItemAllFulfilledMustHave" };
+			toolStripMenuItemAllFulfilledMustHave.MouseUp += userLockHelper.ToolStripMenuItemAllFulfilledMustHaveMouseUp;
+			toolStripMenuItemLockPreferences.DropDownItems.Add(toolStripMenuItemAllFulfilledMustHave);
+
+			var toolStripMenuItemAllFulfilledMustHaveRM = new ToolStripMenuItem(Resources.AllFulfilledMustHave)
+				{ Name = "toolStripMenuItemAllFulfilledMustHaveRM" };
+			toolStripMenuItemAllFulfilledMustHaveRM.MouseUp += userLockHelper.ToolStripMenuItemAllFulfilledMustHaveMouseUp;
+			toolStripMenuItemLockPreferencesRM.DropDownItems.Add(toolStripMenuItemAllFulfilledMustHaveRM);
+		}
 	}
 }

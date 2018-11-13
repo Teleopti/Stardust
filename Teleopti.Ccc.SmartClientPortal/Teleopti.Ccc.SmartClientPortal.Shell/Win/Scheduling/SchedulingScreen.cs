@@ -1427,65 +1427,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			executer.LockAllRestrictions(e.Button);
 		}
 
-		private void toolStripMenuItemAllPreferencesMouseUp(object sender, MouseEventArgs e)
-		{
-			var executer = new LockExecuter(schedulerSplitters1.Grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
-			executer.AllPreferences(e.Button);
-		}
 
-		private void toolStripMenuItemAllDaysOffMouseUp(object sender, MouseEventArgs e)
-		{
-			var executer = new LockExecuter(schedulerSplitters1.Grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
-			executer.AllDaysOff(e.Button);
-		}
-
-		private void toolStripMenuItemAllShiftsPreferencesMouseUp(object sender, MouseEventArgs e)
-		{
-			var executer = new LockExecuter(schedulerSplitters1.Grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
-			executer.AllShiftsPreferences(e.Button);
-		}
-
-		private void toolStripMenuItemAllMustHaveMouseUp(object sender, MouseEventArgs e)
-		{
-			var executer = new LockExecuter(schedulerSplitters1.Grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
-			executer.AllMustHave(e.Button);
-		}
-
-		private void toolStripMenuItemAllFulfilledMustHaveMouseUp(object sender, MouseEventArgs e)
-		{
-			var executer = new LockExecuter(schedulerSplitters1.Grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
-			executer.AllFulfilledMustHave(e.Button);
-		}
-
-		private void toolStripMenuItemAllFulFilledPreferencesMouseUp(object sender, MouseEventArgs e)
-		{
-			var executer = new LockExecuter(schedulerSplitters1.Grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
-			executer.AllFulfilledPreferences(e.Button);
-		}
-
-		private void toolStripMenuItemAllAbsencePreferenceMouseUp(object sender, MouseEventArgs e)
-		{
-			var executer = new LockExecuter(schedulerSplitters1.Grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
-			executer.AllAbsencePreference(e.Button);
-		}
-
-		private void toolStripMenuItemAllFulFilledAbsencesPreferencesMouseUp(object sender, MouseEventArgs e)
-		{
-			var executer = new LockExecuter(schedulerSplitters1.Grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
-			executer.AllFulfilledAbsencesPreferences(e.Button);
-		}
-
-		private void toolStripMenuItemAllFulFilledDaysOffPreferencesMouseUp(object sender, MouseEventArgs e)
-		{
-			var executer = new LockExecuter(schedulerSplitters1.Grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
-			executer.AllFulfilledDaysOffPreferences(e.Button);
-		}
-
-		private void toolStripMenuItemAllFulFilledShiftsPreferencesMouseUp(object sender, MouseEventArgs e)
-		{
-			var executer = new LockExecuter(schedulerSplitters1.Grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
-			executer.AllFulfilledShiftsPreferences(e.Button);
-		}
 
 		#endregion
 
@@ -4439,6 +4381,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			lockRestrictionsMenuBuilder.BuildLockAvailability(ToolStripMenuItemLockAvailabilityRM, ToolStripMenuItemLockAvailability, _userLockHelper);
 			lockRestrictionsMenuBuilder.BuildLockStudentAvailability(ToolStripMenuItemLockStudentAvailability, ToolStripMenuItemLockStudentAvailabilityRM, _userLockHelper);
 			lockRestrictionsMenuBuilder.BuildLockRotation(ToolStripMenuItemLockRotations, ToolStripMenuItemLockRotationsRM, _userLockHelper);
+			lockRestrictionsMenuBuilder.BuildLockPreference(ToolStripMenuItemLockPreferences, ToolStripMenuItemLockPreferencesRM, _userLockHelper);
 		}
 
 		private void enableSwapButtons(IList<IScheduleDay> selectedSchedules)
@@ -5140,16 +5083,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripMenuItemUnlockAllRM.MouseUp -= toolStripMenuItemUnlockAllRmMouseUp;
 			toolStripMenuItemLockSelectionRM.MouseUp -= toolStripMenuItemLockSelectionRmMouseUp;
 			ToolStripMenuItemAllRM.MouseUp -= toolStripMenuItemLockAllRestrictionsMouseUp;
-			ToolStripMenuItemAllPreferencesRM.MouseUp -= toolStripMenuItemAllPreferencesMouseUp;
-			ToolStripMenuItemAllAbsencePreferenceRM.MouseUp -= toolStripMenuItemAllAbsencePreferenceMouseUp;
-			ToolStripMenuItemAllDaysOffPreferencesRM.MouseUp -= toolStripMenuItemAllDaysOffMouseUp;
-			ToolStripMenuItemAllShiftsPreferencesRM.MouseUp -= toolStripMenuItemAllShiftsPreferencesMouseUp;
-			ToolStripMenuItemAllMustHaveRM.MouseUp -= toolStripMenuItemAllMustHaveMouseUp;
-			ToolStripMenuItemAllFulFilledPreferencesRM.MouseUp -= toolStripMenuItemAllFulFilledPreferencesMouseUp;
-			ToolStripMenuItemAllFulFilledAbsencesPreferencesRM.MouseUp -= toolStripMenuItemAllFulFilledAbsencesPreferencesMouseUp;
-			ToolStripMenuItemAllFulFilledDaysOffPreferencesRM.MouseUp -= toolStripMenuItemAllFulFilledDaysOffPreferencesMouseUp;
-			ToolStripMenuItemAllFulFilledShiftsPreferencesRM.MouseUp -= toolStripMenuItemAllFulFilledShiftsPreferencesMouseUp;
-			ToolStripMenuItemAllFulfilledMustHaveRM.MouseUp -= toolStripMenuItemAllFulfilledMustHaveMouseUp;
 			toolStripMenuItemLockAllTagsRM.MouseUp -= toolStripMenuItemLockAllTagsMouseUp;
 			toolStripMenuItemWriteProtectSchedule.MouseUp -= toolStripMenuItemWriteProtectScheduleMouseUp;
 			toolstripMenuRemoveWriteProtection.MouseUp -= toolstripMenuRemoveWriteProtectionMouseUp;
@@ -5161,15 +5094,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripMenuItemExportToPDFGraphical.MouseUp -= toolStripMenuItemExportToPdfGraphicalMouseUp;
 			ToolStripMenuItemExportToPDFShiftsPerDay.MouseUp -= toolStripMenuItemExportToPdfShiftsPerDayMouseUp;
 			ToolStripMenuItemLockAllRestrictions.MouseUp -= toolStripMenuItemLockAllRestrictionsMouseUp;
-			ToolStripMenuItemAllPreferences.MouseUp -= toolStripMenuItemAllPreferencesMouseUp;
-			ToolStripMenuItemAllAbsencePreference.MouseUp -= toolStripMenuItemAllAbsencePreferenceMouseUp;
-			ToolStripMenuItemAllDaysOff.MouseUp -= toolStripMenuItemAllDaysOffMouseUp;
-			ToolStripMenuItemAllShiftsPreferences.MouseUp -= toolStripMenuItemAllShiftsPreferencesMouseUp;
-			ToolStripMenuItemAllMustHave.MouseUp -= toolStripMenuItemAllMustHaveMouseUp;
-			ToolStripMenuItemAllFulFilledPreferences.MouseUp -= toolStripMenuItemAllFulFilledPreferencesMouseUp;
-			ToolStripMenuItemAllFulFilledDaysOffPreferences.MouseUp -= toolStripMenuItemAllFulFilledDaysOffPreferencesMouseUp;
-			ToolStripMenuItemAllFulFilledShiftsPreferences.MouseUp -= toolStripMenuItemAllFulFilledShiftsPreferencesMouseUp;
-			ToolStripMenuItemAllFulfilledMustHave.MouseUp -= toolStripMenuItemAllFulfilledMustHaveMouseUp;
 			toolStripMenuItemLockAllTags.MouseUp -= toolStripMenuItemLockAllTagsMouseUp;
 			ToolStripMenuItemRemoveWriteProtectionToolBar.MouseUp -= toolstripMenuRemoveWriteProtectionMouseUp;
 			toolStripButtonQuickAccessRedo.MouseUp -= toolStripButtonQuickAccessRedoClick1;
