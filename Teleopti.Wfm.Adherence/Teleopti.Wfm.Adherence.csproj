@@ -179,7 +179,6 @@
     <Compile Include="Domain\Infrastructure\Repositories\RtaStateGroupRepository.cs" />
     <Compile Include="Domain\Infrastructure\RtaEventPublisher.cs" />
     <Compile Include="Domain\Infrastructure\RtaEventStore.cs" />
-    <Compile Include="Domain\Infrastructure\RtaEventStoreSynchronizerProcess.cs" />
     <Compile Include="Domain\Infrastructure\RtaEventStoreUpgraderProcess.cs" />
     <Compile Include="Domain\Infrastructure\Service\AgentStatePersister.cs" />
     <Compile Include="Domain\Infrastructure\Service\DataSourceReader.cs" />

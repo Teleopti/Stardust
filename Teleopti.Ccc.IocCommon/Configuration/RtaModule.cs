@@ -47,17 +47,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StateQueue>().As<IStateQueueReader>().As<IStateQueueWriter>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateQueueWorker>().AsSelf().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateQueueTenants>().SingleInstance();
-			
+
 			if (_config.Toggle(Toggles.RTA_StateQueueFloodPrevention_77710))
 			{
 				if (_config.Args().BehaviorTestServer)
 				{
-					builder.RegisterType<AlwaysHealthyChecker>().As<IStateQueueHealthChecker>().SingleInstance();				
+					builder.RegisterType<AlwaysHealthyChecker>().As<IStateQueueHealthChecker>().SingleInstance();
 				}
 				else
 				{
 					builder.RegisterType<StateQueueHealthChecker>().As<IStateQueueHealthChecker>().SingleInstance().ApplyAspects();
-					builder.RegisterType<StateQueueHealthCheckerProcess>().As<IBackgroundProcess>().SingleInstance().ApplyAspects();					
+					builder.RegisterType<StateQueueHealthCheckerProcess>().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 				}
 			}
 			else
@@ -140,13 +140,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
 			{
 				builder.RegisterType<RtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance().ApplyAspects();
-				builder.RegisterType<RtaEventStoreSynchronizerProcess>().AsSelf().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
-			}
-
-			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
 				builder.RegisterType<RtaEventStoreSynchronizerWaiter>().As<IRtaEventStoreSynchronizerWaiter>().SingleInstance().ApplyAspects();
+			}
 			else
-				builder.RegisterType<EmptyRtaEventStoreSynchronizerWaiter>().As<IRtaEventStoreSynchronizerWaiter>().SingleInstance().ApplyAspects();
+			{
+				builder.RegisterType<DontSynchronize>().As<IRtaEventStoreSynchronizer>().SingleInstance().ApplyAspects();
+				builder.RegisterType<DontWaitForSynchronizer>().As<IRtaEventStoreSynchronizerWaiter>().SingleInstance().ApplyAspects();
+			}
 
 			if (_config.Toggle(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485))
 				builder.RegisterType<AgentAdherenceDayLoaderSpeedUpRemoveScheduleDependency>().As<IAgentAdherenceDayLoader>().SingleInstance();

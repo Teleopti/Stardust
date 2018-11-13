@@ -16,9 +16,14 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 {
 	public interface IRtaEventStoreSynchronizer
 	{
-		void Trigger();
-		void SynchronizeOnTrigger();
-		void SynchronizeNow();
+		void Synchronize();
+	}
+
+	public class DontSynchronize : IRtaEventStoreSynchronizer
+	{
+		public void Synchronize()
+		{
+		}
 	}
 
 	public class RtaEventStoreSynchronizer : IRtaEventStoreSynchronizer
@@ -28,7 +33,6 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 		private readonly IAgentAdherenceDayLoader _adherenceDayLoader;
 		private readonly IKeyValueStorePersister _keyValueStore;
 		private readonly IDistributedLockAcquirer _distributedLock;
-		private readonly INow _now;
 
 		public const string SynchronizedEventKey = "HistoricalOverviewReadModelSynchronizedEvent";
 
@@ -37,8 +41,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 			IHistoricalOverviewReadModelPersister readModels,
 			IAgentAdherenceDayLoader adherenceDayLoader,
 			IKeyValueStorePersister keyValueStore,
-			IDistributedLockAcquirer distributedLock,
-			INow now
+			IDistributedLockAcquirer distributedLock
 		)
 		{
 			_events = events;
@@ -46,54 +49,35 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 			_adherenceDayLoader = adherenceDayLoader;
 			_keyValueStore = keyValueStore;
 			_distributedLock = distributedLock;
-			_now = now;
 		}
 
-		public void Trigger() =>
-			RunAt(_now.UtcDateTime());
-
-		public void SynchronizeOnTrigger()
+		[TestLog]
+		public virtual void Synchronize()
 		{
-			var runAt = RunAt();
-			if (_now.UtcDateTime() < runAt) return;
 			_distributedLock.TryLockForTypeOf(this, () =>
 			{
-				if (_now.UtcDateTime() < runAt) return;
-				RunAt(_now.UtcDateTime().AddSeconds(10));
-				synchronize();
+				var fromEventId = SynchronizedEventId();
+				var events = LoadEvents(fromEventId);
+				Synchronize(events.Events);
+				UpdateSynchronizedEventId(events.LastId);
 			});
-		}
-
-		public void SynchronizeNow() => synchronize();
-
-		[ReadModelUnitOfWork]
-		protected virtual DateTime RunAt() =>
-			new DateTime(_keyValueStore.Get("RtaEventStoreSynchronizerRunAt", 0L), DateTimeKind.Utc);
-
-		[ReadModelUnitOfWork]
-		protected virtual void RunAt(DateTime time) =>
-			_keyValueStore.Update("RtaEventStoreSynchronizerRunAt", time.Ticks);
-
-		private void synchronize()
-		{
-			var fromEventId = SynchronizedEventId();
-			var events = LoadEvents(fromEventId);
-			Synchronize(events.Events);
-			UpdateSynchronizedEventId(events.LastId);
 		}
 
 		[UnitOfWork]
 		protected virtual LoadedEvents LoadEvents(int fromEventId) =>
 			_events.LoadFrom(fromEventId);
 
+		[TestLog]
 		[ReadModelUnitOfWork]
 		protected virtual void UpdateSynchronizedEventId(int toEventId) =>
 			_keyValueStore.Update(SynchronizedEventKey, toEventId.ToString());
 
+		[TestLog]
 		[ReadModelUnitOfWork]
 		protected virtual int SynchronizedEventId() =>
 			_keyValueStore.Get(SynchronizedEventKey, 0);
 
+		[TestLog]
 		[AllBusinessUnitsUnitOfWork]
 		[FullPermissions]
 		protected virtual void Synchronize(IEnumerable<IEvent> events)

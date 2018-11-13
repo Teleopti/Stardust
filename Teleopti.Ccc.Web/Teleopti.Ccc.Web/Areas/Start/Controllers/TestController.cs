@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Mvc;
-using Common.Logging;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
@@ -26,7 +25,6 @@ using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Wfm.Adherence.Domain.Events;
 using ClaimTypes = System.IdentityModel.Claims.ClaimTypes;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
@@ -47,7 +45,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IPhysicalApplicationPath _physicalApplicationPath;
 		private readonly IFindPersonInfo _findPersonInfo;
 		private readonly HangfireUtilities _hangfire;
-		private readonly IRtaEventStoreSynchronizerWaiter _synchronizerWaiter;
 		private readonly RecurringEventPublishings _recurringEventPublishings;
 		private readonly SystemVersion _version;
 
@@ -66,7 +63,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			IPhysicalApplicationPath physicalApplicationPath,
 			IFindPersonInfo findPersonInfo,
 			HangfireUtilities hangfire,
-			IRtaEventStoreSynchronizerWaiter synchronizerWaiter,
 			RecurringEventPublishings recurringEventPublishings,
 			SystemVersion version)
 		{
@@ -84,7 +80,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_physicalApplicationPath = physicalApplicationPath;
 			_findPersonInfo = findPersonInfo;
 			_hangfire = hangfire;
-			_synchronizerWaiter = synchronizerWaiter;
 			_recurringEventPublishings = recurringEventPublishings;
 			_version = version;
 		}
@@ -104,7 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			((IdentityProviderProvider) _identityProviderProvider).SetDefaultProvider(defaultProvider);
 			_loadPasswordPolicyService.ClearFile();
 			_loadPasswordPolicyService.Path = Path.Combine(_physicalApplicationPath.Get(), usePasswordPolicy ? "" : _settings.ConfigurationFilesPath());
-			
+
 			UserDataFactory.EnableMyTimeMessageBroker = enableMyTimeMessageBroker;
 
 			clearAllConnectionPools();
@@ -271,10 +266,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			});
 
 			if (waitForQueue)
-			{
 				_hangfire.WaitForQueue();
-				_synchronizerWaiter.WaitForSynchronizeAllTenants(TimeSpan.FromSeconds(20));
-			}
 		}
 	}
 }

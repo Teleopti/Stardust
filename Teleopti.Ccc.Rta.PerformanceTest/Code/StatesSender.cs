@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		private readonly ScheduleInvalidator _scheduleInvalidator;
 
 		public StatesSender(
-			MutableNow now, 
+			MutableNow now,
 			TestConfiguration testConfiguration,
 			DataCreator data,
 			Http http,
@@ -51,12 +51,11 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 
 		private void sendAll(int batchSize)
 		{
-			StateChanges().ForEach(stateChange =>
-			{
-				SendStateChange(batchSize, stateChange);
-			});
+			StateChanges().ForEach(stateChange => { SendStateChange(batchSize, stateChange); });
+			// trigger recurring one last time
+			setTime("2016-02-26 22:00");
 		}
-		
+
 		[TestLog]
 		protected virtual void SendStateChange(int batchSize, StateChange stateChange)
 		{
@@ -65,8 +64,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 
 			var now = stateChange.Time.Utc();
 			_now.Is(now);
-			_http.PostJson("/Test/SetCurrentTime", new {time = stateChange.Time, waitForQueue = false});
-			
+			setTime(stateChange.Time);
+
 			_data.LogonsWorking()
 				.Select(logon => new ExternalUserBatchStateWebModel
 				{
@@ -82,6 +81,9 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 				})
 				.ForEach(Send);
 		}
+
+		private void setTime(string time) =>
+			_http.PostJson("/Test/SetCurrentTime", new {time = time, waitForQueue = false});
 
 		[TestLog]
 		protected virtual void Send(ExternalUserBatchWebModel batch)
@@ -146,14 +148,13 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 				.Infinite()
 				.Take(calls * statesPerCall)
 				.Select((x, i) =>
-						new StateChange
-						{
-							ScheduleChangesPercent = i == 0 ? scheduleChangesPercent : 0,
-							Time = $"{time}:{i:00}",
-							StateCode = x
-						}
+					new StateChange
+					{
+						ScheduleChangesPercent = i == 0 ? scheduleChangesPercent : 0,
+						Time = $"{time}:{i:00}",
+						StateCode = x
+					}
 				);
 		}
-
 	}
 }
