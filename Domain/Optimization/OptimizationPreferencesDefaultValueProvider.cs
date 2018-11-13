@@ -17,7 +17,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 					ScheduleTag = NullScheduleTag.Instance, 
 					OptimizationStepDaysOff = true,
 					UseRotations = true,
-					RotationsValue = 1
+					RotationsValue = 1,
+					UseAvailabilities = true,
+					AvailabilitiesValue = 1
 				},
 				Advanced = new AdvancedPreferences{UseMinimumStaffing = true}
 			};
