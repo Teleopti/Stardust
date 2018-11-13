@@ -114,6 +114,8 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function($) {
 	}
 
 	function fetchData(momentDate) {
+		vm.isLoading(true);
+
 		var dateStr =
 			(momentDate && momentDate.format('YYYY/MM/DD')) ||
 			Teleopti.MyTimeWeb.Portal.ParseHash().dateHash ||
