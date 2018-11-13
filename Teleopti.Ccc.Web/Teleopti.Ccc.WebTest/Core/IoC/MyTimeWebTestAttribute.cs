@@ -162,5 +162,20 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 					_tenantScope = DataSourceScope.OnThisThreadUse(DefaultTenantName);
 			}
 		}
+
+		protected override void AfterTest()
+		{
+			base.AfterTest();
+
+			_tenantScope?.Dispose();
+			Authorization = null;
+			AuthorizationScope = null;
+			DataSourceForTenant?.Dispose();
+			DataSourceForTenant = null;
+			DataSourceScope = null;
+			Database = null;
+			Persons = null;
+			Now = null;
+		}
 	}
 }
