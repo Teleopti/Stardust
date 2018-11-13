@@ -11,7 +11,7 @@ using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Wfm.Adherence.Test.Domain.AgentAdherenceDay
+namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 {
 	[DomainTest]
 	[DefaultData]

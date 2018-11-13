@@ -10,7 +10,7 @@ using Teleopti.Wfm.Adherence.Domain.Configuration;
 using Teleopti.Wfm.Adherence.Domain.Infrastructure.Repositories;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Repositories
+namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 {
 
     [TestFixture]

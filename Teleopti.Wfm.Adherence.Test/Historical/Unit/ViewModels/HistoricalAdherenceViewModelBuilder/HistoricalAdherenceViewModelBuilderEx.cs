@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
 
-namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.HistoricalAdherenceViewModelBuilder
+namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdherenceViewModelBuilder
 {
 	public static class HistoricalAdherenceViewModelBuilderEx
 	{

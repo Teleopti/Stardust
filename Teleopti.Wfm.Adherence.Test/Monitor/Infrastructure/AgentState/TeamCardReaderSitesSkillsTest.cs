@@ -10,7 +10,7 @@ using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.Infrastructure.AgentState
+namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 {
 	[DatabaseTest]
 	[TestFixture]

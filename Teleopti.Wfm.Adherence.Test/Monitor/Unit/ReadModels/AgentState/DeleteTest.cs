@@ -7,7 +7,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 
-namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ReadModels.AgentState
+namespace Teleopti.Wfm.Adherence.Test.Monitor.Unit.ReadModels.AgentState
 {
 	[TestFixture]
 	[DomainTest]

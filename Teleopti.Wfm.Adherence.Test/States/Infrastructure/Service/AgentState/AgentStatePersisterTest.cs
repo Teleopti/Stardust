@@ -8,7 +8,7 @@ using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.Persisters
+namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service.AgentState
 {
 	[TestFixture]
 	[UnitOfWorkTest]

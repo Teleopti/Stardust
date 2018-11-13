@@ -1,17 +1,15 @@
 using System;
 using NUnit.Framework;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Wfm.Adherence.Domain.Configuration;
 using Teleopti.Wfm.Adherence.Domain.Infrastructure.Repositories;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Repositories
+namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 {
     [TestFixture]
     [Category("BucketB")]

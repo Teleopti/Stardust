@@ -14,7 +14,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.Persisters
+namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service.AgentState
 {
 	[TestFixture]
 	[DatabaseTest]
@@ -114,7 +114,7 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.Persisters
 				addOneTo(all);
 			}
 
-			private void addOneTo(IEnumerable<AgentState> all)
+			private void addOneTo(IEnumerable<Domain.Service.AgentState> all)
 			{
 				all.ForEach(model =>
 				{
@@ -141,13 +141,13 @@ namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.Persisters
 			}
 
 			[UnitOfWork]
-			public virtual AgentState Get(Guid personId)
+			public virtual Domain.Service.AgentState Get(Guid personId)
 			{
 				return _persister.ReadForTest(personId).Single();
 			}
 
 			[UnitOfWork]
-			public virtual IEnumerable<AgentState> GetAll()
+			public virtual IEnumerable<Domain.Service.AgentState> GetAll()
 			{
 				return _persister.ReadForTest();
 			}

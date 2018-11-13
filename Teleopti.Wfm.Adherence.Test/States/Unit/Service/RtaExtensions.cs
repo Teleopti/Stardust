@@ -2,7 +2,7 @@
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Wfm.Adherence.Test.Domain.Service
+namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 {
 	public static class RtaExtensions
 	{

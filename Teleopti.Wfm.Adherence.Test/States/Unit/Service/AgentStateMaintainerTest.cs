@@ -8,7 +8,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using ExternalLogon = Teleopti.Ccc.Domain.ApplicationLayer.Events.ExternalLogon;
 
-namespace Teleopti.Wfm.Adherence.Test.Domain.Service
+namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 {
 	[TestFixture]
 	[RtaTest]

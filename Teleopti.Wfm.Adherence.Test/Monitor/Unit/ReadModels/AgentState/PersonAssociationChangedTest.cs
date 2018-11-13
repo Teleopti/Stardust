@@ -10,7 +10,7 @@ using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using ExternalLogon = Teleopti.Ccc.Domain.ApplicationLayer.Events.ExternalLogon;
 
-namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ReadModels.AgentState
+namespace Teleopti.Wfm.Adherence.Test.Monitor.Unit.ReadModels.AgentState
 {
 	[TestFixture]
 	[DomainTest]

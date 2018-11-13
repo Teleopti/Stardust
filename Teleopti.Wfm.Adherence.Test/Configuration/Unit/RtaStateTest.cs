@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Wfm.Adherence.Domain.Configuration;
 
-namespace Teleopti.Wfm.Adherence.Test.Domain.Configuration
+namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 {
     [TestFixture]
     public class RtaStateTest

@@ -9,7 +9,7 @@ using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Tracer;
 
-namespace Teleopti.Wfm.Adherence.Test.Domain.Service
+namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 {
 	[TestFixture]
 	[RtaTest]

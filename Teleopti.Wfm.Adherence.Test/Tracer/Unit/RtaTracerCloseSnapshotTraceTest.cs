@@ -8,10 +8,10 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Wfm.Adherence.Domain.Service;
-using Teleopti.Wfm.Adherence.Test.Domain;
+using Teleopti.Wfm.Adherence.Test.States.Unit.Service;
 using Teleopti.Wfm.Adherence.Tracer;
 
-namespace Teleopti.Wfm.Adherence.Test.Tracer
+namespace Teleopti.Wfm.Adherence.Test.Tracer.Unit
 {
 	[RtaTest]
 	[Setting("UseSafeRtaTracer", false)]

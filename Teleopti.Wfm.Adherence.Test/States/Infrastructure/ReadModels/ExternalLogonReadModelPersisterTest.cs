@@ -5,7 +5,7 @@ using SharpTestsEx;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.Infrastructure.ExternalLogon
+namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 {
 	[TestFixture]
 	[ReadModelUnitOfWorkTest]

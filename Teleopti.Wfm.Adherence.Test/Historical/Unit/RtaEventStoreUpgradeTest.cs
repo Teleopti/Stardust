@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -12,7 +11,7 @@ using Teleopti.Wfm.Adherence.Domain;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Wfm.Adherence.Test.Domain.EventStore
+namespace Teleopti.Wfm.Adherence.Test.Historical.Unit
 {
 	[DomainTest]
 	[DefaultData]

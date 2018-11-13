@@ -6,7 +6,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service.Persisters
+namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.StateQueue
 {
 	[TestFixture]
 	[AnalyticsUnitOfWorkTest]

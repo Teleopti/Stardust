@@ -10,7 +10,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 using Teleopti.Wfm.Adherence.Domain.Events;
 
-namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ReadModels.Mappings
+namespace Teleopti.Wfm.Adherence.Test.States.Unit.ReadModels
 {
 	[TestFixture]
 	[DomainTest]

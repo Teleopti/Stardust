@@ -8,10 +8,10 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
-using Teleopti.Wfm.Adherence.Test.Domain.Service;
+using Teleopti.Wfm.Adherence.Test.States.Unit.Service;
 using Teleopti.Wfm.Adherence.Tracer;
 
-namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service
+namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service
 {
 	[TestFixture]
 	[PrincipalAndStateTest]

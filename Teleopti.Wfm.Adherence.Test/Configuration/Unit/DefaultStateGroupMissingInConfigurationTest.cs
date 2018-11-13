@@ -5,7 +5,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Domain.Configuration;
 
-namespace Teleopti.Wfm.Adherence.Test.Domain.Configuration
+namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 {
 	[DomainTest]
 	public class DefaultStateGroupMissingInConfigurationTest

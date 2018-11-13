@@ -16,7 +16,7 @@ using Teleopti.Wfm.Adherence.Domain.Configuration;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.Infrastructure.Mappings
+namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 {
 	[TestFixture]
 	[DatabaseTest]

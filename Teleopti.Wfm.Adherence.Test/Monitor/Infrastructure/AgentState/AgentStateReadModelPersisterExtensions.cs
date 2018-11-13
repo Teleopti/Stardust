@@ -1,7 +1,7 @@
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.Infrastructure.AgentState
+namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 {
 	public static class AgentStateReadModelPersisterExtensions
 	{

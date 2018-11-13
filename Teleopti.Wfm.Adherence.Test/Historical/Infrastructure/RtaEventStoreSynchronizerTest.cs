@@ -14,7 +14,7 @@ using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure
+namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 {
 	[TestFixture]
 	[PrincipalAndStateTest]

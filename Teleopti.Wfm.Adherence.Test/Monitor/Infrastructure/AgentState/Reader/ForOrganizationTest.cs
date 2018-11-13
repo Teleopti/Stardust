@@ -12,7 +12,7 @@ using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.Infrastructure.AgentState.Reader
+namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 {
 	[TestFixture]
 	[UnitOfWorkTest]

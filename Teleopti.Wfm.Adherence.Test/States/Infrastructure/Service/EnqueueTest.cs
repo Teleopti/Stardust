@@ -4,9 +4,9 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
-using Teleopti.Wfm.Adherence.Test.Domain.Service;
+using Teleopti.Wfm.Adherence.Test.States.Unit.Service;
 
-namespace Teleopti.Wfm.Adherence.Test.Domain.Infrastructure.Service
+namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service
 {
 	[TestFixture]
 	[PrincipalAndStateTest]

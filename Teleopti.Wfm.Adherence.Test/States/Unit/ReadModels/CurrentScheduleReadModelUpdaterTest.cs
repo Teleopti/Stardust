@@ -13,7 +13,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using FakeDatabase = Teleopti.Ccc.TestCommon.FakeRepositories.FakeDatabase;
 
-namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ReadModels.Schedules
+namespace Teleopti.Wfm.Adherence.Test.States.Unit.ReadModels
 {
 	[TestFixture]
 	[DomainTest]

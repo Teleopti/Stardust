@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.ViewModels.AgentStateViewModelBuilder
+namespace Teleopti.Wfm.Adherence.Test.Monitor.Unit.ViewModels.AgentStateViewModelBuilder
 {
 	[DomainTest]
 	[TestFixture]

@@ -8,7 +8,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
-namespace Teleopti.Wfm.Adherence.Test.ApplicationLayer.Infrastructure.Schedules
+namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 {
 	[TestFixture]
 	[ReadModelUnitOfWorkTest]
