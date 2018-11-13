@@ -20,5 +20,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IEnumerable<ActiveBpoModel> LoadActiveBpos();
 		int ClearBpoResources(Guid bpoGuid, DateTimePeriod dateTimePeriod);
 		BpoResourceRangeRaw GetRangeForBpo(Guid bpoId);
+		string GetSourceBpoByGuid(Guid bpoGuid);
 	}
 }

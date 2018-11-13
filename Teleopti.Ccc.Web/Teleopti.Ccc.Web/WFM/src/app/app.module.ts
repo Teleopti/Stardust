@@ -12,6 +12,7 @@ import { UserPreferences, UserService } from './core/services';
 import { CustomTranslateParser, LanguageLoaderFactory, Zorroi18nService } from './core/translation';
 import { MenuModule } from './menu/menu.module';
 import { NavigationModule } from './navigation/navigation.module';
+import { ReportModule } from './reports/reports.module';
 import { PeopleModule } from './people/people.module';
 import { InsightsModule } from './insights/insights.module';
 
@@ -35,7 +36,8 @@ import { InsightsModule } from './insights/insights.module';
 				deps: [HttpClient]
 			},
 			parser: { provide: TranslateParser, useClass: CustomTranslateParser }
-		})
+		}),
+		ReportModule
 	],
 	entryComponents: [BootstrapComponent],
 	providers: [Zorroi18nService]

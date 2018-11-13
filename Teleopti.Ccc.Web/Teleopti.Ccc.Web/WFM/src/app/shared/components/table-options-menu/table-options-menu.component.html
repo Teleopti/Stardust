@@ -1,0 +1,9 @@
+<nz-dropdown [nzTrigger]="'click'" nzPlacement="bottomRight">
+   <div nz-dropdown class="my-wrapper">
+      <i class="mdi mdi-dots-vertical"></i>
+   </div>
+   <ul nz-menu>
+      <li nz-menu-item [nzDisabled]="!enableCsvExport" (click)="exportToCsv()"><i class="anticon anticon-save"></i>Export
+         as CSV</li>
+   </ul>
+</nz-dropdown>

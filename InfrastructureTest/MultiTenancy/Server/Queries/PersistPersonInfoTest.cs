@@ -9,6 +9,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -18,19 +19,35 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 {
 	[TestFixture]
 	[InfrastructureTest]
-	public class PersistPersonInfoTest : IExtendSystem
+	public class PersistPersonInfoTest : BasePersistPersonInfoTest, IExtendSystem
 	{
-		private Tenant tenant;
-		private TenantUnitOfWorkManager _tenantUnitOfWorkManager;
-
-		public IPersistPersonInfo target;
-
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<PersistPersonInfo>(true);
 			extend.AddService<TenantAuditAttribute>();
 			extend.AddService<FakeCurrentHttpContext>();
 		}
+	}
+
+	[TestFixture]
+	[InfrastructureTest]
+	public class PersistPersonInfoWithAuditTrailCompatibilityTest : BasePersistPersonInfoTest, IExtendSystem
+	{
+		public void Extend(IExtend extend, IocConfiguration configuration)
+		{
+			extend.AddService<PersistPersonInfo>(true);
+			extend.AddService<TenantAuditAttribute>();
+			extend.AddService<FakeCurrentHttpContext>();
+			extend.AddModule(new AuditTrailModule(configuration));
+		}
+	}
+
+	public abstract class BasePersistPersonInfoTest
+	{
+		private Tenant tenant;
+		private TenantUnitOfWorkManager _tenantUnitOfWorkManager;
+
+		public IPersistPersonInfo Target;
 
 		[SetUp]
 		public void InsertPreState()
@@ -56,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 
 			var personInfo = new PersonInfo(tenant, id);
 			personInfo.SetIdentity("DOMAIN/User1");
-			target.Persist(personInfo);
+			Target.Persist(new GenericPersistApiCallActionObj(){PersonInfo = personInfo});
 
 			session.Flush();
 			session.Clear();
@@ -79,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			session.Clear();
 
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), newLogonName, RandomName.Make(), new OneWayEncryption());
-			target.Persist(personInfo);
+			Target.Persist(new GenericPersistApiCallActionObj() { PersonInfo = personInfo });
 
 			session.Flush();
 			session.Clear();
@@ -99,9 +116,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var personInfo2 = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo2.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, RandomName.Make(), new OneWayEncryption());
 
-			target.Persist(personInfo1);
+			Target.Persist(new GenericPersistApiCallActionObj() { PersonInfo = personInfo1 });
 			_tenantUnitOfWorkManager.CurrentSession().Flush();
-			Assert.Throws<DuplicateApplicationLogonNameException>(() => target.Persist(personInfo2));
+			Assert.Throws<DuplicateApplicationLogonNameException>(() => Target.Persist(new GenericPersistApiCallActionObj() { PersonInfo = personInfo2 }));
 		}
 
 		[Test]
@@ -112,8 +129,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var personInfo2 = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo2.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), null, RandomName.Make(), new OneWayEncryption());
 
-			target.Persist(personInfo1);
-			target.Persist(personInfo2);
+			Target.Persist(new GenericPersistApiCallActionObj() { PersonInfo = personInfo1 });
+			Target.Persist(new GenericPersistApiCallActionObj() { PersonInfo = personInfo2 });
 
 			Assert.DoesNotThrow(_tenantUnitOfWorkManager.CurrentSession().Flush);
 		}
@@ -128,9 +145,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var personInfo2 = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo2.SetIdentity(identity);
 
-			target.Persist(personInfo1);
+			Target.Persist(new GenericPersistApiCallActionObj() { PersonInfo = personInfo1 });
 			_tenantUnitOfWorkManager.CurrentSession().Flush();
-			Assert.Throws<DuplicateIdentityException>(() => target.Persist(personInfo2));
+			Assert.Throws<DuplicateIdentityException>(() => Target.Persist(new GenericPersistApiCallActionObj() { PersonInfo = personInfo2 }));
 		}
 
 		[Test]
@@ -141,8 +158,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var personInfo2 = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo2.SetIdentity(null);
 
-			target.Persist(personInfo1);
-			target.Persist(personInfo2);
+			Target.Persist(new GenericPersistApiCallActionObj() { PersonInfo = personInfo1 });
+			Target.Persist(new GenericPersistApiCallActionObj() { PersonInfo = personInfo2 });
 
 			var result = _tenantUnitOfWorkManager.CurrentSession().Query<PersonInfo>().ToList();
 			result.Count.Should().Be(0);
@@ -157,12 +174,12 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 
 			var personInfo1 = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo1.ApplicationLogonInfo.SetLogonName(string.Empty);
-			target.PersistIdentity(personInfo1);
+			Target.PersistIdentity(new IdentityChangeActionObj() { PersonInfo = personInfo1 });
 			Assert.DoesNotThrow(session.Flush);
 			
 			var personInfo2 = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo2.ApplicationLogonInfo.SetLogonName(string.Empty);
-			target.PersistIdentity(personInfo2);
+			Target.PersistIdentity(new IdentityChangeActionObj() { PersonInfo = personInfo2 });
 			Assert.DoesNotThrow(session.Flush);
 
 			var result = session.Query<PersonInfo>().ToList();
@@ -175,11 +192,11 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var session = _tenantUnitOfWorkManager.CurrentSession();
 
 			var personInfo1 = new PersonInfo(tenant, Guid.NewGuid());
-			target.PersistApplicationLogonName(personInfo1);
+			Target.PersistApplicationLogonName(new AppLogonChangeActionObj() { PersonInfo = personInfo1 });
 			Assert.DoesNotThrow(session.Flush);
 
 			var personInfo2 = new PersonInfo(tenant, Guid.NewGuid());
-			target.PersistApplicationLogonName(personInfo2);
+			Target.PersistApplicationLogonName(new AppLogonChangeActionObj() { PersonInfo = personInfo2 });
 			Assert.DoesNotThrow(session.Flush);
 
 			var result = session.Query<PersonInfo>().ToList();
@@ -196,11 +213,11 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			personInfo.SetIdentity("DOMAIN/User1");
 			var oldTenantPassword = personInfo.TenantPassword; 
 			
-			target.Persist(personInfo);
+			Target.Persist(new GenericPersistApiCallActionObj() { PersonInfo = personInfo });
 
 			var personInfoNew = new PersonInfo(tenant, id);
 			personInfoNew.SetIdentity("DOMAIN/User1");
-			target.Persist(personInfoNew);
+			Target.Persist(new GenericPersistApiCallActionObj() { PersonInfo = personInfoNew });
 			
 			var loaded = session.Get<PersonInfo>(id);
 			var result = loaded.TenantPassword;
@@ -212,7 +229,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		public void ShouldThrowIfExplicitIdIsNotSet()
 		{
 			Assert.Throws<ArgumentException>(() =>
-				target.Persist(new PersonInfo(tenant, Guid.Empty)));
+				Target.Persist(new GenericPersistApiCallActionObj() { PersonInfo = new PersonInfo(tenant, Guid.Empty)}));
 		}
 
 		[Test]
@@ -224,11 +241,11 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var personInfo = new PersonInfo(tenant, id);
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "logonName", RandomName.Make(), new OneWayEncryption());
 			var oldPw = personInfo.ApplicationLogonInfo.LogonPassword;
-			target.Persist(personInfo);
+			Target.Persist(new GenericPersistApiCallActionObj() { PersonInfo = personInfo });
 
 			var personInfoNew = new PersonInfo(tenant, id);
 			personInfoNew.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "newLogonName", string.Empty, new OneWayEncryption());
-			target.Persist(personInfoNew);
+			Target.Persist(new GenericPersistApiCallActionObj() { PersonInfo = personInfoNew });
 
 			var loaded = session.Get<PersonInfo>(id);
 			loaded.ApplicationLogonInfo.LogonName
@@ -247,11 +264,11 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "whatever", RandomName.Make(), new OneWayEncryption());
 			var pw = personInfo.ApplicationLogonInfo.LogonPassword;
 
-			target.Persist(personInfo);
+			Target.Persist(new GenericPersistApiCallActionObj() { PersonInfo = personInfo });
 
 			var personInfoNew = new PersonInfo(tenant, id);
 			personInfoNew.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), "whatever", new OneWayEncryption());
-			target.Persist(personInfoNew);
+			Target.Persist(new GenericPersistApiCallActionObj() { PersonInfo = personInfoNew });
 			
 
 			var loaded = session.Get<PersonInfo>(id);
@@ -268,7 +285,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 
 			var personInfo = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), "password1", new OneWayEncryption());
-			target.PersistApplicationLogonName(personInfo);
+			Target.PersistApplicationLogonName(new AppLogonChangeActionObj() { PersonInfo = personInfo });
 
 			var p1 = session.Get<PersonInfo>(personInfo.Id);
 			var auditRecords = session.Query<TenantAudit>().ToList();
@@ -288,7 +305,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var personInfo = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), "password1", new OneWayEncryption());
 			personInfo.SetIdentity(RandomName.Make());
-			target.PersistIdentity(personInfo);
+			Target.PersistIdentity(new IdentityChangeActionObj {PersonInfo = personInfo});
 
 			var p1 = session.Get<PersonInfo>(personInfo.Id);
 			var auditRecords = session.Query<TenantAudit>().ToList();
@@ -309,7 +326,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 
 			var personInfo = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), "password1", new OneWayEncryption());
-			target.Persist(personInfo);
+			Target.Persist(new GenericPersistApiCallActionObj() { PersonInfo = personInfo });
 
 			var p1 = session.Get<PersonInfo>(personInfo.Id);
 			var auditRecords = session.Query<TenantAudit>().ToList();
@@ -320,6 +337,5 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			auditRecord.Action.Should().Be.EqualTo(PersistActionIntent.GenericPersistApiCall.ToString());
 			auditRecord.Correlation.Should().Be.EqualTo(_tenantUnitOfWorkManager.CurrentSessionId());
 		}
-
 	}
 }

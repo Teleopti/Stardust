@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			currentTenant = new CurrentTenantUserFake();
 			var personInfoPersister = new PersistPersonInfo(_tenantUnitOfWorkManager, new PersonInfoPersister(_tenantUnitOfWorkManager));
 
-			personInfoPersister.Persist(existingPerson);
+			personInfoPersister.Persist(new GenericPersistApiCallActionObj() { PersonInfo = existingPerson});
 			target = new IdentityUserQuery(_tenantUnitOfWorkManager);
 		}
 

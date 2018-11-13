@@ -216,6 +216,7 @@
     <Compile Include="ApplicationLayer\SyncCommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\RecurringEventPublishingUpdater.cs" />
     <Compile Include="ApplicationLayer\UnitOfWorkTransactionEventSyncronization.cs" />
+    <Compile Include="Audit\PersonAccessContextReaderService.cs" />
     <Compile Include="Authentication\CryptoKeyInfo.cs" />
     <Compile Include="Authentication\CryptoKeyInfoRepository.cs" />
     <Compile Include="Authentication\ICryptoKeyInfoRepository.cs" />
@@ -271,6 +272,9 @@
     <Compile Include="MultiTenancy\BehaviorTestTenants.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAspect.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAttribute.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\PersistPersonInfoWithAuditTrail.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\TenantAccessAuditContext.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\TenantAuditActions.cs" />
     <Compile Include="MultiTenancy\Server\Queries\TenantAuditPersisterFake.cs" />
     <Compile Include="MultiTenancy\Server\TenantAudit.cs" />
     <Compile Include="MultiTenancy\Server\ExternalApplicationAccess.cs" />
@@ -306,6 +310,7 @@
     <Compile Include="Repositories\AllSkillForSkillGroupProvider.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSiteRepository.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReport.cs" />
+    <Compile Include="Repositories\Audit\StaffingAuditRepository.cs" />
     <Compile Include="Repositories\ExtensiveLogRepository.cs" />
     <Compile Include="Repositories\ExternalPerformanceDataRepository.cs" />
     <Compile Include="Repositories\ExternalPerformanceRepository.cs" />
@@ -323,6 +328,7 @@
     <Compile Include="Repositories\Stardust\JobFilterModel.cs" />
     <Compile Include="Repositories\Stardust\StardustRepository.cs" />
     <Compile Include="Repositories\Stardust\WorkerNode.cs" />
+    <Compile Include="Repositories\TenantAuditRepository.cs" />
     <Compile Include="Repositories\UserDeviceRepository.cs" />
     <Compile Include="Repositories\RequeueHangfireRepository.cs" />
     <Compile Include="Requests\StaffingInfoAvailableDaysProvider.cs" />
@@ -533,6 +539,7 @@
     <Compile Include="Foundation\IConnectionStrings.cs" />
     <Compile Include="ServiceLocatorForEntity.cs" />
     <Compile Include="Staffing\IStaffingDataAvailablePeriodProvider.cs" />
+    <Compile Include="Audit\StaffingContextReaderService.cs" />
     <Compile Include="Staffing\StaffingDataAvailablePeriodProvider.cs" />
     <Compile Include="SystemCheck\CheckMessageBrokerMailBox.cs" />
     <Compile Include="Toggle\Admin\FetchAllToggleOverrides.cs" />
@@ -906,7 +913,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="RealTimeAdherence\Domain" />
+    <Folder Include="RealTimeAdherence\Domain\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

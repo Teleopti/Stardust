@@ -79,6 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		[TestCase(DefinedRaptorApplicationFunctionPaths.Insights)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.ViewInsightsReport)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.EditInsightsReport)]
+		[TestCase(DefinedRaptorApplicationFunctionPaths.GeneralAuditTrailWebReport)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.WebApproveOrDenyRequest)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.WebReplyRequest)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.WebEditSiteOpenHours)]

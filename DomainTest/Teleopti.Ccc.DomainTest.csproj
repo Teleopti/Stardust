@@ -1532,6 +1532,7 @@
     <Compile Include="Scheduling\Assignment\PersonAssignmentTest.cs" />
     <Compile Include="Scheduling\Overtime\AddOvertimeTest.cs" />
     <Compile Include="SiteOpenHours\SiteWithOpenHourProviderTest.cs" />
+    <Compile Include="Staffing\AuditAggregatorServiceTest.cs" />
     <Compile Include="Staffing\BpoProviderTest.cs" />
     <Compile Include="Staffing\CompareProjectionTest.cs" />
     <Compile Include="Staffing\ExportBpoFileTest.cs" />
@@ -1539,6 +1540,7 @@
     <Compile Include="Staffing\ImportBpoFileTest.cs" />
     <Compile Include="Staffing\RequiredStaffingProviderTest.cs" />
     <Compile Include="Staffing\ScheduledSTaffingVIewModelCreatorTest.cs" />
+    <Compile Include="Staffing\TenantContextReaderServiceTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSettingsTest.cs" />
     <Compile Include="TestWithStaticDependenciesDONOTUSEAttribute.cs" />
     <Compile Include="SiteOpenHours\SiteOpenHoursPersisterTest.cs" />

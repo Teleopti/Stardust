@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Staffing"
+                   default-access="field.camelcase-underscore"
+				   schema="Auditing">
+
+  <class name="StaffingAudit">
+    <!--IEntity-->
+    <id name="Id" type="guid" access="nosetter.camelcase-underscore" unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+
+    <!--IEntity-->
+
+    <property name="TimeStamp"
+			 access="property"
+			 not-null="true"
+			type="UtcDateTime" />
+
+    <property name="Action"
+			 access="property"
+					not-null="true"
+					length="255"
+					type="string" />
+	
+     <property name="Area"
+				access="property"
+				not-null="true"
+				length="255"
+				type="string" />
+	 
+	  <property name="ImportFileName"
+				access="property"
+				not-null="false"
+				length="500"
+				type="string" />
+
+	 <property name="BpoId"
+				access="property"
+				not-null="false"
+				type="guid" />
+	  
+	  <property name="ClearPeriodStart"
+				access="property"
+				not-null="false"
+				type="UtcDateTime" />
+	  
+	  <property name="ClearPeriodEnd"
+				access="property"
+				not-null="false"
+				type="UtcDateTime" />
+	  
+    <many-to-one name="ActionPerformedBy"
+      class="Teleopti.Ccc.Domain.Common.Person"
+		access="property"
+        not-null="true"
+       foreign-key="FK__PER_SA_ActionPerformedBy_Person_Id"/>
+
+	 
+  </class>
+<query name="StaffingAuditOnCriteria">
+	<![CDATA[
+Select s from StaffingAudit s
+			where s.TimeStamp between :StartDate and :EndDate and :PersonId = s.ActionPerformedBy
+
+]]>
+</query>
+	<query name="PurgeStaffingAudit">
+		<![CDATA[
+DELETE from StaffingAudit
+			where TimeStamp < : DaysBack
+
+]]>
+	</query>
+</hibernate-mapping>

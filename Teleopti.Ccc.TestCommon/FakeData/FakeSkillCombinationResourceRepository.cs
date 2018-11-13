@@ -157,6 +157,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return BpoResourceRange;
 		}
 
+		public string GetSourceBpoByGuid(Guid bpoGuid)
+		{
+			return ActiveBpos.Single(b => b.Id == bpoGuid).Source;
+		}
+
 		public IList<SkillCombinationResourceBpo> LoadSkillCombinationResourcesBpo()
 		{
 			return _combinationResourcesBpo.Select(x => new SkillCombinationResourceBpo()

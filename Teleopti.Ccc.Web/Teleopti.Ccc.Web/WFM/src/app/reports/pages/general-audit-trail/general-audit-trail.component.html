@@ -1,0 +1,69 @@
+<div style="padding-bottom: 10px;" nz-row>
+    <div nz-col>
+        <h1>
+            <i class="mdi mdi-database-search"></i> Audit trail
+        </h1>
+    </div>
+</div>
+
+<form nz-form nzLayout="vertical" [formGroup]="searchForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <nz-form-label>{{'ChangedBy' | translate}}</nz-form-label>
+        <nz-form-control>
+            <nz-input-group style="width: 200px;" nzSize="medium" [nzSuffix]="suffixIcon">
+                <input placeholder="Select person" formControlName="personPicker" nz-input [nzAutocomplete]="auto" />
+            </nz-input-group>
+            <ng-template #suffixIcon>
+                <i class="anticon anticon-search"></i>
+            </ng-template>
+            <nz-autocomplete #auto>
+                <nz-auto-option *ngFor="let person of personList" [nzLabel]="person.FirstName + ' ' + person.LastName" [nzValue]="person">
+                    <span>
+                        {{person.FirstName + " " + person.LastName}}
+                    </span>
+                </nz-auto-option>
+            </nz-autocomplete>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label>{{'ChangeDateColon' | translate}}</nz-form-label>
+        <nz-form-control>
+            <nz-range-picker formControlName="changedRange" [nzFormat]="dateformat"></nz-range-picker>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-control>
+            <button [disabled]="notValidFields()" type="submit" nz-button nzType="primary">
+                <i class="anticon anticon-search"></i>{{'Search' | translate}}</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>
+
+<nz-table #auditTable nzSize="middle" [nzData]="auditTrailData" nzPageSize="100" nzHideOnSinglePage>
+    <thead nzSingleSort>
+        <tr>
+            <th nzShowExpand></th>
+            <th>Timestamp</th>
+            <th>Person</th>
+            <th>Action</th>
+            <th>Context</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-template ngFor let-data [ngForOf]="auditTable.data">
+            <tr>
+                <td nzShowExpand [(nzExpand)]="data.expand"></td>
+                <td>{{data.TimeStamp}}</td>
+                <td>{{data.ActionPerformedBy}}</td>
+                <td>{{data.Action}}</td>
+                <td>{{data.Context}}</td>
+            </tr>
+            <tr [nzExpand]="data.expand">
+                <td></td>
+                <td colspan="4">{{data.Data}}</td>
+            </tr>
+        </ng-template>
+    </tbody>
+</nz-table>

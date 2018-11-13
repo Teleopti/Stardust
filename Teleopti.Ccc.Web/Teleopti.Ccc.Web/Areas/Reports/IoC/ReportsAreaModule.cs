@@ -1,5 +1,9 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
+using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Web.Areas.Reports.Core;
+using Teleopti.Ccc.Web.Areas.Staffing.Controllers;
 
 namespace Teleopti.Ccc.Web.Areas.Reports.IoC
 {

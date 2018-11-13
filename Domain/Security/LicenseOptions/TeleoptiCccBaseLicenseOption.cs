@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				DefinedRaptorApplicationFunctionPaths.RequestSchedulerApprove,
 				DefinedRaptorApplicationFunctionPaths.AuditTrailSettings,
 				DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport,
+				DefinedRaptorApplicationFunctionPaths.GeneralAuditTrailWebReport,
 				DefinedRaptorApplicationFunctionPaths.ViewRestrictedScenario,
 				DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario,
 				DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport,

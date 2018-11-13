@@ -17797,6 +17797,10 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>No restrictions in period</value>
     <comment>No restrictions in period</comment>
   </data>
+  <data name="xxGeneralAuditTrailWebReport" xml:space="preserve">
+    <value>Audit Trail</value>
+    <comment>The new generic audit trail web report </comment>
+  </data>
   <data name="CopySchedule" xml:space="preserve">
     <value>Copy schedule</value>
     <comment>Copy schedule</comment>
