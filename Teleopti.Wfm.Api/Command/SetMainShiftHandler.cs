@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 using log4net;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 
 /* DO NOT USE! 
 It only contains vary simple logic. 
@@ -20,20 +21,23 @@ namespace Teleopti.Wfm.Api.Command
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IActivityRepository _activityRepository;
-		private readonly IPersonAssignmentRepository _personAssignmentRepository;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IShiftCategoryRepository _shiftCategoryRepository;
+		private readonly ISaveSchedulePartService _saveSchedulePartService;
+
 		private static readonly ILog logger = LogManager.GetLogger(typeof(SetMainShiftHandler));
 
 		public SetMainShiftHandler(IScenarioRepository scenarioRepository, 
 			IPersonRepository personRepository, IActivityRepository activityRepository, 
-			IPersonAssignmentRepository personAssignmentRepository, 
-			IShiftCategoryRepository shiftCategoryRepository)
+			IScheduleStorage scheduleStorage, 
+			IShiftCategoryRepository shiftCategoryRepository, ISaveSchedulePartService saveSchedulePartService)
 		{
 			_scenarioRepository = scenarioRepository;
 			_personRepository = personRepository;
 			_activityRepository = activityRepository;
-			_personAssignmentRepository = personAssignmentRepository;
+			_scheduleStorage = scheduleStorage;
 			_shiftCategoryRepository = shiftCategoryRepository;
+			_saveSchedulePartService = saveSchedulePartService;
 		}
 
 		[UnitOfWork]
@@ -47,7 +51,14 @@ namespace Teleopti.Wfm.Api.Command
 				var person = _personRepository.Load(command.PersonId);
 				var dateOnly = command.Date.ToDateOnly();
 
-				var assignment = getPersonAssignment(person, dateOnly, scenario, command.ShiftCategory);
+				var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), dateOnly.ToDateOnlyPeriod(), scenario);
+				var range = scheduleDictionary[person];
+				var day = range.ScheduledDay(dateOnly);
+				var assignment = day.PersonAssignment(true);
+				var shiftCategory = _shiftCategoryRepository.Get(command.ShiftCategory);
+				if (shiftCategory!=null)
+					assignment.SetShiftCategory(shiftCategory);
+
 				assignment.ClearMainActivities();
 
 				foreach (var layer in command.LayerCollection)
@@ -56,6 +67,9 @@ namespace Teleopti.Wfm.Api.Command
 					assignment.AddActivity(activity, new DateTimePeriod(layer.UtcStartDateTime.Utc(), layer.UtcEndDateTime.Utc()),
 						true);
 				}
+				
+				_saveSchedulePartService.Save(day,NewBusinessRuleCollection.Minimum(), KeepOriginalScheduleTag.Instance);
+
 				return new ResultDto
 				{
 					Successful = true
@@ -69,26 +83,6 @@ namespace Teleopti.Wfm.Api.Command
 					Successful = false
 				};
 			}
-		}
-
-		private IPersonAssignment getPersonAssignment(IPerson person, DateOnly dateOnly, IScenario scenario, Guid shiftCategoryId)
-		{
-			IPersonAssignment assignment;
-			var currentAssignments = _personAssignmentRepository.Find(new[] { person }, dateOnly.ToDateOnlyPeriod(), scenario);
-			if (currentAssignments.IsEmpty())
-			{
-				assignment = new PersonAssignment(person, scenario, dateOnly);
-				_personAssignmentRepository.Add(assignment);
-			}
-			else
-			{
-				assignment = currentAssignments.First();
-			}
-
-			var shiftCategory = _shiftCategoryRepository.Get(shiftCategoryId);
-			if (shiftCategory != null)
-				assignment.SetShiftCategory(shiftCategory);
-			return assignment;
 		}
 	}
 }
