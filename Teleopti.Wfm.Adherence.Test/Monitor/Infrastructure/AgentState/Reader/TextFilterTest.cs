@@ -370,5 +370,96 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 
 			result.Single().PersonId.Should().Be(personId1);
 		}
+		
+		[Test]
+		public void ShouldExcludeActivity()
+		{
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			Persister.UpsertWithState(new AgentStateReadModelForTest
+			{
+				PersonId = personId1,
+				Activity = "Phone"
+			});
+			Persister.UpsertWithState(new AgentStateReadModelForTest
+			{
+				PersonId = personId2,
+				Activity = "Lunch"
+			});
+
+			var result = Target.Read(new AgentStateFilter
+			{
+				TextFilter = "-Phone"
+			});
+
+			result.Single().PersonId.Should().Be(personId2);
+		}
+		
+		[Test]
+		public void ShouldExcludeActivityWithEndingDash()
+		{
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			Persister.UpsertWithState(new AgentStateReadModelForTest
+			{
+				PersonId = personId1,
+				Activity = "Phone-"
+			});
+			Persister.UpsertWithState(new AgentStateReadModelForTest
+			{
+				PersonId = personId2,
+				Activity = "Phone"
+			});
+
+			var result = Target.Read(new AgentStateFilter
+			{
+				TextFilter = "-Phone-"
+			});
+
+			result.Single().PersonId.Should().Be(personId2);
+		}
+		
+		[Test]
+		public void ShouldExcludeActivityWithStartingDash()
+		{
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			Persister.UpsertWithState(new AgentStateReadModelForTest
+			{
+				PersonId = personId1,
+				Activity = "Phone"
+			});
+			Persister.UpsertWithState(new AgentStateReadModelForTest
+			{
+				PersonId = personId2,
+				Activity = "-Phone"
+			});
+
+			var result = Target.Read(new AgentStateFilter
+			{
+				TextFilter = "--Phone"
+			});
+
+			result.Single().PersonId.Should().Be(personId1);
+		}
+		
+		[Test]
+		public void ShouldIgnoreSingleDash()
+		{
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			Persister.UpsertWithState(new AgentStateReadModelForTest
+			{
+				PersonId = personId1,
+				Activity = "Phone"
+			});
+
+			var result = Target.Read(new AgentStateFilter
+			{
+				TextFilter = "-"
+			});
+
+			result.Single().PersonId.Should().Be(personId1);
+		}
 	}
 }
