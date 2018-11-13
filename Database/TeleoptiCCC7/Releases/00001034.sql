@@ -12,7 +12,7 @@ CONSTRAINT [PK_StaffingAudit] PRIMARY KEY CLUSTERED
 (
             [Id] ASC
 )
-) ON [PRIMARY] 
+)
 GO
 
 ALTER TABLE [Auditing].[StaffingAudit]  WITH CHECK ADD  CONSTRAINT [FK__PER_SA_ActionPerformedBy_Person_Id] FOREIGN KEY([ActionPerformedBy])
