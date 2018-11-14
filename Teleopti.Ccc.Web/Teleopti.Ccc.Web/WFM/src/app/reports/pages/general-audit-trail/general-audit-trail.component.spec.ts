@@ -22,7 +22,7 @@ import { GeneralAuditTrailComponent as GeneralAuditTrail } from './general-audit
 import { AuditTrailService } from '../../services';
 import { UserService, UserPreferences } from '../../../core/services';
 
-fdescribe('SearchPageComponent', () => {
+describe('SearchPageComponent', () => {
 	let component: GeneralAuditTrail;
 	let fixture: ComponentFixture<GeneralAuditTrail>;
 	let page: Page;
