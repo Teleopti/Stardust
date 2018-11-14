@@ -15,7 +15,7 @@
 			controllerAs: 'vm',
 			bindToController: true,
 			controller: 'requestsScheduleTableController',
-			templateUrl: 'requests-schedule-table.html'
+			templateUrl: 'app/requests/html/requests-schedule-table.html'
 		};
 	}
 	function requestsScheduleTableController() {}

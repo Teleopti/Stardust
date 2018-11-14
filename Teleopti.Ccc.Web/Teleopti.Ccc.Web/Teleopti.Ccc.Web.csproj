@@ -1660,11 +1660,14 @@
     <Content Include="WFM\app\requests\html\requests-budget-allowance.tpl.html" />
     <Content Include="WFM\app\requests\html\requests-footer.tpl.html" />
     <Content Include="WFM\app\requests\html\requests-absence-and-text.html" />
+    <Content Include="WFM\app\requests\html\requests-absence-person-account-overview.html" />
     <Content Include="WFM\app\requests\html\requests-absence-and-text-header.html" />
     <Content Include="WFM\app\requests\html\requests-shift-trade-header.html" />
     <Content Include="WFM\app\requests\html\requests.html" />
+    <Content Include="WFM\app\requests\html\requests-schedule-table.html" />
     <Content Include="WFM\app\requests\html\requests-shift-trade.html" />
     <Content Include="WFM\app\requests\html\requests-overtime.html" />
+    <Content Include="WFM\app\requests\html\shift-trade-day-template.html" />
     <Content Include="WFM\app\requests\requests.controller.spec.js" />
     <Content Include="WFM\app\requests\requests.controller.shiftTrade.spec.js" />
     <Content Include="WFM\app\requests\requests.directive.shiftDetail.spec.js" />
@@ -2070,9 +2073,6 @@
     <Content Include="WFM\app\requests\requests.service.definitions.spec.js" />
     <Content Include="WFM\app\requests\requests.directive.scheduleTable.js" />
     <Content Include="WFM\app\requests\requests.routes.js" />
-    <Content Include="WFM\app\requests\templates\requests.template.absencePersonAccountOverview.js" />
-    <Content Include="WFM\app\requests\templates\requests.template.shiftTradeDay.js" />
-    <Content Include="WFM\app\requests\templates\requests.template.scheduleTableTemplate.js" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.routes.js" />
     <Content Include="WFM\app\global\http\http.service.js" />
     <Content Include="WFM\app\search\search.controller.spec.js" />

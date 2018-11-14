@@ -345,7 +345,7 @@
 				enablePinning: false,
 				enableColumnMenu: false,
 				enableHiding: false,
-				cellTemplate: 'shift-trade-day-template.html',
+				cellTemplate: 'app/requests/html/shift-trade-day-template.html',
 				width: numberOfDays * 40,
 				enableSorting: false,
 				enableFiltering: false,

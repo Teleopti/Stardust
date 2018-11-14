@@ -171,7 +171,7 @@
 				displayName: $translate.instant('Account'),
 				field: 'PersonAccountSummaryViewModel',
 				enableFiltering: false,
-				cellTemplate: 'requests-absence-person-account-overview.html',
+				cellTemplate: 'app/requests/html/requests-absence-person-account-overview.html',
 				enableSorting: false
 			};
 
