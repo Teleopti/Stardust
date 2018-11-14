@@ -286,6 +286,8 @@
     <Compile Include="Intraday\To Staffing\StaffingIntervalModel.cs" />
     <Compile Include="Logon\SingleOwnedPerson.cs" />
     <Compile Include="MultiTenancy\ActiveTenants.cs" />
+    <Compile Include="Notification\INotificationServiceClient.cs" />
+    <Compile Include="Notification\NotificationServiceClient.cs" />
     <Compile Include="Optimization\BlockPreferencesExtensions.cs" />
     <Compile Include="Optimization\IntradayOptimizationOnStardust.cs" />
     <Compile Include="Optimization\MatrixLockers\MatrixClosedDayLocker.cs" />

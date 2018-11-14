@@ -72,8 +72,15 @@
 											</label>
 										</div>
 									</div>
-									<button class="wfm-btn wfm-btn-primary" id="Signin-button" type="submit" data-bind="enable: Ajax.Inactive" style="margin-top: 10px">@Resources.SignIn</button>
-									<div data-bind="visible: Ajax.Active" class="loader"></div>
+									<div style="text-align: right;" class="con-flex" data-bind="visible: isToggleEnabled('Wfm_User_Password_Reset_74957')">
+										<a href="#" data-bind="click: gotoForgotPassword">@Resources.ForgotYourPassword</a>
+									</div>
+									<div class="con-row">
+										<div class="con-flex">
+											<button class="wfm-btn wfm-btn-primary" id="Signin-button" type="submit" data-bind="enable: Ajax.Inactive" style="margin-top: 10px">@Resources.SignIn</button>
+											<div data-bind="visible: Ajax.Active" class="loader"></div>
+										</div>
+									</div>
 								</form>
 							</div>
 						</div>
@@ -115,7 +122,7 @@
 									<input type="password" id="Confirm-new-password" placeholder="@Resources.ConfirmNewPassword" data-bind="value: ConfirmNewPassword" autocomplete="new-password" />
 								</div>
 								<div id="Password-change-error" class="alert alert-warning formError material-depth-1" data-bind="visible: ErrorMessage().length > 0, text: ErrorMessage"
-										  data-notmatch="@Resources.PasswordsDoNotMatch">
+									 data-notmatch="@Resources.PasswordsDoNotMatch">
 								</div>
 								<button class="wfm-btn wfm-btn-default" id="Skip-button" data-bind="visible: !MustChangePassword(), click: SkipChangePassword">@Resources.Skip</button>
 								<button class="wfm-btn wfm-btn-primary" id="Change-password-button" data-bind="click: ApplyChangePassword">@Resources.Apply</button>
@@ -141,5 +148,40 @@
 			</div>
 		</div>
 
+		<div id="forgotpassword">
+			<div class="con-row" data-bind="visible: SuccessMessage().length === 0" style="margin-top: 2%;">
+				<div class="con-flex"></div>
+				<div class="con-flex split-1-2" >
+					<div class="panel material-depth-1 line-center">
+						<div class="sub-header">
+							<h1>@Resources.ForgotYourPassword</h1>
+						</div>
+						<div style="margin-bottom: 15px;">@Resources.ForgotYourPasswordInstruction</div>
+						<div class="con-row">
+							<div class="con-flex wfm-form">
+								<div class="form-group">
+									<input type="text" id="e-mail" required placeholder="@Resources.Email" data-bind="value: MailAddress"/>
+								</div>
+								<button class="wfm-btn wfm-btn-default" id="back-button" data-bind="click: BackToLogin">@Resources.Cancel</button>
+								<button class="wfm-btn wfm-btn-primary" id="send-forgot-password-mail-button" type="submit" data-bind="click: SendForgotPasswordMail">@Resources.Send</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="con-flex"></div>
+			</div>
+			<div class="con-row" style="margin-top: 2%;">
+				<div class="con-flex"></div>
+				<div class="con-flex split-1-2">
+					<div id="Password-change-success" style="text-align: center" class="alert alert-success formError material-depth-1" data-bind="visible: SuccessMessage().length > 0, text: '@Resources.ResetPasswordSuccess'">
+					</div>
+
+					<div id="Password-change-error" style="text-align: center; background-color: #ffb974; color: #333333;" class="alert alert-info formError material-depth-1" data-bind="visible: ErrorMessage().length > 0, text: ErrorMessage"
+						 data-invalid="@Resources.ResetPasswordErrorMessage" data-techerror="@Resources.SomethingWentWrong" >
+					</div>
+				</div>
+				<div class="con-flex"></div>
+			</div>
+		</div>
 	</div>
 </section>

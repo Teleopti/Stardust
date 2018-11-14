@@ -17,4 +17,3 @@ Teleopti.SSO.Authentication.ChangePasswordView = function (data) {
 		Teleopti.SSO.Common.Layout.ActivatePlaceHolderText();
 	};
 };
-

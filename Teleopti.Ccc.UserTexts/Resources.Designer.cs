@@ -13584,6 +13584,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Forgot your password?.
+        /// </summary>
+        public static string ForgotYourPassword {
+            get {
+                return ResourceManager.GetString("ForgotYourPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter your email to get instructions on how to reset your password.
+        /// </summary>
+        public static string ForgotYourPasswordInstruction {
+            get {
+                return ResourceManager.GetString("ForgotYourPasswordInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Format.
         /// </summary>
         public static string Format {
@@ -28647,6 +28665,33 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset password.
+        /// </summary>
+        public static string ResetPassword {
+            get {
+                return ResourceManager.GetString("ResetPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a valid email address.
+        /// </summary>
+        public static string ResetPasswordErrorMessage {
+            get {
+                return ResourceManager.GetString("ResetPasswordErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An email with instructions has been sent to you.
+        /// </summary>
+        public static string ResetPasswordSuccess {
+            get {
+                return ResourceManager.GetString("ResetPasswordSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset Rules.
         /// </summary>
         public static string ResetRules {
@@ -34306,6 +34351,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SomeoneElseHaveChanged {
             get {
                 return ResourceManager.GetString("SomeoneElseHaveChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Something went wrong. Please try again later..
+        /// </summary>
+        public static string SomethingWentWrong {
+            get {
+                return ResourceManager.GetString("SomethingWentWrong", resourceCulture);
             }
         }
         

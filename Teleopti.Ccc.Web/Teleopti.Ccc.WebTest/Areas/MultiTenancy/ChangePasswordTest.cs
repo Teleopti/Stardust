@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 	[TenantTest]
 	public class ChangePasswordTest
 	{
-		public ChangePasswordController Target;
+		public PasswordController Target;
 		public FindPersonInfoFake FindPersonInfo;
 		public TenantUnitOfWorkFake TenantUnitOfWork;
 		public CheckPasswordStrengthFake CheckPasswordStrength;

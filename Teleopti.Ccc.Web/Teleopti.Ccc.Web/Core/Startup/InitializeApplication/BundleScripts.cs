@@ -152,6 +152,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/hasher/hasher.js",
 					"~/Content/crossroads/crossroads.js")
 				.IncludeDirectory("~/Areas/SSO/Content/Scripts", "*.js");
+
 			BundleTable.Bundles.Add(cssBundle);
 			BundleTable.Bundles.Add(jsBundle);
 		}
