@@ -61,4 +61,17 @@
 		equal(shiftExchangeOfferViewModel.startTimeInternal(), '08.00');
 		equal(shiftExchangeOfferViewModel.endTimeInternal(), '17.00');
 	});
+
+	test('should call getAbsence service for only one time when loading Post Shift for Trade page', function () {
+		var counter = 0;
+		var ajax = {
+			Ajax: function () {
+				counter++;
+			}
+		};
+		var shiftExchangeOfferViewModel = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel(ajax, function () { });
+		shiftExchangeOfferViewModel.DateToForPublish('2018/11/14');
+		shiftExchangeOfferViewModel.DateToForPublish('2018/11/14');
+		equal(counter, 1);
+	});
 });
