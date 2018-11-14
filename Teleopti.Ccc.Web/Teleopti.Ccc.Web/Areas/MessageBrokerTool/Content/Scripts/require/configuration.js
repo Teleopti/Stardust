@@ -5,7 +5,7 @@
 		modernizr: '../../../../Content/modernizr/modernizr-2.6.2.min',
 		moment: '../../../../Content/moment/moment',
 		bootstrap: '../../../../Content/bootstrap/Scripts/bootstrap.min',
-		signalr: '../../../../Content/signalr/jquery.signalR-2.2.2.min',
+		signalr: '../../../../Content/signalr/jquery.signalR-2.3.0.min',
 
 		noext: '../../../../Content/require/noext',
 		signalrrr: 'require/signalrrr',

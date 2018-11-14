@@ -135,7 +135,7 @@ module.exports = function(grunt) {
 			'node_modules/angular-dialog-service/dist/dialogs-default-translations.min.js',
 			'vendor/angular-bootstrap-persian-datepicker-master/persiandate.js',
 			'vendor/angular-bootstrap-persian-datepicker-master/persian-datepicker-tpls.js',
-			'../Content/signalr/jquery.signalR-2.2.2.js',
+			'../Content/signalr/jquery.signalR-2.3.0.js',
 			'../Content/signalr/broker-hubs.js',
 			'node_modules/lodash/lodash.min.js'
 		],
