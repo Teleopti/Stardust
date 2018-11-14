@@ -1,4 +1,4 @@
-/*import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -11,7 +11,9 @@ import {
 	NzTableModule,
 	NzToolTipModule,
 	NzAutocompleteModule,
-	NzDatePickerModule
+	NzDatePickerModule,
+	NZ_I18N,
+	en_US
 } from 'ng-zorro-antd';
 import { of } from 'rxjs';
 import { configureTestSuite } from '@wfm/test';
@@ -43,7 +45,11 @@ fdescribe('SearchPageComponent', () => {
 				NzAutocompleteModule,
 				NzDatePickerModule
 			],
-			providers: [AuditTrailService, { provide: UserService, useClass: MockUserService }]
+			providers: [
+				AuditTrailService,
+				{ provide: UserService, useClass: MockUserService },
+				{ provide: NZ_I18N, useValue: en_US }
+			]
 		}).compileComponents();
 	}));
 
@@ -59,7 +65,7 @@ fdescribe('SearchPageComponent', () => {
 	});
 });
 
-class MockUserService implements Partial(UserService) {
+class MockUserService implements Partial<UserService> {
 	getPreferences() {
 		return of({
 			Id: '1',
@@ -82,4 +88,3 @@ class Page {
 		return this.fixture.debugElement.queryAll(By.css(selector));
 	}
 }
-*/
