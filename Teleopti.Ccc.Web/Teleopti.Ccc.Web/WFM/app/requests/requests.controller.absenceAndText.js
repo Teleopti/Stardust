@@ -59,8 +59,7 @@
 		vm.paging = {};
 		vm.initialized = false;
 
-		var onInitCallBack = undefined,
-			columnsWithFilterEnabled = ['Subject', 'Message', 'Type', 'Status'];
+		var onInitCallBack = undefined;
 
 		vm.setDefaultStatuses = function() {
 			if (vm.defaultStatusesLoaded) return;
@@ -204,9 +203,7 @@
 			vm.filterEnabled = data;
 			vm.gridOptions.enableFiltering = vm.filterEnabled;
 			vm.gridOptions.useExternalFiltering = vm.filterEnabled;
-			angular.forEach(vm.gridOptions.columnDefs, function(col) {
-				col.enableFiltering = vm.filterEnabled && columnsWithFilterEnabled.indexOf(col.displayName) > -1;
-			});
+
 			if (vm.gridApi && vm.gridApi.core)
 				vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
 		});
@@ -331,9 +328,6 @@
 
 		function applyGridColumns(){
 			vm.gridOptions.columnDefs = textAndAbsenceGridConfigurationService.columnDefinitions();
-			angular.forEach(vm.gridOptions.columnDefs, function (col) {
-				col.enableFiltering = vm.filterEnabled && columnsWithFilterEnabled.indexOf(col.displayName) > -1;
-			});
 		}
 
 		function onSelectionChanged() {
