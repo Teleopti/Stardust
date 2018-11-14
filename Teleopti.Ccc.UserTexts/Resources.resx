@@ -17677,9 +17677,9 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Time (s)</value>
     <comment>Label for Y axis in web forecast</comment>
   </data>
-  <data name="ShowOnlyDayOff" xml:space="preserve">
-    <value>Show only day off</value>
-    <comment>Show only day off tooltip on new TeamSchedule view in MyTime</comment>
+  <data name="ShowOnlyDaysOff" xml:space="preserve">
+    <value>Show only days off</value>
+    <comment>Show only days off tooltip on new TeamSchedule view in MyTime</comment>
   </data>
   <data name="NoHistoricalDataFoundForThisSkill" xml:space="preserve">
     <value>No historical data found for this skill.</value>

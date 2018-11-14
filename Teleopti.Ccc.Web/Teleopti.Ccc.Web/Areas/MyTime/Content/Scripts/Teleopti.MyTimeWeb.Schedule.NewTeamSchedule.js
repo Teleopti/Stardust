@@ -166,7 +166,7 @@
 			}
 
 			if (vm.showOnlyDayOff()) {
-				htmlStr += '<p> ' + userTexts.ShowOnlyDayOff + ': ' + vm.showOnlyDayOff() + '</p>';
+				htmlStr += '<p> ' + userTexts.ShowOnlyDaysOff + ': ' + vm.showOnlyDayOff() + '</p>';
 			}
 
 			if (vm.showOnlyNightShift() || vm.showOnlyDayOff()) {

@@ -33448,9 +33448,9 @@ namespace Teleopti.Ccc.UserTexts {
         /// <summary>
         ///   Looks up a localized string similar to Show only day off.
         /// </summary>
-        public static string ShowOnlyDayOff {
+        public static string ShowOnlyDaysOff {
             get {
-                return ResourceManager.GetString("ShowOnlyDayOff", resourceCulture);
+                return ResourceManager.GetString("ShowOnlyDaysOff", resourceCulture);
             }
         }
         
