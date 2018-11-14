@@ -143,9 +143,7 @@
 
 			var ele = document.createElement('div');
 			var htmlStr =
-				'<div class="new-teamschedule-team-filter-detail"><span>' +
-				userTexts.FilterTeamSchedulesByTime +
-				'</span>';
+				'<div class="new-teamschedule-team-filter-detail"><span>' + userTexts.FilterTeamSchedules + '</span>';
 
 			if (vm.filter.filteredStartTimes.length > 0)
 				htmlStr +=
@@ -165,6 +163,10 @@
 
 			if (vm.showOnlyNightShift()) {
 				htmlStr += '<p> ' + userTexts.ShowOnlyNightShifts + ': ' + vm.showOnlyNightShift() + '</p>';
+			}
+
+			if (vm.showOnlyDayOff()) {
+				htmlStr += '<p> ' + userTexts.ShowOnlyDaysOff + ': ' + vm.showOnlyDayOff() + '</p>';
 			}
 
 			if (vm.showOnlyNightShift() || vm.showOnlyDayOff()) {

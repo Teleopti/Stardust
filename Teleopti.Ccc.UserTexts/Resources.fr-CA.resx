@@ -13605,7 +13605,7 @@ L'application va maintenant se fermer.</value>
   <data name="SelectTargetScenarioWithColon" xml:space="preserve">
     <value>Sélectionner le scénario-cible:</value>
   </data>
-  <data name="ShowOnlyDayOff" xml:space="preserve">
+  <data name="ShowOnlyDaysOff" xml:space="preserve">
     <value>Montrer uniquement jours libres</value>
   </data>
   <data name="ShowNoneIssuedAgents" xml:space="preserve">

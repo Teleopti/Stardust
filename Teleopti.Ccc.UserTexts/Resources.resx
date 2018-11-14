@@ -17677,9 +17677,9 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Time (s)</value>
     <comment>Label for Y axis in web forecast</comment>
   </data>
-  <data name="ShowOnlyDayOff" xml:space="preserve">
-    <value>Show only day off</value>
-    <comment>Show only day off tooltip on new TeamSchedule view in MyTime</comment>
+  <data name="ShowOnlyDaysOff" xml:space="preserve">
+    <value>Show only days off</value>
+    <comment>Show only days off tooltip on new TeamSchedule view in MyTime</comment>
   </data>
   <data name="NoHistoricalDataFoundForThisSkill" xml:space="preserve">
     <value>No historical data found for this skill.</value>
@@ -17820,9 +17820,9 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>The shifts in the shift bag {0} can not fulfill the contract time for the contract {1}. </value>
     <comment>Shown when validating agents in Plans (web) and an agent has a contract that with contract time that can't be fulfilled with the assigned shift bag</comment>
   </data>
-  <data name="FilterTeamSchedulesByTime" xml:space="preserve">
-    <value>Filter team schedules by time</value>
-    <comment>Filter team schedules by time - a icon tooltip used in TeamSchedule/MyTime</comment>
+  <data name="FilterTeamSchedules" xml:space="preserve">
+    <value>Filter team schedules</value>
+    <comment>Filter team schedules - a icon tooltip used in TeamSchedule/MyTime</comment>
   </data>
   <data name="ApproveOrDenyRequest" xml:space="preserve">
     <value>Approve/Deny Request</value>

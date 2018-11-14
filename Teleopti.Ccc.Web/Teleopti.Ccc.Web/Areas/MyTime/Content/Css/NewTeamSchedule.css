@@ -22,13 +22,16 @@
 .new-teamschedule-view-nav .navbar-teleopti.navbar-nav > li > a:focus {
 	cursor: pointer;
 	border-radius: 3px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 41px;
 }
 .new-teamschedule-view-nav input.form-control {
 	background: transparent !important;
 	border-color: white;
 	box-shadow: none;
 	color: white;
-	font-size: 1.1em;
 	font-weight: bold;
 }
 .new-teamschedule-view-nav .mobile-datepicker span.input-group-btn .btn.btn-default {
@@ -68,6 +71,7 @@
 	white-space: nowrap;
 	min-width: 35px;
 	margin: 0 10px;
+	cursor: pointer;
 }
 .new-teamschedule-toggle {
 	display: inline-block;
@@ -226,6 +230,7 @@
 	height: 36px;
 	display: block;
 	background: white;
+	flex-grow: 1;
 }
 .new-teamschedule-view-nav .submenu li:first-child {
 	margin-left: 15px;

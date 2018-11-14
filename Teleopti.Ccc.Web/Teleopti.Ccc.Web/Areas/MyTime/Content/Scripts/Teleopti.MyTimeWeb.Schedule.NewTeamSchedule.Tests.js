@@ -1030,6 +1030,7 @@
 		}
 		initVm();
 
+		$('.new-teamschedule-time-filter').click();
 		$('.show-only-day-off-toggle input').click();
 
 		equal(completeLoadedCount, 2);
@@ -1045,6 +1046,7 @@
 		initVm();
 
 		vm.searchNameText('this is a test search name text');
+		$('.new-teamschedule-time-filter').click();
 		$('.show-only-day-off-toggle input').click();
 
 		equal(completeLoadedCount, 2);
@@ -1062,6 +1064,7 @@
 		vm.paging.take = 20;
 		vm.paging.skip = 20;
 
+		$('.new-teamschedule-time-filter').click();
 		$('.show-only-day-off-toggle input').click();
 
 		equal(completeLoadedCount, 2);
@@ -1136,9 +1139,9 @@
 
 		initVm();
 
+		$('.new-teamschedule-time-filter').click();
 		$('.show-only-day-off-toggle input').click();
 
-		$('.new-teamschedule-time-filter').click();
 		$('.show-only-night-shift-toggle input').click();
 
 		equal(completeLoadedCount, 3);
@@ -1158,7 +1161,7 @@
 		equal(completeLoadedCount, 3);
 		equal(ajaxOption.ScheduleFilter.isDayOff, true);
 		equal(ajaxOption.ScheduleFilter.onlyNightShift, false);
-		equal(vm.hasTimeFiltered(), false);
+		equal(vm.hasTimeFiltered(), true);
 	});
 
 	test('should restore show only day off toggle state after clicking cancel button on mobile', function() {
@@ -1291,6 +1294,10 @@
 	});
 
 	test("should filter agents' day off after turn on show only day off toggle and click search on mobile", function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
+			return true;
+		};
 		$('body').append(agentSchedulesHtml);
 
 		if (fakeOriginalAgentSchedulesData.length > 0) {
@@ -1311,6 +1318,7 @@
 				.text(),
 			'Jon Kleinsmith200'
 		);
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
 	test('should filter agents using start time slider', function() {
@@ -1951,11 +1959,20 @@
 			'					</span>',
 			'				</div>',
 			'			</li>',
+			'			<!-- ko if: isHostAMobile || isHostAniPad -->',
+			'			<li class="mobile-today" data-bind="click: today">',
+			'				<a>',
+			'					<i class="glyphicon glyphicon-home"></i>',
+			'				</a>',
+			'			</li>',
+			'			<!-- /ko -->',
+			'			<!-- ko if: isHostADesktop -->',
 			"			<li class=\"mobile-today\" data-bind=\"click: today, tooltip: { title: '@Resources.Today', html: true, trigger: 'hover', placement: 'bottom'}\">",
 			'				<a>',
 			'					<i class="glyphicon glyphicon-home"></i>',
 			'				</a>',
 			'			</li>',
+			'			<!-- /ko -->',
 			'			<!-- ko if: isHostAMobile -->',
 			'			<li class="new-teamschedule-team-filter" data-bind="css: {\'new-teamschedule-has-time-filter\': hasFilteredOnMobile}">',
 			'				<a class="relative">',
@@ -1964,17 +1981,11 @@
 			'				</a>',
 			'			</li>',
 			'			<!-- /ko -->',
-			'			<!-- ko ifnot: isHostAMobile -->',
-			"			<li class=\"new-teamschedule-time-filter\" data-bind=\"css: {'new-teamschedule-has-time-filter': hasTimeFiltered}, tooltip: { title: buildFilterDetails('@Resources.FilterTeamSchedulesByTime', '@Resources.StartTime', '@Resources.EndTime', '@Resources.ShowOnlyNightShifts'), html: true, trigger: 'hover', placement: 'bottom'}\">",
+			'			<!-- ko if: isHostADesktop || isHostAniPad -->',
+			"			<li class=\"new-teamschedule-time-filter\" data-bind=\"css: {'new-teamschedule-has-time-filter': hasTimeFiltered}, tooltip: { title: buildFilterDetails(), html: true, trigger: 'hover', placement: 'bottom'}\">",
 			'				<a>',
 			'					<i class="glyphicon glyphicon-filter"></i>',
 			'					<span></span>',
-			'				</a>',
-			'			</li>',
-			"			<li class=\"new-teamschedule-toggle show-only-day-off-toggle\" data-bind=\"tooltip: { title: '@Resources.ShowOnlyDayOff', html: true, trigger: 'hover', placement: 'bottom'}\">",
-			'				<a>',
-			'					<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />',
-			'					<label class="relative" for="show-only-day-off-switch">Day off switch</label>',
 			'				</a>',
 			'			</li>',
 			'			<li class="new-teamschedule-filter-component relative">',
@@ -2101,7 +2112,7 @@
 			'		</div>',
 			'		<!-- /ko -->',
 			'	</div>',
-			'	<!-- ko if: !isHostAMobile && !isHostAniPad -->',
+			'	<!-- ko if: isHostADesktop -->',
 			'	<div class="teamschedule-scroll-block-container" data-bind="style: {border: isScrollbarVisible() ? \'1px dashed rgba(0, 0, 0, 0.1)\' : \'none\'}">',
 			'		<!-- ko if: isScrollbarVisible -->',
 			'		<div class="teamschedule-scroll-block">',
@@ -2135,7 +2146,7 @@
 			'			<!-- ko if: showOnlyDayOff() || showOnlyNightShift() -->',
 			'			<div class="new-teamschedule-time-slider-block-backdrop"></div>',
 			'			<!-- /ko -->',
-			'			<div class="new-teamschedule-time-slider-container">',
+			'			<div class="new-teamschedule-time-slider-container cursorpointer">',
 			'				<label>@Resources.StartTime:</label>',
 			'				<!-- ko if: isHostAMobile-->',
 			'				<span class="start-time-clear-button cursorpointer floatright">',
@@ -2153,7 +2164,7 @@
 			'				</span>',
 			'				<!--/ko-->',
 			'			</div>',
-			'			<div class="new-teamschedule-time-slider-container">',
+			'			<div class="new-teamschedule-time-slider-container cursorpointer">',
 			'				<label>@Resources.EndTime:</label>',
 			'				<!-- ko if: isHostAMobile-->',
 			'				<span class="end-time-clear-button cursorpointer floatright">',
@@ -2173,15 +2184,15 @@
 			'			</div>',
 			'		</div>',
 			'		<!-- ko if: isHostAMobile-->',
-			'		<div class="new-teamschedule-toggle show-only-day-off-toggle">',
-			'			<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />',
-			'			<label class="relative" for="show-only-day-off-switch">Day off switch</label>',
-			'			<span>@Resources.ShowOnlyDayOff</span>',
-			'		</div>',
 			'		<div class="new-teamschedule-toggle show-only-night-shift-toggle">',
 			'			<input type="checkbox" id="show-only-night-shift-switch" data-bind="checked: showOnlyNightShift" />',
 			'			<label class="relative" for="show-only-night-shift-switch">Night shift switch</label>',
 			'			<span>@Resources.ShowOnlyNightShifts</span>',
+			'		</div>',
+			'		<div class="new-teamschedule-toggle show-only-day-off-toggle">',
+			'			<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />',
+			'			<label class="relative" for="show-only-day-off-switch">Day off switch</label>',
+			'			<span>@Resources.ShowOnlyDaysOff</span>',
 			'		</div>',
 			'		<div class="empty-search-result">',
 			'			<!-- ko if: emptySearchResult -->',
@@ -2195,12 +2206,17 @@
 			'			<button class="btn btn-primary" data-bind="click: submitSearchForm">@Resources.Search</button>',
 			'		</div>',
 			'		<!--/ko-->',
-			'		<!-- ko if: !isHostAMobile-->',
+			'		<!-- ko if: isHostADesktop || isHostAniPad -->',
 			'		<div class="new-teamschedule-submit-buttons clearfix">',
 			'			<div class="new-teamschedule-toggle show-only-night-shift-toggle">',
 			'				<input type="checkbox" id="show-only-night-shift-switch" data-bind="checked: showOnlyNightShift" />',
 			'				<label class="relative" for="show-only-night-shift-switch">Night shift switch</label>',
 			'				<span>@Resources.ShowOnlyNightShifts</span>',
+			'			</div>',
+			'			<div class="new-teamschedule-toggle show-only-day-off-toggle">',
+			'				<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />',
+			'				<label class="relative" for="show-only-day-off-switch">Day off switch</label>',
+			'				<span>@Resources.ShowOnlyDaysOff</span>',
 			'			</div>',
 			'			<button class="btn btn-primary pull-right" data-bind="click: submitSearchForm">@Resources.Search</button>',
 			'			<button class="btn btn-default pull-right" data-bind="click: cancelClick">@Resources.Cancel</button>',
