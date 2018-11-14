@@ -113,7 +113,7 @@
 	},
 	"scripts": {
 		"pretest": "grunt concat:concatJsDependencies | grunt copy",
-		"test": "ng test",
+		"test": "ng test --source-map=false",
 		"pretest:teamcity": "grunt concat:concatJsDependencies | grunt copy",
 		"test:teamcity": "ng test --karma-config test/karma.conf.teamcity.js",
 		"pretest:rta": "grunt concat:concatJsDependencies",
