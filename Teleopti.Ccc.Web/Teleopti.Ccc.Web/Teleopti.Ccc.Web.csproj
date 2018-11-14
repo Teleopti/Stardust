@@ -310,6 +310,7 @@
     </Reference>
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.Runtime.Serialization.Primitives, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Runtime.Serialization.Primitives.4.3.0\lib\net46\System.Runtime.Serialization.Primitives.dll</HintPath>
     </Reference>
@@ -395,6 +396,7 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Areas\Anywhere\Controllers\LandingPageController.cs" />
     <Compile Include="Areas\Global\ChatConfigurationController.cs" />
     <Compile Include="Areas\Global\TenantCredential.cs" />
     <Compile Include="Areas\MultiTenancy\Core\CustomerDbConnector.cs" />
@@ -1598,10 +1600,10 @@
     <Content Include="WFM\app\forecasting\html\modify.html" />
     <Content Include="WFM\app\forecasting\service\forecast.backend.fake.js" />
     <Content Include="WFM\app\forecasting\controller\controller.js" />
-    <Content Include="WFM\app\forecasting\spec\controller.spec.js" />
+    <Content Include="WFM\app\forecasting\controller\controller.spec.js" />
     <Content Include="WFM\app\forecasting\html\forecast.html" />
     <Content Include="WFM\app\forecasting\controller\modify.controller.js" />
-    <Content Include="WFM\app\forecasting\spec\modify.controller.spec.js" />
+    <Content Include="WFM\app\forecasting\controller\modify.controller.spec.js" />
     <Content Include="WFM\app\global\areas\menu-component.html" />
     <Content Include="WFM\app\global\areas\menu.component.js" />
     <Content Include="WFM\app\global\current-user\authentication-requests.service.js" />
@@ -2014,7 +2016,7 @@
     <Content Include="WFM\app\app_desktop_client.js" />
     <Content Include="WFM\app\forecasting\routes.js" />
     <Content Include="WFM\app\forecasting\html\skillCreate.html" />
-    <Content Include="WFM\app\forecasting\spec\skill.create.controller.spec.js" />
+    <Content Include="WFM\app\forecasting\controller\skill.create.controller.spec.js" />
     <Content Include="WFM\app\global\areas\areas.controller.spec.js" />
     <Content Include="WFM\app\global\current-user\currentuserinfo.service.spec.js" />
     <Content Include="WFM\app\global\exception-handling\exceptionhandler.js" />

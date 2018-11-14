@@ -141,6 +141,7 @@ WFM_Forecast_Show_History_Data_76432 = DEV
 ETL_Show_Web_Based_ETL_Tool_74837 = true
 ETL_Show_Tenant_Name_In_History_75767 = true
 WFM_Connect_NewLandingPage_Remove_GDPR_78132 = true
+WFM_Connect_NewLandingPage_WEB_78578 = false
 
 # Dragonfly #
 WFM_Gamification_Setting_With_External_Quality_Values_45003 = true
