@@ -35,9 +35,9 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IEnumerable<StoredEvent> Data = Enumerable.Empty<StoredEvent>();
 
-		public void Add(IEvent @event, DeadLockVictim deadLockVictim, int storeVersion) => 
+		public void Add(IEvent @event, DeadLockVictim deadLockVictim, int storeVersion) =>
 			Add(new[] {@event}, deadLockVictim, storeVersion);
-		
+
 		public void Add(IEnumerable<IEvent> events, DeadLockVictim deadLockVictim, int storeVersion)
 		{
 			events.ForEach(@event =>
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.TestCommon
 					}).ToArray();
 				}
 			);
-			
+
 			_synchronizer.Value.Synchronize();
 		}
 
@@ -111,19 +111,16 @@ namespace Teleopti.Ccc.TestCommon
 				?.Event;
 		}
 
-		public LoadedEvents LoadFrom(int latestSynchronizedEvent)
+		public LoadedEvents LoadFrom(int fromEventId)
 		{
-			var events = Data
-				.Where(e => e.Id > latestSynchronizedEvent)
+			var rows = Data.Where(x => x.Id > fromEventId).ToArray();
+			var events = rows
 				.Select(e => e.Event.CopyBySerialization(e.Event.GetType()))
 				.Cast<IEvent>()
 				.ToArray();
-
-			var maxId = Data.Max(e => e.Id);
-
 			return new LoadedEvents
 			{
-				LastId = maxId,
+				LastId = rows.IsNullOrEmpty() ? fromEventId : rows.Last().Id,
 				Events = events
 			};
 		}
