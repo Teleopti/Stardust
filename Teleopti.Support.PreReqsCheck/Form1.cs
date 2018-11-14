@@ -45,7 +45,8 @@ namespace CheckPreRequisites
 			{
 				AgentLevel();
 				_hardwareCheck.RunHardWareChecks((int)numericUpDownAgents.Value, CheckType.Worker);
-				_webCheck.Get461OrHigerFromRegistry();
+				_webCheck.GetDotNetFrameworkOrHigherFromRegistry();
+				_webCheck.GetNetCoreVersion();
 			}
 		}
 
