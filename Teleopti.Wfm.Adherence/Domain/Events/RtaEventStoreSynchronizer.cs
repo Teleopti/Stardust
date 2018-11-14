@@ -54,13 +54,10 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 		[TestLog]
 		public virtual void Synchronize()
 		{
-			_distributedLock.TryLockForTypeOf(this, () =>
-			{
-				var fromEventId = SynchronizedEventId();
-				var events = LoadEvents(fromEventId);
-				Synchronize(events.Events);
-				UpdateSynchronizedEventId(events.LastId);
-			});
+			var fromEventId = SynchronizedEventId();
+			var events = LoadEvents(fromEventId);
+			Synchronize(events.Events);
+			UpdateSynchronizedEventId(events.LastId);
 		}
 
 		[UnitOfWork]
