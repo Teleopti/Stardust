@@ -122,12 +122,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 		{
 			UserCulture.IsSwedish();
 
-			var person = PersonFactory.CreatePerson();
-			PersonRepository.Add(person);
 			var loggedOnUser = PersonFactory.CreatePersonWithGuid("Ashley", "Aaron");
 			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
 			var staffingAudit =
-				new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt") {TimeStamp = DateTime.UtcNow};
+				new StaffingAudit(loggedOnUser, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt") {TimeStamp = DateTime.UtcNow};
 			StaffingAuditRepository.Add(staffingAudit);
 			CurrentUnitOfWork.Current().PersistAll();
 

@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public DateOnly StartDate { get; set; }
 		public DateOnly EndDate { get; set; }
 		public IEnumerable<Guid> Agents { get; set; }
-		public Guid PlanningPeriodId { get; set; }
 		public Guid CommandId { get; set; }
 		public IEnumerable<Guid> Skills { get; set; }
 		public IEnumerable<Guid> AgentsInIsland { get; set; }
