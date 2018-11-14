@@ -372,7 +372,7 @@
 				self.filter.searchNameText = self.searchNameText();
 
 				setTimeFilterData();
-				self.filterChangedCallback(self.selectedDate());
+				self.filterChangedCallback(self.selectedDate(), true);
 			}
 
 			if (value) {
