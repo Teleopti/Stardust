@@ -200,7 +200,7 @@ Layout = null;
 				<!-- /ko -->
 			</div>
 
-			<!-- ko if: showProbabilityOptionsToggleIcon || probabilities().length > 0 -->
+			<!-- ko if: showProbabilityOptionsToggleIcon && probabilities().length > 0 -->
 			<div class="probability-vertical-bar">
 				<!--ko foreach: probabilities()-->
 				<div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true, placement: 'left', trigger: 'click'}, style: styleJson, hideTooltipAfterMouseLeave: true"></div>
