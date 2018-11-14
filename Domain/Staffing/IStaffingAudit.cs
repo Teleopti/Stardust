@@ -6,7 +6,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 	public interface IStaffingAudit : IAggregateRoot
 	{
 		DateTime TimeStamp { get; set; }
-		IPerson ActionPerformedBy { get; set; }
+		Guid ActionPerformedById { get; set; }
+		string ActionPerformedBy { get; set; }
 		string Action { get; set; }
 		string Area { get; set; }
 		string ImportFileName { get; set; }
