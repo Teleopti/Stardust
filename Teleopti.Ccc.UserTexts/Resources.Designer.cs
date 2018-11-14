@@ -13593,7 +13593,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter your email to get instructions on how to reset your password.
+        ///   Looks up a localized string similar to Enter your username to get instructions on how to reset your password.
         /// </summary>
         public static string ForgotYourPasswordInstruction {
             get {

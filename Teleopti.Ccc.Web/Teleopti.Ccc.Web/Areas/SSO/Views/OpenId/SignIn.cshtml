@@ -63,23 +63,25 @@
 									<div class="form-input-wrap">
 										<input type="password" id="Password-input" placeholder="@Resources.Password" data-bind="value: Password, valueUpdate: 'afterkeydown',enable: Ajax.Inactive" autocomplete="current-password" />
 									</div>
-									<div class="form-input-wrap">
-										<div class="wfm-checkbox" data-bind="visible: IsLogonFromBrowser">
+									<div class="form-input-wrap con-row">
+										<div class="wfm-checkbox con-flex" style="text-align: left; padding-left: 0px;" data-bind="visible: IsLogonFromBrowser">
 											<input type="checkbox" id="check1" data-bind="checked: RememberMe, enable: Ajax.Inactive">
 											<label for="check1">
 												<span class="wfm-checkbox-toggle"></span>
 												<span class="wfm-checkbox-label">@Resources.RememberMe </span>
 											</label>
 										</div>
+										<div style="text-align: right; padding-right: 0px;" class="con-flex" data-bind="visible: isToggleEnabled('Wfm_User_Password_Reset_74957')">
+											<a href="#" data-bind="click: gotoForgotPassword">@Resources.ForgotYourPassword</a>
+										</div>
 									</div>
-									<div style="text-align: right;" class="con-flex" data-bind="visible: isToggleEnabled('Wfm_User_Password_Reset_74957')">
-										<a href="#" data-bind="click: gotoForgotPassword">@Resources.ForgotYourPassword</a>
-									</div>
+
 									<div class="con-row">
 										<div class="con-flex">
 											<button class="wfm-btn wfm-btn-primary" id="Signin-button" type="submit" data-bind="enable: Ajax.Inactive" style="margin-top: 10px">@Resources.SignIn</button>
 											<div data-bind="visible: Ajax.Active" class="loader"></div>
 										</div>
+
 									</div>
 								</form>
 							</div>
@@ -160,7 +162,7 @@
 						<div class="con-row">
 							<div class="con-flex wfm-form">
 								<div class="form-group">
-									<input type="text" id="e-mail" required placeholder="@Resources.Email" data-bind="value: MailAddress"/>
+									<input type="text" id="user-name" required placeholder="@Resources.UserName" data-bind="value: UserName, valueUpdate:'afterkeydown', event: {keypress: onEnterKey}"/>
 								</div>
 								<button class="wfm-btn wfm-btn-default" id="back-button" data-bind="click: BackToLogin">@Resources.Cancel</button>
 								<button class="wfm-btn wfm-btn-primary" id="send-forgot-password-mail-button" type="submit" data-bind="click: SendForgotPasswordMail">@Resources.Send</button>

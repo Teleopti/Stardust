@@ -17798,7 +17798,7 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>Success message of reset password request</comment>
   </data>
   <data name="ForgotYourPasswordInstruction" xml:space="preserve">
-    <value>Enter your email to get instructions on how to reset your password</value>
+    <value>Enter your username to get instructions on how to reset your password</value>
     <comment>Instructions on forgot password page</comment>
   </data>
   <data name="SomethingWentWrong" xml:space="preserve">
