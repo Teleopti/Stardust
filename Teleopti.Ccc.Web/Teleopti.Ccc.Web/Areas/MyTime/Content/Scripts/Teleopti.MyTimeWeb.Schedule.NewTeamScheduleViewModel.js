@@ -548,7 +548,7 @@
 
 			if (teams.length > 0) {
 				if (teams[0] && teams[0].children != null) {
-					teams.unshift({ children: [allTeam], text: '' });
+					teams[0].children.unshift(allTeam);
 				} else {
 					teams = [
 						{
