@@ -40,8 +40,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 					continue;
 				var shiftProjectionCaches = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(new DateOnlyAsDateTimePeriod(period.StartDate, person.PermissionInformation.DefaultTimeZone()), shiftBag.RuleSetCollection, false);
 				var allStartTime = shiftProjectionCaches.Select(x => x.WorkShiftStartTime()).Distinct().ToList();
-				var allShifts = shiftProjectionCaches.Select(x=>x.TheWorkShift).Distinct().ToList();
-				
+
 				var scheduleDays = schedule.Value.ScheduledDayCollection(period);
 				foreach (var scheduleDay in scheduleDays)
 				{
