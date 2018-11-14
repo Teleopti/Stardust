@@ -75,9 +75,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
         {
 			if (!Disposing && !IsDisposed)
             {
-                TimeSpan timeOfDay;
-                string timeAsText;
-                if (GetTimeInformation(out timeAsText, out timeOfDay))
+				string timeAsText;
+                if (GetTimeInformation(out timeAsText, out _))
                     Text = timeAsText;
                 else
                     Text = string.Empty;

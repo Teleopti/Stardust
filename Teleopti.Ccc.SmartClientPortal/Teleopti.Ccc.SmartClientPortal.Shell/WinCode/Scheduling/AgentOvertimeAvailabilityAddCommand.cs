@@ -46,15 +46,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 		public bool CanExecute()
 		{
-			bool startTimeError;
-			bool endTimeError;
-
 			foreach (var persistableScheduleData in _scheduleDay.PersistableScheduleDataCollection())
 			{
 				if (persistableScheduleData is IOvertimeAvailability) return false;
 			}
 
-			if (!_overtimeAvailabilityDayCreator.CanCreate(_startTime, _endTime, out startTimeError, out endTimeError))
+			if (!_overtimeAvailabilityDayCreator.CanCreate(_startTime, _endTime, out _, out _))
 				return false;
 
 			return true;

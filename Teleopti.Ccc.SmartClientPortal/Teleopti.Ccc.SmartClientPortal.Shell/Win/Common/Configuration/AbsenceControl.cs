@@ -102,7 +102,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private int getNextAbsenceId()
 		{
 			var absenceList = _sourceList;
-			int parsedValue; 
 			var sortedArray = (from q in
 								   ((from p in absenceList
 									 where p.Description.Name.Contains(_newEntityeName)
@@ -112,7 +111,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 										 .Replace(_newEntityeName, string.Empty)
 										 .Replace(spaceChar, string.Empty)).ToList())
 
-							   where string.IsNullOrEmpty(q) == false && Int32.TryParse(q, NumberStyles.Integer,CultureInfo.CurrentCulture, out parsedValue)
+							   where string.IsNullOrEmpty(q) == false && Int32.TryParse(q, NumberStyles.Integer,CultureInfo.CurrentCulture, out _)
 							   select Int32.Parse(q, CultureInfo.CurrentCulture)).ToArray();
 
 			return getNextId(sortedArray);

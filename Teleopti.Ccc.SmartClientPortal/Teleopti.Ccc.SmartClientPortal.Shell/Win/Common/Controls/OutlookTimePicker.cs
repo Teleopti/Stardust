@@ -229,8 +229,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
             else
             {
                 TimeSpan? timeOfDay;
-                string timeAsText;
-                if (!GetTimeInformationFromFormat(out timeAsText, out timeOfDay))
+				if (!GetTimeInformationFromFormat(out _, out timeOfDay))
                 {
                     if (_enableNull)
                         timeOfDay = null;
@@ -288,12 +287,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
         /// </remarks>
         private void FormatTextAsTime()
         {
-            TimeSpan? timeOfDay;
-            TimeSpan? timeOfDayFormat;
-            string timeAsText;
-            if (!FormatFromCulture && GetTimeInformation(out timeAsText, out timeOfDay))
+			string timeAsText;
+            if (!FormatFromCulture && GetTimeInformation(out timeAsText, out _))
                 Text = timeAsText;
-            if (FormatFromCulture && GetTimeInformationFromFormat(out timeAsText, out timeOfDayFormat))
+            if (FormatFromCulture && GetTimeInformationFromFormat(out timeAsText, out _))
                 Text = timeAsText;
         }
 

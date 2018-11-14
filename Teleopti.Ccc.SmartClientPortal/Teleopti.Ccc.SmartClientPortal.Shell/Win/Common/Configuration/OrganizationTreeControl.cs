@@ -168,9 +168,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
                          .Replace(_newTeamName, string.Empty)
                          .Replace(spaceChar, string.Empty)).ToList();
 
-            int intValue;
-            var sortedArray = (from q in names
-                               where string.IsNullOrEmpty(q) == false && int.TryParse(q, out intValue)
+			var sortedArray = (from q in names
+                               where string.IsNullOrEmpty(q) == false && int.TryParse(q, out _)
                                select Int32.Parse(q, CultureInfo.CurrentCulture)).ToArray();
 
             var nextId = 1;
@@ -254,9 +253,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
                          .Replace(_newSiteName, string.Empty)
                          .Replace(spaceChar, string.Empty)).ToList();
 
-            int intValue;
-            var sortedArray = (from q in names
-                               where string.IsNullOrEmpty(q) == false && int.TryParse(q, out intValue)
+			var sortedArray = (from q in names
+                               where string.IsNullOrEmpty(q) == false && int.TryParse(q, out _)
                                select Int32.Parse(q, CultureInfo.CurrentCulture)).ToArray();
             var nextId = 1;
 

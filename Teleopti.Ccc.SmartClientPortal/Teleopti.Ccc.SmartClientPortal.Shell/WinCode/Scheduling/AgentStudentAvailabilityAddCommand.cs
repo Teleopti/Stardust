@@ -54,9 +54,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				if (persistableScheduleData is IStudentAvailabilityDay) return false;
 			}
 
-			bool startTimeError;
-			bool endTimeError;
-			if (!_studentAvailabilityDayCreator.CanCreate(_startTime, _endTime, out startTimeError, out endTimeError)) return false;
+			if (!_studentAvailabilityDayCreator.CanCreate(_startTime, _endTime, out _, out _)) return false;
 
 			return true;
 		}
