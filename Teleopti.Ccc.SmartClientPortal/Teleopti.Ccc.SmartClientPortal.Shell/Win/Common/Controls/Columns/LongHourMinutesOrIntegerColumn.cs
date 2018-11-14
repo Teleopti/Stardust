@@ -47,15 +47,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns
                 if (e.Style.CellType == "NumericCell")
                 {
                     type = typeof (int);
-                    int outInt;
-                    if (!int.TryParse(e.Style.CellValue.ToString(), out outInt))
+					if (!int.TryParse(e.Style.CellValue.ToString(), out _))
                         isValidValue = false;
                 }
                 else
                 {
                     type = typeof (TimeSpan);
-                    TimeSpan outTimeSpan;
-                    if (!TimeSpan.TryParse(e.Style.CellValue.ToString(), out outTimeSpan))
+					if (!TimeSpan.TryParse(e.Style.CellValue.ToString(), out _))
                         isValidValue = false;
                 }
 

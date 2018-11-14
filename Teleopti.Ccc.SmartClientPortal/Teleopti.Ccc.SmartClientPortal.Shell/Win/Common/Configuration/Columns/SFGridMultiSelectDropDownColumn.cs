@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns
 
 			foreach (var stringValue in stringValues)
 			{
-				if (tryGetItemByDisplayMember(stringValue, out var item))
+				if (tryGetItemByDisplayMember(stringValue, out _))
 				{
 					listValidValues.Add(stringValue);
 				}
