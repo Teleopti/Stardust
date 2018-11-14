@@ -497,8 +497,6 @@ describe('Requests - overtime controller tests',
 		});
 
 		it('should toggle filters status', function () {
-			var columnsWithFilterEnabled = ['Subject', 'Message', 'Type', 'Status'];
-
 			params.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 
@@ -507,19 +505,11 @@ describe('Requests - overtime controller tests',
 
 			expect(controller.gridOptions.enableFiltering).toBeTruthy();
 			expect(controller.gridOptions.useExternalFiltering).toBeTruthy();
-			controller.gridOptions.columnDefs.forEach(function (col) {
-				if (columnsWithFilterEnabled.indexOf(col.displayName) > -1)
-					expect(col.enableFiltering).toBeTruthy();
-			});
 
 			scope.$broadcast('requests.filterEnabled.changed', false);
 
 			expect(controller.gridOptions.enableFiltering).toBeFalsy();
 			expect(controller.gridOptions.useExternalFiltering).toBeFalsy();
-			controller.gridOptions.columnDefs.forEach(function (col) {
-				if (columnsWithFilterEnabled.indexOf(col.displayName) > -1)
-					expect(col.enableFiltering).toBeFalsy();
-			});
 		});
 
 		it('should get overtime types', function () {
