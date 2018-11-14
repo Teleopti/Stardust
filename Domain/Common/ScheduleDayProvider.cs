@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Common
 			var scheduleDicLoadOption = loadOptions ?? new ScheduleDictionaryLoadOptions(false, false);
 			var dictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 				persons.ToArray(),
-				new ScheduleDictionaryLoadOptions(false, false),
+				scheduleDicLoadOption,
 				period,
 				_currentScenario.Current());
 			return dictionary;
