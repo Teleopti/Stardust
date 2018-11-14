@@ -330,7 +330,7 @@
 				})
 			)
 			.then(
-				requestsDataService.getPermissionsPromise().then(function (result) {
+				requestsDataService.getPermissionsPromise().then(function(result) {
 					requestsPermissions.set(result.data);
 					vm.permissionInited = true;
 				})

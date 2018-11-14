@@ -1,32 +1,28 @@
 ﻿'use strict';
 
-describe('requestsRepltMessagedirectiveTest', function () {
-	var $compile,
-		$rootScope,
-		requestsPermissions,
-        expectedMessage;
-	var cb = function (message) {
+describe('requestsRepltMessagedirectiveTest', function() {
+	var $compile, $rootScope, requestsPermissions, expectedMessage;
+	var cb = function(message) {
 		expectedMessage = message;
-	}
-	beforeEach(function () {
+	};
+	beforeEach(function() {
 		module('wfm.templates');
 		module('wfm.requests');
 
 		requestsPermissions = new FakeRequestsPermissions();
 		module(function($provide) {
-			$provide.service('requestsPermissions',
-				function() {
-					return requestsPermissions;
-				});
+			$provide.service('requestsPermissions', function() {
+				return requestsPermissions;
+			});
 		});
 	});
 
-	beforeEach(inject(function (_$rootScope_, _$compile_) {
+	beforeEach(inject(function(_$rootScope_, _$compile_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 	}));
 
-	it('replyAndApprove, should pass through the message', function () {
+	it('replyAndApprove, should pass through the message', function() {
 		var test = setUpTarget(cb);
 		test.targetScope.replyMessage = 'message for replyAndApprove';
 		expect(expectedMessage).toEqual('');
@@ -36,7 +32,7 @@ describe('requestsRepltMessagedirectiveTest', function () {
 		expect(expectedMessage).toEqual('message for replyAndApprove');
 	});
 
-	it('replyAndDeny, should pass through the message', function () {
+	it('replyAndDeny, should pass through the message', function() {
 		var test = setUpTarget(cb);
 		test.targetScope.replyMessage = 'message for replyAndDeny';
 		expect(expectedMessage).toEqual('');
@@ -46,7 +42,7 @@ describe('requestsRepltMessagedirectiveTest', function () {
 		expect(expectedMessage).toEqual('message for replyAndDeny');
 	});
 
-	it('replyAndCancel, should pass through the message', function () {
+	it('replyAndCancel, should pass through the message', function() {
 		var test = setUpTarget(cb);
 		test.targetScope.replyMessage = 'message for replyAndCancel';
 		expect(expectedMessage).toEqual('');
@@ -56,7 +52,7 @@ describe('requestsRepltMessagedirectiveTest', function () {
 		expect(expectedMessage).toEqual('message for replyAndCancel');
 	});
 
-	it('replyOnly, should pass through the message', function () {
+	it('replyOnly, should pass through the message', function() {
 		var test = setUpTarget(cb);
 		test.targetScope.replyMessage = 'message for replyOnly';
 		expect(expectedMessage).toEqual('');
@@ -66,7 +62,7 @@ describe('requestsRepltMessagedirectiveTest', function () {
 		expect(expectedMessage).toEqual('message for replyOnly');
 	});
 
-	it('should clean up after each operation', function () {
+	it('should clean up after each operation', function() {
 		var test = setUpTarget(cb);
 
 		test.targetScope.replyMessage = 'for clean up';
@@ -103,7 +99,7 @@ describe('requestsRepltMessagedirectiveTest', function () {
 		var rootScope = $rootScope.$new();
 		rootScope.requestsCommandsPane = {};
 		expectedMessage = '';
-		var callback = function (message) {
+		var callback = function(message) {
 			cb(message);
 		};
 		rootScope.requestsCommandsPane.approveRequests = callback;
@@ -112,21 +108,23 @@ describe('requestsRepltMessagedirectiveTest', function () {
 		rootScope.requestsCommandsPane.replyRequests = callback;
 		rootScope.requestsCommandsPane.showReplyDialog = false;
 
-		var targetElement = $compile('<requests-reply-message' +
-        ' approve="requestsCommandsPane.approveRequests(message)"' +
-        ' deny="requestsCommandsPane.denyRequests(message)"' +
-        ' cancel="requestsCommandsPane.cancelRequests(message)"' +
-        ' reply="requestsCommandsPane.replyRequests(message)"' +
-        ' original-message="requestsCommandsPane.selectedRequestMessage"' +
-        'show-reply-dialog="requestsCommandsPane.showReplyDialog"></requests-reply-message>')(rootScope);
+		var targetElement = $compile(
+			'<requests-reply-message' +
+				' approve="requestsCommandsPane.approveRequests(message)"' +
+				' deny="requestsCommandsPane.denyRequests(message)"' +
+				' cancel="requestsCommandsPane.cancelRequests(message)"' +
+				' reply="requestsCommandsPane.replyRequests(message)"' +
+				' original-message="requestsCommandsPane.selectedRequestMessage"' +
+				'show-reply-dialog="requestsCommandsPane.showReplyDialog"></requests-reply-message>'
+		)(rootScope);
 		rootScope.$digest();
 		var target = targetElement.isolateScope();
-		
+
 		return {
 			targetScope: target.requestsReplyMessage,
 			targetElem: targetElement,
 			rootScope: rootScope
-		}
+		};
 	}
 
 	function FakeRequestsPermissions() {
@@ -134,10 +132,10 @@ describe('requestsRepltMessagedirectiveTest', function () {
 
 		this.set = function setPermissions(data) {
 			permissions = data;
-		}
+		};
 
 		this.all = function getPermissions() {
 			return permissions;
-		}
+		};
 	}
 });

@@ -1,12 +1,11 @@
 ﻿'use strict';
-(function () {
-	angular.module('wfm.requests')
+(function() {
+	angular
+		.module('wfm.requests')
 		.controller('requestsReplyMessageController', requestsReplyMessageController)
 		.directive('requestsReplyMessage', replyMessageDirective);
 
-	requestsReplyMessageController.$inject = [
-		'requestsPermissions'
-	];
+	requestsReplyMessageController.$inject = ['requestsPermissions'];
 
 	function requestsReplyMessageController(requestsPermissions) {
 		var vm = this;
@@ -24,7 +23,6 @@
 		function replyAndDeny() {
 			vm.deny({ message: vm.replyMessage });
 			cleanUp();
-
 		}
 		function replyAndCancel() {
 			vm.cancel({ message: vm.replyMessage });
@@ -63,8 +61,7 @@
 		};
 
 		function link(scope, elem, attrs) {
-			scope.$watch('requestsReplyMessage.showReplyDialog',
-			function (newValue, oldValue) {
+			scope.$watch('requestsReplyMessage.showReplyDialog', function(newValue, oldValue) {
 				if (newValue) {
 					var innerScope = angular.element(elem.find('form')).scope();
 					var form = innerScope.replyDialogForm;
@@ -74,4 +71,4 @@
 			});
 		}
 	}
-}());
+})();
