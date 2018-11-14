@@ -171,6 +171,7 @@
     <Compile Include="Domain\Configuration\RtaState.cs" />
     <Compile Include="Domain\Configuration\RtaStateGroup.cs" />
     <Compile Include="Domain\Configuration\RtaStateHolder.cs" />
+    <Compile Include="Domain\Events\RtaEventStoreAsyncSynchronizer.cs" />
     <Compile Include="Domain\Events\RtaEventStoreSynchronizerWaiter.cs" />
     <Compile Include="Domain\Infrastructure\Repositories\RtaMapRepository.cs" />
     <Compile Include="Domain\Infrastructure\Repositories\RtaRuleRepository.cs" />

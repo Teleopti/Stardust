@@ -11,27 +11,17 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 		void Wait(TimeSpan timeout);
 	}
 
-	public class DontWaitForSynchronizer : IRtaEventStoreSynchronizerWaiter
-	{
-		public void Wait(TimeSpan timeout)
-		{
-		}
-	}
-
 	public class RtaEventStoreSynchronizerWaiter : IRtaEventStoreSynchronizerWaiter
 	{
 		private readonly IKeyValueStorePersister _keyValueStore;
 		private readonly IRtaEventStoreReader _events;
-		private readonly ActiveTenants _tenants;
 
 		public RtaEventStoreSynchronizerWaiter(
 			IKeyValueStorePersister keyValueStore,
-			IRtaEventStoreReader events,
-			ActiveTenants tenants)
+			IRtaEventStoreReader events)
 		{
 			_keyValueStore = keyValueStore;
 			_events = events;
-			_tenants = tenants;
 		}
 
 		[TestLog]

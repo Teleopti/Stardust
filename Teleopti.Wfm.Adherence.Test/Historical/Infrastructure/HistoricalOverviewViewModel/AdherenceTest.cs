@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -7,6 +6,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
@@ -21,7 +21,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure.HistoricalOvervi
 		public IEventPublisher Publisher;
 		public IRtaEventStoreSynchronizer Synchronizer;
 		public WithUnitOfWork UnitOfWork;
-		public IRtaEventStoreSynchronizerWaiter Waiter;
+		public ApprovePeriodAsInAdherence Approver;
+		public RemoveApprovedPeriod Remover;
 
 		[Test]
 		public void ShouldWorkAfterSynchronize()
@@ -48,6 +49,82 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure.HistoricalOvervi
 			var data = UnitOfWork.Get(() => Target.Build(null, new[] {team}).First());
 
 			data.Agents.Single().Days.Last().Adherence.Should().Be("100");
-		}		
+		}
+
+		[Test]
+		public void ShouldWorkAfterApproval()
+		{
+			Now.Is("2018-11-13 08:00");
+			Database
+				.WithActivity("Phone")
+				.WithTeam()
+				.WithAgent()
+				.WithAssignment("2018-11-13")
+				.WithAssignedActivity("Phone", "2018-11-13 08:00", "2018-11-13 17:00");
+			var person = Database.CurrentPersonId();
+			var team = Database.CurrentTeamId();
+			Publisher.Publish(new PersonStateChangedEvent
+			{
+				PersonId = person,
+				BelongsToDate = "2018-11-13".Date(),
+				Timestamp = "2018-11-13 08:00".Utc(),
+				Adherence = EventAdherence.Out
+			});
+			Now.Is("2018-11-14 08:00");
+			UnitOfWork.Do(() => Approver.Approve(
+				new ApprovedPeriod()
+				{
+					PersonId = person,
+					StartTime = "2018-11-13 08:00".Utc(),
+					EndTime = "2018-11-13 17:00".Utc()
+				}
+			));
+
+			var data = UnitOfWork.Get(() => Target.Build(null, new[] {team}).First());
+
+			data.Agents.Single().Days.Last().Adherence.Should().Be("100");
+		}
+
+		[Test]
+		public void ShouldWorkAfterRemovalOfApproval()
+		{
+			Now.Is("2018-11-13 08:00");
+			Database
+				.WithActivity("Phone")
+				.WithTeam()
+				.WithAgent()
+				.WithAssignment("2018-11-13")
+				.WithAssignedActivity("Phone", "2018-11-13 08:00", "2018-11-13 17:00");
+			var person = Database.CurrentPersonId();
+			var team = Database.CurrentTeamId();
+			Publisher.Publish(new PersonStateChangedEvent
+			{
+				PersonId = person,
+				BelongsToDate = "2018-11-13".Date(),
+				Timestamp = "2018-11-13 08:00".Utc(),
+				Adherence = EventAdherence.Out
+			});
+			Now.Is("2018-11-14 08:00");
+			UnitOfWork.Do(() => Approver.Approve(
+				new ApprovedPeriod
+				{
+					PersonId = person,
+					StartTime = "2018-11-13 08:00".Utc(),
+					EndTime = "2018-11-13 17:00".Utc()
+				}
+			));
+			UnitOfWork.Do(() => Remover.Remove(
+				new RemovedPeriod
+				{
+					PersonId = person,
+					StartTime = "2018-11-13 08:00".Utc(),
+					EndTime = "2018-11-13 17:00".Utc()
+				}
+			));
+
+			var data = UnitOfWork.Get(() => Target.Build(null, new[] {team}).First());
+
+			data.Agents.Single().Days.Last().Adherence.Should().Be("0");
+		}
 	}
 }

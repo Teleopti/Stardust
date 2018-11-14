@@ -106,6 +106,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			isolate.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
 			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 			isolate.UseTestDouble<ThrowExceptions>().For<ISyncEventProcessingExceptionHandler>();
+			isolate.UseTestDouble<RunSynchronouslyAndThrow>().For<IRtaEventStoreAsyncSynchronizerStrategy>();
 			isolate.UseTestDouble<FakeRtaEventStore>().For<IRtaEventStore, IRtaEventStoreReader, IRtaEventStoreUpgradeWriter>();
 			QueryAllAttributes<UseEventPublisherAttribute>()
 				.ForEach(a => isolate.UseTestDoubleForType(a.EventPublisher).For<IEventPublisher>());
