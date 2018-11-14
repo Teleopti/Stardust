@@ -1565,8 +1565,6 @@
     <Content Include="WFM\app\gamification\html\measureConfigForm2.tpl.html" />
     <Content Include="WFM\app\gamification\html\measureConfigHeader.tpl.html" />
     <Content Include="WFM\app\gamification\_modules.js" />
-    <Content Include="WFM\app\global\applicationInsights\appInsights.controller.js" />
-    <Content Include="WFM\app\global\applicationInsights\_modules.js" />
     <Content Include="WFM\app\global\shortcuts\shortcuts.tab.service.js" />
     <Content Include="WFM\app\global\shortcuts\_modules.js" />
     <Content Include="WFM\app\global\skill-group\skill-group-manager.controller.js" />
