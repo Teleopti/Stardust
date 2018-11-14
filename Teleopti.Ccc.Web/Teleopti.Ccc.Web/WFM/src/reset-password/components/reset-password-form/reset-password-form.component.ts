@@ -30,7 +30,7 @@ export class ResetPasswordFormComponent {
 	@Output()
 	onSuccess: EventEmitter<boolean> = new EventEmitter();
 	@Output()
-	onCancel = new EventEmitter();
+	onCancel = new EventEmitter<void>();
 
 	form: FormGroup = this.fb.group(
 		{
