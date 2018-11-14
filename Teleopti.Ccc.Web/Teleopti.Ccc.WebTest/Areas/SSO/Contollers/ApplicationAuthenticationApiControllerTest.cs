@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 					OldPassword = "old",
 					UserName = RandomName.Make()
 				};
-			var changePassword = MockRepository.GenerateStub<IChangePersonPassword>();
+			var changePassword = MockRepository.GenerateStub<IPasswordManager>();
 			var applicationUserQuery = MockRepository.GenerateStub<IApplicationUserQuery>();
 			var personInfo = new PersonInfo(new Tenant(string.Empty), Guid.NewGuid());
 			applicationUserQuery.Expect(x => x.Find(input.UserName)).Return(personInfo);
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			var personInfo = new PersonInfo(new Tenant(string.Empty), Guid.NewGuid());
 			applicationUserQuery.Expect(x => x.Find(input.UserName)).Return(personInfo);
 			
-			var changePassword = MockRepository.GenerateStub<IChangePersonPassword>();
+			var changePassword = MockRepository.GenerateStub<IPasswordManager>();
 			changePassword.Expect(x => x.Modify(personInfo.Id, input.OldPassword, input.NewPassword))
 				.Throw(new HttpException(403, string.Empty));
 

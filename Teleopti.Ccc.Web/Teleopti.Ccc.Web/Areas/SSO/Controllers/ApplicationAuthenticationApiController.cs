@@ -16,19 +16,19 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 	public class ApplicationAuthenticationApiController : ApiController
 	{
 		private readonly IFormsAuthentication _formsAuthentication;
-		private readonly IChangePersonPassword _changePersonPassword;
+		private readonly IPasswordManager _passwordManager;
 		private readonly IApplicationUserQuery _applicationUserQuery;
 		private readonly ISsoAuthenticator _authenticator;
 		private readonly ILogLogonAttempt _logLogonAttempt;
 
 		public ApplicationAuthenticationApiController(IFormsAuthentication formsAuthentication,
-			IChangePersonPassword changePersonPassword,
+			IPasswordManager passwordManager,
 			IApplicationUserQuery applicationUserQuery,
 			ISsoAuthenticator authenticator,
 			ILogLogonAttempt logLogonAttempt)
 		{
 			_formsAuthentication = formsAuthentication;
-			_changePersonPassword = changePersonPassword;
+			_passwordManager = passwordManager;
 			_applicationUserQuery = applicationUserQuery;
 			_authenticator = authenticator;
 			_logLogonAttempt = logLogonAttempt;
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				tenantName = personInfo.Tenant.Name;
 				var hackToGetPersonId = personInfo.Id;
 				//
-				_changePersonPassword.Modify(hackToGetPersonId, model.OldPassword, model.NewPassword);
+				_passwordManager.Modify(hackToGetPersonId, model.OldPassword, model.NewPassword);
 			}
 			catch (HttpException httpEx)
 			{

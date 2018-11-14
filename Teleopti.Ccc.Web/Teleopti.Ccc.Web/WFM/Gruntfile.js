@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 
 	const watch = {
 		indexTemplates: {
-			files: ['src/index.tpl.html', 'src/index_desktop_client.tpl.html'],
+			files: ['index.tpl.html', 'index_desktop_client.tpl.html', 'src/reset_password.tpl.html'],
 			tasks: ['processhtml']
 		},
 		angularjsTemplates: {
@@ -77,7 +77,16 @@ module.exports = function(grunt) {
 		},
 		desktop: {
 			files: {
-				'index_desktop_client.html': ['src/index_desktop_client.tpl.html']
+				'index_desktop_client.html': ['index_desktop_client.tpl.html']
+			},
+			options: {
+				process: true,
+				environment: isDev ? 'dev' : 'prod'
+			}
+		},
+		reset_password: {
+			files: {
+				'reset_password.html': ['src/reset_password.tpl.html']
 			},
 			options: {
 				process: true,

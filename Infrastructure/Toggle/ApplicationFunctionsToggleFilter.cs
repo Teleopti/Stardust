@@ -33,6 +33,8 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 				DefinedRaptorApplicationFunctionForeignIds.WebReplyRequest);
 			hideAppFunctionWithToggleOff(functions, Toggles.WFM_Request_View_Permissions_77731,
 				DefinedRaptorApplicationFunctionForeignIds.WebEditSiteOpenHours);
+			hideAppFunctionWithToggleOff(functions, Toggles.WFM_Connect_NewLandingPage_WEB_78578,
+				DefinedRaptorApplicationFunctionForeignIds.ViewCustomerCenter);
 
 			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.BpoExchange);
 			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.ChatBot);

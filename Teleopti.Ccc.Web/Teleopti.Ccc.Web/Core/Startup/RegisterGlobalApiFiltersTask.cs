@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					typeof (LanguageController),
 					typeof (ConfigController),
 					typeof (JavascriptLoggingController),
-					typeof (ChangePasswordController),
+					typeof (PasswordController),
 					typeof (ExternalApplicationAccessController)
 				}));
 

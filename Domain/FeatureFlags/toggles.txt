@@ -40,7 +40,7 @@ RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306 = true
 RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485 = true
 RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485 = true
 RTA_TooManyPersonAssociationChangedEvents_Packages_78669 = true
-RTA_StateQueueFloodPrevention_77710 = RC
+RTA_StateQueueFloodPrevention_77710 = true
 RTA_ReviewHistoricalAdherence_74770 = RC
 
 # Dumplings, can any of these be removed? #
@@ -77,6 +77,7 @@ Wfm_People_ImportAndCreateAgentFromFile_42528 = true
 Wfm_People_SetFallbackValuesForImporting_43289 = true
 Wfm_People_MoveImportJobToBackgroundService_43582 = true
 Wfm_Authentication_ChangePasswordMenu_76666 = true
+Wfm_User_Password_Reset_74957 = RC
 
 # China, can any of these be removed? #
 MyTimeWeb_PreferenceForJalaliCalendar_42965 = true
@@ -140,6 +141,7 @@ WFM_Forecast_Show_History_Data_76432 = DEV
 ETL_Show_Web_Based_ETL_Tool_74837 = true
 ETL_Show_Tenant_Name_In_History_75767 = true
 WFM_Connect_NewLandingPage_Remove_GDPR_78132 = true
+WFM_Connect_NewLandingPage_WEB_78578 = false
 
 # Dragonfly #
 WFM_Gamification_Setting_With_External_Quality_Values_45003 = true

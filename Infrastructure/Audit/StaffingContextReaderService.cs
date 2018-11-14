@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
@@ -16,14 +18,16 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 		private readonly IUserCulture _userCulture;
 		private readonly IPurgeSettingRepository _purgeSettingRepository;
 		private readonly INow _now;
+		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 
-		public StaffingContextReaderService(IStaffingAuditRepository staffingAuditRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository, IUserCulture userCulture, IPurgeSettingRepository purgeSettingRepository, INow now)
+		public StaffingContextReaderService(IStaffingAuditRepository staffingAuditRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository, IUserCulture userCulture, IPurgeSettingRepository purgeSettingRepository, INow now, ICommonAgentNameProvider commonAgentNameProvider)
 		{
 			_staffingAuditRepository = staffingAuditRepository;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 			_userCulture = userCulture;
 			_purgeSettingRepository = purgeSettingRepository;
 			_now = now;
+			_commonAgentNameProvider = commonAgentNameProvider;
 		}
 
 		public IEnumerable<AuditServiceModel> LoadAll()
@@ -37,12 +41,13 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 		private IEnumerable<AuditServiceModel> getAuditServiceModel(IEnumerable<IStaffingAudit> staffingAudit)
 		{
 			var auditServiceModelList = new List<AuditServiceModel>();
+			var commonAgentNameSetting = _commonAgentNameProvider.CommonAgentNameSettings;
 			foreach (var audit in staffingAudit)
 			{
 				var auditServiceModel = new AuditServiceModel()
 				{
 					TimeStamp = audit.TimeStamp, Context = "Staffing", Action = audit.Action,
-					ActionPerformedBy = audit.ActionPerformedBy.Name.ToString(NameOrderOption.FirstNameLastName)
+					ActionPerformedBy = extractPersonAuditInfo(audit.ActionPerformedBy, commonAgentNameSetting)
 				};
 				if (audit.Action.Equals(StaffingAuditActionConstants.ImportBpo))
 					auditServiceModel.Data = $"File name: {audit.ImportFileName}";
@@ -59,6 +64,12 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 			}
 
 			return auditServiceModelList;
+		}
+
+		private string extractPersonAuditInfo(string person, ICommonNameDescriptionSetting commonAgentNameSetting)
+		{
+			var personInfo = JsonConvert.DeserializeObject<PersonAuditInfo>(person);
+			return commonAgentNameSetting.BuildFor(personInfo);
 		}
 
 		public IEnumerable<AuditServiceModel> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate)

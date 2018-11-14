@@ -2,8 +2,8 @@
 #note: The orders of the features matters!
 #-----------------
 NetFx3,NET Framework 3.5 (includes .NET 2.0 and 3.0)
-NetFx4-AdvSrvs,NET Framework 4.6 Advanced Services
-NetFx4Extended-ASPNET45,ASP.NET 4.6
+NetFx4-AdvSrvs,NET Framework 4.7 Advanced Services
+NetFx4Extended-ASPNET45,ASP.net 4.7
 
 IIS-WebServerRole,Internet Information Services
 
@@ -13,11 +13,11 @@ IIS-WindowsAuthentication,Windows Authentication
 
 IIS-ApplicationDevelopment,Application Development Features
 IIS-NetFxExtensibility,.NET Extensibility 3.5
-IIS-NetFxExtensibility45,.NET Extensibility 4.6
+IIS-NetFxExtensibility45,.NET Extensibility 4.7
 IIS-ISAPIExtensions,ISAPI Extensions
 IIS-ISAPIFilter,ISAPI Filters
 IIS-ASPNET,ASP.NET 3.5
-IIS-ASPNET45,ASP.NET 4.6
+IIS-ASPNET45,ASP.net 4.7
 IIS-WebSockets,WebSocket Protocol
 IIS-ApplicationInit,Application Initialization
 	

@@ -23,6 +23,11 @@
 			html: getTemplate("changepassword"),
 			baseUrl: Teleopti.SSO.Authentication.Settings.baseUrl,
 			authenticationState: authenticationState
+		}),
+		forgotpassword: new Teleopti.SSO.Authentication.ForgotPasswordView({
+			html: getTemplate("forgotpassword"),
+			baseUrl: Teleopti.SSO.Authentication.Settings.baseUrl,
+			authenticationState: authenticationState
 		})
 	};
 
@@ -60,6 +65,10 @@
 					view: "changepassword",
 					mustChangePassword: true
 				});
+			});
+		crossroads.addRoute(new RegExp('^(forgotpassword)$', "i"),
+			function () {
+				_displayView({ view: "forgotpassword" });
 			});
 		crossroads.addRoute(
 			new RegExp('^(' + viewRegex + ')$', "i"),

@@ -310,6 +310,7 @@
     </Reference>
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.Runtime.Serialization.Primitives, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Runtime.Serialization.Primitives.4.3.0\lib\net46\System.Runtime.Serialization.Primitives.dll</HintPath>
     </Reference>
@@ -395,14 +396,16 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Areas\Anywhere\Controllers\LandingPageController.cs" />
     <Compile Include="Areas\Global\ChatConfigurationController.cs" />
     <Compile Include="Areas\Global\TenantCredential.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\CustomerDbConnector.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormExtensions.cs" />
     <Compile Include="Areas\Reports\Controllers\AuditTrailController.cs" />
     <Compile Include="Areas\Search\Controllers\PersonSearchController.cs" />
     <Compile Include="Areas\Search\Models\PersonSearchModels.cs" />
     <Compile Include="Areas\Insights\Models\EmbedReportConfig.cs" />
     <Compile Include="Areas\Insights\Models\ReportModel.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormExtensions.cs" />
     <Compile Include="Areas\Insights\Controllers\InsightsController.cs" />
     <Compile Include="Areas\Insights\InsightsAreaRegistration.cs" />
     <Compile Include="Areas\Requests\Core\ViewModel\RequestsPermissonsViewModel.cs" />
@@ -466,12 +469,16 @@
     <Compile Include="Areas\Intraday\IntradayMonitorStaffingController.cs" />
     <Compile Include="Areas\Intraday\IntradayMonitorStatisticsController.cs" />
     <Compile Include="Areas\Intraday\IntradayController.cs" />
-    <Compile Include="Areas\MultiTenancy\ExternalApplicationAccessController.cs" />
-    <Compile Include="Areas\MultiTenancy\ExternalApplicationModel.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\IPasswordManager.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\PasswordManager.cs" />
+    <Compile Include="Areas\MultiTenancy\Controllers\ExternalApplicationAccessController.cs" />
+    <Compile Include="Areas\MultiTenancy\Model\ExternalApplicationModel.cs" />
     <Compile Include="Areas\MultiTenancy\Model\BaseResultModel.cs" />
+    <Compile Include="Areas\MultiTenancy\Model\RequestPasswordResetModel.cs" />
+    <Compile Include="Areas\MultiTenancy\Model\PasswordResetModel.cs" />
     <Compile Include="Areas\MultiTenancy\Model\PersonInfoGenericModel.cs" />
-    <Compile Include="Areas\MultiTenancy\NewExternalApplicationModel.cs" />
-    <Compile Include="Areas\MultiTenancy\NewExternalApplicationResponseModel.cs" />
+    <Compile Include="Areas\MultiTenancy\Model\NewExternalApplicationModel.cs" />
+    <Compile Include="Areas\MultiTenancy\Model\NewExternalApplicationResponseModel.cs" />
     <Compile Include="Areas\MyTime\Controllers\GrantBotApiController.cs" />
     <Compile Include="Areas\MyTime\Controllers\OvertimeRequestsController.cs" />
     <Compile Include="Areas\MyTime\Controllers\TeamScheduleController.cs" />
@@ -544,10 +551,8 @@
     <Compile Include="Areas\Search\Models\PeopleSearchModels.cs" />
     <Compile Include="Areas\SkillGroup\SkillGroupController.cs" />
     <Compile Include="Areas\Intraday\IntradaySkillController.cs" />
-    <Compile Include="Areas\MultiTenancy\ChangePasswordController.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\ChangePersonPassword.cs" />
+    <Compile Include="Areas\MultiTenancy\Controllers\PasswordController.cs" />
     <Compile Include="Areas\MultiTenancy\Core\CurrentTenantUser.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\IChangePersonPassword.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IdAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IIdAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LogLogonAttemptFake.cs" />
@@ -878,7 +883,7 @@
     <Compile Include="Areas\MultiTenancy\Core\LoginAttemptModelFactoryForWeb.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LogLogonAttempt.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IIdentityAuthentication.cs" />
-    <Compile Include="Areas\MultiTenancy\AuthenticateController.cs" />
+    <Compile Include="Areas\MultiTenancy\Controllers\AuthenticateController.cs" />
     <Compile Include="Areas\MultiTenancy\Core\ApplicationAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\Core\TenantAuthenticationResult.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IApplicationAuthentication.cs" />
@@ -1027,7 +1032,7 @@
     <Compile Include="Areas\MultiTenancy\Model\ApplicationLogonModel.cs" />
     <Compile Include="Areas\MultiTenancy\Model\IdentityLogonModel.cs" />
     <Compile Include="Areas\MultiTenancy\Model\PersistPersonInfoResult.cs" />
-    <Compile Include="Areas\MultiTenancy\PersonInfoController.cs" />
+    <Compile Include="Areas\MultiTenancy\Controllers\PersonInfoController.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\AbsenceController.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\TeamScheduleCommandController.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\TeamScheduleDataController.cs" />
@@ -1420,6 +1425,9 @@
       <Link>FeatureFlags\toggles.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Areas\MultiTenancy\Core\Templates\password_reset_email_template.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Areas\MyTime\Content\appdownload.html" />
     <Content Include="Areas\Anywhere\Views\Application\redirect.aspx" />
     <Content Include="Areas\MyTime\Content\Css\MobileApp.css" />
@@ -1486,6 +1494,8 @@
     <Content Include="Areas\SSO\Content\Css\newLogin.css" />
     <Content Include="Areas\SSO\Content\Css\main.min.css" />
     <Content Include="Areas\SSO\Content\Images\bg.png" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.ForgotPasswordViewModel.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.ForgotPasswordView.js" />
     <Content Include="Areas\Start\Content\Css\newLogin.css" />
     <Content Include="Areas\Start\Content\Css\main.min.css" />
     <Content Include="Areas\Start\Content\Images\bg.png" />
@@ -1590,10 +1600,10 @@
     <Content Include="WFM\app\forecasting\html\modify.html" />
     <Content Include="WFM\app\forecasting\service\forecast.backend.fake.js" />
     <Content Include="WFM\app\forecasting\controller\controller.js" />
-    <Content Include="WFM\app\forecasting\spec\controller.spec.js" />
+    <Content Include="WFM\app\forecasting\controller\controller.spec.js" />
     <Content Include="WFM\app\forecasting\html\forecast.html" />
     <Content Include="WFM\app\forecasting\controller\modify.controller.js" />
-    <Content Include="WFM\app\forecasting\spec\modify.controller.spec.js" />
+    <Content Include="WFM\app\forecasting\controller\modify.controller.spec.js" />
     <Content Include="WFM\app\global\areas\menu-component.html" />
     <Content Include="WFM\app\global\areas\menu.component.js" />
     <Content Include="WFM\app\global\current-user\authentication-requests.service.js" />
@@ -2006,7 +2016,7 @@
     <Content Include="WFM\app\app_desktop_client.js" />
     <Content Include="WFM\app\forecasting\routes.js" />
     <Content Include="WFM\app\forecasting\html\skillCreate.html" />
-    <Content Include="WFM\app\forecasting\spec\skill.create.controller.spec.js" />
+    <Content Include="WFM\app\forecasting\controller\skill.create.controller.spec.js" />
     <Content Include="WFM\app\global\areas\areas.controller.spec.js" />
     <Content Include="WFM\app\global\current-user\currentuserinfo.service.spec.js" />
     <Content Include="WFM\app\global\exception-handling\exceptionhandler.js" />

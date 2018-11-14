@@ -6,6 +6,9 @@ Teleopti.SSO.Authentication.NavigationConstructor = function () {
 	this.GotoMustChangePassword = function () {
 		window.location.hash = 'mustchangepassword';
 	};
+	this.GotoForgotPassword = function () {
+		window.location.hash = 'forgotpassword';
+	}
 	this.GotoReturnUrl = function(returnUrl, pendingRequest, rememberMe) {
 		var form = $('<form></form>');
 

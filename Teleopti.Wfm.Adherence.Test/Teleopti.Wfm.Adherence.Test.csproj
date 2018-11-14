@@ -309,6 +309,7 @@
     <Compile Include="States\Infrastructure\Service\DataSourceReaderTest.cs" />
     <Compile Include="States\Infrastructure\Service\DeadlockTest.cs" />
     <Compile Include="States\Infrastructure\Service\EnqueueTest.cs" />
+    <Compile Include="States\Infrastructure\Service\QueueFloodTest.cs" />
     <Compile Include="States\Infrastructure\Service\QueueueueueeTest.cs" />
     <Compile Include="States\Infrastructure\Service\ScheduleCacheTest.cs" />
     <Compile Include="States\Infrastructure\Service\SnapshotTest.cs" />

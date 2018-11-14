@@ -148,9 +148,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (!_wrappedDictionary.TryGetValue(skill, out var thisDic))
 				return false;
 
-			IResourceCalculationPeriod items;
-
-			return thisDic.TryGetValue(periodToCalculate, out items);
+			return thisDic.TryGetValue(periodToCalculate, out _);
 		}
 
 		public IEnumerable<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> Items()
