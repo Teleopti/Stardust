@@ -39,10 +39,5 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			return _extraPreferences;
 		}
-
-		public IEnumerable<ExtraPreferences> ForAgents(IEnumerable<IPerson> persons, DateOnly dateOnly)
-		{
-			return new List<ExtraPreferences> {_extraPreferences};
-		}
 	}
 }
