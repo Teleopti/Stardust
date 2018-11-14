@@ -42,7 +42,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		{
 			_distributedLock.TryLockForTypeOf(_updater, () => { _updater.UpdateInvalids(); });
 			_distributedLock.TryLockForTypeOf(_checker, () => { _checker.CheckForActivityChanges(); });
-			_synchronizer.Synchronize(); // dist lock is inside
+			_distributedLock.TryLockForTypeOf(_synchronizer, () => { _synchronizer.Synchronize(); }); 
 		}
 
 		[Attempts(10)]

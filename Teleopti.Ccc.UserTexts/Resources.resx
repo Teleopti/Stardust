@@ -17880,4 +17880,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Try the new Forecasts!</value>
     <comment>Try the new Forecasts!</comment>
   </data>
+  <data name="ViewCustomerCenter" xml:space="preserve">
+    <value>View customer center</value>
+    <comment>function name to view customer center page</comment>
+  </data>
 </root>

@@ -12971,7 +12971,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filter team schedules by time.
+        ///   Looks up a localized string similar to Filter team schedules.
         /// </summary>
         public static string FilterTeamSchedules {
             get {
@@ -33491,7 +33491,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show only day off.
+        ///   Looks up a localized string similar to Show only days off.
         /// </summary>
         public static string ShowOnlyDaysOff {
             get {
@@ -38934,6 +38934,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ViewConfidential {
             get {
                 return ResourceManager.GetString("ViewConfidential", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View customer center.
+        /// </summary>
+        public static string ViewCustomerCenter {
+            get {
+                return ResourceManager.GetString("ViewCustomerCenter", resourceCulture);
             }
         }
         
