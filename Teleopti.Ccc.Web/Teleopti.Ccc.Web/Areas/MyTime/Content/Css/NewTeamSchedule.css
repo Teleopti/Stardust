@@ -25,6 +25,7 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	height: 41px;
 }
 .new-teamschedule-view-nav input.form-control {
 	background: transparent !important;
@@ -70,6 +71,7 @@
 	white-space: nowrap;
 	min-width: 35px;
 	margin: 0 10px;
+	cursor: pointer;
 }
 .new-teamschedule-toggle {
 	display: inline-block;

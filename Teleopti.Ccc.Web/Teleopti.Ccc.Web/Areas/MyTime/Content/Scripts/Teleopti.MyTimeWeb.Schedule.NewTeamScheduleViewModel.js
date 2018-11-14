@@ -146,12 +146,6 @@
 
 		setTimeFilterData();
 
-		self.hasTimeFiltered(
-			self.filter.filteredStartTimes.length > 0 ||
-				self.filter.filteredEndTimes.length > 0 ||
-				self.showOnlyNightShift() == true
-		);
-
 		if (!self.isHostAMobile) {
 			self.isPanelVisible(false);
 		}
@@ -216,11 +210,17 @@
 		if (data.PageCount > 0) self.totalPageNum = data.PageCount;
 		self.totalAgentCount = data.TotalAgentCount;
 
+		self.hasTimeFiltered(
+			self.filter.onlyNightShift ||
+				self.filter.isDayOff ||
+				self.filter.filteredStartTimes.length > 0 ||
+				self.filter.filteredEndTimes.length > 0
+		);
+
 		self.hasFilteredOnMobile(
 			self.hasTimeFiltered() ||
 				!!self.filter.searchNameText ||
-				((self.selectedTeamIds[0] && self.selectedTeamIds[0] != self.defaultTeamId) ||
-					(self.isMobileEnabled && self.showOnlyDayOff()))
+				(self.selectedTeamIds[0] && self.selectedTeamIds[0] != self.defaultTeamId)
 		);
 		self.emptySearchResult(data.AgentSchedules.length == 0);
 
@@ -341,10 +341,6 @@
 				self.filterChangedCallback(self.selectedDate(), true);
 			}
 
-			self.hasTimeFiltered(
-				value || self.filter.filteredStartTimes.length > 0 || self.filter.filteredEndTimes.length > 0
-			);
-
 			setShowOnlyDayOffSubscription();
 		});
 	}
@@ -373,14 +369,6 @@
 
 				setTimeFilterData();
 				self.filterChangedCallback(self.selectedDate(), true);
-			}
-
-			if (value) {
-				self.hasTimeFiltered(false);
-			} else {
-				self.hasTimeFiltered(
-					self.filter.filteredStartTimes.length > 0 || self.filter.filteredEndTimes.length > 0
-				);
 			}
 
 			setShowOnlyNightShiftSubscription();

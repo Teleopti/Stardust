@@ -1161,7 +1161,7 @@
 		equal(completeLoadedCount, 3);
 		equal(ajaxOption.ScheduleFilter.isDayOff, true);
 		equal(ajaxOption.ScheduleFilter.onlyNightShift, false);
-		equal(vm.hasTimeFiltered(), false);
+		equal(vm.hasTimeFiltered(), true);
 	});
 
 	test('should restore show only day off toggle state after clicking cancel button on mobile', function() {
@@ -2184,15 +2184,15 @@
 			'			</div>',
 			'		</div>',
 			'		<!-- ko if: isHostAMobile-->',
-			'		<div class="new-teamschedule-toggle show-only-day-off-toggle">',
-			'			<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />',
-			'			<label class="relative" for="show-only-day-off-switch">Day off switch</label>',
-			'			<span>@Resources.ShowOnlyDaysOff</span>',
-			'		</div>',
 			'		<div class="new-teamschedule-toggle show-only-night-shift-toggle">',
 			'			<input type="checkbox" id="show-only-night-shift-switch" data-bind="checked: showOnlyNightShift" />',
 			'			<label class="relative" for="show-only-night-shift-switch">Night shift switch</label>',
 			'			<span>@Resources.ShowOnlyNightShifts</span>',
+			'		</div>',
+			'		<div class="new-teamschedule-toggle show-only-day-off-toggle">',
+			'			<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />',
+			'			<label class="relative" for="show-only-day-off-switch">Day off switch</label>',
+			'			<span>@Resources.ShowOnlyDaysOff</span>',
 			'		</div>',
 			'		<div class="empty-search-result">',
 			'			<!-- ko if: emptySearchResult -->',
