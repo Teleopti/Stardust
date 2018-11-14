@@ -29,7 +29,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		[Test]
-		public void Foo()
+		[Ignore("#76289 To be continued")]
+		public void ShouldConsiderPreference()
 		{
 			var date = new DateOnly(2015, 10, 12); //mon
 			var activity = ActivityRepository.Has("_");
