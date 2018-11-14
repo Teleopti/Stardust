@@ -3,7 +3,6 @@ using Ical.Net;
 using Ical.Net.DataTypes;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
-using Event = Ical.Net.CalendarEvent;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 {
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
                 
                 foreach (var layer in shift.Projection)
                 {
-                    var evt = iCal.Create<Event>();
+                    var evt = iCal.Create<Ical.Net.CalendarComponents.CalendarEvent>();
 
                     evt.Start = new CalDateTime(layer.Start){ HasTime = true};
                     evt.End = new CalDateTime(layer.End) { HasTime = true };
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
                 }
             }
 
-            var serializer = new Ical.Net.Serialization.iCalendar.Serializers.CalendarSerializer();
+            var serializer = new Ical.Net.Serialization.CalendarSerializer();
             var icsContent = serializer.SerializeToString(iCal);
             return icsContent;
         }
