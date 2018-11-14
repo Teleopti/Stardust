@@ -60,21 +60,17 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 
 			foreach (var shiftCategoryLimitation in schedulePeriod.ShiftCategoryLimitationCollection())
 			{
-				IList<DateOnly> datesWithCategory;
 				if (shiftCategoryLimitation.Weekly)
 				{
 					var firstDateInPeriodLocal = DateHelper.GetFirstDateInWeek(dateOnly, person.FirstDayOfWeek);
 					var dateOnlyWeek = new DateOnlyPeriod(firstDateInPeriodLocal, firstDateInPeriodLocal.AddDays(6));
-					if (_shiftCategoryLimitationChecker.IsShiftCategoryOverWeekLimit(shiftCategoryLimitation,
-																					 range, dateOnlyWeek,
-					                                                                 out datesWithCategory))
+					if (_shiftCategoryLimitationChecker.IsShiftCategoryOverWeekLimit(shiftCategoryLimitation, range, dateOnlyWeek, out _))
 						return false;
 				}
 				else
 				{
-					DateOnlyPeriod period = schedulePeriod.DateOnlyPeriod;
-					if (_shiftCategoryLimitationChecker.IsShiftCategoryOverPeriodLimit(shiftCategoryLimitation, period, range,
-														   out datesWithCategory))
+					var period = schedulePeriod.DateOnlyPeriod;
+					if (_shiftCategoryLimitationChecker.IsShiftCategoryOverPeriodLimit(shiftCategoryLimitation, period, range, out _))
 						return false;
 				}
 			}
