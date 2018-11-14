@@ -1,5 +1,4 @@
 Set-Executionpolicy RemoteSigned -s CurrentUser
-Set-ExecutionPolicy RemoteSigned -s CurrentUser
 
 # Install scoop package manager
 iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
