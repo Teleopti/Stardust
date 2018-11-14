@@ -32,28 +32,21 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		}
 
 		[TestLog]
-		public virtual void SendAllAsSingles()
-		{
+		public virtual void SendAllAsSingles() =>
 			sendAll(1);
-		}
 
 		[TestLog]
-		public virtual void SendAllAsSmallBatches()
-		{
+		public virtual void SendAllAsSmallBatches() =>
 			sendAll(50);
-		}
 
 		[TestLog]
-		public virtual void SendAllAsLargeBatches()
-		{
+		public virtual void SendAllAsLargeBatches() =>
 			sendAll(1000);
-		}
 
 		private void sendAll(int batchSize)
 		{
 			StateChanges().ForEach(stateChange => { SendStateChange(batchSize, stateChange); });
-			// trigger recurring one last time
-			setTime("2016-02-26 22:00");
+			triggerRecurringJobs();
 		}
 
 		[TestLog]
@@ -84,6 +77,9 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 
 		private void setTime(string time) =>
 			_http.PostJson("/Test/SetCurrentTime", new {time = time, waitForQueue = false});
+
+		private void triggerRecurringJobs() =>
+			_http.GetJson("/Test/TriggerRecurringJobs");
 
 		[TestLog]
 		protected virtual void Send(ExternalUserBatchWebModel batch)

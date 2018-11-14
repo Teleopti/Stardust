@@ -229,6 +229,19 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		[TestLog]
 		[HttpGet]
+		[ActionName("TriggerRecurringJobs")]
+		public virtual void TriggerRecurringJobs()
+		{
+			_recurringEventPublishings.WithPublishingsForTest(() =>
+			{
+				_hangfire.TriggerDailyRecurringJobs();
+				_hangfire.TriggerHourlyRecurringJobs();
+				_hangfire.TriggerMinutelyRecurringJobs();
+			});
+		}
+
+		[TestLog]
+		[HttpGet]
 		public virtual ViewResult SetCurrentTime(long? ticks, string time)
 		{
 			setCurrentTime(ticks, time, true);
@@ -243,10 +256,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[TestLog]
 		[HttpPost]
 		[ActionName("SetCurrentTime")]
-		public virtual void SetCurrentTimePost(long? ticks, string time, bool waitForQueue = true)
-		{
+		public virtual void SetCurrentTimePost(long? ticks, string time, bool waitForQueue = true) =>
 			setCurrentTime(ticks, time, waitForQueue);
-		}
 
 		private void setCurrentTime(long? ticks, string time, bool waitForQueue)
 		{

@@ -2,20 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Wfm.Adherence.Domain.Service
 {
 	public class StateQueueTenants
 	{
-		private readonly INow _now;
 		private readonly ICurrentDataSource _dataSource;
 		private readonly object _lock = new object();
 		private readonly IList<TenantInfo> _tenants = new List<TenantInfo>();
 
-		public StateQueueTenants(INow now, ICurrentDataSource dataSource)
+		public StateQueueTenants(ICurrentDataSource dataSource)
 		{
-			_now = now;
 			_dataSource = dataSource;
 		}
 
@@ -33,10 +30,11 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 				var info = _tenants.SingleOrDefault(x => x.Name == tenant);
 				if (info == null)
 				{
-					info = new TenantInfo { Name = tenant };
+					info = new TenantInfo {Name = tenant};
 					_tenants.Add(info);
 				}
-				info.ProcessQueueUntil = _now.UtcDateTime().AddMinutes(1);
+
+				info.ProcessQueueUntil = DateTime.UtcNow.AddMinutes(1);
 			}
 		}
 
@@ -44,11 +42,10 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 		{
 			lock (_lock)
 			{
-				var toRemove = _tenants.Where(x => x.ProcessQueueUntil < _now.UtcDateTime()).ToList();
+				var toRemove = _tenants.Where(x => x.ProcessQueueUntil < DateTime.UtcNow).ToList();
 				toRemove.ForEach(x => _tenants.Remove(x));
 				return _tenants.Select(x => x.Name).ToArray();
 			}
 		}
-
 	}
 }
