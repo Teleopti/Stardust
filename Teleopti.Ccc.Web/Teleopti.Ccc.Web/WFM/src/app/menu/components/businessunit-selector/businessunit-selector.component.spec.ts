@@ -19,7 +19,7 @@ class MockBusinessUnitSelectorService implements Partial<BusinessUnitService> {
 	}
 }
 
-fdescribe('BusinessUnitSelector', () => {
+describe('BusinessUnitSelector', () => {
 	let component: BusinessUnitSelectorComponent;
 	let fixture: ComponentFixture<BusinessUnitSelectorComponent>;
 
