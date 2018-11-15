@@ -46,7 +46,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _workRuleSettings.SingleOrDefault(x => x.Default);
 		}
-
+		
+		public void HasDefault(IPlanningGroup planningGroup)
+		{
+			HasDefault(delegate { }, planningGroup);
+		}
+		
 		public void HasDefault(Action<PlanningGroupSettings> actionOnDefaultInstance, IPlanningGroup planningGroup)
 		{
 			var defaultSettings = PlanningGroupSettings.CreateDefault(planningGroup);
@@ -63,5 +68,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			_workRuleSettings.RemoveAll(dayOffRule => dayOffRule.PlanningGroup == planningGroup);
 		}
+
 	}
 }

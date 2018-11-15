@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 		public FakeAppDomainPrincipalContext AppDomainPrincipalContext;
 		public FakePersonRepository PersonRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
+		public FakePlanningGroupSettingsRepository PlanningGroupSettingsRepository;
 
 		private void setup()
 		{
@@ -80,6 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			var planningGroup = new PlanningGroup("_").AddFilter(new ContractFilter(filterContract));
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, SchedulePeriodType.Week, planningGroup);
 			PlanningGroupRepository.Has(planningGroup);
+			PlanningGroupSettingsRepository.HasDefault(planningGroup);
 
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				5,
