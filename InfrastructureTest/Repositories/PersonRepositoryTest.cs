@@ -1882,7 +1882,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 			var planningGroup = testCase.CreatePlanningGroup(new PlanningGroup("Group"), testData);
 			PersistAndRemoveFromUnitOfWork(planningGroup);
-			var loadedPlanningGroup = new PlanningGroupRepository(new ThisUnitOfWork(UnitOfWork)).Get(planningGroup.Id.Value);
+			var currentUnitOfWork = new ThisUnitOfWork(UnitOfWork);
+			var loadedPlanningGroup = new PlanningGroupRepository(currentUnitOfWork).Get(planningGroup.Id.Value);
 
 			//load
 			var dateOnlyPeriod = new DateOnlyPeriod(2017, 1, 1, 2017, 1, 6);

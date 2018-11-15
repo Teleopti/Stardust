@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public PlanningPeriod Has(DateOnly start, int numberOfWeeks)
 		{
-			return Has(start, numberOfWeeks, null);
+			return Has(start, numberOfWeeks, new PlanningGroup());
 		}
 
 		public PlanningPeriod Has(DateOnly startDate, DateOnly endDate, SchedulePeriodType schedulePeriodType, int number)

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				Default = planningGroupSettings.Default,
 				Name = planningGroupSettings.Name,
 				Filters = filterModels,
-				PlanningGroupId = planningGroupSettings.PlanningGroup?.Id,
+				PlanningGroupId = planningGroupSettings.Parent.Id.Value,
 				BlockFinderType = planningGroupSettings.BlockFinderType,
 				BlockSameShiftCategory = planningGroupSettings.BlockSameShiftCategory,
 				BlockSameShift = planningGroupSettings.BlockSameShift,

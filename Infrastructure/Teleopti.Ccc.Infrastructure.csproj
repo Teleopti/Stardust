@@ -497,7 +497,6 @@
     <Compile Include="Repositories\LoaderDeciderResult.cs" />
     <Compile Include="Repositories\OutboundCampaignRepository.cs" />
     <Compile Include="Repositories\PayrollFormatRepository.cs" />
-    <Compile Include="Repositories\PlanningGroupSettingsRepository.cs" />
     <Compile Include="Repositories\PeopleForShiftTradeFinder.cs" />
     <Compile Include="Repositories\PersonAssociationPublisherCheckSumPersister.cs" />
     <Compile Include="Repositories\ProjectionVersionPersister.cs" />

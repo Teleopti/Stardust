@@ -406,7 +406,6 @@
     <Compile Include="FakeRepositories\FakeStudentAvailabilityDayRepository.cs" />
     <Compile Include="FakeRepositories\FakeTeamRepository.cs" />
     <Compile Include="FakeRepositories\FakeWorkflowControlSetRepository.cs" />
-    <Compile Include="FakeRepositories\FakePlanningGroupSettingsRepository.cs" />
     <Compile Include="FakeRepositories\FakeDatabase.cs" />
     <Compile Include="IoC\AllTogglesOffAttribute.cs" />
     <Compile Include="IoC\AllTogglesOnAttribute.cs" />

@@ -11,15 +11,6 @@
             unsaved-value="null">
 			<generator class="guid.comb" />
 		</id>
-		<many-to-one name="UpdatedBy"
-                 class="Teleopti.Ccc.Domain.Common.Person"/>
-		<property name="UpdatedOn"
-              type="UtcDateTime"/>
-
-		<many-to-one name="BusinessUnit"
-			class="Teleopti.Ccc.Domain.Common.BusinessUnit"
-			access="nosetter.camelcase-underscore"/>
-
 		<component name="DayOffsPerWeek" access="property">
 			<property name="Minimum" column="MinDayOffsPerWeek" />
 			<property name="Maximum" column="MaxDayOffsPerWeek" />
@@ -49,10 +40,9 @@
 		</component>
 		
 
-		<many-to-one name="PlanningGroup"
+		<many-to-one name="Parent"
 					 class="Teleopti.Ccc.Domain.Optimization.PlanningGroup"
-						access="nosetter.camelcase-underscore"
-					 foreign-key="FK_PlanningGroupSettings_PlanningGroup"/>
+						access="nosetter.camelcase-underscore"/>
 		
 		<set name="Filters" table="PlanningGroupSettingsFilters" cascade="all-delete-orphan">
 			<key column="PlanningGroupSettings" />

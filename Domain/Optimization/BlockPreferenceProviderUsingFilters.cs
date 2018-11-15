@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return mapToBlockPreference(planningGroupSettings);
 		}
 
-		private ExtraPreferences mapToBlockPreference(PlanningGroupSettings settings)
+		private static ExtraPreferences mapToBlockPreference(PlanningGroupSettings settings)
 		{
 			return new ExtraPreferences
 			{

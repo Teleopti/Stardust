@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePersonRotationRepository PersonRotationRepository;
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakePlanningGroupRepository PlanningGroupRepository;
 
 		[Test]
 		public void ShouldHandleTeamUsingShiftOverMidnight()
@@ -853,6 +854,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningGroup = new PlanningGroup();
 			planningGroup.AddFilter(new TeamFilter(team));
+			PlanningGroupRepository.Has(planningGroup);
 			var planningPeriod = new PlanningPeriod(date.ToDateOnlyPeriod(),SchedulePeriodType.Day, 1, planningGroup);
 			PlanningPeriodRepository.Add(planningPeriod);
 

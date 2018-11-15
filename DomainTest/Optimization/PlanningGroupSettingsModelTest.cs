@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	public class PlanningGroupSettingsModelTest
 	{
 		public IFetchPlanningGroupSettingsModel Target;
-		public FakePlanningGroupSettingsRepository PlanningGroupSettingsRepository;
+		public FakePlanningGroupRepository PlanningGroupRepository;
 
 		[Test]
 		public void ShouldIncludeContractFilterWhenFetching()
@@ -29,7 +29,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var contractFilter = new ContractFilter(contract);
 			var dayOffRule = new PlanningGroupSettings().WithId();
 			dayOffRule.AddFilter(contractFilter);
-			PlanningGroupSettingsRepository.Add(dayOffRule);
+			var planningGroup = new PlanningGroup();
+			planningGroup.AddSetting(dayOffRule);
+			PlanningGroupRepository.Add(planningGroup);
 
 			var loaded = Target.Fetch(dayOffRule.Id.Value);
 
@@ -47,7 +49,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var teamFilter = new TeamFilter(team);
 			var dayOffRule = new PlanningGroupSettings().WithId();
 			dayOffRule.AddFilter(teamFilter);
-			PlanningGroupSettingsRepository.Add(dayOffRule);
+			var planningGroup = new PlanningGroup();
+			planningGroup.AddSetting(dayOffRule);
+			PlanningGroupRepository.Add(planningGroup);
 
 			var loaded = Target.Fetch(dayOffRule.Id.Value);
 
@@ -65,7 +69,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var siteFilter = new SiteFilter(site);
 			var dayOffRule = new PlanningGroupSettings().WithId();
 			dayOffRule.AddFilter(siteFilter);
-			PlanningGroupSettingsRepository.Add(dayOffRule);
+			var planningGroup = new PlanningGroup();
+			planningGroup.AddSetting(dayOffRule);
+			PlanningGroupRepository.Add(planningGroup);
 
 			var loaded = Target.Fetch(dayOffRule.Id.Value);
 
@@ -80,7 +86,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void ShouldFetchDayOffRule()
 		{
 			var curr = new PlanningGroupSettings().WithId();
-			PlanningGroupSettingsRepository.Add(curr);
+			var planningGroup = new PlanningGroup();
+			planningGroup.AddSetting(curr);
+			PlanningGroupRepository.Add(planningGroup);
 			curr.ConsecutiveWorkdays = new MinMax<int>(1,1);
 			curr.ConsecutiveDayOffs = new MinMax<int>(2,2);
 			curr.DayOffsPerWeek = new MinMax<int>(3,3);

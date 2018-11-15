@@ -11,6 +11,11 @@
             unsaved-value="null">
 			<generator class="guid.comb" />
 		</id>
+
+		<bag name="Settings" cascade="all-delete-orphan" inverse="true">
+			<key column="Parent" />
+			<one-to-many class="PlanningGroupSettings"/>
+		</bag>
 		<many-to-one name="UpdatedBy"
                  class="Teleopti.Ccc.Domain.Common.Person"/>
 		<property name="UpdatedOn"

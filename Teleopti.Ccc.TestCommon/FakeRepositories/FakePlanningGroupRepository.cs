@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(PlanningGroup root)
 		{
-			_planningGroups.Add(root); // Should set Id
+			_planningGroups.Add(root);
 		}
 
 		public void Remove(PlanningGroup root)
@@ -36,17 +36,27 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _planningGroups;
 		}
 
-		public FakePlanningGroupRepository Has(PlanningGroup root)
+		public PlanningGroup Has(PlanningGroup root)
 		{
 			_planningGroups.Add(root);
-			return this;
+			return root;
 		}
 
 		public PlanningGroup Has()
 		{
-			var planningGroup = new PlanningGroup().WithId();
-			_planningGroups.Add(planningGroup);
-			return planningGroup;
+			return Has(new PlanningGroup().WithId());
+		}
+
+		public void HasDefault(PlanningGroup planningGroup, Action<PlanningGroupSettings> action)
+		{
+			var currDefault = planningGroup.Settings.SingleOrDefault(x => x.Default);
+			if (currDefault == null)
+			{
+				currDefault = PlanningGroupSettings.CreateDefault();
+				planningGroup.AddSetting(currDefault);
+			}
+			
+			action(currDefault);
 		}
 	}
 }

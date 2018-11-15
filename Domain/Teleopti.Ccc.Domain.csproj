@@ -2252,7 +2252,6 @@
     <Compile Include="Optimization\ISynchronizeSchedulesAfterIsland.cs" />
     <Compile Include="Optimization\OptimizationPreferencesDefaultValueProvider.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimizationAndSingleAgentTeam.cs" />
-    <Compile Include="Optimization\IPlanningGroupSettingsRepository.cs" />
     <Compile Include="Optimization\FullSchedulingResult.cs" />
     <Compile Include="Optimization\OptimizeIntradayDesktop.cs" />
     <Compile Include="Optimization\PersistSchedulesAfterIsland.cs" />

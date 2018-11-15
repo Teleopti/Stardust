@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
+		public FakePlanningGroupRepository PlanningGroupRepository;
 
 		[Test]
 		public void ShouldNotMoveDayOffForAgentNotPartOfPlanningGroup()
@@ -39,6 +40,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var validTeam = new Team();
 			var planningGroup = new PlanningGroup("_");
 			planningGroup.AddFilter(new TeamFilter(validTeam));
+			PlanningGroupRepository.Has(planningGroup);
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, planningGroup);
 			var scenario = ScenarioRepository.Has("some name");
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1).NumberOfDaysOff(1);

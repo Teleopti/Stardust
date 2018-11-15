@@ -339,7 +339,6 @@
     <Compile Include="Repositories\Analytics\AnalyticsTeamRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\IntradayQueueStatisticsLoaderTest.cs" />
     <Compile Include="Repositories\Analytics\LatestStatisticsIntervalIdLoaderTest.cs" />
-    <Compile Include="Repositories\PlanningGroupSettingsRepositoryTest.cs" />
     <Compile Include="Repositories\FavoriteSearchRepositoryTest.cs" />
     <Compile Include="Repositories\IndexMaintenanceRepositoryTest.cs" />
     <Compile Include="Repositories\LoadSkillInIntradaysTest.cs" />
