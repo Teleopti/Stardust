@@ -1602,8 +1602,6 @@
     <Content Include="WFM\app\forecasting\html\forecast.html" />
     <Content Include="WFM\app\forecasting\controller\modify.controller.js" />
     <Content Include="WFM\app\forecasting\controller\modify.controller.spec.js" />
-    <Content Include="WFM\app\global\areas\menu-component.html" />
-    <Content Include="WFM\app\global\areas\menu.component.js" />
     <Content Include="WFM\app\global\current-user\authentication-requests.service.js" />
     <Content Include="WFM\app\global\current-user\settings.service.js" />
     <Content Include="WFM\app\global\current-user\_modules.js" />
@@ -2018,7 +2016,6 @@
     <Content Include="WFM\app\forecasting\routes.js" />
     <Content Include="WFM\app\forecasting\html\skillCreate.html" />
     <Content Include="WFM\app\forecasting\controller\skill.create.controller.spec.js" />
-    <Content Include="WFM\app\global\areas\areas.controller.spec.js" />
     <Content Include="WFM\app\global\current-user\currentuserinfo.service.spec.js" />
     <Content Include="WFM\app\global\exception-handling\exceptionhandler.js" />
     <Content Include="WFM\app\global\http\http.spec.js" />
@@ -2286,7 +2283,6 @@
     <None Include="WFM\css\_outbound.scss" />
     <Content Include="WFM\Gruntfile.js" />
     <Content Include="WFM\app\forecasting\service\forecasting.service.js" />
-    <Content Include="WFM\app\global\areas\areas.controller.js" />
     <Content Include="WFM\app\global\areas\areas.service.js" />
     <Content Include="WFM\app\global\notifications\notifications.controller.js" />
     <Content Include="WFM\app\global\notifications\notifications.service.js" />
