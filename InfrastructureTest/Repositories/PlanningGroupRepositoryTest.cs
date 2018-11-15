@@ -6,20 +6,20 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-	public class PlanningGroupRepositoryTest : RepositoryTest<IPlanningGroup>
+	public class PlanningGroupRepositoryTest : RepositoryTest<PlanningGroup>
 	{
-		protected override IPlanningGroup CreateAggregateWithCorrectBusinessUnit()
+		protected override PlanningGroup CreateAggregateWithCorrectBusinessUnit()
 		{
 			return new PlanningGroup("Test");
 		}
 
-		protected override void VerifyAggregateGraphProperties(IPlanningGroup loadedAggregateFromDatabase)
+		protected override void VerifyAggregateGraphProperties(PlanningGroup loadedAggregateFromDatabase)
 		{
 			var expected = CreateAggregateWithCorrectBusinessUnit();
 			loadedAggregateFromDatabase.Name.Should().Be.EqualTo(expected.Name);
 		}
 
-		protected override Repository<IPlanningGroup> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
+		protected override Repository<PlanningGroup> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			return new PlanningGroupRepository(currentUnitOfWork);
 		}

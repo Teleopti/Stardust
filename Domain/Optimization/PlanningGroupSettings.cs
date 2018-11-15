@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class PlanningGroupSettings : NonversionedAggregateRootWithBusinessUnit
 	{
 		private readonly ISet<IFilter> _filters = new HashSet<IFilter>();
-		private readonly IPlanningGroup _planningGroup;
+		private readonly PlanningGroup _planningGroup;
 		public virtual MinMax<int> DayOffsPerWeek { get; set; }
 		public virtual MinMax<int> ConsecutiveWorkdays { get; set; }
 		public virtual MinMax<int> ConsecutiveDayOffs { get; set; }
@@ -30,12 +30,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Name = string.Empty;
 		}
 
-		public PlanningGroupSettings(IPlanningGroup planningGroup):this()
+		public PlanningGroupSettings(PlanningGroup planningGroup):this()
 		{
 			_planningGroup = planningGroup;
 		}
 
-		public static PlanningGroupSettings CreateDefault(IPlanningGroup planningGroup = null)
+		public static PlanningGroupSettings CreateDefault(PlanningGroup planningGroup = null)
 		{
 			return new PlanningGroupSettings(planningGroup)
 			{
@@ -54,9 +54,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			};
 		}
 
-
-
-		public virtual IPlanningGroup PlanningGroup
+		public virtual PlanningGroup PlanningGroup
 		{
 			get { return _planningGroup; }
 		}

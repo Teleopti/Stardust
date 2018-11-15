@@ -50,19 +50,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return PlanningGroupSettings.CreateDefault();
 		}
 
-		public void HasDefault(Action<PlanningGroupSettings> actionOnDefaultInstance, IPlanningGroup planningGroup)
+		public void HasDefault(Action<PlanningGroupSettings> actionOnDefaultInstance, PlanningGroup planningGroup)
 		{
 			var defaultSettings = PlanningGroupSettings.CreateDefault(planningGroup);
 			actionOnDefaultInstance(defaultSettings);
 			_workRuleSettings.Add(defaultSettings);
 		}
 
-		public AllPlanningGroupSettings LoadAllByPlanningGroup(IPlanningGroup planningGroup)
+		public AllPlanningGroupSettings LoadAllByPlanningGroup(PlanningGroup planningGroup)
 		{
 			return new AllPlanningGroupSettings(_workRuleSettings.Where(x => x.PlanningGroup == planningGroup).OrderBy(x => x.Default).ThenByDescending(x => x.Priority));
 		}
 		
-		public void RemoveForPlanningGroup(IPlanningGroup planningGroup)
+		public void RemoveForPlanningGroup(PlanningGroup planningGroup)
 		{
 			_workRuleSettings.RemoveAll(dayOffRule => dayOffRule.PlanningGroup == planningGroup);
 		}

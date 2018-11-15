@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return new PlanningPeriodSuggestions(now, top10.ToList());
 		}
 
-		public IEnumerable<IPlanningPeriod> LoadForPlanningGroup(IPlanningGroup planningGroup)
+		public IEnumerable<IPlanningPeriod> LoadForPlanningGroup(PlanningGroup planningGroup)
 		{
 			return Session.CreateCriteria(typeof(PlanningPeriod))
 				.Add(Restrictions.Eq("PlanningGroup", planningGroup))

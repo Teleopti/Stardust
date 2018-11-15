@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string PlanningGroupName { get; set; }
 
 
-		public IPlanningGroup PlanningGroup;
+		public PlanningGroup PlanningGroup;
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{

@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -34,10 +35,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public class SchedulingInformation
 	{
 		public IList<Guid> PersonIds { get; }
-		public IPlanningGroup PlanningGroup { get; }
+		public PlanningGroup PlanningGroup { get; }
 		public DateOnlyPeriod Period { get; }
 
-		public SchedulingInformation(DateOnlyPeriod period, IList<Guid> personIds, IPlanningGroup planningGroup)
+		public SchedulingInformation(DateOnlyPeriod period, IList<Guid> personIds, PlanningGroup planningGroup)
 		{
 			PersonIds = personIds;
 			PlanningGroup = planningGroup;

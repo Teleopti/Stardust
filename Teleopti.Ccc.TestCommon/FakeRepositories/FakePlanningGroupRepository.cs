@@ -9,40 +9,40 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePlanningGroupRepository : IPlanningGroupRepository
 	{
-		private readonly List<IPlanningGroup> _planningGroups = new List<IPlanningGroup>();
+		private readonly List<PlanningGroup> _planningGroups = new List<PlanningGroup>();
 
-		public void Add(IPlanningGroup root)
+		public void Add(PlanningGroup root)
 		{
 			_planningGroups.Add(root); // Should set Id
 		}
 
-		public void Remove(IPlanningGroup root)
+		public void Remove(PlanningGroup root)
 		{
 			((IDeleteTag)Get(root.Id.GetValueOrDefault())).SetDeleted();
 		}
 
-		public IPlanningGroup Get(Guid id)
+		public PlanningGroup Get(Guid id)
 		{
 			return _planningGroups.FirstOrDefault(x => x.Id == id);
 		}
 
-		public IPlanningGroup Load(Guid id)
+		public PlanningGroup Load(Guid id)
 		{
 			return _planningGroups.First(x => x.Id == id);
 		}
 
-		public IEnumerable<IPlanningGroup> LoadAll()
+		public IEnumerable<PlanningGroup> LoadAll()
 		{
 			return _planningGroups;
 		}
 
-		public FakePlanningGroupRepository Has(IPlanningGroup root)
+		public FakePlanningGroupRepository Has(PlanningGroup root)
 		{
 			_planningGroups.Add(root);
 			return this;
 		}
 
-		public IPlanningGroup Has()
+		public PlanningGroup Has()
 		{
 			var planningGroup = new PlanningGroup().WithId();
 			_planningGroups.Add(planningGroup);

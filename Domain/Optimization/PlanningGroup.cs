@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class PlanningGroup : NonversionedAggregateRootWithBusinessUnit, IPlanningGroup, IDeleteTag
+	public class PlanningGroup : NonversionedAggregateRootWithBusinessUnit, IDeleteTag
 	{
 		private readonly ISet<IFilter> _filters = new HashSet<IFilter>();
 		private bool _isDeleted;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_filters.Clear();
 		}
 
-		public virtual IPlanningGroup AddFilter(IFilter filter)
+		public virtual PlanningGroup AddFilter(IFilter filter)
 		{
 			_filters.Add(filter);
 			return this;

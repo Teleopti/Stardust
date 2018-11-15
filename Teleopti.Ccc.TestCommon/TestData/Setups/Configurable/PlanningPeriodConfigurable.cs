@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				Number = 1,
 				Priority = 1
 			};
-			IPlanningGroup planningGroup = null;
+			PlanningGroup planningGroup = null;
 			if (PlanningGroupName != null)
 				planningGroup = new PlanningGroupRepository(currentUnitOfWork).LoadAll().FirstOrDefault(a => a.Name == PlanningGroupName);
 			

@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -677,17 +678,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<IPerson>();
 		}
 
-		public IList<IPerson> FindPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period)
+		public IList<IPerson> FindPeopleInPlanningGroup(PlanningGroup planningGroup, DateOnlyPeriod period)
 		{
 			return FindPeople(FindPeopleIdsInPlanningGroup(planningGroup, period)).ToList();
 		}
 
-		public int CountPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period)
+		public int CountPeopleInPlanningGroup(PlanningGroup planningGroup, DateOnlyPeriod period)
 		{
 			return FindPeopleIdsInPlanningGroup(planningGroup, period).Count;
 		}
 
-		public IList<Guid> FindPeopleIdsInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period)
+		public IList<Guid> FindPeopleIdsInPlanningGroup(PlanningGroup planningGroup, DateOnlyPeriod period)
 		{
 			var criteria = Session.CreateCriteria(typeof(Person), "per")
 				.SetFetchMode("PersonPeriodCollection", FetchMode.Join)

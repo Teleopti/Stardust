@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			}));
 		}
 
-		private IPlanningPeriodSuggestions getSuggestion(IPlanningGroup planningGroup)
+		private IPlanningPeriodSuggestions getSuggestion(PlanningGroup planningGroup)
 		{
 			var period = new DateOnly(_now.UtcDateTime()).ToDateOnlyPeriod();
 			var personIds = planningGroup != null
@@ -301,7 +301,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return buildPlanningPeriodViewModels(planningPeriods, new List<PlanningPeriodModel>(), false, planningGroup);
 		}
 
-		private IHttpActionResult nextPlanningPeriod(IPlanningGroup planningGroup)
+		private IHttpActionResult nextPlanningPeriod(PlanningGroup planningGroup)
 		{
 			var allPlanningPeriods = _planningPeriodRepository.LoadAll().Where(p => p.PlanningGroup == planningGroup).ToList();
 			var last = allPlanningPeriods.OrderByDescending(p => p.Range.StartDate).FirstOrDefault();
@@ -317,7 +317,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			IList<IPlanningPeriod> allPlanningPeriods,
 			List<PlanningPeriodModel> availablePlanningPeriods,
 			bool createDefaultPlanningPeriod,
-			IPlanningGroup planningGroup = null)
+			PlanningGroup planningGroup = null)
 		{
 			if (!allPlanningPeriods.Any() && createDefaultPlanningPeriod)
 			{

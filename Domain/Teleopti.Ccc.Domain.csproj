@@ -1359,7 +1359,6 @@
     <Compile Include="InterfaceLegacy\Domain\WorkTimeDirective.cs" />
     <Compile Include="InterfaceLegacy\Domain\WorkTimeLimitation.cs" />
     <Compile Include="InterfaceLegacy\Domain\WorkTimeSource.cs" />
-    <Compile Include="InterfaceLegacy\IPlanningGroup.cs" />
     <Compile Include="InterfaceLegacy\IDayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="InterfaceLegacy\IFilter.cs" />
     <Compile Include="InterfaceLegacy\IJsonDeserializer.cs" />

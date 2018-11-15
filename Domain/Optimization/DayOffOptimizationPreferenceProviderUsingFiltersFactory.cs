@@ -1,6 +1,4 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy;
-
-namespace Teleopti.Ccc.Domain.Optimization
+﻿namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class DayOffOptimizationPreferenceProviderUsingFiltersFactory
 	{
@@ -11,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_planningGroupSettingsRepository = planningGroupSettingsRepository;
 		}
 
-		public IDayOffOptimizationPreferenceProvider Create(IPlanningGroup planningGroup)
+		public IDayOffOptimizationPreferenceProvider Create(PlanningGroup planningGroup)
 		{
 			return new DayOffOptimizationPreferenceProviderUsingFilters(_planningGroupSettingsRepository.LoadAllByPlanningGroup(planningGroup));
 		}

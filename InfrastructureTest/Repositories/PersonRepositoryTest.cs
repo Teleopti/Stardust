@@ -2058,7 +2058,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				_name = name;
 			}
-			public Func<IPlanningGroup, PlanningGroupFilterTestData, IPlanningGroup> CreatePlanningGroup { get; set; }
+			public Func<PlanningGroup, PlanningGroupFilterTestData, PlanningGroup> CreatePlanningGroup { get; set; }
 			public Func<PlanningGroupFilterTestData, IList<IPerson>> ExpectedPeople { get; set; }
 
 			public override string ToString()

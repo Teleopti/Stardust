@@ -1,4 +1,3 @@
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -14,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_schedulingOptionsProvider = schedulingOptionsProvider;
 		}
 
-		public IBlockPreferenceProvider Create(IPlanningGroup planningGroup)
+		public IBlockPreferenceProvider Create(PlanningGroup planningGroup)
 		{
 			return new BlockPreferenceProviderUsingFilters(_planningGroupSettingsRepository.LoadAllByPlanningGroup(planningGroup), _schedulingOptionsProvider.Fetch(null));
 		}

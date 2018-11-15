@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void Persist(PlanningGroupSettingsModel model)
 		{
-			IPlanningGroup planningGroup = null;
+			PlanningGroup planningGroup = null;
 			if (model.PlanningGroupId.HasValue)
 				planningGroup = _planningGroupRepository.Get(model.PlanningGroupId.Value);
 

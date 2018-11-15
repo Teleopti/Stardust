@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 		}
 
-		private void setProperties(IPlanningGroup planningGroup, PlanningGroupModel planningGroupModel)
+		private void setProperties(PlanningGroup planningGroup, PlanningGroupModel planningGroupModel)
 		{
 			planningGroup.ChangeName(planningGroupModel.Name);
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy
@@ -10,9 +11,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy
 		int Number { get; }
 		SchedulePeriodType PeriodType { get; }
 		void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation, bool updateTypeAndNumber = false);
-		IPlanningPeriod NextPlanningPeriod(IPlanningGroup planningGroup);
+		IPlanningPeriod NextPlanningPeriod(PlanningGroup planningGroup);
 		PlanningPeriodState State { get; }
-		IPlanningGroup PlanningGroup { get; }
+		PlanningGroup PlanningGroup { get; }
 		ISet<IJobResult> JobResults { get; }
 		void Scheduled();
 		void Publish(params IPerson[] people);

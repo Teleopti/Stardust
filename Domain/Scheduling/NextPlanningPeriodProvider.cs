@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Optimization;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_now = now;
 		}
 		
-		public IPlanningPeriod Current(IPlanningGroup planningGroup)
+		public IPlanningPeriod Current(PlanningGroup planningGroup)
 		{
 			var foundPlanningPeriods = planningGroup != null ? _planningPeriodRepository.LoadForPlanningGroup(planningGroup) : _planningPeriodRepository.LoadAll();
 			var result =

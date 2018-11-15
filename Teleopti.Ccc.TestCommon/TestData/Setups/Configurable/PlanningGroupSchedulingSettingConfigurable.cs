@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string SchedulingSettingName { get; set; }
 		public string PlanningGroupName { get; set; }
 		public string BlockScheduling { get; set; }
-		public IPlanningGroup PlanningGroup;
+		public PlanningGroup PlanningGroup;
 		public PlanningGroupSettings PlanningGroupSchedulingSetting;
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)

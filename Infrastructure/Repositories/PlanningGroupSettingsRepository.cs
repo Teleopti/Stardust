@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return Session.GetNamedQuery("loadGlobalDefault").UniqueResult<PlanningGroupSettings>();
 		}
 
-		public AllPlanningGroupSettings LoadAllByPlanningGroup(IPlanningGroup planningGroup)
+		public AllPlanningGroupSettings LoadAllByPlanningGroup(PlanningGroup planningGroup)
 		{
 			return new AllPlanningGroupSettings(Session.CreateCriteria(typeof(PlanningGroupSettings), "planningGroupSettings")
 				.Add(Restrictions.Eq("planningGroupSettings.PlanningGroup", planningGroup))
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<PlanningGroupSettings>());
 		}
 
-		public void RemoveForPlanningGroup(IPlanningGroup planningGroup)
+		public void RemoveForPlanningGroup(PlanningGroup planningGroup)
 		{
 			var planningGroupSettingses = LoadAllByPlanningGroup(planningGroup);
 			foreach (var planningGroupSettings in planningGroupSettingses)
