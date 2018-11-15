@@ -308,8 +308,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakePermissions>().For<IAuthorization>();
 		}
 
-		public IAuthorizationScope AuthorizationScope;
-		public IAuthorization Authorization;
 		public IThreadPrincipalContext PrincipalContext;
 		public FakeDataSourceForTenant DataSourceForTenant;
 		public IDataSourceScope DataSourceScope;
@@ -406,9 +404,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			_tenantScope?.Dispose();
 			_tenantScope = null;
-
-			Authorization = null;
-			AuthorizationScope = null;
 			DataSourceForTenant = null;
 			DataSourceScope = null;
 			Database = null;
