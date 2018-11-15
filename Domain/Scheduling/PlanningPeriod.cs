@@ -66,11 +66,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public virtual ISet<IJobResult> JobResults => _jobResults;
 
-		public virtual void Scheduled()
-		{
-			_state = PlanningPeriodState.Scheduled;
-		}
-
 		public virtual void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation, bool updateTypeAndNumber = false)
 		{
 			_range = calculator.PeriodForType(schedulePeriodForRangeCalculation.StartDate, schedulePeriodForRangeCalculation);

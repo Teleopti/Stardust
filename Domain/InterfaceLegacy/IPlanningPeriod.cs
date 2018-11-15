@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy
 		PlanningPeriodState State { get; }
 		PlanningGroup PlanningGroup { get; }
 		ISet<IJobResult> JobResults { get; }
-		void Scheduled();
 		void Publish(params IPerson[] people);
 		IJobResult GetLastSchedulingJob();
 		IJobResult GetLastIntradayOptimizationJob();
