@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IPlanningGroupSettingsRepository : IRepository<PlanningGroupSettings>
 	{
-		IList<PlanningGroupSettings> LoadAllByPlanningGroup(IPlanningGroup planningGroup);
+		IEnumerable<PlanningGroupSettings> LoadAllByPlanningGroup(IPlanningGroup planningGroup);
 		void RemoveForPlanningGroup(IPlanningGroup planningGroup);
 	}
 }

@@ -20,8 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public ExtraPreferences ForAgent(IPerson person, DateOnly dateOnly)
 		{
 			var planningGroupSettings = _planningGroupSettings
-				.Where(x => x.IsValidForAgent(person, dateOnly))
-				.OrderByDescending(x => x.Priority).FirstOrDefault();
+				.FirstOrDefault(x => x.IsValidForAgent(person, dateOnly));
 			if (planningGroupSettings == null)
 			{
 				planningGroupSettings = PlanningGroupSettings.CreateDefault();
