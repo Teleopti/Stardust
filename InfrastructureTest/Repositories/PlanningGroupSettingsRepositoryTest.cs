@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			UnitOfWork.Flush();
 
 			rep.LoadAllByPlanningGroup(planningGroup)
-				.Should().Have.SameSequenceAs(planningGroupSetting1, planningGroupSetting2, planningGroupSetting3);
+				.Should().Have.SameSequenceAs(planningGroupSetting3, planningGroupSetting2, planningGroupSetting1);
 		}
 		
 		[Test]
