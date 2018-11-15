@@ -16,31 +16,31 @@
 //Styleguide 2.10
 //
 
-.working-hour-picker{
-	.mini{
+.working-hour-picker {
+	.mini {
 		min-width: 32px;
-		color:$text-color-standard;
-		background: rgba(0,0,0,0.1);
+		color: $text-color-standard;
+		background: rgba(0, 0, 0, 0.1);
 	}
-	.mini-active{
+	.mini-active {
 		background: $secondary;
-		color:$white;
-		box-shadow: 0 8px 17px 0 rgba(0,0,0,.2);
+		color: $white;
+		box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
 	}
-	.mini-success{
+	.mini-success {
 		background: $highlight;
-		color:$text-color-standard;
-		box-shadow: 0 8px 17px 0 rgba(0,0,0,.2);
+		color: $text-color-standard;
+		box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
 	}
-	.work-day{
+	.work-day {
 		opacity: 1;
 		transition: $transition-timing;
 	}
-	.inactive-work-day{
+	.inactive-work-day {
 		opacity: 0;
 		transform: translate(-50px, 0px);
 	}
-	.working-hour-dropdown{
+	.working-hour-dropdown {
 		position: absolute;
 		top: 55px;
 		left: 0;
@@ -48,26 +48,26 @@
 		z-index: 20;
 		background: $white;
 	}
-	.day-row{
-		flex-direction:row;
+	.day-row {
+		flex-direction: row;
 	}
 
-.uib-timepicker{
-	width: 100%;
-}
+	.uib-timepicker {
+		width: 100%;
+	}
 
-	.uib-time{
-		.md-button{
-			margin:0px!important;
-			&:hover{
-				background-color: #ececec!important;
+	.uib-time {
+		.md-button {
+			margin: 0px !important;
+			&:hover {
+				background-color: #ececec !important;
 			}
 		}
 	}
 
-	@media screen and (max-width:768px){
-		.day-row > .con-flex{
-			padding:0!important;
+	@media screen and (max-width: 768px) {
+		.day-row > .con-flex {
+			padding: 0 !important;
 		}
 	}
 }
@@ -76,7 +76,9 @@
 .working-hours-row {
 	border-bottom: 1px solid $hover;
 
-	.working-hours-period, .working-hours-day, .working-hours-action {
+	.working-hours-period,
+	.working-hours-day,
+	.working-hours-action {
 		align-self: center;
 	}
 
@@ -87,11 +89,10 @@
 	.working-hours-action {
 		flex-grow: 1.5;
 	}
-
 }
 
 .working-hours-picker-container {
-	display: inline-flex;
+	display: flex;
 	align-items: center;
 	margin-top: 10px;
 }

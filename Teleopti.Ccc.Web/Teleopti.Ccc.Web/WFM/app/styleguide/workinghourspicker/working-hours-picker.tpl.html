@@ -4,34 +4,18 @@
 			<h2>{{ getTimerangeDisplay(WorkingPeriod.StartTime, WorkingPeriod.EndTime) }}</h2>
 		</div>
 		<div class="con-flex working-hours-day" ng-repeat="WeekDay in WorkingPeriod.WeekDaySelections">
-			<md-checkbox
-				ng-model="WeekDay.Checked"
-				aria-label="Checkbox"
-				ng-click="enforceRadioBehavior($parent.$index, WeekDay.WeekDay)"
-				ng-disabled="!$parent.enabled"
-			>
+			<md-checkbox ng-model="WeekDay.Checked" aria-label="Checkbox" ng-click="enforceRadioBehavior($parent.$index, WeekDay.WeekDay)"
+			 ng-disabled="!$parent.enabled">
 				<span translate>{{ WeekDay | showWeekdays }}</span>
 			</md-checkbox>
 		</div>
 		<div class="con-flex working-hours-action">
-			<div
-				tabindex="0"
-				class="context-menu card-context"
-				ng-if="$parent.enabled"
-				ng-click="$parent.removeWorkingPeriod($index)"
-			>
+			<div tabindex="0" class="context-menu card-context" ng-if="$parent.enabled" ng-click="$parent.removeWorkingPeriod($index)">
 				<i class="mdi mdi-delete"></i>
-				<md-tooltip
-					>{{ 'DeletePeriod' | translate }}
-					{{ getTimerangeDisplay(WorkingPeriod.StartTime, WorkingPeriod.EndTime) }}</md-tooltip
-				>
+				<md-tooltip>{{ 'DeletePeriod' | translate }}
+					{{ getTimerangeDisplay(WorkingPeriod.StartTime, WorkingPeriod.EndTime) }}</md-tooltip>
 			</div>
-			<div
-				tabindex="0"
-				class="context-menu card-context"
-				ng-if="$parent.enabled"
-				ng-click="$parent.toggleAllChecks($index)"
-			>
+			<div tabindex="0" class="context-menu card-context" ng-if="$parent.enabled" ng-click="$parent.toggleAllChecks($index)">
 				<i class="mdi mdi-check"></i>
 				<md-tooltip>{{ 'ToggleAll' | translate }}</md-tooltip>
 			</div>
@@ -42,11 +26,8 @@
 <div class="con-row">
 	<div class="working-hours-picker-container" ng-if="enabled">
 		<!-- No need for a con-flex here, its in the directive -->
-		<time-range-picker
-			ng-model="newWorkingPeriod"
-			max-hours-range="maxHoursRange"
-			disable-next-day="disableNextDay"
-		></time-range-picker>
+		<time-range-picker class="wfm-time-range-picker-wrap" ng-model="newWorkingPeriod" max-hours-range="maxHoursRange"
+		 disable-next-day="disableNextDay"></time-range-picker>
 		<button type="button" class="wfm-btn wfm-btn-invis-default" ng-click="addEmptyWorkingPeriod()">
 			{{ 'AddOpenHours' | translate }}
 			<md-tooltip>{{ 'AddEmptyPeriod' | translate }}</md-tooltip>
