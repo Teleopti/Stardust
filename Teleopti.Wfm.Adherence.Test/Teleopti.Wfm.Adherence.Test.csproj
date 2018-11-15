@@ -170,6 +170,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Common\PermissionViewModelBuilderTest.cs" />
     <Compile Include="Configuration\Infrastructure\DatabaseTest.cs" />
     <Compile Include="Configuration\Infrastructure\RepositoryTest.cs" />
     <Compile Include="Configuration\Infrastructure\RtaMapRepositoryTest.cs" />

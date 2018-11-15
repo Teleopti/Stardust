@@ -109,6 +109,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IExternalLogonReader>()
 				.SingleInstance().ApplyAspects();
 
+			builder.RegisterType<PermissionsViewModelBuilder>().SingleInstance();
 			builder.RegisterType<AgentStatesViewModelBuilder>().SingleInstance();
 			builder.RegisterType<PhoneStateViewModelBuilder>().SingleInstance();
 			builder.RegisterType<SkillViewModelBuilder>().SingleInstance();

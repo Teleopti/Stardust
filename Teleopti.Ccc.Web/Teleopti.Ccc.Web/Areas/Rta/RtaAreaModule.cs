@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<TeleoptiRtaService>().AsSelf().As<ITeleoptiRtaService>().SingleInstance();
-			builder.RegisterType<PermissionsViewModelBuilder>().AsSelf().SingleInstance();
 		}
 	}
 }
