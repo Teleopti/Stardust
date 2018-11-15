@@ -15420,7 +15420,7 @@ Applikaatio sulkeutuu. </value>
   <data name="TimeInSecond" xml:space="preserve">
     <value>Aika (s)</value>
   </data>
-  <data name="ShowOnlyDayOff" xml:space="preserve">
+  <data name="ShowOnlyDaysOff" xml:space="preserve">
     <value>Näytä vain vapaapäivät</value>
   </data>
   <data name="NoHistoricalDataFoundForThisSkill" xml:space="preserve">

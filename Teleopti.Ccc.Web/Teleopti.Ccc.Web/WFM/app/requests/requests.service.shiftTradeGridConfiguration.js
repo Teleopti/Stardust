@@ -161,6 +161,7 @@
 					visible: false,
 					pinnedRight: true,
 					enablePinning: false,
+					enableFiltering: false,
 					minWidth: 100
 				},
 				{
@@ -171,6 +172,7 @@
 					visible: false,
 					pinnedRight: true,
 					enablePinning: false,
+					enableFiltering: false,
 					minWidth: 100
 				},
 				{
@@ -182,6 +184,7 @@
 					headerCellClass: 'request-period-duration-header',
 					pinnedRight: true,
 					enablePinning: false,
+					enableFiltering: false,
 					minWidth: 100
 				},
 				{
@@ -193,6 +196,7 @@
 					enableSorting: false,
 					pinnedLeft: true,
 					enablePinning: false,
+					enableFiltering: false,
 					minWidth: 100
 				},
 				{
@@ -203,6 +207,7 @@
 					enableSorting: false,
 					pinnedRight: true,
 					enablePinning: false,
+					enableFiltering: false,
 					visible: false,
 					minWidth: 100
 				},
@@ -216,6 +221,7 @@
 					enableSorting: false,
 					pinnedLeft: true,
 					enablePinning: false,
+					enableFiltering: false,
 					minWidth: 100
 				},
 				{
@@ -226,6 +232,7 @@
 					visible: false,
 					pinnedRight: true,
 					enablePinning: false,
+					enableFiltering: false,
 					minWidth: 100
 				},
 				{
@@ -240,6 +247,7 @@
 					visible: false,
 					pinnedRight: true,
 					enablePinning: false,
+					enableFiltering: true,
 					minWidth: 100,
 					cellTooltip: true,
 					filterHeaderTemplate:
@@ -256,6 +264,7 @@
 					visible: false,
 					pinnedRight: true,
 					enablePinning: false,
+					enableFiltering: true,
 					minWidth: 100,
 					cellTooltip: true,
 					filter: {
@@ -276,6 +285,7 @@
 					visible: false,
 					pinnedRight: true,
 					enablePinning: false,
+					enableFiltering: false,
 					minWidth: 100,
 					cellTooltip: true
 				},
@@ -288,6 +298,7 @@
 					enableSorting: false,
 					pinnedRight: true,
 					enablePinning: false,
+					enableFiltering: true,
 					minWidth: 100,
 					filterHeaderTemplate:
 						'<div class="ui-grid-filter-container" ng-repeat="colFilter in col.filters">' +
@@ -306,6 +317,7 @@
 					headerCellClass: 'request-created-time-header',
 					pinnedRight: true,
 					enablePinning: false,
+					enableFiltering: false,
 					minWidth: 100
 				},
 				{
@@ -316,6 +328,7 @@
 					headerCellClass: 'request-updated-time-header',
 					pinnedRight: true,
 					enablePinning: false,
+					enableFiltering: false,
 					minWidth: 100
 				}
 			];
@@ -332,9 +345,8 @@
 				enablePinning: false,
 				enableColumnMenu: false,
 				enableHiding: false,
-				cellTemplate: 'shift-trade-day-template.html',
+				cellTemplate: 'app/requests/html/shift-trade-day-template.html',
 				width: numberOfDays * 40,
-
 				enableSorting: false,
 				enableFiltering: false,
 				isShiftTradeDayColumn: true
@@ -354,6 +366,7 @@
 					pinnedRight: true,
 					enablePinning: false,
 					enableSorting: false,
+					enableFiltering: false,
 					minWidth: 100
 				};
 				columns.splice(10, 0, brokenRulesColumn);

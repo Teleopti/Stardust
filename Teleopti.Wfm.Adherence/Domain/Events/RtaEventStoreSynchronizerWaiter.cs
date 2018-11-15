@@ -2,57 +2,42 @@
 using Polly;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Domain.MultiTenancy;
 
 namespace Teleopti.Wfm.Adherence.Domain.Events
 {
 	public interface IRtaEventStoreSynchronizerWaiter
 	{
-		void WaitForSynchronizeAllTenants(TimeSpan timeout);
-		void WaitForSynchronize(TimeSpan timeout);
+		void Wait(TimeSpan timeout);
+	}
+
+	public class DontWaitForSynchronizer : IRtaEventStoreSynchronizerWaiter
+	{
+		public void Wait(TimeSpan timeout)
+		{
+		}
 	}
 
 	public class RtaEventStoreSynchronizerWaiter : IRtaEventStoreSynchronizerWaiter
 	{
 		private readonly IKeyValueStorePersister _keyValueStore;
 		private readonly IRtaEventStoreReader _events;
-		private readonly IRtaEventStoreSynchronizer _synchronizer;
 		private readonly ActiveTenants _tenants;
 
 		public RtaEventStoreSynchronizerWaiter(
 			IKeyValueStorePersister keyValueStore,
 			IRtaEventStoreReader events,
-			IRtaEventStoreSynchronizer synchronizer,
 			ActiveTenants tenants)
 		{
 			_keyValueStore = keyValueStore;
 			_events = events;
-			_synchronizer = synchronizer;
 			_tenants = tenants;
-		}
-
-		[TestLog]
-		public virtual void WaitForSynchronizeAllTenants(TimeSpan timeout) =>
-			_tenants.Tenants().ForEach(x => { WaitForSynchronizeTenant(x, timeout); });
-
-		[TestLog]
-		[TenantScope]
-		protected virtual void WaitForSynchronizeTenant(string tenant, TimeSpan timeout) =>
-			WaitForSynchronize(timeout);
-
-		[TestLog]
-		public virtual void WaitForSynchronize(TimeSpan timeout)
-		{
-			_synchronizer.Trigger();
-			Wait(timeout);
 		}
 
 		[TestLog]
 		[UnitOfWork]
 		[ReadModelUnitOfWork]
-		protected virtual void Wait(TimeSpan timeout)
+		public virtual void Wait(TimeSpan timeout)
 		{
 			var interval = TimeSpan.FromMilliseconds(100);
 			var attempts = (int) (timeout.TotalMilliseconds / interval.TotalMilliseconds);
@@ -77,11 +62,5 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 			{
 			}
 		}
-	}
-	
-	public class EmptyRtaEventStoreSynchronizerWaiter: IRtaEventStoreSynchronizerWaiter
-	{
-		public void WaitForSynchronizeAllTenants(TimeSpan timeout){}
-		public void WaitForSynchronize(TimeSpan timeout){}
 	}
 }

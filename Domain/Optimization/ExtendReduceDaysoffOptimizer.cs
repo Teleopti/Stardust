@@ -96,14 +96,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_rollbackService.ClearModificationCollection();
 
 			var schedulePeriod = _matrix.SchedulePeriod;
-			int targetDaysoff;
-			IList<IScheduleDay> dayOffDays;
-			if (!_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_scheduleDictionary, schedulePeriod, out targetDaysoff, out dayOffDays))
+			if (!_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_scheduleDictionary, schedulePeriod, out _, out _))
 				return false;
 
-			bool success = false;
+			var success = false;
 
-			ExtendReduceTimeDecisionMakerResult daysToBeRescheduled = _decisionMaker.Execute(_matrix, _personalSkillsDataExtractor, _validatorList);
+			var daysToBeRescheduled = _decisionMaker.Execute(_matrix, _personalSkillsDataExtractor, _validatorList);
 			if (!daysToBeRescheduled.DayToLengthen.HasValue && !daysToBeRescheduled.DayToShorten.HasValue)
 				return false;
 
@@ -132,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			if (daysToBeRescheduled.DayToShorten.HasValue && !_dayOffsInPeriodCalculator.OutsideOrAtMaximumTargetDaysOff(_scheduleDictionary, schedulePeriod))
 			{
-				DateOnly dayToShorten = daysToBeRescheduled.DayToShorten.Value;
+				var dayToShorten = daysToBeRescheduled.DayToShorten.Value;
 				if (addDayOff(dayToShorten, true, schedulingOptions, _rollbackService))
 					success = true;
 				// bugfix for infinie loop 19889. We need to lock the day for avoiding infinitive loop

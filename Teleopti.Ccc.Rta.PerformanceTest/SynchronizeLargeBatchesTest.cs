@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			{
 				States.SendAllAsLargeBatches();
 				StateQueue.WaitForDequeue(TimeSpan.FromMinutes(15));
-				Waiter.WaitForSynchronize(TimeSpan.FromMinutes(15));
+				Waiter.Wait(TimeSpan.FromMinutes(15));
 			});
 		}
 	}

@@ -1,8 +1,7 @@
 ﻿'use strict';
 
 describe('requestsDataService tests ', function() {
-	var $translate,
-		targetSvc;
+	var $translate, targetSvc;
 
 	beforeEach(function() {
 		module('wfm.requests');

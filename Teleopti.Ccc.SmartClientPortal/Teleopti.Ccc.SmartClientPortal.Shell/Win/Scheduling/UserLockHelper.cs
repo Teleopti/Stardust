@@ -224,5 +224,66 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			executer.AllFulfilledShiftsRotations(e.Button);
 		}
 
+		internal void ToolStripMenuItemAllPreferencesMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllPreferences(e.Button);
+		}
+
+		internal void ToolStripMenuItemAllDaysOffMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllDaysOff(e.Button);
+		}
+
+		internal void ToolStripMenuItemAllShiftsPreferencesMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllShiftsPreferences(e.Button);
+		}
+
+		internal void ToolStripMenuItemAllMustHaveMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllMustHave(e.Button);
+		}
+
+		internal void ToolStripMenuItemAllFulfilledMustHaveMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllFulfilledMustHave(e.Button);
+		}
+
+		internal void ToolStripMenuItemAllFulFilledPreferencesMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllFulfilledPreferences(e.Button);
+		}
+
+		internal void ToolStripMenuItemAllAbsencePreferenceMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllAbsencePreference(e.Button);
+		}
+
+		internal void ToolStripMenuItemAllFulFilledAbsencesPreferencesMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllFulfilledAbsencesPreferences(e.Button);
+		}
+
+		internal void ToolStripMenuItemAllFulFilledDaysOffPreferencesMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllFulfilledDaysOffPreferences(e.Button);
+		}
+
+		internal void ToolStripMenuItemAllFulFilledShiftsPreferencesMouseUp(object sender, MouseEventArgs e)
+		{
+			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
+			executer.AllFulfilledShiftsPreferences(e.Button);
+		}
+
+
 	}
 }

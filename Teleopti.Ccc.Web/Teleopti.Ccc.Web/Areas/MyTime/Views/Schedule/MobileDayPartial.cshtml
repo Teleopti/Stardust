@@ -128,7 +128,7 @@ Layout = null;
 				</div>
 
 				<!-- ko if: showOldTrafficLightIconOnMobile -->
-				<div class="holiday-agents cursorpointer displayinline-block" data-bind="visible: absenceRequestPermission, tooltip: { title: trafficLightTooltip(), placement: 'bottom', trigger: 'click'}, hideTooltipAfterMouseLeave: true, style: {'right': showProbabilityOptionsToggleIcon() ? '38px': '0'}">
+				<div class="holiday-agents cursorpointer inline-block" data-bind="visible: absenceRequestPermission, tooltip: { title: trafficLightTooltip(), placement: 'bottom', trigger: 'click'}, hideTooltipAfterMouseLeave: true, style: {'right': showProbabilityOptionsToggleIcon() ? '38px': '0'}">
 					<div class="small-circle" data-bind="style: {background: trafficLightColor()}"></div>
 				</div>
 				<!-- /ko -->
@@ -200,7 +200,7 @@ Layout = null;
 				<!-- /ko -->
 			</div>
 
-			<!-- ko if: showProbabilityOptionsToggleIcon || probabilities().length > 0 -->
+			<!-- ko if: showProbabilityOptionsToggleIcon && probabilities().length > 0 -->
 			<div class="probability-vertical-bar">
 				<!--ko foreach: probabilities()-->
 				<div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true, placement: 'left', trigger: 'click'}, style: styleJson, hideTooltipAfterMouseLeave: true"></div>

@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public virtual int Priority { get; set; }
 		public virtual MinMax<int> FullWeekendsOff { get; set; }
 		public virtual MinMax<int> WeekendDaysOff { get; set; }
+		public virtual Percent PreferenceValue { get; set; }
 
 		public PlanningGroupSettings()
 		{

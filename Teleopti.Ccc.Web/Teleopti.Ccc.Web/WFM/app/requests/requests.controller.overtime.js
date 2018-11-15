@@ -1,9 +1,7 @@
 (function() {
-
 	'use strict';
 
-	angular.module('wfm.requests')
-		.controller('requestsOvertimeController', requestsOvertimeController);
+	angular.module('wfm.requests').controller('requestsOvertimeController', requestsOvertimeController);
 
 	requestsOvertimeController.$inject = [
 		'$scope',
@@ -42,7 +40,8 @@
 		uiGridUtilitiesService,
 		requestsTabNames,
 		requestCommandParamsHolder,
-		uiGridFixService) {
+		uiGridFixService
+	) {
 		var vm = this;
 
 		vm.requests = [];
@@ -58,8 +57,7 @@
 		vm.paging = {};
 		vm.initialized = false;
 
-		var onInitCallBack = undefined,
-			columnsWithFilterEnabled = ['Subject', 'Message', 'Type', 'Status'];
+		var onInitCallBack = undefined;
 
 		vm.setDefaultStatuses = function() {
 			if (vm.defaultStatusesLoaded) return;
@@ -71,7 +69,9 @@
 		vm.setSelectedTypes = function() {
 			if (!vm.filters || vm.filters.length == 0) return;
 
-			var typeElement = vm.filters.filter(function(f) { return Object.keys(f)[0] == 'Type';})[0];
+			var typeElement = vm.filters.filter(function(f) {
+				return Object.keys(f)[0] == 'Type';
+			})[0];
 			if (!typeElement) return;
 
 			requestFilterSvc.setFilter('Type', typeElement.Type, requestsTabNames.overtime);
@@ -94,7 +94,7 @@
 			vm.filters = requestFilterSvc.filters[requestsTabNames.overtime];
 		};
 
-		vm.statusFilterClose = function () {
+		vm.statusFilterClose = function() {
 			setFilters(vm.selectedRequestStatuses, 'Status');
 		};
 
@@ -116,66 +116,64 @@
 				filters: vm.filters
 			};
 
-
 			getRequests(requestsFilter, vm.sortingOrders, vm.paging);
 		};
 
-		vm.clearAllFilters = function () {
-			angular.forEach(vm.gridApi.grid.columns,
-				function (column) {
-					column.filters[0].term = undefined;
-				});
+		vm.clearAllFilters = function() {
+			angular.forEach(vm.gridApi.grid.columns, function(column) {
+				column.filters[0].term = undefined;
+			});
 
-			angular.forEach(vm.overtimeTypes,
-				function (overtime) {
-					overtime.Selected = false;
-				});
+			angular.forEach(vm.overtimeTypes, function(overtime) {
+				overtime.Selected = false;
+			});
 			vm.selectedTypes = [];
 
-			angular.forEach(vm.allRequestStatuses,
-				function (status) {
-					status.Selected = false;
-				});
+			angular.forEach(vm.allRequestStatuses, function(status) {
+				status.Selected = false;
+			});
 			vm.selectedRequestStatuses = [];
 
 			requestFilterSvc.resetFilter(requestsTabNames.overtime);
 			vm.filters = requestFilterSvc.filters[requestsTabNames.overtime];
 			vm.subjectFilter = undefined;
 			vm.messageFilter = undefined;
-		}; 
+		};
 
-		vm.init = function () {
+		vm.init = function() {
 			vm.defaultStatusesLoaded = false;
 			vm.userTimeZone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
 
-			var sortingOrder = requestsDefinitions.translateSingleSortingOrder(requestGridStateService.getOvertimeSorting());
+			var sortingOrder = requestsDefinitions.translateSingleSortingOrder(
+				requestGridStateService.getOvertimeSorting()
+			);
 
-			if(sortingOrder)
-				vm.sortingOrders.push(sortingOrder);
+			if (sortingOrder) vm.sortingOrders.push(sortingOrder);
 
 			vm.gridOptions = getGridOptions();
 			vm.allRequestStatuses = requestsDataService.getOvertimeRequestsStatuses();
 
 			var params = $stateParams.getParams && $stateParams.getParams();
-			if (!params)
-				return;
+			if (!params) return;
 
 			vm.filterEnabled = params.filterEnabled;
 			vm.isUsingRequestSubmitterTimeZone = params.isUsingRequestSubmitterTimeZone;
 			onInitCallBack = params.onInitCallBack;
 
-			if(requestFilterSvc.filters[requestsTabNames.overtime]){
+			if (requestFilterSvc.filters[requestsTabNames.overtime]) {
 				vm.filters = requestFilterSvc.filters[requestsTabNames.overtime];
 
-				var subjectFilter = vm.filters.filter(function(f){return Object.keys(f)[0] == 'Subject';})[0];
-				var messageFilter = vm.filters.filter(function(f){return Object.keys(f)[0] == 'Message';})[0];
+				var subjectFilter = vm.filters.filter(function(f) {
+					return Object.keys(f)[0] == 'Subject';
+				})[0];
+				var messageFilter = vm.filters.filter(function(f) {
+					return Object.keys(f)[0] == 'Message';
+				})[0];
 
-				if(subjectFilter)
-					vm.subjectFilter = subjectFilter['Subject'];
-				if(messageFilter)
-					vm.messageFilter = messageFilter['Message'];
-			} else{
-				vm.filters = [{ 'Status': '0' }];
+				if (subjectFilter) vm.subjectFilter = subjectFilter['Subject'];
+				if (messageFilter) vm.messageFilter = messageFilter['Message'];
+			} else {
+				vm.filters = [{ Status: '0' }];
 			}
 
 			getOvertimeTypes();
@@ -193,7 +191,7 @@
 			vm.initialized && vm.reload(data);
 		});
 
-		$scope.$on('reload.requests.without.selection', function () {
+		$scope.$on('reload.requests.without.selection', function() {
 			clearSelection();
 			vm.initialized && vm.reload();
 		});
@@ -202,11 +200,7 @@
 			vm.filterEnabled = data;
 			vm.gridOptions.enableFiltering = vm.filterEnabled;
 			vm.gridOptions.useExternalFiltering = vm.filterEnabled;
-			angular.forEach(vm.gridOptions.columnDefs, function(col) {
-				col.enableFiltering = vm.filterEnabled && columnsWithFilterEnabled.indexOf(col.displayName) > -1;
-			});
-			if (vm.gridApi && vm.gridApi.core)
-				vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
+			if (vm.gridApi && vm.gridApi.core) vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
 		});
 
 		$scope.$on('requests.isUsingRequestSubmitterTimeZone.changed', function(event, data) {
@@ -216,30 +210,31 @@
 
 		function setFilters(filtersList, displayName) {
 			var filters = '';
-			angular.forEach(filtersList,
-				function (filter) {
-					filters += filter.Id + ' ';
-				});
+			angular.forEach(filtersList, function(filter) {
+				filters += filter.Id + ' ';
+			});
 			requestFilterSvc.setFilter(displayName, filters.trim(), requestsTabNames.overtime);
 			vm.filters = requestFilterSvc.filters[requestsTabNames.overtime];
 		}
 
 		function setupWatch() {
-			$scope.$watch(function() {
-					return{
+			$scope.$watch(
+				function() {
+					return {
 						period: $stateParams.getParams().getPeriod(),
 						filters: vm.filters,
 						sortOrder: vm.sortingOrders
 					};
 				},
-				function (newVal) {
-					if (!newVal || !vm.initialized)
-						return;
+				function(newVal) {
+					if (!newVal || !vm.initialized) return;
 					if (validateDateParameters(newVal.period.startDate, newVal.period.endDate)) {
 						vm.period = newVal.period;
 						vm.reload($stateParams.getParams());
 					}
-				}, true);
+				},
+				true
+			);
 		}
 
 		function getOvertimeTypes() {
@@ -256,7 +251,7 @@
 		function initialiseGridStateHandling() {
 			vm.shiftTradeView = false;
 
-			$timeout(function () {
+			$timeout(function() {
 				requestGridStateService.restoreState(vm, requestsDefinitions.REQUEST_TYPES.OVERTIME);
 			}, 0);
 
@@ -268,7 +263,11 @@
 
 		function validateDateParameters(startDate, endDate) {
 			if (endDate === null || startDate === null) return false;
-			return !(moment(endDate).isBefore(startDate, 'day')) && moment(startDate).year() > 1969 && moment(endDate).year() > 1969;
+			return (
+				!moment(endDate).isBefore(startDate, 'day') &&
+				moment(startDate).year() > 1969 &&
+				moment(endDate).year() > 1969
+			);
 		}
 
 		function getGridOptions() {
@@ -289,7 +288,8 @@
 				onRegisterApi: function(gridApi) {
 					vm.gridApi = gridApi;
 					gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
-						vm.sortingOrders = sortColumns.map(requestsDefinitions.translateSingleSortingOrder)
+						vm.sortingOrders = sortColumns
+							.map(requestsDefinitions.translateSingleSortingOrder)
 							.filter(function(x) {
 								return x !== null;
 							});
@@ -307,18 +307,20 @@
 						}
 
 						filterHandlingTimeout = $timeout(function() {
-								angular.forEach(grid.columns,
-									function(column) {
-										var term = column.filters[0].term;
-										if (angular.isDefined(term)) {
-											requestFilterSvc.setFilter(column.colDef.displayName, term.trim(), requestsTabNames.overtime);
-										}
-									});
-								vm.filters = requestFilterSvc.filters[requestsTabNames.overtime];
-							},
-							500);
+							angular.forEach(grid.columns, function(column) {
+								var term = column.filters[0].term;
+								if (angular.isDefined(term)) {
+									requestFilterSvc.setFilter(
+										column.colDef.displayName,
+										term.trim(),
+										requestsTabNames.overtime
+									);
+								}
+							});
+							vm.filters = requestFilterSvc.filters[requestsTabNames.overtime];
+						}, 500);
 					});
-					$timeout(function () {
+					$timeout(function() {
 						uiGridFixService.fixColumneMenuToggling();
 					}, 500);
 				}
@@ -327,31 +329,41 @@
 			return options;
 		}
 
-		function applyGridColumns(){
+		function applyGridColumns() {
 			vm.gridOptions.columnDefs = overtimeGridConfigurationService.columnDefinitions();
-			angular.forEach(vm.gridOptions.columnDefs, function (col) {
-				col.enableFiltering = vm.filterEnabled && columnsWithFilterEnabled.indexOf(col.displayName) > -1;
-			});
 		}
 
 		function onSelectionChanged() {
-			var visibleRequestsIds = vm.gridOptions.data.map(function(row) { return row.Id; });
-			var visibleSelectedRequestsIds = vm.gridApi.selection.getSelectedRows().map(function (row) { return row.Id; });
-			var messages = vm.gridApi.selection.getSelectedRows().map(function (row) { return row.Message; });
-			uiGridUtilitiesService.setOvertimeSelectedRequestIds(visibleSelectedRequestsIds, visibleRequestsIds, messages);
-			vm.gridApi.grid.selection.selectAll = vm.requests && (vm.requests.length === visibleSelectedRequestsIds.length) && vm.requests.length > 0;
+			var visibleRequestsIds = vm.gridOptions.data.map(function(row) {
+				return row.Id;
+			});
+			var visibleSelectedRequestsIds = vm.gridApi.selection.getSelectedRows().map(function(row) {
+				return row.Id;
+			});
+			var messages = vm.gridApi.selection.getSelectedRows().map(function(row) {
+				return row.Message;
+			});
+			uiGridUtilitiesService.setOvertimeSelectedRequestIds(
+				visibleSelectedRequestsIds,
+				visibleRequestsIds,
+				messages
+			);
+			vm.gridApi.grid.selection.selectAll =
+				vm.requests && vm.requests.length === visibleSelectedRequestsIds.length && vm.requests.length > 0;
 		}
 
 		function getRequests(requestsFilter, sortingOrders, paging) {
 			if (requestsFilter.selectedGroupIds.length === 0) {
 				getRequestsCallback({
 					data: {
-						Requests:[]
+						Requests: []
 					}
 				});
 			} else {
 				vm.isLoading = true;
-				requestsDataService.getOvertimeRequestsPromise(requestsFilter, sortingOrders, paging).then(getRequestsCallback);
+				requestsDataService
+					.getOvertimeRequestsPromise(requestsFilter, sortingOrders, paging)
+					.then(getRequestsCallback);
 			}
 		}
 
@@ -370,11 +382,10 @@
 			}
 			onInitCallBack && onInitCallBack(requests.data.TotalCount);
 
-			if (vm.gridApi)
-				vm.gridApi.grid.selection.selectAll = false;
+			if (vm.gridApi) vm.gridApi.grid.selection.selectAll = false;
 
 			vm.isLoading = false;
-			$timeout(function () {
+			$timeout(function() {
 				reselectRequests();
 			}, 0);
 		}
@@ -385,7 +396,7 @@
 			var rows = getVisibleSelectedRequestsRows();
 
 			vm.gridApi.grid.modifyRows(vm.gridOptions.data);
-			angular.forEach(rows, function (row) {
+			angular.forEach(rows, function(row) {
 				vm.gridApi.selection.selectRow(row);
 			});
 
@@ -397,15 +408,19 @@
 			if (!vm.gridOptions.data) return [];
 
 			var allSelectedRequestsIds = requestCommandParamsHolder.getOvertimeSelectedRequestIds();
-			if(!allSelectedRequestsIds) return [];
+			if (!allSelectedRequestsIds) return [];
 
-			return vm.gridOptions.data.filter(function (row) {
+			return vm.gridOptions.data.filter(function(row) {
 				return allSelectedRequestsIds.indexOf(row.Id) > -1;
 			});
 		}
 
 		function prepareComputedColumns(requests) {
-			uiGridUtilitiesService.prepareComputedColumns(requests, vm.userTimeZone, vm.isUsingRequestSubmitterTimeZone);
+			uiGridUtilitiesService.prepareComputedColumns(
+				requests,
+				vm.userTimeZone,
+				vm.isUsingRequestSubmitterTimeZone
+			);
 
 			vm.gridOptions.enableFiltering = vm.filterEnabled;
 			vm.gridOptions.useExternalFiltering = vm.filterEnabled;

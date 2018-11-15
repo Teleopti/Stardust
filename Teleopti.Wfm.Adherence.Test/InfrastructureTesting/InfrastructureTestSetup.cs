@@ -32,7 +32,29 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 		internal static IDataSource DataSource;
 		private static int createdDatabaseHash = 0;
 
-		public static void Before()
+		public static IPerson Before()
+		{
+			IPerson person;
+
+			ensureDatabase();
+
+			createBusinessUnitAndPerson(out person);
+			Login(person);
+			using (var unitOfWork = DataSource.Application.CreateAndOpenUnitOfWork())
+			{
+				saveBusinessUnitAndPerson(person, unitOfWork);
+				unitOfWork.PersistAll();
+			}
+
+			return person;
+		}
+
+		public static void After()
+		{
+			Logout();
+		}
+
+		private static void ensureDatabase()
 		{
 			if (createdDatabaseHash != 0)
 			{
@@ -62,30 +84,6 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 			return someHash;
 		}
 
-		public static void After()
-		{
-		}
-
-		public static void BeforeWithLogon() => BeforeWithLogon(out _);
-
-		public static void BeforeWithLogon(out IPerson person)
-		{
-			Before();
-
-			createBusinessUnitAndPerson(out person);
-			Login(person);
-			using (var unitOfWork = DataSource.Application.CreateAndOpenUnitOfWork())
-			{
-				saveBusinessUnitAndPerson(person, unitOfWork);
-				unitOfWork.PersistAll();
-			}
-		}
-
-		public static void AfterWithLogon()
-		{
-			Logout();
-			After();
-		}
 
 		private static void createBusinessUnitAndPerson(out IPerson person)
 		{

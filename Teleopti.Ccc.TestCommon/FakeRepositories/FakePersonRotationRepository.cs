@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
@@ -14,6 +15,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void Add(IPersonRotation root)
 		{
 			_storage.Add(root);
+		}
+		
+		public void Has(IPersonRotation personRotation)
+		{
+			Add(personRotation.WithId());
 		}
 
 		public void Remove(IPersonRotation root)

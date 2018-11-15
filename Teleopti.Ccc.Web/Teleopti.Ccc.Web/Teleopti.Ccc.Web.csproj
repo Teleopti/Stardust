@@ -57,9 +57,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="antlr.runtime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\packages\Ical.Net.3.0.15\lib\netstandard1.3\antlr.runtime.dll</HintPath>
-    </Reference>
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f">
       <HintPath>..\..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
@@ -109,17 +106,14 @@
     <Reference Include="Hangfire.Autofac, Version=2.3.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Hangfire.Autofac.2.3.1\lib\net45\Hangfire.Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Hangfire.Core, Version=1.6.20.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Hangfire.Core.1.6.20\lib\net45\Hangfire.Core.dll</HintPath>
+    <Reference Include="Hangfire.Core, Version=1.6.21.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Hangfire.Core.1.6.21\lib\net45\Hangfire.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Hangfire.SqlServer, Version=1.6.20.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Hangfire.SqlServer.1.6.20\lib\net45\Hangfire.SqlServer.dll</HintPath>
+    <Reference Include="Hangfire.SqlServer, Version=1.6.21.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Hangfire.SqlServer.1.6.21\lib\net45\Hangfire.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="Ical.Net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\packages\Ical.Net.3.0.15\lib\netstandard1.3\Ical.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="Ical.Net.Collections, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\packages\Ical.Net.3.0.15\lib\netstandard1.3\Ical.Net.Collections.dll</HintPath>
+    <Reference Include="Ical.Net, Version=4.1.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Ical.Net.4.1.9\lib\net46\Ical.Net.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -165,20 +159,20 @@
       <HintPath>..\..\packages\Microsoft.ApplicationInsights.Log4NetAppender.2.2.0\lib\net45\Microsoft.ApplicationInsights.Log4NetAppender.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.Client, Version=2.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Client.2.2.2\lib\net45\Microsoft.AspNet.SignalR.Client.dll</HintPath>
+    <Reference Include="Microsoft.AspNet.SignalR.Client, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Client.2.3.0\lib\net45\Microsoft.AspNet.SignalR.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.2.2.2\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.2.3.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.Redis, Version=2.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Redis.2.2.2\lib\net45\Microsoft.AspNet.SignalR.Redis.dll</HintPath>
+    <Reference Include="Microsoft.AspNet.SignalR.Redis, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Redis.2.3.0\lib\net45\Microsoft.AspNet.SignalR.Redis.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.ServiceBus3, Version=2.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.ServiceBus3.2.2.2\lib\net45\Microsoft.AspNet.SignalR.ServiceBus3.dll</HintPath>
+    <Reference Include="Microsoft.AspNet.SignalR.ServiceBus3, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.ServiceBus3.2.3.0\lib\net45\Microsoft.AspNet.SignalR.ServiceBus3.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.SqlServer, Version=2.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.SqlServer.2.2.2\lib\net45\Microsoft.AspNet.SignalR.SqlServer.dll</HintPath>
+    <Reference Include="Microsoft.AspNet.SignalR.SqlServer, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.SqlServer.2.3.0\lib\net45\Microsoft.AspNet.SignalR.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.TelemetryCorrelation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.0\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll</HintPath>
@@ -260,17 +254,17 @@
     <Reference Include="NodaTime, Version=2.2.2.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NodaTime.2.2.2\lib\net45\NodaTime.dll</HintPath>
     </Reference>
-    <Reference Include="NPOI, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NPOI.2.3.0\lib\net40\NPOI.dll</HintPath>
+    <Reference Include="NPOI, Version=2.4.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NPOI.2.4.0\lib\net40\NPOI.dll</HintPath>
     </Reference>
-    <Reference Include="NPOI.OOXML, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NPOI.2.3.0\lib\net40\NPOI.OOXML.dll</HintPath>
+    <Reference Include="NPOI.OOXML, Version=2.4.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NPOI.2.4.0\lib\net40\NPOI.OOXML.dll</HintPath>
     </Reference>
-    <Reference Include="NPOI.OpenXml4Net, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NPOI.2.3.0\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.4.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NPOI.2.4.0\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
     </Reference>
-    <Reference Include="NPOI.OpenXmlFormats, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NPOI.2.3.0\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.4.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NPOI.2.4.0\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -306,11 +300,17 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Reflection, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Reflection.4.3.0\lib\net462\System.Reflection.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Reflection.TypeExtensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <HintPath>..\..\packages\System.Reflection.TypeExtensions.4.3.0\lib\net46\System.Reflection.TypeExtensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.Runtime.Serialization.Primitives, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Runtime.Serialization.Primitives.4.3.0\lib\net46\System.Runtime.Serialization.Primitives.dll</HintPath>
     </Reference>
@@ -396,14 +396,16 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Areas\Anywhere\Controllers\LandingPageController.cs" />
     <Compile Include="Areas\Global\ChatConfigurationController.cs" />
     <Compile Include="Areas\Global\TenantCredential.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\CustomerDbConnector.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormExtensions.cs" />
     <Compile Include="Areas\Reports\Controllers\AuditTrailController.cs" />
     <Compile Include="Areas\Search\Controllers\PersonSearchController.cs" />
     <Compile Include="Areas\Search\Models\PersonSearchModels.cs" />
     <Compile Include="Areas\Insights\Models\EmbedReportConfig.cs" />
     <Compile Include="Areas\Insights\Models\ReportModel.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormExtensions.cs" />
     <Compile Include="Areas\Insights\Controllers\InsightsController.cs" />
     <Compile Include="Areas\Insights\InsightsAreaRegistration.cs" />
     <Compile Include="Areas\Requests\Core\ViewModel\RequestsPermissonsViewModel.cs" />
@@ -467,12 +469,16 @@
     <Compile Include="Areas\Intraday\IntradayMonitorStaffingController.cs" />
     <Compile Include="Areas\Intraday\IntradayMonitorStatisticsController.cs" />
     <Compile Include="Areas\Intraday\IntradayController.cs" />
-    <Compile Include="Areas\MultiTenancy\ExternalApplicationAccessController.cs" />
-    <Compile Include="Areas\MultiTenancy\ExternalApplicationModel.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\IPasswordManager.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\PasswordManager.cs" />
+    <Compile Include="Areas\MultiTenancy\Controllers\ExternalApplicationAccessController.cs" />
+    <Compile Include="Areas\MultiTenancy\Model\ExternalApplicationModel.cs" />
     <Compile Include="Areas\MultiTenancy\Model\BaseResultModel.cs" />
+    <Compile Include="Areas\MultiTenancy\Model\RequestPasswordResetModel.cs" />
+    <Compile Include="Areas\MultiTenancy\Model\PasswordResetModel.cs" />
     <Compile Include="Areas\MultiTenancy\Model\PersonInfoGenericModel.cs" />
-    <Compile Include="Areas\MultiTenancy\NewExternalApplicationModel.cs" />
-    <Compile Include="Areas\MultiTenancy\NewExternalApplicationResponseModel.cs" />
+    <Compile Include="Areas\MultiTenancy\Model\NewExternalApplicationModel.cs" />
+    <Compile Include="Areas\MultiTenancy\Model\NewExternalApplicationResponseModel.cs" />
     <Compile Include="Areas\MyTime\Controllers\GrantBotApiController.cs" />
     <Compile Include="Areas\MyTime\Controllers\OvertimeRequestsController.cs" />
     <Compile Include="Areas\MyTime\Controllers\TeamScheduleController.cs" />
@@ -545,10 +551,8 @@
     <Compile Include="Areas\Search\Models\PeopleSearchModels.cs" />
     <Compile Include="Areas\SkillGroup\SkillGroupController.cs" />
     <Compile Include="Areas\Intraday\IntradaySkillController.cs" />
-    <Compile Include="Areas\MultiTenancy\ChangePasswordController.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\ChangePersonPassword.cs" />
+    <Compile Include="Areas\MultiTenancy\Controllers\PasswordController.cs" />
     <Compile Include="Areas\MultiTenancy\Core\CurrentTenantUser.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\IChangePersonPassword.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IdAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IIdAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LogLogonAttemptFake.cs" />
@@ -879,7 +883,7 @@
     <Compile Include="Areas\MultiTenancy\Core\LoginAttemptModelFactoryForWeb.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LogLogonAttempt.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IIdentityAuthentication.cs" />
-    <Compile Include="Areas\MultiTenancy\AuthenticateController.cs" />
+    <Compile Include="Areas\MultiTenancy\Controllers\AuthenticateController.cs" />
     <Compile Include="Areas\MultiTenancy\Core\ApplicationAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\Core\TenantAuthenticationResult.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IApplicationAuthentication.cs" />
@@ -1028,7 +1032,7 @@
     <Compile Include="Areas\MultiTenancy\Model\ApplicationLogonModel.cs" />
     <Compile Include="Areas\MultiTenancy\Model\IdentityLogonModel.cs" />
     <Compile Include="Areas\MultiTenancy\Model\PersistPersonInfoResult.cs" />
-    <Compile Include="Areas\MultiTenancy\PersonInfoController.cs" />
+    <Compile Include="Areas\MultiTenancy\Controllers\PersonInfoController.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\AbsenceController.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\TeamScheduleCommandController.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\TeamScheduleDataController.cs" />
@@ -1421,6 +1425,9 @@
       <Link>FeatureFlags\toggles.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Areas\MultiTenancy\Core\Templates\password_reset_email_template.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Areas\MyTime\Content\appdownload.html" />
     <Content Include="Areas\Anywhere\Views\Application\redirect.aspx" />
     <Content Include="Areas\MyTime\Content\Css\MobileApp.css" />
@@ -1487,6 +1494,8 @@
     <Content Include="Areas\SSO\Content\Css\newLogin.css" />
     <Content Include="Areas\SSO\Content\Css\main.min.css" />
     <Content Include="Areas\SSO\Content\Images\bg.png" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.ForgotPasswordViewModel.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.ForgotPasswordView.js" />
     <Content Include="Areas\Start\Content\Css\newLogin.css" />
     <Content Include="Areas\Start\Content\Css\main.min.css" />
     <Content Include="Areas\Start\Content\Images\bg.png" />
@@ -1501,8 +1510,6 @@
     <Content Include="Content\jquery\jquery-1.12.4.js" />
     <Content Include="Content\jquery\jquery-1.12.4.min.js" />
     <Content Include="Content\moment-datepicker\moment-datepicker-ext.js" />
-    <Content Include="Content\signalr\jquery.signalR-2.2.2.js" />
-    <Content Include="Content\signalr\jquery.signalR-2.2.2.min.js" />
     <Content Include="Content\jasny-bootstrap\config.json" />
     <Content Include="Areas\MyTime\Views\StudentAvailability\NoSchedulePeriodPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\StudentAvailability\StudentAvailabilityPartial.cshtml" />
@@ -1515,6 +1522,8 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Content\signalr\jquery.signalR-2.3.0.js" />
+    <Content Include="Content\signalr\jquery.signalR-2.3.0.min.js" />
     <Content Include="WFM\app\forecasting\component\history.chart.component.js" />
     <Content Include="WFM\app\forecasting\html\history.html" />
     <Content Include="WFM\app\forecasting\controller\history.controller.js" />
@@ -1556,8 +1565,6 @@
     <Content Include="WFM\app\gamification\html\measureConfigForm2.tpl.html" />
     <Content Include="WFM\app\gamification\html\measureConfigHeader.tpl.html" />
     <Content Include="WFM\app\gamification\_modules.js" />
-    <Content Include="WFM\app\global\applicationInsights\appInsights.controller.js" />
-    <Content Include="WFM\app\global\applicationInsights\_modules.js" />
     <Content Include="WFM\app\global\shortcuts\shortcuts.tab.service.js" />
     <Content Include="WFM\app\global\shortcuts\_modules.js" />
     <Content Include="WFM\app\global\skill-group\skill-group-manager.controller.js" />
@@ -1591,10 +1598,10 @@
     <Content Include="WFM\app\forecasting\html\modify.html" />
     <Content Include="WFM\app\forecasting\service\forecast.backend.fake.js" />
     <Content Include="WFM\app\forecasting\controller\controller.js" />
-    <Content Include="WFM\app\forecasting\spec\controller.spec.js" />
+    <Content Include="WFM\app\forecasting\controller\controller.spec.js" />
     <Content Include="WFM\app\forecasting\html\forecast.html" />
     <Content Include="WFM\app\forecasting\controller\modify.controller.js" />
-    <Content Include="WFM\app\forecasting\spec\modify.controller.spec.js" />
+    <Content Include="WFM\app\forecasting\controller\modify.controller.spec.js" />
     <Content Include="WFM\app\global\areas\menu-component.html" />
     <Content Include="WFM\app\global\areas\menu.component.js" />
     <Content Include="WFM\app\global\current-user\authentication-requests.service.js" />
@@ -1653,11 +1660,14 @@
     <Content Include="WFM\app\requests\html\requests-budget-allowance.tpl.html" />
     <Content Include="WFM\app\requests\html\requests-footer.tpl.html" />
     <Content Include="WFM\app\requests\html\requests-absence-and-text.html" />
+    <Content Include="WFM\app\requests\html\requests-absence-person-account-overview.html" />
     <Content Include="WFM\app\requests\html\requests-absence-and-text-header.html" />
     <Content Include="WFM\app\requests\html\requests-shift-trade-header.html" />
     <Content Include="WFM\app\requests\html\requests.html" />
+    <Content Include="WFM\app\requests\html\requests-schedule-table.html" />
     <Content Include="WFM\app\requests\html\requests-shift-trade.html" />
     <Content Include="WFM\app\requests\html\requests-overtime.html" />
+    <Content Include="WFM\app\requests\html\shift-trade-day-template.html" />
     <Content Include="WFM\app\requests\requests.controller.spec.js" />
     <Content Include="WFM\app\requests\requests.controller.shiftTrade.spec.js" />
     <Content Include="WFM\app\requests\requests.directive.shiftDetail.spec.js" />
@@ -2007,7 +2017,7 @@
     <Content Include="WFM\app\app_desktop_client.js" />
     <Content Include="WFM\app\forecasting\routes.js" />
     <Content Include="WFM\app\forecasting\html\skillCreate.html" />
-    <Content Include="WFM\app\forecasting\spec\skill.create.controller.spec.js" />
+    <Content Include="WFM\app\forecasting\controller\skill.create.controller.spec.js" />
     <Content Include="WFM\app\global\areas\areas.controller.spec.js" />
     <Content Include="WFM\app\global\current-user\currentuserinfo.service.spec.js" />
     <Content Include="WFM\app\global\exception-handling\exceptionhandler.js" />
@@ -2063,9 +2073,6 @@
     <Content Include="WFM\app\requests\requests.service.definitions.spec.js" />
     <Content Include="WFM\app\requests\requests.directive.scheduleTable.js" />
     <Content Include="WFM\app\requests\requests.routes.js" />
-    <Content Include="WFM\app\requests\templates\requests.template.absencePersonAccountOverview.js" />
-    <Content Include="WFM\app\requests\templates\requests.template.shiftTradeDay.js" />
-    <Content Include="WFM\app\requests\templates\requests.template.scheduleTableTemplate.js" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.routes.js" />
     <Content Include="WFM\app\global\http\http.service.js" />
     <Content Include="WFM\app\search\search.controller.spec.js" />

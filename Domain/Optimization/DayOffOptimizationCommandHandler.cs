@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 					Agents = agentIds,
 					AgentsInIsland = crossAgentsAndSkillsResult.Agents,
 					Skills = crossAgentsAndSkillsResult.Skills,
-					PlanningPeriodId = command.PlanningPeriodId,
 					CommandId = command.CommandId,
 					UserLocks = _gridLockManager.LockInfos()
 				});
@@ -73,7 +72,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 							Agents = agentsToOptimize.Select(x=>x.Id.Value),
 							AgentsInIsland = agentsInIsland.Select(x=>x.Id.Value),
 							Skills = island.SkillIds(),
-							PlanningPeriodId = command.PlanningPeriodId,
 							CommandId = command.CommandId,
 							UserLocks = _gridLockManager.LockInfos()
 						});	

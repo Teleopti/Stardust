@@ -11,18 +11,21 @@
 			columns = [
 				{
 					displayName: $translate.instant('StartTime'),
+					enableFiltering: false,
 					field: 'FormatedPeriodStartTime()',
 					cellClass: 'request-period-start-time',
 					headerCellClass: 'request-period-start-time-header'
 				},
 				{
 					displayName: $translate.instant('EndTime'),
+					enableFiltering: false,
 					field: 'FormatedPeriodEndTime()',
 					cellClass: 'request-period-end-time',
 					headerCellClass: 'request-period-end-time-header'
 				},
 				{
 					displayName: $translate.instant('TimeZone'),
+					enableFiltering: false,
 					field: 'TimeZone',
 					cellClass: 'request-time-zone',
 					headerCellClass: 'request-time-zone-header',
@@ -31,6 +34,7 @@
 				},
 				{
 					displayName: $translate.instant('Duration'),
+					enableFiltering: false,
 					field: 'GetDuration()',
 					cellClass: 'request-period-duration',
 					enableSorting: false,
@@ -39,18 +43,21 @@
 				},
 				{
 					displayName: $translate.instant('AgentName'),
+					enableFiltering: false,
 					field: 'AgentName',
 					cellClass: 'request-agent-name',
 					headerCellClass: 'request-agent-name-header'
 				},
 				{
 					displayName: $translate.instant('Team'),
+					enableFiltering: false,
 					field: 'Team',
 					cellClass: 'request-team',
 					headerCellClass: 'request-team-header'
 				},
 				{
 					displayName: $translate.instant('Seniority'),
+					enableFiltering: false,
 					field: 'Seniority',
 					cellClass: 'request-seniority',
 					headerCellClass: 'request-seniority-header',
@@ -62,6 +69,7 @@
 					cellClass: 'request-type',
 					headerCellClass: 'request-type-header',
 					enableSorting: false,
+					enableFiltering: true,
 					visible: true,
 					filterHeaderTemplate:
 						'<div class="ui-grid-filter-container" ng-repeat="colFilter in col.filters">' +
@@ -79,6 +87,7 @@
 					cellClass: 'request-subject',
 					cellTooltip: true,
 					headerCellClass: 'request-subject-header',
+					enableFiltering: true,
 					filter: {
 						disableCancelFilterButton: true,
 						placeholder: $translate.instant('FilterThreeDots')
@@ -97,6 +106,7 @@
 					headerCellClass: 'request-message-header',
 					visible: false,
 					cellTooltip: true,
+					enableFiltering: true,
 					filter: {
 						disableCancelFilterButton: true,
 						placeholder: $translate.instant('FilterThreeDots')
@@ -111,6 +121,7 @@
 				},
 				{
 					displayName: $translate.instant('DenyReason'),
+					enableFiltering: false,
 					field: 'DenyReason',
 					cellClass: 'request-deny-reason',
 					headerCellClass: 'request-deny-reason-header',
@@ -123,6 +134,7 @@
 					cellClass: 'request-status',
 					headerCellClass: 'request-status-header',
 					enableSorting: false,
+					enableFiltering: true,
 					filterHeaderTemplate:
 						'<div class="ui-grid-filter-container" ng-repeat="colFilter in col.filters">' +
 						'<md-select class="test-status-selector" ng-model-options="{trackBy: \'$value.Id\'}" md-on-close="grid.appScope.statusFilterClose()"' +
@@ -135,12 +147,14 @@
 				},
 				{
 					displayName: $translate.instant('CreatedOn'),
+					enableFiltering: false,
 					field: 'FormatedCreatedTime()',
 					cellClass: 'request-created-time',
 					headerCellClass: 'request-created-time-header'
 				},
 				{
 					displayName: $translate.instant('UpdatedOn'),
+					enableFiltering: false,
 					field: 'FormatedUpdatedTime()',
 					cellClass: 'request-updated-time',
 					visible: false,
@@ -155,6 +169,7 @@
 
 				var brokenRulesColumn = {
 					displayName: $translate.instant('BrokenRules'),
+					enableFiltering: false,
 					field: 'GetBrokenRules()',
 					cellTooltip: true,
 					visible: true,

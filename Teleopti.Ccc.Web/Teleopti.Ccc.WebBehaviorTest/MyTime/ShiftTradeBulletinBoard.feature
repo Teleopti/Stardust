@@ -520,7 +520,7 @@ Scenario: Should show my shift and other shifts filtered by site open hours in b
 
 @OnlyRunIfEnabled('MyTimeWeb_Request_CleanUpRequestHisotry_77776')
 Scenario: Should not see request list in bulletin board view
-	Given I am an agent
+	Given I have the role 'Full access to mytime'
 	And I have an existing text request
 	When I view Bulletin Board
 	Then I should not see any request in current view

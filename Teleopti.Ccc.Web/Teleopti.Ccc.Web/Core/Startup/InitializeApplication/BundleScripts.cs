@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/Scripts/jquery.hoverIntent.js",
 					"~/Content/Scripts/jquery.qtip.js",
 					"~/Content/Scripts/indexOf.js",
-					"~/Content/signalr/jquery.signalR-2.2.2.js",
+					"~/Content/signalr/jquery.signalR-2.3.0.js",
 					"~/Content/signalr/broker-hubs.js",
 					"~/Content/select2/select2.js",
 					"~/Content/bootstrap-timepicker/js/bootstrap-timepicker.js",
@@ -152,6 +152,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/hasher/hasher.js",
 					"~/Content/crossroads/crossroads.js")
 				.IncludeDirectory("~/Areas/SSO/Content/Scripts", "*.js");
+
 			BundleTable.Bundles.Add(cssBundle);
 			BundleTable.Bundles.Add(jsBundle);
 		}

@@ -57,7 +57,7 @@ Try
 	
 	log-info "We are on the following instance: '$env:RoleInstanceID'"
 	
-	if ($env:RoleInstanceID -eq "TeleoptiCCC_IN_0" -or $RoleInstanceID -eq "TeleoptiCCC_IN_1"){
+	if ($env:RoleInstanceID -eq "TeleoptiCCC_IN_0" -or $env:RoleInstanceID -eq "TeleoptiCCC_IN_1"){
 		
 		ReinstallService "TeleoptiEtlService" "E:\approot\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe"
 	}

@@ -170,6 +170,8 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Configuration\Infrastructure\DatabaseTest.cs" />
+    <Compile Include="Configuration\Infrastructure\RepositoryTest.cs" />
     <Compile Include="Configuration\Infrastructure\RtaMapRepositoryTest.cs" />
     <Compile Include="Configuration\Infrastructure\RtaRuleRepositoryTest.cs" />
     <Compile Include="Configuration\Infrastructure\RtaStateGroupRepositoryNotSignedInTest.cs" />
@@ -182,6 +184,7 @@
     <Compile Include="Configuration\Unit\RtaStateGroupTest.cs" />
     <Compile Include="Configuration\Unit\RtaStateHolderTest.cs" />
     <Compile Include="Configuration\Unit\RtaStateTest.cs" />
+    <Compile Include="Historical\Infrastructure\HistoricalOverviewViewModel\AdherenceTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreApprovedReadTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreBatchInsertTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreEventTypeIdTest.cs" />
@@ -233,14 +236,10 @@
     <Compile Include="Historical\Unit\ViewModels\HistoricalOverviewViewModelBuilder\TeamTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalOverviewViewModelBuilder\TimeZoneTest.cs" />
     <Compile Include="InfrastructureTesting\AnalyticsUnitOfWorkTestAttribute.cs" />
-    <Compile Include="InfrastructureTesting\DatabaseTest.cs" />
     <Compile Include="InfrastructureTesting\DatabaseTestAttribute.cs" />
     <Compile Include="InfrastructureTesting\InfrastructureTestSetup.cs" />
-    <Compile Include="InfrastructureTesting\PrincipalAndStateTestAttribute.cs" />
     <Compile Include="InfrastructureTesting\ReadModelUnitOfWorkTestAttribute.cs" />
-    <Compile Include="InfrastructureTesting\RepositoryTest.cs" />
     <Compile Include="InfrastructureTesting\UnitOfWorkTestAttribute.cs" />
-    <Compile Include="InfrastructureTesting\WithUnitOfWorkWithRecurringEvents.cs" />
     <Compile Include="Monitor\Infrastructure\AgentState\AgentStateReadModelForTest.cs" />
     <Compile Include="Monitor\Infrastructure\AgentState\AgentStateReadModelPersisterExtensions.cs" />
     <Compile Include="Monitor\Infrastructure\AgentState\AgentStateReadModelPersisterTest.cs" />
@@ -310,6 +309,7 @@
     <Compile Include="States\Infrastructure\Service\DataSourceReaderTest.cs" />
     <Compile Include="States\Infrastructure\Service\DeadlockTest.cs" />
     <Compile Include="States\Infrastructure\Service\EnqueueTest.cs" />
+    <Compile Include="States\Infrastructure\Service\QueueFloodTest.cs" />
     <Compile Include="States\Infrastructure\Service\QueueueueueeTest.cs" />
     <Compile Include="States\Infrastructure\Service\ScheduleCacheTest.cs" />
     <Compile Include="States\Infrastructure\Service\SnapshotTest.cs" />

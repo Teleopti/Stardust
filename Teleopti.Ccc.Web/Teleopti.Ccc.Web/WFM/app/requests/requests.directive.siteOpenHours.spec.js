@@ -1,13 +1,10 @@
 ﻿'use strict';
-describe('requestsSiteOpenHoursDirectiveTests', function () {
-	var $compile,
-		$rootScope;
+describe('requestsSiteOpenHoursDirectiveTests', function() {
+	var $compile, $rootScope;
 
-	var requestsNotificationService,
-		requestsDataService,
-		requestsPermissions;
+	var requestsNotificationService, requestsDataService, requestsPermissions;
 
-	beforeEach(function () {
+	beforeEach(function() {
 		module('wfm.templates');
 		module('wfm.requests');
 
@@ -15,31 +12,31 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 		requestsDataService = new FakeRequestsDataService();
 		requestsPermissions = new FakeRequestsPermissions();
 
-		module(function ($provide) {
-			$provide.service('requestsNotificationService', function () {
+		module(function($provide) {
+			$provide.service('requestsNotificationService', function() {
 				return requestsNotificationService;
 			});
-			$provide.service('requestsDataService', function () {
+			$provide.service('requestsDataService', function() {
 				return requestsDataService;
 			});
-			$provide.service('requestsPermissions', function () {
+			$provide.service('requestsPermissions', function() {
 				return requestsPermissions;
 			});
-			$provide.service('workingHoursPickerDirective', function () {
+			$provide.service('workingHoursPickerDirective', function() {
 				return null;
 			});
-			$provide.service('showWeekdaysFilter', function () {
+			$provide.service('showWeekdaysFilter', function() {
 				return null;
 			});
 		});
 	});
 
-	beforeEach(inject(function (_$rootScope_, _$compile_) {
+	beforeEach(inject(function(_$rootScope_, _$compile_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 	}));
 
-	it('should get open hours and open modal', function () {
+	it('should get open hours and open modal', function() {
 		var openHoursHandleResult = [{ Id: '1', OpenHours: [] }, { Id: '2', OpenHours: [] }];
 		requestsDataService.setOpenHoursHandleResult(openHoursHandleResult);
 
@@ -48,19 +45,22 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 		expect(test.targetScope.sites.length).toEqual(2);
 	});
 
-	it('should save open hours and close modal', function () {
+	it('should save open hours and close modal', function() {
 		var test = setUpTarget();
-		test.targetScope.sites = [{
-			Id: '1',
-			Name: 'BTS',
-			NumberOfAgents: 10,
-			OpenHours: [
+		test.targetScope.sites = [
 			{
-				EndTime: '',
-				StartTime: '',
-				WeekDaySelections: []
-			}]
-		}];
+				Id: '1',
+				Name: 'BTS',
+				NumberOfAgents: 10,
+				OpenHours: [
+					{
+						EndTime: '',
+						StartTime: '',
+						WeekDaySelections: []
+					}
+				]
+			}
+		];
 
 		expect(requestsDataService.getDataBeforeSend()).not.toBeDefined();
 		expect(test.targetScope.shouldShowSites).not.toBeDefined();
@@ -71,19 +71,22 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 		expect(test.targetScope.shouldShowSites).toBeFalsy();
 	});
 
-	it('should notify operation result', function () {
+	it('should notify operation result', function() {
 		var test = setUpTarget();
-		test.targetScope.sites = [{
-			Id: '1',
-			Name: 'BTS',
-			NumberOfAgents: 10,
-			OpenHours: [
+		test.targetScope.sites = [
 			{
-				EndTime: '',
-				StartTime: '',
-				WeekDaySelections: []
-			}]
-		}];
+				Id: '1',
+				Name: 'BTS',
+				NumberOfAgents: 10,
+				OpenHours: [
+					{
+						EndTime: '',
+						StartTime: '',
+						WeekDaySelections: []
+					}
+				]
+			}
+		];
 		var openHoursHandleResult = 4;
 		requestsDataService.setOpenHoursHandleResult(openHoursHandleResult);
 
@@ -92,50 +95,65 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 		expect(requestsNotificationService.getNotificationResult()).toEqual(openHoursHandleResult);
 	});
 
-	it('should format data before saving open hours', function () {
+	it('should format data before saving open hours', function() {
 		var test = setUpTarget();
-		var openHoursFormatResult = [{
-			OpenHours: [
+		var openHoursFormatResult = [
 			{
-				EndTime: '17:00:00',
-				StartTime: '08:00:00',
-				WeekDay: 1
-			}]
-		}];
-		test.targetScope.sites = [{
-			OpenHours: [
-			{
-				EndTime: '2016-08-09 17:00',
-				StartTime: '2016-08-09 08:00',
-				WeekDaySelections: [
-					{ Checked: true, WeekDay: 1 },
-					{ Checked: false, WeekDay: 2 },
-					{ Checked: false, WeekDay: 3 },
-					{ Checked: false, WeekDay: 4 },
-					{ Checked: false, WeekDay: 5 },
-					{ Checked: false, WeekDay: 6 },
-					{ Checked: false, WeekDay: 7 }
+				OpenHours: [
+					{
+						EndTime: '17:00:00',
+						StartTime: '08:00:00',
+						WeekDay: 1
+					}
 				]
-			}]
-		}];
+			}
+		];
+		test.targetScope.sites = [
+			{
+				OpenHours: [
+					{
+						EndTime: '2016-08-09 17:00',
+						StartTime: '2016-08-09 08:00',
+						WeekDaySelections: [
+							{ Checked: true, WeekDay: 1 },
+							{ Checked: false, WeekDay: 2 },
+							{ Checked: false, WeekDay: 3 },
+							{ Checked: false, WeekDay: 4 },
+							{ Checked: false, WeekDay: 5 },
+							{ Checked: false, WeekDay: 6 },
+							{ Checked: false, WeekDay: 7 }
+						]
+					}
+				]
+			}
+		];
 
 		test.targetScope.save();
 
-		expect(requestsDataService.getDataBeforeSend()[0].OpenHours.WeekDay).toEqual(openHoursFormatResult[0].OpenHours.WeekDay);
-		expect(requestsDataService.getDataBeforeSend()[0].OpenHours.EndTime).toEqual(openHoursFormatResult[0].OpenHours.EndTime);
-		expect(requestsDataService.getDataBeforeSend()[0].OpenHours.StartTime).toEqual(openHoursFormatResult[0].OpenHours.StartTime);
+		expect(requestsDataService.getDataBeforeSend()[0].OpenHours.WeekDay).toEqual(
+			openHoursFormatResult[0].OpenHours.WeekDay
+		);
+		expect(requestsDataService.getDataBeforeSend()[0].OpenHours.EndTime).toEqual(
+			openHoursFormatResult[0].OpenHours.EndTime
+		);
+		expect(requestsDataService.getDataBeforeSend()[0].OpenHours.StartTime).toEqual(
+			openHoursFormatResult[0].OpenHours.StartTime
+		);
 		expect(requestsDataService.getDataBeforeSend()[0].OpenHours.length).toEqual(7);
 	});
 
-	it('should deformat data after get open hours', function () {
-		var openHoursHandleResult = [{
-			OpenHours: [
+	it('should deformat data after get open hours', function() {
+		var openHoursHandleResult = [
 			{
-				EndTime: '17:00:00',
-				StartTime: '08:00:00',
-				WeekDay: 1
-			}]
-		}];
+				OpenHours: [
+					{
+						EndTime: '17:00:00',
+						StartTime: '08:00:00',
+						WeekDay: 1
+					}
+				]
+			}
+		];
 		requestsDataService.setOpenHoursHandleResult(openHoursHandleResult);
 
 		var test = setUpTarget();
@@ -147,51 +165,49 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 		expect(test.targetScope.sites[0].OpenHours.length).toEqual(1);
 	});
 
-	it('should deformat closed week day',
-		function() {
-			var openHoursHandleResult = [
-				{
-					OpenHours: [
-						{
-							EndTime: '17:00:00',
-							StartTime: '08:00:00',
-							WeekDay: 1,
-							IsClosed: true
-						}
-					]
-				}
-			];
-			requestsDataService.setOpenHoursHandleResult(openHoursHandleResult);
+	it('should deformat closed week day', function() {
+		var openHoursHandleResult = [
+			{
+				OpenHours: [
+					{
+						EndTime: '17:00:00',
+						StartTime: '08:00:00',
+						WeekDay: 1,
+						IsClosed: true
+					}
+				]
+			}
+		];
+		requestsDataService.setOpenHoursHandleResult(openHoursHandleResult);
 
-			var test = setUpTarget();
-			expect(test.targetScope.sites[0].OpenHours.length).toEqual(1);
-		});
+		var test = setUpTarget();
+		expect(test.targetScope.sites[0].OpenHours.length).toEqual(1);
+	});
 
-	it('should not deformat default time period',
-		function () {
-			var openHoursHandleResult = [
-				{
-					OpenHours: [
-						{
-							EndTime: '00:00:00',
-							StartTime: '00:00:00',
-							WeekDay: 1,
-							IsClosed: true
-						},
-						{
-							EndTime: '00:00:00',
-							StartTime: '23:00:00',
-							WeekDay: 2,
-							IsClosed: true
-						}
-					]
-				}
-			];
-			requestsDataService.setOpenHoursHandleResult(openHoursHandleResult);
+	it('should not deformat default time period', function() {
+		var openHoursHandleResult = [
+			{
+				OpenHours: [
+					{
+						EndTime: '00:00:00',
+						StartTime: '00:00:00',
+						WeekDay: 1,
+						IsClosed: true
+					},
+					{
+						EndTime: '00:00:00',
+						StartTime: '23:00:00',
+						WeekDay: 2,
+						IsClosed: true
+					}
+				]
+			}
+		];
+		requestsDataService.setOpenHoursHandleResult(openHoursHandleResult);
 
-			var test = setUpTarget();
-			expect(test.targetScope.sites[0].OpenHours.length).toEqual(1);
-		});
+		var test = setUpTarget();
+		expect(test.targetScope.sites[0].OpenHours.length).toEqual(1);
+	});
 
 	it('should notify nothing changed', function() {
 		var openHoursHandleResult = [{ id: 1, OpenHours: [] }];
@@ -207,41 +223,40 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 		var targetScope = $rootScope.$new();
 		var targetElem = $compile('<requests-site-open-hours></requests-site-open-hours>')(targetScope);
 		targetScope.$digest();
-		return { targetScope: targetElem.isolateScope().requestsSiteOpenHours, targetElem: targetElem }
+		return { targetScope: targetElem.isolateScope().requestsSiteOpenHours, targetElem: targetElem };
 	}
 
 	function FakeRequestsNotificationService() {
 		var _notificationResult;
-		this.notifySaveSiteOpenHoursSuccess = function (persistedSitesCount) {
+		this.notifySaveSiteOpenHoursSuccess = function(persistedSitesCount) {
 			_notificationResult = persistedSitesCount;
-		}
-		this.getNotificationResult = function () {
+		};
+		this.getNotificationResult = function() {
 			return _notificationResult;
-		}
-		this.notifyNothingChanged = function () {
+		};
+		this.notifyNothingChanged = function() {
 			_notificationResult = 'nothing changed';
-		}
+		};
 	}
 
 	function FakeRequestsDataService() {
-		var _handleResult,
-			_dataBeforeSend;
-		var successCallback = function (callback) {
+		var _handleResult, _dataBeforeSend;
+		var successCallback = function(callback) {
 			callback(_handleResult);
 		};
-		this.setOpenHoursHandleResult = function (handleResult) {
+		this.setOpenHoursHandleResult = function(handleResult) {
 			_handleResult = handleResult;
-		}
-		this.getSitesPromise = function () {
-			return { success: successCallback }
-		}
-		this.maintainOpenHoursPromise = function (sites) {
+		};
+		this.getSitesPromise = function() {
+			return { success: successCallback };
+		};
+		this.maintainOpenHoursPromise = function(sites) {
 			_dataBeforeSend = sites;
-			return { success: successCallback }
-		}
-		this.getDataBeforeSend = function () {
+			return { success: successCallback };
+		};
+		this.getDataBeforeSend = function() {
 			return _dataBeforeSend;
-		}
+		};
 	}
 
 	function FakeRequestsPermissions() {
@@ -249,10 +264,10 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 
 		this.set = function setPermissions(data) {
 			permissions = data;
-		}
+		};
 
 		this.all = function getPermissions() {
 			return permissions;
-		}
+		};
 	}
 });

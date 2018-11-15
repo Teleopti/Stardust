@@ -18,13 +18,15 @@
 					displayName: $translate.instant('StartTime'),
 					field: 'FormatedPeriodStartTime()',
 					cellClass: 'request-period-start-time',
-					headerCellClass: 'request-period-start-time-header'
+					headerCellClass: 'request-period-start-time-header',
+					enableFiltering: false
 				},
 				{
 					displayName: $translate.instant('EndTime'),
 					field: 'FormatedPeriodEndTime()',
 					cellClass: 'request-period-end-time',
-					headerCellClass: 'request-period-end-time-header'
+					headerCellClass: 'request-period-end-time-header',
+					enableFiltering: false
 				},
 				{
 					displayName: $translate.instant('TimeZone'),
@@ -32,13 +34,15 @@
 					cellClass: 'request-time-zone',
 					headerCellClass: 'request-time-zone-header',
 					visible: false,
-					enableSorting: false
+					enableSorting: false,
+					enableFiltering: false
 				},
 				{
 					displayName: $translate.instant('Duration'),
 					field: 'GetDuration()',
 					cellClass: 'request-period-duration',
 					enableSorting: false,
+					enableFiltering: false,
 					visible: false,
 					headerCellClass: 'request-period-duration-header'
 				},
@@ -46,20 +50,23 @@
 					displayName: $translate.instant('AgentName'),
 					field: 'AgentName',
 					cellClass: 'request-agent-name',
-					headerCellClass: 'request-agent-name-header'
+					headerCellClass: 'request-agent-name-header',
+					enableFiltering: false
 				},
 				{
 					displayName: $translate.instant('Team'),
 					field: 'Team',
 					cellClass: 'request-team',
-					headerCellClass: 'request-team-header'
+					headerCellClass: 'request-team-header',
+					enableFiltering: false
 				},
 				{
 					displayName: $translate.instant('Seniority'),
 					field: 'Seniority',
 					cellClass: 'request-seniority',
 					headerCellClass: 'request-seniority-header',
-					visible: false
+					visible: false,
+					enableFiltering: false
 				},
 				{
 					displayName: $translate.instant('Type'),
@@ -67,13 +74,14 @@
 					cellClass: 'request-type',
 					headerCellClass: 'request-type-header',
 					enableSorting: false,
+					enableFiltering: true,
 					visible: true,
 					filterHeaderTemplate:
 						'<div class="ui-grid-filter-container" ng-repeat="colFilter in col.filters">' +
 						'<md-select md-on-close="grid.appScope.typeFilterClose()" ng-model-options="{trackBy: \'$value.Id\'}"' +
 						'multiple ng-model="grid.appScope.selectedTypes" placeholder="{{\'FilterColon\' | translate}} {{\'Type\' | translate}}" aria-label="{{\'Type\' | translate}}">' +
 						'<md-option ng-repeat="item in grid.appScope.AllRequestTypes" ng-value="item">' +
-						'<span>{{ item.Name | translate}}</span>' +
+						'<span>{{item.Name}}</span>' +
 						'</md-option>' +
 						'</md-select>' +
 						'</div>'
@@ -84,6 +92,7 @@
 					cellClass: 'request-subject',
 					cellTooltip: true,
 					headerCellClass: 'request-subject-header',
+					enableFiltering: true,
 					filter: {
 						disableCancelFilterButton: true,
 						placeholder: $translate.instant('FilterThreeDots')
@@ -102,6 +111,7 @@
 					headerCellClass: 'request-message-header',
 					visible: false,
 					cellTooltip: true,
+					enableFiltering: true,
 					filter: {
 						disableCancelFilterButton: true,
 						placeholder: $translate.instant('FilterThreeDots')
@@ -120,6 +130,7 @@
 					cellClass: 'request-deny-reason',
 					headerCellClass: 'request-deny-reason-header',
 					visible: false,
+					enableFiltering: false,
 					cellTooltip: true
 				},
 				{
@@ -128,6 +139,7 @@
 					cellClass: 'request-status',
 					headerCellClass: 'request-status-header',
 					enableSorting: false,
+					enableFiltering: true,
 					filterHeaderTemplate:
 						'<div class="ui-grid-filter-container" ng-repeat="colFilter in col.filters">' +
 						'<md-select class="test-status-selector" ng-model-options="{trackBy: \'$value.Id\'}" md-on-close="grid.appScope.statusFilterClose()"' +
@@ -142,6 +154,7 @@
 					displayName: $translate.instant('CreatedOn'),
 					field: 'FormatedCreatedTime()',
 					cellClass: 'request-created-time',
+					enableFiltering: false,
 					headerCellClass: 'request-created-time-header'
 				},
 				{
@@ -149,6 +162,7 @@
 					field: 'FormatedUpdatedTime()',
 					cellClass: 'request-updated-time',
 					visible: false,
+					enableFiltering: false,
 					headerCellClass: 'request-updated-time-header'
 				}
 			];
@@ -156,7 +170,8 @@
 			var accountColumn = {
 				displayName: $translate.instant('Account'),
 				field: 'PersonAccountSummaryViewModel',
-				cellTemplate: 'requests-absence-person-account-overview.html',
+				enableFiltering: false,
+				cellTemplate: 'app/requests/html/requests-absence-person-account-overview.html',
 				enableSorting: false
 			};
 

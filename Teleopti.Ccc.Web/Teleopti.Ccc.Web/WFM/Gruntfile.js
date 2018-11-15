@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 
 	const watch = {
 		indexTemplates: {
-			files: ['src/index.tpl.html', 'src/index_desktop_client.tpl.html'],
+			files: ['index.tpl.html', 'index_desktop_client.tpl.html', 'src/reset_password.tpl.html'],
 			tasks: ['processhtml']
 		},
 		angularjsTemplates: {
@@ -77,7 +77,16 @@ module.exports = function(grunt) {
 		},
 		desktop: {
 			files: {
-				'index_desktop_client.html': ['src/index_desktop_client.tpl.html']
+				'index_desktop_client.html': ['index_desktop_client.tpl.html']
+			},
+			options: {
+				process: true,
+				environment: isDev ? 'dev' : 'prod'
+			}
+		},
+		reset_password: {
+			files: {
+				'reset_password.html': ['src/reset_password.tpl.html']
 			},
 			options: {
 				process: true,
@@ -135,7 +144,7 @@ module.exports = function(grunt) {
 			'node_modules/angular-dialog-service/dist/dialogs-default-translations.min.js',
 			'vendor/angular-bootstrap-persian-datepicker-master/persiandate.js',
 			'vendor/angular-bootstrap-persian-datepicker-master/persian-datepicker-tpls.js',
-			'../Content/signalr/jquery.signalR-2.2.2.js',
+			'../Content/signalr/jquery.signalR-2.3.0.js',
 			'../Content/signalr/broker-hubs.js',
 			'node_modules/lodash/lodash.min.js'
 		],

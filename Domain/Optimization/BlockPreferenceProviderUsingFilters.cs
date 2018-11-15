@@ -30,11 +30,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			
 			return mapToBlockPreference(planningGroupSettings);
 		}
-		
-		public IEnumerable<ExtraPreferences> ForAgents(IEnumerable<IPerson> persons, DateOnly dateOnly)
-		{
-			return persons.Select(person => ForAgent(person, dateOnly)).ToList();
-		}
 
 		private ExtraPreferences mapToBlockPreference(PlanningGroupSettings settings)
 		{

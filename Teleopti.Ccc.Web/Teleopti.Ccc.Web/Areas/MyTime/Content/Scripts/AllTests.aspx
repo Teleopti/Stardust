@@ -30,7 +30,7 @@
 	<script type="text/javascript" src="jquery.ui.calendarselectable.js"></script>
 	<script type="text/javascript" src="../../../../Content/jquery-plugin/jquery.touchSwipe.min.js"></script>
 	<script type="text/javascript" src="../../../../Content/signals/signals.min.js"></script>
-	<script type="text/javascript" src="../../../../Content/signalr/jquery.signalR-2.2.2.min.js"></script>
+	<script type="text/javascript" src="../../../../Content/signalr/jquery.signalR-2.3.0.min.js"></script>
 	<script type="text/javascript" src="../../../../Content/signalr/broker-hubs.js"></script>
 
 	<script type="text/javascript" src="../../../../Content/hasher/hasher.min.js"></script>

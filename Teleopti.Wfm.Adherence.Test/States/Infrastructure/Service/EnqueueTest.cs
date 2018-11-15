@@ -9,10 +9,10 @@ using Teleopti.Wfm.Adherence.Test.States.Unit.Service;
 namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service
 {
 	[TestFixture]
-	[PrincipalAndStateTest]
+	[DatabaseTest]
 	public class EnqueueTest
 	{
-		public IPrincipalAndStateContext Context;
+		public ILogOnOffContext Context;
 		public Rta Target;
 		public IStateQueueReader Queue;
 		public WithAnalyticsUnitOfWork UnitOfWork;

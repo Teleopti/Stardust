@@ -1,6 +1,7 @@
 ﻿
 Teleopti.SSO.Authentication.SignInViewModel = function (data) {
 	var self = this;
+	var toggleCache = {};
 
 	this.UserName = ko.observable('');
 	this.Password = ko.observable('');
@@ -12,6 +13,25 @@ Teleopti.SSO.Authentication.SignInViewModel = function (data) {
 		return errorMessage && errorMessage.length > 0;
 	});
 	this.Ajax = new Teleopti.SSO.Authentication.JQueryAjaxViewModel();
+
+	this.gotoForgotPassword = function() {
+		Teleopti.SSO.Authentication.Navigation.GotoForgotPassword();
+	};
+
+	this.isToggleEnabled = function (toggleName) {
+		var result = false;
+
+		$.ajax({
+			type: "GET",
+			url: "../../ToggleHandler/IsEnabled?toggle=" + toggleName,
+			async: false,
+			success: function (data) {
+				result = data.IsEnabled;
+			}
+		});
+
+		return result;
+	}
 
 	this.SignIn = function () {
 		var state = data.authenticationState;

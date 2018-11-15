@@ -1,7 +1,8 @@
-﻿(function () {
+﻿(function() {
 	'use strict';
 
-	angular.module('wfm.requests')
+	angular
+		.module('wfm.requests')
 		.controller('requestsCommandsPaneController', requestsCommandsPaneController)
 		.directive('requestsCommandsPane', requestsCommandsPaneDirective);
 
@@ -18,7 +19,8 @@
 		'REQUESTS_TAB_NAMES'
 	];
 
-	function requestsCommandsPaneController($state,
+	function requestsCommandsPaneController(
+		$state,
 		requestsDefinitions,
 		requestsDataService,
 		requestCommandParamsHolder,
@@ -27,7 +29,8 @@
 		NoticeService,
 		requestsCommandsConfigurationsSvc,
 		requestsPermissions,
-		REQUESTS_TAB_NAMES) {
+		REQUESTS_TAB_NAMES
+	) {
 		var vm = this;
 		vm.approveRequests = approveRequests;
 		vm.replyRequests = replyRequests;
@@ -84,14 +87,14 @@
 
 		function showResourceCalculations() {
 			vm.shouldShowResourceCalculations = !vm.shouldShowResourceCalculations;
-			requestsDataService.getLastCaluclatedDateTime().success(function (result) {
+			requestsDataService.getLastCaluclatedDateTime().success(function(result) {
 				result = moment(result).format('MMMM Do YYYY, h:mm:ss a');
 				vm.lastCaluclated = result;
 			});
 		}
 
 		function triggerResourceCalculate() {
-			requestsDataService.triggerResourceCalculate().success(function () {
+			requestsDataService.triggerResourceCalculate().success(function() {
 				NoticeService.success('Resource calculation successfully triggered ', 5000, true);
 				vm.shouldShowResourceCalculations = false;
 			});
@@ -114,13 +117,13 @@
 		}
 
 		function getSelectedRequestIds() {
-			if($state.current.name.indexOf(REQUESTS_TAB_NAMES.overtime) > -1){
+			if ($state.current.name.indexOf(REQUESTS_TAB_NAMES.overtime) > -1) {
 				return requestCommandParamsHolder.getOvertimeSelectedRequestIds();
 			}
 
-			return requestCommandParamsHolder ?
-				requestCommandParamsHolder.getSelectedRequestsIds(vm.isShiftTradeViewActive) :
-				null;
+			return requestCommandParamsHolder
+				? requestCommandParamsHolder.getSelectedRequestsIds(vm.isShiftTradeViewActive)
+				: null;
 		}
 
 		function doProcessWaitlistCommandHandling(waitlistPeriod) {
@@ -129,9 +132,12 @@
 			var commandInProgress = dataServicePromise(waitlistPeriod);
 
 			if (vm.afterCommandSuccess) {
-				commandInProgress.success(function (requestCommandHandlingResult) {
-					if (requestCommandHandlingResult.Success || (requestCommandHandlingResult.AffectedRequestIds &&
-						requestCommandHandlingResult.AffectedRequestIds.length > 0)) {
+				commandInProgress.success(function(requestCommandHandlingResult) {
+					if (
+						requestCommandHandlingResult.Success ||
+						(requestCommandHandlingResult.AffectedRequestIds &&
+							requestCommandHandlingResult.AffectedRequestIds.length > 0)
+					) {
 						vm.commandTrackId = requestCommandHandlingResult.CommandTrackId;
 						vm.afterCommandSuccess({
 							commandType: requestType,
@@ -140,7 +146,10 @@
 							waitlistPeriod: waitlistPeriod
 						});
 					}
-					if (requestCommandHandlingResult.ErrorMessages && requestCommandHandlingResult.ErrorMessages.length > 0) {
+					if (
+						requestCommandHandlingResult.ErrorMessages &&
+						requestCommandHandlingResult.ErrorMessages.length > 0
+					) {
 						handleErrorMessages(requestCommandHandlingResult.ErrorMessages);
 					}
 				});
@@ -152,7 +161,9 @@
 
 		function doStandardCommandHandlingWithParameters(requestType, dataServicePromise, parameters) {
 			if (vm.beforeCommand && !vm.beforeCommand()) return;
-			var commandInProgress = angular.isUndefined(parameters) ? dataServicePromise() : dataServicePromise(parameters);
+			var commandInProgress = angular.isUndefined(parameters)
+				? dataServicePromise()
+				: dataServicePromise(parameters);
 
 			if (vm.afterCommandSuccess) {
 				var requestCount = 0;
@@ -164,9 +175,12 @@
 					}
 				}
 
-				commandInProgress.success(function (requestCommandHandlingResult) {
-					if (requestCommandHandlingResult.Success || (requestCommandHandlingResult.AffectedRequestIds &&
-						requestCommandHandlingResult.AffectedRequestIds.length > 0)) {
+				commandInProgress.success(function(requestCommandHandlingResult) {
+					if (
+						requestCommandHandlingResult.Success ||
+						(requestCommandHandlingResult.AffectedRequestIds &&
+							requestCommandHandlingResult.AffectedRequestIds.length > 0)
+					) {
 						vm.commandTrackId = requestCommandHandlingResult.CommandTrackId;
 						vm.afterCommandSuccess({
 							commandType: requestType,
@@ -180,7 +194,10 @@
 							changedRequestsCount: requestCommandHandlingResult.ReplySuccessCount
 						});
 					}
-					if (requestCommandHandlingResult.ErrorMessages && requestCommandHandlingResult.ErrorMessages.length > 0) {
+					if (
+						requestCommandHandlingResult.ErrorMessages &&
+						requestCommandHandlingResult.ErrorMessages.length > 0
+					) {
 						handleErrorMessages(requestCommandHandlingResult.ErrorMessages);
 					}
 				});
@@ -196,20 +213,23 @@
 			var selectedRequestIdsAndMessage = {
 				ReplyMessage: replyMessage,
 				SelectedRequestIds: selectedRequestIds
-			}
+			};
 			doStandardCommandHandlingWithParameters(requestType, dataServicePromise, selectedRequestIdsAndMessage);
 		}
 
 		function subscribeSignalRMessage(domainType, eventHandler) {
-			signalRSVC.subscribe({
-				DomainType: domainType
-			}, function (message) {
-				if (message.TrackId === vm.commandTrackId) {
-					eventHandler({
-						message: message
-					});
+			signalRSVC.subscribe(
+				{
+					DomainType: domainType
+				},
+				function(message) {
+					if (message.TrackId === vm.commandTrackId) {
+						eventHandler({
+							message: message
+						});
+					}
 				}
-			});
+			);
 		}
 
 		function replyRequests(message) {
@@ -217,7 +237,11 @@
 		}
 
 		function approveRequests(replyMessage) {
-			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Approve, requestsDataService.approveRequestsPromise, replyMessage);
+			doStandardCommandHandling(
+				requestsDefinitions.REQUEST_COMMANDS.Approve,
+				requestsDataService.approveRequestsPromise,
+				replyMessage
+			);
 		}
 
 		function processWaitlistRequests() {
@@ -234,7 +258,7 @@
 		function getSelectedRulesFlag() {
 			var selectedRulesFlag = requestsDefinitions.REQUEST_VALIDATORS.None;
 
-			angular.forEach(vm.allBusinessRulesForApproving, function (rule) {
+			angular.forEach(vm.allBusinessRulesForApproving, function(rule) {
 				selectedRulesFlag += rule.Checked ? rule.Id : 0;
 			});
 
@@ -257,14 +281,21 @@
 				Validators: selectedRulesFlag
 			};
 
-			doStandardCommandHandlingWithParameters(requestsDefinitions.REQUEST_COMMANDS.ApproveBasedOnBusinessRules,
-				requestsDataService.approveWithValidatorsPromise, parameter);
+			doStandardCommandHandlingWithParameters(
+				requestsDefinitions.REQUEST_COMMANDS.ApproveBasedOnBusinessRules,
+				requestsDataService.approveWithValidatorsPromise,
+				parameter
+			);
 
 			vm.showApproveBasedOnRulesPanel = false;
 		}
 
 		function denyRequests(replyMessage) {
-			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Deny, requestsDataService.denyRequestsPromise, replyMessage);
+			doStandardCommandHandling(
+				requestsDefinitions.REQUEST_COMMANDS.Deny,
+				requestsDataService.denyRequestsPromise,
+				replyMessage
+			);
 		}
 
 		function disableCommands() {
@@ -279,7 +310,11 @@
 
 		function cancelRequests(replyMessage) {
 			vm.ShowCancelAbsenceConfirmationModal = false;
-			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Cancel, requestsDataService.cancelRequestsPromise, replyMessage);
+			doStandardCommandHandling(
+				requestsDefinitions.REQUEST_COMMANDS.Cancel,
+				requestsDataService.cancelRequestsPromise,
+				replyMessage
+			);
 		}
 
 		function toggleCancelConfirmationModal() {
@@ -301,10 +336,12 @@
 		}
 
 		function isApproveBasedOnBusinessRulesEnabled() {
-			return (toggleSvc.Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 ||
-				toggleSvc.Wfm_Requests_Approve_Based_On_Intraday_39868 ||
-				toggleSvc.Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274) &&
-				isCommandEnabledWithoutShiftTradeView('approveBasedOnBusinessRules');
+			return (
+				(toggleSvc.Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 ||
+					toggleSvc.Wfm_Requests_Approve_Based_On_Intraday_39868 ||
+					toggleSvc.Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274) &&
+				isCommandEnabledWithoutShiftTradeView('approveBasedOnBusinessRules')
+			);
 		}
 
 		function onCloseDialog() {

@@ -16,7 +16,7 @@ using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
 namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 {
-	[PrincipalAndStateTest]
+	[DatabaseTest]
 	public class RtaEventStoreUpgradeTest : IIsolateSystem
 	{
 		public IRtaEventStore Events;
@@ -24,7 +24,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 		public IRtaEventStoreUpgrader Target;
 		public WithUnitOfWork WithUnitOfWork;
 		public Database Database;
-		public IPrincipalAndStateContext Context;
+		public ILogOnOffContext Context;
 		public ICurrentDataSource DataSource;
 		public IDataSourceScope DataSourceScope;
 

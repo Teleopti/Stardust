@@ -7,6 +7,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
+using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
 
 namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 {

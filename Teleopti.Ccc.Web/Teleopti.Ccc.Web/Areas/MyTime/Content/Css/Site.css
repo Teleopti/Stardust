@@ -68,16 +68,16 @@
 	display: block;
 }
 
-.displayinline {
+.inline {
 	display: inline;
 }
 
-.displayinline-block {
+.inline-block {
 	display: inline-block;
 	vertical-align: top;
 }
 
-.ie7 .displayinline-block {
+.ie7 .inline-block {
 	zoom: 1;
 	display: inline;
 }
@@ -1476,9 +1476,11 @@ select.time-input {
 .select2-container .select2-choice .select2-arrow b::before {
 	content: '\e114';
 }
-
 .select2-container .select2-choice > .select2-chosen {
 	margin-right: 35px;
+}
+.select2-search {
+	padding: 4px;
 }
 .select2-search input {
 	border-color: rgba(0, 0, 0, 0.1);
@@ -1486,20 +1488,33 @@ select.time-input {
 	min-height: 24px;
 	height: 24px !important;
 }
-
 ul.select2-results {
 	-webkit-overflow-scrolling: touch;
+	margin: 0;
+	padding: 0;
+	max-height: 250px;
 }
-
+ul.select2-results
+	li.select2-result.select2-result-unselectable.select2-result-with-children
+	> div.select2-result-label {
+	background: rgba(200, 200, 200, 0.2);
+}
 ul.select2-results li.select2-result {
 	background: none;
 }
-ul.select2-results > li.select2-result:nth-child(odd) > div,
-ul.select2-results li ul li.select2-result:nth-child(odd) > div {
-	background: rgba(0, 0, 0, 0.1);
+ul.select2-results li.select2-no-results {
+	padding: 5px;
 }
-ul.select2-results li.select2-result.select2-highlighted > div,
-ul.select2-results li ul li.select2-result.select2-highlighted > div {
+ul.select2-results li.select2-result-selectable {
+	border-bottom: 1px solid rgba(200, 200, 200, 0.2);
+}
+.select2-results ul.select2-result-sub > li .select2-result-label {
+	padding: 8px 5px;
+	padding-left: 20px;
+	line-height: 1;
+}
+ul.select2-results li.select2-result.select2-highlighted,
+ul.select2-results li ul li.select2-result.select2-highlighted {
 	background: #5acdf9;
 }
 .select2-container .select2-choice,

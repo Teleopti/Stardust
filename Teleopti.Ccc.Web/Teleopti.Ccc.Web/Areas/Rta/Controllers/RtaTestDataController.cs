@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			var timer = new Stopwatch();
 			log.AppendLine("Starting Synch");
 			timer.Start();
-			_synchronizer.SynchronizeNow();
+			_synchronizer.Synchronize();
 			timer.Stop();
 			log.AppendLine($"Elapsed time: {timer.Elapsed}");
 

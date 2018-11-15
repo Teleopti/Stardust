@@ -94,12 +94,6 @@
 					<span></span>
 				</a>
 			</li>
-			<li class="new-teamschedule-toggle show-only-day-off-toggle" data-bind="tooltip: { title: '@Resources.ShowOnlyDayOff', html: true, trigger: 'hover', placement: 'bottom'}">
-				<a>
-					<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />
-					<label class="relative" for="show-only-day-off-switch">Day off switch</label>
-				</a>
-			</li>
 			<li class="new-teamschedule-filter-component relative">
 				<div data-bind="click: openTeamSelectorPanel"></div>
 				<select id="teams-and-groups-selector" data-bind="foreach: availableTeams, select2: {value: selectedTeam}">
@@ -305,15 +299,15 @@
 			</div>
 		</div>
 		<!-- ko if: isHostAMobile-->
-		<div class="new-teamschedule-toggle show-only-day-off-toggle">
-			<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />
-			<label class="relative" for="show-only-day-off-switch">Day off switch</label>
-			<span>@Resources.ShowOnlyDayOff</span>
-		</div>
 		<div class="new-teamschedule-toggle show-only-night-shift-toggle">
 			<input type="checkbox" id="show-only-night-shift-switch" data-bind="checked: showOnlyNightShift" />
 			<label class="relative" for="show-only-night-shift-switch">Night shift switch</label>
 			<span>@Resources.ShowOnlyNightShifts</span>
+		</div>
+		<div class="new-teamschedule-toggle show-only-day-off-toggle">
+			<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />
+			<label class="relative" for="show-only-day-off-switch">Day off switch</label>
+			<span>@Resources.ShowOnlyDaysOff</span>
 		</div>
 		<div class="empty-search-result">
 			<!-- ko if: emptySearchResult -->
@@ -327,15 +321,24 @@
 			<button class="btn btn-primary" data-bind="click: submitSearchForm">@Resources.Search</button>
 		</div>
 		<!--/ko-->
-		<!-- ko if: !isHostAMobile-->
-		<div class="new-teamschedule-submit-buttons clearfix">
-			<div class="new-teamschedule-toggle show-only-night-shift-toggle">
-				<input type="checkbox" id="show-only-night-shift-switch" data-bind="checked: showOnlyNightShift" />
-				<label class="relative" for="show-only-night-shift-switch">Night shift switch</label>
-				<span>@Resources.ShowOnlyNightShifts</span>
+		<!-- ko if: isHostADesktop || isHostAniPad -->
+		<div class="clearfix">
+			<div class="inline-block show-only-night-shift-container">
+				<div class="new-teamschedule-toggle show-only-night-shift-toggle">
+					<input type="checkbox" id="show-only-night-shift-switch" data-bind="checked: showOnlyNightShift" />
+					<label class="relative" for="show-only-night-shift-switch">Night shift switch</label>
+					<span>@Resources.ShowOnlyNightShifts</span>
+				</div>
+				<div class="new-teamschedule-toggle show-only-day-off-toggle">
+					<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />
+					<label class="relative" for="show-only-day-off-switch">Day off switch</label>
+					<span>@Resources.ShowOnlyDaysOff</span>
+				</div>
 			</div>
-			<button class="btn btn-primary pull-right" data-bind="click: submitSearchForm">@Resources.Search</button>
-			<button class="btn btn-default pull-right" data-bind="click: cancelClick">@Resources.Cancel</button>
+			<div class="new-teamschedule-submit-buttons pull-right">
+				<button class="btn btn-default" data-bind="click: cancelClick">@Resources.Cancel</button>
+				<button class="btn btn-primary" data-bind="click: submitSearchForm">@Resources.Search</button>
+			</div>
 		</div>
 		<!--/ko-->
 

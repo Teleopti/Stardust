@@ -70,6 +70,7 @@
 		//Bockemon
 		Wfm_PeopleWeb_PrepareForRelease_74903,
 		Wfm_Authentication_ChangePasswordMenu_76666,
+		Wfm_User_Password_Reset_74957,
 
 		WfmGlobalLayout_personalOptions_37114,
 
@@ -122,6 +123,7 @@
 		WFM_Remember_My_Selection_In_Intraday_47254,
 		WFM_Clear_Data_After_Leaving_Date_47768,
 		WFM_Request_View_Permissions_77731,
+		WFM_Request_Show_Feedback_Link_77733,
 
 		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889,
 		MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947,
@@ -142,7 +144,8 @@
 		Wfm_Stardust_EnableScaleout_77366,
 		Wfm_AuditTrail_StaffingAuditTrail_78125,
 		Wfm_AuditTrail_GenericAuditTrail_74938,
-		WFM_Connect_NewLandingPage_Remove_GDPR_78132
+		WFM_Connect_NewLandingPage_Remove_GDPR_78132,
+		WFM_Connect_NewLandingPage_WEB_78578
 		// ReSharper restore InconsistentNaming
 	}
 }

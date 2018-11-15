@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly ISettingsPermissionViewModelFactory _settingsPermissionViewModelFactory;
 		private readonly ISettingsPersisterAndProvider<CalendarLinkSettings> _calendarLinkSettingsPersisterAndProvider;
 		private readonly ICalendarLinkViewModelFactory _calendarLinkViewModelFactory;
-		private readonly IChangePersonPassword _changePersonPassword;
+		private readonly IPasswordManager _passwordManager;
 		private readonly ICurrentTenant _currentTenant;
 		private readonly ISettingsViewModelFactory _settingsViewModelFactory;
 		private readonly ISettingsPersisterAndProvider<NameFormatSettings> _nameFormatSettingsPersisterAndProvider;
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 										  ISettingsPersisterAndProvider<CalendarLinkSettings> calendarLinkSettingsPersisterAndProvider,
 											ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettingsPersisterAndProvider,
 											ICalendarLinkViewModelFactory calendarLinkViewModelFactory,
-											IChangePersonPassword changePersonPassword,
+											IPasswordManager passwordManager,
 											ICurrentTenant currentTenant)
 		{
 			_loggedOnUser = loggedOnUser;
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_calendarLinkSettingsPersisterAndProvider = calendarLinkSettingsPersisterAndProvider;
 			_nameFormatSettingsPersisterAndProvider = nameFormatSettingsPersisterAndProvider;
 			_calendarLinkViewModelFactory = calendarLinkViewModelFactory;
-			_changePersonPassword = changePersonPassword;
+			_passwordManager = passwordManager;
 			_currentTenant = currentTenant;
 		}
 
@@ -102,7 +101,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			var ret = new ChangePasswordResultInfo();
 			try
 			{
-				_changePersonPassword.Modify(loggedOnUser.Id.Value, model.OldPassword, model.NewPassword);
+				_passwordManager.Modify(loggedOnUser.Id.Value, model.OldPassword, model.NewPassword);
 				ret.IsSuccessful = true;
 				ret.IsAuthenticationSuccessful = true;
 

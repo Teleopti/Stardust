@@ -20,59 +20,67 @@
 //Styleguide 2.7
 //
 
+.wfm-time-range-picker {
+	display: flex;
+	align-items: center;
+}
+
 .wfm-time-range-picker-wrap {
-  position: relative;
+	position: relative;
 
-  button, input {
-    font-size: $standard-font-size;
-  }
+	button,
+	input {
+		font-size: $standard-font-size;
+	}
 
-  timepicker-wrap > div{
-    margin-top: 3px;
-  }
+	timepicker-wrap > div {
+		margin-top: 3px;
+	}
 
-  .wfm-timepicker-wrap {
-    .md-button {
-      text-align: left!important;
-      min-width: auto!important;
-      margin: 0;
-      margin-right:$full-padding;
-      height: 25px;
-      line-height: 25px;
-      min-height: 25px;
-    }
-    input{
-      width:50px;
-      text-align:center;
-      margin-left: 2px;
-      margin-right: 2px;
-    }
-    .md-ink-ripple{
-        color: $text-color-standard!important;
-    }
-  }
+	.wfm-timepicker-wrap {
+		height: 33px;
 
-  .has-error > input {
-    border:2px solid $red-600;
-  }
+		.md-button {
+			text-align: left !important;
+			min-width: auto !important;
+			margin: 0;
+			margin-right: $full-padding;
+			height: 25px;
+			line-height: 25px;
+			min-height: 25px;
+		}
+		input {
+			width: 50px;
+			text-align: center;
+			margin-left: 2px;
+			margin-right: 2px;
+		}
+		.md-ink-ripple {
+			color: $text-color-standard !important;
+		}
+	}
 
-  .error-msg-container {
-    display: none;
-    z-index: 30;
-    width:360px;
-    margin-top: 10px;
-    position: absolute;
-  }
+	.has-error > input {
+		border: 2px solid $red-600;
+	}
 
-  &.ng-invalid {
-    &.ng-invalid-order .error-msg-container.ng-invalid-order {
-      display: block !important;
-    }
-    &.ng-invalid-parse .error-msg-container.ng-invalid-parse {
-      display: block !important;
-    }
-    &.ng-invalid-range .error-msg-container.ng-invalid-range {
-      display: block !important;
-    }
-  }
+	.error-msg-container {
+		display: none;
+		z-index: 30;
+		width: 360px;
+		margin-top: 10px;
+		position: absolute;
+	}
+
+	&.ng-invalid {
+		&.ng-invalid-order .error-msg-container.ng-invalid-order {
+			display: block !important;
+		}
+		&.ng-invalid-parse .error-msg-container.ng-invalid-parse {
+			display: block !important;
+		}
+		&.ng-invalid-range .error-msg-container.ng-invalid-range {
+			display: block !important;
+		}
+	}
 }

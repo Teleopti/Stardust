@@ -18,6 +18,24 @@ using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 {
+	public class WithUnitOfWorkWithRecurringEvents
+	{
+		private readonly WithUnitOfWork _unitOfWork;
+		private readonly IEventPublisher _publisher;
+
+		public WithUnitOfWorkWithRecurringEvents(WithUnitOfWork unitOfWork, IEventPublisher publisher)
+		{
+			_unitOfWork = unitOfWork;
+			_publisher = publisher;
+		}
+
+		public void Do(Action action)
+		{
+			_unitOfWork.Do(action);
+			_publisher.Publish(new TenantMinuteTickEvent());
+		}
+	}
+
 	[TestFixture]
 	[DatabaseTest]
 	public class MappingReadModelReaderTest : IExtendSystem
@@ -31,7 +49,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 		public WithUnitOfWorkWithRecurringEvents WithUnitOfWork;
 		public IEventPublisher EventPublisher;
 		public ICurrentBusinessUnit CurrentBusinessUnit;
-		
+
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<WithUnitOfWorkWithRecurringEvents>();
@@ -41,7 +59,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 		[Test]
 		public void ShouldReadEmptyMapping()
 		{
-			WithUnitOfWork.Do(() => 
+			WithUnitOfWork.Do(() =>
 				Maps.Add(new RtaMap(null, null)));
 
 			WithReadModels.Get(() => Target.Read())
@@ -62,7 +80,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 
 			WithReadModels.Get(() => Target.Read())
 				.Select(x => x.ActivityId).Should().Contain(phone.Id.Value);
-		}		
+		}
 
 		[Test]
 		public void ShouldReadStateFromMapping()
@@ -87,10 +105,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 		{
 			var group = new RtaStateGroup("Phone", true, true);
 			group.AddState("phone", ".");
-			WithUnitOfWork.Do(() =>
-			{
-				Groups.Add(group);
-			});
+			WithUnitOfWork.Do(() => { Groups.Add(group); });
 
 			var mapping = WithReadModels.Get(() => Target.Read()).Single(x => x.StateGroupId == group.Id.Value);
 
@@ -103,9 +118,9 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 		public void ShouldReadRule()
 		{
 			var rule = new RtaRule(
-				new Description("InAdherence"), 
-				Color.Blue, 
-				0, 
+				new Description("InAdherence"),
+				Color.Blue,
+				0,
 				1)
 			{
 				Adherence = Ccc.Domain.InterfaceLegacy.Domain.Adherence.In,
@@ -138,7 +153,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 			WithUnitOfWork.Do(() =>
 			{
 				Rules.Add(rule);
-				Maps.Add(new RtaMap(null, null) { RtaRule = rule });
+				Maps.Add(new RtaMap(null, null) {RtaRule = rule});
 			});
 
 			var mapping = WithReadModels.Get(() => Target.Read()).Single();
@@ -163,10 +178,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 		{
 			var group = new RtaStateGroup("Phone", true, true);
 			group.AddState("Phone");
-			WithUnitOfWork.Do(() =>
-			{
-				Groups.Add(group);
-			});
+			WithUnitOfWork.Do(() => { Groups.Add(group); });
 
 			WithReadModels.Get(() => Target.Read())
 				.Single(x => x.StateGroupId == group.Id.Value)
@@ -186,6 +198,5 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 				});
 			});
 		}
-
 	}
 }

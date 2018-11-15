@@ -9,13 +9,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class OptimizationLimitsForAgentFactory
 	{
-		private readonly IUserTimeZone _userTimeZone;
-
-		public OptimizationLimitsForAgentFactory(IUserTimeZone userTimeZone)
-		{
-			_userTimeZone = userTimeZone;
-		}
-
 		public OptimizationLimitsForAgent Create(IOptimizationPreferences optimizationPreferences, IEnumerable<ITeamBlockInfo> teamBlockInfos)
 		{
 			if (optimizationPreferences.Extra.UseTeamBlockOption || optimizationPreferences.Extra.UseTeams)

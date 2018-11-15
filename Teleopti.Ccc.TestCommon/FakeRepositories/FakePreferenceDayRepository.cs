@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
@@ -14,6 +15,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void Add(IPreferenceDay root)
 		{
 			_preferensDays.Add(root);
+		}
+
+		public void Has(IPerson agent, DateOnlyPeriod period, IPreferenceRestriction preferenceRestriction)
+		{
+			foreach (var date in period.DayCollection())
+			{
+				_preferensDays.Add(new PreferenceDay(agent, date, preferenceRestriction).WithId());	
+			}
 		}
 
 		public void Remove(IPreferenceDay root)

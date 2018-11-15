@@ -14,11 +14,11 @@ using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 {
 	[TestFixture]
-	[PrincipalAndStateTest]
+	[DatabaseTest]
 	public class RtaStateGroupRepositoryNotSignedInTest : IExtendSystem
 	{
 		public IRtaStateGroupRepository StateGroupRepository;
-		public IPrincipalAndStateContext Context;
+		public ILogOnOffContext Context;
 		public TheServiceImpl TheService;
 		
 		public void Extend(IExtend extend, IocConfiguration configuration)

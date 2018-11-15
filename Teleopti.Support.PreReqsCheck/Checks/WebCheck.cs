@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Management.Automation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -87,12 +89,13 @@ namespace CheckPreRequisites.Checks
         // ReSharper disable InconsistentNaming
         public void RunWebChecks()
         {
-            Get461OrHigerFromRegistry();
+            GetDotNetFrameworkOrHigherFromRegistry();
+			GetNetCoreVersion();
             checkFeatures();
             //CheckNetFx();
             //CheckIIS();
         }
-        public void Get461OrHigerFromRegistry()
+        public void GetDotNetFrameworkOrHigherFromRegistry()
         {
             var lineNumber = _form1.printNewFeature(".NET Framework", "System", "Installed", "4.7.2+");
             using (RegistryKey ndpKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey("SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full\\"))
@@ -111,6 +114,24 @@ namespace CheckPreRequisites.Checks
                 }
             }
         }
+		
+		public void GetNetCoreVersion() {
+			using (var PowerShellInstance = PowerShell.Create())
+			{
+				const string version = "2.1.5";
+				var lineNumber = _form1.printNewFeature(".NET Core", "System", "Installed", version + "+");
+				PowerShellInstance.AddScript(
+					"(dir (Get-Command dotnet).Path.Replace(\'dotnet.exe\', \'shared\\Microsoft.NETCore.App\')).Name");
+				var PSOutput = PowerShellInstance.Invoke();
+				var targetVersion = new Version(version);
+				var currentVersion = new Version(PSOutput.Last().BaseObject.ToString());
+				if (currentVersion >= targetVersion)
+					_form1.printFeatureStatus(true, ".Net Core is installed", lineNumber);
+				else
+					_form1.printFeatureStatus(false, ".NET Core is not installed", lineNumber);
+			}
+		}
+		
         //private void CheckNetFx()
         //{
         //	_form1.printNewFeature(".NET framework", ".NET Framework", "version 4.0 required",

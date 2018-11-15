@@ -1,8 +1,7 @@
-﻿(function () {
+﻿(function() {
 	'use strict';
 
-	angular.module('wfm.requests')
-		.service('requestCommandParamsHolder', requestCommandParamsHolderService);
+	angular.module('wfm.requests').service('requestCommandParamsHolder', requestCommandParamsHolderService);
 
 	function requestCommandParamsHolderService() {
 		var self = this;
@@ -14,36 +13,36 @@
 			selectedIdAndMessage: {}
 		};
 
-		self.setSelectedIdAndMessage = function (selectedRequestId, message) {
+		self.setSelectedIdAndMessage = function(selectedRequestId, message) {
 			message[0] = message[0].trim();
 			self._state.selectedIdAndMessage[selectedRequestId] = message[0];
 		};
 
-		self.getSelectedIdAndMessage = function (selectedRequestId) {
+		self.getSelectedIdAndMessage = function(selectedRequestId) {
 			return self._state.selectedIdAndMessage[selectedRequestId];
 		};
 
-		self.setSelectedRequestIds = function (selectedRequestIds, isShiftTrade) {
+		self.setSelectedRequestIds = function(selectedRequestIds, isShiftTrade) {
 			if (isShiftTrade) {
 				self._state.selectedShiftTradeRequestIds = selectedRequestIds;
 			} else {
 				self._state.selectedTextAndAbsenceRequestIds = selectedRequestIds;
-			};
+			}
 		};
 
-		self.setOvertimeSelectedRequestIds = function (selectedRequestIds) {
+		self.setOvertimeSelectedRequestIds = function(selectedRequestIds) {
 			self._state.selectedOvertimeRequestIds = selectedRequestIds;
 		};
 
-		self.getOvertimeSelectedRequestIds = function () {
+		self.getOvertimeSelectedRequestIds = function() {
 			return self._state.selectedOvertimeRequestIds;
 		};
 
 		self.resetOvertimeSelectedRequestIds = function() {
 			self._state.selectedOvertimeRequestIds = [];
-		}
+		};
 
-		self.resetSelectedRequestIds = function (isShiftTrade) {
+		self.resetSelectedRequestIds = function(isShiftTrade) {
 			if (isShiftTrade) {
 				self._state.selectedShiftTradeRequestIds = [];
 			} else {
@@ -59,11 +58,10 @@
 			}
 		};
 
-		self.resetAllSelectedRequestsIds = function () {
+		self.resetAllSelectedRequestsIds = function() {
 			self._state.selectedShiftTradeRequestIds = [];
 			self._state.selectedTextAndAbsenceRequestIds = [];
 			self._state.selectedOvertimeRequestIds = [];
-		}
+		};
 	}
-
 })();

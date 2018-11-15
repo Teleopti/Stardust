@@ -147,12 +147,18 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	self.OpenPeriodRelativeStart = ko.observable(1);
 	self.OpenPeriodRelativeEnd = ko.observable(10);
 	self.OfferValidTo = ko.observable(moment().startOf('day'));
+	self.InitAbsence = ko.observable(false);
 
 	self.DateToForPublish = ko.computed({
 		read: function () {
 			return self.DateTo();
 		},
 		write: function (date) {
+			var unixDateTo = moment(self.DateTo()).format('X');
+			var unixDate = moment(date).format('X');
+			if (self.InitAbsence() && unixDateTo == unixDate) {
+				return;
+			}
 			self.DateTo(date);
 			self.getAbsence(self.getFormattedDateForServiceCall(date));
 			if (!self.IsUpdating() || (self.IsUpdating() && self.OfferValidTo() >= (moment(date)))) {
@@ -254,6 +260,9 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	};
 
 	self.getAbsence = function(date) {
+		if (!self.InitAbsence()) {
+			self.InitAbsence(true);
+		}
 		ajax.Ajax({
 			url: "ShiftExchange/GetAbsence",
 			dataType: "json",

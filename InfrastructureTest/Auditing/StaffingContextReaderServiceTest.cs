@@ -122,12 +122,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 		{
 			UserCulture.IsSwedish();
 
-			var person = PersonFactory.CreatePerson();
-			PersonRepository.Add(person);
 			var loggedOnUser = PersonFactory.CreatePersonWithGuid("Ashley", "Aaron");
 			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
 			var staffingAudit =
-				new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt") {TimeStamp = DateTime.UtcNow};
+				new StaffingAudit(loggedOnUser, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt") {TimeStamp = DateTime.UtcNow};
 			StaffingAuditRepository.Add(staffingAudit);
 			CurrentUnitOfWork.Current().PersistAll();
 
@@ -135,7 +133,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 
 			list.FirstOrDefault().TimeStamp.Should().Be.EqualTo(staffingAudit.TimeStamp);
 			list.FirstOrDefault().Action.Should().Be.EqualTo(StaffingAuditActionConstants.ImportBpo);
-			list.FirstOrDefault().ActionPerformedBy.Should().Be.EqualTo(person.Name.ToString(NameOrderOption.FirstNameLastName));
+			list.FirstOrDefault().ActionPerformedBy.Should().Be.EqualTo("Ashley Aaron");
 			list.FirstOrDefault().Context.Should().Be.EqualTo("Staffing");
 		}
 

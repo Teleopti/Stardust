@@ -50,19 +50,25 @@
 				access="property"
 				not-null="false"
 				type="UtcDateTime" />
-	  
-    <many-to-one name="ActionPerformedBy"
-      class="Teleopti.Ccc.Domain.Common.Person"
-		access="property"
-        not-null="true"
-       foreign-key="FK__PER_SA_ActionPerformedBy_Person_Id"/>
+
+	  <property name="ActionPerformedById"
+				access="property"
+				not-null="true"
+				type="guid" />
+
+		<property name="ActionPerformedBy"
+				access="property"
+				not-null="false"
+				length="300"
+				type="string" />
+
 
 	 
   </class>
 <query name="StaffingAuditOnCriteria">
 	<![CDATA[
 Select s from StaffingAudit s
-			where s.TimeStamp between :StartDate and :EndDate and :PersonId = s.ActionPerformedBy
+			where s.TimeStamp between :StartDate and :EndDate and :PersonId = s.ActionPerformedById
 
 ]]>
 </query>

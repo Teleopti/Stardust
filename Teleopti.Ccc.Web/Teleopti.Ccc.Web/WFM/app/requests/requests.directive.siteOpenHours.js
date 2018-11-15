@@ -1,7 +1,13 @@
 ﻿'use strict';
-(function () {
-	angular.module('wfm.requests')
-		.controller('requestsSiteOpenHoursController', ['requestsDataService', 'requestsNotificationService', 'requestsPermissions', requestsSiteOpenHoursController])
+(function() {
+	angular
+		.module('wfm.requests')
+		.controller('requestsSiteOpenHoursController', [
+			'requestsDataService',
+			'requestsNotificationService',
+			'requestsPermissions',
+			requestsSiteOpenHoursController
+		])
 		.directive('requestsSiteOpenHours', requestsSiteOpenHoursDirective);
 
 	function requestsSiteOpenHoursController(requestsDataService, requestsNotificationService, requestsPermissions) {
@@ -16,21 +22,19 @@
 		init();
 		function init() {
 			var getSiteProgress = requestsDataService.getSitesPromise();
-			getSiteProgress.success(function (sites) {
+			getSiteProgress.success(function(sites) {
 				sitesBefore = sites;
 				vm.sites = [];
-				angular.forEach(sites,
-					function (site) {
-						vm.sites.push(denormalizeSite(site));
-					});
-				if (vm.sites.length > 0)
-					vm.selectedSite = vm.sites[0].Id;
+				angular.forEach(sites, function(site) {
+					vm.sites.push(denormalizeSite(site));
+				});
+				if (vm.sites.length > 0) vm.selectedSite = vm.sites[0].Id;
 			});
 		}
 
 		function save() {
 			var sites = [];
-			angular.forEach(vm.sites, function (site) {
+			angular.forEach(vm.sites, function(site) {
 				sites.push(normalizeSite(site));
 			});
 			sitesAfter = sites;
@@ -38,7 +42,7 @@
 				requestsNotificationService.notifyNothingChanged();
 			} else {
 				var maintainOpenHoursProgress = requestsDataService.maintainOpenHoursPromise(sites);
-				maintainOpenHoursProgress.success(function (persistedSites) {
+				maintainOpenHoursProgress.success(function(persistedSites) {
 					requestsNotificationService.notifySaveSiteOpenHoursSuccess(persistedSites);
 				});
 			}
@@ -67,7 +71,7 @@
 				}
 				for (var j = 0; j < beforeOpenHours.length && isSame; j++) {
 					var openHourBefore = beforeOpenHours[j];
-					var openHourAfter = afterOpenHours.filter(function (compareOpenHour) {
+					var openHourAfter = afterOpenHours.filter(function(compareOpenHour) {
 						return openHourBefore.WeekDay === compareOpenHour.WeekDay;
 					})[0];
 
@@ -102,7 +106,7 @@
 		function normalizeSite(site) {
 			var copySite = angular.copy(site);
 			var weekDayOpenHours = [];
-			angular.forEach(copySite.OpenHours, function (openHour) {
+			angular.forEach(copySite.OpenHours, function(openHour) {
 				var timespan = formatTimespanObj({
 					StartTime: openHour.StartTime,
 					EndTime: openHour.EndTime
@@ -128,18 +132,17 @@
 		}
 
 		function getOpenHourSelection(weekDaySelections, weekDay) {
-			var openHourSelections = weekDaySelections.filter(function (weekDaySelection) {
+			var openHourSelections = weekDaySelections.filter(function(weekDaySelection) {
 				return weekDay === weekDaySelection.WeekDay;
 			});
 
 			var openHourSelection = openHourSelections[0];
 			if (openHourSelections.length > 1) {
-				angular.forEach(openHourSelections,
-					function (selection) {
-						if (!selection.IsClosed) {
-							openHourSelection = selection;
-						}
-					});
+				angular.forEach(openHourSelections, function(selection) {
+					if (!selection.IsClosed) {
+						openHourSelection = selection;
+					}
+				});
 			}
 
 			return openHourSelection;
@@ -147,9 +150,9 @@
 
 		function createEmptyWeekDayOpenHour(weekDay) {
 			return {
-				EndTime: "00:00",
+				EndTime: '00:00',
 				IsClosed: true,
-				StartTime: "00:00",
+				StartTime: '00:00',
 				WeekDay: weekDay
 			};
 		}
@@ -157,14 +160,14 @@
 		function denormalizeSite(site) {
 			var siteCopy = angular.copy(site);
 			var reformattedWorkingHours = [];
-			siteCopy.OpenHours.forEach(function (a) {
+			siteCopy.OpenHours.forEach(function(a) {
 				var startTime = parseTimespanString(a.StartTime),
 					endTime = parseTimespanString(a.EndTime),
 					timespan = {
 						StartTime: startTime,
 						EndTime: endTime
 					};
-				var workingHourRows = reformattedWorkingHours.filter(function (wh) {
+				var workingHourRows = reformattedWorkingHours.filter(function(wh) {
 					return sameTimespan(timespan, wh);
 				});
 				var workingHourRow;
@@ -175,17 +178,16 @@
 				} else {
 					workingHourRow = workingHourRows[0];
 				}
-				angular.forEach(workingHourRow.WeekDaySelections,
-								function (e) {
-									if (e.WeekDay === a.WeekDay) {
-										e.Checked = !a.IsClosed;
-										e.IsClosed = a.IsClosed;
-									}
-								});
+				angular.forEach(workingHourRow.WeekDaySelections, function(e) {
+					if (e.WeekDay === a.WeekDay) {
+						e.Checked = !a.IsClosed;
+						e.IsClosed = a.IsClosed;
+					}
+				});
 			});
 			siteCopy.OpenHours = reformattedWorkingHours;
 			return siteCopy;
-		};
+		}
 	}
 
 	function formatTimespanObj(timespan) {
@@ -205,7 +207,7 @@
 	}
 	function createEmptyWorkingPeriod(startTime, endTime) {
 		var weekdaySelections = [];
-		var startDow = (moment.localeData()._week) ? moment.localeData()._week.dow : 0;
+		var startDow = moment.localeData()._week ? moment.localeData()._week.dow : 0;
 		for (var i = 0; i < 7; i++) {
 			var curDow = (startDow + i) % 7;
 			weekdaySelections.push({ WeekDay: curDow, Checked: false });
@@ -215,8 +217,10 @@
 	function sameTimespan(timespan1, timespan2) {
 		var formattedTimespan1 = formatTimespanObj(timespan1),
 			formattedTimespan2 = formatTimespanObj(timespan2);
-		return formattedTimespan1.StartTime == formattedTimespan2.StartTime &&
-			formattedTimespan1.EndTime == formattedTimespan2.EndTime;
+		return (
+			formattedTimespan1.StartTime == formattedTimespan2.StartTime &&
+			formattedTimespan1.EndTime == formattedTimespan2.EndTime
+		);
 	}
 	function parseTimespanString(t) {
 		if (!angular.isString(t)) return t;
@@ -225,7 +229,10 @@
 			var d = new Date();
 			d.setHours(parts[2]);
 			d.setMinutes(parts[3]);
-			if (parts[1]) return moment(d).add(1, 'days').toDate();
+			if (parts[1])
+				return moment(d)
+					.add(1, 'days')
+					.toDate();
 			else return d;
 		}
 	}
@@ -239,6 +246,6 @@
 			controllerAs: 'requestsSiteOpenHours',
 			bindToController: true,
 			templateUrl: 'app/requests/html/requests-open-hours.html'
-		}
+		};
 	}
-}());
+})();

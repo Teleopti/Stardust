@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using Teleopti.Ccc.Domain.DistributedLock;
 
@@ -6,21 +7,26 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeDistributedLockAcquirer : IDistributedLockAcquirer
 	{
-		public void TryLockForTypeOf(object lockObject, Action action)
-		{
-			tryLock(lockObject.GetType().Name, action);
-		}
-		
-		public void TryLockForTypeOfAnd(object lockObject, string extra, Action action)
-		{
-			tryLock(lockObject.GetType().Name + extra, action);
-		}
+		private readonly ConcurrentDictionary<string, object> _locks = new ConcurrentDictionary<string, object>();
 
-		private static void tryLock(string name, Action action)
+		public void TryLockForTypeOf(object lockObject, Action action) =>
+			tryLock(lockObject.GetType().Name, action);
+
+		public void TryLockForTypeOfAnd(object lockObject, string extra, Action action) =>
+			tryLock(lockObject.GetType().Name + extra, action);
+
+		private void tryLock(string name, Action action)
 		{
-			if (!Monitor.TryEnter(name)) return;
-			action.Invoke();
-			Monitor.Exit(name);
+			var @lock = _locks.GetOrAdd(name, x => new object());
+			if (!Monitor.TryEnter(@lock)) return;
+			try
+			{
+				action.Invoke();
+			}
+			finally
+			{
+				Monitor.Exit(@lock);
+			}
 		}
 	}
 }

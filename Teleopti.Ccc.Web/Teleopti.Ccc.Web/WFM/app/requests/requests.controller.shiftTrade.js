@@ -58,7 +58,6 @@
 		vm.shiftTradeView = true;
 
 		var onInitCallBack = undefined,
-			columnsWithFilterEnabled = ['Subject', 'Message', 'Type', 'Status'],
 			shiftTradeMaximumRangeDays = 60;
 
 		vm.setDefaultStatuses = function() {
@@ -210,9 +209,6 @@
 			vm.filterEnabled = data;
 			vm.gridOptions.enableFiltering = vm.filterEnabled;
 			vm.gridOptions.useExternalFiltering = vm.filterEnabled;
-			angular.forEach(vm.gridOptions.columnDefs, function(col) {
-				col.enableFiltering = vm.filterEnabled && columnsWithFilterEnabled.indexOf(col.displayName) > -1;
-			});
 			if (vm.gridApi && vm.gridApi.core) vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
 		});
 
@@ -455,9 +451,6 @@
 
 		function applyGridColumns() {
 			vm.gridOptions.columnDefs = shiftTradeGridConfiguration.columnDefinitions(vm.shiftTradeRequestDateSummary);
-			angular.forEach(vm.gridOptions.columnDefs, function(col) {
-				col.enableFiltering = vm.filterEnabled && columnsWithFilterEnabled.indexOf(col.displayName) > -1;
-			});
 		}
 
 		function setupShiftTradeVisualisation(requests) {

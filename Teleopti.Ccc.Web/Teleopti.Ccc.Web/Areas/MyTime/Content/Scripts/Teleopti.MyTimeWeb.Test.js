@@ -122,7 +122,7 @@ Teleopti.MyTimeWeb.Common.SetUserTexts({
 	ShowOvertimeProbability: '@Resources.ShowOvertimeProbability',
 	StaffingInfo: '@Resources.StaffingInfo',
 	NoDateIsSelected: '@Resources.NoDateIsSelected',
-	FilterTeamSchedulesByTime: '@Resources.FilterTeamSchedulesByTime',
+	FilterTeamSchedules: '@Resources.FilterTeamSchedules',
 	StartTime: '@Resources.StartTime',
 	EndTime: '@Resources.EndTime',
 	ShowOnlyNightShifts: '@Resources.ShowOnlyNightShifts'
