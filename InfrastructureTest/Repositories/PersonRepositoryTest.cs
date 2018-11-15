@@ -2003,8 +2003,51 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var persons = target.FindPersonsByKeywords(new List<string> { "ashley", "aaron" });
 			persons.First().Name.Should().Be(person.Name);
-			//persons.Count.Should().Be(4);
+			persons.Count.Should().Be(3);
+		}
 
+		[Test]
+		public void ShouldHandleManyKeywords()
+		{
+			target = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
+			var person = PersonFactory.CreatePerson("ashley", "aaron");
+			var people = new List<IPerson>
+			{
+				PersonFactory.CreatePerson("ashley", "Barley"),
+				PersonFactory.CreatePerson("David", "aaron"),
+				PersonFactory.CreatePerson("Roy", "Barley"),
+				PersonFactory.CreatePerson("Roy", "Anderson"),
+				PersonFactory.CreatePerson("Boy", "hhh"),
+				PersonFactory.CreatePerson("x", "y"),
+				person
+			};
+
+			PersistAndRemoveFromUnitOfWork(people);
+
+			var persons = target.FindPersonsByKeywords(new List<string> { "a", "b", "c", "d", "e", "f", "g", "h" });
+			persons.Count.Should().Be(6);
+		}
+
+		[Test]
+		public void ShouldHandleNoKeywordMatch()
+		{
+			target = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
+			var person = PersonFactory.CreatePerson("ashley", "aaron");
+			var people = new List<IPerson>
+			{
+				PersonFactory.CreatePerson("ashley", "Barley"),
+				PersonFactory.CreatePerson("David", "aaron"),
+				PersonFactory.CreatePerson("Roy", "Barley"),
+				PersonFactory.CreatePerson("Roy", "Anderson"),
+				PersonFactory.CreatePerson("Boy", "hhh"),
+				PersonFactory.CreatePerson("x", "y"),
+				person
+			};
+
+			PersistAndRemoveFromUnitOfWork(people);
+
+			var persons = target.FindPersonsByKeywords(new List<string> { "z" });
+			persons.Count.Should().Be(0);
 		}
 
 		public class PlanningGroupTestCase

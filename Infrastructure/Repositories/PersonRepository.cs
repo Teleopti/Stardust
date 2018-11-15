@@ -746,7 +746,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return results;
 		}
 
-		public IList<IPerson> FindPersonsByKeywords(IEnumerable<string> keywords)
+		public IList<IPerson> FindPersonsByKeywordsMulti(IEnumerable<string> keywords)
 		{
 
 			//SELECT* from
@@ -783,6 +783,33 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				allPersons.AddRange(retList);
 			}
 
+			var sortedPersons = allPersons.GroupBy(person => person.Name).OrderByDescending(group => group.Count()).Select(group => group.First());
+
+			return sortedPersons.ToList();
+		}
+
+		public IList<IPerson> FindPersonsByKeywords(IEnumerable<string> keywords)
+		{
+			var allPersons = new List<IPerson>();
+			var criterias = new List<ICriteria>();
+			foreach (var keyword in keywords)
+			{
+				var criteriaFirstName = Session.CreateCriteria(typeof(Person), "per")
+				.Add(Restrictions.Like("Name.FirstName", $"%{keyword}%"))
+				.SetResultTransformer(Transformers.DistinctRootEntity);
+				criteriaFirstName.Future<List<IPerson>>();
+
+				criterias.Add(criteriaFirstName);
+			
+				var criteriaLastName = Session.CreateCriteria(typeof(Person), "per")
+					.Add(Restrictions.Like("Name.LastName", $"%{keyword}%"))
+					.SetResultTransformer(Transformers.DistinctRootEntity);
+				criteriaLastName.Future<List<IPerson>>();
+
+				criterias.Add(criteriaLastName);
+			}
+
+			criterias.ForEach(c => allPersons.AddRange(c.List<IPerson>()));
 			var sortedPersons = allPersons.GroupBy(person => person.Name).OrderByDescending(group => group.Count()).Select(group => group.First());
 
 			return sortedPersons.ToList();
