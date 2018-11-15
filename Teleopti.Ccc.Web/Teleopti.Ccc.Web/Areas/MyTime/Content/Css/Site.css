@@ -68,16 +68,16 @@
 	display: block;
 }
 
-.displayinline {
+.inline {
 	display: inline;
 }
 
-.displayinline-block {
+.inline-block {
 	display: inline-block;
 	vertical-align: top;
 }
 
-.ie7 .displayinline-block {
+.ie7 .inline-block {
 	zoom: 1;
 	display: inline;
 }

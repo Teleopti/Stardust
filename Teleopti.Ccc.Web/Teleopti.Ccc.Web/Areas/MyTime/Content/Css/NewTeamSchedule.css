@@ -711,13 +711,12 @@ div.new-teamschedule-no-result-indicator {
 }
 .new-teamschedule-submit-buttons {
 	margin-bottom: 0;
-}
-.show-only-night-shift-toggle {
-	margin-left: 120px;
-}
-.new-teamschedule-panel-mobile .new-teamschedule-submit-buttons {
 	display: flex;
 	justify-content: space-between;
+	width: 300px;
+}
+.show-only-night-shift-container {
+	margin-left: 120px;
 }
 .new-teamschedule-submit-buttons button {
 	width: 45%;
