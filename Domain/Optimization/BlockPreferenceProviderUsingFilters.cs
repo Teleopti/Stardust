@@ -18,12 +18,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public ExtraPreferences ForAgent(IPerson person, DateOnly dateOnly)
 		{
 			var planningGroupSettings = _planningGroupSettings.ForAgent(person, dateOnly);
-			if (planningGroupSettings == null)
-			{
-				planningGroupSettings = PlanningGroupSettings.CreateDefault();
-				planningGroupSettings.UpdateWith(_schedulingOptions);
-			}
-			
 			return mapToBlockPreference(planningGroupSettings);
 		}
 

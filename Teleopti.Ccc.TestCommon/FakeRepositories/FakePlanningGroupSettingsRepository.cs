@@ -44,10 +44,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		private PlanningGroupSettings Default()
 		{
-			var curr = _workRuleSettings.SingleOrDefault(x => x.Default);
-			if (curr != null)
-				return curr;
-			return PlanningGroupSettings.CreateDefault();
+			return _workRuleSettings.SingleOrDefault(x => x.Default);
 		}
 
 		public void HasDefault(Action<PlanningGroupSettings> actionOnDefaultInstance, IPlanningGroup planningGroup)
