@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return Session.CreateCriteria(typeof(PlanningGroupSettings), "planningGroupSettings")
 				.Add(Restrictions.Eq("planningGroupSettings.PlanningGroup", planningGroup))
+				.AddOrder(Order.Asc("planningGroupSettings.Default"))
 				.AddOrder(Order.Asc("planningGroupSettings.Priority"))
 				.List<PlanningGroupSettings>();
 		}

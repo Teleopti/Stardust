@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public DayOffOptimizationPreferenceProviderUsingFilters(IEnumerable<PlanningGroupSettings> dayOffRules)
 		{
-			_dayOffRules = dayOffRules.OrderBy(x => x.Default);
+			_dayOffRules = dayOffRules;
 		}
 
 		public IDaysOffPreferences ForAgent(IPerson person, DateOnly dateOnly)

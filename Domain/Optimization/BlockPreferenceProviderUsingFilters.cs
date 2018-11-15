@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public BlockPreferenceProviderUsingFilters(IEnumerable<PlanningGroupSettings> planningGroupSettings, SchedulingOptions schedulingOptions)
 		{
 			_schedulingOptions = schedulingOptions;
-			_planningGroupSettings = planningGroupSettings.OrderBy(x => x.Default);
+			_planningGroupSettings = planningGroupSettings;
 		}
 
 		public ExtraPreferences ForAgent(IPerson person, DateOnly dateOnly)

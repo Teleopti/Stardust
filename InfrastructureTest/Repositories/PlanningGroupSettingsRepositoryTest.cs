@@ -72,7 +72,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			rep.LoadAllByPlanningGroup(planningGroup)
 				.Should().Have.SameSequenceAs(planningGroupSetting1, planningGroupSetting2, planningGroupSetting3);
+		}
+		
+		[Test]
+		public void ShouldPlaceDefaultSettingLast()
+		{
+			var planningGroup = new PlanningGroup("_");
+			PersistAndRemoveFromUnitOfWork(planningGroup);
+			var rep = new PlanningGroupSettingsRepository(CurrUnitOfWork);
+			var defaultPlanningGroupSetting = PlanningGroupSettings.CreateDefault(planningGroup);
+			var planningGroupSetting = new PlanningGroupSettings(planningGroup);
+			rep.Add(defaultPlanningGroupSetting);
+			rep.Add(planningGroupSetting);
+			UnitOfWork.Flush();
 
+			rep.LoadAllByPlanningGroup(planningGroup)
+				.Should().Have.SameSequenceAs(planningGroupSetting, defaultPlanningGroupSetting);
 		}
 
 		[Test]
