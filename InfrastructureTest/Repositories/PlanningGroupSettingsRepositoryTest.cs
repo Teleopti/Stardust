@@ -57,6 +57,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void ShouldBeOrdered()
+		{
+			var planningGroup = new PlanningGroup("_");
+			PersistAndRemoveFromUnitOfWork(planningGroup);
+			var rep = new PlanningGroupSettingsRepository(CurrUnitOfWork);
+			var planningGroupSetting3 = new PlanningGroupSettings(planningGroup) {Priority = 3};
+			var planningGroupSetting1 = new PlanningGroupSettings(planningGroup) {Priority = 1};
+			var planningGroupSetting2 = new PlanningGroupSettings(planningGroup) {Priority = 2};
+			rep.Add(planningGroupSetting3);
+			rep.Add(planningGroupSetting1);
+			rep.Add(planningGroupSetting2);
+			UnitOfWork.Flush();
+
+			rep.LoadAllByPlanningGroup(planningGroup)
+				.Should().Have.SameSequenceAs(planningGroupSetting1, planningGroupSetting2, planningGroupSetting3);
+
+		}
+
+		[Test]
 		public void CanUseAddWhenUpdatingAlreadyPersistedDefault()
 		{
 			var dayOffSettings = PlanningGroupSettings.CreateDefault();
