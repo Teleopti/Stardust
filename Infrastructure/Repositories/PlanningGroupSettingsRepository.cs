@@ -49,8 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return Session.CreateCriteria(typeof(PlanningGroupSettings), "planningGroupSettings")
 				.Add(Restrictions.Eq("planningGroupSettings.PlanningGroup", planningGroup))
-				 .SetResultTransformer(Transformers.DistinctRootEntity)
-				 .List<PlanningGroupSettings>();
+				.List<PlanningGroupSettings>();
 		}
 
 		public void RemoveForPlanningGroup(IPlanningGroup planningGroup)
