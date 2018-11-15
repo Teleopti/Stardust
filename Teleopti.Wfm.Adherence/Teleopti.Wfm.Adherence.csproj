@@ -130,6 +130,7 @@
     <Compile Include="ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ViewModels\HistoricalOverviewViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ViewModels\OrganizationViewModelBuilder.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\PermissionsViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ViewModels\PhoneStateViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ViewModels\RtaTracerViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ViewModels\SiteCardViewModel.cs" />

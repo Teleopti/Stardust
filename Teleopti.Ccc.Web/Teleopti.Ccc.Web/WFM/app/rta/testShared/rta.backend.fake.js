@@ -102,8 +102,8 @@
 			url: /\.\.\/api\/Adherence\/Permissions(.*)/,
 			clear: function () {
 				return {
-					HasHistoricalOverviewPermission: true,
-					HasModifyAdherencePermission: true
+					HistoricalOverview: true,
+					ModifyAdherence: true
 				};
 			},
 			add: function (data, item) {

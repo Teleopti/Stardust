@@ -3,7 +3,7 @@
 rtaTester.describe('RtaAgentsController', function (it, fit, xit) {
 	it('should have permission to access historical overview', function (t) {
 		t.backend.with.permissions({
-			HasHistoricalOverviewPermission: true
+			HistoricalOverview: true
 		});
 
 		var vm = t.createController();
@@ -13,7 +13,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit) {
 	
 	it('should not have permission to access historical overview', function (t) {
 		t.backend.with.permissions({
-			HasHistoricalOverviewPermission: false
+			HistoricalOverview: false
 		});
 
 		var vm = t.createController();

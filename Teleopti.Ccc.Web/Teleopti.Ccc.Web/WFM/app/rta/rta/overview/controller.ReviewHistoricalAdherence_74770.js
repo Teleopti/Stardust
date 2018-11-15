@@ -53,7 +53,7 @@
 			skillAreas = data.skillAreas; 
 			vm.skills = data.skills;
 			vm.skillAreas = data.skillAreas;
-			vm.hasHistoricalOverviewPermission = data.permissions.HasHistoricalOverviewPermission;
+			vm.hasHistoricalOverviewPermission = data.permissions.HistoricalOverview;
 		});
 
 		vm.selectTeamOrSite = function (selectable) {

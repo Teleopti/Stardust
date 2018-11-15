@@ -3,7 +3,7 @@
 rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should have permission to modify adherence', function (t) {
 		t.backend.with.permissions({
-			HasModifyAdherencePermission: true
+			ModifyAdherence: true
 		});
 
 		var c = t.createController();
@@ -13,7 +13,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	
 	it('should not have permission to modify adherence', function (t) {
 		t.backend.with.permissions({
-			HasModifyAdherencePermission: false
+			ModifyAdherence: false
 		});
 		
 		var c = t.createController();
