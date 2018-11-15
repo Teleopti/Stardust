@@ -98,26 +98,16 @@
 		});
 
 		service.fake({
-			name: 'modifyAdherencePermission',
-			url: /\.\.\/api\/HistoricalAdherence\/HasModifyAdherencePermission/,
-			clear: function () {
-				return {};
-			},
-			add: function (data, item) {
-				return item;
-			}
-		});
-
-		service.fake({
 			name: 'permissions',
 			url: /\.\.\/api\/Adherence\/Permissions(.*)/,
 			clear: function () {
 				return {
-					HasHistoricalOverviewPermission: true
+					HasHistoricalOverviewPermission: true,
+					HasModifyAdherencePermission: true
 				};
 			},
 			add: function (data, item) {
-				for(var key in item) {
+				for (var key in item) {
 					data[key] = item[key];
 				}
 				return data;
@@ -269,7 +259,7 @@
 					});
 				return [200, result];
 			});
-		
+
 
 		function withTime(time) {
 			serverTime = time;
@@ -366,7 +356,7 @@
 			});
 			return this;
 		}
-		
+
 		service.withTracer = withTracer;
 		service.withTracedUser = withTracedUser;
 
