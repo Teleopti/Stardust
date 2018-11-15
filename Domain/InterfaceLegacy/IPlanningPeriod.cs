@@ -21,13 +21,4 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy
 		IJobResult GetLastClearScheduleJob();
 		void Reset();
 	}
-
-	public enum PlanningPeriodState
-	{
-		New,
-		Scheduled,
-		Published,
-		ScheduleFailed,
-		IntradayOptimizationFailed
-	}
 }

@@ -232,6 +232,7 @@
     <Compile Include="Infrastructure\HttpRequestHandler.cs" />
     <Compile Include="Infrastructure\IHttpRequestHandler.cs" />
     <Compile Include="InterfaceLegacy\Domain\PersonInfoForShiftTradeFilter.cs" />
+    <Compile Include="InterfaceLegacy\PlanningPeriodState.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayForcastedStaffingIntervalDTO.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayScheduleStaffingIntervalDTO.cs" />
     <Compile Include="Intraday\ApplicationLayer\IntradayIncomingTrafficApplicationService.cs" />
