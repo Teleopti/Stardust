@@ -124,7 +124,7 @@ namespace CheckPreRequisites.Checks
 					"(dir (Get-Command dotnet).Path.Replace(\'dotnet.exe\', \'shared\\Microsoft.NETCore.App\')).Name");
 				var PSOutput = PowerShellInstance.Invoke();
 				var targetVersion = new Version(version);
-				var versionStr = PSOutput.Last().BaseObject?.ToString().Split('-').FirstOrDefault() ?? "";
+				var versionStr = PSOutput.LastOrDefault()?.BaseObject?.ToString().Split('-').FirstOrDefault() ?? "0.0.0";
 				var currentVersion = new Version(versionStr);
 				if (currentVersion >= targetVersion)
 					_form1.printFeatureStatus(true, ".Net Core is installed", lineNumber);
