@@ -8,6 +8,7 @@
 		ajax,
 		onMobile = Teleopti.MyTimeWeb.Common.IsHostAMobile(),
 		oniPad = Teleopti.MyTimeWeb.Common.IsHostAniPad(),
+		onDesktop = !onMobile && !oniPad,
 		agentScheduleColumnWidth = onMobile ? 50 : 80;
 
 	var MIN_SCROLL_BLOCK_WIDTH = 60,
@@ -196,6 +197,16 @@
 					},
 					true
 				);
+				if (onDesktop) {
+					ele.addEventListener(
+						'mouseenter',
+						function() {
+							$('.teammates-schedules-column').css({ 'z-index': '0' });
+							$(ele).css({ 'z-index': '1' });
+						},
+						true
+					);
+				}
 			});
 		}, 0);
 	}
