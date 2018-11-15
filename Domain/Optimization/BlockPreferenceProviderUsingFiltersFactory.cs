@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public IBlockPreferenceProvider Create(IPlanningGroup planningGroup)
 		{
-			return new BlockPreferenceProviderUsingFilters(_planningGroupSettingsRepository.LoadAllByPlanningGroup(planningGroup), _schedulingOptionsProvider.Fetch(null));
+			return new BlockPreferenceProviderUsingFilters(_planningGroupSettingsRepository.LoadAllByPlanningGroup(planningGroup));
 		}
 	}
 }

@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public IDaysOffPreferences ForAgent(IPerson person, DateOnly dateOnly)
 		{
-			return mapToDayOffPrefences(_allPlanningGroupSettings.ForAgent(person, dateOnly));
+			return mapToDayOffPreferences(_allPlanningGroupSettings.ForAgent(person, dateOnly));
 		}
 
-		private static DaysOffPreferences mapToDayOffPrefences(PlanningGroupSettings planningGroupSettings)
+		private static DaysOffPreferences mapToDayOffPreferences(PlanningGroupSettings planningGroupSettings)
 		{
 			return new DaysOffPreferences
 			{

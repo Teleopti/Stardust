@@ -1,17 +1,14 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class BlockPreferenceProviderUsingFilters : IBlockPreferenceProvider
 	{
-		private readonly SchedulingOptions _schedulingOptions;
 		private readonly AllPlanningGroupSettings _planningGroupSettings;
 
-		public BlockPreferenceProviderUsingFilters(AllPlanningGroupSettings planningGroupSettings, SchedulingOptions schedulingOptions)
+		public BlockPreferenceProviderUsingFilters(AllPlanningGroupSettings planningGroupSettings)
 		{
-			_schedulingOptions = schedulingOptions;
 			_planningGroupSettings = planningGroupSettings;
 		}
 
