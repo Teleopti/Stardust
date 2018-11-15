@@ -158,7 +158,7 @@ WFM_Gamification_Permission_76546 = true
 MyTimeWeb_Request_CleanUpRequestHisotry_77776 = true
 MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446 = true
 WFM_Request_View_Permissions_77731 = RC
-WFM_Request_Show_Feedback_Link_77733 = DEV
+WFM_Request_Show_Feedback_Link_77733 = RC
 
 # Tech #
 WFM_ChatBot_77547 = DEV
