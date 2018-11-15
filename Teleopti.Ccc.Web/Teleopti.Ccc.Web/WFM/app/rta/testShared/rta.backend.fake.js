@@ -109,8 +109,8 @@
 		});
 
 		service.fake({
-			name: 'rtaPermissions',
-			url: /\.\.\/api\/RtaPermissions\/Load(.*)/,
+			name: 'permissions',
+			url: /\.\.\/api\/Adherence\/Permissions(.*)/,
 			clear: function () {
 				return {
 					HasHistoricalOverviewPermission: true

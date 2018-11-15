@@ -65,7 +65,7 @@
 			buildSkillGroups(data.skillAreas);
 			buildSites(data.organization);
 			buildPhoneStates(data.states);
-			vm.hasHistoricalOverviewPermission = data.rtaPermissions.HasHistoricalOverviewPermission;
+			vm.hasHistoricalOverviewPermission = data.permissions.HasHistoricalOverviewPermission;
 		});
 
 		var defaultSorting = function () {
