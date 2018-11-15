@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public IScheduleStorage ScheduleStorage;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public Func<IGridlockManager> LockManager;
-		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 
 		[Test]
 		public void ShouldUseShiftThatCoverHigherDemand()
@@ -68,9 +67,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		[Repeat(10)] //to possible avoid green on teamblock due to random(shuffle)
 		public void ShouldOptimizeWorstDayFirst()
 		{
-			var optimizationPreferences = OptimizationPreferencesProvider.Fetch();
-			optimizationPreferences.General.UseShiftCategoryLimitations = true;
-			OptimizationPreferencesProvider.SetFromTestsOnly(optimizationPreferences);
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var dateOnly = new DateOnly(2015, 10, 12);
