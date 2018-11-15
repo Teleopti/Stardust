@@ -10,7 +10,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.WebTest.Areas.Permissions;
 
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 	[TestFixture]
 	public class AreaWithPermissionPathProviderTest : IIsolateSystem, IExtendSystem
 	{
-		public IAreaWithPermissionPathProvider Target;
+		public AreaWithPermissionPathProvider Target;
 		public FakePermissionProvider PermissionProvider;
 		public FakeToggleManager ToggleManager;
 		public FakeApplicationFunctionsToggleFilter ApplicationFunctionsToggleFilter;

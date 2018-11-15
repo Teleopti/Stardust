@@ -596,8 +596,7 @@
     <Compile Include="Areas\MyTime\Core\IMonthScheduleDomainDataProvider.cs" />
     <Compile Include="Areas\MyTime\Core\IDaycheduleDomainDataProvider.cs" />
     <Compile Include="Areas\MyTime\Core\MonthScheduleDomainDataProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Portal\DataProvider\AreaWithPermissionPathProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Portal\DataProvider\IAreaWithPermissionPathProvider.cs" />
+    <Compile Include="Areas\Global\AreaWithPermissionPathProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceNightRestChecker.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceNightRestChecker.cs" />

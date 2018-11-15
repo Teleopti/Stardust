@@ -4,16 +4,15 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 
 namespace Teleopti.Ccc.Web.Areas.Global
 {
 	public class ApplicationController : ApiController
 	{
-		private readonly IAreaWithPermissionPathProvider _areaWithPermissionPathProvider;
+		private readonly AreaWithPermissionPathProvider _areaWithPermissionPathProvider;
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 
-		public ApplicationController(IAreaWithPermissionPathProvider areaWithPermissionPathProvider, IGlobalSettingDataRepository globalSettingDataRepository)
+		public ApplicationController(AreaWithPermissionPathProvider areaWithPermissionPathProvider, IGlobalSettingDataRepository globalSettingDataRepository)
 		{
 			_areaWithPermissionPathProvider = areaWithPermissionPathProvider;
 			_globalSettingDataRepository = globalSettingDataRepository;

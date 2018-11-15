@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<SessionSpecificCookieSettingsProvider>().SingleInstance();
 			builder.RegisterType<SetThreadCulture>().As<ISetThreadCulture>().SingleInstance();
 
-			builder.RegisterType<AreaWithPermissionPathProvider>().As<IAreaWithPermissionPathProvider>();
+			builder.RegisterType<AreaWithPermissionPathProvider>();
 			builder.RegisterType<AbsenceTypesProvider>().As<IAbsenceTypesProvider>();
 			builder.RegisterType<PushMessageProvider>().As<IPushMessageProvider>();
 			builder.RegisterType<ReportsProvider>().As<IReportsProvider>();
