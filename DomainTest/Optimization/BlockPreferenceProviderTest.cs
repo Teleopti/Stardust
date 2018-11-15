@@ -37,8 +37,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void ShouldNotReturnRulesForContractFilterIfAgentHaveNoContract()
 		{
 			var planningGroup = new PlanningGroup();
-			var defaultSettings = PlanningGroupSettings.CreateDefault(planningGroup);
-			PlanningGroupSettingsRepository.Add(defaultSettings);
 			var contract = new Contract("_");
 			var planningGroupSettings = new PlanningGroupSettings(planningGroup) {  BlockFinderType = BlockFinderType.BetweenDayOff };
 			planningGroupSettings.AddFilter(new ContractFilter(contract));
@@ -46,15 +44,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var agent = new Person();
 
 			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).BlockTypeValue
-				.Should().Be.EqualTo(defaultSettings.BlockFinderType);
+				.Should().Be.EqualTo(PlanningGroupSettings.CreateDefault().BlockFinderType);
 		}
 
 		[Test]
 		public void ShouldNotReturnRulesForWrongContractFilter()
 		{
 			var planningGroup = new PlanningGroup();
-			var defaultSettings = PlanningGroupSettings.CreateDefault(planningGroup);
-			PlanningGroupSettingsRepository.Add(defaultSettings);
 			var contract = new Contract("_");
 			var planningGroupSettings = new PlanningGroupSettings(planningGroup) {  BlockFinderType = BlockFinderType.BetweenDayOff };
 			planningGroupSettings.AddFilter(new ContractFilter(contract));
@@ -64,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 
 			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).BlockTypeValue
-				.Should().Be.EqualTo(defaultSettings.BlockFinderType);
+				.Should().Be.EqualTo(PlanningGroupSettings.CreateDefault().BlockFinderType);
 		}
 
 		[Test]
@@ -84,15 +80,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void ShouldNotReturnRulesForSiteFilterIfAgentHaveNoPersonPeriod()
 		{
 			var planningGroup = new PlanningGroup();
-			var defaultSettings = PlanningGroupSettings.CreateDefault(planningGroup);
-			PlanningGroupSettingsRepository.Add(defaultSettings);
 			var planningGroupSettings = new PlanningGroupSettings(planningGroup) {  BlockFinderType = BlockFinderType.BetweenDayOff };
 			planningGroupSettings.AddFilter(new SiteFilter(new Site("_")));
 			PlanningGroupSettingsRepository.Add(planningGroupSettings);
 			var agent = new Person();
 
 			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).BlockTypeValue
-				.Should().Be.EqualTo(defaultSettings.BlockFinderType);
+				.Should().Be.EqualTo(PlanningGroupSettings.CreateDefault().BlockFinderType);
 		}
 
 		[Test]
@@ -112,22 +106,20 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void ShouldNotReturnRulesForTeamFilterIfAgentHaveNoPersonPeriod()
 		{
 			var planningGroup = new PlanningGroup();
-			var defaultSettings = PlanningGroupSettings.CreateDefault(planningGroup);
-			PlanningGroupSettingsRepository.Add(defaultSettings);
 			var planningGroupSettings = new PlanningGroupSettings(planningGroup) {  BlockFinderType = BlockFinderType.BetweenDayOff };
 			planningGroupSettings.AddFilter(new TeamFilter(new Team()));
 			PlanningGroupSettingsRepository.Add(planningGroupSettings);
 			var agent = new Person();
 
 			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).BlockTypeValue
-				.Should().Be.EqualTo(defaultSettings.BlockFinderType);
+				.Should().Be.EqualTo(PlanningGroupSettings.CreateDefault().BlockFinderType);
 		}
 
 		[Test]
 		public void ShouldUseExplicitFilterWhenDefaultFilterExists()
 		{
 			var planningGroup = new PlanningGroup();
-			PlanningGroupSettingsRepository.Add(PlanningGroupSettings.CreateDefault(planningGroup));
+			PlanningGroupSettingsRepository.Add(PlanningGroupSettings.CreateDefault());
 			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(1900, 1, 1));
 			var planningGroupSettings = new PlanningGroupSettings(planningGroup) {  BlockFinderType = BlockFinderType.BetweenDayOff };
 			planningGroupSettings.AddFilter(new TeamFilter(agent.Period(new DateOnly(2000, 1, 1)).Team));
@@ -141,8 +133,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void ShouldDoAndOperationBetweenDifferentFilters()
 		{
 			var planningGroup = new PlanningGroup();
-			var defaultSettings = PlanningGroupSettings.CreateDefault(planningGroup);
-			PlanningGroupSettingsRepository.Add(defaultSettings);
 			var contractNotOnAgent = new Contract("_");
 			var agent = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(1900, 1, 1));
 			agent.Period(new DateOnly(2000, 1, 1)).PersonContract = new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_"));
@@ -153,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			PlanningGroupSettingsRepository.Add(planningGroupSettings);
 
 			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).BlockTypeValue
-				.Should().Be.EqualTo(defaultSettings.BlockFinderType);
+				.Should().Be.EqualTo(PlanningGroupSettings.CreateDefault().BlockFinderType);
 		}
 
 		[Test]

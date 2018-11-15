@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_planningGroup = planningGroup;
 		}
 
-		public static PlanningGroupSettings CreateDefault(IPlanningGroup planningGroup)
+		public static PlanningGroupSettings CreateDefault(IPlanningGroup planningGroup = null)
 		{
 			return new PlanningGroupSettings(planningGroup)
 			{

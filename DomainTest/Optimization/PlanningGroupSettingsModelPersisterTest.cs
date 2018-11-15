@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldUpdateDefault()
 		{
-			var existing = PlanningGroupSettings.CreateDefault(new PlanningGroup().WithId()).WithId();
+			var existing = PlanningGroupSettings.CreateDefault().WithId();
 			PlanningGroupSettingsRepository.Add(existing);
 
 			var model = new PlanningGroupSettingsModel

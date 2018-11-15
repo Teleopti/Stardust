@@ -93,10 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void CanUseAddWhenUpdatingAlreadyPersistedDefault()
 		{
-			var planningGroup = new PlanningGroup("_");
-			PersistAndRemoveFromUnitOfWork(planningGroup);
-			
-			var dayOffSettings = PlanningGroupSettings.CreateDefault(planningGroup);
+			var dayOffSettings = PlanningGroupSettings.CreateDefault();
 			var rep = new PlanningGroupSettingsRepository(CurrUnitOfWork);
 			rep.Add(dayOffSettings);
 			UnitOfWork.Flush();
@@ -107,7 +104,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void CanNotRemoveDefaultSetting()
 		{
 			var rep = new PlanningGroupSettingsRepository(CurrUnitOfWork);
-			var defaultSetting = PlanningGroupSettings.CreateDefault(new PlanningGroup());
+			var defaultSetting = PlanningGroupSettings.CreateDefault();
 			Assert.Throws<ArgumentException>(() => rep.Remove(defaultSetting));
 		}
 
@@ -202,6 +199,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var planningGroup = new PlanningGroup("_");
 			PersistAndRemoveFromUnitOfWork(planningGroup);
+			PersistAndRemoveFromUnitOfWork(PlanningGroupSettings.CreateDefault());
 
 			var rep = new PlanningGroupSettingsRepository(CurrUnitOfWork);
 			rep.Add(PlanningGroupSettings.CreateDefault(planningGroup));

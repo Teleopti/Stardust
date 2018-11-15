@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -25,13 +26,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 	public class WebScheduleStardustHandlerTest : SchedulingScenario
 	{
 		public WebScheduleStardustHandler Target;
+		public FullScheduling FullScheduling;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakePlanningGroupSettingsRepository PlanningGroupSettingsRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeScenarioRepository ScenarioRepository;
+		public FakeDataSourceForTenant DataSourceForTenant;
 		public FakePersonRepository PersonRepository;
 		public FakeJobResultRepository JobResultRepository;
 		public FakeTenants Tenants;
@@ -100,7 +102,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			planningPeriod.JobResults.Add(jobResult);
 			JobResultRepository.Add(jobResult);
 			PlanningPeriodRepository.Add(planningPeriod);
-			PlanningGroupSettingsRepository.HasDefault(planningPeriod.PlanningGroup);
 			
 			var reqEvent = new WebScheduleStardustEvent
 			{
