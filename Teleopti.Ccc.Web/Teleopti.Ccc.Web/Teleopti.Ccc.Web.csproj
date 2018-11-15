@@ -1514,10 +1514,7 @@
     <Content Include="Areas\MyTime\Views\StudentAvailability\StudentAvailabilityPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\NewMultipleShiftTradeRequest.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\NewShiftTradeRequestWrapper.cshtml" />
-    <Content Include=".node\package.json" />
-    <Content Include=".node\npm.cmd" />
-    <Content Include=".node\node.targets" />
-    <Content Include=".node\node.cmd" />
+    <Content Include=".node\UseNodeEnv.ps1" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
