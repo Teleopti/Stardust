@@ -238,7 +238,7 @@ ko.bindingHandlers.outsideClickCallback = {
 ko.bindingHandlers.adjustMyActivityTooltipPositionInTeamSchedule = {
 	init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 		if (valueAccessor()) {
-			$(element).click(function(event) {
+			$(element).on('click mouseenter',function(event) {
 				var tooltipEle = $(this)
 					.siblings()
 					.filter('.tooltip.in')[0];
@@ -270,7 +270,7 @@ ko.bindingHandlers.adjustMyActivityTooltipPositionInTeamSchedule = {
 ko.bindingHandlers.adjustAgentActivityTooltipPositionInTeamSchedule = {
 	init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 		if (valueAccessor()) {
-			$(element).click(function(event) {
+			$(element).on('click mouseenter', function(event) {
 				var tooltipEle = $(this)
 					.siblings()
 					.filter('.tooltip.in')[0];
