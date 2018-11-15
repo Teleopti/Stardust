@@ -15,37 +15,37 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakePlanningPeriodRepository : IPlanningPeriodRepository
 	{
 		private readonly INow _now;
-		private readonly IList<IPlanningPeriod> _planningPeriods;
+		private readonly IList<PlanningPeriod> _planningPeriods;
 		private IPlanningPeriodSuggestions _planningPeriodSuggestions;
 
 		public FakePlanningPeriodRepository(INow now)
 		{
 			_now = now;
-			_planningPeriods = new List<IPlanningPeriod>();
+			_planningPeriods = new List<PlanningPeriod>();
 		}
 
 		public bool AddExecuted { get; set; }
 
-		public void Add(IPlanningPeriod entity)
+		public void Add(PlanningPeriod entity)
 		{
 			entity.SetId(Guid.NewGuid());
 			_planningPeriods.Add(entity);
 			AddExecuted = true;
 		}
 
-		public IPlanningPeriod Has(DateOnly start, int numberOfWeeks)
+		public PlanningPeriod Has(DateOnly start, int numberOfWeeks)
 		{
 			return Has(start, numberOfWeeks, null);
 		}
 
-		public IPlanningPeriod Has(DateOnly startDate, DateOnly endDate, SchedulePeriodType schedulePeriodType, int number)
+		public PlanningPeriod Has(DateOnly startDate, DateOnly endDate, SchedulePeriodType schedulePeriodType, int number)
 		{
 			var planningPeriod = new PlanningPeriod(new DateOnlyPeriod(startDate,endDate),schedulePeriodType,number, new PlanningGroup()).WithId();
 			_planningPeriods.Add(planningPeriod);
 			return planningPeriod;
 		}
 
-		public IPlanningPeriod Has(DateOnly start, int number, SchedulePeriodType type, PlanningGroup planningGroup)
+		public PlanningPeriod Has(DateOnly start, int number, SchedulePeriodType type, PlanningGroup planningGroup)
 		{
 			DateTime now;
 			switch (type)
@@ -80,27 +80,27 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			
 		}
 
-		public IPlanningPeriod Has(DateOnly start, int numberOfWeeks, PlanningGroup planningGroup)
+		public PlanningPeriod Has(DateOnly start, int numberOfWeeks, PlanningGroup planningGroup)
 		{
 			return Has(start, numberOfWeeks, SchedulePeriodType.Week, planningGroup);
 		}
 
-		public void Remove(IPlanningPeriod entity)
+		public void Remove(PlanningPeriod entity)
 		{
 			_planningPeriods.Remove(entity);
 		}
 
-		public IPlanningPeriod Get(Guid id)
+		public PlanningPeriod Get(Guid id)
 		{
 			return _planningPeriods.FirstOrDefault(planningPeriod => planningPeriod.Id == id);
 		}
 
-		public IEnumerable<IPlanningPeriod> LoadAll()
+		public IEnumerable<PlanningPeriod> LoadAll()
 		{
 			return _planningPeriods;
 		}
 
-		public IPlanningPeriod Load(Guid id)
+		public PlanningPeriod Load(Guid id)
 		{
 			if (!_planningPeriods.Any())
 				return new PlanningPeriod(new PlanningPeriodSuggestions(_now, new AggregatedSchedulePeriod[] {}));
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _planningPeriodSuggestions;
 		}
 
-		public IEnumerable<IPlanningPeriod> LoadForPlanningGroup(PlanningGroup planningGroup)
+		public IEnumerable<PlanningPeriod> LoadForPlanningGroup(PlanningGroup planningGroup)
 		{
 			return _planningPeriods.Where(x => x.PlanningGroup.Id == planningGroup.Id).ToList();
 		}

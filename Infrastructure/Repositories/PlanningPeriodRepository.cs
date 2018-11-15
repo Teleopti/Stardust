@@ -13,7 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class PlanningPeriodRepository : Repository<IPlanningPeriod> , IPlanningPeriodRepository
+	public class PlanningPeriodRepository : Repository<PlanningPeriod> , IPlanningPeriodRepository
 	{
 		public PlanningPeriodRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
@@ -59,11 +59,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return new PlanningPeriodSuggestions(now, top10.ToList());
 		}
 
-		public IEnumerable<IPlanningPeriod> LoadForPlanningGroup(PlanningGroup planningGroup)
+		public IEnumerable<PlanningPeriod> LoadForPlanningGroup(PlanningGroup planningGroup)
 		{
 			return Session.CreateCriteria(typeof(PlanningPeriod))
 				.Add(Restrictions.Eq("PlanningGroup", planningGroup))
-				.List<IPlanningPeriod>();
+				.List<PlanningPeriod>();
 		}
 	}
 

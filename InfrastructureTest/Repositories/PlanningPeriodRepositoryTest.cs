@@ -21,7 +21,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture, Category("BucketB")]
-	public class PlanningPeriodRepositoryTest : RepositoryTest<IPlanningPeriod>
+	public class PlanningPeriodRepositoryTest : RepositoryTest<PlanningPeriod>
 	{
 		private static readonly DateOnly startDate = new DateOnly(2001, 1, 1);
 		private IPerson person;
@@ -39,14 +39,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(jobResult);
 		}
 
-		protected override IPlanningPeriod CreateAggregateWithCorrectBusinessUnit()
+		protected override PlanningPeriod CreateAggregateWithCorrectBusinessUnit()
 		{
 			var planningPeriod = new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015,4,1), new DateOnly(2015,4,7)),SchedulePeriodType.Week, 1);
 			planningPeriod.JobResults.Add(jobResult);
 			return planningPeriod;
 		}
 
-		protected override void VerifyAggregateGraphProperties(IPlanningPeriod loadedAggregateFromDatabase)
+		protected override void VerifyAggregateGraphProperties(PlanningPeriod loadedAggregateFromDatabase)
 		{
 			var aggregateWithCorrectBusinessUnit = CreateAggregateWithCorrectBusinessUnit();
 			loadedAggregateFromDatabase.Range.Should().Be.EqualTo(aggregateWithCorrectBusinessUnit.Range);
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			loadedAggregateFromDatabase.JobResults.Single().Owner.Should().Be.EqualTo(aggregateWithCorrectBusinessUnit.JobResults.Single().Owner);
 		}
 
-		protected override Repository<IPlanningPeriod> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
+		protected override Repository<PlanningPeriod> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			return new PlanningPeriodRepository(currentUnitOfWork);
 		}

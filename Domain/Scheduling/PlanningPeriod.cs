@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public class PlanningPeriod : NonversionedAggregateRootWithBusinessUnit, IPlanningPeriod
+	public class PlanningPeriod : NonversionedAggregateRootWithBusinessUnit
 	{
 		private DateOnlyPeriod _range;
 		private static readonly SchedulePeriodRangeCalculator calculator = new SchedulePeriodRangeCalculator();
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_state = PlanningPeriodState.Published;
 		}
 
-		public virtual IPlanningPeriod NextPlanningPeriod(PlanningGroup planningGroup)
+		public virtual PlanningPeriod NextPlanningPeriod(PlanningGroup planningGroup)
 		{
 			var nextPlanningPeriodStartDate = _range.EndDate.AddDays(1);
 			var range = calculator.PeriodForType(nextPlanningPeriodStartDate, new SchedulePeriodForRangeCalculation

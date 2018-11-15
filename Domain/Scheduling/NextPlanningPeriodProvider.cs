@@ -1,6 +1,5 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
@@ -18,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_now = now;
 		}
 		
-		public IPlanningPeriod Current(PlanningGroup planningGroup)
+		public PlanningPeriod Current(PlanningGroup planningGroup)
 		{
 			var foundPlanningPeriods = planningGroup != null ? _planningPeriodRepository.LoadForPlanningGroup(planningGroup) : _planningPeriodRepository.LoadAll();
 			var result =
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return result;
 		}
 
-		private static bool planningPeriodNotFound(IPlanningPeriod result)
+		private static bool planningPeriodNotFound(PlanningPeriod result)
 		{
 			return result == null;
 		}
