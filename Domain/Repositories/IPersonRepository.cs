@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		IList<IPerson> FindUsers(DateOnly date);
 		IList<IPerson> FindPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period);
+		IList<IPerson> FindPersonsByKeywords(IEnumerable<string> keywords);
 
 		void HardRemove(IPerson person);
 

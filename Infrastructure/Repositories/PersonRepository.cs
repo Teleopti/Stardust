@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Text;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
@@ -745,6 +746,46 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return results;
 		}
 
+		public IList<IPerson> FindPersonsByKeywords(IEnumerable<string> keywords)
+		{
 
+			//SELECT* from
+			//(
+			//	SELECT FirstName, LastName
+			//		FROM Person
+			//	Where FirstName like '%adam%'
+			//	--group by FirstName, LastName
+
+			//UNION ALL
+
+			//SELECT FirstName, LastName
+			//FROM Person
+			//Where LastName like '%Cuomo%'
+			//	--group by FirstName, LastName
+			//--order by count(*) desc
+			//	) As wolo
+			//GROUP BY FirstName, LastName ORDER BY count(*) desc;
+
+			
+			var allPersons = new List<IPerson>();
+			foreach (var keyword in keywords)
+			{
+				var criteria = Session.CreateCriteria(typeof(Person), "per");
+				criteria.Add(Restrictions.Like("Name.FirstName", $"%{keyword}%"));
+				var retList = criteria.SetResultTransformer(Transformers.DistinctRootEntity)
+					.List<IPerson>();
+				allPersons.AddRange(retList);
+
+				criteria = Session.CreateCriteria(typeof(Person), "per");
+				criteria.Add(Restrictions.Like("Name.LastName", $"%{keyword}%"));
+				retList = criteria.SetResultTransformer(Transformers.DistinctRootEntity)
+					.List<IPerson>();
+				allPersons.AddRange(retList);
+			}
+
+			var sortedPersons = allPersons.GroupBy(person => person.Name).OrderByDescending(group => group.Count()).Select(group => group.First());
+
+			return sortedPersons.ToList();
+		}
 	}
 }

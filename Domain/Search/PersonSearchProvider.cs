@@ -19,22 +19,9 @@ namespace Teleopti.Ccc.Domain.Search
 		public virtual IList<IPerson> FindPersonsByKeywords(string keywords)
 		{
 			var separateKeywords = keywords.Split(' ');
-			var persons = _personRepository.LoadAll();
+			var persons = _personRepository.FindPersonsByKeywords(separateKeywords);
 
-			var perfectMatch = persons.Where(p => keywords == $"{p.Name.FirstName} {p.Name.LastName}" ||
-												  keywords == $"{p.Name.LastName} {p.Name.FirstName}").ToList();
-
-			if (perfectMatch.Count == 1) return perfectMatch.ToList();
-
-			var hitsPerPerson = new Dictionary<IPerson, int>();
-			
-			foreach (var keyword in separateKeywords)
-			{
-				persons.Where(p => p.Name.FirstName.Contains(keyword)).ForEach(p => AddOrUpdate(hitsPerPerson, p));
-				persons.Where(p => p.Name.LastName.Contains(keyword)).ForEach(p => AddOrUpdate(hitsPerPerson, p));
-			}
-
-			return hitsPerPerson.OrderByDescending(kp => kp.Value).Select(refPersonCount => refPersonCount.Key).ToList();
+			return persons;
 		}
 
 		private void AddOrUpdate(Dictionary<IPerson, int> dictionary, IPerson person)

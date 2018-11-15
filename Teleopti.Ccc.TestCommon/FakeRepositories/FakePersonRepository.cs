@@ -311,6 +311,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return result;
 		}
 
+		public IList<IPerson> FindPersonsByKeywords(IEnumerable<string> keywords)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void HardRemove(IPerson person)
 		{
 			_storage.Remove(person);
