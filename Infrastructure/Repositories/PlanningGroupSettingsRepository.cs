@@ -45,13 +45,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return Session.GetNamedQuery("loadGlobalDefault").UniqueResult<PlanningGroupSettings>();
 		}
 
-		public IEnumerable<PlanningGroupSettings> LoadAllByPlanningGroup(IPlanningGroup planningGroup)
+		public AllPlanningGroupSettings LoadAllByPlanningGroup(IPlanningGroup planningGroup)
 		{
-			return Session.CreateCriteria(typeof(PlanningGroupSettings), "planningGroupSettings")
+			return new AllPlanningGroupSettings(Session.CreateCriteria(typeof(PlanningGroupSettings), "planningGroupSettings")
 				.Add(Restrictions.Eq("planningGroupSettings.PlanningGroup", planningGroup))
 				.AddOrder(Order.Asc("planningGroupSettings.Default"))
 				.AddOrder(Order.Asc("planningGroupSettings.Priority"))
-				.List<PlanningGroupSettings>();
+				.List<PlanningGroupSettings>());
 		}
 
 		public void RemoveForPlanningGroup(IPlanningGroup planningGroup)

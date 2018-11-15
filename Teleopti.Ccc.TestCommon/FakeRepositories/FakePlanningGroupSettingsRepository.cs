@@ -57,9 +57,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_workRuleSettings.Add(defaultSettings);
 		}
 
-		public IEnumerable<PlanningGroupSettings> LoadAllByPlanningGroup(IPlanningGroup planningGroup)
+		public AllPlanningGroupSettings LoadAllByPlanningGroup(IPlanningGroup planningGroup)
 		{
-			return _workRuleSettings.Where(x => x.PlanningGroup == planningGroup).OrderBy(x => x.Priority).ToList();
+			return new AllPlanningGroupSettings(_workRuleSettings.Where(x => x.PlanningGroup == planningGroup).OrderBy(x => x.Default).OrderBy(x => x.Priority));
 		}
 		
 		public void RemoveForPlanningGroup(IPlanningGroup planningGroup)
