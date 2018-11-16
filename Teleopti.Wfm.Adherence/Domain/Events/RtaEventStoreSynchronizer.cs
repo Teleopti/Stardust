@@ -60,26 +60,37 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 		{
 			_distributedLock.TryLockForTypeOf(this, () =>
 			{
-				var fromEventId = SynchronizedEventId();
-				var events = LoadEvents(fromEventId);
-				Synchronize(events.Events);
-				UpdateSynchronizedEventId(events.LastId);
+				var toEventId = ToEventId();
+				while (true)
+				{
+					var fromEventId = FromEventId();
+					var events = LoadEvents(fromEventId);
+					Synchronize(events.Events);
+					UpdateSynchronizedEventId(events.ToId);
+					if (events.ToId >= toEventId)
+						break;
+				}
 			});
 		}
 
 		[UnitOfWork]
-		protected virtual LoadedEvents LoadEvents(int fromEventId) =>
-			_events.LoadFrom(fromEventId);
+		protected virtual LoadedEvents LoadEvents(long fromEventId) =>
+			_events.LoadForSynchronization(fromEventId);
 
 		[TestLog]
 		[ReadModelUnitOfWork]
-		protected virtual void UpdateSynchronizedEventId(int toEventId) =>
-			_keyValueStore.Update(SynchronizedEventKey, toEventId.ToString());
-
-		[TestLog]
-		[ReadModelUnitOfWork]
-		protected virtual int SynchronizedEventId() =>
+		protected virtual long FromEventId() =>
 			_keyValueStore.Get(SynchronizedEventKey, 0);
+
+		[TestLog]
+		[UnitOfWork]
+		protected virtual long ToEventId() =>
+			_events.ReadLastId();
+
+		[TestLog]
+		[ReadModelUnitOfWork]
+		protected virtual void UpdateSynchronizedEventId(long toEventId) =>
+			_keyValueStore.Update(SynchronizedEventKey, toEventId.ToString());
 
 		[TestLog]
 		[AllBusinessUnitsUnitOfWork]
@@ -100,7 +111,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 				.Distinct()
 				.ToArray();
 
-			toBeSynched.ForEach(x => { synchronizeAdherenceDay(x.PersonId, x.Day); });
+			Extensions.ForEach(toBeSynched, x => { synchronizeAdherenceDay(x.PersonId, x.Day); });
 		}
 
 		private void synchronizeAdherenceDay(Guid personId, DateOnly day)

@@ -31,7 +31,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit
 
 			Target.Upgrade();
 
-			Events.LoadFrom(0).Events
+			Events.LoadForSynchronization(0).Events
 				.OfType<PersonStateChangedEvent>().Single().BelongsToDate.Should().Be("2018-10-30".Date());
 		}
 
@@ -43,7 +43,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit
 
 			Target.Upgrade();
 
-			Events.LoadFrom(0).Events
+			Events.LoadForSynchronization(0).Events
 				.OfType<PersonRuleChangedEvent>().Single().BelongsToDate.Should().Be("2018-10-30".Date());
 		}
 
@@ -56,7 +56,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit
 
 			Target.Upgrade();
 
-			var events = Events.LoadFrom(0).Events;
+			var events = Events.LoadForSynchronization(0).Events;
 			events.OfType<PersonStateChangedEvent>().First().BelongsToDate.Should().Be("2018-10-30".Date());
 			events.OfType<PersonStateChangedEvent>().Last().BelongsToDate.Should().Be("2018-10-31".Date());
 		}
@@ -79,7 +79,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit
 
 			Target.Upgrade();
 
-			Events.LoadFrom(0).Events
+			Events.LoadForSynchronization(0).Events
 				.OfType<PeriodApprovedAsInAdherenceEvent>().Single().BelongsToDate.Should().Be("2018-10-30".Date());
 		}
 
@@ -93,7 +93,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit
 			Events.Data.Select(x => x.Event).Cast<PersonStateChangedEvent>().Single().BelongsToDate = null;
 			Target.Upgrade();
 
-			Events.LoadFrom(0).Events
+			Events.LoadForSynchronization(0).Events
 				.OfType<PersonStateChangedEvent>().Single().BelongsToDate.Should().Be(null);
 		}
 
@@ -106,7 +106,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit
 
 			Target.Upgrade();
 
-			Events.LoadFrom(0).Events
+			Events.LoadForSynchronization(0).Events
 				.OfType<PersonStateChangedEvent>().Single().BelongsToDate.Should().Be("2018-10-31".Date());
 		}
 
@@ -118,7 +118,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit
 
 			Target.Upgrade();
 
-			Events.LoadFrom(0).Events.OfType<PersonStateChangedEvent>()
+			Events.LoadForSynchronization(0).Events.OfType<PersonStateChangedEvent>()
 				.Single().BelongsToDate.Should().Be(null);
 		}
 
