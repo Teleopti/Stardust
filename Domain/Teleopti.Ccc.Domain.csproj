@@ -177,6 +177,7 @@
     <Compile Include="Aop\IHandleContextAction.cs" />
     <Compile Include="Aop\IUnitOfWorkNoCommitAspect.cs" />
     <Compile Include="Aop\ReadonlyUnitOfWorkAttribute.cs" />
+    <Compile Include="ApplicationLayer\Audit\PurgeAuditHandler.cs" />
     <Compile Include="ApplicationLayer\Audit\AuditAggregatorService.cs" />
     <Compile Include="ApplicationLayer\Audit\AuditServiceModel.cs" />
     <Compile Include="ApplicationLayer\Audit\IPersonAccessContextReaderService.cs" />

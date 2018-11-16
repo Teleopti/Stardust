@@ -20,5 +20,23 @@ namespace Teleopti.Ccc.DomainTest.Auditing
 			StaffingAuditRepository.PurgeCounter.Should().Be(1);
 			PersonAccessAuditRepository.PurgeCounter.Should().Be(1);
 		}
+
+		[Test]
+		public void ShouldRunOtherPurgesWhenOneCrashes1()
+		{
+			StaffingAuditRepository.ThrowOnPurgeOldAudits = true;
+			Target.Run();
+			StaffingAuditRepository.PurgeCounter.Should().Be(0);
+			PersonAccessAuditRepository.PurgeCounter.Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldRunOtherPurgesWhenOneCrashes2()
+		{
+			PersonAccessAuditRepository.ThrowOnPurgeOldAudits = true;
+			Target.Run();
+			StaffingAuditRepository.PurgeCounter.Should().Be(1);
+			PersonAccessAuditRepository.PurgeCounter.Should().Be(0);
+		}
 	}
 }

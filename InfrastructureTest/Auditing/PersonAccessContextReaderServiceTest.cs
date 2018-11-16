@@ -6,15 +6,10 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Audit;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories.Audit;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -23,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 	[TestFixture]
 	[UnitOfWorkTest]
 	[AllTogglesOn]
-	public class PersonAccessContextReaderServiceTest //: IIsolateSystem
+	public class PersonAccessContextReaderServiceTest
 	{
 		public IPersonAccessAuditRepository PersonAccessAuditRepository;
 		public PersonAccessContextReaderService Target;
@@ -31,13 +26,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 		public ICurrentUnitOfWork CurrentUnitOfWork;
 		public IPersonRepository PersonRepository;
 		public MutableNow Now;
-
-
-		//public void Isolate(IIsolate isolate)
-		//{
-		//	isolate.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
-		//	isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-		//}
 
 		[Test]
 		public void ShouldLoadPersonAccessAuditContext()
@@ -56,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 					PersonAuditActionResult.Change.ToString(),
 					JsonConvert.SerializeObject(role)));
 			CurrentUnitOfWork.Current().PersistAll();
-			var model = Target.LoadAll().Single();
+			var model = Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now).Single();
 
 			model.Data.Should().Be.EqualTo("Role: Superman Action: GrantRole");
 		}
@@ -90,7 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 
 			Target.PurgeAudits();
 			CurrentUnitOfWork.Current().PersistAll();
-			var loadedAudits = Target.LoadAll();
+			var loadedAudits = Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now);
 			loadedAudits.Count().Should().Be(1);
 			loadedAudits.FirstOrDefault().TimeStamp.Should().Be.EqualTo(personAccess1.TimeStamp);
 		}

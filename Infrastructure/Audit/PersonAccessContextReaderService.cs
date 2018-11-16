@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
 
@@ -23,12 +25,6 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 			_applicationRoleRepository = applicationRoleRepository;
 			_purgeSettingRepository = purgeSettingRepository;
 			_now = now;
-		}
-
-		public IEnumerable<AuditServiceModel> LoadAll()
-		{
-			var personAccessAudits = _personAccessAuditRepository.LoadAll();
-			return getAuditServiceModel(personAccessAudits);
 		}
 
 		private IEnumerable<AuditServiceModel> getAuditServiceModel(IEnumerable<IPersonAccess> personAccessAudit)

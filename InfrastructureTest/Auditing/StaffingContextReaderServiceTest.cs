@@ -49,11 +49,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 		[Test]
 		public void ShouldLoadStaffingAuditContext()
 		{
-			var person = PersonFactory.CreatePersonWithId();
+			var person = PersonFactory.CreatePerson();
 			PersonRepository.Add(person);
 			StaffingAuditRepository.Add(new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo,  "BPO", "abc.txt"));
 			CurrentUnitOfWork.Current().PersistAll();
-			Target.LoadAudits(person, DateTime.MinValue, DateTime.MaxValue).Should().Not.Be.Empty();
+			Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now).Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -63,8 +63,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 
 			var person = PersonFactory.CreatePerson();
 			PersonRepository.Add(person);
-			var loggedOnUser = PersonFactory.CreatePersonWithGuid("Ashley", "Aaron");
-			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
 			var expectedResult = "BPO name: telia" + Environment.NewLine + "Period from 2018-10-01 to 2019-10-01";
 			var bpoGuid = addBpo("telia");
 			var clearBpoAction = new ClearBpoActionObj
@@ -78,7 +76,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 					clearBpoAction.BpoGuid,clearBpoAction.StartDate,clearBpoAction.EndDate));
 			CurrentUnitOfWork.Current().PersistAll();
 
-			Target.LoadAudits(loggedOnUser, DateTime.MinValue, DateTime.MaxValue).FirstOrDefault().Data.Should().Be.EqualTo(expectedResult);
+			Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now).FirstOrDefault().Data.Should().Be.EqualTo(expectedResult);
 		}
 
 		private Guid addBpo(string bpoName)
@@ -130,7 +128,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 			StaffingAuditRepository.Add(staffingAudit);
 			CurrentUnitOfWork.Current().PersistAll();
 
-			var list = Target.LoadAudits(loggedOnUser, DateTime.MinValue, DateTime.MaxValue).ToList();
+			var list = Target.LoadAudits(loggedOnUser, DateTime.Now.AddDays(-100), DateTime.Now).ToList();
 
 			list.FirstOrDefault().TimeStamp.Should().Be.EqualTo(staffingAudit.TimeStamp);
 			list.FirstOrDefault().Action.Should().Be.EqualTo(StaffingAuditActionConstants.ImportBpo);
@@ -144,9 +142,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 			Now.Is(DateTime.UtcNow);
 			var person = PersonFactory.CreatePerson();
 			PersonRepository.Add(person);
-			var loggedOnUser = PersonFactory.CreatePersonWithGuid("Ashley", "Aaron");
-			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
-
+			
 			var staffingAudit1 =
 				new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt")
 					{ TimeStamp = DateTime.UtcNow };
@@ -160,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 
 			Target.PurgeAudits();
 			CurrentUnitOfWork.Current().PersistAll();
-			var loadedAudits = Target.LoadAudits(loggedOnUser, DateTime.MinValue, DateTime.MaxValue);
+			var loadedAudits = Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now);
 			loadedAudits.Count().Should().Be(1);
 			loadedAudits.FirstOrDefault().TimeStamp.Should().Be.EqualTo(staffingAudit1.TimeStamp);
 		}

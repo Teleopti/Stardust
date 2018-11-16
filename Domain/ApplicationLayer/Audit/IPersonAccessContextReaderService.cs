@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 {
 	public interface IPersonAccessContextReaderService
 	{
-		IEnumerable<AuditServiceModel> LoadAll();
 		IEnumerable<AuditServiceModel> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate);
 	}
 
