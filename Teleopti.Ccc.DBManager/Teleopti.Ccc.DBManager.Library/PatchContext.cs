@@ -51,12 +51,11 @@ namespace Teleopti.Ccc.DBManager.Library
 			{
 				Policy.Handle<SqlException>()
 					.WaitAndRetry(3, i => TimeSpan.FromSeconds(Math.Pow(i, 2)))
-					.Execute(()=>ExecuteSql().Execute(c => { }));
+					.Execute(() => ExecuteSql().Execute(c => { }));
 				return true;
 			}
-			catch(Exception e)
+			catch (Exception)
 			{
-				_log.Write($"An error occurred: {e}\n{e.StackTrace}", "WARN");
 				return false;
 			}
 		}
