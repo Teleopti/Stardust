@@ -16,7 +16,7 @@ import { environment } from './environments/environment';
 import { MainController } from './main.controller';
 import { mainInitializer } from './main.initializer';
 import { DowngradeableComponent, RouterConfigFunction } from './types';
-import { ResetPasswordModule } from './reset-password/reset-password.module';
+//import { ResetPasswordModule } from './reset-password/reset-password.module';
 export interface IWfmRootScopeService extends IRootScopeService {
 	_: any;
 	isAuthenticated: boolean;
@@ -26,11 +26,11 @@ if (environment.production) {
 	enableProdMode();
 }
 
-if (window.location.pathname.includes('reset_password.html')) {
-	platformBrowserDynamic().bootstrapModule(ResetPasswordModule);
-} else {
+//if (window.location.pathname.includes('reset_password.html')) {
+//	platformBrowserDynamic().bootstrapModule(ResetPasswordModule);
+//} else {
 	bootstrapAngularJs();
-}
+//}
 
 function bootstrapAngularJs() {
 	const bootstrapFnAngularApp = (extraProviders: StaticProvider[]) =>
