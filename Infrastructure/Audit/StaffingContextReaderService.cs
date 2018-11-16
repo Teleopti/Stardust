@@ -30,14 +30,6 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 			_commonAgentNameProvider = commonAgentNameProvider;
 		}
 
-		public IEnumerable<AuditServiceModel> LoadAll()
-		{
-			var staffingAudit = _staffingAuditRepository.LoadAll();
-
-			return getAuditServiceModel(staffingAudit);
-
-		}
-
 		private IEnumerable<AuditServiceModel> getAuditServiceModel(IEnumerable<IStaffingAudit> staffingAudit)
 		{
 			var auditServiceModelList = new List<AuditServiceModel>();
