@@ -513,7 +513,7 @@
     <Compile Include="Areas\MyTime\Models\Schedule\Common\OvertimeAvailabilityViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Schedule\Common\SpecialDateState.cs" />
     <Compile Include="Areas\MyTime\Models\Schedule\Common\DayViewModel.cs" />
-    <Compile Include="Areas\Rta\Controllers\RtaTestDataController.cs" />
+    <Compile Include="Areas\Rta\Controllers\TestDataController.cs" />
     <Compile Include="Areas\Rta\Controllers\HistoricalOverviewController.cs" />
     <Compile Include="Core\Exceptions\CustomMessageException.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\AgentScheduleViewModelMapper.cs" />
