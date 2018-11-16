@@ -163,9 +163,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			planningGroup.AddSetting(setting2);
 			PersistAndRemoveFromUnitOfWork(planningGroup);
 			var target = new PlanningGroupRepository(CurrUnitOfWork);
-			
-			target.FindPlanningGroupBySettingId(setting2.Id.Value)
-				.Should().Be.EqualTo(planningGroup);
+
+			target.FindPlanningGroupBySettingId(setting2.Id.Value).Settings
+				.Should().Have.SameValuesAs(setting1, setting2);
 		}
 		
 		[Test]
@@ -184,9 +184,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 		
 		[Test]
-		[Ignore("to be contiinued")]
-		public void ShouldNotIncludePlanningGroupContainingPlanningGroupSettingId()
+		[Ignore("to be continued")]
+		public void ShouldNotIncludePlanningGroupNotContainingPlanningGroupSettingId()
 		{
+			var settings = new PlanningGroupSettings();
+			var planningGroup = new PlanningGroup();
+			planningGroup.AddSetting(settings);
+			PersistAndRemoveFromUnitOfWork(planningGroup);
+			
 			var target = new PlanningGroupRepository(CurrUnitOfWork);
 
 			target.FindPlanningGroupBySettingId(Guid.NewGuid())
