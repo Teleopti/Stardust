@@ -19,18 +19,17 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Controllers
 
 		private static readonly string powerBiUsername = ConfigurationManager.AppSettings["PowerBIUsername"];
 		private static readonly string powerBiPassword = ConfigurationManager.AppSettings["PowerBIPassword"];
-		private static readonly string authorityUrl = ConfigurationManager.AppSettings["PowerBIAuthorityUrl"];
-		private static readonly string resourceUrl = ConfigurationManager.AppSettings["PowerBIResourceUrl"];
 		private static readonly string clientId = ConfigurationManager.AppSettings["PowerBIClientId"];
-		private static readonly string apiUrl = ConfigurationManager.AppSettings["PowerBIApiUrl"];
 		private static readonly string groupId = ConfigurationManager.AppSettings["PowerBIGroupId"];
+		private static readonly string azureTenantId = ConfigurationManager.AppSettings["AzureTenantId"];
+
+		const string azureAuthorityUrl = "https://login.microsoftonline.com/{0}/";
+		const string resourceUrl = "https://analysis.windows.net/powerbi/api";
+		const string apiUrl = "https://api.powerbi.com/";
 
 		[HttpGet, Route("api/Insights/ReportConfig")]
 		public virtual async Task<EmbedReportConfig> GetReportConfig(string reportId)
 		{
-			var userName = "";
-			var roles = "";
-
 			var result = new EmbedReportConfig();
 
 			// Create a Power BI Client object. It will be used to call Power BI APIs.
@@ -52,37 +51,12 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Controllers
 				//var datasets = await client.Datasets.GetDatasetByIdInGroupAsync(groupId, report.DatasetId);
 				//result.IsEffectiveIdentityRequired = datasets.IsEffectiveIdentityRequired;
 				//result.IsEffectiveIdentityRolesRequired = datasets.IsEffectiveIdentityRolesRequired;
-				GenerateTokenRequest generateTokenRequestParameters;
-				// This is how you create embed token with effective identities
-				if (!string.IsNullOrEmpty(userName))
-				{
-					var rls = new EffectiveIdentity(userName, new List<string> { report.DatasetId });
-					if (!string.IsNullOrWhiteSpace(roles))
-					{
-						var rolesList = new List<string>();
-						rolesList.AddRange(roles.Split(','));
-						rls.Roles = rolesList;
-					}
-					// Generate Embed Token with effective identities.
-					generateTokenRequestParameters = new GenerateTokenRequest(accessLevel: "view", identities: new List<EffectiveIdentity> { rls });
-				}
-				else
-				{
-					// Generate Embed Token for reports without effective identities.
-					generateTokenRequestParameters = new GenerateTokenRequest(accessLevel: "view");
-				}
 
-				var tokenResponse = await client.Reports.GenerateTokenInGroupAsync(groupId, report.Id, generateTokenRequestParameters);
-
-				if (tokenResponse == null)
-				{
-					logger.Error("Failed to generate embed token.");
-					return result;
-				}
+				var token = await generateAccessToken(client, report);
 
 				// Generate Embed Configuration.
 				result.TokenType = "Embed";
-				result.AccessToken = tokenResponse.Token;
+				result.AccessToken = token.Token;
 				result.ReportUrl = report.EmbedUrl;
 				result.ReportId = report.Id;
 
@@ -114,6 +88,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Controllers
 			var credential = new UserPasswordCredential(powerBiUsername, powerBiPassword);
 
 			// Authenticate using created credentials
+			var authorityUrl = string.Format(azureAuthorityUrl, azureTenantId);
 			var authenticationContext = new AuthenticationContext(authorityUrl);
 			var authenticationResult = await authenticationContext.AcquireTokenAsync(resourceUrl, clientId, credential);
 
@@ -128,6 +103,39 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Controllers
 			// Create a Power BI Client object. It will be used to call Power BI APIs.
 			var client = new PowerBIClient(new Uri(apiUrl), tokenCredentials);
 			return client;
+		}
+
+		private async Task<EmbedToken> generateAccessToken(IPowerBIClient client, Report report, string userName = null, string roles = null)
+		{
+			GenerateTokenRequest generateTokenRequestParameters;
+			// This is how you create embed token with effective identities
+			if (!string.IsNullOrEmpty(userName))
+			{
+				var rls = new EffectiveIdentity(userName, new List<string> { report.DatasetId });
+				if (!string.IsNullOrWhiteSpace(roles))
+				{
+					rls.Roles = roles.Split(',').ToList();
+				}
+
+				// Generate Embed Token with effective identities.
+				// Possible values for access level: 'View', 'Edit', 'Create'
+				// Refer to https://github.com/Microsoft/PowerBI-CSharp/blob/master/sdk/PowerBI.Api/Source/V2/Models/GenerateTokenRequest.cs
+				generateTokenRequestParameters = new GenerateTokenRequest(accessLevel: "Edit", identities: new List<EffectiveIdentity> { rls });
+			}
+			else
+			{
+				// Generate Embed Token for reports without effective identities.
+				generateTokenRequestParameters = new GenerateTokenRequest(accessLevel: "Edit");
+			}
+
+			var token = await client.Reports.GenerateTokenInGroupAsync(groupId, report.Id, generateTokenRequestParameters);
+
+			if (token == null)
+			{
+				logger.Error("Failed to generate embed token.");
+			}
+
+			return token;
 		}
 	}
 }
