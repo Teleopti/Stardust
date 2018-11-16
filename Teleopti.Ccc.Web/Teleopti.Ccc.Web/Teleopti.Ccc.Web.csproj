@@ -402,6 +402,7 @@
     <Compile Include="Areas\MultiTenancy\Core\CustomerDbConnector.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormExtensions.cs" />
     <Compile Include="Areas\Reports\Controllers\AuditTrailController.cs" />
+    <Compile Include="Areas\Rta\Controllers\PermissionsController.cs" />
     <Compile Include="Areas\Search\Controllers\PersonSearchController.cs" />
     <Compile Include="Areas\Search\Models\PersonSearchModels.cs" />
     <Compile Include="Areas\Insights\Models\EmbedReportConfig.cs" />
@@ -508,7 +509,6 @@
     <Compile Include="Areas\MyTime\Models\Schedule\Common\OvertimeAvailabilityViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Schedule\Common\SpecialDateState.cs" />
     <Compile Include="Areas\MyTime\Models\Schedule\Common\DayViewModel.cs" />
-    <Compile Include="Areas\Rta\Controllers\RtaPermissionsController.cs" />
     <Compile Include="Areas\Rta\Controllers\RtaTestDataController.cs" />
     <Compile Include="Areas\Rta\Controllers\HistoricalOverviewController.cs" />
     <Compile Include="Core\Exceptions\CustomMessageException.cs" />
