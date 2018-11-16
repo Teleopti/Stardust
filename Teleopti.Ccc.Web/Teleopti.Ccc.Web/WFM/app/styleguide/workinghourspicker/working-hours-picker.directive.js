@@ -100,6 +100,9 @@
 			function addEmptyWorkingPeriod() {
 				var startTime = scope.newWorkingPeriod.startTime,
 					endTime = scope.newWorkingPeriod.endTime;
+
+				if (startTime >= endTime) return;
+
 				scope.workingHours.push(
 					workingHoursPickerService.createEmptyWorkingPeriod(angular.copy(startTime), angular.copy(endTime))
 				);
