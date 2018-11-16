@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Audit
 {
-	public class StaffingContextReaderService : IStaffingContextReaderService
+	public class StaffingContextReaderService : IStaffingContextReaderService, IPurgeAudit
 	{
 		private readonly IStaffingAuditRepository _staffingAuditRepository;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;

@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 	{
 		IEnumerable<AuditServiceModel> LoadAll();
 		IEnumerable<AuditServiceModel> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate);
-		void PurgeAudits();
 	}
 
 	public enum PersonAuditActionResult

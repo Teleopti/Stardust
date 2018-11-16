@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 	public class PersonAccessContextReaderServiceTest //: IIsolateSystem
 	{
 		public IPersonAccessAuditRepository PersonAccessAuditRepository;
-		public IPersonAccessContextReaderService Target;
+		public PersonAccessContextReaderService Target;
 		public IApplicationRoleRepository ApplicationRoleRepository;
 		public ICurrentUnitOfWork CurrentUnitOfWork;
 		public IPersonRepository PersonRepository;

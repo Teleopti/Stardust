@@ -747,70 +747,29 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return results;
 		}
 
-		public IList<IPerson> FindPersonsByKeywordsMulti(IEnumerable<string> keywords)
-		{
-
-			//SELECT* from
-			//(
-			//	SELECT FirstName, LastName
-			//		FROM Person
-			//	Where FirstName like '%adam%'
-			//	--group by FirstName, LastName
-
-			//UNION ALL
-
-			//SELECT FirstName, LastName
-			//FROM Person
-			//Where LastName like '%Cuomo%'
-			//	--group by FirstName, LastName
-			//--order by count(*) desc
-			//	) As wolo
-			//GROUP BY FirstName, LastName ORDER BY count(*) desc;
-
-			
-			var allPersons = new List<IPerson>();
-			foreach (var keyword in keywords)
-			{
-				var criteria = Session.CreateCriteria(typeof(Person), "per");
-				criteria.Add(Restrictions.Like("Name.FirstName", $"%{keyword}%"));
-				var retList = criteria.SetResultTransformer(Transformers.DistinctRootEntity)
-					.List<IPerson>();
-				allPersons.AddRange(retList);
-
-				criteria = Session.CreateCriteria(typeof(Person), "per");
-				criteria.Add(Restrictions.Like("Name.LastName", $"%{keyword}%"));
-				retList = criteria.SetResultTransformer(Transformers.DistinctRootEntity)
-					.List<IPerson>();
-				allPersons.AddRange(retList);
-			}
-
-			var sortedPersons = allPersons.GroupBy(person => person.Name).OrderByDescending(group => group.Count()).Select(group => group.First());
-
-			return sortedPersons.ToList();
-		}
-
 		public IList<IPerson> FindPersonsByKeywords(IEnumerable<string> keywords)
 		{
 			var allPersons = new List<IPerson>();
-			var criterias = new List<ICriteria>();
+			var multi = Session.CreateMultiCriteria();
 			foreach (var keyword in keywords)
 			{
 				var criteriaFirstName = Session.CreateCriteria(typeof(Person), "per")
-				.Add(Restrictions.Like("Name.FirstName", $"%{keyword}%"))
-				.SetResultTransformer(Transformers.DistinctRootEntity);
-				criteriaFirstName.Future<List<IPerson>>();
+					.Add(Restrictions.Like("Name.FirstName", $"%{keyword}%"));
+				
+				multi.Add(criteriaFirstName);
 
-				criterias.Add(criteriaFirstName);
-			
 				var criteriaLastName = Session.CreateCriteria(typeof(Person), "per")
-					.Add(Restrictions.Like("Name.LastName", $"%{keyword}%"))
-					.SetResultTransformer(Transformers.DistinctRootEntity);
-				criteriaLastName.Future<List<IPerson>>();
-
-				criterias.Add(criteriaLastName);
+					.Add(Restrictions.Like("Name.LastName", $"%{keyword}%"));
+				multi.Add(criteriaLastName);				
 			}
 
-			criterias.ForEach(c => allPersons.AddRange(c.List<IPerson>()));
+			var multiList = multi.List();
+
+			foreach (IList listOfPersons in multiList)
+			{
+				allPersons.AddRange(listOfPersons.OfType<IPerson>());
+			}
+
 			var sortedPersons = allPersons.GroupBy(person => person.Name).OrderByDescending(group => group.Count()).Select(group => group.First());
 
 			return sortedPersons.ToList();

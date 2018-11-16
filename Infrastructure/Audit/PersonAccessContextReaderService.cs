@@ -7,22 +7,19 @@ using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Audit
 {
-	public class PersonAccessContextReaderService : IPersonAccessContextReaderService
+	public class PersonAccessContextReaderService : IPersonAccessContextReaderService, IPurgeAudit
 	{
 		private readonly IPersonAccessAuditRepository _personAccessAuditRepository;
-		private readonly IUserCulture _userCulture;
 		private readonly IApplicationRoleRepository _applicationRoleRepository;
 		private readonly IPurgeSettingRepository _purgeSettingRepository;
 		private readonly INow _now;
 
-		public PersonAccessContextReaderService(IPersonAccessAuditRepository personAccessAuditRepository, IUserCulture userCulture, IApplicationRoleRepository applicationRoleRepository, IPurgeSettingRepository purgeSettingRepository, INow now)
+		public PersonAccessContextReaderService(IPersonAccessAuditRepository personAccessAuditRepository, IApplicationRoleRepository applicationRoleRepository, IPurgeSettingRepository purgeSettingRepository, INow now)
 		{
 			_personAccessAuditRepository = personAccessAuditRepository;
-			_userCulture = userCulture;
 			_applicationRoleRepository = applicationRoleRepository;
 			_purgeSettingRepository = purgeSettingRepository;
 			_now = now;
@@ -31,9 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 		public IEnumerable<AuditServiceModel> LoadAll()
 		{
 			var personAccessAudits = _personAccessAuditRepository.LoadAll();
-
 			return getAuditServiceModel(personAccessAudits);
-
 		}
 
 		private IEnumerable<AuditServiceModel> getAuditServiceModel(IEnumerable<IPersonAccess> personAccessAudit)

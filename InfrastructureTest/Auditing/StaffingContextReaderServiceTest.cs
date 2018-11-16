@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.Infrastructure.Audit;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 	public class StaffingContextReaderServiceTest : IIsolateSystem
 	{
 		public IStaffingAuditRepository StaffingAuditRepository;
-		public IStaffingContextReaderService Target;
+		public StaffingContextReaderService Target;
 		public ISkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public IPersonRepository PersonRepository;
 		public ICurrentUnitOfWork CurrentUnitOfWork;

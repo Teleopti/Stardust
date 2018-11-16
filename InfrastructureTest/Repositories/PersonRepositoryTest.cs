@@ -2029,7 +2029,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldHandleNoKeywordMatch()
+		public void ShouldHandleKeywordNotMatching()
 		{
 			target = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 			var person = PersonFactory.CreatePerson("ashley", "aaron");
