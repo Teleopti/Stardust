@@ -46,12 +46,12 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 
 		[TestLog]
 		[ReadModelUnitOfWork]
-		protected virtual int SynchronizedEventId() =>
-			KeyValueStorePersisterExtensions.Get(_keyValueStore, RtaEventStoreSynchronizer.SynchronizedEventKey, 0);
+		protected virtual long SynchronizedEventId() =>
+			_keyValueStore.Get(RtaEventStoreSynchronizer.SynchronizedEventKey, 0);
 
 		[TestLog]
 		[UnitOfWork]
-		protected virtual int LatestEventId() =>
+		protected virtual long LatestEventId() =>
 			_events.ReadLastId();
 
 		public class WaitForSynchronizeException : Exception
