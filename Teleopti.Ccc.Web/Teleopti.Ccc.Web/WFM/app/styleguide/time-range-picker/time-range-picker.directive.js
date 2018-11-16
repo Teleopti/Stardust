@@ -29,8 +29,7 @@
 		vm.nextDay = !isSameDate(vm.ngModel.startTime, vm.ngModel.endTime);
 		vm.meridians = [meridianInfo.am, meridianInfo.pm];
 		vm.minuteStep = 5;
-		vm.invalidTimeRangeMessage = $translate.instant('InvalidHoursRange').replace('{0}', vm.maxHoursRange);
-
+		vm.errorMessage = '';
 		vm.showInvalidError = false;
 		vm.showOrderError = false;
 		vm.showEmptyError = false;
@@ -66,16 +65,14 @@
 				});
 			},
 			function(newVal, oldVal) {
-				if (!vm.ngModel) {
-					vm.showInvalidError = true;
-					return;
-				}
-				if (vm.ngModel.startTime > vm.ngModel.endTime) {
-					vm.showOrderError = true;
-					return;
-				}
-				if (!vm.ngModel.startTime || !vm.ngModel.endTime) {
-					vm.showEmptyError = true;
+				if (!vm.ngModel || !vm.ngModel.startTime || !vm.ngModel.endTime) {
+					vm.errorMessage = $translate.instant('StartTimeAndEndTimeMustBeSet');
+				} else if (vm.ngModel.endTime.getHours() - vm.ngModel.startTime.getHours() > vm.maxHoursRange) {
+					vm.errorMessage = $translate.instant('InvalidHoursRange').replace('{0}', vm.maxHoursRange);
+				} else if (vm.ngModel.startTime > vm.ngModel.endTime) {
+					vm.errorMessage = $translate.instant('EndTimeMustBeGreaterOrEqualToStartTime');
+				} else {
+					vm.errorMessage = '';
 				}
 			}
 		);

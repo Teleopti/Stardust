@@ -25,15 +25,7 @@
 	</div>
 </div>
 
-<div class="error-msg-container ng-invalid-range alert-error notice-spacer" ng-if="vm.showInvalidError">
+<div class="error-msg-container alert-error notice-spacer" ng-if="vm.errorMessage.length > 0">
 	<i class="mdi mdi-alert-octagon"></i>
-	<span>{{vm.invalidTimeRangeMessage}}</span>
-</div>
-<div class="error-msg-container ng-invalid-order alert-error notice-spacer" ng-if="vm.showOrderError">
-	<i class="mdi mdi-alert-octagon"></i>
-	<span translate>EndTimeMustBeGreaterOrEqualToStartTime</span>
-</div>
-<div class="error-msg-container ng-invalid-parse alert-error notice-spacer" ng-if="vm.showEmptyError">
-	<i class="mdi mdi-alert-octagon"></i>
-	<span translate>StartTimeAndEndTimeMustBeSet</span>
+	<span>{{vm.errorMessage}}</span>
 </div>
