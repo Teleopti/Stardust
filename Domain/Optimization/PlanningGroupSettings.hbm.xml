@@ -54,12 +54,11 @@
 				<column name="Filter"/>
 			</many-to-any>
 		</set>
-		
-		<filter name="businessUnitFilter"
-			condition=":businessUnitParameter = BusinessUnit" />
 	</class>
 
-	<query name="loadGlobalDefault">
-		select dor from PlanningGroupSettings dor where defaultsettings=1 and planningGroup is null
+	<query name="FindPlanningGroupBySettingId">
+		select pg from PlanningGroup pg
+		left outer join fetch pg.Settings s
+		where exists(select 1 from PlanningGroup pg2 inner join pg2.Settings s2 where s2.id = :settingId and pg.Id=pg2.Id)
 	</query>
 </hibernate-mapping>

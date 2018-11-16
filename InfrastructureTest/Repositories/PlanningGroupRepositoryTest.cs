@@ -184,7 +184,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 		
 		[Test]
-		[Ignore("to be continued")]
 		public void ShouldNotIncludePlanningGroupNotContainingPlanningGroupSettingId()
 		{
 			var settings = new PlanningGroupSettings();
