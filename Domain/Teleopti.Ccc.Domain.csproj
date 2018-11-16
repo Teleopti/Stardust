@@ -234,6 +234,7 @@
     <Compile Include="Infrastructure\HttpRequestHandler.cs" />
     <Compile Include="Infrastructure\IHttpRequestHandler.cs" />
     <Compile Include="InterfaceLegacy\Domain\PersonInfoForShiftTradeFilter.cs" />
+    <Compile Include="InterfaceLegacy\PlanningPeriodState.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayForcastedStaffingIntervalDTO.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayScheduleStaffingIntervalDTO.cs" />
     <Compile Include="Intraday\ApplicationLayer\IntradayIncomingTrafficApplicationService.cs" />
@@ -1361,7 +1362,6 @@
     <Compile Include="InterfaceLegacy\Domain\WorkTimeDirective.cs" />
     <Compile Include="InterfaceLegacy\Domain\WorkTimeLimitation.cs" />
     <Compile Include="InterfaceLegacy\Domain\WorkTimeSource.cs" />
-    <Compile Include="InterfaceLegacy\IPlanningGroup.cs" />
     <Compile Include="InterfaceLegacy\IDayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="InterfaceLegacy\IFilter.cs" />
     <Compile Include="InterfaceLegacy\IJsonDeserializer.cs" />
@@ -1415,7 +1415,6 @@
     <Compile Include="InterfaceLegacy\Infrastructure\IWriteToFile.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\MessageBrokerException.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\ReadModelValidationResult.cs" />
-    <Compile Include="InterfaceLegacy\IPlanningPeriod.cs" />
     <Compile Include="InterfaceLegacy\IValidatePeriod.cs" />
     <Compile Include="InterfaceLegacy\Messages\Denormalize\DenormalizeScheduleProjection.cs" />
     <Compile Include="InterfaceLegacy\Messages\Denormalize\GroupPageChangedMessage.cs" />
