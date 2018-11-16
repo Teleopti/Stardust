@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 				builder.RegisterType<ScheduleInvalidator>().SingleInstance().ApplyAspects();
 				builder.RegisterType<FakeEventPublisher>().SingleInstance();
 				builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
+				builder.RegisterType<SynchronizerWaiter>().SingleInstance().ApplyAspects();
 			}, arguments => { arguments.AllEventPublishingsAsSync = true; }, this);
 
 		}

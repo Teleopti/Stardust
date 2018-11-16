@@ -19,17 +19,13 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 		void Synchronize();
 	}
 
-	public class DontSynchronize : IRtaEventStoreSynchronizer, IRtaEventStoreAsyncSynchronizer, IRtaEventStoreSynchronizerWaiter
+	public class DontSynchronize : IRtaEventStoreSynchronizer, IRtaEventStoreAsyncSynchronizer
 	{
 		public void Synchronize()
 		{
 		}
 
 		public void SynchronizeAsync()
-		{
-		}
-
-		public void Wait(TimeSpan timeout)
 		{
 		}
 	}

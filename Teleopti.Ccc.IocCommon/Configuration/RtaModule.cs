@@ -141,7 +141,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
 			{
 				builder.RegisterType<RtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance().ApplyAspects();
-				builder.RegisterType<RtaEventStoreSynchronizerWaiter>().As<IRtaEventStoreSynchronizerWaiter>().SingleInstance().ApplyAspects();
 				builder.RegisterType<RtaEventStoreAsyncSynchronizer>().As<IRtaEventStoreAsyncSynchronizer>().SingleInstance().ApplyAspects();
 				builder.RegisterType<RunAsynchronouslyAndLog>().As<IRtaEventStoreAsyncSynchronizerStrategy>().SingleInstance().ApplyAspects();
 			}
@@ -150,7 +149,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<DontSynchronize>()
 					.As<IRtaEventStoreSynchronizer>()
 					.As<IRtaEventStoreAsyncSynchronizer>()
-					.As<IRtaEventStoreSynchronizerWaiter>()
 					.SingleInstance();
 			}
 

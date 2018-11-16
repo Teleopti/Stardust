@@ -2,47 +2,55 @@
 using Polly;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.Hangfire;
+using Teleopti.Wfm.Adherence.Domain.Events;
 
-namespace Teleopti.Wfm.Adherence.Domain.Events
+namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 {
-	public interface IRtaEventStoreSynchronizerWaiter
-	{
-		void Wait(TimeSpan timeout);
-	}
-
-	public class RtaEventStoreSynchronizerWaiter : IRtaEventStoreSynchronizerWaiter
+	public class SynchronizerWaiter
 	{
 		private readonly IKeyValueStorePersister _keyValueStore;
 		private readonly IRtaEventStoreReader _events;
+		private readonly StatesSender _sender;
+		private readonly HangfireUtilities _hangfire;
 
-		public RtaEventStoreSynchronizerWaiter(
+		public SynchronizerWaiter(
 			IKeyValueStorePersister keyValueStore,
-			IRtaEventStoreReader events)
+			IRtaEventStoreReader events,
+			StatesSender sender,
+			HangfireUtilities hangfire)
 		{
 			_keyValueStore = keyValueStore;
 			_events = events;
+			_sender = sender;
+			_hangfire = hangfire;
 		}
 
 		[TestLog]
-		[UnitOfWork]
-		[ReadModelUnitOfWork]
 		public virtual void Wait(TimeSpan timeout)
 		{
-			var interval = TimeSpan.FromMilliseconds(100);
+			var interval = TimeSpan.FromMilliseconds(500);
 			var attempts = (int) (timeout.TotalMilliseconds / interval.TotalMilliseconds);
-			var synchronized = Policy.HandleResult(false)
+			var synchronized = Policy
+				.HandleResult(false)
 				.WaitAndRetry(attempts, attempt => interval)
-				.Execute(() => SynchronizedEventId() >= LatestEventId());
+				.Execute(() =>
+				{
+					_sender.TriggerRecurringJobs();
+					_hangfire.WaitForQueue();
+					return SynchronizedEventId() >= LatestEventId();
+				});
 			if (!synchronized)
 				throw new WaitForSynchronizeException($"Events still not synchronized after waiting {timeout.TotalSeconds} seconds");
 		}
 
 		[TestLog]
+		[ReadModelUnitOfWork]
 		protected virtual int SynchronizedEventId() =>
-			Ccc.Domain.ApplicationLayer.KeyValueStorePersisterExtensions.Get(_keyValueStore, RtaEventStoreSynchronizer.SynchronizedEventKey, 0);
+			KeyValueStorePersisterExtensions.Get(_keyValueStore, RtaEventStoreSynchronizer.SynchronizedEventKey, 0);
 
 		[TestLog]
+		[UnitOfWork]
 		protected virtual int LatestEventId() =>
 			_events.ReadLastId();
 

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 			Recurring.PublishMinutely(new RecurringEvent());
 			200.Times(() =>
 			{
-				Hangfire.TriggerReccuringJobs();
+				Hangfire.TriggerRecurringJobs();
 				Publisher.Publish(new RegularEvent());
 			});
 
