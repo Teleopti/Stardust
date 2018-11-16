@@ -29,14 +29,16 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 				var groupId = _configReader.AppConfig("PowerBIGroupId");
 				var reports = await client.Reports.GetReportsInGroupAsync(groupId);
 
-				return reports.Value.Select(x => new ReportModel
-				{
-					Id = x.Id,
-					Name = x.Name,
-					EmbedUrl = x.EmbedUrl
-					// WebUrl = x.WebUrl,
-					// DatasetId = x.DatasetId
-				}).ToArray();
+				return reports.Value.OrderBy(r => r.Name)
+					.Select(x => new ReportModel
+					{
+						Id = x.Id,
+						Name = x.Name,
+						EmbedUrl = x.EmbedUrl
+						// WebUrl = x.WebUrl,
+						// DatasetId = x.DatasetId
+					})
+					.ToArray();
 			}
 		}
 
@@ -72,6 +74,44 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 				result.AccessToken = token.Token;
 				result.ReportUrl = report.EmbedUrl;
 				result.ReportId = report.Id;
+
+				return result;
+			}
+		}
+
+		public async Task<EmbedReportConfig> CloneReport(string reportId)
+		{
+			var result = new EmbedReportConfig();
+
+			if (string.IsNullOrEmpty(reportId))
+			{
+				return result;
+			}
+
+			// Create a Power BI Client object. It will be used to call Power BI APIs.
+			using (var client = await _powerBiClientFactory.CreatePowerBiClient())
+			{
+				// Get a list of reports.
+				var groupId = _configReader.AppConfig("PowerBIGroupId");
+				var reports = await client.Reports.GetReportsInGroupAsync(groupId);
+
+				var report = reports.Value.FirstOrDefault(r => r.Id == reportId);
+
+				if (report == null)
+				{
+					logger.Error("Group has no reports.");
+					return result;
+				}
+
+				var newReport = client.Reports.CloneReportInGroup(groupId, reportId,
+					new CloneReportRequest(report.Name + " - Copy"));
+
+				var accessToken = await generateAccessToken(client, newReport);
+
+				result.TokenType = "Embed";
+				result.AccessToken = accessToken.Token;
+				result.ReportUrl = newReport.EmbedUrl;
+				result.ReportId = newReport.Id;
 
 				return result;
 			}

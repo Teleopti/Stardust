@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Api.V2.Models;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -22,7 +23,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 				Name = "Test report",
 				EmbedUrl = "https://someworkspace/somereport"
 			};
-			var target = createReportProvider(groupId, "", report);
+
+			var reports = createReports(groupId, report);
+			var target = createReportProvider(reports, groupId);
 
 			var result = target.GetReports().Result;
 			result.Length.Should().Be(1);
@@ -36,7 +39,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 		public void ShouldGetEmptyConfigWhenNoReport()
 		{
 			var groupId = Guid.NewGuid().ToString();
-			var target = createReportProvider(groupId);
+			var reports = createReports(groupId);
+			var target = createReportProvider(reports, groupId);
 
 			var config = target.GetReportConfig(Guid.NewGuid().ToString()).Result;
 			config.ReportId.Should().Be.NullOrEmpty();
@@ -55,7 +59,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 				Name = "Test report",
 				EmbedUrl = "https://someworkspace/somereport"
 			};
-			var target = createReportProvider(groupId, "", report);
+
+			var reports = createReports(groupId, report);
+			var target = createReportProvider(reports, groupId);
 
 			var config = target.GetReportConfig(Guid.NewGuid().ToString()).Result;
 			config.ReportId.Should().Be.NullOrEmpty();
@@ -67,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 		[Test]
 		public void ShouldGetReportConfig()
 		{
-			var token = "Test access token for report";
+			const string token = "Test access token for report";
 			var groupId = Guid.NewGuid().ToString();
 			var report = new Report
 			{
@@ -75,19 +81,55 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 				Name = "Test report",
 				EmbedUrl = "https://someworkspace/somereport"
 			};
-			var target = createReportProvider(groupId, token, report);
+
+			var reports = createReports(groupId, report);
+			reports.SetAccessToken(token);
+
+			var target = createReportProvider(reports, groupId);
 
 			var config = target.GetReportConfig(report.Id).Result;
 			config.ReportId.Should().Be(report.Id);
 			config.AccessToken.Should().Be(token);
 		}
 
-		private ReportProvider createReportProvider(string groupId, string token = "", params Report[] newReports)
+		[Test]
+		public void ShouldCloneExistingReport()
 		{
-			var reports = new FakeReports();
-			reports.AddReports(groupId, newReports);
+			const string token = "Test access token for report clone";
+			var groupId = Guid.NewGuid().ToString();
+			var report = new Report
+			{
+				Id = Guid.NewGuid().ToString(),
+				Name = "Test report",
+				EmbedUrl = "https://someworkspace/somereport"
+			};
+
+			var reports = createReports(groupId, report);
 			reports.SetAccessToken(token);
 
+			var target = createReportProvider(reports, groupId);
+
+			var config = target.CloneReport(report.Id).Result;
+			config.ReportId.Should().Not.Be.Null();
+			config.AccessToken.Should().Be(token);
+
+			var reportGroups = reports.ReportGroups;
+			reportGroups.ContainsKey(groupId).Should().Be.True();
+			reportGroups[groupId].Count.Should().Be(2);
+
+			reportGroups[groupId].Any(x=>x.Id == report.Id).Should().Be.True();
+			reportGroups[groupId].Any(x=>x.Id == config.ReportId && x.Name == report.Name + " - Copy").Should().Be.True();
+		}
+
+		private FakeReports createReports(string groupId, params Report[] powerBiReports)
+		{
+			var reports = new FakeReports();
+			reports.AddReports(groupId, powerBiReports);
+			return reports;
+		}
+
+		private ReportProvider createReportProvider(IReports reports, string groupId)
+		{
 			var pbiClient = new FakePowerBiClient(reports);
 			var pbiClientFactory = new FakePowerBiClientFactory(pbiClient);
 

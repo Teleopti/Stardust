@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core.PowerBi
 	public class FakeReports : IReports
 	{
 		public string Token { get; private set; }
-		private readonly Dictionary<string, List<Report>> reportGroups = new Dictionary<string, List<Report>>();
+		public Dictionary<string, List<Report>> ReportGroups { get; } = new Dictionary<string, List<Report>>();
 
 		public void SetAccessToken(string token)
 		{
@@ -22,14 +22,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core.PowerBi
 
 		public void AddReports(string groupId, params Report[] newReports)
 		{
-			reportGroups.TryGetValue(groupId, out var reports);
+			ReportGroups.TryGetValue(groupId, out var reports);
 			if (reports != null)
 			{
 				reports.AddRange(newReports);
 			}
 			else
 			{
-				reportGroups.Add(groupId, newReports.ToList());
+				ReportGroups.Add(groupId, newReports.ToList());
 			}
 		}
 
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core.PowerBi
 			string groupId, Dictionary<string, List<string>> customHeaders = null,
 			CancellationToken cancellationToken = new CancellationToken())
 		{
-			reportGroups.TryGetValue(groupId, out var reports);
+			ReportGroups.TryGetValue(groupId, out var reports);
 			var reportList = new ODataResponseListReport
 			{
 				Value = reports ?? new List<Report>()
@@ -123,12 +123,27 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core.PowerBi
 			return null;
 		}
 
-		public Task<HttpOperationResponse<Report>> CloneReportInGroupWithHttpMessagesAsync(string groupId,
+		public async Task<HttpOperationResponse<Report>> CloneReportInGroupWithHttpMessagesAsync(string groupId,
 			string reportKey, CloneReportRequest requestParameters,
 			Dictionary<string, List<string>> customHeaders = null,
 			CancellationToken cancellationToken = new CancellationToken())
 		{
-			throw new NotImplementedException();
+			var reports = ReportGroups[groupId];
+			var sourceReport = reports.Single(x => x.Id == reportKey);
+			var newReportId = Guid.NewGuid().ToString();
+			var newReport = new Report
+			{
+				Id = newReportId,
+				Name = sourceReport.Name + " - Copy",
+				DatasetId = sourceReport.DatasetId,
+				WebUrl = "NewWebUrl",
+				EmbedUrl = "NewEmbedUrl"
+			};
+
+			reports.Add(newReport);
+			
+			var result = new HttpOperationResponse<Report> {Body = newReport};
+			return await Task.FromResult(result);
 		}
 
 		public Task<HttpOperationResponse<Stream>> ExportReportInGroupWithHttpMessagesAsync(string groupId,
