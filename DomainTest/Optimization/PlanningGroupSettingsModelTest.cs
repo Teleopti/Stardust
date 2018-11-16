@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var contractFilter = new ContractFilter(contract);
 			var dayOffRule = new PlanningGroupSettings().WithId();
 			dayOffRule.AddFilter(contractFilter);
-			var planningGroup = new PlanningGroup();
+			var planningGroup = new PlanningGroup().WithId();
 			planningGroup.AddSetting(dayOffRule);
 			PlanningGroupRepository.Add(planningGroup);
 
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var teamFilter = new TeamFilter(team);
 			var dayOffRule = new PlanningGroupSettings().WithId();
 			dayOffRule.AddFilter(teamFilter);
-			var planningGroup = new PlanningGroup();
+			var planningGroup = new PlanningGroup().WithId();
 			planningGroup.AddSetting(dayOffRule);
 			PlanningGroupRepository.Add(planningGroup);
 
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var siteFilter = new SiteFilter(site);
 			var dayOffRule = new PlanningGroupSettings().WithId();
 			dayOffRule.AddFilter(siteFilter);
-			var planningGroup = new PlanningGroup();
+			var planningGroup = new PlanningGroup().WithId();
 			planningGroup.AddSetting(dayOffRule);
 			PlanningGroupRepository.Add(planningGroup);
 
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void ShouldFetchDayOffRule()
 		{
 			var curr = new PlanningGroupSettings().WithId();
-			var planningGroup = new PlanningGroup();
+			var planningGroup = new PlanningGroup().WithId();
 			planningGroup.AddSetting(curr);
 			PlanningGroupRepository.Add(planningGroup);
 			curr.ConsecutiveWorkdays = new MinMax<int>(1,1);
