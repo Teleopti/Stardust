@@ -152,5 +152,45 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			rep.Get(planningGroup.Id.Value).Settings.Should().Not.Contain(planningGroupSettings);
 		}
+
+		[Test]
+		public void ShouldFindPlanningGroupContainingPlanningGroupSettingId()
+		{
+			var setting1 = new PlanningGroupSettings();
+			var setting2 = new PlanningGroupSettings();
+			var planningGroup = new PlanningGroup();
+			planningGroup.AddSetting(setting1);
+			planningGroup.AddSetting(setting2);
+			PersistAndRemoveFromUnitOfWork(planningGroup);
+			var target = new PlanningGroupRepository(CurrUnitOfWork);
+			
+			target.FindPlanningGroupBySettingId(setting2.Id.Value)
+				.Should().Be.EqualTo(planningGroup);
+		}
+		
+		[Test]
+		public void ShouldFindPlanningGroupShouldIncludeSettings()
+		{
+			var settings = new PlanningGroupSettings();
+			var planningGroup = new PlanningGroup();
+			planningGroup.AddSetting(settings);
+			PersistAndRemoveFromUnitOfWork(planningGroup);
+			var target = new PlanningGroupRepository(CurrUnitOfWork);
+			
+			var result = target.FindPlanningGroupBySettingId(settings.Id.Value);
+				
+			Session.Close();
+			result.Settings.Count().Should().Be.EqualTo(1);
+		}
+		
+		[Test]
+		[Ignore("to be contiinued")]
+		public void ShouldNotIncludePlanningGroupContainingPlanningGroupSettingId()
+		{
+			var target = new PlanningGroupRepository(CurrUnitOfWork);
+
+			target.FindPlanningGroupBySettingId(Guid.NewGuid())
+				.Should().Be.Null();
+		}
 	}
 }

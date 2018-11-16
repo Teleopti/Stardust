@@ -36,6 +36,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _planningGroups;
 		}
 
+		public PlanningGroup FindPlanningGroupBySettingId(Guid planningGroupSettingId)
+		{
+			return _planningGroups.SingleOrDefault(x=>x.Settings.Any(y=>y.Id.Value==planningGroupSettingId));
+		}
+
 		public PlanningGroup Has(PlanningGroup root)
 		{
 			_planningGroups.Add(root);
