@@ -28,7 +28,7 @@
 		<!-- No need for a con-flex here, its in the directive -->
 		<time-range-picker class="wfm-time-range-picker-wrap" ng-model="newWorkingPeriod" max-hours-range="maxHoursRange"
 		 disable-next-day="disableNextDay"></time-range-picker>
-		<button type="button" class="wfm-btn wfm-btn-invis-default" ng-click="addEmptyWorkingPeriod()">
+		<button type="button" class="wfm-btn wfm-btn-invis-default add-working-hours-button" ng-click="addEmptyWorkingPeriod()">
 			{{ 'AddOpenHours' | translate }}
 			<md-tooltip>{{ 'AddEmptyPeriod' | translate }}</md-tooltip>
 		</button>

@@ -1866,6 +1866,7 @@
     <Content Include="WFM\app\styleguide\wfm-right-panel\wfm-right-panel.tpl.html" />
     <Content Include="WFM\app\styleguide\workinghourspicker\weekdays.filter.js" />
     <Content Include="WFM\app\styleguide\workinghourspicker\working-hours-picker.directive.js" />
+    <Content Include="WFM\app\styleguide\workinghourspicker\working-hours-picker.directive.spec.js" />
     <Content Include="WFM\app\styleguide\workinghourspicker\working-hours-picker.tpl.html" />
     <Content Include="WFM\app\styleguide\workinghourspicker\_modules.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addDayOff.spec.js" />

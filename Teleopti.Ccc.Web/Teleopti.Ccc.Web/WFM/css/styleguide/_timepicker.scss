@@ -65,22 +65,9 @@
 	}
 
 	.error-msg-container {
-		display: none;
 		z-index: 30;
 		width: 360px;
 		margin-top: 10px;
 		position: absolute;
-	}
-
-	&.ng-invalid {
-		&.ng-invalid-order .error-msg-container.ng-invalid-order {
-			display: block !important;
-		}
-		&.ng-invalid-parse .error-msg-container.ng-invalid-parse {
-			display: block !important;
-		}
-		&.ng-invalid-range .error-msg-container.ng-invalid-range {
-			display: block !important;
-		}
 	}
 }

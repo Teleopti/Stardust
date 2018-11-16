@@ -1,6 +1,6 @@
 'use strict';
 describe('time-range-picker directive', function() {
-	var elementCompileFn, elementCompileWithHoursLimitFn, $templateCache, $compile, $translate, element, scope;
+	var elementCompileFn, elementCompileWithHoursLimitFn, $compile, scope;
 
 	beforeEach(module('wfm.templates'));
 	beforeEach(module('tmh.dynamicLocale'));
@@ -13,10 +13,8 @@ describe('time-range-picker directive', function() {
 	);
 	beforeEach(module('wfm.timerangepicker'));
 
-	beforeEach(inject(function(_$compile_, _$rootScope_, _$templateCache_, _$translate_) {
-		$templateCache = _$templateCache_;
+	beforeEach(inject(function(_$compile_, _$rootScope_) {
 		$compile = _$compile_;
-		$translate = _$translate_;
 		scope = _$rootScope_.$new();
 
 		scope.timeRange = {
@@ -32,10 +30,6 @@ describe('time-range-picker directive', function() {
 
 		elementCompileFn = function() {
 			return $compile('<time-range-picker ng-model="timeRange"></time-range-picker>');
-		};
-
-		elementCompileWithHoursLimitFn = function() {
-			return $compile('<time-range-picker max-hours-range="3" ng-model="timeRange"></time-range-picker>');
 		};
 	}));
 
@@ -65,7 +59,10 @@ describe('time-range-picker directive', function() {
 		var element = elementCompileFn()(scope);
 		scope.$apply();
 
-		expect(element[0].getElementsByClassName('ng-invalid-order').length, 1);
+		expect(element[0].getElementsByClassName('error-msg-container').length).toEqual(1);
+		expect(
+			element[0].getElementsByClassName('error-msg-container')[0].getElementsByTagName('span')[0].innerText
+		).toEqual('EndTimeMustBeGreaterOrEqualToStartTime');
 	});
 
 	it('Should show error when time range is larger than max-hours-range', function() {
@@ -78,10 +75,15 @@ describe('time-range-picker directive', function() {
 			minute: 30
 		}).toDate();
 
-		var element = elementCompileWithHoursLimitFn()(scope);
+		var element = $compile('<time-range-picker max-hours-range="3" ng-model="timeRange"></time-range-picker>')(
+			scope
+		);
 		scope.$apply();
 
-		expect(element[0].getElementsByClassName('ng-invalid-range').length, 1);
+		expect(element[0].getElementsByClassName('error-msg-container').length).toEqual(1);
+		expect(
+			element[0].getElementsByClassName('error-msg-container')[0].getElementsByTagName('span')[0].innerText
+		).toEqual('InvalidHoursRange');
 	});
 
 	it('Should not show error when end-time is on the next day', function() {
@@ -99,7 +101,7 @@ describe('time-range-picker directive', function() {
 		var element = elementCompileFn()(scope);
 		scope.$apply();
 
-		expect(element[0].getElementsByClassName('ng-invalid-range').length, 0);
+		expect(element[0].getElementsByClassName('error-msg-container').length).toEqual(0);
 	});
 
 	it('Should set the next-day to true when start-time and the end-time are on different days', function() {
@@ -117,7 +119,7 @@ describe('time-range-picker directive', function() {
 		var element = elementCompileFn()(scope);
 		scope.$apply();
 
-		expect(element[0].getElementsByClassName('mdi-weather-night').length, 1);
+		expect(element[0].getElementsByClassName('mdi-weather-night').length).toEqual(1);
 	});
 
 	it('Setting next day to true will change the end-time to different date value', function() {
