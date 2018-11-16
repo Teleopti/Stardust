@@ -17,17 +17,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public PlanningGroupSettingsModel Fetch(Guid planningGroupSettingId)
 		{
-			var allGroups = _planningGroupRepository.LoadAll();
-			foreach (var planningGroup in allGroups)
+			var planningGroup = _planningGroupRepository.FindPlanningGroupBySettingId(planningGroupSettingId);
+			if (planningGroup == null)
 			{
-				foreach (var planningGroupSetting in planningGroup.Settings)
-				{
-					if (planningGroupSetting.Id.Value == planningGroupSettingId)
-						return _planningGroupSettingsMapper.ToModel(planningGroupSetting);
-				}
+				throw new ArgumentException($"Cannot find PlanningGroupSettings with Id {planningGroupSettingId}");
 			}
-
-			throw new ArgumentException($"Cannot find PlanningGroupSettings with Id {planningGroupSettingId}");
+			var planningGroupSettings = planningGroup.Settings.SingleOrDefault(x => x.Id.Value == planningGroupSettingId);
+			return _planningGroupSettingsMapper.ToModel(planningGroupSettings);
 		}
 
 		public IEnumerable<PlanningGroupSettingsModel> FetchAllForPlanningGroup(Guid planningGroupId)

@@ -38,35 +38,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 			else
 			{
-				var allGroups = _planningGroupRepository.LoadAll();
-				foreach (var planningGroupToDo in allGroups)
-				{
-					foreach (var planningGroupSetting in planningGroupToDo.Settings)
-					{
-						if (planningGroupSetting.Id.Value == model.Id)
-						{
-							setProperies(planningGroupSetting, model);
-							break;
-						}
-					}
-				}
+				var setting = planningGroup.Settings.Single(x => x.Id.Value == model.Id);
+				setProperies(setting, model);
 			}
 		}
 
 		public void Delete(Guid id)
 		{
-			var allGroups = _planningGroupRepository.LoadAll();
-			foreach (var planningGroupToDo in allGroups)
-			{
-				foreach (var planningGroupSetting in planningGroupToDo.Settings)
-				{
-					if (planningGroupSetting.Id.Value == id)
-					{
-						planningGroupToDo.RemoveSetting(planningGroupSetting);
-						break;
-					}
-				}
-			}
+			var planningGroup = _planningGroupRepository.FindPlanningGroupBySettingId(id);
+			planningGroup.RemoveSetting(planningGroup.Settings.Single(x => x.Id.Value==id));
 		}
 
 
