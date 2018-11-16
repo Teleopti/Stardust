@@ -257,9 +257,11 @@ ORDER BY [Id]
 
 		private class internalModel
 		{
+#pragma warning disable 649
 			public long Id;
 			public string Type;
 			public string Event;
+#pragma warning restore 649
 			public IEvent DeserializedEvent;
 		}
 
