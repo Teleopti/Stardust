@@ -291,7 +291,6 @@
     <Compile Include="Monitor\Unit\ViewModels\SiteCardViewModelBuilderPermissionTest.cs" />
     <Compile Include="Monitor\Unit\ViewModels\SiteCardViewModelBuilderTeamsTest.cs" />
     <Compile Include="Monitor\Unit\ViewModels\SiteCardViewModelBuilderTest.cs" />
-    <Compile Include="NUnitSetup.cs" />
     <Compile Include="States\Infrastructure\ReadModels\CurrentScheduleReadModelPersisterTest.cs" />
     <Compile Include="States\Infrastructure\ReadModels\CurrentScheduleReadModelUpdaterTest.cs" />
     <Compile Include="States\Infrastructure\ReadModels\ExternalLogonReadModelPersisterTest.cs" />
