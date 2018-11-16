@@ -26,10 +26,10 @@
 			<label for="enableFilter">Enable filter</label>
 		</span>
 		&nbsp;&nbsp;&nbsp;
-		<input type="button" class="wfm-btn wfm-btn-invis-primary ng-binding ng-scope" [disabled]="loading || !this.selectedReport" id="btnReloadReport" value="Reload" (click)="reloadCurrentReport()">
-		<input type="button" class="wfm-btn wfm-btn-invis-primary ng-binding ng-scope" [disabled]="loading || !this.selectedReport" id="btnCloneReport" value="Clone" (click)="cloneCurrentReport()">
+		<input type="button" class="wfm-btn wfm-btn-invis-primary ng-binding ng-scope" [disabled]="isLoading || !this.selectedReport" id="btnReloadReport" value="Reload" (click)="reloadCurrentReport()">
+		<input type="button" class="wfm-btn wfm-btn-invis-primary ng-binding ng-scope" [disabled]="isLoading || !this.selectedReport" id="btnCloneReport" value="Clone" (click)="cloneCurrentReport()">
 	</div>
-	<div [hidden]="loading" class="panel con-flex material-depth-1">
+	<div [hidden]="isLoading" class="panel con-flex material-depth-1">
 		<div id="reportContainer" style="height:850px;"></div>
 	</div>
 </div>
