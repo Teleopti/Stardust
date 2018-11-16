@@ -3,7 +3,6 @@ using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Security;
@@ -23,19 +22,17 @@ using Teleopti.Ccc.Web.Areas.Forecasting.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Gamification.core.IoC;
 using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Areas.Global.Core;
+using Teleopti.Ccc.Web.Areas.Insights.Core;
 using Teleopti.Ccc.Web.Areas.Mart.Core.IoC;
-using Teleopti.Ccc.Web.Areas.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.Options.IoC;
 using Teleopti.Ccc.Web.Areas.Outbound.core.IoC;
-using Teleopti.Ccc.Web.Areas.People.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Permissions;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
 using Teleopti.Ccc.Web.Areas.Reports.IoC;
@@ -115,6 +112,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<ReportsAreaModule>();
 			builder.RegisterModule<OptionsAreaModule>();
 			builder.RegisterModule<GamificationAreaModel>();
+			builder.RegisterModule<InsightsAreaModel>();
 
 			//remove me when #36904 is done!
 			builder.RegisterType<TranslatedTexts>().SingleInstance();

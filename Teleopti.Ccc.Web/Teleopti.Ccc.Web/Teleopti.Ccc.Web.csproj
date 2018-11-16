@@ -399,6 +399,10 @@
     <Compile Include="Areas\Anywhere\Controllers\LandingPageController.cs" />
     <Compile Include="Areas\Global\ChatConfigurationController.cs" />
     <Compile Include="Areas\Global\TenantCredential.cs" />
+    <Compile Include="Areas\Insights\Core\DataProvider\IPowerBiClientFactory.cs" />
+    <Compile Include="Areas\Insights\Core\DataProvider\IReportProvider.cs" />
+    <Compile Include="Areas\Insights\Core\DataProvider\ReportProvider.cs" />
+    <Compile Include="Areas\Insights\Core\InsightsAreaModel.cs" />
     <Compile Include="Areas\MultiTenancy\Core\CustomerDbConnector.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormExtensions.cs" />
     <Compile Include="Areas\Reports\Controllers\AuditTrailController.cs" />

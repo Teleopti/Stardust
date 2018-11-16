@@ -45,7 +45,12 @@ export class WorkspaceComponent implements OnInit {
 
 	loadReportList() {
 		this.reportSvc.getReports().then((reports) => {
-			this.reports = reports;
+			this.reports = [];
+			reports.forEach(report => {
+				if (report.Name.trim() !== 'Report Usage Metrics Report') {
+					this.reports.push(report);
+				}
+			});
 		});
 	}
 
