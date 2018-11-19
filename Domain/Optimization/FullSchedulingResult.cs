@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -26,15 +25,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly AgentsWithWhiteSpots _agentsWithWhiteSpots;
-		private readonly ICurrentUnitOfWork _currentUnitOfWork;
+		private readonly IPlanningGroupRepository _planningGroupRepository;
+		
 
 		public FullSchedulingResult(Func<ISchedulerStateHolder> schedulerStateHolder, IFindSchedulesForPersons findSchedulesForPersons, 
 			IUserTimeZone userTimeZone, ICurrentScenario currentScenario,  
 			CheckScheduleHints checkScheduleHints, 
 			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory, IResourceCalculation resourceCalculation, 
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory, FillSchedulerStateHolder fillSchedulerStateHolder,
-			AgentsWithWhiteSpots agentsWithWhiteSpots,
-			ICurrentUnitOfWork currentUnitOfWork)
+			AgentsWithWhiteSpots agentsWithWhiteSpots, IPlanningGroupRepository planningGroupRepository)
 		{
 			_checkScheduleHints = checkScheduleHints;
 			_blockPreferenceProviderUsingFiltersFactory = blockPreferenceProviderUsingFiltersFactory;
@@ -42,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_agentsWithWhiteSpots = agentsWithWhiteSpots;
-			_currentUnitOfWork = currentUnitOfWork;
+			_planningGroupRepository = planningGroupRepository;
 			_schedulerStateHolder = schedulerStateHolder;
 			_findSchedulesForPersons = findSchedulesForPersons;
 			_userTimeZone = userTimeZone;
@@ -51,9 +50,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		[TestLog]
 		[UnitOfWork]
-		public virtual FullSchedulingResultModel Create(DateOnlyPeriod period, IEnumerable<IPerson> selectedAgents, PlanningGroup planningGroup, bool usePreferences)
+		public virtual FullSchedulingResultModel Create(DateOnlyPeriod period, IEnumerable<IPerson> selectedAgents, Guid planningGroupId, bool usePreferences)
 		{
-			_currentUnitOfWork.Current().Reassociate(planningGroup); //TODO fix some other way
 			var schedulerStateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period, null);
 			var resultStateHolder = schedulerStateHolder.SchedulingResultState;
@@ -68,6 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var allSkillsForAgentGroup = getAllSkillsForPlanningGroup(planningGroupSkills, resultStateHolder);
 			var scheduleOfSelectedPeople = _findSchedulesForPersons.FindSchedulesForPersons(_currentScenario.Current(), loadedSelectedAgents, 
 				new ScheduleDictionaryLoadOptions(usePreferences, false, usePreferences), period.ToDateTimePeriod(_userTimeZone.TimeZone()), loadedSelectedAgents, true);
+			var planningGroup = _planningGroupRepository.Get(planningGroupId);
 			var validationResults = _checkScheduleHints.Execute(new SchedulePostHintInput(scheduleOfSelectedPeople, loadedSelectedAgents, period, _blockPreferenceProviderUsingFiltersFactory.Create(planningGroup), usePreferences)).InvalidResources;
 			var nonScheduledAgents = _agentsWithWhiteSpots.Execute(scheduleOfSelectedPeople, loadedSelectedAgents, period);
 			var result = new FullSchedulingResultModel

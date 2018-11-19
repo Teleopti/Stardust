@@ -28,20 +28,20 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
 			var people = _planningGroupStaffLoader.Load(period, planningPeriod.PlanningGroup).AllPeople.Select(x => x.Id.Value).ToList();
-			return new SchedulingInformation(period, people, planningPeriod.PlanningGroup);
+			return new SchedulingInformation(period, people, planningPeriod.PlanningGroup.Id.Value);
 		}
 	}
 
 	public class SchedulingInformation
 	{
 		public IList<Guid> PersonIds { get; }
-		public PlanningGroup PlanningGroup { get; }
+		public Guid PlanningGroupId { get; }
 		public DateOnlyPeriod Period { get; }
 
-		public SchedulingInformation(DateOnlyPeriod period, IList<Guid> personIds, PlanningGroup planningGroup)
+		public SchedulingInformation(DateOnlyPeriod period, IList<Guid> personIds, Guid planningGroupId)
 		{
 			PersonIds = personIds;
-			PlanningGroup = planningGroup;
+			PlanningGroupId = planningGroupId;
 			Period = period;
 		}
 	}
