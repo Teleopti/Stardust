@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var activity = ActivityRepository.Has();
 			var skill = SkillRepository.Has(activity);
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
-			PlanningGroupRepository.ModifyDefault(planningPeriod.PlanningGroup, x=> x.PreferenceValue = new Percent(preferencePercentage));
+			planningPeriod.PlanningGroup.ModifyDefault_UseFromTestOnly(x=> x.PreferenceValue = new Percent(preferencePercentage));
 			var scenario = ScenarioRepository.Has();
 			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1);
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory().WithId()));

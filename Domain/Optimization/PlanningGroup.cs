@@ -61,5 +61,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 				throw new ArgumentException("Cannot remove default PlanningGroupSettings.");
 			_settings.Remove(planningGroupSettings);
 		}
+		
+		
+		public void ModifyDefault_UseFromTestOnly(Action<PlanningGroupSettings> action)
+		{
+			var currDefault = Settings.Single(x => x.Default);
+			action(currDefault);
+		}
 	}
 }

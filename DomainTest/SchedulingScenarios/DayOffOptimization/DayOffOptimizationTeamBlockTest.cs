@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				1, 2, 2, 2, 2, 2, 2,
 				1, 2, 2, 2, 2, 2, 2));
-			PlanningGroupRepository.ModifyDefault(planningPeriod.PlanningGroup, x =>
+			planningPeriod.PlanningGroup.ModifyDefault_UseFromTestOnly(x =>
 			{
 				x.ConsecutiveWorkdays = new MinMax<int>(1, 20); //just to make sure anything goes
 			}); 
