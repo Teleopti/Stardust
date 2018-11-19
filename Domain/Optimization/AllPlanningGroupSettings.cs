@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public AllPlanningGroupSettings(IEnumerable<PlanningGroupSettings> planningGroupSettings)
 		{
-			_planningGroupSettings = planningGroupSettings;
+			_planningGroupSettings = planningGroupSettings.OrderByDescending(x=>x.Priority).ToArray();
 		}
 
 		public PlanningGroupSettings ForAgent(IPerson person, DateOnly dateOnly)

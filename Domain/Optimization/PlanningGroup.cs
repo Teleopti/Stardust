@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public virtual IEnumerable<IFilter> Filters => _filters;
 		public virtual string Name { get; set; }
-		public virtual AllPlanningGroupSettings Settings => new AllPlanningGroupSettings(_settings.OrderByDescending(x=>x.Priority));
+		public virtual AllPlanningGroupSettings Settings => new AllPlanningGroupSettings(_settings);
 
 		public virtual void ClearFilters()
 		{
