@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 				};
 				var deserializedRole = JsonConvert.DeserializeObject<PersonAccessModel>(audit.Data);
 				var appRole = _applicationRoleRepository.Load(deserializedRole.RoleId);
-				auditServiceModel.Data = $"Role: {appRole.Name} Action: {audit.Action}";
+				auditServiceModel.Data = $"person: {audit.ActionPerformedOn.Name} Role: {appRole.Name} Action: {audit.Action}";
 				auditServiceModelList.Add(auditServiceModel);
 			}
 
@@ -55,7 +55,6 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 		public IEnumerable<AuditServiceModel> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate)
 		{
 			var staffingAudit = _personAccessAuditRepository.LoadAudits(personId, startDate, endDate);
-
 			return getAuditServiceModel(staffingAudit);
 		}
 
