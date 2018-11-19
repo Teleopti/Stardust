@@ -266,12 +266,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			executer.AllAbsencePreference(e.Button);
 		}
 
-		internal void ToolStripMenuItemAllFulFilledAbsencesPreferencesMouseUp(object sender, MouseEventArgs e)
-		{
-			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
-			executer.AllFulfilledAbsencesPreferences(e.Button);
-		}
-
 		internal void ToolStripMenuItemAllFulFilledDaysOffPreferencesMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
@@ -283,7 +277,5 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
 			executer.AllFulfilledShiftsPreferences(e.Button);
 		}
-
-
 	}
 }

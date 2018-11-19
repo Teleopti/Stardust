@@ -10,20 +10,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakePersonRequestRepositoryWithClone : FakePersonRequestRepository
-	{
-		public override void Add(IPersonRequest entity)
-		{
-			if (!entity.Id.HasValue)
-			{
-				entity.SetId(Guid.NewGuid());
-			}
-			var clone = (PersonRequest)entity.Clone();
-			clone.SetId(entity.Id);
-			RequestRepository.Add(clone);
-		}
-	}
-
 	public class FakePersonRequestRepository : IPersonRequestRepository
 	{
 		public readonly IList<IPersonRequest> RequestRepository = new List<IPersonRequest>();
