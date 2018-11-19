@@ -96,7 +96,7 @@
 	content: '';
 	position: absolute;
 	top: 0;
-	left: 0;
+	left: -1px;
 	width: 20px;
 	height: 20px;
 	background: #fff;
@@ -400,7 +400,6 @@
 	height: 10px;
 }
 .new-teamschedule-table.relative {
-	-webkit-overflow-scrolling: touch;
 	overflow-y: auto;
 	overflow-x: hidden;
 	max-width: 100%;
@@ -443,7 +442,7 @@
 	display: inline-block;
 	overflow: visible;
 	white-space: nowrap;
-	-webkit-overflow-scrolling: touch;
+	-webkit-overflow-scrolling: auto;
 	font-size: 0;
 	z-index: 9;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -799,7 +798,6 @@ div.new-teamschedule-no-result-indicator {
 	max-width: calc(100% - 30px - 70px);
 	overflow-y: hidden;
 	overflow-x: auto;
-	-webkit-overflow-scrolling: touch;
 }
 .new-teamschedule-view.new-teamschedule-view-mobile .teammates-schedules-column {
 	width: 50px;
@@ -874,6 +872,7 @@ div.new-teamschedule-no-result-indicator {
 	margin: 0;
 }
 .new-teamschedule-view-mobile .new-teamschedule-submit-buttons {
+	width: 100%;
 	justify-content: space-between;
 }
 .new-teamschedule-view-mobile .new-teamschedule-submit-buttons button {

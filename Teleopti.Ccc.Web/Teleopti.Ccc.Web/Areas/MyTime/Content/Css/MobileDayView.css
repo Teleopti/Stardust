@@ -1,4 +1,8 @@
-﻿.mobile-start-day .mobile-start-day-nav {
+﻿.mobile-start-day {
+	height: 100%;
+	cursor: pointer;
+}
+.mobile-start-day .mobile-start-day-nav {
 	padding: 0;
 }
 .mobile-start-day .mobile-start-day-nav .teleopti-toolbar {

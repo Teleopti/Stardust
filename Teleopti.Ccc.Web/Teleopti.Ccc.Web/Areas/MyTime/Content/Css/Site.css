@@ -565,17 +565,31 @@ header,
 	margin: 0 auto;
 }
 
+
+html,
 body {
-	padding-top: 50px;
+	width: 100%;
+	height: 100%;
 	overflow: hidden;
 }
 
-header {
-	position: fixed;
-	top: 0;
+section#page {
 	width: 100%;
-	z-index: 200;
+	height: calc(100% - 50px);
 }
+
+article#body,
+#body-inner {
+	width: 100%;
+	height: 100%;
+	overflow-x: hidden;
+}
+
+header {
+	width: 100%;
+	height: 50px;
+}
+
 
 footer {
 	margin: 0 auto;
