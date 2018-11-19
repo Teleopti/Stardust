@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.Should().Not.Be.Null();
 			((IDeleteTag)inDb).IsDeleted.Should().Be.True();
 
-			inDb.Settings.Should().Be.Empty();
+			inDb.Settings.Where(x => !x.Default).Should().Be.Empty();
 		}
 	}
 }
