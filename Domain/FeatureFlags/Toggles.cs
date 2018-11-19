@@ -95,7 +95,6 @@
 		ETL_Optimize_Memory_Usage_76761,
 		ETL_Show_Tenant_Name_In_History_75767,
 
-		Staffing_Info_Configuration_44687,
 		WfmStaffing_AddOvertime_42524,
 		OvertimeRequestUseMostUnderStaffedSkill_47853,
 		OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944,

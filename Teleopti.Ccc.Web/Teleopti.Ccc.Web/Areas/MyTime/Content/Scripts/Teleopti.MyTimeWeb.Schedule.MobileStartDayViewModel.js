@@ -336,19 +336,14 @@
 	function setStaffingProbabilityToggleStates(data) {
 		self.staffingProbabilityOnMobileEnabled(!!data.ViewPossibilityPermission);
 
-		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('Staffing_Info_Configuration_44687')) {
-			self.absenceProbabilityEnabled(
-				!!data.CheckStaffingByIntraday &&
-					!!data.AbsenceProbabilityEnabled &&
-					self.staffingProbabilityOnMobileEnabled()
-			);
-			self.overtimeProbabilityEnabled(
-				!!data.OvertimeProbabilityEnabled && self.staffingProbabilityOnMobileEnabled()
-			);
-		} else {
-			self.overtimeProbabilityEnabled(false);
-			self.absenceProbabilityEnabled(false);
-		}
+		self.absenceProbabilityEnabled(
+			!!data.CheckStaffingByIntraday &&
+				!!data.AbsenceProbabilityEnabled &&
+				self.staffingProbabilityOnMobileEnabled()
+		);
+		self.overtimeProbabilityEnabled(
+			!!data.OvertimeProbabilityEnabled && self.staffingProbabilityOnMobileEnabled()
+		);
 
 		if (
 			!self.absenceProbabilityEnabled() &&

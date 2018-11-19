@@ -92,7 +92,6 @@ MyTimeWeb_NewTeamScheduleViewDesktop_76313 = RC
 MyTimeWeb_PollToCheckScheduleChanges_46595 = true
 MyTimeWeb_TrafficLightOnMobileDayView_77447 = RC
 MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640 = RC
-Staffing_Info_Configuration_44687 = true
 Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = true
 WebByPassDefaultPermissionCheck_37984 = true
 
