@@ -13,13 +13,14 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Admin
 	{
 		private TenantUnitOfWorkManager tenantUnitOfWorkManager;
 
-		[SetUp]
-		public void Setup()
+		protected override void SetupForRepositoryTest()
 		{
+			base.SetupForRepositoryTest();
+			
 			tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString);
 			tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted();
 		}
-
+		
 		[TearDown]
 		public void RollbackTransaction()
 		{
