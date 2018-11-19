@@ -17,8 +17,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			PlanningGroup = new PlanningGroup();
-			PlanningGroup.ChangeName(PlanningGroupName);
+			PlanningGroup = new PlanningGroup {Name = PlanningGroupName};
 			if (Team != null)
 			{
 				var team = new TeamRepository(currentUnitOfWork).FindTeamByDescriptionName(Team).First();

@@ -71,8 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldFetchOne()
 		{
-			var planningGroup = new PlanningGroup();
-			planningGroup.ChangeName(RandomName.Make());
+			var planningGroup = new PlanningGroup {Name = RandomName.Make()};
 			PlanningGroupRepository.Has(planningGroup);
 			var result = Target.Get(planningGroup.Id.GetValueOrDefault()).Result<PlanningGroupModel>();
 

@@ -27,8 +27,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				team = new TeamRepository(currentUnitOfWork).FindTeamByDescriptionName(Team).First();
 			}
 
-			PlanningGroup = new PlanningGroup();
-			PlanningGroup.ChangeName(SchedulingSettingName);
+			PlanningGroup = new PlanningGroup {Name = SchedulingSettingName};
 			PlanningGroup.AddFilter(new TeamFilter(team));
 
 			PlanningGroupSchedulingSetting = new PlanningGroupSettings {Name = SchedulingSettingName};

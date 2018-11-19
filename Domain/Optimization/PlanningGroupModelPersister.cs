@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		private void setProperties(PlanningGroup planningGroup, PlanningGroupModel planningGroupModel)
 		{
-			planningGroup.ChangeName(planningGroupModel.Name);
+			planningGroup.Name = planningGroupModel.Name;
 
 			planningGroup.ClearFilters();
 			foreach (var filter in planningGroupModel.Filters.Select(filterModel => _filterMapper.ToEntity(filterModel)))
