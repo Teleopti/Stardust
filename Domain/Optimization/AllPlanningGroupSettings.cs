@@ -22,7 +22,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public IEnumerator<PlanningGroupSettings> GetEnumerator()
 		{
-			return _planningGroupSettings.GetEnumerator();
+			if (_planningGroupSettings.Any())
+			{
+				foreach (var setting in _planningGroupSettings)
+				{
+					yield return setting;
+				}
+			}
+			//TO BE REMOVED! just for "backward compability"/green build in perf tests
+			else
+			{
+				var planningGroupSettings = new PlanningGroupSettings();
+				planningGroupSettings.SetAsDefault();
+				yield return planningGroupSettings;
+			}
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
