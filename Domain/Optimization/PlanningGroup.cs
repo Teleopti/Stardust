@@ -20,6 +20,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public PlanningGroup(string name)
 		{
 			Name = name;
+			var planningGroupSettings = new PlanningGroupSettings();
+			planningGroupSettings.SetAsDefault();
+			addPlanningGroupSetting(planningGroupSettings);
 		}
 
 		public virtual IEnumerable<IFilter> Filters => _filters;
@@ -49,6 +52,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		public virtual void AddSetting(PlanningGroupSettings planningGroupSettings)
+		{
+			if(planningGroupSettings.Default)
+				throw new ArgumentException("Cannot add default planning group settings.");
+			addPlanningGroupSetting(planningGroupSettings);
+		}
+		
+		private void addPlanningGroupSetting(PlanningGroupSettings planningGroupSettings)
 		{
 			planningGroupSettings.SetParent(this);
 			_settings.Add(planningGroupSettings);

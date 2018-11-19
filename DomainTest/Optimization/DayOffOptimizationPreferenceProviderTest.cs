@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var agent = new Person();
 
 			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveDaysOffValue
-				.Should().Be.EqualTo(PlanningGroupSettings.CreateDefault().ConsecutiveDayOffs);
+				.Should().Be.EqualTo(new PlanningGroupSettings().ConsecutiveDayOffs);
 		}
 
 		[Test]
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 
 			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
-				.Should().Be.EqualTo(PlanningGroupSettings.CreateDefault().ConsecutiveWorkdays);
+				.Should().Be.EqualTo(new PlanningGroupSettings().ConsecutiveWorkdays);
 		}
 
 		[Test]
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var agent = new Person();
 
 			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveDaysOffValue
-				.Should().Be.EqualTo(PlanningGroupSettings.CreateDefault().ConsecutiveDayOffs);
+				.Should().Be.EqualTo(new PlanningGroupSettings().ConsecutiveDayOffs);
 		}
 
 		[Test]
@@ -110,14 +110,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var agent = new Person();
 
 			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveDaysOffValue
-				.Should().Be.EqualTo(PlanningGroupSettings.CreateDefault().ConsecutiveDayOffs);
+				.Should().Be.EqualTo(new PlanningGroupSettings().ConsecutiveDayOffs);
 		}
 
 		[Test]
 		public void ShouldUseExplicitFilterWhenDefaultFilterExists()
 		{
 			var planningGroup = new PlanningGroup();
-			planningGroup.AddSetting(PlanningGroupSettings.CreateDefault());
 			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(1900, 1, 1));
 			var dayOffRules = new PlanningGroupSettings {  ConsecutiveWorkdays = new MinMax<int>(6, 7) };
 			dayOffRules.AddFilter(new TeamFilter(agent.Period(new DateOnly(2000, 1, 1)).Team));
@@ -142,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			planningGroup.AddSetting(dayOffRules);
 
 			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
-				.Should().Be.EqualTo(PlanningGroupSettings.CreateDefault().ConsecutiveWorkdays);	
+				.Should().Be.EqualTo(new PlanningGroupSettings().ConsecutiveWorkdays);	
 		}
 
 		[Test]

@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				var planningGroup = new PlanningGroup();
 				setProperties(planningGroup, planningGroupModel);
-				planningGroup.AddSetting(PlanningGroupSettings.CreateDefault());
 				_planningGroupRepository.Add(planningGroup);
 			}
 			else

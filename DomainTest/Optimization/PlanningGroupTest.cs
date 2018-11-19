@@ -12,20 +12,34 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void ShouldRemoveNonDefaultPlanningGroupSetting()
 		{
 			var planningGroup = new PlanningGroup();
-			var defaultSetting = new PlanningGroupSettings();
-			planningGroup.AddSetting(defaultSetting);
-			planningGroup.RemoveSetting(defaultSetting);
+			var setting = new PlanningGroupSettings();
+			planningGroup.AddSetting(setting);
+			planningGroup.RemoveSetting(setting);
 
-			planningGroup.Settings.Should().Be.Empty();
+			planningGroup.Settings.Where(x=>!x.Default).Should().Be.Empty();
 		}
 		
 		[Test]
 		public void CannotRemoveDefaultPlanningGroupSetting()
 		{
 			var planningGroup = new PlanningGroup();
-			var defaultSetting = PlanningGroupSettings.CreateDefault();
-			planningGroup.AddSetting(defaultSetting);
-			Assert.Throws<ArgumentException>(() => planningGroup.RemoveSetting(defaultSetting));
+			Assert.Throws<ArgumentException>(() => planningGroup.RemoveSetting(planningGroup.Settings.Single(x=>x.Default)));
+		}
+
+		[Test]
+		public void ShouldAddDefaultPlanningGroupSettingWhenCreatingPlanningGroup()
+		{
+			var planningGroup = new PlanningGroup();
+			planningGroup.Settings.Single().Default.Should().Be.True();
+		}
+		
+		[Test]
+		public void CannotAddDefaultPlanningGroupSetting()
+		{
+			var planningGroup = new PlanningGroup();
+			var anotherDefaultSetting = new PlanningGroupSettings();
+			anotherDefaultSetting.SetAsDefault();
+			Assert.Throws<ArgumentException>(() => planningGroup.AddSetting(anotherDefaultSetting));
 		}
 	}
 }

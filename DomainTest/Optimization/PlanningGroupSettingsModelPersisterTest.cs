@@ -71,14 +71,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldUpdateDefault()
 		{
-			var existing = PlanningGroupSettings.CreateDefault().WithId();
 			var planningGroup = new PlanningGroup().WithId();
-			planningGroup.AddSetting(existing);
 			PlanningGroupRepository.Add(planningGroup);
-
+			var defaultSetting = planningGroup.Settings.Single(x=>x.Default);
 			var model = new PlanningGroupSettingsModel
 			{
-				Id = existing.Id.Value,
+				Id = defaultSetting.Id.Value,
 				MinDayOffsPerWeek = 2,
 				MaxDayOffsPerWeek = 3,
 				MinConsecutiveDayOffs = 1,
@@ -99,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupRepository.Get(planningGroup.Id.Value).Settings.Single(x => x.Id == existing.Id);
+			var inDb = PlanningGroupRepository.Get(planningGroup.Id.Value).Settings.Single(x => x.Id == defaultSetting.Id);
 			inDb.DayOffsPerWeek.Should().Be.EqualTo(new MinMax<int>(model.MinDayOffsPerWeek, model.MaxDayOffsPerWeek));
 			inDb.ConsecutiveDayOffs.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveDayOffs, model.MaxConsecutiveDayOffs));
 			inDb.ConsecutiveWorkdays.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveWorkdays, model.MaxConsecutiveWorkdays));

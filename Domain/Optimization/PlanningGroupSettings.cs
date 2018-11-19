@@ -29,25 +29,22 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public PlanningGroupSettings()
 		{
 			Name = string.Empty;
+			DayOffsPerWeek = new MinMax<int>(1, 3);
+			ConsecutiveDayOffs = new MinMax<int>(1, 3);
+			ConsecutiveWorkdays = new MinMax<int>(2, 6);
+			BlockFinderType = BlockFinderType.SingleDay;
+			BlockSameShiftCategory = false;
+			BlockSameStartTime = false;
+			BlockSameShift = false;
+			FullWeekendsOff = new MinMax<int>(0, 8);
+			WeekendDaysOff = new MinMax<int>(0, 16);
 		}
 
-		public static PlanningGroupSettings CreateDefault()
+		public virtual void SetAsDefault()
 		{
-			return new PlanningGroupSettings
-			{
-				DayOffsPerWeek = new MinMax<int>(1, 3),
-				ConsecutiveDayOffs = new MinMax<int>(1, 3),
-				ConsecutiveWorkdays = new MinMax<int>(2, 6),
-				Default = true,
-				Name = UserTexts.Resources.Default,
-				BlockFinderType = BlockFinderType.SingleDay,
-				BlockSameShiftCategory = false,
-				BlockSameStartTime = false,
-				BlockSameShift = false,
-				Priority = -1,
-				FullWeekendsOff = new MinMax<int>(0, 8),
-				WeekendDaysOff = new MinMax<int>(0, 16)
-			};
+			Default = true;
+			Name = UserTexts.Resources.Default;
+			Priority = -1;
 		}
 
 		public virtual IEnumerable<IFilter> Filters

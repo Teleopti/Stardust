@@ -22,24 +22,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var planningGroup = _planningGroupRepository.Get(model.PlanningGroupId.Value);
 			if (model.Id == Guid.Empty)
 			{
-				PlanningGroupSettings planningGroupSettings;
-				if (model.Default)
-				{
-					planningGroupSettings = PlanningGroupSettings.CreateDefault();
-				}
-				else
-				{
-					var allSettings = planningGroup.Settings;
-					model.Priority = allSettings.IsEmpty() ? 0 : allSettings.Max(x => x.Priority) + 1;
-					planningGroupSettings = new PlanningGroupSettings();
-				}
-				setProperies(planningGroupSettings, model);
+				var allSettings = planningGroup.Settings;
+				model.Priority = allSettings.IsEmpty() ? 0 : allSettings.Max(x => x.Priority) + 1;
+				var planningGroupSettings = new PlanningGroupSettings();
+				setProperties(planningGroupSettings, model);
 				planningGroup.AddSetting(planningGroupSettings);
 			}
 			else
 			{
 				var setting = planningGroup.Settings.Single(x => x.Id.Value == model.Id);
-				setProperies(setting, model);
+				setProperties(setting, model);
 			}
 		}
 
@@ -50,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 
-		private void setProperies(PlanningGroupSettings planningGroupSettings, PlanningGroupSettingsModel planningGroupSettingsModel)
+		private void setProperties(PlanningGroupSettings planningGroupSettings, PlanningGroupSettingsModel planningGroupSettingsModel)
 		{
 			planningGroupSettings.DayOffsPerWeek = new MinMax<int>(planningGroupSettingsModel.MinDayOffsPerWeek, planningGroupSettingsModel.MaxDayOffsPerWeek);
 			planningGroupSettings.ConsecutiveDayOffs = new MinMax<int>(planningGroupSettingsModel.MinConsecutiveDayOffs, planningGroupSettingsModel.MaxConsecutiveDayOffs);

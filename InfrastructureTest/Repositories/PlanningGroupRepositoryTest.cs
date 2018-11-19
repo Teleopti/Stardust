@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(planningGroup);
 			
 			TestRepository(CurrUnitOfWork).Get(planningGroup.Id.Value).Settings
-				.Should().Have.SameSequenceAs(planningGroupSettings4, planningGroupSettings3, planningGroupSettings2, planningGroupSettings1);
+				.Should().Have.SameSequenceAs(planningGroupSettings4, planningGroupSettings3, planningGroupSettings2, planningGroupSettings1, planningGroup.Settings.Single(x=>x.Default));
 		}
 		
 		[Test]
@@ -54,14 +54,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var planningGroup = new PlanningGroup("_");
 			PersistAndRemoveFromUnitOfWork(planningGroup);
 			var rep = new PlanningGroupRepository(CurrUnitOfWork);
-			var defaultPlanningGroupSetting = PlanningGroupSettings.CreateDefault();
 			var planningGroupSetting = new PlanningGroupSettings();
-			planningGroup.AddSetting(defaultPlanningGroupSetting);
 			planningGroup.AddSetting(planningGroupSetting);
 			PersistAndRemoveFromUnitOfWork(planningGroup);
 
 			rep.Load(planningGroup.Id.Value).Settings
-				.Should().Have.SameSequenceAs(planningGroupSetting, defaultPlanningGroupSetting);
+				.Should().Have.SameSequenceAs(planningGroupSetting, planningGroup.Settings.Single(x=>x.Default));
 		}
 		
 		[Test]
@@ -75,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			UnitOfWork.Flush();
 			UnitOfWork.Clear();
 			
-			TestRepository(CurrUnitOfWork).Get(planningGroup.Id.Value).Settings.Count()
+			TestRepository(CurrUnitOfWork).Get(planningGroup.Id.Value).Settings.Count(x => !x.Default)
 				.Should().Be.EqualTo(2);
 		}
 		
@@ -94,7 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var planningGroupInDb = new PlanningGroupRepository(CurrUnitOfWork).Get(planningGroup.Id.Value);
 
-			planningGroupInDb.Settings.Single().Filters.Single().Should().Be.EqualTo(contractFilter);
+			planningGroupInDb.Settings.Single(x=>!x.Default).Filters.Single().Should().Be.EqualTo(contractFilter);
 		}
 		
 		[Test]
@@ -112,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var planningGroupInDb = new PlanningGroupRepository(CurrUnitOfWork).Get(planningGroup.Id.Value);
 
-			planningGroupInDb.Settings.Single().Filters.Single()
+			planningGroupInDb.Settings.Single(x=>!x.Default).Filters.Single()
 				.Should().Be.EqualTo(siteFilter);
 		}
 		
@@ -129,7 +127,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var planningGroupInDb = new PlanningGroupRepository(CurrUnitOfWork).Get(planningGroup.Id.Value);
 
-			planningGroupInDb.Settings.Single().Name.Should().Be.EqualTo(name);	
+			planningGroupInDb.Settings.Single(x=>!x.Default).Name.Should().Be.EqualTo(name);	
 		}
 
 		[Test]
@@ -165,7 +163,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var target = new PlanningGroupRepository(CurrUnitOfWork);
 
 			target.FindPlanningGroupBySettingId(setting2.Id.Value).Settings
-				.Should().Have.SameValuesAs(setting1, setting2);
+				.Should().Have.SameValuesAs(setting1, setting2, planningGroup.Settings.Single(x=>x.Default));
 		}
 		
 		[Test]
@@ -180,7 +178,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var result = target.FindPlanningGroupBySettingId(settings.Id.Value);
 				
 			Session.Close();
-			result.Settings.Count().Should().Be.EqualTo(1);
+			result.Settings.Count(x=>!x.Default).Should().Be.EqualTo(1);
 		}
 		
 		[Test]

@@ -52,15 +52,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Has(new PlanningGroup().WithId());
 		}
 
-		public void HasDefault(PlanningGroup planningGroup, Action<PlanningGroupSettings> action)
+		public void ModifyDefault(PlanningGroup planningGroup, Action<PlanningGroupSettings> action)
 		{
-			var currDefault = planningGroup.Settings.SingleOrDefault(x => x.Default);
-			if (currDefault == null)
-			{
-				currDefault = PlanningGroupSettings.CreateDefault();
-				planningGroup.AddSetting(currDefault);
-			}
-			
+			var currDefault = planningGroup.Settings.Single(x => x.Default);
 			action(currDefault);
 		}
 	}

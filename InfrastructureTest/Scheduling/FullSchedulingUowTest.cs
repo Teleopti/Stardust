@@ -132,7 +132,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 			agent.InTimeZone(TimeZoneInfo.Utc);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 4);
 			var planningGroup = new PlanningGroup();
-			planningGroup.AddSetting(PlanningGroupSettings.CreateDefault());
 			var planningPeriod = new PlanningPeriod(period, SchedulePeriodType.Week, 4, planningGroup);
 			var assignment = new PersonAssignment(agent,scenario, new DateOnly(2018, 01, 05));
 
@@ -181,7 +180,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				.WithSchedulePeriodOneWeek(date);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
 			var planningGroup = new PlanningGroup();
-			planningGroup.AddSetting(PlanningGroupSettings.CreateDefault());
 			var planningPeriod = new PlanningPeriod(period, SchedulePeriodType.Week, 1, planningGroup);
 
 			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())

@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var agent = new Person();
 
 			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).BlockTypeValue
-				.Should().Be.EqualTo(PlanningGroupSettings.CreateDefault().BlockFinderType);
+				.Should().Be.EqualTo(new PlanningGroupSettings().BlockFinderType);
 		}
 
 		[Test]
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 
 			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).BlockTypeValue
-				.Should().Be.EqualTo(PlanningGroupSettings.CreateDefault().BlockFinderType);
+				.Should().Be.EqualTo(new PlanningGroupSettings().BlockFinderType);
 		}
 
 		[Test]
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var agent = new Person();
 
 			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).BlockTypeValue
-				.Should().Be.EqualTo(PlanningGroupSettings.CreateDefault().BlockFinderType);
+				.Should().Be.EqualTo(new PlanningGroupSettings().BlockFinderType);
 		}
 
 		[Test]
@@ -111,14 +111,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var agent = new Person();
 
 			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).BlockTypeValue
-				.Should().Be.EqualTo(PlanningGroupSettings.CreateDefault().BlockFinderType);
+				.Should().Be.EqualTo(new PlanningGroupSettings().BlockFinderType);
 		}
 
 		[Test]
 		public void ShouldUseExplicitFilterWhenDefaultFilterExists()
 		{
 			var planningGroup = new PlanningGroup();
-			planningGroup.AddSetting(PlanningGroupSettings.CreateDefault());
 			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(1900, 1, 1));
 			var planningGroupSettings = new PlanningGroupSettings() {  BlockFinderType = BlockFinderType.BetweenDayOff };
 			planningGroupSettings.AddFilter(new TeamFilter(agent.Period(new DateOnly(2000, 1, 1)).Team));
@@ -142,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			planningGroup.AddSetting(planningGroupSettings);
 
 			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).BlockTypeValue
-				.Should().Be.EqualTo(PlanningGroupSettings.CreateDefault().BlockFinderType);
+				.Should().Be.EqualTo(new PlanningGroupSettings().BlockFinderType);
 		}
 
 		[Test]

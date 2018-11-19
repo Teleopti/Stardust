@@ -98,7 +98,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			prepareSchedule();
 
 			var planningGroup = new PlanningGroup();
-			planningGroup.AddSetting(PlanningGroupSettings.CreateDefault());
 			var planningPeriod = new PlanningPeriod(period,SchedulePeriodType.Day, 8, planningGroup);
 			var jobResultId = Guid.NewGuid();
 			var jobResult = new JobResult(JobCategory.WebSchedule, period, agent, DateTime.UtcNow).WithId(jobResultId);
