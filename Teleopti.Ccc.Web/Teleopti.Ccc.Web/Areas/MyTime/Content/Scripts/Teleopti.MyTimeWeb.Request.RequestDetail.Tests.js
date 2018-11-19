@@ -29,10 +29,7 @@
 		};
 
 		Teleopti.MyTimeWeb.Common.Init({ baseUrl: '' }, ajax);
-		Teleopti.MyTimeWeb.Common.FakeToggles({
-			MyTimeWeb_PollToCheckScheduleChanges_46595: false
-		});
-
+		
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY-MM-DD',

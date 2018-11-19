@@ -57,19 +57,16 @@ header: '@Resources.Teleopti'
 
 		Teleopti.MyTimeWeb.AsmMessage.Init();
 
-					if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PollToCheckScheduleChanges_46595")) {
-					Teleopti.MyTimeWeb.PollScheduleUpdates.Init({
-						notifyText: '@Resources.YourScheduleHasChanged',
-						originalDocumentTitle: document.title,
-						baseUrl: '@Url.Content("~/")',
-						header: '@Resources.Teleopti'
-					});
-				}
-                </text>
+		Teleopti.MyTimeWeb.PollScheduleUpdates.Init({
+			notifyText: '@Resources.YourScheduleHasChanged',
+			originalDocumentTitle: document.title,
+			baseUrl: '@Url.Content("~/")',
+			header: '@Resources.Teleopti'
+		});
+        </text>
 		}
 
 		Teleopti.MyTimeWeb.TeamScheduleNew.Init();
-
 	});
 
 	StoreDeviceInstanceToken = function (token) {

@@ -89,7 +89,6 @@ MyTimeWeb_SortRequestList_40711 = true #Please note the feature for this one is 
 MyTimeWeb_WaitListPositionEnhancement_46301 = true
 MyTimeWeb_NewTeamScheduleView_75989 = RC
 MyTimeWeb_NewTeamScheduleViewDesktop_76313 = RC
-MyTimeWeb_PollToCheckScheduleChanges_46595 = true
 MyTimeWeb_TrafficLightOnMobileDayView_77447 = RC
 MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640 = RC
 Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = true

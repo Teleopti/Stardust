@@ -589,7 +589,7 @@ Teleopti.MyTimeWeb.Schedule = (function($) {
 			data.AbsenceProbabilityEnabled && data.CheckStaffingByIntraday && self.staffingProbabilityEnabled
 		);
 		self.overtimeProbabilityEnabled(data.OvertimeProbabilityEnabled);
-		
+
 		if (!self.absenceProbabilityEnabled() && self.selectedProbabilityType === constants.probabilityType.absence) {
 			self.selectedProbabilityType = constants.probabilityType.none;
 			rebindProbabilityLabel(self);
@@ -662,15 +662,13 @@ Teleopti.MyTimeWeb.Schedule = (function($) {
 			self.fetchProbabilityData();
 		}
 
-		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_PollToCheckScheduleChanges_46595')) {
-			Teleopti.MyTimeWeb.PollScheduleUpdates.SetListener('WeekScheduleWeb', function(period) {
-				var startDate = moment(moment(period.startDate).format('YYYY-MM-DD')).toDate();
-				var endDate = moment(moment(period.endDate).format('YYYY-MM-DD')).toDate();
-				if (vm.isWithinSelected(startDate, endDate)) {
-					_fetchData(vm.selectedProbabilityType);
-				}
-			});
-		}
+		Teleopti.MyTimeWeb.PollScheduleUpdates.SetListener('WeekScheduleWeb', function(period) {
+			var startDate = moment(moment(period.startDate).format('YYYY-MM-DD')).toDate();
+			var endDate = moment(moment(period.endDate).format('YYYY-MM-DD')).toDate();
+			if (vm.isWithinSelected(startDate, endDate)) {
+				_fetchData(vm.selectedProbabilityType);
+			}
+		});
 	}
 
 	function _setTimeIndicator(theDate) {

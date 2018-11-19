@@ -230,13 +230,11 @@ Teleopti.MyTimeWeb.Asm = (function() {
 		ko.applyBindings(vm, elementToBind);
 		vm.loadViewModel();
 
-		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_PollToCheckScheduleChanges_46595')) {
-			Teleopti.MyTimeWeb.PollScheduleUpdates.SetListener('MyTimeAsm', function(period) {
-				if (_validSchedulePeriod(period, true)) {
-					vm.loadViewModel();
-				}
-			});
-		}
+		Teleopti.MyTimeWeb.PollScheduleUpdates.SetListener('MyTimeAsm', function(period) {
+			if (_validSchedulePeriod(period, true)) {
+				vm.loadViewModel();
+			}
+		});
 	}
 
 	function _setFixedElementAttributes() {
