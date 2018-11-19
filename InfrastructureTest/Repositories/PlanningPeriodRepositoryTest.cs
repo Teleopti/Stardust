@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -60,8 +61,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			return new PlanningPeriodRepository(currentUnitOfWork);
 		}
-		
-		
+
+		[Test]
+		public void ShouldNotAllowNullAsPlanningGroup()
+		{
+			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
+			var planningPeriod = new PlanningPeriod(DateOnly.Today.ToDateOnlyPeriod(), SchedulePeriodType.Day, 1, null);
+
+			Assert.Throws<DataSourceException>(() =>
+			{
+				repository.Add(planningPeriod);
+				Session.Flush();
+			});
+		}
 
 		[Test]
 		public void ShouldGetPlanningPeriodsForPlanningGroup()
