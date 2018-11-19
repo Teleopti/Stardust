@@ -28,11 +28,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_jobResults = new HashSet<IJobResult>();
 		}
 
-		protected PlanningPeriod(PlanningGroup planningGroup):this()
-		{
-			_planningGroup = planningGroup;
-		}
-
 		public PlanningPeriod(IPlanningPeriodSuggestions planningPeriodSuggestions, PlanningGroup planningGroup) : this()
 		{
 			var suggestedPlanningPeriod = planningPeriodSuggestions.Default();
@@ -89,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				PeriodType = _periodType,
 				StartDate = nextPlanningPeriodStartDate
 			});
-			return new PlanningPeriod(planningGroup) { _range = range, _number = _number, _periodType = _periodType };
+			return new PlanningPeriod(range, _periodType, _number, planningGroup);
 		}
 
 		public virtual IJobResult GetLastSchedulingJob()
