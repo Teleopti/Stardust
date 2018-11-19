@@ -68,15 +68,6 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		}
 
 		[Test]
-		public void ShouldReturnDefaultPlanningPeriodIfNoPeriodExists()
-		{
-			Now.Is(new DateTime(2015, 4, 1));
-			var result = (OkNegotiatedContentResult<PlanningPeriodModel>) Target.GetPlanningPeriod(Guid.NewGuid());
-			result.Content.StartDate.Should().Be(new DateTime(2015, 05, 01));
-			result.Content.EndDate.Should().Be(new DateTime(2015, 05, 31));
-		}
-
-		[Test]
 		public void ShouldReturnEmptyIfForecastIsAvailable()
 		{
 			ScenarioRepository.Has(ScenarioFactory.CreateScenario("Default", true, true).WithId());
@@ -175,7 +166,6 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldReturnNextPlanningPeriodForPlanningGroup()
 		{
-			ScenarioRepository.Has(ScenarioFactory.CreateScenario("Default", true, true).WithId());
 			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>();
 			var planningGroup = PlanningGroupRepository.Has(new PlanningGroup());
 			Now.Is(new DateTime(2015, 05, 23));
@@ -200,8 +190,13 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldCreatePlanningPeriodWithNewState()
 		{
-			Now.Is(new DateTime(2015, 4, 1));
-			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(Guid.NewGuid());
+			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>();
+			var planningGroup = PlanningGroupRepository.Has(new PlanningGroup());
+			Now.Is(new DateTime(2015, 05, 23));
+			PlanningPeriodRepository.Add(new PlanningPeriod(new PlanningPeriodSuggestions(Now, new List<AggregatedSchedulePeriod>()), planningGroup));
+
+			Target.Request = new HttpRequestMessage();
+			var result = (CreatedAtRouteNegotiatedContentResult<PlanningPeriodModel>)Target.GetNextPlanningPeriod(planningGroup.Id.Value);
 			result.Content.State.Should().Be("New");
 		}
 
