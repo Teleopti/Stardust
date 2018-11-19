@@ -27,20 +27,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 	public class WebScheduleStardustHandlerTest : SchedulingScenario
 	{
 		public WebScheduleStardustHandler Target;
-		public FullScheduling FullScheduling;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeScenarioRepository ScenarioRepository;
-		public FakeDataSourceForTenant DataSourceForTenant;
 		public FakePersonRepository PersonRepository;
 		public FakeJobResultRepository JobResultRepository;
 		public FakeTenants Tenants;
 		public ICurrentSchedulingSource CurrentSchedulingSource;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
+		public FakePlanningGroupRepository PlanningGroupRepository;
 
 		private IScenario scenario;
 		private Person agent;
@@ -97,8 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			SetUp();
 			prepareSchedule();
 
-			var planningGroup = new PlanningGroup();
-			var planningPeriod = new PlanningPeriod(period,SchedulePeriodType.Day, 8, planningGroup);
+			var planningPeriod = new PlanningPeriod(period,SchedulePeriodType.Day, 8, PlanningGroupRepository.Has(new PlanningGroup()));
 			var jobResultId = Guid.NewGuid();
 			var jobResult = new JobResult(JobCategory.WebSchedule, period, agent, DateTime.UtcNow).WithId(jobResultId);
 			planningPeriod.JobResults.Add(jobResult);
@@ -131,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public void ShouldSaveExceptionToJobResult()
 		{
 			SetUp();
-			var planningPeriod = new PlanningPeriod(period,SchedulePeriodType.Day, 8);
+			var planningPeriod = new PlanningPeriod(period,SchedulePeriodType.Day, 8, new PlanningGroup().WithId());
 			var jobResultId = Guid.NewGuid();
 			var jobResult = new JobResult(JobCategory.WebSchedule, period, agent, DateTime.UtcNow).WithId(jobResultId);
 			planningPeriod.JobResults.Add(jobResult);

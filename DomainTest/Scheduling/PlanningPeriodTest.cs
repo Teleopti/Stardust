@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldReturnMonthPeriodEvenIfStartDateIsInMiddleOfMonth()
 		{
-			var target = new PlanningPeriod(new DateOnlyPeriod(2017, 12, 10, 2018, 1, 9),SchedulePeriodType.Month,1);
+			var target = new PlanningPeriod(new DateOnlyPeriod(2017, 12, 10, 2018, 1, 9),SchedulePeriodType.Month,1, new PlanningGroup());
 			target.PeriodType.Should().Be.EqualTo(SchedulePeriodType.Month);
 			target.Number.Should().Be.EqualTo(1);
 		}
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldReturnMonthPeriodWhenStartDateIs31()
 		{
-			var target = new PlanningPeriod(new DateOnlyPeriod(2017, 3, 31, 2017, 4, 29),SchedulePeriodType.Month,1);
+			var target = new PlanningPeriod(new DateOnlyPeriod(2017, 3, 31, 2017, 4, 29),SchedulePeriodType.Month,1, new PlanningGroup());
 			target.PeriodType.Should().Be.EqualTo(SchedulePeriodType.Month);
 			target.Number.Should().Be.EqualTo(1);
 		}
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldReturnMonthPeriodWhenItIsOneMonthLongAndEndDateIsFebruary27()
 		{
-			var target = new PlanningPeriod(new DateOnlyPeriod(2017, 1, 30, 2017, 2, 27),SchedulePeriodType.Month, 1);
+			var target = new PlanningPeriod(new DateOnlyPeriod(2017, 1, 30, 2017, 2, 27),SchedulePeriodType.Month, 1, new PlanningGroup());
 			target.PeriodType.Should().Be.EqualTo(SchedulePeriodType.Month);
 			target.Number.Should().Be.EqualTo(1);
 		}
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldReturnMonthPeriodWhenItIsTwoMonthsLongAndEndDateIsFebruary27()
 		{
-			var target = new PlanningPeriod(new DateOnlyPeriod(2016, 12, 29, 2017, 2, 27),SchedulePeriodType.Month,2);
+			var target = new PlanningPeriod(new DateOnlyPeriod(2016, 12, 29, 2017, 2, 27),SchedulePeriodType.Month,2, new PlanningGroup());
 			target.PeriodType.Should().Be.EqualTo(SchedulePeriodType.Month);
 			target.Number.Should().Be.EqualTo(2);
 		}

@@ -41,7 +41,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override PlanningPeriod CreateAggregateWithCorrectBusinessUnit()
 		{
-			var planningPeriod = new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015,4,1), new DateOnly(2015,4,7)),SchedulePeriodType.Week, 1);
+			var planningGroup = new PlanningGroup();
+			PersistAndRemoveFromUnitOfWork(planningGroup);
+			var planningPeriod = new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015,4,1), new DateOnly(2015,4,7)),SchedulePeriodType.Week, 1, planningGroup);
 			planningPeriod.JobResults.Add(jobResult);
 			return planningPeriod;
 		}
@@ -58,6 +60,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			return new PlanningPeriodRepository(currentUnitOfWork);
 		}
+		
+		
 
 		[Test]
 		public void ShouldGetPlanningPeriodsForPlanningGroup()
