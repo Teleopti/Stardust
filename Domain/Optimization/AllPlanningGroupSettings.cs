@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public PlanningGroupSettings ForAgent(IPerson person, DateOnly dateOnly)
 		{
-			return _planningGroupSettings.FirstOrDefault(x => x.IsValidForAgent(person, dateOnly));
+			return _planningGroupSettings.First(x => x.IsValidForAgent(person, dateOnly));
 		}
 
 		public IEnumerator<PlanningGroupSettings> GetEnumerator()
