@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			//hack for now - to be removed when we have one/fewer "settings objects" sent around
 			if (schedulingOptions.UseBlock)
 			{
-				planningPeriod.PlanningGroup.ModifyDefault_UseFromTestOnly(x =>
+				planningPeriod.PlanningGroup.ModifyDefault(x =>
 				{
 					x.BlockFinderType = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
 					x.BlockSameShiftCategory = schedulingOptions.BlockSameShiftCategory;

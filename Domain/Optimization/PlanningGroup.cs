@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 		
 		
-		public void ModifyDefault_UseFromTestOnly(Action<PlanningGroupSettings> action)
+		public virtual void ModifyDefault(Action<PlanningGroupSettings> action)
 		{
 			var currDefault = Settings.Single(x => x.Default);
 			action(currDefault);
