@@ -327,7 +327,7 @@
 
 	test('Should close badges dropdown menu when taping outside', function() {
 		var badgesHTML =
-			'<div class="navbar bdd-mytime-top-menu" id="testBadgesHTML">' +
+			'<div class="navbar teleopti-mytime-top-menu" id="testBadgesHTML">' +
 			'<ul class="nav navbar-nav pull-left navbar-user-setting">' +
 			'<li id="BadgePanel" class="dropdown pull-left open">111111111111111111' +
 			'</li>' +
@@ -337,17 +337,17 @@
 		$('body').append(badgesHTML);
 		Teleopti.MyTimeWeb.Common.Layout.Init();
 
-		equal($('.bdd-mytime-top-menu #BadgePanel').hasClass('open'), true);
+		equal($('.teleopti-mytime-top-menu #BadgePanel').hasClass('open'), true);
 
 		$('body').trigger('touchend');
-		equal($('.bdd-mytime-top-menu #BadgePanel').hasClass('open'), false);
+		equal($('.teleopti-mytime-top-menu #BadgePanel').hasClass('open'), false);
 
 		$('#testBadgesHTML').remove();
 	});
 
 	test('Should close user settings dropdown menu when taping outside', function() {
 		var userSettingsHTML =
-			'<div class="navbar bdd-mytime-top-menu" id="testUserSettingsHTML">' +
+			'<div class="navbar teleopti-mytime-top-menu" id="testUserSettingsHTML">' +
 			'<ul class="nav navbar-nav pull-left navbar-user-setting">' +
 			'<li id="user-settings" class="dropdown pull-left open">111111111111111111' +
 			'</li>' +
@@ -357,38 +357,38 @@
 		$('body').append(userSettingsHTML);
 		Teleopti.MyTimeWeb.Common.Layout.Init();
 
-		equal($('.bdd-mytime-top-menu #user-settings').hasClass('open'), true);
+		equal($('.teleopti-mytime-top-menu #user-settings').hasClass('open'), true);
 
 		$('body').trigger('touchend');
-		equal($('.bdd-mytime-top-menu #user-settings').hasClass('open'), false);
+		equal($('.teleopti-mytime-top-menu #user-settings').hasClass('open'), false);
 
 		$('#testUserSettingsHTML').remove();
 	});
 
 	test('Should close collapsing menu when taping outside', function() {
 		var collaspingMenuHTML =
-			'<div class="navbar bdd-mytime-top-menu" id="testCollaspingMenuHTML">' +
-			'<button id="mainNavbarToggler" type="button" class="navbar-toggle" ' +
+			'<div class="navbar teleopti-mytime-top-menu" id="testCollaspingMenuHTML">' +
+			'<button type="button" class="navbar-toggle navbar-toggle-button" ' +
 			'data-toggle="offcanvas" data-target=".navbar-offcanvas">' +
 			'</button>' +
-			'<div class="navbar-offcanvas navmenu-fixed-left offcanvas menu-top-adjust in" id="bs-example-navbar-collapse-1">' +
+			'<div class="navbar-offcanvas offcanvas in">' +
 			'</div>' +
 			'</div>';
 
 		$('body').append(collaspingMenuHTML);
 		Teleopti.MyTimeWeb.Common.Layout.Init();
 
-		equal($('#bs-example-navbar-collapse-1').hasClass('in'), true);
+		equal($('.teleopti-mytime-top-menu .navbar-offcanvas').hasClass('in'), true);
 
 		var mainNavbarTogglerClickTriggered = false;
-		$('#mainNavbarToggler').click(function() {
+		$('.navbar-toggle-button').click(function() {
 			mainNavbarTogglerClickTriggered = true;
 		});
 
 		$('body').trigger('touchend');
 		equal(mainNavbarTogglerClickTriggered, true);
 
-		$('#mainNavbarToggler').unbind('click');
+		$('.navbar-toggle-button').unbind('click');
 		$('#testCollaspingMenuHTML').remove();
 	});
 

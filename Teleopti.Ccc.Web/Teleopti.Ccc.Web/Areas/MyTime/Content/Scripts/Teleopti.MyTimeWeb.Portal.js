@@ -347,7 +347,7 @@ Teleopti.MyTimeWeb.Portal = (function($) {
 
 	function _adjustTabs(hashInfo) {
 		var tabHref = '#' + hashInfo.controller + 'Tab';
-		$('#bs-example-navbar-collapse-1 .nav li').removeClass('active');
+		$('.teleopti-mytime-top-menu .navbar-offcanvas .nav li').removeClass('active');
 		$('a[href="' + tabHref + '"]')
 			.parent()
 			.addClass('active');

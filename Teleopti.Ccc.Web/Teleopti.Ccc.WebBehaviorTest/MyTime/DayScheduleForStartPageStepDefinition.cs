@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I open MyTime menu on the left")]
 		public void ThenIOpenMyTimeMenuOnTheLeft()
 		{
-			Browser.Interactions.Click("#mainNavbarToggler");
+			Browser.Interactions.Click(".navbar-toggle-button");
 		}
 
 		[When(@"I click Schedule menu item")]

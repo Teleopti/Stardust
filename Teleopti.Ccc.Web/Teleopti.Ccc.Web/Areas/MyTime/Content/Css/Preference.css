@@ -20,8 +20,8 @@
 	background: rgba(90, 205, 249, 0.3);
 }
 
-.navbar-teleopti .navbar-nav .open .dropdown-menu > li > a.add-musthave,
-.navbar-teleopti .navbar-nav .open .dropdown-menu > li > a.remove-musthave {
+.teleopti-toolbar .navbar-nav .open .dropdown-menu > li > a.add-musthave,
+.teleopti-toolbar .navbar-nav .open .dropdown-menu > li > a.remove-musthave {
 	color: black;
 }
 
@@ -275,8 +275,8 @@
 		margin: 0;
 		padding: 0;
 	}
-	.phone-navbar.navbar-teleopti .navbar-nav .open .dropdown-menu > li > a.add-musthave,
-	.phone-navbar.navbar-teleopti .navbar-nav .open .dropdown-menu > li > a.remove-musthave {
+	.phone-navbar.teleopti-toolbar .navbar-nav .open .dropdown-menu > li > a.add-musthave,
+	.phone-navbar.teleopti-toolbar .navbar-nav .open .dropdown-menu > li > a.remove-musthave {
 		color: white;
 	}
 }

@@ -58,7 +58,7 @@
 
 		var html = [
 			'<div class="navbar-header pull-left fake-navbar-brand">',
-			'	<button id="mainNavbarToggler" type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".navbar-offcanvas">',
+			'	<button type="button" class="navbar-toggle navbar-toggle-button" data-toggle="offcanvas" data-target=".navbar-offcanvas">',
 			'		<span class="icon-bar"></span>',
 			'		<span class="icon-bar"></span>',
 			'		<span class="icon-bar"></span>',
@@ -97,7 +97,7 @@
 		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
 
 		var html = [
-			'<div class="navbar-offcanvas navmenu-fixed-left offcanvas menu-top-adjust" id="bs-example-navbar-collapse-1">',
+			'<div class="navbar-offcanvas offcanvas">',
 			'	<ul class="nav navbar-nav">',
 			'		<li class="active">',
 			'			<a href="#ScheduleTab" onclick="hideNavMenu();" data-mytime-action="Schedule/Week">',
@@ -156,7 +156,7 @@
 
 		equal($('ul.navbar-nav li a[href="#Schedule/MobileDay"]').attr('data-mytime-action'), 'Schedule/MobileDay');
 
-		$('#bs-example-navbar-collapse-1').remove();
+		$('.teleopti-mytime-top-menu .navbar-offcanvas').remove();
 	});
 
 	test('should navigate to next date when swiping left', function() {
@@ -318,7 +318,7 @@
 
 		var html =
 			'<div id="testUnreadMessageHtml">' +
-			'<ul class="nav navbar-nav navbar-teleopti row submenu">' +
+			'<ul class="nav navbar-nav teleopti-toolbar row submenu">' +
 			'<li class="mobile-message" data-bind="click: navigateToMessages">' +
 			'<a>' +
 			'<i class="glyphicon glyphicon-envelope"></i>' +
