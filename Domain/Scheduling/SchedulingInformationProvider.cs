@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -28,21 +26,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
 			var people = _planningGroupStaffLoader.Load(period, planningPeriod.PlanningGroup).AllPeople.Select(x => x.Id.Value).ToList();
-			return new SchedulingInformation(period, people, planningPeriod.PlanningGroup.Id.Value);
+			return new SchedulingInformation(period, people);
 		}
 	}
 
 	public class SchedulingInformation
 	{
-		public IList<Guid> PersonIds { get; }
-		public Guid PlanningGroupId { get; }
-		public DateOnlyPeriod Period { get; }
-
-		public SchedulingInformation(DateOnlyPeriod period, IList<Guid> personIds, Guid planningGroupId)
+		public SchedulingInformation(DateOnlyPeriod period, IEnumerable<Guid> personIds)
 		{
 			PersonIds = personIds;
-			PlanningGroupId = planningGroupId;
 			Period = period;
 		}
+		
+		public IEnumerable<Guid> PersonIds { get; }
+		public DateOnlyPeriod Period { get; }
 	}
 }
