@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(2001, 1, 1));
 			var planningPeriod =
 				new PlanningPeriod(new PlanningPeriodSuggestions(new ThisIsNow(new DateTime(2010, 1, 1)),
-					new List<AggregatedSchedulePeriod>()));
+					new List<AggregatedSchedulePeriod>()), new PlanningGroup());
 
 			planningPeriod.Publish(person);
 
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var person = PersonFactory.CreatePersonWithId();
 			var planningPeriod =
 				new PlanningPeriod(new PlanningPeriodSuggestions(new ThisIsNow(new DateTime(2010, 1, 1)),
-					new List<AggregatedSchedulePeriod>()));
+					new List<AggregatedSchedulePeriod>()), new PlanningGroup());
 
 			planningPeriod.Publish(person);
 
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var person2 = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(2002, 1, 1));
 			var planningPeriod =
 				new PlanningPeriod(new PlanningPeriodSuggestions(new ThisIsNow(new DateTime(2010, 1, 1)),
-					new List<AggregatedSchedulePeriod>()));
+					new List<AggregatedSchedulePeriod>()), new PlanningGroup());
 
 			planningPeriod.Publish(person1,person2);
 

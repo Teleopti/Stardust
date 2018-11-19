@@ -43,11 +43,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_planningGroup = planningGroup;
 		}
 
-
-		public PlanningPeriod(IPlanningPeriodSuggestions planningPeriodSuggestions) : this(planningPeriodSuggestions, null)
-		{
-		}
-
 		//TODO: remove 
 		public PlanningPeriod(DateOnlyPeriod range, SchedulePeriodType periodType, int number, PlanningGroup planningGroup = null) : this()
 		{

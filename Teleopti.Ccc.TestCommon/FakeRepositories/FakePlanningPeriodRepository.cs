@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public PlanningPeriod Load(Guid id)
 		{
 			if (!_planningPeriods.Any())
-				return new PlanningPeriod(new PlanningPeriodSuggestions(_now, new AggregatedSchedulePeriod[] {}));
+				return new PlanningPeriod(new PlanningPeriodSuggestions(_now, new AggregatedSchedulePeriod[] {}), new PlanningGroup());
 			//TODO: fix this!
 			return _planningPeriods.FirstOrDefault(planningPeriod => planningPeriod.Id == id);
 		}

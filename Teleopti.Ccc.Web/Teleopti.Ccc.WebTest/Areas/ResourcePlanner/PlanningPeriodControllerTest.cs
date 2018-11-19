@@ -128,10 +128,13 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public void ShouldGetPlanningPeriodSuggestions()
 		{
 			Now.Is(new DateTime(2015, 4, 1));
+			var planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(Now, Enumerable.Empty<AggregatedSchedulePeriod>()), new PlanningGroup()).WithId();
+
+			PlanningPeriodRepository.Add(planningPeriod);
 			PlanningPeriodRepository.CustomData(null, new PlanningPeriodSuggestions(Now, suggestions()));
 			var result = 
 				(OkNegotiatedContentResult<IEnumerable<SuggestedPlanningPeriodRangeModel>>)
-					Target.GetPlanningPeriodSuggestion(Guid.NewGuid());
+					Target.GetPlanningPeriodSuggestion(planningPeriod.Id.Value);
 			result.Content.Count().Should().Be.EqualTo(14);
 		}
 		
@@ -141,7 +144,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			Now.Is(new DateTime(2015, 05, 22));
 			var planningPeriodId = Guid.NewGuid();
 			PlanningPeriodRepository.CustomData(
-				new PlanningPeriod(new PlanningPeriodSuggestions(Now, suggestions())).WithId(planningPeriodId),
+				new PlanningPeriod(new PlanningPeriodSuggestions(Now, suggestions()), new PlanningGroup()).WithId(planningPeriodId),
 				new PlanningPeriodSuggestions(Now, suggestions()));
 
 
@@ -172,7 +175,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			PlanningGroupRepository.Has(planningGroup);
 			var planningPeriodId = Guid.NewGuid();
 			PlanningPeriodRepository.CustomData(
-				new PlanningPeriod(new PlanningPeriodSuggestions(Now, suggestions())).WithId(planningPeriodId),
+				new PlanningPeriod(new PlanningPeriodSuggestions(Now, suggestions()),planningGroup).WithId(planningPeriodId),
 				new PlanningPeriodSuggestions(Now, suggestions()));
 
 
@@ -187,7 +190,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		{
 			Now.Is(new DateTime(2015, 4, 1));
 			var planningPeriodId = Guid.NewGuid();
-			PlanningPeriodRepository.CustomData(new PlanningPeriod(new PlanningPeriodSuggestions(Now, suggestions())).WithId(planningPeriodId),
+			PlanningPeriodRepository.CustomData(new PlanningPeriod(new PlanningPeriodSuggestions(Now, suggestions()), new PlanningGroup()).WithId(planningPeriodId),
 				new PlanningPeriodSuggestions(Now, suggestions()));
 			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(2010, 1, 1));
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1)));
@@ -215,10 +218,10 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			ScenarioRepository.Has(ScenarioFactory.CreateScenario("Default", true, true).WithId());
 			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>();
 			Now.Is(new DateTime(2015, 05, 23));
-			PlanningPeriodRepository.Add( new PlanningPeriod(new PlanningPeriodSuggestions(Now,new List<AggregatedSchedulePeriod>())));
-
+			var planningGroup = PlanningGroupRepository.Has(new PlanningGroup().WithId());
+			PlanningPeriodRepository.Add( new PlanningPeriod(new PlanningPeriodSuggestions(Now,new List<AggregatedSchedulePeriod>()), planningGroup));
 			Target.Request = new HttpRequestMessage();
-			Target.GetNextPlanningPeriod();
+			Target.GetNextPlanningPeriod(planningGroup.Id.Value);
 			PlanningPeriodRepository.LoadAll().Any(p => p.Range.StartDate == new DateOnly(2015, 07, 01)).Should().Be.True();
 		}
 

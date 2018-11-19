@@ -218,12 +218,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return Ok(createPlanningPeriodModel(planningPeriod));
 		}
 
-		[UnitOfWork, HttpPost, Route("api/resourceplanner/nextplanningperiod")]
-		public virtual IHttpActionResult GetNextPlanningPeriod()
-		{
-			return nextPlanningPeriod(null);
-		}
-
 		[UnitOfWork, HttpPost, Route("api/resourceplanner/planninggroup/{planningGroupId}/firstplanningperiod")]
 		public virtual IHttpActionResult CreateFirstPlanningPeriod(Guid planningGroupId, DateTime startDate, DateTime endDate, SchedulePeriodType schedulePeriodType, int lengthOfThePeriodType)
 		{
