@@ -537,7 +537,7 @@
     <Compile Include="Intraday\ApplicationLayer\IntradayStaffingApplicationServiceTest.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
     <Compile Include="Notification\UserDeviceServiceTest.cs" />
-    <Compile Include="Optimization\BlockPreferenceProviderTest.cs" />
+    <Compile Include="Optimization\BlockPreferenceProviderUsingFiltersTest.cs" />
     <Compile Include="Optimization\FetchPlanningGroupModelTest.cs" />
     <Compile Include="Optimization\WebIntradayOptimizationStardustHandlerTest.cs" />
     <Compile Include="Reports\ReportNavigationModelTest.cs" />

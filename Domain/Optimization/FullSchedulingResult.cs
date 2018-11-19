@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IFindSchedulesForPersons _findSchedulesForPersons;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly ICurrentScenario _currentScenario;
-		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
@@ -32,12 +31,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public FullSchedulingResult(Func<ISchedulerStateHolder> schedulerStateHolder, IFindSchedulesForPersons findSchedulesForPersons, 
 			IUserTimeZone userTimeZone, ICurrentScenario currentScenario,  
 			CheckScheduleHints checkScheduleHints, 
-			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory, IResourceCalculation resourceCalculation, 
+			IResourceCalculation resourceCalculation, 
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory, FillSchedulerStateHolder fillSchedulerStateHolder,
 			AgentsWithWhiteSpots agentsWithWhiteSpots, IPlanningPeriodRepository planningPeriodRepository)
 		{
 			_checkScheduleHints = checkScheduleHints;
-			_blockPreferenceProviderUsingFiltersFactory = blockPreferenceProviderUsingFiltersFactory;
 			_resourceCalculation = resourceCalculation;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -68,7 +66,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var scheduleOfSelectedPeople = _findSchedulesForPersons.FindSchedulesForPersons(_currentScenario.Current(), loadedSelectedAgents, 
 				new ScheduleDictionaryLoadOptions(usePreferences, false, usePreferences), period.ToDateTimePeriod(_userTimeZone.TimeZone()), loadedSelectedAgents, true);
 			var planningPeriod = _planningPeriodRepository.Get(planningPeriodId);
-			var validationResults = _checkScheduleHints.Execute(new SchedulePostHintInput(scheduleOfSelectedPeople, loadedSelectedAgents, period, _blockPreferenceProviderUsingFiltersFactory.Create(planningPeriod.PlanningGroup), usePreferences)).InvalidResources;
+			var blockPreferenceProvider = new BlockPreferenceProviderUsingFilters(planningPeriod.PlanningGroup.Settings);
+			var validationResults = _checkScheduleHints.Execute(new SchedulePostHintInput(scheduleOfSelectedPeople, loadedSelectedAgents, period, blockPreferenceProvider, usePreferences)).InvalidResources;
 			var nonScheduledAgents = _agentsWithWhiteSpots.Execute(scheduleOfSelectedPeople, loadedSelectedAgents, period);
 			var result = new FullSchedulingResultModel
 			{

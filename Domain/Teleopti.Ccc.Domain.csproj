@@ -621,7 +621,6 @@
     <Compile Include="Intraday\To Staffing\SkillTypesWithBacklog.cs" />
     <Compile Include="Notification\UserDeviceService.cs" />
     <Compile Include="Optimization\BlockPreferenceProviderUsingFilters.cs" />
-    <Compile Include="Optimization\BlockPreferenceProviderUsingFiltersFactory.cs" />
     <Compile Include="Optimization\FixedBlockPreferenceProvider.cs" />
     <Compile Include="Optimization\IBlockPreferenceProvider.cs" />
     <Compile Include="Optimization\IntradayOptimization.cs" />
