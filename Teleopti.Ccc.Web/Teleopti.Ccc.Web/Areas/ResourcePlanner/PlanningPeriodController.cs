@@ -173,11 +173,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private IPlanningPeriodSuggestions getSuggestion(PlanningGroup planningGroup)
 		{
 			var period = new DateOnly(_now.UtcDateTime()).ToDateOnlyPeriod();
-			var personIds = planningGroup != null
-				? _planningGroupStaffLoader.LoadPersonIds(period, planningGroup)
-				: _planningGroupStaffLoader.Load(period, null)
-					.FixedStaffPeople.Select(x => x.Id.GetValueOrDefault())
-					.ToList();
+			var personIds = _planningGroupStaffLoader.LoadPersonIds(period, planningGroup);
 			var suggestion = _planningPeriodRepository.Suggestions(_now, personIds);
 			return suggestion;
 		}
