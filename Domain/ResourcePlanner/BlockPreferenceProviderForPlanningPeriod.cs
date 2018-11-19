@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner
 		public IBlockPreferenceProvider Fetch(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
-			var planningGroup = planningPeriod.PlanningGroup;
 			return new BlockPreferenceProviderUsingFilters(planningPeriod.PlanningGroup.Settings);
 		}
 	}
