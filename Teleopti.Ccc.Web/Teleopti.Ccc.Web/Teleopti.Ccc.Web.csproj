@@ -399,7 +399,6 @@
     <Compile Include="Areas\Anywhere\Controllers\LandingPageController.cs" />
     <Compile Include="Areas\Global\ChatConfigurationController.cs" />
     <Compile Include="Areas\Global\TenantCredential.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\CustomerDbConnector.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormExtensions.cs" />
     <Compile Include="Areas\Reports\Controllers\AuditTrailController.cs" />
     <Compile Include="Areas\Search\Controllers\PersonSearchController.cs" />
