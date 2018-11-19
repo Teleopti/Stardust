@@ -200,13 +200,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		}
 
 		[UnitOfWork, HttpPost, Route("api/resourceplanner/planninggroup/{planningGroupId}/firstplanningperiod")]
-		public virtual IHttpActionResult CreateFirstPlanningPeriod(Guid planningGroupId, DateTime startDate, DateTime endDate, SchedulePeriodType schedulePeriodType, int lengthOfThePeriodType)
+		public virtual IHttpActionResult CreateFirstPlanningPeriod(Guid planningGroupId, DateTime startDate, SchedulePeriodType schedulePeriodType, int lengthOfThePeriodType)
 		{
 			var planningGroup = _planningGroupRepository.Get(planningGroupId);
 			if (planningGroup == null)
 				return BadRequest($"Invalid {nameof(planningGroupId)}");
 
-			//TODO check if we can remove endDate
 			var firstPeriod = new PlanningPeriod(new DateOnly(startDate), schedulePeriodType, lengthOfThePeriodType, planningGroup);
 			_planningPeriodRepository.Add(firstPeriod);
 			

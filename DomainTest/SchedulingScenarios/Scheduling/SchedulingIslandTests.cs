@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				skillA.CreateSkillDayWithDemand(scenario, date, 100),
 				skillB.CreateSkillDayWithDemand(scenario, date, 1),
 				skillC.CreateSkillDayWithDemand(scenario, date, 10));
-			var planningPeriod = PlanningPeriodRepository.Has(date,date,SchedulePeriodType.Day, 1);
+			var planningPeriod = PlanningPeriodRepository.Has(date,SchedulePeriodType.Day, 1);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 

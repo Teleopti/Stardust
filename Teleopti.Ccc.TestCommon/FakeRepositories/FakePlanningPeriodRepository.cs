@@ -27,8 +27,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Has(start, numberOfWeeks, new PlanningGroup());
 		}
 
-		//TODO removed endDate
-		public PlanningPeriod Has(DateOnly startDate, DateOnly endDate, SchedulePeriodType schedulePeriodType, int number)
+		public PlanningPeriod Has(DateOnly startDate, SchedulePeriodType schedulePeriodType, int number)
 		{
 			var planningPeriod = new PlanningPeriod(startDate, schedulePeriodType,number, new PlanningGroup()).WithId();
 			_planningPeriods.Add(planningPeriod);

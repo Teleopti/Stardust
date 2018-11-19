@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldPublishEventWothPlanningPeriodId()
 		{
-			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, DateOnly.Today.AddDays(6), SchedulePeriodType.Week, 1);
+			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, SchedulePeriodType.Week, 1);
 			
 			Target.Execute(planningPeriod.Id.Value);
 
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldIncludeCreatedJobResult()
 		{
-			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, DateOnly.Today.AddDays(6), SchedulePeriodType.Week, 1);
+			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, SchedulePeriodType.Week, 1);
 			
 			Target.Execute(planningPeriod.Id.Value);
 
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldSetLoggedOnUserOnJobResult()
 		{
-			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, DateOnly.Today.AddDays(6), SchedulePeriodType.Week, 1);
+			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, SchedulePeriodType.Week, 1);
 			var loggedOnPerson = LoggedOnUser.CurrentUser();
 			
 			Target.Execute(planningPeriod.Id.Value);
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldSetJobResultPeriodBasedOnPlanningPeriod()
 		{
-			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, DateOnly.Today.AddDays(6), SchedulePeriodType.Week, 1);
+			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, SchedulePeriodType.Week, 1);
 			
 			Target.Execute(planningPeriod.Id.Value);
 			
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldAddJobResultToPlanningPeriod()
 		{
-			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, DateOnly.Today.AddDays(6), SchedulePeriodType.Week, 1);
+			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, SchedulePeriodType.Week, 1);
 			
 			Target.Execute(planningPeriod.Id.Value);
 

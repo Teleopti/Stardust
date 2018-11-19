@@ -30,7 +30,7 @@
 				getPlanningPeriods: { method: 'GET', params: { planningGroupId: "@planningGroupId" }, isArray: true, url: planningGroupBaseUrl + '/planningperiods' },
 				deleteLastPlanningPeriod: { method: 'DELETE', params: { planningGroupId: "@planningGroupId" }, isArray: true, url: planningGroupBaseUrl + '/lastperiod' },
 				changeEndDateForLastPlanningPeriod: { method: 'PUT', params: { planningGroupId: "@planningGroupId", startDate: "@startDate", schedulePeriodType: "@schedulePeriodType", lengthOfThePeriodType: "@lengthOfThePeriodType", endDate: "@endDate" }, isArray: true, url: planningGroupBaseUrl + '/lastperiod' },
-				firstPlanningPeriod: { method: 'POST', params: { planningGroupId: "@planningGroupId", startDate: "@startDate", endDate: "@endDate", schedulePeriodType: "@schedulePeriodType", lengthOfThePeriodType:"@lengthOfThePeriodType" }, url: planningGroupBaseUrl + '/firstplanningperiod' }
+				firstPlanningPeriod: { method: 'POST', params: { planningGroupId: "@planningGroupId", startDate: "@startDate", schedulePeriodType: "@schedulePeriodType", lengthOfThePeriodType:"@lengthOfThePeriodType" }, url: planningGroupBaseUrl + '/firstplanningperiod' }
 			});
 
 		return {

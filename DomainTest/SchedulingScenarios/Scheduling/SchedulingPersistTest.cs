@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.WithPersonPeriod(ruleSet, contract, skill)
 				.WithSchedulePeriodOneWeek(firstDay));
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, period.Inflate(10), TimeSpan.FromHours(1)));
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Month, 1);
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,SchedulePeriodType.Month, 1);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 						
