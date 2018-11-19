@@ -18,8 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 	{
 		public PlanningGroupController Target;
 		public FakePlanningGroupRepository PlanningGroupRepository;
-		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		
+
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<PlanningGroupController>();
@@ -42,13 +41,11 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldUpdatePlanningGroup()
 		{
-			var planningGroupId = Guid.NewGuid();
-			PlanningGroupRepository.Has(new PlanningGroup("TestPlanningGroup").WithId(planningGroupId));
-
+			var existingPlanningGroup = PlanningGroupRepository.Has(new PlanningGroup("TestPlanningGroup"));
 			var model = new PlanningGroupModel
 			{
 				Name = "UpdatedPlanningGroup",
-				Id = planningGroupId
+				Id = existingPlanningGroup.Id.Value
 			};
 
 			Target.Create(model);
@@ -60,8 +57,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldFetchAll()
 		{
-			var planningGroup1 = new PlanningGroup("PlanningGroup 1").WithId();
-			var planningGroup2 = new PlanningGroup("PlanningGroup 2").WithId();
+			var planningGroup1 = new PlanningGroup("PlanningGroup 1");
+			var planningGroup2 = new PlanningGroup("PlanningGroup 2");
 			PlanningGroupRepository.Has(planningGroup1);
 			PlanningGroupRepository.Has(planningGroup2);
 			var result = Target.List().Result<IEnumerable<PlanningGroupModel>>().ToList();
@@ -73,9 +70,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldFetchOne()
 		{
-			var planningGroup = new PlanningGroup("PlanningGroup 1").WithId();
-			PlanningGroupRepository
-				.Has(planningGroup);
+			var planningGroup = new PlanningGroup("PlanningGroup 1");
+			PlanningGroupRepository.Has(planningGroup);
 			var result = Target.Get(planningGroup.Id.GetValueOrDefault()).Result<PlanningGroupModel>();
 
 			result.Id.Should().Be.EqualTo(planningGroup.Id.GetValueOrDefault());
@@ -85,13 +81,11 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldRemovePlanningGroup()
 		{
-			var planningGroupId = Guid.NewGuid();
-			PlanningGroupRepository
-				.Has(new PlanningGroup("PlanningGroup 1").WithId(planningGroupId));
+			var planningGroup = PlanningGroupRepository.Has(new PlanningGroup("PlanningGroup 1"));
 
-			Target.DeletePlanningGroup(planningGroupId);
+			Target.DeletePlanningGroup(planningGroup.Id.Value);
 
-			var result = (PlanningGroup) PlanningGroupRepository.Get(planningGroupId);
+			var result = PlanningGroupRepository.Get(planningGroup.Id.Value);
 			result.IsDeleted.Should().Be.True();
 		}
 	}

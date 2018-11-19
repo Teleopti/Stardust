@@ -24,13 +24,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_planningPeriods = new List<PlanningPeriod>();
 		}
 
-		public bool AddExecuted { get; set; }
-
 		public void Add(PlanningPeriod entity)
 		{
 			entity.SetId(Guid.NewGuid());
 			_planningPeriods.Add(entity);
-			AddExecuted = true;
 		}
 
 		public PlanningPeriod Has(DateOnly start, int numberOfWeeks)
