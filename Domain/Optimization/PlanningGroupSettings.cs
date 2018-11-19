@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -47,10 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Priority = -1;
 		}
 
-		public virtual IEnumerable<IFilter> Filters
-		{
-			get { return _filters; }
-		}
+		public virtual IEnumerable<IFilter> Filters => _filters;
 
 		public virtual string Name { get; set; }
 
@@ -70,25 +64,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			foreach (var filter in _filters)
 			{
 				var filterType = filter.FilterType;
-				bool currFilterValue;
-				if(validFilterTypes.TryGetValue(filterType, out currFilterValue) && currFilterValue)
+				if(validFilterTypes.TryGetValue(filterType, out var currFilterValue) && currFilterValue)
 					continue;
 
 				validFilterTypes[filterType] = filter.IsValidFor(person, dateOnly);
 			}
 
 			return validFilterTypes.Keys.All(key => validFilterTypes[key]);
-		}
-
-		public virtual void UpdateWith(SchedulingOptions schedulingOptions)
-		{
-			if (schedulingOptions.UseBlock)
-			{
-				BlockFinderType = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
-				BlockSameShiftCategory = schedulingOptions.BlockSameShiftCategory;
-				BlockSameStartTime = schedulingOptions.BlockSameStartTime;
-				BlockSameShift = schedulingOptions.BlockSameShift;				
-			}
 		}
 	}
 }
