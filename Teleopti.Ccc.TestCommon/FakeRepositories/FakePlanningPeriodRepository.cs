@@ -69,8 +69,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 						Number = number,
 						PeriodType = type
 					}
-				}), planningGroup ?? new PlanningGroup());
-			planningPeriod.SetId(Guid.NewGuid());
+				}), planningGroup).WithId();
 			_planningPeriods.Add(planningPeriod);
 			return planningPeriod;
 
