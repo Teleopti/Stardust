@@ -46,6 +46,8 @@
 				"@ECHO OFF",
 				"COLOR 0D",
 				"\"Teleopti.Develop.Batflow\\bin\\Debug\\Teleopti.Develop.Batflow.exe\" flow --develop.baseline 77750",
+				"CD \"Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\WFM\"",
+				"START ..\\.node\\npm start",
 				"EXIT"
 			]
 		}
