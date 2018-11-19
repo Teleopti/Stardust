@@ -153,21 +153,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return Ok(createPlanningPeriodModel(planningPeriod));
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{planningPeriodId}/suggestions")]
-		public virtual IHttpActionResult GetPlanningPeriodSuggestion(Guid planningPeriodId)
-		{
-			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
-			var suggestion = getSuggestion(null);
-			var result = suggestion.SuggestedPeriods(planningPeriod.Range);
-			return Ok(result.Select(r => new SuggestedPlanningPeriodRangeModel
-			{
-				PeriodType = r.PeriodType.ToString(),
-				StartDate = r.Range.StartDate.Date,
-				EndDate = r.Range.EndDate.Date,
-				Number = r.Number
-			}));
-		}
-
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/suggestions/{planningGroupId}")]
 		public virtual IHttpActionResult GetPlanningPeriodSuggestionsForPlanningGroup(Guid planningGroupId)
 		{
