@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1));
 			var endDate = new DateOnly(2015, 10, 18);
 			var period = new DateOnlyPeriod(firstDay, endDate);
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, SchedulePeriodType.Day, 1);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, SchedulePeriodType.Day, 7);
 			
 			var result = Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
