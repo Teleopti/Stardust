@@ -3709,11 +3709,56 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Action.
+        /// </summary>
+        public static string AuditTrailAction {
+            get {
+                return ResourceManager.GetString("AuditTrailAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to At.
+        /// </summary>
+        public static string AuditTrailAt {
+            get {
+                return ResourceManager.GetString("AuditTrailAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Between.
+        /// </summary>
+        public static string AuditTrailBetween {
+            get {
+                return ResourceManager.GetString("AuditTrailBetween", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By.
+        /// </summary>
+        public static string AuditTrailBy {
+            get {
+                return ResourceManager.GetString("AuditTrailBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Audit Trail:.
         /// </summary>
         public static string AuditTrailColon {
             get {
                 return ResourceManager.GetString("AuditTrailColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Context.
+        /// </summary>
+        public static string AuditTrailContext {
+            get {
+                return ResourceManager.GetString("AuditTrailContext", resourceCulture);
             }
         }
         

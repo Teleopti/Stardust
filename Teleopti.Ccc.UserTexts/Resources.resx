@@ -17884,4 +17884,24 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>View customer center</value>
     <comment>function name to view customer center page</comment>
   </data>
+  <data name="AuditTrailAction" xml:space="preserve">
+    <value>Action</value>
+    <comment>The action that was made</comment>
+  </data>
+  <data name="AuditTrailAt" xml:space="preserve">
+    <value>At</value>
+    <comment>At what time the action was made</comment>
+  </data>
+  <data name="AuditTrailBetween" xml:space="preserve">
+    <value>Between</value>
+    <comment>Between what dates an action was made. Used when searching</comment>
+  </data>
+  <data name="AuditTrailBy" xml:space="preserve">
+    <value>By</value>
+    <comment>Who did the action </comment>
+  </data>
+  <data name="AuditTrailContext" xml:space="preserve">
+    <value>Context</value>
+    <comment>The context in which the action was performed in</comment>
+  </data>
 </root>

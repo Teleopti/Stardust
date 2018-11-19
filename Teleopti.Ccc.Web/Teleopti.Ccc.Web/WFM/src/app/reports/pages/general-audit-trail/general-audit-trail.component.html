@@ -5,10 +5,9 @@
         </h1>
     </div>
 </div>
-
 <form nz-form nzLayout="vertical" [formGroup]="searchForm" (ngSubmit)="submitForm()">
     <nz-form-item>
-        <nz-form-label>{{'ChangedBy' | translate}}</nz-form-label>
+        <nz-form-label>{{'AuditTrailBy' | translate}}</nz-form-label>
         <nz-form-control>
             <nz-input-group style="width: 200px;" nzSize="medium" [nzSuffix]="suffixIcon">
                 <input placeholder="Select person" formControlName="personPicker" nz-input [nzAutocomplete]="auto" />
@@ -27,7 +26,7 @@
     </nz-form-item>
 
     <nz-form-item>
-        <nz-form-label>{{'ChangeDateColon' | translate}}</nz-form-label>
+        <nz-form-label>{{'AuditTrailBetween' | translate}}</nz-form-label>
         <nz-form-control>
             <nz-range-picker formControlName="changedRange" [nzFormat]="dateformat"></nz-range-picker>
         </nz-form-control>
@@ -45,10 +44,10 @@
     <thead nzSingleSort>
         <tr>
             <th nzShowExpand></th>
-            <th>Timestamp</th>
-            <th>Person</th>
-            <th>Action</th>
-            <th>Context</th>
+            <th>{{'AuditTrailAt' | translate}}</th>
+            <th>{{'AuditTrailBy' | translate}}</th>
+            <th>{{'AuditTrailAction' | translate}}</th>
+            <th>{{'AuditTrailContext' | translate}}</th>
         </tr>
     </thead>
     <tbody>
