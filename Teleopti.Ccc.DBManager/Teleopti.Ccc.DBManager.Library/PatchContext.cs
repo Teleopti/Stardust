@@ -45,9 +45,8 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			try
 			{
-				Policy.Handle<SqlException>()
-					.WaitAndRetry(3, i => TimeSpan.FromSeconds(Math.Pow(i, 2)))
-					.Execute(() => ExecuteSql().Execute(c => { }));
+				// would be better to make an actual lookup
+				ExecuteSql().Execute(c => { });
 				return true;
 			}
 			catch (Exception)
