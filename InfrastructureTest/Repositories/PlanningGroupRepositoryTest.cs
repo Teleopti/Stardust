@@ -3,12 +3,14 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData;
+using AggregateException = Teleopti.Ccc.Domain.Common.AggregateException;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -46,6 +48,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			
 			TestRepository(CurrUnitOfWork).Get(planningGroup.Id.Value).Settings
 				.Should().Have.SameSequenceAs(planningGroupSettings4, planningGroupSettings3, planningGroupSettings2, planningGroupSettings1, planningGroup.Settings.Single(x=>x.Default));
+		}
+
+		[Test]
+		public void PlanningGroupSettingsMustBelongToPlanningGroup()
+		{
+			Assert.Throws<AggregateException>(() => { PersistAndRemoveFromUnitOfWork(new PlanningGroupSettings()); });
 		}
 		
 		[Test]
