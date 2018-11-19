@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
@@ -14,15 +13,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePlanningPeriodRepository : IPlanningPeriodRepository
 	{
-		private readonly INow _now;
-		private readonly IList<PlanningPeriod> _planningPeriods;
+		private readonly IList<PlanningPeriod> _planningPeriods = new List<PlanningPeriod>();
 		private IPlanningPeriodSuggestions _planningPeriodSuggestions;
-
-		public FakePlanningPeriodRepository(INow now)
-		{
-			_now = now;
-			_planningPeriods = new List<PlanningPeriod>();
-		}
 
 		public void Add(PlanningPeriod entity)
 		{
