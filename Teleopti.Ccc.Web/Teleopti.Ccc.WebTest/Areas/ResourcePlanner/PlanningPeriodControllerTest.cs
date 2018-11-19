@@ -57,9 +57,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var planningGroup = new PlanningGroup().WithId(planningGroupId);
 			PlanningGroupRepository.Add(planningGroup);
 
-			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 05, 18), new DateOnly(2015, 05, 31)),SchedulePeriodType.Week, 2, planningGroup).WithId());
-			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 06, 01), new DateOnly(2015, 06, 14)),SchedulePeriodType.Week, 2,planningGroup).WithId());
-			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 06, 15), new DateOnly(2015, 06, 28)), SchedulePeriodType.Week, 2, planningGroup).WithId());
+			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnly(2015, 05, 18),SchedulePeriodType.Week, 2, planningGroup).WithId());
+			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnly(2015, 06, 01),SchedulePeriodType.Week, 2,planningGroup).WithId());
+			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnly(2015, 06, 15), SchedulePeriodType.Week, 2, planningGroup).WithId());
 
 
 			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods(planningGroupId);

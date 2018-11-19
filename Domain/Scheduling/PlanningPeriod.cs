@@ -38,9 +38,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_planningGroup = planningGroup;
 		}
 
-		public PlanningPeriod(DateOnlyPeriod range, SchedulePeriodType periodType, int number, PlanningGroup planningGroup) : this()
+		public PlanningPeriod(DateOnly start, SchedulePeriodType periodType, int number, PlanningGroup planningGroup) : this()
 		{
-			_range = range;
+			_range = calculator.PeriodForType(start, new SchedulePeriodForRangeCalculation
+			{
+				StartDate = start,
+				Number = number,
+				PeriodType = periodType,
+				Culture = CultureInfo.CurrentCulture
+			});
 			_number = number;
 			_periodType = periodType;
 			_planningGroup = planningGroup;	
@@ -77,14 +83,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual PlanningPeriod NextPlanningPeriod(PlanningGroup planningGroup)
 		{
 			var nextPlanningPeriodStartDate = _range.EndDate.AddDays(1);
-			var range = calculator.PeriodForType(nextPlanningPeriodStartDate, new SchedulePeriodForRangeCalculation
-			{
-				Culture = CultureInfo.CurrentCulture,
-				Number = _number,
-				PeriodType = _periodType,
-				StartDate = nextPlanningPeriodStartDate
-			});
-			return new PlanningPeriod(range, _periodType, _number, planningGroup);
+			return new PlanningPeriod(nextPlanningPeriodStartDate, _periodType, _number, planningGroup);
 		}
 
 		public virtual IJobResult GetLastSchedulingJob()

@@ -206,7 +206,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			if (planningGroup == null)
 				return BadRequest($"Invalid {nameof(planningGroupId)}");
 
-			var firstPeriod = new PlanningPeriod(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)), schedulePeriodType, lengthOfThePeriodType, planningGroup);
+			//TODO check if we can remove endDate
+			var firstPeriod = new PlanningPeriod(new DateOnly(startDate), schedulePeriodType, lengthOfThePeriodType, planningGroup);
 			_planningPeriodRepository.Add(firstPeriod);
 			
 			return planningPeriodCreatedResponse(firstPeriod);

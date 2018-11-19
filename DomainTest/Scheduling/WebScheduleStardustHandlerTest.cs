@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			SetUp();
 			prepareSchedule();
 
-			var planningPeriod = new PlanningPeriod(period,SchedulePeriodType.Day, 8, PlanningGroupRepository.Has(new PlanningGroup()));
+			var planningPeriod = new PlanningPeriod(period.StartDate,SchedulePeriodType.Day, 8, PlanningGroupRepository.Has(new PlanningGroup()));
 			var jobResultId = Guid.NewGuid();
 			var jobResult = new JobResult(JobCategory.WebSchedule, period, agent, DateTime.UtcNow).WithId(jobResultId);
 			planningPeriod.JobResults.Add(jobResult);
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public void ShouldSaveExceptionToJobResult()
 		{
 			SetUp();
-			var planningPeriod = new PlanningPeriod(period,SchedulePeriodType.Day, 8, new PlanningGroup().WithId());
+			var planningPeriod = new PlanningPeriod(period.StartDate,SchedulePeriodType.Day, 8, new PlanningGroup().WithId());
 			var jobResultId = Guid.NewGuid();
 			var jobResult = new JobResult(JobCategory.WebSchedule, period, agent, DateTime.UtcNow).WithId(jobResultId);
 			planningPeriod.JobResults.Add(jobResult);

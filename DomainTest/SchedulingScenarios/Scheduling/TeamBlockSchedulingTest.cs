@@ -855,7 +855,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var planningGroup = new PlanningGroup();
 			planningGroup.AddFilter(new TeamFilter(team));
 			PlanningGroupRepository.Has(planningGroup);
-			var planningPeriod = new PlanningPeriod(date.ToDateOnlyPeriod(),SchedulePeriodType.Day, 1, planningGroup);
+			var planningPeriod = new PlanningPeriod(date,SchedulePeriodType.Day, 1, planningGroup);
 			PlanningPeriodRepository.Add(planningPeriod);
 
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);

@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var planningGroup = new PlanningGroup();
 			PersistAndRemoveFromUnitOfWork(planningGroup);
-			var planningPeriod = new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015,4,1), new DateOnly(2015,4,7)),SchedulePeriodType.Week, 1, planningGroup);
+			var planningPeriod = new PlanningPeriod(new DateOnly(2015,4,1),SchedulePeriodType.Week, 1, planningGroup);
 			planningPeriod.JobResults.Add(jobResult);
 			return planningPeriod;
 		}
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldNotAllowNullAsPlanningGroup()
 		{
 			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
-			var planningPeriod = new PlanningPeriod(DateOnly.Today.ToDateOnlyPeriod(), SchedulePeriodType.Day, 1, null);
+			var planningPeriod = new PlanningPeriod(DateOnly.Today, SchedulePeriodType.Day, 1, null);
 
 			Assert.Throws<DataSourceException>(() =>
 			{
