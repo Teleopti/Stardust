@@ -29,7 +29,6 @@
 		MyTimeWeb_PreferenceForJalaliCalendar_42965,
 		MyTimeWeb_DayScheduleForStartPage_43446,
 		MyTimeWeb_DayScheduleForStartPage_Command_44209,
-		MyTimeWeb_MonthlyScheduleMobileView_45004,
 		MyTimeWeb_WaitListPositionEnhancement_46301,
 		MyTimeWeb_NewTeamScheduleView_75989,
 		MyTimeWeb_NewTeamScheduleViewDesktop_76313,

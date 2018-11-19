@@ -306,7 +306,6 @@
 
 	test('should not show unreadMessage number if it is zero', function() {
 		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_MonthlyScheduleMobileView_45004');
 
 		startDayData.UnReadMessageCount = 0;
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(

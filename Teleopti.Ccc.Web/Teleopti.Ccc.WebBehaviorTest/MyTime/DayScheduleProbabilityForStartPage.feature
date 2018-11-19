@@ -75,12 +75,3 @@ Scenario: Should hide staffing probability
 	And I click show probability toggle
 	And I click hide probability
 	Then I should not see the probability in schedule
-
-@OnlyRunIfDisabled('MyTimeWeb_MonthlyScheduleMobileView_45004')
-Scenario: Probability setting should be kept when date changed
-	Given tomorrow I have a full day absence
-	When I am viewing mobile view for today
-	And I click show probability toggle
-	And I click show overtime probability
-	And I change date to tomorrow
-	Then I should see the selected probability toggle is Overtime Probability

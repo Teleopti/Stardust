@@ -44,47 +44,6 @@ Layout = null;
 <div class="mobile-start-day">
 	<div class="navbar teleopti-toolbar subnavbar">
 		<div class="container mobile-start-day-nav">
-			<!-- ko ifnot: mobileMonthEnabled -->
-			<ul class="nav navbar-nav teleopti-toolbar row submenu">
-				<li class="mobile-datepicker">
-					<div class="input-group">
-						<span class="input-group-btn">
-							<button class="btn btn-default" data-bind="click: previousDay" type="button">
-								<i class="glyphicon glyphicon-chevron-left"></i>
-							</button>
-						</span>
-						<input class="form-control text-center date-input-style" data-bind="value: displayDate" type="text" readonly="readonly" />
-						<span class="input-group-btn">
-							<span class="btn btn-default moment-datepicker" type="button">
-								<i class="glyphicon glyphicon-calendar"></i>
-							</span>
-							<button class="btn btn-default" data-bind="click: nextDay" type="button">
-								<i class="glyphicon glyphicon-chevron-right"></i>
-							</button>
-						</span>
-					</div>
-				</li>
-				<li class="mobile-today" data-bind="click: today">
-					<a>
-						<i class="glyphicon glyphicon-home"></i>
-					</a>
-				</li>
-				<li class="mobile-message" data-bind="click: navigateToMessages">
-					<a>
-						<i class="glyphicon glyphicon-envelope"></i>
-						<span id="MobileDayView-message" class="badge" data-bind="visible: unreadMessageCount() > 0, text: unreadMessageCount">
-						</span>
-					</a>
-				</li>
-				<li class="mobile-request" data-bind="click: function(e, d){ if(requestsCount() > 0){navigateToRequests();}}">
-					<a id="MobileDayView-request" data-bind="visible: requestsCount() > 0">
-						<i class="glyphicon glyphicon-comment"></i>
-					</a>
-				</li>
-			</ul>
-			<!-- /ko -->
-
-			<!-- ko if: mobileMonthEnabled -->
 			<ul class="nav navbar-nav teleopti-toolbar row submenu">
 				<li class="mobile-month-datepicker">
 					<a data-bind="attr: { href: mobileMonthUrl}, text: displayDate" class="formatted-date-text"></a>
@@ -110,7 +69,6 @@ Layout = null;
 					</a>
 				</li>
 			</ul>
-			<!-- /ko -->
 		</div>
 	</div>
 

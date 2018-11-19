@@ -56,8 +56,7 @@
 	self.menuIconIsVisible = ko.observable(true);
 	self.focusingRequestForm = ko.observable(false);
 	self.isCommandEnable = ko.observable(false);
-	self.mobileMonthEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MonthlyScheduleMobileView_45004');
-
+	
 	self.datePickerFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
 	self.requestDay = null;
 
