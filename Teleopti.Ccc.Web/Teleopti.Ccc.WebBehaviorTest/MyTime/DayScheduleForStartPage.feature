@@ -42,14 +42,12 @@ Given there is a role with
 	And I have the workflow control set 'Published schedule'
 
 @Mobile
-@OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: Navigate to day schedule when clicking 'Schedule' menu on mobile
 	Given I am american
 	When I am viewing requests
 	And I click Schedule menu item
 	Then I should see mobile day view
 
-@OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: View day schedule after login
 	Given I have a shift with
 	| Field          | Value            |
@@ -65,7 +63,6 @@ Scenario: View day schedule after login
 		| Shift category | Early             |
 		| Week day       | Friday            |
 
-@OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: Should see the brief request in today
 	Given 'I' has an existing absence request with
 	| Field       | Value            |
@@ -78,7 +75,6 @@ Scenario: Should see the brief request in today
 	When I click the request icon
 	Then I should see it go to request page
 
-@OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: Should see unread messages
 	Given I have an unread message with
 	| Field | Value       |

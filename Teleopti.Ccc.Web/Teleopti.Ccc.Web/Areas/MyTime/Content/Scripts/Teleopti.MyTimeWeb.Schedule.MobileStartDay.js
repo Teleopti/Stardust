@@ -66,10 +66,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function($) {
 	}
 
 	function setUpLogoClick(mywindow) {
-		if (
-			Teleopti.MyTimeWeb.Portal.IsMobile(mywindow) &&
-			Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
-		) {
+		if (Teleopti.MyTimeWeb.Portal.IsMobile(mywindow)) {
 			var brand = $('a.navbar-brand');
 			if (brand.data('events') && brand.data('events')['click']) brand.unbind('click');
 

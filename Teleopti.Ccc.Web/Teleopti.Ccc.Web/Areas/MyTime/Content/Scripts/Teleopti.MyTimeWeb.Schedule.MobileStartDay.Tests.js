@@ -54,8 +54,6 @@
 	});
 
 	test('should navigate to default start day view when clicking logo', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
-
 		var html = [
 			'<div class="navbar-header pull-left fake-navbar-brand">',
 			'	<button type="button" class="navbar-toggle navbar-toggle-button" data-toggle="offcanvas" data-target=".navbar-offcanvas">',
@@ -94,8 +92,6 @@
 	});
 
 	test('should navigate to default start date when clicking schedule menu item', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
-
 		var html = [
 			'<div class="navbar-offcanvas offcanvas">',
 			'	<ul class="nav navbar-nav">',
@@ -305,8 +301,6 @@
 	});
 
 	test('should not show unreadMessage number if it is zero', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
-
 		startDayData.UnReadMessageCount = 0;
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
 			fakeReadyForInteractionCallback,
@@ -338,8 +332,6 @@
 	});
 
 	test('should navigate to messages', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
-
 		Teleopti.MyTimeWeb.Portal.Init(getDefaultSetting(), getFakeWindow());
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
