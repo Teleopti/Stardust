@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public bool TryGetEmailAddress(PersonInfo pi, out string emailAddress)
 		{
 			using (var con = new SqlConnection(pi.Tenant.DataSourceConfiguration.ApplicationConnectionString))
-			using (var cmd = new SqlCommand("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; SELECT Email FROM Person WHERE Id = @userId", con)) // set transaction isolation level read uncommitted;
+			using (var cmd = new SqlCommand("SELECT Email FROM Person WITH (READUNCOMMITTED) WHERE Id = @userId", con))
 			{
 				cmd.CommandType = CommandType.Text;
 				cmd.Parameters.Add("@userId", SqlDbType.UniqueIdentifier);
