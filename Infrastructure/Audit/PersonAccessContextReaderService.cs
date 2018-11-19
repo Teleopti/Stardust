@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 				};
 				var deserializedRole = JsonConvert.DeserializeObject<PersonAccessModel>(audit.Data);
 				var appRole = _applicationRoleRepository.Load(deserializedRole.RoleId);
-				auditServiceModel.Data = $"person: {audit.ActionPerformedOn.Name} Role: {appRole.Name} Action: {audit.Action}";
+				auditServiceModel.Data = $"Person: {audit.ActionPerformedOn.Name} Role: {appRole.Name} Action: {audit.Action}";
 				auditServiceModelList.Add(auditServiceModel);
 			}
 
