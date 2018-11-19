@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 			else
 			{
-				var setting = planningGroup.Settings.Single(x => x.Id.Value == model.Id);
+				var setting = planningGroup.Settings.Single(x => x.Id == model.Id);
 				setProperties(setting, model);
 			}
 		}
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public void Delete(Guid id)
 		{
 			var planningGroup = _planningGroupRepository.FindPlanningGroupBySettingId(id);
-			planningGroup.RemoveSetting(planningGroup.Settings.Single(x => x.Id.Value==id));
+			planningGroup.RemoveSetting(planningGroup.Settings.Single(x => x.Id.HasValue && x.Id.Value==id));
 		}
 
 

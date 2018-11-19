@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			var planningGroup = new PlanningGroup().WithId();
 			PlanningGroupRepository.Add(planningGroup);
-			var defaultSetting = planningGroup.Settings.Single(x=>x.Default);
+			var defaultSetting = planningGroup.Settings.Single(x=>x.Default).WithId();
 			var model = new PlanningGroupSettingsModel
 			{
 				Id = defaultSetting.Id.Value,
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupRepository.Get(planningGroup.Id.Value).Settings.Single();
+			var inDb = PlanningGroupRepository.Get(planningGroup.Id.Value).Settings.Single(x => !x.Default);
 			inDb.DayOffsPerWeek.Should().Be.EqualTo(new MinMax<int>(model.MinDayOffsPerWeek, model.MaxDayOffsPerWeek));
 			inDb.ConsecutiveDayOffs.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveDayOffs, model.MaxConsecutiveDayOffs));
 			inDb.ConsecutiveWorkdays.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveWorkdays, model.MaxConsecutiveWorkdays));
@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Target.Persist(model);
 
 			
-			var inDb = PlanningGroupRepository.Get(planningGroup.Id.Value).Settings.Single();
+			var inDb = PlanningGroupRepository.Get(planningGroup.Id.Value).Settings.Single(x => !x.Default);
 			inDb.DayOffsPerWeek.Should().Be.EqualTo(new MinMax<int>(model.MinDayOffsPerWeek, model.MaxDayOffsPerWeek));
 			inDb.ConsecutiveDayOffs.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveDayOffs, model.MaxConsecutiveDayOffs));
 			inDb.ConsecutiveWorkdays.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveWorkdays, model.MaxConsecutiveWorkdays));
@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupRepository.Get(planningGroup.Id.Value).Settings.Single();
+			var inDb = PlanningGroupRepository.Get(planningGroup.Id.Value).Settings.Single(x => !x.Default);
 			inDb.DayOffsPerWeek.Should().Be.EqualTo(new MinMax<int>(model.MinDayOffsPerWeek, model.MaxDayOffsPerWeek));
 			inDb.ConsecutiveDayOffs.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveDayOffs, model.MaxConsecutiveDayOffs));
 			inDb.ConsecutiveWorkdays.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveWorkdays, model.MaxConsecutiveWorkdays));
@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single();
+			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single(x => !x.Default);
 			var contractFilter = (ContractFilter)inDb.Filters.Single();
 			contractFilter.Contract.Should().Be.EqualTo(contract);
 		}
@@ -327,7 +327,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single();
+			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single(x => !x.Default);
 			var siteFilter = (SiteFilter)inDb.Filters.Single();
 			siteFilter.Site.Should().Be.EqualTo(site);
 		}
@@ -355,7 +355,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single();
+			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single(x => !x.Default);
 			var teamFilter = (TeamFilter)inDb.Filters.Single();
 			teamFilter.Team.Should().Be.EqualTo(team);
 		}
@@ -378,7 +378,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single();
+			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single(x => !x.Default);
 			inDb.Filters.Count().Should().Be.EqualTo(1);
 		}
 
@@ -400,7 +400,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single();
+			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single(x => !x.Default);
 			inDb.Filters.Count().Should().Be.EqualTo(1);
 		}
 
@@ -421,7 +421,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single();
+			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single(x => !x.Default);
 			inDb.Filters.Count().Should().Be.EqualTo(1);
 		}
 
@@ -475,7 +475,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var onlyFilterInDb = (TeamFilter)PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single().Filters.Single();
+			var onlyFilterInDb = (TeamFilter)PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single(x => !x.Default).Filters.Single();
 			onlyFilterInDb.Team.Id.Value.Should().Be.EqualTo(team.Id.Value);
 		}
 
@@ -492,7 +492,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			model.Name = expectedName;
 
 			Target.Persist(model);
-			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single();
+			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single(x => !x.Default);
 			inDb.Name.Should().Be.EqualTo(expectedName);
 		}
 
@@ -549,8 +549,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var inDbs = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings;
-			inDbs.Single().Priority.Should().Be.EqualTo(2);
+			PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single(x => !x.Default).Priority
+				.Should().Be.EqualTo(2);
 		}
 	}
 }
