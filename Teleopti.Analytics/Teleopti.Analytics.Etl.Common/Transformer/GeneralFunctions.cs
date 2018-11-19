@@ -30,11 +30,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			var retList = new List<IDataSourceEtl>();
 			foreach (var source in origList)
 			{
-				var name = source.DataSourceName;
-				if (includeOptionAll && name.Equals("ResourceKeyAliasForAll"))
-					name = Resources.AllSelection;
-
-				var newSource = new DataSourceEtl(source.DataSourceId, name, source.TimeZoneId, source.TimeZoneCode,
+				var newSource = new DataSourceEtl(source.DataSourceId, source.DataSourceName, source.TimeZoneId, source.TimeZoneCode,
 					source.IntervalLength, source.Inactive);
 				retList.Add(newSource);
 			}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Security.Policy;
 using System.Web.Http;
 using log4net;
 using Teleopti.Analytics.Etl.Common;
@@ -102,7 +103,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			try
 			{
-				return Ok(_tenantLogDataSourcesProvider.Load(tenantName));
+				return Ok(_tenantLogDataSourcesProvider.Load(tenantName, false, true));
 			}
 			catch (ArgumentException e)
 			{
@@ -116,8 +117,25 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			try
 			{
+				return Ok(_tenantLogDataSourcesProvider.Load(tenantName, true, true));
+			}
+			catch (ArgumentException e)
+			{
+				return Content(HttpStatusCode.NotFound, e.Message);
+			}
+		}
+
+		[TenantUnitOfWork]
+		[HttpPost, Route("Etl/TenantLogDataSources")]
+		public virtual IHttpActionResult TenantLogDataSources([FromBody] string tenantName)
+		{
+			try
+			{
+				var tenant = _loadAllTenants.Tenants().Single(x => x.Name == tenantName);
+				var analyticsConnectionString = tenant.DataSourceConfiguration.AnalyticsConnectionString;
+				_generalFunctions.SetConnectionString(analyticsConnectionString);
 				_generalFunctions.LoadNewDataSources();
-				return Ok(_tenantLogDataSourcesProvider.Load(tenantName, true));
+				return Ok(_tenantLogDataSourcesProvider.Load(tenantName, true, false));
 			}
 			catch (ArgumentException e)
 			{
@@ -247,7 +265,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 					continue;
 				}
 
-				var dataSource = _tenantLogDataSourcesProvider.Load(tenantName, true).SingleOrDefault(x => x.Id == dataSourceId);
+				var dataSource = _tenantLogDataSourcesProvider.Load(tenantName, true, false).SingleOrDefault(x => x.Id == dataSourceId);
 				if (dataSource == null)
 				{
 					dataSourceNotPersisted.Add(dataSourceModel.Name);
