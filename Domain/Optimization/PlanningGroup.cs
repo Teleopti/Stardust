@@ -13,13 +13,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IList<PlanningGroupSettings> _settings = new List<PlanningGroupSettings>();
 		private bool _isDeleted;
 
-		public PlanningGroup():this(string.Empty)
+		public PlanningGroup()
 		{
-		}
-
-		public PlanningGroup(string name)
-		{
-			Name = name;
+			Name = string.Empty;
 			var planningGroupSettings = new PlanningGroupSettings();
 			planningGroupSettings.SetAsDefault();
 			addPlanningGroupSetting(planningGroupSettings);

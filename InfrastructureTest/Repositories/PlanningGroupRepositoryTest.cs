@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	{
 		protected override PlanningGroup CreateAggregateWithCorrectBusinessUnit()
 		{
-			return new PlanningGroup("Test");
+			return new PlanningGroup();
 		}
 
 		protected override void VerifyAggregateGraphProperties(PlanningGroup loadedAggregateFromDatabase)
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldBeOrdered()
 		{
-			var planningGroup = new PlanningGroup("_");
+			var planningGroup = new PlanningGroup();
 			var planningGroupSettings1 = new PlanningGroupSettings {Priority = 1};
 			var planningGroupSettings2 = new PlanningGroupSettings {Priority = 2};
 			var planningGroupSettings3 = new PlanningGroupSettings {Priority = 3};
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldPlaceDefaultSettingLast()
 		{
-			var planningGroup = new PlanningGroup("_");
+			var planningGroup = new PlanningGroup();
 			PersistAndRemoveFromUnitOfWork(planningGroup);
 			var rep = new PlanningGroupRepository(CurrUnitOfWork);
 			var planningGroupSetting = new PlanningGroupSettings();

@@ -8,6 +8,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Ccc.WebTest.TestHelper;
 
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldUpdatePlanningGroup()
 		{
-			var existingPlanningGroup = PlanningGroupRepository.Has(new PlanningGroup("TestPlanningGroup"));
+			var existingPlanningGroup = PlanningGroupRepository.Has(new PlanningGroup());
 			var model = new PlanningGroupModel
 			{
 				Name = "UpdatedPlanningGroup",
@@ -57,8 +58,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldFetchAll()
 		{
-			var planningGroup1 = new PlanningGroup("PlanningGroup 1");
-			var planningGroup2 = new PlanningGroup("PlanningGroup 2");
+			var planningGroup1 = new PlanningGroup();
+			var planningGroup2 = new PlanningGroup();
 			PlanningGroupRepository.Has(planningGroup1);
 			PlanningGroupRepository.Has(planningGroup2);
 			var result = Target.List().Result<IEnumerable<PlanningGroupModel>>().ToList();
@@ -70,7 +71,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldFetchOne()
 		{
-			var planningGroup = new PlanningGroup("PlanningGroup 1");
+			var planningGroup = new PlanningGroup();
+			planningGroup.ChangeName(RandomName.Make());
 			PlanningGroupRepository.Has(planningGroup);
 			var result = Target.Get(planningGroup.Id.GetValueOrDefault()).Result<PlanningGroupModel>();
 
@@ -81,7 +83,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldRemovePlanningGroup()
 		{
-			var planningGroup = PlanningGroupRepository.Has(new PlanningGroup("PlanningGroup 1"));
+			var planningGroup = PlanningGroupRepository.Has(new PlanningGroup());
 
 			Target.DeletePlanningGroup(planningGroup.Id.Value);
 

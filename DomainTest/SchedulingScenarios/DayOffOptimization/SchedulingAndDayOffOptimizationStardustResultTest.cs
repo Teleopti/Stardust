@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var filterContract = new ContractWithMaximumTolerance().WithId();
 			var agent = PersonRepository.Has(filterContract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, skill)
 				.InTimeZone(TimeZoneInfo.FindSystemTimeZoneById(assignedShiftsTimeZone));
-			var planningGroup = new PlanningGroup("_").AddFilter(new ContractFilter(filterContract));
+			var planningGroup = new PlanningGroup().AddFilter(new ContractFilter(filterContract));
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1, SchedulePeriodType.Day, planningGroup);
 			PlanningGroupRepository.Has(planningGroup);
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, 1, 1, 1));

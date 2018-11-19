@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public void ShouldNotCreateDefaultPlanningPeriodForPlanningGroupIfNonExists()
 		{
 			var planningGroupId = Guid.NewGuid();
-			var planningGroup = new PlanningGroup("test group").WithId(planningGroupId);
+			var planningGroup = new PlanningGroup().WithId(planningGroupId);
 			PlanningGroupRepository.Add(planningGroup);
 
 			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods(planningGroupId);
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public void ShouldReturnAvailablePlanningPeriodsForPlanningGroup()
 		{
 			var planningGroupId = Guid.NewGuid();
-			var planningGroup = new PlanningGroup("test group").WithId(planningGroupId);
+			var planningGroup = new PlanningGroup().WithId(planningGroupId);
 			PlanningGroupRepository.Add(planningGroup);
 
 			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 05, 18), new DateOnly(2015, 05, 31)),SchedulePeriodType.Week, 2, planningGroup).WithId());

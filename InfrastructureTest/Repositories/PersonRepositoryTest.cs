@@ -1880,7 +1880,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				SkillA = skillA,
 				SkillB = skillB
 			};
-			var planningGroup = testCase.CreatePlanningGroup(new PlanningGroup("Group"), testData);
+			var planningGroup = testCase.CreatePlanningGroup(new PlanningGroup(), testData);
 			PersistAndRemoveFromUnitOfWork(planningGroup);
 			var currentUnitOfWork = new ThisUnitOfWork(UnitOfWork);
 			var loadedPlanningGroup = new PlanningGroupRepository(currentUnitOfWork).Get(planningGroup.Id.Value);

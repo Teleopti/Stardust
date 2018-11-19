@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public void ShouldReturnNextPlanningPeriodForPlanningGroup()
 		{
 			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()), new PlanningGroup());
-			var planningGroup = new PlanningGroup("group1");
+			var planningGroup = new PlanningGroup();
 			var nextPlanningPeriod = target.NextPlanningPeriod(planningGroup);
 			nextPlanningPeriod.Range.Should().Be.EqualTo(new DateOnlyPeriod(2015, 06, 01, 2015, 06, 30));
 			nextPlanningPeriod.PlanningGroup.Name.Should().Be.EqualTo(planningGroup.Name);

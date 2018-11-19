@@ -1,6 +1,5 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
@@ -28,7 +27,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				team = new TeamRepository(currentUnitOfWork).FindTeamByDescriptionName(Team).First();
 			}
 
-			PlanningGroup = new PlanningGroup(PlanningGroupName);
+			PlanningGroup = new PlanningGroup();
+			PlanningGroup.ChangeName(SchedulingSettingName);
 			PlanningGroup.AddFilter(new TeamFilter(team));
 
 			PlanningGroupSchedulingSetting = new PlanningGroupSettings {Name = SchedulingSettingName};

@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldGetPlanningPeriodsForPlanningGroup()
 		{
 			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
-			var planningGroup = new PlanningGroup("test planning group");
+			var planningGroup = new PlanningGroup();
 			PersistAndRemoveFromUnitOfWork(planningGroup);
 			PersistAndRemoveFromUnitOfWork(new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()), planningGroup));
 

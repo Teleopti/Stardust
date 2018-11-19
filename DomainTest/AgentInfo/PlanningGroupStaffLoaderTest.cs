@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		{
 			var team = TeamFactory.CreateTeamWithId(Guid.NewGuid());
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(Guid.NewGuid(), new DateOnly(2017, 1, 1), team);
-			var planningGroup = new PlanningGroup("planning group 1")
+			var planningGroup = new PlanningGroup()
 				.WithId()
 				.AddFilter(new TeamFilter(team));
 			PersonRepository.Add(person);
