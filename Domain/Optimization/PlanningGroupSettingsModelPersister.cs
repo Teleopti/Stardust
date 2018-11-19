@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (model.Id == Guid.Empty)
 			{
 				var allSettings = planningGroup.Settings;
-				model.Priority = allSettings.IsEmpty() ? 0 : allSettings.Max(x => x.Priority) + 1;
+				model.Priority = allSettings.Max(x => x.Priority) + 1;
 				var planningGroupSettings = new PlanningGroupSettings();
 				setProperties(planningGroupSettings, model);
 				planningGroup.AddSetting(planningGroupSettings);
