@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		private void createDatabase(PatchCommand command, PatchContext context)
 		{
 			_log.Write("Creating database " + command.DatabaseName + "...");
-			var creator = new DatabaseCreator(context.DatabaseFolder(), context.MasterExecuteSql());
+			var creator = new DatabaseCreator(context.DatabaseFolder(), context.ExecuteSql(), context.MasterExecuteSql());
 			if (context.SqlVersion().IsAzure)
 				creator.CreateAzureDatabase(command.DatabaseType, command.DatabaseName);
 			else

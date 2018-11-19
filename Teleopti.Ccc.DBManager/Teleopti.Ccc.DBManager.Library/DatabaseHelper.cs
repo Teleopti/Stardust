@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			}, Logger);
 
 			_usingDatabase = new ExecuteSql(() => openConnection(), Logger);
-			
+
 			_sqlVersion = new Lazy<SqlVersion>(() => new ServerVersionHelper(_usingMaster).Version());
 		}
 
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			dropIfExists();
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
 
-			var creator = new DatabaseCreator(databaseFolder, _usingMaster);
+			var creator = new DatabaseCreator(databaseFolder, _usingDatabase, _usingMaster);
 			creator.CreateDatabase(DatabaseType, DatabaseName);
 
 			var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, _usingDatabase);
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
 
-			var creator = new DatabaseCreator(databaseFolder, _usingMaster);
+			var creator = new DatabaseCreator(databaseFolder, _usingDatabase, _usingMaster);
 			creator.CreateAzureDatabase(DatabaseType, DatabaseName);
 
 			var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, _usingDatabase);

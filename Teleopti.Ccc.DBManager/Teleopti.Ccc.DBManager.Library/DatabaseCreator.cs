@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using Teleopti.Support.Library;
@@ -9,18 +10,21 @@ namespace Teleopti.Ccc.DBManager.Library
 	public class DatabaseCreator
 	{
 		private readonly DatabaseFolder _databaseFolder;
-		private readonly ExecuteSql _executeSql;
+		private readonly ExecuteSql _sql;
+		private readonly ExecuteSql _masterSql;
 
-		public DatabaseCreator(DatabaseFolder databaseFolder, ExecuteSql executeSql)
+		public DatabaseCreator(DatabaseFolder databaseFolder, ExecuteSql sql, ExecuteSql masterSql)
 		{
 			_databaseFolder = databaseFolder;
-			_executeSql = executeSql;
+			_sql = sql;
+			_masterSql = masterSql;
 		}
 
 		public void CreateDatabase(DatabaseType type, string name)
 		{
 			var scriptFile = _databaseFolder.CreateScriptsPath().ScriptFilePath(type);
 			createDatabaseByScriptFile(scriptFile, type, name);
+			waitUntilLoginWorks();
 		}
 
 		public void CreateAzureDatabase(DatabaseType type, string name)
@@ -38,7 +42,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			{
 				var script = File.ReadAllText(scriptFile);
 				script = replaceScriptTags(script, type, name);
-				_executeSql.ExecuteTransactionlessNonQuery(script, Timeouts.CommandTimeout);
+				_masterSql.ExecuteTransactionlessNonQuery(script, Timeouts.CommandTimeout);
 			}
 			catch (SqlException exception)
 			{
@@ -46,6 +50,14 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
 		}
 
+		private void waitUntilLoginWorks()
+		{
+			// wait until login actually works
+			Retry.Handle<Exception>()
+				.WaitAndRetry(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5))
+				.Do(() => { _sql.Execute("select 1"); });
+		}
+		
 		private string replaceScriptTags(string script, DatabaseType type, string name)
 		{
 			script = script.Replace("$(DBNAME)", name);
