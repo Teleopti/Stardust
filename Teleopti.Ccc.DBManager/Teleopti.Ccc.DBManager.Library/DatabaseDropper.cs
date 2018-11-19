@@ -8,12 +8,11 @@
 		{
 			_executeSql = executeSql;
 		}
-		
-		public void DropDatabase(string name)
+
+		public void DropDatabaseIfExists(string name)
 		{
 			_executeSql.ExecuteTransactionlessNonQuery($"if exists(select 1 from sys.databases where name='{name}') alter database [{name}] set single_user with rollback immediate");
 			_executeSql.ExecuteTransactionlessNonQuery($"if exists(select 1 from sys.databases where name='{name}') drop database [{name}]");
 		}
-
 	}
 }
