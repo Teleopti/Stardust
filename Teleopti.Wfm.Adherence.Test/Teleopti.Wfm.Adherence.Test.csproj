@@ -196,7 +196,7 @@
     <Compile Include="Historical\Infrastructure\RtaEventStoreTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreUpgradeTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreUpgradeWriterTest.cs" />
-    <Compile Include="Historical\Unit\AgentAdherenceDay\77750TestIssue.cs" />
+    <Compile Include="Historical\Unit\AgentAdherenceDay\_TestBench.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\AdherencesTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\ApprovedPeriodPercentageTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\ApprovedPeriodTest.cs" />
@@ -434,7 +434,7 @@
     <Folder Include="Monitor\Unit\ReadModels" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Historical\Unit\AgentAdherenceDay\77750TestIssue.txt">
+    <Content Include="Historical\Unit\AgentAdherenceDay\_TestBench.data">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
