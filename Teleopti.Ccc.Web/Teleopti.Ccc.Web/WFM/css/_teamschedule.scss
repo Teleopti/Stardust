@@ -1158,6 +1158,22 @@ note-editor {
 			color: inherit;
 		}
 	}
+
+	wfm-date-range-picker {
+		.wfm-datepicker-text {
+			margin: 0;
+
+			> span:first-child {
+				padding-left: 0;
+			}
+		}
+
+		&.invalid {
+			.mdi-calendar-range {
+				color: $red-800;
+			}
+		}
+	}
 }
 
 teams-time-picker.ng-invalid-dst {
