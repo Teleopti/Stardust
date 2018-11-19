@@ -285,8 +285,9 @@ ORDER BY [Id]
 		public IEnumerable<IEvent> LoadAllForTest() =>
 			loadEvents(_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT [Type], [Event] FROM [rta].[Events]"));
 
-		public IEnumerable<string> LoadAllEventTypeIds() => _unitOfWork.Current().Session()
-			.CreateSQLQuery(@"SELECT [Type] FROM [rta].[Events]")
-			.List<string>();
+		public IEnumerable<string> LoadAllEventTypeIds() =>
+			_unitOfWork.Current().Session()
+				.CreateSQLQuery(@"SELECT [Type] FROM [rta].[Events]")
+				.List<string>();
 	}
 }
