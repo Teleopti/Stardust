@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 					EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(21, 0, 0))
 				});
 			}
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions {UseStudentAvailability = true});
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions {UseStudentAvailability = true});
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 

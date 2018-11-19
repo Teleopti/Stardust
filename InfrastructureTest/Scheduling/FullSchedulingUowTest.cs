@@ -55,15 +55,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		[TestCase(false)]
 		public void ShouldDoSchedulingForPlanningPeriod(bool teamScheduling)
 		{
+			var planningPeriod = fillDatabaseWithEnoughDataToRunScheduling();
 			if (teamScheduling)
 			{
 				var defaultOptions = SchedulingOptionsProvider.Fetch(new DayOffTemplate());
 				defaultOptions.UseTeam = true;
 				defaultOptions.GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag);
-				SchedulingOptionsProvider.SetFromTest(defaultOptions);
+				SchedulingOptionsProvider.SetFromTest(planningPeriod, defaultOptions);
 			}
-
-			var planningPeriod = fillDatabaseWithEnoughDataToRunScheduling();
 
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 		}
@@ -73,15 +72,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public void ShouldNotThrowLazyInitializationExceptionWhenHavingPersonPeriodStartingLaterThanThePlanningPeriod(bool teamScheduling)
 		{
 			Now.Is(new DateTime(2018,1,11,0,0,0,DateTimeKind.Utc));
+			var planningPeriod = fillDatabaseWithEnoughDataToRunSchedulingAndPersonPeriodStartingLaterThanThePlanningPeriod();
 			if (teamScheduling)
 			{
 				var defaultOptions = SchedulingOptionsProvider.Fetch(new DayOffTemplate());
 				defaultOptions.UseTeam = true;
 				defaultOptions.GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag);
-				SchedulingOptionsProvider.SetFromTest(defaultOptions);
+				SchedulingOptionsProvider.SetFromTest(planningPeriod, defaultOptions);
 			}
-
-			var planningPeriod = fillDatabaseWithEnoughDataToRunSchedulingAndPersonPeriodStartingLaterThanThePlanningPeriod();
 
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 		}
