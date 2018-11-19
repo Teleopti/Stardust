@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakePersonAvailabilityRepository PersonAvailabilityRepository;
+		public FakePlanningGroupRepository PlanningGroupRepository;
 		
 		[Test]
 		public void ShouldRespectAvailability()
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var date = new DateOnly(2015, 10, 12); //mon
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1, PlanningGroupRepository.Has());
 			var scenario = ScenarioRepository.Has("some name");
 			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1);
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory().WithId()));

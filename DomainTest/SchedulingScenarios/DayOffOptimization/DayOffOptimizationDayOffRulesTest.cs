@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, PlanningGroupRepository.Has());
 			var scenario = ScenarioRepository.Has("some name");
 			PlanningGroupRepository.ModifyDefault(planningPeriod.PlanningGroup, x => 
 			{
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 12); //mo
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, PlanningGroupRepository.Has());
 			var scenario = ScenarioRepository.Has("some name");
 			PlanningGroupRepository.ModifyDefault(planningPeriod.PlanningGroup, x => x.ConsecutiveWorkdays = new MinMax<int>(1, 6));
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 26); //mon
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, PlanningGroupRepository.Has());
 			var scenario = ScenarioRepository.Has("some name");
 			PlanningGroupRepository.ModifyDefault(planningPeriod.PlanningGroup, x => x.DayOffsPerWeek = new MinMax<int>(3, 4));
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 2);
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 26); //mon
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, PlanningGroupRepository.Has());
 			var scenario = ScenarioRepository.Has("some name");
 			PlanningGroupRepository.ModifyDefault(planningPeriod.PlanningGroup, x =>
 			{
@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 26); //mon
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, PlanningGroupRepository.Has());
 			var scenario = ScenarioRepository.Has("some name");
 			PlanningGroupRepository.ModifyDefault(planningPeriod.PlanningGroup, x =>
 			{
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, PlanningGroupRepository.Has());
 			var scenario = ScenarioRepository.Has("some name");
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			schedulePeriod.SetDaysOff(1);
