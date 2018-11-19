@@ -256,6 +256,7 @@
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeTargetTimeSpecificationTests.cs" />
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsSiteUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsTeamUpdaterTest.cs" />
+    <Compile Include="Auditing\PurgeAuditRunnerTest.cs" />
     <Compile Include="CacheTest.cs" />
     <Compile Include="Common\AgentBadgeWithRankTest.cs" />
     <Compile Include="Common\EnumExtensionsTest.cs" />
@@ -286,6 +287,7 @@
     <Compile Include="Notification\RawPostNotificationWebClientTest.cs" />
     <Compile Include="Notification\ScheduleChangeMessagePollerTest.cs" />
     <Compile Include="Optimization\IntradayOptimizationOnStardustTest.cs" />
+    <Compile Include="Optimization\PlanningGroupTest.cs" />
     <Compile Include="Reports\ScheduleAnalysisAuditTrailProviderTest.cs" />
     <Compile Include="Reports\ScheduleAnalysisProviderTest.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingExistingShiftNotMatchingEachOtherHintForBetweenDayoffsTest.cs" />

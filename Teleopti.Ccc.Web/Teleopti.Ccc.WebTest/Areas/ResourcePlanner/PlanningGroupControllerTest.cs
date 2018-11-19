@@ -62,9 +62,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		{
 			var planningGroup1 = new PlanningGroup("PlanningGroup 1").WithId();
 			var planningGroup2 = new PlanningGroup("PlanningGroup 2").WithId();
-			PlanningGroupRepository
-				.Has(planningGroup1)
-				.Has(planningGroup2);
+			PlanningGroupRepository.Has(planningGroup1);
+			PlanningGroupRepository.Has(planningGroup2);
 			var result = Target.List().Result<IEnumerable<PlanningGroupModel>>().ToList();
 
 			result.SingleOrDefault(x => x.Id == planningGroup1.Id.GetValueOrDefault()).Should().Not.Be.Null();

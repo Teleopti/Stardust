@@ -124,6 +124,7 @@
 		WFM_Clear_Data_After_Leaving_Date_47768,
 		WFM_Request_View_Permissions_77731,
 		WFM_Request_Show_Feedback_Link_77733,
+		WFM_Request_Remove_Waitlist_Link_78939,
 
 		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889,
 		MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947,

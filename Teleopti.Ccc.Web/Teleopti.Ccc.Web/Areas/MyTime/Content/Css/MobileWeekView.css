@@ -1,4 +1,4 @@
-﻿.weekview-mobile .mobile-weekview-nav ul.navbar-teleopti {
+﻿.weekview-mobile .mobile-weekview-nav ul.teleopti-toolbar {
 	margin: 0;
 	display: inline-block;
 }
@@ -10,7 +10,7 @@
 		padding-left: 0;
 		padding-right: 0;
 	}
-	.weekview-mobile .mobile-weekview-nav ul.navbar-teleopti > li {
+	.weekview-mobile .mobile-weekview-nav ul.teleopti-toolbar > li {
 		padding-left: 0;
 		padding-right: 0;
 	}

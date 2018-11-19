@@ -23,7 +23,8 @@ namespace Teleopti.Wfm.Adherence.Domain.Infrastructure
 		private readonly DeadLockVictimPriority _deadLockVictimPriority;
 		private readonly IJsonEventSerializer _serializer;
 		private readonly IJsonEventDeserializer _deserializer;
-		private readonly IConfigReader _config;
+		private readonly int _batchSize;
+		private readonly int _loadSize;
 
 		public RtaEventStore(
 			ICurrentUnitOfWork unitOfWork,
@@ -36,7 +37,8 @@ namespace Teleopti.Wfm.Adherence.Domain.Infrastructure
 			_deadLockVictimPriority = deadLockVictimPriority;
 			_serializer = serializer;
 			_deserializer = deserializer;
-			_config = config;
+			_batchSize = config.ReadValue("RtaEventStoreBatchSize", 10);
+			_loadSize = config.ReadValue("RtaEventStoreLoadForSynchronizationSize", 50000);
 		}
 
 		public void Add(IEvent @event, DeadLockVictim deadLockVictim, int storeVersion) => Add(new[] {@event}, deadLockVictim, storeVersion);
@@ -45,9 +47,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Infrastructure
 		{
 			_deadLockVictimPriority.Specify(deadLockVictim);
 
-			var batchSize = _config.ReadValue("RtaEventStoreBatchSize", 10);
-
-			events.Batch(batchSize).ForEach(batch =>
+			events.Batch(_batchSize).ForEach(batch =>
 			{
 				var sqlValues = batch.Select((m, i) =>
 					$@"
@@ -214,12 +214,12 @@ ORDER BY [Id] DESC
 				.SingleOrDefault();
 		}
 
-		public LoadedEvents LoadFrom(int fromEventId)
+		public LoadedEvents LoadForSynchronization(long fromEventId)
 		{
 			var events = load(
 				_unitOfWork.Current().Session()
-					.CreateSQLQuery(@"
-SELECT
+					.CreateSQLQuery($@"
+SELECT TOP {_loadSize}
 	[Id], 
 	[Type],
 	[Event] 
@@ -233,12 +233,12 @@ ORDER BY [Id]
 			);
 			return new LoadedEvents
 			{
-				LastId = events.IsNullOrEmpty() ? fromEventId : events.Last().Id,
+				ToId = events.IsNullOrEmpty() ? fromEventId : events.Last().Id,
 				Events = events.Select(e => e.DeserializedEvent).ToArray()
 			};
 		}
 
-		public int ReadLastId() =>
+		public long ReadLastId() =>
 			_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT MAX([Id]) FROM [rta].[Events] WITH (NOLOCK)").UniqueResult<int>();
 
 		private IEnumerable<IEvent> loadEvents(IQuery query) =>
@@ -258,11 +258,11 @@ ORDER BY [Id]
 		private class internalModel
 		{
 #pragma warning disable 649
-			public int Id;
+			public long Id;
 			public string Type;
 			public string Event;
-			public IEvent DeserializedEvent;
 #pragma warning restore 649
+			public IEvent DeserializedEvent;
 		}
 
 		private static string eventTypeId(IEvent @event) => eventTypeId(@event.GetType());

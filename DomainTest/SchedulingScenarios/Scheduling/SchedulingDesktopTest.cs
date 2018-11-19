@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NPOI.SS.Formula.Functions;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
@@ -330,6 +331,42 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, new DateOnlyPeriod(date.AddDays(5), date.AddDays(5)));
 
 			return schedulerStateHolder.Schedules[agent].ScheduledDay(date.AddDays(5)).IsScheduled();
+		}
+
+		[Test]
+		[Ignore("76118 to be fixed")]
+		public void ShouldConsiderOpenHoursWhenUsingAverageShiftLength([Values(18, 12)] int endHour )
+		{
+			var date = new DateOnly(2018, 10, 1);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
+			var activity = new Activity().WithId();
+			var scenario = new Scenario();
+			var days = new Dictionary<DayOfWeek, TimePeriod>
+			{
+				{DayOfWeek.Wednesday, new TimePeriod(8, 18)},
+				{DayOfWeek.Thursday, new TimePeriod(8, 18)},
+				{DayOfWeek.Friday, new TimePeriod(8, 18)},
+				{DayOfWeek.Saturday, new TimePeriod(8, 18)},
+				{DayOfWeek.Sunday, new TimePeriod(8, endHour)}
+
+			};
+			var skill = new Skill().For(activity).WithId().InTimeZone(TimeZoneInfo.Utc).IsOpen(days);	
+			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40), TimeSpan.FromHours(40), TimeSpan.FromHours(11), TimeSpan.FromHours(36)) };
+			var ruleSet8And9 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 17, 0, 60), new ShiftCategory().WithId()));
+			var ruleSet4 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(12, 0, 12, 0, 60), new ShiftCategory().WithId()));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(new RuleSetBag(ruleSet8And9, ruleSet4), contract, skill).WithSchedulePeriodOneWeek(date);
+			agent.SchedulePeriod(date).SetDaysOff(2);
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date.AddDays(2), 10, 10, 10, 10, 10);
+			var assDayOff1 = new PersonAssignment(agent, scenario, date).WithDayOff(new DayOffTemplate());
+			var assDayOff2 = new PersonAssignment(agent, scenario, date.AddDays(1)).WithDayOff(new DayOffTemplate());
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[]{ agent }, new []{ assDayOff1, assDayOff2 }, skillDays);
+			
+			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions { UseAverageShiftLengths = true }, new NoSchedulingProgress(), new[]{ agent }, period);
+
+			for (var i = 0; i < 7; i++)
+			{
+				schedulerStateHolder.Schedules[agent].ScheduledDay(date.AddDays(i)).IsScheduled().Should().Be.True();
+			}
 		}
 
 		public SchedulingDesktopTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)

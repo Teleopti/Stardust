@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -96,11 +97,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			SetUp();
 			prepareSchedule();
 
-			var planningPeriod = new PlanningPeriod(period,SchedulePeriodType.Day, 8);
+			var planningGroup = new PlanningGroup();
+			planningGroup.AddSetting(PlanningGroupSettings.CreateDefault());
+			var planningPeriod = new PlanningPeriod(period,SchedulePeriodType.Day, 8, planningGroup);
 			var jobResultId = Guid.NewGuid();
 			var jobResult = new JobResult(JobCategory.WebSchedule, period, agent, DateTime.UtcNow).WithId(jobResultId);
 			planningPeriod.JobResults.Add(jobResult);
 			JobResultRepository.Add(jobResult);
+			
 			PlanningPeriodRepository.Add(planningPeriod);
 			
 			var reqEvent = new WebScheduleStardustEvent

@@ -44,9 +44,9 @@
 </style>
 <!-- /ko -->
 
-<div class="nav navbar navbar-teleopti new-teamschedule-view-nav" data-bind="css: {'new-teamschedule-view-nav-mobile': isHostAMobile}">
+<div class="nav navbar teleopti-toolbar new-teamschedule-view-nav" data-bind="css: {'new-teamschedule-view-nav-mobile': isHostAMobile}">
 	<div class="container">
-		<ul class="nav navbar-nav navbar-teleopti row submenu">
+		<ul class="nav navbar-nav teleopti-toolbar row submenu">
 			<li class="mobile-datepicker">
 				<div class="input-group">
 					<span class="input-group-btn">
@@ -71,7 +71,7 @@
 			<!-- /ko -->
 
 			<!-- ko if: isHostADesktop -->
-			<li class="mobile-today" data-bind="click: today, tooltip: { title: '@Resources.Today', html: true, trigger: 'hover', placement: 'bottom'}">
+			<li class="mobile-today" data-bind="click: today, tooltip: { title: '@Resources.Today', html: true, placement: 'bottom'}">
 				<a>
 					<i class="glyphicon glyphicon-home"></i>
 				</a>
@@ -88,7 +88,7 @@
 			<!-- /ko -->
 
 			<!-- ko if: isHostADesktop || isHostAniPad -->
-			<li class="new-teamschedule-time-filter" data-bind="css: {'new-teamschedule-has-time-filter': hasTimeFiltered}, tooltip: { title: buildFilterDetails(), html: true, trigger: 'hover', placement: 'bottom'}">
+			<li class="new-teamschedule-time-filter" data-bind="css: {'new-teamschedule-has-time-filter': hasTimeFiltered}, tooltip: { title: buildFilterDetails(), html: true, trigger: $root.isHostADesktop ? 'hover' : 'click', placement: 'bottom'}">
 				<a>
 					<i class="glyphicon glyphicon-filter"></i>
 					<span></span>
@@ -129,7 +129,7 @@
 		<div class="teammates-agent-name-row relative">
 			<div class="left-filling-block"></div>
 			<!-- ko foreach: agentNames -->
-			<span class="new-teamschedule-agent-name relative" data-bind="tooltip: { title: $data.name, trigger: 'click', placement: 'bottom'}, attr: {'index': index}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">
+			<span class="new-teamschedule-agent-name relative" data-bind="tooltip: { title: $data.name, trigger: $root.isHostADesktop ? 'hover' : 'click', placement: 'bottom'}, attr: {'index': index}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">
 				<span class="text-name" data-bind="text: $data.name"></span>
 				<span class="shift-category-cell" data-bind="text: $data.shiftCategory.name, style: {background: $data.shiftCategory.bgColor, color: $data.shiftCategory.color}, css: {'dayoff': $data.isDayOff}"></span>
 			</span>
@@ -152,7 +152,7 @@
 			<!-- ko if: mySchedule -->
 			<div class="new-teamschedule-layer-container relative">
 				<!-- ko foreach: mySchedule().layers -->
-				<div class="new-teamschedule-layer cursorpointer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustMyActivityTooltipPositionInTeamSchedule: true">
+				<div class="new-teamschedule-layer cursorpointer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: $root.isHostADesktop ? 'hover' : 'click' }, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustMyActivityTooltipPositionInTeamSchedule: true">
 					<div class="activity-info" data-bind="visible: showTitle && !isOvertimeAvailability">
 						<strong data-bind="text: title"></strong>
 						<!-- ko if: hasMeeting -->
@@ -170,14 +170,14 @@
 				</div>
 				<!-- /ko -->
 				<!--ko if: mySchedule().isDayOff-->
-				<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: mySchedule().dayOffName, html: true, trigger: 'click'}, hideTooltipAfterMouseLeave: true">
+				<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: mySchedule().dayOffName, html: true, trigger: $root.isHostADesktop ? 'hover' : 'click'}, hideTooltipAfterMouseLeave: true">
 					<!-- ko if: mySchedule().layers && mySchedule().layers.length == 0 -->
 					<span class="dayoff-text" data-bind="text: mySchedule().dayOffName"></span>
 					<!-- /ko -->
 				</div>
 				<!--/ko-->
 				<!-- ko if: mySchedule().isNotScheduled -->
-				<div class="not-scheduled-text" data-bind="tooltip: { title: '@Resources.NotScheduled', html: true, trigger: 'click'}, hideTooltipAfterMouseLeave: true">@Resources.NotScheduled</div>
+				<div class="not-scheduled-text" data-bind="tooltip: { title: '@Resources.NotScheduled', html: true, trigger: $root.isHostADesktop ? 'hover' : 'click'}, hideTooltipAfterMouseLeave: true">@Resources.NotScheduled</div>
 				<!-- /ko -->
 			</div>
 			<!-- /ko -->
@@ -190,7 +190,7 @@
 			<div class="teammates-schedules-column relative" data-bind="attr: {'index': index}">
 				<div class="new-teamschedule-layer-container relative">
 					<!-- ko foreach: layers -->
-					<div class="new-teamschedule-layer cursorpointer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">
+					<div class="new-teamschedule-layer cursorpointer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: $root.isHostADesktop ? 'hover' : 'click' }, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">
 						<div class="activity-info" data-bind="visible: showTitle && !isOvertimeAvailability">
 							<strong data-bind="text: title"></strong>
 							<!-- ko if: hasMeeting -->
@@ -208,14 +208,14 @@
 					</div>
 					<!-- /ko -->
 					<!--ko if:isDayOff-->
-					<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: dayOffName, html: true, trigger: 'click' }, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">
+					<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: dayOffName, html: true, trigger: $root.isHostADesktop ? 'hover' : 'click' }, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">
 						<!-- ko if: layers && layers.length == 0 -->
 						<span class="dayoff-text" data-bind="text: dayOffName"></span>
 						<!-- /ko -->
 					</div>
 					<!--/ko-->
 					<!-- ko if:isNotScheduled -->
-					<div class="not-scheduled-text" data-bind="tooltip: { title: '@Resources.NotScheduled', html: true, trigger: 'click'}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">@Resources.NotScheduled</div>
+					<div class="not-scheduled-text" data-bind="tooltip: { title: '@Resources.NotScheduled', html: true, trigger: $root.isHostADesktop ? 'hover' : 'click'}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">@Resources.NotScheduled</div>
 					<!-- /ko -->
 				</div>
 			</div>
@@ -322,19 +322,23 @@
 		</div>
 		<!--/ko-->
 		<!-- ko if: isHostADesktop || isHostAniPad -->
-		<div class="new-teamschedule-submit-buttons clearfix">
-			<div class="new-teamschedule-toggle show-only-night-shift-toggle">
-				<input type="checkbox" id="show-only-night-shift-switch" data-bind="checked: showOnlyNightShift" />
-				<label class="relative" for="show-only-night-shift-switch">Night shift switch</label>
-				<span>@Resources.ShowOnlyNightShifts</span>
+		<div class="clearfix">
+			<div class="inline-block show-only-night-shift-container">
+				<div class="new-teamschedule-toggle show-only-night-shift-toggle">
+					<input type="checkbox" id="show-only-night-shift-switch" data-bind="checked: showOnlyNightShift" />
+					<label class="relative" for="show-only-night-shift-switch">Night shift switch</label>
+					<span>@Resources.ShowOnlyNightShifts</span>
+				</div>
+				<div class="new-teamschedule-toggle show-only-day-off-toggle">
+					<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />
+					<label class="relative" for="show-only-day-off-switch">Day off switch</label>
+					<span>@Resources.ShowOnlyDaysOff</span>
+				</div>
 			</div>
-			<div class="new-teamschedule-toggle show-only-day-off-toggle">
-				<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />
-				<label class="relative" for="show-only-day-off-switch">Day off switch</label>
-				<span>@Resources.ShowOnlyDaysOff</span>
+			<div class="new-teamschedule-submit-buttons pull-right">
+				<button class="btn btn-default" data-bind="click: cancelClick">@Resources.Cancel</button>
+				<button class="btn btn-primary" data-bind="click: submitSearchForm">@Resources.Search</button>
 			</div>
-			<button class="btn btn-primary pull-right" data-bind="click: submitSearchForm">@Resources.Search</button>
-			<button class="btn btn-default pull-right" data-bind="click: cancelClick">@Resources.Cancel</button>
 		</div>
 		<!--/ko-->
 

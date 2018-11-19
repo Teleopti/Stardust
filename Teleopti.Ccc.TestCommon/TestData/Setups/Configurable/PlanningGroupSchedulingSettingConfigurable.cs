@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string SchedulingSettingName { get; set; }
 		public string PlanningGroupName { get; set; }
 		public string BlockScheduling { get; set; }
-		public IPlanningGroup PlanningGroup;
+		public PlanningGroup PlanningGroup;
 		public PlanningGroupSettings PlanningGroupSchedulingSetting;
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
@@ -30,9 +30,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			PlanningGroup = new PlanningGroup(PlanningGroupName);
 			PlanningGroup.AddFilter(new TeamFilter(team));
-			new PlanningGroupRepository(currentUnitOfWork).Add(PlanningGroup);
 
-			PlanningGroupSchedulingSetting = new PlanningGroupSettings(PlanningGroup){Name = SchedulingSettingName};
+			PlanningGroupSchedulingSetting = new PlanningGroupSettings {Name = SchedulingSettingName};
 			PlanningGroupSchedulingSetting.AddFilter(new TeamFilter(team));
 			if (BlockScheduling == "default")
 			{
@@ -41,8 +40,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				PlanningGroupSchedulingSetting.BlockSameStartTime = false;
 				PlanningGroupSchedulingSetting.BlockFinderType = BlockFinderType.BetweenDayOff;
 			}
-			
-			new PlanningGroupSettingsRepository(currentUnitOfWork).Add(PlanningGroupSchedulingSetting);
+			PlanningGroup.AddSetting(PlanningGroupSchedulingSetting);
+			new PlanningGroupRepository(currentUnitOfWork).Add(PlanningGroup);
 		}
 	}
 }

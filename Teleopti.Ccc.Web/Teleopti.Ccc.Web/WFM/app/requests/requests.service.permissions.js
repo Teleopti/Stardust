@@ -1,4 +1,4 @@
-﻿(function () {
+﻿(function() {
 	'use strict';
 
 	angular.module('wfm.requests').service('requestsPermissions', requestsPermissions);
@@ -12,11 +12,10 @@
 
 		self.set = function setPermissions(data) {
 			permissions = data;
-		}
+		};
 
 		self.all = function getPermissions() {
 			return permissions;
-		}
+		};
 	}
-
 })();

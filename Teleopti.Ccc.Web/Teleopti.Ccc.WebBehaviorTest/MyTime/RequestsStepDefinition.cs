@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not be able to see requests link")]
 		public void ThenIShouldNotBeAbleToSeeRequestsLink()
 		{
-			Browser.Interactions.AssertNotExistsUsingJQuery(".bdd-mytime-top-menu", "a[href='#RequestsTab']");
+			Browser.Interactions.AssertNotExistsUsingJQuery(".teleopti-mytime-top-menu", "a[href='#RequestsTab']");
 		}
 
 		[Then(@"I should only see one page of requests")]

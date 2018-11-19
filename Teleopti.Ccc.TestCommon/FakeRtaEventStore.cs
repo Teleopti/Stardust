@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Interfaces.Domain;
@@ -111,7 +112,7 @@ namespace Teleopti.Ccc.TestCommon
 				?.Event;
 		}
 
-		public LoadedEvents LoadFrom(int fromEventId)
+		public LoadedEvents LoadForSynchronization(long fromEventId)
 		{
 			var rows = Data.Where(x => x.Id > fromEventId).ToArray();
 			var events = rows
@@ -120,14 +121,12 @@ namespace Teleopti.Ccc.TestCommon
 				.ToArray();
 			return new LoadedEvents
 			{
-				LastId = rows.IsNullOrEmpty() ? fromEventId : rows.Last().Id,
+				ToId = rows.IsNullOrEmpty() ? fromEventId : rows.Last().Id,
 				Events = events
 			};
 		}
 
-		public int ReadLastId()
-		{
-			throw new NotImplementedException();
-		}
+		public long ReadLastId() =>
+			Data.LastOrDefault()?.Id ?? 0;
 	}
 }

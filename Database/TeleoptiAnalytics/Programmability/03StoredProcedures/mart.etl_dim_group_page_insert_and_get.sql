@@ -46,7 +46,7 @@ BEGIN
 					)
 		ON (
 			target.group_page_code = src.group_page_code
-			and target.group_name COLLATE DATABASE_DEFAULT = src.group_name COLLATE DATABASE_DEFAULT
+			and target.group_name COLLATE Latin1_General_CS_AS = src.group_name COLLATE Latin1_General_CS_AS
 			and target.business_unit_code = src.business_unit_code
 			)
 	WHEN NOT MATCHED THEN  
@@ -91,7 +91,7 @@ BEGIN
 		mart.dim_group_page WITH (NOLOCK)
 	WHERE 
 		group_page_code = @group_page_code and 
-		group_name COLLATE DATABASE_DEFAULT = @group_name COLLATE DATABASE_DEFAULT and 
+		group_name COLLATE Latin1_General_CS_AS = @group_name COLLATE Latin1_General_CS_AS and 
 		business_unit_code = @business_unit_code
 END
 

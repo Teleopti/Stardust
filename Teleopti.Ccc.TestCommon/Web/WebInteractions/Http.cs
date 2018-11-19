@@ -35,8 +35,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 				Content = new StringContent(json, Encoding.UTF8, "application/json")
 			};
 			request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-			var post = _client.SendAsync(request);
-			var response = post.Result;
+			var response = _client.SendAsync(request).Result;
 
 			if (new[] {HttpStatusCode.OK, HttpStatusCode.Created}
 				.Contains(response.StatusCode))
@@ -45,7 +44,25 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			var responseContent = response.Content.ReadAsStringAsync().Result;
 			throw new Exception($"Posting json returned http code {response.StatusCode}, Sent: {json}, Response: {responseContent}");
 		}
-		
+
+		public void GetJson(string url)
+		{
+			var request = new HttpRequestMessage
+			{
+				RequestUri = uri(url),
+				Method = HttpMethod.Get,
+			};
+			request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			var response = _client.SendAsync(request).Result;
+
+			if (new[] {HttpStatusCode.OK}
+				.Contains(response.StatusCode))
+				return;
+
+			var responseContent = response.Content.ReadAsStringAsync().Result;
+			throw new Exception($"Get json returned http code {response.StatusCode}, Response: {responseContent}");
+		}
+
 		// will "sometimes always" return 200 for html if the server responds with friendly custom error page
 		public void Get(string url)
 		{
@@ -69,5 +86,4 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			_handler?.Dispose();
 		}
 	}
-	
 }

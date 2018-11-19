@@ -36,13 +36,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		{
 			return getSchedule(period, options, ScheduleVisibleReasons.StudentAvailability);
 		}
-
-		public IEnumerable<IScheduleDay> GetScheduleForPersonsWithOptions(DateOnly date, IEnumerable<IPerson> persons, ScheduleDictionaryLoadOptions options = null)
+		
+		public IEnumerable<IScheduleDay> GetScheduleForPersons(DateOnly date, IEnumerable<IPerson> persons, bool loadNotes = false)
 		{
-			if (options == null)
-			{
-				options = new ScheduleDictionaryLoadOptions(true, true);
-			}
+			var options = new ScheduleDictionaryLoadOptions(false, loadNotes);
 
 			var defaultScenario = _scenarioRepository.Current();
 			var dictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
@@ -52,12 +49,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				defaultScenario);
 
 			return persons.Select(p => dictionary[p].ScheduledDay(date));
-		}
-
-		public IEnumerable<IScheduleDay> GetScheduleForPersons(DateOnly date, IEnumerable<IPerson> persons, bool loadNotes = false)
-		{
-			var options = new ScheduleDictionaryLoadOptions(false, loadNotes);
-			return GetScheduleForPersonsWithOptions(date, persons, options);
 		}
 
 		public IEnumerable<IScheduleDay> GetScheduleForPersonsInPeriod(DateOnlyPeriod period, IEnumerable<IPerson> persons,

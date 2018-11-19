@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -33,12 +33,13 @@ namespace Teleopti.Ccc.Domain.Repositories
 		ICollection<IPerson> FindAllAgentsQuiteLight(DateOnlyPeriod period);
 
 		IList<IPerson> FindUsers(DateOnly date);
-		IList<IPerson> FindPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period);
+		IList<IPerson> FindPeopleInPlanningGroup(PlanningGroup planningGroup, DateOnlyPeriod period);
+		IList<IPerson> FindPersonsByKeywords(IEnumerable<string> keywords);
 
 		void HardRemove(IPerson person);
 
-		int CountPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period);
-		IList<Guid> FindPeopleIdsInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period);
+		int CountPeopleInPlanningGroup(PlanningGroup planningGroup, DateOnlyPeriod period);
+		IList<Guid> FindPeopleIdsInPlanningGroup(PlanningGroup planningGroup, DateOnlyPeriod period);
 		IList<PersonBudgetGroupName> FindBudgetGroupNameForPeople(IList<Guid> personIds, DateTime startDate);
 	}
 }

@@ -102,7 +102,8 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				DefinedRaptorApplicationFunctionPaths.PeopleAccess,
 				DefinedRaptorApplicationFunctionPaths.PeopleManageUsers,
 				DefinedRaptorApplicationFunctionPaths.WebForecasts,
-				DefinedRaptorApplicationFunctionPaths.ViewCustomerCenter
+				DefinedRaptorApplicationFunctionPaths.ViewCustomerCenter,
+				DefinedRaptorApplicationFunctionPaths.WebModifySkill
 			};
 
 			var webTeamsFunctionPaths = new List<string>

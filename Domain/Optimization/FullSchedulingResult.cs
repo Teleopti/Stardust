@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -26,13 +26,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly AgentsWithWhiteSpots _agentsWithWhiteSpots;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
 		public FullSchedulingResult(Func<ISchedulerStateHolder> schedulerStateHolder, IFindSchedulesForPersons findSchedulesForPersons, 
 			IUserTimeZone userTimeZone, ICurrentScenario currentScenario,  
 			CheckScheduleHints checkScheduleHints, 
 			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory, IResourceCalculation resourceCalculation, 
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory, FillSchedulerStateHolder fillSchedulerStateHolder,
-			AgentsWithWhiteSpots agentsWithWhiteSpots)
+			AgentsWithWhiteSpots agentsWithWhiteSpots,
+			ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_checkScheduleHints = checkScheduleHints;
 			_blockPreferenceProviderUsingFiltersFactory = blockPreferenceProviderUsingFiltersFactory;
@@ -40,6 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_agentsWithWhiteSpots = agentsWithWhiteSpots;
+			_currentUnitOfWork = currentUnitOfWork;
 			_schedulerStateHolder = schedulerStateHolder;
 			_findSchedulesForPersons = findSchedulesForPersons;
 			_userTimeZone = userTimeZone;
@@ -48,8 +51,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		[TestLog]
 		[UnitOfWork]
-		public virtual FullSchedulingResultModel Create(DateOnlyPeriod period, IEnumerable<IPerson> selectedAgents, IPlanningGroup planningGroup, bool usePreferences)
+		public virtual FullSchedulingResultModel Create(DateOnlyPeriod period, IEnumerable<IPerson> selectedAgents, PlanningGroup planningGroup, bool usePreferences)
 		{
+			_currentUnitOfWork.Current().Reassociate(planningGroup); //TODO fix some other way
 			var schedulerStateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period, null);
 			var resultStateHolder = schedulerStateHolder.SchedulingResultState;

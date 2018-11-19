@@ -8,9 +8,9 @@
 }
 <input id="showweeklyworktime" type="hidden" value="MinMaxWorkingTime" />
 
-<div class="navbar navbar-teleopti subnavbar">
+<div class="navbar teleopti-toolbar subnavbar">
 	<div class="container">
-		<ul class="nav navbar-nav navbar-teleopti row submenu" data-bind="css:{'phone-navbar':IsHostAMobile}">
+		<ul class="nav navbar-nav teleopti-toolbar row submenu" data-bind="css:{'phone-navbar':IsHostAMobile}">
 			<li class="col-xs-12 col-sm-4 phone-navbar-top">
 				<span class="input-group" style="max-width: 329px;">
 					<span class="input-group-btn">
@@ -30,7 +30,7 @@
 				</span>
 			</li>
 			<li class="col-xs-12 col-sm-4 phone-navbar-bottom">
-				<ul class="nav navbar-nav navbar-teleopti row submenu">
+				<ul class="nav navbar-nav teleopti-toolbar row submenu">
 					@if (Model.ExtendedPreferencesPermission)
 					{
 						<li class="col-xs-12 col-sm-4 w-30"><a href="#" class="Preference-add-extended-button"><i class="glyphicon glyphicon-edit"></i>&nbsp;<span>@Resources.Preference</span></a></li>
@@ -63,11 +63,11 @@
 															}
 														}
 														}]">
-							<button type="button" data-toggle="dropdown" style="margin-left: 15px" class="btn btn-default navbar-btn dropdown-toggle">
+							<button type="button" data-toggle="dropdown" class="btn btn-default navbar-btn dropdown-toggle">
 								<span data-bind="'text': selectedPreferenceText()"></span>
 								<span class="caret"></span>
 							</button>
-							<ul role="menu" class="dropdown-menu w-30" data-bind="foreach: availablePreferences">
+							<ul role="menu" class="available-preferences-list dropdown-menu w-30" data-bind="foreach: availablePreferences">
 								<!-- ko if: Value != '-' -->
 								<li><a href="#" data-bind="click: $parent.selectAndapplyPreference, 'text': Text"></a></li>
 								<!-- /ko -->
@@ -240,7 +240,7 @@
 										<div class="error" data-bind="text: AjaxError"></div>
 										<!-- /ko -->
 										<div class="preference">
-											<div class="displayinline-block">
+											<div class="inline-block">
 												<!--ko if: MustHave -->
 												<div class="preference-indicator">
 													<span class="preference-must-have" data-bind="css: {'glyphicon glyphicon-heart': MustHave}"></span>

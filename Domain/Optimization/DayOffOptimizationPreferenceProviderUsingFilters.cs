@@ -1,22 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class DayOffOptimizationPreferenceProviderUsingFilters : IDayOffOptimizationPreferenceProvider
 	{
-		private readonly IEnumerable<PlanningGroupSettings> _dayOffRules;
+		private readonly AllPlanningGroupSettings _allPlanningGroupSettings;
 
-		public DayOffOptimizationPreferenceProviderUsingFilters(IEnumerable<PlanningGroupSettings> dayOffRules)
+		public DayOffOptimizationPreferenceProviderUsingFilters(AllPlanningGroupSettings allPlanningGroupSettings)
 		{
-			_dayOffRules = dayOffRules.OrderBy(x => x.Default);
+			_allPlanningGroupSettings = allPlanningGroupSettings;
 		}
 
 		public IDaysOffPreferences ForAgent(IPerson person, DateOnly dateOnly)
 		{
-			return mapToDayOffPrefences(_dayOffRules.Where(dayOffRule => dayOffRule.IsValidForAgent(person, dateOnly)).OrderByDescending(x=>x.Priority).FirstOrDefault() ?? PlanningGroupSettings.CreateDefault());
+			return mapToDayOffPrefences(_allPlanningGroupSettings.ForAgent(person, dateOnly) ?? PlanningGroupSettings.CreateDefault());
 		}
 
 		private static DaysOffPreferences mapToDayOffPrefences(PlanningGroupSettings planningGroupSettings)

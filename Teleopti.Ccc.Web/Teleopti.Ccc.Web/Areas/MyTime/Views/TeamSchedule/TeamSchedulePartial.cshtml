@@ -9,9 +9,9 @@ var left = Html.HtmlStyleLeft();
 }
 
 <div data-bind="ifnot: showFabButton">
-	<div class="navbar navbar-teleopti subnavbar" tabindex="0">
+	<div class="navbar teleopti-toolbar subnavbar" tabindex="0">
 		<div class="container">
-			<ul class="nav navbar-nav navbar-teleopti row submenu ts-menu">
+			<ul class="nav navbar-nav teleopti-toolbar row submenu ts-menu">
 				@if (Model.ShiftTradePermisssion)
 				{
 				<li class="col-xs-12 col-sm-3">
@@ -38,8 +38,8 @@ var left = Html.HtmlStyleLeft();
 <div data-bind="if: showFabButton, css: { 'hide-fab-on-phone': hideFab}">
 	<button class="close-fab-overlay" data-bind="visible: menuIsVisible,css: { 'hide-fab-on-phone': hideFab}, click: disableMenu"></button>
 	<button class="fab" data-bind="click: enableMenu" tabindex="0"></button>
-	<div class="navbar navbar-teleopti subnavbar" data-bind="css: { 'menu-focusing': menuIsVisible}, visible: menuIsVisible">
-		<ul class="nav navbar-nav navbar-teleopti row submenu ts-menu">
+	<div class="navbar teleopti-toolbar subnavbar" data-bind="css: { 'menu-focusing': menuIsVisible}, visible: menuIsVisible">
+		<ul class="nav navbar-nav teleopti-toolbar row submenu ts-menu">
 			@if (Model.ShiftTradePermisssion)
 			{
 			<li class="col-xs-12 col-sm-3">

@@ -1882,7 +1882,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 			var planningGroup = testCase.CreatePlanningGroup(new PlanningGroup("Group"), testData);
 			PersistAndRemoveFromUnitOfWork(planningGroup);
-			var loadedPlanningGroup = new PlanningGroupRepository(new ThisUnitOfWork(UnitOfWork)).Get(planningGroup.Id.Value);
+			var currentUnitOfWork = new ThisUnitOfWork(UnitOfWork);
+			var loadedPlanningGroup = new PlanningGroupRepository(currentUnitOfWork).Get(planningGroup.Id.Value);
 
 			//load
 			var dateOnlyPeriod = new DateOnlyPeriod(2017, 1, 1, 2017, 1, 6);
@@ -1945,6 +1946,111 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(budgetGroupName, results[0].BudgetGroupName);
 		}
 
+		[Test]
+		public void ReturnSinglePersonByKeyword()
+		{
+			target = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
+
+			IPerson person1 = PersonFactory.CreatePerson("Ashley", "Aaron");
+			IPerson person2 = PersonFactory.CreatePerson("x", "y");
+			PersistAndRemoveFromUnitOfWork(person1);
+			PersistAndRemoveFromUnitOfWork(person2);
+
+			var persons = target.FindPersonsByKeywords(new List<string>{"a"});
+
+			persons.Count.Should().Be(1);
+
+		}
+
+		[Test]
+		public void ReturnMultiplePersonsByKeywords()
+		{
+			target = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
+
+			var people = new List<IPerson>
+			{
+				PersonFactory.CreatePerson("ashley", "aaron"),
+				PersonFactory.CreatePerson("ASHLEY", "AARON"),
+				PersonFactory.CreatePerson("Roy", "Barley"),
+				PersonFactory.CreatePerson("Boy", "hhh"),
+				PersonFactory.CreatePerson("x", "y")
+			};
+
+			PersistAndRemoveFromUnitOfWork(people);
+
+			var persons = target.FindPersonsByKeywords(new List<string> { "a", "b" });
+
+			persons.Count.Should().Be(4);
+
+		}
+
+		[Test]
+		public void ShouldReturnMostOccurancesFirst()
+		{
+			target = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
+			var person = PersonFactory.CreatePerson("ashley", "aaron");
+			var people = new List<IPerson>
+			{
+				PersonFactory.CreatePerson("ashley", "Barley"),
+				PersonFactory.CreatePerson("David", "aaron"),
+				PersonFactory.CreatePerson("Roy", "Barley"),
+				PersonFactory.CreatePerson("Roy", "Anderson"),
+				PersonFactory.CreatePerson("Boy", "hhh"),
+				PersonFactory.CreatePerson("x", "y"),
+				person
+			};
+
+			PersistAndRemoveFromUnitOfWork(people);
+
+			var persons = target.FindPersonsByKeywords(new List<string> { "ashley", "aaron" });
+			persons.First().Name.Should().Be(person.Name);
+			persons.Count.Should().Be(3);
+		}
+
+		[Test]
+		public void ShouldHandleManyKeywords()
+		{
+			target = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
+			var person = PersonFactory.CreatePerson("ashley", "aaron");
+			var people = new List<IPerson>
+			{
+				PersonFactory.CreatePerson("ashley", "Barley"),
+				PersonFactory.CreatePerson("David", "aaron"),
+				PersonFactory.CreatePerson("Roy", "Barley"),
+				PersonFactory.CreatePerson("Roy", "Anderson"),
+				PersonFactory.CreatePerson("Boy", "hhh"),
+				PersonFactory.CreatePerson("x", "y"),
+				person
+			};
+
+			PersistAndRemoveFromUnitOfWork(people);
+
+			var persons = target.FindPersonsByKeywords(new List<string> { "a", "b", "c", "d", "e", "f", "g", "h" });
+			persons.Count.Should().Be(6);
+		}
+
+		[Test]
+		public void ShouldHandleKeywordNotMatching()
+		{
+			target = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
+			var person = PersonFactory.CreatePerson("ashley", "aaron");
+			var people = new List<IPerson>
+			{
+				PersonFactory.CreatePerson("ashley", "Barley"),
+				PersonFactory.CreatePerson("David", "aaron"),
+				PersonFactory.CreatePerson("Roy", "Barley"),
+				PersonFactory.CreatePerson("Roy", "Anderson"),
+				PersonFactory.CreatePerson("Boy", "hhh"),
+				PersonFactory.CreatePerson("x", "y"),
+				person
+			};
+
+			PersistAndRemoveFromUnitOfWork(people);
+
+			var persons = target.FindPersonsByKeywords(new List<string> { "z" });
+			persons.Count.Should().Be(0);
+		}
+
 		public class PlanningGroupTestCase
 		{
 			private readonly string _name;
@@ -1953,7 +2059,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				_name = name;
 			}
-			public Func<IPlanningGroup, PlanningGroupFilterTestData, IPlanningGroup> CreatePlanningGroup { get; set; }
+			public Func<PlanningGroup, PlanningGroupFilterTestData, PlanningGroup> CreatePlanningGroup { get; set; }
 			public Func<PlanningGroupFilterTestData, IList<IPerson>> ExpectedPeople { get; set; }
 
 			public override string ToString()

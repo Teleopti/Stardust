@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using Polly;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Support.Library;
 using Teleopti.Support.Library.Folders;
 
 namespace Teleopti.Ccc.DBManager.Library
@@ -34,10 +33,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public ExecuteSql MasterExecuteSql() => _masterExecuteSql ?? (_masterExecuteSql = new ExecuteSql(() => connectAndOpen(connectionStringToMaster()), _log));
 		public ExecuteSql ExecuteSql() => _executeSql ?? (_executeSql = new ExecuteSql(() => connectAndOpen(connectionString()), _log));
-		public SqlVersion SqlVersion() => _sqlVersion ?? (_sqlVersion = new ServerVersionHelper(_command.CreateDatabase ||
-																								_command.RecreateDatabaseIfNotExistsOrNewer ||
-																								!string.IsNullOrEmpty(_command.RestoreBackup) ||
-																								!string.IsNullOrEmpty(_command.RestoreBackupIfNotExistsOrNewer) ? MasterExecuteSql() : ExecuteSql()).Version());
+		public SqlVersion SqlVersion() => _sqlVersion ?? (_sqlVersion = new ServerVersionHelper(DatabaseExists() ? ExecuteSql() : MasterExecuteSql()).Version());
 
 		public DatabaseFolder DatabaseFolder() => _databaseFolder ?? (_databaseFolder = new DatabaseFolder(new DbManagerFolder(_command.DbManagerFolderPath)));
 		public DatabaseVersionInformation DatabaseVersionInformation() => _databaseVersionInformation ?? (_databaseVersionInformation = new DatabaseVersionInformation(DatabaseFolder(), ExecuteSql()));
@@ -51,12 +47,11 @@ namespace Teleopti.Ccc.DBManager.Library
 			{
 				Policy.Handle<SqlException>()
 					.WaitAndRetry(3, i => TimeSpan.FromSeconds(Math.Pow(i, 2)))
-					.Execute(()=>ExecuteSql().Execute(c => { }));
+					.Execute(() => ExecuteSql().Execute(c => { }));
 				return true;
 			}
-			catch(Exception e)
+			catch (Exception)
 			{
-				_log.Write($"An error occurred: {e}\n{e.StackTrace}", "WARN");
 				return false;
 			}
 		}

@@ -130,6 +130,7 @@
     <Compile Include="ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ViewModels\HistoricalOverviewViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ViewModels\OrganizationViewModelBuilder.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\PermissionsViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ViewModels\PhoneStateViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ViewModels\RtaTracerViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ViewModels\SiteCardViewModel.cs" />
@@ -171,7 +172,7 @@
     <Compile Include="Domain\Configuration\RtaState.cs" />
     <Compile Include="Domain\Configuration\RtaStateGroup.cs" />
     <Compile Include="Domain\Configuration\RtaStateHolder.cs" />
-    <Compile Include="Domain\Events\RtaEventStoreSynchronizerWaiter.cs" />
+    <Compile Include="Domain\Events\RtaEventStoreAsyncSynchronizer.cs" />
     <Compile Include="Domain\Infrastructure\Repositories\RtaMapRepository.cs" />
     <Compile Include="Domain\Infrastructure\Repositories\RtaRuleRepository.cs" />
     <Compile Include="Domain\Infrastructure\Repositories\RtaStateGroupRepository.cs" />

@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_teamBlockScheduling.Execute(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, blockPreferenceProvider);
 				if (!backgroundWorker.CancellationPending)
 				{
-					ExecuteWeeklyRestSolverCommand(useShiftCategoryLimitations, schedulingOptions, selectedAgents,selectedPeriod, backgroundWorker, blockPreferenceProvider);
+					ExecuteWeeklyRestSolverCommand(useShiftCategoryLimitations, schedulingOptions, selectedAgents,selectedPeriod, backgroundWorker);
 				}
 			}
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
@@ -68,8 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		protected virtual void ExecuteWeeklyRestSolverCommand(bool useShiftCategoryLimitations, SchedulingOptions schedulingOptions,
 															IEnumerable<IPerson> selectedPersons,
 															DateOnlyPeriod selectedPeriod, 
-															ISchedulingProgress backgroundWorker, 
-															IBlockPreferenceProvider blockPreferenceProvider)
+															ISchedulingProgress backgroundWorker)
 		{
 			_removeShiftCategoryToBeInLegalState.Execute(useShiftCategoryLimitations, schedulingOptions, selectedPersons, selectedPeriod, backgroundWorker);
 		}	

@@ -180,8 +180,8 @@
     <Reference Include="Microsoft.Build.Engine" />
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
-    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=3.19.8.16603, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.19.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=4.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.4.4.0\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory.Platform, Version=3.19.8.16603, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.19.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll</HintPath>
@@ -399,8 +399,13 @@
     <Compile Include="Areas\Anywhere\Controllers\LandingPageController.cs" />
     <Compile Include="Areas\Global\ChatConfigurationController.cs" />
     <Compile Include="Areas\Global\TenantCredential.cs" />
+    <Compile Include="Areas\Insights\Core\DataProvider\IPowerBiClientFactory.cs" />
+    <Compile Include="Areas\Insights\Core\DataProvider\IReportProvider.cs" />
+    <Compile Include="Areas\Insights\Core\DataProvider\ReportProvider.cs" />
+    <Compile Include="Areas\Insights\Core\InsightsAreaModel.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormExtensions.cs" />
     <Compile Include="Areas\Reports\Controllers\AuditTrailController.cs" />
+    <Compile Include="Areas\Rta\Controllers\PermissionsController.cs" />
     <Compile Include="Areas\Search\Controllers\PersonSearchController.cs" />
     <Compile Include="Areas\Search\Models\PersonSearchModels.cs" />
     <Compile Include="Areas\Insights\Models\EmbedReportConfig.cs" />
@@ -507,8 +512,7 @@
     <Compile Include="Areas\MyTime\Models\Schedule\Common\OvertimeAvailabilityViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Schedule\Common\SpecialDateState.cs" />
     <Compile Include="Areas\MyTime\Models\Schedule\Common\DayViewModel.cs" />
-    <Compile Include="Areas\Rta\Controllers\RtaPermissionsController.cs" />
-    <Compile Include="Areas\Rta\Controllers\RtaTestDataController.cs" />
+    <Compile Include="Areas\Rta\Controllers\TestDataController.cs" />
     <Compile Include="Areas\Rta\Controllers\HistoricalOverviewController.cs" />
     <Compile Include="Core\Exceptions\CustomMessageException.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\AgentScheduleViewModelMapper.cs" />
@@ -595,8 +599,7 @@
     <Compile Include="Areas\MyTime\Core\IMonthScheduleDomainDataProvider.cs" />
     <Compile Include="Areas\MyTime\Core\IDaycheduleDomainDataProvider.cs" />
     <Compile Include="Areas\MyTime\Core\MonthScheduleDomainDataProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Portal\DataProvider\AreaWithPermissionPathProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Portal\DataProvider\IAreaWithPermissionPathProvider.cs" />
+    <Compile Include="Areas\Global\AreaWithPermissionPathProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceNightRestChecker.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceNightRestChecker.cs" />
@@ -1514,10 +1517,7 @@
     <Content Include="Areas\MyTime\Views\StudentAvailability\StudentAvailabilityPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\NewMultipleShiftTradeRequest.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\NewShiftTradeRequestWrapper.cshtml" />
-    <Content Include=".node\package.json" />
-    <Content Include=".node\npm.cmd" />
-    <Content Include=".node\node.targets" />
-    <Content Include=".node\node.cmd" />
+    <Content Include=".node\UseNodeEnv.ps1" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -1601,8 +1601,6 @@
     <Content Include="WFM\app\forecasting\html\forecast.html" />
     <Content Include="WFM\app\forecasting\controller\modify.controller.js" />
     <Content Include="WFM\app\forecasting\controller\modify.controller.spec.js" />
-    <Content Include="WFM\app\global\areas\menu-component.html" />
-    <Content Include="WFM\app\global\areas\menu.component.js" />
     <Content Include="WFM\app\global\current-user\authentication-requests.service.js" />
     <Content Include="WFM\app\global\current-user\settings.service.js" />
     <Content Include="WFM\app\global\current-user\_modules.js" />
@@ -1659,11 +1657,14 @@
     <Content Include="WFM\app\requests\html\requests-budget-allowance.tpl.html" />
     <Content Include="WFM\app\requests\html\requests-footer.tpl.html" />
     <Content Include="WFM\app\requests\html\requests-absence-and-text.html" />
+    <Content Include="WFM\app\requests\html\requests-absence-person-account-overview.html" />
     <Content Include="WFM\app\requests\html\requests-absence-and-text-header.html" />
     <Content Include="WFM\app\requests\html\requests-shift-trade-header.html" />
     <Content Include="WFM\app\requests\html\requests.html" />
+    <Content Include="WFM\app\requests\html\requests-schedule-table.html" />
     <Content Include="WFM\app\requests\html\requests-shift-trade.html" />
     <Content Include="WFM\app\requests\html\requests-overtime.html" />
+    <Content Include="WFM\app\requests\html\shift-trade-day-template.html" />
     <Content Include="WFM\app\requests\requests.controller.spec.js" />
     <Content Include="WFM\app\requests\requests.controller.shiftTrade.spec.js" />
     <Content Include="WFM\app\requests\requests.directive.shiftDetail.spec.js" />
@@ -1868,6 +1869,7 @@
     <Content Include="WFM\app\styleguide\wfm-right-panel\wfm-right-panel.tpl.html" />
     <Content Include="WFM\app\styleguide\workinghourspicker\weekdays.filter.js" />
     <Content Include="WFM\app\styleguide\workinghourspicker\working-hours-picker.directive.js" />
+    <Content Include="WFM\app\styleguide\workinghourspicker\working-hours-picker.directive.spec.js" />
     <Content Include="WFM\app\styleguide\workinghourspicker\working-hours-picker.tpl.html" />
     <Content Include="WFM\app\styleguide\workinghourspicker\_modules.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addDayOff.spec.js" />
@@ -2014,7 +2016,6 @@
     <Content Include="WFM\app\forecasting\routes.js" />
     <Content Include="WFM\app\forecasting\html\skillCreate.html" />
     <Content Include="WFM\app\forecasting\controller\skill.create.controller.spec.js" />
-    <Content Include="WFM\app\global\areas\areas.controller.spec.js" />
     <Content Include="WFM\app\global\current-user\currentuserinfo.service.spec.js" />
     <Content Include="WFM\app\global\exception-handling\exceptionhandler.js" />
     <Content Include="WFM\app\global\http\http.spec.js" />
@@ -2069,9 +2070,6 @@
     <Content Include="WFM\app\requests\requests.service.definitions.spec.js" />
     <Content Include="WFM\app\requests\requests.directive.scheduleTable.js" />
     <Content Include="WFM\app\requests\requests.routes.js" />
-    <Content Include="WFM\app\requests\templates\requests.template.absencePersonAccountOverview.js" />
-    <Content Include="WFM\app\requests\templates\requests.template.shiftTradeDay.js" />
-    <Content Include="WFM\app\requests\templates\requests.template.scheduleTableTemplate.js" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.routes.js" />
     <Content Include="WFM\app\global\http\http.service.js" />
     <Content Include="WFM\app\search\search.controller.spec.js" />
@@ -2285,7 +2283,6 @@
     <None Include="WFM\css\_outbound.scss" />
     <Content Include="WFM\Gruntfile.js" />
     <Content Include="WFM\app\forecasting\service\forecasting.service.js" />
-    <Content Include="WFM\app\global\areas\areas.controller.js" />
     <Content Include="WFM\app\global\areas\areas.service.js" />
     <Content Include="WFM\app\global\notifications\notifications.controller.js" />
     <Content Include="WFM\app\global\notifications\notifications.service.js" />

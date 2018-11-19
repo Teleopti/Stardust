@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Timers;
 using System.Web.Http;
-using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
@@ -22,14 +18,13 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence.Domain;
-using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.All)]
-	public class RtaTestDataController : ApiController
+	public class TestDataController : ApiController
 	{
 		private readonly IPersonRepository _persons;
 		private readonly IScheduleStorage _schedules;
@@ -38,17 +33,16 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private readonly IRtaEventStore _events;
-		private readonly IRtaEventStoreSynchronizer _synchronizer;
 
 
-		public RtaTestDataController(
+		public TestDataController(
 			IPersonRepository persons,
 			IScheduleStorage schedules,
 			ICurrentScenario scenario,
 			IActivityRepository activities,
 			IDifferenceCollectionService<IPersistableScheduleData> differenceService,
 			IScheduleDifferenceSaver scheduleDifferenceSaver,
-			IRtaEventStore events, IRtaEventStoreSynchronizer synchronizer)
+			IRtaEventStore events)
 		{
 			_persons = persons;
 			_schedules = schedules;
@@ -57,13 +51,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			_differenceService = differenceService;
 			_scheduleDifferenceSaver = scheduleDifferenceSaver;
 			_events = events;
-			_synchronizer = synchronizer;
 		}
 
-		[HttpGet, Route("api/RtaTestData/MakeStuff")]
-		public virtual HttpResponseMessage MakeStuff()
+		[HttpGet, Route("api/Adherence/TestData/Make")]
+		public virtual HttpResponseMessage Make()
 		{
-			var log = CreateStuff();
+			var log = MakeTestData();
 
 			return new HttpResponseMessage(HttpStatusCode.OK)
 			{
@@ -72,7 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		}
 
 		[UnitOfWork]
-		public virtual StringBuilder CreateStuff()
+		public virtual StringBuilder MakeTestData()
 		{
 			var log = new StringBuilder();
 			var date = DateOnly.Today.AddDays(-1);
@@ -137,37 +130,37 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			var moments = new[]
 			{
 				new Func<DateOnly, Guid, IEnumerable<IEvent>>((d, p) =>
-                   				{
-                   					return new IEvent[]
-                   					{
-                   						new PersonStateChangedEvent
-                   						{
-                   							PersonId = p,
-                   							BelongsToDate = d,
-                   							Timestamp = d.Date.AddHours(8).Utc(),
-                   							StateName = "Logon",
-                   							StateGroupId = null,
-                   							ActivityName = "Phone",
-                   							ActivityColor = Color.Green.ToArgb(),
-                   							RuleName = "Out",
-                   							RuleColor = Color.Red.ToArgb(),
-                   							Adherence = EventAdherence.Out
-                   						},
-                   						new PersonRuleChangedEvent
-                   						{
-                   							PersonId = p,
-                   							BelongsToDate = d,
-                   							Timestamp = d.Date.AddHours(8).Utc(),
-                   							StateName = "Logon",
-                   							StateGroupId = null,
-                   							ActivityName = "Phone",
-                   							ActivityColor = Color.Green.ToArgb(),
-                   							RuleName = "Out",
-                   							RuleColor = Color.Red.ToArgb(),
-                   							Adherence = EventAdherence.Out
-                   						}
-                   					};
-                   				}),
+				{
+					return new IEvent[]
+					{
+						new PersonStateChangedEvent
+						{
+							PersonId = p,
+							BelongsToDate = d,
+							Timestamp = d.Date.AddHours(8).Utc(),
+							StateName = "Logon",
+							StateGroupId = null,
+							ActivityName = "Phone",
+							ActivityColor = Color.Green.ToArgb(),
+							RuleName = "Out",
+							RuleColor = Color.Red.ToArgb(),
+							Adherence = EventAdherence.Out
+						},
+						new PersonRuleChangedEvent
+						{
+							PersonId = p,
+							BelongsToDate = d,
+							Timestamp = d.Date.AddHours(8).Utc(),
+							StateName = "Logon",
+							StateGroupId = null,
+							ActivityName = "Phone",
+							ActivityColor = Color.Green.ToArgb(),
+							RuleName = "Out",
+							RuleColor = Color.Red.ToArgb(),
+							Adherence = EventAdherence.Out
+						}
+					};
+				}),
 				new Func<DateOnly, Guid, IEnumerable<IEvent>>((d, p) =>
 				{
 					return new IEvent[]
@@ -188,38 +181,35 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 				}),
 				new Func<DateOnly, Guid, IEnumerable<IEvent>>((d, p) =>
 				{
-					var listOfEvents = new List<IEvent>();
-					
-						listOfEvents.AddRange(new IEvent[]
+					return new IEvent[]
+					{
+						new PersonStateChangedEvent
 						{
-							new PersonStateChangedEvent
-							{
-								PersonId = p,
-								BelongsToDate = d,
-								Timestamp = d.Date.AddHours(8).AddHours(6).Utc(),
-								StateName = "Logoff",
-								StateGroupId = null,
-								ActivityName = "Phone",
-								ActivityColor = Color.Green.ToArgb(),
-								RuleName = "Out",
-								RuleColor = Color.Red.ToArgb(),
-								Adherence = EventAdherence.Out
-							}, 
-							new PersonRuleChangedEvent
-							{
-								PersonId = p,
-								BelongsToDate = d,
-								Timestamp = d.Date.AddHours(8).AddHours(6).Utc(),
-								StateName = "Logoff",
-								StateGroupId = null,
-								ActivityName = "Phone",
-								ActivityColor = Color.Green.ToArgb(),
-								RuleName = "Out",
-								RuleColor = Color.Red.ToArgb(),
-								Adherence = EventAdherence.Out
-							}
-						});
-					return listOfEvents.ToArray();
+							PersonId = p,
+							BelongsToDate = d,
+							Timestamp = d.Date.AddHours(8).AddHours(6).Utc(),
+							StateName = "Logoff",
+							StateGroupId = null,
+							ActivityName = "Phone",
+							ActivityColor = Color.Green.ToArgb(),
+							RuleName = "Out",
+							RuleColor = Color.Red.ToArgb(),
+							Adherence = EventAdherence.Out
+						},
+						new PersonRuleChangedEvent
+						{
+							PersonId = p,
+							BelongsToDate = d,
+							Timestamp = d.Date.AddHours(8).AddHours(6).Utc(),
+							StateName = "Logoff",
+							StateGroupId = null,
+							ActivityName = "Phone",
+							ActivityColor = Color.Green.ToArgb(),
+							RuleName = "Out",
+							RuleColor = Color.Red.ToArgb(),
+							Adherence = EventAdherence.Out
+						}
+					};
 				}),
 				new Func<DateOnly, Guid, IEnumerable<IEvent>>((d, p) =>
 				{
@@ -245,8 +235,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			log.AppendLine($"Removing all events");
 
 			_events.Remove(DateTime.Now.AddYears(1), int.MaxValue);
-			
-			var events = new List<IEvent>();
 
 			dates.ForEach(d =>
 			{
@@ -257,42 +245,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 						.ForEach(x =>
 						{
 							var q = (x as IRtaStoredEvent)?.QueryData();
-							//log.AppendLine($"Adding event {q.PersonId} {q.StartTime} {x.GetType().Name}");
-
-							events.Add(x);
-							//_events.Add(x);
+							log.AppendLine($"Adding event {q.PersonId} {q.StartTime} {x.GetType().Name}");
+							_events.Add(x, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion);
 						});
 				});
 			});
 
-			var orderedEvents = events.OrderBy(x => (x as IRtaStoredEvent).QueryData().StartTime).ThenBy(x => (x as IRtaStoredEvent).QueryData().PersonId).ToArray();
-
-			orderedEvents.ForEach(e =>
-			{
-				var q = (e as IRtaStoredEvent)?.QueryData();
-				log.AppendLine($"Adding event {q.PersonId} {q.StartTime} {e.GetType().Name}");			
-				_events.Add(e, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion);
-			});
-			
-			
 			return log;
-		}
-
-		[HttpGet, Route("api/RtaTestData/SynchStuff")]
-		public virtual HttpResponseMessage SynchStuff()
-		{
-			var log = new StringBuilder();
-			var timer = new Stopwatch();
-			log.AppendLine("Starting Synch");
-			timer.Start();
-			_synchronizer.Synchronize();
-			timer.Stop();
-			log.AppendLine($"Elapsed time: {timer.Elapsed}");
-
-			return new HttpResponseMessage(HttpStatusCode.OK)
-			{
-				Content = new StringContent(log.ToString(), System.Text.Encoding.UTF8, "text/plain")
-			};
 		}
 	}
 }

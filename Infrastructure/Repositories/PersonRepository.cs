@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Text;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
@@ -16,6 +17,7 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -676,17 +678,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<IPerson>();
 		}
 
-		public IList<IPerson> FindPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period)
+		public IList<IPerson> FindPeopleInPlanningGroup(PlanningGroup planningGroup, DateOnlyPeriod period)
 		{
 			return FindPeople(FindPeopleIdsInPlanningGroup(planningGroup, period)).ToList();
 		}
 
-		public int CountPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period)
+		public int CountPeopleInPlanningGroup(PlanningGroup planningGroup, DateOnlyPeriod period)
 		{
 			return FindPeopleIdsInPlanningGroup(planningGroup, period).Count;
 		}
 
-		public IList<Guid> FindPeopleIdsInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period)
+		public IList<Guid> FindPeopleIdsInPlanningGroup(PlanningGroup planningGroup, DateOnlyPeriod period)
 		{
 			var criteria = Session.CreateCriteria(typeof(Person), "per")
 				.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
@@ -745,6 +747,32 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return results;
 		}
 
+		public IList<IPerson> FindPersonsByKeywords(IEnumerable<string> keywords)
+		{
+			var allPersons = new List<IPerson>();
+			var multi = Session.CreateMultiCriteria();
+			foreach (var keyword in keywords)
+			{
+				var criteriaFirstName = Session.CreateCriteria(typeof(Person), "per")
+					.Add(Restrictions.Like("Name.FirstName", $"%{keyword}%"));
+				
+				multi.Add(criteriaFirstName);
 
+				var criteriaLastName = Session.CreateCriteria(typeof(Person), "per")
+					.Add(Restrictions.Like("Name.LastName", $"%{keyword}%"));
+				multi.Add(criteriaLastName);				
+			}
+
+			var multiList = multi.List();
+
+			foreach (IList listOfPersons in multiList)
+			{
+				allPersons.AddRange(listOfPersons.OfType<IPerson>());
+			}
+
+			var sortedPersons = allPersons.GroupBy(person => person.Name).OrderByDescending(group => group.Count()).Select(group => group.First());
+
+			return sortedPersons.ToList();
+		}
 	}
 }

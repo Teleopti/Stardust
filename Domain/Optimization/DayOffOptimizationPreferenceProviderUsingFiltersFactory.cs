@@ -1,19 +1,10 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy;
-
-namespace Teleopti.Ccc.Domain.Optimization
+﻿namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class DayOffOptimizationPreferenceProviderUsingFiltersFactory
 	{
-		private readonly IPlanningGroupSettingsRepository _planningGroupSettingsRepository;
-
-		public DayOffOptimizationPreferenceProviderUsingFiltersFactory(IPlanningGroupSettingsRepository planningGroupSettingsRepository)
+		public IDayOffOptimizationPreferenceProvider Create(PlanningGroup planningGroup)
 		{
-			_planningGroupSettingsRepository = planningGroupSettingsRepository;
-		}
-
-		public IDayOffOptimizationPreferenceProvider Create(IPlanningGroup planningGroup)
-		{
-			return new DayOffOptimizationPreferenceProviderUsingFilters(_planningGroupSettingsRepository.LoadAllByPlanningGroup(planningGroup));
+			return new DayOffOptimizationPreferenceProviderUsingFilters(planningGroup.Settings);
 		}
 	}
 }

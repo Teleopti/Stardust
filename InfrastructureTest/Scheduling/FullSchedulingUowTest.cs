@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -40,6 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public IActivityRepository ActivityRepository;
 		public IShiftCategoryRepository ShiftCategoryRepository;
 		public IPlanningPeriodRepository PlanningPeriodRepository;
+		public IPlanningGroupRepository PlanningGroupRepository;
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
 		public IJobResultRepository JobResultRepository;
 		public ISkillRepository SkillRepository;
@@ -129,7 +131,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 			agent.PersonPeriodCollection[1].RuleSetBag = ruleSetBag;
 			agent.InTimeZone(TimeZoneInfo.Utc);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 4);
-			var planningPeriod = new PlanningPeriod(period, SchedulePeriodType.Week, 4);
+			var planningGroup = new PlanningGroup();
+			planningGroup.AddSetting(PlanningGroupSettings.CreateDefault());
+			var planningPeriod = new PlanningPeriod(period, SchedulePeriodType.Week, 4, planningGroup);
 			var assignment = new PersonAssignment(agent,scenario, new DateOnly(2018, 01, 05));
 
 			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -154,6 +158,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				AssignmentRepository.Add(assignment);
 				var jobResult = new JobResult(JobCategory.WebSchedule, period, agent, DateTime.UtcNow);
 				JobResultRepository.Add(jobResult);
+				PlanningGroupRepository.Add(planningGroup);
 				PlanningPeriodRepository.Add(planningPeriod);
 				uow.PersistAll();
 			}
@@ -175,7 +180,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				.WithPersonPeriod(ruleSetBag, null, team).InTimeZone(TimeZoneInfo.Utc)
 				.WithSchedulePeriodOneWeek(date);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
-			var planningPeriod = new PlanningPeriod(period, SchedulePeriodType.Week, 1);
+			var planningGroup = new PlanningGroup();
+			planningGroup.AddSetting(PlanningGroupSettings.CreateDefault());
+			var planningPeriod = new PlanningPeriod(period, SchedulePeriodType.Week, 1, planningGroup);
 
 			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -193,6 +200,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				PersonRepository.Add(agent);
 				var jobResult = new JobResult(JobCategory.WebSchedule, period, agent, DateTime.UtcNow);
 				JobResultRepository.Add(jobResult);
+				PlanningGroupRepository.Add(planningGroup);
 				PlanningPeriodRepository.Add(planningPeriod);
 				uow.PersistAll();
 			}

@@ -15,6 +15,10 @@ export class BusinessUnitSelectorComponent implements OnInit {
 	ngOnInit() {
 		this.buService.getBusinessUnits().subscribe(businessUnits => {
 			this.businessUnits = businessUnits;
+			if (!this.selectedBusinessUnit) {
+				const primaryBusinessUnit = this.businessUnits[0];
+				this.buService.selectBusinessUnit(primaryBusinessUnit.Id);
+			}
 		});
 	}
 

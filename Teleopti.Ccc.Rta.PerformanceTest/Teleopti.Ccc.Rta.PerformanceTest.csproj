@@ -64,6 +64,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Code\SynchronizerWaiter.cs" />
     <Compile Include="Code\ScheduleInvalidator.cs" />
     <Compile Include="QueueWorkLargeBatchesTest.cs" />
     <Compile Include="Measurements\MeasurementTest.cs" />

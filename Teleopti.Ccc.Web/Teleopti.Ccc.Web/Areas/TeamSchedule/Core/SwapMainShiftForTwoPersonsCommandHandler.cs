@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var personFrom = people[0];
 			var personTo = people[1];
 
-			var permissionErrors = checkPermission(DefinedRaptorApplicationFunctionPaths.SwapShifts, scheduleDateOnly, personFrom, personTo);
+			var permissionErrors = checkPermission(scheduleDateOnly, personFrom, personTo);
 			if (permissionErrors.Any())
 			{
 				result.AddRange(permissionErrors);
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return result;
 		}
 
-		private IList<ActionResult> checkPermission(string swapShifts, DateOnly scheduleDateOnly, IPerson personFrom, IPerson personTo)
+		private IList<ActionResult> checkPermission(DateOnly scheduleDateOnly, IPerson personFrom, IPerson personTo)
 		{
 			var result = new List<ActionResult>();
 			if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.SwapShifts, scheduleDateOnly, personFrom))

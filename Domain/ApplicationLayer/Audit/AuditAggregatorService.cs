@@ -55,11 +55,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 			return _personAccessContextReaderService.LoadAudits(person, startDate, endDate);
 		}
 
-		public void PurgeOldAudits()
-		{
-			//make some plugin architecture 
-			_staffingContextReaderService.PurgeAudits();
-			_personAccessContextReaderService.PurgeAudits();
-		}
+		//public void PurgeOldAudits()
+		//{
+		//	//make some plugin architecture 
+		//	_staffingContextReaderService.PurgeAudits();
+		//	_personAccessContextReaderService.PurgeAudits();
+		//}
 	}
 }

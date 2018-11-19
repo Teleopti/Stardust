@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Then(@"Planning period should have been intraday optimized")]
 		public void ThenPlanningPeriodShouldHaveBeenIntradayOptimized()
 		{
-			using (Browser.TimeoutScope(TimeSpan.FromMinutes(2)))
+			using (Browser.TimeoutScope(TimeSpan.FromMinutes(3)))
 			{
 				Browser.Interactions.AssertAnyContains(".notice-success", "intraday");
 				Browser.Interactions.AssertExists(".scheduled-agents");

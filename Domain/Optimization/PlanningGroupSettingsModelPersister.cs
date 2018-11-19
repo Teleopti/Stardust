@@ -8,51 +8,45 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class PlanningGroupSettingsModelPersister : IPlanningGroupSettingsModelPersister
 	{
-		private readonly IPlanningGroupSettingsRepository _planningGroupSettingsRepository;
 		private readonly FilterMapper _filterMapper;
 		private readonly IPlanningGroupRepository _planningGroupRepository;
 
-		public PlanningGroupSettingsModelPersister(IPlanningGroupSettingsRepository planningGroupSettingsRepository, FilterMapper filterMapper, IPlanningGroupRepository planningGroupRepository)
+		public PlanningGroupSettingsModelPersister(FilterMapper filterMapper, IPlanningGroupRepository planningGroupRepository)
 		{
-			_planningGroupSettingsRepository = planningGroupSettingsRepository;
 			_filterMapper = filterMapper;
 			_planningGroupRepository = planningGroupRepository;
 		}
 
 		public void Persist(PlanningGroupSettingsModel model)
 		{
-			IPlanningGroup planningGroup = null;
-			if (model.PlanningGroupId.HasValue)
-				planningGroup = _planningGroupRepository.Get(model.PlanningGroupId.Value);
-
+			var planningGroup = _planningGroupRepository.Get(model.PlanningGroupId.Value);
 			if (model.Id == Guid.Empty)
 			{
 				PlanningGroupSettings planningGroupSettings;
 				if (model.Default)
 				{
-					planningGroupSettings = PlanningGroupSettings.CreateDefault(planningGroup);
+					planningGroupSettings = PlanningGroupSettings.CreateDefault();
 				}
 				else
 				{
-					var allSettingses = _planningGroupSettingsRepository.LoadAllByPlanningGroup(planningGroup);
-					model.Priority = allSettingses.IsEmpty() ? 0 : allSettingses.Max(x => x.Priority) + 1;
-					planningGroupSettings = new PlanningGroupSettings(planningGroup);
+					var allSettings = planningGroup.Settings;
+					model.Priority = allSettings.IsEmpty() ? 0 : allSettings.Max(x => x.Priority) + 1;
+					planningGroupSettings = new PlanningGroupSettings();
 				}
 				setProperies(planningGroupSettings, model);
-				_planningGroupSettingsRepository.Add(planningGroupSettings);
+				planningGroup.AddSetting(planningGroupSettings);
 			}
 			else
 			{
-				var planningGroupSettings = _planningGroupSettingsRepository.Get(model.Id);
-				setProperies(planningGroupSettings, model);
+				var setting = planningGroup.Settings.Single(x => x.Id.Value == model.Id);
+				setProperies(setting, model);
 			}
 		}
 
 		public void Delete(Guid id)
 		{
-			var planningGroupSettings = _planningGroupSettingsRepository.Get(id);
-			if (planningGroupSettings != null)
-				_planningGroupSettingsRepository.Remove(planningGroupSettings);
+			var planningGroup = _planningGroupRepository.FindPlanningGroupBySettingId(id);
+			planningGroup.RemoveSetting(planningGroup.Settings.Single(x => x.Id.Value==id));
 		}
 
 

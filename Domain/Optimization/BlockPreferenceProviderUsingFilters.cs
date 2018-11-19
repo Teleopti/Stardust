@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -9,19 +7,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class BlockPreferenceProviderUsingFilters : IBlockPreferenceProvider
 	{
 		private readonly SchedulingOptions _schedulingOptions;
-		private readonly IEnumerable<PlanningGroupSettings> _planningGroupSettings;
+		private readonly AllPlanningGroupSettings _planningGroupSettings;
 
-		public BlockPreferenceProviderUsingFilters(IEnumerable<PlanningGroupSettings> planningGroupSettings, SchedulingOptions schedulingOptions)
+		public BlockPreferenceProviderUsingFilters(AllPlanningGroupSettings planningGroupSettings, SchedulingOptions schedulingOptions)
 		{
 			_schedulingOptions = schedulingOptions;
-			_planningGroupSettings = planningGroupSettings.OrderBy(x => x.Default);
+			_planningGroupSettings = planningGroupSettings;
 		}
 
 		public ExtraPreferences ForAgent(IPerson person, DateOnly dateOnly)
 		{
-			var planningGroupSettings = _planningGroupSettings
-				.Where(x => x.IsValidForAgent(person, dateOnly))
-				.OrderByDescending(x => x.Priority).FirstOrDefault();
+			var planningGroupSettings = _planningGroupSettings.ForAgent(person, dateOnly);
 			if (planningGroupSettings == null)
 			{
 				planningGroupSettings = PlanningGroupSettings.CreateDefault();
@@ -31,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return mapToBlockPreference(planningGroupSettings);
 		}
 
-		private ExtraPreferences mapToBlockPreference(PlanningGroupSettings settings)
+		private static ExtraPreferences mapToBlockPreference(PlanningGroupSettings settings)
 		{
 			return new ExtraPreferences
 			{

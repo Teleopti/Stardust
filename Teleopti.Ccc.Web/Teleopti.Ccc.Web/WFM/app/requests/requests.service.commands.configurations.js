@@ -1,7 +1,12 @@
 ﻿(function() {
 	'use strict';
 
-	angular.module('wfm.requests').service('RequestsCommandsConfigurationsService', ['REQUESTS_TAB_NAMES', requestsCommandsConfigurationsService]);
+	angular
+		.module('wfm.requests')
+		.service('RequestsCommandsConfigurationsService', [
+			'REQUESTS_TAB_NAMES',
+			requestsCommandsConfigurationsService
+		]);
 
 	function requestsCommandsConfigurationsService(REQUESTS_TAB_NAMES) {
 		var svc = this;

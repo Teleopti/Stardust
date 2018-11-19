@@ -106,6 +106,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			isolate.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
 			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 			isolate.UseTestDouble<ThrowExceptions>().For<ISyncEventProcessingExceptionHandler>();
+			isolate.UseTestDouble<RunSynchronouslyAndThrow>().For<IRtaEventStoreAsyncSynchronizerStrategy>();
 			isolate.UseTestDouble<FakeRtaEventStore>().For<IRtaEventStore, IRtaEventStoreReader, IRtaEventStoreUpgradeWriter>();
 			QueryAllAttributes<UseEventPublisherAttribute>()
 				.ForEach(a => isolate.UseTestDoubleForType(a.EventPublisher).For<IEventPublisher>());
@@ -201,7 +202,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakePersonAvailabilityRepository>().For<IPersonAvailabilityRepository>();
 				isolate.UseTestDouble<FakePersonRotationRepository>().For<IPersonRotationRepository>();
 				isolate.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
-				isolate.UseTestDouble<FakePlanningGroupSettingsRepository>().For<IPlanningGroupSettingsRepository>();
 				isolate.UseTestDouble<FakePlanningGroupRepository>().For<IPlanningGroupRepository>();
 				isolate.UseTestDouble<FakeStatisticRepository>().For<IStatisticRepository>();
 				isolate.UseTestDouble<FakeRtaStateGroupRepository>().For<IRtaStateGroupRepository>();
@@ -307,8 +307,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakePermissions>().For<IAuthorization>();
 		}
 
-		public IAuthorizationScope AuthorizationScope;
-		public IAuthorization Authorization;
 		public IThreadPrincipalContext PrincipalContext;
 		public FakeDataSourceForTenant DataSourceForTenant;
 		public IDataSourceScope DataSourceScope;
@@ -405,9 +403,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			_tenantScope?.Dispose();
 			_tenantScope = null;
-
-			Authorization = null;
-			AuthorizationScope = null;
 			DataSourceForTenant = null;
 			DataSourceScope = null;
 			Database = null;

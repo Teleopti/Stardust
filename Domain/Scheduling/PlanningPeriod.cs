@@ -6,12 +6,13 @@ using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public class PlanningPeriod : NonversionedAggregateRootWithBusinessUnit, IPlanningPeriod
+	public class PlanningPeriod : NonversionedAggregateRootWithBusinessUnit
 	{
 		private DateOnlyPeriod _range;
 		private static readonly SchedulePeriodRangeCalculator calculator = new SchedulePeriodRangeCalculator();
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private  int _number;
 		private PlanningPeriodState _state;
 		private readonly ISet<IJobResult> _jobResults;
-		private readonly IPlanningGroup _planningGroup;
+		private readonly PlanningGroup _planningGroup;
 
 		protected PlanningPeriod()
 		{
@@ -27,12 +28,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_jobResults = new HashSet<IJobResult>();
 		}
 
-		protected PlanningPeriod(IPlanningGroup planningGroup):this()
+		protected PlanningPeriod(PlanningGroup planningGroup):this()
 		{
 			_planningGroup = planningGroup;
 		}
 
-		public PlanningPeriod(IPlanningPeriodSuggestions planningPeriodSuggestions, IPlanningGroup planningGroup) : this()
+		public PlanningPeriod(IPlanningPeriodSuggestions planningPeriodSuggestions, PlanningGroup planningGroup) : this()
 		{
 			var suggestedPlanningPeriod = planningPeriodSuggestions.Default();
 
@@ -47,7 +48,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 		}
 
-		public PlanningPeriod(DateOnlyPeriod range, SchedulePeriodType periodType, int number, IPlanningGroup planningGroup = null) : this()
+		//TODO: remove 
+		public PlanningPeriod(DateOnlyPeriod range, SchedulePeriodType periodType, int number, PlanningGroup planningGroup = null) : this()
 		{
 			_range = range;
 			_number = number;
@@ -61,14 +63,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public virtual PlanningPeriodState State => _state;
 
-		public virtual IPlanningGroup PlanningGroup => _planningGroup;
+		public virtual PlanningGroup PlanningGroup => _planningGroup;
 
 		public virtual ISet<IJobResult> JobResults => _jobResults;
-
-		public virtual void Scheduled()
-		{
-			_state = PlanningPeriodState.Scheduled;
-		}
 
 		public virtual void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation, bool updateTypeAndNumber = false)
 		{
@@ -88,7 +85,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_state = PlanningPeriodState.Published;
 		}
 
-		public virtual IPlanningPeriod NextPlanningPeriod(IPlanningGroup planningGroup)
+		public virtual PlanningPeriod NextPlanningPeriod(PlanningGroup planningGroup)
 		{
 			var nextPlanningPeriodStartDate = _range.EndDate.AddDays(1);
 			var range = calculator.PeriodForType(nextPlanningPeriodStartDate, new SchedulePeriodForRangeCalculation

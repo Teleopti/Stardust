@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public ReduceIslandsLimits ReduceIslandsLimits;
 		public MergeIslandsSizeLimit MergeIslandsSizeLimit;
+		public FakePlanningGroupRepository PlanningGroupRepository;
 
 		[TestCase(0, 12, 12, 24, true)]
 		[TestCase(8, 16, 8, 16, true)]
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				skill2.CreateSkillDayWithDemand(scenario, date, 100)
 				);
 			PersonAssignmentRepository.Has(new PersonAssignment(agentToSchedule, scenario, date)); //just to make easier assert
-			var planningPeriod = PlanningPeriodRepository.Has(date, 1, SchedulePeriodType.Day, null);
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1, SchedulePeriodType.Day, PlanningGroupRepository.Has());
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 			
@@ -80,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				SkillDayRepository.Has(extraSkill.CreateSkillDayWithDemand(scenario, date, 1000));
 				PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Day, 1), ruleSet, superSkillThatEveryOneKnows, extraSkill);
 			}
-			var planningPeriod = PlanningPeriodRepository.Has(date, 1, SchedulePeriodType.Day, null);
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1, SchedulePeriodType.Day, PlanningGroupRepository.Has());
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 			

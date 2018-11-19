@@ -26,11 +26,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakeSkillRepository SkillRepository;
 		public FakePersonRepository PersonRepository;
 		public FakeScenarioRepository ScenarioRepository;
-		public FakeSkillDayRepository SkillDayRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public IntradayOptimizationCommandHandler Target;
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
 		public IScheduleStorage ScheduleStorage;
+		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		[Test]
 		public void ShouldNotResolveWeeklyRestIfCommandSaysItShouldNotRun()
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			phoneActivity.InWorkTime = true;
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var dateOnly = new DateOnly(2015, 10, 12);
-			var weekPeriod = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(7));
+			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
 			var scenario = ScenarioRepository.Has("some name");
 			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
 			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), weeklyRest);
@@ -50,14 +50,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, new DateOnlyPeriod(dateOnly, dateOnly.AddDays(7)), new TimePeriod(8, 0, 16, 0));
 
+			
 			Target.Execute(new IntradayOptimizationCommand
 			{
-				Period = weekPeriod,
-				RunResolveWeeklyRestRule = false
+				Period = planningPeriod.Range,
+				RunResolveWeeklyRestRule = false,
+				PlanningPeriodId = planningPeriod.Id.Value
 			});
 
-			var agentRange = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false, false), weekPeriod, scenario)[agent];
-			CheckWeeklyRestRule.IsSatisfyBy(agentRange, weekPeriod, weeklyRest).Should().Be.False();
+			var agentRange = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false, false), planningPeriod.Range, scenario)[agent];
+			CheckWeeklyRestRule.IsSatisfyBy(agentRange, planningPeriod.Range, weeklyRest).Should().Be.False();
 		}
 	}
 }

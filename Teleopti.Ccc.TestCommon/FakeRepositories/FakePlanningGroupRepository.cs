@@ -9,44 +9,59 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePlanningGroupRepository : IPlanningGroupRepository
 	{
-		private readonly List<IPlanningGroup> _planningGroups = new List<IPlanningGroup>();
+		private readonly List<PlanningGroup> _planningGroups = new List<PlanningGroup>();
 
-		public void Add(IPlanningGroup root)
+		public void Add(PlanningGroup root)
 		{
-			_planningGroups.Add(root); // Should set Id
+			_planningGroups.Add(root);
 		}
 
-		public void Remove(IPlanningGroup root)
+		public void Remove(PlanningGroup root)
 		{
 			((IDeleteTag)Get(root.Id.GetValueOrDefault())).SetDeleted();
 		}
 
-		public IPlanningGroup Get(Guid id)
+		public PlanningGroup Get(Guid id)
 		{
 			return _planningGroups.FirstOrDefault(x => x.Id == id);
 		}
 
-		public IPlanningGroup Load(Guid id)
+		public PlanningGroup Load(Guid id)
 		{
 			return _planningGroups.First(x => x.Id == id);
 		}
 
-		public IEnumerable<IPlanningGroup> LoadAll()
+		public IEnumerable<PlanningGroup> LoadAll()
 		{
 			return _planningGroups;
 		}
 
-		public FakePlanningGroupRepository Has(IPlanningGroup root)
+		public PlanningGroup FindPlanningGroupBySettingId(Guid planningGroupSettingId)
 		{
-			_planningGroups.Add(root);
-			return this;
+			return _planningGroups.SingleOrDefault(x=>x.Settings.Any(y=>y.Id.Value==planningGroupSettingId));
 		}
 
-		public IPlanningGroup Has()
+		public PlanningGroup Has(PlanningGroup root)
 		{
-			var planningGroup = new PlanningGroup().WithId();
-			_planningGroups.Add(planningGroup);
-			return planningGroup;
+			_planningGroups.Add(root);
+			return root;
+		}
+
+		public PlanningGroup Has()
+		{
+			return Has(new PlanningGroup().WithId());
+		}
+
+		public void HasDefault(PlanningGroup planningGroup, Action<PlanningGroupSettings> action)
+		{
+			var currDefault = planningGroup.Settings.SingleOrDefault(x => x.Default);
+			if (currDefault == null)
+			{
+				currDefault = PlanningGroupSettings.CreateDefault();
+				planningGroup.AddSetting(currDefault);
+			}
+			
+			action(currDefault);
 		}
 	}
 }

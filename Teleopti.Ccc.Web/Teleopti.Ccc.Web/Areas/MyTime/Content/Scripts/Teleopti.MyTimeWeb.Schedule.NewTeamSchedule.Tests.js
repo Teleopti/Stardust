@@ -1941,9 +1941,9 @@
 
 	function setUpHtml() {
 		agentSchedulesHtml = [
-			'<div class="nav navbar navbar-teleopti new-teamschedule-view-nav" data-bind="css: {\'new-teamschedule-view-nav-mobile\': isHostAMobile}">',
+			'<div class="nav navbar teleopti-toolbar new-teamschedule-view-nav" data-bind="css: {\'new-teamschedule-view-nav-mobile\': isHostAMobile}">',
 			'	<div class="container">',
-			'		<ul class="nav navbar-nav navbar-teleopti row submenu">',
+			'		<ul class="nav navbar-nav teleopti-toolbar row submenu">',
 			'			<li class="mobile-datepicker">',
 			'				<div class="input-group">',
 			'					<span class="input-group-btn">',

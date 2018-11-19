@@ -88,7 +88,7 @@
 											<div class="con-flex">
 												<label for="editRole" class="input-icon">
 													<i class="mdi mdi-pencil">
-														<input type="text" id="edit-role-input" ng-model="newRoleName" required placeholder="{{'Name'|translate}}">
+														<input type="text" ng-model="newRoleName" required placeholder="{{'Name'|translate}}">
 														<md-tooltip>{{'Name' | translate}}</md-tooltip>
 													</i>
 												</label>
@@ -97,7 +97,7 @@
 									</div>
 									<div class="modal-actions">
 										<aside>
-											<button class="wfm-btn wfm-btn-invis-primary" type="submit" id="edit-role-confirm" ng-click="editRoleModal=!editRoleModal" name="button">{{'Edit'|translate}}</button>
+											<button class="wfm-btn wfm-btn-invis-primary" type="submit" ng-click="editRoleModal=!editRoleModal" name="button">{{'Edit'|translate}}</button>
 										</aside>
 									</div>
 								</form>
@@ -137,9 +137,9 @@
 							<md-content class="md-padding perm-functions ng-cloak">
 								<div class="con-row">
 									<div class="con-flex">
-										<label for="filter1" class="input-icon">
+										<label class="input-icon">
 											<i class="mdi mdi-filter-outline">
-												<input type="text" id="filter1" ng-model="vm.searchString" placeholder="{{'Filter' | translate}}" ng-change="vm.functionsDescriptionFilter(vm.searchString)">
+												<input type="text" ng-model="vm.searchString" placeholder="{{'Filter' | translate}}" ng-change="vm.functionsDescriptionFilter(vm.searchString)">
 												<md-tooltip>{{'Filter'|translate}}</md-tooltip>
 											</i>
 										</label>
@@ -180,9 +180,9 @@
 							<md-content class="md-padding">
 								<div class="con-row">
 									<div class="con-flex">
-										<label for="filter1" class="input-icon">
+										<label class="input-icon">
 											<i class="mdi mdi-filter-outline">
-												<input type="text" id="filter1" ng-model="searchString1" placeholder="{{'Filter' | translate}}" ng-change="vm.orgDataDescriptionFilter(searchString1)">
+												<input type="text" ng-model="searchString1" placeholder="{{'Filter' | translate}}" ng-change="vm.orgDataDescriptionFilter(searchString1)">
 												<md-tooltip>{{'Filter'|translate}}</md-tooltip>
 											</i>
 										</label>

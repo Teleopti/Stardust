@@ -20,8 +20,8 @@
 	background: rgba(90, 205, 249, 0.3);
 }
 
-.navbar-teleopti .navbar-nav .open .dropdown-menu > li > a.add-musthave,
-.navbar-teleopti .navbar-nav .open .dropdown-menu > li > a.remove-musthave {
+.teleopti-toolbar .navbar-nav .open .dropdown-menu > li > a.add-musthave,
+.teleopti-toolbar .navbar-nav .open .dropdown-menu > li > a.remove-musthave {
 	color: black;
 }
 
@@ -254,9 +254,29 @@
 	.phone-navbar .phone-navbar-bottom .preference-split-button .navbar-btn {
 		margin-left: 0 !important;
 		margin-top: 10px;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
-	.phone-navbar.navbar-teleopti .navbar-nav .open .dropdown-menu > li > a.add-musthave,
-	.phone-navbar.navbar-teleopti .navbar-nav .open .dropdown-menu > li > a.remove-musthave {
+	.phone-navbar .phone-navbar-bottom .open .dropdown-menu.available-preferences-list {
+		-webkit-overflow-scrolling: touch;
+		max-height: calc(100vh - 50px - 50px - 80px);
+		overflow: auto;
+		min-width: 200px;
+		left: 0;
+		z-index: 10;
+		box-shadow: 0 -1px 1px 2px rgba(0,0,0,0.2);
+	}
+	.phone-navbar .phone-navbar-bottom .open .dropdown-menu.available-preferences-list li a {
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+	}
+	.phone-navbar .phone-navbar-bottom .open .dropdown-menu.available-preferences-list .divider {
+		margin: 0;
+		padding: 0;
+	}
+	.phone-navbar.teleopti-toolbar .navbar-nav .open .dropdown-menu > li > a.add-musthave,
+	.phone-navbar.teleopti-toolbar .navbar-nav .open .dropdown-menu > li > a.remove-musthave {
 		color: white;
 	}
 }

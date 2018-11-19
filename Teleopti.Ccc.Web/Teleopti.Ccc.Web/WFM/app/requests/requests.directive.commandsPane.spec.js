@@ -58,7 +58,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function() {
 			$provide.service('requestsPermissions', function() {
 				return new FakeRequestsPermissions();
 			});
-			$provide.service('requestsPermissions', function () {
+			$provide.service('requestsPermissions', function() {
 				return requestsPermissions;
 			});
 			$provide.service('$state', function() {
@@ -653,13 +653,20 @@ describe('[RequestsCommandPaneDirectiveTests]', function() {
 				resolve({ Children: [] });
 			});
 		};
-		this.getPermissionsPromise = function () {
+		this.getPermissionsPromise = function() {
 			return {
-				then: function (callback) {
-					callback && callback({ data: { HasApproveOrDenyPermission: true, HasCancelPermission: true, HasReplyPermission: true } }) ;
+				then: function(callback) {
+					callback &&
+						callback({
+							data: {
+								HasApproveOrDenyPermission: true,
+								HasCancelPermission: true,
+								HasReplyPermission: true
+							}
+						});
 				}
 			};
-		}
+		};
 	}
 
 	function FakeRequestsPermissions() {
@@ -667,11 +674,11 @@ describe('[RequestsCommandPaneDirectiveTests]', function() {
 
 		this.set = function setPermissions(data) {
 			permissions = data;
-		}
+		};
 
 		this.all = function getPermissions() {
 			return permissions;
-		}
+		};
 	}
 
 	function FakeSingalRService() {

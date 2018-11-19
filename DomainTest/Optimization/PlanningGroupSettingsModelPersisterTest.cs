@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	[DomainTest]
 	public class PlanningGroupSettingsModelPersisterTest
 	{
-		public FakePlanningGroupSettingsRepository PlanningGroupSettingsRepository;
 		public FakeContractRepository ContractRepository;
 		public FakeSiteRepository SiteRepository;
 		public FakeTeamRepository TeamRepository;
@@ -30,7 +29,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void ShouldUpdate()
 		{
 			var existing = new PlanningGroupSettings().WithId();
-			PlanningGroupSettingsRepository.Add(existing);
+			var planningGroup = new PlanningGroup().WithId();
+			planningGroup.AddSetting(existing);
+			PlanningGroupRepository.Add(planningGroup);
 
 			var model = new PlanningGroupSettingsModel
 			{
@@ -48,12 +49,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				MinFullWeekendsOff = 2,
 				MaxFullWeekendsOff = 6,
 				MinWeekendDaysOff = 2,
-				MaxWeekendDaysOff = 15
+				MaxWeekendDaysOff = 15,
+				PlanningGroupId = planningGroup.Id.Value
 			};
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupSettingsRepository.Get(existing.Id.Value);
+			var inDb = PlanningGroupRepository.Get(planningGroup.Id.Value).Settings.Single(x => x.Id == existing.Id);
 			inDb.DayOffsPerWeek.Should().Be.EqualTo(new MinMax<int>(model.MinDayOffsPerWeek, model.MaxDayOffsPerWeek));
 			inDb.ConsecutiveDayOffs.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveDayOffs, model.MaxConsecutiveDayOffs));
 			inDb.ConsecutiveWorkdays.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveWorkdays, model.MaxConsecutiveWorkdays));
@@ -70,7 +72,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void ShouldUpdateDefault()
 		{
 			var existing = PlanningGroupSettings.CreateDefault().WithId();
-			PlanningGroupSettingsRepository.Add(existing);
+			var planningGroup = new PlanningGroup().WithId();
+			planningGroup.AddSetting(existing);
+			PlanningGroupRepository.Add(planningGroup);
 
 			var model = new PlanningGroupSettingsModel
 			{
@@ -89,12 +93,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				MinFullWeekendsOff = 2,
 				MaxFullWeekendsOff = 6,
 				MinWeekendDaysOff = 2,
-				MaxWeekendDaysOff = 15
+				MaxWeekendDaysOff = 15,
+				PlanningGroupId = planningGroup.Id.Value
 			};
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupSettingsRepository.Get(existing.Id.Value);
+			var inDb = PlanningGroupRepository.Get(planningGroup.Id.Value).Settings.Single(x => x.Id == existing.Id);
 			inDb.DayOffsPerWeek.Should().Be.EqualTo(new MinMax<int>(model.MinDayOffsPerWeek, model.MaxDayOffsPerWeek));
 			inDb.ConsecutiveDayOffs.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveDayOffs, model.MaxConsecutiveDayOffs));
 			inDb.ConsecutiveWorkdays.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveWorkdays, model.MaxConsecutiveWorkdays));
@@ -110,6 +115,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldInsert()
 		{
+			var planningGroup = new PlanningGroup().WithId();
+			PlanningGroupRepository.Add(planningGroup);
+			
 			var model = new PlanningGroupSettingsModel
 			{
 				MinDayOffsPerWeek = 1,
@@ -125,12 +133,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				MinFullWeekendsOff = 2,
 				MaxFullWeekendsOff = 6,
 				MinWeekendDaysOff = 2,
-				MaxWeekendDaysOff = 15
+				MaxWeekendDaysOff = 15,
+				PlanningGroupId = planningGroup.Id.Value
 			};
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupSettingsRepository.LoadAll().Single();
+			var inDb = PlanningGroupRepository.Get(planningGroup.Id.Value).Settings.Single();
 			inDb.DayOffsPerWeek.Should().Be.EqualTo(new MinMax<int>(model.MinDayOffsPerWeek, model.MaxDayOffsPerWeek));
 			inDb.ConsecutiveDayOffs.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveDayOffs, model.MaxConsecutiveDayOffs));
 			inDb.ConsecutiveWorkdays.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveWorkdays, model.MaxConsecutiveWorkdays));
@@ -144,9 +153,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
-		public void ShouldInsertForPlanningGroup()
+		public void ShouldInsertSettingsForPlanningGroup()
 		{
-			var planningGroup = new PlanningGroup().WithId(Guid.NewGuid());
+			var planningGroup = new PlanningGroup().WithId();
 			PlanningGroupRepository.Add(planningGroup);
 
 			var model = new PlanningGroupSettingsModel
@@ -170,7 +179,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupSettingsRepository.LoadAllByPlanningGroup(planningGroup).Single();
+			
+			var inDb = PlanningGroupRepository.Get(planningGroup.Id.Value).Settings.Single();
 			inDb.DayOffsPerWeek.Should().Be.EqualTo(new MinMax<int>(model.MinDayOffsPerWeek, model.MaxDayOffsPerWeek));
 			inDb.ConsecutiveDayOffs.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveDayOffs, model.MaxConsecutiveDayOffs));
 			inDb.ConsecutiveWorkdays.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveWorkdays, model.MaxConsecutiveWorkdays));
@@ -186,6 +196,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldInsertDefault()
 		{
+			var planningGroup = new PlanningGroup().WithId();
+			PlanningGroupRepository.Add(planningGroup);
+			
 			var model = new PlanningGroupSettingsModel
 			{
 				MinDayOffsPerWeek = 1,
@@ -203,12 +216,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				MinFullWeekendsOff = 2,
 				MaxFullWeekendsOff = 6,
 				MinWeekendDaysOff = 2,
-				MaxWeekendDaysOff = 15
+				MaxWeekendDaysOff = 15,
+				PlanningGroupId = planningGroup.Id.Value
 			};
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupSettingsRepository.LoadAll().Single();
+			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single();
 			inDb.DayOffsPerWeek.Should().Be.EqualTo(new MinMax<int>(model.MinDayOffsPerWeek, model.MaxDayOffsPerWeek));
 			inDb.ConsecutiveDayOffs.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveDayOffs, model.MaxConsecutiveDayOffs));
 			inDb.ConsecutiveWorkdays.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveWorkdays, model.MaxConsecutiveWorkdays));
@@ -251,7 +265,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupSettingsRepository.LoadAllByPlanningGroup(planningGroup).Single();
+			var inDb = PlanningGroupRepository.Get(planningGroup.Id.Value).Settings.Single();
 			inDb.DayOffsPerWeek.Should().Be.EqualTo(new MinMax<int>(model.MinDayOffsPerWeek, model.MaxDayOffsPerWeek));
 			inDb.ConsecutiveDayOffs.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveDayOffs, model.MaxConsecutiveDayOffs));
 			inDb.ConsecutiveWorkdays.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveWorkdays, model.MaxConsecutiveWorkdays));
@@ -268,9 +282,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldInsertContractFilter()
 		{
+			var planningGroup = new PlanningGroup().WithId();
+			PlanningGroupRepository.Add(planningGroup);
+			
 			var contract = new Contract("_").WithId();
 			ContractRepository.Add(contract);
-			var model = new PlanningGroupSettingsModel();
+			var model = new PlanningGroupSettingsModel()
+			{
+				PlanningGroupId = planningGroup.Id.Value
+			};
 			model.Filters.Add(
 				new FilterModel
 				{
@@ -281,7 +301,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupSettingsRepository.LoadAll().Single();
+			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single();
 			var contractFilter = (ContractFilter)inDb.Filters.Single();
 			contractFilter.Contract.Should().Be.EqualTo(contract);
 		}
@@ -289,10 +309,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldInsertSiteFilter()
 		{
+			var planningGroup = new PlanningGroup().WithId();
+			PlanningGroupRepository.Add(planningGroup);
+			
 			var site = new Site("_").WithId();
 			SiteRepository.Add(site);
 
-			var model = new PlanningGroupSettingsModel();
+			var model = new PlanningGroupSettingsModel
+			{
+				PlanningGroupId = planningGroup.Id.Value
+			};
 			model.Filters.Add(
 				new FilterModel
 				{
@@ -303,7 +329,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupSettingsRepository.LoadAll().Single();
+			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single();
 			var siteFilter = (SiteFilter)inDb.Filters.Single();
 			siteFilter.Site.Should().Be.EqualTo(site);
 		}
@@ -311,10 +337,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldInsertTeamFilter()
 		{
+			var planningGroup = new PlanningGroup().WithId();
+			PlanningGroupRepository.Add(planningGroup);
+			
 			var team = new Team().WithId();
 			TeamRepository.Add(team);
 
-			var model = new PlanningGroupSettingsModel();
+			var model = new PlanningGroupSettingsModel
+			{
+				PlanningGroupId = planningGroup.Id.Value
+			};
 			model.Filters.Add(
 				new FilterModel
 				{
@@ -325,7 +357,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupSettingsRepository.LoadAll().Single();
+			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single();
 			var teamFilter = (TeamFilter)inDb.Filters.Single();
 			teamFilter.Team.Should().Be.EqualTo(team);
 		}
@@ -333,55 +365,77 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldNotAddExistingTeamFilter()
 		{
+			var planningGroup = new PlanningGroup().WithId();
+			PlanningGroupRepository.Add(planningGroup);
+			
 			var team = new Team().WithId();
 			TeamRepository.Add(team);
 
-			var model = new PlanningGroupSettingsModel();
+			var model = new PlanningGroupSettingsModel
+			{
+				PlanningGroupId = planningGroup.Id.Value
+			};
 			model.Filters.Add(new FilterModel{Id = team.Id.Value,FilterType = "team"});
 			model.Filters.Add(new FilterModel{Id = team.Id.Value,FilterType = "team"});
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupSettingsRepository.LoadAll().Single();
+			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single();
 			inDb.Filters.Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldNotAddExistingContractFilter()
 		{
+			var planningGroup = new PlanningGroup().WithId();
+			PlanningGroupRepository.Add(planningGroup);
+			
 			var contract = new Contract("_").WithId();
 			ContractRepository.Add(contract);
 			
-			var model = new PlanningGroupSettingsModel();
+			var model = new PlanningGroupSettingsModel
+			{
+				PlanningGroupId = planningGroup.Id.Value
+			};
 			model.Filters.Add(new FilterModel { Id = contract.Id.Value, FilterType = "contract" });
 			model.Filters.Add(new FilterModel { Id = contract.Id.Value, FilterType = "contract" });
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupSettingsRepository.LoadAll().Single();
+			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single();
 			inDb.Filters.Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldNotAddExistingSiteFilter()
 		{
+			var planningGroup = new PlanningGroup().WithId();
+			PlanningGroupRepository.Add(planningGroup);
 			var site = new Site("_").WithId();
 			SiteRepository.Add(site);
 
-			var model = new PlanningGroupSettingsModel();
+			var model = new PlanningGroupSettingsModel
+			{
+				PlanningGroupId = planningGroup.Id.Value
+			};
 			model.Filters.Add(new FilterModel { Id = site.Id.Value, FilterType = "site" });
 			model.Filters.Add(new FilterModel { Id = site.Id.Value, FilterType = "site" });
 
 			Target.Persist(model);
 
-			var inDb = PlanningGroupSettingsRepository.LoadAll().Single();
+			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single();
 			inDb.Filters.Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldThrowIfUnknownFilter()
 		{
-			var model = new PlanningGroupSettingsModel();
+			var planningGroup = new PlanningGroup().WithId();
+			PlanningGroupRepository.Add(planningGroup);
+			var model = new PlanningGroupSettingsModel
+			{
+				PlanningGroupId = planningGroup.Id.Value
+			};
 			model.Filters.Add(
 				new FilterModel
 				{
@@ -389,6 +443,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					FilterType = "unknown"
 				}
 			);
+
 			Assert.Throws<NotSupportedException>(() =>
 				Target.Persist(model));
 		}
@@ -400,8 +455,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var existing = new PlanningGroupSettings().WithId();
 			var team = new Team().WithId();
 			existing.AddFilter(new ContractFilter(contract));
+			var planningGroup = new PlanningGroup().WithId();
+			planningGroup.AddSetting(existing);
+			PlanningGroupRepository.Add(planningGroup);
 
-			PlanningGroupSettingsRepository.Add(existing);
 			ContractRepository.Add(contract);
 			TeamRepository.Add(team);
 
@@ -414,72 +471,88 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				MaxConsecutiveDayOffs = 1,
 				MinConsecutiveWorkdays = 2,
 				MaxConsecutiveWorkdays = 2,
-				Filters = new List<FilterModel> { new FilterModel { FilterType = FilterModel.TeamFilterType, Name = team.Description.Name, Id=team.Id.Value} }
+				Filters = new List<FilterModel> { new FilterModel { FilterType = FilterModel.TeamFilterType, Name = team.Description.Name, Id=team.Id.Value} },
+				PlanningGroupId = planningGroup.Id.Value
 			};
 
 			Target.Persist(model);
 
-			var onlyFilterInDb = (TeamFilter)PlanningGroupSettingsRepository.LoadAll().Single().Filters.Single();
+			var onlyFilterInDb = (TeamFilter)PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single().Filters.Single();
 			onlyFilterInDb.Team.Id.Value.Should().Be.EqualTo(team.Id.Value);
 		}
 
 		[Test]
 		public void ShouldInsertName()
 		{
-			var model = new PlanningGroupSettingsModel();
+			var planningGroup = new PlanningGroup().WithId();
+			PlanningGroupRepository.Add(planningGroup);
+			var model = new PlanningGroupSettingsModel
+			{
+				PlanningGroupId = planningGroup.Id.Value
+			};
 			var expectedName = RandomName.Make();
 			model.Name = expectedName;
 
 			Target.Persist(model);
-			var inDb = PlanningGroupSettingsRepository.LoadAll().Single();
+			var inDb = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings.Single();
 			inDb.Name.Should().Be.EqualTo(expectedName);
 		}
 
 		[Test]
 		public void ShouldDeletePlanningGroupSettings()
 		{
+			var planningGroup = new PlanningGroup().WithId();
 			var planningGroupSettings = new PlanningGroupSettings().WithId();
-			PlanningGroupSettingsRepository.Add(planningGroupSettings);
+			planningGroup.AddSetting(planningGroupSettings);
+			PlanningGroupRepository.Add(planningGroup);
 
 			Target.Delete(planningGroupSettings.Id.Value);
 
-			PlanningGroupSettingsRepository.Get(planningGroupSettings.Id.Value)
-				.Should().Be.Null();
+			PlanningGroupRepository.Get(planningGroup.Id.Value).Settings.Should().Not.Contain(planningGroupSettings);
 		}
 
 		[Test]
 		public void ShouldInsertWithHighestPriority()
 		{
-			PlanningGroupSettingsRepository.Add(new PlanningGroupSettings
+			var planningGroup = new PlanningGroup().WithId();
+			planningGroup.AddSetting(new PlanningGroupSettings
 			{
 				Priority = 2
 			});
-			var model = new PlanningGroupSettingsModel();
+			PlanningGroupRepository.Add(planningGroup);
+			var model = new PlanningGroupSettingsModel
+			{
+				PlanningGroupId = planningGroup.Id.Value
+			};
 
 			Target.Persist(model);
 
-			var inDbs = PlanningGroupSettingsRepository.LoadAll();
-			inDbs.Last().Priority.Should().Be.EqualTo(3);
+			var inDbs = PlanningGroupRepository.Get(planningGroup.Id.Value).Settings;
+			inDbs.Max(x=>x.Priority).Should().Be.EqualTo(3);
 		}
 
 		[Test]
 		public void ShouldNotChangeThePriorityWhenModifySettings()
 		{
-			var id = Guid.NewGuid();
-			PlanningGroupSettingsRepository.Add(new PlanningGroupSettings
+			var settingId = Guid.NewGuid();
+			var planningGroupSettings = new PlanningGroupSettings
 			{
 				Priority = 2
-			}.WithId(id));
+			}.WithId(settingId);
+			var planningGroup = new PlanningGroup().WithId();
+			planningGroup.AddSetting(planningGroupSettings);
+			PlanningGroupRepository.Add(planningGroup);
 			var model = new PlanningGroupSettingsModel
 			{
-				Id = id,
-				Priority = 2
+				Id = settingId,
+				Priority = 2,
+				PlanningGroupId = planningGroup.Id.Value
 			};
 
 			Target.Persist(model);
 
-			var inDbs = PlanningGroupSettingsRepository.LoadAll();
-			inDbs.First().Priority.Should().Be.EqualTo(2);
+			var inDbs = PlanningGroupRepository.Load(planningGroup.Id.Value).Settings;
+			inDbs.Single().Priority.Should().Be.EqualTo(2);
 		}
 	}
 }

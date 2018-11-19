@@ -42,10 +42,10 @@ Layout = null;
 </script>
 }
 <div class="mobile-start-day">
-	<div class="navbar navbar-teleopti subnavbar">
+	<div class="navbar teleopti-toolbar subnavbar">
 		<div class="container mobile-start-day-nav">
 			<!-- ko ifnot: mobileMonthEnabled -->
-			<ul class="nav navbar-nav navbar-teleopti row submenu">
+			<ul class="nav navbar-nav teleopti-toolbar row submenu">
 				<li class="mobile-datepicker">
 					<div class="input-group">
 						<span class="input-group-btn">
@@ -85,7 +85,7 @@ Layout = null;
 			<!-- /ko -->
 
 			<!-- ko if: mobileMonthEnabled -->
-			<ul class="nav navbar-nav navbar-teleopti row submenu">
+			<ul class="nav navbar-nav teleopti-toolbar row submenu">
 				<li class="mobile-month-datepicker">
 					<a data-bind="attr: { href: mobileMonthUrl}, text: displayDate" class="formatted-date-text"></a>
 					<a class="mobile-month-calendar-icon" data-bind="attr: { href: mobileMonthUrl}">
@@ -128,7 +128,7 @@ Layout = null;
 				</div>
 
 				<!-- ko if: showOldTrafficLightIconOnMobile -->
-				<div class="holiday-agents cursorpointer displayinline-block" data-bind="visible: absenceRequestPermission, tooltip: { title: trafficLightTooltip(), placement: 'bottom', trigger: 'click'}, hideTooltipAfterMouseLeave: true, style: {'right': showProbabilityOptionsToggleIcon() ? '38px': '0'}">
+				<div class="holiday-agents cursorpointer inline-block" data-bind="visible: absenceRequestPermission, tooltip: { title: trafficLightTooltip(), placement: 'bottom', trigger: 'click'}, hideTooltipAfterMouseLeave: true, style: {'right': showProbabilityOptionsToggleIcon() ? '38px': '0'}">
 					<div class="small-circle" data-bind="style: {background: trafficLightColor()}"></div>
 				</div>
 				<!-- /ko -->
@@ -214,8 +214,8 @@ Layout = null;
 	<!-- ko if: isCommandEnable -->
 	<button class="close-fab-overlay" data-bind="visible: menuIsVisible() || focusingRequestForm(), click: hideMenuAndRequestForm"></button>
 	<button class="fab" data-bind="visible: menuIconIsVisible, click: showMenu" tabindex="0"></button>
-	<div class="navbar navbar-teleopti subnavbar request-menu-list" data-bind="css: {'menu-focusing': menuIsVisible}, visible: menuIsVisible">
-		<ul class="nav navbar-nav navbar-teleopti row submenu">
+	<div class="navbar teleopti-toolbar subnavbar request-menu-list" data-bind="css: {'menu-focusing': menuIsVisible}, visible: menuIsVisible">
+		<ul class="nav navbar-nav teleopti-toolbar row submenu">
 			@if (Model.RequestLicense.IsOvertimeAvailabilityEnabled)
 			{
 			<li data-bind="visible: overtimeAvailabilityPermission" class="col-xs-12 col-sm-4">

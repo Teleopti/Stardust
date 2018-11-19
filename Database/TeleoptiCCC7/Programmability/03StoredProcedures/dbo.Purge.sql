@@ -53,7 +53,8 @@ if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepPersons')
 	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepPersons', 3)
 if not exists (select 1 from PurgeSetting where [key] = 'MonthsToKeepPersonalData')
 	insert into PurgeSetting ([Key], [Value]) values ('MonthsToKeepPersonalData', 3) --Set to 3 for new and 120 for existing in migration scripts
-
+if not exists (select 1 from PurgeSetting where [key] = 'MonthsToKeepAudit')
+	insert into PurgeSetting ([Key], [Value]) values ('MonthsToKeepAudit', 3)
 
 /* Not part of Teleopti Data Retention Policy */
 if not exists (select 1 from PurgeSetting where [key] = 'DenyPendingRequestsAfterNDays')

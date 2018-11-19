@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Http.Results;
 using NUnit.Framework;
@@ -329,8 +330,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var forecastedTaskTime = result.Content.ForecastDays.Single().AverageTaskTime;
 			var forecastedAfterTaskTime = result.Content.ForecastDays.Single().AverageAfterTaskTime;
 
-			// 997 is the forecasted value when statistics time is 100 for all days in history with no outliers removed
-			// 1400 is the forecasted value when statistics time is 200 for all days in history with no outliers removed
 			forecastedTaskTime.Should().Be.GreaterThanOrEqualTo(997);
 			forecastedAfterTaskTime.Should().Be.GreaterThanOrEqualTo(997);
 			forecastedTaskTime.Should().Be.LessThanOrEqualTo(1400);
@@ -357,11 +356,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				{
 					Interval = date.AddDays(-i).Date.AddHours(10),
 					StatOfferedTasks = 10,
-					StatAverageTaskTimeSeconds = random.Next(100, 200),
-					StatAverageAfterTaskTimeSeconds = random.Next(100, 200)
+					StatAverageTaskTimeSeconds = random.Next(190, 200),
+					StatAverageAfterTaskTimeSeconds = random.Next(190, 200)
 				});
 			}
-
+			
 			var outlierDay = statisticTasks.Single(x => new DateOnly(x.Interval.Date) == date.AddDays(-7));
 			outlierDay.StatAverageTaskTimeSeconds = 10;
 			outlierDay.StatAverageAfterTaskTimeSeconds = 10;
@@ -379,10 +378,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var forecastedTaskTime = result.Content.ForecastDays.Single().AverageTaskTime;
 			var forecastedAfterTaskTime = result.Content.ForecastDays.Single().AverageAfterTaskTime;
 
-			// 83 is the forecasted value when statistics time is 100 for all days in history with no outliers removed
-			// 166 is the forecasted value when statistics time is 200 for all days in history with no outliers removed
-			forecastedTaskTime.Should().Be.GreaterThanOrEqualTo(83);
-			forecastedAfterTaskTime.Should().Be.GreaterThanOrEqualTo(83);
+			forecastedTaskTime.Should().Be.GreaterThanOrEqualTo(145);
+			forecastedAfterTaskTime.Should().Be.GreaterThanOrEqualTo(145);
 			forecastedTaskTime.Should().Be.LessThanOrEqualTo(166);
 			forecastedAfterTaskTime.Should().Be.LessThanOrEqualTo(166);
 		}
@@ -407,8 +404,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				{
 					Interval = date.AddDays(-i).Date.AddHours(10),
 					StatOfferedTasks = 10,
-					StatAverageTaskTimeSeconds = random.Next(100, 200),
-					StatAverageAfterTaskTimeSeconds = random.Next(100, 200)
+					StatAverageTaskTimeSeconds = random.Next(190, 200),
+					StatAverageAfterTaskTimeSeconds = random.Next(190, 200)
 				});
 			}
 
@@ -429,10 +426,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var forecastedTaskTime = result.Content.ForecastDays.Single().AverageTaskTime;
 			var forecastedAfterTaskTime = result.Content.ForecastDays.Single().AverageAfterTaskTime;
 
-			// 129 is the forecasted value when statistics time is 100 for all days in history with no outliers removed
-			// 211 is the forecasted value when statistics time is 200 for all days in history with no outliers removed
-			forecastedTaskTime.Should().Be.GreaterThanOrEqualTo(129);
-			forecastedAfterTaskTime.Should().Be.GreaterThanOrEqualTo(129);
+			forecastedTaskTime.Should().Be.GreaterThanOrEqualTo(200);
+			forecastedAfterTaskTime.Should().Be.GreaterThanOrEqualTo(200);
 			forecastedTaskTime.Should().Be.LessThanOrEqualTo(211);
 			forecastedAfterTaskTime.Should().Be.LessThanOrEqualTo(211);
 		}

@@ -15,17 +15,14 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 
 	public class UpgradeEvent
 	{
-		public int Id;
+		public long Id;
 		public IRtaStoredEvent Event;
 	}
 
 	public interface IRtaEventStore
 	{
 		void Add(IEvent @event, DeadLockVictim deadLockVictim, int storeVersion);
-
 		void Add(IEnumerable<IEvent> events, DeadLockVictim deadLockVictim, int storeVersion);
-
-		// maybe segregate this stuff
 		int Remove(DateTime removeUntil, int maxEventsToRemove);
 	}
 
@@ -35,13 +32,13 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 		IEnumerable<IEvent> Load(Guid personId, DateOnly date);
 		[RemoveMeWithToggle(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306)]
 		IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp, DeadLockVictim deadLockVictim);
-		LoadedEvents LoadFrom(int fromEventId);
-		int ReadLastId();
+		LoadedEvents LoadForSynchronization(long fromEventId);
+		long ReadLastId();
 	}
 
 	public class LoadedEvents
 	{
-		public int LastId { get; set; }
+		public long ToId { get; set; }
 		public IEnumerable<IEvent> Events { get; set; }
 	}
 

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		private IBackgroundJobClient backgroundJobs => _backgroundJobs.Value;
 		private RecurringJobManager recurringJobs => _recurringJobs.Value;
 
-		public void TriggerReccuringJobs() => triggerRecurringJob(null);
+		public void TriggerRecurringJobs() => triggerRecurringJob(null);
 		public void TriggerDailyRecurringJobs() => triggerRecurringJob(Cron.Daily());
 		public void TriggerHourlyRecurringJobs() => triggerRecurringJob(Cron.Hourly());
 		public void TriggerMinutelyRecurringJobs() => triggerRecurringJob(Cron.Minutely());

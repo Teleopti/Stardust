@@ -43,7 +43,7 @@ describe('Requests controller tests', function() {
 					})
 				};
 			});
-			$provide.service('requestsPermissions', function () {
+			$provide.service('requestsPermissions', function() {
 				return requestsPermissions;
 			});
 			$provide.service('requestsDataService', function() {
@@ -493,13 +493,13 @@ describe('Requests controller tests', function() {
 				}
 			};
 		};
-		this.getPermissionsPromise = function () {
+		this.getPermissionsPromise = function() {
 			return {
-				then: function (callback) {
-					callback && callback({ data: { HasApproveOrDenyPermission: true, HasCancelPermission: false }});
+				then: function(callback) {
+					callback && callback({ data: { HasApproveOrDenyPermission: true, HasCancelPermission: false } });
 				}
 			};
-		}
+		};
 	}
 
 	function FakeRequestsPermissions() {
@@ -507,11 +507,11 @@ describe('Requests controller tests', function() {
 
 		this.set = function setPermissions(data) {
 			permissions = data;
-		}
+		};
 
 		this.all = function getPermissions() {
 			return permissions;
-		}
+		};
 	}
 
 	function FakeGroupPageService() {

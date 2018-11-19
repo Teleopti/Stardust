@@ -17,6 +17,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Wfm.Adherence.Domain.Events;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
@@ -112,6 +113,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// fake for now. if real repo needs to be included in the scope....
 			isolate.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();
+			
+			isolate.UseTestDouble<RunSynchronouslyAndThrow>().For<IRtaEventStoreAsyncSynchronizerStrategy>();
 		}
 
 		protected override void BeforeTest()

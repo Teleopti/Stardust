@@ -1,8 +1,8 @@
 ﻿'use strict';
 
 (function() {
-
-	angular.module('wfm.requests')
+	angular
+		.module('wfm.requests')
 		.factory('RequestGridStateService', ['$timeout', '$window', 'requestsDefinitions', RequestGridStateService]);
 
 	function RequestGridStateService($timeout, $window, requestsDefinitions) {
@@ -23,8 +23,7 @@
 			var state = $window.localStorage.getItem(localStorageKeyName);
 
 			var stateObj = angular.fromJson(state);
-			if(stateObj && stateObj.selection)
-				stateObj.selection = undefined;
+			if (stateObj && stateObj.selection) stateObj.selection = undefined;
 
 			if (stateObj) {
 				vm.gridApi.saveState.restore(vm, stateObj);
@@ -44,7 +43,7 @@
 				vm.gridApi.colResizable.on.columnSizeChanged($scope, function() {
 					saveState(vm, requestType);
 				});
-			};
+			}
 		};
 
 		svc.getAbsenceAndTextSorting = function() {
@@ -62,15 +61,13 @@
 		function getSortingColumn(name) {
 			var state = angular.fromJson($window.localStorage.getItem(name));
 
-			if (!state || !state.columns)
-				return;
+			if (!state || !state.columns) return;
 
 			var sortingColumn = state.columns.filter(function(column) {
-				return column.sort.direction
+				return column.sort.direction;
 			})[0];
 
-			if (sortingColumn)
-				sortingColumn.displayName = sortingColumn.name;
+			if (sortingColumn) sortingColumn.displayName = sortingColumn.name;
 
 			return sortingColumn;
 		}
@@ -97,7 +94,7 @@
 			}
 
 			var columnsToInclude = state.columns.filter(function(col) {
-				return (columnsToExcludeFromSave.indexOf(col.name) != 0);
+				return columnsToExcludeFromSave.indexOf(col.name) != 0;
 			});
 
 			state.columns = columnsToInclude;
@@ -116,4 +113,4 @@
 
 		return svc;
 	}
-}());
+})();

@@ -8,15 +8,15 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 {
 	public class StateQueueTenants
 	{
-		private readonly INow _now;
 		private readonly ICurrentDataSource _dataSource;
+		private readonly INow _now;
 		private readonly object _lock = new object();
 		private readonly IList<TenantInfo> _tenants = new List<TenantInfo>();
 
-		public StateQueueTenants(INow now, ICurrentDataSource dataSource)
+		public StateQueueTenants(ICurrentDataSource dataSource, INow now)
 		{
-			_now = now;
 			_dataSource = dataSource;
+			_now = now;
 		}
 
 		internal class TenantInfo
@@ -33,9 +33,10 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 				var info = _tenants.SingleOrDefault(x => x.Name == tenant);
 				if (info == null)
 				{
-					info = new TenantInfo { Name = tenant };
+					info = new TenantInfo {Name = tenant};
 					_tenants.Add(info);
 				}
+
 				info.ProcessQueueUntil = _now.UtcDateTime().AddMinutes(1);
 			}
 		}
@@ -49,6 +50,5 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 				return _tenants.Select(x => x.Name).ToArray();
 			}
 		}
-
 	}
 }
