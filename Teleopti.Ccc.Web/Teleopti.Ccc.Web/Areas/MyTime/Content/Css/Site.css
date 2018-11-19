@@ -74,7 +74,6 @@
 
 .inline-block {
 	display: inline-block;
-	vertical-align: top;
 }
 
 .ie7 .inline-block {
@@ -1682,10 +1681,6 @@ button.btn.absence-report-cancel {
 	}
 	#Request-add-section div.pull-right {
 		margin-top: 20px;
-	}
-	#Request-add-section label.checkbox {
-		display: inline-block;
-		padding-left: 25px;
 	}
 	#Request-add-section i.glyphicon,
 	#Request-add-section input[type='checkbox'],
