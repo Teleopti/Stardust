@@ -196,6 +196,7 @@
     <Compile Include="Historical\Infrastructure\RtaEventStoreTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreUpgradeTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreUpgradeWriterTest.cs" />
+    <Compile Include="Historical\Unit\AgentAdherenceDay\77750TestIssue.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\AdherencesTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\ApprovedPeriodPercentageTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\ApprovedPeriodTest.cs" />
@@ -431,6 +432,11 @@
   <ItemGroup>
     <Folder Include="Monitor\Infrastructure" />
     <Folder Include="Monitor\Unit\ReadModels" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Historical\Unit\AgentAdherenceDay\77750TestIssue.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
