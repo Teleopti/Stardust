@@ -5,7 +5,7 @@
 				<i class="mdi mdi mdi-numeric-9-plus-box-multiple-outline"></i>
 				<h1 class="inline-block">{{'Requests' | translate }}</h1>
 			</div>
-			<div class="pull-right">
+			<div ng-if="vm.showFeedbackLink" class="pull-right">
 				<ng2-feedback-message [feedback-type]="'newRelease'" [component-name]="'Requests' | translate"></ng2-feedback-message>
 			</div>
 		</div>

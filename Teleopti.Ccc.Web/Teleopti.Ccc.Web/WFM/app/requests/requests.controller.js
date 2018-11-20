@@ -8,7 +8,6 @@
 		'$state',
 		'$q',
 		'$translate',
-		'NoticeService',
 		'$timeout',
 		'Toggle',
 		'requestsDefinitions',
@@ -27,7 +26,6 @@
 		$state,
 		$q,
 		$translate,
-		noticeSvc,
 		$timeout,
 		toggleService,
 		requestsDefinitions,
@@ -52,6 +50,7 @@
 		vm.Wfm_GroupPages_45057 = toggleService.Wfm_GroupPages_45057;
 		vm.overtimeRequestsLicenseAvailable = false;
 		vm.teamNameMap = {};
+		vm.showFeedbackLink = toggleService.WFM_Request_Show_Feedback_Link_77733;
 
 		vm.selectedGroups = {
 			mode: 'BusinessHierarchy',
@@ -89,17 +88,6 @@
 
 		var loggedonUsersTeamId = $q.defer();
 		var shiftTradeMaximumDays = 60;
-
-		function initFeedback() {
-			if (toggleService.WFM_Request_Show_Feedback_Link_77733) {
-				var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
-					.replace('{0}', $translate.instant('Requests'))
-					.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank' rel='noopener'>")
-					.replace('{2}', '</a>');
-				noticeSvc.info(message, null, true);
-			}
-		}
-		initFeedback();
 
 		vm.orgPickerSelectedText = function() {
 			var text = '';
