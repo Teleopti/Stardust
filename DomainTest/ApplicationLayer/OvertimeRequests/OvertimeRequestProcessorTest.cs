@@ -506,7 +506,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestUsePrimarySkillOption_75573)]
 		public void ShouldApproveWhenUsePrimarySkillValidationIsOnAndTheSkillIsCriticalUnderStaffed()
 		{
 			setupPerson(8, 20);
@@ -531,7 +530,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestUsePrimarySkillOption_75573)]
 		public void ShouldApproveWhenUsePrimarySkillValidationIsOffAndOnlyPrimarySkillIsNotCriticalUnderStaffed()
 		{
 			setupPerson(8, 20);

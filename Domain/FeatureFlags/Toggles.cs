@@ -14,8 +14,6 @@
 		// ReSharper disable InconsistentNaming
 		Forecast_CopySettingsToWorkflow_11112,
 
-		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
-
 		RTA_KillFattyIntradayUntilItDies_74939, //remove april 2019
 		RTA_ReviewHistoricalAdherence_Domain_74770,
 		RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306,
@@ -94,7 +92,6 @@
 		OvertimeRequestSupportMultiSelectionSkillTypes_74945,
 		OvertimeRequestStaffingCheckMethod_74949,
 		OvertimeRequestChangeBelongsToDateForOverNightShift_74984,
-		OvertimeRequestUsePrimarySkillOption_75573,
 		WFM_Forecaster_Refact_44480,
 		WFM_Export_Forecast_44716,
 		WFM_Forecaster_Preview_74801,

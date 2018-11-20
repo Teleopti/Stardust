@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void initOvertimeRequestUsePrimarySkill()
 		{
-			if (!_toggleManager.IsEnabled(Toggles.OvertimeRequestUsePrimarySkillOption_75573) || !_presenter.IsUsingPrimarySkill())
+			if (!_presenter.IsUsingPrimarySkill())
 			{
 				checkBoxUsePrimarySkill.Visible = false;
 			}

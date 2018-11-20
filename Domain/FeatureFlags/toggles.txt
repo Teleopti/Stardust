@@ -69,7 +69,6 @@ OvertimeRequestSupportMultiSelectionSkillTypes_74945 = true
 
 OvertimeRequestStaffingCheckMethod_74949 = true
 OvertimeRequestChangeBelongsToDateForOverNightShift_74984 = true
-OvertimeRequestUsePrimarySkillOption_75573 = true
 
 # Bockemon #
 Wfm_PeopleWeb_PrepareForRelease_74903 = true
@@ -85,7 +84,6 @@ MyTimeWeb_NewTeamScheduleView_75989 = RC
 MyTimeWeb_NewTeamScheduleViewDesktop_76313 = RC
 MyTimeWeb_TrafficLightOnMobileDayView_77447 = RC
 MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640 = RC
-Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = true
 WebByPassDefaultPermissionCheck_37984 = true
 
 

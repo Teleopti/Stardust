@@ -640,7 +640,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestUsePrimarySkillOption_75573)]
 		public void ShouldUseAllSkillsForOvertimeProbabilityWhenUsePrimarySkillValidationIsDisabled()
 		{
 			setupWorkFlowControlSet();
@@ -671,7 +670,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestUsePrimarySkillOption_75573)]
 		public void ShouldUsePrimarySkillsForOvertimeProbabilityWhenUsePrimarySkillValidationIsEnabled()
 		{
 			setupWorkFlowControlSet();
@@ -702,7 +700,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestUsePrimarySkillOption_75573)]
 		public void ShouldUsePrimarySkillsForOvertimeProbabilityWhenPrimarySkillIsNotLevel1InCascading()
 		{
 			setupWorkFlowControlSet();

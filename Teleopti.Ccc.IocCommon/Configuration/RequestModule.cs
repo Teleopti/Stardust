@@ -135,10 +135,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OvertimeRequestCriticalUnderStaffedSpecificationToggle74944On>().As<IOvertimeRequestCriticalUnderStaffedSpecification>()
 				.SingleInstance();
 
-			registerType<IPrimaryPersonSkillFilter,
-				PrimaryPersonSkillFilter, PrimaryPersonSkillFilterToggle75573Off>(
-				builder, Toggles.OvertimeRequestUsePrimarySkillOption_75573);
-
+			builder.RegisterType<PrimaryPersonSkillFilter>().As<IPrimaryPersonSkillFilter>().SingleInstance();
 		}
 
 		private void registerType<T, TToggleOn, TToggleOff>(ContainerBuilder builder, Toggles toggle)
