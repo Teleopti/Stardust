@@ -40,23 +40,32 @@
 			 access="property"
 				not-null="true"
 				type="guid" />
-    
-    <many-to-one name="ActionPerformedBy"
-      class="Teleopti.Ccc.Domain.Common.Person"
-		access="property"
-        not-null="true"
-       foreign-key="FK_PA_ActionPerformedBy_Person_Id"/>
-	  
-	  <many-to-one name="ActionPerformedOn"
-				   class="Teleopti.Ccc.Domain.Common.Person"
-				   access="property"
-				   not-null="true"
-				   foreign-key="FK_PA_ActionPerformedOn_Person_Id"/>
+
+		<property name="ActionPerformedById"
+				  access="property"
+				  not-null="true"
+				  type="guid" />
+
+	  <property name="ActionPerformedBy"
+				access="property"
+				not-null="false"
+				length="300"
+				type="string" />
+	  <property name="ActionPerformedOnId"
+				access="property"
+				not-null="true"
+				type="guid" />
+
+	  <property name="ActionPerformedOn"
+				access="property"
+				not-null="false"
+				length="300"
+				type="string" />
   </class>
 	<query name="PersonAccessAuditOnCriteria">
 		<![CDATA[
 Select s from PersonAccess s
-			where s.TimeStamp between :StartDate and :EndDate and :PersonId = s.ActionPerformedBy
+			where s.TimeStamp between :StartDate and :EndDate and :PersonId = s.ActionPerformedById
 
 ]]>
 	</query>
