@@ -7,8 +7,10 @@
 	test('should navigate to defaultNavigation', function() {
 		setup();
 		var fakeWindow = getFakeWindow();
+		fakeWindow.navigator.userAgent =
+			'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36';
 		init(fakeWindow);
-		equal('', fakeWindow.location.url);
+		equal('#Schedule', fakeWindow.location.url);
 	});
 
 	test('should navigate to mobile day page', function() {
