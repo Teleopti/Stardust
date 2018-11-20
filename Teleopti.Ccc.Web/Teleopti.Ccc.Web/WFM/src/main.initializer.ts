@@ -1,4 +1,4 @@
-import { IQService, ITimeoutService } from 'angular';
+import { IPromise, IQService, ITimeoutService } from 'angular';
 import { IState } from 'angular-ui-router';
 import { IWfmRootScopeService } from './main';
 
@@ -77,8 +77,8 @@ export const mainInitializer = [
 			});
 		}
 
-		let areas;
-		let permittedAreas;
+		let areas: any[];
+		let permittedAreas: any[];
 		const alwaysPermittedAreas: string[] = [
 			'main',
 			'skillprio',
@@ -89,13 +89,15 @@ export const mainInitializer = [
 			'dataprotection'
 		];
 
-		function initializePermissionCheck(): Promise<void> {
-			return areasService.getAreasWithPermission().then(function(data) {
-				permittedAreas = data;
-				return areasService.getAreasList().then(function(data) {
+		function initializePermissionCheck(): IPromise<void[]> {
+			return $q.all([
+				areasService.getAreasWithPermission().then(function(data) {
+					permittedAreas = data;
+				}),
+				areasService.getAreasList().then(function(data) {
 					areas = data;
-				});
-			});
+				})
+			]);
 		}
 
 		function permitted(name: string, url: string): boolean {
