@@ -296,13 +296,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var activity2 = createActivity("activity2");
 			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var notUnderStaffingSkill = createSkill("notUnderStaffingSkill", null,timeZone);
-			var criticalUnderStaffingSkill = createSkill("criticalUnderStaffingSkill",null, timeZone);
+			var notUnderStaffingSkill2 = createSkill("notUnderStaffingSkill2", null, timeZone);
 
 			var personSkill1 = createPersonSkill(activity1, notUnderStaffingSkill);
-			var personSkill2 = createPersonSkill(activity2, criticalUnderStaffingSkill);
+			var personSkill2 = createPersonSkill(activity2, notUnderStaffingSkill2);
 
 			setupIntradayStaffingForSkill(notUnderStaffingSkill, 10d, 15d);
-			setupIntradayStaffingForSkill(criticalUnderStaffingSkill, 10d, 6d);
+			setupIntradayStaffingForSkill(notUnderStaffingSkill2, 10d, 20d);
 
 			addPersonSkillsToPersonPeriod(personSkill1, personSkill2);
 
@@ -531,7 +531,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944)]
 		[Toggle(Toggles.OvertimeRequestUsePrimarySkillOption_75573)]
 		public void ShouldApproveWhenUsePrimarySkillValidationIsOffAndOnlyPrimarySkillIsNotCriticalUnderStaffed()
 		{

@@ -51,8 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			if (periods.Any())
 			{
 				var possibilityModels = new List<CalculatedPossibilityModel>();
-				var satisfyAllSkills = !_toggleManager.IsEnabled(Domain.FeatureFlags.Toggles
-					.OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944);
+				var satisfyAllSkills = false;
 				foreach (var period in periods)
 				{
 					possibilityModels.AddRange(
