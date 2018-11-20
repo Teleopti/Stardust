@@ -38,7 +38,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 				.WithStateGroup(null, "InCall")
 				.WithStateCode("InCall")
 				.WithActivity(null, "phone", Color.Crimson)
-				.WithRule(null, "in", 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In, Color.DarkKhaki)
+				.WithRule(null, "in", 0, Domain.Configuration.Adherence.In, Color.DarkKhaki)
 				.WithHistoricalStateChange("2017-03-07 14:00")
 				;
 			
@@ -138,7 +138,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 				.WithStateGroup(state, "InCall")
 				.WithStateCode("InCall")
 				.WithActivity(null, "phone", Color.Crimson)
-				.WithRule(null, "in", 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In, Color.DarkKhaki)
+				.WithRule(null, "in", 0, Domain.Configuration.Adherence.In, Color.DarkKhaki)
 				.WithHistoricalStateChange("2017-03-07 14:00")
 				.WithHistoricalStateChange("2017-03-07 14:00")
 				.WithHistoricalStateChange("2017-03-07 14:00")

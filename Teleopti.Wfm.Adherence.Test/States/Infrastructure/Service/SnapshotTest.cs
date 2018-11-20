@@ -51,12 +51,12 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service
 				
 				.WithStateGroup("phone")
 				.WithStateCode("phone")
-				.WithRule("InAdherence", 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithRule("InAdherence", 0, Domain.Configuration.Adherence.In)
 				.WithMapping("phone", "InAdherence")
 
 				.WithStateGroup(logOutBySnapshot, true, true)
 				.WithStateCode(logOutBySnapshot)
-				.WithRule("OutAdherence", -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithRule("OutAdherence", -1, Domain.Configuration.Adherence.Out)
 				.WithMapping(logOutBySnapshot, "OutAdherence")
 
 				.PublishRecurringEvents()

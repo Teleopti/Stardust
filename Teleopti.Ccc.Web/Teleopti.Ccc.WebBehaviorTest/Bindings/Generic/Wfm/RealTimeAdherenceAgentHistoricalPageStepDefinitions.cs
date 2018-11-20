@@ -11,6 +11,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Wfm.Adherence.Domain.Configuration;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 {
@@ -209,11 +210,11 @@ return 'OK';
 					if (Adherence.HasValue)
 						switch (Adherence.Value)
 						{
-							case Domain.InterfaceLegacy.Domain.Adherence.In:
+							case Teleopti.Wfm.Adherence.Domain.Configuration.Adherence.In:
 								return UserTexts.Resources.InAdherence;
-							case Domain.InterfaceLegacy.Domain.Adherence.Neutral:
+							case Teleopti.Wfm.Adherence.Domain.Configuration.Adherence.Neutral:
 								return UserTexts.Resources.NeutralAdherence;
-							case Domain.InterfaceLegacy.Domain.Adherence.Out:
+							case Teleopti.Wfm.Adherence.Domain.Configuration.Adherence.Out:
 								return UserTexts.Resources.OutOfAdherence;
 						}
 					return null;

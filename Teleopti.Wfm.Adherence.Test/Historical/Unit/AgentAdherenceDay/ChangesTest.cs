@@ -40,7 +40,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			Now.Is("2017-03-14 18:00");
 			var personId = Guid.NewGuid();
 			History
-				.RuleChanged(personId, "2017-03-14 18:00", "InCall", "phone", Color.Crimson, null, Color.DarkKhaki, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.RuleChanged(personId, "2017-03-14 18:00", "InCall", "phone", Color.Crimson, null, Color.DarkKhaki, Domain.Configuration.Adherence.In)
 				;
 
 			var data = Target.LoadUntilNow(personId, "2017-03-14".Date());

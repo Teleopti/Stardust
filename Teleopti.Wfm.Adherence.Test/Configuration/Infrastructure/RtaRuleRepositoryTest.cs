@@ -24,7 +24,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
         {
             return new RtaRule(new Description("Wrong state"), Color.DarkTurquoise, TimeSpan.FromSeconds(15).Seconds, 0.8)
             {
-	            Adherence = Ccc.Domain.InterfaceLegacy.Domain.Adherence.In
+	            Adherence = Domain.Configuration.Adherence.In
             };
         }
 
@@ -35,7 +35,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
             Assert.AreEqual(org.DisplayColor.ToArgb(), loadedAggregateFromDatabase.DisplayColor.ToArgb());
             Assert.AreEqual(org.ThresholdTime,loadedAggregateFromDatabase.ThresholdTime);
             Assert.AreEqual(0.8, loadedAggregateFromDatabase.StaffingEffect );
-			Assert.AreEqual(Ccc.Domain.InterfaceLegacy.Domain.Adherence.In, loadedAggregateFromDatabase.Adherence);
+			Assert.AreEqual(Domain.Configuration.Adherence.In, loadedAggregateFromDatabase.Adherence);
         }
 
         protected override Repository<IRtaRule> TestRepository(ICurrentUnitOfWork currentUnitOfWork)

@@ -16,7 +16,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Configuration
 		private Color _alarmColor;
 		private int _thresholdTime;
 		private double _staffingEffect;
-		private Ccc.Domain.InterfaceLegacy.Domain.Adherence? _adherence;
+		private Adherence? _adherence;
 		private bool _isAlarm = false;
 
 		public RtaRule(Description description, Color color, int thresholdTime, double staffingEffect)
@@ -44,7 +44,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Configuration
 			set{ _staffingEffect = value;}
 		}
 
-		public virtual Ccc.Domain.InterfaceLegacy.Domain.Adherence? Adherence
+		public virtual Adherence? Adherence
 		{
 			get { return _adherence; }
 			set { _adherence = value; }
@@ -54,31 +54,31 @@ namespace Teleopti.Wfm.Adherence.Domain.Configuration
 		{
 			new adherenceWithText
 			{
-				Adherence = Ccc.Domain.InterfaceLegacy.Domain.Adherence.In,
+				Adherence = Configuration.Adherence.In,
 				Text = Resources.InAdherence
 			},
 			new adherenceWithText
 			{
-				Adherence = Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out,
+				Adherence = Configuration.Adherence.Out,
 				Text = Resources.OutOfAdherence
 			},
 			new adherenceWithText
 			{
-				Adherence = Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral,
+				Adherence = Configuration.Adherence.Neutral,
 				Text = Resources.NeutralAdherence
 			}
 		};
 
 		private class adherenceWithText
 		{
-			public Ccc.Domain.InterfaceLegacy.Domain.Adherence Adherence { get; set; }
+			public Adherence Adherence { get; set; }
 			public string Text { get; set; }
 		}
 
 		public virtual void SetAdherenceByText(string text)
 		{
 			var adherenceWithText = _adherences.SingleOrDefault(x => x.Text == text);
-			Adherence = adherenceWithText == null ? (Ccc.Domain.InterfaceLegacy.Domain.Adherence?) null : adherenceWithText.Adherence;
+			Adherence = adherenceWithText == null ? (Adherence?) null : adherenceWithText.Adherence;
 		}
 
 		public virtual string AdherenceText

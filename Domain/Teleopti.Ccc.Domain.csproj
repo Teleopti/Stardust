@@ -1120,10 +1120,6 @@
     <Compile Include="InterfaceLegacy\Domain\IRotation.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRotationDay.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRotationRestriction.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IRtaMap.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IRtaRule.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IRtaState.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IRtaStateGroup.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRuleSetBag.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRuleSetProjectionEntityService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRuleSetProjectionService.cs" />
@@ -2968,10 +2964,7 @@
     <Compile Include="Repositories\IRuleSetBagRepository.cs" />
     <Compile Include="Repositories\ISettingDataRepository.cs" />
     <Compile Include="Repositories\ISiteRepository.cs" />
-    <Compile Include="Repositories\IRtaMapRepository.cs" />
     <Compile Include="Repositories\IActivityRepository.cs" />
-    <Compile Include="Repositories\IRtaStateGroupRepository.cs" />
-    <Compile Include="Repositories\IRtaRuleRepository.cs" />
     <Compile Include="Repositories\IShiftCategoryRepository.cs" />
     <Compile Include="Repositories\IStudentAvailabilityDayRepository.cs" />
     <Compile Include="Repositories\ITeamRepository.cs" />

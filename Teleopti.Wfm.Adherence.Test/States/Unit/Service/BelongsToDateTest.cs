@@ -122,7 +122,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, admin, null, "2015-02-19", "2015-02-20 1:00", "2015-02-20 7:00")
-				.WithMappedRule("admin", admin, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral)
+				.WithMappedRule("admin", admin, 0, Domain.Configuration.Adherence.Neutral)
 				;
 			Now.Is("2015-02-20 2:00");
 
@@ -239,7 +239,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, null, "2015-02-19", "2015-02-20 1:00", "2015-02-20 7:00")
-				.WithMappedRule(Guid.NewGuid(), "break", phone, 0, "out", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out);
+				.WithMappedRule(Guid.NewGuid(), "break", phone, 0, "out", Domain.Configuration.Adherence.Out);
 			Now.Is("2015-02-20 2:00");
 
 			Target.ProcessState(new StateForTest
