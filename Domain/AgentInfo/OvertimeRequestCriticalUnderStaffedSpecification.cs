@@ -3,17 +3,6 @@ using Teleopti.Ccc.Domain.Specification;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
 {
-	[DisabledBy(Toggles.OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944)]
-	public class OvertimeRequestCriticalUnderStaffedSpecification : Specification<OvertimeRequestValidatedSkillCount>,
-		IOvertimeRequestCriticalUnderStaffedSpecification
-	{
-		public override bool IsSatisfiedBy(OvertimeRequestValidatedSkillCount obj)
-		{
-			return obj.CriticalUnderStaffedSkillCount == obj.SkillCount;
-		}
-	}
-
-	[EnabledBy(Toggles.OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944)]
 	public class OvertimeRequestCriticalUnderStaffedSpecificationToggle74944On :
 		Specification<OvertimeRequestValidatedSkillCount>, IOvertimeRequestCriticalUnderStaffedSpecification
 	{
