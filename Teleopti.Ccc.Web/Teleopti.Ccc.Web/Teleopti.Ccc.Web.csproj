@@ -2246,7 +2246,6 @@
     <Content Include="Areas\Start\Views\Return\Hash.cshtml" />
     <Content Include="Areas\MyTime\Views\Widget\Index.cshtml" />
     <EmbeddedResource Include="tzdb2016c.nzd" />
-    <Content Include="WFM\css\_navbar.scss" />
     <Content Include="WFM\css\_main.scss" />
     <Content Include="Areas\MultiTenancy\Views\TenantAdminInfo\Index.cshtml" />
     <Content Include="Areas\MultiTenancy\Views\web.config" />
@@ -2514,7 +2513,6 @@
     <Content Include="Areas\Reporting\Views\Report\Empty.cshtml" />
     <Content Include=".node\flatten-packages.cmd" />
     <Content Include="WFM\html\main.html" />
-    <Content Include="WFM\html\nav.html" />
     <Content Include="WFM\app\app.js" />
     <Content Include="WFM\vendor\fabricjs\fabric.js" />
     <Content Include="WFM\vendor\fabricjs\fabric.min.js" />

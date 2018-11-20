@@ -4,12 +4,33 @@
 	}
 }
 nz-dropdown {
+	transition: 300ms background-color cubic-bezier(0.33, 0.11, 0.02, 0.99);
+
+	&:hover {
+		background: rgba(0, 0, 0, 0.16);
+	}
+
 	button.trigger-btn {
+		border: none;
+		border-radius: 0;
+		height: 54px;
+		background: transparent;
+		display: flex;
+		align-items: center;
+		transition: none;
+
 		color: white;
 		&:hover,
 		&:active,
-		&focus {
+		&:focus {
 			color: white;
+		}
+		.text-icon {
+			display: flex;
+			align-items: center;
+			i.mdi-vector-square {
+				margin-right: 5px;
+			}
 		}
 	}
 }

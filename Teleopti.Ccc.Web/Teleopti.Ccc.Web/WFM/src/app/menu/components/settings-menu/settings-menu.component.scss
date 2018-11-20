@@ -1,0 +1,22 @@
+.clickable {
+	cursor: pointer;
+	height: 100%;
+	width: 100%;
+	color: white;
+
+	&[ng-reflect-nz-visible='true'] {
+		background: rgba(0, 0, 0, 0.16);
+	}
+}
+
+.cower-area {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}

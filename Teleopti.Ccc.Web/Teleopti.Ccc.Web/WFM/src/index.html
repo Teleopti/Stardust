@@ -5,110 +5,11 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>WFM</title>
-	<link rel="stylesheet" href="vendor/MaterialDesignIcons/css/materialdesignicons.min.css" media="none" onload="if(media!=='all')media='all'">
-	<link href="vendor/open-sans/font.css" rel="stylesheet">
-	<meta name="theme-color" content="#0099FF" />
-	<link rel="manifest" href="manifest.webmanifest.json">
-	<style>
-		.loader {
-			width: 75px;
-			height: 75px;
-			margin: 5% auto 0;
-			border: 6px solid transparent;
-			border-top: 6px solid #09f;
-			animation-name: spin;
-			animation-duration: 1s;
-			animation-iteration-count: infinite;
-			border-radius: 50%;
-			transform: rotate(0);
-			overflow: hidden
-		}
 
-		@keyframes spin {
-			from {
-				transform: rotate(0)
-			}
-
-			to {
-				transform: rotate(360deg)
-			}
-		}
-
-		.backdrop {
-			position: fixed;
-			z-index: 999999;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			top: 0;
-			background: #fff
-		}
-	</style>
-	<script type="text/javascript" src="appInsights.js"></script>
 </head>
 
-<body ng-app="wfm" ng-show="isAuthenticated" ng-cloak ng-controller="MainController as main">
-	<div class="backdrop" ng-if="!main.styleIsFullyLoaded">
-		<div class="loader"></div>
-	</div>
-	<div id="nav" ng-include="'html/nav.html'" class="material-depth-1 navbar navbar-default navbar-static-top " role="navigation"></div>
-	<div class="layout-container">
-		<div class="main-menu" ng-controller="AreasController as vm">
-			<h2 class="main-menu-ctrls">
-				<label for="nav-left" ng-click="vm.mainMenuState = !vm.mainMenuState" class="pointer" id="main-menu-trigger">
-					<div tabindex=0 class="context-menu card-context even-icon">
-						<i class="mdi main-menu-trigger-icon text-white" ng-class="{'mdi-menu':!vm.mainMenuState, 'mdi-backburger':vm.mainMenuState}"></i>
-						<md-tooltip>
-							{{'Navigate'|translate}}
-						</md-tooltip>
-					</div>
-				</label>
-			</h2>
-			<div ng-show="vm.mainMenuState" class="main-menu-slide main-menu-link-wrapper material-depth-1">
-				<div ng-repeat="a in vm.areas">
-					<mainmenu data="a" open="vm.mainMenuState" ng-click="vm.toggleMobileMenu();"></mainmenu>
-				</div>
-			</div>
-		</div>
-
-		<div id="materialcontainer" class="container content">
-			<div ui-view></div>
-			<wfm-notice notices="$parent.wfmNotices"></wfm-notice>
-		</div>
-
-	</div>
-
-	<script type="text/javascript" src="index_desktop_client_mods.js"></script>
-
-	<link id="themeDependencies" rel="stylesheet" href="dist/dependencies.css">
-	<link id="themeStyleguide" rel="stylesheet" href="">
-	<link id="themeAnt" rel="stylesheet" href="">
-	<ng2-bootstrap></ng2-bootstrap>
-	<script src="dist/resources/modules.js"></script>
-	<script src="dist/templates.js"></script>
-	<script src="dist/main.js"></script>
-	<script src="dist/ng2/runtime.js"></script>
-	<script src="dist/ng2/polyfills.js"></script>
-
-	<!-- <% if(htmlWebpackPlugin.options.production) { %> -->
-	<link rel="stylesheet" href="dist/ng2/styles.css">
-	<!-- <% } else { %> -->
-	<script src="dist/ng2/styles.js"></script>
-	<script src="dist/ng2/vendor.js"></script>
-	<!-- <% } %> -->
-
-	<script src="dist/ng2/main.js"></script>
-	<!--dummy links to disable IE default alt-key shortcuts-->
-	<div class="shortcut-trick-ie">
-		<a href="javascript:void(0);" accesskey="a"></a>
-		<a href="javascript:void(0);" accesskey="c"></a>
-		<a href="javascript:void(0);" accesskey="e"></a>
-		<a href="javascript:void(0);" accesskey="f"></a>
-		<a href="javascript:void(0);" accesskey="h"></a>
-		<a href="javascript:void(0);" accesskey="t"></a>
-		<a href="javascript:void(0);" accesskey="v"></a>
-		<a href="javascript:void(0);" accesskey="x"></a>
-	</div>
+<body>
+	NOT USED
 </body>
 
 </html>

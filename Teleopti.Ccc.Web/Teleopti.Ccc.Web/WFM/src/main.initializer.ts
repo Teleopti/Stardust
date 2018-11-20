@@ -34,12 +34,6 @@ export const mainInitializer = [
 	) {
 		$rootScope.isAuthenticated = false;
 
-		$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function() {
-			$timeout(function() {
-				$rootScope.$broadcast('sidenav:toggle');
-			}, 500);
-		});
-
 		$rootScope.$on('$localeChangeSuccess', function() {
 			if ($locale.id === 'zh-cn') $locale.DATETIME_FORMATS.FIRSTDAYOFWEEK = 0;
 		});

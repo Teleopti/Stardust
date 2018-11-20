@@ -6,11 +6,10 @@ import { IStateProvider, IUrlRouterProvider } from 'angular-ui-router';
 import { apiAccessComponents, apiAccessRouterConfig } from './app/api-access/api-access.module';
 import { appComponents, AppModule } from './app/app.module';
 import { authenticationComponents } from './app/authentication/authentication.module';
+import { insightsComponents, insightsRouterConfig } from './app/insights/insights.module';
 import { menuComponents } from './app/menu/menu.module';
-import { navigationComponents } from './app/navigation/navigation.module';
 import { peopleComponents, peopleRouterConfig } from './app/people/people.module';
 import { reportsComponents } from './app/reports/reports.module';
-import { insightsComponents, insightsRouterConfig } from './app/insights/insights.module';
 import { sharedComponents } from './app/shared/shared.module';
 import { environment } from './environments/environment';
 import { MainController } from './main.controller';
@@ -103,14 +102,13 @@ function bootstrapAngularJs() {
 
 	// Use this to downgrade module components
 	downgradeHelper(peopleComponents);
-downgradeHelper(reportsComponents);
+	downgradeHelper(reportsComponents);
 	downgradeHelper(sharedComponents);
-	downgradeHelper(navigationComponents);
 	downgradeHelper(authenticationComponents);
 	downgradeHelper(apiAccessComponents);
 	downgradeHelper(appComponents);
 	downgradeHelper(menuComponents);
-downgradeHelper(insightsComponents);
+	downgradeHelper(insightsComponents);
 
 	/**
 	 * Use this if your module is purely Angular and you want mount some routes
@@ -120,7 +118,7 @@ downgradeHelper(insightsComponents);
 	};
 
 	routerHelper(peopleRouterConfig);
-routerHelper(insightsRouterConfig);
+	routerHelper(insightsRouterConfig);
 	routerHelper(apiAccessRouterConfig);
 
 	wfm.config([
@@ -158,7 +156,7 @@ routerHelper(insightsRouterConfig);
 			$mdGestureProvider.skipClickHijack();
 
 			tmhDynamicLocaleProvider.localeLocationPattern('dist/angular-i18n/angular-locale_{{locale}}.js');
-		//	tmhDynamicLocaleProvider.defaultLocale("en-gb");  -- causes problems with unit tests due to reinit of scope
+			//	tmhDynamicLocaleProvider.defaultLocale("en-gb");  -- causes problems with unit tests due to reinit of scope
 		}
 	]);
 
