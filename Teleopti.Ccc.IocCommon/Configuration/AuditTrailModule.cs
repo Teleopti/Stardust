@@ -36,6 +36,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TenantContextReaderService>().SingleInstance();
 			builder.RegisterType<StaffingContextReaderService>().As<IStaffingContextReaderService>().AsSelf().SingleInstance();
 			builder.RegisterType<PersonAccessContextReaderService>().As<IPersonAccessContextReaderService>().AsSelf().SingleInstance();
+
+			//do this in a smarter way in the next push
+			builder.RegisterType<StaffingContextPurgeService>().As<IPurgeAudit>().AsSelf().SingleInstance();
+			builder.RegisterType<PersonAccessContextPurgeService>().As<IPurgeAudit>().AsSelf().SingleInstance();
+
 			builder.RegisterType<PurgeAuditRunner>().AsSelf().SingleInstance();
 		}
 	}

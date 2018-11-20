@@ -216,7 +216,7 @@
     <Compile Include="ApplicationLayer\SyncCommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\RecurringEventPublishingUpdater.cs" />
     <Compile Include="ApplicationLayer\UnitOfWorkTransactionEventSyncronization.cs" />
-    <Compile Include="Audit\PersonAccessContexPurgeService.cs" />
+    <Compile Include="Audit\PersonAccessContextPurgeService.cs" />
     <Compile Include="Audit\PersonAccessContextReaderService.cs" />
     <Compile Include="Audit\StaffingContextPurgeService.cs" />
     <Compile Include="Authentication\CryptoKeyInfo.cs" />

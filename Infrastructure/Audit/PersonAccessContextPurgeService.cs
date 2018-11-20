@@ -6,13 +6,13 @@ using Teleopti.Ccc.Domain.Staffing;
 
 namespace Teleopti.Ccc.Infrastructure.Audit
 {
-	public class PersonAccessContexPurgeService : IPurgeAudit
+	public class PersonAccessContextPurgeService : IPurgeAudit
 	{
 		private readonly IPurgeSettingRepository _purgeSettingRepository;
 		private readonly INow _now;
 		private readonly IPersonAccessAuditRepository _personAccessAuditRepository;
 
-		public PersonAccessContexPurgeService(IPurgeSettingRepository purgeSettingRepository, INow now, IPersonAccessAuditRepository personAccessAuditRepository)
+		public PersonAccessContextPurgeService(IPurgeSettingRepository purgeSettingRepository, INow now, IPersonAccessAuditRepository personAccessAuditRepository)
 		{
 			_purgeSettingRepository = purgeSettingRepository;
 			_now = now;

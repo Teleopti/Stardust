@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<PersonAccessContexPurgeService>().For<IPurgeAudit>();
+			isolate.UseTestDouble<PersonAccessContextPurgeService>().For<IPurgeAudit>();
 		}
 
 		[Test]
