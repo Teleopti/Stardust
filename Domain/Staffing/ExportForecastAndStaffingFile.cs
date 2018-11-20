@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			if(usedIntervals.IsEmpty())
 				return forecastedData.ToString().Trim();
 			
-			var bpoResources = _skillCombinationResourceRepository.BpoResourcesForSkill(skill.Id.GetValueOrDefault(), period).ToList();
+			var bpoResources = _skillCombinationResourceRepository.BpoResourcesForSkill(skill.Id.GetValueOrDefault(), period.Inflate(1)).ToList();
 			var bpoNames = bpoResources.Select(r => r.Source).Distinct().ToList();
 			var resourcesByBpo = bpoResources.ToLookup(r => r.Source, r => r);
 

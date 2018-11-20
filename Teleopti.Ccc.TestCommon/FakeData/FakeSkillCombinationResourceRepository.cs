@@ -130,7 +130,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IEnumerable<SkillCombinationResourceForBpo> BpoResourcesForSkill(Guid skillId, DateOnlyPeriod period)
 		{
-			return SkillCombinationResourceForBpos;
+			//almost like the code in Db .. that a bad fake
+			var extendedEndDate = period.EndDate.Date.AddDays(1).AddMinutes(-1);
+			return SkillCombinationResourceForBpos.Where(x=> x.StartDateTime>= period.StartDate.Date && x.EndDateTime<= extendedEndDate);
 		}
 
 		public IEnumerable<ScheduledHeads> ScheduledHeadsForSkill(Guid skillId, DateOnlyPeriod period)
