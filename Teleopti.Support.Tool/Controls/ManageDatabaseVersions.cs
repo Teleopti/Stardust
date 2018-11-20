@@ -20,7 +20,6 @@ namespace Teleopti.Support.Tool.Controls
 		private const int ImageIndexDatabaseVersionNotOk = 1;
 		private const int ImageIndexDatabaseConnecting = 2;
 		private const int ImageIndexDatabaseNotConnected = 3;
-		private const string DOUBLEQUOTE = @"""";
 		private const String SPACE = " ";
 		private readonly MainForm _mainForm;
 		private readonly Version _currentVersion;
@@ -50,8 +49,6 @@ namespace Teleopti.Support.Tool.Controls
 
 #if (DEBUG)
 			{
-				//c:\Projects\Teleopti\ccc\teleopticcc\Database\
-				//_dbManagerHomeFolder = @"c:\Projects\Teleopti\ccc\teleopticcc\Database\";
 				_dbManagerHomeFolder = @"C:\data\main_clone\Database\";
 			}
 #endif
@@ -146,7 +143,6 @@ namespace Teleopti.Support.Tool.Controls
 			}
 
 			ThreadSafeControlDelegation.SetEnabled(true, buttonRefresh);
-			//ThreadSafeControlDelegation.SetEnabled(true, buttonBack);
 			ThreadSafeControlDelegation.SetCursor(Cursors.Default, buttonRefresh);
 			Application.DoEvents();
 		}
@@ -164,12 +160,6 @@ namespace Teleopti.Support.Tool.Controls
 				listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem(listViewItem, nHibDataSource.DatabaseName) { Tag = nHibDataSource });
 				listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem(listViewItem, nHibDataSource.Version));
 			}
-
-			//if (!listViewDatabases.Items.ContainsKey(nHibDataSource.Id))
-			//{
-			//	listViewItem = CreateDatasourceListViewItem(listViewGroup, nHibDataSource);
-			//	items.Add(listViewItem);
-			//}
 			return items.ToArray();
 		}
 
@@ -194,8 +184,6 @@ namespace Teleopti.Support.Tool.Controls
 			}
 
 			ListViewItem.ListViewSubItem listViewSubItem;
-			//listViewSubItem = new ListViewItem.ListViewSubItem(listViewItem, nHibDataSource.CccDatabaseType);
-			//listViewItem.SubItems.Add(listViewSubItem);
 			listViewSubItem = new ListViewItem.ListViewSubItem(listViewItem, nHibDataSource.Version);
 
 			listViewItem.SubItems.Add(listViewSubItem);
@@ -232,14 +220,6 @@ namespace Teleopti.Support.Tool.Controls
 			buttonRefresh.Enabled = state;
 			buttonUpdate.Enabled = state;
 		}
-
-		delegate void EnableBackDelegate();
-
-		private void EnableBack()
-		{
-			buttonBack.Enabled = true;
-		}
-
 
 
 		private void execute()
@@ -509,22 +489,6 @@ namespace Teleopti.Support.Tool.Controls
 			}
 			_lastSelectedItemText = e.Item.Text;
 		}
-
-		//private bool IsSameOrLowerThanCurrentVersion(Version clickedVersion)
-		//{
-		//    if (clickedVersion.Major <= _currentVersion.Major)
-		//    {
-		//        if (clickedVersion.Minor <= _currentVersion.Minor)
-		//        {
-		//            if (clickedVersion.Build <= _currentVersion.Build)
-		//            {
-		//                return true;
-		//            }
-		//        }
-
-		//    }
-		//    return false;
-		//}
 
 		private void listViewDatabases_SelectedIndexChanged(object sender, EventArgs e)
 		{
