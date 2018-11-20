@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 	public class StaffingContextPurgeServiceTest : IIsolateSystem
 	{
 		public IStaffingAuditRepository StaffingAuditRepository;
-		public StaffingContextReaderService Target;
+		//public StaffingContextReaderService Target;
 		public ISkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public IPersonRepository PersonRepository;
 		public ICurrentUnitOfWork CurrentUnitOfWork;
@@ -33,11 +33,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 		public FakeUserCulture UserCulture;
 		public IPurgeSettingRepository PurgeSettingRepository;
 		public MutableNow Now;
+		public StaffingContextPurgeService Target;
 
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<StaffingContextPurgeService>().For<StaffingContextPurgeService>();
+			
 		}
 
 		
@@ -61,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 
 			Target.PurgeAudits();
 			CurrentUnitOfWork.Current().PersistAll();
-			var loadedAudits = Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now);
+			var loadedAudits = StaffingAuditRepository.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now);
 			loadedAudits.Count().Should().Be(1);
 			loadedAudits.FirstOrDefault().TimeStamp.Should().Be.EqualTo(staffingAudit1.TimeStamp);
 		}

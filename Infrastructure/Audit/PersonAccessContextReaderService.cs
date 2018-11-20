@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
@@ -13,20 +12,17 @@ using Teleopti.Ccc.Domain.Staffing;
 
 namespace Teleopti.Ccc.Infrastructure.Audit
 {
-	public class PersonAccessContextReaderService : IPersonAccessContextReaderService, IPurgeAudit
+	public class PersonAccessContextReaderService : IPersonAccessContextReaderService
 	{
 		private readonly IPersonAccessAuditRepository _personAccessAuditRepository;
 		private readonly IApplicationRoleRepository _applicationRoleRepository;
-		private readonly IPurgeSettingRepository _purgeSettingRepository;
-		private readonly INow _now;
+		
 		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 
-		public PersonAccessContextReaderService(IPersonAccessAuditRepository personAccessAuditRepository, IApplicationRoleRepository applicationRoleRepository, IPurgeSettingRepository purgeSettingRepository, INow now, ICommonAgentNameProvider commonAgentNameProvider)
+		public PersonAccessContextReaderService(IPersonAccessAuditRepository personAccessAuditRepository, IApplicationRoleRepository applicationRoleRepository,  ICommonAgentNameProvider commonAgentNameProvider)
 		{
 			_personAccessAuditRepository = personAccessAuditRepository;
 			_applicationRoleRepository = applicationRoleRepository;
-			_purgeSettingRepository = purgeSettingRepository;
-			_now = now;
 			_commonAgentNameProvider = commonAgentNameProvider;
 		}
 
@@ -58,11 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 			return commonAgentNameSetting.BuildFor(personInfo);
 		}
 
-		public class PersonAccessModel
-		{
-			public Guid RoleId;
-			public string Name;
-		}
+		
 
 		public IEnumerable<AuditServiceModel> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate)
 		{
@@ -70,14 +62,12 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 			return getAuditServiceModel(staffingAudit);
 		}
 
-		public void PurgeAudits()
-		{
-			var purgeSettings = _purgeSettingRepository.FindAllPurgeSettings();
-			var monthsToKeepAuditEntry = purgeSettings.SingleOrDefault(p => p.Key == "MonthsToKeepAudit");
-			var dateForPurging = _now.UtcDateTime().AddMonths(-(monthsToKeepAuditEntry?.Value ?? 3));
-			_personAccessAuditRepository.PurgeOldAudits(dateForPurging);
-		}
+		
 	}
 
-	
+	internal class PersonAccessModel
+	{
+		public Guid RoleId { get; set; }  
+		public string Name { get; set; }  
+	}
 }

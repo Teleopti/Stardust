@@ -18,14 +18,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 	[TestFixture]
 	[UnitOfWorkTest]
 	[AllTogglesOn]
-	public class PersonAccessContextPurgeServiceTest
+	public class PersonAccessContextPurgeServiceTest : IIsolateSystem
 	{
-		public IPersonAccessAuditRepository PersonAccessAuditRepository;
-		public PersonAccessContextReaderService Target;
+		public IPurgeAudit Target;
 		public IApplicationRoleRepository ApplicationRoleRepository;
+		public IPersonAccessAuditRepository PersonAccessAuditRepository;
 		public ICurrentUnitOfWork CurrentUnitOfWork;
 		public IPersonRepository PersonRepository;
 		public MutableNow Now;
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<PersonAccessContexPurgeService>().For<IPurgeAudit>();
+		}
 
 		[Test]
 		public void ShouldPurgeAccordingToSetting()
@@ -57,10 +62,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 
 			Target.PurgeAudits();
 			CurrentUnitOfWork.Current().PersistAll();
-			var loadedAudits = Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now);
+			var loadedAudits = PersonAccessAuditRepository.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now);
 			loadedAudits.Count().Should().Be(1);
 			loadedAudits.FirstOrDefault().TimeStamp.Should().Be.EqualTo(personAccess1.TimeStamp);
 		}
 
+		
 	}
 }

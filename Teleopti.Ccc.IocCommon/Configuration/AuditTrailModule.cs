@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Search;
 using Teleopti.Ccc.Infrastructure.Audit;
-using Teleopti.Ccc.Infrastructure.Staffing;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -35,8 +34,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<PersonSearchProvider>().SingleInstance();
 			builder.RegisterType<TenantContextReaderService>().SingleInstance();
-			builder.RegisterType<StaffingContextReaderService>().As<IStaffingContextReaderService, IPurgeAudit>().AsSelf().SingleInstance();
-			builder.RegisterType<PersonAccessContextReaderService>().As<IPersonAccessContextReaderService, IPurgeAudit>().AsSelf().SingleInstance();
+			builder.RegisterType<StaffingContextReaderService>().As<IStaffingContextReaderService>().AsSelf().SingleInstance();
+			builder.RegisterType<PersonAccessContextReaderService>().As<IPersonAccessContextReaderService>().AsSelf().SingleInstance();
 			builder.RegisterType<PurgeAuditRunner>().AsSelf().SingleInstance();
 		}
 	}
