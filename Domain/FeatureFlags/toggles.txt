@@ -155,5 +155,5 @@ WFM_Request_Remove_Waitlist_Link_78939 = RC
 WFM_Request_Show_Shift_for_Absence_Requests_79008 = DEV
 
 # Tech #
-WFM_ChatBot_77547 = DEV
+WFM_ChatBot_77547 = RC
 WFM_Insights_78059 = DEV
