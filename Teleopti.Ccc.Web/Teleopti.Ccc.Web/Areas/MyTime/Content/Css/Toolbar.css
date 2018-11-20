@@ -168,14 +168,28 @@
 	}
 }
 
-/*Hide user name on small screens*/
 @media (max-width: 768px) {
+	.navbar-nav .open .dropdown-menu.show-outside-toolbar {
+		position: absolute;
+		top: 50px;
+		right: 0;
+		left: auto;
+		background: white;
+		box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+	}
+
+	.navbar-nav .open .dropdown-menu.show-outside-toolbar li a {
+		color: black;
+	}
+
+	/*Hide user name on small screens*/
 	.navbar-brand {
 		padding-left: 5px;
 		padding-right: 5px;
 	}
 	.navbar-nav.navbar-user-setting {
-		margin: 2px 5px;
+		margin: 8px 10px;
+		padding-right: 10px;
 	}
 	.navbar-nav.navbar-user-setting a {
 		padding-left: 5px;
