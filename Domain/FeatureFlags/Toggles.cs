@@ -25,7 +25,6 @@
 		RTA_StateQueueFloodPrevention_77710,
 		RTA_ReviewHistoricalAdherence_74770,
 
-		MyTimeWeb_PreferenceForJalaliCalendar_42965,
 		MyTimeWeb_DayScheduleForStartPage_Command_44209,
 		MyTimeWeb_WaitListPositionEnhancement_46301,
 		MyTimeWeb_NewTeamScheduleView_75989,
