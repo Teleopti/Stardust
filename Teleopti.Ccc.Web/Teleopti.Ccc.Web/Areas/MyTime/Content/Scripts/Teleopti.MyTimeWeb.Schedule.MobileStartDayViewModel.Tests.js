@@ -1,11 +1,7 @@
 ﻿$(document).ready(function() {
 	module('Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel', {
-		setup: function() {
-			Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_Command_44209');
-		},
-		teardown: function() {
-			Teleopti.MyTimeWeb.Common.DisableToggle('MyTimeWeb_DayScheduleForStartPage_Command_44209');
-		}
+		setup: function() {},
+		teardown: function() {}
 	});
 
 	var resetLocale = function() {
@@ -626,7 +622,7 @@
 	});
 
 	test('should not show absence probability option item if CheckStaffingByIntraday is not toggled on ', function() {
-		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel()
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment
 				.utc()
@@ -653,7 +649,7 @@
 	});
 
 	test('should not show absence probability option item if Absence Probability is toggled off in fat client ', function() {
-		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel()
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment
 				.utc()
@@ -680,7 +676,7 @@
 	});
 
 	test('should not show overtime probability option item if Overtime Probability is toggled off in fat client ', function() {
-		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel()
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment
 				.utc()
@@ -1032,7 +1028,7 @@
 	});
 
 	test('should not show probability option icon when OvertimeProbability and AbsenceProbability are disabled', function() {
-		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel()
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment().format('YYYY-MM-DD'),
 			OvertimeProbabilityEnabled: false,

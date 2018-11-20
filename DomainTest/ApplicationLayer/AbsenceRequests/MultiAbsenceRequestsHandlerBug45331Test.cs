@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			isolate.UseTestDouble<MultiAbsenceRequestsHandler>().For<IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>>();
 			isolate.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 			isolate.UseTestDouble<FakePersonAssignmentRepositoryThrowsLockException>().For<IPersonAssignmentRepository>();
+			isolate.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
 		}
 
 		[Test]

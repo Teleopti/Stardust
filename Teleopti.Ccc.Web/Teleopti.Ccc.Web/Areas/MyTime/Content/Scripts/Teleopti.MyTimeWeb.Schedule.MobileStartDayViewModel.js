@@ -56,7 +56,7 @@
 	self.menuIconIsVisible = ko.observable(true);
 	self.focusingRequestForm = ko.observable(false);
 	self.isCommandEnable = ko.observable(false);
-	
+
 	self.datePickerFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
 	self.requestDay = null;
 
@@ -170,10 +170,7 @@
 			self.shiftTradeRequestPermission() ||
 			self.showAddOvertimeRequestMenu();
 
-		self.isCommandEnable(
-			Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_DayScheduleForStartPage_Command_44209') &&
-				hasAtLeastOnePermission
-		);
+		self.isCommandEnable(hasAtLeastOnePermission);
 
 		setSelectedDateSubscription(data.Date);
 
@@ -340,9 +337,7 @@
 				!!data.AbsenceProbabilityEnabled &&
 				self.staffingProbabilityOnMobileEnabled()
 		);
-		self.overtimeProbabilityEnabled(
-			!!data.OvertimeProbabilityEnabled && self.staffingProbabilityOnMobileEnabled()
-		);
+		self.overtimeProbabilityEnabled(!!data.OvertimeProbabilityEnabled && self.staffingProbabilityOnMobileEnabled());
 
 		if (
 			!self.absenceProbabilityEnabled() &&
