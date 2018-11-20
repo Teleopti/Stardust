@@ -17,15 +17,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 {
 	class AbsenceRequestDetailViewModelFactoryTests
 	{
-		[Ignore("temp for codemonkeys")]
 		[Test]
 		public void ShouldRetrieveMyAbsenceWaitlistPosition()
 		{
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 
 			var absence = AbsenceFactory.CreateAbsenceWithId();
-			var absenceRequestWaitlistProvider = new AbsenceRequestWaitlistProviderFor46301(personRequestRepository,null);
+			var absenceRequestWaitlistProvider = new AbsenceRequestWaitlistProvider(personRequestRepository, personRepository);
 
 			var personRequestList = new List<IPersonRequest>();
 			personRequestRepository.Stub(x => x.FindAbsenceAndTextRequests(null, out _, true)).Return(personRequestList).IgnoreArguments();
@@ -38,6 +38,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			personRequestList.AddRange(new[] { personRequest1, personRequest2, personRequest3 });
 
+			var personBudgetGroupNameList = new List<PersonBudgetGroupName>
+			{
+				new PersonBudgetGroupName {PersonId = personRequest1.Person.Id.Value, BudgetGroupName = ""},
+				new PersonBudgetGroupName {PersonId = personRequest2.Person.Id.Value, BudgetGroupName = ""},
+				new PersonBudgetGroupName {PersonId = personRequest3.Person.Id.Value, BudgetGroupName = ""}
+			};
+			personRepository.Stub(x => x.FindBudgetGroupNameForPeople(null, DateTime.Now)).Return(personBudgetGroupNameList).IgnoreArguments();
+
 			var property = typeof(PersonRequest).GetProperty("CreatedOn");
 			property.SetValue(personRequest1, new DateTime(2016, 01, 01, 10, 00, 00));
 			property.SetValue(personRequest3, new DateTime(2016, 01, 01, 8, 00, 00));
@@ -47,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			var absenceRequestDetailViewModelFactory = new AbsenceRequestDetailViewModelFactory(personRequestProvider, absenceRequestWaitlistProvider);
 			var absenceRequestDetailViewModel = absenceRequestDetailViewModelFactory.CreateAbsenceRequestDetailViewModel(personRequest1.Id.GetValueOrDefault());
-			
+
 			Assert.AreEqual(2, absenceRequestDetailViewModel.WaitlistPosition);
 		}
 
@@ -65,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				Request = absenceRequest
 			};
 
-			personRequest.Deny ("work harder", new PersonRequestAuthorizationCheckerForTest());
+			personRequest.Deny("work harder", new PersonRequestAuthorizationCheckerForTest());
 
 			absenceRequest.SetId(Guid.NewGuid());
 			absenceRequest.Parent.SetId(Guid.NewGuid());
@@ -79,7 +87,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var workflowControlSet = new WorkflowControlSet { AbsenceRequestWaitlistEnabled = true };
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 
-			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod()
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod
 			{
 				Absence = absence,
 				Period = dateOnlyPeriod,
