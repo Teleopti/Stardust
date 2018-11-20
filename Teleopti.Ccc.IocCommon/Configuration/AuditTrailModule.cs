@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterAssemblyTypes(typeof(IHandleContextAction<>).Assembly)
 				.Where(t =>
 						t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandleContextAction<>))
-					//&& t.EnabledByToggle(_config.Toggle)
+					//&& t.EnabledByToggle(_config.Toggle) may be later
 				)
 				.As(t => t.GetInterfaces().Where(i => i.GetGenericTypeDefinition() == typeof(IHandleContextAction<>))
 				);
@@ -38,12 +38,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StaffingContextReaderService>().As<IStaffingContextReaderService, IPurgeAudit>().AsSelf().SingleInstance();
 			builder.RegisterType<PersonAccessContextReaderService>().As<IPersonAccessContextReaderService, IPurgeAudit>().AsSelf().SingleInstance();
 			builder.RegisterType<PurgeAuditRunner>().AsSelf().SingleInstance();
-			////may be we should move it to domain or its own module or a global module
-			//if (_config.Toggle(Toggles.Wfm_AuditTrail_StaffingAuditTrail_78125))
-			//	builder.RegisterType<AuditableBpoOperationsToggleOn>().As<IAuditableBpoOperations>().SingleInstance().ApplyAspects();
-			//else
-			//	builder.RegisterType<AuditableBpoOperationsToggleOff>().As<IAuditableBpoOperations>().SingleInstance();
-
 		}
 	}
 }

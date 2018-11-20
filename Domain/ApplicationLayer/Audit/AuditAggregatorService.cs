@@ -54,12 +54,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 			var person = _personRepository.Load(personId);
 			return _personAccessContextReaderService.LoadAudits(person, startDate, endDate);
 		}
-
-		//public void PurgeOldAudits()
-		//{
-		//	//make some plugin architecture 
-		//	_staffingContextReaderService.PurgeAudits();
-		//	_personAccessContextReaderService.PurgeAudits();
-		//}
+		
 	}
 }
