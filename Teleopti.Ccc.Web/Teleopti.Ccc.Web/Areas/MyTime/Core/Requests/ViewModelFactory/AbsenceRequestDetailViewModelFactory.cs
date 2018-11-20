@@ -4,7 +4,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 {
-	
 	public class AbsenceRequestDetailViewModelFactory : IAbsenceRequestDetailViewModelFactory
 	{
 		private readonly IPersonRequestProvider _personRequestProvider;
@@ -19,20 +18,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		public IAbsenceRequestDetailViewModel CreateAbsenceRequestDetailViewModel(Guid personRequestId)
 		{
 			var personRequest=_personRequestProvider.RetrieveRequest (personRequestId);
-			var absenceRequest = personRequest.Request as IAbsenceRequest;
-			if (absenceRequest != null)
-			{
-				var waitListPosition=_absenceRequestWaitlistProvider.GetPositionInWaitlist (absenceRequest);
-				return new AbsenceRequestDetailViewModel()
-				{
-					WaitlistPosition = waitListPosition
-				};
-			}
-			return null;
+			if (!(personRequest.Request is IAbsenceRequest absenceRequest)) return null;
 
+			var waitListPosition=_absenceRequestWaitlistProvider.GetPositionInWaitlist (absenceRequest);
+			return new AbsenceRequestDetailViewModel
+			{
+				WaitlistPosition = waitListPosition
+			};
 		}
 	}
-	
+
 	public class AbsenceRequestDetailViewModel : IAbsenceRequestDetailViewModel
 	{
 		public int WaitlistPosition { get; set; }
