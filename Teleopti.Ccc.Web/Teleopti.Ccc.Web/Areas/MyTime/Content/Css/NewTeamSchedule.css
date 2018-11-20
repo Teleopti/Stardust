@@ -303,6 +303,12 @@
 	border-right: 1px solid #dfdfdf;
 	background: white;
 }
+
+.new-teamschedule-view-ipad .new-teamschedule-agent-name.my-name.relative {
+	width: 111px;
+	min-width: 111px;
+	max-width: 111px;
+}
 .new-teamschedule-agent-name.my-name.relative {
 	width: 110px;
 	min-width: 110px;
