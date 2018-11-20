@@ -11,7 +11,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -43,7 +42,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 		public SkillIntradayStaffingFactory SkillIntradayStaffingFactory;
 		public MutableNow Now;
 		public FullPermission Permissions;
-		
+
 		[TestCase(10, 5)]
 		[TestCase(10, 10)]
 		[TestCase(10, 20)]
