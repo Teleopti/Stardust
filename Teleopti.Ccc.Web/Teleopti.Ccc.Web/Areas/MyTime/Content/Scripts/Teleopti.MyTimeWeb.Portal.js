@@ -61,7 +61,7 @@ Teleopti.MyTimeWeb.Portal = (function($) {
 			if (isMobile) {
 				awindow.location.replace('#Schedule/MobileDay');
 			} else {
-				awindow.location.replace('#' + (isMobile ? 'Schedule/MobileWeek' : _settings.defaultNavigation));
+				awindow.location.replace('#Schedule');
 			}
 		}
 

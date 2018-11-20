@@ -367,23 +367,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")));
 		}
 
-		public static void GotoMobileWeekSchedulePageNoWait()
-		{
-			GoToPage("MyTime#Schedule/MobileWeek");
-		}
-
-		public static void GotoMobileWeekSchedulePage()
-		{
-			GoToPage("MyTime#Schedule/MobileWeek");
-		}
-
-		public static void GotoMobileWeekSchedulePage(DateTime date)
-		{
-			GoToPage(string.Format("MyTime#Schedule/MobileWeek/{0}/{1}/{2}",
-					date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-				new WaitUntilCompletelyLoaded());
-		}
-
 		public static void GoToMyQueueMetrics(DateTime date)
 		{
 			GoToPage(string.Format("MyTime#MyReport/QueueMetrics/{0}/{1}/{2}",

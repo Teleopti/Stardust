@@ -1467,7 +1467,6 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileStartDay.DataService.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileStartDay.Tests.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileDayViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.LayerViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileStartDay.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel.js" />
@@ -1476,7 +1475,6 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.NewTeamSchedule.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.NewTeamScheduleViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityModels.Tests.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileDayViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityModels.js" />
@@ -2362,7 +2360,6 @@
     <Content Include="Areas\Messages\Views\Application\index.aspx" />
     <Content Include="Areas\MyTime\Content\Css\BadgeLeaderBoard.css" />
     <Content Include="Areas\MyTime\Content\Css\Toolbar.css" />
-    <Content Include="Areas\MyTime\Content\Css\MobileWeekView.css" />
     <Content Include="Areas\MyTime\Content\Css\Rtl4Bootstrap.css" />
     <Content Include="Areas\MyTime\Content\Css\MyReport.css" />
     <Content Include="Areas\MyTime\Content\Css\MonthView.css" />
@@ -2398,9 +2395,6 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.WeekViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.ShiftTradeViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.ShiftTradeViewModel.Tests.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel.Tests.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileWeek.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.RequestViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MonthViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.MyReport.js" />
@@ -2725,7 +2719,6 @@
     <Content Include="Areas\SSO\Views\Shared\_LayoutBase.cshtml" />
     <Content Include="Areas\SSO\Views\OpenId\SignIn.cshtml" />
     <Content Include="Areas\MyTime\Views\MyReport\AdherencePartial.cshtml" />
-    <Content Include="Areas\MyTime\Views\Schedule\MobileWeekPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\MyReport\DailyQueueMetricsPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Availability\NoPersonPeriodPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\BadgeLeaderBoardReport\BadgeLeaderBoardReportPartial.cshtml" />

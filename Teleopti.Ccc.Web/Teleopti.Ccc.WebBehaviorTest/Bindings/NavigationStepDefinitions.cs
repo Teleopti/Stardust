@@ -89,28 +89,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoWeekSchedulePageNoWait();
 		}
 
-		[When(@"I manually navigate to mobile week schedule page")]
-		public void WhenIManuallyNavigateToMobileWeekSchedulePage()
-		{
-            Navigation.GotoMobileWeekSchedulePageNoWait();
-		}
-
-		[Given(@"I am viewing my mobile week schedule")]
-        [When(@"I view my mobile week schedule")]
-		public void WhenIViewMyMobileWeekSchedule()
-		{
-            TestControllerMethods.Logon();
-            Navigation.GotoMobileWeekSchedulePage();
-        }
-
-        [When(@"I view my mobile week schedule for date '(.*)'")]
-		  [Given(@"I view my mobile week schedule for date '(.*)'")]
-        public void WhenIViewMyMobileWeekScheduleForDate(DateTime date)
-        {
-            TestControllerMethods.Logon();
-            Navigation.GotoMobileWeekSchedulePage(date);
-        }
-
 		[Given(@"I view my next week schedule")]
 		public void GivenIViewMyNextWeekSchedule()
 		{

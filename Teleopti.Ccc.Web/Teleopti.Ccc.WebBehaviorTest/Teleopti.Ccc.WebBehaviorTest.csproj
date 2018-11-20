@@ -242,12 +242,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="MyTime\AbsenceReportFromMobileWeekSchedule.feature.cs">
-      <DependentUpon>AbsenceReportFromMobileWeekSchedule.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="MyTime\AbsenceReportFromMobileWeekScheduleStepDefinitions.cs" />
     <Compile Include="MyTime\GamificationOrganisationalBasedLeaderboardStepDefinitions.cs" />
     <Compile Include="MyTime\ShiftTradeBulletinBoard.feature.cs">
       <DependentUpon>ShiftTradeBulletinBoard.feature</DependentUpon>
@@ -298,12 +292,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="MyTime\22851_FindShiftTradePageFromTeamScheduleStepDefinition.cs" />
-    <Compile Include="MyTime\WeekScheduleOnMobileStepDefinitions.cs" />
-    <Compile Include="MyTime\WeekScheduleOnMobile.feature.cs">
-      <DependentUpon>WeekScheduleOnMobile.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignOut.feature.cs">
       <DependentUpon>SignOut.feature</DependentUpon>
@@ -1056,10 +1044,6 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ShiftExchangeOfferForNonWorkingDaysFromWeekSchedule.feature.cs</LastGenOutput>
     </None>
-    <None Include="MyTime\AbsenceReportFromMobileWeekSchedule.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AbsenceReportFromMobileWeekSchedule.feature.cs</LastGenOutput>
-    </None>
     <None Include="MyTime\ShiftTradeBulletinBoard.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ShiftTradeBulletinBoard.feature.cs</LastGenOutput>
@@ -1095,10 +1079,6 @@
     <None Include="MyTime\TeamScheduleWithFilterAndPagingFunction.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TeamScheduleWithFilterAndPagingFunction.feature.cs</LastGenOutput>
-    </None>
-    <None Include="MyTime\WeekScheduleOnMobile.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>WeekScheduleOnMobile.feature.cs</LastGenOutput>
     </None>
     <None Include="SignOut.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
