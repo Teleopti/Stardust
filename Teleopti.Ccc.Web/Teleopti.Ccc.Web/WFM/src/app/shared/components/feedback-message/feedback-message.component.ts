@@ -17,8 +17,6 @@ export class FeedbackMessageComponent {
 
 	constructor(private translateService: TranslateService) {}
 
-	ngOnInit() {}
-
 	getFeedbackMessage(): Observable<string> {
 		if (this.feedbackType === 'newRelease') {
 			return this.translateService.get('WFMNewReleaseNotification', {

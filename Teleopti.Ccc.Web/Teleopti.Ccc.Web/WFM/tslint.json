@@ -10,7 +10,7 @@
       true,
       "check-space"
     ],
-    "curly": true,
+    "curly": false,
     "deprecation": {
       "severity": "warn"
     },
@@ -90,7 +90,8 @@
     "radix": true,
     "semicolon": [
       true,
-      "always"
+			"always",
+			"ignore-bound-class-methods"
     ],
     "triple-equals": [
       true,
@@ -118,15 +119,15 @@
       "check-type"
     ],
     "directive-selector": [
-      true,
+      false,
       "attribute",
-      "app",
+      ["", "app"],
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "app",
+      ["", "app"],
       "kebab-case"
     ],
     "no-output-on-prefix": true,

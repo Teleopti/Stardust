@@ -56,7 +56,7 @@ export class ListPageComponent implements OnInit {
 	}
 
 	revokeSelected() {
-		let items = this.getCheckedItems();
+		const items = this.getCheckedItems();
 		items.forEach(app => {
 			this.listPageService.revokeApiAccess(app.Id).subscribe({
 				next: _ => {

@@ -2,15 +2,13 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd';
-import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
 import { PasswordService } from '../../services/password.service';
 
 export class MatchingPasswordValidation {
 	static MatchPassword(AC: AbstractControl) {
-		let password = AC.get('newPassword').value; // to get value in input tag
-		let confirmPassword = AC.get('confirmPassword').value; // to get value in input tag
-		if (password != confirmPassword) {
+		const password = AC.get('newPassword').value; // to get value in input tag
+		const confirmPassword = AC.get('confirmPassword').value; // to get value in input tag
+		if (password !== confirmPassword) {
 			AC.get('confirmPassword').setErrors({ MatchPassword: true });
 		} else {
 			AC.get('confirmPassword').setErrors(null);
@@ -21,8 +19,8 @@ export class MatchingPasswordValidation {
 }
 export class EnsurePasswordIsNewValidation {
 	static IsNewPassword(AC: AbstractControl) {
-		let newPassword = AC.get('newPassword').value; // to get value in input tag
-		let currentPassword = AC.get('currentPassword').value; // to get value in input tag
+		const newPassword = AC.get('newPassword').value; // to get value in input tag
+		const currentPassword = AC.get('currentPassword').value; // to get value in input tag
 		if (newPassword === currentPassword) {
 			AC.get('newPassword').setErrors({ IsNewPassword: true });
 		} else {
@@ -87,7 +85,7 @@ export class ChangePasswordComponent {
 
 	handleOk(): void {
 		if (!this.hasClientError()) {
-			let response = this.ps
+			this.ps
 				.setPassword({
 					OldPassword: this.changePasswordForm.get('currentPassword').value,
 					NewPassword: this.changePasswordForm.get('newPassword').value

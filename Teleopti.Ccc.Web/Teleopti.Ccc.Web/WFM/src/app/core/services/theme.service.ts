@@ -75,8 +75,8 @@ export class ThemeService {
 
 	replaceCssFile(path: string, id: string, theme: ThemeType) {
 		return new Promise((res, rej) => {
-			var oldNode = document.getElementById(id);
-			var newNode = document.createElement('link');
+			const oldNode = document.getElementById(id);
+			const newNode = document.createElement('link');
 			newNode.id = id;
 			newNode.rel = 'stylesheet';
 
@@ -92,7 +92,7 @@ export class ThemeService {
 	}
 
 	getCurrentTheme(): ThemeType {
-		let classList = document.documentElement.classList;
+		const classList = document.documentElement.classList;
 		if (classList.contains('angular-theme-dark')) {
 			return 'dark';
 		} else if (classList.contains('angular-theme-classic')) {

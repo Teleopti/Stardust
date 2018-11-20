@@ -18,7 +18,7 @@ class DuplicateFormNameValidator {
 		const filterByExists = (logon: string) => logon && logon.length > 0;
 		const filterBySameLogon = (logon: string) => logon.toLowerCase() === (control.value as string).toLowerCase();
 		const countSameLogon = this.appLogonPageComponent.logons
-			.map(control => control.value)
+			.map(c => c.value)
 			.filter(filterByExists)
 			.filter(filterBySameLogon).length;
 		if (countSameLogon > 1) return { duplicateFormNameValidator: control.value };
@@ -55,9 +55,11 @@ export class AppLogonPageComponent implements OnDestroy, OnInit {
 		});
 		this.people.valueChanges.pipe(debounceTime(100)).subscribe({
 			next: val => {
-				this.logons.filter(logon => logon.invalid).forEach(control => {
-					control.updateValueAndValidity();
-				});
+				this.logons
+					.filter(logon => logon.invalid)
+					.forEach(control => {
+						control.updateValueAndValidity();
+					});
 			}
 		});
 	}
@@ -85,7 +87,7 @@ export class AppLogonPageComponent implements OnDestroy, OnInit {
 
 	buildForm(people: PeopleWithLogon) {
 		while (this.people.length > 0) this.people.removeAt(0);
-		people.map(people => this.personToFormGroup(people)).forEach(control => this.people.push(control));
+		people.map(p => this.personToFormGroup(p)).forEach(control => this.people.push(control));
 	}
 
 	get people(): FormArray {

@@ -9,11 +9,11 @@ import { ThemeService, TogglesService, UserService } from '../../../core/service
 	styleUrls: ['./settings-menu.component.scss']
 })
 export class SettingsMenuComponent {
-	lowLightFilter: boolean = false;
-	darkTheme: boolean = false;
+	lowLightFilter = false;
+	darkTheme = false;
 	visible: boolean;
-	changePasswordToggle: boolean = false;
-	isTeleoptiApplicationLogon: boolean = false;
+	changePasswordToggle = false;
+	isTeleoptiApplicationLogon = false;
 
 	@ViewChild('passwordModal')
 	passwordModal: ChangePasswordComponent;

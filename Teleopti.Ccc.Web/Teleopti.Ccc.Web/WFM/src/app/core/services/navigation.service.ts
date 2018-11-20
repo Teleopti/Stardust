@@ -13,7 +13,7 @@ export class NavigationService {
 	}
 
 	private resetScroll() {
-		var element = document.getElementById('materialcontainer');
+		const element = document.getElementById('materialcontainer');
 		if (element) element.scrollTop = 0;
 	}
 }

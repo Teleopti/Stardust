@@ -9,7 +9,7 @@ import { ThemeService } from '../../core/services';
 	templateUrl: './bootstrap.component.html'
 })
 export class BootstrapComponent {
-	@Input('style')
+	@Input()
 	style: MainControllerStyle;
 
 	constructor(private themeService: ThemeService) {

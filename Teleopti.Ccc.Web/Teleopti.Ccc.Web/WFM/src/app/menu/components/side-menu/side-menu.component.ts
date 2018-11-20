@@ -3,12 +3,12 @@ import { IStateService } from 'angular-ui-router';
 import { Area, AreaService } from '../../shared/area.service';
 import { ToggleMenuService } from '../../shared/toggle-menu.service';
 
-type AreaConfig = {
+interface AreaConfig {
 	InternalName?: string;
 	url?: string;
 	inNewTab?: boolean;
 	icon?: string;
-};
+}
 
 type AreaWithConfig = Area & AreaConfig;
 
@@ -75,7 +75,7 @@ export class SideMenuComponent implements OnInit {
 
 	addAreaInfo(group: AreaGroup) {
 		const mergeAreaConfigs = groupArea => {
-			const area = this.areas.find(area => area.InternalName === groupArea.InternalName);
+			const area = this.areas.find(a => a.InternalName === groupArea.InternalName);
 			return { ...area, ...groupArea };
 		};
 		return group.map(mergeAreaConfigs);
@@ -95,6 +95,6 @@ export class SideMenuComponent implements OnInit {
 	}
 
 	isActive(area: Area) {
-		return this.$state.current.name.indexOf(area.InternalName) == 0;
+		return this.$state.current.name.indexOf(area.InternalName) === 0;
 	}
 }
