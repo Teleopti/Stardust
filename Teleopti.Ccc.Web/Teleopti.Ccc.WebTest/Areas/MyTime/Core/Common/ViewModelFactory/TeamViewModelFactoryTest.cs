@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 				.Return(teams);
 
 			var target = new TeamViewModelFactory(teamProvider, MockRepository.GenerateMock<IPermissionProvider>(), null,
-				new UserTextTranslator(), MockRepository.GenerateMock<IAuthorization>());
+				new UserTextTranslator());
 
 			var result = target.CreateTeamOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 				x => x.GetPermittedTeams(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(teams);
 
 			var target = new TeamViewModelFactory(teamProvider, MockRepository.GenerateMock<IPermissionProvider>(), null,
-				new UserTextTranslator(), MockRepository.GenerateMock<IAuthorization>());
+				new UserTextTranslator());
 
 			var result = target.CreateTeamOptionsViewModel(DateOnly.Today,
 				DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb);
@@ -75,8 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(
 				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages)).Return(false);
-			var target = new TeamViewModelFactory(teamProvider, permissionProvider, null, new UserTextTranslator(),
-				MockRepository.GenerateMock<IAuthorization>());
+			var target = new TeamViewModelFactory(teamProvider, permissionProvider, null, new UserTextTranslator());
 
 			var result = target.CreateTeamOrGroupOptionsViewModel(DateOnly.Today);
 
@@ -103,8 +102,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 				{
 					new ReadOnlyGroupDetail {PageId = Group.PageMainId, GroupName = "team", GroupId = teamId}
 				});
-			var target = new TeamViewModelFactory(null, permissionProvider, groupingReadOnlyRepository, new UserTextTranslator(),
-				MockRepository.GenerateMock<IAuthorization>());
+			var target = new TeamViewModelFactory(null, permissionProvider, groupingReadOnlyRepository, new UserTextTranslator());
 
 			var result = target.CreateTeamOrGroupOptionsViewModel(DateOnly.Today) as IEnumerable<SelectGroup>;
 			result.FirstOrDefault().children.FirstOrDefault().id.Should().Be.EqualTo(teamId.ToString());
@@ -133,8 +131,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 				{
 					new ReadOnlyGroupDetail {PageId = pageId, GroupName = "full time", GroupId = teamId}
 				});
-			var target = new TeamViewModelFactory(null, permissionProvider, groupingReadOnlyRepository, new UserTextTranslator(),
-				MockRepository.GenerateMock<IAuthorization>());
+			var target = new TeamViewModelFactory(null, permissionProvider, groupingReadOnlyRepository, new UserTextTranslator());
 
 			var result = target.CreateTeamOrGroupOptionsViewModel(DateOnly.Today) as IEnumerable<SelectGroup>;
 			result.FirstOrDefault().children.FirstOrDefault().id.Should().Be.EqualTo(teamId.ToString());

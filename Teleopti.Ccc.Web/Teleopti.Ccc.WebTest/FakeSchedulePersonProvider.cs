@@ -20,11 +20,6 @@ namespace Teleopti.Ccc.WebTest
 			_personsWithMyTeamSchedulesPermission = persons.ToList();
 		}
 
-		public IEnumerable<IPerson> GetPermittedPersonsForTeam(DateOnly date, Guid id, string function)
-		{
-			return _persons;
-		}
-
 		public IEnumerable<IPerson> GetPermittedPersonsForGroup(DateOnly date, Guid id, string function)
 		{
 			if (function == DefinedRaptorApplicationFunctionPaths.MyTeamSchedules)

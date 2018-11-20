@@ -10,11 +10,5 @@ namespace Teleopti.Ccc.DBManager.Library
 			var fileName = type.GetName() + ".sql";
 			return Path.Combine(path, fileName);
 		}
-
-		public static string ScriptFilePath(this string path, string fileName)
-		{
-			fileName = fileName + ".sql";
-			return Path.Combine(path, fileName);
-		}
 	}
 }

@@ -5,11 +5,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Search.Models
 {
-	public class FindPersonSearchModel
-	{
-		public string Keyword { get; set; }
-	}
-
 	public class FindPersonViewModel
 	{
 		public FindPersonViewModel(IEnumerable<IPerson> persons)

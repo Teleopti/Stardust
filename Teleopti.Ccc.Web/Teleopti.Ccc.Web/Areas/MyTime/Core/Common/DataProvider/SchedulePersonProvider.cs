@@ -12,25 +12,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly IPermissionProvider _permissionProvider;
-		private readonly ITeamRepository _teamRepository;
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 
-		public SchedulePersonProvider(IPersonRepository personRepository, IPermissionProvider permissionProvider, ITeamRepository teamRepository, IGroupingReadOnlyRepository groupingReadOnlyRepository)
+		public SchedulePersonProvider(IPersonRepository personRepository, IPermissionProvider permissionProvider, IGroupingReadOnlyRepository groupingReadOnlyRepository)
 		{
 			_personRepository = personRepository;
 			_permissionProvider = permissionProvider;
-			_teamRepository = teamRepository;
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
-		}
-
-		public IEnumerable<IPerson> GetPermittedPersonsForTeam(DateOnly date, Guid id, string function)
-		{
-			var team = _teamRepository.Load(id);
-			var period = new DateOnlyPeriod(date, date);
-			var persons = _personRepository.FindPeopleBelongTeam(team, period) ?? new IPerson[] { };
-			return (from p in persons
-					where _permissionProvider.HasPersonPermission(function, date, p)
-					select p).ToArray();
 		}
 
 		public IEnumerable<IPerson> GetPermittedPersonsForGroup(DateOnly date, Guid id, string function)

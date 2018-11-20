@@ -1,14 +1,9 @@
-﻿using NUnit.Framework;
-using SharpTestsEx;
+﻿using SharpTestsEx;
 using System;
-using System.Linq;
-using System.Text.RegularExpressions;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
-using Teleopti.Ccc.WebBehaviorTest.Data;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Toggle
 {
