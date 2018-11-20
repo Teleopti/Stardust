@@ -1,9 +1,7 @@
 ﻿$(document).ready(function() {
 	module('Teleopti.MyTimeWeb.Portal', {
 		setup: function() {},
-		teardown: function() {
-			Teleopti.MyTimeWeb.Common.DisableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
-		}
+		teardown: function() {}
 	});
 
 	test('should navigate to binded action view after clicking menu item', function() {
@@ -24,20 +22,17 @@
 		setup();
 		var fakeWindow = getFakeWindow();
 		init(fakeWindow);
-		equal('#Schedule/MobileWeek', fakeWindow.location.url);
+		equal('#Schedule/MobileDay', fakeWindow.location.url);
 	});
 
-	test('should navigate to mobile day page when toggle 43446 is on', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
+	test('should navigate to mobile day page', function() {
 		setup();
 		var fakeWindow = getFakeWindow();
 		init(fakeWindow);
 		equal('#Schedule/MobileDay', fakeWindow.location.url);
 	});
 
-	test('should navigate to mobile week page when toggle 43446 is on and access from ipad', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
-
+	test('should navigate to mobile week page when access from ipad', function() {
 		setup();
 		var fakeWindow = getFakeWindow();
 		fakeWindow.navigator.userAgent = 'iPad';
@@ -45,9 +40,7 @@
 		equal('#Schedule/MobileWeek', fakeWindow.location.url);
 	});
 
-	test('should navigate to mobile week page when toggle 43446 is on and access from tablet', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
-
+	test('should navigate to mobile week page when access from tablet', function() {
 		setup();
 		var fakeWindow = getFakeWindow();
 		fakeWindow.navigator.userAgent =

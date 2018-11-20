@@ -25,13 +25,8 @@
 		RTA_StateQueueFloodPrevention_77710,
 		RTA_ReviewHistoricalAdherence_74770,
 
-		MyTimeWeb_SortRequestList_40711,
-		MyTimeWeb_PreferenceForJalaliCalendar_42965,
-		MyTimeWeb_DayScheduleForStartPage_43446,
 		MyTimeWeb_DayScheduleForStartPage_Command_44209,
-		MyTimeWeb_MonthlyScheduleMobileView_45004,
 		MyTimeWeb_WaitListPositionEnhancement_46301,
-		MyTimeWeb_PollToCheckScheduleChanges_46595,
 		MyTimeWeb_NewTeamScheduleView_75989,
 		MyTimeWeb_NewTeamScheduleViewDesktop_76313,
 		MyTimeWeb_TrafficLightOnMobileDayView_77447,
@@ -95,7 +90,6 @@
 		ETL_Optimize_Memory_Usage_76761,
 		ETL_Show_Tenant_Name_In_History_75767,
 
-		Staffing_Info_Configuration_44687,
 		WfmStaffing_AddOvertime_42524,
 		OvertimeRequestUseMostUnderStaffedSkill_47853,
 		OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944,

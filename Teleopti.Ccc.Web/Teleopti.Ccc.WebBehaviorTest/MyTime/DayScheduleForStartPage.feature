@@ -42,14 +42,12 @@ Given there is a role with
 	And I have the workflow control set 'Published schedule'
 
 @Mobile
-@OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: Navigate to day schedule when clicking 'Schedule' menu on mobile
 	Given I am american
 	When I am viewing requests
 	And I click Schedule menu item
 	Then I should see mobile day view
 
-@OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: View day schedule after login
 	Given I have a shift with
 	| Field          | Value            |
@@ -65,43 +63,6 @@ Scenario: View day schedule after login
 		| Shift category | Early             |
 		| Week day       | Friday            |
 
-@OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
-@OnlyRunIfDisabled('MyTimeWeb_MonthlyScheduleMobileView_45004')
-Scenario: Should view schedule for tomorrow
-	Given I am american
-	And I have a shift with
-	| Field          | Value            |
-	| StartTime      | 2017-04-22 09:00 |
-	| EndTime        | 2017-04-22 18:00 |
-	| Shift category | Early            |
-	When I am viewing mobile view for date '2017-04-21'
-	And I navigate to next day
-	Then I should see my day view schedule with
-		| Field          | Value             |
-		| Date           | 4/22/2017         |
-		| Time span      | 9:00 AM - 6:00 PM |
-		| Shift category | Early             |
-		| Week day       | Saturday          |
-
-@OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
-@OnlyRunIfDisabled('MyTimeWeb_MonthlyScheduleMobileView_45004')
-Scenario: Should view schedule for the day before
-	Given I am american
-	And I have a shift with
-	| Field          | Value            |
-	| StartTime      | 2017-04-22 09:00 |
-	| EndTime        | 2017-04-22 18:00 |
-	| Shift category | Early            |
-	When I am viewing mobile view for date '2017-04-23'
-	And I navigate to previous day
-	Then I should see my day view schedule with
-		| Field          | Value             |
-		| Date           | 4/22/2017         |
-		| Time span      | 9:00 AM - 6:00 PM |
-		| Shift category | Early             |
-		| Week day       | Saturday          |
-
-@OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: Should see the brief request in today
 	Given 'I' has an existing absence request with
 	| Field       | Value            |
@@ -114,7 +75,6 @@ Scenario: Should see the brief request in today
 	When I click the request icon
 	Then I should see it go to request page
 
-@OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: Should see unread messages
 	Given I have an unread message with
 	| Field | Value       |

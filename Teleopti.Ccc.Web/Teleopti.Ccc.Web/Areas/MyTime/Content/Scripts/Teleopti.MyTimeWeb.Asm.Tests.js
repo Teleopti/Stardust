@@ -12,10 +12,6 @@
 			Date.prototype.getTeleoptiTimeInUserTimezone = function() {
 				return "2018-03-04";
 			};
-
-			Teleopti.MyTimeWeb.Common.FakeToggles({
-				MyTimeWeb_PollToCheckScheduleChanges_46595: false
-			});
 			oldAjax = Teleopti.MyTimeWeb.Ajax;
 		},
 		teardown: function() {

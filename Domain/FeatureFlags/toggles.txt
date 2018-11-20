@@ -81,18 +81,12 @@ Wfm_Authentication_ChangePasswordMenu_76666 = true
 Wfm_User_Password_Reset_74957 = RC
 
 # China, can any of these be removed? #
-MyTimeWeb_PreferenceForJalaliCalendar_42965 = true
-MyTimeWeb_DayScheduleForStartPage_43446 = true
 MyTimeWeb_DayScheduleForStartPage_Command_44209 = true
-MyTimeWeb_MonthlyScheduleMobileView_45004 = true
-MyTimeWeb_SortRequestList_40711 = true #Please note the feature for this one is 40771!
 MyTimeWeb_WaitListPositionEnhancement_46301 = true
 MyTimeWeb_NewTeamScheduleView_75989 = RC
 MyTimeWeb_NewTeamScheduleViewDesktop_76313 = RC
-MyTimeWeb_PollToCheckScheduleChanges_46595 = true
 MyTimeWeb_TrafficLightOnMobileDayView_77447 = RC
 MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640 = RC
-Staffing_Info_Configuration_44687 = true
 Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = true
 WebByPassDefaultPermissionCheck_37984 = true
 

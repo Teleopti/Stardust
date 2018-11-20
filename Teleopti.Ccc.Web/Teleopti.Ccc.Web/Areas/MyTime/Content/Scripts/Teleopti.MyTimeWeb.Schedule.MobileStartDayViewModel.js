@@ -56,8 +56,7 @@
 	self.menuIconIsVisible = ko.observable(true);
 	self.focusingRequestForm = ko.observable(false);
 	self.isCommandEnable = ko.observable(false);
-	self.mobileMonthEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MonthlyScheduleMobileView_45004');
-
+	
 	self.datePickerFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
 	self.requestDay = null;
 
@@ -336,19 +335,14 @@
 	function setStaffingProbabilityToggleStates(data) {
 		self.staffingProbabilityOnMobileEnabled(!!data.ViewPossibilityPermission);
 
-		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('Staffing_Info_Configuration_44687')) {
-			self.absenceProbabilityEnabled(
-				!!data.CheckStaffingByIntraday &&
-					!!data.AbsenceProbabilityEnabled &&
-					self.staffingProbabilityOnMobileEnabled()
-			);
-			self.overtimeProbabilityEnabled(
-				!!data.OvertimeProbabilityEnabled && self.staffingProbabilityOnMobileEnabled()
-			);
-		} else {
-			self.overtimeProbabilityEnabled(false);
-			self.absenceProbabilityEnabled(false);
-		}
+		self.absenceProbabilityEnabled(
+			!!data.CheckStaffingByIntraday &&
+				!!data.AbsenceProbabilityEnabled &&
+				self.staffingProbabilityOnMobileEnabled()
+		);
+		self.overtimeProbabilityEnabled(
+			!!data.OvertimeProbabilityEnabled && self.staffingProbabilityOnMobileEnabled()
+		);
 
 		if (
 			!self.absenceProbabilityEnabled() &&

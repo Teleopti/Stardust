@@ -132,11 +132,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void checkOvertimeRequestsLicense()
 		{
-			var toggleEnabled = _toggleManager.IsEnabled(Toggles.Staffing_Info_Configuration_44687);
 			var hasLicense = _licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiWfmOvertimeRequests);
 
-			var visible = hasLicense && toggleEnabled;
-			if (!visible)
+			if (!hasLicense)
 			{
 				tableLayoutPanelOvertimeMaximumSetting.Visible = false;
 				tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Visible = false;
