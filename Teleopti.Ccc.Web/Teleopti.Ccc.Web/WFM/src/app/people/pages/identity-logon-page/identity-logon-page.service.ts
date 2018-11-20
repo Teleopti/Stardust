@@ -15,18 +15,16 @@ export interface PersonWithLogon {
 	Logon: string;
 }
 
-export interface PeopleWithLogon extends Array<PersonWithLogon> {}
-
 @Injectable()
 export class IdentityLogonPageService {
 	constructor(public logonInfo: LogonInfoService, public workspaceService: WorkspaceService) {}
 
-	public people$: Observable<PeopleWithLogon> = this.workspaceService.people$.pipe(
+	public people$: Observable<PersonWithLogon[]> = this.workspaceService.people$.pipe(
 		map(people => this.mapPeopleWithFullName(people)),
 		flatMap(peopleWithName => this.joinPeopleWithIdentityLogon(peopleWithName))
 	);
 
-	public save(people: PeopleWithLogon) {
+	public save(people: PersonWithLogon[]) {
 		return this.logonInfo.persistIdentityLogonNames(
 			people.map(person => ({
 				Identity: person.Logon,
@@ -41,8 +39,8 @@ export class IdentityLogonPageService {
 		const peopleLogonInfo$ = this.logonInfo.getLogonInfo(peopleIds);
 		return peopleLogonInfo$.pipe(
 			map(peopleLogonInfo =>
-				peopleWithName.reduce((peopleWithLogon: PeopleWithLogon, personWithName: PersonWithName) => {
-					const logonInfo = peopleLogonInfo.find(logonInfo => logonInfo.PersonId === personWithName.Id);
+				peopleWithName.reduce((peopleWithLogon: PersonWithLogon[], personWithName: PersonWithName) => {
+					const logonInfo = peopleLogonInfo.find(info => info.PersonId === personWithName.Id);
 					const Logon = (logonInfo && logonInfo.Identity) || '';
 					const personWithLogon = {
 						...personWithName,

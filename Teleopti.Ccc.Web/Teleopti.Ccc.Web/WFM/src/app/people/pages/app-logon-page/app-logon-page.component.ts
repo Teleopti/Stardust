@@ -4,7 +4,7 @@ import { AbstractControl } from '@angular/forms/src/model';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { FormControlWithInitial, NavigationService } from '../../shared';
-import { AppLogonPageService, PeopleWithLogon, PersonWithLogon } from './app-logon-page.service';
+import { AppLogonPageService, PersonWithLogon } from './app-logon-page.service';
 import { DuplicateAppLogonValidator } from './duplicate-app-logon.validator';
 
 class DuplicateFormNameValidator {
@@ -48,7 +48,7 @@ export class AppLogonPageComponent implements OnDestroy, OnInit {
 
 	ngOnInit() {
 		this.appLogonPageService.people$.pipe(takeUntil(this.componentDestroyed)).subscribe({
-			next: (people: PeopleWithLogon) => {
+			next: (people: PersonWithLogon[]) => {
 				if (people.length === 0) return this.nav.navToSearch();
 				this.buildForm(people);
 			}
@@ -85,7 +85,7 @@ export class AppLogonPageComponent implements OnDestroy, OnInit {
 		});
 	}
 
-	buildForm(people: PeopleWithLogon) {
+	buildForm(people: PersonWithLogon[]) {
 		while (this.people.length > 0) this.people.removeAt(0);
 		people.map(p => this.personToFormGroup(p)).forEach(control => this.people.push(control));
 	}
