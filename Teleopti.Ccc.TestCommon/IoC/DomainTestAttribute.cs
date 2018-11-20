@@ -286,6 +286,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
 				isolate.UseTestDouble<FakeExtensiveLogRepository>().For<IExtensiveLogRepository>();
 				isolate.UseTestDouble<FakeStaffingAuditRepository>().For<IStaffingAuditRepository>();
+				isolate.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
 			}
 
 			isolate.UseTestDouble<PersonSearchProvider>().For<PersonSearchProvider>();
