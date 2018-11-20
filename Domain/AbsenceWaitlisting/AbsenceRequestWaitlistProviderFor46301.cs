@@ -9,7 +9,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 {
-	[EnabledBy(FeatureFlags.Toggles.MyTimeWeb_WaitListPositionEnhancement_46301)]
 	public class AbsenceRequestWaitlistProviderFor46301 : IAbsenceRequestWaitlistProvider
 	{
 		private readonly IPersonRequestRepository _personRequestRepository;
@@ -74,7 +73,7 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 				: waitlistedRequests.OrderBy(x => x.CreatedOn);
 		}
 
-		private bool requestShouldBeProcessed(IPersonRequest request, string requestBudgetGroupName, string currentUserBudgetGroupName)
+		private static bool requestShouldBeProcessed(IPersonRequest request, string requestBudgetGroupName, string currentUserBudgetGroupName)
 		{
 			if (currentUserBudgetGroupName != requestBudgetGroupName)
 				return false;
