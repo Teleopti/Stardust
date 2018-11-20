@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
@@ -18,6 +19,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 	{
 		public IAgentAdherenceDayLoader Target;
 		public FakeDatabase Database;
+		public FakeRtaHistory History;
 		public MutableNow Now;
 
 		[Test]
@@ -65,6 +67,22 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			result.RecordedOutOfAdherences().First().EndTime.Should().Be("2017-12-08 09:00".Utc());
 			result.RecordedOutOfAdherences().Second().StartTime.Should().Be("2017-12-08 11:00".Utc());
 			result.RecordedOutOfAdherences().Second().EndTime.Should().Be("2017-12-08 12:00".Utc());
+		}
+		
+		[Test]
+		public void ShouldExcludeOutOfAdherencePeriodOutsidePeriod()
+		{
+			Now.Is("2018-11-07 08:00");
+			var person = Guid.NewGuid();
+			History
+				.RuleChanged(person, "2018-11-06 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.RuleChanged(person, "2018-11-06 10:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.ShiftStart(person, "2018-11-06 12:00", "2018-11-06 17:00")
+				;
+			
+			var result = Target.Load(person, "2018-11-06".Date());
+			
+			result.RecordedOutOfAdherences().Should().Be.Empty();
 		}
 	}
 }

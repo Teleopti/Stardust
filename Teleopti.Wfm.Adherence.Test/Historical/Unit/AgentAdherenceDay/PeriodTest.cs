@@ -28,7 +28,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.ShiftStart(person, "2018-11-06 09:00", "2018-11-06 17:00")
 				;
 
-			var actual = Target.Load(person, "2018-11-06".Date()).Period();
+			var actual = Target.Load(person, "2018-11-06".Date()).DisplayPeriod();
 			actual.StartDateTime.Should().Be("2018-11-06 08:00".Utc());
 			actual.EndDateTime.Should().Be("2018-11-06 18:00".Utc());
 		}
@@ -43,11 +43,11 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.ShiftStart(person, "2018-11-06 10:00", "2018-11-06 18:00")
 				;
 
-			var actual = Target.Load(person, "2018-11-06".Date()).Period();
+			var actual = Target.Load(person, "2018-11-06".Date()).DisplayPeriod();
 			actual.StartDateTime.Should().Be("2018-11-06 09:00".Utc());
 			actual.EndDateTime.Should().Be("2018-11-06 19:00".Utc());
 		}
-		
+
 		[Test]
 		public void ShouldHavePeriodFromShiftEnd()
 		{
@@ -58,9 +58,28 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.ShiftEnd(person, "2018-11-06 10:00", "2018-11-06 18:00")
 				;
 
-			var actual = Target.Load(person, "2018-11-06".Date()).Period();
+			var actual = Target.Load(person, "2018-11-06".Date()).DisplayPeriod();
+
 			actual.StartDateTime.Should().Be("2018-11-06 09:00".Utc());
 			actual.EndDateTime.Should().Be("2018-11-06 19:00".Utc());
+		}
+
+		[Test]
+		public void ShouldHavePeriodFromLatestShiftStartWhenOutOfAdherenceBeforeShiftStart()
+		{
+			Now.Is("2018-11-07 08:00");
+			var person = Guid.NewGuid();
+			History
+				.ShiftStart(person, "2018-11-06 09:00", "2018-11-06 17:00")
+				.RuleChanged(person, "2018-11-06 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.RuleChanged(person, "2018-11-06 10:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.ShiftStart(person, "2018-11-06 12:00", "2018-11-06 17:00")
+				;
+
+			var actual = Target.Load(person, "2018-11-06".Date()).DisplayPeriod();
+
+			actual.StartDateTime.Should().Be("2018-11-06 11:00".Utc());
+			actual.EndDateTime.Should().Be("2018-11-06 18:00".Utc());
 		}
 	}
 }
