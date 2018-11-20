@@ -2234,7 +2234,6 @@
     <Compile Include="Optimization\Filters\SiteFilter.cs" />
     <Compile Include="Optimization\Filters\TeamFilter.cs" />
     <Compile Include="Optimization\FixedDayOffOptimizationPreferenceProvider.cs" />
-    <Compile Include="Optimization\DayOffOptimizationPreferenceProviderUsingFiltersFactory.cs" />
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderUsingFilters.cs" />
     <Compile Include="Optimization\PlanningGroupSettingsModelPersister.cs" />
     <Compile Include="Optimization\PlanningGroupSettingsMapper.cs" />

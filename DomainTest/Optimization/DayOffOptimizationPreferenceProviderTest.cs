@@ -4,7 +4,8 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
-using Teleopti.Ccc.TestCommon.FakeData;
+ using Teleopti.Ccc.Domain.ResourcePlanner;
+ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -12,10 +13,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
 	[DomainTest]
-	public class DayOffOptimizationPreferenceProviderTest
+	public class DayOffOptimizationPreferenceProviderUsingFiltersTest
 	{
-		public DayOffOptimizationPreferenceProviderUsingFiltersFactory Target;
-
 		[Test]
 		public void ShouldReturnRulesForContractFilter()
 		{
@@ -27,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var agent = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(1900,1,1));
 			agent.Period(new DateOnly(2000,1,1)).PersonContract = new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_"));
 
-			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).DaysOffPerWeekValue
+			new DayOffOptimizationPreferenceProviderUsingFilters(planningGroup.Settings).ForAgent(agent, new DateOnly(2000, 1, 1)).DaysOffPerWeekValue
 				.Should().Be.EqualTo(new MinMax<int>(19, 20));
 		}
 
@@ -41,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			planningGroup.AddSetting(dayOffRules);
 			var agent = new Person();
 
-			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveDaysOffValue
+			new DayOffOptimizationPreferenceProviderUsingFilters(planningGroup.Settings).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveDaysOffValue
 				.Should().Be.EqualTo(new PlanningGroupSettings().ConsecutiveDayOffs);
 		}
 
@@ -57,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			agent.Period(new DateOnly(2000, 1, 1)).PersonContract = new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_"));
 
 
-			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
+			new DayOffOptimizationPreferenceProviderUsingFilters(planningGroup.Settings).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
 				.Should().Be.EqualTo(new PlanningGroupSettings().ConsecutiveWorkdays);
 		}
 
@@ -70,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			dayOffRules.AddFilter(new SiteFilter(agent.Period(new DateOnly(2000,1,1)).Team.Site));
 			planningGroup.AddSetting(dayOffRules);
 		
-			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
+			new DayOffOptimizationPreferenceProviderUsingFilters(planningGroup.Settings).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
 				.Should().Be.EqualTo(new MinMax<int>(5, 7));
 		}
 
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			planningGroup.AddSetting(dayOffRules);
 			var agent = new Person();
 
-			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveDaysOffValue
+			new DayOffOptimizationPreferenceProviderUsingFilters(planningGroup.Settings).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveDaysOffValue
 				.Should().Be.EqualTo(new PlanningGroupSettings().ConsecutiveDayOffs);
 		}
 
@@ -96,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			dayOffRules.AddFilter(new TeamFilter(agent.Period(new DateOnly(2000, 1, 1)).Team));
 			planningGroup.AddSetting(dayOffRules);
 
-			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
+			new DayOffOptimizationPreferenceProviderUsingFilters(planningGroup.Settings).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
 				.Should().Be.EqualTo(new MinMax<int>(6, 7));
 		}
 
@@ -109,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			planningGroup.AddSetting(dayOffRules);
 			var agent = new Person();
 
-			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveDaysOffValue
+			new DayOffOptimizationPreferenceProviderUsingFilters(planningGroup.Settings).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveDaysOffValue
 				.Should().Be.EqualTo(new PlanningGroupSettings().ConsecutiveDayOffs);
 		}
 
@@ -122,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			dayOffRules.AddFilter(new TeamFilter(agent.Period(new DateOnly(2000, 1, 1)).Team));
 			planningGroup.AddSetting(dayOffRules);
 			
-			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
+			new DayOffOptimizationPreferenceProviderUsingFilters(planningGroup.Settings).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
 				.Should().Be.EqualTo(new MinMax<int>(6, 7));
 		}
 
@@ -140,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			planningGroup.AddSetting(dayOffRules);
 
-			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
+			new DayOffOptimizationPreferenceProviderUsingFilters(planningGroup.Settings).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
 				.Should().Be.EqualTo(new PlanningGroupSettings().ConsecutiveWorkdays);	
 		}
 
@@ -155,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			dayOffRules.AddFilter(new TeamFilter(agent.Period(new DateOnly(2000, 1, 1)).Team));
 			planningGroup.AddSetting(dayOffRules);
 
-			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
+			new DayOffOptimizationPreferenceProviderUsingFilters(planningGroup.Settings).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
 				.Should().Be.EqualTo(new MinMax<int>(1, 2));
 		}
 
@@ -169,12 +168,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			dayOffRules.AddFilter(new SiteFilter(agent.Period(new DateOnly(2000, 1, 1)).Team.Site));
 			planningGroup.AddSetting(dayOffRules);
 
-			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
+			new DayOffOptimizationPreferenceProviderUsingFilters(planningGroup.Settings).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
 				.Should().Be.EqualTo(new MinMax<int>(1, 2));
 		}
 
 		[Test]
-		public void ShouldSelectDayOfffRuleWithHighestPriority()
+		public void ShouldSelectDayOffRuleWithHighestPriority()
 		{
 			var planningGroup = new PlanningGroup();
 			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(1900, 1, 1));
@@ -188,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			planningGroup.AddSetting(dayOffRules);
 			planningGroup.AddSetting(dayOffRules2);
 
-			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
+			new DayOffOptimizationPreferenceProviderUsingFilters(planningGroup.Settings).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
 				.Should().Be.EqualTo(new MinMax<int>(1, 3));
 		}
 
@@ -207,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			};
 			planningGroup.AddSetting(dayOffRules);
 
-			var daysOffPreferences = Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1));
+			var daysOffPreferences = new DayOffOptimizationPreferenceProviderUsingFilters(planningGroup.Settings).ForAgent(agent, new DateOnly(2000, 1, 1));
 			daysOffPreferences.ConsecutiveWorkdaysValue.Should().Be.EqualTo(new MinMax<int>(1, 2));
 			daysOffPreferences.DaysOffPerWeekValue.Should().Be.EqualTo(new MinMax<int>(3, 4));
 			daysOffPreferences.ConsecutiveDaysOffValue.Should().Be.EqualTo(new MinMax<int>(5, 6));
