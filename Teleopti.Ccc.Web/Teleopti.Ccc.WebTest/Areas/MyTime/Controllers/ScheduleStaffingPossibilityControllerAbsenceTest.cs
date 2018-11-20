@@ -356,34 +356,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldGetFairOvertimePossibilitiesWhenAllSkillsArePrimarySkillWithOneSkillCriticalUnderStaffing()
-		{
-			setupWorkFlowControlSet();
-			var primarySkill = createSkill("primarySkill1");
-			primarySkill.SetCascadingIndex(1);
-			setupIntradayStaffingForSkill(primarySkill, new double?[] { 5, 5 }, new double?[] { 0, 0 });
-
-			var primarySkill2 = createSkill("PrimarySkill2");
-			primarySkill2.SetCascadingIndex(1);
-			setupIntradayStaffingForSkill(primarySkill2, new double?[] { 5, 5 }, new double?[] { 7, 7 });
-
-			var activity = createActivity();
-			createAssignment(User.CurrentUser(), activity);
-			var primaryPersonSkill = createPersonSkill(activity, primarySkill);
-			var nonPrimaryPersonSkill = createPersonSkill(activity, primarySkill2);
-
-			addPersonSkillsToPersonPeriod(primaryPersonSkill, nonPrimaryPersonSkill);
-
-			var possibilities =
-				getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
-					.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat())
-					.ToList();
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
-		}
-
-		[Test]
 		public void ShouldNotUsePrimarySkillsWhenCalculatingAbsenceProbability()
 		{
 			setupWorkFlowControlSet();
