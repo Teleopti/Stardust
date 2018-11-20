@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private IPerson _personActionOn;
 		private IPersonAccess _personAccessBase;
 		private IPersonAccessAuditRepository _personAccessAuditRepository;
-		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 		protected override void ConcreteSetup()
 		{
 			_personActionOn = PersonFactory.CreatePerson(new Name("Test1", "Test2"));
@@ -94,12 +93,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			audits = rep.LoadAudits(LoggedOnPerson, DateTime.UtcNow.AddDays(-200), DateTime.UtcNow);
 			audits.Count().Should().Be(2);
-		}
-
-		private string extractPersonAuditInfo(string person, ICommonNameDescriptionSetting commonAgentNameSetting)
-		{
-			var personInfo = JsonConvert.DeserializeObject<PersonAuditInfo>(person);
-			return commonAgentNameSetting.BuildFor(personInfo);
 		}
 
 		protected override IPersonAccess CreateAggregateWithCorrectBusinessUnit()
