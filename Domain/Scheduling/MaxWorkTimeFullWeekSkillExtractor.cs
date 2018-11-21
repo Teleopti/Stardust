@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
@@ -41,6 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 	}
 
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118)]
 	public class MaxWorkTimeFullWeekSkillExtractorDoNothing : IMaxWorkTimeFullWeekSkillExtractor
 	{
 		public Dictionary<DateOnly, TimeSpan> Extract(IScheduleMatrixPro scheduleMatrixPro, ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays)
