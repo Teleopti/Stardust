@@ -39,8 +39,11 @@ SQLCMD -S%dbServer% -E -d"%appDb%" -i"%RepoRoot%\.debug-Setup\database\tsql\Demo
 
 ::upgrade appdb
 %dbmanagerExe% -S%dbServer% -D"%appDb%" -E -OTeleoptiCCC7 -F"%RepoRoot%\Database" -T
+IF %ERRORLEVEL% NEQ 0 GOTO :upgradeError
 %dbmanagerExe% -S%dbServer% -D"%analDb%" -E -OTeleoptiAnalytics -F"%RepoRoot%\Database" -T
+IF %ERRORLEVEL% NEQ 0 GOTO :upgradeError
 %securityExe% -DS%dbServer% -AP"%appDb%" -AN"%analDb%" -CD"%aggDb%" -EE 
+IF %ERRORLEVEL% NEQ 0 GOTO :upgradeError
 
 
 ::copy app.config
@@ -51,6 +54,11 @@ COPY "%sourceFolder%\app.config" "%RepoRoot%\Teleopti.Ccc.Scheduling.Performance
 SQLCMD -S%dbServer% -E -d"%appDb%" -i"%RepoRoot%\.debug-Setup\database\tsql\AddLic.sql" -v LicFile="%sourceFolder%\20300523_Teleopti_RD.xml"
 
 exit
+
+:upgradeError
+echo Upgrade failed
+echo.
+exit -1
 
 :wrongInput
 echo Two arguments are needed. Pass in server name and a path to a folder containing "ccc7.bak", "analytics.bak" and "app.config". Eg,
