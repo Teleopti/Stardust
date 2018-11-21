@@ -303,7 +303,6 @@
 	border-right: 1px solid #dfdfdf;
 	background: white;
 }
-
 .new-teamschedule-view-ipad .new-teamschedule-agent-name.my-name.relative {
 	width: 111px;
 	min-width: 111px;
@@ -780,6 +779,11 @@ div.new-teamschedule-no-result-indicator {
 	width: 100%;
 }
 .new-teamschedule-view-mobile .new-teamschedule-agent-name.my-name.relative {
+	width: 70px;
+	min-width: 70px;
+	max-width: 70px;
+}
+.new-teamschedule-view-iphone .new-teamschedule-agent-name.my-name.relative {
 	width: 72px;
 	min-width: 72px;
 	max-width: 72px;

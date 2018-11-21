@@ -531,6 +531,10 @@ Teleopti.MyTimeWeb.Common = (function($) {
 			ua = ua || navigator.userAgent;
 			return /Mobile/i.test(ua) && !/ipad/i.test(ua);
 		},
+		IsHostAniPhone: function(ua) {
+			ua = ua || navigator.userAgent;
+			return /Mobile/i.test(ua) && /iPhone/i.test(ua);
+		},
 		IsHostAniPad: function(ua) {
 			ua = ua || navigator.userAgent;
 			return /ipad/i.test(ua) || (/Android/i.test(ua) && !/Mobile/i.test(ua));
