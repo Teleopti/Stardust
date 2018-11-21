@@ -75,8 +75,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			Now.Is("2018-11-07 08:00");
 			var person = Guid.NewGuid();
 			History
-				.RuleChanged(person, "2018-11-06 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
-				.RuleChanged(person, "2018-11-06 10:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.RuleChanged(person, "2018-11-06 09:00", Domain.Configuration.Adherence.Out)
+				.RuleChanged(person, "2018-11-06 10:00", Domain.Configuration.Adherence.In)
 				.ShiftStart(person, "2018-11-06 12:00", "2018-11-06 17:00")
 				;
 			

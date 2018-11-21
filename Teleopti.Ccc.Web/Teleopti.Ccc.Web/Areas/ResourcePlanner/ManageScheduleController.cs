@@ -25,17 +25,15 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly IEventPopulatingPublisher _eventPublisher;
-		private readonly IToggleManager _toggleManager;
 		private readonly ITeamRepository _teamRepository;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
 
-		public ManageScheduleController(IPersonRepository personRepository, IEventPopulatingPublisher eventPublisher, IToggleManager toggleManager, ITeamRepository teamRepository, IPermissionProvider permissionProvider, IJobResultRepository jobResultRepository, ILoggedOnUser loggedOnUser)
+		public ManageScheduleController(IPersonRepository personRepository, IEventPopulatingPublisher eventPublisher, ITeamRepository teamRepository, IPermissionProvider permissionProvider, IJobResultRepository jobResultRepository, ILoggedOnUser loggedOnUser)
 		{
 			_personRepository = personRepository;
 			_eventPublisher = eventPublisher;
-			_toggleManager = toggleManager;
 			_teamRepository = teamRepository;
 			_permissionProvider = permissionProvider;
 			_jobResultRepository = jobResultRepository;

@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public FakeCurrentDatasource CurrentDatasource;
 		public FakeTenants FindTenantByName;
 		private AgentFileTemplate _agentFileTemplate;
-		private IIsolate _isolate;
 		
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
@@ -53,7 +52,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		
 		public void Isolate(IIsolate isolate)
 		{
-			_isolate = isolate;
 			isolate.UseTestDouble<FileProcessor>().For<IFileProcessor>();
 			isolate.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 			isolate.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
