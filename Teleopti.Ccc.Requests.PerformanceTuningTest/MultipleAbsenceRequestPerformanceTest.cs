@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 		public IAbsenceRequestPersister AbsenceRequestPersister;
 
-		//private IList<IPersonRequest> requests;
 		private List<IPerson> _persons;
 		private DateTime _nowDateTime;
 
@@ -64,20 +63,15 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			{
 				connection.Open();
 				StardustJobFeedback.SendProgress($"Will run script");
-				//var path = AppDomain.CurrentDomain.BaseDirectory + "/../../" + "Prepare200RequestForIntradayTest.sql";
-				//var script = File.ReadAllText(path);
-				var script = @"declare @start datetime = '2016-03-13 00:00:00' 
-declare @end datetime = '2016-03-18 00:00:00' 
-declare @startRequest datetime = '2016-03-16 8:00:00' 
-declare @endRequest datetime = '2016-03-16 17:00:00'
---select * 
-delete 
-from PersonAbsence
-where [Minimum] between @start and @end or Maximum between @start and @end
-DELETE FROM AbsenceRequest WHERE Request IN (SELECT Id from Request where StartDateTime between  @start  and @end)
-delete from Request where StartDateTime between  @start  and @end and Id not in (select Request from ShiftTradeRequest)
-delete from PersonRequest where id not in(select parent from Request )";
-				using (var command = new SqlCommand("", connection))
+				var script = @"delete from AbsenceRequest
+where request in (select id from request
+where parent in (  select id from PersonRequest where Subject  = 'Story79139'))
+
+delete from request
+where parent in (  select id from PersonRequest where Subject  = 'Story79139')
+ 
+delete from PersonRequest where Subject  = 'Story79139'";
+				using (var command = new SqlCommand(script, connection))
 				{
 					command.ExecuteNonQuery();
 				}
@@ -106,37 +100,42 @@ delete from PersonRequest where id not in(select parent from Request )";
 				UpdateStaffingLevel.Update(period);
 				StardustJobFeedback.SendProgress($"Done update staffing readmodel");
 				_persons = PersonRepository.LoadAll().ToList();
-				//requests = PersonRequestRepository.FindPersonRequestWithinPeriod(new DateTimePeriod(new DateTime(2016, 03, 16, 7, 0, 0).Utc(), new DateTime(2016, 03, 16, 10, 0, 0).Utc()));
+				
 
 			});
 		}
 
+		/// <summary>
+		/// To see if the loading of skills is fast enough or not. It should not load all skills, workload for all skills and workload day template
+		/// for all the workloads
+		/// </summary>
 		[Test]
-		public void Run200Requests()
+		public void Run200RequestsSoAmandaIsHappy()
 		{
 			Now.Is("2016-03-16 07:01");
 
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
-			//StardustJobFeedback.SendProgress($"Will process {requests.Count} requests");
-
-			WithUnitOfWork.Do(() =>
+			StardustJobFeedback.SendProgress($"Will process {200} requests");
+			foreach (var i in Enumerable.Range(0, 200))
 			{
-				foreach (var i in Enumerable.Range(0, 200))
+				WithUnitOfWork.Do(() =>
 				{
+					AbsenceRepository.LoadAll();
+
 					AbsenceRequestModel model = new AbsenceRequestModel()
 					{
 						Period = new DateTimePeriod(2016, 12, 24, 2016, 12, 24),
 						PersonId = _persons[i].Id.GetValueOrDefault(),
-						Message = "message",
-						Subject = "yesss"
+						Message = "Story79139",
+						Subject = "Story79139",
+						AbsenceId = new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F")
 					};
 					AbsenceRequestPersister.Persist(model);
-				}
 
-			});
+				});
 
-
+			}
 		}
 	}
 }
