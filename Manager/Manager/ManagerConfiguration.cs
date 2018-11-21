@@ -23,35 +23,35 @@ namespace Stardust.Manager
 		{
 			if (ConnectionString == null)
 			{
-				throw new ArgumentNullException("ConnectionString");
+				throw new ArgumentNullException(nameof(ConnectionString));
 			}
 			if (Route == null)
 			{
-				throw new ArgumentNullException("Route");
+				throw new ArgumentNullException(nameof(Route));
 			}
 			if (AllowedNodeDownTimeSeconds <= 0)
 			{
-				throw new ArgumentNullException("AllowedNodeDownTimeSeconds");
+				throw new ArgumentNullException(nameof(AllowedNodeDownTimeSeconds));
 			}
 			if (CheckNewJobIntervalSeconds <= 0)
 			{
-				throw new ArgumentNullException("CheckNewJobIntervalSeconds");
+				throw new ArgumentNullException(nameof(CheckNewJobIntervalSeconds));
 			}
 			if (PurgeJobsBatchSize <= 0)
 			{
-				throw new ArgumentNullException("PurgeJobsBatchSize");
+				throw new ArgumentNullException(nameof(PurgeJobsBatchSize));
 			}
 			if (PurgeJobsIntervalHours <= 0)
 			{
-				throw new ArgumentNullException("PurgeJobsIntervalHours");
+				throw new ArgumentNullException(nameof(PurgeJobsIntervalHours));
 			}
 			if (PurgeJobsOlderThanHours <= 0)
 			{
-				throw new ArgumentNullException("PurgeJobsOlderThanHours");
+				throw new ArgumentNullException(nameof(PurgeJobsOlderThanHours));
 			}
 			if (PurgeNodesIntervalHours <= 0)
 			{
-				throw new ArgumentNullException("PurgeNodesIntervalHours");
+				throw new ArgumentNullException(nameof(PurgeNodesIntervalHours));
 			}
 		}
 

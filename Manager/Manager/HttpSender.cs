@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Stardust.Manager.Interfaces;
@@ -35,7 +34,7 @@ namespace Stardust.Manager
 				catch
 				{
 					if (--retries == 0) throw;
-					Thread.Sleep(RetryDelayMilliseconds);
+					await Task.Delay(RetryDelayMilliseconds);
 				}
 			}
 		}
@@ -55,7 +54,7 @@ namespace Stardust.Manager
 				catch
 				{
 					if (--retries == 0) throw;
-					Thread.Sleep(RetryDelayMilliseconds);
+					await Task.Delay(RetryDelayMilliseconds);
 				}
 			}
 		}
@@ -73,7 +72,7 @@ namespace Stardust.Manager
 				catch
 				{
 					if (--retries == 0) throw;
-					Thread.Sleep(RetryDelayMilliseconds);
+					await Task.Delay(RetryDelayMilliseconds);
 				}
 			}
 		}
@@ -92,7 +91,7 @@ namespace Stardust.Manager
 				catch
 				{
 					if (--retries == 0) throw;
-					Thread.Sleep(RetryDelayMilliseconds);
+					await Task.Delay(RetryDelayMilliseconds);
 				}
 			}
 		}

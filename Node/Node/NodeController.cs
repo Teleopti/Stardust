@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using log4net;
@@ -32,23 +30,7 @@ namespace Stardust.Node
 				return ResponseMessage(isValidRequest);
 			}
 			if (_workerWrapper.IsWorking) return Conflict();
-			Task.Factory.StartNew(() =>
-			                      {
-				                      try
-				                      {
-					                      var stopwatch = new Stopwatch();
-					                      stopwatch.Start();
 
-					                      while (stopwatch.Elapsed.Seconds <= 60 && !_workerWrapper.IsWorking)
-					                      {
-						                      Thread.Sleep(TimeSpan.FromMilliseconds(200));
-					                      }
-				                      }
-				                      catch
-				                      {
-					                      // ignored
-				                      }
-			                      });
 			return Ok();
 		}
 
@@ -74,7 +56,7 @@ namespace Stardust.Node
 				return BadRequest("Current message job id does not match with job id argument.");
 			}
 
-			Task.Factory.StartNew(() =>
+			Task.Run(() =>
 			{				
 				var startJobMessage = $"{_workerWrapper.WhoamI} : Starting job ( jobId, jobName ) : ( {currentMessage.JobId}, {currentMessage.Name} )";
 

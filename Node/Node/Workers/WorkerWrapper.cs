@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -301,13 +300,7 @@ namespace Stardust.Node.Workers
 			_nodeStartUpNotificationToManagerTimer.Stop();
 			_pingToManagerTimer.Start();
 		}
-
-
-		public void ResetCurrentMessage()
-		{
-			_currentMessageToProcess = null;
-		}
-
+        
 		private void SetNodeStatusTimer(TrySendStatusToManagerTimer newTrySendStatusToManagerTimer,
 										JobQueueItemEntity jobQueueItemEntity)
 		{

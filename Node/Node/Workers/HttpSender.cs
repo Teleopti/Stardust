@@ -36,7 +36,7 @@ namespace Stardust.Node.Workers
 				catch
 				{
 					if (--retries == 0) throw;
-					Thread.Sleep(50);
+					await Task.Delay(50, cancellationToken);
 				}
 			}
 		}

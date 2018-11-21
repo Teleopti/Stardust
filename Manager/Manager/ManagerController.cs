@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Stardust.Manager.Constants;
 using Stardust.Manager.Extensions;
-using Stardust.Manager.Helpers;
 using Stardust.Manager.Models;
 using Stardust.Manager.Validations;
 
@@ -43,7 +40,7 @@ namespace Stardust.Manager
 			this.Log().InfoWithLineNumber(msg);
 
 			
-			Task.Factory.StartNew(() =>
+			Task.Run(() =>
 			{
 				_jobManager.AssignJobToWorkerNodes();
 			});
@@ -100,7 +97,7 @@ namespace Stardust.Manager
 			var isValidRequest = _validator.ValidateUri(workerNodeUri);
 			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
 
-			Task.Factory.StartNew(() =>
+			Task.Run(() =>
 			{
 				this.Log().InfoWithLineNumber(WhoAmI(Request) +
 					                              ": Received heartbeat from Node. Node Uri : ( " + workerNodeUri + " )");
@@ -118,7 +115,7 @@ namespace Stardust.Manager
 			var isValidRequest = _validator.ValidateJobId(jobId);
 			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
 			
-			Task.Factory.StartNew(() =>
+			Task.Run(() =>
 			{
 				var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
 
@@ -141,7 +138,7 @@ namespace Stardust.Manager
 			var isValidRequest = _validator.ValidateObject(jobFailed);
 			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
 			
-			Task.Factory.StartNew(() =>
+			Task.Run(() =>
 			{
 				var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
 
@@ -173,7 +170,7 @@ namespace Stardust.Manager
 			var isValidRequest = _validator.ValidateJobId(jobId);
 			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
 			
-			Task.Factory.StartNew(() =>
+			Task.Run(() =>
 			{
 				var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
 
@@ -199,7 +196,7 @@ namespace Stardust.Manager
 				var isValidRequest = _validator.ValidateObject(detail);
 				if (!isValidRequest.Success) continue;
 				
-				Task.Factory.StartNew(() =>
+				Task.Run(() =>
 				                      {
 					                      _jobManager.CreateJobDetail(detail);
 				                      });

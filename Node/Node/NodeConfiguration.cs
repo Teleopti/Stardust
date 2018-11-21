@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Text;
 
 namespace Stardust.Node
 {
@@ -69,18 +70,18 @@ namespace Stardust.Node
 				throw new ArgumentNullException(nameof(port));
 			}
 
-		    var nodeUrl = "http://";
+		    var nodeUrl = new StringBuilder("http://");
 
             if(fixedIp != null)
             {
-                nodeUrl += fixedIp.AddressFamily == AddressFamily.InterNetworkV6 ? "[" + fixedIp + "]" : fixedIp.ToString();
+                nodeUrl.Append(fixedIp.AddressFamily == AddressFamily.InterNetworkV6 ? "[" + fixedIp + "]" : fixedIp.ToString());
             }
             else
             {
-                nodeUrl += GetHostName();
+                nodeUrl.Append(GetHostName());
             }
 
-			return new Uri(nodeUrl + ":" + port + "/");
+			return new Uri($"{nodeUrl}:{port}/");
 		}
 	}
 }

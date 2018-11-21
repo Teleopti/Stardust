@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Handlers;
-using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using Stardust.Manager.Interfaces;
 
@@ -33,7 +31,7 @@ namespace ManagerTest.Fakes
 		{
 			if (FailPostAsync)
 			{
-				throw new AggregateException(new HttpRequestException("",  new WebException("The remote name could not be resolved: 'x'")));
+				return Task.FromException<HttpResponseMessage>(new HttpRequestException("",  new WebException("The remote name could not be resolved: 'x'")));
 			}
 				
 			return ReturnOkOrConflict(url, true);

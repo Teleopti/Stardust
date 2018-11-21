@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -24,7 +23,6 @@ namespace Stardust.Manager
 		private readonly ILog ManagerLogger;
 		private readonly object _requeueJobLock = new object();
 		private readonly object _assigningJob = new object();
-		//private static readonly ILog ManagerLogger = LogManager.GetLogger("Stardust.ManagerLog");
 
 		public JobRepository(ManagerConfiguration managerConfiguration,
 		                     RetryPolicyProvider retryPolicyProvider,
@@ -34,7 +32,7 @@ namespace Stardust.Manager
 		{
 			if (retryPolicyProvider == null)
 			{
-				throw new ArgumentNullException("retryPolicyProvider");
+				throw new ArgumentNullException(nameof(retryPolicyProvider));
 			}
 
 			if (retryPolicyProvider.GetPolicy() == null)
@@ -371,7 +369,7 @@ namespace Stardust.Manager
 
 						var builderHelper = new NodeUriBuilderHelper(sentToWorkerNodeUri);
 						var uriCancel = builderHelper.GetCancelJobUri(jobId);
-						var response = _httpSender.DeleteAsync(uriCancel).Result;
+						var response = _httpSender.DeleteAsync(uriCancel).GetAwaiter().GetResult();
 
 						if (response != null && response.IsSuccessStatusCode)
 						{
@@ -421,16 +419,15 @@ namespace Stardust.Manager
 						HttpResponseMessage response = null;
 						try
 						{
-							response = _httpSender.PostAsync(urijob, jobQueueItem).Result;
+							response = _httpSender.PostAsync(urijob, jobQueueItem).GetAwaiter().GetResult();
 						}
-						catch (AggregateException aggregateException)
+						catch (HttpRequestException httpRequestException)
 						{
-							var nodeNotFound =
-								aggregateException.InnerExceptions.FirstOrDefault(e => e is HttpRequestException)?.InnerException is
+							var nodeNotFound = httpRequestException.InnerException is
 									WebException;
 
 							if (!nodeNotFound) throw;
-							ManagerLogger.Info($"Send job to node:{availableNode} failed. {aggregateException.Message}", aggregateException);
+							ManagerLogger.Info($"Send job to node:{availableNode} failed. {httpRequestException.Message}", httpRequestException);
 							return;
 						}
 						

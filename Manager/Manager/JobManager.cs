@@ -88,17 +88,7 @@ namespace Stardust.Manager
 				_nodeManager.RequeueJobsThatDidNotFinishedByWorkerNodeUri(node);
 			}
 		}
-
-		public JobQueueItem GetJobQueueItemByJobId(Guid jobId)
-		{
-			return _jobRepository.GetJobQueueItemByJobId(jobId);
-		}
-
-		public List<JobQueueItem> GetAllItemsInJobQueue()
-		{
-			return _jobRepository.GetAllItemsInJobQueue();
-		}
-
+        
 		public void AddItemToJobQueue(JobQueueItem jobQueueItem)
 		{
 			_jobRepository.AddItemToJobQueue(jobQueueItem);

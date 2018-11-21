@@ -56,15 +56,12 @@ namespace Stardust.Node.Workers
 			{
 				try
 				{
-					var task = Task.Factory.StartNew(async () =>
+					var task = Task.Run(async () =>
 					                                 {
 						                                 var httpResponseMessage = await _httpSender.PostAsync(_uriBuilder.Uri, _jobDetails, cancellationToken);
-						                                 if (httpResponseMessage.IsSuccessStatusCode)
-						                                 {
-							                                 //detail.Sent = true;
-						                                 }
+					                                     httpResponseMessage.EnsureSuccessStatusCode();
 					                                 }, cancellationToken);
-					task.Wait(cancellationToken);
+					task.GetAwaiter().GetResult();
 					_jobDetails.Clear();
 				}
 				catch (Exception)
