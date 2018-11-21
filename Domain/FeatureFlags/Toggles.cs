@@ -79,6 +79,7 @@
 		ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941,
 		ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717,
 		ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487,
+		ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118,
 
 		Wfm_DisplayOnlineHelp_39402,
 
