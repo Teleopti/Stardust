@@ -676,7 +676,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestSupportMultiSelectionSkillTypes_74945)]
 		public void
 			ShouldApprovedAndAssginActivityCorrectlyBaseOnSkillsWhenMultipleSkillTypesSelectionIsEnabledInOvertimeRequestOpenPeriodSetting()
 		{

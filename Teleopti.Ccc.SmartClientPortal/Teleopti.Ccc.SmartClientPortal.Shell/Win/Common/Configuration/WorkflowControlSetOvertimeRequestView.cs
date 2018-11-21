@@ -237,8 +237,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				OvertimeRequestPeriodModel.OvertimeRequestWorkRuleValidationHandleOptionViews.Values.ToList(), "Description",
 				typeof(OvertimeRequestValidationHandleOptionView)));
 
-			var enabledMultiSelect = _toggleManager.IsEnabled(Toggles.OvertimeRequestSupportMultiSelectionSkillTypes_74945);
-			var comboBoxCellModel = new GridDropDownAdvComboBoxCellModel(gridControlOvertimeRequestOpenPeriods.Model, enabledMultiSelect);
+			var comboBoxCellModel = new GridDropDownAdvComboBoxCellModel(gridControlOvertimeRequestOpenPeriods.Model);
 
 			gridControlOvertimeRequestOpenPeriods.CellModels.Add("MultiSelectCellModel", comboBoxCellModel);
 
