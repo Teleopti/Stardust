@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Auditing
 
 		public void Run()
 		{
+			
 			var types = _resolve.ConcreteTypesFor(typeof(IPurgeAudit));
 
 			foreach (var type in types)

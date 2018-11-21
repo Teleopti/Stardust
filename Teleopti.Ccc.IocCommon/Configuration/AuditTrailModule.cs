@@ -40,6 +40,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			//do this in a smarter way in the next push
 			builder.RegisterType<StaffingContextPurgeService>().As<IPurgeAudit>().AsSelf().SingleInstance();
 			builder.RegisterType<PersonAccessContextPurgeService>().As<IPurgeAudit>().AsSelf().SingleInstance();
+			//builder.RegisterAssemblyTypes(typeof(IPurgeAudit).Assembly)
+			//	.Where(t=> t.GetInterfaces().Any(i=>i== typeof(IPurgeAudit)) )
+			//	.As( typeof(IPurgeAudit));
 
 			builder.RegisterType<PurgeAuditRunner>().AsSelf().SingleInstance();
 		}

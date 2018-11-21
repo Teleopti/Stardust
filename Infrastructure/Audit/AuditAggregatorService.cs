@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
+namespace Teleopti.Ccc.Infrastructure.Audit
 {
-	public class AuditAggregatorService
+	public class AuditAggregatorService : IAuditAggregatorService
 	{
 		private readonly IStaffingContextReaderService _staffingContextReaderService;
 		private readonly IPersonAccessContextReaderService _personAccessContextReaderService;
@@ -25,8 +26,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 		{
 			var aggregatedAudits = new List<AuditServiceModel>();
 
-			aggregatedAudits.AddRange(getStaffingAudits(personId,startDate,endDate));
-			aggregatedAudits.AddRange(getPersonAccessAudits(personId,startDate,endDate));
+			aggregatedAudits.AddRange(getStaffingAudits(personId, startDate, endDate));
+			aggregatedAudits.AddRange(getPersonAccessAudits(personId, startDate, endDate));
 
 			fixUserTimeZone(aggregatedAudits);
 
@@ -37,16 +38,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 		private void fixUserTimeZone(List<AuditServiceModel> aggregatedAudits)
 		{
 			aggregatedAudits.ForEach(x =>
-				{
-					x.TimeStamp = TimeZoneHelper.ConvertFromUtc(x.TimeStamp,
-						_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
-				});
+			{
+				x.TimeStamp = TimeZoneHelper.ConvertFromUtc(x.TimeStamp,
+					_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+			});
 		}
 
 		private IEnumerable<AuditServiceModel> getStaffingAudits(Guid personId, DateTime startDate, DateTime endDate)
 		{
 			var person = _personRepository.Load(personId);
-			return  _staffingContextReaderService.LoadAudits(person, startDate, endDate);
+			return _staffingContextReaderService.LoadAudits(person, startDate, endDate);
 		}
 
 		private IEnumerable<AuditServiceModel> getPersonAccessAudits(Guid personId, DateTime startDate, DateTime endDate)
@@ -54,6 +55,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 			var person = _personRepository.Load(personId);
 			return _personAccessContextReaderService.LoadAudits(person, startDate, endDate);
 		}
-		
+
 	}
 }
