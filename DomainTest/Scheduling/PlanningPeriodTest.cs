@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test, SetCulture("sv-SE")]
 		public void ShouldGetUpcommingMonthAsDefaultPlanningPeriod()
 		{
-			var target = new PlanningPeriod( new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015,4,1)),new List<AggregatedSchedulePeriod>()));
+			var target = new PlanningPeriod( new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015,4,1)),new List<AggregatedSchedulePeriod>()), new PlanningGroup());
 			
 			target.Range.Should().Be.EqualTo(new DateOnlyPeriod(2015, 05, 01, 2015, 05, 31));
 		}
@@ -26,15 +26,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test, SetCulture("sv-SE")]
 		public void ShouldReturnNextPlanningPeriod()
 		{
-			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
+			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()), new PlanningGroup());
 			target.NextPlanningPeriod(null).Range.Should().Be.EqualTo(new DateOnlyPeriod(2015, 06, 01, 2015, 06, 30));
 		}
 
 		[Test, SetCulture("sv-SE")]
 		public void ShouldReturnNextPlanningPeriodForPlanningGroup()
 		{
-			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
-			var planningGroup = new PlanningGroup("group1");
+			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()), new PlanningGroup());
+			var planningGroup = new PlanningGroup();
 			var nextPlanningPeriod = target.NextPlanningPeriod(planningGroup);
 			nextPlanningPeriod.Range.Should().Be.EqualTo(new DateOnlyPeriod(2015, 06, 01, 2015, 06, 30));
 			nextPlanningPeriod.PlanningGroup.Name.Should().Be.EqualTo(planningGroup.Name);
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test, SetCulture("sv-SE")]
 		public void ShouldReturnNextNextPlanningPeriod()
 		{
-			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
+			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()), new PlanningGroup());
 			target.NextPlanningPeriod(null).NextPlanningPeriod(null).Range.Should().Be.EqualTo(new DateOnlyPeriod(2015, 07, 01, 2015, 07, 31));
 		}
 
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				aggSchedulePeriod1,aggSchedulePeriod2
 			});
 
-			var target = new PlanningPeriod(suggestion);
+			var target = new PlanningPeriod(suggestion, new PlanningGroup());
 			target.ChangeRange(new SchedulePeriodForRangeCalculation { Culture = culture, Number = 1, PeriodType = SchedulePeriodType.Week, StartDate = new DateOnly(2015, 06, 01) });
 			target.NextPlanningPeriod(null).Range.Should().Be.EqualTo(new DateOnlyPeriod(2015, 06, 8, 2015, 06, 21));
 		}
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldChangeTypeOfPeriodAndNextPeriodShouldUseSameWeek()
 		{
-			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 05, 23)), new List<AggregatedSchedulePeriod>()));
+			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 05, 23)), new List<AggregatedSchedulePeriod>()), new PlanningGroup());
 
 			var startDate = new DateOnly(2017, 04, 03);
 			target.ChangeRange(new SchedulePeriodForRangeCalculation
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldChangeTypeOfPeriodAndNextPeriodShouldUseSameMonth()
 		{
-			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 05, 23)), new List<AggregatedSchedulePeriod>()));
+			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 05, 23)), new List<AggregatedSchedulePeriod>()), new PlanningGroup());
 
 			var startDate = new DateOnly(2017, 04, 01);
 			target.ChangeRange(new SchedulePeriodForRangeCalculation
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldChangeTypeOfPeriodAndNextPeriodShouldUseSameDays()
 		{
-			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 05, 23)), new List<AggregatedSchedulePeriod>()));
+			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 05, 23)), new List<AggregatedSchedulePeriod>()), new PlanningGroup());
 
 			var startDate = new DateOnly(2017, 04, 01);
 			target.ChangeRange(new SchedulePeriodForRangeCalculation
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldReturnMonthPeriodEvenIfStartDateIsInMiddleOfMonth()
 		{
-			var target = new PlanningPeriod(new DateOnlyPeriod(2017, 12, 10, 2018, 1, 9),SchedulePeriodType.Month,1);
+			var target = new PlanningPeriod(new DateOnly(2017, 12, 10), SchedulePeriodType.Month,1, new PlanningGroup());
 			target.PeriodType.Should().Be.EqualTo(SchedulePeriodType.Month);
 			target.Number.Should().Be.EqualTo(1);
 		}
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldReturnMonthPeriodWhenStartDateIs31()
 		{
-			var target = new PlanningPeriod(new DateOnlyPeriod(2017, 3, 31, 2017, 4, 29),SchedulePeriodType.Month,1);
+			var target = new PlanningPeriod(new DateOnly(2017, 3, 31), SchedulePeriodType.Month,1, new PlanningGroup());
 			target.PeriodType.Should().Be.EqualTo(SchedulePeriodType.Month);
 			target.Number.Should().Be.EqualTo(1);
 		}
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldReturnMonthPeriodWhenItIsOneMonthLongAndEndDateIsFebruary27()
 		{
-			var target = new PlanningPeriod(new DateOnlyPeriod(2017, 1, 30, 2017, 2, 27),SchedulePeriodType.Month, 1);
+			var target = new PlanningPeriod(new DateOnly(2017, 1, 30), SchedulePeriodType.Month, 1, new PlanningGroup());
 			target.PeriodType.Should().Be.EqualTo(SchedulePeriodType.Month);
 			target.Number.Should().Be.EqualTo(1);
 		}
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldReturnMonthPeriodWhenItIsTwoMonthsLongAndEndDateIsFebruary27()
 		{
-			var target = new PlanningPeriod(new DateOnlyPeriod(2016, 12, 29, 2017, 2, 27),SchedulePeriodType.Month,2);
+			var target = new PlanningPeriod(new DateOnly(2016, 12, 29), SchedulePeriodType.Month,2, new PlanningGroup());
 			target.PeriodType.Should().Be.EqualTo(SchedulePeriodType.Month);
 			target.Number.Should().Be.EqualTo(2);
 		}

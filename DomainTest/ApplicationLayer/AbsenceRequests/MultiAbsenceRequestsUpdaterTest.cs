@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			isolate.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 			isolate.UseTestDouble<FakeBudgetGroupRepository>().For<IBudgetGroupRepository>();
 			isolate.UseTestDouble<FakeBudgetDayRepository>().For<IBudgetDayRepository>();
+			isolate.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
 		}
 
 		[Test]

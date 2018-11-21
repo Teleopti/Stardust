@@ -95,11 +95,9 @@
 				return;
 			vm.openCreatePpModal = false;
 			var startDate = moment(vm.selectedSuggestion.startDate).format('YYYY-MM-DD');
-			var newEndDate = moment(vm.selectedSuggestion.endDate).format('YYYY-MM-DD');
 			var firstPp = planningPeriodServiceNew.firstPlanningPeriod({
 				planningGroupId: planningGroupId,
 				startDate: startDate,
-				endDate: newEndDate,
 				schedulePeriodType: vm.intervalType,
 				lengthOfThePeriodType: vm.intervalRange
 			});

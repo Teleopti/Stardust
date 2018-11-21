@@ -1,19 +1,5 @@
 @using Teleopti.Ccc.UserTexts @{ Layout = null; }
 <style>
-	html,
-	body,
-	section#page,
-	article#body,
-	#body-inner {
-		height: 100%;
-		overflow-x: hidden;
-	}
-
-	html,
-	body {
-		overflow: hidden;
-	}
-
 	#loading {
 		width: 100%;
 		text-align: center;
@@ -44,9 +30,9 @@
 </style>
 <!-- /ko -->
 
-<div class="nav navbar navbar-teleopti new-teamschedule-view-nav" data-bind="css: {'new-teamschedule-view-nav-mobile': isHostAMobile}">
+<div class="nav navbar teleopti-toolbar new-teamschedule-view-nav" data-bind="css: {'new-teamschedule-view-nav-mobile': isHostAMobile}">
 	<div class="container">
-		<ul class="nav navbar-nav navbar-teleopti row submenu">
+		<ul class="nav navbar-nav teleopti-toolbar row submenu">
 			<li class="mobile-datepicker">
 				<div class="input-group">
 					<span class="input-group-btn">
@@ -115,7 +101,7 @@
 	</div>
 </div>
 
-<div class="container relative pagebody new-teamschedule-view relative" data-bind="css: {'new-teamschedule-view-mobile': isHostAMobile && isMobileEnabled, 'new-teamschedule-view-ipad': isHostAniPad && isDesktopEnabled}, style: {display: isMobileEnabled || isDesktopEnabled ? 'block': 'none'}">
+<div class="container relative pagebody new-teamschedule-view relative" data-bind="css: {'new-teamschedule-view-mobile': isHostAMobile && isMobileEnabled, 'new-teamschedule-view-iphone': isHostAniPhone && isMobileEnabled, 'new-teamschedule-view-ipad': isHostAniPad && isDesktopEnabled}, style: {display: isMobileEnabled || isDesktopEnabled ? 'block': 'none'}">
 	<div class="agent-name-row container relative">
 		<!-- ko if: mySchedule -->
 		<div class="timeline-margin-block relative"></div>

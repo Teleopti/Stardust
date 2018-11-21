@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { IStateService } from 'angular-ui-router';
 import { AuthenticatedInterceptor, BusinessUnitInterceptor, ClientOutdatedInterceptor } from './interceptors';
 import { NavigationService, ThemeService, TogglesService, UserService, VersionService } from './services';
+import { WINDOW } from '@wfm/common';
 
 @NgModule({
 	imports: [HttpClientModule],
@@ -32,7 +33,8 @@ import { NavigationService, ThemeService, TogglesService, UserService, VersionSe
 			useFactory: (i: any): IStateService => i.get('$state'),
 			deps: ['$injector']
 		},
-		NavigationService
+		NavigationService,
+		{ provide: WINDOW, useValue: window }
 	],
 	entryComponents: []
 })

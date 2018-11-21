@@ -1,7 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
-import Papa from 'papaparse';
+import { Component, Input } from '@angular/core';
 import FileSaver from 'file-saver';
 import { NzMessageService } from 'ng-zorro-antd';
+import Papa from 'papaparse';
 /*
 	Part of working around https://github.com/angular/angular/issues/14761
  */
@@ -15,13 +15,13 @@ export function toBoolean(value: any): boolean {
 	styleUrls: ['./table-options-menu.component.scss'],
 	providers: []
 })
-export class TableOptionsMenu {
+export class TableOptionsMenuComponent {
 	private _enableCsvExport = false;
 
 	constructor(private message: NzMessageService) {}
 
-	@Input('data')
-	dataSet: any[];
+	@Input()
+	data: any[];
 
 	@Input()
 	set enableCsvExport(value: boolean) {
@@ -34,9 +34,9 @@ export class TableOptionsMenu {
 
 	exportToCsv() {
 		if (!this.enableCsvExport) return;
-		if (this.dataSet.length === 0) return this.message.warning('No data to export');
-		console.log('export', this.dataSet);
-		const csvString = Papa.unparse(this.dataSet);
+		if (this.data.length === 0) return this.message.warning('No data to export');
+		console.log('export', this.data);
+		const csvString = Papa.unparse(this.data);
 		const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8' });
 		FileSaver.saveAs(blob, 'export.csv');
 	}

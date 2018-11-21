@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			PersonRepository.Has(filterContract, new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"),
 				new Team {Site = new Site("site")}, schedulePeriod, ruleSet, skill);
 
-			var planningGroup = new PlanningGroup("_").AddFilter(new ContractFilter(filterContract));
+			var planningGroup = new PlanningGroup().AddFilter(new ContractFilter(filterContract));
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, SchedulePeriodType.Week, planningGroup);
 			PlanningGroupRepository.Has(planningGroup);
 

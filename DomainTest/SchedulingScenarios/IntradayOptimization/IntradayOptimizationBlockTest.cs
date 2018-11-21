@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakePlanningGroupSettingsRepository PlanningGroupSettingsRepository;
 		public FakePlanningGroupRepository PlanningGroupRepository;
 
 		[Test]
@@ -60,11 +59,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			PersonAssignmentRepository.Has(new PersonAssignment(agentWithSameStarttime, scenario, date.AddDays(6)).WithDayOff());
 			var planningGroup = PlanningGroupRepository.Has(); //all agents are optimized
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1, planningGroup);
-			var planningGroupSettings = PlanningGroupSettings.CreateDefault(planningGroup);
+			var planningGroupSettings = new PlanningGroupSettings();
 			planningGroupSettings.AddFilter(new TeamFilter(agentWithSameStarttime.MyTeam(date))); //only agentWithSameStarttime has these settings
 			planningGroupSettings.BlockFinderType = BlockFinderType.BetweenDayOff;
 			planningGroupSettings.BlockSameStartTime = true;
-			PlanningGroupSettingsRepository.Add(planningGroupSettings);
+			planningGroup.AddSetting(planningGroupSettings);
 			
 			Target.Execute(planningPeriod.Id.Value);
 

@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
+		public FakePlanningGroupRepository PlanningGroupRepository;
 
 		[Test]
 		public void ShouldScheduleAndDayOffOptimizeAllDays()
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var team = new Team();
 			var planningGroup = new PlanningGroup();
 			planningGroup.AddFilter(new TeamFilter(team));
+			PlanningGroupRepository.Has(planningGroup);
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1, planningGroup);
 			var agentToSchedule = PersonRepository.Has(team,schedulePeriod, ruleSet, skill);
 			var contractSchedule = new ContractSchedule("_");

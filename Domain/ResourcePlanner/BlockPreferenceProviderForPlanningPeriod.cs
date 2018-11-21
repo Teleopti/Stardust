@@ -7,20 +7,16 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner
 	public class BlockPreferenceProviderForPlanningPeriod : IBlockPreferenceProviderForPlanningPeriod
 	{
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
-		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
 
-		public BlockPreferenceProviderForPlanningPeriod(IPlanningPeriodRepository planningPeriodRepository,
-			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory)
+		public BlockPreferenceProviderForPlanningPeriod(IPlanningPeriodRepository planningPeriodRepository)
 		{
 			_planningPeriodRepository = planningPeriodRepository;
-			_blockPreferenceProviderUsingFiltersFactory = blockPreferenceProviderUsingFiltersFactory;
 		}
 		
 		public IBlockPreferenceProvider Fetch(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
-			var planningGroup = planningPeriod.PlanningGroup;
-			return _blockPreferenceProviderUsingFiltersFactory.Create(planningGroup);
+			return new BlockPreferenceProviderUsingFilters(planningPeriod.PlanningGroup.Settings);
 		}
 	}
 }

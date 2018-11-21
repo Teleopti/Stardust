@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePersonRotationRepository PersonRotationRepository;
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakePlanningGroupRepository PlanningGroupRepository;
 
 		[Test]
 		public void ShouldHandleTeamUsingShiftOverMidnight()
@@ -61,14 +62,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(19, 0, 19, 0, 15), new TimePeriodWithSegment(27, 0, 27, 0, 15), shiftCategory));
 			var agent = PersonRepository.Has(new ContractWithMaximumTolerance(), contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				DayOffTemplate =  dayOffTemplate,
 				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
 				UseTeam = true,
 				TeamSameShiftCategory = true
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -96,14 +97,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var agent = PersonRepository.Has(new ContractWithMaximumTolerance(), contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill1, skill2);
 			SkillDayRepository.Has(skill1.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			SkillDayRepository.Has(skill2.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				DayOffTemplate = dayOffTemplate,
 				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
 				UseTeam = true,
 				TeamSameShiftCategory = true
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -138,7 +139,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.Has(agent1, scenario, activity, otherShiftCategory, firstDay.AddDays(1), new TimePeriod(8, 16));
 			AssignmentRepository.Has(agent2, scenario, activity, otherShiftCategory, firstDay, new TimePeriod(8, 16));
 			AssignmentRepository.Has(agent2, scenario, activity, otherShiftCategory, firstDay.AddDays(1), new TimePeriod(8, 16));
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay,SchedulePeriodType.Day, 5);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				UseTeam = true,
 				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag),
@@ -147,7 +149,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TeamSameShiftCategory = true,
 				BlockSameShiftCategory = true
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, firstDay.AddDays(4),SchedulePeriodType.Day, 5);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -183,7 +184,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				1, 1, 1, 1, 1, 1, 1));
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				UseAvailability = true,
 				UsePreferences = true,
@@ -196,7 +198,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TeamSameShiftCategory = true,
 				TagToUseOnScheduling = NullScheduleTag.Instance
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -243,7 +244,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				1, 1, 1, 1, 1, 1, 1));
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				UseAvailability = true,
 				UsePreferences = true,
@@ -256,7 +258,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TeamSameShiftCategory = true,
 				TagToUseOnScheduling = NullScheduleTag.Instance
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -295,7 +296,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skill1.CreateSkillDayWithDemand(scenario, date, 10), skill2.CreateSkillDayWithDemand(scenario, date, 10));
 			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(date,SchedulePeriodType.Day, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				DayOffTemplate = dayOffTemplate,
 				ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
@@ -304,7 +306,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TeamSameShiftCategory = true,
 				TagToUseOnScheduling = NullScheduleTag.Instance
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(date,date,SchedulePeriodType.Day, 1);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -343,7 +344,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				1, 1, 1, 1, 1, 1, 1));
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				UseAvailability = true,
 				UsePreferences = true,
@@ -356,7 +358,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TeamSameShiftCategory = true,
 				TagToUseOnScheduling = NullScheduleTag.Instance
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value, false);
 
@@ -396,13 +397,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
 				UseTeam = true,
 				TagToUseOnScheduling = NullScheduleTag.Instance
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -446,7 +447,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				DayOffTemplate = dayOffTemplate,
 				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
@@ -454,7 +456,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TagToUseOnScheduling = NullScheduleTag.Instance,
 				UseShiftCategoryLimitations = true
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -483,14 +484,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				DayOffTemplate = dayOffTemplate,
 				TagToUseOnScheduling = NullScheduleTag.Instance,
 				UseBlock = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -518,14 +519,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skillAgentDontKnow.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 10, 10, 10, 10, 10, 10, 10));
 			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				DayOffTemplate = dayOffTemplate,
 				TagToUseOnScheduling = NullScheduleTag.Instance,
 				UseBlock = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -560,14 +561,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skillExtendedActivityAgentDontKnow.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 10, 10, 10, 10, 10, 10, 10));
 			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				DayOffTemplate = dayOffTemplate,
 				TagToUseOnScheduling = NullScheduleTag.Instance,
 				UseBlock = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -598,14 +599,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				DayOffTemplate = dayOffTemplate,
 				TagToUseOnScheduling = NullScheduleTag.Instance,
 				UseBlock = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -634,14 +635,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skillExtendedActivity.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				DayOffTemplate = dayOffTemplate,
 				TagToUseOnScheduling = NullScheduleTag.Instance,
 				UseBlock = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -669,14 +670,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				DayOffTemplate = dayOffTemplate,
 				TagToUseOnScheduling = NullScheduleTag.Instance,
 				UseBlock = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -705,14 +706,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skillExtendedActivity.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				DayOffTemplate = dayOffTemplate,
 				TagToUseOnScheduling = NullScheduleTag.Instance,
 				UseBlock = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 			
@@ -745,14 +746,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				DayOffTemplate = dayOffTemplate,
 				TagToUseOnScheduling = NullScheduleTag.Instance,
 				UseBlock = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -777,14 +778,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				DayOffTemplate = dayOffTemplate,
 				TagToUseOnScheduling = NullScheduleTag.Instance,
 				UseBlock = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -810,13 +811,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			agentOnlyKnowingClosedSkill.SetName(new Name("AgentClosed", "AgentClosed"));
 			SkillDayRepository.Has(closedSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			SkillDayRepository.Has(openSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
 				UseTeam = true,
 				TeamSameShiftCategory = true
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -845,16 +846,17 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				skillA.CreateSkillDayWithDemand(scenario, date, 1),
 				skillB.CreateSkillDayWithDemand(scenario, date, 1.1), //make test red if skillA/agentAB isn't counted
 				skillC.CreateSkillDayWithDemand(scenario, date, 1));
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningGroup = new PlanningGroup();
+			planningGroup.AddFilter(new TeamFilter(team));
+			PlanningGroupRepository.Has(planningGroup);
+			var planningPeriod = new PlanningPeriod(date,SchedulePeriodType.Day, 1, planningGroup);
+			PlanningPeriodRepository.Add(planningPeriod);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
 				UseTeam = true,
 				TeamSameShiftCategory = true
 			});
-			var planningGroup = new PlanningGroup();
-			planningGroup.AddFilter(new TeamFilter(team));
-			var planningPeriod = new PlanningPeriod(date.ToDateOnlyPeriod(),SchedulePeriodType.Day, 1, planningGroup);
-			PlanningPeriodRepository.Add(planningPeriod);
 
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -875,13 +877,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(3, 0, 3, 0, 15), new TimePeriodWithSegment(11, 0, 11, 0, 15), new ShiftCategory("_").WithId()));
 			var agent = PersonRepository.Has(new ContractWithMaximumTolerance(), new SchedulePeriod(date, SchedulePeriodType.Day, 1), ruleSet, skill).InTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date.AddDays(-1), 1, 1, 1));
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(date,SchedulePeriodType.Day, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				UseBlock = true,
 				BlockSameShift = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod
 			});				
-			var planningPeriod = PlanningPeriodRepository.Has(date,date,SchedulePeriodType.Day, 1);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -915,7 +917,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			rotation.RotationDays[1].RestrictionCollection[0].ShiftCategory = shiftCategory7H;
 			var personRotation = new PersonRotation(agent, rotation, firstDay, 0).WithId();
 			PersonRotationRepository.Add(personRotation);
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				UseRotations = true,
 				UseBlock = true,
@@ -924,8 +927,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				BlockSameShiftCategory = false,
 				UseAverageShiftLengths = true
 			});
-			
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value, false);
 			
@@ -961,15 +962,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				DayOffTemplate = dayOffTemplate,
 				TagToUseOnScheduling = NullScheduleTag.Instance,
 				UseBlock = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
-
+			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Count(personAssignment => personAssignment.MainActivities().Any()).Should().Be.EqualTo(5);
@@ -996,14 +997,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 					dayTemplate.Close();
 				}
 			}
-
 			PersonAbsenceRepository.Has(new PersonAbsence(agent, scenario, new AbsenceLayer(new Absence { InContractTime = true },
 					firstDay.ToDateTimePeriod(new TimePeriod(8, 16), TimeZoneInfo.Utc))));
-
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 0, 1, 1, 1, 1, 0, 0));
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				DayOffTemplate = dayOffTemplate,
 				ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
@@ -1012,7 +1012,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod,
 				UseAverageShiftLengths = true
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -1046,8 +1045,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 0, 1, 1, 1, 1, 0, 0));
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			PersonAssignmentRepository.Has(agent, scenario, dayOffTemplate,firstDay.AddDays(-1));
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			PersonAssignmentRepository.Has(agent, scenario, dayOffTemplate,firstDay.AddDays(-1));			
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, SchedulePeriodType.Week, 1);
+			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
 			{
 				DayOffTemplate = dayOffTemplate,
 				ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
@@ -1056,7 +1056,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff,
 				UseAverageShiftLengths = true
 			});
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 

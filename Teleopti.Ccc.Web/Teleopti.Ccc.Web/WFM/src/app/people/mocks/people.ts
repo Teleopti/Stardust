@@ -11,30 +11,30 @@ type Site2 = 'Site2';
 const site1: Site1 = 'Site1';
 const site2: Site2 = 'Site2';
 
-export type Adina = {
+export interface Adina {
 	Id: 'id1';
 	FirstName: 'Adina';
 	LastName: 'Oswald';
 	Site: Site1;
 	Team: Team1;
 	Roles: [Agent, TeamLeader];
-};
-export type Eva = {
+}
+export interface Eva {
 	Id: 'id2';
 	FirstName: 'Eva';
 	LastName: 'Speece';
 	Site: Site1;
 	Team: Team1;
 	Roles: [Agent];
-};
-export type Myles = {
+}
+export interface Myles {
 	Id: 'id3';
 	FirstName: 'Myles';
 	LastName: 'Miller';
 	Site: Site2;
 	Team: Team2;
 	Roles: [Agent];
-};
+}
 
 export const adina: Adina = {
 	Id: 'id1',

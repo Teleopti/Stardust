@@ -62,13 +62,13 @@ export class GrantPageComponent implements OnInit, OnDestroy {
 
 	toggleSelectedRole(role: Role): void {
 		const roleId = role.Id;
-		this.selectableRoles = this.selectableRoles.map(role => {
+		this.selectableRoles = this.selectableRoles.map(r => {
 			if (roleId === role.Id)
 				return {
-					...role,
-					selected: !role.selected
+					...r,
+					selected: !r.selected
 				};
-			else return role;
+			else return r;
 		});
 	}
 

@@ -54,11 +54,9 @@
 	});
 
 	test('should navigate to default start day view when clicking logo', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
-
 		var html = [
 			'<div class="navbar-header pull-left fake-navbar-brand">',
-			'	<button id="mainNavbarToggler" type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".navbar-offcanvas">',
+			'	<button type="button" class="navbar-toggle navbar-toggle-button" data-toggle="offcanvas" data-target=".navbar-offcanvas">',
 			'		<span class="icon-bar"></span>',
 			'		<span class="icon-bar"></span>',
 			'		<span class="icon-bar"></span>',
@@ -94,10 +92,8 @@
 	});
 
 	test('should navigate to default start date when clicking schedule menu item', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
-
 		var html = [
-			'<div class="navbar-offcanvas navmenu-fixed-left offcanvas menu-top-adjust" id="bs-example-navbar-collapse-1">',
+			'<div class="navbar-offcanvas offcanvas">',
 			'	<ul class="nav navbar-nav">',
 			'		<li class="active">',
 			'			<a href="#ScheduleTab" onclick="hideNavMenu();" data-mytime-action="Schedule/Week">',
@@ -156,7 +152,7 @@
 
 		equal($('ul.navbar-nav li a[href="#Schedule/MobileDay"]').attr('data-mytime-action'), 'Schedule/MobileDay');
 
-		$('#bs-example-navbar-collapse-1').remove();
+		$('.teleopti-mytime-top-menu .navbar-offcanvas').remove();
 	});
 
 	test('should navigate to next date when swiping left', function() {
@@ -305,9 +301,6 @@
 	});
 
 	test('should not show unreadMessage number if it is zero', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_MonthlyScheduleMobileView_45004');
-
 		startDayData.UnReadMessageCount = 0;
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
 			fakeReadyForInteractionCallback,
@@ -318,7 +311,7 @@
 
 		var html =
 			'<div id="testUnreadMessageHtml">' +
-			'<ul class="nav navbar-nav navbar-teleopti row submenu">' +
+			'<ul class="nav navbar-nav teleopti-toolbar row submenu">' +
 			'<li class="mobile-message" data-bind="click: navigateToMessages">' +
 			'<a>' +
 			'<i class="glyphicon glyphicon-envelope"></i>' +
@@ -339,8 +332,6 @@
 	});
 
 	test('should navigate to messages', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
-
 		Teleopti.MyTimeWeb.Portal.Init(getDefaultSetting(), getFakeWindow());
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
@@ -1138,21 +1129,6 @@
 		equal(probabilities.length, 0);
 	});
 
-	test('should not show overtime probability option if Overtime Probability is disabled and selectedProbability is overtime', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
-
-		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(
-			fakeReadyForInteractionCallback,
-			fakeCompletelyLoadedCallback,
-			ajax
-		);
-		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
-		vm.onProbabilityOptionSelectCallback(constants.probabilityType.overtime);
-		startDayData.OvertimeProbabilityEnabled = false;
-		vm.nextDay();
-		equal(vm.selectedProbabilityOptionValue(), 0);
-	});
-
 	function createPropabilities(periods, date) {
 		var values = [];
 		periods.forEach(function(period) {
@@ -1212,9 +1188,6 @@
 	}
 
 	function setupToggles() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_Command_44209');
-		Teleopti.MyTimeWeb.Common.EnableToggle('Staffing_Info_Configuration_44687');
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_PollToCheckScheduleChanges_46595');
 		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_TrafficLightOnMobileDayView_77447');
 		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640');
 	}

@@ -32,10 +32,10 @@ export class SearchService {
 	constructor(private http: HttpClient) {}
 
 	public peopleCache$ = new BehaviorSubject<Array<Person>>([]);
-	public keyword: string = '';
-	public pageIndex: number = 0;
-	public pageSize: number = 20;
-	public lastQuerySize: number = 0;
+	public keyword = '';
+	public pageIndex = 0;
+	public pageSize = 20;
+	public lastQuerySize = 0;
 	public sortColumn: number = COLUMNS.LastName;
 	public direction: number = DIRECTION.asc;
 

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		{
 			Recurring.PublishMinutely(new RecurringEvent());
 
-			Hangfire.TriggerReccuringJobs();
+			Hangfire.TriggerRecurringJobs();
 			Hangfire.EmulateWorkerIteration();
 
 			Hangfire.NumberOfFailedJobs().Should().Be(0);
@@ -42,11 +42,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		{
 			Recurring.PublishMinutely(new RecurringEvent());
 
-			Hangfire.TriggerReccuringJobs();
+			Hangfire.TriggerRecurringJobs();
 			Hangfire.EmulateWorkerIteration();
-			Hangfire.TriggerReccuringJobs();
+			Hangfire.TriggerRecurringJobs();
 			Hangfire.EmulateWorkerIteration();
-			Hangfire.TriggerReccuringJobs();
+			Hangfire.TriggerRecurringJobs();
 			Hangfire.EmulateWorkerIteration();
 
 			Hangfire.NumberOfFailedJobs().Should().Be(1);
@@ -59,13 +59,13 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 			Recurring.PublishMinutely(new RecurringEvent());
 			Recurring.PublishMinutely(new RecurringEvent2());
 
-			Hangfire.TriggerReccuringJobs();
+			Hangfire.TriggerRecurringJobs();
 			Hangfire.EmulateWorkerIteration();
 			Hangfire.EmulateWorkerIteration();
-			Hangfire.TriggerReccuringJobs();
+			Hangfire.TriggerRecurringJobs();
 			Hangfire.EmulateWorkerIteration();
 			Hangfire.EmulateWorkerIteration();
-			Hangfire.TriggerReccuringJobs();
+			Hangfire.TriggerRecurringJobs();
 			Hangfire.EmulateWorkerIteration();
 			Hangfire.EmulateWorkerIteration();
 
@@ -79,18 +79,18 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		{
 			Recurring.PublishMinutely(new RecurringEvent());
 			FailingHandler.Success = false;
-			Hangfire.TriggerReccuringJobs();
+			Hangfire.TriggerRecurringJobs();
 			Hangfire.EmulateWorkerIteration();
 			FailingHandler.Success = true;
-			Hangfire.TriggerReccuringJobs();
+			Hangfire.TriggerRecurringJobs();
 			Hangfire.EmulateWorkerIteration();
 
 			FailingHandler.Success = false;
-			Hangfire.TriggerReccuringJobs();
+			Hangfire.TriggerRecurringJobs();
 			Hangfire.EmulateWorkerIteration();
-			Hangfire.TriggerReccuringJobs();
+			Hangfire.TriggerRecurringJobs();
 			Hangfire.EmulateWorkerIteration();
-			Hangfire.TriggerReccuringJobs();
+			Hangfire.TriggerRecurringJobs();
 			Hangfire.EmulateWorkerIteration();
 
 			Hangfire.NumberOfFailedJobs().Should().Be(1);
@@ -101,13 +101,13 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		{
 			Recurring.PublishMinutely(new RecurringEvent());
 
-			Hangfire.TriggerReccuringJobs();
+			Hangfire.TriggerRecurringJobs();
 			Hangfire.EmulateWorkerIteration();
-			Hangfire.TriggerReccuringJobs();
+			Hangfire.TriggerRecurringJobs();
 			Hangfire.EmulateWorkerIteration();
-			Hangfire.TriggerReccuringJobs();
+			Hangfire.TriggerRecurringJobs();
 			Hangfire.EmulateWorkerIteration();
-			Hangfire.TriggerReccuringJobs();
+			Hangfire.TriggerRecurringJobs();
 			Hangfire.EmulateWorkerIteration();
 
 			Hangfire.NumberOfFailedJobs().Should().Be(2);

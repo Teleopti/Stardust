@@ -50,10 +50,6 @@ Teleopti.MyTimeWeb.Portal = (function($) {
 		});
 	}
 
-	function _showDayScheduleForStartPage() {
-		return Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_DayScheduleForStartPage_43446');
-	}
-
 	function _initNavigation(awindow) {
 		$('#innerNavBar a[data-mytime-action]').click(function(e) {
 			e.preventDefault();
@@ -62,10 +58,10 @@ Teleopti.MyTimeWeb.Portal = (function($) {
 
 		if (awindow.location.hash.length <= 1) {
 			var isMobile = _isMobile(awindow);
-			if (_showDayScheduleForStartPage() && isMobile) {
+			if (isMobile) {
 				awindow.location.replace('#Schedule/MobileDay');
 			} else {
-				awindow.location.replace('#' + (isMobile ? 'Schedule/MobileWeek' : _settings.defaultNavigation));
+				awindow.location.replace('#Schedule');
 			}
 		}
 
@@ -296,14 +292,7 @@ Teleopti.MyTimeWeb.Portal = (function($) {
 		var isWeekSchedule = hash.indexOf('#Schedule') >= 0;
 
 		if (_endsWith(hash, 'Tab')) {
-			var suffix =
-				hash.indexOf('#Schedule') === 0
-					? _isMobile(window)
-						? _showDayScheduleForStartPage()
-							? '/MobileDay'
-							: '/MobileWeek'
-						: '/Week'
-					: '/Index';
+			var suffix = hash.indexOf('#Schedule') === 0 ? (_isMobile(window) ? '/MobileDay' : '/Week') : '/Index';
 			hash = hash.substring(0, hash.length - 'Tab'.length) + suffix;
 		}
 
@@ -347,7 +336,7 @@ Teleopti.MyTimeWeb.Portal = (function($) {
 
 	function _adjustTabs(hashInfo) {
 		var tabHref = '#' + hashInfo.controller + 'Tab';
-		$('#bs-example-navbar-collapse-1 .nav li').removeClass('active');
+		$('.teleopti-mytime-top-menu .navbar-offcanvas .nav li').removeClass('active');
 		$('a[href="' + tabHref + '"]')
 			.parent()
 			.addClass('active');
@@ -446,10 +435,7 @@ Teleopti.MyTimeWeb.Portal = (function($) {
 
 	function _setUpLogoHref(mywindow) {
 		$(document).ready(function() {
-			if (
-				Teleopti.MyTimeWeb.Portal.IsMobile(mywindow) &&
-				Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
-			) {
+			if (Teleopti.MyTimeWeb.Portal.IsMobile(mywindow)) {
 				var brand = $('a.navbar-brand');
 				brand.attr({ href: '#Schedule/MobileDay' });
 

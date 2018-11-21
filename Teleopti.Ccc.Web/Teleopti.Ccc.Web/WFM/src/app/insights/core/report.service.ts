@@ -10,6 +10,7 @@ export class ReportService {
 
 	private url_getReportConfig = '../api/Insights/ReportConfig';
 	private url_getReports = '../api/Insights/Reports';
+	private url_cloneReport = '../api/Insights/CloneReport';
 	private headers = new Headers({'Content-Type': 'application/json'});
 
 	async getReportConfig(reportId: string): Promise<ReportConfig> {
@@ -20,6 +21,17 @@ export class ReportService {
 		};
 
 		return this.http.get(this.url_getReportConfig, parameters)
+			.toPromise()
+			.catch(this.handleError);
+	}
+	async cloneReport(reportId: string): Promise<ReportConfig> {
+		const parameters = {
+			params: {
+				reportId: reportId
+			}
+		};
+
+		return this.http.get(this.url_cloneReport, parameters)
 			.toPromise()
 			.catch(this.handleError);
 	}

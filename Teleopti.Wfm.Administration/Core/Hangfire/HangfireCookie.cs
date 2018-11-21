@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Web;
+using System.Web.Helpers;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using Teleopti.Ccc.Infrastructure.Hangfire;
@@ -22,12 +23,15 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 
 			var identity = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
 
-			HttpContext.Current.GetOwinContext().Authentication.SignIn(new AuthenticationProperties
+			var owinContext = HttpContext.Current.GetOwinContext();
+			owinContext.Authentication.SignIn(new AuthenticationProperties
 			{
 				AllowRefresh = true,
 				IsPersistent = false,
 				ExpiresUtc = DateTime.UtcNow.AddDays(1)
 			}, identity);
+			AntiForgery.GetTokens("", out var token, out _);
+			owinContext.Response.Cookies.Append(AntiForgeryConfig.CookieName, token);
 		}
 
 		public void RemoveAdminCookie()

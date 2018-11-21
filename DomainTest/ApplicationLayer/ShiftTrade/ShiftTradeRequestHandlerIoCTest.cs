@@ -6,6 +6,8 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -16,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 	[DomainTest]
 	[DefaultData]
 	[Toggle(Toggles.MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889)]
-	public class ShiftTradeRequestHandlerIoCTest
+	public class ShiftTradeRequestHandlerIoCTest: IIsolateSystem
 	{
 		public ShiftTradeRequestHandler Target;
 		public FakePersonRequestRepository PersonRequestRepository;
@@ -24,6 +26,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeDatabase Database;
 		public MutableNow Now;
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<ASMScheduleChangeTimePersister>().For<ITransactionHook>();
+			isolate.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
+			isolate.UseTestDouble<MutableNow>().For<INow>();
+		}
 
 		[Test]
 		public void ShouldDenyWhenPersonFromBreakMaximumWorkdayRule()

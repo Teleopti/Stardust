@@ -406,7 +406,6 @@
     <Compile Include="FakeRepositories\FakeStudentAvailabilityDayRepository.cs" />
     <Compile Include="FakeRepositories\FakeTeamRepository.cs" />
     <Compile Include="FakeRepositories\FakeWorkflowControlSetRepository.cs" />
-    <Compile Include="FakeRepositories\FakePlanningGroupSettingsRepository.cs" />
     <Compile Include="FakeRepositories\FakeDatabase.cs" />
     <Compile Include="IoC\AllTogglesOffAttribute.cs" />
     <Compile Include="IoC\AllTogglesOnAttribute.cs" />
@@ -438,7 +437,6 @@
     <Compile Include="IoC\LoggedOnAppDomainAttribute.cs" />
     <Compile Include="DbManagerLog4Net.cs" />
     <Compile Include="IoC\UseIocForFatClientAttribute.cs" />
-    <Compile Include="JobResultExtensions.cs" />
     <Compile Include="LegacyFakeEventPublisher.cs" />
     <Compile Include="MessageBrokerCompositeDummy.cs" />
     <Compile Include="Messaging\FakeUrl.cs" />
@@ -664,7 +662,6 @@
     <Compile Include="TestData\Analytics\EternityAndNotDefinedDate.cs" />
     <Compile Include="TestData\Analytics\ExistingDatasources.cs" />
     <Compile Include="TestData\Analytics\FactQueue.cs" />
-    <Compile Include="TestData\Analytics\FillBridgeQueueWorkloadFromData.cs" />
     <Compile Include="TestData\Analytics\FillBridgeTimeZoneFromData.cs" />
     <Compile Include="TestData\Analytics\IBridgeTimeZone.cs" />
     <Compile Include="TestData\Analytics\IBusinessUnitData.cs" />
@@ -703,7 +700,6 @@
     <Compile Include="TestData\Analytics\ThreeSkills.cs" />
     <Compile Include="TestData\Analytics\TodayDate.cs" />
     <Compile Include="TestData\Analytics\UtcAndCetTimeZones.cs" />
-    <Compile Include="TestData\Analytics\WeekdayTranslations.cs" />
     <Compile Include="TestData\Core\DataFactory.cs" />
     <Compile Include="TestData\Core\IAnalyticsDataSetup.cs" />
     <Compile Include="TestData\Core\AnalyticsDataFactory.cs" />

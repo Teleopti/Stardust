@@ -28,12 +28,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public bool HasModifyWriteProtectedSchedulePermission { get; set; }
 		public bool HasExportSchedulePermission { get; set; }
 	}
-
-	public class PagingGroupScheduleShiftViewModel
-	{
-		public IEnumerable<GroupScheduleShiftViewModel> GroupSchedule { get; set; }
-		public int TotalPages { get; set; }
-	}
 	
 	public class GroupScheduleViewModel
 	{

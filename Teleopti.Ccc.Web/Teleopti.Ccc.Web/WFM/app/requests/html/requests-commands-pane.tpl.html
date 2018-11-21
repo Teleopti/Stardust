@@ -32,7 +32,8 @@
 				<i class="mdi mdi-backup-restore"></i>
 				<span translate>Cancel</span>
 			</li>
-			<li ng-click="requestsCommandsPane.toggleProcessWaitlistModal()" ng-if="requestsCommandsPane.isCommandEnabledWithoutShiftTradeView('processWaitlist')">
+			<li ng-click="requestsCommandsPane.toggleProcessWaitlistModal()" 
+				ng-if="requestsCommandsPane.showWaitlist&&requestsCommandsPane.isCommandEnabledWithoutShiftTradeView('processWaitlist')">
 				<i class="mdi mdi-check-all"></i>
 				<span translate>ProcessWaitlist</span>
 			</li>

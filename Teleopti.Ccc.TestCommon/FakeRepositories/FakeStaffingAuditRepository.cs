@@ -10,7 +10,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakeStaffingAuditRepository : IStaffingAuditRepository
 	{
 		public List<IStaffingAudit> StaffingAuditList = new List<IStaffingAudit>();
-		
+		public int PurgeCounter { get; set; }
+
 		public void Add(IStaffingAudit staffingAudit)
 		{
 			StaffingAuditList.Add(staffingAudit);
@@ -44,7 +45,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void PurgeOldAudits(DateTime daysBack)
 		{
-			throw new NotImplementedException();
+			if(ThrowOnPurgeOldAudits) throw new Exception("ThrowOnPurgeOldAudits = true");
+			PurgeCounter++;
 		}
+
+		public bool ThrowOnPurgeOldAudits { get; set; }
 	}
 }

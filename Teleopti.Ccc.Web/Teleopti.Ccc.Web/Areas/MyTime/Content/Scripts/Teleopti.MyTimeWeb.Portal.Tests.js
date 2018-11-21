@@ -1,59 +1,23 @@
 ﻿$(document).ready(function() {
 	module('Teleopti.MyTimeWeb.Portal', {
 		setup: function() {},
-		teardown: function() {
-			Teleopti.MyTimeWeb.Common.DisableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
-		}
-	});
-
-	test('should navigate to binded action view after clicking menu item', function() {
-		var html =
-			'<div id="innerNavBar"><a id="test-menu" href="#Schedule/MobileWeek" data-mytime-action ="#Schedule/MobileWeekAction"></a></div>';
-		$('body').append(html);
-
-		var fakeWindow = getFakeWindow();
-		setup(fakeWindow);
-		init(fakeWindow);
-
-		$('#test-menu').click();
-
-		equal('#Schedule/MobileWeekAction', fakeWindow.location.url);
+		teardown: function() {}
 	});
 
 	test('should navigate to defaultNavigation', function() {
 		setup();
 		var fakeWindow = getFakeWindow();
+		fakeWindow.navigator.userAgent =
+			'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36';
 		init(fakeWindow);
-		equal('#Schedule/MobileWeek', fakeWindow.location.url);
+		equal('#Schedule', fakeWindow.location.url);
 	});
 
-	test('should navigate to mobile day page when toggle 43446 is on', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
+	test('should navigate to mobile day page', function() {
 		setup();
 		var fakeWindow = getFakeWindow();
 		init(fakeWindow);
 		equal('#Schedule/MobileDay', fakeWindow.location.url);
-	});
-
-	test('should navigate to mobile week page when toggle 43446 is on and access from ipad', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
-
-		setup();
-		var fakeWindow = getFakeWindow();
-		fakeWindow.navigator.userAgent = 'iPad';
-		init(fakeWindow);
-		equal('#Schedule/MobileWeek', fakeWindow.location.url);
-	});
-
-	test('should navigate to mobile week page when toggle 43446 is on and access from tablet', function() {
-		Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_DayScheduleForStartPage_43446');
-
-		setup();
-		var fakeWindow = getFakeWindow();
-		fakeWindow.navigator.userAgent =
-			'Mozilla/5.0 (Linux; U; Android 3.0; en-us; Xoom Build/HRI39) AppleWebKit/534.13 (KHTML, like Gecko) Version/4.0 Safari/534.13';
-		init(fakeWindow);
-		equal('#Schedule/MobileWeek', fakeWindow.location.url);
 	});
 
 	function setup(fakeWindow) {
@@ -101,7 +65,7 @@
 
 	function getDefaultSetting() {
 		return {
-			defaultNavigation: 'Schedule/MobileWeek',
+			defaultNavigation: 'Schedule',
 			baseUrl: '/',
 			startBaseUrl: '/'
 		};

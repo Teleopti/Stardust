@@ -65,11 +65,8 @@ Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 = RC # can not use it until
 Wfm_Requests_Approve_Based_On_Intraday_39868 = RC # can not use it until function 'Approve based on business rules' is ready
 Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274 = RC # can not use it until function 'Approve based on business rules' is ready
 OvertimeRequestUseMostUnderStaffedSkill_47853 = true
-OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944 = true
-OvertimeRequestSupportMultiSelectionSkillTypes_74945 = true
-OvertimeRequestStaffingCheckMethod_74949 = true
+
 OvertimeRequestChangeBelongsToDateForOverNightShift_74984 = true
-OvertimeRequestUsePrimarySkillOption_75573 = true
 
 # Bockemon #
 Wfm_PeopleWeb_PrepareForRelease_74903 = true
@@ -77,22 +74,14 @@ Wfm_People_ImportAndCreateAgentFromFile_42528 = true
 Wfm_People_SetFallbackValuesForImporting_43289 = true
 Wfm_People_MoveImportJobToBackgroundService_43582 = true
 Wfm_Authentication_ChangePasswordMenu_76666 = true
-Wfm_User_Password_Reset_74957 = RC
+Wfm_User_Password_Reset_74957 = DEV
+Wfm_ReadNotificationConfigurationFromDb_78242 = DEV
 
 # China, can any of these be removed? #
-MyTimeWeb_PreferenceForJalaliCalendar_42965 = true
-MyTimeWeb_DayScheduleForStartPage_43446 = true
-MyTimeWeb_DayScheduleForStartPage_Command_44209 = true
-MyTimeWeb_MonthlyScheduleMobileView_45004 = true
-MyTimeWeb_SortRequestList_40711 = true #Please note the feature for this one is 40771!
-MyTimeWeb_WaitListPositionEnhancement_46301 = true
 MyTimeWeb_NewTeamScheduleView_75989 = RC
 MyTimeWeb_NewTeamScheduleViewDesktop_76313 = RC
-MyTimeWeb_PollToCheckScheduleChanges_46595 = true
 MyTimeWeb_TrafficLightOnMobileDayView_77447 = RC
 MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640 = RC
-Staffing_Info_Configuration_44687 = true
-Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = true
 WebByPassDefaultPermissionCheck_37984 = true
 
 
@@ -110,6 +99,7 @@ ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348 = true
 ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941 = true
 ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717 = RC
 ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487 = true
+ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = DEV
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
@@ -159,7 +149,9 @@ MyTimeWeb_Request_CleanUpRequestHisotry_77776 = true
 MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446 = true
 WFM_Request_View_Permissions_77731 = RC
 WFM_Request_Show_Feedback_Link_77733 = RC
+WFM_Request_Remove_Waitlist_Link_78939 = RC
+WFM_Request_Show_Shift_for_Absence_Requests_79008 = DEV
 
 # Tech #
-WFM_ChatBot_77547 = DEV
+WFM_ChatBot_77547 = RC
 WFM_Insights_78059 = DEV

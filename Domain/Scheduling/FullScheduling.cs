@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				PlanningPeriodId = planningPeriodId,
 				RunDayOffOptimization = runDayOffOptimization
 			});
-			return _fullSchedulingResult.Create(schedulingInformation.Period, agents, schedulingInformation.PlanningGroup, schedulingOptions.UsePreferences);
+			return _fullSchedulingResult.Create(schedulingInformation.Period, agents, planningPeriodId, schedulingOptions.UsePreferences);
 		}
 
 		[TestLog]

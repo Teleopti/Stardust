@@ -130,13 +130,6 @@ namespace Teleopti.Ccc.DBManager.Library
 				if (!context.IsDbOwner())
 					throw new Exception("db_owner or sysAdmin permissions needed to patch the database!");
 
-				//if this is the very first create, add VersionControl table
-				if (command.CreateDatabase)
-				{
-					_log.Write("Creating database version table and setting inital version to 0...");
-					context.DatabaseVersionInformation().CreateTable();
-				}
-
 				//Set permissions of the newly application user on db.
 				if (command.CreatePermissions && safeMode)
 					new PermissionsHelper(_log, context.DatabaseFolder(), context.ExecuteSql())
@@ -196,17 +189,19 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			_log.Write("Dropping database " + command.DatabaseName + "...");
 			new DatabaseDropper(context.MasterExecuteSql())
-				.DropDatabase(command.DatabaseName);
+				.DropDatabaseIfExists(command.DatabaseName);
 		}
 
 		private void createDatabase(PatchCommand command, PatchContext context)
 		{
 			_log.Write("Creating database " + command.DatabaseName + "...");
-			var creator = new DatabaseCreator(context.DatabaseFolder(), context.MasterExecuteSql());
+			var creator = new DatabaseCreator(context.DatabaseFolder(), context.ExecuteSql(), context.MasterExecuteSql());
 			if (context.SqlVersion().IsAzure)
 				creator.CreateAzureDatabase(command.DatabaseType, command.DatabaseName);
 			else
 				creator.CreateDatabase(command.DatabaseType, command.DatabaseName);
+			_log.Write("Creating database version table and setting initial version to 0...");
+			context.DatabaseVersionInformation().CreateTable();
 		}
 
 		public void SetLogger(IUpgradeLog logger)

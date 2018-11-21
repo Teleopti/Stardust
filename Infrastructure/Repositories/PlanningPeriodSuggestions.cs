@@ -13,10 +13,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class PlanningPeriodSuggestions : IPlanningPeriodSuggestions
 	{
 		private readonly INow _now;
-		private readonly IList<AggregatedSchedulePeriod> _uniqueSchedulePeriods;
+		private readonly IEnumerable<AggregatedSchedulePeriod> _uniqueSchedulePeriods;
 		private readonly SchedulePeriodRangeCalculator _schedulePeriodRangeCalculator = new SchedulePeriodRangeCalculator();
 
-		public PlanningPeriodSuggestions(INow now, IList<AggregatedSchedulePeriod> uniqueSchedulePeriods)
+		public PlanningPeriodSuggestions(INow now, IEnumerable<AggregatedSchedulePeriod> uniqueSchedulePeriods)
 		{
 			_now = now;
 			_uniqueSchedulePeriods = uniqueSchedulePeriods;

@@ -42,17 +42,6 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			AssertScopeValue(interactions, selector, name, constraint, useIsolateScope);			
 			actionThen();						
 		}
-
-		public static void AssertScopeValueEmpty(this IBrowserInteractions interactions, string selector, string name, bool useIsolateScope = false)
-		{
-			var script = string.Format(scopeByQuerySelector(selector, useIsolateScope) + " return scope.{0}; ", name);
-			var readerName = getTmpName(name);
-			interactions.Javascript_IsFlaky(waitForAngular(selector, script, readerName, useIsolateScope));
-			var query = scopeByQuerySelector(selector, useIsolateScope) +
-						string.Format("return scope.$result{0} == null ?'True': 'False' ; ", readerName);
-			
-			interactions.AssertJavascriptResultContains(query, "True");		
-		}
 	
 		public static void AssertScopeValue<T>(this IBrowserInteractions interactions, string selector, string name, T constraint, bool useIsolateScope = false)
 		{		
@@ -77,21 +66,6 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			}		
 		}
 
-		public static void AngularSelectOptionByText(this IBrowserInteractions interactions, string selector, string text, bool useIsolateScope = false)
-		{
-			var selectSelector = selector + ":enabled";
-			var optionSelector = string.Format(selectSelector + " option:contains('{0}')", text);
-			interactions.AssertExists(selectSelector);
-			interactions.AssertExistsUsingJQuery(optionSelector);
-			var selectAction = string.Format("$(\"{0}\").val($(\"{1}\").val());" ,
-									   selectSelector.JSEncode(), optionSelector.JSEncode());
-			var triggerChange = string.Format("{0}.triggerHandler(\"change\")", elementByQuerySelector(selector));
-
-			var script = runScript(selector, selectAction + triggerChange, useIsolateScope);
-			interactions.Javascript_IsFlaky(script);
-		}
-
-
 		private static string elementByQuerySelector(string selector)
 		{
 			return string.Format("angular.element(document.querySelector('{0}'))", selector);
@@ -112,14 +86,6 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			return string.Format("var service = {0}.injector().get('{1}'); ", elementByQuerySelector(selector), serviceName);
 		}
 
-		private static string runScript(string selector, string script, bool useIsolateScope)
-		{
-			return scopeByQuerySelector(selector, useIsolateScope)
-				   + runnerByQuerySelector(selector)
-				   + string.Format("runner(function() {{ {0} }}, 200); ", script);			
-
-		}
-
 		private static string waitForAngular(string selector, string next, string readerName, bool useIsolateScope)
 		{
 			return scopeByQuerySelector(selector, useIsolateScope)
@@ -136,7 +102,5 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			Regex rgx = new Regex("[^a-zA-Z0-9 -]");
 			return rgx.Replace(output, "");
 		}
-
-
 	}
 }

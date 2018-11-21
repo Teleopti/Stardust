@@ -116,8 +116,9 @@
 			</div>
 		</div>
 		<div>
-			<label class="cursorpointer inline-block inline-block checkbox full-day-label">
-				<input type="checkbox" class="request-new-fullday" data-bind="checked: IsFullDay" /> @Resources.FullDay
+			<label class="cursorpointer checkbox">
+				<input type="checkbox" class="request-new-fullday" data-bind="checked: IsFullDay" /> 
+				<span>@Resources.FullDay</span>
 			</label>
 		</div>
 		<div class="request-new-error alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage"></div>

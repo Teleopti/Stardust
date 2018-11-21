@@ -122,6 +122,7 @@ namespace Teleopti.Wfm.Api.Test
 			isolate.UseTestDouble(personRepository).For<IProxyForId<IPerson>>();
 			isolate.UseTestDouble(personRepository).For<IPersonLoadAllWithAssociation>();
 			isolate.UseTestDouble(businessUnitRepository).For<IBusinessUnitRepository>();
+			isolate.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
 		}
 		
 		private class sharedSettingsQuerierFake : ISharedSettingsQuerier

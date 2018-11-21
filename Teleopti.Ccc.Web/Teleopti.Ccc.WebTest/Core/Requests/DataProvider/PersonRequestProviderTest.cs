@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -27,26 +26,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public IPersonRequestRepository RequestRepository;
 		public IPermissionProvider PermissionProvider;
 		public ILoggedOnUser LoggedOnUser;
-
-		[Test]
-		public void ShouldRetrieveRequestsForCurrentUserAndDays()
-		{
-			var repository = MockRepository.GenerateMock<IPersonRequestRepository>();
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			var userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			var person = new Person();
-			var target = new PersonRequestProvider(repository, loggedOnUser, userTimeZone, new FakePermissionProvider());
-			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(3));
-			var personRequests = new IPersonRequest[] { };
-
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			userTimeZone.Stub(x => x.TimeZone()).Return((TimeZoneInfo.Local));
-			repository.Stub(x => x.FindAllRequestsForAgent(person, period.ToDateTimePeriod(userTimeZone.TimeZone()))).Return(personRequests);
-
-			var result = target.RetrieveRequestsForLoggedOnUser(period);
-
-			result.Should().Be.SameInstanceAs(personRequests);
-		}
 
 		[Test]
 		public void ShouldRetrieveRequestById()

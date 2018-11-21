@@ -3709,11 +3709,146 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Action.
+        /// </summary>
+        public static string AuditTrailAction {
+            get {
+                return ResourceManager.GetString("AuditTrailAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to At.
+        /// </summary>
+        public static string AuditTrailAt {
+            get {
+                return ResourceManager.GetString("AuditTrailAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Between.
+        /// </summary>
+        public static string AuditTrailBetween {
+            get {
+                return ResourceManager.GetString("AuditTrailBetween", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BPO name.
+        /// </summary>
+        public static string AuditTrailBpoName {
+            get {
+                return ResourceManager.GetString("AuditTrailBpoName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By.
+        /// </summary>
+        public static string AuditTrailBy {
+            get {
+                return ResourceManager.GetString("AuditTrailBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear staffing.
+        /// </summary>
+        public static string AuditTrailClearStaffing {
+            get {
+                return ResourceManager.GetString("AuditTrailClearStaffing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Audit Trail:.
         /// </summary>
         public static string AuditTrailColon {
             get {
                 return ResourceManager.GetString("AuditTrailColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Context.
+        /// </summary>
+        public static string AuditTrailContext {
+            get {
+                return ResourceManager.GetString("AuditTrailContext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import staffing.
+        /// </summary>
+        public static string AuditTrailImportStaffing {
+            get {
+                return ResourceManager.GetString("AuditTrailImportStaffing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grant role.
+        /// </summary>
+        public static string AuditTrailMultiGrantRole {
+            get {
+                return ResourceManager.GetString("AuditTrailMultiGrantRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Revoke role.
+        /// </summary>
+        public static string AuditTrailMultiRevokeRole {
+            get {
+                return ResourceManager.GetString("AuditTrailMultiRevokeRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to and.
+        /// </summary>
+        public static string AuditTrailPeriodEnd {
+            get {
+                return ResourceManager.GetString("AuditTrailPeriodEnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Period between.
+        /// </summary>
+        public static string AuditTrailPeriodStart {
+            get {
+                return ResourceManager.GetString("AuditTrailPeriodStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Person.
+        /// </summary>
+        public static string AuditTrailPerson {
+            get {
+                return ResourceManager.GetString("AuditTrailPerson", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to People access management.
+        /// </summary>
+        public static string AuditTrailPersonAccessContext {
+            get {
+                return ResourceManager.GetString("AuditTrailPersonAccessContext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Role.
+        /// </summary>
+        public static string AuditTrailRole {
+            get {
+                return ResourceManager.GetString("AuditTrailRole", resourceCulture);
             }
         }
         
@@ -3741,6 +3876,33 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AuditTrailSettings {
             get {
                 return ResourceManager.GetString("AuditTrailSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grant role.
+        /// </summary>
+        public static string AuditTrailSingleGrantRole {
+            get {
+                return ResourceManager.GetString("AuditTrailSingleGrantRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Revoke role.
+        /// </summary>
+        public static string AuditTrailSingleRevokeRole {
+            get {
+                return ResourceManager.GetString("AuditTrailSingleRevokeRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Staffing.
+        /// </summary>
+        public static string AuditTrailStaffingContext {
+            get {
+                return ResourceManager.GetString("AuditTrailStaffingContext", resourceCulture);
             }
         }
         

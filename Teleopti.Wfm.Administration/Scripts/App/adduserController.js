@@ -39,7 +39,7 @@
 		};
 
 		vm.CheckName = function() {
-			if (vm.Name === '') {
+			if (vm.Name === "") {
 				vm.NameMessage = "The name can not be empty.";
 				vm.NameOk = false;
 			} else {
@@ -49,7 +49,7 @@
 		};
 
 		vm.CheckEmail = function() {
-			if (vm.Email === undefined) {
+			if (vm.Email === undefined || vm.Email === "") {
 				vm.EmailMessage = "The email does not look to be correct.";
 				vm.EmailOk = false;
 			} else {
@@ -57,7 +57,7 @@
 				vm.EmailOk = true;
 			}
 			if (vm.EmailOk) {
-				$http.post('./CheckEmail',
+				$http.post("./CheckEmail",
 						{
 							Email: vm.Email
 						},

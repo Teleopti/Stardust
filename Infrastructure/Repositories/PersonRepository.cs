@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -677,17 +678,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<IPerson>();
 		}
 
-		public IList<IPerson> FindPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period)
+		public IList<IPerson> FindPeopleInPlanningGroup(PlanningGroup planningGroup, DateOnlyPeriod period)
 		{
 			return FindPeople(FindPeopleIdsInPlanningGroup(planningGroup, period)).ToList();
 		}
 
-		public int CountPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period)
+		public int CountPeopleInPlanningGroup(PlanningGroup planningGroup, DateOnlyPeriod period)
 		{
 			return FindPeopleIdsInPlanningGroup(planningGroup, period).Count;
 		}
 
-		public IList<Guid> FindPeopleIdsInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period)
+		public IList<Guid> FindPeopleIdsInPlanningGroup(PlanningGroup planningGroup, DateOnlyPeriod period)
 		{
 			var criteria = Session.CreateCriteria(typeof(Person), "per")
 				.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
@@ -748,39 +749,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<IPerson> FindPersonsByKeywords(IEnumerable<string> keywords)
 		{
-
-			//SELECT* from
-			//(
-			//	SELECT FirstName, LastName
-			//		FROM Person
-			//	Where FirstName like '%adam%'
-			//	--group by FirstName, LastName
-
-			//UNION ALL
-
-			//SELECT FirstName, LastName
-			//FROM Person
-			//Where LastName like '%Cuomo%'
-			//	--group by FirstName, LastName
-			//--order by count(*) desc
-			//	) As wolo
-			//GROUP BY FirstName, LastName ORDER BY count(*) desc;
-
-			
 			var allPersons = new List<IPerson>();
+			var multi = Session.CreateMultiCriteria();
 			foreach (var keyword in keywords)
 			{
-				var criteria = Session.CreateCriteria(typeof(Person), "per");
-				criteria.Add(Restrictions.Like("Name.FirstName", $"%{keyword}%"));
-				var retList = criteria.SetResultTransformer(Transformers.DistinctRootEntity)
-					.List<IPerson>();
-				allPersons.AddRange(retList);
+				var criteriaFirstName = Session.CreateCriteria(typeof(Person), "per")
+					.Add(Restrictions.Like("Name.FirstName", $"%{keyword}%"));
+				
+				multi.Add(criteriaFirstName);
 
-				criteria = Session.CreateCriteria(typeof(Person), "per");
-				criteria.Add(Restrictions.Like("Name.LastName", $"%{keyword}%"));
-				retList = criteria.SetResultTransformer(Transformers.DistinctRootEntity)
-					.List<IPerson>();
-				allPersons.AddRange(retList);
+				var criteriaLastName = Session.CreateCriteria(typeof(Person), "per")
+					.Add(Restrictions.Like("Name.LastName", $"%{keyword}%"));
+				multi.Add(criteriaLastName);				
+			}
+
+			var multiList = multi.List();
+
+			foreach (IList listOfPersons in multiList)
+			{
+				allPersons.AddRange(listOfPersons.OfType<IPerson>());
 			}
 
 			var sortedPersons = allPersons.GroupBy(person => person.Name).OrderByDescending(group => group.Count()).Select(group => group.First());

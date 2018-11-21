@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { FormControlWithInitial, NavigationService } from '../../shared';
 import { DuplicateIdentityLogonValidator } from './duplicate-identity-logon.validator';
-import { IdentityLogonPageService, PeopleWithLogon, PersonWithLogon } from './identity-logon-page.service';
+import { IdentityLogonPageService, PersonWithLogon } from './identity-logon-page.service';
 
 class DuplicateFormNameValidator {
 	private identityLogonPageComponent: IdentityLogonPageComponent;
@@ -18,7 +18,7 @@ class DuplicateFormNameValidator {
 		const filterByExists = (logon: string) => logon && logon.length > 0;
 		const filterBySameLogon = logon => logon.toLowerCase() === (control.value as string).toLowerCase();
 		const countSameLogon = this.identityLogonPageComponent.logons
-			.map(control => control.value)
+			.map(c => c.value)
 			.filter(filterByExists)
 			.filter(filterBySameLogon).length;
 		if (countSameLogon > 1) return { duplicateFormNameValidator: control.value };
@@ -48,16 +48,18 @@ export class IdentityLogonPageComponent implements OnDestroy, OnInit {
 
 	ngOnInit() {
 		this.identityLogonPageService.people$.pipe(takeUntil(this.componentDestroyed)).subscribe({
-			next: (people: PeopleWithLogon) => {
+			next: (people: PersonWithLogon[]) => {
 				if (people.length === 0) return this.nav.navToSearch();
 				this.buildForm(people);
 			}
 		});
 		this.people.valueChanges.pipe(debounceTime(100)).subscribe({
 			next: val => {
-				this.logons.filter(logon => logon.invalid).forEach(control => {
-					control.updateValueAndValidity();
-				});
+				this.logons
+					.filter(logon => logon.invalid)
+					.forEach(control => {
+						control.updateValueAndValidity();
+					});
 			}
 		});
 	}
@@ -83,9 +85,9 @@ export class IdentityLogonPageComponent implements OnDestroy, OnInit {
 		});
 	}
 
-	buildForm(people: PeopleWithLogon) {
+	buildForm(people: PersonWithLogon[]) {
 		while (this.people.length > 0) this.people.removeAt(0);
-		people.map(people => this.personToFormGroup(people)).forEach(control => this.people.push(control));
+		people.map(p => this.personToFormGroup(p)).forEach(control => this.people.push(control));
 	}
 
 	get people(): FormArray {

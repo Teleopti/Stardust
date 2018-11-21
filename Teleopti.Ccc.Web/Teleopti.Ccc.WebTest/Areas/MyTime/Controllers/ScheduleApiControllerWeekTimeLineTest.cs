@@ -187,7 +187,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestSupportMultiSelectionSkillTypes_74945)]
 		public void ShouldAdjustTimelineForWeekScheduleByNotDeniedSkillType()
 		{
 			Now.Is(new DateTime(2018, 2, 5, 8, 0, 0, DateTimeKind.Utc));

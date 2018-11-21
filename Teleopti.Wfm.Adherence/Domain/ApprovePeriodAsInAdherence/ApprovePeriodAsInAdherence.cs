@@ -8,11 +8,16 @@ namespace Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence
 	{
 		private readonly IEventPublisher _publisher;
 		private readonly BelongsToDateMapper _belongsToDate;
+		private readonly IRtaEventStoreAsyncSynchronizer _synchronizer;
 
-		public ApprovePeriodAsInAdherence(IEventPublisher publisher, BelongsToDateMapper belongsToDate)
+		public ApprovePeriodAsInAdherence(
+			IEventPublisher publisher,
+			BelongsToDateMapper belongsToDate,
+			IRtaEventStoreAsyncSynchronizer synchronizer)
 		{
 			_publisher = publisher;
 			_belongsToDate = belongsToDate;
+			_synchronizer = synchronizer;
 		}
 
 		public void Approve(ApprovedPeriod period)
@@ -25,6 +30,7 @@ namespace Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence
 				StartTime = p.StartDateTime,
 				EndTime = p.EndDateTime
 			});
+			_synchronizer.SynchronizeAsync();
 		}
 	}
 }

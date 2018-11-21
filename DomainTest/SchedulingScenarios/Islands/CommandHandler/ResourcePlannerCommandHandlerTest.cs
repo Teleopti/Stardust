@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 				case SUT.Scheduling:
 					if (teamBlockType.HasValue)
 					{
-						SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+						SchedulingOptionsProvider.SetFromTest(null, new SchedulingOptions
 						{
 							UseTeam = teamBlockType == TeamBlockType.Team || teamBlockType == TeamBlockType.TeamAndBlock
 						});

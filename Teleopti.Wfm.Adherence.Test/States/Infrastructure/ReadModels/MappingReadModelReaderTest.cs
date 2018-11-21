@@ -123,7 +123,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 				0,
 				1)
 			{
-				Adherence = Ccc.Domain.InterfaceLegacy.Domain.Adherence.In,
+				Adherence = Domain.Configuration.Adherence.In,
 			};
 			WithUnitOfWork.Do(() =>
 			{
@@ -137,7 +137,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 			mapping.RuleName.Should().Be("InAdherence");
 			mapping.DisplayColor.Should().Be(Color.Blue.ToArgb());
 			mapping.StaffingEffect.Should().Be(1);
-			mapping.Adherence.Should().Be(Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
+			mapping.Adherence.Should().Be(Domain.Configuration.Adherence.In);
 		}
 
 		[Test]

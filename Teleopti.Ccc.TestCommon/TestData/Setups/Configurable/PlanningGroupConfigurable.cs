@@ -13,12 +13,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Team { get; set; }
 		public string PlanningGroupName { get; set; }
 
-
-		public IPlanningGroup PlanningGroup;
+		public PlanningGroup PlanningGroup;
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			PlanningGroup = new PlanningGroup(PlanningGroupName);
+			PlanningGroup = new PlanningGroup {Name = PlanningGroupName};
 			if (Team != null)
 			{
 				var team = new TeamRepository(currentUnitOfWork).FindTeamByDescriptionName(Team).First();

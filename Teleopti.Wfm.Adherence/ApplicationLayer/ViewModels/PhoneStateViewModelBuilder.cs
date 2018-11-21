@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Wfm.Adherence.Domain.Configuration;
 
 namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 {

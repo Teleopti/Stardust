@@ -27,7 +27,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service.AgentStateReadModel
 			Database
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2016-05-30 09:00", "2016-05-30 10:00")
-				.WithMappedRule("out", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out);
+				.WithMappedRule("out", phone, -1, Domain.Configuration.Adherence.Out);
 
 			Now.Is("2016-05-30 09:00");
 			Target.ProcessState(new StateForTest
@@ -50,8 +50,8 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service.AgentStateReadModel
 			Database
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2016-05-30 10:00", "2016-05-30 11:00")
-				.WithMappedRule("out", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
-				.WithMappedRule("ready", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
+				.WithMappedRule("out", phone, -1, Domain.Configuration.Adherence.Out)
+				.WithMappedRule("ready", phone, 0, Domain.Configuration.Adherence.In);
 
 			Now.Is("2016-05-30 10:00");
 			Target.ProcessState(new StateForTest
@@ -88,8 +88,8 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service.AgentStateReadModel
 			Database
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2016-05-30 10:00", "2016-05-30 11:00")
-				.WithMappedRule("out", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
-				.WithMappedRule("ready", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
+				.WithMappedRule("out", phone, -1, Domain.Configuration.Adherence.Out)
+				.WithMappedRule("ready", phone, 0, Domain.Configuration.Adherence.In);
 
 			Now.Is("2016-05-30 09:55");
 			Target.ProcessState(new StateForTest
@@ -114,8 +114,8 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service.AgentStateReadModel
 			Database
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2016-05-30 10:00", "2016-05-30 11:00")
-				.WithMappedRule("out", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
-				.WithMappedRule("ready", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
+				.WithMappedRule("out", phone, -1, Domain.Configuration.Adherence.Out)
+				.WithMappedRule("ready", phone, 0, Domain.Configuration.Adherence.In);
 
 			Now.Is("2016-05-30 09:55");
 			Target.ProcessState(new StateForTest
@@ -144,8 +144,8 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service.AgentStateReadModel
 			Database
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2016-05-30 09:00", "2016-05-30 10:00")
-				.WithMappedRule("out", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
-				.WithMappedRule("admin", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral)
+				.WithMappedRule("out", phone, -1, Domain.Configuration.Adherence.Out)
+				.WithMappedRule("admin", phone, 0, Domain.Configuration.Adherence.Neutral)
 				;
 
 			Now.Is("2016-05-30 09:00");
@@ -175,9 +175,9 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service.AgentStateReadModel
 			Database
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2016-05-30 09:00", "2016-05-30 10:00")
-				.WithMappedRule("out", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
-				.WithMappedRule("admin", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral)
-				.WithMappedRule("ready", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithMappedRule("out", phone, -1, Domain.Configuration.Adherence.Out)
+				.WithMappedRule("admin", phone, 0, Domain.Configuration.Adherence.Neutral)
+				.WithMappedRule("ready", phone, 0, Domain.Configuration.Adherence.In)
 				;
 
 			Now.Is("2016-05-30 09:00");
@@ -213,9 +213,9 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service.AgentStateReadModel
 			Database
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2016-05-30 09:00", "2016-05-30 10:00")
-				.WithMappedRule("out", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
-				.WithMappedRule("admin", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral)
-				.WithMappedRule("ready", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithMappedRule("out", phone, -1, Domain.Configuration.Adherence.Out)
+				.WithMappedRule("admin", phone, 0, Domain.Configuration.Adherence.Neutral)
+				.WithMappedRule("ready", phone, 0, Domain.Configuration.Adherence.In)
 				;
 
 			Now.Is("2016-05-30 09:00");
@@ -251,9 +251,9 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service.AgentStateReadModel
 			Database
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2016-05-30 10:00", "2016-05-30 17:00")
-				.WithMappedRule("out", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
-				.WithMappedRule("ready", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
-				.WithMappedRule("incall", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
+				.WithMappedRule("out", phone, -1, Domain.Configuration.Adherence.Out)
+				.WithMappedRule("ready", phone, 0, Domain.Configuration.Adherence.In)
+				.WithMappedRule("incall", phone, 0, Domain.Configuration.Adherence.In);
 
 			Now.Is("2016-05-30 10:00");
 			Target.ProcessState(new StateForTest
@@ -287,8 +287,8 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service.AgentStateReadModel
 			Database
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2016-05-30 09:00", "2016-05-30 10:00")
-				.WithMappedRule("state1", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
-				.WithMappedRule("state2", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithMappedRule("state1", phone, -1, Domain.Configuration.Adherence.Out)
+				.WithMappedRule("state2", phone, -1, Domain.Configuration.Adherence.Out)
 				;
 
 			Now.Is("2016-05-30 09:00");
@@ -298,8 +298,8 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service.AgentStateReadModel
 				StateCode = "state1"
 			});
 			Database.ClearRuleMap()
-				.WithMappedRule("state1", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
-				.WithMappedRule("state2", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithMappedRule("state1", phone, 0, Domain.Configuration.Adherence.In)
+				.WithMappedRule("state2", phone, -1, Domain.Configuration.Adherence.Out)
 				;
 			Now.Is("2016-05-30 09:01");
 			Target.ProcessState(new StateForTest

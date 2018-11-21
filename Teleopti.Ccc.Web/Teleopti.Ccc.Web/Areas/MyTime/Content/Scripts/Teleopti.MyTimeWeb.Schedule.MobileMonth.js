@@ -31,15 +31,13 @@ Teleopti.MyTimeWeb.Schedule.MobileMonth = (function($) {
 	}
 
 	function registPollListener() {
-		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_PollToCheckScheduleChanges_46595')) {
-			Teleopti.MyTimeWeb.PollScheduleUpdates.SetListener('MonthScheduleMobile', function(period) {
-				var startDate = moment(moment(period.startDate).format('YYYY-MM-DD')).toDate();
-				var endDate = moment(moment(period.endDate).format('YYYY-MM-DD')).toDate();
-				if (vm.isWithinSelected(startDate, endDate)) {
-					fetchData(vm.selectedDate().format('YYYY/MM/DD'));
-				}
-			});
-		}
+		Teleopti.MyTimeWeb.PollScheduleUpdates.SetListener('MonthScheduleMobile', function(period) {
+			var startDate = moment(moment(period.startDate).format('YYYY-MM-DD')).toDate();
+			var endDate = moment(moment(period.endDate).format('YYYY-MM-DD')).toDate();
+			if (vm.isWithinSelected(startDate, endDate)) {
+				fetchData(vm.selectedDate().format('YYYY/MM/DD'));
+			}
+		});
 	}
 
 	function registerSwipeEvent() {

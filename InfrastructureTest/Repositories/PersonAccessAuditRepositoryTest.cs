@@ -2,7 +2,9 @@
 using SharpTestsEx;
 using System;
 using System.Linq;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Auditing;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Staffing;
@@ -57,11 +59,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			personAccess.TimeStamp = new DateTime(2018, 10, 22, 10, 00, 00, DateTimeKind.Utc);
 			PersistAndRemoveFromUnitOfWork(personAccess);
 
-			var _person2 = PersonFactory.CreatePerson(new Name("Test1", "Test2"));
+			var _person2 = PersonFactory.CreatePerson(new Name("Test4", "Test5"));
 			PersistAndRemoveFromUnitOfWork(_person2);
 			var personAccess2 = CreateAggregateWithCorrectBusinessUnit();
 			personAccess2.TimeStamp = new DateTime(2018, 10, 22, 10, 00, 00, DateTimeKind.Utc);
-			personAccess2.ActionPerformedBy = _person2;
+			personAccess2.ActionPerformedById = _person2.Id.GetValueOrDefault();
 			PersistAndRemoveFromUnitOfWork(personAccess2);
 
 			_personAccessAuditRepository.LoadAudits(_person2, new DateTime(2018, 10, 22), new DateTime(2018, 10, 22))
@@ -96,8 +98,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		protected override IPersonAccess CreateAggregateWithCorrectBusinessUnit()
 		{
 			return new PersonAccess(
-				LoggedOnPerson, 
-				_personAccessBase.ActionPerformedOn, 
+				LoggedOnPerson,
+				_personActionOn,
 				_personAccessBase.Action, 
 				_personAccessBase.ActionResult, 
 				_personAccessBase.Data, 
@@ -111,7 +113,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override void VerifyAggregateGraphProperties(IPersonAccess loadedAggregateFromDatabase)
 		{
-			loadedAggregateFromDatabase.ActionPerformedBy.Should().Be.EqualTo(LoggedOnPerson);
+			loadedAggregateFromDatabase.ActionPerformedById.Should().Be.EqualTo(LoggedOnPerson.Id.GetValueOrDefault());
 			loadedAggregateFromDatabase.ActionPerformedOn.Should().Be.EqualTo(_personAccessBase.ActionPerformedOn);
 			loadedAggregateFromDatabase.Action.Should().Be.EqualTo(_personAccessBase.Action);
 			loadedAggregateFromDatabase.ActionResult.Should().Be.EqualTo(_personAccessBase.ActionResult);

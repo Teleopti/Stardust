@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
+		public FakePlanningGroupRepository PlanningGroupRepository;
 		
 		[Test]
 		public void ShouldOnlySchedulePeopleInPlanningGroup()
@@ -63,7 +64,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				1,
 				1)
 			);
-			var planningPeriod = new PlanningPeriod(period,SchedulePeriodType.Day, 8, new PlanningGroup().WithId().AddFilter(new TeamFilter(team)));
+			var planningGroup = new PlanningGroup().AddFilter(new TeamFilter(team));
+			PlanningGroupRepository.Has(planningGroup);
+			var planningPeriod = new PlanningPeriod(period.StartDate,SchedulePeriodType.Day, 8, planningGroup);
 			PlanningPeriodRepository.Add(planningPeriod);
 
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
@@ -84,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var schedulePeriod = new SchedulePeriod(period.StartDate, SchedulePeriodType.Month, 1);
 			var agent = PersonRepository.Has(schedulePeriod, ruleSet, skill);
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, period,1));
-			var planningPeriod = new PlanningPeriod(period,SchedulePeriodType.Month,1);
+			var planningPeriod = new PlanningPeriod(period.StartDate,SchedulePeriodType.Month,1,PlanningGroupRepository.Has());
 			PlanningPeriodRepository.Add(planningPeriod);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);

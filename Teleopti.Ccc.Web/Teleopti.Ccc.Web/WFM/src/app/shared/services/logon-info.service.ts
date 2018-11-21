@@ -40,8 +40,6 @@ export interface LogonInfo {
 	Identity: string;
 }
 
-export interface LogonInfoFromGuidsResponse extends Array<LogonInfo> {}
-
 export interface PersistResponse {
 	success: boolean;
 	result: Array<any>;
@@ -86,15 +84,13 @@ export class LogonInfoService {
 		);
 	}
 
-	getLogonInfo(personIdsToGet: string[]): Observable<LogonInfoFromGuidsResponse> {
-		return this.http.post('../PersonInfo/LogonInfoFromGuids', personIdsToGet) as Observable<
-			LogonInfoFromGuidsResponse
-		>;
+	getLogonInfo(personIdsToGet: string[]): Observable<LogonInfo[]> {
+		return this.http.post('../PersonInfo/LogonInfoFromGuids', personIdsToGet) as Observable<LogonInfo[]>;
 	}
 
 	appLogonExists(logon: string): Observable<boolean> {
 		const params = new HttpParams().set('LogonName', logon);
-		var response = this.http
+		const response = this.http
 			.get('../PersonInfo/LogonFromName', {
 				params
 			})
@@ -109,7 +105,7 @@ export class LogonInfoService {
 
 	identityLogonExists(logon: string): Observable<boolean> {
 		const params = new HttpParams().set('Identity', logon);
-		var response = this.http
+		const response = this.http
 			.get('../PersonInfo/LogonFromIdentity', {
 				params
 			})

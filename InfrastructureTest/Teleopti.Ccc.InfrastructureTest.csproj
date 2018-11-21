@@ -204,9 +204,12 @@
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyCheckerTest.cs" />
     <Compile Include="ApplicationLayer\Staffing\SendUpdateStaffingReadModelHandlerTest.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcherContextBug48226Test.cs" />
+    <Compile Include="Auditing\AuditAggregatorServiceTest.cs" />
     <Compile Include="Auditing\AuditSettingTest.cs" />
+    <Compile Include="Auditing\PersonAccessContextPurgeServiceTest.cs" />
     <Compile Include="Auditing\PersonAccessContextReaderServiceTest.cs" />
     <Compile Include="Auditing\RevisionTest.cs" />
+    <Compile Include="Auditing\StaffingContextPurgeServiceTest.cs" />
     <Compile Include="Auditing\StaffingContextReaderServiceTest.cs" />
     <Compile Include="Authentication\CryptoKeyInfoRepositoryTest.cs" />
     <Compile Include="Authentication\LoadUserUnauthorizedTest.cs" />
@@ -225,6 +228,7 @@
     <Compile Include="Helper\StardustRepositoryTestHelper.cs" />
     <Compile Include="MachineLearning\ShiftCategoryPredictionTest.cs" />
     <Compile Include="MessageBroker\MailboxNotSignedInTest.cs" />
+    <Compile Include="MultiTenancy\Admin\CustomerDbConnectorTest.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAspectTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindExternalApplicationAccessTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\TenantAuditTest.cs" />
@@ -339,7 +343,6 @@
     <Compile Include="Repositories\Analytics\AnalyticsTeamRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\IntradayQueueStatisticsLoaderTest.cs" />
     <Compile Include="Repositories\Analytics\LatestStatisticsIntervalIdLoaderTest.cs" />
-    <Compile Include="Repositories\PlanningGroupSettingsRepositoryTest.cs" />
     <Compile Include="Repositories\FavoriteSearchRepositoryTest.cs" />
     <Compile Include="Repositories\IndexMaintenanceRepositoryTest.cs" />
     <Compile Include="Repositories\LoadSkillInIntradaysTest.cs" />
@@ -375,6 +378,7 @@
     <Compile Include="UnitOfWorkTestAttribute.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryHasCurrentUnitOfWorkTest.cs" />
     <Compile Include="UnitOfWork\AnalyticsUnitOfWorkTest.cs" />
+    <Compile Include="UnitOfWork\SessionFactoryExtensions.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\FatClientOptimizationEventPublishingTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\ASMScheduleChangeTimePersisterTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\PersonChangedMessageSenderTest.cs" />

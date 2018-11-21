@@ -1,62 +1,46 @@
 ﻿using System;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class PlanningGroupSettingsModelPersister : IPlanningGroupSettingsModelPersister
 	{
-		private readonly IPlanningGroupSettingsRepository _planningGroupSettingsRepository;
 		private readonly FilterMapper _filterMapper;
 		private readonly IPlanningGroupRepository _planningGroupRepository;
 
-		public PlanningGroupSettingsModelPersister(IPlanningGroupSettingsRepository planningGroupSettingsRepository, FilterMapper filterMapper, IPlanningGroupRepository planningGroupRepository)
+		public PlanningGroupSettingsModelPersister(FilterMapper filterMapper, IPlanningGroupRepository planningGroupRepository)
 		{
-			_planningGroupSettingsRepository = planningGroupSettingsRepository;
 			_filterMapper = filterMapper;
 			_planningGroupRepository = planningGroupRepository;
 		}
 
 		public void Persist(PlanningGroupSettingsModel model)
 		{
-			IPlanningGroup planningGroup = null;
-			if (model.PlanningGroupId.HasValue)
-				planningGroup = _planningGroupRepository.Get(model.PlanningGroupId.Value);
-
+			var planningGroup = _planningGroupRepository.Get(model.PlanningGroupId.Value);
 			if (model.Id == Guid.Empty)
 			{
-				PlanningGroupSettings planningGroupSettings;
-				if (model.Default)
-				{
-					planningGroupSettings = PlanningGroupSettings.CreateDefault(planningGroup);
-				}
-				else
-				{
-					var allSettingses = _planningGroupSettingsRepository.LoadAllByPlanningGroup(planningGroup);
-					model.Priority = allSettingses.IsEmpty() ? 0 : allSettingses.Max(x => x.Priority) + 1;
-					planningGroupSettings = new PlanningGroupSettings(planningGroup);
-				}
-				setProperies(planningGroupSettings, model);
-				_planningGroupSettingsRepository.Add(planningGroupSettings);
+				var allSettings = planningGroup.Settings;
+				model.Priority = allSettings.Max(x => x.Priority) + 1;
+				var planningGroupSettings = new PlanningGroupSettings();
+				setProperties(planningGroupSettings, model);
+				planningGroup.AddSetting(planningGroupSettings);
 			}
 			else
 			{
-				var planningGroupSettings = _planningGroupSettingsRepository.Get(model.Id);
-				setProperies(planningGroupSettings, model);
+				var setting = planningGroup.Settings.Single(x => x.Id == model.Id);
+				setProperties(setting, model);
 			}
 		}
 
 		public void Delete(Guid id)
 		{
-			var planningGroupSettings = _planningGroupSettingsRepository.Get(id);
-			if (planningGroupSettings != null)
-				_planningGroupSettingsRepository.Remove(planningGroupSettings);
+			var planningGroup = _planningGroupRepository.FindPlanningGroupBySettingId(id);
+			planningGroup.RemoveSetting(planningGroup.Settings.Single(x => x.Id.HasValue && x.Id.Value==id));
 		}
 
 
-		private void setProperies(PlanningGroupSettings planningGroupSettings, PlanningGroupSettingsModel planningGroupSettingsModel)
+		private void setProperties(PlanningGroupSettings planningGroupSettings, PlanningGroupSettingsModel planningGroupSettingsModel)
 		{
 			planningGroupSettings.DayOffsPerWeek = new MinMax<int>(planningGroupSettingsModel.MinDayOffsPerWeek, planningGroupSettingsModel.MaxDayOffsPerWeek);
 			planningGroupSettings.ConsecutiveDayOffs = new MinMax<int>(planningGroupSettingsModel.MinConsecutiveDayOffs, planningGroupSettingsModel.MaxConsecutiveDayOffs);

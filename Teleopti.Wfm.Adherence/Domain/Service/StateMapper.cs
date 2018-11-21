@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Wfm.Adherence.Domain.Configuration;
 
 namespace Teleopti.Wfm.Adherence.Domain.Service
 {
@@ -19,7 +20,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 	{
 		public Guid RuleId { get; set; }
 		public string RuleName { get; set; }
-		public Ccc.Domain.InterfaceLegacy.Domain.Adherence? Adherence { get; set; }
+		public Configuration.Adherence? Adherence { get; set; }
 		public double? StaffingEffect { get; set; }
 		public int DisplayColor { get; set; }
 

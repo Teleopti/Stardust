@@ -6,11 +6,16 @@ import { BusinessUnitService } from '../../shared/businessunit.service';
 import { BusinessUnitSelectorComponent } from './businessunit-selector.component';
 
 class MockBusinessUnitSelectorService implements Partial<BusinessUnitService> {
+	selectedBu = '1';
+
 	getBusinessUnits() {
 		return of([{ Id: '1', Name: 'First' }, { Id: '2', Name: 'Second' }]);
 	}
 	getSelectedBusinessUnitId() {
-		return '1';
+		return this.selectedBu;
+	}
+	selectBusinessUnit(id: string) {
+		this.selectedBu = id;
 	}
 }
 
@@ -48,6 +53,14 @@ describe('BusinessUnitSelector', () => {
 	});
 
 	it('should store selected business unit', () => {
+		fixture.detectChanges();
+		expect(component.selectedBusinessUnit).toBeTruthy();
+	});
+
+	it('should select first bu if none selected', () => {
+		const service = TestBed.get(BusinessUnitService);
+		service.selectBusinessUnit('');
+		expect(service.getSelectedBusinessUnitId()).toBeFalsy();
 		fixture.detectChanges();
 		expect(component.selectedBusinessUnit).toBeTruthy();
 	});

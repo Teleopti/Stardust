@@ -54,15 +54,13 @@
 			},
 			header: '@Resources.Teleopti'
 		});
-		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PollToCheckScheduleChanges_46595")) {
-								Teleopti.MyTimeWeb.PollScheduleUpdates.Init({
-									notifyText: '@Resources.YourScheduleHasChanged',
-									originalDocumentTitle: document.title,
-									baseUrl: '@Url.Content("~/")',
-									header: '@Resources.Teleopti'
-								});
-							}
-
+		
+		Teleopti.MyTimeWeb.PollScheduleUpdates.Init({
+			notifyText: '@Resources.YourScheduleHasChanged',
+			originalDocumentTitle: document.title,
+			baseUrl: '@Url.Content("~/")',
+			header: '@Resources.Teleopti'
+		});
 
 		$(window)
 			.on("unload",

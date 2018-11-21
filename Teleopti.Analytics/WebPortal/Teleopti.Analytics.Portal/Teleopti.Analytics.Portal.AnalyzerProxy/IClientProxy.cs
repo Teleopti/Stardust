@@ -29,19 +29,19 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
     public enum PermissionLevel
     {
         // Below is a list of Analyzers permission
-        // 1 – List only
-        // 4 – Config only
-        // 5 – List and Config
-        // 16 – Execute only
-        // 17 – List and Execute
-        // 20 – Execute and Config
-        // 64 – Export only
-        // 65 – List and Export
-        // 68 – Export and config
-        // 80 – Execute and Export
-        // 81 – List, Execute and Export
-        // 84 – Execute, Export and Config
-        // 85 – List, Execute, Export and Config
+        // 1 â€“ List only
+        // 4 â€“ Config only
+        // 5 â€“ List and Config
+        // 16 â€“ Execute only
+        // 17 â€“ List and Execute
+        // 20 â€“ Execute and Config
+        // 64 â€“ Export only
+        // 65 â€“ List and Export
+        // 68 â€“ Export and config
+        // 80 â€“ Execute and Export
+        // 81 â€“ List, Execute and Export
+        // 84 â€“ Execute, Export and Config
+        // 85 â€“ List, Execute, Export and Config
         None = 0,
         GeneralUser = 81,
         ReportDesigner = 85

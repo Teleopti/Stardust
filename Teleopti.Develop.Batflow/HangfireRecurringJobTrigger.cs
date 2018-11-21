@@ -40,7 +40,7 @@ namespace Teleopti.Develop.Batflow
 			{
 				container.Resolve<IHangfireClientStarter>().Start();
 				container.Resolve<RecurringEventPublishings>().UpdatePublishings();
-				container.Resolve<HangfireUtilities>().TriggerReccuringJobs();
+				container.Resolve<HangfireUtilities>().TriggerRecurringJobs();
 			}
 		}
 	}

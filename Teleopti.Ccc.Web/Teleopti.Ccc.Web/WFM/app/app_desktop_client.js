@@ -79,12 +79,6 @@ var wfm = angular
 		function($rootScope, $state, $translate, $timeout, $locale, currentUserInfo, toggleService) {
 			$rootScope.isAuthenticated = false;
 
-			$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function() {
-				$timeout(function() {
-					$rootScope.$broadcast('sidenav:toggle');
-				}, 500);
-			});
-
 			$rootScope.$on('$stateChangeStart', function(event, next, toParams) {
 				if (!currentUserInfo.isConnected()) {
 					event.preventDefault();

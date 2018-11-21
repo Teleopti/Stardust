@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakePlanningGroupSettingsRepository PlanningGroupSettingsRepository;
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public FakePlanningGroupRepository PlanningGroupRepository;
 
 		[Test]
 		public void ShouldNotMoveDOsForOneAgentOnlyButChangeAfterEachPeriod([Values(true, false)] bool useTeams)
@@ -51,10 +51,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				1, 2, 2, 2, 2, 2, 2,
 				1, 2, 2, 2, 2, 2, 2));
-			PlanningGroupSettingsRepository.HasDefault(x =>
+			planningPeriod.PlanningGroup.ModifyDefault(x =>
 			{
 				x.ConsecutiveWorkdays = new MinMax<int>(1, 20); //just to make sure anything goes
-			}, planningPeriod.PlanningGroup); 
+			}); 
 			var optPrefs = OptimizationPreferencesProvider.Fetch();
 			optPrefs.Extra.UseTeams= true;
 			OptimizationPreferencesProvider.SetFromTestsOnly(optPrefs);
@@ -91,10 +91,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var skill = SkillRepository.Has("skill", activity);
 			var team = new Team { Site = new Site("site") }.WithDescription("_").WithId();
 			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value));
-			var planningGroup = new PlanningGroup("_");
 			var contractToSchedule = new Contract("_").WithId();
 			var contractNotToSchedule = new Contract("_").WithId();
-			planningGroup.AddFilter(new ContractFilter(contractToSchedule));
+			var planningGroup = new PlanningGroup().AddFilter(new ContractFilter(contractToSchedule));
+			PlanningGroupRepository.Has(planningGroup);
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, planningGroup);
 			var scenario = ScenarioRepository.Has("some name");
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1).NumberOfDaysOff(1);

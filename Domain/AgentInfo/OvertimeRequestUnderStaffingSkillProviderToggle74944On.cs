@@ -8,7 +8,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
 {
-	[EnabledBy(Toggles.OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944)]
 	public class OvertimeRequestUnderStaffingSkillProviderToggle74944On : IOvertimeRequestUnderStaffingSkillProvider
 	{
 		private readonly ISkillStaffingDataLoader _skillStaffingDataLoader;

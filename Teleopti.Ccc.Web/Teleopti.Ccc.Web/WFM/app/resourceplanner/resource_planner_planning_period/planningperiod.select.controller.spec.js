@@ -114,7 +114,7 @@ describe('planningPeriodSelectController', function () {
             }]]
         });
 
-        $httpBackend.whenPOST('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/firstplanningperiod?endDate=2018-02-25&lengthOfThePeriodType=8&schedulePeriodType=Week&startDate=2018-01-01').respond(function (method, url, data, headers) {
+        $httpBackend.whenPOST('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/firstplanningperiod?lengthOfThePeriodType=8&schedulePeriodType=Week&startDate=2018-01-01').respond(function (method, url, data, headers) {
             return [200, {
                 Id: "aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e",
                 StartDate: "2018-01-01T00:00:00",
@@ -128,7 +128,7 @@ describe('planningPeriodSelectController', function () {
             }];
         });
 
-        $httpBackend.whenPOST('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/firstplanningperiod?endDate=2018-01-31&lengthOfThePeriodType=1&schedulePeriodType=Month&startDate=2018-01-01').respond(function (method, url, data, headers) {
+        $httpBackend.whenPOST('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/firstplanningperiod?lengthOfThePeriodType=1&schedulePeriodType=Month&startDate=2018-01-01').respond(function (method, url, data, headers) {
             return [200, {
                 Id: "aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e",
                 StartDate: "2018-01-01T00:00:00",
@@ -246,7 +246,6 @@ describe('planningPeriodSelectController', function () {
         expect(planningPeriodServiceNew.firstPlanningPeriod).toHaveBeenCalledWith({
             planningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             startDate: '2018-01-01',
-            endDate: '2018-02-25',
             schedulePeriodType: 'Week', 
             lengthOfThePeriodType: 8 
         });
@@ -267,7 +266,6 @@ describe('planningPeriodSelectController', function () {
         expect(planningPeriodServiceNew.firstPlanningPeriod).toHaveBeenCalledWith({
             planningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             startDate: '2018-01-01',
-            endDate: '2018-01-31',
             schedulePeriodType: 'Month',
             lengthOfThePeriodType: 1
         });

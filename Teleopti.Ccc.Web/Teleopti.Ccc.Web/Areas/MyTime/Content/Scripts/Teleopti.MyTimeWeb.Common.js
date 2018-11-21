@@ -531,6 +531,10 @@ Teleopti.MyTimeWeb.Common = (function($) {
 			ua = ua || navigator.userAgent;
 			return /Mobile/i.test(ua) && !/ipad/i.test(ua);
 		},
+		IsHostAniPhone: function(ua) {
+			ua = ua || navigator.userAgent;
+			return /Mobile/i.test(ua) && /iPhone/i.test(ua);
+		},
 		IsHostAniPad: function(ua) {
 			ua = ua || navigator.userAgent;
 			return /ipad/i.test(ua) || (/Android/i.test(ua) && !/Mobile/i.test(ua));
@@ -543,12 +547,12 @@ Teleopti.MyTimeWeb.Common = (function($) {
 			return _userTexts;
 		},
 		ShowAgentScheduleMessenger: function() {
-			$('#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar #asm-divider').show();
-			$('#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar #asm-link').show();
+			$('#autocollapse.teleopti-mytime-top-menu ul.show-outside-toolbar #asm-divider').show();
+			$('#autocollapse.teleopti-mytime-top-menu ul.show-outside-toolbar #asm-link').show();
 		},
 		HideAgentScheduleMessenger: function() {
-			$('#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar #asm-divider').hide();
-			$('#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar #asm-link').hide();
+			$('#autocollapse.teleopti-mytime-top-menu ul.show-outside-toolbar #asm-divider').hide();
+			$('#autocollapse.teleopti-mytime-top-menu ul.show-outside-toolbar #asm-link').hide();
 		},
 		GetCurrentUserDateTime: _getCurrentUserDateTime,
 		FakeToggles: function(toggles) {
@@ -589,18 +593,18 @@ Teleopti.MyTimeWeb.Common.Layout = (function($) {
 			}
 			//And touchend event to close dropdown menus when taping outside
 			$('body').on('touchend', function(e) {
-				var badgePanel = $('.navbar.bdd-mytime-top-menu ul.navbar-nav li.dropdown#BadgePanel');
+				var badgePanel = $('.navbar.teleopti-mytime-top-menu ul.navbar-nav li.dropdown#BadgePanel');
 				if (badgePanel[0] && !badgePanel[0].contains(e.target)) {
 					badgePanel.removeClass('open');
 				}
 
-				var userSettings = $('.navbar.bdd-mytime-top-menu ul.navbar-nav li.dropdown#user-settings');
+				var userSettings = $('.navbar.teleopti-mytime-top-menu ul.navbar-nav li.dropdown#user-settings');
 				if (userSettings[0] && !userSettings[0].contains(e.target)) {
 					userSettings.removeClass('open');
 				}
 
-				var collapsingMenu = $('#bs-example-navbar-collapse-1');
-				var mainNavbarToggler = $('#mainNavbarToggler');
+				var collapsingMenu = $('.teleopti-mytime-top-menu .navbar-offcanvas');
+				var mainNavbarToggler = $('.navbar-toggle-button');
 				if (
 					collapsingMenu[0] &&
 					!collapsingMenu[0].contains(e.target) &&

@@ -12,9 +12,7 @@ export function MainController<IControllerConstructor>(
 	$rootScope: IWfmRootScopeService,
 	$q: IQService
 ) {
-	var vm = this;
-
-	vm.style = {
+	this.style = {
 		isFullyLoaded: false
 	};
 }

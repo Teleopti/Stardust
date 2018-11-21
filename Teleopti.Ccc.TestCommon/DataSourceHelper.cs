@@ -5,7 +5,9 @@ using System.IO;
 using Autofac;
 using Newtonsoft.Json;
 using NHibernate.Dialect;
+using NUnit.Framework;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -37,8 +39,8 @@ namespace Teleopti.Ccc.TestCommon
 				return new DataSourcesFactory(
 					enversConfiguration,
 					new DataSourceConfigurationSetter(
-						new DataSourceApplicationName {Name = DataSourceApplicationName.ForTest()}, 
-						new ConfigReader(), 
+						new DataSourceApplicationName {Name = DataSourceApplicationName.ForTest()},
+						new ConfigReader(),
 						mappingAssemblies),
 					new MemoryNHibernateConfigurationCache(),
 					new UnitOfWorkFactoryFactory(
@@ -74,7 +76,8 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static IDataSource CreateDatabasesAndDataSource(DataSourceFactoryFactory factory, string name = TestTenantName)
 		{
-			CreateDatabases(name);
+			using (testDirectoryFix())
+				CreateDatabases(name);
 			return makeDataSource(factory, name);
 		}
 
@@ -103,12 +106,14 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static void BackupApplicationDatabase(int dataHash)
 		{
-			backupByFileCopy(application(), dataHash);
+			using (testDirectoryFix())
+				backupByFileCopy(application(), dataHash);
 		}
 
 		public static void RestoreApplicationDatabase(int dataHash)
 		{
-			restoreByFileCopy(application(), dataHash);
+			using (testDirectoryFix())
+				restoreByFileCopy(application(), dataHash);
 		}
 
 		public static void BackupApplicationDatabaseBySql(string path, int dataHash)
@@ -126,12 +131,14 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static void BackupAnalyticsDatabase(int dataHash)
 		{
-			backupByFileCopy(analytics(), dataHash);
+			using (testDirectoryFix())
+				backupByFileCopy(analytics(), dataHash);
 		}
 
 		public static void RestoreAnalyticsDatabase(int dataHash)
 		{
-			restoreByFileCopy(analytics(), dataHash);
+			using (testDirectoryFix())
+				restoreByFileCopy(analytics(), dataHash);
 		}
 
 		public static void ClearAnalyticsData()
@@ -151,6 +158,13 @@ namespace Teleopti.Ccc.TestCommon
 			return database.BackupBySql().TryRestore(path, database.BackupNameForRestore(dataHash));
 		}
 
+
+		private static IDisposable testDirectoryFix()
+		{
+			var path = Directory.GetCurrentDirectory();
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+			return new GenericDisposable(() => { Directory.SetCurrentDirectory(path); });
+		}
 
 		private static DatabaseHelper application()
 		{

@@ -234,9 +234,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		{
 			_recurringEventPublishings.WithPublishingsForTest(() =>
 			{
-				_hangfire.TriggerDailyRecurringJobs();
-				_hangfire.TriggerHourlyRecurringJobs();
-				_hangfire.TriggerMinutelyRecurringJobs();
+				_hangfire.TriggerRecurringJobs();
 			});
 		}
 

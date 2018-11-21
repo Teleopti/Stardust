@@ -1,14 +1,5 @@
 <div class="main-menu">
-	<h2 class="main-menu-ctrls">
-		<div (click)="toggleMenu()" tabindex="0" class="main-menu-trigger" role="button">
-			<i
-				class="mdi main-menu-trigger-icon text-white"
-				[class.mdi-menu]="!showMenu"
-				[class.mdi-backburger]="showMenu"
-			></i>
-		</div>
-	</h2>
-	<div [hidden]="!showMenu" class="main-menu-slide main-menu-link-wrapper">
+	<div [hidden]="!showMenu" class="main-menu-slide main-menu-link-wrapper" data-test-main-menu-wrapper>
 		<ng-container *ngFor="let group of groups">
 			<div *ngFor="let area of group">
 				<a

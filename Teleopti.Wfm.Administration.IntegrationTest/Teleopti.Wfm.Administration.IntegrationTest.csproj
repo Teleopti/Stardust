@@ -202,6 +202,10 @@
       <Project>{6030cf98-1346-43dd-a9b6-01cdbeb5a832}</Project>
       <Name>Teleopti.Support.Security</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Wfm.Adherence\Teleopti.Wfm.Adherence.csproj">
+      <Project>{2dd2e616-8405-49df-a07d-546a8c160117}</Project>
+      <Name>Teleopti.Wfm.Adherence</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Wfm.Administration\Teleopti.Wfm.Administration.csproj">
       <Project>{C7CFBE6B-F899-44FD-BB8D-7ACD7131ACD9}</Project>
       <Name>Teleopti.Wfm.Administration</Name>

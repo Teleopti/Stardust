@@ -8,11 +8,12 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class PlanningPeriodRepository : Repository<IPlanningPeriod> , IPlanningPeriodRepository
+	public class PlanningPeriodRepository : Repository<PlanningPeriod> , IPlanningPeriodRepository
 	{
 		public PlanningPeriodRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
@@ -58,11 +59,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return new PlanningPeriodSuggestions(now, top10.ToList());
 		}
 
-		public IEnumerable<IPlanningPeriod> LoadForPlanningGroup(IPlanningGroup planningGroup)
+		public IEnumerable<PlanningPeriod> LoadForPlanningGroup(PlanningGroup planningGroup)
 		{
 			return Session.CreateCriteria(typeof(PlanningPeriod))
 				.Add(Restrictions.Eq("PlanningGroup", planningGroup))
-				.List<IPlanningPeriod>();
+				.List<PlanningPeriod>();
 		}
 	}
 

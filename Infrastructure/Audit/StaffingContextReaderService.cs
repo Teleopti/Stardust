@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Audit
@@ -16,26 +16,14 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 		private readonly IStaffingAuditRepository _staffingAuditRepository;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly IUserCulture _userCulture;
-		private readonly IPurgeSettingRepository _purgeSettingRepository;
-		private readonly INow _now;
 		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 
-		public StaffingContextReaderService(IStaffingAuditRepository staffingAuditRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository, IUserCulture userCulture, IPurgeSettingRepository purgeSettingRepository, INow now, ICommonAgentNameProvider commonAgentNameProvider)
+		public StaffingContextReaderService(IStaffingAuditRepository staffingAuditRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository, IUserCulture userCulture, ICommonAgentNameProvider commonAgentNameProvider)
 		{
 			_staffingAuditRepository = staffingAuditRepository;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 			_userCulture = userCulture;
-			_purgeSettingRepository = purgeSettingRepository;
-			_now = now;
 			_commonAgentNameProvider = commonAgentNameProvider;
-		}
-
-		public IEnumerable<AuditServiceModel> LoadAll()
-		{
-			var staffingAudit = _staffingAuditRepository.LoadAll();
-
-			return getAuditServiceModel(staffingAudit);
-
 		}
 
 		private IEnumerable<AuditServiceModel> getAuditServiceModel(IEnumerable<IStaffingAudit> staffingAudit)
@@ -46,10 +34,12 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 			{
 				var auditServiceModel = new AuditServiceModel()
 				{
-					TimeStamp = audit.TimeStamp, Context = "Staffing", Action = audit.Action,
+					TimeStamp = audit.TimeStamp,
+					Context = Resources.AuditTrailStaffingContext,
+					Action = Resources.ResourceManager.GetString(audit.Action, _userCulture.GetCulture()) ?? audit.Action,
 					ActionPerformedBy = extractPersonAuditInfo(audit.ActionPerformedBy, commonAgentNameSetting)
 				};
-				if (audit.Action.Equals(StaffingAuditActionConstants.ImportBpo))
+				if (audit.Action.Equals(StaffingAuditActionConstants.ImportStaffing))
 					auditServiceModel.Data = $"File name: {audit.ImportFileName}";
 				else
 				{
@@ -57,7 +47,8 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 					var bpoName = _skillCombinationResourceRepository.GetSourceBpoByGuid(audit.BpoId.GetValueOrDefault());
 					var startDate = audit.ClearPeriodStart.Value.ToString("d", _userCulture.GetCulture());
 					var endDate = audit.ClearPeriodEnd.Value.ToString("d", _userCulture.GetCulture());
-					auditServiceModel.Data = $"BPO name: {bpoName}{Environment.NewLine}Period from {startDate} to {endDate}";
+					auditServiceModel.Data = $"{Resources.AuditTrailBpoName}: {bpoName}, " +
+											 $"{Resources.AuditTrailPeriodStart} {startDate} {Resources.AuditTrailPeriodEnd} {endDate}";
 				}
 
 				auditServiceModelList.Add(auditServiceModel);
@@ -79,12 +70,6 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 			return getAuditServiceModel(staffingAudit);
 		}
 
-		public void PurgeAudits()
-		{
-			var purgeSettings = _purgeSettingRepository.FindAllPurgeSettings();
-			var monthsToKeepAuditEntry = purgeSettings.SingleOrDefault(p => p.Key == "MonthsToKeepAudit");
-			var dateForPurging = _now.UtcDateTime().AddMonths(-(monthsToKeepAuditEntry?.Value ?? 3));
-			_staffingAuditRepository.PurgeOldAudits(dateForPurging);
-		}
+		
 	}
 }

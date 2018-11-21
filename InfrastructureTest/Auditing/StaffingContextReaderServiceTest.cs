@@ -12,9 +12,11 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.Infrastructure.Audit;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 // ReSharper disable PossibleNullReferenceException
@@ -27,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 	public class StaffingContextReaderServiceTest : IIsolateSystem
 	{
 		public IStaffingAuditRepository StaffingAuditRepository;
-		public IStaffingContextReaderService Target;
+		public StaffingContextReaderService Target;
 		public ISkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public IPersonRepository PersonRepository;
 		public ICurrentUnitOfWork CurrentUnitOfWork;
@@ -50,9 +52,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 		{
 			var person = PersonFactory.CreatePerson();
 			PersonRepository.Add(person);
-			StaffingAuditRepository.Add(new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo,  "BPO", "abc.txt"));
+			StaffingAuditRepository.Add(new StaffingAudit(person, StaffingAuditActionConstants.ImportStaffing,  "BPO", "abc.txt"));
 			CurrentUnitOfWork.Current().PersistAll();
-			Target.LoadAll().Should().Not.Be.Empty();
+			Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now).Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -62,9 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 
 			var person = PersonFactory.CreatePerson();
 			PersonRepository.Add(person);
-			var loggedOnUser = PersonFactory.CreatePersonWithGuid("Ashley", "Aaron");
-			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
-			var expectedResult = "BPO name: telia" + Environment.NewLine + "Period from 2018-10-01 to 2019-10-01";
+			var expectedResult = "BPO name: telia, Period between 2018-10-01 and 2019-10-01";
 			var bpoGuid = addBpo("telia");
 			var clearBpoAction = new ClearBpoActionObj
 			{
@@ -73,11 +73,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 				EndDate = new DateTime(2019, 10, 01, 0, 0, 0, DateTimeKind.Utc)
 			};
 			StaffingAuditRepository.Add(
-				new StaffingAudit(person, StaffingAuditActionConstants.ClearBpo,  "BPO", "",
+				new StaffingAudit(person, StaffingAuditActionConstants.ClearStaffing,  "BPO", "",
 					clearBpoAction.BpoGuid,clearBpoAction.StartDate,clearBpoAction.EndDate));
 			CurrentUnitOfWork.Current().PersistAll();
 
-			Target.LoadAll().FirstOrDefault().Data.Should().Be.EqualTo(expectedResult);
+			Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now).FirstOrDefault().Data.Should().Be.EqualTo(expectedResult);
 		}
 
 		private Guid addBpo(string bpoName)
@@ -125,90 +125,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 			var loggedOnUser = PersonFactory.CreatePersonWithGuid("Ashley", "Aaron");
 			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
 			var staffingAudit =
-				new StaffingAudit(loggedOnUser, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt") {TimeStamp = DateTime.UtcNow};
+				new StaffingAudit(loggedOnUser, StaffingAuditActionConstants.ImportStaffing, "BPO", "abc.txt") {TimeStamp = DateTime.UtcNow};
 			StaffingAuditRepository.Add(staffingAudit);
 			CurrentUnitOfWork.Current().PersistAll();
 
-			var list = Target.LoadAll().ToList();
+			var list = Target.LoadAudits(loggedOnUser, DateTime.Now.AddDays(-100), DateTime.Now).ToList();
 
 			list.FirstOrDefault().TimeStamp.Should().Be.EqualTo(staffingAudit.TimeStamp);
-			list.FirstOrDefault().Action.Should().Be.EqualTo(StaffingAuditActionConstants.ImportBpo);
+			list.FirstOrDefault().Action.Should().Be.EqualTo(Resources.AuditTrailImportStaffing);
 			list.FirstOrDefault().ActionPerformedBy.Should().Be.EqualTo("Ashley Aaron");
 			list.FirstOrDefault().Context.Should().Be.EqualTo("Staffing");
 		}
-
-		[Test]
-		public void ShouldPurgeAccordingToDefaultSetting()
-		{
-			Now.Is(DateTime.UtcNow);
-			var person = PersonFactory.CreatePerson();
-			PersonRepository.Add(person);
-			var loggedOnUser = PersonFactory.CreatePersonWithGuid("Ashley", "Aaron");
-			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
-
-			var staffingAudit1 =
-				new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt")
-					{ TimeStamp = DateTime.UtcNow };
-			var staffingAudit2 =
-				new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt")
-					{ TimeStamp = DateTime.UtcNow.AddMonths(-4) };
-
-			StaffingAuditRepository.Add(staffingAudit1);
-			StaffingAuditRepository.Add(staffingAudit2);
-			CurrentUnitOfWork.Current().PersistAll();
-
-			Target.PurgeAudits();
-			CurrentUnitOfWork.Current().PersistAll();
-			var loadedAudits = Target.LoadAll();
-			loadedAudits.Count().Should().Be(1);
-			loadedAudits.FirstOrDefault().TimeStamp.Should().Be.EqualTo(staffingAudit1.TimeStamp);
-		}
-
-		//[Test]
-		//public void ShouldPurgeAccordingToDbSetting()
-		//{
-		//	Now.Is(DateTime.UtcNow);
-		//	var person = PersonFactory.CreatePerson();
-		//	PersonRepository.Add(person);
-		//	var loggedOnUser = PersonFactory.CreatePersonWithGuid("Ashley", "Aaron");
-		//	LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
-
-		//	addPurgeSetting(5);
-
-		//	var staffingAudit1 =
-		//		new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt")
-		//			{ TimeStamp = DateTime.UtcNow };
-		//	var staffingAudit2 =
-		//		new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt")
-		//			{ TimeStamp = DateTime.UtcNow.AddMonths(-4) };
-
-		//	var staffingAudit3 =
-		//		new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt")
-		//			{ TimeStamp = DateTime.UtcNow.AddMonths(-6) };
-
-		//	StaffingAuditRepository.Add(staffingAudit1);
-		//	StaffingAuditRepository.Add(staffingAudit2);
-		//	StaffingAuditRepository.Add(staffingAudit3);
-		//	CurrentUnitOfWork.Current().PersistAll();
-
-		//	Target.PurgeAudits();
-		//	CurrentUnitOfWork.Current().PersistAll();
-		//	var loadedAudits = Target.LoadAll();
-		//	loadedAudits.Count().Should().Be(2);
-		//	loadedAudits.FirstOrDefault().TimeStamp.Should().Be.EqualTo(staffingAudit1.TimeStamp);
-		//}
-
-		//private void addPurgeSetting(int purgeMonthValue)
-		//{
-		//	using (var uow = UnitOfWorkFactory.CreateAndOpenUnitOfWork())
-		//	{
-		//		var session = uow.FetchSession();
-		//		session.CreateSQLQuery(
-		//				$"update dbo.purgeSetting set [Value] = {purgeMonthValue} where [key]='MonthsToKeepAudit'")
-		//			.ExecuteUpdate();
-		//		uow.PersistAll();
-		//	}
-		//}
 
 	}
 }

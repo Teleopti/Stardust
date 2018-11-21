@@ -278,7 +278,7 @@
 	function registerScrollEvent() {
 		if (onMobile || oniPad) {
 			$('.teammates-schedules-container').scroll(function() {
-				$('.teammates-agent-name-row').css({ left: -$(this).scrollLeft() - 1 });
+				$('.teammates-agent-name-row').css({ left: -$(this).scrollLeft() });
 			});
 		}
 

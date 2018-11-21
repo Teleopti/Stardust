@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var agent = PersonRepository.Has(filterContract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
 			var agentOutSideGroup = PersonRepository.Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill, irrelevantSkill);
 
-			var planningGroup = new PlanningGroup("_").AddFilter(new ContractFilter(filterContract));
+			var planningGroup = new PlanningGroup().AddFilter(new ContractFilter(filterContract));
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, SchedulePeriodType.Day, planningGroup);
 			PlanningGroupRepository.Has(planningGroup);
 
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var agentToBeOptimized = PersonRepository.Has(filterContract1, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, relevantSkill);
 			var agentNotToBeOptimized = PersonRepository.Has(filterContract2, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, irrellevantSkill, relevantSkill);
 
-			var planningGroup = new PlanningGroup("_").AddFilter(new ContractFilter(filterContract1));
+			var planningGroup = PlanningGroupRepository.Has(new PlanningGroup().AddFilter(new ContractFilter(filterContract1)));
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, SchedulePeriodType.Day, planningGroup);
 
 			SkillDayRepository.Has(relevantSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1));
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			personPeriod.AddPersonSkill(new PersonSkill(relevantSkill,new Percent(100)));
 			agent.AddPersonPeriod(personPeriod);
 			
-			var planningGroup = new PlanningGroup("_").AddFilter(new ContractFilter(contract));
+			var planningGroup = PlanningGroupRepository.Has(new PlanningGroup().AddFilter(new ContractFilter(contract)));
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, SchedulePeriodType.Day, planningGroup);
 
 			SkillDayRepository.Has(relevantSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1));
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, activeSkill,inactiveSkill);
 			agent.DeactivateSkill(inactiveSkill, agent.PersonPeriodCollection.First());
 
-			var planningGroup = new PlanningGroup("_").AddFilter(new ContractFilter(contract));
+			var planningGroup = PlanningGroupRepository.Has(new PlanningGroup().AddFilter(new ContractFilter(contract)));
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, SchedulePeriodType.Day, planningGroup);
 
 			SkillDayRepository.Has(activeSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1));
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var agentToSchedule = PersonRepository.Has(filterContract, contractScheduleWorkingMondayToFriday, partTimePercentage, team, schedulePeriod, skill);
 			PersonRepository.Has(new Contract("_2"), contractScheduleWorkingMondayToFriday, partTimePercentage, team, schedulePeriod, skill);
 
-			var planningGroup = new PlanningGroup("_").AddFilter(new ContractFilter(filterContract));
+			var planningGroup = new PlanningGroup().AddFilter(new ContractFilter(filterContract));
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1, SchedulePeriodType.Week, planningGroup);
 			PlanningGroupRepository.Has(planningGroup);
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 2));

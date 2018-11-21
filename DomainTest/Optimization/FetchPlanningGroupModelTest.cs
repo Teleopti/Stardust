@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldIncludePersistedPlanningGroupWhenLoadingAll()
 		{
-			var presentInDb = new PlanningGroup(RandomName.Make()).WithId();
+			var presentInDb = new PlanningGroup().WithId();
 			PlanningGroupRepository.Add(presentInDb);
 
 			var loaded = Target.FetchAll().Single();
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldFetchPlanningGroup()
 		{
-			var planningGroup = new PlanningGroup(RandomName.Make()).WithId();
+			var planningGroup = new PlanningGroup().WithId();
 			PlanningGroupRepository.Add(planningGroup);
 
 			var planningGroupModel = Target.Fetch(planningGroup.Id.GetValueOrDefault());

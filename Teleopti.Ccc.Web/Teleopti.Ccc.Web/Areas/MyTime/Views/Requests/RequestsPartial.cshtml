@@ -48,8 +48,8 @@ Layout = null;
 	<button class="close-fab-overlay" data-bind="visible: menuIsVisible, css:{'hide-fab-on-phone': hideFab}, click: disableMenu"></button>
 	<div class="with-fab" data-bind="if: showFabButton, css:{'hide-fab-on-phone': hideFab}">
 		<button class="fab" data-bind="click: enableMenu" tabindex="0"></button>
-		<div class="navbar navbar-teleopti subnavbar" data-bind="css: {'menu-focusing': menuIsVisible}, visible: menuIsVisible">
-			<ul class="nav navbar-nav navbar-teleopti row submenu">
+		<div class="navbar teleopti-toolbar subnavbar" data-bind="css: {'menu-focusing': menuIsVisible}, visible: menuIsVisible">
+			<ul class="nav navbar-nav teleopti-toolbar row submenu">
 				<!-- ko if: showRequestListButton-->
 				@if (Model.RequestPermission.RequestListPermission)
 				{
@@ -103,9 +103,9 @@ Layout = null;
 		</div>
 	</div>
 	<div class="no-fab" data-bind="ifnot: showFabButton, click: closeDatePickers">
-		<div class="navbar navbar-teleopti subnavbar" tabindex="0">
+		<div class="navbar teleopti-toolbar subnavbar" tabindex="0">
 			<div class="container">
-				<ul class="nav navbar-nav navbar-teleopti row submenu">
+				<ul class="nav navbar-nav teleopti-toolbar row submenu">
 					<!-- ko if: showRequestListButton-->
 					@if (Model.RequestPermission.RequestListPermission)
 					{

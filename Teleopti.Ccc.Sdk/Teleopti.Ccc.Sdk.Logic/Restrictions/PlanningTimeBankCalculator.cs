@@ -3,14 +3,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 {
-    public interface IPlanningTimeBankCalculator
+    public class PlanningTimeBankCalculator
     {
-        MinMax<int> CalculateAdjustedTimeBank(PlanningTimeBackCalculatorParameters calculatorParameters);
-    }
-
-    public class PlanningTimeBankCalculator : IPlanningTimeBankCalculator
-    {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public MinMax<int> CalculateAdjustedTimeBank(PlanningTimeBackCalculatorParameters calculatorParameters)
         {
             int balanceOutMinMinutes = calculatorParameters.BalanceOutMinMinutes;

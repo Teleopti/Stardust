@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory);
 			var ass2 = new PersonAssignment(agentWithNoSchedulePeriod, scenario, date).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory);
 			var planningGroup = new PlanningGroup();
-			var planningPeriod = new PlanningPeriod(date.ToDateOnlyPeriod(), SchedulePeriodType.Day, 1, planningGroup);
+			var planningPeriod = new PlanningPeriod(date, SchedulePeriodType.Day, 1, planningGroup);
 
 			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{

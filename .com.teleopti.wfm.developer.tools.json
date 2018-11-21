@@ -39,5 +39,17 @@
 				"EXIT"
 			]
 		}
+	],
+	Example: [
+		{Id: "77750", Text: "Copy a backup to repository root and call it 77750_App.bak", 
+			Script: [
+				"@ECHO OFF",
+				"COLOR 0D",
+				"\"Teleopti.Develop.Batflow\\bin\\Debug\\Teleopti.Develop.Batflow.exe\" flow --develop.baseline 77750",
+				"CD \"Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\WFM\"",
+				"START ..\\.node\\npm start",
+				"EXIT"
+			]
+		}
 	]
 }

@@ -62,10 +62,10 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			PersonAccessRepository.LoadAll().Count().Should().Be.EqualTo(1);
 
 			var auditRow = PersonAccessRepository.LoadAll().First();
-			auditRow.Action.Should().Be.EqualTo(PersonAuditActionType.SingleGrantRole.ToString());
+			auditRow.Action.Should().Be.EqualTo(PersonAuditActionType.AuditTrailSingleGrantRole.ToString());
 			auditRow.ActionResult.Should().Be.EqualTo(PersonAuditActionResult.Change.ToString());
-			auditRow.ActionPerformedBy.Id.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id);
-			auditRow.ActionPerformedOn.Id.Should().Be.EqualTo(_person1.Id);
+			auditRow.ActionPerformedById.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id);
+			auditRow.ActionPerformedOnId.Should().Be.EqualTo(_person1.Id);
 
 			// Check NoChange, SingleGrant
 			var result2 = Target.GrantRoles(inputModel);
@@ -73,10 +73,10 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			PersonAccessRepository.LoadAll().Count().Should().Be.EqualTo(2);
 
 			auditRow = PersonAccessRepository.LoadAll().Last();
-			auditRow.Action.Should().Be.EqualTo(PersonAuditActionType.SingleGrantRole.ToString());
+			auditRow.Action.Should().Be.EqualTo(PersonAuditActionType.AuditTrailSingleGrantRole.ToString());
 			auditRow.ActionResult.Should().Be.EqualTo(PersonAuditActionResult.NoChange.ToString());
-			auditRow.ActionPerformedBy.Id.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id);
-			auditRow.ActionPerformedOn.Id.Should().Be.EqualTo(_person1.Id);
+			auditRow.ActionPerformedById.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id);
+			auditRow.ActionPerformedOnId.Should().Be.EqualTo(_person1.Id);
 		}
 
 		[Test]
@@ -99,10 +99,10 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			PersonAccessRepository.LoadAll().Count().Should().Be.EqualTo(1);
 
 			var auditRow = PersonAccessRepository.LoadAll().First();
-			auditRow.Action.Should().Be.EqualTo(PersonAuditActionType.SingleGrantRole.ToString());
+			auditRow.Action.Should().Be.EqualTo(PersonAuditActionType.AuditTrailSingleGrantRole.ToString());
 			auditRow.ActionResult.Should().Be.EqualTo(PersonAuditActionResult.NotPermitted.ToString());
-			auditRow.ActionPerformedBy.Id.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id);
-			auditRow.ActionPerformedOn.Id.Should().Be.EqualTo(_person1.Id);
+			auditRow.ActionPerformedById.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id);
+			auditRow.ActionPerformedOnId.Should().Be.EqualTo(_person1.Id);
 		}
 
 		[Test]
@@ -128,14 +128,14 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 			var auditRows = PersonAccessRepository.LoadAll();
 			auditRows.Count().Should().Be.EqualTo(2);
-			auditRows.Where(x => x.Action == PersonAuditActionType.MultiGrantRole.ToString()).Count().Should().Be.EqualTo(2);
+			auditRows.Where(x => x.Action == PersonAuditActionType.AuditTrailMultiGrantRole.ToString()).Count().Should().Be.EqualTo(2);
 			auditRows.Where(x => x.ActionResult == PersonAuditActionResult.Change.ToString()).Count().Should().Be.EqualTo(2);
 			auditRows.Where(x => x.ActionResult == PersonAuditActionResult.NoChange.ToString()).Count().Should().Be.EqualTo(0);
 
-			var p1AuditRow1 = auditRows.Single(x => x.ActionPerformedOn.Id == _person1.Id);
-			var p2AuditRow1 = auditRows.Single(x => x.ActionPerformedOn.Id == _person2.Id);
-			p1AuditRow1.ActionPerformedBy.Id.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id);
-			p2AuditRow1.ActionPerformedBy.Id.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id);
+			var p1AuditRow1 = auditRows.Single(x => x.ActionPerformedOnId == _person1.Id);
+			var p2AuditRow1 = auditRows.Single(x => x.ActionPerformedOnId == _person2.Id);
+			p1AuditRow1.ActionPerformedById.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id);
+			p2AuditRow1.ActionPerformedById.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id);
 
 			// Check NoChange, MultiGrant
 			var inputModel2 = new GrantRolesInputModel()
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 			var auditRows2 = PersonAccessRepository.LoadAll();
 			auditRows2.Count().Should().Be.EqualTo(6);
-			auditRows2.Where(x => x.Action == PersonAuditActionType.MultiGrantRole.ToString()).Count().Should().Be.EqualTo(6);
+			auditRows2.Where(x => x.Action == PersonAuditActionType.AuditTrailMultiGrantRole.ToString()).Count().Should().Be.EqualTo(6);
 			auditRows2.Where(x => x.ActionResult == PersonAuditActionResult.Change.ToString()).Count().Should().Be.EqualTo(4);
 			auditRows2.Where(x => x.ActionResult == PersonAuditActionResult.NoChange.ToString()).Count().Should().Be.EqualTo(2);
 		}
@@ -176,10 +176,10 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			PersonAccessRepository.LoadAll().Count().Should().Be.EqualTo(1);
 
 			var auditRow = PersonAccessRepository.LoadAll().First();
-			auditRow.Action.Should().Be.EqualTo(PersonAuditActionType.SingleRevokeRole.ToString());
+			auditRow.Action.Should().Be.EqualTo(PersonAuditActionType.AuditTrailSingleRevokeRole.ToString());
 			auditRow.ActionResult.Should().Be.EqualTo(PersonAuditActionResult.Change.ToString());
-			auditRow.ActionPerformedBy.Id.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id);
-			auditRow.ActionPerformedOn.Id.Should().Be.EqualTo(_person1.Id);
+			auditRow.ActionPerformedById.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id);
+			auditRow.ActionPerformedOnId.Should().Be.EqualTo(_person1.Id);
 
 			// Check NoChange, SingleRevoke
 			var result2 = Target.RevokeRoles(inputModel);
@@ -187,10 +187,10 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			PersonAccessRepository.LoadAll().Count().Should().Be.EqualTo(2);
 
 			auditRow = PersonAccessRepository.LoadAll().Last();
-			auditRow.Action.Should().Be.EqualTo(PersonAuditActionType.SingleRevokeRole.ToString());
+			auditRow.Action.Should().Be.EqualTo(PersonAuditActionType.AuditTrailSingleRevokeRole.ToString());
 			auditRow.ActionResult.Should().Be.EqualTo(PersonAuditActionResult.NoChange.ToString());
-			auditRow.ActionPerformedBy.Id.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id);
-			auditRow.ActionPerformedOn.Id.Should().Be.EqualTo(_person1.Id);
+			auditRow.ActionPerformedById.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id);
+			auditRow.ActionPerformedOnId.Should().Be.EqualTo(_person1.Id);
 		}
 
 		[Test]
@@ -220,14 +220,14 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 			var auditRows = PersonAccessRepository.LoadAll();
 			auditRows.Count().Should().Be.EqualTo(2);
-			auditRows.Where(x => x.Action == PersonAuditActionType.MultiRevokeRole.ToString()).Count().Should().Be.EqualTo(2);
+			auditRows.Where(x => x.Action == PersonAuditActionType.AuditTrailMultiRevokeRole.ToString()).Count().Should().Be.EqualTo(2);
 			auditRows.Where(x => x.ActionResult == PersonAuditActionResult.Change.ToString()).Count().Should().Be.EqualTo(2);
 			auditRows.Where(x => x.ActionResult == PersonAuditActionResult.NoChange.ToString()).Count().Should().Be.EqualTo(0);
 
-			var p1AuditRow1 = auditRows.Single(x => x.ActionPerformedOn.Id == _person1.Id);
-			var p2AuditRow1 = auditRows.Single(x => x.ActionPerformedOn.Id == _person2.Id);
-			p1AuditRow1.ActionPerformedBy.Id.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id);
-			p2AuditRow1.ActionPerformedBy.Id.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id);
+			var p1AuditRow1 = auditRows.Single(x => x.ActionPerformedOnId == _person1.Id);
+			var p2AuditRow1 = auditRows.Single(x => x.ActionPerformedOnId == _person2.Id);
+			p1AuditRow1.ActionPerformedById.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id);
+			p2AuditRow1.ActionPerformedById.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id);
 
 			// Check NoChange, MultiGrant
 			var inputModel2 = new RevokeRolesInputModel()
@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 			var auditRows2 = PersonAccessRepository.LoadAll();
 			auditRows2.Count().Should().Be.EqualTo(6);
-			auditRows2.Where(x => x.Action == PersonAuditActionType.MultiRevokeRole.ToString()).Count().Should().Be.EqualTo(6);
+			auditRows2.Where(x => x.Action == PersonAuditActionType.AuditTrailMultiRevokeRole.ToString()).Count().Should().Be.EqualTo(6);
 			auditRows2.Where(x => x.ActionResult == PersonAuditActionResult.Change.ToString()).Count().Should().Be.EqualTo(4);
 			auditRows2.Where(x => x.ActionResult == PersonAuditActionResult.NoChange.ToString()).Count().Should().Be.EqualTo(2);
 		}

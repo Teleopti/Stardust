@@ -20,7 +20,6 @@
 	height: 65px;
 	display: none; /*hide when loaded, before moved to correct place*/
 	margin: 1px 1px 1px 1px;
-	margin-top: -50px;
 }
 .mytime-chart .asm-outer-canvas {
 	margin-top: 0;

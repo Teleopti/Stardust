@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		private void sendAll(int batchSize)
 		{
 			StateChanges().ForEach(stateChange => { SendStateChange(batchSize, stateChange); });
-			triggerRecurringJobs();
+			TriggerRecurringJobs();
 		}
 
 		[TestLog]
@@ -78,7 +78,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		private void setTime(string time) =>
 			_http.PostJson("/Test/SetCurrentTime", new {time = time, waitForQueue = false});
 
-		private void triggerRecurringJobs() =>
+		[TestLog]
+		public virtual void TriggerRecurringJobs() =>
 			_http.GetJson("/Test/TriggerRecurringJobs");
 
 		[TestLog]

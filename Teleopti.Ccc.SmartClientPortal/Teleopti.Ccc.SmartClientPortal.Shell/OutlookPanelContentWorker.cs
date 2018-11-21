@@ -35,9 +35,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		/// This method will return usercontrol for outlook panel control
 		/// </summary>
 		/// <returns>user control</returns>
-		public UserControl GetOutlookPanelContent(string contentType, IToggleManager toggleManager)
+		public UserControl GetOutlookPanelContent(string contentType)
 		{
-			UserControl uc = getParticularUserControl(contentType, toggleManager);
+			UserControl uc = getParticularUserControl(contentType);
 			if (uc != null) { uc.Dock = DockStyle.Fill; }
 			return uc;
 		}
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		/// Created by: Dinesh Ranasinghe
 		/// Created date: 2008-01-18
 		/// </remarks>
-		private UserControl getParticularUserControl(string contentType, IToggleManager toggleManager)
+		private UserControl getParticularUserControl(string contentType)
 		{
 
 			switch (contentType)

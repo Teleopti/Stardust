@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944)]
 		public void ShouldUseIntradayCheckMethodWhenToggle74944IsOn()
 		{
 			setupPerson(8, 21);

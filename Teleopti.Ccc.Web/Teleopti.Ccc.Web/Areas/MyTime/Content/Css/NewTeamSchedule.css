@@ -9,7 +9,7 @@
 .new-teamschedule-view-nav > .container {
 	padding: 0;
 }
-.new-teamschedule-view-nav .navbar-teleopti {
+.new-teamschedule-view-nav .teleopti-toolbar {
 	max-width: 100%;
 	margin: 0;
 	display: flex;
@@ -17,9 +17,9 @@
 	align-items: center;
 	height: 50px;
 }
-.new-teamschedule-view-nav .navbar-teleopti.navbar-nav > li > a,
-.new-teamschedule-view-nav .navbar-teleopti.navbar-nav > li > a:hover,
-.new-teamschedule-view-nav .navbar-teleopti.navbar-nav > li > a:focus {
+.new-teamschedule-view-nav .teleopti-toolbar.navbar-nav > li > a,
+.new-teamschedule-view-nav .teleopti-toolbar.navbar-nav > li > a:hover,
+.new-teamschedule-view-nav .teleopti-toolbar.navbar-nav > li > a:focus {
 	cursor: pointer;
 	border-radius: 3px;
 	display: flex;
@@ -96,7 +96,7 @@
 	content: '';
 	position: absolute;
 	top: 0;
-	left: 0;
+	left: -1px;
 	width: 20px;
 	height: 20px;
 	background: #fff;
@@ -303,6 +303,11 @@
 	border-right: 1px solid #dfdfdf;
 	background: white;
 }
+.new-teamschedule-view-ipad .new-teamschedule-agent-name.my-name.relative {
+	width: 111px;
+	min-width: 111px;
+	max-width: 111px;
+}
 .new-teamschedule-agent-name.my-name.relative {
 	width: 110px;
 	min-width: 110px;
@@ -400,7 +405,6 @@
 	height: 10px;
 }
 .new-teamschedule-table.relative {
-	-webkit-overflow-scrolling: touch;
 	overflow-y: auto;
 	overflow-x: hidden;
 	max-width: 100%;
@@ -443,7 +447,7 @@
 	display: inline-block;
 	overflow: visible;
 	white-space: nowrap;
-	-webkit-overflow-scrolling: touch;
+	-webkit-overflow-scrolling: auto;
 	font-size: 0;
 	z-index: 9;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -534,6 +538,10 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	font-size: 14px;
 	font-weight: bold;
 	text-align: center;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: normal;
+	line-height: 1;
 }
 .new-teamschedule-view .new-teamschedule-layer .activity-info {
 	line-height: 1;
@@ -729,7 +737,7 @@ div.new-teamschedule-no-result-indicator {
 }
 
 /*On mobile*/
-.new-teamschedule-view-nav-mobile .navbar-teleopti {
+.new-teamschedule-view-nav-mobile .teleopti-toolbar {
 	min-width: initial;
 	justify-content: space-between;
 }
@@ -760,7 +768,7 @@ div.new-teamschedule-no-result-indicator {
 .new-teamschedule-view.new-teamschedule-view-ipad {
 	padding: 10px 0 0 0;
 }
-.new-teamschedule-view-mobile .new-teamschedule-view-nav .navbar-teleopti {
+.new-teamschedule-view-mobile .new-teamschedule-view-nav .teleopti-toolbar {
 	min-width: initial;
 	justify-content: space-between;
 }
@@ -773,6 +781,11 @@ div.new-teamschedule-no-result-indicator {
 	width: 100%;
 }
 .new-teamschedule-view-mobile .new-teamschedule-agent-name.my-name.relative {
+	width: 70px;
+	min-width: 70px;
+	max-width: 70px;
+}
+.new-teamschedule-view-iphone .new-teamschedule-agent-name.my-name.relative {
 	width: 72px;
 	min-width: 72px;
 	max-width: 72px;
@@ -799,7 +812,6 @@ div.new-teamschedule-no-result-indicator {
 	max-width: calc(100% - 30px - 70px);
 	overflow-y: hidden;
 	overflow-x: auto;
-	-webkit-overflow-scrolling: touch;
 }
 .new-teamschedule-view.new-teamschedule-view-mobile .teammates-schedules-column {
 	width: 50px;
@@ -874,6 +886,7 @@ div.new-teamschedule-no-result-indicator {
 	margin: 0;
 }
 .new-teamschedule-view-mobile .new-teamschedule-submit-buttons {
+	width: 100%;
 	justify-content: space-between;
 }
 .new-teamschedule-view-mobile .new-teamschedule-submit-buttons button {

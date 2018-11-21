@@ -216,7 +216,10 @@
     <Compile Include="ApplicationLayer\SyncCommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\RecurringEventPublishingUpdater.cs" />
     <Compile Include="ApplicationLayer\UnitOfWorkTransactionEventSyncronization.cs" />
+    <Compile Include="Audit\AuditAggregatorService.cs" />
+    <Compile Include="Audit\PersonAccessContextPurgeService.cs" />
     <Compile Include="Audit\PersonAccessContextReaderService.cs" />
+    <Compile Include="Audit\StaffingContextPurgeService.cs" />
     <Compile Include="Authentication\CryptoKeyInfo.cs" />
     <Compile Include="Authentication\CryptoKeyInfoRepository.cs" />
     <Compile Include="Authentication\ICryptoKeyInfoRepository.cs" />
@@ -272,6 +275,7 @@
     <Compile Include="MultiTenancy\BehaviorTestTenants.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAspect.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAttribute.cs" />
+    <Compile Include="MultiTenancy\Server\CustomerDbConnector.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistPersonInfoWithAuditTrail.cs" />
     <Compile Include="MultiTenancy\Server\Queries\TenantAccessAuditContext.cs" />
     <Compile Include="MultiTenancy\Server\Queries\TenantAuditActions.cs" />
@@ -497,7 +501,6 @@
     <Compile Include="Repositories\LoaderDeciderResult.cs" />
     <Compile Include="Repositories\OutboundCampaignRepository.cs" />
     <Compile Include="Repositories\PayrollFormatRepository.cs" />
-    <Compile Include="Repositories\PlanningGroupSettingsRepository.cs" />
     <Compile Include="Repositories\PeopleForShiftTradeFinder.cs" />
     <Compile Include="Repositories\PersonAssociationPublisherCheckSumPersister.cs" />
     <Compile Include="Repositories\ProjectionVersionPersister.cs" />

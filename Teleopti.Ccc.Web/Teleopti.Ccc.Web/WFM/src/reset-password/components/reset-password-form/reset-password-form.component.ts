@@ -4,9 +4,9 @@ import { ResetPasswordService } from '../../shared/reset-password.service';
 
 export class MatchingPasswordValidation {
 	static MatchPassword(AC: AbstractControl) {
-		let password = AC.get('password').value; // to get value in input tag
-		let confirmPassword = AC.get('confirmPassword').value; // to get value in input tag
-		if (password != confirmPassword) {
+		const password = AC.get('password').value; // to get value in input tag
+		const confirmPassword = AC.get('confirmPassword').value; // to get value in input tag
+		if (password !== confirmPassword) {
 			AC.get('confirmPassword').setErrors({ MatchPassword: true });
 		} else {
 			AC.get('confirmPassword').setErrors(null);
@@ -28,9 +28,9 @@ export class ResetPasswordFormComponent {
 	token: string;
 
 	@Output()
-	onSuccess: EventEmitter<boolean> = new EventEmitter();
+	success: EventEmitter<boolean> = new EventEmitter();
 	@Output()
-	onCancel = new EventEmitter<void>();
+	cancel = new EventEmitter<void>();
 
 	form: FormGroup = this.fb.group(
 		{
@@ -42,8 +42,8 @@ export class ResetPasswordFormComponent {
 		}
 	);
 
-	cancel() {
-		this.onCancel.emit();
+	onCancel() {
+		this.cancel.emit();
 	}
 
 	get isFormValid() {
@@ -57,8 +57,10 @@ export class ResetPasswordFormComponent {
 	onSubmit(): void {
 		this.form.setErrors({ resetFailed: false });
 		for (const i in this.form.controls) {
-			this.form.controls[i].markAsDirty();
-			this.form.controls[i].updateValueAndValidity();
+			if (this.form.controls.hasOwnProperty(i)) {
+				this.form.controls[i].markAsDirty();
+				this.form.controls[i].updateValueAndValidity();
+			}
 		}
 		if (this.isFormValid) {
 			this.resetPasswordService
@@ -68,7 +70,7 @@ export class ResetPasswordFormComponent {
 				})
 				.subscribe({
 					next: () => {
-						this.onSuccess.emit(true);
+						this.success.emit(true);
 					},
 					error: () => {
 						this.form.setErrors({ resetFailed: true });

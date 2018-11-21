@@ -14,9 +14,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 	public class SynchronizeLargeBatchesTest
 	{
 		public StatesSender States;
-		public StateQueueUtilities StateQueue;
 		public TestCommon.PerformanceTest.PerformanceTest PerformanceTest;
-		public IRtaEventStoreSynchronizerWaiter Synchronizer;
+		public SynchronizerWaiter Synchronizer;
 
 		[Test]
 		[OnlyRunIfEnabled(Toggles.RTA_ReviewHistoricalAdherence_74770)]
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			PerformanceTest.Measure("1mKUHvBlk5wIk0LDZESO2prWvRuimhpjiWaSvoKk2gsE", "SynchronizeLargeBatchesTest", () =>
 			{
 				States.SendAllAsLargeBatches();
-				StateQueue.WaitForDequeue(TimeSpan.FromMinutes(15));
 				Synchronizer.Wait(TimeSpan.FromMinutes(15));
 			});
 		}

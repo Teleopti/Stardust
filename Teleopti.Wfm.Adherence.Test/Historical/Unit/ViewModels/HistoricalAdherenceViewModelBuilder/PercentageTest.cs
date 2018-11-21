@@ -26,7 +26,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 				.WithAssignment(person, "2017-12-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 17:00")
-				.WithHistoricalStateChange("2017-12-08 08:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithHistoricalStateChange("2017-12-08 08:00", Domain.Configuration.Adherence.In)
 				;
 
 			var viewModel = Target.Build(person);

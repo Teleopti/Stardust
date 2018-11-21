@@ -11,7 +11,7 @@ import { Report } from '../../models/Report.model';
 	styleUrls: ['./workspace.component.scss']
 })
 export class WorkspaceComponent implements OnInit {
-	@Input() initialized: boolean;
+	@Input() isLoading: boolean;
 	public canEditReport = false;
 	public reportPermission: pbi.models.Permissions;
 	public enableFilter: boolean;
@@ -22,7 +22,7 @@ export class WorkspaceComponent implements OnInit {
 	private pbiCoreService: pbi.service.Service;
 
 	constructor(private reportSvc: ReportService) {
-		this.initialized = false;
+		this.isLoading = false;
 
 		this.canEditReport = false;
 		this.enableFilter = true;
@@ -44,47 +44,61 @@ export class WorkspaceComponent implements OnInit {
 	}
 
 	loadReportList() {
+		this.isLoading = true;
 		this.reportSvc.getReports().then((reports) => {
-			this.reports = reports;
+			this.reports = [];
+			reports.forEach(report => {
+				if (report.Name.trim() !== 'Report Usage Metrics Report') {
+					this.reports.push(report);
+				}
+			});
+
+			this.reports = this.reports.sort();
+			this.isLoading = false;
 		});
 	}
 
-	loadSelectedReport(selectedReportId) {
-		this.reportSvc.getReportConfig(selectedReportId).then((config) => {
-			// Refer to https://github.com/Microsoft/PowerBI-JavaScript/wiki/Embed-Configuration-Details for more details
-			const embedConfig = {
-				type: 'report',
-				tokenType: pbi.models.TokenType.Embed,
-				accessToken: config.AccessToken,
-				embedUrl: config.ReportUrl,
-				id: config.ReportId,
-				permissions: this.reportPermission,
-				viewMode: this.canEditReport ? pbi.models.ViewMode.Edit : pbi.models.ViewMode.View,
-				settings: {
-					filterPaneEnabled: this.enableFilter,
-					navContentPaneEnabled: this.enableNavContent,
-					localeSettings: {
-						language: 'en',
-						formatLocale: 'en'
-					}
+	loadReport(config) {// Refer to https://github.com/Microsoft/PowerBI-JavaScript/wiki/Embed-Configuration-Details for more details
+		const embedConfig = {
+			type: 'report',
+			tokenType: pbi.models.TokenType.Embed,
+			accessToken: config.AccessToken,
+			embedUrl: config.ReportUrl,
+			id: config.ReportId,
+			permissions: this.reportPermission,
+			viewMode: this.canEditReport ? pbi.models.ViewMode.Edit : pbi.models.ViewMode.View,
+			settings: {
+				filterPaneEnabled: this.enableFilter,
+				navContentPaneEnabled: this.enableNavContent,
+				localeSettings: {
+					language: 'en',
+					formatLocale: 'en'
 				}
-			};
+			}
+		};
 
-			// Embed the report and display it within the div container.
-			const reportContainer = <HTMLElement>document.getElementById('reportContainer');
+		// Embed the report and display it within the div container.
+		const reportContainer = <HTMLElement>document.getElementById('reportContainer');
 
-			this.pbiCoreService.reset(reportContainer);
-			const report = this.pbiCoreService.embed(reportContainer, embedConfig);
+		this.pbiCoreService.reset(reportContainer);
+		const report = this.pbiCoreService.embed(reportContainer, embedConfig);
 
-			// Report.off removes a given event handler if it exists.
-			report.off('loaded');
+		// Report.off removes a given event handler if it exists.
+		report.off('loaded');
 
-			// Report.on will add an event handler which prints to Log window.
-			report.on('loaded', function() {
-				// console.log('Report loaded');
-			});
+		// Report.on will add an event handler which prints to Log window.
+		report.on('loaded', function() {
+			// console.log('Report loaded');
+		});
 
-			this.initialized = true;
+		this.isLoading = true;
+	}
+
+	loadSelectedReport(selectedReportId) {
+		this.isLoading = true;
+		this.reportSvc.getReportConfig(selectedReportId).then((config) => {
+			this.loadReport(config);
+			this.isLoading = false;
 		});
 	}
 
@@ -95,6 +109,15 @@ export class WorkspaceComponent implements OnInit {
 
 	public reloadCurrentReport() {
 		this.loadSelectedReport(this.selectedReport);
+	}
+
+	public cloneCurrentReport() {
+		this.isLoading = true;
+		this.reportSvc.cloneReport(this.selectedReport).then((config) => {
+			this.loadReportList();
+			this.loadReport(config);
+			this.isLoading = false;
+		});
 	}
 
 	public onCanEditReportChanged() {

@@ -109,6 +109,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IExternalLogonReader>()
 				.SingleInstance().ApplyAspects();
 
+			builder.RegisterType<PermissionsViewModelBuilder>().SingleInstance();
 			builder.RegisterType<AgentStatesViewModelBuilder>().SingleInstance();
 			builder.RegisterType<PhoneStateViewModelBuilder>().SingleInstance();
 			builder.RegisterType<SkillViewModelBuilder>().SingleInstance();
@@ -131,6 +132,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IRtaEventStoreTester>()
 				.As<IRtaEventStoreUpgradeWriter>()
 				.SingleInstance();
+			builder.RegisterType<RtaEventStoreTypeIdMapper>().SingleInstance();
 			if (_config.Toggle(Toggles.RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485))
 			{
 				builder.RegisterType<RtaEventStoreUpgrader>().As<IRtaEventStoreUpgrader>().SingleInstance().ApplyAspects();
@@ -140,12 +142,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
 			{
 				builder.RegisterType<RtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance().ApplyAspects();
-				builder.RegisterType<RtaEventStoreSynchronizerWaiter>().As<IRtaEventStoreSynchronizerWaiter>().SingleInstance().ApplyAspects();
+				builder.RegisterType<RtaEventStoreAsyncSynchronizer>().As<IRtaEventStoreAsyncSynchronizer>().SingleInstance().ApplyAspects();
+				builder.RegisterType<RunAsynchronouslyAndLog>().As<IRtaEventStoreAsyncSynchronizerStrategy>().SingleInstance().ApplyAspects();
 			}
 			else
 			{
-				builder.RegisterType<DontSynchronize>().As<IRtaEventStoreSynchronizer>().SingleInstance().ApplyAspects();
-				builder.RegisterType<DontWaitForSynchronizer>().As<IRtaEventStoreSynchronizerWaiter>().SingleInstance().ApplyAspects();
+				builder.RegisterType<DontSynchronize>()
+					.As<IRtaEventStoreSynchronizer>()
+					.As<IRtaEventStoreAsyncSynchronizer>()
+					.SingleInstance();
 			}
 
 			if (_config.Toggle(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485))

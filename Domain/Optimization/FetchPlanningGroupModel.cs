@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return _planningGroupMapper.ToModel(planningGroup, getAgentsToday(planningGroup));
 		}
 
-		private int getAgentsToday(IPlanningGroup planningGroup)
+		private int getAgentsToday(PlanningGroup planningGroup)
 		{
 			return _personRepository.CountPeopleInPlanningGroup(planningGroup,
 				DateOnly.Today.ToDateOnlyPeriod());

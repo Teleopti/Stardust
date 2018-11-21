@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var startDate = new DateOnly(2017, 3, 1);
 			var endDate = new DateOnly(2017, 3, 7);
 			JobResultRepository.Add(new JobResult(JobCategory.WebIntradayOptimization, new DateOnlyPeriod(startDate, endDate), PersonFactory.CreatePerson("name1"), DateTime.Now).WithId(jobResultId));
-			var planningPeriod = PlanningPeriodRepository.Has(startDate, endDate, SchedulePeriodType.Week, 1);
+			var planningPeriod = PlanningPeriodRepository.Has(startDate, SchedulePeriodType.Week, 1);
 			Target.Handle(new WebClearScheduleStardustEvent
 			{
 				JobResultId = jobResultId,

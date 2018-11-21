@@ -170,6 +170,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Common\PermissionViewModelBuilderTest.cs" />
     <Compile Include="Configuration\Infrastructure\DatabaseTest.cs" />
     <Compile Include="Configuration\Infrastructure\RepositoryTest.cs" />
     <Compile Include="Configuration\Infrastructure\RtaMapRepositoryTest.cs" />
@@ -195,6 +196,7 @@
     <Compile Include="Historical\Infrastructure\RtaEventStoreTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreUpgradeTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreUpgradeWriterTest.cs" />
+    <Compile Include="Historical\Unit\AgentAdherenceDay\_TestBench.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\AdherencesTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\ApprovedPeriodPercentageTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\ApprovedPeriodTest.cs" />
@@ -290,7 +292,6 @@
     <Compile Include="Monitor\Unit\ViewModels\SiteCardViewModelBuilderPermissionTest.cs" />
     <Compile Include="Monitor\Unit\ViewModels\SiteCardViewModelBuilderTeamsTest.cs" />
     <Compile Include="Monitor\Unit\ViewModels\SiteCardViewModelBuilderTest.cs" />
-    <Compile Include="NUnitSetup.cs" />
     <Compile Include="States\Infrastructure\ReadModels\CurrentScheduleReadModelPersisterTest.cs" />
     <Compile Include="States\Infrastructure\ReadModels\CurrentScheduleReadModelUpdaterTest.cs" />
     <Compile Include="States\Infrastructure\ReadModels\ExternalLogonReadModelPersisterTest.cs" />
@@ -431,6 +432,11 @@
   <ItemGroup>
     <Folder Include="Monitor\Infrastructure" />
     <Folder Include="Monitor\Unit\ReadModels" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Historical\Unit\AgentAdherenceDay\_TestBench.data">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -297,7 +298,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				p => !p.IsAgent(date) && p.TerminalDate.GetValueOrDefault(DateOnly.MaxValue) >= date).ToArray();
 		}
 
-		public IList<IPerson> FindPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period)
+		public IList<IPerson> FindPeopleInPlanningGroup(PlanningGroup planningGroup, DateOnlyPeriod period)
 		{
 			var people = _storage.LoadAll<IPerson>().ToList();
 			if (planningGroup.Filters.IsEmpty())
@@ -321,12 +322,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_storage.Remove(person);
 		}
 
-		public int CountPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period)
+		public int CountPeopleInPlanningGroup(PlanningGroup planningGroup, DateOnlyPeriod period)
 		{
 			return FindPeopleInPlanningGroup(planningGroup, period).Count;
 		}
 
-		public IList<Guid> FindPeopleIdsInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period)
+		public IList<Guid> FindPeopleIdsInPlanningGroup(PlanningGroup planningGroup, DateOnlyPeriod period)
 		{
 			return FindPeopleInPlanningGroup(planningGroup, period).Select(x => x.Id.GetValueOrDefault()).ToList();
 		}

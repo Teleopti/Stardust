@@ -38,9 +38,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public void ShouldIntradayOptimizeForPlanningGroup()
 		{
 			var team = new Team { Site = new Site("site") };
-			var planningGroup = new PlanningGroup("Europe")
-				.AddFilter(new TeamFilter(team));
-
+			var planningGroup = new PlanningGroup().AddFilter(new TeamFilter(team));
 			PlanningGroupRepository.Add(planningGroup);
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
 			var skill = SkillRepository.Has("skill", phoneActivity);
@@ -71,8 +69,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldNotIntradayOptimizeForAgentNotInPlanningGroup()
 		{
-			var planningGroup = new PlanningGroup("Europe");
-			planningGroup.AddFilter(new TeamFilter(new Team()));
+			var planningGroup = new PlanningGroup().AddFilter(new TeamFilter(new Team()));
 			PlanningGroupRepository.Add(planningGroup);
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
 			var skill = SkillRepository.Has("skill", phoneActivity);

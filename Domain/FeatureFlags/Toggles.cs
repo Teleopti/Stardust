@@ -14,8 +14,6 @@
 		// ReSharper disable InconsistentNaming
 		Forecast_CopySettingsToWorkflow_11112,
 
-		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
-
 		RTA_KillFattyIntradayUntilItDies_74939, //remove april 2019
 		RTA_ReviewHistoricalAdherence_Domain_74770,
 		RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306,
@@ -25,13 +23,6 @@
 		RTA_StateQueueFloodPrevention_77710,
 		RTA_ReviewHistoricalAdherence_74770,
 
-		MyTimeWeb_SortRequestList_40711,
-		MyTimeWeb_PreferenceForJalaliCalendar_42965,
-		MyTimeWeb_DayScheduleForStartPage_43446,
-		MyTimeWeb_DayScheduleForStartPage_Command_44209,
-		MyTimeWeb_MonthlyScheduleMobileView_45004,
-		MyTimeWeb_WaitListPositionEnhancement_46301,
-		MyTimeWeb_PollToCheckScheduleChanges_46595,
 		MyTimeWeb_NewTeamScheduleView_75989,
 		MyTimeWeb_NewTeamScheduleViewDesktop_76313,
 		MyTimeWeb_TrafficLightOnMobileDayView_77447,
@@ -71,6 +62,7 @@
 		Wfm_PeopleWeb_PrepareForRelease_74903,
 		Wfm_Authentication_ChangePasswordMenu_76666,
 		Wfm_User_Password_Reset_74957,
+		Wfm_ReadNotificationConfigurationFromDb_78242,
 
 		WfmGlobalLayout_personalOptions_37114,
 
@@ -87,6 +79,7 @@
 		ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941,
 		ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717,
 		ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487,
+		ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118,
 
 		Wfm_DisplayOnlineHelp_39402,
 
@@ -95,14 +88,9 @@
 		ETL_Optimize_Memory_Usage_76761,
 		ETL_Show_Tenant_Name_In_History_75767,
 
-		Staffing_Info_Configuration_44687,
 		WfmStaffing_AddOvertime_42524,
 		OvertimeRequestUseMostUnderStaffedSkill_47853,
-		OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944,
-		OvertimeRequestSupportMultiSelectionSkillTypes_74945,
-		OvertimeRequestStaffingCheckMethod_74949,
 		OvertimeRequestChangeBelongsToDateForOverNightShift_74984,
-		OvertimeRequestUsePrimarySkillOption_75573,
 		WFM_Forecaster_Refact_44480,
 		WFM_Export_Forecast_44716,
 		WFM_Forecaster_Preview_74801,
@@ -124,6 +112,8 @@
 		WFM_Clear_Data_After_Leaving_Date_47768,
 		WFM_Request_View_Permissions_77731,
 		WFM_Request_Show_Feedback_Link_77733,
+		WFM_Request_Remove_Waitlist_Link_78939,
+		WFM_Request_Show_Shift_for_Absence_Requests_79008,
 
 		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889,
 		MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947,

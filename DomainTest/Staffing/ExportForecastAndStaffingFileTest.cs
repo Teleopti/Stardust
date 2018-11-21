@@ -35,6 +35,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public FakeStaffingSettingsReader StaffingSettingsReader;
 		public FakeUserUiCulture FakeUserUiCulture;
 		public FakeUserCulture FakeUserCulture;
+		public FakeUserTimeZone UserTimeZone;
+
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -605,7 +607,79 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			rows[1].Should().Be.EqualTo("skillname,8/15/2017 8:00 AM,8/15/2017 8:15 AM,20,8,-12,8");
 			rows[2].Should().Be.EqualTo("skillname,8/15/2017 8:15 AM,8/15/2017 8:30 AM,20,6,-14,6");
 		}
-		
+
+		[Test]
+		public void ShouldExportDayWhenInEstTimezone()
+		{
+			FakeUserCulture.Is(new CultureInfo("en-US"));
+			UserTimeZone.IsNewYork();
+			var skill = createSkillWithTimezone(15, "skillname", new TimePeriod(22, 0, 22, 30), TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
+			skill.SetId(Guid.NewGuid());
+
+			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
+			var skillDay = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2017, 8, 15), new TimePeriod(22, 0, 22, 30), 15);
+			skillDay.SkillStaffPeriodCollection.ForEach(ssp => ssp.Payload.Shrinkage = new Percent(0.25));
+			skillDay.SkillDataPeriodCollection.ForEach(sdpc => sdpc.Shrinkage = new Percent(0.25));
+
+			var skillDay2 = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2017, 8, 16), new TimePeriod(22, 0, 22, 30), 15);
+			skillDay2.SkillStaffPeriodCollection.ForEach(ssp => ssp.Payload.Shrinkage = new Percent(0.25));
+			skillDay2.SkillDataPeriodCollection.ForEach(sdpc => sdpc.Shrinkage = new Percent(0.25));
+
+
+			SkillRepository.Add(skill);
+			SkillDayRepository.Add(skillDay);
+			SkillDayRepository.Add(skillDay2);
+
+			
+			var bpoResources = (new List<SkillCombinationResourceForBpo>
+			{
+				new SkillCombinationResourceForBpo
+				{
+					StartDateTime = new DateTime(2017, 08, 16, 2, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 08, 16, 2, 15, 0).Utc(),
+					Resource = 8,
+					Source = "BpoName",
+					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
+				},
+				new SkillCombinationResourceForBpo
+				{
+					StartDateTime = new DateTime(2017, 08, 16, 2, 15, 0).Utc(),
+					EndDateTime = new DateTime(2017, 08, 16, 2, 30, 0).Utc(),
+					Resource = 6,
+					Source = "BpoName",
+					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
+				},
+				new SkillCombinationResourceForBpo
+				{
+					StartDateTime = new DateTime(2017, 08, 17, 2, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 08, 17, 2, 15, 0).Utc(),
+					Resource = 8,
+					Source = "BpoName",
+					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
+				},
+				new SkillCombinationResourceForBpo
+				{
+					StartDateTime = new DateTime(2017, 08, 17, 2, 15, 0).Utc(),
+					EndDateTime = new DateTime(2017, 08, 17, 2, 30, 0).Utc(),
+					Resource = 6,
+					Source = "BpoName",
+					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
+				}
+			});
+			SkillCombinationResourceRepository.AddBpoResources(bpoResources);
+
+			
+			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
+			var forecastedData = Target.ExportDemand(skill, period, true);
+			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
+			rows.Length.Should().Be(5);
+			rows[0].Should().Be("skill,startdatetime,enddatetime,forecasted agents,total scheduled agents,total diff,total scheduled heads,BpoName");
+			rows[1].Should().Be.EqualTo("skillname,8/15/2017 10:00 PM,8/15/2017 10:15 PM,20,8,-12,8,8");
+			rows[2].Should().Be.EqualTo("skillname,8/15/2017 10:15 PM,8/15/2017 10:30 PM,20,6,-14,6,6");
+			rows[3].Should().Be.EqualTo("skillname,8/16/2017 10:00 PM,8/16/2017 10:15 PM,20,8,-12,8,8");
+			rows[4].Should().Be.EqualTo("skillname,8/16/2017 10:15 PM,8/16/2017 10:30 PM,20,6,-14,6,6");
+		}
+
 		[Test]
 		public void ShouldReturnCorrectNumberOfIntervals()
 		{
@@ -640,7 +714,21 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 
 			return skill;
 		}
-		
+
+		private static ISkill createSkillWithTimezone(int intervalLength, string skillName, TimePeriod openHours, TimeZoneInfo timeZone)
+		{
+			var skill =
+				new Skill(skillName, skillName, Color.Empty, intervalLength, new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony))
+				{
+					TimeZone = timeZone,
+					Activity = new Activity("activity_" + skillName).WithId()
+				}.WithId();
+			var workload = WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours);
+			workload.SetId(Guid.NewGuid());
+
+			return skill;
+		}
+
 		private static ISkill createSkillWithFullOpenHours(int intervalLength, string skillName)
 		{
 			var skill =

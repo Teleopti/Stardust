@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakePersonAccessAuditRepository : IPersonAccessAuditRepository
 	{
 		public List<IPersonAccess> PersonAccesses = new List<IPersonAccess>();
-
+		public int PurgeCounter;
 		public void Add(IPersonAccess personAccess)
 		{
 			PersonAccesses.Add(personAccess);
@@ -40,9 +40,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return PersonAccesses;
 		}
 
-		public void PurgeOldAudits(DateTime dateForPurging)
+		public void PurgeOldAudits(DateTime daysBack)
 		{
-			throw new NotImplementedException();
+			if (ThrowOnPurgeOldAudits) throw new Exception("ThrowOnPurgeOldAudits = true");
+			PurgeCounter++;
 		}
+
+		public bool ThrowOnPurgeOldAudits { get; set; }
 	}
 }

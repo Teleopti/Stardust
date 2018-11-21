@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public ISkillRepository SkillRepository;
 		public ISkillTypeRepository SkillTypeRepository;
 		public IWorkloadRepository WorkloadRepository;
-		public IPersonAssignmentRepository PersonAssignmentRepository;
 		public ISkillDayRepository SkillDayRepository;
 
 		[Test]
@@ -74,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 			var period = date.ToDateOnlyPeriod();
 			var planningGroup = new PlanningGroup();
 			planningGroup.AddFilter(new SkillFilter(childSkill1));
-			var planningPeriod = new PlanningPeriod(period, SchedulePeriodType.Day, 1, planningGroup);
+			var planningPeriod = new PlanningPeriod(date, SchedulePeriodType.Day, 1, planningGroup);
 			var skillDay = multisiteSkill.CreateSkillDayWithDemand(scenario, date, 1);
 			
 			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())

@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -21,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture, Category("BucketB")]
-	public class PlanningPeriodRepositoryTest : RepositoryTest<IPlanningPeriod>
+	public class PlanningPeriodRepositoryTest : RepositoryTest<PlanningPeriod>
 	{
 		private static readonly DateOnly startDate = new DateOnly(2001, 1, 1);
 		private IPerson person;
@@ -39,14 +40,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(jobResult);
 		}
 
-		protected override IPlanningPeriod CreateAggregateWithCorrectBusinessUnit()
+		protected override PlanningPeriod CreateAggregateWithCorrectBusinessUnit()
 		{
-			var planningPeriod = new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015,4,1), new DateOnly(2015,4,7)),SchedulePeriodType.Week, 1);
+			var planningGroup = new PlanningGroup();
+			PersistAndRemoveFromUnitOfWork(planningGroup);
+			var planningPeriod = new PlanningPeriod(new DateOnly(2015,4,1),SchedulePeriodType.Week, 1, planningGroup);
 			planningPeriod.JobResults.Add(jobResult);
 			return planningPeriod;
 		}
 
-		protected override void VerifyAggregateGraphProperties(IPlanningPeriod loadedAggregateFromDatabase)
+		protected override void VerifyAggregateGraphProperties(PlanningPeriod loadedAggregateFromDatabase)
 		{
 			var aggregateWithCorrectBusinessUnit = CreateAggregateWithCorrectBusinessUnit();
 			loadedAggregateFromDatabase.Range.Should().Be.EqualTo(aggregateWithCorrectBusinessUnit.Range);
@@ -54,16 +57,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			loadedAggregateFromDatabase.JobResults.Single().Owner.Should().Be.EqualTo(aggregateWithCorrectBusinessUnit.JobResults.Single().Owner);
 		}
 
-		protected override Repository<IPlanningPeriod> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
+		protected override Repository<PlanningPeriod> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			return new PlanningPeriodRepository(currentUnitOfWork);
+		}
+
+		[Test]
+		public void ShouldNotAllowNullAsPlanningGroup()
+		{
+			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
+			var planningPeriod = new PlanningPeriod(DateOnly.Today, SchedulePeriodType.Day, 1, null);
+
+			Assert.Throws<DataSourceException>(() =>
+			{
+				repository.Add(planningPeriod);
+				Session.Flush();
+			});
 		}
 
 		[Test]
 		public void ShouldGetPlanningPeriodsForPlanningGroup()
 		{
 			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
-			var planningGroup = new PlanningGroup("test planning group");
+			var planningGroup = new PlanningGroup();
 			PersistAndRemoveFromUnitOfWork(planningGroup);
 			PersistAndRemoveFromUnitOfWork(new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()), planningGroup));
 

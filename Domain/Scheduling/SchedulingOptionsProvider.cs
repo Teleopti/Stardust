@@ -25,9 +25,21 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			};
 		}
 
-		public void SetFromTest(SchedulingOptions schedulingOptions)
+		public void SetFromTest(PlanningPeriod planningPeriod, SchedulingOptions schedulingOptions)
 		{
 			_setFromTest = schedulingOptions;
+			
+			//hack for now - to be removed when we have one/fewer "settings objects" sent around
+			if (schedulingOptions.UseBlock)
+			{
+				planningPeriod.PlanningGroup.ModifyDefault(x =>
+				{
+					x.BlockFinderType = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
+					x.BlockSameShiftCategory = schedulingOptions.BlockSameShiftCategory;
+					x.BlockSameStartTime = schedulingOptions.BlockSameStartTime;
+					x.BlockSameShift = schedulingOptions.BlockSameShift;				
+				});
+			}
 		}
 	}
 }

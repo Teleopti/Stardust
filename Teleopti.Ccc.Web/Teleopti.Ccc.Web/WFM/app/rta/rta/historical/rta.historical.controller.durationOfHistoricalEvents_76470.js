@@ -23,13 +23,13 @@
 
 		loadData();
 
-		$http.get('../api/HistoricalAdherence/HasModifyAdherencePermission', {
+		$http.get('../api/Adherence/Permissions', {
 			params: {
 				personId: $stateParams.personId,
 				date: $stateParams.date
 			}
 		}).then(function (response) {
-			vm.hasModifyAdherencePermission = response.data;
+			vm.hasModifyAdherencePermission = response.data.ModifyAdherence;
 		});
 
 		function loadData() {

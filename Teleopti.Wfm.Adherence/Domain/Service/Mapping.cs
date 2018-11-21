@@ -15,7 +15,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 
 		public Guid? RuleId { get; set; }
 		public string RuleName { get; set; }
-		public Ccc.Domain.InterfaceLegacy.Domain.Adherence? Adherence { get; set; }
+		public Configuration.Adherence? Adherence { get; set; }
 		public double? StaffingEffect { get; set; }
 		public int DisplayColor { get; set; }
 

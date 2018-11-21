@@ -6,32 +6,30 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class FetchPlanningGroupSettingsModel : IFetchPlanningGroupSettingsModel
 	{
-		private readonly IPlanningGroupSettingsRepository _planningGroupSettingsRepository;
 		private readonly PlanningGroupSettingsMapper _planningGroupSettingsMapper;
 		private readonly IPlanningGroupRepository _planningGroupRepository;
 
-		public FetchPlanningGroupSettingsModel(IPlanningGroupSettingsRepository planningGroupSettingsRepository, PlanningGroupSettingsMapper planningGroupSettingsMapper, IPlanningGroupRepository planningGroupRepository)
+		public FetchPlanningGroupSettingsModel(PlanningGroupSettingsMapper planningGroupSettingsMapper, IPlanningGroupRepository planningGroupRepository)
 		{
-			_planningGroupSettingsRepository = planningGroupSettingsRepository;
 			_planningGroupSettingsMapper = planningGroupSettingsMapper;
 			_planningGroupRepository = planningGroupRepository;
 		}
 
-		public PlanningGroupSettingsModel Fetch(Guid id)
+		public PlanningGroupSettingsModel Fetch(Guid planningGroupSettingId)
 		{
-			var planningGroupSettings = _planningGroupSettingsRepository.Get(id);
-			if (planningGroupSettings == null)
-				throw new ArgumentException($"Cannot find PlanningGroupSettings with Id {id}");
-
+			var planningGroup = _planningGroupRepository.FindPlanningGroupBySettingId(planningGroupSettingId);
+			if (planningGroup == null)
+			{
+				throw new ArgumentException($"Cannot find PlanningGroupSettings with Id {planningGroupSettingId}");
+			}
+			var planningGroupSettings = planningGroup.Settings.SingleOrDefault(x => x.Id.HasValue && x.Id.Value == planningGroupSettingId);
 			return _planningGroupSettingsMapper.ToModel(planningGroupSettings);
 		}
 
 		public IEnumerable<PlanningGroupSettingsModel> FetchAllForPlanningGroup(Guid planningGroupId)
 		{
 			var planningGroup = _planningGroupRepository.Get(planningGroupId);
-			var all = _planningGroupSettingsRepository.LoadAllByPlanningGroup(planningGroup);
-
-			var result = all.Select(planningGroupSettings => _planningGroupSettingsMapper.ToModel(planningGroupSettings)).ToList();
+			var result = planningGroup.Settings.Select(planningGroupSettings => _planningGroupSettingsMapper.ToModel(planningGroupSettings)).ToList();
 			return result;
 		}
 	}

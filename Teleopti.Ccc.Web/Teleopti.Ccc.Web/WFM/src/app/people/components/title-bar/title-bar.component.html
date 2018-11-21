@@ -1,10 +1,5 @@
-<div class="con-row view-header with-fab with-desc">
-  <div class="con-flex view-title">
-    <h1>
-      <ng-content></ng-content>
-    </h1>
-  </div>
-  <div>
-    <feedback-message feedbackType="newRelease" [componentName]="'People' | translate"></feedback-message>
-  </div>
+<div class="con-row">
+	<h1 class="con-flex"><ng-content></ng-content></h1>
+
+	<feedback-message feedbackType="newRelease" [componentName]="'People' | translate"></feedback-message>
 </div>

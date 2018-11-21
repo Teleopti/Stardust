@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
@@ -14,38 +13,28 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePlanningPeriodRepository : IPlanningPeriodRepository
 	{
-		private readonly INow _now;
-		private readonly IList<IPlanningPeriod> _planningPeriods;
+		private readonly IList<PlanningPeriod> _planningPeriods = new List<PlanningPeriod>();
 		private IPlanningPeriodSuggestions _planningPeriodSuggestions;
 
-		public FakePlanningPeriodRepository(INow now)
-		{
-			_now = now;
-			_planningPeriods = new List<IPlanningPeriod>();
-		}
-
-		public bool AddExecuted { get; set; }
-
-		public void Add(IPlanningPeriod entity)
+		public void Add(PlanningPeriod entity)
 		{
 			entity.SetId(Guid.NewGuid());
 			_planningPeriods.Add(entity);
-			AddExecuted = true;
 		}
 
-		public IPlanningPeriod Has(DateOnly start, int numberOfWeeks)
+		public PlanningPeriod Has(DateOnly start, int numberOfWeeks)
 		{
-			return Has(start, numberOfWeeks, null);
+			return Has(start, numberOfWeeks, new PlanningGroup());
 		}
 
-		public IPlanningPeriod Has(DateOnly startDate, DateOnly endDate, SchedulePeriodType schedulePeriodType, int number)
+		public PlanningPeriod Has(DateOnly startDate, SchedulePeriodType schedulePeriodType, int number)
 		{
-			var planningPeriod = new PlanningPeriod(new DateOnlyPeriod(startDate,endDate),schedulePeriodType,number, new PlanningGroup()).WithId();
+			var planningPeriod = new PlanningPeriod(startDate, schedulePeriodType,number, new PlanningGroup()).WithId();
 			_planningPeriods.Add(planningPeriod);
 			return planningPeriod;
 		}
 
-		public IPlanningPeriod Has(DateOnly start, int number, SchedulePeriodType type, IPlanningGroup planningGroup)
+		public PlanningPeriod Has(DateOnly start, int number, SchedulePeriodType type, PlanningGroup planningGroup)
 		{
 			DateTime now;
 			switch (type)
@@ -72,39 +61,35 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 						Number = number,
 						PeriodType = type
 					}
-				}), planningGroup ?? new PlanningGroup());
-			planningPeriod.SetId(Guid.NewGuid());
+				}), planningGroup).WithId();
 			_planningPeriods.Add(planningPeriod);
 			return planningPeriod;
 
 			
 		}
 
-		public IPlanningPeriod Has(DateOnly start, int numberOfWeeks, IPlanningGroup planningGroup)
+		public PlanningPeriod Has(DateOnly start, int numberOfWeeks, PlanningGroup planningGroup)
 		{
 			return Has(start, numberOfWeeks, SchedulePeriodType.Week, planningGroup);
 		}
 
-		public void Remove(IPlanningPeriod entity)
+		public void Remove(PlanningPeriod entity)
 		{
 			_planningPeriods.Remove(entity);
 		}
 
-		public IPlanningPeriod Get(Guid id)
+		public PlanningPeriod Get(Guid id)
 		{
 			return _planningPeriods.FirstOrDefault(planningPeriod => planningPeriod.Id == id);
 		}
 
-		public IEnumerable<IPlanningPeriod> LoadAll()
+		public IEnumerable<PlanningPeriod> LoadAll()
 		{
 			return _planningPeriods;
 		}
 
-		public IPlanningPeriod Load(Guid id)
+		public PlanningPeriod Load(Guid id)
 		{
-			if (!_planningPeriods.Any())
-				return new PlanningPeriod(new PlanningPeriodSuggestions(_now, new AggregatedSchedulePeriod[] {}));
-			//TODO: fix this!
 			return _planningPeriods.FirstOrDefault(planningPeriod => planningPeriod.Id == id);
 		}
 
@@ -115,7 +100,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _planningPeriodSuggestions;
 		}
 
-		public IEnumerable<IPlanningPeriod> LoadForPlanningGroup(IPlanningGroup planningGroup)
+		public IEnumerable<PlanningPeriod> LoadForPlanningGroup(PlanningGroup planningGroup)
 		{
 			return _planningPeriods.Where(x => x.PlanningGroup.Id == planningGroup.Id).ToList();
 		}

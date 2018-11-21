@@ -37,9 +37,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public IScheduleStorage ScheduleStorage;
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
-		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 
-		
 		[Test]
 		public void ShouldMoveDayOffToDayWithLessDemand()
 		{
@@ -371,9 +369,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			));
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1), new TimePeriod(6, 0, 14, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).SetDayOff(new DayOffTemplate());
-			var optPrefs = OptimizationPreferencesProvider.Fetch();
-			optPrefs.General.UseShiftCategoryLimitations = true;
-			OptimizationPreferencesProvider.SetFromTestsOnly(optPrefs);
 
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 

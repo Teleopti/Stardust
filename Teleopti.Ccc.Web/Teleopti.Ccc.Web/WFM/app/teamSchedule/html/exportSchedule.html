@@ -6,10 +6,11 @@
 			</div>
 			<div class="con-flex x3">
 				<div class="form-input-wrap">
-					<date-range-picker ng-model="vm.configuration.period"
-									   template-type="vm.periodPickerType"
-									   custom-validators="vm.dateRangeCustomValidators"
-									   on-pop-up-close="vm.onPeriodChanged()"></date-range-picker>
+					<wfm-date-range-picker ng-class="{'invalid': !vm.isDateValid()}"
+									   ng-model="vm.configuration.period"
+									   popup-mode="true"
+									   custom-validate="vm.dateRangeCustomValidators()"
+									   on-date-change="vm.onPeriodChanged()"></wfm-date-range-picker>
 					<div class="tips"><i class="mdi mdi-information-outline"></i>{{'ExportSchedulesMaximumDays' | translate}}</div>
 				</div>
 			</div>

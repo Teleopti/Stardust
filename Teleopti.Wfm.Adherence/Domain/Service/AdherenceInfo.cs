@@ -28,7 +28,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 			return adherenceFor(rule?.Adherence, rule?.StaffingEffect);
 		}
 
-		private static EventAdherence adherenceFor(Ccc.Domain.InterfaceLegacy.Domain.Adherence? adherence, double? staffingEffect)
+		private static EventAdherence adherenceFor(Configuration.Adherence? adherence, double? staffingEffect)
 		{
 			if (!adherence.HasValue)
 			{
@@ -39,11 +39,11 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 				return EventAdherence.Out;
 			}
 
-			if (adherence == Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+			if (adherence == Configuration.Adherence.In)
 				return EventAdherence.In;
-			if (adherence == Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+			if (adherence == Configuration.Adherence.Out)
 				return EventAdherence.Out;
-			if (adherence == Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral)
+			if (adherence == Configuration.Adherence.Neutral)
 				return EventAdherence.Neutral;
 
 			return EventAdherence.Neutral;

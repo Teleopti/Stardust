@@ -3,34 +3,10 @@
 	text-decoration: none;
 	font-size: 13px;
 
-	.main-menu-ctrls {
-		position: fixed;
-		z-index: 1000;
-		top: -6px;
-		left: 0;
-		margin-top: 10px;
-
-		.main-menu-trigger {
-			user-select: none;
-			cursor: pointer;
-			margin: 5px;
-			padding: 8px;
-			line-height: 16px;
-			border-radius: 50%;
-			transition: 300ms all cubic-bezier(0.33, 0.11, 0.02, 0.99);
-		}
-
-		.main-menu-trigger-icon {
-			position: relative;
-			top: 2px;
-		}
-	}
-
 	.main-menu-link-wrapper {
 		height: 100%;
 		min-width: 200px;
 		overflow-y: auto;
-		box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
 	}
 
 	@media screen and (max-width: 768px) {
@@ -40,6 +16,9 @@
 			left: 0;
 			width: 100%;
 			z-index: 1010;
+		}
+		.open-in-new {
+			display: none;
 		}
 	}
 

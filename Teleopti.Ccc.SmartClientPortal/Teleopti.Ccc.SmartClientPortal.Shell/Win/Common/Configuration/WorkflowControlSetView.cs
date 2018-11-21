@@ -57,11 +57,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			dateOnlyPeriodsVisualizer1.Culture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
 			timeSpanTextBox1.TimeSpanBoxWidth = timeSpanTextBox1.Width;
 			dateTimePickerAdvViewpoint.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
-			setAbsenceRequestVisibilityOptions(_toggleManager);
 			SetMaxConsecutiveWorkingDaysVisibility(_toggleManager);
 			checkOvertimeProbabilityLicense();
 			checkOvertimeRequestsLicense();
-			checkOvertimeStaffingCheckMethodToggle();
 			loadOvertimeRequestAutoGrantTypeAdapterCollection();
 		}
 
@@ -69,14 +67,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			_presenter = presenter;
 			_presenter.SetParentView(this);
-		}
-
-		private void setAbsenceRequestVisibilityOptions(IToggleManager toggleManager)
-		{
-			if (!toggleManager.IsEnabled(Toggles.Staffing_Info_Configuration_44687))
-			{
-				hideAbsenceProbabilityCheckBox();
-			}
 		}
 
 		private void SetMaxConsecutiveWorkingDaysVisibility(IToggleManager toggleManager)
@@ -89,19 +79,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				this.panel10.Visible = false;
 
 			}
-		}
-
-
-		private void hideAbsenceProbabilityCheckBox()
-		{
-			hideControl(tableLayoutPanelAbsenceProbability);
-		}
-
-		private void hideControl(Control control)
-		{
-			control.Hide();
-			var rowIndex = tableLayoutPanelBasic.GetRow(control);
-			tableLayoutPanelAbsenceRequestPeriods.RowStyles[rowIndex].Height = 0;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]

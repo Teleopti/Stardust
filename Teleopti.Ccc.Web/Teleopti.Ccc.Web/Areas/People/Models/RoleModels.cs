@@ -34,11 +34,4 @@ namespace Teleopti.Ccc.Web.Areas.People.Models
 		public IEnumerable<Guid> PersonIdList { get; set; }
 	}
 
-	public class PersonRoleInputModel
-	{
-		public Guid PersonId { get; set; }
-		public IEnumerable<Guid> Roles { get; set; }
-	}
-
-	
 }

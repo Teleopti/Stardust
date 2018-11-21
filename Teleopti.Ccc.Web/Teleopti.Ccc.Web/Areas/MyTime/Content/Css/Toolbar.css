@@ -1,89 +1,75 @@
-﻿.badge-detail {
-	text-align: center;
+﻿.teleopti-mytime-top-menu {
+	border: none;
+	margin: 0;
+	background: #0099ff;
 }
-.badge-type {
-	font-size: 12px;
-	font-weight: bold;
-}
-.navbar {
-	margin-bottom: 0;
-}
-.navbar-toggle {
+.navbar-toggle-button {
 	float: left;
 	margin: 10px;
 }
-.navmenu-inverse,
-.navbar-inverse .navbar-offcanvas {
-	background-color: #0099ff;
-	border-color: #0066cc;
+.navbar-default .navbar-toggle.navbar-toggle-button:hover,
+.navbar-default .navbar-toggle.navbar-toggle-button:focus {
+	background: #0079ef;
 }
-.navbar-collapse {
-	max-height: none !important;
+.teleopti-mytime-top-menu.custom-collapsed .navbar-offcanvas {
+	display: none !important;
+	width: 33.3%;
+	min-width: 250px;
+	height: auto;
+	border: none;
+	position: fixed;
+	top: 50px;
+	right: initial;
+	bottom: 0;
+	left: 0;
+	z-index: 1030;
+	overflow-y: auto;
+	background: #0099ff;
+}
+.teleopti-mytime-top-menu.custom-collapsed .navbar-offcanvas.in {
+	display: block !important;
+}
+.teleopti-mytime-top-menu.custom-collapsed .navbar-offcanvas.in ul.navbar-nav,
+.teleopti-mytime-top-menu.custom-collapsed .navbar-offcanvas.in li {
+	width: 100%;
+}
+.teleopti-mytime-top-menu.custom-collapsed .navbar-offcanvas.in li {
+	display: block;
+	float: none;
+}
+.teleopti-mytime-top-menu.custom-collapsed .navbar-offcanvas.in #report-list {
+	width: 100%;
+	background: #0099ff;
+	box-shadow: none;
+	border: none;
+}
+.teleopti-mytime-top-menu.custom-collapsed .navbar-offcanvas.in #report-list a {
+	color: #fff;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.teleopti-mytime-top-menu .navbar-nav > li > a:hover,
+.teleopti-mytime-top-menu .navbar-nav > li > a:focus,
+.teleopti-mytime-top-menu .navbar-nav > .active > a,
+.teleopti-mytime-top-menu .navbar-nav > .active > a:hover,
+.teleopti-mytime-top-menu .navbar-nav > .active > a:focus,
+.teleopti-mytime-top-menu .navbar-nav > .open > a,
+.teleopti-mytime-top-menu .navbar-nav > .open > a:hover,
+.teleopti-mytime-top-menu .navbar-nav > .open > a:focus,
+.teleopti-mytime-top-menu.custom-collapsed .navbar-offcanvas.in #report-list .active > a,
+.teleopti-mytime-top-menu.custom-collapsed .navbar-offcanvas.in #report-list .active > a:hover,
+.teleopti-mytime-top-menu.custom-collapsed .navbar-offcanvas.in #report-list .active > a:focus,
+.teleopti-mytime-top-menu.custom-collapsed .navbar-offcanvas.in #report-list a:hover,
+.teleopti-mytime-top-menu.custom-collapsed .navbar-offcanvas.in #report-list a:focus {
+	background: #0079ef;
 }
 .navbar-nav.navbar-user-setting {
 	margin-right: 2px 10px;
 	margin-left: 10px;
 }
-.navbar-inverse {
-	background-color: #0099ff;
-}
 
-.navbar-inverse .navbar-nav > li > a:hover,
-.navbar-inverse .navbar-nav > li > a:focus {
-	background-color: #0079ef;
-}
-.navbar-inverse .navbar-nav > .active > a,
-.navbar-inverse .navbar-nav > .active > a:hover,
-.navbar-inverse .navbar-nav > .active > a:focus {
-	background-color: #0079ef;
-}
-.bdd-mytime-top-menu {
-	border: none;
-}
-.nav > li > .input-group {
-	position: relative;
-	padding: 4px 0px;
-	margin-left: -5px;
-}
-.submenu {
-	width: auto;
-}
-.navbar-teleopti {
-	margin-bottom: 0;
-}
-.navbar-teleopti {
-	margin-bottom: 0;
-	background-color: #5acdf9;
-	border: none;
-}
-.navbar-teleopti .btn-default {
-	background-color: #5acdf9;
-	border-color: #5acdf9;
-}
-.navbar-teleopti .navbar-nav > li > a:hover,
-.navbar-teleopti .navbar-nav > li > a:focus {
-	color: #ffffff;
-	background-color: #3aade9;
-}
-.navbar-teleopti .navbar-nav > .active > a,
-.navbar-teleopti .navbar-nav > .active > a:hover,
-.navbar-teleopti .navbar-nav > .active > a:focus {
-	color: #ffffff;
-	background-color: #3aade9;
-}
-.navbar-teleopti .btn-default:hover,
-.navbar-teleopti .btn-default:focus,
-.navbar-teleopti .btn-default:active,
-.navbar-teleopti .btn-default.visited,
-.navbar-teleopti .open > .dropdown-toggle.btn-default {
-	background-color: #3aade9;
-	border-color: #3aade9;
-}
-
-/*
-Personal drop down menu
-*/
-
+/*User settings drop down menu*/
 .dropdown dd {
 	position: relative;
 }
@@ -102,9 +88,8 @@ Personal drop down menu
 	display: block;
 	text-align: left;
 }
-/*
-End personal drop down menu
-*/
+
+/*End User settings drop down menu*/
 .user-name-link {
 	white-space: nowrap;
 	margin: 0;
@@ -121,32 +106,47 @@ End personal drop down menu
 .placeholder {
 	color: #aaa !important;
 }
-.navbar-collapse {
-	max-height: none !important;
+
+/*teleopti-toolbar: customize Bootstrap navbar using Teleopti blue*/
+.teleopti-toolbar {
+	margin-bottom: 0;
+	margin-bottom: 0;
+	background-color: #5acdf9;
+	border: none;
+}
+.teleopti-toolbar .btn-default {
+	background-color: #5acdf9;
+	border-color: #5acdf9;
+}
+.teleopti-toolbar a,
+.teleopti-toolbar .dropdown-menu > li > a {
+	color: #fff;
+}
+.teleopti-toolbar .navbar-nav > li > a:hover,
+.teleopti-toolbar .navbar-nav > li > a:focus {
+	color: #fff;
+	background-color: #3aade9;
+}
+.teleopti-toolbar .navbar-nav > .active > a,
+.teleopti-toolbar .navbar-nav > .active > a:hover,
+.teleopti-toolbar .navbar-nav > .active > a:focus {
+	color: #fff;
+	background-color: #3aade9;
+}
+.teleopti-toolbar .btn-default:hover,
+.teleopti-toolbar .btn-default:focus,
+.teleopti-toolbar .btn-default:active,
+.teleopti-toolbar .btn-default.visited,
+.teleopti-toolbar .open > .dropdown-toggle.btn-default {
+	background-color: #3aade9;
+	border-color: #3aade9;
+}
+.teleopti-toolbar > li > .input-group {
+	position: relative;
+	padding: 4px 0px;
 }
 
-/*
-override dropdown-menu style on mobile
-*/
-.custom-collapsed .in .dropdown-menu {
-	background-color: transparent !important;
-	border: 0 !important;
-	box-shadow: none !important;
-	width: 100%;
-}
-
-.custom-collapsed .in .dropdown-menu .divider {
-	background-color: #0066cc !important;
-}
-
-.custom-collapsed .in .dropdown-menu > li > a {
-	color: white !important;
-}
-
-/*
-End override dropdown-menu style on mobile
-*/
-
+/*Override dropdown-menu style on mobile*/
 @media (min-width: 768px) {
 	.navbar-nav > li > a {
 		padding-left: 12px;
@@ -162,182 +162,53 @@ End override dropdown-menu style on mobile
 		float: none;
 	}
 
-	.custom-collapsed .navbar-toggle {
+	.custom-collapsed .navbar-toggle-button {
 		display: block;
 		margin: 8px 10px;
 	}
-
-	.custom-collapsed .navbar-collapse {
-		border-top: 1px solid transparent;
-		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
-	}
-
-	.custom-collapsed .navbar-collapse.collapse {
-		display: none !important;
-	}
-
-	.custom-collapsed .navbar-user-setting {
-		float: none !important;
-		margin: 2px -15px;
-	}
-
-	.custom-collapsed .navbar-nav > li {
-		float: none;
-	}
-
-	.custom-collapsed .navbar-nav > li > a {
-		padding-top: 10px;
-		padding-bottom: 10px;
-	}
-
-	.custom-collapsed .navbar-collapse.collapse.in {
-		display: block !important;
-	}
-
-	.custom-collapsed .collapsing {
-		overflow: hidden !important;
-	}
-
-	.custom-collapsed .navmenu-brand {
-		display: block;
-	}
-
-	.custom-collapsed .menu-top-adjust {
-		margin-top: 50px;
-	}
-
-	.custom-collapsed .offcanvas {
-		display: none !important;
-	}
-
-	.custom-collapsed .offcanvas.in {
-		display: block !important;
-	}
-
-	.custom-collapsed .navbar-offcanvas {
-		width: 33.3%;
-		height: auto;
-		border-style: solid;
-		border-width: 1px;
-		border-radius: 4px;
-		position: fixed;
-		top: 0;
-		bottom: 0;
-		z-index: 1030;
-		overflow-y: auto;
-		right: 0;
-		left: auto;
-		border-width: 0 0 0 1px;
-	}
-
-	.custom-collapsed .navbar-offcanvas.navmenu-fixed-left {
-		right: auto;
-		left: 0;
-		border-width: 0 1px 0 0;
-		overflow-y: auto !important;
-		overflow-x: hidden !important;
-	}
-
-	.custom-collapsed .navbar-offcanvas .navbar-nav {
-		width: 100%;
-		margin: 0;
-	}
-
-	.navbar-nav.navbar-user-setting {
-		margin-right: 10px;
-		margin-left: 10px;
-	}
 }
 
-/* overides so can keep a nav bar uncollapsed*/
-@media (max-width: 993px) {
-	.navbar-nav .open .show-outside-toolbar {
-		position: absolute;
-		float: none;
-		background-color: rgb(255, 255, 255);
-		right: 0;
-		left: auto;
-		width: auto;
-		margin-top: 0;
-		border: 1px;
-		box-shadow: rgba(0, 0, 0, 0.172549) 0px 6px 12px 0px;
-		border-style: solid;
-		border-width: 1px;
-		border-color: rgba(0, 0, 0, 0.14902);
-		z-index: 1031;
-	}
-
-	.navbar-inverse .navbar-nav .open .show-outside-toolbar .divider {
-		height: 1px;
-		margin: 9px 0;
-		overflow: hidden;
-		background-color: #e5e5e5;
-	}
-
-	.navbar-inverse .navbar-nav .open .show-outside-toolbar > li > a {
-		display: block;
-		padding: 3px 20px;
-		clear: both;
-		font-weight: 400;
-		line-height: 1.42857143;
-		color: #333;
-		white-space: nowrap;
-	}
-}
-/*Hide user name on small screens*/
 @media (max-width: 768px) {
+	.navbar-nav .open .dropdown-menu.show-outside-toolbar {
+		position: absolute;
+		top: 50px;
+		right: 0;
+		left: auto;
+		background: white;
+		box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+	}
+
+	.navbar-nav .open .dropdown-menu.show-outside-toolbar li a {
+		color: black;
+	}
+
+	/*Hide user name on small screens*/
 	.navbar-brand {
 		padding-left: 5px;
 		padding-right: 5px;
 	}
-	.custom-collapsed .navbar-toggle {
-		display: block;
-		margin: 8px 10px;
-	}
 	.navbar-nav.navbar-user-setting {
-		margin: 2px 5px;
+		margin: 8px 10px;
+		padding-right: 10px;
 	}
 	.navbar-nav.navbar-user-setting a {
 		padding-left: 5px;
 		padding-right: 5px;
 	}
-	.bdd-mytime-top-menu span.user-name {
+	.teleopti-mytime-top-menu span.user-name {
 		display: none;
 	}
-	.menu-top-adjust {
-		margin-top: 50px;
-		-webkit-overflow-scrolling: touch !important;
+	.custom-collapsed .navbar-toggle-button {
+		display: block;
+		margin: 8px 10px;
 	}
 	.submenu .select2-container {
 		margin-left: 14px;
 	}
-	.navbar-teleopti .navbar-nav .open .dropdown-menu > li > a {
-		color: #ffffff;
-	}
-	.navbar-teleopti .navbar-nav .open .dropdown-menu > li > a:hover,
-	.navbar-teleopti .navbar-nav .open .dropdown-menu > li > a:focus {
-		color: #ffffff;
-		background-color: #3aade9;
-	}
-	.navbar-teleopti .navbar-nav .open .dropdown-menu > .active > a,
-	.navbar-teleopti .navbar-nav .open .dropdown-menu > .active > a:hover,
-	.navbar-teleopti .navbar-nav .open .dropdown-menu > .active > a:focus {
-		color: #ffffff;
-		background-color: #3aade9;
-	}
-	.navbar-teleopti .navbar-nav .open .dropdown-menu > .disabled > a,
-	.navbar-teleopti .navbar-nav .open .dropdown-menu > .disabled > a:hover,
-	.navbar-teleopti .navbar-nav .open .dropdown-menu > .disabled > a:focus {
-		color: #9ccc33;
-		background-color: transparent;
-	}
-	.navbar-offcanvas.offcanvas {
-		overflow: auto !important;
-	}
 }
 
 @media (max-width: 350px) {
-	.navbar-inverse .navbar-toggle {
+	.teleopti-mytime-top-menu .navbar-toggle-button {
 		padding-left: 5px;
 		padding-right: 5px;
 	}
@@ -357,50 +228,29 @@ End override dropdown-menu style on mobile
 	}
 }
 
-@media (max-width: 768px) {
-	.navbar-offcanvas.canvas-slid.in .navbar-nav .open .dropdown-menu > li > a {
-		top: 100%;
-		left: 0;
-		z-index: 1000;
-		position: static;
-		float: none;
-		width: auto;
-		background-color: transparent;
-		border: 0;
-		box-shadow: none;
-		min-width: 160px;
-		padding: 5px 15px;
-		margin: 2px 0 0;
-		list-style: none;
-		font-size: 15px;
-		text-align: left;
-		overflow-y: auto;
-	}
-
-	.navbar-offcanvas.canvas-slid.in .navbar-nav .open .dropdown-menu > li > a {
-		color: white;
-	}
-}
-
 #badge-period-navigator {
 	white-space: nowrap;
 	font-size: 12px;
 	text-align: center;
 	padding: 0 4px;
 }
-
 #badge-period-navigator .period-arrow {
 	background-color: transparent;
 	border: none;
 	padding: 0.8em;
 }
-
 #badge-period-navigator button[disabled],
 #badge-period-navigator .working {
 	color: darkgrey;
 }
-
 #badge-period-navigator .period-text {
 	min-width: 130px;
 	display: inline-block;
+}
+.badge-detail {
+	text-align: center;
+}
+.badge-type {
+	font-size: 12px;
+	font-weight: bold;
 }

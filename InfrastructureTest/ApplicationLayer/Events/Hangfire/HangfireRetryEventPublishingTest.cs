@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		{
 			Recurring.PublishMinutely(new MinutelyEvent());
 
-			Hangfire.TriggerReccuringJobs();
+			Hangfire.TriggerRecurringJobs();
 			20.Times(() =>
 			{
 				Hangfire.EmulateWorkerIteration();
