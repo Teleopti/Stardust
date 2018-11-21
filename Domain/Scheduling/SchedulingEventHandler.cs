@@ -103,9 +103,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var agents = schedulerStateHolder.SchedulingResultState.LoadedAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray();
 			var agentsWithExistingShiftsBeforeSchedule = _alreadyScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod, agents);
 			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, agents, selectedPeriod, blockPreferenceProvider);
-			
-			runSchedulingWithoutPreferences(agentsWithExistingShiftsBeforeSchedule, @event, agents, selectedPeriod, schedulingOptions, schedulingCallback, schedulingProgress, blockPreferenceProvider);
 
+			if (runSchedulingWithoutPreferences(agentsWithExistingShiftsBeforeSchedule, @event, agents, selectedPeriod,
+				schedulingOptions, schedulingCallback, schedulingProgress, blockPreferenceProvider))
+			{
+				//to be fixed later - just hack for now
+				planningGroup.PreferenceValue = Percent.Zero;
+			}
+		
 			if (schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly)
 			{
 				_removeNonPreferenceDaysOffs.Execute(schedulerStateHolder.Schedules, agents, selectedPeriod);
@@ -120,14 +125,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			}
 		}
 
-		private void runSchedulingWithoutPreferences(
+		private bool runSchedulingWithoutPreferences(
 			IDictionary<IPerson, IEnumerable<DateOnly>> alreadyScheduledAgents, SchedulingWasOrdered @event,IEnumerable<IPerson> agents,
 			DateOnlyPeriod selectedPeriod, SchedulingOptions schedulingOptions,
 			ISchedulingCallback schedulingCallback, ISchedulingProgress schedulingProgress,
 			IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			if (!@event.ScheduleWithoutPreferencesForFailedAgents) 
-				return;
+				return false;
 			var schedules = _schedulerStateHolder().Schedules;
 			var agentsWithPreferences = _agentsWithPreferences.Execute(schedules, agents, selectedPeriod);
 			var filteredAgents = _agentsWithWhiteSpots.Execute(schedules, agentsWithPreferences, selectedPeriod);
@@ -150,6 +155,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			}
 			schedulingOptions.UsePreferences = false;
 			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, filteredAgents, selectedPeriod, blockPreferenceProvider);
+			return filteredAgents.Any();
 		}
 	}
 }
