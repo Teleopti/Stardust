@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -13,7 +14,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
@@ -155,37 +155,6 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 		}
 
 		[Test]
-		public void ShouldReturnCorrectPositionInWaitlistWithDifferentWCS()
-		{
-			Now.Is(baseTime);
-
-			var workflowControlSet1 = createWorkFlowControlSet(new DateTime(2016, 01, 01),
-				new DateTime(2059, 12, 31), _absence).WithId();
-
-			var workflowControlSet2 = createWorkFlowControlSet(new DateTime(2016, 01, 01),
-				new DateTime(2059, 12, 31), _absence).WithId();
-
-			var absenceRequestOne = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet1), _absence,
-				new DateTimePeriod(
-					new DateTime(2016, 3, 1, 15, 0, 0, DateTimeKind.Utc),
-					new DateTime(2016, 3, 1, 19, 00, 00, DateTimeKind.Utc)));
-
-			var absenceRequestTwo = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet1), _absence,
-				new DateTimePeriod(
-					new DateTime(2016, 3, 1, 8, 0, 0, DateTimeKind.Utc),
-					new DateTime(2016, 3, 1, 16, 00, 00, DateTimeKind.Utc)));
-
-			var absenceRequestThree = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet2), _absence,
-				new DateTimePeriod(
-					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
-					new DateTime(2016, 3, 1, 18, 00, 00, DateTimeKind.Utc)));
-
-			Assert.AreEqual(1, AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestOne));
-			Assert.AreEqual(2, AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestTwo));
-			Assert.AreEqual(1, AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestThree));
-		}
-
-		[Test]
 		public void Bug37600_ShouldReturnCorrectPositionInWaitlist()
 		{
 			var absenceRequestOne = createAutoDeniedAbsenceRequest(createAndSetupPerson(_workflowControlSet), _absence,
@@ -246,6 +215,275 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 			property.SetValue(absenceRequest2.Parent, new DateTime(2016, 01, 01, 12, 00, 00));
 
 			Assert.AreEqual(1, AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequest2));
+		}
+
+		[Test]
+		public void ShouldCalculateWaitListedPositionRegardlessWorkflowControlSet()
+		{
+			Now.Is(baseTime);
+
+			var workflowControlSet1 = createWorkFlowControlSet(new DateTime(2016, 01, 01),
+				new DateTime(2059, 12, 31), _absence).WithId();
+
+			var workflowControlSet2 = createWorkFlowControlSet(new DateTime(2016, 01, 01),
+				new DateTime(2059, 12, 31), _absence).WithId();
+
+			var absenceRequestOne = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet1), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
+
+			var absenceRequestTwo = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet1), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
+
+			var absenceRequestThree = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet2), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 11, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 20, 00, 00, DateTimeKind.Utc)));
+
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestOne).Should().Be(1);
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestTwo).Should().Be(2);
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestThree).Should().Be(3);
+		}
+
+		[Test]
+		public void ShouldHandleRequestWithPersonThatHasNoWorkflowControlSet()
+		{
+			Now.Is(baseTime);
+
+			var workflowControlSet1 = createWorkFlowControlSet(new DateTime(2016, 01, 01),
+				new DateTime(2059, 12, 31), _absence).WithId();
+
+			var workflowControlSet2 = createWorkFlowControlSet(new DateTime(2016, 01, 01),
+				new DateTime(2059, 12, 31), _absence).WithId();
+
+			var absenceRequestOne = createAutoDeniedAbsenceRequest(createAndSetupPerson(null), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
+
+			var absenceRequestTwo = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet1), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
+
+			var absenceRequestThree = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet2), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 11, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 20, 00, 00, DateTimeKind.Utc)));
+
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestOne).Should().Be(0);
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestTwo).Should().Be(1);
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestThree).Should().Be(2);
+		}
+
+		[Test]
+		public void ShouldGetWaitlistPostionExcludingDeletedPerson()
+		{
+			var absenceRequest1 = createPendingAbsenceRequest(createAndSetupPerson(_workflowControlSet, true), _absence,
+				new DateTimePeriod(new DateTime(2016, 7, 8, 15, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 7, 8, 19, 00, 00, DateTimeKind.Utc)));
+			var absenceRequest2 = createAutoDeniedAbsenceRequest(createAndSetupPerson(_workflowControlSet), _absence,
+				new DateTimePeriod(new DateTime(2016, 7, 8, 8, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 7, 8, 16, 00, 00, DateTimeKind.Utc)));
+
+			var property = typeof(PersonRequest).GetProperty("CreatedOn");
+			property.SetValue(absenceRequest1.Parent, new DateTime(2016, 01, 01, 10, 00, 00));
+			property.SetValue(absenceRequest2.Parent, new DateTime(2016, 01, 01, 12, 00, 00));
+
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequest2).Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldCalculateWaitListedPositionBasedOnWaitlistedAndAutoGrantPendingStatus()
+		{
+			Now.Is(baseTime);
+
+			var workflowControlSet1 = createWorkFlowControlSet(new DateTime(2016, 01, 01),
+				new DateTime(2059, 12, 31), _absence).WithId();
+
+			var workflowControlSet2 = createWorkFlowControlSet(new DateTime(2016, 01, 01),
+				new DateTime(2059, 12, 31), _absence).WithId();
+
+			createNewAbsenceRequest(createAndSetupPerson(workflowControlSet1), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
+
+			createNewAbsenceRequest(createAndSetupPerson(workflowControlSet1), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
+
+			var pendingAbsenceRequest = createNewAbsenceRequest(createAndSetupPerson(workflowControlSet1), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
+			((PersonRequest)pendingAbsenceRequest.Parent).ForcePending();
+
+			var waitlistedAbsenceRequest = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet2), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 11, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 20, 00, 00, DateTimeKind.Utc)));
+
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(waitlistedAbsenceRequest).Should().Be(2);
+		}
+
+		[Test]
+		public void ShouldCalculateWaitListedPositionBasedOnBudgetGroups()
+		{
+			Now.Is(baseTime);
+
+			var budgetGroup1 = createBudgetGroup("group1");
+			var budgetGroup2 = createBudgetGroup("group2");
+
+			var workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01),
+				new DateTime(2059, 12, 31), _absence).WithId();
+
+			var personPeriod1 = createPersonPeriod(new DateOnly(baseTime), budgetGroup1);
+			var personPeriod2 = createPersonPeriod(new DateOnly(baseTime), budgetGroup2);
+
+			var absenceRequestOne = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet, personPeriod: personPeriod1), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
+
+			var absenceRequestTwo = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet, personPeriod: personPeriod2), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
+
+			var absenceRequestThree = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet, personPeriod: personPeriod2), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 11, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 20, 00, 00, DateTimeKind.Utc)));
+
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestOne).Should().Be(1);
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestTwo).Should().Be(1);
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestThree).Should().Be(2);
+		}
+
+		[Test]
+		public void ShouldCalculateWaitListedPositionRegardlessBudgetGroupWhenAgentHasNoBudgetGroup()
+		{
+			Now.Is(baseTime);
+
+			var budgetGroup = createBudgetGroup("group1");
+
+			var workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01),
+				new DateTime(2059, 12, 31), _absence).WithId();
+
+			var personPeriod1 = createPersonPeriod(new DateOnly(baseTime), budgetGroup);
+			var personPeriod2 = createPersonPeriod(new DateOnly(baseTime), null);
+
+			var absenceRequestOne = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet, personPeriod: personPeriod2), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
+
+			var absenceRequestTwo = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet, personPeriod: personPeriod2), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
+
+			var absenceRequestThree = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet, personPeriod: personPeriod1), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 11, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 20, 00, 00, DateTimeKind.Utc)));
+
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestOne).Should().Be(1);
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestTwo).Should().Be(2);
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestThree).Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldCalculateWaitListedPositionWhenNoOverlapPeriods()
+		{
+			Now.Is(baseTime);
+
+			var budgetGroup = createBudgetGroup("group1");
+
+			var workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01),
+				new DateTime(2059, 12, 31), _absence).WithId();
+
+			var personPeriod1 = createPersonPeriod(new DateOnly(baseTime), budgetGroup);
+
+			var absenceRequestOne = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet, personPeriod: personPeriod1), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 11, 00, 00, DateTimeKind.Utc)));
+
+			var absenceRequestTwo = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet, personPeriod: personPeriod1), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 11, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 12, 00, 00, DateTimeKind.Utc)));
+
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestOne).Should().Be(1);
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestTwo).Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldCalculateWaitListedPositionWithDifferentPeriodsAndBudgetGroups()
+		{
+			Now.Is(baseTime);
+
+			var budgetGroup1 = createBudgetGroup("group1");
+			var budgetGroup2 = createBudgetGroup("group2");
+
+			var workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01),
+				new DateTime(2059, 12, 31), _absence).WithId();
+
+			var personPeriod1 = createPersonPeriod(new DateOnly(baseTime), budgetGroup1);
+			var personPeriod2 = createPersonPeriod(new DateOnly(baseTime), budgetGroup2);
+			var personPeriod3 = createPersonPeriod(new DateOnly(baseTime), null);
+
+			var absenceRequestOne = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet, personPeriod: personPeriod1), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 11, 00, 00, DateTimeKind.Utc)));
+
+			var absenceRequestTwo = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet, personPeriod: personPeriod1), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 11, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 12, 00, 00, DateTimeKind.Utc)));
+
+			var absenceRequestThree = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet, personPeriod: personPeriod2), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 12, 00, 00, DateTimeKind.Utc)));
+
+			var absenceRequestFour = createAutoDeniedAbsenceRequest(createAndSetupPerson(workflowControlSet, personPeriod: personPeriod3), _absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 12, 00, 00, DateTimeKind.Utc)));
+
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestOne).Should().Be(1);
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestTwo).Should().Be(1);
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestThree).Should().Be(1);
+			AbsenceRequestWaitlistProvider.GetPositionInWaitlist(absenceRequestFour).Should().Be(1);
+		}
+
+		private IAbsenceRequest createPendingAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod requestDateTimePeriod)
+		{
+			var request = createNewAbsenceRequest(person, absence, requestDateTimePeriod);
+			((IPersonRequest)request.Parent).ForcePending();
+			return request;
+		}
+
+		private static IBudgetGroup createBudgetGroup(string name)
+		{
+			var budgetGroup = new BudgetGroup { Name = name };
+			budgetGroup.SetId(Guid.NewGuid());
+			return budgetGroup;
+		}
+
+		private static IPersonPeriod createPersonPeriod(DateOnly startDate, IBudgetGroup budgetGroup)
+		{
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(startDate);
+			personPeriod.BudgetGroup = budgetGroup;
+			return personPeriod;
 		}
 
 		private IPerson createAndSetupPerson(IWorkflowControlSet workflowControlSet,

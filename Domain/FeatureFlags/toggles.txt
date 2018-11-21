@@ -79,7 +79,6 @@ Wfm_User_Password_Reset_74957 = RC
 Wfm_ReadNotificationConfigurationFromDb_78242 = RC
 
 # China, can any of these be removed? #
-MyTimeWeb_WaitListPositionEnhancement_46301 = true
 MyTimeWeb_NewTeamScheduleView_75989 = RC
 MyTimeWeb_NewTeamScheduleViewDesktop_76313 = RC
 MyTimeWeb_TrafficLightOnMobileDayView_77447 = RC
