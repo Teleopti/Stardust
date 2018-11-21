@@ -16,15 +16,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		private readonly IOvertimeStaffingPossibilityCalculator _overtimeStaffingPossibilityCalculator;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IStaffingDataAvailablePeriodProvider _staffingDataAvailablePeriodProvider;
-		private readonly IToggleManager _toggleManager;
 
 		public StaffingPossibilityViewModelFactory(
 			IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider,
-			IToggleManager toggleManager, IAbsenceStaffingPossibilityCalculator absenceStaffingPossibilityCalculator,
+			IAbsenceStaffingPossibilityCalculator absenceStaffingPossibilityCalculator,
 			IOvertimeStaffingPossibilityCalculator overtimeStaffingPossibilityCalculator, ILoggedOnUser loggedOnUser)
 		{
 			_staffingDataAvailablePeriodProvider = staffingDataAvailablePeriodProvider;
-			_toggleManager = toggleManager;
 			_absenceStaffingPossibilityCalculator = absenceStaffingPossibilityCalculator;
 			_overtimeStaffingPossibilityCalculator = overtimeStaffingPossibilityCalculator;
 			_loggedOnUser = loggedOnUser;

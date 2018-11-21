@@ -11,14 +11,12 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 	public class PasswordController : ApiController
 	{
 		private readonly IPasswordManager _passwordManager;
-		private readonly IApplicationUserQuery _applicationUserQuery;
 		private const string Error_TokenInvalid = "Error_TokenInvalid";
 		private const string Error_RequestFailed = "Error_RequestFailed";
 
-		public PasswordController(IPasswordManager passwordManager, IApplicationUserQuery userQuery)
+		public PasswordController(IPasswordManager passwordManager)
 		{
 			_passwordManager = passwordManager;
-			_applicationUserQuery = userQuery;
 		}
 
 		[TenantUnitOfWork]
