@@ -48,8 +48,8 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 			Database
 				.WithAgent("usercode1", person)
 				.WithAgent("usercode2", person)
-				.WithMappedRule("phone", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
-				.WithMappedRule("loggedOut", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithMappedRule("phone", phone, 0, Domain.Configuration.Adherence.In)
+				.WithMappedRule("loggedOut", phone, -1, Domain.Configuration.Adherence.Out)
 				.WithSchedule(person, phone, "2016-08-29 10:00", "2016-08-29 11:00")
 				;
 
@@ -91,8 +91,8 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 				.WithAgent("usercode2", person1)
 				.WithAgent("usercode2", person2)
 				.WithAgent("usercode3", person2)
-				.WithMappedRule("phone", phone, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
-				.WithMappedRule("loggedOut", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithMappedRule("phone", phone, 0, Domain.Configuration.Adherence.In)
+				.WithMappedRule("loggedOut", phone, -1, Domain.Configuration.Adherence.Out)
 				.WithSchedule(person1, phone, "2016-08-29 10:00", "2016-08-29 11:00")
 				.WithSchedule(person2, phone, "2016-08-29 10:00", "2016-08-29 11:00")
 				;

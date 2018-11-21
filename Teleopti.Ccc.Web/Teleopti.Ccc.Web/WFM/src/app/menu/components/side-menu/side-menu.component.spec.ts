@@ -1,9 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { configureTestSuite, PageObject } from '@wfm/test';
 import { IStateService } from 'angular-ui-router';
-import { Observable, of } from 'rxjs';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import { Area, AreaService } from '../../shared/area.service';
 import { SideMenuComponent } from './side-menu.component';
+import { ToggleMenuService } from '../../shared/toggle-menu.service';
 
 const areaOne: Area = { InternalName: 'people' };
 const areaTwo: Area = { InternalName: 'permissions' };
@@ -11,6 +12,15 @@ const areaTwo: Area = { InternalName: 'permissions' };
 class MockAreaService implements Partial<AreaService> {
 	getAreas(): Observable<Area[]> {
 		return of([areaOne, areaTwo]);
+	}
+}
+
+class MockToggleMenuService implements Partial<ToggleMenuService> {
+	public get showMenu$() {
+		return new ReplaySubject<boolean>(1);
+	}
+	isMobileView() {
+		return false;
 	}
 }
 
@@ -36,7 +46,8 @@ describe('SideMenuComponent', () => {
 					provide: '$state',
 					useValue: mockStateService
 				},
-				{ provide: AreaService, useClass: MockAreaService }
+				{ provide: AreaService, useClass: MockAreaService },
+				{ provide: ToggleMenuService, useClass: MockToggleMenuService }
 			]
 		}).compileComponents();
 	}));
@@ -60,10 +71,22 @@ describe('SideMenuComponent', () => {
 		fixture.detectChanges();
 		expect(page.menuItems[0].classes['main-menu-link-active']).toBeTruthy();
 	});
+
+	it('should be able to be hidden', async(() => {
+		const service = TestBed.get(ToggleMenuService);
+		service.showMenu$.next(false);
+		fixture.detectChanges();
+		const hidden = page.menuWrapper.nativeElement.hasAttribute('hidden');
+		expect(hidden).toBeTruthy();
+	}));
 });
 
 class Page extends PageObject {
 	get menuItems() {
 		return this.queryAll('[data-test-menu-item]');
+	}
+
+	get menuWrapper() {
+		return this.queryAll('[data-test-main-menu-wrapper]')[0];
 	}
 }

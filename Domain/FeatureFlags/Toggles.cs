@@ -14,8 +14,6 @@
 		// ReSharper disable InconsistentNaming
 		Forecast_CopySettingsToWorkflow_11112,
 
-		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
-
 		RTA_KillFattyIntradayUntilItDies_74939, //remove april 2019
 		RTA_ReviewHistoricalAdherence_Domain_74770,
 		RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306,
@@ -25,7 +23,6 @@
 		RTA_StateQueueFloodPrevention_77710,
 		RTA_ReviewHistoricalAdherence_74770,
 
-		MyTimeWeb_WaitListPositionEnhancement_46301,
 		MyTimeWeb_NewTeamScheduleView_75989,
 		MyTimeWeb_NewTeamScheduleViewDesktop_76313,
 		MyTimeWeb_TrafficLightOnMobileDayView_77447,
@@ -65,6 +62,7 @@
 		Wfm_PeopleWeb_PrepareForRelease_74903,
 		Wfm_Authentication_ChangePasswordMenu_76666,
 		Wfm_User_Password_Reset_74957,
+		Wfm_ReadNotificationConfigurationFromDb_78242,
 
 		WfmGlobalLayout_personalOptions_37114,
 
@@ -81,6 +79,7 @@
 		ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941,
 		ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717,
 		ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487,
+		ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118,
 
 		Wfm_DisplayOnlineHelp_39402,
 
@@ -91,10 +90,7 @@
 
 		WfmStaffing_AddOvertime_42524,
 		OvertimeRequestUseMostUnderStaffedSkill_47853,
-		OvertimeRequestSupportMultiSelectionSkillTypes_74945,
-		OvertimeRequestStaffingCheckMethod_74949,
 		OvertimeRequestChangeBelongsToDateForOverNightShift_74984,
-		OvertimeRequestUsePrimarySkillOption_75573,
 		WFM_Forecaster_Refact_44480,
 		WFM_Export_Forecast_44716,
 		WFM_Forecaster_Preview_74801,

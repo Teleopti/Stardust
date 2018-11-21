@@ -163,9 +163,17 @@
     <Compile Include="Domain\ApprovePeriodAsInAdherence\RemoveApprovedPeriodCommandHandler.cs" />
     <Compile Include="Domain\ApprovePeriodAsInAdherence\RemovedPeriod.cs" />
     <Compile Include="Domain\BelongsToDateMapper.cs" />
+    <Compile Include="Domain\Configuration\Adherence.cs" />
     <Compile Include="Domain\Configuration\ConfigurationValidationViewModel.cs" />
     <Compile Include="Domain\Configuration\ConfigurationValidator.cs" />
     <Compile Include="Domain\Configuration\DefaultStateGroupException.cs" />
+    <Compile Include="Domain\Configuration\IRtaMap.cs" />
+    <Compile Include="Domain\Configuration\IRtaMapRepository.cs" />
+    <Compile Include="Domain\Configuration\IRtaRule.cs" />
+    <Compile Include="Domain\Configuration\IRtaRuleRepository.cs" />
+    <Compile Include="Domain\Configuration\IRtaState.cs" />
+    <Compile Include="Domain\Configuration\IRtaStateGroup.cs" />
+    <Compile Include="Domain\Configuration\IRtaStateGroupRepository.cs" />
     <Compile Include="Domain\Configuration\IRtaStateHolder.cs" />
     <Compile Include="Domain\Configuration\RtaMap.cs" />
     <Compile Include="Domain\Configuration\RtaRule.cs" />

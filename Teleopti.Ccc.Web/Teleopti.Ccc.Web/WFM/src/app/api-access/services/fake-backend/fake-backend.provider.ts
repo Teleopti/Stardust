@@ -1,16 +1,15 @@
 import {
-	HTTP_INTERCEPTORS,
 	HttpEvent,
 	HttpHandler,
 	HttpInterceptor,
 	HttpRequest,
-	HttpResponse
+	HttpResponse,
+	HTTP_INTERCEPTORS
 } from '@angular/common/http';
 import { Injectable, Provider } from '@angular/core';
-import { Observable ,  of } from 'rxjs';
-import { ExternalApplication } from '../../types';
-import { APPLICATIONS, TOKEN } from './external-applications';
+import { Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
+import { APPLICATIONS, TOKEN } from './external-applications';
 
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
@@ -27,7 +26,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 				if (request.url.endsWith('/api/token') && request.method === 'POST') {
 					return of(new HttpResponse({ status: 200, body: TOKEN }));
 				}
-				
+
 				if (request.url.endsWith('/api/token') && request.method === 'DELETE') {
 					return of(new HttpResponse({ status: 200 }));
 				}

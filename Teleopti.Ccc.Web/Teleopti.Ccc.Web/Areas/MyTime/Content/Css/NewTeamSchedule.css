@@ -303,6 +303,11 @@
 	border-right: 1px solid #dfdfdf;
 	background: white;
 }
+.new-teamschedule-view-ipad .new-teamschedule-agent-name.my-name.relative {
+	width: 111px;
+	min-width: 111px;
+	max-width: 111px;
+}
 .new-teamschedule-agent-name.my-name.relative {
 	width: 110px;
 	min-width: 110px;
@@ -533,6 +538,10 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	font-size: 14px;
 	font-weight: bold;
 	text-align: center;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: normal;
+	line-height: 1;
 }
 .new-teamschedule-view .new-teamschedule-layer .activity-info {
 	line-height: 1;
@@ -772,6 +781,11 @@ div.new-teamschedule-no-result-indicator {
 	width: 100%;
 }
 .new-teamschedule-view-mobile .new-teamschedule-agent-name.my-name.relative {
+	width: 70px;
+	min-width: 70px;
+	max-width: 70px;
+}
+.new-teamschedule-view-iphone .new-teamschedule-agent-name.my-name.relative {
 	width: 72px;
 	min-width: 72px;
 	max-width: 72px;

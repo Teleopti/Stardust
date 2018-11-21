@@ -936,7 +936,6 @@
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\ITeamViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\TeamViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\ViewModelFactory\MyReportViewModelFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\Portal\DataProvider\IBadgeProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceWeeklyWorkTimeSettingProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceWeeklyWorkTimeSettingProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\Extensions.cs" />
@@ -949,11 +948,9 @@
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftExchangeOfferPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\PersonAccountViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Reports\DataProvider\ReportsNavigationProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeBulletinScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeEditScheduleLayerViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeEditScheduleLayerViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DatePersons.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeBulletinScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\IRequestsShiftTradeScheduleFilterViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\IRequestsShiftTradeBulletinViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\RequestsShiftTradeScheduleFilterViewModelFactory.cs" />
@@ -2239,7 +2236,6 @@
     <Content Include="Areas\Start\Views\Return\Hash.cshtml" />
     <Content Include="Areas\MyTime\Views\Widget\Index.cshtml" />
     <EmbeddedResource Include="tzdb2016c.nzd" />
-    <Content Include="WFM\css\_navbar.scss" />
     <Content Include="WFM\css\_main.scss" />
     <Content Include="Areas\MultiTenancy\Views\TenantAdminInfo\Index.cshtml" />
     <Content Include="Areas\MultiTenancy\Views\web.config" />
@@ -2507,7 +2503,6 @@
     <Content Include="Areas\Reporting\Views\Report\Empty.cshtml" />
     <Content Include=".node\flatten-packages.cmd" />
     <Content Include="WFM\html\main.html" />
-    <Content Include="WFM\html\nav.html" />
     <Content Include="WFM\app\app.js" />
     <Content Include="WFM\vendor\fabricjs\fabric.js" />
     <Content Include="WFM\vendor\fabricjs\fabric.min.js" />

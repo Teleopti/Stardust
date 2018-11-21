@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Trend;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 {

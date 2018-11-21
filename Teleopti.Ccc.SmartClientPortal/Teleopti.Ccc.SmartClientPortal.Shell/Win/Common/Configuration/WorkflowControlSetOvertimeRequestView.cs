@@ -143,16 +143,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			}
 		}
 
-		private void checkOvertimeStaffingCheckMethodToggle()
-		{
-			if (!_toggleManager.IsEnabled(Toggles.OvertimeRequestStaffingCheckMethod_74949))
-			{
-				tableLayoutPanelOvertimeStaffingCheckMethodSetting.Visible = false;
-				var rowIndex = tableLayoutPanelETOTRequest.Controls.GetChildIndex(tableLayoutPanelOvertimeStaffingCheckMethodSetting);
-				tableLayoutPanelETOTRequest.RowStyles[rowIndex].Height = 0;
-			}
-		}
-
 		private void initOvertimeRequestMaximumTimeHandleType()
 		{
 			comboBoxOvertimeRequestMaximumTimeHandleType.DataSource =
@@ -176,7 +166,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void initOvertimeRequestUsePrimarySkill()
 		{
-			if (!_toggleManager.IsEnabled(Toggles.OvertimeRequestUsePrimarySkillOption_75573) || !_presenter.IsUsingPrimarySkill())
+			if (!_presenter.IsUsingPrimarySkill())
 			{
 				checkBoxUsePrimarySkill.Visible = false;
 			}
@@ -247,8 +237,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				OvertimeRequestPeriodModel.OvertimeRequestWorkRuleValidationHandleOptionViews.Values.ToList(), "Description",
 				typeof(OvertimeRequestValidationHandleOptionView)));
 
-			var enabledMultiSelect = _toggleManager.IsEnabled(Toggles.OvertimeRequestSupportMultiSelectionSkillTypes_74945);
-			var comboBoxCellModel = new GridDropDownAdvComboBoxCellModel(gridControlOvertimeRequestOpenPeriods.Model, enabledMultiSelect);
+			var comboBoxCellModel = new GridDropDownAdvComboBoxCellModel(gridControlOvertimeRequestOpenPeriods.Model);
 
 			gridControlOvertimeRequestOpenPeriods.CellModels.Add("MultiSelectCellModel", comboBoxCellModel);
 

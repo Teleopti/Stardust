@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DowngradeableComponent } from '@wfm/types';
 import { en_US, NgZorroAntdModule, NZ_I18N } from 'ng-zorro-antd';
-import { FeedbackMessageComponent, TableOptionsMenu } from './components';
+import { FeedbackMessageComponent, TableOptionsMenuComponent } from './components';
 import { LogonInfoService } from './services';
 
 @NgModule({
@@ -25,11 +25,11 @@ import { LogonInfoService } from './services';
 		HttpClientModule,
 		NgZorroAntdModule,
 		FeedbackMessageComponent,
-		TableOptionsMenu
+		TableOptionsMenuComponent
 	],
 	providers: [{ provide: NZ_I18N, useValue: en_US }, LogonInfoService],
 	entryComponents: [FeedbackMessageComponent],
-	declarations: [FeedbackMessageComponent, TableOptionsMenu]
+	declarations: [FeedbackMessageComponent, TableOptionsMenuComponent]
 })
 export class SharedModule {}
 

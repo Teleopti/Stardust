@@ -30,8 +30,8 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2016-02-23 08:00", "2016-02-23 10:00")
-				.WithMappedRule("loggedout", phone, -1, Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
-				.WithMappedRule("loggedout", null, 0, Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithMappedRule("loggedout", phone, -1, Domain.Configuration.Adherence.Out)
+				.WithMappedRule("loggedout", null, 0, Domain.Configuration.Adherence.In)
 				;
 
 			Now.Is("2016-02-23 08:05");

@@ -67,7 +67,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private readonly IComponentContext _container;
 
 		private readonly SystemCheckerValidator _systemChecker;
-		//private bool _lastSystemCheck = true;
 		private readonly OutlookPanelContentWorker _outlookPanelContentWorker;
 		private readonly PortalSettings _portalSettings;
 		private readonly IToggleManager _toggleManager;
@@ -509,7 +508,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			_portalSettings.LastModule = modulePanelItem.Tag.ToString();
 			SmartPartInvoker.ClearAllSmartParts();
-			var uc = _outlookPanelContentWorker.GetOutlookPanelContent(_portalSettings.LastModule, _toggleManager);
+			var uc = _outlookPanelContentWorker.GetOutlookPanelContent(_portalSettings.LastModule);
 
 			if (uc == null)
 				return;

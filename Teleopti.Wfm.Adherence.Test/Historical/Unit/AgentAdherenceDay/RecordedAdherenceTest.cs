@@ -31,9 +31,9 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithHistoricalStateChange("2017-12-08 08:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out);
-			Database.WithHistoricalStateChange("2017-12-08 10:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
-			Database.WithHistoricalStateChange("2017-12-08 12:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral);
+			Database.WithHistoricalStateChange("2017-12-08 08:00", Domain.Configuration.Adherence.Out);
+			Database.WithHistoricalStateChange("2017-12-08 10:00", Domain.Configuration.Adherence.In);
+			Database.WithHistoricalStateChange("2017-12-08 12:00", Domain.Configuration.Adherence.Neutral);
 
 			var result = Target.Load(person);
 
@@ -51,12 +51,12 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithAssignment(person, "2017-12-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
-				.WithHistoricalStateChange("2017-12-08 08:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
-				.WithHistoricalStateChange("2017-12-08 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
-				.WithHistoricalStateChange("2017-12-08 10:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral)
-				.WithHistoricalStateChange("2017-12-08 11:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
-				.WithHistoricalStateChange("2017-12-08 12:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral)
-				.WithHistoricalStateChange("2017-12-08 13:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithHistoricalStateChange("2017-12-08 08:00", Domain.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2017-12-08 09:00", Domain.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2017-12-08 10:00", Domain.Configuration.Adherence.Neutral)
+				.WithHistoricalStateChange("2017-12-08 11:00", Domain.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2017-12-08 12:00", Domain.Configuration.Adherence.Neutral)
+				.WithHistoricalStateChange("2017-12-08 13:00", Domain.Configuration.Adherence.In)
 				;
 
 			var result = Target.Load(person);

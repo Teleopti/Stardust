@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
-using Rhino.Mocks;
-using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
@@ -15,71 +14,75 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 {
-	class AbsenceRequestDetailViewModelFactoryTests
+	[TestFixture]
+	[DomainTest]
+	class AbsenceRequestDetailViewModelFactoryTests : IIsolateSystem
 	{
+		#pragma warning disable 0649
+		public IPersonRepository PersonRepository;
+		public IPersonRequestRepository PersonRequestRepository;
+		public IAbsenceRequestDetailViewModelFactory Target;
+		#pragma warning restore 0649
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<AbsenceRequestDetailViewModelFactory>().For<IAbsenceRequestDetailViewModelFactory>();
+			isolate.UseTestDouble<PersonRequestProvider>().For<IPersonRequestProvider>();
+		}
 
 		[Test]
 		public void ShouldRetrieveMyAbsenceWaitlistPosition()
 		{
-			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
-			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
+			var baseTime = new DateTime(2016, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-			var absence = AbsenceFactory.CreateAbsenceWithId();
-			var absenceRequestWaitlistProvider = new AbsenceRequestWaitlistProvider(personRequestRepository);
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var workflowControlSet = createWorkFlowControlSet(new DateTime(2014, 01, 01),
+				new DateTime(2059, 12, 31), absence).WithId();
 
-			var personRequestList = new List<IPersonRequest>();
-			personRequestRepository.Stub(x => x.FindAbsenceAndTextRequests(null, out _, true)).Return(personRequestList).IgnoreArguments();
+			var baseCreatedOn = new DateTime(2016, 01, 01);
 
-			var workflowControlSet = createWorkFlowControlSet(new DateTime(2015, 01, 01, 00, 00, 00, DateTimeKind.Utc), new DateTime(2019, 01, 01, 00, 00, 00, DateTimeKind.Utc), absence);
+			var person1 = createAndSetupPerson(workflowControlSet);
+			var person2 = createAndSetupPerson(workflowControlSet);
+			var person3 = createAndSetupPerson(workflowControlSet);
 
-			var personRequest1 = createWaitlistedPersonRequest(absence, workflowControlSet);
-			var personRequest2 = createWaitlistedPersonRequest(absence, workflowControlSet);
-			var personRequest3 = createWaitlistedPersonRequest(absence, workflowControlSet);
+			var absenceRequest1 = createNewAbsenceRequest(absence,
+				new DateTimePeriod(baseTime.AddHours(15), baseTime.AddHours(19)));
+			var absenceRequest2 = createNewAbsenceRequest( absence,
+				new DateTimePeriod(baseTime.AddHours(08), baseTime.AddHours(16)));
+			var absenceRequest3 = createNewAbsenceRequest(absence,
+				new DateTimePeriod(baseTime.AddHours(10), baseTime.AddHours(18)));
 
-			personRequestList.AddRange(new[] { personRequest1, personRequest2, personRequest3 });
+			var waitListPersonRequestOne = addWaitListPersonRequest(person1, absenceRequest1);
+
+			var waitListPersonRequestTwo = addWaitListPersonRequest(person2, absenceRequest2);
+
+			var waitListPersonRequestThree = addWaitListPersonRequest(person3, absenceRequest3);
 
 			var property = typeof(PersonRequest).GetProperty("CreatedOn");
-			property.SetValue(personRequest1, new DateTime(2016, 01, 01, 10, 00, 00));
-			property.SetValue(personRequest3, new DateTime(2016, 01, 01, 8, 00, 00));
-			property.SetValue(personRequest2, new DateTime(2016, 01, 01, 11, 00, 00));
+			property.SetValue(absenceRequest3.Parent, baseCreatedOn.AddHours(08));
+			property.SetValue(absenceRequest1.Parent, baseCreatedOn.AddHours(10));
+			property.SetValue(absenceRequest2.Parent, baseCreatedOn.AddHours(11));
 
-			personRequestProvider.Stub(p => p.RetrieveRequest(personRequest1.Id.GetValueOrDefault())).Return(personRequest1);
+			var absenceRequestDetailViewModel1 = Target.CreateAbsenceRequestDetailViewModel(waitListPersonRequestOne.Id.GetValueOrDefault());
+			Assert.AreEqual(2, absenceRequestDetailViewModel1.WaitlistPosition);
 
-			var absenceRequestDetailViewModelFactory = new AbsenceRequestDetailViewModelFactory(personRequestProvider, absenceRequestWaitlistProvider);
-			var absenceRequestDetailViewModel = absenceRequestDetailViewModelFactory.CreateAbsenceRequestDetailViewModel(personRequest1.Id.GetValueOrDefault());
-			
-			Assert.AreEqual(2, absenceRequestDetailViewModel.WaitlistPosition);
+			var absenceRequestDetailViewModel2 = Target.CreateAbsenceRequestDetailViewModel(waitListPersonRequestTwo.Id.GetValueOrDefault());
+			Assert.AreEqual(3, absenceRequestDetailViewModel2.WaitlistPosition);
+
+			var absenceRequestDetailViewModel3 = Target.CreateAbsenceRequestDetailViewModel(waitListPersonRequestThree.Id.GetValueOrDefault());
+			Assert.AreEqual(1, absenceRequestDetailViewModel3.WaitlistPosition);
 		}
-
-		private static PersonRequest createWaitlistedPersonRequest(IAbsence absence, IWorkflowControlSet workflowControlSet)
-		{
-			var person = PersonFactory.CreatePersonWithId();
-			person.WorkflowControlSet = workflowControlSet;
-
-			var absenceRequest = new AbsenceRequest(absence,
-				new DateTimePeriod(new DateTime(2015, 10, 10, 00, 00, 00, DateTimeKind.Utc),
-					new DateTime(2015, 10, 10, 23, 59, 00, DateTimeKind.Utc)));
-
-			var personRequest = new PersonRequest(person)
-			{
-				Request = absenceRequest
-			};
-
-			personRequest.Deny ("work harder", new PersonRequestAuthorizationCheckerForTest());
-
-			absenceRequest.SetId(Guid.NewGuid());
-			absenceRequest.Parent.SetId(Guid.NewGuid());
-
-			return personRequest;
-		}
-
 
 		private static WorkflowControlSet createWorkFlowControlSet(DateTime startDate, DateTime endDate, IAbsence absence)
 		{
-			var workflowControlSet = new WorkflowControlSet { AbsenceRequestWaitlistEnabled = true };
+			var workflowControlSet = new WorkflowControlSet
+			{
+				AbsenceRequestWaitlistEnabled = true,
+				AbsenceRequestWaitlistProcessOrder = WaitlistProcessOrder.FirstComeFirstServed
+			};
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 
-			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod()
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod
 			{
 				Absence = absence,
 				Period = dateOnlyPeriod,
@@ -90,8 +93,39 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			workflowControlSet.InsertPeriod(absenceRequestOpenPeriod, 0);
 
 			return workflowControlSet;
-
 		}
 
+		private IAbsenceRequest createNewAbsenceRequest(IAbsence absence, DateTimePeriod requestDateTimePeriod)
+		{
+			return createAbsenceRequest(absence, requestDateTimePeriod);
+		}
+
+		private IPersonRequest addWaitListPersonRequest(IPerson person, IAbsenceRequest absenceRequest)
+		{
+			var personRequest = new PersonRequest(person, absenceRequest);
+			personRequest.SetId(Guid.NewGuid());
+
+			PersonRequestRepository.Add(personRequest);
+			personRequest.Pending();
+			personRequest.Deny("", new PersonRequestAuthorizationCheckerForTest(), person, PersonRequestDenyOption.AutoDeny);
+
+			return personRequest;
+		}
+
+		private IAbsenceRequest createAbsenceRequest(IAbsence absence, DateTimePeriod requestDateTimePeriod)
+		{
+			var absenceRequest = new AbsenceRequest(absence, requestDateTimePeriod).WithId();
+
+			return absenceRequest;
+		}
+
+		private IPerson createAndSetupPerson(IWorkflowControlSet workflowControlSet)
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Add(person);
+
+			person.WorkflowControlSet = workflowControlSet;
+			return person;
+		}
 	}
 }

@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 	[DomainTest]
 	public class AnyPersonSkillsOpenValidatorNoSkillActivityTest : IIsolateSystem
 	{
-		private readonly AnyPersonSkillsOpenValidator _target = new AnyPersonSkillsOpenValidator(new FakeSkillRepository());
+		private readonly AnyPersonSkillsOpenValidator _target = new AnyPersonSkillsOpenValidator();
 		private IPerson _person;
 		private Absence _absence;
 		private ISkill _skill;

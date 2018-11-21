@@ -7,9 +7,7 @@ function iAmCalledFromFatClient() {
 var removeElements = function() {
 	var elementsToRemove = [
 		document.getElementById('nav'),
-		document.getElementById('leftsidenav'),
-		document.getElementById('notice'),
-		document.getElementById('lefttoogle')
+		document.getElementById('notice')
 	];
 
 	elementsToRemove.forEach(function(elmt) {

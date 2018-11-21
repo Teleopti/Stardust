@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 {
 	public class RequestCommandHandlingProvider : IRequestCommandHandlingProvider
 	{
-		private static readonly ILog _logger = LogManager.GetLogger(typeof(RequestCommandHandlingProvider));
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly ILoggedOnUser _loggedOnUser;
 

@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Wfm.Adherence.Domain.Configuration;
 using Teleopti.Wfm.Adherence.Domain.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration

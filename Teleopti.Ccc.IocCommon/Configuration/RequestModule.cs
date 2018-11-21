@@ -37,8 +37,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ConfigurableBusinessRuleProvider>().As<IBusinessRuleProvider>();
 			builder.RegisterType<BudgetGroupAllowanceSpecification>().As<IBudgetGroupAllowanceSpecification>();
 			builder.RegisterType<AlreadyAbsentSpecification>().As<IAlreadyAbsentSpecification>();
-			registerType<IAbsenceRequestWaitlistProvider, AbsenceRequestWaitlistProviderFor46301, AbsenceRequestWaitlistProvider>
-				(builder, Toggles.MyTimeWeb_WaitListPositionEnhancement_46301);
+			builder.RegisterType<AbsenceRequestWaitlistProvider>().As<IAbsenceRequestWaitlistProvider>().SingleInstance();
 			builder.RegisterType<WriteProtectedScheduleCommandValidator>().As<IWriteProtectedScheduleCommandValidator>().SingleInstance();
 			builder.RegisterType<CancelAbsenceRequestCommandValidator>().As<ICancelAbsenceRequestCommandValidator>().SingleInstance();
 			builder.RegisterType<CheckingPersonalAccountDaysProvider>().As<ICheckingPersonalAccountDaysProvider>().SingleInstance();
@@ -135,10 +134,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OvertimeRequestCriticalUnderStaffedSpecificationToggle74944On>().As<IOvertimeRequestCriticalUnderStaffedSpecification>()
 				.SingleInstance();
 
-			registerType<IPrimaryPersonSkillFilter,
-				PrimaryPersonSkillFilter, PrimaryPersonSkillFilterToggle75573Off>(
-				builder, Toggles.OvertimeRequestUsePrimarySkillOption_75573);
-
+			builder.RegisterType<PrimaryPersonSkillFilter>().As<IPrimaryPersonSkillFilter>().SingleInstance();
 		}
 
 		private void registerType<T, TToggleOn, TToggleOff>(ContainerBuilder builder, Toggles toggle)

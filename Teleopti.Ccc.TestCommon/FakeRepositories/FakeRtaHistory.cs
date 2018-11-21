@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence.Domain;
 using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
+using Teleopti.Wfm.Adherence.Domain.Configuration;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
 

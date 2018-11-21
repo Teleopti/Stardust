@@ -150,7 +150,6 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProviderFor46301Test.cs" />
     <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProviderTest.cs" />
     <Compile Include="AgentInfo\PlanningGroupStaffLoaderTest.cs" />
     <Compile Include="AgentInfo\ExtractBudgetGroupPeriodsTest.cs" />
@@ -1539,7 +1538,6 @@
     <Compile Include="Scheduling\Assignment\PersonAssignmentTest.cs" />
     <Compile Include="Scheduling\Overtime\AddOvertimeTest.cs" />
     <Compile Include="SiteOpenHours\SiteWithOpenHourProviderTest.cs" />
-    <Compile Include="Staffing\AuditAggregatorServiceTest.cs" />
     <Compile Include="Staffing\BpoProviderTest.cs" />
     <Compile Include="Staffing\CompareProjectionTest.cs" />
     <Compile Include="Staffing\ExportBpoFileTest.cs" />

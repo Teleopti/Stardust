@@ -48,40 +48,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 
 			model.Data.Should().Be.EqualTo("Person: arne arne Role: Superman Action: GrantRole");
 		}
-
-		[Test]
-		public void ShouldPurgeAccordingToSetting()
-		{
-			Now.Is(DateTime.UtcNow);
-			var person = PersonFactory.CreatePerson();
-			PersonRepository.Add(person);
-			var appRole = ApplicationRoleFactory.CreateRole("Superman", "The man");
-			ApplicationRoleRepository.Add(appRole);
-			dynamic role = new { RoleId = appRole.Id.GetValueOrDefault(), Name = appRole.DescriptionText };
-
-			CurrentUnitOfWork.Current().PersistAll();
-			var personAccess1 = new PersonAccess(person,
-				person,
-				PersonAuditActionType.GrantRole.ToString(),
-				PersonAuditActionResult.Change.ToString(),
-				JsonConvert.SerializeObject(role)){TimeStamp = Now.UtcDateTime()};
-			var personAccess2 = new PersonAccess(person,
-					person,
-					PersonAuditActionType.GrantRole.ToString(),
-					PersonAuditActionResult.Change.ToString(),
-					JsonConvert.SerializeObject(role))
-				{ TimeStamp = Now.UtcDateTime().AddMonths(-4) };
-			PersonAccessAuditRepository.Add(personAccess1);
-			PersonAccessAuditRepository.Add(personAccess2);
-
-			CurrentUnitOfWork.Current().PersistAll();
-
-			Target.PurgeAudits();
-			CurrentUnitOfWork.Current().PersistAll();
-			var loadedAudits = Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now);
-			loadedAudits.Count().Should().Be(1);
-			loadedAudits.FirstOrDefault().TimeStamp.Should().Be.EqualTo(personAccess1.TimeStamp);
-		}
-
 	}
 }

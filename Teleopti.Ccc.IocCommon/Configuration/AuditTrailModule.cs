@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Search;
 using Teleopti.Ccc.Infrastructure.Audit;
-using Teleopti.Ccc.Infrastructure.Staffing;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -27,7 +26,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterAssemblyTypes(typeof(IHandleContextAction<>).Assembly)
 				.Where(t =>
 						t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandleContextAction<>))
-					//&& t.EnabledByToggle(_config.Toggle)
+					//&& t.EnabledByToggle(_config.Toggle) may be later
 				)
 				.As(t => t.GetInterfaces().Where(i => i.GetGenericTypeDefinition() == typeof(IHandleContextAction<>))
 				);
@@ -35,15 +34,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<PersonSearchProvider>().SingleInstance();
 			builder.RegisterType<TenantContextReaderService>().SingleInstance();
-			builder.RegisterType<StaffingContextReaderService>().As<IStaffingContextReaderService, IPurgeAudit>().AsSelf().SingleInstance();
-			builder.RegisterType<PersonAccessContextReaderService>().As<IPersonAccessContextReaderService, IPurgeAudit>().AsSelf().SingleInstance();
-			builder.RegisterType<PurgeAuditRunner>().AsSelf().SingleInstance();
-			////may be we should move it to domain or its own module or a global module
-			//if (_config.Toggle(Toggles.Wfm_AuditTrail_StaffingAuditTrail_78125))
-			//	builder.RegisterType<AuditableBpoOperationsToggleOn>().As<IAuditableBpoOperations>().SingleInstance().ApplyAspects();
-			//else
-			//	builder.RegisterType<AuditableBpoOperationsToggleOff>().As<IAuditableBpoOperations>().SingleInstance();
+			builder.RegisterType<StaffingContextReaderService>().As<IStaffingContextReaderService>().AsSelf().SingleInstance();
+			builder.RegisterType<PersonAccessContextReaderService>().As<IPersonAccessContextReaderService>().AsSelf().SingleInstance();
 
+			//do this in a smarter way in the next push
+			builder.RegisterType<StaffingContextPurgeService>().As<IPurgeAudit>().AsSelf().SingleInstance();
+			builder.RegisterType<PersonAccessContextPurgeService>().As<IPurgeAudit>().AsSelf().SingleInstance();
+			//builder.RegisterAssemblyTypes(typeof(IPurgeAudit).Assembly)
+			//	.Where(t=> t.GetInterfaces().Any(i=>i== typeof(IPurgeAudit)) )
+			//	.As( typeof(IPurgeAudit));
+
+			builder.RegisterType<PurgeAuditRunner>().AsSelf().SingleInstance();
 		}
 	}
 }

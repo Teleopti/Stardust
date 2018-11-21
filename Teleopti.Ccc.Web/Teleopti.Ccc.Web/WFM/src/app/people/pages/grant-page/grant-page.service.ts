@@ -17,7 +17,7 @@ export class GrantPageService {
 	);
 
 	private peopleToRoles(people: Person[]) {
-		let uniqueRoles = [];
+		const uniqueRoles = [];
 		people.forEach(({ Roles }) => {
 			Roles.forEach(role => {
 				const isUniqueRole = uniqueRoles.findIndex(r => r.Id === role.Id) === -1;

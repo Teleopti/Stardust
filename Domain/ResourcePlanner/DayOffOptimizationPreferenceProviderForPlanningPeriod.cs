@@ -7,20 +7,16 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner
 	public class DayOffOptimizationPreferenceProviderForPlanningPeriod : IDayOffOptimizationPreferenceProviderForPlanningPeriod
 	{
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
-		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 
-		public DayOffOptimizationPreferenceProviderForPlanningPeriod(IPlanningPeriodRepository planningPeriodRepository,
-			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory)
+		public DayOffOptimizationPreferenceProviderForPlanningPeriod(IPlanningPeriodRepository planningPeriodRepository)
 		{
 			_planningPeriodRepository = planningPeriodRepository;
-			_dayOffOptimizationPreferenceProviderUsingFiltersFactory = dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		}
 		
 		public IDayOffOptimizationPreferenceProvider Fetch(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
-			var planningGroup = planningPeriod.PlanningGroup;
-			return _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create(planningGroup);
+			return new DayOffOptimizationPreferenceProviderUsingFilters(planningPeriod.PlanningGroup.Settings);
 		}
 	}
 }

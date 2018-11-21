@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -109,12 +110,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldNotMakeSearchCallIfMaxItemsIsZero()
 		{
-			var statementsBefore = Session.SessionFactory.Statistics.PrepareStatementCount;
+			using (Session.SessionFactory.WithStats())
+			{
+				var statementsBefore = Session.SessionFactory.Statistics.PrepareStatementCount;
 
-			new SiteRepository(UnitOfWork).FindSitesContain(RandomName.Make(), 0);
+				new SiteRepository(UnitOfWork).FindSitesContain(RandomName.Make(), 0);
 
-			var statementsAfter = Session.SessionFactory.Statistics.PrepareStatementCount;
-			(statementsAfter - statementsBefore).Should().Be.EqualTo(0);
+				var statementsAfter = Session.SessionFactory.Statistics.PrepareStatementCount;
+				(statementsAfter - statementsBefore).Should().Be.EqualTo(0);
+			}
 		}
 
 	    [Test]

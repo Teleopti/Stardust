@@ -15,11 +15,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			fakeShiftCategories = new List<AnalyticsShiftCategory>();
 		}
 
-		public FakeAnalyticsShiftCategoryRepository(List<AnalyticsShiftCategory> analyticsShiftCategories)
-		{
-			fakeShiftCategories = analyticsShiftCategories;
-		}
-
 		public IList<AnalyticsShiftCategory> ShiftCategories()
 		{
 			return fakeShiftCategories;

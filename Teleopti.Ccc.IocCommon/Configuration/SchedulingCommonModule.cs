@@ -294,6 +294,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ScheduleAllRemovedDaysOrRollbackDoNothing>().As<IScheduleAllRemovedDaysOrRollback>().InstancePerLifetimeScope();
 			}
 
+			if (_configuration.Toggle(Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118))
+			{
+				builder.RegisterType<MaxWorkTimeFullWeekSkillExtractor>().As<IMaxWorkTimeFullWeekSkillExtractor>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<MaxWorkTimeFullWeekSkillExtractorDoNothing>().As<IMaxWorkTimeFullWeekSkillExtractor>().SingleInstance();
+			}
 
 			builder.RegisterType<MatrixNotPermittedLocker>().SingleInstance();
 			builder.RegisterType<ScheduleMatrixValueCalculatorProFactory>().SingleInstance();
@@ -411,7 +419,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FilterMapper>().SingleInstance();
 			builder.RegisterType<PlanningGroupSettingsModelPersister>().As<IPlanningGroupSettingsModelPersister>().SingleInstance();
 			builder.RegisterType<PlanningGroupModelPersister>().As<IPlanningGroupModelPersister>().SingleInstance();
-			builder.RegisterType<DayOffOptimizationPreferenceProviderUsingFiltersFactory>().AsSelf().SingleInstance();
 			builder.RegisterType<FindFilter>().SingleInstance();
 			builder.RegisterType<ViolatedSchedulePeriodBusinessRule>().SingleInstance();
 			builder.RegisterType<DayOffBusinessRuleValidation>().SingleInstance();

@@ -42,16 +42,6 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			});
 		}
 
-		public IEnumerable<IScheduleDay> GetScheduleForPersonsWithOptions(DateOnly date, IEnumerable<IPerson> persons,
-			ScheduleDictionaryLoadOptions options = null)
-		{
-			LatestScheduleLoadOptions = options;
-			return _scheduleDays.Where(sd =>
-			{
-				return persons.Any(p => p == sd.Person || p.Id == sd.Person.Id) && sd.DateOnlyAsPeriod.DateOnly == date;
-			});
-		}
-
 		public IEnumerable<IScheduleDay> GetScheduleForPersonsInPeriod(DateOnlyPeriod period, IEnumerable<IPerson> persons,
 			ScheduleDictionaryLoadOptions options)
 		{

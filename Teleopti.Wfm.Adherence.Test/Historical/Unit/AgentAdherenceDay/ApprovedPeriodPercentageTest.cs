@@ -28,8 +28,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithAssignment(person, "2018-02-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2018-02-08 08:00", "2018-02-08 18:00")
-				.WithHistoricalStateChange("2018-02-08 08:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
-				.WithHistoricalStateChange("2018-02-08 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithHistoricalStateChange("2018-02-08 08:00", Domain.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-08 09:00", Domain.Configuration.Adherence.In)
 				.WithApprovedPeriod("2018-02-08 08:00", "2018-02-08 09:00")
 				;
 
@@ -48,8 +48,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithAssignment(person, "2017-12-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 10:00", "2017-12-08 20:00")
-				.WithHistoricalStateChange("2017-12-08 10:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
-				.WithHistoricalStateChange("2017-12-08 11:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral)
+				.WithHistoricalStateChange("2017-12-08 10:00", Domain.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2017-12-08 11:00", Domain.Configuration.Adherence.Neutral)
 				.WithApprovedPeriod("2017-12-08 11:00", "2017-12-08 20:00")
 				;
 
@@ -68,9 +68,9 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithAssignment(person, "2017-12-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 10:00", "2017-12-08 18:00")
-				.WithHistoricalStateChange("2017-12-08 10:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Neutral)
-				.WithHistoricalStateChange("2017-12-08 12:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
-				.WithHistoricalStateChange("2017-12-08 14:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange("2017-12-08 10:00", Domain.Configuration.Adherence.Neutral)
+				.WithHistoricalStateChange("2017-12-08 12:00", Domain.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2017-12-08 14:00", Domain.Configuration.Adherence.Out)
 				.WithApprovedPeriod("2017-12-08 10:00", "2017-12-08 12:00")
 				;
 

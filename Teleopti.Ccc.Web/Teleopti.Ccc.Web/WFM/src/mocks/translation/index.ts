@@ -1,14 +1,13 @@
-import { Directive, NgModule, Pipe, PipeTransform, Injectable } from '@angular/core';
+import { Directive, Injectable, Input, NgModule, Pipe, PipeTransform } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, of } from 'rxjs';
 
 @Directive({
-	selector: '[translate]',
-	inputs: ['translateParams']
+	selector: '[translate]'
 })
 export class MockTranslateParamsDirective {
+	@Input()
 	translateParams: any;
-	constructor() {}
 }
 
 @Pipe({ name: 'translate' })

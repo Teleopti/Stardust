@@ -126,7 +126,6 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProvider.cs" />
-    <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProviderFor46301.cs" />
     <Compile Include="AbsenceWaitlisting\ArrangeRequestsByProcessOrder.cs" />
     <Compile Include="AbsenceWaitlisting\QueuedAbsenceRequest.cs" />
     <Compile Include="AgentInfo\AbsenceStaffingPossibilityCalculator.cs" />
@@ -177,8 +176,8 @@
     <Compile Include="Aop\IHandleContextAction.cs" />
     <Compile Include="Aop\IUnitOfWorkNoCommitAspect.cs" />
     <Compile Include="Aop\ReadonlyUnitOfWorkAttribute.cs" />
+    <Compile Include="ApplicationLayer\Audit\IAuditAggregatorService.cs" />
     <Compile Include="ApplicationLayer\Audit\PurgeAuditHandler.cs" />
-    <Compile Include="ApplicationLayer\Audit\AuditAggregatorService.cs" />
     <Compile Include="ApplicationLayer\Audit\AuditServiceModel.cs" />
     <Compile Include="ApplicationLayer\Audit\IPersonAccessContextReaderService.cs" />
     <Compile Include="ApplicationLayer\Audit\IPurgeAudit.cs" />
@@ -318,6 +317,7 @@
     <Compile Include="Scheduling\AgentsWithPreferences.cs" />
     <Compile Include="Scheduling\AgentsWithWhiteSpots.cs" />
     <Compile Include="Scheduling\AlreadyScheduledAgents.cs" />
+    <Compile Include="Scheduling\MaxWorkTimeFullWeekSkillExtractor.cs" />
     <Compile Include="Scheduling\ReducedSkillsProvider.cs" />
     <Compile Include="Scheduling\RemoveNonPreferenceDaysOffs.cs" />
     <Compile Include="Scheduling\SchedulingInformation.cs" />
@@ -1120,10 +1120,6 @@
     <Compile Include="InterfaceLegacy\Domain\IRotation.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRotationDay.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRotationRestriction.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IRtaMap.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IRtaRule.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IRtaState.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IRtaStateGroup.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRuleSetBag.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRuleSetProjectionEntityService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRuleSetProjectionService.cs" />
@@ -2238,7 +2234,6 @@
     <Compile Include="Optimization\Filters\SiteFilter.cs" />
     <Compile Include="Optimization\Filters\TeamFilter.cs" />
     <Compile Include="Optimization\FixedDayOffOptimizationPreferenceProvider.cs" />
-    <Compile Include="Optimization\DayOffOptimizationPreferenceProviderUsingFiltersFactory.cs" />
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderUsingFilters.cs" />
     <Compile Include="Optimization\PlanningGroupSettingsModelPersister.cs" />
     <Compile Include="Optimization\PlanningGroupSettingsMapper.cs" />
@@ -2968,10 +2963,7 @@
     <Compile Include="Repositories\IRuleSetBagRepository.cs" />
     <Compile Include="Repositories\ISettingDataRepository.cs" />
     <Compile Include="Repositories\ISiteRepository.cs" />
-    <Compile Include="Repositories\IRtaMapRepository.cs" />
     <Compile Include="Repositories\IActivityRepository.cs" />
-    <Compile Include="Repositories\IRtaStateGroupRepository.cs" />
-    <Compile Include="Repositories\IRtaRuleRepository.cs" />
     <Compile Include="Repositories\IShiftCategoryRepository.cs" />
     <Compile Include="Repositories\IStudentAvailabilityDayRepository.cs" />
     <Compile Include="Repositories\ITeamRepository.cs" />

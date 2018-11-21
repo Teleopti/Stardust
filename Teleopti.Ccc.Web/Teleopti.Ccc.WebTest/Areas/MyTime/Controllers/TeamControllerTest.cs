@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var teamProvider = new TeamProvider(teamRepository, permissionProvider, searchProvider);
 
-			var viewModelFactory = new TeamViewModelFactory(teamProvider, null, null, null, null);
+			var viewModelFactory = new TeamViewModelFactory(teamProvider, null, null, null);
 			var target = new TeamController(viewModelFactory, new Now(), null);
 
 

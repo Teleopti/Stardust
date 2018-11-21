@@ -51,10 +51,10 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 				.WithAssignedActivity("2016-10-11 09:00", "2016-10-11 12:00")
 				.WithActivity(null, "email")
 				.WithAssignedActivity("2016-10-11 12:00", "2016-10-11 17:00")
-				.WithHistoricalStateChange(person, "2016-10-11 11:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
-				.WithHistoricalStateChange(person, "2016-10-11 11:05", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
-				.WithHistoricalStateChange(person, "2016-10-11 13:30", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
-				.WithHistoricalStateChange(person, "2016-10-11 17:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In);
+				.WithHistoricalStateChange(person, "2016-10-11 11:00", Domain.Configuration.Adherence.Out)
+				.WithHistoricalStateChange(person, "2016-10-11 11:05", Domain.Configuration.Adherence.In)
+				.WithHistoricalStateChange(person, "2016-10-11 13:30", Domain.Configuration.Adherence.Out)
+				.WithHistoricalStateChange(person, "2016-10-11 17:00", Domain.Configuration.Adherence.In);
 
 			var viewModel = Target.Build(person);
 

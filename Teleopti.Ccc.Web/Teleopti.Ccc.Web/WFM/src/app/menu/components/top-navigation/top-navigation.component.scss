@@ -1,0 +1,113 @@
+@mixin button-transition {
+	transition: 300ms background-color cubic-bezier(0.33, 0.11, 0.02, 0.99);
+}
+
+@mixin darken-bg {
+	background: rgba(0, 0, 0, 0.16);
+}
+
+@mixin fill-nav-bar {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+}
+
+$top-nav-height: 54px;
+
+.top-nav {
+	position: fixed;
+	display: flex;
+	align-items: center;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: $top-nav-height;
+}
+
+.toggle-menu {
+	user-select: none;
+	cursor: pointer;
+	width: $top-nav-height;
+	@include fill-nav-bar;
+	@include button-transition;
+
+	&:hover {
+		@include darken-bg;
+	}
+}
+
+.home {
+	padding: 0 13px;
+	@include fill-nav-bar;
+	@include button-transition;
+	font-size: 13px;
+
+	font-weight: 700;
+	color: white;
+	&:hover,
+	&:active,
+	&focus {
+		color: white;
+		@include darken-bg;
+	}
+}
+
+.right-side {
+	margin-left: auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+}
+
+.help-link {
+	width: $top-nav-height;
+	@include fill-nav-bar;
+	@include button-transition;
+
+	&:hover {
+		@include darken-bg;
+	}
+}
+
+.settings-menu {
+	width: $top-nav-height;
+	@include fill-nav-bar;
+	@include button-transition;
+
+	&:hover {
+		@include darken-bg;
+	}
+}
+
+:host-context(.angular-theme-classic) {
+	$top-nav-bg: #09f;
+	.top-nav {
+		background-color: $top-nav-bg;
+
+		i {
+			color: #fff;
+		}
+	}
+}
+
+:host-context(.angular-theme-dark) {
+	$top-nav-bg: #0a84d6;
+	.top-nav {
+		background-color: $top-nav-bg;
+
+		i {
+			color: #eee;
+		}
+	}
+}
+
+.feedback-wrapper-wrapper {
+	width: $top-nav-height;
+	@include fill-nav-bar;
+	@include button-transition;
+	&:hover {
+		@include darken-bg;
+	}
+}

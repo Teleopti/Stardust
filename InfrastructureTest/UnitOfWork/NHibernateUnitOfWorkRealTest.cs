@@ -13,8 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
     //complement test fixture for nhibernateunitofwork
     //going to a physical db (not mocks)
-
-    [TestFixture]
+	[TestFixture]
     [Category("BucketB")]
 	[DatabaseTest]
     public class NHibernateUnitOfWorkRealTest
@@ -25,13 +24,15 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	        using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
 	        {
 		        var session = uow.FetchSession();
-				session.SessionFactory.Statistics.Clear();
-				var p = PersonFactory.CreatePerson();
-				new PersonRepository(new ThisUnitOfWork(uow)).Add(p);
-				Assert.IsTrue(uow.IsDirty());
-				uow.Flush();
-				Assert.IsFalse(uow.IsDirty());
-				Assert.AreEqual(2, session.SessionFactory.Statistics.EntityInsertCount);
+				using (session.SessionFactory.WithStats())
+				{
+					var p = PersonFactory.CreatePerson();
+					new PersonRepository(new ThisUnitOfWork(uow)).Add(p);
+					Assert.IsTrue(uow.IsDirty());
+					uow.Flush();
+					Assert.IsFalse(uow.IsDirty());
+					Assert.AreEqual(2, session.SessionFactory.Statistics.EntityInsertCount);
+				}
 			}
         }
 

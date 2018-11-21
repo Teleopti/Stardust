@@ -15,6 +15,7 @@
 		rawTimeline = [];
 
 	self.isHostAMobile = Teleopti.MyTimeWeb.Common.IsHostAMobile();
+	self.isHostAniPhone = Teleopti.MyTimeWeb.Common.IsHostAniPhone();
 	self.isHostAniPad = Teleopti.MyTimeWeb.Common.IsHostAniPad();
 	self.isHostADesktop = !self.isHostAMobile && !self.isHostAniPad;
 

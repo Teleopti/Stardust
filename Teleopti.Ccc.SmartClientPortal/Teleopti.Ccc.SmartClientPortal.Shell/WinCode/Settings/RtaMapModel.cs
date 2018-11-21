@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Wfm.Adherence.Domain.Configuration;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings
 {

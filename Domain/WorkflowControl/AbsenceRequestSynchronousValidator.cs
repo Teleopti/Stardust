@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			var personSkills =
 				person.PersonPeriods(personRequest.Request.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone())).
-					SelectMany(x => x.PersonSkillCollection).Distinct();
+					SelectMany(x => x.PersonSkillCollection);
 			return _anyPersonSkillsOpenValidator.Validate(absenceRequest, personSkills, scheduleRange);
 		}
 

@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IPersonRequestRepository _repository;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IUserTimeZone _userTimeZone;
-
 		private readonly IPermissionProvider _permissionProvider;
 
 		public PersonRequestProvider(IPersonRequestRepository repository, ILoggedOnUser loggedOnUser, IUserTimeZone userTimeZone, IPermissionProvider permissionProvider)
@@ -58,11 +57,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			}
 
 			return _repository.FindAllRequestsSortByRequestedDate(_loggedOnUser.CurrentUser(), paging, earliestDateUtc, types.ToArray());
-		}
-
-		public IEnumerable<IPersonRequest> RetrieveRequestsForLoggedOnUser(DateOnlyPeriod period)
-		{
-			return _repository.FindAllRequestsForAgent(_loggedOnUser.CurrentUser(), period.ToDateTimePeriod(_userTimeZone.TimeZone()));
 		}
 
 		public IEnumerable<DateTimePeriod> RetrieveRequestPeriodsForLoggedOnUser(DateOnlyPeriod period)

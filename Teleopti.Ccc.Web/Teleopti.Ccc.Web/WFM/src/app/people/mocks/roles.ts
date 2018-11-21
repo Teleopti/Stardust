@@ -1,10 +1,25 @@
 import { Role } from '../../shared/types';
 
-export type Agent = { Id: 'id1'; Name: 'Agent' };
-export type TeamLeader = { Id: 'id2'; Name: 'TeamLeader' };
-export type Coach = { Id: 'id2'; Name: 'Coach' };
-export type Operator = { Id: 'id3'; Name: 'Operator' };
-export type Trainer = { Id: 'id4'; Name: 'Trainer' };
+export interface Agent {
+	Id: 'id1';
+	Name: 'Agent';
+}
+export interface TeamLeader {
+	Id: 'id2';
+	Name: 'TeamLeader';
+}
+export interface Coach {
+	Id: 'id2';
+	Name: 'Coach';
+}
+export interface Operator {
+	Id: 'id3';
+	Name: 'Operator';
+}
+export interface Trainer {
+	Id: 'id4';
+	Name: 'Trainer';
+}
 
 export const agent: Agent = { Id: 'id1', Name: 'Agent' };
 export const teamLeader: TeamLeader = { Id: 'id2', Name: 'TeamLeader' };

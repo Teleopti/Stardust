@@ -1,4 +1,4 @@
-import { IQService, ITimeoutService } from 'angular';
+import { IPromise, IQService, ITimeoutService } from 'angular';
 import { IState } from 'angular-ui-router';
 import { IWfmRootScopeService } from './main';
 
@@ -34,17 +34,11 @@ export const mainInitializer = [
 	) {
 		$rootScope.isAuthenticated = false;
 
-		$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function() {
-			$timeout(function() {
-				$rootScope.$broadcast('sidenav:toggle');
-			}, 500);
-		});
-
 		$rootScope.$on('$localeChangeSuccess', function() {
 			if ($locale.id === 'zh-cn') $locale.DATETIME_FORMATS.FIRSTDAYOFWEEK = 0;
 		});
 
-		var preloads = [];
+		const preloads = [];
 		preloads.push(toggleService.togglesLoaded);
 		preloads.push(
 			$q.all([initializeUserInfo(), initializePermissionCheck()]).then(function() {
@@ -52,7 +46,7 @@ export const mainInitializer = [
 				if (permitted('rta', undefined)) rtaDataService.load(); // dont return promise, async call
 			})
 		);
-		var preloadDone = false;
+		let preloadDone = false;
 
 		$rootScope.$on('$stateChangeStart', function(event, next: IState, toParams) {
 			if (preloadDone) {
@@ -83,9 +77,9 @@ export const mainInitializer = [
 			});
 		}
 
-		var areas;
-		var permittedAreas;
-		var alwaysPermittedAreas: string[] = [
+		let areas: any[];
+		let permittedAreas: any[];
+		const alwaysPermittedAreas: string[] = [
 			'main',
 			'skillprio',
 			'teapot',
@@ -95,30 +89,32 @@ export const mainInitializer = [
 			'dataprotection'
 		];
 
-		function initializePermissionCheck(): Promise<void> {
-			return areasService.getAreasWithPermission().then(function(data) {
-				permittedAreas = data;
-				return areasService.getAreasList().then(function(data) {
+		function initializePermissionCheck(): IPromise<void[]> {
+			return $q.all([
+				areasService.getAreasWithPermission().then(function(data) {
+					permittedAreas = data;
+				}),
+				areasService.getAreasList().then(function(data) {
 					areas = data;
-				});
-			});
+				})
+			]);
 		}
 
 		function permitted(name: string, url: string): boolean {
-			var permitted = alwaysPermittedAreas.some(function(a) {
+			let isAreaPermitted = alwaysPermittedAreas.some(function(a) {
 				return a === name.toLowerCase();
 			});
-			if (!permitted)
-				permitted = permittedAreas.some(function(a) {
+			if (!isAreaPermitted)
+				isAreaPermitted = permittedAreas.some(function(a) {
 					if (url && (a.InternalName.indexOf(url) > -1 || url.indexOf(a.InternalName) > -1)) return true;
 					else return a.InternalName === name;
 				});
-			return permitted;
+			return isAreaPermitted;
 		}
 
 		function notPermitted(internalName: string) {
 			noticeService.error(
-				"<span class='test-alert'></span>" +
+				`<span class="test-alert"></span>` +
 					$translate.instant('NoPermissionToViewWFMModuleErrorMessage').replace('{0}', nameOf(internalName)),
 				null,
 				false
@@ -127,7 +123,7 @@ export const mainInitializer = [
 		}
 
 		function internalNameOf(o: IState): string {
-			var name = o.name;
+			let name = o.name;
 			name = name.split('.')[0];
 			name = name.split('-')[0];
 			return name;
@@ -138,9 +134,9 @@ export const mainInitializer = [
 		}
 
 		function nameOf(internalName: string): string {
-			var name;
+			let name;
 			areas.forEach(function(area) {
-				if (area.InternalName == internalName) name = area.Name;
+				if (area.InternalName === internalName) name = area.Name;
 			});
 			return name;
 		}

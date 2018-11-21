@@ -21,15 +21,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 		private readonly IUserTextTranslator _userTextTranslator;
-		private readonly IAuthorization _authorization;
 
-		public TeamViewModelFactory(ITeamProvider teamProvider, IPermissionProvider permissionProvider, IGroupingReadOnlyRepository groupingReadOnlyRepository, IUserTextTranslator userTextTranslator, IAuthorization authorization)
+		public TeamViewModelFactory(ITeamProvider teamProvider, IPermissionProvider permissionProvider, IGroupingReadOnlyRepository groupingReadOnlyRepository, IUserTextTranslator userTextTranslator)
 		{
 			_teamProvider = teamProvider;
 			_permissionProvider = permissionProvider;
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 			_userTextTranslator = userTextTranslator;
-			_authorization = authorization;
 		}
 
 		public IEnumerable<SelectBase> CreateTeamOrGroupOptionsViewModel(DateOnly date)
@@ -82,43 +80,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 				options.AddRange(teamOptions);
 			});
 
-			return options;
-		}
-
-		public IEnumerable<dynamic> CreateLeaderboardOptionsViewModel(DateOnly date, string applicationFunctionPath)
-		{
-			var teams = _teamProvider.GetPermittedTeams(date, applicationFunctionPath).ToArray();
-			var sites = teams.GroupBy(t => t.Site)
-				.OrderBy(s => s.Key.Description.Name);
-
-			var options = new List<dynamic>();
-			options.Add( new
-			{
-				id = Guid.Empty,
-				text = UserTexts.Resources.Everyone,
-				type = LeadboardQueryType.Everyone
-			});
-			sites.ForEach(s =>
-			{
-				if (_authorization.IsPermitted(applicationFunctionPath, date, s.Key))
-				{
-					options.Add(new 
-					{
-						id = s.Key.Id.ToString(),
-						text = s.Key.Description.Name,
-						type = LeadboardQueryType.Site
-					});
-				}
-				
-				var teamOptions = from t in s
-								  select new
-								  {
-									  id = t.Id.ToString(),
-									  text = t.Description.Name,
-									  type = LeadboardQueryType.Team
-								  };
-				options.AddRange(teamOptions);
-			});
 			return options;
 		}
 

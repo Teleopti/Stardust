@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.GeneralAuditTrailWebReport)]
 	public class AuditTrailController : ApiController
 	{
-		private readonly AuditAggregatorService _auditAggregatorService;
+		private readonly IAuditAggregatorService _auditAggregatorService;
 
-		public AuditTrailController(AuditAggregatorService auditAggregatorService)
+		public AuditTrailController(IAuditAggregatorService auditAggregatorService)
 		{
 			_auditAggregatorService = auditAggregatorService;
 		}
