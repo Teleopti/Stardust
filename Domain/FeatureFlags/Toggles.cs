@@ -85,7 +85,6 @@
 
 
 		Wfm_SkillPriorityRoutingGUI_39885,
-		ETL_Optimize_Memory_Usage_76761,
 		ETL_Show_Tenant_Name_In_History_75767,
 
 		WfmStaffing_AddOvertime_42524,

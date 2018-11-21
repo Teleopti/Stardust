@@ -21,7 +21,7 @@ namespace Teleopti.Analytics.Etl.Common
 		private readonly IDataSourcesFactory _dataSourcesFactory;
 		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
 		private readonly IToggleManager _toggleManager;
-		private static readonly Dictionary<string, TenantInfo> allTenants = new Dictionary<string, TenantInfo>();
+		private static readonly Dictionary<string, TenantInfo> listofTenants = new Dictionary<string, TenantInfo>();
 
 		public Tenants(
 			ITenantUnitOfWork tenantUnitOfWork, 
@@ -56,7 +56,9 @@ namespace Teleopti.Analytics.Etl.Common
 
 		public TenantInfo Tenant(string name)
 		{
-			return LoadedTenants().FirstOrDefault(x => x.Tenant.Name.Equals(name));
+			return LoadedTenants()
+				.Where(t => t.EtlConfiguration != null)
+				.FirstOrDefault(x => x.Tenant.Name.Equals(name));
 		}
 
 		public IDataSource DataSourceForTenant(string name)
@@ -67,34 +69,30 @@ namespace Teleopti.Analytics.Etl.Common
 
 		public IEnumerable<TenantInfo> LoadedTenants()
 		{
-			var loadedTenants = new List<TenantInfo>();
-			var toggle76761Enabled = _toggleManager.IsEnabled(Toggles.ETL_Optimize_Memory_Usage_76761);
-
+			Dictionary<string, TenantInfo> retList;
 			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var generalInfrastructure = new GeneralInfrastructure(_baseConfigurationRepository);
 				var generalFunctions = new GeneralFunctions(generalInfrastructure);
 				var configurationHandler = new ConfigurationHandler(generalFunctions, new BaseConfigurationValidator());
 
-				var loaded = _loadAllTenants.Tenants().ToList();
-				foreach (var tenant in loaded)
+				var tenantsInApp = _loadAllTenants.Tenants().ToList();
+				foreach (var tenant in tenantsInApp)
 				{
-					if (!toggle76761Enabled)
+					if (listofTenants.ContainsKey(tenant.Name))
 					{
-						var tenantInfo = getTenantInfo(tenant, configurationHandler);
-						loadedTenants.Add(tenantInfo);
+						if(listofTenants[tenant.Name].EtlConfiguration == null)
+							listofTenants[tenant.Name] = getTenantInfo(tenant, configurationHandler);
+						continue;
 					}
-					else
-					{
-						if (allTenants.ContainsKey(tenant.Name)) continue;
 
-						var tenantInfo = getTenantInfo(tenant, configurationHandler);
-						allTenants.Add(tenant.Name, tenantInfo);
-					}
+					var tenantInfo = getTenantInfo(tenant, configurationHandler);
+					listofTenants.Add(tenant.Name, tenantInfo);
 				}
+				retList = listofTenants.Where(x => tenantsInApp.Any(y => y.Name == x.Value.Tenant.Name)).ToDictionary(x => x.Key, x => x.Value);
 			}
 
-			return toggle76761Enabled ? allTenants.Values.ToList() : loadedTenants;
+			return retList.Values.ToList();
 		}
 
 		private TenantInfo getTenantInfo(Tenant tenant, IConfigurationHandler configurationHandler)

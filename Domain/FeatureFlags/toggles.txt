@@ -126,7 +126,6 @@ Report_Show_Utc_In_Report_Selection_When_In_Use_45079 = true
 WFM_AuditTrail_44006 = true
 WFM_Clear_Data_After_Leaving_Date_47768 = true
 WFM_Forecaster_Preview_74801 = RC
-ETL_Optimize_Memory_Usage_76761 = true
 WFM_Forecast_Show_History_Data_76432 = DEV
 ETL_Show_Web_Based_ETL_Tool_74837 = true
 ETL_Show_Tenant_Name_In_History_75767 = true
