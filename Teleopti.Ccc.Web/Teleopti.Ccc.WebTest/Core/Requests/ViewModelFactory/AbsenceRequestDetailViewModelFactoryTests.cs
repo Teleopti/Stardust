@@ -18,9 +18,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 	[DomainTest]
 	class AbsenceRequestDetailViewModelFactoryTests : IIsolateSystem
 	{
+		#pragma warning disable 0649
 		public IPersonRepository PersonRepository;
 		public IPersonRequestRepository PersonRequestRepository;
 		public IAbsenceRequestDetailViewModelFactory Target;
+		#pragma warning restore 0649
 
 		public void Isolate(IIsolate isolate)
 		{
