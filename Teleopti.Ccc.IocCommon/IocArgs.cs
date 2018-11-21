@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.IocCommon
 
 		public bool BehaviorTestServer { get; set; }
 		public bool AllEventPublishingsAsSync { get; set; }
-		public bool WebByPassDefaultPermissionCheck_37984 { get; set; }
 		public IConfigReader ConfigReader { get; }
 		public bool IsFatClient { get; set; }
 		public IocCache Cache { get; } = new IocCache();

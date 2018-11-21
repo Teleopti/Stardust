@@ -48,8 +48,6 @@
 		WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952,
 		WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978,
 
-		WebByPassDefaultPermissionCheck_37984,
-
 		Wfm_Requests_Approve_Based_On_Budget_Allotment_39626,
 		Wfm_Requests_Approve_Based_On_Intraday_39868,
 		Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274,
