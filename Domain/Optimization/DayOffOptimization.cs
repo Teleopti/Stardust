@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization.ClassicLegacy;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -70,6 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly MatrixListFactory _matrixListFactory;
+		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 
 		public DayOffOptimization(TeamBlockDayOffOptimizer teamBlockDayOffOptimizer,
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter,
@@ -87,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IOptimizationPreferencesProvider optimizationPreferencesProvider,
 			IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod,
 			IDayOffOptimizationPreferenceProviderForPlanningPeriod dayOffOptimizationPreferenceProviderForPlanningPeriod,
-			IScheduleAllRemovedDaysOrRollback scheduleAllRemovedDaysOrRollback)
+			IScheduleAllRemovedDaysOrRollback scheduleAllRemovedDaysOrRollback, IPlanningPeriodRepository planningPeriodRepository)
 		{
 			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
@@ -103,6 +105,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_blockPreferenceProviderForPlanningPeriod = blockPreferenceProviderForPlanningPeriod;
 			_dayOffOptimizationPreferenceProviderForPlanningPeriod = dayOffOptimizationPreferenceProviderForPlanningPeriod;
 			_scheduleAllRemovedDaysOrRollback = scheduleAllRemovedDaysOrRollback;
+			_planningPeriodRepository = planningPeriodRepository;
 			_userTimeZone = userTimeZone;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_matrixListFactory = matrixListFactory;
@@ -114,6 +117,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Guid planningPeriodId)
 		{
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
+			if (planningPeriodId != Guid.Empty)
+			{
+				var planningGroup = _planningPeriodRepository.Load(planningPeriodId).PlanningGroup;
+				optimizationPreferences.General.UsePreferences = planningGroup.PreferenceValue > 0;
+				optimizationPreferences.General.PreferencesValue = planningGroup.PreferenceValue;
+			}
+			
 			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(planningPeriodId);
 			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderForPlanningPeriod.Fetch(planningPeriodId);
 			var stateHolder = _schedulerStateHolder();

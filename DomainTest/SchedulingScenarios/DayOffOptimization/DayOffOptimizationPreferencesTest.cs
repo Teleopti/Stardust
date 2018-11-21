@@ -28,19 +28,17 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakePreferenceDayRepository PreferenceDayRepository;
-		public FakePlanningGroupRepository PlanningGroupRepository;
 
 		[TestCase(0.60, ExpectedResult = 2)]
 		[TestCase(0.80, ExpectedResult = 1)]
 		[TestCase(1, ExpectedResult = 0)]
-		[Ignore("#76289 To be fixed")]
 		public int ShouldConsiderPreference(double preferencePercentage)
 		{
 			var date = new DateOnly(2015, 10, 12); 
 			var activity = ActivityRepository.Has();
 			var skill = SkillRepository.Has(activity);
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
-			planningPeriod.PlanningGroup.ModifyDefault(x=> x.PreferenceValue = new Percent(preferencePercentage));
+			planningPeriod.PlanningGroup.PreferenceValue = preferencePercentage;
 			var scenario = ScenarioRepository.Has();
 			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1);
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory().WithId()));
