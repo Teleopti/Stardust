@@ -43,12 +43,17 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			var dates = new CurrentWeekDates();
 
-			analyticsDataFactory.Setup(new EternityAndNotDefinedDate());
+			var eternityAndNotDefinedDate = new EternityAndNotDefinedDate();
 			var timeZones = new UtcAndCetTimeZones();
 			_datasource = new ExistingDatasources(timeZones);
+			var sysConfiguration = new SysConfiguration("IntervalLengthMinutes", "15");
+			sysConfiguration.AddConfiguration("TimeZoneCode", "UTC");
+			sysConfiguration.AddConfiguration("Culture", CultureInfo.CurrentCulture.LCID.ToString());
 
+			analyticsDataFactory.Setup(eternityAndNotDefinedDate);
 			analyticsDataFactory.Setup(_datasource);
 			analyticsDataFactory.Setup(dates);
+			analyticsDataFactory.Setup(sysConfiguration);
 			analyticsDataFactory.Persist();
 
 			const string timeZoneId = "W. Europe Standard Time";
