@@ -108,8 +108,10 @@
 					if (vm.status !== null) {
 						vm.status.formatedTime = moment(vm.status.StartTime).local().format('HH:mm');
 					}
-					pollStatus();
-				});
+						if (window.location.hash === '#/ETL/history') {
+							pollStatus();
+						}
+					});
 			}, 10000 );
 		}
 
