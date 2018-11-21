@@ -117,8 +117,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
 			if (planningGroup != null)
 			{
-				optimizationPreferences.General.UsePreferences = planningGroup.PreferenceValue > 0;
-				optimizationPreferences.General.PreferencesValue = planningGroup.PreferenceValue;
+				optimizationPreferences.General.UsePreferences = planningGroup.PreferenceValue > Percent.Zero;
+				optimizationPreferences.General.PreferencesValue = planningGroup.PreferenceValue.Value;
 			}
 			
 			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(planningGroup);
