@@ -1,7 +1,7 @@
 ﻿namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 {
-	public interface IPurgeAudit
+	public interface IPurgeAuditRunner
 	{
-		void PurgeAudits();
+		void Run();
 	}
 }

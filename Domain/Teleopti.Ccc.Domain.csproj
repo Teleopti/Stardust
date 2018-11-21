@@ -180,7 +180,7 @@
     <Compile Include="ApplicationLayer\Audit\PurgeAuditHandler.cs" />
     <Compile Include="ApplicationLayer\Audit\AuditServiceModel.cs" />
     <Compile Include="ApplicationLayer\Audit\IPersonAccessContextReaderService.cs" />
-    <Compile Include="ApplicationLayer\Audit\IPurgeAudit.cs" />
+    <Compile Include="ApplicationLayer\Audit\IPurgeAuditRunner.cs" />
     <Compile Include="ApplicationLayer\Audit\IStaffingContextReaderService.cs" />
     <Compile Include="ApplicationLayer\Audit\PersonAccessAuditContext.cs" />
     <Compile Include="ApplicationLayer\Audit\StaffingAuditContext.cs" />

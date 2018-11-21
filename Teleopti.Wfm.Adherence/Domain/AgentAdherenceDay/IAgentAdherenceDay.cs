@@ -6,13 +6,13 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 {
 	public interface IAgentAdherenceDay
 	{
-		DateTimePeriod Period();
+		DateTimePeriod DisplayPeriod();
 		IEnumerable<HistoricalChangeModel> Changes();
 		IEnumerable<AdherencePeriod> RecordedOutOfAdherences();
-		IEnumerable<ApprovedPeriod> ApprovedPeriods();
+		IEnumerable<ApprovedPeriod> ApprovedPeriods(); // change type to something without person id. AdherencePeriod maybe?
 		IEnumerable<AdherencePeriod> OutOfAdherences();
 		int? Percentage();
-		int? SecondsInAherence();
+		int? SecondsInAdherence();
 		int? SecondsOutOfAdherence();
 	}
 }

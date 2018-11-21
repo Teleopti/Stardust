@@ -143,7 +143,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 				.Where(x => x.EndTime - x.StartTime >= TimeSpan.FromSeconds(1))
 				.ToList();
 
-		public DateTimePeriod Period() => _period;
+		public DateTimePeriod DisplayPeriod() => _period;
 
 		public IEnumerable<HistoricalChangeModel> Changes() => _changes;
 
@@ -166,7 +166,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			return new AdherencePercentageCalculator().Calculate(_shift, neutralAdherencesWithinShift, outOfAhderencesWithinShift, _now);
 		}
 
-		public int? SecondsInAherence()
+		public int? SecondsInAdherence()
 		{
 			throw new NotImplementedException();
 		}

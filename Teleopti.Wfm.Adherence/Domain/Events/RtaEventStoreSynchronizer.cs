@@ -128,7 +128,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 				Date = day,
 				WasLateForWork = lateForWork != null,
 				MinutesLateForWork = minutesLateForWork,
-				SecondsInAdherence = adherenceDay.SecondsInAherence(),
+				SecondsInAdherence = adherenceDay.SecondsInAdherence(),
 				SecondsOutOfAdherence = adherenceDay.SecondsOutOfAdherence(),
 			});
 		}

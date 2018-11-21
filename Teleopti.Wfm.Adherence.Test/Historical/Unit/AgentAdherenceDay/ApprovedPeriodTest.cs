@@ -219,6 +219,40 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			result.OutOfAdherences().Second().StartTime.Should().Be("2018-02-08 08:30".Utc());
 			result.OutOfAdherences().Second().EndTime.Should().Be("2018-02-08 08:50".Utc());
 		}
-		
+
+		[Test]
+		public void ShouldExcludeApprovedPeriodFromOutOfAdherenceEndingInTheFuture()
+		{
+			Now.Is("2018-02-28 09:00");
+			var person = Guid.NewGuid();
+			Database
+				.WithAgent(person)
+				.WithHistoricalStateChange("2018-02-08 08:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithApprovedPeriod("2018-02-08 08:00", "2018-02-08 09:00")
+				;
+
+			var result = Target.Load(person, "2018-02-08".Date());
+
+			result.OutOfAdherences().Single().StartTime.Should().Be("2018-02-08 09:00".Utc());
+			result.OutOfAdherences().Single().EndTime.Should().Be(null);
+		}
+
+		[Test]
+		public void ShouldExcludeApprovedPeriodFromOutOfAdherenceStartingInThePast()
+		{
+			Now.Is("2018-02-28 09:00");
+			var person = Guid.NewGuid();
+			Database
+				.WithAgent(person)
+				.WithHistoricalAdherenceDayStart("2018-02-08 00:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-08 09:00", Ccc.Domain.InterfaceLegacy.Domain.Adherence.In)
+				.WithApprovedPeriod("2018-02-08 08:00", "2018-02-08 09:00")
+				;
+
+			var result = Target.LoadUntilNow(person, "2018-02-08".Date());
+
+			result.OutOfAdherences().Single().StartTime.Should().Be(null);
+			result.OutOfAdherences().Single().EndTime.Should().Be("2018-02-08 08:00".Utc());
+		}
 	}
 }

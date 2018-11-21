@@ -136,6 +136,7 @@
     <Compile Include="ApplicationLayer\ViewModels\SiteCardViewModel.cs" />
     <Compile Include="ApplicationLayer\ViewModels\SiteCardViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ViewModels\TeamCardViewModel.cs" />
+    <Compile Include="Domain\AgentAdherenceDay\AdherencePercentageCalculation.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AdherencePercentageCalculator.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AdherencePeriod.cs" />
     <Compile Include="Domain\AgentAdherenceDay\AgentAdherenceDay.cs" />

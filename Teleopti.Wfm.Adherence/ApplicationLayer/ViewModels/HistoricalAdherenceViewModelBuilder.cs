@@ -60,8 +60,8 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 				ApprovedPeriods = buildApprovedPeriods(adherenceDay.ApprovedPeriods()),
 				Timeline = new ScheduleTimeline
 				{
-					StartTime = formatForUser(adherenceDay.Period().StartDateTime),
-					EndTime = formatForUser(adherenceDay.Period().EndDateTime)
+					StartTime = formatForUser(adherenceDay.DisplayPeriod().StartDateTime),
+					EndTime = formatForUser(adherenceDay.DisplayPeriod().EndDateTime)
 				},
 				AdherencePercentage = adherenceDay.Percentage(),
 				Navigation = buildNavigation(person)
