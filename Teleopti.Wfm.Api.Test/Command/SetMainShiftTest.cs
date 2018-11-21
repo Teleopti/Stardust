@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -27,7 +28,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 		public FakeShiftCategoryRepository ShiftCategoryRepository;
 
 		[Test]
-		public void ShouldSetMainShift()
+		public async Task ShouldSetMainShift()
 		{
 			Client.Authorize();
 			ScenarioRepository.Has(ScenarioFactory.CreateScenario("TestScenario", true, false).WithId());
@@ -47,16 +48,16 @@ namespace Teleopti.Wfm.Api.Test.Command
 				}
 			};
 
-			var result = Client.PostAsync("/command/SetMainShift",
+			var result = await Client.PostAsync("/command/SetMainShift",
 				new StringContent(JsonConvert.SerializeObject(setMainShiftDto), Encoding.UTF8, "application/json"));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
 
 			PersonAssignmentRepository.LoadAll().Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]
-		public void ShouldSetNewMainshiftIfAlreadyExists()
+		public async Task ShouldSetNewMainshiftIfAlreadyExists()
 		{
 			Client.Authorize();
 			var scenario = ScenarioFactory.CreateScenario("TestScenario", true, false).WithId();
@@ -80,9 +81,9 @@ namespace Teleopti.Wfm.Api.Test.Command
 				}
 			};
 
-			var result = Client.PostAsync("/command/SetMainShift",
+			var result = await Client.PostAsync("/command/SetMainShift",
 				new StringContent(JsonConvert.SerializeObject(setMainShiftDto), Encoding.UTF8, "application/json"));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
 
 			PersonAssignmentRepository.LoadAll().Count().Should().Be.EqualTo(1);
@@ -90,7 +91,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 		}
 
 		[Test]
-		public void ShouldNotChangePersonalActivities()
+		public async Task ShouldNotChangePersonalActivities()
 		{
 			Client.Authorize();
 			var scenario = ScenarioFactory.CreateScenario("TestScenario", true, false).WithId();
@@ -114,9 +115,9 @@ namespace Teleopti.Wfm.Api.Test.Command
 				}
 			};
 
-			var result = Client.PostAsync("/command/SetMainShift",
+			var result = await Client.PostAsync("/command/SetMainShift",
 				new StringContent(JsonConvert.SerializeObject(setMainShiftDto), Encoding.UTF8, "application/json"));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
 
 			var shift = PersonAssignmentRepository.LoadAll().Single();
@@ -126,7 +127,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 		}
 
 		[Test]
-		public void ShouldKeepPersonAssignmentsForOtherDays()
+		public async Task ShouldKeepPersonAssignmentsForOtherDays()
 		{
 			Client.Authorize();
 			var scenario = ScenarioFactory.CreateScenario("TestScenario", true, false).WithId();
@@ -154,9 +155,9 @@ namespace Teleopti.Wfm.Api.Test.Command
 				}
 			};
 
-			var result = Client.PostAsync("/command/SetMainShift",
+			var result = await Client.PostAsync("/command/SetMainShift",
 				new StringContent(JsonConvert.SerializeObject(setMainShiftDto), Encoding.UTF8, "application/json"));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
 
 			var personAssignments = PersonAssignmentRepository.LoadAll().ToList();
@@ -171,7 +172,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 		}
 
 		[Test]
-		public void ShouldSetShiftCategory()
+		public async Task ShouldSetShiftCategory()
 		{
 			Client.Authorize();
 			ScenarioRepository.Has(ScenarioFactory.CreateScenario("TestScenario", true, false).WithId());
@@ -194,9 +195,9 @@ namespace Teleopti.Wfm.Api.Test.Command
 				ShiftCategory = shiftCategory.Id.GetValueOrDefault()
 			};
 
-			var result = Client.PostAsync("/command/SetMainShift",
+			var result = await Client.PostAsync("/command/SetMainShift",
 				new StringContent(JsonConvert.SerializeObject(setMainShiftDto), Encoding.UTF8, "application/json"));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
 
 			PersonAssignmentRepository.LoadAll().Count().Should().Be.EqualTo(1);
