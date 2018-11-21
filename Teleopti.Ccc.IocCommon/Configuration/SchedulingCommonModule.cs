@@ -434,6 +434,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RestrictionNotAbleToBeScheduledReport>().InstancePerLifetimeScope();
 			builder.RegisterType<AdvancedAgentsFilter>().SingleInstance();
 			builder.RegisterType<StaffingDataAvailablePeriodProvider>().As<IStaffingDataAvailablePeriodProvider>().SingleInstance();
+			builder.RegisterType<PlanningGroupGlobalSettingSetter>().SingleInstance();
 
 			if (_configuration.Args().IsFatClient)
 			{

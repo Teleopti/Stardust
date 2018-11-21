@@ -71,6 +71,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly MatrixListFactory _matrixListFactory;
+		private readonly PlanningGroupGlobalSettingSetter _planningGroupGlobalSettingSetter;
+		
 
 		public DayOffOptimization(TeamBlockDayOffOptimizer teamBlockDayOffOptimizer,
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter,
@@ -88,7 +90,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IOptimizationPreferencesProvider optimizationPreferencesProvider,
 			IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod,
 			IDayOffOptimizationPreferenceProviderForPlanningPeriod dayOffOptimizationPreferenceProviderForPlanningPeriod,
-			IScheduleAllRemovedDaysOrRollback scheduleAllRemovedDaysOrRollback)
+			IScheduleAllRemovedDaysOrRollback scheduleAllRemovedDaysOrRollback,
+			PlanningGroupGlobalSettingSetter planningGroupGlobalSettingSetter)
 		{
 			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
@@ -104,6 +107,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_blockPreferenceProviderForPlanningPeriod = blockPreferenceProviderForPlanningPeriod;
 			_dayOffOptimizationPreferenceProviderForPlanningPeriod = dayOffOptimizationPreferenceProviderForPlanningPeriod;
 			_scheduleAllRemovedDaysOrRollback = scheduleAllRemovedDaysOrRollback;
+			_planningGroupGlobalSettingSetter = planningGroupGlobalSettingSetter;
 			_userTimeZone = userTimeZone;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_matrixListFactory = matrixListFactory;
@@ -115,12 +119,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			PlanningGroup planningGroup)
 		{
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
-			if (planningGroup != null)
-			{
-				optimizationPreferences.General.UsePreferences = planningGroup.PreferenceValue > Percent.Zero;
-				optimizationPreferences.General.PreferencesValue = planningGroup.PreferenceValue.Value;
-			}
-			
+			_planningGroupGlobalSettingSetter.SetSetting(planningGroup, optimizationPreferences);
 			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(planningGroup);
 			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderForPlanningPeriod.Fetch(planningGroup);
 			var stateHolder = _schedulerStateHolder();

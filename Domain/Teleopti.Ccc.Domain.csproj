@@ -297,6 +297,7 @@
     <Compile Include="Optimization\IntradayOptimizationOnStardust.cs" />
     <Compile Include="Optimization\IPlanningGroupProvider.cs" />
     <Compile Include="Optimization\MatrixLockers\MatrixClosedDayLocker.cs" />
+    <Compile Include="Optimization\PlanningGroupGlobalSettingSetter.cs" />
     <Compile Include="Optimization\PlanningGroupProvider.cs" />
     <Compile Include="Optimization\PredictorResult.cs" />
     <Compile Include="Optimization\TeamBlock\CreatePersonalSkillDataExtractor.cs" />
