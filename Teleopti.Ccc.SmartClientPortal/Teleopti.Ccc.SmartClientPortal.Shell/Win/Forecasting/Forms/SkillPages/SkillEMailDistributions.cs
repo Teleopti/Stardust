@@ -129,10 +129,5 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
         public void SetEditMode()
         {
         }
-
-		private void panelMain_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
-		{
-
-		}
     }
 }

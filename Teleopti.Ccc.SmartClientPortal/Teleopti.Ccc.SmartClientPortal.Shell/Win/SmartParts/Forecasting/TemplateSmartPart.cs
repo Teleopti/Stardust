@@ -57,17 +57,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
         public void DrawProgressGraphs(IDrawProperties drawProperties)
         {
             if (drawProperties == null) throw new ArgumentNullException("drawProperties");
-            DrawLastUpdatedInfoForTemplateSmartPart(drawProperties, drawProperties.RowIndex - 1);
-        }
-
-        private void DrawLastUpdatedInfoForTemplateSmartPart(IDrawProperties drawProperties, int index)
-        {
-				
         }
 
         public void DrawNames(IDrawProperties drawProperties)
         {
-				
         }
 
         public ToolTipInfo SetTooltip(IDrawPositionAndWidth drawPositionAndWidth, int cursorX)

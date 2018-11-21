@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			get { return comboBoxOptionalColumns.SelectedItem as IOptionalColumn; }
 		}
 
-		public OptionalColumnsControl(IToggleManager toggleManager)
+		public OptionalColumnsControl()
 		{
 			InitializeComponent();
 
