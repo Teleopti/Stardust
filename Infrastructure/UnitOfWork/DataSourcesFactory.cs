@@ -108,10 +108,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			if (cachedSessionFactory != null)
 				return cachedSessionFactory;
 			using (PerformanceOutput.ForOperation(
-				$"Building sessionfactory for {configuration.Properties[Environment.SessionFactoryName]}"))
+				$"Building session factory for {configuration.Properties[Environment.SessionFactoryName]}"))
 			{
 				var sessionFactory = configuration.BuildSessionFactory();
-				sessionFactory.Statistics.IsStatisticsEnabled = true;
 				_nhibernateConfigurationCache.StoreSessionFactory(configuration, sessionFactory);
 				return sessionFactory;
 			}

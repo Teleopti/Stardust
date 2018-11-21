@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -30,14 +31,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var target = createAssigment();
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				initAssAndClearStatistics(uow, target);
-				target.RemoveActivity(target.OvertimeActivities().First());
-				uow.Merge(target);
-				uow.PersistAll();
-				uow.FetchSession().SessionFactory.Statistics.PrepareStatementCount
-					.Should().Be.EqualTo(2); //delete overtime layer + update personassignment  (no index changes)
-				uow.FetchSession().SessionFactory.Statistics.EntityDeleteCount
-					.Should().Be.EqualTo(1); //delete overtimeshift layer
+				var sessionFactory = uow.FetchSession().SessionFactory;
+				using (sessionFactory.WithStats())
+				{
+					initAss(uow, target);
+					target.RemoveActivity(target.OvertimeActivities().First());
+					uow.Merge(target);
+					uow.PersistAll();
+					sessionFactory.Statistics.PrepareStatementCount
+						.Should().Be.EqualTo(2); //delete overtime layer + update personassignment  (no index changes)
+					sessionFactory.Statistics.EntityDeleteCount
+						.Should().Be.EqualTo(1); //delete overtimeshift layer
+				}
 			}
 		}
 
@@ -47,14 +52,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var target = createAssigment();
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				initAssAndClearStatistics(uow, target);
-				target.ClearMainActivities();
-				uow.Merge(target);
-				uow.PersistAll();
-				uow.FetchSession().SessionFactory.Statistics.PrepareStatementCount
-					.Should().Be.EqualTo(3); //delete mainshift layer + update personassignment + update overtime index
-				uow.FetchSession().SessionFactory.Statistics.EntityDeleteCount
-					.Should().Be.EqualTo(1); //delete mainshiftlayer
+				var sessionFactory = uow.FetchSession().SessionFactory;
+				using (sessionFactory.WithStats())
+				{
+					initAss(uow, target);
+					target.ClearMainActivities();
+					uow.Merge(target);
+					uow.PersistAll();
+					sessionFactory.Statistics.PrepareStatementCount
+						.Should().Be
+						.EqualTo(3); //delete mainshift layer + update personassignment + update overtime index
+					sessionFactory.Statistics.EntityDeleteCount
+						.Should().Be.EqualTo(1); //delete mainshiftlayer
+				}
 			}
 		}
 
@@ -64,15 +74,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var target = createAssigment();
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				initAssAndClearStatistics(uow, target);
-				target.RemoveActivity(target.PersonalActivities().First());
-				uow.Merge(target);
-				uow.PersistAll();
-				uow.FetchSession().SessionFactory.Statistics.PrepareStatementCount
-					.Should().Be
-					.EqualTo(4); //delete overtime layer + update personassignment + update main index + update overtime index
-				uow.FetchSession().SessionFactory.Statistics.EntityDeleteCount
-					.Should().Be.EqualTo(1); //delete personalshiftlayer	
+				var sessionFactory = uow.FetchSession().SessionFactory;
+				using (sessionFactory.WithStats())
+				{
+					initAss(uow, target);
+					target.RemoveActivity(target.PersonalActivities().First());
+					uow.Merge(target);
+					uow.PersistAll();
+					sessionFactory.Statistics.PrepareStatementCount
+						.Should().Be
+						.EqualTo(4); //delete overtime layer + update personassignment + update main index + update overtime index
+					sessionFactory.Statistics.EntityDeleteCount
+						.Should().Be.EqualTo(1); //delete personalshiftlayer	
+				}
 			}
 		}
 
@@ -82,21 +96,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var target = createAssigment();
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				initAssAndClearStatistics(uow, target);
-				PersonAssignmentRepository.Remove(target);
-				uow.PersistAll();
-				uow.FetchSession().SessionFactory.Statistics.PrepareStatementCount
-					.Should().Be.EqualTo(1); //delete pers assignment, (no layers - cascading)
-				uow.FetchSession().SessionFactory.Statistics.EntityDeleteCount
-					.Should().Be.EqualTo(4); //delete pers assignment, otlayer, mslayer, pslayer
+				var sessionFactory = uow.FetchSession().SessionFactory;
+				using (sessionFactory.WithStats())
+				{
+					initAss(uow, target);
+					PersonAssignmentRepository.Remove(target);
+					uow.PersistAll();
+					sessionFactory.Statistics.PrepareStatementCount
+						.Should().Be.EqualTo(1); //delete pers assignment, (no layers - cascading)
+					sessionFactory.Statistics.EntityDeleteCount
+						.Should().Be.EqualTo(4); //delete pers assignment, otlayer, mslayer, pslayer
+				}
 			}
 		}
 
-		private static void initAssAndClearStatistics(IUnitOfWork uow, IPersonAssignment personAssignment)
+		private static void initAss(IUnitOfWork uow, IPersonAssignment personAssignment)
 		{
 			uow.Reassociate(personAssignment);
 			personAssignment.ShiftLayers.ToArray();
-			uow.FetchSession().SessionFactory.Statistics.Clear();
 		}
 
 		public IActivityRepository ActivityRepository;

@@ -378,6 +378,7 @@
     <Compile Include="UnitOfWorkTestAttribute.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryHasCurrentUnitOfWorkTest.cs" />
     <Compile Include="UnitOfWork\AnalyticsUnitOfWorkTest.cs" />
+    <Compile Include="UnitOfWork\SessionFactoryExtensions.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\FatClientOptimizationEventPublishingTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\ASMScheduleChangeTimePersisterTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\PersonChangedMessageSenderTest.cs" />
