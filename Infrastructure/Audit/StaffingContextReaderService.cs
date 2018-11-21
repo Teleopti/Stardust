@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Audit
@@ -33,10 +34,12 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 			{
 				var auditServiceModel = new AuditServiceModel()
 				{
-					TimeStamp = audit.TimeStamp, Context = "Staffing", Action = audit.Action,
+					TimeStamp = audit.TimeStamp,
+					Context = Resources.AuditTrailStaffingContext,
+					Action = Resources.ResourceManager.GetString(audit.Action, _userCulture.GetCulture()) ?? audit.Action,
 					ActionPerformedBy = extractPersonAuditInfo(audit.ActionPerformedBy, commonAgentNameSetting)
 				};
-				if (audit.Action.Equals(StaffingAuditActionConstants.ImportBpo))
+				if (audit.Action.Equals(StaffingAuditActionConstants.ImportStaffing))
 					auditServiceModel.Data = $"File name: {audit.ImportFileName}";
 				else
 				{
@@ -44,7 +47,8 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 					var bpoName = _skillCombinationResourceRepository.GetSourceBpoByGuid(audit.BpoId.GetValueOrDefault());
 					var startDate = audit.ClearPeriodStart.Value.ToString("d", _userCulture.GetCulture());
 					var endDate = audit.ClearPeriodEnd.Value.ToString("d", _userCulture.GetCulture());
-					auditServiceModel.Data = $"BPO name: {bpoName}{Environment.NewLine}Period from {startDate} to {endDate}";
+					auditServiceModel.Data = $"{Resources.AuditTrailBpoName}: {bpoName}, " +
+											 $"{Resources.AuditTrailPeriodStart} {startDate} {Resources.AuditTrailPeriodEnd} {endDate}";
 				}
 
 				auditServiceModelList.Add(auditServiceModel);

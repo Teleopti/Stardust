@@ -17904,4 +17904,56 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Context</value>
     <comment>The context in which the action was performed in</comment>
   </data>
+  <data name="AuditTrailClearStaffing" xml:space="preserve">
+    <value>Clear staffing</value>
+    <comment>Action in audit trail</comment>
+  </data>
+  <data name="AuditTrailImportStaffing" xml:space="preserve">
+    <value>Import staffing</value>
+    <comment>Action in audit trail</comment>
+  </data>
+  <data name="AuditTrailBpoName" xml:space="preserve">
+    <value>BPO name</value>
+    <comment>BPO name key-value in audit trail data</comment>
+  </data>
+  <data name="AuditTrailMultiGrantRole" xml:space="preserve">
+    <value>Grant role</value>
+    <comment>Action in audit trail</comment>
+  </data>
+  <data name="AuditTrailMultiRevokeRole" xml:space="preserve">
+    <value>Revoke role</value>
+    <comment>Action in audit trail</comment>
+  </data>
+  <data name="AuditTrailPeriodEnd" xml:space="preserve">
+    <value>and</value>
+    <comment>Period end-key value in audit trail data. Designed to ALWAYS be used in combination with AuditTrailPeriodStart</comment>
+  </data>
+  <data name="AuditTrailPeriodStart" xml:space="preserve">
+    <value>Period between</value>
+    <comment>Period start key-value in audit trail data</comment>
+  </data>
+  <data name="AuditTrailPerson" xml:space="preserve">
+    <value>Person</value>
+    <comment>Person key-value in audit trail data</comment>
+  </data>
+  <data name="AuditTrailPersonAccessContext" xml:space="preserve">
+    <value>People access management</value>
+    <comment>Context in audit trail</comment>
+  </data>
+  <data name="AuditTrailRole" xml:space="preserve">
+    <value>Role</value>
+    <comment>Role key-value in audit trail data</comment>
+  </data>
+  <data name="AuditTrailSingleGrantRole" xml:space="preserve">
+    <value>Grant role</value>
+    <comment>Action in audit trail</comment>
+  </data>
+  <data name="AuditTrailSingleRevokeRole" xml:space="preserve">
+    <value>Revoke role</value>
+    <comment>Action in audit trail</comment>
+  </data>
+  <data name="AuditTrailStaffingContext" xml:space="preserve">
+    <value>Staffing</value>
+    <comment>Context in audit trail</comment>
+  </data>
 </root>

@@ -9,6 +9,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Audit
 {
@@ -18,12 +20,14 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 		private readonly IApplicationRoleRepository _applicationRoleRepository;
 		
 		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
+		private readonly IUserCulture _userCulture;
 
-		public PersonAccessContextReaderService(IPersonAccessAuditRepository personAccessAuditRepository, IApplicationRoleRepository applicationRoleRepository,  ICommonAgentNameProvider commonAgentNameProvider)
+		public PersonAccessContextReaderService(IPersonAccessAuditRepository personAccessAuditRepository, IApplicationRoleRepository applicationRoleRepository,  ICommonAgentNameProvider commonAgentNameProvider, IUserCulture userCulture)
 		{
 			_personAccessAuditRepository = personAccessAuditRepository;
 			_applicationRoleRepository = applicationRoleRepository;
 			_commonAgentNameProvider = commonAgentNameProvider;
+			_userCulture = userCulture;
 		}
 
 		private IEnumerable<AuditServiceModel> getAuditServiceModel(IEnumerable<IPersonAccess> personAccessAudit)
@@ -34,14 +38,16 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 			{
 				var auditServiceModel = new AuditServiceModel
 				{
-					TimeStamp = audit.TimeStamp, Context = "PersonAccess", Action = audit.Action,
+					TimeStamp = audit.TimeStamp,
+					Context = Resources.AuditTrailPersonAccessContext,
+					Action = Resources.ResourceManager.GetString(audit.Action, _userCulture.GetCulture()) ?? audit.Action,
 					ActionPerformedBy = extractPersonAuditInfo(audit.ActionPerformedBy, commonAgentNameSetting)
 						//audit.ActionPerformedBy.Name.ToString(NameOrderOption.FirstNameLastName)
 				};
 				var deserializedRole = JsonConvert.DeserializeObject<PersonAccessModel>(audit.Data);
 				var appRole = _applicationRoleRepository.Load(deserializedRole.RoleId);
 				var actionPerformedOn = extractPersonAuditInfo(audit.ActionPerformedOn, commonAgentNameSetting);
-				auditServiceModel.Data = $"Person: {actionPerformedOn} Role: {appRole.Name} Action: {audit.Action}";
+				auditServiceModel.Data = $"{Resources.AuditTrailPerson}: {actionPerformedOn}, {Resources.AuditTrailRole}: {appRole.Name}";
 				auditServiceModelList.Add(auditServiceModel);
 			}
 

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	{
 		protected override IStaffingAudit CreateAggregateWithCorrectBusinessUnit()
 		{
-			return new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportBpo,"BPO","filename");
+			return new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportStaffing,"BPO","filename");
 		}
 
 		protected override void VerifyAggregateGraphProperties(IStaffingAudit loadedAggregateFromDatabase)
@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldLoadAudit()
 		{
 			var rep = new StaffingAuditRepository(CurrUnitOfWork);
-			var staffingAudit = new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportBpo, "BPO", "filename");
-			var staffingAudit2 = new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportBpo, "BPO", "filename");
+			var staffingAudit = new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportStaffing, "BPO", "filename");
+			var staffingAudit2 = new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportStaffing, "BPO", "filename");
 			staffingAudit2.TimeStamp = DateTime.UtcNow.AddDays(-100);
 			
 			PersistAndRemoveFromUnitOfWork(staffingAudit);
@@ -49,14 +49,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldPurgeOldAudits()
 		{
 			var rep = new StaffingAuditRepository(CurrUnitOfWork);
-			var staffingAudit = new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportBpo, "BPO", "filename");
+			var staffingAudit = new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportStaffing, "BPO", "filename");
 			var staffingAudit2 =
-				new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportBpo, "BPO", "filename")
+				new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportStaffing, "BPO", "filename")
 				{
 					TimeStamp = DateTime.UtcNow.AddDays(-50)
 				};
 			var staffingAudit3 =
-				new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportBpo, "BPO", "filename")
+				new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportStaffing, "BPO", "filename")
 				{
 					TimeStamp = DateTime.UtcNow.AddDays(-100)
 				};

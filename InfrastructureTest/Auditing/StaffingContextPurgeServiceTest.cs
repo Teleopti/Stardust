@@ -52,10 +52,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 			PersonRepository.Add(person);
 
 			var staffingAudit1 =
-				new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt")
+				new StaffingAudit(person, StaffingAuditActionConstants.ImportStaffing, "BPO", "abc.txt")
 					{ TimeStamp = DateTime.UtcNow };
 			var staffingAudit2 =
-				new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt")
+				new StaffingAudit(person, StaffingAuditActionConstants.ImportStaffing, "BPO", "abc.txt")
 					{ TimeStamp = DateTime.UtcNow.AddMonths(-4) };
 
 			StaffingAuditRepository.Add(staffingAudit1);
