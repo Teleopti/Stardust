@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
             {
                 for (int i = 0; i < 7; i++)
                 {
-                    Assert.AreEqual(new MinMax<TimeSpan>(TimeSpan.FromHours(7), TimeSpan.FromHours(9)), _target.PossibleLengthsForDate(new DateOnly(2010, 8, 2).AddDays(i), _matrix, _schedulingOptions));
+                    Assert.AreEqual(new MinMax<TimeSpan>(TimeSpan.FromHours(7), TimeSpan.FromHours(9)), _target.PossibleLengthsForDate(new DateOnly(2010, 8, 2).AddDays(i), _matrix, _schedulingOptions, null));
                 }
             }
         }
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 			{
 				for (int i = 0; i < 7; i++)
 				{
-                    Assert.AreEqual(new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero), _target.PossibleLengthsForDate(new DateOnly(2010, 8, 2).AddDays(i), _matrix, _schedulingOptions));
+                    Assert.AreEqual(new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero), _target.PossibleLengthsForDate(new DateOnly(2010, 8, 2).AddDays(i), _matrix, _schedulingOptions, null));
 				}
 			}
 		}
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
             {
                 for (int i = 0; i < 1; i++)
                 {
-                    Assert.AreEqual(new MinMax<TimeSpan>(TimeSpan.FromHours(8), TimeSpan.FromHours(8)).Maximum, _target.PossibleLengthsForDate(new DateOnly(2010, 8, 2).AddDays(i), _matrix, _schedulingOptions).Maximum);
+                    Assert.AreEqual(new MinMax<TimeSpan>(TimeSpan.FromHours(8), TimeSpan.FromHours(8)).Maximum, _target.PossibleLengthsForDate(new DateOnly(2010, 8, 2).AddDays(i), _matrix, _schedulingOptions, null).Maximum);
                 }
             }
         }

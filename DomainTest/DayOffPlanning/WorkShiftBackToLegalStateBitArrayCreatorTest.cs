@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             var layerCollection = _mocks.StrictMock<IVisualLayerCollection>();
             var minMaxContractTime = new MinMax<TimeSpan>(new TimeSpan(6, 0, 0), new TimeSpan(8, 0, 0));
 
-            Expect.Call(_minMaxCalculator.PossibleLengthsForDate(new DateOnly(), _matrix, _schedulingOptions)).IgnoreArguments()
+            Expect.Call(_minMaxCalculator.PossibleLengthsForDate(new DateOnly(), _matrix, _schedulingOptions, null)).IgnoreArguments()
                 .Return(minMaxContractTime).Repeat.Any();
 
             var contractTime = new TimeSpan(7, 0, 0);
