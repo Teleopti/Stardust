@@ -53,13 +53,13 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 				switch (actionType)
 				{
-					case PersonAuditActionType.MultiGrantRole:
-					case PersonAuditActionType.SingleGrantRole:
+					case PersonAuditActionType.AuditTrailMultiGrantRole:
+					case PersonAuditActionType.AuditTrailSingleGrantRole:
 						rolesThatMakesChange = selectedRoles.Except(person.PermissionInformation.ApplicationRoleCollection);
 						rolesThatMakesNOChange = selectedRoles.Where(r => person.PermissionInformation.ApplicationRoleCollection.Contains(r));
 						break;
-					case PersonAuditActionType.MultiRevokeRole:
-					case PersonAuditActionType.SingleRevokeRole:
+					case PersonAuditActionType.AuditTrailMultiRevokeRole:
+					case PersonAuditActionType.AuditTrailSingleRevokeRole:
 					default:
 						rolesThatMakesChange = selectedRoles.Where(r => person.PermissionInformation.ApplicationRoleCollection.Contains(r));
 						rolesThatMakesNOChange = selectedRoles.Except(person.PermissionInformation.ApplicationRoleCollection);
@@ -81,9 +81,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			switch (actionType)
 			{
 				case PersonAuditActionType.GrantRole:
-					return model.Persons.Count() > 1 ? PersonAuditActionType.MultiGrantRole : PersonAuditActionType.SingleGrantRole;
+					return model.Persons.Count() > 1 ? PersonAuditActionType.AuditTrailMultiGrantRole : PersonAuditActionType.AuditTrailSingleGrantRole;
 				case PersonAuditActionType.RevokeRole:
-					return model.Persons.Count() > 1 ? PersonAuditActionType.MultiRevokeRole : PersonAuditActionType.SingleRevokeRole;
+					return model.Persons.Count() > 1 ? PersonAuditActionType.AuditTrailMultiRevokeRole : PersonAuditActionType.AuditTrailSingleRevokeRole;
 				default:
 					return actionType;
 			}

@@ -91,7 +91,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule(new LegacyRegistrationsFromAnywhere(_configuration));
 
 			builder.RegisterModule<ForecastingAreaModule>();
-			builder.RegisterType<BasicActionThrottler>().As<IActionThrottler>().SingleInstance();
 			builder.RegisterModule<ResourceHandlerModule>();
 
 			//overwriting domain registration for IClearScheduleEvents, to keep behavior before 47447480a839. Don't really know why this is needed...

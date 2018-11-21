@@ -461,7 +461,6 @@
     <Compile Include="Areas\Global\LanguageController.cs" />
     <Compile Include="Areas\Global\JavascriptLoggingController.cs" />
     <Compile Include="Areas\Global\NotificationsController.cs" />
-    <Compile Include="Areas\Global\StatusController.cs" />
     <Compile Include="Areas\Global\TimeZoneController.cs" />
     <Compile Include="Areas\Global\VersionController.cs" />
     <Compile Include="Areas\Global\WfmAreaRegistration.cs" />
@@ -745,7 +744,6 @@
     <Compile Include="Areas\Reporting\Index.aspx.designer.cs">
       <DependentUpon>Index.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Global\BasicActionThrottler.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\IRequestViewModelMapper.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\IShiftTradeRequestViewModelFactory.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestAllowanceViewModelFactory.cs" />
@@ -769,14 +767,12 @@
     <Compile Include="Areas\ResourcePlanner\GroupPagesController.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterGroup.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterItem.cs" />
-    <Compile Include="Areas\Global\IActionThrottler.cs" />
     <Compile Include="Areas\ResourcePlanner\OptimizationController.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodChangeRangeModel.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodController.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodModel.cs" />
     <Compile Include="Areas\ResourcePlanner\ScheduleController.cs" />
     <Compile Include="Areas\ResourcePlanner\SuggestedPlanningPeriodRangeModel.cs" />
-    <Compile Include="Areas\Global\ThrottledAction.cs" />
     <Compile Include="Areas\Rta\Controllers\RtaSkillAreaController.cs" />
     <Compile Include="Areas\Rta\Controllers\RtaToolController.cs" />
     <Compile Include="Areas\Rta\Log4NetWcfLogger.cs" />
@@ -1521,9 +1517,9 @@
     <Content Include="WFM\app\forecasting\component\history.chart.component.js" />
     <Content Include="WFM\app\forecasting\html\history.html" />
     <Content Include="WFM\app\forecasting\controller\history.controller.js" />
-    <Content Include="WFM\app\forecasting\controller\r2forecast.controller.js" />
+    <Content Include="WFM\app\forecasting\controller\forecast.controller.js" />
     <Content Include="WFM\app\forecasting\html\noSkills.html" />
-    <Content Include="WFM\app\forecasting\html\r2forecast.html" />
+    <Content Include="WFM\app\forecasting\html\forecast.html" />
     <Content Include="WFM\app\gamification\gamification.component.badgeCalculation.js" />
     <Content Include="WFM\app\gamification\gamification.component.badgeCalculation.spec.js" />
     <Content Include="WFM\app\gamification\gamification.component.gamification.js" />
@@ -1591,9 +1587,6 @@
     <Content Include="WFM\app\forecasting\component\forecast.chart.component.js" />
     <Content Include="WFM\app\forecasting\html\modify.html" />
     <Content Include="WFM\app\forecasting\service\forecast.backend.fake.js" />
-    <Content Include="WFM\app\forecasting\controller\controller.js" />
-    <Content Include="WFM\app\forecasting\controller\controller.spec.js" />
-    <Content Include="WFM\app\forecasting\html\forecast.html" />
     <Content Include="WFM\app\forecasting\controller\modify.controller.js" />
     <Content Include="WFM\app\forecasting\controller\modify.controller.spec.js" />
     <Content Include="WFM\app\global\current-user\authentication-requests.service.js" />

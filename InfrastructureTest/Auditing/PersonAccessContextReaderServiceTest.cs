@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 			CurrentUnitOfWork.Current().PersistAll();
 			var model = Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now).Single();
 
-			model.Data.Should().Be.EqualTo("Person: arne arne Role: Superman Action: GrantRole");
+			model.Data.Should().Be.EqualTo("Person: arne arne, Role: Superman");
 		}
 	}
 }
