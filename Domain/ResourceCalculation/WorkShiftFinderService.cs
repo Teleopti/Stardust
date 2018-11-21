@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				if (schedulingOptions.WorkShiftLengthHintOption == WorkShiftLengthHintOption.AverageWorkTime)
 				{
-					shiftList = _shiftLengthDecider.FilterList(shiftList, _workShiftMinMaxCalculator(), matrix, schedulingOptions);
+					shiftList = _shiftLengthDecider.FilterList(shiftList, _workShiftMinMaxCalculator(), matrix, schedulingOptions, null);
 					if (shiftList.Count == 0)
 						return null;
 				}
