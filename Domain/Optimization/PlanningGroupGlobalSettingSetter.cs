@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class PlanningGroupGlobalSettingSetter
 	{
-		public void SetSetting(PlanningGroup planningGroup, IOptimizationPreferences optimizationPreferences)
+		public void Execute(PlanningGroup planningGroup, IOptimizationPreferences optimizationPreferences)
 		{
 			if (planningGroup != null)
 			{

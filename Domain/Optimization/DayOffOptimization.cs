@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			PlanningGroup planningGroup)
 		{
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
-			_planningGroupGlobalSettingSetter.SetSetting(planningGroup, optimizationPreferences);
+			_planningGroupGlobalSettingSetter.Execute(planningGroup, optimizationPreferences);
 			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(planningGroup);
 			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderForPlanningPeriod.Fetch(planningGroup);
 			var stateHolder = _schedulerStateHolder();
