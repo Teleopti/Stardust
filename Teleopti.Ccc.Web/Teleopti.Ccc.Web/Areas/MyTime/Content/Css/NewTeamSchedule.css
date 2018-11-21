@@ -540,6 +540,8 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	text-align: center;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	white-space: normal;
+	line-height: 1;
 }
 .new-teamschedule-view .new-teamschedule-layer .activity-info {
 	line-height: 1;
