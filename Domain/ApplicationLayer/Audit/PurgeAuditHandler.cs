@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 	[EnabledBy(Toggles.Wfm_AuditTrail_GenericAuditTrail_74938)]
 	public class PurgeAuditHandler : IHandleEvent<TenantDayTickEvent>, IRunOnHangfire
 	{
-		private readonly PurgeAuditRunner _purgeAuditRunner;
+		private readonly IPurgeAuditRunner _purgeAuditRunner;
 
-		public PurgeAuditHandler(PurgeAuditRunner purgeAuditRunner)
+		public PurgeAuditHandler(IPurgeAuditRunner purgeAuditRunner)
 		{
 			_purgeAuditRunner = purgeAuditRunner;
 		}

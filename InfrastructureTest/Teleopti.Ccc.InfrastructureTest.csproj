@@ -208,6 +208,7 @@
     <Compile Include="Auditing\AuditSettingTest.cs" />
     <Compile Include="Auditing\PersonAccessContextPurgeServiceTest.cs" />
     <Compile Include="Auditing\PersonAccessContextReaderServiceTest.cs" />
+    <Compile Include="Auditing\PurgeAuditRunnerTest.cs" />
     <Compile Include="Auditing\RevisionTest.cs" />
     <Compile Include="Auditing\StaffingContextPurgeServiceTest.cs" />
     <Compile Include="Auditing\StaffingContextReaderServiceTest.cs" />
