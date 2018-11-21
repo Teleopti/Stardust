@@ -11,13 +11,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 	public class TeamScheduleComparerNew : IComparer
 	{
 		private readonly Guid[] _peopleCanViewUnpublishedFor;
-		private readonly IPermissionProvider _permissionProvider;
 		private readonly bool _isFullAbsenceBeforeDayOff;
 
-		public TeamScheduleComparerNew(Guid[] peopleCanViewUnpublishedFor, IPermissionProvider permissionProvider, bool isFullAbsenceBeforeDayOff = true)
+		public TeamScheduleComparerNew(Guid[] peopleCanViewUnpublishedFor, bool isFullAbsenceBeforeDayOff = true)
 		{
 			_peopleCanViewUnpublishedFor = peopleCanViewUnpublishedFor;
-			_permissionProvider = permissionProvider;
 			_isFullAbsenceBeforeDayOff = isFullAbsenceBeforeDayOff;
 		}
 

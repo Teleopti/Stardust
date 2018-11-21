@@ -46,12 +46,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 			return auditServiceModelList;
 		}
 
-		public class TenantAuditModel
-		{
-			public DateTime StartDate;
-			public DateTime EndDate;
-			public string Name;
-		}
 
 		public IEnumerable<AuditServiceModel> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate)
 		{

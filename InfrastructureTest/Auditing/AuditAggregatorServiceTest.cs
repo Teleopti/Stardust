@@ -6,16 +6,20 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.Infrastructure.Audit;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Staffing
+namespace Teleopti.Ccc.InfrastructureTest.Auditing
 {
-	[DomainTest]
+	[UnitOfWorkTest]
 	[AllTogglesOn]
 	public class AuditAggregatorServiceTest : IIsolateSystem
 	{
@@ -25,10 +29,14 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public AuditAggregatorService Target;
 		public ISkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeLoggedOnUser LoggedOnUser;
-		
+		public FakeUserCulture UserCulture;
+		public ICurrentUnitOfWork CurrentUnitOfWork;
+		public IPersonRepository PersonRepository;
+
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
 			isolate.UseTestDouble<AuditAggregatorService>().For<AuditAggregatorService>();
 		}
 
@@ -36,10 +44,11 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public void ShouldReturnStaffingAuditOnImportBpoAction()
 		{
 			var person = PersonFactory.CreatePersonWithId();
-			StaffingAuditRepository.Add(new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo,  "BPO", "abc.txt") {TimeStamp = new DateTime(2018, 10, 14,10,0,0,DateTimeKind.Utc) });
+			StaffingAuditRepository.Add(new StaffingAudit(person, StaffingAuditActionConstants.ImportStaffing,  "BPO", "abc.txt") {TimeStamp = new DateTime(2018, 10, 14, 10, 0, 0,DateTimeKind.Utc) });
 			var startDate = new DateTime(2018, 10, 13);
-			var endDate = new DateTime(2018,10,15);
-			var audits =  Target.Load(person.Id.GetValueOrDefault(), startDate,endDate);
+			var endDate = new DateTime(2018, 10, 15);
+			CurrentUnitOfWork.Current().PersistAll();
+			var audits = Target.Load(person.Id.GetValueOrDefault(), startDate, endDate);
 			audits.Count.Should().Be.EqualTo(1);
 		}
 
@@ -49,12 +58,13 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var stockholmUser = PersonFactory.CreatePerson(TimeZoneInfoFactory.StockholmTimeZoneInfo()).WithId();
 			var stockholmTime = new DateTime(2018, 10, 14, 16, 0, 0);
 			LoggedOnUser.SetFakeLoggedOnUser(stockholmUser);
-			
+
 			var singaporeUser = PersonFactory.CreatePerson().WithId();
 
-			StaffingAuditRepository.Add(new StaffingAudit(singaporeUser, StaffingAuditActionConstants.ImportBpo, "BPO", "abc.txt") { TimeStamp = new DateTime(2018, 10, 14, 14, 0, 0, DateTimeKind.Utc) });
+			StaffingAuditRepository.Add(new StaffingAudit(singaporeUser, StaffingAuditActionConstants.ImportStaffing, "BPO", "abc.txt") { TimeStamp = new DateTime(2018, 10, 14, 14, 0, 0, DateTimeKind.Utc) });
 			var startDate = new DateTime(2018, 10, 13);
 			var endDate = new DateTime(2018, 10, 15);
+			CurrentUnitOfWork.Current().PersistAll();
 			var audits = Target.Load(singaporeUser.Id.GetValueOrDefault(), startDate, endDate);
 			audits.Count.Should().Be.EqualTo(1);
 			audits.First().TimeStamp.Should().Be.EqualTo(stockholmTime);
@@ -63,30 +73,35 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		[Test]
 		public void ShouldReturnStaffingAuditAndPersonAccessAudit()
 		{
-			var person = PersonFactory.CreatePersonWithId();
-			var staffingAudit = new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "abc.txt", "BPO")
-				{TimeStamp = new DateTime(2018, 10, 14, 10, 0, 0, DateTimeKind.Utc)};
-			IApplicationRole role = new ApplicationRole(){Name = "Name" };
-			role.SetId(Guid.NewGuid());
-			dynamic role2 = new {RoleId = role.Id, Name = "Name"};
+			UserCulture.IsSwedish();
+			var person = PersonFactory.CreatePerson();
+			PersonRepository.Add(person);
+			CurrentUnitOfWork.Current().PersistAll();
+			var staffingAudit = new StaffingAudit(person, StaffingAuditActionConstants.ImportStaffing, "abc.txt", "BPO")
+				{ TimeStamp = new DateTime(2018, 10, 14, 10, 0, 0, DateTimeKind.Utc) };
+			IApplicationRole role = new ApplicationRole() { Name = "Name" };
+			ApplicationRoleRepository.Add(role);
+			CurrentUnitOfWork.Current().PersistAll();
+			dynamic role2 = new { RoleId = role.Id, Name = "Name" };
 			var personAccessAudit = new PersonAccess(
-				person,
-				person,
-				PersonAuditActionType.GrantRole.ToString(),
-				PersonAuditActionResult.Change.ToString(),
-				JsonConvert.SerializeObject(role2))
-			{ TimeStamp = new DateTime(2018, 10, 14, 10, 0, 0, DateTimeKind.Utc) };
-
+					person,
+					person,
+					PersonAuditActionType.GrantRole.ToString(),
+					PersonAuditActionResult.Change.ToString(),
+					JsonConvert.SerializeObject(role2))
+				{ TimeStamp = new DateTime(2018, 10, 14, 10, 0, 0, DateTimeKind.Utc) };
+			
 			StaffingAuditRepository.Add(staffingAudit);
 			PersonAccessAuditRepository.Add(personAccessAudit);
-			ApplicationRoleRepository.Add(role);
+
 
 			var startDate = new DateTime(2018, 10, 13);
 			var endDate = new DateTime(2018, 10, 15);
+			CurrentUnitOfWork.Current().PersistAll();
 			var audits = Target.Load(person.Id.GetValueOrDefault(), startDate, endDate);
 			audits.Count.Should().Be.EqualTo(2);
-			audits.Count(f => f.Action == staffingAudit.Action).Should().Be(1);
-			audits.Count(f => f.Action == personAccessAudit.Action).Should().Be(1);
+			audits.Count(f => f.Action == Resources.ResourceManager.GetString(staffingAudit.Action, UserCulture.GetCulture())).Should().Be(1);
+			audits.Count(f => f.Action == Resources.ResourceManager.GetString(personAccessAudit.Action, UserCulture.GetCulture())).Should().Be(1);
 		}
 
 		//[Test]
@@ -104,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		//	PersonAccessAuditRepository.Add(personAccessAudit);
 		//	PersonAccessAuditRepository.Add(personAccessAuditOld);
 		//	ApplicationRoleRepository.Add(role);
-			
+
 		//	Target.PurgeOldAudits();
 
 		//	var result = Target.Load(person.Id.GetValueOrDefault(), DateTime.MinValue, DateTime.MaxValue);

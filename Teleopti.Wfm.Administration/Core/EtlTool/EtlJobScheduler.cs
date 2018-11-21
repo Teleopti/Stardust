@@ -20,19 +20,16 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
 		private readonly INow _now;
 		private readonly IConfigReader _configReader;
-		private readonly AnalyticsConnectionsStringExtractor _analyticsConnectionsStringExtractor;
 
 		public EtlJobScheduler(IJobScheduleRepository jobScheduleRepository,
 			IBaseConfigurationRepository baseConfigurationRepository,
 			INow now,
-			IConfigReader configReader,
-			AnalyticsConnectionsStringExtractor analyticsConnectionsStringExtractor)
+			IConfigReader configReader)
 		{
 			_jobScheduleRepository = jobScheduleRepository;
 			_baseConfigurationRepository = baseConfigurationRepository;
 			_now = now;
 			_configReader = configReader;
-			_analyticsConnectionsStringExtractor = analyticsConnectionsStringExtractor;
 		}
 
 		public void ScheduleManualJob(EtlJobEnqueModel jobEnqueModel)

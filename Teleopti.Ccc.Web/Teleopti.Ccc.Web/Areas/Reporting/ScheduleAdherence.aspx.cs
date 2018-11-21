@@ -80,6 +80,11 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 		protected override void OnLoadComplete(EventArgs e)
 		{
 			base.OnLoadComplete(e);
+			if (ReportId.Equals(reportAdherencePerAgentGuid))
+			{
+				buttonHideSelection.Visible = false;
+				buttonShowSelection.Visible = false;
+			}
 			buttonShowReport.Enabled = ParameterSelector.IsValid;
 		}
 

@@ -71,9 +71,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			}, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion);
 			return this;
 		}
+		
+		public FakeRtaHistory RuleChanged(Guid personId, string time) =>
+			RuleChanged(personId, time, null, null, null, null, null, null, null);
 
 		public FakeRtaHistory RuleChanged(Guid personId, string time, string rule) =>
 			RuleChanged(personId, time, null, null, null, null, rule, null, null);
+		
+		public FakeRtaHistory RuleChanged(Guid personId, string time, Adherence? adherence) =>
+			RuleChanged(personId, time, null, null, null, null, null, null, adherence);
 
 		public FakeRtaHistory RuleChanged(Guid personId, string time, string state, string activity, Color? activityColor, string rule, Color? ruleColor, Adherence? adherence) =>
 			RuleChanged(personId, time, null, state, activity, activityColor, rule, ruleColor, adherence);

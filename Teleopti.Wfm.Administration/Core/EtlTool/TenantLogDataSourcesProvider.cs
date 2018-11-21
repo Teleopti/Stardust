@@ -19,7 +19,7 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			_generalFunctions = generalFunctions;
 		}
 
-		public IList<DataSourceModel> Load(string tenantName, bool includeInvalidDataSource = false)
+		public IList<DataSourceModel> Load(string tenantName, bool includeInvalidDataSource, bool includeAllOption)
 		{
 			var modelForAllDataSource = new DataSourceModel
 			{
@@ -41,9 +41,13 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 				logDataSources = _generalFunctions.DataSourceValidList.ToList();
 				logDataSources.AddRange(_generalFunctions.DataSourceInvalidList);
 			}
-			else
+			else if(includeAllOption)
 			{
 				logDataSources = _generalFunctions.DataSourceValidListIncludedOptionAll.ToList();
+			}
+			else
+			{
+				logDataSources = _generalFunctions.DataSourceValidList.ToList();
 			}
 
 			var result = logDataSources.Select(x => new DataSourceModel
@@ -57,15 +61,11 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 				.OrderBy(x => x.Name)
 				.ToList();
 
+
 			var optionAll = result.SingleOrDefault(x => x.Id == -2);
-			if (optionAll == null)
+			if (includeAllOption && optionAll == null)
 			{
 				result.Insert(0, modelForAllDataSource);
-			}
-			else
-			{
-				// The name for option "All" comes from UserTexts.Resource.AllSelection, it's "< All >"
-				optionAll.Name = NameForOptionAll;
 			}
 
 			return result;

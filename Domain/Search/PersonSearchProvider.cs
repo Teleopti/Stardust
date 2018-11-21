@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 
@@ -22,14 +19,6 @@ namespace Teleopti.Ccc.Domain.Search
 			var persons = _personRepository.FindPersonsByKeywords(separateKeywords);
 
 			return persons;
-		}
-
-		private void AddOrUpdate(Dictionary<IPerson, int> dictionary, IPerson person)
-		{
-			if (!dictionary.ContainsKey(person))
-				dictionary.Add(person, 0);
-
-			dictionary[person]++;
 		}
 	}
 }

@@ -13,11 +13,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 	[Serializable]
 	public class GridDropDownAdvComboBoxCellModel : GridDropDownCellModel
 	{
-		private readonly bool _enabledMultiSelect;
-		public bool EnabledMultiSelect => _enabledMultiSelect;
-		public GridDropDownAdvComboBoxCellModel(GridModel grid, bool enabledMultiSelect) : base(grid)
+		public GridDropDownAdvComboBoxCellModel(GridModel grid) : base(grid)
 		{
-			_enabledMultiSelect = enabledMultiSelect;
 		}
 
 		protected GridDropDownAdvComboBoxCellModel(SerializationInfo info, StreamingContext context) : base(info, context)
@@ -43,24 +40,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 		protected override void InitializeDropDownContainer()
 		{
 			base.InitializeDropDownContainer();
-			if (isMultiSelectEnabled())
+
+			listBox = new CheckedListBox
 			{
-				listBox = new CheckedListBox
-				{
-					CheckOnClick = true,
-					Dock = DockStyle.Fill,
-					DisplayMember = CurrentStyle.DisplayMember
-				};
-			}
-			else
-			{
-				listBox = new ListBox
-				{
-					Dock = DockStyle.Fill,
-					DisplayMember = CurrentStyle.DisplayMember,
-					SelectionMode = SelectionMode.One
-				};
-			}
+				CheckOnClick = true,
+				Dock = DockStyle.Fill,
+				DisplayMember = CurrentStyle.DisplayMember
+			};
 
 			foreach (var item in (IEnumerable<object>) CurrentStyle.DataSource)
 			{
@@ -109,14 +95,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 		private void selectedIndexChanged(object sender, EventArgs e)
 		{
 			setCurrentCellText();
-
-			if (!isMultiSelectEnabled())
-				CurrentCell.CloseDropDown(PopupCloseType.Canceled);
-		}
-
-		private bool isMultiSelectEnabled()
-		{
-			return ((GridDropDownAdvComboBoxCellModel)this.CurrentCell.Model).EnabledMultiSelect;
 		}
 
 		private void setSelectedValues()
@@ -124,23 +102,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 			if (!string.IsNullOrEmpty(TextBox.Text))
 			{
 				var values = TextBox.Text.Split(',');
-				if (isMultiSelectEnabled())
+				for (var index = 0; index < listBox.Items.Count; index++)
 				{
-					for (var index = 0; index < listBox.Items.Count; index++)
-					{
-						((CheckedListBox)listBox).SetItemChecked(index, values.Contains(listBox.Items[index].ToString()));
-					}
-				}
-				else
-				{
-					for (var index = 0; index < listBox.Items.Count; index++)
-					{
-						if (values.Contains(listBox.Items[index].ToString()))
-						{
-							listBox.SetSelected(index, true);
-							break;
-						}
-					}
+					((CheckedListBox) listBox).SetItemChecked(index, values.Contains(listBox.Items[index].ToString()));
 				}
 			}
 			else
@@ -165,19 +129,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 		private string getText()
 		{
 			var selectedValues = string.Empty;
-			if (isMultiSelectEnabled())
+
+			foreach (var listBoxSelectedItem in ((CheckedListBox) listBox).CheckedItems)
 			{
-				foreach (var listBoxSelectedItem in ((CheckedListBox)listBox).CheckedItems)
-				{
-					selectedValues += listBoxSelectedItem + ",";
-				}
-			}
-			else
-			{
-				foreach (var listBoxSelectedItem in listBox.SelectedItems)
-				{
-					selectedValues += listBoxSelectedItem + ",";
-				}
+				selectedValues += listBoxSelectedItem + ",";
 			}
 
 			return selectedValues.TrimEnd(',');

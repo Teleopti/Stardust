@@ -126,7 +126,6 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProvider.cs" />
-    <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProviderFor46301.cs" />
     <Compile Include="AbsenceWaitlisting\ArrangeRequestsByProcessOrder.cs" />
     <Compile Include="AbsenceWaitlisting\QueuedAbsenceRequest.cs" />
     <Compile Include="AgentInfo\AbsenceStaffingPossibilityCalculator.cs" />
@@ -177,11 +176,11 @@
     <Compile Include="Aop\IHandleContextAction.cs" />
     <Compile Include="Aop\IUnitOfWorkNoCommitAspect.cs" />
     <Compile Include="Aop\ReadonlyUnitOfWorkAttribute.cs" />
+    <Compile Include="ApplicationLayer\Audit\IAuditAggregatorService.cs" />
     <Compile Include="ApplicationLayer\Audit\PurgeAuditHandler.cs" />
-    <Compile Include="ApplicationLayer\Audit\AuditAggregatorService.cs" />
     <Compile Include="ApplicationLayer\Audit\AuditServiceModel.cs" />
     <Compile Include="ApplicationLayer\Audit\IPersonAccessContextReaderService.cs" />
-    <Compile Include="ApplicationLayer\Audit\IPurgeAudit.cs" />
+    <Compile Include="ApplicationLayer\Audit\IPurgeAuditRunner.cs" />
     <Compile Include="ApplicationLayer\Audit\IStaffingContextReaderService.cs" />
     <Compile Include="ApplicationLayer\Audit\PersonAccessAuditContext.cs" />
     <Compile Include="ApplicationLayer\Audit\StaffingAuditContext.cs" />
@@ -294,8 +293,12 @@
     <Compile Include="Notification\NotificationServiceClient.cs" />
     <Compile Include="Optimization\AllPlanningGroupSettings.cs" />
     <Compile Include="Optimization\BlockPreferencesExtensions.cs" />
+    <Compile Include="Optimization\NullPlanningGroupProvider.cs" />
     <Compile Include="Optimization\IntradayOptimizationOnStardust.cs" />
+    <Compile Include="Optimization\IPlanningGroupProvider.cs" />
     <Compile Include="Optimization\MatrixLockers\MatrixClosedDayLocker.cs" />
+    <Compile Include="Optimization\PlanningGroupGlobalSettingSetter.cs" />
+    <Compile Include="Optimization\PlanningGroupProvider.cs" />
     <Compile Include="Optimization\PredictorResult.cs" />
     <Compile Include="Optimization\TeamBlock\CreatePersonalSkillDataExtractor.cs" />
     <Compile Include="MultiTenancy\PersonIdentitiesInputModel.cs" />
@@ -318,6 +321,7 @@
     <Compile Include="Scheduling\AgentsWithPreferences.cs" />
     <Compile Include="Scheduling\AgentsWithWhiteSpots.cs" />
     <Compile Include="Scheduling\AlreadyScheduledAgents.cs" />
+    <Compile Include="Scheduling\MaxWorkTimeFullWeekSkillExtractor.cs" />
     <Compile Include="Scheduling\ReducedSkillsProvider.cs" />
     <Compile Include="Scheduling\RemoveNonPreferenceDaysOffs.cs" />
     <Compile Include="Scheduling\SchedulingInformation.cs" />

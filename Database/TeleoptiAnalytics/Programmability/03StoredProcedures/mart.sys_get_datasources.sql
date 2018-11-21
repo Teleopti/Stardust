@@ -79,7 +79,7 @@ CREATE TABLE #sys_datasource(
 				INSERT INTO #sys_datasource
 				SELECT
 					cast(-2 as smallint) as 'datasource_id',
-					N'ResourceKeyAliasForAll' as 'datasource_name',
+					N'<All>' as 'datasource_name',
 					cast(0 as smallint) as 'time_zone_id',
 					N'UTC' as 'time_zone_code',
 					15 as 'interval_length',

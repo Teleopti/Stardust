@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
+using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 
 namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 {
@@ -58,7 +59,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 					agentDay.PersonId,
 					Name = _nameDisplaySetting.CommonAgentNameSettings.BuildFor(person.Name.FirstName, person.Name.LastName, null),
 					Day = agentDay.Date,
-					Adherence = calculateAdherence(agentDay.SecondsInAdherence, agentDay.SecondsOutOfAdherence),
+					Adherence = AdherencePercentageCalculation.Calculate(agentDay.SecondsInAdherence, agentDay.SecondsOutOfAdherence),
 					agentDay.WasLateForWork,
 					agentDay.MinutesLateForWork,
 					agentDay.SecondsInAdherence,
@@ -90,7 +91,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 									Count = groupedAgent.Count(a => a.WasLateForWork),
 									TotalMinutes = groupedAgent.Sum(a => a.MinutesLateForWork)
 								},
-								IntervalAdherence = calculateAdherence(
+								IntervalAdherence = AdherencePercentageCalculation.Calculate(
 									groupedAgent.All(a => a.SecondsInAdherence == null) ? null : groupedAgent.Sum(a => a.SecondsInAdherence),
 									groupedAgent.All(a => a.SecondsOutOfAdherence == null) ? null : groupedAgent.Sum(a => a.SecondsOutOfAdherence))
 							})
@@ -111,22 +112,6 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 				teams = _teams.FindTeams(teamIds);
 
 			return teams;
-		}
-
-		private static int? calculateAdherence(int? secondsInAdherence, int? secondsOutOfAdherence)
-		{
-			if (secondsInAdherence == null)
-				return null;
-
-			var inAdherence = Convert.ToDouble(secondsInAdherence);
-			var outAdherence = Convert.ToDouble(secondsOutOfAdherence);
-			var expectedWorkTime = inAdherence + outAdherence;
-
-			if (expectedWorkTime.Equals(0.0))
-				return null;
-
-			//Financial Rounding
-			return Convert.ToInt32((inAdherence / expectedWorkTime) * 100);
 		}
 	}
 

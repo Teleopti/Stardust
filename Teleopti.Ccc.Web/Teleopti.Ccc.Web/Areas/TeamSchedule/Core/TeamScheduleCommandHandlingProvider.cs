@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IScheduleStorage _scheduleStorage;
-		private readonly IActivityRepository _activityRepository;
 		private readonly IChangeActivityTypeFormValidator _changeActivityTypeFormValidator;
 		private readonly IDictionary<string, Func<string>> _permissionDic = new Dictionary<string, Func<string>>
 		{
@@ -45,7 +44,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			IDayOffTemplateRepository dayOffTemplateRepository,
 			ICurrentScenario currentScenario,
 			IScheduleStorage scheduleStorage,
-			IActivityRepository activityRepository,
 			IChangeActivityTypeFormValidator changeActivityTypeFormValidator)
 		{
 			_commandDispatcher = commandDispatcher;
@@ -55,7 +53,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			_dayOffTemplateRepository = dayOffTemplateRepository;
 			_currentScenario = currentScenario;
 			_scheduleStorage = scheduleStorage;
-			_activityRepository = activityRepository;
 			_changeActivityTypeFormValidator = changeActivityTypeFormValidator;
 		}
 

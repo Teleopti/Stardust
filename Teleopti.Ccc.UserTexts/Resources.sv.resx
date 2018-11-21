@@ -10105,7 +10105,7 @@ period</comment>
     <value>Aktivitet kan inte vara tom.</value>
   </data>
   <data name="NoPermissionToViewRestrictedScenarios" xml:space="preserve">
-    <value>Du har inte rättighet att se skyddade scenarion och alla scenarion är skyddade.</value>
+    <value>Rättigheter för att se skyddade scenarion saknas och alla scenarion är skyddade.</value>
   </data>
   <data name="RequestDenyReasonBudgetGroupAllowance" xml:space="preserve">
     <value>Din frånvaroförfrågan har blivit nekad automatiskt. Det finns inte tillräckligt med budgeterad tilldelning kvar för denna förfrågan.</value>
@@ -12782,10 +12782,10 @@ Kontrollera din internetuppkoppling eller kontakta din administratör. </value>
 Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
   </data>
   <data name="NoPermisionAddIntradayAbsenceForAgent" xml:space="preserve">
-    <value>Du har inte rättigheter för att lägga till frånvaro inom dag för {0}</value>
+    <value>Rättigheter för att lägga till frånvaro inom dag för agent(er) saknas</value>
   </data>
   <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
-    <value>Du har inte rättigheter för att lägga till heldagsfrånvaro för {0}</value>
+    <value>Rättigheter för att lägga till heldagsfrånvaro för agent(er) saknas</value>
   </data>
   <data name="LogonUserTimeZone" xml:space="preserve">
     <value>Aktuell användares tidszon</value>
@@ -13013,7 +13013,7 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
     <value>Rättigheter saknas för att lägga till aktivitet för agent(er).</value>
   </data>
   <data name="NoPermissionRemoveAgentActivity" xml:space="preserve">
-    <value>Rättigheter saknas för att ta bort aktiviteter för agent(er).</value>
+    <value>Rättigheter för att ta bort aktiviteter för agent(er) saknas</value>
   </data>
   <data name="IncomingTraffic" xml:space="preserve">
     <value>Inkommande trafik</value>
@@ -13150,7 +13150,7 @@ Dessa val är aktiverade:
     <value>Antal dagar innan frånvarodatumet som förfrågningar kan avbrytas:</value>
   </data>
   <data name="NoPermissionMoveAgentActivity" xml:space="preserve">
-    <value>Rättigheter saknas för att flytta aktivitet för agent(er)</value>
+    <value>Rättigheter för att flytta aktivitet för agent(er) saknas</value>
   </data>
   <data name="SelectedAgentsColon" xml:space="preserve">
     <value>Valda agenter:</value>
@@ -13196,7 +13196,7 @@ Dessa val är aktiverade:
     <value>Avmarkera</value>
   </data>
   <data name="NoPermissionAddPersonalActivity" xml:space="preserve">
-    <value>Rättigheter för att lägga till personlig aktivitet för agent {0} saknas.</value>
+    <value>Rättigheter för att lägga till personlig aktivitet för agent(er) saknas</value>
   </data>
   <data name="CanNotAddPersonalActivityToAgentWithoutShift" xml:space="preserve">
     <value>Du kan inte lägga till en personlig aktivitet när det inte finns något skift</value>
@@ -13675,7 +13675,7 @@ Dessa val är aktiverade:
     <value>Aktiviteten kan inte läggas till för </value>
   </data>
   <data name="NoPermissionRemoveAgentAbsence" xml:space="preserve">
-    <value>Rättighet att ta bort frånvaro för agenter saknas.</value>
+    <value>Rättigheter att ta bort frånvaro för agenter saknas.</value>
   </data>
   <data name="TheAbsenceCanNotBeAddedTo" xml:space="preserve">
     <value>Frånvaro kan inte läggas till för </value>
@@ -13687,7 +13687,7 @@ Dessa val är aktiverade:
     <value>Flytta otillåtet överlappad aktivitet</value>
   </data>
   <data name="NoPermissionToMoveInvalidOverlappedActivity" xml:space="preserve">
-    <value>Du har inte rättigheter för att flytta otillåtet överlappade aktiviteter.</value>
+    <value>Rättigheter för att flytta otillåtet överlappade aktiviteter saknas.</value>
   </data>
   <data name="MoveInvalidOverlappedActivitySuccess" xml:space="preserve">
     <value>Otillåtet överlappade aktiviteter för valda agenter har flyttats. </value>
@@ -13780,7 +13780,7 @@ Dessa val är aktiverade:
     <value>Perioden för förfrågan är för lång</value>
   </data>
   <data name="NoPermissionAddOvertimeActivity" xml:space="preserve">
-    <value>Inga rättigheter att lägga till övertidsaktivitet för agenten {0}.</value>
+    <value>Rättigheter att lägga till övertidsaktivitet för agent(er) saknas</value>
   </data>
   <data name="Level" xml:space="preserve">
     <value>Nivå</value>
@@ -15330,7 +15330,7 @@ Vill du registrera dig?</value>
     <value>Namnet är en dubblett</value>
   </data>
   <data name="NoPermissionRemovingShift" xml:space="preserve">
-    <value>Inga rättigheter att ta bort skift för agenter</value>
+    <value>Rättigheter att ta bort skift för agent(er) saknas</value>
   </data>
   <data name="CanNotRemoveShiftForAgentWithFullDayAbsence" xml:space="preserve">
     <value>Kan inte ta bort skift för agenter med heldagsfrånvaro</value>
@@ -15377,7 +15377,7 @@ Grattis! Du är nu en licensierad användare av den här prisbelönta WFM-lösni
 Applikationen kommer nu att stängas. </value>
   </data>
   <data name="NoPermissionToEditUnpublishedSchedule" xml:space="preserve">
-    <value>Inga rättigheter att ändra opublicerat schema för agenter</value>
+    <value>Rättigheter att ändra opublicerat schema för agent(er) saknas</value>
   </data>
   <data name="ExitSGM" xml:space="preserve">
     <value>Lämna kompetensgruppshanteraren</value>
@@ -15866,9 +15866,6 @@ Applikationen kommer nu att stängas. </value>
   <data name="ShiftsInShiftBagCanNotFulFillContractTime" xml:space="preserve">
     <value>Skiften i skiftpåsen {0} kan inte uppfylla kontraktstiden för kontraktet {1}. </value>
   </data>
-  <data name="FilterTeamSchedulesByTime" xml:space="preserve">
-    <value>Filtrera teamscheman på tid</value>
-  </data>
   <data name="ApproveOrDenyRequest" xml:space="preserve">
     <value>Godkänn/avslå förfrågan</value>
   </data>
@@ -15892,5 +15889,53 @@ Applikationen kommer nu att stängas. </value>
   </data>
   <data name="NoPermissionToViewSchedules" xml:space="preserve">
     <value>Rättigheter för att visa scheman saknas</value>
+  </data>
+  <data name="ForgotYourPassword" xml:space="preserve">
+    <value>Glömt ditt lösenord?</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Återställ lösenord</value>
+  </data>
+  <data name="ResetPasswordErrorMessage" xml:space="preserve">
+    <value>Ange en giltig e-postadress</value>
+  </data>
+  <data name="ResetPasswordSuccess" xml:space="preserve">
+    <value>Instruktioner har skickats till dig via e-post</value>
+  </data>
+  <data name="ForgotYourPasswordInstruction" xml:space="preserve">
+    <value>Ange ditt användarnamn för att få instruktioner om hur du kan återställa ditt lösenord</value>
+  </data>
+  <data name="SomethingWentWrong" xml:space="preserve">
+    <value>Något gick fel. Var god och försök igen senare. </value>
+  </data>
+  <data name="Insights" xml:space="preserve">
+    <value>Insights</value>
+  </data>
+  <data name="xxGeneralAuditTrailWebReport" xml:space="preserve">
+    <value>Ändringslogg</value>
+  </data>
+  <data name="FilterTeamSchedules" xml:space="preserve">
+    <value>Filtrera teamscheman</value>
+  </data>
+  <data name="TryTheNewForecasts" xml:space="preserve">
+    <value>Prova nya Prognoser!</value>
+  </data>
+  <data name="ViewCustomerCenter" xml:space="preserve">
+    <value>Visa kundcenter</value>
+  </data>
+  <data name="AuditTrailAction" xml:space="preserve">
+    <value>Åtgärd</value>
+  </data>
+  <data name="AuditTrailAt" xml:space="preserve">
+    <value>Vid</value>
+  </data>
+  <data name="AuditTrailBetween" xml:space="preserve">
+    <value>Mellan</value>
+  </data>
+  <data name="AuditTrailBy" xml:space="preserve">
+    <value>Av</value>
+  </data>
+  <data name="AuditTrailContext" xml:space="preserve">
+    <value>Kontext</value>
   </data>
 </root>

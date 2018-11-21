@@ -53,46 +53,6 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages
 			}
 		}
 
-		private ProcessStartInfo CreateProcessStartInfo()
-		{
-			//ProcessStartInfo processStartInfo = new ProcessStartInfo(command);
-			////-R -L%SQLAppLogin%:%SQLAppPwd%
-			//// nHibDataSource.ConnectionString
-
-			//processStartInfo.Arguments = stringBuilder.ToString();
-
-			//processStartInfo.WorkingDirectory = workingDirectory;
-			////This means that it will be redirected to the Process.StandardOutput StreamReader.
-			//processStartInfo.RedirectStandardOutput = true;
-
-
-			////This means that it will be redirected to the Process.StandardError StreamReader. (same as StdOutput)
-			//processStartInfo.RedirectStandardError = true;
-
-			//processStartInfo.UseShellExecute = false;
-			//// Do not create the black window.
-			//processStartInfo.CreateNoWindow = true;
-
-			//return processStartInfo;
-			return null;
-		}
-
-        private void AppendText(string text)
-        {
-            if (InvokeRequired)
-            {
-                this.BeginInvoke(new Action<string>(AppendLine), new object[] { text });
-                return;
-            }
-
-
-            textBoxOutput.Text += text;
-            textBoxOutput.Select(textBoxOutput.Text.Length - 1, 0);
-            textBoxOutput.ScrollToCaret();
-            Application.DoEvents();
-            //textBoxOutput.AppendText(@"\n");
-        }
-
 		private void AppendLine(string text)
 		{
 			if (InvokeRequired)
@@ -107,7 +67,6 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages
 			textBoxOutput.Select(textBoxOutput.Text.Length - 1, 0);
 			textBoxOutput.ScrollToCaret();
 			Application.DoEvents();
-			//textBoxOutput.AppendText(@"\n");
 		}
 
 		private void ProcOnExited(object sender, EventArgs eventArgs)
@@ -127,7 +86,6 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages
 
 		private void progressPage_Load(object sender, EventArgs e)
 		{
-			// ReSharper disable LocalizableElement
 			Cursor = Cursors.WaitCursor;
 			shareFolder(_model.UnzipPath, "DatabaseUnzipTemp", "Temporary folder for Teleopti support tool");
 			copyFilesToShare();
@@ -140,8 +98,6 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages
 
 			Cursor = Cursors.Default;
 			AppendLine("Database deployed");
-
-			// ReSharper restore LocalizableElement
 		}
 
 		private void recycleIisPools()
@@ -163,21 +119,6 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages
             SevenZipExtractor extractor = new SevenZipExtractor(_model.ZipFilePath);
             extractor.Extracting += extractor_Extracting;
             extractor.ExtractArchive(_model.UnzipPath);
-
-            /*
-            var zipFile = new ZipFile(_model.ZipFilePath);
-            zipFile.ExtractProgress += zipFile_ExtractProgress;
-			zipFile.ExtractAll(_model.UnzipPath, ExtractExistingFileAction.OverwriteSilently);
-
-			_model.GetSelections()
-				  .Where(s => s.DatabaseFromSourceType == DatabaseSourceType.FromArchive)
-				  .ToList()
-				  .ForEach(d =>
-					  {
-						  AppendText("Unzipping " + d.DatabasePath);
-						  d.DatabasePath = d.DatabasePath.Insert(0, _model.UnzipPath);
-					  });
-            */
 		}
 
         void extractor_Extracting(object sender, ProgressEventArgs e)
@@ -187,26 +128,6 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages
                 AppendLine("Unzipping " + e.PercentDone + "%");
             }
         }
-
-        /*
-        void zipFile_ExtractProgress(object sender, ExtractProgressEventArgs e)
-        {
-            if (e.BytesTransferred == 0) { return; }
-            if (_currentZipEntry != e.CurrentEntry)
-            {
-                _currentZipEntry = e.CurrentEntry;
-                AppendText("Unzipping " + _currentZipEntry.FileName);
-            }
-            
-            double newMegabytesTransferredPercentage = ((double)e.BytesTransferred / (double)e.TotalBytesToTransfer * 100);
-            newMegabytesTransferredPercentage = Math.Truncate((newMegabytesTransferredPercentage / 10)) * 10;
-            if (_megabytesTransferredPercentage != newMegabytesTransferredPercentage)
-            {
-                _megabytesTransferredPercentage = newMegabytesTransferredPercentage;
-                AppendText("Unzipping " + _megabytesTransferredPercentage + "%");
-            }
-        }
-        */
 
 		private void copyFilesToShare()
 		{
@@ -326,9 +247,6 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages
 				var userSecurityDescriptor = new ManagementClass(new ManagementPath("Win32_SecurityDescriptor"), null);
 				userSecurityDescriptor["ControlFlags"] = 4; //SE_DACL_PRESENT 
 				userSecurityDescriptor["DACL"] = new object[] { userAce };
-				//can declare share either way, where "ShareName" is the name used to share the folder
-				//ManagementPath path = new ManagementPath("Win32_Share.Name='" + ShareName + "'");
-				//ManagementObject share = new ManagementObject(path);
 				var share = new ManagementObject(managementClass.Path + ".Name='" + shareName + "'");
 
 				share.InvokeMethod("SetShareInfo", new object[] { Int32.MaxValue, description, userSecurityDescriptor });
@@ -339,7 +257,6 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages
 			{
 				MessageBox.Show("Error sharing folders. Please make sure you install as Administrator. ERROR: " + ex.Message, "Error!");
 			}
-			// ReSharper restore LocalizableElement
 		}
 
 		private void restoreDatabase()

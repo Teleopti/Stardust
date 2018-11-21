@@ -1,14 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
@@ -23,14 +29,22 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly IPersonAbsenceAccountProvider _personAbsenceAccountProvider;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly IScheduleStorage _scheduleStorage;
+		private readonly ICurrentScenario _currentScenario;
+		private readonly IProjectionChangedEventBuilder _builder;
+		private readonly IShiftTradeAddScheduleLayerViewModelMapper _layerMapper;
 
 		public RequestViewModelMapper(IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider,
-			IPersonAbsenceAccountProvider personAbsenceAccountProvider, IUserTimeZone userTimeZone)
+			IPersonAbsenceAccountProvider personAbsenceAccountProvider, IUserTimeZone userTimeZone, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IProjectionChangedEventBuilder builder, IShiftTradeAddScheduleLayerViewModelMapper layerMapper)
 		{
 			_personNameProvider = personNameProvider;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 			_personAbsenceAccountProvider = personAbsenceAccountProvider;
 			_userTimeZone = userTimeZone;
+			_scheduleStorage = scheduleStorage;
+			_currentScenario = currentScenario;
+			_builder = builder;
+			_layerMapper = layerMapper;
 		}
 
 		public AbsenceAndTextRequestViewModel Map(AbsenceAndTextRequestViewModel requestViewModel, IPersonRequest request,
@@ -98,10 +112,74 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		{
 			if (request.Request is IAbsenceRequest absenceRequest)
 			{
+				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(absenceRequest.Person, new ScheduleDictionaryLoadOptions(false, false),
+					absenceRequest.Period, _currentScenario.Current());
+
 				requestViewModel.PersonAccountSummaryViewModel = getPersonalAccountApprovalSummary(absenceRequest);
 
 				requestViewModel.IsFullDay = isFullDay(request);
+				var scheduleRange = schedules[absenceRequest.Person];
+
+				requestViewModel.Shifts = mapShifts(scheduleRange, absenceRequest.Period.ToDateOnlyPeriod(TimeZoneInfo.Utc));
 			}
+		}
+
+		private IEnumerable<ShiftViewModel> mapShifts(IScheduleRange schedules, DateOnlyPeriod period)
+		{
+			var shiftViewModels = new List<ShiftViewModel>();
+			foreach (var date in period.DayCollection())
+			{
+				var scheduleDay = schedules.ScheduledDay(date);
+				var eventScheduleDay = _builder.BuildEventScheduleDay(scheduleDay);
+				var isDayOff = eventScheduleDay.DayOff != null;
+				var isFulldayAbsence = eventScheduleDay.IsFullDayAbsence;
+				var shiftViewModel = new ShiftViewModel
+				{
+					ContractTimeInMinute = eventScheduleDay.ContractTime.TotalMinutes,
+					DayOffName = eventScheduleDay.Name,
+					IsDayOff = isDayOff,
+					IsNotScheduled = eventScheduleDay.Shift == null && !isDayOff && !isFulldayAbsence,
+					MinStart = date.Date,
+					Name = _personNameProvider.BuildNameFromSetting(scheduleDay.Person.Name.FirstName,
+						scheduleDay.Person.Name.LastName),
+					PersonId = scheduleDay.Person.Id.GetValueOrDefault(),
+					ScheduleLayers = getScheduleLayers(eventScheduleDay, scheduleDay.PersonAssignment())
+				};
+				shiftViewModels.Add(shiftViewModel);
+			}
+
+			return shiftViewModels;
+		}
+
+		private string mapColor(int argb)
+		{
+			return ColorTranslator.ToHtml(Color.FromArgb(argb));
+		}
+
+		private IList<SimpleLayer> mapLayers(ProjectionChangedEventScheduleDay eventScheduleDay)
+		{
+			var layers = new List<SimpleLayer>();
+			if (eventScheduleDay.Shift == null) return layers;
+
+			var ls = from layer in eventScheduleDay.Shift.Layers
+				select new SimpleLayer
+				{
+					Color = mapColor(layer.DisplayColor),
+					Description = layer.Name,
+					Start = layer.StartDateTime,
+					End = layer.EndDateTime,
+					Minutes = (int)layer.EndDateTime.Subtract(layer.StartDateTime).TotalMinutes,
+					IsAbsenceConfidential = layer.IsAbsenceConfidential
+				};
+
+			layers.AddRange(ls);
+			return layers;
+		}
+
+		private TeamScheduleLayerViewModel[] getScheduleLayers(ProjectionChangedEventScheduleDay eventScheduleDay, IPersonAssignment personAssignment)
+		{
+			var layers = mapLayers(eventScheduleDay);
+			return _layerMapper.Map(layers, personAssignment?.OvertimeActivities());
 		}
 
 		private PersonAccountSummaryViewModel getPersonalAccountApprovalSummary(IAbsenceRequest absenceRequest)

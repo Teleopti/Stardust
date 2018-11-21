@@ -18,11 +18,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 
 	public enum PersonAuditActionType
 	{
+		//dont remove the AuditTrail prefix because its used fo translation in the UI
+		//Also don't remove the comments, they are used to 'fool' some translation code
 		GrantRole,
 		RevokeRole,
-		SingleGrantRole,
-		SingleRevokeRole,
-		MultiGrantRole,
-		MultiRevokeRole
+		AuditTrailSingleGrantRole, //Resources.AuditTrailSingleGrantRole
+		AuditTrailSingleRevokeRole, //Resources.AuditTrailSingleRevokeRole
+		AuditTrailMultiGrantRole, //Resources.AuditTrailMultiGrantRole
+		AuditTrailMultiRevokeRole //Resources.AuditTrailMultiRevokeRole
 	}
 }

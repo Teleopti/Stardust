@@ -204,9 +204,11 @@
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyCheckerTest.cs" />
     <Compile Include="ApplicationLayer\Staffing\SendUpdateStaffingReadModelHandlerTest.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcherContextBug48226Test.cs" />
+    <Compile Include="Auditing\AuditAggregatorServiceTest.cs" />
     <Compile Include="Auditing\AuditSettingTest.cs" />
     <Compile Include="Auditing\PersonAccessContextPurgeServiceTest.cs" />
     <Compile Include="Auditing\PersonAccessContextReaderServiceTest.cs" />
+    <Compile Include="Auditing\PurgeAuditRunnerTest.cs" />
     <Compile Include="Auditing\RevisionTest.cs" />
     <Compile Include="Auditing\StaffingContextPurgeServiceTest.cs" />
     <Compile Include="Auditing\StaffingContextReaderServiceTest.cs" />
@@ -377,6 +379,7 @@
     <Compile Include="UnitOfWorkTestAttribute.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryHasCurrentUnitOfWorkTest.cs" />
     <Compile Include="UnitOfWork\AnalyticsUnitOfWorkTest.cs" />
+    <Compile Include="UnitOfWork\SessionFactoryExtensions.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\FatClientOptimizationEventPublishingTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\ASMScheduleChangeTimePersisterTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\PersonChangedMessageSenderTest.cs" />

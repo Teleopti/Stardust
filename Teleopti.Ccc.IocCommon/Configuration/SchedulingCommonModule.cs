@@ -294,6 +294,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ScheduleAllRemovedDaysOrRollbackDoNothing>().As<IScheduleAllRemovedDaysOrRollback>().InstancePerLifetimeScope();
 			}
 
+			if (_configuration.Toggle(Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118))
+			{
+				builder.RegisterType<MaxWorkTimeFullWeekSkillExtractor>().As<IMaxWorkTimeFullWeekSkillExtractor>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<MaxWorkTimeFullWeekSkillExtractorDoNothing>().As<IMaxWorkTimeFullWeekSkillExtractor>().SingleInstance();
+			}
 
 			builder.RegisterType<MatrixNotPermittedLocker>().SingleInstance();
 			builder.RegisterType<ScheduleMatrixValueCalculatorProFactory>().SingleInstance();
@@ -426,6 +434,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RestrictionNotAbleToBeScheduledReport>().InstancePerLifetimeScope();
 			builder.RegisterType<AdvancedAgentsFilter>().SingleInstance();
 			builder.RegisterType<StaffingDataAvailablePeriodProvider>().As<IStaffingDataAvailablePeriodProvider>().SingleInstance();
+			builder.RegisterType<PlanningGroupGlobalSettingSetter>().SingleInstance();
 
 			if (_configuration.Args().IsFatClient)
 			{
@@ -452,6 +461,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<MoveSchedulesToOriginalStateHolderAfterIsland>()
 					.As<ISynchronizeSchedulesAfterIsland>()
 					.SingleInstance();
+				builder.RegisterType<NullPlanningGroupProvider>().As<IPlanningGroupProvider>().SingleInstance();
 			}
 			else
 			{
@@ -472,6 +482,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<CurrentOptimizationCallback>().As<ICurrentOptimizationCallback>().AsSelf().SingleInstance();
 				builder.RegisterType<CurrentSchedulingCallback>().As<ICurrentSchedulingCallback>().AsSelf().SingleInstance();
 				builder.RegisterType<FillSchedulerStateHolderFromDatabase>().As<FillSchedulerStateHolder>().ApplyAspects().SingleInstance();
+				builder.RegisterType<PlanningGroupProvider>().As<IPlanningGroupProvider>().SingleInstance();
 			}
 
 

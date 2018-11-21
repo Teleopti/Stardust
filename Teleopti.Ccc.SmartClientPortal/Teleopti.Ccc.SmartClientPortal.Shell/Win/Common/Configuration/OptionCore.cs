@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				new ScenarioPage(),
 				new CommonAgentNameDescriptionControl(CommonAgentNameDescriptionType.Common),
 				new CommonAgentNameDescriptionControl(CommonAgentNameDescriptionType.ScheduleExport),
-				new OptionalColumnsControl(_toggleManager),
+				new OptionalColumnsControl(),
 				new OrganizationTreeControl(),
 				new SiteControl(),
 				new StateGroupControl(),

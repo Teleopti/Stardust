@@ -17,11 +17,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_preferensDays.Add(root);
 		}
 
+		public void Has(IPerson agent, DateOnly date, IPreferenceRestriction preferenceRestriction)
+		{
+			_preferensDays.Add(new PreferenceDay(agent, date, preferenceRestriction).WithId());
+		}
+
 		public void Has(IPerson agent, DateOnlyPeriod period, IPreferenceRestriction preferenceRestriction)
 		{
 			foreach (var date in period.DayCollection())
 			{
-				_preferensDays.Add(new PreferenceDay(agent, date, preferenceRestriction).WithId());	
+				Has(agent,date,preferenceRestriction);	
 			}
 		}
 

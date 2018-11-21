@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Util;
 
 namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 {
@@ -17,9 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private readonly IAnalyticsPermissionExecutionRepository _analyticsPermissionExecutionRepository;
 		private readonly IPermissionsConverter _permissionsConverter;
-
-		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsPermissionsUpdater));
-
+		
 		public AnalyticsPermissionsUpdater(IAnalyticsPermissionRepository analyticsPermissionRepository,
 			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
 			IAnalyticsPermissionExecutionRepository analyticsPermissionExecutionRepository, 
@@ -62,23 +59,9 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 
 		private static void runWithRetries(Action action)
 		{
-			var retries = 3;
-			while (true)
-			{
-				try
-				{
-					action();
-					break;
-				}
-				catch (ConstraintViolationException)
-				{
-					retries--;
-					logger.Warn($"Retrying due to constraint volation ({retries} attempts left)");
-					if (retries == 0)
-						throw;
-					Thread.Sleep(new Random().Next(0, 1000));
-				}
-			}
+			Retry.Handle<ConstraintViolationException>()
+				.WaitAndRetry(TimeSpan.FromMilliseconds(200), TimeSpan.FromMilliseconds(300), TimeSpan.FromMilliseconds(400))
+				.Do(action);
 		}
 	}
 }

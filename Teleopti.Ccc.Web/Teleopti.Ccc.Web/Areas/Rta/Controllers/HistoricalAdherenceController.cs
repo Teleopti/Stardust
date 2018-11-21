@@ -18,21 +18,18 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		private readonly HistoricalAdherenceViewModelBuilder _historicalAdherenceViewModelBuilder;
 		private readonly ApprovePeriodAsInAdherenceCommandHandler _approvePeriodCommandHandler;
 		private readonly HistoricalAdherenceDate _historicalAdherenceDate;
-		private readonly PermissionsViewModelBuilder _permissions;
 		private readonly RemoveApprovedPeriodCommandHandler _removePeriodCommandHandler;
 
 		public HistoricalAdherenceController(
 			HistoricalAdherenceViewModelBuilder historicalAdherenceViewModelBuilder,
 			ApprovePeriodAsInAdherenceCommandHandler approvePeriodCommandHandler,
 			RemoveApprovedPeriodCommandHandler removePeriodCommandHandler,
-			HistoricalAdherenceDate historicalAdherenceDate,
-			PermissionsViewModelBuilder permissions)
+			HistoricalAdherenceDate historicalAdherenceDate)
 		{
 			_historicalAdherenceViewModelBuilder = historicalAdherenceViewModelBuilder;
 			_approvePeriodCommandHandler = approvePeriodCommandHandler;
 			_removePeriodCommandHandler = removePeriodCommandHandler;
 			_historicalAdherenceDate = historicalAdherenceDate;
-			_permissions = permissions;
 		}
 
 		[ReadModelUnitOfWork, UnitOfWork]

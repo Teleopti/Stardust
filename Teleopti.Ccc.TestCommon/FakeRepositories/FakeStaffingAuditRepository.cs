@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void PurgeOldAudits(DateTime daysBack)
 		{
-			if(ThrowOnPurgeOldAudits) throw new Exception("ThrowOnPurgeOldAudits = true");
+			if (ThrowOnPurgeOldAudits) throw new Exception("ThrowOnPurgeOldAudits = true");
 			PurgeCounter++;
 		}
 

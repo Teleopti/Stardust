@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			}
 
 			IDictionary<DateOnly, MinMax<TimeSpan>> possibleMinMaxWorkShiftLengths =
-				_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(matrixList.First(), new SchedulingOptions());
+				_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(matrixList.First(), new SchedulingOptions(), null);
 			failingPeriod = checkWeeks(matrixList.First(), schedulePeriod, possibleMinMaxWorkShiftLengths);
 			if (failingPeriod.HasValue)
 			{

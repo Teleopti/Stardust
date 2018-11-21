@@ -3,7 +3,6 @@ using Autofac;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
-using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Search;
 using Teleopti.Ccc.Infrastructure.Audit;
 
@@ -37,11 +36,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StaffingContextReaderService>().As<IStaffingContextReaderService>().AsSelf().SingleInstance();
 			builder.RegisterType<PersonAccessContextReaderService>().As<IPersonAccessContextReaderService>().AsSelf().SingleInstance();
 
-			//do this in a smarter way in the next push
-			builder.RegisterType<StaffingContextPurgeService>().As<IPurgeAudit>().AsSelf().SingleInstance();
-			builder.RegisterType<PersonAccessContextPurgeService>().As<IPurgeAudit>().AsSelf().SingleInstance();
-
-			builder.RegisterType<PurgeAuditRunner>().AsSelf().SingleInstance();
+			builder.RegisterAssemblyTypes(typeof(IPurgeAudit).Assembly)
+				.Where(t => t.GetInterfaces().Any(i => i == typeof(IPurgeAudit)))
+				.As(t => t.GetInterfaces().Where(i => i == typeof(IPurgeAudit))).AsSelf().SingleInstance();
+			
+			builder.RegisterType<PurgeAuditRunner>().As<IPurgeAuditRunner>().AsSelf().SingleInstance();
 		}
 	}
 }

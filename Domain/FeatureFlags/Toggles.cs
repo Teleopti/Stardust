@@ -23,7 +23,6 @@
 		RTA_StateQueueFloodPrevention_77710,
 		RTA_ReviewHistoricalAdherence_74770,
 
-		MyTimeWeb_WaitListPositionEnhancement_46301,
 		MyTimeWeb_NewTeamScheduleView_75989,
 		MyTimeWeb_NewTeamScheduleViewDesktop_76313,
 		MyTimeWeb_TrafficLightOnMobileDayView_77447,
@@ -80,18 +79,16 @@
 		ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941,
 		ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717,
 		ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487,
+		ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118,
 
 		Wfm_DisplayOnlineHelp_39402,
 
 
 		Wfm_SkillPriorityRoutingGUI_39885,
-		ETL_Optimize_Memory_Usage_76761,
 		ETL_Show_Tenant_Name_In_History_75767,
 
 		WfmStaffing_AddOvertime_42524,
 		OvertimeRequestUseMostUnderStaffedSkill_47853,
-		OvertimeRequestSupportMultiSelectionSkillTypes_74945,
-		OvertimeRequestStaffingCheckMethod_74949,
 		OvertimeRequestChangeBelongsToDateForOverNightShift_74984,
 		WFM_Forecaster_Refact_44480,
 		WFM_Export_Forecast_44716,

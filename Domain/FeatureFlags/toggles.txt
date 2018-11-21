@@ -65,9 +65,7 @@ Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 = RC # can not use it until
 Wfm_Requests_Approve_Based_On_Intraday_39868 = RC # can not use it until function 'Approve based on business rules' is ready
 Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274 = RC # can not use it until function 'Approve based on business rules' is ready
 OvertimeRequestUseMostUnderStaffedSkill_47853 = true
-OvertimeRequestSupportMultiSelectionSkillTypes_74945 = true
 
-OvertimeRequestStaffingCheckMethod_74949 = true
 OvertimeRequestChangeBelongsToDateForOverNightShift_74984 = true
 
 # Bockemon #
@@ -76,11 +74,10 @@ Wfm_People_ImportAndCreateAgentFromFile_42528 = true
 Wfm_People_SetFallbackValuesForImporting_43289 = true
 Wfm_People_MoveImportJobToBackgroundService_43582 = true
 Wfm_Authentication_ChangePasswordMenu_76666 = true
-Wfm_User_Password_Reset_74957 = RC
-Wfm_ReadNotificationConfigurationFromDb_78242 = RC
+Wfm_User_Password_Reset_74957 = DEV
+Wfm_ReadNotificationConfigurationFromDb_78242 = DEV
 
 # China, can any of these be removed? #
-MyTimeWeb_WaitListPositionEnhancement_46301 = true
 MyTimeWeb_NewTeamScheduleView_75989 = RC
 MyTimeWeb_NewTeamScheduleViewDesktop_76313 = RC
 MyTimeWeb_TrafficLightOnMobileDayView_77447 = RC
@@ -102,6 +99,7 @@ ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348 = true
 ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941 = true
 ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717 = RC
 ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487 = true
+ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = RC
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
@@ -128,7 +126,6 @@ Report_Show_Utc_In_Report_Selection_When_In_Use_45079 = true
 WFM_AuditTrail_44006 = true
 WFM_Clear_Data_After_Leaving_Date_47768 = true
 WFM_Forecaster_Preview_74801 = RC
-ETL_Optimize_Memory_Usage_76761 = true
 WFM_Forecast_Show_History_Data_76432 = DEV
 ETL_Show_Web_Based_ETL_Tool_74837 = true
 ETL_Show_Tenant_Name_In_History_75767 = true
