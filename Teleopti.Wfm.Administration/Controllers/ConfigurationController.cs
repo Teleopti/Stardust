@@ -17,13 +17,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 	public class ConfigurationController : ApiController
 	{
 		private readonly IServerConfigurationRepository _serverConfigurationRepository;
-		private readonly IToggleManager _toggleManager;
 		private const string logonAttempsDays = "PreserveLogonAttemptsDays";
 
-		public ConfigurationController(IServerConfigurationRepository serverConfigurationRepository, IToggleManager toggleManager)
+		public ConfigurationController(IServerConfigurationRepository serverConfigurationRepository)
 		{
 			_serverConfigurationRepository = serverConfigurationRepository;
-			_toggleManager = toggleManager;
 		}
 
 		[HttpGet]
