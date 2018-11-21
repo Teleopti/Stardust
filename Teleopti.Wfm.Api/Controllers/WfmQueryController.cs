@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Autofac;
 
@@ -34,7 +35,7 @@ namespace Teleopti.Wfm.Api.Controllers
         }
 
 		[HttpPost, Route("query/{queryType}/{query}")]
-		public IHttpActionResult Post(string queryType, string query)
+		public async Task<IHttpActionResult> Post(string queryType, string query)
 		{
 			using (var scope = services.Resolve<ILifetimeScope>())
 			{
@@ -50,7 +51,7 @@ namespace Teleopti.Wfm.Api.Controllers
 
 				try
 				{
-					var text = Request.Content.ReadAsStringAsync().Result;
+					var text = await Request.Content.ReadAsStringAsync();
 					var value = Newtonsoft.Json.JsonConvert.DeserializeObject(text, kindOfQuery);
 					var handler = scope.Resolve(typeof(IQueryHandler<,>).MakeGenericType(kindOfQuery, type));
 					var method = handler.GetType().GetMethod("Handle");

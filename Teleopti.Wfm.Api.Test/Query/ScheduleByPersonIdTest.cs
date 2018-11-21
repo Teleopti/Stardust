@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -11,11 +12,13 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Api.Test.Query
 {
 	[ApiTest]
+	[LoggedOnAppDomain]
 	public class ScheduleByPersonIdTest
 	{
 		public IApiHttpClient Client;
@@ -27,7 +30,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
 
 		[Test]
-		public void ShouldGetBasicScheduleInformation()
+		public async Task ShouldGetBasicScheduleInformation()
 		{
 			Client.Authorize();
 
@@ -39,14 +42,14 @@ namespace Teleopti.Wfm.Api.Test.Query
 			personAssignment.AddActivity(activity,new TimePeriod(8,17));
 			PersonAssignmentRepository.Add(personAssignment);
 
-			var result = Client.PostAsync("/query/Schedule/ScheduleByPersonId",
+			var result = await Client.PostAsync("/query/Schedule/ScheduleByPersonId",
 				new StringContent(JsonConvert.SerializeObject(new
 				{
 					PersonId = person.Id.GetValueOrDefault(),
 					StartDate = new DateTime(2001, 1, 1),
 					EndDate = new DateTime(2001, 1, 1)
 				}), Encoding.UTF8, "application/json"));
-			var obj = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Result"][0];
+			var obj = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync())["Result"][0];
 
 			obj["PersonId"].Value<string>().Should().Be.EqualTo(person.Id.Value.ToString());
 			obj["Date"].Value<DateTime>().Should().Be.EqualTo(new DateTime(2001,1,1));
@@ -57,7 +60,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 		}
 
 		[Test]
-		public void ShouldGetIndicationForAbsenceLayer()
+		public async Task ShouldGetIndicationForAbsenceLayer()
 		{
 			Client.Authorize();
 
@@ -74,14 +77,14 @@ namespace Teleopti.Wfm.Api.Test.Query
 			var personAbsence = new PersonAbsence(person, scenario, new AbsenceLayer(absence,new DateTimePeriod(2001,1,1, 8,2001, 1, 1, 17))).WithId();
 			PersonAbsenceRepository.Add(personAbsence);
 
-			var result = Client.PostAsync("/query/Schedule/ScheduleByPersonId",
+			var result = await Client.PostAsync("/query/Schedule/ScheduleByPersonId",
 				new StringContent(JsonConvert.SerializeObject(new
 				{
 					PersonId = person.Id.GetValueOrDefault(),
 					StartDate = new DateTime(2001, 1, 1),
 					EndDate = new DateTime(2001, 1, 1)
 				}), Encoding.UTF8, "application/json"));
-			var obj = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Result"][0];
+			var obj = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync())["Result"][0];
 			
 			obj["Shift"][0]["PayloadId"].Value<string>().Should().Be.EqualTo(absence.Id.ToString());
 			obj["Shift"][0]["Name"].Value<string>().Should().Be.EqualTo("PTO");
@@ -89,7 +92,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 		}
 		
 		[Test]
-		public void ShouldGetAgentTimezoneInformation()
+		public async Task ShouldGetAgentTimezoneInformation()
 		{
 			Client.Authorize();
 
@@ -100,20 +103,20 @@ namespace Teleopti.Wfm.Api.Test.Query
 
 			ScenarioRepository.Has("Default");
 
-			var result = Client.PostAsync("/query/Schedule/ScheduleByPersonId",
+			var result = await Client.PostAsync("/query/Schedule/ScheduleByPersonId",
 				new StringContent(JsonConvert.SerializeObject(new
 				{
 					PersonId = person.Id.GetValueOrDefault(),
 					StartDate = new DateTime(2001, 1, 1),
 					EndDate = new DateTime(2001, 1, 1)
 				}), Encoding.UTF8, "application/json"));
-			var obj = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Result"][0];
+			var obj = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync())["Result"][0];
 			
 			obj["TimeZoneId"].Value<string>().Should().Be.EqualTo(timezone.Id);
 		}
 
 		[Test]
-		public void ShouldGetActivityDisplayColor()
+		public async Task ShouldGetActivityDisplayColor()
 		{
 			Client.Authorize();
 
@@ -126,14 +129,14 @@ namespace Teleopti.Wfm.Api.Test.Query
 			personAssignment.AddActivity(activity, new TimePeriod(8, 17));
 			PersonAssignmentRepository.Add(personAssignment);
 
-			var result = Client.PostAsync("/query/Schedule/ScheduleByPersonId",
+			var result = await Client.PostAsync("/query/Schedule/ScheduleByPersonId",
 				new StringContent(JsonConvert.SerializeObject(new
 				{
 					PersonId = person.Id.GetValueOrDefault(),
 					StartDate = new DateTime(2001, 1, 1),
 					EndDate = new DateTime(2001, 1, 1)
 				}), Encoding.UTF8, "application/json"));
-			var obj = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Result"][0];
+			var obj = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync())["Result"][0];
 
 			obj["Shift"][0]["DisplayColor"].Value<int>().Should().Be.EqualTo(Color.FromName("blue").ToArgb());
 		}

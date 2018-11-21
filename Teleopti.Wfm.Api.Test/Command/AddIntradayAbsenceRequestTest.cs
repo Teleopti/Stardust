@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -14,10 +15,12 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Wfm.Api.Test.Command
 {
 	[ApiTest]
+	[LoggedOnAppDomain]
 	public class AddIntradayAbsenceRequestTest
 	{
 		public IApiHttpClient Client;
@@ -27,7 +30,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 		public FakeLoggedOnUser LoggedOnUser;
 
 		[Test]
-		public void ShouldAddIntradayAbsenceRequest()
+		public async Task ShouldAddIntradayAbsenceRequest()
 		{
 			Client.Authorize();
 
@@ -44,7 +47,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			PersonRepository.Add(person);
 
-			var result = Client.PostAsync("/command/AddIntradayAbsenceRequest", new StringContent(
+			var result = await Client.PostAsync("/command/AddIntradayAbsenceRequest", new StringContent(
 				JsonConvert.SerializeObject(new
 				{
 					PersonId = person.Id.Value,
@@ -54,7 +57,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 					UtcStartTime = new DateTime(2018, 8, 2, 13, 0, 0, DateTimeKind.Utc),
 					UtcEndTime = new DateTime(2018, 8, 2, 15, 0, 0, DateTimeKind.Utc)
 				}), Encoding.UTF8, "application/json"));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
 			resultDto["Id"].ToObject<Guid>().Should().Be.EqualTo(PersonRequestRepository.LoadAll().Single().Id);
 		}

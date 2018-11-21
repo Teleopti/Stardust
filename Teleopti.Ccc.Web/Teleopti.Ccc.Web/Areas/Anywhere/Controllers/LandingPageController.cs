@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 				var response = client
 					.PostAsync("https://www.teleopti.com/api/v1/autologin/init", stringContent)
-					.Result;
+					.GetAwaiter().GetResult();
 				return response;
 			}
 		}

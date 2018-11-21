@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			var reports = createReports(groupId, report);
 			var target = createReportProvider(reports, groupId);
 
-			var result = target.GetReports().Result;
+			var result = target.GetReports().GetAwaiter().GetResult();
 			result.Length.Should().Be(1);
 			var reportModel = result.Single();
 			reportModel.Id.Should().Be(report.Id);
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			var reports = createReports(groupId);
 			var target = createReportProvider(reports, groupId);
 
-			var config = target.GetReportConfig(Guid.NewGuid().ToString()).Result;
+			var config = target.GetReportConfig(Guid.NewGuid().ToString()).GetAwaiter().GetResult();
 			config.ReportId.Should().Be.NullOrEmpty();
 			config.ReportUrl.Should().Be.NullOrEmpty();
 			config.AccessToken.Should().Be.NullOrEmpty();
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			var reports = createReports(groupId, report);
 			var target = createReportProvider(reports, groupId);
 
-			var config = target.GetReportConfig(Guid.NewGuid().ToString()).Result;
+			var config = target.GetReportConfig(Guid.NewGuid().ToString()).GetAwaiter().GetResult();
 			config.ReportId.Should().Be.NullOrEmpty();
 			config.ReportUrl.Should().Be.NullOrEmpty();
 			config.AccessToken.Should().Be.NullOrEmpty();
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 
 			var target = createReportProvider(reports, groupId);
 
-			var config = target.GetReportConfig(report.Id).Result;
+			var config = target.GetReportConfig(report.Id).GetAwaiter().GetResult();
 			config.ReportId.Should().Be(report.Id);
 			config.AccessToken.Should().Be(token);
 		}
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 
 			var target = createReportProvider(reports, groupId);
 
-			var config = target.CloneReport(report.Id).Result;
+			var config = target.CloneReport(report.Id).GetAwaiter().GetResult();
 			config.ReportId.Should().Not.Be.Null();
 			config.AccessToken.Should().Be(token);
 

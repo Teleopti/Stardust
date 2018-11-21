@@ -79,7 +79,7 @@ namespace Teleopti.Analytics.Stats.TestApplication
 				if (Console.ReadKey().Key != ConsoleKey.P)
 					break;
 				var generator = new QueueStatsGenerator();
-				generator.CreateAsync(parameters).Wait();
+				generator.CreateAsync(parameters).GetAwaiter().GetResult();
 				Console.ReadLine();
 				break;
 			}

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 				var httpActionContext = getHttpActionContext(target);
 				target.OnAuthorization(httpActionContext);
 				httpActionContext.Response.StatusCode.Should().Be.EqualTo(HttpStatusCode.Forbidden);
-				httpActionContext.Response.Content.ReadAsStringAsync().Result.Should().Be.EqualTo("{\"Message\":\"No permission to view schedules\"}");
+				httpActionContext.Response.Content.ReadAsStringAsync().GetAwaiter().GetResult().Should().Be.EqualTo("{\"Message\":\"No permission to view schedules\"}");
 			}
 		}
 

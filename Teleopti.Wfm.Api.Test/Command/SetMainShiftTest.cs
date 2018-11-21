@@ -10,11 +10,13 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Api.Test.Command
 {
 	[ApiTest]
+	[LoggedOnAppDomain]
 	public class SetMainShiftTest
 	{
 		public IApiHttpClient Client;

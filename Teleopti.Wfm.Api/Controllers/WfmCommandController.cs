@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Autofac;
 
@@ -28,7 +29,7 @@ namespace Teleopti.Wfm.Api.Controllers
 	    }
 
 		[HttpPost, Route("command/{commandType}")]
-		public IHttpActionResult Post(string commandType)
+		public async Task<IHttpActionResult> Post(string commandType)
 		{
 			using (var scope = services.Resolve<ILifetimeScope>())
 			{
@@ -38,7 +39,7 @@ namespace Teleopti.Wfm.Api.Controllers
 				}
 				try
 				{
-					var text = Request.Content.ReadAsStringAsync().Result;
+					var text = await Request.Content.ReadAsStringAsync();
 					var value = Newtonsoft.Json.JsonConvert.DeserializeObject(text, type);
 					var handler = scope.Resolve(typeof(ICommandHandler<>).MakeGenericType(value.GetType()));
 					var method = handler.GetType().GetMethod("Handle");
