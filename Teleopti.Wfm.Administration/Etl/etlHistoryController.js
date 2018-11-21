@@ -100,19 +100,20 @@
 		}
 
 		function pollStatus() {
-			$timeout( function(){
-				$http
-				.get("./Etl/GetjobRunning", tokenHeaderService.getHeaders())
-				.success(function (data) {
-					vm.status = data;
-					if (vm.status !== null) {
-						vm.status.formatedTime = moment(vm.status.StartTime).local().format('HH:mm');
+			$timeout(function() {
+					if (window.location.hash === '#/ETL/history') {
+						$http
+							.get("./Etl/GetjobRunning", tokenHeaderService.getHeaders())
+							.success(function(data) {
+								vm.status = data;
+								if (vm.status !== null) {
+									vm.status.formatedTime = moment(vm.status.StartTime).local().format('HH:mm');
+								}
+								pollStatus();
+							});
 					}
-						if (window.location.hash === '#/ETL/history') {
-							pollStatus();
-						}
-					});
-			}, 10000 );
+				},
+					10000);
 		}
 
 		function getStatusRightNow() {
