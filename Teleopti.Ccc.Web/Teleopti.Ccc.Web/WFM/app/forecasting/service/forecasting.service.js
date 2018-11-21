@@ -16,15 +16,6 @@
 			}
 		);
 
-		// TODO: Should be removed
-		this.status = $resource(
-			'../api/Status/Forecasting',
-			{},
-			{
-				get: { method: 'GET', params: {}, isArray: false }
-			}
-		);
-
 		this.scenarios = $resource(
 			'../api/Global/Scenario',
 			{},

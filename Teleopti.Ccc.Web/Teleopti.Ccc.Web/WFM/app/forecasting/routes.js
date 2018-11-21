@@ -19,8 +19,8 @@
 		$stateProvider
 			.state("forecast", {
 				url: "/forecast",
-				templateUrl: "app/forecasting/html/r2forecast.html",
-				controller: "r2ForecastRefactController",
+				templateUrl: "app/forecasting/html/forecast.html",
+				controller: "ForecastRefactController",
 				controllerAs: "vm"
 			})
 			.state("forecast-modify", {

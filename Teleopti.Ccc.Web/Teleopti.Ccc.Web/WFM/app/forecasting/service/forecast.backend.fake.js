@@ -48,11 +48,6 @@
 				return [200, skills];
 			});
 
-		fakeGet('../api/Status/Forecasting',
-			function () {
-				return [200, forecastStatus];
-			});
-
 		fakeGet('../api/Global/Scenario',
 			function () {
 				return [200, scenarios];
