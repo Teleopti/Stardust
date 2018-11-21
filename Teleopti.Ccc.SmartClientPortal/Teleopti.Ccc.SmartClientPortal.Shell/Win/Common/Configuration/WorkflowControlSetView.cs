@@ -60,7 +60,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			SetMaxConsecutiveWorkingDaysVisibility(_toggleManager);
 			checkOvertimeProbabilityLicense();
 			checkOvertimeRequestsLicense();
-			checkOvertimeStaffingCheckMethodToggle();
 			loadOvertimeRequestAutoGrantTypeAdapterCollection();
 		}
 

@@ -143,16 +143,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			}
 		}
 
-		private void checkOvertimeStaffingCheckMethodToggle()
-		{
-			if (!_toggleManager.IsEnabled(Toggles.OvertimeRequestStaffingCheckMethod_74949))
-			{
-				tableLayoutPanelOvertimeStaffingCheckMethodSetting.Visible = false;
-				var rowIndex = tableLayoutPanelETOTRequest.Controls.GetChildIndex(tableLayoutPanelOvertimeStaffingCheckMethodSetting);
-				tableLayoutPanelETOTRequest.RowStyles[rowIndex].Height = 0;
-			}
-		}
-
 		private void initOvertimeRequestMaximumTimeHandleType()
 		{
 			comboBoxOvertimeRequestMaximumTimeHandleType.DataSource =
