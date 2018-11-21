@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
 	public class AnyPersonSkillsOpenValidatorTest
 	{
-		private readonly AnyPersonSkillsOpenValidator _target = new AnyPersonSkillsOpenValidator();
+		private readonly AnyPersonSkillsOpenValidator _target = new AnyPersonSkillsOpenValidator(new FakeSkillRepository());
 		private IPerson _person;
 		private Absence _absence;
 		private ISkill _skill;

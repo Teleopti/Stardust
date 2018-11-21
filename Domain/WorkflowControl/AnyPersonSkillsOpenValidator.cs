@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -16,31 +17,43 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 	public class AnyPersonSkillsOpenValidator : IAnyPersonSkillsOpenValidator
 	{
+		private readonly ISkillRepository _skillRepository;
+
+		public AnyPersonSkillsOpenValidator(ISkillRepository skillRepository)
+		{
+			_skillRepository = skillRepository;
+		}
 		public IValidatedRequest Validate(IAbsenceRequest absenceRequest, IEnumerable<IPersonSkill> personSkills, IScheduleRange scheduleRange)
 		{
-			var skills = personSkills.Where(p => p.Active).Select(p => p.Skill).Distinct().Select(s => new
-			{
-				s.TimeZone,
-				WorkloadCollection = s is IChildSkill child
-					? child.ParentSkill.WorkloadCollection
-					: s.WorkloadCollection
-			});
+			_skillRepository.LoadAllSkills();
 			var requestPeriod = absenceRequest.Period;
-			foreach (var skill in skills)
+			foreach (var personSkill in personSkills)
 			{
+				if (!personSkill.Active) continue;
+
+				var skill = personSkill.Skill;
 				var dateOnlyPeriod = requestPeriod.ToDateOnlyPeriod(skill.TimeZone);
+
 				foreach (var requestDay in dateOnlyPeriod.DayCollection())
 				{
-					foreach (var workload in skill.WorkloadCollection)
+					IEnumerable<IWorkload> workloadCollection;
+					if (skill is IChildSkill child)
+					{
+						workloadCollection = child.ParentSkill.WorkloadCollection;
+					}
+					else
+					{
+						workloadCollection = skill.WorkloadCollection;
+					}
+
+					foreach (var workload in workloadCollection)
 					{
 						var openHoursForRequestDay = workload.TemplateWeekCollection[(int)requestDay.DayOfWeek].OpenHourList;
 						var openHoursForYesterday = workload.TemplateWeekCollection[(int)requestDay.AddDays(-1).DayOfWeek].OpenHourList;
 
-						if (validateSkillOpenHours(requestDay.AddDays(-1), openHoursForYesterday, skill.TimeZone,
-								requestPeriod) || validateSkillOpenHours(requestDay, openHoursForRequestDay,
-								skill.TimeZone, requestPeriod))
+						if (validateSkillOpenHours(requestDay.AddDays(-1), openHoursForYesterday, skill, requestPeriod) || validateSkillOpenHours(requestDay, openHoursForRequestDay, skill, requestPeriod))
 						{
-							return new ValidatedRequest {IsValid = true};
+							return new ValidatedRequest { IsValid = true };
 						}
 					}
 				}
@@ -69,20 +82,24 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			};
 		}
 
-		private static bool validateSkillOpenHours(DateOnly requestDay, ReadOnlyCollection<TimePeriod> openHoursForRequestDay, TimeZoneInfo timeZone,
+		private static bool validateSkillOpenHours(DateOnly requestDay, ReadOnlyCollection<TimePeriod> openHoursForRequestDay, ISkill skill,
 			DateTimePeriod requestPeriod)
 		{
 			if(!openHoursForRequestDay.Any())
 				return false;
 
-			var timePeriod = openHoursForRequestDay.First();
-			var utcDateTimeStart = requestDay.Date.Add(timePeriod.StartTime);
-			var utcDateTimeEnd = requestDay.Date.Add(timePeriod.EndTime);
+			var utcDateTimeStart = new DateTime(requestDay.Date.Ticks).Add(openHoursForRequestDay.First().StartTime);
+			var utcDateTimeEnd = new DateTime(requestDay.Date.Ticks).Add(openHoursForRequestDay.First().EndTime);
 
-			var workloadOpenPeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(utcDateTimeStart, timeZone),
-				TimeZoneHelper.ConvertToUtc(utcDateTimeEnd, timeZone));
+			var workloadOpenPeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(utcDateTimeStart, skill.TimeZone),
+				TimeZoneHelper.ConvertToUtc(utcDateTimeEnd, skill.TimeZone));
 
-			return requestPeriod.Intersect(workloadOpenPeriod);
+			if (requestPeriod.Intersect(workloadOpenPeriod))
+			{
+				return true;
+			}
+
+			return false;
 		}
 	}
 }
