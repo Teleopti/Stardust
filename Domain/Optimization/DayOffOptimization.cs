@@ -71,7 +71,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly MatrixListFactory _matrixListFactory;
-		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 
 		public DayOffOptimization(TeamBlockDayOffOptimizer teamBlockDayOffOptimizer,
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter,
@@ -89,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IOptimizationPreferencesProvider optimizationPreferencesProvider,
 			IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod,
 			IDayOffOptimizationPreferenceProviderForPlanningPeriod dayOffOptimizationPreferenceProviderForPlanningPeriod,
-			IScheduleAllRemovedDaysOrRollback scheduleAllRemovedDaysOrRollback, IPlanningPeriodRepository planningPeriodRepository)
+			IScheduleAllRemovedDaysOrRollback scheduleAllRemovedDaysOrRollback)
 		{
 			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
@@ -105,7 +104,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_blockPreferenceProviderForPlanningPeriod = blockPreferenceProviderForPlanningPeriod;
 			_dayOffOptimizationPreferenceProviderForPlanningPeriod = dayOffOptimizationPreferenceProviderForPlanningPeriod;
 			_scheduleAllRemovedDaysOrRollback = scheduleAllRemovedDaysOrRollback;
-			_planningPeriodRepository = planningPeriodRepository;
 			_userTimeZone = userTimeZone;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_matrixListFactory = matrixListFactory;
@@ -114,18 +112,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public void Execute(DateOnlyPeriod selectedPeriod,
 			IEnumerable<IPerson> selectedAgents,
 			bool runWeeklyRestSolver, // desktop client runs this explicitly afterwards so sending in false here
-			Guid planningPeriodId)
+			PlanningGroup planningGroup)
 		{
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
-			if (planningPeriodId != Guid.Empty)
+			if (planningGroup != null)
 			{
-				var planningGroup = _planningPeriodRepository.Load(planningPeriodId).PlanningGroup;
 				optimizationPreferences.General.UsePreferences = planningGroup.PreferenceValue > 0;
 				optimizationPreferences.General.PreferencesValue = planningGroup.PreferenceValue;
 			}
 			
-			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(planningPeriodId);
-			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderForPlanningPeriod.Fetch(planningPeriodId);
+			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(planningGroup);
+			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderForPlanningPeriod.Fetch(planningGroup);
 			var stateHolder = _schedulerStateHolder();
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceCalculation, schedulingOptions.ConsiderShortBreaks, stateHolder.SchedulingResultState, _userTimeZone);

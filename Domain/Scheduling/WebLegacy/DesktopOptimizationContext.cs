@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			return contextData().OptimizationPreferences;
 		}
 		
-		public IBlockPreferenceProvider Fetch(Guid planningPeriodId)
+		public IBlockPreferenceProvider Fetch(PlanningGroup planningGroup)
 		{
 			return new FixedBlockPreferenceProvider(Fetch().Extra);
 		}
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			return ctxData == null ? new NoOptimizationCallback() : ctxData.OptimizationCallback;
 		}
 
-		IDayOffOptimizationPreferenceProvider IDayOffOptimizationPreferenceProviderForPlanningPeriod.Fetch(Guid planningPeriodId)
+		IDayOffOptimizationPreferenceProvider IDayOffOptimizationPreferenceProviderForPlanningPeriod.Fetch(PlanningGroup planningGroup)
 		{
 			return contextData().DayOffOptimizationPreferenceProvider;
 		}

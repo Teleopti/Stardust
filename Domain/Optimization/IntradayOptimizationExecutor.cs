@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.ResourcePlanner;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IGridlockManager _gridlockManager;
 		private readonly IBlockPreferenceProviderForPlanningPeriod _blockPreferenceProviderForPlanningPeriod;
 		private readonly DeadLockRetrier _deadLockRetrier;
+		private readonly IPlanningGroupProvider _planningGroupProvider;
 
 		public IntradayOptimizationExecutor(IntradayOptimization intradayOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -27,7 +29,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland,
 			IGridlockManager gridlockManager,
 			IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod,
-			DeadLockRetrier deadLockRetrier)
+			DeadLockRetrier deadLockRetrier,
+			IPlanningGroupProvider planningGroupProvider)
 		{
 			_intradayOptimization = intradayOptimization;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -36,6 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_gridlockManager = gridlockManager;
 			_blockPreferenceProviderForPlanningPeriod = blockPreferenceProviderForPlanningPeriod;
 			_deadLockRetrier = deadLockRetrier;
+			_planningGroupProvider = planningGroupProvider;
 		}
 
 		[TestLog]
@@ -60,7 +64,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Guid planningPeriodId)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
-			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(planningPeriodId);
+			var planningGroup = _planningGroupProvider.Execute(planningPeriodId);
+			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(planningGroup);
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, agentsInIsland, new LockInfoForStateHolder(_gridlockManager, locks), period, onlyUseSkills);
 			_intradayOptimization.Execute(period, schedulerStateHolder.ChoosenAgents.Filter(agentsToOptimize), runResolveWeeklyRestRule, blockPreferenceProvider);
 		}
