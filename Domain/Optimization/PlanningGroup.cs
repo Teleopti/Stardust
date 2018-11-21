@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public virtual IEnumerable<IFilter> Filters => _filters;
 		public virtual string Name { get; set; }
 		public virtual AllPlanningGroupSettings Settings => new AllPlanningGroupSettings(_settings);
-		public virtual double PreferenceValue { get; set; }
+		public virtual double PreferenceValue { get; set; } = 1;
 		
 
 		public virtual void ClearFilters()
