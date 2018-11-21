@@ -28,7 +28,7 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 			if (includeOptionAll)
 			{
 				// Refer to SP mart.sys_get_datasources
-				result.Insert(0, new DataSourceEtl(-2, "< All >", 0, "UTC", 15, false));
+				result.Insert(0, new DataSourceEtl(-2, "<All>", 0, "UTC", 15, false));
 			}
 
 			return result;
