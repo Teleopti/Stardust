@@ -27,5 +27,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 			}
 			return dayIntervalDataPerDateAndActivity;
 		}
+
+		public Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>> CreateFor(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> allSkillDays, IGroupPersonSkillAggregator groupPersonSkillAggregator, DateOnlyPeriod period)
+		{
+			var dayIntervalDataPerDateAndActivity = new Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>>();
+			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers.ToList();
+			var skills = groupPersonSkillAggregator.AggregatedSkills(groupMembers, period).ToList();
+			foreach (var dateOnly in period.DayCollection())
+			{
+				var dayIntervalDataPerActivity = _createSkillIntervalDatasPerActivtyForDate.CreateFor(dateOnly, skills, allSkillDays);
+				dayIntervalDataPerDateAndActivity.Add(dateOnly, dayIntervalDataPerActivity);
+			}
+			return dayIntervalDataPerDateAndActivity;
+		}
 	}
 }
