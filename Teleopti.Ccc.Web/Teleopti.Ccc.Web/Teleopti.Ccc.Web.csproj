@@ -1426,6 +1426,7 @@
     <Content Include="Areas\MyTime\Content\appdownload.html" />
     <Content Include="Areas\Anywhere\Views\Application\redirect.aspx" />
     <Content Include="Areas\MyTime\Content\Css\MobileApp.css" />
+    <Content Include="Areas\MyTime\Content\Css\WebChat.css" />
     <Content Include="Areas\MyTime\Content\Images\download-on-the-app-store.png" />
     <Content Include="Areas\MyTime\Content\Images\google-play-badge.png" />
     <Content Include="Areas\MyTime\Content\Scripts\ai.js" />
@@ -1493,8 +1494,6 @@
     <Content Include="Areas\Start\Content\Css\main.min.css" />
     <Content Include="Areas\Start\Content\Images\bg.png" />
     <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker-ext.js" />
-    <Content Include="Content\botchat\botchat.css" />
-    <Content Include="Content\botchat\botchat.js" />
     <Content Include="Content\jquery-plugin\jquery.touchSwipe.min.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.10.2.dialog.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.10.2.slider.js" />
@@ -1514,6 +1513,7 @@
     </None>
     <Content Include="Content\signalr\jquery.signalR-2.3.0.js" />
     <Content Include="Content\signalr\jquery.signalR-2.3.0.min.js" />
+    <Content Include="Content\webchat\webchat.js" />
     <Content Include="WFM\app\forecasting\component\history.chart.component.js" />
     <Content Include="WFM\app\forecasting\html\history.html" />
     <Content Include="WFM\app\forecasting\controller\history.controller.js" />
