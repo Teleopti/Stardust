@@ -45,10 +45,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var useShrinkage = isShrinkageValidatorEnabled(person);
 
 			var workflowControlSet = person.WorkflowControlSet;
-			var skillStaffingData = _skillStaffingDataLoader.Load(skills, period, useShrinkage, date =>
-				workflowControlSet?.AbsenceRequestOpenPeriods != null &&
-				workflowControlSet.AbsenceRequestOpenPeriods.Any() &&
-				workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(_now.ServerDate_DontUse(), date));
+			var hasOpenAbsenceRequestPeriods = workflowControlSet?.AbsenceRequestOpenPeriods?.Any() ?? false;
+			var skillStaffingData = _skillStaffingDataLoader.Load(skills, period, useShrinkage, date => hasOpenAbsenceRequestPeriods &&
+																										workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(_now.ServerDate_DontUse(), date));
 
 			return calculatePossibilities(person, skillStaffingData, scheduleDictionary);
 		}
@@ -76,18 +75,15 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			IList<SkillStaffingData> skillStaffingData, IScheduleDictionary scheduleDictionary)
 		{
 			var resolution = skillStaffingData.FirstOrDefault()?.Resolution ?? 15;
-			var calculatedPossibilityModels = new List<CalculatedPossibilityModel>();
 			var skillStaffingDataGroups = skillStaffingData.GroupBy(s => s.Date);
-			foreach (var skillStaffingDataGroup in skillStaffingDataGroups)
+
+			return skillStaffingDataGroups.Select(skillStaffingDataGroup => new CalculatedPossibilityModel
 			{
-				calculatedPossibilityModels.Add(new CalculatedPossibilityModel
-				{
-					Date = skillStaffingDataGroup.Key,
-					IntervalPossibilies = calculateIntervalPossibilities(person, skillStaffingDataGroup.ToList(), scheduleDictionary),
-					Resolution = resolution
-				});
-			}
-			return calculatedPossibilityModels;
+				Date = skillStaffingDataGroup.Key,
+				IntervalPossibilies =
+					calculateIntervalPossibilities(person, skillStaffingDataGroup.ToList(), scheduleDictionary),
+				Resolution = resolution
+			}).ToList();
 		}
 
 		private Dictionary<DateTime, int> calculateIntervalPossibilities(IPerson person, IList<SkillStaffingData> skillStaffingData, IScheduleDictionary scheduleDictionary)
@@ -184,7 +180,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				return new IPersonSkill[] { };
 
 			var personSkills = personPeriod.SelectMany(p => _personalSkills.PersonSkills(p))
-				.Where(p => _supportedSkillsInIntradayProvider.CheckSupportedSkill(p.Skill)).ToArray();
+				.Where(p => p.Active && _supportedSkillsInIntradayProvider.CheckSupportedSkill(p.Skill)).ToArray();
 
 			return personSkills.Distinct();
 		}
