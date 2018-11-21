@@ -31,6 +31,39 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakePreferenceDayRepository PreferenceDayRepository;
 
+		
+		[Test]
+		[Ignore("76289 to be fixed")]
+		public void ShouldDayOffOptimizeAgentWitPreferencesEvenIfOtherAgentFailsToBeScheduledWithPreferences()
+		{
+			var date = new DateOnly(2015, 10, 12); 
+			var activity = ActivityRepository.Has();
+			var skill = SkillRepository.Has(activity);
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			var scenario = ScenarioRepository.Has();
+			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1);
+			var shiftCategoryInShiftBag = new ShiftCategory().WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15),shiftCategoryInShiftBag));
+			
+			var agentWithIncorrectPreferences = PersonRepository.Has(schedulePeriod, ruleSet, skill);
+			var agentWithCorrectPreferences = PersonRepository.Has(schedulePeriod, ruleSet, skill);
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date,1, 1, 1, 1, 2, 2, 2));
+			PersonAssignmentRepository.Has(agentWithIncorrectPreferences, scenario, new DayOffTemplate(), date.AddDays(5));
+			PersonAssignmentRepository.Has(agentWithIncorrectPreferences, scenario, new DayOffTemplate(), date.AddDays(6));
+			PersonAssignmentRepository.Has(agentWithCorrectPreferences, scenario, new DayOffTemplate(), date.AddDays(5));
+			PersonAssignmentRepository.Has(agentWithCorrectPreferences, scenario, new DayOffTemplate(), date.AddDays(6));
+			var inCorrectPreferenceRestriction = new PreferenceRestriction {ShiftCategory = new ShiftCategory()};
+			PreferenceDayRepository.Has(agentWithIncorrectPreferences, date, inCorrectPreferenceRestriction);
+			var correctPreferenceRestriction = new PreferenceRestriction {ShiftCategory = shiftCategoryInShiftBag};
+			PreferenceDayRepository.Has(agentWithCorrectPreferences, new DateOnlyPeriod(date, date.AddDays(4)), correctPreferenceRestriction);
+			
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
+			
+			var saturdayAndSunday = PersonAssignmentRepository.LoadAll().Where(x => x.Date == date.AddDays(5) || x.Date == date.AddDays(6));
+			var saturdaysAndSundaysForAgentWithCorrectPreferences = saturdayAndSunday.Where(x => x.Person.Equals(agentWithCorrectPreferences));
+			saturdaysAndSundaysForAgentWithCorrectPreferences.Count(x => x.DayOffTemplate == null).Should().Be.EqualTo(0); //number of DOs moved
+		}
+		
 		[Test]
 		public void ShouldDayOffOptimizeWithoutPreferenceIfNotManageToScheduleWithPreferences()
 		{
