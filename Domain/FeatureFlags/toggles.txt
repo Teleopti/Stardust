@@ -82,8 +82,6 @@ MyTimeWeb_NewTeamScheduleView_75989 = RC
 MyTimeWeb_NewTeamScheduleViewDesktop_76313 = RC
 MyTimeWeb_TrafficLightOnMobileDayView_77447 = RC
 MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640 = RC
-WebByPassDefaultPermissionCheck_37984 = true
-
 
 # Kittens, Bugs&Roses and Micke #
 Wfm_SkillPriorityRoutingGUI_39885 = RC #Skill priorities, aka Cascading, is not ready for release just yet
