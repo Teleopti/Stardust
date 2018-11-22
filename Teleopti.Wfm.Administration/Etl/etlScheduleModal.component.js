@@ -97,7 +97,9 @@
 
     function selectedTenantChanged(tenant){
       ctrl.selectedTenant = tenant;
-      getJobs(ctrl.selectedTenant.TenantName);
+		if (ctrl.jobs.data !== null) {
+			getJobs(ctrl.selectedTenant.TenantName);
+		}
       getLogDataForATenant(ctrl.selectedTenant.TenantName);
     }
 
