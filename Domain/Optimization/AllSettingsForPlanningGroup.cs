@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly IEnumerable<PlanningGroupSettings> _planningGroupSettings;
 
-		public AllSettingsForPlanningGroup(IEnumerable<PlanningGroupSettings> planningGroupSettings, Percent preferenceValue)
+		public AllSettingsForPlanningGroup(IEnumerable<PlanningGroupSettings> planningGroupSettings, Percent? preferenceValue)
 		{
 			PreferenceValue = preferenceValue;
 			_planningGroupSettings = planningGroupSettings.OrderByDescending(x=>x.Priority).ToArray();
 		}
 		
-		public Percent PreferenceValue { get; set; }
+		public Percent? PreferenceValue { get; set; }
 
 		public PlanningGroupSettings ForAgent(IPerson person, DateOnly dateOnly)
 		{

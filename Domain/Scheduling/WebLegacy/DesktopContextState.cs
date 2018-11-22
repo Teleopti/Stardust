@@ -1,10 +1,12 @@
 using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourcePlanner;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
@@ -77,7 +79,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		public AllSettingsForPlanningGroup Execute(Guid planningPeriodId)
 		{
-			return null;
+			Percent? preferenceValue;
+			if(Fetch().General.UsePreferences)
+				preferenceValue = new Percent(Fetch().General.PreferencesValue);
+			else
+			{
+				preferenceValue = null;
+			}
+			
+			return new AllSettingsForPlanningGroup(Enumerable.Empty<PlanningGroupSettings>(), preferenceValue);
 		}
 	}
 }

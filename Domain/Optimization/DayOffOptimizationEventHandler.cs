@@ -19,13 +19,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly ISynchronizeSchedulesAfterIsland _synchronizeSchedulesAfterIsland;
 		private readonly IGridlockManager _gridlockManager;
+		private readonly IPlanningGroupSettingsProvider _planningGroupSettingsProvider;
 
 		public DayOffOptimizationEventHandler(DeadLockRetrier deadLockRetrier, 
 			DayOffOptimization dayOffOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			FillSchedulerStateHolder fillSchedulerStateHolder,
 			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland,
-			IGridlockManager gridlockManager)
+			IGridlockManager gridlockManager,
+			IPlanningGroupSettingsProvider planningGroupSettingsProvider)
 		{
 			_deadLockRetrier = deadLockRetrier;
 			_dayOffOptimization = dayOffOptimization;
@@ -33,6 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_synchronizeSchedulesAfterIsland = synchronizeSchedulesAfterIsland;
 			_gridlockManager = gridlockManager;
+			_planningGroupSettingsProvider = planningGroupSettingsProvider;
 		}
 
 		[TestLog]
@@ -60,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate),
 				schedulerStateHolder.SchedulingResultState.LoadedAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray(),
 				false,
-				null); 
+				_planningGroupSettingsProvider.Execute(Guid.Empty)); 
 		}
 	}
 }
