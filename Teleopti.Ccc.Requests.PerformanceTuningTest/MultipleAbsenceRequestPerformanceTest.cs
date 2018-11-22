@@ -143,7 +143,7 @@ and p.Id not in (select person from PersonAbsence where  '2016-03-16 00:00:00' b
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 			StardustJobFeedback.SendProgress($"Will process {200} requests");
-			foreach (var i in Enumerable.Range(0, 5))
+			foreach (var i in Enumerable.Range(0, 200))
 			{
 				WithUnitOfWork.Do(() =>
 				{
