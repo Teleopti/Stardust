@@ -21,7 +21,7 @@
 					<div class="form-group">
 						<label for="baseInterval">Interval length:</label>
 						<select class="form-control" id="baseInterval" ng-disabled="ctrl.tenant.IsBaseConfigured" ng-options="interval.Id as interval.Text for interval in ctrl.configData.IntervalLengthList" ng-model="ctrl.baseConfig.interval">
-							<option ng-show="!ctrl.baseConfig.interval" value="">- Select Interval length</option>
+							<!--<option ng-show="!ctrl.baseConfig.interval" value="">- Select Interval length</option>-->
 						</select>
 					</div>
 				</div>
@@ -29,7 +29,7 @@
 					<div class="form-group">
 						<label for="baseCulture">Culture:</label>
 						<select class="form-control" id="baseCulture" ng-disabled="ctrl.tenant.IsBaseConfigured" ng-options="culture.Id as culture.Text for culture in ctrl.configData.CultureList" ng-model="ctrl.baseConfig.culture">
-							<option ng-show="!ctrl.baseConfig.culture" value="">- Select culture</option>
+							<!--<option ng-show="!ctrl.baseConfig.culture" value="">- Select culture</option>-->
 						</select>
 					</div>
 				</div>
@@ -37,7 +37,7 @@
 					<div class="form-group">
 						<label for="baseTimezone">Time zone:</label>
 						<select class="form-control" id="baseTimezone" ng-disabled="ctrl.tenant.IsBaseConfigured" ng-options="timezone.Id as timezone.Text for timezone in ctrl.configData.TimeZoneList" ng-model="ctrl.baseConfig.timezone">
-							<option ng-show="!ctrl.baseConfig.timezone" value="">- Select time zone</option>
+							<!--<option ng-show="!ctrl.baseConfig.timezone" value="">- Select time zone</option>-->
 						</select>
 					</div>
 				</div>

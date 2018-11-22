@@ -26,6 +26,12 @@
 			  interval: ctrl.tenant.BaseConfig.IntervalLength,
 			  timezone: ctrl.tenant.BaseConfig.TimeZoneCode
 		  }
+	  } else {
+		  ctrl.baseConfig = {
+			  culture: 1033,
+			  interval: 15,
+			  timezone: "UTC"
+		  }
 	  }
 
     (function getConfigurationModel() {
