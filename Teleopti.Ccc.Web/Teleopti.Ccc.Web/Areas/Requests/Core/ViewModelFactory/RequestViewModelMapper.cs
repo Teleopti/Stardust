@@ -17,6 +17,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
@@ -120,11 +121,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				requestViewModel.IsFullDay = isFullDay(request);
 				var scheduleRange = schedules[absenceRequest.Person];
 
-				requestViewModel.Shifts = mapShifts(scheduleRange, absenceRequest.Period.ToDateOnlyPeriod(request.Person.PermissionInformation.DefaultTimeZone()));
+				requestViewModel.Shifts = mapShifts(scheduleRange, absenceRequest.Person, absenceRequest.Period.ToDateOnlyPeriod(request.Person.PermissionInformation.DefaultTimeZone()));
 			}
 		}
 
-		private IEnumerable<ShiftViewModel> mapShifts(IScheduleRange schedules, DateOnlyPeriod period)
+		private IEnumerable<ShiftViewModel> mapShifts(IScheduleRange schedules, IPerson person, DateOnlyPeriod period)
 		{
 			var shiftViewModels = new List<ShiftViewModel>();
 			foreach (var date in period.DayCollection())
@@ -133,6 +134,19 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				var eventScheduleDay = _builder.BuildEventScheduleDay(scheduleDay);
 				var isDayOff = eventScheduleDay.DayOff != null;
 				var isFulldayAbsence = eventScheduleDay.IsFullDayAbsence;
+				var shiftCategory = scheduleDay.PersonAssignment()?.ShiftCategory;
+				var categoryName = shiftCategory?.Description.Name;
+				var shortName = shiftCategory?.Description.ShortName;
+				string displayColor = null;
+				if (shiftCategory != null) displayColor = mapColor(shiftCategory.DisplayColor.ToArgb());
+				if (isFulldayAbsence)
+				{
+					var payload = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload;
+					categoryName = payload.ConfidentialDescription(person).Name;
+					var absenceColor = payload.ConfidentialDisplayColor(person);
+					displayColor = mapColor(absenceColor.ToArgb());
+					shortName = payload.Description.ShortName;
+				}
 				var shiftViewModel = new ShiftViewModel
 				{
 					ContractTimeInMinute = eventScheduleDay.ContractTime.TotalMinutes,
@@ -143,6 +157,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 					Name = _personNameProvider.BuildNameFromSetting(scheduleDay.Person.Name.FirstName,
 						scheduleDay.Person.Name.LastName),
 					PersonId = scheduleDay.Person.Id.GetValueOrDefault(),
+					ShiftCategory = new ShiftCategoryViewModel { Name = categoryName, ShortName = shortName, DisplayColor = displayColor },
 					ScheduleLayers = getScheduleLayers(eventScheduleDay, scheduleDay.PersonAssignment())
 				};
 				shiftViewModels.Add(shiftViewModel);
