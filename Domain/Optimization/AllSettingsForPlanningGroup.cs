@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -21,6 +22,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public PlanningGroupSettings ForAgent(IPerson person, DateOnly dateOnly)
 		{
 			return _planningGroupSettings.First(x => x.IsValidForAgent(person, dateOnly));
+		}
+
+		public IDisposable ChangeSettingInThisScope(Percent newPreferenceValue)
+		{
+			var oldPreferenceValue = PreferenceValue;
+			PreferenceValue = newPreferenceValue;
+			return new GenericDisposable(() => PreferenceValue = oldPreferenceValue);
 		}
 
 		public IEnumerator<PlanningGroupSettings> GetEnumerator()

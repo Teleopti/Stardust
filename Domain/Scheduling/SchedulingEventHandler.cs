@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var agentsWithExistingShiftsBeforeSchedule = _alreadyScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod, agents);
 			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, agents, selectedPeriod, blockPreferenceProvider);
 
-			var agentsScheduledWithoutPreferences =  runSchedulingWithoutPreferences(agentsWithExistingShiftsBeforeSchedule, @event, agents, selectedPeriod,
+			var agentsScheduledWithoutPreferences = runSchedulingWithoutPreferences(agentsWithExistingShiftsBeforeSchedule, @event, agents, selectedPeriod,
 				schedulingOptions, schedulingCallback, schedulingProgress, blockPreferenceProvider);
 			
 			if (schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly)
@@ -113,15 +113,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			
 			if (@event.RunDayOffOptimization)
 			{
-				var originalPreferenceValue = allSettingsForPlanningGroup.PreferenceValue;
-				allSettingsForPlanningGroup.PreferenceValue = Percent.Zero;
-				
-				_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate),
-					agentsScheduledWithoutPreferences,
-					true,
-					allSettingsForPlanningGroup);
-
-				allSettingsForPlanningGroup.PreferenceValue = originalPreferenceValue;
+				using (allSettingsForPlanningGroup.ChangeSettingInThisScope(Percent.Zero))
+				{
+					_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate),
+						agentsScheduledWithoutPreferences,
+						true,
+						allSettingsForPlanningGroup);					
+				}
 				_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate),
 					agents.Where(x=>!agentsScheduledWithoutPreferences.Contains(x)).ToArray(),
 					true,
