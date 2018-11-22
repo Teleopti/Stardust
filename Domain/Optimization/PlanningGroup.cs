@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public virtual IEnumerable<IFilter> Filters => _filters;
 		public virtual string Name { get; set; }
-		public virtual AllPlanningGroupSettings Settings => new AllPlanningGroupSettings(_settings, _preferenceValue);
+		public virtual AllSettingsForPlanningGroup Settings => new AllSettingsForPlanningGroup(_settings, _preferenceValue);
 
 		public virtual void SetGlobalValues(Percent preferenceValue)
 		{
