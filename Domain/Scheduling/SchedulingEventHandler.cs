@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				schedulingOptions, schedulingCallback, schedulingProgress, blockPreferenceProvider))
 			{
 				//to be fixed later - just hack for now
-				planningGroup.PreferenceValue = Percent.Zero;
+				planningGroup.SetGlobalValues(Percent.Zero);
 			}
 		
 			if (schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly)

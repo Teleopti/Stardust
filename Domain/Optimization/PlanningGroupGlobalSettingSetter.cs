@@ -9,8 +9,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			if (planningGroup != null)
 			{
-				optimizationPreferences.General.UsePreferences = planningGroup.PreferenceValue > Percent.Zero;
-				optimizationPreferences.General.PreferencesValue = planningGroup.PreferenceValue.Value;
+				optimizationPreferences.General.UsePreferences = planningGroup.Settings.PreferenceValue > Percent.Zero;
+				optimizationPreferences.General.PreferencesValue = planningGroup.Settings.PreferenceValue.Value;
 			}
 		}
 	}
