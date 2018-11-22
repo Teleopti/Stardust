@@ -64,8 +64,6 @@ export const mainInitializer = [
 			areas.permitted = permittedAreas;
 
 			if (isPermittedArea(areas, 'rta')) rtaDataService.load();
-
-			preloadDone = true;
 		});
 
 		$rootScope.$on('$localeChangeSuccess', () => {
@@ -73,14 +71,14 @@ export const mainInitializer = [
 		});
 
 		$rootScope.$on('$stateChangeStart', (event, next: IState, toParams) => {
-			if (preloadDone) {
-				if (isPermittedArea(areas, internalNameOf(next), urlOfState(next))) return;
+			if (!preloadDone) {
+				preloadDone = true; // Why is this done!?
+				event.preventDefault();
+				preload.then(() => $state.go(next, toParams));
+			} else if (!isPermittedArea(areas, internalNameOf(next), urlOfState(next))) {
 				event.preventDefault();
 				handleNotPermitted(areas, noticeService, $translate, $state, next);
 			}
-
-			event.preventDefault();
-			preload.then(() => $state.go(next, toParams));
 		});
 
 		$rootScope.$on('$stateChangeSuccess', () => {
