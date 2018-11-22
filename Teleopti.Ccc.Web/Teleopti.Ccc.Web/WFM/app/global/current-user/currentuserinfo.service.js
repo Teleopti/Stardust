@@ -1,11 +1,11 @@
-(function() {
+﻿(function() {
 	'use strict';
 
 	angular.module('currentUserInfoService').service('CurrentUserInfo', CurrentUserInfo);
 
-	CurrentUserInfo.$inject = ['AuthenticationRequests', '$q', 'wfmI18nService', 'Settings'];
+	CurrentUserInfo.$inject = ['$http', '$q', 'wfmI18nService', 'Settings'];
 
-	function CurrentUserInfo(AuthenticationRequests, $q, wfmI18nService, Settings) {
+	function CurrentUserInfo($http, $q, wfmI18nService, Settings) {
 		var userName;
 		var defaultTimeZone;
 		var defaultTimeZoneName;
@@ -64,7 +64,7 @@
 		}
 
 		function getCurrentUserFromServer() {
-			return AuthenticationRequests.getCurrentUser();
+			return $http.get('../api/Global/User/CurrentUser');
 		}
 
 		function initContext() {
