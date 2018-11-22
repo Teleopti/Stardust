@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		public IAbsenceRequestPersister AbsenceRequestPersister;
 
 		private List<IPerson> _persons;
+		private List<Guid> _personIdList = new List<Guid>();
 		private DateTime _nowDateTime;
 
 		public override void OneTimeSetUp()
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			Now.Is(_nowDateTime);
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
-
+			
 			using (var connection = new SqlConnection(ConfigReader.ConnectionString("Tenancy")))
 			{
 				connection.Open();
@@ -77,6 +78,33 @@ delete from PersonRequest where Subject  = 'Story79139'";
 				}
 				connection.Close();
 				StardustJobFeedback.SendProgress($"Have been running the script");
+			}
+
+
+			using (var connection = new SqlConnection(ConfigReader.ConnectionString("Tenancy")))
+			{
+				connection.Open();
+				var sql = @"select distinct top 200 p.Id 
+from person p
+inner join personperiod pp on pp.Parent = p.id
+inner join PersonSkill ps on ps.Parent = pp.id
+inner join Team t on t.id = pp.team
+inner join [Site] s on t.Site = s.Id
+inner join PersonAssignment pa
+on pa.Person = p.Id
+where pp.StartDate < '2016-03-18 00:00:00' and pp.EndDate > '2016-03-13 00:00:00' 
+and p.WorkflowControlSet = 'E97BC114-8939-4A70-AE37-A338010FFF19'
+and s.BusinessUnit = '1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B'
+and pa.Date between '2016-03-13 00:00:00'  and '2016-03-18 00:00:00'
+and p.Id not in (select person from PersonAbsence where  '2016-03-16 00:00:00' between  DATEADD(day,-1,Minimum)  and  DATEADD(day,1,maximum) )";
+				using (var command = new SqlCommand(sql, connection))
+				{
+					var reader = command.ExecuteReader();
+					while(reader.Read())
+						_personIdList.Add((Guid) reader[0]);
+				}
+				connection.Close();
+				
 			}
 
 			var now = Now.UtcDateTime();
@@ -99,9 +127,8 @@ delete from PersonRequest where Subject  = 'Story79139'";
 				StardustJobFeedback.SendProgress($"Will update staffing readmodel");
 				UpdateStaffingLevel.Update(period);
 				StardustJobFeedback.SendProgress($"Done update staffing readmodel");
-				_persons = PersonRepository.LoadAll().ToList();
+				//_persons = PersonRepository.l
 				
-
 			});
 		}
 
@@ -117,16 +144,18 @@ delete from PersonRequest where Subject  = 'Story79139'";
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 			StardustJobFeedback.SendProgress($"Will process {200} requests");
-			foreach (var i in Enumerable.Range(0, 200))
+			foreach (var i in Enumerable.Range(0, 5))
 			{
 				WithUnitOfWork.Do(() =>
 				{
 					AbsenceRepository.LoadAll();
-
+					var startTime = new DateTime(2016, 3, 16, 8, 0, 0, DateTimeKind.Utc);
+					var endDateTime = new DateTime(2016,3,16,17,0,0,DateTimeKind.Utc);
+					
 					AbsenceRequestModel model = new AbsenceRequestModel()
 					{
-						Period = new DateTimePeriod(2016, 12, 24, 2016, 12, 24),
-						PersonId = _persons[i].Id.GetValueOrDefault(),
+						Period = new DateTimePeriod(startTime,endDateTime),
+						PersonId = _personIdList[i],
 						Message = "Story79139",
 						Subject = "Story79139",
 						AbsenceId = new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F")
