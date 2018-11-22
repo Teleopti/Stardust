@@ -5,6 +5,10 @@ var MicrosoftLoginPage = require('./pages/MicrosoftLogin.page');
 
 describe('Azure AD using WsFed', function() {
 	this.timeout(360 * 1000); // Set global timeout for this test to 6 minutes
+	this.retries(3);
+	beforeEach(function () {
+        browser.reload();
+    });
 	// ktWPzyvL67VpGwl2GcpmkyQaZ0bMgz2-rtC5fXGuFYU is the claim nameidentifier from azure ad for demo@teleopti.com, the correct claim should be used is http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name
     it('should be able to sign in with AD user using WsFed (metadata)', function () {
 		browser.deleteCookie();
@@ -22,5 +26,5 @@ describe('Azure AD using WsFed', function() {
 		MicrosoftLoginPage.signin();
 		MytimePage.usernameLabel.waitForExist(60 * 1000);
 		MytimePage.signout();
-    }, 2);
+    });
 });
