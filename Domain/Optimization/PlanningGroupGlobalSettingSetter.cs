@@ -7,14 +7,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		public void Execute(AllSettingsForPlanningGroup allSettingsForPlanningGroup, IOptimizationPreferences optimizationPreferences)
 		{
-			if (allSettingsForPlanningGroup.PreferenceValue.HasValue)
+			if (allSettingsForPlanningGroup != null)
 			{
-				optimizationPreferences.General.UsePreferences = true;
-				optimizationPreferences.General.PreferencesValue = allSettingsForPlanningGroup.PreferenceValue.Value.Value;
-			}
-			else
-			{
-				optimizationPreferences.General.UsePreferences = false;
+				optimizationPreferences.General.UsePreferences = allSettingsForPlanningGroup.PreferenceValue > Percent.Zero;
+				optimizationPreferences.General.PreferencesValue = allSettingsForPlanningGroup.PreferenceValue.Value;
 			}
 		}
 	}
