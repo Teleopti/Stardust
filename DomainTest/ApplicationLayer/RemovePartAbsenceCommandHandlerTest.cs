@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	{
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
 		public FakeScenarioRepository ScenarioRepository;
+		public FullPermission Permission;
 		public RemovePartPersonAbsenceCommandHandler Target;
 
 		public void Isolate(IIsolate isolate)
@@ -196,6 +198,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldReturnErrorMessages()
 		{
+			Permission.AddToBlackList(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule);
+
 			var scenario = ScenarioRepository.Has("Default");
 			var startDate = new DateTime(2016, 01, 01, 00, 00, 00, DateTimeKind.Utc);
 			var endDate = new DateTime(2016, 01, 01, 01, 00, 00, DateTimeKind.Utc);
