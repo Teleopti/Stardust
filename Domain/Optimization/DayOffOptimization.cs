@@ -116,12 +116,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public void Execute(DateOnlyPeriod selectedPeriod,
 			IEnumerable<IPerson> selectedAgents,
 			bool runWeeklyRestSolver, // desktop client runs this explicitly afterwards so sending in false here
-			PlanningGroup planningGroup)
+			AllSettingsForPlanningGroup allSettingsForPlanningGroup)
 		{
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
-			_planningGroupGlobalSettingSetter.Execute(planningGroup, optimizationPreferences);
-			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(planningGroup);
-			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderForPlanningPeriod.Fetch(planningGroup);
+			_planningGroupGlobalSettingSetter.Execute(allSettingsForPlanningGroup, optimizationPreferences);
+			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(allSettingsForPlanningGroup);
+			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderForPlanningPeriod.Fetch(allSettingsForPlanningGroup);
 			var stateHolder = _schedulerStateHolder();
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceCalculation, schedulingOptions.ConsiderShortBreaks, stateHolder.SchedulingResultState, _userTimeZone);

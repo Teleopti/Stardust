@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IGridlockManager _gridlockManager;
 		private readonly IBlockPreferenceProviderForPlanningPeriod _blockPreferenceProviderForPlanningPeriod;
 		private readonly DeadLockRetrier _deadLockRetrier;
-		private readonly IPlanningGroupProvider _planningGroupProvider;
+		private readonly IPlanningGroupSettingsProvider _planningGroupSettingsProvider;
 
 		public IntradayOptimizationExecutor(IntradayOptimization intradayOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IGridlockManager gridlockManager,
 			IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod,
 			DeadLockRetrier deadLockRetrier,
-			IPlanningGroupProvider planningGroupProvider)
+			IPlanningGroupSettingsProvider planningGroupSettingsProvider)
 		{
 			_intradayOptimization = intradayOptimization;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_gridlockManager = gridlockManager;
 			_blockPreferenceProviderForPlanningPeriod = blockPreferenceProviderForPlanningPeriod;
 			_deadLockRetrier = deadLockRetrier;
-			_planningGroupProvider = planningGroupProvider;
+			_planningGroupSettingsProvider = planningGroupSettingsProvider;
 		}
 
 		[TestLog]
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Guid planningPeriodId)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
-			var planningGroup = _planningGroupProvider.Execute(planningPeriodId);
+			var planningGroup = _planningGroupSettingsProvider.Execute(planningPeriodId);
 			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(planningGroup);
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, agentsInIsland, new LockInfoForStateHolder(_gridlockManager, locks), period, onlyUseSkills);
 			_intradayOptimization.Execute(period, schedulerStateHolder.ChoosenAgents.Filter(agentsToOptimize), runResolveWeeklyRestRule, blockPreferenceProvider);

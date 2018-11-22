@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly AgentsWithPreferences _agentsWithPreferences;
 		private readonly AgentsWithWhiteSpots _agentsWithWhiteSpots;
 		private readonly RemoveNonPreferenceDaysOffs _removeNonPreferenceDaysOffs;
-		private readonly IPlanningGroupProvider _planningGroupProvider;
+		private readonly IPlanningGroupSettingsProvider _planningGroupSettingsProvider;
 
 		protected SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder,
 						FillSchedulerStateHolder fillSchedulerStateHolder,
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						AgentsWithPreferences agentsWithPreferences, 
 						AgentsWithWhiteSpots agentsWithWhiteSpots,
 						RemoveNonPreferenceDaysOffs removeNonPreferenceDaysOffs,
-						IPlanningGroupProvider planningGroupProvider)
+						IPlanningGroupSettingsProvider planningGroupSettingsProvider)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_agentsWithPreferences = agentsWithPreferences;
 			_agentsWithWhiteSpots = agentsWithWhiteSpots;
 			_removeNonPreferenceDaysOffs = removeNonPreferenceDaysOffs;
-			_planningGroupProvider = planningGroupProvider;
+			_planningGroupSettingsProvider = planningGroupSettingsProvider;
 		}
 
 		[TestLog]
@@ -91,12 +91,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[ReadonlyUnitOfWork]
 		protected virtual void DoScheduling(SchedulingWasOrdered @event, ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod)
 		{
-			var planningGroup = _planningGroupProvider.Execute(@event.PlanningPeriodId);
+			var allSettingsForPlanningGroup = _planningGroupSettingsProvider.Execute(@event.PlanningPeriodId);
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsInIsland, new LockInfoForStateHolder(_gridlockManager, @event.UserLocks), selectedPeriod, @event.Skills);
 			var schedulingCallback = _currentSchedulingCallback.Current();
 			var schedulingProgress = schedulingCallback is IConvertSchedulingCallbackToSchedulingProgress converter ? converter.Convert() : new NoSchedulingProgress();
 			var schedulingOptions = _schedulingOptionsProvider.Fetch(schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate);
-			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(planningGroup);
+			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(allSettingsForPlanningGroup);
 			selectedPeriod = _extendSelectedPeriodForMonthlyScheduling.Execute(@event, schedulerStateHolder, selectedPeriod);
 			var agents = schedulerStateHolder.SchedulingResultState.LoadedAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray();
 			var agentsWithExistingShiftsBeforeSchedule = _alreadyScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod, agents);
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				schedulingOptions, schedulingCallback, schedulingProgress, blockPreferenceProvider))
 			{
 				//to be fixed later - just hack for now
-				planningGroup.SetGlobalValues(Percent.Zero);
+				allSettingsForPlanningGroup.PreferenceValue = Percent.Zero;
 			}
 		
 			if (schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly)
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate),
 					agents,
 					true,
-					planningGroup);
+					allSettingsForPlanningGroup);
 			}
 		}
 

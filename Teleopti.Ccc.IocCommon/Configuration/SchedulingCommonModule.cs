@@ -458,7 +458,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<MoveSchedulesToOriginalStateHolderAfterIsland>()
 					.As<ISynchronizeSchedulesAfterIsland>()
 					.SingleInstance();
-				builder.RegisterType<NullPlanningGroupProvider>().As<IPlanningGroupProvider>().SingleInstance();
+				builder.RegisterType<NullPlanningGroupSettingsProvider>().As<IPlanningGroupSettingsProvider>().SingleInstance();
 			}
 			else
 			{
@@ -479,7 +479,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<CurrentOptimizationCallback>().As<ICurrentOptimizationCallback>().AsSelf().SingleInstance();
 				builder.RegisterType<CurrentSchedulingCallback>().As<ICurrentSchedulingCallback>().AsSelf().SingleInstance();
 				builder.RegisterType<FillSchedulerStateHolderFromDatabase>().As<FillSchedulerStateHolder>().ApplyAspects().SingleInstance();
-				builder.RegisterType<PlanningGroupProvider>().As<IPlanningGroupProvider>().SingleInstance();
+				builder.RegisterType<PlanningGroupSettingsProvider>().As<IPlanningGroupSettingsProvider>().SingleInstance();
 			}
 
 

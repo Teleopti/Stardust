@@ -5,12 +5,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class PlanningGroupGlobalSettingSetter
 	{
-		public void Execute(PlanningGroup planningGroup, IOptimizationPreferences optimizationPreferences)
+		public void Execute(AllSettingsForPlanningGroup allSettingsForPlanningGroup, IOptimizationPreferences optimizationPreferences)
 		{
-			if (planningGroup != null)
+			if (allSettingsForPlanningGroup != null)
 			{
-				optimizationPreferences.General.UsePreferences = planningGroup.Settings.PreferenceValue > Percent.Zero;
-				optimizationPreferences.General.PreferencesValue = planningGroup.Settings.PreferenceValue.Value;
+				optimizationPreferences.General.UsePreferences = allSettingsForPlanningGroup.PreferenceValue > Percent.Zero;
+				optimizationPreferences.General.PreferencesValue = allSettingsForPlanningGroup.PreferenceValue.Value;
 			}
 		}
 	}

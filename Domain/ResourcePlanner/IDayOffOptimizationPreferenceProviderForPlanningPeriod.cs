@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner
 {
 	public interface IDayOffOptimizationPreferenceProviderForPlanningPeriod
 	{
-		IDayOffOptimizationPreferenceProvider Fetch(PlanningGroup planningGroup);
+		IDayOffOptimizationPreferenceProvider Fetch(AllSettingsForPlanningGroup allSettingsForPlanningGroup);
 	}
 }

@@ -293,12 +293,12 @@
     <Compile Include="Notification\NotificationServiceClient.cs" />
     <Compile Include="Optimization\AllSettingsForPlanningGroup.cs" />
     <Compile Include="Optimization\BlockPreferencesExtensions.cs" />
-    <Compile Include="Optimization\NullPlanningGroupProvider.cs" />
+    <Compile Include="Optimization\NullPlanningGroupSettingsProvider.cs" />
     <Compile Include="Optimization\IntradayOptimizationOnStardust.cs" />
-    <Compile Include="Optimization\IPlanningGroupProvider.cs" />
+    <Compile Include="Optimization\IPlanningGroupSettingsProvider.cs" />
     <Compile Include="Optimization\MatrixLockers\MatrixClosedDayLocker.cs" />
     <Compile Include="Optimization\PlanningGroupGlobalSettingSetter.cs" />
-    <Compile Include="Optimization\PlanningGroupProvider.cs" />
+    <Compile Include="Optimization\PlanningGroupSettingsProvider.cs" />
     <Compile Include="Optimization\PredictorResult.cs" />
     <Compile Include="Optimization\TeamBlock\CreatePersonalSkillDataExtractor.cs" />
     <Compile Include="MultiTenancy\PersonIdentitiesInputModel.cs" />
