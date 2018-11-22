@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 		public IAbsenceRequestPersister AbsenceRequestPersister;
 
-		private List<IPerson> _persons;
 		private List<Guid> _personIdList = new List<Guid>();
 		private DateTime _nowDateTime;
 
