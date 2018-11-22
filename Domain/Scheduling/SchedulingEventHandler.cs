@@ -96,9 +96,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var schedulingCallback = _currentSchedulingCallback.Current();
 			var schedulingProgress = schedulingCallback is IConvertSchedulingCallbackToSchedulingProgress converter ? converter.Convert() : new NoSchedulingProgress();
 			var schedulingOptions = _schedulingOptionsProvider.Fetch(schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate);
-			var blockPreferenceProvider = @event.FromWeb ? 
-				_blockPreferenceProviderForPlanningPeriod.Fetch(planningGroup) : 
-				new FixedBlockPreferenceProvider(schedulingOptions);
+			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(planningGroup);
 			selectedPeriod = _extendSelectedPeriodForMonthlyScheduling.Execute(@event, schedulerStateHolder, selectedPeriod);
 			var agents = schedulerStateHolder.SchedulingResultState.LoadedAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray();
 			var agentsWithExistingShiftsBeforeSchedule = _alreadyScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod, agents);

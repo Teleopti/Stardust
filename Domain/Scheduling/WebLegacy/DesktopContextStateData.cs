@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			OptimizationPreferences = optimizationPreferences;
 			DayOffOptimizationPreferenceProvider = dayOffOptimizationPreferenceProvider;
 			OptimizationCallback = optimizationCallback;
+			IsOptimization = true;
 		}
 
 		public DesktopContextStateData(ISchedulerStateHolder schedulerStateHolderFrom, SchedulingOptions schedulingOptions, ISchedulingCallback schedulingCallback)
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			SchedulerStateHolderFrom = schedulerStateHolderFrom;
 			SchedulingOptions = schedulingOptions;
 			SchedulingCallback = schedulingCallback;
+			IsOptimization = false;
 		}
 
 		public ISchedulerStateHolder SchedulerStateHolderFrom { get; }
@@ -28,5 +30,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		public IOptimizationCallback OptimizationCallback { get; }
 		public SchedulingOptions SchedulingOptions { get; }
 		public ISchedulingCallback SchedulingCallback { get; }
+		public bool IsOptimization { get; }
 	}
 }

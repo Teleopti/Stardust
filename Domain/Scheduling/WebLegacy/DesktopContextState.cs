@@ -48,7 +48,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		
 		public IBlockPreferenceProvider Fetch(PlanningGroup planningGroup)
 		{
-			return new FixedBlockPreferenceProvider(Fetch().Extra);
+			return contextData().IsOptimization ? 
+				new FixedBlockPreferenceProvider(Fetch().Extra) : 
+				new FixedBlockPreferenceProvider(((ISchedulingOptionsProvider)this).Fetch(null));
 		}
 
 		public IOptimizationCallback Current()
