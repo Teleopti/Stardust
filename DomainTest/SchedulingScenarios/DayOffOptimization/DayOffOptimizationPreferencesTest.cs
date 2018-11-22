@@ -33,8 +33,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 		
 		[Test]
-		[Ignore("76289 to be fixed")]
-		public void ShouldDayOffOptimizeAgentWitPreferencesEvenIfOtherAgentFailsToBeScheduledWithPreferences()
+		public void ShouldDayOffOptimizeAgentWithPreferencesEvenIfOtherAgentFailsToBeScheduledWithPreferences()
 		{
 			var date = new DateOnly(2015, 10, 12); 
 			var activity = ActivityRepository.Has();

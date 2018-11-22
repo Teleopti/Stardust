@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourcePlanner;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
 
@@ -102,13 +103,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var agentsWithExistingShiftsBeforeSchedule = _alreadyScheduledAgents.Execute(schedulerStateHolder.Schedules, selectedPeriod, agents);
 			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, agents, selectedPeriod, blockPreferenceProvider);
 
-			if (runSchedulingWithoutPreferences(agentsWithExistingShiftsBeforeSchedule, @event, agents, selectedPeriod,
-				schedulingOptions, schedulingCallback, schedulingProgress, blockPreferenceProvider))
-			{
-				//to be fixed later - just hack for now
-				allSettingsForPlanningGroup.PreferenceValue = Percent.Zero;
-			}
-		
+			var agentsScheduledWithoutPreferences =  runSchedulingWithoutPreferences(agentsWithExistingShiftsBeforeSchedule, @event, agents, selectedPeriod,
+				schedulingOptions, schedulingCallback, schedulingProgress, blockPreferenceProvider);
+			
 			if (schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly)
 			{
 				_removeNonPreferenceDaysOffs.Execute(schedulerStateHolder.Schedules, agents, selectedPeriod);
@@ -116,21 +113,30 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			
 			if (@event.RunDayOffOptimization)
 			{
+				var originalPreferenceValue = allSettingsForPlanningGroup.PreferenceValue;
+				allSettingsForPlanningGroup.PreferenceValue = Percent.Zero;
+				
 				_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate),
-					agents,
+					agentsScheduledWithoutPreferences,
+					true,
+					allSettingsForPlanningGroup);
+
+				allSettingsForPlanningGroup.PreferenceValue = originalPreferenceValue;
+				_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate),
+					agents.Where(x=>!agentsScheduledWithoutPreferences.Contains(x)).ToArray(),
 					true,
 					allSettingsForPlanningGroup);
 			}
 		}
 
-		private bool runSchedulingWithoutPreferences(
+		private IEnumerable<IPerson> runSchedulingWithoutPreferences(
 			IDictionary<IPerson, IEnumerable<DateOnly>> alreadyScheduledAgents, SchedulingWasOrdered @event,IEnumerable<IPerson> agents,
 			DateOnlyPeriod selectedPeriod, SchedulingOptions schedulingOptions,
 			ISchedulingCallback schedulingCallback, ISchedulingProgress schedulingProgress,
 			IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			if (!@event.ScheduleWithoutPreferencesForFailedAgents) 
-				return false;
+				return Enumerable.Empty<IPerson>();
 			var schedules = _schedulerStateHolder().Schedules;
 			var agentsWithPreferences = _agentsWithPreferences.Execute(schedules, agents, selectedPeriod);
 			var filteredAgents = _agentsWithWhiteSpots.Execute(schedules, agentsWithPreferences, selectedPeriod);
@@ -153,7 +159,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			}
 			schedulingOptions.UsePreferences = false;
 			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, filteredAgents, selectedPeriod, blockPreferenceProvider);
-			return filteredAgents.Any();
+			var agentsWithWhiteSpotsAfterScheduling = _agentsWithWhiteSpots.Execute(schedules, filteredAgents, selectedPeriod);
+
+			return filteredAgents.Where(agent => !agentsWithWhiteSpotsAfterScheduling.Contains(agent)).ToList();
 		}
 	}
 }
