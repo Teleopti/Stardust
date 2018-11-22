@@ -1913,12 +1913,6 @@
     <Compile Include="Win\Common\Controls\ScenarioSelector.Designer.cs">
       <DependentUpon>ScenarioSelector.cs</DependentUpon>
     </Compile>
-    <Compile Include="Win\Common\Controls\SkillResultHighlightGridControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Win\Common\Controls\SkillResultHighlightGridControl.Designer.cs">
-      <DependentUpon>SkillResultHighlightGridControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Win\Common\Controls\SpinningProgress\SpinningProgressControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -4265,9 +4259,6 @@
     <EmbeddedResource Include="Win\Common\Controls\ScenarioSelector.resx">
       <DependentUpon>ScenarioSelector.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Win\Common\Controls\SkillResultHighlightGridControl.resx">
-      <DependentUpon>SkillResultHighlightGridControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Win\Common\Controls\SpinningProgress\SpinningProgressControl.resx">
       <DependentUpon>SpinningProgressControl.cs</DependentUpon>
