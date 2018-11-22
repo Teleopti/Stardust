@@ -16024,15 +16024,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Insights.
-        /// </summary>
-        public static string Insights {
-            get {
-                return ResourceManager.GetString("Insights", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to You don&apos;t have sufficient permission to perform this task. please contact your Administrator..
         /// </summary>
         public static string InsufficientPermission {

@@ -15908,9 +15908,6 @@ Applikationen kommer nu att stängas. </value>
   <data name="SomethingWentWrong" xml:space="preserve">
     <value>Något gick fel. Var god och försök igen senare. </value>
   </data>
-  <data name="Insights" xml:space="preserve">
-    <value>Insights</value>
-  </data>
   <data name="xxGeneralAuditTrailWebReport" xml:space="preserve">
     <value>Ändringslogg</value>
   </data>
