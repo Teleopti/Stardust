@@ -609,6 +609,7 @@
     <Compile Include="ResourcePlanner\IDayOffOptimizationPreferenceProviderForPlanningPeriod.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionsAbleToBeScheduled.cs" />
     <Compile Include="Scheduling\ShiftCategorySelection.cs" />
+    <Compile Include="Scheduling\WebLegacy\DesktopContextStateData.cs" />
     <Compile Include="Search\PersonSearchProvider.cs" />
     <Compile Include="Security\DataTokenManager.cs" />
     <Compile Include="Security\IDataTokenManager.cs" />
@@ -651,9 +652,7 @@
     <Compile Include="Scheduling\SchedulingInformationProvider.cs" />
     <Compile Include="Scheduling\WebLegacy\DesktopContext.cs" />
     <Compile Include="Scheduling\WebLegacy\DesktopPeopleInOrganization.cs" />
-    <Compile Include="Scheduling\WebLegacy\DesktopSchedulingContext.cs" />
     <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolderForDesktop.cs" />
-    <Compile Include="Scheduling\WebLegacy\IDesktopContextData.cs" />
     <Compile Include="Scheduling\WebLegacy\LockInfoForStateHolder.cs" />
     <Compile Include="Scheduling\WebLegacy\MoveSchedulesToOriginalStateHolderAfterIsland.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiWfmBpoExchangeLicenseOption.cs" />
@@ -2296,7 +2295,7 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ActivityRequiresSkillProjectionFilter.cs" />
     <Compile Include="Scheduling\SaveSchedulePart\BusinessRulesForPersonalAccountUpdate.cs" />
     <Compile Include="Scheduling\ViolatedSchedulePeriodBusinessRule.cs" />
-    <Compile Include="Scheduling\WebLegacy\DesktopOptimizationContext.cs" />
+    <Compile Include="Scheduling\WebLegacy\DesktopContextState.cs" />
     <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolderFromDatabase.cs" />
     <Compile Include="SeatPlanning\GroupSeatBookingRanker.cs" />
     <Compile Include="SeatPlanning\LocationSeatBookingScore.cs" />

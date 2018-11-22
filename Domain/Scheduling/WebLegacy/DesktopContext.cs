@@ -6,20 +6,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
 	public class DesktopContext
 	{
-		private readonly ConcurrentDictionary<Guid, IDesktopContextData> _contextPerCommand = new ConcurrentDictionary<Guid, IDesktopContextData>();
+		private readonly ConcurrentDictionary<Guid, DesktopContextStateData> _contextPerCommand = new ConcurrentDictionary<Guid, DesktopContextStateData>();
 
-		public IDesktopContextData CurrentContext()
+		public DesktopContextStateData CurrentContext()
 		{
 			var currentScope = CommandScope.Current();
 			return currentScope == null ? null : _contextPerCommand[currentScope.CommandId];
 		}
 
-		public IDisposable SetContextFor(ICommandIdentifier commandIdentifier, IDesktopContextData contextData)
+		public IDisposable SetContextFor(ICommandIdentifier commandIdentifier, DesktopContextStateData contextStateData)
 		{
-			_contextPerCommand[commandIdentifier.CommandId] = contextData;
+			_contextPerCommand[commandIdentifier.CommandId] = contextStateData;
 			return new GenericDisposable(() =>
 			{
-				_contextPerCommand.TryRemove(commandIdentifier.CommandId, out IDesktopContextData _);
+				_contextPerCommand.TryRemove(commandIdentifier.CommandId, out _);
 			});
 		}
 	}

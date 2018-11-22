@@ -11,19 +11,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class DayOffOptimizationDesktop
 	{
 		private readonly DayOffOptimizationCommandHandler _dayOffOptimizationCommandHandler;
-		private readonly DesktopOptimizationContext _desktopOptimizationContext;
+		private readonly DesktopContextState _desktopContextState;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public DayOffOptimizationDesktop(DayOffOptimizationCommandHandler dayOffOptimizationCommandHandler,
-			DesktopOptimizationContext desktopOptimizationContext,
+			DesktopContextState desktopContextState,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IResourceCalculation resourceCalculation,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_dayOffOptimizationCommandHandler = dayOffOptimizationCommandHandler;
-			_desktopOptimizationContext = desktopOptimizationContext;
+			_desktopContextState = desktopContextState;
 			_schedulerStateHolder = schedulerStateHolder;
 			_resourceCalculation = resourceCalculation;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				Period = selectedPeriod,
 				AgentsToOptimize = selectedAgents
 			};
-			using (_desktopOptimizationContext.Set(command, stateHolder, optimizationPreferences, dayOffOptimizationPreferenceProvider, optimizationCallback))
+			using (_desktopContextState.SetForOptimization(command, stateHolder, optimizationPreferences, dayOffOptimizationPreferenceProvider, optimizationCallback))
 			{
 				_dayOffOptimizationCommandHandler.Execute(command);
 			}

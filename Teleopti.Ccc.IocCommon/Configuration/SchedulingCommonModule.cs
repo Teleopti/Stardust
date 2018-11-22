@@ -439,11 +439,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Args().IsFatClient)
 			{
 				builder.RegisterType<DesktopPeopleInOrganization>().As<IAllStaff>().SingleInstance();
-				builder.RegisterType<DesktopOptimizationContext>()
+				builder.RegisterType<DesktopContextState>()
 					.As<IOptimizationPreferencesProvider>()
 					.As<ICurrentOptimizationCallback>()
 					.As<IBlockPreferenceProviderForPlanningPeriod>()
 					.As<IDayOffOptimizationPreferenceProviderForPlanningPeriod>()
+					.As<ISchedulingOptionsProvider>()
+					.As<ICurrentSchedulingCallback>()
 					.AsSelf()
 					.ApplyAspects()
 					.SingleInstance();
@@ -453,11 +455,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.SingleInstance();					
 
 				builder.RegisterType<DesktopContext>().SingleInstance();
-				builder.RegisterType<DesktopSchedulingContext>()
-					.As<ISchedulingOptionsProvider>()
-					.As<ICurrentSchedulingCallback>()
-					.AsSelf()
-					.SingleInstance();
 				builder.RegisterType<MoveSchedulesToOriginalStateHolderAfterIsland>()
 					.As<ISynchronizeSchedulesAfterIsland>()
 					.SingleInstance();
