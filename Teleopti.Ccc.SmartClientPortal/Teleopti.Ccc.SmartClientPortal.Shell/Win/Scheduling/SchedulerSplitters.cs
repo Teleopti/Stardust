@@ -247,5 +247,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			RefreshTabInfoPanels(_filteredPersons);
 		}
+
+		private void gridResize(object sender, EventArgs e)
+		{
+			Grid.Invalidate();
+		}
 	}
 }

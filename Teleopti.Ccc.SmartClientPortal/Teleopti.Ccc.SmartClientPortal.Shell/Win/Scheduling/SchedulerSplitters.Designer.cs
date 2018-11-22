@@ -390,6 +390,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.grid.Text = "xxPeriodViewPROTOTYPE";
 			this.grid.ThemesEnabled = true;
 			this.grid.UseRightToLeftCompatibleTextBox = true;
+			this.grid.Resize += new System.EventHandler(this.gridResize);
 			// 
 			// elementHostRequests
 			// 

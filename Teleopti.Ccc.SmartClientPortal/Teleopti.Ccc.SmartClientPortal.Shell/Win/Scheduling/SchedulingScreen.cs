@@ -4775,16 +4775,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_scheduleView.SetSelectedDateLocal(e.Date);
 		}
 
+		//Denna och nästa löser ett problem med omritning av dagvyn när man ändrat på splitters, kanske till och med om man resize fönstret, lös det där i stället
 		private void gridStartAutoScrolling(object sender, StartAutoScrollingEventArgs e)
 		{
-			if (e.Reason == AutoScrollReason.MouseDragging)
-				schedulerSplitters1.Grid.SupportsPrepareViewStyleInfo = false;
+			//if (e.Reason == AutoScrollReason.MouseDragging)
+			//	schedulerSplitters1.Grid.SupportsPrepareViewStyleInfo = false;
 		}
 
 		private void gridScrollControlMouseUp(object sender, CancelMouseEventArgs e)
 		{
-			schedulerSplitters1.Grid.SupportsPrepareViewStyleInfo = true;
-			schedulerSplitters1.Grid.Invalidate();
+			//schedulerSplitters1.Grid.SupportsPrepareViewStyleInfo = true;
+			//schedulerSplitters1.Grid.Invalidate();
 		}
 
 		private void replyAndDenyRequestFromRequestDetailsView(EventParameters<ReplyAndDenyRequestFromRequestDetailsView> obj)
