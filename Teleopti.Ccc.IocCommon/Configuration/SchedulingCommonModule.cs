@@ -446,6 +446,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.As<IDayOffOptimizationPreferenceProviderForPlanningPeriod>()
 					.As<ISchedulingOptionsProvider>()
 					.As<ICurrentSchedulingCallback>()
+					.As<IPlanningGroupSettingsProvider>()
 					.AsSelf()
 					.ApplyAspects()
 					.SingleInstance();
@@ -458,7 +459,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<MoveSchedulesToOriginalStateHolderAfterIsland>()
 					.As<ISynchronizeSchedulesAfterIsland>()
 					.SingleInstance();
-				builder.RegisterType<NullPlanningGroupSettingsProvider>().As<IPlanningGroupSettingsProvider>().SingleInstance();
 			}
 			else
 			{

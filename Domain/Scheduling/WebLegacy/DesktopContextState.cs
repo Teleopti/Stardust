@@ -13,7 +13,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		IBlockPreferenceProviderForPlanningPeriod,
 		IDayOffOptimizationPreferenceProviderForPlanningPeriod,
 		ISchedulingOptionsProvider, 
-		ICurrentSchedulingCallback
+		ICurrentSchedulingCallback,
+		IPlanningGroupSettingsProvider
 	{
 		private readonly DesktopContext _desktopContext;
 
@@ -72,6 +73,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		ISchedulingCallback ICurrentSchedulingCallback.Current()
 		{
 			return _desktopContext.CurrentContext().SchedulingCallback;
+		}
+
+		public AllSettingsForPlanningGroup Execute(Guid planningPeriodId)
+		{
+			return null;
 		}
 	}
 }

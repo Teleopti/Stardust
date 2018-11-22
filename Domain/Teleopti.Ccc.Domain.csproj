@@ -293,7 +293,6 @@
     <Compile Include="Notification\NotificationServiceClient.cs" />
     <Compile Include="Optimization\AllSettingsForPlanningGroup.cs" />
     <Compile Include="Optimization\BlockPreferencesExtensions.cs" />
-    <Compile Include="Optimization\NullPlanningGroupSettingsProvider.cs" />
     <Compile Include="Optimization\IntradayOptimizationOnStardust.cs" />
     <Compile Include="Optimization\IPlanningGroupSettingsProvider.cs" />
     <Compile Include="Optimization\MatrixLockers\MatrixClosedDayLocker.cs" />
