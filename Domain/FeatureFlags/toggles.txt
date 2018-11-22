@@ -78,10 +78,10 @@ Wfm_User_Password_Reset_74957 = DEV
 Wfm_ReadNotificationConfigurationFromDb_78242 = DEV
 
 # China, can any of these be removed? #
-MyTimeWeb_NewTeamScheduleView_75989 = RC
-MyTimeWeb_NewTeamScheduleViewDesktop_76313 = RC
-MyTimeWeb_TrafficLightOnMobileDayView_77447 = RC
-MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640 = RC
+MyTimeWeb_NewTeamScheduleView_75989 = true
+MyTimeWeb_NewTeamScheduleViewDesktop_76313 = true
+MyTimeWeb_TrafficLightOnMobileDayView_77447 = true
+MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640 = true
 
 # Kittens, Bugs&Roses and Micke #
 Wfm_SkillPriorityRoutingGUI_39885 = RC #Skill priorities, aka Cascading, is not ready for release just yet
@@ -95,7 +95,7 @@ ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don'
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348 = true
 ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941 = true
-ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717 = RC
+ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717 = true
 ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487 = true
 ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = RC
 
@@ -108,7 +108,7 @@ WFM_Intraday_Redesign_77214 = DEV
 
 # Ziggy #
 WfmStaffing_AddOvertime_42524 = RC
-Wfm_Payroll_SupportMultiDllPayrolls_75959 = RC
+Wfm_Payroll_SupportMultiDllPayrolls_75959 = true
 Wfm_Stardust_EnableScaleout_77366 = true
 Wfm_AuditTrail_StaffingAuditTrail_78125 = false
 Wfm_AuditTrail_GenericAuditTrail_74938 = false
@@ -123,12 +123,12 @@ Report_Remove_Realtime_AuditTrail_44006 = true
 Report_Show_Utc_In_Report_Selection_When_In_Use_45079 = true
 WFM_AuditTrail_44006 = true
 WFM_Clear_Data_After_Leaving_Date_47768 = true
-WFM_Forecaster_Preview_74801 = RC
+WFM_Forecaster_Preview_74801 = true
 WFM_Forecast_Show_History_Data_76432 = DEV
 ETL_Show_Web_Based_ETL_Tool_74837 = true
 ETL_Show_Tenant_Name_In_History_75767 = true
 WFM_Connect_NewLandingPage_Remove_GDPR_78132 = true
-WFM_Connect_NewLandingPage_WEB_78578 = RC
+WFM_Connect_NewLandingPage_WEB_78578 = true
 
 # Dragonfly #
 WFM_Gamification_Setting_With_External_Quality_Values_45003 = true
@@ -144,8 +144,8 @@ MyTimeWeb_ShiftTradeRequest_BackShiftTradeView_77409 = true #Depending on MyTime
 WFM_Gamification_Permission_76546 = true
 MyTimeWeb_Request_CleanUpRequestHisotry_77776 = true
 MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446 = true
-WFM_Request_View_Permissions_77731 = RC
-WFM_Request_Show_Feedback_Link_77733 = RC
+WFM_Request_View_Permissions_77731 = true
+WFM_Request_Show_Feedback_Link_77733 = true
 WFM_Request_Remove_Waitlist_Link_78939 = RC
 WFM_Request_Show_Shift_for_Absence_Requests_79008 = DEV
 
