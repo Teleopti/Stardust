@@ -56,13 +56,13 @@
 				<hr/>
 				<div class="row">
 					<div class="col-md-12 ">
-						<button type="button" class="btn btn-primary pull-right" name="button" ng-click="vm.getHistoryForTenant()">Find history</button>
+						<button ng-disabled="vm.loadingHistory" type="button" class="btn btn-primary pull-right" name="button" ng-click="vm.getHistoryForTenant()">Find history</button>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="row" ng-if="vm.history.length>0 || vm.error">
+		<div class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default ">
 					<div class="panel-heading follow-filter">
@@ -76,7 +76,7 @@
 						</div>
 					</div>
 					<div class="panel-body">
-						<table class="table" ng-if="!vm.error">
+						<table class="table" ng-class="vm.loadingHistory ? 'opacityOnLoad' : ''">
 							<thead>
 								<tr>
 									<th scope="col" ng-click="sortType = 'Name'; sortReverse = !sortReverse">
@@ -125,9 +125,19 @@
 										<span ng-show="sortType == 'ErrorMessage' && sortReverse">▴</span>
 									</th>
 								</tr>
-							</thead>
+							</thead>	
+							
+							<tr ng-if="vm.loadingHistory" style="width: 100%; height: 0px; position: relative; padding: 0; margin: 0;">
+								<td colspan="9" style="height: 0; padding: 0; margin: 0;">
+									<div style="width: 100%; position:absolute" class="vertically-horizontally-center">
+										<svg class="spin ng-scope ng-animate ng-leave ng-leave-active" style="width: 35px; height: 35px; position: absolute;" viewBox="0 0 24 24" data-ng-animate="5">
+											<path fill="#000000" d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z"></path>
+										</svg>
+									</div>
+								</td>
+							</tr>
 
-							<tbody ng-repeat="job in vm.history | filter: historyFilter | orderBy:sortType:sortReverse ">
+							<tbody style="border-top:0" ng-repeat="job in vm.history | filter: historyFilter | orderBy:sortType:sortReverse ">
 								<tr ng-click="job.Open = !job.Open">
 									<td class="center-row">
 										<span ng-click="job.Open = !job.Open; $event.stopPropagation()" style="outline: none;">
@@ -207,7 +217,7 @@
 								</tr>
 							</tbody>
 						</table>
-						<div ng-if="vm.error" class="alert alert-warning pointer" role="alert">	<!-- if unconfigured tenants  -->
+						<div ng-if="vm.error && !vm.loadingHistory" class="alert alert-warning pointer" role="alert">	<!-- if unconfigured tenants  -->
 							{{vm.error}}
 						</div>
 					</div>
@@ -216,3 +226,16 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.vertically-horizontally-center{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.opacityOnLoad {
+		opacity:0.5
+	}
+	
+</style>
