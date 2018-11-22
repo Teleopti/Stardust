@@ -1,9 +1,6 @@
 using System;
 using Autofac;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.Infrastructure.Toggle.InApp;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.IocCommon
