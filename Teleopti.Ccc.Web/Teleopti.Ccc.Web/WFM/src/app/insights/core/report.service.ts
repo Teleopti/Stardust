@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { ReportConfig } from '../models/ReportConfig.model';
 import { Report } from '../models/Report.model';
+import { Permission } from '../models/Permission.model';
 
 @Injectable()
 export class ReportService {
@@ -10,6 +11,7 @@ export class ReportService {
 
 	private url_getReportConfig = '../api/Insights/ReportConfig';
 	private url_getReports = '../api/Insights/Reports';
+	private url_getPermissions = '../api/Insights/Permission';
 	private url_cloneReport = '../api/Insights/CloneReport';
 	private headers = new Headers({'Content-Type': 'application/json'});
 
@@ -24,6 +26,7 @@ export class ReportService {
 			.toPromise()
 			.catch(this.handleError);
 	}
+
 	async cloneReport(reportId: string): Promise<ReportConfig> {
 		const parameters = {
 			params: {
@@ -38,6 +41,12 @@ export class ReportService {
 
 	async getReports(): Promise<Report[]> {
 		return this.http.get(this.url_getReports)
+			.toPromise()
+			.catch(this.handleError);
+	}
+
+	async getPermission(): Promise<Permission> {
+		return this.http.get(this.url_getPermissions)
 			.toPromise()
 			.catch(this.handleError);
 	}
