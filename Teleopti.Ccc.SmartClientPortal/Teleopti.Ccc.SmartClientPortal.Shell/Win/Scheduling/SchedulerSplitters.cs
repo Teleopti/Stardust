@@ -78,6 +78,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             get { return chartControlSkillData; }
         }
         
+		public TabControlAdv TabSkillData
+		{
+			get { return tabSkillData; }
+		}
+
 		public IVirtualSkillHelper VirtualSkillHelper
 		{
 			get { return _virtualSkillHelper; }
