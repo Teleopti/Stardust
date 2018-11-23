@@ -14,6 +14,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common.Interop;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Requests.Views;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -23,9 +24,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
     public partial class SchedulerSplitters : BaseUserControl
     {
-        private bool _useAvailability = true;
-        private bool _usePreference = true;
-        private bool _useSchedules = true;
         private readonly PinnedSkillHelper _pinnedSkillHelper;
 		IEnumerable<IPerson> _filteredPersons = new List<IPerson>();
 
@@ -104,7 +102,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             get { return grid; }
         }
 
-		public TabPageAdv PinnedPage
+		private TabPageAdv PinnedPage
 		{
 			get { return _pinnedSkillHelper.PinnedPage(); }
 		}
@@ -123,6 +121,30 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			if (PinnedPage != null)
 				TabSkillData.SelectedTab = PinnedPage;
+		}
+
+		public ISkill CreateSkillSummery(IList<ISkill> allSkills)
+		{
+			using (var skillSummery = new SkillSummary(allSkills))
+			{
+				skillSummery.ShowDialog();
+
+				if (skillSummery.DialogResult == DialogResult.OK)
+				{
+					var virtualSkill = (ISkill)skillSummery.AggregateSkillSkill;
+					virtualSkill.SetId(Guid.NewGuid());
+					TabPageAdv tab = ColorHelper.CreateTabPage(virtualSkill.Name, virtualSkill.Description);
+					tab.ImageIndex = 4;
+					tab.Tag = skillSummery.AggregateSkillSkill;
+					TabSkillData.TabPages.Add(tab);
+					AddVirtualSkill(virtualSkill);
+					SortSkills();
+
+					return virtualSkill;
+				}
+			}
+
+			return null;
 		}
 
 		public void SortSkills()
