@@ -1,0 +1,92 @@
+﻿@media only screen and (min-width: 1600px) {
+	.manualJobDateContainer {
+		position: -webkit-sticky; /* Safari */
+		position: sticky;
+		top: 40px;
+	}
+
+	.ETLManualTopContainer {
+		margin-left: 16.66666667%;
+	}
+
+	.manualJobDateFrom h5 {
+		margin: 0
+	}
+
+	.manualJobDateTo h5 {
+		margin: 0
+	}
+
+	.manualJobInnerDateContainer {
+		float: none;
+		margin-top: 25px;
+		font-size: 21px;
+		text-align: center;
+		animation: fadein 2s;
+		-moz-animation: fadein 2s; /* Firefox */
+		-webkit-animation: fadein 2s; /* Safari and Chrome */
+		-o-animation: fadein 2s; /* Opera */
+	}
+
+	@keyframes fadein {
+		from {
+			opacity: 0;
+		}
+
+		to {
+			opacity: 1;
+		}
+	}
+
+	@-moz-keyframes fadein { /* Firefox */
+		from {
+			opacity: 0;
+		}
+
+		to {
+			opacity: 1;
+		}
+	}
+
+	@-webkit-keyframes fadein { /* Safari and Chrome */
+		from {
+			opacity: 0;
+		}
+
+		to {
+			opacity: 1;
+		}
+	}
+
+	@-o-keyframes fadein { /* Opera */
+		from {
+			opacity: 0;
+		}
+
+		to {
+			opacity: 1;
+		}
+	}
+}
+
+@media only screen and (max-width: 1600px) {
+	.manualJobDateContainer {
+		width: 100%;
+	}
+
+	.ETLManualTopContainer {
+		margin-left: 8.33333333%;
+	}
+
+
+	.manualJobInnerDateContainer {
+		float: left;
+		margin: 10px;
+	}
+}
+
+@media (min-width: 1600px) {
+	.container {
+		width: 1170px;
+	}
+}
