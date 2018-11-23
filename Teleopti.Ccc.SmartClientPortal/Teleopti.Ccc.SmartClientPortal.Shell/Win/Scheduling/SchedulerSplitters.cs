@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					}
 					else
 					{
-						RemoveVirtualSkill(_contextMenuSkillGrid, newSkill);
+						RemoveVirtualSkill(newSkill);
 					}
 				}
 			}
@@ -180,16 +180,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			return ret;
 		}
 
-		public void RemoveVirtualSkill(ContextMenuStrip contextMenuSkillGrid, IAggregateSkill virtualSkill)
+		public void RemoveVirtualSkill(IAggregateSkill virtualSkill)
 		{
 			virtualSkill.ClearAggregateSkill();
-			RemoveVirtualSkill((Skill)virtualSkill);
+			removeVirtualSkill((Skill)virtualSkill);
 			foreach (TabPageAdv tabPage in tabSkillData.TabPages)
 			{
 				if (tabPage.Tag == virtualSkill)
 				{
-					removeVirtualSkillToolStripMenuItem(contextMenuSkillGrid, tabPage, virtualSkill, "Delete");
-					removeVirtualSkillToolStripMenuItem(contextMenuSkillGrid, tabPage, virtualSkill, "Edit");
+					removeVirtualSkillToolStripMenuItem(_contextMenuSkillGrid, tabPage, virtualSkill, "Delete");
+					removeVirtualSkillToolStripMenuItem(_contextMenuSkillGrid, tabPage, virtualSkill, "Edit");
 					break;
 				}
 			}
@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             _pinnedSkillHelper.AddVirtualSkill(virtualSkill);
         }
 
-        public void RemoveVirtualSkill(ISkill virtualSkill)
+        private void removeVirtualSkill(ISkill virtualSkill)
         {
             _pinnedSkillHelper.RemoveVirtualSkill(virtualSkill);
         }
@@ -371,5 +371,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			Grid.Invalidate();
 		}
+
 	}
 }

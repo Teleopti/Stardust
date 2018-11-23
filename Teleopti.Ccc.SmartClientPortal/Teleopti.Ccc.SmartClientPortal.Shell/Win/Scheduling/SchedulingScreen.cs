@@ -1521,7 +1521,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			var menuItem = (ToolStripMenuItem)sender;
 			var virtualSkill = (IAggregateSkill)menuItem.Tag;
-			schedulerSplitters1.RemoveVirtualSkill(schedulerSplitters1.ContextMenuSkillGrid, virtualSkill);
+			schedulerSplitters1.RemoveVirtualSkill(virtualSkill);
 		}
 
 		private void enableEditVirtualSkill(ISkill virtualSkill)
