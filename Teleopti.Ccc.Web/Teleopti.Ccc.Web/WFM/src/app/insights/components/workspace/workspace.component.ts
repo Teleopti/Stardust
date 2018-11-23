@@ -68,6 +68,9 @@ export class WorkspaceComponent implements OnInit {
 	}
 
 	loadReport(config) {
+		// TODO: For debug, refer to https://teleopti.visualstudio.com/TeleoptiWFM/_workitems/edit/79021
+		console.log('pbi.models:', pbi.models);
+
 		// Refer to https://github.com/Microsoft/PowerBI-JavaScript/wiki/Embed-Configuration-Details for more details
 		const embedConfig = {
 			type: 'report',
