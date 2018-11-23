@@ -60,8 +60,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 		[Test]
 		public void ShouldReturnStaffingAuditOnClearBpoAction()
 		{
-			UserCulture.IsSwedish();
-
 			var person = PersonFactory.CreatePerson();
 			PersonRepository.Add(person);
 			var expectedResult = "BPO name: telia, Period between 2018-10-01 and 2019-10-01";
@@ -120,8 +118,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 		[Test]
 		public void ShouldReturnStaffingAuditForTheGivenParameters()
 		{
-			UserCulture.IsSwedish();
-
 			var loggedOnUser = PersonFactory.CreatePersonWithGuid("Ashley", "Aaron");
 			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
 			var staffingAudit =
