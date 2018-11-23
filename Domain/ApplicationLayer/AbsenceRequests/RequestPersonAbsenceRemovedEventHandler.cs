@@ -14,8 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 		private readonly IWorkflowControlSetRepository _workflowControlSetRepository;
 		private readonly INow _now;
-
-
+		
 		public RequestPersonAbsenceRemovedEventHandler(IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IWorkflowControlSetRepository workflowControlSetRepository, INow now)
 		{
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
@@ -34,14 +33,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		private void queueAbsenceRequest(RequestPersonAbsenceRemovedEvent @event)
 		{
-
 			var start = @event.StartDateTime;
 			var end = @event.EndDateTime;
 			while (start < end)
 			{
 				if (start >= _now.UtcDateTime())
 				{
-					var queuedAbsenceRequest = new QueuedAbsenceRequest()
+					var queuedAbsenceRequest = new QueuedAbsenceRequest
 					{
 						PersonRequest = Guid.Empty,
 						Created = DateTime.UtcNow,

@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			base.NotifyDelete();
 			if (!_scenario.DefaultScenario) return;
 
-			var requestPersonAbsenceRemovedEvent = new RequestPersonAbsenceRemovedEvent()
+			var requestPersonAbsenceRemovedEvent = new RequestPersonAbsenceRemovedEvent
 			{
 				PersonId = Person.Id.GetValueOrDefault(),
 				ScenarioId = Scenario.Id.GetValueOrDefault(),
