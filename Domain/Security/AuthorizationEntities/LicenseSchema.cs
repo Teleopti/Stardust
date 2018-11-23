@@ -6,21 +6,20 @@ using Teleopti.Ccc.Secrets.Licensing;
 namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 {
 	/// <summary>
-	/// Represents the default license schema of Raptor and makes the licence data available.
+	/// Represents the default license schema of Raptor and makes the license data available.
 	/// </summary>
 	public class LicenseSchema
 	{
-		private readonly LicenseOption[] _licenseOptions = DefinedLicenseDataFactory.CreateDefinedLicenseOptions();
-
 		private static readonly ConcurrentDictionary<string, LicenseSchema> activeLicenseSchemas = new ConcurrentDictionary<string, LicenseSchema>();
+
 		/// <summary>
 		/// Gets the singleton instance of the active license schema.
 		/// </summary>
+		/// <param name="dataSource"></param>
 		/// <value>The instance.</value>
 		public static LicenseSchema GetActiveLicenseSchema(string dataSource)
 		{
-			LicenseSchema activeLicenseSchema;
-			activeLicenseSchemas.TryGetValue(dataSource, out activeLicenseSchema);
+			activeLicenseSchemas.TryGetValue(dataSource, out var activeLicenseSchema);
 			if (activeLicenseSchema != null)
 				return activeLicenseSchema;
 			var licenseSchema = DefinedLicenseDataFactory.CreateActiveLicenseSchema(dataSource);
@@ -37,28 +36,29 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 		{
 			activeLicenseSchemas.TryRemove(tenant, out var _);
 		}
+
 		/// <summary>
-		/// Gets or sets the enabled licence schema.
+		/// Gets or sets the enabled license schema.
 		/// </summary>
-		/// <value>The enabled licence schema.</value>
+		/// <value>The enabled license schema.</value>
 		public string EnabledLicenseSchema { get; set; }
 
 		/// <summary>
 		/// Gets or sets the defined license options.
 		/// </summary>
 		/// <value>The defined license options.</value>
-		public LicenseOption[] LicenseOptions => _licenseOptions;
+		public LicenseOption[] LicenseOptions { get; } = DefinedLicenseDataFactory.CreateDefinedLicenseOptions();
 
 		/// <summary>
-		/// Gets the enabled licence option.
+		/// Gets the enabled license option.
 		/// </summary>
-		/// <value>The enabled licence option paths.</value>
+		/// <value>The enabled license option paths.</value>
 		/// <returns></returns>
 		public LicenseOption[] EnabledLicenseOptions
 		{
 			get
 			{
-				return _licenseOptions.Where(licenseOption => licenseOption.Enabled).ToArray();
+				return LicenseOptions.Where(licenseOption => licenseOption.Enabled).ToArray();
 			}
 		}
 
@@ -78,7 +78,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 		/// <summary>
 		/// Sets the defined license options enabled according to the input list.
 		/// </summary>
-		/// <value>The enabled licence options.</value>
+		/// <param name="licenseActivator"></param>
+		/// <value>The enabled license options.</value>
 		public void ActivateLicense(ILicenseActivator licenseActivator)
 		{
 			if (licenseActivator == null)
@@ -87,14 +88,14 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 			}
 			EnabledLicenseSchema = licenseActivator.EnabledLicenseSchemaName;
 
-			// set to false all
-			foreach (LicenseOption licenseOption in LicenseOptions)
+			foreach (var licenseOption in LicenseOptions)
 			{
 				licenseOption.Enabled = false;
 			}
+
 			foreach (string licenseOptionPath in licenseActivator.EnabledLicenseOptionPaths)
 			{
-				LicenseOption licenseOption =
+				var licenseOption =
 					LicenseOption.FindLicenseOptionByPath(LicenseOptions, licenseOptionPath);
 				if (licenseOption != null)
 					licenseOption.Enabled = true;
