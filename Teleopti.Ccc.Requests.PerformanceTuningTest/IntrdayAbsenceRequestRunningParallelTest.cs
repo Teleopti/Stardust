@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		/// To see if the loading of skills is fast enough or not. It should not load all skills, workload for all skills and workload day template
 		/// for all the workloads
 		/// </summary>
-		[Test]
+		[Test, Ignore("Some lock issues")]
 		public void Run200ParallelAbsenceRequestSoAmandaIsHappy()
 		{
 			Now.Is("2016-03-16 07:01");
