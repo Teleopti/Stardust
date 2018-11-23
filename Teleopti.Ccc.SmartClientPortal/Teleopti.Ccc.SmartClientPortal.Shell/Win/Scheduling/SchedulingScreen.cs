@@ -1500,14 +1500,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void skillGridMenuItemClick(object sender, EventArgs e)
 		{
-			using (var skillSummery = new SkillSummary(SchedulerState.SchedulerStateHolder.SchedulingResultState.Skills))
+			var virtualSkill = schedulerSplitters1.CreateSkillSummery(SchedulerState.SchedulerStateHolder.SchedulingResultState.Skills);
+			if (virtualSkill != null)
 			{
-				skillSummery.ShowDialog();
-
-				if (skillSummery.DialogResult == DialogResult.OK)
-				{
-					handleCreateSummeryMenuItems(skillSummery);
-				}
+				_virtualSkillHelper.SaveVirtualSkill(virtualSkill);
+				enableEditVirtualSkill(virtualSkill);
+				enableDeleteVirtualSkill(virtualSkill);
 			}
 		}
 
@@ -1577,21 +1575,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					break;
 				}
 			}
-		}
-
-		private void handleCreateSummeryMenuItems(SkillSummary skillSummary)
-		{
-			var virtualSkill = (ISkill)skillSummary.AggregateSkillSkill;
-			virtualSkill.SetId(Guid.NewGuid());
-			TabPageAdv tab = ColorHelper.CreateTabPage(virtualSkill.Name, virtualSkill.Description);
-			tab.ImageIndex = 4;
-			tab.Tag = skillSummary.AggregateSkillSkill;
-			_tabSkillData.TabPages.Add(tab);
-			_virtualSkillHelper.SaveVirtualSkill(virtualSkill);
-			schedulerSplitters1.AddVirtualSkill(virtualSkill);
-			schedulerSplitters1.SortSkills();
-			enableEditVirtualSkill(virtualSkill);
-			enableDeleteVirtualSkill(virtualSkill);
 		}
 
 		private void enableEditVirtualSkill(ISkill virtualSkill)
