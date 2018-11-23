@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 		}
 
 		[Test]
-		[Ignore("Failing perftest - to be fixed")]
+		//[Ignore("Failing perftest - to be fixed")]
 		public void ShouldNotReturnHintWhenNoSchedulePeriod()
 		{
 			var date = new DateOnly(2017, 01, 23);
