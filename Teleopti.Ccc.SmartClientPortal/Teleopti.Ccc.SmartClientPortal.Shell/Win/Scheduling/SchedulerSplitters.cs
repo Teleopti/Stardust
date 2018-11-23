@@ -6,6 +6,7 @@ using System.Windows.Forms.Integration;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
     {
         private readonly PinnedSkillHelper _pinnedSkillHelper;
 		IEnumerable<IPerson> _filteredPersons = new List<IPerson>();
+		private IVirtualSkillHelper _virtualSkillHelper;
 
 		public SchedulerSplitters()
         {
@@ -79,7 +81,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         {
             get { return tabSkillData; }
         }
-		
+
+		public IVirtualSkillHelper VirtualSkillHelper
+		{
+			get { return _virtualSkillHelper; }
+		}
+
 		public TabControlAdv TabInfoPanels
         {
             get { return tabInfoPanels; }
@@ -137,6 +144,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					tab.ImageIndex = 4;
 					tab.Tag = skillSummery.AggregateSkillSkill;
 					TabSkillData.TabPages.Add(tab);
+					_virtualSkillHelper.SaveVirtualSkill(virtualSkill);
 					AddVirtualSkill(virtualSkill);
 					SortSkills();
 
@@ -145,6 +153,104 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 
 			return null;
+		}
+
+		public bool EditSkillSummary(IList<ISkill> allSkills, ISkill skill, ContextMenuStrip contextMenuSkillGrid, ToolStripMenuItem menuItem)
+		{
+			var ret = false;
+			using (var skillSummery = new SkillSummary(skill, allSkills))
+			{
+				skillSummery.ShowDialog();
+
+				if (skillSummery.DialogResult == DialogResult.OK)
+				{
+					IAggregateSkill newSkill = handleSummeryEditMenuItems(contextMenuSkillGrid, menuItem, skillSummery);
+
+					if (newSkill.AggregateSkills.Count != 0)
+					{
+						VirtualSkillHelper.EditAndRenameVirtualSkill(newSkill, skill.Name);
+						ReplaceOldWithNew((ISkill)newSkill, skill);
+						SortSkills();
+						ret = true;
+					}
+					else
+					{
+						removeVirtualSkill(contextMenuSkillGrid, newSkill);
+					}
+				}
+			}
+
+			return ret;
+		}
+
+		private void removeVirtualSkill(ContextMenuStrip contextMenuSkillGrid, IAggregateSkill virtualSkill)
+		{
+			virtualSkill.ClearAggregateSkill();
+			RemoveVirtualSkill((Skill)virtualSkill);
+			foreach (TabPageAdv tabPage in TabSkillData.TabPages)
+			{
+				if (tabPage.Tag == virtualSkill)
+				{
+					removeVirtualSkillToolStripMenuItem(contextMenuSkillGrid, tabPage, virtualSkill, "Delete");
+					removeVirtualSkillToolStripMenuItem(contextMenuSkillGrid, tabPage, virtualSkill, "Edit");
+					break;
+				}
+			}
+			VirtualSkillHelper.SaveVirtualSkill(virtualSkill);
+		}
+
+		private IAggregateSkill handleSummeryEditMenuItems(ContextMenuStrip contextMenuSkillGrid, ToolStripMenuItem menuItem, SkillSummary skillSummary)
+		{
+			var virtualSkill = (ISkill)skillSummary.AggregateSkillSkill;
+			TabSkillData.SelectedTab = ColorHelper.CreateTabPage(virtualSkill.Name, virtualSkill.Description);
+			foreach (TabPageAdv tabPage in TabSkillData.TabPages)
+			{
+				handleTabsAndMenuItemsVirtualSkill(contextMenuSkillGrid, skillSummary, virtualSkill, tabPage, menuItem);
+			}
+			return virtualSkill;
+		}
+
+		private void handleTabsAndMenuItemsVirtualSkill(ContextMenuStrip contextMenuSkillGrid, SkillSummary skillSummary, ISkill virtualSkill, TabPageAdv tabPage,
+			ToolStripMenuItem menuItem)
+		{
+			if (tabPage.Tag == virtualSkill)
+			{
+				if (skillSummary.AggregateSkillSkill.AggregateSkills.Count == 0)
+				{
+					removeVirtualSkillToolStripMenuItem(contextMenuSkillGrid, tabPage, virtualSkill, "Edit");
+					removeVirtualSkillToolStripMenuItem(contextMenuSkillGrid, tabPage, virtualSkill, "Delete");
+					return;
+				}
+				tabPage.Text = virtualSkill.Name;
+				menuItem.Name = virtualSkill.Name;
+				menuItem.Text = virtualSkill.Name;
+				var skillGridMenuItem = (ToolStripMenuItem)contextMenuSkillGrid.Items["Delete"];
+				foreach (ToolStripMenuItem subItem in skillGridMenuItem.DropDownItems)
+				{
+					if (subItem.Tag == virtualSkill)
+					{
+						subItem.Name = virtualSkill.Name;
+						subItem.Text = virtualSkill.Name;
+						break;
+					}
+				}
+			}
+		}
+
+		private void removeVirtualSkillToolStripMenuItem(ContextMenuStrip contextMenuSkillGrid, TabPageAdv tabPage, IAggregateSkill virtualSkill, string action)
+		{
+			var skillGridMenuItem = (ToolStripMenuItem)contextMenuSkillGrid.Items[action];
+			TabSkillData.TabPages.Remove(tabPage);
+			foreach (ToolStripMenuItem subItem in skillGridMenuItem.DropDownItems)
+			{
+				if (subItem.Tag == virtualSkill)
+				{
+					skillGridMenuItem.DropDownItems.Remove(subItem);
+					if (skillGridMenuItem.DropDownItems.Count == 0)
+						contextMenuSkillGrid.Items[action].Enabled = false;
+					break;
+				}
+			}
 		}
 
 		public void SortSkills()
@@ -187,6 +293,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						defaultDistance;
 			}
         }
+
+		public void SetVirtualSkillHelper(IVirtualSkillHelper virtualSkillHelper)
+		{
+			_virtualSkillHelper = virtualSkillHelper;
+		}
 
 	    public void InsertAgentInfoControl(AgentInfoControl agentInfoControl)
 	    {
