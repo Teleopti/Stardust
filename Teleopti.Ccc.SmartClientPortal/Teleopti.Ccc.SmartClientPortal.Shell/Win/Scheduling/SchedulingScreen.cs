@@ -1518,68 +1518,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				drawSkillGrid();
 			}
-
-
-			//using (var skillSummery = new SkillSummary(skill, SchedulerState.SchedulerStateHolder.SchedulingResultState.Skills))
-			//{
-			//	skillSummery.ShowDialog();
-
-			//	if (skillSummery.DialogResult == DialogResult.OK)
-			//	{
-			//		IAggregateSkill newSkill = handleSummeryEditMenuItems(menuItem, skillSummery);
-
-			//		if (newSkill.AggregateSkills.Count != 0)
-			//		{
-			//			schedulerSplitters1.VirtualSkillHelper.EditAndRenameVirtualSkill(newSkill, skill.Name);
-			//			schedulerSplitters1.ReplaceOldWithNew((ISkill)newSkill, skill);
-			//			schedulerSplitters1.SortSkills();
-			//			drawSkillGrid();
-			//		}
-			//		else
-			//		{
-			//			removeVirtualSkill(newSkill);
-			//		}
-			//	}
-			//}
 		}
 
 		private void skillGridMenuItemDeleteClick(object sender, EventArgs e)
 		{
 			var menuItem = (ToolStripMenuItem)sender;
 			var virtualSkill = (IAggregateSkill)menuItem.Tag;
-			removeVirtualSkill(virtualSkill);
-		}
-
-		private void removeVirtualSkill(IAggregateSkill virtualSkill)
-		{
-			virtualSkill.ClearAggregateSkill();
-			schedulerSplitters1.RemoveVirtualSkill((Skill)virtualSkill);
-			foreach (TabPageAdv tabPage in _tabSkillData.TabPages)
-			{
-				if (tabPage.Tag == virtualSkill)
-				{
-					removeVirtualSkillToolStripMenuItem(tabPage, virtualSkill, "Delete");
-					removeVirtualSkillToolStripMenuItem(tabPage, virtualSkill, "Edit");
-					break;
-				}
-			}
-			schedulerSplitters1.VirtualSkillHelper.SaveVirtualSkill(virtualSkill);
-		}
-
-		private void removeVirtualSkillToolStripMenuItem(TabPageAdv tabPage, IAggregateSkill virtualSkill, string action)
-		{
-			var skillGridMenuItem = (ToolStripMenuItem)_contextMenuSkillGrid.Items[action];
-			_tabSkillData.TabPages.Remove(tabPage);
-			foreach (ToolStripMenuItem subItem in skillGridMenuItem.DropDownItems)
-			{
-				if (subItem.Tag == virtualSkill)
-				{
-					skillGridMenuItem.DropDownItems.Remove(subItem);
-					if (skillGridMenuItem.DropDownItems.Count == 0)
-						_contextMenuSkillGrid.Items[action].Enabled = false;
-					break;
-				}
-			}
+			schedulerSplitters1.RemoveVirtualSkill(_contextMenuSkillGrid, virtualSkill);
 		}
 
 		private void enableEditVirtualSkill(ISkill virtualSkill)

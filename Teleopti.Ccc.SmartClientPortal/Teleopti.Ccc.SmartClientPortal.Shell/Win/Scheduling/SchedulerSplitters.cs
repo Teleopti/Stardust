@@ -77,20 +77,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         {
             get { return chartControlSkillData; }
         }
-        public TabControlAdv TabSkillData
-        {
-            get { return tabSkillData; }
-        }
-
+        
 		public IVirtualSkillHelper VirtualSkillHelper
 		{
 			get { return _virtualSkillHelper; }
 		}
-
-		public TabControlAdv TabInfoPanels
-        {
-            get { return tabInfoPanels; }
-        }
 
         public ElementHost ElementHostRequests
         {
@@ -109,11 +100,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             get { return grid; }
         }
 
-		private TabPageAdv PinnedPage
-		{
-			get { return _pinnedSkillHelper.PinnedPage(); }
-		}
-
         private void pinnedToolStripMenuItemClick(object sender, EventArgs e)
         {
             var tab = tabSkillData.SelectedTab;
@@ -126,8 +112,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         {
             _pinnedSkillHelper.InitialSetup(tabSkillData, currentSchedulingScreenSettings);
 
-			if (PinnedPage != null)
-				TabSkillData.SelectedTab = PinnedPage;
+			if (_pinnedSkillHelper.PinnedPage() != null)
+				tabSkillData.SelectedTab = _pinnedSkillHelper.PinnedPage();
 		}
 
 		public ISkill CreateSkillSummery(IList<ISkill> allSkills)
@@ -143,7 +129,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					TabPageAdv tab = ColorHelper.CreateTabPage(virtualSkill.Name, virtualSkill.Description);
 					tab.ImageIndex = 4;
 					tab.Tag = skillSummery.AggregateSkillSkill;
-					TabSkillData.TabPages.Add(tab);
+					tabSkillData.TabPages.Add(tab);
 					_virtualSkillHelper.SaveVirtualSkill(virtualSkill);
 					AddVirtualSkill(virtualSkill);
 					SortSkills();
@@ -175,7 +161,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					}
 					else
 					{
-						removeVirtualSkill(contextMenuSkillGrid, newSkill);
+						RemoveVirtualSkill(contextMenuSkillGrid, newSkill);
 					}
 				}
 			}
@@ -183,11 +169,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			return ret;
 		}
 
-		private void removeVirtualSkill(ContextMenuStrip contextMenuSkillGrid, IAggregateSkill virtualSkill)
+		public void RemoveVirtualSkill(ContextMenuStrip contextMenuSkillGrid, IAggregateSkill virtualSkill)
 		{
 			virtualSkill.ClearAggregateSkill();
 			RemoveVirtualSkill((Skill)virtualSkill);
-			foreach (TabPageAdv tabPage in TabSkillData.TabPages)
+			foreach (TabPageAdv tabPage in tabSkillData.TabPages)
 			{
 				if (tabPage.Tag == virtualSkill)
 				{
@@ -202,8 +188,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private IAggregateSkill handleSummeryEditMenuItems(ContextMenuStrip contextMenuSkillGrid, ToolStripMenuItem menuItem, SkillSummary skillSummary)
 		{
 			var virtualSkill = (ISkill)skillSummary.AggregateSkillSkill;
-			TabSkillData.SelectedTab = ColorHelper.CreateTabPage(virtualSkill.Name, virtualSkill.Description);
-			foreach (TabPageAdv tabPage in TabSkillData.TabPages)
+			tabSkillData.SelectedTab = ColorHelper.CreateTabPage(virtualSkill.Name, virtualSkill.Description);
+			foreach (TabPageAdv tabPage in tabSkillData.TabPages)
 			{
 				handleTabsAndMenuItemsVirtualSkill(contextMenuSkillGrid, skillSummary, virtualSkill, tabPage, menuItem);
 			}
@@ -240,7 +226,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void removeVirtualSkillToolStripMenuItem(ContextMenuStrip contextMenuSkillGrid, TabPageAdv tabPage, IAggregateSkill virtualSkill, string action)
 		{
 			var skillGridMenuItem = (ToolStripMenuItem)contextMenuSkillGrid.Items[action];
-			TabSkillData.TabPages.Remove(tabPage);
+			tabSkillData.TabPages.Remove(tabPage);
 			foreach (ToolStripMenuItem subItem in skillGridMenuItem.DropDownItems)
 			{
 				if (subItem.Tag == virtualSkill)
