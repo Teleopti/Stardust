@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Interfaces.Domain;
 using AggregateException = Teleopti.Ccc.Domain.Common.AggregateException;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
@@ -201,6 +202,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			target.FindPlanningGroupBySettingId(Guid.NewGuid())
 				.Should().Be.Null();
+		}
+
+		[TestCase(0.22)]
+		[TestCase(0.87)]
+		public void ShouldPersistPreferenceValue(double preferenceValue)
+		{
+			var percentValue = new Percent(preferenceValue);
+			var planningGroup = new PlanningGroup();
+			planningGroup.SetGlobalValues(percentValue);
+			PersistAndRemoveFromUnitOfWork(planningGroup);
+			var target = new PlanningGroupRepository(CurrUnitOfWork);
+			
+			target.Get(planningGroup.Id.Value).Settings.PreferenceValue
+				.Should().Be.EqualTo(percentValue);
 		}
 	}
 }
