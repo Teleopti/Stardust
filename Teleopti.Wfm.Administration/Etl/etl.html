@@ -1,9 +1,9 @@
-<div class="container body-content" ng-controller="etlController as vm">
+<div class="container-fluid body-content" ng-controller="etlController as vm">
 
 	<etl-modal ng-cloak ng-if="vm.masterTenant.IsBaseConfigured === false" tenant="vm.masterTenant" callback="vm.getTenants" output="vm.masterTenant.IsBaseConfigured"></etl-modal>
 
-	<div ng-cloak ng-if="vm.masterTenant.IsBaseConfigured">
-		<h2 >
+	<div class="container" ng-cloak ng-if="vm.masterTenant.IsBaseConfigured">
+		<h2>
 			ETL
 		</h2>
 		<div class="row">
@@ -18,8 +18,8 @@
 				</a>
 			</div>
 		</div>
-
-		<div ng-include="'Etl/manual.html'"></div>
-
 	</div>
+
+	<div ng-include="'Etl/manual.html'"></div>
+
 </div>
