@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 	    ICollection<ISkill> LoadSkills(IEnumerable<Guid> skillIdList);
 		IEnumerable<ISkill> FindSkillsContain(string searchString, int maxHits);
 		IEnumerable<SkillOpenHoursLight> FindOpenHoursForSkills(IEnumerable<Guid> skillIds);
+		IEnumerable<ISkill> LoadSkillsWithOpenHours(IEnumerable<Guid> skillIdList);
 
 	}
 }

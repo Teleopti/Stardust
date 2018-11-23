@@ -133,6 +133,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
+		public IEnumerable<ISkill> LoadSkillsWithOpenHours(IEnumerable<Guid> skillIdList)
+		{
+			return _skills.Where(s => skillIdList.Contains(s.Id.Value)).ToList();
+		}
+
 		public IMultisiteSkill HasMultisiteSkill(string skillName, IActivity activity)
 		{
 			var skill = SkillFactory.CreateMultisiteSkill(skillName).WithId();

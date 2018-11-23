@@ -25,7 +25,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		}
 		public IValidatedRequest Validate(IAbsenceRequest absenceRequest, IEnumerable<IPersonSkill> personSkills, IScheduleRange scheduleRange)
 		{
-			_skillRepository.LoadAllSkills();
+			var skills = personSkills.Select(s => s.Skill.Id.GetValueOrDefault());
+			_skillRepository.LoadSkillsWithOpenHours(skills);
 			var requestPeriod = absenceRequest.Period;
 			foreach (var personSkill in personSkills)
 			{
