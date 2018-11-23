@@ -2124,9 +2124,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			Refresh();
 			SuspendLayout();
 
-			if (schedulerSplitters1.PinnedPage != null)
-				schedulerSplitters1.TabSkillData.SelectedTab = schedulerSplitters1.PinnedPage;
-
 			schedulerSplitters1.SplitContainerAdvMainContainer.Visible = true;
 			toolStripStatusLabelScheduleTag.Visible = true;
 			toolStripStatusLabelNumberOfAgents.Text = LanguageResourceHelper.Translate("XXAgentsColon") + @" " +

@@ -109,20 +109,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			get { return _pinnedSkillHelper.PinnedPage(); }
 		}
 
-		public RestrictionSchedulingOptions SchedulingOptions
-		{
-			get
-			{
-				var options = new RestrictionSchedulingOptions
-				{
-					UseAvailability = _useAvailability,
-					UsePreferences = _usePreference,
-					UseScheduling = _useSchedules
-				};
-				return options;
-			}
-		}
-
         private void pinnedToolStripMenuItemClick(object sender, EventArgs e)
         {
             var tab = tabSkillData.SelectedTab;
@@ -134,9 +120,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         public void PinSavedSkills(ISchedulingScreenSettings currentSchedulingScreenSettings)
         {
             _pinnedSkillHelper.InitialSetup(tabSkillData, currentSchedulingScreenSettings);
-        }
 
-        public void SortSkills()
+			if (PinnedPage != null)
+				TabSkillData.SelectedTab = PinnedPage;
+		}
+
+		public void SortSkills()
         {
             _pinnedSkillHelper.SortSkills();
         }
