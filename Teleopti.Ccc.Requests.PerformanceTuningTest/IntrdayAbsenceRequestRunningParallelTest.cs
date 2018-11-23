@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy;
 using Teleopti.Ccc.Domain.Common;
@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
 	[RequestPerformanceTuningTest]
-	public class MultipleAbsenceRequestPerformanceTest : PerformanceTestWithOneTimeSetup
+	public class IntrdayAbsenceRequestRunningParallelTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
 		public MutableNow Now;
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			Now.Is(_nowDateTime);
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
-			
+
 			using (var connection = new SqlConnection(ConfigReader.ConnectionString("Tenancy")))
 			{
 				connection.Open();
@@ -80,11 +80,11 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				using (var command = new SqlCommand(sql, connection))
 				{
 					var reader = command.ExecuteReader();
-					while(reader.Read())
-						_personIdList.Add((Guid) reader[0]);
+					while (reader.Read())
+						_personIdList.Add((Guid)reader[0]);
 				}
 				connection.Close();
-				
+
 			}
 
 			var now = Now.UtcDateTime();
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				UpdateStaffingLevel.Update(period);
 				StardustJobFeedback.SendProgress($"Done update staffing readmodel");
 				//_persons = PersonRepository.l
-				
+
 			});
 		}
 
@@ -117,34 +117,36 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		/// for all the workloads
 		/// </summary>
 		[Test]
-		public void Run200RequestsSoAmandaIsHappy()
+		public void Run200ParallelAbsenceRequestSoAmandaIsHappy()
 		{
 			Now.Is("2016-03-16 07:01");
 
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 			StardustJobFeedback.SendProgress($"Will process {200} requests");
+			var taskList = new List<Task>();
 			foreach (var i in Enumerable.Range(0, 200))
 			{
-				WithUnitOfWork.Do(() =>
+				var task = Task.Run(() => WithUnitOfWork.Do(() =>
 				{
 					AbsenceRepository.LoadAll();
 					var startTime = new DateTime(2016, 3, 16, 8, 0, 0, DateTimeKind.Utc);
-					var endDateTime = new DateTime(2016,3,16,17,0,0,DateTimeKind.Utc);
-					
+					var endDateTime = new DateTime(2016, 3, 16, 17, 0, 0, DateTimeKind.Utc);
+
 					AbsenceRequestModel model = new AbsenceRequestModel()
 					{
-						Period = new DateTimePeriod(startTime,endDateTime),
+						Period = new DateTimePeriod(startTime, endDateTime),
 						PersonId = _personIdList[i],
 						Message = "Story79139",
 						Subject = "Story79139",
 						AbsenceId = new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F")
 					};
 					AbsenceRequestPersister.Persist(model);
-
-				});
+				}));
+				taskList.Add(task);
 
 			}
+			Task.WaitAll(taskList.ToArray());
 		}
 	}
 }
