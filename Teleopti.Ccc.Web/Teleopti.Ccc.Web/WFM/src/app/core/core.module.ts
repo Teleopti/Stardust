@@ -1,9 +1,10 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { WINDOW } from '@wfm/common';
 import { IStateService } from 'angular-ui-router';
 import { AuthenticatedInterceptor, BusinessUnitInterceptor, ClientOutdatedInterceptor } from './interceptors';
 import { NavigationService, ThemeService, TogglesService, UserService, VersionService } from './services';
-import { WINDOW } from '@wfm/common';
+import { InterceptorOverrideService } from './services/interceptor-override.service';
 
 @NgModule({
 	imports: [HttpClientModule],
@@ -13,6 +14,7 @@ import { WINDOW } from '@wfm/common';
 		UserService,
 		ThemeService,
 		VersionService,
+		InterceptorOverrideService,
 		{
 			provide: HTTP_INTERCEPTORS,
 			useClass: AuthenticatedInterceptor,

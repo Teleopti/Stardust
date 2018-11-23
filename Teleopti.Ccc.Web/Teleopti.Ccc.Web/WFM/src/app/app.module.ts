@@ -10,10 +10,11 @@ import { BootstrapComponent } from './components/bootstrap/bootstrap.component';
 import { CoreModule } from './core/core.module';
 import { UserPreferences, UserService } from './core/services';
 import { CustomTranslateParser, LanguageLoaderFactory, Zorroi18nService } from './core/translation';
-import { MenuModule } from './menu/menu.module';
-import { ReportModule } from './reports/reports.module';
-import { PeopleModule } from './people/people.module';
 import { InsightsModule } from './insights/insights.module';
+import { MenuModule } from './menu/menu.module';
+import { PeopleModule } from './people/people.module';
+import { ReportModule } from './reports/reports.module';
+import { ResetPasswordModule } from './reset-password/reset-password.module';
 
 @NgModule({
 	declarations: [BootstrapComponent],
@@ -27,6 +28,7 @@ import { InsightsModule } from './insights/insights.module';
 		HttpClientModule,
 		InsightsModule,
 		MenuModule,
+		ResetPasswordModule,
 		TranslateModule.forRoot({
 			loader: {
 				provide: TranslateLoader,
