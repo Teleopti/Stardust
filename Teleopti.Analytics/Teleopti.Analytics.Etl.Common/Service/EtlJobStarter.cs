@@ -149,11 +149,10 @@ namespace Teleopti.Analytics.Etl.Common.Service
 						{
 							_tenants.Tenant(etlTenantName)
 						};
-
+					
 					foreach (var tenant in etlTenants)
 					{
 						if (tenant == null) continue;
-
 						jobToRun.JobParameters.SetTenantBaseConfigValues(tenant.EtlConfiguration);
 						jobToRun.JobParameters.Helper.SelectDataSourceContainer(tenant.Name);
 
@@ -188,19 +187,21 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				}
 				else
 				{
-					log.InfoFormat("Distributed lock could not created. Job '{0}' could not be started.", jobToRun.Name);
+					log.InfoFormat("Distributed lock could not created. Job '{0}' could not be started.",
+						jobToRun.Name);
 				}
+			}
+			catch (Exception ex)
+			{
+				log.Error($"ETL service failed to run the job {jobToRun.Name} with exception: {ex.Message}", ex);
 			}
 			finally
 			{
-				if (_toggleManager.IsEnabled(Toggles.ETL_Optimize_Memory_Usage_76761))
+				bool.TryParse(ConfigurationManager.AppSettings["ReleaseMemoryOnJobFinished"], out var forceGc);
+				if (forceGc)
 				{
-					bool.TryParse(ConfigurationManager.AppSettings["ReleaseMemoryOnJobFinished"], out var forceGc);
-					if (forceGc)
-					{
-						GC.Collect();
-						GC.WaitForFullGCComplete();
-					}
+					GC.Collect();
+					GC.WaitForFullGCComplete();
 				}
 			}
 

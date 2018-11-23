@@ -18,9 +18,9 @@ namespace Teleopti.Wfm.Api
 		public bool TryGetUser(string token, out UserIdWithTenant user)
 		{
 			var result = client.PostAsJsonAsync(_url, token);
-			var content = result.Result.EnsureSuccessStatusCode()
+			var content = result.GetAwaiter().GetResult().EnsureSuccessStatusCode()
 				.Content
-				.ReadAsStringAsync().Result;
+				.ReadAsStringAsync().GetAwaiter().GetResult();
 			if (string.IsNullOrWhiteSpace(content))
 			{
 				user = new UserIdWithTenant();

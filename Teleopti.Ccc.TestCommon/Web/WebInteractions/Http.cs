@@ -35,13 +35,13 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 				Content = new StringContent(json, Encoding.UTF8, "application/json")
 			};
 			request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-			var response = _client.SendAsync(request).Result;
+			var response = _client.SendAsync(request).GetAwaiter().GetResult();
 
 			if (new[] {HttpStatusCode.OK, HttpStatusCode.Created}
 				.Contains(response.StatusCode))
 				return;
 
-			var responseContent = response.Content.ReadAsStringAsync().Result;
+			var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 			throw new Exception($"Posting json returned http code {response.StatusCode}, Sent: {json}, Response: {responseContent}");
 		}
 
@@ -53,13 +53,13 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 				Method = HttpMethod.Get,
 			};
 			request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-			var response = _client.SendAsync(request).Result;
+			var response = _client.SendAsync(request).GetAwaiter().GetResult();
 
 			if (new[] {HttpStatusCode.OK}
 				.Contains(response.StatusCode))
 				return;
 
-			var responseContent = response.Content.ReadAsStringAsync().Result;
+			var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 			throw new Exception($"Get json returned http code {response.StatusCode}, Response: {responseContent}");
 		}
 
@@ -67,10 +67,10 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		public void Get(string url)
 		{
 			var post = _client.GetAsync(uri(url));
-			var response = post.Result;
+			var response = post.GetAwaiter().GetResult();
 			if (response.StatusCode != HttpStatusCode.OK)
 			{
-				var responseContent = response.Content.ReadAsStringAsync().Result;
+				var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 				throw new Exception("Get returned http code " + response.StatusCode + ", Content: " + responseContent);
 			}
 		}

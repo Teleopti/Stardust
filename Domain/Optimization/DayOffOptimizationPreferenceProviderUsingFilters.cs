@@ -5,16 +5,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class DayOffOptimizationPreferenceProviderUsingFilters : IDayOffOptimizationPreferenceProvider
 	{
-		private readonly AllPlanningGroupSettings _allPlanningGroupSettings;
+		private readonly AllSettingsForPlanningGroup _allSettingsForPlanningGroup;
 
-		public DayOffOptimizationPreferenceProviderUsingFilters(AllPlanningGroupSettings allPlanningGroupSettings)
+		public DayOffOptimizationPreferenceProviderUsingFilters(AllSettingsForPlanningGroup allSettingsForPlanningGroup)
 		{
-			_allPlanningGroupSettings = allPlanningGroupSettings;
+			_allSettingsForPlanningGroup = allSettingsForPlanningGroup;
 		}
 
 		public IDaysOffPreferences ForAgent(IPerson person, DateOnly dateOnly)
 		{
-			return mapToDayOffPrefences(_allPlanningGroupSettings.ForAgent(person, dateOnly));
+			return mapToDayOffPrefences(_allSettingsForPlanningGroup.ForAgent(person, dateOnly));
 		}
 
 		private static DaysOffPreferences mapToDayOffPrefences(PlanningGroupSettings planningGroupSettings)

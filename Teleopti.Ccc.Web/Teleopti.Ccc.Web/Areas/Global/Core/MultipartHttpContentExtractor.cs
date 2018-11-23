@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 				var prop = props.FirstOrDefault(p => p.Name == fieldName);
 				if (prop == null) continue;
 
-				prop.SetValue(formModel, content.ReadAsStringAsync().Result);
+				prop.SetValue(formModel, content.ReadAsStringAsync().GetAwaiter().GetResult());
 				hasFallBacks = true;
 			}
 			
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 				select new ImportFileData
 				{
 					FileName = content.Headers.ContentDisposition.FileName.Trim('\"'),
-					Data = content.ReadAsByteArrayAsync().Result
+					Data = content.ReadAsByteArrayAsync().GetAwaiter().GetResult()
 				};
 		}
 	}

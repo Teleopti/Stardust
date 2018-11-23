@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		{
 			HttpServer.FakeResponseMessage(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(JsonConvert.SerializeObject(true))});
 
-			Target.Exists(new TenantCredential{Host = "localhost:52858", Tenant = "Teleopti WFM"}).Result.Should().Be.True();
+			Target.Exists(new TenantCredential{Host = "localhost:52858", Tenant = "Teleopti WFM"}).GetAwaiter().GetResult().Should().Be.True();
 		}
 
 		[Test]

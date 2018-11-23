@@ -144,10 +144,14 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			analyticsDataFactory.Setup(new EternityAndNotDefinedDate());
 			_timeZones = new UtcAndCetTimeZones();
 			_datasource = new ExistingDatasources(_timeZones);
+			var sysConfiguration = new SysConfiguration("IntervalLengthMinutes", "15");
+			sysConfiguration.AddConfiguration("TimeZoneCode", "UTC");
+			sysConfiguration.AddConfiguration("Culture", CultureInfo.CurrentCulture.LCID.ToString());
 
 			analyticsDataFactory.Setup(_datasource);
 			analyticsDataFactory.Setup(_timeZones);
 			analyticsDataFactory.Setup(dates);
+			analyticsDataFactory.Setup(sysConfiguration);
 			analyticsDataFactory.Setup(new BusinessUnit(TestState.BusinessUnit, _datasource));
 			analyticsDataFactory.Persist();
 

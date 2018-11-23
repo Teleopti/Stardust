@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		public SchedulerMessageBrokerHandler(SchedulingScreen owner, ILifetimeScope container)
 		{
-		    if (owner == null) throw new ArgumentNullException(nameof(owner));
-		    _owner = owner;
+			if (owner == null) throw new ArgumentNullException(nameof(owner));
+			_owner = owner;
 			_scheduleScreenRefresher = container.Resolve<IScheduleScreenRefresher>(
 				TypedParameter.From<IReassociateDataForSchedules>(this),
 				TypedParameter.From(container.Resolve<IScheduleRefresher>(
@@ -112,8 +112,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private bool messageIsRelevant(IEventMessage message)
 		{
 			return isRelevantPerson(message.DomainObjectId) || isRelevantPerson(message.ReferenceObjectId) ||
-			       message.InterfaceType.IsAssignableFrom(typeof (IMeeting)) ||
-			       message.InterfaceType.IsAssignableFrom(typeof (IPersonRequest));
+				   message.InterfaceType.IsAssignableFrom(typeof (IMeeting)) ||
+				   message.InterfaceType.IsAssignableFrom(typeof (IPersonRequest));
 		}
 
 		public void Refresh(ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer, bool loadRequests)
@@ -165,16 +165,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				new[] {personToReassociate} : 
 				new IAggregateRoot[] {};
 			return new[]
-			       	{
-			       		new IAggregateRoot[] {_owner.SchedulerState.SchedulerStateHolder.RequestedScenario},
-			       		personsToReassociate,
-			       		_owner.MultiplicatorDefinitionSet,
-			       		_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.Absences,
-			       		_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.DayOffs,
-			       		_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities,
-			       		_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.ShiftCategories,
+					{
+						new IAggregateRoot[] {_owner.SchedulerState.SchedulerStateHolder.RequestedScenario},
+						personsToReassociate,
+						_owner.MultiplicatorDefinitionSet,
+						_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.Absences,
+						_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.DayOffs,
+						_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities,
+						_owner.SchedulerState.SchedulerStateHolder.CommonStateHolder.ShiftCategories,
 						_owner.SchedulerState.ScheduleTags.Where(scheduleTag => scheduleTag.Id != null).ToList()
-			       	};
+					};
 		}
 
 		public event EventHandler<EventArgs> SchedulesUpdatedFromBroker;
@@ -284,14 +284,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				{
 				return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(new PublicNoteRepository(currentUnitOfWork), eventMessage.DomainObjectId);
 				}
-            if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IStudentAvailabilityDay)))
-            {
-                return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(new StudentAvailabilityDayRepository(currentUnitOfWork), eventMessage.DomainObjectId);
-            }
-            if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IOvertimeAvailability)))
-            {
-                return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(new OvertimeAvailabilityRepository (currentUnitOfWork), eventMessage.DomainObjectId);
-            }
+			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IStudentAvailabilityDay)))
+			{
+				return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(new StudentAvailabilityDayRepository(currentUnitOfWork), eventMessage.DomainObjectId);
+			}
+			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IOvertimeAvailability)))
+			{
+				return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(new OvertimeAvailabilityRepository (currentUnitOfWork), eventMessage.DomainObjectId);
+			}
 
 			Log.Warn("Message broker - Got a message of an unknown IScheduleData type: " + eventMessage.DomainObjectType);
 

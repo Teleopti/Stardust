@@ -117,7 +117,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private readonly SkillWeekGridControl _skillWeekGridControl;
 		private readonly SkillMonthGridControl _skillMonthGridControl;
 		private readonly SkillFullPeriodGridControl _skillFullPeriodGridControl;
-		private readonly SkillResultHighlightGridControl _skillResultHighlightGridControl;
 		private DateOnly _currentIntraDayDate;
 		private AgentInfoControl _agentInfoControl;
 		private ShiftCategoryDistributionModel _shiftCategoryDistributionModel;
@@ -202,9 +201,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		#region Constructors
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Mobility",
-			"CA1601:DoNotUseTimersThatPreventPowerStateChanges"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		protected SchedulingScreen()
 		{
 			InitializeComponent();
@@ -354,7 +350,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_skillWeekGridControl = new SkillWeekGridControl();
 			_skillMonthGridControl = new SkillMonthGridControl();
 			_skillFullPeriodGridControl = new SkillFullPeriodGridControl();
-			_skillResultHighlightGridControl = new SkillResultHighlightGridControl();
 			_skillIntradayGridControl = new SkillIntradayGridControl("SchedulerSkillIntradayGridAndChart", _container.Resolve<ISkillPriorityProvider>());
 			toolStripButtonChartPeriodView.Tag = SkillResultViewSetting.Period;
 			toolStripButtonChartMonthView.Tag = SkillResultViewSetting.Month;
@@ -2129,9 +2124,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			Refresh();
 			SuspendLayout();
 
-			if (schedulerSplitters1.PinnedPage != null)
-				schedulerSplitters1.TabSkillData.SelectedTab = schedulerSplitters1.PinnedPage;
-
 			schedulerSplitters1.SplitContainerAdvMainContainer.Visible = true;
 			toolStripStatusLabelScheduleTag.Visible = true;
 			toolStripStatusLabelNumberOfAgents.Text = LanguageResourceHelper.Translate("XXAgentsColon") + @" " +
@@ -2575,23 +2567,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void chartControlSkillDataChartRegionClick(object sender, ChartRegionMouseEventArgs e)
 		{
 			int column = Math.Max(1, (int)GridChartManager.GetIntervalValueForChartPoint(schedulerSplitters1.ChartControlSkillData, e.Point));
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Week))
-				_skillWeekGridControl.ScrollCellInView(0, column);
+			var skillGridControl = resolveControlFromSkillResultViewSetting();
+			skillGridControl.ScrollCellInView(0, column);
 
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Month))
-				_skillMonthGridControl.ScrollCellInView(0, column);
-
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Period))
-				_skillFullPeriodGridControl.ScrollCellInView(0, column);
-
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
-				_skillIntradayGridControl.ScrollCellInView(0, column);
-
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Day))
-			{
-				_skillDayGridControl.ScrollCellInView(0, column);
+			if(skillGridControl is SkillDayGridControl)
 				schedulerSplitters1.Grid.ScrollCellInView(0, column + 1);
-			}
+
 		}
 
 		#endregion
@@ -3906,7 +3887,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			using (var analyzer = new AgentSkillAnalyzer(SchedulerState.SchedulerStateHolder.SchedulingResultState.LoadedAgents,
 				SchedulerState.SchedulerStateHolder.SchedulingResultState.Skills, SchedulerState.SchedulerStateHolder.SchedulingResultState.SkillDays,
-				SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod, _container.Resolve<CreateIslands>(), _container.Resolve<DesktopSchedulingContext>(), SchedulerState.SchedulerStateHolder))
+				SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod, _container.Resolve<CreateIslands>(), _container.Resolve<DesktopContextState>(), SchedulerState.SchedulerStateHolder))
 			{
 				analyzer.LoadData();
 				analyzer.ShowDialog(this);
@@ -4423,32 +4404,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				if (selectedSkillGridControl == null)
 					return;
 
-				if (selectedSkillGridControl is SkillFullPeriodGridControl)
-				{
-					if (TestMode.Micke)
-					{
-						positionControl(_skillFullPeriodGridControl, SkillFullPeriodGridControl.PreferredGridWidth);
-						TabPageAdv thisTab = _tabSkillData.TabPages[_tabSkillData.SelectedIndex];
-						thisTab.Controls.Add(_skillResultHighlightGridControl);
-						_skillResultHighlightGridControl.DrawGridContents(SchedulerState.SchedulerStateHolder, skill);
-						_skillResultHighlightGridControl.Left = SkillFullPeriodGridControl.PreferredGridWidth + 5;
-						_skillResultHighlightGridControl.Top = 0;
-						_skillResultHighlightGridControl.Width = thisTab.Width - _skillResultHighlightGridControl.Left;
-						_skillResultHighlightGridControl.Height = thisTab.Height;
-						_skillResultHighlightGridControl.Anchor = AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Top |
-																  AnchorStyles.Left;
-					}
-					else
-					{
-						positionControl(skillGridControl);
-					}
-
-					ActiveControl = skillGridControl;
-					selectedSkillGridControl.DrawDayGrid(SchedulerState.SchedulerStateHolder, skill);
-					selectedSkillGridControl.DrawDayGrid(SchedulerState.SchedulerStateHolder, skill);
-					return;
-				}
-
 				positionControl(skillGridControl);
 				ActiveControl = skillGridControl;
 				selectedSkillGridControl.DrawDayGrid(SchedulerState.SchedulerStateHolder, skill);
@@ -4703,8 +4658,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			schedulerSplitters1.Grid.CurrentCellKeyDown += gridCurrentCellKeyDown;
 			schedulerSplitters1.Grid.GotFocus += gridGotFocus;
 			schedulerSplitters1.Grid.SelectionChanged += gridSelectionChanged;
-			schedulerSplitters1.Grid.ScrollControlMouseUp += gridScrollControlMouseUp;
-			schedulerSplitters1.Grid.StartAutoScrolling += gridStartAutoScrolling;
 
 			wpfShiftEditor1.ShiftUpdated += wpfShiftEditor1ShiftUpdated;
 			wpfShiftEditor1.CommitChanges += wpfShiftEditor1CommitChanges;
@@ -4733,7 +4686,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_skillWeekGridControl.SelectionChanged += skillGridControlSelectionChanged;
 			_skillMonthGridControl.SelectionChanged += skillGridControlSelectionChanged;
 			_skillFullPeriodGridControl.SelectionChanged += skillGridControlSelectionChanged;
-			_skillResultHighlightGridControl.GoToDate += skillResultHighlightGridControlGoToDate;
 
 			_gridrowInChartSettingButtons.LineInChartSettingsChanged += gridlinesInChartSettingsLineInChartSettingsChanged;
 			_gridrowInChartSettingButtons.LineInChartEnabledChanged += gridrowInChartSettingLineInChartEnabledChanged;
@@ -4768,23 +4720,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void wpfShiftEditor1ShowLayers(object sender, EventArgs e)
 		{
 			RunActionWithDelay(updateShiftEditor, 50);
-		}
-
-		private void skillResultHighlightGridControlGoToDate(object sender, GoToDateEventArgs e)
-		{
-			_scheduleView.SetSelectedDateLocal(e.Date);
-		}
-
-		private void gridStartAutoScrolling(object sender, StartAutoScrollingEventArgs e)
-		{
-			if (e.Reason == AutoScrollReason.MouseDragging)
-				schedulerSplitters1.Grid.SupportsPrepareViewStyleInfo = false;
-		}
-
-		private void gridScrollControlMouseUp(object sender, CancelMouseEventArgs e)
-		{
-			schedulerSplitters1.Grid.SupportsPrepareViewStyleInfo = true;
-			schedulerSplitters1.Grid.Invalidate();
 		}
 
 		private void replyAndDenyRequestFromRequestDetailsView(EventParameters<ReplyAndDenyRequestFromRequestDetailsView> obj)
@@ -5050,8 +4985,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				schedulerSplitters1.Grid.CurrentCellKeyDown -= gridCurrentCellKeyDown;
 				schedulerSplitters1.Grid.GotFocus -= gridGotFocus;
 				schedulerSplitters1.Grid.SelectionChanged -= gridSelectionChanged;
-				schedulerSplitters1.Grid.StartAutoScrolling -= gridStartAutoScrolling;
-				schedulerSplitters1.Grid.ScrollControlMouseUp -= gridScrollControlMouseUp;
 			}
 
 			if (wpfShiftEditor1 != null)
@@ -5112,9 +5045,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				_requestView.PropertyChanged -= requestViewPropertyChanged;
 				_requestView.SelectionChanged -= requestViewSelectionChanged;
 			}
-
-			if (_skillResultHighlightGridControl != null)
-				_skillResultHighlightGridControl.GoToDate -= skillResultHighlightGridControlGoToDate;
 
 			if (_skillDayGridControl != null)
 				_skillDayGridControl.GotFocus -= skillGridControlGotFucus;

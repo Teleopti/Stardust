@@ -25,6 +25,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Wfm.Api.Test.Query
 {
 	[ApiTest]
+	[LoggedOnAppDomain]
 	public class AbsencePossibilityHandlerTest : IExtendSystem
 	{
 		private const int intervalLengthInMinute = 15;
@@ -46,7 +47,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 		[TestCase(10, 5)]
 		[TestCase(10, 10)]
 		[TestCase(10, 20)]
-		public void ShouldGetAbsencePossibility(double forecastStaffPerInterval, double scheduledStaffPerInterval)
+		public async System.Threading.Tasks.Task ShouldGetAbsencePossibility(double forecastStaffPerInterval, double scheduledStaffPerInterval)
 		{
 			var today = new DateTime(2018, 8, 2, 0, 0, 0, DateTimeKind.Utc);
 			var tomorrow = today.AddDays(1);
@@ -91,9 +92,9 @@ namespace Teleopti.Wfm.Api.Test.Query
 				EndDate = tomorrow
 			};
 
-			var result = Client.PostAsync("/query/AbsencePossibility/AbsencePossibilityByPersonId",
+			var result = await Client.PostAsync("/query/AbsencePossibility/AbsencePossibilityByPersonId",
 				new StringContent(JsonConvert.SerializeObject(queryDto), Encoding.UTF8, "application/json"));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
 			resultDto["Result"].Count().Should().Be.EqualTo((17 - 8) * 4 * 2);
@@ -103,7 +104,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 		}
 
 		[Test]
-		public void ShouldDenyGetAbsencePossibilityWhenPersonNotFound()
+		public async System.Threading.Tasks.Task ShouldDenyGetAbsencePossibilityWhenPersonNotFound()
 		{
 			var today = new DateTime(2018, 8, 2, 0, 0, 0, DateTimeKind.Utc);
 			var tomorrow = today.AddDays(1);
@@ -119,16 +120,16 @@ namespace Teleopti.Wfm.Api.Test.Query
 				EndDate = tomorrow
 			};
 
-			var result = Client.PostAsync("/query/AbsencePossibility/AbsencePossibilityByPersonId",
+			var result = await Client.PostAsync("/query/AbsencePossibility/AbsencePossibilityByPersonId",
 				new StringContent(JsonConvert.SerializeObject(queryDto), Encoding.UTF8, "application/json"));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(false);
 			resultDto["Message"].Value<string>().Should().Be.EqualTo($"Person with Id {personId} could not be found");
 		}
 
 		[Test]
-		public void ShouldDenyGetAbsencePossibilityWhenNotPermitted()
+		public async System.Threading.Tasks.Task ShouldDenyGetAbsencePossibilityWhenNotPermitted()
 		{
 			var today = new DateTime(2018, 8, 2, 0, 0, 0, DateTimeKind.Utc);
 			var tomorrow = today.AddDays(1);
@@ -172,9 +173,9 @@ namespace Teleopti.Wfm.Api.Test.Query
 				EndDate = tomorrow
 			};
 
-			var result = Client.PostAsync("/query/AbsencePossibility/AbsencePossibilityByPersonId",
+			var result = await Client.PostAsync("/query/AbsencePossibility/AbsencePossibilityByPersonId",
 				new StringContent(JsonConvert.SerializeObject(queryDto), Encoding.UTF8, "application/json"));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(false);
 			resultDto["Message"].Value<string>().Should().Be.EqualTo($"Person with Id {person.Id} is not allowed to request absence in {today:yyyy-MM-dd}");

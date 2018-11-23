@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization.ClassicLegacy;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -70,6 +71,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly MatrixListFactory _matrixListFactory;
+		private readonly PlanningGroupGlobalSettingSetter _planningGroupGlobalSettingSetter;
+		
 
 		public DayOffOptimization(TeamBlockDayOffOptimizer teamBlockDayOffOptimizer,
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter,
@@ -87,7 +90,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IOptimizationPreferencesProvider optimizationPreferencesProvider,
 			IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod,
 			IDayOffOptimizationPreferenceProviderForPlanningPeriod dayOffOptimizationPreferenceProviderForPlanningPeriod,
-			IScheduleAllRemovedDaysOrRollback scheduleAllRemovedDaysOrRollback)
+			IScheduleAllRemovedDaysOrRollback scheduleAllRemovedDaysOrRollback,
+			PlanningGroupGlobalSettingSetter planningGroupGlobalSettingSetter)
 		{
 			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
@@ -103,6 +107,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_blockPreferenceProviderForPlanningPeriod = blockPreferenceProviderForPlanningPeriod;
 			_dayOffOptimizationPreferenceProviderForPlanningPeriod = dayOffOptimizationPreferenceProviderForPlanningPeriod;
 			_scheduleAllRemovedDaysOrRollback = scheduleAllRemovedDaysOrRollback;
+			_planningGroupGlobalSettingSetter = planningGroupGlobalSettingSetter;
 			_userTimeZone = userTimeZone;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_matrixListFactory = matrixListFactory;
@@ -111,11 +116,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public void Execute(DateOnlyPeriod selectedPeriod,
 			IEnumerable<IPerson> selectedAgents,
 			bool runWeeklyRestSolver, // desktop client runs this explicitly afterwards so sending in false here
-			Guid planningPeriodId)
+			AllSettingsForPlanningGroup allSettingsForPlanningGroup)
 		{
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
-			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(planningPeriodId);
-			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderForPlanningPeriod.Fetch(planningPeriodId);
+			_planningGroupGlobalSettingSetter.Execute(allSettingsForPlanningGroup, optimizationPreferences);
+			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(allSettingsForPlanningGroup);
+			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderForPlanningPeriod.Fetch(allSettingsForPlanningGroup);
 			var stateHolder = _schedulerStateHolder();
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceCalculation, schedulingOptions.ConsiderShortBreaks, stateHolder.SchedulingResultState, _userTimeZone);

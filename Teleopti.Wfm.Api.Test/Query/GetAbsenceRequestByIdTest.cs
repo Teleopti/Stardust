@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -13,11 +14,13 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Api.Test.Query
 {
 	[ApiTest]
+	[LoggedOnAppDomain]
 	public class GetAbsenceRequestByIdTest
 	{
 		public IApiHttpClient Client;
@@ -27,7 +30,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 		public FullPermission FullPermission;
 
 		[Test]
-		public void ShouldGetAbsenceRequestById()
+		public async Task ShouldGetAbsenceRequestById()
 		{
 			Client.Authorize();
 
@@ -41,8 +44,8 @@ namespace Teleopti.Wfm.Api.Test.Query
 				new AbsenceRequest(absence, new DateTimePeriod(2018, 8, 1, 13, 2018, 8, 1, 15))).WithId();
 			PersonRequestRepository.Add(personRequest);
 
-			var result = Client.PostAsync("/query/AbsenceRequest/AbsenceRequestById", new StringContent(JsonConvert.SerializeObject(new { RequestId = personRequest.Id }), Encoding.UTF8, "application/json"));
-			var request = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Result"][0];
+			var result = await Client.PostAsync("/query/AbsenceRequest/AbsenceRequestById", new StringContent(JsonConvert.SerializeObject(new { RequestId = personRequest.Id }), Encoding.UTF8, "application/json"));
+			var request = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync())["Result"][0];
 			request["Id"].ToObject<Guid>().Should().Be.EqualTo(personRequest.Id);
 			request["IsNew"].Value<bool>().Should().Be.EqualTo(true);
 			request["IsPending"].Value<bool>().Should().Be.EqualTo(false);
@@ -57,7 +60,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 		}
 
 		[Test]
-		public void ShouldNotGetAbsenceRequestByIdWhenNotPermitted()
+		public async Task ShouldNotGetAbsenceRequestByIdWhenNotPermitted()
 		{
 			FullPermission.AddToBlackList(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb);
 			Client.Authorize();
@@ -72,18 +75,18 @@ namespace Teleopti.Wfm.Api.Test.Query
 				new AbsenceRequest(absence, new DateTimePeriod(2018, 8, 1, 13, 2018, 8, 1, 15))).WithId();
 			PersonRequestRepository.Add(personRequest);
 
-			var result = Client.PostAsync("/query/AbsenceRequest/AbsenceRequestById", new StringContent(JsonConvert.SerializeObject(new { RequestId = personRequest.Id }), Encoding.UTF8, "application/json"));
-			var response = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var result = await Client.PostAsync("/query/AbsenceRequest/AbsenceRequestById", new StringContent(JsonConvert.SerializeObject(new { RequestId = personRequest.Id }), Encoding.UTF8, "application/json"));
+			var response = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 			response["Successful"].Value<bool>().Should().Be.False();
 		}
 
 		[Test]
-		public void ShouldHandleWhenAbsenceRequestByIdNotExists()
+		public async Task ShouldHandleWhenAbsenceRequestByIdNotExists()
 		{
 			Client.Authorize();
 			
-			var result = Client.PostAsync("/query/AbsenceRequest/AbsenceRequestById", new StringContent(JsonConvert.SerializeObject(new { RequestId = Guid.NewGuid() }), Encoding.UTF8, "application/json"));
-			var response = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var result = await Client.PostAsync("/query/AbsenceRequest/AbsenceRequestById", new StringContent(JsonConvert.SerializeObject(new { RequestId = Guid.NewGuid() }), Encoding.UTF8, "application/json"));
+			var response = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 			response["Successful"].Value<bool>().Should().Be.False();
 		}
 	}

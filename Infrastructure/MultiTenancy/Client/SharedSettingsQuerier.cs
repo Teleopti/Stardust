@@ -18,11 +18,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		{
 			using (var httpClient = new HttpClient())
 			{
-				var response = httpClient.GetAsync(_urlToServer + "Start/Config/SharedSettings").Result;
+				var response = httpClient.GetAsync(_urlToServer + "Start/Config/SharedSettings").GetAwaiter().GetResult();
 				if (!response.IsSuccessStatusCode)
 					return new SharedSettings();
 
-				var jsonString = response.Content.ReadAsStringAsync().Result;
+				var jsonString = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 				var ret = JsonConvert.DeserializeObject<SharedSettings>(jsonString);
 				ret.Hangfire = Encryption.DecryptStringFromBase64(ret.Hangfire, EncryptionConstants.Image1, EncryptionConstants.Image2);
 				//ret.InstrumentationKey = Encryption.DecryptStringFromBase64(ret.InstrumentationKey, EncryptionConstants.Image1, EncryptionConstants.Image2);

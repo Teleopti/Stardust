@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core
 		{
 			builder.RegisterType<PowerBiClientFactory>().As<IPowerBiClientFactory>();
 			builder.RegisterType<ReportProvider>().As<IReportProvider>();
+			builder.RegisterType<PermissionProvider>().As<IPermissionProvider>();
 		}
 	}
 }

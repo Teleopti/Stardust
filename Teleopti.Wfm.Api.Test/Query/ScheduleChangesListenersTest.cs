@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -11,13 +12,14 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Wfm.Api.Test.Query
 {
 	[ApiTest]
+	[LoggedOnAppDomain]
 	public class ScheduleChangesListenersTest
 	{
 		public IApiHttpClient Client;
 		public FakeGlobalSettingDataRepository GlobalSettingDataRepository;
 
 		[Test]
-		public void ShouldGetScheduleChangesListeners()
+		public async Task ShouldGetScheduleChangesListeners()
 		{
 			const string name = "NameOfScheduleChangeListener";
 			const string url = "http://endpoint/";
@@ -25,21 +27,21 @@ namespace Teleopti.Wfm.Api.Test.Query
 			const int daysEndFromCurrentDate = 1;
 
 			Client.Authorize();
-			Client.PostAsync("/command/AddScheduleChangesListener",
+			(await Client.PostAsync("/command/AddScheduleChangesListener",
 				new StringContent(JsonConvert.SerializeObject(new
 				{
 					Name = name,
 					Url = url,
 					DaysStartFromCurrentDate = daysStartFromCurrentDate,
 					DaysEndFromCurrentDate = daysEndFromCurrentDate
-				}), Encoding.UTF8, "application/json")).Result.EnsureSuccessStatusCode();
+				}), Encoding.UTF8, "application/json"))).EnsureSuccessStatusCode();
 
-			var result =
+			var result = await 
 				Client.PostAsync("/query/ScheduleChangesListenerSubscription/AllScheduleChangesListenerSubscription",
 					new StringContent("{}"));
 
 			var obj =
-				JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Result"][0];
+				JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync())["Result"][0];
 
 			var listener = obj["Listeners"].First();
 			listener["Name"].Value<string>().Should().Be.EqualTo(name);
@@ -49,15 +51,15 @@ namespace Teleopti.Wfm.Api.Test.Query
 		}
 
 		[Test]
-		public void ShouldIncludePublicKeyForSignatureValidation()
+		public async Task ShouldIncludePublicKeyForSignatureValidation()
 		{
 			Client.Authorize();
-			var result =
+			var result = await 
 				Client.PostAsync("/query/ScheduleChangesListenerSubscription/AllScheduleChangesListenerSubscription",
 					new StringContent("{}", Encoding.UTF8, "application/json"));
 
 			var obj =
-				JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Result"][0];
+				JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync())["Result"][0];
 
 			obj["Modulus"].Value<string>().Should().Be.EqualTo(
 				"tcQWMgdpQeCd8+gzB3rYQAehHXF5mBGdyFMkJMEmcQmTlkpg22xLNz/kNYXZ7j2Cuhls+PBORzZkfBsNoL1vErT+N9Es4EEWOt6ntNe7wujqQqktUT/QOWEMJ8zJQM3bn7Oj9H5StBr7DWSRzgEjOc7knDcb4KCQL3ceXqmqwSonPfP1hp+bE8rZuxDISYiZVEkm417YzUHBk3ppV30Q9zvfL9IZX0q/ebCTRnLFockl7yOVucomvo8j4ssFPCAYgASoNvzWq+s5UTzYELl1I7F3hQnFwx0bIpQFmGbZ5BbNczc6rVYtCX5KDMsVaJSUcXBAnqGd20hq/ICkBR658w==");
@@ -65,15 +67,15 @@ namespace Teleopti.Wfm.Api.Test.Query
 		}
 
 		[Test, FakePermissions]
-		public void ShouldRejectIfNotSufficientPermissions()
+		public async Task ShouldRejectIfNotSufficientPermissions()
 		{
 			Client.Authorize();
 
-			var result =
+			var result = await 
 				Client.PostAsync("/query/ScheduleChangesListenerSubscription/AllScheduleChangesListenerSubscription",
 					new StringContent("{}", Encoding.UTF8, "application/json"));
 
-			var obj = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var obj = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 
 			obj["Successful"].Value<bool>().Should().Be.False();
 			obj["Result"].Value<string>().Should().Be.Null();

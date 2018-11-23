@@ -1,6 +1,5 @@
 ﻿@using System.Web.Mvc.Html
 @using Teleopti.Ccc.UserTexts;
-@using Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 
@@ -57,103 +56,106 @@
 @if (Model.GrantEnabled)
 {
 	<script type="text/javascript">
-		$(document).ready(function () {
+		var ajax = new Teleopti.MyTimeWeb.Ajax();
+
+		function createGrantBotConfig() {
+			ajax.Ajax({
+				url: "../api/token",
+				dataType: "json",
+				type: 'POST',
+				data: JSON.stringify({ name: 'GrantBot' }),
+				contentType: 'application/json; charset=utf-8',
+				success: function(token) {
+					ajax.Ajax({
+						url: "../api/ChatConfiguration",
+						dataType: "json",
+						type: 'POST',
+						data: JSON.stringify({
+							host: window.location.host,
+							tenant: '@Model.CurrentLogonAgentId',
+							apiKey: token.Token
+						}),
+						contentType: 'application/json; charset=utf-8',
+						success: function() {
+						}
+					});
+				}
+			});
+		}
+
+		function renderWebChat() {
+			ajax.Ajax({
+				url: "../api/GrantBot/Config",
+				dataType: "json",
+				type: 'GET',
+				contentType: 'application/json; charset=utf-8',
+				success: function(grantBotConfig) {
+					var token = grantBotConfig.Token;
+					var dl = window.WebChat.createDirectLine({ secret: token });
+					var botContainer = document.getElementById('grantBot');
+
+					const styleOptions = {
+						backgroundColor: 'rgba(224, 224, 224, .4)',
+						bubbleBackground: 'rgba(153, 214, 255, .4)',
+						bubbleFromUserBackground: 'rgba(194, 224, 133, .6)'
+					};
+
+					window.WebChat.renderWebChat({ directLine: dl, styleOptions }, botContainer);
+
+					var activity = {
+						from: {
+							id: "@Model.CurrentLogonAgentId",
+							name: "@Model.CurrentLogonAgentName"
+						},
+						name: 'startConversation',
+						type: 'event',
+						value: '',
+						channelData: {
+							"personId": "@Model.CurrentLogonAgentId",
+							"environment": window.location.host
+						}
+					};
+
+					dl.postActivity(activity).subscribe(function(id) {
+						if (console) {
+							console.log('"trigger requestWelcomeDialog" sent');
+						}
+					});
+				},
+				error: function(e) {
+					if (console) {
+						console.error("Failed to load GrantBot config.", e);
+					}
+				}
+			});
+		}
+
+		$(document).ready(function() {
 			var div = document.createElement("div");
 			document.getElementsByTagName('body')[0].appendChild(div);
-			div.outerHTML = "<div id='botDiv' class='chatbot' style='width: 430px; height: 400px; z-index: 10000; display: none;'>"
-				+ "<div class='wc-header' style='top: -30px;'>"
-				+ "<span>Grant bot</span>"
-				+ "<span id='closeChatbot' class='pull-right dropdown-toggle'>"
-				+ "<i class='glyphicon glyphicon-remove' style='color: white'></i>"
-				+ "</span>"
-				+ "</div>"
-				+ "<div id='grantBot' style='width: 100%;'></div>"
-				+ "</div>";
+			div.outerHTML =
+				"<div id='grantBotWrapper' class='webchat-wrapper' style='display: none;'>" +
+				"<div class='webchat-header'>" +
+				"<span>Grant bot</span>" +
+				"<span id='closeWebChat' class='pull-right dropdown-toggle'>" +
+				"<i class='glyphicon glyphicon-remove' style='color: white'></i>" +
+				"</span>" +
+				"</div>" +
+				"<div id='grantBot' class='webchat-container'></div>" +
+				"</div>";
 
-			document.getElementById("closeChatbot").addEventListener("click",
-				function (e) {
-					document.getElementById("botDiv").style.display = "none";
+			document.getElementById("closeWebChat").addEventListener("click",
+				function(e) {
+					document.getElementById("grantBotWrapper").style.display = "none";
 				}
 			);
 
 			document.getElementById("botIndicator").addEventListener("click",
 				function (e) {
-					var style = document.getElementById("botDiv").style;
+					var style = document.getElementById("grantBotWrapper").style;
 					if (style.display === "block") {
 						style.display = "none";
 						return;
-					}
-
-					if (document.querySelector("#grantBot>.wc-app") === null) {
-						var ajax = new Teleopti.MyTimeWeb.Ajax();
-						ajax.Ajax({
-							url: "../api/GrantBot/Config",
-							dataType: "json",
-							type: 'GET',
-							contentType: 'application/json; charset=utf-8',
-							success: function (grantBotConfig) {
-								var dl = new BotChat.DirectLine({ token: grantBotConfig.Token });
-								var user = { id: "@Model.CurrentLogonAgentId", name: "@Model.CurrentLogonAgentName" };
-
-								BotChat.App({
-									botConnection: Object.assign({}, dl, {
-										postActivity: activity => {
-											var newActivity = Object.assign({}, activity, { channelData: { "personId": "@Model.CurrentLogonAgentId", "environment": window.location.host } });
-											return dl.postActivity(newActivity);
-										}
-									}),
-									user: user,
-									bot: { id: "botid" },
-									resize: "detect",
-									chatTitle: false,
-									showUploadButton: false
-								}, document.getElementById("grantBot"));
-
-								dl.postActivity({
-										from: user,
-										name: 'startConversation',
-										type: 'event',
-										value: '',
-										channelData: {
-											"personId": "@Model.CurrentLogonAgentId",
-											"environment": window.location.host
-										}
-									})
-									.subscribe(function (id) {
-										if (console) console.log('"trigger requestWelcomeDialog" sent');
-									});
-							},
-							error: function (e) {
-								if (console) console.error("Failed to load GrantBot config.", e);
-							}
-						});
-
-						ajax.Ajax({
-							url: "../api/ChatConfiguration/exists",
-							dataType: "json",
-							type: 'POST',
-							data: JSON.stringify({ host: window.location.host, tenant: '@Model.CurrentLogonAgentId' }),
-							contentType: 'application/json; charset=utf-8',
-							success: function(grantBotConfig) {
-								if (!grantBotConfig) {
-									ajax.Ajax({
-										url: "../api/token",
-										dataType: "json",
-										type: 'POST',
-										data: JSON.stringify({ name: 'GrantBot' }),
-										contentType: 'application/json; charset=utf-8',
-										success: function(token) {
-												ajax.Ajax({
-													url: "../api/ChatConfiguration",
-													dataType: "json",
-													type: 'POST',
-													data: JSON.stringify({ host: window.location.host, tenant: '@Model.CurrentLogonAgentId', apiKey: token.Token }),
-													contentType: 'application/json; charset=utf-8',
-													success: function() {
-													}});
-										}});
-								}
-							}});
 					}
 
 					var availableClientWidth = document.documentElement.clientWidth;
@@ -161,6 +163,21 @@
 					style.width = (availableClientWidth > 450 ? 430 : availableClientWidth - 20) + 'px';
 					style.height = (availableClientHeight > 500 ? 400 : availableClientHeight) + 'px';
 					style.display = "block";
+
+					if (!document.querySelector("#grantBot").hasChildNodes()) {
+						renderWebChat();
+
+						ajax.Ajax({
+							url: "../api/ChatConfiguration/exists",
+							dataType: "json",
+							type: 'POST',
+							data: JSON.stringify({ host: window.location.host, tenant: '@Model.CurrentLogonAgentId' }),
+							contentType: 'application/json; charset=utf-8',
+							success: function(botConfigExists) {
+								if (botConfigExists) createGrantBotConfig();
+							}
+						});
+					}
 				}
 			);
 		});
@@ -216,54 +233,54 @@
 							<ul class="dropdown-menu show-outside-toolbar" id="badge-counts" data-period-type=@Model.BadgeRollingPeriodSet>
 								@if (Model.ShowBadgePeriodNavigator && Model.BadgeRollingPeriodSet.ToString() != "OnGoing")
 								{
-								<li id="badge-period-navigator">
-									<button id="previous-period" class="period-arrow" data-bind="click: clickPrev, disable: isFetchingData">
-										<i class="glyphicon glyphicon-chevron-left"></i>
-									</button>
-									<div class="period-text" data-bind="text: periodText, css: { working: isFetchingData }"></div>
-									<button id="next-period" class="period-arrow" data-bind="click: clickNext, disable: isFetchingData">
-										<i class="glyphicon glyphicon-chevron-right"></i>
-									</button>
-								</li>
-								<li>
-									<div class="badge-detail" data-bind="foreach: badgeCounts">
-										<div class="badge-type" data-bind="text: $data.Name"></div>
-										<span class="gold-badge">
-											<i class="glyphicon glyphicon-star" style="color: gold"></i>
-											<span data-bind="text: $data.GoldBadge"></span>
-										</span>
-										<span class="silver-badge">
-											<i class="glyphicon glyphicon-star" style="color: silver"></i>
-											<span data-bind="text: $data.SilverBadge"></span>
-										</span>
-										<span class="bronze-badge">
-											<i class="glyphicon glyphicon-star" style="color: brown"></i>
-											<span data-bind="text: $data.BronzeBadge"></span>
-										</span>
-									</div>
-								</li>
+									<li id="badge-period-navigator">
+										<button id="previous-period" class="period-arrow" data-bind="click: clickPrev, disable: isFetchingData">
+											<i class="glyphicon glyphicon-chevron-left"></i>
+										</button>
+										<div class="period-text" data-bind="text: periodText, css: { working: isFetchingData }"></div>
+										<button id="next-period" class="period-arrow" data-bind="click: clickNext, disable: isFetchingData">
+											<i class="glyphicon glyphicon-chevron-right"></i>
+										</button>
+									</li>
+									<li>
+										<div class="badge-detail" data-bind="foreach: badgeCounts">
+											<div class="badge-type" data-bind="text: $data.Name"></div>
+											<span class="gold-badge">
+												<i class="glyphicon glyphicon-star" style="color: gold"></i>
+												<span data-bind="text: $data.GoldBadge"></span>
+											</span>
+											<span class="silver-badge">
+												<i class="glyphicon glyphicon-star" style="color: silver"></i>
+												<span data-bind="text: $data.SilverBadge"></span>
+											</span>
+											<span class="bronze-badge">
+												<i class="glyphicon glyphicon-star" style="color: brown"></i>
+												<span data-bind="text: $data.BronzeBadge"></span>
+											</span>
+										</div>
+									</li>
 								}
 								else
 								{
 									foreach (var badge in Model.Badges)
 									{
-									<li>
-										<div class="badge-detail">
-											<div class="badge-type">@badge.Name</div>
-											<span class="gold-badge">
-												<i class="glyphicon glyphicon-star" style="color: gold"></i>
-												@badge.GoldBadge
-											</span>
-											<span class="silver-badge">
-												<i class="glyphicon glyphicon-star" style="color: silver"></i>
-												@badge.SilverBadge
-											</span>
-											<span class="bronze-badge">
-												<i class="glyphicon glyphicon-star" style="color: brown"></i>
-												@badge.BronzeBadge
-											</span>
-										</div>
-									</li>
+										<li>
+											<div class="badge-detail">
+												<div class="badge-type">@badge.Name</div>
+												<span class="gold-badge">
+													<i class="glyphicon glyphicon-star" style="color: gold"></i>
+													@badge.GoldBadge
+												</span>
+												<span class="silver-badge">
+													<i class="glyphicon glyphicon-star" style="color: silver"></i>
+													@badge.SilverBadge
+												</span>
+												<span class="bronze-badge">
+													<i class="glyphicon glyphicon-star" style="color: brown"></i>
+													@badge.BronzeBadge
+												</span>
+											</div>
+										</li>
 									}
 								}
 							</ul>

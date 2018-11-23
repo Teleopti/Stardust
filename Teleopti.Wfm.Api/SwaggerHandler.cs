@@ -60,7 +60,7 @@ namespace Teleopti.Wfm.Api
 				};
 				var swaggerResponse = new SwaggerResponse
 				{
-					Schema = Task.Run(() => generator.GenerateWithReferenceAndNullability<JsonSchema4>(typeof(ResultDto), null, false, schemaResolver, null)).Result
+					Schema = generator.GenerateWithReferenceAndNullability<JsonSchema4>(typeof(ResultDto), null, false, schemaResolver, null).GetAwaiter().GetResult()
 				};
 				swaggerOperation.Responses.Add("200", swaggerResponse);
 
@@ -68,7 +68,7 @@ namespace Teleopti.Wfm.Api
 				{
 					Description = "Command arguments for " + opname,
 					Kind = SwaggerParameterKind.Body,
-					Schema = Task.Run(() => generator.GenerateWithReferenceAndNullability<JsonSchema4>(cmd, null, false, schemaResolver, null)).Result
+					Schema = generator.GenerateWithReferenceAndNullability<JsonSchema4>(cmd, null, false, schemaResolver, null).GetAwaiter().GetResult()
 				};
 				swaggerOperation.Parameters.Add(param);
 
@@ -96,7 +96,7 @@ namespace Teleopti.Wfm.Api
 				
 				var swaggerResponse = new SwaggerResponse
 				{
-					Schema = Task.Run(()=>generator.GenerateWithReferenceAndNullability<JsonSchema4>(typeof(QueryResultDto<>).MakeGenericType(query.Item3), null, false, schemaResolver, null)).Result
+					Schema = generator.GenerateWithReferenceAndNullability<JsonSchema4>(typeof(QueryResultDto<>).MakeGenericType(query.Item3), null, false, schemaResolver, null).GetAwaiter().GetResult()
 				};
 				swaggerOperation.Responses.Add("200", swaggerResponse);
 				
@@ -104,7 +104,7 @@ namespace Teleopti.Wfm.Api
 				{
 					Description = "Query arguments for " + opname,
 					Kind = SwaggerParameterKind.Body,
-					Schema = Task.Run(() => generator.GenerateWithReferenceAndNullability<JsonSchema4>(query.Item2, null, false, schemaResolver, null)).Result
+					Schema = generator.GenerateWithReferenceAndNullability<JsonSchema4>(query.Item2, null, false, schemaResolver, null).GetAwaiter().GetResult()
 				};
 				swaggerOperation.Parameters.Add(param);
 			}

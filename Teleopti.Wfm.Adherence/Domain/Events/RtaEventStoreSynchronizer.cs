@@ -97,7 +97,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 		[FullPermissions]
 		protected virtual void Synchronize(IEnumerable<IEvent> events)
 		{
-			var toBeSynched = events
+			events
 				.Cast<IRtaStoredEvent>()
 				.Select(e =>
 				{
@@ -109,9 +109,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 					};
 				})
 				.Distinct()
-				.ToArray();
-
-			Extensions.ForEach(toBeSynched, x => { synchronizeAdherenceDay(x.PersonId, x.Day); });
+				.ForEach(x => synchronizeAdherenceDay(x.PersonId, x.Day));
 		}
 
 		private void synchronizeAdherenceDay(Guid personId, DateOnly day)

@@ -55,7 +55,7 @@
 							<td>{{tenant.TenantName}}</td>
 							<td>
 								<button type="button" class="btn btn-default" ng-class="{'btn-success':tenant.IsBaseConfigured}" ng-click="tenant.showTenantConfiguration = true">
-									{{tenant.IsBaseConfigured}}
+									{{tenant.IsBaseConfigured == true ? 'Configured' : 'Configure'}}
 								</button>
 								<div class="custom-modal" ng-if="tenant.showTenantConfiguration">
 									<div class="modal-content">

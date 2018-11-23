@@ -325,6 +325,28 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 				StartTime = startTime;
 				EndTime = endTime;
 			}
+			
+			protected bool Equals(openPeriod other)
+			{
+				return StartTime.Equals(other.StartTime) && EndTime.Equals(other.EndTime);
+			}
+
+			public override bool Equals(object obj)
+			{
+				if (ReferenceEquals(null, obj)) return false;
+				if (ReferenceEquals(this, obj)) return true;
+				if (obj.GetType() != this.GetType()) return false;
+				return Equals((openPeriod) obj);
+			}
+
+			public override int GetHashCode()
+			{
+				unchecked
+				{
+					return (StartTime.GetHashCode() * 397) ^ EndTime.GetHashCode();
+				}
+			}
+
 		}
 	}
 }

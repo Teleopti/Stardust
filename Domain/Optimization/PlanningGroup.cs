@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -12,6 +13,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ISet<IFilter> _filters = new HashSet<IFilter>();
 		private readonly IList<PlanningGroupSettings> _settings = new List<PlanningGroupSettings>();
 		private bool _isDeleted;
+		private Percent _preferenceValue;
 
 		public PlanningGroup()
 		{
@@ -19,11 +21,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var planningGroupSettings = new PlanningGroupSettings();
 			planningGroupSettings.SetAsDefault();
 			addPlanningGroupSetting(planningGroupSettings);
+			_preferenceValue = new Percent(1);
 		}
 
 		public virtual IEnumerable<IFilter> Filters => _filters;
 		public virtual string Name { get; set; }
-		public virtual AllPlanningGroupSettings Settings => new AllPlanningGroupSettings(_settings);
+		public virtual AllSettingsForPlanningGroup Settings => new AllSettingsForPlanningGroup(_settings, _preferenceValue);
+
+		public virtual void SetGlobalValues(Percent preferenceValue)
+		{
+			_preferenceValue = preferenceValue;
+		}
 
 		public virtual void ClearFilters()
 		{

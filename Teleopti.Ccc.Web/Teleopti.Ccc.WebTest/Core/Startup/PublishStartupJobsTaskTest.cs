@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 
 			var task = _target.Execute(null);
 			task.Should().Not.Be.Null();
-			task.Wait();
+			task.GetAwaiter().GetResult();
 
 			_eventPublisher.PublishedEvents.OfType<PublishInitializeReadModelEvent>().Should().Not.Be.Empty();
 		}

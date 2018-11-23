@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -334,12 +335,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("76118 to be fixed")]
 		public void ShouldConsiderOpenHoursWhenUsingAverageShiftLength([Values(18, 12)] int endHour )
 		{
+			if (!ResourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118))
+				Assert.Ignore("only works with toggle on");
+
 			var date = new DateOnly(2018, 10, 1);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
-			var activity = new Activity().WithId();
+			var activity = new Activity { RequiresSkill = true }.WithId();
 			var scenario = new Scenario();
 			var days = new Dictionary<DayOfWeek, TimePeriod>
 			{

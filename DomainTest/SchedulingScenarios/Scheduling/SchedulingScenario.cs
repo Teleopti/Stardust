@@ -40,7 +40,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		
 		private class schedulingFixtureSource : ResourcePlannerFixtureSource
 		{
-			protected override IEnumerable<Toggles> ToggleFlags { get; } = Enumerable.Empty<Toggles>();
+			protected override IEnumerable<Toggles> ToggleFlags { get; } = new []
+			{
+				Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118
+			};
 			protected override bool AlsoSimulateSecondRequest { get; } = true;
 		}
 	}

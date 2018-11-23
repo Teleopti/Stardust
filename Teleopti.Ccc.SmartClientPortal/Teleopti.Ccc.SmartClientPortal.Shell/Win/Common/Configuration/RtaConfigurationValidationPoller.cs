@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
-using log4net;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Collection;
@@ -64,7 +63,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			try
 			{
-				var json = _client.GetStringAsync(_serverUrl + "Rta/Configuration/Validate?tenant=" + _dataSource.CurrentName()).Result;
+				var json = _client.GetStringAsync(_serverUrl + "Rta/Configuration/Validate?tenant=" + _dataSource.CurrentName()).GetAwaiter().GetResult();
 				var models = JsonConvert.DeserializeObject<IEnumerable<ConfigurationValidationViewModel>>(json);
 				var texts = models
 					.Select(x => string.Format(UserTexts.Resources.ResourceManager.GetString(x.Resource), x.Data.EmptyIfNull().Cast<object>().ToArray()))

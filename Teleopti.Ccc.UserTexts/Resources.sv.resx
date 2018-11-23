@@ -978,7 +978,7 @@ datum</value>
     <comment>Absenteeism(%)</comment>
   </data>
   <data name="KpiAdherence" xml:space="preserve">
-    <value>Schemauppföljning (%)</value>
+    <value>Schemaföljsamhet (%)</value>
     <comment>Adherence(%)</comment>
   </data>
   <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
@@ -4845,7 +4845,7 @@ standard</value>
     <comment>Weeks:</comment>
   </data>
   <data name="Adherence" xml:space="preserve">
-    <value>Schemauppföljning</value>
+    <value>Adherence</value>
     <comment>Adherence</comment>
   </data>
   <data name="MyReport" xml:space="preserve">
@@ -7276,7 +7276,7 @@ Uppdaterad den: {1}</value>
     <comment>Not Scheduled</comment>
   </data>
   <data name="AdherenceReportCalculation" xml:space="preserve">
-    <value>Schemauppföljningsberäkning</value>
+    <value>Adherence-beräkning</value>
     <comment>Adherence calculation</comment>
   </data>
   <data name="AddDate" xml:space="preserve">
@@ -11265,7 +11265,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Tid i status per agent</value>
   </data>
   <data name="DetailedAdherence" xml:space="preserve">
-    <value>Detaljerad schemauppföljning</value>
+    <value>Detaljerad schemaföljsamhet</value>
   </data>
   <data name="Metric" xml:space="preserve">
     <value>Mått</value>
@@ -11305,7 +11305,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Schemat måste laddas om</value>
   </data>
   <data name="MyReportAdherenceTab" xml:space="preserve">
-    <value>Detaljerad schemauppföljning</value>
+    <value>Detaljerad schemaföljsamhet</value>
     <comment>Text on adherence tab on web my report</comment>
   </data>
   <data name="MyReportSummaryTab" xml:space="preserve">
@@ -12139,7 +12139,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Fler rubrikfält</value>
   </data>
   <data name="AdherenceCannotBeEmpty" xml:space="preserve">
-    <value>Fältet Schemauppföljning kan inte vara tomt</value>
+    <value>Fältet Adherence kan inte vara tomt</value>
   </data>
   <data name="GenerateForecastTip" xml:space="preserve">
     <value>Skapa prognos</value>
@@ -12298,7 +12298,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Välj en skiftpåse</value>
   </data>
   <data name="InAdherence" xml:space="preserve">
-    <value>Följer schema</value>
+    <value>I adherence</value>
   </data>
   <data name="NeutralAdherence" xml:space="preserve">
     <value>Neutral</value>
@@ -13624,7 +13624,7 @@ Dessa val är aktiverade:
     <value>Mottagaren har inte rättigheter att byta skift. </value>
   </data>
   <data name="AgentHistoricalAdherence" xml:space="preserve">
-    <value>Historisk schemauppföljning </value>
+    <value>Historisk adherence</value>
   </data>
   <data name="TooManySelectedAgents" xml:space="preserve">
     <value>Du har markerat för många agenter. Var god markera färre än 55. </value>
@@ -14120,7 +14120,7 @@ Vill du registrera dig?</value>
     <value>Kolumn som saknas</value>
   </data>
   <data name="AdherenceFor" xml:space="preserve">
-    <value>Schemauppföljning för</value>
+    <value>Adherence för</value>
   </data>
   <data name="AfterShiftEnd" xml:space="preserve">
     <value>Efter skiftslut</value>
@@ -15225,7 +15225,7 @@ Vill du registrera dig?</value>
     <value>Affärsenhet '{0}' har ingen statusgrupp angiven för utloggade agenter. Funktionen för statussnapshots kommer inte att fungera förrän detta är angivet. Konfigurera detta i Inställningar i Windowsklienten.</value>
   </data>
   <data name="LoggedOutStateGroupMissingInRtaService" xml:space="preserve">
-    <value>Tjänsten för Real-time adherence har ingen statusgrupp angiven för utloggade agenter. Funktionen för statussnapshots kommer inte att fungera förrän detta är angivet och tjänstens cache har uppdaterats. Konfigurera detta i Inställningar i Windowsklienten och vänta på att tjänstens cache ska uppdateras.</value>
+    <value>RTA-tjänsten har ingen statusgrupp angiven för utloggade agenter. Funktionen för statussnapshots kommer inte att fungera förrän detta är angivet och tjänstens cache har uppdaterats. Konfigurera detta i Inställningar i Windowsklienten och vänta på att tjänstens cache ska uppdateras.</value>
   </data>
   <data name="DefaultStateGroupMissingInConfiguration" xml:space="preserve">
     <value>Affärsenheten '{0}' har ingen statusgrupp angiven som standardgrupp för agenter. Okända statusar kommer inte att fungera förrän detta är angivet. Konfigurera detta i Inställningar i Windowsklienten.</value>
@@ -15422,7 +15422,7 @@ Applikationen kommer nu att stängas. </value>
     <value>Ursprunglig avvikelse</value>
   </data>
   <data name="ApprovedAsInAdherence" xml:space="preserve">
-    <value>Godkänt som schemaföljsamhet</value>
+    <value>Godkänt som i adherence</value>
   </data>
   <data name="DoYouWantToSaveChangesWithTerminalDate" xml:space="preserve">
     <value>Slutdatumet för en eller flera agenter har ändrats. Agentrelaterad schemadata efter detta datum kommer att tas bort genast. Vill du spara?</value>
@@ -15500,7 +15500,7 @@ Applikationen kommer nu att stängas. </value>
     <value>importerad</value>
   </data>
   <data name="ModifyAdherence" xml:space="preserve">
-    <value>Justera schemauppföljning</value>
+    <value>Justera adherence</value>
   </data>
   <data name="LateXMinutes" xml:space="preserve">
     <value>Sen {0} min</value>
@@ -15521,7 +15521,7 @@ Applikationen kommer nu att stängas. </value>
     <value>Ersättningsvärde har lagts på</value>
   </data>
   <data name="ApproveAsInAdherence" xml:space="preserve">
-    <value>Godkänn som "följer schema"</value>
+    <value>Godkänn som i adherence</value>
   </data>
   <data name="AbandonRateParenthesisPercentSign" xml:space="preserve">
     <value>Andel tappade (%)</value>
@@ -15908,9 +15908,6 @@ Applikationen kommer nu att stängas. </value>
   <data name="SomethingWentWrong" xml:space="preserve">
     <value>Något gick fel. Var god och försök igen senare. </value>
   </data>
-  <data name="Insights" xml:space="preserve">
-    <value>Insights</value>
-  </data>
   <data name="xxGeneralAuditTrailWebReport" xml:space="preserve">
     <value>Ändringslogg</value>
   </data>
@@ -15937,5 +15934,53 @@ Applikationen kommer nu att stängas. </value>
   </data>
   <data name="AuditTrailContext" xml:space="preserve">
     <value>Kontext</value>
+  </data>
+  <data name="ReadyTimeAdherence" xml:space="preserve">
+    <value>Schemaföljsamhet</value>
+  </data>
+  <data name="ReadyTimeAdherenceReportCalculation" xml:space="preserve">
+    <value>Schemaföljsamhetsberäkning för Min rapport</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerAgent" xml:space="preserve">
+    <value>Följsamhet per agent</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerDay" xml:space="preserve">
+    <value>Följsamhet per dag</value>
+  </data>
+  <data name="AuditTrailStaffingContext" xml:space="preserve">
+    <value>Bemanning</value>
+  </data>
+  <data name="AuditTrailSingleRevokeRole" xml:space="preserve">
+    <value>Upphäv roll</value>
+  </data>
+  <data name="AuditTrailClearStaffing" xml:space="preserve">
+    <value>Rensa bemanning</value>
+  </data>
+  <data name="AuditTrailImportStaffing" xml:space="preserve">
+    <value>Importera bemanning</value>
+  </data>
+  <data name="AuditTrailMultiGrantRole" xml:space="preserve">
+    <value>Bevilja roll</value>
+  </data>
+  <data name="AuditTrailMultiRevokeRole" xml:space="preserve">
+    <value>Upphäv roll</value>
+  </data>
+  <data name="AuditTrailBpoName" xml:space="preserve">
+    <value>Namn på BPO</value>
+  </data>
+  <data name="AuditTrailPerson" xml:space="preserve">
+    <value>Person</value>
+  </data>
+  <data name="AuditTrailPeriodStart" xml:space="preserve">
+    <value>Period mellan</value>
+  </data>
+  <data name="AuditTrailPeriodEnd" xml:space="preserve">
+    <value>och</value>
+  </data>
+  <data name="AuditTrailSingleGrantRole" xml:space="preserve">
+    <value>Bevilja roll</value>
+  </data>
+  <data name="AuditTrailRole" xml:space="preserve">
+    <value>Roll</value>
   </data>
 </root>
