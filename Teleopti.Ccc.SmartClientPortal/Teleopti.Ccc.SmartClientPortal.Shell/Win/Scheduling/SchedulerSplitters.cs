@@ -26,8 +26,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
     public partial class SchedulerSplitters : BaseUserControl
     {
         private readonly PinnedSkillHelper _pinnedSkillHelper;
-		IEnumerable<IPerson> _filteredPersons = new List<IPerson>();
+		private IEnumerable<IPerson> _filteredPersons = new List<IPerson>();
 		private IVirtualSkillHelper _virtualSkillHelper;
+		private readonly ContextMenuStrip _contextMenuSkillGrid = new ContextMenuStrip();
 
 		public SchedulerSplitters()
         {
@@ -77,7 +78,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         {
             get { return chartControlSkillData; }
         }
-        
+
+		public ContextMenuStrip ContextMenuSkillGrid
+		{
+			get { return _contextMenuSkillGrid; }
+		}
+
 		public TabControlAdv TabSkillData
 		{
 			get { return tabSkillData; }
@@ -146,7 +152,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			return null;
 		}
 
-		public bool EditSkillSummary(IList<ISkill> allSkills, ISkill skill, ContextMenuStrip contextMenuSkillGrid, ToolStripMenuItem menuItem)
+		public bool EditSkillSummary(IList<ISkill> allSkills, ISkill skill, ToolStripMenuItem menuItem)
 		{
 			var ret = false;
 			using (var skillSummery = new SkillSummary(skill, allSkills))
@@ -155,7 +161,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				if (skillSummery.DialogResult == DialogResult.OK)
 				{
-					IAggregateSkill newSkill = handleSummeryEditMenuItems(contextMenuSkillGrid, menuItem, skillSummery);
+					IAggregateSkill newSkill = handleSummeryEditMenuItems(_contextMenuSkillGrid, menuItem, skillSummery);
 
 					if (newSkill.AggregateSkills.Count != 0)
 					{
@@ -166,7 +172,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					}
 					else
 					{
-						RemoveVirtualSkill(contextMenuSkillGrid, newSkill);
+						RemoveVirtualSkill(_contextMenuSkillGrid, newSkill);
 					}
 				}
 			}
