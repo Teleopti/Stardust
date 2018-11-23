@@ -40,12 +40,15 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		private IList<IPersonRequest> requests;
 		private DateTime _nowDateTime;
 
+		private const string tenantName = "Teleopti WFM";
+		private readonly Guid businessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b");
+
 		public override void OneTimeSetUp()
 		{
 			_nowDateTime = new DateTime(2016, 01, 16, 7, 0, 0).Utc();
 			Now.Is(_nowDateTime);
-			using (DataSource.OnThisThreadUse("Teleopti WFM"))
-				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+			using (DataSource.OnThisThreadUse(tenantName))
+				AsSystem.Logon(tenantName, businessUnitId);
 
 			using (var connection = new SqlConnection(ConfigReader.ConnectionString("Tenancy")))
 			{
@@ -79,8 +82,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		{
 			Now.Is("2016-01-16 07:01");
 
-			using (DataSource.OnThisThreadUse("Teleopti WFM"))
-				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+			using (DataSource.OnThisThreadUse(tenantName))
+				AsSystem.Logon(tenantName, businessUnitId);
 			Console.WriteLine($"Will process {requests.Count} requests");
 
 			foreach (var request in requests)
@@ -104,8 +107,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		{
 			Now.Is("2016-01-16 07:01");
 
-			using (DataSource.OnThisThreadUse("Teleopti WFM"))
-				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+			using (DataSource.OnThisThreadUse(tenantName))
+				AsSystem.Logon(tenantName, businessUnitId);
 			Console.WriteLine($"Will process {requests.Count} requests");
 
 			foreach (var request in requests)
