@@ -1,5 +1,5 @@
 'use strict';
-describe('planningGroupSettingEditController', function () {
+fdescribe('planningGroupSettingEditController', function () {
     var $httpBackend,
         $controller,
         $state,
@@ -69,7 +69,8 @@ describe('planningGroupSettingEditController', function () {
                 MinWeekendDaysOff: 0,
                 MaxWeekendDaysOff: 16,
                 Filters: [],
-                Priority: 0
+                Priority: 0,
+				PreferencePercent: 23
             }, {}];
         });
 
@@ -98,7 +99,8 @@ describe('planningGroupSettingEditController', function () {
                     FilterType: "contract",
                     Name: "Full time Fixed staff"
                 }],
-                Priority: 5
+                Priority: 5,
+				PreferencePercent: 23
             }, {}];
         });
     }));
@@ -127,6 +129,14 @@ describe('planningGroupSettingEditController', function () {
         expect(vm.filterResults[0].Id).toEqual('0ffeb898-11bf-43fc-8104-9b5e015ab3c2');
         expect(vm.filterResults[1].Id).toEqual('a98d2c45-a8f4-4c70-97f9-907ab364af75');
     });
+    
+    it('should display preference value', function(){
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo });
+		$httpBackend.flush();
+
+		expect(vm.settingInfo.PreferencePercent).toEqual(23);
+	});
+    
 
     it('should add one filter from filter results', function () {
         var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams });

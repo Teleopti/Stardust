@@ -15,6 +15,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public string Name { get; set; }
 		public IList<FilterModel> Filters { get; set; }
 		public int AgentCount { get; set; }
-		public Percent PreferenceValue { get; set; }
+		public double PreferenceValue { get; set; }
 	}
 }

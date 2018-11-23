@@ -121,13 +121,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void ShouldFetchPreferenceValue()
 		{
 			var planningGroup = new PlanningGroup().WithId();
-			planningGroup.SetGlobalValues(new Percent(22));
+			planningGroup.SetGlobalValues(new Percent(0.22));
 			PlanningGroupRepository.Add(planningGroup);
 
 			var planningGroupModel = Target.Fetch(planningGroup.Id.GetValueOrDefault());
-			planningGroupModel.Id.Should().Be.EqualTo(planningGroup.Id);
-			planningGroupModel.Name.Should().Be.EqualTo(planningGroup.Name);
-			planningGroupModel.PreferenceValue.Should().Be.EqualTo(planningGroup.Settings.PreferenceValue);
+			planningGroupModel.PreferenceValue.Should().Be.EqualTo(planningGroup.Settings.PreferenceValue.Value);
 		}
 
 		[Test]

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				Name = planningGroup.Name,
 				Filters = filterModels,
 				AgentCount = agentCount,
-				PreferenceValue = planningGroup.Settings.PreferenceValue
+				PreferenceValue = planningGroup.Settings.PreferenceValue.Value
 			};
 		}
 	}

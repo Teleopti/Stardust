@@ -107,6 +107,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
+		public void ShouldFetchPreferenceValue()
+		{
+			var planningGroup = new PlanningGroup();
+			planningGroup.SetGlobalValues(new Percent(0.22));
+			PlanningGroupRepository.Has(planningGroup);
+			Target.Fetch(planningGroup.Settings.Single(x => x.Default).Id.Value).PreferencePercent
+				.Should().Be.EqualTo(22);
+		}
+
+		[Test]
 		public void ShouldThrowIfFetchNonExisting()
 		{
 			Assert.Throws<ArgumentException>(() => Target.Fetch(Guid.NewGuid()));

@@ -22,17 +22,8 @@
 				<div class="con-flex x3 align-row-center">
 					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.goCreateSchedulingSetting()">
 						<i class="mdi mdi-plus"></i> {{'NewPlanGroupSchedulingSetting' | translate}}</button>
-					<div class="pg-setting-priority-label inline-flex">
-						<div class="inline-flex">
-							<span> {{'PriorityHigher' | translate}}</span>
-							<div class="pg-setting-priority-scale"></div>
-							<span> {{'PriorityLower' | translate}}</span>
-						</div>
-					</div>
-					<button class="wfm-btn wfm-btn-invis-disabled" ng-click="">
-						<i class="mdi mdi-information-outline"></i> {{'HelpLabel' | translate}}
-					</button>
 				</div>
+		
 			</div>
 		</div>
 	</div>
@@ -158,6 +149,17 @@
 							</div>
 						</div>
 					</div>
+
+					<div class="con-row" ng-if="setting.Default">
+						<div class="con-flex">
+							<div class="line-right">
+								<div class="con-flex align-row-center">
+									<span>{{'PreferenceFulfillment' | translate}} {{vm.preferencePercentage}}%</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					
 					<div class="con-row" ng-hide="vm.isDisable">
 						<div class="con-flex">
 							<div class="line-right">
