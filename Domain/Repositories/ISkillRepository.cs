@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -42,5 +43,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 	    IEnumerable<ISkill> FindSkillsWithAtLeastOneQueueSource();
 	    ICollection<ISkill> LoadSkills(IEnumerable<Guid> skillIdList);
 		IEnumerable<ISkill> FindSkillsContain(string searchString, int maxHits);
-    }
+		IEnumerable<SkillOpenHoursLight> FindOpenHoursForSkills(IEnumerable<Guid> skillIds);
+
+	}
 }

@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 		{
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			isolate.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
-			isolate.UseTestDouble<AuditAggregatorService>().For<AuditAggregatorService>();
+			isolate.UseTestDouble<AuditAggregatorService>().For<IAuditAggregatorService>();
 		}
 
 		[Test]
