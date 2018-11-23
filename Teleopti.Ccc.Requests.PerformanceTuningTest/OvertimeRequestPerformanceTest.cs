@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -13,9 +12,11 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
@@ -45,6 +46,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 
 		public override void OneTimeSetUp()
 		{
+			var schema = LicenseDataFactory.CreateDefaultActiveLicenseSchemaForTest();
+			LicenseSchema.SetActiveLicenseSchema(tenantName, schema);
+
 			_nowDateTime = new DateTime(2016, 01, 16, 7, 0, 0).Utc();
 			Now.Is(_nowDateTime);
 			using (DataSource.OnThisThreadUse(tenantName))
@@ -97,8 +101,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			{
 				var reqs = PersonRequestRepository.FindPersonRequestWithinPeriod(
 					new DateTimePeriod(new DateTime(2016, 01, 16, 16, 0, 0).Utc(), new DateTime(2016, 01, 16, 20, 0, 0).Utc()));
-				reqs.Count(x => x.IsApproved).Should().Be
-					.GreaterThan(100); //just to have something to catch if big changes are done, locally I get 172 approved
+				reqs.Count.Should().Be(200);
 			});
 		}
 
@@ -122,8 +125,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			{
 				var reqs = PersonRequestRepository.FindPersonRequestWithinPeriod(
 					new DateTimePeriod(new DateTime(2016, 01, 16, 16, 0, 0).Utc(), new DateTime(2016, 01, 16, 20, 0, 0).Utc()));
-				reqs.Count(x => x.IsApproved).Should().Be
-					.GreaterThan(100); //just to have something to catch if big changes are done, locally I get 172 approved
+				reqs.Count.Should().Be(200);
 			});
 		}
 	}
