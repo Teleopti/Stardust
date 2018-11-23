@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -13,11 +11,11 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
@@ -32,11 +30,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentScenario _currentScenario;
-		private readonly IProjectionChangedEventBuilder _builder;
-		private readonly IShiftTradeAddScheduleLayerViewModelMapper _layerMapper;
+		private readonly ITeamScheduleShiftViewModelProvider _shiftViewModelProvider;
+		private readonly TeamScheduleAgentScheduleViewModelMapper _layerMapper;
 
 		public RequestViewModelMapper(IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider,
-			IPersonAbsenceAccountProvider personAbsenceAccountProvider, IUserTimeZone userTimeZone, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IProjectionChangedEventBuilder builder, IShiftTradeAddScheduleLayerViewModelMapper layerMapper)
+			IPersonAbsenceAccountProvider personAbsenceAccountProvider, IUserTimeZone userTimeZone, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,  TeamScheduleAgentScheduleViewModelMapper layerMapper, ITeamScheduleShiftViewModelProvider shiftViewModelProvider)
 		{
 			_personNameProvider = personNameProvider;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
@@ -44,8 +42,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			_userTimeZone = userTimeZone;
 			_scheduleStorage = scheduleStorage;
 			_currentScenario = currentScenario;
-			_builder = builder;
 			_layerMapper = layerMapper;
+			_shiftViewModelProvider = shiftViewModelProvider;
 		}
 
 		public AbsenceAndTextRequestViewModel Map(AbsenceAndTextRequestViewModel requestViewModel, IPersonRequest request,
@@ -121,80 +119,42 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				requestViewModel.IsFullDay = isFullDay(request);
 				var scheduleRange = schedules[absenceRequest.Person];
 
-				requestViewModel.Shifts = mapShifts(scheduleRange, absenceRequest.Person, absenceRequest.Period.ToDateOnlyPeriod(request.Person.PermissionInformation.DefaultTimeZone()));
+				requestViewModel.Shifts = getSchedules(scheduleRange, absenceRequest.Person, absenceRequest.Period.ToDateOnlyPeriod(request.Person.PermissionInformation.DefaultTimeZone()));
 			}
 		}
 
-		private IEnumerable<ShiftViewModel> mapShifts(IScheduleRange schedules, IPerson person, DateOnlyPeriod period)
+		private IEnumerable<TeamScheduleAgentScheduleViewModel> getSchedules(IScheduleRange schedules, IPerson person, DateOnlyPeriod period)
 		{
-			var shiftViewModels = new List<ShiftViewModel>();
+			var shiftViewModels = new List<TeamScheduleAgentScheduleViewModel>();
 			foreach (var date in period.DayCollection())
 			{
-				var scheduleDay = schedules.ScheduledDay(date);
-				var eventScheduleDay = _builder.BuildEventScheduleDay(scheduleDay);
-				var isDayOff = eventScheduleDay.DayOff != null;
-				var isFulldayAbsence = eventScheduleDay.IsFullDayAbsence;
-				var shiftCategory = scheduleDay.PersonAssignment()?.ShiftCategory;
-				var categoryName = shiftCategory?.Description.Name;
-				var shortName = shiftCategory?.Description.ShortName;
-				string displayColor = null;
-				if (shiftCategory != null) displayColor = mapColor(shiftCategory.DisplayColor.ToArgb());
-				if (isFulldayAbsence)
-				{
-					var payload = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload;
-					categoryName = payload.ConfidentialDescription(person).Name;
-					var absenceColor = payload.ConfidentialDisplayColor(person);
-					displayColor = mapColor(absenceColor.ToArgb());
-					shortName = payload.Description.ShortName;
-				}
-				var shiftViewModel = new ShiftViewModel
-				{
-					ContractTimeInMinute = eventScheduleDay.ContractTime.TotalMinutes,
-					DayOffName = eventScheduleDay.Name,
-					IsDayOff = isDayOff,
-					IsNotScheduled = eventScheduleDay.Shift == null && !isDayOff && !isFulldayAbsence,
-					MinStart = date.Date,
-					Name = _personNameProvider.BuildNameFromSetting(scheduleDay.Person.Name.FirstName,
-						scheduleDay.Person.Name.LastName),
-					PersonId = scheduleDay.Person.Id.GetValueOrDefault(),
-					ShiftCategory = new ShiftCategoryViewModel { Name = categoryName, ShortName = shortName, DisplayColor = displayColor },
-					ScheduleLayers = getScheduleLayers(eventScheduleDay, scheduleDay.PersonAssignment())
-				};
-				shiftViewModels.Add(shiftViewModel);
+				var viewModel = getAgentScheduleViewModel(person, schedules.ScheduledDay(date));
+				shiftViewModels.Add(viewModel);
 			}
 
 			return shiftViewModels;
 		}
 
-		private string mapColor(int argb)
+		private TeamScheduleAgentScheduleViewModel getAgentScheduleViewModel(IPerson person, IScheduleDay scheduleDay)
 		{
-			return ColorTranslator.ToHtml(Color.FromArgb(argb));
+			var scheduleViewModel = _shiftViewModelProvider.MakeScheduleReadModel(person, scheduleDay, true);
+			var schedulePeriod = getScheduleMinMax(scheduleViewModel, person, scheduleDay.DateOnlyAsPeriod.DateOnly);
+
+			return _layerMapper.Map( scheduleViewModel, schedulePeriod, person.PermissionInformation.DefaultTimeZone());
 		}
 
-		private IList<SimpleLayer> mapLayers(ProjectionChangedEventScheduleDay eventScheduleDay)
+		private DateTimePeriod getScheduleMinMax(AgentInTeamScheduleViewModel schedule, IPerson person, DateOnly date)
 		{
-			var layers = new List<SimpleLayer>();
-			if (eventScheduleDay.Shift == null) return layers;
+			var timeZone = person.PermissionInformation.DefaultTimeZone();
 
-			var ls = from layer in eventScheduleDay.Shift.Layers
-				select new SimpleLayer
-				{
-					Color = mapColor(layer.DisplayColor),
-					Description = layer.Name,
-					Start = layer.StartDateTime,
-					End = layer.EndDateTime,
-					Minutes = (int)layer.EndDateTime.Subtract(layer.StartDateTime).TotalMinutes,
-					IsAbsenceConfidential = layer.IsAbsenceConfidential
-				};
+			if (schedule.ScheduleLayers.IsNullOrEmpty()) {
+				return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.AddHours(DefaultSchedulePeriodProvider.DefaultStartHour), date.Date.AddHours(DefaultSchedulePeriodProvider.DefaultEndHour), timeZone);
+			}
 
-			layers.AddRange(ls);
-			return layers;
-		}
+			var startTime = schedule.ScheduleLayers.First().Start;
+			var endTime = schedule.ScheduleLayers.Last().End;
 
-		private TeamScheduleLayerViewModel[] getScheduleLayers(ProjectionChangedEventScheduleDay eventScheduleDay, IPersonAssignment personAssignment)
-		{
-			var layers = mapLayers(eventScheduleDay);
-			return _layerMapper.Map(layers, personAssignment?.OvertimeActivities());
+			return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startTime, endTime, timeZone);
 		}
 
 		private PersonAccountSummaryViewModel getPersonalAccountApprovalSummary(IAbsenceRequest absenceRequest)
