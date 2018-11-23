@@ -178,6 +178,18 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 				.Should().Be.Empty();
 		}
 
+		[Test]
+		[Ignore("Failing perftest - to be fixed")]
+		public void ShouldNotReturnHintWhenNoSchedulePeriod()
+		{
+			var date = new DateOnly(2017, 01, 23);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(new Activity("_"), new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), new ShiftCategory("_").WithId()));
+			var agent = new Person().WithId().WithPersonPeriod(new RuleSetBag(ruleSet).WithId(), new Contract("_"), new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"), null);
+
+			Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)))
+				.Should().Be.Empty();
+		}
+
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("_", true, true))).For<IScenarioRepository>();
