@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private CurrentScheduleSummary _currentScheduleSummary;
 		private readonly Lazy<IEnumerable<DateOnlyPeriod>> _availablePeriods;
 		private IShiftCategoryFairnessHolder _shiftCategoryFairnessHolder;
-		
+
 		public ScheduleRange(IScheduleDictionary owner, IScheduleParameters parameters, IPersistableScheduleDataPermissionChecker permissionChecker, ICurrentAuthorization authorization)
 			: base(owner, parameters, authorization)
 		{
@@ -156,8 +156,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return differenceService.Difference(org, current);
 		}
 
-	//don't use this from client. use scheduledictionary.modify instead!
-	public void ModifyInternal(IScheduleDay part)
+		//don't use this from client. use scheduledictionary.modify instead!
+		public void ModifyInternal(IScheduleDay part)
 		{
 			var periodData = PersistableScheduleDataInternalCollection().Where(d => d.BelongsToPeriod(part.DateOnlyAsPeriod));
 			var permittedData = _permissionChecker.GetPermittedData(periodData);
@@ -197,9 +197,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void CopyTo(IScheduleRange scheduleRangeToModify)
 		{
-			var rangeToModify = (ScheduleRange) scheduleRangeToModify;
+			var rangeToModify = (ScheduleRange)scheduleRangeToModify;
 			rangeToModify.AddRange(ScheduleDataInternalCollection()
-				.Select(x => (IScheduleData) x.Clone()));
+				.Select(x => (IScheduleData)x.Clone()));
 			rangeToModify._scheduleObjectsWithNoPermissions = _scheduleObjectsWithNoPermissions.ToArray();
 		}
 

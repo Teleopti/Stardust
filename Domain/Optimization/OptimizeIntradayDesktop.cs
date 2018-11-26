@@ -11,20 +11,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class OptimizeIntradayDesktop
 	{
-		private readonly DesktopOptimizationContext _desktopOptimizationContext;
+		private readonly DesktopContextState _desktopContextState;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
 
 		public OptimizeIntradayDesktop(IntradayOptimizationCommandHandler intradayOptimizationCommandHandler, 
-			DesktopOptimizationContext desktopOptimizationContext,
+			DesktopContextState desktopContextState,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IResourceCalculation resourceCalculation,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_intradayOptimizationCommandHandler = intradayOptimizationCommandHandler;
-			_desktopOptimizationContext = desktopOptimizationContext;
+			_desktopContextState = desktopContextState;
 			_schedulerStateHolder = schedulerStateHolder;
 			_resourceCalculation = resourceCalculation;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				AgentsToOptimize = agents
 			};
 
-			using (_desktopOptimizationContext.Set(command, stateHolder, optimizerPreferences, null, optimizationCallback))
+			using (_desktopContextState.SetForOptimization(command, stateHolder, optimizerPreferences, null, optimizationCallback))
 			{
 				_intradayOptimizationCommandHandler.Execute(command);
 			}

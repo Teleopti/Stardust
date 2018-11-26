@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday.ApplicationLayer
 		public FakeIntradayQueueStatisticsLoader IntradayQueueStatisticsLoader;
 		private IntradayStaffingApplicationServiceTestHelper _staffingViewModelCreatorTestHelper;
 		public IStaffingCalculatorServiceFacade StaffingCalculatorServiceFacade;
-		public IStaffingViewModelCreator svmc;
 		public IIntradayStaffingApplicationService Target;
 
 		private int _skillResolution = 60;

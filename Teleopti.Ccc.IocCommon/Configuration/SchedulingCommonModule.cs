@@ -439,11 +439,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Args().IsFatClient)
 			{
 				builder.RegisterType<DesktopPeopleInOrganization>().As<IAllStaff>().SingleInstance();
-				builder.RegisterType<DesktopOptimizationContext>()
+				builder.RegisterType<DesktopContextState>()
 					.As<IOptimizationPreferencesProvider>()
 					.As<ICurrentOptimizationCallback>()
 					.As<IBlockPreferenceProviderForPlanningPeriod>()
 					.As<IDayOffOptimizationPreferenceProviderForPlanningPeriod>()
+					.As<ISchedulingOptionsProvider>()
+					.As<ICurrentSchedulingCallback>()
+					.As<IPlanningGroupSettingsProvider>()
 					.AsSelf()
 					.ApplyAspects()
 					.SingleInstance();
@@ -453,15 +456,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.SingleInstance();					
 
 				builder.RegisterType<DesktopContext>().SingleInstance();
-				builder.RegisterType<DesktopSchedulingContext>()
-					.As<ISchedulingOptionsProvider>()
-					.As<ICurrentSchedulingCallback>()
-					.AsSelf()
-					.SingleInstance();
 				builder.RegisterType<MoveSchedulesToOriginalStateHolderAfterIsland>()
 					.As<ISynchronizeSchedulesAfterIsland>()
 					.SingleInstance();
-				builder.RegisterType<NullPlanningGroupProvider>().As<IPlanningGroupProvider>().SingleInstance();
 			}
 			else
 			{
@@ -482,7 +479,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<CurrentOptimizationCallback>().As<ICurrentOptimizationCallback>().AsSelf().SingleInstance();
 				builder.RegisterType<CurrentSchedulingCallback>().As<ICurrentSchedulingCallback>().AsSelf().SingleInstance();
 				builder.RegisterType<FillSchedulerStateHolderFromDatabase>().As<FillSchedulerStateHolder>().ApplyAspects().SingleInstance();
-				builder.RegisterType<PlanningGroupProvider>().As<IPlanningGroupProvider>().SingleInstance();
+				builder.RegisterType<PlanningGroupSettingsProvider>().As<IPlanningGroupSettingsProvider>().SingleInstance();
 			}
 
 

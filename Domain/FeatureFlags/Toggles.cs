@@ -48,8 +48,6 @@
 		WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952,
 		WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978,
 
-		WebByPassDefaultPermissionCheck_37984,
-
 		Wfm_Requests_Approve_Based_On_Budget_Allotment_39626,
 		Wfm_Requests_Approve_Based_On_Intraday_39868,
 		Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274,
@@ -111,7 +109,6 @@
 		WFM_Clear_Data_After_Leaving_Date_47768,
 		WFM_Request_View_Permissions_77731,
 		WFM_Request_Show_Feedback_Link_77733,
-		WFM_Request_Remove_Waitlist_Link_78939,
 		WFM_Request_Show_Shift_for_Absence_Requests_79008,
 
 		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889,
@@ -123,7 +120,6 @@
 		MyTimeWeb_Request_CleanUpRequestHisotry_77776,
 		MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446,
 
-		WFM_Intraday_Refactoring_74652,
 		WFM_Intraday_Redesign_77214,
 
 		WFM_ChatBot_77547,
@@ -134,7 +130,8 @@
 		Wfm_AuditTrail_StaffingAuditTrail_78125,
 		Wfm_AuditTrail_GenericAuditTrail_74938,
 		WFM_Connect_NewLandingPage_Remove_GDPR_78132,
-		WFM_Connect_NewLandingPage_WEB_78578
+		WFM_Connect_NewLandingPage_WEB_78578,
+		WFM_AbsenceRequest_ImproveThroughput_79139
 		// ReSharper restore InconsistentNaming
 	}
 }

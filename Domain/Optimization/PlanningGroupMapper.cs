@@ -20,7 +20,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				Id = planningGroup.Id ?? Guid.Empty,
 				Name = planningGroup.Name,
 				Filters = filterModels,
-				AgentCount = agentCount
+				AgentCount = agentCount,
+				PreferenceValue = planningGroup.Settings.PreferenceValue.Value
 			};
 		}
 	}

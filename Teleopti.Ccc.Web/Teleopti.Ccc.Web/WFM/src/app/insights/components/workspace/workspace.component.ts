@@ -2,7 +2,6 @@ import { Component, Input, Output, OnInit } from '@angular/core';
 import * as pbi from 'powerbi-client';
 
 import { ReportService } from '../../core/report.service';
-// import { ReportConfig } from '../../models/ReportConfig.model';
 import { Report } from '../../models/Report.model';
 
 @Component({
@@ -11,9 +10,11 @@ import { Report } from '../../models/Report.model';
 	styleUrls: ['./workspace.component.scss']
 })
 export class WorkspaceComponent implements OnInit {
+	@Input() initialized: boolean;
 	@Input() isLoading: boolean;
+	@Input() hasViewPermission: boolean;
+	@Input() hasEditPermission: boolean;
 	public canEditReport = false;
-	public reportPermission: pbi.models.Permissions;
 	public enableFilter: boolean;
 	public enableNavContent: boolean;
 	public reports: Report[];
@@ -22,12 +23,11 @@ export class WorkspaceComponent implements OnInit {
 	private pbiCoreService: pbi.service.Service;
 
 	constructor(private reportSvc: ReportService) {
-		this.isLoading = false;
+		this.initialized = false;
 
 		this.canEditReport = false;
 		this.enableFilter = true;
 		this.enableNavContent = true;
-		this.reportPermission = pbi.models.Permissions.All;
 
 		this.pbiCoreService = new pbi.service.Service(
 			pbi.factories.hpmFactory,
@@ -37,7 +37,16 @@ export class WorkspaceComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.loadReportList();
+		this.reportSvc.getPermission().then((permission) => {
+			this.hasViewPermission = permission.CanViewReport;
+			this.hasEditPermission = permission.CanEditReport;
+
+			if (this.hasViewPermission || this.hasEditPermission) {
+				this.loadReportList();
+			}
+
+			this.initialized = true;
+		});
 	}
 
 	onEmbedded() {
@@ -58,15 +67,21 @@ export class WorkspaceComponent implements OnInit {
 		});
 	}
 
-	loadReport(config) {// Refer to https://github.com/Microsoft/PowerBI-JavaScript/wiki/Embed-Configuration-Details for more details
+	loadReport(config) {
+		// TODO: For debug, refer to https://teleopti.visualstudio.com/TeleoptiWFM/_workitems/edit/79021
+		console.log('pbi.models:', pbi.models);
+
+		// Refer to https://github.com/Microsoft/PowerBI-JavaScript/wiki/Embed-Configuration-Details for more details
 		const embedConfig = {
 			type: 'report',
-			tokenType: pbi.models.TokenType.Embed,
+			tokenType: 1, // pbi.models.TokenType.Embed
 			accessToken: config.AccessToken,
 			embedUrl: config.ReportUrl,
 			id: config.ReportId,
-			permissions: this.reportPermission,
-			viewMode: this.canEditReport ? pbi.models.ViewMode.Edit : pbi.models.ViewMode.View,
+			permissions: 7, // pbi.models.Permissions.All
+			viewMode: this.canEditReport
+				? 1  // pbi.models.ViewMode.Edit
+				: 0, // pbi.models.ViewMode.View
 			settings: {
 				filterPaneEnabled: this.enableFilter,
 				navContentPaneEnabled: this.enableNavContent,
@@ -78,9 +93,7 @@ export class WorkspaceComponent implements OnInit {
 		};
 
 		// Embed the report and display it within the div container.
-		const reportContainer = <HTMLElement>document.getElementById('reportContainer');
-
-		this.pbiCoreService.reset(reportContainer);
+		const reportContainer = this.getReportContainer();
 		const report = this.pbiCoreService.embed(reportContainer, embedConfig);
 
 		// Report.off removes a given event handler if it exists.
@@ -95,11 +108,18 @@ export class WorkspaceComponent implements OnInit {
 	}
 
 	loadSelectedReport(selectedReportId) {
-		this.isLoading = true;
-		this.reportSvc.getReportConfig(selectedReportId).then((config) => {
-			this.loadReport(config);
-			this.isLoading = false;
-		});
+		this.pbiCoreService.reset(this.getReportContainer());
+		if (selectedReportId) {
+			this.isLoading = true;
+			this.reportSvc.getReportConfig(selectedReportId).then((config) => {
+				this.loadReport(config);
+				this.isLoading = false;
+			});
+		}
+	}
+
+	getReportContainer() {
+		return <HTMLElement>document.getElementById('reportContainer');
 	}
 
 	public onReportSelected(selectedReportId) {

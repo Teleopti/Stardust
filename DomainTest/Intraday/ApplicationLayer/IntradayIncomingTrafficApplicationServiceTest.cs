@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday.ApplicationLayer
 	public class IntradayIncomingTrafficApplicationServiceTest
 	{
 		public IIntradayIncomingTrafficApplicationService Target;
-		public IncomingTrafficViewModelCreator Old;
 		public FakeIntradayMonitorDataLoader IntradayMonitorDataLoader;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakeSkillRepository SkillRepository;

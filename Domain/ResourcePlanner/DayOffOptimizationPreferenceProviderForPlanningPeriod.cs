@@ -4,9 +4,9 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner
 {
 	public class DayOffOptimizationPreferenceProviderForPlanningPeriod : IDayOffOptimizationPreferenceProviderForPlanningPeriod
 	{
-		public IDayOffOptimizationPreferenceProvider Fetch(PlanningGroup planningGroup)
+		public IDayOffOptimizationPreferenceProvider Fetch(AllSettingsForPlanningGroup allSettingsForPlanningGroup)
 		{
-			return new DayOffOptimizationPreferenceProviderUsingFilters(planningGroup.Settings);
+			return new DayOffOptimizationPreferenceProviderUsingFilters(allSettingsForPlanningGroup);
 		}
 	}
 }

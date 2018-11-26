@@ -1,8 +1,8 @@
+using NUnit.Framework;
+using SharpTestsEx;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public IApplicationRoleRepository ApplicationRoleRepository;
 		public FakePersonRepository PersonRepository;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
+		
 
 		private IPerson[] people;
 		private readonly IAbsence absence = AbsenceFactory.CreateAbsence("absence1").WithId();
@@ -61,8 +62,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
 			isolate.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
-			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("test") { DefaultScenario = true }))
-				.For<IScenarioRepository>();
+			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("test") { DefaultScenario = true })).For<IScenarioRepository>();
 
 			team = createTeam();
 			personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2015, 10, 1), team);
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
-			result.ToList()[1].Shifts.Count().Should().Not.Equals(0);
+			result.ToList()[1].Shifts.Count().Should().Be.EqualTo(6);
 		}
 
 		[Test]

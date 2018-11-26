@@ -37,7 +37,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function($) {
 	}
 
 	function registPollListener() {
-		Teleopti.MyTimeWeb.PollScheduleUpdates.SetListener('DayScheduleMobile', function(period) {
+		Teleopti.MyTimeWeb.PollScheduleUpdates.AddListener('DayScheduleMobile', function(period) {
 			var startDate = moment(moment(period.startDate).format('YYYY-MM-DD')).toDate();
 			var endDate = moment(moment(period.endDate).format('YYYY-MM-DD')).toDate();
 			var listeningStartDate = moment(vm.selectedDate())

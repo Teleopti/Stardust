@@ -101,6 +101,11 @@ Try
 		log-error "User is not Admin!"
 		throw "User is not Admin!"
 	}
+	
+	#74478, #76734, #78787
+    $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
+    $Cname = "$DataSourceName.teleopticloud.com"
+    Hostsfile-Add-Cname -Cname $Cname
 
 	#Setting $Env:TeleoptiIsAzure = $true
 	[Environment]::SetEnvironmentVariable("TeleoptiIsAzure", "true", "Machine")
@@ -108,11 +113,10 @@ Try
 	#Set environment variables for RoleInstanceID & Rolename
 	[Environment]::SetEnvironmentVariable("RoleName", [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::CurrentRoleInstance.Role.Name, "Machine") 
 	[Environment]::SetEnvironmentVariable("RoleInstanceID", [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::CurrentRoleInstance.Id, "Machine")
+	
+	#Set Datasource customer name as env variables
+	$Env:CustomerName = $DataSourceName
 
-    #74478, #76734, #78787
-    $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
-    $Cname = "$DataSourceName.teleopticloud.com"
-    Hostsfile-Add-Cname -Cname $Cname
     
 }
 Catch [Exception]

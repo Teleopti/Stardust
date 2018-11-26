@@ -12,12 +12,13 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 {
 	[DatabaseTest]
-	public class DayOffOptimizationWithResultWhenOneAgentCannotBeScheduledTest
+	public class DayOffOptimizationWithResultWhenOneAgentCannotBeScheduledTest : IIsolateSystem
 	{
 		public FullScheduling Target;
 
@@ -41,6 +42,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public ISkillDayRepository SkillDayRepository;
 		public IWorkloadRepository WorkloadRepository;
 		public IPersonAssignmentRepository PersonAssignmentRepository;
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<PersistableScheduleDataPermissionChecker>().For<IPersistableScheduleDataPermissionChecker>();
+		}
 
 		[Test]
 		public void ShouldNotThrowOnSkillTypeLazyLoading()
@@ -109,6 +115,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 			}
 			return planningPeriod;
 		}
-
 	}
 }

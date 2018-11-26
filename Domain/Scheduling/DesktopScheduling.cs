@@ -19,21 +19,21 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly ScheduleHourlyStaffExecutor _scheduleHourlyStaffExecutor;
-		private readonly DesktopSchedulingContext _desktopSchedulingContext;
+		private readonly DesktopContextState _desktopContextState;
 
 		public DesktopScheduling(CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory,
 			SchedulingCommandHandler schedulingCommandHandler, 
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IResourceCalculation resourceCalculation,
 			ScheduleHourlyStaffExecutor scheduleHourlyStaffExecutor,
-			DesktopSchedulingContext desktopSchedulingContext)
+			DesktopContextState desktopContextState)
 		{
 			_cascadingResourceCalculationContextFactory = cascadingResourceCalculationContextFactory;
 			_schedulingCommandHandler = schedulingCommandHandler;
 			_schedulerStateHolder = schedulerStateHolder;
 			_resourceCalculation = resourceCalculation;
 			_scheduleHourlyStaffExecutor = scheduleHourlyStaffExecutor;
-			_desktopSchedulingContext = desktopSchedulingContext;
+			_desktopContextState = desktopContextState;
 		}
 
 		public void Execute(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions,
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					Period = selectedPeriod,
 					RunDayOffOptimization = false
 				};
-				using (_desktopSchedulingContext.Set(command, _schedulerStateHolder(), schedulingOptions, schedulingCallback))
+				using (_desktopContextState.SetForScheduling(command, _schedulerStateHolder(), schedulingOptions, schedulingCallback))
 				{
 					_schedulingCommandHandler.Execute(command);
 				}

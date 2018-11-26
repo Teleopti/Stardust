@@ -30,7 +30,9 @@
 		vm.color = {
 			render: 'linear',
 			rgba: 'rgba(156, 39, 176, 1)'
-		}
+		};
+		vm.preferencePercentage = planningGroupInfo.PreferenceValue * 100;
+
 
 		getBlockSchedulingSetting();
 

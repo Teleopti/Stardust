@@ -4,9 +4,9 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner
 {
 	public class BlockPreferenceProviderForPlanningPeriod : IBlockPreferenceProviderForPlanningPeriod
 	{	
-		public IBlockPreferenceProvider Fetch(PlanningGroup planningGroup)
+		public IBlockPreferenceProvider Fetch(AllSettingsForPlanningGroup allSettingsForPlanningGroup)
 		{
-			return new BlockPreferenceProviderUsingFilters(planningGroup.Settings);
+			return new BlockPreferenceProviderUsingFilters(allSettingsForPlanningGroup);
 		}
 	}
 }

@@ -42,6 +42,7 @@
 	test('Should show notice if schedule changed within correct period', function() {
 		target.Init({ intervalTimeout: 0, notifyText: notifyText });
 		equal(currentText, target.GetNotifyText());
+		target.Destroy();
 	});
 
 	test('Should not show notice if no schedule changed within correct period', function() {
@@ -50,27 +51,45 @@
 		target.Init({ intervalTimeout: 0, notifyText: notifyText });
 		equal(currentText, null);
 		hasUpdates = true;
+		target.Destroy();
 	});
 
-	test('Should call listener callback if has schedule change within  period', function() {
+	test('Should call listener callback if has schedule change within  period', function () {
 		var called = false;
-		target.SetListener('Schedule/Week', function() {
+		target.AddListener('Schedule/Week', function () {
 			called = true;
 		});
 		target.Init({ intervalTimeout: 0, notifyText: notifyText });
 		equal(called, true);
+		target.Destroy();
 	});
 
-	test('Should only one listener be invoked when time is up', function() {
-		var executedListener;
-		target.SetListener('Schedule/Week', function() {
-			executedListener = 'Schedule/Week';
+	test('Should all listeners be invoked when time is up', function () {
+		
+		var executedListeners = [];
+		target.AddListener('Schedule/Week', function () {
+			executedListeners.push('Schedule/Week');
 		});
-		target.SetListener('Schedule/ASM', function() {
-			executedListener = 'Schedule/ASM';
+		target.AddListener('Schedule/ASM', function() {
+			executedListeners.push('Schedule/ASM');
 		});
 		target.Init({ intervalTimeout: 0, notifyText: notifyText });
-		equal(executedListener, 'Schedule/ASM');
+		equal(executedListeners[0], 'Schedule/Week');
+		equal(executedListeners[1], 'Schedule/ASM');
+		target.Destroy();
+	});
+
+	test('Should only registe one time for same name', function () {
+		var register = '';
+		target.AddListener('Schedule/Week', function () {
+			register = 'first';
+		});
+		target.AddListener('Schedule/Week', function () {
+			register = 'second';
+		});
+		target.Init({ intervalTimeout: 0, notifyText: notifyText });
+		equal(register, 'first');
+		target.Destroy();
 	});
 
 	function fakeAjax() {

@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Intraday.Domain;
 
 namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer.ViewModels
 {

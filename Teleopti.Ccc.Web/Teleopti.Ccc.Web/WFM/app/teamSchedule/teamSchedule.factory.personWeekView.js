@@ -2,9 +2,9 @@
 	'use strict';
 
 	angular.module('wfm.teamSchedule').factory('PersonScheduleWeekViewCreator', PersonScheduleWeekViewCreator);
-	PersonScheduleWeekViewCreator.$inject = ['$filter'];
+	PersonScheduleWeekViewCreator.$inject = ['$filter', 'CurrentUserInfo'];
 
-	function PersonScheduleWeekViewCreator($filter) {
+	function PersonScheduleWeekViewCreator($filter, currentUserInfo) {
 		function createPersonWeekViewModel(personWeek) {
 			var days = [];
 			angular.forEach(personWeek.DaySchedules, function(day) {
@@ -32,22 +32,25 @@
 		function getTimeSpanForAgentScheduleDay(dateTimeSpan, timezone, dateInWeek) {
 			if (!dateTimeSpan || !timezone || !dateInWeek) return '';
 
+			var dateTimeFormat = currentUserInfo.CurrentUserInfo().DateTimeFormat || {};
+			var shortTimePattern = dateTimeFormat.ShortTimePattern;
+			
 			var startTimeInUserTimezoneMoment = moment($filter('timezone')(dateTimeSpan.StartDateTime, null, timezone.IanaId));
 			var endTimeInUserTimezoneMoment = moment($filter('timezone')(dateTimeSpan.EndDateTime, null, timezone.IanaId));
 
-			var displayStarStr = startTimeInUserTimezoneMoment.format('LT');
-			var displayEndStr = endTimeInUserTimezoneMoment.format('LT');
+			var displayStarStr = startTimeInUserTimezoneMoment.format(shortTimePattern);
+			var displayEndStr = endTimeInUserTimezoneMoment.format(shortTimePattern);
 
 			if (startTimeInUserTimezoneMoment.isBefore(moment(dateInWeek).startOf('day'))) {
-				displayStarStr = startTimeInUserTimezoneMoment.format('LT') + ' (-1)';
+				displayStarStr = displayStarStr + ' (-1)';
 			}else if(startTimeInUserTimezoneMoment.isAfter(moment(dateInWeek).endOf('day'))){
-				displayStarStr = startTimeInUserTimezoneMoment.format('LT') + ' (+1)';
+				displayStarStr = displayStarStr + ' (+1)';
 			}
 
 			if(endTimeInUserTimezoneMoment.isBefore(moment(dateInWeek).startOf('day'))) {
-				displayEndStr = endTimeInUserTimezoneMoment.format('LT') + ' (-1)';
+				displayEndStr = displayEndStr + ' (-1)';
 			}else if (endTimeInUserTimezoneMoment.isAfter(moment(dateInWeek).endOf('day'))) {
-				displayEndStr = endTimeInUserTimezoneMoment.format('LT') + ' (+1)';
+				displayEndStr = displayEndStr + ' (+1)';
 			}
 
 			return displayStarStr + ' - ' + displayEndStr;

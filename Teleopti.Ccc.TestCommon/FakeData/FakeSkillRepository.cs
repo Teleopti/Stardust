@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -125,6 +126,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public IEnumerable<ISkill> FindSkillsContain(string searchString, int maxHits)
 		{
 			return _skills.Where(x => x.Name.Contains(searchString)).Take(maxHits);
+		}
+
+		public IEnumerable<SkillOpenHoursLight> FindOpenHoursForSkills(IEnumerable<Guid> skillIds)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<ISkill> LoadSkillsWithOpenHours(IEnumerable<Guid> skillIdList)
+		{
+			return _skills.Where(s => skillIdList.Contains(s.Id.Value)).ToList();
 		}
 
 		public IMultisiteSkill HasMultisiteSkill(string skillName, IActivity activity)

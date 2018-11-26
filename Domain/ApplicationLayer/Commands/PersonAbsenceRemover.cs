@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -15,20 +15,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 		private readonly ISaveSchedulePartService _saveSchedulePartService;
 		private readonly IPersonAbsenceCreator _personAbsenceCreator;
-		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ICheckingPersonalAccountDaysProvider _checkingPersonalAccountDaysProvider;
+		private readonly ICurrentAuthorization _currentAuthorization;
 
 		public PersonAbsenceRemover(IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate,
 			ISaveSchedulePartService saveSchedulePartService,
 			IPersonAbsenceCreator personAbsenceCreator,
-			ILoggedOnUser loggedOnUser,
-		 ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider)
+		 ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider, ICurrentAuthorization currentAuthorization)
 		{
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_saveSchedulePartService = saveSchedulePartService;
 			_personAbsenceCreator = personAbsenceCreator;
-			_loggedOnUser = loggedOnUser;
 			_checkingPersonalAccountDaysProvider = checkingPersonalAccountDaysProvider;
+			_currentAuthorization = currentAuthorization;
 		}
 
 		public IEnumerable<string> RemovePersonAbsence(DateOnly scheduleDate, IPerson person,
@@ -50,16 +49,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private bool canRemovePersonAbsence(IPerson person, DateOnly startDate)
 		{
-			var factory = new DefinedRaptorApplicationFunctionFactory();
-			var functionPath = ApplicationFunction.FindByPath(factory.ApplicationFunctions,
-				DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule);
-			var functionPathAll = ApplicationFunction.FindByPath(factory.ApplicationFunctions,
-				DefinedRaptorApplicationFunctionPaths.All);
-			var currentUserRoles = _loggedOnUser.CurrentUser().PermissionInformation.ApplicationRoleCollection;
-			var canModifyProtectedSchedule =
-				currentUserRoles.Any(role => (role.ApplicationFunctionCollection.Contains(functionPath)
-											  || role.ApplicationFunctionCollection.Contains(functionPathAll)));
-			return !person.PersonWriteProtection.IsWriteProtected(startDate) || canModifyProtectedSchedule;
+			return !person.PersonWriteProtection.IsWriteProtected(startDate) || _currentAuthorization.Current()
+					   .IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule);
 		}
 
 		private static IList<DateTimePeriod> getPeriodsForNewAbsence(DateTimePeriod originalAbsencePeriod,

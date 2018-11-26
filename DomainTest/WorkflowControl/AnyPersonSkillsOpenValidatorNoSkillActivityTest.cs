@@ -2,9 +2,12 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
@@ -17,9 +20,16 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
 	[DomainTest]
-	public class AnyPersonSkillsOpenValidatorNoSkillActivityTest : IIsolateSystem
+	[Toggle(Toggles.WFM_AbsenceRequest_ImproveThroughput_79139)]
+	public class AnyPersonSkillsOpenValidatorNoSkillActivityOptimizationOffTest : AnyPersonSkillsOpenValidatorNoSkillActivityTestBase{}
+	
+	[DomainTest]
+	[ToggleOff(Toggles.WFM_AbsenceRequest_ImproveThroughput_79139)]
+	public class AnyPersonSkillsOpenValidatorNoSkillActivityOptimizationOnTest : AnyPersonSkillsOpenValidatorNoSkillActivityTestBase{}
+	
+	public abstract class AnyPersonSkillsOpenValidatorNoSkillActivityTestBase
 	{
-		private readonly AnyPersonSkillsOpenValidator _target = new AnyPersonSkillsOpenValidator(new FakeSkillRepository());
+		public readonly IAnyPersonSkillsOpenValidator Target;
 		private IPerson _person;
 		private Absence _absence;
 		private ISkill _skill;
@@ -27,11 +37,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		public IScheduleStorage ScheduleStorage;
 		public ICurrentScenario Scenario;
 		public FakeScenarioRepository ScenarioRepository;
-
-		public void Isolate(IIsolate isolate)
-		{
-			
-		}
 
 		[SetUp]
 		public void Setup()
@@ -58,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person, new ScheduleDictionaryLoadOptions(false, false),
 				new DateOnlyPeriod(new DateOnly(2017, 10, 21), new DateOnly(2017, 10, 21)), Scenario.Current());
 
-			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection,
+			var validatedRequest = Target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection,
 				scheduleDictionary[_person]);
 
 			validatedRequest.IsValid.Should().Be.True();
@@ -76,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person, new ScheduleDictionaryLoadOptions(false, false),
 				new DateOnlyPeriod(new DateOnly(2017, 10, 21), new DateOnly(2017, 10, 21)), Scenario.Current());
 
-			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection,
+			var validatedRequest = Target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection,
 				scheduleDictionary[_person]);
 
 			validatedRequest.IsValid.Should().Be.False();

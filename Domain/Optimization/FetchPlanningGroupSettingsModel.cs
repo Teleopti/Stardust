@@ -23,7 +23,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 				throw new ArgumentException($"Cannot find PlanningGroupSettings with Id {planningGroupSettingId}");
 			}
 			var planningGroupSettings = planningGroup.Settings.SingleOrDefault(x => x.Id.HasValue && x.Id.Value == planningGroupSettingId);
-			return _planningGroupSettingsMapper.ToModel(planningGroupSettings);
+
+			var planningGroupSettingsModel = _planningGroupSettingsMapper.ToModel(planningGroupSettings);
+			planningGroupSettingsModel.PreferencePercent = (int)planningGroup.Settings.PreferenceValue.ValueAsPercent();
+			return planningGroupSettingsModel;
 		}
 
 		public IEnumerable<PlanningGroupSettingsModel> FetchAllForPlanningGroup(Guid planningGroupId)

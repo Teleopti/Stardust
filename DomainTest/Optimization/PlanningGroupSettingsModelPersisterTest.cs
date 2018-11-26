@@ -26,6 +26,25 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public IPlanningGroupSettingsModelPersister Target;
 
 		[Test]
+		public void ShouldUpdatePreferenceValue()
+		{
+			var planningGroup = new PlanningGroup();
+			PlanningGroupRepository.Has(planningGroup);
+			var defaultSetting = planningGroup.Settings.Single(x=>x.Default);
+			
+			var model = new PlanningGroupSettingsModel
+			{
+				Id = defaultSetting.Id.Value,
+				PlanningGroupId = planningGroup.Id.Value,
+				PreferencePercent = 24
+			};
+			
+			Target.Persist(model);
+			
+			PlanningGroupRepository.Get(planningGroup.Id.Value).Settings.PreferenceValue.Should().Be.EqualTo(new Percent(0.24));
+		}
+
+		[Test]
 		public void ShouldUpdate()
 		{
 			var existing = new PlanningGroupSettings().WithId();
@@ -71,9 +90,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldUpdateDefault()
 		{
-			var planningGroup = new PlanningGroup().WithId();
-			PlanningGroupRepository.Add(planningGroup);
-			var defaultSetting = planningGroup.Settings.Single(x=>x.Default).WithId();
+			var planningGroup = new PlanningGroup();
+			PlanningGroupRepository.Has(planningGroup);
+			var defaultSetting = planningGroup.Settings.Single(x=>x.Default);
 			var model = new PlanningGroupSettingsModel
 			{
 				Id = defaultSetting.Id.Value,

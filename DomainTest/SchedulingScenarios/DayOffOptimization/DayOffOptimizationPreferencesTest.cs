@@ -33,8 +33,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 		
 		[Test]
-		[Ignore("76289 to be fixed")]
-		public void ShouldDayOffOptimizeAgentWitPreferencesEvenIfOtherAgentFailsToBeScheduledWithPreferences()
+		public void ShouldDayOffOptimizeAgentWithPreferencesEvenIfOtherAgentFailsToBeScheduledWithPreferences()
 		{
 			var date = new DateOnly(2015, 10, 12); 
 			var activity = ActivityRepository.Has();
@@ -97,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var activity = ActivityRepository.Has();
 			var skill = SkillRepository.Has(activity);
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
-			planningPeriod.PlanningGroup.PreferenceValue = new Percent(preferencePercentage);
+			planningPeriod.PlanningGroup.SetGlobalValues(new Percent(preferencePercentage));
 			var scenario = ScenarioRepository.Has();
 			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1);
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory().WithId()));

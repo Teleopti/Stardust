@@ -4,8 +4,10 @@ var IdentityProvidersPage = require('./pages/IdentityProviders.page');
 
 describe('Iframe ground all', function() {
 	this.timeout(360 * 1000); // Set global timeout for this test to 6 minutes
-	
-	
+	this.retries(3);
+	beforeEach(function () {
+        browser.reload();
+    });
 	it('should be able to iframe asmwidget', function () {
 		browser.url(process.env.UrlToTest);
 		browser.deleteCookie();
@@ -14,5 +16,5 @@ describe('Iframe ground all', function() {
 		var my_frame = browser.element('iframe').value;
 		browser.frame(my_frame);
 		ASMWidgetPage.signin();		
-    }, 2);
+    });
 });

@@ -48,13 +48,21 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				return requestExpired;
 
 			if (_alreadyAbsentValidator.Validate(absenceRequest, scheduleRange))
-				return new ValidatedRequest { IsValid = false, ValidationErrors = Resources.RequestDenyReasonAlreadyAbsent
-					, DenyOption = PersonRequestDenyOption.AlreadyAbsence };
+				return new ValidatedRequest
+				{
+					IsValid = false,
+					ValidationErrors = Resources.RequestDenyReasonAlreadyAbsent,
+					DenyOption = PersonRequestDenyOption.AlreadyAbsence
+				};
 
 			var personAccountValidateResult = _absenceRequestPersonAccountValidator.Validate(personRequest, scheduleRange);
 			if (!personAccountValidateResult.IsValid)
-				return new ValidatedRequest { IsValid = false, ValidationErrors = Resources.RequestDenyReasonPersonAccount
-					, DenyOption = PersonRequestDenyOption.InsufficientPersonAccount };
+				return new ValidatedRequest
+				{
+					IsValid = false,
+					ValidationErrors = Resources.RequestDenyReasonPersonAccount,
+					DenyOption = PersonRequestDenyOption.InsufficientPersonAccount
+				};
 
 			var personSkills =
 				person.PersonPeriods(personRequest.Request.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone())).

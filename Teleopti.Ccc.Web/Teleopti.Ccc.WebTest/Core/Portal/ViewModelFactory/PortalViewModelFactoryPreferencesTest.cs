@@ -72,25 +72,25 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldNotHavePreferencesNavigationItemIfJalaliCalendarIsUsedAndPermissionToExtendedPreferences()
+		public void ShouldHavePreferencesNavigationItemIfJalaliCalendarIsUsedAndPermissionToExtendedPreferences()
 		{
 			UserCulture.Is(new CultureInfo("fa-IR"));
 			setExtendedPreferencesPermissions();
 
 			var result = Target.CreatePortalViewModel();
 
-			result.Controller("Preference").Should().Be.Null();
+			result.Controller("Preference").Should().Not.Be.Null();
 		}
 
 		[Test]
-		public void ShouldNotHavePreferencesNavigationItemIfJalaliCalendarIsUsedAndPermissionToStandardPreferences()
+		public void ShouldHavePreferencesNavigationItemIfJalaliCalendarIsUsedAndPermissionToStandardPreferences()
 		{
 			UserCulture.Is(new CultureInfo("fa-IR"));
 			setStandardPreferencesPermissions();
 
 			var result = Target.CreatePortalViewModel();
 
-			result.Controller("Preference").Should().Be.Null();
+			result.Controller("Preference").Should().Not.Be.Null();
 		}
 
 		private static void setExtendedPreferencesPermissions()

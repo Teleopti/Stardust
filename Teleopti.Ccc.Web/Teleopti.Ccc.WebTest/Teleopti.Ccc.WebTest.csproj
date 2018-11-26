@@ -246,6 +246,7 @@
     <Compile Include="Areas\Global\ScenarioControllerTest.cs" />
     <Compile Include="Areas\Global\TimeZoneControllerTest.cs" />
     <Compile Include="Areas\Global\UserControllerTest.cs" />
+    <Compile Include="Areas\Insights\Core\InsightsPermissionProviderTest.cs" />
     <Compile Include="Areas\Insights\Core\PowerBi\FakePowerBiClient.cs" />
     <Compile Include="Areas\Insights\Core\PowerBi\FakePowerBiClientFactory.cs" />
     <Compile Include="Areas\Insights\Core\PowerBi\FakeReports.cs" />

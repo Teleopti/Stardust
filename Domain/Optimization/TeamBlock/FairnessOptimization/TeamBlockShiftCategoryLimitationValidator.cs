@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -18,7 +19,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 			 _shiftCategoryLimitationChecker = shiftCategoryLimitationChecker;
 		 }
 
-		public bool Validate(ITeamBlockInfo teamBlockInfo1, ITeamBlockInfo teamBlockInfo2, IOptimizationPreferences optimizationPreferences)
+		[TestLog]
+		public virtual bool Validate(ITeamBlockInfo teamBlockInfo1, ITeamBlockInfo teamBlockInfo2, IOptimizationPreferences optimizationPreferences)
 		{
 			if (optimizationPreferences == null || !optimizationPreferences.General.UseShiftCategoryLimitations)
 				return true;

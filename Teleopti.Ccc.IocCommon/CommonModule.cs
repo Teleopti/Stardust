@@ -43,14 +43,8 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<LogModule>();
 			builder.RegisterModule<JsonSerializationModule>();
 			builder.RegisterModule(new MessageBrokerModule(_configuration));
-			if (_configuration.Args().WebByPassDefaultPermissionCheck_37984)
-			{
-				builder.RegisterType<ByPassPersistableScheduleDataPermissionChecker>().As<IPersistableScheduleDataPermissionChecker>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<PersistableScheduleDataPermissionChecker>().As<IPersistableScheduleDataPermissionChecker>().SingleInstance();
-			}
+			
+			builder.RegisterType<ByPassPersistableScheduleDataPermissionChecker>().As<IPersistableScheduleDataPermissionChecker>().SingleInstance();
 			
 			builder.RegisterModule(new RepositoryModule(_configuration));
 			builder.RegisterModule(new AnalyticsUnitOfWorkModule(_configuration));

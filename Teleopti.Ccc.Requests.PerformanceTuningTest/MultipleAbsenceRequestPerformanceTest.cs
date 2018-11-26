@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 		public IAbsenceRequestPersister AbsenceRequestPersister;
 
-		private List<IPerson> _persons;
+		private List<Guid> _personIdList = new List<Guid>();
 		private DateTime _nowDateTime;
 
 		public override void OneTimeSetUp()
@@ -58,25 +58,33 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			Now.Is(_nowDateTime);
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
-
+			
 			using (var connection = new SqlConnection(ConfigReader.ConnectionString("Tenancy")))
 			{
 				connection.Open();
 				StardustJobFeedback.SendProgress($"Will run script");
-				var script = @"delete from AbsenceRequest
-where request in (select id from request
-where parent in (  select id from PersonRequest where Subject  = 'Story79139'))
-
-delete from request
-where parent in (  select id from PersonRequest where Subject  = 'Story79139')
- 
-delete from PersonRequest where Subject  = 'Story79139'";
+				var script = HelperScripts.ClearAbsenceRequestRequestPersonRequestOnPeriod;
 				using (var command = new SqlCommand(script, connection))
 				{
 					command.ExecuteNonQuery();
 				}
 				connection.Close();
 				StardustJobFeedback.SendProgress($"Have been running the script");
+			}
+
+
+			using (var connection = new SqlConnection(ConfigReader.ConnectionString("Tenancy")))
+			{
+				connection.Open();
+				var sql = HelperScripts.PersonWithValidSetupForIntradayRequestOnPeriod;
+				using (var command = new SqlCommand(sql, connection))
+				{
+					var reader = command.ExecuteReader();
+					while(reader.Read())
+						_personIdList.Add((Guid) reader[0]);
+				}
+				connection.Close();
+				
 			}
 
 			var now = Now.UtcDateTime();
@@ -99,9 +107,8 @@ delete from PersonRequest where Subject  = 'Story79139'";
 				StardustJobFeedback.SendProgress($"Will update staffing readmodel");
 				UpdateStaffingLevel.Update(period);
 				StardustJobFeedback.SendProgress($"Done update staffing readmodel");
-				_persons = PersonRepository.LoadAll().ToList();
+				//_persons = PersonRepository.l
 				
-
 			});
 		}
 
@@ -122,11 +129,13 @@ delete from PersonRequest where Subject  = 'Story79139'";
 				WithUnitOfWork.Do(() =>
 				{
 					AbsenceRepository.LoadAll();
-
+					var startTime = new DateTime(2016, 3, 16, 8, 0, 0, DateTimeKind.Utc);
+					var endDateTime = new DateTime(2016,3,16,17,0,0,DateTimeKind.Utc);
+					
 					AbsenceRequestModel model = new AbsenceRequestModel()
 					{
-						Period = new DateTimePeriod(2016, 12, 24, 2016, 12, 24),
-						PersonId = _persons[i].Id.GetValueOrDefault(),
+						Period = new DateTimePeriod(startTime,endDateTime),
+						PersonId = _personIdList[i],
 						Message = "Story79139",
 						Subject = "Story79139",
 						AbsenceId = new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F")
