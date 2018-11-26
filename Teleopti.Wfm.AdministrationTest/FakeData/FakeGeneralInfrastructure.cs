@@ -109,6 +109,10 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 
 		public DateOnlyPeriod GetFactQueuePeriod(int dataSourceId)
 		{
+			if (GetFactQueuePeriodThrowException)
+			{
+				throw new ArgumentException();
+			}
 			return factQueuePeriods.ContainsKey(dataSourceId)
 				? factQueuePeriods[dataSourceId]
 				: new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue);
@@ -116,10 +120,17 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 
 		public DateOnlyPeriod GetFactAgentPeriod(int dataSourceId)
 		{
+			if (GetFactAgentPeriodThrowException)
+			{
+				throw new ArgumentException();
+			}
 			return factAgentPeriods.ContainsKey(dataSourceId)
 				? factAgentPeriods[dataSourceId]
 				: new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue);
 		}
+
+		public bool GetFactQueuePeriodThrowException { get; set; }
+		public bool GetFactAgentPeriodThrowException { get; set; }
 
 		public void HasFactQueuePeriod(int dataSourceId, DateOnlyPeriod period)
 		{

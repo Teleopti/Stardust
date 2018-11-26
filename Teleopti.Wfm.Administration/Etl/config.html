@@ -19,45 +19,47 @@
 			<div class="panel-body text-container">
 				<table class="table">
 					<thead>
-					<tr>
-						<th scope="col" ng-click="sortType = 'TenantName'; sortReverse = !sortReverse">Tenant name
-							<span ng-show="sortType == 'TenantName' && !sortReverse"><i class="glyphicon glyphicon-arrow-down"></i></span>
-							<span ng-show="sortType == 'TenantName' && sortReverse"><i class="glyphicon glyphicon-arrow-up"></i></span>
-						</th>
-						<th scope="col" ng-click="sortType = 'IsBaseConfigured'; sortReverse = !sortReverse">Base configuration
-							<span ng-show="sortType == 'IsBaseConfigured' && !sortReverse"><i class="glyphicon glyphicon-arrow-down"></i></span>
-							<span ng-show="sortType == 'IsBaseConfigured' && sortReverse"><i class="glyphicon glyphicon-arrow-up"></i></span>
-						</th>
-						<th scope="col">
-							Log data configuration
-						</th>
-					</tr>
+						<tr>
+							<th scope="col" ng-click="sortType = 'TenantName'; sortReverse = !sortReverse">
+								Tenant name
+								<span ng-show="sortType == 'TenantName' && !sortReverse"><i class="glyphicon glyphicon-arrow-down"></i></span>
+								<span ng-show="sortType == 'TenantName' && sortReverse"><i class="glyphicon glyphicon-arrow-up"></i></span>
+							</th>
+							<th scope="col" ng-click="sortType = 'IsBaseConfigured'; sortReverse = !sortReverse">
+								Base configuration
+								<span ng-show="sortType == 'IsBaseConfigured' && !sortReverse"><i class="glyphicon glyphicon-arrow-down"></i></span>
+								<span ng-show="sortType == 'IsBaseConfigured' && sortReverse"><i class="glyphicon glyphicon-arrow-up"></i></span>
+							</th>
+							<th scope="col">
+								Log data source configuration
+							</th>
+						</tr>
 					</thead>
 					<tbody>
-					<tr ng-repeat="tenant in vm.tenants | filter:configFilter  | orderBy:sortType:sortReverse">
-						<td>{{tenant.TenantName}}</td>
-						<td>
-							<button type="button" class="btn btn-default" ng-class="{'btn-success':tenant.IsBaseConfigured}" ng-click="tenant.showTenantConfiguration = true">
+						<tr ng-repeat="tenant in vm.tenants | filter:configFilter  | orderBy:sortType:sortReverse">
+							<td>{{tenant.TenantName}}</td>
+							<td>
+								<button type="button" class="btn btn-default" ng-class="{'btn-success':tenant.IsBaseConfigured}" ng-click="tenant.showTenantConfiguration = true">
 									{{tenant.IsBaseConfigured == true ? 'Configured' : 'Configure'}}
-							</button>
-							<div class="custom-modal" ng-if="tenant.showTenantConfiguration">
-								<div class="modal-content">
-									<div class="modal-header">
-										<h5>Base configuration</h5>
-										<i class="glyphicon glyphicon-remove pull-right" ng-click="tenant.showTenantConfiguration = false"></i>
-									</div>
-									<div class="modal-body">
-										<etl-modal ng-cloak tenant="tenant" callback="vm.getTenants" output="tenant.IsBaseConfigured"></etl-modal>
+								</button>
+								<div class="custom-modal" ng-if="tenant.showTenantConfiguration">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5>Base configuration</h5>
+											<i class="glyphicon glyphicon-remove pull-right" ng-click="tenant.showTenantConfiguration = false"></i>
+										</div>
+										<div class="modal-body">
+											<etl-modal ng-cloak tenant="tenant" callback="vm.getTenants" output="tenant.IsBaseConfigured"></etl-modal>
+										</div>
 									</div>
 								</div>
-							</div>
-						</td>
-						<td>
-							<button type="button" class="btn btn-default" ng-click="vm.getLogDataForATenant(tenant)">
-								<i ng-if="tenant.loading" class="glyphicon glyphicon-refresh"></i>Configure
-							</button>
-						</td>
-					</tr>
+							</td>
+							<td>
+								<button type="button" class="btn btn-default" ng-click="vm.getLogDataForATenant(tenant)">
+									<i ng-if="tenant.loading" class="glyphicon glyphicon-refresh"></i>Configure
+								</button>
+							</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
@@ -65,35 +67,40 @@
 		<form class="custom-modal" ng-if="vm.showModal" ng-submit="vm.sendLogDataConfiguration()">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5>Datasource configuration</h5>
+					<h5>Log data source configuration</h5>
 					<button type="button" class="close" ng-click="vm.showModal = false;" aria-label="Close"><i class="glyphicon glyphicon-remove"></i></button>
 				</div>
 				<div class="modal-body">
-					<small style="color:#ff6347;" ng-cloak ng-if="vm.tenantLogData.Error">
-						<i class=".glyphicon-glyphicon-question-sign"></i>
+					<div class="alert alert-warning">
+						Note! It is only recommended to change time zone of an existing data source if it has limited amount of statistics data in Analytics database.
+					</div>
+					<div class="alert alert-danger" ng-if="vm.tenantLogData.Error">
 						{{vm.tenantLogData.Error}}
-					</small>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true" style="font-size: 20px">×</span>
+						</button>
+					</div>
 					<table class="table" ng-if="vm.tenantLogData.length > 0">
 						<thead>
-						<tr>
-							<th scope="col">Status</th>
-							<th scope="col">Name</th>
-							<th scope="col">Time zone</th>
-							<th scope="col">Interval length</th>
-						</tr>
+							<tr>
+								<th scope="col">Status</th>
+								<th scope="col">Name</th>
+								<th scope="col">Time zone</th>
+								<th scope="col">Interval length</th>
+							</tr>
 						</thead>
 						<tbody>
-						<tr ng-repeat="logData in vm.tenantLogData" ng-class="{'unmatched':!logData.IsIntervalLengthSameAsTenant}">
-							<th scope="row" ng-if="logData.TimeZoneCode">✓ <span ng-if="!logData.IsIntervalLengthSameAsTenant">Interval length not matching with tenant interval length.</span></th>
-							<th scope="row" ng-if="!logData.TimeZoneCode">✗ <span ng-if="!logData.IsIntervalLengthSameAsTenant">Interval length not matching with tenant interval length.</span></th>
-							<td>{{logData.Name}}</td>
-							<td>
-								<select ng-if="!logData.timezone" ng-disabled="!logData.IsIntervalLengthSameAsTenant" class="form-control" ng-options="timezone.Id as timezone.Text for timezone in vm.TimeZoneCodes" ng-model="logData.TimeZoneCode">
-									<option ng-show="!logData.selectedTimezone" value="">- Select time zone</option>
-								</select>
-							</td>
-							<td>{{logData.IntervalLength}}</td>
-						</tr>
+							<tr ng-repeat="logData in vm.tenantLogData" ng-class="{'unmatched':!logData.IsIntervalLengthSameAsTenant}">
+								<th scope="row" ng-if="logData.TimeZoneCode">✓ <span ng-if="!logData.IsIntervalLengthSameAsTenant">Interval length not matching with tenant interval length.</span></th>
+								<th scope="row" ng-if="!logData.TimeZoneCode">✗ <span ng-if="!logData.IsIntervalLengthSameAsTenant">Interval length not matching with tenant interval length.</span></th>
+								<td>{{logData.Name}}</td>
+								<td>
+									<select ng-if="!logData.timezone" ng-disabled="!logData.IsIntervalLengthSameAsTenant" class="form-control" ng-options="timezone.Id as timezone.Text for timezone in vm.TimeZoneCodes" ng-model="logData.TimeZoneCode">
+										<option ng-show="!logData.selectedTimezone" value="">- Select time zone</option>
+									</select>
+								</td>
+								<td>{{logData.IntervalLength}}</td>
+							</tr>
 						</tbody>
 					</table>
 					<div ng-cloak ng-if="vm.tenantLogData.length <= 0">

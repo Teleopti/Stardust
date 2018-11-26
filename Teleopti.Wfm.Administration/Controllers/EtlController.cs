@@ -303,6 +303,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 					}
 
 					var queuePeriod = _generalFunctions.GetFactQueueAvailblePeriod(dataSourceId);
+					var agentPeriod = _generalFunctions.GetFactAgentAvailblePeriod(dataSourceId);
+
 					if (queuePeriod.EndDate != DateOnly.MinValue)
 					{
 						if (logger.IsDebugEnabled)
@@ -315,8 +317,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 						etlJobsToEnque.AddRange(createJobToEnqueue(tenantName, "Queue Statistics", JobCategoryType.QueueStatistics,
 							dataSourceId, queuePeriod.StartDate.Date, queuePeriod.EndDate.Date));
 					}
-
-					var agentPeriod = _generalFunctions.GetFactAgentAvailblePeriod(dataSourceId);
+					
 					if (agentPeriod.EndDate != DateOnly.MinValue)
 					{
 						if (logger.IsDebugEnabled)
@@ -485,7 +486,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			const int periodLengthInDay = 30;
 
 			var jobs = new List<EtlJobEnqueModel>();
-			for (var start = startDate; start < endDate; start = start.AddDays(periodLengthInDay))
+			for (var start = startDate; start <= endDate; start = start.AddDays(periodLengthInDay))
 			{
 				var nextStart = start.AddDays(periodLengthInDay);
 				var jobPeriodDate = new JobPeriodDate

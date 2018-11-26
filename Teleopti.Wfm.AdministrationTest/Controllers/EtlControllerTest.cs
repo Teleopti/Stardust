@@ -1268,5 +1268,79 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 
 			return jobs;
 		}
+
+		[Test]
+		public void ShouldFailToEnqueStatisticsJobsPossiblyDueToTimeoutOnQueueStats()
+		{
+			const int dataSourceId = 3;
+			var masterTenant = new Tenant(testTenantName);
+			masterTenant.DataSourceConfiguration.SetAnalyticsConnectionString($"Initial Catalog={RandomName.Make()}");
+			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
+			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
+				new BaseConfiguration(1053, 15, "UTC", false));
+			ConfigReader.FakeConnectionString("Hangfire", masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
+			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, timezoneName, 15, false));
+			var period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), (new DateOnly(Now.UtcDateTime())));
+			GeneralInfrastructure.HasFactQueuePeriod(dataSourceId, period);
+			GeneralInfrastructure.HasFactAgentPeriod(dataSourceId, period);
+			GeneralInfrastructure.GetFactQueuePeriodThrowException = true;
+
+			var myDsModel = new DataSourceModel
+			{
+				Id = dataSourceId,
+				Name = "myDs",
+				TimeZoneCode = "UTC"
+			};
+			var tenantDataSources = new TenantDataSourceModel
+			{
+				TenantName = testTenantName,
+				DataSources = new List<DataSourceModel> { myDsModel }
+			};
+
+			var result = (NegotiatedContentResult<string>)Target.PersistDataSource(tenantDataSources);
+			result.StatusCode.Should().Be(HttpStatusCode.Ambiguous);
+			result.Content.Should().Contain(myDsModel.Name);
+
+			var scheduledJobs = JobScheduleRepository.GetSchedules(null, DateTime.Now);
+			scheduledJobs.Count.Should().Be(1);
+			scheduledJobs.Single().JobName.Should().Be("Initial");
+		}
+
+		[Test]
+		public void ShouldFailToEnqueStatisticsJobsPossiblyDueToTimeoutOnAgentStats()
+		{
+			const int dataSourceId = 3;
+			var masterTenant = new Tenant(testTenantName);
+			masterTenant.DataSourceConfiguration.SetAnalyticsConnectionString($"Initial Catalog={RandomName.Make()}");
+			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
+			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
+				new BaseConfiguration(1053, 15, "UTC", false));
+			ConfigReader.FakeConnectionString("Hangfire", masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
+			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, timezoneName, 15, false));
+			var period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), (new DateOnly(Now.UtcDateTime())));
+			GeneralInfrastructure.HasFactQueuePeriod(dataSourceId, period);
+			GeneralInfrastructure.HasFactAgentPeriod(dataSourceId, period);
+			GeneralInfrastructure.GetFactAgentPeriodThrowException = true;
+
+			var myDsModel = new DataSourceModel
+			{
+				Id = dataSourceId,
+				Name = "myDs",
+				TimeZoneCode = "UTC"
+			};
+			var tenantDataSources = new TenantDataSourceModel
+			{
+				TenantName = testTenantName,
+				DataSources = new List<DataSourceModel> { myDsModel }
+			};
+
+			var result = (NegotiatedContentResult<string>)Target.PersistDataSource(tenantDataSources);
+			result.StatusCode.Should().Be(HttpStatusCode.Ambiguous);
+			result.Content.Should().Contain(myDsModel.Name);
+
+			var scheduledJobs = JobScheduleRepository.GetSchedules(null, DateTime.Now);
+			scheduledJobs.Count.Should().Be(1);
+			scheduledJobs.Single().JobName.Should().Be("Initial");
+		}
 	}
 }
