@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Intraday.Domain
+namespace Teleopti.Ccc.Domain.AgentInfo
 {
 	public interface IForecastedStaffingProvider
 	{

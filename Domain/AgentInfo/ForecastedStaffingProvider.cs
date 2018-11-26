@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Intraday
+namespace Teleopti.Ccc.Domain.AgentInfo
 {
 	public class ForecastedStaffingProvider : IForecastedStaffingProvider
 	{

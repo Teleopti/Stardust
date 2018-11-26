@@ -44,7 +44,6 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			isolate.UseTestDouble<MutableNow>().For<INow>();
 			isolate.UseTestDouble(intervalFetcher).For<IIntervalLengthFetcher>();
 			isolate.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
-			isolate.UseTestDouble<StaffingViewModelCreator>().For<StaffingViewModelCreator>();
 		}
 
 		protected override void Startup(IComponentContext container)

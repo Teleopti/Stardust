@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Intraday.Domain;
-using Teleopti.Ccc.Domain.Staffing;
 
-namespace Teleopti.Ccc.Domain.Intraday
+namespace Teleopti.Ccc.Domain.Staffing
 {
 	public class ForecastedStaffingToDataSeries : IForecastedStaffingToDataSeries
 	{

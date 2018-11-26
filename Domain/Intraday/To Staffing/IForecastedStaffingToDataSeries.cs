@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Staffing;
 
-namespace Teleopti.Ccc.Domain.Intraday
+namespace Teleopti.Ccc.Domain.Staffing
 {
 	public interface IForecastedStaffingToDataSeries
 	{

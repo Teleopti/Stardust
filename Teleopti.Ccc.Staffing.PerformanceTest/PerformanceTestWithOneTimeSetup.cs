@@ -73,7 +73,6 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			isolate.UseTestDouble(toggles).For<IToggleManager>();
 			isolate.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 			isolate.UseTestDouble<NoMessageSender>().For<IMessageSender>();
-			isolate.UseTestDouble<StaffingViewModelCreator>().For<StaffingViewModelCreator>();
 			extend.AddService<Database>();
 			extend.AddService<MultiplicatorDefinitionSetRepository>();
 		}

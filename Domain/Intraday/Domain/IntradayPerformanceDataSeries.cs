@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.Domain.Intraday
+namespace Teleopti.Ccc.Domain.Intraday.Domain
 {
 	public class IntradayPerformanceDataSeries
 	{
