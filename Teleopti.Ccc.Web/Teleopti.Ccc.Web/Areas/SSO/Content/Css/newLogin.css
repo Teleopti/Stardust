@@ -47,9 +47,14 @@ h1 {
 	perspective: 1000px;
 }
 
+.signin_forgot_password {
+	white-space: nowrap;
+	text-align: right; 
+	padding-right: 0px;
+}
+
 @keyframes shake {
-	10%,
-	90% {
+	10%, 90% {
 		transform: translate3d(-1px, 0, 0);
 	}
 	20%,
@@ -123,29 +128,46 @@ h1 {
 	}
 }
 
-@media screen and (min-width: 728px) {
+@media screen and (min-width: 768px) {
 	.con-row {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: nowrap;
 	}
+
+	.con-row .wfm-checkbox {
+		text-align: left;
+	}
+
 	.con-flex {
 		flex: 1;
 	}
+
+	.con-row .signin_forgot_password {
+		text-align: right;
+	}
 }
 
-@media screen and (max-width: 728px) {
+@media screen and (max-width: 768px) {
 	.con-row {
 		display: flex;
 		flex-direction: column;
 		flex-wrap: nowrap;
 	}
+
+	.con-row .wfm-checkbox {
+		text-align: center;
+	}
 	.con-flex {
-		flex: 1 1 auto;
+		flex: 1;
+	}
+
+	.con-row .signin_forgot_password {
+		text-align: center;
 	}
 }
 
-@media screen and (max-height: 320px) {
+@media screen and (max-width: 425px) and (max-height: 420px) {
 	body {
 		background: #fff;
 	}
