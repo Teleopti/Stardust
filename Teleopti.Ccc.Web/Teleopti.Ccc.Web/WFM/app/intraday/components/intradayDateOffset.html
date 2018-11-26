@@ -1,6 +1,12 @@
-<div class="con-row con-row-wrap full-padding day-offset-picker" layout="row" layout-align="center center">
-	<div class="line-center animate work-day" ng-repeat="item in $ctrl.dayOffsets">
-		<button tabindex="0" class="wfm-fab mini" ng-click="$ctrl.dateChange(item.value)" ng-class="{'mini-active': $ctrl.selOffset.value == item.value}">
+<div class="con-row con-row-wrap full-padding day-offset-picker"
+     layout="row"
+     layout-align="center center">
+	<div class="line-center animate work-day"
+	     ng-repeat="item in $ctrl.dayOffsets">
+		<button tabindex="0"
+		        class="wfm-fab mini"
+		        ng-click="$ctrl.dateChange(item.value)"
+		        ng-class="{'mini-active': $ctrl.selOffset.value == item.value}">
 			<span style="text-transform:uppercase;">{{item.display}}</span>
 			<md-tooltip>{{item.text}}</md-tooltip>
 		</button>

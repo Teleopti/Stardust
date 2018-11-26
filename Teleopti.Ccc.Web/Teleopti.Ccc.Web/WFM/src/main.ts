@@ -16,6 +16,7 @@ import { environment } from './environments/environment';
 import { MainController } from './main.controller';
 import { mainInitializer } from './main.initializer';
 import { DowngradeableComponent, RouterConfigFunction } from './types';
+import { intradayComponents } from './app/intraday/intraday.module';
 export interface IWfmRootScopeService extends IRootScopeService {
 	_: any;
 	isAuthenticated: boolean;
@@ -106,6 +107,7 @@ downgradeHelper(apiAccessComponents);
 downgradeHelper(appComponents);
 downgradeHelper(menuComponents);
 downgradeHelper(insightsComponents);
+downgradeHelper(intradayComponents);
 downgradeHelper(resetPasswordComponents);
 
 /**

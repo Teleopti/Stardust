@@ -1,0 +1,91 @@
+<div class="con-row">
+    <div class="con-flex">
+        <div class="con-row view-header with-fab with-desc">
+            <div class="con-flex view-title">
+                <h1>
+                    <i nz-icon
+                       type="compass"></i>
+                    {{'Intraday' | translate}}
+                </h1>
+            </div>
+        </div>
+        <div class="sub-header">
+            <div class="con-row">
+                <div class="con-flex"
+                     style="flex-basis: 40%; padding: 0">
+                    <div class="con-row">
+                        <app-angular-skill-picker class="con-flex x2"
+                                                  style="margin: 0; padding: 0"
+                                                  (selected)="onSelecetSkill($event)"></app-angular-skill-picker>
+                        <div class="con-flex"
+                             style="flex-basis: 15%">
+                            <button nz-button
+                                    (click)="goToGroupManager()"
+                                    icon=""
+                                    nzType="default">Manage skillgroups</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="con-flex">
+                    <intraday-date-selector (selected)="onSelectDate($event)">
+                    </intraday-date-selector>
+                </div>
+            </div>
+            <div class="con-row">
+                <div class="con-flex">
+                    <div *ngIf="displayDate && displayDate.length>0">
+                        {{displayDate}}
+                    </div>
+                    <div *ngIf="selectedSkillOrGroup && selectedSkillOrGroup.Skills.length > 0">
+                        <nz-radio-group [(ngModel)]="selectedSubSkillId"
+                                        (ngModelChange)="onPickSubSkill()">
+                            <label nz-radio-button
+                                   nzValue="all">
+                                {{translate.instant('All')}}
+                            </label>
+                            <label *ngFor="let skill of selectedSkillOrGroup.Skills"
+                                   nz-radio-button
+                                   nzValue={{skill.Id}}>
+                                {{skill.Name}}
+                            </label>
+                        </nz-radio-group>
+                    </div>
+                </div>
+            </div>
+            <div class="con-row">
+                <div class="con-flex">
+                    <div>
+                        <nz-radio-group [(ngModel)]="selectedChartType"
+                                        (click)="onClickTab()">
+                            <label nz-radio-button
+                                   nzValue="traffic">{{translate.instant('IncomingTraffic')}}</label>
+                            <label nz-radio-button
+                                   nzValue="performance">{{translate.instant('Performance')}}</label>
+                            <label nz-radio-button
+                                   nzValue="staffing">{{translate.instant('Staffing')}}
+                            </label>
+                        </nz-radio-group>
+                        &nbsp;
+                        <i nz-icon
+                           [hidden]="!loading"
+                           type="loading"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="con-row">
+                <div class="con-flex">
+                    <app-intraday-chart [chartData]="chartData"
+                                        [chartType]="chartType"></app-intraday-chart>
+                </div>
+            </div>
+            <div class="con-row">
+                <div class="con-flex"></div>
+                <div class="con-flex">
+                    <intraday-table [chartType]="chartType"
+                                    [tableData]="summaryData"></intraday-table>
+                </div>
+                <div class="con-flex"></div>
+            </div>
+        </div>
+    </div>
+</div>
