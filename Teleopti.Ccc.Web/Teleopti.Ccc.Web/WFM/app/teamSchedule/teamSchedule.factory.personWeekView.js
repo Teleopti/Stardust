@@ -35,19 +35,19 @@
 			var startTimeInUserTimezoneMoment = moment($filter('timezone')(dateTimeSpan.StartDateTime, null, timezone.IanaId));
 			var endTimeInUserTimezoneMoment = moment($filter('timezone')(dateTimeSpan.EndDateTime, null, timezone.IanaId));
 
-			var displayStarStr = startTimeInUserTimezoneMoment.format('LT');
-			var displayEndStr = endTimeInUserTimezoneMoment.format('LT');
+			var displayStarStr = $filter('date')(startTimeInUserTimezoneMoment.toDate(), 'shortTime');
+			var displayEndStr = $filter('date')(endTimeInUserTimezoneMoment.toDate(), 'shortTime');
 
 			if (startTimeInUserTimezoneMoment.isBefore(moment(dateInWeek).startOf('day'))) {
-				displayStarStr = startTimeInUserTimezoneMoment.format('LT') + ' (-1)';
+				displayStarStr = displayStarStr + ' (-1)';
 			}else if(startTimeInUserTimezoneMoment.isAfter(moment(dateInWeek).endOf('day'))){
-				displayStarStr = startTimeInUserTimezoneMoment.format('LT') + ' (+1)';
+				displayStarStr = displayStarStr + ' (+1)';
 			}
 
 			if(endTimeInUserTimezoneMoment.isBefore(moment(dateInWeek).startOf('day'))) {
-				displayEndStr = endTimeInUserTimezoneMoment.format('LT') + ' (-1)';
+				displayEndStr = displayEndStr + ' (-1)';
 			}else if (endTimeInUserTimezoneMoment.isAfter(moment(dateInWeek).endOf('day'))) {
-				displayEndStr = endTimeInUserTimezoneMoment.format('LT') + ' (+1)';
+				displayEndStr = displayEndStr + ' (+1)';
 			}
 
 			return displayStarStr + ' - ' + displayEndStr;
