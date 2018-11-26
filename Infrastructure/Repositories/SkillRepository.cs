@@ -303,31 +303,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return retList;
 		}
-		public IEnumerable<ISkill> LoadSkillsWithOpenHours(IEnumerable<Guid> skillIdList)
-		{
-			DetachedCriteria workloadSubquery = DetachedCriteria.For<Workload>("w")
-				.Add(Restrictions.InG("Skill.Id", skillIdList))
-				.SetProjection(Projections.Property("w.Id"));
-
-			var skills = Session.CreateCriteria<Skill>("skill")
-				.Add(Restrictions.InG("Id", skillIdList))
-				.SetFetchMode("WorkloadCollection", FetchMode.Join)
-				.Future<Skill>();
-
-			Session.CreateCriteria<Workload>("workload")
-				.Add(Restrictions.InG("Skill.Id", skillIdList))
-				.SetFetchMode("TemplateWeekCollection", FetchMode.Join)
-				.Future<Workload>();
-
-			Session.CreateCriteria<WorkloadDayTemplate>()
-				.Add(Subqueries.PropertyIn("Parent", workloadSubquery))
-				.SetFetchMode("OpenHourList", FetchMode.Join)
-				.SetFetchMode("TaskPeriodList", FetchMode.Join)
-				.Future<WorkloadDayTemplate>();
-
-			return skills.Distinct().ToList();
-		}
-
+		
 		public IEnumerable<ISkill> FindSkillsContain(string searchString, int maxHits)
 		{
 			if (maxHits < 1)

@@ -3487,6 +3487,7 @@
     <Compile Include="WorkflowControl\AbsenceRequestNoneValidator.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenDatePeriod.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriod.cs" />
+    <Compile Include="WorkflowControl\AnyPersonSkillsOpenValidatorOptimizationOn.cs" />
     <Compile Include="WorkflowControl\IOvertimeRequestOpenPeriodMerger.cs" />
     <Compile Include="WorkflowControl\IOvertimeRequestOpenPeriodSkillType.cs" />
     <Compile Include="WorkflowControl\OvertimeRequestOpenPeriodMerger.cs" />

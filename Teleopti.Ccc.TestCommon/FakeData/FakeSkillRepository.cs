@@ -12,7 +12,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	public class FakeSkillRepository : ISkillRepository
 	{
 		private readonly IList<ISkill> _skills;
- 
+		public List<SkillOpenHoursLight> OpenHoursList;
+
 		public FakeSkillRepository()
 		{
 			_skills = new List<ISkill>();
@@ -130,14 +131,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IEnumerable<SkillOpenHoursLight> FindOpenHoursForSkills(IEnumerable<Guid> skillIds)
 		{
-			throw new NotImplementedException();
+			return OpenHoursList;
 		}
-
-		public IEnumerable<ISkill> LoadSkillsWithOpenHours(IEnumerable<Guid> skillIdList)
-		{
-			return _skills.Where(s => skillIdList.Contains(s.Id.Value)).ToList();
-		}
-
+		
 		public IMultisiteSkill HasMultisiteSkill(string skillName, IActivity activity)
 		{
 			var skill = SkillFactory.CreateMultisiteSkill(skillName).WithId();
