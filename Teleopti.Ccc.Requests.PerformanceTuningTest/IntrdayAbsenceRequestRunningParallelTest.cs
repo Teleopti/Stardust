@@ -128,7 +128,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 			StardustJobFeedback.SendProgress($"Will process {200} requests");
 			var taskList = new List<Task>();
-			foreach (var i in Enumerable.Range(0, 100))
+			//foreach (var i in Enumerable.Range(0, 100))
+			for(int i=0;i<100;i++)
 			{
 				var task = Task.Run(() => WithUnitOfWork.Do(() =>
 				{
@@ -151,7 +152,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			}
 			Task.WaitAll(taskList.ToArray());
 
-			foreach (var i in Enumerable.Range(101, 200))
+			//foreach (var i in Enumerable.Range(100, 100))
+			for (int i = 100; i < 200; i++)
 			{
 				var task = Task.Run(() => WithUnitOfWork.Do(() =>
 				{
