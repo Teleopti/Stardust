@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         private readonly PinnedSkillHelper _pinnedSkillHelper;
 		private IEnumerable<IPerson> _filteredPersons = new List<IPerson>();
 		private IVirtualSkillHelper _virtualSkillHelper;
-		private readonly ContextMenuStrip _contextMenuSkillGrid = new ContextMenuStrip();
+		private readonly ContextMenuStrip _contextMenuSkillGrid;
 
 		public SchedulerSplitters()
         {
@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				tabSkillData.TabStyle = typeof(SkillTabRenderer);
 				tabSkillData.TabPanelBackColor = Color.FromArgb(199, 216, 237);
 			validationAlertsView1.AgentDoubleClick += validationAlertsView1AgentDoubleClick;
+			_contextMenuSkillGrid = new ContextMenuStrip();
         }
 
 		public event EventHandler<System.ComponentModel.ProgressChangedEventArgs> RestrictionsNotAbleToBeScheduledProgress;
