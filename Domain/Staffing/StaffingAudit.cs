@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		{
 		}
 
-		public StaffingAudit(IPerson actionBy, string action, string area, string importFileName, Guid? bpoId = null, DateTime? clearPeriodStart = null, DateTime? clearPeriodEnd=null)
+		public StaffingAudit(IPerson actionBy, string action, string area, string importFileName, string bpoName,  DateTime? clearPeriodStart = null, DateTime? clearPeriodEnd=null)
 			: this()
 		{
 			ActionPerformedById = actionBy.Id.GetValueOrDefault();
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			TimeStamp = DateTime.UtcNow;
 			Area = area;
 			ImportFileName = importFileName;
-			BpoId = bpoId;
+			BpoName = bpoName;
 			ClearPeriodStart = clearPeriodStart;
 			ClearPeriodEnd = clearPeriodEnd;
 		}
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		public virtual string Area { get; set; }
 		public virtual string ActionPerformedBy { get; set; }
 		public virtual string ImportFileName { get; set; }
-		public virtual Guid? BpoId { get; set; }
+		public virtual string BpoName { get; set; }
 		public virtual DateTime? ClearPeriodStart { get; set; }
 		public virtual DateTime? ClearPeriodEnd { get; set; }
 

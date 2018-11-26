@@ -14,14 +14,12 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 	public class StaffingContextReaderService : IStaffingContextReaderService
 	{
 		private readonly IStaffingAuditRepository _staffingAuditRepository;
-		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly IUserCulture _userCulture;
 		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 
-		public StaffingContextReaderService(IStaffingAuditRepository staffingAuditRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository, IUserCulture userCulture, ICommonAgentNameProvider commonAgentNameProvider)
+		public StaffingContextReaderService(IStaffingAuditRepository staffingAuditRepository, IUserCulture userCulture, ICommonAgentNameProvider commonAgentNameProvider)
 		{
 			_staffingAuditRepository = staffingAuditRepository;
-			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 			_userCulture = userCulture;
 			_commonAgentNameProvider = commonAgentNameProvider;
 		}
@@ -44,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 				else
 				{
 					//var deserialized = JsonConvert.DeserializeObject<ClearBpoActionObj>(audit.Data);
-					var bpoName = _skillCombinationResourceRepository.GetSourceBpoByGuid(audit.BpoId.GetValueOrDefault());
+					var bpoName = audit.BpoName;
 					var startDate = audit.ClearPeriodStart.Value.ToString("d", _userCulture.GetCulture());
 					var endDate = audit.ClearPeriodEnd.Value.ToString("d", _userCulture.GetCulture());
 					auditServiceModel.Data = $"{Resources.AuditTrailBpoName}: {bpoName}, " +

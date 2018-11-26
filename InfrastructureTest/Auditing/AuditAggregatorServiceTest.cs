@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 		public void ShouldReturnStaffingAuditOnImportBpoAction()
 		{
 			var person = PersonFactory.CreatePersonWithId();
-			StaffingAuditRepository.Add(new StaffingAudit(person, StaffingAuditActionConstants.ImportStaffing,  "BPO", "abc.txt") {TimeStamp = new DateTime(2018, 10, 14, 10, 0, 0,DateTimeKind.Utc) });
+			StaffingAuditRepository.Add(new StaffingAudit(person, StaffingAuditActionConstants.ImportStaffing,  "BPO", "abc.txt", "") {TimeStamp = new DateTime(2018, 10, 14, 10, 0, 0,DateTimeKind.Utc) });
 			var startDate = new DateTime(2018, 10, 13);
 			var endDate = new DateTime(2018, 10, 15);
 			CurrentUnitOfWork.Current().PersistAll();
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 
 			var singaporeUser = PersonFactory.CreatePerson().WithId();
 
-			StaffingAuditRepository.Add(new StaffingAudit(singaporeUser, StaffingAuditActionConstants.ImportStaffing, "BPO", "abc.txt") { TimeStamp = new DateTime(2018, 10, 14, 14, 0, 0, DateTimeKind.Utc) });
+			StaffingAuditRepository.Add(new StaffingAudit(singaporeUser, StaffingAuditActionConstants.ImportStaffing, "BPO", "abc.txt", "") { TimeStamp = new DateTime(2018, 10, 14, 14, 0, 0, DateTimeKind.Utc) });
 			var startDate = new DateTime(2018, 10, 13);
 			var endDate = new DateTime(2018, 10, 15);
 			CurrentUnitOfWork.Current().PersistAll();
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 			var person = PersonFactory.CreatePerson();
 			PersonRepository.Add(person);
 			CurrentUnitOfWork.Current().PersistAll();
-			var staffingAudit = new StaffingAudit(person, StaffingAuditActionConstants.ImportStaffing, "abc.txt", "BPO")
+			var staffingAudit = new StaffingAudit(person, StaffingAuditActionConstants.ImportStaffing, "abc.txt", "BPO", "")
 				{ TimeStamp = new DateTime(2018, 10, 14, 10, 0, 0, DateTimeKind.Utc) };
 			IApplicationRole role = new ApplicationRole() { Name = "Name" };
 			ApplicationRoleRepository.Add(role);
