@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 	[TestFixture(SUT.Scheduling)]
 	[TestFixture(SUT.DayOffOptimization)]
 	[DomainTest]
-	public abstract class ResourcePlannerCommandHandlerTest : ITestInterceptor
+	public abstract class ResourcePlannerCommandHandlerTest : ITestInterceptor, IIsolateSystem
 	{
 		private readonly SUT _sut;
 
@@ -101,6 +101,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 		{
 			//hack to remove logon user when using "loadall" in executetarget methods
 			PersonRepository.LoadAll().ToArray().ForEach(x => PersonRepository.Remove(x));
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			//not needed when web supports team scheduling
+			isolate.UseTestDouble<SchedulingOptionsProvider>().For<ISchedulingOptionsProvider>();
 		}
 	}
 }

@@ -21,8 +21,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
+	/*  DONT ADD MORE TESTS HERE! - LEGACY TESTS HERE!
+	 *  Web supports (limited) block (not team) scheduling only.
+	 *  If you want to add simple (web) block scheduling tests that PlanningGroup supports, add it to SchedulingBlockTest
+	 *  If you want to add a team scheduling tests, add it as a desktop test (until web supports it)
+	 */
 	[DomainTest]
-	public class TeamBlockSchedulingTest : SchedulingScenario
+	public class TeamBlockSchedulingTest : SchedulingScenario, IIsolateSystem
 	{
 		public FullScheduling Target;
 		public FakePersonRepository PersonRepository;
@@ -673,6 +678,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
 			assignments.Count(x => x.MainActivities().Any() || x.AssignedWithDayOff(dayOffTemplate)).Should().Be.EqualTo(6);
+		}
+		
+		public void Isolate(IIsolate isolate)
+		{
+			//hack until web supports team scheduling
+			isolate.UseTestDouble<SchedulingOptionsProvider>().For<ISchedulingOptionsProvider>();
 		}
 
 		public TeamBlockSchedulingTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
