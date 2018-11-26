@@ -20,7 +20,7 @@ using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
-{
+{	
 	public class PerformanceTestWithOneTimeSetup 
 	{
 		[OneTimeSetUp]
@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 
 			var toggles = service.Toggles();
 
-			toggles.Enable(Toggles.WFM_AbsenceRequest_ImproveThroughput_79139);
 			var builder = new ContainerBuilder();
 			var system = new SystemImpl(builder, new TestDoubles());
 
