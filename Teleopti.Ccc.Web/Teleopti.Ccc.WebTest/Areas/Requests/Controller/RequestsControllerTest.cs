@@ -36,25 +36,58 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		public FakePersonRepository PersonRepository;
 		public FakePersonFinderReadOnlyRepository PersonFinderReadOnlyRepository;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
+		public FakeLoggedOnUser LoggedOnUser;
 
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
 			isolate.UseTestDouble<FakePermissions>().For<IAuthorization>();
 			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("test") { DefaultScenario = true })).For<IScenarioRepository>();
 		}
 
 		[Test]
 		public void ShouldGetRequests()
 		{
-			var input = setupData();
+			var date = new DateTime(2018, 11, 21);
+			var input = setupData(date);
 
 			var result = Target.GetRequests(input);
 			result.Requests.Count().Should().Be.EqualTo(1);
 		}
 
-		private AllRequestsFormData setupData()
+		[Test]
+		public void ShouldGetShift()
+		{
+			var date = new DateTime(2018, 11, 21);
+			var input = setupData(date);
+
+			var result = Target.GetRequests(input);
+			result.Requests.First().Shifts.Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldGetShiftIsNotDayOff()
+		{
+			var date = new DateTime(2018, 11, 21);
+			var input = setupData(date);
+
+			var result = Target.GetRequests(input);
+			result.Requests.First().Shifts.First().IsDayOff.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldGetBelongsToDate()
+		{
+			var expactedDate = new DateTime(2018, 11, 26);
+			var input = setupData(expactedDate);
+
+			var result = Target.GetRequests(input);
+			result.Requests.First().Shifts.First().BelongsToDate.Should().Be.EqualTo(expactedDate);
+		}
+
+		private AllRequestsFormData setupData(DateTime date)
 		{
 			var scenarioId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
@@ -64,34 +97,34 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 			Database.WithPerson(personId)
 				.WithTeam(teamId, "myTeam")
 				.WithPeriod(DateOnly.MinValue.ToString())
-				.WithAbsenceRequest(personId, new DateTime(2018, 11, 21).ToString());
+				.WithScenario(scenarioId)
+				.WithSchedule(date.AddHours(8).ToString(), date.AddHours(17).ToString())
+				.WithAbsenceRequest(personId, date.ToString());
 			var person = PersonRepository.Get(personId);
+			setPermissions(person);
 			PersonFinderReadOnlyRepository.Has(person);
 			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail { PersonId = personId });
-			setPermissions(person, DefinedRaptorApplicationFunctionPaths.WebRequests);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 
+			var dateOnly = new DateOnly(date);
 			return new AllRequestsFormData
 			{
-				StartDate = new DateOnly(2018, 11, 20),
-				EndDate = new DateOnly(2018, 11, 30),
+				StartDate = dateOnly.AddDays(-1),
+				EndDate = dateOnly.AddDays(9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
 				SortingOrders = new List<RequestsSortingOrder>(),
 				SelectedGroupIds = new[] { teamId.ToString() }
 			};
 		}
 
-		private void setPermissions(IPerson person, params string[] functionPaths)
+		private void setPermissions(IPerson person)
 		{
 			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.WebRequests);
 			var role = ApplicationRoleFactory.CreateRole("test", "test");
+			role.AddApplicationFunction(ApplicationFunctionFactory.CreateApplicationFunction(DefinedRaptorApplicationFunctionPaths.ViewSchedules));
+			role.AddApplicationFunction(ApplicationFunctionFactory.CreateApplicationFunction(DefinedRaptorApplicationFunctionPaths.WebRequests));
 			role.AvailableData = new AvailableData { AvailableDataRange = AvailableDataRangeOption.Everyone };
 			person.PermissionInformation.AddApplicationRole(role);
-
-			var factory = new DefinedRaptorApplicationFunctionFactory();
-			foreach (var functionPath in functionPaths)
-			{
-				role.AddApplicationFunction(ApplicationFunction.FindByPath(factory.ApplicationFunctions, functionPath));
-			}
 		}
 
 		[Test]
