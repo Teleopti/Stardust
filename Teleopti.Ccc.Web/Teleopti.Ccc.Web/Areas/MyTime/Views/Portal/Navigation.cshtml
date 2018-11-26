@@ -174,7 +174,7 @@
 							data: JSON.stringify({ host: window.location.host, tenant: '@Model.CurrentLogonAgentId' }),
 							contentType: 'application/json; charset=utf-8',
 							success: function(botConfigExists) {
-								if (botConfigExists) createGrantBotConfig();
+								if (!botConfigExists) createGrantBotConfig();
 							}
 						});
 					}
