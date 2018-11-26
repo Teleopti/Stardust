@@ -7,11 +7,3 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		CultureInfo GetCulture();
 	}
 }
-//
-//namespace Teleopti.Interfaces.Domain
-//{
-//	public interface IUserCulture
-//	{
-//		CultureInfo GetCulture();
-//	}
-//}
