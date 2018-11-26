@@ -1,94 +1,99 @@
-﻿<div class="manualJobDateContainer col-md-2">
-	<div class="manualJobInnerDateContainer">
-		<fieldset ng-hide="!vm.selectedJob.Initial">
-			<legend>Initial - data period</legend>
-			<div class="row">
-				<div class="col-md-6 manualJobDateFrom">
-					<h5>Date from:</h5>
-					<md-datepicker ng-model="vm.manualInitial.StartDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('StartDate', vm.manualInitial.StartDate)"></md-datepicker>
+﻿
+<div class="manualJobDateContainer">
+	<div class="manualJobOuterDateContainer">
+		<div class="manualJobInnerDateContainer">
+			<fieldset ng-hide="!vm.selectedJob.Initial">
+				<legend>Initial - data period</legend>
+				<div class="row">
+					<div class="col-md-6 manualJobDateFrom">
+						<h5>Date from:</h5>
+						<md-datepicker ng-model="vm.manualInitial.StartDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('StartDate', vm.manualInitial.StartDate)"></md-datepicker>
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6 manualJobDateTo">
-					<h5>Date to:</h5>
-					<md-datepicker ng-model="vm.manualInitial.EndDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('EndDate', vm.manualInitial.EndDate)"></md-datepicker>
+				<div class="row">
+					<div class="col-md-6 manualJobDateTo">
+						<h5>Date to:</h5>
+						<md-datepicker ng-model="vm.manualInitial.EndDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('EndDate', vm.manualInitial.EndDate)"></md-datepicker>
+					</div>
 				</div>
-			</div>
-		</fieldset>
-	</div>
+			</fieldset>
+		</div>
 
-	<div class="manualJobInnerDateContainer">
-		<fieldset ng-hide="!vm.selectedJob.QueueStatistics">
-			<legend>Queue statistics - data period</legend>
-			<div class="row">
-				<div class="col-md-6 manualJobDateFrom">
-					<h5>Date from:</h5>
-					<md-datepicker ng-model="vm.manualQueueStats.StartDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('StartDate', vm.manualQueueStats.StartDate)"></md-datepicker>
+		<div class="manualJobInnerDateContainer">
+			<fieldset ng-hide="!vm.selectedJob.QueueStatistics">
+				<legend>Queue statistics - data period</legend>
+				<div class="row">
+					<div class="col-md-6 manualJobDateFrom">
+						<h5>Date from:</h5>
+						<md-datepicker ng-model="vm.manualQueueStats.StartDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('StartDate', vm.manualQueueStats.StartDate)"></md-datepicker>
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6 manualJobDateTo">
-					<h5>Date to:</h5>
-					<md-datepicker ng-model="vm.manualQueueStats.EndDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('EndDate', vm.manualQueueStats.EndDate)"></md-datepicker>
+				<div class="row">
+					<div class="col-md-6 manualJobDateTo">
+						<h5>Date to:</h5>
+						<md-datepicker ng-model="vm.manualQueueStats.EndDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('EndDate', vm.manualQueueStats.EndDate)"></md-datepicker>
+					</div>
 				</div>
-			</div>
-		</fieldset>
-	</div>
+			</fieldset>
+		</div>
 
-	<div class="manualJobInnerDateContainer">
-		<fieldset ng-hide="!vm.selectedJob.AgentStatistics">
-			<legend>Agent statistics - data period</legend>
-			<div class="row">
-				<div class="col-md-6 manualJobDateFrom">
-					<h5>Date from:</h5>
-					<md-datepicker ng-model="vm.manualAgentStats.StartDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('StartDate', vm.manualAgentStats.StartDate)"></md-datepicker>
+		<div class="manualJobInnerDateContainer">
+			<fieldset ng-hide="!vm.selectedJob.AgentStatistics">
+				<legend>Agent statistics - data period</legend>
+				<div class="row">
+					<div class="col-md-6 manualJobDateFrom">
+						<h5>Date from:</h5>
+						<md-datepicker ng-model="vm.manualAgentStats.StartDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('StartDate', vm.manualAgentStats.StartDate)"></md-datepicker>
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6 manualJobDateTo">
-					<h5>Date to:</h5>
-					<md-datepicker ng-model="vm.manualAgentStats.EndDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('EndDate', vm.manualAgentStats.EndDate)"></md-datepicker>
+				<div class="row">
+					<div class="col-md-6 manualJobDateTo">
+						<h5>Date to:</h5>
+						<md-datepicker ng-model="vm.manualAgentStats.EndDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('EndDate', vm.manualAgentStats.EndDate)"></md-datepicker>
+					</div>
 				</div>
-			</div>
-		</fieldset>
-	</div>
+			</fieldset>
+		</div>
 
-	<div class="manualJobInnerDateContainer">
-		<fieldset ng-hide="!vm.selectedJob.Schedule">
-			<legend>Schedule - data period</legend>
-			<div class="row">
-				<div class="col-md-6 manualJobDateFrom">
-					<h5>Date from:</h5>
-					<md-datepicker ng-model="vm.manualSchedule.StartDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('StartDate', vm.manualSchedule.StartDate)"></md-datepicker>
+		<div class="manualJobInnerDateContainer">
+			<fieldset ng-hide="!vm.selectedJob.Schedule">
+				<legend>Schedule - data period</legend>
+				<div class="row">
+					<div class="col-md-6 manualJobDateFrom">
+						<h5>Date from:</h5>
+						<md-datepicker ng-model="vm.manualSchedule.StartDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('StartDate', vm.manualSchedule.StartDate)"></md-datepicker>
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6 manualJobDateTo">
-					<h5>Date to:</h5>
-					<md-datepicker ng-model="vm.manualSchedule.EndDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('EndDate', vm.manualSchedule.EndDate)"></md-datepicker>
+				<div class="row">
+					<div class="col-md-6 manualJobDateTo">
+						<h5>Date to:</h5>
+						<md-datepicker ng-model="vm.manualSchedule.EndDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('EndDate', vm.manualSchedule.EndDate)"></md-datepicker>
+					</div>
 				</div>
-			</div>
-		</fieldset>
-	</div>
+			</fieldset>
+		</div>
 
-	<div class="manualJobInnerDateContainer">
-		<fieldset ng-hide="!vm.selectedJob.Forecast">
-			<legend>Forecast - data period</legend>
-			<div class="row">
-				<div class="col-md-6 manualJobDateFrom">
-					<h5>Date from:</h5>
-					<md-datepicker ng-model="vm.manualForecast.StartDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('StartDate', vm.manualForecast.StartDate)"></md-datepicker>
+		<div class="manualJobInnerDateContainer">
+			<fieldset ng-hide="!vm.selectedJob.Forecast">
+				<legend>Forecast - data period</legend>
+				<div class="row">
+					<div class="col-md-6 manualJobDateFrom">
+						<h5>Date from:</h5>
+						<md-datepicker ng-model="vm.manualForecast.StartDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('StartDate', vm.manualForecast.StartDate)"></md-datepicker>
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6 manualJobDateTo">
-					<h5>Date to:</h5>
-					<md-datepicker ng-model="vm.manualForecast.EndDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('EndDate', vm.manualForecast.EndDate)"></md-datepicker>
+				<div class="row">
+					<div class="col-md-6 manualJobDateTo">
+						<h5>Date to:</h5>
+						<md-datepicker ng-model="vm.manualForecast.EndDate" md-placeholder="N/A" md-open-on-focus ng-dblclick="vm.applyToAll('EndDate', vm.manualForecast.EndDate)"></md-datepicker>
+					</div>
 				</div>
-			</div>
-		</fieldset>
+			</fieldset>
+		</div>
 	</div>
 </div>
+
+<div class="col-md-2" style="clear:both"></div>
 
 <div class="container" style="display: inline-block;">
 	<br />

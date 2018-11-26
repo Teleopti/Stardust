@@ -1,8 +1,31 @@
-﻿@media only screen and (min-width: 1600px) {
-	.manualJobDateContainer {
+﻿@media only screen and (min-width: 1452px) {
+
+	.manualJobOuterDateContainer {
+		position: fixed;
 		position: -webkit-sticky; /* Safari */
 		position: sticky;
-		top: 40px;
+		height: 80%;
+		width: 16.66666667%;
+		float: left;
+		padding: 0;
+		margin: 0;
+		left: 0;
+		-ms-overflow-style: none;
+		overflow: auto;
+	}
+
+		.manualJobOuterDateContainer::-webkit-scrollbar {
+			display: none;
+		}
+
+	.manualJobDateContainer {
+		position: fixed;
+		position: -webkit-sticky; /* Safari */
+		position: sticky;
+		top: 100px;
+		padding: 0;
+		margin: 0;
+		left: 0;
 	}
 
 	.ETLManualTopContainer {
@@ -69,7 +92,8 @@
 	}
 }
 
-@media only screen and (max-width: 1600px) {
+@media only screen and (max-width: 1452px) {
+
 	.manualJobDateContainer {
 		width: 100%;
 	}
