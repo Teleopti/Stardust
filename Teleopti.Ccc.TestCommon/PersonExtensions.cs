@@ -98,11 +98,16 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static Person WithPersonPeriod(this Person agent, IWorkShiftRuleSet ruleSet, IContract contract, ITeam team, params ISkill[] skills)
 		{
-			return ruleSet == null ? 
-				agent.WithPersonPeriod((IRuleSetBag)null, contract, team, skills) : 
-				agent.WithPersonPeriod(new RuleSetBag(ruleSet), contract, team, skills);
+			return WithPersonPeriod(agent, DateOnly.MinValue, ruleSet, contract, team, skills);
 		}
-
+		
+		public static Person WithPersonPeriod(this Person agent, DateOnly periodStart, IWorkShiftRuleSet ruleSet, IContract contract, ITeam team, params ISkill[] skills)
+		{
+			return ruleSet == null ? 
+				agent.WithPersonPeriod(periodStart, (IRuleSetBag)null, contract, team, skills) : 
+				agent.WithPersonPeriod(periodStart, new RuleSetBag(ruleSet){Description = new Description("_")}, contract, team, skills);
+		}
+		
 		public static Person WithPersonPeriod(this Person agent, IRuleSetBag ruleSetBag, IContract contract, params ISkill[] skills)
 		{
 			return agent.WithPersonPeriod(ruleSetBag, contract, null, skills);
@@ -110,14 +115,28 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static Person WithPersonPeriod(this Person agent, IWorkShiftRuleSet ruleSet, IContractSchedule contractSchedule, params ISkill[] skills)
 		{
-			var newAgent = agent.WithPersonPeriod(ruleSet, null, new Team(), skills);
-			newAgent.Period(DateOnly.MinValue).PersonContract.ContractSchedule = contractSchedule;
+			return WithPersonPeriod(agent, DateOnly.MinValue, ruleSet, contractSchedule, skills);
+		}
+		
+		public static Person WithPersonPeriod(this Person agent, DateOnly periodStart, IWorkShiftRuleSet ruleSet, IContractSchedule contractSchedule, params ISkill[] skills)
+		{
+			var team = new Team {Site = new Site("_")};
+			team.SetDescription(new Description("_"));
+			return WithPersonPeriod(agent, periodStart, ruleSet, contractSchedule, team, skills);
+		}
+		
+		public static Person WithPersonPeriod(this Person agent, DateOnly periodStart, IWorkShiftRuleSet ruleSet, IContractSchedule contractSchedule, ITeam team, params ISkill[] skills)
+		{
+			var newAgent = agent.WithPersonPeriod(periodStart, ruleSet, (IContract)null, team, skills);
+			newAgent.Period(periodStart).PersonContract.ContractSchedule = contractSchedule;
 			return newAgent;
 		}
 		
 		public static Person WithPersonPeriod(this Person agent, IContractSchedule contractSchedule, params ISkill[] skills)
 		{
-			var newAgent = agent.WithPersonPeriod(null, new Team(), skills);
+			var team = new Team {Site = new Site("_")};
+			team.SetDescription(new Description("_"));
+			var newAgent = agent.WithPersonPeriod(null, team, skills);
 			newAgent.Period(DateOnly.MinValue).PersonContract.ContractSchedule = contractSchedule;
 			return newAgent;
 		}
