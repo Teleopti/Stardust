@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 
 			var moments = new[]
 			{
-				new Func<DateOnly, Guid, IEnumerable<IEvent>>((d, p) =>
+				new Func<Teleopti.Wfm.Adherence.DateOnly, Guid, IEnumerable<IEvent>>((d, p) =>
 				{
 					return new IEvent[]
 					{
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 						}
 					};
 				}),
-				new Func<DateOnly, Guid, IEnumerable<IEvent>>((d, p) =>
+				(d, p) =>
 				{
 					return new IEvent[]
 					{
@@ -178,8 +178,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 							Adherence = EventAdherence.In
 						}
 					};
-				}),
-				new Func<DateOnly, Guid, IEnumerable<IEvent>>((d, p) =>
+				},
+				(d, p) =>
 				{
 					return new IEvent[]
 					{
@@ -210,8 +210,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 							Adherence = EventAdherence.Out
 						}
 					};
-				}),
-				new Func<DateOnly, Guid, IEnumerable<IEvent>>((d, p) =>
+				},
+				(d, p) =>
 				{
 					return new[]
 					{
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 							Adherence = EventAdherence.In
 						}
 					};
-				})
+				}
 			};
 
 			log.AppendLine($"Removing all events");
@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 				moments.ForEach(what =>
 				{
 					persons
-						.SelectMany(x => what.Invoke(d, x.Id.Value))
+						.SelectMany(x => what.Invoke(new Wfm.Adherence.DateOnly(d.Date), x.Id.Value))
 						.ForEach(x =>
 						{
 							var q = (x as IRtaStoredEvent)?.QueryData();

@@ -50,7 +50,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 				period = new DateTimePeriod(shift.Value.StartDateTime.AddHours(-1), shift.Value.EndDateTime.AddHours(1));
 			}
 
-			var events = _eventStore.Load(personId, period);
+			var events = _eventStore.Load(personId, period.StartDateTime, period.EndDateTime);
 
 			var obj = new AgentAdherenceDaySpeedUpRemoveLastBefore(period, shift, until);
 			events.ForEach(x =>

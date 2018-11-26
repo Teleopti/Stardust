@@ -6,6 +6,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
+	public static class AuthorizationExtensions
+	{
+		public static bool IsPermitted(this IAuthorization authorization, string functionPath, DateTime date, IPerson person) =>
+			authorization.IsPermitted(functionPath, new DateOnly(date), person);
+	}
+	
     public interface IAuthorization
     {
         bool IsPermitted(string functionPath);

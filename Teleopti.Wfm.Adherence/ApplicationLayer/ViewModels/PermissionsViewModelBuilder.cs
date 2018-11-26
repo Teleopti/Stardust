@@ -18,7 +18,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 			_persons = persons;
 		}
 
-		public PermissionsViewModel Build(Guid? personId, DateOnly? date)
+		public PermissionsViewModel Build(Guid? personId, DateTime? date)
 		{
 			IPerson person = null;
 			if (personId != null)
@@ -30,13 +30,13 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 			};
 		}
 
-		private bool isPermitted(string permission, DateOnly? date, IPerson person)
+		private bool isPermitted(string permission, DateTime? date, IPerson person)
 		{
 			if (date == null)
 				return _authorization.Current().IsPermitted(permission);
-			return _authorization.Current().IsPermitted(permission, date.Value, person);
+			return _authorization.Current().IsPermitted(permission, date.Value.Date, person);
 		}
-		
+
 		public class PermissionsViewModel
 		{
 			public bool HistoricalOverview;

@@ -3,28 +3,16 @@ using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
 {
-    /// <summary>
-    /// A period of two DateOnly
-    /// </summary>
-    /// <remarks>
-    ///  Created by: Ola
-    ///  Created date: 2009-03-17    
-    /// </remarks>
     [Serializable]
     public struct DateOnlyPeriod : IEquatable<DateOnlyPeriod>
     {
         private MinMax<DateOnly> period;
         private const string DATETIME_SEPARATOR = " - ";
+
+		public DateOnlyPeriod(DateTime startDate, DateTime endDate) : this(new DateOnly(startDate), new DateOnly(endDate))
+		{
+		}
         
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DateOnlyPeriod"/> struct.
-        /// </summary>
-        /// <param name="startDate">The start date.</param>
-        /// <param name="endDate">The end date.</param>
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2009-03-17    
-        /// </remarks>
         public DateOnlyPeriod(DateOnly startDate, DateOnly endDate)
         {
             period = new MinMax<DateOnly>(startDate, endDate);

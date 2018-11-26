@@ -234,7 +234,10 @@
     <Compile Include="Infrastructure\DeadLockRetrier.cs" />
     <Compile Include="Infrastructure\HttpRequestHandler.cs" />
     <Compile Include="Infrastructure\IHttpRequestHandler.cs" />
+    <Compile Include="InterfaceLegacy\Domain\IUserCulture.cs" />
     <Compile Include="InterfaceLegacy\Domain\PersonInfoForShiftTradeFilter.cs" />
+    <Compile Include="InterfaceLegacy\Domain\ThisCulture.cs" />
+    <Compile Include="InterfaceLegacy\Domain\TimeFormatter.cs" />
     <Compile Include="InterfaceLegacy\PlanningPeriodState.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayForcastedStaffingIntervalDTO.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayScheduleStaffingIntervalDTO.cs" />

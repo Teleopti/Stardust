@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MyReport;
 using Teleopti.Interfaces.Domain;

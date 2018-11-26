@@ -41,7 +41,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Service
 						RuleName = context.State.RuleName(),
 						RuleColor = context.State.RuleDisplayColor(),
 						Adherence = context.Adherence.Adherence(),
-						BelongsToDate = context.Time.ToDateOnly()
+						BelongsToDate = new DateOnly(context.Time)
 					}
 				);
 		}

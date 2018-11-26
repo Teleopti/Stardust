@@ -105,15 +105,12 @@
     <Compile Include="Domain\IPersonInfoModel.cs" />
     <Compile Include="Domain\ISchedulingSourceScope.cs" />
     <Compile Include="Domain\IStateReader.cs" />
-    <Compile Include="Domain\IUserCulture.cs" />
     <Compile Include="Domain\MinMax.cs" />
     <Compile Include="Domain\ParsedTimeOfDay.cs" />
     <Compile Include="Domain\Percent.cs" />
     <Compile Include="Domain\StateHolderReader.cs" />
     <Compile Include="Domain\TeleoptiAuthenticationHeaderNames.cs" />
-    <Compile Include="Domain\ThisCulture.cs" />
     <Compile Include="Domain\TimeFormatsType.cs" />
-    <Compile Include="Domain\TimeFormatter.cs" />
     <Compile Include="Domain\TimeHelper.cs" />
     <Compile Include="Domain\TimePeriod.cs" />
     <Compile Include="Domain\TimeZoneHelper.cs" />

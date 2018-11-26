@@ -52,7 +52,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			var events =
 				_eventStore.LoadLastAdherenceEventBefore(personId, period.StartDateTime, DeadLockVictim.Yes)
 					.AsArray()
-					.Concat(_eventStore.Load(personId, period))
+					.Concat(_eventStore.Load(personId, period.StartDateTime, period.EndDateTime))
 					.Where(x => x != null)
 					.ToArray();
 
