@@ -4,15 +4,16 @@ using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
 
 namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 {
+	// change type of ApprovedPeriods() to AdherencePeriod when removing toggle RTA_ReviewHistoricalAdherence_74770
 	public interface IAgentAdherenceDay
 	{
-		DateTimePeriod Period();
+		DateTimePeriod DisplayPeriod();
 		IEnumerable<HistoricalChangeModel> Changes();
 		IEnumerable<AdherencePeriod> RecordedOutOfAdherences();
 		IEnumerable<ApprovedPeriod> ApprovedPeriods();
 		IEnumerable<AdherencePeriod> OutOfAdherences();
 		int? Percentage();
-		int? SecondsInAherence();
+		int? SecondsInAdherence();
 		int? SecondsOutOfAdherence();
 	}
 }

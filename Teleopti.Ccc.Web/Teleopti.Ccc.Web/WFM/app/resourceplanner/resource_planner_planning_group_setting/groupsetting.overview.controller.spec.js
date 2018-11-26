@@ -9,7 +9,8 @@ describe('planningGroupSettingOverviewController', function () {
         planningGroupInfo = {
             Id: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             Name: "Plan Group Test",
-            Filters: []
+            Filters: [],
+			PreferenceValue: 0.22
         },
         schedulingSettingInfo = [{
             Id: '00e9d2f9-e35e-408a-9cef-a76cfc9f6d6c',
@@ -125,6 +126,16 @@ describe('planningGroupSettingOverviewController', function () {
 
         expect(vm.schedulingSetting.length).toEqual(4);
     });
+    
+    it('should display preference percentage', function(){
+		var vm = $controller('planningGroupSettingOverviewController', {
+			$stateParams: stateparams,
+			planningGroupInfo: planningGroupInfo,
+			schedulingSettingInfo: schedulingSettingInfo
+		});
+
+		expect(vm.preferencePercentage).toEqual(22);
+	});
 
     it('should set priority higher for the selected setting', function () {
         var vm = $controller('planningGroupSettingOverviewController', {

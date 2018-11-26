@@ -27,7 +27,7 @@ namespace DotNetOpenAuth.Xrds {
 		public int? Priority {
 			get {
 				XPathNavigator n = Node.SelectSingleNode("@priority", XmlNamespaceResolver);
-				return n != null ? n.ValueAsInt : (int?)null;
+				return n?.ValueAsInt;
 			}
 		}
 
@@ -50,9 +50,7 @@ namespace DotNetOpenAuth.Xrds {
 		/// <summary>
 		/// Gets the parent service.
 		/// </summary>
-		public ServiceElement Service {
-			get { return (ServiceElement)ParentNode; }
-		}
+		public ServiceElement Service => (ServiceElement)ParentNode;
 
 		#region IComparable<UriElement> Members
 

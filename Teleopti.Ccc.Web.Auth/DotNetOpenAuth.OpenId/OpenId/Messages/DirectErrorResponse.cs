@@ -32,17 +32,13 @@ namespace DotNetOpenAuth.OpenId.Messages {
 		/// Gets the HTTP status code that the direct respones should be sent with.
 		/// </summary>
 		/// <value><see cref="HttpStatusCode.BadRequest"/></value>
-		HttpStatusCode IHttpDirectResponse.HttpStatusCode {
-			get { return HttpStatusCode.BadRequest; }
-		}
+		HttpStatusCode IHttpDirectResponse.HttpStatusCode { get; } = HttpStatusCode.BadRequest;
 
 		/// <summary>
 		/// Gets the HTTP headers to add to the response.
 		/// </summary>
 		/// <value>May be an empty collection, but must not be <c>null</c>.</value>
-		WebHeaderCollection IHttpDirectResponse.Headers {
-			get { return new WebHeaderCollection(); }
-		}
+		WebHeaderCollection IHttpDirectResponse.Headers => new WebHeaderCollection();
 
 		#endregion
 

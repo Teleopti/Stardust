@@ -28,11 +28,7 @@ namespace DotNetOpenAuth.Yadis {
 		/// <summary>
 		/// Gets or sets the cache that can be used for HTTP requests made during identifier discovery.
 		/// </summary>
-#if false
-		internal static readonly RequestCachePolicy IdentifierDiscoveryCachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.BypassCache);
-#else
 		internal static readonly RequestCachePolicy IdentifierDiscoveryCachePolicy = new HttpRequestCachePolicy(DotNetOpenAuth.Configuration.OpenIdElement.Configuration.CacheDiscovery ? HttpRequestCacheLevel.CacheIfAvailable : HttpRequestCacheLevel.BypassCache);
-#endif
 
 		/// <summary>
 		/// The maximum number of bytes to read from an HTTP response
@@ -112,8 +108,7 @@ namespace DotNetOpenAuth.Yadis {
 			foreach (var metaTag in HtmlParser.HeadTags<HtmlMeta>(html)) {
 				if (HeaderName.Equals(metaTag.HttpEquiv, StringComparison.OrdinalIgnoreCase)) {
 					if (metaTag.Content != null) {
-						Uri uri;
-						if (Uri.TryCreate(metaTag.Content, UriKind.Absolute, out uri)) {
+						if (Uri.TryCreate(metaTag.Content, UriKind.Absolute, out var uri)) {
 							return uri;
 						}
 					}
@@ -150,10 +145,8 @@ namespace DotNetOpenAuth.Yadis {
 			try {
 				return requestHandler.GetResponse(request, options);
 			} catch (ProtocolException ex) {
-				var webException = ex.InnerException as WebException;
-				if (webException != null) {
-					var response = webException.Response as HttpWebResponse;
-					if (response != null && response.IsFromCache) {
+				if (ex.InnerException is WebException webException) {
+					if (webException.Response is HttpWebResponse response && response.IsFromCache) {
 						// We don't want to report error responses from the cache, since the server may have fixed
 						// whatever was causing the problem.  So try again with cache disabled.
 						Logger.Messaging.Error("An HTTP error response was obtained from the cache.  Retrying with cache disabled.", ex);

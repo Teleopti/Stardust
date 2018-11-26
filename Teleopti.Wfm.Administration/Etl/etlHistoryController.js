@@ -21,6 +21,7 @@
 		vm.history = [];
 		vm.error = null;
 		vm.status = null;
+		vm.loadingHistory = false;
 
 		vm.selectedTenantChanged = selectedTenantChanged;
 		vm.buildError = buildError;
@@ -100,17 +101,20 @@
 		}
 
 		function pollStatus() {
-			$timeout( function(){
-				$http
-				.get("./Etl/GetjobRunning", tokenHeaderService.getHeaders())
-				.success(function (data) {
-					vm.status = data;
-					if (vm.status !== null) {
-						vm.status.formatedTime = moment(vm.status.StartTime).local().format('HH:mm');
+			$timeout(function() {
+					if (window.location.hash === '#/ETL/history') {
+						$http
+							.get("./Etl/GetjobRunning", tokenHeaderService.getHeaders())
+							.success(function(data) {
+								vm.status = data;
+								if (vm.status !== null) {
+									vm.status.formatedTime = moment(vm.status.StartTime).local().format('HH:mm');
+								}
+								pollStatus();
+							});
 					}
-					pollStatus();
-				});
-			}, 10000 );
+				},
+					10000);
 		}
 
 		function getStatusRightNow() {
@@ -130,6 +134,8 @@
 				return;
 			}
 
+			vm.loadingHistory = true;
+
 			var	JobHistoryCriteria = {
 				BusinessUnitId: vm.selectedBu.Id,
 				TenantName: vm.selectedTenant.TenantName,
@@ -139,23 +145,25 @@
 			};
 
 			$http
-			.post(
-				"./Etl/GetJobHistory",
-				JSON.stringify(JobHistoryCriteria),
-				tokenHeaderService.getHeaders()
-			)
-			.success(function(data) {
-				if (data.length < 1) {
+				.post(
+					"./Etl/GetJobHistory",
+					JSON.stringify(JobHistoryCriteria),
+					tokenHeaderService.getHeaders()
+				)
+				.success(function(data) {
+					if (data.length < 1) {
+						vm.error = "No history found";
+					} else {
+						vm.history = data;
+						vm.error = null;
+					}
+				})
+				.error(function(data) {
+					vm.history = [];
 					vm.error = "No history found";
-				} else {
-					vm.history = data;
-					vm.error = null;
-				}
-			})
-			.error(function(data) {
-				vm.history = [];
-				vm.error = "No history found";
-			});
+				}).then(function() {
+					vm.loadingHistory = false;
+				});
 		}
 
 		function buildError(root) {

@@ -27,9 +27,7 @@ namespace DotNetOpenAuth.Xrds {
 		/// <summary>
 		/// Gets the XRD parent element.
 		/// </summary>
-		public XrdElement Xrd {
-			get { return (XrdElement)ParentNode; }
-		}
+		public XrdElement Xrd => (XrdElement)ParentNode;
 
 		/// <summary>
 		/// Gets the priority.
@@ -37,7 +35,7 @@ namespace DotNetOpenAuth.Xrds {
 		public int? Priority {
 			get {
 				XPathNavigator n = Node.SelectSingleNode("@priority", XmlNamespaceResolver);
-				return n != null ? n.ValueAsInt : (int?)null;
+				return n?.ValueAsInt;
 			}
 		}
 
@@ -83,7 +81,7 @@ namespace DotNetOpenAuth.Xrds {
 			get {
 				var n = Node.SelectSingleNode("xrd:LocalID", XmlNamespaceResolver)
 					?? Node.SelectSingleNode("openid10:Delegate", XmlNamespaceResolver);
-				if (n != null && n.Value != null) {
+				if (n?.Value != null) {
 					string value = n.Value.Trim();
 					if (value.Length > 0) {
 						return n.Value;

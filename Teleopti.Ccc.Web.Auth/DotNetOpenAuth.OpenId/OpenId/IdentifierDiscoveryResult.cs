@@ -76,9 +76,7 @@ namespace DotNetOpenAuth.OpenId {
 		/// Gets the Identifier that the end user claims to control.
 		/// </summary>
 		public Identifier ClaimedIdentifier {
-			get {
-				return this.claimedIdentifier;
-			}
+			get => this.claimedIdentifier;
 
 			internal set {
 				// Take care to reparse the incoming identifier to make sure it's
@@ -166,9 +164,7 @@ namespace DotNetOpenAuth.OpenId {
 		/// Gets the URL that the OpenID Provider receives authentication requests at.
 		/// </summary>
 		/// <value>This value MUST be an absolute HTTP or HTTPS URL.</value>
-		Uri IProviderEndpoint.Uri {
-			get { return this.ProviderEndpoint; }
-		}
+		Uri IProviderEndpoint.Uri => this.ProviderEndpoint;
 
 		#endregion
 
@@ -439,16 +435,7 @@ namespace DotNetOpenAuth.OpenId {
 			Requires.NotNullOrEmpty(typeUri, "typeUri");
 			return this.Capabilities.Contains(typeUri);
 		}
-
-		/// <summary>
-		/// Sets the Capabilities property (this method is a test hook.)
-		/// </summary>
-		/// <param name="value">The value.</param>
-		/// <remarks>The publicize.exe tool should work for the unit tests, but for some reason it fails on the build server.</remarks>
-		internal void SetCapabilitiesForTestHook(ReadOnlyCollection<string> value) {
-			this.Capabilities = value;
-		}
-
+		
 		/// <summary>
 		/// Gets the priority rating for a given type of endpoint, allowing a
 		/// priority sorting of endpoints.
@@ -472,22 +459,5 @@ namespace DotNetOpenAuth.OpenId {
 			}
 			return 10;
 		}
-
-#if CONTRACTS_FULL
-		/// <summary>
-		/// Verifies conditions that should be true for any valid state of this object.
-		/// </summary>
-		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Called by code contracts.")]
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Called by code contracts.")]
-		[ContractInvariantMethod]
-		private void ObjectInvariant() {
-			Contract.Invariant(this.ProviderEndpoint != null);
-			Contract.Invariant(this.ClaimedIdentifier != null);
-			Contract.Invariant(this.ProviderLocalIdentifier != null);
-			Contract.Invariant(this.Capabilities != null);
-			Contract.Invariant(this.Version != null);
-			Contract.Invariant(this.Protocol != null);
-		}
-#endif
 	}
 }

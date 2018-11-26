@@ -5,16 +5,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class BlockPreferenceProviderUsingFilters : IBlockPreferenceProvider
 	{
-		private readonly AllPlanningGroupSettings _planningGroupSettings;
+		private readonly AllSettingsForPlanningGroup _allSettingsForPlanningGroup;
 
-		public BlockPreferenceProviderUsingFilters(AllPlanningGroupSettings planningGroupSettings)
+		public BlockPreferenceProviderUsingFilters(AllSettingsForPlanningGroup allSettingsForPlanningGroup)
 		{
-			_planningGroupSettings = planningGroupSettings;
+			_allSettingsForPlanningGroup = allSettingsForPlanningGroup;
 		}
 
 		public ExtraPreferences ForAgent(IPerson person, DateOnly dateOnly)
 		{
-			var planningGroupSettings = _planningGroupSettings.ForAgent(person, dateOnly);
+			var planningGroupSettings = _allSettingsForPlanningGroup.ForAgent(person, dateOnly);
 			return mapToBlockPreference(planningGroupSettings);
 		}
 

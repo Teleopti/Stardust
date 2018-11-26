@@ -22,13 +22,9 @@ namespace DotNetOpenAuth.OpenId.RelyingParty {
 			}
 		}
 
-		OutgoingWebResponse IAuthenticationRequest.RedirectingResponse {
-			get { throw new NotImplementedException(); }
-		}
+		OutgoingWebResponse IAuthenticationRequest.RedirectingResponse => throw new NotImplementedException();
 
-		Uri IAuthenticationRequest.ReturnToUrl {
-			get { throw new NotImplementedException(); }
-		}
+		Uri IAuthenticationRequest.ReturnToUrl => throw new NotImplementedException();
 
 		Realm IAuthenticationRequest.Realm {
 			get {
@@ -37,15 +33,9 @@ namespace DotNetOpenAuth.OpenId.RelyingParty {
 			}
 		}
 
-		Identifier IAuthenticationRequest.ClaimedIdentifier {
-			get {
-				throw new NotImplementedException();
-			}
-		}
+		Identifier IAuthenticationRequest.ClaimedIdentifier => throw new NotImplementedException();
 
-		bool IAuthenticationRequest.IsDirectedIdentity {
-			get { throw new NotImplementedException(); }
-		}
+		bool IAuthenticationRequest.IsDirectedIdentity => throw new NotImplementedException();
 
 		bool IAuthenticationRequest.IsExtensionOnly {
 			get {

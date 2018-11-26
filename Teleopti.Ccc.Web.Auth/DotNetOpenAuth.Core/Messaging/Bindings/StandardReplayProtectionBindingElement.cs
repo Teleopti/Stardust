@@ -52,9 +52,7 @@ namespace DotNetOpenAuth.Messaging.Bindings {
 		/// <summary>
 		/// Gets the protection that this binding element provides messages.
 		/// </summary>
-		public MessageProtections Protection {
-			get { return MessageProtections.ReplayProtection; }
-		}
+		public MessageProtections Protection => MessageProtections.ReplayProtection;
 
 		/// <summary>
 		/// Gets or sets the channel that this binding element belongs to.
@@ -100,8 +98,7 @@ namespace DotNetOpenAuth.Messaging.Bindings {
 		/// Null if this binding element did not even apply to this binding element.
 		/// </returns>
 		public MessageProtections? ProcessOutgoingMessage(IProtocolMessage message) {
-			IReplayProtectedProtocolMessage nonceMessage = message as IReplayProtectedProtocolMessage;
-			if (nonceMessage != null) {
+			if (message is IReplayProtectedProtocolMessage nonceMessage) {
 				nonceMessage.Nonce = this.GenerateUniqueFragment();
 				return MessageProtections.ReplayProtection;
 			}
@@ -119,8 +116,7 @@ namespace DotNetOpenAuth.Messaging.Bindings {
 		/// </returns>
 		/// <exception cref="ReplayedMessageException">Thrown when the nonce check revealed a replayed message.</exception>
 		public MessageProtections? ProcessIncomingMessage(IProtocolMessage message) {
-			IReplayProtectedProtocolMessage nonceMessage = message as IReplayProtectedProtocolMessage;
-			if (nonceMessage != null && nonceMessage.Nonce != null) {
+			if (message is IReplayProtectedProtocolMessage nonceMessage && nonceMessage.Nonce != null) {
 				ErrorUtilities.VerifyProtocol(nonceMessage.Nonce.Length > 0 || this.AllowZeroLengthNonce, MessagingStrings.InvalidNonceReceived);
 
 				if (!this.nonceStore.StoreNonce(nonceMessage.NonceContext, nonceMessage.Nonce, nonceMessage.UtcCreationDate)) {

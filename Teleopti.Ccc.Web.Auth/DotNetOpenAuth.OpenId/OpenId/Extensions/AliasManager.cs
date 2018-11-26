@@ -22,19 +22,17 @@ namespace DotNetOpenAuth.OpenId.Extensions {
 		/// <summary>
 		/// Tracks extension Type URIs and aliases assigned to them.
 		/// </summary>
-		private Dictionary<string, string> typeUriToAliasMap = new Dictionary<string, string>();
+		private readonly Dictionary<string, string> typeUriToAliasMap = new Dictionary<string, string>();
 
 		/// <summary>
 		/// Tracks extension aliases and Type URIs assigned to them.
 		/// </summary>
-		private Dictionary<string, string> aliasToTypeUriMap = new Dictionary<string, string>();
+		private readonly Dictionary<string, string> aliasToTypeUriMap = new Dictionary<string, string>();
 
 		/// <summary>
 		/// Gets the aliases that have been set.
 		/// </summary>
-		public IEnumerable<string> Aliases {
-			get { return this.aliasToTypeUriMap.Keys; }
-		}
+		public IEnumerable<string> Aliases => this.aliasToTypeUriMap.Keys;
 
 		/// <summary>
 		/// Gets an alias assigned for a given Type URI.  A new alias is assigned if necessary.
@@ -43,8 +41,7 @@ namespace DotNetOpenAuth.OpenId.Extensions {
 		/// <returns>The alias assigned to this type URI.  Never null.</returns>
 		public string GetAlias(string typeUri) {
 			Requires.NotNullOrEmpty(typeUri, "typeUri");
-			string alias;
-			return this.typeUriToAliasMap.TryGetValue(typeUri, out alias) ? alias : this.AssignNewAlias(typeUri);
+			return this.typeUriToAliasMap.TryGetValue(typeUri, out var alias) ? alias : this.AssignNewAlias(typeUri);
 		}
 
 		/// <summary>
@@ -75,8 +72,7 @@ namespace DotNetOpenAuth.OpenId.Extensions {
 						continue;
 					}
 
-					string preferredAlias;
-					if (preferredTypeUriToAliases.TryGetValue(typeUri, out preferredAlias) && !this.IsAliasUsed(preferredAlias)) {
+					if (preferredTypeUriToAliases.TryGetValue(typeUri, out var preferredAlias) && !this.IsAliasUsed(preferredAlias)) {
 						this.SetAlias(preferredAlias, typeUri);
 					}
 				}
@@ -128,7 +124,7 @@ namespace DotNetOpenAuth.OpenId.Extensions {
 			Requires.NotNullOrEmpty(alias, "alias");
 			string typeUri = this.TryResolveAlias(alias);
 			if (typeUri == null) {
-				throw new ArgumentOutOfRangeException("alias");
+				throw new ArgumentOutOfRangeException(nameof(alias));
 			}
 			return typeUri;
 		}

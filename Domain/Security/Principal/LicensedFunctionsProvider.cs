@@ -5,9 +5,9 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-    public interface ILicensedFunctionsProvider
-    {
-        IEnumerable<IApplicationFunction> LicensedFunctions(string tenantName);
+	public interface ILicensedFunctionsProvider
+	{
+		IEnumerable<IApplicationFunction> LicensedFunctions(string tenantName);
 		void ClearLicensedFunctions(string tenantName);
 	}
 
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		{
 			_licensedFunctions.Remove(tenantName);
 		}
-			
+
 
 		private IEnumerable<IApplicationFunction> fetchLicensedFunctions(string tenantName)
 		{

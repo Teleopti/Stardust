@@ -4,14 +4,14 @@
 		Insights
 	</h1>
 
-	<div class="material-depth-1 con-row full-padding align-row-baseline">
+	<div [hidden]="!hasViewPermission && !hasEditPermission" class="material-depth-1 con-row full-padding align-row-baseline">
 		<span>
-			<nz-select style="width: 300px;" [(ngModel)]="selectedReport" (ngModelChange)="onReportSelected($event)" nzAllowClear nzPlaceHolder="Select a report...">
+			<nz-select style="width: 300px;" [disabled]="!initialized" [(ngModel)]="selectedReport" (ngModelChange)="onReportSelected($event)" nzAllowClear nzPlaceHolder="Select a report...">
 				<nz-option *ngFor="let rep of this.reports" [nzValue]="rep.Id" [nzLabel]="rep.Name"></nz-option>
 			</nz-select>
 		</span>
 		&nbsp;&nbsp;&nbsp;
-		<span>
+		<span [hidden]="!hasEditPermission">
 			<input type="checkbox" name="canEditReport" id="canEditReport" [checked]="canEditReport" (change)="onCanEditReportChanged()">
 			<label for="canEditReport">Enable report editing</label>
 		</span>
@@ -26,10 +26,17 @@
 			<label for="enableFilter">Enable filter</label>
 		</span>
 		&nbsp;&nbsp;&nbsp;
-		<input type="button" class="wfm-btn wfm-btn-invis-primary ng-binding ng-scope" [disabled]="isLoading || !this.selectedReport" id="btnReloadReport" value="Reload" (click)="reloadCurrentReport()">
-		<input type="button" class="wfm-btn wfm-btn-invis-primary ng-binding ng-scope" [disabled]="isLoading || !this.selectedReport" id="btnCloneReport" value="Clone" (click)="cloneCurrentReport()">
+		<input type="button" class="wfm-btn wfm-btn-invis-primary ng-binding ng-scope" [disabled]="!initialized || isLoading || !this.selectedReport" id="btnReloadReport" value="Reload" (click)="reloadCurrentReport()">
+		<input [hidden]="!hasEditPermission" type="button" class="wfm-btn wfm-btn-invis-primary ng-binding ng-scope" [disabled]="!initialized || isLoading || !this.selectedReport" id="btnCloneReport" value="Clone" (click)="cloneCurrentReport()">
 	</div>
-	<div [hidden]="isLoading" class="panel con-flex material-depth-1">
+	<div [hidden]="!hasViewPermission && !hasEditPermission" class="panel con-flex material-depth-1">
 		<div id="reportContainer" style="height:850px;"></div>
 	</div>
+	<nz-alert
+	  [hidden]="hasViewPermission || hasEditPermission" 
+      nzType="error"
+      nzMessage="Error"
+      nzDescription="You have no permission to view or edit report."
+      nzShowIcon>
+    </nz-alert>
 </div>

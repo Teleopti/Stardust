@@ -18,10 +18,10 @@ namespace Mono.Math.Prime.Generator {
 	//[CLSCompliant(false)]
 	internal class NextPrimeFinder : SequentialSearchPrimeGeneratorBase {
 		
-		protected override BigInteger GenerateSearchBase (int bits, object Context) 
+		protected override BigInteger GenerateSearchBase (int bits, object context) 
 		{
-			if (Context == null) throw new ArgumentNullException ("Context");
-			BigInteger ret = new BigInteger ((BigInteger)Context);
+			if (context == null) throw new ArgumentNullException (nameof(context));
+			BigInteger ret = new BigInteger ((BigInteger)context);
 			ret.setBit (0);
 			return ret;
 		}

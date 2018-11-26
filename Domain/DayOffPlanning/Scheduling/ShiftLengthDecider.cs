@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 {
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 			_desiredShiftLengthCalculator = desiredShiftLengthCalculator;
 		}
 
-		public IList<ShiftProjectionCache> FilterList(IList<ShiftProjectionCache> shiftList, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
+		public IList<ShiftProjectionCache> FilterList(IList<ShiftProjectionCache> shiftList, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, IDictionary<DateOnly, TimeSpan> maxWorkTimeDictionary)
 		{
 			if (shiftList == null) return null;
 			if (!shiftList.Any()) return shiftList;
@@ -33,8 +34,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 			var resultingTimes = contractTimes.Select(x => x.Key).ToArray();
 			
 			//hämta önskad skiftlängd
-			TimeSpan shiftLength = _desiredShiftLengthCalculator.FindAverageLength(workShiftMinMaxCalculator, matrix,
-			                                                                       schedulingOptions);
+			TimeSpan shiftLength = _desiredShiftLengthCalculator.FindAverageLength(workShiftMinMaxCalculator, matrix, schedulingOptions, maxWorkTimeDictionary);
 			//välj närmaste från listan
 			IList<TimeSpan> resultingList = new List<TimeSpan>(resultingTimes);
 			while (resultingList.Count > 0)

@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
@@ -40,6 +41,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var anotherDefaultSetting = new PlanningGroupSettings();
 			anotherDefaultSetting.SetAsDefault();
 			Assert.Throws<ArgumentException>(() => planningGroup.AddSetting(anotherDefaultSetting));
+		}
+
+		[Test]
+		public void ShouldHaveCorrectDefaultPreferenceValue()
+		{
+			var planningGroup = new PlanningGroup();
+			planningGroup.Settings.PreferenceValue.Should().Be.EqualTo(new Percent(0.8));
 		}
 	}
 }

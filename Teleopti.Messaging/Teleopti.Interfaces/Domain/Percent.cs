@@ -59,7 +59,12 @@ namespace Teleopti.Interfaces.Domain
             return _value.ToString("P0", CultureInfo.CurrentCulture);
         }
 
-        #region Equals and GetHashCode stuff
+		public static Percent Zero
+		{
+			get { return new Percent(0); }
+		}
+
+		#region Equals and GetHashCode stuff
         /// <summary>
         /// Implements the operator ==.
         /// </summary>

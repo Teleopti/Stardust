@@ -25,9 +25,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 		/// Gets the protection offered (if any) by this binding element.
 		/// </summary>
 		/// <value><see cref="MessageProtections.TamperProtection"/></value>
-		public MessageProtections Protection {
-			get { return MessageProtections.TamperProtection; }
-		}
+		public MessageProtections Protection => MessageProtections.TamperProtection;
 
 		/// <summary>
 		/// Gets or sets the channel that this binding element belongs to.
@@ -39,9 +37,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 		/// <summary>
 		/// Gets a value indicating whether this binding element is on a Provider channel.
 		/// </summary>
-		protected virtual bool IsOnProvider {
-			get { return false; }
-		}
+		protected virtual bool IsOnProvider => false;
 
 		#region IChannelBindingElement Methods
 
@@ -71,8 +67,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 		/// NOT be processed.
 		/// </exception>
 		public MessageProtections? ProcessIncomingMessage(IProtocolMessage message) {
-			var signedMessage = message as ITamperResistantOpenIdMessage;
-			if (signedMessage != null) {
+			if (message is ITamperResistantOpenIdMessage signedMessage) {
 				Logger.Bindings.DebugFormat("Verifying incoming {0} message signature of: {1}", message.GetType().Name, signedMessage.Signature);
 				MessageProtections protectionsApplied = MessageProtections.TamperProtection;
 

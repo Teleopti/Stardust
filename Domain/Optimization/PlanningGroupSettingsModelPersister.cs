@@ -31,6 +31,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var setting = planningGroup.Settings.Single(x => x.Id == model.Id);
 				setProperties(setting, model);
 			}
+
+			planningGroup.SetGlobalValues(new Percent(model.PreferencePercent / 100d));
 		}
 
 		public void Delete(Guid id)

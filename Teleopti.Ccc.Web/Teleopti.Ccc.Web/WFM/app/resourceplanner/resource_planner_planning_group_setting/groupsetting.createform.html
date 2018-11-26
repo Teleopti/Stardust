@@ -32,6 +32,12 @@
 								<p class="text-danger" ng-show="!vm.isValidName()" translate> NameRequired </p>
 							</div>
 						</div>
+						<div class="con-flex" ng-if="vm.default">
+							<div class="form-input-wrap">
+								<label for="preferencePercent" translate>PreferenceFulfillmentPercentColon</label>
+								<input id="preferencePercent" type="number" ng-model="vm.settingInfo.PreferencePercent" placeholder="Preference Percentage" min="0" max="100" step="10"/>
+							</div>
+						</div>
 						<div class="con-flex">
 							<div class="form-input-wrap" ng-hide="vm.default">
 								<label for="autocomplete-form" translate>Filter:</label>

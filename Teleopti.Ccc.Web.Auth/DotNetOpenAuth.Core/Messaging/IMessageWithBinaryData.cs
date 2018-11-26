@@ -54,9 +54,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <summary>
 		/// Gets a value indicating whether this message should be sent as multi-part POST.
 		/// </summary>
-		bool IMessageWithBinaryData.SendAsMultipart {
-			get { throw new NotImplementedException(); }
-		}
+		bool IMessageWithBinaryData.SendAsMultipart => throw new NotImplementedException();
 
 		#endregion
 
@@ -69,11 +67,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <remarks>
 		/// Implementations of this interface should ensure that this property never returns null.
 		/// </remarks>
-		Version IMessage.Version {
-			get {
-				return default(Version); // dummy return
-			}
-		}
+		Version IMessage.Version => default(Version);
 
 		/// <summary>
 		/// Gets the extra, non-standard Protocol parameters included in the message.
@@ -82,11 +76,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <remarks>
 		/// Implementations of this interface should ensure that this property never returns null.
 		/// </remarks>
-		IDictionary<string, string> IMessage.ExtraData {
-			get {
-				return default(IDictionary<string, string>);
-			}
-		}
+		IDictionary<string, string> IMessage.ExtraData => default(IDictionary<string, string>);
 
 		#endregion
 
@@ -100,16 +90,12 @@ namespace DotNetOpenAuth.Messaging {
 		/// the GET with a simple 301 Redirect, and the POST with an HTML form in the response with javascript
 		/// to automate submission.
 		/// </remarks>
-		HttpDeliveryMethods IDirectedProtocolMessage.HttpMethods {
-			get { throw new NotImplementedException(); }
-		}
+		HttpDeliveryMethods IDirectedProtocolMessage.HttpMethods => throw new NotImplementedException();
 
 		/// <summary>
 		/// Gets the URL of the intended receiver of this message.
 		/// </summary>
-		Uri IDirectedProtocolMessage.Recipient {
-			get { throw new NotImplementedException(); }
-		}
+		Uri IDirectedProtocolMessage.Recipient => throw new NotImplementedException();
 
 		#endregion
 
@@ -118,16 +104,12 @@ namespace DotNetOpenAuth.Messaging {
 		/// <summary>
 		/// Gets the level of protection this message requires.
 		/// </summary>
-		MessageProtections IProtocolMessage.RequiredProtection {
-			get { throw new NotImplementedException(); }
-		}
+		MessageProtections IProtocolMessage.RequiredProtection => throw new NotImplementedException();
 
 		/// <summary>
 		/// Gets a value indicating whether this is a direct or indirect message.
 		/// </summary>
-		MessageTransport IProtocolMessage.Transport {
-			get { throw new NotImplementedException(); }
-		}
+		MessageTransport IProtocolMessage.Transport => throw new NotImplementedException();
 
 		#endregion
 

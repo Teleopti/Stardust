@@ -99,11 +99,6 @@ namespace DotNetOpenAuth.OpenId.Provider {
 	/// </summary>
 	[ContractClassFor(typeof(IAuthenticationRequest))]
 	internal abstract class IAuthenticationRequestContract : IAuthenticationRequest {
-		/// <summary>
-		/// Initializes a new instance of the <see cref="IAuthenticationRequestContract"/> class.
-		/// </summary>
-		protected IAuthenticationRequestContract() {
-		}
 
 		#region IAuthenticationRequest Properties
 
@@ -111,9 +106,7 @@ namespace DotNetOpenAuth.OpenId.Provider {
 		/// Gets a value indicating whether the Provider should help the user
 		/// select a Claimed Identifier to send back to the relying party.
 		/// </summary>
-		bool IAuthenticationRequest.IsDirectedIdentity {
-			get { throw new NotImplementedException(); }
-		}
+		bool IAuthenticationRequest.IsDirectedIdentity => throw new NotImplementedException();
 
 		/// <summary>
 		/// Gets a value indicating whether the requesting Relying Party is using a delegated URL.
@@ -125,9 +118,7 @@ namespace DotNetOpenAuth.OpenId.Provider {
 		/// A relying party implementing only OpenID 1.x may use delegation and this property will
 		/// return false anyway.
 		/// </remarks>
-		bool IAuthenticationRequest.IsDelegatedIdentifier {
-			get { throw new NotImplementedException(); }
-		}
+		bool IAuthenticationRequest.IsDelegatedIdentifier => throw new NotImplementedException();
 
 		/// <summary>
 		/// Gets or sets the Local Identifier to this OpenID Provider of the user attempting
@@ -201,25 +192,19 @@ namespace DotNetOpenAuth.OpenId.Provider {
 		/// <summary>
 		/// Gets the version of OpenID being used by the relying party that sent the request.
 		/// </summary>
-		ProtocolVersion IHostProcessedRequest.RelyingPartyVersion {
-			get { throw new NotImplementedException(); }
-		}
+		ProtocolVersion IHostProcessedRequest.RelyingPartyVersion => throw new NotImplementedException();
 
 		/// <summary>
 		/// Gets the URL the consumer site claims to use as its 'base' address.
 		/// </summary>
-		Realm IHostProcessedRequest.Realm {
-			get { throw new NotImplementedException(); }
-		}
+		Realm IHostProcessedRequest.Realm => throw new NotImplementedException();
 
 		/// <summary>
 		/// Gets a value indicating whether the consumer demands an immediate response.
 		/// If false, the consumer is willing to wait for the identity provider
 		/// to authenticate the user.
 		/// </summary>
-		bool IHostProcessedRequest.Immediate {
-			get { throw new NotImplementedException(); }
-		}
+		bool IHostProcessedRequest.Immediate => throw new NotImplementedException();
 
 		/// <summary>
 		/// Gets or sets the provider endpoint claimed in the positive assertion.
@@ -250,9 +235,7 @@ namespace DotNetOpenAuth.OpenId.Provider {
 		/// This property returns false if there are properties that must be set on this
 		/// request instance before the response can be sent.
 		/// </remarks>
-		bool IRequest.IsResponseReady {
-			get { throw new NotImplementedException(); }
-		}
+		bool IRequest.IsResponseReady => throw new NotImplementedException();
 
 		/// <summary>
 		/// Gets or sets the security settings that apply to this request.

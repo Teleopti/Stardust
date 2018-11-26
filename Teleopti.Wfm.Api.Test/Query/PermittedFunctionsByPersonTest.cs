@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -9,10 +10,12 @@ using SharpTestsEx;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Wfm.Api.Test.Query
 {
 	[ApiTest]
+	[LoggedOnAppDomain]
 	public class PermittedFunctionsByPersonTest
 	{
 		public IApiHttpClient Client;
@@ -20,7 +23,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 		public FakeApplicationRoleRepository ApplicationRoleRepository;
 
 		[Test]
-		public void ShouldGetPermissionByPerson()
+		public async Task ShouldGetPermissionByPerson()
 		{
 			Client.Authorize();
 
@@ -32,10 +35,10 @@ namespace Teleopti.Wfm.Api.Test.Query
 			person.PermissionInformation.AddApplicationRole(applicationRole);
 			PersonRepository.Add(person);
 
-			var result = Client.PostAsync("/query/ApplicationFunction/PermissionByPerson",
+			var result = await Client.PostAsync("/query/ApplicationFunction/PermissionByPerson",
 				new StringContent(JsonConvert.SerializeObject(new {PersonId = person.Id}), Encoding.UTF8,
 					"application/json"));
-			var obj = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Result"].Single();
+			var obj = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync())["Result"].Single();
 
 			obj["Id"].ToObject<Guid>().Should().Be.EqualTo(applicationFunction.Id.Value);
 			obj["FunctionCode"].Value<string>().Should().Be.EqualTo(applicationFunction.FunctionCode);

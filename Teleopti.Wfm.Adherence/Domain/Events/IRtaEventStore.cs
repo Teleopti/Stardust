@@ -28,7 +28,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 
 	public interface IRtaEventStoreReader
 	{
-		IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period);
+		IEnumerable<IEvent> Load(Guid personId, DateTime @from, DateTime to);
 		IEnumerable<IEvent> Load(Guid personId, DateOnly date);
 		[RemoveMeWithToggle(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306)]
 		IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp, DeadLockVictim deadLockVictim);

@@ -30,22 +30,11 @@ namespace DotNetOpenAuth.OpenId.Messages {
 		[MessagePart("ns", IsRequired = true, AllowEmpty = false, MinVersion = "2.0")]
 #pragma warning disable 0414 // read by reflection
 		private readonly string OpenIdNamespace = Protocol.OpenId2Namespace;
-#pragma warning restore 0414
-
-		/// <summary>
-		/// Backing store for the <see cref="OriginatingRequest"/> properties.
-		/// </summary>
-		private IDirectedProtocolMessage originatingRequest;
-
-		/// <summary>
-		/// Backing store for the <see cref="Incoming"/> properties.
-		/// </summary>
-		private bool incoming;
 
 		/// <summary>
 		/// The dictionary of parameters that are not part of the OpenID specification.
 		/// </summary>
-		private Dictionary<string, string> extraData = new Dictionary<string, string>();
+		private readonly Dictionary<string, string> extraData = new Dictionary<string, string>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DirectResponseBase"/> class.
@@ -56,7 +45,7 @@ namespace DotNetOpenAuth.OpenId.Messages {
 			Requires.NotNull(responseVersion, "responseVersion");
 
 			this.Version = responseVersion;
-			this.originatingRequest = originatingRequest;
+			this.OriginatingRequest = originatingRequest;
 		}
 
 		#region IProtocolMessage Properties
@@ -65,30 +54,24 @@ namespace DotNetOpenAuth.OpenId.Messages {
 		/// Gets the version of the protocol this message is prepared to implement.
 		/// </summary>
 		/// <value>Version 2.0</value>
-		public Version Version { get; private set; }
+		public Version Version { get; }
 
 		/// <summary>
 		/// Gets the level of protection this message requires.
 		/// </summary>
 		/// <value><see cref="MessageProtections.None"/></value>
-		public MessageProtections RequiredProtection {
-			get { return MessageProtections.None; }
-		}
+		public MessageProtections RequiredProtection { get; } = MessageProtections.None;
 
 		/// <summary>
 		/// Gets a value indicating whether this is a direct or indirect message.
 		/// </summary>
 		/// <value><see cref="MessageTransport.Direct"/></value>
-		public MessageTransport Transport {
-			get { return MessageTransport.Direct; }
-		}
+		public MessageTransport Transport { get; } = MessageTransport.Direct;
 
 		/// <summary>
 		/// Gets the extra, non-OAuth parameters included in the message.
 		/// </summary>
-		public IDictionary<string, string> ExtraData {
-			get { return this.extraData; }
-		}
+		public IDictionary<string, string> ExtraData => this.extraData;
 
 		#endregion
 
@@ -100,48 +83,40 @@ namespace DotNetOpenAuth.OpenId.Messages {
 		/// <remarks>
 		/// This property may be null if the request message was undecipherable.
 		/// </remarks>
-		IDirectedProtocolMessage IDirectResponseProtocolMessage.OriginatingRequest {
-			get { return this.originatingRequest; }
-		}
+		IDirectedProtocolMessage IDirectResponseProtocolMessage.OriginatingRequest => this.OriginatingRequest;
 
 		#endregion
 
-		/// <summary>
-		/// Gets a value indicating whether this message was deserialized as an incoming message.
-		/// </summary>
-		protected internal bool Incoming {
-			get { return this.incoming; }
-		}
+        /// <summary>
+        /// Gets a value indicating whether this message was deserialized as an incoming message.
+        /// </summary>
+        protected internal bool Incoming { get; private set; }
+
+        /// <summary>
+        /// Gets the protocol used by this message.
+        /// </summary>
+        protected Protocol Protocol => Protocol.Lookup(this.Version);
 
 		/// <summary>
-		/// Gets the protocol used by this message.
-		/// </summary>
-		protected Protocol Protocol {
-			get { return Protocol.Lookup(this.Version); }
-		}
+        /// Gets the originating request message that caused this response to be formed.
+        /// </summary>
+        protected IDirectedProtocolMessage OriginatingRequest { get; }
 
-		/// <summary>
-		/// Gets the originating request message that caused this response to be formed.
-		/// </summary>
-		protected IDirectedProtocolMessage OriginatingRequest {
-			get { return this.originatingRequest; }
-		}
+        #region IProtocolMessage methods
 
-		#region IProtocolMessage methods
-
-		/// <summary>
-		/// Checks the message state for conformity to the protocol specification
-		/// and throws an exception if the message is invalid.
-		/// </summary>
-		/// <remarks>
-		/// 	<para>Some messages have required fields, or combinations of fields that must relate to each other
-		/// in specialized ways.  After deserializing a message, this method checks the state of the
-		/// message to see if it conforms to the protocol.</para>
-		/// 	<para>Note that this property should <i>not</i> check signatures or perform any state checks
-		/// outside this scope of this particular message.</para>
-		/// </remarks>
-		/// <exception cref="ProtocolException">Thrown if the message is invalid.</exception>
-		public virtual void EnsureValidMessage() {
+        /// <summary>
+        /// Checks the message state for conformity to the protocol specification
+        /// and throws an exception if the message is invalid.
+        /// </summary>
+        /// <remarks>
+        /// 	<para>Some messages have required fields, or combinations of fields that must relate to each other
+        /// in specialized ways.  After deserializing a message, this method checks the state of the
+        /// message to see if it conforms to the protocol.</para>
+        /// 	<para>Note that this property should <i>not</i> check signatures or perform any state checks
+        /// outside this scope of this particular message.</para>
+        /// </remarks>
+        /// <exception cref="ProtocolException">Thrown if the message is invalid.</exception>
+        public virtual void EnsureValidMessage() {
 		}
 
 		#endregion
@@ -150,7 +125,7 @@ namespace DotNetOpenAuth.OpenId.Messages {
 		/// Sets a flag indicating that this message is received (as opposed to sent).
 		/// </summary>
 		internal void SetAsIncoming() {
-			this.incoming = true;
+			this.Incoming = true;
 		}
 	}
 }

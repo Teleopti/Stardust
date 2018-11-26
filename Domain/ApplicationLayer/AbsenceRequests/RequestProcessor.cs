@@ -259,6 +259,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 							var scheduledStaff =
 								scheduledStaffingPerSkill[skill.Id.Value].FirstOrDefault(x => x.StartDateTime == skillStaffPeriod.Period.StartDateTime);
 							skillStaffPeriod.SetCalculatedResource65(0);
+							if(scheduledStaff == null)
+								continue;
 							if (scheduledStaff.StaffingLevel > 0)
 								skillStaffPeriod.SetCalculatedResource65(scheduledStaff.StaffingLevel);
 						}

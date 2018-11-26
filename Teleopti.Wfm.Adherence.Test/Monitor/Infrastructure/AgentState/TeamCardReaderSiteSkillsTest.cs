@@ -194,9 +194,9 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			Now.Is("2016-11-21 8:10");
 			Database
 				.WithPerson("agent1")
-				.WithPersonPeriod("2016-01-01".Date())
+				.WithPersonPeriod("2016-01-01")
 				.WithSkill("email")
-				.WithPersonPeriod("2016-11-20".Date())
+				.WithPersonPeriod("2016-11-20")
 				.WithSkill("phone")
 				;
 			var siteId = Guid.NewGuid();
@@ -225,9 +225,9 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			Now.Is("2016-11-21 8:10");
 			Database
 				.WithPerson("agent1")
-				.WithPersonPeriod("2016-01-01".Date())
+				.WithPersonPeriod("2016-01-01")
 				.WithSkill("email")
-				.WithPersonPeriod("2017-01-01".Date())
+				.WithPersonPeriod("2017-01-01")
 				.WithSkill("phone")
 				;
 			var siteId = Guid.NewGuid();

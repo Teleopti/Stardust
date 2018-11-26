@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -12,11 +13,13 @@ using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Api.Test.Query
 {
 	[ApiTest]
+	[LoggedOnAppDomain]
 	public class AbsenceRequestRulesByPersonIdTest
 	{
 		public IApiHttpClient Client;
@@ -25,7 +28,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 		public MutableNow Now;
 
 		[Test]
-		public void ShouldGetSingleRuleForAbsenceRequest()
+		public async Task ShouldGetSingleRuleForAbsenceRequest()
 		{
 			Now.Is(new DateTime(2018,8,2,13,0,0,DateTimeKind.Utc));
 
@@ -44,13 +47,13 @@ namespace Teleopti.Wfm.Api.Test.Query
 			});
 			PersonRepository.Has(person);
 
-			var result = Client.PostAsync("/query/AbsenceRequestRule/AbsenceRequestRulesByPersonId",
+			var result = await Client.PostAsync("/query/AbsenceRequestRule/AbsenceRequestRulesByPersonId",
 				new StringContent(
 					JsonConvert.SerializeObject(new
 					{
 						PersonId = person.Id, StartDate = new DateTime(2018, 8, 2), EndDate = new DateTime(2018, 8, 3)
 					}), Encoding.UTF8, "application/json"));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
 			resultDto["Result"].Count().Should().Be.EqualTo(1);
 			resultDto["Result"].First()["AbsenceId"].ToObject<Guid>().Should().Be.EqualTo(absence.Id);
@@ -62,7 +65,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 		}
 
 		[Test]
-		public void ShouldHandleNoPerson()
+		public async Task ShouldHandleNoPerson()
 		{
 			Now.Is(new DateTime(2018, 8, 2, 13, 0, 0, DateTimeKind.Utc));
 
@@ -71,7 +74,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 			absence.Requestable = true;
 			AbsenceRepository.Add(absence);
 			
-			var result = Client.PostAsync("/query/AbsenceRequestRule/AbsenceRequestRulesByPersonId",
+			var result = await Client.PostAsync("/query/AbsenceRequestRule/AbsenceRequestRulesByPersonId",
 				new StringContent(
 					JsonConvert.SerializeObject(new
 					{
@@ -79,13 +82,13 @@ namespace Teleopti.Wfm.Api.Test.Query
 						StartDate = new DateTime(2018, 8, 2),
 						EndDate = new DateTime(2018, 8, 3)
 					}), Encoding.UTF8, "application/json"));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
 			resultDto["Result"].Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
-		public void ShouldHandleNoWorkflowControlSet()
+		public async Task ShouldHandleNoWorkflowControlSet()
 		{
 			Now.Is(new DateTime(2018, 8, 2, 13, 0, 0, DateTimeKind.Utc));
 
@@ -96,7 +99,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 			var person = PersonFactory.CreatePerson().WithId();
 			PersonRepository.Has(person);
 
-			var result = Client.PostAsync("/query/AbsenceRequestRule/AbsenceRequestRulesByPersonId",
+			var result = await Client.PostAsync("/query/AbsenceRequestRule/AbsenceRequestRulesByPersonId",
 				new StringContent(
 					JsonConvert.SerializeObject(new
 					{
@@ -104,7 +107,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 						StartDate = new DateTime(2018, 8, 2),
 						EndDate = new DateTime(2018, 8, 3)
 					}), Encoding.UTF8, "application/json"));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
 			resultDto["Result"].Count().Should().Be.EqualTo(0);
 		}

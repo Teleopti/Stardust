@@ -37,12 +37,6 @@ namespace Org.Mentalis.Security.Cryptography {
 		/// this method does not ensure that the selected prime offers an adequate security level.
 		/// </summary>
 		Random,
-		/*
-		/// <summary>
-		/// Returns dynamically generated values for P and G. P is a Sophie Germain prime, which has some interesting
-		/// security features when used with Diffie Hellman.
-		/// </summary>
-		SophieGermain,*/
 		/// <summary>
 		/// Returns values for P and G that are hard coded in this library. Contrary to what your intuition may tell you,
 		/// using these hard coded values is perfectly safe.

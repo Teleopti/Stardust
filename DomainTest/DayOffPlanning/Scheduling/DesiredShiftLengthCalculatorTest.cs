@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 			using(_mocks.Record())
 			{
 				Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
-				Expect.Call(_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(_matrix, _schedulingOptions)).Return(minMaxDic);
+				Expect.Call(_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(_matrix, _schedulingOptions, null)).Return(minMaxDic);
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(new DateOnly(), new DateOnly().AddDays(1))).
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 
 			using(_mocks.Playback())
 			{
-				result = _target.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions);
+				result = _target.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions, null);
 			}
 
 			Assert.AreEqual(new TimeSpan(8, 0, 0), result);
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 			using (_mocks.Record())
 			{
 				Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
-				Expect.Call(_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(_matrix, _schedulingOptions)).Return(minMaxDic);
+				Expect.Call(_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(_matrix, _schedulingOptions, null)).Return(minMaxDic);
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(new DateOnly(), new DateOnly().AddDays(1))).
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 
 			using (_mocks.Playback())
 			{
-				result = _target.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions);
+				result = _target.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions, null);
 			}
 
 			Assert.AreEqual(new TimeSpan(9, 0, 0), result);
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 			using (_mocks.Record())
 			{
 				Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
-				Expect.Call(_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(_matrix, _schedulingOptions)).Return(minMaxDic);
+				Expect.Call(_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(_matrix, _schedulingOptions, null)).Return(minMaxDic);
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(new DateOnly(), new DateOnly().AddDays(1))).
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 
 			using (_mocks.Playback())
 			{
-				result = _target.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions);
+				result = _target.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions, null);
 			}
 
 			Assert.AreEqual(new TimeSpan(7, 0, 0), result);
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 			using (_mocks.Record())
 			{
 				Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
-				Expect.Call(_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(_matrix, _schedulingOptions)).Return(minMaxDic);
+				Expect.Call(_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(_matrix, _schedulingOptions, null)).Return(minMaxDic);
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(new DateOnly(), new DateOnly().AddDays(1))).
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 
 			using (_mocks.Playback())
 			{
-				result = _target.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions);
+				result = _target.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions, null);
 			}
 
 			Assert.AreEqual(new TimeSpan(9, 0, 0), result);

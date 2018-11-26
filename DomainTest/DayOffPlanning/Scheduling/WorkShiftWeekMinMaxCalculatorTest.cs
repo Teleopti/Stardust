@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
             IPossibleMinMaxWorkShiftLengthExtractor extractor = new PossibleMinMaxWorkShiftLengthExtractorForThisTest();
             for (int i = 0; i < 7; i++)
             {
-                ret.Add(_startDate.AddDays(i), extractor.PossibleLengthsForDate(_startDate.AddDays(i), _matrix, _schedulingOptions));
+                ret.Add(_startDate.AddDays(i), extractor.PossibleLengthsForDate(_startDate.AddDays(i), _matrix, _schedulingOptions, null));
             }
 
             return ret;
@@ -356,7 +356,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 
     public class PossibleMinMaxWorkShiftLengthExtractorForThisTest : IPossibleMinMaxWorkShiftLengthExtractor
     {
-        public MinMax<TimeSpan> PossibleLengthsForDate(DateOnly dateOnly, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
+        public MinMax<TimeSpan> PossibleLengthsForDate(DateOnly dateOnly, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, IDictionary<DateOnly, TimeSpan> maxWorkTimeDictionary)
         {
             if (dateOnly.DayOfWeek == DayOfWeek.Saturday || dateOnly.DayOfWeek == DayOfWeek.Sunday)
                 return new MinMax<TimeSpan>(TimeSpan.FromHours(9), TimeSpan.FromHours(9));

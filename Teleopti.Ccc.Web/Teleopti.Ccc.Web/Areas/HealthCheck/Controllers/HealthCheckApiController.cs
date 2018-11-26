@@ -11,7 +11,6 @@ using Microsoft.VisualBasic.Devices;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
@@ -37,16 +36,12 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		private readonly HangfireUtilities _hangfireUtilities;
 		private readonly IReadModelValidator _readModelValidator;
 		private readonly IStardustRepository _stardustRepository;
-		private readonly IncomingTrafficViewModelCreator _incomingTrafficViewModelCreator;
-
 		private readonly IIntradayIncomingTrafficApplicationService _intradayIncomingTrafficApplicationService;
-		private readonly IToggleManager _toggleManager;
 
 		public HealthCheckApiController(IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository,
 												  IStardustSender stardustSender, HangfireUtilities hangfireUtilities, IReadModelValidator readModelValidator,
-												  IStardustRepository stardustRepository, IncomingTrafficViewModelCreator incomingTrafficViewModelCreator,
-			IIntradayIncomingTrafficApplicationService intradayIncomingTrafficApplicationService,
-			IToggleManager toggleManager)
+												  IStardustRepository stardustRepository,
+			IIntradayIncomingTrafficApplicationService intradayIncomingTrafficApplicationService)
 		{
 			_etlJobStatusRepository = etlJobStatusRepository;
 			_etlLogObjectRepository = etlLogObjectRepository;
@@ -54,20 +49,14 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 			_hangfireUtilities = hangfireUtilities;
 			_readModelValidator = readModelValidator;
 			_stardustRepository = stardustRepository;
-			_incomingTrafficViewModelCreator = incomingTrafficViewModelCreator;
-
 			_intradayIncomingTrafficApplicationService = intradayIncomingTrafficApplicationService ?? throw new ArgumentNullException(nameof(intradayIncomingTrafficApplicationService));
-			_toggleManager = toggleManager ?? throw new ArgumentNullException(nameof(toggleManager));
 		}
 
 		[HttpGet, UnitOfWork, Route("api/HealthCheck/IncomingTrafficToday/{skillId}")]
 		public virtual IHttpActionResult IncomingTrafficToday(Guid skillId)
 		{
 			var incomingTrafficDataSeries = new IntradayIncomingDataSeries();
-			if (_toggleManager.IsEnabled(Toggles.WFM_Intraday_Refactoring_74652))
-				incomingTrafficDataSeries = _intradayIncomingTrafficApplicationService.GenerateIncomingTrafficViewModel(new[] { skillId }, 0).DataSeries;
-			else
-				incomingTrafficDataSeries = _incomingTrafficViewModelCreator.Load_old(new[] { skillId }, 0).DataSeries;
+			incomingTrafficDataSeries = _intradayIncomingTrafficApplicationService.GenerateIncomingTrafficViewModel(new[] { skillId }, 0).DataSeries;
 
 			var output = incomingTrafficDataSeries.Time.Select((t, i) => new IncomingTrafficModel
 			{

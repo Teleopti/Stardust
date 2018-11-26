@@ -32,13 +32,13 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			_now = floorToSeconds(now);
 		}
 
-		public DateTimePeriod Period() => _period;
+		public DateTimePeriod DisplayPeriod() => _period;
 		public IEnumerable<HistoricalChangeModel> Changes() => _changes;
 		public IEnumerable<AdherencePeriod> RecordedOutOfAdherences() => _recordedOutOfAdherences.ToArray();
 		public IEnumerable<ApprovedPeriod> ApprovedPeriods() => _approvedPeriods;
 		public IEnumerable<AdherencePeriod> OutOfAdherences() => _outOfAdherences;
 		public int? Percentage() => _adherencePercentage;
-		public int? SecondsInAherence() => _secondsInAdherence;
+		public int? SecondsInAdherence() => _secondsInAdherence;
 		public int? SecondsOutOfAdherence() => _secondsOutOfAdherence;
 
 		public void Apply(PersonShiftStartEvent @event)

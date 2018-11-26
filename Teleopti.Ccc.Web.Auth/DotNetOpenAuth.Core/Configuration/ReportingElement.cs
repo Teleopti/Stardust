@@ -63,12 +63,6 @@ namespace DotNetOpenAuth.Configuration {
 #endif
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ReportingElement"/> class.
-		/// </summary>
-		internal ReportingElement() {
-		}
-
-		/// <summary>
 		/// Gets the configuration section from the .config file.
 		/// </summary>
 		public static ReportingElement Configuration {

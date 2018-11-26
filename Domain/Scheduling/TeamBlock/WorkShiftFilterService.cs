@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly DisallowedShiftProjectionCachesFilter _disallowedShiftProjectionCachesFilter;
 		private readonly ActivityRequiresSkillProjectionFilter _activityRequiresSkillProjectionFilter;
 		private readonly OpenHoursFilter _openHoursFilter;
+		private readonly IMaxWorkTimeFullWeekSkillExtractor _maxWorkTimeFullWeekSkillExtractor;
 
 		public WorkShiftFilterService(ActivityRestrictionsShiftFilter activityRestrictionsShiftFilter,
 			BusinessRulesShiftFilter businessRulesShiftFilter,
@@ -52,7 +53,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IRuleSetPersonalSkillsActivityFilter ruleSetPersonalSkillsActivityFilter,
 			DisallowedShiftProjectionCachesFilter disallowedShiftProjectionCachesFilter,
 			ActivityRequiresSkillProjectionFilter activityRequiresSkillProjectionFilter,
-			OpenHoursFilter openHoursFilter)
+			OpenHoursFilter openHoursFilter,
+			IMaxWorkTimeFullWeekSkillExtractor maxWorkTimeFullWeekSkillExtractor)
 		{
 			_activityRestrictionsShiftFilter = activityRestrictionsShiftFilter;
 			_businessRulesShiftFilter = businessRulesShiftFilter;
@@ -75,6 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_disallowedShiftProjectionCachesFilter = disallowedShiftProjectionCachesFilter;
 			_activityRequiresSkillProjectionFilter = activityRequiresSkillProjectionFilter;
 			_openHoursFilter = openHoursFilter;
+			_maxWorkTimeFullWeekSkillExtractor = maxWorkTimeFullWeekSkillExtractor;
 		}
 
 		public IList<ShiftProjectionCache> FilterForRoleModel(IGroupPersonSkillAggregator groupPersonSkillAggregator, IScheduleDictionary schedules, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
@@ -105,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(dateOnly, person.PermissionInformation.DefaultTimeZone());
 			var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnlyAsPeriod, filteredRuleSetList, false);
 
-			shiftList = runFiltersForRoleModel(schedules, dateOnly, effectiveRestriction, schedulingOptions, shiftList, person, matrixList, isSameOpenHoursInBlock);
+			shiftList = runFiltersForRoleModel(schedules, dateOnly, effectiveRestriction, schedulingOptions, shiftList, person, matrixList, isSameOpenHoursInBlock, teamBlockInfo, skillDays);
 			shiftList = runPersonalShiftFilterForEachMember(schedules, shiftList, teamBlockInfo);
 			if(schedulingOptions.IsClassic() ||schedulingOptions.UseBlock && schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.BetweenDayOff && !schedulingOptions.BlockSameShiftCategory)		
 				shiftList = _businessRulesShiftFilter.Filter(schedules, person, shiftList, dateOnly);
@@ -147,7 +150,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(dateOnly, person.PermissionInformation.DefaultTimeZone());
 			var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnlyAsPeriod, filteredRuleSetList, false);
 
-			shiftList = runFilters(schedules, dateOnly, effectiveRestriction, schedulingOptions, shiftList, person, matrixList, true);
+			shiftList = runFilters(schedules, dateOnly, effectiveRestriction, schedulingOptions, shiftList, person, matrixList, true, teamBlockInfo, skillDays);
 
 			shiftList = _disallowedShiftProjectionCachesFilter.Filter(schedulingOptions.NotAllowedShiftProjectionCaches, shiftList);
 
@@ -164,7 +167,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private IList<ShiftProjectionCache> runFiltersForRoleModel(IScheduleDictionary schedules, DateOnly dateOnly, IEffectiveRestriction effectiveRestriction,
 														SchedulingOptions schedulingOptions,
 														IList<ShiftProjectionCache> shiftList,
-														IPerson person, IList<IScheduleMatrixPro> matrixList, bool sameOpenHours)
+														IPerson person, IList<IScheduleMatrixPro> matrixList, bool sameOpenHours,
+														ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays)
 		{
 			shiftList = _shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, shiftList);
 			shiftList = _timeLimitsRestrictionShiftFilter.Filter(dateOnly, person, shiftList, effectiveRestriction);
@@ -175,7 +179,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	            var matrixForPerson = matrixList.FirstOrDefault(scheduleMatrixPro => scheduleMatrixPro.Person.Equals(person));
 	            if (matrixForPerson != null)
 	            {
-					shiftList = _shiftLengthDecider.FilterList(shiftList, _minMaxCalculator, matrixForPerson, schedulingOptions);
+					var maxWorkTimeDictionary = _maxWorkTimeFullWeekSkillExtractor.Extract(matrixForPerson, teamBlockInfo, skillDays);
+					shiftList = _shiftLengthDecider.FilterList(shiftList, _minMaxCalculator, matrixForPerson, schedulingOptions, maxWorkTimeDictionary);
 				}
 			}
 
@@ -204,10 +209,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		}
 
 		private IList<ShiftProjectionCache> runFilters(IScheduleDictionary schedules, DateOnly dateOnly, IEffectiveRestriction effectiveRestriction,
-								 SchedulingOptions schedulingOptions, IList<ShiftProjectionCache> shiftList,
-								 IPerson person, IList<IScheduleMatrixPro> matrixList, bool sameContractTime)
+									SchedulingOptions schedulingOptions, IList<ShiftProjectionCache> shiftList,
+									IPerson person, IList<IScheduleMatrixPro> matrixList, bool sameContractTime,
+									ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays)
 		{		
-			shiftList = runFiltersForRoleModel(schedules, dateOnly, effectiveRestriction, schedulingOptions, shiftList, person, matrixList,sameContractTime );
+			shiftList = runFiltersForRoleModel(schedules, dateOnly, effectiveRestriction, schedulingOptions, shiftList, person, matrixList,sameContractTime,teamBlockInfo, skillDays );
 			shiftList = _businessRulesShiftFilter.Filter(schedules, person, shiftList, dateOnly);
 			shiftList = _commonActivityFilter.Filter(shiftList, schedulingOptions, effectiveRestriction);
 			shiftList = _personalShiftsShiftFilter.Filter(schedules, dateOnly, person, shiftList);

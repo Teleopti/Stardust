@@ -70,6 +70,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	    /// </remarks>
 	    TimeSpan? CalculatedTargetTimeHolder(DateOnlyPeriod periodToCheck);
 
+		TimeSpan? CalculatedTargetTime(DateOnlyPeriod periodToCheck);
+
 	    /// <summary>
 	    /// Gets or sets the calculated target schedule days off. Used by the result columns in Scheduler.
 	    /// This field vill be set to null when Modify method is called.

@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	angular.module('skillGroupService', ['ngResource']).service('SkillGroupSvc', SkillGroupSvc);
+	angular.module('wfm.skillGroup').service('SkillGroupSvc', SkillGroupSvc);
 
 	SkillGroupSvc.$inject = ['$http'];
 

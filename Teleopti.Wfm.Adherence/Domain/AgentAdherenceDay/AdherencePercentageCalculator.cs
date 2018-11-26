@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 {
+	[RemoveMeWithToggle(Toggles.RTA_ReviewHistoricalAdherence_Domain_74770)]
 	public class AdherencePercentageCalculator
 	{
 		public int? Calculate(DateTimePeriod? shift, IEnumerable<DateTimePeriod> neutralPeriods, IEnumerable<DateTimePeriod> outPeriods, DateTime now)

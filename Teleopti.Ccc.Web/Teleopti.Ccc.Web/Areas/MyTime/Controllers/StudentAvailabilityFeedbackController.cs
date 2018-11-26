@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		public JsonResult FeedbackCompleted(StudentAvailabilityDayFeedbackViewModel model, Task task)
 		{
-			task.Wait();
+			task.GetAwaiter().GetResult();
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		public JsonResult PeriodFeedbackCompleted(StudentAvailabilityPeriodFeedbackViewModel model, Task task)
 		{
-			task.Wait();
+			task.GetAwaiter().GetResult();
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 	}

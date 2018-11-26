@@ -33,7 +33,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			if (person == null)
 				return Enumerable.Empty<IVisualLayer>();
 
-			var businessUnitId = person.Period(date)?.Team?.Site?.BusinessUnit?.Id;
+			var businessUnitId = person.Period(date.Date)?.Team?.Site?.BusinessUnit?.Id;
 			if (businessUnitId == null)
 				return Enumerable.Empty<IVisualLayer>();
 			var businessUnit = _businessUnits.Load(businessUnitId.GetValueOrDefault());
@@ -41,7 +41,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			if (scenario == null)
 				return Enumerable.Empty<IVisualLayer>();
 
-			var period = new DateOnlyPeriod(date, date);
+			var period = new DateOnlyPeriod(date.Date, date.Date);
 
 			var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 				new[] {person},
@@ -50,7 +50,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 				scenario);
 
 			return schedules[person]
-				.ScheduledDay(date)
+				.ScheduledDay(period.StartDate)
 				.ProjectionService()
 				.CreateProjection();
 		}

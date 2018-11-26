@@ -14,11 +14,6 @@ namespace DotNetOpenAuth.Configuration {
 	/// </summary>
 	[ContractVerification(true)]
 	internal class AssociationTypeCollection : ConfigurationElementCollection, IEnumerable<AssociationTypeElement> {
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AssociationTypeCollection"/> class.
-		/// </summary>
-		public AssociationTypeCollection() {
-		}
 
 		#region IEnumerable<AssociationTypeElement> Members
 

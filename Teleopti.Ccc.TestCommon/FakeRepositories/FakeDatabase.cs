@@ -1395,5 +1395,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_personRequests.Add(_personRequest);
 			return this;
 		}
+
+		public FakeDatabase WithAbsenceRequest(Guid personId, string date)
+		{
+			ensureExists(_absences, null, () => WithAbsence(null, "defaultAbsence", null));
+			_personRequest = new PersonRequestFactory().CreateAbsenceRequest(_absence,
+					date.Date().ToDateTimePeriod(TimeZoneInfo.Utc)).Parent as IPersonRequest;
+			_personRequest.SetId(Guid.NewGuid());
+			_personRequest.Person.SetId(personId);
+			_personRequests.Add(_personRequest);
+			return this;
+		}
 	}
 }

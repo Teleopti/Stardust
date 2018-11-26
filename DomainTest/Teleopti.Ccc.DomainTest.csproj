@@ -276,10 +276,6 @@
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobServiceTest.cs" />
     <Compile Include="Intraday\Domain\IntradayForecastingServiceTest.cs" />
     <Compile Include="Intraday\Domain\IntradayReforecastingServiceTest.cs" />
-    <Compile Include="Intraday\IncomingTrafficViewModelCreatorTest.cs" />
-    <Compile Include="Intraday\PerformanceViewModelCreatorTest.cs" />
-    <Compile Include="Intraday\StaffingViewModelCreatorEmailTest.cs" />
-    <Compile Include="Intraday\StaffingViewModelCreatorTest.cs" />
     <Compile Include="Intraday\StaffingViewModelCreatorTestHelper.cs" />
     <Compile Include="Intraday\TimeSeriesProviderTest.cs" />
     <Compile Include="Notification\ClickatellNotificationClientTest.cs" />
@@ -306,6 +302,7 @@
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCallbackDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationMinimumAgentsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationMinimumAgentsTest.cs" />
+    <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationPreferenceDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationPreferencesTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationRotationTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationShiftCategoryLimitationTest.cs" />
@@ -1543,7 +1540,6 @@
     <Compile Include="Staffing\ExportBpoFileTest.cs" />
     <Compile Include="Staffing\ExportForecastAndStaffingFileTest.cs" />
     <Compile Include="Staffing\ImportBpoFileTest.cs" />
-    <Compile Include="Staffing\RequiredStaffingProviderTest.cs" />
     <Compile Include="Staffing\ScheduledSTaffingVIewModelCreatorTest.cs" />
     <Compile Include="Staffing\TenantContextReaderServiceTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSettingsTest.cs" />

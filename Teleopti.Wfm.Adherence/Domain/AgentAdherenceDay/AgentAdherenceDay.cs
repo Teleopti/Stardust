@@ -106,7 +106,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 				.Select(x => shift.Value.Intersection(x).Value)
 				.ToArray();
 
-		public DateTimePeriod Period() => _period;
+		public DateTimePeriod DisplayPeriod() => _period;
 		public IEnumerable<HistoricalChangeModel> Changes() => _changes;
 
 		public IEnumerable<AdherencePeriod> RecordedOutOfAdherences() =>
@@ -124,7 +124,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 
 		public int? Percentage() => _percentage;
 		
-		public int? SecondsInAherence()
+		public int? SecondsInAdherence()
 		{
 			throw new NotImplementedException();
 		}

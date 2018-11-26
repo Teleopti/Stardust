@@ -32,8 +32,8 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 			var now = _now.UtcDateTime();
 			var agentNow = TimeZoneInfo.ConvertTimeFromUtc(now, person.PermissionInformation.DefaultTimeZone());
 			var agentDate = new DateOnly(agentNow);
-			
-			var period = new DateOnlyPeriod(agentDate.AddDays(-6), agentDate);
+
+			var period = new DateOnlyPeriod(agentDate.AddDays(-6).Date, agentDate.Date);
 			var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 				new[] {person},
 				new ScheduleDictionaryLoadOptions(false, false),
@@ -48,7 +48,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 				from projectedLayer in projection
 				select new
 				{
-					Date = scheduleDay.DateOnlyAsPeriod.DateOnly,
+					Date = new DateOnly(scheduleDay.DateOnlyAsPeriod.DateOnly.Date),
 					Activity = projectedLayer
 				};
 

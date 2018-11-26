@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -12,17 +13,18 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Wfm.Api.Test.Command
 {
 	[ApiTest]
+	[LoggedOnAppDomain]
 	public class AddScheduleChangesListenerTest
 	{
 		public IApiHttpClient Client;
 		public FakeGlobalSettingDataRepository GlobalSettingDataRepository;
 
 		[Test]
-		public void ShouldAddNewScheduleChangesListener()
+		public async Task ShouldAddNewScheduleChangesListener()
 		{
 			Client.Authorize();
 
-			var result = Client.PostAsync("/command/AddScheduleChangesListener",
+			var result = await Client.PostAsync("/command/AddScheduleChangesListener",
 				new StringContent(JsonConvert.SerializeObject(new
 				{
 					Name = "NameOfScheduleChangeListener",
@@ -30,7 +32,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 					DaysStartFromCurrentDate = -1,
 					DaysEndFromCurrentDate = 1
 				}), Encoding.UTF8, "application/json"));
-			result.Result.EnsureSuccessStatusCode();
+			result.EnsureSuccessStatusCode();
 
 			var persistedListener = GlobalSettingDataRepository
 				.FindValueByKey(ScheduleChangeSubscriptions.Key, new ScheduleChangeSubscriptions())
@@ -43,11 +45,11 @@ namespace Teleopti.Wfm.Api.Test.Command
 		}
 
 		[Test]
-		public void ShouldRejectIfInvalidUrl()
+		public async Task ShouldRejectIfInvalidUrl()
 		{
 			Client.Authorize();
 
-			var result = Client.PostAsync("/command/AddScheduleChangesListener",
+			var result = await Client.PostAsync("/command/AddScheduleChangesListener",
 				new StringContent(JsonConvert.SerializeObject(new
 				{
 					Name = "NameOfScheduleChangeListener",
@@ -55,7 +57,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 					DaysStartFromCurrentDate = -1,
 					DaysEndFromCurrentDate = 1
 				}), Encoding.UTF8, "application/json"));
-			JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Successful"]
+			JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync())["Successful"]
 				.Value<bool>().Should().Be.False();
 
 			GlobalSettingDataRepository
@@ -65,11 +67,11 @@ namespace Teleopti.Wfm.Api.Test.Command
 
 
 		[Test]
-		public void ShouldRejectIfEndDateIsLessThanStartDate()
+		public async Task ShouldRejectIfEndDateIsLessThanStartDate()
 		{
 			Client.Authorize();
 
-			var result = Client.PostAsync("/command/AddScheduleChangesListener",
+			var result = await Client.PostAsync("/command/AddScheduleChangesListener",
 				new StringContent(JsonConvert.SerializeObject(new
 				{
 					Name = "NameOfScheduleChangeListener",
@@ -77,7 +79,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 					DaysStartFromCurrentDate = 1,
 					DaysEndFromCurrentDate = -1
 				}), Encoding.UTF8, "application/json"));
-			JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Successful"]
+			JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync())["Successful"]
 				.Value<bool>().Should().Be.False();
 
 			GlobalSettingDataRepository
@@ -86,11 +88,11 @@ namespace Teleopti.Wfm.Api.Test.Command
 		}
 
 		[Test]
-		public void ShouldRejectIfNameIsEmpty()
+		public async Task ShouldRejectIfNameIsEmpty()
 		{
 			Client.Authorize();
 
-			var result = Client.PostAsync("/command/AddScheduleChangesListener",
+			var result = await Client.PostAsync("/command/AddScheduleChangesListener",
 				new StringContent(JsonConvert.SerializeObject(new
 				{
 					Name = "",
@@ -98,7 +100,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 					DaysStartFromCurrentDate = -1,
 					DaysEndFromCurrentDate = 1
 				}), Encoding.UTF8, "application/json"));
-			JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Successful"]
+			JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync())["Successful"]
 				.Value<bool>().Should().Be.False();
 
 			GlobalSettingDataRepository
@@ -107,11 +109,11 @@ namespace Teleopti.Wfm.Api.Test.Command
 		}
 
 		[Test]
-		public void ShouldRejectIfNameIsWhitespace()
+		public async Task ShouldRejectIfNameIsWhitespace()
 		{
 			Client.Authorize();
 
-			var result = Client.PostAsync("/command/AddScheduleChangesListener",
+			var result = await Client.PostAsync("/command/AddScheduleChangesListener",
 				new StringContent(JsonConvert.SerializeObject(new
 				{
 					Name = " ",
@@ -119,7 +121,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 					DaysStartFromCurrentDate = -1,
 					DaysEndFromCurrentDate = 1
 				}), Encoding.UTF8, "application/json"));
-			JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Successful"]
+			JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync())["Successful"]
 				.Value<bool>().Should().Be.False();
 
 			GlobalSettingDataRepository
@@ -129,11 +131,11 @@ namespace Teleopti.Wfm.Api.Test.Command
 
 
 		[Test, FakePermissions]
-		public void ShouldRejectIfNotSufficientPermissions()
+		public async Task ShouldRejectIfNotSufficientPermissions()
 		{
 			Client.Authorize(); 
 
-			var result = Client.PostAsync("/command/AddScheduleChangesListener",
+			var result = await Client.PostAsync("/command/AddScheduleChangesListener",
 				new StringContent(JsonConvert.SerializeObject(new
 				{
 					Name = "Name",
@@ -141,7 +143,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 					DaysStartFromCurrentDate = -1,
 					DaysEndFromCurrentDate = 1
 				})));
-			JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Successful"]
+			JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync())["Successful"]
 				.Value<bool>().Should().Be.False();
 
 			GlobalSettingDataRepository

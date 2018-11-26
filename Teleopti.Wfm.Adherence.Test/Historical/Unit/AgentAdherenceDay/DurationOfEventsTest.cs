@@ -91,7 +91,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			var personId = Guid.NewGuid();
 			History
 				.StateChanged(personId, "2018-07-19 10:00")
-				.RuleChanged(personId, "2018-07-19 10:00", null)
+				.RuleChanged(personId, "2018-07-19 10:00")
 				;
 
 			var data = Target.LoadUntilNow(personId, "2018-07-19".Date());

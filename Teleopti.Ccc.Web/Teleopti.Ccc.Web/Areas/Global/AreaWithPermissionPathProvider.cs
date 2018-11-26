@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.BpoExchange,
 				Resources.BpoExchange, "bpo");
 			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.Insights,
-				Resources.Insights, "insights");
+				"Insights", "insights");
 			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPermissions, "API access",
 				"apiaccess");
 		}

@@ -99,6 +99,7 @@
                     vm.settingInfo.MaxFullWeekendsOff = result.MaxFullWeekendsOff;
                     vm.settingInfo.MinWeekendDaysOff = result.MinWeekendDaysOff;
                     vm.settingInfo.MaxWeekendDaysOff = result.MaxWeekendDaysOff;
+					vm.settingInfo.PreferencePercent = result.PreferencePercent;
                     if (result.BlockFinderType > 0) {
                         return setBlockSchedulingIsSelected(result);
                     }

@@ -89,8 +89,7 @@ namespace DotNetOpenAuth.Messaging {
 			foreach (var pair in messageDictionary) {
 				bool include = false;
 				string type = "string";
-				MessagePart partDescription;
-				if (messageDictionary.Description.Mapping.TryGetValue(pair.Key, out partDescription)) {
+				if (messageDictionary.Description.Mapping.TryGetValue(pair.Key, out var partDescription)) {
 					Contract.Assume(partDescription != null);
 					if (partDescription.IsRequired || partDescription.IsNondefaultValueSet(messageDictionary.Message)) {
 						include = true;
@@ -155,8 +154,7 @@ namespace DotNetOpenAuth.Messaging {
 			// values are not empty (or default).
 			var result = new Dictionary<string, string>();
 			foreach (var pair in messageDictionary) {
-				MessagePart partDescription;
-				if (messageDictionary.Description.Mapping.TryGetValue(pair.Key, out partDescription)) {
+				if (messageDictionary.Description.Mapping.TryGetValue(pair.Key, out var partDescription)) {
 					Contract.Assume(partDescription != null);
 					if (partDescription.IsRequired || partDescription.IsNondefaultValueSet(messageDictionary.Message)) {
 						result.Add(pair.Key, pair.Value);
@@ -195,8 +193,7 @@ namespace DotNetOpenAuth.Messaging {
 
 			messageDictionary.Message.EnsureValidMessage();
 
-			var originalPayloadMessage = messageDictionary.Message as IMessageOriginalPayload;
-			if (originalPayloadMessage != null) {
+			if (messageDictionary.Message is IMessageOriginalPayload originalPayloadMessage) {
 				originalPayloadMessage.OriginalPayload = fields;
 			}
 		}
@@ -218,17 +215,5 @@ namespace DotNetOpenAuth.Messaging {
 				|| type.IsAssignableFrom(typeof(uint))
 				|| type.IsAssignableFrom(typeof(ulong));
 		}
-
-#if CONTRACTS_FULL
-		/// <summary>
-		/// Verifies conditions that should be true for any valid state of this object.
-		/// </summary>
-		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Called by code contracts.")]
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Called by code contracts.")]
-		[ContractInvariantMethod]
-		private void ObjectInvariant() {
-			Contract.Invariant(this.messageType != null);
-		}
-#endif
 	}
 }

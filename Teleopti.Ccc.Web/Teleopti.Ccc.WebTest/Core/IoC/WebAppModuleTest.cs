@@ -40,7 +40,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
@@ -669,24 +668,12 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveByPassPermissionCheckerIfToggleEnabled()
 		{
-			using (var container = buildContainer(Toggles.WebByPassDefaultPermissionCheck_37984, true))
+			using (var container = buildContainer())
 			{
 				container.Resolve<IPersistableScheduleDataPermissionChecker>()
 					.GetType()
 					.Should()
 					.Be<ByPassPersistableScheduleDataPermissionChecker>();
-			}
-		}
-
-		[Test]
-		public void ShouldResolvePermissionCheckerIfToggleDisabled()
-		{
-			using (var container = buildContainer(Toggles.WebByPassDefaultPermissionCheck_37984, false))
-			{
-				container.Resolve<IPersistableScheduleDataPermissionChecker>()
-					.GetType()
-					.Should()
-					.Be<PersistableScheduleDataPermissionChecker>();
 			}
 		}
 

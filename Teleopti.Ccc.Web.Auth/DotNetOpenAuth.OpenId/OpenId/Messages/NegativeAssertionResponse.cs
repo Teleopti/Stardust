@@ -114,11 +114,14 @@ namespace DotNetOpenAuth.OpenId.Messages {
 			Requires.NotNull(channel, "channel");
 			ErrorUtilities.VerifyInternal(immediateRequest.Immediate, "Only immediate requests should be sent here.");
 
-			var setupRequest = new CheckIdRequest(immediateRequest.Version, immediateRequest.Recipient, AuthenticationRequestMode.Setup);
-			setupRequest.LocalIdentifier = immediateRequest.LocalIdentifier;
-			setupRequest.ReturnTo = immediateRequest.ReturnTo;
-			setupRequest.Realm = immediateRequest.Realm;
-			setupRequest.AssociationHandle = immediateRequest.AssociationHandle;
+			var setupRequest = new CheckIdRequest(immediateRequest.Version, immediateRequest.Recipient,
+				AuthenticationRequestMode.Setup)
+			{
+				LocalIdentifier = immediateRequest.LocalIdentifier,
+				ReturnTo = immediateRequest.ReturnTo,
+				Realm = immediateRequest.Realm,
+				AssociationHandle = immediateRequest.AssociationHandle
+			};
 			return channel.PrepareResponse(setupRequest).GetDirectUriRequest(channel);
 		}
 

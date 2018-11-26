@@ -155,59 +155,43 @@ namespace DotNetOpenAuth.Messaging {
 		/// <summary>
 		/// Gets the HTTP method.
 		/// </summary>
-		public override string HttpMethod {
-			get { return this.httpMethod; }
-		}
+		public override string HttpMethod => this.httpMethod;
 
 		/// <summary>
 		/// Gets the headers.
 		/// </summary>
-		public override NameValueCollection Headers {
-			get { return this.headers; }
-		}
+		public override NameValueCollection Headers => this.headers;
 
 		/// <summary>
 		/// Gets the URL.
 		/// </summary>
-		public override Uri Url {
-			get { return this.requestUri; }
-		}
+		public override Uri Url => this.requestUri;
 
 		/// <summary>
 		/// Gets the raw URL.
 		/// </summary>
-		public override string RawUrl {
-			get { return this.requestUri.AbsolutePath + this.requestUri.Query; }
-		}
+		public override string RawUrl => this.requestUri.AbsolutePath + this.requestUri.Query;
 
 		/// <summary>
 		/// Gets the form.
 		/// </summary>
-		public override NameValueCollection Form {
-			get { return this.form; }
-		}
+		public override NameValueCollection Form => this.form;
 
 		/// <summary>
 		/// Gets the query string.
 		/// </summary>
-		public override NameValueCollection QueryString {
-			get { return this.queryString; }
-		}
+		public override NameValueCollection QueryString => this.queryString;
 
 		/// <summary>
 		/// Gets the server variables.
 		/// </summary>
-		public override NameValueCollection ServerVariables {
-			get { return this.serverVariables; }
-		}
+		public override NameValueCollection ServerVariables => this.serverVariables;
 
 		/// <summary>
 		/// Gets the collection of cookies that were sent by the client.
 		/// </summary>
 		/// <returns>The client's cookies.</returns>
-		public override HttpCookieCollection Cookies {
-			get { return this.cookies; }
-		}
+		public override HttpCookieCollection Cookies => this.cookies;
 
 		/// <summary>
 		/// Creates an <see cref="HttpRequestBase"/> instance that describes the specified HTTP request.

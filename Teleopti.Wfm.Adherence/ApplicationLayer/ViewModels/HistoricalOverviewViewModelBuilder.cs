@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
+using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 
 namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 {
@@ -34,14 +35,18 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 		public IEnumerable<HistoricalOverviewTeamViewModel> Build(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds)
 		{
 			var teams = getTeams(siteIds, teamIds);
-			var userSevenDays = _userNow.Date().Date.AddDays(-7).DateRange(7).ToArray();
+			// users in different timezones will see different 7 days...
+			var userSevenDays = _userNow.Date().Date.AddDays(-7)
+				.DateRange(7)
+				.Select(x => x.Date)
+				.ToArray();
 			var displayDays = from day in userSevenDays
 				let displayDay = day.ToString("MM") + "/" + day.ToString("dd")
 				select displayDay;
-			var period = new DateOnlyPeriod(new DateOnly(userSevenDays.First()), new DateOnly(userSevenDays.Last()));
+			var period = new DateOnlyPeriod(userSevenDays.First(), userSevenDays.Last());
 			var persons = teams.SelectMany(t => _persons.FindPeopleBelongTeam(t, period)).ToArray();
-			var firstDay = userSevenDays.First().ToDateOnly();
-			var lastDay = userSevenDays.Last().ToDateOnly();
+			var firstDay = new DateOnly(userSevenDays.First());
+			var lastDay = new DateOnly(userSevenDays.Last());
 			var readModel = _reader.Read(persons.Select(p => p.Id.Value))
 				.Where(x => x.Date >= firstDay &&
 							x.Date <= lastDay)
@@ -49,7 +54,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 
 			var agentsPerDayGroupedOnTeam = (from agentDay in readModel
 				let person = persons.FirstOrDefault(p => p.Id == agentDay.PersonId)
-				let pp = person?.Period(agentDay.Date)
+				let pp = person?.Period(agentDay.Date.Date)
 				where pp != null
 				select new
 				{
@@ -57,8 +62,8 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 					SiteTeamName = pp.Team.SiteAndTeam,
 					agentDay.PersonId,
 					Name = _nameDisplaySetting.CommonAgentNameSettings.BuildFor(person.Name.FirstName, person.Name.LastName, null),
-					Day = agentDay.Date,
-					Adherence = calculateAdherence(agentDay.SecondsInAdherence, agentDay.SecondsOutOfAdherence),
+					Day = agentDay.Date.Date,
+					Adherence = AdherencePercentageCalculation.Calculate(agentDay.SecondsInAdherence, agentDay.SecondsOutOfAdherence),
 					agentDay.WasLateForWork,
 					agentDay.MinutesLateForWork,
 					agentDay.SecondsInAdherence,
@@ -78,7 +83,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 								Id = groupedAgent.First().PersonId,
 								Name = groupedAgent.First().Name,
 								Days = (from day in userSevenDays
-									let agentDay = groupedAgent.FirstOrDefault(a => a.Day == day.ToDateOnly())
+									let agentDay = groupedAgent.FirstOrDefault(a => a.Day == day)
 									select new HistoricalOverviewDayViewModel
 									{
 										Date = day.ToString("yyyyMMdd"),
@@ -90,7 +95,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 									Count = groupedAgent.Count(a => a.WasLateForWork),
 									TotalMinutes = groupedAgent.Sum(a => a.MinutesLateForWork)
 								},
-								IntervalAdherence = calculateAdherence(
+								IntervalAdherence = AdherencePercentageCalculation.Calculate(
 									groupedAgent.All(a => a.SecondsInAdherence == null) ? null : groupedAgent.Sum(a => a.SecondsInAdherence),
 									groupedAgent.All(a => a.SecondsOutOfAdherence == null) ? null : groupedAgent.Sum(a => a.SecondsOutOfAdherence))
 							})
@@ -111,22 +116,6 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 				teams = _teams.FindTeams(teamIds);
 
 			return teams;
-		}
-
-		private static int? calculateAdherence(int? secondsInAdherence, int? secondsOutOfAdherence)
-		{
-			if (secondsInAdherence == null)
-				return null;
-
-			var inAdherence = Convert.ToDouble(secondsInAdherence);
-			var outAdherence = Convert.ToDouble(secondsOutOfAdherence);
-			var expectedWorkTime = inAdherence + outAdherence;
-
-			if (expectedWorkTime.Equals(0.0))
-				return null;
-
-			//Financial Rounding
-			return Convert.ToInt32((inAdherence / expectedWorkTime) * 100);
 		}
 	}
 

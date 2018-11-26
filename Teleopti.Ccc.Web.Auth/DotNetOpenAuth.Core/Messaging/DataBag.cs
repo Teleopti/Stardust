@@ -54,9 +54,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <remarks>
 		/// Implementations of this interface should ensure that this property never returns null.
 		/// </remarks>
-		Version IMessage.Version {
-			get { return this.version; }
-		}
+		Version IMessage.Version => this.version;
 
 		/// <summary>
 		/// Gets the extra, non-standard Protocol parameters included in the message.
@@ -65,9 +63,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <remarks>
 		/// Implementations of this interface should ensure that this property never returns null.
 		/// </remarks>
-		public IDictionary<string, string> ExtraData {
-			get { return this.extraData; }
-		}
+		public IDictionary<string, string> ExtraData => this.extraData;
 
 		#endregion
 
@@ -105,9 +101,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// </remarks>
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Accessed by reflection")]
 		[MessagePart("t", IsRequired = true, AllowEmpty = false)]
-		protected virtual Type BagType {
-			get { return this.GetType(); }
-		}
+		protected virtual Type BagType => this.GetType();
 
 		#region IMessage Methods
 

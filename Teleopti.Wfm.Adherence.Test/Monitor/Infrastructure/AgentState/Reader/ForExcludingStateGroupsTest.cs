@@ -245,11 +245,11 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			Now.Is("2016-11-28 08:10");
 			Database
 				.WithPerson("expected")
-				.WithPersonPeriod("2016-01-01".Date())
+				.WithPersonPeriod("2016-01-01")
 				.WithSkill("email")
-				.WithPersonPeriod("2016-06-01".Date())
+				.WithPersonPeriod("2016-06-01")
 				.WithSkill("phone")
-				.WithPersonPeriod("2017-01-01".Date())
+				.WithPersonPeriod("2017-01-01")
 				.WithSkill("email")
 				.WithAgent("wrongState")
 				.WithSkill("phone")

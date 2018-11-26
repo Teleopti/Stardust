@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			_target = new StaffingAuditContext(StaffingAuditRepository, LoggedOnUser, Now);
 			_target.Handle(new ClearBpoActionObj() { BpoGuid = Guid.NewGuid(), EndDate = DateTime.Today, StartDate = DateTime.Today.AddDays(-1) });
-			StaffingAuditRepository.StaffingAuditList.First().Action.Should().Be.EqualTo("ClearBpoStaffing");
+			StaffingAuditRepository.StaffingAuditList.First().Action.Should().Be.EqualTo(StaffingAuditActionConstants.ClearStaffing);
 		}
 
 		[Test]
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 
 			var staffingAuditLog = StaffingAuditRepository.StaffingAuditList.First();
 			staffingAuditLog.ActionPerformedById.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id.GetValueOrDefault());
-			staffingAuditLog.Action.Should().Be.EqualTo("ImportBpo");
+			staffingAuditLog.Action.Should().Be.EqualTo(StaffingAuditActionConstants.ImportStaffing);
 			staffingAuditLog.ImportFileName.Should().Be.EqualTo(importBpoAction.FileName);
 			staffingAuditLog.TimeStamp.Should().Be.EqualTo(new DateTime(2018, 10, 09, 10, 10, 20));
 		}

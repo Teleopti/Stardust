@@ -111,54 +111,7 @@ namespace DotNetOpenAuth.OpenId.RelyingParty {
 		/// tampering.
 		/// </remarks>
 		string GetCallbackArgument(string key);
-
-		/// <summary>
-		/// Gets a callback argument's value that was previously added using
-		/// <see cref="IAuthenticationRequest.AddCallbackArguments(string, string)"/>.
-		/// </summary>
-		/// <param name="key">The name of the parameter whose value is sought.</param>
-		/// <returns>
-		/// The value of the argument, or null if the named parameter could not be found.
-		/// </returns>
-		/// <remarks>
-		/// Callback parameters are only available even if the RP is in stateless mode,
-		/// or the callback parameters are otherwise unverifiable as untampered with.
-		/// Therefore, use this method only when the callback argument is not to be
-		/// used to make a security-sensitive decision.
-		/// </remarks>
-		string GetUntrustedCallbackArgument(string key);
-
-		/// <summary>
-		/// Gets all the callback arguments that were previously added using 
-		/// <see cref="IAuthenticationRequest.AddCallbackArguments(string, string)"/> or as a natural part
-		/// of the return_to URL.
-		/// </summary>
-		/// <returns>A name-value dictionary.  Never null.</returns>
-		/// <remarks>
-		/// Callback parameters are only available if they are complete and untampered with
-		/// since the original request message (as proven by a signature).
-		/// If the relying party is operating in stateless mode an empty dictionary is always
-		/// returned since the callback arguments could not be signed to protect against
-		/// tampering.
-		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Historically an expensive operation.")]
-		IDictionary<string, string> GetCallbackArguments();
-
-		/// <summary>
-		/// Gets all the callback arguments that were previously added using 
-		/// <see cref="IAuthenticationRequest.AddCallbackArguments(string, string)"/> or as a natural part
-		/// of the return_to URL.
-		/// </summary>
-		/// <returns>A name-value dictionary.  Never null.</returns>
-		/// <remarks>
-		/// Callback parameters are only available even if the RP is in stateless mode,
-		/// or the callback parameters are otherwise unverifiable as untampered with.
-		/// Therefore, use this method only when the callback argument is not to be
-		/// used to make a security-sensitive decision.
-		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Historically an expensive operation.")]
-		IDictionary<string, string> GetUntrustedCallbackArguments();
-
+		
 		/// <summary>
 		/// Tries to get an OpenID extension that may be present in the response.
 		/// </summary>
@@ -257,12 +210,6 @@ namespace DotNetOpenAuth.OpenId.RelyingParty {
 	/// </summary>
 	[ContractClassFor(typeof(IAuthenticationResponse))]
 	internal abstract class IAuthenticationResponseContract : IAuthenticationResponse {
-		/// <summary>
-		/// Initializes a new instance of the <see cref="IAuthenticationResponseContract"/> class.
-		/// </summary>
-		protected IAuthenticationResponseContract() {
-		}
-
 		#region IAuthenticationResponse Members
 
 		/// <summary>
@@ -281,9 +228,7 @@ namespace DotNetOpenAuth.OpenId.RelyingParty {
 		/// <see cref="IAuthenticationResponse.FriendlyIdentifierForDisplay"/> property.
 		/// </para>
 		/// </remarks>
-		Identifier IAuthenticationResponse.ClaimedIdentifier {
-			get { throw new NotImplementedException(); }
-		}
+		Identifier IAuthenticationResponse.ClaimedIdentifier => throw new NotImplementedException();
 
 		/// <summary>
 		/// Gets a user-friendly OpenID Identifier for display purposes ONLY.
@@ -315,17 +260,13 @@ namespace DotNetOpenAuth.OpenId.RelyingParty {
 		/// and lookup please use the <see cref="IAuthenticationResponse.ClaimedIdentifier"/> property.
 		/// </para>
 		/// </remarks>
-		string IAuthenticationResponse.FriendlyIdentifierForDisplay {
-			get { throw new NotImplementedException(); }
-		}
+		string IAuthenticationResponse.FriendlyIdentifierForDisplay => throw new NotImplementedException();
 
 		/// <summary>
 		/// Gets the detailed success or failure status of the authentication attempt.
 		/// </summary>
 		/// <value></value>
-		AuthenticationStatus IAuthenticationResponse.Status {
-			get { throw new NotImplementedException(); }
-		}
+		AuthenticationStatus IAuthenticationResponse.Status => throw new NotImplementedException();
 
 		/// <summary>
 		/// Gets information about the OpenId Provider, as advertised by the
@@ -336,18 +277,14 @@ namespace DotNetOpenAuth.OpenId.RelyingParty {
 		/// The Provider endpoint that issued the positive assertion;
 		/// or <c>null</c> if information about the Provider is unavailable.
 		/// </value>
-		IProviderEndpoint IAuthenticationResponse.Provider {
-			get { throw new NotImplementedException(); }
-		}
+		IProviderEndpoint IAuthenticationResponse.Provider => throw new NotImplementedException();
 
 		/// <summary>
 		/// Gets the details regarding a failed authentication attempt, if available.
 		/// This will be set if and only if <see cref="IAuthenticationResponse.Status"/> is <see cref="AuthenticationStatus.Failed"/>.
 		/// </summary>
 		/// <value></value>
-		Exception IAuthenticationResponse.Exception {
-			get { throw new NotImplementedException(); }
-		}
+		Exception IAuthenticationResponse.Exception => throw new NotImplementedException();
 
 		/// <summary>
 		/// Gets a callback argument's value that was previously added using
@@ -367,23 +304,7 @@ namespace DotNetOpenAuth.OpenId.RelyingParty {
 			Requires.NotNullOrEmpty(key, "key");
 			throw new NotImplementedException();
 		}
-
-		/// <summary>
-		/// Gets all the callback arguments that were previously added using
-		/// <see cref="IAuthenticationRequest.AddCallbackArguments(string, string)"/> or as a natural part
-		/// of the return_to URL.
-		/// </summary>
-		/// <returns>A name-value dictionary.  Never null.</returns>
-		/// <remarks>
-		/// 	<para>This MAY return any argument on the querystring that came with the authentication response,
-		/// which may include parameters not explicitly added using
-		/// <see cref="IAuthenticationRequest.AddCallbackArguments(string, string)"/>.</para>
-		/// 	<para>Note that these values are NOT protected against tampering in transit.</para>
-		/// </remarks>
-		IDictionary<string, string> IAuthenticationResponse.GetCallbackArguments() {
-			throw new NotImplementedException();
-		}
-
+		
 		/// <summary>
 		/// Tries to get an OpenID extension that may be present in the response.
 		/// </summary>
@@ -430,7 +351,6 @@ namespace DotNetOpenAuth.OpenId.RelyingParty {
 		/// </remarks>
 		IOpenIdMessageExtension IAuthenticationResponse.GetExtension(Type extensionType) {
 			Requires.NotNullSubtype<IOpenIdMessageExtension>(extensionType, "extensionType");
-			////ErrorUtilities.VerifyArgument(typeof(IOpenIdMessageExtension).IsAssignableFrom(extensionType), string.Format(CultureInfo.CurrentCulture, OpenIdStrings.TypeMustImplementX, typeof(IOpenIdMessageExtension).FullName));
 			throw new NotImplementedException();
 		}
 
@@ -485,43 +405,6 @@ namespace DotNetOpenAuth.OpenId.RelyingParty {
 			////ErrorUtilities.VerifyArgument(typeof(IOpenIdMessageExtension).IsAssignableFrom(extensionType), string.Format(CultureInfo.CurrentCulture, OpenIdStrings.TypeMustImplementX, typeof(IOpenIdMessageExtension).FullName));
 			throw new NotImplementedException();
 		}
-
-		/// <summary>
-		/// Gets a callback argument's value that was previously added using
-		/// <see cref="IAuthenticationRequest.AddCallbackArguments(string, string)"/>.
-		/// </summary>
-		/// <param name="key">The name of the parameter whose value is sought.</param>
-		/// <returns>
-		/// The value of the argument, or null if the named parameter could not be found.
-		/// </returns>
-		/// <remarks>
-		/// Callback parameters are only available even if the RP is in stateless mode,
-		/// or the callback parameters are otherwise unverifiable as untampered with.
-		/// Therefore, use this method only when the callback argument is not to be
-		/// used to make a security-sensitive decision.
-		/// </remarks>
-		string IAuthenticationResponse.GetUntrustedCallbackArgument(string key) {
-			Requires.NotNullOrEmpty(key, "key");
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Gets all the callback arguments that were previously added using
-		/// <see cref="IAuthenticationRequest.AddCallbackArguments(string, string)"/> or as a natural part
-		/// of the return_to URL.
-		/// </summary>
-		/// <returns>A name-value dictionary.  Never null.</returns>
-		/// <remarks>
-		/// Callback parameters are only available even if the RP is in stateless mode,
-		/// or the callback parameters are otherwise unverifiable as untampered with.
-		/// Therefore, use this method only when the callback argument is not to be
-		/// used to make a security-sensitive decision.
-		/// </remarks>
-		IDictionary<string, string> IAuthenticationResponse.GetUntrustedCallbackArguments() {
-			Contract.Ensures(Contract.Result<IDictionary<string, string>>() != null);
-			throw new NotImplementedException();
-		}
-
 		#endregion
 	}
 }

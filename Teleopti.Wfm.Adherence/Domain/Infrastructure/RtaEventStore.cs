@@ -150,7 +150,7 @@ WHERE Id = :Id
 				.ExecuteUpdate();
 		}
 
-		public IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period) =>
+		public IEnumerable<IEvent> Load(Guid personId, DateTime @from, DateTime to) =>
 			loadEvents(
 				_unitOfWork.Current().Session()
 					.CreateSQLQuery(@"
@@ -166,8 +166,8 @@ WHERE
 ORDER BY [Id] ASC
 ")
 					.SetParameter("PersonId", personId)
-					.SetParameter("StartTime", period.StartDateTime)
-					.SetParameter("EndTime", period.EndDateTime)
+					.SetParameter("StartTime", @from)
+					.SetParameter("EndTime", @to)
 			);
 
 		public IEnumerable<IEvent> Load(Guid personId, DateOnly date) =>

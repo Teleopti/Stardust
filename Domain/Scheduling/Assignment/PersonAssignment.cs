@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private IDayOffTemplate _dayOffTemplate;
 		private string _source;
 
-
 		public PersonAssignment(IPerson agent, IScenario scenario, DateOnly date)
 		{
 			Date = date;
@@ -342,6 +341,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					return activityAddedEvent;
 				});
 			}
+		}
+
+		public void AddActivityFromTo(IActivity activity, DateTime start, DateTime end)
+		{
+			AddActivity(activity, new DateTimePeriod(start, end), null);
 		}
 
 		public virtual void AddActivity(IActivity activity, DateTime start, DateTime end)

@@ -19,10 +19,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		[UnitOfWork, HttpGet, Route("api/Adherence/Permissions")]
 		public virtual IHttpActionResult Load(Guid? personId = null, string date = null)
 		{
-			var dateOnly = default(DateOnly?);
+			var dateTime = default(DateTime?);
 			if (date != null)
-				dateOnly = new DateOnly(DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None));
-			return Ok(_builder.Build(personId, dateOnly));
+				dateTime = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None);
+			return Ok(_builder.Build(personId, dateTime));
 		}
 	}
 }

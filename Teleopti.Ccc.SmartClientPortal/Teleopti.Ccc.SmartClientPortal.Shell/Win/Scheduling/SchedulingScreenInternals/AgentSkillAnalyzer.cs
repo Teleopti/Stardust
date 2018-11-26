@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 		private readonly IList<ISkill> _loadedSkillList;
 		private readonly IDictionary<ISkill, IEnumerable<ISkillDay>> _skillDays;
 		private readonly CreateIslands _createIslands;
-		private readonly DesktopSchedulingContext _desktopSchedulingContext;
+		private readonly DesktopContextState _desktopContextState;
 		private readonly ISchedulerStateHolder _schedulerStateHolder;
 		private IList<Island> _islandListBeforeReducing;
 		private IList<Island> _islandListAfterReducing;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 
 		public AgentSkillAnalyzer(IEnumerable<IPerson> personList, IEnumerable<ISkill> skillList,
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnlyPeriod datePeriod,
-			CreateIslands createIslands, DesktopSchedulingContext desktopSchedulingContext,
+			CreateIslands createIslands, DesktopContextState desktopContextState,
 			ISchedulerStateHolder schedulerStateHolder)
 		{
 			InitializeComponent();
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			_loadedSkillList = skillList.Where(s => s.SkillType.ForecastSource != ForecastSource.MaxSeatSkill).ToList();
 			_skillDays = skillDays;
 			_createIslands = createIslands;
-			_desktopSchedulingContext = desktopSchedulingContext;
+			_desktopContextState = desktopContextState;
 			_schedulerStateHolder = schedulerStateHolder;
 			_date = datePeriod.StartDate;
 			listViewGroupsInIsland.ListViewItemSorter = new listViewItemComparer(0, SortOrder.Ascending);
@@ -431,7 +431,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			var schedulingWasOrdered = new SchedulingWasOrdered { CommandId = commandId };
 			using (CommandScope.Create(schedulingWasOrdered))
 			{
-				using (_desktopSchedulingContext.Set(command, _schedulerStateHolder, new SchedulingOptions(), new NoSchedulingCallback()))
+				using (_desktopContextState.SetForScheduling(command, _schedulerStateHolder, new SchedulingOptions(), new NoSchedulingCallback()))
 				{
 					_createIslands.Create(_date.ToDateOnlyPeriod(), callback);
 				}

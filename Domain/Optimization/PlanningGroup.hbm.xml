@@ -25,7 +25,10 @@
 			class="Teleopti.Ccc.Domain.Common.BusinessUnit"
 			access="nosetter.camelcase-underscore"/>
     
-    <property name="Name" access="property"/>
+    	<property name="Name" access="property"/>
+		<component name="_preferenceValue" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces" access="field">
+			<property name="Value" column="PreferenceValue"/>
+		</component>
 
 
     <set name="Filters" table="PlanningGroupFilters" cascade="all-delete-orphan">

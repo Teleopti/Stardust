@@ -661,8 +661,8 @@ Teleopti.MyTimeWeb.Schedule = (function($) {
 		) {
 			self.fetchProbabilityData();
 		}
-
-		Teleopti.MyTimeWeb.PollScheduleUpdates.SetListener('WeekScheduleWeb', function(period) {
+		
+		Teleopti.MyTimeWeb.PollScheduleUpdates.AddListener('WeekScheduleWeb', function(period) {
 			var startDate = moment(moment(period.startDate).format('YYYY-MM-DD')).toDate();
 			var endDate = moment(moment(period.endDate).format('YYYY-MM-DD')).toDate();
 			if (vm.isWithinSelected(startDate, endDate)) {

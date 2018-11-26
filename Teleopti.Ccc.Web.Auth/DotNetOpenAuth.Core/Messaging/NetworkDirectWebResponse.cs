@@ -51,9 +51,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <summary>
 		/// Gets the body of the HTTP response.
 		/// </summary>
-		public override Stream ResponseStream {
-			get { return this.responseStream; }
-		}
+		public override Stream ResponseStream => this.responseStream;
 
 		/// <summary>
 		/// Creates a text reader for the response stream.

@@ -2,8 +2,7 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
@@ -43,7 +42,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		public void ShouldPersistWithProperties()
 		{
 			var personId = Guid.NewGuid();
-			var date = "2018-09-04".Utc().ToDateOnly();
+			var date = "2018-09-04".Date();
 			
 			Persister.Upsert(new HistoricalOverviewReadModel
 			{
@@ -68,7 +67,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		public void ShouldUpdateWithProperties()
 		{
 			var personId = Guid.NewGuid();
-			var date = "2018-09-04".Utc().ToDateOnly();
+			var date = "2018-09-04".Date();
 			
 			Persister.Upsert(new HistoricalOverviewReadModel
 			{
@@ -132,8 +131,8 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		public void ShouldUpdateForDate()
 		{
 			var personId = Guid.NewGuid();
-			var date1 = "2018-09-04".Utc().ToDateOnly();
-			var date2 = "2018-09-05".Utc().ToDateOnly();
+			var date1 = "2018-09-04".Date();
+			var date2 = "2018-09-05".Date();
 			
 			Persister.Upsert(new HistoricalOverviewReadModel
 			{

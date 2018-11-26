@@ -131,30 +131,30 @@ namespace DotNetOpenAuth.OpenId {
 		/// <summary>
 		/// A list of all supported OpenID versions, in order starting from newest version.
 		/// </summary>
-		public readonly static List<Protocol> AllVersions = new List<Protocol>() { V20, V11, V10 };
+		public static List<Protocol> AllVersions = new List<Protocol>() { V20, V11, V10 };
 
 		/// <summary>
 		/// A list of all supported OpenID versions, in order starting from newest version.
 		/// V1.1 and V1.0 are considered the same and only V1.1 is in the list.
 		/// </summary>
-		public readonly static List<Protocol> AllPracticalVersions = new List<Protocol>() { V20, V11 };
+		public static List<Protocol> AllPracticalVersions = new List<Protocol>() { V20, V11 };
 
 		/// <summary>
 		/// The default (or most recent) supported version of the OpenID protocol.
 		/// </summary>
-		public readonly static Protocol Default = AllVersions[0];
+		public static Protocol Default = AllVersions[0];
 		public static Protocol Lookup(Version version) {
 			foreach (Protocol protocol in AllVersions) {
 				if (protocol.Version == version) return protocol;
 			}
-			throw new ArgumentOutOfRangeException("version");
+			throw new ArgumentOutOfRangeException(nameof(version));
 		}
 		public static Protocol Lookup(ProtocolVersion version) {
 			switch (version) {
 				case ProtocolVersion.V10: return Protocol.V10;
 				case ProtocolVersion.V11: return Protocol.V11;
 				case ProtocolVersion.V20: return Protocol.V20;
-				default: throw new ArgumentOutOfRangeException("version");
+				default: throw new ArgumentOutOfRangeException(nameof(version));
 			}
 		}
 		/// <summary>
@@ -164,14 +164,6 @@ namespace DotNetOpenAuth.OpenId {
 		internal static Protocol Detect(IDictionary<string, string> query) {
 			Requires.NotNull(query, "query");
 			return query.ContainsKey(V20.openid.ns) ? V20 : V11;
-		}
-		/// <summary>
-		/// Attempts to detect the right OpenID protocol version based on the contents
-		/// of an incoming OpenID <i>direct</i> response message.
-		/// </summary>
-		internal static Protocol DetectFromDirectResponse(IDictionary<string, string> query) {
-			Requires.NotNull(query, "query");
-			return query.ContainsKey(V20.openidnp.ns) ? V20 : V11;
 		}
 		/// <summary>
 		/// Attemps to detect the highest OpenID protocol version supported given a set
@@ -325,18 +317,6 @@ namespace DotNetOpenAuth.OpenId {
 			public string dh_server_public = "dh_server_public";
 			public string enc_mac_key = "enc_mac_key";
 			public string mac_key = "mac_key";
-
-#if CONTRACTS_FULL
-			/// <summary>
-			/// Verifies conditions that should be true for any valid state of this object.
-			/// </summary>
-			[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Called by code contracts.")]
-			[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Called by code contracts.")]
-			[ContractInvariantMethod]
-			private void ObjectInvariant() {
-				Contract.Invariant(!string.IsNullOrEmpty(this.Prefix));
-			}
-#endif
 		}
 
 		internal sealed class QueryArguments {
@@ -353,8 +333,8 @@ namespace DotNetOpenAuth.OpenId {
 				/// <summary>
 				/// A preference order list of all supported session types.
 				/// </summary>
-				public string[] All { get { return new[] { DH_SHA512, DH_SHA384, DH_SHA256, DH_SHA1, NoEncryption }; } }
-				public string[] AllDiffieHellman { get { return new[] { DH_SHA512, DH_SHA384, DH_SHA256, DH_SHA1 }; } }
+				public string[] All => new[] { DH_SHA512, DH_SHA384, DH_SHA256, DH_SHA1, NoEncryption };
+
 				public string DH_SHA1 = "DH-SHA1";
 				public string DH_SHA256;
 				public string DH_SHA384;
@@ -375,7 +355,8 @@ namespace DotNetOpenAuth.OpenId {
 				/// <summary>
 				/// A preference order list of signature algorithms we support.
 				/// </summary>
-				public string[] All { get { return new[] { HMAC_SHA512, HMAC_SHA384, HMAC_SHA256, HMAC_SHA1 }; } }
+				public string[] All => new[] { HMAC_SHA512, HMAC_SHA384, HMAC_SHA256, HMAC_SHA1 };
+
 				public string HMAC_SHA1 = "HMAC-SHA1";
 				public string HMAC_SHA256;
 				public string HMAC_SHA384;
@@ -406,29 +387,7 @@ namespace DotNetOpenAuth.OpenId {
 				public string False = "false";
 			}
 		}
-
-		/// <summary>
-		/// The maximum time a user can be allowed to take to complete authentication.
-		/// </summary>
-		/// <remarks>
-		/// This is used to calculate the length of time that nonces are stored.
-		/// This is internal until we can decide whether to leave this static, or make
-		/// it an instance member, or put it inside the IConsumerApplicationStore interface.
-		/// </remarks>
-		internal static TimeSpan MaximumUserAgentAuthenticationTime = TimeSpan.FromMinutes(5);
-		/// <summary>
-		/// The maximum permissible difference in clocks between relying party and 
-		/// provider web servers, discounting time zone differences.
-		/// </summary>
-		/// <remarks>
-		/// This is used when storing/validating nonces from the provider.
-		/// If it is conceivable that a server's clock could be up to five minutes
-		/// off from true UTC time, then the maximum time skew should be set to 
-		/// ten minutes to allow one server to be five minutes ahead and the remote
-		/// server to be five minutes behind and still be able to communicate.
-		/// </remarks>
-		internal static TimeSpan MaximumAllowableTimeSkew = TimeSpan.FromMinutes(10);
-
+		
 		/// <summary>
 		/// Checks whether a given Protocol version practically equals this one
 		/// for purposes of verifying a match for assertion verification.
@@ -460,8 +419,7 @@ namespace DotNetOpenAuth.OpenId {
 		}
 
 		public override bool Equals(object obj) {
-			Protocol other = obj as Protocol;
-			if (other == null) {
+			if (!(obj is Protocol other)) {
 				return false;
 			}
 

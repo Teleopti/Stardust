@@ -20,13 +20,7 @@ namespace DotNetOpenAuth.Messaging.Reflection {
 		/// A dictionary of reflected message types and the generated reflection information.
 		/// </summary>
 		private readonly Dictionary<MessageTypeAndVersion, MessageDescription> reflectedMessageTypes = new Dictionary<MessageTypeAndVersion, MessageDescription>();
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MessageDescriptionCollection"/> class.
-		/// </summary>
-		internal MessageDescriptionCollection() {
-		}
-
+		
 		#region IEnumerable<MessageDescription> Members
 
 		/// <summary>
@@ -165,17 +159,13 @@ namespace DotNetOpenAuth.Messaging.Reflection {
 			/// Gets the message type.
 			/// </summary>
 			[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Exposes basic identity on the type.")]
-			internal Type Type {
-				get { return this.type; }
-			}
+			internal Type Type => this.type;
 
 			/// <summary>
 			/// Gets the message version.
 			/// </summary>
 			[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Exposes basic identity on the type.")]
-			internal Version Version {
-				get { return this.version; }
-			}
+			internal Version Version => this.version;
 
 			/// <summary>
 			/// Implements the operator ==.
@@ -207,8 +197,7 @@ namespace DotNetOpenAuth.Messaging.Reflection {
 			/// true if <paramref name="obj"/> and this instance are the same type and represent the same value; otherwise, false.
 			/// </returns>
 			public override bool Equals(object obj) {
-				if (obj is MessageTypeAndVersion) {
-					MessageTypeAndVersion other = (MessageTypeAndVersion)obj;
+				if (obj is MessageTypeAndVersion other) {
 					return this.type == other.type && this.version == other.version;
 				} else {
 					return false;

@@ -1,12 +1,17 @@
-import { IPromise, IQService, ITimeoutService } from 'angular';
-import { IState } from 'angular-ui-router';
+import { IState, IStateService } from 'angular-ui-router';
+import { Area } from './app/menu/shared/area.service';
 import { IWfmRootScopeService } from './main';
+
+export interface Areas {
+	permitted: Area[];
+	available: Area[];
+	alwaysPermitted: string[];
+}
 
 export const mainInitializer = [
 	'$rootScope',
 	'$state',
 	'$translate',
-	'$timeout',
 	'$locale',
 	'CurrentUserInfo',
 	'Toggle',
@@ -14,14 +19,12 @@ export const mainInitializer = [
 	'NoticeService',
 	'TabShortCut',
 	'rtaDataService',
-	'$q',
 	'$window',
 	'$http',
 	function(
 		$rootScope: IWfmRootScopeService,
 		$state,
 		$translate,
-		$timeout: ITimeoutService,
 		$locale,
 		currentUserInfo,
 		toggleService,
@@ -29,118 +32,94 @@ export const mainInitializer = [
 		noticeService,
 		TabShortCut,
 		rtaDataService,
-		$q: IQService,
 		$window
 	) {
+		$rootScope._ = (<any>window)._;
 		$rootScope.isAuthenticated = false;
 
-		$rootScope.$on('$localeChangeSuccess', function() {
+		const areas: Areas = {
+			permitted: [],
+			available: [],
+			alwaysPermitted: [
+				'main',
+				'skillprio',
+				'teapot',
+				'rtatool',
+				'rtatracer',
+				'resourceplanner',
+				'dataprotection'
+			]
+		};
+
+		let preloadDone = false;
+		const preload = Promise.all([
+			areasService.getAreasList(),
+			areasService.getAreasWithPermission(),
+			toggleService.togglesLoaded,
+			currentUserInfo.initContext().then(userPreferences => $translate.use(userPreferences.Language))
+		]).then(([areasAvailable, permittedAreas]) => {
+			$rootScope.isAuthenticated = true;
+
+			areas.available = areasAvailable;
+			areas.permitted = permittedAreas;
+
+			if (isPermittedArea(areas, 'rta')) rtaDataService.load();
+		});
+
+		$rootScope.$on('$localeChangeSuccess', () => {
 			if ($locale.id === 'zh-cn') $locale.DATETIME_FORMATS.FIRSTDAYOFWEEK = 0;
 		});
 
-		const preloads = [];
-		preloads.push(toggleService.togglesLoaded);
-		preloads.push(
-			$q.all([initializeUserInfo(), initializePermissionCheck()]).then(function() {
-				// any preloads than requires selected business unit and/or permission check
-				if (permitted('rta', undefined)) rtaDataService.load(); // dont return promise, async call
-			})
-		);
-		let preloadDone = false;
-
-		$rootScope.$on('$stateChangeStart', function(event, next: IState, toParams) {
-			if (preloadDone) {
-				if (!permitted(internalNameOf(next), urlOf(next))) {
-					event.preventDefault();
-					notPermitted(internalNameOf(next));
-				}
-				return;
+		$rootScope.$on('$stateChangeStart', (event, next: IState, toParams) => {
+			if (!preloadDone) {
+				preloadDone = true; // Why is this done!?
+				event.preventDefault();
+				preload.then(() => $state.go(next, toParams));
+			} else if (!isPermittedArea(areas, internalNameOf(next), urlOfState(next))) {
+				event.preventDefault();
+				handleNotPermitted(areas, noticeService, $translate, $state, next);
 			}
-			preloadDone = true;
-			event.preventDefault();
-			$q.all(preloads).then(function() {
-				$state.go(next, toParams);
-			});
 		});
 
-		// application insight
-		$rootScope.$on('$stateChangeSuccess', function() {
+		$rootScope.$on('$stateChangeSuccess', () => {
 			if ($window.appInsights) $window.appInsights.trackPageView($state.current.name);
 		});
-
-		$rootScope._ = (<any>window)._;
-
-		function initializeUserInfo() {
-			return currentUserInfo.initContext().then(function(data) {
-				$rootScope.isAuthenticated = true;
-				return $translate.use(data.Language);
-			});
-		}
-
-		let areas: any[];
-		let permittedAreas: any[];
-		const alwaysPermittedAreas: string[] = [
-			'main',
-			'skillprio',
-			'teapot',
-			'rtatool',
-			'rtatracer',
-			'resourceplanner',
-			'dataprotection'
-		];
-
-		function initializePermissionCheck(): IPromise<void[]> {
-			return $q.all([
-				areasService.getAreasWithPermission().then(function(data) {
-					permittedAreas = data;
-				}),
-				areasService.getAreasList().then(function(data) {
-					areas = data;
-				})
-			]);
-		}
-
-		function permitted(name: string, url: string): boolean {
-			let isAreaPermitted = alwaysPermittedAreas.some(function(a) {
-				return a === name.toLowerCase();
-			});
-			if (!isAreaPermitted)
-				isAreaPermitted = permittedAreas.some(function(a) {
-					if (url && (a.InternalName.indexOf(url) > -1 || url.indexOf(a.InternalName) > -1)) return true;
-					else return a.InternalName === name;
-				});
-			return isAreaPermitted;
-		}
-
-		function notPermitted(internalName: string) {
-			noticeService.error(
-				`<span class="test-alert"></span>` +
-					$translate.instant('NoPermissionToViewWFMModuleErrorMessage').replace('{0}', nameOf(internalName)),
-				null,
-				false
-			);
-			$state.go('main');
-		}
-
-		function internalNameOf(o: IState): string {
-			let name = o.name;
-			name = name.split('.')[0];
-			name = name.split('-')[0];
-			return name;
-		}
-
-		function urlOf(o: IState) {
-			return o.url && o.url.toString().split('/')[1];
-		}
-
-		function nameOf(internalName: string): string {
-			let name;
-			areas.forEach(function(area) {
-				if (area.InternalName === internalName) name = area.Name;
-			});
-			return name;
-		}
 
 		TabShortCut.unifyFocusStyle();
 	}
 ];
+
+export function handleNotPermitted(areas, noticeService, $translate, $state: IStateService, state: IState) {
+	const stateInternalName = internalNameOf(state);
+	const stateName = nameOfArea(areas, stateInternalName);
+
+	noticeService.error(
+		`<span class="test-alert"></span>` +
+			$translate.instant('NoPermissionToViewWFMModuleErrorMessage').replace('{0}', stateName),
+		null,
+		false
+	);
+	$state.go('main');
+}
+
+export function internalNameOf(state: IState): string {
+	return state.name.split(/[\.-]/)[0];
+}
+
+export function isPermittedArea(areas: Areas, name: string, url?: string): boolean {
+	const isAlwaysPermitted = areas.alwaysPermitted.includes(name.toLowerCase());
+	const isOtherwisePermitted = areas.permitted.some(area => {
+		if (url && (area.InternalName.includes(url) || url.includes(area.InternalName))) return true;
+		return area.InternalName === name;
+	});
+	return isAlwaysPermitted || isOtherwisePermitted;
+}
+
+export function nameOfArea(areas: Areas, internalName: string): string {
+	const area = areas.available.find(a => a.InternalName === internalName);
+	return area ? area.Name : undefined;
+}
+
+export function urlOfState(state: IState): string {
+	return state.url && state.url.toString().split('/')[1];
+}

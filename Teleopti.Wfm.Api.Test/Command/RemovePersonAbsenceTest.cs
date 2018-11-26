@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -9,11 +10,13 @@ using SharpTestsEx;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Api.Test.Command
 {
 	[ApiTest]
+	[LoggedOnAppDomain]
 	public class RemovePersonAbsenceTest
 	{
 		public IApiHttpClient Client;
@@ -26,7 +29,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 
 		[Test]
-		public void ShouldValidateThatEndDateIsGreatedThatStartDate()
+		public async Task ShouldValidateThatEndDateIsGreatedThatStartDate()
 		{
 			Client.Authorize();
 			var scenario = ScenarioFactory.CreateScenario("TestScenario", true, false).WithId();
@@ -44,14 +47,14 @@ namespace Teleopti.Wfm.Api.Test.Command
 				ScenarioId = scenario.Id.GetValueOrDefault()
 			};
 
-			var result = Client.PostAsync("/command/RemovePersonAbsence",
+			var result = await Client.PostAsync("/command/RemovePersonAbsence",
 				new StringContent(JsonConvert.SerializeObject(removePersonAbsenceDto), Encoding.UTF8, "application/json"));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(false);
 		}
 
 		[Test]
-		public void ShouldRemoveAbsence()
+		public async Task ShouldRemoveAbsence()
 		{
 			Client.Authorize();
 			var scenario = ScenarioFactory.CreateScenario("TestScenario", true, false).WithId();
@@ -71,15 +74,15 @@ namespace Teleopti.Wfm.Api.Test.Command
 				ScenarioId = scenario.Id.GetValueOrDefault()
 			};
 
-			var result = Client.PostAsync("/command/RemovePersonAbsence",
+			var result = await Client.PostAsync("/command/RemovePersonAbsence",
 				new StringContent(JsonConvert.SerializeObject(removePersonAbsenceDto), Encoding.UTF8, "application/json"));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
 			PersonAbsenceRepository.LoadAll().Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
-		public void ShouldSplitAbsenceIfBiggerThanPeriod()
+		public async Task ShouldSplitAbsenceIfBiggerThanPeriod()
 		{
 			Client.Authorize();
 			var scenario = ScenarioFactory.CreateScenario("TestScenario", true, false).WithId();
@@ -101,9 +104,9 @@ namespace Teleopti.Wfm.Api.Test.Command
 				ScenarioId = scenario.Id.GetValueOrDefault()
 			};
 
-			var result = Client.PostAsync("/command/RemovePersonAbsence",
+			var result = await Client.PostAsync("/command/RemovePersonAbsence",
 				new StringContent(JsonConvert.SerializeObject(removePersonAbsenceDto), Encoding.UTF8, "application/json"));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
 			PersonAbsenceRepository.LoadAll().Count().Should().Be.EqualTo(2);
 			PersonAbsenceRepository.LoadAll().Any(x => x.Period == new DateTimePeriod(2018,1,1,2018,1,3)).Should().Be.True();
@@ -111,7 +114,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 		}
 
 		[Test]
-		public void ShouldRemoveAbsenceWhenPeriodIsLargerThanAbsencePeriod()
+		public async Task ShouldRemoveAbsenceWhenPeriodIsLargerThanAbsencePeriod()
 		{
 			Client.Authorize();
 			var scenario = ScenarioFactory.CreateScenario("TestScenario", true, false).WithId();
@@ -131,16 +134,16 @@ namespace Teleopti.Wfm.Api.Test.Command
 				ScenarioId = scenario.Id.GetValueOrDefault()
 			};
 
-			var result = Client.PostAsync("/command/RemovePersonAbsence",
+			var result = await Client.PostAsync("/command/RemovePersonAbsence",
 				new StringContent(JsonConvert.SerializeObject(removePersonAbsenceDto), Encoding.UTF8, "application/json"));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
 			PersonAbsenceRepository.LoadAll().Count().Should().Be.EqualTo(0);
 		}
 
 
 		[Test]
-		public void ShouldRemoveAllAbsencesWithingPeriodAndSplitTheOnesThatGoesOutside()
+		public async Task ShouldRemoveAllAbsencesWithingPeriodAndSplitTheOnesThatGoesOutside()
 		{
 			Client.Authorize();
 			var scenario = ScenarioFactory.CreateScenario("TestScenario", true, false).WithId();
@@ -165,16 +168,16 @@ namespace Teleopti.Wfm.Api.Test.Command
 				ScenarioId = scenario.Id.GetValueOrDefault()
 			};
 
-			var result = Client.PostAsync("/command/RemovePersonAbsence",
+			var result = await Client.PostAsync("/command/RemovePersonAbsence",
 				new StringContent(JsonConvert.SerializeObject(removePersonAbsenceDto), Encoding.UTF8, "application/json"));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
 			PersonAbsenceRepository.LoadAll().Count().Should().Be.EqualTo(2);
 			PersonAbsenceRepository.LoadAll().First(x => x.Period.StartDateTime == new DateTime(2018,1,9)).Period.EndDateTime.Should().Be.EqualTo(new DateTime(2018,1,12));
 		}
 
 		[Test]
-		public void ShouldTrackPersonalAccount()
+		public async Task ShouldTrackPersonalAccount()
 		{
 			Client.Authorize();
 			var scenario = ScenarioFactory.CreateScenario("TestScenario", true, false).WithId();
@@ -200,9 +203,9 @@ namespace Teleopti.Wfm.Api.Test.Command
 				ScenarioId = scenario.Id.GetValueOrDefault()
 			};
 
-			var result = Client.PostAsync("/command/RemovePersonAbsence",
+			var result = await Client.PostAsync("/command/RemovePersonAbsence",
 				new StringContent(JsonConvert.SerializeObject(removePersonAbsenceDto), Encoding.UTF8, "application/json"));
-			var resultDto = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);
+			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
 			PersonAbsenceRepository.LoadAll().Count().Should().Be.EqualTo(0);
 			account.LatestCalculatedBalance.Days.Should().Be.EqualTo(4);

@@ -54,8 +54,7 @@ namespace DotNetOpenAuth.Messaging.Reflection {
 			Requires.NotNull(encoder, "encoder");
 
 			this.Encoder = encoder;
-			var nullEncoder = encoder as IMessagePartNullEncoder;
-			string nullString = nullEncoder != null ? nullEncoder.EncodedNullValue : null;
+			string nullString = encoder is IMessagePartNullEncoder nullEncoder ? nullEncoder.EncodedNullValue : null;
 
 			var originalStringEncoder = encoder as IMessagePartOriginalEncoder;
 			Func<object, string> originalStringEncode = encoder.Encode;

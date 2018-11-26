@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -24,14 +25,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<StaffingViewModelCreator>().As<IStaffingViewModelCreator>().SingleInstance();
-			builder.RegisterType<ForecastedCallsProvider>().SingleInstance();
-			builder.RegisterType<RequiredStaffingProvider>().As<IRequiredStaffingProvider>().SingleInstance();
 			builder.RegisterType<ScheduledStaffingProvider>().As<IScheduledStaffingProvider>().SingleInstance();
 			builder.RegisterType<ScheduledStaffingToDataSeries>().As<IScheduledStaffingToDataSeries>().SingleInstance();
 			builder.RegisterType<ForecastedStaffingProvider>().As<IForecastedStaffingProvider>().SingleInstance();
 			builder.RegisterType<ForecastedStaffingToDataSeries>().As<IForecastedStaffingToDataSeries>().SingleInstance();
-			builder.RegisterType<ReforecastedStaffingProvider>().As<IReforecastedStaffingProvider>().SingleInstance();
 			builder.RegisterType<SupportedSkillsInIntradayProvider>().As<ISupportedSkillsInIntradayProvider>().SingleInstance();
 			builder.RegisterType<SkillTypeInfoProvider>().As<ISkillTypeInfoProvider>();
 			builder.RegisterType<InboundPhoneSkillSupported>().As<ISupportedSkillCheck>();
@@ -40,7 +37,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MultisiteSkillSupportedCheckAlwaysTrue>().As<IMultisiteSkillSupportedCheck>();
 			builder.RegisterType<OtherSkillsLikeEmailSupported>().As<ISupportedSkillCheck>();
 			builder.RegisterType<SkillTypeInfoTypesLikePhone>().As<ISkillTypeInfo>();
-			builder.RegisterType<TaskPeriodsProvider>().As<ITaskPeriodsProvider>().SingleInstance();
 			builder.RegisterType<FetchSkillInIntraday>().SingleInstance();
 			builder.RegisterType<SkillGroupViewModelBuilder>().SingleInstance();
 			builder.RegisterType<AllSkillForSkillGroupProvider>().As<IAllSkillForSkillGroupProvider>();
@@ -50,9 +46,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LoadSkillInIntradays>().As<ILoadAllSkillInIntradays>().SingleInstance();
 			builder.RegisterType<IntradayMonitorDataLoader>().As<IIntradayMonitorDataLoader>().SingleInstance();
 			builder.RegisterType<LatestStatisticsIntervalIdLoader>().As<ILatestStatisticsIntervalIdLoader>().SingleInstance();
-			builder.RegisterType<IncomingTrafficViewModelCreator>().SingleInstance();
-			builder.RegisterType<PerformanceViewModelCreator>().SingleInstance();
-			builder.RegisterType<EstimatedServiceLevelProvider>().SingleInstance();
 
 			builder.RegisterType<LatestStatisticsTimeProvider>().As<ILatestStatisticsTimeProvider>().SingleInstance();
 			builder.RegisterType<ExtractSkillForecastIntervals>().SingleInstance();

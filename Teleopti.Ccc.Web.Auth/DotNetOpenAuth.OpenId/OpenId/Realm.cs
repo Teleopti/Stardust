@@ -140,7 +140,7 @@ namespace DotNetOpenAuth.OpenId {
 		/// </summary>
 		public string Host {
 			[DebuggerStepThrough]
-			get { return this.uri.Host; }
+			get => this.uri.Host;
 		}
 
 		/// <summary>
@@ -148,7 +148,7 @@ namespace DotNetOpenAuth.OpenId {
 		/// </summary>
 		public string Scheme {
 			[DebuggerStepThrough]
-			get { return this.uri.Scheme; }
+			get => this.uri.Scheme;
 		}
 
 		/// <summary>
@@ -156,7 +156,7 @@ namespace DotNetOpenAuth.OpenId {
 		/// </summary>
 		public int Port {
 			[DebuggerStepThrough]
-			get { return this.uri.Port; }
+			get => this.uri.Port;
 		}
 
 		/// <summary>
@@ -164,7 +164,7 @@ namespace DotNetOpenAuth.OpenId {
 		/// </summary>
 		public string AbsolutePath {
 			[DebuggerStepThrough]
-			get { return this.uri.AbsolutePath; }
+			get => this.uri.AbsolutePath;
 		}
 
 		/// <summary>
@@ -173,23 +173,21 @@ namespace DotNetOpenAuth.OpenId {
 		/// </summary>
 		public string PathAndQuery {
 			[DebuggerStepThrough]
-			get { return this.uri.PathAndQuery; }
+			get => this.uri.PathAndQuery;
 		}
 
 		/// <summary>
 		/// Gets the original string.
 		/// </summary>
 		/// <value>The original string.</value>
-		internal string OriginalString {
-			get { return this.uri.OriginalString; }
-		}
+		internal string OriginalString => this.uri.OriginalString;
 
 		/// <summary>
 		/// Gets the realm URL.  If the realm includes a wildcard, it is not included here.
 		/// </summary>
 		internal Uri NoWildcardUri {
 			[DebuggerStepThrough]
-			get { return this.uri; }
+			get => this.uri;
 		}
 
 		/// <summary>
@@ -282,7 +280,7 @@ namespace DotNetOpenAuth.OpenId {
 		[DebuggerStepThrough]
 		public static implicit operator string(Realm realm) {
 			Contract.Ensures((Contract.Result<string>() != null) == (realm != null));
-			return realm != null ? realm.ToString() : null;
+			return realm?.ToString();
 		}
 
 		/// <summary>
@@ -426,11 +424,7 @@ namespace DotNetOpenAuth.OpenId {
 		/// </returns>
 		internal virtual IEnumerable<RelyingPartyEndpointDescription> DiscoverReturnToEndpoints(IDirectWebRequestHandler requestHandler, bool allowRedirects) {
 			XrdsDocument xrds = this.Discover(requestHandler, allowRedirects);
-			if (xrds != null) {
-				return xrds.FindRelyingPartyReceivingEndpoints();
-			}
-
-			return null;
+			return xrds?.FindRelyingPartyReceivingEndpoints();
 		}
 
 		/// <summary>
@@ -481,19 +475,7 @@ namespace DotNetOpenAuth.OpenId {
 			// is safe: http://blog.nerdbank.net/2008/04/uriabsoluteuri-and-uritostring-are-not.html
 			return realmUriBuilder.ToString();
 		}
-
-#if CONTRACTS_FULL
-		/// <summary>
-		/// Verifies conditions that should be true for any valid state of this object.
-		/// </summary>
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Called by code contracts.")]
-		[ContractInvariantMethod]
-		private void ObjectInvariant() {
-			Contract.Invariant(this.uri != null);
-			Contract.Invariant(this.uri.AbsoluteUri != null);
-		}
-#endif
-
+		
 		/// <summary>
 		/// Provides conversions to and from strings for messages that include members of this type.
 		/// </summary>

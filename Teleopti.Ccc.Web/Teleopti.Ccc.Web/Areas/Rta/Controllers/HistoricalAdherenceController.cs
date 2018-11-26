@@ -2,11 +2,9 @@
 using System.Globalization;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
 using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
 
@@ -18,21 +16,18 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		private readonly HistoricalAdherenceViewModelBuilder _historicalAdherenceViewModelBuilder;
 		private readonly ApprovePeriodAsInAdherenceCommandHandler _approvePeriodCommandHandler;
 		private readonly HistoricalAdherenceDate _historicalAdherenceDate;
-		private readonly PermissionsViewModelBuilder _permissions;
 		private readonly RemoveApprovedPeriodCommandHandler _removePeriodCommandHandler;
 
 		public HistoricalAdherenceController(
 			HistoricalAdherenceViewModelBuilder historicalAdherenceViewModelBuilder,
 			ApprovePeriodAsInAdherenceCommandHandler approvePeriodCommandHandler,
 			RemoveApprovedPeriodCommandHandler removePeriodCommandHandler,
-			HistoricalAdherenceDate historicalAdherenceDate,
-			PermissionsViewModelBuilder permissions)
+			HistoricalAdherenceDate historicalAdherenceDate)
 		{
 			_historicalAdherenceViewModelBuilder = historicalAdherenceViewModelBuilder;
 			_approvePeriodCommandHandler = approvePeriodCommandHandler;
 			_removePeriodCommandHandler = removePeriodCommandHandler;
 			_historicalAdherenceDate = historicalAdherenceDate;
-			_permissions = permissions;
 		}
 
 		[ReadModelUnitOfWork, UnitOfWork]

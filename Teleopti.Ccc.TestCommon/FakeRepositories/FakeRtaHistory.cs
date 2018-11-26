@@ -1,10 +1,8 @@
 using System;
 using System.Drawing;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence;
 using Teleopti.Wfm.Adherence.Domain;
-using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.Configuration;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
@@ -72,8 +70,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
+		public FakeRtaHistory RuleChanged(Guid personId, string time) =>
+			RuleChanged(personId, time, null, null, null, null, null, null, null);
+
 		public FakeRtaHistory RuleChanged(Guid personId, string time, string rule) =>
 			RuleChanged(personId, time, null, null, null, null, rule, null, null);
+
+		public FakeRtaHistory RuleChanged(Guid personId, string time, Adherence? adherence) =>
+			RuleChanged(personId, time, null, null, null, null, null, null, adherence);
 
 		public FakeRtaHistory RuleChanged(Guid personId, string time, string state, string activity, Color? activityColor, string rule, Color? ruleColor, Adherence? adherence) =>
 			RuleChanged(personId, time, null, state, activity, activityColor, rule, ruleColor, adherence);
@@ -139,8 +143,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		private DateOnly? belongsToDate(Guid personId, string time, string date) =>
-			date?.Date() ??
-			_belongsToDate.BelongsToDate(personId, time.Utc(), time.Utc());
+		private DateOnly? belongsToDate(Guid personId, string time, string date)
+		{
+			if (date == null)
+				return _belongsToDate.BelongsToDate(personId, time.Utc(), time.Utc());
+			return new DateOnly(date.Utc());
+		}
 	}
 }

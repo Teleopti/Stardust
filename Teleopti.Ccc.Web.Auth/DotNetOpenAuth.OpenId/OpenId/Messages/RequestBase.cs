@@ -106,9 +106,7 @@ namespace DotNetOpenAuth.OpenId.Messages {
 		/// Gets the level of protection this message requires.
 		/// </summary>
 		/// <value><see cref="MessageProtections.None"/></value>
-		public virtual MessageProtections RequiredProtection {
-			get { return MessageProtections.None; }
-		}
+		public virtual MessageProtections RequiredProtection => MessageProtections.None;
 
 		/// <summary>
 		/// Gets a value indicating whether this is a direct or indirect message.
@@ -120,25 +118,19 @@ namespace DotNetOpenAuth.OpenId.Messages {
 		/// Gets the extra parameters included in the message.
 		/// </summary>
 		/// <value>An empty dictionary.</value>
-		public IDictionary<string, string> ExtraData {
-			get { return this.extraData; }
-		}
+		public IDictionary<string, string> ExtraData => this.extraData;
 
 		#endregion
 
 		/// <summary>
 		/// Gets a value indicating whether this message was deserialized as an incoming message.
 		/// </summary>
-		protected internal bool Incoming {
-			get { return this.incoming; }
-		}
+		protected internal bool Incoming => this.incoming;
 
 		/// <summary>
 		/// Gets the protocol used by this message.
 		/// </summary>
-		protected Protocol Protocol {
-			get { return Protocol.Lookup(this.Version); }
-		}
+		protected Protocol Protocol => Protocol.Lookup(this.Version);
 
 		#region IProtocolMessage Methods
 

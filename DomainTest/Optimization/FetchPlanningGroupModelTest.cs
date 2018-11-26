@@ -12,6 +12,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
@@ -114,6 +115,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var planningGroupModel = Target.Fetch(planningGroup.Id.GetValueOrDefault());
 			planningGroupModel.Id.Should().Be.EqualTo(planningGroup.Id);
 			planningGroupModel.Name.Should().Be.EqualTo(planningGroup.Name);
+		}
+		
+		[Test]
+		public void ShouldFetchPreferenceValue()
+		{
+			var planningGroup = new PlanningGroup().WithId();
+			planningGroup.SetGlobalValues(new Percent(0.22));
+			PlanningGroupRepository.Add(planningGroup);
+
+			var planningGroupModel = Target.Fetch(planningGroup.Id.GetValueOrDefault());
+			planningGroupModel.PreferenceValue.Should().Be.EqualTo(planningGroup.Settings.PreferenceValue.Value);
 		}
 
 		[Test]

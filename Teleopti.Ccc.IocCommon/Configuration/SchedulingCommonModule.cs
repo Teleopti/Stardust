@@ -434,15 +434,19 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RestrictionNotAbleToBeScheduledReport>().InstancePerLifetimeScope();
 			builder.RegisterType<AdvancedAgentsFilter>().SingleInstance();
 			builder.RegisterType<StaffingDataAvailablePeriodProvider>().As<IStaffingDataAvailablePeriodProvider>().SingleInstance();
+			builder.RegisterType<PlanningGroupGlobalSettingSetter>().SingleInstance();
 
 			if (_configuration.Args().IsFatClient)
 			{
 				builder.RegisterType<DesktopPeopleInOrganization>().As<IAllStaff>().SingleInstance();
-				builder.RegisterType<DesktopOptimizationContext>()
+				builder.RegisterType<DesktopContextState>()
 					.As<IOptimizationPreferencesProvider>()
 					.As<ICurrentOptimizationCallback>()
 					.As<IBlockPreferenceProviderForPlanningPeriod>()
 					.As<IDayOffOptimizationPreferenceProviderForPlanningPeriod>()
+					.As<ISchedulingOptionsProvider>()
+					.As<ICurrentSchedulingCallback>()
+					.As<IPlanningGroupSettingsProvider>()
 					.AsSelf()
 					.ApplyAspects()
 					.SingleInstance();
@@ -452,11 +456,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.SingleInstance();					
 
 				builder.RegisterType<DesktopContext>().SingleInstance();
-				builder.RegisterType<DesktopSchedulingContext>()
-					.As<ISchedulingOptionsProvider>()
-					.As<ICurrentSchedulingCallback>()
-					.AsSelf()
-					.SingleInstance();
 				builder.RegisterType<MoveSchedulesToOriginalStateHolderAfterIsland>()
 					.As<ISynchronizeSchedulesAfterIsland>()
 					.SingleInstance();
@@ -480,6 +479,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<CurrentOptimizationCallback>().As<ICurrentOptimizationCallback>().AsSelf().SingleInstance();
 				builder.RegisterType<CurrentSchedulingCallback>().As<ICurrentSchedulingCallback>().AsSelf().SingleInstance();
 				builder.RegisterType<FillSchedulerStateHolderFromDatabase>().As<FillSchedulerStateHolder>().ApplyAspects().SingleInstance();
+				builder.RegisterType<PlanningGroupSettingsProvider>().As<IPlanningGroupSettingsProvider>().SingleInstance();
 			}
 
 

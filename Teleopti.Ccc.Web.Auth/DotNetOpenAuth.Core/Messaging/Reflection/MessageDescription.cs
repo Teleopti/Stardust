@@ -40,9 +40,7 @@ namespace DotNetOpenAuth.Messaging.Reflection {
 		/// Gets the mapping between the serialized key names and their describing
 		/// <see cref="MessagePart"/> instances.
 		/// </summary>
-		internal IDictionary<string, MessagePart> Mapping {
-			get { return this.mapping; }
-		}
+		internal IDictionary<string, MessagePart> Mapping => this.mapping;
 
 		/// <summary>
 		/// Gets the message version this instance was generated from.
@@ -266,17 +264,5 @@ namespace DotNetOpenAuth.Messaging.Reflection {
 			BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public;
 			this.Constructors = this.MessageType.GetConstructors(flags);
 		}
-
-#if CONTRACTS_FULL
-		/// <summary>
-		/// Describes traits of this class that are always true.
-		/// </summary>
-		[ContractInvariantMethod]
-		private void Invariant() {
-			Contract.Invariant(this.MessageType != null);
-			Contract.Invariant(this.MessageVersion != null);
-			Contract.Invariant(this.Constructors != null);
-		}
-#endif
 	}
 }
