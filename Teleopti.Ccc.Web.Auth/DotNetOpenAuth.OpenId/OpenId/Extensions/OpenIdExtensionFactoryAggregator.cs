@@ -19,21 +19,13 @@ namespace DotNetOpenAuth.OpenId.Extensions {
 		/// <summary>
 		/// The list of factories this factory delegates to.
 		/// </summary>
-		private List<IOpenIdExtensionFactory> factories = new List<IOpenIdExtensionFactory>(2);
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="OpenIdExtensionFactoryAggregator"/> class.
-		/// </summary>
-		internal OpenIdExtensionFactoryAggregator() {
-		}
-
+		private readonly List<IOpenIdExtensionFactory> factories = new List<IOpenIdExtensionFactory>(2);
+		
 		/// <summary>
 		/// Gets the extension factories that this aggregating factory delegates to.
 		/// </summary>
 		/// <value>A list of factories.  May be empty, but never null.</value>
-		internal IList<IOpenIdExtensionFactory> Factories {
-			get { return this.factories; }
-		}
+		internal IList<IOpenIdExtensionFactory> Factories => this.factories;
 
 		#region IOpenIdExtensionFactory Members
 

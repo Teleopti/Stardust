@@ -15,10 +15,6 @@ namespace DotNetOpenAuth.OpenId.Messages {
 	/// </summary>
 	[Serializable]
 	internal class SignedResponseRequest : RequestBase, IProtocolMessageWithExtensions {
-		/// <summary>
-		/// Backing store for the <see cref="Extensions"/> property.
-		/// </summary>
-		private IList<IExtensionMessage> extensions = new List<IExtensionMessage>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SignedResponseRequest"/> class.
@@ -33,18 +29,16 @@ namespace DotNetOpenAuth.OpenId.Messages {
 			base(version, providerEndpoint, GetMode(version, mode), DotNetOpenAuth.Messaging.MessageTransport.Indirect) {
 		}
 
-		#region IProtocolMessageWithExtensions Members
+        #region IProtocolMessageWithExtensions Members
 
-		/// <summary>
-		/// Gets the list of extensions that are included with this message.
-		/// </summary>
-		/// <value></value>
-		/// <remarks>
-		/// Implementations of this interface should ensure that this property never returns null.
-		/// </remarks>
-		public IList<IExtensionMessage> Extensions {
-			get { return this.extensions; }
-		}
+        /// <summary>
+        /// Gets the list of extensions that are included with this message.
+        /// </summary>
+        /// <value></value>
+        /// <remarks>
+        /// Implementations of this interface should ensure that this property never returns null.
+        /// </remarks>
+        public IList<IExtensionMessage> Extensions { get; } = new List<IExtensionMessage>();
 
 		#endregion
 
@@ -53,9 +47,7 @@ namespace DotNetOpenAuth.OpenId.Messages {
 		/// as part of authentication.
 		/// </summary>
 		/// <value><c>true</c> if using OpenID immediate mode; otherwise, <c>false</c>.</value>
-		internal bool Immediate {
-			get { return string.Equals(this.Mode, Protocol.Args.Mode.checkid_immediate, StringComparison.Ordinal); }
-		}
+		internal bool Immediate => string.Equals(this.Mode, Protocol.Args.Mode.checkid_immediate, StringComparison.Ordinal);
 
 		/// <summary>
 		/// Gets or sets the handle of the association the RP would like the Provider

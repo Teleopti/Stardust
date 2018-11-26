@@ -243,9 +243,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <summary>
 		/// Gets the binding elements used by this channel, in the order applied to outgoing messages.
 		/// </summary>
-		protected internal ReadOnlyCollection<IChannelBindingElement> OutgoingBindingElements {
-			get { return this.outgoingBindingElements.AsReadOnly(); }
-		}
+		protected internal ReadOnlyCollection<IChannelBindingElement> OutgoingBindingElements => this.outgoingBindingElements.AsReadOnly();
 
 		/// <summary>
 		/// Gets the binding elements used by this channel, in the order applied to incoming messages.
@@ -484,8 +482,7 @@ namespace DotNetOpenAuth.Messaging {
 			if (requestMessage != null) {
 				Logger.Channel.DebugFormat("Incoming request received: {0}", requestMessage.GetType().Name);
 
-				var directRequest = requestMessage as IHttpDirectRequest;
-				if (directRequest != null) {
+				if (requestMessage is IHttpDirectRequest directRequest) {
 					foreach (string header in httpRequest.Headers) {
 						directRequest.Headers[header] = httpRequest.Headers[header];
 					}
@@ -669,8 +666,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <param name="response">The HTTP response.</param>
 		protected static void ApplyMessageTemplate(IMessage message, OutgoingWebResponse response) {
 			Requires.NotNull(message, "message");
-			var httpMessage = message as IHttpDirectResponse;
-			if (httpMessage != null) {
+			if (message is IHttpDirectResponse httpMessage) {
 				response.Status = httpMessage.HttpStatusCode;
 				foreach (string headerName in httpMessage.Headers) {
 					response.Headers.Add(headerName, httpMessage.Headers[headerName]);
@@ -699,11 +695,8 @@ namespace DotNetOpenAuth.Messaging {
 		/// <param name="message">The message about to be encoded and sent.</param>
 		protected virtual void OnSending(IProtocolMessage message) {
 			Requires.NotNull(message, "message");
-
-			var sending = this.Sending;
-			if (sending != null) {
-				sending(this, new ChannelEventArgs(message));
-			}
+			
+			Sending?.Invoke(this, new ChannelEventArgs(message));
 		}
 
 		/// <summary>
@@ -732,8 +725,7 @@ namespace DotNetOpenAuth.Messaging {
 			Requires.True(request.Recipient != null, "request", MessagingStrings.DirectedMessageMissingRecipient);
 
 			HttpWebRequest webRequest = this.CreateHttpRequest(request);
-			var directRequest = request as IHttpDirectRequest;
-			if (directRequest != null) {
+			if (request is IHttpDirectRequest directRequest) {
 				foreach (string header in directRequest.Headers) {
 					webRequest.Headers[header] = directRequest.Headers[header];
 				}
@@ -850,8 +842,7 @@ namespace DotNetOpenAuth.Messaging {
 			bool tooLargeForGet = false;
 			if ((message.HttpMethods & HttpDeliveryMethods.GetRequest) == HttpDeliveryMethods.GetRequest) {
 				bool payloadInFragment = false;
-				var httpIndirect = message as IHttpIndirectResponse;
-				if (httpIndirect != null) {
+				if (message is IHttpIndirectResponse httpIndirect) {
 					payloadInFragment = httpIndirect.Include301RedirectPayloadInFragment;
 				}
 
@@ -1032,8 +1023,7 @@ namespace DotNetOpenAuth.Messaging {
 			this.OnSending(message);
 
 			// Give the message a chance to do custom serialization.
-			IMessageWithEvents eventedMessage = message as IMessageWithEvents;
-			if (eventedMessage != null) {
+			if (message is IMessageWithEvents eventedMessage) {
 				eventedMessage.OnSending();
 			}
 
@@ -1062,8 +1052,7 @@ namespace DotNetOpenAuth.Messaging {
 			message.EnsureValidMessage();
 
 			if (Logger.Channel.IsInfoEnabled) {
-				var directedMessage = message as IDirectedProtocolMessage;
-				string recipient = (directedMessage != null && directedMessage.Recipient != null) ? directedMessage.Recipient.AbsoluteUri : "<response>";
+				string recipient = (message is IDirectedProtocolMessage directedMessage && directedMessage.Recipient != null) ? directedMessage.Recipient.AbsoluteUri : "<response>";
 				var messageAccessor = this.MessageDescriptions.GetAccessor(message);
 				Logger.Channel.InfoFormat(
 					"Prepared outgoing {0} ({1}) message for {2}: {3}{4}",
@@ -1092,7 +1081,7 @@ namespace DotNetOpenAuth.Messaging {
 			var fields = messageAccessor.Serialize();
 
 			UriBuilder builder = new UriBuilder(requestMessage.Recipient);
-			MessagingUtilities.AppendQueryArgs(builder, fields);
+			builder.AppendQueryArgs(fields);
 			HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(builder.Uri);
 			this.PrepareHttpWebRequest(httpRequest);
 
@@ -1283,8 +1272,7 @@ namespace DotNetOpenAuth.Messaging {
 			}
 
 			// Give the message a chance to do custom serialization.
-			IMessageWithEvents eventedMessage = message as IMessageWithEvents;
-			if (eventedMessage != null) {
+			if (message is IMessageWithEvents eventedMessage) {
 				eventedMessage.OnReceiving();
 			}
 
@@ -1401,19 +1389,7 @@ namespace DotNetOpenAuth.Messaging {
 			// Now put the protection ones in the right order.
 			return -((int)protection1).CompareTo((int)protection2); // descending flag ordinal order
 		}
-
-#if CONTRACTS_FULL
-		/// <summary>
-		/// Verifies conditions that should be true for any valid state of this object.
-		/// </summary>
-		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Called by code contracts.")]
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Called by code contracts.")]
-		[ContractInvariantMethod]
-		private void ObjectInvariant() {
-			Contract.Invariant(this.MessageDescriptions != null);
-		}
-#endif
-
+		
 		/// <summary>
 		/// Verifies that all required message parts are initialized to values
 		/// prior to sending the message to a remote party.

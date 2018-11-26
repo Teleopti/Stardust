@@ -95,9 +95,7 @@ namespace DotNetOpenAuth.OpenId.Provider {
 		/// This property returns false if there are properties that must be set on this
 		/// request instance before the response can be sent.
 		/// </remarks>
-		bool IRequest.IsResponseReady {
-			get { throw new NotImplementedException(); }
-		}
+		bool IRequest.IsResponseReady => throw new NotImplementedException();
 
 		/// <summary>
 		/// Adds an extension to the response to send to the relying party.

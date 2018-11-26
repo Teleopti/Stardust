@@ -16,17 +16,10 @@ namespace DotNetOpenAuth.OpenId.Extensions {
 	/// OpenID implementations and their extensions.
 	/// </summary>
 	internal static class OpenIdExtensionsInteropHelper {
-		/// <summary>
-		/// The gender decoder to translate AX genders to Sreg.
-		/// </summary>
-		private static GenderEncoder genderEncoder = new GenderEncoder();
-
-		/// <summary>
-		/// Gets the gender decoder to translate AX genders to Sreg.
-		/// </summary>
-		internal static GenderEncoder GenderEncoder {
-			get { return genderEncoder; }
-		}
+        /// <summary>
+        /// Gets the gender decoder to translate AX genders to Sreg.
+        /// </summary>
+        internal static GenderEncoder GenderEncoder { get; } = new GenderEncoder();
 
 		/// <summary>
 		/// Splits the AX attribute format flags into individual values for processing.
@@ -64,7 +57,7 @@ namespace DotNetOpenAuth.OpenId.Extensions {
 				case AXAttributeFormats.OpenIdNetSchema:
 					return axSchemaOrgFormatTypeUri.Replace("axschema.org", "openid.net/schema");
 				default:
-					throw new ArgumentOutOfRangeException("targetFormat");
+					throw new ArgumentOutOfRangeException(nameof(targetFormat));
 			}
 		}
 

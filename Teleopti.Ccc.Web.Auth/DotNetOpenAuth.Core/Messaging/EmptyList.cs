@@ -33,9 +33,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <returns>
 		/// The number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
 		/// </returns>
-		public int Count {
-			get { return 0; }
-		}
+		public int Count => 0;
 
 		/// <summary>
 		/// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
@@ -43,9 +41,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <value></value>
 		/// <returns>true if the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only; otherwise, false.
 		/// </returns>
-		public bool IsReadOnly {
-			get { return true; }
-		}
+		public bool IsReadOnly => true;
 
 		#region IList<T> Members
 
@@ -102,7 +98,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// </exception>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Code Contracts ccrewrite does this.")]
 		public void RemoveAt(int index) {
-			throw new ArgumentOutOfRangeException("index");
+			throw new ArgumentOutOfRangeException(nameof(index));
 		}
 
 		#endregion

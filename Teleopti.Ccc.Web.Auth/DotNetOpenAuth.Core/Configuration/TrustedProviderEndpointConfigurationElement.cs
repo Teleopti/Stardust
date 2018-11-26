@@ -18,12 +18,6 @@ namespace DotNetOpenAuth.Configuration {
 		private const string ProviderEndpointConfigName = "endpoint";
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TrustedProviderEndpointConfigurationElement"/> class.
-		/// </summary>
-		public TrustedProviderEndpointConfigurationElement() {
-		}
-
-		/// <summary>
 		/// Gets or sets the OpenID Provider Endpoint (aka "OP Endpoint") that this relying party trusts.
 		/// </summary>
 		[ConfigurationProperty(ProviderEndpointConfigName, IsRequired = true, IsKey = true)]

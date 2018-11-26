@@ -46,9 +46,7 @@ namespace DotNetOpenAuth.OpenId {
 		/// string that was deserialized.  For Identifiers instantiated in some other way, this is
 		/// the normalized form of the string used to instantiate the identifier.
 		/// </value>
-		internal virtual string SerializedString {
-			get { return this.IsDeserializedInstance ? this.OriginalString : this.ToString(); }
-		}
+		internal virtual string SerializedString => this.IsDeserializedInstance ? this.OriginalString : this.ToString();
 
 		/// <summary>
 		/// Gets or sets a value indicating whether <see cref="Identifier"/> instances are considered equal
@@ -94,10 +92,7 @@ namespace DotNetOpenAuth.OpenId {
 			Requires.True(identifier == null || identifier.Length > 0, "identifier");
 			Contract.Ensures((identifier == null) == (Contract.Result<Identifier>() == null));
 
-			if (identifier == null) {
-				return null;
-			}
-			return Parse(identifier);
+			return identifier == null ? null : Parse(identifier);
 		}
 
 		/// <summary>

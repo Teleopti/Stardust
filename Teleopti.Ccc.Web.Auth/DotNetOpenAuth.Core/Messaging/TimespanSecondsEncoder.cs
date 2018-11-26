@@ -25,9 +25,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <summary>
 		/// Gets the type of the encoded values produced by this encoder, as they would appear in their preferred form.
 		/// </summary>
-		public Type FormattingType {
-			get { return typeof(int); }
-		}
+		public Type FormattingType => typeof(int);
 
 		#endregion
 
@@ -41,9 +39,8 @@ namespace DotNetOpenAuth.Messaging {
 		/// The <paramref name="value"/> in string form, ready for message transport.
 		/// </returns>
 		public string Encode(object value) {
-			TimeSpan? timeSpan = value as TimeSpan?;
-			if (timeSpan.HasValue) {
-				return timeSpan.Value.TotalSeconds.ToString(CultureInfo.InvariantCulture);
+			if (value is TimeSpan timeSpan) {
+				return timeSpan.TotalSeconds.ToString(CultureInfo.InvariantCulture);
 			} else {
 				return null;
 			}

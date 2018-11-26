@@ -81,8 +81,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 		/// This can be due to tampering, replay attack or expiration, among other things.
 		/// </exception>
 		protected override void ProcessIncomingMessage(IProtocolMessage message) {
-			var checkAuthRequest = message as CheckAuthenticationRequest;
-			if (checkAuthRequest != null) {
+			if (message is CheckAuthenticationRequest checkAuthRequest) {
 				IndirectSignedResponse originalResponse = new IndirectSignedResponse(checkAuthRequest, this);
 				try {
 					base.ProcessIncomingMessage(originalResponse);
@@ -98,8 +97,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 			// between two good OpenID implementations, into an exception.
 			// We don't process DirectErrorResponse because associate negotiations
 			// commonly get a derivative of that message type and handle it.
-			var errorMessage = message as IndirectErrorResponse;
-			if (errorMessage != null) {
+			if (message is IndirectErrorResponse errorMessage) {
 				string exceptionMessage = string.Format(
 					CultureInfo.CurrentCulture,
 					OpenIdStrings.IndirectErrorFormattedMessage,
@@ -149,8 +147,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 			// per OpenID 2.0 section 5.1.2.2.
 			// Note: The v1.1 spec doesn't require 400 responses for some error messages
 			if (message.Version.Major >= 2) {
-				var httpDirectResponse = message as IHttpDirectResponse;
-				if (httpDirectResponse != null) {
+				if (message is IHttpDirectResponse httpDirectResponse) {
 					ErrorUtilities.VerifyProtocol(
 						httpDirectResponse.HttpStatusCode == response.Status,
 						MessagingStrings.UnexpectedHttpStatusCode,
@@ -182,8 +179,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 			preparedResponse.OriginalMessage = response;
 			preparedResponse.ResponseStream = new MemoryStream(keyValueEncoding);
 
-			IHttpDirectResponse httpMessage = response as IHttpDirectResponse;
-			if (httpMessage != null) {
+			if (response is IHttpDirectResponse httpMessage) {
 				preparedResponse.Status = httpMessage.HttpStatusCode;
 			}
 

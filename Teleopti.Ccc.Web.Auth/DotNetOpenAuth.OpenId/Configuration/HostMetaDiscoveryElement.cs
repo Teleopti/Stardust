@@ -15,13 +15,7 @@ namespace DotNetOpenAuth.Configuration {
 		/// The property name for enableCertificateValidationCache.
 		/// </summary>
 		private const string EnableCertificateValidationCacheConfigName = "enableCertificateValidationCache";
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="HostMetaDiscoveryElement"/> class.
-		/// </summary>
-		public HostMetaDiscoveryElement() {
-		}
-
+		
 		/// <summary>
 		/// Gets or sets a value indicating whether validated certificates should be cached and not validated again.
 		/// </summary>

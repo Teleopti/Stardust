@@ -30,8 +30,10 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 		/// The appropriate association response message.
 		/// </returns>
 		public IProtocolMessage CreateResponseCore() {
-			var response = new AssociateUnencryptedResponseProvider(this.Version, this);
-			response.AssociationType = this.AssociationType;
+			var response = new AssociateUnencryptedResponseProvider(this.Version, this)
+			{
+				AssociationType = this.AssociationType
+			};
 			return response;
 		}
 	}

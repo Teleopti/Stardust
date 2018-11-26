@@ -48,11 +48,7 @@ namespace DotNetOpenAuth.Xrds {
 		/// <value>
 		/// 	<c>true</c> if this XRD's resolution was successful; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsXriResolutionSuccessful {
-			get {
-				return this.XriResolutionStatusCode == 100;
-			}
-		}
+		public bool IsXriResolutionSuccessful => this.XriResolutionStatusCode == 100;
 
 		/// <summary>
 		/// Gets the canonical ID (i-number) for this element.
@@ -60,7 +56,7 @@ namespace DotNetOpenAuth.Xrds {
 		public string CanonicalID {
 			get {
 				var n = Node.SelectSingleNode("xrd:CanonicalID", XmlNamespaceResolver);
-				return n != null ? n.Value : null;
+				return n?.Value;
 			}
 		}
 
@@ -105,13 +101,9 @@ namespace DotNetOpenAuth.Xrds {
 		/// <summary>
 		/// Gets an enumeration of all Service/URI elements, sorted in priority order.
 		/// </summary>
-		public IEnumerable<UriElement> ServiceUris {
-			get {
-				return from service in this.Services
-					   from uri in service.UriElements
-					   select uri;
-			}
-		}
+		public IEnumerable<UriElement> ServiceUris => from service in this.Services
+			from uri in service.UriElements
+			select uri;
 
 		/// <summary>
 		/// Gets the XRI resolution status code.

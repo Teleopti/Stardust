@@ -28,7 +28,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <param name="innerException">The inner exception.</param>
 		/// <param name="message">The message for the exception.</param>
 		protected internal ProtocolFaultResponseException(Channel channel, IDirectResponseProtocolMessage errorResponse, IProtocolMessage faultedMessage = null, Exception innerException = null, string message = null)
-			: base(message ?? (innerException != null ? innerException.Message : null), faultedMessage, innerException) {
+			: base(message ?? (innerException?.Message), faultedMessage, innerException) {
 			Requires.NotNull(channel, "channel");
 			Requires.NotNull(errorResponse, "errorResponse");
 			this.channel = channel;

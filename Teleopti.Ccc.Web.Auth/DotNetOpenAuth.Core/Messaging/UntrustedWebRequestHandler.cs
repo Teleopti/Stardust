@@ -36,26 +36,6 @@ namespace DotNetOpenAuth.Messaging {
 		private ICollection<string> allowableSchemes = new List<string> { "http", "https" };
 
 		/// <summary>
-		/// The collection of blacklisted hosts.
-		/// </summary>
-		private ICollection<string> blacklistHosts = new List<string>(Configuration.BlacklistHosts.KeysAsStrings);
-
-		/// <summary>
-		/// The collection of regular expressions used to identify additional blacklisted hosts.
-		/// </summary>
-		private ICollection<Regex> blacklistHostsRegex = new List<Regex>(Configuration.BlacklistHostsRegex.KeysAsRegexs);
-
-		/// <summary>
-		/// The collection of whitelisted hosts.
-		/// </summary>
-		private ICollection<string> whitelistHosts = new List<string>(Configuration.WhitelistHosts.KeysAsStrings);
-
-		/// <summary>
-		/// The collection of regular expressions used to identify additional whitelisted hosts.
-		/// </summary>
-		private ICollection<Regex> whitelistHostsRegex = new List<Regex>(Configuration.WhitelistHostsRegex.KeysAsRegexs);
-
-		/// <summary>
 		/// The maximum redirections to follow in the course of a single request.
 		/// </summary>
 		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -146,33 +126,31 @@ namespace DotNetOpenAuth.Messaging {
 		/// pass standard security checks.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Whitelist", Justification = "Spelling as intended.")]
-		public ICollection<string> WhitelistHosts { get { return this.whitelistHosts; } }
+		public ICollection<string> WhitelistHosts { get; } = new List<string>(Configuration.WhitelistHosts.KeysAsStrings);
 
 		/// <summary>
 		/// Gets a collection of host name regular expressions that indicate hosts that should
 		/// be allowed even though they don't pass standard security checks.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Whitelist", Justification = "Spelling as intended.")]
-		public ICollection<Regex> WhitelistHostsRegex { get { return this.whitelistHostsRegex; } }
+		public ICollection<Regex> WhitelistHostsRegex { get; } = new List<Regex>(Configuration.WhitelistHostsRegex.KeysAsRegexs);
 
 		/// <summary>
 		/// Gets a collection of host name literals that should be rejected even if they 
 		/// pass standard security checks.
 		/// </summary>
-		public ICollection<string> BlacklistHosts { get { return this.blacklistHosts; } }
+		public ICollection<string> BlacklistHosts { get; } = new List<string>(Configuration.BlacklistHosts.KeysAsStrings);
 
 		/// <summary>
 		/// Gets a collection of host name regular expressions that indicate hosts that should
 		/// be rejected even if they pass standard security checks.
 		/// </summary>
-		public ICollection<Regex> BlacklistHostsRegex { get { return this.blacklistHostsRegex; } }
+		public ICollection<Regex> BlacklistHostsRegex { get; } = new List<Regex>(Configuration.BlacklistHostsRegex.KeysAsRegexs);
 
 		/// <summary>
 		/// Gets the configuration for this class that is specified in the host's .config file.
 		/// </summary>
-		private static UntrustedWebRequestElement Configuration {
-			get { return DotNetOpenAuthSection.Messaging.UntrustedWebRequest; }
-		}
+		private static UntrustedWebRequestElement Configuration => DotNetOpenAuthSection.Messaging.UntrustedWebRequest;
 
 		#region IDirectWebRequestHandler Members
 

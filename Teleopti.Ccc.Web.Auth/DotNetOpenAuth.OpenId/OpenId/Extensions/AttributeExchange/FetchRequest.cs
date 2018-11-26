@@ -23,8 +23,7 @@ namespace DotNetOpenAuth.OpenId.Extensions.AttributeExchange {
 		/// </summary>
 		internal static readonly StandardOpenIdExtensionFactory.CreateDelegate Factory = (typeUri, data, baseMessage, isProviderRole) => {
 			if (typeUri == Constants.TypeUri && isProviderRole) {
-				string mode;
-				if (data.TryGetValue("mode", out mode) && mode == Mode) {
+				if (data.TryGetValue("mode", out var mode) && mode == Mode) {
 					return new FetchRequest();
 				}
 			}

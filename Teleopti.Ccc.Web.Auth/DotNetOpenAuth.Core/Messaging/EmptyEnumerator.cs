@@ -34,9 +34,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <exception cref="T:System.InvalidOperationException">
 		/// The enumerator is positioned before the first element of the collection or after the last element.
 		/// </exception>
-		public object Current {
-			get { return null; }
-		}
+		public object Current => null;
 
 		/// <summary>
 		/// Advances the enumerator to the next element of the collection.

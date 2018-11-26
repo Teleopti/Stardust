@@ -42,9 +42,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 		/// Gets the protection offered (if any) by this binding element.
 		/// </summary>
 		/// <value><see cref="MessageProtections.None"/></value>
-		public MessageProtections Protection {
-			get { return MessageProtections.None; }
-		}
+		public MessageProtections Protection => MessageProtections.None;
 
 		/// <summary>
 		/// Prepares a message for sending based on the rules of this channel binding element.
@@ -59,12 +57,10 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 		/// <see cref="MessagePartAttribute.RequiredProtection"/> properties where applicable.
 		/// </remarks>
 		public MessageProtections? ProcessOutgoingMessage(IProtocolMessage message) {
-			SignedResponseRequest request = message as SignedResponseRequest;
-			if (request != null && request.Version.Major < 2) {
+			if (message is SignedResponseRequest request && request.Version.Major < 2) {
 				request.AddReturnToArguments(ProviderEndpointParameterName, request.Recipient.AbsoluteUri);
 
-				CheckIdRequest authRequest = request as CheckIdRequest;
-				if (authRequest != null) {
+				if (request is CheckIdRequest authRequest) {
 					request.AddReturnToArguments(ClaimedIdentifierParameterName, authRequest.ClaimedIdentifier);
 				}
 
@@ -92,8 +88,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 		/// <see cref="MessagePartAttribute.RequiredProtection"/> properties where applicable.
 		/// </remarks>
 		public MessageProtections? ProcessIncomingMessage(IProtocolMessage message) {
-			IndirectSignedResponse response = message as IndirectSignedResponse;
-			if (response != null && response.Version.Major < 2) {
+			if (message is IndirectSignedResponse response && response.Version.Major < 2) {
 				// GetReturnToArgument may return parameters that are not signed,
 				// but we must allow for that since in OpenID 1.x, a stateless RP has 
 				// no way to preserve the provider endpoint and claimed identifier otherwise.  
@@ -108,8 +103,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 					response.ProviderEndpoint = new Uri(op_endpoint);
 				}
 
-				PositiveAssertionResponse authResponse = response as PositiveAssertionResponse;
-				if (authResponse != null) {
+				if (response is PositiveAssertionResponse authResponse) {
 					if (authResponse.ClaimedIdentifier == null) {
 						string claimedId = response.GetReturnToArgument(ClaimedIdentifierParameterName);
 						ErrorUtilities.VerifyProtocol(claimedId != null, MessagingStrings.RequiredParametersMissing, message.GetType().Name, ClaimedIdentifierParameterName);

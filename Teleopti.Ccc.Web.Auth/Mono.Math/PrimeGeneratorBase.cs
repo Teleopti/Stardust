@@ -25,21 +25,11 @@ namespace Mono.Math.Prime.Generator {
 	//[CLSCompliant(false)]
 	internal abstract class PrimeGeneratorBase {
 
-		public virtual ConfidenceFactor Confidence {
-			get {
-				return ConfidenceFactor.Medium;
-			}
-		}
+		public virtual ConfidenceFactor Confidence => ConfidenceFactor.Medium;
 
-		public virtual Prime.PrimalityTest PrimalityTest {
-			get {
-				return new Prime.PrimalityTest (PrimalityTests.SmallPrimeSppTest);
-			}
-		}
+		public virtual Prime.PrimalityTest PrimalityTest => new Prime.PrimalityTest (PrimalityTests.SmallPrimeSppTest);
 
-		public virtual int TrialDivisionBounds {
-			get { return 4000; }
-		}
+		public virtual int TrialDivisionBounds => 4000;
 
 		/// <summary>
 		/// Performs primality tests on bi, assumes trial division has been done.

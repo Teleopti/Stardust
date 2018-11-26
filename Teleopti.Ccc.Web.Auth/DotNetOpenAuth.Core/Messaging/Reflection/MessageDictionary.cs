@@ -75,16 +75,12 @@ namespace DotNetOpenAuth.Messaging.Reflection {
 		/// <summary>
 		/// Gets the number of explicitly set values in the message.
 		/// </summary>
-		public int Count {
-			get { return this.Keys.Count; }
-		}
+		public int Count => this.Keys.Count;
 
 		/// <summary>
 		/// Gets a value indicating whether this message is read only.
 		/// </summary>
-		bool ICollection<KeyValuePair<string, string>>.IsReadOnly {
-			get { return false; }
-		}
+		bool ICollection<KeyValuePair<string, string>>.IsReadOnly => false;
 
 		#endregion
 
@@ -122,9 +118,7 @@ namespace DotNetOpenAuth.Messaging.Reflection {
 		/// <summary>
 		/// Gets the keys that are in the message but not declared as official OAuth properties.
 		/// </summary>
-		public ICollection<string> AdditionalKeys {
-			get { return this.message.ExtraData.Keys; }
-		}
+		public ICollection<string> AdditionalKeys => this.message.ExtraData.Keys;
 
 		/// <summary>
 		/// Gets all the values.
@@ -132,12 +126,14 @@ namespace DotNetOpenAuth.Messaging.Reflection {
 		public ICollection<string> Values {
 			get {
 				List<string> values = new List<string>(this.message.ExtraData.Count + this.description.Mapping.Count);
-				foreach (MessagePart part in this.description.Mapping.Values) {
-					if (part.GetValue(this.message, this.getOriginalValues) != null) {
-						values.Add(part.GetValue(this.message, this.getOriginalValues));
+				foreach (MessagePart part in this.description.Mapping.Values)
+				{
+					var value = part.GetValue(this.message, this.getOriginalValues);
+					if (value != null) {
+						values.Add(value);
 					}
 				}
-
+				
 				foreach (string value in this.message.ExtraData.Values) {
 					Debug.Assert(value != null, "Null values should never be allowed in the extra data dictionary.");
 					values.Add(value);
@@ -152,9 +148,7 @@ namespace DotNetOpenAuth.Messaging.Reflection {
 		/// <summary>
 		/// Gets the serializer for the message this dictionary provides access to.
 		/// </summary>
-		private MessageSerializer Serializer {
-			get { return MessageSerializer.Get(this.Message.GetType()); }
-		}
+		private MessageSerializer Serializer => MessageSerializer.Get(this.Message.GetType());
 
 		#region IDictionary<string,string> Indexers
 
@@ -392,18 +386,5 @@ namespace DotNetOpenAuth.Messaging.Reflection {
 			Requires.NotNull(fields, "fields");
 			this.Serializer.Deserialize(fields, this);
 		}
-
-#if CONTRACTS_FULL
-		/// <summary>
-		/// Verifies conditions that should be true for any valid state of this object.
-		/// </summary>
-		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Called by code contracts.")]
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Called by code contracts.")]
-		[ContractInvariantMethod]
-		private void ObjectInvariant() {
-			Contract.Invariant(this.Message != null);
-			Contract.Invariant(this.Description != null);
-		}
-#endif
 	}
 }

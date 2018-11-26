@@ -61,36 +61,25 @@ namespace DotNetOpenAuth.OpenId.Provider {
 	/// </summary>
 	[ContractClassFor(typeof(IHostProcessedRequest))]
 	internal abstract class IHostProcessedRequestContract : IHostProcessedRequest {
-		/// <summary>
-		/// Initializes a new instance of the <see cref="IHostProcessedRequestContract"/> class.
-		/// </summary>
-		protected IHostProcessedRequestContract() {
-		}
-
+		
 		#region IHostProcessedRequest Properties
 
 		/// <summary>
 		/// Gets the version of OpenID being used by the relying party that sent the request.
 		/// </summary>
-		ProtocolVersion IHostProcessedRequest.RelyingPartyVersion {
-			get { throw new System.NotImplementedException(); }
-		}
+		ProtocolVersion IHostProcessedRequest.RelyingPartyVersion => throw new System.NotImplementedException();
 
 		/// <summary>
 		/// Gets the URL the consumer site claims to use as its 'base' address.
 		/// </summary>
-		Realm IHostProcessedRequest.Realm {
-			get { throw new System.NotImplementedException(); }
-		}
+		Realm IHostProcessedRequest.Realm => throw new System.NotImplementedException();
 
 		/// <summary>
 		/// Gets a value indicating whether the consumer demands an immediate response.
 		/// If false, the consumer is willing to wait for the identity provider
 		/// to authenticate the user.
 		/// </summary>
-		bool IHostProcessedRequest.Immediate {
-			get { throw new System.NotImplementedException(); }
-		}
+		bool IHostProcessedRequest.Immediate => throw new System.NotImplementedException();
 
 		/// <summary>
 		/// Gets or sets the provider endpoint.
@@ -132,9 +121,7 @@ namespace DotNetOpenAuth.OpenId.Provider {
 		/// This property returns false if there are properties that must be set on this
 		/// request instance before the response can be sent.
 		/// </remarks>
-		bool IRequest.IsResponseReady {
-			get { throw new System.NotImplementedException(); }
-		}
+		bool IRequest.IsResponseReady => throw new System.NotImplementedException();
 
 		/// <summary>
 		/// Adds an extension to the response to send to the relying party.

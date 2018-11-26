@@ -20,17 +20,7 @@ namespace DotNetOpenAuth.Configuration {
 		/// The name of the section under which this library's settings must be found.
 		/// </summary>
 		internal const string SectionName = "dotNetOpenAuth";
-
-		/// <summary>
-		/// The name of the &lt;openid&gt; sub-element.
-		/// </summary>
-		private const string OpenIdElementName = "openid";
-
-		/// <summary>
-		/// The name of the &lt;oauth&gt; sub-element.
-		/// </summary>
-		private const string OAuthElementName = "oauth";
-
+		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DotNetOpenAuthSection"/> class.
 		/// </summary>
@@ -40,16 +30,12 @@ namespace DotNetOpenAuth.Configuration {
 		/// <summary>
 		/// Gets the messaging configuration element.
 		/// </summary>
-		public static MessagingElement Messaging {
-			get { return MessagingElement.Configuration; }
-		}
+		public static MessagingElement Messaging => MessagingElement.Configuration;
 
 		/// <summary>
 		/// Gets the reporting configuration element.
 		/// </summary>
-		internal static ReportingElement Reporting {
-			get { return ReportingElement.Configuration; }
-		}
+		internal static ReportingElement Reporting => ReportingElement.Configuration;
 
 		/// <summary>
 		/// Gets a named section in this section group, or <c>null</c> if no such section is defined.
@@ -62,7 +48,7 @@ namespace DotNetOpenAuth.Configuration {
 				return (ConfigurationSection)WebConfigurationManager.GetSection(fullyQualifiedSectionName);
 			} else {
 				var configuration = ConfigurationManager.OpenExeConfiguration(null);
-				return configuration != null ? configuration.GetSection(fullyQualifiedSectionName) : null;
+				return configuration.GetSection(fullyQualifiedSectionName);
 			}
 		}
 	}

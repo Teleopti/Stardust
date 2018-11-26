@@ -30,9 +30,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 		/// <remarks>
 		/// This value is used to assist in sorting binding elements in the channel stack.
 		/// </remarks>
-		public MessageProtections Protection {
-			get { return MessageProtections.All; }
-		}
+		public MessageProtections Protection => MessageProtections.All;
 
 		/// <summary>
 		/// Prepares a message for sending based on the rules of this channel binding element.
@@ -69,8 +67,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 		/// <see cref="MessagePartAttribute.RequiredProtection"/> properties where applicable.
 		/// </remarks>
 		public MessageProtections? ProcessIncomingMessage(IProtocolMessage message) {
-			var signedMessage = message as ITamperResistantOpenIdMessage;
-			if (signedMessage != null) {
+			if (message is ITamperResistantOpenIdMessage signedMessage) {
 				Logger.Bindings.DebugFormat("Skipped security checks of incoming {0} message for preview purposes.", message.GetType().Name);
 				return this.Protection;
 			}
