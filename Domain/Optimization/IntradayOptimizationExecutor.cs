@@ -74,26 +74,25 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(allSettingsForPlanningGroup);
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, agentsInIsland, new LockInfoForStateHolder(_gridlockManager, locks), period, onlyUseSkills);
 			var agents = schedulerStateHolder.ChoosenAgents.Filter(agentsToOptimize);
-			if (planningPeriodId != Guid.Empty)
+			if (planningPeriodId == Guid.Empty)
+			{
+				_intradayOptimization.Execute(period, agents, runResolveWeeklyRestRule, blockPreferenceProvider, allSettingsForPlanningGroup);
+			}
+			else
 			{
 				var lastJobResult = _planningPeriodRepository.Get(planningPeriodId).GetLastSchedulingJob();
-				var agentIdsWithPreferenceHints = lastJobResult == null ? 
-					Enumerable.Empty<Guid>() : 
-					JsonConvert.DeserializeObject<FullSchedulingResultModel>(lastJobResult.Details.Last().Message)
-						.BusinessRulesValidationResults.Where(x => x.ValidationErrors
-						.Any(y => y.ResourceType == ValidationResourceType.Preferences))
+				var agentIdsWithPreferenceHints = lastJobResult == null
+					? Enumerable.Empty<Guid>()
+					: JsonConvert.DeserializeObject<FullSchedulingResultModel>(lastJobResult.Details.Last().Message)
+						.BusinessRulesValidationResults.Where(x => x.ValidationErrors.Any(y => y.ResourceType == ValidationResourceType.Preferences))
 						.Select(x => x.ResourceId);
 				var agentsToOptimizeWithoutPreferences = agents.Where(agent => agentIdsWithPreferenceHints.Contains(agent.Id.Value)).ToList();
 				var agentsToOptimizeWithOriginalPreferenceValues = agents.Except(agentsToOptimizeWithoutPreferences).ToArray();
 				using (allSettingsForPlanningGroup.ChangeSettingInThisScope(Percent.Zero))
 				{
-					_intradayOptimization.Execute(period, agentsToOptimizeWithoutPreferences, runResolveWeeklyRestRule, blockPreferenceProvider,allSettingsForPlanningGroup);
+					_intradayOptimization.Execute(period, agentsToOptimizeWithoutPreferences, runResolveWeeklyRestRule, blockPreferenceProvider, allSettingsForPlanningGroup);
 				}
 				_intradayOptimization.Execute(period, agentsToOptimizeWithOriginalPreferenceValues, runResolveWeeklyRestRule, blockPreferenceProvider, allSettingsForPlanningGroup);
-			}
-			else
-			{
-				_intradayOptimization.Execute(period, agents, runResolveWeeklyRestRule, blockPreferenceProvider, allSettingsForPlanningGroup);				
 			}
 		}
 	}
