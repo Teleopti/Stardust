@@ -104,3 +104,15 @@ class MockAreaService implements Partial<AreaService> {
 
 -   `src\app\menu\components\side-menu\side-menu.component.spec.ts`
     -   Uses Mocks for services and PageObject for DOM interaction
+
+### Translation
+
+Each module should import the TranslationModule - after which translationService among other things are accessible to the module.
+
+When searching for translations you might need to look at these potential translation usages:
+
+-   `get(key: string|Array<string>, interpolateParams?: Object)`
+-   `instant(key: string|Array<string>, interpolateParams?: Object)`
+-   `<div>{{ 'HELLO' | translate:param }}</div>`
+-   `<div [translate]="'HELLO'" [translateParams]="{value: 'world'}"></div>`
+-   `<div translate [translateParams]="{value: 'world'}">HELLO</div>`
