@@ -327,10 +327,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var query = Session.CreateSQLQuery(
 				@"SELECT w.Skill as SkillId, s.TimeZone as TimeZoneId, wdt.WeekdayIndex, ohl.Minimum as StartTimeTicks, ohl.Maximum as EndTimeTicks  
- FROM [WorkloadDayTemplate] wdt 
- inner join OpenHourList ohl on ohl.Parent=wdt.WorkloadDayBase
- inner join workload w on w.Id=wdt.Parent
- inner join skill s on w.Skill=s.id WHERE Skill IN(:skillIdList) AND s.IsDeleted = 0 AND w.IsDeleted = 0");
+ FROM [WorkloadDayTemplate] wdt WITH (NOLOCK)
+ inner join  OpenHourList ohl WITH (NOLOCK) on ohl.Parent=wdt.WorkloadDayBase 
+ inner join workload w WITH (NOLOCK) on w.Id=wdt.Parent
+ inner join skill s WITH (NOLOCK) on w.Skill=s.id  WHERE Skill IN(:skillIdList) AND s.IsDeleted = 0 AND w.IsDeleted = 0");
 
 			return query.SetParameterList("skillIdList", skillIds)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(SkillOpenHoursLight)))
