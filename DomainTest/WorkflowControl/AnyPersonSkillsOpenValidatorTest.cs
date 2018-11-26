@@ -149,6 +149,31 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			validatedRequest.IsValid.Should().Be.True();
 		}
 
+		[Test]
+		public void ShouldHandleSkillWithNoOpenHours()
+		{
+			var skill = SkillFactory.CreateSkill("Phone").WithId();
+			var date = new DateOnly(2016, 4, 1);
+			var person = PersonFactory.CreatePersonWithPersonPeriodTeamSite(date);
+			person.AddSkill(skill, date);
+			person.AddSkill(_skill, date);
+			setupOpenHours(_skill, true);
+			var request = new PersonRequest(person, new AbsenceRequest(_absence, new DateTimePeriod(2017, 10, 21, 8, 2017, 10, 22, 9))).WithId();
+			var validatedRequest = Target.Validate(request.Request as IAbsenceRequest, person.PersonPeriodCollection.First().PersonSkillCollection, _scheduleRange);
+			validatedRequest.IsValid.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldHandleNoSkillWithOpenHours()
+		{
+			var date = new DateOnly(2016, 4, 1);
+			var person = PersonFactory.CreatePersonWithPersonPeriodTeamSite(date);
+			person.AddSkill(_skill, date);
+			var request = new PersonRequest(person, new AbsenceRequest(_absence, new DateTimePeriod(2017, 10, 21, 8, 2017, 10, 22, 9))).WithId();
+			var validatedRequest = Target.Validate(request.Request as IAbsenceRequest, person.PersonPeriodCollection.First().PersonSkillCollection, _scheduleRange);
+			validatedRequest.IsValid.Should().Be.False();
+		}
+
 		private void setupOpenHours(ISkill skill, bool openWeekend = false)
 		{
 			if (SkillRepository.OpenHoursList == null)
