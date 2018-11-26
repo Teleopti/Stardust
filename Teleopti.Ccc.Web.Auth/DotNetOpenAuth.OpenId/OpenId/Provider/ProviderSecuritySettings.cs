@@ -35,11 +35,6 @@ namespace DotNetOpenAuth.OpenId.Provider {
 		internal const UnsolicitedAssertionVerificationLevel UnsolicitedAssertionVerificationDefault = UnsolicitedAssertionVerificationLevel.RequireSuccess;
 
 		/// <summary>
-		/// The subset of association types and their customized lifetimes.
-		/// </summary>
-		private IDictionary<string, TimeSpan> associationLifetimes = new Dictionary<string, TimeSpan>();
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="ProviderSecuritySettings"/> class.
 		/// </summary>
 		internal ProviderSecuritySettings()
@@ -80,13 +75,11 @@ namespace DotNetOpenAuth.OpenId.Provider {
 			NeverVerify,
 		}
 
-		/// <summary>
-		/// Gets a subset of the available association types and their
-		/// customized maximum lifetimes.
-		/// </summary>
-		public IDictionary<string, TimeSpan> AssociationLifetimes {
-			get { return this.associationLifetimes; }
-		}
+        /// <summary>
+        /// Gets a subset of the available association types and their
+        /// customized maximum lifetimes.
+        /// </summary>
+        public IDictionary<string, TimeSpan> AssociationLifetimes { get; } = new Dictionary<string, TimeSpan>();
 
 		/// <summary>
 		/// Gets or sets a value indicating whether Relying Party discovery will only

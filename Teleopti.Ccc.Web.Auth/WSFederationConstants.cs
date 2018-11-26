@@ -8,7 +8,6 @@
 		public static class Actions
 		{
 			public const string Attribute = "wattr1.0";
-			public const string Pseudonym = "wpseudo1.0";
 			public const string SignIn = "wsignin1.0";
 			public const string SignOut = "wsignout1.0";
 			public const string SignOutCleanup = "wsignoutcleanup1.0";
@@ -24,11 +23,8 @@
 			public const string CurrentTime = "wct";
 			public const string Encoding = "wencoding";
 			public const string Federation = "wfed";
-			public const string Freshness = "wfresh";
 			public const string HomeRealm = "whr";
 			public const string Policy = "wp";
-			public const string Pseudonym = "wpseudo";
-			public const string PseudonymPtr = "wpseudoptr";
 			public const string Realm = "wtrealm";
 			public const string Reply = "wreply";
 			public const string Request = "wreq";
@@ -40,16 +36,12 @@
 
 		public static class FaultCodeValues
 		{
-			public const string AlreadySignedIn = "AlreadySignedIn";
 			public const string BadRequest = "BadRequest";
 			public const string IssuerNameNotSupported = "IssuerNameNotSupported";
 			public const string NeedFresherCredentials = "NeedFresherCredentials";
 			public const string NoMatchInScope = "NoMatchInScope";
-			public const string NoPseudonymInScope = "NoPseudonymInScope";
 			public const string NotSignedIn = "NotSignedIn";
 			public const string RstParameterNotAccepted = "RstParameterNotAccepted";
-			public const string SpecificPolicy = "SpecificPolicy";
-			public const string UnsupportedClaimsDialect = "UnsupportedClaimsDialect";
 			public const string UnsupportedEncoding = "UnsupportedEncoding";
 		}
 	}

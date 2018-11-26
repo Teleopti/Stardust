@@ -96,9 +96,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <remarks>
 		/// This value is used to assist in sorting binding elements in the channel stack.
 		/// </remarks>
-		MessageProtections IChannelBindingElement.Protection {
-			get { throw new NotImplementedException(); }
-		}
+		MessageProtections IChannelBindingElement.Protection => throw new NotImplementedException();
 
 		/// <summary>
 		/// Prepares a message for sending based on the rules of this channel binding element.

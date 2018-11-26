@@ -49,13 +49,7 @@ namespace DotNetOpenAuth.Configuration {
 		/// Gets the name of the @unsolicitedAssertionVerification attribute.
 		/// </summary>
 		private const string UnsolicitedAssertionVerificationConfigName = "unsolicitedAssertionVerification";
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="OpenIdProviderSecuritySettingsElement"/> class.
-		/// </summary>
-		public OpenIdProviderSecuritySettingsElement() {
-		}
-
+		
 		/// <summary>
 		/// Gets or sets a value indicating whether all discovery and authentication should require SSL security.
 		/// </summary>

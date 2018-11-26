@@ -35,13 +35,13 @@ namespace DotNetOpenAuth.OpenId.Extensions {
 		/// <summary>
 		/// The alias manager that will track Type URI to alias mappings.
 		/// </summary>
-		private AliasManager aliasManager = new AliasManager();
+		private readonly AliasManager aliasManager = new AliasManager();
 
 		/// <summary>
 		/// A complex dictionary where the key is the Type URI of the extension,
 		/// and the value is another dictionary of the name/value args of the extension.
 		/// </summary>
-		private Dictionary<string, IDictionary<string, string>> extensions = new Dictionary<string, IDictionary<string, string>>();
+		private readonly Dictionary<string, IDictionary<string, string>> extensions = new Dictionary<string, IDictionary<string, string>>();
 
 		/// <summary>
 		/// Prevents a default instance of the <see cref="ExtensionArgumentsManager"/> class from being created.
@@ -51,9 +51,7 @@ namespace DotNetOpenAuth.OpenId.Extensions {
 		/// <summary>
 		/// Gets a value indicating whether the extensions are being read (as opposed to written).
 		/// </summary>
-		internal bool ReadMode {
-			get { return this.isReadMode; }
-		}
+		internal bool ReadMode => this.isReadMode;
 
 		/// <summary>
 		/// Creates a <see cref="ExtensionArgumentsManager"/> instance to process incoming extensions.
@@ -96,11 +94,13 @@ namespace DotNetOpenAuth.OpenId.Extensions {
 				}
 				string typeUri;
 				if ((typeUri = mgr.aliasManager.TryResolveAlias(possibleAlias)) != null) {
-					if (!mgr.extensions.ContainsKey(typeUri)) {
-						mgr.extensions[typeUri] = new Dictionary<string, string>();
+					if (!mgr.extensions.TryGetValue(typeUri, out var ext))
+					{
+						ext = new Dictionary<string, string>();
+						mgr.extensions[typeUri] = ext;
 					}
 					string key = periodIndex >= 0 ? pair.Key.Substring(mgr.protocol.openid.Prefix.Length + possibleAlias.Length + 1) : string.Empty;
-					mgr.extensions[typeUri].Add(key, pair.Value);
+					ext.Add(key, pair.Value);
 				}
 			}
 			return mgr;
@@ -138,8 +138,7 @@ namespace DotNetOpenAuth.OpenId.Extensions {
 				return;
 			}
 
-			IDictionary<string, string> extensionArgs;
-			if (!this.extensions.TryGetValue(extensionTypeUri, out extensionArgs)) {
+			if (!this.extensions.TryGetValue(extensionTypeUri, out var extensionArgs)) {
 				this.extensions.Add(extensionTypeUri, extensionArgs = new Dictionary<string, string>(arguments.Count));
 			}
 

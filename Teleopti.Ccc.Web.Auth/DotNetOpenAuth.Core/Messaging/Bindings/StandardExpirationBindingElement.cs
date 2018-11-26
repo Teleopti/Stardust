@@ -25,9 +25,7 @@ namespace DotNetOpenAuth.Messaging.Bindings {
 		/// Gets the protection offered by this binding element.
 		/// </summary>
 		/// <value><see cref="MessageProtections.Expiration"/></value>
-		MessageProtections IChannelBindingElement.Protection {
-			get { return MessageProtections.Expiration; }
-		}
+		MessageProtections IChannelBindingElement.Protection => MessageProtections.Expiration;
 
 		/// <summary>
 		/// Gets or sets the channel that this binding element belongs to.
@@ -41,9 +39,7 @@ namespace DotNetOpenAuth.Messaging.Bindings {
 		/// <see cref="IExpiringProtocolMessage"/> interface can be before
 		/// being discarded as too old.
 		/// </summary>
-		protected internal static TimeSpan MaximumMessageAge {
-			get { return Configuration.DotNetOpenAuthSection.Messaging.MaximumMessageLifetime; }
-		}
+		protected internal static TimeSpan MaximumMessageAge => Configuration.DotNetOpenAuthSection.Messaging.MaximumMessageLifetime;
 
 		#region IChannelBindingElement Methods
 
@@ -56,8 +52,7 @@ namespace DotNetOpenAuth.Messaging.Bindings {
 		/// Null if this binding element did not even apply to this binding element.
 		/// </returns>
 		public MessageProtections? ProcessOutgoingMessage(IProtocolMessage message) {
-			IExpiringProtocolMessage expiringMessage = message as IExpiringProtocolMessage;
-			if (expiringMessage != null) {
+			if (message is IExpiringProtocolMessage expiringMessage) {
 				expiringMessage.UtcCreationDate = DateTime.UtcNow;
 				return MessageProtections.Expiration;
 			}
@@ -79,8 +74,7 @@ namespace DotNetOpenAuth.Messaging.Bindings {
 		/// NOT be processed.
 		/// </exception>
 		public MessageProtections? ProcessIncomingMessage(IProtocolMessage message) {
-			IExpiringProtocolMessage expiringMessage = message as IExpiringProtocolMessage;
-			if (expiringMessage != null) {
+			if (message is IExpiringProtocolMessage expiringMessage) {
 				// Yes the UtcCreationDate is supposed to always be in UTC already,
 				// but just in case a given message failed to guarantee that, we do it here.
 				DateTime creationDate = expiringMessage.UtcCreationDate.ToUniversalTimeSafe();

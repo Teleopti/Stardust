@@ -39,9 +39,7 @@ namespace DotNetOpenAuth.OpenId {
 		/// <summary>
 		/// Gets the list of services that can perform discovery on identifiers given.
 		/// </summary>
-		public IList<IIdentifierDiscoveryService> DiscoveryServices {
-			get { return this.discoveryServices; }
-		}
+		public IList<IIdentifierDiscoveryService> DiscoveryServices => this.discoveryServices;
 
 		/// <summary>
 		/// Performs discovery on the specified identifier.
@@ -54,8 +52,7 @@ namespace DotNetOpenAuth.OpenId {
 
 			IEnumerable<IdentifierDiscoveryResult> results = Enumerable.Empty<IdentifierDiscoveryResult>();
 			foreach (var discoverer in this.DiscoveryServices) {
-				bool abortDiscoveryChain;
-				var discoveryResults = discoverer.Discover(identifier, this.host.WebRequestHandler, out abortDiscoveryChain).CacheGeneratedResults();
+				var discoveryResults = discoverer.Discover(identifier, this.host.WebRequestHandler, out var abortDiscoveryChain).CacheGeneratedResults();
 				results = results.Concat(discoveryResults);
 				if (abortDiscoveryChain) {
 					Logger.OpenId.InfoFormat("Further discovery on '{0}' was stopped by the {1} discovery service.", identifier, discoverer.GetType().Name);

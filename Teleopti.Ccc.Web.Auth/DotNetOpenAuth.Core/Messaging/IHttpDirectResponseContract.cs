@@ -20,9 +20,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// Gets the HTTP status code that the direct response should be sent with.
 		/// </summary>
 		/// <value></value>
-		HttpStatusCode IHttpDirectResponse.HttpStatusCode {
-			get { throw new NotImplementedException(); }
-		}
+		HttpStatusCode IHttpDirectResponse.HttpStatusCode => throw new NotImplementedException();
 
 		/// <summary>
 		/// Gets the HTTP headers to add to the response.

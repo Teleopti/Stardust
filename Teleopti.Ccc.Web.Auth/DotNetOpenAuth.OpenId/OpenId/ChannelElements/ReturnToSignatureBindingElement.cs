@@ -80,9 +80,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 		/// No message protection is reported because this binding element
 		/// does not protect the entire message -- only a part.
 		/// </remarks>
-		public MessageProtections Protection {
-			get { return MessageProtections.None; }
-		}
+		public MessageProtections Protection => MessageProtections.None;
 
 		/// <summary>
 		/// Prepares a message for sending based on the rules of this channel binding element.
@@ -97,8 +95,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 		/// <see cref="MessagePartAttribute.RequiredProtection"/> properties where applicable.
 		/// </remarks>
 		public MessageProtections? ProcessOutgoingMessage(IProtocolMessage message) {
-			SignedResponseRequest request = message as SignedResponseRequest;
-			if (request != null && request.ReturnTo != null && request.SignReturnTo) {
+			if (message is SignedResponseRequest request && request.ReturnTo != null && request.SignReturnTo) {
 				var cryptoKeyPair = this.cryptoKeyStore.GetCurrentKey(SecretUri.AbsoluteUri, OpenIdElement.Configuration.MaxAuthenticationTime);
 				request.AddReturnToArguments(ReturnToSignatureHandleParameterName, cryptoKeyPair.Key);
 				string signature = Convert.ToBase64String(this.GetReturnToSignature(request.ReturnTo, cryptoKeyPair.Value));
@@ -129,9 +126,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 		/// <see cref="MessagePartAttribute.RequiredProtection"/> properties where applicable.
 		/// </remarks>
 		public MessageProtections? ProcessIncomingMessage(IProtocolMessage message) {
-			IndirectSignedResponse response = message as IndirectSignedResponse;
-
-			if (response != null) {
+			if (message is IndirectSignedResponse response) {
 				// We can't use response.GetReturnToArgument(string) because that relies
 				// on us already having validated this signature.
 				NameValueCollection returnToParameters = HttpUtility.ParseQueryString(response.ReturnTo.Query);

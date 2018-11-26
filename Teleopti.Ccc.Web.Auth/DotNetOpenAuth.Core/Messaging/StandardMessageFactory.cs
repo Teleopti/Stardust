@@ -28,13 +28,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// The value is a dictionary, whose key is the type of the constructor's lone parameter.
 		/// </value>
 		private readonly Dictionary<MessageDescription, Dictionary<Type, ConstructorInfo>> responseMessageTypes = new Dictionary<MessageDescription, Dictionary<Type, ConstructorInfo>>();
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="StandardMessageFactory"/> class.
-		/// </summary>
-		internal StandardMessageFactory() {
-		}
-
+		
 		/// <summary>
 		/// Adds message types to the set that this factory can create.
 		/// </summary>

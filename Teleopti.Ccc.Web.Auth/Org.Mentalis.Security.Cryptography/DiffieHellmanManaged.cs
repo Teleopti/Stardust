@@ -53,22 +53,6 @@ namespace Org.Mentalis.Security.Cryptography {
 		/// <summary>
 		/// Initializes a new <see cref="DiffieHellmanManaged"/> instance.
 		/// </summary>
-		/// <param name="p">The P parameter of the Diffie-Hellman algorithm. This is a public parameter.</param>
-		/// <param name="g">The G parameter of the Diffie-Hellman algorithm. This is a public parameter.</param>
-		/// <param name="x">The X parameter of the Diffie-Hellman algorithm. This is a private parameter. If this parameters is a null reference (<b>Nothing</b> in Visual Basic), a secret value of the default size will be generated.</param>
-		/// <exception cref="ArgumentNullException"><paramref name="p"/> or <paramref name="g"/> is a null reference (<b>Nothing</b> in Visual Basic).</exception>
-		/// <exception cref="CryptographicException"><paramref name="p"/> or <paramref name="g"/> is invalid.</exception>
-		public DiffieHellmanManaged(byte[] p, byte[] g, byte[] x) {
-			if (p == null || g == null)
-				throw new ArgumentNullException();
-			if (x == null)
-				Initialize(new BigInteger(p), new BigInteger(g), null, 0, true);
-			else
-				Initialize(new BigInteger(p), new BigInteger(g), new BigInteger(x), 0, true);
-		}
-		/// <summary>
-		/// Initializes a new <see cref="DiffieHellmanManaged"/> instance.
-		/// </summary>
 		/// <param name="p">The P parameter of the Diffie-Hellman algorithm.</param>
 		/// <param name="g">The G parameter of the Diffie-Hellman algorithm.</param>
 		/// <param name="l">The length, in bits, of the private value. If 0 is specified, the default value will be used.</param>
@@ -127,20 +111,14 @@ namespace Org.Mentalis.Security.Cryptography {
 		/// Gets the name of the key exchange algorithm.
 		/// </summary>
 		/// <value>The name of the key exchange algorithm.</value>
-		public override string KeyExchangeAlgorithm {
-			get {
-				return "1.2.840.113549.1.3"; // PKCS#3 OID
-			}
-		}
+		public override string KeyExchangeAlgorithm => "1.2.840.113549.1.3";
+
 		/// <summary>
 		/// Gets the name of the signature algorithm.
 		/// </summary>
 		/// <value>The name of the signature algorithm.</value>
-		public override string SignatureAlgorithm {
-			get {
-				return null;
-			}
-		}
+		public override string SignatureAlgorithm => null;
+
 		/// <summary>
 		/// Releases the unmanaged resources used by the SymmetricAlgorithm and optionally releases the managed resources.
 		/// </summary>

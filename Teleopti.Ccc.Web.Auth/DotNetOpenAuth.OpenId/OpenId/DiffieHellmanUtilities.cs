@@ -18,7 +18,7 @@ namespace DotNetOpenAuth.OpenId {
 		/// <summary>
 		/// An array of known Diffie Hellman sessions, sorted by decreasing hash size.
 		/// </summary>
-		private static DHSha[] diffieHellmanSessionTypes = CreateSessionTypes();
+		private static readonly DHSha[] diffieHellmanSessionTypes = CreateSessionTypes();
 
 		/// <summary>
 		/// Finds the hashing algorithm to use given an openid.session_type value.
@@ -46,7 +46,7 @@ namespace DotNetOpenAuth.OpenId {
 		internal static string GetNameForSize(Protocol protocol, int hashSizeInBits) {
 			Requires.NotNull(protocol, "protocol");
 			DHSha match = diffieHellmanSessionTypes.FirstOrDefault(dhsha => dhsha.Algorithm.HashSize == hashSizeInBits);
-			return match != null ? match.GetName(protocol) : null;
+			return match?.GetName(protocol);
 		}
 
 		/// <summary>
@@ -95,7 +95,7 @@ namespace DotNetOpenAuth.OpenId {
 		internal static byte[] EnsurePositive(byte[] inputBytes) {
 			Requires.NotNull(inputBytes, "inputBytes");
 			if (inputBytes.Length == 0) {
-				throw new ArgumentException(MessagingStrings.UnexpectedEmptyArray, "inputBytes");
+				throw new ArgumentException(MessagingStrings.UnexpectedEmptyArray, nameof(inputBytes));
 			}
 
 			int i = (int)inputBytes[0];

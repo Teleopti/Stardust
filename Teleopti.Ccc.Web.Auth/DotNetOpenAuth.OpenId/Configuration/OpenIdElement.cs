@@ -49,13 +49,7 @@ namespace DotNetOpenAuth.Configuration {
 		/// The name of the @cacheDiscovery attribute.
 		/// </summary>
 		private const string CacheDiscoveryPropertyName = "cacheDiscovery";
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="OpenIdElement"/> class.
-		/// </summary>
-		internal OpenIdElement() {
-		}
-
+		
 		/// <summary>
 		/// Gets the configuration section from the .config file.
 		/// </summary>

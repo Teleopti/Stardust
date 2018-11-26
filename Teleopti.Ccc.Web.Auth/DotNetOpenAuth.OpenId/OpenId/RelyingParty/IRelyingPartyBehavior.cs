@@ -22,22 +22,6 @@ namespace DotNetOpenAuth.OpenId.RelyingParty {
 		/// incompatible with each other.
 		/// </remarks>
 		void ApplySecuritySettings(RelyingPartySecuritySettings securitySettings);
-
-		/// <summary>
-		/// Called when an authentication request is about to be sent.
-		/// </summary>
-		/// <param name="request">The request.</param>
-		/// <remarks>
-		/// Implementations should be prepared to be called multiple times on the same outgoing message
-		/// without malfunctioning.
-		/// </remarks>
-		void OnOutgoingAuthenticationRequest(IAuthenticationRequest request);
-
-		/// <summary>
-		/// Called when an incoming positive assertion is received.
-		/// </summary>
-		/// <param name="assertion">The positive assertion.</param>
-		void OnIncomingPositiveAssertion(IAuthenticationResponse assertion);
 	}
 
 	/// <summary>
@@ -65,27 +49,7 @@ namespace DotNetOpenAuth.OpenId.RelyingParty {
 		void IRelyingPartyBehavior.ApplySecuritySettings(RelyingPartySecuritySettings securitySettings) {
 			Requires.NotNull(securitySettings, "securitySettings");
 		}
-
-		/// <summary>
-		/// Called when an authentication request is about to be sent.
-		/// </summary>
-		/// <param name="request">The request.</param>
-		/// <remarks>
-		/// Implementations should be prepared to be called multiple times on the same outgoing message
-		/// without malfunctioning.
-		/// </remarks>
-		void IRelyingPartyBehavior.OnOutgoingAuthenticationRequest(IAuthenticationRequest request) {
-			Requires.NotNull(request, "request");
-		}
-
-		/// <summary>
-		/// Called when an incoming positive assertion is received.
-		/// </summary>
-		/// <param name="assertion">The positive assertion.</param>
-		void IRelyingPartyBehavior.OnIncomingPositiveAssertion(IAuthenticationResponse assertion) {
-			Requires.NotNull(assertion, "assertion");
-		}
-
+		
 		#endregion
 	}
 }

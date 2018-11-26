@@ -38,9 +38,8 @@ namespace DotNetOpenAuth.OpenId.Extensions.ProviderAuthenticationPolicy {
 		/// The <paramref name="value"/> in string form, ready for message transport.
 		/// </returns>
 		public string Encode(object value) {
-			DateTime? dateTime = value as DateTime?;
-			if (dateTime.HasValue) {
-				return dateTime.Value.ToUniversalTimeSafe().ToString(PermissibleDateTimeFormats[0], CultureInfo.InvariantCulture);
+			if (value is DateTime dateTime) {
+				return dateTime.ToUniversalTimeSafe().ToString(PermissibleDateTimeFormats[0], CultureInfo.InvariantCulture);
 			} else {
 				return null;
 			}
@@ -55,8 +54,7 @@ namespace DotNetOpenAuth.OpenId.Extensions.ProviderAuthenticationPolicy {
 		/// </returns>
 		/// <exception cref="FormatException">Thrown when the string value given cannot be decoded into the required object type.</exception>
 		public object Decode(string value) {
-			DateTime dateTime;
-			if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out dateTime) && dateTime.Kind == DateTimeKind.Utc) { // may be unspecified per our option above
+			if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var dateTime) && dateTime.Kind == DateTimeKind.Utc) { // may be unspecified per our option above
 				return dateTime;
 			} else {
 				Logger.OpenId.ErrorFormat("Invalid format for message part: {0}", value);

@@ -195,10 +195,8 @@ namespace DotNetOpenAuth.Messaging {
 		/// </returns>
 		internal static bool IsExceptionFrom417ExpectationFailed(Exception ex) {
 			while (ex != null) {
-				WebException webEx = ex as WebException;
-				if (webEx != null) {
-					HttpWebResponse response = webEx.Response as HttpWebResponse;
-					if (response != null) {
+				if (ex is WebException webEx) {
+					if (webEx.Response is HttpWebResponse response) {
 						if (response.StatusCode == HttpStatusCode.ExpectationFailed) {
 							return true;
 						}

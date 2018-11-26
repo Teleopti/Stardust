@@ -161,8 +161,7 @@ namespace DotNetOpenAuth.OpenId.Provider {
 		[Category("Behavior"), DefaultValue(EnabledDefault)]
 		public bool Enabled {
 			get {
-				return ViewState[EnabledViewStateKey] == null ?
-				EnabledDefault : (bool)ViewState[EnabledViewStateKey];
+				return (bool?) ViewState[EnabledViewStateKey] ?? EnabledDefault;
 			}
 
 			set {
@@ -203,12 +202,10 @@ namespace DotNetOpenAuth.OpenId.Provider {
 					PendingRequest = null;
 
 					// process the incoming message appropriately and send the response
-					IAuthenticationRequest idrequest;
-					IAnonymousRequest anonRequest;
-					if ((idrequest = request as IAuthenticationRequest) != null) {
+					if (request is IAuthenticationRequest idrequest) {
 						PendingAuthenticationRequest = idrequest;
 						this.OnAuthenticationChallenge(idrequest);
-					} else if ((anonRequest = request as IAnonymousRequest) != null) {
+					} else if (request is IAnonymousRequest anonRequest) {
 						PendingAnonymousRequest = anonRequest;
 						if (!this.OnAnonymousRequest(anonRequest)) {
 							// This is a feature not supported by the OP, so
@@ -230,10 +227,7 @@ namespace DotNetOpenAuth.OpenId.Provider {
 		/// </summary>
 		/// <param name="request">The request to include in the event args.</param>
 		protected virtual void OnAuthenticationChallenge(IAuthenticationRequest request) {
-			var authenticationChallenge = this.AuthenticationChallenge;
-			if (authenticationChallenge != null) {
-				authenticationChallenge(this, new AuthenticationChallengeEventArgs(request));
-			}
+			this.AuthenticationChallenge?.Invoke(this, new AuthenticationChallengeEventArgs(request));
 		}
 
 		/// <summary>
@@ -244,7 +238,7 @@ namespace DotNetOpenAuth.OpenId.Provider {
 		protected virtual bool OnAnonymousRequest(IAnonymousRequest request) {
 			var anonymousRequest = this.AnonymousRequest;
 			if (anonymousRequest != null) {
-				anonymousRequest(this, new AnonymousRequestEventArgs(request));
+				anonymousRequest.Invoke(this, new AnonymousRequestEventArgs(request));
 				return true;
 			} else {
 				return false;

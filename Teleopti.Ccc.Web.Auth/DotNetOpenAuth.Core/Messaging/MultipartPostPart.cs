@@ -204,18 +204,5 @@ namespace DotNetOpenAuth.Messaging {
 				this.Content.Dispose();
 			}
 		}
-
-#if CONTRACTS_FULL
-		/// <summary>
-		/// Verifies conditions that should be true for any valid state of this object.
-		/// </summary>
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Called by code contracts.")]
-		[ContractInvariantMethod]
-		private void Invariant() {
-			Contract.Invariant(!string.IsNullOrEmpty(this.ContentDisposition));
-			Contract.Invariant(this.PartHeaders != null);
-			Contract.Invariant(this.ContentAttributes != null);
-		}
-#endif
 	}
 }

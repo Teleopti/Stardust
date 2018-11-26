@@ -211,17 +211,14 @@ namespace DotNetOpenAuth.Messaging.Reflection {
 		/// <summary>
 		/// Gets the type of the declared member.
 		/// </summary>
-		internal Type MemberDeclaredType {
-			get { return this.memberDeclaredType; }
-		}
+		internal Type MemberDeclaredType => this.memberDeclaredType;
 
 		/// <summary>
 		/// Gets the type of the encoded values produced by this encoder, as they would appear in their preferred form.
 		/// </summary>
 		internal Type PreferredFormattingType {
 			get {
-				var formattingEncoder = this.converter.Encoder as IMessagePartFormattingEncoder;
-				if (formattingEncoder != null) {
+				if (this.converter.Encoder is IMessagePartFormattingEncoder formattingEncoder) {
 					return formattingEncoder.FormattingType;
 				}
 

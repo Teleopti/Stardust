@@ -15,10 +15,6 @@ namespace DotNetOpenAuth.Configuration {
 	/// </summary>
 	[ContractVerification(true)]
 	internal class OpenIdProviderElement : ConfigurationElement {
-		/// <summary>
-		/// The name of the &lt;provider&gt; sub-element.
-		/// </summary>
-		private const string ProviderElementName = "provider";
 
 		/// <summary>
 		/// The name of the security sub-element.
@@ -34,13 +30,7 @@ namespace DotNetOpenAuth.Configuration {
 		/// The name of the custom store sub-element.
 		/// </summary>
 		private const string StoreConfigName = "store";
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="OpenIdProviderElement"/> class.
-		/// </summary>
-		public OpenIdProviderElement() {
-		}
-
+		
 		/// <summary>
 		/// Gets or sets the security settings.
 		/// </summary>

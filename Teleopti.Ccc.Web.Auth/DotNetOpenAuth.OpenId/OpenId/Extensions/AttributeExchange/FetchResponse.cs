@@ -21,8 +21,7 @@ namespace DotNetOpenAuth.OpenId.Extensions.AttributeExchange {
 		/// </summary>
 		internal static readonly StandardOpenIdExtensionFactory.CreateDelegate Factory = (typeUri, data, baseMessage, isProviderRole) => {
 			if (typeUri == Constants.TypeUri && !isProviderRole) {
-				string mode;
-				if (data.TryGetValue("mode", out mode) && mode == Mode) {
+				if (data.TryGetValue("mode", out var mode) && mode == Mode) {
 					return new FetchResponse();
 				}
 			}
@@ -62,9 +61,7 @@ namespace DotNetOpenAuth.OpenId.Extensions.AttributeExchange {
 		/// Gets a value indicating whether the OpenID Provider intends to
 		/// honor the request for updates.
 		/// </summary>
-		public bool UpdateUrlSupported {
-			get { return this.UpdateUrl != null; }
-		}
+		public bool UpdateUrlSupported => this.UpdateUrl != null;
 
 		/// <summary>
 		/// Gets or sets the URL the OpenID Provider will post updates to.  
@@ -79,9 +76,7 @@ namespace DotNetOpenAuth.OpenId.Extensions.AttributeExchange {
 		/// <value>
 		/// 	<c>true</c> if this instance is signed by the Provider; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsSignedByProvider {
-			get { return this.IsSignedByRemoteParty; }
-		}
+		public bool IsSignedByProvider => this.IsSignedByRemoteParty;
 
 		/// <summary>
 		/// Gets the first attribute value provided for a given attribute Type URI.

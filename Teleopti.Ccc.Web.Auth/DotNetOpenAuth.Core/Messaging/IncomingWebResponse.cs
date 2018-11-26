@@ -182,9 +182,7 @@ namespace DotNetOpenAuth.Messaging {
 		protected virtual void Dispose(bool disposing) {
 			if (disposing) {
 				Stream responseStream = this.ResponseStream;
-				if (responseStream != null) {
-					responseStream.Dispose();
-				}
+				responseStream?.Dispose();
 			}
 		}
 	}

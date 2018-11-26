@@ -15,20 +15,11 @@ namespace DotNetOpenAuth.OpenId.Extensions {
 	/// </summary>
 	[Serializable]
 	public class ExtensionBase : IOpenIdMessageExtension {
-		/// <summary>
-		/// Backing store for the <see cref="IOpenIdMessageExtension.TypeUri"/> property.
-		/// </summary>
-		private string typeUri;
-
-		/// <summary>
-		/// Backing store for the <see cref="IOpenIdMessageExtension.AdditionalSupportedTypeUris"/> property.
-		/// </summary>
-		private IEnumerable<string> additionalSupportedTypeUris;
 
 		/// <summary>
 		/// Backing store for the <see cref="IMessage.ExtraData"/> property.
 		/// </summary>
-		private Dictionary<string, string> extraData = new Dictionary<string, string>();
+		private readonly Dictionary<string, string> extraData = new Dictionary<string, string>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExtensionBase"/> class.
@@ -38,8 +29,8 @@ namespace DotNetOpenAuth.OpenId.Extensions {
 		/// <param name="additionalSupportedTypeUris">The additional supported type URIs by which this extension might be recognized.  May be null.</param>
 		protected ExtensionBase(Version version, string typeUri, IEnumerable<string> additionalSupportedTypeUris) {
 			this.Version = version;
-			this.typeUri = typeUri;
-			this.additionalSupportedTypeUris = additionalSupportedTypeUris ?? EmptyList<string>.Instance;
+			this.TypeUri = typeUri;
+			this.AdditionalSupportedTypeUris = additionalSupportedTypeUris ?? EmptyList<string>.Instance;
 		}
 
 		#region IOpenIdProtocolMessageExtension Members
@@ -47,9 +38,7 @@ namespace DotNetOpenAuth.OpenId.Extensions {
 		/// <summary>
 		/// Gets the TypeURI the extension uses in the OpenID protocol and in XRDS advertisements.
 		/// </summary>
-		string IOpenIdMessageExtension.TypeUri {
-			get { return this.TypeUri; }
-		}
+		string IOpenIdMessageExtension.TypeUri => this.TypeUri;
 
 		/// <summary>
 		/// Gets the additional TypeURIs that are supported by this extension, in preferred order.
@@ -66,9 +55,7 @@ namespace DotNetOpenAuth.OpenId.Extensions {
 		/// given the version of the extension in the request message.
 		/// The <see cref="SimpleRegistration.ClaimsRequest.CreateResponse"/> for an example.
 		/// </remarks>
-		IEnumerable<string> IOpenIdMessageExtension.AdditionalSupportedTypeUris {
-			get { return this.AdditionalSupportedTypeUris; }
-		}
+		IEnumerable<string> IOpenIdMessageExtension.AdditionalSupportedTypeUris => this.AdditionalSupportedTypeUris;
 
 		/// <summary>
 		/// Gets or sets a value indicating whether this extension was
@@ -89,7 +76,7 @@ namespace DotNetOpenAuth.OpenId.Extensions {
 		/// <summary>
 		/// Gets the version of the protocol or extension this message is prepared to implement.
 		/// </summary>
-		public Version Version { get; private set; }
+		public Version Version { get; }
 
 		/// <summary>
 		/// Gets the extra, non-standard Protocol parameters included in the message.
@@ -97,58 +84,50 @@ namespace DotNetOpenAuth.OpenId.Extensions {
 		/// <remarks>
 		/// Implementations of this interface should ensure that this property never returns null.
 		/// </remarks>
-		IDictionary<string, string> IMessage.ExtraData {
-			get { return this.ExtraData; }
-		}
+		IDictionary<string, string> IMessage.ExtraData => this.ExtraData;
 
 		#endregion
 
-		/// <summary>
-		/// Gets the TypeURI the extension uses in the OpenID protocol and in XRDS advertisements.
-		/// </summary>
-		protected string TypeUri {
-			get { return this.typeUri; }
-		}
+        /// <summary>
+        /// Gets the TypeURI the extension uses in the OpenID protocol and in XRDS advertisements.
+        /// </summary>
+        protected string TypeUri { get; }
 
-		/// <summary>
-		/// Gets or sets a value indicating whether this extension was
-		/// signed by the OpenID Provider.
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if this instance is signed by the provider; otherwise, <c>false</c>.
-		/// </value>
-		protected bool IsSignedByRemoteParty { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether this extension was
+        /// signed by the OpenID Provider.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is signed by the provider; otherwise, <c>false</c>.
+        /// </value>
+        protected bool IsSignedByRemoteParty { get; set; }
 
-		/// <summary>
-		/// Gets the additional TypeURIs that are supported by this extension, in preferred order.
-		/// May be empty if none other than <see cref="IOpenIdMessageExtension.TypeUri"/> is supported, but
-		/// should not be null.
-		/// </summary>
-		/// <value></value>
-		/// <remarks>
-		/// Useful for reading in messages with an older version of an extension.
-		/// The value in the <see cref="IOpenIdMessageExtension.TypeUri"/> property is always checked before
-		/// trying this list.
-		/// If you do support multiple versions of an extension using this method,
-		/// consider adding a CreateResponse method to your request extension class
-		/// so that the response can have the context it needs to remain compatible
-		/// given the version of the extension in the request message.
-		/// The <see cref="Extensions.SimpleRegistration.ClaimsRequest.CreateResponse"/> for an example.
-		/// </remarks>
-		protected IEnumerable<string> AdditionalSupportedTypeUris {
-			get { return this.additionalSupportedTypeUris; }
-		}
+        /// <summary>
+        /// Gets the additional TypeURIs that are supported by this extension, in preferred order.
+        /// May be empty if none other than <see cref="IOpenIdMessageExtension.TypeUri"/> is supported, but
+        /// should not be null.
+        /// </summary>
+        /// <value></value>
+        /// <remarks>
+        /// Useful for reading in messages with an older version of an extension.
+        /// The value in the <see cref="IOpenIdMessageExtension.TypeUri"/> property is always checked before
+        /// trying this list.
+        /// If you do support multiple versions of an extension using this method,
+        /// consider adding a CreateResponse method to your request extension class
+        /// so that the response can have the context it needs to remain compatible
+        /// given the version of the extension in the request message.
+        /// The <see cref="Extensions.SimpleRegistration.ClaimsRequest.CreateResponse"/> for an example.
+        /// </remarks>
+        protected IEnumerable<string> AdditionalSupportedTypeUris { get; }
 
-		/// <summary>
-		/// Gets the extra, non-standard Protocol parameters included in the message.
-		/// </summary>
-		/// <value></value>
-		/// <remarks>
-		/// Implementations of this interface should ensure that this property never returns null.
-		/// </remarks>
-		protected IDictionary<string, string> ExtraData {
-			get { return this.extraData; }
-		}
+        /// <summary>
+        /// Gets the extra, non-standard Protocol parameters included in the message.
+        /// </summary>
+        /// <value></value>
+        /// <remarks>
+        /// Implementations of this interface should ensure that this property never returns null.
+        /// </remarks>
+        protected IDictionary<string, string> ExtraData => this.extraData;
 
 		#region IMessage Methods
 

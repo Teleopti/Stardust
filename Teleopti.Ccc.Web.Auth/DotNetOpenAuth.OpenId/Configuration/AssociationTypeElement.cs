@@ -24,13 +24,7 @@ namespace DotNetOpenAuth.Configuration {
 		/// The name of the attribute that stores the association's maximum lifetime.
 		/// </summary>
 		private const string MaximumLifetimeConfigName = "lifetime";
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AssociationTypeElement"/> class.
-		/// </summary>
-		internal AssociationTypeElement() {
-		}
-
+		
 		/// <summary>
 		/// Gets or sets the protocol name of the association.
 		/// </summary>

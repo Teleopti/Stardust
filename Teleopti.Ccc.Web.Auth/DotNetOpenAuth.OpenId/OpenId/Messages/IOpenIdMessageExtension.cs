@@ -119,11 +119,7 @@ namespace DotNetOpenAuth.OpenId.Messages {
 		/// <remarks>
 		/// Implementations of this interface should ensure that this property never returns null.
 		/// </remarks>
-		Version IMessage.Version {
-			get {
-				throw new NotImplementedException();
-			}
-		}
+		Version IMessage.Version => throw new NotImplementedException();
 
 		/// <summary>
 		/// Gets the extra, non-standard Protocol parameters included in the message.
@@ -131,11 +127,7 @@ namespace DotNetOpenAuth.OpenId.Messages {
 		/// <remarks>
 		/// Implementations of this interface should ensure that this property never returns null.
 		/// </remarks>
-		IDictionary<string, string> IMessage.ExtraData {
-			get {
-				throw new NotImplementedException();
-			}
-		}
+		IDictionary<string, string> IMessage.ExtraData => throw new NotImplementedException();
 
 		/// <summary>
 		/// Checks the message state for conformity to the protocol specification

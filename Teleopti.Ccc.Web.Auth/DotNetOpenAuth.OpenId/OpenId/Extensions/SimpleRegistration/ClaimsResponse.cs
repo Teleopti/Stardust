@@ -216,8 +216,8 @@ namespace DotNetOpenAuth.OpenId.Extensions.SimpleRegistration {
 
 			set {
 				this.culture = value;
-				this.Language = (value != null) ? value.TwoLetterISOLanguageName : null;
-				int indexOfHyphen = (value != null) ? value.Name.IndexOf('-') : -1;
+				this.Language = value?.TwoLetterISOLanguageName;
+				int indexOfHyphen = value?.Name.IndexOf('-') ?? -1;
 				this.Country = indexOfHyphen > 0 ? value.Name.Substring(indexOfHyphen + 1) : null;
 			}
 		}
@@ -228,9 +228,7 @@ namespace DotNetOpenAuth.OpenId.Extensions.SimpleRegistration {
 		/// <value>
 		/// 	<c>true</c> if this instance is signed by the Provider; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsSignedByProvider {
-			get { return this.IsSignedByRemoteParty; }
-		}
+		public bool IsSignedByProvider => this.IsSignedByRemoteParty;
 
 		/// <summary>
 		/// Tests equality of two <see cref="ClaimsResponse"/> objects.

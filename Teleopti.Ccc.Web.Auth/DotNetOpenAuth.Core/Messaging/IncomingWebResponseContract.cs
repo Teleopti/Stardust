@@ -18,9 +18,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// Gets the body of the HTTP response.
 		/// </summary>
 		/// <value></value>
-		public override Stream ResponseStream {
-			get { throw new NotImplementedException(); }
-		}
+		public override Stream ResponseStream => throw new NotImplementedException();
 
 		/// <summary>
 		/// Creates a text reader for the response stream.

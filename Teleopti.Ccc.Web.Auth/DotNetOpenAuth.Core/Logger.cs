@@ -79,57 +79,57 @@ namespace DotNetOpenAuth {
 		/// <summary>
 		/// Gets the logger for general library logging.
 		/// </summary>
-		internal static ILog Library { get { return library; } }
+		internal static ILog Library => library;
 
 		/// <summary>
 		/// Gets the logger for service discovery and selection events.
 		/// </summary>
-		internal static ILog Yadis { get { return yadis; } }
+		internal static ILog Yadis => yadis;
 
 		/// <summary>
 		/// Gets the logger for Messaging events.
 		/// </summary>
-		internal static ILog Messaging { get { return messaging; } }
+		internal static ILog Messaging => messaging;
 
 		/// <summary>
 		/// Gets the logger for Channel events.
 		/// </summary>
-		internal static ILog Channel { get { return channel; } }
+		internal static ILog Channel => channel;
 
 		/// <summary>
 		/// Gets the logger for binding elements and binding-element related events on the channel.
 		/// </summary>
-		internal static ILog Bindings { get { return bindings; } }
+		internal static ILog Bindings => bindings;
 
 		/// <summary>
 		/// Gets the logger specifically used for logging verbose text on everything about the signing process.
 		/// </summary>
-		internal static ILog Signatures { get { return signatures; } }
+		internal static ILog Signatures => signatures;
 
 		/// <summary>
 		/// Gets the logger for HTTP-level events.
 		/// </summary>
-		internal static ILog Http { get { return http; } }
+		internal static ILog Http => http;
 
 		/// <summary>
 		/// Gets the logger for events logged by ASP.NET controls.
 		/// </summary>
-		internal static ILog Controls { get { return controls; } }
+		internal static ILog Controls => controls;
 
 		/// <summary>
 		/// Gets the logger for high-level OpenID events.
 		/// </summary>
-		internal static ILog OpenId { get { return openId; } }
+		internal static ILog OpenId => openId;
 
 		/// <summary>
 		/// Gets the logger for high-level OAuth events.
 		/// </summary>
-		internal static ILog OAuth { get { return oauth; } }
+		internal static ILog OAuth => oauth;
 
 		/// <summary>
 		/// Gets the logger for high-level InfoCard events.
 		/// </summary>
-		internal static ILog InfoCard { get { return infocard; } }
+		internal static ILog InfoCard => infocard;
 
 		#endregion
 
