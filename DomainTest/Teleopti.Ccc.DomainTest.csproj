@@ -565,7 +565,7 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationPlanningGroupTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationReduceUnnecessaryCallsTest.cs" />
     <Compile Include="Optimization\PlanningGroupModelPersisterTest.cs" />
-    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationClassicTest.cs" />
+    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationClassicDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationRestrictionsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationScenarioTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationStandardDeviationTest.cs" />
