@@ -78,13 +78,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (planningPeriod != null)
 			{
 				var lastJobResult = planningPeriod.GetLastSchedulingJob();
-				var agentsWithHints = new List<Guid>();
+				var agentsWithPreferenceHints = new List<Guid>();
 				if (lastJobResult != null && lastJobResult.FinishedOk)
 				{
 					var fullSchedulingResultModel = JsonConvert.DeserializeObject<FullSchedulingResultModel>(lastJobResult.Details.Last().Message);
-					agentsWithHints = fullSchedulingResultModel.BusinessRulesValidationResults.Where(x=>x.ValidationErrors.Any(y=>y.ResourceType==ValidationResourceType.Preferences)).Select(x => x.ResourceId).ToList();
+					agentsWithPreferenceHints = fullSchedulingResultModel.BusinessRulesValidationResults.Where(x=>x.ValidationErrors.Any(y=>y.ResourceType==ValidationResourceType.Preferences)).Select(x => x.ResourceId).ToList();
 				}
-				var agentsToOptimizeWithoutPreferences = agents.Where(agent => agentsWithHints.Contains(agent.Id.Value)).ToList();
+				var agentsToOptimizeWithoutPreferences = agents.Where(agent => agentsWithPreferenceHints.Contains(agent.Id.Value)).ToList();
 				var agentsToOptimizeWithPreferences = agents.Except(agentsToOptimizeWithoutPreferences).ToList();
 				using (allSettingsForPlanningGroup.ChangeSettingInThisScope(Percent.Zero))
 				{
