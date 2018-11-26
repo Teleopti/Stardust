@@ -41,12 +41,7 @@ namespace Org.Mentalis.Security.Cryptography {
 		public static new DiffieHellman Create (string algName) {
 			return (DiffieHellman) CryptoConfig.CreateFromName (algName);
 		}
-
-		/// <summary>
-		/// Initializes a new <see cref="DiffieHellman"/> instance.
-		/// </summary>
-		public DiffieHellman() {}
-
+		
 		/// <summary>
 		/// When overridden in a derived class, creates the key exchange data. 
 		/// </summary>
@@ -70,15 +65,7 @@ namespace Org.Mentalis.Security.Cryptography {
 		/// </summary>
 		/// <param name="parameters">The parameters for Diffie-Hellman.</param>
 		public abstract void ImportParameters (DHParameters parameters);
-
-#if UNUSED
-		private byte[] GetNamedParam(SecurityElement se, string param) {
-			SecurityElement sep = se.SearchForChildByTag(param);
-			if (sep == null)
-				return null;
-			return Convert.FromBase64String(sep.Text);
-		}
-#endif
+		
 		/// <summary>
 		/// Reconstructs a <see cref="DiffieHellman"/> object from an XML string.
 		/// </summary>

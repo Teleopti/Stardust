@@ -113,11 +113,7 @@ namespace DotNetOpenAuth.OpenId.Messages {
 		/// by adding its own specially-crafted nonce to the authentication request
 		/// messages except for stateless RPs in OpenID 1.x messages.
 		/// </remarks>
-		public override MessageProtections RequiredProtection {
-			// We actually manage to provide All protections regardless of OpenID version
-			// on both the Provider and Relying Party side, except for stateless RPs for OpenID 1.x.
-			get { return this.Version.Major < 2 ? MessageProtections.TamperProtection : MessageProtections.All; }
-		}
+		public override MessageProtections RequiredProtection => this.Version.Major < 2 ? MessageProtections.TamperProtection : MessageProtections.All;
 
 		/// <summary>
 		/// Gets or sets the message signature.
@@ -286,15 +282,8 @@ namespace DotNetOpenAuth.OpenId.Messages {
 		/// <summary>
 		/// Gets the querystring key=value pairs in the return_to URL.
 		/// </summary>
-		private IDictionary<string, string> ReturnToParameters {
-			get {
-				if (this.returnToParameters == null) {
-					this.returnToParameters = HttpUtility.ParseQueryString(this.ReturnTo.Query).ToDictionary();
-				}
-
-				return this.returnToParameters;
-			}
-		}
+		private IDictionary<string, string> ReturnToParameters => this.returnToParameters ?? (this.returnToParameters =
+																	  HttpUtility.ParseQueryString(this.ReturnTo.Query).ToDictionary());
 
 		/// <summary>
 		/// Checks the message state for conformity to the protocol specification
@@ -328,8 +317,7 @@ namespace DotNetOpenAuth.OpenId.Messages {
 			Requires.NotNullOrEmpty(key, "key");
 			ErrorUtilities.VerifyInternal(this.ReturnTo != null, "ReturnTo was expected to be required but is null.");
 
-			string value;
-			this.ReturnToParameters.TryGetValue(key, out value);
+			this.ReturnToParameters.TryGetValue(key, out var value);
 			return value;
 		}
 

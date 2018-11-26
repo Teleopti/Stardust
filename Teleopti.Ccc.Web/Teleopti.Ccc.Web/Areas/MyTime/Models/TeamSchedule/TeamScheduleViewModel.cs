@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public string DayOffName { get; set; }
 		public bool IsNotScheduled { get; set; }
 		public ShiftCategoryViewModel ShiftCategory { get; set; }
+		public DateTime BelongsToDate { get; set; }
 	}
 
 	public class TeamScheduleAgentScheduleLayerViewModel

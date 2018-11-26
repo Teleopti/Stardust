@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay

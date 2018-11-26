@@ -447,16 +447,18 @@ namespace Teleopti.Ccc.Domain.Common
 			addPersonPeriodChangedEvent();
 		}
 
-		public virtual IPersonPeriod Period(DateOnly dateOnly)
+		public virtual IPersonPeriod Period(DateTime date) => Period(new DateOnly(date));
+		
+		public virtual IPersonPeriod Period(DateOnly date)
 		{
 			IPersonPeriod period = null;
 
-			if (isTerminated(dateOnly))
+			if (isTerminated(date))
 				return null;
 
 			foreach (IPersonPeriod personPeriod in InternalPersonPeriodCollection)
 			{
-				if (!(personPeriod.StartDate > dateOnly))
+				if (!(personPeriod.StartDate > date))
 					period = personPeriod;
 				else
 					break;

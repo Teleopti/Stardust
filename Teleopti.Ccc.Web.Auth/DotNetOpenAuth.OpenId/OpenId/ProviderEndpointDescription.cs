@@ -115,17 +115,6 @@ namespace DotNetOpenAuth.OpenId {
 		}
 
 		#endregion
-
-#if CONTRACTS_FULL
-		/// <summary>
-		/// Verifies conditions that should be true for any valid state of this object.
-		/// </summary>
-		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Called by code contracts.")]
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Called by code contracts.")]
-		[ContractInvariantMethod]
-		private void ObjectInvariant() {
-			Contract.Invariant(this.Capabilities != null);
-		}
-#endif
+		
 	}
 }

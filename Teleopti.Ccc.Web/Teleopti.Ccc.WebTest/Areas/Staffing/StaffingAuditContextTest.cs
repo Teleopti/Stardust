@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeStaffingAuditRepository StaffingAuditRepository;
 		public MutableNow Now;
+		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -31,8 +33,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 		{
 			IPerson person = PersonFactory.CreatePersonWithGuid("Ashley", "Aaron");
 			LoggedOnUser.SetFakeLoggedOnUser(person);
-			_target = new StaffingAuditContext(StaffingAuditRepository, LoggedOnUser, Now);
-			_target.Handle(new ClearBpoActionObj(){BpoGuid = Guid.NewGuid(), EndDate = DateTime.Today, StartDate = DateTime.Today.AddDays(-1)});
+			var bpoGuid = Guid.NewGuid();
+			SkillCombinationResourceRepository.ActiveBpos.Add(new ActiveBpoModel() { Id = bpoGuid, Source = "Generic" });
+			_target = new StaffingAuditContext(StaffingAuditRepository, LoggedOnUser, Now, SkillCombinationResourceRepository);
+			_target.Handle(new ClearBpoActionObj(){BpoGuid = bpoGuid, EndDate = DateTime.Today, StartDate = DateTime.Today.AddDays(-1)});
 			StaffingAuditRepository.StaffingAuditList.First().ActionPerformedById.Should().Be
 				.EqualTo(person.Id.GetValueOrDefault());
 		}
@@ -42,8 +46,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 		{
 			IPerson person = PersonFactory.CreatePersonWithGuid("Ashley", "Aaron");
 			LoggedOnUser.SetFakeLoggedOnUser(person);
-			_target = new StaffingAuditContext(StaffingAuditRepository, LoggedOnUser, Now);
-			_target.Handle(new ClearBpoActionObj() { BpoGuid = Guid.NewGuid(), EndDate = DateTime.Today, StartDate = DateTime.Today.AddDays(-1) });
+			_target = new StaffingAuditContext(StaffingAuditRepository, LoggedOnUser, Now, SkillCombinationResourceRepository);
+			var bpoGuid = Guid.NewGuid();
+			SkillCombinationResourceRepository.ActiveBpos.Add(new ActiveBpoModel(){Id = bpoGuid, Source = "Generic"});
+			_target.Handle(new ClearBpoActionObj() { BpoGuid = bpoGuid, EndDate = DateTime.Today, StartDate = DateTime.Today.AddDays(-1) });
 			StaffingAuditRepository.StaffingAuditList.First().Action.Should().Be.EqualTo(StaffingAuditActionConstants.ClearStaffing);
 		}
 
@@ -52,11 +58,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 		{
 			IPerson person = PersonFactory.CreatePersonWithGuid("Ashley", "Aaron");
 			LoggedOnUser.SetFakeLoggedOnUser(person);
-			_target = new StaffingAuditContext(StaffingAuditRepository, LoggedOnUser, Now);
+			var bpoGuid = Guid.NewGuid();
+			SkillCombinationResourceRepository.ActiveBpos.Add(new ActiveBpoModel() { Id = bpoGuid, Source = "Generic" });
+			_target = new StaffingAuditContext(StaffingAuditRepository, LoggedOnUser, Now, SkillCombinationResourceRepository);
 			Now.Is(new DateTime(2018,10,09,10,10,10));
 			var clearBpoAction = new ClearBpoActionObj()
 			{
-				BpoGuid = Guid.NewGuid(),
+				BpoGuid = bpoGuid,
 				EndDate = DateTime.Today,
 				StartDate = DateTime.Today.AddDays(-1)
 			};
@@ -64,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 			_target.Handle(clearBpoAction);
 
 			var staffingAuditLog = StaffingAuditRepository.StaffingAuditList.First();
-			staffingAuditLog.BpoId.Should().Be.EqualTo(clearBpoAction.BpoGuid);
+			staffingAuditLog.BpoName.Should().Be.EqualTo(SkillCombinationResourceRepository.GetSourceBpoByGuid(clearBpoAction.BpoGuid));
 			staffingAuditLog.ClearPeriodStart.Should().Be.EqualTo(clearBpoAction.StartDate);
 			staffingAuditLog.ClearPeriodEnd.Should().Be.EqualTo(clearBpoAction.EndDate);
 			staffingAuditLog.TimeStamp.Should().Be.EqualTo(new DateTime(2018, 10, 09, 10, 10, 10));
@@ -76,7 +84,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 		{
 			IPerson person = PersonFactory.CreatePersonWithGuid("Ashley", "Aaron");
 			LoggedOnUser.SetFakeLoggedOnUser(person);
-			_target = new StaffingAuditContext(StaffingAuditRepository, LoggedOnUser, Now);
+			_target = new StaffingAuditContext(StaffingAuditRepository, LoggedOnUser, Now, SkillCombinationResourceRepository);
 			Now.Is(new DateTime(2018, 10, 09, 10, 10, 20));
 			var importBpoAction = new ImportBpoActionObj()
 			{

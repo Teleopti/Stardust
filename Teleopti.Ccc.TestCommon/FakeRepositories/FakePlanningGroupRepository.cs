@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public PlanningGroup Has(PlanningGroup root)
 		{
 			_planningGroups.Add(root.WithId());
+			root.Settings.Single(x => x.Default).WithId();
 			return root;
 		}
 

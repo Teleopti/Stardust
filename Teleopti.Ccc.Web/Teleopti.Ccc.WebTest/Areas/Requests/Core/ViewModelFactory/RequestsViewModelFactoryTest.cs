@@ -1,9 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
@@ -12,8 +11,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -52,8 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public IApplicationRoleRepository ApplicationRoleRepository;
 		public FakePersonRepository PersonRepository;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
-		public IScheduleStorage ScheduleStorage;
-		public ICurrentScenario Scenario;
+		
 
 		private IPerson[] people;
 		private readonly IAbsence absence = AbsenceFactory.CreateAbsence("absence1").WithId();
@@ -70,25 +66,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			team = createTeam();
 			personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2015, 10, 1), team);
-		}
-
-		[Test]
-		public void ShouldGetCorrectScheduledShiftsForAbsenceRequest()
-		{
-			setUpAbsenceWithScheduledShiftsRequests();
-
-			var input = new AllRequestsFormData
-			{
-				StartDate = new DateOnly(2015, 10, 1),
-				EndDate = new DateOnly(2015, 10, 9),
-				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SortingOrders = new List<RequestsSortingOrder>(),
-				SelectedGroupIds = new[] { team.Id.Value.ToString() }
-			};
-
-			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
-			var count = result.ToList()[1].Shifts.Count();
-			count.Should().Be.EqualTo(3);
 		}
 
 		[Test]
@@ -627,51 +604,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			PersonAbsenceAccountRepository.Add(personAbsenceAccount);
 
 			return personAbsenceAccount;
-		}
-
-		private PersonRequest[] setUpAbsenceWithScheduledShiftsRequests()
-		{
-			var absenceRequest1 = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 3));
-			var absenceRequest2 = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 6));
-
-			people = new[]
-			{
-				PersonFactory.CreatePerson("test1").WithId(),
-				PersonFactory.CreatePerson("test2").WithId()
-
-			};
-			people.ForEach(setUpPerson);
-
-			var personRequests = new[]
-			{
-				new PersonRequest(people[0], absenceRequest1).WithId(),
-				new PersonRequest(people[1], absenceRequest2).WithId()
-
-			};
-
-			PersonRequestRepository.AddRange(personRequests);
-
-			var personAssignment1 = new PersonAssignment(people[0], Scenario.Current(), new DateOnly(2015, 10, 3));
-			personAssignment1.AddActivity(new Activity("act1"), new DateOnly(2015, 10, 3).ToDateTimePeriod(TimeZoneInfo.Utc));
-			personAssignment1.SetShiftCategory(new ShiftCategory("shiftCategory1") { DisplayColor = Color.AliceBlue });
-			ScheduleStorage.Add(personAssignment1);
-
-			var personAssignment2 = new PersonAssignment(people[1], Scenario.Current(), new DateOnly(2015, 10, 3));
-			personAssignment2.AddActivity(new Activity("act2"), new DateOnly(2015, 10, 3).ToDateTimePeriod(TimeZoneInfo.Utc));
-			personAssignment2.SetShiftCategory(new ShiftCategory("shiftCategory2") { DisplayColor = Color.AntiqueWhite });
-			ScheduleStorage.Add(personAssignment2);
-
-			var personAssignment3 = new PersonAssignment(people[1], Scenario.Current(), new DateOnly(2015, 10, 4));
-			personAssignment3.AddActivity(new Activity("act3"), new DateOnly(2015, 10, 4).ToDateTimePeriod(TimeZoneInfo.Utc));
-			personAssignment3.SetShiftCategory(new ShiftCategory("shiftCategory3") { DisplayColor = Color.Aqua });
-			ScheduleStorage.Add(personAssignment3);
-
-			var personAssignment4 = new PersonAssignment(people[1], Scenario.Current(), new DateOnly(2015, 10, 5));
-			personAssignment4.AddActivity(new Activity("act4"), new DateOnly(2015, 10, 5).ToDateTimePeriod(TimeZoneInfo.Utc));
-			personAssignment4.SetShiftCategory(new ShiftCategory("shiftCategory4") { DisplayColor = Color.Aquamarine });
-			ScheduleStorage.Add(personAssignment4);
-
-			return personRequests;
 		}
 
 		private PersonRequest[] setUpRequests()

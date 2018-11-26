@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 		private void insertSomeStaffingAudits()
 		{
 			var singaporeUser = PersonFactory.CreatePerson().WithId();
-			StaffingAuditRepository.Add(new StaffingAudit(singaporeUser, StaffingAuditActionConstants.ImportStaffing, "BPO", "abc.txt") { TimeStamp = new DateTime(2017, 6, 14, 14, 0, 0, DateTimeKind.Utc) });
+			StaffingAuditRepository.Add(new StaffingAudit(singaporeUser, StaffingAuditActionConstants.ImportStaffing, "BPO", "abc.txt", "") { TimeStamp = new DateTime(2017, 6, 14, 14, 0, 0, DateTimeKind.Utc) });
 			CurrentUnitOfWork.Current().PersistAll();
 		}
 

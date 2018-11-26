@@ -40,8 +40,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
                     _skillDayGridControl.Dispose();
                 if (_skillIntradayGridControl!=null)
                     _skillIntradayGridControl.Dispose();
-                if (_contextMenuSkillGrid != null)
-                    _contextMenuSkillGrid.Dispose();
                 if (_schedulerMessageBrokerHandler!=null)
                     _schedulerMessageBrokerHandler.Dispose();
                 if (_clipboardControl != null)

@@ -22,7 +22,8 @@ namespace DotNetOpenAuth.OpenId.Extensions.AttributeExchange {
 		/// The factory method that may be used in deserialization of this message.
 		/// </summary>
 		internal static readonly StandardOpenIdExtensionFactory.CreateDelegate Factory = (typeUri, data, baseMessage, isProviderRole) => {
-			if (typeUri == Constants.TypeUri && isProviderRole) {
+			if (typeUri == Constants.TypeUri && isProviderRole)
+			{
 				string mode;
 				if (data.TryGetValue("mode", out mode) && mode == Mode) {
 					return new FetchRequest();
@@ -107,8 +108,7 @@ namespace DotNetOpenAuth.OpenId.Extensions.AttributeExchange {
 		/// The <paramref name="obj"/> parameter is null.
 		/// </exception>
 		public override bool Equals(object obj) {
-			FetchRequest other = obj as FetchRequest;
-			if (other == null) {
+			if (!(obj is FetchRequest other)) {
 				return false;
 			}
 

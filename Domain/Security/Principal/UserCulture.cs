@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {

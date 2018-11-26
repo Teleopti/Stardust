@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		string Action { get; set; }
 		string Area { get; set; }
 		string ImportFileName { get; set; }
-		Guid? BpoId { get; set; }
+		string BpoName { get; set; }
 		DateTime? ClearPeriodStart { get; set; }
 		DateTime? ClearPeriodEnd { get; set; }
 	}

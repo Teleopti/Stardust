@@ -32,7 +32,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			var scenario = _scenario.Current();
 			if (scenario != null && person != null)
 			{
-				var period = new DateOnlyPeriod(date, date);
+				var period = new DateOnlyPeriod(date.Date, date.Date);
 
 				var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 					new[] {person},
@@ -41,7 +41,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 					scenario);
 
 				schedule = schedules[person]
-					.ScheduledDay(date)
+					.ScheduledDay(period.StartDate)
 					.ProjectionService()
 					.CreateProjection();
 			}

@@ -59,9 +59,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 				}
 			}
 
-			if (message != null) {
-				message.SetAsIncoming();
-			}
+			message?.SetAsIncoming();
 
 			return message;
 		}

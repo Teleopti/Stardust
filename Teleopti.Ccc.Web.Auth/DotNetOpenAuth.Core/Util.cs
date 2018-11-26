@@ -106,7 +106,7 @@ namespace DotNetOpenAuth {
 					ErrorUtilities.VerifyArgumentNotNull(pairs, "pairs");
 					var dictionary = pairs as IDictionary<K, V>;
 					var messageDictionary = pairs as MessageDictionary;
-					StringBuilder sb = new StringBuilder(dictionary != null ? dictionary.Count * 40 : 200);
+					StringBuilder sb = new StringBuilder(dictionary?.Count * 40 ?? 200);
 					foreach (var pair in pairs) {
 						var key = pair.Key.ToString();
 						string value = pair.Value.ToString();

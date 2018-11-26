@@ -33,12 +33,6 @@ namespace DotNetOpenAuth.Configuration {
 		private const string XamlReaderSourceConfigName = "xaml";
 
 		/// <summary>
-		/// Initializes a new instance of the TypeConfigurationElement class.
-		/// </summary>
-		public TypeConfigurationElement() {
-		}
-
-		/// <summary>
 		/// Gets or sets the full name of the type.
 		/// </summary>
 		/// <value>The full name of the type, such as: "ConsumerPortal.Code.CustomStore, ConsumerPortal".</value>
@@ -61,16 +55,12 @@ namespace DotNetOpenAuth.Configuration {
 		/// <summary>
 		/// Gets the type described in the .config file.
 		/// </summary>
-		public Type CustomType {
-			get { return string.IsNullOrEmpty(this.TypeName) ? null : Type.GetType(this.TypeName); }
-		}
+		public Type CustomType => string.IsNullOrEmpty(this.TypeName) ? null : Type.GetType(this.TypeName);
 
 		/// <summary>
 		/// Gets a value indicating whether this type has no meaningful type to instantiate.
 		/// </summary>
-		public bool IsEmpty {
-			get { return this.CustomType == null && string.IsNullOrEmpty(this.XamlSource); }
-		}
+		public bool IsEmpty => this.CustomType == null && string.IsNullOrEmpty(this.XamlSource);
 
 		/// <summary>
 		/// Creates an instance of the type described in the .config file.

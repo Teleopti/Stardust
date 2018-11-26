@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -11,7 +12,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	public class FakeSkillRepository : ISkillRepository
 	{
 		private readonly IList<ISkill> _skills;
- 
+		public List<SkillOpenHoursLight> OpenHoursList;
+
 		public FakeSkillRepository()
 		{
 			_skills = new List<ISkill>();
@@ -127,6 +129,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return _skills.Where(x => x.Name.Contains(searchString)).Take(maxHits);
 		}
 
+		public IEnumerable<SkillOpenHoursLight> FindOpenHoursForSkills(IEnumerable<Guid> skillIds)
+		{
+			return OpenHoursList;
+		}
+		
 		public IMultisiteSkill HasMultisiteSkill(string skillName, IActivity activity)
 		{
 			var skill = SkillFactory.CreateMultisiteSkill(skillName).WithId();

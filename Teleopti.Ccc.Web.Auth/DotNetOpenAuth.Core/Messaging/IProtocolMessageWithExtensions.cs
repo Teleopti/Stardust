@@ -56,16 +56,12 @@ namespace DotNetOpenAuth.Messaging {
 		/// <summary>
 		/// Gets the level of protection this message requires.
 		/// </summary>
-		MessageProtections IProtocolMessage.RequiredProtection {
-			get { throw new NotImplementedException(); }
-		}
+		MessageProtections IProtocolMessage.RequiredProtection => throw new NotImplementedException();
 
 		/// <summary>
 		/// Gets a value indicating whether this is a direct or indirect message.
 		/// </summary>
-		MessageTransport IProtocolMessage.Transport {
-			get { throw new NotImplementedException(); }
-		}
+		MessageTransport IProtocolMessage.Transport => throw new NotImplementedException();
 
 		#endregion
 
@@ -77,11 +73,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <remarks>
 		/// Implementations of this interface should ensure that this property never returns null.
 		/// </remarks>
-		Version IMessage.Version {
-			get {
-				throw new NotImplementedException();
-			}
-		}
+		Version IMessage.Version => throw new NotImplementedException();
 
 		/// <summary>
 		/// Gets the extra, non-standard Protocol parameters included in the message.
@@ -89,11 +81,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <remarks>
 		/// Implementations of this interface should ensure that this property never returns null.
 		/// </remarks>
-		IDictionary<string, string> IMessage.ExtraData {
-			get {
-				throw new NotImplementedException();
-			}
-		}
+		IDictionary<string, string> IMessage.ExtraData => throw new NotImplementedException();
 
 		/// <summary>
 		/// Checks the message state for conformity to the protocol specification

@@ -57,7 +57,7 @@ namespace Mono.Math.Prime {
 				case ConfidenceFactor.Provable:
 					throw new Exception ("The Rabin-Miller test can not be executed in a way such that its results are provable");
 				default:
-					throw new ArgumentOutOfRangeException ("confidence");
+					throw new ArgumentOutOfRangeException (nameof(confidence));
 			}
 		}
 

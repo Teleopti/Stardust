@@ -5,11 +5,13 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
@@ -115,7 +117,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Measurement
 							partTimePercentage,
 							contractSchedule);
 
-						var personPeriod = new PersonPeriod("2001-01-01".Date(), personContract, team);
+						var personPeriod = PersonPeriodFactory.CreatePersonPeriodFromDateTime("2001-01-01".Utc(), personContract, team);
 						person.AddPersonPeriod(personPeriod);
 
 						var exteralLogOn = new ExternalLogOn

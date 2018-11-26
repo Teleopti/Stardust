@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
+using Teleopti.Wfm.Adherence;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
@@ -83,17 +80,17 @@ namespace Teleopti.Ccc.TestCommon
 			toUpdate.StoreVersion = toStoreVersion;
 		}
 
-		public IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period)
+		public IEnumerable<IEvent> Load(Guid personId, DateTime @from, DateTime to)
 		{
 			return Data
 				.Where(x => x.PersonId == personId &&
-							x.StartTime <= period.EndDateTime &&
-							x.EndTime >= period.StartDateTime)
+							x.StartTime <= @from &&
+							x.EndTime >= @to)
 				.Select(e => e.Event)
 				.ToArray();
 		}
 
-		public IEnumerable<IEvent> Load(Guid personId, DateOnly date)
+		public IEnumerable<IEvent> Load(Guid personId, Wfm.Adherence.DateOnly date)
 		{
 			return Data
 				.Where(x => x.PersonId == personId &&

@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 						ErrorResourceData = new object[]
 						{
 							DateHelper.HourMinutesString(
-								item.Value.CalculatedTargetTimeHolder(period).GetValueOrDefault(TimeSpan.Zero).TotalMinutes)
+								item.Value.CalculatedTargetTime(period).GetValueOrDefault(TimeSpan.Zero).TotalMinutes)
 						}.ToList()
 					}, GetType());
 				}

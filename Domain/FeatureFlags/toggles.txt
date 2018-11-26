@@ -97,13 +97,11 @@ ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348 = true
 ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941 = true
 ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717 = true
 ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487 = true
-ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = RC
+ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = DEV
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
-WFM_Modify_Skill_Groups_43727 = true
 WFM_Remember_My_Selection_In_Intraday_47254 = true
-WFM_Intraday_Refactoring_74652 = true
 WFM_Intraday_Redesign_77214 = DEV
 
 # Ziggy #
@@ -112,6 +110,7 @@ Wfm_Payroll_SupportMultiDllPayrolls_75959 = true
 Wfm_Stardust_EnableScaleout_77366 = true
 Wfm_AuditTrail_StaffingAuditTrail_78125 = false
 Wfm_AuditTrail_GenericAuditTrail_74938 = false
+WFM_AbsenceRequest_ImproveThroughput_79139 = RC
 
 # Squids #
 WFM_Forecaster_Refact_44480 = true
@@ -146,7 +145,6 @@ MyTimeWeb_Request_CleanUpRequestHisotry_77776 = true
 MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446 = true
 WFM_Request_View_Permissions_77731 = true
 WFM_Request_Show_Feedback_Link_77733 = true
-WFM_Request_Remove_Waitlist_Link_78939 = RC
 WFM_Request_Show_Shift_for_Absence_Requests_79008 = DEV
 
 # Tech #

@@ -74,8 +74,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 		/// </remarks>
 		[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "It doesn't look too bad to me. :)")]
 		public MessageProtections? ProcessOutgoingMessage(IProtocolMessage message) {
-			var extendableMessage = message as IProtocolMessageWithExtensions;
-			if (extendableMessage != null) {
+			if (message is IProtocolMessageWithExtensions extendableMessage) {
 				Protocol protocol = Protocol.Lookup(message.Version);
 				MessageDictionary baseMessageDictionary = this.Channel.MessageDescriptions.GetAccessor(message);
 
@@ -83,8 +82,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 				// all the extensions, their aliases, and their parameters.
 				var extensionManager = ExtensionArgumentsManager.CreateOutgoingExtensions(protocol);
 				foreach (IExtensionMessage protocolExtension in extendableMessage.Extensions) {
-					var extension = protocolExtension as IOpenIdMessageExtension;
-					if (extension != null) {
+					if (protocolExtension is IOpenIdMessageExtension extension) {
 						// Give extensions that require custom serialization a chance to do their work.
 						var customSerializingExtension = extension as IMessageWithEvents;
 						customSerializingExtension?.OnSending();
@@ -136,8 +134,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 		/// <see cref="MessagePartAttribute.RequiredProtection"/> properties where applicable.
 		/// </remarks>
 		public MessageProtections? ProcessIncomingMessage(IProtocolMessage message) {
-			var extendableMessage = message as IProtocolMessageWithExtensions;
-			if (extendableMessage != null) {
+			if (message is IProtocolMessageWithExtensions extendableMessage) {
 				// First add the extensions that are signed by the Provider.
 				foreach (IOpenIdMessageExtension signedExtension in this.GetExtensions(extendableMessage, true, null)) {
 					signedExtension.IsSignedByRemoteParty = true;
@@ -147,7 +144,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 				// Now search again, considering ALL extensions whether they are signed or not,
 				// skipping the signed ones and adding the new ones as unsigned extensions.
 				if (this.receiveUnsignedExtensions) {
-					Func<string, bool> isNotSigned = typeUri => !extendableMessage.Extensions.Cast<IOpenIdMessageExtension>().Any(ext => ext.TypeUri == typeUri);
+					Func<string, bool> isNotSigned = typeUri => extendableMessage.Extensions.Cast<IOpenIdMessageExtension>().All(ext => ext.TypeUri != typeUri);
 					foreach (IOpenIdMessageExtension unsignedExtension in this.GetExtensions(extendableMessage, false, isNotSigned)) {
 						unsignedExtension.IsSignedByRemoteParty = false;
 						extendableMessage.Extensions.Add(unsignedExtension);
@@ -228,8 +225,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 		private IDictionary<string, string> GetExtensionsDictionary(IProtocolMessage message, bool ignoreUnsigned) {
 			Requires.ValidState(this.Channel != null);
 
-			IndirectSignedResponse signedResponse = message as IndirectSignedResponse;
-			if (signedResponse != null && ignoreUnsigned) {
+			if (message is IndirectSignedResponse signedResponse && ignoreUnsigned) {
 				return signedResponse.GetSignedMessageParts(this.Channel);
 			}
 			return this.Channel.MessageDescriptions.GetAccessor(message);

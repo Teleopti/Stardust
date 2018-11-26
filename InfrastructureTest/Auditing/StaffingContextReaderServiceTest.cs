@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 		{
 			var person = PersonFactory.CreatePerson();
 			PersonRepository.Add(person);
-			StaffingAuditRepository.Add(new StaffingAudit(person, StaffingAuditActionConstants.ImportStaffing,  "BPO", "abc.txt"));
+			StaffingAuditRepository.Add(new StaffingAudit(person, StaffingAuditActionConstants.ImportStaffing,  "BPO", "abc.txt", ""));
 			CurrentUnitOfWork.Current().PersistAll();
 			Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now).Should().Not.Be.Empty();
 		}
@@ -72,9 +72,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 				StartDate = new DateTime(2018, 10, 01, 0, 0, 0, DateTimeKind.Utc),
 				EndDate = new DateTime(2019, 10, 01, 0, 0, 0, DateTimeKind.Utc)
 			};
+			var bpoName = SkillCombinationResourceRepository.GetSourceBpoByGuid(clearBpoAction.BpoGuid);
 			StaffingAuditRepository.Add(
 				new StaffingAudit(person, StaffingAuditActionConstants.ClearStaffing,  "BPO", "",
-					clearBpoAction.BpoGuid,clearBpoAction.StartDate,clearBpoAction.EndDate));
+					bpoName, clearBpoAction.StartDate,clearBpoAction.EndDate));
 			CurrentUnitOfWork.Current().PersistAll();
 
 			Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now).FirstOrDefault().Data.Should().Be.EqualTo(expectedResult);
@@ -120,12 +121,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 		[Test]
 		public void ShouldReturnStaffingAuditForTheGivenParameters()
 		{
-			UserCulture.IsSwedish();
-
 			var loggedOnUser = PersonFactory.CreatePersonWithGuid("Ashley", "Aaron");
 			LoggedOnUser.SetFakeLoggedOnUser(loggedOnUser);
 			var staffingAudit =
-				new StaffingAudit(loggedOnUser, StaffingAuditActionConstants.ImportStaffing, "BPO", "abc.txt") {TimeStamp = DateTime.UtcNow};
+				new StaffingAudit(loggedOnUser, StaffingAuditActionConstants.ImportStaffing, "BPO", "abc.txt", "") {TimeStamp = DateTime.UtcNow};
 			StaffingAuditRepository.Add(staffingAudit);
 			CurrentUnitOfWork.Current().PersistAll();
 

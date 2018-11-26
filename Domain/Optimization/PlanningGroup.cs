@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var planningGroupSettings = new PlanningGroupSettings();
 			planningGroupSettings.SetAsDefault();
 			addPlanningGroupSetting(planningGroupSettings);
-			_preferenceValue = new Percent(1);
+			_preferenceValue = new Percent(0.8);
 		}
 
 		public virtual IEnumerable<IFilter> Filters => _filters;

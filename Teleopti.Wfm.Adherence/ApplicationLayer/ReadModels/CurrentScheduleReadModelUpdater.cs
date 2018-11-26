@@ -106,12 +106,12 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
 			var from = new DateOnly(time.AddDays(-1));
 			var date = new DateOnly(time);
 			var to = new DateOnly(time.AddDays(1));
-			var persistPeriod = new DateOnlyPeriod(from, to);
+			var persistPeriod = new DateOnlyPeriod(from.Date, to.Date);
 			var loadPeriod = persistPeriod.Inflate(1);
 			var persons = _persons.FindPeople(personIds)
 				.Select(x => new
 				{
-					businessUnitId = x.Period(date)?.Team?.Site?.BusinessUnit?.Id,
+					businessUnitId = x.Period(date.Date)?.Team?.Site?.BusinessUnit?.Id,
 					person = x
 				})
 				.ToArray();
@@ -147,7 +147,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
 							from layer in scheduleDay.ProjectionService().CreateProjection()
 							select new ScheduledActivity
 							{
-								BelongsToDate = belongsToDate,
+								BelongsToDate = new DateOnly(belongsToDate.Date),
 								DisplayColor = layer.Payload.ConfidentialDisplayColor(x).ToArgb(),
 								EndDateTime = layer.Period.EndDateTime,
 								Name = layer.Payload.ConfidentialDescription(x).Name,

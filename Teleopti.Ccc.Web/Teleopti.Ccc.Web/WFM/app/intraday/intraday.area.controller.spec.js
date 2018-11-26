@@ -822,7 +822,6 @@ describe('IntradayAreaController', function() {
 		$httpBackend.whenGET('../ToggleHandler/AllToggles').respond(function() {
 			return [200];
 		});
-
 		initBackend();
 	}));
 
@@ -835,7 +834,7 @@ describe('IntradayAreaController', function() {
 	var createController = function(isNewlyCreatedSkillArea, toggleObj) {
 		vm = $controller('IntradayAreaController', { $scope: scope, $translate: $translate });
 		vm.toggles = Object.assign(defaultToggles, toggleObj);
-		vm.onStateChanged(undefined, { name: 'intraday.area' }, { isNewSkillArea: isNewlyCreatedSkillArea });
+		vm.onStateChanged(undefined, { name: 'intraday.legacy' }, { isNewSkillArea: isNewlyCreatedSkillArea });
 		scope.$digest();
 		$httpBackend.flush();
 	};

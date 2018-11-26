@@ -143,9 +143,7 @@ namespace DotNetOpenAuth.OpenId.Extensions.ProviderAuthenticationPolicy {
 		/// <value>
 		/// 	<c>true</c> if this instance is signed by the Provider; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsSignedByProvider {
-			get { return this.IsSignedByRemoteParty; }
-		}
+		public bool IsSignedByProvider => this.IsSignedByRemoteParty;
 
 		#region IMessageWithEvents Members
 

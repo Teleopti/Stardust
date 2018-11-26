@@ -1,9 +1,5 @@
 describe('SkillGroupManager', function() {
-	var $controller,
-		$provide,
-		$rootScope,
-		scope,
-		currentUserInfo = new FakeCurrentUserInfo();
+	var $controller, $rootScope, scope, $httpBackend;
 
 	var vm;
 	var skills = [
@@ -50,13 +46,16 @@ describe('SkillGroupManager', function() {
 		});
 	});
 
-	beforeEach(
-		inject(function(_$controller_, _$rootScope_) {
-			$controller = _$controller_;
-			$rootScope = _$rootScope_;
-			$rootScope._ = _;
-		})
-	);
+	beforeEach(inject(function(_$controller_, _$rootScope_, _$httpBackend_) {
+		$controller = _$controller_;
+		$rootScope = _$rootScope_;
+		$rootScope._ = _;
+		$httpBackend = _$httpBackend_;
+
+		$httpBackend.whenGET('../ToggleHandler/AllToggles').respond(function() {
+			return [200];
+		});
+	}));
 
 	beforeEach(function() {
 		createController();
@@ -127,5 +126,6 @@ describe('SkillGroupManager', function() {
 			$translate: null
 		});
 		scope.$digest();
+		$httpBackend.flush();
 	}
 });

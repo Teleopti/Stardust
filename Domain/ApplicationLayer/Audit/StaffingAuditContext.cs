@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
@@ -11,27 +12,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 		private readonly IStaffingAuditRepository _staffingAuditRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly INow _now;
+		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 
 
-		public StaffingAuditContext(IStaffingAuditRepository staffingAuditRepository, ILoggedOnUser loggedOnUser,INow now)
+		public StaffingAuditContext(IStaffingAuditRepository staffingAuditRepository, ILoggedOnUser loggedOnUser,INow now, ISkillCombinationResourceRepository skillCombinationResourceRepository)
 		{
 			_staffingAuditRepository = staffingAuditRepository;
 			_loggedOnUser = loggedOnUser;
 			_now = now;
+			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 		}
 
 		public void Handle(ClearBpoActionObj clearBpoAction)
 		{
 			var utcStartDate = DateTime.SpecifyKind(clearBpoAction.StartDate,DateTimeKind.Utc);
 			var utcEndDate = DateTime.SpecifyKind(clearBpoAction.EndDate, DateTimeKind.Utc);
+			var bpoName = _skillCombinationResourceRepository.GetSourceBpoByGuid(clearBpoAction.BpoGuid);
 			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), StaffingAuditActionConstants.ClearStaffing, "BPO", "",
-				clearBpoAction.BpoGuid, utcStartDate, utcEndDate) {TimeStamp = _now.UtcDateTime()};
+				bpoName, utcStartDate, utcEndDate) {TimeStamp = _now.UtcDateTime()};
 			_staffingAuditRepository.Add(staffingAudit);
 		}
 
 		public void Handle(ImportBpoActionObj importBpoAction)
 		{
-			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), StaffingAuditActionConstants.ImportStaffing, "BPO", importBpoAction.FileName);
+			var staffingAudit = new StaffingAudit(_loggedOnUser.CurrentUser(), StaffingAuditActionConstants.ImportStaffing, "BPO", importBpoAction.FileName, "");
 			staffingAudit.TimeStamp = _now.UtcDateTime();
 			_staffingAuditRepository.Add(staffingAudit);
 		}

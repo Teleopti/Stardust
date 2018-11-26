@@ -37,7 +37,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 			});
 
 			var result = WithUnitOfWork.Get(() =>
-				Target.Load(personId, "2018-01-30 08:00 - 2018-01-30 17:00".Period())
+				Target.Load(personId, "2018-01-30 08:00".Utc(), "2018-01-30 17:00".Utc())
 			).Cast<PeriodApprovedAsInAdherenceEvent>();
 
 			result.Single().PersonId.Should().Be(personId);
@@ -57,7 +57,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 			});
 
 			var result = WithUnitOfWork.Get(() =>
-				Target.Load(personId, "2018-01-30 08:00 - 2018-01-30 17:00".Period())
+				Target.Load(personId, "2018-01-30 08:00".Utc(), "2018-01-30 17:00".Utc())
 			).Cast<PeriodApprovedAsInAdherenceEvent>();
 
 			result.Count().Should().Be(0);
@@ -75,7 +75,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 			});
 
 			var result = WithUnitOfWork.Get(() =>
-				Target.Load(personId, "2018-01-30 08:00 - 2018-01-30 17:00".Period())
+				Target.Load(personId, "2018-01-30 08:00".Utc(), "2018-01-30 17:00".Utc())
 			).Cast<PeriodApprovedAsInAdherenceEvent>();
 
 			result.Single().StartTime.Should().Be("2018-01-30 16:00".Utc());
@@ -93,7 +93,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 			});
 
 			var result = WithUnitOfWork.Get(() =>
-				Target.Load(personId, "2018-01-30 08:00 - 2018-01-30 17:00".Period())
+				Target.Load(personId, "2018-01-30 08:00".Utc(), "2018-01-30 17:00".Utc())
 			).Cast<PeriodApprovedAsInAdherenceEvent>();
 
 			result.Single().StartTime.Should().Be("2018-01-30 07:00".Utc());
@@ -111,7 +111,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 			});
 
 			var result = WithUnitOfWork.Get(() =>
-				Target.Load(personId, "2018-01-30 08:00 - 2018-01-30 17:00".Period())
+				Target.Load(personId, "2018-01-30 08:00".Utc(), "2018-01-30 17:00".Utc())
 			).Cast<PeriodApprovedAsInAdherenceEvent>();
 
 			result.Single().StartTime.Should().Be("2018-01-30 07:00".Utc());
@@ -130,7 +130,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 			});
 
 			var result = WithUnitOfWork.Get(() =>
-				Target.Load(personId, "2018-01-30 08:00 - 2018-01-30 17:00".Period())
+				Target.Load(personId, "2018-01-30 08:00".Utc(), "2018-01-30 17:00".Utc())
 			).Cast<PeriodApprovedAsInAdherenceEvent>();
 
 			result.Single().StartTime.Should().Be("2018-01-30 17:00".Utc());
@@ -148,7 +148,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 			});
 
 			var result = WithUnitOfWork.Get(() =>
-				Target.Load(personId, "2018-01-30 08:00 - 2018-01-30 17:00".Period())
+				Target.Load(personId, "2018-01-30 08:00".Utc(), "2018-01-30 17:00".Utc())
 			).Cast<PeriodApprovedAsInAdherenceEvent>();
 
 			result.Single().StartTime.Should().Be("2018-01-30 07:00".Utc());

@@ -31,7 +31,7 @@ Teleopti.MyTimeWeb.Schedule.MobileMonth = (function($) {
 	}
 
 	function registPollListener() {
-		Teleopti.MyTimeWeb.PollScheduleUpdates.SetListener('MonthScheduleMobile', function(period) {
+		Teleopti.MyTimeWeb.PollScheduleUpdates.AddListener('MonthScheduleMobile', function(period) {
 			var startDate = moment(moment(period.startDate).format('YYYY-MM-DD')).toDate();
 			var endDate = moment(moment(period.endDate).format('YYYY-MM-DD')).toDate();
 			if (vm.isWithinSelected(startDate, endDate)) {

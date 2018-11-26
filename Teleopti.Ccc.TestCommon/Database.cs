@@ -254,15 +254,10 @@ namespace Teleopti.Ccc.TestCommon
 			return this;
 		}
 
+		[UnitOfWork]
 		public virtual Database WithPersonPeriod(string date)
 		{
-			return WithPersonPeriod(date.Date());
-		}
-
-		[UnitOfWork]
-		public virtual Database WithPersonPeriod(DateOnly date)
-		{
-			withPeriod(person(), date);
+			withPeriod(person(), date.Date());
 			return this;
 		}
 
@@ -425,40 +420,20 @@ namespace Teleopti.Ccc.TestCommon
 			return this;
 		}
 
-		public Database WithAssignment(string date)
-		{
-			WithAssignment(date.Date());
-			return this;
-		}
-
 		[UnitOfWork]
-		public virtual Database WithAssignment(DateOnly date)
+		public virtual Database WithAssignment(string date)
 		{
-			_date = date;
-			_assignments.Add(new PersonAssignment(person(), scenario(), date));
-			return this;
-		}
-
-		[UnitOfWork]
-		public virtual Database WithAssignedActivity(string activityName, DateTime startTime, DateTime endTime)
-		{
-			withAssignedActivity(activityName, startTime, endTime);
+			_date = date.Date();
+			_assignments.Add(new PersonAssignment(person(), scenario(), _date));
 			return this;
 		}
 
 		[UnitOfWork]
 		public virtual Database WithAssignedActivity(string activityName, string startTime, string endTime)
 		{
-			withAssignedActivity(activityName, startTime.Utc(), endTime.Utc());
-			return this;
-		}
-
-		private void withAssignedActivity(string activityName, DateTime startTime, DateTime endTime)
-		{
 			_activity = activityName;
-			startTime = DateTime.SpecifyKind(startTime, DateTimeKind.Utc);
-			endTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc);
-			assignment().AddActivity(activity(), new DateTimePeriod(startTime, endTime));
+			assignment().AddActivity(activity(), new DateTimePeriod(startTime.Utc(), endTime.Utc()));
+			return this;
 		}
 
 		private IActivity activity()

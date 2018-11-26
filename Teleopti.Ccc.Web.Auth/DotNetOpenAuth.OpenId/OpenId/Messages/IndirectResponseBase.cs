@@ -15,10 +15,6 @@ namespace DotNetOpenAuth.OpenId.Messages {
 	/// </summary>
 	[Serializable]
 	internal class IndirectResponseBase : RequestBase, IProtocolMessageWithExtensions {
-		/// <summary>
-		/// Backing store for the <see cref="Extensions"/> property.
-		/// </summary>
-		private IList<IExtensionMessage> extensions = new List<IExtensionMessage>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IndirectResponseBase"/> class.
@@ -45,34 +41,28 @@ namespace DotNetOpenAuth.OpenId.Messages {
 			: base(version, relyingPartyReturnTo, mode, MessageTransport.Indirect) {
 		}
 
-		#region IProtocolMessageWithExtensions Members
+        #region IProtocolMessageWithExtensions Members
 
-		/// <summary>
-		/// Gets the list of extensions that are included with this message.
-		/// </summary>
-		/// <value></value>
-		/// <remarks>
-		/// Implementations of this interface should ensure that this property never returns null.
-		/// </remarks>
-		public IList<IExtensionMessage> Extensions {
-			get { return this.extensions; }
-		}
+        /// <summary>
+        /// Gets the list of extensions that are included with this message.
+        /// </summary>
+        /// <value></value>
+        /// <remarks>
+        /// Implementations of this interface should ensure that this property never returns null.
+        /// </remarks>
+        public IList<IExtensionMessage> Extensions { get; } = new List<IExtensionMessage>();
 
 		#endregion
 
 		/// <summary>
 		/// Gets the signed extensions on this message.
 		/// </summary>
-		internal IEnumerable<IOpenIdMessageExtension> SignedExtensions {
-			get { return this.extensions.OfType<IOpenIdMessageExtension>().Where(ext => ext.IsSignedByRemoteParty); }
-		}
+		internal IEnumerable<IOpenIdMessageExtension> SignedExtensions => this.Extensions.OfType<IOpenIdMessageExtension>().Where(ext => ext.IsSignedByRemoteParty);
 
 		/// <summary>
 		/// Gets the unsigned extensions on this message.
 		/// </summary>
-		internal IEnumerable<IOpenIdMessageExtension> UnsignedExtensions {
-			get { return this.extensions.OfType<IOpenIdMessageExtension>().Where(ext => !ext.IsSignedByRemoteParty); }
-		}
+		internal IEnumerable<IOpenIdMessageExtension> UnsignedExtensions => this.Extensions.OfType<IOpenIdMessageExtension>().Where(ext => !ext.IsSignedByRemoteParty);
 
 		/// <summary>
 		/// Gets the originating request message, if applicable.

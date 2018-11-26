@@ -63,7 +63,6 @@
 		vm.showApproveOrDenyRequests = requestsPermissions.all().HasApproveOrDenyPermission;
 		vm.showCancelRequests = requestsPermissions.all().HasCancelPermission;
 		vm.showReplyRequests = requestsPermissions.all().HasReplyPermission;
-		vm.showWaitlist = !toggleSvc.WFM_Request_Remove_Waitlist_Link_78939;
 
 		initWaitlistProcessPeriod();
 

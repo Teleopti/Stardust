@@ -54,12 +54,7 @@ namespace DotNetOpenAuth.OpenId.Provider {
 	/// </summary>
 	[ContractClassFor(typeof(IProviderBehavior))]
 	internal abstract class IProviderBehaviorContract : IProviderBehavior {
-		/// <summary>
-		/// Initializes a new instance of the <see cref="IProviderBehaviorContract"/> class.
-		/// </summary>
-		protected IProviderBehaviorContract() {
-		}
-
+		
 		#region IProviderBehavior Members
 
 		/// <summary>

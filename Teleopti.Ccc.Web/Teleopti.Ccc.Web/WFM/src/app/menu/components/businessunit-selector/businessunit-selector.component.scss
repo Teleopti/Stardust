@@ -6,10 +6,6 @@
 nz-dropdown {
 	transition: 300ms background-color cubic-bezier(0.33, 0.11, 0.02, 0.99);
 
-	&:hover {
-		background: rgba(0, 0, 0, 0.16);
-	}
-
 	button.trigger-btn {
 		border: none;
 		border-radius: 0;
@@ -18,12 +14,14 @@ nz-dropdown {
 		display: flex;
 		align-items: center;
 		transition: none;
+		transition: 300ms background-color cubic-bezier(0.33, 0.11, 0.02, 0.99);
 
 		color: white;
 		&:hover,
 		&:active,
 		&:focus {
 			color: white;
+			background: rgba(0, 0, 0, 0.16) !important;
 		}
 		.text-icon {
 			display: flex;

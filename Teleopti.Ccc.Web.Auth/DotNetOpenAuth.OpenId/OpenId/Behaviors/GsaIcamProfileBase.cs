@@ -29,7 +29,7 @@ namespace DotNetOpenAuth.OpenId.Behaviors {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GsaIcamProfileBase"/> class.
 		/// </summary>
-		public GsaIcamProfileBase() {
+		protected GsaIcamProfileBase() {
 			if (DisableSslRequirement) {
 				Logger.OpenId.Warn("GSA level 1 behavior has its RequireSsl requirement disabled.");
 			}

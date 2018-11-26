@@ -16,12 +16,6 @@ namespace DotNetOpenAuth.Configuration {
 	[ContractVerification(true)]
 	internal class HostNameOrRegexCollection : ConfigurationElementCollection {
 		/// <summary>
-		/// Initializes a new instance of the <see cref="HostNameOrRegexCollection"/> class.
-		/// </summary>
-		public HostNameOrRegexCollection() {
-		}
-
-		/// <summary>
 		/// Gets all the members of the collection assuming they are all literal host names.
 		/// </summary>
 		internal IEnumerable<string> KeysAsStrings {

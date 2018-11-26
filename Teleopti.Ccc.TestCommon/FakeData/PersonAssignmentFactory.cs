@@ -15,6 +15,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public static class PersonAssignmentFactory
 	{
+		public static IPersonAssignment CreatePersonAssignmentFromDateTime(IPerson agent, IScenario scenario, DateTime date)
+		{
+			return new PersonAssignment(agent, scenario, new DateOnly(date));
+		}
+		
 		public static IPersonAssignment CreatePersonAssignment(IPerson agent)
 		{
 			return CreatePersonAssignment(agent, ScenarioFactory.CreateScenarioAggregate());

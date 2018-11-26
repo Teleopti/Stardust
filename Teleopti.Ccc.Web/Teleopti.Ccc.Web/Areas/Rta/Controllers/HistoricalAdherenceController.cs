@@ -2,11 +2,9 @@
 using System.Globalization;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Wfm.Adherence;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
 using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
 

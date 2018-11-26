@@ -27,7 +27,7 @@ namespace Teleopti.Wfm.Api
 			this.commandProvider = commandProvider;
 		}
 
-		private string generateDoc(IOwinContext context)
+		private async Task<string> generateDoc(IOwinContext context)
 		{
 			var doc = new SwaggerDocument
 			{
@@ -60,7 +60,7 @@ namespace Teleopti.Wfm.Api
 				};
 				var swaggerResponse = new SwaggerResponse
 				{
-					Schema = generator.GenerateWithReferenceAndNullability<JsonSchema4>(typeof(ResultDto), null, false, schemaResolver, null).GetAwaiter().GetResult()
+					Schema = await generator.GenerateWithReferenceAndNullability<JsonSchema4>(typeof(ResultDto), null, false, schemaResolver, null).ConfigureAwait(false)
 				};
 				swaggerOperation.Responses.Add("200", swaggerResponse);
 
@@ -68,7 +68,7 @@ namespace Teleopti.Wfm.Api
 				{
 					Description = "Command arguments for " + opname,
 					Kind = SwaggerParameterKind.Body,
-					Schema = generator.GenerateWithReferenceAndNullability<JsonSchema4>(cmd, null, false, schemaResolver, null).GetAwaiter().GetResult()
+					Schema = await generator.GenerateWithReferenceAndNullability<JsonSchema4>(cmd, null, false, schemaResolver, null).ConfigureAwait(false)
 				};
 				swaggerOperation.Parameters.Add(param);
 
@@ -96,7 +96,7 @@ namespace Teleopti.Wfm.Api
 				
 				var swaggerResponse = new SwaggerResponse
 				{
-					Schema = generator.GenerateWithReferenceAndNullability<JsonSchema4>(typeof(QueryResultDto<>).MakeGenericType(query.Item3), null, false, schemaResolver, null).GetAwaiter().GetResult()
+					Schema = await generator.GenerateWithReferenceAndNullability<JsonSchema4>(typeof(QueryResultDto<>).MakeGenericType(query.Item3), null, false, schemaResolver, null).ConfigureAwait(false)
 				};
 				swaggerOperation.Responses.Add("200", swaggerResponse);
 				
@@ -104,7 +104,7 @@ namespace Teleopti.Wfm.Api
 				{
 					Description = "Query arguments for " + opname,
 					Kind = SwaggerParameterKind.Body,
-					Schema = generator.GenerateWithReferenceAndNullability<JsonSchema4>(query.Item2, null, false, schemaResolver, null).GetAwaiter().GetResult()
+					Schema = await generator.GenerateWithReferenceAndNullability<JsonSchema4>(query.Item2, null, false, schemaResolver, null).ConfigureAwait(false)
 				};
 				swaggerOperation.Parameters.Add(param);
 			}
@@ -116,19 +116,20 @@ namespace Teleopti.Wfm.Api
 			return doc.ToJson();
 		}
 
-		public override Task Invoke(IOwinContext context)
+		public override async Task Invoke(IOwinContext context)
 		{
 			if (context.Request.Path.HasValue && string.Equals(context.Request.Path.Value.Trim('/'), url.Trim('/'), StringComparison.OrdinalIgnoreCase))
 			{
 				context.Response.StatusCode = 200;
 				context.Response.Headers["Content-Type"] = "application/json; charset=utf-8";
 
-				var doc = generateDoc(context);
-				return context.Response.WriteAsync(doc);
+				var doc = await generateDoc(context);
+				await context.Response.WriteAsync(doc);
+				return;
 			}
 
 			// Call the next delegate/middleware in the pipeline
-			return Next.Invoke(context);
+			await Next.Invoke(context);
 		}
 	}
 }

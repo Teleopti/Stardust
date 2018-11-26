@@ -17952,4 +17952,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Staffing</value>
     <comment>Context in audit trail</comment>
   </data>
+  <data name="PreferenceFulfillmentPercentColon" xml:space="preserve">
+    <value>Preference Fulfillment (%):</value>
+    <comment>used in web plans</comment>
+  </data>
 </root>

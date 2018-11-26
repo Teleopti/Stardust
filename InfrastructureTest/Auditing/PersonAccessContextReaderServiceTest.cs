@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 		{
 			var appRole = ApplicationRoleFactory.CreateRole("Superman", "The man");
 			ApplicationRoleRepository.Add(appRole);
-			dynamic role = new {RoleId = appRole.Id.GetValueOrDefault(), Name = appRole.DescriptionText};
+			dynamic role = new {RoleId = appRole.Id.GetValueOrDefault(), Name = appRole.Name};
 			var person = PersonFactory.CreatePerson();
 			PersonRepository.Add(person);
 			CurrentUnitOfWork.Current().PersistAll();

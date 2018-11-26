@@ -33,7 +33,7 @@ namespace Teleopti.Wfm.Adherence.Domain
 		{
 			var person = _persons.Get(personId);
 			if (person == null)
-				return startDateTime.ToDateOnly();
+				return new DateOnly(startDateTime);
 
 			var period = new DateTimePeriod(startDateTime, endDateTime);
 			var periods = loadPeriodsForPerson(period, person);
@@ -122,8 +122,8 @@ namespace Teleopti.Wfm.Adherence.Domain
 					from layer in scheduleDay.ProjectionService().CreateProjection()
 					select new dateForPeriod
 					{
-						Date = belongsToDate,
-						Period = layer.Period
+						Date = new DateOnly(belongsToDate.Date),
+						Period = new DateTimePeriod(layer.Period.StartDateTime, layer.Period.EndDateTime)
 					})
 				.ToArray();
 		}

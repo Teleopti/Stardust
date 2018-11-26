@@ -15,17 +15,15 @@ describe('IntradayConfigController', function() {
 		];
 	});
 
-	beforeEach(
-		inject(function(_$httpBackend_, _$controller_, _$rootScope_, _$translate_) {
-			$controller = _$controller_;
-			$httpBackend = _$httpBackend_;
-			scope = _$rootScope_.$new();
-			$translate = _$translate_;
-			$httpBackend.whenGET('../api/skillgroup/skills').respond(200, skills);
+	beforeEach(inject(function(_$httpBackend_, _$controller_, _$rootScope_, _$translate_) {
+		$controller = _$controller_;
+		$httpBackend = _$httpBackend_;
+		scope = _$rootScope_.$new();
+		$translate = _$translate_;
+		$httpBackend.whenGET('../api/skillgroup/skills').respond(200, skills);
 
-			$httpBackend.whenGET('../ToggleHandler/AllToggles').respond(200, {});
-		})
-	);
+		$httpBackend.whenGET('../ToggleHandler/AllToggles').respond(200, {});
+	}));
 
 	var createController = function(isNewlyCreatedSkillGroup) {
 		vm = $controller('IntradayConfigController', {

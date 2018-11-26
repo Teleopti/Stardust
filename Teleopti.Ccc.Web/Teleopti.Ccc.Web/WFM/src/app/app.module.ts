@@ -15,6 +15,8 @@ import { MenuModule } from './menu/menu.module';
 import { PeopleModule } from './people/people.module';
 import { ReportModule } from './reports/reports.module';
 import { ResetPasswordModule } from './reset-password/reset-password.module';
+import { IntradayModule } from './intraday/intraday.module';
+import { NzIconService } from 'ng-zorro-antd';
 
 @NgModule({
 	declarations: [BootstrapComponent],
@@ -37,6 +39,7 @@ import { ResetPasswordModule } from './reset-password/reset-password.module';
 			},
 			parser: { provide: TranslateParser, useClass: CustomTranslateParser }
 		}),
+		IntradayModule,
 		ReportModule
 	],
 	entryComponents: [BootstrapComponent],
@@ -47,7 +50,8 @@ export class AppModule {
 		private upgrade: UpgradeModule,
 		private userService: UserService,
 		private translate: TranslateService,
-		private zorroi18n: Zorroi18nService
+		private zorroi18n: Zorroi18nService,
+		private iconService: NzIconService
 	) {}
 
 	ngDoBootstrap() {
@@ -58,6 +62,7 @@ export class AppModule {
 				this.zorroi18n.switchLanguage(preferences.Language);
 			}
 		});
+		this.iconService.changeAssetsSource('dist/ng2/');
 	}
 }
 

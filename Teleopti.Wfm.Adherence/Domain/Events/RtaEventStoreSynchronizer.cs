@@ -105,7 +105,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 					return new
 					{
 						PersonId = data.PersonId.Value,
-						Day = data.BelongsToDate ?? data.StartTime.Value.ToDateOnly()
+						Day = data.BelongsToDate ?? new DateOnly(data.StartTime.Value)
 					};
 				})
 				.Distinct()

@@ -6,15 +6,14 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Test.States.Unit.Service;
 
@@ -72,11 +71,11 @@ namespace Teleopti.Wfm.Adherence.Test.States.Measurement
 					dates.ForEach(date =>
 					{
 						var d = DateTime.SpecifyKind(date.Date, DateTimeKind.Utc);
-						var assignment = new PersonAssignment(person, scenario, date);
-						assignment.AddActivity(phone, d.AddHours(8), d.AddHours(17));
-						assignment.AddActivity(brejk, d.AddHours(10), d.AddHours(10).AddMinutes(15));
-						assignment.AddActivity(lunch, d.AddHours(12), d.AddHours(13));
-						assignment.AddActivity(brejk, d.AddHours(15), d.AddHours(15).AddMinutes(15));
+						var assignment = PersonAssignmentFactory.CreatePersonAssignmentFromDateTime(person, scenario, d);
+						assignment.AddActivityFromTo(phone, d.AddHours(8), d.AddHours(17));
+						assignment.AddActivityFromTo(brejk, d.AddHours(10), d.AddHours(10).AddMinutes(15));
+						assignment.AddActivityFromTo(lunch, d.AddHours(12), d.AddHours(13));
+						assignment.AddActivityFromTo(brejk, d.AddHours(15), d.AddHours(15).AddMinutes(15));
 						PersonAssignments.Add(assignment);
 					});
 				});
@@ -96,44 +95,44 @@ namespace Teleopti.Wfm.Adherence.Test.States.Measurement
 			createData();
 
 			(
-				from parallelTransactions in Context.ParallelTransactions()
-				from transactionSize in Context.TransactionSize()
-				from batchSize in Context.BatchSize()
-				from variation in Context.Variation()
-				select new { parallelTransactions, transactionSize, batchSize, variation }
-			)
-			.Select(x =>
-			{
-				Config.FakeSetting("RtaBatchParallelTransactions", x.parallelTransactions.ToString());
-				Config.FakeSetting("RtaBatchMaxTransactionSize", x.transactionSize.ToString());
-
-				var batches = userCodes
-					.Batch(x.batchSize)
-					.Select(u => new BatchForTest
-					{
-						States = u
-							.Select(y => new BatchStateForTest
-							{
-								UserCode = y,
-								StateCode = $"code{x.variation}"
-							})
-							.ToArray()
-					}).ToArray();
-
-				var stopwatch = new Stopwatch();
-				stopwatch.Start();
-				batches.ForEach(Rta.Process);
-				stopwatch.Stop();
-
-				return new
+					from parallelTransactions in Context.ParallelTransactions()
+					from transactionSize in Context.TransactionSize()
+					from batchSize in Context.BatchSize()
+					from variation in Context.Variation()
+					select new {parallelTransactions, transactionSize, batchSize, variation}
+				)
+				.Select(x =>
 				{
-					x.batchSize,
-					x.variation,
-					stopwatch.Elapsed
-				};
-			})
-			.OrderBy(x => x.Elapsed)
-			.ForEach(x => Console.WriteLine($@"{x.batchSize} {x.variation}: {x.Elapsed}"));
+					Config.FakeSetting("RtaBatchParallelTransactions", x.parallelTransactions.ToString());
+					Config.FakeSetting("RtaBatchMaxTransactionSize", x.transactionSize.ToString());
+
+					var batches = userCodes
+						.Batch(x.batchSize)
+						.Select(u => new BatchForTest
+						{
+							States = u
+								.Select(y => new BatchStateForTest
+								{
+									UserCode = y,
+									StateCode = $"code{x.variation}"
+								})
+								.ToArray()
+						}).ToArray();
+
+					var stopwatch = new Stopwatch();
+					stopwatch.Start();
+					batches.ForEach(Rta.Process);
+					stopwatch.Stop();
+
+					return new
+					{
+						x.batchSize,
+						x.variation,
+						stopwatch.Elapsed
+					};
+				})
+				.OrderBy(x => x.Elapsed)
+				.ForEach(x => Console.WriteLine($@"{x.batchSize} {x.variation}: {x.Elapsed}"));
 		}
 	}
 }

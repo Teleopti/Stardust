@@ -85,9 +85,7 @@ namespace DotNetOpenAuth.Configuration {
 		/// </summary>
 		/// <value>The sum of the <see cref="MaximumMessageLifetime"/> and 
 		/// <see cref="MaximumClockSkew"/> property values.</value>
-		public TimeSpan MaximumMessageLifetime {
-			get { return this.MaximumMessageLifetimeNoSkew + this.MaximumClockSkew; }
-		}
+		public TimeSpan MaximumMessageLifetime => this.MaximumMessageLifetimeNoSkew + this.MaximumClockSkew;
 
 		/// <summary>
 		/// Gets or sets the maximum lifetime of a private symmetric secret,

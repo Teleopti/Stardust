@@ -150,9 +150,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <summary>
 		/// Gets a random number generator for use on the current thread only.
 		/// </summary>
-		internal static Random NonCryptoRandomDataGenerator {
-			get { return ThreadSafeRandom.RandomNumberGenerator; }
-		}
+		internal static Random NonCryptoRandomDataGenerator => ThreadSafeRandom.RandomNumberGenerator;
 
 		/// <summary>
 		/// Transforms an OutgoingWebResponse to an MVC-friendly ActionResult.
@@ -193,7 +191,7 @@ namespace DotNetOpenAuth.Messaging {
 		[SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings", Justification = "The Uri merging requires use of a string value.")]
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Expensive call should not be a property.")]
 		public static Uri GetRequestUrlFromContext() {
-			Requires.ValidState(HttpContext.Current != null && HttpContext.Current.Request != null, MessagingStrings.HttpContextRequired);
+			Requires.ValidState(HttpContext.Current?.Request != null, MessagingStrings.HttpContextRequired);
 			return new HttpRequestWrapper(HttpContext.Current.Request).GetPublicFacingUrl();
 		}
 
@@ -397,10 +395,11 @@ namespace DotNetOpenAuth.Messaging {
 				string scheme = serverVariables["HTTP_X_FORWARDED_PROTO"] ??
 					(string.Equals(serverVariables["HTTP_FRONT_END_HTTPS"], "on", StringComparison.OrdinalIgnoreCase) ? Uri.UriSchemeHttps : request.Url.Scheme);
 				Uri hostAndPort = new Uri(scheme + Uri.SchemeDelimiter + serverVariables["HTTP_HOST"]);
-				UriBuilder publicRequestUri = new UriBuilder(request.Url);
-				publicRequestUri.Scheme = scheme;
-				publicRequestUri.Host = hostAndPort.Host;
-				publicRequestUri.Port = hostAndPort.Port; // CC missing Uri.Port contract that's on UriBuilder.Port
+				UriBuilder publicRequestUri = new UriBuilder(request.Url)
+				{
+					Scheme = scheme, Host = hostAndPort.Host, Port = hostAndPort.Port
+				};
+				// CC missing Uri.Port contract that's on UriBuilder.Port
 				return publicRequestUri.Uri;
 			} else {
 				// Failover to the method that works for non-web farm enviroments.
@@ -431,10 +430,10 @@ namespace DotNetOpenAuth.Messaging {
 		/// <returns>An absolute URI.</returns>
 		internal static Uri GetWebRoot() {
 			HttpRequestBase requestInfo = new HttpRequestWrapper(HttpContext.Current.Request);
-			UriBuilder realmUrl = new UriBuilder(requestInfo.GetPublicFacingUrl());
-			realmUrl.Path = HttpContext.Current.Request.ApplicationPath;
-			realmUrl.Query = null;
-			realmUrl.Fragment = null;
+			UriBuilder realmUrl = new UriBuilder(requestInfo.GetPublicFacingUrl())
+			{
+				Path = HttpContext.Current.Request.ApplicationPath, Query = null, Fragment = null
+			};
 			return realmUrl.Uri;
 		}
 
@@ -1007,10 +1006,9 @@ namespace DotNetOpenAuth.Messaging {
 
 					compressingStream.Write(buffer, 0, buffer.Length);
 					return ms.ToArray();
-				} finally {
-					if (compressingStream != null) {
-						compressingStream.Dispose();
-					}
+				} finally
+				{
+					compressingStream?.Dispose();
 				}
 			}
 		}
@@ -1044,10 +1042,9 @@ namespace DotNetOpenAuth.Messaging {
 						}
 
 						decompressingStream.CopyTo(decompressedDataStream);
-					} finally {
-						if (decompressingStream != null) {
-							decompressingStream.Dispose();
-						}
+					} finally
+					{
+						decompressingStream?.Dispose();
 					}
 
 					return decompressedDataStream.ToArray();
@@ -1460,7 +1457,7 @@ namespace DotNetOpenAuth.Messaging {
 		internal static void AppendQueryArgs(this UriBuilder builder, IEnumerable<KeyValuePair<string, string>> args) {
 			Requires.NotNull(builder, "builder");
 
-			if (args != null && args.Count() > 0) {
+			if (args != null && args.Any()) {
 				StringBuilder sb = new StringBuilder(50 + (args.Count() * 10));
 				if (!string.IsNullOrEmpty(builder.Query)) {
 					sb.Append(builder.Query.Substring(1));
@@ -1489,7 +1486,7 @@ namespace DotNetOpenAuth.Messaging {
 		internal static void AppendFragmentArgs(this UriBuilder builder, IEnumerable<KeyValuePair<string, string>> args) {
 			Requires.NotNull(builder, "builder");
 
-			if (args != null && args.Count() > 0) {
+			if (args != null && args.Any()) {
 				StringBuilder sb = new StringBuilder(50 + (args.Count() * 10));
 				if (!string.IsNullOrEmpty(builder.Fragment)) {
 					sb.Append(builder.Fragment);
@@ -1513,7 +1510,7 @@ namespace DotNetOpenAuth.Messaging {
 		internal static void AppendAndReplaceQueryArgs(this UriBuilder builder, IEnumerable<KeyValuePair<string, string>> args) {
 			Requires.NotNull(builder, "builder");
 
-			if (args != null && args.Count() > 0) {
+			if (args != null && args.Any()) {
 				NameValueCollection aggregatedArgs = HttpUtility.ParseQueryString(builder.Query);
 				foreach (var pair in args) {
 					aggregatedArgs[pair.Key] = pair.Value;
@@ -2010,9 +2007,7 @@ namespace DotNetOpenAuth.Messaging {
 				return result;
 			} catch {
 				IDisposable disposableResult = result;
-				if (disposableResult != null) {
-					disposableResult.Dispose();
-				}
+				disposableResult?.Dispose();
 
 				throw;
 			}

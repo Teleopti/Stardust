@@ -56,32 +56,18 @@ namespace DotNetOpenAuth.OpenId {
 		/// <summary>
 		/// Gets the UTC time when this <see cref="Association"/> will expire.
 		/// </summary>
-		public DateTime Expires {
-			get { return this.Issued + this.TotalLifeLength; }
-		}
+		public DateTime Expires => this.Issued + this.TotalLifeLength;
 
 		/// <summary>
 		/// Gets a value indicating whether this <see cref="Association"/> has already expired.
 		/// </summary>
-		public bool IsExpired {
-			get { return this.Expires < DateTime.UtcNow; }
-		}
+		public bool IsExpired => this.Expires < DateTime.UtcNow;
 
 		/// <summary>
 		/// Gets the length (in bits) of the hash this association creates when signing.
 		/// </summary>
 		public abstract int HashBitLength { get; }
-
-		/// <summary>
-		/// Gets a value indicating whether this instance has useful life remaining.
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if this instance has useful life remaining; otherwise, <c>false</c>.
-		/// </value>
-		internal bool HasUsefulLifeRemaining {
-			get { return this.TimeTillExpiration >= MinimumUsefulAssociationLifetime; }
-		}
-
+		
 		/// <summary>
 		/// Gets or sets the UTC time that this <see cref="Association"/> was first created.
 		/// </summary>
@@ -121,26 +107,11 @@ namespace DotNetOpenAuth.OpenId {
 		/// </summary>
 		[MessagePart("ttl")]
 		protected TimeSpan TotalLifeLength { get; private set; }
-
-		/// <summary>
-		/// Gets the minimum lifetime an association must still be good for in order for it to be used for a future authentication.
-		/// </summary>
-		/// <remarks>
-		/// Associations that are not likely to last the duration of a user login are not worth using at all.
-		/// </remarks>
-		private static TimeSpan MinimumUsefulAssociationLifetime {
-			get {
-				Contract.Ensures(Contract.Result<TimeSpan>() > TimeSpan.Zero);
-				return OpenIdElement.Configuration.MaxAuthenticationTime;
-			}
-		}
-
+		
 		/// <summary>
 		/// Gets the TimeSpan till this association expires.
 		/// </summary>
-		private TimeSpan TimeTillExpiration {
-			get { return this.Expires - DateTime.UtcNow; }
-		}
+		private TimeSpan TimeTillExpiration => this.Expires - DateTime.UtcNow;
 
 		/// <summary>
 		/// Re-instantiates an <see cref="Association"/> previously persisted in a database or some
@@ -244,7 +215,7 @@ namespace DotNetOpenAuth.OpenId {
 			try {
 				CryptoStream cs = new CryptoStream(Stream.Null, hmac, CryptoStreamMode.Write);
 
-				byte[] hbytes = ASCIIEncoding.ASCII.GetBytes(this.Handle);
+				byte[] hbytes = Encoding.ASCII.GetBytes(this.Handle);
 
 				cs.Write(hbytes, 0, hbytes.Length);
 				cs.Close();
@@ -289,19 +260,5 @@ namespace DotNetOpenAuth.OpenId {
 		/// </summary>
 		/// <returns>The hash algorithm used for message signing.</returns>
 		protected abstract HashAlgorithm CreateHasher();
-
-#if CONTRACTS_FULL
-		/// <summary>
-		/// Verifies conditions that should be true for any valid state of this object.
-		/// </summary>
-		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Called by code contracts.")]
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Called by code contracts.")]
-		[ContractInvariantMethod]
-		private void ObjectInvariant() {
-			Contract.Invariant(!string.IsNullOrEmpty(this.Handle));
-			Contract.Invariant(this.TotalLifeLength > TimeSpan.Zero);
-			Contract.Invariant(this.SecretKey != null);
-		}
-#endif
 	}
 }

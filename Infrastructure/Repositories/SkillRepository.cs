@@ -4,6 +4,7 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.Infrastructure;
@@ -302,7 +303,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return retList;
 		}
-
+		
 		public IEnumerable<ISkill> FindSkillsContain(string searchString, int maxHits)
 		{
 			if (maxHits < 1)
@@ -321,5 +322,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.List<ISkill>()
 					.OrderBy(y => y.Name);
 			}
-    }
+
+		public IEnumerable<SkillOpenHoursLight> FindOpenHoursForSkills(IEnumerable<Guid> skillIds)
+		{
+			var query = Session.CreateSQLQuery(
+				@"SELECT w.Skill as SkillId, s.TimeZone as TimeZoneId, wdt.WeekdayIndex, ohl.Minimum as StartTimeTicks, ohl.Maximum as EndTimeTicks  
+ FROM [WorkloadDayTemplate] wdt 
+ inner join OpenHourList ohl on ohl.Parent=wdt.WorkloadDayBase
+ inner join workload w on w.Id=wdt.Parent
+ inner join skill s on w.Skill=s.id WHERE Skill IN(:skillIdList) AND s.IsDeleted = 0 AND w.IsDeleted = 0");
+
+			return query.SetParameterList("skillIdList", skillIds)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(SkillOpenHoursLight)))
+				.SetReadOnly(true)
+				.List<SkillOpenHoursLight>();
+		}
+	}
 }

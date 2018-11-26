@@ -13,7 +13,6 @@ export class ReportService {
 	private url_getReports = '../api/Insights/Reports';
 	private url_getPermissions = '../api/Insights/Permission';
 	private url_cloneReport = '../api/Insights/CloneReport';
-	private headers = new Headers({'Content-Type': 'application/json'});
 
 	async getReportConfig(reportId: string): Promise<ReportConfig> {
 		const parameters = {

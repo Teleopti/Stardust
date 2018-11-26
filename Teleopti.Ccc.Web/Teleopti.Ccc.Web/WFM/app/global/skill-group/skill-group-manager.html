@@ -220,7 +220,6 @@
                             <div class="con-flex">
                                 <div class="wfm-chip-wrap"
                                      ng-repeat="skill in vm.skillGroups[vm.selectedGroupIndex].Skills | filter:areaFilter as filtered"
-                            
                                      ng-click="vm.selectGroupSkill(skill)"
                                      ng-hide="(selectedFilter==true && !!vm.groupSkillIsSelected(skill)) || (supportedFilter==false && !skill.DoDisplayData)">
                                     <span class="wfm-chip">
@@ -240,8 +239,10 @@
                                             {{skill.Name}}
                                         </span>
                                         <md-tooltip>
-                                            <span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType | translate}} - {{'MultisiteSkill' | translate}}</span>
-                                            <span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType | translate}}</span>
+                                            <span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType
+                                                | translate}} - {{'MultisiteSkill' | translate}}</span>
+                                            <span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType
+                                                | translate}}</span>
                                             <span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
                                         </md-tooltip>
                                     </span>
@@ -262,7 +263,8 @@
             <div class="dialog-mini material-depth-1">
                 <div class="modal-inner-content">
                     <h3 style="display: inline">{{'DoYouWantToDeleteSkillGroup'|translate}}</h3>
-                    <br/> {{'AreYouSureYouWantToDeleteTheSkillGroup'|translate}} "{{vm.skillGroups[vm.selectedGroupIndex].Name}}"?
+                    <br /> {{'AreYouSureYouWantToDeleteTheSkillGroup'|translate}}
+                    "{{vm.skillGroups[vm.selectedGroupIndex].Name}}"?
                 </div>
                 <div class="modal-actions">
                     <aside>
@@ -289,7 +291,7 @@
             <div class="dialog-mini material-depth-1">
                 <div class="modal-inner-content">
                     <h3 style="display: inline">{{'ExitSGM'|translate}}</h3>
-                    <br/>{{'AreYouSureYouWantToExitSGM'|translate}}
+                    <br />{{'AreYouSureYouWantToExitSGM'|translate}}
                 </div>
                 <div class="modal-actions">
                     <aside>

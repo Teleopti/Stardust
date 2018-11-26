@@ -20,12 +20,12 @@ namespace DotNetOpenAuth.OpenId {
 		/// <summary>
 		/// A list of HMAC-SHA algorithms in order of decreasing bit lengths.
 		/// </summary>
-		private static HmacSha[] hmacShaAssociationTypes = CreateAssociationTypes();
+		private static readonly HmacSha[] hmacShaAssociationTypes = CreateAssociationTypes();
 
 		/// <summary>
 		/// The specific variety of HMAC-SHA this association is based on (whether it be HMAC-SHA1, HMAC-SHA256, etc.)
 		/// </summary>
-		private HmacSha typeIdentity;
+		private readonly HmacSha typeIdentity;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HmacShaAssociation"/> class.
@@ -266,7 +266,7 @@ namespace DotNetOpenAuth.OpenId {
 			/// <summary>
 			/// Gets the size of the hash (in bytes).
 			/// </summary>
-			internal int SecretLength { get { return this.BaseHashAlgorithm.HashSize / 8; } }
+			internal int SecretLength => BaseHashAlgorithm.HashSize / 8;
 
 			/// <summary>
 			/// Creates the <see cref="HashAlgorithm"/> using a given shared secret for the mac.

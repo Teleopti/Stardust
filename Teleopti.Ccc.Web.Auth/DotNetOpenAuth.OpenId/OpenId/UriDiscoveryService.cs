@@ -107,8 +107,7 @@ namespace DotNetOpenAuth.OpenId {
 					continue;
 				}
 
-				Uri providerEndpoint = null;
-				if (Uri.TryCreate(serverLinkTag.Href, UriKind.Absolute, out providerEndpoint)) {
+				if (Uri.TryCreate(serverLinkTag.Href, UriKind.Absolute, out var providerEndpoint)) {
 					// See if a LocalId tag of the discovered version exists
 					Identifier providerLocalIdentifier = null;
 					var delegateLinkTag = linkTags.WithAttribute("rel").FirstOrDefault(tag => Regex.IsMatch(tag.Attributes["rel"], @"\b" + Regex.Escape(protocol.HtmlDiscoveryLocalIdKey) + @"\b", RegexOptions.IgnoreCase));

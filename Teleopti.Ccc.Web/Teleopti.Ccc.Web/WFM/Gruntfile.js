@@ -146,7 +146,8 @@ module.exports = function(grunt) {
 			'vendor/angular-bootstrap-persian-datepicker-master/persian-datepicker-tpls.js',
 			'../Content/signalr/jquery.signalR-2.3.0.js',
 			'../Content/signalr/broker-hubs.js',
-			'node_modules/lodash/lodash.min.js'
+			'node_modules/lodash/lodash.min.js',
+			'node_modules/requirejs/require.js'
 		],
 		dest: 'dist/resources/modules.js'
 	};
@@ -165,6 +166,12 @@ module.exports = function(grunt) {
 		],
 		dest: 'dist/main.js'
 	};
+
+	const addD3 = {
+		src: ['node_modules/d3/dist/d3.min.js'],
+		dest: 'dist/resources/d3.js'
+	};
+
 	// TODO: Add desktop concat
 
 	const concatCssDependencies = {

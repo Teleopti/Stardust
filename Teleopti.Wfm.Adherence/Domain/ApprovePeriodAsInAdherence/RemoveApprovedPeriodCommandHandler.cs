@@ -31,7 +31,7 @@ namespace Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence
 		public void Handle(RemoveApprovedPeriodCommand command)
 		{
 			// should really be in RemoveApprovedPeriod using the correct date?
-			var date = new DateOnly(DateTime.ParseExact(command.StartDateTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
+			var date = DateTime.ParseExact(command.StartDateTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 			if (!_authorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAdherence, date, _persons.Load(command.PersonId)))
 				throw new PermissionException();
 

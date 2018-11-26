@@ -55,8 +55,7 @@ namespace DotNetOpenAuth.OpenId.ChannelElements {
 			Requires.NotNull(securitySettings, "securitySettings");
 			Requires.NotNull(nonceStore, "nonceStore");
 
-			SigningBindingElement signingElement;
-			signingElement = new ProviderSigningBindingElement(cryptoKeyStore, securitySettings);
+			SigningBindingElement signingElement = new ProviderSigningBindingElement(cryptoKeyStore, securitySettings);
 
 			var extensionFactory = OpenIdExtensionFactoryAggregator.LoadFromConfiguration();
 

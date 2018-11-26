@@ -64,14 +64,14 @@
 										<input type="password" id="Password-input" placeholder="@Resources.Password" data-bind="value: Password, valueUpdate: 'afterkeydown',enable: Ajax.Inactive" autocomplete="current-password" />
 									</div>
 									<div class="form-input-wrap con-row">
-										<div class="wfm-checkbox con-flex" style="text-align: left; padding-left: 0px;" data-bind="visible: IsLogonFromBrowser">
+										<div class="wfm-checkbox con-flex" data-bind="visible: IsLogonFromBrowser">
 											<input type="checkbox" id="check1" data-bind="checked: RememberMe, enable: Ajax.Inactive">
 											<label for="check1">
 												<span class="wfm-checkbox-toggle"></span>
 												<span class="wfm-checkbox-label">@Resources.RememberMe </span>
 											</label>
 										</div>
-										<div style="text-align: right; padding-right: 0px;" class="con-flex" data-bind="visible: isToggleEnabled('Wfm_User_Password_Reset_74957')">
+										<div class="con-flex signin_forgot_password" data-bind="visible: isToggleEnabled('Wfm_User_Password_Reset_74957')">
 											<a href="#" data-bind="click: gotoForgotPassword">@Resources.ForgotYourPassword</a>
 										</div>
 									</div>

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_planningGroupSettings = planningGroupSettings.OrderByDescending(x=>x.Priority).ToArray();
 		}
 		
-		public Percent PreferenceValue { get; set; }
+		public Percent PreferenceValue { get; private set; }
 
 		public PlanningGroupSettings ForAgent(IPerson person, DateOnly dateOnly)
 		{

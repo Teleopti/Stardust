@@ -33,9 +33,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <returns>
 		/// An <see cref="T:System.Collections.Generic.ICollection`1"/> containing the keys of the object that implements <see cref="T:System.Collections.Generic.IDictionary`2"/>.
 		/// </returns>
-		public ICollection<K> Keys {
-			get { return this.baseDictionary.Keys; }
-		}
+		public ICollection<K> Keys => this.baseDictionary.Keys;
 
 		/// <summary>
 		/// Gets an <see cref="T:System.Collections.Generic.ICollection`1"/> containing the values in the <see cref="T:System.Collections.Generic.IDictionary`2"/>.
@@ -43,9 +41,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <returns>
 		/// An <see cref="T:System.Collections.Generic.ICollection`1"/> containing the values in the object that implements <see cref="T:System.Collections.Generic.IDictionary`2"/>.
 		/// </returns>
-		public ICollection<V> Values {
-			get { return this.baseDictionary.Values; }
-		}
+		public ICollection<V> Values => this.baseDictionary.Values;
 
 		/// <summary>
 		/// Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
@@ -53,18 +49,14 @@ namespace DotNetOpenAuth.Messaging {
 		/// <returns>
 		/// The number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
 		/// </returns>
-		public int Count {
-			get { return this.baseDictionary.Count; }
-		}
+		public int Count => this.baseDictionary.Count;
 
 		/// <summary>
 		/// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
 		/// </summary>
 		/// <returns>true if the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only; otherwise, false.
 		/// </returns>
-		public bool IsReadOnly {
-			get { return true; }
-		}
+		public bool IsReadOnly => true;
 
 		/// <summary>
 		/// Gets or sets the element with the specified key.
