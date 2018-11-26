@@ -91,7 +91,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 				}
 				_intradayOptimization.Execute(period, agentsToOptimizeWithOriginalPreferenceValues, runResolveWeeklyRestRule, blockPreferenceProvider, allSettingsForPlanningGroup);
 			}
-			_intradayOptimization.Execute(period, agents, runResolveWeeklyRestRule, blockPreferenceProvider, allSettingsForPlanningGroup);
+			else
+			{
+				_intradayOptimization.Execute(period, agents, runResolveWeeklyRestRule, blockPreferenceProvider, allSettingsForPlanningGroup);				
+			}
 		}
 	}
 }
