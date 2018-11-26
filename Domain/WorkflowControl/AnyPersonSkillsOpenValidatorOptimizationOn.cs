@@ -25,28 +25,30 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var skillIds = personSkills.Where(sk => sk.Active).Select(s =>
 				s.Skill is IChildSkill child ? child.ParentSkill.Id.GetValueOrDefault() : s.Skill.Id.GetValueOrDefault()).ToList();
 
-			var openHours = _skillRepository.FindOpenHoursForSkills(skillIds).ToList();
-
-
-			foreach (var skillId in skillIds)
+			if (skillIds.Any())
 			{
-				var skillOpen = openHours.Where(o => o.SkillId.Equals(skillId)).ToList();
-				if (!skillOpen.Any()) continue;
-				var dateOnlyPeriod = requestPeriod.ToDateOnlyPeriod(skillOpen.First().TimeZone);
-				foreach (var requestDay in dateOnlyPeriod.DayCollection())
-				{
-					var openOnWeekDay = skillOpen.Where(so => so.WeekdayIndex.Equals((int)requestDay.DayOfWeek)).ToList();
-					var openOnWeekDayBefore = skillOpen.Where(so => so.WeekdayIndex.Equals((int)requestDay.AddDays(-1).DayOfWeek)).ToList();
-					if (validateSkillOpenHours(requestDay.AddDays(-1), openOnWeekDayBefore, skillOpen.First().TimeZone, requestPeriod) || validateSkillOpenHours(requestDay, openOnWeekDay, skillOpen.First().TimeZone, requestPeriod))
-					{
-						return new ValidatedRequest { IsValid = true };
-					}
+				var openHours = _skillRepository.FindOpenHoursForSkills(skillIds).ToList();
 
+				foreach (var skillId in skillIds)
+				{
+					if(!openHours.Any(o => o.SkillId.Equals(skillId)))
+						continue;
+					var skillOpen = openHours.Where(o => o.SkillId.Equals(skillId)).ToList();
+					if (!skillOpen.Any()) continue;
+					var dateOnlyPeriod = requestPeriod.ToDateOnlyPeriod(skillOpen.First().TimeZone);
+					foreach (var requestDay in dateOnlyPeriod.DayCollection())
+					{
+						var openOnWeekDay = skillOpen.Where(so => so.WeekdayIndex.Equals((int)requestDay.DayOfWeek)).ToList();
+						var openOnWeekDayBefore = skillOpen.Where(so => so.WeekdayIndex.Equals((int)requestDay.AddDays(-1).DayOfWeek)).ToList();
+						if (validateSkillOpenHours(requestDay.AddDays(-1), openOnWeekDayBefore, skillOpen.First().TimeZone, requestPeriod) || validateSkillOpenHours(requestDay, openOnWeekDay, skillOpen.First().TimeZone, requestPeriod))
+						{
+							return new ValidatedRequest { IsValid = true };
+						}
+
+					}
 				}
 			}
-
-
-
+			
 			var activities = new HashSet<IActivity>();
 			foreach (var scheduleDay in scheduleRange.ScheduledDayCollection(requestPeriod.ToDateOnlyPeriod(scheduleRange.Person.PermissionInformation.DefaultTimeZone())))
 			{
