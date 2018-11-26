@@ -24,7 +24,7 @@ import {
 	styleUrls: ['./intraday-main.component.scss']
 })
 export class IntradayMainComponent implements OnInit, OnDestroy {
-	constructor(public intradayDataService: IntradayDataService, private translate: TranslateService) {}
+	constructor(public intradayDataService: IntradayDataService, public translate: TranslateService) {}
 
 	selectedSkillOrGroup: SkillPickerItem;
 	selectedSubSkill: Skill;
