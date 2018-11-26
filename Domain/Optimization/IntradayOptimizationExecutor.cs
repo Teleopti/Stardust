@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Infrastructure;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.ResourcePlanner;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
@@ -75,10 +74,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(allSettingsForPlanningGroup);
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, agentsInIsland, new LockInfoForStateHolder(_gridlockManager, locks), period, onlyUseSkills);
 			var agents = schedulerStateHolder.ChoosenAgents.Filter(agentsToOptimize);
-			var planningPeriod = _planningPeriodRepository.Get(planningPeriodId);
-			if (planningPeriod != null)
+			if (planningPeriodId != Guid.Empty)
 			{
-				var lastJobResult = planningPeriod.GetLastSchedulingJob();
+				var lastJobResult = _planningPeriodRepository.Get(planningPeriodId).GetLastSchedulingJob();
 				var agentIdsWithPreferenceHints = lastJobResult == null ? 
 					Enumerable.Empty<Guid>() : 
 					JsonConvert.DeserializeObject<FullSchedulingResultModel>(lastJobResult.Details.Last().Message)
