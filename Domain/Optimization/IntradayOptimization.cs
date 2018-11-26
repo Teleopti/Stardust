@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContext;
 		private readonly TeamBlockIntradayOptimizationService _teamBlockIntradayOptimizationService;
 		private readonly BlockPreferencesMapper _blockPreferencesMapper;
+		private readonly PlanningGroupGlobalSettingSetter _planningGroupGlobalSettingSetter;
 
 		public IntradayOptimization(TeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter,
 			CascadingResourceCalculationContextFactory resourceCalculationContext, 
-			BlockPreferencesMapper blockPreferencesMapper)
+			BlockPreferencesMapper blockPreferencesMapper, PlanningGroupGlobalSettingSetter planningGroupGlobalSettingSetter)
 		{
 			_teamBlockIntradayOptimizationService = teamBlockIntradayOptimizationService;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -53,12 +54,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
 			_resourceCalculationContext = resourceCalculationContext;
 			_blockPreferencesMapper = blockPreferencesMapper;
+			_planningGroupGlobalSettingSetter = planningGroupGlobalSettingSetter;
 		}
 
-		public void Execute(DateOnlyPeriod period, IEnumerable<IPerson> agents, bool runResolveWeeklyRestRule, IBlockPreferenceProvider blockPreferenceProvider)
+		public void Execute(DateOnlyPeriod period, IEnumerable<IPerson> agents, bool runResolveWeeklyRestRule, IBlockPreferenceProvider blockPreferenceProvider,
+			AllSettingsForPlanningGroup allSettingsForPlanningGroup)
 		{
 			var stateHolder = _schedulerStateHolder();
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
+			_planningGroupGlobalSettingSetter.Execute(allSettingsForPlanningGroup, optimizationPreferences);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, stateHolder.ConsiderShortBreaks, stateHolder.SchedulingResultState, _userTimeZone);
 			var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizationPreferences.General.ScheduleTag));
 			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(stateHolder.Schedules, stateHolder.SchedulingResultState.LoadedAgents, period);

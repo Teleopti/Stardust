@@ -100,7 +100,6 @@ ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487 = true
 ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = DEV
 
 # DeBockers #
-WfmIntraday_MonitorActualvsForecasted_35176 = true
 WFM_Intraday_Redesign_77214 = DEV
 
 # Ziggy #

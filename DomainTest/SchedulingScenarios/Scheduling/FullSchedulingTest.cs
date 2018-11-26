@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakeStudentAvailabilityDayRepository StudentAvailabilityDayRepository;
 		public FakeSkillCombinationResourceReader SkillCombinationResourceReader;
-		public SchedulingOptionsProvider SchedulingOptionsProvider;
 		
 		[Test]
 		public void ShouldNotCreateTags()
@@ -248,44 +247,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			AssignmentRepository.GetSingle(date, agent).Period.StartDateTime.Hour
 				.Should().Be.EqualTo(8);
-		}
-		
-		[Test]
-		public void ShouldScheduleFixedStaffWhenUsingHourlyAvailability()
-		{
-			var dayOff = DayOffFactory.CreateDayOff();
-			DayOffTemplateRepository.Has(dayOff);
-			var monday = new DateOnly(2017, 5, 15);
-			var activity = ActivityRepository.Has("_");
-			var skill = SkillRepository.Has("skill", activity);
-			var scenario = ScenarioRepository.Has("_");
-			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			var bag = new RuleSetBag(ruleSet);
-			var agent = PersonRepository.Has(new SchedulePeriod(monday, SchedulePeriodType.Week, 1), bag, skill);
-			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, monday, 10, 10, 10, 10, 10, 10, 10));
-			var planningPeriod = PlanningPeriodRepository.Has(monday,SchedulePeriodType.Week, 1);
-			for (var i = 0; i < 4; i++)
-			{
-				StudentAvailabilityDayRepository.Has(agent, monday.AddDays(i), new StudentAvailabilityRestriction
-				{
-					StartTimeLimitation = new StartTimeLimitation(new TimeSpan(4, 0, 0), null),
-					EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(21, 0, 0))
-				});
-			}
-			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions {UseStudentAvailability = true});
-			
-			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
-
-			for (var i = 0; i < 7; i++)
-			{
-				if (i < 4)
-					AssignmentRepository.GetSingle(monday.AddDays(i), agent).ShiftLayers
-						.Should().Not.Be.Empty();
-				else
-					AssignmentRepository.GetSingle(monday.AddDays(i), agent).AssignedWithDayOff(dayOff)
-						.Should().Be.True();
-			}		
 		}
 		
 		[TestCase(0, ExpectedResult = 8)]

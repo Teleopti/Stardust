@@ -313,6 +313,7 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizatinDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationBlockTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCascadingSameThreadDesktopTest.cs" />
+    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationPreferenceTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\CommandHandlerDecreaseIslandsTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\CommandHandlerExternalStaffTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\CommandHandlerGeneralTest.cs" />
@@ -333,6 +334,7 @@
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCommandHandlerExternalStaffDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingFulfillPreferencesTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingFulfillPreferenceDesktopTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\SchedulingHourlyDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingReduceSkillsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingReduceSkillsTest.cs" />
     <Compile Include="SchedulingScenarios\SyncInFatClientProcessEventPublisher_SimulateNoNewThreads.cs" />
