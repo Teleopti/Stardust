@@ -323,6 +323,34 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			result.First().ValidationErrors.Count(x =>x.ErrorResource.Equals("TargetDayOffNotFulfilledMessage")).Should().Be.EqualTo(0);
 		}
 
+		[Test]
+		public void ShouldNotUpdateTargetTimeWhenValidatingBusinessRule()
+		{
+			var date = new DateOnly(2018, 10, 1);
+			var planningPeriod = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
+			var totalPeriod = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 2);
+			var scenario = new Scenario();
+			var shiftCategory = new ShiftCategory().WithId();
+			var activity = ActivityRepository.Has();
+			var skill = SkillRepository.Has(activity);
+			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40), TimeSpan.FromHours(40), TimeSpan.FromHours(11), TimeSpan.FromHours(36)) };
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1);
+			var agent = PersonRepository.Has(contract, new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"), new Team { Site = new Site("_") }, schedulePeriod, ruleSet, skill);
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, totalPeriod.ToDateTimePeriod(TimeZoneInfo.Utc));
+			for (var i = 1; i < 14; i++)
+			{
+				scheduleDictionary.AddPersonAssignment(new[] { 5, 6, 12, 13 }.Contains(i)
+					? new PersonAssignment(agent, scenario, date.AddDays(i)).WithDayOff()
+					: new PersonAssignment(agent, scenario, date.AddDays(i)).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory));
+			}
+
+			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, planningPeriod, null, false)).InvalidResources;
+
+			result.First().ValidationErrors.Count(x => x.ErrorResource.Equals("TargetScheduleTimeNotFullfilled")).Should().Be.EqualTo(1);
+			scheduleDictionary[agent].CalculatedTargetTimeHolder(totalPeriod).Should().Be.EqualTo(TimeSpan.FromHours(80));
+		}
+
 
 		public void Isolate(IIsolate isolate)
 		{

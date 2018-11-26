@@ -187,6 +187,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return _targetScheduleSummary.TargetTime;
 		}
 
+		public TimeSpan? CalculatedTargetTime(DateOnlyPeriod periodToCheck)
+		{
+			var target = new TargetScheduleSummaryCalculator().GetTargets(this, periodToCheck);
+			return target.TargetTime;
+		}
+
 		public CurrentScheduleSummary CalculatedCurrentScheduleSummary(DateOnlyPeriod periodToCheck)
 		{
 			if (_currentScheduleSummary == null)
