@@ -250,7 +250,6 @@
 		};
 
 		vm.saveState = function() {
-			if (!vm.toggles['WFM_Remember_My_Selection_In_Intraday_47254']) return;
 			intradayService.saveIntradayState(vm.moduleState);
 		};
 
@@ -261,11 +260,7 @@
 		};
 
 		vm.loadState = function() {
-			if (vm.toggles['WFM_Remember_My_Selection_In_Intraday_47254']) {
-				setModuleState(intradayService.loadIntradayState());
-			} else {
-				resetModuleState();
-			}
+			setModuleState(intradayService.loadIntradayState());
 			if (!vm.moduleState) return;
 			if (vm.moduleState.chosenOffset) {
 				vm.changeChosenOffset(vm.moduleState.chosenOffset.value, vm.moduleState.chosenOffset.value !== 0);

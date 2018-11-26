@@ -2,7 +2,6 @@
 
 describe('IntradayAreaController', function() {
 	var defaultToggles = {
-		WFM_Remember_My_Selection_In_Intraday_47254: true,
 		togglesLoaded: {
 			then: function(cb) {
 				cb();
@@ -1153,7 +1152,7 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should remember selected tab if toggle is on', function() {
-		createController(false, { WFM_Remember_My_Selection_In_Intraday_47254: true });
+		createController(false);
 		vm.moduleState.activeTab = 1;
 		vm.saveState();
 		vm.moduleState.activeTab = 0;
@@ -1163,7 +1162,7 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should remember selected day offset if toggle is on', function() {
-		createController(false, { WFM_Remember_My_Selection_In_Intraday_47254: true });
+		createController(false);
 		vm.changeChosenOffset(-5, true);
 		vm.moduleState.chosenOffset.value = 0;
 		vm.loadState();
@@ -1172,7 +1171,7 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should NOT remember selected day offset if toggle is off', function() {
-		createController(false, { WFM_Remember_My_Selection_In_Intraday_47254: false });
+		createController(false);
 		vm.changeChosenOffset(-5, true);
 		vm.changeChosenOffset(0, true);
 		vm.loadState();

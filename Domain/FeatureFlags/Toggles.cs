@@ -104,7 +104,6 @@
 		WFM_Gamification_Create_Rolling_Periods_74866,
 		Report_Remove_Realtime_AuditTrail_44006,
 		ETL_Show_Web_Based_ETL_Tool_74837,
-		WFM_Remember_My_Selection_In_Intraday_47254,
 		WFM_Clear_Data_After_Leaving_Date_47768,
 		WFM_Request_View_Permissions_77731,
 		WFM_Request_Show_Feedback_Link_77733,

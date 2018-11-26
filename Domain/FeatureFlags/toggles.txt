@@ -101,7 +101,6 @@ ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = DEV
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
-WFM_Remember_My_Selection_In_Intraday_47254 = true
 WFM_Intraday_Redesign_77214 = DEV
 
 # Ziggy #
