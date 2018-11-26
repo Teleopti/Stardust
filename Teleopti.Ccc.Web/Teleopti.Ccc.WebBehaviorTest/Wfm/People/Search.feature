@@ -7,6 +7,10 @@ Feature: Search
 
 Background:
 	Given I have a role with full access
+	And there is a business unit named 'OtherBU'
+	And there is a site 'OtherSite' on business unit 'OtherBU'
+	And there is a team named 'OtherTeam' on site 'OtherSite'
+	And WA Person 'OtherPerson' exists on team 'OtherTeam'
 	And there is a role with
 	| Field          | Value |
 	| Name           | Agent |
@@ -27,7 +31,12 @@ Background:
 
 Scenario: Search for a selection of users
 	When Searching for 'le'
-	Then I should see all matches for 'le'
+	Then I should see '2' or more matches for 'le'
 
 
-
+Scenario: Search on different business unit
+	When I pick business unit 'OtherBU'
+	And Searching for 'OtherPerson'
+	Then I should see '1' matches for 'OtherPerson'
+	When Searching for 'Ashley'
+	Then I should see '0' matches for 'Ashley'

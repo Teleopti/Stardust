@@ -12,10 +12,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 	[Binding]
 	public sealed class SearchStepDefinition
 	{
-		[Then("I should see all matches for '(.*)'")]
-		public void ShouldSeeAllMatchesForSearch(string searchString)
+		[Then("I should see '(.*)' or more matches for '(.*)'")]
+		public void ShouldSeeXOrMoreMatchesForSearch(string numberOfMatches, string searchString)
 		{
-			Browser.Interactions.AssertJavascriptResultContains("return document.querySelectorAll('[data-test-search] [data-test-person]').length >= 2", "True");
+			Browser.Interactions.AssertJavascriptResultContains($"return document.querySelectorAll('[data-test-search] [data-test-person]').length >= {numberOfMatches}", "True");
+		}
+
+		[Then("I should see '(.*)' matches for '(.*)'")]
+		public void ShouldSeeXMatchesForSearch(string numberOfMatches, string searchString)
+		{
+			Browser.Interactions.AssertJavascriptResultContains($"return document.querySelectorAll('[data-test-search] [data-test-person]').length === {numberOfMatches}", "True");
 		}
 
 		[Then("I should see columns")]

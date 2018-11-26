@@ -29,6 +29,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 			DataMaker.Person(name).Apply(personPeriod);
 		}
 
+		[Given("WA Person '(.*)' exists on team '(.*)'")]
+		public void WAPersonXExistsOnTeam(string name, string team)
+		{
+			var personPeriod = new PersonPeriodConfigurable()
+			{
+				StartDate = new DateTime(2014, 2, 21),
+				Team = team
+			};
+
+			DataMaker.Person(name).Apply(personPeriod);
+		}
+
 		[Given("WA People exists")]
 		public void WAPeopleExists(Table table)
 		{
