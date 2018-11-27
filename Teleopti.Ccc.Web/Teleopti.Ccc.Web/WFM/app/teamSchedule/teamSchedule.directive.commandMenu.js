@@ -18,7 +18,6 @@
 				'ShortCuts',
 				'keyCodes',
 				'teamsPermissions',
-				'teamsToggles',
 				'serviceDateFormatHelper',
 				'teamsBootstrapData',
 				teamscheduleCommandMenuCtrl
@@ -37,7 +36,6 @@
 		shortCuts,
 		keyCodes,
 		teamsPermissions,
-		teamsToggles,
 		serviceDateFormatHelper,
 		teamsBootstrapData
 	) {
@@ -269,15 +267,15 @@
 		};
 
 		vm.canActiveAddDayOff = function () {
-			return vm.permissions.HasAddDayOffPermission && vm.toggles.WfmTeamSchedule_AddNDeleteDayOff_40555;
+			return vm.permissions.HasAddDayOffPermission;
 		};
 
 		vm.canActiveRemoveDayOff = function () {
-			return vm.permissions.HasRemoveDayOffPermission && vm.toggles.WfmTeamSchedule_AddNDeleteDayOff_40555;
+			return vm.permissions.HasRemoveDayOffPermission;
 		};
 
 		vm.canActiveRemoveShift = function () {
-			return vm.toggles.WfmTeamSchedule_RemoveShift_46322 && vm.permissions.HasRemoveShiftPermission;
+			return vm.permissions.HasRemoveShiftPermission;
 		};
 
 		vm.canActiveMoveActivity = function () {
@@ -399,7 +397,6 @@
 		}
 
 		vm.init = function () {
-			vm.toggles = teamsToggles.all();
 			vm.permissions = teamsPermissions.all();
 
 			vm.isMenuVisible = function () {
