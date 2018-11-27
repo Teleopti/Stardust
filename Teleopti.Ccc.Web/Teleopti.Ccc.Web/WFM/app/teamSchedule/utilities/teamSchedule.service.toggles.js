@@ -10,8 +10,7 @@
 
 		self.all = function getToggles() {
 			return {
-				Wfm_HideUnusedTeamsAndSites_42690: toggleSvc.Wfm_HideUnusedTeamsAndSites_42690,
-				Wfm_GroupPages_45057: toggleSvc.Wfm_GroupPages_45057
+				Wfm_HideUnusedTeamsAndSites_42690: toggleSvc.Wfm_HideUnusedTeamsAndSites_42690
 			};
 		}
 

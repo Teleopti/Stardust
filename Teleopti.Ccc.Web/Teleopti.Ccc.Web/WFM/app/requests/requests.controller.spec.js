@@ -37,7 +37,6 @@ describe('Requests controller tests', function() {
 			$provide.service('Toggle', function() {
 				return {
 					Wfm_Requests_People_Search_36294: true,
-					Wfm_GroupPages_45057: true,
 					togglesLoaded: $q(function(resolve, reject) {
 						resolve();
 					})

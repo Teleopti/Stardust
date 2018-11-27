@@ -49,7 +49,6 @@ WfmTeamSchedule_SuggestShiftCategory_152 = RC
 Wfm_HideUnusedTeamsAndSites_42690 = true
 Wfm_SearchAgentBasedOnCorrectPeriod_44552 = true
 Wfm_AddMyTimeLink_45088 = true
-Wfm_GroupPages_45057 = true
 Wfm_FetchBusinessHierarchyFromReadModel_45275 = RC
 WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = RC
 

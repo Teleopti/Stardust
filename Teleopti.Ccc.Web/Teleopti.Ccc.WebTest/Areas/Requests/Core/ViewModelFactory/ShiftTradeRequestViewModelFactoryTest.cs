@@ -7,7 +7,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -15,7 +14,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -34,9 +32,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 {
 	[TestFixture]
-	[DomainTest] 
-	[WebTest] 
-	[RequestsTest] 
+	[DomainTest]
+	[WebTest]
+	[RequestsTest]
 	[DefaultData]
 	public class ShiftTradeRequestViewModelFactoryTest : IIsolateSystem
 	{
@@ -452,8 +450,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldReturnEmptyResultWhenSearchingPersonCountIsExceeded()
 		{
-			var personTo = PersonFactory.CreatePerson("Person", "To");
-			var personFrom = PersonFactory.CreatePerson("Person", "From");
+			var personTo = PersonFactory.CreatePerson("Person", "To").WithId();
+			var personFrom = PersonFactory.CreatePerson("Person", "From").WithId();
 			var site = new Site("site").WithId(Guid.NewGuid());
 			var team = new Team().WithDescription(new Description("from team")).WithId(Guid.NewGuid());
 			team.Site = site;
@@ -466,6 +464,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				new DateOnlyPeriod(2016, 03, 01, 2016, 03, 03), Scenario.Current());
 			setShiftTradeSwapDetailsToAndFrom((IShiftTradeRequest)personrequest.Request, schedule, personTo, personFrom);
 			personrequest.Pending();
+			PersonRepository.Has(personFrom);
+			PersonRepository.Has(personTo);
+			PeopleSearchProvider.Add(personFrom);
+			PeopleSearchProvider.Add(personTo);
 
 			var input = new AllRequestsFormData
 			{
@@ -511,7 +513,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldCalculatePersonCountOnlyBasedOnPersonId()
 		{
-			ToggleManager.Enable(Toggles.Wfm_GroupPages_45057);
 			var personTo = PersonFactory.CreatePerson("Person", "To").WithId();
 			var personFrom = PersonFactory.CreatePerson("Person", "From").WithId();
 			var site = new Site("site").WithId(Guid.NewGuid());

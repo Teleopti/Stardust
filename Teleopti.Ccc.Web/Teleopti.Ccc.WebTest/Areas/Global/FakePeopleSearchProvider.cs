@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.People.Core.ViewModels;
@@ -18,6 +19,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		private readonly IDictionary<DateOnly, List<IPerson>> _permittedPeopleByDate;
 		private bool _enableDateFilter;
 		private readonly IDictionary<IPerson, string> _personApplicationRoleDictionary;
+		private readonly Dictionary<Guid, List<IPerson>> _permittedPeopleInTeam = new Dictionary<Guid, List<IPerson>>();
+		private bool _enablePermittedPeopleInTeams = false;
 
 
 		const string quotePattern = "(?!\")[^\"]*?(?=\")";
@@ -38,6 +41,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void EnableDateFilter()
 		{
 			_enableDateFilter = true;
+		}
+
+		public void EnablePermittedPeopleInTeams()
+		{
+			_enablePermittedPeopleInTeams = true;
 		}
 
 		public PeopleSummaryModel SearchPermittedPeopleSummary(IDictionary<PersonFinderField, string> criteriaDictionary,
@@ -159,6 +167,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			}
 		}
 
+		public void Add(Guid teamId, IPerson person)
+		{
+			if (!_permittedPeopleInTeam.ContainsKey(teamId))
+			{
+				_permittedPeopleInTeam.Add(teamId, new List<IPerson>());
+			}
+			_permittedPeopleInTeam[teamId].Add(person);
+		}
+
 		public void AddPersonWithViewConfidentialPermission(IPerson person)
 		{
 			_peopleWithConfidentialAbsencePermission.Add(person);
@@ -166,6 +183,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 		public List<Guid> FindPersonIdsInPeriodWithGroup(DateOnlyPeriod period, Guid[] groupIds, IDictionary<PersonFinderField, string> searchCriteria)
 		{
+			if (_enablePermittedPeopleInTeams)
+			{
+				return _permittedPeopleInTeam.Where(p => groupIds.Contains(p.Key)).SelectMany(pit => pit.Value.Select(p => p.Id.Value)).ToList();
+			}
+
 			IEnumerable<IPerson> people = _permittedPeople;
 
 			if (searchCriteria.ContainsKey(PersonFinderField.Role))

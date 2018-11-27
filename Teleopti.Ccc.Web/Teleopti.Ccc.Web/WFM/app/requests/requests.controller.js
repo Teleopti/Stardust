@@ -47,7 +47,6 @@
 		vm.pageSizeOptions = [20, 50, 100, 200];
 		vm.sitesAndTeams = [];
 		vm.isUsingRequestSubmitterTimeZone = false;
-		vm.Wfm_GroupPages_45057 = toggleService.Wfm_GroupPages_45057;
 		vm.overtimeRequestsLicenseAvailable = false;
 		vm.teamNameMap = {};
 		vm.showFeedbackLink = toggleService.WFM_Request_Show_Feedback_Link_77733;
@@ -263,8 +262,7 @@
 		vm.getTeamOrGroupData = function() {
 			if (angular.toJson(lastPeriodForFetchingTeamOrGroupData) !== angular.toJson(vm.period)) {
 				lastPeriodForFetchingTeamOrGroupData = vm.period;
-				if (vm.Wfm_GroupPages_45057) getGroupPagesAsync();
-				else getSitesAndTeamsAsync();
+				getGroupPagesAsync();
 			}
 		};
 

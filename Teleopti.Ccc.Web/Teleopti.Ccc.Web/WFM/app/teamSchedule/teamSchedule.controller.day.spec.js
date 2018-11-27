@@ -565,20 +565,6 @@
 			return {};
 		}
 
-		function setUpMockGroupPagesService() {
-			return {
-				fetchAvailableGroupPages: function () {
-					return {
-						then: function () {
-
-						}
-					};
-				}
-
-			};
-
-		}
-
 		function setupMockCurrentUserInfoService() {
 			return {
 				CurrentUserInfo: function () {
@@ -606,6 +592,7 @@
 						selectedDate: '2018-06-13'
 					};
 				});
+				$provide.service('groupPageService', setUpMockGroupPagesService);
 			});
 		});
 
@@ -620,5 +607,22 @@
 			expect(moment(controller.scheduleDate).format('YYYY-MM-DD')).toEqual('2018-06-13');
 		});
 	});
+
+
+
+	function setUpMockGroupPagesService() {
+		return {
+			fetchAvailableGroupPages: function () {
+				return {
+					then: function () {
+
+					}
+				};
+			}
+
+		};
+
+	}
+
 })();
 

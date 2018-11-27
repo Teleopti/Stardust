@@ -56,10 +56,10 @@ describe('[RequestsCommandPaneDirectiveTests]', function() {
 				return null;
 			});
 			$provide.service('requestsPermissions', function() {
-				return new FakeRequestsPermissions();
-			});
-			$provide.service('requestsPermissions', function() {
 				return requestsPermissions;
+			});
+			$provide.service('groupPageService', function () {
+				return new FakeGroupPageService();
 			});
 			$provide.service('$state', function() {
 				return fakeState;
@@ -698,6 +698,17 @@ describe('[RequestsCommandPaneDirectiveTests]', function() {
 				DefaultTimeZone: 'Europe/Berlin'
 			};
 		};
+	}
+
+	function FakeGroupPageService() {
+		this.period = {};
+		this.fetchAvailableGroupPages = function (startDate, endDate) {
+			this.period = { StartDate: startDate, EndDate: endDate };
+			return {
+				then: function (cb) {
+				}
+			}
+		}
 	}
 
 	function setUpTarget(isShiftTradeViewActived) {

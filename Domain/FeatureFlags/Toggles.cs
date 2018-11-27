@@ -33,7 +33,6 @@
 		Wfm_HideUnusedTeamsAndSites_42690,
 		Wfm_SearchAgentBasedOnCorrectPeriod_44552,
 		Wfm_AddMyTimeLink_45088,
-		Wfm_GroupPages_45057,
 		Wfm_FetchBusinessHierarchyFromReadModel_45275,
 		
 		WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871,

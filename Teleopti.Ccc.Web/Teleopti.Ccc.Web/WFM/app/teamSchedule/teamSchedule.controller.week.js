@@ -102,7 +102,7 @@
 		vm.onScheduleDateChanged = function () {
 			vm.weekDays = Util.getWeekdays(vm.scheduleDate);
 
-			loadGroupings();
+			vm.getGroupPagesAsync();
 			vm.loadSchedules();
 		};
 
@@ -279,13 +279,6 @@
 			return teamNameMap;
 		}
 
-		function loadGroupings() {
-			if (toggles.Wfm_GroupPages_45057)
-				vm.getGroupPagesAsync();
-			else
-				vm.getSitesAndTeamsAsync();
-		}
-
 		function initSelectedGroups(mode, groupIds, groupPageId) {
 			vm.selectedGroups = {
 				mode: mode,
@@ -295,7 +288,7 @@
 		}
 
 		function init() {
-			loadGroupings();
+			vm.getGroupPagesAsync();
 
 			$q.all(asyncData).then(function (data) {
 				if (data.pageSetting.Agents > 0) {
