@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Infrastructure.Aop;
@@ -36,7 +37,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterEventHandlers(_config.Toggle, typeof(IHandleEvent<>).Assembly, typeof(Rta).Assembly);
+			builder.RegisterEventHandlers(_config.Toggle,
+				typeof(IHandleEvent<>).Assembly,
+				typeof(Rta).Assembly,
+				typeof(MessageBrokerServerNoMailboxPurge).Assembly
+			);
 
 			builder.RegisterType<ReadModelValidator>().As<IReadModelValidator>().SingleInstance();
 			builder.RegisterType<ReadModelFixer>().As<IReadModelFixer>().SingleInstance();
@@ -62,7 +67,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			_config.Args().Cache.This<AnalyticsAbsenceMapper>(b => b.CacheMethod(m => m.Map(Guid.Empty)));
 			builder.CacheByClassProxy<FetchAnalyticsScenarios>().SingleInstance();
 			_config.Args().Cache.This<FetchAnalyticsScenarios>(b => b.CacheMethod(m => m.Execute()));
-			builder.RegisterType<AnalyticsFactScheduleTimeMapper>().As<IAnalyticsFactScheduleTimeMapper>().SingleInstance();				
+			builder.RegisterType<AnalyticsFactScheduleTimeMapper>().As<IAnalyticsFactScheduleTimeMapper>().SingleInstance();
 			builder.RegisterType<AnalyticsFactScheduleDateMapper>().As<IAnalyticsFactScheduleDateMapper>().SingleInstance();
 			builder.RegisterType<AnalyticsDateMapper>().SingleInstance();
 			builder.RegisterType<AnalyticsFactSchedulePersonMapper>().As<IAnalyticsFactSchedulePersonMapper>().SingleInstance();
@@ -75,8 +80,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IndexMaintenanceRepository>().As<IIndexMaintenanceRepository>().SingleInstance();
 
 			builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>().SingleInstance();
-			
-			builder.RegisterType<UpdateFactSchedules>().SingleInstance().ApplyAspects();	
+
+			builder.RegisterType<UpdateFactSchedules>().SingleInstance().ApplyAspects();
 
 			builder.RegisterType<ScheduleProjectionReadOnlyPersister>()
 				.As<IScheduleProjectionReadOnlyPersister>()

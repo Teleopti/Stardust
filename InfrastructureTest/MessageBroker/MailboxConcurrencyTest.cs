@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Infrastructure.Events;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.TestCommon;
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 	public class MailboxConcurrencyTest
 	{
 		public IMessageBrokerServer Server;
+		public MessageBrokerMailboxPurger Purger;
 
 		[Test]
 		public void ShouldNotBreakWhenPolling()
@@ -47,6 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 			{
 				Server.PopMessages(messages.GetRandom().Routes().First(), Guid.NewGuid().ToString());
 				Server.NotifyClients(messages.GetRandom());
+				Purger.Handle(new SharedMinuteTickEvent());
 			}).Times(100);
 
 			Assert.DoesNotThrow(() => run.WaitForException<SqlException>());

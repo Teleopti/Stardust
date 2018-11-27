@@ -75,7 +75,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 			hasTenant("t");
 			RecurringEventPublishings.UpdatePublishings();
 
-			Publisher.Publishings.First().Event.GetType().Should().Be.EqualTo<CleanFailedQueue>();
+			Publisher.Publishings.First().Event.GetType().Should().Be.EqualTo<SharedHourTickEvent>();
 		}
 
 		[Test]
