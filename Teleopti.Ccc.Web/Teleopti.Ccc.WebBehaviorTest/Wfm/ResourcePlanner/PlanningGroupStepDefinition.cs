@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		[Then(@"I should see '(.*)' in the planning group list")]
 		public void ThenIShouldSeeInThePlanningGroupList(string planningGroupName)
 		{
-			Browser.Interactions.AssertAnyContains(".plan-group > div.list-header h1", planningGroupName);
+			Browser.Interactions.AssertAnyContains(".plan-group > div.list-header h2", planningGroupName);
 		}
 
 		[Then(@"I should see '(.*)' in the scheduling setting list")]
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		[When(@"I click edit planning group '(.*)'")]
 		public void WhenIClickEditPlanningGroup(string planningGroupName)
 		{
-			Browser.Interactions.AssertAnyContains(".plan-group > div.list-header h1", planningGroupName);
+			Browser.Interactions.AssertAnyContains(".plan-group > div.list-header h2", planningGroupName);
 			Browser.Interactions.Click(".edit-plan-group");
 		}
 

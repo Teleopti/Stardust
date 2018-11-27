@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 			var culture = CultureInfo.CurrentUICulture;
 			from = DateTime.Parse(from).ToString(format, culture);
 			to = DateTime.Parse(to).ToString(format, culture);
-			Browser.Interactions.AssertAnyContains(".plan-group-pp > div.list-header h1", $"{from} - {to}");
+			Browser.Interactions.AssertAnyContains(".plan-group-pp > div.list-header h2", $"{from} - {to}");
 		}
 		
 	}

@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I open planning period")]
 		public void WhenIOpenPlanningPeriod()
 		{
-			Browser.Interactions.Click(".planingperiod-container .wfm-btn");
+			Browser.Interactions.Click(".plan-group-pp");
 		}
 
 

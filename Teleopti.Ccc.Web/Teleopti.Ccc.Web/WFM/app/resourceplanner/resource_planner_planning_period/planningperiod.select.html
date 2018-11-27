@@ -1,7 +1,8 @@
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
 		<h1>
-			<i class="mdi mdi-calendar"></i> {{'PlanningGroup' | translate}} - {{vm.planningGroup.Name}}</h1>
+			<i class="mdi mdi-calendar"></i> {{'PlanningGroup' | translate}} - {{vm.planningGroup.Name}}
+		</h1>
 		<div class="pp-sub-title">
 			<span ng-hide="vm.selectedPp">{{'SelectPpToSchedulePlanningGroup' | translate}} </span>
 		</div>
@@ -37,9 +38,9 @@
 </div>
 <div class="con-fluid-row">
 	<div class="con-fluid-flex planingperiod-container" ng-repeat="p in vm.planningPeriods track by p.Id | filter: vm.filterTime ">
-		<div class="list-content material-depth-1 plan-group-pp">
+		<div class="list-content material-depth-1 plan-group-pp" ng-click="vm.selectPp(p)">
 			<div class="list-header" ng-class="{'pp-scheduled':p.State == 'Scheduled', 'pp-scheduled-failed':p.State == 'ScheduleFailed'|| p.State == 'IntradayOptimizationFailed'}">
-				<h1>{{p.StartDate | amDateFormat:"LL"}} - {{p.EndDate | amDateFormat:"LL"}}</h1>
+				<h2>{{p.StartDate | amDateFormat:"LL"}} - {{p.EndDate | amDateFormat:"LL"}}</h2>
 				<div class="subtext">{{p.Number}} {{p.Type | translate}}</div>
 			</div>
 			<div class="list-header-content">
@@ -51,7 +52,6 @@
 					<i class="mdi mdi-delete"></i>
 					<md-tooltip>{{'DeletePlanningPeriod' | translate}}</md-tooltip>
 				</div>
-				<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="vm.selectPp(p)">{{'Schedule' | translate}}</button>
 			</div>
 		</div>
 	</div>
@@ -86,8 +86,8 @@
 		<div class="modal-box" ng-show="vm.modifyLastPpModal">
 			<div class="modalbg">
 				<div class="dialog material-depth-1">
-					<h1 class="modal-title">{{'ChangePlanningPeriodDurationColon' | translate}} {{vm.originLastPp.startDate | amDateFormat:"L"}} - {{vm.originLastPp.endDate
-						| amDateFormat:"L"}}</h1>
+					<h2 class="modal-title">{{'ChangePlanningPeriodDurationColon' | translate}} {{vm.originLastPp.startDate | amDateFormat:"L"}} - {{vm.originLastPp.endDate
+						| amDateFormat:"L"}}</h2>
 					<span class="modal-title" ng-if="vm.typeIsWrong"><i class="mdi mdi-information-outline" ></i> The planning period interval has wrong type.</span>
 					<md-content class="md-padding pp-create-modal" ng-hide="vm.typeIsWrong">
 						<md-tabs md-dynamic-height md-border-bottom>
@@ -152,7 +152,7 @@
 		<div ng-cloak class="modal-box" ng-if="vm.openCreatePpModal">
 			<div class="modalbg">
 				<div class="dialog material-depth-1">
-					<h1 class="modal-title">{{'CreateFirstPlanningPeriod' | translate}}</h1>
+					<h2 class="modal-title">{{'CreateFirstPlanningPeriod' | translate}}</h2>
 					<md-content class="md-padding pp-create-modal">
 						<md-tabs md-dynamic-height md-border-bottom>
 							<md-tab label="By Suggestions">

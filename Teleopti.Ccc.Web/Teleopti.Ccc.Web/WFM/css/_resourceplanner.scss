@@ -305,6 +305,7 @@ table.overview {
 	
 	.list-header-content {
 		overflow: hidden;
+	  	min-height: 44px;
 	}
 }
 
@@ -328,10 +329,6 @@ table.overview {
 		padding: 5px 5px 5px 10px;
 		color: $gray054;
 	}
-}
-
-.wfm-btn{
-	transition: none !important;
 }
 
 .wfm-btn-invis-default.active {
@@ -483,4 +480,12 @@ card-panel-content {
 
 .manage-schedule-period-picker wfm-date-range-picker{
   z-index: 40;
+}
+
+.plan-group{
+  cursor: pointer;
+}
+
+.plan-group-pp{
+  cursor: pointer;
 }
