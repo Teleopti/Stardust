@@ -18,6 +18,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
+	/*  DONT ADD MORE TESTS HERE! - LEGACY TESTS HERE!
+	 *  Web supports (limited) block (not team) DOopt only.
+	 * Dont use OptimizationPreferencesProvider.SetFromTestsOnly_LegacyDONOTUSE...
+	 * Either set it on planninggroup or make a desktop test instead.
+	 */
 	[DomainTest]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	public class DayOffOptimizationTeamBlockTest : DayOffOptimizationScenario
