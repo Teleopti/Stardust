@@ -22,6 +22,11 @@ truncate table [dbo].[JobStartTime]
 -- ska ha person period och helst schema under perioden
 -- skapa person request p� dom
 
+
+ update [AbsenceRequestOpenPeriod]
+ set StaffingThresholdValidator = 1
+  where PArent = 'E97BC114-8939-4A70-AE37-A338010FFF19'
+
 select distinct top 200 p.* into #tempPerson 
 from person p
 inner join personperiod pp on pp.Parent = p.id
