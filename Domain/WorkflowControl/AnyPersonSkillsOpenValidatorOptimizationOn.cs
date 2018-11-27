@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NPOI.HSSF.Record;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -34,16 +33,16 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 					var openHours = openHoursTmp.ToLookup(s => s.SkillId);
 					foreach (var skillId in skillIds)
 					{
-						if (openHours[skillId].IsEmpty())
-							continue;
 						var skillOpen = openHours[skillId].ToList();
 						if (!skillOpen.Any()) continue;
-						var dateOnlyPeriod = requestPeriod.ToDateOnlyPeriod(skillOpen.First().TimeZone);
+
+						var timeZoneInfo = skillOpen[0].TimeZone;
+						var dateOnlyPeriod = requestPeriod.ToDateOnlyPeriod(timeZoneInfo);
 						foreach (var requestDay in dateOnlyPeriod.DayCollection())
 						{
 							var openOnWeekDay = skillOpen.Where(so => so.WeekdayIndex.Equals((int)requestDay.DayOfWeek)).ToList();
 							var openOnWeekDayBefore = skillOpen.Where(so => so.WeekdayIndex.Equals((int)requestDay.AddDays(-1).DayOfWeek)).ToList();
-							if (validateSkillOpenHours(requestDay.AddDays(-1), openOnWeekDayBefore, skillOpen.First().TimeZone, requestPeriod) || validateSkillOpenHours(requestDay, openOnWeekDay, skillOpen.First().TimeZone, requestPeriod))
+							if (validateSkillOpenHours(requestDay.AddDays(-1), openOnWeekDayBefore, timeZoneInfo, requestPeriod) || validateSkillOpenHours(requestDay, openOnWeekDay, timeZoneInfo, requestPeriod))
 							{
 								return new ValidatedRequest { IsValid = true };
 							}
@@ -51,8 +50,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 						}
 					}
 				}
-
-				
 			}
 			
 			var activities = new HashSet<IActivity>();
