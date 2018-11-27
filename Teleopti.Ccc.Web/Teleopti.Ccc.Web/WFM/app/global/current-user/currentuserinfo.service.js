@@ -3,9 +3,9 @@
 
 	angular.module('currentUserInfoService').service('CurrentUserInfo', CurrentUserInfo);
 
-	CurrentUserInfo.$inject = ['AuthenticationRequests', '$q', '$sessionStorage', 'wfmI18nService', 'Settings'];
+	CurrentUserInfo.$inject = ['$http', '$q', 'wfmI18nService', 'Settings'];
 
-	function CurrentUserInfo(AuthenticationRequests, $q, $sessionStorage, wfmI18nService, Settings) {
+	function CurrentUserInfo($http, $q, wfmI18nService, Settings) {
 		var userName;
 		var defaultTimeZone;
 		var defaultTimeZoneName;
@@ -20,7 +20,6 @@
 		this.getCurrentUserFromServer = getCurrentUserFromServer;
 		this.initContext = initContext;
 		this.isConnected = isConnected;
-		this.resetContext = resetContext;
 		this.isTeleoptiApplicationLogon = isTeleoptiApplicationLogon;
 
 		function SetCurrentUserInfo(data) {
@@ -36,7 +35,6 @@
 		}
 
 		function CurrentUserInfo() {
-			
 			return {
 				UserName: userName,
 				DefaultTimeZone: defaultTimeZone,
@@ -57,16 +55,16 @@
 			var patternArrays = dateTimeFormat.ShortTimePattern.split(' ');
 			var showMeridian = patternArrays.length > 1;
 			var shortTimePattern = showMeridian ? patternArrays[0] + ' A' : dateTimeFormat.ShortTimePattern;
-			return  {
+			return {
 				ShortTimePattern: shortTimePattern,
 				AMDesignator: dateTimeFormat.AMDesignator,
 				PMDesignator: dateTimeFormat.PMDesignator,
 				ShowMeridian: showMeridian
-			}
+			};
 		}
 
 		function getCurrentUserFromServer() {
-			return AuthenticationRequests.getCurrentUser();
+			return $http.get('../api/Global/User/CurrentUser');
 		}
 
 		function initContext() {
@@ -85,18 +83,6 @@
 
 		function isConnected() {
 			return timeout > Date.now();
-		}
-
-		function resetContext() {
-			if (window.location.hash.length > '#/'.length) {
-				var d = new Date();
-				d.setTime(d.getTime() + 5 * 60 * 1000);
-				var expires = 'expires=' + d.toUTCString();
-				document.cookie = 'returnHash=WFM/' + window.location.hash + '; ' + expires + '; path=/';
-			}
-			timeout = Date.now();
-			$sessionStorage.$reset();
-			window.location.href = 'Authentication?redirectUrl=' + window.location.hash;
 		}
 	}
 })();

@@ -110,7 +110,6 @@
 	});
 
 	it("should show skills for the preselected skill group", function () {
-		enableShowSkillsToggle();
 		var scope = $rootScope.$new();
 		scope.preselectedSkills = { skillAreaId: 'SkillArea1' };
 		var panel = setupComponent('selected-date="2017-09-27" preselected-skills="preselectedSkills"', scope);
@@ -124,7 +123,6 @@
 	});
 
 	it("should change skills after change the selected skill group", function () {
-		enableShowSkillsToggle();
 		var scope = $rootScope.$new();
 		scope.preselectedSkills = { skillAreaId: 'SkillArea1' };
 		var panel = setupComponent('selected-date="2017-09-27" preselected-skills="preselectedSkills"', scope);
@@ -141,7 +139,6 @@
 	});
 
 	it("should hide skills if no selected skill group", function () {
-		enableShowSkillsToggle();
 		var scope = $rootScope.$new();
 		scope.preselectedSkills = { skillAreaId: 'SkillArea1' };
 		var panel = setupComponent('selected-date="2017-09-27" preselected-skills="preselectedSkills"', scope);
@@ -154,7 +151,6 @@
 	});
 
 	it("should hide skills when select skill", function () {
-		enableShowSkillsToggle();
 		var scope = $rootScope.$new();
 		scope.preselectedSkills = { skillAreaId: 'SkillArea1' };
 		var panel = setupComponent('selected-date="2017-09-27" preselected-skills="preselectedSkills"', scope);
@@ -167,7 +163,6 @@
 	});
 
 	it("should not generate chart if the selected skill or skill group is not changed when set skill", function () {
-		enableShowSkillsToggle();
 		var scope = $rootScope.$new();
 		scope.preselectedSkills = { skillAreaId: skillGroups[0].Id };
 		var panel = setupComponent('selected-date="2017-09-27" preselected-skills="preselectedSkills"', scope);
@@ -178,7 +173,6 @@
 	});
 
 	it("should not generate chart when it did not load skill or skill group ", function () {
-		enableShowSkillsToggle();
 		var scope = $rootScope.$new();
 		scope.preselectedSkills = { skillAreaId: skillGroups[0].Id };
 		var panel = setupComponent('selected-date="2018-02-11" preselected-skills="preselectedSkills"', scope);
@@ -207,11 +201,6 @@
 		expect(_staffingInfoService.date).toEqual('2018-11-09');
 	});
 
-	function enableShowSkillsToggle() {
-		toggles.set({
-			WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202: true
-		});
-	}
 
 	function setupComponent(attrs, scope) {
 		var el;

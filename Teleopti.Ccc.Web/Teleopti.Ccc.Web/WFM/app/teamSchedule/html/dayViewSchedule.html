@@ -59,24 +59,11 @@
 							 ng-model="vm.currentTimezone"
 							 ng-change="vm.changeTimezone()"></timezone-picker>
 
-			<md-switch ng-if="vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206"
-					   ng-model="vm.staffingEnabled"
+			<md-switch  ng-model="vm.staffingEnabled"
 					   ng-change="vm.showStaffing()">
 				<span translate>ShowStaffing</span>
 			</md-switch>
 
-			<md-switch id="show-warnings"
-					   ng-if="!vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206"
-					   ng-model="vm.currentSettings.validateWarningEnabled"
-					   ng-change="vm.checkValidationWarningForCurrentPage()">
-				<span translate>ShowWarnings</span>
-			</md-switch>
-
-			<md-switch ng-if="!vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206 && vm.searchEnabled"
-					   ng-model="vm.currentSettings.onlyLoadScheduleWithAbsence"
-					   ng-change="vm.toggleShowAbsenceOnly()">
-				<span translate>ShowOnlyAbsence</span>
-			</md-switch>
 		</div>
 
 		<div class="rightside-part">

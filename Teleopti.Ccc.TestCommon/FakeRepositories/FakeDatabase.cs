@@ -370,6 +370,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				.WithAssignedActivity(start, end);
 		}
 
+		public static FakeDatabase WithSchedules(this FakeDatabase database, IEnumerable<DateTimePeriod> periods)
+		{
+			periods.ForEach(t => {
+				database
+				.WithAssignment(t.StartDateTime.ToString())
+				.WithAssignedActivity(t.StartDateTime.ToString(), t.EndDateTime.ToString());
+			});
+			return database;
+		}
+
 		public static FakeDatabase WithScheduleDayOff(this FakeDatabase database, string date)
 		{
 			return database
@@ -430,7 +440,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly IBusinessRuleConfigProvider _businessRuleConfig;
 		private readonly FakeRtaHistory _rtaHistory;
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeSetChecksum;
-
+		
 		private BusinessUnit _businessUnit;
 		private Site _site;
 		private Person _person;
@@ -1057,7 +1067,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_personAssignment.AddActivity(_activity, new DateTimePeriod(startTime.Utc(), endTime.Utc()));
 			return this;
 		}
-
+		
 		public virtual FakeDatabase WithAssignedOvertimeActivity(string startTime, string endTime)
 		{
 			ensureExists(_activities, null, () => this.WithActivity(null));
@@ -1396,11 +1406,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeDatabase WithAbsenceRequest(Guid personId, string date)
+		public FakeDatabase WithAbsenceRequest(Guid personId, DateTime start, DateTime end)
 		{
 			ensureExists(_absences, null, () => WithAbsence(null, "defaultAbsence", null));
-			_personRequest = new PersonRequestFactory().CreateAbsenceRequest(_absence,
-					date.Date().ToDateTimePeriod(TimeZoneInfo.Utc)).Parent as IPersonRequest;
+			_personRequest = new PersonRequestFactory()
+								.CreateAbsenceRequest(_absence, 
+								new DateTimePeriod(start.Utc(), end.Utc()))
+								.Parent as IPersonRequest;
 			_personRequest.SetId(Guid.NewGuid());
 			_personRequest.Person.SetId(personId);
 			_personRequests.Add(_personRequest);

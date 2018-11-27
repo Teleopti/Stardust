@@ -26,7 +26,6 @@
 		var staffingDataAvailable = false;
 		vm.loadedSkillsData = false;
 		vm.selectedSkillGroup = null;
-		vm.toggleShowSkillsForSelectedSkillGroup = teamsToggles.all().WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202;
 		vm.selectedSkill = null;
 
 		var chart = null;

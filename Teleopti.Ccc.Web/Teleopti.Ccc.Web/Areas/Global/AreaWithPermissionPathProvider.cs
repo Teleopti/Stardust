@@ -25,10 +25,6 @@ namespace Teleopti.Ccc.Web.Areas.Global
 				Toggles.Wfm_WebPlan_Pilot_46815
 			},
 			{
-				DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning,
-				Toggles.WfmIntraday_MonitorActualvsForecasted_35176
-			},
-			{
 				DefinedRaptorApplicationFunctionPaths.WebForecasts,
 				Toggles.WFM_Forecaster_Preview_74801
 			},

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				)
 				.As(t => t.GetInterfaces().Where(i => i.GetGenericTypeDefinition() == typeof(IHandleContextAction<>))
 				);
-			builder.RegisterType<AuditAggregatorService>().SingleInstance();
+			builder.RegisterType<AuditAggregatorService>().As<IAuditAggregatorService>().SingleInstance();
 
 			builder.RegisterType<PersonSearchProvider>().SingleInstance();
 			builder.RegisterType<TenantContextReaderService>().SingleInstance();

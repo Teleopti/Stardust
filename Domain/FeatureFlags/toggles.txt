@@ -44,9 +44,6 @@ RTA_StateQueueFloodPrevention_77710 = true
 RTA_ReviewHistoricalAdherence_74770 = RC
 
 # Dumplings, can any of these be removed? #
-WfmTeamSchedule_ShowStaffingInfo_45206 = true
-WfmTeamSchedule_ExportSchedulesToExcel_45795 = true
-WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202 = true
 WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010 = true
 WfmTeamSchedule_AddNDeleteDayOff_40555 = true
 WfmTeamSchedule_RemoveShift_46322 = true
@@ -100,8 +97,6 @@ ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487 = true
 ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = DEV
 
 # DeBockers #
-WfmIntraday_MonitorActualvsForecasted_35176 = true
-WFM_Remember_My_Selection_In_Intraday_47254 = true
 WFM_Intraday_Redesign_77214 = DEV
 
 # Ziggy #

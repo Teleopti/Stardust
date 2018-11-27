@@ -10,7 +10,9 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
@@ -39,7 +41,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public IShiftCategoryRepository ShiftCategoryRepository;
 		public IPlanningPeriodRepository PlanningPeriodRepository;
 		public IPlanningGroupRepository PlanningGroupRepository;
-		public SchedulingOptionsProvider SchedulingOptionsProvider;
 		public IJobResultRepository JobResultRepository;
 		public ISkillRepository SkillRepository;
 		public IBusinessUnitRepository BusinessUnitRepository;
@@ -47,18 +48,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public IWorkloadRepository WorkloadRepository;
 		public IPersonAssignmentRepository PersonAssignmentRepository;
 
-		[TestCase(true)]
-		[TestCase(false)]
-		public void ShouldDoSchedulingForPlanningPeriod(bool teamScheduling)
+		[Test]
+		public void ShouldDoSchedulingForPlanningPeriod()
 		{
 			var planningPeriod = fillDatabaseWithEnoughDataToRunScheduling(new DateOnly(2017, 12, 11), new[]{DateOnly.MinValue});
-			if (teamScheduling)
-			{
-				var defaultOptions = SchedulingOptionsProvider.Fetch(new DayOffTemplate());
-				defaultOptions.UseTeam = true;
-				defaultOptions.GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag);
-				SchedulingOptionsProvider.SetFromTest(planningPeriod, defaultOptions);
-			}
 
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -68,18 +61,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 			}
 		}
 
-		[TestCase(true)]
-		[TestCase(false)]
-		public void ShouldNotThrowLazyInitializationExceptionWhenHavingPersonPeriodStartingLaterThanThePlanningPeriod(bool teamScheduling)
+		[Test]
+		public void ShouldNotThrowLazyInitializationExceptionWhenHavingPersonPeriodStartingLaterThanThePlanningPeriod()
 		{
 			var planningPeriod = fillDatabaseWithEnoughDataToRunScheduling(new DateOnly(2017, 12, 11), new[]{DateOnly.MinValue, new DateOnly(2018, 1, 15)});
-			if (teamScheduling)
-			{
-				var defaultOptions = SchedulingOptionsProvider.Fetch(new DayOffTemplate());
-				defaultOptions.UseTeam = true;
-				defaultOptions.GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag);
-				SchedulingOptionsProvider.SetFromTest(planningPeriod, defaultOptions);
-			}
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -139,9 +124,35 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 			return planningPeriod;
 		}
 
-		public void Isolate(IIsolate isolate)
+		public virtual void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
+		}
+	}
+	
+	public class FullSchedulingUowTeamTest : FullSchedulingUowTest
+	{
+		public override void Isolate(IIsolate isolate)
+		{
+			base.Isolate(isolate);
+			isolate.UseTestDouble<teamSchedulingOptions>().For<ISchedulingOptionsProvider>();
+		}
+
+		//do "the new way" when web supports team scheduling
+		private class teamSchedulingOptions : ISchedulingOptionsProvider
+		{
+			public SchedulingOptions Fetch(IDayOffTemplate defaultDayOffTemplate)
+			{
+				return new SchedulingOptions
+				{
+					DayOffTemplate = defaultDayOffTemplate,
+					ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
+					GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.RuleSetBag),
+					TagToUseOnScheduling = NullScheduleTag.Instance,
+					UseTeam = true,
+					TeamSameShiftCategory = true
+				};
+			}
 		}
 	}
 }

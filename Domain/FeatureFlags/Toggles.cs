@@ -30,16 +30,12 @@
 
 		Wfm_MinimumScaffolding_32659,
 		Wfm_WebPlan_Pilot_46815,
-		WfmIntraday_MonitorActualvsForecasted_35176,
 		Wfm_HideUnusedTeamsAndSites_42690,
 		Wfm_SearchAgentBasedOnCorrectPeriod_44552,
 		Wfm_AddMyTimeLink_45088,
 		Wfm_GroupPages_45057,
 		Wfm_FetchBusinessHierarchyFromReadModel_45275,
-
-		WfmTeamSchedule_ShowStaffingInfo_45206,
-		WfmTeamSchedule_ExportSchedulesToExcel_45795,
-		WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202,
+		
 		WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010,
 		WfmTeamSchedule_AddNDeleteDayOff_40555,
 		WfmTeamSchedule_RemoveShift_46322,
@@ -104,7 +100,6 @@
 		WFM_Gamification_Create_Rolling_Periods_74866,
 		Report_Remove_Realtime_AuditTrail_44006,
 		ETL_Show_Web_Based_ETL_Tool_74837,
-		WFM_Remember_My_Selection_In_Intraday_47254,
 		WFM_Clear_Data_After_Leaving_Date_47768,
 		WFM_Request_View_Permissions_77731,
 		WFM_Request_Show_Feedback_Link_77733,

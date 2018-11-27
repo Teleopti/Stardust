@@ -310,9 +310,10 @@
     <Compile Include="SchedulingScenarios\ExtraPreferencesFactory.cs" />
     <Compile Include="SchedulingScenarios\FairnessOptimization\FairnessOptimizationDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayCombinationDesktopTest.cs" />
-    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizatinDesktopTest.cs" />
+    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationBlockTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCascadingSameThreadDesktopTest.cs" />
+    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationPreferenceTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\CommandHandlerDecreaseIslandsTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\CommandHandlerExternalStaffTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\CommandHandlerGeneralTest.cs" />
@@ -329,9 +330,11 @@
     <Compile Include="SchedulingScenarios\Scheduling\ConcurrencyDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\DaysOffSchedulingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingAndDoTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\SchedulingBlockTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCommandHandlerExternalStaffDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingFulfillPreferencesTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingFulfillPreferenceDesktopTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\SchedulingHourlyDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingReduceSkillsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingReduceSkillsTest.cs" />
     <Compile Include="SchedulingScenarios\SyncInFatClientProcessEventPublisher_SimulateNoNewThreads.cs" />
@@ -562,7 +565,7 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationPlanningGroupTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationReduceUnnecessaryCallsTest.cs" />
     <Compile Include="Optimization\PlanningGroupModelPersisterTest.cs" />
-    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationClassicTest.cs" />
+    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationClassicDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationRestrictionsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationScenarioTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationStandardDeviationTest.cs" />

@@ -36,10 +36,11 @@
 				length="500"
 				type="string" />
 
-	 <property name="BpoId"
+	 <property name="BpoName"
 				access="property"
 				not-null="false"
-				type="guid" />
+			    length="100"
+				type="string" />
 	  
 	  <property name="ClearPeriodStart"
 				access="property"

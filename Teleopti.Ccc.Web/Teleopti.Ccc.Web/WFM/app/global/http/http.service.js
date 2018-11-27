@@ -1,13 +1,21 @@
-(function () {
+(function() {
 	'use strict';
 
 	angular
 		.module('wfm.http', ['currentUserInfoService', 'wfm.notice', 'pascalprecht.translate', 'wfm.versionService'])
 		.factory('httpInterceptor', httpInterceptor);
 
-	httpInterceptor.$inject = ['$q', '$injector', '$timeout', '$translate', '$window', 'versionService'];
+	httpInterceptor.$inject = [
+		'$q',
+		'$sessionStorage',
+		'$injector',
+		'$timeout',
+		'$translate',
+		'$window',
+		'versionService'
+	];
 
-	function httpInterceptor($q, $injector, $timeout, $translate, $window, versionService) {
+	function httpInterceptor($q, $sessionStorage, $injector, $timeout, $translate, $window, versionService) {
 		var connected = true;
 
 		var service = {
@@ -16,6 +24,17 @@
 			response: onResponse
 		};
 		return service;
+
+		function resetContext() {
+			if (window.location.hash.length > '#/'.length) {
+				var d = new Date();
+				d.setTime(d.getTime() + 5 * 60 * 1000);
+				var expires = 'expires=' + d.toUTCString();
+				document.cookie = 'returnHash=WFM/' + window.location.hash + '; ' + expires + '; path=/';
+			}
+			$sessionStorage.$reset();
+			window.location.href = 'Authentication?redirectUrl=' + window.location.hash;
+		}
 
 		function ensureClientIsUpToDate(headers) {
 			var version = versionService.getVersion();
@@ -28,7 +47,7 @@
 		function onRequest(config) {
 			if (!connected) {
 				var q = $q.defer();
-				$timeout(function () {
+				$timeout(function() {
 					q.reject();
 				}, 2000);
 				return q.promise;
@@ -86,8 +105,7 @@
 
 				case rejection.status === 401:
 					connected = false;
-					var CurrentUserInfo = $injector.get('CurrentUserInfo');
-					CurrentUserInfo.resetContext();
+					resetContext();
 					NoticeService.error(
 						"<span class='test-alert'></span>" + $translate.instant('NoPermissionToViewErrorMessage'),
 						null,
@@ -98,11 +116,7 @@
 				case rejection.status === 403:
 					var message = $translate.instant('NoPermissionToViewErrorMessage');
 					if (rejection.data && rejection.data.Message) message = rejection.data.Message;
-					NoticeService.error(
-						"<span class='test-alert'></span>" + message,
-						null,
-						false
-					);
+					NoticeService.error("<span class='test-alert'></span>" + message, null, false);
 					break;
 
 				case rejection.status === 422:
@@ -121,12 +135,12 @@
 					//don't remove class test-alert - used in perf tests
 					NoticeService.error(
 						"<span class='test-alert'></span>" +
-						$translate.instant('InternalErrorMessage') +
-						'<a href="mailto:' +
-						Settings.supportEmailSetting +
-						'">' +
-						Settings.supportEmailSetting +
-						'</a>',
+							$translate.instant('InternalErrorMessage') +
+							'<a href="mailto:' +
+							Settings.supportEmailSetting +
+							'">' +
+							Settings.supportEmailSetting +
+							'</a>',
 						null,
 						false
 					);

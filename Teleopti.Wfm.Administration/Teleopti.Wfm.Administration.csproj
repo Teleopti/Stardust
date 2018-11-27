@@ -236,6 +236,7 @@
     <Content Include="Etl\etlHistoryController.js" />
     <Content Include="Etl\etlScheduleController.js" />
     <Content Include="Etl\etlScheduleModal.component.js" />
+    <Content Include="Etl\manual.css" />
     <Content Include="firstuser.html" />
     <Content Include="App_Data\RtaStates.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

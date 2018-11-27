@@ -45,9 +45,9 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 						//audit.ActionPerformedBy.Name.ToString(NameOrderOption.FirstNameLastName)
 				};
 				var deserializedRole = JsonConvert.DeserializeObject<PersonAccessModel>(audit.Data);
-				var appRole = _applicationRoleRepository.Load(deserializedRole.RoleId);
+				var appRole = deserializedRole.Name;
 				var actionPerformedOn = extractPersonAuditInfo(audit.ActionPerformedOn, commonAgentNameSetting);
-				auditServiceModel.Data = $"{Resources.AuditTrailPerson}: {actionPerformedOn}, {Resources.AuditTrailRole}: {appRole.Name}";
+				auditServiceModel.Data = $"{Resources.AuditTrailPerson}: {actionPerformedOn}, {Resources.AuditTrailRole}: {appRole}";
 				auditServiceModelList.Add(auditServiceModel);
 			}
 

@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.ResourcePlanner;
+using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
@@ -22,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IBlockPreferenceProviderForPlanningPeriod _blockPreferenceProviderForPlanningPeriod;
 		private readonly DeadLockRetrier _deadLockRetrier;
 		private readonly IPlanningGroupSettingsProvider _planningGroupSettingsProvider;
+		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 
 		public IntradayOptimizationExecutor(IntradayOptimization intradayOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -30,7 +34,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IGridlockManager gridlockManager,
 			IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod,
 			DeadLockRetrier deadLockRetrier,
-			IPlanningGroupSettingsProvider planningGroupSettingsProvider)
+			IPlanningGroupSettingsProvider planningGroupSettingsProvider, 
+			IPlanningPeriodRepository planningPeriodRepository)
 		{
 			_intradayOptimization = intradayOptimization;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -40,6 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_blockPreferenceProviderForPlanningPeriod = blockPreferenceProviderForPlanningPeriod;
 			_deadLockRetrier = deadLockRetrier;
 			_planningGroupSettingsProvider = planningGroupSettingsProvider;
+			_planningPeriodRepository = planningPeriodRepository;
 		}
 
 		[TestLog]
@@ -64,10 +70,30 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Guid planningPeriodId)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
-			var planningGroup = _planningGroupSettingsProvider.Execute(planningPeriodId);
-			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(planningGroup);
+			var allSettingsForPlanningGroup = _planningGroupSettingsProvider.Execute(planningPeriodId);
+			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(allSettingsForPlanningGroup);
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, agentsInIsland, new LockInfoForStateHolder(_gridlockManager, locks), period, onlyUseSkills);
-			_intradayOptimization.Execute(period, schedulerStateHolder.ChoosenAgents.Filter(agentsToOptimize), runResolveWeeklyRestRule, blockPreferenceProvider);
+			var agents = schedulerStateHolder.ChoosenAgents.Filter(agentsToOptimize);
+			if (planningPeriodId == Guid.Empty)
+			{
+				_intradayOptimization.Execute(period, agents, runResolveWeeklyRestRule, blockPreferenceProvider, allSettingsForPlanningGroup);
+			}
+			else
+			{
+				var lastJobResult = _planningPeriodRepository.Get(planningPeriodId).GetLastSchedulingJob();
+				var agentIdsWithPreferenceHints = lastJobResult == null
+					? Enumerable.Empty<Guid>()
+					: JsonConvert.DeserializeObject<FullSchedulingResultModel>(lastJobResult.Details.Last().Message)
+						.BusinessRulesValidationResults.Where(x => x.ValidationErrors.Any(y => y.ResourceType == ValidationResourceType.Preferences))
+						.Select(x => x.ResourceId);
+				var agentsToOptimizeWithoutPreferences = agents.Where(agent => agentIdsWithPreferenceHints.Contains(agent.Id.Value)).ToList();
+				var agentsToOptimizeWithOriginalPreferenceValues = agents.Except(agentsToOptimizeWithoutPreferences).ToArray();
+				using (allSettingsForPlanningGroup.ChangeSettingInThisScope(Percent.Zero))
+				{
+					_intradayOptimization.Execute(period, agentsToOptimizeWithoutPreferences, runResolveWeeklyRestRule, blockPreferenceProvider, allSettingsForPlanningGroup);
+				}
+				_intradayOptimization.Execute(period, agentsToOptimizeWithOriginalPreferenceValues, runResolveWeeklyRestRule, blockPreferenceProvider, allSettingsForPlanningGroup);
+			}
 		}
 	}
 }

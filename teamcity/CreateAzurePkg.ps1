@@ -21,7 +21,6 @@ properties {
 	$Large = "Standard_D2_v3"
 	$XLarge = "Standard_E2_v3"
 	
-	
 	$WorkingDir = $TCParams['teamcity.build.workingDir']
 	
 	$TeleoptiBin = "$WorkingDir\TeleoptiCCC\bin"

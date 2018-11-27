@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -16,6 +17,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
 using Teleopti.Interfaces.Domain;
 
@@ -54,7 +56,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 
 		public override void OneTimeSetUp()
 		{
-			_nowDateTime = new DateTime(2016, 03, 21, 7, 0, 0).Utc();
+			_nowDateTime = new DateTime(2016, 03, 16, 7, 0, 0).Utc();
 			Now.Is(_nowDateTime);
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
@@ -63,7 +65,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			{
 				connection.Open();
 				StardustJobFeedback.SendProgress($"Will run script");
-				var script = HelperScripts.ClearAbsenceRequestRequestPersonRequestOnPeriodForParalelTest;
+				var script = HelperScripts.ClearAbsenceRequestRequestPersonRequestOnPeriod;
 				using (var command = new SqlCommand(script, connection))
 				{
 					command.ExecuteNonQuery();
@@ -76,7 +78,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			using (var connection = new SqlConnection(ConfigReader.ConnectionString("Tenancy")))
 			{
 				connection.Open();
-				var sql = HelperScripts.PersonWithValidSetupForIntradayRequestOnPeriodForParallelTests;
+				var sql = HelperScripts.PersonWithValidSetupForIntradayRequestOnPeriod;
 				using (var command = new SqlCommand(sql, connection))
 				{
 					var reader = command.ExecuteReader();
@@ -117,28 +119,30 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		/// for all the workloads
 		/// </summary>
 		[Test]
+		[Toggle(Toggles.WFM_AbsenceRequest_ImproveThroughput_79139)]
 		public void Run200ParallelAbsenceRequestSoAmandaIsHappy()
 		{
-			Now.Is("2016-03-21 07:01");
+			Now.Is("2016-03-16 07:01");
 
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 			StardustJobFeedback.SendProgress($"Will process {200} requests");
 			var taskList = new List<Task>();
-			foreach (var i in Enumerable.Range(0, 200))
+			
+			for (int i=0;i<100;i++)
 			{
 				var task = Task.Run(() => WithUnitOfWork.Do(() =>
 				{
 					AbsenceRepository.LoadAll();
-					var startTime = new DateTime(2016, 3, 21, 8, 0, 0, DateTimeKind.Utc);
-					var endDateTime = new DateTime(2016, 3, 21, 17, 0, 0, DateTimeKind.Utc);
-
+					var startTime = new DateTime(2016, 3, 16, 8, 0, 0, DateTimeKind.Utc);
+					var endDateTime = new DateTime(2016, 3, 16, 17, 0, 0, DateTimeKind.Utc);
+					i = i - 1;
 					AbsenceRequestModel model = new AbsenceRequestModel()
 					{
 						Period = new DateTimePeriod(startTime, endDateTime),
 						PersonId = _personIdList[i],
-						Message = "Story7913921",
-						Subject = "Story7913921",
+						Message = "Story79139",
+						Subject = "Story79139",
 						AbsenceId = new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F")
 					};
 					AbsenceRequestPersister.Persist(model);
@@ -147,6 +151,32 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 
 			}
 			Task.WaitAll(taskList.ToArray());
+			taskList.Clear();
+			
+			for (int i = 100; i < 200; i++)
+			{
+				var task = Task.Run(() => WithUnitOfWork.Do(() =>
+				{
+					AbsenceRepository.LoadAll();
+					var startTime = new DateTime(2016, 3, 16, 8, 0, 0, DateTimeKind.Utc);
+					var endDateTime = new DateTime(2016, 3, 16, 17, 0, 0, DateTimeKind.Utc);
+					i = i - 1;
+					AbsenceRequestModel model = new AbsenceRequestModel()
+					{
+						Period = new DateTimePeriod(startTime, endDateTime),
+						PersonId = _personIdList[i],
+						Message = "Story79139",
+						Subject = "Story79139",
+						AbsenceId = new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F")
+					};
+					AbsenceRequestPersister.Persist(model);
+				}));
+				taskList.Add(task);
+
+			}
+			Task.WaitAll(taskList.ToArray());
+
+
 		}
 	}
 }
