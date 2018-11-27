@@ -24,10 +24,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return _planningGroupSettings.First(x => x.IsValidForAgent(person, dateOnly));
 		}
 
-		public IDisposable ChangeSettingInThisScope(Percent newPreferenceValue)
+		public IDisposable DontUsePreferences()
 		{
 			var oldPreferenceValue = PreferenceValue;
-			PreferenceValue = newPreferenceValue;
+			PreferenceValue = Percent.Zero;
 			return new GenericDisposable(() => PreferenceValue = oldPreferenceValue);
 		}
 

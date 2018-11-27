@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			
 			if (@event.RunDayOffOptimization)
 			{
-				using (allSettingsForPlanningGroup.ChangeSettingInThisScope(Percent.Zero))
+				using (allSettingsForPlanningGroup.DontUsePreferences())
 				{
 					_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate),
 						agentsScheduledWithoutPreferences,
