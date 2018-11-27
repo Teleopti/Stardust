@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Infrastructure.Events;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.TestCommon;
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 	public class MailboxConcurrencyTest
 	{
 		public IMessageBrokerServer Server;
+		public MessageBrokerMailboxPurger Purger;
 
 		[Test]
 		public void ShouldNotBreakWhenPolling()
@@ -35,11 +37,12 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		[Test]
 		[Setting("MessageBrokerMailboxPurgeIntervalInSeconds", 0)]
 		[Setting("MessageBrokerMailboxExpirationInSeconds", 0)]
+		[Category("LongRunning")]
 		public void ShouldNotDeadlockWhenPurging()
 		{
 			var run = new ConcurrencyRunner();
 
-			var messages = Enumerable.Range(0, 10)
+			var messages = Enumerable.Range(0, 1000)
 				.Select(i => new Message {BusinessUnitId = Guid.NewGuid().ToString()})
 				.ToArray();
 
@@ -47,7 +50,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 			{
 				Server.PopMessages(messages.GetRandom().Routes().First(), Guid.NewGuid().ToString());
 				Server.NotifyClients(messages.GetRandom());
-			}).Times(100);
+				Purger.Handle(new SharedMinuteTickEvent());
+			}).Times(1000);
 
 			Assert.DoesNotThrow(() => run.WaitForException<SqlException>());
 		}

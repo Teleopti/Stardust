@@ -24,6 +24,7 @@
 		RTA_ReviewHistoricalAdherence_74770,
 		
 		MessageBroker_HttpSenderThrottleRequests_79140,
+		MessageBroker_VeganBurger_79140,
 		
 		MyTimeWeb_NewTeamScheduleView_75989,
 		MyTimeWeb_NewTeamScheduleViewDesktop_76313,
