@@ -1,14 +1,13 @@
 <div class="settings-panel">
 	<div class="sidenav-header">{{'Settings'|translate}}</div>
-	<md-content class="command-panel-content" ng-class="{'toggle-control': vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206}" layout-padding>
-		<md-switch ng-if="vm.searchEnabled && vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206"
+	<md-content class="command-panel-content toggle-control" layout-padding>
+		<md-switch ng-if="vm.searchEnabled"
 				   ng-model="vm.settings.onlyLoadScheduleWithAbsence"
 				   ng-change="vm.onSettingsUpdated('onlyLoadScheduleWithAbsence')">
 			<span translate>ShowOnlyAbsence</span>
 		</md-switch>
-		<md-divider ng-if="vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206"></md-divider>
+		<md-divider></md-divider>
 		<md-switch id="show-warnings"
-				   ng-if="vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206"
 				   ng-model="vm.settings.validateWarningEnabled"
 				   ng-change="vm.onSettingsUpdated('validateWarningEnabled')">
 			<span translate>ShowWarnings</span>

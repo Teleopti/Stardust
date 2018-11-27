@@ -35,8 +35,7 @@
 		Wfm_AddMyTimeLink_45088,
 		Wfm_GroupPages_45057,
 		Wfm_FetchBusinessHierarchyFromReadModel_45275,
-
-		WfmTeamSchedule_ShowStaffingInfo_45206,
+		
 		WfmTeamSchedule_ExportSchedulesToExcel_45795,
 		WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202,
 		WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010,
