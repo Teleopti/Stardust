@@ -36,7 +36,6 @@
 		Wfm_GroupPages_45057,
 		Wfm_FetchBusinessHierarchyFromReadModel_45275,
 		
-		WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202,
 		WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010,
 		WfmTeamSchedule_AddNDeleteDayOff_40555,
 		WfmTeamSchedule_RemoveShift_46322,
