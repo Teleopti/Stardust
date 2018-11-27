@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			};
 		}
 
-		public void SetFromTestsOnly(IOptimizationPreferences optimizationPreferences)
+		public void SetFromTestsOnly_LegacyDONOTUSE(IOptimizationPreferences optimizationPreferences)
 		{
 			_setFromTests = optimizationPreferences;
 		}

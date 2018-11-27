@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.Has(agent1, scenario, new DayOffTemplate(), firstDay.AddDays(4));
 			AssignmentRepository.Has(agent2, scenario, new DayOffTemplate(), firstDay.AddDays(5));
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay.AddDays(3),SchedulePeriodType.Day, 2);
-			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
+			SchedulingOptionsProvider.SetFromTest_LegacyDONOTUSE(planningPeriod, new SchedulingOptions
 			{
 				UseTeam = true,
 				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag),
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.Has(agent2, scenario, new DayOffTemplate(), firstDay.AddDays(5));
 			AssignmentRepository.Has(agent2, scenario, activity, otherShiftCategory, firstDay.AddDays(4), new TimePeriod(8, 16));
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay.AddDays(3),SchedulePeriodType.Day, 2);
-			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
+			SchedulingOptionsProvider.SetFromTest_LegacyDONOTUSE(planningPeriod, new SchedulingOptions
 			{
 				UseTeam = true,
 				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag),
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.Has(agent2, scenario, activity, otherShiftCategory, firstDay.AddDays(1), new TimePeriod(8, 16));
 			AssignmentRepository.Has(agent2, scenario, activity, otherShiftCategory, firstDay.AddDays(2), new TimePeriod(8, 16));
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay,SchedulePeriodType.Day, 5);
-			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
+			SchedulingOptionsProvider.SetFromTest_LegacyDONOTUSE(planningPeriod, new SchedulingOptions
 			{
 				UseTeam = true,
 				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag),
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.Has(agent2, scenario, new DayOffTemplate(), firstDay.AddDays(5));
 			AssignmentRepository.Has(agent2, scenario, activity, otherShiftCategory, firstDay.AddDays(4), new TimePeriod(8, 16));
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay.AddDays(3),SchedulePeriodType.Day, 2);
-			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
+			SchedulingOptionsProvider.SetFromTest_LegacyDONOTUSE(planningPeriod, new SchedulingOptions
 			{
 				UseTeam = true,
 				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag),
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			DayOffTemplateRepository.Add(new DayOffTemplate());
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 2, 2, 2, 2, 2, 2, 2));
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay,SchedulePeriodType.Day, 1);
-			SchedulingOptionsProvider.SetFromTest(planningPeriod, new SchedulingOptions
+			SchedulingOptionsProvider.SetFromTest_LegacyDONOTUSE(planningPeriod, new SchedulingOptions
 			{
 				UseTeam = true,
 				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag),

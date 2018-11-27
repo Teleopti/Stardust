@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			};
 		}
 
-		public void SetFromTest(PlanningPeriod planningPeriod, SchedulingOptions schedulingOptions)
+		public void SetFromTest_LegacyDONOTUSE(PlanningPeriod planningPeriod, SchedulingOptions schedulingOptions)
 		{
 			_setFromTest = schedulingOptions;
 			

@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			}); 
 			var optPrefs = OptimizationPreferencesProvider.Fetch();
 			optPrefs.Extra.UseTeams= true;
-			OptimizationPreferencesProvider.SetFromTestsOnly(optPrefs);
+			OptimizationPreferencesProvider.SetFromTestsOnly_LegacyDONOTUSE(optPrefs);
 
 			for (var i = 0; i < numberOfAttempts; i++)
 			{
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			optPrefs.Extra.UseTeams = true;
 			optPrefs.Extra.TeamGroupPage = new GroupPageLight("_", GroupPageType.Hierarchy);
 			optPrefs.Extra.UseTeamBlockOption = true;
-			OptimizationPreferencesProvider.SetFromTestsOnly(optPrefs);
+			OptimizationPreferencesProvider.SetFromTestsOnly_LegacyDONOTUSE(optPrefs);
 
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		{
 			var prefUsedInThisTest = OptimizationPreferencesProvider.Fetch();
 			prefUsedInThisTest.Advanced.UseTweakedValues = true;
-			OptimizationPreferencesProvider.SetFromTestsOnly(prefUsedInThisTest);
+			OptimizationPreferencesProvider.SetFromTestsOnly_LegacyDONOTUSE(prefUsedInThisTest);
 			var firstDay = new DateOnly(2015, 10, 26); //mon
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);

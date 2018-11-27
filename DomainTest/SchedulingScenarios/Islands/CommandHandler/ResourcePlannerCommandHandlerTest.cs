@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 				case SUT.Scheduling:
 					if (teamBlockType.HasValue)
 					{
-						SchedulingOptionsProvider.SetFromTest(null, new SchedulingOptions
+						SchedulingOptionsProvider.SetFromTest_LegacyDONOTUSE(null, new SchedulingOptions
 						{
 							UseTeam = teamBlockType == TeamBlockType.Team || teamBlockType == TeamBlockType.TeamAndBlock
 						});
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 				case SUT.IntradayOptimization:
 					if (teamBlockType.HasValue)
 					{
-						OptimizationPreferencesProvider.SetFromTestsOnly(new OptimizationPreferences
+						OptimizationPreferencesProvider.SetFromTestsOnly_LegacyDONOTUSE(new OptimizationPreferences
 						{
 							Extra = teamBlockType.Value.CreateExtraPreferences()
 						});
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 				case SUT.DayOffOptimization:
 					if (teamBlockType.HasValue)
 					{
-						OptimizationPreferencesProvider.SetFromTestsOnly(new OptimizationPreferences
+						OptimizationPreferencesProvider.SetFromTestsOnly_LegacyDONOTUSE(new OptimizationPreferences
 						{
 							Extra = teamBlockType.Value.CreateExtraPreferences()
 						});
