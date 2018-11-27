@@ -20,7 +20,13 @@ where parent in (  select id from PersonRequest where Subject  = 'Story7913921')
  
 delete from PersonRequest where Subject  = 'Story7913921'";
 
-		public static string PersonWithValidSetupForIntradayRequestOnPeriod => @"select distinct top 200 p.Id 
+		public static string PersonWithValidSetupForIntradayRequestOnPeriod => @"
+
+ update [AbsenceRequestOpenPeriod]
+ set StaffingThresholdValidator = 3
+  where Parent = 'E97BC114-8939-4A70-AE37-A338010FFF19'
+
+select distinct top 400 p.Id 
 from person p
 inner join personperiod pp on pp.Parent = p.id
 inner join PersonSkill ps on ps.Parent = pp.id

@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourcePlanner;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
@@ -108,12 +109,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			
 			if (schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly)
 			{
-				_removeNonPreferenceDaysOffs.Execute(schedulerStateHolder.Schedules, agents, selectedPeriod);
+				_removeNonPreferenceDaysOffs.Execute(schedulerStateHolder.Schedules, agents, selectedPeriod, agentsWithExistingShiftsBeforeSchedule);
 			}
 			
 			if (@event.RunDayOffOptimization)
 			{
-				using (allSettingsForPlanningGroup.ChangeSettingInThisScope(Percent.Zero))
+				using (allSettingsForPlanningGroup.DontUsePreferences())
 				{
 					_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate),
 						agentsScheduledWithoutPreferences,

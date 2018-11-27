@@ -12,12 +12,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Audit
 	public class TenantContextReaderService
 	{
 		private readonly ITenantAuditRepository _tenantAuditRepository;
-		private readonly IUserCulture _userCulture;
 
-		public TenantContextReaderService(ITenantAuditRepository tenantAuditRepository, IUserCulture userCulture)
+		public TenantContextReaderService(ITenantAuditRepository tenantAuditRepository)
 		{
 			_tenantAuditRepository = tenantAuditRepository;
-			_userCulture = userCulture;
 		}
 
 		public IEnumerable<AuditServiceModel> LoadAll()

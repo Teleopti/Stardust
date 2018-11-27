@@ -15,12 +15,17 @@ Background:
 	| Field          | Value |
 	| Name           | TeamLeader |
 	| Description    | TeamLeader |
+	And there is a role with
+	| Field          | Value |
+	| Name           | SuperAdmin |
+	| Description    | SuperAdmin |
 	And WA People exists
 	| Name		|
 	| Ashley	|
 	| Anthony	|
 	| Abraham	|
 	And Person 'Ashley' has role 'Agent'
+	And Person 'Ashley' has role 'SuperAdmin'
 	And Person 'Ashley' has role 'TeamLeader'
 	And Person 'Anthony' has role 'Agent'
 	And Person 'Abraham' has role 'Agent'
@@ -61,8 +66,11 @@ Scenario: Grant roles on people
 	When I select the role 'TeamLeader' to grant
 	And I press the save button
 	Then Person 'Ashley' should have role 'TeamLeader'
+	And Person 'Ashley' should have role 'SuperAdmin'
 	And Person 'Anthony' should have role 'TeamLeader'
+	And Person 'Anthony' should not have role 'SuperAdmin'
 	And Person 'Abraham' should have role 'TeamLeader'
+	And Person 'Abraham' should not have role 'SuperAdmin'
 
 
 Scenario: Revoke roles on people

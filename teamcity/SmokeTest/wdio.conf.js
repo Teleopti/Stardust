@@ -208,4 +208,13 @@ exports.config = {
     // possible to defer the end of the process using a promise.
     // onComplete: function(exitCode) {
     // }
+
+    afterSession: async function(){
+        // workaround to make sure the chromedriver shuts down https://github.com/webdriverio-boneyard/wdio-selenium-standalone-service/issues/28
+        await browser.end().pause(1000);
+    },
+    after: async function(){
+        // workaround to make sure the chromedriver shuts down https://github.com/webdriverio-boneyard/wdio-selenium-standalone-service/issues/28
+        await browser.pause(1000);
+    }
 }

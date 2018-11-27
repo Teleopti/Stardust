@@ -14,20 +14,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftEditor
 	{
 		private readonly IReplaceLayerInSchedule _replaceLayerInSchedule;
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
-		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IEventPublisher _eventPublisher;
 		private readonly ICurrentDataSource _currentDataSource;
 
 		public MultipleChangeScheduleCommandHandler(
 			IReplaceLayerInSchedule replaceLayerInSchedule,
 			IScheduleDifferenceSaver scheduleDifferenceSaver,
-			ILoggedOnUser loggedOnUser,
 			IEventPublisher eventPublisher,
 			ICurrentDataSource currentDataSource)
 		{
 			_replaceLayerInSchedule = replaceLayerInSchedule;
 			_scheduleDifferenceSaver = scheduleDifferenceSaver;
-			_loggedOnUser = loggedOnUser;
 			_eventPublisher = eventPublisher;
 			_currentDataSource = currentDataSource;
 		}

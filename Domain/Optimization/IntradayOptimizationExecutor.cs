@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 						.Select(x => x.ResourceId);
 				var agentsToOptimizeWithoutPreferences = agents.Where(agent => agentIdsWithPreferenceHints.Contains(agent.Id.Value)).ToList();
 				var agentsToOptimizeWithOriginalPreferenceValues = agents.Except(agentsToOptimizeWithoutPreferences).ToArray();
-				using (allSettingsForPlanningGroup.ChangeSettingInThisScope(Percent.Zero))
+				using (allSettingsForPlanningGroup.DontUsePreferences())
 				{
 					_intradayOptimization.Execute(period, agentsToOptimizeWithoutPreferences, runResolveWeeklyRestRule, blockPreferenceProvider, allSettingsForPlanningGroup);
 				}
