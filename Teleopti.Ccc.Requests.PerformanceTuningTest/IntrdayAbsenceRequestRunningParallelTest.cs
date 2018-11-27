@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			using (var connection = new SqlConnection(ConfigReader.ConnectionString("Tenancy")))
 			{
 				connection.Open();
-				var sql = HelperScripts.PersonWithValidSetupForIntradayRequestOnPeriod;
+				var sql = HelperScripts.PersonWithValidSetupForIntradayRequestOnPeriodForParallelTests;
 				using (var command = new SqlCommand(sql, connection))
 				{
 					var reader = command.ExecuteReader();
