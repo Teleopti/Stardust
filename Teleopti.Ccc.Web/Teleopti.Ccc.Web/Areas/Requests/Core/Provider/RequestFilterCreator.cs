@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 		{
 			var dateTimePeriod = new DateOnlyPeriod(input.StartDate, input.EndDate).ToDateTimePeriod(_userTimeZone.TimeZone());
 			var queryDateTimePeriod = dateTimePeriod.ChangeEndTime(TimeSpan.FromSeconds(-1));
-			var searchAgentBasedOnCorrectPeriodToggle = _toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552);
 			var filter = new RequestFilter
 			{
 				RequestFilters = input.Filters,
