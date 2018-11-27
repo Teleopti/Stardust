@@ -237,7 +237,8 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PreBuildEvent>if not exist "$(ProjectDir)web.config" copy "$(ProjectDir)..\BuildArtifacts\Web.Api.Web.config" "$(ProjectDir)web.config"</PreBuildEvent>
+    <PreBuildEvent>if not exist "$(ProjectDir)web.config" copy "$(ProjectDir)..\BuildArtifacts\Web.Api.Web.config" "$(ProjectDir)web.config"
+powershell -Command "(gc $(ProjectDir)web.config) -replace '#VERSION#', '1.0.0.0' | set-content $(ProjectDir)web.config" -force</PreBuildEvent>
   </PropertyGroup>
   <!--<Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
