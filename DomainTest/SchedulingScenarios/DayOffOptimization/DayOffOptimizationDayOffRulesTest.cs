@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakePlanningGroupRepository PlanningGroupRepository;
-		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 
 		[Test]
 		public void ShouldUseSettingForConsecutiveDayOffs()
@@ -197,15 +196,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			PersonAssignmentRepository.GetSingle(skillDays[2].CurrentDate).DayOff().Should().Not.Be.Null();
 			PersonAssignmentRepository.GetSingle(skillDays[9].CurrentDate).DayOff().Should().Not.Be.Null();
-		}
-
-		[Test]
-		public void ShouldUseSettingForDayOffPerWeek_Valid_EvenWhenUseTeamSameDaysOffIsTrueButUseTeamIsNot()
-		{
-			var optPrefs = OptimizationPreferencesProvider.Fetch();
-			optPrefs.Extra.UseTeams = false;
-			optPrefs.Extra.UseTeamSameDaysOff = true;
-			ShouldUseSettingForDayOffPerWeek_Valid();
 		}
 
 		[Test]
