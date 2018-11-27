@@ -4,6 +4,7 @@
 	<PropertyGroup>
 		<StartupPageFile2Update>$(WorkingDirectory)\Teleopti.Ccc.Startpage\index.html</StartupPageFile2Update>
 		<ServiceBusFile2Update>$(WorkingDirectory)\BuildArtifacts\ServiceBusHost.config</ServiceBusFile2Update>
+		<ApiFile2Update>$(WorkingDirectory)\BuildArtifacts\Web.Api.Web.config</ApiFile2Update>
 		<MSBuildCommunityTasksPath>$(WorkingDirectory)\packages\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
 		<CccVersion>WillBeSetFromTeamCity</CccVersion>
 	</PropertyGroup>
@@ -13,6 +14,10 @@
 	<Target Name="UpdateFile">
 		<FileUpdate
 			  Files="$(StartupPageFile2Update)"
+			  Regex="#VERSION#"
+			  ReplacementText="$(CccVersion)"/>
+		<FileUpdate
+			  Files="$(ApiFile2Update)"
 			  Regex="#VERSION#"
 			  ReplacementText="$(CccVersion)"/>
 		<FileUpdate

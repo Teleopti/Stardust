@@ -9,51 +9,28 @@ namespace Teleopti.Ccc.Sdk.Common.WcfExtensions
 {
 	public class TeleoptiAuthenticationHeader : MessageHeader
 	{
-		private readonly string _userName;
-		private readonly string _password;
-		private readonly string _dataSource;
-		private readonly Guid _businessUnit;
-
 		public TeleoptiAuthenticationHeader(string userName, string password, string dataSource, Guid businessUnit)
 		{
 			UseWindowsIdentity = false;
-			_userName = userName;
-			_password = password;
-			_dataSource = dataSource;
-			_businessUnit = businessUnit;
+			UserName = userName;
+			Password = password;
+			DataSource = dataSource;
+			BusinessUnit = businessUnit;
 		}
 
-		public Guid BusinessUnit
-		{
-			get { return _businessUnit; }
-		}
+		public Guid BusinessUnit { get; }
 
-		public string DataSource
-		{
-			get { return _dataSource; }
-		}
+		public string DataSource { get; }
 
-		public string Password
-		{
-			get { return _password; }
-		}
+		public string Password { get; }
 
-		public string UserName
-		{
-			get { return _userName; }
-		}
+		public string UserName { get; }
 
 		public bool UseWindowsIdentity { get; set; }
 
-		public override string Name
-		{
-			get { return TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderName; }
-		}
+		public override string Name => TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderName;
 
-		public override string Namespace
-		{
-			get { return TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace; }
-		}
+		public override string Namespace => TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace;
 
 		protected override void OnWriteHeaderContents(XmlDictionaryWriter writer, MessageVersion messageVersion)
 		{
