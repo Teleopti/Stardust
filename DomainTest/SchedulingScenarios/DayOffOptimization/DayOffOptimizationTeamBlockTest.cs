@@ -170,6 +170,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			Assert.IsTrue(dayOff1 == null || dayOff2 == null);
 		}
 
+		public override void Isolate(IIsolate isolate)
+		{
+			base.Isolate(isolate);
+			//hack until web supports team scheduling
+			isolate.UseTestDouble<OptimizationPreferencesDefaultValueProvider>().For<IOptimizationPreferencesProvider>();
+		}
+
 		public DayOffOptimizationTeamBlockTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
 		}

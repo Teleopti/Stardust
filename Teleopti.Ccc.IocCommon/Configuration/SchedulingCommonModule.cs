@@ -472,7 +472,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				}
 				else
 				{
-					builder.RegisterType<OptimizationPreferencesDefaultValueProvider>().AsSelf().As<IOptimizationPreferencesProvider>().SingleInstance();
+					builder.RegisterType<OptimizationPreferencesDefaultValueProvider>().As<IOptimizationPreferencesProvider>().SingleInstance();
 					builder.RegisterType<SchedulingOptionsProvider>().As<ISchedulingOptionsProvider>().SingleInstance();
 				}
 				builder.RegisterType<PeopleInOrganization>().As<IAllStaff>().SingleInstance();

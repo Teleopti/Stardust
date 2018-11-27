@@ -105,8 +105,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 
 		public void Isolate(IIsolate isolate)
 		{
-			//not needed when web supports team scheduling
+			//these are not needed when web supports team scheduling
 			isolate.UseTestDouble<SchedulingOptionsProvider>().For<ISchedulingOptionsProvider>();
+			isolate.UseTestDouble<OptimizationPreferencesDefaultValueProvider>().For<IOptimizationPreferencesProvider>();
+			//
 		}
 	}
 }
