@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		/// for all the workloads
 		/// </summary>
 		[Test]
-		//[Toggle(Toggles.WFM_AbsenceRequest_ImproveThroughput_79139)]
+		[Toggle(Toggles.WFM_AbsenceRequest_ImproveThroughput_79139)]
 		public void Run400RequestsBudgetGroupValidationSet()
 		{
 			Now.Is("2016-03-16 07:01");
