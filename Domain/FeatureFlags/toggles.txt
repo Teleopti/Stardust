@@ -51,7 +51,6 @@ Wfm_SearchAgentBasedOnCorrectPeriod_44552 = true
 Wfm_AddMyTimeLink_45088 = true
 Wfm_GroupPages_45057 = true
 Wfm_FetchBusinessHierarchyFromReadModel_45275 = RC
-WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 = true
 WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = RC
 
 # Code Monkeys, can any of these be removed? #

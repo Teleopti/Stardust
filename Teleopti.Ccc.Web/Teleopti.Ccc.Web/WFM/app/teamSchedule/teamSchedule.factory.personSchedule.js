@@ -257,7 +257,7 @@
 		};
 
 		PersonSchedule.prototype.HasUnderlyingSchedules = function () {
-			return toggleSvc.WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 && !!this.UnderlyingScheduleSummary;
+			return  !!this.UnderlyingScheduleSummary;
 		}
 
 		PersonSchedule.prototype.AbsenceCount = function () {

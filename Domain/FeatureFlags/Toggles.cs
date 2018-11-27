@@ -38,7 +38,6 @@
 		
 		WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871,
 		WfmTeamSchedule_SuggestShiftCategory_152,
-		WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952,
 		WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978,
 
 		Wfm_Requests_Approve_Based_On_Budget_Allotment_39626,
