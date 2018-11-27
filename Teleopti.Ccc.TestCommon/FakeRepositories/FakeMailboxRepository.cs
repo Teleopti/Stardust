@@ -23,8 +23,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_now = now;
 		}
 
-		public bool PurgeWasCalled;
-
 		public IEnumerable<MailboxWithMessages> Data => _data.ToArray();
 		public Mailbox PersistedLast => Data.Last();
 
@@ -58,22 +56,21 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_data.Where(x => message.Routes().Contains(x.Route))
 				.ForEach(x => x.Messages.Add(message));
 		}
-		
+
 		public void Purge()
 		{
-			PurgeWasCalled = true;
 			var mailboxesToDelete = _data.Where(x => _now.UtcDateTime() > x.ExpiresAt).ToArray();
 			mailboxesToDelete.ForEach(x => _data.Remove(x));
 		}
 
 		public void PurgeOneChunkOfMailboxes()
 		{
-			throw new NotImplementedException();
+			Purge(); // not totally correct but...
 		}
 
 		public void PurgeOneChunkOfNotifications()
 		{
-			throw new NotImplementedException();
+			Purge(); // not totally correct but...
 		}
 	}
 }
