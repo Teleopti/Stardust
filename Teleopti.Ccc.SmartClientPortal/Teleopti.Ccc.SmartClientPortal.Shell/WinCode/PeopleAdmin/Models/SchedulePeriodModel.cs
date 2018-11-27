@@ -70,12 +70,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 
         public bool ExpandState { get; set; }
 
-        public ISchedulePeriod GetCurrentPersonPeriodByDate(DateOnly selectedDate)
-        {
-            _currentSchedulePeriod = _containedEntity.SchedulePeriod(selectedDate);
-            return _currentSchedulePeriod;
-        }
-
         public int? DaysOff
         {
             get

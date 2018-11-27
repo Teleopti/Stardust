@@ -407,6 +407,7 @@
     <Compile Include="Areas\Insights\Core\DataProvider\PowerBiClientFactory.cs" />
     <Compile Include="Areas\Insights\Core\DataProvider\ReportProvider.cs" />
     <Compile Include="Areas\Insights\Core\InsightsAreaModel.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\LogLogonAttemptFake.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormExtensions.cs" />
     <Compile Include="Areas\Reports\Controllers\AuditTrailController.cs" />
     <Compile Include="Areas\Rta\Controllers\PermissionsController.cs" />
@@ -561,7 +562,6 @@
     <Compile Include="Areas\MultiTenancy\Core\CurrentTenantUser.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IdAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IIdAuthentication.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\LogLogonAttemptFake.cs" />
     <Compile Include="Areas\MultiTenancy\Core\WebTenantAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\Model\AdminSiteInfoModel.cs" />
     <Compile Include="Areas\MultiTenancy\Model\ChangePasswordModel.cs" />
@@ -952,8 +952,6 @@
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftExchangeOfferPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\PersonAccountViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Reports\DataProvider\ReportsNavigationProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeEditScheduleLayerViewModelMapper.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeEditScheduleLayerViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DatePersons.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\IRequestsShiftTradeScheduleFilterViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\IRequestsShiftTradeBulletinViewModelFactory.cs" />
@@ -1156,7 +1154,6 @@
     <Compile Include="Areas\MyTime\Core\Asm\Mapping\AsmViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Message\DataProvider\IPushMessageDialoguePersister.cs" />
     <Compile Include="Areas\MyTime\Core\Message\DataProvider\PushMessageDialoguePersister.cs" />
-    <Compile Include="Areas\MyTime\Core\Message\Mapping\MessageViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Message\ViewModelFactory\IMessageViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Message\ViewModelFactory\MessageViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Message\DataProvider\IPushMessageProvider.cs" />

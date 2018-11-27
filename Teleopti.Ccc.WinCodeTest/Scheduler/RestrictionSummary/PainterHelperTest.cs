@@ -62,20 +62,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             Assert.IsTrue(_target.CanPaintMustHave());
         }
 
-        [Test]
-        public void VerifyCanPaintAbsence()
-        {
-	        var cellData = new PreferenceCellData
-	        {
-		        HasFullDayAbsence = true,
-		        SchedulingOption = GetSchedulingOptions(true, false, false, false, false),
-		        HasDayOff = false,
-		        HasAbsenceOnContractDayOff = true
-	        };
-	        _target = new PainterHelper(cellData);
-			Assert.IsTrue(_target.CanPaintAbsenceOnContractDayOff());
-
-		}
 
 		[Test]
         public void ShouldPaintPreferredAbsence()
@@ -108,36 +94,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             Assert.IsTrue(_target.CanPaintPreferredAbsence());
         }
 
-        [Test]
-        public void ShouldPaintPreferredAbsenceOnContractDayOff()
-        {
-            PreferenceCellData cellData = new PreferenceCellData();
-            cellData.SchedulingOption = GetSchedulingOptions(true, true, true, true, true);
-            cellData.HasDayOff = true;
-            _target = new PainterHelper(cellData);
-            Assert.IsFalse(_target.CanPaintPreferredAbsenceOnContractDayOff());
-
-            cellData.SchedulingOption = GetSchedulingOptions(false, true, true, true, true);
-            cellData.HasAbsenceOnContractDayOff = false;
-            _target = new PainterHelper(cellData);
-            Assert.IsFalse(_target.CanPaintPreferredAbsenceOnContractDayOff());
-
-            cellData.SchedulingOption = GetSchedulingOptions(false, true, true, true, true);
-            cellData.EffectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
-                                                                     new WorkTimeLimitation(), null, DayOffFactory.CreateDayOff(), AbsenceFactory.CreateAbsence("hej"),
-                                                                     new List<IActivityRestriction>());
-            cellData.HasAbsenceOnContractDayOff = true;
-            _target = new PainterHelper(cellData);
-            Assert.IsFalse(_target.CanPaintPreferredAbsenceOnContractDayOff());
-
-            cellData.SchedulingOption = GetSchedulingOptions(false, true, true, true, true);
-            cellData.EffectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
-                                                                     new WorkTimeLimitation(), null, null, AbsenceFactory.CreateAbsence("hej"),
-                                                                     new List<IActivityRestriction>());
-            cellData.HasAbsenceOnContractDayOff = true;
-            _target = new PainterHelper(cellData);
-            Assert.IsTrue(_target.CanPaintPreferredAbsenceOnContractDayOff());
-        }
 
         [Test]
         public void VerifyCanPaintDisabled()

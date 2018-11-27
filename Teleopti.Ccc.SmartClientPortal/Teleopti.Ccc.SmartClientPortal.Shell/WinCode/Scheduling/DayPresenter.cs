@@ -28,11 +28,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             return SelectedPeriod.DateOnlyPeriod.StartDate.AddDays(column - (int)ColumnType.StartScheduleColumns);
         }
 
-        public int GetColumnFromLocalDate(DateOnly now)
-        {
-            return (int)(now.Subtract(SelectedPeriod.DateOnlyPeriod.StartDate).TotalDays) + (int)ColumnType.StartScheduleColumns;
-        }
-
         /// <summary>
         /// Creates the day header.
         /// </summary>

@@ -22,11 +22,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.RestrictionSum
             return false;
         }
 
-        public bool CanPaintAbsenceOnContractDayOff()
-        {
-            return (_cellValue.SchedulingOption.UseScheduling && _cellValue.HasFullDayAbsence && !_cellValue.HasDayOff && _cellValue.HasAbsenceOnContractDayOff);
-        }
-
         public bool CanPaintDisabled()
         {
             return (!_cellValue.Enabled);
@@ -50,21 +45,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.RestrictionSum
             if (scheduleShouldOverwrite)
                 return false;
             if (_cellValue.HasAbsenceOnContractDayOff)
-                return false;
-            if ((_cellValue.SchedulingOption.UsePreferences && _cellValue.SchedulingOption.UseRotations) && _cellValue.EffectiveRestriction != null
-                && (_cellValue.EffectiveRestriction.DayOffTemplate != null && _cellValue.EffectiveRestriction.Absence != null))
-                return false;
-            return ((_cellValue.SchedulingOption.UsePreferences || _cellValue.SchedulingOption.UseRotations ||
-                    _cellValue.SchedulingOption.UseAvailability || _cellValue.SchedulingOption.UseStudentAvailability) && (_cellValue.EffectiveRestriction != null && _cellValue.EffectiveRestriction.Absence != null));
-
-        }
-
-        public bool CanPaintPreferredAbsenceOnContractDayOff()
-        {
-            bool scheduleShouldOverwrite = (_cellValue.SchedulingOption.UseScheduling && _cellValue.HasFullDayAbsence) || (_cellValue.SchedulingOption.UseScheduling && _cellValue.HasShift) || (_cellValue.SchedulingOption.UseScheduling && _cellValue.HasDayOff);
-            if (scheduleShouldOverwrite)
-                return false;
-            if (!_cellValue.HasAbsenceOnContractDayOff)
                 return false;
             if ((_cellValue.SchedulingOption.UsePreferences && _cellValue.SchedulingOption.UseRotations) && _cellValue.EffectiveRestriction != null
                 && (_cellValue.EffectiveRestriction.DayOffTemplate != null && _cellValue.EffectiveRestriction.Absence != null))

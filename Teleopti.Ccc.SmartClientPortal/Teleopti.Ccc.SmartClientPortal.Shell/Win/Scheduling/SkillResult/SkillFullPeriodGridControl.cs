@@ -40,11 +40,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
             ResumeLayout(false);
         }
 
-		public static int PreferredGridWidth
-		{
-			get { return rowHeaderWidth * 2 + System.Windows.Forms.SystemInformation.VerticalScrollBarWidth; }
-		}
-
         private void Model_ClipboardCanCopy(object sender, GridCutPasteEventArgs e)
         {
             e.Result = true;

@@ -18,10 +18,5 @@ namespace Teleopti.Wfm.Api
 			type = null;
 			return false;
 		}
-
-		public Type[] AllowedQueryTypes()
-		{
-			return types;
-		}
 	}
 }

@@ -5,19 +5,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview
 {
 	public interface IOverlappingAppointmentsHelper
 	{
-		bool HasTooManyOverlapping(IList<ISimpleAppointment> simpleAppointments);
 		IEnumerable<ISimpleAppointment> ReduceOverlappingToFive(IEnumerable<ISimpleAppointment> appointments);
 	}
 
 	public class OverlappingAppointmentsHelper : IOverlappingAppointmentsHelper
 	{
-		public bool HasTooManyOverlapping(IList<ISimpleAppointment> simpleAppointments)
-		{
-			if (getFirstOverlappingWhenMoreThanFive(simpleAppointments) != null)
-				return true;
-			return false;
-		}
-
 		public IEnumerable<ISimpleAppointment> ReduceOverlappingToFive(IEnumerable<ISimpleAppointment> appointments)
 		{
 			if (appointments != null)

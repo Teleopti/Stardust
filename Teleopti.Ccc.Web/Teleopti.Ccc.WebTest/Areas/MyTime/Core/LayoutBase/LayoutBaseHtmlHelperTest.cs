@@ -63,22 +63,5 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.LayoutBase
 			var result = target.FullDirAttribute();
 			result.ToString().Length.Should().Be.EqualTo(0);
 		}
-
-		[Test]
-		public void ShouldFindDatePickerGlobalizationFromViewData()
-		{
-			var viewData = new ViewDataDictionary
-			               	{
-			               		{
-			               			"LayoutBase",
-			               			new LayoutBaseViewModel
-			               				{DatePickerGlobalization = new DatePickerGlobalizationViewModel()}
-			               			}
-			               	};
-			var target = new LayoutBaseHtmlHelper(new TestHtmlHelperBuilder().CreateHtmlHelper(viewData));
-
-			target.DatePickerGlobalizationAsJson();
-		}
-
 	}
 }

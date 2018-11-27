@@ -29,9 +29,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         /// Created date: 2008-06-26
         /// </remarks>
         void LoadAll();
-
-        void ReloadCurrentGroupPageFromDatabase(IUnitOfWork uow);
-
+		
     	/// <summary>
     	/// Removes the group page.
     	/// </summary>

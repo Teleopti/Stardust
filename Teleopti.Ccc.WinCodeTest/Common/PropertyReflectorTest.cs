@@ -63,14 +63,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Assert.AreEqual(typeof(string), theType);
         }
 
-        [Test]
-        public void VerifyGetTopLevelProperty()
-        {
-            Assert.IsNotNull(propertyReflector); //just to make it nonstatic
-            string top = PropertyReflector.GetTopLevelProperty("top.child");
-            Assert.AreEqual("top", top);
-        }
-
         private void CheckSetValue(MyTestObject o)
         {
             propertyReflector.SetValue(o, "Id", "1b");

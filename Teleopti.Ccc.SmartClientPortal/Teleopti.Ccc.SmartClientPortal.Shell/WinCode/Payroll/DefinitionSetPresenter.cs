@@ -76,23 +76,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll
         }
 
         /// <summary>
-        /// Definitions the set comparison.
-        /// </summary>
-        /// <returns></returns>
-        private static Comparison<IDefinitionSetViewModel> DefinitionSetComparison()
-        {
-            return delegate(IDefinitionSetViewModel left, IDefinitionSetViewModel right)
-            {
-                int value = -1;
-                if (left.DomainEntity.Name != null && right.DomainEntity.Name != null)
-                    value = string.Compare(left.DomainEntity.Name,
-                                           right.DomainEntity.Name,
-                                           StringComparison.CurrentCulture);
-                return value;
-            };
-        }
-
-        /// <summary>
         /// Renames the definition set.
         /// </summary>
         /// <param name="definitionSet">The definition set.</param>

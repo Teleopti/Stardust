@@ -154,14 +154,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers
 
 			return new BrushInfo(Vertical, MySettings.StandardForegroundColor, MySettings.GradientPanelBackgroundColor);
 		}
-		public static Color RequestWarningTextColor()
-		{
-			return Color.Red;
-		}
-		public static Color RequestStandardTextColor()
-		{
-			return Color.Black;
-		}
+
 		public static Color TabBackColor()
 		{
 			return MySettings.TabBackgroundColor;

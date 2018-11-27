@@ -243,12 +243,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 
         public GridControl GridControl { get; set; }
 
-        public IAccount GetCurrentPersonAccountByDate(DateOnly selectedDate)
-        {
-            _currentAccount = _containedEntity.Find(selectedDate).FirstOrDefault();
-            return _currentAccount;
-        }
-
         public bool CanBold { get; set; }
 
         public void ResetCanBoldPropertyOfChildAdapters()

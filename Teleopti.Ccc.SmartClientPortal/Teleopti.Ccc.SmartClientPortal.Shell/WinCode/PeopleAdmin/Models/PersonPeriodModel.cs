@@ -169,13 +169,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 			return String.Empty;
         }
 
-        public IPersonPeriod GetCurrentPersonPeriodByDate(DateOnly selectedDate)
-        {
-            _currentPeriod = _containedEntity.Period(selectedDate);
-            return _currentPeriod;
-        }
-
-
         public bool CanGray => _currentPeriod == null;
 
 		public IPersonPeriod Period => _currentPeriod;

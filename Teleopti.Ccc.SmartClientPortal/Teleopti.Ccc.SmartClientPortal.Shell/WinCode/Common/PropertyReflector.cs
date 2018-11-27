@@ -90,25 +90,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             SetValueImpl(target, propertyName, value);
         }
 
-        /// <summary>
-        /// Gets the top level property.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// </remarks>
-        public static string GetTopLevelProperty(string propertyName)
-        {
-            string ret = propertyName;
-
-            if (propertyName.IndexOf(PropertyNameSeparator) > -1)
-            {
-                ret = propertyName.Split(PropertyNameSeparator)[0];
-            }
-
-            return ret;
-        }
-
         /// <summary> 
         /// Returns the type of the given property on the target instance. 
         /// The type and propertyName parameters can't be null. 

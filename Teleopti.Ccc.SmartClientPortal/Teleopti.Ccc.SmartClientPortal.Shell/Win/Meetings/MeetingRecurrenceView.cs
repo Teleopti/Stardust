@@ -261,11 +261,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			throw new NotImplementedException();
 		}
 
-		public DialogResult ShowOkCancelMessage(string text, string caption)
-		{
-			throw new NotImplementedException();
-		}
-
 		public DialogResult ShowWarningMessage(string text, string caption)
 		{
 			throw new NotImplementedException();

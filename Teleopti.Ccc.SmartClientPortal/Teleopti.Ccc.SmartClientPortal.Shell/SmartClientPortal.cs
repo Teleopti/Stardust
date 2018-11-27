@@ -72,7 +72,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private readonly IToggleManager _toggleManager;
 		readonly int homeCommand = CommandIds.RegisterUserCommand("StartPage");
 		private bool showCustomerWebMenu = true;
-		private readonly WebUrlHolder _webUrlHolder;
 
 		protected SmartClientShellForm()
 		{
@@ -149,7 +148,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			_outlookPanelContentWorker = _container.Resolve<OutlookPanelContentWorker>();
 			_portalSettings = _container.Resolve<PortalSettings>();
 			_toggleManager = _container.Resolve<IToggleManager>();
-			_webUrlHolder = _container.Resolve<WebUrlHolder>();
 		}
 
 		void toolStripButtonHelpClick(object sender, EventArgs e)
@@ -267,16 +265,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			backStage1.Controls.Remove(backStageButtonSignCustomerWeb);
 
 			_container.Resolve<IHangfireClientStarter>().Start();
-		}
-
-
-
-		private string webServer
-		{
-			get
-			{
-				return _webUrlHolder.WebUrl;
-			}
 		}
 
 		private void showMem()

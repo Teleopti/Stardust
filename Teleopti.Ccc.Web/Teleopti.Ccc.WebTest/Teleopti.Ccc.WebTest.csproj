@@ -431,7 +431,6 @@
     <Compile Include="Core\Requests\DataProvider\AbsenceAccountProviderTest.cs" />
     <Compile Include="Core\Requests\DataProvider\ShiftTradeSiteOpenHourFilterTest.cs" />
     <Compile Include="Core\Requests\Mapping\AbsenceAccountMappingProfileTest.cs" />
-    <Compile Include="Core\Requests\Mapping\ShiftTradeEditScheduleLayerViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftExchangeOfferMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeScheduleViewModelMapperByFakeTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeSwapDetailViewModelMappingProfileTest.cs" />
@@ -506,7 +505,6 @@
     <Compile Include="Core\Common\DataProvider\PreferenceProviderTest.cs" />
     <Compile Include="Core\HttpPostOrPutAttributeTest.cs" />
     <Compile Include="Core\Message\DataProvider\PushMessageDialoguePersisterTest.cs" />
-    <Compile Include="Core\Message\Mapping\MessageViewModelMappingProfileTest.cs" />
     <Compile Include="Core\Message\ViewModelFactory\MessageViewModelFactoryTest.cs" />
     <Compile Include="Core\Message\DataProvider\PushMessageProviderTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryRequestsTest.cs" />

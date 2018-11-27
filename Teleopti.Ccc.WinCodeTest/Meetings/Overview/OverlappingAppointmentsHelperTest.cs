@@ -30,12 +30,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
 		}
 
 		[Test]
-		public void ShouldWarnIfMoreThanFiveMeetingsOverlapping()
-		{
-			Assert.That(_target.HasTooManyOverlapping(_appointments), Is.True);
-		}
-
-		[Test]
 		public void ShouldReduceOverlappingToFive()
 		{
 			var left = _target.ReduceOverlappingToFive(_appointments);

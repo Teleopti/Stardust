@@ -100,24 +100,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         }
 
         [Test]
-        public void VerifyCurrentSchedulePeriodNullChecks()
-        {
-            ISchedulePeriod schedulePeriod = _target.GetCurrentPersonPeriodByDate(new DateOnly(2005, 5, 2));
-            
-            Assert.IsNull(schedulePeriod);
-            Assert.IsNull(_target.PeriodDate);
-            Assert.AreEqual(-1, _target.Number);
-            Assert.IsNull(_target.PeriodType);
-            Assert.IsNull(_target.DaysOff);
-            Assert.AreEqual(TimeSpan.MinValue, _target.AverageWorkTimePerDay);
-            Assert.IsTrue(_target.CanGray);
-            Assert.IsFalse(_target.IsAverageWorkTimePerDayOverride);
-            Assert.IsFalse(_target.IsDaysOffOverride);
-            Assert.IsNull(_target.SchedulePeriod);
-
-        }
-
-        [Test]
         public void CheckDaysOffSetter()
         {
             int value = 5;

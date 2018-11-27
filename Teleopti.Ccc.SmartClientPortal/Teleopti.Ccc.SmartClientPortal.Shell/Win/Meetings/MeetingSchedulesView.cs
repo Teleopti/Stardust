@@ -603,11 +603,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			_composer.NotifyMeetingDatesChanged(this);
 		}
 
-		public void NotifyMeetingTimeChanged()
-		{
-			//_composer.NotifyMeetingTimeChanged(this);
-		}
-
 		private void dateTimePickerAdvStartDateValueChanged(object sender, EventArgs e)
 		{
 			dateIsChanged();

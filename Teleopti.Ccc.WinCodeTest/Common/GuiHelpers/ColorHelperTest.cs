@@ -48,8 +48,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common.GuiHelpers
 			Assert.AreEqual(Color.Black, ColorHelper.DefaultTextColor);
 			Assert.IsNotNull(ColorHelper.RibbonFormBaseColor());
 			Assert.IsNotNull(ColorHelper.ControlGradientPanelBrush());
-			Assert.IsNotNull(ColorHelper.RequestWarningTextColor());
-			Assert.IsNotNull(ColorHelper.RequestStandardTextColor());
 			Assert.IsNotNull(ColorHelper.TabBackColor());
 			Assert.IsNotNull(ColorHelper.TabForegroundColor());
 			Assert.IsNotNull(ColorHelper.GridControlGridInteriorColor());

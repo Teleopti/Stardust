@@ -41,12 +41,4 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public string Id { get; set; }
 		public string Name { get; set; }
 	}
-
-	public class PersonScheduleViewModelLayer
-	{
-		public string Color { get; set; }
-		public string Description { get; set; }
-		public string Start { get; set; }
-		public int Minutes { get; set; }
-	}
 }

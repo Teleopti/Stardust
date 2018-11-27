@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces
         void SetRecurringOption(RecurrentMeetingType recurrentMeetingType);
         void RefreshRecurrenceOption(RecurrentMeetingOptionViewModel meetingOptionViewModel);
         void SetRecurringExists(bool recurringExists);
-        //void SetMeetingDuration(TimeSpan duration);
         void AcceptAndClose();
     	void NotifyMeetingTimeChanged();
     }

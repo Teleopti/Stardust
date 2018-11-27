@@ -75,11 +75,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation
             _view.SetHeaderText(reportDetail.DisplayName);
         }
 
-	    public void ShowSpinningProgress(bool show)
-	    {
-		    _view.ShowSpinningProgress(show);
-	    }
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         public ReportSettingsScheduledTimePerActivityModel GetModelForScheduledTimePerActivityReport()
         {

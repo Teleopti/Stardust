@@ -105,23 +105,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         }
 
         [Test]
-        public void VerifyCurrentPersonAccountNullChecks()
-        {
-            SetTargetDayWithoutAccount();
-            IAccount account = _targetDay.GetCurrentPersonAccountByDate(new DateOnly(2005, 5, 2));
-
-            Assert.IsNull(account);
-            Assert.IsNull(_targetDay.AccountDate);
-            Assert.IsNull(_targetDay.Extra);
-            Assert.IsNull(_targetDay.Accrued);
-            Assert.IsNull(_targetDay.BalanceIn);
-            Assert.IsNull(_targetDay.BalanceOut);
-            Assert.IsTrue(_targetDay.CanGray);
-            Assert.IsNull(_targetDay.Used);
-            Assert.IsFalse(_targetDay.CanBold);
-        }
-
-        [Test]
         public void VerifyAccrued()
         {
             var unitOfWorkFactory = new FakeUnitOfWorkFactory(null, null, null);

@@ -137,15 +137,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 			}
 		}
 
-		public void ReloadCurrentGroupPageFromDatabase(IUnitOfWork uow)
-		{
-			if (CurrentGroupPage.Id.HasValue)
-			{
-				var groupPageRepository = _repositoryFactory.CreateGroupPageRepository(uow);
-				CurrentGroupPage = groupPageRepository.Get(CurrentGroupPage.Id.Value);
-			}
-		}
-
 		public IEnumerable<IContractSchedule> ContractScheduleCollection
 		{
 			get { return _contractScheduleCollection; }
