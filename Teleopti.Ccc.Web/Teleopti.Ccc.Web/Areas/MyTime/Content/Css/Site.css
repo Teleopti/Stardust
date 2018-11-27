@@ -1772,6 +1772,16 @@ button.btn.absence-report-cancel {
 	height: 20px;
 }
 
+/* Styles for chatbot */
+.chatbot {
+	position: fixed;
+	left: 0;
+	margin: 10px;
+	bottom: 0;
+	background-color: #f6f6f6;
+	opacity: 1;
+}
+
 /*Traffic Light New Icon Style*/
 .traffic-light-progress {
 	width: 21px;
