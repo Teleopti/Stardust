@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
-		private readonly IScheduledStaffingProvider _scheduledStaffingProvider;
 		private readonly IScheduledStaffingToDataSeries _scheduledStaffingToDataSeries;
 		private readonly IForecastedStaffingToDataSeries _forecastedStaffingToDataSeries;
 		
@@ -24,17 +23,14 @@ namespace Teleopti.Ccc.Domain.Staffing
 			INow now,
 			IUserTimeZone timeZone,
 			IIntervalLengthFetcher intervalLengthFetcher,
-			IScheduledStaffingProvider scheduledStaffingProvider,
 			IScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
 			IForecastedStaffingToDataSeries forecastedStaffingToDataSeries,
-
 			IIntradayStaffingApplicationService intradayStaffingApplicationService
 		)
 		{
 			_now = now;
 			_timeZone = timeZone;
 			_intervalLengthFetcher = intervalLengthFetcher;
-			_scheduledStaffingProvider = scheduledStaffingProvider;
 			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
 			_forecastedStaffingToDataSeries = forecastedStaffingToDataSeries;
 			
