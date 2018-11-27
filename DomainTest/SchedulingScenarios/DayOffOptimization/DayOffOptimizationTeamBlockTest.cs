@@ -119,6 +119,56 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate, agentToSchedule).DayOff()
 				.Should().Not.Be.Null();
 		}
+		
+		[Test]
+		public void ShouldNotContinueWhenWorsePeriodValueAndUsingTweakedValues()
+		{
+			var prefUsedInThisTest = OptimizationPreferencesProvider.Fetch();
+			prefUsedInThisTest.Advanced.UseTweakedValues = true;
+			OptimizationPreferencesProvider.SetFromTestsOnly(prefUsedInThisTest);
+			var firstDay = new DateOnly(2015, 10, 26); //mon
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2);
+			var scenario = ScenarioRepository.Has("some name");
+			planningPeriod.PlanningGroup.ModifyDefault(x =>
+			{
+				x.DayOffsPerWeek = new MinMax<int>(1, 3);
+				x.ConsecutiveWorkdays = new MinMax<int>(2, 20);
+			});
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 2);
+			schedulePeriod.SetDaysOff(2);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
+			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
+				20,
+				20,
+				3, //expected
+				20,
+				20,
+				20,
+				20,
+				20,
+				20,
+				1, //expected
+				2,
+				20,
+				20,
+				20
+			));
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(14)), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).SetDayOff(new DayOffTemplate());
+			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate).SetDayOff(new DayOffTemplate());
+
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
+
+			var dayOff1 = PersonAssignmentRepository.GetSingle(skillDays[2].CurrentDate).DayOff();
+			var dayOff2 = PersonAssignmentRepository.GetSingle(skillDays[9].CurrentDate).DayOff();
+
+			//when using tweaked values we should bail out when period value gets worse when we optimize
+			Assert.IsTrue(dayOff1 == null || dayOff2 == null);
+		}
 
 		public DayOffOptimizationTeamBlockTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
