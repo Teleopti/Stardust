@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Infrastructure.Events;
 namespace Teleopti.Ccc.Domain.Infrastructure
 {
 	public class CleanFailedQueueHandler: 
-		IHandleEvent<SharedHourTickEvent>,
+		IHandleEvent<CleanFailedQueue>,
 		IRunOnHangfire
 	{
 		private readonly ICleanHangfire _hangfireUtilities;
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 			_config = config;
 		}
 
-		public void Handle(SharedHourTickEvent @event)
+		public void Handle(CleanFailedQueue @event)
 		{
 			var expiryDays = _config.ReadValue("HangfireCleanFailedJobsAfterDays", 90);
 			_hangfireUtilities.CleanFailedJobsBefore(DateTime.UtcNow - TimeSpan.FromDays(expiryDays));

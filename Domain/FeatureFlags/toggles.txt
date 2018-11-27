@@ -43,7 +43,6 @@ RTA_TooManyPersonAssociationChangedEvents_Packages_78669 = true
 RTA_StateQueueFloodPrevention_77710 = true
 RTA_ReviewHistoricalAdherence_74770 = RC
 MessageBroker_HttpSenderThrottleRequests_79140 = RC
-MessageBroker_VeganBurger_79140 = RC
 
 # Dumplings, can any of these be removed? #
 WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010 = true

@@ -232,7 +232,6 @@
     <Compile Include="Forecasting\Models\WorkloadQueueStatisticsViewModel.cs" />
     <Compile Include="Forecasting\SkillStaffingIntervalUnderstaffing.cs" />
     <Compile Include="Infrastructure\DeadLockRetrier.cs" />
-    <Compile Include="Infrastructure\Events\SharedMinuteTickEvent.cs" />
     <Compile Include="Infrastructure\HttpRequestHandler.cs" />
     <Compile Include="Infrastructure\IHttpRequestHandler.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUserCulture.cs" />
@@ -290,8 +289,6 @@
     <Compile Include="Forecasting\WorkloadNameBuilder.cs" />
     <Compile Include="Intraday\To Staffing\StaffingIntervalModel.cs" />
     <Compile Include="Logon\SingleOwnedPerson.cs" />
-    <Compile Include="MessageBroker\Server\MessageBrokerMailboxPurger.cs" />
-    <Compile Include="MessageBroker\Server\MessageBrokerServerNoMailboxPurge.cs" />
     <Compile Include="MultiTenancy\ActiveTenants.cs" />
     <Compile Include="Notification\INotificationServiceClient.cs" />
     <Compile Include="Notification\NotificationServiceClient.cs" />
@@ -1616,7 +1613,7 @@
     <Compile Include="Common\IBusinessUnitScope.cs" />
     <Compile Include="Helper\DateRangeExtensions.cs" />
     <Compile Include="Infrastructure\CleanFailedQueueHandler.cs" />
-    <Compile Include="Infrastructure\Events\SharedHourTickEvent.cs" />
+    <Compile Include="Infrastructure\Events\CleanFailedQueue.cs" />
     <Compile Include="Infrastructure\IIndexMaintenanceRepository.cs" />
     <Compile Include="Infrastructure\IndexMaintenanceStardustHandler.cs" />
     <Compile Include="Intraday\Domain\EslInterval.cs" />

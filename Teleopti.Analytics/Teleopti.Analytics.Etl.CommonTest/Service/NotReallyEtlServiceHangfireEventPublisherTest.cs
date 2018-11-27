@@ -70,13 +70,12 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		}
 
 		[Test]
-		public void ShouldPublishSharedEvents()
+		public void ShouldPublishCleanFailedQueue()
 		{
 			hasTenant("t");
 			RecurringEventPublishings.UpdatePublishings();
 
-			Publisher.Publishings.Select(x => x.Event.GetType()).Should().Contain(typeof(SharedMinuteTickEvent));
-			Publisher.Publishings.Select(x => x.Event.GetType()).Should().Contain(typeof(SharedHourTickEvent));
+			Publisher.Publishings.First().Event.GetType().Should().Be.EqualTo<CleanFailedQueue>();
 		}
 
 		[Test]
