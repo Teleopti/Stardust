@@ -267,7 +267,7 @@
 		};
 
 		vm.isExportScheduleEnabled = function () {
-			return vm.toggles.WfmTeamSchedule_ExportSchedulesToExcel_45795 && vm.permissions.HasExportSchedulePermission;
+			return vm.permissions.HasExportSchedulePermission;
 		}
 
 		vm.openExportPanel = function () {
