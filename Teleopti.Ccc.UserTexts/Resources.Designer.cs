@@ -14700,7 +14700,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A planning group is needed to be able to schedule your agents. Do you want to create a planning group?.
+        ///   Looks up a localized string similar to A planning group is needed to be able to schedule your agents..
         /// </summary>
         public static string HelpCreatePlanningGroup {
             get {
