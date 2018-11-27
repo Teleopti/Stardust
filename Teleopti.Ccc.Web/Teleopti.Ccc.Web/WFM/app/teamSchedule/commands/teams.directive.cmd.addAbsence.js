@@ -117,10 +117,7 @@
 		function updateInvalidAgents() {
 			if (vm.isFullDayAbsence) {
 				determineIsSameTimezoneForFullDayAbsence();
-			} else if (vm.isAbsenceTimeValid()) {
-				checkIfTimeRangeAllowedForIntradayAbsence();
-			}
-			return;
+			} 
 		};
 
 		function getTimeRangeInCurrentTimezone() {
@@ -153,32 +150,11 @@
 			});
 			vm.invalidAgentNameListString = invalidAgentNameList.join(', ');
 		}
-
-		function checkIfTimeRangeAllowedForIntradayAbsence() {
-			vm.invalidAgents = [];
-			var timeRangeMoment = {
-				startTime: moment(vm.timeRange.startTime),
-				endTime: moment(vm.timeRange.endTime)
-			}
-			vm.selectedAgents.forEach(function (agent) {
-				var personSchedule = vm.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId);
-
-				if (!Toggle.WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010 && !belongsToDateDecider
-					.checkTimeRangeAllowedForIntradayAbsence(timeRangeMoment,
-					belongsToDateDecider.normalizePersonScheduleVm(personSchedule, vm.getCurrentTimezone())))
-					vm.invalidAgents.push(agent);
-			});
-
-			var invalidAgentNameList = vm.invalidAgents.map(function (agent) {
-				return agent.Name;
-			});
-			vm.invalidAgentNameListString = invalidAgentNameList.join(', ');
-		}
-
+		
 		vm.anyValidAgent = function () {
 			updateInvalidAgents();
 			return vm.invalidAgents.length !== vm.selectedAgents.length;
-		};
+		}
 
 		function addAbsence(requestData) {
 			if (requestData.PersonIds.length === 0) {

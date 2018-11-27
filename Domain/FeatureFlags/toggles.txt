@@ -44,7 +44,6 @@ RTA_StateQueueFloodPrevention_77710 = true
 RTA_ReviewHistoricalAdherence_74770 = RC
 
 # Dumplings, can any of these be removed? #
-WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010 = true
 WfmTeamSchedule_AddNDeleteDayOff_40555 = true
 WfmTeamSchedule_RemoveShift_46322 = true
 WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871 = RC
