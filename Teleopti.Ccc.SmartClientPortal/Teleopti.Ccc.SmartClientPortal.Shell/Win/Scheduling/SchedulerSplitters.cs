@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private IEnumerable<IPerson> _filteredPersons = new List<IPerson>();
 		private IVirtualSkillHelper _virtualSkillHelper;
 		private readonly ContextMenuStrip _contextMenuSkillGrid;
+		private SplitterManagerRestrictionView _splitterManager;
 
 		public SchedulerSplitters()
         {
@@ -40,7 +41,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				tabSkillData.TabPanelBackColor = Color.FromArgb(199, 216, 237);
 			validationAlertsView1.AgentDoubleClick += validationAlertsView1AgentDoubleClick;
 			_contextMenuSkillGrid = new ContextMenuStrip();
-        }
+			_splitterManager = new SplitterManagerRestrictionView
+			{
+				MainSplitter = SplitContainerAdvMainContainer,
+				LeftMainSplitter = lessIntellegentSplitContainerAdvMain,
+				GraphResultSplitter = lessIntellegentSplitContainerAdvResultGraph,
+				GridEditorSplitter = teleoptiLessIntelligentSplitContainerLessIntelligent1,
+				RestrictionViewSplitter = SplitContainerView
+			};
+		}
 
 		public event EventHandler<System.ComponentModel.ProgressChangedEventArgs> RestrictionsNotAbleToBeScheduledProgress;
 		public event EventHandler<ValidationViewAgentDoubleClickEvenArgs> ValidationAlertsAgentDoubleClick;
@@ -54,23 +63,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         {
             get { return multipleHostControl1; }
         }
-        public TeleoptiLessIntelligentSplitContainer SplitContainerAdvMain
-        {
-            get { return lessIntellegentSplitContainerAdvMain; }
-        }
-		
+
 		public TeleoptiLessIntelligentSplitContainer SplitContainerAdvMainContainer
         {
             get { return lessIntellegentSplitContainerAdvMainContainer; }
         }
-        public TeleoptiLessIntelligentSplitContainer SplitContainerAdvResultGraph
-        {
-            get { return lessIntellegentSplitContainerAdvResultGraph; }
-        }
-        public TeleoptiLessIntelligentSplitContainer SplitContainerLessIntelligent1
-        {
-            get { return teleoptiLessIntelligentSplitContainerLessIntelligent1; }
-        }
+
         public TeleoptiLessIntelligentSplitContainer SplitContainerView
         {
             get { return teleoptiLessIntellegentSplitContainerView; }
@@ -112,7 +110,39 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             get { return grid; }
         }
 
-        private void pinnedToolStripMenuItemClick(object sender, EventArgs e)
+		public void ShowGraph(bool show)
+		{
+			_splitterManager.ShowGraph = show;
+		}
+
+		public void ShowEditor(bool show)
+		{
+			_splitterManager.ShowEditor = show;
+		}
+
+		public void ShowResult(bool show)
+		{
+			_splitterManager.ShowResult = show;
+		}
+
+		public void ShowRestrictionView(bool show)
+		{
+			_splitterManager.ShowRestrictionView = show;
+		}
+
+		public void EnableShiftEditor(bool enable)
+		{
+			if (enable)
+			{
+				_splitterManager.EnableShiftEditor();
+			}
+			else
+			{
+				_splitterManager.DisableShiftEditor();
+			}
+		}
+
+		private void pinnedToolStripMenuItemClick(object sender, EventArgs e)
         {
             var tab = tabSkillData.SelectedTab;
             

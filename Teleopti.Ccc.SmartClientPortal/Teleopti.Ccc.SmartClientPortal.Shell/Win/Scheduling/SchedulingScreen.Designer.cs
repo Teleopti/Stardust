@@ -26,8 +26,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
                     components.Dispose();
                 if (_scheduleView != null)
                     _scheduleView.Dispose();
-                if (_splitterManager != null)
-                    _splitterManager.Dispose();
                 if (schedulerSplitters1!=null)
                 {
                     schedulerSplitters1.MultipleHostControl3.GotFocus -= multipleHostControl3OnGotFocus;

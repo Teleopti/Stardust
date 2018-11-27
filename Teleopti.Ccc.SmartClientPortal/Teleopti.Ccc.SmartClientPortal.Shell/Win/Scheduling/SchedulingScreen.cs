@@ -78,7 +78,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.LockMenuBuilders;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenInternals;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionPreferences;
-using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers;
@@ -170,7 +169,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private SchedulingScreenSettings _currentSchedulingScreenSettings;
 		private ZoomLevel _currentZoomLevel;
 		private ZoomLevel _previousZoomLevel;
-		private SplitterManagerRestrictionView _splitterManager;
 		private readonly IWorkShiftWorkTime _workShiftWorkTime;
 		private bool _inUpdate;
 		private int _totalScheduled;
@@ -1797,7 +1795,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				{
 					gridSelectionChangedRunning = true;
 
-					SchedulerRibbonHelper.EnableScheduleButton(toolStripSplitButtonSchedule, _scheduleView, _splitterManager,
+					SchedulerRibbonHelper.EnableScheduleButton(toolStripSplitButtonSchedule, _scheduleView,
 						_teamLeaderMode);
 
 					disableButtonsIfTeamLeaderMode();
@@ -1873,13 +1871,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				if (scheduleDay == null)
 				{
-					splitterManager.DisableShiftEditor();
+					schedulerSplitters1.EnableShiftEditor(false);
 					return;
 				}
 
-				splitterManager.EnableShiftEditor();
-
-				scheduleDay = SchedulerState.SchedulerStateHolder.Schedules[scheduleDay.Person].ReFetch(scheduleDay);
+				schedulerSplitters1.EnableShiftEditor(true);
+				scheduleDay = SchedulerState.SchedulerStateHolder.Schedules[scheduleDay.Person]
+					.ReFetch(scheduleDay);
 
 				if (_showEditor)
 				{
@@ -1894,7 +1892,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					{
 						_scheduleView.SetSelectedDateLocal(scheduleDay.DateOnlyAsPeriod.DateOnly);
 					}
-
 				}
 			}
 		}
@@ -2137,13 +2134,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void displayOptionsFromSetting(SchedulingScreenSettings settings)
 		{
-			splitterManager.ShowResult = !settings.HideResult;
+			schedulerSplitters1.ShowResult(!settings.HideResult);
 			toolStripButtonShowResult.Checked = !settings.HideResult;
 			_showResult = !settings.HideResult;
-			splitterManager.ShowGraph = !settings.HideGraph;
+			schedulerSplitters1.ShowGraph(!settings.HideGraph);
 			toolStripButtonShowGraph.Checked = !settings.HideGraph;
 			_showGraph = !settings.HideGraph;
-			splitterManager.ShowEditor = !settings.HideEditor;
+			schedulerSplitters1.ShowEditor(!settings.HideEditor);
 			toolStripButtonShowEditor.Checked = !settings.HideEditor;
 			_showEditor = !settings.HideEditor;
 			_showInfoPanel = !settings.HideInfoPanel;
@@ -2153,8 +2150,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_showRibbonTexts = !settings.HideRibbonTexts;
 			if (_teamLeaderMode)
 			{
-				splitterManager.ShowGraph = false;
-				splitterManager.ShowResult = false;
+				schedulerSplitters1.ShowGraph(false);
+				schedulerSplitters1.ShowResult(false);
 			}
 		}
 
@@ -5595,43 +5592,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				wpfShiftEditor1.EnableMoveAllLayers(false);
 		}
 
-		private SplitterManagerRestrictionView splitterManager
-		{
-			get
-			{
-				if (_splitterManager == null)
-				{
-					_splitterManager = new SplitterManagerRestrictionView
-					{
-						MainSplitter = schedulerSplitters1.SplitContainerAdvMainContainer,
-						LeftMainSplitter = schedulerSplitters1.SplitContainerAdvMain,
-						GraphResultSplitter = schedulerSplitters1.SplitContainerAdvResultGraph,
-						GridEditorSplitter = schedulerSplitters1.SplitContainerLessIntelligent1,
-						RestrictionViewSplitter = schedulerSplitters1.SplitContainerView
-					};
-				}
-				return _splitterManager;
-			}
-		}
-
 		private void toolStripButtonShowGraphClick(object sender, EventArgs e)
 		{
 			toolStripButtonShowGraph.Checked = !toolStripButtonShowGraph.Checked;
-			splitterManager.ShowGraph = toolStripButtonShowGraph.Checked;
+			schedulerSplitters1.ShowGraph(toolStripButtonShowGraph.Checked);
 			_showGraph = toolStripButtonShowGraph.Checked;
 		}
 
 		private void toolStripButtonShowResultClick(object sender, EventArgs e)
 		{
 			toolStripButtonShowResult.Checked = !toolStripButtonShowResult.Checked;
-			splitterManager.ShowResult = toolStripButtonShowResult.Checked;
+			schedulerSplitters1.ShowResult(toolStripButtonShowResult.Checked);
 			_showResult = toolStripButtonShowResult.Checked;
 		}
 
 		private void toolStripButtonShowEditorClick(object sender, EventArgs e)
 		{
 			toolStripButtonShowEditor.Checked = !toolStripButtonShowEditor.Checked;
-			splitterManager.ShowEditor = toolStripButtonShowEditor.Checked;
+			schedulerSplitters1.ShowEditor(true);
 			_showEditor = toolStripButtonShowEditor.Checked;
 			updateShiftEditor();
 		}
@@ -5654,12 +5632,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (show)
 			{
 				toolStripButtonShowResult.Checked = false;
-				splitterManager.ShowResult = toolStripButtonShowResult.Checked;
+				schedulerSplitters1.ShowResult(toolStripButtonShowResult.Checked);
 				toolStripButtonShowGraph.Checked = false;
-				splitterManager.ShowGraph = toolStripButtonShowGraph.Checked;
-				_splitterManager.ShowRestrictionView = true;
+				schedulerSplitters1.ShowGraph(toolStripButtonShowGraph.Checked);
+				schedulerSplitters1.ShowRestrictionView(true);
 				toolStripButtonShowEditor.Checked = true;
-				splitterManager.ShowEditor = true;
+				schedulerSplitters1.ShowEditor(true);
 				toolStripMenuItemLock.Enabled = false;
 				toolStripMenuItemUnlock.Enabled = false;
 				toolStripSplitButtonLock.Enabled = false;
@@ -5669,12 +5647,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			else
 			{
 				toolStripButtonShowResult.Checked = _showResult;
-				splitterManager.ShowResult = toolStripButtonShowResult.Checked;
+				schedulerSplitters1.ShowResult(toolStripButtonShowResult.Checked);
 				toolStripButtonShowGraph.Checked = _showGraph;
-				splitterManager.ShowGraph = toolStripButtonShowGraph.Checked;
-				splitterManager.ShowEditor = _showEditor;
+				schedulerSplitters1.ShowGraph(toolStripButtonShowGraph.Checked);
+				schedulerSplitters1.ShowEditor(_showEditor);
 				toolStripButtonShowEditor.Checked = _showEditor;
-				_splitterManager.ShowRestrictionView = false;
+				schedulerSplitters1.ShowRestrictionView(false);
 				toolStripMenuItemLock.Enabled = true;
 				toolStripMenuItemUnlock.Enabled = true;
 				toolStripSplitButtonLock.Enabled = true;
@@ -5682,8 +5660,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				toolStripMenuItemSortBy.Enabled = true;
 				if (_teamLeaderMode)
 				{
-					splitterManager.ShowGraph = false;
-					splitterManager.ShowResult = false;
+					schedulerSplitters1.ShowGraph(false);
+					schedulerSplitters1.ShowResult(false);
 				}
 			}
 
