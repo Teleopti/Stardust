@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			{
 				connection.Open();
 				StardustJobFeedback.SendProgress($"Will run script");
-				var script = HelperScripts.ClearAbsenceRequestRequestPersonRequestOnPeriod;
+				var script = HelperScripts.ClearExistingAbsencesOnperiod;
 				using (var command = new SqlCommand(script, connection))
 				{
 					command.ExecuteNonQuery();

@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Requests.PerformanceTuningTest
+﻿namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
 	public static class HelperScripts
 	{
@@ -11,14 +11,22 @@ where parent in (  select id from PersonRequest where Subject  = 'Story79139')
  
 delete from PersonRequest where Subject  = 'Story79139'";
 
-		public static string ClearAbsenceRequestRequestPersonRequestOnPeriodForParalelTest => @"delete from AbsenceRequest
-where request in (select id from request
-where parent in (  select id from PersonRequest where Subject  = 'Story7913921'))
 
-delete from request
-where parent in (  select id from PersonRequest where Subject  = 'Story7913921')
- 
-delete from PersonRequest where Subject  = 'Story7913921'";
+		public static string ClearExistingAbsencesOnperiod => @"declare @start datetime = '2016-03-13 00:00:00' 
+declare @end datetime = '2016-03-18 00:00:00' 
+--select * 
+delete 
+from PersonAbsence
+where [Minimum] between @start and @end or Maximum between @start and @end
+DELETE FROM AbsenceRequest WHERE Request IN (SELECT Id from Request where StartDateTime between  @start  and @end)
+delete from Request where StartDateTime between  @start  and @end and Id not in (select Request from ShiftTradeRequest)
+delete from PersonRequest where id not in(select parent from Request )
+
+
+truncate table [ReadModel].[SkillCombinationResource]
+truncate table [ReadModel].[SkillCombination]
+truncate table [ReadModel].[SkillCombinationResourceDelta]
+truncate table [dbo].[JobStartTime]";
 
 		public static string PersonWithValidSetupForIntradayRequestOnPeriod => @"
 
