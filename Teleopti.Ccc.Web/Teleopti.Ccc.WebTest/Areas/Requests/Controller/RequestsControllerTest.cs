@@ -87,6 +87,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 			result.Requests.First().Shifts.First().BelongsToDate.Should().Be.EqualTo(expactedDate);
 		}
 
+		[Test]
+		public void ShouldGetShiftCategory()
+		{
+			var expactedDate = new DateTime(2018, 11, 26);
+			var input = setupData(expactedDate);
+
+			var result = Target.GetRequests(input);
+			result.Requests.First().Shifts.First().IsNotScheduled.Should().Be.False();
+		}
+
 		private AllRequestsFormData setupData(DateTime date)
 		{
 			var scenarioId = Guid.NewGuid();
@@ -120,8 +130,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		private void setPermissions(IPerson person)
 		{
 			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.WebRequests);
+			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules);
+			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 			var role = ApplicationRoleFactory.CreateRole("test", "test");
-			role.AddApplicationFunction(ApplicationFunctionFactory.CreateApplicationFunction(DefinedRaptorApplicationFunctionPaths.ViewSchedules));
 			role.AddApplicationFunction(ApplicationFunctionFactory.CreateApplicationFunction(DefinedRaptorApplicationFunctionPaths.WebRequests));
 			role.AvailableData = new AvailableData { AvailableDataRange = AvailableDataRangeOption.Everyone };
 			person.PermissionInformation.AddApplicationRole(role);
