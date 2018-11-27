@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<SubscriptionFiller>().As<IBeforeSubscribe>().SingleInstance();
-			if (_config.Toggle(Toggles.MessageBroker_ActuallyPurgeEvery5Minutes_79140))
+			if (_config.Toggle(Toggles.MessageBroker_VeganBurger_79140))
 				builder.RegisterType<MessageBrokerServerNoMailboxPurge>().As<IMessageBrokerServer>().SingleInstance().ApplyAspects();
 			else
 				builder.RegisterType<MessageBrokerServer>().As<IMessageBrokerServer>().SingleInstance().ApplyAspects();

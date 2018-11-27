@@ -37,11 +37,12 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		[Test]
 		[Setting("MessageBrokerMailboxPurgeIntervalInSeconds", 0)]
 		[Setting("MessageBrokerMailboxExpirationInSeconds", 0)]
+		[Category("LongRunning")]
 		public void ShouldNotDeadlockWhenPurging()
 		{
 			var run = new ConcurrencyRunner();
 
-			var messages = Enumerable.Range(0, 10)
+			var messages = Enumerable.Range(0, 1000)
 				.Select(i => new Message {BusinessUnitId = Guid.NewGuid().ToString()})
 				.ToArray();
 
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 				Server.PopMessages(messages.GetRandom().Routes().First(), Guid.NewGuid().ToString());
 				Server.NotifyClients(messages.GetRandom());
 				Purger.Handle(new SharedMinuteTickEvent());
-			}).Times(100);
+			}).Times(1000);
 
 			Assert.DoesNotThrow(() => run.WaitForException<SqlException>());
 		}

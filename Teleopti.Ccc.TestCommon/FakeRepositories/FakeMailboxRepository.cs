@@ -65,5 +65,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			var mailboxesToDelete = _data.Where(x => _now.UtcDateTime() > x.ExpiresAt).ToArray();
 			mailboxesToDelete.ForEach(x => _data.Remove(x));
 		}
+
+		public void PurgeOneChunkOfMailboxes()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void PurgeOneChunkOfNotifications()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

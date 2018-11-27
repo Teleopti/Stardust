@@ -109,6 +109,22 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 				.ExecuteUpdate();
 		}
 
+		public void PurgeOneChunkOfMailboxes() =>
+			_unitOfWork.Current().CreateSqlQuery($@"
+DELETE TOP (50) 
+FROM [msg].Mailbox WITH (READPAST, ROWLOCK) 
+WHERE ExpiresAt <= :time
+")
+				.SetParameter("time", _now.UtcDateTime())
+				.ExecuteUpdate();
+
+		public void PurgeOneChunkOfNotifications() =>
+			_unitOfWork.Current().CreateSqlQuery(@"
+DELETE TOP (1000) mn FROM [msg].MailboxNotification mn WITH (READPAST, ROWLOCK) 
+LEFT JOIN [msg].Mailbox m WITH (NOLOCK) ON mn.MailboxId = m.Id 
+WHERE m.Id IS NULL
+").ExecuteUpdate();
+
 		private class InternalMessage : Message
 		{
 			public Guid MailboxId { get; set; }

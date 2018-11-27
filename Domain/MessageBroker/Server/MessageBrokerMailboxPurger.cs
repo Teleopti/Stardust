@@ -6,8 +6,7 @@ using Teleopti.Ccc.Domain.Infrastructure.Events;
 
 namespace Teleopti.Ccc.Domain.MessageBroker.Server
 {
-	[EnabledBy(Toggles.MessageBroker_ActuallyPurgeEvery5Minutes_79140)]
-	[RunInterval(5)]
+	[EnabledBy(Toggles.MessageBroker_VeganBurger_79140)]
 	public class MessageBrokerMailboxPurger :
 		IHandleEvent<SharedMinuteTickEvent>,
 		IRunOnHangfire
@@ -19,10 +18,18 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 			_mailbox = mailbox;
 		}
 
-		[MessageBrokerUnitOfWork]
-		public virtual void Handle(SharedMinuteTickEvent @event)
+		public void Handle(SharedMinuteTickEvent @event)
 		{
-			_mailbox.Purge();
+			PurgeSomeMailboxes();
+			PurgeSomeNotifications();
 		}
+
+		[MessageBrokerUnitOfWork]
+		protected virtual void PurgeSomeMailboxes() =>
+			_mailbox.PurgeOneChunkOfMailboxes();
+		
+		[MessageBrokerUnitOfWork]
+		protected virtual void PurgeSomeNotifications() =>
+			_mailbox.PurgeOneChunkOfNotifications();
 	}
 }
