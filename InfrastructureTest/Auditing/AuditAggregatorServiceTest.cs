@@ -32,12 +32,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 		public FakeUserCulture UserCulture;
 		public ICurrentUnitOfWork CurrentUnitOfWork;
 		public IPersonRepository PersonRepository;
+		public ResultCountOfAggregatedAudits ResultCountOfAggregatedAudits;
 
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			isolate.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
-			isolate.UseTestDouble<AuditAggregatorService>().For<IAuditAggregatorService>();
+			isolate.UseTestDouble<AuditAggregatorService>().For<AuditAggregatorService>();
+			isolate.UseTestDouble<ResultCountOfAggregatedAudits>().For<ResultCountOfAggregatedAudits>();
+
 		}
 
 		[Test]
@@ -104,79 +107,75 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 			audits.Count(f => f.Action == Resources.ResourceManager.GetString(personAccessAudit.Action, UserCulture.GetCulture())).Should().Be(1);
 		}
 
-		//[Test]
-		//public void ShouldPurgeStaffingAuditAndPersonAccessAudit()
-		//{
-		//	var person = PersonFactory.CreatePersonWithId();
-		//	var staffingAudit = createStaffingAudit(person);
-		//	var staffingAuditOld = createStaffingAudit(person, DateTime.UtcNow.AddMonths(-5));
-		//	IApplicationRole role = new ApplicationRole { Name = "Name" };
-		//	var personAccessAudit = createPersonAccess(person, role);
-		//	var personAccessAuditOld = createPersonAccess(person, role, DateTime.UtcNow.AddMonths(-4));
+		[Test]
+		public void ShouldReturnResultInSortedOrder()
+		{
+			var now = new DateTime(2018, 10, 14, 14, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePerson();
+			PersonRepository.Add(person);
+			CurrentUnitOfWork.Current().PersistAll();
 
-		//	StaffingAuditRepository.Add(staffingAudit);
-		//	StaffingAuditRepository.Add(staffingAuditOld);
-		//	PersonAccessAuditRepository.Add(personAccessAudit);
-		//	PersonAccessAuditRepository.Add(personAccessAuditOld);
-		//	ApplicationRoleRepository.Add(role);
+			insertSomeStaffingAudits(now.AddDays(1), person, 1);
+			insertSomeStaffingAudits(now.AddDays(2), person, 1);
+			insertSomePersonAccessAudits(now.AddDays(-1), person, 1);
+			insertSomePersonAccessAudits(now.AddDays(3), person, 1);
+			CurrentUnitOfWork.Current().PersistAll();
 
-		//	Target.PurgeOldAudits();
+			var audits = Target.Load(person.Id.GetValueOrDefault(), now.AddDays(-5), now.AddDays(+5));
+			audits.Count.Should().Be(4);
+			audits[0].TimeStamp.Should().Be(now.AddDays(3));
+			audits[1].TimeStamp.Should().Be(now.AddDays(2));
+			audits[2].TimeStamp.Should().Be(now.AddDays(1));
+			audits[3].TimeStamp.Should().Be(now.AddDays(-1));
+		}
 
-		//	var result = Target.Load(person.Id.GetValueOrDefault(), DateTime.MinValue, DateTime.MaxValue);
 
-		//	result.Count.Should().Be(2);
-		//}
+		[Test]
+		public void ShouldReturnOnlyFirst100Recored()
+		{
+			var now = new DateTime(2018, 10, 14, 14, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePerson();
+			PersonRepository.Add(person);
+			CurrentUnitOfWork.Current().PersistAll();
 
-		//[Test]
-		//public void ShouldCallPurgeServiceForStaffing()
-		//{
-		//	var person = PersonFactory.CreatePersonWithId();
-		//	var staffingAudit = createStaffingAudit(person);
-		//	staffingAudit.TimeStamp = DateTime.Now.AddMonths(-5);
-		//	StaffingAuditRepository.Add(staffingAudit);
+			insertSomeStaffingAudits(now.AddDays(-10), person,10);
+			insertSomeStaffingAudits(now.AddDays(1), person,50);
+			insertSomePersonAccessAudits(now.AddDays(-10), person,10);
+			insertSomePersonAccessAudits(now.AddDays(1), person,50);
+			CurrentUnitOfWork.Current().PersistAll();
 
-		//	Target.PurgeOldAudits();
+			var audits = Target.Load(person.Id.GetValueOrDefault(), now.AddDays(-20), now.AddDays(+20));
+			audits.Count.Should().Be.EqualTo(ResultCountOfAggregatedAudits.Limit);
+			audits.Any(x=>x.TimeStamp==now.AddDays(-10)).Should().Be.False();
 
-		//	StaffingAuditRepository.LoadAll().Count().Should().Be.EqualTo(0);
+		}
 
-		//}
+		private void insertSomePersonAccessAudits(DateTime now, IPerson person,int count)
+		{
+			var appRole = ApplicationRoleFactory.CreateRole("Superman", "The man");
+			ApplicationRoleRepository.Add(appRole);
+			dynamic role = new { RoleId = appRole.Id.GetValueOrDefault(), Name = appRole.DescriptionText };
+			
+			foreach (var i in Enumerable.Range(0, count))
+			{
+				var personAccess = new PersonAccess(person,
+					person,
+					PersonAuditActionType.GrantRole.ToString(),
+					PersonAuditActionResult.Change.ToString(),
+					JsonConvert.SerializeObject(role));
+				personAccess.TimeStamp = now;
+				PersonAccessAuditRepository.Add(personAccess);
+			}
+			
+		}
 
-		//private static PersonAccess createPersonAccess(IPerson person = null, IApplicationRole role = null, DateTime? timeStamp = null)
-		//{
-		//	if(person == null)
-		//		 person = PersonFactory.CreatePersonWithId();
-
-		//	if(role == null)
-		//		role = new ApplicationRole { Name = "Name" };
-
-		//	dynamic role2 = new { RoleId = role.Id, Name = "Name" };
-
-		//	if (timeStamp == null)
-		//		timeStamp = DateTime.UtcNow;
-
-		//	var personAccessAudit = new PersonAccess(
-		//			person,
-		//			person,
-		//			PersonAuditActionType.GrantRole.ToString(),
-		//			PersonAuditActionResult.Change.ToString(),
-		//			JsonConvert.SerializeObject(role2))
-		//		{ TimeStamp = timeStamp.GetValueOrDefault() };
-
-		//	return personAccessAudit;
-		//}
-
-		//private static StaffingAudit createStaffingAudit(IPerson person = null, DateTime? timeStamp = null)
-		//{
-		//	if (person == null)
-		//		person = PersonFactory.CreatePersonWithId();
-
-		//	if(timeStamp == null)
-		//		timeStamp = DateTime.UtcNow;
-		//	var staffingAudit = new StaffingAudit(person, StaffingAuditActionConstants.ImportBpo, "abc.txt", "BPO")
-		//		{ TimeStamp = timeStamp.GetValueOrDefault() };
-
-		//	return staffingAudit;
-		//}
-
+		private void insertSomeStaffingAudits(DateTime now, IPerson person, int count)
+		{
+			foreach (var i in Enumerable.Range(0, count))
+			{
+				StaffingAuditRepository.Add(new StaffingAudit(person, StaffingAuditActionConstants.ImportStaffing, "BPO", "abc.txt","") { TimeStamp = now });
+			}
+			
+		}
 	}
 }

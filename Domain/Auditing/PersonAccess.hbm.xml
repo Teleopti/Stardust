@@ -65,7 +65,7 @@
 	<query name="PersonAccessAuditOnCriteria">
 		<![CDATA[
 Select s from PersonAccess s
-			where s.TimeStamp between :StartDate and :EndDate and :PersonId = s.ActionPerformedById
+			where s.TimeStamp between :StartDate and :EndDate and :PersonId = s.ActionPerformedById order by s.TimeStamp
 
 ]]>
 	</query>

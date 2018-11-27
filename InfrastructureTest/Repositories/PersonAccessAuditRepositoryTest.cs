@@ -3,7 +3,9 @@ using SharpTestsEx;
 using System;
 using System.Linq;
 using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.Auditing;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -95,6 +97,47 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			audits.Count().Should().Be(2);
 		}
 
+		[Test]
+		public void ShouldReturnSortedAuditsBasedOnTimestamp()
+		{
+			var rep = new PersonAccessAuditRepository(CurrUnitOfWork);
+			var now = new DateTime(2018, 10, 16, 10, 0, 0, DateTimeKind.Utc);
+			var personAccess1 = CreateAggregateWithCorrectBusinessUnit();
+			personAccess1.TimeStamp = new DateTime(2018, 10, 16, 11, 0, 0, DateTimeKind.Utc);
+			PersistAndRemoveFromUnitOfWork(personAccess1);
+
+			var personAccess2 = CreateAggregateWithCorrectBusinessUnit();
+			personAccess2.TimeStamp = new DateTime(2018, 10, 16, 10, 0, 0, DateTimeKind.Utc);
+			PersistAndRemoveFromUnitOfWork(personAccess2);
+
+			var personAccess3 = CreateAggregateWithCorrectBusinessUnit();
+			personAccess3.TimeStamp = new DateTime(2018, 10, 16, 12, 0, 0, DateTimeKind.Utc);
+			PersistAndRemoveFromUnitOfWork(personAccess3);
+
+			var audits = rep.LoadAudits(LoggedOnPerson, now.AddDays(-5), now.AddDays(5));
+			audits.Count().Should().Be(3);
+			audits.First().TimeStamp.Should().Be(personAccess2.TimeStamp);
+			audits.Second().TimeStamp.Should().Be(personAccess1.TimeStamp);
+			audits.Third().TimeStamp.Should().Be(personAccess3.TimeStamp);
+		}
+
+		[Test]
+		public void ShouldOnlyReturnTop100()
+		{
+			var rep = new PersonAccessAuditRepository(CurrUnitOfWork);
+			var now = new DateTime(2018,10,16,10,0,0,DateTimeKind.Utc);
+			foreach (var i in Enumerable.Range(0,200))
+			{
+				var personAccess = CreateAggregateWithCorrectBusinessUnit();
+				personAccess.TimeStamp = now;
+				PersistAndRemoveFromUnitOfWork(personAccess);
+			}
+
+			var audits = rep.LoadAudits(LoggedOnPerson, now.AddDays(-200), now.AddDays(100));
+			audits.Count().Should().Be(100);
+		}
+
+		
 		protected override IPersonAccess CreateAggregateWithCorrectBusinessUnit()
 		{
 			return new PersonAccess(

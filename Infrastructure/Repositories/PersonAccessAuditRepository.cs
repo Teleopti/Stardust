@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -22,7 +23,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetDateTime("EndDate", endDate.AddDays(1).AddMinutes(-1))
 				.SetEntity("PersonId", personId)
 				.List<IPersonAccess>());
-			return results;
+			//do it in SQL
+			return results.Take(100);
 		}
 
 		public void PurgeOldAudits(DateTime dateForPurging)
