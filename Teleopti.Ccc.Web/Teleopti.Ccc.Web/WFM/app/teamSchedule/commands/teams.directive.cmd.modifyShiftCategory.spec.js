@@ -183,10 +183,6 @@
 					function () {
 						return scheduleManagementSvc;
 					});
-				$provide.service('teamsToggles',
-					function() {
-						return { all: function() {} };
-					});
 				$provide.service('Toggle',
 					function() {
 						return {};
@@ -276,10 +272,6 @@
 				$provide.service('ScheduleManagement',
 					function () {
 						return scheduleManagementSvc;
-					});
-				$provide.service('teamsToggles',
-					function() {
-						return { all: function() {} };
 					});
 				$provide.service('Toggle',
 					function() {
@@ -378,10 +370,6 @@
 				$provide.service('ScheduleManagement',
 					function () {
 						return scheduleManagementSvc;
-					});
-				$provide.service('teamsToggles',
-					function () {
-						return { all: function () { } };
 					});
 				$provide.service('Toggle',
 					function () {

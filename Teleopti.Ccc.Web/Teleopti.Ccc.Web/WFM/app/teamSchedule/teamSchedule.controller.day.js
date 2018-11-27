@@ -17,7 +17,6 @@
 		'ValidateRulesService',
 		'CommandCheckService',
 		'ScheduleNoteManagementService',
-		'teamsToggles',
 		'Toggle',
 		'bootstrapCommon',
 		'groupPageService',
@@ -29,7 +28,7 @@
 
 	function TeamScheduleController($scope, $q, $timeout, $translate, $state, $mdSidenav, $stateParams, $mdComponentRegistry, $document,
 		teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService,
-		CommandCheckService, ScheduleNoteManagementService, teamsToggles, toggleSvc, bootstrapCommon, groupPageService,
+		CommandCheckService, ScheduleNoteManagementService, toggleSvc, bootstrapCommon, groupPageService,
 		StaffingConfigStorageService, serviceDateFormatHelper, ViewStateKeeper, teamsPermissions) {
 		var mode = {
 			BusinessHierarchy: 'BusinessHierarchy',
@@ -337,9 +336,7 @@
 			personSelectionSvc.clearPersonInfo();
 			vm.resetSchedulePage();
 			updateShiftStatusForSelectedPerson();
-			if (vm.toggles.Wfm_HideUnusedTeamsAndSites_42690) {
-				vm.getGroupPagesAsync();
-			}
+			vm.getGroupPagesAsync();
 		};
 
 		vm.onKeyWordInSearchInputChanged = function () {
@@ -516,10 +513,6 @@
 			vm.updateSchedules(personIds);
 			vm.checkValidationWarningForCommandTargets(personIds);
 		};
-
-		vm.toggles = teamsToggles.all();
-		vm.toggles.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871 = toggleSvc.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871;
-
 		vm.searchOptions = {
 			keyword: viewState.keyword || '',
 			searchKeywordChanged: false,
@@ -610,11 +603,11 @@
 		};
 
 		vm.isResultTooMany = function () {
-			var toggle = vm.toggles.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871;
+			var toggle = toggleSvc.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871;
 			return (toggle && vm.total > 750) || (!toggle && vm.total > 500);
 		}
 		vm.warningMessageForTooManyResults = function () {
-			var toggle = vm.toggles.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871;
+			var toggle = toggleSvc.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871;
 			var max = toggle ? 750 : 500;
 			return $translate.instant('TooManyResultsForSearchKeywords').replace('{0}', max);
 		}

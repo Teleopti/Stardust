@@ -23,10 +23,6 @@
 				function () {
 					return scheduleManagementSvc;
 				});
-			$provide.service('teamsToggles',
-				function () {
-					return { all: function () { } };
-				});
 			$provide.service('Toggle',
 				function () {
 					return {};

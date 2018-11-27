@@ -2003,7 +2003,6 @@
     <Content Include="WFM\app\skillPrio\_modules.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.bootstrapCommon.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.permissions.js" />
-    <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.toggles.js" />
     <Content Include="WFM\app\app_desktop_client.js" />
     <Content Include="WFM\app\forecasting\routes.js" />
     <Content Include="WFM\app\forecasting\html\skillCreate.html" />

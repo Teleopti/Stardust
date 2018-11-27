@@ -217,11 +217,7 @@
 				var startOfWeek = Util.getFirstDayOfWeek(date);
 				var endOfWeek = serviceDateFormatHelper.getDateOnly(moment(startOfWeek).add(6, 'days'));
 
-				var promise = toggles.Wfm_HideUnusedTeamsAndSites_42690 ?
-					teamScheduleSvc.hierarchyOverPeriod(startOfWeek, endOfWeek)
-					: teamScheduleSvc.hierarchy(date);
-
-				promise.then(function (data) {
+				teamScheduleSvc.hierarchyOverPeriod(startOfWeek, endOfWeek).then(function (data) {
 					resolve(data);
 					loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
 					vm.sitesAndTeams = data.Children;
