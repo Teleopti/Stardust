@@ -1,10 +1,11 @@
-﻿using System;
+﻿using NUnit.Framework;
+using SharpTestsEx;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -20,6 +21,7 @@ using Teleopti.Ccc.Web.Areas.Requests.Controller;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.Helper;
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 {
@@ -63,6 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 			var date = new DateTime(2018, 11, 21);
 			var input = setupData(date);
 
+
 			var result = Target.GetRequests(input);
 			result.Requests.First().Shifts.Count().Should().Be.EqualTo(1);
 		}
@@ -94,33 +97,49 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 			var input = setupData(expactedDate);
 
 			var result = Target.GetRequests(input);
-			result.Requests.First().Shifts.First().IsNotScheduled.Should().Be.False();
+			result.Requests.First().Shifts.First().ShiftCategory.Should().Not.Be.Null();
 		}
 
-		private AllRequestsFormData setupData(DateTime date)
+		[Test]
+		public void ShouldGetAbsenceRequestsWithMultipleShifts()
+		{
+			var date = new DateTime(2018, 11, 21);
+			var periods = new List<DateTimePeriod> { new DateTimePeriod(date.AddHours(8).Utc(), date.AddHours(17).Utc()), new DateTimePeriod(date.AddDays(1).AddHours(8).Utc(), date.AddDays(1).AddHours(17).Utc()) };
+			var input = setupData(date, periods, date.AddDays(2));
+
+			var result = Target.GetRequests(input);
+			result.Requests.First().Shifts.Count().Should().Equals(2);
+		}
+	
+		private AllRequestsFormData setupData
+			(DateTime requestStartTime, IEnumerable<DateTimePeriod> schedulesPeriods=null, DateTime? requestEndTime = null)
 		{
 			var scenarioId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
 
 			CurrentScenario.Current().WithId(scenarioId);
-			Database.WithPerson(personId)
+
+			Database.WithMultiSchedulesForShiftTradeWorkflow(requestStartTime.AddDays(10), new Skill("must"))
+				.WithPerson(personId)
+				.WithScenario(scenarioId)
 				.WithTeam(teamId, "myTeam")
 				.WithPeriod(DateOnly.MinValue.ToString())
-				.WithScenario(scenarioId)
-				.WithSchedule(date.AddHours(8).ToString(), date.AddHours(17).ToString())
-				.WithAbsenceRequest(personId, date.ToString());
+				.WithSchedules(schedulesPeriods?? new List<DateTimePeriod> { new DateTimePeriod(requestStartTime.AddHours(8).Utc(), requestStartTime.AddHours(17).Utc()) })
+				.WithAbsenceRequest(personId, requestStartTime, requestEndTime.HasValue?requestEndTime.Value:requestStartTime);
+
+
 			var person = PersonRepository.Get(personId);
 			setPermissions(person);
 			PersonFinderReadOnlyRepository.Has(person);
 			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail { PersonId = personId });
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 
-			var dateOnly = new DateOnly(date);
+			
 			return new AllRequestsFormData
 			{
-				StartDate = dateOnly.AddDays(-1),
-				EndDate = dateOnly.AddDays(9),
+				StartDate = new DateOnly(requestStartTime).AddDays(-1),
+				EndDate = requestEndTime.HasValue? new DateOnly(requestEndTime.Value).AddDays(1): new DateOnly(requestStartTime).AddDays(1),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
 				SortingOrders = new List<RequestsSortingOrder>(),
 				SelectedGroupIds = new[] { teamId.ToString() }
