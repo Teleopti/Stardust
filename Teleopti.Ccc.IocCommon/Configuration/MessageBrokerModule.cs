@@ -2,6 +2,7 @@ using System.Configuration;
 using System.Net;
 using System.Net.Http;
 using Autofac;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
@@ -17,32 +18,32 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class MessageBrokerModule : Module
 	{
-		private readonly IocConfiguration _configuration;
+		private readonly IocConfiguration _config;
 
-		public MessageBrokerModule(IocConfiguration configuration)
+		public MessageBrokerModule(IocConfiguration config)
 		{
-			_configuration = configuration;
+			_config = config;
 		}
 
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterInstance(MessageFilterManager.Instance).As<IMessageFilterManager>().SingleInstance();
 			builder.RegisterType<NotificationCreator>().As<INotificationCreator>().SingleInstance();
-			
+
 			builder.RegisterType<MessageBrokerCompositeClient>()
 				.As<IMessageBrokerComposite>()
 				.As<IMessageCreator>()
 				.As<IMessageListener>()
 				.SingleInstance();
 
-			var signalRRequired = _configuration.Args().MessageBrokerListeningEnabled;
-			if (_configuration.Args().SharedContainer != null)
+			var signalRRequired = _config.Args().MessageBrokerListeningEnabled;
+			if (_config.Args().SharedContainer != null)
 			{
-				builder.RegisterInstance(_configuration.Args().SharedContainer.Resolve<ISignalRClient>())
+				builder.RegisterInstance(_config.Args().SharedContainer.Resolve<ISignalRClient>())
 					.As<ISignalRClient>()
 					.As<IMessageBrokerUrl>()
 					.SingleInstance();
-			} 
+			}
 			else if (signalRRequired)
 			{
 				builder.RegisterType<RecreateOnNoPingReply>().As<IConnectionKeepAliveStrategy>().SingleInstance();
@@ -67,7 +68,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				{
 					Credentials = CredentialCache.DefaultNetworkCredentials
 				})).SingleInstance().ExternallyOwned();
-			builder.RegisterType<HttpSender>().As<IMessageSender>().SingleInstance();
+			if (_config.Toggle(Toggles.MessageBroker_HttpSenderThrottleRequests_79140))
+				builder.RegisterType<HttpThrottledSender>().As<IMessageSender>().SingleInstance();
+			else
+				builder.RegisterType<HttpSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterType<HttpServer>().As<IHttpServer>().SingleInstance();
 
 			builder.RegisterType<SystemCheckerValidator>();

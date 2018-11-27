@@ -13,11 +13,8 @@ namespace Teleopti.Ccc.Domain
 
 		public void Dispose()
 		{
-			if (_disposeAction != null)
-			{
-				_disposeAction.Invoke();
-				_disposeAction = null;
-			}
+			_disposeAction?.Invoke();
+			_disposeAction = null;
 		}
 	}
 }

@@ -1,9 +1,39 @@
 using System;
 using System.Threading;
+using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Common.Time
 {
+	public static class TimeExtensions
+	{
+		private static readonly ILog logger = LogManager.GetLogger(typeof(ITime));
+
+		public static IDisposable StartTimerWithLock(this ITime time, Action callback, object @lock, TimeSpan period)
+		{
+			return time.StartTimer(state =>
+			{
+				try
+				{
+					if (!Monitor.TryEnter(@lock))
+						return;
+					try
+					{
+						callback.Invoke();
+					}
+					finally
+					{
+						Monitor.Exit(@lock);
+					}
+				}
+				catch (Exception e)
+				{
+					logger.Error("Exception on timer tick", e);
+				}
+			}, null, period, period);
+		}
+	}
+
 	public class Time : ITime
 	{
 		private readonly INow _now;

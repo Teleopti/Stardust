@@ -39,6 +39,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Http\HttpSenderTest.cs" />
+    <Compile Include="Http\HttpSenderThrottleTest.cs" />
     <Compile Include="Http\Mailbox\EmptyConnectionStringTest.cs" />
     <Compile Include="Http\Mailbox\ITestType.cs" />
     <Compile Include="Http\Mailbox\RetryPopMessagesTest.cs" />

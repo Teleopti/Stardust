@@ -29,25 +29,25 @@ namespace Teleopti.Ccc.TestCommon.Messaging
 			_server.NotifyClients(message);
 		}
 
-		public Task<HttpResponseMessage> Post(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
+		public Task<HttpResponseMessage> Post(string uri, object data, Func<string, NameValueCollection> customHeadersFunc = null)
 		{
-			var headers = customHeadersFunc?.Invoke(thing.ToString());
-			Requests.Add(new RequestInfo { Uri = uri, Thing = thing, Headers = headers });
+			var headers = customHeadersFunc?.Invoke(data.ToString());
+			Requests.Add(new RequestInfo { Uri = uri, Data = data, Headers = headers });
 			return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
 		}
 
-		public void PostOrThrow(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
+		public void PostOrThrow(string uri, object data, Func<string, NameValueCollection> customHeadersFunc = null)
 		{
-			var headers = customHeadersFunc?.Invoke(thing.ToString());
-			Requests.Add(new RequestInfo { Uri = uri, Thing = thing, Headers = headers });
+			var headers = customHeadersFunc?.Invoke(data.ToString());
+			Requests.Add(new RequestInfo { Uri = uri, Data = data, Headers = headers });
 			if (_exception != null)
 				throw _exception;
 		}
 
-		public Task PostOrThrowAsync(string uri, object thing, Func<string, NameValueCollection> customHeadersFunc = null)
+		public Task PostOrThrowAsync(string uri, object data, Func<string, NameValueCollection> customHeadersFunc = null)
 		{
-			var headers = customHeadersFunc?.Invoke(thing.ToString());
-			Requests.Add(new RequestInfo { Uri = uri, Thing = thing, Headers = headers });
+			var headers = customHeadersFunc?.Invoke(data.ToString());
+			Requests.Add(new RequestInfo { Uri = uri, Data = data, Headers = headers });
 			if (_exception != null)
 				return Task.FromException(_exception);
 

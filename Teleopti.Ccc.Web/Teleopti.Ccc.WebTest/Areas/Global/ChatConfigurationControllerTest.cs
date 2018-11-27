@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			var tenantCredential = new TenantCredential {Host = "localhost:52858", Tenant = "Teleopti WFM", ApiKey = "topsecretkeygoeshere"};
 			await Target.Configure(tenantCredential);
 
-			HttpServer.Requests[0].Thing.Should().Be.SameInstanceAs(tenantCredential);
+			HttpServer.Requests[0].Data.Should().Be.SameInstanceAs(tenantCredential);
 		}
 
 		public void Isolate(IIsolate isolate)

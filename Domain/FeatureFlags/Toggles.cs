@@ -22,7 +22,9 @@
 		RTA_TooManyPersonAssociationChangedEvents_Packages_78669,
 		RTA_StateQueueFloodPrevention_77710,
 		RTA_ReviewHistoricalAdherence_74770,
-
+		
+		MessageBroker_HttpSenderThrottleRequests_79140,
+		
 		MyTimeWeb_NewTeamScheduleView_75989,
 		MyTimeWeb_NewTeamScheduleViewDesktop_76313,
 		MyTimeWeb_TrafficLightOnMobileDayView_77447,
