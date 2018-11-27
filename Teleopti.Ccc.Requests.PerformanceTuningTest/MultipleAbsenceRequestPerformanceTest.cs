@@ -119,15 +119,15 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		/// for all the workloads
 		/// </summary>
 		[Test]
-		[Toggle(Toggles.WFM_AbsenceRequest_ImproveThroughput_79139)]
-		public void Run200RequestsSoAmandaIsHappy()
+		//[Toggle(Toggles.WFM_AbsenceRequest_ImproveThroughput_79139)]
+		public void Run400RequestsBudgetGroupValidationSet()
 		{
 			Now.Is("2016-03-16 07:01");
 
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
-			StardustJobFeedback.SendProgress($"Will process {200} requests");
-			foreach (var i in Enumerable.Range(0, 200))
+			StardustJobFeedback.SendProgress($"Will process {_personIdList.Count} requests");
+			foreach (var i in Enumerable.Range(0, _personIdList.Count -1))
 			{
 				WithUnitOfWork.Do(() =>
 				{
