@@ -127,20 +127,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Commands
         /// <summary>
         /// Executes the repository commandmodel and provides a unitofwork
         /// </summary>
-        /// <param name="repositoryCommandModel">The repository command model.</param>
-        /// <param name="unitOfWork">The unit of work.</param>
-        /// <remarks>
-        /// Sets the sender to null
-        /// For testing repositorycommands without setting up unitofworkfactory in tests
-        /// </remarks>
-        public void ExecuteRepositoryCommandModel(RepositoryCommandModel repositoryCommandModel,IUnitOfWork unitOfWork)
-        {
-            ExecuteRepositoryCommandModel(null, repositoryCommandModel, unitOfWork);
-        }
-
-        /// <summary>
-        /// Executes the repository commandmodel and provides a unitofwork
-        /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="repositoryCommandModel">The repository command model.</param>
         /// <param name="unitOfWork">The unit of work.</param>
@@ -151,9 +137,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Commands
         {
             repositoryCommandModel.OnExecute(unitOfWork,sender,CreateExecutedRoutedEventArgs());
         }
-        #endregion
-
-       
+        #endregion    
     }
-
 }

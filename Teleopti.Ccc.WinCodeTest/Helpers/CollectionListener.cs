@@ -44,16 +44,5 @@ namespace Teleopti.Ccc.WinCodeTest.Helpers
             RemovedItems.Clear();
             HasChanged = 0;
         }
-
-        //Checks the removed and added items and also checks that the collection did not fire any extra changes
-        public bool CheckChangedItems(int numberOfAddedItems, int numberOfRemovedItems)
-        {
-            int added = AddedItems.Count;
-            int removed = RemovedItems.Count;
-            bool checkAdded = added == numberOfAddedItems;
-            bool checkRemoved = removed == numberOfRemovedItems;
-            bool checkTotal = (added + removed) == HasChanged;
-            return (checkAdded && checkRemoved && checkTotal); 
-        }
     }
 }

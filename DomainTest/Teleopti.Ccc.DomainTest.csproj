@@ -276,7 +276,6 @@
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobServiceTest.cs" />
     <Compile Include="Intraday\Domain\IntradayForecastingServiceTest.cs" />
     <Compile Include="Intraday\Domain\IntradayReforecastingServiceTest.cs" />
-    <Compile Include="Intraday\StaffingViewModelCreatorTestHelper.cs" />
     <Compile Include="Intraday\TimeSeriesProviderTest.cs" />
     <Compile Include="Notification\ClickatellNotificationClientTest.cs" />
     <Compile Include="Notification\RawPostNotificationWebClientTest.cs" />
