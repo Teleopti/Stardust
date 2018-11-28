@@ -29,10 +29,6 @@ namespace Teleopti.Ccc.Web.Areas.Global
 				Toggles.WFM_Forecaster_Preview_74801
 			},
 			{
-				DefinedRaptorApplicationFunctionPaths.MyTimeWeb,
-				Toggles.Wfm_AddMyTimeLink_45088
-			},
-			{
 				DefinedRaptorApplicationFunctionPaths.PeopleAccess,
 				Toggles.Wfm_PeopleWeb_PrepareForRelease_74903
 			},
