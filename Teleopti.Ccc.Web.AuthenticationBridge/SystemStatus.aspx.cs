@@ -47,19 +47,17 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge
 
 		private Dictionary<string, bool> tryVisitUrlsByIdentity(IEnumerable<ClaimProvider> providers)
 		{
-			var result = new Dictionary<string, bool>();
-			foreach (var provider in providers)
+			var uriLoadBalancer = Request.UrlConsideringLoadBalancerHeaders();
+			string baseUrl = uriLoadBalancer.Scheme + "://" + uriLoadBalancer.Authority +
+						  Request.ApplicationPath.TrimEnd('/') + "/";
+			return providers.AsParallel().Select(provider =>
 			{
-				var uriLoadBalancer = Request.UrlConsideringLoadBalancerHeaders();
-
-				var baseUrl = uriLoadBalancer.Scheme + "://" + uriLoadBalancer.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
 				var authenticateUrl = baseUrl + "authenticate?whr=" + provider.Identifier;
 
 				sbTriedVisitByIdentityUrls.Append($"{authenticateUrl};");
 
-				result.Add(provider.DisplayName, tryVisitUrl(authenticateUrl));
-			}
-			return result;
+				return (provider.DisplayName, tryVisitUrl(authenticateUrl));
+			}).ToDictionary(k => k.Item1, v => v.Item2);
 		}
 
 		private static bool tryVisitUrl(string url)
