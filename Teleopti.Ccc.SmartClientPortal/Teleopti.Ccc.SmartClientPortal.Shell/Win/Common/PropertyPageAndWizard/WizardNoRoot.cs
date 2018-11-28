@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard
 {
@@ -144,7 +145,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard
 
 			splitContainerVertical.Panel2.Controls.Add(c);
 			setButtonState();
-			if (!_propertyPages.IsOnFirst() || 
+			if (!_propertyPages.IsOnFirst() ||
+				_propertyPages.Name != Resources.QuickForecast ||
 				!_toggleManager.IsEnabled(Toggles.WFM_Forecaster_Preview_74801) || 
 				!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebForecasts))
 				previewPanel.Hide();
