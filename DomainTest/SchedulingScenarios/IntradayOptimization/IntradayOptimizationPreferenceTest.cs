@@ -95,33 +95,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var numberOfMovedShifts = PersonAssignmentRepository.Find(planningPeriod.Range, scenario).Count(x => x.Period.StartDateTime.Minute == 15);
 			numberOfMovedShifts.Should().Be.EqualTo(1);
 		}
-		
-		[TestCase(1)]
-		[TestCase(0.99)]
-		public void ShouldBehaveSameWhenIntradayOptimizeWithDifferentPreferenceValues(double preferenceValue)
-		{
-			var activity = ActivityFactory.CreateActivity("_");
-			var skill = SkillRepository.Has("_", activity);
-			var date = new DateOnly(2015, 10, 12);
-			var scenario = ScenarioRepository.Has();
-			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1);
-			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(17, 15, 17, 15, 15), new ShiftCategory().WithId()));
-			var agent = PersonRepository.Has(schedulePeriod, ruleSet, skill);
-			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
-			planningPeriod.PlanningGroup.SetGlobalValues(new Percent(preferenceValue));
-			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = new ShiftCategory()};
-			PreferenceDayRepository.Has(agent, date, preferenceRestriction);
-			SkillDayRepository.Has(new List<ISkillDay>
-			{
-				skill.CreateSkillDayWithDemandPerHour(scenario, date, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360))),
-			});
-			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, date, new TimePeriod(8, 0, 17, 0));
-
-			Target.Execute(planningPeriod.Id.GetValueOrDefault());
-
-			PersonAssignmentRepository.GetSingle(date, agent).Period.StartDateTime.Minute 
-				.Should().Be.EqualTo(15);
-		}
 	}
 }
