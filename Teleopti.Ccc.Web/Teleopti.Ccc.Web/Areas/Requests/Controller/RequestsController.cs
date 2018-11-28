@@ -113,10 +113,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		[UnitOfWork, HttpGet, Route("api/Requests/GetOrganizationWithPeriod")]
 		public virtual BusinessUnitWithSitesViewModel GetOrganizationWithPeriod(DateTime startDate,DateTime endDate)
 		{
-			return _toggleManager.IsEnabled(Toggles.Wfm_FetchBusinessHierarchyFromReadModel_45275)
-				? _teamsProvider.GetOrganizationWithPeriod(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)),
-					DefinedRaptorApplicationFunctionPaths.WebRequests)
-				: _teamsProvider.GetOrganizationBasedOnRawData(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)),
+			return  _teamsProvider.GetOrganizationWithPeriod(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)),
 					DefinedRaptorApplicationFunctionPaths.WebRequests);
 
 		}
