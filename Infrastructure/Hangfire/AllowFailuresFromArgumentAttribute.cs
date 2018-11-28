@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			if (allowFailures == 0)
 				return;
 
-			var recurringId = jobInfo.RecurringId();
+			var recurringId = jobInfo?.RecurringId();
 			var key = "allow-failures:" + recurringId;
 
 			if (context.CandidateState is SucceededState)
