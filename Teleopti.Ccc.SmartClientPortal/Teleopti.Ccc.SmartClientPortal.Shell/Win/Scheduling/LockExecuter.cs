@@ -103,20 +103,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_schedulingScreen.Cursor = Cursors.Default;
 		}
 
-		public void AllFulfilledPreferences(MouseButtons mouseButtons)
-		{
-			if (mouseButtons != MouseButtons.Left) return;
-			_schedulingScreen.Cursor = Cursors.WaitCursor;
-			IGridSchedulesExtractor gridSchedulesExtractor = new GridSchedulesExtractor(_grid);
-			IScheduleDayPreferenceRestrictionExtractor scheduleDayPreferenceRestrictionExtractor = new ScheduleDayPreferenceRestrictionExtractor(_restrictionExtractor);
-			ICheckerRestriction restrictionChecker = new RestrictionChecker();
-			var gridlockAllPreferencesFulfilledCommand = new GridlockAllPreferencesFulfilledCommand(gridSchedulesExtractor, restrictionChecker, scheduleDayPreferenceRestrictionExtractor, _lockManager);
-			gridlockAllPreferencesFulfilledCommand.Execute();
-			_schedulingScreen.Refresh();
-			_schedulingScreen.RefreshSelection();
-			_schedulingScreen.Cursor = Cursors.Default;
-		}
-
 		public void AllAbsencePreference(MouseButtons mouseButtons)
 		{
 			if (mouseButtons != MouseButtons.Left) return;

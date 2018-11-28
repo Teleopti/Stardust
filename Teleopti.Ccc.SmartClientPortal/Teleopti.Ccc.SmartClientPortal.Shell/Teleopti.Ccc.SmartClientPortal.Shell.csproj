@@ -1027,7 +1027,6 @@
     <Compile Include="WinCode\Scheduling\GridlockCommands\GridlockAllPreferencesCommand.cs" />
     <Compile Include="WinCode\Scheduling\GridlockCommands\GridlockAllPreferencesDayOffCommand.cs" />
     <Compile Include="WinCode\Scheduling\GridlockCommands\GridlockAllPreferencesFulfilledAbsenceCommand.cs" />
-    <Compile Include="WinCode\Scheduling\GridlockCommands\GridlockAllPreferencesFulfilledCommand.cs" />
     <Compile Include="WinCode\Scheduling\GridlockCommands\GridlockAllPreferencesFulfilledDayOffCommand.cs" />
     <Compile Include="WinCode\Scheduling\GridlockCommands\GridlockAllPreferencesFulfilledShiftCommand.cs" />
     <Compile Include="WinCode\Scheduling\GridlockCommands\GridlockAllPreferencesMustHaveCommand.cs" />
