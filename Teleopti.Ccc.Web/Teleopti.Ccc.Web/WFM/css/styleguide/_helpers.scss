@@ -32,49 +32,66 @@
 //Styleguide 8.1
 //
 
-.align-row-center{
+.align-row-center {
 	display: flex;
 	align-items: center;
 }
 
-.baseline{
+.baseline {
 	align-items: baseline;
 }
 
-.align-row-baseline{
+.align-row-baseline {
 	display: flex;
 	align-items: baseline;
 }
 
-.line-right{
-	text-align:right;
+.line-right {
+	text-align: right;
 }
 
-.line-center{
+.line-center {
 	text-align: center;
 }
 
-.relative{
+.relative {
 	position: relative;
 }
 
-.absolute{
+.absolute {
 	position: absolute;
 }
 
-.inline-block{
+.inline-block {
 	display: inline-block;
 }
 
-.inline-flex{
-	display: inline-flex!important;
-	display: -ms-inline-flexbox!important;
+.inline-flex {
+	display: inline-flex !important;
+	display: -ms-inline-flexbox !important;
 }
 
-.margin-center{
+.margin-center {
 	margin: 0 auto;
 }
 
+.text-right {
+	text-align: right;
+}
+
+.text-left {
+	text-align: left;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.text-nowrap-ellipsis {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
 
 // Cursor types
 //
@@ -86,14 +103,15 @@
 //Styleguide 8.2
 //
 
-.cursor-pointer,.pointer{
-  cursor: pointer;
+.cursor-pointer,
+.pointer {
+	cursor: pointer;
 }
 
-.non-pointer{
+.non-pointer {
 	pointer-events: none;
 
-	&:focus{
+	&:focus {
 		display: none;
 	}
 }
@@ -103,7 +121,6 @@
 	cursor: not-allowed;
 	pointer-events: none;
 }
-
 
 // Showing and hiding content
 //
@@ -117,16 +134,16 @@
 //Styleguide 8.3
 //
 .show {
-  display: block !important;
+	display: block !important;
 }
 .hidden {
-  display: none !important;
+	display: none !important;
 }
 .invisible {
-  visibility: hidden;
+	visibility: hidden;
 }
-.block{
-	display: block!important;
+.block {
+	display: block !important;
 }
 
 //Animations

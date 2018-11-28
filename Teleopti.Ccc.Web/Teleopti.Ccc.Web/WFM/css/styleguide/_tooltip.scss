@@ -32,6 +32,41 @@ md-tooltip {
   cursor:pointer;
 }
 
+
+.multiline-tooltip {
+	height: auto;
+
+	p {
+		margin: 0;
+	}
+
+	@media (max-width: 1200px) {
+		span {
+			display: inline-block;
+			line-height: 25px;
+			max-width: 500px;
+			white-space: normal;
+		}
+	}
+}
+
+md-tooltip.layer-summary {
+	text-align: center;
+}
+
+.multiline-tooltip.max-width-600 {
+	span {
+		display: inline-block;
+		line-height: 25px;
+		max-width: 600px;
+		white-space: normal;
+	}
+}
+
+.multiline-tooltip.margin-top-22 {
+	margin-top: -22px;
+}
+
 // Badge
 //
 //Badges are used to show the size of a group of items. It can show a fixed number or tick up as the user add more items to the group.

@@ -3,9 +3,9 @@
 (function() {
 	angular
 		.module('wfm.requests')
-		.factory('TextAndAbsenceGridConfiguration', ['$translate', TextAndAbsenceGridConfiguration]);
+		.factory('TextAndAbsenceGridConfiguration', ['$translate', 'Toggle', TextAndAbsenceGridConfiguration]);
 
-	function TextAndAbsenceGridConfiguration($translate) {
+	function TextAndAbsenceGridConfiguration($translate, toggleService) {
 		var columns = [];
 
 		var service = {
@@ -164,18 +164,30 @@
 					visible: false,
 					enableFiltering: false,
 					headerCellClass: 'request-updated-time-header'
+				},
+				{
+					displayName: $translate.instant('Account'),
+					field: 'PersonAccountSummaryViewModel',
+					enableFiltering: false,
+					cellTemplate: 'app/requests/html/requests-absence-person-account-overview.html',
+					enableSorting: false
 				}
 			];
 
-			var accountColumn = {
-				displayName: $translate.instant('Account'),
-				field: 'PersonAccountSummaryViewModel',
-				enableFiltering: false,
-				cellTemplate: 'app/requests/html/requests-absence-person-account-overview.html',
-				enableSorting: false
-			};
-
-			columns.splice(12, 0, accountColumn);
+			if (toggleService.WFM_Request_Show_Shift_for_Absence_Requests_79008) {
+				columns.splice(2, 0, {
+					displayName: '',
+					field: 'Shifts',
+					enableSorting: false,
+					enableFiltering: false,
+					enableHiding: false,
+					enablePinning: false,
+					// enableColumnMenu: false,
+					cellTemplate: 'app/requests/html/requests-absence-schedules-cell.html',
+					visible: true,
+					width: 30
+				});
+			}
 		}
 
 		function columnDefinitions() {

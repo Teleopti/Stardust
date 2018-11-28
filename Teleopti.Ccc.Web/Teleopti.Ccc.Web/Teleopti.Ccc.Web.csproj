@@ -1618,6 +1618,8 @@
     <Content Include="WFM\app\global\skill-group\skillgroup.html" />
     <Content Include="WFM\app\global\skill-group\skillgroup.service.js" />
     <Content Include="WFM\app\global\skill-group\_modules.js" />
+    <Content Include="WFM\app\global\utilities\colorUtils.service.js" />
+    <Content Include="WFM\app\global\utilities\colorUtils.service.spec.js" />
     <Content Include="WFM\app\global\utilities\guidgenerator.service.js" />
     <Content Include="WFM\app\global\utilities\_modules.js" />
     <Content Include="WFM\app\intraday\components\intradayDateOffset.component.js" />
@@ -1647,6 +1649,7 @@
     <Content Include="WFM\app\requests\html\requests-footer.tpl.html" />
     <Content Include="WFM\app\requests\html\requests-absence-and-text.html" />
     <Content Include="WFM\app\requests\html\requests-absence-person-account-overview.html" />
+    <Content Include="WFM\app\requests\html\requests-absence-schedules-cell.html" />
     <Content Include="WFM\app\requests\html\requests-absence-and-text-header.html" />
     <Content Include="WFM\app\requests\html\requests-shift-trade-header.html" />
     <Content Include="WFM\app\requests\html\requests.html" />
@@ -1673,6 +1676,8 @@
     <Content Include="WFM\app\requests\requests.uigridFix.js" />
     <Content Include="WFM\app\requests\requests.controller.js" />
     <Content Include="WFM\app\requests\requests.service.permissions.js" />
+    <Content Include="WFM\app\requests\requests.service.requestSchedule.js" />
+    <Content Include="WFM\app\requests\requests.service.requestSchedule.spec.js" />
     <Content Include="WFM\app\requests\_modules.js" />
     <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.html" />
     <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.controller.js" />
