@@ -29,16 +29,25 @@
 				<div class="con-flex">
 					<div *ngIf="displayDate && displayDate.length > 0">{{ displayDate }}</div>
 					<div *ngIf="selectedSkillOrGroup && selectedSkillOrGroup.Skills.length > 0">
-						<nz-radio-group [(ngModel)]="selectedSubSkillId" (ngModelChange)="onPickSubSkill()">
-							<label nz-radio-button nzValue="all"> {{ translate.instant('All') }} </label>
-							<label
-								*ngFor="let skill of selectedSkillOrGroup.Skills"
-								nz-radio-button
-								nzValue="{{skill.Id}}"
+						<nz-collapse nzAccordion>
+							<nz-collapse-panel
+								id="skill-panel"
+								nzHeader="{{translate.instant('Skills') }}"
+								[nzActive]="showSkills"
+								(click)="onShowHideSkills()"
 							>
-								{{ skill.Name }}
-							</label>
-						</nz-radio-group>
+								<nz-radio-group [(ngModel)]="selectedSubSkillId" (ngModelChange)="onPickSubSkill()">
+									<label nz-radio-button nzValue="all"> {{ translate.instant('All') }} </label>
+									<label
+										*ngFor="let skill of selectedSkillOrGroup.Skills"
+										nz-radio-button
+										nzValue="{{skill.Id}}"
+									>
+										{{ skill.Name }}
+									</label>
+								</nz-radio-group>
+							</nz-collapse-panel>
+						</nz-collapse>
 					</div>
 				</div>
 			</div>
