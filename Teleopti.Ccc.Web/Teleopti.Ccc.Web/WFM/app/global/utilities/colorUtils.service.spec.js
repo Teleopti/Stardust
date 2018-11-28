@@ -25,9 +25,14 @@ describe('colorUtils', function() {
 		expect(textColor).toBe('white');
 	});
 
-	it('should be able to convert a HEX color to RGB', function() {
+	it('should be able to convert a HEX color #333 to RGB', function() {
 		var hexColor = colorUtils.hexToRGB('#333');
 		expect(hexColor).toBe('rgb(51,51,51)');
+	});
+
+	it('should be able to convert a HEX color #c00000 to RGB', function() {
+		var hexColor = colorUtils.hexToRGB('#c00000');
+		expect(hexColor).toBe('rgb(192,0,0)');
 	});
 
 	it('should be able to convert color to RGB', function() {

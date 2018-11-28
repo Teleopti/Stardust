@@ -84,7 +84,7 @@
 			expect(personSchedule.ShiftCategory.ShortName).toEqual('AM');
 			expect(personSchedule.ShiftCategory.Name).toEqual('Early');
 			expect(personSchedule.ShiftCategory.DisplayColor).toEqual('#000000');
-			expect(personSchedule.ShiftCategory.ContrastColor).toEqual('#ffffff');
+			expect(personSchedule.ShiftCategory.TextColor).toEqual('white');
 			expect(personSchedule.DayOffs.length).toEqual(0);
 
 			var personScheduleTommorow = target.Create([schedule, scheduleTommorow], '2018-10-17', 'etc/UTC').Schedules[0];

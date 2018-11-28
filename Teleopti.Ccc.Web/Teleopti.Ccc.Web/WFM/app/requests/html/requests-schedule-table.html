@@ -27,8 +27,7 @@
 						<div class="layer absolute floatleft selectable projection-layer" projection-name="{projection.Description}}"
 						 ng-repeat="projection in shift.Projections" ng-style=" {left: projection.StartPosition + '%' , width:
 						 projection.Length + '%' , backgroundColor: projection.Color}"
-						 ng-class="{overtimeLight: projection.IsOvertime && projection.UseLighterBorder, overtimeDark: rojection.IsOvertime && !projection.UseLighterBorder, personAbsence:projection.ParentPersonAbsences !== null, noneSelected:!projection.IsOvertime,
-						 hasSelected: !projection.IsOvertime, selected:projection.Selected, lighterBorder: rojection.UseLighterBorder}">
+						 ng-class="{overtimeLight: projection.IsOvertime && projection.UseLighterBorder, overtimeDark: projection.IsOvertime && !projection.UseLighterBorder, personAbsence: projection.ParentPersonAbsences !== null}">
 							<md-tooltip md-z-index="1200">{{projection.Description}}</md-tooltip>
 						</div>
 					</div>

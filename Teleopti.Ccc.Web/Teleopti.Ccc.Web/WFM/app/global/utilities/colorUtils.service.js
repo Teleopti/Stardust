@@ -20,7 +20,7 @@
 			var brightness =
 				backgroundColorArr[0] * 0.299 + backgroundColorArr[1] * 0.587 + backgroundColorArr[2] * 0.114;
 
-			return brightness < 100 ? 'white' : 'black';
+			return brightness < 128 ? 'white' : 'black';
 		};
 
 		svc.hexToRGB = function(hex) {
@@ -53,7 +53,7 @@
 			if (hex.length == 1) {
 				hex += '' + hex;
 			}
-			return parseInt(hex);
+			return hex;
 		}
 	}
 })();

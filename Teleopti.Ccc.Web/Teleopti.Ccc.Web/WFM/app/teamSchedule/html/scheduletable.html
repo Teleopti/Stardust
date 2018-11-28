@@ -68,7 +68,7 @@
 				<i class="mdi mdi-information mdi-alert info" ng-if="personSchedule.HasUnderlyingSchedules()"></i>
 
 				<span id="name" ng-if="::personSchedule.ShiftCategory.Name"
-					  ng-style="{background: personSchedule.ShiftCategory.DisplayColor, color: personSchedule.ShiftCategory.ContrastColor}">
+					  ng-style="{background: personSchedule.ShiftCategory.DisplayColor, color: personSchedule.ShiftCategory.TextColor}">
 					{{::personSchedule.ShiftCategory.ShortName}}
 				</span>
 				<md-tooltip ng-if="!!personSchedule.ShiftCategory.Name ||  personSchedule.HasUnderlyingSchedules()"

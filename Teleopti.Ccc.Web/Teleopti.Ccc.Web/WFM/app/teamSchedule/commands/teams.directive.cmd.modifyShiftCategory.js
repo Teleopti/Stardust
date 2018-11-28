@@ -26,9 +26,9 @@
 		};
 	}
 
-	modifyShiftCategoryCtrl.$inject = ['$translate', 'ScheduleManagement', 'ShiftCategoryService', 'PersonSelection', 'teamScheduleNotificationService'];
+	modifyShiftCategoryCtrl.$inject = ['$translate', 'ScheduleManagement', 'ShiftCategoryService', 'PersonSelection', 'teamScheduleNotificationService', 'colorUtils'];
 
-	function modifyShiftCategoryCtrl($translate, scheduleMgmtSvc, shiftCategorySvc, personSelectionSvc, teamScheduleNotificationService) {
+	function modifyShiftCategoryCtrl($translate, scheduleMgmtSvc, shiftCategorySvc, personSelectionSvc, teamScheduleNotificationService, colorUtils) {
 		var vm = this;
 
 		vm.label = 'EditShiftCategory';
@@ -86,8 +86,7 @@
 			vm.shiftCategoriesList = response.data;
 			if (angular.isArray(response.data)) {
 				response.data.forEach(function (shiftCat) {
-					var displayColorHex = shiftCat.DisplayColor.substring(1);
-					shiftCat.ContrastColor = getContrastYIQ(displayColorHex);
+					shiftCat.TextColor = colorUtils.getTextColorBasedOnBackgroundColor(shiftCat.DisplayColor);
 				});
 			}
 			vm.shiftCategoriesLoaded = true;
