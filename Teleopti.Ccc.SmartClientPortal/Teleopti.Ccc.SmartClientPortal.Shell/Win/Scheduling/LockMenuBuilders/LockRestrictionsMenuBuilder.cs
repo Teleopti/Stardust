@@ -218,12 +218,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.LockMenuBuilders
 			//AllFulFilledAbsences, toolStripMenuItemAllFulFilledAbsencesPreferences, toolStripMenuItemAllFulFilledAbsencesPreferencesRM, toolStripMenuItemAllAbsencePreferenceMouseUp
 			var toolStripMenuItemAllFulFilledAbsencesPreferences = new ToolStripMenuItem(Resources.AllFulFilledAbsences)
 				{ Name = "toolStripMenuItemAllFulFilledAbsencesPreferences" };
-			toolStripMenuItemAllFulFilledAbsencesPreferences.MouseUp += userLockHelper.ToolStripMenuItemAllAbsencePreferenceMouseUp;
+			toolStripMenuItemAllFulFilledAbsencesPreferences.MouseUp += userLockHelper.ToolStripMenuItemAllFulFilledPreferencesMouseUp;
 			toolStripMenuItemLockPreferences.DropDownItems.Add(toolStripMenuItemAllFulFilledAbsencesPreferences);
 
 			var toolStripMenuItemAllFulFilledAbsencesPreferencesRM = new ToolStripMenuItem(Resources.AllFulFilledAbsences)
 				{ Name = "toolStripMenuItemAllFulFilledAbsencesPreferencesRM" };
-			toolStripMenuItemAllFulFilledAbsencesPreferencesRM.MouseUp += userLockHelper.ToolStripMenuItemAllAbsencePreferenceMouseUp;
+			toolStripMenuItemAllFulFilledAbsencesPreferencesRM.MouseUp += userLockHelper.ToolStripMenuItemAllFulFilledPreferencesMouseUp;
 			toolStripMenuItemLockPreferencesRM.DropDownItems.Add(toolStripMenuItemAllFulFilledAbsencesPreferencesRM);
 
 			//AllFulFilledDaysOff, toolStripMenuItemAllFulFilledDaysOffPreferences, toolStripMenuItemAllFulFilledDaysOffPreferencesRM, toolStripMenuItemAllFulFilledDaysOffPreferencesMouseUp
