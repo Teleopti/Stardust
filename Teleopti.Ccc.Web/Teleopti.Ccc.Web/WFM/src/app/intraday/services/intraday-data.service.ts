@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -44,4 +44,32 @@ export class IntradayDataService {
 			.get(`../api/intraday/monitorskillareaperformance/${id}/${offset}`)
 			.pipe(map((data): IntradayPerformanceData => data as IntradayPerformanceData));
 	}
+
+	getIntradayExportForSkillGroup = function(data) {
+		return this.http
+			.post('../api/intraday/exportskillareadatatoexcel', data, {
+				responseType: 'Blob',
+				headers: new HttpHeaders()
+					.set('Content-Type', 'application/json')
+					.set(
+						'Accept',
+						'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+					)
+			})
+			.pipe(map((res: any) => new Blob([res], { type: 'application/vnd.ms-excel' })));
+	};
+
+	getIntradayExportForSkill = function(data) {
+		return this.http
+			.post('../api/intraday/exportskilldatatoexcel', data, {
+				responseType: 'Blob',
+				headers: new HttpHeaders()
+					.set('Content-Type', 'application/json')
+					.set(
+						'Accept',
+						'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+					)
+			})
+			.pipe(map((res: any) => new Blob([res], { type: 'application/vnd.ms-excel' })));
+	};
 }

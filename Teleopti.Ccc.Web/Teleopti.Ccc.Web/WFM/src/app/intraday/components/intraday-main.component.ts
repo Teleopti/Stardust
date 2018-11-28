@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import moment, { Moment } from 'moment';
 import { IntradayDataService } from '../services/intraday-data.service';
 import { TranslateService } from '@ngx-translate/core';
+import { NzMessageService } from 'ng-zorro-antd';
 import c3 from 'c3';
 import {
 	SkillPickerItem,
@@ -24,7 +25,11 @@ import {
 	styleUrls: ['./intraday-main.component.scss']
 })
 export class IntradayMainComponent implements OnInit, OnDestroy {
-	constructor(public intradayDataService: IntradayDataService, public translate: TranslateService) {}
+	constructor(
+		public intradayDataService: IntradayDataService,
+		public translate: TranslateService,
+		private message: NzMessageService
+	) {}
 
 	selectedSkillOrGroup: SkillPickerItem;
 	selectedSubSkill: Skill;
@@ -38,6 +43,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy {
 	chartData: c3.Data = this.trafficDataToC3Data(this.getEmptyTrafficData().DataSeries);
 	summaryData: IntradayTrafficSummaryItem[] | IntradayPerformanceSummaryItem[] = [];
 	loading = false;
+	exporting = false;
 	timer: any;
 
 	ngOnInit() {
@@ -69,6 +75,52 @@ export class IntradayMainComponent implements OnInit, OnDestroy {
 		this.selectedDate = moment().add(e, 'days');
 		this.displayDate = this.selectedDate.format('LLLL');
 		this.updateData(true);
+	}
+
+	exportToExcel() {
+		if (this.selectedSkillOrGroup && !this.exporting) {
+			this.exporting = true;
+			if (this.selectedSkillOrGroup.Skills.length > 1) {
+				this.intradayDataService
+					.getIntradayExportForSkillGroup(
+						angular.toJson({
+							id: this.selectedSkillOrGroup.Id,
+							dayOffset: this.selectedOffset
+						})
+					)
+					.subscribe(
+						data => {
+							this.saveData(data);
+						},
+						error => this.errorSaveData(error)
+					);
+			} else {
+				this.intradayDataService
+					.getIntradayExportForSkill(
+						angular.toJson({
+							id: this.selectedSkillOrGroup.Id,
+							dayOffset: this.selectedOffset
+						})
+					)
+					.subscribe(
+						data => {
+							this.saveData(data);
+						},
+						error => this.errorSaveData(error)
+					);
+			}
+		}
+	}
+
+	saveData(data) {
+		const blob = new Blob([data]);
+		this.exporting = false;
+		saveAs(blob, 'IntradayExportedData ' + moment().format('YYYY-MM-DD') + '.xlsx');
+	}
+
+	errorSaveData(error: Error) {
+		this.message.create('error', error.message);
+		this.exporting = false;
 	}
 
 	getSelectedSkillOrGroup(): SkillPickerItem {

@@ -325,14 +325,6 @@
 			};
 		}
 
-		function errorSaveData(data, status, headers, config) {
-			NoticeService.warning(
-				"<span class='test-alert'></span>" + $translate.instant('FailedExportToExcel'),
-				null,
-				false
-			);
-			vm.exporting = false;
-		}
 
 		function isSupported(skill) {
 			return skill.DoDisplayData === true;
@@ -428,6 +420,15 @@
 			var blob = new Blob([data]);
 			vm.exporting = false;
 			saveAs(blob, 'IntradayExportedData ' + moment().format('YYYY-MM-DD') + '.xlsx');
+		}
+	
+		function errorSaveData(data, status, headers, config) {
+			NoticeService.warning(
+				"<span class='test-alert'></span>" + $translate.instant('FailedExportToExcel'),
+				null,
+				false
+			);
+			vm.exporting = false;
 		}
 
 		function UnsupportedSkillNotice() {
