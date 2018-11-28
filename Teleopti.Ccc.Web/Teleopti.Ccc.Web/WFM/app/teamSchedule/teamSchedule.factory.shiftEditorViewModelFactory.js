@@ -19,9 +19,7 @@
 			var currentTimezone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
 			var layers = createShiftLayers(schedule.Projection, date, timezone, currentTimezone);
 
-			var hasUnderlyingSchedules =
-				toggleSvc.WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 &&
-				!!schedule.UnderlyingScheduleSummary;
+			var hasUnderlyingSchedules = !!schedule.UnderlyingScheduleSummary;
 			var underlyingScheduleSummary = hasUnderlyingSchedules
 				? getUnderlyingSummarySchedule(schedule.UnderlyingScheduleSummary, date, timezone, currentTimezone)
 				: null;

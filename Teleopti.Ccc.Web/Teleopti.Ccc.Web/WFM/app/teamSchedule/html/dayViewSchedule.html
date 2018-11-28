@@ -17,19 +17,11 @@
 							 get-search="vm.getSearch()"
 							 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
 
-			<group-page-picker ng-if="vm.toggles.Wfm_GroupPages_45057 && vm.searchEnabled"
+			<group-page-picker ng-if="vm.searchEnabled"
 							   group-pages="vm.availableGroups"
 							   on-close="vm.onSelectedTeamsChanged()"
 							   class="group-picker-container inline-block"
 							   selected-groups="vm.selectedGroups"></group-page-picker>
-
-			<organization-picker ng-if="!vm.toggles.Wfm_GroupPages_45057 && vm.searchEnabled"
-								 sites-and-teams="vm.sitesAndTeams"
-								 class="organization-picker-container inline-block"
-								 on-open="vm.searchOptions.focusingSearch = false"
-								 on-close="vm.onSelectedTeamsChanged()"
-								 selected-text="vm.orgPickerSelectedText()"
-								 selected-team-ids="vm.selectedGroups.groupIds"></organization-picker>
 
 			<div class="people-search-container inline-block"
 				 ng-if="vm.searchEnabled"

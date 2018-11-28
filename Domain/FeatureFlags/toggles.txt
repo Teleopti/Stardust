@@ -46,17 +46,8 @@ MessageBroker_HttpSenderThrottleRequests_79140 = RC
 MessageBroker_VeganBurger_79140 = RC
 
 # Dumplings, can any of these be removed? #
-WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010 = true
-WfmTeamSchedule_AddNDeleteDayOff_40555 = true
-WfmTeamSchedule_RemoveShift_46322 = true
 WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871 = RC
 WfmTeamSchedule_SuggestShiftCategory_152 = RC
-Wfm_HideUnusedTeamsAndSites_42690 = true
-Wfm_SearchAgentBasedOnCorrectPeriod_44552 = true
-Wfm_AddMyTimeLink_45088 = true
-Wfm_GroupPages_45057 = true
-Wfm_FetchBusinessHierarchyFromReadModel_45275 = RC
-WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 = true
 WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = RC
 
 # Code Monkeys, can any of these be removed? #

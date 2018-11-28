@@ -1,5 +1,4 @@
 ﻿@WFM
-@OnlyRunIfEnabled('Wfm_GroupPages_45057')
 
 Feature: GroupPages
 	As a team leader

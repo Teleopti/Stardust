@@ -42,8 +42,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 		{
 			var dateTimePeriod = new DateOnlyPeriod(input.StartDate, input.EndDate).ToDateTimePeriod(_userTimeZone.TimeZone());
 			var queryDateTimePeriod = dateTimePeriod.ChangeEndTime(TimeSpan.FromSeconds(-1));
-			var searchAgentBasedOnCorrectPeriodToggle = _toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552);
-			var groupPageToggle = _toggleManager.IsEnabled(Toggles.Wfm_GroupPages_45057);
 			var filter = new RequestFilter
 			{
 				RequestFilters = input.Filters,
@@ -56,22 +54,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			adjustRoleFieldValue(input.AgentSearchTerm);
 
 			List<Guid> targetIds;
-			if (groupPageToggle)
-			{
-				var period = new DateOnlyPeriod(input.StartDate, input.EndDate);
-				targetIds = !input.IsDynamic ? _peopleSearchProvider.FindPersonIdsInPeriodWithGroup(period, input.GroupIds, input.AgentSearchTerm)
-											: _peopleSearchProvider.FindPersonIdsInPeriodWithDynamicGroup(period,input.SelectedGroupPageId, input.DynamicOptionalValues, input.AgentSearchTerm);
 
-			}
-			else if (searchAgentBasedOnCorrectPeriodToggle)
-			{
-				targetIds = _peopleSearchProvider.FindPersonIdsInPeriod(new DateOnlyPeriod(input.StartDate, input.EndDate),
-					input.GroupIds, input.AgentSearchTerm);
-			}
-			else
-			{
-				targetIds = _peopleSearchProvider.FindPersonIds(input.StartDate, input.GroupIds, input.AgentSearchTerm);
-			}
+			var period = new DateOnlyPeriod(input.StartDate, input.EndDate);
+			targetIds = !input.IsDynamic ? _peopleSearchProvider.FindPersonIdsInPeriodWithGroup(period, input.GroupIds, input.AgentSearchTerm)
+										: _peopleSearchProvider.FindPersonIdsInPeriodWithDynamicGroup(period, input.SelectedGroupPageId, input.DynamicOptionalValues, input.AgentSearchTerm);
 
 			if (targetIds.Count == 0)
 				filter.Persons = new List<IPerson>();

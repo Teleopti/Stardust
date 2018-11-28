@@ -14,9 +14,9 @@
 		}
 	});
 
-	StaffingInfoController.$inject = ['$scope', '$document', '$timeout', '$q', 'SkillGroupSvc', 'StaffingInfoService', 'TeamScheduleChartService', 'teamsToggles', 'skillIconService', 'serviceDateFormatHelper'];
+	StaffingInfoController.$inject = ['$scope', '$document', '$timeout', '$q', 'SkillGroupSvc', 'StaffingInfoService', 'TeamScheduleChartService', 'skillIconService', 'serviceDateFormatHelper'];
 
-	function StaffingInfoController($scope, $document, $timeout, $q, SkillGroupSvc, StaffingInfoService, ChartService, teamsToggles, skillIconService, serviceDateFormatHelper) {
+	function StaffingInfoController($scope, $document, $timeout, $q, SkillGroupSvc, StaffingInfoService, ChartService, skillIconService, serviceDateFormatHelper) {
 		var vm = this;
 
 		vm.skills = [];

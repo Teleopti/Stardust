@@ -102,7 +102,7 @@
 		vm.onScheduleDateChanged = function () {
 			vm.weekDays = Util.getWeekdays(vm.scheduleDate);
 
-			loadGroupings();
+			vm.getGroupPagesAsync();
 			vm.loadSchedules();
 		};
 
@@ -217,11 +217,7 @@
 				var startOfWeek = Util.getFirstDayOfWeek(date);
 				var endOfWeek = serviceDateFormatHelper.getDateOnly(moment(startOfWeek).add(6, 'days'));
 
-				var promise = toggles.Wfm_HideUnusedTeamsAndSites_42690 ?
-					teamScheduleSvc.hierarchyOverPeriod(startOfWeek, endOfWeek)
-					: teamScheduleSvc.hierarchy(date);
-
-				promise.then(function (data) {
+				teamScheduleSvc.hierarchyOverPeriod(startOfWeek, endOfWeek).then(function (data) {
 					resolve(data);
 					loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
 					vm.sitesAndTeams = data.Children;
@@ -279,13 +275,6 @@
 			return teamNameMap;
 		}
 
-		function loadGroupings() {
-			if (toggles.Wfm_GroupPages_45057)
-				vm.getGroupPagesAsync();
-			else
-				vm.getSitesAndTeamsAsync();
-		}
-
 		function initSelectedGroups(mode, groupIds, groupPageId) {
 			vm.selectedGroups = {
 				mode: mode,
@@ -295,7 +284,7 @@
 		}
 
 		function init() {
-			loadGroupings();
+			vm.getGroupPagesAsync();
 
 			$q.all(asyncData).then(function (data) {
 				if (data.pageSetting.Agents > 0) {

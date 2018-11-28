@@ -411,7 +411,6 @@ describe('teamschedule schedule table controller tests', function () {
 	}));
 
 	it("should show icon if schedules has underlying schedule summaries", function () {
-		toggleSvc.WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 = true;
 		var underlyingScheduleSummary = {
 			PersonalActivities: [{ Description: 'Personal activity 1', Timespan: '10:00 - 11:00' }]
 		};
@@ -615,7 +614,7 @@ describe('teamschedule schedule table controller tests', function () {
 			AllowSwap: function () { return false; },
 			UnderlyingScheduleSummary: underlyingScheduleSummary,
 			HasUnderlyingSchedules: function () {
-				return toggleSvc.WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 && !!underlyingScheduleSummary;
+				return !!underlyingScheduleSummary;
 			},
 			IsFullDayAbsence: isFullDayAbsence,
 			ActivityCount: function () {

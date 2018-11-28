@@ -20,12 +20,8 @@
 					<favorite-search apply-favorite="vm.applyFavorite(currentFavorite)" get-search="vm.getSearch()" current-favorite="vm.selectedFavorite"
 					 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
 
-					<group-page-picker ng-if="vm.Wfm_GroupPages_45057" group-pages="vm.availableGroups" on-close="vm.changeSelectedTeams()"
+					<group-page-picker  group-pages="vm.availableGroups" on-close="vm.changeSelectedTeams()"
 					 class="group-picker-container inline-block" selected-groups="vm.selectedGroups"></group-page-picker>
-
-					<organization-picker ng-if="!vm.Wfm_GroupPages_45057" sites-and-teams="vm.sitesAndTeams" on-open="vm.agentSearchOptions.focusingSearch = false"
-					 on-close="vm.changeSelectedTeams()" selected-team-ids="vm.selectedGroups.groupIds" selected-text="vm.orgPickerSelectedText()"
-					 class="organization-picker-container"></organization-picker>
 
 					<div class="people-search-container" ng-style="{'visibility': vm.hideSearchIfNoSelectedTeam()}">
 						<wfm-multiple-search-input class="request-filter inline-block" search-title="vm.searchPlaceholder" search-options="vm.agentSearchOptions"

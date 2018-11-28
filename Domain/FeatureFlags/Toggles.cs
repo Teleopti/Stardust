@@ -33,18 +33,9 @@
 
 		Wfm_MinimumScaffolding_32659,
 		Wfm_WebPlan_Pilot_46815,
-		Wfm_HideUnusedTeamsAndSites_42690,
-		Wfm_SearchAgentBasedOnCorrectPeriod_44552,
-		Wfm_AddMyTimeLink_45088,
-		Wfm_GroupPages_45057,
-		Wfm_FetchBusinessHierarchyFromReadModel_45275,
 		
-		WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010,
-		WfmTeamSchedule_AddNDeleteDayOff_40555,
-		WfmTeamSchedule_RemoveShift_46322,
 		WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871,
 		WfmTeamSchedule_SuggestShiftCategory_152,
-		WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952,
 		WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978,
 
 		Wfm_Requests_Approve_Based_On_Budget_Allotment_39626,

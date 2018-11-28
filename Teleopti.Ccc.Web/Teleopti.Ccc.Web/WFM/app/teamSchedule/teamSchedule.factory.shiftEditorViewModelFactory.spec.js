@@ -4,9 +4,6 @@
 	beforeEach(module('wfm.templates', 'wfm.teamSchedule'));
 	beforeEach(
 		module(function ($provide) {
-			$provide.service('Toggle', function () {
-				return { WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952: true };
-			});
 			$provide.service('CurrentUserInfo', function () {
 				return {
 					CurrentUserInfo: function () {

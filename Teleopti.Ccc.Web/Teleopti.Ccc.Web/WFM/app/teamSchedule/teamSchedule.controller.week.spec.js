@@ -231,7 +231,6 @@
 	function initProvideService($provide) {
 		weekViewScheduleService = new WeekViewScheduleService();
 		groupPageService = new GroupPageService();
-		toggle = new ToggleService();
 
 		$provide.service('weekViewScheduleSvc', function () {
 			return weekViewScheduleService;
@@ -240,7 +239,7 @@
 			return groupPageService;
 		});
 		$provide.service('Toggle', function () {
-			return toggle;
+			return {};
 		});
 	}
 
@@ -277,12 +276,6 @@
 				}
 			}
 		}
-	}
-
-	function ToggleService() {
-		return {
-			Wfm_GroupPages_45057: true
-		};
 	}
 
 	function SignalRSVCService() {

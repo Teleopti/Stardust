@@ -115,20 +115,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/GetOrganizationWithPeriod")]
 		public virtual BusinessUnitWithSitesViewModel GetOrganizationWithPeriod(DateTime date)
 		{
-			return _toggleManager.IsEnabled(Toggles.Wfm_FetchBusinessHierarchyFromReadModel_45275)
-				? _teamProvider.GetOrganizationWithPeriod(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)),
-					DefinedRaptorApplicationFunctionPaths.MyTeamSchedules)
-				: _teamProvider.GetOrganizationBasedOnRawData(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)),
+			return _teamProvider.GetOrganizationWithPeriod(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)),
 					DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/GetOrganizationWithPeriod")]
 		public virtual BusinessUnitWithSitesViewModel GetOrganizationWithPeriod(DateTime startDate, DateTime endDate)
 		{
-			return _toggleManager.IsEnabled(Toggles.Wfm_FetchBusinessHierarchyFromReadModel_45275)
-				? _teamProvider.GetOrganizationWithPeriod(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)),
-					DefinedRaptorApplicationFunctionPaths.MyTeamSchedules)
-				: _teamProvider.GetOrganizationBasedOnRawData(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)),
+			return _teamProvider.GetOrganizationWithPeriod(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)),
 					DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 		}
 		

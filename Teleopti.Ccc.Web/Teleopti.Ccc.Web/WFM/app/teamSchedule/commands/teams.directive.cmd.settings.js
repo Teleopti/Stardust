@@ -12,11 +12,10 @@
 		}
 	}
 
-	settingsCtrl.$inject = ['$scope', '$state', 'ValidateRulesService', 'teamsToggles'];
+	settingsCtrl.$inject = ['$scope', '$state', 'ValidateRulesService'];
 
-	function settingsCtrl($scope, $state, validateRulesService, teamsToggles) {
+	function settingsCtrl($scope, $state, validateRulesService) {
 		var vm = this;
-		vm.toggles = teamsToggles.all();
 		vm.settings = {
 			validateWarningEnabled: false,
 			onlyLoadScheduleWithAbsence: false

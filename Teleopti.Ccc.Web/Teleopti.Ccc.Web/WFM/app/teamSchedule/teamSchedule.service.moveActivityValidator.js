@@ -1,9 +1,9 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module("wfm.teamSchedule").service('ActivityValidator', ['$filter', 'PersonSelection', 'belongsToDateDecider', 'teamsToggles', 'serviceDateFormatHelper', validator]);
+	angular.module("wfm.teamSchedule").service('ActivityValidator', ['$filter', 'PersonSelection', 'belongsToDateDecider', 'serviceDateFormatHelper', validator]);
 
-	function validator($filter, PersonSelectionSvc, belongsToDateDecider, teamsToggles, serviceDateFormatHelper) {
+	function validator($filter, PersonSelectionSvc, belongsToDateDecider, serviceDateFormatHelper) {
 		var self = this;
 		var MAX_SCHEDULE_LENGTH_IN_MINUTES = 36 * 60; // 36 hours
 		var invalidPeople = [];

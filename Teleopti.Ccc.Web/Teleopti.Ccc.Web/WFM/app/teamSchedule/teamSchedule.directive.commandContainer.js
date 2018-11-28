@@ -31,9 +31,9 @@
 		};
 	}
 
-	teamscheduleCommandContainerCtrl.$inject = ['$q', '$filter', '$element', '$scope', 'guidgenerator', 'teamsToggles', 'teamsPermissions', 'CommandCheckService', 'ScheduleManagement', 'PersonSelection', 'TeamSchedule','serviceDateFormatHelper'];
+	teamscheduleCommandContainerCtrl.$inject = ['$q', '$filter', '$element', '$scope', 'guidgenerator', 'teamsPermissions', 'CommandCheckService', 'ScheduleManagement', 'PersonSelection', 'TeamSchedule','serviceDateFormatHelper'];
 
-	function teamscheduleCommandContainerCtrl($q, $filter, $element, $scope, guidgenerator, teamsToggles, teamsPermissions, CommandCheckService, scheduleManagementSvc, personSelectionSvc, teamScheduleSvc, serviceDateFormatHelper) {
+	function teamscheduleCommandContainerCtrl($q, $filter, $element, $scope, guidgenerator, teamsPermissions, CommandCheckService, scheduleManagementSvc, personSelectionSvc, teamScheduleSvc, serviceDateFormatHelper) {
 		var vm = this;
 
 		vm.scheduleManagementSvc = scheduleManagementSvc.newService();
@@ -129,10 +129,6 @@
 
 		vm.hasPermission = function (permission) {
 			return teamsPermissions.all()[permission];
-		};
-
-		vm.hasToggle = function (toggle) {
-			return teamsToggles.all()[toggle];
 		};
 
 		vm.activeCommandCheck = function () {

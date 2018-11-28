@@ -14,7 +14,7 @@
 	beforeEach(
 		module(function ($provide) {
 			$provide.service('Toggle', function () {
-				return { WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952: true };
+				return { };
 			});
 			$provide.service('CurrentUserInfo', function () {
 				return {

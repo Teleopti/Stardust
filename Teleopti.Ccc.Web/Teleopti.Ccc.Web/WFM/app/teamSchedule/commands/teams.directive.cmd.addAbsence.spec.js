@@ -229,9 +229,7 @@
 		expect(result.container[0].innerHTML.indexOf('agent1') != -1).toBeTruthy();
 	});
 
-	it('should apply correct data for adding absence from part of day to x day when toggle WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010 is on', function () {
-		fakeToggle.WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010 = true;
-
+	it('should apply correct data for adding absence from part of day to x day', function () {
 		fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: false });
 		fakePersonSelectionService.setFakeCheckedPersonInfoList([
 			{
