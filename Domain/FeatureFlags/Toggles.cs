@@ -34,7 +34,6 @@
 		Wfm_MinimumScaffolding_32659,
 		Wfm_WebPlan_Pilot_46815,
 		
-		WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871,
 		WfmTeamSchedule_SuggestShiftCategory_152,
 		WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978,
 

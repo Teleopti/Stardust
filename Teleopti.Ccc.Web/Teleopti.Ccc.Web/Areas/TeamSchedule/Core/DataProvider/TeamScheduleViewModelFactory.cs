@@ -320,13 +320,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			};
 		}
 
-
-
 		private bool isResultTooMany<T>(IEnumerable<T> people)
 		{
-			var max = _toggleManager.IsEnabled(Toggles.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871) ? 750 : 500;
-			return people.Count() > max;
-
+			return people.Count() > 500;
 		}
 	}
 }

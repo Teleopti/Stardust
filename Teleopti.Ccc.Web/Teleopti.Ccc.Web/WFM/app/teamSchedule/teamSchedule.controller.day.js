@@ -603,13 +603,10 @@
 		};
 
 		vm.isResultTooMany = function () {
-			var toggle = toggleSvc.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871;
-			return (toggle && vm.total > 750) || (!toggle && vm.total > 500);
+			return vm.total > 500;
 		}
 		vm.warningMessageForTooManyResults = function () {
-			var toggle = toggleSvc.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871;
-			var max = toggle ? 750 : 500;
-			return $translate.instant('TooManyResultsForSearchKeywords').replace('{0}', max);
+			return $translate.instant('TooManyResultsForSearchKeywords').replace('{0}', 500);
 		}
 
 
