@@ -352,6 +352,13 @@ wfm-date-range-picker-header {
 	}
 }
 
+wfm-date-picker-body,
+wfm-date-range-picker-body {
+	border-left: 1px solid $gray012;
+	border-bottom: 1px solid $gray012;
+	border-right: 1px solid $gray012;
+}
+
 wfm-date-picker-body > .date-info-wrapper,
 wfm-date-range-picker-body > .date-info-wrapper {
 	height: 280px;
@@ -421,8 +428,8 @@ wfm-date-range-picker-body > .date-info-wrapper {
 		position: absolute;
 		top: 0;
 		height: 50%;
-		width: calc(100% - 5px);
-		background: white;
+		width: 100%;
+		background: $white;
 	}
 
 	.transition-block.transit-to-start {
