@@ -92,9 +92,9 @@ export class SideMenuComponent implements OnInit {
 		if (!area.inNewTab) {
 			event.preventDefault();
 			if (area.CustomStateName) {
-				this.$state.go(area.CustomStateName);
+				this.$state.go(area.CustomStateName, {}, { reload: true });
 			} else {
-				this.$state.go(area.InternalName);
+				this.$state.go(area.InternalName, {}, { reload: true });
 			}
 		}
 	}
