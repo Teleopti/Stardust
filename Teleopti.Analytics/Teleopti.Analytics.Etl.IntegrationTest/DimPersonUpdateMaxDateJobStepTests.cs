@@ -174,8 +174,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 					new Tenants(tenantUnitOfWorkManager,
 						new LoadAllTenants(tenantUnitOfWorkManager),
 						dsFactory,
-						new BaseConfigurationRepository(),
-						new TrueToggleManager())),
+						new BaseConfigurationRepository())),
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 

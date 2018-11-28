@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private ShiftTradeSettings _shiftTradeSettings;
 		private SFGridColumnGridHelper<ShiftTradeBusinessRuleConfigView> _gridColumnHelper;
 		private readonly IBusinessRuleConfigProvider _businessRuleConfigProvider;
-		private readonly IToggleManager _toggleManager;
 
 		private static readonly Dictionary<RequestHandleOption, ShiftTradeRequestHandleOptionView> _shiftTradeRequestHandleOptionViews
 			= new Dictionary<RequestHandleOption, ShiftTradeRequestHandleOptionView>()
@@ -36,9 +35,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private IList<ShiftTradeBusinessRuleConfigView> _businessRuleConfigViews;
 
-		public ShiftTradeSystemSettings(IToggleManager toggleManager, IBusinessRuleConfigProvider businessRuleConfigProvider)
+		public ShiftTradeSystemSettings(IBusinessRuleConfigProvider businessRuleConfigProvider)
 		{
-			_toggleManager = toggleManager;
 			_businessRuleConfigProvider = businessRuleConfigProvider;
 			InitializeComponent();
 		}

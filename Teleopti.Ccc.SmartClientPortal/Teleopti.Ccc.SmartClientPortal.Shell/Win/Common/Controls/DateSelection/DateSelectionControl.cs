@@ -25,11 +25,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 			dateSelectionFromTo1.ValueChanged += dateSelectionFromTo1DateRangeValueChanged;
 		}
 
-		public void AllowValueChangedEvent(bool allow)
-		{
-			if (!allow) dateSelectionFromTo1.ValueChanged -= dateSelectionFromTo1DateRangeValueChanged;
-		}
-
 		  public IList<DateOnlyPeriod> GetCurrentlySelectedDates()
 		{
 			var dateSelection =

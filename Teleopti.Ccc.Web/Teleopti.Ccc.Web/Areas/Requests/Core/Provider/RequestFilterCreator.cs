@@ -23,17 +23,15 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 		private readonly IPeopleSearchProvider _peopleSearchProvider;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IApplicationRoleRepository _applicationRoleRepository;
-		private readonly IToggleManager _toggleManager;
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 		private readonly IPermissionProvider _permissionProvider;
 
 
-		public RequestFilterCreator(IPeopleSearchProvider peopleSearchProvider, IUserTimeZone userTimeZone, IApplicationRoleRepository applicationRoleRepository, IToggleManager toggleManager, IGroupingReadOnlyRepository groupingReadOnlyRepository, IPermissionProvider permissionProvider)
+		public RequestFilterCreator(IPeopleSearchProvider peopleSearchProvider, IUserTimeZone userTimeZone, IApplicationRoleRepository applicationRoleRepository, IGroupingReadOnlyRepository groupingReadOnlyRepository, IPermissionProvider permissionProvider)
 		{
 			_peopleSearchProvider = peopleSearchProvider;
 			_userTimeZone = userTimeZone;
 			_applicationRoleRepository = applicationRoleRepository;
-			_toggleManager = toggleManager;
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 			_permissionProvider = permissionProvider;
 		}

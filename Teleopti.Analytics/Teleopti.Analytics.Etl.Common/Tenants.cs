@@ -20,21 +20,18 @@ namespace Teleopti.Analytics.Etl.Common
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly IDataSourcesFactory _dataSourcesFactory;
 		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
-		private readonly IToggleManager _toggleManager;
 		private static readonly Dictionary<string, TenantInfo> listofTenants = new Dictionary<string, TenantInfo>();
 
 		public Tenants(
 			ITenantUnitOfWork tenantUnitOfWork, 
 			ILoadAllTenants loadAllTenants, 
 			IDataSourcesFactory dataSourcesFactory,
-			IBaseConfigurationRepository baseConfigurationRepository,
-			IToggleManager toggleManager)
+			IBaseConfigurationRepository baseConfigurationRepository)
 		{
 			_tenantUnitOfWork = tenantUnitOfWork;
 			_loadAllTenants = loadAllTenants;
 			_dataSourcesFactory = dataSourcesFactory;
 			_baseConfigurationRepository = baseConfigurationRepository;
-			_toggleManager = toggleManager;
 		}
 
 		public static bool IsAllTenants(string tenantName)

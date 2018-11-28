@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly IScheduleValidationProvider _validationProvider;
 		private readonly IShiftCategoryProvider _shiftCategoryProvider;
 		private readonly ITeamsProvider _teamProvider;
-		private readonly IToggleManager _toggleManager;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IOptionalColumnRepository _optionalColumnRepository;
 		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
@@ -33,7 +32,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			IScheduleValidationProvider validationProvider,
 			IShiftCategoryProvider shiftCategoryProvider,
 			ITeamsProvider teamProvider,
-			IToggleManager toggleManager,
 			IScenarioRepository scenarioRepository,
 			IOptionalColumnRepository optionalColumnRepository,
 			IDayOffTemplateRepository dayOffTemplateRepository)
@@ -42,7 +40,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_validationProvider = validationProvider;
 			_shiftCategoryProvider = shiftCategoryProvider;
 			_teamProvider = teamProvider;
-			_toggleManager = toggleManager;
 			_scenarioRepository = scenarioRepository;
 			_optionalColumnRepository = optionalColumnRepository;
 			_dayOffTemplateRepository = dayOffTemplateRepository;

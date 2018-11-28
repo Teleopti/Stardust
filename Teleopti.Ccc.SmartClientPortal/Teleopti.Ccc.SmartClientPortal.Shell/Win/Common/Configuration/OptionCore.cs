@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				new StateGroupControl(),
 				new ShiftCategorySettingsControl(),
 				new AvailabilityPage(),
-				new SystemSettingControl(_toggleManager),
+				new SystemSettingControl(),
 				new RotationPage(),
 				new DaysOffControl(),
 				new AlarmControl(alarmControlPresenterDecorators()),
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			}
 			else
 			{
-				allSupportedPages.Add(new GamificationSettingControl(_toggleManager));
+				allSupportedPages.Add(new GamificationSettingControl());
 				allSupportedPages.Add(new SetGamificationSettingTargetsControl());
 			}
 
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				allSupportedPages.Add(new MultiplicatorControlView());
 
 			allSupportedPages.Add(new NotificationSettingsControl());
-			allSupportedPages.Add (new ShiftTradeSystemSettings(_toggleManager, _businessRuleConfigProvider));
+			allSupportedPages.Add (new ShiftTradeSystemSettings(_businessRuleConfigProvider));
 
 			return allSupportedPages;
 		}

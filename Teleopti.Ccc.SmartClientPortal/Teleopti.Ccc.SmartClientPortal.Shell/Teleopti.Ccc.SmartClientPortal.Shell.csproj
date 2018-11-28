@@ -1242,7 +1242,6 @@
     <Compile Include="WinCode\Shifts\Views\IExplorerView.cs" />
     <Compile Include="WinCode\Shifts\Views\IGeneralView.cs" />
     <Compile Include="WinCode\Shifts\Views\INavigationView.cs" />
-    <Compile Include="WinCode\Shifts\Views\IVisualizeView.cs" />
     <Compile Include="WinCode\Shifts\VisualPayloadInfo.cs" />
     <Compile Include="WinCode\Shifts\WorkShiftAddCallback.cs" />
     <Compile Include="WinCode\Tracking\DefaultTracker.cs" />
