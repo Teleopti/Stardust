@@ -127,7 +127,6 @@
 		};
 
 		vm.onStateChanged = function(evt, to, params, from) {
-			if (to.name !== 'intraday.legacy') return;
 			if (params.isNewSkillArea === true) {
 				reloadSkillGroups(true);
 			} else reloadSkillGroups(false);

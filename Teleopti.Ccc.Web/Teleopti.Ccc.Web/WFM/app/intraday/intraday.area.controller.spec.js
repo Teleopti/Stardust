@@ -833,7 +833,7 @@ describe('IntradayAreaController', function() {
 	var createController = function(isNewlyCreatedSkillArea, toggleObj) {
 		vm = $controller('IntradayAreaController', { $scope: scope, $translate: $translate });
 		vm.toggles = Object.assign(defaultToggles, toggleObj);
-		vm.onStateChanged(undefined, { name: 'intraday.legacy' }, { isNewSkillArea: isNewlyCreatedSkillArea });
+		vm.onStateChanged(undefined, { name: 'intraday' }, { isNewSkillArea: isNewlyCreatedSkillArea });
 		scope.$digest();
 		$httpBackend.flush();
 	};
