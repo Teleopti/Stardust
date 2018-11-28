@@ -45,6 +45,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy {
 	loading = false;
 	exporting = false;
 	timer: any;
+	showSkills = true;
 
 	ngOnInit() {
 		this.timer = setInterval(this.updateOnInterval, 60000);
@@ -75,6 +76,10 @@ export class IntradayMainComponent implements OnInit, OnDestroy {
 		this.selectedDate = moment().add(e, 'days');
 		this.displayDate = this.selectedDate.format('LLLL');
 		this.updateData(true);
+	}
+
+	onShowHideSkills() {
+		this.showSkills = !this.showSkills;
 	}
 
 	exportToExcel() {

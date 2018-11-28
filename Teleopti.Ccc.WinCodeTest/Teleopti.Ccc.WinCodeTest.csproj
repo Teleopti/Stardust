@@ -578,7 +578,6 @@
     <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesAbsenceCommandTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesCommandTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesDayOffCommandTest.cs" />
-    <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesFulfilledCommandTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesFulfilledDayOffCommandTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesFulfilledShiftCommandTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesMustHaveCommandTest.cs" />
