@@ -292,6 +292,8 @@
     <Compile Include="Logon\SingleOwnedPerson.cs" />
     <Compile Include="MessageBroker\Server\MessageBrokerMailboxPurger.cs" />
     <Compile Include="MessageBroker\Server\MessageBrokerServerNoMailboxPurge.cs" />
+    <Compile Include="MessageBroker\Server\MessageBrokerServerThrottleMessages.cs" />
+    <Compile Include="MessageBroker\Server\RouteToGroupName.cs" />
     <Compile Include="MultiTenancy\ActiveTenants.cs" />
     <Compile Include="Notification\INotificationServiceClient.cs" />
     <Compile Include="Notification\NotificationServiceClient.cs" />

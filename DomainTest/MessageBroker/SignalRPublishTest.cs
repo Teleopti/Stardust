@@ -4,7 +4,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Messaging;
 
 namespace Teleopti.Ccc.DomainTest.MessageBroker
@@ -13,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 	[MessagingTest]
 	public class SignalRPublishTest
 	{
-		public IMessageBrokerServer Server;
+		public MessageBrokerServerTester Server;
 		public FakeSignalR SignalR;
 
 		[Test]
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 
 			Server.NotifyClients(notification);
 
-			SignalR.SentToGroups.Should().Have.SameValuesAs(notification.Routes().Select(MessageBrokerServer.RouteToGroupName));
+			SignalR.SentToGroups.Should().Have.SameValuesAs(notification.Routes().Select(RouteToGroupName.Convert));
 			SignalR.SentRoutes.Should().Have.SameValuesAs(notification.Routes());
 		}
 
@@ -42,5 +41,6 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 			Server.NotifyClientsMultiple(notifications);
 			SignalR.SentMessages.Should().Have.SameValuesAs(notifications);
 		}
+
 	}
 }

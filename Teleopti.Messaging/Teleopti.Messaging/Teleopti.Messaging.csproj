@@ -102,6 +102,7 @@
     <Compile Include="Client\NoMessageSender.cs" />
     <Compile Include="Client\SignalR\DisabledSignalRClient.cs" />
     <Compile Include="Client\SignalR\InProcessMessageSender.cs" />
+    <Compile Include="Client\SignalR\InProcessMessageSenderNoThrottle.cs" />
     <Compile Include="Exceptions\BrokerNotInstantiatedException.cs">
       <SubType>Code</SubType>
     </Compile>

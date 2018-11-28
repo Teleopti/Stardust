@@ -1,35 +1,47 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.MessageBroker.Server
 {
-	public class MessageBrokerServerNoMailboxPurge : IMessageBrokerServer
+	public class MessageBrokerServerThrottleMessages : IMessageBrokerServer, IDisposable
 	{
 		private readonly ISignalR _signalR;
 		private readonly IMailboxRepository _mailboxRepository;
 		private readonly INow _now;
+		private readonly ITime _time;
 		private readonly IBeforeSubscribe _beforeSubscribe;
 		private readonly TimeSpan _expirationInterval;
 		private readonly MessageBrokerTracer _tracer = new MessageBrokerTracer();
-		private readonly ILog _logger = LogManager.GetLogger(typeof(MessageBrokerServerNoMailboxPurge));
+		private readonly ILog _logger = LogManager.GetLogger(typeof(MessageBrokerServerThrottleMessages));
 
-		public MessageBrokerServerNoMailboxPurge(
+		private IDisposable _timer;
+		private readonly object _timerLock = new object();
+		private readonly ConcurrentQueue<Message> _messageQueue = new ConcurrentQueue<Message>();
+		private readonly TimeSpan _messageDistributionInterval;
+
+		public MessageBrokerServerThrottleMessages(
 			ISignalR signalR,
 			IBeforeSubscribe beforeSubscribe,
 			IMailboxRepository mailboxRepository,
 			IConfigReader config,
-			INow now)
+			INow now,
+			ITime time)
 		{
 			_signalR = signalR;
 			_mailboxRepository = mailboxRepository;
 			_now = now;
+			_time = time;
 			_beforeSubscribe = beforeSubscribe ?? new SubscriptionPassThrough();
+			//12 = 80 messages per second
+			_messageDistributionInterval = TimeSpan.FromMilliseconds(config.ReadValue("MessageBrokerServerIntervalMilliseconds", 12));
 			_expirationInterval = TimeSpan.FromSeconds(config.ReadValue("MessageBrokerMailboxExpirationInSeconds", 60 * 15));
 		}
 
@@ -90,9 +102,27 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 				: _mailboxRepository.PopMessages(mailboxIdGuid, null);
 		}
 
-		[MessageBrokerUnitOfWork]
-		public virtual void NotifyClients(Message message)
+		public void NotifyClients(Message message)
 		{
+			ensureThrottle();
+			_messageQueue.Enqueue(message);
+		}
+
+		public void NotifyClientsMultiple(IEnumerable<Message> messages) =>
+			messages.ForEach(NotifyClients);
+
+
+		private void ensureThrottle()
+		{
+			if (_timer == null)
+				_timer = _time.StartTimerWithLock(distributeAMessage, _timerLock, _messageDistributionInterval);
+		}
+
+		private void distributeAMessage()
+		{
+			if (!_messageQueue.TryDequeue(out var message))
+				return;
+
 			var routes = message.Routes();
 
 			if (_logger.IsDebugEnabled)
@@ -100,7 +130,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 					message.DomainUpdateType, string.Join(", ", routes),
 					string.Join(", ", routes.Select(RouteToGroupName.Convert)));
 
-			_mailboxRepository.AddMessage(message);
+			AddMessagesToMailbox(message);
 
 			foreach (var route in routes)
 			{
@@ -109,13 +139,12 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 
 			_tracer.ClientsNotified(message);
 		}
-		
-		public void NotifyClientsMultiple(IEnumerable<Message> messages)
-		{
-			foreach (var notification in messages)
-			{
-				NotifyClients(notification);
-			}
-		}
+
+		[MessageBrokerUnitOfWork]
+		protected virtual void AddMessagesToMailbox(Message message) =>
+			_mailboxRepository.AddMessage(message);
+
+		public void Dispose() =>
+			_timer?.Dispose();
 	}
 }
