@@ -16,11 +16,12 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge
 		private readonly StringBuilder sbTriedVisitByIdentityUrls = new StringBuilder();
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			var results = visitProviderUrls();
-			
-			var isScopeAccessible = tryVisitUrl(ServiceLocator.Container.Value.Resolve<IConfigurationRepository>().RetrieveDefaultScope(Request.UrlConsideringLoadBalancerHeaders()).Url.ToString());
-			results.Add("Teleopti web site", isScopeAccessible);
-			
+			var urls = providerUrls();
+			urls = urls.Append(() => ("Teleopti web site",
+				tryVisitUrl(ServiceLocator.Container.Value.Resolve<IConfigurationRepository>()
+					.RetrieveDefaultScope(Request.UrlConsideringLoadBalancerHeaders()).Url.ToString())));
+
+			var results = urls.AsParallel().Select(u => u()).ToDictionary(k => k.Item1, v => v.Item2);
 			foreach (var providerResult in results)
 			{
 				var statusText = providerResult.Value ? "OK" : "FAILED";
@@ -37,32 +38,29 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge
 			Response.StatusCode =  allOk ? 200: 202;
 		}
 
-		private Dictionary<string, bool> visitProviderUrls()
-		{
-			var configurationRepository = ServiceLocator.Container.Value.Resolve<IConfigurationRepository>();
-			var issuers = configurationRepository.RetrieveIssuers(Request.UrlConsideringLoadBalancerHeaders()).Where(provider => provider.DisplayName.ToLower().Contains("teleopti"));
-			var result = tryVisitUrlsByIdentity(issuers);
-			return result;
-		}
-
-		private Dictionary<string, bool> tryVisitUrlsByIdentity(IEnumerable<ClaimProvider> providers)
+		private IEnumerable<Func<ValueTuple<string, bool>>> providerUrls()
 		{
 			var uriLoadBalancer = Request.UrlConsideringLoadBalancerHeaders();
+			var configurationRepository = ServiceLocator.Container.Value.Resolve<IConfigurationRepository>();
+			var issuers = configurationRepository.RetrieveIssuers(uriLoadBalancer).Where(provider => provider.DisplayName.ToLower().Contains("teleopti"));
+
 			string baseUrl = uriLoadBalancer.Scheme + "://" + uriLoadBalancer.Authority +
-						  Request.ApplicationPath.TrimEnd('/') + "/";
-			return providers.AsParallel().Select(provider =>
+							 Request.ApplicationPath.TrimEnd('/') + "/";
+			return issuers.Select(provider =>
 			{
-				var authenticateUrl = baseUrl + "authenticate?whr=" + provider.Identifier;
+				return new Func<(string, bool)>(() =>
+				{
+					var authenticateUrl = baseUrl + "authenticate?whr=" + provider.Identifier;
 
-				sbTriedVisitByIdentityUrls.Append($"{authenticateUrl};");
+					sbTriedVisitByIdentityUrls.Append($"{authenticateUrl};");
 
-				return (provider.DisplayName, tryVisitUrl(authenticateUrl));
-			}).ToDictionary(k => k.Item1, v => v.Item2);
+					return (provider.DisplayName, tryVisitUrl(authenticateUrl));
+				});
+			});
 		}
-
+		
 		private static bool tryVisitUrl(string url)
 		{
-			
 			try
 			{
 				var httpWebRequest = WebRequest.CreateHttp(url);
