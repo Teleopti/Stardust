@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			{
 				var task = Task.Run(() => WithUnitOfWork.Do(() =>
 				{
-					AbsenceRepository.LoadAll();
+					//AbsenceRepository.LoadAll();
 					var startTime = new DateTime(2016, 3, 16, 8, 0, 0, DateTimeKind.Utc);
 					var endDateTime = new DateTime(2016, 3, 16, 17, 0, 0, DateTimeKind.Utc);
 					i = i - 1;
