@@ -51,11 +51,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			    !schedulingOptions.NotAllowedShiftCategories.Contains(foundShiftProjectionCache.TheWorkShift.ShiftCategory))
 				return foundShiftProjectionCache;
 			effectiveRestriction = effectiveRestriction.Combine(additionalEffectiveRestriction);
-			var openHoursResult = _openHoursSkillExtractor.Extract(teamBlockInfo, allSkillDays, datePointer.ToDateOnlyPeriod());	
-			if (openHoursResult != null && openHoursResult.OpenHoursDictionary.TryGetValue(datePointer, out var startEndRestriction))
-			{
-				effectiveRestriction = effectiveRestriction?.Combine(startEndRestriction);	
-			}
 			
 			if (effectiveRestriction == null) return null;
 
