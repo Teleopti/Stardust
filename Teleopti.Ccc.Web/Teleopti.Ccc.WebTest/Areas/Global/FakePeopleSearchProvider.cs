@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			IEnumerable<IPerson> people = _permittedPeople;
 
-			if (searchCriteria.ContainsKey(PersonFinderField.Role))
+			if (searchCriteria != null && searchCriteria.ContainsKey(PersonFinderField.Role))
 			{
 				people = filterByRole(searchCriteria, people);
 			}
