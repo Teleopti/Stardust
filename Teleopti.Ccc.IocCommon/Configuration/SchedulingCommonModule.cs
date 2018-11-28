@@ -296,11 +296,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_configuration.Toggle(Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118))
 			{
-				builder.RegisterType<MaxWorkTimeFullWeekSkillExtractor>().As<IMaxWorkTimeFullWeekSkillExtractor>().SingleInstance();
+				builder.RegisterType<OpenHoursSkillExtractor>().As<IOpenHoursSkillExtractor>().SingleInstance();
 			}
 			else
 			{
-				builder.RegisterType<MaxWorkTimeFullWeekSkillExtractorDoNothing>().As<IMaxWorkTimeFullWeekSkillExtractor>().SingleInstance();
+				builder.RegisterType<OpenHoursSkillExtractorDoNothing>().As<IOpenHoursSkillExtractor>().SingleInstance();
 			}
 
 			builder.RegisterType<MatrixNotPermittedLocker>().SingleInstance();

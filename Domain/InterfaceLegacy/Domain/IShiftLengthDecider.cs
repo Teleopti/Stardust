@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -15,6 +14,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		                                        IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
 		                                        IScheduleMatrixPro matrix, 
 		                                        SchedulingOptions schedulingOptions,
-												IDictionary<DateOnly, TimeSpan> maxWorkTimeDictionary);
+												OpenHoursSkillResult openHoursResult);
 	}
 }

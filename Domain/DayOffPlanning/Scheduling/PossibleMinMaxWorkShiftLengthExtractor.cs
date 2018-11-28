@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Interfaces.Domain;
 
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
             _extractedLengths.Clear();
         }
 
-        public MinMax<TimeSpan> PossibleLengthsForDate(DateOnly dateOnly, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, IDictionary<DateOnly, TimeSpan> maxWorkTimeDictionary)
+        public MinMax<TimeSpan> PossibleLengthsForDate(DateOnly dateOnly, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, OpenHoursSkillResult openHoursSkillResult)
 		{
 			if (_extractedLengths.Count ==0)
 			{
@@ -68,16 +68,9 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 
                 if (matrix.SchedulePeriod.IsValid && ruleSetBag != null)
 				{
-					if (maxWorkTimeDictionary != null && maxWorkTimeDictionary.TryGetValue(dateOnly, out var maxWorkTime))
+					if (openHoursSkillResult != null && openHoursSkillResult.OpenHoursDictionary.TryGetValue(dateOnly, out var startEndRestriction))
 					{
-						var effectiveRestriction = new EffectiveRestriction(
-							new StartTimeLimitation(),
-							new EndTimeLimitation(),
-							new WorkTimeLimitation(null, maxWorkTime),
-							null, null, null,
-							new List<IActivityRestriction>());
-
-						restriction = restriction?.Combine(effectiveRestriction);
+						restriction = restriction?.Combine(startEndRestriction);	
 					}
 
 					ret = ruleSetBag.MinMaxWorkTime(

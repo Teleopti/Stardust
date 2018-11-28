@@ -324,7 +324,7 @@
     <Compile Include="Scheduling\AgentsWithPreferences.cs" />
     <Compile Include="Scheduling\AgentsWithWhiteSpots.cs" />
     <Compile Include="Scheduling\AlreadyScheduledAgents.cs" />
-    <Compile Include="Scheduling\MaxWorkTimeFullWeekSkillExtractor.cs" />
+    <Compile Include="Scheduling\OpenHoursSkillExtractor.cs" />
     <Compile Include="Scheduling\ReducedSkillsProvider.cs" />
     <Compile Include="Scheduling\RemoveNonPreferenceDaysOffs.cs" />
     <Compile Include="Scheduling\SchedulingInformation.cs" />

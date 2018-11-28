@@ -3,7 +3,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
@@ -17,16 +16,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly WorkShiftFilterService _workShiftFilterService;
 		private readonly SameOpenHoursInTeamBlock _sameOpenHoursInTeamBlock;
 		private readonly FirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
+		private readonly IOpenHoursSkillExtractor _openHoursSkillExtractor;
 
 		public TeamBlockRoleModelSelector(ITeamBlockRestrictionAggregator teamBlockRestrictionAggregator,
 			WorkShiftFilterService workShiftFilterService,
 			SameOpenHoursInTeamBlock sameOpenHoursInTeamBlock,
-			FirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder)
+			FirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder,
+			IOpenHoursSkillExtractor openHoursSkillExtractor
+			)
 		{
 			_teamBlockRestrictionAggregator = teamBlockRestrictionAggregator;
 			_workShiftFilterService = workShiftFilterService;
 			_sameOpenHoursInTeamBlock = sameOpenHoursInTeamBlock;
 			_firstShiftInTeamBlockFinder = firstShiftInTeamBlockFinder;
+			_openHoursSkillExtractor = openHoursSkillExtractor;
 		}
 
 		public ShiftProjectionCache Select(IScheduleDictionary schedules,
@@ -47,10 +50,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (foundShiftProjectionCache != null &&
 			    !schedulingOptions.NotAllowedShiftCategories.Contains(foundShiftProjectionCache.TheWorkShift.ShiftCategory))
 				return foundShiftProjectionCache;
-			
 			effectiveRestriction = effectiveRestriction.Combine(additionalEffectiveRestriction);
-			var adjustedStartTimeRestriction = new EffectiveRestriction();
-			effectiveRestriction = effectiveRestriction?.Combine(adjustedStartTimeRestriction);
+			var openHoursResult = _openHoursSkillExtractor.Extract(teamBlockInfo, allSkillDays, datePointer.ToDateOnlyPeriod());	
+			if (openHoursResult != null && openHoursResult.OpenHoursDictionary.TryGetValue(datePointer, out var startEndRestriction))
+			{
+				effectiveRestriction = effectiveRestriction?.Combine(startEndRestriction);	
+			}
+			
 			if (effectiveRestriction == null) return null;
 
 			//TODO: This check could probably be moved "higher up" for perf reasons/fewer calls

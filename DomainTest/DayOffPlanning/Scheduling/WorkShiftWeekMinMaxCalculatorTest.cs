@@ -5,6 +5,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -356,7 +357,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 
     public class PossibleMinMaxWorkShiftLengthExtractorForThisTest : IPossibleMinMaxWorkShiftLengthExtractor
     {
-        public MinMax<TimeSpan> PossibleLengthsForDate(DateOnly dateOnly, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, IDictionary<DateOnly, TimeSpan> maxWorkTimeDictionary)
+        public MinMax<TimeSpan> PossibleLengthsForDate(DateOnly dateOnly, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, OpenHoursSkillResult openHoursSkillResult)
         {
             if (dateOnly.DayOfWeek == DayOfWeek.Saturday || dateOnly.DayOfWeek == DayOfWeek.Sunday)
                 return new MinMax<TimeSpan>(TimeSpan.FromHours(9), TimeSpan.FromHours(9));
