@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		[When(@"I input planning group name '(.*)'")]
 		public void WhenIInputPlanningGroupName(string planningGroupName)
 		{
-			Browser.Interactions.FillWith("input#planningGroupName", planningGroupName);
+			Browser.Interactions.FillWith("input#planningGroupNameId", planningGroupName);
 		}
 
 		[When(@"I input scheduling setting name '(.*)'")]
