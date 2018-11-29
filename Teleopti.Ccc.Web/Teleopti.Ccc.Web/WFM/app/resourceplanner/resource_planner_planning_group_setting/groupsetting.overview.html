@@ -31,9 +31,10 @@
 <div class="con-row">
 	<div class="con-flex">
 		<card-panel-list>
-			<card-panel ng-repeat="setting in vm.schedulingSetting | filter:vm.filterName" color="vm.color" open="single" pre-open="setting.Name"
+			<card-panel ng-class="" ng-repeat="setting in vm.schedulingSetting | filter:vm.filterName" color="vm.color" pre-open="setting.Name"
 			 id="$index">
 				<card-panel-header>
+					<span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
 					<div class="title header-flex">
 						<b class="scheduling-setting-name">{{setting.Name}}</b>
 					</div>
