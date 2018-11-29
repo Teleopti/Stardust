@@ -7,17 +7,11 @@ using System.Threading;
 using System.Windows.Forms;
 using Autofac;
 using Microsoft.Practices.Composite.Events;
-using Teleopti.Ccc.Domain.Auditing;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
@@ -26,7 +20,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Reporting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
@@ -152,31 +145,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 				getReportDataForScheduledTimeVersusTarget(
 					getReportSettingsModel() as ReportSettingsScheduleTimeVersusTargetTimeModel);
 			reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage);
-		}
-
-		//from scheduler
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-			 MessageId = "0"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
-			 "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-		public void LoadScheduledTimePerActivityReport(ReportDetail reportDetail,
-			IDictionary<string, IList<IReportData>> reportData, IList<IReportDataParameter> reportDataParameters,
-			ScheduleViewBase scheduleViewBase, IScenario scenario)
-		{
-			var reportDataPackage = new ReportDataPackage<IReportData>(reportData, reportDataParameters, false);
-			reportViewerControl1.LoadReport(reportDetail.File, reportDataPackage);
-			setupSettings(reportDetail);
-			_scheduleViewBase = scheduleViewBase;
-			_scenario = scenario;
-			_reportDetail = reportDetail;
-			_openFromScheduler = true;
-			reportSettings1.Fold();
-		}
-
-		//from scheduler
-		private void setupSettings(ReportDetail reportDetail)
-		{
-			reportSettings1.SetupFromScheduler(reportDetail);
 		}
 
 		//from tree

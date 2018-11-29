@@ -197,33 +197,5 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			parameters.Add(new ReportDataParameter("param_timezone", TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone.StandardName));
 		}
 
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public static void RefreshScheduleTimePerActivity(SchedulerReportsViewer viewer, ReportDetail reportDetail, ScheduleViewBase scheduleViewBase, IScenario loadedScenario, CultureInfo culture)
-		{
-			var parameters = new List<IReportDataParameter>();
-			createScheduleTimePerActivityParameters(scheduleViewBase, loadedScenario, parameters, culture);
-
-			var data = new Dictionary<string, IList<IReportData>>();
-			data.Add("DataSet1", ScheduledTimePerActivityModel.GetReportDataFromScheduleParts(scheduleViewBase.SelectedSchedules()));
-
-			viewer.LoadScheduledTimePerActivityReport(reportDetail, data, parameters, scheduleViewBase, loadedScenario);      
-		}
-
-
-		// måste nog brytas isär lite om man ska ladda från ScheduleDictionary från trädet.
-		private static void showScheduleTimePerActivity(ReportDetail reportDetail, ScheduleViewBase scheduleViewBase, IScenario loadedScenario, CultureInfo culture)
-		{
-			var viewer = new SchedulerReportsViewer(new EventAggregator(), null, null);
-
-			var parameters = new List<IReportDataParameter>();
-			createScheduleTimePerActivityParameters(scheduleViewBase, loadedScenario, parameters, culture);
-   
-			var data = new Dictionary<string, IList<IReportData>>();
-			data.Add("DataSet1", ScheduledTimePerActivityModel.GetReportDataFromScheduleParts(scheduleViewBase.SelectedSchedules()));
-
-			viewer.LoadScheduledTimePerActivityReport(reportDetail, data, parameters, scheduleViewBase, loadedScenario);
-			viewer.Show();
-		}
 	}
 }
