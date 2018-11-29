@@ -420,4 +420,20 @@
 
 		equal(Teleopti.MyTimeWeb.Common.IsHostAMobile(ua), true);
 	});
+
+	test('should be able to get a black default text color', function() {
+		equal(Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(), 'black');
+	});
+
+	test('should be able to get a white text color for background #303a30', function() {
+		equal(Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor('#303a30'), 'white');
+	});
+
+	test('should be able to get a white text color for background #222', function() {
+		equal(Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor('#222'), 'white');
+	});
+
+	test('should be able to get a black text color for background rgb(200,200,200)', function() {
+		equal(Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor('rgb(200,200,200)'), 'black');
+	});
 });

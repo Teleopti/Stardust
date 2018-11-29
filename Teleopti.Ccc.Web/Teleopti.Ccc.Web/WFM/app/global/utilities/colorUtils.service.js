@@ -4,6 +4,9 @@
 	angular.module('wfm.utilities').service('colorUtils', colorUtils);
 
 	function colorUtils() {
+		//Note: for the unified look of the activity color and text in Web,
+		//please keep this color strategy synced with the one in MyTime: Teleopti.MyTimeWeb.Common.js
+		//which locates in \Teleopti.Ccc.Web\Teleopti.Ccc.Web\Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Common.js
 		var svc = this;
 
 		svc.getTextColorBasedOnBackgroundColor = function(backgroundColor) {
