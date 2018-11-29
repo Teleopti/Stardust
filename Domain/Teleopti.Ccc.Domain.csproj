@@ -587,7 +587,6 @@
     <Compile Include="Repositories\PersonBudgetGroupName.cs" />
     <Compile Include="Reports\IScheduleAnalysisProvider.cs" />
     <Compile Include="Reports\ScheduleAnalysisAuditTrailProvider.cs" />
-    <Compile Include="Reports\ScheduleAnalysisProvider.cs" />
     <Compile Include="ResourceCalculation\AddBpoResourcesToContext.cs" />
     <Compile Include="ResourceCalculation\ExternalStaff.cs" />
     <Compile Include="ResourceCalculation\ShiftProjectionCacheFetcher.cs" />

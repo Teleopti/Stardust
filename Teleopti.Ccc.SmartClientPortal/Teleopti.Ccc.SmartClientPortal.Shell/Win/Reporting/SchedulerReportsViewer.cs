@@ -84,18 +84,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 		{
 			try
 			{
-				switch (_reportDetail.FunctionPath)
-				{
-					case DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport:
-						refreshScheduledTimePerActivity();
-						break;
-					case DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport:
-						refreshScheduleAuditing();
-						break;
-					case DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport:
-						refreshScheduleTimeVersusTarget();
-						break;
-				}
+				refreshScheduleTimeVersusTarget();
 			}
 			catch (DataSourceException dataSourceException)
 			{
@@ -110,22 +99,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 		void backgroundWorkerLoadReportDoWork(object sender, DoWorkEventArgs e)
 		{
 			setThreadCulture();
-			switch (_reportDetail.FunctionPath)
-			{
-				case DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport:
-					e.Result = getReportDataForScheduleTimePerActivityReport(
-						e.Argument as ReportSettingsScheduledTimePerActivityModel);
-					break;
-				case DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport:
-					//NEW_AUDIT
-					e.Result = getReportDataForScheduleAuditingReport(e.Argument as ReportSettingsScheduleAuditingModel);
-					break;
-				case DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport:
-					e.Result = getReportDataForScheduledTimeVersusTarget(
-						e.Argument as ReportSettingsScheduleTimeVersusTargetTimeModel);
-					break;
-			}
-
+			e.Result = getReportDataForScheduledTimeVersusTarget(
+				e.Argument as ReportSettingsScheduleTimeVersusTargetTimeModel);
 			Application.DoEvents();
 		}
 
@@ -142,34 +117,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			reportSettings1.ShowSpinningProgress(false);
 			if (rethrowBackgroundException(e)) return;
 
-			switch (_reportDetail.FunctionPath)
+			if (e.Result is ReportDataPackage<IScheduledTimeVersusTargetTimeReportData> reportDataPackage3)
 			{
-				case DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport:
-					if (e.Result is ReportDataPackage<IReportData> reportDataPackage1)
-					{
-						reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage1);
-					}
-
-					break;
-				case DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport:
-					if (e.Result is ReportDataPackage<ScheduleAuditingReportData> reportDataPackage2)
-					{
-						reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage2);
-						if (reportDataPackage2.LimitReached)
-						{
-							MessageBox.Show(this, Resources.MaximumNumberOfReportRowsReached,
-								Resources.NarrowToSeeAll, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-						}
-					}
-
-					break;
-				case DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport:
-					if (e.Result is ReportDataPackage<IScheduledTimeVersusTargetTimeReportData> reportDataPackage3)
-					{
-						reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage3);
-					}
-
-					break;
+				reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage3);
 			}
 
 			_eventAggregator.GetEvent<LoadReportDone>().Publish(true);
@@ -196,35 +146,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			}
 		}
 
-		private void refreshScheduleAuditing()
-		{
-			//NEW_AUDIT
-			var reportDataPackage =
-				getReportDataForScheduleAuditingReport(getReportSettingsModel() as ReportSettingsScheduleAuditingModel);
-			reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage);
-		}
-
 		private void refreshScheduleTimeVersusTarget()
 		{
 			var reportDataPackage =
 				getReportDataForScheduledTimeVersusTarget(
 					getReportSettingsModel() as ReportSettingsScheduleTimeVersusTargetTimeModel);
 			reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage);
-		}
-
-		private void refreshScheduledTimePerActivity()
-		{
-			if (_openFromScheduler)
-			{
-				ReportHandler.RefreshScheduleTimePerActivity(this, _reportDetail, _scheduleViewBase, _scenario, _currentCulture);
-			}
-			else
-			{
-				var reportDataPackage =
-					getReportDataForScheduleTimePerActivityReport(
-						getReportSettingsModel() as ReportSettingsScheduledTimePerActivityModel);
-				reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage);
-			}
 		}
 
 		//from scheduler
@@ -286,75 +213,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
 			return new ReportDataPackage<IScheduledTimeVersusTargetTimeReportData>(data, parameters, false);
 		}
-
-		private ReportDataPackage<ScheduleAuditingReportData> getReportDataForScheduleAuditingReport(
-			ReportSettingsScheduleAuditingModel model)
-		{
-			IList<ScheduleAuditingReportData> reportData;
-
-			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var rep = new ScheduleHistoryReport(UnitOfWorkFactory.Current, TeleoptiPrincipal.CurrentPrincipal.Regional);
-
-				if (model.ModifiedBy.Count > 1 || model.ModifiedBy.Count == 0)
-				{
-					reportData = rep.Report(model.ChangePeriod, model.SchedulePeriod, model.Agents, maximumRows).ToList();
-				}
-				else
-				{
-					reportData = rep.Report(model.ModifiedBy[0], model.ChangePeriod, model.SchedulePeriod, model.Agents, maximumRows)
-						.ToList();
-				}
-			}
-
-			var data = new Dictionary<string, IList<ScheduleAuditingReportData>> {{"DataSet2", reportData}};
-			var parameters = ReportHandler.CreateScheduleAuditingParameters(model, _currentCulture);
-
-			return new ReportDataPackage<ScheduleAuditingReportData>(data, parameters, reportData.Count > maximumRows);
-		}
-
-		//from tree
-		private ReportDataPackage<IReportData> getReportDataForScheduleTimePerActivityReport(
-			ReportSettingsScheduledTimePerActivityModel model)
-		{
-			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
-			var data = new Dictionary<string, IList<IReportData>>();
-
-			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				using (unitOfWork.DisableFilter(QueryFilter.Deleted))
-				{
-					//get these first so they are loaded
-					_componentContext.Resolve<IActivityRepository>().LoadAll();
-					unitOfWork.Reassociate(model.Persons);
-					var dic = _componentContext.Resolve<IScheduleStorage>().FindSchedulesForPersons(model.Scenario,
-						model.Persons,
-						scheduleDictionaryLoadOptions,
-						model.Period.ToDateTimePeriod(model.TimeZone),
-						model.Persons, false);
-
-					var parameters = ReportHandler.CreateScheduleTimePerActivityParameters(model, _currentCulture);
-					ReportHandler.CreateScheduleTimePerActivityData(dic, model, data);
-
-					return new ReportDataPackage<IReportData>(data, parameters, false);
-				}
-			}
-		}
-
+		
 		private Object getReportSettingsModel()
 		{
-			switch (_reportDetail.FunctionPath)
-			{
-				case DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport:
-					return reportSettings1.ScheduleTimePerActivitySettingsModel;
-				case DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport:
-					//NEW_AUDIT
-					return reportSettings1.ScheduleAuditingModel;
-				case DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport:
-					return reportSettings1.ScheduleTimeVersusTargetSettingsModel;
-			}
-
-			return null;
+			return reportSettings1.ScheduleTimeVersusTargetSettingsModel;
 		}
 
 		private void releaseManagedResources()

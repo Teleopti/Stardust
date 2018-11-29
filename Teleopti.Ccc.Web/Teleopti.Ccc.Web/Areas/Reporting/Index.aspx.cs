@@ -74,8 +74,6 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 
 			var toggleQuerier = new ToggleQuerier(ConfigurationManager.AppSettings["ReportServer"]);
 
-			Selector.Report_Show_Utc_In_Report_Selection_When_In_Use_45079 =
-				toggleQuerier.IsEnabled(Toggles.Report_Show_Utc_In_Report_Selection_When_In_Use_45079);
 			ParameterSelector.ConnectionString = dataSource.Analytics.ConnectionString;
 			ParameterSelector.UserCode = id.GetValueOrDefault();
 			ParameterSelector.BusinessUnitCode = bu.GetValueOrDefault();

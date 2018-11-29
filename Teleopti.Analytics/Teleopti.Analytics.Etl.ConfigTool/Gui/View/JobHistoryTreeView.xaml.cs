@@ -26,15 +26,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View
 		{
 			DataContext = null;
 			DataContext = JobHistoryMapper.Map(startDate, endDate, businessUnit.Id, showOnlyErrors);
-			
-			var container = new IocContainerHolder(App.Container);
-			var tenantNameVisible = container.ToggleManager.IsEnabled(Toggles.ETL_Show_Tenant_Name_In_History_75767);
-			if (tenantNameVisible) return;
-
-			var tenantNameColumn = treeListView.Columns.SingleOrDefault(
-				col => col.Header != null && string.Compare(col.Header.ToString(), "Tenant name", StringComparison.CurrentCultureIgnoreCase) == 0);
-			if (tenantNameColumn == null) return;
-			treeListView.Columns.Remove(tenantNameColumn);
 		}
 
 		private void treeListView_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)

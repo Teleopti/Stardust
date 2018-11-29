@@ -280,7 +280,6 @@
     <Compile Include="Common\ReportSettingsScheduledTimeVersusTargetTest.cs" />
     <Compile Include="Common\Rows\RowManagerSchedulerTest.cs" />
     <Compile Include="Common\ScheduleContractTimeCalculatorTest.cs" />
-    <Compile Include="Common\ReportSettingsHostPresenterTest.cs" />
     <Compile Include="Common\SchedulePeriodCloseCalculatorTest.cs" />
     <Compile Include="Common\ScheduleTargetTimeCalculatorTest.cs" />
     <Compile Include="Common\OvertimeLayerViewModelTest.cs" />
@@ -488,16 +487,8 @@
     <Compile Include="PeopleAdmin\ShiftCategoryLimitationCombinationTest.cs" />
     <Compile Include="Presentation\ReportDetailTest.cs" />
     <Compile Include="Presentation\ReportSettingsHostPresenterTest.cs" />
-    <Compile Include="Presentation\ReportSettingsScheduleAuditingModelTest.cs" />
-    <Compile Include="Presentation\ReportSettingsScheduleAuditingPresenterTest.cs" />
-    <Compile Include="Presentation\ReportSettingsScheduleAuditingTest.cs" />
-    <Compile Include="Presentation\ReportSettingsScheduledTimePerActivityModelTest.cs" />
-    <Compile Include="Presentation\ReportSettingsScheduledTimePerActivityPresenterTest.cs" />
-    <Compile Include="Presentation\ReportSettingsScheduledTimePerActivityTest.cs" />
     <Compile Include="Presentation\ReportSettingsScheduleTimeVersusTargetTimeModelTest.cs" />
     <Compile Include="Presentation\ReportSettingsScheduleTimeVersusTargetTimePresenterTest.cs" />
-    <Compile Include="Presentation\ReportUserSelectorAuditingModelTest.cs" />
-    <Compile Include="Presentation\ReportUserSelectorAuditingPresenterTest.cs" />
     <Compile Include="Presentation\ShiftCategoryLimitationViewPresenterTest.cs" />
     <Compile Include="Scheduler\AddAbsenceViewModelTest.cs" />
     <Compile Include="Scheduler\AddActivityViewModelTest.cs" />

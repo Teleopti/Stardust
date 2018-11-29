@@ -76,11 +76,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			return Height > 63;
 		}
 
-		public IReportSettingsScheduledTimePerActivityView GetSettingsForScheduledTimePerActivityReport()
-		{
-			return new ReportSettingsScheduledTimePerActivityView(_eventAggregator,_componentContext);
-		}
-
 		public void ShowSpinningProgress(bool show)
 		{
 			reportHeader1.ShowSpinningProgress(show);
@@ -96,39 +91,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			reportHeader1.CheckRightToLeft();
 		}
 
-		public void AddSettingsForScheduledTimePerActivityReport(IReportSettingsScheduledTimePerActivityView settingsScheduledTimePerActivityView)
-		{
-			panelSettingsContainer.Controls.Add((ReportSettingsScheduledTimePerActivityView) settingsScheduledTimePerActivityView);
-		}
-
 		public void DisableShowSettings()
 		{
 			reportHeader1.DisableShowSettings();
-		}
-
-		public ReportSettingsScheduledTimePerActivityModel ScheduleTimePerActivitySettingsModel
-		{
-			get
-			{
-				return _presenter.GetModelForScheduledTimePerActivityReport();
-			}
-		}
-
-		public ReportSettingsScheduleAuditingModel ScheduleAuditingModel
-		{
-			get { return _presenter.GetModelForScheduleAuditingReport; }
-		}
-
-		
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		public IReportSettingsScheduleAuditingView GetSettingsForScheduleAuditingReport
-		{
-			get{return new ReportSettingsScheduleAuditingView(_eventAggregator, _componentContext, _applicationFunction);}
-		}
-
-		public void AddSettingsForScheduleAuditingReport(IReportSettingsScheduleAuditingView settingsScheduleAuditingView)
-		{
-			panelSettingsContainer.Controls.Add((ReportSettingsScheduleAuditingView)settingsScheduleAuditingView);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]

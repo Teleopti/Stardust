@@ -34,7 +34,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 		private readonly ObservableCollection<IEtlJobSchedule> _observableCollection;
 		private readonly IBaseConfiguration _baseConfiguration;
 		private readonly bool _selectDataSourceIsPossible;
-		private bool _isWebBasedEtlToolInUse;
 
 		public JobSchedule(IEtlJobSchedule etlJobSchedule, ObservableCollection<IEtlJobSchedule> observableCollection,
 			IBaseConfiguration baseConfiguration, bool selectDataSourceIsPossible)
@@ -84,7 +83,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 			comboBoxJob.DataSource = jobCollection;
 			comboBoxJob.DisplayMember = "Name";
 			comboBoxJob.ValueMember = "Name";
-			_isWebBasedEtlToolInUse =container.ToggleManager.IsEnabled(Toggles.ETL_Show_Web_Based_ETL_Tool_74837);
 		}
 
 		private void fillDataSourceCombo()
@@ -566,38 +564,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 
 		private void updateDescription()
 		{
-			if (_isWebBasedEtlToolInUse)
-			{
-				labelDescription.Text = _isNewSchedule ? string.Empty : _etlJobSchedule.Description;
-				return;
-			}
-
-			string description;
-
-			if (radioButtonOccursOnce.Checked)
-			{
-				description = "Occurs every day at " + dateTimePickerOccursOnce.Value.ToShortTimeString() + ".";
-			}
-			else
-			{
-				description = "Occurs every day every " + numericUpDownOccursEveryMinute.Value + " minute(s) between " +
-									dateTimePickerStartingAt.Value.ToShortTimeString() + " and " +
-									dateTimePickerEndingAt.Value.ToShortTimeString() + ".";
-			}
-
-			if (_selectedJob != null)
-			{
-				if (_selectedJob.NeedsParameterDatePeriod)
-				{
-					if (_selectedJob.NeedsParameterDataSource && comboBoxDataSource.SelectedIndex > -1)
-					{
-						description += " Using the log data source '" + ((IDataSourceEtl)comboBoxDataSource.SelectedItem).DataSourceName + "'.";
-					}
-					else description += ".";
-				}
-			}
-
-			labelDescription.Text = description;
+			labelDescription.Text = _isNewSchedule ? string.Empty : _etlJobSchedule.Description;
 		}
 	}
 }

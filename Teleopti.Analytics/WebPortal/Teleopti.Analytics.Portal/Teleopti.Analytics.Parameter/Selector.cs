@@ -485,7 +485,6 @@ namespace Teleopti.Analytics.Parameters
 		}
 
 		public TimeZoneInfo UserTimeZone { get; set; }
-		public static bool Report_Show_Utc_In_Report_Selection_When_In_Use_45079 { get; set; }
 
 		protected override void RenderContents(HtmlTextWriter writer)
 		{

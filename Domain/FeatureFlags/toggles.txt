@@ -102,19 +102,11 @@ Wfm_AuditTrail_GenericAuditTrail_74938 = false
 WFM_AbsenceRequest_ImproveThroughput_79139 = RC
 
 # Squids #
-WFM_Forecaster_Refact_44480 = true
-WFM_Export_Forecast_44716 = true
 WFM_TrainingPlanner_44780 = RC #So that large customers can use TP for up to 7 weeks from readmodels. Hard to set to true for everyone as they may book trainings further out...
-Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560 = true
 Report_Remove_Realtime_Scheduled_Time_vs_Target_45559 = true
-Report_Remove_Realtime_AuditTrail_44006 = true
-Report_Show_Utc_In_Report_Selection_When_In_Use_45079 = true
-WFM_AuditTrail_44006 = true
 WFM_Clear_Data_After_Leaving_Date_47768 = true
 WFM_Forecaster_Preview_74801 = true
 WFM_Forecast_Show_History_Data_76432 = DEV
-ETL_Show_Web_Based_ETL_Tool_74837 = true
-ETL_Show_Tenant_Name_In_History_75767 = true
 WFM_Connect_NewLandingPage_Remove_GDPR_78132 = true
 WFM_Connect_NewLandingPage_WEB_78578 = true
 

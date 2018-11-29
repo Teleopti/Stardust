@@ -73,27 +73,18 @@
 
 
 		Wfm_SkillPriorityRoutingGUI_39885,
-		ETL_Show_Tenant_Name_In_History_75767,
-
 		WfmStaffing_AddOvertime_42524,
 		OvertimeRequestUseMostUnderStaffedSkill_47853,
 		OvertimeRequestChangeBelongsToDateForOverNightShift_74984,
-		WFM_Forecaster_Refact_44480,
-		WFM_Export_Forecast_44716,
 		WFM_Forecaster_Preview_74801,
 		WFM_Forecast_Show_History_Data_76432,
 		WFM_TrainingPlanner_44780,
-		Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560,
 		Report_Remove_Realtime_Scheduled_Time_vs_Target_45559,
 
-		WFM_AuditTrail_44006,
-		Report_Show_Utc_In_Report_Selection_When_In_Use_45079,
 		WFM_Gamification_Setting_With_External_Quality_Values_45003,
 		WFM_Gamification_Calculate_Badges_47250,
 		WFM_Gamification_Recalculate_Badges_Within_Period_48403,
 		WFM_Gamification_Create_Rolling_Periods_74866,
-		Report_Remove_Realtime_AuditTrail_44006,
-		ETL_Show_Web_Based_ETL_Tool_74837,
 		WFM_Clear_Data_After_Leaving_Date_47768,
 		WFM_Request_View_Permissions_77731,
 		WFM_Request_Show_Feedback_Link_77733,
