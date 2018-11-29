@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	[DomainTest]
 	public class TeamDayOffModifierTest
 	{
-		public ITeamDayOffModifier Target;
+		public TeamDayOffModifier Target;
 		public SchedulerStateHolder SchedulerStateHolder;
 		public ITimeZoneGuard TimeZoneGuard;
 

@@ -660,7 +660,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		private static void registerTeamBlockDayOffOptimizerService(ContainerBuilder builder)
 		{
 			builder.RegisterType<LockableBitArrayFactory>().As<ILockableBitArrayFactory>().SingleInstance();
-			builder.RegisterType<TeamDayOffModifier>().As<ITeamDayOffModifier>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamDayOffModifier>().InstancePerLifetimeScope();
 		}
 
 		private void registerWorkShiftSelector(ContainerBuilder builder)
