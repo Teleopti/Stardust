@@ -16074,6 +16074,10 @@ Do you want to participate?</value>
     <value>Search site / team / skill / contract</value>
     <comment>SearchForPlanningGroup</comment>
   </data>
+  <data name="SearchForSiteTeamSkillContract" xml:space="preserve">
+    <value>Search for: site / team / skill / contract</value>
+    <comment>used for creating planning group</comment>
+  </data>
   <data name="SearchForDayOff" xml:space="preserve">
     <value>Search site / team / contract</value>
     <comment>SearchForDayOff</comment>

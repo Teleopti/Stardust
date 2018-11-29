@@ -359,6 +359,16 @@ table.overview {
 	border-color: $red-600 !important;
 }
 
+.selected{
+  transition-property: width, height;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-out;
+  .chevron{
+	transition: $transition-timing;
+	transform:rotate(90deg);
+  }
+}
+
 card-panel-header {
 	.pp-validation-progress {
 		position: absolute;

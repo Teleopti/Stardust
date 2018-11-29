@@ -143,10 +143,17 @@
             function toggleCard() {
                 var style = selectedCardContent.classList;
                 if (style.contains('hidden')) {
-                    return style.remove('hidden');
+                    style.remove('hidden');
                 } else {
-                    return style.add('hidden');
+                    style.add('hidden');
                 }
+
+				var elStyle = el.classList;
+				if (elStyle.contains('selected')) {
+					elStyle.remove('selected');
+				} else {
+					elStyle.add('selected');
+				}
             }
 
         }
