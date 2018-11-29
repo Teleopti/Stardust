@@ -1,6 +1,7 @@
 <div class="view-header">
 	<div class="view-title" ng-if="!vm.isEditGroup">
-		<h1><i class="mdi mdi-calendar"></i> {{'OpenPlansPage' | translate}} / {{'CreatePlanningGroup' | translate}}</h1>
+		<h1><i class="mdi mdi-calendar"></i> {{'OpenPlansPage' | translate}} / {{'CreatePlanningGroup' | translate}}
+		</h1>
 	</div>
 	<div class="view-title" ng-if="vm.isEditGroup">
 		<h1><i class="mdi mdi-calendar"></i> {{'EditPlanningGroup' | translate}}: {{::vm.name}}</h1>
@@ -14,9 +15,15 @@
 					<div class="con-flex">
 						<div class="form-input-wrap">
 							<label for="planningGroupNameId" translate>NameColon</label>
-							<input type="text" maxlength="100" minlength="1" name="planningGroupName" id="planningGroupNameId" autofocus autocomplete="off" ng-model="vm.name" class="pg-setting-name" required=""/>
-							<div ng-cloak class="animate-show" ng-show="form.$submitted || form.planningGroupName.$touched">
-								<div class="form-input-message" ng-class="{ formInvalidInput:form.planningGroupName.$error.required }">{{ 'YouCannotHaveABlankName' | translate }}</div>
+							<input type="text" maxlength="100" minlength="1" name="planningGroupName"
+								   id="planningGroupNameId" autofocus autocomplete="off" ng-model="vm.name"
+								   class="pg-setting-name" required=""/>
+							<div ng-cloak class="animate-show"
+								 ng-show="form.$submitted || form.planningGroupName.$touched">
+								<div class="form-input-message"
+									 ng-class="{ formInvalidInput:form.planningGroupName.$error.required }">{{
+									'YouCannotHaveABlankName' | translate }}
+								</div>
 							</div>
 						</div>
 					</div>
@@ -24,30 +31,35 @@
 						<div class="form-input-wrap">
 							<label for="filtersId" translate>FiltersColon</label>
 							<div id="filtersId" class="autosearch-input">
-								<md-autocomplete md-input-name="filters" md-no-cache="true" md-selected-item="selectedItem" md-search-text="vm.searchString" placeholder="{{'SearchForPlanningGroup'|translate}}"
-								 md-items="item in vm.inputFilterData()" md-item-text="item.Name" md-selected-item-change="vm.selectResultItem(selectedItem)">
+								<md-autocomplete md-input-name="filters" md-no-cache="true"
+												 md-selected-item="selectedItem" md-search-text="vm.searchString"
+												 placeholder="{{'SearchForPlanningGroup'|translate}}"
+												 md-items="item in vm.inputFilterData()" md-item-text="item.Name"
+												 md-selected-item-change="vm.selectResultItem(selectedItem)">
 									<md-item-template>
-											<div class="wfm-chip-wrap">
+										<div class="wfm-chip-wrap">
 												<span class="wfm-chip">
 													<span class="chip-handle">{{item.FilterType}}</span>
 												<span class="chip-text">{{item.Name}}</span>
 												</span>
-											</div>
+										</div>
 									</md-item-template>
 									<md-not-found>
 										<p translate>noSearchResults</p>
 									</md-not-found>
 								</md-autocomplete>
 							</div>
-						<div ng-cloak class="animate-show" ng-show="form.$submitted || form.filters.$touched">
-							<span class="form-input-message" ng-class="{ formInvalidInput: !vm.isValidFilters() }" translate>YouMustSelectAtLeastOneFilter</span>
-						</div>
-						<div ng-show="vm.selectedResults.length > 0">
-							<p translate>SelectedFiltersColon</p>
+							<div ng-cloak class="animate-show" ng-show="form.$submitted || form.filters.$touched">
+								<span class="form-input-message" ng-class="{ formInvalidInput: !vm.isValidFilters() }"
+									  translate>YouMustSelectAtLeastOneFilter</span>
+							</div>
+							<div ng-show="vm.selectedResults.length > 0">
+								<p translate>SelectedFiltersColon</p>
 								<div class="wfm-chip-wrap" ng-repeat="selected in vm.selectedResults ">
 									<span class="wfm-chip">
 										<span class="chip-handle">{{selected.FilterType | translate}}</span>
-									<span class="chip-text">{{selected.Name}}<i class="mdi mdi-close" ng-click="vm.removeSelectedFilter(selected)"></i></span>
+									<span class="chip-text">{{selected.Name}}<i class="mdi mdi-close"
+																				ng-click="vm.removeSelectedFilter(selected)"></i></span>
 									</span>
 								</div>
 							</div>
@@ -56,9 +68,12 @@
 				</div>
 				<div class="con-footer">
 					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancel()">{{'Cancel'|translate}}</button>
-					<button ng-if="vm.isEditGroup" class="wfm-btn wfm-btn-invis-default delete-plan-group" ng-click='vm.confirmDeleteModal=true;'>{{'Delete'|translate}}</button>
-					<button class="wfm-btn save-plan-group" ng-disabled="!vm.isValid || vm.requestSent" ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}"
-					 ng-click="vm.persist()">
+					<button ng-if="vm.isEditGroup" class="wfm-btn wfm-btn-invis-default delete-plan-group"
+							ng-click='vm.confirmDeleteModal=true;'>{{'Delete'|translate}}
+					</button>
+					<button class="wfm-btn save-plan-group" ng-disabled="!vm.isValid || vm.requestSent"
+							ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}"
+							ng-click="vm.persist()">
 						{{'Save'|translate}}
 					</button>
 					<div ng-cloak class="modal-box">
@@ -71,8 +86,13 @@
 									</div>
 									<div class="modal-actions">
 										<aside>
-											<button ng-click="vm.confirmDeleteModal=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
-											<button ng-click="vm.removePlanningGroup()" ng-disabled="vm.requestSent" class="wfm-btn wfm-btn-invis-primary confirm-delete-plan-group">{{'Delete'|translate}}</button>
+											<button ng-click="vm.confirmDeleteModal=false"
+													class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}
+											</button>
+											<button ng-click="vm.removePlanningGroup()" ng-disabled="vm.requestSent"
+													class="wfm-btn wfm-btn-invis-primary confirm-delete-plan-group">
+												{{'Delete'|translate}}
+											</button>
 										</aside>
 									</div>
 								</div>
