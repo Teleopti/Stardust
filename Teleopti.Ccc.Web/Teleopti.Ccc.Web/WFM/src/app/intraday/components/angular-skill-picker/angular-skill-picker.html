@@ -1,32 +1,25 @@
 <div class="con-row">
-    <div class="con-flex">
-        <nz-radio-group [(ngModel)]="skillPickerFilter"
-                        (ngModelChange)="onFilterChange()">
-            <button nz-radio-button
-                    nzValue="All">{{'All' | translate}}</button>
-            <button nz-radio-button
-                    nzValue="0">{{'Skills' | translate}}</button>
-            <button nz-radio-button
-                    nzValue="1">{{'Groups' | translate}}</button>
-        </nz-radio-group>
-    </div>
-    <div class="con-flex x2">
-        <nz-select style="width: 100%;"
-                   [compareWith]="compareFn"
-                   [(ngModel)]="selectedItem"
-                   (ngModelChange)="itemSelected($event)"
-                   nzAllowClear
-                   nzPlaceHolder="Choose">
-            <nz-option *ngFor="let option of filteredItems"
-                       [nzValue]="option"
-                       [nzLabel]="option.Name"
-                       nzCustomContent>
-                <skill-picker-icon [type]="option.Type"></skill-picker-icon>
-                {{option.Name}}
-            </nz-option>
-        </nz-select>
-        <ng-template #suffixTemplate>
-            <i class="anticon anticon-close-circle"></i>
-        </ng-template>
-    </div>
+	<div class="con-flex">
+		<nz-radio-group [(ngModel)]="skillPickerFilter" (ngModelChange)="onFilterChange()">
+			<button nz-radio-button nzValue="All">{{ 'All' | translate }}</button>
+			<button nz-radio-button nzValue="0">{{ 'Skills' | translate }}</button>
+			<button nz-radio-button nzValue="1">{{ 'Groups' | translate }}</button>
+		</nz-radio-group>
+	</div>
+	<div class="con-flex x2">
+		<nz-select
+			style="width: 100%;"
+			[compareWith]="compareFn"
+			[(ngModel)]="selectedItem"
+			(ngModelChange)="itemSelected($event)"
+			nzAllowClear
+			nzPlaceHolder="{{'SelectSkillOrGroup' | translate}}"
+		>
+			<nz-option *ngFor="let option of filteredItems" [nzValue]="option" [nzLabel]="option.Name" nzCustomContent>
+				<skill-picker-icon [type]="option.Type"></skill-picker-icon>
+				{{ option.Name }}
+			</nz-option>
+		</nz-select>
+		<ng-template #suffixTemplate> <i class="anticon anticon-close-circle"></i> </ng-template>
+	</div>
 </div>

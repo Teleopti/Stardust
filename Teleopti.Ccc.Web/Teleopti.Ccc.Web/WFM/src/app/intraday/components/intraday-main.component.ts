@@ -51,6 +51,10 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 	showSkills = true;
 
 	ngOnInit() {
+		this.startTimer();
+	}
+
+	startTimer() {
 		this.timer = setInterval(this.updateOnInterval, 60000);
 	}
 
@@ -90,8 +94,8 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		});
 	}
 
-	onSelecetSkill(e: SkillPickerItem) {
-		this.selectedSkillOrGroup = Object.assign({}, e);
+	onSelectSkill(e: SkillPickerItem) {
+		this.selectedSkillOrGroup = e;
 		this.updateData(false);
 		this.setPersistedData();
 	}
@@ -102,6 +106,8 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 	}
 
 	onSelectDate(e: number) {
+		if (e !== 0) clearInterval(this.timer);
+		else this.startTimer();
 		this.selectedOffset = e;
 		this.selectedDate = moment().add(e, 'days');
 		this.displayDate = this.selectedDate.format('LLLL');
@@ -158,22 +164,24 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		this.exporting = false;
 	}
 
-	getSelectedSkillOrGroup(): SkillPickerItem {
-		clearInterval(this.timer);
-		if (!this.selectedSubSkillId || this.selectedSubSkillId === 'all') {
-			this.timer = setInterval(this.updateData, 1000);
-			return this.selectedSkillOrGroup;
-		} else {
-			const spi: SkillPickerItem = {
-				Id: this.selectedSubSkillId,
-				Name: '',
-				Skills: [],
-				Type: SkillPickerItemType.Skill
-			};
-			this.timer = setInterval(this.updateData, 1000);
-			return spi;
-		}
-	}
+	// getSelectedSkillOrGroup(): SkillPickerItem {
+	// 	console.log('selected');
+
+	// 	clearInterval(this.timer);
+	// 	if (!this.selectedSubSkillId || this.selectedSubSkillId === 'all') {
+	// 		this.timer = setInterval(this.updateData, 1000);
+	// 		return this.selectedSkillOrGroup;
+	// 	} else {
+	// 		const spi: SkillPickerItem = {
+	// 			Id: this.selectedSubSkillId,
+	// 			Name: '',
+	// 			Skills: [],
+	// 			Type: SkillPickerItemType.Skill
+	// 		};
+	// 		this.timer = setInterval(this.updateData, 1000);
+	// 		return spi;
+	// 	}
+	// }
 
 	onPickSubSkill() {
 		this.updateData(true);
@@ -186,7 +194,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 	updateData = (columnsOnly: boolean = true) => {
 		this.setPersistedData();
 
-		if (!this.selectedSkillOrGroup) {
+		if (!this.selectedSkillOrGroup || !this.selectedSkillOrGroup.Skills) {
 			return;
 		}
 		let selectedSkill = this.selectedSkillOrGroup;

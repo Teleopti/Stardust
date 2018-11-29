@@ -17968,4 +17968,7 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Click to view schedules</value>
     <comment>Click to view schedules tooltip in WFM/Requests</comment>
   </data>
+  <data name="SelectSkillOrGroup" xml:space="preserve">
+    <value>Select a skill or skill-group</value>
+  </data>
 </root>
