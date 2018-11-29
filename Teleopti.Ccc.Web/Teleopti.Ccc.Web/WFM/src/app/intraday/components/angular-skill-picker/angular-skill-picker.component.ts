@@ -18,7 +18,6 @@ export class AngularSkillPickerComponent implements OnInit {
 	@Output()
 	hasEditPermission: boolean;
 
-	skillPickerFilter = 'all';
 	filteredItems: SkillPickerItem[] = [];
 	inputValue: string;
 	skillPickerItems: SkillPickerItem[] = [];
@@ -32,16 +31,6 @@ export class AngularSkillPickerComponent implements OnInit {
 			this.skillPickerItems = item;
 			this.filteredItems = item;
 		});
-	}
-
-	onFilterChange() {
-		if (this.skillPickerFilter === 'All') {
-			this.filteredItems = this.skillPickerItems;
-		} else {
-			this.filteredItems = this.skillPickerItems.filter(item => {
-				return item.Type.toString() === this.skillPickerFilter;
-			});
-		}
 	}
 
 	itemSelected(e: SkillPickerItem) {
