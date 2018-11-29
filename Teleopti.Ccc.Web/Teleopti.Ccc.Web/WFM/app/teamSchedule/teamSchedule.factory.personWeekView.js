@@ -15,7 +15,7 @@
 					isDayOff: day.IsDayOff,
 					isTerminated: day.IsTerminated,
 					color: day.Color,
-					contrastFontColor: colorUtils.getTextColorBasedOnBackgroundColor(day.Color)
+					textColor: colorUtils.getTextColorBasedOnBackgroundColor(day.Color)
 				};
 				days.push(dayViewModel);
 			});
