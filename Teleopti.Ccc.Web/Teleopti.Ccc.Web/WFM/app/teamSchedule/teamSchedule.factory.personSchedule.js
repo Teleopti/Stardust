@@ -256,19 +256,33 @@
 		PersonSchedule.prototype.MergeExtra = mergeExtra;
 
 		PersonSchedule.prototype.ScheduleEndTime = function () {
-			var shift = this.Shifts[0];
-			if (shift && shift.Date === this.Date && !!shift.Projections.length) {
-				return serviceDateFormatHelper.getDateByFormat(shift.Projections[shift.Projections.length - 1].EndMoment, 'YYYY-MM-DDTHH:mm:00');
+			var endMoment = this.ScheduleEndTimeMoment();
+			if (endMoment) {
+				return serviceDateFormatHelper.getDateByFormat(endMoment, 'YYYY-MM-DDTHH:mm:00')
 			}
 			return this.Date + 'T23:59:00';
 		};
 
-		PersonSchedule.prototype.ScheduleStartTime = function () {
+		PersonSchedule.prototype.ScheduleEndTimeMoment = function () {
 			var shift = this.Shifts[0];
 			if (shift && shift.Date === this.Date && !!shift.Projections.length) {
-				return serviceDateFormatHelper.getDateByFormat(shift.Projections[0].StartMoment, 'YYYY-MM-DDTHH:mm:00');
+				return shift.Projections[shift.Projections.length - 1].EndMoment;
+			}
+		};
+
+		PersonSchedule.prototype.ScheduleStartTime = function () {
+			var startMoment = this.ScheduleStartTimeMoment();
+			if (startMoment) {
+				return serviceDateFormatHelper.getDateByFormat(startMoment, 'YYYY-MM-DDTHH:mm:00')
 			}
 			return this.Date + 'T00:00:00';
+		};
+
+		PersonSchedule.prototype.ScheduleStartTimeMoment = function () {
+			var shift = this.Shifts[0];
+			if (shift && shift.Date === this.Date && !!shift.Projections.length) {
+				return shift.Projections[0].StartMoment;
+			}
 		};
 
 		PersonSchedule.prototype.HasHiddenScheduleAtStart = function () {
