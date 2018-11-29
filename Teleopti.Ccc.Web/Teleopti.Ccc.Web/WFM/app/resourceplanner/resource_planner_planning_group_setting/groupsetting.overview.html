@@ -54,6 +54,16 @@
 								<md-tooltip>{{'Set priority lower' | translate }}</md-tooltip>
 							</i>
 						</div>
+						<div tabindex=0 class="context-menu card-context" ng-click="vm.goEditSchedulingSetting(setting)">
+							<i class=" mdi mdi-pencil pointer">
+								<md-tooltip>{{'EditFilter' | translate }}</md-tooltip>
+							</i>
+						</div>
+						<div tabindex=0 class="context-menu card-context delete-scheduling-setting" ng-click="vm.getSchedulingSettingInfo(setting)" ng-show="!setting.Default">
+							<i class=" mdi mdi-delete pointer">
+								<md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip>
+							</i>
+						</div>
 					</div>
 				</card-panel-header>
 				<card-panel-content>
@@ -156,23 +166,6 @@
 							<div class="line-right">
 								<div class="con-flex align-row-center">
 									<span>{{'PreferenceFulfillment' | translate}}: {{vm.preferencePercentage}}%</span>
-								</div>
-							</div>
-						</div>
-					</div>
-					
-					<div class="con-row" ng-hide="vm.isDisable">
-						<div class="con-flex">
-							<div class="line-right">
-								<div tabindex=0 class="context-menu card-context" ng-click="vm.goEditSchedulingSetting(setting)">
-									<i class=" mdi mdi-pencil pointer">
-										<md-tooltip>{{'EditFilter' | translate }}</md-tooltip>
-									</i>
-								</div>
-								<div tabindex=0 class="context-menu card-context delete-scheduling-setting" ng-click="vm.getSchedulingSettingInfo(setting)" ng-show="!setting.Default">
-									<i class=" mdi mdi-delete pointer">
-										<md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip>
-									</i>
 								</div>
 							</div>
 						</div>
