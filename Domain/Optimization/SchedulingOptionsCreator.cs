@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			schedulingOptions.GroupOnGroupPageForTeamBlockPer = optimizationPreferences.Extra.TeamGroupPage;
 
 
-			setPreferencesInSchedulingOptions(optimizationPreferences, schedulingOptions);
+			setPreferencesInSchedulingOptions(schedulingOptions);
 			setRotationsInSchedulingOptions(optimizationPreferences, schedulingOptions);
 			setAvailabilitiesInSchedulingOptions(optimizationPreferences, schedulingOptions);
 			setStudentAvailabilitiesInSchedulingOptions(optimizationPreferences, schedulingOptions);
@@ -56,17 +56,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return schedulingOptions;
 		}
 
-		private static void setPreferencesInSchedulingOptions(IOptimizationPreferences optimizationPreferences,
-			SchedulingOptions schedulingOptions)
+		private static void setPreferencesInSchedulingOptions(SchedulingOptions schedulingOptions)
 		{
-			schedulingOptions.PreferencesDaysOnly = false; // always
+			schedulingOptions.PreferencesDaysOnly = false;
 			schedulingOptions.UsePreferencesMustHaveOnly = false;
-				// always >>> bugfix 19947: Can't optimize days off with 100% must have-fulfillment 
-
-			bool usePreferences = optimizationPreferences.General.UsePreferences;
-			double preferencesValue = optimizationPreferences.General.PreferencesValue;
-			bool usePreferencesAndValueIs1 = usePreferences && preferencesValue == 1d;
-			schedulingOptions.UsePreferences = usePreferencesAndValueIs1;
+			schedulingOptions.UsePreferences = false;
 		}
 
 		private static void setRotationsInSchedulingOptions(IOptimizationPreferences optimizationPreferences,
