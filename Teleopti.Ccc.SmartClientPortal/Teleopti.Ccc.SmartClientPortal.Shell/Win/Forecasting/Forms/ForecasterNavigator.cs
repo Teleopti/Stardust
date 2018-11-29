@@ -1400,7 +1400,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 								var firstPageFromPages = (SelectExportType)pages.FirstPage;
 								if (b)
 								{
-									pages.ChangePages(PropertyPagesHelper.GetExportSkillToFilePages(firstPageFromPages));
+									pages.ChangePages(PropertyPagesHelper.GetExportSkillToFilePages(firstPageFromPages, _staffingCalculatorServiceFacade));
 								}
 								else
 								{
@@ -1408,7 +1408,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 										PropertyPagesHelper.GetExportAcrossBusinessUnitsPages(firstPageFromPages));
 								}
 							});
-					var exportToFilePages = PropertyPagesHelper.GetExportSkillToFilePages(firstPage);
+					var exportToFilePages = PropertyPagesHelper.GetExportSkillToFilePages(firstPage, _staffingCalculatorServiceFacade);
 
 					pages.Initialize(exportToFilePages);
 					using (var wizard = new WizardNoRoot<ExportSkillModel>(pages, _container))

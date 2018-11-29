@@ -141,14 +141,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")
 		]
-		public static IList<IPropertyPageNoRoot<ExportSkillModel>> GetExportSkillToFilePages(SelectExportType firstPage)
+		public static IList<IPropertyPageNoRoot<ExportSkillModel>> GetExportSkillToFilePages(SelectExportType firstPage, IStaffingCalculatorServiceFacade staffingCalculatorService)
 		{
 			return new List<IPropertyPageNoRoot<ExportSkillModel>>
 			{
 				firstPage,
 				new SelectSkills(),
 				new SelectDateAndScenario(),
-				new SelectFileDestination(),
+				new SelectFileDestination(staffingCalculatorService),
 				new FileExportFinished()
 			};
 		}
