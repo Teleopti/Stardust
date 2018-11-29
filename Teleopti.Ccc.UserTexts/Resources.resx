@@ -9681,6 +9681,10 @@ Period</comment>
     <value>Filter:</value>
     <comment>Filter</comment>
   </data>
+  <data name="FiltersColon" xml:space="preserve">
+    <value>Filters:</value>
+    <comment>Filters:</comment>
+  </data>	
   <data name="MeetingDeleteConfirmationQuestion" xml:space="preserve">
     <value>Do you want to delete the meeting {0}?</value>
     <comment>Do you want to delete the meeting {0}?</comment>
@@ -13865,6 +13869,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Please add a filter</value>
     <comment>Notice for user that they need to add a filter</comment>
   </data>
+  <data name="YouMustSelectAtLeastOneFilter" xml:space="preserve">
+    <value>You must select at least one filter</value>
+    <comment>Notice for user that they need to add a filter</comment>
+  </data>	
   <data name="BothOverrideAndCampaignAdded" xml:space="preserve">
     <value>Both override and campaign added</value>
     <comment>label for the forecasting chart</comment>
@@ -15959,7 +15967,7 @@ Do you want to participate?</value>
     <comment>Change planning duration</comment>
   </data>
   <data name="CreatePlanningGroup" xml:space="preserve">
-    <value>Create Planning Group</value>
+    <value>Create planning group</value>
     <comment>text for helping information </comment>
   </data>
   <data name="CreateFirstPlanningPeriod" xml:space="preserve">

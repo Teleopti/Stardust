@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -8165,7 +8165,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Planning Group.
+        ///   Looks up a localized string similar to Create planning group.
         /// </summary>
         public static string CreatePlanningGroup {
             get {
@@ -13111,6 +13111,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Filters {
             get {
                 return ResourceManager.GetString("Filters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filters:.
+        /// </summary>
+        public static string FiltersColon {
+            get {
+                return ResourceManager.GetString("FiltersColon", resourceCulture);
             }
         }
         
@@ -40728,6 +40737,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string YouMustHaveAtLeastOneDateInShiftTradeRequest {
             get {
                 return ResourceManager.GetString("YouMustHaveAtLeastOneDateInShiftTradeRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must select at least one filter.
+        /// </summary>
+        public static string YouMustSelectAtLeastOneFilter {
+            get {
+                return ResourceManager.GetString("YouMustSelectAtLeastOneFilter", resourceCulture);
             }
         }
         
