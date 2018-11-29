@@ -3,7 +3,7 @@ import moment, { Moment } from 'moment';
 import { IntradayDataService } from '../services/intraday-data.service';
 import { IntradayPersistService } from '../services/intraday-persist.service';
 import { TranslateService } from '@ngx-translate/core';
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService, NzTabComponent, NzTabChangeEvent } from 'ng-zorro-antd';
 import c3 from 'c3';
 import {
 	SkillPickerItem,
@@ -39,10 +39,10 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 	selectedOffset = 0;
 	selectedChartType: IntradayChartType = 'traffic';
 	selectedDate: Moment;
+	selectedTabIndex: number;
 
 	displayDate: string = moment().format('LLLL');
 	intradayTabs: IntradayChartType;
-	chartType: IntradayChartType = 'traffic';
 	chartData: c3.Data = this.trafficDataToC3Data(this.getEmptyTrafficData().DataSeries);
 	summaryData: IntradayTrafficSummaryItem[] | IntradayPerformanceSummaryItem[] = [];
 	loading = false;
@@ -68,7 +68,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			this.selectedOffset = persisted.selectedOffset;
 			this.selectedChartType = persisted.selectedChartType;
 			this.selectedDate = persisted.selectedDate;
-			this.chartType = this.selectedChartType;
+			this.selectedTabIndex = persisted.selectedTabIndex;
 			this.updateData(false);
 		}
 	}
@@ -90,7 +90,8 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			selectedSubSkillId: this.selectedSubSkillId,
 			selectedOffset: this.selectedOffset,
 			selectedChartType: this.selectedChartType,
-			selectedDate: this.selectedDate
+			selectedDate: this.selectedDate,
+			selectedTabIndex: this.selectedTabIndex
 		});
 	}
 
@@ -100,8 +101,11 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		this.setPersistedData();
 	}
 
-	onClickTab() {
-		this.chartType = this.selectedChartType;
+	onClickTab(index: number) {
+		this.selectedTabIndex = index;
+		const chartTypes: IntradayChartType[] = ['traffic', 'performance', 'staffing'];
+		this.selectedChartType = chartTypes[index];
+
 		this.updateData(false);
 	}
 
@@ -193,6 +197,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 
 	updateData = (columnsOnly: boolean = true) => {
 		this.setPersistedData();
+		console.log('this.selectedChartType', this.selectedChartType);
 
 		if (!this.selectedSkillOrGroup || !this.selectedSkillOrGroup.Skills) {
 			return;
@@ -206,7 +211,10 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 				Type: SkillPickerItemType.Skill
 			};
 		}
-		if (this.chartType === 'traffic') {
+		if (this.selectedChartType === 'traffic') {
+			console.log('RÖW');
+			console.log('selectedSkill.Skills.length', selectedSkill.Skills.length);
+
 			if (selectedSkill.Skills.length === 0) {
 				this.loading = true;
 				this.intradayDataService.getTrafficData(selectedSkill.Id, this.selectedOffset).subscribe(data => {
@@ -225,7 +233,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			}
 		}
 
-		if (this.chartType === 'performance') {
+		if (this.selectedChartType === 'performance') {
 			if (selectedSkill.Skills.length === 0) {
 				this.loading = true;
 				this.intradayDataService.getPerformanceData(selectedSkill.Id, this.selectedOffset).subscribe(data => {
@@ -246,7 +254,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			}
 		}
 
-		if (this.chartType === 'staffing') {
+		if (this.selectedChartType === 'staffing') {
 			if (selectedSkill.Skills.length === 0) {
 				this.loading = true;
 				this.intradayDataService.getStaffingData(selectedSkill.Id, this.selectedOffset).subscribe(data => {

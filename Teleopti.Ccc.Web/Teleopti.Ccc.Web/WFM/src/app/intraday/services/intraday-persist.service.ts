@@ -9,6 +9,7 @@ export interface IntradayPersistedData {
 	selectedOffset: number;
 	selectedChartType: IntradayChartType;
 	selectedDate: Moment;
+	selectedTabIndex: number;
 }
 
 @Injectable()

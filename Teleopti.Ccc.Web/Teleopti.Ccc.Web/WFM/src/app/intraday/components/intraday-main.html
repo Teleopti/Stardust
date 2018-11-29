@@ -30,7 +30,7 @@
 			<div class="con-row">
 				<div class="con-flex">
 					<div *ngIf="displayDate && displayDate.length > 0">
-						<h2>{{ displayDate }}</h2>
+						<h2>{{ displayDate }} <i nz-icon [hidden]="!loading" type="loading"></i>&nbsp;</h2>
 					</div>
 					<div
 						*ngIf="
@@ -64,37 +64,38 @@
 					</div>
 				</div>
 			</div>
+
 			<div class="con-row" [hidden]="!selectedSkillOrGroup">
 				<div class="con-flex">
 					<div>
-						<nz-radio-group [(ngModel)]="selectedChartType" (click)="onClickTab()">
-							<label nz-radio-button nzValue="traffic">{{ translate.instant('IncomingTraffic') }}</label>
-							<label nz-radio-button nzValue="performance">{{ translate.instant('Performance') }}</label>
-							<label nz-radio-button nzValue="staffing">{{ translate.instant('Staffing') }} </label>
-						</nz-radio-group>
-						&nbsp; <i nz-icon [hidden]="!loading" type="loading"></i>
+						<nz-tabset
+							[nzTabPosition]="'top'"
+							[nzType]="'card'"
+							(nzSelectedIndexChange)="onClickTab($event)"
+							[nzTabBarExtraContent]="extraTemplate"
+							[nzSelectedIndex]="selectedTabIndex"
+						>
+							<nz-tab nzTitle="{{ translate.instant('IncomingTraffic') }}"> </nz-tab>
+							<nz-tab nzTitle="{{ translate.instant('Performance') }}"> </nz-tab>
+							<nz-tab nzTitle="{{ translate.instant('Staffing') }}"> </nz-tab>
+						</nz-tabset>
+						<ng-template #extraTemplate>
+							<button (click)="exportToExcel()" [nzLoading]="exporting" nz-button>
+								{{ translate.instant('ExportToExcel') }}
+							</button>
+						</ng-template>
 					</div>
-				</div>
-				<div class="con-flex">
-					<button
-						style="margin: 0 0 0 auto; display: flex;"
-						(click)="exportToExcel()"
-						[nzLoading]="exporting"
-						nz-button
-					>
-						{{ translate.instant('ExportToExcel') }}
-					</button>
 				</div>
 			</div>
 			<div class="con-row" [hidden]="!selectedSkillOrGroup">
 				<div class="con-flex">
-					<app-intraday-chart [chartData]="chartData" [chartType]="chartType"></app-intraday-chart>
+					<app-intraday-chart [chartData]="chartData" [chartType]="selectedChartType"></app-intraday-chart>
 				</div>
 			</div>
 			<div class="con-row">
 				<div class="con-flex"></div>
 				<div class="con-flex">
-					<intraday-table [chartType]="chartType" [tableData]="summaryData"></intraday-table>
+					<intraday-table [chartType]="selectedChartType" [tableData]="summaryData"></intraday-table>
 				</div>
 				<div class="con-flex"></div>
 			</div>
