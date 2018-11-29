@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IEnumerable<IStaffingAudit> LoadAudits(IPerson personId, DateTime startDate,
-			DateTime endDate)
+			DateTime endDate, string searchword = "")
 		{
 			return StaffingAuditList.Where(x => x.TimeStamp >= startDate && x.TimeStamp <= endDate.AddDays(1).AddMinutes(-1));
 		}
