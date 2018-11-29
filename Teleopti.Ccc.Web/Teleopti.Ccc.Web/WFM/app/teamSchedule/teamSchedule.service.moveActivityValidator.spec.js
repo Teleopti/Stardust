@@ -477,7 +477,7 @@
 				personSelection.updatePersonSelection(personSchedule);
 				var newStartMoment = moment.tz(scheduleDate + " 02:00", "Asia/Hong_Kong");
 
-				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
+				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment);
 
 				expect(target.getInvalidPeople().length).toEqual(0);
 			});
@@ -532,7 +532,7 @@
 				personSelection.updatePersonSelection(personSchedule);
 				var newStartMoment = moment.tz(scheduleDate + " 08:00", "America/Denver");
 
-				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "America/Denver");
+				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment);
 
 				expect(target.getInvalidPeople().length).toEqual(0);
 			});
@@ -566,7 +566,7 @@
 				personSelection.updatePersonSelection(personSchedule);
 				var newStartMoment = moment.tz(nextDay + " 02:00", "Asia/Hong_Kong");
 
-				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
+				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment);
 
 				expect(target.getInvalidPeople().length).toEqual(1);
 			});
@@ -621,7 +621,7 @@
 				personSelection.updatePersonSelection(personSchedule);
 				var newStartMoment = moment.tz(scheduleDate + " 23:00", "Asia/Hong_Kong");
 
-				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
+				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment);
 
 				expect(target.getInvalidPeople().length).toEqual(1);
 			});
@@ -676,7 +676,7 @@
 				personSelection.updatePersonSelection(personSchedule);
 				var newStartMoment = moment.tz(scheduleDate + " 23:00", "Asia/Hong_Kong");
 
-				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
+				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment);
 
 				expect(target.getInvalidPeople().length).toEqual(1);
 			});
@@ -731,7 +731,7 @@
 				personSelection.updatePersonSelection(personSchedule);
 				var newStartMoment = moment.tz(scheduleDate + " 05:00", "Asia/Hong_Kong");
 
-				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
+				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment);
 
 				expect(target.getInvalidPeople().length).toEqual(1);
 			});
@@ -765,7 +765,7 @@
 				personSelection.updatePersonSelection(personSchedule);
 				var newStartMoment = moment.tz(scheduleDate + " 10:00", "Asia/Hong_Kong");
 
-				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
+				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment);
 
 				expect(target.getInvalidPeople().length).toEqual(1);
 			});
@@ -790,7 +790,7 @@
 				personSelection.updatePersonSelection(personSchedule);
 				var newStartMoment = moment.tz(scheduleDate + " 10:00", "Asia/Hong_Kong");
 
-				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
+				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment);
 
 				expect(target.getInvalidPeople().length).toEqual(1);
 			});
