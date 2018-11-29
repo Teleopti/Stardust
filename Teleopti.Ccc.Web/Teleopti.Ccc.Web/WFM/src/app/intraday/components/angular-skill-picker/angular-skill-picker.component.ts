@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, OnInit, Input } from '@angular/core';
 import { SkillPickerService } from '../../services/skill-picker.service';
-import { SkillPickerItem } from '../../types';
+import { SkillPickerItem, SkillPickerItemType } from '../../types';
 
 @Component({
 	selector: 'app-angular-skill-picker',
@@ -9,7 +9,7 @@ import { SkillPickerItem } from '../../types';
 })
 export class AngularSkillPickerComponent implements OnInit {
 	constructor(public skillPickerService: SkillPickerService) {
-		this.filteredItems = this.skillPickerItems;
+		this.skillGroups = this.skills;
 	}
 
 	@Output()
@@ -18,9 +18,9 @@ export class AngularSkillPickerComponent implements OnInit {
 	@Output()
 	hasEditPermission: boolean;
 
-	filteredItems: SkillPickerItem[] = [];
+	skillGroups: SkillPickerItem[] = [];
+	skills: SkillPickerItem[] = [];
 	inputValue: string;
-	skillPickerItems: SkillPickerItem[] = [];
 
 	@Input()
 	selectedItem: SkillPickerItem;
@@ -28,8 +28,8 @@ export class AngularSkillPickerComponent implements OnInit {
 	ngOnInit() {
 		this.skillPickerService.getSkillsAndGroups().subscribe(item => {
 			this.hasEditPermission = this.skillPickerService.hasEditPermission;
-			this.skillPickerItems = item;
-			this.filteredItems = item;
+			this.skills = item.filter(x => x.Type === SkillPickerItemType.Skill);
+			this.skillGroups = item.filter(x => x.Type === SkillPickerItemType.Group);
 		});
 	}
 
