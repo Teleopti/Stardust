@@ -20,7 +20,8 @@
 								   class="pg-setting-name" required=""/>
 							<div ng-cloak class="animate-show"
 								 ng-show="(form.$submitted || form.planningGroupName.$touched) && form.planningGroupName.$error.required">
-								<div class="form-input-message formInvalidInput">{{'YouCannotHaveABlankName' | translate }}
+								<div class="form-input-message formInvalidInput">{{'YouCannotHaveABlankName' | translate
+									}}
 								</div>
 							</div>
 						</div>
@@ -31,15 +32,15 @@
 							<div id="filtersId" class="autosearch-input">
 								<md-autocomplete md-input-name="filters" md-no-cache="true"
 												 md-selected-item="selectedItem" md-search-text="vm.searchString"
-												 placeholder="{{'SearchForPlanningGroup'|translate}}"
+												 placeholder="{{'SearchForSiteTeamSkillContract'|translate}}"
 												 md-items="item in vm.inputFilterData()" md-item-text="item.Name"
 												 md-selected-item-change="vm.selectResultItem(selectedItem)">
 									<md-item-template>
 										<div class="wfm-chip-wrap">
-												<span class="wfm-chip">
-													<span class="chip-handle">{{item.FilterType}}</span>
-												<span class="chip-text">{{item.Name}}</span>
-												</span>
+													<span class="wfm-chip">
+														<span class="chip-handle">{{item.FilterType}}</span>
+													<span class="chip-text">{{item.Name}}</span>
+													</span>
 										</div>
 									</md-item-template>
 									<md-not-found>
@@ -47,35 +48,39 @@
 									</md-not-found>
 								</md-autocomplete>
 							</div>
-							<div ng-cloak ng-show="(form.$submitted || form.filters.$touched) && !vm.isValidFilters()">
+							<div ng-cloak
+								 ng-show="(form.$submitted || form.filters.$touched) && !vm.isValidFilters()">
 								<span class="form-input-message formInvalidInput" translate>YouMustSelectAtLeastOneFilter</span>
-							</div>
-							<div style="margin-top: 20px" ng-show="vm.selectedResults.length > 0">
-								<div translate>SelectedFiltersColon</div>
-								<div class="wfm-chip-wrap" ng-repeat="selected in vm.selectedResults ">
-									<span class="wfm-chip">
-										<span class="chip-handle">{{selected.FilterType | translate}}</span>
-									<span class="chip-text">{{selected.Name}}<i class="mdi mdi-close" ng-click="vm.removeSelectedFilter(selected)"></i></span>
-									</span>
-								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div >
-					<span style="text-align: left">
+				<div class="con-row wfm-card-content" ng-show="vm.selectedResults.length > 0">
+					<div class="con-flex">
+						<div translate>SelectedFiltersColon</div>
+						<div class="wfm-chip-wrap" ng-repeat="selected in vm.selectedResults ">
+						<span class="wfm-chip">
+							<span class="chip-handle">{{selected.FilterType | translate}}</span>
+							<span class="chip-text">{{selected.Name}}<i class="mdi mdi-close" ng-click="vm.removeSelectedFilter(selected)"></i></span>
+						</span>
+						</div>
+					</div>
+				</div>
+				<div class="wfm-card-content" style="height: 62px;">
+					<div style="float: left;">
 						<button ng-if="vm.isEditGroup" class="wfm-btn wfm-btn-invis-default delete-plan-group"
 								ng-click='vm.confirmDeleteModal=true;'>{{'Delete'|translate}}
 						</button>
-					</span>
-					<span style="float: right">
-						<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancel()">{{'Cancel'|translate}}</button>
+					</div>
+					<div style="float: right;">
+						<button class="wfm-btn wfm-btn-invis-default"
+								ng-click="vm.cancel()">{{'Cancel'|translate}}</button>
 						<button class="wfm-btn save-plan-group" ng-disabled="!vm.isValid || vm.requestSent"
 								ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}"
 								ng-click="vm.persist()">
 							{{'Save'|translate}}
 						</button>
-					</span>
+					</div>
 					<div ng-cloak class="modal-box">
 						<div ng-show="vm.confirmDeleteModal">
 							<div class="modalbg">
