@@ -10,7 +10,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.TeamSchedule;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 {

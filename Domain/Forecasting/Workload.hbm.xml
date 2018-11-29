@@ -63,43 +63,43 @@
 		</bag>
 
     <component name="QueueAdjustments" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.QueueAdjustment">
-      <component name="OfferedTasks" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces" access="property">
+      <component name="OfferedTasks" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain" access="property">
         <property name="Value"
             not-null="true"
             type="double"
             column="OfferedTasks"/>
       </component>
-      <component name="OverflowIn" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces" access="property">
+      <component name="OverflowIn" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain" access="property">
         <property name="Value"
             not-null="true"
             type="double"
             column="OverflowIn"/>
       </component>
-      <component name="OverflowOut" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces" access="property">
+      <component name="OverflowOut" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain" access="property">
         <property name="Value"
             not-null="true"
             type="double"
             column="OverflowOut"/>
       </component>
-      <component name="Abandoned" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces" access="property">
+      <component name="Abandoned" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain" access="property">
         <property name="Value"
             not-null="true"
             type="double"
             column="Abandoned"/>
       </component>
-      <component name="AbandonedShort" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces" access="property">
+      <component name="AbandonedShort" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain" access="property">
         <property name="Value"
             not-null="true"
             type="double"
             column="AbandonedShort"/>
       </component>
-      <component name="AbandonedWithinServiceLevel" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces" access="property">
+      <component name="AbandonedWithinServiceLevel" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain" access="property">
         <property name="Value"
             not-null="true"
             type="double"
             column="AbandonedWithinServiceLevel"/>
       </component>
-      <component name="AbandonedAfterServiceLevel" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces" access="property">
+      <component name="AbandonedAfterServiceLevel" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain" access="property">
         <property name="Value"
             not-null="true"
             type="double"

@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 using HandleOptionViewDictionary = System.Collections.Generic.Dictionary<Teleopti.Ccc.Domain.WorkflowControl.OvertimeValidationHandleType, Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings.OvertimeRequestValidationHandleOptionView>;
 using StaffingCheckMethodOptionViewDictionary = System.Collections.Generic.Dictionary<Teleopti.Ccc.Domain.InterfaceLegacy.Domain.OvertimeRequestStaffingCheckMethod, Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings.OvertimeRequestStaffingCheckMethodOptionView>;
 

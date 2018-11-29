@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Reporting;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {

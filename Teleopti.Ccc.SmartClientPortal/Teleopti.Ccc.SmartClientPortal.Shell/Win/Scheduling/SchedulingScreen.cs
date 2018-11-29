@@ -99,7 +99,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
-using Teleopti.Interfaces.Domain;
+
 
 #endregion
 

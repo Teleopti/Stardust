@@ -14,7 +14,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 using PersonFactory = Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData.PersonFactory;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer

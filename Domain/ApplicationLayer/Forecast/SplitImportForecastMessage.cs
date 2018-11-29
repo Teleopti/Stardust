@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.General;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {

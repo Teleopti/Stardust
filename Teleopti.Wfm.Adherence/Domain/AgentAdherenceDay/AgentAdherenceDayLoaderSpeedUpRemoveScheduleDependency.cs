@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Infrastructure;
 

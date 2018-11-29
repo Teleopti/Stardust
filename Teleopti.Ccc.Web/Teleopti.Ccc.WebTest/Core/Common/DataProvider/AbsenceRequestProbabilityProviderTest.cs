@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -16,7 +17,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 {

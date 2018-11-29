@@ -10,7 +10,8 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
-using Teleopti.Interfaces.Domain;
+using DateOnly = Teleopti.Interfaces.Domain.DateOnly;
+using DateOnlyPeriod = Teleopti.Interfaces.Domain.DateOnlyPeriod;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {

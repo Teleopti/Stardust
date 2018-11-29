@@ -12,7 +12,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests;
 using Teleopti.Ccc.TestCommon.Services;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 {

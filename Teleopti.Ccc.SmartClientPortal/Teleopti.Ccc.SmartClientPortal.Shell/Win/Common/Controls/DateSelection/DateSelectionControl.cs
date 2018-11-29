@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 {

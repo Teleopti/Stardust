@@ -1,8 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {

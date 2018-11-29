@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 {

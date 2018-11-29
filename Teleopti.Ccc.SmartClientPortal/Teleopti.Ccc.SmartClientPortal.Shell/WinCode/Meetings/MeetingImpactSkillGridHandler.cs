@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 {
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
                 _meetingImpactView.AddSkillTab(skill.Name, skill.Description, ImageIndexSkillType(skill.SkillType.ForecastSource), skill);
             }
 
-            // TODO efter detta anrop kör koden nedan
+            // TODO efter detta anrop kï¿½r koden nedan
             //_meetingImpactCalculator.RecalculateResources(_meetingImpactView.StartDate);
         }
 

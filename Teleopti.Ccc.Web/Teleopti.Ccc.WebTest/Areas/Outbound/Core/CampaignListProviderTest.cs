@@ -15,7 +15,7 @@ using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Rules;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
 using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 {

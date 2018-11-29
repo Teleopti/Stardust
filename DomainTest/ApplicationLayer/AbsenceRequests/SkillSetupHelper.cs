@@ -12,7 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {

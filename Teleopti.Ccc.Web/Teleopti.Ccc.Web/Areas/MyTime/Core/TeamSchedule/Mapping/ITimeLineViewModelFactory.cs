@@ -1,5 +1,6 @@
-﻿using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
+
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 {

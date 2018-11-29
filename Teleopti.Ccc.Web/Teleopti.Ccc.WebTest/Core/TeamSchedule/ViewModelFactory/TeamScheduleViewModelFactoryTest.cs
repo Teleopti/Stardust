@@ -24,7 +24,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 using Teleopti.Ccc.WebTest.Core.IoC;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 {

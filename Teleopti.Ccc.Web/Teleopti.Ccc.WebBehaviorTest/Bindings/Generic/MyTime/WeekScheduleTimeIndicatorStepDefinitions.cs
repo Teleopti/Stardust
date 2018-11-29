@@ -1,9 +1,10 @@
 using System;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 {

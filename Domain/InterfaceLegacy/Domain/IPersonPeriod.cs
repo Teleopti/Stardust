@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler
 {

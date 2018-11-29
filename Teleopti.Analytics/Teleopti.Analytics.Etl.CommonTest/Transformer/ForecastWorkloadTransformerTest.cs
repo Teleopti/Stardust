@@ -8,7 +8,7 @@ using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 using SkillFactory = Teleopti.Ccc.TestCommon.FakeData.SkillFactory;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer

@@ -6,12 +6,13 @@ using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
-using Teleopti.Interfaces.Domain;
+
 using Cursors=System.Windows.Forms.Cursors;
 using KeyEventArgs=System.Windows.Forms.KeyEventArgs;
 

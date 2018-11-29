@@ -6,6 +6,7 @@ using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns;
@@ -14,7 +15,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.Interfaces;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets
 {

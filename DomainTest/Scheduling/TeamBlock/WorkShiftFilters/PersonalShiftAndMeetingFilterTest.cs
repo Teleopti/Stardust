@@ -10,7 +10,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters

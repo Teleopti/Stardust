@@ -3,7 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {

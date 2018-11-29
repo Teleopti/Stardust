@@ -97,18 +97,15 @@
     <Compile Include="Domain\EmploymentType.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Domain\IApplicationData.cs" />
     <Compile Include="Domain\ICurrentSchedulingSource.cs" />
     <Compile Include="Domain\InParameter.cs" />
     <Compile Include="Domain\IntervalDefinition.cs" />
     <Compile Include="Domain\IPasswordStrengthRule.cs" />
     <Compile Include="Domain\IPersonInfoModel.cs" />
     <Compile Include="Domain\ISchedulingSourceScope.cs" />
-    <Compile Include="Domain\IStateReader.cs" />
     <Compile Include="Domain\MinMax.cs" />
     <Compile Include="Domain\ParsedTimeOfDay.cs" />
     <Compile Include="Domain\Percent.cs" />
-    <Compile Include="Domain\StateHolderReader.cs" />
     <Compile Include="Domain\TeleoptiAuthenticationHeaderNames.cs" />
     <Compile Include="Domain\TimeFormatsType.cs" />
     <Compile Include="Domain\TimeHelper.cs" />

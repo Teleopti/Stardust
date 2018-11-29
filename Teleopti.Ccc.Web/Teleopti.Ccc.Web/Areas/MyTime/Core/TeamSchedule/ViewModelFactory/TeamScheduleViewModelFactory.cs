@@ -11,7 +11,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 {

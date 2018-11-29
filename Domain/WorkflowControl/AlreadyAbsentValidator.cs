@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
 			var period = FullDayAbsenceRequestPeriodUtil.AdjustFullDayAbsencePeriodIfRequired(absenceRequest.Period,
 				absenceRequest.Person,
-				scheduleRange.ScheduledDay(new Interfaces.Domain.DateOnly(absenceRequest.Period.StartDateTimeLocal(timeZone)))
-				, scheduleRange.ScheduledDay(new Interfaces.Domain.DateOnly(absenceRequest.Period.EndDateTimeLocal(timeZone))), _globalSettingsDataRepository);
+				scheduleRange.ScheduledDay(new DateOnly(absenceRequest.Period.StartDateTimeLocal(timeZone)))
+				, scheduleRange.ScheduledDay(new DateOnly(absenceRequest.Period.EndDateTimeLocal(timeZone))), _globalSettingsDataRepository);
 
 			var scheduleDays = scheduleRange.ScheduledDayCollection(
 				period.ToDateOnlyPeriod(absenceRequest.Person.PermissionInformation.DefaultTimeZone()).Inflate(1));

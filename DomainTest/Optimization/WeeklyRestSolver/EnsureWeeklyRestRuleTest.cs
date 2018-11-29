@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 {

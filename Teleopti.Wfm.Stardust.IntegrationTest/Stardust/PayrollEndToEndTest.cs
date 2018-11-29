@@ -17,7 +17,7 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {

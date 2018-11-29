@@ -13,7 +13,7 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.Web.Core.Extensions;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 {

@@ -13,7 +13,7 @@ using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {

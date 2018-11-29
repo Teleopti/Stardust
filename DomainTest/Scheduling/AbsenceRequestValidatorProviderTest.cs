@@ -7,7 +7,7 @@ using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {

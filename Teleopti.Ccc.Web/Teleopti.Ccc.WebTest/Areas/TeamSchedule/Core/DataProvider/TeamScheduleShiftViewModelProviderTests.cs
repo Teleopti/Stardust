@@ -22,7 +22,7 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Extensions;
 using Teleopti.Ccc.WebTest.Areas.Global;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 {

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {

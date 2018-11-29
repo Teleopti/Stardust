@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -24,7 +25,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Ccc.WebTest.Core.Requests.DataProvider;
-using Teleopti.Interfaces.Domain;
+
 using IRequestsViewModelFactory = Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory.IRequestsViewModelFactory;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory

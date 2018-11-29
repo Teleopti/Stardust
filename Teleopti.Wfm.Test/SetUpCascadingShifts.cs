@@ -15,7 +15,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Wfm.Test
 {

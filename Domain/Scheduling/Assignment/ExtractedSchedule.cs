@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UndoRedo;
-using Teleopti.Interfaces.Domain;
 using System;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;

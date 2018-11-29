@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Comparers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
-using Teleopti.Interfaces.Domain;
+
 using Rotation=Teleopti.Ccc.Domain.Scheduling.Restriction.Rotation;
 
 #endregion

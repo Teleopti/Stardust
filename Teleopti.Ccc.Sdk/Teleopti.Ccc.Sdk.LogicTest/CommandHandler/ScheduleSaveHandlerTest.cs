@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {

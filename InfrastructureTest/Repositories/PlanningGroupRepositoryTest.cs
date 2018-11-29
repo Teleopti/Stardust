@@ -5,12 +5,13 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData;
-using Teleopti.Interfaces.Domain;
+
 using AggregateException = Teleopti.Ccc.Domain.Common.AggregateException;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories

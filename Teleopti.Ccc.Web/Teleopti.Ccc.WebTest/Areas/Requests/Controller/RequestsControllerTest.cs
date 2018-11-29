@@ -20,7 +20,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Requests.Controller;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 

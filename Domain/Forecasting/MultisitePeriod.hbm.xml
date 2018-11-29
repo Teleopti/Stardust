@@ -16,7 +16,7 @@
                  not-null="true" foreign-key="FK_MultisitePeriod_MultisiteDay"/>
 		<!--IEntity-->
 
-    <component name="Period" class="Teleopti.Interfaces.Domain.DateTimePeriod, Teleopti.Interfaces">
+    <component name="Period" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateTimePeriod, Teleopti.Ccc.Domain">
       <component name="period" access="field">
         <property name="Minimum"
 				  column="StartDateTime"
@@ -35,7 +35,7 @@
               lazy="false">
       <key column="Parent" foreign-key="FK_MultisitePeriodDistribution_MultisitePeriod"/>
       <index-many-to-many column="ChildSkill" class="Teleopti.Ccc.Domain.Forecasting.ChildSkill" foreign-key="FK_MultisitePeriodDistribution_ChildSkill"/>
-        <composite-element class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+        <composite-element class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
           <property name="Value"
 							  not-null="true"
 							  type="Double" />

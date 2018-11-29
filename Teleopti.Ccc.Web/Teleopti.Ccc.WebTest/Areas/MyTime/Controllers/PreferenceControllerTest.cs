@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
@@ -14,7 +15,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {

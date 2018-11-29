@@ -2,7 +2,8 @@
 using System.Drawing;
 using System.Globalization;
 using Syncfusion.Pdf.Graphics;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory.ScheduleReporting
 {

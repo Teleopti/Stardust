@@ -9,7 +9,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.DataProvider
 {

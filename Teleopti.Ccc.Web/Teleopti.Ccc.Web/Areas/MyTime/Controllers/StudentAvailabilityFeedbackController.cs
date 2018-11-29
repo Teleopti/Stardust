@@ -1,10 +1,11 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {

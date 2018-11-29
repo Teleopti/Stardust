@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {

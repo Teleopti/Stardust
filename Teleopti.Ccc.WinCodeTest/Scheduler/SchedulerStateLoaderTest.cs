@@ -8,7 +8,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
+
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;

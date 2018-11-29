@@ -20,7 +20,7 @@ using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Common
 {

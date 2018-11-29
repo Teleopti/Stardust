@@ -33,7 +33,7 @@
 					length="25"/>
 	  </component>
 	  <component name="Percentage" 
-               class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+               class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
 		  <property name="Value" type="double" />
 	  </component>
     <many-to-one name="BusinessUnit"

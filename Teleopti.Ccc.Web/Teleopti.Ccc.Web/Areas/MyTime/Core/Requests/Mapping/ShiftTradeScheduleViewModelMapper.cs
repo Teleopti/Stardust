@@ -14,7 +14,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Data;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {

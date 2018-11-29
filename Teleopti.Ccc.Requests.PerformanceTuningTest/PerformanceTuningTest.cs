@@ -10,7 +10,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {

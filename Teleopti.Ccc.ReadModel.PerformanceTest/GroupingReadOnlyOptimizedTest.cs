@@ -6,11 +6,12 @@ using System.Diagnostics;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.ReadModel.PerformanceTest
 {

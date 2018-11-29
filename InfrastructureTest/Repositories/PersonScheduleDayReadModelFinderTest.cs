@@ -14,7 +14,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Messaging.Client.Composite;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories

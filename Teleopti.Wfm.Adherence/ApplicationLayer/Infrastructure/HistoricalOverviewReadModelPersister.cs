@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 
 namespace Teleopti.Wfm.Adherence.ApplicationLayer.Infrastructure

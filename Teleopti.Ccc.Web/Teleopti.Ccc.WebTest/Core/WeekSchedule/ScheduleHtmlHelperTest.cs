@@ -2,11 +2,12 @@
 using System.Web.Mvc;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.Common;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Core.WeekSchedule
 {

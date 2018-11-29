@@ -5,8 +5,9 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.Properties;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 {

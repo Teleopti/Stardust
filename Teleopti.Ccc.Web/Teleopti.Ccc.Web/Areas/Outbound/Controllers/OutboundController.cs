@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.OutboundSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -12,7 +13,7 @@ using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
 using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 {

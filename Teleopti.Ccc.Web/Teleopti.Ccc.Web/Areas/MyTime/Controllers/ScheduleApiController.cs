@@ -13,7 +13,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.DaySchedule;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.WeekSchedule;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {

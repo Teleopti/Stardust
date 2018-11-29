@@ -8,8 +8,9 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.JobSchedule;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.Administration.Core.EtlTool

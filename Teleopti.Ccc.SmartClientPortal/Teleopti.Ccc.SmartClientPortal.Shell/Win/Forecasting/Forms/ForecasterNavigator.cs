@@ -40,7 +40,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.QuickForecastPage
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.SkillPages;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.WorkloadPages;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 using DataSourceException = Teleopti.Ccc.Domain.Infrastructure.DataSourceException;
 using Wizard = Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard.Wizard;
 

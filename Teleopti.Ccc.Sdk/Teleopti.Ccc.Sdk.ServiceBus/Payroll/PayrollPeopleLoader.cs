@@ -4,7 +4,8 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Sdk.Logic;
+using DateOnlyPeriod = Teleopti.Interfaces.Domain.DateOnlyPeriod;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
         public IEnumerable<IPerson> GetPeopleForExport(RunPayrollExportEvent message, DateOnlyPeriod payrollExportPeriod, IUnitOfWork unitOfWork)
         {
             var personRepository = _repositoryFactory.CreatePersonRepository(unitOfWork);
-            var allPeople = personRepository.FindAllAgentsLight(payrollExportPeriod);
+            var allPeople = personRepository.FindAllAgentsLight(payrollExportPeriod.Convert());
             return allPeople.Where(p => message.ExportPersonIdCollection.Contains(p.Id.GetValueOrDefault()));
         }
     }

@@ -26,7 +26,7 @@
 			access="nosetter.camelcase-underscore"/>
     
     	<property name="Name" access="property"/>
-		<component name="_preferenceValue" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces" access="field">
+		<component name="_preferenceValue" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain" access="field">
 			<property name="Value" column="PreferenceValue"/>
 		</component>
 

@@ -12,7 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             multisiteSkill.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(multisiteSkill);
 
-            var q = new QueueSource("vågar inte skriva sånt", "peter", 1);
+            var q = new QueueSource("vï¿½gar inte skriva sï¿½nt", "peter", 1);
             var q2 = new QueueSource("ft", "peter", 2);
             PersistAndRemoveFromUnitOfWork(q);
             PersistAndRemoveFromUnitOfWork(q2);
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(skillDay.Scenario);
             PersistAndRemoveFromUnitOfWork(skillDay);
             
-            var skill2 = SkillFactory.CreateSkill("tvåan", _skillType, 15);
+            var skill2 = SkillFactory.CreateSkill("tvï¿½an", _skillType, 15);
             skill2.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(skill2);
 
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             skill1.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(skill1);
             
-            QueueSource q = new QueueSource("vågar inte skriva sånt", "peter", 1);
+            QueueSource q = new QueueSource("vï¿½gar inte skriva sï¿½nt", "peter", 1);
             QueueSource q2 = new QueueSource("ft", "peter", 2);
             PersistAndRemoveFromUnitOfWork(q);
             PersistAndRemoveFromUnitOfWork(q2);
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(skillDay.Scenario);
             PersistAndRemoveFromUnitOfWork(skillDay);
 
-            ISkill skill2 = SkillFactory.CreateSkill("tvåan", _skillType, 15);
+            ISkill skill2 = SkillFactory.CreateSkill("tvï¿½an", _skillType, 15);
             skill2.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(skill2);
 
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             skill1.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(skill1);
 
-            QueueSource q = new QueueSource("vågar inte skriva sånt", "peter", 1);
+            QueueSource q = new QueueSource("vï¿½gar inte skriva sï¿½nt", "peter", 1);
             PersistAndRemoveFromUnitOfWork(q); 
             
             Workload wl = new Workload(skill1);
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             skill1.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(skill1);
 
-            IQueueSource q = new QueueSource("vågar inte skriva sånt", "peter", 1);
+            IQueueSource q = new QueueSource("vï¿½gar inte skriva sï¿½nt", "peter", 1);
             PersistAndRemoveFromUnitOfWork(q);
 
             Workload wl = new Workload(skill1);
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             
             PersistAndRemoveFromUnitOfWork(child1);
             
-            IQueueSource q = new QueueSource("vågar inte skriva sånt", "peter", 1);
+            IQueueSource q = new QueueSource("vï¿½gar inte skriva sï¿½nt", "peter", 1);
             PersistAndRemoveFromUnitOfWork(q);
 
             IWorkload wl = new Workload(skill1);

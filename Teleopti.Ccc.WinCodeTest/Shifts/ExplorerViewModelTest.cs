@@ -12,7 +12,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Models;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Shifts
 {

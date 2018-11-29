@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {

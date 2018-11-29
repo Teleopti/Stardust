@@ -31,7 +31,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
-using Teleopti.Interfaces.Domain;
+
 using DataSourceException = Teleopti.Ccc.Domain.Infrastructure.DataSourceException;
 using GridConstructor = Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views.GridConstructor;
 using ViewType = Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views.ViewType;

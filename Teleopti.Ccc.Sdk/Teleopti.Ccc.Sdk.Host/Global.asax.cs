@@ -41,7 +41,7 @@ using Teleopti.Ccc.Sdk.WcfHost.Ioc;
 using Teleopti.Ccc.Sdk.WcfHost.Service;
 using Teleopti.Ccc.Sdk.WcfHost.Service.Factory;
 using Teleopti.Ccc.Sdk.WcfHost.Service.LogOn;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Sdk.WcfHost
 {

@@ -14,7 +14,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 {

@@ -23,7 +23,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 {

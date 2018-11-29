@@ -1,11 +1,12 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Secrets.Licensing;
-using Teleopti.Interfaces.Domain;
+
 
 
 namespace Teleopti.Ccc.InfrastructureTest.Licensing

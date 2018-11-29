@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Linq;
 using NHibernate;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {

@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Staffing
 {

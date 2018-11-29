@@ -8,9 +8,10 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+using DateOnlyPeriod = Teleopti.Interfaces.Domain.DateOnlyPeriod;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 {
@@ -70,7 +71,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
             using (mocks.Record())
             {
                 Expect.Call(repositoryFactory.CreatePersonRepository(unitOfWork)).Return(personRepository);
-                Expect.Call(personRepository.FindAllAgentsLight(payrollExportPeriod)).Return(new List<IPerson>{personInExport,personNotInExport});
+                Expect.Call(personRepository.FindAllAgentsLight(payrollExportPeriod.Convert())).Return(new List<IPerson>{personInExport,personNotInExport});
             }
             using (mocks.Playback())
             {

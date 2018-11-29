@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 {

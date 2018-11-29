@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Wfm.Adherence.Domain.Events

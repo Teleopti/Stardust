@@ -19,7 +19,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.EtlTool;
 using Teleopti.Wfm.Administration.Models;

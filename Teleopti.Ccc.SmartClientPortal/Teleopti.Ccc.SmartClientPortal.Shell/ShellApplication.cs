@@ -21,6 +21,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -52,7 +53,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ExceptionHandling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 using Application = System.Windows.Forms.Application;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell

@@ -13,7 +13,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Views;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode;
 using Teleopti.Ccc.WinCode.Budgeting;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Budgeting
 {

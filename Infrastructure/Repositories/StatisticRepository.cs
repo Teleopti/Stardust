@@ -19,7 +19,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {

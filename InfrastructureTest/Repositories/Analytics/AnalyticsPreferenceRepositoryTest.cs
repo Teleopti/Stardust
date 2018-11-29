@@ -4,13 +4,14 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Person = Teleopti.Ccc.TestCommon.TestData.Analytics.Person;
 using Scenario = Teleopti.Ccc.TestCommon.TestData.Analytics.Scenario;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {

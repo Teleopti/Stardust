@@ -1,8 +1,9 @@
-﻿using Teleopti.Ccc.Domain.WorkflowControl;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {

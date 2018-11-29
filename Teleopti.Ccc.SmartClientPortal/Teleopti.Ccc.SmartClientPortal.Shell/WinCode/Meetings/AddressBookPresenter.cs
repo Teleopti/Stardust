@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 {

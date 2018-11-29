@@ -3,7 +3,8 @@ using System.Runtime.Serialization;
 using System.Security;
 using NHibernate;
 using Teleopti.Ccc.Domain.Infrastructure;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {

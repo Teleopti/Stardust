@@ -8,7 +8,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 {

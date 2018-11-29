@@ -11,7 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {

@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {

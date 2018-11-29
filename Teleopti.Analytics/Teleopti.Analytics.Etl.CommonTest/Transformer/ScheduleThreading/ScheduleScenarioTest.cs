@@ -7,10 +7,11 @@ using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer.ScheduleThreading
 {

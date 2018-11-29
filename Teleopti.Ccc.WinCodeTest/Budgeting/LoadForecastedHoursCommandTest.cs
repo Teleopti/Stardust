@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Budgeting
 {

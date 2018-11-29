@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Budgeting
 {

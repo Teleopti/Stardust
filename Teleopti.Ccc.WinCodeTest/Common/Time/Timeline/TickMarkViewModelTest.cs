@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Threading;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time.Timeline;
 using Teleopti.Ccc.WinCodeTest.Helpers;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Time.Timeline
 {

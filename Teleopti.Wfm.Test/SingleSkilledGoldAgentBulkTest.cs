@@ -16,7 +16,7 @@ using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Wfm.Test
 {

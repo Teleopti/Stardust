@@ -7,12 +7,13 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
-using Teleopti.Interfaces.Domain;
+
 using VisualPayloadInfo = Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.VisualPayloadInfo;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts.Grids

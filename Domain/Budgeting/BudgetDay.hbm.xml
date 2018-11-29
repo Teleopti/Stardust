@@ -50,11 +50,11 @@
       type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
       not-null="true" />
 
-    <component name="AttritionRate" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+    <component name="AttritionRate" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
       <property name="Value" not-null="true" type="double" column="AttritionRate"/>
     </component>
 
-	<component name="AbsenceThreshold" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+	<component name="AbsenceThreshold" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
 	  <property name="Value" not-null="true" type="double" column="AbsenceThreshold"/>
 	</component>
 
@@ -64,7 +64,7 @@
                 lazy="false">
         <key column="Parent" foreign-key="FK_CustomShrinkageBudget_BudgetDay"/>
         <index type="Guid" column="CustomShrinkage"/>
-        <composite-element class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+        <composite-element class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
           <property name="Value"
 							  not-null="true"
 							  type="Double" />
@@ -77,7 +77,7 @@
               lazy="false">
       <key column="Parent" foreign-key="FK_CustomEfficiencyShrinkageBudget_BudgetDay"/>
       <index type="Guid" column="CustomEfficiencyShrinkage"/>
-      <composite-element class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+      <composite-element class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
         <property name="Value"
               not-null="true"
               type="Double" />

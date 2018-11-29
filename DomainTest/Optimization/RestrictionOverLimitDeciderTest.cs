@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Interfaces.Domain;
+
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 

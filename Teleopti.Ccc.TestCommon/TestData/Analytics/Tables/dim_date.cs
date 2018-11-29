@@ -4,7 +4,8 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Analytics.ReportTexts;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 {

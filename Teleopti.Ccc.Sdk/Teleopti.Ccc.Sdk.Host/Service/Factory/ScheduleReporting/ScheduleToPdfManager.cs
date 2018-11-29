@@ -6,7 +6,7 @@ using System.IO;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory.ScheduleReporting
 {

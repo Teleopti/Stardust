@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Requests;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Staffing
 {

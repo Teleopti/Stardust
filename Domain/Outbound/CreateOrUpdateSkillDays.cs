@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Outbound
 {

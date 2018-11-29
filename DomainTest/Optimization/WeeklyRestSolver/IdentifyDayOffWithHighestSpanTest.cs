@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 {

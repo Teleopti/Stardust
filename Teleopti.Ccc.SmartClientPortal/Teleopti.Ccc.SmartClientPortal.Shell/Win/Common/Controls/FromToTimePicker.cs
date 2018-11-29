@@ -2,7 +2,8 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {

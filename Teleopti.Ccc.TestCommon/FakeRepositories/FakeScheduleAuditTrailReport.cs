@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {

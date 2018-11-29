@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 {

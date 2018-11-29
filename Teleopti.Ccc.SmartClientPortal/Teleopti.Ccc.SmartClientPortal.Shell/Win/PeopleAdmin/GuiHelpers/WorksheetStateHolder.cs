@@ -19,7 +19,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
-using Teleopti.Interfaces.Domain;
+
 using ViewType = Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views.ViewType;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers

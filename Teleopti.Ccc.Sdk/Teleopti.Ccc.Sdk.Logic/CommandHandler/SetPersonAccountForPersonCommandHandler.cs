@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {

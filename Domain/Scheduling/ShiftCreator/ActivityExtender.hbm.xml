@@ -22,7 +22,7 @@
                  class="Teleopti.Ccc.Domain.Scheduling.Activity"
                  not-null="true" foreign-key="FK_ActivityExtender_Activity"/>
     <component name="ActivityLengthWithSegment" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimePeriodWithSegment">
-      <component name="Period" class="Teleopti.Interfaces.Domain.TimePeriod, Teleopti.Interfaces">
+      <component name="Period" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimePeriod, Teleopti.Ccc.Domain">
         <component name="period" access="field">
           <property name="Minimum"
                     column="MinimumLength"

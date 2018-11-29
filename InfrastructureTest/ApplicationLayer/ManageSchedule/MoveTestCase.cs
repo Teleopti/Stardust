@@ -2,7 +2,7 @@ using System;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ManageSchedule
 {

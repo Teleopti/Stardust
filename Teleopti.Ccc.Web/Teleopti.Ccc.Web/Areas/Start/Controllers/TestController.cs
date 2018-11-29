@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Hangfire;
@@ -24,7 +25,6 @@ using Teleopti.Ccc.Web.Areas.Start.Models.Test;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
-using Teleopti.Interfaces.Infrastructure;
 using ClaimTypes = System.IdentityModel.Claims.ClaimTypes;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers

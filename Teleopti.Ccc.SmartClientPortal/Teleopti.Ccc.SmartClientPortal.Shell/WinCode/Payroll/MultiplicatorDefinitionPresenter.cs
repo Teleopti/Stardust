@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.Interfaces;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll
 {

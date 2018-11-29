@@ -7,7 +7,8 @@ using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 {

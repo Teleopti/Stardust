@@ -4,11 +4,12 @@ using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 {

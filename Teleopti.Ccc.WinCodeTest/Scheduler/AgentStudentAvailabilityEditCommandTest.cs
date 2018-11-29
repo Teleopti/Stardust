@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {

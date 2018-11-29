@@ -1,6 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Trend;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 {

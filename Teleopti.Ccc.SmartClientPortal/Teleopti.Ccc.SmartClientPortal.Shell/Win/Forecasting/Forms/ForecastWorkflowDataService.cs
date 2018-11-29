@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {

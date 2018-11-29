@@ -19,7 +19,7 @@ using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {

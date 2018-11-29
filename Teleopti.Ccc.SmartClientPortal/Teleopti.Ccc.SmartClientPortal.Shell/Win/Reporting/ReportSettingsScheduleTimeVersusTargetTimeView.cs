@@ -22,7 +22,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Reporting;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Reporting;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {

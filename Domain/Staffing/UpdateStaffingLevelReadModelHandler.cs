@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Staffing
 {

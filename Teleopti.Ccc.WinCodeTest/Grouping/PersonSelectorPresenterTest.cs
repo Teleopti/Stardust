@@ -19,7 +19,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Events;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Commands;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Grouping
 {
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 			var deletedPage = new EventGroupPage { Id = id, Name = "test" };
 			var tabControl = new TabControlAdv();
 			var command = _mocks.Stub<ILoadUserDefinedTabsCommand>();
-			tabControl.TabPages.Add(new TabPageAdv("första"));
+			tabControl.TabPages.Add(new TabPageAdv("fï¿½rsta"));
 			tabControl.TabPages.Add(new TabPageAdv("andra"));
 			tabControl.TabPages.Add(new TabPageAdv("tredje") { Tag = command });
 			tabControl.SelectedIndex = 2;
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 			var renamedPage = new EventGroupPage { Id = id, Name = "new name" };
 			var tabControl = new TabControlAdv();
 			var command = _mocks.Stub<ILoadUserDefinedTabsCommand>();
-			tabControl.TabPages.Add(new TabPageAdv("första"));
+			tabControl.TabPages.Add(new TabPageAdv("fï¿½rsta"));
 			tabControl.TabPages.Add(new TabPageAdv("andra"));
 			tabControl.TabPages.Add(new TabPageAdv("tredje") { Tag = command });
 			tabControl.SelectedIndex = 2;
@@ -301,7 +301,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 		public void ShouldReloadIfTabNotUserDefinedAndPeopleSaved()
 		{
 			var command = _mocks.Stub<ILoadOrganizationCommand>();
-			var selectedTab = new TabPageAdv("första") { Tag = command };
+			var selectedTab = new TabPageAdv("fï¿½rsta") { Tag = command };
 			Expect.Call(_view.SelectedTab).Return(selectedTab);
 			Expect.Call(command.Execute);
 			_mocks.ReplayAll();
@@ -408,7 +408,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 		{
 			var tabControl = new TabControlAdv();
 			var command = _mocks.Stub<ILoadGroupPageCommand>();
-			tabControl.TabPages.Add(new TabPageAdv("första"));
+			tabControl.TabPages.Add(new TabPageAdv("fï¿½rsta"));
 			tabControl.TabPages.Add(new TabPageAdv("andra") { Tag = command });
 			tabControl.TabPages.Add(new TabPageAdv("tredje"));
 			tabControl.SelectedIndex = 0;
@@ -425,7 +425,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 		{
 			var tabControl = new TabControlAdv();
 			var command = _mocks.Stub<ILoadGroupPageCommand>();
-			tabControl.TabPages.Add(new TabPageAdv("första"));
+			tabControl.TabPages.Add(new TabPageAdv("fï¿½rsta"));
 			tabControl.TabPages.Add(new TabPageAdv("andra") { Tag = command });
 			tabControl.TabPages.Add(new TabPageAdv("tredje"));
 			tabControl.SelectedIndex = 1;

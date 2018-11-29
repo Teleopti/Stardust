@@ -75,28 +75,28 @@
 		  type="TimeSpan" />
 
 	<component name="AdherenceThreshold"
-	   class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+	   class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
 	  <property name="Value"
 				not-null="true"
 				type="double"
 				column="AdherenceThreshold" />
 	</component>
 	<component name="AdherenceBronzeThreshold"
-	   class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+	   class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
 	  <property name="Value"
 				not-null="true"
 				type="double"
 				column="AdherenceBronzeThreshold" />
 	</component>
 	<component name="AdherenceSilverThreshold"
-	   class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+	   class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
 	  <property name="Value"
 				not-null="true"
 				type="double"
 				column="AdherenceSilverThreshold" />
 	</component>
 	<component name="AdherenceGoldThreshold"
-	   class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+	   class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
 	  <property name="Value"
 				not-null="true"
 				type="double"

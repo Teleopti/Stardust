@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {

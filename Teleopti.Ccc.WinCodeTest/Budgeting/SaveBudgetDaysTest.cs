@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters;
-using Teleopti.Interfaces.Domain;
+
 
 #pragma warning disable 618
 

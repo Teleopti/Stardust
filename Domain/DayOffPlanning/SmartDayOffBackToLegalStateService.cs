@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
 {

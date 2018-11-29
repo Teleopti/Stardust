@@ -1,13 +1,14 @@
 using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 {

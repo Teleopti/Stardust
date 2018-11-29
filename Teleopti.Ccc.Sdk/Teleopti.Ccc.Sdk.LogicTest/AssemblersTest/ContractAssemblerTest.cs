@@ -3,10 +3,11 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 {
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
             Assert.AreEqual(contractDomain.Id, contractDto.Id);
             Assert.AreEqual(contractDomain.Description.Name, contractDto.Description);
-			Assert.AreEqual(EmploymentType.HourlyStaff, contractDto.EmploymentType);
+			Assert.AreEqual(Teleopti.Interfaces.Domain.EmploymentType.HourlyStaff, contractDto.EmploymentType);
             Assert.AreEqual(1,contractDto.AvailableOvertimeDefinitionSets.Count);
 			Assert.AreEqual(1, contractDto.AvailableShiftAllowanceDefinitionSets.Count);
             Assert.IsFalse(contractDto.IsDeleted);

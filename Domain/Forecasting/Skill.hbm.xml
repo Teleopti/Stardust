@@ -74,25 +74,25 @@
 		</set>
 	
 	<component name="StaffingThresholds" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.StaffingThresholds">
-	  <component name="SeriousUnderstaffing" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+	  <component name="SeriousUnderstaffing" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
 		<property name="Value"
 			not-null="true"
 			type="double"
 			column="SeriousUnderstaffing"/>
 	  </component>
-	  <component name="Understaffing" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+	  <component name="Understaffing" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
 		<property name="Value"
 			not-null="true"
 			type="double"
 			column="Understaffing"/>
 	  </component>
-	  <component name="Overstaffing" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+	  <component name="Overstaffing" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
 		<property name="Value"
 			not-null="true"
 			type="double"
 			column="Overstaffing"/>
 	  </component>
-	  <component name="UnderstaffingFor" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+	  <component name="UnderstaffingFor" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
 		<property name="Value"
 			not-null="true"
 			type="double"
@@ -102,12 +102,12 @@
 	<property name="Priority"
 				  type="int"
 				  not-null="true"/>
-	<component name="OverstaffingFactor" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+	<component name="OverstaffingFactor" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
 	  <property name="Value"
 			not-null="true"
 			column="OverstaffingFactor"/>
 	</component>
-	<component name="AbandonRate" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+	<component name="AbandonRate" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
 		<property name="Value"
 					not-null="true"
 					type="double"

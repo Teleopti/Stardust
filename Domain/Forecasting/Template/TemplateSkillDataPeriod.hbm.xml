@@ -22,7 +22,7 @@
     -->
 		<component name="ServiceAgreement" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.ServiceAgreement">
 			<component name="ServiceLevel" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.ServiceLevel">
-        <component name="Percent" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+        <component name="Percent" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
           <property name="Value"
 							  not-null="true"
 							  type="Double" />
@@ -32,13 +32,13 @@
 							  not-null="true"/>
 			</component>
 
-      <component name="MaxOccupancy" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+      <component name="MaxOccupancy" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
         <property name="Value"
                 not-null="true"
                 type="Double"
                 column="MaxOccupancy"/>
       </component>
-      <component name="MinOccupancy" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+      <component name="MinOccupancy" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
         <property name="Value"
                   not-null="true"
                   type="Double"
@@ -58,19 +58,19 @@
 						  not-null="true"
 						  type="int" />
 		</component>
-    <component name="Shrinkage" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+    <component name="Shrinkage" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
       <property name="Value"
               not-null="true"
               type="Double"
               column="Shrinkage"/>
     </component>
-    <component name="Efficiency" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+    <component name="Efficiency" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
       <property name="Value"
               not-null="true"
               type="Double"
               column="Efficiency"/>
     </component>
-    <component name="Period" class="Teleopti.Interfaces.Domain.DateTimePeriod, Teleopti.Interfaces">
+    <component name="Period" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateTimePeriod, Teleopti.Ccc.Domain">
       <component name="period" access="field">
         <property name="Minimum"
 				  column="StartDateTime"

@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -18,7 +20,8 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting;
 using Teleopti.Ccc.Win;
 using Teleopti.Ccc.Win.Forecasting.Forms;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Interfaces.Domain;
+
+using DateHelper = Teleopti.Interfaces.Domain.DateHelper;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
@@ -89,8 +92,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 
 		public virtual WorkingInterval WorkingInterval { get { return WorkingInterval.Day; } }
 		public virtual TimeSpan ChartResolution { get { return TimeSpan.FromHours(1); } }
-		public virtual DateTime FirstDate { get { return DateHelper.MinSmallDateTime; } }
-		public virtual DateTime LastDate { get { return DateHelper.MinSmallDateTime; } }
+		public virtual DateTime FirstDate { get { return Domain.InterfaceLegacy.Domain.DateHelper.MinSmallDateTime; } }
+		public virtual DateTime LastDate { get { return Domain.InterfaceLegacy.Domain.DateHelper.MinSmallDateTime; } }
 
 		public TeleoptiGridControl()
 		{

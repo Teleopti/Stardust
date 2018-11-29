@@ -9,10 +9,12 @@ using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Domain;
+using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
+
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {

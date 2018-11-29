@@ -1,7 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Wfm.Api.Command
 {

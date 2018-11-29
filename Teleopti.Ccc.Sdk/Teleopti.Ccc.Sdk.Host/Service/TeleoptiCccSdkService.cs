@@ -36,7 +36,7 @@ using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Ccc.Sdk.Logic.Restrictions;
 using Teleopti.Ccc.Sdk.WcfHost.Service.Factory;
 using Teleopti.Ccc.Sdk.WcfHost.Service.LogOn;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Sdk.WcfHost.Service
 {

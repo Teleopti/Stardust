@@ -14,7 +14,7 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Data;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 {

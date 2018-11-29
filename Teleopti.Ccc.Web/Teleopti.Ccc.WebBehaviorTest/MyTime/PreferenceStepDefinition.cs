@@ -3,6 +3,7 @@ using System.Globalization;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime;
@@ -10,7 +11,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {

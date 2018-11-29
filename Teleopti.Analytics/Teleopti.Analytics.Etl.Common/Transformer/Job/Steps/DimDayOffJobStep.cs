@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
-using Teleopti.Interfaces.Domain;
+
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps

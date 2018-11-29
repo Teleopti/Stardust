@@ -13,7 +13,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
 {

@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
@@ -86,7 +86,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "Teleopti.Interfaces.Domain.DateOnly.ToShortDateString")]
         protected override void CreateDayHeader(GridQueryCellInfoEventArgs e)
         {
             if (e.ColIndex < (int)ColumnType.StartScheduleColumns)

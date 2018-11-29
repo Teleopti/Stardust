@@ -15,7 +15,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
 using Teleopti.Ccc.WebTest.Core.IoC;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Core
 {

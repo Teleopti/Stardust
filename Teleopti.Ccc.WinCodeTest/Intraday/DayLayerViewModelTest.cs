@@ -17,7 +17,7 @@ using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Wfm.Adherence.Domain.Configuration;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Is = NUnit.Framework.Is;

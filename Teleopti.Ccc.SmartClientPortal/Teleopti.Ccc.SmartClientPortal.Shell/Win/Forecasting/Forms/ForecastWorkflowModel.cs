@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {

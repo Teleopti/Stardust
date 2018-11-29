@@ -5,13 +5,15 @@ using System.Net;
 using System.Net.Http;
 using Teleopti.Ccc.Domain.Coders;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Client.Http;
+using DetailLevel = Teleopti.Interfaces.Domain.DetailLevel;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {
@@ -146,7 +148,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			if (!payrollResultDetail.ExceptionMessage.IsNullOrEmpty())
 				exception = new Exception(payrollResultDetail.ExceptionMessage);
 
-			PayrollResultDetails.Add(new PayrollResultDetailData(payrollResultDetail.DetailLevel, payrollResultDetail.Message, exception, DateTime.UtcNow));
+			PayrollResultDetails.Add(new PayrollResultDetailData(payrollResultDetail.DetailLevel.Convert(), payrollResultDetail.Message, exception, DateTime.UtcNow));
 		}
 
 		private void addPayrollResultDetailToList(DetailLevel detailLevel, string message, Exception exception)

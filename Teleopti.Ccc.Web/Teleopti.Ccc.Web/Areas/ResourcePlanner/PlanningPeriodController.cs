@@ -14,7 +14,7 @@ using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {

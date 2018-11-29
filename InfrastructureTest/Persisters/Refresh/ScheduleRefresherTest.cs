@@ -17,7 +17,7 @@ using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 {

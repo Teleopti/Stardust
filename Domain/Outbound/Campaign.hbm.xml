@@ -57,8 +57,8 @@
                 lazy="false">
         <key column="Parent" foreign-key="FK_OutboundCampaignWorkingHours_OutboundCampaign"/>
         <index type="System.DayOfWeek" column="Weekday"/>
-			<composite-element class="Teleopti.Interfaces.Domain.TimePeriod, Teleopti.Interfaces" >
-				<nested-composite-element class="Teleopti.Interfaces.Domain.MinMax`1[System.TimeSpan], Teleopti.Interfaces"
+			<composite-element class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimePeriod, Teleopti.Ccc.Domain" >
+				<nested-composite-element class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.MinMax`1[System.TimeSpan], Teleopti.Ccc.Domain"
 										  name="period" access="field">
 					<property name="Minimum" 
 							column="StartTime"
@@ -72,15 +72,15 @@
 			</composite-element>	
       </map>
 
-		<component name="SpanningPeriod" class="Teleopti.Interfaces.Domain.DateTimePeriod, Teleopti.Interfaces">
+		<component name="SpanningPeriod" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateTimePeriod, Teleopti.Ccc.Domain">
 			<component name="period" access="field">
 				<property name="Minimum" column="StartDate" not-null="true" type="UtcDateTime"/>
 				<property name="Maximum" column="EndDate" not-null="true" type="UtcDateTime"/>
 			</component>
 		</component>		
 		
-		<component name="BelongsToPeriod" class="Teleopti.Interfaces.Domain.DateOnlyPeriod, Teleopti.Interfaces">
-			<component class ="Teleopti.Interfaces.Domain.MinMax`1[Teleopti.Interfaces.Domain.DateOnly, Teleopti.Interfaces], Teleopti.Interfaces" name="period" access="field">
+		<component name="BelongsToPeriod" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnlyPeriod, Teleopti.Ccc.Domain">
+			<component class ="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.MinMax`1[Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly, Teleopti.Ccc.Domain], Teleopti.Ccc.Domain" name="period" access="field">
 				<property name="Minimum" column="BelongsToStartDate" not-null="true" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
 				<property name="Maximum" column="BelongsToEndDate" not-null="true" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
 			</component>

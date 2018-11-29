@@ -23,7 +23,7 @@ using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
+
 using List = Rhino.Mocks.Constraints.List;
 
 namespace Teleopti.Ccc.DomainTest.Collection

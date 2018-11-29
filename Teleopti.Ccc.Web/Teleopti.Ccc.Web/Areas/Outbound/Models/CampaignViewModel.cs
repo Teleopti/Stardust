@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.SystemSetting.OutboundSetting;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Rules;
 using Teleopti.Ccc.Web.Core.Data;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 {

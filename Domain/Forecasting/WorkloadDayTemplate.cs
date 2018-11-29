@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 using TemplateReference=Teleopti.Ccc.Domain.Forecasting.Template.TemplateReference;
 
 namespace Teleopti.Ccc.Domain.Forecasting

@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Helper
 {

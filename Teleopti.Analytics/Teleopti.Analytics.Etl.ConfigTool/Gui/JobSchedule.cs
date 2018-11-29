@@ -17,8 +17,9 @@ using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 {

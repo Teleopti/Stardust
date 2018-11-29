@@ -14,7 +14,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.People.Controllers;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
 using Teleopti.Ccc.WebTest.Areas.People.IoC;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.People
 {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -8,7 +9,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {

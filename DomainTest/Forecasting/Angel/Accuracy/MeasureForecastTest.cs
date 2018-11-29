@@ -14,7 +14,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Trend;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 using LinearTrend = Teleopti.Ccc.Domain.Forecasting.Angel.Trend.LinearTrend;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy

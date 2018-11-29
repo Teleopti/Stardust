@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Ccc.Domain.Specification;
 
 namespace Teleopti.Ccc.DomainTest.Optimization

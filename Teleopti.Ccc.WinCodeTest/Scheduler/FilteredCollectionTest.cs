@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Windows.Data;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Collections;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {

@@ -26,7 +26,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Wfm.Adherence.Domain.Configuration;
 using Teleopti.Wfm.Adherence.Domain.Service;
 

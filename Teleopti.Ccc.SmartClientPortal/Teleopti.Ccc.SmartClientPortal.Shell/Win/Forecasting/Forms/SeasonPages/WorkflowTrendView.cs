@@ -13,7 +13,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 {

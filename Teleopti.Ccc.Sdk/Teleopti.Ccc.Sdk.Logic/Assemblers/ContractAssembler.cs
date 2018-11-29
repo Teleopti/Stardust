@@ -6,7 +6,7 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 {
-    public class ContractAssembler : Assembler<IContract,ContractDto>
+	public class ContractAssembler : Assembler<IContract,ContractDto>
     {
         private readonly IContractRepository _contractRepository;
 
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             var contract = new ContractDto
                                {
                                    Description = entity.Description.ToString(),
-								   EmploymentType = entity.EmploymentType,
+								   EmploymentType = entity.EmploymentType.Convert(),
                                    Id = entity.Id.GetValueOrDefault(Guid.Empty),
                                    IsDeleted = ((IDeleteTag)entity).IsDeleted
                                };

@@ -11,7 +11,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Messaging.Client.Composite;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories

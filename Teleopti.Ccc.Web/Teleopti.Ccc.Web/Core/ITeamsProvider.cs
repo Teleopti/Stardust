@@ -1,5 +1,6 @@
-﻿using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
+
 
 namespace Teleopti.Ccc.Web.Core
 {

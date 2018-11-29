@@ -4,9 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {

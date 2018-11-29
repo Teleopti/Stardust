@@ -13,7 +13,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {

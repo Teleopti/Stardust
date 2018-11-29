@@ -6,8 +6,10 @@ using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.JobSchedule;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {

@@ -20,7 +20,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 {

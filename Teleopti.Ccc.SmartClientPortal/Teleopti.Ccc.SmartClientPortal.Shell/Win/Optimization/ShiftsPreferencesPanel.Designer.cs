@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 {
@@ -259,8 +260,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			// 
 			this.fromToTimePicker1.Location = new System.Drawing.Point(126, 10);
 			this.fromToTimePicker1.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
-			this.fromToTimePicker1.MinMaxEndTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimePicker1.MinMaxEndTime")));
-			this.fromToTimePicker1.MinMaxStartTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimePicker1.MinMaxStartTime")));
+			this.fromToTimePicker1.MinMaxEndTime = ((MinMax<System.TimeSpan>)(resources.GetObject("fromToTimePicker1.MinMaxEndTime")));
+			this.fromToTimePicker1.MinMaxStartTime = ((MinMax<System.TimeSpan>)(resources.GetObject("fromToTimePicker1.MinMaxStartTime")));
 			this.fromToTimePicker1.Name = "fromToTimePicker1";
 			this.fromToTimePicker1.Size = new System.Drawing.Size(310, 31);
 			this.fromToTimePicker1.TabIndex = 10;

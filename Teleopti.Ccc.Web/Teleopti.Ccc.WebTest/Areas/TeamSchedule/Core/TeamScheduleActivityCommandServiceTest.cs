@@ -15,7 +15,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
-using Teleopti.Interfaces.Domain;
+
 using System.Threading;
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core

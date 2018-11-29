@@ -25,7 +25,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Reporting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReporting;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {

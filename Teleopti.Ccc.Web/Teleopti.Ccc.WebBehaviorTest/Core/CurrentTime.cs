@@ -1,7 +1,8 @@
 using System;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core
 {

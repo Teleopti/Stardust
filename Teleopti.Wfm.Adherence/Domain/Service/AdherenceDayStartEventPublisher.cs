@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Wfm.Adherence.Domain.Events;
 
 namespace Teleopti.Wfm.Adherence.Domain.Service

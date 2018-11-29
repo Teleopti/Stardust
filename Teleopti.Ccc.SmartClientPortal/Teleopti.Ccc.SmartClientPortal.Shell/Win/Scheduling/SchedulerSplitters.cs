@@ -19,7 +19,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Ccc.WinCode.Scheduling;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {

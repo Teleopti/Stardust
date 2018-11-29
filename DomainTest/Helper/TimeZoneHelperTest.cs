@@ -2,7 +2,8 @@ using System;
 using System.Globalization;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Helper
 {

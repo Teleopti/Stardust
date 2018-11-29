@@ -3,7 +3,6 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -11,7 +10,8 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces.Domain;
+
+using ISchedulingSourceScope = Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.ISchedulingSourceScope;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {

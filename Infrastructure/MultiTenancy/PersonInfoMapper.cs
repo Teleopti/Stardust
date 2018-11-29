@@ -1,6 +1,6 @@
-﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Security;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 {

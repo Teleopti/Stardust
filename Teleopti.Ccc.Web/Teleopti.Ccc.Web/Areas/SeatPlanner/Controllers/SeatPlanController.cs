@@ -10,7 +10,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 {

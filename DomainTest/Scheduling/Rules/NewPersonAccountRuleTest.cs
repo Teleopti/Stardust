@@ -16,7 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {

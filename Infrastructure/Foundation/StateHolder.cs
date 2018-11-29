@@ -1,6 +1,7 @@
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
-using Teleopti.Interfaces.Domain;
+using InParameter = Teleopti.Interfaces.Domain.InParameter;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {

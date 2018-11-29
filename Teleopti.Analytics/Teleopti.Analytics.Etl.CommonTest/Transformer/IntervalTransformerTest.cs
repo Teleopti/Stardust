@@ -5,7 +5,8 @@ using System.Threading;
 using NUnit.Framework;
 using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Transformer;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 {

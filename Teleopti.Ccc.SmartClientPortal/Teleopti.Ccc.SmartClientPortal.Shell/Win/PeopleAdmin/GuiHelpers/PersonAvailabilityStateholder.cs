@@ -7,7 +7,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 {

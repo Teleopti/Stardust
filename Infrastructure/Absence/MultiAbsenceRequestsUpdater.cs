@@ -23,7 +23,6 @@ using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Absence
 {

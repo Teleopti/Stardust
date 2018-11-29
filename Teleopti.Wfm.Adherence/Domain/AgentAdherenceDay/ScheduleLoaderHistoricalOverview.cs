@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 {

@@ -4,7 +4,6 @@ using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Collection;
 using NHibernate;

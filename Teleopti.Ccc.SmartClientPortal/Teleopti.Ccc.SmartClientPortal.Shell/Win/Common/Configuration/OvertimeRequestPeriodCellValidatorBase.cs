@@ -3,12 +3,13 @@ using System.Drawing;
 using System.Globalization;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Requests;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
