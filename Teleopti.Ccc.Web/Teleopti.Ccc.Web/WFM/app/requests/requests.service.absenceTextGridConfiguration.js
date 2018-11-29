@@ -3,9 +3,9 @@
 (function() {
 	angular
 		.module('wfm.requests')
-		.factory('TextAndAbsenceGridConfiguration', ['$translate', 'Toggle', TextAndAbsenceGridConfiguration]);
+		.factory('TextAndAbsenceGridConfiguration', ['$translate', TextAndAbsenceGridConfiguration]);
 
-	function TextAndAbsenceGridConfiguration($translate, toggleService) {
+	function TextAndAbsenceGridConfiguration($translate) {
 		var columns = [];
 
 		var service = {
@@ -50,6 +50,7 @@
 					displayName: $translate.instant('AgentName'),
 					field: 'AgentName',
 					cellClass: 'request-agent-name',
+					cellTemplate: 'app/requests/html/requests-absence-name-cell.html',
 					headerCellClass: 'request-agent-name-header',
 					enableFiltering: false
 				},
@@ -173,21 +174,6 @@
 					enableSorting: false
 				}
 			];
-
-			if (toggleService.WFM_Request_Show_Shift_for_Absence_Requests_79008) {
-				columns.splice(2, 0, {
-					displayName: '',
-					field: 'Shifts',
-					enableSorting: false,
-					enableFiltering: false,
-					enableHiding: false,
-					enablePinning: false,
-					// enableColumnMenu: false,
-					cellTemplate: 'app/requests/html/requests-absence-schedules-cell.html',
-					visible: true,
-					width: 30
-				});
-			}
 		}
 
 		function columnDefinitions() {

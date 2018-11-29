@@ -1,9 +1,0 @@
-<div class="request-absence-schedule-cell" ng-if="row.entity.Type == grid.appScope.absenceRequestType">
-	<i
-		class="mdi mdi-calendar cursor-pointer"
-		ng-click="grid.appScope.toggleAbsenceSchedules(row.entity, $event);"
-		ng-class="{active: row.entity.activeShowSchedule}"
-	>
-		<md-tooltip> {{ 'ClickToViewSchedules' | translate }} </md-tooltip>
-	</i>
-</div>

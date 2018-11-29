@@ -1,0 +1,12 @@
+<div class="request-absence-name-cell">
+	<i
+		class="mdi mdi-calendar cursor-pointer inline-block"
+		ng-if="grid.appScope.enableScheduleIcon"
+		ng-style="{visibility: row.entity.Type == grid.appScope.absenceRequestType ? 'visible': 'hidden'}"
+		ng-click="grid.appScope.toggleAbsenceSchedules(row.entity, $event);"
+		ng-class="{active: row.entity.activeShowSchedule}"
+	>
+		<md-tooltip> {{ 'ClickToViewSchedules' | translate }} </md-tooltip>
+	</i>
+	<span>{{ row.entity.AgentName }}</span>
+</div>

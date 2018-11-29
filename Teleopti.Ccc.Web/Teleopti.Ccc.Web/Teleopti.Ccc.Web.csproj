@@ -1649,7 +1649,7 @@
     <Content Include="WFM\app\requests\html\requests-footer.tpl.html" />
     <Content Include="WFM\app\requests\html\requests-absence-and-text.html" />
     <Content Include="WFM\app\requests\html\requests-absence-person-account-overview.html" />
-    <Content Include="WFM\app\requests\html\requests-absence-schedules-cell.html" />
+    <Content Include="WFM\app\requests\html\requests-absence-name-cell.html" />
     <Content Include="WFM\app\requests\html\requests-absence-and-text-header.html" />
     <Content Include="WFM\app\requests\html\requests-shift-trade-header.html" />
     <Content Include="WFM\app\requests\html\requests.html" />

@@ -63,6 +63,7 @@
 		vm.initialized = false;
 		vm.absence = {};
 		vm.absenceRequestType = requestsTypes.AbsenceRequest;
+		vm.enableScheduleIcon = false;
 		vm.showingAbsenceSchedules = false;
 
 		var onInitCallBack = undefined;
@@ -195,6 +196,7 @@
 		vm.init = function() {
 			vm.defaultStatusesLoaded = false;
 			vm.userTimeZone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
+			vm.enableScheduleIcon = toggleService.WFM_Request_Show_Shift_for_Absence_Requests_79008;
 
 			var sortingOrder = requestsDefinitions.translateSingleSortingOrder(
 				requestGridStateService.getAbsenceAndTextSorting()
