@@ -4,7 +4,7 @@
 		</h1>
 	</div>
 	<div class="view-title" ng-if="vm.isEditGroup">
-		<h1><i class="mdi mdi-calendar"></i> {{'EditPlanningGroup' | translate}}: {{::vm.name}}</h1>
+		<h1><i class="mdi mdi-calendar"></i> {{'OpenPlansPage' | translate}} / {{vm.name}} / {{'Edit' | translate}}</h1>
 	</div>
 </div>
 <div class="con-row">
@@ -19,10 +19,8 @@
 								   id="planningGroupNameId" autofocus autocomplete="off" ng-model="vm.name"
 								   class="pg-setting-name" required=""/>
 							<div ng-cloak class="animate-show"
-								 ng-show="form.$submitted || form.planningGroupName.$touched">
-								<div class="form-input-message"
-									 ng-class="{ formInvalidInput:form.planningGroupName.$error.required }">{{
-									'YouCannotHaveABlankName' | translate }}
+								 ng-show="(form.$submitted || form.planningGroupName.$touched) && form.planningGroupName.$error.required">
+								<div class="form-input-message formInvalidInput">{{'YouCannotHaveABlankName' | translate }}
 								</div>
 							</div>
 						</div>
@@ -49,33 +47,35 @@
 									</md-not-found>
 								</md-autocomplete>
 							</div>
-							<div ng-cloak class="animate-show" ng-show="form.$submitted || form.filters.$touched">
-								<span class="form-input-message" ng-class="{ formInvalidInput: !vm.isValidFilters() }"
-									  translate>YouMustSelectAtLeastOneFilter</span>
+							<div ng-cloak ng-show="(form.$submitted || form.filters.$touched) && !vm.isValidFilters()">
+								<span class="form-input-message formInvalidInput" translate>YouMustSelectAtLeastOneFilter</span>
 							</div>
-							<div ng-show="vm.selectedResults.length > 0">
+							<div style="margin-top: 20px" ng-show="vm.selectedResults.length > 0">
 								<div translate>SelectedFiltersColon</div>
 								<div class="wfm-chip-wrap" ng-repeat="selected in vm.selectedResults ">
 									<span class="wfm-chip">
 										<span class="chip-handle">{{selected.FilterType | translate}}</span>
-									<span class="chip-text">{{selected.Name}}<i class="mdi mdi-close"
-																				ng-click="vm.removeSelectedFilter(selected)"></i></span>
+									<span class="chip-text">{{selected.Name}}<i class="mdi mdi-close" ng-click="vm.removeSelectedFilter(selected)"></i></span>
 									</span>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="con-footer">
-					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancel()">{{'Cancel'|translate}}</button>
-					<button ng-if="vm.isEditGroup" class="wfm-btn wfm-btn-invis-default delete-plan-group"
-							ng-click='vm.confirmDeleteModal=true;'>{{'Delete'|translate}}
-					</button>
-					<button class="wfm-btn save-plan-group" ng-disabled="!vm.isValid || vm.requestSent"
-							ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}"
-							ng-click="vm.persist()">
-						{{'Save'|translate}}
-					</button>
+				<div >
+					<span style="text-align: left">
+						<button ng-if="vm.isEditGroup" class="wfm-btn wfm-btn-invis-default delete-plan-group"
+								ng-click='vm.confirmDeleteModal=true;'>{{'Delete'|translate}}
+						</button>
+					</span>
+					<span style="float: right">
+						<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancel()">{{'Cancel'|translate}}</button>
+						<button class="wfm-btn save-plan-group" ng-disabled="!vm.isValid || vm.requestSent"
+								ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}"
+								ng-click="vm.persist()">
+							{{'Save'|translate}}
+						</button>
+					</span>
 					<div ng-cloak class="modal-box">
 						<div ng-show="vm.confirmDeleteModal">
 							<div class="modalbg">
