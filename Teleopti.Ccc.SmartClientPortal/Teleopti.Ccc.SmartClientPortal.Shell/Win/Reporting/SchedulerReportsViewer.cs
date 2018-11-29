@@ -15,7 +15,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
-using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Reporting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReporting;
@@ -31,11 +30,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 		private readonly IApplicationFunction _applicationFunction;
 		private ReportDetail _reportDetail;
 		private readonly BackgroundWorker _backgroundWorkerLoadReport = new BackgroundWorker();
-		private ScheduleViewBase _scheduleViewBase;
-		private IScenario _scenario;
-		private bool _openFromScheduler;
 		private readonly CultureInfo _currentCulture;
-		private const int maximumRows = 1000;
 
 		public SchedulerReportsViewer(IEventAggregator eventAggregator, IComponentContext componentContext,
 			IApplicationFunction applicationFunction)
