@@ -132,10 +132,11 @@ module.exports = function(grunt) {
 			'vendor/fabricjs/fabricjs_viewport.js',
 
 			//To get around the problem of getting a d3 global variable this minified js file was made using
-			//rollup and uglify "nom i -g rollup uglify".
+			//rollup and uglify "npm i -g rollup uglify".
 			//In case of a new version: Create a file using rollup with the -f iife flag. Edit that one so it uses "window" as an input parameter
 			//to the main function, it had "undefined" when we did it, then use uglify to minify the package and place it in the vendor/d3 folder.
 			'vendor/d3/d3.min.js',
+			'vendor/powerbi/powerbi.bundle.min.js', //same as d3 bundle
 			'node_modules/c3/c3.min.js',
 			'node_modules/c3-angular/c3-angular.min.js',
 			'vendor/ui-bootstrap-custom-build/datepicker.directive.ext.js',
