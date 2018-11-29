@@ -1919,6 +1919,7 @@
     <Content Include="WFM\css\_grouppage.scss" />
     <Content Include="WFM\css\_organizationpicker.scss" />
     <Content Include="WFM\css\_gamification.scss" />
+    <Content Include="WFM\css\_global.scss" />
     <Content Include="WFM\css\_cascade.scss" />
     <Content Include="WFM\css\_cardpanel.scss" />
     <Content Include="WFM\app\permissions\functionsrefact\permissions-function-tree.html" />
