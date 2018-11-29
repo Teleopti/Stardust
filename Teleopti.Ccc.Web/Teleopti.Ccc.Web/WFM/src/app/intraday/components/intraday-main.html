@@ -13,6 +13,7 @@
 							class="con-flex x2"
 							style="margin: 0; padding: 0"
 							(selected)="onSelecetSkill($event)"
+							[selectedItem]="selectedSkillOrGroup"
 						></app-angular-skill-picker>
 						<div class="con-flex" style="flex-basis: 15%">
 							<button nz-button (click)="goToGroupManager()" icon="" nzType="default">
@@ -22,7 +23,8 @@
 					</div>
 				</div>
 				<div class="con-flex">
-					<intraday-date-selector (selected)="onSelectDate($event)"> </intraday-date-selector>
+					<intraday-date-selector [value]="selectedOffset + ''" (selected)="onSelectDate($event)">
+					</intraday-date-selector>
 				</div>
 			</div>
 			<div class="con-row">
@@ -37,11 +39,14 @@
 								(click)="onShowHideSkills()"
 							>
 								<nz-radio-group [(ngModel)]="selectedSubSkillId" (ngModelChange)="onPickSubSkill()">
-									<label nz-radio-button nzValue="all"> {{ translate.instant('All') }} </label>
+									<label nz-radio-button nzValue="all" (click)="onSubSkillClick($event)">
+										{{ translate.instant('All') }}
+									</label>
 									<label
 										*ngFor="let skill of selectedSkillOrGroup.Skills"
 										nz-radio-button
 										nzValue="{{skill.Id}}"
+										(click)="onSubSkillClick($event)"
 									>
 										{{ skill.Name }}
 									</label>

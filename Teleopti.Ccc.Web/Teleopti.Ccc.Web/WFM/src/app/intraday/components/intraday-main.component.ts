@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterContentInit, OnChanges } from '@angular/core';
 import moment, { Moment } from 'moment';
 import { IntradayDataService } from '../services/intraday-data.service';
+import { IntradayPersistService } from '../services/intraday-persist.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd';
 import c3 from 'c3';
@@ -24,21 +25,23 @@ import {
 	templateUrl: './intraday-main.html',
 	styleUrls: ['./intraday-main.component.scss']
 })
-export class IntradayMainComponent implements OnInit, OnDestroy {
+export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentInit {
 	constructor(
 		public intradayDataService: IntradayDataService,
 		public translate: TranslateService,
-		private message: NzMessageService
+		private message: NzMessageService,
+		private persistData: IntradayPersistService
 	) {}
 
 	selectedSkillOrGroup: SkillPickerItem;
 	selectedSubSkill: Skill;
 	selectedSubSkillId: string;
 	selectedOffset = 0;
-	displayDate: string = moment().format('LLLL');
-	intradayTabs: IntradayChartType;
 	selectedChartType: IntradayChartType = 'traffic';
 	selectedDate: Moment;
+
+	displayDate: string = moment().format('LLLL');
+	intradayTabs: IntradayChartType;
 	chartType: IntradayChartType = 'traffic';
 	chartData: c3.Data = this.trafficDataToC3Data(this.getEmptyTrafficData().DataSeries);
 	summaryData: IntradayTrafficSummaryItem[] | IntradayPerformanceSummaryItem[] = [];
@@ -51,6 +54,21 @@ export class IntradayMainComponent implements OnInit, OnDestroy {
 		this.timer = setInterval(this.updateOnInterval, 60000);
 	}
 
+	ngAfterContentInit() {
+		const persisted = this.persistData.getPersisted();
+		this.selectedOffset = 0;
+		if (persisted) {
+			this.selectedSkillOrGroup = persisted.selectedSkillOrGroup;
+			this.selectedSubSkill = persisted.selectedSubSkill;
+			this.selectedSubSkillId = persisted.selectedSubSkillId;
+			this.selectedOffset = persisted.selectedOffset;
+			this.selectedChartType = persisted.selectedChartType;
+			this.selectedDate = persisted.selectedDate;
+			this.chartType = this.selectedChartType;
+			this.updateData(false);
+		}
+	}
+
 	updateOnInterval = () => {
 		if (this.selectedOffset === 0 && this.selectedSkillOrGroup && this.loading === false) {
 			this.updateData(true);
@@ -61,9 +79,21 @@ export class IntradayMainComponent implements OnInit, OnDestroy {
 		clearInterval(this.timer);
 	}
 
+	private setPersistedData() {
+		this.persistData.setPersisted({
+			selectedSkillOrGroup: this.selectedSkillOrGroup,
+			selectedSubSkill: this.selectedSubSkill,
+			selectedSubSkillId: this.selectedSubSkillId,
+			selectedOffset: this.selectedOffset,
+			selectedChartType: this.selectedChartType,
+			selectedDate: this.selectedDate
+		});
+	}
+
 	onSelecetSkill(e: SkillPickerItem) {
 		this.selectedSkillOrGroup = Object.assign({}, e);
 		this.updateData(false);
+		this.setPersistedData();
 	}
 
 	onClickTab() {
@@ -149,7 +179,13 @@ export class IntradayMainComponent implements OnInit, OnDestroy {
 		this.updateData(true);
 	}
 
+	onSubSkillClick(event: any) {
+		event.stopPropagation();
+	}
+
 	updateData = (columnsOnly: boolean = true) => {
+		this.setPersistedData();
+
 		if (!this.selectedSkillOrGroup) {
 			return;
 		}

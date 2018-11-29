@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { IntradayStaffingData } from '../types/intraday-staffing-data';
 import { IntradayTrafficData } from '../types/intraday-traffic-data';
 import { IntradayPerformanceData } from '../types/intraday-performance-data';
+
 @Injectable()
 export class IntradayDataService {
 	constructor(private http: HttpClient) {}

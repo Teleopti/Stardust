@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, Input } from '@angular/core';
 import { SkillPickerService } from '../../services/skill-picker.service';
 import { SkillPickerItem } from '../../types';
 
@@ -22,6 +22,8 @@ export class AngularSkillPickerComponent implements OnInit {
 	filteredItems: SkillPickerItem[] = [];
 	inputValue: string;
 	skillPickerItems: SkillPickerItem[] = [];
+
+	@Input()
 	selectedItem: SkillPickerItem;
 
 	ngOnInit() {
