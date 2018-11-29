@@ -65,20 +65,17 @@ export class WorkspaceComponent implements OnInit {
 	}
 
 	loadReport(config) {
-		// TODO: For debug, refer to https://teleopti.visualstudio.com/TeleoptiWFM/_workitems/edit/79021
-		console.log('pbi.models:', pbi.models);
-
 		// Refer to https://github.com/Microsoft/PowerBI-JavaScript/wiki/Embed-Configuration-Details for more details
 		const embedConfig = {
 			type: 'report',
-			tokenType: 1, // pbi.models.TokenType.Embed,
+			tokenType: pbi.models.TokenType.Embed,
 			accessToken: config.AccessToken,
 			embedUrl: config.ReportUrl,
 			id: config.ReportId,
 			permissions: pbi.models.Permissions.All,
 			viewMode: this.canEditReport
-				? 1 // pbi.models.ViewMode.Edit
-				: 0, // pbi.models.ViewMode.View
+				? pbi.models.ViewMode.Edit
+				: pbi.models.ViewMode.View,
 			settings: {
 				filterPaneEnabled: this.enableFilter,
 				navContentPaneEnabled: this.enableNavContent,
