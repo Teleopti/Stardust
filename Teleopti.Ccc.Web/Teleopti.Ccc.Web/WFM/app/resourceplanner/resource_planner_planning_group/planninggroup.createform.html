@@ -54,7 +54,7 @@
 									  translate>YouMustSelectAtLeastOneFilter</span>
 							</div>
 							<div ng-show="vm.selectedResults.length > 0">
-								<p translate>SelectedFiltersColon</p>
+								<div translate>SelectedFiltersColon</div>
 								<div class="wfm-chip-wrap" ng-repeat="selected in vm.selectedResults ">
 									<span class="wfm-chip">
 										<span class="chip-handle">{{selected.FilterType | translate}}</span>
