@@ -29,7 +29,9 @@
 			</div>
 			<div class="con-row">
 				<div class="con-flex">
-					<div *ngIf="displayDate && displayDate.length > 0">{{ displayDate }}</div>
+					<div *ngIf="displayDate && displayDate.length > 0">
+						<h2>{{ displayDate }}</h2>
+					</div>
 					<div
 						*ngIf="
 							selectedSkillOrGroup &&
