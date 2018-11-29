@@ -50,14 +50,14 @@
 				NewPassword: vm.Password,
 				ConfirmNewPassword: vm.ConfirmPassword
 			}, tokenHeaderService.getHeaders())
-				.success(function (data) {
+				.then(function (data) {
 					if (!data.Success) {
 						vm.ErrorMessage = data.Message;
 						return;
 					}
 					window.location = "#";
 				})
-				.error(function (xhr, ajaxOptions, thrownError) {
+				.catch(function (xhr, ajaxOptions, thrownError) {
 					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 					vm.Success = false;
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);

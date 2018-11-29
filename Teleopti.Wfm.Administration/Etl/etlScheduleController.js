@@ -33,7 +33,7 @@
 			vm.schedules = null;
 			$http
 			.get("./Etl/ScheduledJobs", tokenHeaderService.getHeaders())
-			.success(function (data) {
+			.then(function (data) {
 				vm.schedules = data;
 			});
 		}
@@ -44,7 +44,7 @@
 				JSON.stringify(scheduleId),
 				tokenHeaderService.getHeaders()
 			)
-			.success(function(data) {
+			.then(function(data) {
 				console.log(data);
 				getScheduledJobs();
 			});
@@ -56,7 +56,7 @@
 				JSON.stringify(scheduleId),
 				tokenHeaderService.getHeaders()
 			)
-			.success(function(data) {
+			.then(function(data) {
 				console.log(data);
 				getScheduledJobs();
 			});
@@ -127,7 +127,7 @@
 				JSON.stringify(postObj),
 				tokenHeaderService.getHeaders()
 			)
-			.success(function(data) {
+			.then(function(data) {
 				getScheduledJobs();
 				console.log(data);
 			});
@@ -184,7 +184,7 @@
 				JSON.stringify(postObj),
 				tokenHeaderService.getHeaders()
 			)
-			.success(function(data) {
+			.then(function(data) {
 				getScheduledJobs();
 				console.log(data);
 			});

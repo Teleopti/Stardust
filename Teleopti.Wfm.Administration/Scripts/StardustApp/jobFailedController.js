@@ -32,7 +32,7 @@
 		var refreshPromise = $interval(pollNewData, refreshInterval);
 
 		$http.get("./Stardust/Types", tokenHeaderService.getHeaders())
-			.success(function (data) {
+			.then(function (data) {
 				vm.types = data;
 			});
 
@@ -42,12 +42,12 @@
 			});
 
 		$http.get("./AllTenants", tokenHeaderService.getHeaders())
-			.success(function (data) {
+			.then(function (data) {
 				vm.Tenants = data;
 			});
 
 		$http.get("./Stardust/OldestJob", tokenHeaderService.getHeaders())
-			.success(function (data) {
+			.then(function (data) {
 				var oldestJob = data;
 				vm.minFrom = new Date(oldestJob.Created);
 				vm.maxTo = new Date(new Date());
@@ -76,7 +76,7 @@
 
 			var params = { "from": vm.resultsFrom, "to": vm.resultsTo, "dataSource": dataSource, "type": jobType, "fromdate": vm.fromDateFilter, "todate": vm.toDateFilter};
 			$http.get("./Stardust/FailedJobs", tokenHeaderService.getHeadersAndParams(params))
-				.success(function (data) {
+				.then(function (data) {
 					if (data.length < vm.resultsTo) {
 						vm.moreJobs = false;
 					} else {
@@ -84,7 +84,7 @@
 					}
 					vm.Jobs = data;
 				})
-				.error(function (xhr, ajaxOptions, thrownError) {
+				.catch(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ": " + xhr.ExceptionMessage);
 					vm.JobError = ajaxOptions;
 					if (xhr !== "") {

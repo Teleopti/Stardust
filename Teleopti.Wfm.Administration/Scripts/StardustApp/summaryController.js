@@ -41,12 +41,12 @@
 			});
 
 	$http.get("./AllTenants", tokenHeaderService.getHeaders())
-			.success(function (data) {
+			.then(function (data) {
 				vm.Tenants = data;
 			});
 
 		$http.get("./Stardust/ShowIntradayTool", tokenHeaderService.getHeaders())
-			.success(function (data) {
+			.then(function (data) {
 				vm.showIntradayTool = data;
 			});
 
@@ -60,7 +60,7 @@
 
 		function refresh() {
 			$http.get("./Stardust/Jobs", tokenHeaderService.getHeadersAndParams({ "from": 1, "to": 5}))
-				.success(function(data) {
+				.then(function(data) {
 					vm.RunningJobs = data;
 					if (data.length > 0) {
 						vm.anyHistory = true;
@@ -70,7 +70,7 @@
 						vm.showHistoryAlert = true;
 					}
 				})
-				.error(function(xhr, ajaxOptions) {
+				.catch(function(xhr, ajaxOptions) {
 					console.log(xhr.Message + ": " + xhr.ExceptionMessage);
 					vm.JobError = ajaxOptions;
 					if (xhr !== "") {
@@ -80,7 +80,7 @@
 				});
 
 			$http.get("./Stardust/FailedJobs", tokenHeaderService.getHeadersAndParams({ "from": 1, "to": 5}))
-				.success(function(data) {
+				.then(function(data) {
 					vm.FailedJobs = data;
 					if (data.length > 0) {
 						vm.anyFailedJobs = true;
@@ -90,7 +90,7 @@
 						vm.showFailureAlert = false;
 					}
 				})
-				.error(function(xhr, ajaxOptions) {
+				.catch(function(xhr, ajaxOptions) {
 					console.log(xhr.Message + ": " + xhr.ExceptionMessage);
 					vm.JobError = ajaxOptions;
 					if (xhr !== "") {
@@ -100,7 +100,7 @@
 				});
 
 			$http.get("./Stardust/QueuedJobs", tokenHeaderService.getHeadersAndParams({ "from": 1, "to": 5 }))
-				.success(function(data) {
+				.then(function(data) {
 					vm.QueuedJobs = data;
 					if (data.length > 0) {
 						vm.anyQueuedJobs = true;
@@ -108,7 +108,7 @@
 						vm.anyQueuedJobs = false;
 					}
 				})
-				.error(function(xhr, ajaxOptions) {
+				.catch(function(xhr, ajaxOptions) {
 					console.log(xhr.Message + ": " + xhr.ExceptionMessage);
 					vm.JobError = ajaxOptions;
 					if (xhr !== "") {
@@ -118,12 +118,12 @@
 				});
 
 			$http.get("./Stardust/QueueCount", tokenHeaderService.getHeaders())
-				.success(function (data) {
+				.then(function (data) {
 					vm.queueCount = data;
 				});
 
 			$http.get("./Stardust/AliveWorkerNodes", tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					vm.WorkerNodes = data;
 					if (data.length > 0) {
 						vm.anyNodes = true;
@@ -133,7 +133,7 @@
 						vm.showNodesAlert = true;
 					}
 				})
-				.error(function(xhr, ajaxOptions) {
+				.catch(function(xhr, ajaxOptions) {
 					vm.NodeError = ajaxOptions;
 					console.log(xhr.Message + ": " + xhr.ExceptionMessage);
 					if (xhr !== "") {
@@ -155,7 +155,7 @@
 					"Days": 14
 				},
 				tokenHeaderService.getHeaders()
-			).success(function() {
+			).then(function() {
 				refresh();
 			});
 		}
@@ -165,13 +165,13 @@
 			vm.showHealthAlert = false;
 			$http.get("./Stardust/HealthCheck",
 					tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					vm.result = data;
 					if (data !== "Everything looks OK!")
 						vm.showHealthAlert = true;
 					refresh();
 				})
-				.error(function() {
+				.catch(function() {
 					vm.result = "Something is wrong but we can't figure out what!";
 					vm.showHealthAlert = true;
 				});
@@ -184,7 +184,7 @@
 					"Tenant": vm.selectedTenantName
 				},
 				tokenHeaderService.getHeaders()
-			).success(function () {
+			).then(function () {
 				refresh();
 			});
 		}
@@ -192,7 +192,7 @@
 		function intradayToolGoWithTheFlow() {
 			$http.get("./Stardust/IntradayToolGoWithTheFlow",
 				tokenHeaderService.getHeaders()
-			).success(function () {
+			).then(function () {
 				refresh();
 			});
 		}

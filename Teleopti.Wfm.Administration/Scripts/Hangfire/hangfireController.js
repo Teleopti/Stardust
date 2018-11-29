@@ -17,9 +17,9 @@
 	});
 
 	function hangfireController($http, tokenHeaderService, $scope) {
-		$http.get("./Hangfire/GetUrl", tokenHeaderService.getHeaders()).success(function (data) {
+		$http.get("./Hangfire/GetUrl", tokenHeaderService.getHeaders()).then(function (data) {
 			$scope.HangfireUrl = data;
-		}).error(function (xhr, ajaxOptions, thrownError) {
+		}).catch(function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 		});
 	}

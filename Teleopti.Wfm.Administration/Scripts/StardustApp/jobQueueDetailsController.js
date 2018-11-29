@@ -11,10 +11,10 @@
 		vm.back = back;
 		vm.JobId = $routeParams.jobId;
 		$http.get("./Stardust/QueuedJobs/" + vm.JobId, tokenHeaderService.getHeaders())
-			.success(function(data) {
+			.then(function(data) {
 				vm.Job = data;
 			})
-			.error(function(xhr, ajaxOptions, thrownError) {
+			.catch(function(xhr, ajaxOptions, thrownError) {
 				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 			});
 		

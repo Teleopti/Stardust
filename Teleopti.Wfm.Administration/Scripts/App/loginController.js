@@ -45,18 +45,19 @@
 
 		vm.Id = cookie ? cookie.id : null;
 
-		$http.get("./Etl/ShouldEtlToolBeVisible", tokenHeaderService.getHeaders())
-			.success(function (data) {
-				vm.shouldShowEtl = data;
+		//$http.get("./Etl/ShouldEtlToolBeVisible", tokenHeaderService.getHeaders())
+		//	.then(function (data) {
+		//		debugger;
+		//		vm.shouldShowEtl = data;
 
-				$scope.menuItems.push(
-					{
-						text: "ETL",
-						link: "#/ETL",
-						toggle: vm.shouldShowEtl
-					}
-				);
-			});
+		//		$scope.menuItems.push(
+		//			{
+		//				text: "ETL",
+		//				link: "#/ETL",
+		//				toggle: vm.shouldShowEtl
+		//			}
+		//		);
+		//	});
 
 		$scope.state = {
 			selected: 1
@@ -83,8 +84,8 @@
 
 		$scope.message = "något som jag vill visa";
 
-		$http.get("./HasNoUser").success(function (data) {
-			firstUser = data;
+		$http.get("./HasNoUser").then(function (data) {
+			firstUser = data.data;
 			if (firstUser) {
 				vm.user = 'xxfirstxx';
 				window.location = "firstuser.html";
@@ -99,7 +100,7 @@
 					});
 				}
 			}
-		}).error(function (xhr, ajaxOptions, thrownError) {
+		}).catch(function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 		});
 
@@ -151,21 +152,21 @@
 
 			$http.post('./Login',
 				loginData
-			).success(function (data) {
+			).then(function (data) {
 				$("#modal-login").toggleClass("wait");
 				//destory previous cookies
-				if (data.Success === false) {
+				if (data.data.Success === false) {
 					//alert(data.Message);
-					vm.ErrorMessage = data.Message;
+					vm.ErrorMessage = data.data.Message;
 					return;
 				} else {
-					createCookies(data);
+					createCookies(data.data);
 					document.location = "#/";
 					location.reload();
 					//$('#modal-login').dialog('close');
 				}
 
-			}).error(showError);
+			}).catch(showError);
 		};
 
 		vm.logout = function () {

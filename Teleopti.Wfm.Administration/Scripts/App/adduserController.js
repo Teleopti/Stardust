@@ -24,9 +24,9 @@
 		vm.FirstUser = false;
 		vm.SaveEnabled = false;
 
-		$http.get("./HasNoUser").success(function(data) {
+		$http.get("./HasNoUser").then(function(data) {
 			vm.FirstUser = data;
-		}).error(function(xhr, ajaxOptions, thrownError) {
+		}).catch(function(xhr, ajaxOptions, thrownError) {
 			console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 		});
 
@@ -62,7 +62,7 @@
 							Email: vm.Email
 						},
 						tokenHeaderService.getHeaders())
-					.success(function(data) {
+					.then(function(data) {
 						if (!data.Success) {
 							vm.EmailMessage = data.Message;
 							vm.EmailOk = false;
@@ -72,7 +72,7 @@
 						}
 
 					})
-					.error(function(xhr, ajaxOptions, thrownError) {
+					.catch(function(xhr, ajaxOptions, thrownError) {
 						vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 						vm.Success = false;
 						console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
@@ -115,14 +115,14 @@
 						ConfirmPassword: vm.ConfirmPassword
 					},
 					tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					if (!data.Success) {
 						vm.ErrorMessage = data.Message;
 						return;
 					}
 					window.location = "#users";
 				})
-				.error(function(xhr, ajaxOptions, thrownError) {
+				.catch(function(xhr, ajaxOptions, thrownError) {
 					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 					vm.Success = false;
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
@@ -136,14 +136,14 @@
 						Email: vm.Email,
 						Password: vm.Password,
 						ConfirmPassword: vm.ConfirmPassword
-					}).success(function(data) {
+					}).then(function(data) {
 					if (!data.Success) {
 						vm.ErrorMessage = data.Message;
 						return;
 					}
 					window.location = document.location.toString().replace("firstuser.html", "");
 				})
-				.error(function(xhr, ajaxOptions, thrownError) {
+				.catch(function(xhr, ajaxOptions, thrownError) {
 					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 					vm.Success = false;
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);

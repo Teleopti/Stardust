@@ -54,10 +54,10 @@
 		vm.CheckTenantName = function() {
 			vm.Message = '';
 			$http.post('./api/Import/IsNewTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					vm.TenantMessage = data.Message;
 					vm.TenantOk = data.Success;
-				}).error(function(xhr, ajaxOptions, thrownError) {
+				}).catch(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
@@ -74,12 +74,12 @@
 			};
 
 			$http.post('./CheckCreateDb', model, tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					vm.SqlUserOk = data.Success,
 						vm.SqlUserOkMessage = data.Message;
 					vm.CheckLogin();
 
-				}).error(function(xhr, ajaxOptions, thrownError) {
+				}).catch(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
@@ -104,11 +104,11 @@
 			};
 
 			$http.post('./CheckLogin', model, tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					vm.UserOk = data.Success,
 						vm.UserOkMessage = data.Message;
 
-				}).error(function(xhr, ajaxOptions, thrownError) {
+				}).catch(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
@@ -130,13 +130,13 @@
 			};
 
 			$http.post('./CreateTenant', model, tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					vm.Success = data.Success,
 						vm.Message = data.Message;
 					vm.Creating = '';
 					$("#loading").hide();
 
-				}).error(function(xhr, ajaxOptions, thrownError) {
+				}).catch(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 					vm.Creating = '';
@@ -152,11 +152,11 @@
 			};
 
 			$http.post('./CheckFirstUser', model, tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					vm.FirstUserOk = data.Success,
 						vm.FirstUserOkMessage = data.Message;
 
-				}).error(function(xhr, ajaxOptions, thrownError) {
+				}).catch(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};

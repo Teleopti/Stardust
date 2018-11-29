@@ -13,14 +13,14 @@
 		vm.ToggleValueToSave="false";
 		
 		var getAllOverrides = function(){
-			$http.get("./Toggle/AllOverrides", tokenHeaderService.getHeaders()).success(function (data) {
-				$scope.Overrides = data;
+			$http.get("./Toggle/AllOverrides", tokenHeaderService.getHeaders()).then(function (data) {
+				$scope.Overrides = data.data;
 			});
 		};
 		
 		var getAllToggleNamesWithoutOverride = function(){
-			$http.get("./Toggle/AllToggleNamesWithoutOverrides", tokenHeaderService.getHeaders()).success(function (data) {
-				$scope.ToggleNames = data;
+			$http.get("./Toggle/AllToggleNamesWithoutOverrides", tokenHeaderService.getHeaders()).then(function (data) {
+				$scope.ToggleNames = data.data;
 				if(data.length>0)
 					vm.ToggleNameToSave = data[0];
 			});	
@@ -28,7 +28,7 @@
 		
 		vm.DeleteOverride = function(override){
 			$http.delete('./Toggle/DeleteOverride/'+override.Toggle, tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					getAllOverrides(); 
 					getAllToggleNamesWithoutOverride();
 					alert("Toggles changes made here may take some time before being active in system!");
@@ -42,7 +42,7 @@
 		
 		vm.SaveOverride = function(){
 			$http.post('./Toggle/SaveOverride', {toggle: vm.ToggleNameToSave, value: vm.ToggleValueToSave}, tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					getAllOverrides();
 					getAllToggleNamesWithoutOverride();
 					vm.ShowAdd = false;
@@ -51,11 +51,11 @@
 				});
 		};
 
-		$http.get("./AllTenants", tokenHeaderService.getHeaders()).success(function(data) {
+		$http.get("./AllTenants", tokenHeaderService.getHeaders()).then(function(data) {
 			$scope.Tenants = data;
 		});
 
-		$http.get("./AllConfigurations", tokenHeaderService.getHeaders()).success(function (data) {
+		$http.get("./AllConfigurations", tokenHeaderService.getHeaders()).then(function (data) {
 			$scope.Configurations = data;
 		});
 

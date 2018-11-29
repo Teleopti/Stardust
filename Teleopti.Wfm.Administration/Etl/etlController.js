@@ -128,10 +128,10 @@
 				JSON.stringify(tenant),
 				tokenHeaderService.getHeaders()
 			)
-			.success(function(data) {
+			.then(function(data) {
 				vm.jobs = data;
 			})
-			.error(function(data) {
+			.catch(function(data) {
 				vm.jobs = [];
 				console.log(data, "failed to get jobs");
 			});
@@ -141,7 +141,7 @@
 			vm.tenants = [];
 			$http
 			.get("./Etl/GetTenants", tokenHeaderService.getHeaders())
-			.success(function (data) {
+			.then(function (data) {
 				for (var i = 0; i < data.length; i++) {
 					if (data[i].IsBaseConfigured) {
 						vm.tenants.push(data[i]);
@@ -176,7 +176,7 @@
 				"./Etl/IsBaseConfigurationAvailable",
 				tokenHeaderService.getHeaders()
 			)
-			.success(function(data) {
+			.then(function(data) {
 				vm.masterTenant = {
 					IsBaseConfigured: data.IsBaseConfigured,
 					TenantName: data.TenantName
@@ -198,7 +198,7 @@
 				JSON.stringify(tenant),
 				tokenHeaderService.getHeaders()
 			)
-			.success(function(data) {
+			.then(function(data) {
 				vm.dataSources = data;
 			});
 		}
@@ -253,13 +253,13 @@
 
 			$http
 			.post("./Etl/EnqueueJob", data, tokenHeaderService.getHeaders())
-			.success(function() {
+			.then(function() {
 				job.Status = "Job enqueued";
 				$timeout(function() {
 					job.Status = null;
 				}, 5000);
 			})
-			.error(function() {
+			.catch(function() {
 				job.Status = "Failed. Check inputs and network";
 				$timeout(function() {
 					job.Status = null;

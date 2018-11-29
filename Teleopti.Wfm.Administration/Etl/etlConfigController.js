@@ -28,7 +28,7 @@
     function getTenants() {
       $http
       .get("./Etl/GetTenants", tokenHeaderService.getHeaders())
-      .success(function(data) {
+      .then(function(data) {
         vm.tenants = data;
         // addUrl();
       });
@@ -49,7 +49,7 @@
         JSON.stringify(tenant.TenantName),
         tokenHeaderService.getHeaders()
       )
-      .success(function(data) {
+      .then(function(data) {
         vm.tenantLogData = data;
         if ($window.sessionStorage.configData) {
           var stringifiedConfigData = angular.fromJson($window.sessionStorage.configData);
@@ -58,7 +58,7 @@
           vm.showModal = true;
         } else{
           $http.get("./Etl/GetConfigurationModel", tokenHeaderService.getHeaders())
-          .success(function (timezones) {
+          .then(function (timezones) {
            $window.sessionStorage.configData =  angular.toJson(timezones)
            var stringifiedConfigData = angular.fromJson($window.sessionStorage.configData);
            vm.TimeZoneCodes = stringifiedConfigData.TimeZoneList;
@@ -82,13 +82,13 @@
         JSON.stringify(logDataObject),
         tokenHeaderService.getHeaders()
       )
-      .success(function(data) {
+      .then(function(data) {
         vm.tenantLogData = null;
         vm.showModal = false;
         vm.selectedTenant = null;
         vm.logDataSending = false;
       })
-      .error(function(data) {
+      .catch(function(data) {
         vm.logDataSending = false;
         vm.tenantLogData.Error = data;
       });

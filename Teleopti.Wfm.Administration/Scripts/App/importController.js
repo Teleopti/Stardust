@@ -49,12 +49,12 @@
 
 		vm.CheckTenantName = function() {
 			$http.post('./api/Import/IsNewTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					vm.TenantMessage = data.Message;
 					vm.TenantOk = data.Success;
 					//vm.CheckUsers();
 
-				}).error(function(xhr, ajaxOptions, thrownError) {
+				}).catch(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
@@ -74,10 +74,10 @@
 			};
 
 			$http.post('./CheckImportAdmin', model, tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					vm.SqlUserOk = data.Success,
 						vm.SqlUserOkMessage = data.Message;
-				}).error(function(xhr, ajaxOptions, thrownError) {
+				}).catch(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
@@ -103,10 +103,10 @@
 			};
 
 			$http.post('./CheckAppLogin', model, tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					vm.AppLoginOk = data.Success,
 						vm.AppLoginMessage = data.Message;
-				}).error(function(xhr, ajaxOptions, thrownError) {
+				}).catch(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
@@ -123,14 +123,14 @@
 						DbType: 1
 					},
 					tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					vm.AppDbOk = data.Exists;
 					vm.AppDbCheckMessage = data.Message;
 					if (vm.AppDbOk) {
 						vm.CheckVersions();
 						//vm.CheckUsers();
 					}
-				}).error(function(xhr, ajaxOptions, thrownError) {
+				}).catch(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 					vm.AppDbCheckMessage = xhr.Message + xhr.ExceptionMessage;
 				});
@@ -148,10 +148,10 @@
 						DbType: 2
 					},
 					tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					vm.AnalDbOk = data.Exists;
 					vm.AnalDbCheckMessage = data.Message;
-				}).error(function(xhr, ajaxOptions, thrownError) {
+				}).catch(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 					vm.AnalDbCheckMessage = xhr.Message + xhr.ExceptionMessage;
 				});
@@ -174,10 +174,10 @@
 						DbType: 3
 					},
 					tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					vm.AggDbOk = data.Exists;
 					vm.AggDbCheckMessage = data.Message;
-				}).error(function(xhr, ajaxOptions, thrownError) {
+				}).catch(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 					vm.AggDbCheckMessage = xhr.Message + xhr.ExceptionMessage;
 				});
@@ -193,7 +193,7 @@
 						AppDatabase: vm.AppDatabase
 					},
 					tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					vm.HeadVersion = data.HeadVersion;
 					vm.ImportAppVersion = data.ImportAppVersion;
 					vm.AppVersionOk = data.AppVersionOk;
@@ -202,7 +202,7 @@
 						vm.ToEarlyVersionMessage = 'This is a version that is too early to import this way!';
 					}
 
-				}).error(function(xhr, ajaxOptions, thrownError) {
+				}).catch(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.status + xhr.responseText + thrownError);
 				});
 		};
@@ -226,14 +226,14 @@
 				AdminUser: vm.CreateDbUser,
 				AdminPassword: vm.CreateDbPassword
 			}, tokenHeaderService.getHeaders())
-				.success(function (data) {
+				.then(function (data) {
 					vm.Success = data.Success;
 					vm.Message = data.Message;
 					vm.TenantId = data.TenantId;
 					$("#loading").hide();
 					vm.GetImportLog();
 				})
-				.error(function (xhr, ajaxOptions, thrownError) {
+				.catch(function (xhr, ajaxOptions, thrownError) {
 					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 					vm.Success = false;
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
@@ -243,9 +243,9 @@
 
 		vm.GetImportLog = function() {
 			$http.post('./GetImportLog', vm.TenantId, tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					vm.Log = data;
-				}).error(function(xhr, ajaxOptions, thrownError) {
+				}).catch(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};

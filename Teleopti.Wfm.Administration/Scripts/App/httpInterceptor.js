@@ -26,9 +26,9 @@
 			// optional method
 			'responseError': function(rejection) {
 				// do something on error
-				if (rejection.status === 401) {
-          window.location = "#/login";
-        }
+				//if (rejection.status === 401) {
+    //      window.location = "#/login";
+    //    }
 				return $q.reject(rejection);
 			}
 		};

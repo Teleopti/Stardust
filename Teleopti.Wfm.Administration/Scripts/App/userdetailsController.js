@@ -31,14 +31,14 @@
 
 		vm.LoadUser = function() {
 			$http.post('./User', vm.UserId, tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					vm.UserId = data.Id;
 					vm.Name = data.Name;
 					vm.OriginalName = data.Name;
 					vm.Email = data.Email;
 					vm.CheckName();
 					vm.CheckEmail();
-				}).error(function(xhr, ajaxOptions, thrownError) {
+				}).catch(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
@@ -74,7 +74,7 @@
 							Id: vm.UserId
 						},
 						tokenHeaderService.getHeaders())
-					.success(function(data) {
+					.then(function(data) {
 						if (!data.Success) {
 							vm.EmailMessage = data.Message;
 							vm.EmailOk = false;
@@ -84,7 +84,7 @@
 						}
 
 					})
-					.error(function(xhr, ajaxOptions, thrownError) {
+					.catch(function(xhr, ajaxOptions, thrownError) {
 						vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 						vm.Success = false;
 						console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
@@ -106,7 +106,7 @@
 						Email: vm.Email
 					},
 					tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					if (!data.Success) {
 						vm.Message = data.Message;
 						return;
@@ -122,7 +122,7 @@
 					}
 					window.location = "#users";
 				})
-				.error(function(xhr, ajaxOptions, thrownError) {
+				.catch(function(xhr, ajaxOptions, thrownError) {
 					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 					vm.Success = false;
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
@@ -131,9 +131,9 @@
 
 		vm.DeleteUser = function() {
 			$http.post('./DeleteUser', vm.UserId, tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					window.location = "#users";
-				}).error(function(xhr, ajaxOptions, thrownError) {
+				}).catch(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};

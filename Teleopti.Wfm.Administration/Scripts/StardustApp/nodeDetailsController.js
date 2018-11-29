@@ -20,15 +20,15 @@
 
 		function getJobs(dataExists) {
 			$http.get("./Stardust/WorkerNode/" + vm.NodeId, tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					vm.Node = data;
 				})
-				.error(function(xhr, ajaxOptions, thrownError) {
+				.catch(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 
 			$http.get("./Stardust/JobsByNode/" + vm.NodeId + "/" + vm.resultsFrom + "/" + vm.resultsTo  , tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function(data) {
 					if (data.length < vm.limit) {
 						vm.noMoreJobs = true;
 					}
@@ -38,7 +38,7 @@
 						vm.Jobs = data;
 					}
 				})
-				.error(function(xhr, ajaxOptions, thrownError) {
+				.catch(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		}

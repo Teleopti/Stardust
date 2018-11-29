@@ -37,7 +37,7 @@
 
 		function checkToggle() {
 			$http.get("./Etl/ShouldTenantNameBeVisible", tokenHeaderService.getHeaders())
-				.success(function(result) {
+				.then(function(result) {
 					vm.shouldShowTenantName = result;
 				});
 		}
@@ -46,7 +46,7 @@
 			vm.tenants = [];
 			$http
 			.get("./Etl/GetTenants", tokenHeaderService.getHeaders())
-			.success(function (data) {
+			.then(function (data) {
 				for (var i = 0; i < data.length; i++) {
 					if (data[i].IsBaseConfigured) {
 						vm.tenants.push(data[i]);
@@ -82,12 +82,12 @@
 				JSON.stringify(tenant),
 				tokenHeaderService.getHeaders()
 			)
-			.success(function(data) {
+			.then(function(data) {
 				vm.businessUnits = data;
 				vm.selectedBu = vm.businessUnits[0];
 				vm.getHistoryForTenant();
 			})
-			.error(function(data) {
+			.catch(function(data) {
 				vm.businessUnits = [];
 			});
 		}
@@ -105,7 +105,7 @@
 					if (window.location.hash === '#/ETL/history') {
 						$http
 							.get("./Etl/GetjobRunning", tokenHeaderService.getHeaders())
-							.success(function(data) {
+							.then(function(data) {
 								vm.status = data;
 								if (vm.status !== null) {
 									vm.status.formatedTime = moment(vm.status.StartTime).local().format('HH:mm');
@@ -120,7 +120,7 @@
 		function getStatusRightNow() {
 				$http
 				.get("./Etl/GetjobRunning", tokenHeaderService.getHeaders())
-				.success(function (data) {
+				.then(function (data) {
 					vm.status = data;
 					if (vm.status !== null) {
 						vm.status.formatedTime = moment(vm.status.StartTime).local().format('HH:mm');
@@ -150,18 +150,18 @@
 					JSON.stringify(JobHistoryCriteria),
 					tokenHeaderService.getHeaders()
 				)
-				.success(function(data) {
+				.then(function(data) {
 					if (data.length < 1) {
 						vm.error = "No history found";
 					} else {
 						vm.history = data;
 						vm.error = null;
 					}
+					vm.loadingHistory = false;
 				})
-				.error(function(data) {
+				.catch(function(data) {
 					vm.history = [];
 					vm.error = "No history found";
-				}).then(function() {
 					vm.loadingHistory = false;
 				});
 		}
