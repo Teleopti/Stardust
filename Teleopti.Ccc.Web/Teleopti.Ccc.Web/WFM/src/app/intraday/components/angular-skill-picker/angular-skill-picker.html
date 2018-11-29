@@ -1,6 +1,6 @@
 <div class="con-row">
 	<div class="con-flex">
-		<nz-radio-group [(ngModel)]="skillPickerFilter" (ngModelChange)="onFilterChange()">
+		<nz-radio-group [(ngModel)]="skillPickerFilter" (ngModelChange)="onFilterChange()" style="white-space: nowrap">
 			<button nz-radio-button nzValue="All">{{ 'All' | translate }}</button>
 			<button nz-radio-button nzValue="0">{{ 'Skills' | translate }}</button>
 			<button nz-radio-button nzValue="1">{{ 'Groups' | translate }}</button>

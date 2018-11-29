@@ -9684,7 +9684,7 @@ Period</comment>
   <data name="FiltersColon" xml:space="preserve">
     <value>Filters:</value>
     <comment>Filters:</comment>
-  </data>	
+  </data>
   <data name="MeetingDeleteConfirmationQuestion" xml:space="preserve">
     <value>Do you want to delete the meeting {0}?</value>
     <comment>Do you want to delete the meeting {0}?</comment>
@@ -13872,7 +13872,7 @@ Reduce the complexity to use these shifts.</value>
   <data name="YouMustSelectAtLeastOneFilter" xml:space="preserve">
     <value>You must select at least one filter</value>
     <comment>Notice for user that they need to add a filter</comment>
-  </data>	
+  </data>
   <data name="BothOverrideAndCampaignAdded" xml:space="preserve">
     <value>Both override and campaign added</value>
     <comment>label for the forecasting chart</comment>
@@ -17969,6 +17969,6 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>Click to view schedules tooltip in WFM/Requests</comment>
   </data>
   <data name="SelectSkillOrGroup" xml:space="preserve">
-    <value>Select a skill or skill-group</value>
+    <value>Select a skill or skill group</value>
   </data>
 </root>
