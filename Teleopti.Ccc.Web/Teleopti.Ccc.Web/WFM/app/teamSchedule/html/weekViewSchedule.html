@@ -57,7 +57,7 @@
 				<tbody>
 					<tr class="weekview-tr" ng-repeat="person in vm.groupWeeks">
 						<td class="weekview-td weekview-person-name">{{person.name}}</td>
-						<td class="weekview-td" ng-repeat="day in person.days" ng-style="{background: day.color, color: day.contrastFontColor}" ng-class="{'dayoff': day.isDayOff, 'terminated': day.isTerminated}">
+						<td class="weekview-td" ng-repeat="day in person.days" ng-style="{background: day.color, color: day.textColor}" ng-class="{'dayoff': day.isDayOff, 'terminated': day.isTerminated}">
 							<div class="full-size" ng-click="vm.onCellClick(person.personId, day.date.Date)" ng-class="{'pointer': vm.enableClickableCell}">
 								<div class="summary" title="{{day.summeryTitle}}">{{day.summeryTitle}}</div>
 								<div>{{day.summeryTimeSpan}}</div>

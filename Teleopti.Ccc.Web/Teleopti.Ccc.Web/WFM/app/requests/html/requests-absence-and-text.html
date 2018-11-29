@@ -56,7 +56,7 @@
 					class="layer absolute cursor-pointer"
 					ng-repeat="projection in shift.Periods"
 					ng-style=" {backgroundColor: projection.Color, left: projection.StartPositionPercentage * 100 + '%', width: (projection.EndPositionPercentage - projection.StartPositionPercentage) * 100 + '%', color: projection.TextColor}"
-					ng-class="{overtimeLight: projection.IsOvertime && projection.TextColor == 'white', overtimeDark: projection.IsOvertime && projection.TextColor == 'black'}"
+					ng-class="{'overtime-light': projection.IsOvertime && projection.TextColor == 'white', 'overtime-dark': projection.IsOvertime && projection.TextColor == 'black'}"
 				>
 					<md-tooltip md-z-index="1200" class="multiline-tooltip layer-summary">
 						<p>{{ projection.Title }}</p>

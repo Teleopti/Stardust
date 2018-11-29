@@ -29,7 +29,6 @@
 		'$timeout',
 		'$window',
 		'$interval',
-		'$filter',
 		'$state',
 		'$translate',
 		'TeamSchedule',
@@ -50,7 +49,6 @@
 		$timeout,
 		$window,
 		$interval,
-		$filter,
 		$state,
 		$translate,
 		TeamSchedule,
@@ -136,7 +134,7 @@
 		vm.useLighterBorder = function (shiftLayer) {
 			var sl = vm.getMergedShiftLayer(shiftLayer);
 			return shiftLayer.UseLighterBorder(sl.Color);
-		}
+		};
 
 		vm.changeActivityType = function () {
 			var selectActivity = vm.availableActivities.filter(function (activity) {

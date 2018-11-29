@@ -1762,8 +1762,16 @@ button.btn.absence-report-cancel {
 .calendarview-week li.dayoff .day-content,
 .weekview-day li.dayoff div,
 .weekview-day-summary.striped {
-	background-color: beige !important;
-	background-image: url(../Images/stripe.png) !important;
+	background-size: 11px 11px;
+	background-image: linear-gradient(
+		135deg,
+		transparent,
+		transparent 7px,
+		rgba(0, 0, 0, 0.5) 8px,
+		transparent 8px,
+		transparent
+	);
+	background-color: beige;
 }
 
 .probability-loading-gif {

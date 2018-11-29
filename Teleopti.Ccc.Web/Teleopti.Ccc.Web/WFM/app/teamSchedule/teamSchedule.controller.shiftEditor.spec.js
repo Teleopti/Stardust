@@ -3,7 +3,6 @@
 
 	var $rootScope,
 		$compile,
-		$document,
 		fakeActivityService,
 		fakeShiftEditorService,
 		fakeTeamSchedule,
@@ -71,10 +70,9 @@
 	);
 
 	beforeEach(
-		inject(function (_$rootScope_, _$compile_, _$document_) {
+		inject(function (_$rootScope_, _$compile_) {
 			$rootScope = _$rootScope_;
 			$compile = _$compile_;
-			$document = _$document_;
 		})
 	);
 	beforeEach(function () {
@@ -481,7 +479,7 @@
 				},
 				{
 					ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49623'],
-					Color: '#8080c0',
+					Color: '#303030',
 					Description: 'Phone',
 					Start: '2018-05-28 10:00',
 					Minutes: 120,
