@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -21,7 +22,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
+namespace Teleopti.Ccc.DomainTest.Intraday.ApplicationLayer
 {
 	[DomainTest]
 	[TestFixture(true)]

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 
-namespace Teleopti.Ccc.Intraday.UnitTests.Domain
+namespace Teleopti.Ccc.DomainTest.Intraday.Domain
 {
 	public class IntradayReforecastingServiceTest
 	{

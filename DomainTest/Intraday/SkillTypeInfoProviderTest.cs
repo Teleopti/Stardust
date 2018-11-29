@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.Intraday.UnitTests
+namespace Teleopti.Ccc.DomainTest.Intraday
 {
 	[DomainTest]
 	public class SkillTypeInfoProviderTest

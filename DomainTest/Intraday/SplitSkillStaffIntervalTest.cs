@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.Intraday.UnitTests
+namespace Teleopti.Ccc.DomainTest.Intraday
 {
 	[DomainTest]
 	[TestFixture]

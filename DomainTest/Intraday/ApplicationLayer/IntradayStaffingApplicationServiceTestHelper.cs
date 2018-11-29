@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
@@ -12,7 +13,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
+namespace Teleopti.Ccc.DomainTest.Intraday.ApplicationLayer
 {
 	public class IntradayStaffingApplicationServiceTestHelper
 	{

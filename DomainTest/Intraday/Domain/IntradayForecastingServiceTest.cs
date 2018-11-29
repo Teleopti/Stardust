@@ -18,7 +18,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Intraday.UnitTests.Domain
+namespace Teleopti.Ccc.DomainTest.Intraday.Domain
 {
 	public class IntradayForecastingServiceTest
 	{

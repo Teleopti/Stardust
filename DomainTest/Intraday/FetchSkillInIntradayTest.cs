@@ -7,7 +7,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 
-namespace Teleopti.Ccc.Intraday.UnitTests
+namespace Teleopti.Ccc.DomainTest.Intraday
 {
 	[DomainTest]
 	public class FetchSkillInIntradayTest
