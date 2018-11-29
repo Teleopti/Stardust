@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				ITeamInfo result = _target.CreateTeamInfo(null, _baseLineData.Person1, new DateOnlyPeriod(new DateOnly(2013, 2, 26), new DateOnly(2013, 2, 27)), allMatrixesInScheduler);
-				IList<IScheduleMatrixPro> matrixesForGroupMember0 = result.MatrixesForGroupMember(0).ToList();
+				IList<IScheduleMatrixPro> matrixesForGroupMember0 = result.MatrixesForGroup().ToList();
 				Assert.AreSame(matrixOnOtherPeriod, matrixesForGroupMember0[0]);
 				Assert.AreSame(matrixOnPersonAndPeriod, matrixesForGroupMember0[1]);
 				Assert.AreEqual(2, result.MatrixesForGroup().Count());

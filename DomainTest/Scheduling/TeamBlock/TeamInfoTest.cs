@@ -145,12 +145,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 		[Test]
-		public void ShouldContainMatrixesForOneGroupMember()
-		{
-			Assert.AreEqual(2, _target.MatrixesForGroupMember(0).Count());
-		}
-
-		[Test]
 		public void TwoTeamInfoWithSameTeamMembersShouldBeEqual()
 		{
 			Assert.That(_target.Equals(null), Is.False);
