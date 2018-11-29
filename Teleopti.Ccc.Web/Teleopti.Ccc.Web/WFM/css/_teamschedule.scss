@@ -253,6 +253,7 @@
 	}
 }
 
+//Move dayoff and overtime styles to some global place
 //Day off style
 .dayoff {
 	text-align: center;
@@ -273,7 +274,7 @@
 }
 
 //Overtime style
-.overtimeLight {
+.overtime-light {
 	background-size: 11px 11px;
 	background-image: linear-gradient(
 		45deg,
@@ -285,7 +286,7 @@
 	);
 }
 
-.overtimeDark {
+.overtime-dark {
 	background-size: 11px 11px;
 	background-image: linear-gradient(
 		45deg,

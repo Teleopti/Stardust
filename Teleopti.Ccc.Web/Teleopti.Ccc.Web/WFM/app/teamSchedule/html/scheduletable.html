@@ -92,7 +92,7 @@
 							 projection-name="{{::projection.Description}}"
 							 ng-repeat="projection in ::shift.Projections"
 							 ng-style="{left: projection.StartPosition + '%', width: projection.Length + '%', backgroundColor: projection.Color}"
-							 ng-class="{overtimeLight: projection.IsOvertime && projection.UseLighterBorder, overtimeDark: projection.IsOvertime && !projection.UseLighterBorder,
+							 ng-class="{'overtime-light': projection.IsOvertime && projection.UseLighterBorder, 'overtime-dark': projection.IsOvertime && !projection.UseLighterBorder,
 							 personAbsence:projection.ParentPersonAbsences !== null, noneSelected:vm.totalSelectedProjections() == 0 && !projection.IsOvertime,
 							 hasSelected:vm.totalSelectedProjections() != 0 && !projection.IsOvertime, selected:projection.Selected, lighterBorder: projection.UseLighterBorder, unselectable: !vm.canToggleSelection(projection, vm.selectedDate),
 							 sameTypeAsLast: projection.ShowDividedLine}"
