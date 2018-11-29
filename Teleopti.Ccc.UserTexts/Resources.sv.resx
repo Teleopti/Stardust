@@ -15983,4 +15983,13 @@ Applikationen kommer nu att stängas. </value>
   <data name="AuditTrailRole" xml:space="preserve">
     <value>Roll</value>
   </data>
+  <data name="AuditTrailPersonAccessContext" xml:space="preserve">
+    <value>Behörighetshantering i Personer</value>
+  </data>
+  <data name="PreferenceFulfillmentPercentColon" xml:space="preserve">
+    <value>Önskemålsuppfyllnad (%):</value>
+  </data>
+  <data name="ClickToViewSchedules" xml:space="preserve">
+    <value>Klicka för att se schema</value>
+  </data>
 </root>
