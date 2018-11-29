@@ -38,9 +38,6 @@
 					<div class="title header-flex">
 						<b class="scheduling-setting-name">{{setting.Name}}</b>
 					</div>
-					<div class="header-flex" ng-show="!setting.Default" ng-class="{'line-center': !vm.isDisable}">
-						<span>{{'SelectedFilters' | translate}}: {{setting.Filters.length}}</span>
-					</div>
 					<div class="line-right header-flex" ng-hide="vm.isDisable">
 						<div tabindex=0 class="context-menu card-context" ng-click="vm.setHigherPriority(setting, $index);$event.stopPropagation();"
 						 ng-hide="$last || $first">
