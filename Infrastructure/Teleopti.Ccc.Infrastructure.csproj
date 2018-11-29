@@ -669,6 +669,7 @@
     <Compile Include="UnitOfWork\NoScheduleChangedEventPublisher.cs" />
     <Compile Include="UnitOfWork\OptionalColumnCollectionChangedEventPublisher.cs" />
     <Compile Include="UnitOfWork\ForecastChangedEventPublisher.cs" />
+    <Compile Include="UnitOfWork\ScheduleChangedMessagePackagingSender.cs" />
     <Compile Include="UnitOfWork\ScheduleChangedMessageSender.cs" />
     <Compile Include="UnitOfWork\ClearScheduleEvents.cs" />
     <Compile Include="UnitOfWork\CurrentTransactionHooks.cs" />
