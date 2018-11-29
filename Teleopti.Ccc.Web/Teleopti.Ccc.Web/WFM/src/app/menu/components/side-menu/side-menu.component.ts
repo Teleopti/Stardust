@@ -30,17 +30,16 @@ const GROUPS: AreaGroup[] = [
 		{ InternalName: 'intraday', icon: 'mdi mdi-compass-outline', CustomStateName: 'intraday.intradayArea' },
 		{ InternalName: 'rta', icon: 'mdi mdi-alarm' }
 	],
-	[
-		{ InternalName: 'seatPlan', icon: 'mdi mdi-tab-unselected' },
-		{ InternalName: 'seatMap', icon: 'mdi mdi-tab' }
-	],
+	[{ InternalName: 'seatPlan', icon: 'mdi mdi-tab-unselected' }, { InternalName: 'seatMap', icon: 'mdi mdi-tab' }],
 	[
 		{ InternalName: 'reports', icon: 'mdi mdi-chart-bar' },
-		{ InternalName: 'insights', icon: 'mdi mdi-elevation-rise' },
-		{ InternalName: 'gamification', icon: 'mdi mdi-trophy' }],
-	[
-		{ InternalName: 'myTime', icon: 'mdi mdi-calendar-clock', inNewTab: true, url: '../MyTime' }
-	]
+		{
+			icon: 'mdi mdi-elevation-rise',
+			InternalName: 'insights'
+		},
+		{ InternalName: 'gamification', icon: 'mdi mdi-trophy' }
+	],
+	[{ InternalName: 'myTime', inNewTab: true, url: '../MyTime', icon: 'mdi mdi-calendar-clock' }]
 ];
 
 @Component({
