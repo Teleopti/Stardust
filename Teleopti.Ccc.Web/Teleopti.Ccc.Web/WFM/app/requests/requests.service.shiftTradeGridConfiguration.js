@@ -23,15 +23,14 @@
 			return currentMoment.diff(startMoment, 'days') * requestDefinitions.SHIFTTRADE_COLUMN_WIDTH + 'px';
 		}
 
-		function getDayViewModels(requests, shiftTradeRequestDateSummary, isUsingRequestSubmitterTimezone) {
+		function getDayViewModels(requests, shiftTradeRequestDateSummary) {
 			if (angular.isUndefined(requests) || requests == null || requests.length === 0) {
 				return [];
 			}
 
-			var day = moment(shiftTradeRequestDateSummary.Minimum);
-			var maxDay = moment(shiftTradeRequestDateSummary.Maximum);
+			var day = moment(shiftTradeRequestDateSummary.Minimum).add(-1, 'days');
+			var maxDay = moment(shiftTradeRequestDateSummary.Maximum).add(1, 'days');
 			var startOfWeekIsoDay = shiftTradeRequestDateSummary.FirstDayOfWeek;
-			var submitterTimezone = requests[0].TimeZone;
 
 			var dayViewModels = [];
 			var dayIncrement = day.clone();
@@ -39,8 +38,8 @@
 				var dayViewModel = createDayViewModel(
 					dayIncrement,
 					startOfWeekIsoDay,
-					isUsingRequestSubmitterTimezone,
-					submitterTimezone
+					true,//don't need to convert time zone for title area
+					currentUserInfo.CurrentUserInfo().DefaultTimeZone
 				);
 				dayViewModel.leftOffset = getShiftTradeColumnLeftOffset(day, dayIncrement);
 				dayViewModels.push(dayViewModel);
@@ -61,11 +60,8 @@
 		function createDayViewModel(day, startOfWeekIsoDay, isUsingRequestSubmitterTimezone, submitterTimezone) {
 			var currentUserTimezone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
 			var originalDate = day.toDate();
-			var targetTimezone = submitterTimezone;
-			if (!isUsingRequestSubmitterTimezone && currentUserTimezone !== submitterTimezone) {
-				targetTimezone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
-				day = convertTimezone(day, submitterTimezone, targetTimezone);
-			}
+			var targetTimezone = isUsingRequestSubmitterTimezone ? submitterTimezone : currentUserTimezone;
+			day = convertTimezone(day, submitterTimezone, isUsingRequestSubmitterTimezone);
 
 			var isWeekend = day.isoWeekday() === 6 || day.isoWeekday() === 7;
 
@@ -81,10 +77,20 @@
 			};
 		}
 
-		function convertTimezone(dateTime, fromTimezone, toTimezone) {
-			var dateTimeWithTimezone = moment.tz(dateTime, fromTimezone);
-			dateTimeWithTimezone = dateTimeWithTimezone.tz(toTimezone);
-			return moment(dateTimeWithTimezone.format('YYYY-MM-DD'));
+		function convertTimezone(dateTime, submitterTimezone, isUsingRequestSubmitterTimezone) {
+			var currentUserTimezone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
+			if (isNeedConvertTimeZone(isUsingRequestSubmitterTimezone, submitterTimezone)) {
+				var dateTimeWithTimezone = moment.tz(dateTime, submitterTimezone);
+				dateTimeWithTimezone = dateTimeWithTimezone.tz(currentUserTimezone);
+				return moment(dateTimeWithTimezone.format('YYYY-MM-DD'));
+			}
+			return dateTime;
+		}
+
+		function isNeedConvertTimeZone(isUsingRequestSubmitterTimezone, submitterTimezone) {
+			var currentUserTimezone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
+			if (!isUsingRequestSubmitterTimezone && submitterTimezone !== currentUserTimezone) return true;
+			return false;
 		}
 
 		function isDayOff(scheduleDayDetail) {
@@ -97,7 +103,7 @@
 			isUsingRequestSubmitterTimezone,
 			submitterTimezone
 		) {
-			var startDate = moment(shiftTradeRequestDateSummary.Minimum);
+			var startDate = moment(shiftTradeRequestDateSummary.Minimum).add(-1, 'days');
 			var startOfWeekIsoDay = shiftTradeRequestDateSummary.FirstDayOfWeek;
 			var shiftTradeDate = moment(shiftTradeDay.Date);
 
@@ -115,7 +121,7 @@
 
 			viewModel.FromScheduleDayDetail.IsDayOff = isDayOff(shiftTradeDay.FromScheduleDayDetail);
 			viewModel.ToScheduleDayDetail.IsDayOff = isDayOff(shiftTradeDay.ToScheduleDayDetail);
-			viewModel.LeftOffset = getShiftTradeColumnLeftOffset(startDate, shiftTradeDate);
+			viewModel.LeftOffset = getShiftTradeColumnLeftOffset(startDate, moment(viewModel.date));
 
 			return viewModel;
 		}
@@ -337,7 +343,7 @@
 		function setupShiftTradeVisualisationColumn(shiftTradeRequestDateSummary) {
 			var minimum = moment(shiftTradeRequestDateSummary.Minimum);
 			var maximum = moment(shiftTradeRequestDateSummary.Maximum);
-			var numberOfDays = maximum.diff(minimum, 'days') + 1;
+			var numberOfDays = maximum.diff(minimum, 'days') + 3;
 
 			return {
 				displayName: $translate.instant('ShiftTrade'),
