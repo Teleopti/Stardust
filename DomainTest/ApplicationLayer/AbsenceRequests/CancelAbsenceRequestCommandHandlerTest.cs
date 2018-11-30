@@ -17,7 +17,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
-using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -78,7 +77,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			isolate.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
 			isolate.UseTestDouble<ScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
-			isolate.UseTestDouble<FakeEventHandler>().For<FakeEventHandler>();
 			var userCulture = new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture());
 			isolate.UseTestDouble(userCulture).For<IUserCulture>();
 		}
@@ -102,7 +100,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Target.Should().Not.Be.Null();
 		}
 
-
 		[Test]
 		public void ShouldNotCancelRequestWhenNoPermission()
 		{
@@ -118,7 +115,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.AreEqual(1, PersonAbsenceRepository.LoadAll().Count());
 			Assert.AreEqual(1, cancelRequestCommand.ErrorMessages.Count);
 		}
-
 
 		[Test]
 		public void ShouldFailGracefullyWhenAttemptingToCancelRequestWhereAbsenceCannotBeFound()
@@ -203,8 +199,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personAbsence.Period.Should().Be.EqualTo(new DateTimePeriod(2016, 03, 01, 08, 2016, 03, 01, 13));
 		}
 
-
-
 		[Test]
 		public void ShouldFailGracefullyWhenAttemptingToCancelRequestWhereAbsenceRequestHasNotBeenAccepted()
 		{
@@ -229,7 +223,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				absenceRequest.Period.StartDateTimeLocal(LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).Date.ToString("d", UserCulture.GetCulture())),
 				cancelRequestCommand.ErrorMessages[0]);
 		}
-
 
 		[Test]
 		[Ignore("PBI #41943 No longer support unmatched periods when cancelling request")]
@@ -264,7 +257,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.IsTrue(PersonAbsenceRepository.LoadAll().IsEmpty());
 			Assert.IsTrue(cancelRequestCommand.ErrorMessages.IsEmpty());
 		}
-
 
 		[Test]
 		public void BasicCancelAbsenceRequestShouldFireRequestPersonAbsenceRemovedEvent()
@@ -415,7 +407,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.AreEqual(5, accountDay1.Remaining.TotalDays);
 		}
 
-		private AccountDay createAccountDay(DateOnly startDate, TimeSpan balanceIn, TimeSpan accrued, TimeSpan balance)
+		private static AccountDay createAccountDay(DateOnly startDate, TimeSpan balanceIn, TimeSpan accrued, TimeSpan balance)
 		{
 			return new AccountDay(startDate)
 			{
@@ -508,15 +500,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			return PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(person,
 				scenario, new DateTimePeriod(startDate, endDate)).WithId();
-		}
-
-	}
-
-	public class FakeEventHandler
-	{
-		public void Handle(RequestPersonAbsenceRemovedEvent requestPersonAbsenceEvent)
-		{
-
 		}
 	}
 }

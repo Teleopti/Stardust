@@ -22,6 +22,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IPersonAbsence entity)
 		{
+			if (!entity.Id.HasValue)
+				entity = entity.WithId();
 			_storage.Add(entity);
 		}
 

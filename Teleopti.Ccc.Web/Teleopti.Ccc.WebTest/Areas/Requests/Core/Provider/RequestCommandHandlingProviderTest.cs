@@ -12,7 +12,9 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -47,12 +49,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		public FullPermission Permission;
 		private IAbsence _absence;
 
-
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<PersonRequestAuthorizationCheckerConfigurable>().For<IPersonRequestCheckAuthorization>();
+			isolate.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario {DefaultScenario = true})).For<IScenarioRepository>();
 			isolate.UseTestDouble<RequestCommandHandlingProvider>().For<IRequestCommandHandlingProvider>();
+			isolate.UseTestDouble<SignificantPartService>().For<ISignificantPartService>();
 			_absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
 		}
 
@@ -345,6 +348,169 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			result.Success.Should().Be.True();
 			result.AffectedRequestIds.ToList().Contains(personRequest.Id.GetValueOrDefault()).Should().Be.True();
 			personRequest.IsCancelled.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldCancelPersonRequestsAndRemoveRelatedSchedulesForOneDay()
+		{
+			Now.Is(new DateTime(2015, 10, 3, 22, 0, 0, DateTimeKind.Utc));
+
+			setupStateHolderProxy();
+			var dateTimePeriod = new DateTimePeriod(2015, 10, 3, 2015, 10, 4);
+			var date = new DateOnly(2015, 10, 3);
+
+			var person = PersonFactory.CreatePerson("Yngwie", "Malmsteen").WithId();
+			var personActivity = new Activity("person activity1").WithId();
+			var shiftCategory = new ShiftCategory("day");
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, Scenario.Current(),
+				personActivity
+				, dateTimePeriod, shiftCategory).WithId();
+			ScheduleStorage.Add(personAssignment);
+
+			var personRequest = createAcceptedRequest(person, dateTimePeriod, true);
+			
+			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { person },
+				new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(date, date), Scenario.Current());
+
+			Assert.IsTrue(scheduleDictionary[person].ScheduledDay(date).SignificantPartForDisplay() == SchedulePartView.FullDayAbsence);
+
+			var personRequests = new List<Guid> { personRequest.Id.GetValueOrDefault() };
+			var result = Target.CancelRequests(personRequests, string.Empty);
+
+			scheduleDictionary = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { person },
+				new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(date, date), Scenario.Current());
+
+			result.Success.Should().Be.True();
+			result.AffectedRequestIds.ToList().Contains(personRequest.Id.GetValueOrDefault()).Should().Be.True();
+			personRequest.IsCancelled.Should().Be.True();
+
+			var scheduleDay = scheduleDictionary[person].ScheduledDay(date);
+			Assert.IsFalse(scheduleDay.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence);
+		}
+
+		[Test]
+		public void ShouldCancelPersonRequestsAndRemoveRelatedSchedulesForMultiDays()
+		{
+			Now.Is(new DateTime(2015, 10, 3, 22, 0, 0, DateTimeKind.Utc));
+
+			setupStateHolderProxy();
+			var dateTimePeriod = new DateTimePeriod(2015, 10, 3, 2015, 10, 4);
+
+			var person = PersonFactory.CreatePerson("Yngwie", "Malmsteen").WithId();
+			var shiftCategory = new ShiftCategory("day");
+
+			var personActivity1 = new Activity("person activity1").WithId();
+			var personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, Scenario.Current(),
+				personActivity1
+				, dateTimePeriod, shiftCategory).WithId();
+			ScheduleStorage.Add(personAssignment1);
+
+			var personActivity2 = new Activity("person activity2").WithId();
+			var personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, Scenario.Current(),
+				personActivity2
+				, dateTimePeriod.ChangeEndTime(TimeSpan.FromDays(1)).ChangeStartTime(TimeSpan.FromDays(1)), shiftCategory).WithId();
+			ScheduleStorage.Add(personAssignment2);
+
+			var personActivity3 = new Activity("person activity3").WithId();
+			var personAssignment3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, Scenario.Current(),
+				personActivity3
+				, dateTimePeriod.ChangeEndTime(TimeSpan.FromDays(2)).ChangeStartTime(TimeSpan.FromDays(2)), shiftCategory).WithId();
+			ScheduleStorage.Add(personAssignment3);
+
+			var personRequest1 = createAcceptedRequest(person, dateTimePeriod, true);
+			var personRequest2 = createAcceptedRequest(person, dateTimePeriod.ChangeEndTime(TimeSpan.FromDays(1)).ChangeStartTime(TimeSpan.FromDays(1)), true);
+			var personRequest3 = createAcceptedRequest(person, dateTimePeriod.ChangeEndTime(TimeSpan.FromDays(2)).ChangeStartTime(TimeSpan.FromDays(2)), true);
+
+			var firstDay = new DateOnly(2015, 10, 3);
+			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { person },
+				new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(firstDay, firstDay.AddDays(2)), Scenario.Current());
+
+			Assert.IsTrue(scheduleDictionary[person].ScheduledDay(firstDay).SignificantPartForDisplay() == SchedulePartView.FullDayAbsence);
+			Assert.IsTrue(scheduleDictionary[person].ScheduledDay(firstDay.AddDays(1)).SignificantPartForDisplay() == SchedulePartView.FullDayAbsence);
+			Assert.IsTrue(scheduleDictionary[person].ScheduledDay(firstDay.AddDays(2)).SignificantPartForDisplay() == SchedulePartView.FullDayAbsence);
+			
+			var personRequests = new List<Guid> { personRequest1.Id.GetValueOrDefault(), personRequest2.Id.GetValueOrDefault(), personRequest3.Id.GetValueOrDefault() };
+			var result = Target.CancelRequests(personRequests, string.Empty);
+
+			scheduleDictionary = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { person },
+				new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(firstDay, firstDay.AddDays(2)), Scenario.Current());
+
+			result.Success.Should().Be.True();
+			result.AffectedRequestIds.ToList().Contains(personRequest1.Id.GetValueOrDefault()).Should().Be.True();
+			personRequest1.IsCancelled.Should().Be.True();
+			personRequest2.IsCancelled.Should().Be.True();
+			personRequest3.IsCancelled.Should().Be.True();
+
+			Assert.IsFalse(scheduleDictionary[person].ScheduledDay(firstDay).SignificantPartForDisplay() == SchedulePartView.FullDayAbsence);
+			Assert.IsFalse(scheduleDictionary[person].ScheduledDay(firstDay.AddDays(1)).SignificantPartForDisplay() == SchedulePartView.FullDayAbsence);
+			Assert.IsFalse(scheduleDictionary[person].ScheduledDay(firstDay.AddDays(2)).SignificantPartForDisplay() == SchedulePartView.FullDayAbsence);
+
+			scheduleDictionary[person].ScheduledDay(firstDay).PersonAssignment().ShiftLayers.FirstOrDefault()?.Payload.Should().Be(personActivity1);
+			scheduleDictionary[person].ScheduledDay(firstDay.AddDays(1)).PersonAssignment().ShiftLayers.FirstOrDefault()?.Payload.Should().Be(personActivity2);
+			scheduleDictionary[person].ScheduledDay(firstDay.AddDays(2)).PersonAssignment().ShiftLayers.FirstOrDefault()?.Payload.Should().Be(personActivity3);
+		}
+
+		[Test]
+		public void ShouldCancelPersonRequestsAndRemoveRelatedSchedulesInCentralTimeZone()
+		{
+			Now.Is(new DateTime(2015, 10, 1, 22, 0, 0, DateTimeKind.Utc));
+
+			setupStateHolderProxy();
+			var dateTimePeriod = new DateTimePeriod(2015, 10, 3, 2015, 10, 4);
+
+			var person = PersonFactory.CreatePerson("Yngwie", "Malmsteen").WithId();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.CentralStandardTime());
+			var shiftCategory = new ShiftCategory("day");
+
+			var personActivity1 = new Activity("person activity1").WithId();
+			var personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, Scenario.Current(),
+				personActivity1
+				, dateTimePeriod, shiftCategory).WithId();
+			ScheduleStorage.Add(personAssignment1);
+
+			var personActivity2 = new Activity("person activity2").WithId();
+			var personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, Scenario.Current(),
+				personActivity2
+				, dateTimePeriod.ChangeEndTime(TimeSpan.FromDays(1)).ChangeStartTime(TimeSpan.FromDays(1)), shiftCategory).WithId();
+			ScheduleStorage.Add(personAssignment2);
+
+			var personActivity3 = new Activity("person activity3").WithId();
+			var personAssignment3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, Scenario.Current(),
+				personActivity3
+				, dateTimePeriod.ChangeEndTime(TimeSpan.FromDays(2)).ChangeStartTime(TimeSpan.FromDays(2)), shiftCategory).WithId();
+			ScheduleStorage.Add(personAssignment3);
+
+			var personRequest1 = createAcceptedRequest(person, dateTimePeriod, true);
+			var personRequest2 = createAcceptedRequest(person, dateTimePeriod.ChangeEndTime(TimeSpan.FromDays(1)).ChangeStartTime(TimeSpan.FromDays(1)), true);
+			var personRequest3 = createAcceptedRequest(person, dateTimePeriod.ChangeEndTime(TimeSpan.FromDays(2)).ChangeStartTime(TimeSpan.FromDays(2)), true);
+
+			var firstDay = new DateOnly(2015, 10, 2);
+			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { person },
+				new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(firstDay, firstDay.AddDays(2)), Scenario.Current());
+
+			Assert.IsTrue(scheduleDictionary[person].ScheduledDay(firstDay).SignificantPartForDisplay() == SchedulePartView.FullDayAbsence);
+			Assert.IsTrue(scheduleDictionary[person].ScheduledDay(firstDay.AddDays(1)).SignificantPartForDisplay() == SchedulePartView.FullDayAbsence);
+			Assert.IsTrue(scheduleDictionary[person].ScheduledDay(firstDay.AddDays(2)).SignificantPartForDisplay() == SchedulePartView.FullDayAbsence);
+
+			var personRequests = new List<Guid> { personRequest1.Id.GetValueOrDefault(), personRequest2.Id.GetValueOrDefault(), personRequest3.Id.GetValueOrDefault() };
+			var result = Target.CancelRequests(personRequests, string.Empty);
+
+			scheduleDictionary = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { person },
+				new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(firstDay, firstDay.AddDays(2)), Scenario.Current());
+
+			result.Success.Should().Be.True();
+			result.AffectedRequestIds.ToList().Contains(personRequest1.Id.GetValueOrDefault()).Should().Be.True();
+			personRequest1.IsCancelled.Should().Be.True();
+			personRequest2.IsCancelled.Should().Be.True();
+			personRequest3.IsCancelled.Should().Be.True();
+
+			Assert.IsFalse(scheduleDictionary[person].ScheduledDay(firstDay).SignificantPartForDisplay() == SchedulePartView.FullDayAbsence);
+			Assert.IsFalse(scheduleDictionary[person].ScheduledDay(firstDay.AddDays(1)).SignificantPartForDisplay() == SchedulePartView.FullDayAbsence);
+			Assert.IsFalse(scheduleDictionary[person].ScheduledDay(firstDay.AddDays(2)).SignificantPartForDisplay() == SchedulePartView.FullDayAbsence);
+
+			scheduleDictionary[person].ScheduledDay(firstDay).PersonAssignment().ShiftLayers.FirstOrDefault()?.Payload.Should().Be(personActivity1);
+			scheduleDictionary[person].ScheduledDay(firstDay.AddDays(1)).PersonAssignment().ShiftLayers.FirstOrDefault()?.Payload.Should().Be(personActivity2);
+			scheduleDictionary[person].ScheduledDay(firstDay.AddDays(2)).PersonAssignment().ShiftLayers.FirstOrDefault()?.Payload.Should().Be(personActivity3);
 		}
 
 		[Test]

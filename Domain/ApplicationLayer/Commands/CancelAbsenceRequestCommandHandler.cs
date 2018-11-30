@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 			catch (InvalidRequestStateTransitionException)
 			{
-				command.ErrorMessages.Add(string.Format(UserTexts.Resources.RequestInvalidStateTransition, personRequest.StatusText, UserTexts.Resources.Cancelled));
+				command.ErrorMessages.Add(string.Format(Resources.RequestInvalidStateTransition, personRequest.StatusText, Resources.Cancelled));
 			}
 
 			return false;
