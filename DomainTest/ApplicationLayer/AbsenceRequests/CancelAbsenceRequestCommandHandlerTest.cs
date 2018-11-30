@@ -309,8 +309,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var accountDay2 = createAccountDay(new DateOnly(2016, 08, 18), TimeSpan.FromDays(0), TimeSpan.FromDays(3), TimeSpan.FromDays(2));
 			createPersonAbsenceAccount(person, absence, accountDay1, accountDay2);
 
-			var cancelRequestCommand = new CancelAbsenceRequestCommand();
-			cancelRequestCommand.PersonRequestId = personRequest.Id.GetValueOrDefault();
+			var cancelRequestCommand = new CancelAbsenceRequestCommand
+			{
+				PersonRequestId = personRequest.Id.GetValueOrDefault()
+			};
 			Target.Handle(cancelRequestCommand);
 
 			Assert.AreEqual(5, accountDay1.Remaining.TotalDays);
