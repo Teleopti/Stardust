@@ -37,7 +37,7 @@
 				</span>
 			</div>
 			<span
-				ng-style="{backgroundColor: shift.ShiftCategory.DisplayColor, color: shift.ShiftCategory.TextColor}"
+				ng-style="{visibility: shift.ShiftCategory ? 'visible': 'hidden', backgroundColor: shift.ShiftCategory.DisplayColor, color: shift.ShiftCategory.TextColor}"
 				class="requests-shift-category-cell cursor-pointer"
 			>
 				{{ shift.ShiftCategory.ShortName }}

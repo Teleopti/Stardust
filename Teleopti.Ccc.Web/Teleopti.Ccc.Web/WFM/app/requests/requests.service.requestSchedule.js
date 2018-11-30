@@ -115,13 +115,17 @@
 		}
 
 		function buildShiftCategoryVisualData(category) {
-			return {
-				Id: category.Id,
-				ShortName: category.ShortName,
-				Name: category.Name,
-				DisplayColor: category.DisplayColor,
-				TextColor: colorUtils.getTextColorBasedOnBackgroundColor(category.DisplayColor)
-			};
+			if (category) {
+				return {
+					Id: category.Id,
+					ShortName: category.ShortName,
+					Name: category.Name,
+					DisplayColor: category.DisplayColor,
+					TextColor: colorUtils.getTextColorBasedOnBackgroundColor(category.DisplayColor)
+				};
+			}
+
+			return null;
 		}
 	}
 })();

@@ -121,14 +121,6 @@ describe('requestScheduleService', function() {
 		expect(shiftData.Periods[0].IsOvertime).toBe(false);
 		expect(shiftData.Periods[0].StartPositionPercentage).toBe(0.0);
 		expect(shiftData.Periods[0].EndPositionPercentage).toBe(0.25);
-		expect(shiftData.Periods[0].Title).toBe('Social Media');
-		expect(shiftData.Periods[0].TimeSpan).toBe('8:00 PM - 10:15 PM');
-		expect(shiftData.Periods[0].Color).toBe('rgb(30,144,255)');
-		expect(shiftData.Periods[0].StartTime).toBe('2018-11-23T20:00:00');
-		expect(shiftData.Periods[0].EndTime).toBe('2018-11-23T22:15:00');
-		expect(shiftData.Periods[0].IsOvertime).toBe(false);
-		expect(shiftData.Periods[0].StartPositionPercentage).toBe(0.0);
-		expect(shiftData.Periods[0].EndPositionPercentage).toBe(0.25);
 		expect(shiftData.Periods[shiftData.Periods.length - 1].TimeSpan).toBe('3:30 AM - 5:00 AM');
 		expect(shiftData.IsDayOff).toBe(false);
 		expect(shiftData.IsNotScheduled).toBe(false);
@@ -140,5 +132,52 @@ describe('requestScheduleService', function() {
 		expect(shiftData.ShiftCategory.TextColor).toBe('white');
 		expect(shiftData.ShiftStartTime).toBe('8:00 PM');
 		expect(shiftData.ShiftEndTime).toBe('5:00 AM+1');
+	});
+
+	it('should build shift data for full day absence request', function() {
+		//The timezone in the data from backend is loggger user/admin's timezone: Europe/Berlin
+		var shift = {
+			Name: 'Ashley Andeen',
+			Periods: [
+				{
+					Title: 'Illness',
+					TimeSpan: '8:00 AM - 5:00 PM',
+					Color: '255,0,0',
+					StartTime: '2018-11-30T08:00:00',
+					EndTime: '2018-11-30T17:00:00',
+					IsOvertime: false,
+					StartPositionPercentage: 0.0,
+					EndPositionPercentage: 1.0,
+					Meeting: null
+				}
+			],
+			IsDayOff: false,
+			DayOffName: null,
+			IsNotScheduled: false,
+			ShiftCategory: null,
+			BelongsToDate: '2018-11-30T00:00:00'
+		};
+
+		var shiftData = requestScheduleService.buildShiftData(shift, 'Asia/Amman', 'Europe/Berlin', false);
+
+		expect(shiftData).toBeTruthy();
+		expect(shiftData.Name).toBe('Ashley Andeen');
+		expect(shiftData.Date).toBe('11/30/18');
+		expect(shiftData.Periods.length).toBe(1);
+		expect(shiftData.Periods[0].Title).toBe('Illness');
+		expect(shiftData.Periods[0].TimeSpan).toBe('8:00 AM - 5:00 PM');
+		expect(shiftData.Periods[0].Color).toBe('rgb(255,0,0)');
+		expect(shiftData.Periods[0].Meeting).toBe(null);
+		expect(shiftData.Periods[0].StartTime).toBe('2018-11-30T08:00:00');
+		expect(shiftData.Periods[0].EndTime).toBe('2018-11-30T17:00:00');
+		expect(shiftData.Periods[0].IsOvertime).toBe(false);
+		expect(shiftData.Periods[0].StartPositionPercentage).toBe(0.0);
+		expect(shiftData.Periods[0].EndPositionPercentage).toBe(1.0);
+		expect(shiftData.IsDayOff).toBe(false);
+		expect(shiftData.IsNotScheduled).toBe(false);
+		expect(shiftData.DayOffName).toBe(null);
+		expect(shiftData.ShiftCategory).toBe(null);
+		expect(shiftData.ShiftStartTime).toBe('8:00 AM');
+		expect(shiftData.ShiftEndTime).toBe('5:00 PM');
 	});
 });
