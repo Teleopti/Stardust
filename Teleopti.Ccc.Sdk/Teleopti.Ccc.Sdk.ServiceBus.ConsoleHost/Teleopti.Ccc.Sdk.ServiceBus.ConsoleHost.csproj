@@ -99,10 +99,6 @@
       <Project>{aa4a5374-77af-44f0-85c1-6cabc6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
-      <Project>{8d2565f2-7c44-45b7-96ad-2cd900e033a1}</Project>
-      <Name>Teleopti.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Sdk.ServiceBus\Teleopti.Ccc.Sdk.ServiceBus.csproj">
       <Project>{9DF2D12C-4895-42D9-A365-6B9F97E787B5}</Project>
       <Name>Teleopti.Ccc.Sdk.ServiceBus</Name>

@@ -5,8 +5,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Infrastructure.Repositories;
 
-//using Teleopti.Interfaces.Infrastructure;
-
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
     [TestFixture]

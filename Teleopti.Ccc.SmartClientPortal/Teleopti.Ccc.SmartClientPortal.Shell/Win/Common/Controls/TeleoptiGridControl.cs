@@ -21,8 +21,6 @@ using Teleopti.Ccc.Win;
 using Teleopti.Ccc.Win.Forecasting.Forms;
 using Teleopti.Ccc.WinCode.Common;
 
-using DateHelper = Teleopti.Interfaces.Domain.DateHelper;
-
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 {
 	public class TeleoptiGridControl : GridControl, ITeleoptiGridControl

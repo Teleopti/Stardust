@@ -97,10 +97,6 @@
       <Project>{0a5ebaa1-bdc2-4997-873f-4fa43e3bc275}</Project>
       <Name>Teleopti.Ccc.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
-      <Project>{8d2565f2-7c44-45b7-96ad-2cd900e033a1}</Project>
-      <Name>Teleopti.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj">
       <Project>{4f4df171-4a56-4e0d-90cb-cb2afdea4411}</Project>
       <Name>Teleopti.Messaging</Name>
