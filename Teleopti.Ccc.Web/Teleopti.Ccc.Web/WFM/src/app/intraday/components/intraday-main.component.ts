@@ -19,6 +19,7 @@ import {
 	Skill,
 	SkillPickerItemType
 } from '../types';
+import { IntradayIconService } from '../services/intraday-icon.service';
 
 @Component({
 	selector: 'app-intraday-main',
@@ -30,7 +31,8 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		public intradayDataService: IntradayDataService,
 		public translate: TranslateService,
 		private message: NzMessageService,
-		private persistData: IntradayPersistService
+		private persistData: IntradayPersistService,
+		private skillIcons: IntradayIconService
 	) {}
 
 	selectedSkillOrGroup: SkillPickerItem;

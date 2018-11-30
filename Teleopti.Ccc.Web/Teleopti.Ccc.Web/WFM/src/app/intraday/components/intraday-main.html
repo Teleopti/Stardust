@@ -33,6 +33,7 @@
 						<h2>{{ displayDate }} <i nz-icon [hidden]="!loading" type="loading"></i>&nbsp;</h2>
 					</div>
 					<div
+						style="margin-top: 10px"
 						*ngIf="
 							selectedSkillOrGroup &&
 							selectedSkillOrGroup.Skills &&
@@ -46,9 +47,13 @@
 								[nzActive]="showSkills"
 								(click)="onShowHideSkills()"
 							>
-								<nz-radio-group [(ngModel)]="selectedSubSkillId" (ngModelChange)="onPickSubSkill()">
+								<nz-radio-group
+									[(ngModel)]="selectedSubSkillId"
+									(ngModelChange)="onPickSubSkill()"
+									nzSize="small"
+								>
 									<label nz-radio-button nzValue="all" (click)="onSubSkillClick($event)">
-										{{ translate.instant('All') }}
+										<i nz-icon type="appstore" theme="outline"></i> {{ translate.instant('All') }}
 									</label>
 									<label
 										*ngFor="let skill of selectedSkillOrGroup.Skills"
@@ -56,6 +61,7 @@
 										nzValue="{{skill.Id}}"
 										(click)="onSubSkillClick($event)"
 									>
+										<i nz-icon type="{{ skillIcons.getIcon(skill)}}" theme="outline"></i>
 										{{ skill.Name }}
 									</label>
 								</nz-radio-group>

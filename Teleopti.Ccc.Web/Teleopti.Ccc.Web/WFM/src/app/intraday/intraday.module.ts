@@ -9,6 +9,7 @@ import { IntradayMainComponent } from './components/intraday-main.component';
 import { SkillPickerService } from './services/skill-picker.service';
 import { IntradayDataService } from './services/intraday-data.service';
 import { IntradayPersistService } from './services/intraday-persist.service';
+import { IntradayIconService } from './services/intraday-icon.service';
 import { IntradayTableComponent } from './components/intraday-table.component';
 import { DowngradeableComponent } from '@wfm/types';
 @NgModule({
@@ -22,7 +23,7 @@ import { DowngradeableComponent } from '@wfm/types';
 	],
 	entryComponents: [IntradayMainComponent],
 	imports: [SharedModule, TranslateModule.forChild()],
-	providers: [SkillPickerService, IntradayDataService, IntradayPersistService]
+	providers: [SkillPickerService, IntradayDataService, IntradayPersistService, IntradayIconService]
 })
 export class IntradayModule {}
 

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output, OnInit, Input } from '@angular/core';
 import { SkillPickerService } from '../../services/skill-picker.service';
 import { SkillPickerItem, SkillPickerItemType } from '../../types';
+import { IntradayIconService } from '../../services/intraday-icon.service';
 
 @Component({
 	selector: 'app-angular-skill-picker',
@@ -8,7 +9,7 @@ import { SkillPickerItem, SkillPickerItemType } from '../../types';
 	styleUrls: ['./angular-skill-picker.component.scss']
 })
 export class AngularSkillPickerComponent implements OnInit {
-	constructor(public skillPickerService: SkillPickerService) {
+	constructor(public skillPickerService: SkillPickerService, private skillIcons: IntradayIconService) {
 		this.skillGroups = this.skills;
 	}
 
