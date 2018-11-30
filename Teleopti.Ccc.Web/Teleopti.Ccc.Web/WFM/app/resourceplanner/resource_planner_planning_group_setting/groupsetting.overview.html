@@ -136,21 +136,11 @@
 								<div class="con-flex">
 									<div class="pg-setting-mini-card-wrapper">
 										<div class="pg-setting-mini-card-title line-center">
-											<b>{{setting.BlockSchedulingSetting}}</b>
+											<b>{{'BlockScheduling' | translate}}</b>
 										</div>
-										<div class="pg-setting-card" ng-if="setting.BlockFinderType > 0">
-											<div class="fake-radio-button">
-												<i class="mdi mdi-checkbox-blank-circle" ng-class="{'check':setting.BlockSameShiftCategory}"></i>
-												<span>{{ 'BlockSameShiftCategory' | translate}}</span>
-											</div>
-											<div class="fake-radio-button">
-												<i class="mdi mdi-checkbox-blank-circle" ng-class="{'check':setting.BlockSameStartTime}"></i>
-												<span>{{ 'BlockSameStartTime'| translate}}</span>
-											</div>
-											<div class="fake-radio-button">
-												<i class="mdi mdi-checkbox-blank-circle" ng-class="{'check':setting.BlockSameShift}"></i>
-												<span>{{ 'BlockSameShift' | translate}}</span>
-											</div>
+										<div class="pg-setting-card">
+											<div class="con-flex">{{setting.BlockSchedulingSetting}}</div>
+											<div class="con-flex" ng-if="setting.BlockFinderType > 0">{{setting.BlockSchedulingSettingType}}</div>
 										</div>
 									</div>
 								</div>
