@@ -376,7 +376,6 @@ namespace Teleopti.Ccc.TestCommon
 			return c;
 		}
 
-
 		[UnitOfWork]
 		public virtual Database WithSkill(string name)
 		{
@@ -409,7 +408,7 @@ namespace Teleopti.Ccc.TestCommon
 			return skill;
 		}
 
-		public virtual Database WithActivity(string name) => WithActivity(name, null);
+		public Database WithActivity(string name) => WithActivity(name, null);
 
 		[UnitOfWork]
 		public virtual Database WithActivity(string name, Color? color)
@@ -421,23 +420,14 @@ namespace Teleopti.Ccc.TestCommon
 		[UnitOfWork]
 		public virtual Database WithAssignment(string date)
 		{
-			withAssignment(date);
+			assignment(date);
 			return this;
-		}
-
-		private IPersonAssignment withAssignment(string date)
-		{
-			_date = date.Date();
-			var personAssignment = new PersonAssignment(person(), scenario(), _date);
-			_assignments.Add(personAssignment);
-			return personAssignment;
 		}
 
 		[UnitOfWork]
 		public virtual Database WithAssignedActivity(string activityName, string startTime, string endTime)
 		{
-			assignment(startTime)
-				.AddActivity(activity(activityName, null), new DateTimePeriod(startTime.Utc(), endTime.Utc()));
+			assignment(startTime).AddActivity(activity(activityName, null), new DateTimePeriod(startTime.Utc(), endTime.Utc()));
 			return this;
 		}
 
@@ -450,7 +440,7 @@ namespace Teleopti.Ccc.TestCommon
 			if (existing != null)
 				return existing;
 
-			_activity = RandomName.Make();
+			_activity = _activity ?? RandomName.Make();
 			var activity = new Activity(_activity);
 			if (color.HasValue)
 				activity.DisplayColor = color.Value;
@@ -465,7 +455,7 @@ namespace Teleopti.Ccc.TestCommon
 
 			var existing = _assignments.LoadAll().SingleOrDefault(x => x.Date == _date && x.Person == person());
 			if (existing != null)
-				return existing;
+				return _assignments.LoadAggregate(existing.Id.Value); // dont know why it needs to be loaded using this method here
 
 			var personAssignment = new PersonAssignment(person(), scenario(), _date);
 			_assignments.Add(personAssignment);
