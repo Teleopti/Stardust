@@ -2,7 +2,13 @@
 	'use strict';
 
 	angular
-		.module('wfm.http', ['currentUserInfoService', 'wfm.notice', 'pascalprecht.translate', 'wfm.versionService'])
+		.module('wfm.http', [
+			'supportEmailService',
+			'wfm.notice',
+			'pascalprecht.translate',
+			'wfm.versionService',
+			'ngStorage'
+		])
 		.factory('httpInterceptor', httpInterceptor);
 
 	httpInterceptor.$inject = [
