@@ -3,15 +3,12 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 
@@ -23,14 +20,18 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ICurrentDataSource _dataSource;
 		private readonly ICurrentBusinessUnit _businessUnit;
 		private readonly IJsonSerializer _serializer;
-		private static readonly Type[] includedTypes = new[] {typeof(IPersonAbsence), typeof(IPersonAssignment)};
+		private static readonly Type[] includedTypes = {typeof(IPersonAbsence), typeof(IPersonAssignment)};
 		private readonly ICurrentInitiatorIdentifier _initiatorIdentifier;
 		private readonly ITime _time;
-		private readonly IConfigReader _config;
 		private IDisposable _timer;
 		private readonly object _timerLock = new object();
-		private readonly TimeSpan _sendMessageInterval;
 		private readonly ConcurrentDictionary<packageKey, package> _packagedMessages = new ConcurrentDictionary<packageKey, package>();
+
+		private readonly TimeSpan _idleTime;
+		private readonly TimeSpan _intervalTime;
+
+		private DateTime? _lastReceived;
+		private DateTime? _lastSent;
 
 		public ScheduleChangedMessagePackagingSender(
 			IMessageSender messageSender,
@@ -47,8 +48,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_serializer = serializer;
 			_initiatorIdentifier = initiatorIdentifier;
 			_time = time;
-			_config = config;
-			_sendMessageInterval = TimeSpan.FromMilliseconds(config.ReadValue("ScheduleChangedMessagePackagingSendIntervalMilliseconds", 1000));
+			_idleTime = TimeSpan.FromSeconds(config.ReadValue("ScheduleChangedMessagePackagingSendOnIdleTimeSeconds", 2));
+			_intervalTime = TimeSpan.FromSeconds(config.ReadValue("ScheduleChangedMessagePackagingSendOnIntervalSeconds", 10));
 		}
 
 		public void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)
@@ -78,6 +79,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				if (identifier != null)
 					initiatorId = identifier.InitiatorId.ToString();
 
+				_lastReceived = _time.UtcDateTime();
+
 				_packagedMessages.AddOrUpdate(new packageKey
 				{
 					ThreadId = Thread.CurrentThread.ManagedThreadId,
@@ -105,10 +108,24 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private void ensurePackaging()
 		{
 			if (_timer == null)
-				_timer = _time.StartTimerWithLock(sendMessage, _timerLock, _sendMessageInterval);
+			{
+				_timer = _time.StartTimerWithLock(timerTick, _timerLock, TimeSpan.FromSeconds(1));
+				_lastSent = _time.UtcDateTime();
+			}
 		}
 
-		private void sendMessage()
+		private void timerTick()
+		{
+			var sendAtIdle = _lastReceived.Value.Add(_idleTime);
+			var sendAtForced = _lastSent.Value.Add(_intervalTime);		
+			var sendAt = new [] {sendAtIdle, sendAtForced}.Min();
+			var shouldSend = _time.UtcDateTime() >= sendAt;
+			
+			if(shouldSend)
+				packageAndSend();
+		}
+
+		private void packageAndSend()
 		{
 			_packagedMessages.Keys.ForEach(k =>
 			{
@@ -128,6 +145,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 						BinaryData = _serializer.SerializeObject(package.PersonIds)
 					};
 					_messageSender.Send(message);
+					_lastSent = _time.UtcDateTime();
 				}
 			});
 		}

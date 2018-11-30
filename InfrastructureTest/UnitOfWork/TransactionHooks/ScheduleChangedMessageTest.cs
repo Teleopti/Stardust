@@ -12,12 +12,15 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
+	[Setting("ScheduleChangedMessagePackagingSendOnIdleTimeSeconds", 1)]
+	[Setting("ScheduleChangedMessagePackagingSendOnIntervalSeconds", 1)]
 	public class ScheduleChangedMessageTest
 	{
 		public FakeMessageSender MessageSender;

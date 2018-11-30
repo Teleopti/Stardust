@@ -387,6 +387,7 @@
     <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\ForecastChangedEventPublisherTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\PersonAbsenceEventPublishingTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ScheduleChangedMessageDictionaryPersisterTest.cs" />
+    <Compile Include="UnitOfWork\TransactionHooks\ScheduleChangedMessagePackagingIntervalTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ScheduleChangedMessagePackagingTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ScheduleChangedMessageTest.cs" />
     <Compile Include="PrincipalAndStateTestAttribute.cs" />

@@ -17,7 +17,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
-	[Setting("ScheduleChangedMessagePackagingSendIntervalMilliseconds", 1000)]
+	[Setting("ScheduleChangedMessagePackagingSendOnIntervalSeconds", 1)]
+	[Setting("ScheduleChangedMessagePackagingSendOnIdleTimeSeconds", 1)]
 	public class ScheduleChangedMessagePackagingTest
 	{
 		public FakeMessageSender MessageSender;
@@ -189,5 +190,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 			MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Select(x => x.DomainReferenceId)
 				.Should().Have.SameValuesAs(scenario1.ToString(), scenario2.ToString());
 		}
+		
 	}
 }
