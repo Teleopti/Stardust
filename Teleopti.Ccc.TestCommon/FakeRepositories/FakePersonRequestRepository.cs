@@ -57,11 +57,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return RequestRepository.Where(p => p.Person == person).ToList();
 		}
-
-		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period)
-		{
-			return RequestRepository;
-		}
 		
 		private IEnumerable<IPersonRequest> findAllRequests(RequestFilter filter, out int count)
 		{

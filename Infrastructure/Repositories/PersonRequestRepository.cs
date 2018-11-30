@@ -526,12 +526,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person)
 		{
-			return findAllRequestsForAgent(person, null);
-		}
-
-		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period)
-		{
-			return findAllRequestsForAgent(person, period);
+			return findAllRequestsForAgent(person);
 		}
 
 		public IEnumerable<DateTimePeriod> GetRequestPeriodsForAgent(IPerson person, DateTimePeriod period)
@@ -560,10 +555,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Select(p => new DateTimePeriod(TimeZoneHelper.ConvertToUtc(p.StartDateTime, TimeZoneInfo.Utc), TimeZoneHelper.ConvertToUtc(p.EndDateTime, TimeZoneInfo.Utc)));
 		}
 
-		private IEnumerable<IPersonRequest> findAllRequestsForAgent(IPerson person, DateTimePeriod? period)
+		private IEnumerable<IPersonRequest> findAllRequestsForAgent(IPerson person)
 		{
-			var requestsCreatedByPerson = getRequestsCreatedByAgent(person, period).List<IPersonRequest>();
-			var shiftTradeRequestsWithPerson = getShiftTradeRequestsWithAgent(person, period).List<IPersonRequest>();
+			var requestsCreatedByPerson = getRequestsCreatedByAgent(person).List<IPersonRequest>();
+			var shiftTradeRequestsWithPerson = getShiftTradeRequestsWithAgent(person).List<IPersonRequest>();
 
 			return requestsCreatedByPerson.Union(shiftTradeRequestsWithPerson).OrderByDescending(x => x.UpdatedOn);
 		}
@@ -571,14 +566,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <summary>
 		/// Get all requests created by agent
 		/// </summary>
-		private ICriteria getRequestsCreatedByAgent(IPerson person, DateTimePeriod? period)
+		private ICriteria getRequestsCreatedByAgent(IPerson person)
 		{
 			var criteriaPersonRequestsCreatedByPerson = Session.CreateCriteria<PersonRequest>()
 				.SetFetchMode("requests", FetchMode.Join)
 				.SetResultTransformer(Transformers.DistinctRootEntity)
 				.Add(Restrictions.Eq("Person", person));
-
-			applyPeriodRestriction(criteriaPersonRequestsCreatedByPerson, period);
 
 			return criteriaPersonRequestsCreatedByPerson;
 		}
@@ -586,7 +579,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <summary>
 		/// Get shift trade request created by other agent but trade with current person
 		/// </summary>
-		private ICriteria getShiftTradeRequestsWithAgent(IPerson person, DateTimePeriod? period)
+		private ICriteria getShiftTradeRequestsWithAgent(IPerson person)
 		{
 			var subQueryShiftTradeRequestsWithPerson = DetachedCriteria.For<ShiftTradeRequest>()
 				.SetProjection(Projections.Property("Parent"))
@@ -599,18 +592,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Not(Restrictions.Eq("requestStatus", 4)))
 				.Add(Subqueries.PropertyIn("requests", subQueryShiftTradeRequestsWithPerson));
 
-			applyPeriodRestriction(criteriaShiftTradeRequestsWithPerson, period);
-
 			return criteriaShiftTradeRequestsWithPerson;
-		}
-
-		private void applyPeriodRestriction(ICriteria criteria, DateTimePeriod? period)
-		{
-			if (period == null) return;
-
-			criteria.CreateCriteria("requests", JoinType.LeftOuterJoin)
-				.Add(Restrictions.Ge("Period.period.Maximum", period.Value.StartDateTime))
-				.Add(Restrictions.Le("Period.period.Minimum", period.Value.EndDateTime));
 		}
 
 		/// <summary>
