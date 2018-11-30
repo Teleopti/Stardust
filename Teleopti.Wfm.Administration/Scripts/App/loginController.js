@@ -45,19 +45,18 @@
 
 		vm.Id = cookie ? cookie.id : null;
 
-		//$http.get("./Etl/ShouldEtlToolBeVisible", tokenHeaderService.getHeaders())
-		//	.then(function (data) {
-		//		debugger;
-		//		vm.shouldShowEtl = data;
+		$http.get("./Etl/ShouldEtlToolBeVisible", tokenHeaderService.getHeaders())
+			.then(function (data) {
+				vm.shouldShowEtl = data;
 
-		//		$scope.menuItems.push(
-		//			{
-		//				text: "ETL",
-		//				link: "#/ETL",
-		//				toggle: vm.shouldShowEtl
-		//			}
-		//		);
-		//	});
+				$scope.menuItems.push(
+					{
+						text: "ETL",
+						link: "#/ETL",
+						toggle: vm.shouldShowEtl
+					}
+				);
+			});
 
 		$scope.state = {
 			selected: 1

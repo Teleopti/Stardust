@@ -3,7 +3,9 @@
 
 	angular
 		.module('adminApp', ['ngRoute', 'ngMaterial', 'adminAppHttp', 'ngCookies', 'ngAria', 'ngclipboard'])
-		.config(function ($routeProvider, $httpProvider) {
+		.config(function ($locationProvider, $routeProvider, $httpProvider) {
+
+			$locationProvider.hashPrefix('');
 
 			$routeProvider
 				.when('/', {
@@ -88,8 +90,7 @@
 				.when('/HangfireStatistics', {
 					templateUrl: 'HangfireMonitoring_LevelUp_HangfireStatistics_76139_76373.html'
 				});
-
-
+				
 			$httpProvider.interceptors.push('httpInterceptor');
 		});
 })();

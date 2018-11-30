@@ -37,8 +37,8 @@
 
 		function checkToggle() {
 			$http.get("./Etl/ShouldTenantNameBeVisible", tokenHeaderService.getHeaders())
-				.then(function(result) {
-					vm.shouldShowTenantName = result;
+				.then(function (response) {
+					vm.shouldShowTenantName = response.data;
 				});
 		}
 
@@ -46,10 +46,10 @@
 			vm.tenants = [];
 			$http
 			.get("./Etl/GetTenants", tokenHeaderService.getHeaders())
-			.then(function (data) {
-				for (var i = 0; i < data.length; i++) {
-					if (data[i].IsBaseConfigured) {
-						vm.tenants.push(data[i]);
+				.then(function (response) {
+					for (var i = 0; i < response.data.length; i++) {
+						if (response.data[i].IsBaseConfigured) {
+							vm.tenants.push(response.data[i]);
 					} else {
 						vm.unconfigured = true;
 					}
@@ -82,12 +82,12 @@
 				JSON.stringify(tenant),
 				tokenHeaderService.getHeaders()
 			)
-			.then(function(data) {
-				vm.businessUnits = data;
+				.then(function (response) {
+					vm.businessUnits = response.data;
 				vm.selectedBu = vm.businessUnits[0];
 				vm.getHistoryForTenant();
 			})
-			.catch(function(data) {
+				.catch(function (response) {
 				vm.businessUnits = [];
 			});
 		}
@@ -105,8 +105,8 @@
 					if (window.location.hash === '#/ETL/history') {
 						$http
 							.get("./Etl/GetjobRunning", tokenHeaderService.getHeaders())
-							.then(function(data) {
-								vm.status = data;
+							.then(function (response) {
+								vm.status = response.data;
 								if (vm.status !== null) {
 									vm.status.formatedTime = moment(vm.status.StartTime).local().format('HH:mm');
 								}
@@ -120,8 +120,8 @@
 		function getStatusRightNow() {
 				$http
 				.get("./Etl/GetjobRunning", tokenHeaderService.getHeaders())
-				.then(function (data) {
-					vm.status = data;
+					.then(function (response) {
+						vm.status = response.data;
 					if (vm.status !== null) {
 						vm.status.formatedTime = moment(vm.status.StartTime).local().format('HH:mm');
 					}
@@ -150,16 +150,16 @@
 					JSON.stringify(JobHistoryCriteria),
 					tokenHeaderService.getHeaders()
 				)
-				.then(function(data) {
-					if (data.length < 1) {
+				.then(function (response) {
+					if (response.data.length < 1) {
 						vm.error = "No history found";
 					} else {
-						vm.history = data;
+						vm.history = response.data;
 						vm.error = null;
 					}
 					vm.loadingHistory = false;
 				})
-				.catch(function(data) {
+				.catch(function (response) {
 					vm.history = [];
 					vm.error = "No history found";
 					vm.loadingHistory = false;
