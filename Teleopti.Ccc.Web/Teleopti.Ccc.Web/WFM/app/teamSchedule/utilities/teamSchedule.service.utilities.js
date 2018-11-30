@@ -87,14 +87,15 @@
 		}
 
 		function getNextTickNoEarlierThanEight(timezone) {
-			var nowInUserTimeZoneMoment = moment(nowInSelectedTimeZone(timezone).format('YYYY-MM-DD HH:mm'));
+			var nowInUserTimeZoneMoment = nowInSelectedTimeZone(timezone);
 
 			var minutes = Math.ceil((nowInUserTimeZoneMoment.minute() + 1) / tick) * tick;
 			var start = nowInUserTimeZoneMoment.startOf('hour').minutes(minutes);
 
-			start.hours() < 8 && start.hours(8) && start.minutes(0);
+			if (start.hours() < 8)
+				start.hours(8).minutes(0);
 
-			return format(moment.tz(start.format('YYYY-MM-DD HH:mm'), timezone));
+			return format(start);
 		}
 
 		function format(dateMoment) {
