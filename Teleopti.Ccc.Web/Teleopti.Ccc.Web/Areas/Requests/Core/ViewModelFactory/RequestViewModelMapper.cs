@@ -32,9 +32,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		private readonly ICurrentScenario _currentScenario;
 		private readonly ITeamScheduleShiftViewModelProvider _shiftViewModelProvider;
 		private readonly TeamScheduleAgentScheduleViewModelMapper _layerMapper;
+		private readonly ILoggedOnUser _loggedOnUser;
 
 		public RequestViewModelMapper(IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider,
-			IPersonAbsenceAccountProvider personAbsenceAccountProvider, IUserTimeZone userTimeZone, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,  TeamScheduleAgentScheduleViewModelMapper layerMapper, ITeamScheduleShiftViewModelProvider shiftViewModelProvider)
+			IPersonAbsenceAccountProvider personAbsenceAccountProvider, IUserTimeZone userTimeZone, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,  TeamScheduleAgentScheduleViewModelMapper layerMapper, ITeamScheduleShiftViewModelProvider shiftViewModelProvider, ILoggedOnUser loggedOnUser)
 		{
 			_personNameProvider = personNameProvider;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			_currentScenario = currentScenario;
 			_layerMapper = layerMapper;
 			_shiftViewModelProvider = shiftViewModelProvider;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public AbsenceAndTextRequestViewModel Map(AbsenceAndTextRequestViewModel requestViewModel, IPersonRequest request,
@@ -141,7 +143,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			var scheduleViewModel = _shiftViewModelProvider.MakeScheduleReadModel(person, scheduleDay, true);
 			var schedulePeriod = getScheduleMinMax(scheduleViewModel, person, scheduleDay.DateOnlyAsPeriod.DateOnly);
 
-			return _layerMapper.Map( scheduleViewModel, schedulePeriod, person.PermissionInformation.DefaultTimeZone());
+			return _layerMapper.Map( scheduleViewModel, schedulePeriod, person.PermissionInformation.DefaultTimeZone(),person.Id== _loggedOnUser.CurrentUser().Id);
 		}
 
 		private DateTimePeriod getScheduleMinMax(AgentInTeamScheduleViewModel schedule, IPerson person, DateOnly date)
