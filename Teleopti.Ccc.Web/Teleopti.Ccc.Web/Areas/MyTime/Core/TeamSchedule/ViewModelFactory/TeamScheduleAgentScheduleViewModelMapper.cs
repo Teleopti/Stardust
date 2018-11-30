@@ -14,10 +14,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 	{
 		
 		private readonly IPermissionProvider _permissionProvider;
+		private readonly ILoggedOnUser _loggedOnUser;
 
-		public TeamScheduleAgentScheduleViewModelMapper(IPermissionProvider permissionProvider)
+		public TeamScheduleAgentScheduleViewModelMapper(IPermissionProvider permissionProvider, ILoggedOnUser loggedOnUser)
 		{
 			_permissionProvider = permissionProvider;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public IList<TeamScheduleAgentScheduleViewModel> Map(IEnumerable<AgentInTeamScheduleViewModel> agentInTeamScheduleViewModels, DateTimePeriod schedulePeriod, TimeZoneInfo timeZoneInfo)
@@ -27,9 +29,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			var result = new List<TeamScheduleAgentScheduleViewModel>();
 			foreach (var agentInTeamScheduleViewModel in agentInTeamScheduleViewModels)
 			{
+				var personId = agentInTeamScheduleViewModel.PersonId;
 				result.Add(new TeamScheduleAgentScheduleViewModel
 				{
-					Periods = buildPeriods(agentInTeamScheduleViewModel, startTime, endTime),
+					Periods = buildPeriods(agentInTeamScheduleViewModel, startTime, endTime, personId==_loggedOnUser.CurrentUser().Id),
 					Name = agentInTeamScheduleViewModel.Name,
 					IsDayOff = agentInTeamScheduleViewModel.IsDayOff,
 					DayOffName = agentInTeamScheduleViewModel.DayOffName,
