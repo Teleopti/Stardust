@@ -17519,9 +17519,6 @@ The application will now exit.</value>
   <data name="SkillTypeFilter" xml:space="preserve">
     <value>Skill type filter</value>
   </data>
-  <data name="PeopleManageUsers" xml:space="preserve">
-    <value>Manage users</value>
-  </data>
   <data name="PeopleUsernameIsAlreadyInUse" xml:space="preserve">
     <value>Username is already in use</value>
     <comment>Username is taken</comment>
@@ -17978,5 +17975,9 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="SelectToday" xml:space="preserve">
     <value>Select today</value>
     <comment>Select today canlendar tooltip</comment>
+  </data>
+  <data name="PeopleManageUsers" xml:space="preserve">
+    <value>View users</value>
+    <comment>Permission for viewing users</comment>
   </data>
 </root>
