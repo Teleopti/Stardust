@@ -12684,9 +12684,6 @@ Seuraavat ominaisuudet ovat aktivoitu:
   <data name="OverstaffingColon" xml:space="preserve">
     <value>Ylimiehitys</value>
   </data>
-  <data name="RememberMe" xml:space="preserve">
-    <value>Muistatko minut?</value>
-  </data>
   <data name="MyTeam" xml:space="preserve">
     <value>MyTeam</value>
   </data>

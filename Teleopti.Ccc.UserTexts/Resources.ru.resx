@@ -12333,9 +12333,6 @@ Teleopti R&amp;D</value>
   <data name="ClearCampaign" xml:space="preserve">
     <value>Очистить кампанию</value>
   </data>
-  <data name="RememberMe" xml:space="preserve">
-    <value>Запомнить?</value>
-  </data>
   <data name="MyTeam" xml:space="preserve">
     <value>MyTeam</value>
   </data>
