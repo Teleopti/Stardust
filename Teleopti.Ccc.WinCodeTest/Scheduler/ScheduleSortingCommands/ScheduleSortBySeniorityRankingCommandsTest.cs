@@ -93,7 +93,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
 	    {
 
 			IList<IPerson> persons = new List<IPerson> { person1, person2, person3, person4, person5 };
-			_stateHolder.FilterPersons(persons);
 
 		    IScheduleDay schedulePart1 = _mocks.StrictMock<IScheduleDay>();
 		    IScheduleDay schedulePart2 = _mocks.StrictMock<IScheduleDay>();

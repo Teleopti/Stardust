@@ -147,12 +147,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_combinedFilteredAgents = new Lazy<IDictionary<Guid, IPerson>>(combinedFilters);
 		}
 
-		public void FilterPersons(IList<IPerson> selectedPersons)
-		{
-			FilteredAgentsDictionary = selectedPersons.OrderBy(CommonNameDescription.BuildFor).ToDictionary(p => p.Id.Value);
-			_combinedFilteredAgents = new Lazy<IDictionary<Guid, IPerson>>(combinedFilters);
-		}
-
 		public void FilterPersonsOvertimeAvailability(IEnumerable<IPerson> selectedPersons)
 		{
 			_filteredPersonsOvertimeAvailability = selectedPersons.OrderBy(CommonNameDescription.BuildFor).ToDictionary(p => p.Id.Value);

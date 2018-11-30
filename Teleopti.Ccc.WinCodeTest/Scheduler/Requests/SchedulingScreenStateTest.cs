@@ -331,23 +331,5 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 			innerTarget.PersonRequests[0].Changed = true;
 			Assert.IsTrue(innerTarget.ChangedRequests());
 		}
-
-		[Test]
-		public void ShouldReturnIsFilteredOnAgentsWhenFilterCountNotEqualToAllPermittedCount()
-		{
-			var innerTarget = new SchedulingScreenState(null, target);
-			target.FilterPersons(new List<IPerson>{_person1});
-			var result = innerTarget.AgentFilter();
-			Assert.IsTrue(result);
-		}
-
-		[Test]
-		public void ShouldReturnIsNotFilteredOnAgentsWhenFilterCountEqualToAllPermittedCount()
-		{
-			var innerTarget = new SchedulingScreenState(null, target);
-			target.FilterPersons(new List<IPerson> { _person1, _person2 });
-			var result = innerTarget.AgentFilter();
-			Assert.IsFalse(result);	
-		}
 	}
 }
