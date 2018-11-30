@@ -466,36 +466,6 @@
 		return obj;
 	}
 
-	function FakeScheduleHelper() {
-		var earliestStartTime = null;
-		var latestStartTime = null;
-		var latestEndTime = null;
-
-		this.setEarliestStartTime = function (date) {
-			earliestStartTime = date;
-		};
-
-		this.setLatestStartTime = function (date) {
-			latestStartTime = date;
-		};
-
-		this.setLatestEndTime = function (date) {
-			latestEndTime = date;
-		};
-
-		this.getEarliestStartOfSelectedSchedules = function () {
-			return earliestStartTime;
-		};
-
-		this.getLatestStartOfSelectedSchedules = function () {
-			return latestStartTime;
-		};
-
-		this.getLatestPreviousDayOvernightShiftEnd = function () {
-			return latestEndTime;
-		};
-	}
-
 	function FakePermissions() {
 		var _permissions = {}
 

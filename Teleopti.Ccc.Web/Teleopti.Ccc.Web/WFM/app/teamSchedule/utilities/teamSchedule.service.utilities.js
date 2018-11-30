@@ -14,6 +14,7 @@
 		self.getWeekdayNames = getWeekdayNames;
 		self.getWeekdays = getWeekDays;
 		self.getNextTickNoEarlierThanEight = getNextTickNoEarlierThanEight;
+		self.getNextTickMomentNoEarlierThanEight = getNextTickMomentNoEarlierThanEight;
 		self.nowInUserTimeZone = formattedNowInUserTimeZone;
 		self.nowInSelectedTimeZone = formattedNowInSelectedTimeZone;
 		self.setNowDate = setNowDate;
@@ -87,6 +88,10 @@
 		}
 
 		function getNextTickNoEarlierThanEight(timezone) {
+			return format(getNextTickMomentNoEarlierThanEight(timezone));
+		}
+
+		function getNextTickMomentNoEarlierThanEight(timezone) {
 			var nowInUserTimeZoneMoment = nowInSelectedTimeZone(timezone);
 
 			var minutes = Math.ceil((nowInUserTimeZoneMoment.minute() + 1) / tick) * tick;
@@ -95,11 +100,10 @@
 			if (start.hours() < 8)
 				start.hours(8).minutes(0);
 
-			return format(start);
+			return start;
 		}
 
 		function format(dateMoment) {
-
 			return serviceDateFormatHelper.getDateByFormat(dateMoment, 'YYYY-MM-DDTHH:mm:ssZ');
 		}
 	}

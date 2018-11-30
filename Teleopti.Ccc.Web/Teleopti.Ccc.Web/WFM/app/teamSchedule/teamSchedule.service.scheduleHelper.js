@@ -35,7 +35,7 @@
 				latestStart = scheduleStart;
 			}
 		});
-		return latestStart;
+		return latestStart || dateMoment.startOf('day');
 	};
 
 	ScheduleHelperService.prototype.getLatestStartOfSelectedSchedules = function (schedules, dateMoment, personIds) {
@@ -43,7 +43,7 @@
 		if (latestStart) return latestStart.toDate();
 	};
 
-	ScheduleHelperService.prototype.getLatestPreviousDayOvernightShiftEndMoment = function (schedules, dateMoment, personIds) {
+	ScheduleHelperService.prototype.getLatestPreviousDayOvernightShiftEndMoment = function (schedules, date, personIds) {
 		checkPersonIds(personIds);
 
 		var previousDayShifts = [];
@@ -51,8 +51,7 @@
 		schedules && schedules.forEach(function (schedule) {
 			if (personIds.indexOf(schedule.PersonId) > -1) {
 				previousDayShifts = previousDayShifts.concat(schedule.Shifts.filter(function (shift) {
-					return shift.Projections.length > 0 &&
-						dateMoment.isAfter(shift.Date);
+					return shift.Projections.length > 0 && date > shift.Date;
 				}));
 			}
 		});

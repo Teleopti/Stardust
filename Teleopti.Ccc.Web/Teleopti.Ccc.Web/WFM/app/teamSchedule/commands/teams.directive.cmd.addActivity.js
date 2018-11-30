@@ -1,9 +1,9 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.teamSchedule').directive('addActivity', ['serviceDateFormatHelper', addActivityDirective]);
+	angular.module('wfm.teamSchedule').directive('addActivity', [addActivityDirective]);
 
-	function addActivityDirective(serviceDateFormatHelper) {
+	function addActivityDirective() {
 		return {
 			restrict: 'E',
 			scope: {},
@@ -40,12 +40,10 @@
 		vm.trackId = containerCtrl.getTrackId();
 		vm.getActionCb = containerCtrl.getActionCb;
 
-		vm.getDefaultActvityStartTime = getDefaultActvityStartTime;
-		vm.getDefaultActvityEndTime = getDefaultActvityEndTime;
-
+		var defaultStartTimeMoment = getDefaultStartMoment();
 		vm.timeRange = {
-			startTime: getDefaultActvityStartTime(),
-			endTime: getDefaultActvityEndTime()
+			startTime: serviceDateFormatHelper.getDateTime(defaultStartTimeMoment),
+			endTime: serviceDateFormatHelper.getDateTime(defaultStartTimeMoment.add(1, 'hour'))
 		};
 
 
@@ -56,8 +54,9 @@
 
 		function decidePersonBelongsToDates(agents, targetTimeRange) {
 			return agents.map(function (selectedAgent) {
+				var personSchedule = vm.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(selectedAgent.PersonId);
 				var belongsToDate = belongsToDateDecider.decideBelongsToDate(targetTimeRange,
-					belongsToDateDecider.normalizePersonScheduleVm(vm.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(selectedAgent.PersonId), vm.currentTimezone()),
+					belongsToDateDecider.normalizePersonScheduleVm(personSchedule, vm.currentTimezone()),
 					vm.selectedDate());
 
 				return {
@@ -68,16 +67,22 @@
 		}
 
 		function getTimeRangeMoment() {
-			return { startTime: moment(vm.timeRange.startTime), endTime: moment(vm.timeRange.endTime) };
+			var currentTimezone = vm.currentTimezone();
+			return {
+				startTime: moment.tz(vm.timeRange.startTime, currentTimezone),
+				endTime: moment.tz(vm.timeRange.endTime, currentTimezone)
+			};
 		}
 
 		vm.anyValidAgent = function () {
-			updateInvalidAgents();
 			return vm.invalidAgents.length != vm.selectedAgents.length;
 		};
 
+		vm.updateInvalidAgents = updateInvalidAgents;
+
 		function updateInvalidAgents() {
 			if ($scope.newActivityForm && !$scope.newActivityForm.$valid) return;
+
 			var belongsToDates = decidePersonBelongsToDates(vm.selectedAgents, getTimeRangeMoment());
 			vm.invalidAgents = [];
 
@@ -86,23 +91,6 @@
 			}
 
 			vm.notAllowedNameListString = vm.invalidAgents.map(function (x) { return x.Name; }).join(', ');
-		};
-
-		vm.isNewActivityAllowedForAgent = function (agent, timeRange) {
-			var mNewActivityStart = moment(timeRange.startTime);
-			var mNewActivityEnd = moment(timeRange.endTime);
-			var mScheduleStart = moment(agent.ScheduleStartTime);
-			var mScheduleEnd = moment(agent.ScheduleEndTime);
-			var allowShiftTotalMinutes = 36 * 60;
-			var totalMinutes = (mNewActivityEnd.days() - mScheduleStart.days()) * 24 * 60 + (mNewActivityEnd.hours() - mScheduleStart.hours()) * 60 + (mNewActivityEnd.minutes() - mScheduleStart.minutes());
-
-			var withinAllowShiftPeriod = totalMinutes <= allowShiftTotalMinutes;
-
-			if (mNewActivityStart.isSame(moment(vm.selectedDate()), 'day')) {
-				return withinAllowShiftPeriod;
-			} else {
-				return withinAllowShiftPeriod && (mScheduleEnd.isAfter(mNewActivityStart));
-			}
 		};
 
 		var addActivity = function (requestData) {
@@ -168,39 +156,34 @@
 				});
 		};
 
-		function getDefaultActvityStartTime() {
-			var curDateMoment = moment(vm.selectedDate());
+		function getDefaultStartMoment() {
+			var curDate = vm.selectedDate();
+			var curDateMoment = moment.tz(curDate, vm.currentTimezone());
 			var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
 			var schedules = vm.containerCtrl.scheduleManagementSvc.schedules();
 
-			var overnightEnds = scheduleHelper.getLatestPreviousDayOvernightShiftEnd(schedules, curDateMoment, personIds);
-			var latestShiftStart = scheduleHelper.getLatestStartOfSelectedSchedules(schedules, curDateMoment, personIds);
+			var overnightEndsMoment = scheduleHelper.getLatestPreviousDayOvernightShiftEndMoment(schedules, curDate, personIds);
+			var latestShiftStartMoment = scheduleHelper.getLatestStartMomentOfSelectedSchedules(schedules, curDateMoment, personIds);
 
 			// Set to 08:00 for empty schedule or day off
-			var defaultStart = curDateMoment.clone().hour(8).minute(0).second(0).toDate();
+			var defaultStartMoment = curDateMoment.clone().hour(8).minute(0).second(0);
 
-			if (overnightEnds !== null) {
-				defaultStart = moment(overnightEnds).add(1, 'hour').toDate();
+			if (overnightEndsMoment !== null) {
+				defaultStartMoment = overnightEndsMoment.add(1, 'hour');
 			}
 			if (serviceDateFormatHelper.getDateOnly(utility.nowInSelectedTimeZone(vm.currentTimezone())) === vm.selectedDate()) {
-				var nextTickTime = new Date(moment(utility.getNextTickNoEarlierThanEight(vm.currentTimezone())).tz(vm.currentTimezone()).format('YYYY-MM-DD HH:mm'));
-				if (nextTickTime > defaultStart) {
-					defaultStart = nextTickTime;
+				var nextTickTimeMoment = utility.getNextTickMomentNoEarlierThanEight(vm.currentTimezone());
+				if (nextTickTimeMoment.isAfter(defaultStartMoment)) {
+					defaultStartMoment = nextTickTimeMoment;
 				}
 			} else {
-				if (latestShiftStart !== null) {
-					var latestShiftStartPlusOneHour = moment(latestShiftStart).add(1, 'hour').toDate();
-					if (latestShiftStartPlusOneHour >= defaultStart)
-						defaultStart = latestShiftStartPlusOneHour;
+				if (latestShiftStartMoment !== null) {
+					var latestShiftStartPlusOneHour = latestShiftStartMoment.add(1, 'hour');
+					if (latestShiftStartPlusOneHour.isSameOrAfter(defaultStartMoment))
+						defaultStartMoment = latestShiftStartPlusOneHour;
 				}
 			}
-
-			return serviceDateFormatHelper.getDateTime(defaultStart);
+			return defaultStartMoment;
 		}
-
-		function getDefaultActvityEndTime() {
-			return serviceDateFormatHelper.getDateTime(moment(getDefaultActvityStartTime()).add(1, 'hour'));
-		};
-
 	}
 })();

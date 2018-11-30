@@ -264,15 +264,11 @@
 	});
 
 	it('should get normalized schedule data', function () {
-		var timezone1 = {
-			IanaId: "Asia/Shanghai",
-			DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-		};
-		var currentTimezone = "Europe/Berlin";
-
 		var personScheduleVm = {
 			Date: '2016-07-02',
-			Timezone: timezone1,
+			Timezone: {
+				IanaId: "Asia/Shanghai"
+			},
 			Shifts: [
 				{
 					Date: '2016-07-01',
@@ -284,17 +280,16 @@
 					Projections: [
 						{
 							Start: '2016-07-02 08:00',
-							End: '2016-07-02 17:00',
-							Minutes: 540
+							End: '2016-07-02 17:00'
 						}],
 					ProjectionTimeRange: {
-						Start: '2016-07-02 08:00',
-						End: '2016-07-02 17:00'
+						StartMoment: moment.tz('2016-07-02 08:00', "Asia/Shanghai"),
+						EndMoment: moment.tz('2016-07-02 17:00', "Asia/Shanghai")
 					}
 				}]
 		};
 
-		var result = target.normalizePersonScheduleVm(personScheduleVm, currentTimezone);
+		var result = target.normalizePersonScheduleVm(personScheduleVm, "Europe/Berlin");
 
 		expect(result.length).toEqual(3);
 		expect(result[0].date).toEqual('2016-07-01');

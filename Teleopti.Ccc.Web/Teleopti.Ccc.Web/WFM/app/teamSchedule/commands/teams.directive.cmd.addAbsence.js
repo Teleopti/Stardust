@@ -95,7 +95,6 @@
 		};
 
 		vm.isAbsenceTimeValid = function () {
-			var currentTimezone = vm.getCurrentTimezone();
 			var timeRangeInCurrentTimezone = getTimeRangeInCurrentTimezone();
 			var isStartTimeValid = serviceDateFormatHelper.getDateTime(timeRangeInCurrentTimezone.startTime) === vm.timeRange.startTime;
 			var isEndTimeValid = serviceDateFormatHelper.getDateTime(timeRangeInCurrentTimezone.endTime) === vm.timeRange.endTime;

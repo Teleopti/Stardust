@@ -1,4 +1,4 @@
-﻿describe('teamschedule add activity directive test', function () {
+﻿describe('<add-activity>', function () {
 	'use strict';
 
 	var $compile,
@@ -6,10 +6,9 @@
 		$httpBackend,
 		utility,
 		fakeActivityService,
-		fakeScheduleManagementSvc,
-		fakePersonSelectionService,
 		fakeCommandCheckService,
-		scheduleHelper;
+		personSelection,
+		scheduleManagement;
 
 	var mockCurrentUserInfo = {
 		CurrentUserInfo: function () {
@@ -22,23 +21,11 @@
 
 	beforeEach(function () {
 		fakeActivityService = new FakeActivityService();
-		fakeScheduleManagementSvc = new FakeScheduleManagementService();
-		fakePersonSelectionService = new FakePersonSelectionService();
 		fakeCommandCheckService = new FakeCommandCheckService();
-		scheduleHelper = new FakeScheduleHelper();
 
 		module(function ($provide) {
 			$provide.service('ActivityService', function () {
 				return fakeActivityService;
-			});
-			$provide.service('ScheduleManagement', function () {
-				return fakeScheduleManagementSvc;
-			});
-			$provide.service('ScheduleHelper', function () {
-				return scheduleHelper;
-			});
-			$provide.service('PersonSelection', function () {
-				return fakePersonSelectionService;
 			});
 			$provide.service('CommandCheckService', function () {
 				return fakeCommandCheckService;
@@ -49,29 +36,49 @@
 		});
 	});
 
-	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_, _UtilityService_) {
+	beforeEach(inject(function (_$rootScope_,
+		_$compile_,
+		_$httpBackend_,
+		_UtilityService_,
+		PersonSelection,
+		ScheduleManagement) {
+
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
 		utility = _UtilityService_;
+		personSelection = PersonSelection;
+		scheduleManagement = ScheduleManagement;
 
 		$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
 	}));
 
-	it('add-activity should render correctly', function () {
-		var result = setUp();
-
-		expect(result.commandControl).not.toBeNull();
-	});
-
 	it('add-activity should get date from container', function () {
 		var result = setUp();
-
-		expect(moment(result.commandControl.selectedDate()).format('YYYY-MM-DD')).toBe('2016-06-15');
+		expect(result.commandControl.selectedDate()).toBe('2016-06-15');
 	});
 
 	it('should load activity list', function () {
-		var result = setUp();
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2018-08-01',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Europe/Stockholm'
+				},
+				Projection: [{
+					StartInUtc: '2018-08-01 08:00',
+					EndInUtc: '2018-08-01 09:00',
+				}]
+			}]
+			, '2018-08-01');
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		personSelection.toggleAllPersonProjections(personSchedule, '2018-08-01');
+
+		var result = setUp('2018-08-01', 'Europe/Stockholm');
 
 		var activities = result.container[0].querySelectorAll('.add-activity .activity-selector md-option');
 
@@ -79,128 +86,362 @@
 	});
 
 	it('should see a disabled button when no activity selected', function () {
-		var result = setUp();
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2018-08-01',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Europe/Stockholm'
+				},
+				Projection: [{
+					StartInUtc: '2018-08-01 08:00',
+					EndInUtc: '2018-08-01 09:00',
+				}]
+			}]
+			, '2018-08-01');
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		personSelection.toggleAllPersonProjections(personSchedule, '2018-08-01');
+
+		var result = setUp('2018-08-01', 'Europe/Stockholm');
 
 		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
 		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
 		expect(applyButton.attr('disabled')).toBe('disabled');
 	});
 
-	it('should see a disabled button when time range input is invalid', function () {
-		var result = setUp();
+	it('should not allow to add activity if changed the belongs to date', function () {
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2018-08-01',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Europe/Stockholm'
+				},
+				Projection: [{
+					StartInUtc: '2018-08-01 08:00',
+					EndInUtc: '2018-08-01 09:00',
+				}]
+			}]
+			, '2018-08-01');
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		personSelection.toggleAllPersonProjections(personSchedule, '2018-08-01');
 
-		result.commandControl.timeRange = {
-			startTime: new Date('2016-06-15T08:00:00Z'),
-			endTime: new Date('2016-06-15T07:00:00Z')
-		};
+		var result = setUp('2018-08-01', 'Europe/Stockholm');
 
+		result.container[0].querySelectorAll('.activity-selector md-option')[0].click();
+		setTime(result.container, 8, 17);
+		result.container[0].querySelector('teams-time-range-picker md-switch').click();
 		result.scope.$apply();
 
-		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
-
-		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
-		expect(applyButton.attr('disabled')).toBe('disabled');
-	});
-
-	it('should not allow to add activity if time range is not correct', function () {
-		var result = setUp();
-
-		var vm = result.commandControl;
-
-		vm.isNextDay = true;
-		vm.disableNextDay = false;
-		vm.timeRange = {
-			startTime: new Date('2016-06-16T08:00:00Z'),
-			endTime: new Date('2016-06-16T17:00:00Z')
-		};
-
-		var agent = {
-			PersonId: 'agent1',
-			Name: 'agent1',
-			ScheduleStartTime: new Date('2016-06-15T08:00:00Z'),
-			ScheduleEndTime: new Date('2016-06-15T17:00:00Z')
-		};
-
-		expect(vm.isNewActivityAllowedForAgent(agent, vm.timeRange)).toBe(false);
+		var errorEl = result.container[0].querySelectorAll('.text-danger');
+		expect(!!errorEl.length).toBeTruthy();
+		expect(result.container[0].querySelector('#applyActivity').disabled).toEqual(true);
 	});
 
 	it('should not allow to add activity if agents shift exceed 36 hours', function () {
-		var result = setUp();
-
-		var vm = result.commandControl;
-
-		vm.isNextDay = true;
-		vm.disableNextDay = false;
-		vm.timeRange = {
-			startTime: new Date('2016-06-16T07:00:00Z'),
-			endTime: new Date('2016-06-16T12:01:00Z')
-		};
-		var agent = {
-			PersonId: 'agent1',
-			Name: 'agent1',
-			ScheduleStartTime: new Date('2016-06-15T00:00:00Z'),
-			ScheduleEndTime: new Date('2016-06-16T08:00:00Z')
-		};
-
-		expect(vm.isNewActivityAllowedForAgent(agent, vm.timeRange)).toBe(false);
-	});
-
-	it('should see a disabled button when everyone in selected is not allowed to add current activity', function () {
-		var result = setUp("2016-06-15");
-
-		var vm = result.commandControl;
-		vm.isNextDay = true;
-		vm.disableNextDay = false;
-		vm.timeRange = {
-			startTime: '2016-06-16 18:00',
-			endTime: '2016-06-16 19:00'
-		};
-
-		vm.selectedAgents = [
-			{
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2018-08-01',
 				PersonId: 'agent1',
 				Name: 'agent1',
-				ScheduleStartTime: new Date('2016-06-15T08:00:00Z'),
-				ScheduleEndTime: new Date('2016-06-15T17:00:00Z')
-			}];
-		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
-
-		var timezone1 = {
-			IanaId: "Asia/Shanghai",
-			DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-		};
-
-		vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
-			Date: '2016-06-15',
-			PersonId: 'agent1',
-			Timezone: timezone1,
-			Shifts: [
-				{
-					Date: '2016-06-15',
-					Projections: [
-						{
-							Start: '2016-06-15 08:00',
-							End: '2016-06-15 17:00',
-							Minutes: 540
-						}],
-					ProjectionTimeRange: {
-						Start: '2016-06-15 08:00',
-						End: '2016-06-15 17:00',
-					}
+				Timezone: {
+					IanaId: 'Europe/Stockholm'
+				},
+				Projection: [{
+					StartInUtc: '2018-08-01 01:00',
+					EndInUtc: '2018-08-01 22:00',
 				}]
+			}]
+			, '2018-08-01');
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		personSelection.toggleAllPersonProjections(personSchedule, '2018-08-01');
+
+		var result = setUp('2018-08-01', 'Europe/Stockholm');
+
+		result.container[0].querySelectorAll('.activity-selector md-option')[0].click();
+		setTime(result.container, 22, 20);
+
+		var errorEl = result.container[0].querySelectorAll('.text-danger');
+		expect(!!errorEl.length).toBeTruthy();
+		expect(result.container[0].querySelector('#applyActivity').disabled).toEqual(true);
+	});
+
+	it('should allow to add activity for valid agents and show error message for invalid agents', function () {
+		scheduleManagement.resetSchedules(
+			[
+				{
+					Date: '2018-08-01',
+					PersonId: 'agent1',
+					Name: 'agent1',
+					Timezone: {
+						IanaId: "Asia/Shanghai"
+					},
+					Projection: [{
+						StartInUtc: '2018-07-31 16:00',
+						EndInUtc: '2018-08-01 23:00',
+					}]
+				},
+				{
+					Date: '2018-08-01',
+					PersonId: 'agent2',
+					Name: 'agent2',
+					Timezone: {
+						IanaId: "Asia/Shanghai"
+					},
+					Projection: []
+				}]
+			, '2018-08-01', 'Europe/Berlin');
+
+		scheduleManagement.groupScheduleVm.Schedules.forEach(function (personSchedule) {
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			personSelection.toggleAllPersonProjections(personSchedule, '2018-08-01');
 		});
 
+		var result = setUp('2018-08-01', 'Europe/Berlin');
+		result.container[0].querySelectorAll('.activity-selector md-option')[0].click();
+		setTime(result.container, 12, 11);
 		result.scope.$apply();
 
-		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
+		var errorEl = result.container[0].querySelectorAll('.text-danger');
+		expect(!!errorEl.length).toBeTruthy();
+		expect(result.container[0].querySelector('#applyActivity').disabled).toEqual(false);
+	});
 
-		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
-		expect(applyButton.attr('disabled')).toBe('disabled');
-		expect(vm.anyValidAgent()).toBe(false);
+	it('should set default start time to next quarter from now when no other shifts on today', function () {
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2018-03-01',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Europe/Stockholm'
+				},
+				Projection: []
+			}]
+			, '2018-03-01', 'Europe/Stockholm');
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		personSelection.toggleAllPersonProjections(personSchedule, '2018-03-01');
+
+		utility.setNowDate(new Date("2018-03-01T10:00:00+01:00"));
+
+		var result = setUp('2018-03-01', 'Europe/Stockholm');
+		expect(result.commandControl.timeRange.startTime).toBe("2018-03-01 10:15");
+	});
+
+	it('should set default start time to 8:00 when now is earlier than 8:00 on today', function () {
+		var date = new Date("2018-03-01T05:00:00+00:00");
+		utility.setNowDate(date);
+
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2018-03-01',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Europe/Stockholm'
+				},
+				Projection: []
+			}]
+			, '2018-03-01', 'Europe/Stockholm');
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		personSelection.toggleAllPersonProjections(personSchedule, '2018-03-01');
+
+		var result = setUp('2018-03-01', 'Etc/Utc');
+		expect(result.commandControl.timeRange.startTime).toBe("2018-03-01 08:00");
+	});
+
+	it('should set default start time to next quarter when now is later than 8:00', function () {
+		var date = new Date("2018-03-01T09:10:00+00:00");
+		utility.setNowDate(date);
+
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2018-03-01',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Etc/Utc'
+				},
+				Projection: []
+			}]
+			, '2018-03-01', 'Etc/Utc');
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		personSelection.toggleAllPersonProjections(personSchedule, '2018-03-01');
+
+		var result = setUp(date, 'Etc/Utc');
+		expect(result.commandControl.timeRange.startTime).toBe("2018-03-01 09:15");
+	});
+
+	it('should set default start time to an hour from the end of previous day over night shift to avoid to add activity to previous day', function () {
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2018-07-31',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Etc/Utc'
+				},
+				Projection: [{
+					StartInUtc: '2018-07-31 22:00',
+					EndInUtc: '2018-08-01 09:00'
+				}]
+			}]
+			, '2018-08-01', 'Etc/Utc');
+
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		personSelection.toggleAllPersonProjections(personSchedule, '2018-08-01');
+
+		var result = setUp('2018-08-01', 'Etc/Utc');
+		var vm = result.commandControl;
+
+		expect(vm.timeRange.startTime).toEqual('2018-08-01 10:00');
+	});
+
+	it('should set default start time to an hour from the start of selected days shift is after the end of yesterdays overnight shift ', function () {
+
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2018-08-01',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Etc/Utc'
+				},
+				Projection: [{
+					StartInUtc: '2018-08-01 22:00',
+					EndInUtc: '2018-08-02 09:00'
+				}]
+			},
+			{
+				Date: '2018-07-31',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Etc/Utc'
+				},
+				Projection: [{
+					StartInUtc: '2018-07-31 22:00',
+					EndInUtc: '2018-08-01 09:00'
+				}]
+			}]
+			, '2018-08-01', 'Etc/Utc');
+
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		personSelection.toggleAllPersonProjections(personSchedule, '2018-08-01');
+
+		var result = setUp('2018-08-01', 'Etc/Utc');
+		var vm = result.commandControl;
+
+		expect(vm.timeRange.startTime).toEqual('2018-08-01 23:00');
+	});
+
+	it('should set default start time to next quarter when selected date is same with now and next quarter is later than an hour from the end of previous day over night shift', function () {
+		var date = new Date("2018-08-01T10:00:00+00:00");
+		utility.setNowDate(date);
+
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2018-08-01',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Etc/Utc'
+				},
+				Projection: [{
+					StartInUtc: '2018-08-01 08:00',
+					EndInUtc: '2018-08-01 16:00'
+				}]
+			},
+			{
+				Date: '2018-07-31',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Etc/Utc'
+				},
+				Projection: [{
+					StartInUtc: '2018-07-31 22:00',
+					EndInUtc: '2018-08-01 05:00'
+				}]
+			}]
+			, '2018-08-01', 'Etc/Utc');
+
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		personSelection.toggleAllPersonProjections(personSchedule, '2018-08-01');
+
+		var result = setUp('2018-08-01', 'Etc/Utc');
+		var vm = result.commandControl;
+
+		expect(vm.timeRange.startTime).toEqual('2018-08-01 10:15');
+
+	});
+
+	it('should set default end time to an hour from default start time', function () {
+		var date = new Date("2018-03-01T05:00:00+00:00");
+		utility.setNowDate(date);
+
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2018-03-01',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Europe/Stockholm'
+				},
+				Projection: []
+			}]
+			, '2018-03-01', 'Europe/Stockholm');
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		personSelection.toggleAllPersonProjections(personSchedule, '2018-03-01');
+
+		var result = setUp('2018-03-01', 'Etc/Utc');
+		expect(result.commandControl.timeRange.endTime).toBe("2018-03-01 09:00");
 	});
 
 	it('should invoke action callback after calling add activity', function () {
-		var result = setUp();
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2018-08-01',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Europe/Stockholm'
+				},
+				Projection: [{
+					StartInUtc: '2018-08-01 08:00',
+					EndInUtc: '2018-08-01 09:00',
+				}]
+			}]
+			, '2018-08-01', 'Europe/Stockholm');
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		personSelection.toggleAllPersonProjections(personSchedule, '2018-08-01');
+
+		var result = setUp('2018-08-01', 'Europe/Stockholm');
 
 		var cbMonitor = null;
 		function actionCb() {
@@ -209,46 +450,7 @@
 
 		result.container.isolateScope().vm.setActionCb('AddActivity', actionCb);
 
-		var vm = result.commandControl;
-
-		vm.isNextDay = false;
-		vm.disableNextDay = false;
-		vm.timeRange = {
-			startTime: moment('2016-06-15 08:00').toDate(),
-			endTime: moment('2016-06-15 16:00').toDate()
-		};
-
-		vm.selectedAgents = [
-			{
-				PersonId: 'agent1',
-				Name: 'agent1',
-				ScheduleStartTime: null,
-				ScheduleEndTime: null,
-			}];
-
-		var timezone1 = {
-			IanaId: "Asia/Hong_Kong",
-			DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-		};
-
-		vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
-			Date: '2016-06-15',
-			PersonId: 'agent1',
-			Timezone: timezone1,
-			Shifts: [
-				{
-					Date: '2016-06-15',
-					Projections: [
-					],
-					ProjectionTimeRange: null
-				}]
-		});
-
-		result.scope.$apply();
-
-
-		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
-
+		result.container[0].querySelectorAll('.activity-selector md-option')[0].click();
 		result.scope.$apply();
 
 		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
@@ -259,124 +461,28 @@
 		expect(cbMonitor).toBeTruthy();
 	});
 
-
-	it('should have correct default start time when no other shifts on today', function () {
-		var date = new Date("2018-03-01T10:00:00+00:00");
-		scheduleHelper.setLatestEndTime(null);
-		scheduleHelper.setLatestStartTime(null);
-		utility.setNowDate(date);
-
-		var result = setUp(date, 'Etc/Utc');
-		var vm = result.commandControl;
-		vm.selectedAgents = [];
-
-		var defaultStartTime = vm.getDefaultActvityStartTime();
-
-		expect(moment(defaultStartTime).format('YYYY-MM-DD HH:mm')).toBe("2018-03-01 10:15");
-	});
-
-	it('should have set default start time to 8:00 when now is earlier than 8:00 on today', function () {
-		var date = new Date("2018-03-01T05:00:00+00:00");
-		scheduleHelper.setLatestEndTime(null);
-		scheduleHelper.setLatestStartTime(null);
-		utility.setNowDate(date);
-
-		var result = setUp(date, 'Etc/Utc');
-		var vm = result.commandControl;
-		vm.selectedAgents = [];
-
-		var defaultStartTime = vm.getDefaultActvityStartTime();
-		expect(moment(defaultStartTime).format('YYYY-MM-DD HH:mm')).toBe("2018-03-01 08:00");
-	});
-
-	it('should have set correct default start time when now is later than 8:00 on today', function () {
-		var date = new Date("2018-03-01T09:10:00+00:00");
-		scheduleHelper.setLatestEndTime(null);
-		scheduleHelper.setLatestStartTime(null);
-		utility.setNowDate(date);
-
-		var result = setUp(date, 'Etc/Utc');
-		var vm = result.commandControl;
-		vm.selectedAgents = [];
-
-		var defaultStartTime = vm.getDefaultActvityStartTime();
-		expect(moment(defaultStartTime).format('YYYY-MM-DD HH:mm')).toBe("2018-03-01 09:15");
-	});
-
-	it('should have correct default start time when no other shifts on selected date which is not today', function () {
-		var today = new Date(moment(utility.nowInUserTimeZone()).add(1, 'day'));
-		scheduleHelper.setLatestEndTime(null);
-		scheduleHelper.setLatestStartTime(null);
-
-		var result = setUp(today);
-		var vm = result.commandControl;
-		vm.selectedAgents = [];
-
-		var defaultStartTime = new Date(vm.getDefaultActvityStartTime());
-		var defaultEndTime = new Date(vm.getDefaultActvityEndTime());
-		expect(defaultStartTime.getHours()).toBe(8);
-		expect(defaultStartTime.getMinutes()).toBe(0);
-		expect(defaultEndTime.getHours()).toBe(9);
-		expect(defaultEndTime.getMinutes()).toBe(0);
-	});
-
-	it('should have later default start time than previous day over night shift end', function () {
-		var date = moment(utility.nowInUserTimeZone()).add(7, 'day');
-
-		scheduleHelper.setLatestEndTime(date.clone().hour(10).toDate());
-		scheduleHelper.setLatestStartTime(date.clone().hour(9).toDate());
-
-		var result = setUp(date);
-		var vm = result.commandControl;
-
-		var defaultStartTime = new Date(vm.getDefaultActvityStartTime());
-		expect(defaultStartTime.getHours()).toBe(11);
-	});
-
-
 	function commonTestsInDifferentLocale() {
-		it('should call add activity when click apply with correct data', function () {
-			var result = setUp();
-			var vm = result.commandControl;
-			vm.isNextDay = false;
-			vm.disableNextDay = false;
-			vm.timeRange = {
-				startTime: '2016-06-15 08:00',
-				endTime: '2016-06-15 16:00'
-			};
-
-			vm.selectedAgents = [
-				{
+		it('should add activity with correct data', function () {
+			scheduleManagement.resetSchedules(
+				[{
+					Date: '2018-08-01',
 					PersonId: 'agent1',
 					Name: 'agent1',
-					ScheduleStartTime: null,
-					ScheduleEndTime: null
-				}];
+					Timezone: {
+						IanaId: 'Asia/Hong_Kong'
+					},
+					Projection: []
+				}]
+				, '2018-08-01', 'Asia/Hong_Kong');
+			var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			personSelection.toggleAllPersonProjections(personSchedule, '2018-08-01');
 
-			vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
+			var result = setUp('2018-08-01', 'Asia/Hong_Kong');
+			result.container[0].querySelectorAll('.activity-selector md-option')[0].click();
 
-			fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
-
-			var timezone1 = {
-				IanaId: "Asia/Hong_Kong",
-				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-			};
-
-			vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
-				Date: '2016-06-15',
-				PersonId: 'agent1',
-				Timezone: timezone1,
-				Shifts: [
-					{
-						Date: '2016-06-15',
-						Projections: [
-						],
-						ProjectionTimeRange: null
-					}]
-			});
-
-			result.scope.$apply();
-
+			setTime(result.container, 8, 16);
 
 			var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
 			applyButton.triggerHandler('click');
@@ -385,53 +491,34 @@
 
 			var activityData = fakeActivityService.getAddActivityCalledWith();
 			expect(activityData).not.toBeNull();
-			expect(activityData.PersonDates.length).toEqual(vm.selectedAgents.length);
-			expect(activityData.ActivityId).toEqual(vm.selectedActivityId);
-			expect(activityData.StartTime).toEqual('2016-06-15T08:00');
-			expect(activityData.EndTime).toEqual('2016-06-15T16:00');
-
-			expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
+			expect(activityData.PersonDates).toEqual([{ Date: '2018-08-01', PersonId: 'agent1' }]);
+			expect(activityData.ActivityId).toEqual('472e02c8-1a84-4064-9a3b-9b5e015ab3c6');
+			expect(activityData.StartTime).toEqual('2018-08-01T08:00');
+			expect(activityData.EndTime).toEqual('2018-08-01T16:00');
+			expect(activityData.TrackedCommandInfo.TrackId).toBe(result.commandControl.trackId);
 		});
 
-		it('should apply with correct time range based on the selected time zone', function () {
-			var result = setUp('2018-03-25');
-			var vm = result.commandControl;
-			vm.isNextDay = false;
-			vm.disableNextDay = false;
-			vm.timeRange = {
-				startTime: '2018-03-25 01:00',
-				endTime: '2018-03-25 03:00'
-			};
-
-			vm.selectedAgents = [
-				{
+		it('should apply with correct time range when selected time zone is different from logon user time zone', function () {
+			scheduleManagement.resetSchedules(
+				[{
+					Date: '2018-08-01',
 					PersonId: 'agent1',
 					Name: 'agent1',
-					ScheduleStartTime: null,
-					ScheduleEndTime: null
-				}];
-			vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
+					Timezone: {
+						IanaId: 'Europe/Berlin'
+					},
+					Projection: []
+				}]
+				, '2018-08-01', 'Europe/Berlin');
+			var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			personSelection.toggleAllPersonProjections(personSchedule, '2018-08-01');
 
-			fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
+			var result = setUp('2018-08-01', 'Europe/Berlin');
+			result.container[0].querySelectorAll('.activity-selector md-option')[0].click();
 
-			var timezone1 = {
-				IanaId: "Asia/Hong_Kong",
-				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-			};
-
-			vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
-				Date: '2018-03-25',
-				PersonId: 'agent1',
-				Timezone: timezone1,
-				Shifts: [
-					{
-						Date: '2018-03-25',
-						Projections: [
-						],
-						ProjectionTimeRange: null
-					}]
-			});
-			result.scope.$apply();
+			setTime(result.container, 8, 16);
 
 			var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
 			applyButton.triggerHandler('click');
@@ -440,8 +527,8 @@
 
 			var activityData = fakeActivityService.getAddActivityCalledWith();
 			expect(activityData).not.toBeNull();
-			expect(activityData.StartTime).toEqual('2018-03-25T01:00');
-			expect(activityData.EndTime).toEqual('2018-03-25T03:00');
+			expect(activityData.StartTime).toEqual('2018-08-01T14:00');
+			expect(activityData.EndTime).toEqual('2018-08-01T22:00');
 		});
 	}
 
@@ -497,6 +584,7 @@
 		var vm = container.isolateScope().vm;
 		vm.setReady(true);
 		vm.setActiveCmd('AddActivity');
+		vm.scheduleManagementSvc = scheduleManagement;
 		scope.$apply();
 
 		var commandControl = angular.element(container[0].querySelector(".add-activity")).scope().vm;
@@ -508,72 +596,6 @@
 		};
 
 		return obj;
-	}
-
-	function FakeScheduleManagementService() {
-		var savedPersonScheduleVm = {};
-
-		this.setPersonScheduleVm = function (personId, vm) {
-			savedPersonScheduleVm[personId] = vm;
-		}
-
-		this.findPersonScheduleVmForPersonId = function (personId) {
-			return savedPersonScheduleVm[personId];
-		}
-
-		this.schedules = function () {
-			return null;
-		};
-
-		this.newService = function () {
-			return new FakeScheduleManagementService();
-		};
-
-		function FakeScheduleManagementService() {
-			var savedPersonScheduleVm = {};
-
-			this.setPersonScheduleVm = function (personId, vm) {
-				savedPersonScheduleVm[personId] = vm;
-			}
-
-			this.findPersonScheduleVmForPersonId = function (personId) {
-				return savedPersonScheduleVm[personId];
-			}
-
-			this.schedules = function () {
-				return null;
-			};
-		}
-	}
-
-	function FakeScheduleHelper() {
-		var earliestStartTime = null;
-		var latestStartTime = null;
-		var latestEndTime = null;
-
-		this.setEarliestStartTime = function (date) {
-			earliestStartTime = date;
-		};
-
-		this.setLatestStartTime = function (date) {
-			latestStartTime = date;
-		};
-
-		this.setLatestEndTime = function (date) {
-			latestEndTime = date;
-		};
-
-		this.getEarliestStartOfSelectedSchedules = function () {
-			return earliestStartTime;
-		};
-
-		this.getLatestStartOfSelectedSchedules = function () {
-			return latestStartTime;
-		};
-
-		this.getLatestPreviousDayOvernightShiftEnd = function () {
-			return latestEndTime;
-		};
 	}
 
 	function FakeCommandCheckService() {
@@ -610,18 +632,6 @@
 				}
 			}
 		};
-	}
-
-	function FakePersonSelectionService() {
-		var fakePersonList = [];
-
-		this.setFakeCheckedPersonInfoList = function (input) {
-			fakePersonList = input;
-		}
-
-		this.getCheckedPersonInfoList = function () {
-			return fakePersonList;
-		}
 	}
 
 	function getAvailableActivities() {
@@ -678,5 +688,15 @@
 		this.setAvailableActivities = function (activities) {
 			availableActivities = activities;
 		};
+	}
+
+	function setTime(container, startHour, endHour) {
+		var hourEls = container[0].querySelectorAll('.hours input');
+		var startHourEl = hourEls[0];
+		startHourEl.value = startHour;
+		angular.element(startHourEl).triggerHandler('change');
+		var endHourEl = hourEls[1];
+		endHourEl.value = endHour;
+		angular.element(endHourEl).triggerHandler('change');
 	}
 });

@@ -63,18 +63,18 @@
 		}
 
 		function normalizePersonScheduleVm(personScheduleVm, currentTimezone) {
-			
 			var dates = [
 				serviceDateFormatHelper.getDateOnly(moment(personScheduleVm.Date).add(-1, 'day')),
 				personScheduleVm.Date,
 				serviceDateFormatHelper.getDateOnly(moment(personScheduleVm.Date).add(1, 'day'))];
 
 			var result = dates.map(function (date) {
-				var dayStart = moment(date).startOf('day');
-				var dayEnd = moment(date).add(24, 'hour');
+				var dayStart = moment.tz(date, personScheduleVm.Timezone.IanaId).startOf('day');
+				var dayEnd = moment.tz(date, personScheduleVm.Timezone.IanaId).add(24, 'hour');
+				
 				var timeRangeForDate = {
-					startTime: moment($filter('timezone')(serviceDateFormatHelper.getDateTime(dayStart), currentTimezone, personScheduleVm.Timezone.IanaId)),
-					endTime: moment($filter('timezone')(serviceDateFormatHelper.getDateTime(dayEnd), currentTimezone, personScheduleVm.Timezone.IanaId))
+					startTime: dayStart.tz(currentTimezone),
+					endTime: dayEnd.tz(currentTimezone)
 				}
 				return {
 					date: date,
@@ -88,8 +88,8 @@
 					if (!shift.ProjectionTimeRange) {
 						return;
 					}
-					var shiftStart = moment(shift.ProjectionTimeRange.Start);
-					var shiftEnd = moment(shift.ProjectionTimeRange.End);
+					var shiftStart = shift.ProjectionTimeRange.StartMoment;
+					var shiftEnd = shift.ProjectionTimeRange.EndMoment;
 					var index = dates.indexOf(shift.Date);
 					if (index >= 0) {
 						result[index].shiftRange = {
