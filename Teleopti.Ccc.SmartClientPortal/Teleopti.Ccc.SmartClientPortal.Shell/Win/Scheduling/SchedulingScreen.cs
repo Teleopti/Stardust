@@ -3959,7 +3959,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				SchedulerState.SchedulerStateHolder.FilterPersons(scheduleFilterView.SelectedAgentGuids());
 
-				toolStripButtonFilterAgents.Checked = SchedulerState.SchedulerStateHolder.AgentFilter();
+				toolStripButtonFilterAgents.Checked = SchedulerState.AgentFilter();
 
 				if (_scheduleView != null)
 				{
@@ -6132,7 +6132,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void reloadFilteredPeople()
 		{
-			toolStripButtonFilterAgents.Checked = SchedulerState.SchedulerStateHolder.AgentFilter();
+			toolStripButtonFilterAgents.Checked = SchedulerState.AgentFilter();
 
 			if (_scheduleView != null)
 			{

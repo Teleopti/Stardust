@@ -122,22 +122,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		}
 
 		[Test]
-		public void ShouldReturnIsFilteredOnAgentsWhenFilterCountNotEqualToAllPermittedCount()
-		{
-			target.FilterPersons(new List<IPerson>{_person1});
-			var result = target.AgentFilter();
-			Assert.IsTrue(result);
-		}
-
-		[Test]
-		public void ShouldReturnIsNotFilteredOnAgentsWhenFilterCountEqualToAllPermittedCount()
-		{
-			target.FilterPersons(new List<IPerson> { _person1, _person2 });
-			var result = target.AgentFilter();
-			Assert.IsFalse(result);	
-		}
-
-		[Test]
 		public void ShouldReturnCombinedFilterOnFilteredPersonDictionary()
 		{
 			target.FilterPersons(new List<IPerson>{_person1});

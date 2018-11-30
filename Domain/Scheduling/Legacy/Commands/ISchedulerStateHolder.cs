@@ -60,8 +60,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		IEnumerable<DateOnly> DaysToRecalculate { get; }
 		ShiftTradeRequestStatusCheckerWithSchedule ShiftTradeRequestStatusChecker { get; set; }
-
-
-		bool AgentFilter();
 	}
 }

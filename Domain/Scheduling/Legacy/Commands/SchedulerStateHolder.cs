@@ -2,16 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
@@ -188,12 +182,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public CommonNameDescriptionSetting CommonNameDescription { get; private set; } = new CommonNameDescriptionSetting();
-
-		public bool AgentFilter()
-		{
-			return FilteredAgentsDictionary.Count != ChoosenAgents.Count;
-		}
-
 		
 		public void ClearReferredShiftTradeRequests()
 		{

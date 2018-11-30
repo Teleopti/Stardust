@@ -61,8 +61,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		public int DefaultSegmentLength { get; private set; }
 		
 		
-		
-	
+		public bool AgentFilter()
+		{
+			return SchedulerStateHolder.FilteredAgentsDictionary.Count != SchedulerStateHolder.ChoosenAgents.Count;
+		}
 		
 		public bool ChangedRequests()
 		{
