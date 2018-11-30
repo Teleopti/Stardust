@@ -95,7 +95,7 @@
 		expect(result.container[0].querySelector('.end-date input').value).toEqual("8/1/18");
 	});
 
-	xit('should set default start time and end time correctly for adding intraday absence', function () {
+	it('should set default start time and end time correctly for adding intraday absence', function () {
 		fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: false });
 		scheduleManagement.resetSchedules(
 			[{
@@ -122,37 +122,37 @@
 		var result = setUp('2018-08-01', null);
 
 		expect(result.container[0].querySelector('.start-time team-schedule-datepicker input').value).toEqual("8/1/18");
-		expect(result.container[0].querySelector('.start-time .uib-timepicker .hours input').value).toEqual("07");
+		expect(result.container[0].querySelector('.start-time .uib-timepicker .hours input').value).toEqual("08");
 		expect(result.container[0].querySelector('.start-time .uib-timepicker .minutes input').value).toEqual("00");
 		expect(result.container[0].querySelector('.end-time team-schedule-datepicker input').value).toEqual("8/1/18");
-		expect(result.container[0].querySelector('.end-time  .uib-timepicker .hours input').value).toEqual("08");
+		expect(result.container[0].querySelector('.end-time  .uib-timepicker .hours input').value).toEqual("09");
 		expect(result.container[0].querySelector('.end-time .uib-timepicker .minutes input').value).toEqual("00");
 	});
 
-	xit('should not allow to add intraday absence when startime is early or equal to endtime', function () {
+	it('should not allow to add intraday absence when startime is early or equal to endtime', function () {
 		fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: false });
-		var selectedAgents = [
-			{
-				PersonId: 'agent1',
-				Name: 'agent1'
-			}];
-		fakePersonSelectionService.setFakeCheckedPersonInfoList(selectedAgents);
-
-		var result = setUp("2018-08-01", null, [{
-			Date: '2018-08-01',
-			PersonId: 'agent1',
-			Timezone: {
-				IanaId: 'Europe/Stockholm'
-			},
-			Shifts: [{
+		scheduleManagement.resetSchedules(
+			[{
 				Date: '2018-08-01',
-				ProjectionTimeRange: {
-					Start: '2018-08-01 07:00',
-					End: '2018-08-01 16:00'
-				}
-			}],
-			ScheduleStartTime: function () { return ""; }
-		}]);
+				PersonId: 'agent1',
+				Timezone: {
+					IanaId: 'Europe/Stockholm'
+				},
+				Projection: [
+					{
+						ShiftLayerIds: ["layer1"],
+						StartInUtc: '2018-08-01 06:00',
+						EndInUtc: '2018-08-01 15:00'
+					}
+				]
+			}]
+			, '2018-08-01');
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		personSelection.toggleAllPersonProjections(personSchedule, '2018-08-01');
+
+		var result = setUp("2018-08-01", null);
 
 		result.container[0].querySelectorAll('.absence-selector md-option')[0].click();
 		setTime(result.container, 10, 10);
@@ -225,23 +225,23 @@
 		expect(result.container[0].innerHTML.indexOf('agent1') != -1).toBeTruthy();
 	});
 
-	xit('should apply correct data for adding absence from part of day to x day', function () {
+	it('should apply correct data for adding absence from part of day to x day', function () {
 		fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: false });
-		fakePersonSelectionService.setFakeCheckedPersonInfoList([
-			{
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2018-08-01',
 				PersonId: 'agent1',
-				Name: 'agent1'
-			}]);
-
-		var result = setUp('2018-08-01', null, [{
-			Date: '2018-08-01',
-			PersonId: 'agent1',
-			Timezone: {
-				IanaId: 'Europe/Stockholm'
-			},
-			ScheduleStartTime: function () { return ""; }
-		}]);
-
+				Timezone: {
+					IanaId: 'Europe/Stockholm'
+				},
+				Projection: []
+			}]
+			, '2018-08-01');
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		
+		var result = setUp("2018-08-01", null);
 		result.container[0].querySelectorAll('.absence-selector md-option')[0].click();
 		var startDateEl = result.container[0].querySelector('.start-time team-schedule-datepicker input');
 		var endDateEl = result.container[0].querySelector('.end-time  team-schedule-datepicker input');
@@ -308,37 +308,7 @@
 			$timeout.flush();
 		});
 
-		it('should apply add intraday absence with correct time range based on the selected time zone', function () {
-			fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: false });
-
-			scheduleManagement.resetSchedules(
-				[{
-					Date: '2018-03-25',
-					PersonId: 'agent1',
-					Timezone: {
-						IanaId: 'Europe/Stockholm'
-					},
-					Projection: []
-				}]
-				, '2018-03-25');
-			var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
-			personSchedule.IsSelected = true;
-			personSelection.updatePersonSelection(personSchedule);
-			personSelection.toggleAllPersonProjections(personSchedule, '2018-03-25');
-
-			var result = setUp("2018-03-25", 'Europe/Stockholm');
-
-			result.container[0].querySelectorAll('.absence-selector md-option')[0].click();
-			setTime(result.container, "01", "03");
-
-			var applyButton = result.container[0].querySelectorAll('#applyAbsence');
-			applyButton[0].click();
-
-			var lastAbsence = fakeAbsenceService.getAddAbsenceCalledWith();
-			expect(lastAbsence.Start).toEqual('2018-03-25T01:00');
-			expect(lastAbsence.End).toEqual('2018-03-25T03:00');
-		});
-
+		
 		it('should apply add intraday absence with correct data', function () {
 			fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: false });
 
@@ -371,6 +341,69 @@
 			expect(lastAbsence.Start).toEqual('2018-08-01T10:00');
 			expect(lastAbsence.End).toEqual('2018-08-01T11:00');
 		});
+
+		it('should apply add intraday absence with correct time range  when selected timezone is different from logon users timezone', function () {
+			fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: false });
+
+			scheduleManagement.resetSchedules(
+				[{
+					Date: '2018-08-01',
+					PersonId: 'agent1',
+					Timezone: {
+						IanaId: 'Asia/Hong_Kong'
+					},
+					Projection: []
+				}]
+				, '2018-08-01');
+			var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			personSelection.toggleAllPersonProjections(personSchedule, '2018-03-25');
+
+			var result = setUp("2018-08-01", 'Asia/Hong_Kong');
+
+			result.container[0].querySelectorAll('.absence-selector md-option')[0].click();
+			setTime(result.container, "09", "10");
+
+			var applyButton = result.container[0].querySelectorAll('#applyAbsence');
+			applyButton[0].click();
+
+			var lastAbsence = fakeAbsenceService.getAddAbsenceCalledWith();
+			expect(lastAbsence.Start).toEqual('2018-08-01T03:00');
+			expect(lastAbsence.End).toEqual('2018-08-01T04:00');
+		});
+
+		it('should apply add intraday absence with correct time range  when on start of DST', function () {
+			fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: false });
+
+			scheduleManagement.resetSchedules(
+				[{
+					Date: '2018-03-25',
+					PersonId: 'agent1',
+					Timezone: {
+						IanaId: 'Asia/Hong_Kong'
+					},
+					Projection: []
+				}]
+				, '2018-03-25');
+			var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			personSelection.toggleAllPersonProjections(personSchedule, '2018-03-25');
+
+			var result = setUp("2018-03-25", 'Asia/Hong_Kong');
+
+			result.container[0].querySelectorAll('.absence-selector md-option')[0].click();
+			setTime(result.container, "08", "09");
+
+			var applyButton = result.container[0].querySelectorAll('#applyAbsence');
+			applyButton[0].click();
+
+			var lastAbsence = fakeAbsenceService.getAddAbsenceCalledWith();
+			expect(lastAbsence.Start).toEqual('2018-03-25T01:00');
+			expect(lastAbsence.End).toEqual('2018-03-25T03:00');
+		});
+
 	}
 
 	describe('in locale ar-AE', function () {
