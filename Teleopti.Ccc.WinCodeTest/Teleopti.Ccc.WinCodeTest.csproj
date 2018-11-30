@@ -552,7 +552,6 @@
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityPersonFilterTestOld.cs" />
     <Compile Include="Scheduler\SchedulePartNoteTests.cs" />
     <Compile Include="Scheduler\SchedulePasteActionTest.cs" />
-    <Compile Include="Scheduler\ScheduleSortingCommands\ScheduleSortBySeniorityRankingCommandsTest.cs" />
     <Compile Include="Scheduler\SchedulingScreenPersisterTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftCategoryDistributionModelTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftPerAgentPresenterTest.cs" />
