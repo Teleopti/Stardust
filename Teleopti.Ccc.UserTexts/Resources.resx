@@ -16146,6 +16146,10 @@ Do you want to participate?</value>
     <value>You need a planning period to schedule your agents. Do you want to create a planning period?</value>
     <comment>Help text in resource planner to show that you need to create a planning period</comment>
   </data>
+  <data name="HelpCreatePlanningPeriod" xml:space="preserve">
+    <value>A planning period is needed to schedule your agents.</value>
+    <comment>Help text in resource planner to show that you need to create a planning period</comment>
+  </data>
   <data name="AreYouSureYouWantToClearPlanningPeriodData" xml:space="preserve">
     <value>Are you sure you want to clear scheduled shifts and days off for the planning period {0}-{1} ?</value>
     <comment>AreYouSureYouWantToClearPlaningPeriodData</comment>

@@ -3,9 +3,6 @@
 		<h1>
 			<i class="mdi mdi-calendar"></i> {{'Plans' | translate}} / {{vm.planningGroup.Name}}
 		</h1>
-		<div class="pp-sub-title">
-			<span ng-hide="vm.selectedPp">{{'SelectPpToSchedulePlanningGroup' | translate}} </span>
-		</div>
 	</div>
 </div>
 <div class="con-row" ng-if="!vm.isNonePp()">
@@ -74,8 +71,8 @@
 	<div class="con-flex">
 		<div class="line-center">
 			<i class="mdi mdi-information-outline huge-icon line-center"></i>
-			<h2>{{'YouNeedAPlanningPeriodToScheduleYourAgentsDoYouWantToCreateAPlanningPeriodQuestion' | translate}}</h2>
-			<button class="wfm-btn wfm-btn-primary create-planning-period" ng-click="vm.openCreatePpModal = true;">{{'CreatePlanningPeriod' | translate}}</button>
+			<h2>{{'HelpCreatePlanningPeriod' | translate}}</h2>
+			<button class="wfm-btn wfm-btn-primary create-planning-period" style="margin-top: 30px;" ng-click="vm.openCreatePpModal = true;">{{'CreatePlanningPeriod' | translate}}</button>
 		</div>
 	</div>
 </div>
