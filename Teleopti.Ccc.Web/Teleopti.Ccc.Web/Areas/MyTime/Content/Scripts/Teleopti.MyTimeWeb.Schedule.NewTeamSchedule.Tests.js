@@ -19,6 +19,14 @@
 			Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_NewTeamScheduleView_75989');
 			Teleopti.MyTimeWeb.Common.EnableToggle('MyTimeWeb_NewTeamScheduleViewDesktop_76313');
 			setup();
+
+			Teleopti.MyTimeWeb.Common.SetupCalendar({
+				UseJalaaliCalendar: false,
+				DateFormat: 'YYYY-MM-DD',
+				TimeFormat: 'HH:mm tt',
+				AMDesignator: 'AM',
+				PMDesignator: 'PM'
+			});
 		},
 		teardown: function() {
 			Teleopti.MyTimeWeb.Common.DisableToggle('MyTimeWeb_NewTeamScheduleView_75989');
@@ -43,6 +51,24 @@
 
 		equal(vm.selectedDate().format(dateFormat), today);
 		equal($('.new-teamschedule-view-nav .mobile-datepicker a.formatted-date-text').text(), today);
+	});
+
+	test('should format displayDate', function() {
+		Teleopti.MyTimeWeb.Common.SetupCalendar({
+			UseJalaaliCalendar: true,
+			DateFormat: 'YYYY-MM-DD',
+			TimeFormat: 'HH:mm tt',
+			AMDesignator: 'AM',
+			PMDesignator: 'PM'
+		});
+
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		equal(
+			$('.new-teamschedule-view-nav .mobile-datepicker a.formatted-date-text').text(),
+			Teleopti.MyTimeWeb.Common.FormatDate(moment())
+		);
 	});
 
 	test('should change selected date after clicking on "previous day" icon', function() {
