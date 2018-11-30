@@ -5,10 +5,13 @@
     <div class="sub-header">
       <div class="con-row">
         <div class="con-flex">
-          <nz-input-group [nzSuffix]="suffixTemplate" nzPrefix="search">
+          <nz-input-group [nzSuffix]="suffixTemplate" [nzPrefix]="prefixIconSearch">
             <input nz-input [placeholder]="'Search' | translate" [formControl]="searchControl" (keyup.enter)="onSearch()"
               autofocus data-test-searchinput>
-          </nz-input-group>
+					</nz-input-group>
+					<ng-template #prefixIconSearch>
+						<i nz-icon type="search"></i>
+					</ng-template>
           <ng-template #suffixTemplate>
             <i nz-icon type="close-circle" (click)="searchControl.setValue('')" *ngIf="searchControl.value.length"></i>
           </ng-template>
