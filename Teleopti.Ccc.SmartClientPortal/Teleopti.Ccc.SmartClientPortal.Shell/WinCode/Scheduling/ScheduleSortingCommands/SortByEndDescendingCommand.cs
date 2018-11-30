@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleSortin
 {
     public class SortByEndDescendingCommand : ScheduleSortCommandBase, IScheduleSortCommand
     {
-        public SortByEndDescendingCommand(ISchedulerStateHolder schedulerState) : base(schedulerState)
+        public SortByEndDescendingCommand(SchedulingScreenState schedulerState) : base(schedulerState)
         {
 
         }

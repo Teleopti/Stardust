@@ -1019,7 +1019,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 					if (_scheduleView != null)
 					{
-						var mapper = new SchedulerSortCommandMapper(SchedulerState.SchedulerStateHolder, SchedulerSortCommandSetting.NoSortCommand, _container);
+						var mapper = new SchedulerSortCommandMapper(SchedulerState, SchedulerSortCommandSetting.NoSortCommand, _container);
 						var sortSetting = mapper.GetSettingFromCommand(_scheduleView.Presenter.SortCommand);
 						_currentSchedulingScreenSettings.SortCommandSetting = sortSetting;
 					}
@@ -2049,7 +2049,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			schedulerSplitters1.Grid.Selections.SelectRange(GridRangeInfo.Cell(point.Y, point.X), true);
 			schedulerSplitters1.Grid.Select();
 			var schedulerSortCommandSetting = _currentSchedulingScreenSettings.SortCommandSetting;
-			var sortCommandMapper = new SchedulerSortCommandMapper(SchedulerState.SchedulerStateHolder, SchedulerSortCommandSetting.NoSortCommand,
+			var sortCommandMapper = new SchedulerSortCommandMapper(SchedulerState, SchedulerSortCommandSetting.NoSortCommand,
 				_container);
 			var sortCommand = sortCommandMapper.GetCommandFromSetting(schedulerSortCommandSetting);
 			_scheduleView.Sort(sortCommand);
@@ -5761,22 +5761,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void toolStripMenuItemStartAscMouseUp(object sender, MouseEventArgs e)
 		{
-			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByStartAscendingCommand(SchedulerState.SchedulerStateHolder));
+			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByStartAscendingCommand(SchedulerState));
 		}
 
 		private void toolStripMenuItemStartTimeDescMouseUp(object sender, MouseEventArgs e)
 		{
-			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByStartDescendingCommand(SchedulerState.SchedulerStateHolder));
+			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByStartDescendingCommand(SchedulerState));
 		}
 
 		private void toolStripMenuItemEndTimeAscMouseUp(object sender, MouseEventArgs e)
 		{
-			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByEndAscendingCommand(SchedulerState.SchedulerStateHolder));
+			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByEndAscendingCommand(SchedulerState));
 		}
 
 		private void toolStripMenuItemEndTimeDescMouseUp(object sender, MouseEventArgs e)
 		{
-			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByEndDescendingCommand(SchedulerState.SchedulerStateHolder));
+			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByEndDescendingCommand(SchedulerState));
 		}
 
 		private void toolStripMenuItemUnlockSelectionRmMouseUp(object sender, MouseEventArgs e)
@@ -5976,12 +5976,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void toolStripMenuItemContractTimeAscMouseUp(object sender, MouseEventArgs e)
 		{
-			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByContractTimeAscendingCommand(SchedulerState.SchedulerStateHolder));
+			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByContractTimeAscendingCommand(SchedulerState));
 		}
 
 		private void toolStripMenuItemContractTimeDescMouseUp(object sender, MouseEventArgs e)
 		{
-			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByContractTimeDescendingCommand(SchedulerState.SchedulerStateHolder));
+			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByContractTimeDescendingCommand(SchedulerState));
 		}
 
 		private void toolStripMenuItemSeniorityRankDescMouseUp(object sender, MouseEventArgs e)

@@ -8,25 +8,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleSortin
 {
     public class ScheduleSortCommandBase
     {
-        private readonly ISchedulerStateHolder _schedulerState;
+        private readonly SchedulingScreenState _schedulerState;
         private IList<Tuple<IVisualLayerCollection, IPerson>> _projections = new List<Tuple<IVisualLayerCollection, IPerson>>();
         private List<Tuple<IVisualLayerCollection, IPerson>> _absence = new List<Tuple<IVisualLayerCollection, IPerson>>();
         private List<IPerson> _dayOff = new List<IPerson>();
         private List<IPerson> _empty = new List<IPerson>();
 
-        protected ScheduleSortCommandBase(ISchedulerStateHolder schedulerState)
+        protected ScheduleSortCommandBase(SchedulingScreenState schedulerState)
         {
             _schedulerState = schedulerState;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         protected IList<Tuple<IVisualLayerCollection, IPerson>> Projections
         {
             get { return _projections; }
             set { _projections = value; }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         protected List<Tuple<IVisualLayerCollection, IPerson>> Absence
         {
             get { return _absence; }
@@ -41,9 +39,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleSortin
             _dayOff = new List<IPerson>();
             _empty = new List<IPerson>();
 
-            foreach (var person in _schedulerState.FilteredAgentsDictionary.Values)
+            foreach (var person in _schedulerState.SchedulerStateHolder.FilteredAgentsDictionary.Values)
             {
-                IScheduleDay scheduleDay = _schedulerState.Schedules[person].ScheduledDay(dateOnly);
+                IScheduleDay scheduleDay = _schedulerState.SchedulerStateHolder.Schedules[person].ScheduledDay(dateOnly);
                 SchedulePartView significant = scheduleDay.SignificantPart();
                 if (significant == SchedulePartView.MainShift || significant == SchedulePartView.Overtime)
                 {
@@ -69,26 +67,26 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleSortin
 
         protected void MergeLists()
         {
-			_schedulerState.FilteredAgentsDictionary.Clear();
+			_schedulerState.SchedulerStateHolder.FilteredAgentsDictionary.Clear();
             foreach (var projection in Projections)
             {
                 if (projection.Item2.Id != null)
-                    _schedulerState.FilteredAgentsDictionary.Add(projection.Item2.Id.Value, projection.Item2);
+                    _schedulerState.SchedulerStateHolder.FilteredAgentsDictionary.Add(projection.Item2.Id.Value, projection.Item2);
             }
             foreach (var projection in Absence)
             {
                 if (projection.Item2.Id != null)
-                    _schedulerState.FilteredAgentsDictionary.Add(projection.Item2.Id.Value, projection.Item2);
+                    _schedulerState.SchedulerStateHolder.FilteredAgentsDictionary.Add(projection.Item2.Id.Value, projection.Item2);
             }
             foreach (var person in _dayOff)
             {
                 if (person.Id != null)
-                    _schedulerState.FilteredAgentsDictionary.Add(person.Id.Value, person);
+                    _schedulerState.SchedulerStateHolder.FilteredAgentsDictionary.Add(person.Id.Value, person);
             }
             foreach (var person in _empty)
             {
                 if (person.Id != null)
-                    _schedulerState.FilteredAgentsDictionary.Add(person.Id.Value, person);
+                    _schedulerState.SchedulerStateHolder.FilteredAgentsDictionary.Add(person.Id.Value, person);
             }
         }
     }
