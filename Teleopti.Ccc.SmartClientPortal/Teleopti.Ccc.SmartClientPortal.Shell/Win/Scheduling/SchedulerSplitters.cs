@@ -64,6 +64,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             get { return multipleHostControl1; }
         }
 
+		public AgentInfoControl AgentInfoControl
+		{
+			get { return tabInfoPanels.TabPages[0].Controls[0] as AgentInfoControl;}
+		}
+
 		public TeleoptiLessIntelligentSplitContainer SplitContainerAdvMainContainer
         {
             get { return lessIntellegentSplitContainerAdvMainContainer; }
@@ -322,18 +327,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
         }
 
-		public void SetVirtualSkillHelper(IVirtualSkillHelper virtualSkillHelper)
+		public void Initialize(IVirtualSkillHelper virtualSkillHelper, AgentInfoControl agentInfoControl)
 		{
 			_virtualSkillHelper = virtualSkillHelper;
+			tabInfoPanels.TabPages[0].Controls.Add(agentInfoControl);
+			agentInfoControl.Dock = DockStyle.Fill;
+			tabInfoPanels.Refresh();
 		}
-
-	    public void InsertAgentInfoControl(AgentInfoControl agentInfoControl)
-	    {
-		    tabInfoPanels.TabPages[0].Controls.Add(agentInfoControl);
-		    agentInfoControl.Dock = DockStyle.Fill;
-		    tabInfoPanels.Refresh();
-	    }
-
+		
 	    public void InsertShiftCategoryDistributionModel(IShiftCategoryDistributionModel model)
 		{
 			var shiftCategoryDistributionControl = (ShiftCategoryDistributionControl)tabInfoPanels.TabPages[1].Controls[0];

@@ -117,7 +117,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private readonly SkillMonthGridControl _skillMonthGridControl;
 		private readonly SkillFullPeriodGridControl _skillFullPeriodGridControl;
 		private DateOnly _currentIntraDayDate;
-		private AgentInfoControl _agentInfoControl;
 		private ShiftCategoryDistributionModel _shiftCategoryDistributionModel;
 		private ScheduleViewBase _scheduleView;
 		private RequestView _requestView;
@@ -359,7 +358,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_overriddenBusinessRulesHolder = _container.Resolve<IOverriddenBusinessRulesHolder>();
 			_workShiftWorkTime = _container.Resolve<IWorkShiftWorkTime>();
 			_temporarySelectedEntitiesFromTreeView = allSelectedEntities;
-			schedulerSplitters1.SetVirtualSkillHelper(_container.Resolve<IVirtualSkillHelper>());
 			SchedulerState = new SchedulingScreenState(_container.Resolve<IDisableDeletedFilter>(), _container.Resolve<ISchedulerStateHolder>());
 			_groupPagesProvider = _container.Resolve<SchedulerGroupPagesProvider>();
 			_optimizationHelperExtended = _container.Resolve<IResourceOptimizationHelperExtended>();
@@ -2007,7 +2005,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			toolStripStatusLabelStatus.Text = @"SETTING UP INFO TABS...";
 			Refresh();
-			setupInfoTabs();
+			setupSchedulerSplitters();
 			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXLoadingFormThreeDots");
 			ResumeLayout(true);
 			Refresh();
@@ -3877,14 +3875,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			schedulerSplitters1.PinSavedSkills(_currentSchedulingScreenSettings);
 		}
 
-		private void setupInfoTabs()
+		private void setupSchedulerSplitters()
 		{
 			var requestedPeriod = SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
 			var outerPeriod = new DateOnlyPeriod(requestedPeriod.StartDate.AddDays(-7), requestedPeriod.EndDate.AddDays(7));
+			var agentInfoControl = new AgentInfoControl(_groupPagesProvider, _container, outerPeriod,
+				requestedPeriod, SchedulerState.SchedulerStateHolder, _optionalColumns);
 
-			_agentInfoControl = new AgentInfoControl(_groupPagesProvider, _container, outerPeriod,
-				requestedPeriod, _container.Resolve<IRestrictionExtractor>(), SchedulerState.SchedulerStateHolder, _optionalColumns);
-			schedulerSplitters1.InsertAgentInfoControl(_agentInfoControl);
+			schedulerSplitters1.Initialize(_container.Resolve<IVirtualSkillHelper>(), agentInfoControl);
 
 			//container can fix this to one row
 			ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson =
@@ -4287,7 +4285,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void updateSelectionInfo(IList<IScheduleDay> selectedSchedules)
 		{
 			var updater = new UpdateSelectionForAgentInfo(toolStripStatusLabelContractTime, toolStripStatusLabelScheduleTag);
-			updater.Update(selectedSchedules, _scheduleView, SchedulerState.SchedulerStateHolder, _agentInfoControl, _scheduleTimeType,
+			updater.Update(selectedSchedules, _scheduleView, SchedulerState.SchedulerStateHolder, schedulerSplitters1.AgentInfoControl, _scheduleTimeType,
 				_showInfoPanel);
 		}
 
