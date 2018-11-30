@@ -60,26 +60,26 @@
 
 		vm.LoadTenant = function() {
 			$http.post('./GetOneTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
-				.then(function(data) {
-					vm.TenantMessage = data.Message;
-					vm.TenantId = data.Id,
-						vm.TenantOk = data.Success;
-					vm.Server = data.Server;
-					vm.UseIntegratedSecurity = data.UseIntegratedSecurity;
-					vm.AnalyticsDatabase = data.AnalyticsDatabase;
-					vm.AppDatabase = data.AppDatabase;
-					vm.AggregationDatabase = data.AggregationDatabase;
-					vm.Version = data.Version;
-					vm.CommandTimeout = data.CommandTimeout;
-					vm.Active = data.Active;
-					vm.MobileQRCodeUrl = data.MobileQRCodeUrl;
-					vm.MaximumSessionTime = data.MaximumSessionTime === 0 ? undefined : data.MaximumSessionTime;
+				.then(function(response) {
+					vm.TenantMessage = response.data.Message;
+					vm.TenantId = response.data.Id,
+						vm.TenantOk = response.data.Success;
+					vm.Server = response.data.Server;
+					vm.UseIntegratedSecurity = response.data.UseIntegratedSecurity;
+					vm.AnalyticsDatabase = response.data.AnalyticsDatabase;
+					vm.AppDatabase = response.data.AppDatabase;
+					vm.AggregationDatabase = response.data.AggregationDatabase;
+					vm.Version = response.data.Version;
+					vm.CommandTimeout = response.data.CommandTimeout;
+					vm.Active = response.data.Active;
+					vm.MobileQRCodeUrl = response.data.MobileQRCodeUrl;
+					vm.MaximumSessionTime = response.data.MaximumSessionTime === 0
+						? undefined
+						: response.data.MaximumSessionTime;
 					//vm.CheckAppDb();
 					//vm.CheckAnalDb();
 					vm.CheckDelete();
 					vm.GetImportLog();
-				}).catch(function(xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
 
@@ -119,11 +119,9 @@
 			};
 
 			$http.post('./CheckImportAdmin', model, tokenHeaderService.getHeaders())
-				.then(function(data) {
-					vm.SqlUserOk = data.Success,
-						vm.SqlUserOkMessage = data.Message;
-				}).catch(function(xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				.then(function(response) {
+					vm.SqlUserOk = response.data.Success,
+						vm.SqlUserOkMessage = response.data.Message;
 				});
 		};
 		//vm.CheckTenantName = function () {
@@ -143,23 +141,19 @@
 
 		vm.CheckDelete = function() {
 			$http.post('./TenantCanBeDeleted', '"' + vm.OriginalName + '"', tokenHeaderService.getHeaders())
-				.then(function(data) {
-					vm.AllowDelete = data.Success;
-				}).catch(function(xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				.then(function(response) {
+					vm.AllowDelete = response.data.Success;
 				});
 		};
 
 		vm.Delete = function() {
 			$http.post('./DeleteTenant', '"' + vm.OriginalName + '"', tokenHeaderService.getHeaders())
-				.then(function(data) {
-					if (data.Success === false) {
-						vm.Message = data.Message;
+				.then(function(response) {
+					if (response.data.Success === false) {
+						vm.Message = response.data.Message;
 						return;
 					}
 					window.location = "#";
-				}).catch(function(xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
 
@@ -171,14 +165,12 @@
 				UseIntegratedSecurity: vm.UseIntegratedSecurity
 			};
 			$http.post('./UpgradeTenant', model, tokenHeaderService.getHeaders())
-				.then(function(data) {
-					if (data.Success === false) {
-						vm.Message = data.Message;
+				.then(function(response) {
+					if (response.data.Success === false) {
+						vm.Message = response.data.Message;
 						return;
 					}
 					window.location = "#";
-				}).catch(function(xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
 
@@ -189,10 +181,8 @@
 
 			};
 			$http.post('./AddBusinessUnitToTenant', model, tokenHeaderService.getHeaders())
-				.then(function(data) {
-					vm.NewBusinessUnitMessage = data.Message;
-				}).catch(function(xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				.then(function(response) {
+					vm.NewBusinessUnitMessage = response.data.Message;
 				});
 		};
 		vm.LoadTenant();
@@ -266,9 +256,9 @@
 						MaximumSessionTime: vm.MaximumSessionTime
 					},
 					tokenHeaderService.getHeaders())
-				.then(function(data) {
-					if (data.Success === false) {
-						vm.Message = data.Message;
+				.then(function (response) {
+					if (response.data.Success === false) {
+						vm.Message = response.data.Message;
 						return;
 					}
 					window.location = "#";
@@ -276,20 +266,14 @@
 				.catch(function(xhr, ajaxOptions, thrownError) {
 					vm.Message = xhr.status + xhr.responseText + thrownError;
 					vm.Success = false;
-					console.log(xhr.status + xhr.responseText + thrownError);
 				});
-
 		};
 
 		vm.GetImportLog = function() {
 			$http.post('./GetImportLog', vm.TenantId, tokenHeaderService.getHeaders())
-				.then(function(data) {
-					vm.Log = data;
-				}).catch(function(xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				.then(function(response) {
+					vm.Log = response.data;
 				});
 		};
-
 	}
-
 })();

@@ -50,9 +50,9 @@
 				NewPassword: vm.Password,
 				ConfirmNewPassword: vm.ConfirmPassword
 			}, tokenHeaderService.getHeaders())
-				.then(function (data) {
-					if (!data.Success) {
-						vm.ErrorMessage = data.Message;
+				.then(function (response) {
+					if (!response.data.Success) {
+						vm.ErrorMessage = response.data.Message;
 						return;
 					}
 					window.location = "#";
@@ -60,9 +60,7 @@
 				.catch(function (xhr, ajaxOptions, thrownError) {
 					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 					vm.Success = false;
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
 	}
-
 })();

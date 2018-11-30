@@ -82,15 +82,15 @@
 					JSON.stringify(logDataObject),
 					tokenHeaderService.getHeaders()
 				)
-				.then(function (data) {
+				.then(function (response) {
 					vm.tenantLogData = null;
 					vm.showModal = false;
 					vm.selectedTenant = null;
 					vm.logDataSending = false;
 				})
-				.catch(function (data) {
+				.catch(function (response) {
 					vm.logDataSending = false;
-					vm.tenantLogData.Error = data;
+					vm.tenantLogData.Error = response.data;
 				});
 		}
 

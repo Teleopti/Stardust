@@ -54,11 +54,9 @@
 		vm.CheckTenantName = function() {
 			vm.Message = '';
 			$http.post('./api/Import/IsNewTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
-				.then(function(data) {
-					vm.TenantMessage = data.Message;
-					vm.TenantOk = data.Success;
-				}).catch(function(xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				.then(function(response) {
+					vm.TenantMessage = response.data.Message;
+					vm.TenantOk = response.data.Success;
 				});
 		};
 
@@ -74,13 +72,11 @@
 			};
 
 			$http.post('./CheckCreateDb', model, tokenHeaderService.getHeaders())
-				.then(function(data) {
-					vm.SqlUserOk = data.Success,
-						vm.SqlUserOkMessage = data.Message;
+				.then(function(response) {
+					vm.SqlUserOk = response.data.Success,
+						vm.SqlUserOkMessage = response.data.Message;
 					vm.CheckLogin();
 
-				}).catch(function(xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
 
@@ -104,12 +100,9 @@
 			};
 
 			$http.post('./CheckLogin', model, tokenHeaderService.getHeaders())
-				.then(function(data) {
-					vm.UserOk = data.Success,
-						vm.UserOkMessage = data.Message;
-
-				}).catch(function(xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				.then(function(response) {
+					vm.UserOk = response.data.Success,
+						vm.UserOkMessage = response.data.Message;
 				});
 		};
 
@@ -130,14 +123,13 @@
 			};
 
 			$http.post('./CreateTenant', model, tokenHeaderService.getHeaders())
-				.then(function(data) {
-					vm.Success = data.Success,
-						vm.Message = data.Message;
+				.then(function (response) {
+					vm.Success = response.data.Success,
+						vm.Message = response.data.Message;
 					vm.Creating = '';
 					$("#loading").hide();
 
 				}).catch(function(xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 					vm.Creating = '';
 					vm.Success = false;
@@ -152,14 +144,10 @@
 			};
 
 			$http.post('./CheckFirstUser', model, tokenHeaderService.getHeaders())
-				.then(function(data) {
-					vm.FirstUserOk = data.Success,
-						vm.FirstUserOkMessage = data.Message;
-
-				}).catch(function(xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				.then(function(response) {
+					vm.FirstUserOk = response.data.Success,
+						vm.FirstUserOkMessage = response.data.Message;
 				});
 		};
 	}
-
 })();

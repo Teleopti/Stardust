@@ -180,7 +180,6 @@ root.InnerErrorMessage + '\n' +
 'INNER EXCEPTION STACKTRACE \n' +
 root.InnerErrorStackTrace + '\n' +
 '=========================== \n';
-			console.log(root);
 		}
 
 		function copy(root) {
@@ -190,6 +189,5 @@ root.InnerErrorStackTrace + '\n' +
 				root.Copied = false;
 			}, 5000 );
 		}
-
 	}
 })();

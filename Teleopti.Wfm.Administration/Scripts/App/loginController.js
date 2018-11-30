@@ -46,8 +46,8 @@
 		vm.Id = cookie ? cookie.id : null;
 
 		$http.get("./Etl/ShouldEtlToolBeVisible", tokenHeaderService.getHeaders())
-			.then(function (data) {
-				vm.shouldShowEtl = data;
+			.then(function (response) {
+				vm.shouldShowEtl = response.data;
 
 				$scope.menuItems.push(
 					{
@@ -83,25 +83,26 @@
 
 		$scope.message = "något som jag vill visa";
 
-		$http.get("./HasNoUser").then(function (data) {
-			firstUser = data.data;
-			if (firstUser) {
-				vm.user = 'xxfirstxx';
-				window.location = "firstuser.html";
-			} else {
-				if (!token) {
-					$("#modal-login").dialog({
-						modal: true,
-						title: "Log in to access the admin site",
-						closeOnEscape: false,
-						draggable: false,
-						resizable: false
-					});
+		$http.get("./HasNoUser")
+			.then(function (response) {
+				firstUser = response.data;
+				if (firstUser) {
+					vm.user = 'xxfirstxx';
+					window.location = "firstuser.html";
+				} else {
+					if (!token) {
+						$("#modal-login").dialog({
+							modal: true,
+							title: "Log in to access the admin site",
+							closeOnEscape: false,
+							draggable: false,
+							resizable: false
+						});
+					}
 				}
-			}
-		}).catch(function (xhr, ajaxOptions, thrownError) {
-			console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
-		});
+			}).catch(function (xhr, ajaxOptions, thrownError) {
+				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+			});
 
 		function showError(jqXHR) {
 			vm.ErrorMessage = jqXHR.Message + ': ' + jqXHR.ExceptionMessage;
@@ -117,7 +118,7 @@
 			//lets do authentication in cookie
 			var today = new Date();
 			var expireDate = new Date(today.getTime() + 30 * 60000);
-			$cookies.putObject('WfmAdminAuth', {'tokenKey': data.AccessToken, 'user': data.UserName, 'id': data.Id}, {'expires': expireDate});
+			$cookies.putObject('WfmAdminAuth', { 'tokenKey': data.AccessToken, 'user': data.UserName, 'id': data.Id }, { 'expires': expireDate });
 		}
 
 		updateCookies();
@@ -134,7 +135,7 @@
 					var info = $cookies.getObject('WfmAdminAuth');
 					var today = new Date();
 					var newExpireDate = new Date(today.getTime() + 30 * 60000);
-					$cookies.putObject('WfmAdminAuth', info, {'expires': newExpireDate});
+					$cookies.putObject('WfmAdminAuth', info, { 'expires': newExpireDate });
 				}
 			});
 		}
@@ -151,18 +152,16 @@
 
 			$http.post('./Login',
 				loginData
-			).then(function (data) {
+			).then(function (response) {
 				$("#modal-login").toggleClass("wait");
 				//destory previous cookies
-				if (data.data.Success === false) {
-					//alert(data.Message);
-					vm.ErrorMessage = data.data.Message;
+				if (response.data.Success === false) {
+					vm.ErrorMessage = response.data.Message;
 					return;
 				} else {
-					createCookies(data.data);
+					createCookies(response.data);
 					document.location = "#/";
 					location.reload();
-					//$('#modal-login').dialog('close');
 				}
 
 			}).catch(showError);

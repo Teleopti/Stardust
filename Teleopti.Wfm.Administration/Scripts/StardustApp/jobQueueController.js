@@ -45,13 +45,13 @@
 			});
 
 		$http.get("./Stardust/QueueTypes", tokenHeaderService.getHeaders())
-			.then(function (data) {
-				vm.types = data;
+			.then(function (response) {
+				vm.types = response.data;
 			});
 
 		$http.get("./AllTenants", tokenHeaderService.getHeaders())
-			.then(function (data) {
-				vm.Tenants = data;
+			.then(function (response) {
+				vm.Tenants = response.data;
 			});
 
 		function getJobsByFilter() {
@@ -67,16 +67,15 @@
 
 			var params = { "from": vm.resultsFrom, "to": vm.resultsTo, "dataSource": dataSource, "type": jobType };
 			$http.get("./Stardust/QueuedJobs", tokenHeaderService.getHeadersAndParams(params))
-				.then(function (data) {
-					if (data.length < vm.resultsTo) {
+				.then(function (response) {
+					if (response.data.length < vm.resultsTo) {
 						vm.moreJobs = false;
 					} else {
 						vm.moreJobs = true;
 					}
-					vm.Jobs = data;
+					vm.Jobs = response.data;
 				})
 				.catch(function (xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ": " + xhr.ExceptionMessage);
 					vm.JobError = ajaxOptions;
 					if (xhr !== "") {
 						vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
@@ -137,14 +136,13 @@
 
 		function deleteQueuedJobs() {
 			$http.post("./Stardust/DeleteQueuedJobs",vm.selected, tokenHeaderService.getHeaders())
-				.then(function (data) {
+				.then(function (response) {
 					vm.selected = [];
 					vm.Jobs = [];
 					vm.resultsFrom = 1;
 					getJobs();
 				})
 				.catch(function (xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ": " + xhr.ExceptionMessage);
 					vm.JobError = ajaxOptions;
 					if (xhr !== "") {
 						vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;

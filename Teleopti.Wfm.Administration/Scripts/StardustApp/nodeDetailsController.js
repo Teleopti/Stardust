@@ -20,22 +20,19 @@
 
 		function getJobs(dataExists) {
 			$http.get("./Stardust/WorkerNode/" + vm.NodeId, tokenHeaderService.getHeaders())
-				.then(function(data) {
-					vm.Node = data;
-				})
-				.catch(function(xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				.then(function (response) {
+					vm.Node = response.data;
 				});
 
 			$http.get("./Stardust/JobsByNode/" + vm.NodeId + "/" + vm.resultsFrom + "/" + vm.resultsTo  , tokenHeaderService.getHeaders())
-				.then(function(data) {
-					if (data.length < vm.limit) {
+				.then(function (response) {
+					if (response.data.length < vm.limit) {
 						vm.noMoreJobs = true;
 					}
 					if (dataExists) {
-						vm.Jobs = vm.Jobs.concat(data);
+						vm.Jobs = vm.Jobs.concat(response.data);
 					} else {
-						vm.Jobs = data;
+						vm.Jobs = response.data;
 					}
 				})
 				.catch(function(xhr, ajaxOptions, thrownError) {

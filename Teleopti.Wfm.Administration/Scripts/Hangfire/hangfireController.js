@@ -17,10 +17,9 @@
 	});
 
 	function hangfireController($http, tokenHeaderService, $scope) {
-		$http.get("./Hangfire/GetUrl", tokenHeaderService.getHeaders()).then(function (data) {
-			$scope.HangfireUrl = data;
-		}).catch(function (xhr, ajaxOptions, thrownError) {
-			console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+		$http.get("./Hangfire/GetUrl", tokenHeaderService.getHeaders())
+			.then(function (response) {
+				$scope.HangfireUrl = response.data;
 		});
 	}
 })();

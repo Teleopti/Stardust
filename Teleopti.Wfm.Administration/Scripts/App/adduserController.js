@@ -24,8 +24,8 @@
 		vm.FirstUser = false;
 		vm.SaveEnabled = false;
 
-		$http.get("./HasNoUser").then(function(data) {
-			vm.FirstUser = data;
+		$http.get("./HasNoUser").then(function (response) {
+			vm.FirstUser = response.data;
 		}).catch(function(xhr, ajaxOptions, thrownError) {
 			console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 		});
@@ -62,9 +62,9 @@
 							Email: vm.Email
 						},
 						tokenHeaderService.getHeaders())
-					.then(function(data) {
-						if (!data.Success) {
-							vm.EmailMessage = data.Message;
+					.then(function (response) {
+						if (!response.data.Success) {
+							vm.EmailMessage = response.data.Message;
 							vm.EmailOk = false;
 						} else {
 							vm.EmailMessage = "Email ok.";
@@ -75,7 +75,6 @@
 					.catch(function(xhr, ajaxOptions, thrownError) {
 						vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 						vm.Success = false;
-						console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 					});
 			}
 			vm.CheckAll();
@@ -115,9 +114,9 @@
 						ConfirmPassword: vm.ConfirmPassword
 					},
 					tokenHeaderService.getHeaders())
-				.then(function(data) {
-					if (!data.Success) {
-						vm.ErrorMessage = data.Message;
+				.then(function (response) {
+					if (!response.data.Success) {
+						vm.ErrorMessage = response.data.Message;
 						return;
 					}
 					window.location = "#users";
@@ -125,7 +124,6 @@
 				.catch(function(xhr, ajaxOptions, thrownError) {
 					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 					vm.Success = false;
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
 
@@ -136,9 +134,9 @@
 						Email: vm.Email,
 						Password: vm.Password,
 						ConfirmPassword: vm.ConfirmPassword
-					}).then(function(data) {
-					if (!data.Success) {
-						vm.ErrorMessage = data.Message;
+				}).then(function (response) {
+					if (!response.data.Success) {
+						vm.ErrorMessage = response.data.Message;
 						return;
 					}
 					window.location = document.location.toString().replace("firstuser.html", "");
@@ -146,9 +144,7 @@
 				.catch(function(xhr, ajaxOptions, thrownError) {
 					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 					vm.Success = false;
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
 	}
-
 })();

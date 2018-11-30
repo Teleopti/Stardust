@@ -36,18 +36,18 @@
 					params: { toggle: "Wfm_Payroll_SupportMultiDllPayrolls_75959" }
 				},
 				tokenHeaderService.getHeaders())
-			.then(function(data) {
-				vm.showRefreshPayrollFormats = data.data;
+			.then(function(response) {
+				vm.showRefreshPayrollFormats = response.data;
 			});
 
 	$http.get("./AllTenants", tokenHeaderService.getHeaders())
-			.then(function (data) {
-				vm.Tenants = data;
+		.then(function (response) {
+			vm.Tenants = response.data;
 			});
 
 		$http.get("./Stardust/ShowIntradayTool", tokenHeaderService.getHeaders())
-			.then(function (data) {
-				vm.showIntradayTool = data;
+			.then(function (response) {
+				vm.showIntradayTool = response.data;
 			});
 
 		function cancelPollingAndShowExpiredDialog() {
@@ -60,8 +60,8 @@
 
 		function refresh() {
 			$http.get("./Stardust/Jobs", tokenHeaderService.getHeadersAndParams({ "from": 1, "to": 5}))
-				.then(function(data) {
-					vm.RunningJobs = data;
+				.then(function (response) {
+					vm.RunningJobs = response.data;
 					if (data.length > 0) {
 						vm.anyHistory = true;
 						vm.showHistoryAlert = false;
@@ -71,7 +71,6 @@
 					}
 				})
 				.catch(function(xhr, ajaxOptions) {
-					console.log(xhr.Message + ": " + xhr.ExceptionMessage);
 					vm.JobError = ajaxOptions;
 					if (xhr !== "") {
 						vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
@@ -80,9 +79,9 @@
 				});
 
 			$http.get("./Stardust/FailedJobs", tokenHeaderService.getHeadersAndParams({ "from": 1, "to": 5}))
-				.then(function(data) {
-					vm.FailedJobs = data;
-					if (data.length > 0) {
+				.then(function (response) {
+					vm.FailedJobs = response.data;
+					if (response.data.length > 0) {
 						vm.anyFailedJobs = true;
 						vm.showFailureAlert = true;
 					} else {
@@ -91,7 +90,6 @@
 					}
 				})
 				.catch(function(xhr, ajaxOptions) {
-					console.log(xhr.Message + ": " + xhr.ExceptionMessage);
 					vm.JobError = ajaxOptions;
 					if (xhr !== "") {
 						vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
@@ -100,16 +98,15 @@
 				});
 
 			$http.get("./Stardust/QueuedJobs", tokenHeaderService.getHeadersAndParams({ "from": 1, "to": 5 }))
-				.then(function(data) {
-					vm.QueuedJobs = data;
-					if (data.length > 0) {
+				.then(function (response) {
+					vm.QueuedJobs = response.data;
+					if (response.data.length > 0) {
 						vm.anyQueuedJobs = true;
 					} else {
 						vm.anyQueuedJobs = false;
 					}
 				})
 				.catch(function(xhr, ajaxOptions) {
-					console.log(xhr.Message + ": " + xhr.ExceptionMessage);
 					vm.JobError = ajaxOptions;
 					if (xhr !== "") {
 						vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
@@ -118,14 +115,14 @@
 				});
 
 			$http.get("./Stardust/QueueCount", tokenHeaderService.getHeaders())
-				.then(function (data) {
-					vm.queueCount = data;
+				.then(function (response) {
+					vm.queueCount = response.data;
 				});
 
 			$http.get("./Stardust/AliveWorkerNodes", tokenHeaderService.getHeaders())
-				.then(function(data) {
-					vm.WorkerNodes = data;
-					if (data.length > 0) {
+				.then(function (response) {
+					vm.WorkerNodes = response.data;
+					if (response.data.length > 0) {
 						vm.anyNodes = true;
 						vm.showNodesAlert = false;
 					} else {
@@ -135,7 +132,6 @@
 				})
 				.catch(function(xhr, ajaxOptions) {
 					vm.NodeError = ajaxOptions;
-					console.log(xhr.Message + ": " + xhr.ExceptionMessage);
 					if (xhr !== "") {
 						vm.NodeError = vm.NodeError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
 					}
@@ -165,9 +161,9 @@
 			vm.showHealthAlert = false;
 			$http.get("./Stardust/HealthCheck",
 					tokenHeaderService.getHeaders())
-				.then(function(data) {
-					vm.result = data;
-					if (data !== "Everything looks OK!")
+				.then(function (response) {
+					vm.result = response.data;
+					if (response.data !== "Everything looks OK!")
 						vm.showHealthAlert = true;
 					refresh();
 				})
