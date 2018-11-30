@@ -105,6 +105,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			requestViewModel.TypeText = request.Request.RequestTypeDescription;
 			requestViewModel.StatusText = request.StatusText;
 			requestViewModel.Status = getRequestStatus(request);
+			requestViewModel.IsNew = request.IsNew;
+			requestViewModel.IsPending = request.IsPending;
+			requestViewModel.IsApproved = request.IsApproved;
+			requestViewModel.IsWaitlisted = request.IsWaitlisted;
+			requestViewModel.IsDenied = request.IsDenied;
 			requestViewModel.Payload = request.Request.RequestPayloadDescription;
 			requestViewModel.Team = team?.SiteAndTeam;
 		}

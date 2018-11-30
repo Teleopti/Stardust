@@ -2,7 +2,7 @@
 	<i
 		class="mdi mdi-calendar cursor-pointer inline-block"
 		ng-if="grid.appScope.enableScheduleIcon"
-		ng-style="{visibility: row.entity.Type == grid.appScope.absenceRequestType ? 'visible': 'hidden'}"
+		ng-style="{visibility: (row.entity.Type == grid.appScope.absenceRequestType) && (row.entity.IsPending || row.entity.IsWaitlisted) ? 'visible': 'hidden'}"
 		ng-click="grid.appScope.toggleAbsenceSchedules(row.entity, $event);"
 		ng-class="{active: row.entity.activeShowSchedule}"
 	>
