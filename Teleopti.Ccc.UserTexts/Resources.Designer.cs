@@ -32147,6 +32147,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select today.
+        /// </summary>
+        public static string SelectToday {
+            get {
+                return ResourceManager.GetString("SelectToday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select days in the chart before modifying.
         /// </summary>
         public static string SelectToModify {
