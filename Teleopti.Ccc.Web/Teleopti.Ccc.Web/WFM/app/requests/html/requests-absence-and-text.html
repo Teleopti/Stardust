@@ -32,7 +32,7 @@
 		<div ng-repeat="shift in vm.shifts" class="requests-shift-row">
 			<div class="requests-shift-info pull-left inline-block text-nowrap-ellipsis text-center relative">
 				<span class="block">{{ shift.Date }}</span>
-				<span ng-if="shift.ShiftStartTime.length > 0">
+				<span ng-if="shift.ShiftStartTime.length > 0 && !shift.IsDayOff">
 					{{ shift.ShiftStartTime }} - {{ shift.ShiftEndTime }}
 				</span>
 			</div>
@@ -47,7 +47,7 @@
 				</md-tooltip>
 			</span>
 			<div class="requests-shift-layer-container pull-left inline-block relative">
-				<div class="dayoff cursor-pointer" ng-if="shift.IsDayOff">
+				<div class="dayoff cursor-pointer absolute" ng-if="shift.IsDayOff">
 					<md-tooltip md-z-index="1200" class="multiline-tooltip layer-summary">
 						<p>{{ shift.DayOffName }}</p>
 					</md-tooltip>

@@ -507,7 +507,6 @@ wfm-multiple-search-input {
 			width: 100%;
 			height: calc(100% - 30px);
 			overflow: auto;
-			padding-right: 5px;
 
 			&::-webkit-scrollbar {
 				width: 8px;
@@ -550,10 +549,10 @@ wfm-multiple-search-input {
 			height: 23px;
 			border-radius: 4px;
 			padding: 2px;
-			margin: 2px 4px;
+			margin: 2px 5px;
 		}
 		.requests-shift-layer-container {
-			width: calc(100% - 120px - 31px);
+			width: calc(100% - 120px - 33px);
 			height: 25px;
 			border-radius: 4px;
 			overflow: hidden;
@@ -565,6 +564,16 @@ wfm-multiple-search-input {
 		.dayoff,
 		.layer {
 			height: 100%;
+		}
+
+		.dayoff {
+			width: 100%;
+
+			& + .layer {
+				left: 25% !important;
+				right: 75% !important;
+				width: 50% !important;
+			}
 		}
 	}
 
