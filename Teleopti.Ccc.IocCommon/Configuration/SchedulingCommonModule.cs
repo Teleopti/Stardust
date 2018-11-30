@@ -170,7 +170,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PeriodValueCalculatorProvider>().As<IPeriodValueCalculatorProvider>().SingleInstance();
 			builder.RegisterType<ResourceOptimizationHelperExtended>().As<IResourceOptimizationHelperExtended>().InstancePerLifetimeScope();
 			builder.RegisterType<RequiredScheduleHelper>().InstancePerLifetimeScope();
-			builder.RegisterType<CommonStateHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<PeriodExtractorFromScheduleParts>().SingleInstance();
 
 			builder.RegisterModule<WeeklyRestSolverModule>();

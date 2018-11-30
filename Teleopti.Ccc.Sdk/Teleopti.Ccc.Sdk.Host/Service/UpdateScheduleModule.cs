@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			builder.RegisterType<ScheduleRangeForPerson>().As<IScheduleRangeForPerson>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulerStateHolder>().As<ISchedulerStateHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<TimeZoneGuard>().As<ITimeZoneGuard>().SingleInstance();
-			builder.RegisterType<CommonStateHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<DisableDeletedFilter>().As<IDisableDeletedFilter>().SingleInstance();
 
 			builder.RegisterType<NonBlendSkillCalculator>().As<INonBlendSkillCalculator>().InstancePerLifetimeScope();

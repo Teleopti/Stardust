@@ -34,11 +34,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ResetFilteredPersonsOvertimeAvailability();
 		}
 
-		public SchedulerStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder, CommonStateHolder commonStateHolder, ITimeZoneGuard timeZoneGuard)
+		public SchedulerStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder, IDisableDeletedFilter disableDeletedFilter, ITimeZoneGuard timeZoneGuard)
 		{
+			CommonStateHolder = new CommonStateHolder(disableDeletedFilter);
 			SchedulingResultState = schedulingResultStateHolder;
 			TimeZoneInfo = timeZoneGuard.CurrentTimeZone();
-			CommonStateHolder = commonStateHolder;
 			ChoosenAgents = new List<IPerson>();
 			ResetFilteredPersonsOvertimeAvailability();
 		}
