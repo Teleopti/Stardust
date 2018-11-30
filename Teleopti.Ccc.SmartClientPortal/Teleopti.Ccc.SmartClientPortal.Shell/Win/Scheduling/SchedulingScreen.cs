@@ -6099,7 +6099,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 			var defaultDate = _scheduleView.SelectedDateLocal();
 
-			using (var view = new FilterOvertimeAvailabilityView(defaultDate, SchedulerState.SchedulerStateHolder))
+			using (var view = new FilterOvertimeAvailabilityView(defaultDate, SchedulerState))
 			{
 				if (view.ShowDialog() == DialogResult.OK)
 				{
@@ -6120,7 +6120,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 
 			var defaultDate = _scheduleView.SelectedDateLocal();
-			using (var view = new FilterHourlyAvailabilityView(defaultDate, SchedulerState.SchedulerStateHolder))
+			using (var view = new FilterHourlyAvailabilityView(defaultDate, SchedulerState))
 			{
 				if (view.ShowDialog() == DialogResult.OK)
 				{

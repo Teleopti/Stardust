@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 	{
 		private readonly FilterOvertimeAvailabilityPresenter _presenter;
 
-		public FilterOvertimeAvailabilityView(DateOnly defaultDate, ISchedulerStateHolder schedulerStateHolder)
+		public FilterOvertimeAvailabilityView(DateOnly defaultDate, SchedulingScreenState schedulerStateHolder)
 		{
 			InitializeComponent();
 			outlookTimePickerFrom.EnableNull = false;
