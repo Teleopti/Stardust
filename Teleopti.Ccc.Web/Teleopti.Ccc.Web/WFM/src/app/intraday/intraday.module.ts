@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from '../shared/shared.module';
 import { AngularSkillPickerComponent } from './components/angular-skill-picker/angular-skill-picker.component';
-import { SkillPickerIconComponent } from './components/angular-skill-picker/skill-picker-icon.component';
 import { IntradayChartComponent } from './components/chart/intraday-chart.component';
 import { IntradayDateSelectorComponent } from './components/intraday-date-selector.component';
 import { IntradayMainComponent } from './components/intraday-main.component';
@@ -16,7 +15,6 @@ import { DowngradeableComponent } from '@wfm/types';
 	declarations: [
 		IntradayMainComponent,
 		AngularSkillPickerComponent,
-		SkillPickerIconComponent,
 		IntradayDateSelectorComponent,
 		IntradayChartComponent,
 		IntradayTableComponent
