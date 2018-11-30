@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			StardustJobFeedback.SendProgress($"Will process {200} requests");
 			var taskList = new List<Task>();
 			
-			for (int i=0;i<100;i++)
+			for (int i = 0; i < 100; i++)
 			{
 				var task = Task.Run(() => WithUnitOfWork.Do(() =>
 				{
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			}
 			Task.WaitAll(taskList.ToArray());
 			taskList.Clear();
-			
+
 			for (int i = 100; i < 200; i++)
 			{
 				var task = Task.Run(() => WithUnitOfWork.Do(() =>
@@ -180,7 +180,17 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			}
 			Task.WaitAll(taskList.ToArray());
 
-			WithUnitOfWork.Do(() => QueuedAbsenceRequestRepository.LoadAll().Count().Should().Be(200));
+			WithUnitOfWork.Do(() =>
+			{
+				var list = PersonRequestRepository.FindPersonRequestWithinPeriod(new DateTimePeriod(2016, 3, 16, 2016, 3, 17));
+				var formatting = new NoFormatting();
+				list.Count(pr =>
+				{
+					var subject = pr.GetSubject(formatting);
+					return subject!=null && subject.Equals("Story79139");
+				})
+				.Should().Be(200);
+			});
 		}
 
 		[Test]
