@@ -1,11 +1,9 @@
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
 		<h1>
-			<i class="mdi mdi-calendar"></i> {{'SchedulePlanningGroup' | translate}} - {{vm.planningGroup.Name}}</h1>
+			<i class="mdi mdi-calendar"></i> {{'Plans' | translate}} / {{vm.planningGroup.Name}} /  {{vm.selectedPp.StartDate | amDateFormat:"LL"}} - {{vm.selectedPp.EndDate |
+			amDateFormat:"LL"}}</h1>
 		<div class="pp-sub-title">
-			<span>{{'SelectedPlanningPeriod' | translate}}: {{vm.selectedPp.StartDate | amDateFormat:"LL"}} - {{vm.selectedPp.EndDate |
-				amDateFormat:"LL"}}
-			</span>
 			<span ng-if="vm.isDisable()" ng-bind="vm.status" class="pp-status"></span>
 		</div>
 	</div>
@@ -54,8 +52,6 @@
 					</div>
 					<button class="wfm-btn wfm-btn-invis-default tabLink" id="tabs4" ng-click="vm.showTab('tabs4')">
 						<i class="mdi mdi-information"></i> Planning Group Details</button>
-					<button class="wfm-btn wfm-btn-invis-disabled" ng-click="vm.goDoRulesSetting()">
-						<i class="mdi mdi-information-outline"></i> {{'HelpLabel' | translate}}</button>
 				</div>
 			</div>
 		</div>
