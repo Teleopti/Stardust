@@ -1,6 +1,6 @@
 ﻿(function() {
 	'use strict';
-	angular.module('currentUserInfoService').factory('SupportEmailService', SupportEmailService);
+	angular.module('supportEmailService').factory('SupportEmailService', SupportEmailService);
 	SupportEmailService.$inject = ['$http'];
 	function SupportEmailService($http) {
 		var service = {

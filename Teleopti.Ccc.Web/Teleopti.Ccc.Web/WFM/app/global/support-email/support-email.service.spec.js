@@ -2,7 +2,7 @@
 	var $httpBackend;
 
 	beforeEach(function() {
-		module('currentUserInfoService');
+		module('supportEmailService');
 	});
 
 	beforeEach(inject(function(_$httpBackend_) {
