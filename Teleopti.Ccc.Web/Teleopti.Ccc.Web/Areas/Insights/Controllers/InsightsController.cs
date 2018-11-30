@@ -46,5 +46,11 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Controllers
 		{
 			return await _reportProvider.CloneReport(reportId);
 		}
+
+		[HttpGet, Route("api/Insights/DeleteReport")]
+		public virtual async Task<bool> DeleteReport(string reportId)
+		{
+			return await _reportProvider.DeleteReport(reportId);
+		}
 	}
 }

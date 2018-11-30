@@ -17,3 +17,14 @@
 		}
 	}
 }
+
+:host ::ng-deep .ant-layout-header,
+:host ::ng-deep .ant-layout-footer {
+  background: #fcfcfc;
+  color: #fff;
+}
+
+:host ::ng-deep .report-list {
+  padding-left: 10px;
+  padding-right: 10px;
+}

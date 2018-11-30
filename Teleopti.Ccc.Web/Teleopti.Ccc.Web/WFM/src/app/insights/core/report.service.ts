@@ -13,6 +13,7 @@ export class ReportService {
 	private url_getReports = '../api/Insights/Reports';
 	private url_getPermissions = '../api/Insights/Permission';
 	private url_cloneReport = '../api/Insights/CloneReport';
+	private url_deleteReport = '../api/Insights/DeleteReport';
 
 	async getReportConfig(reportId: string): Promise<ReportConfig> {
 		const parameters = {
@@ -40,6 +41,18 @@ export class ReportService {
 
 	async getReports(): Promise<Report[]> {
 		return this.http.get(this.url_getReports)
+			.toPromise()
+			.catch(this.handleError);
+	}
+
+	async deleteReport(reportId: string): Promise<boolean> {
+		const parameters = {
+			params: {
+				reportId: reportId
+			}
+		};
+
+		return this.http.get(this.url_deleteReport, parameters)
 			.toPromise()
 			.catch(this.handleError);
 	}

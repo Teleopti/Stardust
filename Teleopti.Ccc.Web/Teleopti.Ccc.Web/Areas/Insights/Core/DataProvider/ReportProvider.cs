@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Common.Logging;
@@ -114,6 +115,32 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 				result.ReportId = newReport.Id;
 
 				return result;
+			}
+		}
+
+		public async Task<bool> DeleteReport(string reportId)
+		{
+			if (string.IsNullOrEmpty(reportId))
+			{
+				return false;
+			}
+
+			// Create a Power BI Client object. It will be used to call Power BI APIs.
+			using (var client = await _powerBiClientFactory.CreatePowerBiClient())
+			{
+				try
+				{
+					// Get a list of reports.
+					var groupId = _configReader.AppConfig("PowerBIGroupId");
+					client.Reports.DeleteReport(groupId, reportId);
+				}
+				catch (Exception ex)
+				{
+					logger.Error($"Failed to delete report with Id={reportId}", ex);
+					return false;
+				}
+
+				return true;
 			}
 		}
 
