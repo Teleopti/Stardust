@@ -68,7 +68,7 @@
 		//This is bad and should be reworked. //Anders Sjöberg 2018-07-31
 		function onResponseError(rejection) {
 			var NoticeService = $injector.get('NoticeService');
-			var Settings = $injector.get('Settings');
+			var SupportEmailService = $injector.get('SupportEmailService');
 
 			if (typeof rejection.headers === 'function') {
 				ensureClientIsUpToDate(rejection.headers);
@@ -137,9 +137,9 @@
 						"<span class='test-alert'></span>" +
 							$translate.instant('InternalErrorMessage') +
 							'<a href="mailto:' +
-							Settings.supportEmailSetting +
+							SupportEmailService.supportEmailSetting +
 							'">' +
-							Settings.supportEmailSetting +
+							SupportEmailService.supportEmailSetting +
 							'</a>',
 						null,
 						false

@@ -1,4 +1,4 @@
-﻿describe('SettingsService', function() {
+﻿describe('SupportEmailService', function() {
 	var $httpBackend;
 
 	beforeEach(function() {

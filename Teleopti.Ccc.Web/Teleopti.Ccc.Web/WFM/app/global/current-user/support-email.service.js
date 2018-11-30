@@ -1,8 +1,8 @@
 ﻿(function() {
 	'use strict';
-	angular.module('currentUserInfoService').factory('Settings', Settings);
-	Settings.$inject = ['$http'];
-	function Settings($http) {
+	angular.module('currentUserInfoService').factory('SupportEmailService', SupportEmailService);
+	SupportEmailService.$inject = ['$http'];
+	function SupportEmailService($http) {
 		var service = {
 			init: init
 		};
