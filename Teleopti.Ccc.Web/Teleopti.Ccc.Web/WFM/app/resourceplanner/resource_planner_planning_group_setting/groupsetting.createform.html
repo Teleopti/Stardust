@@ -12,6 +12,7 @@
 </div>
 <div class="con-row">
 	<div class="con-flex">
+		<form name="form" class="wfm-form">
 		<card-panel-list>
 			<card-panel pre-open="true">
 				<card-panel-header>
@@ -24,9 +25,14 @@
 						<div class="con-flex">
 							<div class="form-input-wrap">
 								<label for="schedulingSettingName" translate>NameColon</label>
-								<input type="text" name="schedulingSettingName" id="schedulingSettingName" ng-disabled="vm.default" ng-model="vm.settingInfo.Name" class="pg-setting-name"
+								<input type="text" name="schedulingSettingName" id="schedulingSettingName" ng-disabled="vm.default" ng-model="vm.settingInfo.Name" class="pg-setting-name" required minlength="1" maxlength="100" autofocus
 								/>
-								<p class="text-danger" ng-show="!vm.isValidName()" translate> NameRequired </p>
+								<div ng-cloak class="animate-show"
+									 ng-show="(form.$submitted || form.schedulingSettingName.$touched) && form.schedulingSettingName.$error.required">
+									<div class="form-input-message formInvalidInput">{{'YouCannotHaveABlankName' | translate
+										}}
+									</div>
+								</div>
 							</div>
 						</div>
 						<div class="con-flex" ng-if="vm.default">
@@ -37,9 +43,9 @@
 						</div>
 						<div class="con-flex">
 							<div class="form-input-wrap" ng-hide="vm.default">
-								<label for="autocomplete-form" translate>Filter:</label>
-								<form name="autocomplete-form">
-									<md-autocomplete md-no-cache="true" md-selected-item="vm.selectedItem" md-search-text="vm.searchString" placeholder="{{'SearchForDayOff'|translate}}"
+								<label for="filtersId" translate>Filter:</label>
+								<div name="filters" id="filtersId">
+									<md-autocomplete md-input-name="filters" md-no-cache="true" md-selected-item="vm.selectedItem" md-search-text="vm.searchString" placeholder="{{'SearchForDayOff'|translate}}"
 									 md-items="item in vm.inputFilterData()" md-item-text="vm.searchString" md-selected-item-change="vm.selectResultItem(vm.selectedItem)">
 										<md-item-template>
 											<div class="wfm-chip-wrap">
@@ -53,11 +59,12 @@
 											<p translate>noSearchResults</p>
 										</md-not-found>
 									</md-autocomplete>
-								</form>
+								</div>
+								<div ng-cloak
+									 ng-show="(form.$submitted || form.filters.$touched) && !vm.isValidFilters()">
+									<span class="form-input-message formInvalidInput" translate>YouMustSelectAtLeastOneFilter</span>
+								</div>
 							</div>
-							<p class="text-danger" ng-show="!vm.isValidFilters()">
-								<span translate>ValidationforFilter</span>
-							</p>
 						</div>
 					</div>
 					<div class="con-row demo-outline wfm-card-content" ng-show="vm.settingInfo.Filters.length > 0">
@@ -241,5 +248,6 @@
 				</div>
 			</div>
 		</div>
+		</form>
 	</div>
 </div>
