@@ -195,15 +195,5 @@ namespace Teleopti.Ccc.WinCodeTest.FakeData
        {
            get { return new DateOnly(2008, 1, 1); }
        }
-
-       public static DateOnly DateOnlyNotInRange
-       {
-           get { return new DateOnly(1999, 1, 1); }
-       }
-
-       public static DateOnly DateOnlyInRange
-       {
-           get { return new DateOnly(2006, 1, 1); }
-       }
     }
 }

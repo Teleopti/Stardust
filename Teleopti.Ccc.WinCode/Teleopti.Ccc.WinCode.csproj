@@ -89,8 +89,6 @@
     <Compile Include="Common\IPortalSettings.cs" />
     <Compile Include="Scheduling\ISchedulingScreenSettings.cs" />
     <Compile Include="PeopleAdmin\PersonFinderSettings.cs" />
-    <Compile Include="Reporting\ReportSettingsScheduleAuditing.cs" />
-    <Compile Include="Reporting\ReportSettingsScheduledTimePerActivity.cs" />
     <Compile Include="Reporting\ReportSettingsScheduledTimeVersusTarget.cs" />
     <Compile Include="Scheduling\ScheduleReporting\ScheduleReportDetail.cs" />
     <Compile Include="Scheduling\ScheduleSortingCommands\SchedulerSortCommandSetting.cs" />
