@@ -169,8 +169,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 			Browser.Interactions.WaitScopeCondition(".ui-grid", "vm.isLoading", false,
 					() =>
 					{
-					Browser.Interactions.AssertAnyContains("td.ng-binding", userName);
-				});
+						Browser.Interactions.AssertAnyContains("td.ng-binding", userName);
+					});
 		}
 
 		[Then(@"I should see a absence and text request from '(.*)' in the list")]
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 			Browser.Interactions.WaitScopeCondition(".ui-grid", "vm.isLoading", false,
 				() =>
 				{
-					Browser.Interactions.AssertAnyContains("div.ui-grid-cell-contents.ng-binding", userName);
+					Browser.Interactions.AssertAnyContains(".ui-grid .request-absence-name-cell", userName);
 				});
 		}
 
