@@ -2643,7 +2643,6 @@
     <Compile Include="Scheduling\Legacy\Commands\GroupPageFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\GroupPersonBuilderForOptimizationFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\GroupScheduleGroupPageDataProvider.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\ICommonStateHolder.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IDisableDeletedFilter.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IGroupPageCreator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IGroupPageFactory.cs" />

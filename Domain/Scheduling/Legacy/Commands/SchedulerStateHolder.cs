@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ResetFilteredPersonsOvertimeAvailability();
 		}
 
-		public SchedulerStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder, ICommonStateHolder commonStateHolder, ITimeZoneGuard timeZoneGuard)
+		public SchedulerStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder, CommonStateHolder commonStateHolder, ITimeZoneGuard timeZoneGuard)
 		{
 			SchedulingResultState = schedulingResultStateHolder;
 			TimeZoneInfo = timeZoneGuard.CurrentTimeZone();
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public IScheduleDictionary Schedules => SchedulingResultState.Schedules;
 
-		public ICommonStateHolder CommonStateHolder { get; }
+		public CommonStateHolder CommonStateHolder { get; }
 
 		public IEnumerable<DateOnly> DaysToRecalculate
 		{

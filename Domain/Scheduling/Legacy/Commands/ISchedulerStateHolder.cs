@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		TimeZoneInfo TimeZoneInfo { get; set; }
 
-		ICommonStateHolder CommonStateHolder { get; }
+		CommonStateHolder CommonStateHolder { get; }
 
 		void LoadCommonState(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory);
 

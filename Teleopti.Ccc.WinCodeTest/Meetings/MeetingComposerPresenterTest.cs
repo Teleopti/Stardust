@@ -525,30 +525,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _mocks.VerifyAll();
         }
 
-        [Test]
-        public void ShouldUseAnActiveActivityAsDefaultActivityForMeeting()
-        {
-            var commonStateHolder = _mocks.DynamicMock<ICommonStateHolder>();
-            Expect.Call(commonStateHolder.Activities).Return(new [] {_activity});
-
-            Expect.Call(_schedulerStateHolder.RequestedScenario).Return(_scenario);
-            Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(_timeZone);
-            Expect.Call(_schedulerStateHolder.CommonNameDescription).Return(_commonNameDescriptionSetting);
-            Expect.Call(_schedulerStateHolder.CommonStateHolder).Return(commonStateHolder);
-
-            _mocks.ReplayAll();
-            MeetingViewModel meetingViewModel = MeetingComposerPresenter.CreateDefaultMeeting(_person,
-                                                                                              _schedulerStateHolder,
-                                                                                              _model.StartDate,
-                                                                                              new List<IPerson>
-                                                                                                  {
-                                                                                                      _requiredPerson,
-                                                                                                      _optionalPerson
-                                                                                                  }, _now);
-            Assert.AreEqual(_activity.Id, meetingViewModel.Activity.Id);
-            _mocks.VerifyAll();
-        }
-
 		[Test]
 		public void VerifyTrySave()
 		{
