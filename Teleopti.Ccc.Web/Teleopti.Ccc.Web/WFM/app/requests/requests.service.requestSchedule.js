@@ -71,7 +71,10 @@
 
 			var shiftEndTime = svc.formatTime(periods[periods.length - 1].EndTime, currentTimeZone, targetTimeZone);
 
-			if (moment(periods[0].StartTime).isBefore(moment(periods[periods.length - 1].EndTime), 'day')) {
+			var shiftStartDateTime = moment.tz(periods[0].StartTime, currentTimeZone).tz(targetTimeZone);
+			var shiftEndDateTime = moment.tz(periods[periods.length - 1].EndTime, currentTimeZone).tz(targetTimeZone);
+
+			if (moment.duration(shiftEndDateTime.startOf('day') - shiftStartDateTime.startOf('day')).days() == 1) {
 				shiftEndTime += '+1';
 			}
 
