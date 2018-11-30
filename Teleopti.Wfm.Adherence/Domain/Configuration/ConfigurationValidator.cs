@@ -38,7 +38,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Configuration
 				where !valid
 				select new ConfigurationValidationViewModel
 				{
-					Resource = nameof(Ccc.UserTexts.Resources.DefaultStateGroupMissingInConfiguration),
+					Resource = "DefaultStateGroupMissingInConfiguration",
 					Data = new[] {businessUnit.Name}
 				};
 		}
@@ -50,7 +50,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Configuration
 				where !valid
 				select new ConfigurationValidationViewModel
 				{
-					Resource = nameof(Ccc.UserTexts.Resources.LoggedOutStateGroupMissingInConfiguration),
+					Resource = "LoggedOutStateGroupMissingInConfiguration",
 					Data = new[] {businessUnit.Name}
 				};
 		}
@@ -63,7 +63,7 @@ namespace Teleopti.Wfm.Adherence.Domain.Configuration
 				{
 					new ConfigurationValidationViewModel
 					{
-						Resource = nameof(Ccc.UserTexts.Resources.LoggedOutStateGroupMissingInRtaService)
+						Resource = "LoggedOutStateGroupMissingInRtaService"
 					}
 				};
 			return Enumerable.Empty<ConfigurationValidationViewModel>();
