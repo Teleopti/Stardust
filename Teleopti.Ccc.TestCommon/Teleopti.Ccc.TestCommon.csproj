@@ -285,7 +285,6 @@
     <Compile Include="FakeRepositories\FakePayrollResultRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAssignmentWriteSideRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAssociationPublisherCheckSumPersister.cs" />
-    <Compile Include="FakeRepositories\FakePersonSelectorReadOnlyRepository.cs" />
     <Compile Include="FakeRepositories\FakePurgeSettingRepository.cs" />
     <Compile Include="FakeRepositories\FakePushMessageRepository.cs" />
     <Compile Include="FakeRepositories\FakeQueuedAbsenceRequestRepository.cs" />
