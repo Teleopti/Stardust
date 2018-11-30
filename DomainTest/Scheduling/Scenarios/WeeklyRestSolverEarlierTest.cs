@@ -407,7 +407,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		private void setUpSchedules(IPerson agent, IActivity activity, IShiftCategory shiftCategory)
 		{
 			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(weekPeriod, TimeZoneInfo.Utc);
-			SchedulerStateHolder.FilterPersons(new[] { agent });
 			SchedulerStateHolder.SchedulingResultState.LoadedAgents.Add(agent);
 
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
@@ -503,7 +502,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.RussiaTz7ZoneInfo());
 			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(weekPeriod, TimeZoneInfoFactory.MoskowTimeZoneInfo());
-			SchedulerStateHolder.FilterPersons(new[] { agent });
 			SchedulerStateHolder.SchedulingResultState.LoadedAgents.Add(agent);
 
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
@@ -603,7 +601,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.RussiaTz7ZoneInfo());
 			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(weekPeriod, TimeZoneInfoFactory.MoskowTimeZoneInfo());
-			SchedulerStateHolder.FilterPersons(new[] { agent });
 			SchedulerStateHolder.SchedulingResultState.LoadedAgents.Add(agent);
 
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
