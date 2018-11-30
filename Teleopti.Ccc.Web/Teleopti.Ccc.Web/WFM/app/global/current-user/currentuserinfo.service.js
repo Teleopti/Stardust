@@ -3,9 +3,9 @@
 
 	angular.module('currentUserInfoService').service('CurrentUserInfo', CurrentUserInfo);
 
-	CurrentUserInfo.$inject = ['$http', '$q', 'wfmI18nService', 'Settings'];
+	CurrentUserInfo.$inject = ['$http', '$q', 'wfmI18nService'];
 
-	function CurrentUserInfo($http, $q, wfmI18nService, Settings) {
+	function CurrentUserInfo($http, $q, wfmI18nService) {
 		var userName;
 		var defaultTimeZone;
 		var defaultTimeZoneName;
@@ -75,7 +75,6 @@
 				timeout = Date.now() + 90000;
 				wfmI18nService.setLocales(data);
 				SetCurrentUserInfo(data);
-				Settings.init();
 				deferred.resolve(data);
 			});
 			return deferred.promise;
