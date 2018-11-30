@@ -18,21 +18,17 @@ namespace Teleopti.Ccc.Web.Core
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
-		private readonly IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
-		private readonly ITeamRepository _teamRepository;
 
 		public TeamsProvider(ISiteRepository siteRepository,
 			ICurrentBusinessUnit currentBusinessUnit,
 			IPermissionProvider permissionProvider,
-			ILoggedOnUser loggedOnUser, IGroupingReadOnlyRepository groupingReadOnlyRepository, IPersonSelectorReadOnlyRepository personSelectorReadOnlyRepository, ITeamRepository teamRepository)
+			ILoggedOnUser loggedOnUser, IGroupingReadOnlyRepository groupingReadOnlyRepository)
 		{
 			_siteRepository = siteRepository;
 			_currentBusinessUnit = currentBusinessUnit;
 			_permissionProvider = permissionProvider;
 			_loggedOnUser = loggedOnUser;
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
-			_personSelectorReadOnlyRepository = personSelectorReadOnlyRepository;
-			_teamRepository = teamRepository;
 		}
 
 		private IEnumerable<TeamViewModel> getTeamsForSite(ISite site)
@@ -117,52 +113,6 @@ namespace Teleopti.Ccc.Web.Core
 			};
 		}
 
-		public BusinessUnitWithSitesViewModel GetOrganizationBasedOnRawData(DateOnlyPeriod dateOnlyPeriod, string functionPath)
-		{
-			var compare = StringComparer.Create(_loggedOnUser.CurrentUser().PermissionInformation.UICulture(), false);
-			var personSelectorOrganizations = _personSelectorReadOnlyRepository.GetOrganizationForWeb(dateOnlyPeriod);
-			Guid? logonUserTeamId = getPermittedLogonTeam(dateOnlyPeriod.StartDate, functionPath);
-
-			var sites = personSelectorOrganizations
-				.GroupBy(item => item.SiteId)
-				.Select(site =>
-				{
-					var teamsInSite = _teamRepository.FindTeams(site.Select(s => s.TeamId.GetValueOrDefault()));
-					var permittedTeams = getPermittedTeams(dateOnlyPeriod.StartDate, functionPath, logonUserTeamId,
-						teamsInSite.ToList())
-						.Where(t => t.IsChoosable)
-						.ToList();
-					if (permittedTeams.Any())
-					{
-						return new SiteViewModelWithTeams
-						{
-							Id = site.Key.GetValueOrDefault(),
-							Name = site.First().Site,
-							Children = permittedTeams
-							.Select(t => new TeamViewModel
-							{
-								Id = t.Id.GetValueOrDefault(),
-								Name = t.Description.Name
-							})
-							.OrderBy(t => t.Name, compare)
-							.ToList()
-						};
-					}
-					return null;
-				})
-				.Where(site => site != null)
-				.OrderBy(s => s.Name, compare)
-				.ToList();
-
-			return new BusinessUnitWithSitesViewModel
-			{
-				Id = _currentBusinessUnit.Current().Id ?? Guid.Empty,
-				Name = _currentBusinessUnit.Current().Name,
-				Children = sites,
-				LogonUserTeamId = logonUserTeamId
-			};
-
-		}
 		public BusinessUnitWithSitesViewModel GetOrganizationWithPeriod(DateOnlyPeriod dateOnlyPeriod, string functionPath)
 		{
 			var compare = StringComparer.Create(_loggedOnUser.CurrentUser().PermissionInformation.UICulture(), false);
