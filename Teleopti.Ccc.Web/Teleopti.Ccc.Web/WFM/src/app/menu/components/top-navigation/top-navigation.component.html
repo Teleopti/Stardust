@@ -20,7 +20,7 @@
 			</div>
 			
 			<a [href]="helpUrl$ | async" [nzTitle]="'HelpLabel'|translate" nzPlacement="bottom" nz-tooltip [nzMouseEnterDelay]="0.5" [nzMouseLeaveDelay]="0" target="_blank" class="help-link" rel="noopener">
-				<i class="mdi mdi-help-circle"></i>
+					<i nz-icon type="question-circle" theme="outline" style="font-size: 16px"></i>
     </a>
 
     <settings-menu class="settings-menu" [nzTitle]="'UserSettings'|translate" nzPlacement="bottom" nzOverlayClassName="tooltip" [nzMouseEnterDelay]="0.5" [nzMouseLeaveDelay]="0" nz-tooltip>      
