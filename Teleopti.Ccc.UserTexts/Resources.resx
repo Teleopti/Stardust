@@ -14141,8 +14141,8 @@ Check your internet connection or contact your administrator.</value>
     <comment>Clear campaign</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>Remember me?</value>
-    <comment>Remember me?</comment>
+    <value>Remember me</value>
+    <comment>Checkbox to remember login information</comment>
   </data>
   <data name="MyTeam" xml:space="preserve">
     <value>MyTeam</value>
