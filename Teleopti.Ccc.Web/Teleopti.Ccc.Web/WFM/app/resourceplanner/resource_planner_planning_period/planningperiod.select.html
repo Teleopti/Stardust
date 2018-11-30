@@ -1,7 +1,7 @@
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
 		<h1>
-			<i class="mdi mdi-calendar"></i> {{'PlanningGroup' | translate}} - {{vm.planningGroup.Name}}
+			<i class="mdi mdi-calendar"></i> {{'Plans' | translate}} / {{vm.planningGroup.Name}}
 		</h1>
 		<div class="pp-sub-title">
 			<span ng-hide="vm.selectedPp">{{'SelectPpToSchedulePlanningGroup' | translate}} </span>
@@ -29,10 +29,8 @@
 						<i class="mdi mdi-checkbox-blank-circle pp-scheduled-label"></i> {{'SchedulingSucceeded' | translate}}</span>
 					<span class="pp-label">
 						<i class="mdi mdi-checkbox-blank-circle pp-scheduled-failed-label"></i> {{'SchedulingFailed' | translate}}</span>
-					<button class="wfm-btn wfm-btn-invis-disabled" ng-click="">
-						<i class="mdi mdi-information-outline"></i> {{'HelpLabel' | translate}}</button>
 				</div>
-			</div>
+			</div>	
 		</div>
 	</div>
 </div>
