@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public IPersonAbsenceAccount FetchPersonAbsenceAccount(IPerson person, IAbsence absence)
 		{
-			var personAccounts = _provider.Find(person);
+			var personAccounts = _provider.Find(person, absence);
 			return personAccounts.Find(absence);
 		}
 

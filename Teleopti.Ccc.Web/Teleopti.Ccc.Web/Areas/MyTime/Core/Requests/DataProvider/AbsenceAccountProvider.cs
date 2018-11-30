@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 		public IAccount GetPersonAccount(IAbsence absence, DateOnly date)
 		{
-			return _repository.Find(_loggedOnUser.CurrentUser()).Find(absence, date);
+			return _repository.Find(_loggedOnUser.CurrentUser(), absence).Find(absence, date);
 		}
 	}
 }

@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 
-
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
 	public class PersonAccountViewModelMapper
@@ -12,7 +11,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private const string trackerTypeOthers = "Others";
 		private const string trackerTypeDays = "Days";
 		private const string trackerTypeHours = "Hours";
+
 		private readonly IUserTimeZone _userTimeZone;
+
+		private static readonly Type DayTracker = Tracker.CreateDayTracker().GetType();
+		private static readonly Type TimeTracker = Tracker.CreateTimeTracker().GetType();
 
 		public PersonAccountViewModelMapper(IUserTimeZone timeZone)
 		{
@@ -29,45 +32,31 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return new AbsenceAccountViewModel
 			{
 				AbsenceName = absence.Name,
-				TrackerType = trackerType,
+				TrackerType = trackerType.Item1,
 				PeriodStart = TimeZoneInfo.ConvertTimeFromUtc(absenceAccount.StartDate.Date, timezone),
 				PeriodEnd = TimeZoneInfo.ConvertTimeFromUtc(absenceAccount.Period().EndDate.Date, timezone),
-				Accrued = convertTimeSpanToString(absenceAccount.Accrued, trackerType),
-				Used = convertTimeSpanToString(absenceAccount.LatestCalculatedBalance, trackerType),
-				Remaining = convertTimeSpanToString(absenceAccount.Remaining, trackerType)
+				Accrued = trackerType.Item2(absenceAccount.Accrued),
+				Used = trackerType.Item2(absenceAccount.LatestCalculatedBalance),
+				Remaining = trackerType.Item2(absenceAccount.Remaining)
 			};
 		}
 
-		private static string getTrackerType(ITracker tracker)
+		private static (string,Func<TimeSpan,string>) getTrackerType(ITracker tracker)
 		{
-			var trackerType = trackerTypeOthers;
-			if (tracker == null) return trackerType;
+			if (tracker == null) return (trackerTypeOthers, _ => string.Empty);
 
 			var classTypeOfTracker = tracker.GetType();
-			if (classTypeOfTracker == Tracker.CreateDayTracker().GetType())
+			if (classTypeOfTracker == DayTracker)
 			{
-				trackerType = trackerTypeDays;
+				return (trackerTypeDays, ts => ts.TotalDays.ToString(CultureInfo.CurrentCulture));
 			}
-			else if (classTypeOfTracker == Tracker.CreateTimeTracker().GetType())
+
+			if (classTypeOfTracker == TimeTracker)
 			{
-				trackerType = trackerTypeHours;
+				return (trackerTypeHours, ts => TimeHelper.GetLongHourMinuteTimeString(ts, CultureInfo.CurrentCulture));
 			}
-			return trackerType;
-		}
 
-		private static string convertTimeSpanToString(TimeSpan ts, string trackerType)
-		{
-			switch (trackerType)
-			{
-				case trackerTypeDays:
-					return ts.TotalDays.ToString(CultureInfo.CurrentCulture);
-
-				case trackerTypeHours:
-					return TimeHelper.GetLongHourMinuteTimeString(ts, CultureInfo.CurrentCulture);
-
-				default:
-					return string.Empty;
-			}
+			return (trackerTypeOthers, _ => string.Empty);
 		}
 	}
 }
