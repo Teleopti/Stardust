@@ -557,6 +557,10 @@ wfm-multiple-search-input {
 			height: 25px;
 			border-radius: 4px;
 			overflow: hidden;
+
+			.mdi-account {
+				left: 3px;
+			}
 		}
 		.dayoff,
 		.layer {

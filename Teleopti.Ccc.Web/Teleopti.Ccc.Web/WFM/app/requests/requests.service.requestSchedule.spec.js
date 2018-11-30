@@ -19,7 +19,11 @@ describe('requestScheduleService', function() {
 					IsOvertime: false,
 					StartPositionPercentage: 0.0,
 					EndPositionPercentage: 0.25,
-					Meeting: null
+					Meeting: {
+						Title: 'Meeting Title',
+						Description: 'Meeting Description',
+						Location: 'Meeting Location'
+					}
 				},
 				{
 					Title: 'Short break',
@@ -109,12 +113,14 @@ describe('requestScheduleService', function() {
 		expect(shiftData.Periods[0].Title).toBe('Social Media');
 		expect(shiftData.Periods[0].TimeSpan).toBe('8:00 PM - 10:15 PM');
 		expect(shiftData.Periods[0].Color).toBe('rgb(30,144,255)');
+		expect(shiftData.Periods[0].Meeting.Title).toBe('Meeting Title');
+		expect(shiftData.Periods[0].Meeting.Description).toBe('Meeting Description');
+		expect(shiftData.Periods[0].Meeting.Location).toBe('Meeting Location');
 		expect(shiftData.Periods[0].StartTime).toBe('2018-11-23T20:00:00');
 		expect(shiftData.Periods[0].EndTime).toBe('2018-11-23T22:15:00');
 		expect(shiftData.Periods[0].IsOvertime).toBe(false);
 		expect(shiftData.Periods[0].StartPositionPercentage).toBe(0.0);
 		expect(shiftData.Periods[0].EndPositionPercentage).toBe(0.25);
-		expect(shiftData.Periods[0].Meeting).toBe(null);
 		expect(shiftData.Periods[0].Title).toBe('Social Media');
 		expect(shiftData.Periods[0].TimeSpan).toBe('8:00 PM - 10:15 PM');
 		expect(shiftData.Periods[0].Color).toBe('rgb(30,144,255)');
@@ -123,7 +129,6 @@ describe('requestScheduleService', function() {
 		expect(shiftData.Periods[0].IsOvertime).toBe(false);
 		expect(shiftData.Periods[0].StartPositionPercentage).toBe(0.0);
 		expect(shiftData.Periods[0].EndPositionPercentage).toBe(0.25);
-		expect(shiftData.Periods[0].Meeting).toBe(null);
 		expect(shiftData.Periods[shiftData.Periods.length - 1].TimeSpan).toBe('3:30 AM - 5:00 AM');
 		expect(shiftData.IsDayOff).toBe(false);
 		expect(shiftData.IsNotScheduled).toBe(false);
