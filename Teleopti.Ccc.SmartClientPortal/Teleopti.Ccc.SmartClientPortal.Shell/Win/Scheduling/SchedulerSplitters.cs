@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
+using Autofac;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
@@ -331,9 +332,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
         }
 
-		public void Initialize(ISchedulerStateHolder schedulerStateHolder, IVirtualSkillHelper virtualSkillHelper, AgentInfoControl agentInfoControl)
+		public void Initialize(ILifetimeScope container, ISchedulerStateHolder schedulerStateHolder, SchedulerGroupPagesProvider schedulerGroupPagesProvider, IEnumerable<IOptionalColumn> optionalColumns)
 		{
-			_virtualSkillHelper = virtualSkillHelper;
+			_virtualSkillHelper = container.Resolve<IVirtualSkillHelper>();
+
+			var requestedPeriod = schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
+			var outerPeriod = new DateOnlyPeriod(requestedPeriod.StartDate.AddDays(-7), requestedPeriod.EndDate.AddDays(7));
+			var agentInfoControl = new AgentInfoControl(schedulerGroupPagesProvider, container, outerPeriod,
+				requestedPeriod, schedulerStateHolder, optionalColumns);
+
 			tabInfoPanels.TabPages[0].Controls.Add(agentInfoControl);
 			agentInfoControl.Dock = DockStyle.Fill;
 			tabInfoPanels.Refresh();
@@ -362,12 +369,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			shiftCategoryDistributionModel.SetFilteredPersons(schedulerStateHolder.FilteredCombinedAgentsDictionary.Values);
 			var shiftCategoryDistributionControl = (ShiftCategoryDistributionControl)tabInfoPanels.TabPages[1].Controls[0];
 			shiftCategoryDistributionControl.SetModel(shiftCategoryDistributionModel);
-		}
 
-		public void InsertValidationAlertsModel(ValidationAlertsModel model)
-		{
+			agentsNotPossibleToSchedule1.InitAgentsNotPossibleToSchedule(container.Resolve<RestrictionNotAbleToBeScheduledReport>(), this);
 			var validationAlertsControl = (ValidationAlertsView)tabInfoPanels.TabPages[2].Controls[0];
-			validationAlertsControl.SetModel(model);
+			validationAlertsControl.SetModel(new ValidationAlertsModel(
+				schedulerStateHolder.Schedules, NameOrderOption.LastNameFirstName,
+				schedulerStateHolder.RequestedPeriod.DateOnlyPeriod));
 		}
 
 		public void ReselectSelectedAgentNotPossibleToSchedule()
@@ -377,11 +384,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		public void SetSelectedAgentsOnAgentsNotPossibleToSchedule(IEnumerable<IPerson> selectedPersons, DateOnlyPeriod selectedDates, AgentRestrictionsDetailView detailView)
 		{
 			agentsNotPossibleToSchedule1.SetSelected(selectedPersons, selectedDates, detailView);
-		}
-
-		public void InsertRestrictionNotAbleToBeScheduledReportModel(RestrictionNotAbleToBeScheduledReport reportModel)
-		{
-			agentsNotPossibleToSchedule1.InitAgentsNotPossibleToSchedule(reportModel, this);
 		}
 
 		public void DisableViewShiftCategoryDistribution()

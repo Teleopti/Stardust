@@ -2002,7 +2002,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			toolStripStatusLabelStatus.Text = @"SETTING UP INFO TABS...";
 			Refresh();
-			setupSchedulerSplitters();
+			schedulerSplitters1.Initialize(_container, SchedulerState.SchedulerStateHolder, _groupPagesProvider, _optionalColumns);
+			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
 			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXLoadingFormThreeDots");
 			ResumeLayout(true);
 			Refresh();
@@ -3870,22 +3871,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				schedulerSplitters1.TabSkillData.TabPages.Add(tab);
 			}
 			schedulerSplitters1.PinSavedSkills(_currentSchedulingScreenSettings);
-		}
-
-		private void setupSchedulerSplitters()
-		{
-			var requestedPeriod = SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
-			var outerPeriod = new DateOnlyPeriod(requestedPeriod.StartDate.AddDays(-7), requestedPeriod.EndDate.AddDays(7));
-			var agentInfoControl = new AgentInfoControl(_groupPagesProvider, _container, outerPeriod,
-				requestedPeriod, SchedulerState.SchedulerStateHolder, _optionalColumns);
-
-			schedulerSplitters1.Initialize(SchedulerState.SchedulerStateHolder, _container.Resolve<IVirtualSkillHelper>(), agentInfoControl);
-
-		
-			schedulerSplitters1.InsertRestrictionNotAbleToBeScheduledReportModel(
-				_container.Resolve<RestrictionNotAbleToBeScheduledReport>());
-			schedulerSplitters1.InsertValidationAlertsModel(new ValidationAlertsModel(SchedulerState.SchedulerStateHolder.Schedules, NameOrderOption.LastNameFirstName, SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod));
-			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
 		}
 
 		private PersonsFilterView _cachedPersonsFilterView;
