@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions;
@@ -26,7 +30,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
     public partial class SchedulerSplitters : BaseUserControl
     {
         private readonly PinnedSkillHelper _pinnedSkillHelper;
-		private IEnumerable<IPerson> _filteredPersons = new List<IPerson>();
+		private IList<IPerson> _filteredPersons = new List<IPerson>();
 		private IVirtualSkillHelper _virtualSkillHelper;
 		private readonly ContextMenuStrip _contextMenuSkillGrid;
 		private SplitterManagerRestrictionView _splitterManager;
@@ -327,18 +331,37 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
         }
 
-		public void Initialize(IVirtualSkillHelper virtualSkillHelper, AgentInfoControl agentInfoControl)
+		public void Initialize(ISchedulerStateHolder schedulerStateHolder, IVirtualSkillHelper virtualSkillHelper, AgentInfoControl agentInfoControl)
 		{
 			_virtualSkillHelper = virtualSkillHelper;
 			tabInfoPanels.TabPages[0].Controls.Add(agentInfoControl);
 			agentInfoControl.Dock = DockStyle.Fill;
 			tabInfoPanels.Refresh();
-		}
-		
-	    public void InsertShiftCategoryDistributionModel(IShiftCategoryDistributionModel model)
-		{
+
+			//container can fix this to one row
+			ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson =
+				new CachedNumberOfEachCategoryPerPerson(schedulerStateHolder.Schedules, schedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
+			ICachedNumberOfEachCategoryPerDate cachedNumberOfEachCategoryPerDate =
+				new CachedNumberOfEachCategoryPerDate(schedulerStateHolder.Schedules, schedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
+			var allowedSc = new List<IShiftCategory>();
+			foreach (var shiftCategory in schedulerStateHolder.CommonStateHolder.ShiftCategories)
+			{
+				var sc = shiftCategory as IDeleteTag;
+				if (sc != null && !sc.IsDeleted)
+					allowedSc.Add(shiftCategory);
+			}
+			ICachedShiftCategoryDistribution cachedShiftCategoryDistribution =
+				new CachedShiftCategoryDistribution(schedulerStateHolder.Schedules, schedulerStateHolder.RequestedPeriod.DateOnlyPeriod,
+					cachedNumberOfEachCategoryPerPerson,
+					allowedSc);
+			var shiftCategoryDistributionModel = new ShiftCategoryDistributionModel(cachedShiftCategoryDistribution,
+				cachedNumberOfEachCategoryPerDate,
+				cachedNumberOfEachCategoryPerPerson,
+				schedulerStateHolder.RequestedPeriod.DateOnlyPeriod,
+				schedulerStateHolder);
+			shiftCategoryDistributionModel.SetFilteredPersons(schedulerStateHolder.FilteredCombinedAgentsDictionary.Values);
 			var shiftCategoryDistributionControl = (ShiftCategoryDistributionControl)tabInfoPanels.TabPages[1].Controls[0];
-			shiftCategoryDistributionControl.SetModel(model);
+			shiftCategoryDistributionControl.SetModel(shiftCategoryDistributionModel);
 		}
 
 		public void InsertValidationAlertsModel(ValidationAlertsModel model)
@@ -373,15 +396,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			shiftCategoryDistributionControl.EnableViewShiftCategoryDistribution();
 		}
 
-		public void RefreshTabInfoPanels(IEnumerable<IPerson> filteredPersons)
+		public void RefreshFilteredPersons(IEnumerable<IPerson> filteredPersons)
 		{
-			_filteredPersons = filteredPersons;
+			_filteredPersons = filteredPersons.ToList();
 			if(tabInfoPanels.SelectedIndex == 2)
 			{
 				var validationAlertsControl = (ValidationAlertsView)tabInfoPanels.TabPages[2].Controls[0];
 				validationAlertsControl.ReDraw(_filteredPersons);
 			}
 			tabInfoPanels.Refresh();
+
+			var shiftCategoryDistributionControl = (ShiftCategoryDistributionControl)tabInfoPanels.TabPages[1].Controls[0];
+			shiftCategoryDistributionControl.Model.SetFilteredPersons(_filteredPersons);
 		}
 
 	    protected virtual void OnValidationAlertsAgentDoubleClick(ValidationViewAgentDoubleClickEvenArgs e)
@@ -396,7 +422,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void tabInfoPanelsSelectedIndexChanged(object sender, EventArgs e)
 		{
-			RefreshTabInfoPanels(_filteredPersons);
+			RefreshFilteredPersons(_filteredPersons);
 		}
 
 		private void gridResize(object sender, EventArgs e)

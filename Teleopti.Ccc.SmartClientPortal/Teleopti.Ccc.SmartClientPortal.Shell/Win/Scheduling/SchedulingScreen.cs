@@ -94,12 +94,10 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.GridlockCommands;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleSortingCommands;
-using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
-
 
 #endregion
 
@@ -117,7 +115,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private readonly SkillMonthGridControl _skillMonthGridControl;
 		private readonly SkillFullPeriodGridControl _skillFullPeriodGridControl;
 		private DateOnly _currentIntraDayDate;
-		private ShiftCategoryDistributionModel _shiftCategoryDistributionModel;
 		private ScheduleViewBase _scheduleView;
 		private RequestView _requestView;
 		private SchedulerMeetingHelper _schedulerMeetingHelper;
@@ -1769,7 +1766,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				SchedulerState.SchedulerStateHolder.ResetFilteredPersons();
 				agentsDictionary = SchedulerState.SchedulerStateHolder.FilteredCombinedAgentsDictionary;
 			}
-			schedulerSplitters1.RefreshTabInfoPanels(agentsDictionary.Values);
+			schedulerSplitters1.RefreshFilteredPersons(agentsDictionary.Values);
 		}
 
 		private GridRangeInfo _lastGridSelection;
@@ -3161,7 +3158,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				SchedulerState.SchedulerStateHolder.ResetFilteredPersons();
 				agentsDictionary = SchedulerState.SchedulerStateHolder.FilteredCombinedAgentsDictionary;
 			}
-			schedulerSplitters1.RefreshTabInfoPanels(agentsDictionary.Values);
+			schedulerSplitters1.RefreshFilteredPersons(agentsDictionary.Values);
 
 			GridHelper.GridlockWriteProtected(SchedulerState.SchedulerStateHolder, LockManager);
 
@@ -3882,31 +3879,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var agentInfoControl = new AgentInfoControl(_groupPagesProvider, _container, outerPeriod,
 				requestedPeriod, SchedulerState.SchedulerStateHolder, _optionalColumns);
 
-			schedulerSplitters1.Initialize(_container.Resolve<IVirtualSkillHelper>(), agentInfoControl);
+			schedulerSplitters1.Initialize(SchedulerState.SchedulerStateHolder, _container.Resolve<IVirtualSkillHelper>(), agentInfoControl);
 
-			//container can fix this to one row
-			ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson =
-				new CachedNumberOfEachCategoryPerPerson(SchedulerState.SchedulerStateHolder.Schedules, SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
-			ICachedNumberOfEachCategoryPerDate cachedNumberOfEachCategoryPerDate =
-				new CachedNumberOfEachCategoryPerDate(SchedulerState.SchedulerStateHolder.Schedules, SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
-			var allowedSc = new List<IShiftCategory>();
-			foreach (var shiftCategory in SchedulerState.SchedulerStateHolder.CommonStateHolder.ShiftCategories)
-			{
-				var sc = shiftCategory as IDeleteTag;
-				if (sc != null && !sc.IsDeleted)
-					allowedSc.Add(shiftCategory);
-			}
-			ICachedShiftCategoryDistribution cachedShiftCategoryDistribution =
-				new CachedShiftCategoryDistribution(SchedulerState.SchedulerStateHolder.Schedules, SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod,
-					cachedNumberOfEachCategoryPerPerson,
-					allowedSc);
-			_shiftCategoryDistributionModel = new ShiftCategoryDistributionModel(cachedShiftCategoryDistribution,
-				cachedNumberOfEachCategoryPerDate,
-				cachedNumberOfEachCategoryPerPerson,
-				SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod,
-				SchedulerState.SchedulerStateHolder);
-			_shiftCategoryDistributionModel.SetFilteredPersons(SchedulerState.SchedulerStateHolder.FilteredCombinedAgentsDictionary.Values);
-			schedulerSplitters1.InsertShiftCategoryDistributionModel(_shiftCategoryDistributionModel);
+		
 			schedulerSplitters1.InsertRestrictionNotAbleToBeScheduledReportModel(
 				_container.Resolve<RestrictionNotAbleToBeScheduledReport>());
 			schedulerSplitters1.InsertValidationAlertsModel(new ValidationAlertsModel(SchedulerState.SchedulerStateHolder.Schedules, NameOrderOption.LastNameFirstName, SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod));
@@ -6147,8 +6122,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_requestView?.FilterPersons(SchedulerState.SchedulerStateHolder.FilteredCombinedAgentsDictionary.Keys);
 			drawSkillGrid();
 
-			_shiftCategoryDistributionModel.SetFilteredPersons(SchedulerState.SchedulerStateHolder.FilteredCombinedAgentsDictionary.Values);
-			schedulerSplitters1.RefreshTabInfoPanels(SchedulerState.SchedulerStateHolder.FilteredCombinedAgentsDictionary.Values);
+			schedulerSplitters1.RefreshFilteredPersons(SchedulerState.SchedulerStateHolder.FilteredCombinedAgentsDictionary.Values);
 			updateShiftEditor();
 			toolStripStatusLabelNumberOfAgents.Text = LanguageResourceHelper.Translate("XXAgentsColon") + @" " +
 													  SchedulerState.SchedulerStateHolder.FilteredCombinedAgentsDictionary.Count;
