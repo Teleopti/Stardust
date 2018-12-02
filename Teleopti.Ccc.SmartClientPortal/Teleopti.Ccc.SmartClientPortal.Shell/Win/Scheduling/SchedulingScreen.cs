@@ -4252,30 +4252,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (_teamLeaderMode || _scheduleView == null)
 				return;
 
-			if (schedulerSplitters1.TabSkillData.SelectedIndex >= 0)
-			{
-				_currentIntraDayDate = _scheduleView.SelectedDateLocal();
-				TabPageAdv tab = schedulerSplitters1.TabSkillData.TabPages[schedulerSplitters1.TabSkillData.SelectedIndex];
-				var skill = (ISkill)tab.Tag;
-				IAggregateSkill aggregateSkillSkill = skill;
-				_chartDescription = skill.Name;
-
-				var skillGridControl = resolveControlFromSkillResultViewSetting();
-				if (skillGridControl is SkillIntradayGridControl)
-				{
-					drawIntraday(skill, aggregateSkillSkill);
-					return;
-				}
-
-				var selectedSkillGridControl = skillGridControl as SkillResultGridControlBase;
-				if (selectedSkillGridControl == null)
-					return;
-
-				positionControl(skillGridControl);
-				ActiveControl = skillGridControl;
-				selectedSkillGridControl.DrawDayGrid(SchedulerState.SchedulerStateHolder, skill);
-				selectedSkillGridControl.DrawDayGrid(SchedulerState.SchedulerStateHolder, skill);
-			}
+			_currentIntraDayDate = _scheduleView.SelectedDateLocal();
+			var skillGridControl = resolveControlFromSkillResultViewSetting();
+			_chartDescription = schedulerSplitters1.DrawSkillGrid(skillGridControl, SchedulerState.SchedulerStateHolder,
+				_currentIntraDayDate);
 		}
 
 		private TeleoptiGridControl resolveControlFromSkillResultViewSetting()
@@ -4329,33 +4309,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			skillGridControl.Refresh();
 		}
 
-		private void drawIntraday(ISkill skill, IAggregateSkill aggregateSkillSkill)
-		{
-			IList<ISkillStaffPeriod> skillStaffPeriods;
-			var periodToFind = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate.Date,
-				_currentIntraDayDate.AddDays(1).Date, SchedulerState.SchedulerStateHolder.TimeZoneInfo);
-			if (aggregateSkillSkill.IsVirtual)
-			{
-				SchedulerState.SchedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkillSkill, periodToFind);
-				skillStaffPeriods =
-					SchedulerState.SchedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkillSkill, periodToFind);
-			}
-			else
-			{
-				skillStaffPeriods =
-					SchedulerState.SchedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill },
-						periodToFind);
-			}
-			if (skillStaffPeriods.Count >= 0)
-			{
-				_chartDescription = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", skill.Name,
-					_currentIntraDayDate.ToShortDateString());
-				_skillIntradayGridControl.SetupDataSource(skillStaffPeriods, skill, SchedulerState.SchedulerStateHolder);
-				_skillIntradayGridControl.SetRowsAndCols();
-				positionControl(_skillIntradayGridControl);
-			}
-		}
-
 		private void loadBpos(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
 			stateHolder.SchedulerStateHolder.SchedulingResultState.ExternalStaff = _container.Resolve<ExternalStaffProvider>().Fetch(stateHolder.SchedulerStateHolder.SchedulingResultState.Skills, stateHolder.SchedulerStateHolder.RequestedPeriod.Period());
@@ -4382,21 +4335,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					period.Payload.UseShrinkage = _shrinkage;
 				}
 			}
-		}
-
-		private void positionControl(Control control)
-		{
-			//remove control from all tabPages
-			foreach (TabPageAdv tabPage in schedulerSplitters1.TabSkillData.TabPages)
-			{
-				tabPage.Controls.Clear();
-			}
-
-			TabPageAdv tab = schedulerSplitters1.TabSkillData.TabPages[schedulerSplitters1.TabSkillData.SelectedIndex];
-			tab.Controls.Add(control);
-
-			//position _grid
-			control.Dock = DockStyle.Fill;
 		}
 
 		public void RefreshSelection()

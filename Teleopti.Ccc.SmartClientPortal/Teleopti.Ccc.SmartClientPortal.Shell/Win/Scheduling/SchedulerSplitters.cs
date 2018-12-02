@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
@@ -15,9 +16,11 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common.Interop;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Requests.Views;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
@@ -374,6 +377,83 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			validationAlertsView1.SetModel(new ValidationAlertsModel(
 				schedulerStateHolder.Schedules, NameOrderOption.LastNameFirstName,
 				schedulerStateHolder.RequestedPeriod.DateOnlyPeriod));
+		}
+
+		public string DrawSkillGrid(TeleoptiGridControl skillGridControl, ISchedulerStateHolder schedulerStateHolder, DateOnly currentIntradayDate)
+		{
+			var chartDescription = string.Empty;
+			if (TabSkillData.SelectedIndex >= 0)
+			{
+				TabPageAdv tab = TabSkillData.TabPages[TabSkillData.SelectedIndex];
+				var skill = (ISkill)tab.Tag;
+				IAggregateSkill aggregateSkillSkill = skill;
+				chartDescription = skill.Name;
+
+				if (skillGridControl is SkillIntradayGridControl control)
+				{
+					chartDescription = drawIntraday(control, skill, aggregateSkillSkill, schedulerStateHolder, currentIntradayDate, chartDescription);
+					return chartDescription;
+				}
+
+				var selectedSkillGridControl = skillGridControl as SkillResultGridControlBase;
+				if (selectedSkillGridControl == null)
+					return chartDescription;
+
+				positionControl(skillGridControl);
+				selectedSkillGridControl.DrawDayGrid(schedulerStateHolder, skill);
+				selectedSkillGridControl.DrawDayGrid(schedulerStateHolder, skill);
+			}
+
+			return chartDescription;
+		}
+
+		private string drawIntraday(SkillIntradayGridControl skillIntradayGridControl, ISkill skill,
+			IAggregateSkill aggregateSkillSkill, ISchedulerStateHolder schedulerStateHolder, DateOnly currentIntradayDate, string chartDescription)
+		{
+			IList<ISkillStaffPeriod> skillStaffPeriods;
+			var periodToFind = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentIntradayDate.Date,
+				currentIntradayDate.AddDays(1).Date, schedulerStateHolder.TimeZoneInfo);
+			if (aggregateSkillSkill.IsVirtual)
+			{
+				schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
+					aggregateSkillSkill, periodToFind);
+				skillStaffPeriods =
+					schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
+						aggregateSkillSkill, periodToFind);
+			}
+			else
+			{
+				skillStaffPeriods =
+					schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
+						new List<ISkill> {skill},
+						periodToFind);
+			}
+
+			if (skillStaffPeriods.Count >= 0)
+			{
+				chartDescription = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", skill.Name,
+					currentIntradayDate.ToShortDateString());
+				skillIntradayGridControl.SetupDataSource(skillStaffPeriods, skill, schedulerStateHolder);
+				skillIntradayGridControl.SetRowsAndCols();
+				positionControl(skillIntradayGridControl);
+			}
+
+			return chartDescription;
+		}
+
+		private void positionControl(Control control)
+		{
+			//remove control from all tabPages
+			foreach (TabPageAdv tabPage in TabSkillData.TabPages)
+			{
+				tabPage.Controls.Clear();
+			}
+
+			TabPageAdv tab = TabSkillData.TabPages[TabSkillData.SelectedIndex];
+			tab.Controls.Add(control);
+
+			//position _grid
+			control.Dock = DockStyle.Fill;
 		}
 
 		public void ReselectSelectedAgentNotPossibleToSchedule()
