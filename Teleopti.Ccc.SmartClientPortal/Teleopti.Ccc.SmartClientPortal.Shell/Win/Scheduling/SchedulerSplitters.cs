@@ -334,6 +334,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		public void Initialize(ILifetimeScope container, ISchedulerStateHolder schedulerStateHolder, SchedulerGroupPagesProvider schedulerGroupPagesProvider, IEnumerable<IOptionalColumn> optionalColumns)
 		{
+			Grid.VScrollPixel = false;
+			Grid.HScrollPixel = false;
 			_virtualSkillHelper = container.Resolve<IVirtualSkillHelper>();
 
 			var requestedPeriod = schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
@@ -367,12 +369,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				schedulerStateHolder.RequestedPeriod.DateOnlyPeriod,
 				schedulerStateHolder);
 			shiftCategoryDistributionModel.SetFilteredPersons(schedulerStateHolder.FilteredCombinedAgentsDictionary.Values);
-			var shiftCategoryDistributionControl = (ShiftCategoryDistributionControl)tabInfoPanels.TabPages[1].Controls[0];
-			shiftCategoryDistributionControl.SetModel(shiftCategoryDistributionModel);
-
+			shiftCategoryDistributionControl1.SetModel(shiftCategoryDistributionModel);
 			agentsNotPossibleToSchedule1.InitAgentsNotPossibleToSchedule(container.Resolve<RestrictionNotAbleToBeScheduledReport>(), this);
-			var validationAlertsControl = (ValidationAlertsView)tabInfoPanels.TabPages[2].Controls[0];
-			validationAlertsControl.SetModel(new ValidationAlertsModel(
+			validationAlertsView1.SetModel(new ValidationAlertsModel(
 				schedulerStateHolder.Schedules, NameOrderOption.LastNameFirstName,
 				schedulerStateHolder.RequestedPeriod.DateOnlyPeriod));
 		}
@@ -381,6 +380,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			agentsNotPossibleToSchedule1.ReselectSelected();
 		}
+
 		public void SetSelectedAgentsOnAgentsNotPossibleToSchedule(IEnumerable<IPerson> selectedPersons, DateOnlyPeriod selectedDates, AgentRestrictionsDetailView detailView)
 		{
 			agentsNotPossibleToSchedule1.SetSelected(selectedPersons, selectedDates, detailView);
@@ -388,14 +388,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		public void DisableViewShiftCategoryDistribution()
 		{
-			var shiftCategoryDistributionControl = (ShiftCategoryDistributionControl)tabInfoPanels.TabPages[1].Controls[0];
-			shiftCategoryDistributionControl.DisableViewShiftCategoryDistribution();
+			shiftCategoryDistributionControl1.DisableViewShiftCategoryDistribution();
 		}
 
 		public void EnableViewShiftCategoryDistribution()
 		{
-			var shiftCategoryDistributionControl = (ShiftCategoryDistributionControl)tabInfoPanels.TabPages[1].Controls[0];
-			shiftCategoryDistributionControl.EnableViewShiftCategoryDistribution();
+			shiftCategoryDistributionControl1.EnableViewShiftCategoryDistribution();
 		}
 
 		public void RefreshFilteredPersons(IEnumerable<IPerson> filteredPersons)
@@ -403,13 +401,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_filteredPersons = filteredPersons.ToList();
 			if(tabInfoPanels.SelectedIndex == 2)
 			{
-				var validationAlertsControl = (ValidationAlertsView)tabInfoPanels.TabPages[2].Controls[0];
-				validationAlertsControl.ReDraw(_filteredPersons);
+				validationAlertsView1.ReDraw(_filteredPersons);
 			}
 			tabInfoPanels.Refresh();
 
-			var shiftCategoryDistributionControl = (ShiftCategoryDistributionControl)tabInfoPanels.TabPages[1].Controls[0];
-			shiftCategoryDistributionControl.Model.SetFilteredPersons(_filteredPersons);
+			shiftCategoryDistributionControl1.Model.SetFilteredPersons(_filteredPersons);
 		}
 
 	    protected virtual void OnValidationAlertsAgentDoubleClick(ValidationViewAgentDoubleClickEvenArgs e)

@@ -1998,18 +1998,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			ResumeLayout(true);
 			Refresh();
 			SuspendLayout();
-			setupSkillTabs();
+			
 
 			toolStripStatusLabelStatus.Text = @"SETTING UP INFO TABS...";
 			Refresh();
-			schedulerSplitters1.Initialize(_container, SchedulerState.SchedulerStateHolder, _groupPagesProvider, _optionalColumns);
-			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
 			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXLoadingFormThreeDots");
 			ResumeLayout(true);
 			Refresh();
 			SuspendLayout();
-
+			var agentsDictionary = SchedulerState.SchedulerStateHolder.FilteredCombinedAgentsDictionary;
+			if (agentsDictionary.Count == 0)
+			{
+				SchedulerState.SchedulerStateHolder.ResetFilteredPersons();
+				agentsDictionary = SchedulerState.SchedulerStateHolder.FilteredCombinedAgentsDictionary;
+			}
+			schedulerSplitters1.Initialize(_container, SchedulerState.SchedulerStateHolder, _groupPagesProvider, _optionalColumns);
+			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
+			schedulerSplitters1.RefreshFilteredPersons(agentsDictionary.Values);
 			schedulerSplitters1.SplitContainerAdvMainContainer.Visible = true;
+			setupSkillTabs();
 			toolStripStatusLabelScheduleTag.Visible = true;
 			toolStripStatusLabelNumberOfAgents.Text = LanguageResourceHelper.Translate("XXAgentsColon") + @" " +
 													  SchedulerState.SchedulerStateHolder.FilteredCombinedAgentsDictionary.Count + @" " +
@@ -2037,8 +2044,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				toolStripButtonRequestView.Visible = false;
 			}
 
-			schedulerSplitters1.Grid.VScrollPixel = false;
-			schedulerSplitters1.Grid.HScrollPixel = false;
 			schedulerSplitters1.Grid.Selections.Clear(true);
 			var point = new Point((int)ColumnType.StartScheduleColumns, schedulerSplitters1.Grid.Rows.HeaderCount + 1);
 			schedulerSplitters1.Grid.CurrentCell.MoveTo(point.Y, point.X, GridSetCurrentCellOptions.None);
@@ -3153,18 +3158,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				break;
 			}
 
-			var agentsDictionary = SchedulerState.SchedulerStateHolder.FilteredCombinedAgentsDictionary;
-			if (agentsDictionary.Count == 0)
-			{
-				SchedulerState.SchedulerStateHolder.ResetFilteredPersons();
-				agentsDictionary = SchedulerState.SchedulerStateHolder.FilteredCombinedAgentsDictionary;
-			}
-			schedulerSplitters1.RefreshFilteredPersons(agentsDictionary.Values);
+			
 
 			GridHelper.GridlockWriteProtected(SchedulerState.SchedulerStateHolder, LockManager);
 
 			_lastSaved = DateTime.Now;
 			backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXLoadingFormThreeDots"));
+
 		}
 
 
@@ -3945,8 +3945,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			schedulerSplitters1.SetSelectedAgentsOnAgentsNotPossibleToSchedule(persons, selectedPeriod, view);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
 		private void zoom(ZoomLevel level)
 		{
 			schedulerSplitters1.SuspendLayout();
