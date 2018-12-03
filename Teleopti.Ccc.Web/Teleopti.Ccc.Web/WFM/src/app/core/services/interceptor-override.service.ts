@@ -6,17 +6,5 @@ import { Injectable } from '@angular/core';
  */
 @Injectable()
 export class InterceptorOverrideService {
-	private ignoreAll = false;
-
-	shouldIntercept(): boolean {
-		return !this.ignoreAll;
-	}
-
-	getIgnoreAll(): boolean {
-		return this.ignoreAll;
-	}
-
-	setIgnoreAll(ignoreAll: boolean) {
-		this.ignoreAll = ignoreAll;
-	}
+	public shouldIntercept = true;
 }

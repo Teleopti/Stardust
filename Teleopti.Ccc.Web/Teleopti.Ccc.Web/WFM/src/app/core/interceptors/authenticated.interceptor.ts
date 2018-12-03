@@ -13,7 +13,7 @@ export class AuthenticatedInterceptor implements HttpInterceptor {
 	) {}
 
 	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-		if (!this.overrideInterceptorService.shouldIntercept()) return next.handle(req);
+		if (!this.overrideInterceptorService.shouldIntercept) return next.handle(req);
 		return next.handle(req).pipe(
 			tap(
 				event => {},
