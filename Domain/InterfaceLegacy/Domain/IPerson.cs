@@ -107,7 +107,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="date">The date only.</param>
 		/// <returns></returns>
 		IPersonPeriod Period(DateOnly date);
-		IPersonPeriod Period(DateTime date);
 
 		/// <summary>
 		/// Returns the schedule period for a specific date.
