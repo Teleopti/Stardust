@@ -15,7 +15,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
 
-namespace Teleopti.Ccc.DomainTest.Intraday
+namespace Teleopti.Ccc.Intraday.UnitTests
 {
 	[DomainTest]
 	[TestFixture]
