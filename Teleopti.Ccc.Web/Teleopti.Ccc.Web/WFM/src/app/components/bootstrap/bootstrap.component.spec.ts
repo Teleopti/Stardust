@@ -1,17 +1,16 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { configureTestSuite } from '@wfm/test';
-import { of } from 'rxjs';
-import { ThemeService } from '../../core/services';
+import { Observable, of } from 'rxjs';
+import { Theme, ThemeService } from '../../core/services';
 import { BootstrapComponent } from './bootstrap.component';
 
-const ThemeServiceMock = {
-	provide: ThemeService,
-	useValue: {
-		getTheme: () => of({ Name: 'classic', Overlay: false })
+class ThemeServiceMock implements Partial<ThemeService> {
+	get theme$(): Observable<Theme> {
+		return of({ Name: 'classic', Overlay: false } as Theme);
 	}
-};
+}
 
-describe('FeedbackMessageComponent', () => {
+describe('BootstrapComponent', () => {
 	let component: BootstrapComponent;
 	let fixture: ComponentFixture<BootstrapComponent>;
 
@@ -21,7 +20,7 @@ describe('FeedbackMessageComponent', () => {
 		TestBed.configureTestingModule({
 			declarations: [BootstrapComponent],
 			imports: [],
-			providers: [ThemeServiceMock]
+			providers: [{ provide: ThemeService, useClass: ThemeServiceMock }]
 		}).compileComponents();
 	}));
 
