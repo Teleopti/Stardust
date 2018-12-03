@@ -296,6 +296,26 @@
     <Compile Include="Contracts\ITeleoptiOrganizationService.cs" />
     <Compile Include="Contracts\ITeleoptiSchedulingService.cs" />
     <Compile Include="Contracts\ITeleoptiCccSdkService.cs" />
+    <Compile Include="Legacy\DateHelper.cs" />
+    <Compile Include="Legacy\DateOnly.cs" />
+    <Compile Include="Legacy\DateOnlyPeriod.cs" />
+    <Compile Include="Legacy\DateTimePeriod.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Legacy\DetailLevel.cs" />
+    <Compile Include="Legacy\EmploymentType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Legacy\InParameter.cs" />
+    <Compile Include="Legacy\IntervalDefinition.cs" />
+    <Compile Include="Legacy\MinMax.cs" />
+    <Compile Include="Legacy\ParsedTimeOfDay.cs" />
+    <Compile Include="Legacy\TeleoptiAuthenticationHeaderNames.cs" />
+    <Compile Include="Legacy\TimeFormatsType.cs" />
+    <Compile Include="Legacy\TimeHelper.cs" />
+    <Compile Include="Legacy\TimePeriod.cs" />
+    <Compile Include="Legacy\TimeZoneHelper.cs" />
+    <Compile Include="Legacy\TimeZoneInfoExtensions.cs" />
     <Compile Include="WcfExtensions\AuthenticationMessageInspector.cs" />
     <Compile Include="WcfExtensions\CustomUserNameSecurityToken.cs" />
     <Compile Include="WcfExtensions\CustomWindowsSecurityToken.cs" />
@@ -329,12 +349,6 @@
     <None Include="ProjectSummary.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
-      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
-      <Name>Teleopti.Interfaces</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

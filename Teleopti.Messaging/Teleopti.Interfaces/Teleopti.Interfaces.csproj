@@ -87,34 +87,6 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Domain\DateHelper.cs" />
-    <Compile Include="Domain\DetailLevel.cs" />
-    <Compile Include="Domain\DateOnlyPeriod.cs" />
-    <Compile Include="Domain\DateOnly.cs" />
-    <Compile Include="Domain\DateTimePeriod.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Domain\EmploymentType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Domain\ICurrentSchedulingSource.cs" />
-    <Compile Include="Domain\InParameter.cs" />
-    <Compile Include="Domain\IntervalDefinition.cs" />
-    <Compile Include="Domain\IPasswordStrengthRule.cs" />
-    <Compile Include="Domain\IPersonInfoModel.cs" />
-    <Compile Include="Domain\ISchedulingSourceScope.cs" />
-    <Compile Include="Domain\MinMax.cs" />
-    <Compile Include="Domain\ParsedTimeOfDay.cs" />
-    <Compile Include="Domain\Percent.cs" />
-    <Compile Include="Domain\TeleoptiAuthenticationHeaderNames.cs" />
-    <Compile Include="Domain\TimeFormatsType.cs" />
-    <Compile Include="Domain\TimeHelper.cs" />
-    <Compile Include="Domain\TimePeriod.cs" />
-    <Compile Include="Domain\TimeZoneHelper.cs" />
-    <Compile Include="Domain\TimeZoneInfoExtensions.cs" />
-    <Compile Include="Infrastructure\ILoadPasswordPolicyService.cs" />
-    <Compile Include="Infrastructure\IPersonInfoCreator.cs" />
-    <Compile Include="Infrastructure\ITenantPersonLogonQuerier.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Teleopti.Ccc.snk">
