@@ -142,7 +142,9 @@
 					JSON.stringify(JobHistoryCriteria),
 					tokenHeaderService.getHeaders()
 				)
-				.success(function(data) {
+				.success(function (data) {
+					vm.history = [];
+
 					if (data.length < 1) {
 						vm.error = "No history found";
 					} else {
