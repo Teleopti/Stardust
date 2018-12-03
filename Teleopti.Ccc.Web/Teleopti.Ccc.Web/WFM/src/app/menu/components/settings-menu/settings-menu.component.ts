@@ -36,7 +36,7 @@ export class SettingsMenuComponent {
 				this.UserName = preferences.UserName;
 			}
 		});
-		this.themeService.getTheme().subscribe({
+		this.themeService.theme$.subscribe({
 			next: theme => {
 				this.lowLightFilter = theme.Overlay;
 				this.darkTheme = theme.Name === 'dark';
