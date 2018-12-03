@@ -124,33 +124,32 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 				{
 					Time = formatForUser(x.Timestamp),
 					Duration = x.Duration,
-					LateForWork = x.LateForWork,
+					LateForWorkMinutes = x.LateForWorkMinutes,
 					Activity = x.ActivityName,
 					ActivityColor = x.ActivityColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.ActivityColor.Value)) : null,
 					State = x.StateName,
 					Rule = x.RuleName,
 					RuleColor = x.RuleColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.RuleColor.Value)) : null,
-					Adherence = nameForAdherence(x.Adherence),
+					Adherence = resourceForAdherence(x.Adherence),
 					AdherenceColor = colorForAdherence(x.Adherence)
 				})
 				.ToArray();
 		}
 
-		private string nameForAdherence(HistoricalChangeAdherence? adherence)
+		private string resourceForAdherence(HistoricalChangeAdherence? adherence)
 		{
 			if (!adherence.HasValue)
 				return null;
-
 			switch (adherence.Value)
 			{
 				case HistoricalChangeAdherence.In:
-					return Ccc.UserTexts.Resources.InAdherence;
+					return "InAdherence";
 				case HistoricalChangeAdherence.Neutral:
-					return Ccc.UserTexts.Resources.NeutralAdherence;
+					return "NeutralAdherence";
 				case HistoricalChangeAdherence.Out:
-					return Ccc.UserTexts.Resources.OutOfAdherence;
+					return "OutOfAdherence";
 				default:
-					throw new ArgumentOutOfRangeException(nameof(adherence), adherence, null);
+					return null;
 			}
 		}
 
@@ -158,7 +157,6 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 		{
 			if (!adherence.HasValue)
 				return null;
-
 			switch (adherence.Value)
 			{
 				case HistoricalChangeAdherence.In:
@@ -168,7 +166,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 				case HistoricalChangeAdherence.Out:
 					return ColorTranslator.ToHtml(Color.FromArgb(Color.Firebrick.ToArgb()));
 				default:
-					throw new ArgumentOutOfRangeException(nameof(adherence), adherence, null);
+					return null;
 			}
 		}
 

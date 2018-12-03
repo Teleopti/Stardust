@@ -37,13 +37,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart
             _allowNegativeValues = allowNegativeValues;
         }
 
-        
-        public bool AllowNegativeValues
-        {
-            get { return _allowNegativeValues; }
-            set { _allowNegativeValues = value; }
-        }
-
         public ITaskOwnerGrid CurrentGrid
         {
             get { return _currentGrid; }

@@ -53,7 +53,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 
 			var agentsPerDayGroupedOnTeam = (from agentDay in readModel
 				let person = persons.FirstOrDefault(p => p.Id == agentDay.PersonId)
-				let pp = person?.Period(agentDay.Date.Date)
+				let pp = person?.Period(new Ccc.Domain.InterfaceLegacy.Domain.DateOnly(agentDay.Date.Date))
 				where pp != null
 				select new
 				{

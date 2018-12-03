@@ -29,7 +29,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 
 			var result = Target.Build(personId).Changes.Single();
 
-			result.LateForWork.Should().Be("Late 60 min");
+			result.LateForWorkMinutes.Should().Be(60);
 		}
 	}
 }

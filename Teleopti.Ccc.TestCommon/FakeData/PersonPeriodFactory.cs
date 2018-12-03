@@ -9,12 +9,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
     public static class PersonPeriodFactory
     {
-		
-		public static PersonPeriod CreatePersonPeriodFromDateTime(DateTime startDate, IPersonContract personContract, ITeam team)
-		{
-			return new PersonPeriod(new DateOnly(startDate), personContract, team);
-		}
-
         public static IPersonPeriod CreatePersonPeriod(DateOnly startDate)
         {
             IPersonContract personContract =

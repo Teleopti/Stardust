@@ -117,7 +117,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Measurement
 							partTimePercentage,
 							contractSchedule);
 
-						var personPeriod = PersonPeriodFactory.CreatePersonPeriodFromDateTime("2001-01-01".Utc(), personContract, team);
+						var personPeriod = new PersonPeriod(new Ccc.Domain.InterfaceLegacy.Domain.DateOnly("2001-01-01".Utc()), personContract, team);
 						person.AddPersonPeriod(personPeriod);
 
 						var exteralLogOn = new ExternalLogOn

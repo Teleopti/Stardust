@@ -1488,55 +1488,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			updateSkillGridMenuItem();
 		}
 
-		private void skillGridMenuItemClick(object sender, EventArgs e)
-		{
-			var virtualSkill = schedulerSplitters1.CreateSkillSummery(SchedulerState.SchedulerStateHolder.SchedulingResultState.Skills);
-			if (virtualSkill != null)
-			{
-				enableEditVirtualSkill(virtualSkill);
-				enableDeleteVirtualSkill(virtualSkill);
-			}
-		}
-
-		private void skillGridMenuItemEditClick(object sender, EventArgs e)
-		{
-			var menuItem = (ToolStripMenuItem)sender;
-			var skill = (ISkill)menuItem.Tag;
-
-			var validData = schedulerSplitters1.EditSkillSummary(SchedulerState.SchedulerStateHolder.SchedulingResultState.Skills, skill, menuItem);
-			if (validData)
-			{
-				drawSkillGrid();
-			}
-		}
-
-		private void skillGridMenuItemDeleteClick(object sender, EventArgs e)
-		{
-			var menuItem = (ToolStripMenuItem)sender;
-			var virtualSkill = (IAggregateSkill)menuItem.Tag;
-			schedulerSplitters1.RemoveVirtualSkill(virtualSkill);
-		}
-
-		private void enableEditVirtualSkill(ISkill virtualSkill)
-		{
-			var skillGridMenuItem = (ToolStripMenuItem)schedulerSplitters1.ContextMenuSkillGrid.Items["Edit"];
-			skillGridMenuItem.Enabled = true;
-			var subItem = new ToolStripMenuItem(virtualSkill.Name);
-			subItem.Tag = virtualSkill;
-			subItem.Click += skillGridMenuItemEditClick;
-			skillGridMenuItem.DropDownItems.Add(subItem);
-		}
-
-		private void enableDeleteVirtualSkill(ISkill virtualSkill)
-		{
-			var skillGridMenuItem = (ToolStripMenuItem)schedulerSplitters1.ContextMenuSkillGrid.Items["Delete"];
-			skillGridMenuItem.Enabled = true;
-			var subItem = new ToolStripMenuItem(virtualSkill.Name);
-			subItem.Tag = virtualSkill;
-			subItem.Click += skillGridMenuItemDeleteClick;
-			skillGridMenuItem.DropDownItems.Add(subItem);
-		}
-
 		#endregion//Virtual skill handling
 
 		#endregion//other
@@ -3743,7 +3694,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void setupContextMenuSkillGrid()
 		{
 			new SkillGridContextMenuBuilder().Build(_skillResultViewSetting, schedulerSplitters1.ContextMenuSkillGrid, _shrinkage,
-				skillGridMenuItemPeriodClick, toolStripMenuItemUseShrinkageClick, skillGridMenuItemClick);
+				skillGridMenuItemPeriodClick, toolStripMenuItemUseShrinkageClick);
 
 			_skillDayGridControl.ContextMenuStrip = schedulerSplitters1.ContextMenuSkillGrid;
 			_skillIntradayGridControl.ContextMenuStrip = schedulerSplitters1.ContextMenuSkillGrid;
@@ -3848,29 +3799,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void setupSkillTabs()
 		{
 			_currentIntraDayDate = SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod.StartDate;
-			schedulerSplitters1.TabSkillData.TabPages.Clear();
-			schedulerSplitters1.TabSkillData.ImageList = imageListSkillTypeIcons;
-			foreach (
-				ISkill virtualSkill in
-				schedulerSplitters1.VirtualSkillHelper.LoadVirtualSkills(SchedulerState.SchedulerStateHolder.SchedulingResultState.VisibleSkills).OrderBy(s => s.Name))
-			{
-				TabPageAdv tab = ColorHelper.CreateTabPage(virtualSkill.Name, virtualSkill.Description);
-				tab.Tag = virtualSkill;
-				tab.ImageIndex = 4;
-				schedulerSplitters1.TabSkillData.TabPages.Add(tab);
-				enableEditVirtualSkill(virtualSkill);
-				enableDeleteVirtualSkill(virtualSkill);
-			}
-
-			foreach (ISkill skill in SchedulerState.SchedulerStateHolder.SchedulingResultState.VisibleSkills.OrderBy(s => s.Name))
-			{
-				TabPageAdv tab = ColorHelper.CreateTabPage(skill.Name, skill.Description);
-				tab.Tag = skill;
-				tab.ImageIndex = GuiHelper.ImageIndexSkillType(skill.SkillType.ForecastSource);
-
-				schedulerSplitters1.TabSkillData.TabPages.Add(tab);
-			}
-			schedulerSplitters1.PinSavedSkills(_currentSchedulingScreenSettings);
+			schedulerSplitters1.SetupSkillTabs(_currentSchedulingScreenSettings);
 		}
 
 		private PersonsFilterView _cachedPersonsFilterView;
@@ -4254,8 +4183,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			_currentIntraDayDate = _scheduleView.SelectedDateLocal();
 			var skillGridControl = resolveControlFromSkillResultViewSetting();
-			_chartDescription = schedulerSplitters1.DrawSkillGrid(skillGridControl, SchedulerState.SchedulerStateHolder,
-				_currentIntraDayDate);
+			_chartDescription = schedulerSplitters1.DrawSkillGrid(skillGridControl, _currentIntraDayDate);
 		}
 
 		private TeleoptiGridControl resolveControlFromSkillResultViewSetting()

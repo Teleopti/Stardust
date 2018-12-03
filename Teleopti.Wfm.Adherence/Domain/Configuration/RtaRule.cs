@@ -1,10 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Wfm.Adherence.Domain.Events;
 
 namespace Teleopti.Wfm.Adherence.Domain.Configuration
@@ -48,47 +45,6 @@ namespace Teleopti.Wfm.Adherence.Domain.Configuration
 		{
 			get { return _adherence; }
 			set { _adherence = value; }
-		}
-
-		private static readonly IEnumerable<adherenceWithText> _adherences = new[]
-		{
-			new adherenceWithText
-			{
-				Adherence = Configuration.Adherence.In,
-				Text = Resources.InAdherence
-			},
-			new adherenceWithText
-			{
-				Adherence = Configuration.Adherence.Out,
-				Text = Resources.OutOfAdherence
-			},
-			new adherenceWithText
-			{
-				Adherence = Configuration.Adherence.Neutral,
-				Text = Resources.NeutralAdherence
-			}
-		};
-
-		private class adherenceWithText
-		{
-			public Adherence Adherence { get; set; }
-			public string Text { get; set; }
-		}
-
-		public virtual void SetAdherenceByText(string text)
-		{
-			var adherenceWithText = _adherences.SingleOrDefault(x => x.Text == text);
-			Adherence = adherenceWithText == null ? (Adherence?) null : adherenceWithText.Adherence;
-		}
-
-		public virtual string AdherenceText
-		{
-			get
-			{
-				if (Adherence == null)
-					return string.Empty;
-				return _adherences.Single(x => x.Adherence == Adherence).Text;
-			}
 		}
 
 		public virtual bool IsAlarm

@@ -32,7 +32,7 @@ namespace Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence
 		{
 			// should really be in ApprovePeriodAsInAdherence using the correct date?
 			var date = DateTime.ParseExact(command.StartDateTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-			if (!_authorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAdherence, date, _persons.Load(command.PersonId)))
+			if (!_authorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAdherence, new Ccc.Domain.InterfaceLegacy.Domain.DateOnly(date), _persons.Load(command.PersonId)))
 				throw new PermissionException();
 
 			var startDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.ParseExact(command.StartDateTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), _timeZone.TimeZone());

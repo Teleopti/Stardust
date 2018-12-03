@@ -198,7 +198,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service
 				_externalLogOnRepository.Add(externalLogOn);
 				var person = new Person();
 				person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
-				var personPeriod = PersonPeriodFactory.CreatePersonPeriodFromDateTime(now.UtcDateTime(), new PersonContract(contract, partTimePercentage, contractSchedule), team);
+				var personPeriod = new PersonPeriod(new Ccc.Domain.InterfaceLegacy.Domain.DateOnly(now.UtcDateTime()), new PersonContract(contract, partTimePercentage, contractSchedule), team);
 				personPeriod.AddExternalLogOn(externalLogOn);
 				person.AddPersonPeriod(personPeriod);
 				_personRepository.Add(person);

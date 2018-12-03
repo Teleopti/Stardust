@@ -341,12 +341,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				});
 			}
 		}
-
-		public virtual void AddActivityFromTo(IActivity activity, DateTime start, DateTime end)
-		{
-			AddActivity(activity, new DateTimePeriod(start, end), null);
-		}
-
+		
 		public virtual void AddActivity(IActivity activity, DateTime start, DateTime end)
 		{
 			AddActivity(activity, new DateTimePeriod(start, end), null);

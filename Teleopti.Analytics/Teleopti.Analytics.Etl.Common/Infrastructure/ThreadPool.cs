@@ -130,6 +130,8 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public void Dispose()
 		{
+			if (_bgw == null)
+				return;
 			foreach (var item in _bgw)
 			{
 				item.Value?.Dispose();

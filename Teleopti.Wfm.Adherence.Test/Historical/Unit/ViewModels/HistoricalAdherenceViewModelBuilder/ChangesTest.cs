@@ -16,16 +16,11 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 	[DomainTest]
 	[DefaultData]
 	[TestFixture]
-	public class ChangesTest : IIsolateSystem
+	public class ChangesTest
 	{
 		public Adherence.ApplicationLayer.ViewModels.HistoricalAdherenceViewModelBuilder Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
-
-		public void Isolate(IIsolate isolate)
-		{
-			isolate.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
-		}
 
 		[Test]
 		public void ShouldGetByPersonId()
@@ -41,16 +36,16 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 				.WithRule(null, "in", 0, Domain.Configuration.Adherence.In, Color.DarkKhaki)
 				.WithHistoricalStateChange("2017-03-07 14:00")
 				;
-			
+
 			var result = Target.Build(personId).Changes.Single();
-			
+
 			result.Time.Should().Be("2017-03-07T14:00:00");
 			result.Activity.Should().Be("phone");
 			result.ActivityColor.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(Color.Crimson.ToArgb())));
 			result.State.Should().Be("InCall");
 			result.Rule.Should().Be("in");
 			result.RuleColor.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(Color.DarkKhaki.ToArgb())));
-			result.Adherence.Should().Be(Ccc.UserTexts.Resources.InAdherence);
+			result.Adherence.Should().Be("InAdherence");
 			result.AdherenceColor.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(Color.DarkOliveGreen.ToArgb())));
 		}
 
@@ -63,9 +58,9 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 			Database
 				.WithAgent(personId, name)
 				.WithHistoricalStateChange("2017-03-07 14:00");
-			
+
 			var result = Target.Build(personId).Changes.Single();
-			
+
 			result.Activity.Should().Be(null);
 			result.ActivityColor.Should().Be(null);
 			result.State.Should().Be(null);
@@ -74,7 +69,6 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 			result.Adherence.Should().Be(null);
 			result.AdherenceColor.Should().Be(null);
 		}
-
 
 		[Test]
 		public void ShouldGetForCorrectDate()
@@ -87,7 +81,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 				.WithHistoricalStateChange("2017-03-07 14:00");
 
 			var historicalData = Target.Build(personId).Changes.Single();
-			
+
 			historicalData.Time.Should().Be("2017-03-07T14:00:00");
 		}
 
@@ -101,7 +95,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 				.WithSchedule(personId, "2017-03-14 09:00", "2017-03-14 17:00")
 				.WithHistoricalStateChange("2017-03-14 07:59")
 				.WithHistoricalStateChange("2017-03-14 08:00");
-			
+
 			var data = Target.Build(personId);
 
 			data.Changes.Single().Time.Should().Be("2017-03-14T08:00:00");
@@ -117,12 +111,11 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 				.WithSchedule(personId, "2017-03-14 09:00", "2017-03-14 17:00")
 				.WithHistoricalStateChange("2017-03-14 18:00")
 				.WithHistoricalStateChange("2017-03-14 18:01");
-			
+
 			var data = Target.Build(personId);
 
 			data.Changes.Single().Time.Should().Be("2017-03-14T18:00:00");
 		}
-
 
 		[Test]
 		public void ShouldNotGetDuplicateByPersonId()
@@ -132,7 +125,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 			var personId = Guid.NewGuid();
 			var name = RandomName.Make();
 			Database.WithAgent(personId, name);
-	
+
 			Database
 				.WithAgent(personId, name)
 				.WithStateGroup(state, "InCall")
@@ -146,14 +139,14 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 				;
 
 			var result = Target.Build(personId).Changes.Single();
-			
+
 			result.Time.Should().Be("2017-03-07T14:00:00");
 			result.Activity.Should().Be("phone");
 			result.ActivityColor.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(Color.Crimson.ToArgb())));
 			result.State.Should().Be("InCall");
 			result.Rule.Should().Be("in");
 			result.RuleColor.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(Color.DarkKhaki.ToArgb())));
-			result.Adherence.Should().Be(Ccc.UserTexts.Resources.InAdherence);
+			result.Adherence.Should().Be("InAdherence");
 			result.AdherenceColor.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(Color.DarkOliveGreen.ToArgb())));
 		}
 	}

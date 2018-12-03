@@ -18,7 +18,6 @@ export const mainInitializer = [
 	'Toggle',
 	'areasService',
 	'NoticeService',
-	'TabShortCut',
 	'rtaDataService',
 	'$window',
 	'$http',
@@ -32,7 +31,6 @@ export const mainInitializer = [
 		toggleService,
 		areasService,
 		noticeService,
-		TabShortCut,
 		rtaDataService,
 		$window
 	) {
@@ -87,8 +85,6 @@ export const mainInitializer = [
 		$rootScope.$on('$stateChangeSuccess', () => {
 			if ($window.appInsights) $window.appInsights.trackPageView($state.current.name);
 		});
-
-		TabShortCut.unifyFocusStyle();
 	}
 ];
 

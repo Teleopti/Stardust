@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -13,13 +13,13 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 
-namespace Teleopti.Ccc.DomainTest.Intraday.ApplicationLayer
+namespace Teleopti.Ccc.DomainTest.Intraday
 {
-	public class IntradayStaffingApplicationServiceTestHelper
+	public class StaffingViewModelCreatorTestHelper
 	{
 		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 
-		public IntradayStaffingApplicationServiceTestHelper(IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+		public StaffingViewModelCreatorTestHelper(IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
 		{
 			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
 		}
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday.ApplicationLayer
 				{
 					SkillId = skillDay.Skill.Id.Value,
 					WorkloadId = skillDay.WorkloadDayCollection.First().Workload.Id.Value,
-					StartTime = intervalTime,
+					StartTime = TimeZoneHelper.ConvertFromUtc(intervalTime, timezone),
 					Calls = calls,
 					AnsweredCalls = answeredCalls,
 					HandleTime = 120,
@@ -267,33 +267,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday.ApplicationLayer
 				HandleTime = handleTime,
 				AverageHandleTime = totalAverageHandlingTime
 			};
-		}
-
-		public MultisiteSkill CreateMultisiteSkillPhone(int intervalLength, string skillName, TimePeriod openHours, IActivity activity, TimeZoneInfo timeZone = null)
-		{
-			var skill = new MultisiteSkill(skillName, skillName, Color.Empty, intervalLength, 
-				new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony))
-			{
-				TimeZone = timeZone ?? TimeZoneInfo.Utc,
-				Activity = activity
-			}.WithId();
-
-			skill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
-
-			var childSkill1 = new ChildSkill(skillName + 1, skillName + 1, Color.Empty,
-				skill).WithId();
-
-			var childSkill2 = new ChildSkill(skillName + 2, skillName + 2, Color.Empty,
-				skill).WithId();
-		
-			skill.AddChildSkill(childSkill1);
-			skill.AddChildSkill(childSkill2);
-
-			WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours).WithId(Guid.NewGuid());
-			WorkloadFactory.CreateWorkloadWithOpenHours(childSkill1, openHours).WithId(Guid.NewGuid());
-			WorkloadFactory.CreateWorkloadWithOpenHours(childSkill2, openHours).WithId(Guid.NewGuid());
-
-			return skill;
 		}
 	}
 }

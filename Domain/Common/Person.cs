@@ -446,8 +446,6 @@ namespace Teleopti.Ccc.Domain.Common
 			addPersonPeriodChangedEvent();
 		}
 
-		public virtual IPersonPeriod Period(DateTime date) => Period(new DateOnly(date));
-		
 		public virtual IPersonPeriod Period(DateOnly date)
 		{
 			IPersonPeriod period = null;

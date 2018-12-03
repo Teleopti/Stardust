@@ -16,7 +16,8 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 
 		public HistoricalChangeAdherence? Adherence { get; set; }
 
-		public string LateForWork { get; set; }
+		public int? LateForWorkMinutes { get; set; }
+		
 		public string Duration { get; set; }
 	}
 }

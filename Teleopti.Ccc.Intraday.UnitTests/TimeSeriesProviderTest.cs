@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
 
-namespace Teleopti.Ccc.DomainTest.Intraday
+namespace Teleopti.Ccc.Intraday.UnitTests
 {
 	[TestFixture]
 	public class TimeSeriesProviderTest
