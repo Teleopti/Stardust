@@ -29,7 +29,7 @@
 			}
 
 			var day = moment(shiftTradeRequestDateSummary.Minimum).add(-1, 'days');
-			var maxDay = moment(shiftTradeRequestDateSummary.Maximum).add(1, 'days');
+			var maxDay = moment(shiftTradeRequestDateSummary.Maximum);
 			var startOfWeekIsoDay = shiftTradeRequestDateSummary.FirstDayOfWeek;
 
 			var dayViewModels = [];
@@ -77,14 +77,13 @@
 			};
 		}
 
-		function convertTimezone(dateTime, submitterTimezone, isUsingRequestSubmitterTimezone) {
+		function convertTimezone(dateTimeWithSubmitterTimezone, submitterTimezone, isUsingRequestSubmitterTimezone) {
 			var currentUserTimezone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
 			if (isNeedConvertTimeZone(isUsingRequestSubmitterTimezone, submitterTimezone)) {
-				var dateTimeWithTimezone = moment.tz(dateTime, submitterTimezone);
-				dateTimeWithTimezone = dateTimeWithTimezone.tz(currentUserTimezone);
+				var dateTimeWithTimezone = dateTimeWithSubmitterTimezone.tz(currentUserTimezone);
 				return moment(dateTimeWithTimezone.format('YYYY-MM-DD'));
 			}
-			return dateTime;
+			return dateTimeWithSubmitterTimezone;
 		}
 
 		function isNeedConvertTimeZone(isUsingRequestSubmitterTimezone, submitterTimezone) {
@@ -105,7 +104,7 @@
 		) {
 			var startDate = moment(shiftTradeRequestDateSummary.Minimum).add(-1, 'days');
 			var startOfWeekIsoDay = shiftTradeRequestDateSummary.FirstDayOfWeek;
-			var shiftTradeDate = moment(shiftTradeDay.Date);
+			var shiftTradeDate = moment.tz(shiftTradeDay.Date, submitterTimezone);
 
 			var viewModel = createDayViewModel(
 				shiftTradeDate,
@@ -343,7 +342,7 @@
 		function setupShiftTradeVisualisationColumn(shiftTradeRequestDateSummary) {
 			var minimum = moment(shiftTradeRequestDateSummary.Minimum);
 			var maximum = moment(shiftTradeRequestDateSummary.Maximum);
-			var numberOfDays = maximum.diff(minimum, 'days') + 3;
+			var numberOfDays = maximum.diff(minimum, 'days') + 2;
 
 			return {
 				displayName: $translate.instant('ShiftTrade'),
