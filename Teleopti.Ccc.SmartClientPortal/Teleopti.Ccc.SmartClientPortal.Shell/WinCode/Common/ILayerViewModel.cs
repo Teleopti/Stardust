@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Windows;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
-using DateTimePeriod=Teleopti.Interfaces.Domain.DateTimePeriod;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {

@@ -14,10 +14,10 @@ export const mainInitializer = [
 	'$translate',
 	'$locale',
 	'CurrentUserInfo',
+	'SupportEmailService',
 	'Toggle',
 	'areasService',
 	'NoticeService',
-	'TabShortCut',
 	'rtaDataService',
 	'$window',
 	'$http',
@@ -27,10 +27,10 @@ export const mainInitializer = [
 		$translate,
 		$locale,
 		currentUserInfo,
+		supportEmailService,
 		toggleService,
 		areasService,
 		noticeService,
-		TabShortCut,
 		rtaDataService,
 		$window
 	) {
@@ -56,6 +56,7 @@ export const mainInitializer = [
 			areasService.getAreasList(),
 			areasService.getAreasWithPermission(),
 			toggleService.togglesLoaded,
+			supportEmailService.init(),
 			currentUserInfo.initContext().then(userPreferences => $translate.use(userPreferences.Language))
 		]).then(([areasAvailable, permittedAreas]) => {
 			$rootScope.isAuthenticated = true;
@@ -84,8 +85,6 @@ export const mainInitializer = [
 		$rootScope.$on('$stateChangeSuccess', () => {
 			if ($window.appInsights) $window.appInsights.trackPageView($state.current.name);
 		});
-
-		TabShortCut.unifyFocusStyle();
 	}
 ];
 

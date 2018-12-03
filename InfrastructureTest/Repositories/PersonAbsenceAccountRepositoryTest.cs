@@ -180,8 +180,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var p = new Person();
             Assert.IsNotNull(dic[p]);
         }
+		
+		[Test]
+		public void VerifyCanFindAccountsForOnePersonWithAbsence()
+		{
+			var account = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(account);
 
-        [Test]
+			var rep = new PersonAbsenceAccountRepository(UnitOfWork);
+			var foundAccount = rep.Find(person, absence);
+
+			Assert.IsNotNull(foundAccount);
+			Assert.AreEqual(account.AccountCollection().Count(), foundAccount.AllPersonAccounts().Count());
+		}
+
+		[Test]
         public void VerifyCanFindAccountsForOnePerson()
         {
             var account = CreateAggregateWithCorrectBusinessUnit();

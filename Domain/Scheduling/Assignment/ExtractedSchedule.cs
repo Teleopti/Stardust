@@ -280,8 +280,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private void mergePreferenceRestriction(IScheduleDay source)
 		{
-			TimeSpan diff = CalculatePeriodOffset(source.Period);
-			DateTimePeriod period = source.Period.MovePeriod(diff);
+			var diff = CalculatePeriodOffset(source.Period);
+			var period = source.Period.MovePeriod(diff);
 			var date = new DateOnly(period.StartDateTimeLocal(TimeZone));
 
 			foreach (IPreferenceRestriction preferenceRestriction in source.RestrictionCollection().OfType<IPreferenceRestriction>())
@@ -303,8 +303,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private void mergeStudentAvailabilityRestriction(IScheduleDay source)
 		{
-			TimeSpan diff = CalculatePeriodOffset(source.Period);
-			DateTimePeriod period = source.Period.MovePeriod(diff);
+			var diff = CalculatePeriodOffset(source.Period);
+			var period = source.Period.MovePeriod(diff);
 			var date = new DateOnly(period.StartDateTimeLocal(TimeZone));
 
 			foreach (IStudentAvailabilityRestriction studentAvailabilityRestriction in source.RestrictionCollection().OfType<IStudentAvailabilityRestriction>())
@@ -329,9 +329,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (!PersonAbsenceCollection().IsEmpty() && !_currentAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
 				return;
 
-			TimeSpan diff = CalculatePeriodOffset(source.Period);
+			var diff = CalculatePeriodOffset(source.Period);
 			IList<IPersonAbsence> splitList = new List<IPersonAbsence>();
-			DateTimePeriod period = source.Period.MovePeriod(diff);
+			var period = source.Period.MovePeriod(diff);
 
 			if (deleteAbsence)
 			{
@@ -445,7 +445,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void DeleteAbsence(bool all)
 		{
-			IVisualLayerCollection layerCollection = ProjectionService().CreateProjection();
+			var layerCollection = ProjectionService().CreateProjection();
 			IList<IPersonAbsence> removeList = new List<IPersonAbsence>();
 
 			var layerCollectionPeriod = layerCollection.Period();
@@ -481,13 +481,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void DeleteOvertime()
 		{
-			IPersonAssignment highAss = PersonAssignment();
+			var highAss = PersonAssignment();
 			highAss?.ClearOvertimeActivities();
 		}
 
 		public void DeleteMainShift()
 		{
-			IPersonAssignment highAss = PersonAssignment();
+			var highAss = PersonAssignment();
 			highAss?.ClearMainActivities();
 			highAss?.ClearOvertimeActivities();
 		}
@@ -532,7 +532,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			IList<IPersonAbsence> splitList = new List<IPersonAbsence>();
 			IList<IPersonAbsence> deleteList = new List<IPersonAbsence>();
-			IVisualLayerCollection layerCollection = ProjectionService().CreateProjection();
+			var layerCollection = ProjectionService().CreateProjection();
 			var projectionPeriod = layerCollection.Period();
 			if (!projectionPeriod.HasValue) return;
 			var dateTimePeriod = projectionPeriod.Value;
@@ -566,7 +566,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void DeletePersonalStuff()
 		{
-			IPersonAssignment ass = PersonAssignment();
+			var ass = PersonAssignment();
 			ass?.ClearPersonalActivities();
 		}
 
@@ -691,7 +691,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		//will be removed
 		public void AddMainShift(IEditableShift mainShift)
 		{
-			IPersonAssignment currentAss = PersonAssignment(true);
+			var currentAss = PersonAssignment(true);
 
 			new EditableShiftMapper().SetMainShiftLayers(currentAss, mainShift);
 		}

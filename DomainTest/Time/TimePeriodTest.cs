@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         /// <summary>
         /// Checks if ToShortTimeString method formats TimePeriod correctly.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "Teleopti.Interfaces.Domain.TimePeriod.ToShortTimeString"), Test]
+        [Test]
         public void ToShortTimeStringFormatsCorrectly()
         {
             TimePeriod per = new TimePeriod(_start, _end);

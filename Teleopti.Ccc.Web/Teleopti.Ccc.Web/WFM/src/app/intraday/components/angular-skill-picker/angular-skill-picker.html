@@ -9,16 +9,13 @@
 	>
 		<nz-option-group nzLabel="{{'SkillGroups' | translate}}">
 			<nz-option *ngFor="let option of skillGroups" [nzValue]="option" [nzLabel]="option.Name" nzCustomContent>
-				<skill-picker-icon [type]="option.Type"></skill-picker-icon>
-				{{ option.Name }}
+				<i nz-icon type="appstore" theme="outline"></i> {{ option.Name }}
 			</nz-option>
 		</nz-option-group>
 		<nz-option-group nzLabel="{{'Skills' | translate}}">
 			<nz-option *ngFor="let option of skills" [nzValue]="option" [nzLabel]="option.Name" nzCustomContent>
-				<skill-picker-icon [type]="option.Type"></skill-picker-icon>
-				{{ option.Name }}
+				<i nz-icon type="{{ skillIcons.getIcon(option.Skill)}}" theme="outline"></i> {{ option.Name }}
 			</nz-option>
 		</nz-option-group>
 	</nz-select>
-	<ng-template #suffixTemplate> <i class="anticon anticon-close-circle"></i> </ng-template>
 </div>

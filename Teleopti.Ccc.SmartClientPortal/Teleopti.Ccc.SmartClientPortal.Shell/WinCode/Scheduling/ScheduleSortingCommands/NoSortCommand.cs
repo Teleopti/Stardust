@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleSortin
 {
     public class NoSortCommand : ScheduleSortCommandBase, IScheduleSortCommand
     {
-        public NoSortCommand(ISchedulerStateHolder schedulerState) : base(schedulerState)
+        public NoSortCommand() : base(null)
         {
         }
 

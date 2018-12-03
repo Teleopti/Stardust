@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				return dateOnlyPeriod;
 			}
 
-			var personAccounts = _personAbsenceAccountRepository.Find(person);
+			var personAccounts = _personAbsenceAccountRepository.Find(person, absence);
 			var account = personAccounts.Find(absence);
 			if (account == null)
 				return dateOnlyPeriod.StartDate.ToDateOnlyPeriod();

@@ -263,7 +263,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.toolStripButtonShowTexts = new System.Windows.Forms.ToolStripButton();
 			this.btnFilter = new System.Windows.Forms.ToolStripButton();
 			this.btnRightLeft = new System.Windows.Forms.ToolStripButton();
-			this.imageListSkillTypeIcons = new System.Windows.Forms.ImageList(this.components);
 			this.contextMenuStripRestrictionView = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItemAddPreferenceRestriction = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemAddStudentAvailabilityRestriction = new System.Windows.Forms.ToolStripMenuItem();
@@ -329,14 +328,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			// toolStripSpinningProgressControl1
 			// 
 			this.toolStripSpinningProgressControl1.ActiveSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
-			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = true;
+			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = false;
 			this.toolStripSpinningProgressControl1.InactiveSegmentColor = System.Drawing.Color.White;
 			this.toolStripSpinningProgressControl1.Name = "ToolStripSpinningProgress";
 			this.toolStripSpinningProgressControl1.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(25, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 9;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 4;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.SkyBlue;
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -484,7 +483,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             this.toolStripMenuItemNotifyAgent});
 			this.contextMenuViews.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(236)))), ((int)(((byte)(249)))));
 			this.contextMenuViews.Name = "contextMenuStrip1";
-			this.contextMenuViews.Size = new System.Drawing.Size(306, 666);
+			this.contextMenuViews.Size = new System.Drawing.Size(306, 644);
 			this.contextMenuViews.Style = Syncfusion.Windows.Forms.Tools.ContextMenuStripEx.ContextMenuStyle.Metro;
 			this.contextMenuViews.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuViewsOpening);
 			// 
@@ -2797,18 +2796,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.btnRightLeft.Tag = "rightleft";
 			this.btnRightLeft.Text = "xxRiLe";
 			// 
-			// imageListSkillTypeIcons
-			// 
-			this.imageListSkillTypeIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListSkillTypeIcons.ImageStream")));
-			this.imageListSkillTypeIcons.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageListSkillTypeIcons.Images.SetKeyName(0, "ccc_SkillEmail_16x16.png");
-			this.imageListSkillTypeIcons.Images.SetKeyName(1, "ccc_Skill_Fax_16x16.png");
-			this.imageListSkillTypeIcons.Images.SetKeyName(2, "ccc_SkillTelephone_16x16.png");
-			this.imageListSkillTypeIcons.Images.SetKeyName(3, "ccc_Skill_Backoffice_16x16.png");
-			this.imageListSkillTypeIcons.Images.SetKeyName(4, "ccc_PeopleScehdulePeriodView.png");
-			this.imageListSkillTypeIcons.Images.SetKeyName(5, "desktop.png");
-			this.imageListSkillTypeIcons.Images.SetKeyName(6, "skill_retail.png");
-			// 
 			// contextMenuStripRestrictionView
 			// 
 			this.contextMenuStripRestrictionView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -3090,7 +3077,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemScheduleHourlyEmployees;
         private NotesEditor notesEditor;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAddOverTime;
-        private System.Windows.Forms.ImageList imageListSkillTypeIcons;
         private ToolStripSpinningProgressControl toolStripSpinningProgressControl1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemWriteProtectSchedule;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemWriteProtectSchedule2;

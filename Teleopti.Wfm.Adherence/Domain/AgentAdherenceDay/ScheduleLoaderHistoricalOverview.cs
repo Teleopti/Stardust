@@ -32,7 +32,7 @@ namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay
 			if (person == null)
 				return Enumerable.Empty<IVisualLayer>();
 
-			var businessUnitId = person.Period(date.Date)?.Team?.Site?.BusinessUnit?.Id;
+			var businessUnitId = person.Period(new Ccc.Domain.InterfaceLegacy.Domain.DateOnly(date.Date))?.Team?.Site?.BusinessUnit?.Id;
 			if (businessUnitId == null)
 				return Enumerable.Empty<IVisualLayer>();
 			var businessUnit = _businessUnits.Load(businessUnitId.GetValueOrDefault());

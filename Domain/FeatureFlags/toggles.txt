@@ -46,6 +46,7 @@ RTA_ReviewHistoricalAdherence_74770 = RC
 MessageBroker_HttpSenderThrottleRequests_79140 = true
 MessageBroker_VeganBurger_79140 = true
 MessageBroker_ServerThrottleMessages_79140 = true
+MessageBroker_ScheduleChangedMessagePackaging_79140 = true
 
 # Dumplings, can any of these be removed? #
 WfmTeamSchedule_SuggestShiftCategory_152 = RC

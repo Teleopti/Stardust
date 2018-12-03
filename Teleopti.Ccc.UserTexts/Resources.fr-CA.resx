@@ -13482,9 +13482,6 @@ L'application va maintenant se fermer.</value>
   <data name="ManageIdentityLogon" xml:space="preserve">
     <value>Gérer les logons d'identité</value>
   </data>
-  <data name="PeopleManageUsers" xml:space="preserve">
-    <value>Gérer les utilisateurs</value>
-  </data>
   <data name="DescriptionOfMaximumWorkdayRule" xml:space="preserve">
     <value>Maximum de nombre de jours d'affilée sans jour libre</value>
   </data>

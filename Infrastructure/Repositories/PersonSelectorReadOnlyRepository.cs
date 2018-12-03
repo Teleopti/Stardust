@@ -40,19 +40,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					  .List<IPersonSelectorOrganization>();
 		}
 
-		public IList<IPersonSelectorOrganization> GetOrganizationForWeb(DateOnlyPeriod dateOnlyPeriod)
-		{
-
-			return _unitOfWork.Session().CreateSQLQuery(
-					"exec ReadModel.LoadOrganizationForSelector_Web @ondate=:ondate,@enddate=:enddate, @bu=:bu")
-				.SetDateOnly("ondate", dateOnlyPeriod.StartDate)
-				.SetDateOnly("enddate", dateOnlyPeriod.EndDate)
-				.SetGuid("bu", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
-				.SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorOrganization)))
-				.SetReadOnly(true)
-				.List<IPersonSelectorOrganization>();
-		}
-
 		public IList<IPersonSelectorBuiltIn> GetBuiltIn(DateOnlyPeriod dateOnlyPeriod, PersonSelectorField loadType, Guid optionalColumnId)
 		{
 			int cultureId = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;

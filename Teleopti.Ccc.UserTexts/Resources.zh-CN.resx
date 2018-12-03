@@ -14729,9 +14729,6 @@ Teleopti R&amp;D</value>
   <data name="SkillTypeFilter" xml:space="preserve">
     <value>技能类型过滤</value>
   </data>
-  <data name="PeopleManageUsers" xml:space="preserve">
-    <value>管理用户</value>
-  </data>
   <data name="PeopleUsernameIsAlreadyInUse" xml:space="preserve">
     <value>用户名已经被使用了</value>
   </data>

@@ -76,24 +76,25 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 		
 		[Test]
-		public void ShouldBePossibleToScheduleOneMonthWithoutManuallyExtendingThePeriod()
+		public void ShouldBePossibleToScheduleOneMonthWithoutManuallyExtendingThePeriodForContractScheduleMonToFriAndNoTolerance()
 		{
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var period = new DateOnlyPeriod(new DateOnly(2017, 08, 01), new DateOnly(2017, 08, 31));
 			var activity = ActivityRepository.Has("_");
-			var skill = SkillRepository.Has("skill", activity);
-			var scenario = ScenarioRepository.Has("some name");
+			var skill = SkillRepository.Has("_", activity);
+			var scenario = ScenarioRepository.Has("_");
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory().WithId()));
 			var schedulePeriod = new SchedulePeriod(period.StartDate, SchedulePeriodType.Month, 1);
-			var agent = PersonRepository.Has(schedulePeriod, ruleSet, skill);
+			var contractWithoutTolerance = new Contract("_");
+			var agent = PersonRepository.Has(contractWithoutTolerance,new ContractScheduleWorkingMondayToFriday(), schedulePeriod, ruleSet, skill);
+
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, period,1));
 			var planningPeriod = new PlanningPeriod(period.StartDate,SchedulePeriodType.Month,1,PlanningGroupRepository.Has());
 			PlanningPeriodRepository.Add(planningPeriod);
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
-			AssignmentRepository.Find(new[] { agent }, period, scenario)
-				.Count.Should().Be.EqualTo(31);
+			AssignmentRepository.Find(new[] { agent }, period, scenario).Count.Should().Be.EqualTo(31);
 		}
 		
 		

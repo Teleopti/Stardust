@@ -13,6 +13,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.UserTexts;
 
 
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
 	public partial class ReportAgentSelector : BaseUserControl
 	{
-		private SchedulerStateHolder _stateHolder;
+		private SchedulingScreenState _stateHolder;
 
 		public ReportAgentSelector()
 		{
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			comboBoxAdv1.PopupContainer.HidePopup();
 		}
 
-		public void SetStateHolder(SchedulerStateHolder stateHolder)
+		public void SetStateHolder(SchedulingScreenState stateHolder)
 		{
 			_stateHolder = stateHolder;
 		}
@@ -84,10 +85,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
 		private void showFilterDialog()
 		{
-			var all = _stateHolder.ChoosenAgents.Select(p => p.Id.Value).ToList();
+			var all = _stateHolder.SchedulerStateHolder.ChoosenAgents.Select(p => p.Id.Value).ToList();
 
-			using (var scheduleFilterView = new PersonsFilterView(_stateHolder.RequestedPeriod.DateOnlyPeriod,
-				_stateHolder.FilteredCombinedAgentsDictionary,
+			using (var scheduleFilterView = new PersonsFilterView(_stateHolder.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod,
+				_stateHolder.SchedulerStateHolder.FilteredCombinedAgentsDictionary,
 				ComponentContext, ReportApplicationFunction, SelectedGroupPageKey, all, false))
 			{
 				scheduleFilterView.StartPosition = FormStartPosition.Manual;
@@ -112,8 +113,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
 			builder.Append(SelectedPersonGuids.Count.ToString(currentCultureInfo));
 			builder.Append(":");
-			_stateHolder.FilterPersons(SelectedPersonGuids);
-			foreach (var person in _stateHolder.FilteredCombinedAgentsDictionary.Values)
+			_stateHolder.SchedulerStateHolder.FilterPersons(SelectedPersonGuids);
+			foreach (var person in _stateHolder.SchedulerStateHolder.FilteredCombinedAgentsDictionary.Values)
 			{
 				builder.Append(person.Name);
 				builder.Append(", ");

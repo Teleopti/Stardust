@@ -33,11 +33,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 		}
 
-		public DialogResult ShowOkCancelMessage(string text, string caption)
-		{
-			throw new NotImplementedException();
-		}
-
 		public DialogResult ShowWarningMessage(string text, string caption)
 		{
 			throw new NotImplementedException();

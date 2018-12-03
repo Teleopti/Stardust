@@ -14727,6 +14727,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A planning period is needed to schedule your agents..
+        /// </summary>
+        public static string HelpCreatePlanningPeriod {
+            get {
+                return ResourceManager.GetString("HelpCreatePlanningPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Day off rules will be applied for all planning periods.
         /// </summary>
         public static string HelpDayOffForPlanningPeriod {
@@ -25137,7 +25146,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage users.
+        ///   Looks up a localized string similar to View users.
         /// </summary>
         public static string PeopleManageUsers {
             get {
@@ -27619,7 +27628,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remember me?.
+        ///   Looks up a localized string similar to Remember me.
         /// </summary>
         public static string RememberMe {
             get {
@@ -32143,6 +32152,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SelectTeams {
             get {
                 return ResourceManager.GetString("SelectTeams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select today.
+        /// </summary>
+        public static string SelectToday {
+            get {
+                return ResourceManager.GetString("SelectToday", resourceCulture);
             }
         }
         

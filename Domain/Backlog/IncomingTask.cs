@@ -235,11 +235,6 @@ namespace Teleopti.Ccc.Domain.Backlog
 			return TimeSpan.Zero;
 		}
 
-		public void ClearTimeOnDate(DateOnly date)
-		{
-			_taskDays[date].ClearTime();
-		}
-
 		public void Open(DateOnly date)
 		{
 			_taskDays[date].Open();

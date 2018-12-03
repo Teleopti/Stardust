@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			SchedulerStateHolder.RequestedPeriod =
 				new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2015, 10, 12, 2015, 10, 25), TimeZoneInfo.Utc);
-			SchedulerStateHolder.FilterPersons(new[] { agent });
 			SchedulerStateHolder.SchedulingResultState.LoadedAgents.Add(agent);
 
 			var scheduleDictionary = new ScheduleDictionaryForTest(new Scenario("unimportant"), new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
@@ -62,7 +61,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			SchedulerStateHolder.RequestedPeriod =
 				new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2015, 10, 12, 2015, 10, 25), TimeZoneInfo.Utc);
-			SchedulerStateHolder.FilterPersons(new[] { agent });
 			SchedulerStateHolder.SchedulingResultState.LoadedAgents.Add(agent);
 
 			var scheduleDictionary = new ScheduleDictionaryForTest(new Scenario("unimportant"), new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
@@ -85,7 +83,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			SchedulerStateHolder.RequestedPeriod =
 				new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2015, 10, 12, 2015, 10, 25), TimeZoneInfo.Utc);
-			SchedulerStateHolder.FilterPersons(new[] { agent });
 			SchedulerStateHolder.SchedulingResultState.LoadedAgents.Add(agent);
 
 			var scheduleDictionary = new ScheduleDictionaryForTest(new Scenario("unimportant"), new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
@@ -119,7 +116,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			agent2.AddSchedulePeriod(schedulePeriod2);
 
 			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2016, 1, 4, 2016, 2, 28), TimeZoneInfo.Utc);
-			SchedulerStateHolder.FilterPersons(new[] { agent1, agent2 });
 			SchedulerStateHolder.SchedulingResultState.LoadedAgents.Add(agent1);
 			SchedulerStateHolder.SchedulingResultState.LoadedAgents.Add(agent2);
 

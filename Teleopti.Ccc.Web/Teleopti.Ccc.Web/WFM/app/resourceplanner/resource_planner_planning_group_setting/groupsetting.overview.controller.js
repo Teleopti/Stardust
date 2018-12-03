@@ -39,13 +39,22 @@
 		function getBlockSchedulingSetting() {
 			return vm.schedulingSetting.forEach(function (item) {
 				if (item.BlockFinderType > 0) {
-					if (item.BlockFinderType == 1) {
-						item.BlockSchedulingSetting = $translate.instant('BlockScheduling') + " (" + $translate.instant('BlockFinderTypeBetweenDayOff') + ")";
-					} else {
-						item.BlockSchedulingSetting = $translate.instant('BlockScheduling') + " (" + $translate.instant('BlockFinderTypeSchedulePeriod') + ")";
+					var type = '';
+					if(item.BlockSameShiftCategory){
+						type = $translate.instant('BlockSameShiftCategory');
+					}else if(item.BlockSameStartTime){
+						type = $translate.instant('BlockSameStartTime');
+					}else if(item.BlockSameShift){
+						type = $translate.instant('BlockSameShift');
 					}
+					if (item.BlockFinderType === 1) {
+						item.BlockSchedulingSetting = $translate.instant('BlockFinderTypeBetweenDayOff') + ' ( '+type+' )';
+					} else {
+						item.BlockSchedulingSetting = $translate.instant('BlockFinderTypeSchedulePeriod') + ' ( '+type+' )';
+					}
+					
 				} else {
-					item.BlockSchedulingSetting = $translate.instant('IndividualFlexible') + " (" + $translate.instant('Default') + ")";
+					item.BlockSchedulingSetting = $translate.instant('Off');
 				}
 			});
 		}

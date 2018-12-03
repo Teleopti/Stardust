@@ -134,10 +134,6 @@
       <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
-      <Project>{8d2565f2-7c44-45b7-96ad-2cd900e033a1}</Project>
-      <Name>Teleopti.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Support.Library\Teleopti.Support.Library.csproj">
       <Project>{96BAA3E0-A623-412E-BFE7-D3BE03A2288A}</Project>
       <Name>Teleopti.Support.Library</Name>

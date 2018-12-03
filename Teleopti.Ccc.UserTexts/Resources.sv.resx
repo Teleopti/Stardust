@@ -15595,9 +15595,6 @@ Applikationen kommer nu att stängas. </value>
   <data name="SkillTypeFilter" xml:space="preserve">
     <value>Filter på kompetenstyp</value>
   </data>
-  <data name="PeopleManageUsers" xml:space="preserve">
-    <value>Hantera användare</value>
-  </data>
   <data name="PeopleUsernameIsAlreadyInUse" xml:space="preserve">
     <value>Användarnamnet används redan</value>
   </data>

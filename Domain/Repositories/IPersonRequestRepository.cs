@@ -30,18 +30,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// </remarks>
 		IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person);
 
-		/// <summary>
-		/// Finds all requests from and to a person for given period.
-		/// </summary>
-		/// <param name="person">The person.</param>
-		/// <param name="period">The period to query.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: rogerkr
-		/// Created date: 2011-10-27
-		/// </remarks>
-		IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period);
-
 		IEnumerable<IPersonRequest> FindAbsenceAndTextRequests(RequestFilter filter, out int count, bool ignoreCount = false);
 
 		IEnumerable<IPersonRequest> FindShiftTradeRequests(RequestFilter filter, out int count, bool ignoreCount = false);

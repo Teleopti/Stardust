@@ -4,23 +4,23 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MockTranslationModule } from '@wfm/mocks/translation';
+import { configureTestSuite } from '@wfm/test';
 import {
+	en_US,
+	NzAutocompleteModule,
 	NzButtonModule,
+	NzDatePickerModule,
 	NzFormModule,
 	NzInputModule,
 	NzTableModule,
 	NzToolTipModule,
-	NzAutocompleteModule,
-	NzDatePickerModule,
-	NZ_I18N,
-	en_US
+	NZ_I18N
 } from 'ng-zorro-antd';
 import { of } from 'rxjs';
-import { configureTestSuite } from '@wfm/test';
-import { MockTranslationModule } from '@wfm/mocks/translation';
-import { GeneralAuditTrailComponent as GeneralAuditTrail } from './general-audit-trail.component';
+import { UserService } from '../../../core/services';
 import { AuditTrailService } from '../../services';
-import { UserService, UserPreferences } from '../../../core/services';
+import { GeneralAuditTrailComponent as GeneralAuditTrail } from './general-audit-trail.component';
 
 describe('SearchPageComponent', () => {
 	let component: GeneralAuditTrail;
@@ -66,7 +66,7 @@ describe('SearchPageComponent', () => {
 });
 
 class MockUserService implements Partial<UserService> {
-	getPreferences() {
+	get preferences$() {
 		return of({
 			Id: '1',
 			UserName: '',

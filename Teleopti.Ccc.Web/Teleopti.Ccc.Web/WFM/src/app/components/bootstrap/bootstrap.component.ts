@@ -6,15 +6,16 @@ import { ThemeService } from '../../core/services';
 
 @Component({
 	selector: 'bootstrap',
+	styleUrls: ['./bootstrap.component.scss'],
 	templateUrl: './bootstrap.component.html'
 })
 export class BootstrapComponent {
 	@Input()
 	style: MainControllerStyle;
+	lowLightFilter = false;
 
 	constructor(private themeService: ThemeService) {
-		themeService
-			.getTheme()
+		themeService.theme$
 			.pipe(
 				switchMap(() => {
 					return interval(50).pipe(
@@ -28,5 +29,10 @@ export class BootstrapComponent {
 					this.style.isFullyLoaded = true;
 				}
 			});
+		this.themeService.theme$.subscribe({
+			next: theme => {
+				this.lowLightFilter = theme.Overlay;
+			}
+		});
 	}
 }

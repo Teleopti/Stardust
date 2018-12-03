@@ -12,12 +12,15 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
+	[Setting("ScheduleChangedMessagePackagingSendOnIdleTimeSeconds", 1)]
+	[Setting("ScheduleChangedMessagePackagingSendOnIntervalSeconds", 1)]
 	public class ScheduleChangedMessageTest
 	{
 		public FakeMessageSender MessageSender;
@@ -31,6 +34,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 		public IPersonRepository PersonRepository;
 		public IScenarioRepository ScenarioRepository;
 		public IPersonAssignmentRepository PersonAssignmentRepository;
+		public FakeTime Time;
+		public Database Database;
 
 		[Test]
 		public void ShouldSendAggregatedScheduleChangeMessage()
@@ -54,6 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 
 				uow.PersistAll();
 			}
+			Time.Passes("1".Seconds());
 
 			MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Should().Have.Count.EqualTo(1);
 		}
@@ -80,6 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 
 				uow.PersistAll();
 			}
+			Time.Passes("1".Seconds());
 
 			var message = MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single();
 			message.DataSource.Should().Be(DataSource.CurrentName());
@@ -119,6 +126,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 
 				uow.PersistAll();
 			}
+			Time.Passes("1".Seconds());
+
+			
 			var message = MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single();
 			Deserializer.DeserializeObject<Guid[]>(message.BinaryData).Should().Have.SameValuesAs(new []{person1.Id.Value, person2.Id.Value});
 		}
@@ -148,6 +158,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 
 				uow.PersistAll();
 			}
+			Time.Passes("1".Seconds());
+
 
 			var message = MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single();
 			Deserializer.DeserializeObject<Guid[]>(message.BinaryData).Count().Should().Be(1);
@@ -178,6 +190,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 
 				uow.PersistAll();
 			}
+			Time.Passes("1".Seconds());
 
 			var message = MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single();
 			message.StartDateAsDateTime().Should().Be("2015-06-24 8:00".Utc());
@@ -209,6 +222,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 
 				uow.PersistAll();
 			}
+			Time.Passes("1".Seconds());
 
 			var message = MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single();
 			message.EndDateAsDateTime().Should().Be("2015-06-25 17:00".Utc());
@@ -238,10 +252,10 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 
 				uow.PersistAll(InitiatorIdentifier);
 			}
+			Time.Passes("1".Seconds());
 
 			MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single()
 				.ModuleIdAsGuid().Should().Be(InitiatorIdentifier.InitiatorId);
 		}
-
 	}
 }

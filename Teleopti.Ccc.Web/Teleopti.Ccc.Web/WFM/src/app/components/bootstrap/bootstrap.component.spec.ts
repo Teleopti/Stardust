@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { configureTestSuite } from '@wfm/test';
-import { of } from 'rxjs';
-import { ThemeService } from '../../core/services';
+import { configureTestSuite, PageObject } from '@wfm/test';
+import { Observable, of } from 'rxjs';
+import { Theme, ThemeService } from '../../core/services';
 import { BootstrapComponent } from './bootstrap.component';
 
-const ThemeServiceMock = {
-	provide: ThemeService,
-	useValue: {
-		getTheme: () => of({ Name: 'classic', Overlay: false })
+class ThemeServiceMock implements Partial<ThemeService> {
+	get theme$(): Observable<Theme> {
+		return of({ Name: 'classic', Overlay: false } as Theme);
 	}
-};
+}
 
-describe('FeedbackMessageComponent', () => {
+describe('BootstrapComponent', () => {
 	let component: BootstrapComponent;
 	let fixture: ComponentFixture<BootstrapComponent>;
+	let page: Page;
 
 	configureTestSuite();
 
@@ -21,7 +21,7 @@ describe('FeedbackMessageComponent', () => {
 		TestBed.configureTestingModule({
 			declarations: [BootstrapComponent],
 			imports: [],
-			providers: [ThemeServiceMock]
+			providers: [{ provide: ThemeService, useClass: ThemeServiceMock }]
 		}).compileComponents();
 	}));
 
@@ -29,9 +29,23 @@ describe('FeedbackMessageComponent', () => {
 		fixture = TestBed.createComponent(BootstrapComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
+		page = new Page(fixture);
 	});
 
 	it('should create', () => {
 		expect(component).toBeTruthy();
 	});
+
+	it('should be able to use low light overlay', () => {
+		expect(page.overlayElement).toBeFalsy();
+		component.lowLightFilter = true;
+		fixture.detectChanges();
+		expect(page.overlayElement).toBeTruthy();
+	});
 });
+
+class Page extends PageObject {
+	get overlayElement() {
+		return this.queryAll('.warm-overlay')[0];
+	}
+}

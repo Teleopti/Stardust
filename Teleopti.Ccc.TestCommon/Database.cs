@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.TestCommon
 		[UnitOfWork]
 		public virtual IPersonAssignment CurrentAssignment()
 		{
-			return assignment();
+			return assignment(null);
 		}
 
 		[UnitOfWork]
@@ -147,10 +147,12 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 
+		public Database WithDefaultScenario(string name) => WithScenario(name, true);
+
 		[UnitOfWork]
-		public virtual Database WithDefaultScenario(string name)
+		public virtual Database WithScenario(string name, bool @default)
 		{
-			var scenario = new Scenario(name) {DefaultScenario = true, EnableReporting = true};
+			var scenario = new Scenario(name) {DefaultScenario = false, EnableReporting = true};
 			_scenario = scenario.Description.Name;
 			_scenarios.Add(scenario);
 			return this;
@@ -374,7 +376,6 @@ namespace Teleopti.Ccc.TestCommon
 			return c;
 		}
 
-
 		[UnitOfWork]
 		public virtual Database WithSkill(string name)
 		{
@@ -407,46 +408,58 @@ namespace Teleopti.Ccc.TestCommon
 			return skill;
 		}
 
-		public virtual Database WithActivity(string name) => WithActivity(name, null);
+		public Database WithActivity(string name) => WithActivity(name, null);
 
 		[UnitOfWork]
 		public virtual Database WithActivity(string name, Color? color)
 		{
-			_activity = name;
-			var activity = new Activity(name);
-			if (color.HasValue)
-				activity.DisplayColor = color.Value;
-			_activities.Add(activity);
+			activity(name, color);
 			return this;
 		}
 
 		[UnitOfWork]
 		public virtual Database WithAssignment(string date)
 		{
-			_date = date.Date();
-			_assignments.Add(new PersonAssignment(person(), scenario(), _date));
+			assignment(date);
 			return this;
 		}
 
 		[UnitOfWork]
 		public virtual Database WithAssignedActivity(string activityName, string startTime, string endTime)
 		{
-			_activity = activityName;
-			assignment().AddActivity(activity(), new DateTimePeriod(startTime.Utc(), endTime.Utc()));
+			assignment(startTime).AddActivity(activity(activityName, null), new DateTimePeriod(startTime.Utc(), endTime.Utc()));
 			return this;
 		}
 
-		private IActivity activity()
+		private IActivity activity(string name, Color? color)
 		{
-			if (_activity == null)
-				WithActivity(RandomName.Make());
-			return _activities.LoadAll().Single(x => x.Name.Equals(_activity));
+			if (name != null)
+				_activity = name;
+
+			var existing = _activities.LoadAll().SingleOrDefault(x => x.Name == _activity);
+			if (existing != null)
+				return existing;
+
+			_activity = _activity ?? RandomName.Make();
+			var activity = new Activity(_activity);
+			if (color.HasValue)
+				activity.DisplayColor = color.Value;
+			_activities.Add(activity);
+			return activity;
 		}
 
-		private IPersonAssignment assignment()
+		private IPersonAssignment assignment(string date)
 		{
-			var pa = _assignments.LoadAll().Single(x => x.Date == _date && x.Person == person());
-			return _assignments.LoadAggregate(pa.Id.Value);
+			if (date != null)
+				_date = date.Date();
+
+			var existing = _assignments.LoadAll().SingleOrDefault(x => x.Date == _date && x.Person == person());
+			if (existing != null)
+				return _assignments.LoadAggregate(existing.Id.Value); // dont know why it needs to be loaded using this method here
+
+			var personAssignment = new PersonAssignment(person(), scenario(), _date);
+			_assignments.Add(personAssignment);
+			return personAssignment;
 		}
 
 
@@ -525,7 +538,7 @@ namespace Teleopti.Ccc.TestCommon
 		[UnitOfWork]
 		public virtual Database WithMapping()
 		{
-			var mapping = new RtaMap(stateGroup(), activity()) {RtaRule = rule()};
+			var mapping = new RtaMap(stateGroup(), activity(null, null)) {RtaRule = rule()};
 			_mappings.Add(mapping);
 			return this;
 		}

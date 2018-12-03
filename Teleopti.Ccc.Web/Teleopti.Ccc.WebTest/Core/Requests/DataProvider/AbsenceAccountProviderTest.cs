@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			
-			repository.Stub(x => x.Find(person)).Return(personAccountCollection);
+			repository.Stub(x => x.Find(person, absence)).Return(personAccountCollection);
 			personAccountCollection.Stub(x => x.Find(absence, date)).Return(absenceAccount);
 
 			var result = target.GetPersonAccount(absence, date);

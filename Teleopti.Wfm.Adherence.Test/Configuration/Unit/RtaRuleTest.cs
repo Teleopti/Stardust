@@ -65,16 +65,5 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 		{
 			Assert.Throws<ArgumentOutOfRangeException>(() => _target.ThresholdTime = TimeSpan.FromSeconds(-20).Seconds);
 		}
-
-		[Test]
-		public void ShouldNotThrowWhenNoAdherence()
-		{
-			var target = new RtaRule();
-
-			Assert.DoesNotThrow(() =>
-			{
-				var action = target.AdherenceText;
-			});
-		}
 	}
 }

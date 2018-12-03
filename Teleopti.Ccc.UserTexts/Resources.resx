@@ -16146,6 +16146,10 @@ Do you want to participate?</value>
     <value>You need a planning period to schedule your agents. Do you want to create a planning period?</value>
     <comment>Help text in resource planner to show that you need to create a planning period</comment>
   </data>
+  <data name="HelpCreatePlanningPeriod" xml:space="preserve">
+    <value>A planning period is needed to schedule your agents.</value>
+    <comment>Help text in resource planner to show that you need to create a planning period</comment>
+  </data>
   <data name="AreYouSureYouWantToClearPlanningPeriodData" xml:space="preserve">
     <value>Are you sure you want to clear scheduled shifts and days off for the planning period {0}-{1} ?</value>
     <comment>AreYouSureYouWantToClearPlaningPeriodData</comment>
@@ -17519,9 +17523,6 @@ The application will now exit.</value>
   <data name="SkillTypeFilter" xml:space="preserve">
     <value>Skill type filter</value>
   </data>
-  <data name="PeopleManageUsers" xml:space="preserve">
-    <value>Manage users</value>
-  </data>
   <data name="PeopleUsernameIsAlreadyInUse" xml:space="preserve">
     <value>Username is already in use</value>
     <comment>Username is taken</comment>
@@ -17974,5 +17975,13 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   </data>
   <data name="SelectSkillOrGroup" xml:space="preserve">
     <value>Select a skill or skill group</value>
+  </data>
+  <data name="SelectToday" xml:space="preserve">
+    <value>Select today</value>
+    <comment>Select today canlendar tooltip</comment>
+  </data>
+  <data name="PeopleManageUsers" xml:space="preserve">
+    <value>View users</value>
+    <comment>Permission for viewing users</comment>
   </data>
 </root>

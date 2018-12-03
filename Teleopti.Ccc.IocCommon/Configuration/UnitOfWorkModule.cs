@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CurrentPreCommitHooks>().As<ICurrentPreCommitHooks>();
 			builder.RegisterType<SetSourceOnPersonAssignment>().As<IPreCommitHook>();
 			builder.RegisterType<CurrentSchedulingSource>().As<ICurrentSchedulingSource>().As<ISchedulingSourceScope>().SingleInstance();
-			
+
 			if (_configuration.Args().OptimizeScheduleChangedEvents_DontUseFromWeb)
 			{
 				builder.RegisterType<ScheduleChangedEventPublisher>();
@@ -70,6 +71,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<NoScheduleChangedEventPublisher>().As<ScheduleChangedEventPublisher>();
 			}
+
 			builder.RegisterType<EventsMessageSender>();
 			builder.RegisterType<CompositeScheduleEventsPublisher>().As<ITransactionHook>();
 			builder.RegisterType<ScheduleChangedEventFromMeetingPublisher>().As<ITransactionHook>();
@@ -78,7 +80,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OptionalColumnCollectionChangedEventPublisher>().As<ITransactionHook>();
 			builder.RegisterType<SettingsForPersonPeriodChangedEventPublisher>().As<ITransactionHook>();
 			builder.RegisterType<MessageBrokerSender>().As<ITransactionHook>().SingleInstance();
-			builder.RegisterType<ScheduleChangedMessageSender>().As<ITransactionHook>();
+
+			if (_configuration.Toggle(Toggles.MessageBroker_ScheduleChangedMessagePackaging_79140))
+				builder.RegisterType<ScheduleChangedMessagePackagingSender>().As<ITransactionHook>();
+			else
+				builder.RegisterType<ScheduleChangedMessageSender>().As<ITransactionHook>();
+
 			builder.RegisterType<ASMScheduleChangeTimePersister>().As<ITransactionHook>();
 		}
 	}

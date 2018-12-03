@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockTranslationModule } from '@wfm/mocks/translation';
@@ -16,7 +15,7 @@ describe('FeedbackMessageComponent', () => {
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
 			declarations: [FeedbackMessageComponent],
-			imports: [MockTranslationModule, HttpClientModule, NgZorroAntdModule, NoopAnimationsModule]
+			imports: [MockTranslationModule, NgZorroAntdModule, NoopAnimationsModule]
 		}).compileComponents();
 	}));
 

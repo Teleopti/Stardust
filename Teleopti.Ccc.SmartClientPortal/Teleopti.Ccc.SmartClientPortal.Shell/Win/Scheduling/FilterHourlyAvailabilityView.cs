@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 	public partial class FilterHourlyAvailabilityView : BaseDialogForm
 	{
 		private readonly FilterHourlyAvailabilityPresenter _presenter;
-		public FilterHourlyAvailabilityView(DateOnly defaultDate, ISchedulerStateHolder schedulerStateHolder)
+		public FilterHourlyAvailabilityView(DateOnly defaultDate, SchedulingScreenState schedulerStateHolder)
 		{
 			InitializeComponent();
 			datePicker.Value = defaultDate.Date;

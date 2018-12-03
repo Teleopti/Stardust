@@ -32,8 +32,10 @@ $top-nav-height: 54px;
 	@include fill-nav-bar;
 	@include button-transition;
 
-	&:hover {
+	&:hover,
+	&:focus {
 		@include darken-bg;
+		outline: none;
 	}
 }
 
@@ -47,9 +49,10 @@ $top-nav-height: 54px;
 	color: white;
 	&:hover,
 	&:active,
-	&focus {
+	&:focus {
 		color: white;
 		@include darken-bg;
+		outline: none;
 	}
 }
 
@@ -66,8 +69,10 @@ $top-nav-height: 54px;
 	@include fill-nav-bar;
 	@include button-transition;
 
-	&:hover {
+	&:hover,
+	&:focus {
 		@include darken-bg;
+		outline: none;
 	}
 }
 
@@ -75,10 +80,6 @@ $top-nav-height: 54px;
 	width: $top-nav-height;
 	@include fill-nav-bar;
 	@include button-transition;
-
-	&:hover {
-		@include darken-bg;
-	}
 }
 
 :host-context(.angular-theme-classic) {
@@ -107,7 +108,9 @@ $top-nav-height: 54px;
 	width: $top-nav-height;
 	@include fill-nav-bar;
 	@include button-transition;
-	&:hover {
+	&:hover,
+	&:focus {
 		@include darken-bg;
+		outline: none;
 	}
 }

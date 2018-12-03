@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var dateFrom = command.DateFrom.ToDateOnly();
 				foundPerson.VerifyCanBeModifiedByCurrentUser(dateFrom);
 
-				var accounts = _personAbsenceAccountRepository.Find(foundPerson);
+				var accounts = _personAbsenceAccountRepository.Find(foundPerson, foundAbsence);
                 var personAccount = accounts.Find(foundAbsence, dateFrom);
                 if (personAccount == null || !personAccount.StartDate.Equals(dateFrom))
 				{

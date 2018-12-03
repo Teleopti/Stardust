@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			DefaultScheduleTag = defaultScheduleTag;
             Now = DateTime.UtcNow;
             SelectedPeriod = SchedulerState.RequestedPeriod;
-            SortCommand = new NoSortCommand(_schedulerState);
+            SortCommand = new NoSortCommand();
         }
 
         protected IScheduleViewBase View
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
                 IsAscendingSort = false;
             }
             CurrentSortColumn = column;
-            SortCommand = new NoSortCommand(_schedulerState);
+            SortCommand = new NoSortCommand();
 
 			if (sortedFilteredPersonDictionary.SequenceEqual(SchedulerState.FilteredAgentsDictionary))
 			{

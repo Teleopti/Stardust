@@ -118,6 +118,9 @@
 			if (vm.isFullDayAbsence) {
 				determineIsSameTimezoneForFullDayAbsence();
 			} 
+			else if (vm.isAbsenceTimeValid()) {
+				vm.invalidAgentNameListString = [];
+			}
 		};
 
 		function getTimeRangeInCurrentTimezone() {

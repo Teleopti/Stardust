@@ -37,8 +37,6 @@
 		expect(result.DateTimeFormat.AMDesignator).toBe('AM');
 		expect(result.DateTimeFormat.PMDesignator).toBe('PM');
 		expect(result.DateTimeFormat.ShowMeridian).toBeFalsy();
-										 
-
 	}));
 
 	it('should set the current user info with correct ShortTimePattern', inject(function(CurrentUserInfo) {
@@ -56,7 +54,7 @@
 		var result = CurrentUserInfo.CurrentUserInfo();
 		expect(result.DateTimeFormat.ShortTimePattern).toBe('h:mm A');
 		expect(result.DateTimeFormat.ShowMeridian).toBeTruthy();
-	})); 
+	}));
 
 	it('should get the current user from the server', function(done) {
 		inject(function(CurrentUserInfo) {
@@ -94,7 +92,6 @@
 			$httpBackend
 				.expectGET('../api/Global/User/CurrentUser')
 				.respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
-			$httpBackend.expectGET('../api/Settings/SupportEmail').respond(200, '');
 
 			CurrentUserInfo.initContext().then(function() {
 				var result = CurrentUserInfo.isConnected();
@@ -113,35 +110,10 @@
 			$httpBackend
 				.expectGET('../api/Global/User/CurrentUser')
 				.respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
-			$httpBackend.expectGET('../api/Settings/SupportEmail').respond(200, '');
 
 			CurrentUserInfo.initContext().then(function() {
 				var result = CurrentUserInfo.isConnected();
 				expect(result).toBe(true);
-				done();
-			});
-			$httpBackend.flush();
-		});
-	});
-
-	it('should init the support email', function(done) {
-		inject(function(Settings) {
-			$httpBackend.expectGET('../api/Settings/SupportEmail').respond(200, 'servicedesk@teleopti.com');
-
-			Settings.init().then(function() {
-				expect(Settings.supportEmailSetting).toBe('servicedesk@teleopti.com');
-				done();
-			});
-			$httpBackend.flush();
-		});
-	});
-
-	it('should init with the default support email if nothing is provided by the server', function(done) {
-		inject(function(Settings) {
-			$httpBackend.expectGET('../api/Settings/SupportEmail').respond(200, '');
-
-			Settings.init().then(function() {
-				expect(Settings.supportEmailSetting).toBe('ServiceDesk@teleopti.com');
 				done();
 			});
 			$httpBackend.flush();

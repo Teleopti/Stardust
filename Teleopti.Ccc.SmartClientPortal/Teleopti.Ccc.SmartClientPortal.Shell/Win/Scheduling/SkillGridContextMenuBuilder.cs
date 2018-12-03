@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 	{
 		public void Build(SkillResultViewSetting currentSetting, ContextMenuStrip contextMenuSkillGrid,
 			bool useShrinkage, EventHandler skillGridPeriodHandler,
-			EventHandler toolStripMenuItemUseShrinkageClickHandler, EventHandler skillGridMenuItemClickHandler)
+			EventHandler toolStripMenuItemUseShrinkageClickHandler)
 		{
 			var skillGridMenuItem = new ToolStripMenuItem(Resources.Period)
 			{
@@ -65,8 +65,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var skillGridMenuSeparator = new ToolStripSeparator();
 			contextMenuSkillGrid.Items.Add(skillGridMenuSeparator);
 
-			skillGridMenuItem = new ToolStripMenuItem(Resources.CreateSkillSummery);
-			skillGridMenuItem.Click += skillGridMenuItemClickHandler;
+			skillGridMenuItem = new ToolStripMenuItem(Resources.CreateSkillSummery) {Name = "CreateSkillSummery"};
 			contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 
 			skillGridMenuItem = new ToolStripMenuItem(Resources.EditSkillSummery) {Name = "Edit", Enabled = false};

@@ -12,7 +12,11 @@ type ThemeType = 'classic' | 'dark';
 
 @Injectable()
 export class ThemeService {
-	private theme$ = new ReplaySubject<Theme>(1);
+	private _theme$ = new ReplaySubject<Theme>(1);
+
+	public get theme$(): Observable<Theme> {
+		return this._theme$;
+	}
 
 	constructor(private http: HttpClient) {
 		this.http
@@ -20,7 +24,7 @@ export class ThemeService {
 			.pipe(map(this.ensureThemeNotNull.bind(this)))
 			.subscribe({
 				next: (theme: Theme) => {
-					this.theme$.next(theme);
+					this._theme$.next(theme);
 					this.applyTheme(theme.Name);
 				}
 			});
@@ -33,12 +37,8 @@ export class ThemeService {
 		};
 	}
 
-	getTheme(): Observable<Theme> {
-		return this.theme$;
-	}
-
 	saveThemePreference(theme: Theme): void {
-		this.theme$.next(theme);
+		this._theme$.next(theme);
 		this.http.post('../api/Theme/Change', theme).subscribe();
 	}
 

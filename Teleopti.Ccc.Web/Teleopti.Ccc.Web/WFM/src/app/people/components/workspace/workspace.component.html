@@ -17,7 +17,7 @@
       <tr *ngFor="let person of workspaceTable.data" data-test-person>
         <td>{{person.FirstName}} {{person.LastName}}</td>
         <td>
-          <i class="b-person-remove anticon anticon-close" (click)="workspaceService.deselectPerson(person)" data-test-person-remove></i>
+          <i nz-icon type="close" class="b-person-remove" (click)="workspaceService.deselectPerson(person)" data-test-person-remove></i>
         </td>
       </tr>
     </tbody>

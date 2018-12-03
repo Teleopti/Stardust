@@ -5,13 +5,24 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Common.Time
 {
-	public static class TimeExtensions
+	public class Time : ITime
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(ITime));
+		private readonly INow _now;
+		private static readonly ILog logger = LogManager.GetLogger(typeof(Time));
 
-		public static IDisposable StartTimerWithLock(this ITime time, Action callback, object @lock, TimeSpan period)
+		public Time(INow now)
 		{
-			return time.StartTimer(state =>
+			_now = now;
+		}
+
+		public DateTime UtcDateTime()
+		{
+			return _now.UtcDateTime();
+		}
+
+		public IDisposable StartTimerWithLock(Action callback, object @lock, TimeSpan period)
+		{
+			return StartTimer(state =>
 			{
 				try
 				{
@@ -32,22 +43,7 @@ namespace Teleopti.Ccc.Domain.Common.Time
 				}
 			}, null, period, period);
 		}
-	}
-
-	public class Time : ITime
-	{
-		private readonly INow _now;
-
-		public Time(INow now)
-		{
-			_now = now;
-		}
-
-		public DateTime UtcDateTime()
-		{
-			return _now.UtcDateTime();
-		}
-
+		
 		public IDisposable StartTimer(TimerCallback callback, object state, TimeSpan dueTime, TimeSpan period)
 		{
 			var timer = new Timer(callback, state, dueTime, period);

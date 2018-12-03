@@ -552,7 +552,6 @@
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityPersonFilterTestOld.cs" />
     <Compile Include="Scheduler\SchedulePartNoteTests.cs" />
     <Compile Include="Scheduler\SchedulePasteActionTest.cs" />
-    <Compile Include="Scheduler\ScheduleSortingCommands\ScheduleSortBySeniorityRankingCommandsTest.cs" />
     <Compile Include="Scheduler\SchedulingScreenPersisterTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftCategoryDistributionModelTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftPerAgentPresenterTest.cs" />
@@ -824,10 +823,6 @@
     <ProjectReference Include="..\Teleopti.Ccc.WinCode\Teleopti.Ccc.WinCode.csproj">
       <Project>{3b495e4b-1803-413c-9480-40c8efccba45}</Project>
       <Name>Teleopti.Ccc.WinCode</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
-      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
-      <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj">
       <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>

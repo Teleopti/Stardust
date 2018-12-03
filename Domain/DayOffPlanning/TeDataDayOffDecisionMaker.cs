@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			_logWriter = logWriter;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ILogWriter.LogInfo(System.String)")]
 		public bool Execute(ILockableBitArray lockableBitArray, IList<double?> values)
 		{
 			if (!_is2222)

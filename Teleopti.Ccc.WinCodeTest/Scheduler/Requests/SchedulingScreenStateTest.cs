@@ -331,6 +331,5 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 			innerTarget.PersonRequests[0].Changed = true;
 			Assert.IsTrue(innerTarget.ChangedRequests());
 		}
-
 	}
 }

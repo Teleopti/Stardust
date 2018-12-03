@@ -7,7 +7,6 @@
 	var self = this,
 		constants = Teleopti.MyTimeWeb.Common.Constants,
 		PIXEL_OF_ONE_HOUR = constants.pixelOfOneHourInTeamSchedule,
-		dateOnlyFormat = constants.serviceDateTimeFormat.dateOnly,
 		getTextColoFn = Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor,
 		timeLineOffset = 50,
 		minPixelsToDisplayTitle = 30,
@@ -25,7 +24,7 @@
 		!self.isHostAMobile && Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_NewTeamScheduleViewDesktop_76313');
 
 	self.selectedDate = ko.observable(moment());
-	self.displayDate = ko.observable(self.selectedDate().format(dateOnlyFormat));
+	self.displayDate = ko.observable(Teleopti.MyTimeWeb.Common.FormatDate(self.selectedDate()));
 	self.availableTeams = ko.observableArray();
 	self.selectedTeamIds = [];
 	self.defaultTeamId = '';
@@ -190,7 +189,7 @@
 		disposeShowOnlyNightShiftSubscription();
 
 		self.selectedDate(moment(date));
-		self.displayDate(moment(date).format(dateOnlyFormat));
+		self.displayDate(Teleopti.MyTimeWeb.Common.FormatDate(moment(date)));
 
 		rawTimeline = data.TimeLine;
 		self.timeLines(createTimeLineViewModel(rawTimeline));
@@ -382,7 +381,7 @@
 
 	function setSelectedDateSubscription() {
 		self.selectedDateSubscription = self.selectedDate.subscribe(function(value) {
-			self.displayDate(value.format(dateOnlyFormat));
+			self.displayDate(Teleopti.MyTimeWeb.Common.FormatDate(value));
 			self.paging.skip = 0;
 			self.loadedAgentIndex = 0;
 			self.lastAgentIndexInDom = 0;

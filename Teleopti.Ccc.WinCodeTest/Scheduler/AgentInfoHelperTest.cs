@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_dateOnly = new DateOnly(2009, 12, 12);
 			_person = PersonFactory.CreatePersonWithPersonPeriod(_dateOnly, new List<ISkill>());
 			_stateHolder = SchedulingResultStateHolderFactory.Create(new DateTimePeriod(_dateTime, _dateTime.AddDays(7)));
-			_schedulerStateHolder = new SchedulerStateHolder(_stateHolder, new CommonStateHolder(new DisableDeletedFilter(null)), new FakeTimeZoneGuard(TimeZoneInfo.Utc));
+			_schedulerStateHolder = new SchedulerStateHolder(_stateHolder, new DisableDeletedFilter(null), new FakeTimeZoneGuard(TimeZoneInfo.Utc));
 			_schedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(
 				new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(7)), TimeZoneInfo.Utc);
 			_scenario = ScenarioFactory.CreateScenarioAggregate();

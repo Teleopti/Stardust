@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleSortingCommands;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
 
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
 	public class SchedulerSortCommandMapperTest
 	{
 		private MockRepository _mock;
-		private ISchedulerStateHolder _schedulerStateHolder;
+		private SchedulingScreenState _schedulerStateHolder;
 		private SchedulerSortCommandMapper _target;
 		private ILifetimeScope _container;
 
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
 		public void Setup()
 		{
 			_mock = new MockRepository();
-			_schedulerStateHolder = _mock.StrictMock<ISchedulerStateHolder>();
+			_schedulerStateHolder = new SchedulingScreenState(null, _mock.StrictMock<ISchedulerStateHolder>());
 
 			var builder = new ContainerBuilder();
 			builder.RegisterType<RankedPersonBasedOnStartDate>().As<IRankedPersonBasedOnStartDate>().SingleInstance();
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
 		[Test]
 		public void ShouldMapFromCommandToSetting()
 		{
-			var noSortCommandSetting = _target.GetSettingFromCommand(new NoSortCommand(_schedulerStateHolder));
+			var noSortCommandSetting = _target.GetSettingFromCommand(new NoSortCommand());
 			Assert.IsTrue(noSortCommandSetting == SchedulerSortCommandSetting.NoSortCommand);
 
 			var sortByContractTimeAscendingSetting =
@@ -92,11 +93,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
 			Assert.IsTrue(sortByStartDescendingSetting == SchedulerSortCommandSetting.SortByStartDescending);
 
 			var sortBySeniorityRankAscendingCommand =
-				_target.GetSettingFromCommand(new SortBySeniorityRankingAscendingCommand(_schedulerStateHolder, new RankedPersonBasedOnStartDate(null)));
+				_target.GetSettingFromCommand(new SortBySeniorityRankingAscendingCommand(_schedulerStateHolder.SchedulerStateHolder, new RankedPersonBasedOnStartDate(null)));
 			Assert.IsTrue(sortBySeniorityRankAscendingCommand == SchedulerSortCommandSetting.SortBySeniorityRankingAscending);
 
 			var sortBySeniorityRankDescendingCommand =
-				_target.GetSettingFromCommand(new SortBySeniorityRankingDescendingCommand(_schedulerStateHolder, new RankedPersonBasedOnStartDate(null)));
+				_target.GetSettingFromCommand(new SortBySeniorityRankingDescendingCommand(_schedulerStateHolder.SchedulerStateHolder, new RankedPersonBasedOnStartDate(null)));
 			Assert.IsTrue(sortBySeniorityRankDescendingCommand == SchedulerSortCommandSetting.SortBySeniorityRankingDescending);
 
 		

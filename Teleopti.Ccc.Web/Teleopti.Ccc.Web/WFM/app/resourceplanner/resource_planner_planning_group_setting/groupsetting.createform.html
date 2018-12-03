@@ -1,17 +1,18 @@
 <div class="view-header">
 	<div class="view-title" ng-if='vm.isEdit'>
 		<h1>
-			<i class="mdi mdi-calendar"></i> {{'EditPlanGroupSchedulingSetting' | translate}}</h1>
-		<p>{{'TextOfEditPlanGroupSchedulingSetting' | translate}}</p>
+			<i class="mdi mdi-calendar"></i> {{'EditPlanGroupSchedulingSetting' | translate}}
+		</h1>
 	</div>
 	<div class="view-title" ng-if='!vm.isEdit'>
 		<h1>
-			<i class="mdi mdi-calendar"></i> {{'CreatePlanGroupSchedulingSetting' | translate}}</h1>
-		<p>{{'TextOFCreatePlanGroupSchedulingSetting' | translate}}</p>
+			<i class="mdi mdi-calendar"></i> {{'CreatePlanGroupSchedulingSetting' | translate}}
+		</h1>
 	</div>
 </div>
 <div class="con-row">
 	<div class="con-flex">
+		<form name="form" class="wfm-form">
 		<card-panel-list>
 			<card-panel pre-open="true">
 				<card-panel-header>
@@ -24,9 +25,14 @@
 						<div class="con-flex">
 							<div class="form-input-wrap">
 								<label for="schedulingSettingName" translate>NameColon</label>
-								<input type="text" name="schedulingSettingName" id="schedulingSettingName" ng-disabled="vm.default" ng-model="vm.settingInfo.Name" class="pg-setting-name"
+								<input type="text" name="schedulingSettingName" id="schedulingSettingName" ng-disabled="vm.default" ng-model="vm.settingInfo.Name" class="pg-setting-name" required minlength="1" maxlength="100" autofocus
 								/>
-								<p class="text-danger" ng-show="!vm.isValidName()" translate> NameRequired </p>
+								<div ng-cloak class="animate-show"
+									 ng-show="(form.$submitted || form.schedulingSettingName.$touched) && form.schedulingSettingName.$error.required">
+									<div class="form-input-message formInvalidInput">{{'YouCannotHaveABlankName' | translate
+										}}
+									</div>
+								</div>
 							</div>
 						</div>
 						<div class="con-flex" ng-if="vm.default">
@@ -35,11 +41,11 @@
 								<input id="preferencePercent" type="number" ng-model="vm.settingInfo.PreferencePercent" placeholder="Preference Percentage" min="0" max="100" step="10"/>
 							</div>
 						</div>
-						<div class="con-flex">
-							<div class="form-input-wrap" ng-hide="vm.default">
-								<label for="autocomplete-form" translate>Filter:</label>
-								<form name="autocomplete-form">
-									<md-autocomplete md-no-cache="true" md-selected-item="vm.selectedItem" md-search-text="vm.searchString" placeholder="{{'SearchForDayOff'|translate}}"
+						<div class="con-flex" ng-hide="vm.default">
+							<div class="form-input-wrap">
+								<label for="filtersId" translate>Filter:</label>
+								<div name="filters" id="filtersId">
+									<md-autocomplete md-input-name="filters" md-no-cache="true" md-selected-item="vm.selectedItem" md-search-text="vm.searchString" placeholder="{{'SearchForDayOff'|translate}}"
 									 md-items="item in vm.inputFilterData()" md-item-text="vm.searchString" md-selected-item-change="vm.selectResultItem(vm.selectedItem)">
 										<md-item-template>
 											<div class="wfm-chip-wrap">
@@ -53,11 +59,12 @@
 											<p translate>noSearchResults</p>
 										</md-not-found>
 									</md-autocomplete>
-								</form>
+								</div>
+								<div ng-cloak
+									 ng-show="(form.$submitted || form.filters.$touched) && !vm.isValidFilters()">
+									<span class="form-input-message formInvalidInput" translate>YouMustSelectAtLeastOneFilter</span>
+								</div>
 							</div>
-							<p class="text-danger" ng-show="!vm.isValidFilters()">
-								<span translate>ValidationforFilter</span>
-							</p>
 						</div>
 					</div>
 					<div class="con-row demo-outline wfm-card-content" ng-show="vm.settingInfo.Filters.length > 0">
@@ -75,7 +82,7 @@
 					</div>
 				</card-panel-content>
 			</card-panel>
-			<card-panel>
+			<card-panel pre-open="true">
 				<card-panel-header>
 					<div class="header-flex">
 						<b translate>DayOffRuleSetting</b>
@@ -85,87 +92,87 @@
 					<div class="con-row demo-outline wfm-card-content">
 						<div class="con-flex">
 							<div class="form-input-wrap wfm-options">
-								<div class="wfm-option-label">
-									<p translate>DaysOffPerWeek</p>
+								<div class="wfm-option-label" style="margin-top: 0;">
+									<div translate>DaysOffPerWeek</div>
 								</div>
 								<div class="con-row">
-									<div class="wfm-option form-input-wrap con-flex">
-										<label for="daysOffMin" translate>MinColon </label>
-										<input type="number" ng-model="vm.settingInfo.MinDayOffsPerWeek" name="MinDayOffsPerWeek" placeholder="0" min="0" id="daysOffMin"
+									<div class="wfm-option form-input-wrap">
+										<label for="MinDayOffsPerWeek" translate>MinColon </label>
+										<input type="number" ng-model="vm.settingInfo.MinDayOffsPerWeek" name="MinDayOffsPerWeek" placeholder="0" min="0" id="MinDayOffsPerWeek"
 										/>
 										<p class="text-danger" ng-show="!vm.isValidDayOffsPerWeek()" translate>InvalidInput</p>
 									</div>
-									<div class="wfm-option form-input-wrap con-flex">
-										<label for="daysOffMax" translate>MaxColon</label>
-										<input type="number" ng-model="vm.settingInfo.MaxDayOffsPerWeek" name="MaxDayOffsPerWeek" placeholder="0" min="0" id="daysOffMax"
+									<div class="wfm-option form-input-wrap">
+										<label for="MaxDayOffsPerWeek" translate>MaxColon</label>
+										<input type="number" ng-model="vm.settingInfo.MaxDayOffsPerWeek" name="MaxDayOffsPerWeek" placeholder="0" min="0" id="MaxDayOffsPerWeek"
 										/>
 										<p class="text-danger" ng-show="!vm.isValidDayOffsPerWeek()" translate>InvalidInput</p>
 									</div>
 								</div>
 								<div class="wfm-option-label">
-									<p translate>ConsecutiveDaysOff</p>
+									<div translate>ConsecutiveDaysOff</div>
 								</div>
 								<div class="con-row">
-									<div class="wfm-option form-input-wrap con-flex">
-										<label for="workOffMin" translate>MinColon</label>
+									<div class="wfm-option form-input-wrap">
+										<label for="MinConsecutiveDayOffs" translate>MinColon</label>
 										<input type="number" ng-model="vm.settingInfo.MinConsecutiveDayOffs" name="MinConsecutiveDayOffs" placeholder="0" min="0"
-										 id="workOffMin" />
+										 id="MinConsecutiveDayOffs" />
 										<p class="text-danger" ng-show="!vm.isValidConsecDaysOff()" translate>InvalidInput</p>
 									</div>
-									<div class="wfm-option form-input-wrap con-flex">
-										<label for="workOffMax" translate>MaxColon</label>
+									<div class="wfm-option form-input-wrap">
+										<label for="MaxConsecutiveDayOffs" translate>MaxColon</label>
 										<input type="number" ng-model="vm.settingInfo.MaxConsecutiveDayOffs" name="MaxConsecutiveDayOffs" placeholder="0" min="0"
-										 id="workOffMax" />
+										 id="MaxConsecutiveDayOffs" />
 										<p class="text-danger" ng-show="!vm.isValidConsecDaysOff()" translate>InvalidInput</p>
 									</div>
 								</div>
 								<div class="wfm-option-label">
-									<p translate>ConsecutiveWorkDays</p>
+									<div translate>ConsecutiveWorkDays</div>
 								</div>
 								<div class="con-row">
-									<div class="wfm-option form-input-wrap con-flex">
-										<label for="workMin" translate>MinColon</label>
+									<div class="wfm-option form-input-wrap">
+										<label for="MinConsecutiveWorkdays" translate>MinColon</label>
 										<input type="number" ng-model="vm.settingInfo.MinConsecutiveWorkdays" name="MinConsecutiveWorkdays" placeholder="0" min="0"
-										 id="workMin" />
+										 id="MinConsecutiveWorkdays" />
 										<p class="text-danger" ng-show="!vm.isValidConsecWorkDays()" translate>InvalidInput</p>
 									</div>
-									<div class="wfm-option form-input-wrap con-flex">
-										<label for="workMax" translate>MaxColon</label>
+									<div class="wfm-option form-input-wrap">
+										<label for="MaxConsecutiveWorkdays" translate>MaxColon</label>
 										<input type="number" ng-model="vm.settingInfo.MaxConsecutiveWorkdays" name="MaxConsecutiveWorkdays" placeholder="0" min="0"
-										 id="workMax" />
+										 id="MaxConsecutiveWorkdays" />
 										<p class="text-danger" ng-show="!vm.isValidConsecWorkDays()" translate>InvalidInput</p>
 									</div>
 								</div>
 								<div class="wfm-option-label">
-									<p translate>FullWeekEndsOff</p>
+									<div translate>FullWeekEndsOff</div>
 								</div>
 								<div class="con-row">
-									<div class="wfm-option form-input-wrap con-flex">
-										<label for="workMin" translate>MinColon</label>
-										<input type="number" ng-model="vm.settingInfo.MinFullWeekendsOff" name="MinFullWeekEndsOff" placeholder="0" min="0" id="workMin"
+									<div class="wfm-option form-input-wrap">
+										<label for="MinFullWeekEndsOff" translate>MinColon</label>
+										<input type="number" ng-model="vm.settingInfo.MinFullWeekendsOff" name="MinFullWeekEndsOff" placeholder="0" min="0" id="MinFullWeekEndsOff"
 										/>
 										<p class="text-danger" ng-show="!vm.isValidFullWeekEndsOff()" translate>InvalidInput</p>
 									</div>
-									<div class="wfm-option form-input-wrap con-flex">
-										<label for="workMax" translate>MaxColon</label>
-										<input type="number" ng-model="vm.settingInfo.MaxFullWeekendsOff" name="MaxFullWeekEndsOff" placeholder="0" min="0" id="workMax"
+									<div class="wfm-option form-input-wrap">
+										<label for="MaxFullWeekEndsOff" translate>MaxColon</label>
+										<input type="number" ng-model="vm.settingInfo.MaxFullWeekendsOff" name="MaxFullWeekEndsOff" placeholder="0" min="0" id="MaxFullWeekEndsOff"
 										/>
 										<p class="text-danger" ng-show="!vm.isValidFullWeekEndsOff()" translate>InvalidInput</p>
 									</div>
 								</div>
 								<div class="wfm-option-label">
-									<p translate>FullWeekEndDaysOff</p>
+									<div translate>FullWeekEndDaysOff</div>
 								</div>
 								<div class="con-row">
-									<div class="wfm-option form-input-wrap con-flex">
-										<label for="workMin" translate>MinColon</label>
-										<input type="number" ng-model="vm.settingInfo.MinWeekendDaysOff" name="MinFullWeekEndDaysOff" placeholder="0" min="0" id="workMin"
+									<div class="wfm-option form-input-wrap">
+										<label for="MinFullWeekEndDaysOff" translate>MinColon</label>
+										<input type="number" ng-model="vm.settingInfo.MinWeekendDaysOff" name="MinFullWeekEndDaysOff" placeholder="0" min="0" id="MinFullWeekEndDaysOff"
 										/>
 										<p class="text-danger" ng-show="!vm.isValidFullWeekEndDaysOff()" translate>InvalidInput</p>
 									</div>
-									<div class="wfm-option form-input-wrap con-flex">
-										<label for="workMax" translate>MaxColon</label>
-										<input type="number" ng-model="vm.settingInfo.MaxWeekendDaysOff" name="MaxFullWeekEndDaysOff" placeholder="0" min="0" id="workMax"
+									<div class="wfm-option form-input-wrap">
+										<label for="MaxFullWeekEndDaysOff" translate>MaxColon</label>
+										<input type="number" ng-model="vm.settingInfo.MaxWeekendDaysOff" name="MaxFullWeekEndDaysOff" placeholder="0" min="0" id="MaxFullWeekEndDaysOff"
 										/>
 										<p class="text-danger" ng-show="!vm.isValidFullWeekEndDaysOff()" translate>InvalidInput</p>
 									</div>
@@ -175,7 +182,7 @@
 					</div>
 				</card-panel-content>
 			</card-panel>
-			<card-panel>
+			<card-panel pre-open="true">
 				<card-panel-header class="block-scheduling-panel">
 					<div class="header-flex">
 						<b>{{vm.selectedSchedulingMethod.Name}}</b>
@@ -241,5 +248,6 @@
 				</div>
 			</div>
 		</div>
+		</form>
 	</div>
 </div>

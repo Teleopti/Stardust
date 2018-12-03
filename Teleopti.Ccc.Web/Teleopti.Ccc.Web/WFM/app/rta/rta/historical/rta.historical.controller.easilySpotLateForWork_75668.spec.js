@@ -8,14 +8,14 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 				EndTime: '2018-05-28T20:00:00'
 			},
 			Changes: [{
-				LateForWork: 'Late 30 min',
+				LateForWorkMinutes: 30,
 				Time: '2018-05-28T10:30:00'
 			}]
 		});
 
 		var vm = t.createController();
 
-		expect(vm.lateForWork.text).toEqual('Late 30 min');
+		expect(vm.lateForWork.minutes).toEqual(30);
 	});
 
 	it('should display late for work', function (t) {
@@ -25,14 +25,14 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 				EndTime: '2018-05-28T20:00:00'
 			},
 			Changes: [{
-				LateForWork: 'Late 60 min',
+				LateForWorkMinutes: 60,
 				Time: '2018-05-28T11:00:00'
 			}]
 		});
 
 		var vm = t.createController();
 
-		expect(vm.lateForWork.text).toEqual('Late 60 min');
+		expect(vm.lateForWork.minutes).toEqual(60);
 	});
 
 	it('should display late for work for first change', function (t) {
@@ -44,14 +44,14 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 			Changes: [{
 				Time: '2018-05-28T10:00:00'
 			}, {
-				LateForWork: 'Late 60 min',
+				LateForWorkMinutes: 60,
 				Time: '2018-05-28T11:00:00'
 			}]
 		});
 
 		var vm = t.createController();
 
-		expect(vm.lateForWork.text).toEqual('Late 60 min');
+		expect(vm.lateForWork.minutes).toEqual(60);
 	});
 
 	it('should not display late for work if there is none', function (t) {
@@ -77,7 +77,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 				EndTime: '2018-05-28T20:00:00'
 			},
 			Changes: [{
-				LateForWork: 'Late 60 min',
+				LateForWorkMinutes: 60,
 				Time: '2018-05-28T11:00:00'
 			}]
 		});
@@ -94,7 +94,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 				EndTime: '2018-05-28T20:00:00'
 			},
 			Changes: [{
-				LateForWork: 'Late 120 min',
+				LateForWorkMinutes: 60,
 				Time: '2018-05-28T12:00:00'
 			}]
 		});
@@ -113,7 +113,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 			Changes: [{
 				Time: '2018-05-28T10:00:00'
 			}, {
-				LateForWork: 'Late 120 min',
+				LateForWorkMinutes: 120,
 				Time: '2018-05-28T12:00:00'
 			}]
 		});
@@ -134,13 +134,13 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 				EndTime: '2018-05-28T20:00:00'
 			},
 			Changes: [{
-				LateForWork: 'Late 30 min',
+				LateForWorkMinutes: 30,
 				Time: '2018-05-28T10:30:00'
 			}]
 		});
 
 		var vm = t.createController();
 
-		expect(vm.cards[0].Items[0].lateForWork).toEqual('Late 30 min');
+		expect(vm.cards[0].Items[0].lateForWorkMinutes).toEqual(30);
 	})
 });

@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Editor
 
 	    public IList<IShiftCategory> SelectableShiftCategories => _model.Settings.ShiftCategories;
 
-	    public void LoadFromStateHolder(ICommonStateHolder commonStateHolder)
+	    public void LoadFromStateHolder(CommonStateHolder commonStateHolder)
         {
 			foreach (var absence in commonStateHolder.Absences)
 			{

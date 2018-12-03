@@ -2,16 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
@@ -40,11 +34,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ResetFilteredPersonsOvertimeAvailability();
 		}
 
-		public SchedulerStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder, ICommonStateHolder commonStateHolder, ITimeZoneGuard timeZoneGuard)
+		public SchedulerStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder, IDisableDeletedFilter disableDeletedFilter, ITimeZoneGuard timeZoneGuard)
 		{
+			CommonStateHolder = new CommonStateHolder(disableDeletedFilter);
 			SchedulingResultState = schedulingResultStateHolder;
 			TimeZoneInfo = timeZoneGuard.CurrentTimeZone();
-			CommonStateHolder = commonStateHolder;
 			ChoosenAgents = new List<IPerson>();
 			ResetFilteredPersonsOvertimeAvailability();
 		}
@@ -85,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public IScheduleDictionary Schedules => SchedulingResultState.Schedules;
 
-		public ICommonStateHolder CommonStateHolder { get; }
+		public CommonStateHolder CommonStateHolder { get; }
 
 		public IEnumerable<DateOnly> DaysToRecalculate
 		{
@@ -153,12 +147,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_combinedFilteredAgents = new Lazy<IDictionary<Guid, IPerson>>(combinedFilters);
 		}
 
-		public void FilterPersons(IList<IPerson> selectedPersons)
-		{
-			FilteredAgentsDictionary = selectedPersons.OrderBy(CommonNameDescription.BuildFor).ToDictionary(p => p.Id.Value);
-			_combinedFilteredAgents = new Lazy<IDictionary<Guid, IPerson>>(combinedFilters);
-		}
-
 		public void FilterPersonsOvertimeAvailability(IEnumerable<IPerson> selectedPersons)
 		{
 			_filteredPersonsOvertimeAvailability = selectedPersons.OrderBy(CommonNameDescription.BuildFor).ToDictionary(p => p.Id.Value);
@@ -188,12 +176,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public CommonNameDescriptionSetting CommonNameDescription { get; private set; } = new CommonNameDescriptionSetting();
-
-		public bool AgentFilter()
-		{
-			return FilteredAgentsDictionary.Count != ChoosenAgents.Count;
-		}
-
 		
 		public void ClearReferredShiftTradeRequests()
 		{

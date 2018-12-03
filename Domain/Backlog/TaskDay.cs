@@ -45,12 +45,5 @@ namespace Teleopti.Ccc.Domain.Backlog
 			_time = TimeSpan.Zero;
 			_plannedTimeType = PlannedTimeTypeEnum.Calculated;
 		}
-
-		public void ClearTime()
-		{
-			throw new NotImplementedException();
-		}
 	}
-
-	
 }

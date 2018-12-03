@@ -15279,9 +15279,6 @@ Applikaatio sulkeutuu. </value>
   <data name="SkillTypeFilter" xml:space="preserve">
     <value>Ennustetavan filtteri</value>
   </data>
-  <data name="PeopleManageUsers" xml:space="preserve">
-    <value>Hallinnoi käyttäjiä</value>
-  </data>
   <data name="PeopleUsernameIsAlreadyInUse" xml:space="preserve">
     <value>Käyttäjänimi on jo käytössä</value>
   </data>

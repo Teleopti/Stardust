@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.WebTest.Core
 		public FakeCurrentBusinessUnit CurrentBusinessUnit;
 		private FakePersonRepository personRepository;
 		public FakeLoggedOnUser CurrentLoggedOnUser;
-		public FakePersonSelectorReadOnlyRepository PersonSelectorReadOnlyRepository;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 
 		public void Isolate(IIsolate isolate)
@@ -40,7 +39,6 @@ namespace Teleopti.Ccc.WebTest.Core
 			isolate.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			personRepository = new FakePersonRepositoryLegacy();
-			isolate.UseTestDouble<FakePersonSelectorReadOnlyRepository>().For<IPersonSelectorReadOnlyRepository>();
 		}
 		[Test]
 		public void ShouldReturnPermittedTeamsHierachyWhenUserHasMyTeamSchedulesPermission()

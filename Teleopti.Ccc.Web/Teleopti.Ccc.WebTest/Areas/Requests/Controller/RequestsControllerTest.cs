@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -40,14 +41,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		public FakePersonFinderReadOnlyRepository PersonFinderReadOnlyRepository;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 		public FakeLoggedOnUser LoggedOnUser;
+		public FakeLicenseAvailability LicenseAvailability;
 
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
 			isolate.UseTestDouble<FakePermissions>().For<IAuthorization>();
 			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
-			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>(); 
+			isolate.UseTestDouble<FakeLicenseAvailability>().For<ILicenseAvailability>(); 
 			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("test") { DefaultScenario = true })).For<IScenarioRepository>();
+		}
+
+		[Test]
+		public void ShouldGetLicenseAvailability()
+		{
+			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.WebOvertimeRequest);
+			LicenseAvailability.HasLicense(DefinedLicenseOptionPaths.TeleoptiWfmOvertimeRequests);
+			LicenseAvailability.HasLicense(DefinedLicenseOptionPaths.TeleoptiCccShiftTrader);
+			var result = Target.GetLicenseAvailability();
+
+			result.IsOvertimeRequestEnabled.Should().Be.True();
+			result.IsShiftTradeRequestEnabled.Should().Be.True();
 		}
 
 		[Test]

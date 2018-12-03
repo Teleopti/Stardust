@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		TimeZoneInfo TimeZoneInfo { get; set; }
 
-		ICommonStateHolder CommonStateHolder { get; }
+		CommonStateHolder CommonStateHolder { get; }
 
 		void LoadCommonState(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory);
 
@@ -60,8 +60,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		IEnumerable<DateOnly> DaysToRecalculate { get; }
 		ShiftTradeRequestStatusCheckerWithSchedule ShiftTradeRequestStatusChecker { get; set; }
-
-
-		bool AgentFilter();
 	}
 }

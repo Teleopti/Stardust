@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -11,6 +12,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class PersonAbsenceRemover : IPersonAbsenceRemover
 	{
+		private static readonly ILog logger = LogManager.GetLogger(typeof(PersonAbsenceRemover));
+
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 		private readonly ISaveSchedulePartService _saveSchedulePartService;
 		private readonly IPersonAbsenceCreator _personAbsenceCreator;
@@ -82,42 +85,57 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			TrackedCommandInfo commandInfo, IScheduleRange scheduleRange,
 			DateTimePeriod? periodToRemove = null)
 		{
+			var errorMessages = new List<string>();
+
 			if (!canRemovePersonAbsence(person, scheduleDate))
 			{
-				return new[] {Resources.CouldNotRemoveAbsenceFromProtectedSchedule};
+				return new[] { Resources.CouldNotRemoveAbsenceFromProtectedSchedule };
 			}
 
 			personAbsence.RemovePersonAbsence(commandInfo);
-			
+
 			var scheduleDay = scheduleRange.ScheduledDay(scheduleDate, true) as ExtractedSchedule;
+			
 			if (scheduleDay != null)
 			{
-				var scheduleDaysForChecking = new List<IScheduleDay> {scheduleDay};
-				// To be more efficient, we only return the first schedule day for each personal account for NewPersonAccountRule
-				scheduleDaysForChecking.AddRange(getScheduleDaysForCheckingAccount(personAbsence, scheduleDate, scheduleRange, person));
-				scheduleDaysForChecking.ForEach(s => s.Remove(personAbsence));
-				
-				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
-				var errors = _saveSchedulePartService.Save(scheduleDaysForChecking, rules, KeepOriginalScheduleTag.Instance);
-
-				if (errors != null && errors.Any())
-				{
-					return errors;
-				}
+				errorMessages = removePersonAbsenceFromScheduleDay(scheduleDate, person, personAbsence, scheduleRange, scheduleDay);
+			}
+			else
+			{
+				logger.Error($"Only logged for cancelling absence request used to reproduce bug#79030 PersonAbsenceRemover:{scheduleDate}| {personAbsence.Id}");
 			}
 
-			var errorMessages = new List<string>();
-			if (periodToRemove.HasValue)
+			if (errorMessages.Any())
 			{
-				var newAbsencePeriods = getPeriodsForNewAbsence(personAbsence.Period, periodToRemove.Value);
-				if (newAbsencePeriods.Any())
-				{
-					errorMessages.AddRange(createNewAbsencesForSplitAbsence(person, personAbsence,
-						newAbsencePeriods, commandInfo, scheduleDay, scheduleRange).ToList());
-				}
+				return errorMessages;
+			}
+
+			if (!periodToRemove.HasValue)
+				return errorMessages;
+
+			var newAbsencePeriods = getPeriodsForNewAbsence(personAbsence.Period, periodToRemove.Value);
+			if (newAbsencePeriods.Any())
+			{
+				errorMessages.AddRange(createNewAbsencesForSplitAbsence(person, personAbsence,
+					newAbsencePeriods, commandInfo, scheduleDay, scheduleRange).ToList());
 			}
 
 			return errorMessages;
+		}
+
+		private List<string> removePersonAbsenceFromScheduleDay(DateOnly scheduleDate, IPerson person, IPersonAbsence personAbsence,
+			IScheduleRange scheduleRange, ExtractedSchedule scheduleDay)
+		{
+			var scheduleDays = new List<IScheduleDay> { scheduleDay };
+			// To be more efficient, we only return the first schedule day for each personal account for NewPersonAccountRule
+			scheduleDays.AddRange(
+				getScheduleDaysForCheckingAccount(personAbsence, scheduleDate, scheduleRange, person));
+
+			scheduleDays.ForEach(s => s.Remove(personAbsence));
+
+			var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
+			var errorMessages = _saveSchedulePartService.Save(scheduleDays, rules, KeepOriginalScheduleTag.Instance);
+			return errorMessages != null&&errorMessages.Any() ? errorMessages.ToList() : new List<string>();
 		}
 
 		private IEnumerable<string> createNewAbsencesForSplitAbsence(IPerson person,
