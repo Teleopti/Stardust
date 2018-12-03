@@ -53,14 +53,17 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AuthBridge, Version=1.0.4.133, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\AuthBridge.1.0.4.133\lib\net472\AuthBridge.dll</HintPath>
+    <Reference Include="AuthBridge, Version=1.0.4.134, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\AuthBridge.1.0.4.134\lib\net472\AuthBridge.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="AuthBridge.Web, Version=1.0.4.132, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AuthBridge.Web.1.0.4.132\lib\net461\AuthBridge.Web.dll</HintPath>
+    <Reference Include="AuthBridge.Web, Version=1.0.4.134, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\AuthBridge.Web.1.0.4.134\lib\net472\AuthBridge.Web.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="ClaimsPolicyEngine, Version=1.0.4.133, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\ClaimsPolicyEngine.1.0.4.133\lib\net472\ClaimsPolicyEngine.dll</HintPath>
+    <Reference Include="ClaimsPolicyEngine, Version=1.0.4.134, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\ClaimsPolicyEngine.1.0.4.134\lib\net472\ClaimsPolicyEngine.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="DotNetOpenAuth.AspNet, Version=4.1.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -285,13 +288,9 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\main.min.css" />
     <Content Include="Content\css\selector.css" />
+    <Content Include="Content\css\site.css" />
     <Content Include="Content\favicon.ico" />
     <Content Include="Content\images\bg.png" />
-    <Content Include="Content\images\facebook.png" />
-    <Content Include="Content\images\google.png" />
-    <Content Include="Content\images\liveid.png" />
-    <Content Include="Content\images\twitter.png" />
-    <Content Include="Content\images\yahoo.gif" />
     <Content Include="Default.aspx" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -299,7 +298,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Global.asax" />
-    <Content Include="Policy.xml" />
     <Content Include="SystemStatus.aspx" />
     <Content Include="Scripts\spinner.js" />
     <Content Include="Views\Shared\Error.aspx" />
@@ -307,6 +305,12 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Content\images\facebook.png" />
+    <None Include="Content\images\google.png" />
+    <None Include="Content\images\liveid.png" />
+    <None Include="Content\images\twitter.png" />
+    <None Include="Content\images\yahoo.gif" />
+    <None Include="Policy.xml" />
     <None Include="Scripts\jquery-1.9.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -318,6 +322,7 @@
     </Content>
     <Content Include="Scripts\jquery-1.9.0.min.map" />
     <Content Include="teleopti.auth.pfx" />
+    <None Include="test-certificate.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
