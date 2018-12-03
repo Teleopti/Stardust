@@ -55,7 +55,7 @@
 						<md-tabs md-dynamic-height md-border-botto md-no-pagination md-selected="vm.selectedTabIndex">
 							<md-tab label="{{'Absence' | translate}} {{'And' | translate}} {{'Text' | translate}}" ng-click="vm.activeAbsenceAndTextTab()">
 							</md-tab>
-							<md-tab label="{{'ShiftTrade' | translate}}" ng-click="vm.activeShiftTradeTab()">
+							<md-tab ng-if="vm.shiftTradeRequestsLicenseAvailable" label="{{'ShiftTrade' | translate}}" ng-click="vm.activeShiftTradeTab()">
 							</md-tab>
 							<md-tab ng-if="vm.overtimeRequestsLicenseAvailable" label="{{'Overtime' | translate}}" ng-click="vm.activeOvertimeTab()">
 							</md-tab>

@@ -224,6 +224,7 @@
     <Compile Include="FakeHttpServer.cs" />
     <Compile Include="FakeLicenseActivator.cs" />
     <Compile Include="FakeLicenseActivatorProvider.cs" />
+    <Compile Include="FakeLicenseAvailability.cs" />
     <Compile Include="FakeRepositories\FakeAgentBadgeRepository.cs" />
     <Compile Include="FakeRepositories\FakeAgentBadgeWithRankRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsSiteRepository.cs" />

@@ -614,7 +614,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function() {
 		this.getSitesPromise = function() {
 			return { success: successCallback, error: errorCallback };
 		};
-		this.getOvertimeLicense = function(successCallback) {
+		this.getRequestLicense = function(successCallback) {
 			return {
 				then: function() {
 					successCallback && successCallback();

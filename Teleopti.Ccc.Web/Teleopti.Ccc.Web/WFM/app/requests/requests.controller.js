@@ -48,6 +48,7 @@
 		vm.sitesAndTeams = [];
 		vm.isUsingRequestSubmitterTimeZone = false;
 		vm.overtimeRequestsLicenseAvailable = false;
+		vm.shiftTradeRequestsLicenseAvailable = false;
 		vm.teamNameMap = {};
 		vm.showFeedbackLink = toggleService.WFM_Request_Show_Feedback_Link_77733;
 
@@ -311,8 +312,9 @@
 			})
 			)
 			.then(
-			requestsDataService.getOvertimeLicense().then(function (result) {
-				vm.overtimeRequestsLicenseAvailable = result.data;
+			requestsDataService.getRequestLicense().then(function (result) {
+				vm.overtimeRequestsLicenseAvailable = result.data.IsOvertimeRequestEnabled;
+				vm.shiftTradeRequestsLicenseAvailable = result.data.IsShiftTradeRequestEnabled;
 			})
 			)
 			.then(
