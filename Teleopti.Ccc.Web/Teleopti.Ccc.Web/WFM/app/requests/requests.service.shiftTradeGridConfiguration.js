@@ -352,7 +352,7 @@
 				enableColumnMenu: false,
 				enableHiding: false,
 				cellTemplate: 'app/requests/html/shift-trade-day-template.html',
-				width: numberOfDays * 40,
+				width: numberOfDays * requestDefinitions.SHIFTTRADE_COLUMN_WIDTH,
 				enableSorting: false,
 				enableFiltering: false,
 				isShiftTradeDayColumn: true
