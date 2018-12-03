@@ -414,10 +414,6 @@
       <Project>{68a028b6-864c-4969-8830-9c3c6bd56a98}</Project>
       <Name>Teleopti.Ccc.TestCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
-      <Project>{98105bfe-6c3b-4c57-9141-6bd065c7e966}</Project>
-      <Name>Teleopti.Ccc.UserTexts</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Wfm.Adherence\Teleopti.Wfm.Adherence.csproj">
       <Project>{2dd2e616-8405-49df-a07d-546a8c160117}</Project>
       <Name>Teleopti.Wfm.Adherence</Name>
