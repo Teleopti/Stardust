@@ -322,11 +322,11 @@
 
 		function buildLateForWork(changes) {
 			var change = changes.find(function (d) {
-				return d.LateForWork;
+				return d.LateForWorkMinutes;
 			});
 			if (change) {
 				return {
-					text: change.LateForWork,
+					minutes: change.LateForWorkMinutes,
 					offset: calculate.Offset(change.Time),
 					click: change.click
 				};
@@ -377,7 +377,7 @@
 						State: change.State,
 						Adherence: change.Adherence,
 						AdherenceColor: change.AdherenceColor,
-						lateForWork: change.LateForWork,
+						lateForWorkMinutes: change.LateForWorkMinutes,
 
 						click: change.click,
 						get highlight() {

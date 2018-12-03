@@ -73,7 +73,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 
 			Assert.DoesNotThrow(() =>
 			{
-				var action = target.AdherenceText;
+				var action = target.AdherenceTextResource;
 			});
 		}
 	}

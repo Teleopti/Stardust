@@ -57,7 +57,7 @@
 							 ng-click="vm.lateForWork.click()"
 							 ng-attr-style="left: {{vm.lateForWork.offset}};">
 							<span class="label label-alert">
-								{{vm.lateForWork.text}}
+								{{("LateXMinutes" | translate).replace('{0}', vm.lateForWork.minutes)}}
 							</span>
 						</div>
 						<div class="late-for-work-line" ng-attr-style="left: {{vm.lateForWork.offset}};"></div>
@@ -273,8 +273,8 @@
 					ng-click="item.click()">
 					<td>
 						{{item.Time | amDateFormat: 'LTS' }}
-						<span ng-if="item.lateForWork" class="label label-alert">
-							{{item.lateForWork}}
+						<span ng-if="item.lateForWorkMinutes" class="label label-alert">
+							{{("LateXMinutes" | translate).replace('{0}', item.lateForWorkMinutes)}}
 						</span>
 					</td>
 					<td>
@@ -296,7 +296,7 @@
 					<td>
 						<span ng-if="item.Adherence" class="label"
 							  ng-attr-style="background-color: {{item.AdherenceColor}};">
-							{{item.Adherence}}
+							{{item.Adherence | translate}}
 						</span>
 					</td>
 				</tr>

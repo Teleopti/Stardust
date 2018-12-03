@@ -34,7 +34,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
 		{
 			if (date == null)
 				return _authorization.Current().IsPermitted(permission);
-			return _authorization.Current().IsPermitted(permission, date.Value.Date, person);
+			return _authorization.Current().IsPermitted(permission, new Ccc.Domain.InterfaceLegacy.Domain.DateOnly(date.Value.Date), person);
 		}
 
 		public class PermissionsViewModel

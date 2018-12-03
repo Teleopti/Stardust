@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Wfm.Adherence.Domain.Events;
 
 namespace Teleopti.Wfm.Adherence.Domain.Configuration
@@ -50,44 +49,42 @@ namespace Teleopti.Wfm.Adherence.Domain.Configuration
 			set { _adherence = value; }
 		}
 
-		private static readonly IEnumerable<adherenceWithText> _adherences = new[]
+		private static readonly IEnumerable<adherenceWithResourceText> resourceForAdherence = new[]
 		{
-			new adherenceWithText
+			new adherenceWithResourceText
 			{
 				Adherence = Configuration.Adherence.In,
-				Text = Resources.InAdherence
+				TextResource = "InAdherence"
 			},
-			new adherenceWithText
+			new adherenceWithResourceText
 			{
 				Adherence = Configuration.Adherence.Out,
-				Text = Resources.OutOfAdherence
+				TextResource = "OutOfAdherence"
 			},
-			new adherenceWithText
+			new adherenceWithResourceText
 			{
 				Adherence = Configuration.Adherence.Neutral,
-				Text = Resources.NeutralAdherence
+				TextResource = "NeutralAdherence"
 			}
 		};
 
-		private class adherenceWithText
+		private class adherenceWithResourceText
 		{
 			public Adherence Adherence { get; set; }
-			public string Text { get; set; }
+			public string TextResource { get; set; }
 		}
 
 		public virtual void SetAdherenceByText(string text)
 		{
-			var adherenceWithText = _adherences.SingleOrDefault(x => x.Text == text);
+			var adherenceWithText = resourceForAdherence.SingleOrDefault(x => x.TextResource == text);
 			Adherence = adherenceWithText == null ? (Adherence?) null : adherenceWithText.Adherence;
 		}
 
-		public virtual string AdherenceText
+		public virtual string AdherenceTextResource
 		{
 			get
 			{
-				if (Adherence == null)
-					return string.Empty;
-				return _adherences.Single(x => x.Adherence == Adherence).Text;
+				return resourceForAdherence.SingleOrDefault(x => x.Adherence == Adherence)?.TextResource;
 			}
 		}
 

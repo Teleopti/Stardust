@@ -31,7 +31,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration.Rta
 			e.Style.CellType = "ComboBox";
 			e.Style.ChoiceList = new StringCollection { Resources.InAdherence, Resources.OutOfAdherence, Resources.NeutralAdherence };
 			e.Style.DropDownStyle = GridDropDownStyle.Exclusive;
-			e.Style.CellValue = rule.AdherenceText;
+			var resource = rule.AdherenceTextResource;
+			e.Style.CellValue = resource == null ? 
+				string.Empty : 
+				Resources.ResourceManager.GetString(resource, Resources.Culture);
 		}
 	}
 }

@@ -33,7 +33,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 
 			var data = Target.LoadUntilNow(personId, "2018-05-28".Date());
 
-			data.Changes().Single().LateForWork.Should().Be(string.Format(Ccc.UserTexts.Resources.LateXMinutes, "60"));
+			data.Changes().Single().LateForWorkMinutes.Should().Be(60);
 		}
 
 		[Test]
@@ -48,7 +48,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 
 			var data = Target.LoadUntilNow(personId, "2018-05-28".Date());
 
-			data.Changes().Single().LateForWork.Should().Be(string.Format(Ccc.UserTexts.Resources.LateXMinutes, "60"));
+			data.Changes().Single().LateForWorkMinutes.Should().Be(60);
 		}
 
 		[Test]
@@ -64,8 +64,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 
 			var data = Target.LoadUntilNow(personId, "2018-05-28".Date());
 
-			data.Changes().First().LateForWork.Should().Be.Null();
-			data.Changes().Second().LateForWork.Should().Be(string.Format(Ccc.UserTexts.Resources.LateXMinutes, "60"));
+			data.Changes().First().LateForWorkMinutes.Should().Be(null);
+			data.Changes().Second().LateForWorkMinutes.Should().Be(60);
 		}
 
 		[Test]
@@ -99,7 +99,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 
 			var data = Target.LoadUntilNow(personId, "2018-06-14".Date());
 
-			data.Changes().Single().LateForWork.Should().Be(string.Format(Ccc.UserTexts.Resources.LateXMinutes, "60"));
+			data.Changes().Single().LateForWorkMinutes.Should().Be(60);
 		}
 		
 		[Test]
@@ -112,7 +112,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 
 			var data = Target.LoadUntilNow(personId, "2018-06-14".Date());
 
-			data.Changes().Single().LateForWork.Should().Be(string.Format(Ccc.UserTexts.Resources.LateXMinutes, "5"));
+			data.Changes().Single().LateForWorkMinutes.Should().Be(5);
 		}
 	}
 }

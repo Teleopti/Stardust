@@ -12,6 +12,7 @@ using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
 {
+	
 	public class CurrentScheduleReadModelUpdater
 	{
 		private readonly INow _now;
@@ -110,7 +111,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
 			var persons = _persons.FindPeople(personIds)
 				.Select(x => new
 				{
-					businessUnitId = x.Period(date.Date)?.Team?.Site?.BusinessUnit?.Id,
+					businessUnitId = x.Period(new Ccc.Domain.InterfaceLegacy.Domain.DateOnly(date.Date))?.Team?.Site?.BusinessUnit?.Id,
 					person = x
 				})
 				.ToArray();
