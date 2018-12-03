@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.Util;
+using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -17,15 +18,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	[TestFixture]
 	public class StaffingAuditRepositoryTest : RepositoryTest<IStaffingAudit>
 	{
+		private IStaffingAudit _staffingAudit;
+
+
 		protected override IStaffingAudit CreateAggregateWithCorrectBusinessUnit()
 		{
-			return new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportStaffing,"BPO","filename", "");
+			_staffingAudit =
+				new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportStaffing, "BPO", "filename", "");
+			return _staffingAudit;
 		}
 
 		protected override void VerifyAggregateGraphProperties(IStaffingAudit loadedAggregateFromDatabase)
 		{
-			var org = CreateAggregateWithCorrectBusinessUnit();
-			Assert.That(org.Action.Equals(loadedAggregateFromDatabase.Action));
+			loadedAggregateFromDatabase.ActionPerformedById.Should().Be(_staffingAudit.ActionPerformedById);
+			loadedAggregateFromDatabase.ActionPerformedBy.Should().Be(_staffingAudit.ActionPerformedBy);
+			loadedAggregateFromDatabase.Action.Should().Be(_staffingAudit.Action);
+			loadedAggregateFromDatabase.BpoName.Should().Be(_staffingAudit.BpoName);
+			loadedAggregateFromDatabase.Area.Should().Be(_staffingAudit.Area);
+			loadedAggregateFromDatabase.ImportFileName.Should().Be(_staffingAudit.ImportFileName);
 		}
 
 		protected override Repository<IStaffingAudit> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
@@ -34,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldLoadAudit()
+		public void ShouldLoadAuditsWithinPeriod()
 		{
 			var rep = new StaffingAuditRepository(CurrUnitOfWork);
 			var staffingAudit = new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportStaffing, "BPO", "filename", "");
@@ -46,10 +56,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			
 			var audits = rep.LoadAudits(LoggedOnPerson, DateTime.UtcNow.AddDays(-10), DateTime.UtcNow);
 			audits.Count().Should().Be(1);
-			//Retry.Handle<Exception>()
-			//	.WaitAndRetry()
-			//	.Do(() => { audits.Count().Should().Be(1); });
-
+			
+			audits.First().Should().Be.EqualTo(staffingAudit);
+			audits.First().Area.Should().Be("BPO");
 		}
 
 		[Test]
@@ -208,6 +217,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var audits = rep.LoadAudits(LoggedOnPerson, now.AddDays(-200), now.AddDays(100));
 			audits.Count().Should().Be(100);
+		}
+
+		[Test]
+		public void ShouldLoadAuditFilterOnPerson()
+		{
+			var rep = new StaffingAuditRepository(CurrUnitOfWork);
+			var person2 = PersonFactory.CreatePersonWithGuid("Kalle", "Anka");
+			var staffingAudit = new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportStaffing, "BPO", "filename", "");
+			var staffingAudit2 = new StaffingAudit(person2, StaffingAuditActionConstants.ImportStaffing, "BPO", "filename", "");
+
+			PersistAndRemoveFromUnitOfWork(staffingAudit);
+			PersistAndRemoveFromUnitOfWork(staffingAudit2);
+
+			var audits = rep.LoadAudits(LoggedOnPerson, DateTime.UtcNow.AddDays(-10), DateTime.UtcNow);
+			audits.Count().Should().Be(1);
+			audits.First().ActionPerformedById.Should().Be.EqualTo(LoggedOnPerson.Id.GetValueOrDefault());
 		}
 	}
 }

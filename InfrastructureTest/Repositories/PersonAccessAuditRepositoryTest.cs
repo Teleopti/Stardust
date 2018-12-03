@@ -199,7 +199,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		protected override void VerifyAggregateGraphProperties(IPersonAccess loadedAggregateFromDatabase)
 		{
 			loadedAggregateFromDatabase.ActionPerformedById.Should().Be.EqualTo(LoggedOnPerson.Id.GetValueOrDefault());
+			loadedAggregateFromDatabase.ActionPerformedBy.Should().Be.EqualTo(_personAccessBase.ActionPerformedBy);
 			loadedAggregateFromDatabase.ActionPerformedOn.Should().Be.EqualTo(_personAccessBase.ActionPerformedOn);
+			loadedAggregateFromDatabase.ActionPerformedOnId.Should().Be.EqualTo(_personAccessBase.ActionPerformedOnId);
 			loadedAggregateFromDatabase.Action.Should().Be.EqualTo(_personAccessBase.Action);
 			loadedAggregateFromDatabase.ActionResult.Should().Be.EqualTo(_personAccessBase.ActionResult);
 			loadedAggregateFromDatabase.Data.Should().Be.EqualTo(_personAccessBase.Data);
