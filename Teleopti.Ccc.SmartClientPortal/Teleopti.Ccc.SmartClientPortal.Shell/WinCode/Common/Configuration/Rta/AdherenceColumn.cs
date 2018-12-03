@@ -25,13 +25,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration.Rta
 
 		private static void updateAdherence(IRtaRule rule, IEnumerable<IRtaRule> alarmTypes, IAlarmControlView view, GridSaveCellInfoEventArgs e)
 		{
-			if (e.Style.CellValue == Resources.InAdherence)
+			var value = (string) e.Style.CellValue;
+			if (value == Resources.InAdherence)
 				rule.Adherence = Adherence.In;
-			if (e.Style.CellValue == Resources.OutOfAdherence)
+			if (value == Resources.OutOfAdherence)
 				rule.Adherence = Adherence.Out;
-			if (e.Style.CellValue == Resources.NeutralAdherence)
+			if (value == Resources.NeutralAdherence)
 				rule.Adherence = Adherence.Neutral;
-			if (string.IsNullOrEmpty(e.Style.CellValue as string))
+			if (string.IsNullOrEmpty(value))
 				rule.Adherence = null;
 		}
 
