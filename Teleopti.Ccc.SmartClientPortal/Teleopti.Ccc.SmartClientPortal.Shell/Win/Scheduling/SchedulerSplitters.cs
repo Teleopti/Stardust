@@ -386,6 +386,35 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_contextMenuSkillGrid.Items["CreateSkillSummery"].Click += skillGridMenuItemClick;
 		}
 
+		public void RefreshSummarySkillIfActive(TeleoptiGridControl skillGridControl, DateOnly currentIntraDayDate)
+		{
+			if (TabSkillData.SelectedIndex < 0) return;
+			var tab = TabSkillData.TabPages[TabSkillData.SelectedIndex];
+			var skill = (ISkill)tab.Tag;
+			IAggregateSkill aggregateSkillSkill = skill;
+			if (!aggregateSkillSkill.IsVirtual)
+				return;
+
+			if (skillGridControl is SkillIntradayGridControl)
+			{
+				var skillStaffPeriods = _schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
+					aggregateSkillSkill,
+					TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentIntraDayDate.Date,
+						currentIntraDayDate.AddDays(1).Date, _schedulerStateHolder.TimeZoneInfo));
+				((SkillIntradayGridControl) skillGridControl).Presenter.RowManager?.SetDataSource(skillStaffPeriods);
+			}
+			else
+			{
+				var selectedSkillGridControl = skillGridControl as SkillResultGridControlBase;
+				if (selectedSkillGridControl == null)
+					return;
+
+				selectedSkillGridControl.SetDataSource(_schedulerStateHolder, skill);
+			}
+
+			skillGridControl.Refresh();
+		}
+
 		public void SetupSkillTabs(SchedulingScreenSettings currentSchedulingScreenSettings)
 		{
 			TabSkillData.TabPages.Clear();
