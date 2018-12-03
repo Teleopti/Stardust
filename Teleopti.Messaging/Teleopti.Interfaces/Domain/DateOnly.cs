@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Runtime.Serialization;
 
 namespace Teleopti.Interfaces.Domain
@@ -96,17 +95,7 @@ namespace Teleopti.Interfaces.Domain
 			get { return _internalDateTime.Date; }
 			set { _internalDateTime = new DateTime(value.Year, value.Month, value.Day, 0, 0, 0, 0, value.Kind); }
 		}
-
-		public TimeSpan Subtract(DateOnly other)
-		{
-			return _internalDateTime.Subtract(other._internalDateTime);
-		}
-
-		public DateOnly AddMonths(Calendar calendar, int months)
-		{
-			return new DateOnly(calendar.AddMonths(_internalDateTime, months));
-		}
-
+		
 		/// <summary>
 		/// Gets the max value.
 		/// </summary>
@@ -335,12 +324,7 @@ namespace Teleopti.Interfaces.Domain
 		{
 			return new DateOnly(_internalDateTime.AddDays(days));
 		}
-
-		public DateOnly AddWeeks(int weeks)
-		{
-			return AddDays(7*weeks);
-		}
-
+		
 		/// <summary>
 		/// Returns the fully qualified type name of this instance.
 		/// </summary>
@@ -381,28 +365,6 @@ namespace Teleopti.Interfaces.Domain
 		public string ToShortDateString(IFormatProvider cultureInfo)
 		{
 			return _internalDateTime.ToString("d", cultureInfo);
-		}
-
-		public DateOnly Add(TimeSpan timeSpan)
-		{
-			return new DateOnly(_internalDateTime.Add(timeSpan));
-		}
-
-		public DateTimePeriod ToDateTimePeriod(TimeZoneInfo timeZoneInfo)
-		{
-			return new DateTimePeriod(timeZoneInfo.SafeConvertTimeToUtc(Date),
-									  timeZoneInfo.SafeConvertTimeToUtc(Date.AddDays(1).Date));
-		}
-
-		public DateTimePeriod ToDateTimePeriod(TimePeriod period, TimeZoneInfo timeZoneInfo)
-		{
-			var dateTime = TimeZoneHelper.ConvertToUtc(Date, timeZoneInfo);
-			return new DateTimePeriod(dateTime.Add(period.StartTime), dateTime.Add(period.EndTime));
-		}
-
-		public DateOnlyPeriod ToDateOnlyPeriod()
-		{
-			return new DateOnlyPeriod(this, this);
 		}
 	}
 }
