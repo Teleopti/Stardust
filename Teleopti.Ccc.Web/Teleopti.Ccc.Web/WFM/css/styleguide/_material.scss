@@ -1,27 +1,3 @@
-*:focus {
-	outline: -webkit-focus-ring-color auto 0;
-}
-
-body {
-	color: $text-color-standard;
-	font-size: $standard-font-size;
-	font-family: Calibri, Segoe, Segoe UI, Arial, sans-serif;
-
-	a:focus,
-	a:hover {
-		text-decoration: none;
-		outline: none;
-		outline: 0px auto -webkit-focus-ring-color;
-		outline-offset: 0px;
-	}
-}
-
-button,
-input,
-select {
-	font-family: Calibri, Segoe, Segoe UI, Arial, sans-serif;
-}
-
 dd {
 	margin-left: 40px;
 }
@@ -37,10 +13,10 @@ dd {
 .raise {
 	cursor: pointer;
 	transition: $transition-timing;
-}
 
-.raise:hover {
-	@extend .material-depth-2;
+	&:hover {
+		@extend .material-depth-2;
+	}
 }
 
 .warm-overlay {
