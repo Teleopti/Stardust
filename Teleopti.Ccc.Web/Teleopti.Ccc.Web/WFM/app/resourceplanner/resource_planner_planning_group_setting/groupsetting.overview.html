@@ -136,23 +136,17 @@
 								<div class="con-flex">
 									<div class="pg-setting-mini-card-wrapper">
 										<div class="pg-setting-mini-card-title line-center">
-											<b>{{'BlockScheduling' | translate}}</b>
+											<b>{{'Restrictions' | translate}}</b>
 										</div>
 										<div class="pg-setting-card">
-											<div class="con-flex">{{setting.BlockSchedulingSetting}}</div>
-											<div class="con-flex" ng-if="setting.BlockFinderType > 0">{{setting.BlockSchedulingSettingType}}</div>
+											<div class="con-flex">
+												<b>{{'BlockScheduling' | translate}}</b>: {{setting.BlockSchedulingSetting}}
+											</div>
+											<div class="con-flex" ng-if="setting.Default">
+												<b>{{'PreferenceFulfillment' | translate}}</b>: {{vm.preferencePercentage}}%
+											</div>
 										</div>
 									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="con-row" ng-if="setting.Default">
-						<div class="con-flex">
-							<div class="line-right">
-								<div class="con-flex align-row-center">
-									<span>{{'PreferenceFulfillment' | translate}}: {{vm.preferencePercentage}}%</span>
 								</div>
 							</div>
 						</div>

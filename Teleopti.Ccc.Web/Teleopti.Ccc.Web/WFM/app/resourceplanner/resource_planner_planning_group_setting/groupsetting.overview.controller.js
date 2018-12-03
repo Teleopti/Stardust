@@ -48,9 +48,9 @@
 						type = $translate.instant('BlockSameShift');
 					}
 					if (item.BlockFinderType === 1) {
-						item.BlockSchedulingSetting = $translate.instant('BlockFinderTypeBetweenDayOff') + ' ( '+type+' )';
+						item.BlockSchedulingSetting = $translate.instant('BlockFinderTypeBetweenDayOff') + ' ('+type+')';
 					} else {
-						item.BlockSchedulingSetting = $translate.instant('BlockFinderTypeSchedulePeriod') + ' ( '+type+' )';
+						item.BlockSchedulingSetting = $translate.instant('BlockFinderTypeSchedulePeriod') + ' ('+type+')';
 					}
 					
 				} else {
