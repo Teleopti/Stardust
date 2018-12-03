@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Wfm.Adherence.Domain.Events;
@@ -47,45 +45,6 @@ namespace Teleopti.Wfm.Adherence.Domain.Configuration
 		{
 			get { return _adherence; }
 			set { _adherence = value; }
-		}
-
-		private static readonly IEnumerable<adherenceWithResourceText> resourceForAdherence = new[]
-		{
-			new adherenceWithResourceText
-			{
-				Adherence = Configuration.Adherence.In,
-				TextResource = "InAdherence"
-			},
-			new adherenceWithResourceText
-			{
-				Adherence = Configuration.Adherence.Out,
-				TextResource = "OutOfAdherence"
-			},
-			new adherenceWithResourceText
-			{
-				Adherence = Configuration.Adherence.Neutral,
-				TextResource = "NeutralAdherence"
-			}
-		};
-
-		private class adherenceWithResourceText
-		{
-			public Adherence Adherence { get; set; }
-			public string TextResource { get; set; }
-		}
-
-		public virtual void SetAdherenceByText(string text)
-		{
-			var adherenceWithText = resourceForAdherence.SingleOrDefault(x => x.TextResource == text);
-			Adherence = adherenceWithText == null ? (Adherence?) null : adherenceWithText.Adherence;
-		}
-
-		public virtual string AdherenceTextResource
-		{
-			get
-			{
-				return resourceForAdherence.SingleOrDefault(x => x.Adherence == Adherence)?.TextResource;
-			}
 		}
 
 		public virtual bool IsAlarm
