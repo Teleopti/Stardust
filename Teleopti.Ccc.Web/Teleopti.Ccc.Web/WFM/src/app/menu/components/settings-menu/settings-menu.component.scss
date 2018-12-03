@@ -19,7 +19,8 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	&:focus {
+	&:focus,
+	&:hover {
 		outline: none;
 		@include darken-bg;
 	}
