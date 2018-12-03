@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -11,6 +12,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class PersonAbsenceRemover : IPersonAbsenceRemover
 	{
+		private static readonly ILog logger = LogManager.GetLogger(typeof(PersonAbsenceRemover));
+
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 		private readonly ISaveSchedulePartService _saveSchedulePartService;
 		private readonly IPersonAbsenceCreator _personAbsenceCreator;
@@ -92,9 +95,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			personAbsence.RemovePersonAbsence(commandInfo);
 
 			var scheduleDay = scheduleRange.ScheduledDay(scheduleDate, true) as ExtractedSchedule;
+			
 			if (scheduleDay != null)
 			{
 				errorMessages = removePersonAbsenceFromScheduleDay(scheduleDate, person, personAbsence, scheduleRange, scheduleDay);
+			}
+			else
+			{
+				logger.Error($"Only logged for cancelling absence request used to reproduce bug#79030 PersonAbsenceRemover: person = {person.Id + "/" + person.Name}| scheduleDate = {scheduleDate}| personAbsence = {personAbsence.Id}");
 			}
 
 			if (errorMessages.Any())
