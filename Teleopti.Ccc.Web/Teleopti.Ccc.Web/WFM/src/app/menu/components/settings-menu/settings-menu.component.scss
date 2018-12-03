@@ -1,3 +1,7 @@
+@mixin darken-bg {
+	background: rgba(0, 0, 0, 0.16);
+}
+
 .clickable {
 	cursor: pointer;
 	height: 100%;
@@ -15,6 +19,10 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	&:focus {
+		outline: none;
+		@include darken-bg;
+	}
 }
 
 .profile-info.ant-dropdown-menu-item {
@@ -22,5 +30,21 @@
 	font-weight: 500;
 	&:hover {
 		background-color: inherit;
+	}
+}
+
+:host-context(.angular-theme-classic) {
+	.cower-area {
+		i {
+			color: #fff;
+		}
+	}
+}
+
+:host-context(.angular-theme-dark) {
+	.cower-area {
+		i {
+			color: #eee;
+		}
 	}
 }
